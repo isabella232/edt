@@ -1,0 +1,211 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.mof.impl;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
+
+import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.EVisitor;
+
+
+public class AbstractVisitor implements EVisitor {
+	private int parentSlotIndex = -1;
+	private boolean allowRevisit = true;
+	private boolean trackParent = false;
+	private Set<Object> visited;
+	private Stack<EObject> parents;
+	private Stack<Integer> slotIndices;
+	private Object returnData;
+	
+	public Set<Object> getVisited() {
+		return visited;
+	}
+
+	public void setVisited(Set<Object> visited) {
+		this.visited = visited;
+	}
+
+	public void disallowRevisit() {
+		allowRevisit = false;
+		visited = new HashSet<Object>();
+	}
+	
+	public void allowParentTracking() {
+		trackParent = true;
+		parents = new Stack<EObject>();
+		slotIndices = new Stack<Integer>();
+	}
+	
+	public boolean isTrackingParent() {
+		return trackParent;
+	}
+	
+	public void pushParent(EObject parent) {
+		parents.push(parent);
+	}
+	
+	public EObject popParent() {
+		return parents.pop();
+	}
+	
+	public EObject getParent() {
+		return parents.peek();
+	}
+	
+	public void pushSlotIndex(int index) {
+		slotIndices.push(index);
+	}
+	
+	public Integer popSlotIndex() {
+		return slotIndices.pop();
+	}
+		
+	public int getParentSlotIndex() {
+		return slotIndices.peek();
+	}
+
+	@SuppressWarnings("unchecked")
+	public void primEndVisit(Object obj) {
+		Class clazz = obj.getClass();
+		if (!allowRevisit) {
+			if (alreadyVisited(obj)) return;
+		}
+		invokeEndVisit(clazz, obj);
+	}
+
+	@SuppressWarnings("unchecked")
+	public boolean primVisit(Object obj) {
+		if (!allowRevisit) {
+			if (alreadyVisited(obj)) return false;
+			else visited.add(obj);
+		}
+		Class clazz = obj.getClass();
+		boolean visitChildren = invokeVisit(clazz, obj);
+		return visitChildren;
+	}
+
+	@Override
+	public void endVisit(Object obj) {
+		// Do nothing at the super type level
+	}
+
+	@Override
+	public boolean visit(Object obj) {
+		return true;
+	}
+
+	@SuppressWarnings("unchecked")
+	private boolean invokeVisit(Class clazz, Object obj) {
+		boolean visitChildren = false;
+		Method method;
+		if (clazz.getInterfaces().length == 0) {
+			visitChildren = visit(obj);
+		}
+		else {
+			try {
+				method = getMethod("visit", clazz.getInterfaces()[0], true);
+				if (method == null) {
+					visitChildren = visit(obj);
+				}
+				else {
+					visitChildren = (Boolean)method.invoke(this, obj);
+				}
+			} catch (InvocationTargetException e) {
+				throw new RuntimeException(e);
+			} catch (IllegalArgumentException e) {
+				throw new RuntimeException(e);
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException(e);
+			} catch (SecurityException e) {
+				throw new RuntimeException(e);
+			} 
+		}
+		return visitChildren;
+
+	}
+	@SuppressWarnings("unchecked")
+	private Method primGetMethod(String methodName, Class clazz) {
+		Method method = null;
+		try {
+			method = this.getClass().getMethod(methodName, clazz);
+		} catch (SecurityException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchMethodException e) {
+			// Do nothing to allow search to continue
+		}
+		return method;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Method getMethod(String methodName, Class ifaceClass, boolean doGet) {
+		Method method = null;
+		if (doGet) {
+			method = primGetMethod(methodName, ifaceClass);
+		}
+		if (method == null) {
+			for (Class iface : ifaceClass.getInterfaces()) {
+				method = primGetMethod(methodName, iface);
+				if (method != null) break;
+			}
+		}
+		if (method == null) {
+			if (ifaceClass.getInterfaces().length > 0) {
+				method = getMethod(methodName, ifaceClass.getInterfaces()[0], false);
+			}
+		}
+		return method;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void invokeEndVisit(Class clazz, Object obj) {
+		Method method;
+		if (clazz.getInterfaces().length == 0) {
+			endVisit(obj);
+		}
+		else {
+			try {
+				method = getMethod("endVisit", clazz, true);
+				if (method == null) {
+					endVisit(obj);
+				}
+				else {
+					method.invoke(this, obj);
+				}
+			} catch (InvocationTargetException e) {
+				throw new RuntimeException(e);
+			} catch (IllegalArgumentException e) {
+				throw new RuntimeException(e);
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException(e);
+			} catch (SecurityException e) {
+				throw new RuntimeException(e);
+			} 
+		}
+	}
+	
+	private boolean alreadyVisited(Object obj) {
+		return visited.contains(obj);
+	}
+
+	public void setReturnData(Object returnData) {
+		this.returnData = returnData;
+	}
+
+	public Object getReturnData() {
+		return returnData;
+	}
+
+}
