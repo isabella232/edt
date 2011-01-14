@@ -1,0 +1,410 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package egl.ui.rui;
+
+import egl.javascript.*;
+import egl.core.*;
+
+ExternalType Event type JavaScriptObject {
+		relativePath = "egl/ui/rui",
+		javaScriptName = "Event",
+		eglIsSystemAnnotation = yes
+	}	
+	x Int { @JavaScriptProperty { getMethod="getX", setMethod="setX" } };
+	y Int { @JavaScriptProperty { getMethod="getY", setMethod="setY" } };
+	screenX Int;
+	screenY Int;
+	clientX Int;
+	clientY Int;
+	ch int;
+	widget Widget;
+	mouseButton int;
+	altKey boolean;
+	ctrlKey boolean;
+	metaKey boolean;
+	shiftKey boolean;
+			
+	function stopPropagation();
+	function preventDefault();
+end
+
+Delegate EventHandler( e Event in ) {eglIsSystemPart = yes}
+end
+
+ExternalType Document type JavaScriptObject {
+		relativePath = "egl/ui/rui",
+		javaScriptName = "Document",
+		eglIsSystemAnnotation = yes
+	}
+	
+	onKeyDown EventHandler  { @JavaScriptProperty { setMethod="setOnKeyDown" } };
+	onKeyPress EventHandler { @JavaScriptProperty { setMethod="setOnKeyPress" } };
+	onKeyUp EventHandler { @JavaScriptProperty { setMethod="setOnKeyUp" } };
+	onMouseDown EventHandler { @JavaScriptProperty { setMethod="setOnMouseDown" } };
+	onMouseMove EventHandler { @JavaScriptProperty { setMethod="setOnMouseMove" } };
+	onMouseOver EventHandler { @JavaScriptProperty { setMethod="setOnMouseOver" } };
+	onMouseOut EventHandler { @JavaScriptProperty { setMethod="setOnMouseOut" } };
+	onMouseUp EventHandler { @JavaScriptProperty { setMethod="setOnMouseUp" } };
+	onScroll EventHandler { @JavaScriptProperty { setMethod="setOnScroll" } };
+	onChange EventHandler { @JavaScriptProperty { setMethod="setOnChange" } };						
+	onClick EventHandler { @JavaScriptProperty { setMethod="setOnClick" } };
+
+	onSelectStart EventHandler { @JavaScriptProperty { setMethod="setOnSelecStart" } };
+	onDragStart EventHandler { @JavaScriptProperty { setMethod="setOnDragStart" } };
+	
+	body Widget;
+	
+	location String  { @JavaScriptProperty { setMethod="setLocation", getMethod="getLocation" } };
+end
+
+ExternalType Widget type JavaScriptObject{relativePath = "egl/ui/rui",
+		javaScriptName = "Widget",
+		eglIsSystemAnnotation = yes
+}
+	pixelWidth int { @JavaScriptProperty { getMethod = "getPixelWidth", setMethod = "setPixelWidth" } };
+	pixeLHeight int { @JavaScriptProperty { getMethod = "getPixelHeight", setMethod = "setPixelHeight" } };
+	logicalParent Widget {@JavaScriptProperty { getMethod = "getLogicalParent", setMethod = "setLogicalParent" }};
+	parent Widget {@JavaScriptProperty { getMethod = "getParent", setMethod = "setParent" }};
+	style String { @JavaScriptProperty { getMethod = "getStyle", setMethod = "setStyle" } };
+	background string { @JavaScriptProperty { getMethod = "getBackground", setMethod = "setBackground" } };
+	
+	layoutData any { @JavaScriptProperty { getMethod = "getLayoutData", setMethod = "setLayoutData" } };
+	tabIndex int { @JavaScriptProperty { getMethod = "getTabIndex", setMethod = "setTabIndex" }, @VEProperty{category = "Accessibility"} };
+	ariaLive string { @JavaScriptProperty { getMethod = "getAriaLive", setMethod = "setAriaLive" }, @VEProperty{category = "Accessibility"} };
+	ariaRole string { @JavaScriptProperty { getMethod = "getAriaRole", setMethod = "setAriaRole" }, @VEProperty{category = "Accessibility"} };
+	
+	disabled boolean  { @JavaScriptProperty { getMethod = "getDisabled", setMethod = "setDisabled" }, @VEProperty{category = "Appearance"} };
+	cursor String { @JavaScriptProperty { getMethod = "getCursor", setMethod = "setCursor" }, @VEProperty{category = "Appearance"} };
+	visibility String { @JavaScriptProperty { getMethod = "getVisibility", setMethod = "setVisibility" } };
+	visible boolean { @JavaScriptProperty { getMethod = "getVisible", setMethod = "setVisible" }, @VEProperty{category = "Appearance", 			
+			default = "true"
+	} };
+	opacity String { @JavaScriptProperty { getMethod = "getOpacity", setMethod = "setOpacity" }, @VEProperty{category = "Appearance"} };
+	zIndex String { @JavaScriptProperty { getMethod = "getZIndex", setMethod = "setZIndex" }, @VEProperty{category = "Position"} };
+	height String { @JavaScriptProperty { getMethod = "getHeight", setMethod = "setHeight" }, @VEProperty{category = "Position"} };
+	width String { @JavaScriptProperty { getMethod = "getWidth", setMethod = "setWidth" }, @VEProperty{category = "Position"} };
+	y int { @JavaScriptProperty { getMethod = "getY", setMethod = "setY" }, @VEProperty{category = "Position"} };
+	x int { @JavaScriptProperty { getMethod = "getX", setMethod = "setX" }, @VEProperty{category = "Position"} };
+	
+	position string { @JavaScriptProperty { getMethod = "getPosition", setMethod = "setPosition" },
+			@VEProperty {
+				category = "Position", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"absolute\"", displayName="absolute"}, 
+					@VEPropertyChoice{id="\"relative\"", displayName="relative"}, 
+					@VEPropertyChoice{id="\"static\"", displayName="static"}
+				],
+				default = "\"static\""
+			} };
+	
+	marginBottom int { @JavaScriptProperty { getMethod = "getMarginBottom", setMethod = "setMarginBottom" }, @VEProperty{category = "Spacing"} };
+	marginTop int { @JavaScriptProperty { getMethod = "getMarginTop", setMethod = "setMarginTop" }, @VEProperty{category = "Spacing"} };
+	marginRight int { @JavaScriptProperty { getMethod = "getMarginRight", setMethod = "setMarginRight" }, @VEProperty{category = "Spacing"} };
+	marginLeft int { @JavaScriptProperty { getMethod = "getMarginLeft", setMethod = "setMarginLeft" }, @VEProperty{category = "Spacing"} };
+	margin int { @JavaScriptProperty { getMethod = "getMargin", setMethod = "setMargin" }, @VEProperty{category = "Spacing"} };
+	
+	paddingBottom int { @JavaScriptProperty { getMethod = "getPaddingBottom", setMethod = "setPaddingBottom" }, @VEProperty{category = "Spacing"} };
+	paddingTop int { @JavaScriptProperty { getMethod = "getPaddingTop", setMethod = "setPaddingTop" }, @VEProperty{category = "Spacing"} };
+	paddingRight int { @JavaScriptProperty { getMethod = "getPaddingRight", setMethod = "setPaddingRight" }, @VEProperty{category = "Spacing"} };
+	paddingLeft int { @JavaScriptProperty { getMethod = "getPaddingLeft", setMethod = "setPaddingLeft" }, @VEProperty{category = "Spacing"} };
+	padding int { @JavaScriptProperty { getMethod = "getPadding", setMethod = "setPadding" }, @VEProperty{category = "Spacing"} };
+	
+	borderBottomStyle string { @JavaScriptProperty { getMethod = "getBorderBottomStyle", setMethod = "setBorderBottomStyle" }, @VEProperty{category = "Border", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"solid\"", displayName="solid"}, 
+					@VEPropertyChoice{id="\"double\"", displayName="double"}, 
+					@VEPropertyChoice{id="\"groove\"", displayName="groove"}, 
+					@VEPropertyChoice{id="\"dotted\"", displayName="dotted"}, 
+					@VEPropertyChoice{id="\"dashed\"", displayName="dashed"}, 
+					@VEPropertyChoice{id="\"inset\"", displayName="inset"}, 
+					@VEPropertyChoice{id="\"outset\"", displayName="outset"}, 
+					@VEPropertyChoice{id="\"ridge\"", displayName="ridge"}
+				],
+				default = "\"solid\""
+		} };
+	borderTopStyle string { @JavaScriptProperty { getMethod = "getBorderTopStyle", setMethod = "setBorderTopStyle" }, @VEProperty{category = "Border", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"solid\"", displayName="solid"}, 
+					@VEPropertyChoice{id="\"double\"", displayName="double"}, 
+					@VEPropertyChoice{id="\"groove\"", displayName="groove"}, 
+					@VEPropertyChoice{id="\"dotted\"", displayName="dotted"}, 
+					@VEPropertyChoice{id="\"dashed\"", displayName="dashed"}, 
+					@VEPropertyChoice{id="\"inset\"", displayName="inset"}, 
+					@VEPropertyChoice{id="\"outset\"", displayName="outset"}, 
+					@VEPropertyChoice{id="\"ridge\"", displayName="ridge"}
+				],
+				default = "\"solid\""  
+		} };
+	borderRightStyle string { @JavaScriptProperty { getMethod = "getBorderRightStyle", setMethod = "setBorderRightStyle" }, @VEProperty{category = "Border", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"solid\"", displayName="solid"}, 
+					@VEPropertyChoice{id="\"double\"", displayName="double"}, 
+					@VEPropertyChoice{id="\"groove\"", displayName="groove"}, 
+					@VEPropertyChoice{id="\"dotted\"", displayName="dotted"}, 
+					@VEPropertyChoice{id="\"dashed\"", displayName="dashed"}, 
+					@VEPropertyChoice{id="\"inset\"", displayName="inset"}, 
+					@VEPropertyChoice{id="\"outset\"", displayName="outset"}, 
+					@VEPropertyChoice{id="\"ridge\"", displayName="ridge"}
+				],
+				default = "\"solid\""  
+		} };
+	borderLeftStyle string { @JavaScriptProperty { getMethod = "getBorderLeftStyle", setMethod = "setBorderLeftStyle" }, @VEProperty{category = "Border", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"solid\"", displayName="solid"}, 
+					@VEPropertyChoice{id="\"double\"", displayName="double"}, 
+					@VEPropertyChoice{id="\"groove\"", displayName="groove"}, 
+					@VEPropertyChoice{id="\"dotted\"", displayName="dotted"}, 
+					@VEPropertyChoice{id="\"dashed\"", displayName="dashed"}, 
+					@VEPropertyChoice{id="\"inset\"", displayName="inset"}, 
+					@VEPropertyChoice{id="\"outset\"", displayName="outset"}, 
+					@VEPropertyChoice{id="\"ridge\"", displayName="ridge"}
+				],
+				default = "\"solid\""  
+		} };
+	borderStyle String { @JavaScriptProperty { getMethod = "getBorderStyle", setMethod = "setBorderStyle" }, @VEProperty{category = "Border", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"solid\"", displayName="solid"}, 
+					@VEPropertyChoice{id="\"double\"", displayName="double"}, 
+					@VEPropertyChoice{id="\"groove\"", displayName="groove"}, 
+					@VEPropertyChoice{id="\"dotted\"", displayName="dotted"}, 
+					@VEPropertyChoice{id="\"dashed\"", displayName="dashed"}, 
+					@VEPropertyChoice{id="\"inset\"", displayName="inset"}, 
+					@VEPropertyChoice{id="\"outset\"", displayName="outset"}, 
+					@VEPropertyChoice{id="\"ridge\"", displayName="ridge"}
+				],
+				default = "\"solid\""  
+		} };
+	
+	borderBottomWidth int { @JavaScriptProperty { getMethod = "getBorderBottomWidth", setMethod = "setBorderBottomWidth" }, @VEProperty{category = "Border"} };
+	borderTopWidth int { @JavaScriptProperty { getMethod = "getBorderTopWidth", setMethod = "setBorderTopWidth" }, @VEProperty{category = "Border"} };
+	borderRightWidth int { @JavaScriptProperty { getMethod = "getBorderRightWidth", setMethod = "setBorderRightWidth" }, @VEProperty{category = "Border"} };
+	borderLeftWidth int { @JavaScriptProperty { getMethod = "getBorderLeftWidth", setMethod = "setBorderLeftWidth" }, @VEProperty{category = "Border"} };
+	borderWidth int { @JavaScriptProperty { getMethod = "getBorderWidth", setMethod = "setBorderWidth" }, @VEProperty{category = "Border"} };
+	borderColor String { @JavaScriptProperty { getMethod = "getBorderColor", setMethod = "setBorderColor" }, @VEProperty{category = "Border", propertyType="color"} };
+	
+	fontWeight String { @JavaScriptProperty { getMethod = "getFontWeight", setMethod = "setFontWeight" }, @VEProperty{ 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"normal\"", displayName="normal"}, 
+					@VEPropertyChoice{id="\"bold\"", displayName="bold"}, 
+					@VEPropertyChoice{id="\"bolder\"", displayName="bolder"}, 
+					@VEPropertyChoice{id="\"lighter\"", displayName="lighter"}
+				],
+				default = "\"normal\""  
+		} };
+	fontSize string { @JavaScriptProperty { getMethod = "getFontSize", setMethod = "setFontSize" }, @VEProperty{} };
+	font string { @JavaScriptProperty { getMethod = "getFont", setMethod = "setFont" }, @VEProperty{} };
+	backgroundColor string { @JavaScriptProperty { getMethod = "getBackgroundColor", setMethod = "setBackgroundColor" }, @VEProperty{propertyType="color"} };
+	color string { @JavaScriptProperty { getMethod = "getColor", setMethod = "setColor" }, @VEProperty{propertyType="color" } };
+	
+	class String { @JavaScriptProperty { getMethod = "getClass", setMethod = "setClass" }, @VEProperty };
+	id String { @JavaScriptProperty { getMethod = "getID", setMethod = "setID" },  @VEProperty{} };
+	
+	reverseTextDirection string {@JavaScriptProperty{setMethod = "setReverseTextDirection", getMethod = "getReverseTextDirection"},
+			@VEProperty{
+				category = "Bidi",
+				propertyType = "choice",
+				choices = [
+					@VEPropertyChoice{id = "\"Yes\"", displayName = "Yes"},
+					@VEPropertyChoice{id = "\"No\"", displayName = "No"}
+				],
+				default = "\"No\""
+			} };
+	textLayout string {@JavaScriptProperty{setMethod = "setTextLayout", getMethod = "getTextLayout"}, 
+			@VEProperty{
+				category = "Bidi",
+				propertyType = "choice",
+				choices = [
+					@VEPropertyChoice{id = "\"Logical\"", displayName = "Logical"},
+					@VEPropertyChoice{id = "\"Visual\"", displayName = "Visual"}
+				],
+				default = "\"Logical\""
+			} };	
+	widgetOrientation string {@JavaScriptProperty{setMethod = "setWidgetOrientation", getMethod = "getWidgetOrientation"}, 
+			@VEProperty{
+				category = "Bidi",
+				propertyType = "choice",
+				choices = [
+					@VEPropertyChoice{id="\"LTR\"", displayName = "LTR"},
+					@VEPropertyChoice{id="\"RTL\"", displayName = "RTL"}
+				],
+				default = "\"LTR\""
+			} };
+	
+	targetWidget Widget { }; //@JavaScriptProperty { getMethod = "getTargetWidget", setMethod = "setTargetWidget" } };
+	tagName String { @JavaScriptProperty { getMethod = "getTagName", setMethod = "setTagName" } };
+	innerHTML String {@JavaScriptProperty { getMethod = "getInnerHTML", setMethod = "setInnerHTML" }};
+	innerText String {@JavaScriptProperty { getMethod = "getInnerText", setMethod = "setInnerText" }};
+	value String {@JavaScriptProperty { getMethod = "getValue", setMethod = "setValue" }};
+	children Widget[] {@JavaScriptProperty { getMethod = "getChildren", setMethod = "setChildren" }};
+	
+	function getAttribute(attribute string in) returns (any);
+	function setAttribute(attribute String in, value any in);
+	function removeAttribute(attribute String in);
+	
+	function appendChild(widget Widget in);
+	function appendChildren(widget Widget[] in);
+	function removeChild(widget Widget in);
+	function removeChildren();
+	function childrenChanged();
+	
+	function getElementById(id String in) returns (Widget);
+	function getElementsByName(name String in) returns (Widget[]);
+	function getElementsByTagName(tagName String in) returns (Widget[]);
+	
+	function focus();
+	function select();
+	
+	function toString() returns(string);
+	
+	displayStyle string { @JavaScriptProperty  { getMethod = "getDisplayStyle", setMethod = "setDisplayStyle" } };	
+	
+	onStartDrag StartDragFunction { @JavaScriptProperty { getMethod = "getOnStartDrag", setMethod = "setOnStartDrag"}};
+	onDrag DragFunction { @JavaScriptProperty { getMethod = "getOnDrag", setMethod = "setOnDrag"}};
+	onDropOnTarget DropOnTargetFunction { @JavaScriptProperty { getMethod = "getOnDropOnTarget", setMethod = "setOnDropOnTarget" } };
+	
+	// Functions to manage individual event handler types.
+	// Each widget may not support all of them and may choose to
+	// ignore attempts to add event handlers it does not recognize.
+	
+	onChange
+			EventHandler[]
+			
+			{ @JavaScriptProperty { getMethod="getOnChange", setMethod="setOnChange" },
+			@VEEvent{}
+		};
+	
+	onClick
+			EventHandler[]
+			
+			{ @JavaScriptProperty { getMethod="getOnClick", setMethod="setOnClick" },
+			@VEEvent{}
+		};
+	
+	onSelect
+			EventHandler[]
+			
+			{ @JavaScriptProperty { getMethod="getOnSelect", setMethod="setOnSelect" },
+			@VEEvent{}
+		};
+	
+	onFocusGained
+			EventHandler[]
+			
+			{ @JavaScriptProperty { getMethod="getOnFocusGained", setMethod="setOnFocusGained" },
+			@VEEvent{}
+		};
+	
+	onFocusLost
+			EventHandler[]
+			
+			{ @JavaScriptProperty { getMethod="getOnFocusLost", setMethod="setOnFocusLost" },
+			@VEEvent{}
+		};
+	
+	onKeyDown
+			EventHandler[]
+			
+			{ @JavaScriptProperty { getMethod="getOnKeyDown", setMethod="setOnKeyDown" },		
+			@VEEvent{}
+		};
+	
+	onKeyPress
+			EventHandler[]
+			
+			{ @JavaScriptProperty { getMethod="getOnKeyPress", setMethod="setOnKeyPress" },
+			@VEEvent{}
+		};
+	
+	onKeyUp
+			EventHandler[]
+			
+			{ @JavaScriptProperty { getMethod="getOnKeyUp", setMethod="setOnKeyUp" },
+			@VEEvent{}
+		};
+	
+	onMouseDown
+			EventHandler[]
+			
+			{ @JavaScriptProperty { getMethod="getOnMouseDown", setMethod="setOnMouseDown" },
+			@VEEvent{}
+		};
+	
+	onMouseMove
+			EventHandler[]
+			
+			{ @JavaScriptProperty { getMethod="getOnMouseMove", setMethod="setOnMouseMove" },
+			@VEEvent{}
+		};
+	
+	onMouseOver
+			EventHandler[]
+			
+			{ @JavaScriptProperty { getMethod="getOnMouseOver", setMethod="setOnMouseOver" },
+			@VEEvent{}
+		};
+	
+	onMouseOut
+			EventHandler[]
+			
+			{ @JavaScriptProperty { getMethod="getOnMouseOut", setMethod="setOnMouseOut" },
+			@VEEvent{}
+		};
+	
+	onMouseUp
+			EventHandler[]
+			
+			{ @JavaScriptProperty { getMethod="getOnMouseUp", setMethod="setOnMouseUp" },
+			@VEEvent{}
+		};
+	
+	onScroll
+			EventHandler[]
+			
+			{ @JavaScriptProperty { getMethod="getOnScroll", setMethod="setOnScroll" },
+			@VEEvent{}
+		};
+	
+	onContextMenu
+			EventHandler[]
+			
+			{ @JavaScriptProperty { getMethod="getOnContextMenu", setMethod="setOnContextMenu" },
+			@VEEvent{}
+		};
+	
+	function getChildVariables() returns (String);
+	
+	function morph(duration int in, callback EffectCallback in, morphFunction MorphFunction in);
+	function fadeIn(duration int in, callback EffectCallback in);
+	function fadeOut(duration int in, callback EffectCallback in);
+	function resize(width int in, height int in, duration int in, callback EffectCallback in);
+
+	function setBiDiMarkers(isTextTypeVisual boolean in, isTextOrientationRightToLeft boolean in);
+	
+end
+
+Delegate EffectCallback() {eglIsSystemPart = yes}
+end
+Delegate MorphFunction(widget Widget in, step float in) {eglIsSystemPart = yes}
+end
+Delegate StartDragFunction(widget Widget in, x int in, y int in) returns(boolean) {eglIsSystemPart = yes}
+end
+Delegate DropOnTargetFunction(widget Widget in, dropTarget Widget in, x int in, y int in) {eglIsSystemPart = yes}
+end
+Delegate DragFunction(widget Widget in, dropTarget Widget in, x int in, y int in) {eglIsSystemPart = yes}
+end

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema 	xmlns="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.ibm.com/xmlns/egl/formatting/1.0" 
+	xmlns:egl="http://www.ibm.com/xmlns/egl/formatting/1.0" 
+	xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" 	
+	ecore:documentRoot="EGLFormatProfileRoot" 
+	ecore:nsPrefix="egl" 
+	ecore:package="org.eclipse.edt.compiler.internal.formatting.profile">
+	<element name="format_profiles" type="egl:FormatProfiles"/>
+	<complexType name="FormatProfiles">
+		<sequence>
+			<element name="defaultProfile" type="egl:DefaultProfile" minOccurs="0" maxOccurs="1"/>
+			<element name="profile" type="egl:Profile" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="selection" type="string" use="optional"/>
+		<attribute name="version" type="string" use="optional"/>
+	</complexType>
+		
+	<complexType name="DefaultProfile">
+		<sequence>
+			<element name="preview" type="egl:Preview" minOccurs="0" maxOccurs="1"/>
+			<element name="controls" type="egl:Controls" minOccurs="0" maxOccurs="1"/>
+			<element name="category" type="egl:Category" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="name" type="string" use="required"/>
+	</complexType>
+	
+	<complexType name="Profile">
+		<sequence>
+			<element name="setting" type="egl:Setting" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="name" type="string" use="required"/>
+		<attribute name="base" type="NCName" use="optional"/>		<!-- if base is not specified, means base is defaultProfile -->
+		<attribute name="isBuildIn" type="boolean" default="false"/>
+	</complexType>
+	
+	<complexType name="Setting">
+		<sequence/>
+		<attribute name="category" type="string" use="required"/>
+		<attribute name="pref" type="string" use="required"/>
+		<attribute name="value" type="string" use="required"/>
+	</complexType>	
+	
+	<complexType name="Controls">
+		<sequence>
+			<element ref="egl:control" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="Category">
+		<sequence>
+			<element name="preview" type="egl:Preview" minOccurs="0" maxOccurs="1"/>
+			<element name="group" type="egl:Group" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="id" type="NCName" use="optional"/>
+		<attribute name="display" type="string" use="optional"/>
+	</complexType>
+	<element name="control" type="egl:Control" abstract="true"/>
+	<complexType name="Control">
+		<sequence/>
+		<attribute name="name" type="NCName" use="optional"/>
+		<attribute name="class" type="string" use="optional"/>
+		<attribute name="style" type="string" use="optional"/>
+	</complexType>
+	<element name="control.ref" type="egl:ReferenceControl" substitutionGroup="egl:control"/>
+	<complexType name="ReferenceControl">
+		<complexContent>
+			<extension base="egl:Control">
+				<attribute name="ref" type="NCName" use="optional"/>
+			</extension>
+		</complexContent>
+	</complexType>
+	<element name="control.text" type="egl:TextControl" substitutionGroup="egl:control"/>
+	<complexType name="TextControl">
+		<complexContent>
+			<extension base="egl:Control"/>
+		</complexContent>
+	</complexType>
+	<element name="control.combo" type="egl:ComboControl" substitutionGroup="egl:control"/>
+	<complexType name="ComboControl">
+		<complexContent>
+			<extension base="egl:Control">
+				<attribute name="choices" type="string" use="optional"/>
+			</extension>
+		</complexContent>
+	</complexType>
+	<element name="control.check" type="egl:CheckControl" substitutionGroup="egl:control"/>
+	<complexType name="CheckControl">
+		<complexContent>
+			<extension base="egl:Control"/>
+		</complexContent>
+	</complexType>
+	<element name="control.radio" type="egl:RadioControl" substitutionGroup="egl:control"/>
+	<complexType name="RadioControl">
+		<complexContent>
+			<extension base="egl:Control">
+				<attribute name="choices" type="string" use="optional"/>
+			</extension>
+		</complexContent>
+	</complexType>
+	<element name="control.tree" type="egl:TreeControl" substitutionGroup="egl:control"/>
+	<complexType name="TreeControl">
+		<complexContent>
+			<extension base="egl:Control"/>
+		</complexContent>
+	</complexType>
+	<complexType name="Preview">
+		<sequence/>
+		<attribute name="code" type="string" use="optional"/>
+		<attribute name="ref" type="string" use="optional"/>
+	</complexType>
+	<complexType name="Group">
+		<sequence>
+			<element name="pref" type="egl:Preference" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="display" type="string" use="optional"/>
+	</complexType>
+	<complexType name="Preference">
+		<sequence>
+			<element name="preview" type="egl:Preview" minOccurs="0" maxOccurs="1"/>
+			<element ref="egl:control" minOccurs="0"/>
+		</sequence>
+		<attribute name="id" type="NCName" use="optional"/>
+		<attribute name="display" type="string" use="optional"/>
+		<attribute name="altDisplay" type="string" use="optional"/>		<!-- alternative display -->
+		<attribute name="value" type="string" use="optional"/>
+		<attribute name="visible" type="boolean" use="optional" default="true"/>
+	</complexType>
+</schema>

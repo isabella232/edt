@@ -1,0 +1,41 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package egl.idl.java;
+
+EXTERNALTYPE URL_ type JavaObject
+	{
+		packageName = "java.net", JavaName = "URL",
+		eglIsSystemPart = yes
+	}
+	
+	constructor (spec String);
+	constructor (protocol string, host string, port int, file string);
+	constructor (protocol string, host string, file string );
+	constructor (context URL_, spec String);
+	
+	Function equals (obj Object in) returns (boolean);
+	Function getAuthority() returns (string);
+	Function getContent() returns (Object);
+	Function getContent(classes Class[]) returns (Object);
+	Function getDefaultPort() returns (int);
+	Function getFile() returns (string);
+	Function getHost() returns (string);
+	Function getPath() returns (string);
+	Function getPort() returns (int);
+	Function getProtocol() returns (string);
+	Function getQuery() returns (string);
+	Function getRef() returns (string);
+	Function hashCode() returns (int);
+	Function sameFile(other URL_ in) returns (boolean);
+	Function toString() returns (string);
+	
+end

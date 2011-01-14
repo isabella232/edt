@@ -1,0 +1,107 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package egl.core;
+
+library ServiceLib
+{
+    eglIsSystemPart = yes
+}
+	//delegate
+	serviceExceptionHandler  serviceExceptionHandler {eglSystemConstant = 466};
+	
+    function setWebServiceLocation(webServiceRef int in, location string in)
+        {eglSystemConstant = 450, eglSystemParameterTypes = ["service or interface", ""]}
+    end
+
+    function getWebServiceLocation(webServiceRef int in) returns(string)
+        {eglSystemConstant = 451, eglSystemParameterTypes = ["service or interface"]}
+    end
+
+    function setTCPIPLocation(tcpipServiceRef int in, location string in)
+        {eglSystemConstant = 452, eglSystemParameterTypes = ["service or interface", ""]}
+    end
+
+    function getTCPIPLocation(tcpipServiceRef int in) returns(string)
+        {eglSystemConstant = 453, eglSystemParameterTypes = ["service or interface"]}
+    end
+    
+    function bindService (bindingKey string in) returns (egl.lang.reflect.ServicePart)
+        {eglSystemConstant = 454}
+    end
+    
+    function convertFromJSON(json string in, eglType any const in)
+        {eglSystemConstant = 144}
+    end
+
+    function convertToJSON(eglType any const in) returns(string)
+        {eglSystemConstant = 147}
+    end
+
+    function convertFromURLEncoded(urlEncoded string in) returns (string)
+        {eglSystemConstant = 148}
+    end
+
+    function convertToURLEncoded(eglType string in) returns(string)
+        {eglSystemConstant = 149}
+    end
+    
+    function setRestRequestHeaders(variable int in, requestHeader Dictionary)
+        {eglSystemConstant = 461, eglSystemParameterTypes = ["service or interface", ""]}                
+    end
+    
+    function getRestRequestHeaders(variable int in) returns(Dictionary)
+        {eglSystemConstant = 462, eglSystemParameterTypes = ["service or interface"]}                
+    end
+    
+    function setSOAPRequestHeaders(variable int in, requestHeader any const in)
+        {eglSystemConstant = 467, eglSystemParameterTypes = ["service or interface"]}                
+    end
+    
+    function getSOAPRequestHeaders(variable int in, responseHeader any const in)
+        {eglSystemConstant = 468, eglSystemParameterTypes = ["service or interface"]}                
+    end
+    
+    function setHTTPBasicAuthentication(variable int in, userID string in, userPassword string in)
+        {eglSystemConstant = 460, eglSystemParameterTypes = ["service or interface", "", ""]}
+    end
+    
+    function setProxyBasicAuthentication( userID string in, userPassword string in )
+    	{eglSystemConstant = 465}
+    end
+        
+    function setRestServiceLocation(restServiceRef int in, uri string in)
+        {eglSystemConstant = 463, eglSystemParameterTypes = ["service or interface", ""]}
+    end
+
+    function getRestServiceLocation(restServiceRef int in) returns(string)
+        {eglSystemConstant = 464, eglSystemParameterTypes = ["service or interface"]}
+    end   
+    
+    function getCurrentCallbackResponse() returns (HttpResponse)
+    	{eglSystemConstant = 457}
+    end
+    
+    function getOriginalRequest() returns (HttpRequest)
+    	{eglSystemConstant = 458}
+    end
+    
+    function endStatefulServiceSession(webServiceRef int in, errHandler serviceExceptionHandler in)
+        {eglSystemConstant = 459, eglSystemParameterTypes = ["service or interface", "serviceExceptionHandler delegate"]}
+    end
+    
+    function setCCSID(ccsid int in)
+    	{eglSystemConstant = 469}
+    end
+end
+
+Delegate serviceExceptionHandler(exp AnyException in) {eglIsSystemPart = yes}
+end

@@ -1,0 +1,1933 @@
+package org.eclipse.edt.compiler.core.ast;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Stack;
+
+action code {:
+	private static List simpleNameListToStringList( List simpleNames ) {
+		List result = new ArrayList();
+		for( Iterator iter = simpleNames.iterator(); iter.hasNext(); ) {
+			result.add( ((SimpleName) iter.next()).getIdentifier() );
+		}
+		return result;
+	}
+:}
+
+// Symbols for content assist (error) parser use
+nonterminal UltraRoot, connector, ErrorNode, wsPair;
+terminal BOS, EOS, WS;
+terminal ERRORSTRING;
+terminal ERRORBLOCKCOMMENT;
+terminal ERRORSQLSTMTLIT;
+terminal ERROR_INLINE_DLI;
+
+// Named, single token terminals
+terminal OR, AND, BITOR, BITAND, XOR, IS, NOT, IN, LIKE, MATCHES, ESCAPE, BANG, EQ, NE, LT, GT, LE;
+terminal GE, AS, ISA, PLUS, MINUS, MODULO, TIMES, DIV, TIMESTIMES, CONCAT, NULLCONCAT, AT, DOT, QUESTION;
+terminal BITANDEQ, BITOREQ, PLUSEQ, MINUSEQ, TIMESEQ, DIVEQ, TIMESTIMESEQ, CONCATEQ, NULLCONCATEQ, MODULOEQ, XOREQ;
+terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LCURLY, RCURLY, SEMI, CONST, ASSIGN;
+terminal COLON, COMMA;
+
+// Special terminals used only to specify precedence levels
+terminal UMINUS, UPLUS;
+
+// Special terminals to denote comments and line breaks
+terminal LINE_COMMENT, BLOCK_COMMENT, LINEBREAKS;
+
+// Regular terminals
+terminal PACKAGE, IMPORT;
+terminal END;
+terminal DATAITEM, RECORD, DATATABLE, FORMGROUP, FORM, HANDLER;
+terminal PROGRAM, LIBRARY, FUNCTION, SERVICE, INTERFACE, DELEGATE, EXTERNALTYPE, ENUMERATION;
+terminal IMPLEMENTS, EXTENDS;
+terminal TYPE;
+terminal EMBED, USE, RETURNS;
+terminal SQLNULLABLE, FIELD, INOUT, OUT;
+terminal THIS, NEW;
+terminal PRIVATE, STATIC;
+terminal CONSTRUCTOR;
+
+terminal String ID;
+terminal String INTEGER, DECIMALLIT, FLOATLIT;
+terminal org.eclipse.edt.compiler.core.Boolean BOOLEANLIT;
+terminal StringLiteral STRING;
+terminal HexLiteral HEXLIT;
+terminal CharLiteral CHARLIT;
+terminal DBCharLiteral DBCHARLIT;
+terminal MBCharLiteral MBCHARLIT;
+terminal NULL;
+terminal InlineSQLStatement SQLSTMTLIT, SQLCONDITION;
+terminal InlineDLIStatement INLINE_DLI;
+
+terminal Primitive PRIMITIVE, NUMERICPRIMITIVE, CHARPRIMITIVE;
+terminal Primitive TIMESTAMPINTERVALPRIMITIVE;
+
+// Statement terminals
+terminal CALL, CASE, CONTINUE, EXIT, GOTO, IF, MOVE, TO, RETURN, SET, TRANSFER;
+terminal TRY, THROW, WHILE, CLOSE, CONVERSE, DISPLAY, PRINT, FORWARD, ADD, SHOW;
+terminal DELETE, EXECUTE, GET, OPEN, PREPARE, REPLACE, FOR, FOREACH, FREESQL;
+terminal OPENUI, BIND, ONEVENT, FROM, INTO, BY, DECREMENT, RETURNING;
+terminal PASSING, WITH, USINGPCB, FORUPDATE;
+terminal NOCURSOR;
+terminal SINGLEROW, USING, USINGKEYS, NEXT, PREVIOUS, FIRST, LAST, CURRENT;
+terminal RELATIVE, ABSOLUTE, INPARENT, WHEN, OTHERWISE;
+terminal RUNUNIT, STACK;
+terminal BYNAME, BYPOSITION, WITHV60COMPAT, ALL, TRANSACTION, URL, LABEL, UPDATE;
+terminal INSERT, ELSE, HOLD, SCROLL, ONEXCEPTION;
+
+// Terminals reserved for future use
+terminal DLICALL;
+terminal GROUP;
+terminal LANGUAGEBUNDLE;
+terminal OF;
+terminal REF;
+terminal WHERE;
+terminal WRAP;
+
+nonterminal addOption;
+nonterminal Expression arrayAccess;
+nonterminal Assignment assignment;
+nonterminal FunctionParameter.AttrType attrTypeOpt;
+nonterminal List bindOpt;
+nonterminal List callParametersOpt;
+nonterminal CallbackTarget callReturnToOpt, callOnExceptionOpt;
+nonterminal String charPrimitiveSpecOpt;
+nonterminal classContent;
+nonterminal ContinueStatement.ContinueModifier continueModifierOpt;
+nonterminal OtherwiseClause defaultClauseOpt;
+nonterminal deleteOption;
+nonterminal GetByPositionStatement.Direction direction;
+nonterminal ElseBlock elseOpt;
+nonterminal EnumerationField enumerationField;
+nonterminal OnEventBlock eventBlock;
+nonterminal executeOption;
+nonterminal ExecuteStatement.ExecuteTarget executeTarget;
+nonterminal ExitStatement.ExitModifier exitModifierOpt;
+nonterminal Expression expr;
+nonterminal List extendsOpt;
+nonterminal Expression fieldAccess;
+nonterminal List fieldsOpt;
+nonterminal File file;
+nonterminal ForEachStatement.ForEachTarget foreachTarget;
+nonterminal Node formContent;
+nonterminal Node formGroupContent;
+nonterminal forwardOption;
+nonterminal ForwardStatement.ForwardTarget forwardTargetOpt;
+nonterminal Expression fromExprOpt;
+nonterminal FunctionInvocation functionInvocation;
+nonterminal FunctionParameter functionParameter;
+nonterminal getByKeyOption;
+nonterminal getByPositionOption;
+nonterminal GetByPositionStatement.GetByPositionSource getByPositionSource;
+nonterminal String IDOpt;
+nonterminal List implementsOpt;
+nonterminal ImportDeclaration importDecl;
+nonterminal Expression initializerOpt;
+nonterminal InlineSQLStatement inlineSQLStatement;
+nonterminal InlineSQLStatement inlineSQLStatementOpt;
+nonterminal Boolean inparentOpt;
+nonterminal externalTypeContent;
+nonterminal interfaceContent;
+nonterminal IntoClause intoClauseOpt;
+nonterminal String levelOpt;
+nonterminal Expression literal;
+nonterminal Expression lvalue;
+nonterminal MoveModifier moveModifier;
+nonterminal Name name;
+nonterminal Type namedType;
+nonterminal Boolean sqlNullableOpt;
+nonterminal Boolean parmConstOpt;
+nonterminal String[] numericPrimitiveSpecOpt;
+nonterminal String occursOpt;
+nonterminal OnExceptionBlock onException;
+nonterminal Boolean[] openModifierOpt;
+nonterminal openTarget;
+nonterminal PackageDeclaration packageDeclarationOpt;
+nonterminal Part part;
+nonterminal Name partSubTypeOpt;
+nonterminal Expression passingRecordOpt;
+nonterminal prepareOption;
+nonterminal Expression primary;
+nonterminal Expression primaryNoNew;
+nonterminal Boolean privateAccessModifierOpt;
+nonterminal ProgramParameter programParameter;
+nonterminal List programParametersOpt;
+nonterminal replaceOption;
+nonterminal ReturnsDeclaration returnsOpt;
+nonterminal Expression setTarget;
+nonterminal setting;
+nonterminal SettingsBlock settingsBlock;
+nonterminal SettingsBlock settingsBlockOpt;
+nonterminal showOption;
+nonterminal String simpleNameOpt;
+nonterminal Boolean staticAccessModifierOpt;
+nonterminal ForStatement.ForStep stepOpt;
+nonterminal stmt;
+nonterminal Node strItemDecl;
+nonterminal Node structureContent;
+nonterminal String timestampIntervalPrimitiveSpecOpt;
+nonterminal TransferStatement.TransferTarget transferTargetOpt;
+nonterminal Type type;
+nonterminal Type typeNoName;
+nonterminal FunctionParameter.UseType useTypeOpt;
+nonterminal WhenClause whenClause;
+nonterminal Name withNameOpt;
+
+// Sequence Nonterminals
+nonterminal List addOption_star, addOption_plus;
+nonterminal List classContent_star, classContent_plus;
+nonterminal List deleteOption_star, deleteOption_plus;
+nonterminal List enumerationField_star, enumerationField_plus;
+nonterminal List eventBlock_star, eventBlock_plus;
+nonterminal List executeOption_star, executeOption_plus;
+nonterminal List expr_star, expr_plus;
+nonterminal List externalTypeContent_star, externalTypeContent_plus;
+nonterminal List formContent_star, formContent_plus;
+nonterminal List formGroupContent_star, formGroupContent_plus;
+nonterminal List forwardOption_star, forwardOption_plus;
+nonterminal List functionParameter_star, functionParameter_plus;
+nonterminal List getByKeyOption_star, getByKeyOption_plus;
+nonterminal List getByPositionOption_star, getByPositionOption_plus;
+nonterminal List ID_plus;
+nonterminal List importDecl_star, importDecl_plus;
+nonterminal List interfaceContent_star, interfaceContent_plus;
+nonterminal List setTarget_plus;
+nonterminal List moveModifier_star, moveModifier_plus;
+nonterminal List name_plus;
+nonterminal List onException_star, onException_plus;
+nonterminal List openTarget_star, openTarget_plus;
+nonterminal List part_star, part_plus;
+nonterminal List prepareOption_star, prepareOption_plus;
+nonterminal List programParameter_star, programParameter_plus;
+nonterminal List replaceOption_star, replaceOption_plus;
+nonterminal List setting_star, setting_plus;
+nonterminal List settingsBlock_star, settingsBlock_plus;
+nonterminal List showOption_star, showOption_plus;
+nonterminal List stmt_star, stmt_plus;
+nonterminal List structureContent_star, structureContent_plus;
+nonterminal List whenClause_star, whenClause_plus;
+
+// Precedences
+precedence left OR;
+precedence left AND;
+precedence left IS, NOT, IN, LIKE, MATCHES;
+precedence left BITOR, BITAND, XOR;
+precedence left EQ, NE, LT, GT, LE, GE, ISA;
+precedence left CONCAT, NULLCONCAT;
+precedence left PLUS, MINUS;
+precedence left MODULO;
+precedence left TIMES, DIV;
+precedence left TIMESTIMES;
+precedence left AS;
+precedence left BANG;
+precedence left UMINUS, UPLUS;
+precedence left ESCAPE, FROM;
+
+precedence left DOT;
+
+precedence left RPAREN;		// For Casting
+precedence left LBRACKET;	// To prefer "(new type [])" over "(new type) []"
+precedence left LCURLY;		// To prefer "(new type) {}" over "(new type {})"
+
+// The overall structure of the file
+file
+	::=	packageDeclarationOpt:packageDecl1 importDecl_star:importDecl1 part_star:part1
+	{: RESULT = new File(packageDecl1, importDecl1, part1, packageDecl1left, part1right); :}
+	;
+
+packageDeclarationOpt
+	::=
+	|	PACKAGE:package1 name:name1 SEMI:semi1
+	{: RESULT = new PackageDeclaration(name1, package1left, semi1right); :}
+	;
+
+// The import statements
+importDecl
+	::=	IMPORT:import1 name:name1 SEMI:semi1
+	{: RESULT = new ImportDeclaration(name1, false, import1left, semi1right); :}
+
+	|	IMPORT:import1 name:name1 DOT TIMES:times1 SEMI:semi1
+	{: RESULT = new ImportDeclaration(name1, true, import1left, semi1right); :}
+	;
+
+//==============================
+// parts
+
+part
+	::=	privateAccessModifierOpt:privateAccessModifier1 DATAITEM:dataItem1 ID:id1 type:type1 settingsBlock_star:settingsBlocks1 END:end1
+	{: RESULT = new DataItem(privateAccessModifier1, new SimpleName(id1, id1left, id1right), type1, settingsBlocks1, privateAccessModifier1 == Boolean.FALSE ? dataItem1left : privateAccessModifier1left, end1right); :}
+	
+	|	privateAccessModifierOpt:privateAccessModifier1 DELEGATE:delegate1 ID:id1 LPAREN functionParameter_star:functionParameters1 RPAREN returnsOpt:returns1 settingsBlock_star:settingsBlocks1 END:end1
+	{: RESULT = new Delegate(privateAccessModifier1, new SimpleName(id1, id1left, id1right), functionParameters1, returns1, settingsBlocks1, privateAccessModifier1 == Boolean.FALSE ? delegate1left : privateAccessModifier1left, end1right); :}
+
+	|	privateAccessModifierOpt:privateAccessModifier1 RECORD:record1 ID:id1 partSubTypeOpt:partSubType1 structureContent_star:structureContents1 END:end1
+	{: RESULT = new Record(privateAccessModifier1, new SimpleName(id1, id1left, id1right), partSubType1, structureContents1, privateAccessModifier1 == Boolean.FALSE ? record1left : privateAccessModifier1left, end1right); :}
+
+	|	privateAccessModifierOpt:privateAccessModifier1 DATATABLE:dataTable1 ID:id1 partSubTypeOpt:partSubType1 structureContent_star:structureContents1 END:end1
+	{: RESULT = new DataTable(privateAccessModifier1, new SimpleName(id1, id1left, id1right), partSubType1, structureContents1, privateAccessModifier1 == Boolean.FALSE ? dataTable1left : privateAccessModifier1left, end1right); :}
+
+	|	privateAccessModifierOpt:privateAccessModifier1 FORMGROUP:formGroup1 ID:id1 formGroupContent_star:formGroupContents1 END:end1
+	{: RESULT = new FormGroup(privateAccessModifier1, new SimpleName(id1, id1left, id1right), formGroupContents1, privateAccessModifier1 == Boolean.FALSE ? formGroup1left : privateAccessModifier1left, end1right); :}
+
+	|	privateAccessModifierOpt:privateAccessModifier1 FORM:form1 ID:id1 partSubTypeOpt:partSubType1 formContent_star:formContents1 END:end1
+	{: RESULT = new TopLevelForm(privateAccessModifier1, new SimpleName(id1, id1left, id1right), partSubType1, formContents1, privateAccessModifier1 == Boolean.FALSE ? form1left : privateAccessModifier1left, end1right); :}
+
+	|	privateAccessModifierOpt:privateAccessModifier1 HANDLER:handler1 ID:id1 partSubTypeOpt:partSubType1 classContent_star:classContents1 END:end1
+	{: RESULT = new Handler(privateAccessModifier1, new SimpleName(id1, id1left, id1right), partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? handler1left : privateAccessModifier1left, end1right); :}
+
+	|	privateAccessModifierOpt:privateAccessModifier1 PROGRAM:program1 ID:id1 partSubTypeOpt:partSubType1 programParametersOpt:programParameters1 classContent_star:classContents1 END:end1
+	{: RESULT = new Program(privateAccessModifier1, new SimpleName(id1, id1left, id1right), partSubType1, programParameters1, classContents1, privateAccessModifier1 == Boolean.FALSE ? program1left : privateAccessModifier1left, end1right); :}
+
+	|	privateAccessModifierOpt:privateModifier1 LIBRARY:lib1 ID:id1 partSubTypeOpt:subType classContent_star:contents END:end
+	{: RESULT = new Library(privateModifier1, new SimpleName(id1,id1left,id1right), subType, contents, privateModifier1 == Boolean.FALSE ? lib1left : privateModifier1left, endright); :}
+
+	|	privateAccessModifierOpt:privateAccessModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:functionParameters1 RPAREN returnsOpt:returns1 stmt_star:stmts1 END:end1
+	{: RESULT = new TopLevelFunction(privateAccessModifier1, new SimpleName(id1,id1left,id1right), functionParameters1, returns1, stmts1, privateAccessModifier1 == Boolean.FALSE ? function1left : privateAccessModifier1left, end1right); :}
+
+	|	privateAccessModifierOpt:privateAccessModifier1 SERVICE:service1 ID:id1 implementsOpt:implements1 classContent_star:classContents1 END:end1
+	{: RESULT = new Service(privateAccessModifier1, new SimpleName(id1, id1left, id1right), implements1, classContents1, privateAccessModifier1 == Boolean.FALSE ? service1left : privateAccessModifier1left, end1right); :}
+
+	|	privateAccessModifierOpt:privateAccessModifier1 INTERFACE:interface1 ID:id1 interfaceContent_star:interfaceContents1 END:end1
+	{: RESULT = new Interface(privateAccessModifier1, new SimpleName(id1, id1left, id1right), interfaceContents1, privateAccessModifier1 == Boolean.FALSE ? interface1left : privateAccessModifier1left, end1right); :}
+	
+	|	privateAccessModifierOpt:privateAccessModifier1 EXTERNALTYPE:externalType1 ID:id1 extendsOpt:extends1 partSubTypeOpt:partSubType1 externalTypeContent_star:externalTypeContents1 END:end1
+	{: RESULT = new ExternalType(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, partSubType1, externalTypeContents1, privateAccessModifier1 == Boolean.FALSE ? externalType1left : privateAccessModifier1left, end1right); :}
+	
+	|	privateAccessModifierOpt:privateAccessModifier1 ENUMERATION:enumeration1 ID:id1 settingsBlockOpt:settingsBlock1 enumerationField_star:fields END:end1
+	{: RESULT = new Enumeration(privateAccessModifier1, new SimpleName(id1, id1left, id1right), settingsBlock1, fields, privateAccessModifier1 == Boolean.FALSE ? enumeration1left : privateAccessModifier1left, end1right); :}
+	;
+
+implementsOpt
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	
+	|	IMPLEMENTS name_plus:names1
+	{: RESULT = names1; :}
+	;
+	
+extendsOpt
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	
+	|	EXTENDS name_plus:names1
+	{: RESULT = names1; :}
+	;
+
+partSubTypeOpt
+	::=
+	|	TYPE name:name1
+	{: RESULT = name1; :}
+	;
+
+structureContent
+	::=	settingsBlock:settingsBlock1
+	{: RESULT = settingsBlock1; :}
+
+	|	strItemDecl:strItemDecl1
+	{: RESULT = strItemDecl1; :}
+	;
+
+strItemDecl
+	::=	levelOpt:level1 ID:id1 type:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // StructureItem
+	{: RESULT = new StructureItem(level1, new SimpleName(id1, id1left, id1right), type1, null, settingsBlock1, initializer1, false, false, level1 == null ? id1left : level1left, semi1right); :}
+
+	|	levelOpt:level1 ID:id1 occursOpt:occurs1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // UntypedStructureItem
+	{: RESULT = new StructureItem(level1, new SimpleName(id1, id1left, id1right), null, occurs1, settingsBlock1, initializer1, false, false, level1 == null ? id1left : level1left, semi1right); :}
+
+	|	levelOpt:level1 TIMES:times type:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // FillerStructureItem
+	{: RESULT = new StructureItem(level1, null, type1, null, settingsBlock1, initializer1, true, false, level1 == null ? timesleft : level1left, semi1right); :}
+
+	|	levelOpt:level1 TIMES:times occursOpt:occurs1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // UntypedFillerStructureItem
+	{: RESULT = new StructureItem(level1, null, null, occurs1, settingsBlock1, initializer1, true, false, level1 == null ? timesleft : level1left, semi1right); :}
+
+	|	levelOpt:level1 EMBED:embed name:name1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // EmbeddedRecordStructureItem
+	{: RESULT = new StructureItem(level1, null, new NameType(name1, name1left, name1right), null, settingsBlock1, initializer1, false, true, level1 == null ? embedleft : level1left, semi1right); :}
+	;
+	
+levelOpt
+	::=
+	|	INTEGER:level
+	{: RESULT = level; :}
+	;
+
+occursOpt
+	::=
+	|	LBRACKET INTEGER:occurs RBRACKET
+	{: RESULT = occurs; :}
+	;
+
+formGroupContent
+	::=	USE:use1 name_plus:names1 SEMI:semi1
+	{: RESULT = new UseStatement(names1, null, use1left, semi1right); :}
+
+	|	privateAccessModifierOpt:privateAccessModifier1 FORM:form1 ID:id1 partSubTypeOpt:partSubType1 formContent_star:formContents1 END:end1
+	{: RESULT = new NestedForm(privateAccessModifier1, new SimpleName(id1,id1left,id1right), partSubType1, formContents1, privateAccessModifier1 == Boolean.FALSE ? form1left : privateAccessModifier1left, end1right); :}
+
+	|	settingsBlock:settingsBlock1
+	{: RESULT = settingsBlock1; :}
+	;
+
+formContent
+	::=	ID:id1 type:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable field
+	{: RESULT = new VariableFormField(new SimpleName(id1, id1left, id1right), type1, settingsBlock1, initializer1, id1left, semi1right); :}
+
+	|	TIMES:times1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Constant field
+	{: RESULT = new ConstantFormField(settingsBlock1, initializer1, times1left, semi1right); :}
+	
+	|	settingsBlock:settingsBlock1
+	{: RESULT = settingsBlock1; :}
+	;
+
+programParametersOpt
+	::=
+	|	LPAREN programParameter_star:programParameters1 RPAREN
+	{: RESULT = programParameters1; :}
+	;
+
+programParameter
+	::=	ID:id1 type:type1
+	{: RESULT = new ProgramParameter(new SimpleName(id1, id1left, id1right), type1, id1left, type1right); :}
+	;
+	
+functionParameter
+	::=	ID:id1 type:type1 attrTypeOpt:attrType1 parmConstOpt:parmConst1 useTypeOpt:useType1
+	{: RESULT = new FunctionParameter(new SimpleName(id1, id1left, id1right), type1, attrType1, parmConst1, useType1, id1left, useType1right); :}
+	;
+
+attrTypeOpt
+	::=
+	|	SQLNULLABLE
+	{: RESULT = FunctionParameter.AttrType.SQLNULLABLE; :}
+
+	|	FIELD
+	{: RESULT = FunctionParameter.AttrType.FIELD; :}
+	;
+
+parmConstOpt
+	::=
+	{: RESULT = Boolean.FALSE; :}
+
+	|	CONST
+	{: RESULT = Boolean.TRUE; :}
+	;
+
+useTypeOpt
+	::=
+	|	IN:in1
+	{: RESULT = FunctionParameter.UseType.IN; :}
+
+	|	INOUT:inout1
+	{: RESULT = FunctionParameter.UseType.INOUT; :}
+
+	|	OUT:out1
+	{: RESULT = FunctionParameter.UseType.OUT; :}
+	;
+
+returnsOpt
+	::=
+	|	RETURNS:returns1 LPAREN type:type1 sqlNullableOpt:nullable1 RPAREN:rparen1
+	{: RESULT = new ReturnsDeclaration(type1, nullable1, returns1left, rparen1right); :}
+	;
+	
+sqlNullableOpt
+	::=
+	{: RESULT = Boolean.FALSE; :}
+
+	|	SQLNULLABLE
+	{: RESULT = Boolean.TRUE; :}
+	;
+
+classContent
+	::=	USE:use1 name_plus:names1 settingsBlockOpt:settingsBlock1 SEMI:semi1
+	{: RESULT = new UseStatement(names1, settingsBlock1, use1left, semi1right); :}
+
+	|	privateAccessModifierOpt:privateModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:parms RPAREN returnsOpt:returns1 stmt_star:stmts END:end1
+	{: RESULT = new NestedFunction(privateModifier1, Boolean.FALSE, new SimpleName(id1,id1left,id1right), parms, returns1, stmts, false, privateModifier1 == Boolean.FALSE ? function1left : privateModifier1left, end1right); :}
+
+	|	privateAccessModifierOpt:privateAccessModifier1 ID_plus:IDs1 type:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable Declaration
+	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, Boolean.FALSE, IDs1, type1, settingsBlock1, initializer1, false, privateAccessModifier1 == Boolean.FALSE ? IDs1left : privateAccessModifier1left, semi1right); :}
+
+	|	privateAccessModifierOpt:privateAccessModifier1 CONST:const1 ID_plus:IDs1 type:type1 settingsBlockOpt:settingsBlock1 ASSIGN expr:expr1 SEMI:semi1 // constant
+	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, Boolean.FALSE, IDs1, type1, settingsBlock1, expr1, true, privateAccessModifier1 == Boolean.FALSE ? const1left : privateAccessModifier1left, semi1right); :}
+
+	|	settingsBlock:settingsBlock1
+	{: RESULT = settingsBlock1; :}
+	;
+
+externalTypeContent
+	::=	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:functionParameters1 RPAREN returnsOpt:returns1 settingsBlockOpt:settingsBlock1 SEMI:semi1
+	{: RESULT = new NestedFunction(privateAccessModifier1, staticAccessModifier1, new SimpleName(id1,id1left,id1right), functionParameters1, returns1, settingsBlock1 == null ? Collections.EMPTY_LIST : Arrays.asList(new Object[] {settingsBlock1}), true, (privateAccessModifier1 == Boolean.FALSE && staticAccessModifier1 == Boolean.FALSE ? function1left : (privateAccessModifier1 == Boolean.FALSE ? staticAccessModifier1left : privateAccessModifier1left)), semi1right); :}
+	
+	|	CONSTRUCTOR:constructor1 LPAREN functionParameter_star:functionParameters1 RPAREN settingsBlockOpt:settingsBlock1 SEMI:semi1
+	{: RESULT = new Constructor(functionParameters1, settingsBlock1, constructor1left, semi1right); :}
+	
+	|	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 ID_plus:IDs1 type:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable Declaration
+	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, staticAccessModifier1, IDs1, type1, settingsBlock1, initializer1, false, (privateAccessModifier1 == Boolean.FALSE && staticAccessModifier1 == Boolean.FALSE ? IDs1left : (privateAccessModifier1 == Boolean.FALSE ? staticAccessModifier1left : privateAccessModifier1left)), semi1right); :}
+
+	|	settingsBlock:settingsBlock1
+	{: RESULT = settingsBlock1; :}
+	;
+	
+interfaceContent
+	::=	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:functionParameters1 RPAREN returnsOpt:returns1 settingsBlockOpt:settingsBlock1 SEMI:semi1
+	{: RESULT = new NestedFunction(privateAccessModifier1, staticAccessModifier1, new SimpleName(id1,id1left,id1right), functionParameters1, returns1, settingsBlock1 == null ? Collections.EMPTY_LIST : Arrays.asList(new Object[] {settingsBlock1}), true, (privateAccessModifier1 == Boolean.FALSE && staticAccessModifier1 == Boolean.FALSE ? function1left : (privateAccessModifier1 == Boolean.FALSE ? staticAccessModifier1left : privateAccessModifier1left)), semi1right); :}
+
+	|	settingsBlock:settingsBlock1
+	{: RESULT = settingsBlock1; :}
+	;
+
+enumerationField
+	::=	ID:id1
+	{: RESULT = new EnumerationField(new SimpleName(id1, id1left, id1right), null, id1left, id1right); :}
+	
+	|	ID:id1 ASSIGN expr:expr1
+	{: RESULT = new EnumerationField(new SimpleName(id1, id1left, id1right), expr1, id1left, expr1right); :}
+	;
+
+//==============================
+// Statements
+
+stmt
+	::=	ID_plus:IDs1 type:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable declaration
+	{: RESULT = new FunctionDataDeclaration(IDs1, type1, settingsBlock1, initializer1, false, IDs1left, semi1right); :}
+
+	|	CONST:const1 ID_plus:IDs1 type:type1 settingsBlockOpt:settingsBlock1 ASSIGN expr:expr1 SEMI:semi1 // Constant declaration
+	{: RESULT = new FunctionDataDeclaration(IDs1, type1, settingsBlock1, expr1, true, const1left, semi1right); :}
+
+	|	settingsBlock:settingsBlock1
+	{: RESULT = settingsBlock1; :}
+
+	|	assignment:assignment1 SEMI:semi1
+	{: RESULT = new AssignmentStatement(assignment1, assignment1left, semi1right); :}
+	
+	|	functionInvocation:functionInvocation1 SEMI:semi1
+	{: RESULT = new FunctionInvocationStatement(functionInvocation1, functionInvocation1left, semi1right); :}
+
+	|	primary:primary1 settingsBlock:settingsBlock1 SEMI:semi1 // Set values statement
+	{: RESULT = new SetValuesStatement(new SetValuesExpression(primary1, settingsBlock1, primary1left, settingsBlock1right), primary1left, semi1right); :}
+
+	|	name:name1 settingsBlock:settingsBlock1 SEMI:semi1 // Set values statement
+	{: RESULT = new SetValuesStatement(new SetValuesExpression(name1, settingsBlock1, name1left, settingsBlock1right), name1left, semi1right); :}
+	
+	|	CALL:call1 name:expr1 callParametersOpt:parametersOpt callReturnToOpt:callReturnTo callOnExceptionOpt:onExcept1 settingsBlockOpt:settingsBlock SEMI:semi1
+	{: RESULT = new CallStatement(expr1, parametersOpt, settingsBlock, callReturnTo, onExcept1, call1left, semi1right); :}
+	
+	|	CALL:call1 primaryNoNew:expr1 callParametersOpt:parametersOpt callReturnToOpt:callReturnTo callOnExceptionOpt:onExcept1 settingsBlockOpt:settingsBlock SEMI:semi1
+	{: RESULT = new CallStatement(expr1, parametersOpt, settingsBlock, callReturnTo, onExcept1, call1left, semi1right); :}
+	
+	|	GOTO:goto1 ID:id1 SEMI:semi1
+	{: RESULT = new GotoStatement(id1, goto1left, semi1right); :}
+
+	|	ID:id1 COLON:colon1 // label statement
+	{: RESULT = new LabelStatement(id1, id1left, colon1right); :}
+
+	|	MOVE:move1 expr:expr1 TO lvalue:lvalue1 moveModifier_star:moveModifiers1 SEMI:semi1
+	{: RESULT = new MoveStatement(expr1, lvalue1, moveModifiers1, move1left, semi1right); :}
+
+	|	RETURN:return1 SEMI:semi1
+	{: RESULT = new ReturnStatement(null, return1left, semi1right); :}
+	
+	|	RETURN:return1 LPAREN:lparen expr:expr1 RPAREN:rparen SEMI:semi1
+	{: RESULT = new ReturnStatement(new ParenthesizedExpression(expr1, lparenleft, rparenright), return1left, semi1right); :}
+
+	|	SET:set1 setTarget_plus:setTargets1 ID_plus:IDs1 SEMI:semi1
+	{: RESULT = new SetStatement(setTargets1, simpleNameListToStringList(IDs1), set1left, semi1right); :}
+
+	|	SEMI:semi1
+	{: RESULT = new EmptyStatement(semi1left, semi1right); :}
+
+	|	TRANSFER:transfer1 TO transferTargetOpt:transferTarget1 name:expr1 passingRecordOpt:passingRecord1 settingsBlockOpt:settingsBlock SEMI:semi1
+	{: RESULT = new TransferStatement(transferTarget1, expr1, passingRecord1, settingsBlock, transfer1left, semi1right); :}
+	
+	|	TRANSFER:transfer1 TO transferTargetOpt:transferTarget1 primaryNoNew:expr1 passingRecordOpt:passingRecord1 settingsBlockOpt:settingsBlock SEMI:semi1
+	{: RESULT = new TransferStatement(transferTarget1, expr1, passingRecord1, settingsBlock, transfer1left, semi1right); :}
+
+	|	TRY:try1 stmt_star:stmts1 onException_star:onExcept1 END:end1
+	{: RESULT = new TryStatement(stmts1, onExcept1, try1left, end1right); :}
+	
+	|	THROW:throw1 expr:expr1 SEMI:semi1
+	{: RESULT = new ThrowStatement(expr1, throw1left, semi1right); :}
+	
+	|	CASE:case1 whenClause_star:whenClauses1 defaultClauseOpt:defaultClause1 END:end1
+	{: RESULT = new CaseStatement(null, whenClauses1, defaultClause1, case1left, end1right); :}
+
+	|	CASE:case1 LPAREN:lparen expr:expr1 RPAREN:rparen whenClause_star:whenClauses1 defaultClauseOpt:defaultClause1 END:end1
+	{: RESULT = new CaseStatement(new ParenthesizedExpression(expr1, lparenleft, rparenright), whenClauses1, defaultClause1, case1left, end1right); :}
+
+	|	IF:if1 LPAREN expr:expr1 RPAREN stmt_star:stmts1 elseOpt:else1 END:end1
+	{: RESULT = new IfStatement(expr1, stmts1, else1, if1left, end1right); :}
+
+	|	WHILE:while1 LPAREN expr:expr1 RPAREN stmt_star:stmts1 END:end1
+	{: RESULT = new WhileStatement(expr1, stmts1, while1left, end1right); :}
+	
+	|	FOR:for1 LPAREN lvalue:lvalue1 fromExprOpt:fromExpr1 TO expr:expr1 stepOpt:step1 RPAREN stmt_star:stmts1 END:end1
+	{: RESULT = new ForStatement(lvalue1, null, null, fromExpr1, expr1, step1, stmts1, for1left, end1right); :}
+	
+	|	FOR:for1 LPAREN ID:id1 type:type1 fromExprOpt:fromExpr1 TO expr:expr1 stepOpt:step1 RPAREN stmt_star:stmts1 END:end1
+	{: RESULT = new ForStatement(null, new SimpleName(id1, id1left, id1right), type1, fromExpr1, expr1, step1, stmts1, for1left, end1right); :}
+
+	|	FOREACH:foreach1 LPAREN foreachTarget:foreachTarget1 intoClauseOpt:intoClause1 RPAREN stmt_star:stmts1 END:end1
+	{: RESULT = new ForEachStatement(foreachTarget1, intoClause1, stmts1, foreach1left, end1right); :}
+	
+	|	CONTINUE:continue1 continueModifierOpt:continueModifier1 SEMI:semi1
+	{: RESULT = new ContinueStatement(continueModifier1, continue1left, semi1right); :}
+
+	|	EXIT:exit1 exitModifierOpt:exitModifier1 settingsBlockOpt:settingsBlock SEMI:semi1
+	{: RESULT = new ExitStatement(exitModifier1, settingsBlock, exit1left, semi1right); :}
+
+//		******* I/O Statements ***********************
+
+	|	ADD:add1 expr_plus:exprs1 addOption_star:addOptions1 SEMI:semi1
+	{: RESULT = new AddStatement(exprs1, addOptions1, add1left, semi1right); :}
+
+	|	CLOSE:close1 expr:expr1 SEMI:semi1
+	{: RESULT = new CloseStatement(expr1, close1left, semi1right); :}
+
+	|	CONVERSE:converse1 expr:expr1 withNameOpt:withName1 SEMI:semi1
+	{: RESULT = new ConverseStatement(expr1, withName1, converse1left, semi1right); :}
+
+	|	DELETE:delete1 expr:expr1 deleteOption_star:deleteOptions1 SEMI:semi1
+	{: RESULT = new DeleteStatement(expr1, deleteOptions1, delete1left, semi1right); :}
+
+	|	DISPLAY:display1 expr:expr1 SEMI:semi1
+	{: RESULT = new DisplayStatement(expr1, display1left, semi1right); :}
+
+	|	FORWARD:forward1 expr_star:exprs1 forwardTargetOpt:forwardTarget1 forwardOption_star:forwardOptions1 SEMI:semi1
+	{: RESULT = new ForwardStatement(exprs1, forwardTarget1, forwardOptions1, forward1left, semi1right); :}
+
+	|	FREESQL:freesql1 ID:preparedStatementReference SEMI:semi1
+	{: RESULT = new FreeSQLStatement(preparedStatementReference, freesql1left, semi1right); :}
+
+	|	EXECUTE:execute1 executeTarget:executeTarget1 executeOption_star:executeOptions1 SEMI:semi1
+	{: RESULT = new ExecuteStatement(executeTarget1, executeOptions1, execute1left, semi1right); :}
+
+	|	GET:get1 expr_star:exprs1 getByKeyOption_star:getByKeyOptions1 SEMI:semi1
+	{: RESULT = new GetByKeyStatement(exprs1, getByKeyOptions1, get1left, semi1right); :}
+	
+	|	GET:get1 direction:direction1 inparentOpt:inparent1 getByPositionSource:getByPositionSource1 getByPositionOption_star:getByPositionOptions1 SEMI:semi1
+	{: RESULT = new GetByPositionStatement(direction1, inparent1, getByPositionSource1, getByPositionOptions1, get1left, semi1right); :}
+	
+	|	OPEN:open1 ID:resultSetID openModifierOpt:openModifier1 openTarget_star:openTargets1 SEMI:semi1
+	{: RESULT = new OpenStatement(resultSetID, openModifier1, openTargets1, open1left, semi1right); :}
+
+	|	OPENUI:openui1 settingsBlockOpt:settingsBlock1 expr_plus:exprs1 bindOpt:bind1 eventBlock_star:eventBlocks1 END:end1
+	{: RESULT = new OpenUIStatement(settingsBlock1, exprs1, bind1, eventBlocks1, openui1left, end1right); :}
+	
+	|	PREPARE:prepare1 ID:preparedStmtID prepareOption_star:prepareOptions1 SEMI:semi1
+	{: RESULT = new PrepareStatement(preparedStmtID, prepareOptions1, prepare1left, semi1right); :}
+	
+	|	PRINT:print1 expr:expr1 SEMI:semi1
+	{: RESULT = new PrintStatement(expr1, print1left, semi1right); :}
+
+	|	REPLACE:replace1 expr:expr1 replaceOption_star:replaceOptions1 SEMI:semi1
+	{: RESULT = new ReplaceStatement(expr1, replaceOptions1, replace1left, semi1right); :}
+	
+	|	SHOW:show1 name:expr1 showOption_star:showOptions1 settingsBlockOpt:settingsBlock SEMI:semi1
+	{: RESULT = new ShowStatement(expr1, showOptions1, settingsBlock, show1left, semi1right); :}
+	
+	|	SHOW:show1 primaryNoNew:expr1 showOption_star:showOptions1 settingsBlockOpt:settingsBlock SEMI:semi1
+	{: RESULT = new ShowStatement(expr1, showOptions1, settingsBlock, show1left, semi1right); :}
+	;
+
+bindOpt
+	::=
+	|	BIND expr_plus:exprs1
+	{: RESULT = exprs1; :}
+	;
+	
+eventBlock
+	::=	ONEVENT:onevent1 LPAREN expr:eventType fieldsOpt:fields1 RPAREN stmt_star:stmts1
+	{: RESULT = new OnEventBlock(eventType, fields1, stmts1, onevent1left, stmts1right); :}
+	;
+
+fieldsOpt
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	COLON expr_plus:exprs1
+	{: RESULT = exprs1; :}
+	;
+	
+callParametersOpt
+	::=
+	|	LPAREN expr_plus:exprs1 RPAREN
+	{: RESULT = exprs1; :}
+	;
+
+continueModifierOpt
+	::=
+	|	FOR
+	{: RESULT = ContinueStatement.DefaultContinueModifier.FOR; :}
+	|	FOREACH
+	{: RESULT = ContinueStatement.DefaultContinueModifier.FOREACH; :}
+	|	WHILE
+	{: RESULT = ContinueStatement.DefaultContinueModifier.WHILE; :}
+	|	OPENUI
+	{: RESULT = ContinueStatement.DefaultContinueModifier.OPENUI; :}
+	|	ID:id1
+	{: RESULT = new ContinueStatement.LabelContinueModifier(id1); :}
+	;
+
+foreachTarget
+	::=	expr:expr1
+	{: RESULT = new ForEachStatement.ExpressionForEachTarget(expr1); :}
+
+	|	FROM ID:resultSetID
+	{: RESULT = new ForEachStatement.ResultSetForEachTarget(resultSetID); :}
+	;
+
+intoClauseOpt
+	::=
+	|	INTO:into1 expr_plus:exprs1
+	{: RESULT = new IntoClause( exprs1, into1left, exprs1right); :}
+	;
+
+fromExprOpt
+	::=
+	|	FROM expr:expr1
+	{: RESULT = expr1; :}
+	;
+
+stepOpt
+	::=
+	|	BY expr:expr1
+	{: RESULT = new ForStatement.IncrementForStep(expr1); :}
+	|	DECREMENT BY expr:expr1
+	{: RESULT = new ForStatement.DecrementForStep(expr1); :}
+	;
+
+callReturnToOpt
+	::=
+	| RETURNING:returning1 TO name:expr1
+	{: RESULT = new CallbackTarget(expr1, returning1left, expr1right); :}
+	
+	|	RETURNING:returning1 TO primaryNoNew:expr1
+	{: RESULT = new CallbackTarget(expr1, returning1left, expr1right); :}
+	;
+
+callOnExceptionOpt
+	::=
+	| ONEXCEPTION:onexception1 name:expr1
+	{: RESULT = new CallbackTarget(expr1, onexception1left, expr1right); :}
+	
+	| ONEXCEPTION:onexception1 primaryNoNew:expr1
+	{: RESULT = new CallbackTarget(expr1, onexception1left, expr1right); :}
+	;
+
+showOption
+	::=	RETURNING:returning1 TO name:expr1
+	{: RESULT = new ReturningToInvocationTargetClause(expr1, returning1left, expr1right); :}
+	
+	|	RETURNING:returning1 TO primaryNoNew:expr1
+	{: RESULT = new ReturningToInvocationTargetClause(expr1, returning1left, expr1right); :}
+	
+	|	PASSING:passing1 name:expr1
+	{: RESULT = new PassingClause(expr1, passing1left, expr1right); :}
+
+	|	PASSING:passing1 primaryNoNew:expr1
+	{: RESULT = new PassingClause(expr1, passing1left, expr1right); :}
+	;
+
+prepareOption
+	::=	FROM:from1 expr:expr1
+	{: RESULT = new FromExpressionClause(expr1, from1left, expr1right); :}
+
+	|	FOR:for1 expr:expr1
+	{: RESULT = new ForExpressionClause(expr1, for1left, expr1right); :}
+	;
+
+replaceOption
+	::=	WITH:with1 inlineSQLStatement:inlineSQLStatement1
+	{: RESULT = new WithInlineSQLClause(inlineSQLStatement1, with1left, inlineSQLStatement1right); :}
+
+	|	WITH:with1 INLINE_DLI:dliStatement
+	{: RESULT = new WithInlineDLIClause(dliStatement, with1left, dliStatementright); :}
+
+	|	FROM:from1 ID:resultSetID
+	{: RESULT = new FromResultSetClause(resultSetID, from1left, resultSetIDright); :}
+
+	|	USINGPCB:usingpcb1 lvalue:lvalue1
+	{: RESULT = new UsingPCBClause(lvalue1, usingpcb1left, lvalue1right); :}
+	
+	|	NOCURSOR:nocursor
+	{: RESULT = new NoCursorClause(nocursorleft, nocursorright); :}
+
+	|	USINGKEYS:usingkeys1 expr_plus:exprs1
+	{: RESULT = new UsingKeysClause(exprs1, usingkeys1left, exprs1right); :}
+	;
+
+getByKeyOption
+	::=	FORUPDATE:forupdate1 IDOpt:ID1
+	{: RESULT = new ForUpdateWithIDClause(ID1, forupdate1left, ID1right); :}
+	
+	|	SINGLEROW:singlerow1
+	{: RESULT = new SingleRowClause(singlerow1left, singlerow1right); :}
+	
+	|	WITH:with1 ID:preparedStmtID
+	{: RESULT = new WithIDClause(preparedStmtID, with1left, preparedStmtIDright); :}
+	
+	|	WITH:with1 inlineSQLStatement:inlineSQLStatement1
+	{: RESULT = new WithInlineSQLClause(inlineSQLStatement1, with1left, inlineSQLStatement1right); :}
+	
+	|	WITH:with1 INLINE_DLI:dliStatement
+	{: RESULT = new WithInlineDLIClause(dliStatement, with1left, dliStatementright); :}
+	
+	|	INTO:into1 expr_plus:exprs1
+	{: RESULT = new IntoClause(exprs1, into1left, exprs1right); :}
+	
+	|	USING:using1 expr_plus:exprs1
+	{: RESULT = new UsingClause(exprs1, using1left, exprs1right); :}
+	
+	|	USINGKEYS:usingkeys1 expr_plus:exprs1
+	{: RESULT = new UsingKeysClause(exprs1, usingkeys1left, exprs1right); :}
+	
+	|	USINGPCB:usingpcb1 lvalue:lvalue1
+	{: RESULT = new UsingPCBClause( lvalue1, usingpcb1left, lvalue1right); :}
+	;
+
+IDOpt
+	::=
+	|	ID:id1
+	{: RESULT = id1; :}
+	;
+
+direction
+	::=	NEXT
+	{: RESULT = GetByPositionStatement.DefaultDirection.NEXT; :}
+
+	|	PREVIOUS
+	{: RESULT = GetByPositionStatement.DefaultDirection.PREVIOUS; :}
+
+	|	FIRST
+	{: RESULT = GetByPositionStatement.DefaultDirection.FIRST; :}
+
+	|	LAST
+	{: RESULT = GetByPositionStatement.DefaultDirection.LAST; :}
+
+	|	CURRENT
+	{: RESULT = GetByPositionStatement.DefaultDirection.CURRENT; :}
+
+	|	RELATIVE LPAREN expr:expr1 RPAREN
+	{: RESULT = new GetByPositionStatement.RelativeDirection(expr1); :}
+
+	|	ABSOLUTE LPAREN expr:expr1 RPAREN
+	{: RESULT = new GetByPositionStatement.AbsoluteDirection(expr1); :}
+	;
+
+getByPositionSource
+	::=	expr_plus:exprs1
+	{: RESULT = new GetByPositionStatement.ExpressionListSource(exprs1); :}
+	
+	|	FROM ID:resultSetID
+	{: RESULT = new GetByPositionStatement.FromResultSetSource(resultSetID); :}
+	
+	|	expr:expr1 FROM ID:resultSetID
+	{: RESULT = new GetByPositionStatement.ExpressionFromResultSetSource(expr1, resultSetID); :}
+	;
+
+getByPositionOption
+	::=	INTO:into1 expr_plus:exprs1
+	{: RESULT = new IntoClause(exprs1, into1left, exprs1right); :}
+
+	|	WITH:with1 INLINE_DLI:dliStatement
+	{: RESULT = new WithInlineDLIClause(dliStatement, with1left, dliStatementright); :}
+
+	|	FORUPDATE:forupdate1
+	{: RESULT = new DefaultForUpdateClause(forupdate1left, forupdate1right); :}
+
+	|	USINGPCB:usingpcb1 lvalue:lvalue1
+	{: RESULT = new UsingPCBClause(lvalue1, usingpcb1left, lvalue1right); :}
+	;
+
+inparentOpt
+	::=
+	{: RESULT = Boolean.FALSE; :}
+	|	INPARENT:inparent1
+	{: RESULT = Boolean.TRUE; :}
+	;
+
+withNameOpt
+	::=
+	|	WITH name:name1
+	{: RESULT = name1; :}
+	;
+
+addOption
+	::=	WITH:with1 inlineSQLStatement:inlineSQLStatement1
+	{: RESULT = new WithInlineSQLClause(inlineSQLStatement1, with1left, inlineSQLStatement1right); :}
+
+	|	WITH:with1 INLINE_DLI:dliStatement
+	{: RESULT = new WithInlineDLIClause(dliStatement, with1left, dliStatementright); :}
+
+	|	USINGPCB:usingpcb1 lvalue:lvalue1
+	{: RESULT = new UsingPCBClause(lvalue1, usingpcb1left, lvalue1right); :}
+	;
+	
+deleteOption
+	::=	USINGPCB:usingpcb1 lvalue:lvalue1
+	{: RESULT = new UsingPCBClause(lvalue1, usingpcb1left, lvalue1right); :}
+
+	|	FROM:from1 ID:resultSetID1
+	{: RESULT = new FromResultSetClause(resultSetID1, from1left, resultSetID1right); :}
+
+	|	WITH:with1 inlineSQLStatement:inlineSQLStatement1
+	{: RESULT = new WithInlineSQLClause(inlineSQLStatement1, with1left, inlineSQLStatement1right); :}
+
+	|	WITH:with1 INLINE_DLI:dliStatement
+	{: RESULT = new WithInlineDLIClause(dliStatement, with1left, dliStatementright); :}
+	
+	|	NOCURSOR:nocursor
+	{: RESULT = new NoCursorClause(nocursorleft, nocursorright); :}
+	
+	|	USINGKEYS:usingkeys1 expr_plus:exprs1
+	{: RESULT = new UsingKeysClause(exprs1, usingkeys1left, exprs1right); :}
+	;
+
+whenClause
+	::=	WHEN:when1 LPAREN expr_plus:exprs1 RPAREN stmt_star:stmts1
+	{: RESULT = new WhenClause(exprs1, stmts1, when1left, stmts1right); :}
+	;
+
+defaultClauseOpt
+	::=
+	|	OTHERWISE:otherwise1 stmt_star:stmts1
+	{: RESULT = new OtherwiseClause(stmts1, otherwise1left, stmts1right); :}
+	;
+
+exitModifierOpt
+	::=
+	|	PROGRAM
+	{: RESULT = new ExitStatement.ProgramExitModifier(null); :}
+	
+	|	PROGRAM LPAREN:lparen expr:expr1 RPAREN:rparen
+	{: RESULT = new ExitStatement.ProgramExitModifier(new ParenthesizedExpression(expr1, lparenleft, rparenright)); :}
+	
+	|	RUNUNIT
+	{: RESULT = new ExitStatement.RunUnitExitModifier(null); :}
+	
+	|	RUNUNIT LPAREN:lparen expr:expr1 RPAREN:rparen
+	{: RESULT = new ExitStatement.RunUnitExitModifier(new ParenthesizedExpression(expr1, lparenleft, rparenright)); :}
+
+	|	STACK simpleNameOpt:simpleName1
+	{: RESULT = new ExitStatement.StackExitModifier(simpleName1); :}
+
+	|	CASE
+	{: RESULT = ExitStatement.DefaultExitModifier.CASE; :}
+
+	|	IF
+	{: RESULT = ExitStatement.DefaultExitModifier.IF; :}
+
+	|	WHILE
+	{: RESULT = ExitStatement.DefaultExitModifier.WHILE; :}
+
+	|	FOR
+	{: RESULT = ExitStatement.DefaultExitModifier.FOR; :}
+
+	|	FOREACH
+	{: RESULT = ExitStatement.DefaultExitModifier.FOREACH; :}
+
+	|	OPENUI
+	{: RESULT = ExitStatement.DefaultExitModifier.OPENUI; :}
+	
+	|	ID:id1
+	{: RESULT = new ExitStatement.LabelExitModifier(id1); :}
+	;
+
+simpleNameOpt
+	::=
+	|	ID:simpleName
+	{: RESULT = simpleName; :}
+	;
+
+moveModifier
+	::=	BYNAME
+	{: RESULT = MoveStatement.DefaultMoveModifier.BYNAME; :}
+
+	|	BYPOSITION
+	{: RESULT = MoveStatement.DefaultMoveModifier.BYPOSITION; :}
+
+	|	FOR ALL
+	{: RESULT = MoveStatement.DefaultMoveModifier.FORALL; :}
+
+	|	FOR expr:expr1
+	{: RESULT = new ForMoveModifier(expr1); :}
+	
+	|	WITHV60COMPAT
+	{: RESULT = MoveStatement.DefaultMoveModifier.WITHV60COMPAT; :}
+	;
+
+transferTargetOpt
+	::=	
+	|	PROGRAM
+	{: RESULT = TransferStatement.TransferTarget.PROGRAM; :}
+
+	|	TRANSACTION
+	{: RESULT = TransferStatement.TransferTarget.TRANSACTION; :}
+	;
+
+passingRecordOpt
+	::=
+	|	PASSING name:expr1
+	{: RESULT = expr1; :}
+	
+	|	PASSING primaryNoNew:expr1
+	{: RESULT = expr1; :}
+	;
+
+forwardTargetOpt
+	::=
+	|	TO:to1 expr:expr1
+	{: RESULT = new ForwardStatement.DefaultForwardTarget(expr1); :}
+
+	|	TO:to1 LABEL:label1 expr:expr1
+	{: RESULT = new ForwardStatement.ToLabelForwardTarget(expr1); :}
+
+	|	TO:to1 URL:url1 expr:expr1
+	{: RESULT = new ForwardStatement.ToURLForwardTarget(expr1); :}
+	;
+
+forwardOption
+	::=	RETURNING:returning1 TO name:name1
+	{: RESULT = new ReturningToNameClause(name1, returning1left, name1right); :}
+	|	PASSING:passing1 expr:expr1
+	{: RESULT = new PassingClause(expr1, passing1left, expr1right); :}
+	;
+
+inlineSQLStatementOpt
+	::=
+	|	inlineSQLStatement:sqlStatement
+	{: RESULT = sqlStatement; :}
+	;
+
+executeTarget
+	::=	UPDATE:update1 inlineSQLStatementOpt:inlineSQLStatement1
+	{: RESULT = new ExecuteStatement.UpdateExecuteTarget(inlineSQLStatement1, update1left, inlineSQLStatement1 == null ? update1right : inlineSQLStatement1right); :}
+
+	|	DELETE:delete1 inlineSQLStatementOpt:inlineSQLStatement1
+	{: RESULT = new ExecuteStatement.DeleteExecuteTarget(inlineSQLStatement1, delete1left, inlineSQLStatement1 == null ? delete1right : inlineSQLStatement1right); :}
+	
+	|	INSERT:insert1 inlineSQLStatementOpt:inlineSQLStatement1
+	{: RESULT = new ExecuteStatement.InsertExecuteTarget(inlineSQLStatement1, insert1left, inlineSQLStatement1 == null ? insert1right : inlineSQLStatement1right); :}
+	
+	|	ID:preparedStmtID
+	{: RESULT = new ExecuteStatement.PreparedStatementExecuteTarget(preparedStmtID, preparedStmtIDleft, preparedStmtIDright); :}
+
+	|	inlineSQLStatement:inlineSQLStatement1
+	{: RESULT = new ExecuteStatement.DefaultSQLStatementExecuteTarget(inlineSQLStatement1, inlineSQLStatement1left, inlineSQLStatement1right); :}
+	;
+
+executeOption
+	::=	USING:using1 expr_plus:exprs1
+	{: RESULT = new UsingClause(exprs1, using1left, exprs1right); :}
+	
+	|	FOR:for1 expr:expr1
+	{: RESULT = new ForExpressionClause(expr1, for1left, expr1right); :}
+	;
+
+inlineSQLStatement
+	::=	SQLSTMTLIT:sqlStatement
+	{: RESULT = sqlStatement; :}
+	;
+
+elseOpt
+	::=
+	|	ELSE:else1 stmt_star:stmts1
+	{: RESULT = new ElseBlock(stmts1, else1left, stmts1right); :}
+	;
+
+openModifierOpt
+	::=
+	{: RESULT = new Boolean[] { Boolean.FALSE, Boolean.FALSE }; :}
+	|	HOLD
+	{: RESULT = new Boolean[] { Boolean.TRUE,  Boolean.FALSE }; :}
+	|	SCROLL
+	{: RESULT = new Boolean[] { Boolean.FALSE, Boolean.TRUE }; :}
+	|	HOLD SCROLL
+	{: RESULT = new Boolean[] { Boolean.TRUE,  Boolean.TRUE }; :}
+	|	SCROLL HOLD
+	{: RESULT = new Boolean[] { Boolean.TRUE,  Boolean.TRUE }; :}
+	;
+
+openTarget
+	::=	FORUPDATE:forupdate1
+	{: RESULT = new DefaultForUpdateClause(forupdate1left, forupdate1right); :}
+
+	|	INTO:into1 expr_plus:exprs1
+	{: RESULT = new IntoClause(exprs1, into1left, exprs1right); :}
+
+	|	WITH:with1 inlineSQLStatement:inlineSQLStatement1
+	{: RESULT = new WithInlineSQLClause(inlineSQLStatement1, with1left, inlineSQLStatement1right); :}
+
+	|	WITH:with1 ID:preparedStmtID
+	{: RESULT = new WithIDClause(preparedStmtID, with1left, preparedStmtIDright); :}
+
+	|	USING:using1 expr_plus:exprs1
+	{: RESULT = new UsingClause(exprs1, using1left, exprs1right); :}
+
+	|	USINGKEYS:usingkeys1 expr_plus:exprs1
+	{: RESULT = new UsingKeysClause(exprs1, usingkeys1left, exprs1right); :}
+
+	|	FOR:for1 expr:expr1
+	{: RESULT = new ForExpressionClause(expr1, for1left, expr1right); :}
+	;
+
+onException
+	::=	ONEXCEPTION:onexception1 stmt_star:stmts1
+	{: RESULT = new OnExceptionBlock(stmts1, null, null, onexception1left, stmts1right); :}
+	
+	|	ONEXCEPTION:onexception1 LPAREN ID:id1 type:type1 RPAREN stmt_star:stmts1
+	{: RESULT = new OnExceptionBlock(stmts1, new SimpleName(id1, id1left, id1right), type1, onexception1left, stmts1right); :}
+	;
+
+expr
+	::=	PLUS:plus1 expr:expr1
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.PLUS, expr1, plus1left, expr1right); :} %prec UPLUS
+
+	|	MINUS:minus1 expr:expr1
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.MINUS, expr1, minus1left, expr1right); :} %prec UMINUS
+
+	|	expr:expr1 PLUS expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.PLUS, expr1, expr2, expr1left, expr2right); :}
+
+	|	expr:expr1 MINUS expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.MINUS, expr1, expr2, expr1left, expr2right); :}
+
+	|	expr:expr1 TIMES expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.TIMES, expr1, expr2, expr1left, expr2right); :}
+
+	|	expr:expr1 DIV expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.DIVIDE, expr1, expr2, expr1left, expr2right); :}
+
+	|	expr:expr1 MODULO expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.MODULO, expr1, expr2, expr1left, expr2right); :}
+
+	|	expr:expr1 TIMESTIMES expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.TIMESTIMES, expr1, expr2, expr1left, expr2right); :}
+	
+	|	expr:expr1 CONCAT expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.CONCAT, expr1, expr2, expr1left, expr2right); :}
+	
+	|	expr:expr1 NULLCONCAT expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.NULLCONCAT, expr1, expr2, expr1left, expr2right); :}
+
+	|	expr:expr1 OR expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.OR, expr1, expr2, expr1left, expr2right); :}
+
+	|	expr:expr1 AND expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.AND, expr1, expr2, expr1left, expr2right); :}
+
+	|	BANG:bang1 expr:expr1
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.BANG, expr1, bang1left, expr1right); :}
+	
+	|	expr:expr1 BITAND expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.BITAND, expr1, expr2, expr1left, expr2right); :}
+	
+	|	expr:expr1 BITOR expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.BITOR, expr1, expr2, expr1left, expr2right); :}
+	
+	|	expr:expr1 XOR expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.XOR, expr1, expr2, expr1left, expr2right); :}
+
+	|	expr:expr1 EQ expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.EQUALS, expr1, expr2, expr1left, expr2right); :}
+
+	|	expr:expr1 NE expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.NOT_EQUALS, expr1, expr2, expr1left, expr2right); :}
+
+	|	expr:expr1 LT expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.LESS, expr1, expr2, expr1left, expr2right); :}
+
+	|	expr:expr1 GT expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.GREATER, expr1, expr2, expr1left, expr2right); :}
+
+	|	expr:expr1 LE expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.LESS_EQUALS, expr1, expr2, expr1left, expr2right); :}
+
+	|	expr:expr1 GE expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.GREATER_EQUALS, expr1, expr2, expr1left, expr2right); :}
+
+	|	expr:expr1 ISA type:type1
+	{: RESULT = new IsAExpression(expr1, type1, expr1left, type1right); :}
+	
+	|	expr:expr1 AS type:type1
+	{: RESULT = new AsExpression(expr1, type1, expr1left, type1right); :}
+	
+	|	expr:expr1 AS STRING:stringLiteral
+	{: RESULT = new AsExpression(expr1, stringLiteral, expr1left, stringLiteralright); :}
+	
+	|	expr:expr1 IN expr:expr2
+	{: RESULT = new InExpression(expr1, expr2, null, expr1left, expr2right); :}
+	
+	|	expr:expr1 IN expr:expr2 FROM expr:expr3
+	{: RESULT = new InExpression(expr1, expr2, expr3, expr1left, expr3right); :}
+
+	|	expr:expr1 IS expr:expr2
+	{: RESULT = new IsNotExpression(IsNotExpression.Operator.IS, expr1, expr2, expr1left, expr2right); :}
+
+	|	expr:expr1 NOT expr:expr2
+	{: RESULT = new IsNotExpression(IsNotExpression.Operator.NOT, expr1, expr2, expr1left, expr2right); :}
+
+	|	expr:expr1 LIKE expr:expr2
+	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.LIKE, expr1, expr2, null, expr1left, expr2right); :}
+
+	|	expr:expr1 MATCHES expr:expr2
+	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, null, expr1left, expr2right); :}
+	
+	|	expr:expr1 LIKE expr:expr2 ESCAPE STRING:escapeCharacter
+	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.LIKE, expr1, expr2, escapeCharacter.getCanonicalString(), expr1left, escapeCharacterright); :}
+
+	|	expr:expr1 MATCHES expr:expr2 ESCAPE STRING:escapeCharacter
+	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, escapeCharacter.getCanonicalString(), expr1left, escapeCharacterright); :}
+
+	|	name:name1
+	{: RESULT = name1; :}
+
+	|	primary:primary1
+	{: RESULT = primary1; :}
+
+	|	primary:primary1 settingsBlock:settingsBlock1
+	{: RESULT = new SetValuesExpression(primary1, settingsBlock1, primary1left, settingsBlock1right); :}
+
+	|	name:name1 settingsBlock:settingsBlock1
+	{: RESULT = new SetValuesExpression(name1, settingsBlock1, name1left, settingsBlock1right); :}
+	
+	|	PRIMITIVE:prim1 DOT TYPE:typeKeyword
+	{: RESULT = new TypeLiteralExpression(new NoSpecPrimitiveType(prim1, prim1left, prim1right), prim1left, typeKeywordright); :}
+
+	|	NUMERICPRIMITIVE:numericprimitive1 DOT TYPE:typeKeyword
+	{: RESULT = new TypeLiteralExpression(new NumericSpecPrimitiveType(numericprimitive1, null, numericprimitive1left, numericprimitive1right), numericprimitive1left, typeKeywordright); :}
+
+	|	CHARPRIMITIVE:charprimitive1 DOT TYPE:typeKeyword
+	{: RESULT = new TypeLiteralExpression(new CharacterSpecPrimitiveType(charprimitive1, null, charprimitive1left, charprimitive1right), charprimitive1left, typeKeywordright); :}
+
+	|	TIMESTAMPINTERVALPRIMITIVE:timestampintervalprimitive1 DOT TYPE:typeKeyword
+	{: RESULT = new TypeLiteralExpression(new TimestampIntervalSpecPrimitiveType(timestampintervalprimitive1, null, timestampintervalprimitive1left, timestampintervalprimitive1right), timestampintervalprimitive1left, typeKeywordright); :}
+	
+	|	PRIMITIVE:prim1 LBRACKET RBRACKET:rbracket1 DOT TYPE:typeKeyword
+	{: RESULT = new TypeLiteralExpression(new ArrayType(new NoSpecPrimitiveType(prim1, prim1left, prim1right), null, prim1left, rbracket1right), prim1left, typeKeywordright); :}
+
+	|	NUMERICPRIMITIVE:prim1 LBRACKET RBRACKET:rbracket1 DOT TYPE:typeKeyword
+	{: RESULT = new TypeLiteralExpression(new ArrayType(new NumericSpecPrimitiveType(prim1, null, prim1left, prim1right), null, prim1left, rbracket1right), prim1left, typeKeywordright); :}
+
+	|	CHARPRIMITIVE:prim1 LBRACKET RBRACKET:rbracket1 DOT TYPE:typeKeyword
+	{: RESULT = new TypeLiteralExpression(new ArrayType(new CharacterSpecPrimitiveType(prim1, null, prim1left, prim1right), null, prim1left, rbracket1right), prim1left, typeKeywordright); :}
+
+	|	TIMESTAMPINTERVALPRIMITIVE:prim1 LBRACKET RBRACKET:rbracket1 DOT TYPE:typeKeyword
+	{: RESULT = new TypeLiteralExpression(new ArrayType(new TimestampIntervalSpecPrimitiveType(prim1, null, prim1left, prim1right), null, prim1left, rbracket1right), prim1left, typeKeywordright); :}
+	
+	|	name:name1 LBRACKET RBRACKET:rbracket1 DOT TYPE:typeKeyword
+	{: RESULT = new TypeLiteralExpression(new ArrayType(new NameType(name1, name1left, name1right), null, name1left, rbracket1right), name1left, typeKeywordright); :}
+	;
+	
+privateAccessModifierOpt
+	::=
+	{: RESULT = Boolean.FALSE; :}
+
+	|	PRIVATE
+	{: RESULT = Boolean.TRUE; :}
+	;
+
+staticAccessModifierOpt
+	::=
+	{: RESULT = Boolean.FALSE; :}
+
+	|	STATIC
+	{: RESULT = Boolean.TRUE; :}
+	;
+	
+primary
+	::= primaryNoNew:primaryNoNew
+	{: RESULT = primaryNoNew; :}
+	
+	|	NEW:new1 typeNoName:type1 settingsBlockOpt:settingsBlock1
+	{: RESULT = new NewExpression(type1, null, settingsBlock1, new1left, settingsBlock1right); :}	
+	
+	|	NEW:new1 namedType:type1 settingsBlockOpt:settingsBlock1
+	{: RESULT = new NewExpression(type1, null, settingsBlock1, new1left, settingsBlock1right); :}	
+	
+	|	NEW:new1 namedType:type1 LPAREN expr_star:funcArgs RPAREN settingsBlockOpt:settingsBlock1
+	{: RESULT = new NewExpression(type1, funcArgs, settingsBlock1, new1left, settingsBlock1right); :}	
+	;
+	
+primaryNoNew
+	::=	LPAREN:lparen1 expr:expr1 RPAREN:rparen1
+	{: RESULT = new ParenthesizedExpression(expr1, lparen1left, rparen1right); :}
+
+	|	THIS:this1
+	{: RESULT = new ThisExpression(this1left, this1right); :}
+
+	|	literal:literal1
+	{: RESULT = literal1; :}
+
+	|	arrayAccess:arrayAccess1
+	{: RESULT = arrayAccess1; :}
+
+	|	fieldAccess:fieldAccess1
+	{: RESULT = fieldAccess1; :}
+
+	|	functionInvocation:functionInvocation1
+	{: RESULT = functionInvocation1; :}
+
+	|	AT:at1 name:name1
+	{: RESULT = new AnnotationExpression(name1, at1left, name1right); :}
+	;
+	
+arrayAccess
+	::=	primary:primary1 LBRACKET expr_plus:expr1 RBRACKET:rbracket1
+	{: RESULT = new ArrayAccess(primary1, expr1, primary1left, rbracket1right); :}
+
+	|	primary:primary1 LBRACKET expr:expr1 COLON expr:expr2 RBRACKET:rbracket1
+	{: RESULT = new SubstringAccess(primary1, expr1, expr2, primary1left, rbracket1right); :}
+
+	|	name:name1 LBRACKET expr_plus:expr1 RBRACKET:rbracket1
+	{: RESULT = new ArrayAccess(name1, expr1, name1left, rbracket1right); :}
+
+	|	name:name1 LBRACKET expr:expr1 COLON expr:expr2 RBRACKET:rbracket1
+	{: RESULT = new SubstringAccess(name1, expr1, expr2, name1left, rbracket1right); :}
+	;
+	
+fieldAccess
+	::=	primary:primary1 DOT ID:id1
+	{: RESULT = new FieldAccess(primary1, id1, primary1left, id1right); :}
+	;
+
+lvalue
+	::=	arrayAccess:arrayAccess1
+	{: RESULT = arrayAccess1; :}
+
+	|	fieldAccess:fieldAccess1
+	{: RESULT = fieldAccess1; :}
+
+	|	name:name1
+	{: RESULT = name1; :}
+	;
+	
+setTarget
+	::=	arrayAccess:arrayAccess1
+	{: RESULT = arrayAccess1; :}
+
+	|	fieldAccess:fieldAccess1
+	{: RESULT = fieldAccess1; :}
+
+	|	name:name1
+	{: RESULT = name1; :}
+	;
+
+literal
+	::=	INTEGER:value
+	{: RESULT = new IntegerLiteral(value, valueleft, valueright); :}
+
+	|	DECIMALLIT:value
+	{: RESULT = new DecimalLiteral(value, valueleft, valueright); :}
+
+	|	FLOATLIT:value
+	{: RESULT = new FloatLiteral(value, valueleft, valueright); :}
+
+	|	STRING:value
+	{: RESULT = value; :}
+	
+	|	HEXLIT:value
+	{: RESULT = value; :}
+	
+	|	CHARLIT:value
+	{: RESULT = value; :}
+	
+	|	DBCHARLIT:value
+	{: RESULT = value; :}
+	
+	|	MBCHARLIT:value
+	{: RESULT = value; :}
+	
+	|	BOOLEANLIT:value
+	{: RESULT = new BooleanLiteral(value, valueleft, valueright); :}
+
+	|	NULL:null1
+	{: RESULT = new NullLiteral(null1left, null1right); :}
+
+	|	SQLCONDITION:value
+	{: RESULT = new SQLLiteral(value.getValue(), valueleft, valueright); :}
+
+	|	LBRACKET:lbracket1 expr_star:exprs1 RBRACKET:rbracket1
+	{: RESULT = new ArrayLiteral(exprs1, lbracket1left, rbracket1right); :}
+	;
+
+functionInvocation
+	::=	name:target1 LPAREN expr_star:funcArgs1 RPAREN:rparen1
+	{: RESULT = new FunctionInvocation(target1, funcArgs1, target1left, rparen1right); :}
+	
+	|	primaryNoNew:target1 LPAREN expr_star:funcArgs1 RPAREN:rparen1
+	{: RESULT = new FunctionInvocation(target1, funcArgs1, target1left, rparen1right); :}
+	;
+	
+assignment
+	::=	lvalue:lvalue1 ASSIGN expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.ASSIGN, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 TIMESEQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.TIMES, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 TIMESTIMESEQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.TIMESTIMES, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 DIVEQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.DIVIDE, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 MODULOEQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.MODULO, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 PLUSEQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.PLUS, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 MINUSEQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.MINUS, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 BITOREQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.OR, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 BITANDEQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.AND, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 XOREQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.XOR, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 CONCATEQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.CONCAT, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 NULLCONCATEQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.NULLCONCAT, lvalue1, expr1, lvalue1left, expr1right); :}
+	;
+
+
+settingsBlockOpt
+	::=
+	|	settingsBlock:settingsBlock1
+	{: RESULT = settingsBlock1; :}
+	;
+	
+settingsBlock
+	::=	LCURLY:lcurly1 setting_star:settings1 RCURLY:rcurly1
+	{: RESULT = new SettingsBlock(settings1, lcurly1left, rcurly1right); :}
+	;
+	
+setting
+	::=	expr:expr1
+	{: RESULT = expr1; :}
+
+	|	assignment:assignment1
+	{: RESULT = assignment1; :}
+	;
+	
+initializerOpt
+	::=	
+	|	ASSIGN expr:expr1
+	{: RESULT = expr1; :}
+	;
+
+name
+	::=	ID:id1
+	{: RESULT = new SimpleName(id1, id1left, id1right); :}
+
+	|	name:name1 DOT ID:id1
+	{: RESULT = new QualifiedName(name1, id1, name1left, id1right); :}
+	;
+	
+type
+	::=	typeNoName:typeNoName1
+	{: RESULT = typeNoName1; :}
+
+	|	namedType:namedType1
+	{: RESULT = namedType1; :}
+	;
+	
+typeNoName
+	::=	PRIMITIVE:prim1
+	{: RESULT = new NoSpecPrimitiveType(prim1, prim1left, prim1right); :}
+
+	|	NUMERICPRIMITIVE:numericprimitive1 numericPrimitiveSpecOpt:numericPrimitiveSpec1
+	{: RESULT = new NumericSpecPrimitiveType(numericprimitive1, numericPrimitiveSpec1, numericprimitive1left, numericPrimitiveSpec1right); :}
+
+	|	CHARPRIMITIVE:charprimitive1 charPrimitiveSpecOpt:charPrimitiveSpec1
+	{: RESULT = new CharacterSpecPrimitiveType(charprimitive1, charPrimitiveSpec1, charprimitive1left, charPrimitiveSpec1right); :}
+
+	|	TIMESTAMPINTERVALPRIMITIVE:timestampintervalprimitive1 timestampIntervalPrimitiveSpecOpt:timestampIntervalPrimitiveSpec1
+	{: RESULT = new TimestampIntervalSpecPrimitiveType(timestampintervalprimitive1, timestampIntervalPrimitiveSpec1, timestampintervalprimitive1left, timestampIntervalPrimitiveSpec1right); :}
+
+	|	typeNoName:typeNoName1 LBRACKET RBRACKET:rbracket1
+	{: RESULT = new ArrayType(typeNoName1, null, typeNoName1left, rbracket1right); :}
+
+	|	typeNoName:typeNoName1 LBRACKET expr:expr1 RBRACKET:rbracket1
+	{: RESULT = new ArrayType(typeNoName1, expr1, typeNoName1left, rbracket1right); :}
+	
+	|	typeNoName:typeNoName1 QUESTION:question1
+	{: RESULT = new NullableType(typeNoName1, typeNoName1left, question1right); :}
+	;
+	
+charPrimitiveSpecOpt
+	::=
+	|	LPAREN:lparen1 INTEGER:length RPAREN:rparen1
+	{: RESULT = length; :}
+	;
+
+numericPrimitiveSpecOpt
+	::=
+	|	LPAREN:lparen1 INTEGER:length COMMA INTEGER:decimal RPAREN:rparen1
+	{: RESULT = new String[] { length, decimal }; :}
+
+	|	LPAREN:lparen1 INTEGER:length RPAREN:rparen1
+	{: RESULT = new String[] { length }; :}
+	;
+	
+timestampIntervalPrimitiveSpecOpt
+	::=
+	|	LPAREN:lparen1 STRING:pattern RPAREN:rparen1
+	{: RESULT = pattern.getCanonicalString(); :}
+	;
+	
+namedType
+	::=	name:name1
+	{: RESULT = new NameType(name1, name1left, name1right); :}
+
+	|	namedType:name1 LBRACKET RBRACKET:rbracket1
+	{: RESULT = new ArrayType(name1, null, name1left, rbracket1right); :}
+
+	|	namedType:name1 LBRACKET expr:expr1 RBRACKET:rbracket1
+	{: RESULT = new ArrayType(name1, expr1, name1left, rbracket1right); :}
+	
+	|	namedType:name1 QUESTION:question1
+	{: RESULT = new NullableType(name1, name1left, question1right); :}
+	;
+	
+ID_plus
+	::=	ID:ID
+	{: RESULT = new ArrayList(); RESULT.add(new SimpleName(ID, IDleft, IDright)); :}
+
+	|	ID_plus:IDs COMMA ID:ID
+	{: if(ID != null) IDs.add(new SimpleName(ID, IDleft, IDright)); RESULT = IDs; :}
+	;
+	
+//==============================
+// Sequence Nonterminals
+// (Everything below generated by PrintSequences in org.eclipse.edt.compiler.core)
+	
+addOption_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	addOption_plus:addOptions
+	{: RESULT = addOptions; :}
+	;
+
+addOption_plus
+	::=	addOption:addOption
+	{: RESULT = new ArrayList(); RESULT.add(addOption); :}
+	|	addOption_plus:addOptions addOption:addOption
+	{: if(addOption != null) addOptions.add(addOption); RESULT = addOptions; :}
+	;
+
+classContent_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	classContent_plus:classContents
+	{: RESULT = classContents; :}
+	;
+
+classContent_plus
+	::=	classContent:classContent
+	{: RESULT = new ArrayList(); RESULT.add(classContent); :}
+	|	classContent_plus:classContents classContent:classContent
+	{: if(classContent != null) classContents.add(classContent); RESULT = classContents; :}
+	;
+
+deleteOption_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	deleteOption_plus:deleteOptions
+	{: RESULT = deleteOptions; :}
+	;
+
+deleteOption_plus
+	::=	deleteOption:deleteOption
+	{: RESULT = new ArrayList(); RESULT.add(deleteOption); :}
+	|	deleteOption_plus:deleteOptions deleteOption:deleteOption
+	{: if(deleteOption != null) deleteOptions.add(deleteOption); RESULT = deleteOptions; :}
+	;
+
+enumerationField_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	enumerationField_plus:enumerationFields
+	{: RESULT = enumerationFields; :}
+	;
+
+enumerationField_plus
+	::=	enumerationField:enumerationField
+	{: RESULT = new ArrayList(); RESULT.add(enumerationField); :}
+	|	enumerationField_plus:enumerationFields COMMA enumerationField:enumerationField
+	{: if(enumerationField != null) enumerationFields.add(enumerationField); RESULT = enumerationFields; :}
+	;
+
+eventBlock_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	eventBlock_plus:eventBlocks
+	{: RESULT = eventBlocks; :}
+	;
+
+eventBlock_plus
+	::=	eventBlock:eventBlock
+	{: RESULT = new ArrayList(); RESULT.add(eventBlock); :}
+	|	eventBlock_plus:eventBlocks eventBlock:eventBlock
+	{: if(eventBlock != null) eventBlocks.add(eventBlock); RESULT = eventBlocks; :}
+	;
+
+executeOption_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	executeOption_plus:executeOptions
+	{: RESULT = executeOptions; :}
+	;
+
+executeOption_plus
+	::=	executeOption:executeOption
+	{: RESULT = new ArrayList(); RESULT.add(executeOption); :}
+	|	executeOption_plus:executeOptions executeOption:executeOption
+	{: if(executeOption != null) executeOptions.add(executeOption); RESULT = executeOptions; :}
+	;
+
+expr_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	expr_plus:exprs
+	{: RESULT = exprs; :}
+	;
+
+expr_plus
+	::=	expr:expr
+	{: RESULT = new ArrayList(); RESULT.add(expr); :}
+	|	expr_plus:exprs COMMA expr:expr
+	{: if(expr != null) exprs.add(expr); RESULT = exprs; :}
+	;
+	
+externalTypeContent_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	externalTypeContent_plus:externalTypeContents
+	{: RESULT = externalTypeContents; :}
+	;
+
+externalTypeContent_plus
+	::=	externalTypeContent:externalTypeContent
+	{: RESULT = new ArrayList(); RESULT.add(externalTypeContent); :}
+	|	externalTypeContent_plus:externalTypeContents externalTypeContent:externalTypeContent
+	{: if(externalTypeContent != null) externalTypeContents.add(externalTypeContent); RESULT = externalTypeContents; :}
+	;
+
+formContent_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	formContent_plus:formContents
+	{: RESULT = formContents; :}
+	;
+
+formContent_plus
+	::=	formContent:formContent
+	{: RESULT = new ArrayList(); RESULT.add(formContent); :}
+	|	formContent_plus:formContents formContent:formContent
+	{: if(formContent != null) formContents.add(formContent); RESULT = formContents; :}
+	;
+
+formGroupContent_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	formGroupContent_plus:formGroupContents
+	{: RESULT = formGroupContents; :}
+	;
+
+formGroupContent_plus
+	::=	formGroupContent:formGroupContent
+	{: RESULT = new ArrayList(); RESULT.add(formGroupContent); :}
+	|	formGroupContent_plus:formGroupContents formGroupContent:formGroupContent
+	{: if(formGroupContent != null) formGroupContents.add(formGroupContent); RESULT = formGroupContents; :}
+	;
+
+forwardOption_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	forwardOption_plus:forwardOptions
+	{: RESULT = forwardOptions; :}
+	;
+
+forwardOption_plus
+	::=	forwardOption:forwardOption
+	{: RESULT = new ArrayList(); RESULT.add(forwardOption); :}
+	|	forwardOption_plus:forwardOptions forwardOption:forwardOption
+	{: if(forwardOption != null) forwardOptions.add(forwardOption); RESULT = forwardOptions; :}
+	;
+
+functionParameter_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	functionParameter_plus:functionParameters
+	{: RESULT = functionParameters; :}
+	;
+
+functionParameter_plus
+	::=	functionParameter:functionParameter
+	{: RESULT = new ArrayList(); RESULT.add(functionParameter); :}
+	|	functionParameter_plus:functionParameters COMMA functionParameter:functionParameter
+	{: if(functionParameter != null) functionParameters.add(functionParameter); RESULT = functionParameters; :}
+	;
+
+getByKeyOption_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	getByKeyOption_plus:getByKeyOptions
+	{: RESULT = getByKeyOptions; :}
+	;
+
+getByKeyOption_plus
+	::=	getByKeyOption:getByKeyOption
+	{: RESULT = new ArrayList(); RESULT.add(getByKeyOption); :}
+	|	getByKeyOption_plus:getByKeyOptions getByKeyOption:getByKeyOption
+	{: if(getByKeyOption != null) getByKeyOptions.add(getByKeyOption); RESULT = getByKeyOptions; :}
+	;
+
+getByPositionOption_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	getByPositionOption_plus:getByPositionOptions
+	{: RESULT = getByPositionOptions; :}
+	;
+
+getByPositionOption_plus
+	::=	getByPositionOption:getByPositionOption
+	{: RESULT = new ArrayList(); RESULT.add(getByPositionOption); :}
+	|	getByPositionOption_plus:getByPositionOptions getByPositionOption:getByPositionOption
+	{: if(getByPositionOption != null) getByPositionOptions.add(getByPositionOption); RESULT = getByPositionOptions; :}
+	;
+
+importDecl_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	importDecl_plus:importDecls
+	{: RESULT = importDecls; :}
+	;
+
+importDecl_plus
+	::=	importDecl:importDecl
+	{: RESULT = new ArrayList(); RESULT.add(importDecl); :}
+	|	importDecl_plus:importDecls importDecl:importDecl
+	{: if(importDecl != null) importDecls.add(importDecl); RESULT = importDecls; :}
+	;
+
+interfaceContent_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	interfaceContent_plus:interfaceContents
+	{: RESULT = interfaceContents; :}
+	;
+
+interfaceContent_plus
+	::=	interfaceContent:interfaceContent
+	{: RESULT = new ArrayList(); RESULT.add(interfaceContent); :}
+	|	interfaceContent_plus:interfaceContents interfaceContent:interfaceContent
+	{: if(interfaceContent != null) interfaceContents.add(interfaceContent); RESULT = interfaceContents; :}
+	;
+
+setTarget_plus
+	::=	setTarget:setTarget
+	{: RESULT = new ArrayList(); RESULT.add(setTarget); :}
+	|	setTarget_plus:setTargets COMMA setTarget:setTarget
+	{: if(setTarget != null) setTargets.add(setTarget); RESULT = setTargets; :}
+	;
+
+moveModifier_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	moveModifier_plus:moveModifiers
+	{: RESULT = moveModifiers; :}
+	;
+
+moveModifier_plus
+	::=	moveModifier:moveModifier
+	{: RESULT = new ArrayList(); RESULT.add(moveModifier); :}
+	|	moveModifier_plus:moveModifiers moveModifier:moveModifier
+	{: if(moveModifier != null) moveModifiers.add(moveModifier); RESULT = moveModifiers; :}
+	;
+
+name_plus
+	::=	name:name
+	{: RESULT = new ArrayList(); RESULT.add(name); :}
+	|	name_plus:names COMMA name:name
+	{: if(name != null) names.add(name); RESULT = names; :}
+	;
+
+onException_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	onException_plus:onExceptions
+	{: RESULT = onExceptions; :}
+	;
+
+onException_plus
+	::=	onException:onException
+	{: RESULT = new ArrayList(); RESULT.add(onException); :}
+	|	onException_plus:onExceptions onException:onException
+	{: if(onException != null) onExceptions.add(onException); RESULT = onExceptions; :}
+	;
+
+openTarget_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	openTarget_plus:openTargets
+	{: RESULT = openTargets; :}
+	;
+
+openTarget_plus
+	::=	openTarget:openTarget
+	{: RESULT = new ArrayList(); RESULT.add(openTarget); :}
+	|	openTarget_plus:openTargets openTarget:openTarget
+	{: if(openTarget != null) openTargets.add(openTarget); RESULT = openTargets; :}
+	;
+
+part_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	part_plus:parts
+	{: RESULT = parts; :}
+	;
+
+part_plus
+	::=	part:part
+	{: RESULT = new ArrayList(); RESULT.add(part); :}
+	|	part_plus:parts part:part
+	{: if(part != null) parts.add(part); RESULT = parts; :}
+	;
+
+prepareOption_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	prepareOption_plus:prepareOptions
+	{: RESULT = prepareOptions; :}
+	;
+
+prepareOption_plus
+	::=	prepareOption:prepareOption
+	{: RESULT = new ArrayList(); RESULT.add(prepareOption); :}
+	|	prepareOption_plus:prepareOptions prepareOption:prepareOption
+	{: if(prepareOption != null) prepareOptions.add(prepareOption); RESULT = prepareOptions; :}
+	;
+
+programParameter_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	programParameter_plus:programParameters
+	{: RESULT = programParameters; :}
+	;
+
+programParameter_plus
+	::=	programParameter:programParameter
+	{: RESULT = new ArrayList(); RESULT.add(programParameter); :}
+	|	programParameter_plus:programParameters COMMA programParameter:programParameter
+	{: if(programParameter != null) programParameters.add(programParameter); RESULT = programParameters; :}
+	;
+
+replaceOption_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	replaceOption_plus:replaceOptions
+	{: RESULT = replaceOptions; :}
+	;
+
+replaceOption_plus
+	::=	replaceOption:replaceOption
+	{: RESULT = new ArrayList(); RESULT.add(replaceOption); :}
+	|	replaceOption_plus:replaceOptions replaceOption:replaceOption
+	{: if(replaceOption != null) replaceOptions.add(replaceOption); RESULT = replaceOptions; :}
+	;
+
+setting_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	setting_plus:settings
+	{: RESULT = settings; :}
+	;
+
+setting_plus
+	::=	setting:setting
+	{: RESULT = new ArrayList(); RESULT.add(setting); :}
+	|	setting_plus:settings COMMA setting:setting
+	{: if(setting != null) settings.add(setting); RESULT = settings; :}
+	;
+
+settingsBlock_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	settingsBlock_plus:settingsBlocks
+	{: RESULT = settingsBlocks; :}
+	;
+
+settingsBlock_plus
+	::=	settingsBlock:settingsBlock
+	{: RESULT = new ArrayList(); RESULT.add(settingsBlock); :}
+	|	settingsBlock_plus:settingsBlocks settingsBlock:settingsBlock
+	{: if(settingsBlock != null) settingsBlocks.add(settingsBlock); RESULT = settingsBlocks; :}
+	;
+
+showOption_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	showOption_plus:showOptions
+	{: RESULT = showOptions; :}
+	;
+
+showOption_plus
+	::=	showOption:showOption
+	{: RESULT = new ArrayList(); RESULT.add(showOption); :}
+	|	showOption_plus:showOptions showOption:showOption
+	{: if(showOption != null) showOptions.add(showOption); RESULT = showOptions; :}
+	;
+
+stmt_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	stmt_plus:stmts
+	{: RESULT = stmts; :}
+	;
+
+stmt_plus
+	::=	stmt:stmt
+	{: RESULT = new ArrayList(); RESULT.add(stmt); :}
+	|	stmt_plus:stmts stmt:stmt
+	{: if(stmt != null) stmts.add(stmt); RESULT = stmts; :}
+	;
+
+structureContent_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	structureContent_plus:structureContents
+	{: RESULT = structureContents; :}
+	;
+
+structureContent_plus
+	::=	structureContent:structureContent
+	{: RESULT = new ArrayList(); RESULT.add(structureContent); :}
+	|	structureContent_plus:structureContents structureContent:structureContent
+	{: if(structureContent != null) structureContents.add(structureContent); RESULT = structureContents; :}
+	;
+
+whenClause_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	whenClause_plus:whenClauses
+	{: RESULT = whenClauses; :}
+	;
+
+whenClause_plus
+	::=	whenClause:whenClause
+	{: RESULT = new ArrayList(); RESULT.add(whenClause); :}
+	|	whenClause_plus:whenClauses whenClause:whenClause
+	{: if(whenClause != null) whenClauses.add(whenClause); RESULT = whenClauses; :}
+	;

@@ -1,0 +1,1679 @@
+package com.ibm.etools.egl.pgm.internal.parser;
+
+import java_cup.runtime.*;
+
+// Expect 158 warnings!!!!!!!!!!!  Due to deliberate ambiguous expansion of sequences (x* or x+)
+// to generate:  From javacup directory:  java java_cup.Main -expect 158 egl.cup
+
+// The following blocks should be commented out for warning-free generation
+// Special nonterminals and terminals
+nonterminal UltraRoot, connector, ErrorNode, wsPair;
+terminal BOS, EOS, WS;
+
+// Terminals representing lexer errors
+terminal ERRORSTRING;
+terminal ERRORBLOCKCOMMENT;
+terminal ERRORSQLSTMTLIT;
+terminal ERROR_INLINE_DLI;
+
+// Terminals that belong to equivalence classes (right now they are mostly primitive types)
+terminal ANY;
+terminal BIGINT;
+terminal BIN;
+terminal BOOLEAN;
+terminal CHAR;
+terminal DBCHAR;
+terminal DECIMAL; 
+terminal HEX;
+terminal INT;
+terminal MBCHAR;
+terminal NUMBER;
+terminal NUM;
+terminal NUMC;
+terminal PACF;
+terminal SMALLINT;
+terminal UNICODE;
+terminal STRINGPRIMITIVE;
+
+terminal BLOB;
+terminal CLOB;
+
+terminal FLOAT;
+terminal SMALLFLOAT;
+
+terminal MONEY;
+
+// Terminals that are reserved words
+terminal SQL;
+
+// Terminals reserved for future uses
+terminal DLICALL;
+terminal GROUP;
+terminal LANGUAGEBUNDLE;
+terminal OF;
+terminal REF;
+terminal WHERE;
+terminal WRAP;
+terminal AS;
+//The above blocks should be commented out for warning-free generation
+
+// current terminals
+terminal ID;
+terminal FLOATLIT, DECIMALLIT, STRING, INTEGER, PRIMITIVE, LOB, SQLSTMTLIT, SQLCONDITION, INLINE_DLI;
+
+nonterminal DateTimeType, dateTimeSpecOpt;
+terminal DATE, TIME, TIMESTAMP, INTERVAL;
+
+terminal PRIVATE, STATIC;
+terminal PACKAGE, IMPORT;
+terminal END;
+terminal DATAITEM, LIBRARY, PAGEHANDLER, RECORD, FORMGROUP, FORM, DATATABLE, PROGRAM, FUNCTION;
+terminal TYPE;
+terminal NULLABLE, FIELD, RETURNS, USE, FROM, EMBED;
+
+terminal OUT, INOUT;	// For function parameter use types
+
+// Statement terminals
+terminal CALL, EXTERNALLYDEFINED, NOREFRESH, CASE, WHEN, OTHERWISE, EXIT, FOREACH;
+terminal GOTO, IF, ELSE, MOVE, TO, RETURN, RETURNING, SET, TRANSFER, TRANSACTION, WHILE, STACK;
+terminal BYNAME, BYPOSITION, ALL, FOR, PASSING, TRY, ONEXCEPTION, SHOW, DISPLAY;
+terminal WITH, LABEL, URL;
+terminal CLOSE, CONVERSE, FORWARD;
+terminal ADD, DELETE, GET, REPLACE, PRINT, EXECUTE, UPDATE;
+terminal INTO, USING, USINGKEYS, FIRST, LAST, NEXT, PREVIOUS, SINGLEROW, FORUPDATE, CURRENT, ABSOLUTE, RELATIVE;
+terminal OPEN, PREPARE, INSERT, HOLD, SCROLL;
+
+terminal BY, DECREMENT;		// For statement
+
+terminal FREESQL;
+
+// Things added for 6.0.0.1
+terminal HANDLER;
+nonterminal initializerOpt;
+terminal OPENUI, ONEVENT;
+nonterminal bindOpt;
+terminal BIND;
+nonterminal eventBlock;
+nonterminal setMnemonic;
+nonterminal literalArray;
+terminal NEW;
+terminal THIS;
+terminal CONST;
+terminal NIL;
+nonterminal fieldsOpt;
+
+// Things added for 6.0.1
+terminal AT;
+terminal SERVICE, IMPLEMENTS, INTERFACE, EXTENDS;
+terminal USINGPCB, INPARENT;
+nonterminal inparentOpt;
+
+// NAMED, SINGLE TOKEN TERMINALS
+terminal SEMI, LBRACKET, RBRACKET, LPAREN, RPAREN, COMMA, DOT, COLON, ASSIGN, PLUS;
+terminal EQ, NE, LT, GT, LE, GE, MINUS, TIMES, TIMESTIMES, DIV, MODULO, IS, NOT, IN, BANG, LIKE, MATCHES, ESCAPE;
+terminal AND, OR;
+terminal LCURLY, RCURLY;
+terminal ISA;
+
+// Special terminals used only to specify precedence levels
+terminal UMINUS, UPLUS;
+
+terminal CONTINUE;
+
+nonterminal continueModifierOpt;
+
+nonterminal foreachTarget;
+
+// Nonterminals
+nonterminal egl, packageDeclarationOpt, Part, partSubTypeOpt, implementsOpt, extendsOpt;
+nonterminal importStatement, importSpec;
+nonterminal propertyBlock, propertyBlockOpt, PropertyDecl;
+nonterminal privateAccessModifierOpt, staticAccessModifierOpt;
+nonterminal Name, simpleName;
+nonterminal ClassContent;
+nonterminal InterfaceContent;
+nonterminal DataAccess;
+nonterminal returnValueOpt;
+nonterminal Type, dimension;
+nonterminal programParametersOpt;
+nonterminal StructureContent, levelOpt;
+nonterminal StrItemDecl;
+nonterminal occursOpt;
+nonterminal FormContent, FormGroupContent;
+nonterminal programParameter;
+nonterminal functionParameter, attrTypeOpt, useTypeOpt, returnsOpt, nullableOpt;
+nonterminal Stmt;
+
+nonterminal literal;
+nonterminal precisionOpt;
+
+// Statement nonterminals
+nonterminal functionInvocation, functionArgument;
+nonterminal callArgument;
+nonterminal CallOpts, criterionOpt, whenClause, defaultClauseOpt, MatchExpr;
+nonterminal ExitModifierOpt;
+nonterminal exitReturnOpt;
+nonterminal ifWhileCondition, elseOpt, MoveModifier;
+nonterminal programOpt;
+nonterminal TransferTarget, passingRecordOpt, externallyDefinedOpt, onExceptOpt;
+nonterminal forwardTargetOpt, ForwardOption, labelKeywordOpt;	// Forward statement
+nonterminal BoolExpr, Expr, ArgExpr, Condit, escapeOpt;
+nonterminal inlineSQLStatement, inlineSQLStatementOpt;
+nonterminal ShowOptions;
+nonterminal direction;
+nonterminal getByPositionSource, getByPositionOption;
+nonterminal intoClauseOpt;
+nonterminal getByKeyOptions;
+nonterminal openModifiersOpt, OpenTarget;
+nonterminal PrepareOption;
+nonterminal ReplaceOption;
+nonterminal resultSetIDOpt;
+nonterminal DeleteOption, AddOption;
+nonterminal converseWithClauseOpt;	// converse statement
+nonterminal executeTarget, ExecuteOption;
+nonterminal labelOpt;
+
+// For statement
+nonterminal fromOpt, stepOpt;
+
+// Sequence Nonterminals
+nonterminal importStatement_star, importStatement_plus;
+nonterminal part_star, part_plus;
+nonterminal structureContent_star, structureContent_plus;
+nonterminal formGroupContent_star, formGroupContent_plus;
+nonterminal formContent_star, formContent_plus;
+nonterminal classContent_star, classContent_plus;
+nonterminal functionParameter_star, functionParameter_plus;
+nonterminal stmt_star, stmt_plus;
+nonterminal programParameter_star, programParameter_plus;
+nonterminal callOpts_star, callOpts_plus;
+nonterminal whenClause_star, whenClause_plus;
+nonterminal openTarget_star, openTarget_plus;
+nonterminal expr_star, expr_plus;
+nonterminal propertyDecl_star, propertyDecl_plus;
+nonterminal dataAccess_star, dataAccess_plus;
+nonterminal getByKeyOptions_star, getByKeyOptions_plus;
+nonterminal showOptions_star, showOptions_plus;
+nonterminal propertyBlock_star, propertyBlock_plus;
+nonterminal prepareOption_star, prepareOption_plus;
+nonterminal replaceOption_star, replaceOption_plus;
+nonterminal addOption_star, addOption_plus;
+nonterminal deleteOption_star, deleteOption_plus;
+nonterminal executeOption_star, executeOption_plus;
+nonterminal moveModifier_star, moveModifier_plus;
+nonterminal forwardOption_star, forwardOption_plus;
+nonterminal dimension_star, dimension_plus;
+nonterminal functionArgument_star, functionArgument_plus;
+nonterminal simpleName_plus;
+nonterminal name_plus;
+nonterminal callArgument_star, callArgument_plus;
+nonterminal setMnemonic_plus;
+nonterminal eventBlock_star, eventBlock_plus;
+nonterminal interfaceContent_star, interfaceContent_plus;
+nonterminal getByPositionOption_star, getByPositionOption_plus;
+
+// Precedences
+precedence nonassoc NEW;
+precedence left LBRACKET, DOT;
+precedence left ESCAPE;
+precedence left OR;
+precedence left AND;
+precedence left IS, NOT, IN, LIKE, MATCHES;
+precedence left BANG;
+precedence left EQ, NE, LT, GT, LE, GE, ISA;
+precedence left PLUS, MINUS;
+precedence left MODULO;
+precedence left TIMES, DIV;
+precedence left TIMESTIMES;
+precedence left UMINUS, UPLUS;
+precedence left RPAREN;
+
+// The overall structure of the file
+egl
+	::=	packageDeclarationOpt importStatement_star part_star
+	{:/* File */:}
+	;
+
+
+packageDeclarationOpt
+	::=
+	|	PACKAGE Name SEMI
+	{:/* PackageDeclarationOpt */:}
+	;
+
+
+// The Import Statements
+importStatement
+	::=	IMPORT importSpec SEMI
+	{:/* ImportStatement */:}
+	;
+
+
+importSpec
+	::=	Name
+	{:/* PackageName */:}
+
+	|	Name DOT TIMES
+	{:/* OnDemandPackageName */:}
+	;
+
+
+// PARTS
+Part
+	::=	privateAccessModifierOpt DATAITEM simpleName Type propertyBlock_star END
+	{:/* DataItem */:}
+
+	|	privateAccessModifierOpt RECORD simpleName partSubTypeOpt structureContent_star END
+	{:/* Record */:}
+
+	|	privateAccessModifierOpt DATATABLE simpleName partSubTypeOpt structureContent_star END
+	{:/* DataTable */:}
+
+	|	privateAccessModifierOpt FORMGROUP simpleName formGroupContent_star END
+	{:/* FormGroup */:}
+
+	|	privateAccessModifierOpt FORM simpleName partSubTypeOpt formContent_star END
+	{:/* Form */:}
+
+	|	privateAccessModifierOpt PAGEHANDLER simpleName classContent_star END
+	{:/* PageHandler */:}
+
+	|	privateAccessModifierOpt HANDLER simpleName partSubTypeOpt classContent_star END
+	{:/* Handler */:}
+
+	|	privateAccessModifierOpt PROGRAM simpleName partSubTypeOpt programParametersOpt classContent_star END
+	{:/* Program */:}
+
+	|	privateAccessModifierOpt LIBRARY simpleName partSubTypeOpt classContent_star END
+	{:/* Library */:}
+
+	|	privateAccessModifierOpt FUNCTION simpleName LPAREN functionParameter_star RPAREN returnsOpt stmt_star END
+	{:/* Function */:}
+
+	|	privateAccessModifierOpt SERVICE simpleName implementsOpt classContent_star END
+	{:/* Service */:}
+
+	|	privateAccessModifierOpt INTERFACE simpleName extendsOpt partSubTypeOpt interfaceContent_star END
+	{:/* Interface */:}
+	;
+
+implementsOpt
+	::=
+	|	IMPLEMENTS name_plus
+	{:/* ImplementsOpt */:}
+	;
+	
+extendsOpt
+	::=
+	|	EXTENDS name_plus
+	{:/* ExtendsOpt */:}
+	;
+
+partSubTypeOpt
+	::=
+	|	TYPE Name
+	{:/* PartSubTypeOpt */:}
+	;
+
+
+StructureContent
+	::=	propertyBlock
+	{:/* StructurePropertyBlock */:}
+
+	|	StrItemDecl
+	{:/* StructureItemDeclarationStructureContent */:}
+	;
+
+
+StrItemDecl
+	::=	levelOpt simpleName Type propertyBlockOpt initializerOpt SEMI
+	{:/* StructureItem */:}
+
+	|	levelOpt simpleName occursOpt propertyBlockOpt initializerOpt SEMI
+	{:/* UntypedStructureItem */:}
+
+	|	levelOpt TIMES Type propertyBlockOpt initializerOpt SEMI
+	{:/* FillerStructureItem */:}
+
+	|	levelOpt TIMES occursOpt propertyBlockOpt initializerOpt SEMI
+	{:/* UntypedFillerStructureItem */:}
+
+	|	levelOpt EMBED Name propertyBlockOpt initializerOpt SEMI
+	{:/* EmbeddedRecordStructureItem */:}
+	;
+
+
+// level
+levelOpt
+	::=
+	|	INTEGER:level
+	{:/* LevelOpt*/:}
+	;
+
+
+occursOpt
+	::=
+	|	LBRACKET INTEGER:occurs RBRACKET
+	{:/* OccursOpt*/:}
+	;
+
+
+// Form Group
+FormGroupContent
+	::=	USE name_plus SEMI
+	{:/* UseFormStatement */:}
+
+	|	privateAccessModifierOpt FORM simpleName partSubTypeOpt formContent_star END
+	{:/* FormDeclaration */:}
+
+	|	propertyBlock
+	{:/* FormGroupPropertyBlock */:}
+	;
+
+
+//Text and Print forms
+FormContent
+	::=	simpleName Type propertyBlockOpt initializerOpt SEMI // Variable field
+	{:/* VariableFormField */:}
+
+	|	TIMES propertyBlockOpt initializerOpt SEMI // Constant field
+	{:/* ConstantFormField */:}
+
+	|	propertyBlock
+	{:/* FormPropertyBlock */:}
+	;
+
+
+// Program
+programParametersOpt
+	::=
+	|	LPAREN programParameter_star RPAREN
+	{:/* ProgramParametersOpt*/:}
+	;
+
+
+programParameter
+	::=	simpleName Type
+	{:/* ProgramParameter */:}
+	;
+
+
+functionParameter
+	::=	simpleName Type attrTypeOpt useTypeOpt
+	{:/* FunctionParameter */:}
+	;
+
+
+attrTypeOpt
+	::=
+	|	NULLABLE
+	{:/* NullableParameterModifier*/:}
+
+	|	FIELD
+	{:/* FieldParameterModifier*/:}
+	;
+
+
+useTypeOpt
+	::=
+	|	IN
+	{:/* InputFunctionArgumentModifier */:}
+
+	|	INOUT
+	{:/* InputOutputFunctionArgumentModifier */:}
+
+	|	OUT
+	{:/* OutputFunctionArgumentModifier */:}
+	;
+
+
+returnsOpt
+	::=
+	|	RETURNS LPAREN Type nullableOpt RPAREN
+	{:/* ReturnsOpt */:}
+	;
+	
+nullableOpt
+	::=
+	|	NULLABLE
+	{:/* NullableOpt */:}
+	;
+
+ClassContent
+	::=	USE name_plus propertyBlockOpt SEMI
+	{:/* UseStatement */:}
+
+	|	privateAccessModifierOpt FUNCTION simpleName LPAREN functionParameter_star RPAREN returnsOpt stmt_star END
+	{:/* FunctionDeclaration */:}
+
+	|	privateAccessModifierOpt simpleName_plus Type propertyBlockOpt initializerOpt SEMI // Variable Declaration
+	{:/* ClassFieldDeclaration */:}
+
+	|	privateAccessModifierOpt CONST simpleName_plus Type ASSIGN Expr SEMI // constant
+	{:/* ClassConstantDeclaration */:}
+
+	|	propertyBlock
+	{:/* ClassPropertyBlock */:}
+	;
+
+InterfaceContent
+	::=	privateAccessModifierOpt staticAccessModifierOpt FUNCTION simpleName LPAREN functionParameter_star RPAREN returnsOpt propertyBlockOpt SEMI
+	{:/* AbstractFunctionDeclaration */:}
+	
+	|	propertyBlock
+	{:/* InterfacePropertyBlock */:}
+	;
+	
+//************************************************************************************************
+// STATEMENTS
+//
+Stmt
+	::=	simpleName_plus Type propertyBlockOpt initializerOpt SEMI // Variable Declaration
+	{:/* VariableDeclarationStatement */:}
+
+	|	CONST simpleName_plus Type ASSIGN Expr SEMI // constant
+	{:/* ConstantDeclarationStatement */:}
+
+	|	DataAccess ASSIGN Expr SEMI
+	{:/* AssignmentStatement */:}
+
+	|	DataAccess propertyBlock SEMI
+	{:/* SetValuesBlockStatement */:}
+
+	|	CALL Name callArgument_star callOpts_star SEMI
+	{:/* CallStatement */:}
+
+	|	CASE criterionOpt whenClause_star defaultClauseOpt END
+	{:/* CaseStatement */:}
+
+	|	CONTINUE continueModifierOpt SEMI
+	{:/* ContinueStatement */:}
+
+	|	EXIT ExitModifierOpt SEMI
+	{:/* ExitStatement */:}
+
+	|	functionInvocation SEMI
+	{:/* FunctionInvocationStatement */:}
+
+	|	GOTO ID:id SEMI
+	{:/* GotoStatement */:}
+
+	|	IF ifWhileCondition stmt_star elseOpt END
+	{:/* IfStatement */:}
+
+	|	ID:id COLON // label statement
+	{:/* LabelStatement */:}
+
+	|	MOVE Expr TO DataAccess moveModifier_star SEMI
+	{:/* MoveStatement */:}
+
+	|	RETURN returnValueOpt SEMI
+	{:/* ReturnStatement */:}
+
+	|	SET dataAccess_plus setMnemonic_plus SEMI
+	{:/* SetStatement */:}
+
+	|	SEMI
+	{:/* EmptyStatement */:}
+
+	|	TRANSFER TO TransferTarget passingRecordOpt externallyDefinedOpt SEMI
+	{:/* TransferStatement */:}
+
+	|	TRY stmt_star onExceptOpt END
+	{:/* TryStatement */:}
+
+	|	WHILE ifWhileCondition stmt_star END
+	{:/* WhileStatement */:}
+	
+//           ******* I/O Statements ***********************
+
+	|	CLOSE DataAccess SEMI
+	{:/* CloseStatement */:}
+
+	|	CONVERSE DataAccess converseWithClauseOpt SEMI
+	{:/* ConverseStatement */:}
+
+	|	DISPLAY DataAccess SEMI
+	{:/* DisplayStatement */:}
+
+	|	PRINT DataAccess SEMI
+	{:/* PrintStatement */:}
+
+	|	FORWARD expr_star forwardTargetOpt forwardOption_star SEMI
+	{:/* ForwardStatement */:}
+
+	|	ADD dataAccess_plus addOption_star SEMI
+	{:/* AddStatement */:}
+
+	|	SHOW DataAccess showOptions_star SEMI
+	{:/* ShowStatement */:}
+
+	|	DELETE DataAccess deleteOption_star SEMI
+	{:/* DeleteStatement */:}
+
+	|	EXECUTE executeTarget executeOption_star SEMI
+	{:/* ExecuteStatement */:}
+
+	|	GET direction inparentOpt getByPositionSource getByPositionOption_star SEMI
+	{:/* GetByPositionStatement */:}
+
+	|	GET dataAccess_star getByKeyOptions_star SEMI
+	{:/* GetByKeyStatement */:}
+
+	|	OPEN ID:resultSetID openModifiersOpt openTarget_star SEMI
+	{:/* OpenStatement */:}
+
+	|	PREPARE ID:preparedStmtID prepareOption_star SEMI
+	{:/* PrepareStatement */:}
+
+	|	REPLACE DataAccess replaceOption_star SEMI
+	{:/* ReplaceStatement */:}
+
+	|	propertyBlock
+	{:/* PropertyStatement */:}
+
+	|	FOR LPAREN DataAccess fromOpt TO Expr stepOpt RPAREN stmt_star END
+	{:/* ForStatement */:}
+
+	|	FOREACH LPAREN foreachTarget intoClauseOpt RPAREN stmt_star END
+	{:/* ForEachStatement */:}
+
+	|	FREESQL ID:preparedStatementReference SEMI
+	{:/* FreeSQLStatement */:}
+
+	|	OPENUI propertyBlockOpt expr_plus bindOpt eventBlock_star END
+	{:/* OpenUIStatement */:}
+	;
+
+
+// Open UI Statement
+bindOpt
+	::=
+	|	BIND expr_plus
+	{:/* BindOpt */:}
+	;
+	
+	
+eventBlock
+	::=	ONEVENT LPAREN ID:eventType fieldsOpt RPAREN stmt_star
+	{:/* EventBlock */:}
+	;
+
+fieldsOpt
+	::=
+	|	COLON expr_plus
+	{:/* FieldsOpt */:}
+	;
+
+// Set Statement
+setMnemonic
+	::=	ID:mnemonic
+	{:/* SetMnemonic */:}
+	;
+
+
+// Continue Statement
+continueModifierOpt
+	::=
+	|	FOR
+	{:/* ForContinueModifier */:}
+
+	|	FOREACH
+	{:/* ForEachContinueModifier */:}
+
+	|	WHILE
+	{:/* WhileContinueModifier */:}
+	
+	|	OPENUI
+	{:/* OpenUIContinueModifier */:}
+	;
+
+
+// For Each Statement
+foreachTarget
+	::=	DataAccess
+	{:/* SQLRecordForEachTarget */:}
+
+	|	FROM ID:resultSetID
+	{:/* ResultSetForEachTarget */:}
+	;
+
+
+intoClauseOpt
+	::=
+	|	INTO dataAccess_plus
+	{:/* IntoClauseOpt*/:}
+	;
+
+
+// For Statement
+fromOpt
+	::=
+	|	FROM Expr
+	{:/* FromOpt */:}
+	;
+
+stepOpt
+	::=
+	|	BY Expr
+	{:/* PositiveForDelta */:}
+
+	|	DECREMENT BY Expr
+	{:/* NegativeForDelta */:}
+	;
+
+
+// Show Statement
+ShowOptions
+	::=	RETURNING TO Name
+	{:/* ReturningToShowOption */:}
+
+	|	EXTERNALLYDEFINED
+	{:/* ExternallyDefinedShowOption */:}
+
+	|	PASSING DataAccess
+	{:/* StateRecordShowOption */:}
+	;
+
+
+// Prepare statement
+PrepareOption
+	::=	FROM Expr
+	{:/* FromPrepareOption */:}
+
+	|	FOR DataAccess
+	{:/* ForPrepareOption */:}
+	;
+
+
+// Replace statement
+ReplaceOption
+	::=	WITH inlineSQLStatement
+	{:/* WithReplaceOption */:}
+
+	|	WITH INLINE_DLI:dliStatement
+	{:/* WithInlineDLIReplaceOption */:}
+
+	|	FROM ID:resultSetID
+	{:/* FromReplaceOption */:}
+	
+	|	USINGPCB DataAccess
+	{:/* UsingPCBReplaceOption */:}
+	;
+
+
+// Get by Key Statement
+getByKeyOptions
+	::=	FORUPDATE resultSetIDOpt
+	{:/* ForUpdateGetByKeyOption */:}
+
+	|	SINGLEROW
+	{:/* SingleRowGetByKeyOption */:}
+
+	|	WITH ID:preparedStmtID
+	{:/* WithPreparedStatementGetByKeyOption */:}
+
+	|	WITH inlineSQLStatement
+	{:/* WithInlineSQLGetByKeyOption */:}
+
+	|	WITH INLINE_DLI:dliStatement
+	{:/* WithInlineDLIGetByKeyOption */:}
+
+	|	INTO dataAccess_plus
+	{:/* IntoGetByKeyOption */:}
+
+	|	USING dataAccess_plus
+	{:/* UsingGetByKeyOption */:}
+
+	|	USINGKEYS dataAccess_plus
+	{:/* UsingKeysGetByKeyOption */:}
+
+	|	USINGPCB DataAccess
+	{:/* UsingPCBGetByKeyOption */:}
+	;
+
+
+resultSetIDOpt
+	::=
+	|	ID:resultSetID
+	{:/* ResultSetIDOpt*/:}
+	;
+
+
+// Get by Position Statement
+direction
+	::=	NEXT
+	{:/* NextDirection */:}
+
+	|	PREVIOUS
+	{:/* PreviousDirection */:}
+
+	|	FIRST
+	{:/* FirstDirection */:}
+
+	|	LAST
+	{:/* LastDirection */:}
+
+	|	CURRENT
+	{:/* CurrentDirection */:}
+
+	|	RELATIVE LPAREN Expr RPAREN
+	{:/* RelativeDirection */:}
+
+	|	ABSOLUTE LPAREN Expr RPAREN
+	{:/* AbsoluteDirection */:}
+	;
+
+
+getByPositionSource
+	::=	dataAccess_plus
+	{:/* GetByPositionSource*/:}
+
+	|	FROM ID:resultSetID
+	{:/* ResultSetIDGetByPositionSource*/:}
+
+	|	DataAccess FROM ID:resultSetID
+	{:/* SQLRecordAndResultSetIDGetByPositionSource*/:}
+	;
+
+
+getByPositionOption
+	::=	INTO dataAccess_plus
+	{:/* IntoGetByPositionOption */:}
+	
+	|	WITH INLINE_DLI:dliStatement
+	{:/* WithInlineDLIGetByPositionOption*/:}
+	
+	|	FORUPDATE
+	{:/* ForUpdateGetByPositionOption*/:}
+	
+	|	USINGPCB DataAccess
+	{:/* UsingPCBGetByPositionOption */:}
+	
+	;
+
+
+inparentOpt
+	::=
+	|	INPARENT
+	{:/* InParentOpt*/:}
+	;
+
+
+// Converse Statement
+converseWithClauseOpt
+	::=
+	|	WITH Name
+	{: /* ConverseWithClauseOpt */ :}
+	;
+
+
+// Add statement
+AddOption
+	::= WITH inlineSQLStatement
+	{:/* WithInlineSQLAddOption */:}
+
+	|	WITH INLINE_DLI:dliStatement
+	{:/* WithInlineDLIAddOption */:}
+
+	|	USINGPCB DataAccess
+	{:/* UsingPCBAddOption */:}
+	;
+	
+// Delete statement
+DeleteOption
+	::= USINGPCB DataAccess
+	{:/* UsingPCBDeleteOption */:}
+	
+	|	FROM ID:resultSetID
+	{:/* ResultSetDeleteOption*/:}
+	
+	|	WITH INLINE_DLI:dliStatement
+	{:/* WithInlineDLIDeleteOption */:}
+	;
+
+
+// Call statement
+callArgument
+	::=	Expr
+	{:/* ExprCallArgument */:}
+	;
+
+
+CallOpts
+	::=	EXTERNALLYDEFINED
+	{:/* ExternallyDefinedCallOption*/:}
+
+	|	NOREFRESH
+	{:/* NoRefreshCallOption*/:}
+	;
+
+
+// Case/when/otherwise statement
+criterionOpt
+	::=
+	|	LPAREN Expr RPAREN
+	{:/* CriterionOpt*/:}
+	;
+
+
+whenClause
+	::=	WHEN LPAREN MatchExpr RPAREN stmt_star
+	{:/* WhenClause*/:}
+	;
+
+
+defaultClauseOpt
+	::=
+	|	OTHERWISE stmt_star
+	{:/* DefaultClauseOpt */:}
+	;
+
+
+MatchExpr
+	::=	expr_plus
+	{:/* ExpressionListMatchExpression */:}
+
+	|	BoolExpr
+	{:/* BooleanMatchExpression */:}
+	;
+
+
+// Exit statement
+ExitModifierOpt
+	::=
+	|	PROGRAM exitReturnOpt
+	{:/* ProgramExitModifier*/:}
+
+	|	STACK labelOpt
+	{:/* StackExitModifier*/:}
+
+	|	CASE
+	{:/* CaseExitModifier*/:}
+
+	|	IF
+	{:/* IfExitModifier*/:}
+
+	|	WHILE
+	{:/* WhileExitModifier*/:}
+
+	|	FOR
+	{:/* ForExitModifier*/:}
+
+	|	FOREACH
+	{:/* ForEachExitModifier*/:}
+
+	|	OPENUI
+	{:/* OpenUIExitModifier*/:}
+	;
+
+
+labelOpt
+	::=
+	|	ID:label
+	{:/* LabelOpt*/:}
+	;
+
+
+exitReturnOpt
+	::=
+	|	LPAREN Expr RPAREN
+	{:/* ExitReturnOpt*/:}
+	;
+
+
+returnValueOpt
+	::=
+	|	LPAREN Expr RPAREN
+	{:/* ReturnValueOpt*/:}
+	;
+
+
+// Function invocation statement
+functionArgument
+	::=	ArgExpr
+	{:/* ExpressionFunctionArgument */:}
+
+	|	LPAREN Expr RPAREN Expr
+	{:/* ReferenceTypeCastExpressionFunctionArgument */:}
+
+	|	LPAREN PRIMITIVE:primitive precisionOpt dimension_star RPAREN Expr
+	{:/* PrimitiveTypeCastExpressionFunctionArgument */:}
+	;
+
+
+functionInvocation
+	::=	DataAccess LPAREN functionArgument_star RPAREN
+	{:/* FunctionInvocation*/:}
+	;
+
+
+// Move statement
+MoveModifier
+	::=	BYNAME
+	{:/* BynameMoveModifier*/:}
+
+	|	BYPOSITION
+	{:/* ByPositionMoveModifier*/:}
+
+	|	FOR ALL
+	{:/* ForAllMoveModifier*/:}
+
+	|	FOR Expr
+	{:/* ForMoveModifier*/:}
+	;
+
+
+// Transfer statement
+TransferTarget
+	::=	programOpt Name
+	{:/* ProgramTransferTarget */:}
+
+	|	TRANSACTION Name
+	{:/* TransactionTransferTarget */:}
+	;
+
+
+programOpt
+	::=
+	|	PROGRAM
+	{:/* ProgramOpt */:}
+	;
+
+
+passingRecordOpt
+	::=
+	|	PASSING DataAccess
+	{:/* PassingRecordOpt */:}
+	;
+
+
+externallyDefinedOpt
+	::=
+	|	EXTERNALLYDEFINED
+	{:/* ExternallyDefinedOpt*/:}
+	;
+
+
+// Forward Statement
+forwardTargetOpt
+	::=
+	|	TO labelKeywordOpt Expr
+	{: /* ToLabelForwardTarget */:}
+
+	|	TO URL Expr
+	{: /* ToURLForwardTarget */:}
+	;
+
+
+labelKeywordOpt
+	::=
+	|	LABEL
+	{:/* LabelKeywordOpt */:}
+	;
+
+
+ForwardOption
+	::=	RETURNING TO Name
+	{:/* ReturningToForwardOption */:}
+
+	|	PASSING DataAccess
+	{:/* PassingForwardOption */:}
+	;
+
+
+// EXECUTE statement
+inlineSQLStatementOpt
+	::=
+	|	SQLSTMTLIT:sqlStatement
+	{:/* InlineSQLStatementOpt */:}
+	;
+
+
+executeTarget
+	::=	UPDATE inlineSQLStatementOpt
+	{:/* UpdateExecuteTarget */:}
+
+	|	DELETE inlineSQLStatementOpt
+	{:/* DeleteExecuteTarget */:}
+
+	|	INSERT inlineSQLStatementOpt
+	{:/* InsertExecuteTarget */:}
+
+	|	ID:preparedStmtID
+	{:/* PreparedStatmentExecuteTarget */:}
+
+	|	inlineSQLStatement
+	{:/* InlineSQLExecuteTarget */:}
+	;
+
+
+ExecuteOption
+	::=	USING dataAccess_plus
+	{:/* UsingExecuteOption */:}
+
+	|	FOR DataAccess
+	{:/* ForExecuteOption */:}
+	;
+
+
+// imbedded SQL statement
+inlineSQLStatement
+	::=	SQLSTMTLIT:sqlStatement
+	{:/* InlineSQLStatement */:}
+	;
+
+
+// If/else statement
+ifWhileCondition
+	::=	LPAREN BoolExpr RPAREN
+	{:/* IfWhileCondition*/:}
+	;
+
+
+elseOpt
+	::=
+	|	ELSE stmt_star
+	{:/* ElseOpt*/:}
+	;
+
+
+// Open Statement
+openModifiersOpt
+	::=
+	|	HOLD
+	{:/* HoldOpenModifier*/:}
+
+	|	SCROLL
+	{:/* ScrollOpenModifier */:}
+
+	|	HOLD SCROLL
+	{:/* HoldAndScrollOpenModifier */:}
+
+	|	SCROLL HOLD
+	{:/* SchollAndHoldOpenModifier */:}
+	;
+
+
+OpenTarget
+	::=	FORUPDATE // open option
+	{:/* ForUpdateOpenTarget*/:}
+
+	|	INTO dataAccess_plus
+	{:/* IntoOpenTarget*/:}
+
+	|	WITH inlineSQLStatement
+	{:/* WithSqlOpenTarget*/:}
+
+	|	WITH ID:preparedStmtID
+	{:/* WithIdOpenTarget*/:}
+
+	|	USING dataAccess_plus
+	{:/* UsingOpenTarget */:}
+
+	|	USINGKEYS dataAccess_plus
+	{:/* UsingKeysOpenTarget */:}
+
+	|	FOR DataAccess
+	{:/* ForOpenTarget*/:}
+	;
+
+
+// on exception block
+onExceptOpt
+	::=
+	|	ONEXCEPTION stmt_star
+	{:/* OnExceptOpt*/:}
+	;
+
+
+// Expressions
+DataAccess
+	::=	ID:id
+	{:/* DataAccess */:}
+
+	|	DataAccess DOT ID:id
+	{:/* FieldAccess */:}
+
+	|	THIS DOT ID:id
+	{:/* ThisFieldAccess */:}
+
+	|	DataAccess LBRACKET expr_plus RBRACKET
+	{:/* ArrayAccess */:}
+
+	|	THIS LBRACKET expr_plus RBRACKET
+	{:/* ThisArrayAccess */:}
+
+	|	DataAccess LBRACKET Expr COLON Expr RBRACKET
+	{:/* SubstringAccess */:}
+	;
+
+ArgExpr
+	::=	BoolExpr
+	{:/* FunctionArgumentBooleanExpression*/:}
+	|	Expr
+	{:/* FunctionArgumentExpression */:}
+	;
+
+
+BoolExpr
+	::=	Condit
+	{:/* ConditionBooleanExpression */:}
+
+	|	LPAREN BoolExpr RPAREN
+	{:/* ParenthesizedBooleanExpression */:}
+
+	|	BANG LPAREN BoolExpr RPAREN
+	{:/* NOTBooleanExpression */:}
+
+	|	BoolExpr AND BoolExpr
+	{:/* ANDBooleanExpression */:}
+
+	|	BoolExpr OR BoolExpr
+	{:/* ORBooleanExpression */:}
+	;
+
+
+Expr
+	::=	DataAccess
+	{:/* DataAccessExpression */:}
+
+	|	literal
+	{:/* LiteralExpression */:}
+
+	|	PLUS Expr
+	{:/* UnaryPlusExpression */:} %prec UPLUS
+
+	|	MINUS Expr
+	{:/* UnaryMinusExpression */:} %prec UMINUS
+
+	|	LPAREN Expr RPAREN
+	{:/* ParenthesizedExpression */:}
+
+	|	Expr PLUS Expr
+	{:/* AddExpression */:}
+
+	|	Expr MINUS Expr
+	{:/* SubtractExpression */:}
+
+	|	Expr TIMES Expr
+	{:/* MultiplyExpression */:}
+
+	|	Expr DIV Expr
+	{:/* DivideExpression */:}
+
+	|	Expr MODULO Expr
+	{:/* ModExpression */:}
+
+	|	Expr TIMESTIMES Expr
+	{:/* PowerExpression */:}
+
+	|	functionInvocation
+	{:/* FunctionInvocationExpression */:}
+
+	|	DataAccess propertyBlock
+	{:/* SetValueExpression */:}
+	
+	|	NEW Type propertyBlockOpt
+	{:/* NewExpression */:}
+
+	|	AT DataAccess propertyBlockOpt
+	{:/* AnnotationExpression */:}
+	;
+
+
+Condit
+	::=	Expr EQ Expr
+	{:/* EqualCondition */:}
+
+	|	Expr NE Expr
+	{:/* NotEqualCondition */:}
+
+	|	Expr LT Expr
+	{:/* LessThanCondition */:}
+
+	|	Expr GT Expr
+	{:/* GreaterThanCondition */:}
+
+	|	Expr LE Expr
+	{:/* LessThanOrEqualCondition */:}
+
+	|	Expr GE Expr
+	{:/* GreaterThanOrEqualCondition */:}
+
+	|	Expr ISA Type
+	{:/* ISACondition */:}
+
+	|	Expr IN DataAccess
+	{:/* INCondition */:}
+
+	|	Expr IS DataAccess // sysvar.state mneumonics
+	{:/* ISCondition */:}
+
+	|	Expr NOT DataAccess // sysVar.state mneumonics
+	{:/* NOTCondition */:}
+
+	|	Expr LIKE Expr escapeOpt
+	{:/* LikeCondition */:}
+
+	|	Expr MATCHES Expr escapeOpt
+	{:/* MatchesCondition */:}
+	;
+
+
+literalArray
+	::=	LBRACKET expr_star RBRACKET
+	{:/* LiteralArray */:}
+	;
+
+
+escapeOpt
+	::=
+	|	ESCAPE STRING:escapeCharacter
+	{:/* EscapeOpt */:}
+	;
+
+
+privateAccessModifierOpt
+	::=
+	|	PRIVATE
+	{:/* PrivateAccessModifierOpt*/:}
+	;
+	
+	
+staticAccessModifierOpt
+	::=
+	|	STATIC
+	{:/* StaticAccessModifierOpt*/:}
+	;
+
+
+// Properties
+propertyBlockOpt
+	::=
+	|	propertyBlock
+	{:/* PropertyBlockOpt*/:}
+	;
+
+
+propertyBlock
+	::=	LCURLY propertyDecl_star RCURLY
+	{:/* PropertyBlock*/:}
+	;
+
+
+PropertyDecl
+	::=	Expr
+	{:/* PositionProperty */:}
+
+	|	DataAccess ASSIGN Expr
+	{:/* NamedProperty */:}
+	;
+
+
+initializerOpt
+	::=	
+	|	ASSIGN Expr
+	{:/* InitializerOpt */:}
+	;
+
+
+// NAMES
+Name
+	::=	ID:id
+	{:/* SimpleName */:}
+
+	|	Name DOT ID:id
+	{:/* QualifiedName */:}
+	;
+
+
+simpleName
+	::=	ID:id
+	{:/* SimpleName */:}
+	;
+
+
+// LITERALS
+literal
+	::=	INTEGER:value
+	{:/* IntegerLiteral */:}
+
+	|	DECIMALLIT:value
+	{:/* DecimalLiteral */:}
+
+	|	FLOATLIT:value
+	{:/* FloatingPointLiteral */:}
+
+	|	STRING:value
+	{:/* StringLiteral */:}
+	
+	|	NIL
+	{:/* NilLiteral */:}
+
+	|	SQLCONDITION:value
+	{:/* SQLConditionLiteral */:}
+
+	|	literalArray
+	{:/* ArrayLiteral */:}
+	;
+
+
+Type
+	::=	PRIMITIVE:primitive precisionOpt
+	{:/* PrimitiveType */:}
+
+	|	Name
+	{:/* NamedType */:}
+
+	|	LOB:largeObjectType
+	{:/* LargeObjectType */:}
+
+	|	DateTimeType
+	{:/* DateTimeType */:}
+
+	|	Type dimension
+	{:/* ArrayType */:}
+	;
+
+
+DateTimeType
+	::=	DATE
+	{:/* DateType */:}
+
+	|	TIME
+	{:/* TimeType */:}
+
+	|	TIMESTAMP dateTimeSpecOpt
+	{:/* TimestampType */:}
+
+	|	INTERVAL dateTimeSpecOpt
+	{:/* IntervalType */:}
+	;
+
+
+dateTimeSpecOpt
+	::=
+	|	LPAREN STRING:pattern RPAREN
+	{:/* DateTimeSpecOpt */:}
+	;
+
+
+dimension
+	::=	LBRACKET RBRACKET
+	{:/* DynamicArrayDimension */:}
+
+	|	LBRACKET Expr RBRACKET
+	{:/* StaticArrayDimension */:}
+	;
+
+
+precisionOpt
+	::=
+	|	LPAREN INTEGER:precision RPAREN
+	{:/* PrimitiveLengthSpec */:}
+
+	|	LPAREN INTEGER:precision COMMA INTEGER:scale RPAREN
+	{:/* PrimitiveLengthAndDecimalsSpec */:}
+	;
+
+// Sequence expansions
+importStatement_star		::=
+					|	importStatement_plus
+					;
+
+importStatement_plus		::=	importStatement
+					|	importStatement_plus importStatement_plus
+					;
+
+part_star		::=
+					|	part_plus
+					;
+
+part_plus		::=	Part
+					|	part_plus part_plus
+					;
+
+structureContent_star		::=
+					|	structureContent_plus
+					;
+
+structureContent_plus		::=	StructureContent
+					|	structureContent_plus structureContent_plus
+					;
+
+formGroupContent_star		::=
+					|	formGroupContent_plus
+					;
+
+formGroupContent_plus		::=	FormGroupContent
+					|	formGroupContent_plus formGroupContent_plus
+					;
+
+formContent_star		::=
+					|	formContent_plus
+					;
+
+formContent_plus		::=	FormContent
+					|	formContent_plus formContent_plus
+					;
+
+classContent_star		::=
+					|	classContent_plus
+					;
+
+classContent_plus		::=	ClassContent
+					|	classContent_plus classContent_plus
+					;
+
+functionParameter_star		::=
+					|	functionParameter_plus
+					;
+
+functionParameter_plus		::=	functionParameter
+					|	functionParameter_plus COMMA functionParameter_plus
+					;
+
+stmt_star		::=
+					|	stmt_plus
+					;
+
+stmt_plus		::=	Stmt
+					|	stmt_plus stmt_plus
+					;
+
+programParameter_star		::=
+					|	programParameter_plus
+					;
+
+programParameter_plus		::=	programParameter
+					|	programParameter_plus COMMA programParameter_plus
+					;
+
+callOpts_star		::=
+					|	callOpts_plus
+					;
+
+callOpts_plus		::=	CallOpts
+					|	callOpts_plus callOpts_plus
+					;
+
+whenClause_star		::=
+					|	whenClause_plus
+					;
+
+whenClause_plus		::=	whenClause
+					|	whenClause_plus whenClause_plus
+					;
+
+openTarget_star		::=
+					|	openTarget_plus
+					;
+
+openTarget_plus		::=	OpenTarget
+					|	openTarget_plus openTarget_plus
+					;
+
+expr_star		::=
+					|	expr_plus
+					;
+
+expr_plus		::=	Expr
+					|	expr_plus COMMA expr_plus
+					;
+
+propertyDecl_star		::=
+					|	propertyDecl_plus
+					;
+
+propertyDecl_plus		::=	PropertyDecl
+					|	propertyDecl_plus COMMA propertyDecl_plus
+					;
+
+dataAccess_star		::=
+					|	dataAccess_plus
+					;
+
+dataAccess_plus		::=	DataAccess
+					|	dataAccess_plus COMMA dataAccess_plus
+					;
+
+getByKeyOptions_star		::=
+					|	getByKeyOptions_plus
+					;
+
+getByKeyOptions_plus		::=	getByKeyOptions
+					|	getByKeyOptions_plus getByKeyOptions_plus
+					;
+
+showOptions_star		::=
+					|	showOptions_plus
+					;
+
+showOptions_plus		::=	ShowOptions
+					|	showOptions_plus showOptions_plus
+					;
+
+propertyBlock_star		::=
+					|	propertyBlock_plus
+					;
+
+propertyBlock_plus		::=	propertyBlock
+					|	propertyBlock_plus propertyBlock_plus
+					;
+
+prepareOption_star		::=
+					|	prepareOption_plus
+					;
+
+prepareOption_plus		::=	PrepareOption
+					|	prepareOption_plus prepareOption_plus
+					;
+
+replaceOption_star		::=
+					|	replaceOption_plus
+					;
+
+replaceOption_plus		::=	ReplaceOption
+					|	replaceOption_plus replaceOption_plus
+					;
+
+addOption_star		::=
+					|	addOption_plus
+					;
+
+addOption_plus		::=	AddOption
+					|	addOption_plus addOption_plus
+					;
+
+deleteOption_star		::=
+					|	deleteOption_plus
+					;
+
+deleteOption_plus		::=	DeleteOption
+					|	deleteOption_plus deleteOption_plus
+					;
+
+executeOption_star		::=
+					|	executeOption_plus
+					;
+
+executeOption_plus		::=	ExecuteOption
+					|	executeOption_plus executeOption_plus
+					;
+
+moveModifier_star		::=
+					|	moveModifier_plus
+					;
+
+moveModifier_plus		::=	MoveModifier
+					|	moveModifier_plus moveModifier_plus
+					;
+
+forwardOption_star		::=
+					|	forwardOption_plus
+					;
+
+forwardOption_plus		::=	ForwardOption
+					|	forwardOption_plus forwardOption_plus
+					;
+
+dimension_star		::=
+					|	dimension_plus
+					;
+
+dimension_plus		::=	dimension
+					|	dimension_plus dimension_plus
+					;
+
+functionArgument_star		::=
+					|	functionArgument_plus
+					;
+
+functionArgument_plus		::=	functionArgument
+					|	functionArgument_plus COMMA functionArgument_plus
+					;
+
+simpleName_plus		::=	simpleName
+					|	simpleName_plus COMMA simpleName_plus
+					;
+
+name_plus		::=	Name
+					|	name_plus COMMA name_plus
+					;
+
+callArgument_star		::=
+					|	callArgument_plus
+					;
+
+callArgument_plus		::=	callArgument
+					|	callArgument_plus COMMA callArgument_plus
+					;
+
+setMnemonic_plus		::=	setMnemonic
+					|	setMnemonic_plus COMMA setMnemonic_plus
+					;
+
+eventBlock_star		::=
+					|	eventBlock_plus
+					;
+
+eventBlock_plus		::=	eventBlock
+					|	eventBlock_plus eventBlock_plus
+					;
+
+interfaceContent_star		::=
+					|	interfaceContent_plus
+					;
+
+interfaceContent_plus		::=	InterfaceContent
+					|	interfaceContent_plus interfaceContent_plus
+					;
+
+getByPositionOption_star		::=
+					|	getByPositionOption_plus
+					;
+
+getByPositionOption_plus		::=	getByPositionOption
+					|	getByPositionOption_plus getByPositionOption_plus
+					;

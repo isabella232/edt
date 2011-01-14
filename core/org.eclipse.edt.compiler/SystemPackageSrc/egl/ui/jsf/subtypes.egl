@@ -1,0 +1,49 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package egl.ui.jsf;
+
+import egl.ui.*;
+
+Record JSFHandler type Annotation
+{
+	targets = [ElementKind.HandlerPart],
+	@Stereotype {
+		memberAnnotations = [
+			action, bypassValidation, displayName, displayUse, help, fill,
+			inputRequired, inputRequiredMsgKey, isDecimalDigit, isHexDigit,
+			minimumInput, minimumInputMsgKey, needsSOSI, newWindow,
+			numElementsItem, onValueChangeFunction, selectFromListItem,
+			selectType, typeahead, typeaheadFunction, typeChkMsgKey,
+			validatorDataTable, validatorDataTableMsgKey, validatorFunction,
+			validatorFunctionMsgKey, validationOrder, validValues,
+			validValuesMsgKey, value
+		],
+		stereotypeContexts = []
+	},
+	validationProxy="org.eclipse.edt.compiler.binding.annotationType.JSFHandlerAnnotationTypeBinding",
+	eglIsSystemAnnotation = yes
+}
+	bidiConversionTable string;
+	cancelOnPageTransition boolean = no;
+	eventValueItem string;
+	labelAndHelpResource string;
+	msgResource string;
+	onConstructionFunction egl.core.reflect.internalRef;
+	onPostRenderFunction egl.core.reflect.functionRef;
+	onPreRenderFunction egl.core.reflect.functionRef;
+	scope ScopeKind = ScopeKind.session;
+	title string;
+	validationBypassFunctions egl.core.reflect.internalRef[];
+	validatorFunction egl.core.reflect.internalRef;
+	view string;
+	viewRootVar egl.core.reflect.internalRef;
+end

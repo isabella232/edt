@@ -1,0 +1,35 @@
+/*******************************************************************************
+ * Copyright © 2005, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.compiler.core.ast;
+
+/**
+ * @author winghong
+ */
+public abstract class StackSymbol {
+    
+    public int left;
+    public int right;
+    public int symbolType;
+    public int parseState;
+
+    public StackSymbol(int symbolType, int left, int right, int parseState) {
+        super();
+        this.symbolType = symbolType;
+        this.left = left;
+        this.right = right;
+        this.parseState = parseState;
+    }
+    
+    public abstract boolean isTerminal();
+    public abstract boolean isNonTerminal();
+
+}

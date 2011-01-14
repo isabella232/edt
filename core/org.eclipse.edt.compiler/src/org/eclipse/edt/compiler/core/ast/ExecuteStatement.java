@@ -1,0 +1,244 @@
+/*******************************************************************************
+ * Copyright © 2005, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.compiler.core.ast;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.edt.compiler.internal.sql.SQLInfo;
+
+
+/**
+ * ExecuteStatement AST node type.
+ *
+ * @author Albert Ho
+ * @author David Murray
+ */
+public class ExecuteStatement extends Statement {
+	
+	public static class ExecuteTarget implements Cloneable {
+		int startOffset;
+		int endOffset;
+		
+		public ExecuteTarget(int startOffset, int endOffset) {
+			this.startOffset = startOffset;
+			this.endOffset = endOffset;
+		}
+		
+		boolean isUpdate() { return false; }
+		boolean isDelete() { return false; }
+		boolean isInsert() { return false; }
+		
+		boolean hasSQLStatement() { return false; }
+		boolean hasPreparedStatementID() { return false; }
+		
+		InlineSQLStatement getSQLStatement() { return null; }
+		String getPreparedStatementID() { return null; }
+		
+		protected Object clone() throws CloneNotSupportedException {
+			throw new CloneNotSupportedException();
+		}
+		
+		public int getOffset() {
+			return startOffset;
+		}
+		
+		public int getLength() {
+			return endOffset - startOffset;
+		}
+	}
+	
+	public static class SQLStatementExecuteTarget extends ExecuteTarget {
+		InlineSQLStatement SQLStatement = null;
+		
+		public SQLStatementExecuteTarget(InlineSQLStatement SQLStatement, int startOffset, int endOffset) {
+			super(startOffset, endOffset);
+			this.SQLStatement = SQLStatement;
+		}
+		
+		boolean hasSQLStatement() {
+			return SQLStatement != null;
+		}
+		
+		InlineSQLStatement getSQLStatement() {
+			return SQLStatement;
+		}
+		
+		protected Object clone() throws CloneNotSupportedException {
+			throw new CloneNotSupportedException();
+		}
+	}
+	
+	public static class DefaultSQLStatementExecuteTarget extends SQLStatementExecuteTarget {
+		public DefaultSQLStatementExecuteTarget(InlineSQLStatement SQLStatement, int startOffset, int endOffset) {
+			super(SQLStatement, startOffset, endOffset);
+		}
+		
+		protected Object clone() throws CloneNotSupportedException {
+			return new DefaultSQLStatementExecuteTarget(SQLStatement, startOffset, endOffset);
+		}
+	}
+	
+	public static class UpdateExecuteTarget extends SQLStatementExecuteTarget {
+		public UpdateExecuteTarget(InlineSQLStatement SQLStatement, int startOffset, int endOffset) {
+			super(SQLStatement, startOffset, endOffset);
+		}
+		
+		boolean isUpdate() {
+			return true;
+		}
+		
+		protected Object clone() throws CloneNotSupportedException {
+			return new UpdateExecuteTarget(SQLStatement, startOffset, endOffset);
+		}
+	}
+	
+	public static class InsertExecuteTarget extends SQLStatementExecuteTarget {
+		public InsertExecuteTarget(InlineSQLStatement SQLStatement, int startOffset, int endOffset) {
+			super(SQLStatement, startOffset, endOffset);
+		}
+		
+		boolean isInsert() {
+			return true;
+		}
+		
+		protected Object clone() throws CloneNotSupportedException {
+			return new InsertExecuteTarget(SQLStatement, startOffset, endOffset);
+		}
+	}
+	
+	public static class DeleteExecuteTarget extends SQLStatementExecuteTarget {
+		public DeleteExecuteTarget(InlineSQLStatement SQLStatement, int startOffset, int endOffset) {
+			super(SQLStatement, startOffset, endOffset);
+		}
+		
+		boolean isDelete() {
+			return true;
+		}
+		
+		protected Object clone() throws CloneNotSupportedException {
+			return new DeleteExecuteTarget(SQLStatement, startOffset, endOffset);
+		}
+	}
+	
+	public static class PreparedStatementExecuteTarget extends ExecuteTarget {
+		String preparedStmtID = null;
+		
+		public PreparedStatementExecuteTarget(String preparedStmtID, int startOffset, int endOffset) {
+			super(startOffset, endOffset);
+			this.preparedStmtID = preparedStmtID;
+		}
+		
+		boolean hasPreparedStatementID() {
+			return true;
+		}
+		
+		String getPreparedStatementID() {
+			return preparedStmtID;
+		}
+		
+		protected Object clone() throws CloneNotSupportedException {
+			return new PreparedStatementExecuteTarget(new String(preparedStmtID), startOffset, endOffset);
+		}
+	}
+
+	private ExecuteTarget executeTarget;
+	private List executeOptions;	// List of Symbols
+	
+	private List ioObjects;
+	private SQLInfo sqlInfo;
+
+	public ExecuteStatement(ExecuteTarget executeTarget, List executeOptions, int startOffset, int endOffset) {
+		super(startOffset, endOffset);
+		
+		this.executeTarget = executeTarget;
+		if(executeTarget.hasSQLStatement()) {
+			executeTarget.getSQLStatement().setParent(this);
+		}
+		
+		this.executeOptions = setParent(executeOptions);
+	}
+	
+	public boolean isUpdate() {
+		return executeTarget.isUpdate();
+	}
+	
+	public boolean isDelete() {
+		return executeTarget.isDelete();
+	}
+	
+	public boolean isInsert() {
+		return executeTarget.isInsert();
+	}
+
+	public boolean isPreparedStatement() {
+		return executeTarget.hasPreparedStatementID();
+	}
+	
+	public String getPreparedStatementID() {
+		return executeTarget.getPreparedStatementID();
+	}
+	
+	public boolean hasInlineSQLStatement() {
+		return executeTarget.hasSQLStatement();
+	}
+	
+	public InlineSQLStatement getInlineSQLStatement() {
+		return executeTarget.getSQLStatement();
+	}	
+		
+	public List getExecuteOptions() {
+		return executeOptions;
+	}
+	
+	public ExecuteTarget getExecuteTarget() {
+		return executeTarget;
+	}
+	
+	public void accept(IASTVisitor visitor) {
+		boolean visitChildren = visitor.visit(this);
+		if(visitChildren) {
+			if(executeTarget.hasSQLStatement()) {
+				executeTarget.getSQLStatement().accept(visitor);
+			}
+			acceptChildren(visitor, executeOptions);			
+		}
+		visitor.endVisit(this);
+	}
+	
+	public List getIOObjects() {
+		if(ioObjects == null) {
+			ioObjects = Collections.EMPTY_LIST;
+			acceptChildren(new DefaultASTVisitor() {
+				public boolean visit(ForExpressionClause forExpressionClause) {
+					if(ioObjects == Collections.EMPTY_LIST) {
+						ioObjects = new ArrayList();
+					}
+					ioObjects.add(forExpressionClause.getExpression());
+					return false;
+				}
+			}, executeOptions);
+		}
+		return ioObjects;
+	}
+	
+	protected Object clone() throws CloneNotSupportedException {
+		return new ExecuteStatement((ExecuteTarget)executeTarget.clone(), cloneList(executeOptions), getOffset(), getOffset() + getLength());
+	}
+    public SQLInfo getSqlInfo() {
+        return sqlInfo;
+    }
+    public void setSqlInfo(SQLInfo sqlInfo) {
+        this.sqlInfo = sqlInfo;
+    }
+}

@@ -1,0 +1,1376 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package egl.ui.rui;
+
+import egl.core.*;
+import egl.lang.FieldDeclaration;
+import egl.lang.FunctionDeclaration;
+
+Record RUIHandler type Annotation
+	{
+		targets = [ElementKind.handlerPart],
+		@Stereotype
+			{},
+		implicitFunctions = [
+			@FunctionDeclaration {
+				functionName = "getProperty",
+				parameterTypes = [string.type],
+				modifiers = ["inModifier"],
+				returnType = string.type
+			},
+			@FunctionDeclaration {
+				functionName = "appendChildToParent",
+				parameterTypes = [egl.ui.rui.Widget, egl.ui.rui.Widget],
+				modifiers = ["inModifier", "inModifier"]
+			}
+		],
+		implicitFields = [
+			@FieldDeclaration {
+				fieldName = "document",
+				fieldType = egl.ui.rui.Document,
+				isPrivate=yes
+			},
+			@FieldDeclaration {
+				fieldName = "initialUI",
+				fieldType = egl.ui.rui.Widget[].type,
+				isPrivate=yes
+			}
+		],
+		eglIsSystemAnnotation = yes,
+		validationProxy = "org.eclipse.edt.compiler.binding.annotationType.RUIHandlerAnnotationTypeBinding"
+	}
+	
+	onConstructionFunction egl.core.reflect.FunctionMemberRef;
+	includeFile String;
+	cssFile String;
+	title String;
+	theme String = "claro";
+end
+
+Record RUIWidget type Annotation {
+	targets = [ElementKind.handlerPart],
+	@Stereotype{},
+	implicitFunctions = [
+		@FunctionDeclaration {
+			functionName = "fadeOut",
+			parameterTypes = [int.type, egl.ui.rui.effectCallback],
+			modifiers = ["inModifier", "inModifier"]
+		},
+		@FunctionDeclaration {
+			functionName = "fadeIn",
+			parameterTypes = [int.type, egl.ui.rui.effectCallback],
+			modifiers = ["inModifier", "inModifier"]
+		},
+		@FunctionDeclaration {
+			functionName = "resize",
+			parameterTypes = [int.type, int.type, int.type, egl.ui.rui.effectCallback],
+			modifiers = ["inModifier", "inModifier", "inModifier", "inModifier"]
+		},
+		@FunctionDeclaration {
+			functionName = "morph",
+			parameterTypes = [int.type, egl.ui.rui.effectCallback, egl.ui.rui.MorphFunction],
+			modifiers = ["inModifier", "inModifier", "inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "appendChild",
+			parameterTypes = [egl.ui.rui.Widget],
+			modifiers = ["inModifier"]
+		},
+		@FunctionDeclaration {
+			functionName = "appendChildren",
+			parameterTypes = [egl.ui.rui.Widget[].type],
+			modifiers = ["inModifier"]
+		},
+		@FunctionDeclaration {
+			functionName = "removeChild",
+			parameterTypes = [egl.ui.rui.Widget],
+			modifiers = ["inModifier"]
+		},
+		@FunctionDeclaration {
+			functionName = "removeChildren",
+			parameterTypes = []
+		},
+		@FunctionDeclaration {
+			functionName = "getChildren",
+			parameterTypes = [],
+			returnType = egl.ui.rui.Widget[].type
+		},
+		@FunctionDeclaration {
+			functionName = "setChildren",
+			parameterTypes = [egl.ui.rui.Widget[].type],
+			modifiers = ["inModifier"]
+		},
+		@FunctionDeclaration {
+			functionName = "getAttribute",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"],
+			returnType = any.type
+		},
+		@FunctionDeclaration {
+			functionName = "setAttribute",
+			parameterTypes = [string.type, any.type],
+			modifiers = ["inModifier", "inModifier"]
+		},
+		@FunctionDeclaration {
+			functionName = "removeAttribute",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]
+		},
+		@FunctionDeclaration {
+			functionName = "focus",
+			parameterTypes = []
+		},
+		@FunctionDeclaration {
+			functionName = "select",
+			parameterTypes = []
+		},
+		@FunctionDeclaration {
+			functionName = "removeAttribute",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]
+		},
+		@FunctionDeclaration {
+			functionName = "getElementById",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"],
+			returnType = egl.ui.rui.Widget
+		},
+		@FunctionDeclaration {
+			functionName = "getElementsByName",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"],
+			returnType = egl.ui.rui.Widget[].type
+		},
+		@FunctionDeclaration {
+			functionName = "getElementsByTagName",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"],
+			returnType = egl.ui.rui.Widget[].type
+		},
+		@FunctionDeclaration {
+			functionName = "childrenChanged",
+			parameterTypes = []
+		},
+		@FunctionDeclaration {
+			functionName = "getID",
+			parameterTypes = [],
+			modifiers = ["inModifier"],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setID",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]
+		},
+		@FunctionDeclaration {
+			functionName = "getLogicalParent",
+			parameterTypes = [],
+			returnType = egl.ui.rui.Widget
+		},
+		@FunctionDeclaration {
+			functionName = "setLogicalParent",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]
+		},
+		@FunctionDeclaration {
+			functionName = "getParent",
+			parameterTypes = [],
+			modifiers = ["inModifier"],
+			returnType = egl.ui.rui.Widget
+		},
+		@FunctionDeclaration {
+			functionName = "setParent",
+			parameterTypes = [egl.ui.rui.Widget],
+			modifiers = ["inModifier"]
+		},
+		@FunctionDeclaration {
+			functionName = "getTabIndex",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setTabIndex",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]
+		},
+		@FunctionDeclaration {
+			functionName = "getAriaRole",
+			parameterTypes = [],
+			returnType = String.type
+		},
+		@FunctionDeclaration {
+			functionName = "setAriaRole",
+			parameterTypes = [String.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getAriaLive",
+			parameterTypes = [],
+			returnType = String.type
+		},
+		@FunctionDeclaration {
+			functionName = "setAriaLive",
+			parameterTypes = [String.type],
+			modifiers = ["inModifier"]
+		},
+		@FunctionDeclaration {
+			functionName = "getDisabled",
+			parameterTypes = [],
+			returnType = boolean.type
+		},
+		@FunctionDeclaration {
+			functionName = "setDisabled",
+			parameterTypes = [boolean.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getError",
+			parameterTypes = [],
+			returnType = boolean.type
+		},
+		@FunctionDeclaration {
+			functionName = "setError",
+			parameterTypes = [boolean.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getCursor",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setCursor",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getStyle",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setStyle",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getClass",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setClass",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]						
+		},
+		@FunctionDeclaration {
+			functionName = "getVisibility",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setVisibility",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getVisible",
+			parameterTypes = [],
+			returnType = boolean.type
+		},
+		@FunctionDeclaration {
+			functionName = "setVisible",
+			parameterTypes = [boolean.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getOpacity",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setOpacity",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getZIndex",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setZIndex",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getX",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setX",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getY",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setY",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getWidth",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setWidth",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getHeight",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setHeight",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]						
+		},
+		@FunctionDeclaration {
+			functionName = "getPixelWidth",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setPixelWidth",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getLayoutData",
+			parameterTypes = [],
+			returnType = any.type
+		},
+		@FunctionDeclaration {
+			functionName = "setLayoutData",
+			parameterTypes = [any.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getPixelHeight",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setPixelHeight",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]						
+		},
+		@FunctionDeclaration {
+			functionName = "getMargin",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setMargin",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getMarginLeft",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setMarginLeft",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getMarginRight",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setMarginRight",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getMarginTop",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setMarginTop",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getMarginBottom",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setMarginBottom",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getBorderStyle",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setBorderStyle",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getBorderLeftStyle",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setBorderLeftStyle",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getBorderRightStyle",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setBorderRightStyle",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getBorderTopStyle",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setBorderTopStyle",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]						
+		},
+		@FunctionDeclaration {
+			functionName = "getBorderBottomStyle",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setBorderBottomStyle",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getPadding",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setPadding",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]						
+		},
+		@FunctionDeclaration {
+			functionName = "getPaddingLeft",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setPaddingLeft",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getPaddingRight",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setPaddingRight",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getPaddingBottom",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setPaddingBottom",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]						
+		},
+		@FunctionDeclaration {
+			functionName = "getPaddingTop",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setPaddingTop",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getBorderColor",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setBorderColor",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getBorderWidth",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setBorderWidth",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getBorderLeftWidth",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setBorderLeftWidth",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getBorderRightWidth",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setBorderRightWidth",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getBorderTopWidth",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setBorderTopWidth",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getBorderBottomWidth",
+			parameterTypes = [],
+			returnType = int.type
+		},
+		@FunctionDeclaration {
+			functionName = "setBorderBottomWidth",
+			parameterTypes = [int.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getColor",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setColor",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getBackground",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setBackground",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getBackgroundColor",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setBackgroundColor",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getFont",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setFont",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getFontSize",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setFontSize",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getFontWeight",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setFontWeight",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getPosition",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setPosition",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getInnerHTML",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setInnerHTML",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		/*
+		@FunctionDeclaration {
+			functionName = "getTargetWidget",
+			parameterTypes = [],
+			modifiers = ["inModifier"],
+			returnType = egl.ui.rui.Widget
+		},
+		@FunctionDeclaration {
+			functionName = "setTargetWidget",
+			parameterTypes = [egl.ui.rui.Widget],
+			modifiers = ["inModifier"]
+		},		
+		*/
+		@FunctionDeclaration {
+			functionName = "getTagName",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setTagName",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getInnerText",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setInnerText",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getOnChange",
+			parameterTypes = [],
+			returnType = egl.ui.rui.EventHandler[].type
+		},
+		@FunctionDeclaration {
+			functionName = "setOnChange",
+			parameterTypes = [egl.ui.rui.EventHandler[].type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getOnClick",
+			parameterTypes = [],
+			returnType = egl.ui.rui.EventHandler[].type
+		},
+		@FunctionDeclaration {
+			functionName = "setOnClick",
+			parameterTypes = [egl.ui.rui.EventHandler[].type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getOnSelect",
+			parameterTypes = [],
+			returnType = egl.ui.rui.EventHandler[].type
+		},
+		@FunctionDeclaration {
+			functionName = "setOnSelect",
+			parameterTypes = [egl.ui.rui.EventHandler[].type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getOnFocusGained",
+			parameterTypes = [],
+			returnType = egl.ui.rui.EventHandler[].type
+		},
+		@FunctionDeclaration {
+			functionName = "setOnFocusGained",
+			parameterTypes = [egl.ui.rui.EventHandler[].type],
+			modifiers = ["inModifier"]						
+		},
+		@FunctionDeclaration {
+			functionName = "getOnFocusLost",
+			parameterTypes = [],
+			returnType = egl.ui.rui.EventHandler[].type
+		},
+		@FunctionDeclaration {
+			functionName = "setOnFocusLost",
+			parameterTypes = [egl.ui.rui.EventHandler[].type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getOnKeyDown",
+			parameterTypes = [],
+			returnType = egl.ui.rui.EventHandler[].type
+		},
+		@FunctionDeclaration {
+			functionName = "setOnKeyDown",
+			parameterTypes = [egl.ui.rui.EventHandler[].type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getOnKeyPress",
+			parameterTypes = [],
+			returnType = egl.ui.rui.EventHandler[].type
+		},
+		@FunctionDeclaration {
+			functionName = "setOnKeyPress",
+			parameterTypes = [egl.ui.rui.EventHandler[].type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getOnKeyUp",
+			parameterTypes = [],
+			returnType = egl.ui.rui.EventHandler[].type
+		},
+		@FunctionDeclaration {
+			functionName = "setOnKeyUp",
+			parameterTypes = [egl.ui.rui.EventHandler[].type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getOnMouseUp",
+			parameterTypes = [],
+			returnType = egl.ui.rui.EventHandler[].type
+		},
+		@FunctionDeclaration {
+			functionName = "setOnMouseUp",
+			parameterTypes = [egl.ui.rui.EventHandler[].type],
+			modifiers = ["inModifier"]						
+		},
+		@FunctionDeclaration {
+			functionName = "getOnMouseDown",
+			parameterTypes = [],
+			returnType = egl.ui.rui.EventHandler[].type
+		},
+		@FunctionDeclaration {
+			functionName = "setOnMouseDown",
+			parameterTypes = [egl.ui.rui.EventHandler[].type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getOnMouseOver",
+			parameterTypes = [],
+			returnType = egl.ui.rui.EventHandler[].type
+		},
+		@FunctionDeclaration {
+			functionName = "setOnMouseOver",
+			parameterTypes = [egl.ui.rui.EventHandler[].type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getOnMouseMove",
+			parameterTypes = [],
+			returnType = egl.ui.rui.EventHandler[].type
+		},
+		@FunctionDeclaration {
+			functionName = "setOnMouseMove",
+			parameterTypes = [egl.ui.rui.EventHandler[].type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getOnMouseOut",
+			parameterTypes = [],
+			returnType = egl.ui.rui.EventHandler[].type
+		},
+		@FunctionDeclaration {
+			functionName = "setOnMouseOut",
+			parameterTypes = [egl.ui.rui.EventHandler[].type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getOnScroll",
+			parameterTypes = [],
+			returnType = egl.ui.rui.EventHandler[].type
+		},
+		@FunctionDeclaration {
+			functionName = "setOnScroll",
+			parameterTypes = [egl.ui.rui.EventHandler[].type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getOnContextMenu",
+			parameterTypes = [],
+			returnType = egl.ui.rui.EventHandler[].type
+		},
+		@FunctionDeclaration {
+			functionName = "setOnContextMenu",
+			parameterTypes = [egl.ui.rui.EventHandler[].type],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getOnStartDrag",
+			parameterTypes = [],
+			returnType = egl.ui.rui.StartDragFunction
+		},
+		@FunctionDeclaration {
+			functionName = "setOnStartDrag",
+			parameterTypes = [egl.ui.rui.StartDragFunction],
+			modifiers = ["inModifier"]						
+		},
+		@FunctionDeclaration {
+			functionName = "getOnDrag",
+			parameterTypes = [],
+			returnType = egl.ui.rui.DragFunction
+		},
+		@FunctionDeclaration {
+			functionName = "setOnDrag",
+			parameterTypes = [egl.ui.rui.DragFunction],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "getOnDropOnTarget",
+			parameterTypes = [],
+			returnType = egl.ui.rui.DropOnTargetFunction
+		},
+		@FunctionDeclaration {
+			functionName = "setOnDropOnTarget",
+			parameterTypes = [egl.ui.rui.DropOnTargetFunction],
+			modifiers = ["inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "setBiDiMarkers",
+			parameterTypes = [boolean.type,boolean.type],
+			modifiers = ["inModifier", "inModifier"]			
+		},
+		@FunctionDeclaration {
+			functionName = "setBiDiStyles",
+			parameterTypes = [boolean.type,boolean.type],
+			modifiers = ["inModifier", "inModifier"]
+		},		
+		@FunctionDeclaration {
+			functionName = "cleanBiDiMarkers",
+			parameterTypes = []
+		},		
+		@FunctionDeclaration {
+			functionName = "getWidgetOrientation",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setWidgetOrientation",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]						
+		},
+		@FunctionDeclaration {
+			functionName = "getTextLayout",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setTextLayout",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]						
+		},
+		@FunctionDeclaration {
+			functionName = "getReverseTextDirection",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setReverseTextDirection",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]						
+		},
+		@FunctionDeclaration {
+			functionName = "getSymmetricSwap",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setSymmetricSwap",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]						
+		},
+		@FunctionDeclaration {
+			functionName = "getNumericSwap",
+			parameterTypes = [],
+			returnType = string.type
+		},
+		@FunctionDeclaration {
+			functionName = "setNumericSwap",
+			parameterTypes = [string.type],
+			modifiers = ["inModifier"]						
+		},
+		@FunctionDeclaration {
+			functionName = "toString",
+			parameterTypes = [],
+			returnType = string.type
+		}			
+	],
+	implicitFields = [
+		@FieldDeclaration { fieldName = "pixelWidth", fieldType = int.type, @EGLProperty { getMethod=getPixelWidth, setMethod=setPixelWidth } },
+		@FieldDeclaration { fieldName = "pixelHeight", fieldType = int.type, @EGLProperty { getMethod=getPixelHeight, setMethod=setPixelHeight } },
+		@FieldDeclaration { fieldName = "logicalParent", fieldType = egl.ui.rui.Widget, @EGLProperty { getMethod=getLogicalParent, setMethod=setLogicalParent } },
+		@FieldDeclaration { fieldName = "parent", fieldType = egl.ui.rui.Widget, @EGLProperty { getMethod=getParent, setMethod=setParent } },
+		@FieldDeclaration { fieldName = "style", fieldType =  String.type, @EGLProperty { getMethod=getStyle, setMethod=setStyle } },
+		@FieldDeclaration { fieldName = "background", fieldType =  string.type, @EGLProperty { getMethod=getBackground, setMethod=setBackground } },
+				
+		@FieldDeclaration { fieldName = "layoutData", fieldType = any.type, @EGLProperty { getMethod=getLayoutData, setMethod=setLayoutData } },
+
+		@FieldDeclaration { fieldName = "tabIndex", fieldType = int.type, @EGLProperty { getMethod=getTabIndex, setMethod=setTabIndex }, @VEProperty{category = "Accessibility"}},
+		@FieldDeclaration { fieldName = "ariaLive", fieldType = String.type, @EGLProperty { getMethod=getAriaLive, setMethod=setAriaLive }, @VEProperty{category = "Accessibility"}},
+		@FieldDeclaration { fieldName = "ariaRole", fieldType = String.type, @EGLProperty { getMethod=getAriaRole, setMethod=setAriaRole }, @VEProperty{category = "Accessibility"}},
+		
+		@FieldDeclaration { fieldName = "disabled", fieldType =  boolean .type, @EGLProperty { getMethod=getDisabled, setMethod=setDisabled }, @VEProperty{category = "Appearance"}},		
+		@FieldDeclaration { fieldName = "cursor", fieldType =  String.type, @EGLProperty { getMethod=getCursor, setMethod=setCursor }, @VEProperty{category = "Appearance"}},
+		@FieldDeclaration { fieldName = "visibility", fieldType =  String.type, @EGLProperty { getMethod=getVisibility, setMethod=setVisibility }},
+		@FieldDeclaration { fieldName = "visible", fieldType =  boolean.type, @EGLProperty { getMethod=getVisible, setMethod=setVisible }, @VEProperty{category = "Appearance", default = "true"}},
+		@FieldDeclaration { fieldName = "opacity", fieldType =  String.type, @EGLProperty { getMethod=getOpacity, setMethod=setOpacity }, @VEProperty{category = "Appearance"}},
+		
+		@FieldDeclaration { fieldName = "zIndex", fieldType =  String.type, 
+			@EGLProperty { getMethod=getZIndex, setMethod=setZIndex }, 
+			@VEProperty{category = "Position"}
+		},
+		@FieldDeclaration { fieldName = "height", fieldType =  String.type, 
+			@EGLProperty { getMethod=getHeight, setMethod=setHeight }, 
+			@VEProperty{category = "Position"}
+		},
+		@FieldDeclaration { fieldName = "width", fieldType =  String.type, 
+			@EGLProperty { getMethod=getWidth, setMethod=setWidth }, 
+			@VEProperty{category = "Position"}
+		},
+		@FieldDeclaration { fieldName = "y", fieldType =  int.type, 
+			@EGLProperty { getMethod=getY, setMethod=setY }, 
+			@VEProperty{category = "Position"}
+		},
+		@FieldDeclaration { fieldName = "x", fieldType =  int.type, 
+			@EGLProperty { getMethod=getX, setMethod=setX }, 
+			@VEProperty{category = "Position"}
+		},
+		@FieldDeclaration { fieldName = "position", fieldType =  string.type, 
+			@EGLProperty { 
+				getMethod=getPosition, 
+				setMethod=setPosition 
+			}, 
+			@VEProperty {
+				category = "Position", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"absolute\"", displayName="absolute"}, 
+					@VEPropertyChoice{id="\"relative\"", displayName="relative"}, 
+					@VEPropertyChoice{id="\"static\"", displayName="static"}
+				],
+				default = "\"static\""
+			}
+		},
+		
+		@FieldDeclaration { fieldName = "marginBottom", fieldType =  int.type, @EGLProperty { getMethod=getMarginBottom, setMethod=setMarginBottom }, @VEProperty{category = "Spacing"}},
+		@FieldDeclaration { fieldName = "marginTop", fieldType =  int.type, @EGLProperty { getMethod=getMarginTop, setMethod=setMarginTop }, @VEProperty{category = "Spacing"}},
+		@FieldDeclaration { fieldName = "marginRight", fieldType =  int.type, @EGLProperty { getMethod=getMarginRight, setMethod=setMarginRight }, @VEProperty{category = "Spacing"}},
+		@FieldDeclaration { fieldName = "marginLeft", fieldType =  int.type, @EGLProperty { getMethod=getMarginLeft, setMethod=setMarginLeft }, @VEProperty{category = "Spacing"}},
+		@FieldDeclaration { fieldName = "margin", fieldType =  int.type, @EGLProperty { getMethod=getMargin, setMethod=setMargin }, @VEProperty{category = "Spacing"}},
+		
+		@FieldDeclaration { fieldName = "paddingBottom", fieldType =  int.type, @EGLProperty { getMethod=getPaddingBottom, setMethod=setPaddingBottom }, @VEProperty{category = "Spacing"}},
+		@FieldDeclaration { fieldName = "paddingTop", fieldType =  int.type, @EGLProperty { getMethod=getPaddingTop, setMethod=setPaddingTop }, @VEProperty{category = "Spacing"}},
+		@FieldDeclaration { fieldName = "paddingRight", fieldType =  int.type, @EGLProperty { getMethod=getPaddingRight, setMethod=setPaddingRight }, @VEProperty{category = "Spacing"}},
+		@FieldDeclaration { fieldName = "paddingLeft", fieldType =  int.type, @EGLProperty { getMethod=getPaddingLeft, setMethod=setPaddingLeft }, @VEProperty{category = "Spacing"}},
+		@FieldDeclaration { fieldName = "padding", fieldType =  int.type, @EGLProperty { getMethod=getPadding, setMethod=setPadding }, @VEProperty{category = "Spacing"}},
+		
+		
+		@FieldDeclaration { fieldName = "borderBottomStyle", fieldType =  String.type, @EGLProperty { getMethod=getBorderBottomStyle, setMethod=setBorderBottomStyle }, @VEProperty{category = "Border", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"solid\"", displayName="solid"}, 
+					@VEPropertyChoice{id="\"double\"", displayName="double"}, 
+					@VEPropertyChoice{id="\"groove\"", displayName="groove"}, 
+					@VEPropertyChoice{id="\"dotted\"", displayName="dotted"}, 
+					@VEPropertyChoice{id="\"dashed\"", displayName="dashed"}, 
+					@VEPropertyChoice{id="\"inset\"", displayName="inset"}, 
+					@VEPropertyChoice{id="\"outset\"", displayName="outset"}, 
+					@VEPropertyChoice{id="\"ridge\"", displayName="ridge"}
+				],
+				default = "\"solid\""
+		}},
+		@FieldDeclaration { fieldName = "borderTopStyle", fieldType =  String.type, @EGLProperty { getMethod=getBorderTopStyle, setMethod=setBorderTopStyle }, @VEProperty{category = "Border", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"solid\"", displayName="solid"}, 
+					@VEPropertyChoice{id="\"double\"", displayName="double"}, 
+					@VEPropertyChoice{id="\"groove\"", displayName="groove"}, 
+					@VEPropertyChoice{id="\"dotted\"", displayName="dotted"}, 
+					@VEPropertyChoice{id="\"dashed\"", displayName="dashed"}, 
+					@VEPropertyChoice{id="\"inset\"", displayName="inset"}, 
+					@VEPropertyChoice{id="\"outset\"", displayName="outset"}, 
+					@VEPropertyChoice{id="\"ridge\"", displayName="ridge"}
+				],
+				default = "\"solid\""  
+		}},
+		@FieldDeclaration { fieldName = "borderRightStyle", fieldType = String.type, @EGLProperty { getMethod=getBorderRightStyle, setMethod=setBorderRightStyle }, @VEProperty{category = "Border", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"solid\"", displayName="solid"}, 
+					@VEPropertyChoice{id="\"double\"", displayName="double"}, 
+					@VEPropertyChoice{id="\"groove\"", displayName="groove"}, 
+					@VEPropertyChoice{id="\"dotted\"", displayName="dotted"}, 
+					@VEPropertyChoice{id="\"dashed\"", displayName="dashed"}, 
+					@VEPropertyChoice{id="\"inset\"", displayName="inset"}, 
+					@VEPropertyChoice{id="\"outset\"", displayName="outset"}, 
+					@VEPropertyChoice{id="\"ridge\"", displayName="ridge"}
+				],
+				default = "\"solid\""  
+		}},
+		@FieldDeclaration { fieldName = "borderLeftStyle", fieldType = String.type, @EGLProperty { getMethod=getBorderLeftStyle, setMethod=setBorderLeftStyle }, @VEProperty{category = "Border", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"solid\"", displayName="solid"}, 
+					@VEPropertyChoice{id="\"double\"", displayName="double"}, 
+					@VEPropertyChoice{id="\"groove\"", displayName="groove"}, 
+					@VEPropertyChoice{id="\"dotted\"", displayName="dotted"}, 
+					@VEPropertyChoice{id="\"dashed\"", displayName="dashed"}, 
+					@VEPropertyChoice{id="\"inset\"", displayName="inset"}, 
+					@VEPropertyChoice{id="\"outset\"", displayName="outset"}, 
+					@VEPropertyChoice{id="\"ridge\"", displayName="ridge"}
+				],
+				default = "\"solid\""  
+		}},
+		@FieldDeclaration { fieldName = "borderStyle", fieldType =  String.type, @EGLProperty { getMethod=getBorderStyle, setMethod=setBorderStyle }, @VEProperty{category = "Border", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"solid\"", displayName="solid"}, 
+					@VEPropertyChoice{id="\"double\"", displayName="double"}, 
+					@VEPropertyChoice{id="\"groove\"", displayName="groove"}, 
+					@VEPropertyChoice{id="\"dotted\"", displayName="dotted"}, 
+					@VEPropertyChoice{id="\"dashed\"", displayName="dashed"}, 
+					@VEPropertyChoice{id="\"inset\"", displayName="inset"}, 
+					@VEPropertyChoice{id="\"outset\"", displayName="outset"}, 
+					@VEPropertyChoice{id="\"ridge\"", displayName="ridge"}
+				],
+				default = "\"solid\""  
+		}},		
+		@FieldDeclaration { fieldName = "borderBottomWidth", fieldType =  int.type, @EGLProperty { getMethod=getBorderBottomWidth, setMethod=setBorderBottomWidth }, @VEProperty{category = "Border"}},
+		@FieldDeclaration { fieldName = "borderTopWidth", fieldType =  int.type, @EGLProperty { getMethod=getBorderTopWidth, setMethod=setBorderTopWidth }, @VEProperty{category = "Border"}},
+		@FieldDeclaration { fieldName = "borderRightWidth", fieldType =  int.type, @EGLProperty { getMethod=getBorderRightWidth, setMethod=setBorderRightWidth }, @VEProperty{category = "Border"}},
+		@FieldDeclaration { fieldName = "borderLeftWidth", fieldType =  int.type, @EGLProperty { getMethod=getBorderLeftWidth, setMethod=setBorderLeftWidth }, @VEProperty{category = "Border"}},
+		@FieldDeclaration { fieldName = "borderWidth", fieldType =  int.type, @EGLProperty { getMethod=getBorderWidth, setMethod=setBorderWidth }, @VEProperty{category = "Border"}},
+		@FieldDeclaration { fieldName = "borderColor", fieldType =  String.type, @EGLProperty { getMethod=getBorderColor, setMethod=setBorderColor }, @VEProperty{category = "Border", propertyType="color"}},
+				
+		@FieldDeclaration { fieldName = "fontWeight", fieldType =  String.type, @EGLProperty { getMethod=getFontWeight, setMethod=setFontWeight }, @VEProperty{ 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"normal\"", displayName="normal"}, 
+					@VEPropertyChoice{id="\"bold\"", displayName="bold"}, 
+					@VEPropertyChoice{id="\"bolder\"", displayName="bolder"}, 
+					@VEPropertyChoice{id="\"lighter\"", displayName="lighter"}
+				],
+				default = "\"normal\""  
+		}},
+		@FieldDeclaration { fieldName = "fontSize", fieldType =  String.type, @EGLProperty { getMethod=getFontSize, setMethod=setFontSize }, @VEProperty{}},
+		@FieldDeclaration { fieldName = "font", fieldType =  string.type, @EGLProperty { getMethod=getFont, setMethod=setFont }, @VEProperty{}},
+		@FieldDeclaration { fieldName = "backgroundColor", fieldType =  string.type, @EGLProperty { getMethod=getBackgroundColor, setMethod=setBackgroundColor },@VEProperty{propertyType="color"}},
+		@FieldDeclaration { fieldName = "color", fieldType =  string.type, @EGLProperty { getMethod=getColor, setMethod=setColor }, @VEProperty{propertyType="color" }},
+		
+		@FieldDeclaration { fieldName = "class", fieldType =  String.type, @EGLProperty { getMethod=getClass, setMethod=setClass }, @VEProperty },
+		@FieldDeclaration { fieldName = "id", fieldType = String.type, @EGLProperty { getMethod=getID, setMethod=setID }, @VEProperty{}	},
+
+		@FieldDeclaration {
+			fieldName = "targetWidget",
+			fieldType = egl.ui.rui.Widget
+			// ,@EGLProperty { getMethod=getTargetWidget, setMethod=setTargetWidget }
+		},
+		@FieldDeclaration {
+			fieldName = "tagName",
+			fieldType = string.type,
+			@EGLProperty { getMethod=getTagName, setMethod=setTagName }
+		},
+		@FieldDeclaration { 
+			fieldName = "innerHTML", 
+				fieldType =  string.type, @EGLProperty { getMethod=getInnerHTML, setMethod=setInnerHTML } 
+		},
+		@FieldDeclaration { 
+			fieldName = "innerText", 
+			fieldType =  string.type, @EGLProperty { getMethod=getInnerText, setMethod=setInnerText }
+		},
+		@FieldDeclaration { 
+			fieldName = "children", 
+			fieldType =  egl.ui.rui.Widget[].type, @EGLProperty { getMethod=getChildren, setMethod=setChildren }
+		},
+		@FieldDeclaration {
+			fieldName = "document",
+				fieldType = egl.ui.rui.Document,
+				isPrivate=yes
+		},
+		@FieldDeclaration {
+			fieldName = "onChange",
+			fieldType = egl.ui.rui.EventHandler[].type,
+			isPrivate=no,
+			@EGLProperty { getMethod=getOnChange, setMethod=setOnChange },
+			@VEEvent{}
+		},
+		@FieldDeclaration {
+			fieldName = "onClick",
+			fieldType = egl.ui.rui.EventHandler[].type,
+			isPrivate=no,
+			@EGLProperty { getMethod=getOnClick, setMethod=setOnClick },
+			@VEEvent{}
+		},
+		@FieldDeclaration {
+			fieldName = "onContextMenu",
+			fieldType = egl.ui.rui.EventHandler[].type,
+			isPrivate=no,
+			@EGLProperty { getMethod=getOnContextMenu, setMethod=setOnContextMenu },
+			@VEEvent{}
+		},
+		@FieldDeclaration {
+			fieldName = "onFocusGained",
+			fieldType = egl.ui.rui.EventHandler[].type,
+			isPrivate=no,
+			@EGLProperty { getMethod=getOnFocusGained, setMethod=setOnFocusGained },
+			@VEEvent{}
+		},
+		@FieldDeclaration {
+			fieldName = "onFocusLost",
+			fieldType = egl.ui.rui.EventHandler[].type,
+			isPrivate=no,
+			@EGLProperty { getMethod=getOnFocusLost, setMethod=setOnFocusLost },
+			@VEEvent{}
+		},
+		@FieldDeclaration {
+			fieldName = "onKeyDown",
+			fieldType = egl.ui.rui.EventHandler[].type,
+			isPrivate=no,
+			@EGLProperty { getMethod=getOnKeyDown, setMethod=setOnKeyDown },
+			@VEEvent{}
+		},
+		@FieldDeclaration {
+			fieldName = "onKeyPress",
+			fieldType = egl.ui.rui.EventHandler[].type,
+			isPrivate=no,
+			@EGLProperty { getMethod=getOnKeyPress, setMethod=setOnKeyPress },
+			@VEEvent{}
+		},
+		@FieldDeclaration {
+			fieldName = "onKeyUp",
+			fieldType = egl.ui.rui.EventHandler[].type,
+			isPrivate=no,
+			@EGLProperty { getMethod=getOnKeyUp, setMethod=setOnKeyUp },
+			@VEEvent{}
+		},
+		@FieldDeclaration {
+			fieldName = "onMouseDown",
+			fieldType = egl.ui.rui.EventHandler[].type,
+			isPrivate=no,
+			@EGLProperty { getMethod=getOnMouseDown, setMethod=setOnMouseDown },
+			@VEEvent{}
+		},
+		@FieldDeclaration {
+			fieldName = "onMouseMove",
+			fieldType = egl.ui.rui.EventHandler[].type,
+			isPrivate=no,
+			@EGLProperty { getMethod=getOnMouseMove, setMethod=setOnMouseMove },
+			@VEEvent{}
+		},
+		@FieldDeclaration {
+			fieldName = "onMouseOut",
+			fieldType = egl.ui.rui.EventHandler[].type,
+			isPrivate=no,
+			@EGLProperty { getMethod=getOnMouseOut, setMethod=setOnMouseOut },
+			@VEEvent{}
+		},
+		@FieldDeclaration {
+			fieldName = "onMouseOver",
+			fieldType = egl.ui.rui.EventHandler[].type,
+			isPrivate=no,
+			@EGLProperty { getMethod=getOnMouseOver, setMethod=setOnMouseOver },
+			@VEEvent{}
+		},
+		@FieldDeclaration {
+			fieldName = "onMouseUp",
+			fieldType = egl.ui.rui.EventHandler[].type,
+			isPrivate=no,
+			@EGLProperty { getMethod=getOnMouseUp, setMethod=setOnMouseUp },
+			@VEEvent{}
+		},
+		@FieldDeclaration {
+			fieldName = "onScroll",
+			fieldType = egl.ui.rui.EventHandler[].type,
+			isPrivate=no,
+			@EGLProperty { getMethod=getOnScroll, setMethod=setOnScroll },
+			@VEEvent{}
+		},
+		@FieldDeclaration {
+			fieldName = "onSelect",
+			fieldType = egl.ui.rui.EventHandler[].type,
+			isPrivate=no,
+			@EGLProperty { getMethod=getOnSelect, setMethod=setOnSelect },
+			@VEEvent{}
+		},
+		@FieldDeclaration {
+			fieldName = "onStartDrag",
+			fieldType = egl.ui.rui.StartDragFunction,
+			isPrivate = no,
+			@EGLProperty { getMethod = getOnStartDrag, setMethod = setOnStartDrag}
+		},
+		@FieldDeclaration {
+			fieldName = "onDrag",
+			fieldType = egl.ui.rui.DragFunction,
+			isPrivate = no,
+			@EGLProperty { getMethod = getOnDrag, setMethod = setOnDrag}
+		}, 
+		@FieldDeclaration {
+			fieldName = "onDropOnTarget",
+			fieldType = egl.ui.rui.DropOnTargetFunction,
+			isPrivate = no, 
+			@EGLProperty { getMethod = getOnDropOnTarget, setMethod = setOnDropOnTarget}		
+		},	
+		@FieldDeclaration {
+			fieldName = "numericSwap",
+			fieldType = String.type,
+			isPrivate = no,
+			@EGLProperty { getMethod = getNumericSwap, setMethod = setNumericSwap},
+			@VEProperty{
+				category = "Bidi",
+				propertyType = "choice",
+				choices = [
+					@VEPropertyChoice{id = "\"Yes\"", displayName = "Yes"},
+					@VEPropertyChoice{id = "\"No\"", displayName = "No"}
+				],
+				default = "\"No\""
+			} 
+		},
+		@FieldDeclaration {
+			fieldName = "symmetricSwap",
+			fieldType = String.type,
+			isPrivate=no,
+			@EGLProperty { getMethod = getSymmetricSwap, setMethod = setSymmetricSwap},
+			@VEProperty{
+				category = "Bidi",
+				propertyType = "choice",
+				choices = [
+					@VEPropertyChoice{id = "\"Yes\"", displayName = "Yes"},
+					@VEPropertyChoice{id = "\"No\"", displayName = "No"}
+				],
+				default = "\"No\""
+			} 
+		},
+		@FieldDeclaration {
+			fieldName = "reverseTextDirection",
+			fieldType = String.type,
+			isPrivate = no,
+			@EGLProperty { getMethod = getReverseTextDirection, setMethod = setReverseTextDirection},
+			@VEProperty{
+				category = "Bidi",
+				propertyType = "choice",
+				choices = [
+					@VEPropertyChoice{id = "\"Yes\"", displayName = "Yes"},
+					@VEPropertyChoice{id = "\"No\"", displayName = "No"}
+				],
+				default = "\"No\""
+			} 
+		},	
+		@FieldDeclaration {
+			fieldName = "textLayout",
+			fieldType = String.type,
+			isPrivate = no,
+			@EGLProperty { getMethod = getTextLayout, setMethod = setTextLayout},
+			@VEProperty{
+				category = "Bidi",
+				propertyType = "choice",
+				choices = [
+					@VEPropertyChoice{id = "\"Logical\"", displayName = "Logical"},
+					@VEPropertyChoice{id = "\"Visual\"", displayName = "Visual"}
+				],
+				default = "\"Logical\""
+			} 
+		},
+		@FieldDeclaration {
+			fieldName = "widgetOrientation",
+			fieldType = String.type,
+			isPrivate = no,
+			@EGLProperty { getMethod = getWidgetOrientation, setMethod = setWidgetOrientation},
+			@VEProperty{
+				category = "Bidi",
+				propertyType = "choice",
+				choices = [
+					@VEPropertyChoice{id="\"LTR\"", displayName = "LTR"},
+					@VEPropertyChoice{id="\"RTL\"", displayName = "RTL"}
+				],
+				default = "\"LTR\""
+			} 
+		}
+	],
+	eglIsSystemAnnotation = yes,
+	isCompatibleWith = [egl.ui.rui.Widget],
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.RUIWidgetAnnotationTypeBinding"
+	
+}
+	tagName String;
+	onConstructionFunction egl.core.reflect.FunctionMemberRef;
+	includeFile String;
+	cssFile String;
+end
+
+Record RUIPropertiesLibrary type Annotation
+{
+	targets = [ElementKind.libraryPart],
+	@Stereotype,
+	eglIsSystemAnnotation = yes,
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.RUIPropertiesLibraryAnnotationTypeBinding",
+	implicitFunctions = [
+			@FunctionDeclaration {
+				functionName = "getMessage",
+				parameterTypes = [string.type, string[].type],
+				modifiers = ["inModifier", "inModifier"],			
+				returnType = string.type
+			}
+		]
+}
+	propertiesFile String;
+end

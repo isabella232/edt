@@ -1,0 +1,32 @@
+# Format ([] = optional): primitiveName [defaultLength] [defaultDecimals]]
+
+any
+bigint		18
+bin
+boolean
+char
+dbchar
+dbcharlit
+decimal
+float		8
+hex
+int			9
+mbchar
+money		16	2
+num
+number
+numc
+pacf
+smallfloat
+smallint	4
+string
+unicode
+blob
+clob
+date		8
+interval	7
+time		6
+timestamp	14
+vagtext
+vagtextornumeric
+anyegl

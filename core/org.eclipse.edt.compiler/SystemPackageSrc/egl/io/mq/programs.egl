@@ -1,0 +1,84 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package egl.io.mq;
+
+program ELAQBGIN( hconn int, mqbo char(1), compcode int, reason int )
+	function main()
+	end
+end
+
+program ELAQCLOS( hconn int, hobj int, options int, compcode int, reason int )
+	function main()
+	end
+end
+
+program ELAQCONN( qmgrname char(48), hconn int, compcode int, reason int )
+	function main()
+	end
+end
+
+program ELAQCONX( qmgrname char(48), mqcno char(1), hconn int, compcode int, reason int )
+	function main()
+	end
+end
+
+program ELAQDISC( hconn int, compcode int, reason int )
+	function main()
+	end
+end
+
+program ELAQGET( hconn int, hobj int, mqmd char(1), mqgmo char(1), bufferlength int, 
+                 buffer char(1), datalength int, compcode int, reason int )
+	function main()
+	end
+end
+
+program ELAQINQ( hconn int, hobj int, selectorcount int, mqselectors char(1), 
+                 intattrcount int, mqintattrs char(1), charattrlength int, 
+                 charattrs char(1), compcode int, reason int )
+	function main()
+	end
+end
+
+program ELAQOPEN( hconn int, mqod char(1), options int, hobj int, compcode int, reason int )
+	function main()
+	end
+end
+
+program ELAQPUT( hconn int, hobj int, mqmd char(1), mqpmo char(1), bufferlength int, 
+                 buffer char(1), compcode int, reason int )
+	function main()
+	end
+end
+
+program ELAQPUT1( hconn int, mqod char(1), mqmd char(1), mqpmo char(1), bufferlength int, 
+                  buffer char(1), compcode int, reason int )
+	function main()
+	end
+end
+
+program ELAQSET( hconn int, hobj int, selectorcount int, mqselectors char(1), 
+                 intattrcount int, mqintattrs char(1), charattrlength int, 
+                 charattrs char(1), compcode int, reason int )
+	function main()
+	end
+end
+
+program ELAQBBAK( hconn int, compcode int, reason int )
+	function main()
+	end
+end
+
+program ELAQBCMT( hconn int, compcode int, reason int )
+	function main()
+	end
+end

@@ -1,0 +1,103 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package egl.lang.reflect.mof;
+
+import egl.core.reflect.FieldRef;
+import egl.core.reflect.InternalRef;
+import egl.lang.reflect.IsEMetadataType;
+import egl.lang.reflect.PartType;
+
+Record MofClass type Annotation {
+	targets = [ElementKind.ExternalTypePart],
+	@IsEMetadataType,
+	@PartType{"org.eclipse.edt.mof.EClass"},
+	@Stereotype
+}
+	packageName String;
+	name string;
+	isAbstract boolean;
+	isInterface boolean;
+	typeParameters FieldRef[];
+	isProxy boolean;
+end
+
+Record MofDataType type Annotation {
+	targets = [ElementKind.ExternalTypePart],
+	@IsEMetadataType,
+	@PartType{"org.eclipse.edt.mof.EDataType"},
+	@Stereotype
+}
+	packageName string;
+	typeName string;
+	javaClassName string;
+	typeParameters string[];
+end
+
+Record MofEnum type Annotation {
+	targets = [ElementKind.Part], // Should be EnumerationPart which does not exist yet
+	@IsEMetadataType,
+	@PartType{"org.eclipse.edt.mof.EEnum"},
+	@Stereotype
+}
+	packageName string;
+	typeName string;
+	isProxy boolean;
+end
+
+Record MofName type Annotation {
+	targets = [ElementKind.FieldMbr],
+	// Override default reflect type for Annotation - org.eclipse.edt.mof.egl.AnnotationType
+	@IsEMetadataType
+}
+	value string;
+end
+
+record Operation type Annotation {
+	targets=[ElementKind.FunctionMbr],
+	// Override default reflect type for Annotation - org.eclipse.edt.mof.egl.AnnotationType
+	@IsEMetadataType
+}
+	opSymbol string;
+end
+
+Record IsArray type Annotation {
+	targets = [ElementKind.FieldMbr], 
+	// Override default reflect type for Annotation - org.eclipse.edt.mof.egl.AnnotationType
+	@IsEMetadataType
+}
+	value boolean=true;
+end
+
+Record Containment type Annotation {
+	targets = [ElementKind.FieldMbr],
+	// Override default reflect type for Annotation - org.eclipse.edt.mof.egl.AnnotationType
+	@IsEMetadataType
+}
+	value boolean = true;
+end
+
+Record Transient type Annotation {
+	targets = [ElementKind.FieldMbr],
+	// Override default reflect type for Annotation - org.eclipse.edt.mof.egl.AnnotationType
+	@IsEMetadataType
+}
+	value boolean = true;
+end
+
+
+Record Settable type Annotation {
+	targets = [ElementKind.FieldMbr],
+	// Override default reflect type for Annotation - org.eclipse.edt.mof.egl.AnnotationType
+	@IsEMetadataType
+}
+	value boolean = true;
+end

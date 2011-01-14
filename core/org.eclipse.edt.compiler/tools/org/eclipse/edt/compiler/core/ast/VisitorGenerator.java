@@ -1,0 +1,366 @@
+/*******************************************************************************
+ * Copyright © 2005, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.compiler.core.ast;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.util.Date;
+
+/**
+ * @author winghong
+ */
+public class VisitorGenerator {
+
+    private static final String[] names = new String[] {
+		"AddStatement",    		
+    	"AnnotationExpression",
+    	"ArrayAccess",
+    	"ArrayLiteral",
+		"ArrayType",
+		"AsExpression",
+		"Assignment",
+		"AssignmentStatement",
+    	"BinaryExpression",
+		"BooleanLiteral",
+		"CallStatement",
+		"CallbackTarget",
+		"CaseStatement",
+		"CharLiteral",
+    	"ClassDataDeclaration",
+		"CloseStatement",
+		"ConstantFormField",
+		"Constructor",
+		"ContinueStatement",
+		"ConverseStatement",
+		"DataItem",
+		"DataTable",
+		"DBCharLiteral",
+		"DecimalLiteral",
+		"Delegate",
+		"DeleteStatement",
+		"DisplayStatement",
+		"ElseBlock",
+		"EmptyStatement",
+		"Enumeration",
+		"EnumerationField",
+		"ExecuteStatement",
+		"ExitStatement",
+		"ExternalType",
+		"FieldAccess",
+        "File",
+		"FloatLiteral",
+		"ForEachStatement",
+		"ForExpressionClause",
+		"FormGroup",		
+		"ForStatement",
+		"ForUpdateClause",
+		"ForwardStatement",
+		"FreeSQLStatement",
+		"FromExpressionClause",
+		"FromResultSetClause",
+		"FunctionDataDeclaration",
+		"FunctionInvocation",
+		"FunctionInvocationStatement",
+		"FunctionParameter",
+		"GetByKeyStatement",
+		"GetByPositionStatement",
+		"GotoStatement",
+		"Handler",
+		"HexLiteral",
+		"ImportDeclaration",
+		"IfStatement",
+		"InExpression",
+		"InlineDLIStatement",
+		"InlineSQLStatement",
+		"IntegerLiteral",
+		"Interface",
+		"IntoClause",
+		"IsAExpression",
+		"IsNotExpression",
+		"LabelStatement",
+		"Library",
+		"LikeMatchesExpression",
+		"MBCharLiteral",
+		"MoveStatement",
+		"NameType",
+		"NestedForm",
+		"NestedFunction",
+		"NewExpression",
+		"NullLiteral",
+		"NullableType",
+		"NoCursorClause",
+		"OnEventBlock",
+		"OnExceptionBlock",
+		"OpenStatement",
+		"OpenUIStatement",
+		"OtherwiseClause",
+		"PackageDeclaration",
+		"ParenthesizedExpression",
+		"PassingClause",
+		"PrepareStatement",
+		"PrimitiveType",
+		"PrintStatement",
+		"Program",
+		"ProgramParameter",
+		"Record",
+		"ReplaceStatement",
+		"ReturnsDeclaration",
+		"ReturningToInvocationTargetClause",
+		"ReturningToNameClause",
+		"ReturnStatement",
+		"Service",
+		"ServiceReference",
+		"SetStatement",
+		"SetValuesExpression",
+		"SetValuesStatement",
+		"SettingsBlock",
+		"ShowStatement",
+		"SimpleName",
+		"SingleRowClause",
+		"StringLiteral",
+		"StructureItem",
+		"SQLLiteral",
+		"SubstringAccess",
+		"ThisExpression",
+		"ThrowStatement",
+		"TopLevelForm",
+		"TopLevelFunction",
+		"TransferStatement",
+		"TryStatement",
+		"TypeLiteralExpression",
+		"QualifiedName",
+		"UnaryExpression",
+		"UsingClause",
+		"UsingKeysClause",
+		"UseStatement",
+		"UsingPCBClause",
+		"VariableFormField",
+		"WhenClause",
+		"WhileStatement",
+		"WithIDClause",
+		"WithInlineDLIClause",
+		"WithInlineSQLClause"
+    };
+    
+    private static final String IASTVisitorClassName = "IASTVisitor";
+    private static final String AbstractVisitorClassName = "AbstractASTVisitor";
+    private static final String DefaultVisitorClassName = "DefaultASTVisitor";
+    private static final String AbstractNodeVisitorClassName = "AbstractASTNodeVisitor";
+    
+    private static final String NL = System.getProperty( "line.separator" );
+    
+    private static String lower(String string) {
+        return " " + string.substring(0, 1).toLowerCase() + string.substring(1);
+    }
+    
+    private static String subKeywords(String string) {
+    	if( string.equals( " interface" ) ) {
+    		return( " interfaceNode" );
+    	}
+    	return string;
+    }
+
+    public static void main(String[] args) {
+    	generateIASTVisitor();
+    	generateAbstractASTVisitor();
+    	generateDefaultASTVisitor();
+    	generateAbstractASTNodeVisitor();
+    }
+    
+    public static void generateIASTVisitor() {
+    	BufferedWriter writer = null;
+    	
+    	try {
+    		writer = new BufferedWriter( new FileWriter( IASTVisitorClassName + ".java" ) );
+    		
+    		writer.write( "/*" + NL );
+    		writer.write( " * Updated on " + new Date() + NL );
+    		writer.write( " */" + NL );
+    		writer.write( "package org.eclipse.edt.compiler.core.ast;" + NL );
+    		writer.write( "" + NL );
+    		writer.write( "/**" + NL );
+    		writer.write( " * Generated by tools/org.eclipse.edt.compiler.core.ast.VisitorGenerator" + NL );
+    		writer.write( " */" + NL );
+    		writer.write( "public interface " + IASTVisitorClassName + " {" + NL );
+    		writer.write( "" + NL );
+            for(int i = 0; i < names.length; i++) {
+                writer.write( "\tboolean visit(" + names[i] + subKeywords(lower(names[i])) + ");" + NL );
+                writer.write( "\tvoid endVisit(" + names[i] + subKeywords(lower(names[i])) + ");" + NL );
+                if( i != names.length - 1 ) {
+                	writer.write( "\t" + NL );
+                }
+            }
+            writer.write( "}" + NL );
+    	}
+    	catch( Exception e ) {
+    		System.err.println( "Exception in generateIASTVisitor()" );
+    		e.printStackTrace();
+    	}
+    	finally {
+    		try {
+    			if( writer != null) writer.close();
+    		}
+    		catch( Exception e ) {}
+    	}
+    	
+    	System.out.println( IASTVisitorClassName + ".java updated" );
+    }
+    
+    public static void generateAbstractASTVisitor() {
+    	BufferedWriter writer = null;
+    	
+    	try {
+    		writer = new BufferedWriter( new FileWriter( AbstractVisitorClassName + ".java" ) );
+    		
+    		writer.write( "/*" + NL );
+    		writer.write( " * Updated on " + new Date() + NL );
+    		writer.write( " */" + NL );
+    		writer.write( "package org.eclipse.edt.compiler.core.ast;" + NL );
+    		writer.write( "" + NL );
+    		writer.write( "/**" + NL );
+    		writer.write( " * Returns true for non-overriden methods. If false is desired, use DefaultASTVisitor." + NL );
+    		writer.write( " *" + NL ); 
+    		writer.write( " * Generated by tools/org.eclipse.edt.compiler.core.ast.VisitorGenerator" + NL );
+    		writer.write( " */" + NL );
+    		writer.write( "public abstract class " + AbstractVisitorClassName + " implements " + IASTVisitorClassName + " {" + NL );
+    		writer.write( "" + NL );
+            for(int i = 0; i < names.length; i++) {
+                writer.write( "\tpublic boolean visit(" + names[i] + subKeywords(lower(names[i])) + ") {" + NL );
+                writer.write( "\t\treturn true;" + NL );
+                writer.write( "\t}" + NL );
+               	writer.write( "\t" + NL );
+            }
+            for(int i = 0; i < names.length; i++) {
+                writer.write( "\tpublic void endVisit(" + names[i] + subKeywords(lower(names[i])) + ") {}" + NL );
+                
+                if( i != names.length - 1 ) {
+                	writer.write( "\t" + NL );
+                }
+            }
+            writer.write( "}" + NL );
+
+    	}
+    	catch( Exception e ) {
+    		System.err.println( "Exception in generateAbstractASTVisitor()" );
+    		e.printStackTrace();
+    	}
+    	finally {
+    		try {
+    			if( writer != null) writer.close();
+    		}
+    		catch( Exception e ) {}
+    	}
+    	
+    	System.out.println( AbstractVisitorClassName + ".java updated" );
+    }
+    
+    public static void generateDefaultASTVisitor() {
+    	BufferedWriter writer = null;
+    	
+    	try {
+    		writer = new BufferedWriter( new FileWriter( DefaultVisitorClassName + ".java" ) );
+    		
+    		writer.write( "/*" + NL );
+    		writer.write( " * Updated on " + new Date() + NL );
+    		writer.write( " */" + NL );
+    		writer.write( "package org.eclipse.edt.compiler.core.ast;" + NL );
+    		writer.write( "" + NL );
+    		writer.write( "/**" + NL );
+    		writer.write( " * Returns false for non-overriden methods. If true is desired, use AbstractASTVisitor." + NL );
+    		writer.write( " *" + NL );
+    		writer.write( " * Generated by tools/org.eclipse.edt.compiler.core.ast.VisitorGenerator" + NL );
+    		writer.write( " */" + NL );
+    		writer.write( "public abstract class " + DefaultVisitorClassName + " implements " + IASTVisitorClassName + " {" + NL );
+    		writer.write( "" + NL );
+            for(int i = 0; i < names.length; i++) {
+                writer.write( "\tpublic boolean visit(" + names[i] + subKeywords(lower(names[i])) + ") {" + NL );
+                writer.write( "\t\treturn false;" + NL );
+                writer.write( "\t}" + NL );
+               	writer.write( "\t" + NL );
+            }
+            for(int i = 0; i < names.length; i++) {
+                writer.write( "\tpublic void endVisit(" + names[i] + subKeywords(lower(names[i])) + ") {}" + NL );
+                
+                if( i != names.length - 1 ) {
+                	writer.write( "\t" + NL );
+                }
+            }
+            writer.write( "}" + NL );
+
+    	}
+    	catch( Exception e ) {
+    		System.err.println( "Exception in generateDefaultASTVisitor()" );
+    		e.printStackTrace();
+    	}
+    	finally {
+    		try {
+    			if( writer != null) writer.close();
+    		}
+    		catch( Exception e ) {}
+    	}
+    	
+    	System.out.println( DefaultVisitorClassName + ".java updated" );
+    }
+    
+    public static void generateAbstractASTNodeVisitor() {
+    	BufferedWriter writer = null;
+    	
+    	try {
+    		writer = new BufferedWriter( new FileWriter( AbstractNodeVisitorClassName + ".java" ) );
+    		
+    		writer.write( "/*" + NL );
+    		writer.write( " * Updated on " + new Date() + NL );
+    		writer.write( " */" + NL );
+    		writer.write( "package org.eclipse.edt.compiler.core.ast;" + NL );
+    		writer.write( "" + NL );
+    		writer.write( "/**" + NL );
+    		writer.write( " * Visitor class to perform operations on all Nodes." + NL );
+    		writer.write( " *" + NL ); 
+    		writer.write( " * Generated by tools/org.eclipse.edt.compiler.core.ast.VisitorGenerator" + NL );
+    		writer.write( " */" + NL );
+    		writer.write( "public abstract class " + AbstractNodeVisitorClassName + " implements " + IASTVisitorClassName + " {" + NL );
+    		writer.write( "" + NL );
+    		writer.write("\tpublic abstract boolean visitNode(Node node);" + NL);
+    		writer.write( "" + NL );
+    		writer.write("\tpublic abstract void endVisitNode(Node node);" + NL);
+    		writer.write( "" + NL );
+            for(int i = 0; i < names.length; i++) {
+                writer.write( "\tpublic boolean visit(" + names[i] + subKeywords(lower(names[i])) + ") {" + NL );
+                writer.write( "\t\treturn visitNode(" + subKeywords(lower(names[i])) + " );" + NL );
+                writer.write( "\t}" + NL );
+               	writer.write( "\t" + NL );
+            }
+            for(int i = 0; i < names.length; i++) {
+                writer.write( "\tpublic void endVisit(" + names[i] + subKeywords(lower(names[i])) + ") {" + NL );
+                writer.write( "\t\t endVisitNode(" + subKeywords(lower(names[i])) + " );" + NL );
+                writer.write( "\t}" + NL );
+               	writer.write( "\t" + NL );
+            }
+            writer.write( "}" + NL );
+
+    	}
+    	catch( Exception e ) {
+    		System.err.println( "Exception in generateAbstractASTNodeVisitor()" );
+    		e.printStackTrace();
+    	}
+    	finally {
+    		try {
+    			if( writer != null) writer.close();
+    		}
+    		catch( Exception e ) {}
+    	}
+    	
+    	System.out.println( AbstractNodeVisitorClassName + ".java updated" );
+    }
+    
+    
+}

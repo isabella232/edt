@@ -1,0 +1,1574 @@
+/*******************************************************************************
+ * Copyright © 2000, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package org.eclipse.edt.compiler.internal;
+
+/**
+ * Insert the type's description here. 
+ * Creation date: (6/27/2003 9:06:42 AM)
+ * @author: Frieda Dollar
+ *
+ * Validation message mneumonics are being moved here to get them out of EGLMessage
+ * Initially, all of them are commented out.  As we issue them in the new code, we will
+ * uncomment them.  Eventually, we will remove the equivalent messages from EGLMessage
+ * but I don't want to break too much right now.
+ */
+public class EGLValidationMessages extends Object {
+
+
+
+		//EGL Message ranges (ids):
+		// 0000-0999: reserved (not used)
+		// 2000-2999: Parser
+		// 3000-6999: Validation/Pre-processor
+		// 7000-7999: Editor
+		// 8000-8999:
+		// 9000-9999:
+		public static final String EGLMESSAGE_MISSING_SEMI = "2000"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_UNEXPECTED_EOF = "2001"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_UNEXPECTED_TOKEN = "2002"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MISSING_END = "2003"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_UNMATCHED_BRACE = "2004"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_UNMATCHED_PAREN = "2005"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_UNMATCHED_BRACKET = "2006"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_UNCLOSED_STRING = "2050"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_UNCLOSED_BLOCK_COMMENT = "2051"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_UNCLOSED_SQL_STMT = "2052"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SQL_STMT = "2053"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SQL_CONDITION = "2054"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INCOMPLETE_DATA_ACCESS = "2055"; //$NON-NLS-1$
+			
+// Also see EGLMessage for messages 3000 - 3030			
+		public static final String EGLMESSAGE_VALIDATION_EXCEPTION = "3000"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_NAME_LENGTH = "3001"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_CHARACTER_IN_NAME = "3002"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_EZE_NOT_ALLOWED = "3003"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_NONNUMERIC_WITH_DECIMALS = "3005"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_WORKING_STORAGE_NOT_IN_LIST = "3006"; //$NON-NLS-1$
+ 		public static final String EGLMESSAGE_INVALID_SUBSCRIPT_SPECIFIED = "3007"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_DUPLICATE_PART_NAME = "3009"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DUPLICATE_VARIABLE_NAME = "3010"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DUPLICATE_PARAMETER_NAME = "3011"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DUPLICATE_NAME_ACROSS_LISTS = "3012"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_INVALID_IMPORT_STATEMENT = "3013"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_DUPLICATE_IMPORT_STATEMENT = "3014"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_NUMBER_OF_PARAMETERS = "3015"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PARAMETER_HAS_WRONG_TYPE = "3016"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TOO_MANY_PARAMETERS = "3017"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_INVALID_SQL_ITEM_PARM_TYPE = "3018"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_RESERVED_WORD_NOT_ALLOWED = "3019"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_IMPORT_FILE_NOT_FOUND = "3020"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_IMPORT_FOLDER_NOT_FOUND = "3021"; //$NON-NLS-1$
+		//more import error messages at 3325
+		
+		public static final String EGLMESSAGE_DUPLICATE_NAME_IN_FILE = "3022"; //$NON-NLS-1$
+			
+//	Also see EGLMessage for messages 3000 - 3030		
+		public static final String EGLMESSAGE_DUPLICATE_USE_NAME = "3031"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DUPLICATE_CONSTANT_NAME = "3032"; //$NON-NLS-1$
+		public static final String SUBSCRIPT_CLOSED_AT_INVALID_LOCATION = "3033"; //$NON-NLS-1$
+		public static final String SUBSCRIPT_NOT_CLOSED = "3034"; //$NON-NLS-1$
+		public static final String INVALID_SUBSCRIPT_NESTING = "3035"; //$NON-NLS-1$
+		public static final String TOO_MANY_ITEMS_IN_SUBSCRIPT = "3036"; //$NON-NLS-1$
+		public static final String TYPE_CANNOT_BE_SUBSCRIPTED = "3037"; //$NON-NLS-1$
+	
+		//continued at 3042
+		
+		public static final String EGLMESSAGE_DUPLICATE_PART_NAME_IN_FILE = "3038"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DUPLICATE_NAME_IN_NAMESPACE = "3039"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_GENERATABLE_PART_NAME_MUST_MATCH_FILE_NAME = "3040"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ONLY_ONE_GENERATABLE_PART_PER_FILE = "3041"; //$NON-NLS-1$
+		
+		//continued from 3037
+		public static final String EGLMESSAGE_TYPE_CANNOT_BE_QUALIFIED = "3042"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_EMPTY_SUBSCRIPT= "3043"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TYPE_CANNOT_BE_SUBSCRIPTED = "3044"; //$NON-NLS-1$
+		//additional CANNOT_BE_QUALIFIED messagse are continued at 3350
+		
+		
+		//MORE EGLFILE ERROR MESSAGES
+		public static final String EGLMESSAGE_MULTIPLE_PAGEHANDLERS_IN_FILE = "3045";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_PAGEHANDLER_AND_PROGRAM_IN_FILE = "3046";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_PAGEHANDLER_AND_FORMGROUP_IN_FILE = "3047";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_PAGEHANDLER_NAME_INVALID_WHEN_COMPARTED_TO_FILE_NAME = "3048";   //$NON-NLS-1$
+		public static final String EGLMESSAGE_PACKAGE_NAME_DOESNT_MATCH_DIRECTORY_STRUCTURE = "3049";  //$NON-NLS-1$
+		//continued at 3065
+
+		public static final String EGLMESSAGE_INVALID_NESTING_OF_PROPERTIES = "3050"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_NESTING_TOO_DEEP = "3051"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_UNSUPPORTED_PROPERTY = "3052"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_REQUIRES_VALUE = "3053"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_PROPERTY_REQUIRES_SPECIFIC_VALUE = "3054"; //$NON-NLS-1$				
+		public static final String EGLMESSAGE_PROPERTY_CANT_HANDLE_ARRAY_VALUE = "3055"; //$NON-NLS-1$						
+		public static final String EGLMESSAGE_PROPERTY_CANT_HANDLE_LIST_VALUE = "3056"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_CANT_HANDLE_INTEGER_VALUE = "3057"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_CANT_HANDLE_REAL_NUMBER_VALUE = "3058"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_CANT_HANDLE_QUOTED_STRING_VALUE = "3059"; //$NON-NLS-1$										
+		public static final String EGLMESSAGE_PROPERTY_CANT_HANDLE_NAME_VALUE = "3060"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_CANT_HANDLE_SQL_STRING_VALUE = "3061"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_REQUIRED_WITH_THIS_RECORD_TYPE = "3062"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_NOT_ALLOWED_WITH_THIS_RECORD_TYPE = "3063"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PACKAGE_NAME_NOT_PROVIDED = "3064"; //$NON-NLS-1$
+		
+		//continued from 3049
+		public static final String EGLMESSAGE_DEFAULT_PACKAGE_NAME_USED_IMPROPERLY = "3065";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_WHITESPACE_NOT_ALLOWED = "3066"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_STATIC_ARRAY_PARAMETER_DEFINITION = "3067"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTIES_NOT_ALLOWED_IN_LIST_USE_DECLARATION = "3068"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DYNAMIC_ARRAY_PARAMETER_DEFINITION = "3069"; //$NON-NLS-1$
+
+		public static final String EGLMESSAGE_PROPERTIES_MUTUALLY_EXCLUSIVE = "3070"; //$NON-NLS-1$				
+		public static final String EGLMESSAGE_PROPERTY_REQUIRES_SPECIFIC_VALUE_OR_LIST = "3071"; //$NON-NLS-1$				
+		public static final String EGLMESSAGE_PROPERTY_REQUIRES_SPECIFIC_VALUE_OR_ARRAY = "3072"; //$NON-NLS-1$						
+		public static final String EGLMESSAGE_PROPERTY_REQUIRES_SPECIFIC_VALUE_OR_NAME = "3073"; //$NON-NLS-1$						
+		public static final String EGLMESSAGE_PROPERTY_REQUIRES_SPECIFIC_VALUE_OR_INTEGER = "3074"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_REQUIRES_SPECIFIC_VALUE_OR_QUOTED_STRING = "3075"; //$NON-NLS-1$										
+		public static final String EGLMESSAGE_PROPERTY_REQUIRES_SPECIFIC_VALUE_OR_LITERAL = "3076"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_VALUE_INVALID = "3077"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_REQUIRES_LITERAL_ARRAY_VALUE = "3078"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_REQUIRES_LIST_VALUE = "3079"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_REQUIRES_SQL_STRING_VALUE = "3080"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_ONLY_ALLOWED_ON_FIRST_ELEMENT_OF_ARRAY = "3081"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_PROPERTY_IS_REQUIRED_IN_NATIVE_LIBRARY = "3082"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_PROPERTY_REQUIRES_INTEGER_GREATER_THAN_ZERO = "3083"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_PROPERTY_REQUIRES_LITERAL_STRING_ARRAY_VALUE = "3084"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_PACKAGE_NAME_CANNOT_START_OR_END_WITH_DOTS_OR_WHITESPACE = "3090"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PACKAGE_NAME_CANNOT_BE_NULL = "3091"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PACKAGE_NAME_CANNOT_BE_EMPTY = "3092"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PACKAGE_NAME_CANNOT_CONTAIN_CONSECUTIVE_DOTS = "3093"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PROP_ON_FILLER_OR_EMBED = "3094"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_PROPERTY_CANNOT_BE_RESOLVED = "3095"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_IS_AMBIGUOUS = "3096"; //$NON-NLS-1$
+		
+		//Program Properties Messages
+		public static final String EGLMESSAGE_PROPERTY_MSGTABLEPREFIX_INVALID_LENGTH = "3097"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_PROPERTY_INVALID_PRIMITIVE_LENGTH_USED_WITH_ISNULLABLE_PROPERTY = "3098"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_INVALID_SQLDATACODE_AND_PRIMITIVE_COMBINATION = "3099";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_INVALID_PRIMITIVE_USED_WITH_SQLDATACODE_PROPERTY = "3100";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_EXCEEDS_ALLOWED_LENGTH = "3101"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_INVALID_PRIMITIVE_USED_WITH_ISNULLABLE_PROPERTY = "3102"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_MINIMUM_INPUT_MUST_BE_LESS_THAN_PRIMITIVE_LENGTH = "3103";   //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_MUST_RESOLVE_TO_FORM = "3104";   //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_MUST_RESOLVE_TO_FORM_BUT_IS_AMBIGUOUS = "3105";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_MUST_RESOLVE_TO_DATA_DECLARATION_OF_UI_RECORD = "3106";   //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_MUST_RESOLVE_TO_DATA_DECLARATION_OF_RECORD = "3107";   //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_MUST_RESOLVE_TO_DATA_DECLARATION = "3108";   //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_MUST_RESOLVE_TO_DATA_DECLARATION_BUT_IS_AMBIGUOUS = "3109";   //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_INPUT_PAGE_RECORD_COMBO = "3110"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_CALLED_PROGRAM_INPUT_RECORD = "3111"; //$NON-NLS-1$
+
+		public static final String EGLMESSAGE_PROPERTY_DUPLICATE_PROPERTIES_FOUND = "3112"; //$NON-NLS-1$
+		//more at 3225
+		
+		public static final String EGLMESSAGE_ACTUAL_REQUIRED_LENGTH_TOO_LARGE = "3113";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_REDEFINES_MUST_BE_DECLARATION = "3114";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_REDEFINES_CANNOT_BE_REDEFINES = "3115";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_REDEFINES_SIZE_MISMATCH = "3116";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_REDEFINES_INITIALIZED_INCOMPATIBLE = "3117";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_RECORD_PARAMETER_WITH_NO_CONTENTS = "3118";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_PARAMETER_OF_TYPE_ANY = "3119";  //$NON-NLS-1$
+        public static final String EGLMESSAGE_INVALID_TYPE_USED_FOR_THIS_PROPERTY = "3120";  //$NON-NLS-1$
+        public static final String EGLMESSAGE_PROPERTY_ONLY_VALID_FOR_PRIMITIVE_LIST = "3121";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_REDEFINING_MUST_BE_FIXED_RECORD = "3122";  //$NON-NLS-1$
+
+	
+		public static final String EGLMESSAGE_SELECTFROMLIST_MUST_BE_ARRAY  = "3130";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_ITEM_OF_SELECTTYPE_MUST_BE_INT = "3131";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_SELECTTYPE_ITEM_MUST_MATCH_ARRAY = "3132";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_SELECTTYPE_REQUIRES_SELECTFROMLIST = "3133";  //$NON-NLS-1$	
+		public static final String EGLMESSAGE_PROP_REQUIRES_DISPLAYUSE_BUTTON_OR_HYPERLINK = "3134";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_NEWWINDOW_REQUIRES_ACTION = "3135";  //$NON-NLS-1$
+ 		public static final String EGLMESSAGE_NUMELEMENTSITEM_INVALID_FOR_DYNAMIC_ARRAY = "3136";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_NUMELEMENTSITEM_MUST_BE_IN_RECORD  = "3137";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_NUMELEMENTSITEM_MUST_BE_NUMERIC = "3138";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_NUMELEMENTSITEM_ITEM_MUST_BE_ARRAY = "3139";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_DUPLICATE_VALIDATION_ORDER_VALUES_FOUND = "3140";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PROPERTY_VALUE_FOR_ITEM_TYPE = "3141";  //$NON-NLS-1$
+
+		public static final String EGLMESSAGE_PROPERTY_INVALID_CHARACTER_IN_DATEFORMAT = "3171"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_DATEFORMAT_INVALID_PRIMITIVE_LENGTH_DATEFORMAT_MASK = "3172"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_DATEFORMAT_INVALID_PRIMITIVE_LENGTH = "3173"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_DATEFORMAT_INVALID_PRIMITIVE_TYPE = "3174"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_DATEFORMAT_INVALID_DECIMALS = "3175"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_DATEFORMAT_INVALID_INCOMPATIBLE_PROPERTIES = "3176"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_INVALID_VALUE_DATEFORMAT_GREGORIAN_AND_JULIAN = "3177"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_INVALID_VALUE_DATEFORMAT_MUST_MATCH_FIELDLEN = "3178"; // $NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_INVALID_VALUE_DATEFORMAT = "3179"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_ONLY_VALID_WHEN_IN_VAGCOMPATABILITY_MODE= "3180"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_MINIMUM_INPUT_MUST_BE_GREATER_THAN_ZERO= "3181"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_LENGTH_EXCEEDS_DEFINED_LENGTH = "3182"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_PROPERTY_MUST_RESOLVE_TO_FUNCTION= "3183"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_VALUES_FOR_OUTLINE_PROPERTY_INVALID = "3184"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_ONLY_DBCHARS_ALLOWED = "3185"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_NUMERIC_PRIMITIVE_USED_WITH_NONNUMERIC_VALUE = "3186"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_INVALID_VALIDATORTABLE_TABLE_TYPE = "3187"; //$NON-NLS-1$
+
+		public static final String EGLMESSAGE_PROPERTY_INVALID_VALUE_FOR_HIGH_VALUE_RANGE_PROPERTY = "3188"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_NUMERIC_PROPERTY_WITH_NONNUMERIC_VALUE = "3189"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_INVALID_VALUE_FOR_LOW_VALUE_RANGE_PROPERTY = "3190"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_RANGE_LOW_GREATHER_THAN_HIGH_VALUE = "3191"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_RANGE_LOW_OR_HIGH_NOT_NUMERIC_VALUE = "3192";//$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_STRING_PRIMITIVE_REQUIRED = "3193";//$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_NUMERIC_PRIMITIVE_REQUIRED = "3194";//$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERPTY_MUST_RESOLVE_TO_DATATABLE = "3195";//$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_ONLY_MBCHARS_ALLOWED = "3196";//$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_MUST_RESOLVE_TO_FUNCTION_BUT_IS_AMBIGUOUS = "3197";//$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_MUST_RESOLVE_TO_DATATABLE_BUT_IS_AMBIGUOUS = "3198";//$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_MANTISSA_EXCEEDS_DEFINED_LENGTH = "3199";//$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_DECIMALS_EXCEEDS_DEFINED_LENGTH = "3200";//$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_CANT_HAVE_DECIMALS = "3201";//$NON-NLS-1$	
+	
+		public static final String EGLMESSAGE_PROPERTY_KEY_ITEM_MUST_BE_IN_INDEXED_RECORD = "3202";//$NON-NLS-1$	
+	    public static final String EGLMESSAGE_PROPERTY_INVALID_TYPE_FOR_KEY_ITEM = "3203"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_KEY_ITEM_VALUE_TOO_LONG= "3204"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_KEY_ITEM_VALUE_HAS_DECIMALS = "3205"; //$NON-NLS-1$					
+		public static final String EGLMESSAGE_PROPERTY_KEY_ITEM_MUST_BE_IN_SQL_RECORD = "3206";//$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_INVALID_TYPE_FOR_NUM_ELEMENTS = "3207"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_NUM_ELEMENTS_ITEM_VALUE_TOO_LONG= "3208"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_NUM_ELEMENTS_ITEM_VALUE_HAS_DECIMALS = "3209"; //$NON-NLS-1$			
+		public static final String EGLMESSAGE_NUM_ELEMENTS_HAS_AN_INVALID_NUMBER_OF_OCCURS = "3210"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_NUM_ELEMENTS_MUST_BE_A_SINGLE_DIMENSIONAL_ARRAY = "3211"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_NUM_ELEMENTS_ITEM_CANNOT_HAVE_SAME_NAME_AS_LAST_ITEM = "3212"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_NUM_ELEMENTS_ITEM_NAME_CANNOT_BE_IN_LAST_ARRAY = "3213"; //$NON-NLS-1$
+	    public static final String EGLMESSAGE_ITEM_REFERENCED_BY_NUM_ELEMENTS_MUST_BE_IN_RECORD = "3214"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_PROPERTY_SELECTED_ELEMENT_MUST_BE_IN_RECORD = "3215";//$NON-NLS-1$
+		public static final String EGLMESSAGE_ITEM_REFERENCED_BY_COMMAND_VALUE_ITEM_MUST_BE_IN_RECORD = "3216"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_NUM_ELEMENTS_REQUIRES_AN_ARRAY = "3217"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_INVALID_TYPE_FOR_RECORD_ITEM_PROPERTY = "3218"; //$NON-NLS-1$ 
+		public static final String EGLMESSAGE_RECORD_ITEM_PROPERTY_VALUE_TOO_LONG = "3219"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_RECORD_ITEM_PROPERTY_VALUE_HAS_DECIMALS = "3220"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_RECORD_ITEM_PROPERTY_VALUE_MUST_BE_DEFINED = "3221"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_RECORD_ITEM_PROPERTY_VALUE_MUST_BE_UNIQUE = "3222"; //$NON-NLS-1$
+				
+		public static final String EGLMESSAGE_INTEGER_TOO_LARGE = "3224"; //$NON-NLS-1$		
+				
+		//continued from 3112
+ 		public static final String EGLMESSAGE_PROPERTY_DUPLICATE_PROPERTIES_ON_STRUC_ITEM_FOUND = "3225";//$NON-NLS-1$		
+		public static final String EGLMESSAGE_PROPERTY_DUPLICATE_PROPERTIES_TOP_LEVEL_ITEM_FOUND = "3226";//$NON-NLS-1$						
+		public static final String EGLMESSAGE_PROPERTY_NO_FORMGROUPS_IN_PROGRAM_WITH_INPUTFORM = "3227";//$NON-NLS-1$	
+		public static final String EGLMESSAGE_PROPERTY_NO_FORM_FOUND_MATCHING_INPUTFORM = "3228";//$NON-NLS-1$	
+		public static final String EGLMESSAGE_PROPERTY_INVALID_FIELDLEN_VALUE = "3229";//$NON-NLS-1$	
+       
+        public static final String EGLMESSAGE_ARRAY_DICTIONARY_HAS_INVALID_COLUMNS = "3231"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_INTEGER_LITERAL_OUT_OF_RANGE = "3250";//$NON-NLS-1$
+		public static final String EGLMESSAGE_DECIMAL_LITERAL_OUT_OF_RANGE = "3251";//$NON-NLS-1$
+		public static final String EGLMESSAGE_FLOATING_POINT_LITERAL_OUT_OF_RANGE = "3252";//$NON-NLS-1$
+		public static final String EGLMESSAGE_ARRAY_SIZE_NOT_INTEGER = "3253";//$NON-NLS-1$
+		public static final String EGLMESSAGE_MAXSIZE_NOT_POSITIVE = "3254"; //$NON_NLS-1$
+		public static final String EGLMESSAGE_ARRAY_DIMENSION_SPECIFIED_AFTER_DYNAMIC_DIMENSION = "3255"; //$NON_NLS-1$
+		public static final String EGLMESSAGE_ARRAY_LITERAL_SIZE_TOO_LARGE = "3256"; //$NON_NLS-1$
+		public static final String EGLMESSAGE_ARRAY_DIMENSION_SPECIFIED_WITH_TARGET_OF_REF = "3257"; //$NON_NLS-1$
+		public static final String EGLMESSAGE_ARRAY_PASSED_TO_NON_EGL_PROGRAM = "3258"; //$NON_NLS-1$
+		
+		public static final String EGLMESSAGE_INVALID_NEW_OPERATION_ON_TYPE = "3259"; //$NON_NLS-1$
+        public static final String EGLMESSAGE_TYPE_CANNOT_BE_RESOLVED = "3260"; //$NON_NLS-1$
+		public static final String EGLMESSAGE_ISA_TARGET_NOT_ITEM_OR_PART = "3261"; //$NON_NLS-1$
+		
+		public static final String EGLMESSAGE_IMPORT_STATEMENT_PACKAGE_NAME_COULD_NOT_BE_RESOLVED = "3325"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_IMPORT_STATEMENT_PART_NAME_IS_AMBIGUOUS = "3326"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_IMPORT_STATEMENT_PART_NAME_COULD_NOT_BE_LOCATED = "3327"; //$NON-NLS-1$	
+					
+		//continued from 3042
+		public static final String EGLMESSAGE_SUBSTRING_CANT_BE_EXPR = "3342"; //$NON-NLS-1$ 
+		public static final String EGLMESSAGE_SUBSCRIPT_CANT_BE_EXPR = "3343"; //$NON-NLS-1$ 
+		public static final String EGLMESSAGE_PART_CANNOT_HAVE_DASH = "3344"; //$NON-NLS-1$ 
+		public static final String EGLMESSAGE_INVALID_SUBSCRIPT_OR_SUBSTRING = "3345"; //$NON-NLS-1$ 
+		public static final String EGLMESSAGE_INVALID_REAL_OR_FLOAT_IN_NAME = "3346";//$NON-NLS-1$ 
+		
+		public static final String EGLMESSAGE_INVALID_USE_OF_THIS_QUALIFIER = "3347";//$NON-NLS-1$
+		public static final String EGLMESSAGE_REFERENCE_CANNOT_CONTAIN_SUBSTRING = "3348";//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_NAME_TOKEN_SEQUENCE = "3349";//$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_REFERENCE_CANNOT_BE_SUBSCRIPTED = "3350";//$NON-NLS-1$
+		public static final String EGLMESSAGE_DATAITEM_REFERENCE_CANNOT_BE_SUBSCRIPTED = "3351";//$NON-NLS-1$
+		public static final String EGLMESSAGE_TYPEDEF_CANNOT_BE_SUBSCRIPTED = "3352";//$NON-NLS-1$
+		public static final String EGLMESSAGE_ALIAS_CANNOT_BE_SUBSCRIPTED = "3353";//$NON-NLS-1$
+		public static final String EGLMESSAGE_MSGTABLEPREFIX_CANNOT_BE_SUBSCRIPTED = "3354";//$NON-NLS-1$
+		public static final String EGLMESSAGE_IDENTIFIER_CANNOT_BE_SUBSCRIPTED = "3355";//$NON-NLS-1$
+		public static final String EGLMESSAGE_PARTREFERENCE_CANNOT_BE_SUBSCRIPTED = "3356";//$NON-NLS-1$
+		public static final String EGLMESSAGE_RECORD_FILENAME_CANNOT_BE_SUBSCRIPTED = "3357";//$NON-NLS-1$
+		public static final String EGLMESSAGE_PART_CANNOT_BE_SUBSCRIPTED = "3358";//$NON-NLS-1$
+		public static final String EGLMESSAGE_PART_CANNOT_BE_QUALIFIED = "3359";//$NON-NLS-1$
+		public static final String EGLMESSAGE_KEYITEM_CANNOT_BE_SUBSCRIPTED = "3360";//$NON-NLS-1$	
+		public static final String EGLMESSAGE_LENGTHITEM_CANNOT_BE_SUBSCRIPTED = "3361";//$NON-NLS-1$
+		public static final String EGLMESSAGE_SUBSTRING_TARGET_NOT_STRING = "3362";//$NON-NLS-1$
+		public static final String EGLMESSAGE_SUBSTRING_INDEX_NOT_INTEGER = "3363";//$NON-NLS-1$
+		public static final String EGLMESSAGE_SUBSTRING_EXPRESSION_IN_BAD_LOCATION = "3364";//$NON-NLS-1$		
+
+		public static final String EGLMESSAGE_ALIAS_CANNOT_BE_QUALIFIED = "3365";//$NON-NLS-1$
+		public static final String EGLMESSAGE_IDENTIFIER_CANNOT_BE_QUALIFIED = "3366";//$NON-NLS-1$
+		public static final String EGLMESSAGE_MSGTABLEPREFIX_CANNOT_BE_QUALIFIED = "3367";//$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_SCROLL_NOT_ALLOWED_FOR_DB2_TARGET = "3368";//$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_ARRAYPROPERTY_OUT_OF_RANGE = "3370";//$NON-NLS-1$
+		public static final String EGLMESSAGE_ARRAYPROPERTY_NOT_ARRAY = "3371";//$NON-NLS-1$
+		public static final String EGLMESSAGE_ARRAYPROPERTY_DYNAMIC_ARRAY = "3372";//$NON-NLS-1$
+		public static final String EGLMESSAGE_ARRAYPROPERTY_NOT_INTEGER = "3373";//$NON-NLS-1$
+		public static final String EGLMESSAGE_ARRAYPROPERTY_MULTI_DIMENSION = "3374";//$NON-NLS-1$
+		public static final String EGLMESSAGE_DIMENSION_MUST_BE_INTEGER = "3375";//$NON-NLS-1$		
+        public static final String EGLMESSAGE_CANNOT_OVERRIDE_FLEX_RECORD_PROPERTIES = "3376"; //$NON-NLS-1$      
+
+//  3896-3999 ARE IN EGLMESSAGES 					
+
+//		//4001 : Used for data structure editor messages (may change)!
+//		public static final String EGLMESSAGE_NO_SQL_TABLE_DEFINED = "4001"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_MISSING_SQL_TABLE = "4002"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_DUPLICATE_SQL_TABLE_LABEL = "4003"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_TYPE_IN_FIXED_RECORD = "4004"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_OCCURS_VALUE = "4005"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_MISSING_RECORD_ORG_PROPERTIES = "4006"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_REF_USED_WITH_ANY = "4007"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_REF_USED_IN_FIXED_RECORD = "4008"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ITEM_NAME_REQUIRED_IF_NOT_TYPEDEF = "4009"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_BLANK_ITEMS_CANNOT_HAVE_DATA_CHARACTERISTICS = "4010"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ITEMS_WITH_TYPEDEF_TO_STRUCTURE_MUST_HAVE_BLANK_NAMES_IN_SQL = "4011"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FILLER_NOT_ALLOWED_IN_SQL = "4012"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SQL_ITEM_MUST_BE_READ_ONLY_IF_JOIN_OR_EXP = "4014"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SQL_ITEM_DATA_CODE_IS_INVALID = "4015"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_TOO_MANY_RECORD_ORG_PROPERTIES = "4016"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_INVALID_REDEFINES_NAME = "4017"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_INVALID_GET_OPTIONS_NAME = "4018"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_INVALID_OPEN_OPTIONS_NAME = "4019"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_INVALID_PUT_OPTIONS_NAME = "4020"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_INVALID_MESSAGE_DESCRIPTOR_NAME = "4021"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_INVALID_QUEUE_DESCRIPTOR_NAME = "4022"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SQL_TABLE_LABEL_ENTRY_LENGTH_INVALID = "4023"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SQL_TABLE_NAME_ENTRY_LENGTH_INVALID = "4024"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_GETBYPOSITION_POSITION_BAUE_MUST_BE_INTEGER = "4025"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FIXED_RECORD_EMBEDDED_IN_FLEXIBLE = "4026"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_DYNAMIC_ARRAY_USED_IN_FIXED_RECORD = "4027"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FLEXIBLE_RECORD_EMBEDDED_IN_FIXED = "4028"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FLEXIBLE_RECORD_ASSIGNED_TO_FIXED = "4029"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FIXED_RECORD_ASSIGNED_TO_FLEXIBLE = "4030"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_BYPOSITION_USED_WITH_FLEXIBLE_RECORD_AND_FORM = "4031"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_REF_ARRAY_POINTS_TO_NONDYNAMIC_ARRAY = "4032"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_REF_USED_WITH_PRIMITIVE = "4033"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_REF_USED_WITH_FIXED_RECORD = "4034"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FLEXIBLE_RECORD_FIELD_MISSING_TYPE = "4035"; //$NON-NLS-1$
+//
+		
+//		public static final String EGLMESSAGE_RECORD_HAS_UNDEFINED_NUMBER_OF_OCCURRENCES_ITEM = "4100"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_RECORD_HAS_NUMBER_OF_OCCURRENCES_ITEM_UNDER_VAR_OCCURRING_ITEM = "4102"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_RECORD_HAS_FILLER_FOR_VARIABLY_OCCURING_ITEM = "4104"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_RECORD_HAS_UNDEFINED_KEY_ITEM = "4106"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_REDEFINED_RECORD_HAS_UNDEFINED_REDEFINED_RECORD_ITEM = "4107"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_REDEFINED_RECORD_IS_REDEFINING_A_REDEFINED_RECORD = "4108"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_STRUCTURE_ITEM_HAS_INVALID_OCCURS_VALUE = "4109"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_FILE_RECORD_HAS_INVALID_LENGTH = "4110"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_STRUCTURE_HAS_TOO_MANY_LEVELS = "4111"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_STRUCTURE_HAS_TOO_MANY_OCCURS_WITHIN_OCCURS = "4112"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_STRUCTURE_ITEM_IS_FILLER_WITH_DECIMALS = "4113"; //$NON-NLS-1$
+
+//		public static final String EGLMESSAGE_STRUCTURE_ITEM_WITH_PRIM_CHAR_AND_TYPDEF_TO_ITEM = "4117"; //$NON-NLS-1$
+ 		public static final String EGLMESSAGE_STRUCTURE_LEAF_ITEM_WITH_NO_PRIM_CHAR = "4118"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_STRUCTURE_ITEM_HAS_INVALID_LENGTH = "4119"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_STRUCTURE_ITEM_FOR_SQL_RECORD_HAS_INVALID_OCCURS_VALUE = "4120"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_STRUCTURE_ITEM_FOR_SQL_RECORD_HAS_DECIMALS_AND_IS_NOT_PACK = "4121"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_STRUCTURE_ITEM_FOR_SQL_RECORD_IS_A_FILLER = "4122"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_STRUCTURE_ITEM_FOR_SQL_RECORD_HAS_INVALID_TYPE = "4123"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_STRUCTURE_ITEM_FOR_SQL_RECORD_HAS_SUBSTRUCTURE = "4124"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_STRUCTURE_ITEM_FOR_SQL_RECORD_IS_BIN_AND_HAS_INVALID_LENGTH = "4125"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_UNDEFINED_VARIABLE_LENGTH_ITEM = "4126"; //$NON-NLS-1$
+
+//
+//		public static final String EGLMESSAGE_REDEFINED_RECORD_LENGTH_CANNOT_EXCEED_PRIMARY_RECORD_LENGTH = "4128"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_REDEFINED_RECORD_IS_REDEFINING_A_PROGRAM_PARAMETER = "4129"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_VARIABLE_LENGTH_RECORD_HAS_VARIABLE_LENGTH_ITEM_WITH_INVALID_ATTRIBUTES = "4130"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_RELATIVERECORD_HAS_KEY_ITEM_WITH_INVALID_ATTRIBUTES = "4131"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_VARIABLE_LENGTH_RECORD_HAS_NUMBER_OF_OCCURS_ITEM_WITH_INVALID_ATTRIBUTES = "4132"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_IO_RECORD_HAS_NO_ITEMS = "4133"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SUBITEM_TYPE_INCOMPATIBLE_WITH_PARENT = "4134"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_STRUCTURE_ITEM_TYPEDEFS_STRUCTURE_AND_HAS_STRUCTUREITEM_DECLARATIONS = "4135"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_IO_RECORD_ORGANIZATION_NOT_SUPPORTED = "4136"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_VARIABLE_LENGTH_SERIAL_RECORD_NOT_SUPPORTED = "4137"; //$NON-NLS-1$
+
+		public static final String EGLMESSAGE_BIN_STRUCTURE_ITEM_FOR_SQL_RECORD_IS_NOT_INTEGER = "4138"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SQL_RECORD_HAS_OCCURS = "4139"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_RECORD_HAS_INVALID_SUBTYPE = "4140"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATATABLE_HAS_INVALID_SUBTYPE = "4141"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_HAS_INVALID_SUBTYPE = "4142"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_HANDLER_HAS_INVALID_SUBTYPE = "4143"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PART_HAS_INVALID_SUBTYPE = "4144"; //$NON-NLS-1$
+
+//		public static final String EGLMESSAGE_WEB_ITEM_MUST_HAVE_OCCURS = "4150"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_WEB_ITEM_OCCURSFOR_NOT_FOUND = "4151"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_WEB_ITEM_OCCURSFOR_MUST_HAVE_SINGLE_OCCURRANCE = "4152"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_WEB_ITEM_OCCURSFOR_MUST_NOT_HAVE_DECIMALS = "4153"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_WEB_ITEM_OCCURSFOR_MUST_BE_NUMERIC = "4154"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_EDITTYPE_REQUIRES_NUMERIC_OR_CHAR_ITEM = "4155"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_FOLD_PROHIBITS_NUMERIC_OR_DBCS_ITEM = "4156"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_PROPERTIES_INVALID_FOR_NON_LEAF_ITEMS = "4157"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_WEB_ITEM_PROPERTIES_INVALID_FOR_NON_LEAF_ITEMS = "4158"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_EDIT_ITEM_FILL_CHARACTER_INVALID_FOR_DBCS = "4159"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_SOSI_INVALID_FOR_NON_MIXED = "4160"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_CURRENCY_REQUIRES_NUMERIC = "4161"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_NUMERICSEPARATOR_REQUIRES_NUMERIC = "4162"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_SIGN_REQUIRES_NUMERIC = "4163"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_ZEROEDIT_REQUIRES_NUMERIC = "4164"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_EDIT_TABLE_INVALID_EDIT_USE = "4165"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_NOT_COMPATIBLE_WITH_TABLE_COLUMN = "4166"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_MINIMUM_INPUT_TOO_LARGE = "4167"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_RANGE_MUST_CONTAIN_TWO_VALUES = "4168"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_RANGE_LOW_VALUE_INVALID = "4169"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_RANGE_HIGH_VALUE_INVALID = "4170"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_RANGE_LOW_MUST_BE_LESSTHAN_HIGH = "4171"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_RANGE_LOW_VALUE_TOO_LARGE = "4172"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_RANGE_HIGH_VALUE_TOO_SMALL = "4173"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SUBMIT_VALUE_RECEIVER_ITEM_WRONG_TYPE = "4174"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TABLE_MATCHINVALID_MUST_CONTAIN_COLUMN = "4175"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TABLE_MATCHVALID_MUST_CONTAIN_COLUMN = "4176"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TABLE_RANGECHECK_MUST_CONTAIN_TWO_COLUMNS = "4177"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_WEB_ITEM_WRONG_TYPE_FOR_SUBMIT = "4178"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EDIT_ITEM_TOO_MANY_DIMENSIONS = "4179"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TABLE_ITEM_HAS_OCCURS = "4180"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TABLE_MESSAGE_MUST_CONTAIN_TWO_COLUMNS = "4181"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MESSAGE_TABLE_MUST_HAVE_FIRST_COLUMN_NUM_UNLESS_USED_BY_WEBTRANSACTION = "4182"; //$NON-NLS-1$
+//
+//		//4200-4299: Used for Statments
+//		public static final String EGLMESSAGE_SET_EMPTY_STATEMENT_WITH_INVALID_DATAREF = "4200"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_AMBIGUOUS_DATAREF = "4201"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SET_SCAN_STATEMENT_WITH_INVALID_DATAREF = "4202"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_UNDECLARED_DATAREF = "4203"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SET_NULL_STATEMENT_WITH_INVALID_DATAREF = "4204"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SET_STATEMENT_OPTION_NOT_VALID_FOR_TARGET = "4206"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SET_STATEMENT_DATAREF_IN_CALL_PARM_LIST = "4207"; //$NON-NLS-1$
+//
+//		public static final String EGLMESSAGE_IO_STATEMENT_WITH_UNDECLARED_DATAREF = "4209"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SCANBACK_STATEMENT_WITH_VSAM_FILE = "4210"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SCAN_AND_ADD_ON_THE_SAME_SERIAL_FILE = "4211"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ASSIGNMENT_FUNCTION_DOES_NOT_RETURN_VALUE = "4212"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ASSIGNMENT_FUNCTION_RETURN_VALUE_TO_DATA_STRUCTURE = "4213"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ASSIGNMENT_FUNCTION_RETURN_VALUE_INCOMPATIBLE_WITH_TARGET = "4214"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ASSIGNMENT_DATA_TYPES_INCOMPATIBLE = "4215"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ASSIGNMENT_DATA_ITEM_TYPES_INCOMPATIBLE = "4216"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ASSIGNMENT_LITERAL_TO_DATA_STRUCTURE = "4217"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ASSIGNMENT_LITERAL_AND_ITEM_INCOMPATIBLE = "4218"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ASSIGNMENT_HEX_DATA_INVALID = "4219"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ARITHMETIC_ASSIGNMENT_TARGET_DATA_STRUCTURE = "4220"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ARITHMETIC_ASSIGNMENT_TARGET_INVALID_TYPE = "4221"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ARITHMETIC_ASSIGNMENT_OPERAND_DATA_STRUCTURE = "4222"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ARITHMETIC_ASSIGNMENT_OPERAND_INVALID_TYPE = "4223"; //$NON-NLS-1$
+//
+//		public static final String EGLMESSAGE_SUBSCRIPT_NOT_ALLOWED_FOR_DATA_STRUCTURE = "4224"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SUBSCRIPT_SPECIFIED_FOR_SINGLE_OCCURRING_ITEM = "4225"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SUBSCRIPT_NUMBER_OF_DIMENSIONS_SPECIFIED_INCORRECT = "4226"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SUBSCRIPT_LITERAL_VALUE_EXCEEDS_DIMENSION_SIZE = "4227"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SUBSCRIPT_DATA_STRUCTURE_SPECIFIED_FOR_SUBSCRIPT = "4228"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SUBSCRIPT_INVALID_ITEM_SPECIFIED_FOR_SUBSCRIPT = "4229"; //$NON-NLS-1$
+//
+//		public static final String EGLMESSAGE_FUNCTION_INVOCATION_INCORRECT_NUM_OF_ARGS = "4230"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_FUNCTION_INVOCATION_INCORRECT_DATAREF_ARGUMENT_TYPE = "4231"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_FUNCTION_INVOCATION_INCORRECT_LITERAL_ARGUMENT_TYPE = "4232"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_FUNCTION_INVOCATION_INCORRECT_DATAREF_ARGUMENT_LENGTH = "4233"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_FUNCTION_INVOCATION_INCORRECT_LITERAL_ARGUMENT_LENGTH = "4234"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_FUNCTION_INVOCATION_INCORRECT_DATAREF_ARGUMENT_DECIMALS = "4235"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_FUNCTION_INVOCATION_INCORRECT_LITERAL_ARGUMENT_DECIMALS = "4236"; //$NON-NLS-1$
+//
+//		public static final String EGLMESSAGE_EZE_FUNCTION_INVOCATION_NOT_SUPPORTED_ON_TARGET = "4237"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EZERTN_CANNOT_SPECIFY_A_VALUE = "4239"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EZERTN_MUST_SPECIFY_A_VALUE = "4240"; //$NON-NLS-1$
+//
+
+// 4241- 4249 ARE IN EGLMESSAGES
+		
+		public static final String EGLMESSAGE_CANNOT_PASS_REFERNECE_TYPE_ON_CALL = "4230"; //$NON-NLS-1$ 
+
+//		public static final String EGLMESSAGE_OPERAND_FOR_IOERROR_CONDITION_MUST_BE_IO_RECORD = "4250"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_OPERAND_FOR_KEYWORD_CONDITION_MUST_BE_ITEM = "4251"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_OPERAND_FOR_KEYWORD_CONDITION_MUST_BE_SQLITEM = "4252"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_COMPARE_DATA_STRUCTURE_INVALID = "4253"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_COMPARE_LITERAL_INCOMPATIBLE_WITH_ARITHMETIC_EXPRESSION = "4254"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_COMPARE_ITEM_INCOMPATIBLE_WITH_ARITHMETIC_EXPRESSION = "4255"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_COMPARE_ITEM_INCOMPATIBLE_WITH_ITEM = "4256"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_COMPARE_ITEM_INCOMPATIBLE_WITH_LITERAL = "4257"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_COMPARE_LITERAL_INCOMPATIBLE_WITH_LITERAL = "4258"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_OPERAND_FOR_KEYWORD_CONDITION_WRONG_ITEM_TYPE = "4259"; //$NON-NLS-1$
+//
+//		public static final String EGLMESSAGE_ASSIGNMENT_EZEJAVA_FUNCTION_RETURN_VALUE_INCOMPATIBLE_WITH_TARGET = "4260"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_CAST_INVALID_FOR_DATASTRUCTURE = "4261"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_CAST_INCOMPATIBLE_WITH_LITERAL_TYPE = "4262"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_CAST_INCOMPATIBLE_WITH_ITEM_TYPE = "4263"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_CAST_INVALID_FOR_ARGUMENT_TYPE = "4264"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ARGUMENT_MUST_BE_CAST_TO_OBJID = "4265"; //$NON-NLS-1$
+//
+//		public static final String EGLMESSAGE_OPERAND_FOR_MODIFIED_CONDITION_MUST_BE_FORM_OR_FORM_ITEM = "4266"; //$NON-NLS-1$
+//
+//		public static final String EGLMESSAGE_ADD_STATEMENT_RECORD_IS_INVALID_TYPE = "4270"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_CLOSE_STATEMENT_RECORD_IS_INVALID_TYPE = "4271"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DELETE_STATEMENT_RECORD_IS_INVALID_TYPE = "4272"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_INQUIRY_STATEMENT_RECORD_IS_INVALID_TYPE = "4273"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_REPLACE_STATEMENT_RECORD_IS_INVALID_TYPE = "4274"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SCANBACK_STATEMENT_RECORD_IS_INVALID_TYPE = "4275"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SCAN_STATEMENT_RECORD_IS_INVALID_TYPE = "4276"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SETINQ_STATEMENT_RECORD_IS_INVALID_TYPE = "4277"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SETUPD_STATEMENT_RECORD_IS_INVALID_TYPE = "4278"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SQLEXEC_STATEMENT_RECORD_IS_INVALID_TYPE = "4279"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_UPDATE_STATEMENT_RECORD_IS_INVALID_TYPE = "4280"; //$NON-NLS-1$
+//
+//		public static final String EGLMESSAGE_PROGRAM_IO_STATEMENT_WITH_RECORD_IN_PROGRAM_PARM_LIST = "4281"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_FUNCTION_IO_STATEMENT_WITH_RECORD_IN_PROGRAM_PARM_LIST = "4282"; //$NON-NLS-1$
+//
+//		public static final String EGLMESSAGE_FORWARD_STATEMENT_LABEL_MUST_BE_ITEM = "4290"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_FORWARD_STATEMENT_LABEL_ITEM_MUST_BE_CHA = "4291"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_FORWARD_ONLY_VALID_IN_ACTION_PROGRAMS = "4292"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_EZEUI_WORD_ONLY_VALID_IN_ACTION_PROGRAMS = "4293"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_FORWARD_STATEMENT_FORM_NOT_DEFINED = "4294"; //$NON-NLS-1$
+//
+		public static final String EGLMESSAGE_JAVA_FUNCTION_NUMERIC_EXPRESSION_AS_ARG = "4293"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_JAVA_CAST_NO_CAST_ALLOWED = "4294"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_JAVA_CAST_NO_CAST_OR_OBJID_REQUIRED = "4295"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_JAVA_CAST_OBJID_REQUIRED = "4296"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_JAVA_CAST_ARGUMENT_REQUIRED = "4297"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_JAVA_CAST_CHARACTER_TYPE_NEEDED = "4298"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_JAVA_CAST_NUMERIC_TYPE_NEEDED = "4299"; //$NON-NLS-1$
+		
+// 4300-4301 ARE IN EGLMESSAGES	
+
+		//4400-4499: Used for item validation messages (may change)!
+ 		public static final String EGLMESSAGE_LENGTH_NOT_ALLOWED = "4400"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_LENGTH_FOR_PRIMITIVE_TYPE = "4401"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_DECIMALS = "4402"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DECIMALS_GREATER_THAN_LENGTH = "4403"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_CALCULATED_LENGTH_FOR_PRIMITIVE_TYPE_WITH_LOGICAL_CHILDREN = "4404"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_TYPEDEF_ITEM_CAUSES_CIRCULAR_TYPEDEFS = "4405"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_NAMELESS_TYPEDEF_ITEM_CAUSES_CIRCULAR_TYPEDEFS = "4406"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DUPLICATE_ITEM_NAME = "4407"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_INVALID_PRIMITIVETYPE = "4408"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_LENGTH_FOR_PRIMITIVE_TYPE_WITH_FIXED_LENGTH = "4409"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_CALCULATED_LENGTH_FOR_PRIMITIVE_TYPE_WITH_FIXED_LENGTH_WITH_LOGICAL_CHILDREN = "4410"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DUPLICATE_ITEM_NAME_DUE_TO_EMBED = "4411"; //$NON-NLS-1$
+
+//
+//		//4500-4599: Used for SQL validation messages (may change)!
+//		public static final String EGLMESSAGE_DUPLICATE_STATEMENT_ID = "4500"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_INVALID_IO_OPTION_FOR_SQL_STATEMENT = "4501"; //$NON-NLS-1$
+//		public static final String EXCEPTION_REMOVING_SQL_COMMENTS = "4502"; //$NON-NLS-1$
+//		//		public static final String THIS_IS_AVAILABLE_FOR_REUSE = "4503"; //$NON-NLS-1$
+//		//		public static final String THIS_IS_AVAILABLE_FOR_REUSE = "4504"; //$NON-NLS-1$
+//		//		public static final String THIS_IS_AVAILABLE_FOR_REUSE = "4505"; //$NON-NLS-1$
+//		//		public static final String THIS_IS_AVAILABLE_FOR_REUSE = "4506"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_INVALID_INTO_CLAUSE = "4507"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_INTO_CLAUSE_ENDS_WITH_COMMA = "4508"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SINGLE_ROW_SELECT_INVALID_WITH_TNHV = "4509"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SINGLE_ROW_SELECT_INVALID_WITH_ORDER_BY_CLAUSE = "4510"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_INVALID_EMPTY_CLAUSE = "4511"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_INVALID_LITERAL = "4512"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_STATEMENT_VALIDATION_FAILED = "4513"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_CLASS_LOCATION_REQUIRED = "4514"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_COULD_NOT_BUILD_DEFAULT_STATEMENT = "4515"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_DATA_ITEM_NOT_FOUND_FOR_COLUMN_IDENTIFIER = "4516"; //$NON-NLS-1$
+//
+//		//      public static final String THIS_IS_AVAILABLE_FOR_REUSE = "4516";
+//		public static final String EGLMESSAGE_Single_Row_Select_And_ESTB_Mutually_Exclusive = "4517"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SQL_INFO_WITH_NON_SQL_RECORD = "4518"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_NO_READ_WRITE_ITEMS = "4519"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_JOIN_NOT_ALLOWED = "4520"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_CONTAINS_ONLY_KEY_OR_READONLY_COLUMNS = "4521"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_UPDATE_ID_REQUIRED = "4522"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_UPDATE_ID_MUST_REFERENCE_UPDATE_OR_SETUPD_STMT = "4523"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_SQL_IO_OBJECTS_MUST_MATCH = "4524"; //$NON-NLS-1$
+//		//      public static final String THIS_IS_AVAILABLE_FOR_REUSE = "4525";
+//		public static final String EGLMESSAGE_CONNECT_TO_DATABASE_FAILED = "4526"; //$NON-NLS-1$
+//
+// 4527-4542 ARE IN EGLMESSAGES
+
+		public static final String EGLMESSAGE_P_INVALID_ORDER_BY = "4551"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_P_INVALID_GROUP_BY = "4552"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_P_INVALID_INSERT_INTO = "4553"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_P_INVALID_FOR_UPDATE_OF = "4554"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_P_BY_WO_ORDER_OR_GROUP = "4555"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_P_OF_WO_FOR_UPDATE = "4556"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_P_UNMATCHED_PARENS = "4557"; //$NON-NLS-1$		
+ // 		public static final String EGLMESSAGE_P_INVALID_WHERE_CURRENT_OF = "4558"; //$NON-NLS-1$
+  
+// 4580 -4808 ARE IN EGLMESSAGES   
+
+
+//		//4900-4999: Used for Logic/Program/Function messages
+		public static final String EGLMESSAGE_INVALID_FORM_TYPEDEF = "4901"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_PARAMETER_HAS_INCORRECT_TYPE = "4902"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_PROGRAM_DECLARATION_HAS_INCORRECT_TYPE = "4903"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_PARAMETER_HAS_INCORRECT_TYPE = "4904"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_PROGRAM_WORKING_STORAGE_RECORD_HAS_INCORRECT_TYPE = "4905"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_PROGRAM_NAME_RESERVED = "4906"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_CALLED_REMOTE_PROGRAM_PARM_LENGTH_IS_TOO_LONG = "4909"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_CALLED_PROGRAM_PARM_LENGTH_IS_TOO_LONG_FOR_COMMDATA = "4910"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_CALLED_REMOTE_PROGRAM_IS_NOT_BATCH = "4911"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ACTION_PROGRAM_INPUT_FORM_MUST_BE_WEB_FORM = "4912"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_ACTION_PROGRAM_INPUT_FORM_NOT_FOUND = "4913"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_SYSTEM_FUNCTION_NOT_ALLOWED_IN_PAGEHANDLER = "4912"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CANNOT_RETURN_ARRAY = "4913"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_RETURN_HAS_INCORRECT_TYPE = "4914"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_RETURN_DOES_NOT_RESOLVE = "4915"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_RETURN_IS_AMBIGUOUS = "4916"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MAIN_FUNCTION_HAS_RETURN = "4917"; //$NON-NLS-1$		
+	
+		public static final String EGLMESSAGE_PROGRAM_PARAMTER_DOES_NOT_RESOLVE = "4920"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_PARAMTER_IS_AMBIGUOUS = "4921"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_MAIN_FUNCTION_REQUIRED = "4922"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_ONLY_ONE_MAIN_FUNCTION_ALLOWED = "4923"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MAIN_FUNCTION_HAS_PARAMETERS = "4924"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATA_DECLARATION_DOES_NOT_RESOLVE = "4925"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATA_DECLARATION_HAS_INCORRECT_TYPE = "4926"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATA_DECLARATION_IS_AMBIGUOUS = "4927"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_OR_LIBRARY_USE_STATEMENT_IS_AMBIGUOUS = "4928"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_OR_LIBRARY_USE_STATEMENT_DOES_NOT_RESOLVE = "4929"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_OR_LIBRARY_USE_STATEMENT_RESOLVES_TO_INVALID_TYPE = "4930"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_USE_STATEMENT_TOO_MANY_FORMGROUPS = "4931"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_USE_STATEMENT_TOO_MANY_HELP_GROUP_PROPERTIES = "4932"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_PARAMETER_FORM_MUST_BE_IN_MAIN_FORMGROUP = "4933"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_OR_LIBRARY_USE_STATEMENT_INAPPLICABLE_PROPERTY_1 = "4934"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_OR_LIBRARY_USE_STATEMENT_INAPPLICABLE_PROPERTY_2 = "4935"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_USE_STATEMENT_HELP_GROUP_WITH_NO_MAIN_GROUP = "4936"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_USE_STATEMENT_VAGCOMPATIBILITY = "4937"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_PARAMETER_REQUIRES_LENGTH = "4938";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_PARAMTER_NO_FORM_ARRAY = "4939"; //$NON-NLS-1$
+
+		public static final String EGLMESSAGE_FUNCTION_PARAMTER_DOES_NOT_RESOLVE = "4940"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_PARAMTER_IS_AMBIGUOUS = "4941"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_PARAMETER_TYPE_CANNOT_BE_NULLABLE = "4942"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_PARAMETER_BIN_CANNOT_BE_NULLABLE = "4943"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_FUNCTION_NO_MAIN_FUNCTION_ALLOWED = "4944"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DUPLICATE_FUNCTION_NAMES = "4945"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_PARAMETER_TYPE_CANNOT_BE_FIELD = "4946"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_PARAMETER_TYPE_CANNOT_BE_IN = "4947"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_PARAMETER_OUT_NOT_ALLOWED_WITH_IO_OR_FIELD = "4948"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_IN_OR_OUT_MODIFIER_NOT_ALLOWED_WITH_ANY_TYPE = "4949"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_PARAMETER_TYPE_CANNOT_BE_OUT = "4950"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DICTIONARY_FUNCTION_USED_WITHOUT_DICTIONARY = "4951"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DICTIONARY_OR_ARRAY_FUNCTION_USED_WITHOUT_DICTIONARY_OR_ARRAY = "4952"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_FUNCTION_PARAMETER_TYPE_CANNOT_BE_OUT_OR_INOUT = "4953"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_CONSTANT_DECL_MUST_BE_PRIMITIVE = "4954"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_CONSTANT_VALUE_MUST_BE_LITERAL = "4955"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_IN_OR_OUT_MODIFIER_NOT_ALLOWED_WITH_NUMBER_TYPE = "4956"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_IN_OUT_AND_INOUT_MODIFIER_NOT_ALLOWED_WITH_REFERENCE_TYPE = "4957"; //$NON-NLS-1$
+		
+	
+//		//5000-5099: Used for Record/Table messages
+//		public static final String EGLMESSAGE_TABLE_NAME_RESERVED = "5000"; //$NON-NLS-1$
+ 		public static final String EGLMESSAGE_TABLE_ROW_MUST_BE_LIST = "5002"; //$NON-NLS-1$
+ 		public static final String EGLMESSAGE_TABLE_HAS_NO_CONTENTS = "5003"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATATABLE_NUMBER_COLUMNS_DO_NOT_MATCH = "5004"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_MQRECORD_GET_OPTIONS_UNKNOWN = "5005"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_MQRECORD_OPEN_OPTIONS_UNKNOWN = "5006"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_MQRECORD_PUT_OPTIONS_UNKNOWN = "5007"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_MQRECORD_MESSAGE_DESCRIPTOR_OPTIONS_UNKNOWN = "5008"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_MQRECORD_QUEUE_DESCRIPTOR_OPTIONS_UNKNOWN = "5009"; //$NON-NLS-1$
+//
+//		public static final String EGLMESSAGE_MQRECORD_GET_OPTIONS_WRONG_TYPE = "5010"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_MQRECORD_OPEN_OPTIONS_WRONG_TYPE = "5011"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_MQRECORD_PUT_OPTIONS_WRONG_TYPE = "5012"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_MQRECORD_MESSAGE_DESCRIPTOR_OPTIONS_WRONG_TYPE = "5013"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_MQRECORD_QUEUE_DESCRIPTOR_OPTIONS_WRONG_TYPE = "5014"; //$NON-NLS-1$
+
+		public static final String EGLMESSAGE_DATATABLE_CONTENT_HAS_INVALID_CHARACTERS = "5019"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATATABLE_CONTENT_HAS_INVALID_DIGITS = "5020"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATATABLE_CONTENT_ONLY_UNICODE_ALLOWED = "5021"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATATABLE_CONTENT_INVALID_HEX_CONTENT = "5022"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATATABLE_CONTENT_HAS_INVALID_LENGTH = "5023"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATATABLE_CONTENT_DECIMALS_EXCEED_MAX_LENGTH = "5024"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATATABLE_CONTENT_DECIMALS_TOO_LONG = "5025"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DATATABLE_CONTENT_MUST_BE_LITERAL = "5026";  //$NON-NLS-1$
+        public static final String EGLMESSAGE_DATATABLE_CONTENT_TOO_MANY_DECIMALS = "5027";  //$NON-NLS-1$
+        
+		public static final String EGLMESSAGE_TOO_MANY_DIMENSIONS_FOR_ARRAY = "5033";		 //$NON-NLS-1$
+		public static final String EGLMESSAGE_TOO_MANY_DIMENTIONS_FOR_RECORD_ARRAY = "5034";		 //$NON-NLS-1$
+		//5035-5050: Used for For statement messages
+		public static final String EGLMESSAGE_FOR_STATEMENT_COUNTER_MUST_BE_INT = "5035";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_FOR_STATEMENT_EXPR_MUST_BE_INT = "5036";	//$NON-NLS-1$
+
+		public static final String EGLMESSAGE_COND_INVALID_ESCAPE_CHARACTER = "5040";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_COND_OPERAND_MUST_BE_STRING = "5041";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_COND_OPERAND_CANNOT_BE_HEX_OR_DBCHAR = "5042";	//$NON-NLS-1$
+		
+
+//		public static final String EGLMESSAGE_WEBFORM_NOT_SUPPORTED_ON_TARGET_SYSTEM = "5051"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_WEBFORM_SUBMITVALUE_RECEIVER_ITEM_NOT_FOUND = "5052"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_SYSTEM_FUNCTION_ARG_CANNOT_BE_EXPRESSION = "5046"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TYPE_INVALID_NIL_TYPE_COMPARISON = "5047"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_TYPE_INVALID_REF_TYPE_COMPARISON = "5048"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_TYPE_NOT_VALID_IN_EXPRESSION = "5049";
+		public static final String EGLMESSAGE_EXPRESSION_FUNCTION_INVOCATION_NOT_ALLOWED = "5050";
+		public static final String EGLMESSAGE_TYPE_INVALID_CONSOLE_FIELD_TYPE_COMPARISON = "5051";
+		public static final String EGLMESSAGE_FIXED_RECORDS_NOT_ALLOWED_IN_COMPARISONS = "5052";
+		
+//      
+		public static final String EGLMESSAGE_CONTINUE_STATEMENT_LOCATION = "5054"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_CONTINUE_EXIT_MODIFIER = "5055"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_CONTINUE_EXIT_MODIFIER_IN_ON_EVENT = "5056"; //$NON-NLS-1$
+
+		public static final String EGLMESSAGE_RECURSIVE_LOOP_STARTED_WITHIN_FLEXIBLE_RECORD_BY_TYPEDEF = "5057"; //$NON-NLS-1$   		
+		public static final String EGLMESSAGE_EMBEDDED_RECORD_MUST_BE_SQL_RECORD = "5058"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_ITEM_IS_AMBIGUOUS = "5059"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_EMBEDED_ITEM_DOES_NOT_RESOLVE = "5060"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PART_DOES_NOT_RESOLVE_TO_DATAITEM_OR_RECORD = "5061"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_EMBED_RERERS_TO_EMPTY_RECORD  = "5062"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INCONSISTENT_LEVEL_NUMBERING = "5063"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_STRUCTURE_LEVEL_NUMBERS = "5064"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_RECORD_REFERENCED_WITHIN_ANOTHER_RECORD = "5065"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_AMOUNT_OF_NESTING = "5066"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SQL_RECORDS_MUST_ONLY_CONTAIN_DATAITEMS = "5067"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SQL_FLAT_LEVEL_NUMBERING = "5068"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SUMMED_RECORD_LENGTH = "5069"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ITEM_DOES_NOT_RESOLVE = "5070"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_NUMBER_USED_INCORRECTLY = "5071"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_RECURSIVE_LOOP_STARTED_WITHIN_RECORD = "5072"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FILLER_STRUCTURE_ITEM_DOES_NOT_RESOLVE_TO_DATAITEM_OR_RECORD = "5073"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FILLER_STRUCTURE_ITEM_IS_AMBIGUOUS = "5074"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_RECURSIVE_LOOP_STARTED_WITHIN_RECORD_BY_EMBEDS = "5075"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_NON_SQL_RECORDS_CANNOT_CONTAIN_NULLABLE = "5076"; //$NON-NLS-1$
+		
+		// 5077-?? : Case statement validation
+		public static final String EGLMESSAGE_CASE_WHEN_MUST_NOT_BE_BOOLEAN_EXPRESSION = "5077"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CASE_WHEN_MUST_BE_BOOLEAN_EXPRESSION = "5078";		//$NON-NLS-1$ 
+
+		
+		//5079-?? : Misc expression validation
+		public static final String EGLMESSAGE_OPERANDS_NOT_VALID_WITH_OPERATOR = "5079";	//$NON-NLS-1$		
+		public static final String EGLMESSAGE_LITERAL_INVALID_IN_NUMERIC_EXPRESSION = "5080";	//$NON-NLS-1$		
+		public static final String EGLMESSAGE_NUMERIC_EXPRESSION_TYPE_NOT_VALID = "5081"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_STRING_CONCAT_EXPRESSION_TYPE_NOT_VALID = "5082"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_LITERAL_INVALID_IN_STRING_CONCAT_EXPRESSION = "5083"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_EXPRESSIONS_INCOMPATIBLE = "5084"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ELEMENT_NOT_VALID_IN_EXPRESSION = "5085"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_UNARY_EXPRESSION_INVALID_IN_STRING_CONCAT_EXPRESSION = "5086"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TYPE_NOT_VALID_IN_STRING_CONCAT_EXPRESSION = "5087"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TYPE_NOT_VALID_IN_NUMERIC_EXPRESSION = "5088"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TYPE_INCOMPATIBLE_ARITHMETIC_COMPARISON = "5089"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_IN_CONDITIONAL_LEFT_OPERAND_INVALID = "5090"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_IN_CONDITIONAL_RIGHT_OPERAND_INVALID = "5091"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_COND_OPERAND_MUST_BE_RECORD = "5092"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_COND_OPERAND_MUST_BE_TEXTFORM_FIELD = "5093"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_TYPE_BLANKS = "5094"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_COND_OPERAND_INVALID_FOR_NULL = "5095"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_COND_OPERAND_INVALID_MODIFIED = "5096"; //$NON-NLS-1$
+
+
+			
+	
+		// 5097-5150:  System Word Validation Errors (Jeff)
+		public static final String EGLMESSAGE_INVALID_USAGE_LOCATION_NO_FUNCTION = "5097";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_ROUTINE_MUST_HAVE_X_OR_Y_ARGS = "5098";	//$NON-NLS-1$		
+		public static final String EGLMESSAGE_ARG_MUST_BE_ITEM_INTEGER_OR_STRING = "5099";	//$NON-NLS-1$		
+		public static final String EGLMESSAGE_WORD_NOT_IN_LIBRARY = "5100";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_USAGE_LOCATION = "5101";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG_MUST_BE_ITEM_CONSTANT_OR_LITERAL = "5102";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG_MUST_BE_ITEM = "5103";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG_MUST_BE_CHAR_ITEM = "5104";	//$NON-NLS-1$		
+		public static final String EGLMESSAGE_ROUTINE_MUST_HAVE_ATLEAST_X_ARGS = "5105";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_ROUTINE_MUST_HAVE_ONE_OR_TWO_ITEM_ARGUMENTS = "5106";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ROUND_ARG_1 = "5107";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SUBSCRIPT = "5108";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS = "5109";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG_MUST_BE_INTEGER_ITEM_CONSTANT_OR_LITERAL = "5110";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG_MUST_BE_ITEM_STRING_CONSTANT_OR_LITERAL = "5111";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG_MUST_BE_GREATER_THAN_ZERO = "5112";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SETSUBSTR_ARGUMENT_4 = "5113";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG_MUST_NOT_BE_INTEGER = "5114";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_ROUTINE_MUST_HAVE_ONE_ITEM_ARG = "5115";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_NUM_ARGS_FOR_CONNECT = "5116";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ARG1_3_FOR_CONNECT = "5117";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ARG_4_FOR_CONNECT = "5118";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ARG_5_FOR_CONNECT = "5119";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ARG_PAIR_4_5_FOR_CONNECT = "5120";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ARG_6_FOR_CONNECT = "5121";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_NUM_ARGS_FOR_CONNECTION_SERVICES = "5122";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_NOT_VAGCOMP_FOR_CONNECTION_SERVICES = "5123";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ARG_1_TO_5_FOR_CONNECTION_SERVICES = "5124";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG6_MUST_CERTAIN_VALUES_FOR_CONNECTION_SERVICES = "5125";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_NUM_ARGS_FOR_CONVERT = "5126";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FIRST_ARG_FOR_CONVERT = "5127";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SECOND_ARG_FOR_CONVERT = "5128";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_THIRD_ARG_FOR_CONVERT = "5129";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_NUM_ARGS_FOR_PURGE = "5130";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ARG_FOR_PURGE = "5131";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_NOT_VAGCOMP_FOR_SYSTEM_WORD = "5132";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_NUM_ARGS_FOR_SET_ERROR_OR_LOCALE = "5133";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_LITERAL_ARG1_2_LENGTH_FOR_SETLOCALE = "5134";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID__ARG2_FOR_AUDIT = "5135";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_NUM_ARGS_FOR_STARTTRANS = "5136";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_SHOULD_NOT_BE_SUBSCRIPTED = "5137";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_TOO_MANY_QUALIFIERS = "5138";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SYSTEM_VARIABLE_VALUE_0_OR_1 = "5139";	//$NON-NLS-1$ 
+		public static final String EGLMESSAGE_INVALID_SYSTEM_VARIABLE_VALUE_0_1_OR_2 = "5140";	 //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_NUM_SYSTEM_VARIABLE_ASSIGNMENT = "5141";	 //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_STR_SYSTEM_VARIABLE_ASSIGNMENT = "5142";	 //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_TYPE_ISNUMERIC = "5143"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_RETURN_CODE_ASSIGN_VALUE = "5144";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_MQCONDITIONCODE_ASSIGN = "5145";		//$NON-NLS-1$
+		public static final String EGLMESSAGE_SUBSCRITPT_REQUIRED = "5146";		 //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_DATA_WORD_SUBSCRIPT_VALUE = "5147";	 //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ARRAY_INDEX_ASSIGN_VALUE = "5148";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_VALIDATIONMSGNUM_ASSIGN_VALUE = "5149";	 //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_MUST_HAVE_ARG_LIST = "5150";	 //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FUNC_ARG = "5151";		 //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ROUND_FUNC_ARG = "5152";		 //$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG_MUST_BE_BIN_ITEM_LESS_THAN_5_DIGITS = "5153";		//$NON-NLS-1$
+		public static final String EGLMessage_INVALID_ARG_LIST = "5154";		//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ARITHMETIC_CONDITION = "5155";		 //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_NON_ARITHMETIC_CONDITION = "5156";		 //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_EXPRESSION_DATA_ACCESS_OR_LITERAL = "5157";	 //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_EXPRESSION_DATA_ACCESS = "5158";		 //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_NUMERIC_EXPRESSION = "5159";		//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FUNC_INVOC_RESULT = "5160";		//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ARITHMETIC_CONDITION_STRING_TO_NUMERIC = "5161";		//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ARITHMETIC_CONDITION_NUMERIC_TO_STRING = "5162";		//$NON-NLS-1$ 
+		public static final String EGLMESSAGE_INVALID_CONDITIONAL_EXPRESSION = "5163";		//$NON-NLS-1$ 
+		public static final String EGLMESSAGE_INVALID_EVENT_KEY_VALUE = "5164";		//$NON-NLS-1$ 
+		public static final String EGLMESSAGE_INVALID_SYSTEM_TYPE_VALUE = "5165";		//$NON-NLS-1$ 
+		public static final String EGLMESSAGE_INVALID_PA_KEY_VALUE = "5166";		//$NON-NLS-1$ 
+		public static final String EGLMESSAGE_INVALID_PF_KEY_VALUE = "5167";		//$NON-NLS-1$ 
+		public static final String EGLMESSAGE_INVALID_NONARITHMETIC_COND_RIGHT_SIDE = "5168";		//$NON-NLS-1$ 
+		public static final String EGLMESSAGE_INVALID_EVENT_KEY_USE = "5169";		//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SYSTEM_TYPE_USE = "5170";		//$NON-NLS-1$ 
+		public static final String EGLMESSAGE_INVALID_STRING_CONCAT_EXPR = "5172";		//$NON-NLS-1$ 
+		public static final String EGLMESSAGE_INVALID_NUMERIC_CASE_TO_STRING_WHEN = "5173";		//$NON-NLS-1$ 
+		public static final String EGLMESSAGE_INVALID_STRING_CASE_TO_NUMERIC_WHEN = "5174";		//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ARG_7_FOR_CONNECT = "5175";	//$NON-NLS-1$		
+	//	public static final String EGLMESSAGE_INVALID_IF_EXIT_MODIFIER = "????";		//$NON-NLS-1$ 
+	//	public static final String EGLMESSAGE_INVALID_WHILE_EXIT_MODIFIER = "5176";		//$NON-NLS-1$ 
+	//	public static final String EGLMESSAGE_INVALID_CASE_EXIT_MODIFIER = "5177";		//$NON-NLS-1$ 
+		public static final String EGLMESSAGE_INVALID_FORWARD_UIRECORD_NUM_ARGS = "5178";		//$NON-NLS-1$ 
+		public static final String EGLMESSAGE_INVALID_EXPRESSION_DATA_ACCESS_OR_NUMERIC_LITERAL = "5179";		 //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_MOVE_TO_ARRAY_MODIFIER = "5180";		 //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SHOW_EXTERNAL = "5181";		 //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORWARD_STMT_PASSING_WITH_OUT_RETURNING_OPTION = "5182";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SHOW_STMT_PASSING_WITH_OUT_RETURNING_OPTION = "5183";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_TRANSFER_EXTERNAL = "5184";		//	$NON-NLS-1$ //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_MOVE_TO_NUM_SYSTEM_VARIABLE = "5185";		//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_MOVE_TO_STR_SYSTEM_VARIABLE = "5186";	 //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_DATA_ACCESS_OR_POS_INT_LITERAL = "5187";	 //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_EXPRESSION_DATA_ACCESS_OR_STRING_LITERAL = "5188";//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ARG_MUST_BE_INT = "5189";//$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORWARD_TARGET = "5190";		 //$NON-NLS-1$
+		public static final String EGLMESSAGE_FORWARD_ARG_MUST_BE_UI_RECORD = "5191";		 //$NON-NLS-1$
+		public static final String EGLMESSAGE_FORWARD_ARG_MUST_BE_ITEM_RECORD_OR_DYNAMIC_ARRAY = "5192";		 //$NON-NLS-1$
+
+		public static final String EGLMESSAGE_FORWARD_UI_RECORD_DEFINITION_MUST_MATCH_INPUT_PAGE_RECORD = "5194";		 //$NON-NLS-1$
+		public static final String EGLMESSAGE_FORWARD_RETURN_TO_MUST_BE_ACTION_PROGRAM = "5195";		 //$NON-NLS-1$
+		public static final String EGLMESSAGE_MOVE_FOR_COUNT_NOT_INTEGER = "5196";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_PREPARE_STATEMENT_NO_FROM_CLAUSE = "5197";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_SHOW_STATEMENT_NO_RETURNING_TO_CLAUSE = "5198";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG_MUST_NOT_BE_CONSTANT = "5199";	//$NON-NLS-1$		
+		public static final String EGLMESSAGE_ARG_MUST_BE_ITEM_OR_RECORD = "5200";	//$NON-NLS-1$		
+				
+		// 01-09 Jeff - New Message for EGLNameValidator
+ 	// 	$NON_NLS-1$
+		
+		// 5200-5299:  SQL parse errors
+		public static final String EGLMESSAGE_L_INVALID_ESCAPE_SEQUENCE = "5201"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_L_STRING_NOT_CLOSED = "5202"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_L_TOO_MANY_DIGITS = "5203"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_L_NAME_CANT_HAVE_SUBSTRING = "5204"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_P_FOUND_RBRACKET_WRONG = "5205"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_P_MISSING_FROM_SUBSTRING = "5206"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_P_TOO_MANY_SUBSTRINGS = "5207"; //$NON-NLS-1$				
+		public static final String EGLMESSAGE_P_UNRECOGNIZED_TOKEN = "5208"; //$NON-NLS-1$						
+		public static final String EGLMESSAGE_P_SUBSCRIPT_OR_SUBSTRING_NOT_CLOSED = "5209"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_P_SUBSTRING_NOT_LAST = "5210"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_P_FOUND_EMPTY_BRACKETS = "5211"; //$NON-NLS-1$
+		
+		
+		public static final String EGLMESSAGE_ROUTINE_MUST_HAVE_EVEN_NUM_OF_ARGS = "5254"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG_MUST_BE_SQL_REC_ITEM_OR_STRING_LITERAL = "5255";	//$NON-NLS-1$
+		public static final String EGLMESSAGE_ROUTINE_CANT_HAVE_MORE_THAN_ARGS = "5256";	//$NON-NLS-1$	
+
+//5250-5251 ARE IN EGLMESSAGES
+		
+		public static final String EGLMESSAGE_INVALID_PAGEHANDLER_SYSTEM_FUNCTION_USAGE = "5252"; //$NON-NLS-1$
+
+		// 5300-5999: Used for PageHandler, Form and Form Group Validation
+		public static final String EGLMESSAGE_INVALID_FORMGROUP_CONTENT = "5300"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_CONTENT = "5301"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PAGEHANDLER_CONTENT = "5302"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORMGROUP_PROPERTY = "5303"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_PROPERTY = "5304"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PAGEHANDLER_PROPERTY = "5305"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_VALIDATIONBYPASSKEY_PROPERTY_VALUE = "5306"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_HELPKEY_PROPERTY_VALUE = "5307"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PROPERTY_VALUE_YES_OR_NO = "5308"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SIMPLE_NAME_PROPERTY_VALUE = "5309"; //$NON-NLS-1$
+        
+		public static final String EGLMESSAGE_INVALID_SIZE_PROPERTY_VALUE = "5311"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_POSITIVE_INTEGER_PROPERTY_VALUE = "5312"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_SIZE_PROPERTY_VALUE = "5313"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_POSITION_PROPERTY_VALUE = "5314"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_HELPFORM_PROPERTY_VALUE = "5315"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_MSGFIELD_PROPERTY_VALUE = "5316"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_HELPFORM_VARIABLE_FIELD = "5317"; //$NON-NLS-1$
+
+		public static final String EGLMESSAGE_INVALID_FORMGROUP_ALIAS_PROPERTY_DUPLICATE = "5325"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORMGROUP_ALIAS_PROPERTY_FORM_NAME = "5326"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORMGROUP_SCREENFLOATINGAREA_PROPERTY = "5327"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORMGROUP_PRINTFLOATINGAREA_PROPERTY = "5328"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORMGROUP_FLOATINGAREA_DUPLICATION = "5329"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORMGROUP_USEDECLARATION_CANNOT_RESOLVE = "5330"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORMGROUP_MULTIPLE_DECLARATION = "5331"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_TEXTFORM_PROPERTY_NOT_VALID_FOR_FORMTYPE = "5332"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_SIZE_PROPERTY_NOT_SPECIFIED = "5333"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_IDENTIFIER_DUPLICATION = "5334"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_VALIDATIONORDER_PROPERTY_SPECIFICATION = "5335"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_CURSOR_PROPERTY_SPECIFICATION = "5336"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_OVERLAPPING = "5337"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_OVERFLOWING = "5338"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_TYPE = "5339"; //$NON-NLS-1$
+
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_POSITION_PROPERTY_VALUE = "5340"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_VALUE_PROPERTY_VALUE = "5341"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_FIELDLEN_PROPERTY_VALUE = "5342"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_PROPERTY_VALUE_MUST_BE_ONE_OF = "5343"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_OUTLINE_PROPERTY_VALUE = "5344"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_VALIDVALUES_PROPERTY_VALUE = "5345"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_STRING_NUMERIC_LITERAL_PROPERTY_VALUE = "5346"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_VALIDATOR_PROPERTY_VALUE = "5347"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_VALIDATORTABLE_PROPERTY_VALUE = "5348"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_GREATER_ZERO_PROPERTY_VALUE = "5350"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_POSITIVE_INTEGER_PROPERTY_VALUE = "5351"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_CURRENCY_SYMBOL_PROPERTY_VALUE = "5352"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_FILLCHARACTER_PROPERTY_VALUE = "5353"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_DATEFORMAT_PROPERTY_VALUE = "5354"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_TIMEFORMAT_PROPERTY_VALUE = "5355"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_PROPERTY = "5356"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_PROPERTY_OVERRIDE = "5357"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PRINTFORM_FIELD_PROPERTY = "5358"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PRINTFORM_FIELD_HIGHLIGHT_PROPERTY_VALUE = "5359"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_OCCURS_VALUE = "5360"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PROPERTY_DUPLICATION = "5361"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_PROPERTY_DUPLICATION = "5362"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PAGEHANDLER_ALIAS_PROPERTY_VALUE = "5363"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_STRING_LITERAL_PROPERTY_VALUE = "5364"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FUNCTION_NAME_PROPERTY_VALUE = "5365"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PAGEHANDLER_EVENTVALUEITEM_PROPERTY_VALUE = "5366"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PAGEHANDLER_VALIDATIONBYPASSFUNCTIONS_PROPERTY_VALUE = "5367"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PAGEHANDLER_MSGRESOURCE_PROPERTY_VALUE = "5368"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PAGEHANDLER_USEDECLARATION_CANNOT_RESOLVE = "5369"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PAGEHANDLER_USEDECLARATION_IS_AMBIGUOUS = "5370"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_DATADECLARATION_REDEFINES_PROPERTY_VALUE = "5371"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_DATAITEMDEFINATIONIDENTIFIER_CANNOT_RESOLVE = "5372"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_DATAITEMDEFINATIONIDENTIFIER_IS_AMBIGUOUS = "5373"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORMGROUP_USEDECLARATION_IS_AMBIGUOUS = "5374"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_HELPFORM_PROPERTY_VALUE_CANNOT_RESOLVE = "5375"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_HELPFORM_PROPERTY_VALUE_AMBIGUOUS = "5376"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_MSGFIELD_PROPERTY_VALUE_CANNOT_RESOLVE = "5377"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORMGROUP_USEDECLARATION_VALUE = "5378"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_HANDLER_USEDECLARATION_VALUE = "5379"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_CHARACTER_PROPERTY_APPLICATION = "5380"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_NUMERIC_PROPERTY_APPLICATION = "5381"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_DATAITEMDEFINATIONIDENTIFIER_IS_INVALID = "5382"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PAGEHANDLER_PROPERTY_VALUE_CANNOT_RESOLVE = "5383"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PAGEHANDLER_PROPERTY_VALUE_IS_AMBIGUOUS = "5384"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_SCREENSIZES_PROPERTY_VALUE = "5385"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PRINTFORM_PROPERTY_SCREENSIZES = "5386"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_WRAPPING = "5387"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORMGROUP_SCREENFLOATINGAREA_PROPERTY_VALUE = "5388"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORMGROUP_PRINTFLOATINGAREA_PROPERTY_VALUE = "5389";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_TYPE_DEFINATION = "5390";  //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORMGROUP_DEVICETYPE_PROPERTY_VALUE = "5391"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_PROPERTY_CANNOT_RESOLVE = "5392"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_PROPERTY_IS_AMBIGUOUS = "5393"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PAGEHANDLER_FIELD_PROPERTY_CANNOT_RESOLVE = "5394"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_DATADECLARATION_PROPERTY_MAXSIZE = "5395"; //$NON-NLS-1$			
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_MSG_KEY_INTEGER_PROPERTY_VALUE = "5396"; //$NON-NLS-1$ 			
+		public static final String EGLMESSAGE_INVALID_MARGIN_VALUE = "5397"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_INVALID_MARGINS_VERSES_HEIGHT = "5398"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_INVALID_MARGINS_VERSES_WIDTH = "5399"; //$NON-NLS-1$	
+
+		public static final String EGLMESSAGE_NULL_PAGEHANDLER_FILL_CHAR = "5400"; //$NON-NLS-1$			
+		public static final String EGLMESSAGE_NONBLANK_PAGEHANDLER_FILL_CHAR = "5401"; //$NON-NLS-1$			
+		public static final String EGLMESSAGE_NEWWINDOW_WITHOUT_ACTIONPROGRAM = "5402"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_NON_NUMERIC_SELECTTYPE = "5403"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DISPLAYUSE_BUTTON = "5404"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_BYPASSVALIDATION_IN_PAGEHANDLER = "5405"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PAGEHANDLER_SELECTFROMLIST_PROPERTY_VALUE = "5406"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_DATETIME_PROPERTY_APPLICATION = "5407"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_NOT_SUPPORTED_FOR_DATETIME = "5408"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_FORM_FIELD_TIMESTAMPFORMAT_PROPERTY_VALUE = "5409"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_PAGEHANDLER_SCOPE_PROPERTY_VALUE = "5410"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PART_IN_PROPERTY_UNRESOLVED = "5411"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PART_IN_PROPERTY_AMBIGUOUS = "5412"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PART_IN_PROPERTY_WRONG_RECORD_TYPE = "5413"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_ONLY_VALID_FOR_PRIMITIVE_TYPE = "5414"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_MUST_BE_SERVICE = "5415"; //$NON-NLS-1$
+// 5550-5555 IS IN EGLMESSAGES	
+  		public static final String EGLMESSAGE_PROPERTY_DOESNT_RESOLVE = "5556"; //$NON-NLS-1$
+   		public static final String EGLMESSAGE_PROPERTY_AMBIGUOUS = "5557"; //$NON-NLS-1$
+   		public static final String EGLMESSAGE_PROPERTY_MUST_BE_BASIC_RECORD = "5558"; //$NON-NLS-1$
+   		public static final String EGLMESSAGE_RECORD_CANT_BE_SYSTEM_FUNCTION_RESULT = "5559"; //$NON-NLS-1$
+		
+		//  5600-5699: (for now) Used for Library errors
+		public static final String EGLMESSAGE_LIBRARY_NO_MAIN_FUNCTION_ALLOWED = "5600"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_LIBRARY_QUALIFIED_NAME_NOT_ALLOWED_AS_DECLARATION= "5601"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_LIBRARY_PARAMETER_TYPES_MUST_SPECIFY_LENGTH = "5602"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_LIBRARY_PARAMETER_TYPES_NUMBER_IS_INVALID = "5603"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_LIBRARY_FUNCTION_PARAMETERS_DO_NOT_SUPPORT_NULLABLE_AND_FIELD = "5604"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_NATIVE_LIBRARY_FUNCTION_PARAMETERS_DO_NOT_SUPPORT_REF = "5605"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_NATIVE_LIBRARY_FUNCTION_PARAMETERS_DO_NOT_SUPPORT_ARRAYS = "5606"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_NATIVE_LIBRARY_FUNCTION_PARAMETERS_DO_NOT_SUPPORT_FORMS = "5607"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_NATIVE_LIBRARY_FUNCTION_PARAMETERS_DO_NOT_SUPPORT_RECORDS = "5608"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_NATIVE_LIBRARY_FUNCTION_PARAMETER_HAS_INCORRECT_TYPE = "5609"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_NATIVE_LIBRARY_FUNCTION_PARAMTER_DOES_NOT_RESOLVE = "5610"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_NATIVE_LIBRARY_FUNCTIONS_DO_NOT_SUPPORT_CONSTANT_DECLARATIONS = "5611"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_NATIVE_LIBRARY_FUNCTIONS_DO_NOT_SUPPORT_STATEMENTS = "5612"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_NATIVE_LIBRARY_FUNCTIONS_DO_NOT_SUPPORT_DECLARATIONS = "5613"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_NATIVE_LIBRARYS_DO_NOT_SUPPORT_CONSTANT_DECLARATIONS = "5614"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_NATIVE_LIBRARYS_DO_NOT_SUPPORT_DECLARATIONS = "5615"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_NATIVE_LIBRARYS_DO_NOT_SUPPORT_USE_STATEMENTS = "5616"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_LIBRARY_HAS_INVALID_SUBTYPE = "5617"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_SUBSTRUCTURED_ITEM_CANNOT_BE_ARGUMENT_TO_NATIVE_LIBRARY_FUNCTION = "5618"; //$NON-NLS-1$
+        
+// 6000-6050 ARE IN EGLMESSAGES
+
+		public static final String EGLMESSAGE_EMPTY_SQL_STRING = "6500"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_REQUIRED_SQL_CLAUSE_MISSING = "6501"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_REQUIRED_SQL_COLUMNS_CLAUSE_MISSING = "6502"; //$NON-NLS-1$		 
+		public static final String EGLMESSAGE_SQL_CLAUSES_OUT_OF_ORDER = "6503"; //$NON-NLS-1$				
+		public static final String EGLMESSAGE_SQL_COLUMNS_CLAUSES_OUT_OF_ORDER = "6504"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SQL_COLUMNS_CLAUSES_OUT_OF_ORDER_2 = "6505"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SQL_CLAUSES_DUPLICATED = "6506"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SQL_CLAUSE_UNSUPPORTED = "6507"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CANT_HAVE_BOTH_FORUPDATE_SINGLEROW = "6508"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CANT_HAVE_BOTH_INLINE_SQL_PREPARED_STMT_REF = "6509"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DUPE_OPTION = "6510"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DUPE_CLAUSE = "6511"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_DUPE_INLINE_SQL = "6512"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DUPE_PREPARED_STMT_REFERENCE = "6513"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CANT_HAVE_USING_WITHOUT_PREPARED_STMT_REF = "6514"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CANT_HAVE_FORUPDATE_WITHOUT_SQLRECORD = "6515"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MUST_HAVE_INTO_AND_SQL_INFO = "6516"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FOR_UPDATE_OF_MUST_BE_LAST = "6517"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CANT_HAVE_BOTH_RECORD_FROM_RESULT_SET = "6518"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CANT_HAVE_BOTH_PREVIOUS_FROM_RESULT_SET = "6519"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_CANT_HAVE_BOTH_INTO_CLAUSE_FROM_RESULT_SET = "6520"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_CANT_HAVE_BOTH_INTO_CLAUSE_PREVIOUS = "6521"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CANT_SUBSCRIPT_IO_OBJECT = "6522"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_INVALID_QUALIFIER_FOR_IO_OBJECT = "6523"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_MUST_HAVE_SQLSTMT_OR_FOR_CLAUSE = "6524"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CANT_BE_USED_WITH_CALL = "6525"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CANT_HAVE_INTO_WITH_CALL = "6526"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_MISSING_HOST_VAR_NAME = "6527"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_HOST_VARIABLE_MUST_BE_ITEM = "6528"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_CANT_HAVE_BOTH_USINGKEYS_FORUPDATE = "6529"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_CANT_HAVE_USINGKEYS_WITHOUT_SQLRECORD = "6530"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_CLAUSE_CANT_BE_EMPTY = "6531"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_RESULTSETID_NOT_FOUND = "6532"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_HOST_VARIABLE_NOT_FOUND = "6533"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_HOST_VARIABLE_AMBIGUOUS = "6534"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DUPLICATE_RESULTSETID = "6535"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CONFLICTING_RESULTSET_ID = "6536"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PREPARED_STATEMENT_ID_NOT_FOUND = "6537"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SYSVAR_NOT_HOST_VARIABLE = "6538"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CANT_HAVE_BOTH_SINGLEROW_PREPARED_STMT_ID = "6539"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_ITEM_OR_CONSTANT_NOT_CHARACTER_TYPE = "6540"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PASSING_RECORD_NOT_RECORD = "6541"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_STATEMENT_CANNOT_BE_IN_ACTION_PROGRAM = "6550"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_STATEMENT_CANNOT_BE_IN_ACTION_OR_BASIC_PROGRAM = "6551"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_STATEMENT_CANNOT_BE_IN_LIBRARY = "6552"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_STATEMENT_CANNOT_BE_IN_PAGE_HANDLER = "6553"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_STATEMENT_CANNOT_BE_IN_BASIC_PROGRAM = "6554"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_STATEMENT_CANNOT_BE_IN_BASIC_OR_TEXTUI_PROGRAM = "6555"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_STATEMENT_CANNOT_BE_IN_CALLED_BASIC_OR_CALLED_TEXTUI_PROGRAM = "6556"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_STATEMENT_CANNOT_BE_IN_CALLED_TEXT_UI_PROGRAM = "6557"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_STATEMENT_CAN_ONLY_BE_IN_PAGE_HANDLER = "6558"; //$NON-NLS-1$
+		
+		//6580 - ????: Messages for subscript validation
+		public static final String EGLMESSAGE_NOT_ENOUGH_SUBSCRIPTS = "6580"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TOO_MANY_SUBSCRIPTS = "6581"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SUBSCRIPT_OUT_OF_RANGE = "6582"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SUBSCRIPT_MUST_BE_INTEGER_ITEM = "6583"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DOT_ACCESS_USED_AFTER_DYNAMIC = "6584"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ARRAY_ACCESS_NOT_SUBSCRIPTED = "6585"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_NON_ARRAY_ACCESS_SUBSCRIPTED = "6586"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_EXPRESSION_AS_SUBSCRIPT = "6587"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_NON_DYNAMIC_ACCESS_ACCESSED_DYNAMICALLY = "6588"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_VALUE_MUST_BE_AN_ARRAY = "6589"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_PROPERTY_VALUE_MUST_BE_AN_ARRAY_OF_ARRAYS = "6590"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_SQL_TABLE_NAME_MUST_BE_ARRAY_OF_ARRAYS = "6591"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SQL_TABLE_NAME_VAR_MUST_BE_ARRAY_OF_ARRAYS = "6592"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SQL_TABLE_NAME_VAR_MUST_BE_ITEM = "6593"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SQL_TABLE_NAME_VARIABLE = "6594"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SQL_TABLE_LABEL_TOO_LONG = "6595"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_INVALID_SQL_TABLE_NAME_OR_LABEL = "6596"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SQL_TABLE_NAME_LABEL_VARIABLE_DUPLICATES_CLAUSE = "6597"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_RECORD_NAME_CANNOT_DUPE_SQL_CLAUSE_KEYWORD = "6598"; //$NON-NLS-1$
+		
+		//6599 - Message for data item part validation. Doesn't seem to fit anywhere else 
+		public static final String EGLMESSAGE_DATA_ITEM_TYPE_NOT_PRIMITIVE = "6599"; //$NON-NLS-1$
+				
+		// 6600 - 6800: Messages for statement validation
+		public static final String EGLMESSAGE_VARIABLE_DECLARATION_CANT_BE_IN_BLOCK = "6600"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CONSTANT_DECLARATION_CANT_BE_IN_BLOCK = "6601"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_LABEL_DECLARATION_CANT_BE_IN_BLOCK = "6602"; //$NON-NLS-1$
+
+		// messages for call statement 
+		public static final String EGLMESSAGE_DUPE_CALL_OPTION = "6603"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TOO_MANY_ARGS_ON_CALL = "6604"; //$NON-NLS-1$
+//		public static final String EGLMESSAGE_CANT_HAVE_FUNC_INVOC_ARG_ON_CALL = "6605"; //$NON-NLS-1$	
+//		public static final String EGLMESSAGE_CANT_HAVE_EXPR_ARG_ON_CALL = "6606"; //$NON-NLS-1$		
+//		public static final String EGLMESSAGE_CANT_HAVE_NUMERIC_ARG_ON_CALL = "6607"; //$NON-NLS-1$
+		
+		// messages for return statement				
+		public static final String EGLMESSAGE_RETURN_VALUE_WO_RETURN_DEF = "6608"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_RETURN_DEF_WO_RETURN_VALUE = "6609"; //$NON-NLS-1$	
+
+		// messages for set statement				
+		public static final String EGLMESSAGE_DUPE_STATE_ON_SET = "6610"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_MULTIPLE_COLORS_ON_SET = "6611"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_MULTIPLE_INTENSITY_ON_SET = "6612"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_MULTIPLE_PROTECTION_ON_SET = "6613"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_MULTIPLE_TEXT_FIELD_STATE_ON_SET = "6614"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_EMPTY_AND_INITIAL_ON_SET = "6615"; //$NON-NLS-1$			
+		public static final String EGLMESSAGE_MULTIPLE_HIGHLIGHT_STATE_ON_SET = "6616"; //$NON-NLS-1$	
+		public static final String EGLMESSAGE_UNSUPPORTED_STATE_ON_SET = "6617"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TEXT_FIELD_STATES_WITH_OTHERS_ON_SET = "6618"; //$NON-NLS-1$
+	
+		// general messages related to data access resolution
+		public static final String EGLMESSAGE_VARIABLE_NOT_FOUND = "6619"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_VARIABLE_ACCESS_AMBIGUOUS = "6620"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_VARIABLE_NOT_FOUND_IN_CONTAINER = "6621"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_VARIABLE_NOT_FOUND_AS_ITEM = "6622"; //$NON-NLS-1$
+		
+		// messages for print statement
+		public static final String EGLMESSAGE_PRINT_TARGET_MUST_BE_PRINT_FORM = "6623"; //$NON-NLS-1$
+		
+		// messages for goto statement
+		public static final String EGLMESSAGE_GOTO_LABEL_IS_UNDEFINED = "6624"; //$NON-NLS-1$
+		
+		// messages for label statement
+		public static final String EGLMESSAGE_DUPLICATE_LABEL = "6625"; //$NON-NLS-1$
+		
+		// messages for delete statement
+		public static final String EGLMESSAGE_DELETE_FROM_CLAUSE_WITH_NON_SQL_RECORD = "6626"; //$NON-NLS-1$
+		
+		// messages for exit statement
+		public static final String EGLMESSAGE_EXIT_PROGRAM_LITERAL_NOT_INTEGER = "6627"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_EXIT_PROGRAM_ITEM_NOT_INTEGER = "6628"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_EXIT_STACK_LABEL_NOT_IN_MAIN = "6629"; //$NON-NLS-1$
+		
+		// messages for prepare statement
+		public static final String EGLMESSAGE_DUPLICATE_PREPARED_STATEMENT_ID = "6630"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CONFLICTING_PREPARED_STATEMENT_ID = "6631"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_STATEMENT_TARGET_NOT_SQL_RECORD = "6632"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PREPARE_STATEMENT_FROM_ARGUMENT_NOT_STRING_EXPRESSION = "6633"; //$NON-NLS-1$
+		
+		// messages for replace statement
+		public static final String EGLMESSAGE_NO_RESULT_SET_ID_FOR_MULTIPLE_CURSOR_OPEN = "6634"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SQL_CLAUSES_OR_OPTIONS_ON_REPLACE_WITH_NON_SQL_REC = "6635"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_REPLACE_STATEMENT_TARGET_NOT_RECORD = "6636"; //$NON-NLS-1$
+		
+		// messages for open statement
+		public static final String EGLMESSAGE_OPEN_FORUPDATE_USED_WITH_SQL_CALL = "6637"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD = "6638"; //$NON-NLS-1$
+		
+		// messages for add/add array statements
+		public static final String EGLMESSAGE_ADD_STATEMENT_TARGET_NOT_RECORD = "6639"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ADD_STATEMENT_WITH_USED_WITHOUT_SQL_RECORD = "6640"; //$NON-NLS-1$
+		
+		// messages for get by position statement
+		public static final String EGLMESSAGE_INVALID_CLAUSE_FOR_NON_SQL_TARGET = "6641"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT = "6642"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT_OR_PREVIOUS = "6643"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_GET_BY_POSITION_STATEMENT_TARGET_NOT_RECORD = "6644"; //$NON-NLS-1$
+	
+		// messages for get by key statement
+		public static final String EGLMESSAGE_GET_BY_KEY_STATEMENT_TARGET_NOT_RECORD = "6645"; //$NON-NLS-1$
+	
+		// messages for assignment statement
+		public static final String EGLMESSAGE_CANNOT_MODIFY_CONSTANT = "6646"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_STRINGCONCAT_EXPRESSION_INVALID_EXPR = "6647"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ASSIGNMENT_STATEMENT_INCOMPATIBLE_OPERANDS = "6648"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ASSIGNMENT_STATEMENT_RECORD_TARGET_SOURCE_CANNOT_BE = "6650"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ASSIGNMENT_STATEMENT_RECORD_SOURCE_TARGET_MUST_BE = "6651"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ASSIGNMENT_STATEMENT_MUST_BE_RECORD_OR_ITEM = "6652"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ASSIGNMENT_STATEMENT_TYPE_MISMATCH = "6653"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_MUST_RETURN_TYPE = "6654"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ASSIGNMENT_STATEMENT_VARIABLE_NOT_DEFINED = "6655"; //$NON-NLS-1$
+		
+		// messages for show statement
+		public static final String EGLMESSAGE_INVALID_PACKAGE_NAME = "6656"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SHOW_RETURNING_TO_NOT_PROGRAM_OR_CHARACTER_ITEM = "6657"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SHOW_PASSING_TARGET_NOT_RECORD = "6658"; //$NON-NLS-1$
+		
+		// messages for close statement
+		public static final String EGLMESSAGE_INVALID_CLOSE_TARGET = "6659"; //$NON-NLS-1$ 
+		
+		public static final String EGLMESSAGE_MOVE_STATEMENT_INVALID_TARGET_TYPE = "6660"; //$NON-NLS-1$
+		
+		// messages for converse statement
+		public static final String EGLMESSAGE_INVALID_CONVERSE_TARGET_FOR_ACTION_PROGRAM = "6661"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_CONVERSE_TARGET_FOR_TEXTUI_PROGRAM = "6662"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_NO_SEGMENTED_CONVERSE_IN_CALLED_PROGRAM = "6663"; //$NON-NLS-1$
+		
+		// messages for move statement
+		public static final String EGLMESSAGE_MOVE_STATEMENT_MAY_ONLY_HAVE_ONE_MODIFIER = "6664"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MOVE_STATEMENT_INVALID_SOURCE_TYPE = "6665"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_MOVE_STATEMENT_LITERAL_CANT_MOVE_BY_NAME_OR_BY_POSITION = "6666"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MOVE_STATEMENT_BYNAME_BYPOSITION_ITEM_HAS_NO_SUBSTRUCTURE = "6667"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MOVE_STATEMENT_NONUNIQUE_BYNAME_SOURCE = "6668"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MOVE_STATEMENT_NONUNIQUE_BYNAME_TARGET = "6669"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MOVE_STATEMENT_MULTIDIMENSIONAL_BYNAME_OR_BYPOSITION_SOURCE = "6670"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MOVE_STATEMENT_MULTIDIMENSIONAL_BYNAME_OR_BYPOSITION_TARGET = "6671"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MOVE_STATEMENT_INCOMPATIBLE_TYPES = "6672"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_DATETIME_PARAMETER = "6673"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_FUNCTION_ARG_REQUIRES_IN_PARAMETER = "6674"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_ARG_LITERAL_NOT_VALID_WITH_OUT_PARAMETER = "6675"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_MOVE_STATEMENT_TARGET_WRONG_TYPE_FOR_SCALAR_SOURCE = "6676"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MOVE_STATEMENT_TARGET_WRONG_TYPE_FOR_CONTAINER_SOURCE = "6677"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MOVE_STATEMENT_TARGET_WRONG_TYPE_FOR_ARRAY_SOURCE = "6678"; //$NON-NLS-1$
+		
+		// messages for function invocations
+		public static final String EGLMESSAGE_FUNCTION_REFERENCE_CANNOT_BE_RESOLVED = "6679"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_REFERENCE_AMBIGUOUS = "6680"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_ARGUMENTS_DONT_MATCH = "6681"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_NULLABLE_ARGUMENT_NOT_SQL_ITEM = "6682"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FIELD_ARGUMENT_NOT_FORM_FIELD = "6683"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_STATIC_ARRAY_CANT_BE_ARGUMENT = "6684"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DYNAMIC_ARRAY_CANT_BE_ARGUMENT = "6685"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ARGUMENT_TYPE = "6686"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ARRAY_FUNCTION_USED_WITHOUT_DYNAMIC_ARRAY = "6687"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ARRAY_ELEMENT_ARGUMENT_INCORRECT_TYPE = "6688"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MAXIMUMSIZE_ARGUMENT_INCORRECT = "6689"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SIZE_ARGUMENT_INCORRECT = "6690"; //$NON-NLS-1$
+		
+		
+		// messages for return statement
+		public static final String EGLMESSAGE_RETURN_STATEMENT_TYPE_INCOMPATIBLE = "6691"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_RETURN_EXPRESSION_INVALID = "6692"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_RETURN_TARGET_NOT_ITEM = "6693"; //$NON-NLS-1$
+		
+		// messages for set statement
+		public static final String EGLMESSAGE_INVALID_SET_STATEMENT_DATA_REFERENCE = "6694"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SET_STATE_FOR_ITEM = "6695"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SET_STATE_FOR_SQL_ITEM = "6696"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SET_STATE_FOR_RECORD = "6697"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SET_STATE_FOR_INDEXED_RECORD = "6698"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SET_STATE_FOR_TEXT_FORM = "6699"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SET_STATE_FOR_PRINT_FORM = "6700"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_SET_STATE_FOR_TEXT_FIELD = "6701"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MOVE_BY_POSITION_INCOMPATIBLE_TYPES = "6702"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_SYSTEM_ARGS_ONLY_ITEMS_LITERALS = "6703"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_TO_SET_ITEM_NULL = "6704";
+				
+		// program-context specific messsages for call statement
+		public static final String EGLMESSAGE_INVALID_CALL_ARGUMENT_TYPE = "6705"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CALL_ARGUMENT_REQUIRES_PROGRAM = "6706"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_PROGRAM_ARGS_DONT_MATCH_PARAMS = "6707"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PAGEHANDLER_ARGS_DONT_MATCH_PARAMS = "6708"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FLEXIBLE_RECORD_PASSED_TO_NON_EGL_PROGRAM = "6709"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_USED_LIBRARY_RECORD_USED_FOR_IO = "6710"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_PROGRAM_INPUT_RECORD_DOESNT_MATCH_PARAM = "6711"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FORWARD_TARGET_DOESNT_HAVE_ONPAGELOAD_FUNCTION = "6712"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FLEXIBLE_RECORD_PASSED_TO_NON_EGL_PAGEHANDLER = "6713"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_ARRAYS_AND_OCCURED_ITEMS_ARE_NOT_COMPATIBLE = "6714"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_OCCURED_ITEMS_ONLY_COMPATIBLE_WITH_ANY = "6715"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FUNCTION_ARG_NOT_REFERENCE_COMPATIBLE_WITH_PARM = "6716"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_OCCURED_ITEM_MOVE_OPERAND_NOT_SUBSCRIPTED = "6717"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_NON_CONTAINER_MOVE_OPERAND_MOVED_BY_NAME_OR_POSITION = "6718"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_INVALID_APPENDALL_ARG = "6719"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_FUNCTION_INVOCATION_USED_IN_ISNOT_WITHOUT_NULL = "6720"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_EXPRESSION_IN_ISNOT = "6721"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_FLEXIBLE_RECORD_ARRAYS_MOVED_BYNAME_OR_BYPOSITION = "6722"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROGRAM_INPUT_UIRECORD_DOESNT_MATCH_PARAM = "6723"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_RECORD_TYPE_FOR_ARRAY = "6724"; //$NON-NLS-1$
+	
+		//7500-7599: Used for VAGCompatability messages		
+		public static final String EGLMESSAGE_PRIMITIVE_TYPE_ONLY_VALID_IF_VAGCOMPATIBLE = "7500"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CALL_OPTIONS_ONLY_VALID_IF_VAGCOMPATIBLE = "7501"; //$NON-NLS-1$
+		
+		// messages for display statement
+		public static final String EGLMESSAGE_STATEMENT_TARGET_MUST_BE_TEXT_FORM = "7502"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_STATEMENT_TARGET_MUST_BE_FORM = "7503"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_STATEMENT_TARGET_MUST_BE_PRINT_FORM = "7504"; //$NON-NLS-1$		
+		
+		// messages for forwad statement
+		public static final String EGLMESSAGE_FORWARD_STATEMENT_CANNOT_CONTAIN_RETURNING_TO = "7505"; //$NON-NLS-1$		 
+		 
+		// messages for transfer statement
+		public static final String EGLMESSAGE_TRANSFER_TO_TRANSACTION_NOT_ALLOWED = "7506"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_SHOW_STATEMENT_TARGET_WRONG_TYPE = "7507"; //$NON-NLS-1$
+		
+		// messages for set values block
+		public static final String EGLMESSAGE_POSITIONAL_PROPERTY_NOT_VALID_FOR = "7510"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SET_VALUES_BLOCK_NOT_VALID_AS_FUNC_ARG = "7511"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SET_VALUES_BLOCK_OR_CONSTRUCTOR_NOT_VALID_AS_CONDITIONAL_OPERAND = "7512"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SET_VALUES_BLOCK_NOT_VALID_AS_CASE_CRITERION = "7513"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SET_VALUES_BLOCK_NOT_VALID_AS_WHEN_CLAUSE = "7514"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SET_VALUES_BLOCK_NOT_VALID_AS_CALL_ARG = "7515"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SET_VALUES_BLOCK_NOT_VALID_AS_RETURN_ARG = "7516"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SET_VALUES_BLOCK_NOT_VALID_HERE = "7517"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_THISARRAY_ONLY_IN_SET_VALUES_BLOOCK = "7518"; //$NON-NLS-1$
+
+		public static final String EGLMESSAGE_ARG_MUST_BE_MATH_NUMERIC_ITEM = "7550"; //$NON-NLS-1$		 
+		public static final String EGLMESSAGE_ARG_MUST_BE_MATH_INTEGER_ITEM = "7551"; //$N
+		public static final String EGLMESSAGE_ARG_MUST_BE_NUMERIC_ITEM_CONSTANT_OR_LITERAL = "7552"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG_MUST_BE_STRING_ITEM_CONSTANT_OR_LITERAL = "7553"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG_MUST_BE_STRING_CONSTANT_OR_LITERAL = "7554"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG_MUST_BE_NUMERIC_EXPRESSION = "7555"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG_MUST_BE_STRING_EXPRESSION = "7556"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG_MUST_BE_INTEGER_EXPRESSION = "7557"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ARG_MUST_HAVE_NO_DECIMALS = "7558"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_DATETIME_LITERAL_CANNOT_START_OR_END_WITH_DELIM = "7600"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TIMESTAMP_LITERAL_YEAR_FIELD_TOO_LONG = "7615"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TIMESTAMP_LITERAL_MONTH_FIELD_TOO_LONG = "7616"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TIMESTAMP_LITERAL_DAY_FIELD_TOO_LONG = "7617"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TIMESTAMP_LITERAL_HOUR_FIELD_TOO_LONG = "7618"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TIMESTAMP_LITERAL_MINUTES_FIELD_TOO_LONG = "7619"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TIMESTAMP_LITERAL_SECONDS_FIELD_TOO_LONG = "7620"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TIMESTAMP_LITERAL_SECOND_FRACTIONS_FIELD_TOO_LONG = "7621"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_DATETIME_PATTERN_HAS_INVALID_CHARACTER = "7625"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATETIME_PATTERN_OUT_OF_ORDER = "7626"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATETIME_PATTERN_YEAR_FIELD_TOO_LONG = "7627"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATETIME_PATTERN_MONTH_FIELD_TOO_LONG = "7628"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATETIME_PATTERN_DAY_FIELD_TOO_LONG = "7629"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATETIME_PATTERN_HOUR_FIELD_TOO_LONG = "7630"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATETIME_PATTERN_MINUTES_FIELD_TOO_LONG = "7631"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATETIME_PATTERN_SECONDS_FIELD_TOO_LONG = "7632"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATETIME_PATTERN_SECOND_FRACTIONS_FIELD_TOO_LONG = "7633"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATETIME_PATTERN_MISSING_INTERMEDIATE_FIELD = "7634"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATETIME_PATTERN_EMPTY = "7635"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATETIME_PATTERN_INVALID_INTERVAL_SPAN = "7636"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TIMESTAMP_LITERAL_MUST_BE_PATTERN_LENGTH = "7637"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TIMESTAMP_LITERAL_MUST_HAVE_AS_MANY_FIELDS_AS_PATTERN = "7638"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TIMESTAMP_LITERAL_YEAR_FIELD_DOESNT_MATCH_PATTERN = "7639"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TIMESTAMP_LITERAL_MONTH_FIELD_DOESNT_MATCH_PATTERN = "7640"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TIMESTAMP_LITERAL_DAY_FIELD_DOESNT_MATCH_PATTERN = "7641"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TIMESTAMP_LITERAL_HOUR_FIELD_DOESNT_MATCH_PATTERN = "7642"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TIMESTAMP_LITERAL_MINUTES_FIELD_DOESNT_MATCH_PATTERN = "7643"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TIMESTAMP_LITERAL_SECONDS_FIELD_DOESNT_MATCH_PATTERN = "7644"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TIMESTAMP_LITERAL_SECOND_FRACTIONS_FIELD_DOESNT_MATCH_PATTERN = "7645"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATETIME_LITERAL_MONTH_OUT_OF_RANGE = "7646"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATETIME_LITERAL_DAY_OUT_OF_RANGE = "7647"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATETIME_LITERAL_HOUR_OUT_OF_RANGE = "7648"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATETIME_LITERAL_MINUTE_OUT_OF_RANGE = "7649"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DATETIME_LITERAL_SECOND_OUT_OF_RANGE = "7650"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_EXTEND_TIMESTAMP_VALUE_ARGUMENT_WRONG_TYPE = "7651"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FORMAT_DATE_ARGUMENT1_WRONG_TYPE = "7652"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FORMAT_TIME_ARGUMENT1_WRONG_TYPE = "7653"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FORMAT_TIMESTAMP_ARGUMENT1_WRONG_TYPE = "7654"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_DUPLICATE_PROPERTY_VALUES_FOR_OUTLINE_PROPERTY = "7660"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_CONSTANT_PROPERTY_VALUES_FOR_OUTLINE_PROPERTY = "7661"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_PROPERTY_KEY_ITEMS_MUST_BE_STRING = "7662"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_PROPERTY_VALIDVALUES_INVALID_FORMAT = "7670"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_VALIDVALUES_INVALID_RANGE_VALUE = "7671"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_VALIDVALUES_INVALID_VALUE_TYPE = "7672"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_CONSOLEFIELD_DECLARATIONS_ONLY_ALLOWED_IN_CONSOLEFORMS = "7710"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ONLY_DATAITEMS_ALLOWED_AS_PARAMETER_OR_RETURN_IN_REPORTHANDLER = "7711"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_READONLY_FIELD_CANNOT_BE_ASSIGNED_TO = "7740"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_READONLY_FIELD_CANNOT_BE_PASSED_TO_OUT_PARM = "7741"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_BOOLEAN_EXPRESSION_AS_ARG_FOR_INVALID_FUNCTION = "7742"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_NON_BOOLEAN_EXPRESSION_AS_ARG_FOR_CONDITIONASINT = "7743"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CANNOT_ASSIGN_TO_ARRAY_DICTIONARY_ELEMENTS = "7744"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_INTO_ITEM_FOR_GET_SQL_RECORD_ARRAY="7745"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_UNSUPPORTED_FIELD_IN_COMPLEX_ANNOTATION = "7746"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INVALID_ELEMENT_FOR_ANNOTATION_ARRAY_PROPERTY = "7747"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_REQUIRED_FIELD_IN_COMPLEX_ANNOTATION = "7748"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FIELD_X_REQUIRES_FIELD_Y_SPECIFICATION = "7749"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_ANNOTATION_REQUIRES_ONE_OF = "7751"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INITIALIZERS_NOT_ALLOWED_IN_DATA_TABLE = "7752"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_INITIALIZERS_ONLY_ALLOWED_ON_LEAF_ITEMS = "7753"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_LOCAL_REFERENCE_VARIABLES_CANNOT_BE_USED_IN_ONEVENT_BLOCK = "7754"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_UNREACHABLE_CODE = "7755"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_NON_MULTIPLY_OCCURING_ITEM_CANNOT_BE_INITIALIZED_WITH_ARRAY = "7756"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_TOO_MANY_ELEMENTS_IN_STRUCTURE_ITEM_ARRAY_INITIALIZER = "7757"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_GOTO_STATEMENT_NOT_ALLOWED_IN_ONEVENT_BLOCK = "7759"; //$NON-NLS-1$		
+		public static final String EGLMESSAGE_SETLOCALE_CANNOT_BE_USED_IN_VGWEBTRANSACTION = "7760"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_RUNTIME_NAME_OF_WEB_PROGRAM_EXCEEDS_8_CHARACTERS = "7761"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_INVALID_TYPE_IN_VGUIRECORD = "7770"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PARAMETERS_NOT_VALID_FOR_WEBPROGRAM = "7771"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_USE_FORMGROUP_NOT_VALID_IN_WEBPROGRAM = "7772"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ARRAY_OF_UIRECORDS_NOT_ALLOWED = "7773"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CLOSE_PRINTFORM_NOT_ALLOWED_IN_WEB_TRANSACTION = "7774"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_VGWEBTRANSACTION_NOT_VALID_TRANSER_TO_TRANSACTION_TARGET = "7775"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_BAD_TYPE_FOR_TRANSFER_TO_PROGRAM_IN_VGWEBTRANSACTION = "7776"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FORWARD_TO_URL_TARGET_MUST_BE_CHARACTER = "7777"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ARGUMENTS_NOT_ALLOWED_ON_FORWARD_TO_URL = "7778"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SHOW_UIRECORD_ONLY_VALID_IN_VGWEBTRANSACTION = "7779"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FIXED_RECORD_ITEM_INITIALIZERS_MUST_BE_LITERAL_VALUES = "7780"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_MULTI_DIMENSIONAL_MULTI_OCCURING_ITEMS_NOT_ALLOWED_IN_VGUIRECORD = "7781"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_ITEM_NAMES_MUST_BE_UNIQUE_IN_VGUIRECORD = "7782"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_COMMAND_VALUE_ITEM_PROPERTY_VALUE_CANNOT_EQUAL_RECORD_NAME = "7783"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_COMMAND_VALUE_ITEM_ITEM_WRONG_TYPE = "7784"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_NOT_ALLOWED_WITH_UITYPE_OF = "7785"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_CONFLICT_WITH_NUMELEMENTSITEM_COMMANDVALUEITEM_SELECTEDINDEXITEM_ITEMNAME = "7786"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_ONLY_APPLICABLE_TO_MULTIPLY_OCCURING_ITEMS = "7787"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_REFERENCE_MUST_BE_NUMERIC_WITH_NO_DECIMALS = "7788"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_REFERENCE_CANNOT_BE_MUTLIPLY_OCCURING = "7789"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_SELECTEDINDEXITEM_REFERENCE_MUST_HAVE_SAME_NUMBER_OF_OCCURS = "7790"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_REQUIRED_WHEN_UITYPE_IS_PROGRAMLINK_OR_UIFORM = "7791"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_FILLER_ITEMS_REQUIRE_UITYPE_NONE = "7792"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_NOT_VALID_WITH_ANY_OF_PROPERTIES = "7793"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_PROPERTY_ONLY_VALID_FOR_CHARACTER_PRIMITIVE = "7794"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_UITYPE_OF_REQUIRES_PRIMITIVE_TYPE_OF = "7795"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_VALIDATION_ORDER_VALUES_MUST_START_AT_ONE = "7796"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_VALIDATION_ORDER_VALUES_MUST_BE_CONTINUOUS = "7797"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_VALUEREF_VALUE_CANNOT_BE_QUALIFIED_OR_SUBSCRIPTED = "7798"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_VALUEREF_NOT_RESOLVED = "7799"; //$NON-NLS-1$
+		
+		public static final String EGLMESSAGE_INTERFACE_IS_AMBIGUOUS = "7800";
+		public static final String EGLMESSAGE_SERVICE_MUST_IMPLEMENT_AN_INTERFACE = "7801";
+		public static final String EGLMESSAGE_SERVICE_CANNOT_BE_USED_BY_SERVICE = "7802";
+		public static final String EGLMESSAGE_LOOSE_TYPES_NOT_ALLOWED_IN_SERVICE_OR_INTERFACE_FUNC_PARM = "7803";
+		public static final String EGLMESSAGE_TYPE_NOT_ALLOWED_IN_SERVICE_OR_INTERFACE_FUNC_PARM = "7804";
+		public static final String EGLMESSAGE_TYPE_NOT_ALLOWED_AS_SERVICE_OR_INTERFACE_FUNC_RETURN = "7805";
+		public static final String EGLMESSAGE_FIELD_NOT_ALLOWED_IN_SERVICE_OR_INTERFACE_FUNC_PARM = "7806";
+		public static final String EGLMESSAGE_STATIC_FUNCTIONS_ONLY_ALLOWED_IN_JAVAOBJECT_INTERFACE = "7807";
+		public static final String EGLMESSAGE_EXTENDS_CLAUSE_ONLY_ALLOWED_IN_JAVAOBJECT_INTERFACE = "7808";
+		public static final String EGLMESSAGE_INTERFACE_MUST_EXTEND_AN_INTERFACE = "7809";
+		public static final String EGLMESSAGE_INTERFACE_FUNCTION_CANNOT_BE_PRIVATE = "7810";		
+		public static final String EGLMESSAGE_SERVICE_CANNOT_USE_FORM_GROUP = "7811";
+		public static final String EGLMESSAGE_OVERRIDEN_FUNCTION_PARAMETERS_DONT_MATCH = "7812";
+		public static final String EGLMESSAGE_OVERRIDEN_RETURN_TYPES_DONT_MATCH = "7813";
+		public static final String EGLMESSAGE_FUNCTIONS_NOT_ALLOWED_IN_SERVICEBINDINGLIBRARY = "7814";
+		public static final String EGLMESSAGE_TWO_PROPERTIES_ARE_MUTUALLY_EXCLUSIVE = "7815";
+		public static final String EGLMESSAGE_PROPERTY_ONLY_ALLOWED_IN_SERVICEBINDINGLIBRARY = "7816";
+		public static final String EGLMESSAGE_PROPERTY_XSD_BASE_NOT_COMPATIBLE_WITH_PRIMITIVE = "7817";
+		public static final String EGLMESSAGE_PROPERTY_XSD_BASE_NEEDS_ARRAY_OF_PRIMITIVES = "7818";
+		public static final String EGLMESSAGE_SERVICE_OR_INTERFACE_CANNOT_BE_CALL_PARM = "7819";
+		public static final String EGLMESSAGE_SERVICE_OR_INTERFACE_ARRAYS_NOT_SUPPORTED = "7820";
+		public static final String EGLMESSAGE_VIEWROOTVAR_NOT_FOUND = "7821";
+		public static final String EGLMESSAGE_VIEWROOTVAR_NOT_JAVAOBJECT_INTERFACE = "7822";
+		public static final String EGLMESSAGE_RECORDS_CANNOT_BE_PARAMETERS_IN_JAVAOBJECT_INTERFACE = "7823";
+		public static final String EGLMESSAGE_IN_MODIFIER_REQUIRED_FOR_PRIMITIVE_JAVAOBJECT_FUNCTION_PARAMETERS = "7824";
+		public static final String EGLMESSAGE_NEW_NOT_SUPPORTED_FOR_SERVICE_OR_INTERFACE = "7825";
+		public static final String EGLMESSAGE_BOOLEAN_PRIMITIVE_ONLY_ALLOWED_IN_JAVAOBJECT_INTERFACE = "7826";
+		public static final String EGLMESSAGE_ISLASTPARAMETERRETURNVALUE_SPECIFIED_WITH_RETURNS_FUNCTION = "7827";
+		public static final String EGLMESSAGE_ISLASTPARAMETERRETURNVALUE_SPECIFIED_WHEN_LAST_PARM_IS_NOT_OUT = "7828";
+		public static final String EGLMESSAGE_OUT_SERVICE_PARAM_DECLARED_BEFORE_IN_OR_INOUT_PARAM = "7829";
+		
+		public static final String EGLMESSAGE_DLI_SEGMENT_IO_INVALID_IN = "7840";
+				
+		public static final String EGLMESSAGE_PSB_PROPERTY_VALUE_NOT_PSB_RECORD = "7850";
+		public static final String EGLMESSAGE_DLI_NAME_TOO_LONG = "7851";
+		public static final String EGLMESSAGE_DLI_NAME_BAD_FIRST_CHAR = "7852";
+		public static final String EGLMESSAGE_DLI_NAME_BAD_CHAR = "7853";
+		public static final String EGLMESSAGE_PCBS_DECLARED_OUT_OF_ORDER_X_AFTER_Y = "7854";
+		public static final String EGLMESSAGE_FIELD_NOT_ALLOWED_FOR_PCBTYPE = "7855";
+		public static final String EGLMESSAGE_FIELD_NOT_ALLOWED_FOR_PCBTYPE_WHEN_ITEM_IS_ELAWORK_OR_ELAMSG = "7856";
+		public static final String EGLMESSAGE_BOTH_PROPERTIES_REQUIRED_IF_ONE_SPECIFIED = "7857";
+
+		public static final String EGLMESSAGE_FIRST_PCB_HIERARCHY_ENTRY_HAS_PARENTRECORD = "7858";
+		public static final String EGLMESSAGE_NOT_FIRST_PCB_HIERARCHY_ENTRY_MISSING_PARENTRECORD = "7859";
+		public static final String EGLMESSAGE_SEGMENTRECORD_AND_PARENTRECORD_CANNOT_BE_SAME = "7860";
+		public static final String EGLMESSAGE_LOOP_IN_DLI_SEGMENT_RECORD_HIERARCHY = "7861";
+		public static final String EGLMESSAGE_MORE_THAN_FIFTEEN_LEVELS_IN_SEGMENT_RECORD_HIERARCHY = "7862";
+		public static final String EGLMESSAGE_PARENTRECORD_MISSING_FROM_HIERARCHICAL_PATH_OF_PCB = "7863";
+		public static final String EGLMESSAGE_KEYITEM_NOT_VALID_DLINAME_SO_MUST_DEFINE_DLIFIELDNAME = "7865";
+		public static final String EGLMESSAGE_PROPERTY_KEY_ITEM_MUST_BE_IN_DLISEGMENT = "7866";
+		public static final String EGLMESSAGE_SEGMENTRECORD_NOT_VALID_DLINAME_SO_MUST_DEFINE_SEGMENTNAME = "7867";
+		public static final String EGLMESSAGE_ISNOT_STATE_NOT_VALID_FOR_DLISEGMENT = "7868";
+		public static final String EGLMESSAGE_MULTIPLE_TARGETS_MUST_ALL_BE_DLISEGMENT_SCALARS = "7869";
+		public static final String EGLMESSAGE_IO_CLAUSE_REQUIRES_DLISEGMENT_TARGET = "7870";
+		public static final String EGLMESSAGE_USINGPCB_ITEM_NOT_IN_PROGRAM_PSB = "7871";
+		public static final String EGLMESSAGE_FORUPDATE_NOT_ALLOWED_WITH_ARRAY_TARGET = "7872";
+		public static final String EGLMESSAGE_ONLY_NEXT_DIRECTIVE_ALLOWED_WITH_DLISEGMENT = "7873";
+		public static final String EGLMESSAGE_PCB_PROPERTY_REQUIRED_FOR_PSB_ITEMS = "7874";
+		public static final String EGLMESSAGE_LEVEL_NUMBERS_NOT_ALLOWED_IN_RECORD = "7875";
+		public static final String EGLMESSAGE_ARRAYS_NOT_VALID_IN_PSB = "7876";
+        public static final String EGLMESSAGE_DLI_SEGMENT_NAME_IS_INVALID = "7877"; //$NON-NLS-1$
+		public static final String EGLMESSAGE_DLI_FIELD_NAME_IS_INVALID = "7878"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_FUNCTION_TYPE_IS_INVALID_FOR_STATEMENT = "7879"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_GET_FORUPDATE_HAS_INVALID_FUNCTION_TYPE = "7880"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_GET_BY_POSITION_INPARENT_HAS_INVALID_FUNCTION_TYPE = "7881"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_GET_BY_POSITION_INPARENT_AND_FORUPDATE_HAS_INVALID_FUNCTION_TYPE = "7882"; //$NON-NLS-1$	
+        public static final String EGLMESSAGE_DUPLICATE_RELATIONSHIP_IN_HIERARCHY = "7883"; //$NON-NLS-1$  
+        public static final String EGLMESSAGE_DLI_GET_BY_KEY_SECOND_STATEMENT_FUNCTION_CODE_INVALID = "7884"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_ONLY_ONE_DLI_CALL_UNLESS_TARGET_IS_ARRAY = "7885"; //$NON-NLS-1$ 
+        public static final String EGLMESSAGE_DLI_TOO_MANY_CALLS_FOR_GETBYKEY = "7886"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_GET_BY_KET_MUST_HAVE_TWO_DLI_CALLS_IF_TARGET_IS_ARRAY = "7887"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_INVALID_COMMAND_CODE_FOR_CALL = "7888"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_MAX_NUMBER_COMMAND_CODES_EXCEEDED = "7889"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_COMMAND_CODES_INCOMPATIBLE = "7890"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_COMMAND_CODE_REPEATED = "7891"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_ONLY_ONE_COMMAND_CODE_SUPPORTED = "7892"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_INVALID_COMMAND_CODE_FOR_CALL_WITH_ARRAY = "7893"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_ONLY_ONE_C_COMMAND_CODE_ALLOWED = "7894"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_NO_CONDITIONS_WITH_C_COMMAND_CODE = "7895"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_COMMAND_CODE_C_CANNOT_FOLLOW_COMMAND_CODE_D = "7896"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_NO_QUALIFIED_SSA_CANNOT_FOLLOW_COMMAND_CODE_D = "7897"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_MODIFIED_CALL_MUST_BE_SPECIFIED = "7898"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_PARSE_ERROR = "7899"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_TOO_MANY_CALLS = "7900"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_VALUES_CLAUSE_MUST_FOLLOW_C = "7901"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_ONLY_VALID_IN_PROGRAM = "7902"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_PROGRAM_MUST_HAVE_DLI = "7903"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_NO_PCB_FOR_SEGMENT = "7904"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_LAST_SSA_WRONG_NAME = "7905"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_SSAS_MUST_FOLLOW_HIERARCHY = "7906"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_DUPLICATE_SSA = "7907"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_SEGMENT_NOT_IN_PCB = "7908"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_TARGETS_MUST_FOLLOW_HIERARCHY = "7909"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_MUST_BE_AN_SSA_FOR_EACH_TARGET = "7910"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_D_COMMAND_CODE_MUST_BE_ON_FIRST_SSA = "7911"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_ADD_TARGETS_MUST_FOLLOW_HIERARCHY = "7912"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_ONLY_ONE_SSA_ALLOWED_FOR_CALL = "7913"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_MUST_BE_AN_SSA_FOR_EACH_SEGMENT_TO_ROOT = "7914"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_SEGMENT_NOT_IN_HIERARCHY = "7915"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_ONLY_ONE_SSA_ALLOWED_FOR_SECOND_STMT = "7916"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_NO_CONDITIONS_FOR_REPL = "7917"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_NO_PCB_FOR_SEGMENTS = "7918"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_D_COMMAND_CODE_MUST_HAVE_TARGET = "7919"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_PCB_IS_GSAM_PCB = "7920"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_NO_HIERARCHY_NO_DEFAULT_SSAS = "7921"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_NEED_AT_LEAST_1_SSA = "7922"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_IO_NOT_ALLOWED_UNLESS_PSB_PROPERTY_DEFINED = "7923"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_PCB_IS_NOT_DECLARED_IN_PROGRAM_PARM_LIST = "7924"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_PCB_PARM_LIST_IS_TOO_LARGE = "7925"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_ONLY_FIXED_RECORDS_ALLOWED_IN_PSBRECORD = "7926"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_SPECIAL_PSB_NAME_REQUIRES_SPECIFIC_PCBTYPE = "7927"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_PCB_PARM_REQUIRES_PSB_PROPERTY = "7928"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_PCB_PARAMETER_REQUIRES_DLI_PROPERTY_ON_PROGRAM = "7929"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_PSBRECORD_NOT_VALID_AS_ARGUMENT = "7930"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_PSBRECORD_NOT_VALID_AS_PARAMETER = "7931"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_PSBRECORD_NOT_VALID_AS_STATEMENT_OPERAND = "7932"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_PSBRECORD_NOT_VALID_AS_PASSING_ITEM = "7933"; //$NON-NLS-1$        
+        public static final String EGLMESSAGE_DLI_ITEM_MUST_RESOLVE_TO_PCB_IN_PROGRAM_PSB_OR_PARM_LIST = "7934"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_IO_ONLY_ALLOWED_IN_PROGRAM_WITH_DLI = "7935"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_ILLEGAL_CODE_MODIFIER = "7936"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_NO_CODE_MODIFIER = "7937"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_INVALID_CODE_MODIFIER = "7938"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_PSBPARM_NOT_PROGRAM_PARAMETER = "7939"; //$NON-NLS-1$        
+        public static final String EGLMESSAGE_DLI_TARGETS_INVALID = "7940"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_DEFAULT_PCB_NOT_FOUND = "7941"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_PCB_NOT_FOUND = "7942"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_TARGET_MUST_BE_DLISEGMENT = "7943"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_TARGETS_MUST_BE_DLISEGMENT = "7944"; //$NON-NLS-1$
+        public static final String EGLMESSAGE_DLI_RELATIONSHIP_NOT_FOUND = "7945"; //$NON-NLS-1$
+
+        
+//8000 AND UP IS IN EGLMESSGES
+
+}
+
