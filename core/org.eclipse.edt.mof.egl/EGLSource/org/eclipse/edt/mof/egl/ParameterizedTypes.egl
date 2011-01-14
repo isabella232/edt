@@ -1,0 +1,38 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.mof.egl;
+
+import egl.core.reflect.TypeRef;
+import egl.lang.reflect.mof.MofClass;
+
+externalType ParameterizedType extends EGLType type MofClass {isAbstract=yes}
+	parameterizableType TypeRef;
+end
+
+externalType SequenceType extends ParameterizedType type MofClass
+	length int;
+end
+
+externalType FixedPrecisionType extends ParameterizedType type MofClass
+	length int;
+	decimals int;
+end
+
+externalType PatternType extends ParameterizedType type MofClass {isAbstract=yes}
+	pattern string;
+end
+
+externalType TimestampType extends PatternType type MofClass
+end
+
+externalType IntervalType extends PatternType type MofClass
+end

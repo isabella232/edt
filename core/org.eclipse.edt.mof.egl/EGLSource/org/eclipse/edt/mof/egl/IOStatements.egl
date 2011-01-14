@@ -1,0 +1,84 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.mof.egl;
+
+import egl.lang.reflect.mof.Containment;
+import egl.lang.reflect.mof.MofClass;
+import egl.lang.reflect.mof.MofEnum;
+import egl.lang.reflect.mof.MofName;
+
+externalType IOStatement extends Statement type MofClass{isAbstract=true}
+	targets Expression[] {containment=true};
+	dataSource Expression {containment=true};
+	usingExpressions Expression[] {containment=true};
+	usingKeyExpressions Expression[] {containment=true};
+	
+	function getTarget() returns (Expression);
+end
+
+externalType AddStatement extends IOStatement type MofClass
+end
+
+externalType CloseStatement extends IOStatement type MofClass
+end
+
+externalType ConverseStatement extends IOStatement type MofClass
+end
+
+externalType DeleteStatement extends IOStatement type MofClass 
+end
+
+externalType DisplayStatement extends IOStatement type MofClass
+end
+
+externalType ExecuteStatement extends IOStatement type MofClass
+end
+
+externalType GetByKeyStatement extends IOStatement type MofClass
+end
+
+enumeration GetByPositionKind {@MofEnum}
+	_NEXT,
+	_PREVIOUS,
+	_FIRST,
+	_LAST,
+	_CURRENT,
+	_ABSOLUTE
+end
+
+externalType GetByPositionStatement extends IOStatement type MofClass
+	directive GetByPositionKind;
+	position Expression {containment=true};
+
+	function getDirectiveString() returns(string);
+end
+
+externalType OpenStatement extends IOStatement type MofClass
+end
+
+externalType OpenUIStatement extends IOStatement type MofClass
+end
+
+externalType PrepareStatement extends IOStatement type MofClass
+end
+
+externalType ReplaceStatement extends IOStatement type MofClass
+end
+
+externalType ShowStatement extends IOStatement type MofClass
+	passingExpr Expression {mofName="passing", containment=true};
+	returnTo Expression {containment=true};
+	
+	function getLinkageKey() returns(string);
+	function isExternal() returns(boolean);
+end
+

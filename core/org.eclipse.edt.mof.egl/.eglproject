@@ -1,0 +1,12 @@
+<resource name="org.eclipse.edt.mof.egl">
+	<storedValue key="DefaultBuildDescriptorJavaScriptTargetPath" value="org.eclipse.edt.mof.egl/EGLSource/com_ibm_egl_model_api.eglbld"/>
+	<storedValue key="DefaultBuildDescriptorJavaScriptDebugPath" value="org.eclipse.edt.mof.egl/EGLSource/com_ibm_egl_model_api.eglbld"/>
+	<storedValue key="EGLProjectMigrationVersion" value="7.5.0"/>
+	<storedValue key="DefaultBuildDescriptorJavaDebugName" value="com_ibm_egl_model_api_Java"/>
+	<storedValue key="DefaultBuildDescriptorJavaTargetPath" value="org.eclipse.edt.mof.egl/EGLSource/com_ibm_egl_model_api.eglbld"/>
+	<storedValue key="EGLProjectFeatureMask" value="4"/>
+	<storedValue key="DefaultBuildDescriptorJavaScriptDebugName" value="com_ibm_egl_model_api_JavaScript"/>
+	<storedValue key="DefaultBuildDescriptorJavaScriptTargetName" value="com_ibm_egl_model_api_JavaScript"/>
+	<storedValue key="DefaultBuildDescriptorJavaTargetName" value="com_ibm_egl_model_api_Java"/>
+	<storedValue key="DefaultBuildDescriptorJavaDebugPath" value="org.eclipse.edt.mof.egl/EGLSource/com_ibm_egl_model_api.eglbld"/>
+</resource>

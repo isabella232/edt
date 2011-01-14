@@ -1,0 +1,237 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.mof.egl;
+
+import egl.lang.reflect.mof.Containment;
+import egl.lang.reflect.mof.MofClass;
+import egl.lang.reflect.mof.MofName;
+import egl.lang.reflect.mof.Transient;
+
+externalType Expression extends Element type MofClass {
+	isAbstract=true
+}
+	function getType() returns (EGLType);
+end
+
+externalType Literal extends Expression type MofClass { isAbstract=true }
+end
+
+externalType PrimitiveTypeLiteral extends Literal type MofClass
+	value string;
+	
+	function getObjectValue();
+end
+
+externalType BooleanLiteral extends PrimitiveTypeLiteral type MofClass
+end
+
+externalType NumericLiteral extends PrimitiveTypeLiteral type MofClass {isAbstract=yes}
+	isNegated boolean;
+end
+
+externalType IntegerLiteral extends NumericLiteral type MofClass
+end
+
+externalType FloatingPointLiteral extends NumericLiteral type MofClass
+end
+
+externalType DecimalLiteral extends NumericLiteral type MofClass
+end
+
+externalType TextTypeLiteral extends PrimitiveTypeLiteral type MofClass
+	isHex boolean;
+end
+
+externalType StringLiteral extends TextTypeLiteral type MofClass
+end
+
+externalType MBCharLiteral extends TextTypeLiteral type MofClass
+end
+
+externalType DBCharLiteral extends TextTypeLiteral type MofClass
+end
+
+externalType CharLiteral extends TextTypeLiteral type MofClass
+end
+
+externalType HexLiteral extends PrimitiveTypeLiteral type MofClass
+end
+
+externalType NullLiteral extends Literal type MofClass
+end
+
+externalType ArrayLiteral extends Literal type MofClass
+	entries Expression[] {containment=true};
+end
+
+externalType LHSExpr extends Expression type MofClass { isAbstract=yes, isInterface=yes }
+end
+
+externalType Name extends Expression, LHSExpr type MofClass{ isAbstract=yes }
+	id string;
+
+	function getNameComponents() returns(string[]);
+	function getBoundElement() returns(Element);
+end
+
+externalType InvalidName extends Name type MofClass
+end
+
+externalType DanglingReference extends MemberAccess type MofClass
+end
+
+externalType MemberName extends Name type MofClass
+	member Member;
+end
+
+externalType TypeName extends Name type MofClass
+	_type EGLType {transient=true, mofName="type"};
+	function getFullyQualifiedName() returns(string);
+end
+
+externalType PartName extends TypeName type MofClass
+	packageName string;
+	
+	function getPart() returns(Part);
+end
+
+externalType MemberAccess extends Name type MofClass
+	member Member {transient=true};
+	qualifier Expression {containment=true};
+end
+
+externalType TopLevelFunctionName extends PartName type MofClass
+end
+
+externalType ThisExpression extends Expression type MofClass
+	thisObject Element;
+end
+
+externalType SetValuesExpression extends Expression type MofClass
+	target Expression {containment=true};
+	settings StatementBlock {containment=true};
+end
+
+externalType SystemFunctionArgumentMnemonicName extends Name type MofClass
+end
+
+externalType BinaryExpression extends Expression type MofClass
+	LHS Expression {containment=yes};
+	RHS Expression {containment=yes};
+	operator string;
+	operation EGLOperation {transient=true};
+end
+
+externalType UnaryExpression extends Expression type MofClass
+	expression Expression {containment=yes};
+	operator string;
+	operation EGLOperation {transient=true};
+end
+
+externalType ArrayElementMemberAccess extends MemberAccess type MofClass
+end
+
+externalType DynamicAccess extends Expression, LHSExpr type MofClass
+	access Expression {containment=true};
+	expression Expression {containment=true};	
+end
+
+externalType Assignment extends Expression type MofClass
+	LHS LHSExpr {containment=true};
+	RHS Expression {containment=true};
+end
+
+externalType ArrayAccess extends Expression, LHSExpr type MofClass
+	array Expression {containment=true};
+	index Expression {containment=true};
+end
+
+externalType InvocationExpression extends Expression type MofClass { isAbstract=true }
+	id string;
+	arguments Expression[] {containment=true};
+	
+	function getTarget() returns(InvocableElement);
+end
+
+externalType NewExpression extends InvocationExpression type MofClass 
+	target EGLConstructor {transient=true};
+end
+
+externalType FunctionInvocation extends InvocationExpression type MofClass
+	target FunctionMember;
+
+	function getFunction() returns(FunctionMember);
+end
+
+externalType DelegateInvocation extends InvocationExpression type MofClass
+	expression Expression {containment=true};
+end
+
+
+externalType FunctionPartInvocation extends FunctionInvocation type MofClass
+	packageName string;
+	functionPart FunctionPart {transient=yes}; 
+
+	function getFullyQualifiedName() returns(string);
+end
+
+externalType QualifiedFunctionInvocation extends InvocationExpression type MofClass
+	target FunctionMember {transient=true};
+	qualifier Expression {containment=true};
+end
+
+externalType TypeExpression extends Expression type MofClass {isAbstract=true}
+	objectExpr Expression {containment=true};
+	typeSignature string;
+	eType EGLType;
+end
+
+externalType AsExpression extends TypeExpression type MofClass
+	conversionOperation EGLOperation {transient=true};
+end
+
+externalType IsAExpression extends TypeExpression type MofClass
+end
+
+externalType InExpression extends BinaryExpression type MofClass
+	_from Expression {containment=yes, mofName="from"};
+end
+
+externalType IsNotExpression extends Expression type MofClass
+	operation string;
+	expr Expression {containment=yes};
+	mnemonic string;
+end
+
+externalType DeclarationExpression extends Expression type MofClass
+	fields EGLField[] {containment=true};
+	initializers Expression[] {containment=true};
+end
+
+externalType BuiltInOperationExpression extends InvocationExpression type MofClass
+	operation BuiltInOperation;
+end
+
+externalType ConvertExpression extends BuiltInOperationExpression type MofClass
+end
+
+externalType SizeInBytesExpression extends BuiltInOperationExpression type MofClass
+end
+
+externalType SizeOfExpression extends BuiltInOperationExpression type MofClass
+end
+
+externalType SubstringAccess extends Expression type MofClass
+	stringExpression Expression {containment=true};
+	start Expression {containment=true};
+	_end Expression {containment=true, mofName="end"}; 
+end

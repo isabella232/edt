@@ -1,0 +1,28 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.mof.egl.impl;
+
+import org.eclipse.edt.mof.egl.DecimalLiteral;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
+
+
+public class DecimalLiteralImpl extends NumericLiteralImpl implements DecimalLiteral {
+	
+	@Override
+	public Type getType() {
+		int i = getValue().indexOf('.');
+		int decimals = getValue().substring(i+1).length();
+		return IRUtils.getEGLPrimitiveType(Type_Decimal, getValue().length()-1, decimals);
+	}
+
+}

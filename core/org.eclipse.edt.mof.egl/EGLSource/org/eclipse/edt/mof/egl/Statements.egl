@@ -1,0 +1,184 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.mof.egl;
+
+import egl.lang.reflect.mof.Containment;
+import egl.lang.reflect.mof.MofClass;
+import egl.lang.reflect.mof.MofName;
+
+externalType Statement extends Element type MofClass {isAbstract=true}
+	functionMember FunctionMember;
+end
+
+externalType StatementBlock extends Statement type MofClass
+	statements Statement[] {containment=true};
+end
+
+externalType ExpressionStatement extends Statement type MofClass
+	expr Expression {containment=true};
+end
+
+externalType AssignmentStatement extends ExpressionStatement type MofClass
+	function getAssignment() returns (Assignment);
+	function setAssignment(expr Assignment in);
+end
+
+externalType SetValuesStatement extends ExpressionStatement type MofClass
+	function getSetValuesExpression() returns (SetValuesExpression);
+	function setAssignment(expr SetValuesExpression in);
+end
+
+externalType CallStatement extends Statement type MofClass
+	invocationTarget Expression {containment=true};
+	arguments Expression[] {containment=true};
+	callback MemberAccess {containment=true};
+	errorCallback MemberAccess {containment=true};
+end
+
+externalType CaseStatement extends Statement type MofClass
+	criterion Expression {containment=true};
+	whenClauses WhenClause[] {containment=true};
+	defaultStatements StatementBlock {containment=true};
+	eLabel string {mofName="label"};
+end
+
+externalType ConditionalStatement extends Statement type MofClass {isAbstract=true}
+	condition Expression {containment=true};
+	eLabel string {mofName="label"};
+end
+
+externalType ContinueStatement extends LabelStatement type MofClass
+	continueType int;
+	
+	function isContinueFor() returns(boolean);
+	function isContinueForeach() returns(boolean);
+	function isContinueWhile() returns(boolean);
+	function isContinueOpenUI() returns(boolean);
+end
+
+externalType ConvertStatement extends ExpressionStatement type MofClass
+	function getConvertExpression() returns(ConvertExpression);
+	function setConvertExpression(expr ConvertExpression in);
+end
+
+externalType DeepCopyStatement extends Statement type MofClass
+	source Expression {containment=true};
+	target LHSExpr {containment=true};
+end
+
+externalType EmptyStatement extends Statement type MofClass
+end
+
+externalType ExitStatement extends LabelStatement type MofClass
+	exitStatementType int;
+	returnExpr Expression {containment=true};
+end
+
+externalType ForwardStatement extends Statement type MofClass
+	forwardToTarget Expression {containment=true};
+	arguments Expression[];
+	forwardToOption int;
+	
+	function isForwardToLabel() returns(boolean);
+	function isForwardToURL() returns(boolean);
+end
+
+externalType FreeSqlStatement extends Statement type MofClass
+	preparedStatementID string;
+end
+
+externalType FunctionStatement extends ExpressionStatement type MofClass
+	function getFunctionInvocation() returns(FunctionInvocation);
+	function setFunctionInvocation(expr FunctionInvocation in);
+end
+
+externalType GoToStatement extends LabelStatement type MofClass
+end
+
+externalType LocalVariableDeclarationStatement extends ExpressionStatement type MofClass
+	function getExpression() returns(DeclarationExpression);
+	function setExpression(expr DeclarationExpression in);
+end
+
+externalType ReturnStatement extends Statement type MofClass
+	expression Expression {containment=true};
+end
+
+externalType IfStatement extends ConditionalStatement type MofClass
+	trueBranch Statement {containment=true};
+	falseBranch Statement {containment=true};
+end
+
+externalType MoveStatement extends Statement type MofClass
+	sourceExpr Expression {containment=true};
+	targetExpr LHSExpr {containment=true};
+	modifierExpr Expression {containment=true};
+end
+
+externalType PrintStatement extends Statement type MofClass
+	target Expression {containment=true};
+end
+
+externalType SetStatement extends Statement type MofClass
+	targets Expression[] {containment=yes};
+	states string[];
+end
+
+externalType ThrowStatement extends Statement type MofClass
+	exception Expression {containment=true};
+end
+
+externalType LoopStatement extends ConditionalStatement type MofClass {isAbstract=true}
+	 body Statement {containment=yes};
+end
+
+externalType WhileStatement extends LoopStatement type MofClass
+end
+
+externalType ForStatement extends LoopStatement type MofClass
+	declarationExpression DeclarationExpression {containment=true};
+	deltaExpression Expression {containment=true};
+	counterVariable Expression {containment=true};
+	fromExpression Expression {containment=true};
+	toExpression Expression {containment=true};
+	isIncrement boolean = true;
+	elabel string {mofName="label"};
+end
+
+externalType ForEachStatement extends Statement type MofClass
+	body Statement {containment=true};
+end
+
+externalType LabelStatement extends Statement type MofClass
+	elabel string {mofName="label"};
+end
+
+externalType TryStatement extends Statement type MofClass
+	tryBlock StatementBlock {containment=true};
+	exceptionBlocks ExceptionBlock[] {containment=true};
+end
+
+externalType TransferStatement extends Statement type MofClass
+	invocationTarget Expression {containment=yes};
+	passingRecord Expression {containment=yes};
+	targetType int;
+end
+
+externalType ExceptionBlock extends StatementBlock type MofClass
+	exception Parameter {containment=true};
+end
+
+externalType WhenClause extends Element type MofClass
+	matchExpressions Expression[] {containment=true};
+	statements StatementBlock {containment=true};
+end
+

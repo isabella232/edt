@@ -1,0 +1,36 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.mof.egl;
+
+import java.util.List;
+
+public interface FunctionMember extends Member, Container, InvocableElement {
+	List<FunctionParameter> getParameters();
+	List<Field> getLocalDeclarations();
+	
+	StatementBlock getStatementBlock();
+	
+	void setStatementBlock(StatementBlock value);
+	
+	
+	public String getSignature();
+	
+	public List<Statement> getStatements();
+	
+	public void addStatement(Statement stmt);
+	
+	public void addStatements(List<Statement> stmts);
+	
+	public void addStatements(StatementBlock block);
+	
+	public void addParameter(FunctionParameter parm);
+}

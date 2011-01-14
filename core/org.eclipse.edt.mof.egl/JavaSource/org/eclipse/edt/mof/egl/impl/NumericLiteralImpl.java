@@ -1,0 +1,38 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.mof.egl.impl;
+
+import org.eclipse.edt.mof.egl.NumericLiteral;
+
+public abstract class NumericLiteralImpl extends PrimitiveTypeLiteralImpl implements NumericLiteral {
+	private static int Slot_isNegated=0;
+	private static int totalSlots = 1;
+	
+	public static int totalSlots() {
+		return totalSlots + PrimitiveTypeLiteralImpl.totalSlots();
+	}
+	
+	static {
+		int offset = PrimitiveTypeLiteralImpl.totalSlots();
+		Slot_isNegated += offset;
+	}
+	@Override
+	public Boolean isNegated() {
+		return (Boolean)slotGet(Slot_isNegated);
+	}
+	
+	@Override
+	public void setIsNegated(Boolean value) {
+		slotSet(Slot_isNegated, value);
+	}
+	
+}

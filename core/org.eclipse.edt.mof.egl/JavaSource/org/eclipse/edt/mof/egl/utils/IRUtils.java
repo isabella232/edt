@@ -1,0 +1,703 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.mof.egl.utils;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.MofSerializable;
+import org.eclipse.edt.mof.egl.AmbiguousReferenceException;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.AsExpression;
+import org.eclipse.edt.mof.egl.Assignment;
+import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.Constructor;
+import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.DanglingReference;
+import org.eclipse.edt.mof.egl.DelegateInvocation;
+import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.FixedPrecisionType;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionInvocation;
+import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.FunctionPart;
+import org.eclipse.edt.mof.egl.FunctionPartInvocation;
+import org.eclipse.edt.mof.egl.GenericType;
+import org.eclipse.edt.mof.egl.InvocableElement;
+import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.LogicAndDataPart;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.Name;
+import org.eclipse.edt.mof.egl.NamedElement;
+import org.eclipse.edt.mof.egl.NewExpression;
+import org.eclipse.edt.mof.egl.NoSuchFieldError;
+import org.eclipse.edt.mof.egl.NoSuchMemberError;
+import org.eclipse.edt.mof.egl.NullType;
+import org.eclipse.edt.mof.egl.Operation;
+import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.ParameterizableType;
+import org.eclipse.edt.mof.egl.ParameterizedType;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.PartName;
+import org.eclipse.edt.mof.egl.PatternType;
+import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
+import org.eclipse.edt.mof.egl.SequenceType;
+import org.eclipse.edt.mof.egl.Statement;
+import org.eclipse.edt.mof.egl.StructPart;
+import org.eclipse.edt.mof.egl.StructuredContainer;
+import org.eclipse.edt.mof.egl.StructuredField;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.TypeName;
+import org.eclipse.edt.mof.impl.AbstractVisitor;
+import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.utils.EList;
+
+public class IRUtils {
+
+	private static IrFactory factory = IrFactory.INSTANCE;
+	public static String OVERLOADED_FUNCTION = "EZE_OVERLOADED_FUNCTION";
+	
+	public class TopLevelFunctionResolver extends AbstractVisitor {
+		private LogicAndDataPart context;
+		private Function currentFunction;
+		private Set<Function> addedFunctions = new HashSet<Function>();
+		
+		TopLevelFunctionResolver() {
+			disallowRevisit();
+		}
+		
+		public void resolveInContext(Function func, LogicAndDataPart part) {
+			context = part;
+			func.accept(this);
+			currentFunction = null;
+			context = null;
+		}
+		
+		public void resolveAddedFunctions(LogicAndDataPart part) {
+			List<Function> newFunctions = new ArrayList<Function>();
+			newFunctions.addAll(addedFunctions);
+			addedFunctions = new HashSet<Function>();
+			for (Function func : newFunctions) {
+				part.addMember(func);
+			}
+			for (Function func : newFunctions) {
+				resolveInContext(func, part);
+			}
+			if (!addedFunctions.isEmpty()) {
+				resolveAddedFunctions(part);
+			}
+		}
+		
+		public boolean visit(Member mbr) {
+			return false;
+		}
+		
+		public boolean visit(Part part) {
+			return false;
+		}
+
+		public boolean visit(Function func) {
+			if (currentFunction == null) {
+				currentFunction = func;
+				for (Statement stmt : func.getStatementBlock().getStatements()) {
+					stmt.accept(this);
+				}
+			}
+			return false;
+		}
+		
+		public boolean visit(DanglingReference ref) {
+			try {
+				IRUtils.resolveDanglingReference(ref, context);
+			} catch (NoSuchFieldError e) {
+				throw new RuntimeException(e);
+			} catch (AmbiguousReferenceException e) {
+				throw new RuntimeException(e);
+			}
+			return false;
+
+		}
+		
+		public boolean visit(FunctionPartInvocation expr) {
+			Function f = null;
+			for (Function added : addedFunctions) {
+				if (added.getName().equalsIgnoreCase(expr.getId())) {
+					f = added;
+					break;
+				}
+			}
+			if (f == null){
+				f = IRUtils.resolveFunctionPartReference(expr, context);
+				if (f != null) addedFunctions.add(f);
+				for (Expression parm : expr.getArguments()) {
+					parm.accept(this);
+				}
+			}
+			return false;
+		}
+
+	}
+	
+	public static class PartsReferencedResolver extends AbstractVisitor {
+		Part root;
+		Set<Part> referencedParts;
+		
+		PartsReferencedResolver() {
+			disallowRevisit();
+			referencedParts = new HashSet<Part>();
+		}
+		
+		public boolean visit(Part part) {
+			if (part == root) {
+				return true;
+			}
+			referencedParts.add(part);
+			return false;
+		}
+		
+		public boolean visit(TypeName name) {
+			name.getType().accept(this);
+			return false;
+		}
+		
+		public Set<Part> getReferencedPartsFor(Part part) {
+			root = part;
+			root.accept(this);
+			return referencedParts;
+		}
+	}
+	
+	/**
+	 * Use this method only to retrieve MOF types that are guaranteed to be there.
+	 * Typically used within Expressions to return referenced types where the
+	 * context where the expression exists has already resolved all type references
+	 * @param typeSignature
+	 * @return
+	 */
+	public static MofSerializable getType(String typeSignature) {
+		try {
+			return Environment.INSTANCE.findType(typeSignature);
+		}
+		catch (Exception ex) {
+			// Should not get here
+			throw new RuntimeException(ex);
+		}
+	}
+	public static Type getEGLType(String typeSignature) {
+		String mofKey = typeSignature;
+		if(!typeSignature.startsWith(Type.EGL_KeyScheme + Type.KeySchemeDelimiter)){
+			mofKey = Type.EGL_KeyScheme + Type.KeySchemeDelimiter + mofKey;
+		}
+		return (Type)getType(mofKey);
+	}
+	
+	public static StructPart getEGLPrimitiveType(String primSignature) {
+		return (StructPart) getEGLType(primSignature);
+	}
+	
+	public static FixedPrecisionType getEGLPrimitiveType(String primSignature, int length, int decimals) {
+		String sig = primSignature + "(" + length + Type.PrimArgDelimiter + decimals + ")";
+		return (FixedPrecisionType)getEGLType(sig);
+	}
+	
+	public static SequenceType getEGLPrimitiveType(String primSignature, int length) {
+		String sig = primSignature + "(" + length + ")";
+		return (SequenceType)getEGLType(sig);
+	}
+	
+	public static PatternType getEGLPrimitiveType(String primSignature, String pattern) {
+		String sig = primSignature + "(" + pattern + ")";
+		return (PatternType)getEGLType(sig);
+	}
+	
+	/**
+	 * Annotate functions that have same signature and also have inout or out
+	 * parameters of primitive types or reference types.  This annotation is
+	 * used to do aliasing in any generated code that needs to be able to.
+	 * @param part
+	 */
+	public static void markOverloadedFunctions(LogicAndDataPart part) {
+		List<Function> overloaded = new ArrayList<Function>();
+		for (Function func : part.getFunctions()) {
+			for (Function possible : part.getFunctions()) {
+				if (func != possible && !overloaded.contains(func) && func.getName().equalsIgnoreCase(possible.getName())) {
+					overloaded.add(func);
+				}
+			}
+		}
+		List<Function> parmLengthSame = new ArrayList<Function>();
+		for (Function func : overloaded) {
+			for (Function possible : overloaded) {
+				if (func != possible && !parmLengthSame.contains(func) && func.getParameters().size() == possible.getParameters().size()) {
+					parmLengthSame.add(func);
+				}
+			}
+		}
+		for (Function func : parmLengthSame) {
+			boolean shouldMark = false;
+			for (Function possible : parmLengthSame) {
+				shouldMark = false;
+				if (func != possible) {
+					int j = 0;
+					for (FunctionParameter parm : possible.getParameters()) {
+						shouldMark = (parm.getParameterKind() == ParameterKind.PARM_INOUT || parm.getParameterKind() == ParameterKind.PARM_OUT);
+						if (shouldMark && j < func.getParameters().size()) {
+							FunctionParameter p = func.getParameters().get(j);
+							shouldMark = (p.getParameterKind() == ParameterKind.PARM_INOUT || p.getParameterKind() == ParameterKind.PARM_OUT);
+						}
+						if (shouldMark) break;
+						j++;
+					}
+					if (shouldMark) break;
+				}
+			}
+			if (shouldMark) {
+				Annotation ann = factory.createAnnotation(OVERLOADED_FUNCTION);
+				func.addAnnotation(ann);
+			}
+		}
+	}
+	
+	public static boolean isOverloadedFunction(Function func) {
+		return func.getAnnotation(OVERLOADED_FUNCTION) != null;
+	}
+	
+	public static void makeCompatible(BinaryExpression expr) {
+		Type type1 = expr.getLHS().getType();
+		Type type2 = expr.getRHS().getType();
+		if (type1 != null && type2 != null)
+			makeCompatible(expr, type1, type2);
+
+	}
+	public static void makeCompatible(BinaryExpression expr, Type type1, Type type2) {
+		Integer direction = conversionDirection(type1, type2, expr.getOperator());
+		// TODO Create InvalidConversionExpression type
+		if (direction == null) return;
+		
+		if (direction == 0) return;
+		
+		Expression asExpr = null;
+		if (direction == 1) {
+			asExpr = createAsExpression(expr.getLHS(), type2 instanceof GenericType ? type2 : type2.getClassifier());	
+			expr.setLHS(asExpr);
+		}
+		else if (direction == -1) {
+			asExpr = createAsExpression(expr.getRHS(), type1 instanceof GenericType ? type1 : type1.getClassifier());
+			expr.setRHS(asExpr);
+		}
+		// The special case is that String conversions require both sides to convert
+		// to Decimal to avoid losing information.  Otherwise the following
+		// example would convert to the LHS Integer and lose the decimal values
+		// of the RHS decimal after conversion:
+		//		1 + "2.3"
+		else if (direction == 2) {
+			Type commonType = TypeUtils.Type_DECIMAL;
+			asExpr = createAsExpression(expr.getLHS(), commonType);
+			expr.setLHS(asExpr);
+			asExpr = createAsExpression(expr.getRHS(), commonType);
+			expr.setRHS(asExpr);			
+		}
+	}
+	
+	public static void makeCompatible(Assignment expr) {	
+		Expression asExpr = makeExprCompatibleToType(expr.getRHS(), expr.getLHS().getType());
+		expr.setRHS(asExpr);			
+	}
+	
+	public static void makeCompatible(Assignment expr, Type type) {
+		Expression asExpr = makeExprCompatibleToType(expr.getRHS(), type);
+		expr.setRHS(asExpr);
+	}
+
+	public static void makeCompatible(InvocationExpression expr) {
+		Expression asExpr;
+		InvocableElement func = expr.getTarget();
+		int i = 0;
+		for (Expression arg : expr.getArguments()) {
+			asExpr = makeExprCompatibleToType(arg, expr.getParameterTypeForArg(i));
+			expr.getArguments().set(i, asExpr);
+			i++;
+		}
+	}
+	
+	public static Expression makeExprCompatibleToType(Expression expr, Type type) {
+		Type exprType = expr.getType();
+		
+		if (expr instanceof Name) {
+			// Check to see if this is a FunctionMember reference
+			NamedElement mbr = ((Name)expr).getNamedElement();
+			if (mbr instanceof Function) return expr;
+		}
+		if (exprType instanceof NullType || exprType.equals(type) || exprType.getClassifier().equals(type)) {
+			return expr;
+		}
+		if (TypeUtils.isReferenceType(exprType) 
+				&& exprType instanceof StructPart 
+				&& type instanceof StructPart 
+				&& ((StructPart)exprType).isSubtypeOf((StructPart)type)) 
+			return expr;
+//		if (TypeUtils.isReferenceType(type) && TypeUtils.isValueType(exprType)) {
+//			BoxingExpression box = factory.createBoxingExpression();
+//			box.setExpr(expr);
+//			return box;
+//		}
+		return createAsExpression(expr, type);
+	}
+	
+	public static AsExpression createAsExpression(Expression objExpr, Type target) {
+		AsExpression expr = factory.createAsExpression();
+		expr.setObjectExpr(objExpr);
+		expr.setEType(target);
+		expr.setConversionOperation(getConversionOperation(objExpr, target));
+		return expr;
+	}
+	
+	public static AsExpression createAsExpression(Expression objExpr, ParameterizableType target) {
+		ParameterizedType type = (ParameterizedType)target.getParameterizedType().newInstance();
+		type.setParameterizableType(target);
+		AsExpression expr = createAsExpression(objExpr, type);
+		return expr;
+	}
+		
+	/**
+	 * Returns an Integer value representing the direction of conversion between a left hand side
+	 * type and a right hand side type.
+	 * - 0: No conversion necessary
+	 * - 1: Left hand side converted to right hand side type
+	 * - -1: Right hand side converted to left hand side
+	 * - 2: Both sides converted to Decimal
+	 * - null: Invalid conversion
+	 * @param lhs
+	 * @param rhs
+	 * @return
+	 */
+	public static Integer conversionDirection(Type lhs, Type rhs, String operator) {
+		// Check for NullType
+		if (lhs == null || rhs == null) return 0;
+		
+		if (lhs.equals(rhs) || lhs.getClassifier().equals(rhs.getClassifier())) return 0;
+		
+		// If Text and Numeric types are involved both will be converted to Decimal
+		// Special case for + operator which is overloaded for both String and Number;
+		// if the Number is on the left then it is a numeric operation otherwise
+		// it is a concatenation operation
+		if (operator.equals("+") && TypeUtils.isNumericType(lhs) && TypeUtils.isTextType(rhs)) {
+			return 2;
+		}
+		if (operator.equals("+") && TypeUtils.isTextType(lhs)) {
+			return -1;
+		}
+		if (isValidWidenConversion(lhs, rhs))
+			return 1;
+		else if (isValidWidenConversion(rhs, lhs))
+			return -1;
+		else if (isValidNarrowConversion(lhs, rhs))
+			return 1;
+		else if (isValidNarrowConversion(rhs, lhs))
+			return -1;
+		else 
+			return null;
+	}
+	
+	public static boolean isValidWidenConversion(Type source,  Type target) {
+		Classifier c1 = source.getClassifier();
+		Classifier c2 = target.getClassifier();
+		if (c1 == c2) return true;
+		if (c1 instanceof StructPart && c2 instanceof StructPart) {
+			StructPart src = (StructPart)c1;
+			StructPart trg = (StructPart)c2;
+			Operation op = src.getBestFitWidenConversionOp(src, trg);
+			return op != null;
+		}
+		return false;
+	}
+	
+	public static boolean isValidNarrowConversion(Type source,  Type target) {
+		Classifier c1 = source.getClassifier();
+		Classifier c2 = target.getClassifier();
+		if (c1 == c2) return true;
+		if (c1 instanceof StructPart && c2 instanceof StructPart) {
+			StructPart src = (StructPart)c1;
+			StructPart trg = (StructPart)c2;
+			Operation op = src.getBestFitNarrowConversionOp(src, trg);
+			return op != null;
+		}
+		return false;
+	}
+
+	
+	public static Operation getConversionOperation(Expression expr, Type trg) {
+		if (expr.getType().getClassifier() instanceof StructPart && trg.getClassifier() instanceof StructPart) {
+			return getConversionOperation((StructPart)expr.getType().getClassifier(), (StructPart)trg.getClassifier());
+		}
+		return null;
+	}
+	
+	public static Operation getConversionOperation(StructPart src, StructPart trg) {
+		Operation op = src.getBestFitWidenConversionOp(src, trg);
+		if (op != null) return op;
+		op = trg.getBestFitNarrowConversionOp(src, trg);
+		
+		return op;
+		
+
+	}
+	
+	public static Operation getBinaryOperation(Classifier lhs, Classifier rhs, String opSymbol) {
+		if (!(lhs instanceof StructPart)) return null;
+		StructPart clazz = null;
+		Integer direction = conversionDirection(lhs, rhs, opSymbol);
+		if (direction == null) return null;
+		if (direction == 0) {
+			clazz = (StructPart)lhs;
+		}
+		if (direction == -1) {
+			clazz = (StructPart)getConversionOperation((StructPart)rhs, (StructPart)lhs).getType().getClassifier();
+		}
+		else if (direction == 1) {
+			clazz = (StructPart)getConversionOperation((StructPart)lhs, (StructPart)rhs).getType().getClassifier(); 
+		}
+		else if (direction == 2) {
+			clazz = (StructPart)TypeUtils.Type_DECIMAL;
+		}
+		for (Operation op : clazz.getOperations()) {
+			if (op.getOpSymbol().equals(opSymbol) && op.getParameters().size() == 2) 
+				return op;
+		}
+		return null;
+	}
+	
+	public static Operation getUnaryOperation(Classifier src, String opSymbol) {
+		if (!(src instanceof StructPart)) return null;
+		for (Operation op : ((StructPart)src).getOperations()) {
+			if (op.getOpSymbol().equals(opSymbol)) {
+				if (op.getParameters().size() == 1) return op;
+			}
+		}
+		return null;
+	}
+	
+	public static String concatWithSeparator(String[] fragments, String separator) {
+		StringBuffer result = new StringBuffer();
+		for (int i=0; i<fragments.length; i++) {
+			result.append(fragments[i]);
+			if (i < fragments.length-1) {
+				result.append(separator);
+			}
+		}
+		return result.toString();
+	}
+	
+	public void resolveTopLevelFunctionsAndDanglingReferences(final LogicAndDataPart part) {
+		TopLevelFunctionResolver resolver = new TopLevelFunctionResolver();
+		for (Function func : part.getFunctions()) {
+			resolver.resolveInContext(func, part);
+		}
+		resolver.resolveAddedFunctions(part);
+	}
+	
+	/**
+	 * This method is used to resolve unqualified references in the
+	 * context of the @param part for TopLevelFunctions that have such 
+	 * references and where the annotation "IncludeReferencedFunctions"
+	 * has been set on the @param part.
+	 * @param name
+	 * @param part
+	 * @return
+	 * @throws NoSuchMemberError
+	 * @throws AmbiguousReferenceException
+	 */
+	public static void resolveDanglingReference(DanglingReference dangling, LogicAndDataPart part) throws NoSuchFieldError, AmbiguousReferenceException {
+		Field field = part.getField(dangling.getId());
+		if (field != null) {
+			dangling.setMember(field);
+		}
+		else {
+			EObject qualifier = null;
+			List<Field> fields = new EList<Field>();
+			// search the types of the fields in part
+			for (Field f : part.getFields()) {
+				Container container;
+				if (f.getType() instanceof LogicAndDataPart || f.getType() instanceof StructuredContainer) {
+					qualifier = f;
+					container = (Container)f.getType();
+					if (container instanceof StructPart) {
+						List<StructuredField> list = ((StructPart)container).getStructuredFields(dangling.getId());
+						if (!list.isEmpty())
+							fields.addAll(list);
+					}
+					else{
+						Field fi = ((LogicAndDataPart)container).getField(dangling.getId());
+						if (fi != null) fields.add(fi);
+					}
+				}
+			}
+			for (Part usedPart : part.getUsedParts()) {
+				if (usedPart instanceof LogicAndDataPart) {
+					for (Field f : ((LogicAndDataPart)usedPart).getFields()) {
+						if (f.getName().equalsIgnoreCase(dangling.getId())) {
+							fields.add(f);
+						}
+					}
+				}
+				if (usedPart instanceof StructPart) {
+					List<StructuredField> list = ((StructPart)usedPart).getStructuredFields(dangling.getId());
+					if (!list.isEmpty())
+						fields.addAll(list);
+				}
+ 			}
+			if (fields.size() > 1) {
+				throw new AmbiguousReferenceException(dangling.getId());
+			}
+			if (fields.size() == 0) {
+				throw new NoSuchFieldError(dangling.getId());
+			}
+			else {
+				if (qualifier instanceof Field) {
+					MemberName expr = factory.createMemberName();
+					expr.setId(((Field)qualifier).getId());
+					expr.setMember((Field)qualifier);
+					dangling.setQualifier(expr);
+				}
+				else if (qualifier instanceof Part) {
+					PartName expr = factory.createPartName();
+					expr.setId(((Part)qualifier).getId());
+					expr.setPackageName(((Part)qualifier).getPackageName());
+					dangling.setQualifier(expr);
+				}
+			}
+		}
+	}
+	
+	public static Function resolveFunctionPartReference(FunctionPartInvocation expr, LogicAndDataPart part) {
+		Function func = part.getFunction(expr.getId());
+		if (func == null) { 
+			FunctionPart funcPart = expr.getFunctionPart();
+			if (funcPart != null) {
+				func = (Function)funcPart.getFunction().clone();
+				expr.setTarget(func);
+				return func;
+			}
+		}
+		else {
+			expr.setTarget(func);
+		}
+		return null;
+	}
+
+	public static Set<Part> getReferencedPartsFor(Part part) {
+		return (new PartsReferencedResolver()).getReferencedPartsFor(part);
+	}
+	
+	public static boolean hasSideEffects(Expression expr) {
+		return (new CheckSideEffects()).checkSideEffect(expr);
+	}
+
+	public static class CheckSideEffects extends AbstractVisitor {
+		boolean has = false;
+		@SuppressWarnings("unused")
+		public boolean checkSideEffect(Expression expr) {
+			disallowRevisit();
+			setReturnData(false);
+			expr.accept(this);
+			return (Boolean)getReturnData();
+		}
+		public boolean visit(EObject obj) {
+			return false;
+		}
+		public boolean visit(Expression expr) {
+			if (has) return false;
+			return true;
+		}
+		public boolean visit(NewExpression expr) {
+			has = true;
+			setReturnData(has);
+			return true;
+		}
+		public boolean visit(Assignment expr) {
+			has = true;
+			setReturnData(has);
+			return true;
+		}
+		public boolean visit(FunctionInvocation expr) {
+			has = true;
+			setReturnData(has);
+			return false;
+		}
+		public boolean visit(DelegateInvocation expr) {
+			has = true;
+			setReturnData(has);
+			return false;
+		}
+		public boolean visit(QualifiedFunctionInvocation expr) {
+			has = true;
+			setReturnData(has);
+			return false;
+		}
+	}
+	
+	public static Constructor resolveConstructorReference(EGLClass clazz, List<Expression> arguments) {
+		Constructor result = null;
+		List<Constructor> possibles = new ArrayList<Constructor>();
+		for (Constructor mbr : clazz.getConstructors()) {
+			if (mbr.getParameters().size() == arguments.size()) {
+				boolean exact = true;
+				for (int i=0; i<arguments.size(); i++) {
+					if (!mbr.getParameters().get(i).getType().equals(arguments.get(i).getType())) {
+						exact = false;
+					}
+				}
+				if (exact) return mbr;
+				boolean compat = false;
+				for (int i=0; i<arguments.size(); i++) {
+					compat = isCompatibleWith(arguments.get(i), mbr.getParameters().get(i).getType());
+				}
+				if (compat) {
+					possibles.add(mbr);
+				}
+			}
+		}
+		if (possibles.size() == 0) {
+			// Return a default constructor
+			result = IrFactory.INSTANCE.createConstructor();
+			result.setIsAbstract(true);
+			result.setName(clazz.getName());
+			result.setType(clazz);
+		}
+		else if (possibles.size() == 1) {
+			result = possibles.get(0);
+		}
+		else {
+			// TODO find best fit based on 
+			result = possibles.get(0);
+		}
+		return result;
+	}
+	
+	public static boolean isCompatibleWith(Expression expr, Type type) {
+		if (expr.getType().equals(type)) {
+			return true;
+		}
+		if (getConversionOperation(expr, type) != null) {
+			return true;
+		}
+		return false;
+	}
+}

@@ -1,0 +1,39 @@
+/*******************************************************************************
+ * Copyright © 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.mof.egl.impl;
+
+import org.eclipse.edt.mof.egl.ConversionOperation;
+import org.eclipse.edt.mof.egl.DirectionKind;
+
+public class ConversionOperationImpl extends OperationImpl implements ConversionOperation {
+	private static int Slot_direction=0;
+	private static int totalSlots = 1;
+	
+	public static int totalSlots() {
+		return totalSlots + OperationImpl.totalSlots();
+	}
+	
+	static {
+		int offset = OperationImpl.totalSlots();
+		Slot_direction += offset;
+	}
+	@Override
+	public DirectionKind getDirection() {
+		return (DirectionKind)slotGet(Slot_direction);
+	}
+	
+	@Override
+	public void setDirection(DirectionKind value) {
+		slotSet(Slot_direction, value);
+	}
+	
+}
