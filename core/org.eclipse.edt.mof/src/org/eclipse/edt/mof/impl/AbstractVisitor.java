@@ -22,7 +22,6 @@ import org.eclipse.edt.mof.EVisitor;
 
 
 public class AbstractVisitor implements EVisitor {
-	private int parentSlotIndex = -1;
 	private boolean allowRevisit = true;
 	private boolean trackParent = false;
 	private Set<Object> visited;

@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.codegen.api;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 
 /**
  * This class writes indented text.  It has two modes of operation.  The default

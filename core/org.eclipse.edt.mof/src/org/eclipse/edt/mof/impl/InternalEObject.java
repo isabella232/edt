@@ -88,7 +88,7 @@ public class InternalEObject implements Cloneable {
 			return internalGet(field);
 		}
 		else {
-			throw new IllegalArgumentException("No such field named: " + name);
+			throw new IllegalArgumentException("No such field named: " + name + " in EClass " + this.internalEType().getETypeSignature());
 		}
 	}
 
@@ -98,7 +98,7 @@ public class InternalEObject implements Cloneable {
 			internalSet(field, value);
 		}
 		else {
-			throw new IllegalArgumentException("No such field named: " + name);
+			throw new IllegalArgumentException("No such field named: " + name + " in EClass " + this.internalEType().getETypeSignature());
 		}
 	}
 	

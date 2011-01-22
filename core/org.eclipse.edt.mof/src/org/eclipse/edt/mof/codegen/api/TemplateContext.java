@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2010 IBM Corporation and others.
+ * Copyright © 2006, 2010 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -17,8 +17,6 @@ import java.util.Map;
 
 import org.eclipse.edt.mof.EClassifier;
 import org.eclipse.edt.mof.EObject;
-import org.eclipse.edt.mof.codegen.api.TemplateFactory;
-
 
 @SuppressWarnings("serial")
 public class TemplateContext extends HashMap<Object, Object> {
@@ -43,6 +41,16 @@ public class TemplateContext extends HashMap<Object, Object> {
 	}
 	
 	
+	public String get(String getMethod, EObject object, Object...args) throws TemplateException {
+		Template template = getTemplateFor(object.getEClass());
+		return template.get(getMethod, object, args);
+	}
+	
+	public boolean is(String isMethod, EObject object, Object...args) throws TemplateException {
+		Template template = getTemplateFor(object.getEClass());
+		return template.is(isMethod, object, args);
+	}
+	
 	public void gen(String genMethod, EObject object, TemplateContext ctx, TabbedWriter out, Object...args) throws TemplateException {
 		Template template = getTemplateFor(object.getEClass());
 		template.gen(genMethod, object, ctx, out, args);
@@ -58,5 +66,14 @@ public class TemplateContext extends HashMap<Object, Object> {
 		}
 	}
 
+	public List<Object> xlate(String genMethod, EObject object, TemplateContext ctx, Object...args) throws TemplateException {
+		Template template = getTemplateFor(object.getEClass());
+		return template.xlate(genMethod, object, ctx, args);
+	}
+
+	public void validate(String genMethod, EObject object, TemplateContext ctx, Object...args) throws TemplateException {
+		Template template = getTemplateFor(object.getEClass());
+		template.validate(genMethod, object, ctx, args);
+	}
 
 }
