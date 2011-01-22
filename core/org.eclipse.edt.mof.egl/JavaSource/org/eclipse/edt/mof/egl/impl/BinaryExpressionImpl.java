@@ -13,10 +13,10 @@ package org.eclipse.edt.mof.egl.impl;
 
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.NoSuchFunctionError;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
-
 
 public class BinaryExpressionImpl extends ExpressionImpl implements BinaryExpression {
 	private static int Slot_LHS=0;
@@ -59,7 +59,11 @@ public class BinaryExpressionImpl extends ExpressionImpl implements BinaryExpres
 	@Override
 	public Operation getOperation() {
 		if (slotGet(Slot_operation) == null) {
-			setOperation(IRUtils.getBinaryOperation(getLHS().getType().getClassifier(), getRHS().getType().getClassifier(), getOperator()));
+			try {
+				setOperation(resolveOperation());
+			} catch (NoSuchFunctionError e) {
+				throw new RuntimeException(e);
+			}
 		}
 		return (Operation)slotGet(Slot_operation);
 	}
@@ -84,4 +88,9 @@ public class BinaryExpressionImpl extends ExpressionImpl implements BinaryExpres
 		slotSet(Slot_operator, opSymbol);
 	}
 
+	private Operation resolveOperation() {
+		Operation op = IRUtils.getBinaryOperation(getLHS().getType().getClassifier(), getRHS().getType().getClassifier(), getOperator());
+		if (op == null) throw new NoSuchFunctionError();
+		return op;
+	}
 }

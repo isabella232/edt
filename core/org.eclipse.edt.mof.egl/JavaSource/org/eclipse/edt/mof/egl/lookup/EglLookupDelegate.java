@@ -33,7 +33,6 @@ import org.eclipse.edt.mof.serialization.ProxyEObject;
 import org.eclipse.edt.mof.serialization.SerializationException;
 import org.eclipse.edt.mof.serialization.IEnvironment.LookupDelegate;
 
-
 /**
  * Implementation of the <code>LookupDelegate</code> interface specific for finding
  * EGL model instances.  LookupDelegates are registered to a given IEnvironment by

@@ -399,12 +399,6 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				}
 			}
 			
-			if (parm != null && parm.isInput()){
-				if (! (parm.getType() instanceof SystemFunctionParameterSpecialTypeBinding)) {
-					expr = IRUtils.makeExprCompatibleToType(expr, (Type)mofTypeFor(parm.getType()));
-				}
-			}
-
 			fi.getArguments().add(expr);
 			index++;
 		}
@@ -756,6 +750,8 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		access.setStart((Expression)stack.pop());
 		substringAccess.getExpr2().accept(this);
 		access.setEnd((Expression)stack.pop());
+		substringAccess.getPrimary().accept(this);	
+		access.setStringExpression((Expression)stack.pop());
 		return false;
 	}
 
@@ -763,6 +759,9 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ThisExpression thisExpression) {
 		ThisExpression expr = factory.createThisExpression();
 		IBinding binding = thisExpression.resolveDataBinding();
+		if (binding == null) {
+			binding = thisExpression.resolveTypeBinding();
+		}
 		Element obj = (Element)getEObjectFor(binding);
 		expr.setThisObject(obj);
 		setElementInformation(thisExpression, expr);

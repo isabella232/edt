@@ -23,6 +23,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Container;
@@ -37,7 +38,6 @@ import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.FunctionPartInvocation;
-import org.eclipse.edt.mof.egl.GenericType;
 import org.eclipse.edt.mof.egl.InvocableElement;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IrFactory;
@@ -47,7 +47,6 @@ import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.NewExpression;
-import org.eclipse.edt.mof.egl.NoSuchFieldError;
 import org.eclipse.edt.mof.egl.NoSuchMemberError;
 import org.eclipse.edt.mof.egl.NullType;
 import org.eclipse.edt.mof.egl.Operation;
@@ -68,6 +67,8 @@ import org.eclipse.edt.mof.egl.TypeName;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.utils.EList;
+
+
 
 public class IRUtils {
 
@@ -287,33 +288,21 @@ public class IRUtils {
 
 	}
 	public static void makeCompatible(BinaryExpression expr, Type type1, Type type2) {
-		Integer direction = conversionDirection(type1, type2, expr.getOperator());
-		// TODO Create InvalidConversionExpression type
-		if (direction == null) return;
-		
-		if (direction == 0) return;
-		
-		Expression asExpr = null;
-		if (direction == 1) {
-			asExpr = createAsExpression(expr.getLHS(), type2 instanceof GenericType ? type2 : type2.getClassifier());	
+		Operation op = expr.getOperation();
+		Expression asExpr;
+		Type parmType1 = op.getParameters().get(0).getType();
+		Type parmType2 = op.getParameters().get(1).getType();
+		// Operation invocations never have ParameterizedType(s) as parameter types
+		// so always use the classifier instead of the type directly
+		if (!type1.getClassifier().equals(parmType1)) {
+			asExpr = makeExprCompatibleToType(expr.getLHS(), parmType1);
 			expr.setLHS(asExpr);
 		}
-		else if (direction == -1) {
-			asExpr = createAsExpression(expr.getRHS(), type1 instanceof GenericType ? type1 : type1.getClassifier());
+		if (!type2.getClassifier().equals(parmType2)) {
+			asExpr = makeExprCompatibleToType(expr.getRHS(), parmType2);
 			expr.setRHS(asExpr);
 		}
-		// The special case is that String conversions require both sides to convert
-		// to Decimal to avoid losing information.  Otherwise the following
-		// example would convert to the LHS Integer and lose the decimal values
-		// of the RHS decimal after conversion:
-		//		1 + "2.3"
-		else if (direction == 2) {
-			Type commonType = TypeUtils.Type_DECIMAL;
-			asExpr = createAsExpression(expr.getLHS(), commonType);
-			expr.setLHS(asExpr);
-			asExpr = createAsExpression(expr.getRHS(), commonType);
-			expr.setRHS(asExpr);			
-		}
+
 	}
 	
 	public static void makeCompatible(Assignment expr) {	
@@ -339,7 +328,6 @@ public class IRUtils {
 	
 	public static Expression makeExprCompatibleToType(Expression expr, Type type) {
 		Type exprType = expr.getType();
-		
 		if (expr instanceof Name) {
 			// Check to see if this is a FunctionMember reference
 			NamedElement mbr = ((Name)expr).getNamedElement();
@@ -353,11 +341,11 @@ public class IRUtils {
 				&& type instanceof StructPart 
 				&& ((StructPart)exprType).isSubtypeOf((StructPart)type)) 
 			return expr;
-//		if (TypeUtils.isReferenceType(type) && TypeUtils.isValueType(exprType)) {
-//			BoxingExpression box = factory.createBoxingExpression();
-//			box.setExpr(expr);
-//			return box;
-//		}
+		if (TypeUtils.isReferenceType(type) && TypeUtils.isValueType(exprType)) {
+			BoxingExpression box = factory.createBoxingExpression();
+			box.setExpr(expr);
+			return box;
+		}
 		return createAsExpression(expr, type);
 	}
 	
@@ -423,7 +411,7 @@ public class IRUtils {
 		if (c1 instanceof StructPart && c2 instanceof StructPart) {
 			StructPart src = (StructPart)c1;
 			StructPart trg = (StructPart)c2;
-			Operation op = src.getBestFitWidenConversionOp(src, trg);
+			Operation op = TypeUtils.getBestFitWidenConversionOp(src, trg);
 			return op != null;
 		}
 		return false;
@@ -436,7 +424,7 @@ public class IRUtils {
 		if (c1 instanceof StructPart && c2 instanceof StructPart) {
 			StructPart src = (StructPart)c1;
 			StructPart trg = (StructPart)c2;
-			Operation op = src.getBestFitNarrowConversionOp(src, trg);
+			Operation op = TypeUtils.getBestFitNarrowConversionOp(src, trg);
 			return op != null;
 		}
 		return false;
@@ -451,9 +439,9 @@ public class IRUtils {
 	}
 	
 	public static Operation getConversionOperation(StructPart src, StructPart trg) {
-		Operation op = src.getBestFitWidenConversionOp(src, trg);
+		Operation op = TypeUtils.getBestFitWidenConversionOp(src, trg);
 		if (op != null) return op;
-		op = trg.getBestFitNarrowConversionOp(src, trg);
+		op = TypeUtils.getBestFitNarrowConversionOp(src, trg);
 		
 		return op;
 		
@@ -464,24 +452,58 @@ public class IRUtils {
 		if (!(lhs instanceof StructPart)) return null;
 		StructPart clazz = null;
 		Integer direction = conversionDirection(lhs, rhs, opSymbol);
-		if (direction == null) return null;
-		if (direction == 0) {
+		
+		// Now check for operation based on one type being converted to the other
+		// to determine where to look for the operation
+		Operation conOp = null;
+		if (direction == null || direction == 0) {
 			clazz = (StructPart)lhs;
 		}
-		if (direction == -1) {
-			clazz = (StructPart)getConversionOperation((StructPart)rhs, (StructPart)lhs).getType().getClassifier();
+		else if (direction == -1) {
+			conOp = getConversionOperation((StructPart)rhs, (StructPart)lhs);
+			if (conOp == null) return null;
+			clazz = (StructPart)conOp.getType().getClassifier();
 		}
 		else if (direction == 1) {
-			clazz = (StructPart)getConversionOperation((StructPart)lhs, (StructPart)rhs).getType().getClassifier(); 
+			conOp = getConversionOperation((StructPart)lhs, (StructPart)rhs);
+			if (conOp == null) return null;
+			clazz = (StructPart)conOp.getType().getClassifier(); 
 		}
 		else if (direction == 2) {
 			clazz = (StructPart)TypeUtils.Type_DECIMAL;
 		}
-		for (Operation op : clazz.getOperations()) {
-			if (op.getOpSymbol().equals(opSymbol) && op.getParameters().size() == 2) 
-				return op;
+		// First check if there is an explicit operation 
+		// independent of conversion of either side to the other.
+		// Check only the lhs classifier for this operation.
+		// This is to handle the cases where binary operations are implemented
+		// that do not force a conversion of one type to the other, i.e
+		// they have the LHS and RHS being different types
+		if (!lhs.equals(rhs)) {
+			List<Operation> ops = TypeUtils.getBestFitOperation(clazz, opSymbol, (StructPart)lhs, (StructPart)rhs);
+			// Filter out an operation that has the same parameter types for each parameter
+			if (ops.size() == 1 
+					&& !(ops.get(0).getParameters().get(0).getType().equals(ops.get(0).getParameters().get(1).getType()))) {
+				return ops.get(0);
+			}
+			if (ops.size() > 1) return null;
 		}
-		return null;
+		
+		Operation result = TypeUtils.getBinaryOperation(clazz, opSymbol);
+		if (result == null) {
+			// If there was no operation then reverse the lookup
+			if (direction == -1) {
+				conOp = getConversionOperation((StructPart)lhs, (StructPart)rhs);
+				if (conOp == null) return null;
+				clazz = (StructPart)conOp.getType().getClassifier();
+			}
+			else if (direction == 1) {
+				conOp = getConversionOperation((StructPart)rhs, (StructPart)lhs);
+				if (conOp == null) return null;
+				clazz = (StructPart)conOp.getType().getClassifier(); 
+			}		
+			result = TypeUtils.getBinaryOperation(clazz, opSymbol);
+		}
+		return result;	
 	}
 	
 	public static Operation getUnaryOperation(Classifier src, String opSymbol) {

@@ -59,5 +59,10 @@ public class FunctionParameterImpl extends ParameterImpl implements FunctionPara
 	public void setIsField(Boolean value) {
 		slotSet(Slot_isField, value);
 	}
+
+	@Override
+	public boolean isGenericTypeParameter() {
+		return getType().getClassifier() == null;
+	}
 	
 }

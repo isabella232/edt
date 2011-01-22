@@ -14,8 +14,6 @@ package org.eclipse.edt.mof.egl;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EEnum;
 import org.eclipse.edt.mof.EFactory;
-import org.eclipse.edt.mof.egl.*;
-
 
 public interface IrFactoryBase extends EFactory  {
 	public String packageName = "org.eclipse.edt.mof.egl";
@@ -33,6 +31,7 @@ public interface IrFactoryBase extends EFactory  {
 	String AssignmentStatement = packageName+".AssignmentStatement";
 	String BinaryExpression = packageName+".BinaryExpression";
 	String BooleanLiteral = packageName+".BooleanLiteral";
+	String BoxingExpression = packageName+".BoxingExpression";
 	String BuiltInOperation = packageName+".BuiltInOperation";
 	String BuiltInOperationExpression = packageName+".BuiltInOperationExpression";
 	String CallStatement = packageName+".CallStatement";
@@ -200,6 +199,7 @@ public interface IrFactoryBase extends EFactory  {
 	EClass getAssignmentStatementEClass();
 	EClass getBinaryExpressionEClass();
 	EClass getBooleanLiteralEClass();
+	EClass getBoxingExpressionEClass();
 	EClass getBuiltInOperationEClass();
 	EClass getBuiltInOperationExpressionEClass();
 	EClass getCallStatementEClass();
@@ -365,6 +365,7 @@ public interface IrFactoryBase extends EFactory  {
 	public AssignmentStatement createAssignmentStatement();
 	public BinaryExpression createBinaryExpression();
 	public BooleanLiteral createBooleanLiteral();
+	public BoxingExpression createBoxingExpression();
 	public BuiltInOperation createBuiltInOperation();
 	public BuiltInOperationExpression createBuiltInOperationExpression();
 	public CallStatement createCallStatement();

@@ -195,6 +195,10 @@ externalType TypeExpression extends Expression type MofClass {isAbstract=true}
 	eType EGLType;
 end
 
+externalType BoxingExpression extends Expression type MofClass
+	expr Expression {containment=yes};
+end
+
 externalType AsExpression extends TypeExpression type MofClass
 	conversionOperation EGLOperation {transient=true};
 end

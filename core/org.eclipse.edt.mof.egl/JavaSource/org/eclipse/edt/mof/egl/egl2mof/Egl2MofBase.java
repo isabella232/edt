@@ -184,7 +184,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	protected EObject getEObjectFor(IBinding element) {
 		if (element == null) return null;
 		IBinding key = element instanceof NestedFunctionBinding ? ((NestedFunctionBinding)element).getType() : element;
-		EObject result = eObjects.get(element);
+		EObject result = eObjects.get(key);
 		if (result == null) {
 			if (inMofContext) {
 				result = new ProxyEObject();
@@ -1129,7 +1129,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		case Primitive.INTERVAL_PRIMITIVE:
 		case Primitive.MONTHSPAN_INTERVAL_PRIMITIVE:
 		case Primitive.SECONDSPAN_INTERVAL_PRIMITIVE: {
-			typeSignature += "(" + type.getPattern() + ")";
+			typeSignature += (type.getPattern() == null ? "" : "(" + type.getPattern() + ")");
 			break;
 		}
 //		case Primitive.TIME_PRIMITIVE:

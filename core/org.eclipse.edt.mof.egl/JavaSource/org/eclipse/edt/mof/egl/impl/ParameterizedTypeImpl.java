@@ -46,7 +46,7 @@ public class ParameterizedTypeImpl extends TypeImpl implements ParameterizedType
 	
 	@Override
 	public Boolean equals(Type eglType) {
-		return getClassifier().equals(eglType.getClassifier()) && typeArgsEqual(eglType);	
+		return eglType instanceof ParameterizedType && getClassifier().equals(eglType.getClassifier()) && typeArgsEqual(eglType);	
 	}
 
 	@Override

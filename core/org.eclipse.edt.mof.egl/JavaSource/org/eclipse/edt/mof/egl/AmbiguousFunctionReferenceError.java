@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl;
 
-public class NoSuchFunctionError extends RuntimeException {
+public class AmbiguousFunctionReferenceError extends RuntimeException {
 
 	/**
 	 * 
@@ -21,24 +21,22 @@ public class NoSuchFunctionError extends RuntimeException {
 	/**
 	 * 
 	 */
-	public NoSuchFunctionError() {
+	public AmbiguousFunctionReferenceError() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * @param message
 	 */
-	public NoSuchFunctionError(String message) {
+	public AmbiguousFunctionReferenceError(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * @param message
 	 * @param cause
 	 */
-	public NoSuchFunctionError(String message, Throwable cause) {
+	public AmbiguousFunctionReferenceError(String message, Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
@@ -46,7 +44,7 @@ public class NoSuchFunctionError extends RuntimeException {
 	/**
 	 * @param cause
 	 */
-	public NoSuchFunctionError(Throwable cause) {
+	public AmbiguousFunctionReferenceError(Throwable cause) {
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}

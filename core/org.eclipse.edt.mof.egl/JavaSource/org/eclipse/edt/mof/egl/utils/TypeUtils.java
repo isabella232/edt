@@ -11,18 +11,25 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.NullType;
+import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.SequenceType;
 import org.eclipse.edt.mof.egl.Stereotype;
+import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.egl2mof.MofConversion;
 import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
-
 
 public class TypeUtils implements MofConversion {
 	public static final Type Type_NULLTYPE = NullType.INSTANCE;
@@ -133,6 +140,8 @@ public class TypeUtils implements MofConversion {
 		else if (classifier == Type_STRING) return TypeKind_STRING;
 		else if (classifier == Type_UNICODE) return TypeKind_UNICODE;
 		else if (classifier == Type_HEX) return TypeKind_HEX;
+		else if (classifier == Type_SMALLFLOAT) return TypeKind_SMALLFLOAT;
+		else if (classifier == Type_FLOAT) return TypeKind_FLOAT;
 		else if (classifier == Type_SMALLINT) return TypeKind_SMALLINT;
 		else if (classifier == Type_INT) return TypeKind_INT;
 		else if (classifier == Type_BIGINT) return TypeKind_BIGINT;
@@ -216,4 +225,282 @@ public class TypeUtils implements MofConversion {
 			? ((EGLClass)subtype).isSubtypeOf(superType)
 			: false;
 	}
+	
+	/**
+	 * Compatibility is defined between StructPart classifiers as either having
+	 * explicit conversion operations defined between them or the rhsType being
+	 * a subtype of the lhsType.
+	 * 
+	 * @param lhsType
+	 * @param rhsType
+	 * @return
+	 */
+	public static boolean areCompatible(StructPart lhsType, StructPart rhsType) {
+		if (lhsType.equals(rhsType)) return true;
+		return IRUtils.getConversionOperation(rhsType, lhsType) != null || rhsType.isSubtypeOf(lhsType);
+	}
+	
+	/**
+	 * Tests which type between the two passed in is the least wide.
+	 * This is determined by which of the two types has a widening conversion
+	 * between the two types.
+	 * @param type1
+	 * @param type2
+	 * @return integer representing which of the types is the least compatible
+	 * value 0: neither is least
+	 * value -1: first parameter is least
+	 * value 1: second parameter is least
+	 */
+	private static int getLeastWideType(StructPart type1, StructPart type2) {
+		if (type1.equals(type2)) return 0;
+		if (getWidenConversionOp(type1, type2) != null) return -1;
+		if (getWidenConversionOp(type2, type1) != null) return 1;
+		return 0;  // neither is least wide
+	}
+	
+	/**
+	 * Opposite of getLeastWidtType
+	 * @param type1
+	 * @param type2
+	 * @return
+	 */
+	private static int getLeastNarrowType(StructPart type1, StructPart type2) {
+		if (type1.equals(type2)) return 0;
+		if (getWidenConversionOp(type1, type2) != null) return 1;
+		if (getWidenConversionOp(type2, type1) != null) return -1;
+		return 0;  // neither is least wide
+	}
+	
+	public static int getBestFitType(StructPart srcType, List<StructPart> types) {
+		List<StructPart> candidates = new ArrayList<StructPart>();
+		for (StructPart type : types) {
+			// a value of null for a type indicates it is a generic type parameter
+			// that is dependent on the argument being passed in - so ignore it
+			if (type == null || srcType.equals(type)) candidates.add(type);
+		}
+		if (candidates.size() == 1) return types.indexOf(candidates.get(0));	
+		if (candidates.size() > 1) return -1;
+		
+		for (StructPart type : types) {
+			if (type != null && getWidenConversionOp(srcType, type) != null)
+				candidates.add(type);
+		}
+		if (candidates.size() == 1) return types.indexOf(candidates.get(0));
+		if (candidates.size() > 1) {
+			boolean done = false;
+			start: 
+			while (!done) {
+				int least = 0;
+				for (int i=0; i<candidates.size(); i++) {
+					for (int j=0; j<candidates.size(); j++) {
+						if (i!=j && candidates.get(i) != null && candidates.get(j) != null) {
+							least = getLeastWideType(candidates.get(i), candidates.get(j));
+							if (least == 1) candidates.remove(i);
+							if (least == -1) candidates.remove(j);
+						}
+						if (least != 0) continue start;  // start over after removing something
+					}
+				}
+				if (candidates.size() == 1) return types.indexOf(candidates.get(0));
+				if (candidates.size() > 1) return -1;
+			}
+		}
+		// Now check for narrow conversions
+		if (candidates.size() == 0) {
+			for (StructPart type : types) {
+				if (getNarrowConversionOp(srcType, type) != null)
+					candidates.add(type);
+			}
+			if (candidates.size() == 1) return types.indexOf(candidates.get(0));
+			if (candidates.size() > 1) {
+				boolean done = false;
+				start: 
+				while (!done) {
+					int least = 0;
+					for (int i=0; i<candidates.size(); i++) {
+						for (int j=0; j<candidates.size(); j++) {
+							if (i!=j && candidates.get(i) != null && candidates.get(j) != null) {
+								least = getLeastNarrowType(candidates.get(i), candidates.get(j));
+								if (least == 1) candidates.remove(i);
+								if (least == -1) candidates.remove(j);
+							}
+							if (least != 0) continue start;  // start over after removing something
+						}
+					}
+					if (candidates.size() == 1) return types.indexOf(candidates.get(0));
+					if (candidates.size() > 1) return -1;
+				}
+			}
+		}
+		return -1;
+	}
+	
+	public static Operation getBinaryOperation(StructPart clazz, String opSymbol ) {
+		Operation result = null;
+		for (Operation op : clazz.getOperations()) {
+			if (op.getOpSymbol().equals(opSymbol) 
+					&& op.getParameters().size() == 2
+					&& op.getParameters().get(0).getType().equals(clazz)
+					&& op.getParameters().get(1).getType().equals(clazz)) {
+				return op;
+			}
+		}
+		return null;
+
+	}
+
+	public static Operation getWidenConversionOp(StructPart src, StructPart target) {
+		Operation result = null;
+		for (Operation op : src.getOperations()) {
+			if (op.isWidenConversion() && op.getParameters().get(0) != null) {
+				Type parmType = (Type)op.getParameters().get(0).getType(); 
+				if ( parmType.equals(src) && op.getType().equals(target) ) {
+					return op;
+				}
+			}
+		}
+		if (result == null) {
+			for (Operation op : target.getOperations()) {
+				if (op.isWidenConversion() && op.getParameters().get(0) != null) {
+					Type parmType = (Type)op.getParameters().get(0).getType(); 
+					if ( parmType.equals(src) && op.getType().equals(target) ) {
+						return op;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public static Operation getNarrowConversionOp(StructPart src, StructPart target) {
+		Operation result = null;
+		for (Operation op : src.getOperations()) {
+			if (op.isNarrowConversion() && op.getParameters().get(0) != null) {
+				Type parmType = (Type)op.getParameters().get(0).getType(); 
+				if (parmType.equals(src) && op.getType().equals(target)) {
+					return op;
+				}
+			}
+		}
+		if (result == null) {
+			for (Operation op : target.getOperations()) {
+				if (op.isNarrowConversion() && op.getParameters().get(0) != null) {
+					Type parmType = (Type)op.getParameters().get(0).getType(); 
+					if ( parmType.equals(src) && op.getType().equals(target) ) {
+						return op;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public static Operation getBestFitWidenConversionOp(StructPart src, StructPart target) {
+		Operation op = getWidenConversionOp(src, target);
+		if (op == null) {
+			// Look up the super type chain
+			if (!src.getSuperTypes().isEmpty()) {
+				StructPart superType = src.getSuperTypes().get(0);
+				op = getBestFitWidenConversionOp(superType, target);
+			}
+		}
+		return op;
+	}
+
+	public static Operation getBestFitNarrowConversionOp(StructPart src, StructPart target) {
+		Operation op = getNarrowConversionOp(src, target);
+		if (op == null) {
+			// Look up the super type chain
+			if (!src.getSuperTypes().isEmpty()) {
+				StructPart superType = src.getSuperTypes().get(0);
+				op = getBestFitNarrowConversionOp(superType, target);
+			}
+		}
+		return op;
+	}
+
+	public static List<Operation> getBestFitOperation(StructPart container, String opSymbol, StructPart...argumentTypes) {
+		List<Operation> ops = new ArrayList<Operation>();
+		for (Operation op : container.getOperations()) {
+			if (op.getOpSymbol().equals(opSymbol)) {
+				if (op.getParameters().size() == argumentTypes.length) {
+					ops.add(op);
+				}
+			}
+		}
+		if (ops.size() <= 1) return ops;
+		return getBestFitFunctionMember(ops, argumentTypes);
+	}
+	
+	public static List<Function> getBestFitFunction(StructPart container, String name, StructPart...argumentTypes) {
+		List<Function> ops = new ArrayList<Function>();
+		for (Function op : container.getFunctions()) {
+			if (op.getName().equalsIgnoreCase(name)) {
+				if (op.getParameters().size() == argumentTypes.length) {
+					ops.add(op);
+				}
+			}
+		}
+		if (ops.size() <= 1) return ops;
+		return getBestFitFunctionMember(ops, argumentTypes);
+	}
+
+	public static <T extends FunctionMember> List<T> getBestFitFunctionMember(List<T> functionMembers, StructPart...argumentTypes) {
+		List<T> candidates = new ArrayList<T>();
+		// First check for exact parameter type matches
+		for (T op : functionMembers) {
+			boolean isCandidate = true;
+			int i = 0;
+			for (FunctionParameter parm : op.getParameters()) {
+				 // check for generic type parameter
+				if (!parm.isGenericTypeParameter()) {
+					if (!parm.getType().getClassifier().equals(argumentTypes[i])) {
+						isCandidate = false;
+					}
+					if (!isCandidate) break;
+				}
+				i++;
+			}
+			if (isCandidate) {
+				candidates.add(op);
+				return candidates;
+			}
+		}
+		// Then check for compatible types
+		for (T op : functionMembers) {
+			boolean isCandidate = true;
+			int i = 0;
+			for (FunctionParameter parm : op.getParameters()) {
+				 // check for generic type parameter
+				if (!parm.isGenericTypeParameter()) {
+					if (!TypeUtils.areCompatible((StructPart)parm.getType().getClassifier(), argumentTypes[i])) {
+						isCandidate = false;
+					}
+					if (!isCandidate) break;
+				}
+				i++;
+			}
+			if (isCandidate) candidates.add(op);
+		}
+		if (candidates.size() <= 1) return candidates;
+		
+		// Now check for best fit from the remaining list
+		List<T> result = new ArrayList<T>();
+		if (candidates.size() > 1) {
+			int idx;
+			for (int i=0; i<argumentTypes.length; i++) {
+				List<StructPart> types = new ArrayList<StructPart>();
+				for (T op : candidates) {
+					types.add((StructPart)op.getParameters().get(i).getType().getClassifier());
+				}
+				idx = getBestFitType(argumentTypes[i], types);
+				if (idx != -1)  // More than one fits so bail on this parameter
+					result.add(candidates.get(idx));
+			}
+		}
+		if (result.isEmpty())
+			result = candidates;
+		return result;
+	}
+
 }

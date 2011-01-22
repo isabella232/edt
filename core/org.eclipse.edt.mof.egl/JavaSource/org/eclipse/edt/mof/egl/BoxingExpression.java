@@ -11,27 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl;
 
-import java.util.List;
 
-public interface StructPart extends Part, Container {
-	List<StructPart> getSuperTypes();
+public interface BoxingExpression extends Expression {
+	Expression getExpr();
 	
-	boolean isSubtypeOf(StructPart part);
-	
-	List<Interface> getInterfaces();
-	
-	List<StructuredField> getStructuredFields();
-	
-	List<Constructor> getConstructors();
-	
-	List<Function> getFunctions();
-	
-	List<Operation> getOperations();
-	
-	List<StructuredField> getStructuredFields(String name);
-	
-	List<Function> getFunctions(String name);
-	
-	Function getFunction(String name);
-	
+	void setExpr(Expression expr);
 }

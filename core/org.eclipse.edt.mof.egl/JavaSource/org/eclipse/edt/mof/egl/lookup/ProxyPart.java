@@ -38,7 +38,6 @@ import org.eclipse.edt.mof.egl.TypeKind;
 import org.eclipse.edt.mof.egl.TypeParameter;
 import org.eclipse.edt.mof.serialization.ProxyEObject;
 
-
 public class ProxyPart extends ProxyEObject implements Part, DataType, ParameterizableType {
 	private static String KeyScheme = Type.EGL_KeyScheme + Type.KeySchemeDelimiter;
 	
@@ -381,35 +380,6 @@ public class ProxyPart extends ProxyEObject implements Part, DataType, Parameter
 	public boolean isNativeType() {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-
-	@Override
-	public Operation getBestFitNarrowConversionOp(StructPart src,
-			StructPart prim) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Operation getBestFitWidenConversionOp(StructPart src, StructPart prim) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Operation getNarrowConversionOp(StructPart src, StructPart trg) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Operation getWidenConversionOp(StructPart src, StructPart trg) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

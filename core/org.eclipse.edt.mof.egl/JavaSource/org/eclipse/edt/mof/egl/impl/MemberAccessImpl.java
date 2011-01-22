@@ -117,7 +117,7 @@ public class MemberAccessImpl extends NameImpl implements MemberAccess {
 		}
 		Member result = null;
 		for (Member mbr : container.getMembers()) {
-			if (mbr.getId().equals(getId())) { 
+			if (mbr.getId().equalsIgnoreCase(getId())) { 
 				result = mbr;
 				break;
 			}

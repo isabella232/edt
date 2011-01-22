@@ -11,17 +11,21 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
-import org.eclipse.edt.mof.egl.Container;
+import java.util.List;
+
+import org.eclipse.edt.mof.egl.AmbiguousFunctionReferenceError;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.GenericType;
 import org.eclipse.edt.mof.egl.InvocationExpression;
-import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.NoSuchFunctionError;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
+import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class QualifiedFunctionInvocationImpl extends InvocationExpressionImpl implements QualifiedFunctionInvocation {
 	private static int Slot_target=0;
@@ -42,7 +46,7 @@ public class QualifiedFunctionInvocationImpl extends InvocationExpressionImpl im
 		if (slotGet(Slot_target) == null) {
 			try {
 				setTarget(resolveFunction());
-			} catch (NoSuchFunctionError e) {
+			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
@@ -98,21 +102,18 @@ public class QualifiedFunctionInvocationImpl extends InvocationExpressionImpl im
 	}
 	
 	// TODO: Handle function overloading
-	private FunctionMember resolveFunction() throws NoSuchFunctionError {
-		Container container = (Container)getQualifier().getType().getClassifier();
-		FunctionMember result = null;
-		for (Member mbr : container.getMembers()) {
-			if (mbr.getId().equals(getId())) { 
-				result = (FunctionMember)mbr;
-				break;
-			}
+	private Function resolveFunction() {
+		StructPart container = (StructPart)getQualifier().getType().getClassifier();
+		StructPart[] argTypes = new StructPart[getArguments().size()];
+		int i = 0;
+		for (Expression expr : getArguments()) {
+			argTypes[i] = (StructPart)expr.getType().getClassifier();
+			i++;
 		}
-		if (result == null)
-			throw new NoSuchFunctionError("Member not found: " + getId());
-		
-		return result;
+		List<Function> result = null;
+		result = TypeUtils.getBestFitFunction(container, getId(), argTypes);
+		if (result.isEmpty()) throw new NoSuchFunctionError();
+		if (result.size() > 1) throw new AmbiguousFunctionReferenceError();
+		return result.get(0);
 	}
-	
-	
-
 }

@@ -25,4 +25,6 @@ public interface FunctionParameter extends Parameter {
 	
 	void setIsField(Boolean value);
 	
+	boolean isGenericTypeParameter();
+	
 }

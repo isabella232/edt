@@ -42,7 +42,7 @@ public class FunctionImpl extends FunctionMemberImpl implements Function {
 		if (getReturnField() != null) {
 			return getReturnField().getType();
 		}
-		return null;
+		return getType();
 	}
 
 	

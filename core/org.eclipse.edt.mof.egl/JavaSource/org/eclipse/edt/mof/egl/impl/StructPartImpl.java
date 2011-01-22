@@ -14,7 +14,6 @@ package org.eclipse.edt.mof.egl.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Interface;
@@ -22,9 +21,7 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.StructuredField;
-import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.utils.EList;
-
 
 public class StructPartImpl extends PartImpl implements StructPart {
 	private static int Slot_superTypes=0;
@@ -144,76 +141,6 @@ public class StructPartImpl extends PartImpl implements StructPart {
 		mbrs.addAll(getOperations());
 		return mbrs;
 	}
-	public Operation getWidenConversionOp(StructPart src, StructPart target) {
-		Operation result = null;
-		for (Operation op : src.getOperations()) {
-			if (op.isWidenConversion()) {
-				Type parmType = (Type)op.getParameters().get(0).getType(); 
-				if ( parmType.equals(src) && op.getType().equals(target) ) {
-					return op;
-				}
-			}
-		}
-		if (result == null) {
-			for (Operation op : target.getOperations()) {
-				if (op.isWidenConversion()) {
-					Type parmType = (Type)op.getParameters().get(0).getType(); 
-					if ( parmType.equals(src) && op.getType().equals(target) ) {
-						return op;
-					}
-				}
-			}
-		}
-		return null;
-	}
-	
-	public Operation getNarrowConversionOp(StructPart src, StructPart target) {
-		Operation result = null;
-		for (Operation op : src.getOperations()) {
-			if (op.isNarrowConversion()) {
-				Type parmType = (Type)op.getParameters().get(0).getType(); 
-				if (parmType.equals(src) && op.getType().equals(target)) {
-					return op;
-				}
-			}
-		}
-		if (result == null) {
-			for (Operation op : target.getOperations()) {
-				if (op.isNarrowConversion()) {
-					Type parmType = (Type)op.getParameters().get(0).getType(); 
-					if ( parmType.equals(src) && op.getType().equals(target) ) {
-						return op;
-					}
-				}
-			}
-		}
-		return null;
-	}
-	
-	public Operation getBestFitWidenConversionOp(StructPart src, StructPart target) {
-		Operation op = src.getWidenConversionOp(src, target);
-		if (op == null) {
-			// Look up the super type chain
-			if (!src.getSuperTypes().isEmpty()) {
-				StructPart superType = src.getSuperTypes().get(0);
-				op = getBestFitWidenConversionOp(superType, target);
-			}
-		}
-		return op;
-	}
-
-	public Operation getBestFitNarrowConversionOp(StructPart src, StructPart target) {
-		Operation op = src.getNarrowConversionOp(src, target);
-		if (op == null) {
-			// Look up the super type chain
-			if (!src.getSuperTypes().isEmpty()) {
-				StructPart superType = src.getSuperTypes().get(0);
-				op = getBestFitNarrowConversionOp(superType, target);
-			}
-		}
-		return op;
-	}
-
 	@Override
 	public boolean isSubtypeOf(StructPart part) {
 		if (!getSuperTypes().isEmpty()) {

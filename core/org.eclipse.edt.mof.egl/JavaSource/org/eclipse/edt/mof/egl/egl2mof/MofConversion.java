@@ -14,7 +14,6 @@ package org.eclipse.edt.mof.egl.egl2mof;
 import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.mof.egl.Type;
 
-
 public interface MofConversion {
 	
 	String Mof_package_name = "org.eclipse.edt.mof";
@@ -71,11 +70,11 @@ public interface MofConversion {
 	String Type_Unicode = EGL_lang_package+".AnyUnicode";
 	String Type_Blob = EGL_lang_package+".AnyBlob";
 	String Type_Clob = EGL_lang_package+".AnyClob";
-	String Type_Date = EGL_lang_package+".DateType";
-	String Type_Time = EGL_lang_package+".TimeType";
+	String Type_Date = EGL_lang_package+".EDate";
+	String Type_Time = EGL_lang_package+".ETime";
 	String Type_Timestamp = EGL_lang_package+".AnyTimestamp";
 	String Type_Interval = EGL_lang_package+".AnyInterval";
-	String Type_MonthInterval = EGL_lang_package+".AnyMonthInterval";
+	String Type_MonthInterval = EGL_lang_package+".AnyMonthsInterval";
 	String Type_SecondsInterval = EGL_lang_package+".AnySecondsInterval";
 	String Type_UBin = EGL_lang_package+".AnyUBin";
 	String Type_UnicodeNum = EGL_lang_package+".AnyUnicodeNum";
@@ -265,6 +264,5 @@ public interface MofConversion {
 	String ElementKind_DataTableUse = InternUtil.intern("DataTableUse");
 	String ElementKind_AnnotationValue = InternUtil.intern("AnnotationValue");
 	String ElementKind_AnnotationType = InternUtil.intern("AnnotationType");
-
 
 }

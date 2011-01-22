@@ -115,7 +115,7 @@ public abstract class Mof2BindingBase extends AbstractVisitor implements MofConv
 		IPartBinding binding = (IPartBinding)getBinding(proxy);
 		if (binding == null) {
 			
-			String name = proxy.getName();
+			String name = proxy.getTypeSignature();
 			
 			String partName;
 			String[] pkgName;

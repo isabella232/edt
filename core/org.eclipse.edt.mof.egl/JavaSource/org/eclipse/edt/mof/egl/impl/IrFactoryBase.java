@@ -1,22 +1,9 @@
-/*******************************************************************************
- * Copyright © 2010 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * IBM Corporation - initial API and implementation
- *
- *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
 import org.eclipse.edt.mof.EClass;
-import org.eclipse.edt.mof.EDataType;
 import org.eclipse.edt.mof.EEnum;
 import org.eclipse.edt.mof.egl.*;
 import org.eclipse.edt.mof.impl.EFactoryImpl;
-
 
 public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	@Override
@@ -79,6 +66,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 		return (EClass)getTypeNamed(BinaryExpression);
 	}
 	
+	@Override
+	public EClass getBoxingExpressionEClass() {
+		return (EClass)getTypeNamed(BoxingExpression);
+	}
+
 	@Override
 	public EClass getBooleanLiteralEClass() {
 		return (EClass)getTypeNamed(BooleanLiteral);
@@ -909,6 +901,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 		return (BooleanLiteral)getBooleanLiteralEClass().newInstance();
 	}
 	
+	@Override
+	public BoxingExpression createBoxingExpression() {
+		return (BoxingExpression)getBoxingExpressionEClass().newInstance();
+	}
+
 	@Override
 	public BuiltInOperation createBuiltInOperation() {
 		return (BuiltInOperation)getBuiltInOperationEClass().newInstance();

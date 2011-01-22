@@ -23,7 +23,6 @@ import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.Type;
 
-
 public class FunctionMemberImpl extends MemberImpl implements FunctionMember {
 	private static int Slot_parameters=0;
 	private static int Slot_localDeclarations=1;
@@ -124,6 +123,6 @@ public class FunctionMemberImpl extends MemberImpl implements FunctionMember {
 
 	@Override
 	public Type getReturnType() {
-		return null;
+		return getType();
 	}
 }

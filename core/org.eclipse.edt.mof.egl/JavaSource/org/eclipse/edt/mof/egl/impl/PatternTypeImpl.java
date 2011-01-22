@@ -39,7 +39,7 @@ public class PatternTypeImpl extends ParameterizedTypeImpl implements PatternTyp
 	@Override
 	// Assumes primitive types have the same classifier
 	public boolean typeArgsEqual(Type type) {
-		return this.getPattern() == ((PatternType)type).getPattern();
+		return this.getPattern().equals(((PatternType)type).getPattern());
 	}
 
 	@Override
