@@ -12,11 +12,10 @@
 package egl.lang;
 
 import egl.lang.reflect.ClassType;
+import egl.lang.reflect.SystemClass;
 import egl.lang.reflect.mof.Operation;
 
-externalType AnyObject type ClassType
-	
-	static function box(value AnyValue in) returns(AnyObject) {@Operation{"widen"}};
+externalType AnyObject type ClassType	
 end
 
 externalType AnyException extends AnyObject type ClassType
@@ -25,8 +24,6 @@ externalType AnyException extends AnyObject type ClassType
 end
 
 externalType AnyValue extends AnyObject type ClassType
-
-	static function unbox(object any) returns(AnyValue) {@Operation{"narrow"}};
 end
 
 externalType AnyRecord extends AnyValue type ClassType {isAbstract=yes}

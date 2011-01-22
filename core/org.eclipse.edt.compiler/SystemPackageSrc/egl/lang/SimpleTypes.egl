@@ -1,14 +1,3 @@
-/*******************************************************************************
- * Copyright © 2010 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * IBM Corporation - initial API and implementation
- *
- *******************************************************************************/
 package egl.lang;
 
 import egl.lang.reflect.ClassType;
@@ -326,30 +315,93 @@ externalType AnyNumc extends AnyNumber type ParameterizableType {
 end
 
 // Date Time primitives
-externalType DateType extends AnyValue type ClassType
+externalType EDate extends AnyValue type ClassType
+
+	static function $Minus(lvalue EDate in, rvalue EDate in) returns(Int32) {@Operation{"-"}};	
+	static function $Minus(lvalue EDate in, rvalue int64 in) returns(EDate) {@Operation{"-"}};
+	static function $Minus(lvalue EDate in, rvalue AnySecondsInterval in) returns(AnyTimestamp) {@Operation{"-"}};
+	static function $Minus(lvalue EDate in, rvalue AnyMonthsInterval in) returns(AnyTimestamp) {@Operation{"-"}};
+	static function $Plus(lvalue EDate in, rvalue Int64 in) returns(EDate) {@Operation{"+"}};
+	static function $Plus(lvalue Int64 in, rvalue EDate in) returns(EDate) {@Operation{"+"}};
+	static function $Plus(lvalue EDate in, rvalue AnySecondsInterval in) returns(AnyTimestamp) {@Operation{"+"}};
+	static function $Plus(lvalue EDate in, rvalue AnyMonthsInterval in) returns(AnyTimestamp) {@Operation{"+"}};
+	
+	static function asDate(value AnyTimestamp in) returns(EDate) {@Operation{"narrow"}};
+	static function asDate(value AnyString in) returns(EDate) {@Operation{"narrow"}};
+	static function asDate(value Int16 in) returns(EDate) {@Operation{"widen"}};
+	static function asDate(value Int32 in) returns(EDate) {@Operation{"widen"}};
+	static function asDate(value Int64 in) returns(EDate) {@Operation{"widen"}};
+	static function asDate(value AnyDecimal in) returns(EDate) {@Operation{"widen"}};
+	static function asDate(value Float32 in) returns(EDate) {@Operation{"widen"}};
+	static function asDate(value Float64 in) returns(EDate) {@Operation{"widen"}};
+	static function asString(value EDate in) returns(AnyString) {@Operation{"widen"}};
 end
 
-externalType TimeType extends AnyValue type ClassType
+externalType ETime extends AnyValue type ClassType
+
+	static function asTime(value AnyString in) returns(ETime) {@Operation{"narrow"}};
+	static function asTime(value AnyTimestamp in) returns(ETime) {@Operation{"narrow"}};
+	static function asString(value ETime in) returns(AnyString) {@Operation{"widen"}};
+	
 end
 
 externalType AnyTimestamp extends AnyValue type ParameterizableType {
 	parameterizedType = TimestampType
 }
+	static function $Minus(lvalue AnyTimestamp in, rvalue AnyTimestamp in) returns (AnyDecimal) {@Operation{"-"}};
+	static function $Minus(lvalue AnyTimestamp in, rvalue AnyMonthsInterval in) returns(AnyTimestamp) {@Operation{"-"}};
+	static function $Minus(lvalue AnyTimestamp in, rvalue AnySecondsInterval in) returns(AnyTimestamp) {@Operation{"-"}};
+	static function $Plus(lvalue AnyTimestamp in, rvalue AnyMonthsInterval in) returns(AnyTimestamp) {@Operation{"+"}};
+	static function $Plus(lvalue AnyMonthsInterval in, rvalue AnyTimestamp in) returns(AnyTimestamp) {@Operation{"+"}};
+	static function $Plus(lvalue AnyTimestamp in, rvalue AnySecondsInterval in) returns(AnyTimestamp) {@Operation{"+"}};
+	static function $Plus(lvalue AnySecondsInterval in, rvalue AnyTimestamp in) returns(AnyTimestamp) {@Operation{"+"}};
+	
+	static function asTimestamp(value EDate in) returns(AnyTimestamp) {@Operation{"widen"}};
+	static function asTimestamp(value AnyString in) returns (AnyTimestamp) {@Operation{"narrow"}};
+	static function asTimestamp(value AnyTimestamp in) returns (AnyTimestamp) {@Operation{"narrow"}};
+	static function asString(value AnyTimestamp in) returns (AnyString) {@Operation{"widen"}};
 end
 
-externalType AnyInterval extends AnyValue type ParameterizableType {
-	parameterizedType = IntervalType
-}
+externalType AnyInterval extends AnyValue type ParameterizableType { paramterizedType = IntervalType }
 end
 
-externalType AnyMonthInterval extends AnyValue type ParameterizableType {
+externalType AnyMonthsInterval extends AnyInterval type ParameterizableType {
 	parameterizedType = IntervalType
 }
+	
+	static function $Plus(lvalue AnyMonthsInterval in, rvalue AnyMonthsInterval in) returns (AnyMonthsInterval) {@Operation{"+"}};
+	static function $Minus(lvalue AnyMonthsInterval in, rvalue AnyMonthsInterval in) returns (AnyMonthsInterval) {@Operation{"-"}};	
+	static function $Multiply(lvalue AnyMonthsInterval in, rvalue Int64 in) returns (AnyMonthsInterval) {@Operation{"*"}};	
+	static function $Divide(lvalue AnyMonthsInterval in, rvalue Int64 in) returns (AnyMonthsInterval) {@Operation{"/"}};
+	
+	static function asMonthsInterval(value AnySecondsInterval in) returns(AnyMonthsInterval) {@Operation{"widen"}};
+	static function asMonthsInterval(value AnyMonthsInterval in) returns(AnyMonthsInterval) {@Operation{"widen"}};
+	static function asMonthsInterval(value Int16 in) returns(AnyMonthsInterval) {@Operation{"widen"}};
+	static function asMonthsInterval(value Int32 in) returns(AnyMonthsInterval) {@Operation{"widen"}};
+	static function asMonthsInterval(value Int64 in) returns(AnyMonthsInterval) {@Operation{"widen"}};
+	static function asMonthsInterval(value AnyDecimal in) returns(AnyMonthsInterval) {@Operation{"widen"}};
+	static function asMonthsInterval(value Float32 in) returns(AnyMonthsInterval) {@Operation{"widen"}};
+	static function asMonthsInterval(value Float64 in) returns(AnyMonthsInterval) {@Operation{"widen"}};
+	static function asString(value AnyMonthsInterval in) returns (AnyString) {@Operation{"widen"}};
 end
 
-externalType AnySecondsInterval extends AnyValue type ParameterizableType {
+externalType AnySecondsInterval extends AnyInterval type ParameterizableType {
 	parameterizedType = IntervalType
 }
+	static function $Plus(lvalue AnySecondsInterval in, rvalue AnySecondsInterval in) returns (AnySecondsInterval) {@Operation{"+"}};
+	static function $Minus(lvalue AnySecondsInterval in, rvalue AnySecondsInterval in) returns (AnySecondsInterval) {@Operation{"-"}};	
+	static function $Multiply(lvalue AnySecondsInterval in, rvalue Int64 in) returns (AnySecondsInterval) {@Operation{"*"}};	
+	static function $Divide(lvalue AnySecondsInterval in, rvalue Int64 in) returns (AnySecondsInterval) {@Operation{"/"}};
+
+	static function asSecondsInterval(value AnyMonthsInterval in) returns(AnySecondsInterval) {@Operation{"narrow"}};
+	static function asSecondsInterval(value AnySecondsInterval in) returns(AnySecondsInterval) {@Operation{"widen"}};
+	static function asSecondsInterval(value Int16 in) returns(AnySecondsInterval) {@Operation{"widen"}};
+	static function asSecondsInterval(value Int32 in) returns(AnySecondsInterval) {@Operation{"widen"}};
+	static function asSecondsInterval(value Int64 in) returns(AnySecondsInterval) {@Operation{"widen"}};
+	static function asSecondsInterval(value AnyDecimal in) returns(AnySecondsInterval) {@Operation{"widen"}};
+	static function asSecondsInterval(value Float32 in) returns(AnySecondsInterval) {@Operation{"widen"}};
+	static function asSecondsInterval(value Float64 in) returns(AnySecondsInterval) {@Operation{"widen"}};
+	static function asString(value AnySecondsInterval in) returns (AnyString) {@Operation{"widen"}};
 end
 
 externalType AnyClob type ClassType
