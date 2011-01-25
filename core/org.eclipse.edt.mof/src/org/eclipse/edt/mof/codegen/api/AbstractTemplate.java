@@ -133,12 +133,12 @@ public abstract class AbstractTemplate implements Template {
 		Method method;
 		Class impls = object.getClass().getInterfaces()[0];
 		try {
-			method = getMethod(xlateMethod, true, impls, args.getClass());
+			method = getMethod(xlateMethod, true, impls, ctx.getClass(), args.getClass());
 			if (method != null) {
 				return (List<Object>)method.invoke(this, object, ctx, args);
 			}
 			else if (args.length == 0) {			
-				method = getMethod(xlateMethod, true, impls);
+				method = getMethod(xlateMethod, true, impls, ctx.getClass());
 				if (method != null) {
 					return (List<Object>)method.invoke(this, object, ctx);
 				}
@@ -167,13 +167,13 @@ public abstract class AbstractTemplate implements Template {
 		Method method;
 		Class impls = object.getClass().getInterfaces()[0];
 		try {
-			method = getMethod(validateMethod, true, impls, args.getClass());
+			method = getMethod(validateMethod, true, impls, ctx.getClass(), args.getClass());
 			if (method != null) {
 				method.invoke(this, object, ctx, args);
 				return;
 			}
 			else if (args.length == 0) {			
-				method = getMethod(validateMethod, true, impls);
+				method = getMethod(validateMethod, true, impls, ctx.getClass());
 				if (method != null) {
 					method.invoke(this, object, ctx);
 					return;
