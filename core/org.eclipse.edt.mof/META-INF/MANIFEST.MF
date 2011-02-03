@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.eclipse.edt.mof
 Bundle-Version: 0.7.0.qualifier
 Bundle-Vendor: IBM
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Eclipse-BuddyPolicy: dependent
 Export-Package: org.eclipse.edt.mof,
  org.eclipse.edt.mof.codegen.api,
  org.eclipse.edt.mof.codegen.java,
