@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package com.ibm.egl.model.api.gen;
+package org.eclipse.edt.mof.egl.api.gen;
 
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.MofFactory;

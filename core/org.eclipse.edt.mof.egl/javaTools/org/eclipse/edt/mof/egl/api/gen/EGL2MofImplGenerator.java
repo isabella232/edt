@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package com.ibm.egl.model.api.gen;
+package org.eclipse.edt.mof.egl.api.gen;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,7 +21,7 @@ import java.util.List;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EClassifier;
 import org.eclipse.edt.mof.EObject;
-import org.eclipse.edt.mof.codegen.api.AbstractTemplateFactory;
+import org.eclipse.edt.mof.codegen.api.TemplateFactory;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.Template;
 import org.eclipse.edt.mof.codegen.api.TemplateContext;
@@ -134,7 +134,7 @@ public class EGL2MofImplGenerator {
 
 	void generate(String typeSignature, File root) {
 		try {
-			AbstractTemplateFactory factory = getTemplateFactory();
+			TemplateFactory factory = getTemplateFactory();
 			TemplateContext ctx = new TemplateContext();
 			if (packageMappings != null)
 				for (String[] mapping : packageMappings) {
@@ -264,7 +264,7 @@ public class EGL2MofImplGenerator {
 		}
 	}
 
-	protected AbstractTemplateFactory getTemplateFactory() throws TemplateException{
+	protected TemplateFactory getTemplateFactory() throws TemplateException{
 		return new MofImplTemplateFactory();
 	}
 }
