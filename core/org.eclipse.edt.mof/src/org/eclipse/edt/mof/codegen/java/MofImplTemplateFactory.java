@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.codegen.java;
 
-import org.eclipse.edt.mof.codegen.api.AbstractTemplateFactory;
+import org.eclipse.edt.mof.codegen.api.TemplateFactory;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
 
-public class MofImplTemplateFactory extends AbstractTemplateFactory {
+public class MofImplTemplateFactory extends TemplateFactory {
 	private final static String propertiesName = "org.eclipse.edt.mof.codegen.java.template";
 
 	public MofImplTemplateFactory() throws TemplateException {
