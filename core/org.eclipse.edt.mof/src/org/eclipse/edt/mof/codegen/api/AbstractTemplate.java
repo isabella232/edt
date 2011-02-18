@@ -71,7 +71,7 @@ public abstract class AbstractTemplate implements Template {
 			if (t instanceof TemplateException)
 				throw (TemplateException)t;
 			else 
-				throw new TemplateException(itx);
+				throw new TemplateException(t);
 		}
 		catch (Exception e) {
 			throw new TemplateException(e);
@@ -116,7 +116,7 @@ public abstract class AbstractTemplate implements Template {
 			if (t instanceof TemplateException)
 				throw (TemplateException)t;
 			else 
-				throw new TemplateException(itx);
+				throw new TemplateException(t);
 		}
 		catch (Exception e) {
 			throw new TemplateException(e);
@@ -162,7 +162,7 @@ public abstract class AbstractTemplate implements Template {
 			if (t instanceof TemplateException)
 				throw (TemplateException)t;
 			else 
-				throw new TemplateException(itx);
+				throw new TemplateException(t);
 		}
 		catch (Exception e) {
 			throw new TemplateException(e);
