@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.codegen.api;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -61,8 +62,12 @@ public abstract class AbstractTemplate implements Template {
 				builder.append(this.getClass().getName());
 				throw new TemplateException(builder.toString());
 			}
-		} catch (TemplateException te) {
+		} 
+		catch (TemplateException te) {
 			throw te;
+		}
+		catch (InvocationTargetException itx) {
+			throw new TemplateException(itx.getTargetException());
 		}
 		catch (Exception e) {
 			throw new TemplateException(e);
@@ -98,9 +103,14 @@ public abstract class AbstractTemplate implements Template {
 				builder.append(this.getClass().getName());
 				throw new TemplateException(builder.toString());
 			}
-		} catch (TemplateException te) {
+		} 
+		catch (TemplateException te) {
 			throw te;
-		} catch (Exception e) {
+		} 
+		catch (InvocationTargetException itx) {
+			throw new TemplateException(itx.getTargetException());
+		}
+		catch (Exception e) {
 			throw new TemplateException(e);
 		}
 		return null;
@@ -135,9 +145,14 @@ public abstract class AbstractTemplate implements Template {
 				builder.append(this.getClass().getName());
 				throw new TemplateException(builder.toString());
 			}
-		} catch (TemplateException te) {
+		} 
+		catch (TemplateException te) {
 			throw te;
-		} catch (Exception e) {
+		} 
+		catch (InvocationTargetException itx) {
+			throw new TemplateException(itx.getTargetException());
+		}
+		catch (Exception e) {
 			throw new TemplateException(e);
 		}
 	}

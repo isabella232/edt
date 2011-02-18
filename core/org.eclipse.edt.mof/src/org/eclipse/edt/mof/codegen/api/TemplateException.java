@@ -19,7 +19,7 @@ public class TemplateException extends RuntimeException {
 	// Optional object that may have caused this exception
 	private EObject causeObject;
 	
-	public TemplateException(Exception e) {
+	public TemplateException(Throwable e) {
 		super(e);
 	}
 	
