@@ -16,8 +16,7 @@ import java.util.List;
 import org.eclipse.edt.mof.EObject;
 
 public interface Template {
-	String get(String getMethod, EObject eObject, Object...args);
-	boolean is(String isMethod, EObject eObject, Object...args);
+	void gen(String genMethod, Object eObject, TemplateContext ctx, TabbedWriter out, Object...args) throws TemplateException;
 	void gen(String genMethod, EObject eObject, TemplateContext ctx, TabbedWriter out, Object...args) throws TemplateException;
 	List<Object> xlate(String xlateMethod, EObject eObject, TemplateContext ctx, Object...args) throws TemplateException;
 	void validate(String xlateMethod, EObject eObject, TemplateContext ctx, Object...args) throws TemplateException;

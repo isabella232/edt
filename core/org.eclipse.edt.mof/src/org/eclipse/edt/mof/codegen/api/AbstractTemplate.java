@@ -25,74 +25,14 @@ public abstract class AbstractTemplate implements Template {
 	public static MofFactory factory = MofFactory.INSTANCE;
 	
 			
-	@SuppressWarnings("unchecked")
-	@Override
-	public String get(String getMethod, EObject object, Object...args) throws TemplateException {
-		Method method;
-		Class impls = object.getClass().getInterfaces()[0];
-		try {
-			method = getMethod(getMethod, true, impls, args.getClass());
-			if (method != null) {
-				return (String)method.invoke(this, object, args);
-			}
-			else if (args.length == 0) {			
-				method = getMethod(getMethod, true, impls);
-				if (method != null) {
-					return (String)method.invoke(this, object);
-				}
-			}
-			if (method == null) {
-				StringBuilder builder = new StringBuilder();
-				builder.append("No such method ");
-				builder.append(getMethod);
-				builder.append("(");
-				builder.append(impls.getName());
-				builder.append(") for template " );
-				builder.append(this.getClass().getName());
-				throw new TemplateException(builder.toString());
-			}
-			return null; //Will never get here
-		} catch (Exception e) {
-			throw new TemplateException(e);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public boolean is(String isMethod, EObject object, Object...args) throws TemplateException {
-		Method method;
-		Class impls = object.getClass().getInterfaces()[0];
-		try {
-			method = getMethod(isMethod, true, impls, args.getClass());
-			if (method != null) {
-				return (Boolean)method.invoke(this, object, args);
-			}
-			else if (args.length == 0) {			
-				method = getMethod(isMethod, true, impls);
-				if (method != null) {
-					return (Boolean)method.invoke(this, object);
-				}
-			}
-			if (method == null) {
-				StringBuilder builder = new StringBuilder();
-				builder.append("No such method ");
-				builder.append(isMethod);
-				builder.append("(");
-				builder.append(impls.getName());
-				builder.append(") for template " );
-				builder.append(this.getClass().getName());
-				throw new TemplateException(builder.toString());
-			}
-			return false; // Will never get here
-		} catch (Exception e) {
-			throw new TemplateException(e);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
 	@Override
 	public void gen(String genMethod, EObject object, TemplateContext ctx, TabbedWriter out, Object...args) throws TemplateException {
-		Class impls = object.getClass().getInterfaces()[0];
+		gen(genMethod, (Object)object, ctx, out, args);
+	}
+
+	@Override
+	public void gen(String genMethod, Object object, TemplateContext ctx, TabbedWriter out, Object...args) throws TemplateException {
+		Class<?> impls = object.getClass().getInterfaces()[0];
 		Method method;
 		try {
 			method = getMethod(genMethod, true, impls, ctx.getClass(), out.getClass(), args.getClass());
@@ -121,17 +61,20 @@ public abstract class AbstractTemplate implements Template {
 				builder.append(this.getClass().getName());
 				throw new TemplateException(builder.toString());
 			}
-		} catch (Exception e) {
+		} catch (TemplateException te) {
+			throw te;
+		}
+		catch (Exception e) {
 			throw new TemplateException(e);
 		}
 	}
 	
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "unused" })
 	@Override
 	public List<Object> xlate(String xlateMethod, EObject object, TemplateContext ctx, Object...args) throws TemplateException {
 		Method method;
-		Class impls = object.getClass().getInterfaces()[0];
+		Class<?> impls = object.getClass().getInterfaces()[0];
 		try {
 			method = getMethod(xlateMethod, true, impls, ctx.getClass(), args.getClass());
 			if (method != null) {
@@ -155,17 +98,18 @@ public abstract class AbstractTemplate implements Template {
 				builder.append(this.getClass().getName());
 				throw new TemplateException(builder.toString());
 			}
-			return null; // Will never get here
+		} catch (TemplateException te) {
+			throw te;
 		} catch (Exception e) {
 			throw new TemplateException(e);
 		}
+		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void validate(String validateMethod, EObject object, TemplateContext ctx, Object...args) throws TemplateException {
 		Method method;
-		Class impls = object.getClass().getInterfaces()[0];
+		Class<?> impls = object.getClass().getInterfaces()[0];
 		try {
 			method = getMethod(validateMethod, true, impls, ctx.getClass(), args.getClass());
 			if (method != null) {
@@ -191,20 +135,21 @@ public abstract class AbstractTemplate implements Template {
 				builder.append(this.getClass().getName());
 				throw new TemplateException(builder.toString());
 			}
+		} catch (TemplateException te) {
+			throw te;
 		} catch (Exception e) {
 			throw new TemplateException(e);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private Method getMethod(String methodName, boolean doGet, Class...classes ) {
+	private Method getMethod(String methodName, boolean doGet, Class<?>...classes ) {
 		Method method = null;
 		if (doGet) {
 			method = primGetMethod(methodName, classes);
 		}
-		Class ifaceClass = classes[0];
+		Class<?> ifaceClass = classes[0];
 		if (method == null) {
-			for (Class iface : ifaceClass.getInterfaces()) {
+			for (Class<?> iface : ifaceClass.getInterfaces()) {
 				classes[0] = iface;
 				method = primGetMethod(methodName, classes);
 				if (method != null) break;
@@ -219,8 +164,7 @@ public abstract class AbstractTemplate implements Template {
 		return method;
 	}
 
-	@SuppressWarnings("unchecked")
-	private Method primGetMethod(String methodName, Class...classes) {
+	private Method primGetMethod(String methodName, Class<?>...classes) {
 		Method method = null;
 		try {
 			method = this.getClass().getMethod(methodName, classes);

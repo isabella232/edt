@@ -8,6 +8,12 @@ import org.eclipse.edt.mof.MofSerializable;
 public class MissingTemplate extends AbstractTemplate {
 
 	@Override
+	public final void gen(String genMethod, Object object, TemplateContext ctx, TabbedWriter out, Object...args) throws TemplateException {
+		String text = object instanceof MofSerializable ? ((MofSerializable)object).getMofSerializationKey() : object.getClass().getName();
+		out.print("<MISSING TEMPLATE FOR: " + text + ">");
+	}
+
+	@Override
 	public final void gen(String genMethod, EObject object, TemplateContext ctx, TabbedWriter out, Object...args) throws TemplateException {
 		String text = object instanceof MofSerializable ? ((MofSerializable)object).getMofSerializationKey() : object.getEClass().getMofSerializationKey();
 		out.print("<MISSING TEMPLATE FOR: " + text + ">");
@@ -26,19 +32,5 @@ public class MissingTemplate extends AbstractTemplate {
 		String text = object instanceof MofSerializable ? ((MofSerializable)object).getMofSerializationKey() : object.getEClass().getMofSerializationKey();
 		throw new TemplateException("Missing Template for: " + text, object);
 	}
-
-	@Override
-	public String get(String getMethod, EObject object, Object... args) {
-		String text = object instanceof MofSerializable ? ((MofSerializable)object).getMofSerializationKey() : object.getEClass().getMofSerializationKey();
-		throw new TemplateException("Missing Template for: " + text, object);
-	}
-
-	@Override
-	public boolean is(String isMethod, EObject object, Object... args) {
-		String text = object instanceof MofSerializable ? ((MofSerializable)object).getMofSerializationKey() : object.getEClass().getMofSerializationKey();
-		throw new TemplateException("Missing Template for: " + text, object);
-	}
-	
-	
 
 }

@@ -40,17 +40,16 @@ public class TemplateContext extends HashMap<Object, Object> {
 		return getTemplate(eClassifier.getETypeSignature());
 	}
 	
-	
-	public String get(String getMethod, EObject object, Object...args) throws TemplateException {
-		Template template = getTemplateFor(object.getEClass());
-		return template.get(getMethod, object, args);
+	@SuppressWarnings("rawtypes")
+	public Template getTemplateFor(Class javaClass) throws TemplateException {
+		return getTemplate(javaClass.getName());
 	}
 	
-	public boolean is(String isMethod, EObject object, Object...args) throws TemplateException {
-		Template template = getTemplateFor(object.getEClass());
-		return template.is(isMethod, object, args);
+	public void gen(String genMethod, Object object, TemplateContext ctx, TabbedWriter out, Object...args) throws TemplateException {
+		Template template = getTemplateFor(object.getClass());
+		template.gen(genMethod, object, ctx, out, args);
 	}
-	
+
 	public void gen(String genMethod, EObject object, TemplateContext ctx, TabbedWriter out, Object...args) throws TemplateException {
 		Template template = getTemplateFor(object.getEClass());
 		template.gen(genMethod, object, ctx, out, args);
