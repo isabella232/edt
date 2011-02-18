@@ -67,7 +67,11 @@ public abstract class AbstractTemplate implements Template {
 			throw te;
 		}
 		catch (InvocationTargetException itx) {
-			throw new TemplateException(itx.getTargetException());
+			Throwable t = itx.getTargetException();
+			if (t instanceof TemplateException)
+				throw (TemplateException)t;
+			else 
+				throw new TemplateException(itx);
 		}
 		catch (Exception e) {
 			throw new TemplateException(e);
@@ -108,7 +112,11 @@ public abstract class AbstractTemplate implements Template {
 			throw te;
 		} 
 		catch (InvocationTargetException itx) {
-			throw new TemplateException(itx.getTargetException());
+			Throwable t = itx.getTargetException();
+			if (t instanceof TemplateException)
+				throw (TemplateException)t;
+			else 
+				throw new TemplateException(itx);
 		}
 		catch (Exception e) {
 			throw new TemplateException(e);
@@ -150,7 +158,11 @@ public abstract class AbstractTemplate implements Template {
 			throw te;
 		} 
 		catch (InvocationTargetException itx) {
-			throw new TemplateException(itx.getTargetException());
+			Throwable t = itx.getTargetException();
+			if (t instanceof TemplateException)
+				throw (TemplateException)t;
+			else 
+				throw new TemplateException(itx);
 		}
 		catch (Exception e) {
 			throw new TemplateException(e);
