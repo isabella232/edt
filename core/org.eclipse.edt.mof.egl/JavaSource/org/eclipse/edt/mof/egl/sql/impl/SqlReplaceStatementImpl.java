@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.sql.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.edt.mof.egl.sql.SqlClause;
 import org.eclipse.edt.mof.egl.sql.SqlReplaceStatement;
 
@@ -34,6 +37,17 @@ public class SqlReplaceStatementImpl extends SqlIOStatementImpl implements SqlRe
 		Slot_whereClause += offset;
 		Slot_noCursor += offset;
 	}
+
+	@Override
+	public List<SqlClause> getSqlClauses() {
+		List<SqlClause> clauses = new ArrayList<SqlClause>();
+		if (getSetClause() != null) clauses.add(getSetClause());
+		if (getFromClause() != null) clauses.add(getFromClause());
+		if (getUpdateClause() != null) clauses.add(getUpdateClause());
+		if (getWhereClause() != null) clauses.add(getWhereClause());
+		return clauses;
+	}
+
 	@Override
 	public SqlClause getSetClause() {
 		return (SqlClause)slotGet(Slot_setClause);

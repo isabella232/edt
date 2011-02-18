@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.sql.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.edt.mof.egl.sql.SqlClause;
 import org.eclipse.edt.mof.egl.sql.SqlGetByKeyStatement;
 
@@ -44,6 +47,20 @@ public class SqlGetByKeyStatementImpl extends SqlIOStatementImpl implements SqlG
 		Slot_isSingleRowSelect += offset;
 		Slot_isForUpdate += offset;
 	}
+
+	@Override
+	public List<SqlClause> getSqlClauses() {
+		List<SqlClause> clauses = new ArrayList<SqlClause>();
+		clauses.add(getSelectClause());
+		clauses.add(getFromClause());
+		if (getWhereClause() != null) clauses.add(getWhereClause());
+		if (getOrderByClause() != null) clauses.add(getOrderByClause());
+		if (getGroupByClause() != null) clauses.add(getGroupByClause());
+		if (getCallClause() != null) clauses.add(getCallClause());
+		if (getForUpdateOfClause() != null) clauses.add(getForUpdateOfClause());
+		return clauses;
+	}
+
 	@Override
 	public SqlClause getCallClause() {
 		return (SqlClause)slotGet(Slot_callClause);

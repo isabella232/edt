@@ -83,29 +83,49 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
         	if(SourcePathEntry.getInstance().hasPart(packageName, partName) != ITypeBinding.NOT_FOUND_BINDING){
 		        hasSourcePart = true;
 	        }
-	        String mofSignature = IRUtils.concatWithSeparator(packageName, ".");
-	        mofSignature = Type.EGL_KeyScheme + ":" + mofSignature + "." + partName;
+	        String mofSignature = IRUtils.concatWithSeparator(packageName, ".") + "." + partName;
+	        String eglSignature = Type.EGL_KeyScheme + ":" + mofSignature;
 		
 			if (hasSourcePart) {
 		    	long sourceLastModified = SourcePathEntry.getInstance().lastModified(packageName, partName);
 		    	long irLastModified = irEnv.lastModified(mofSignature);
+		    	if (irLastModified == -1) irLastModified = irEnv.lastModified(eglSignature);
 		    	if (irLastModified == -1 || sourceLastModified > irLastModified) {
 		    		return SourcePathEntry.getInstance().getOrCompilePartBinding(packageName, partName);
 		    	}
 			}
 			try {
-				EObject irPart = irEnv.find(mofSignature);
-				IPartBinding partBinding = converter.convert(irPart);
-				bindingCache.put(packageName, partName, partBinding);
-				return partBinding;
-			} catch (MofObjectNotFoundException ex) {
-				return SystemEnvironment.getInstance().getPartBinding(packageName, partName);
+				EObject irPart = findPart(eglSignature);
+				if (irPart == null) irPart = findPart(mofSignature);
+				IPartBinding partBinding;
+				if (irPart == null) {
+					partBinding = SystemEnvironment.getInstance().getPartBinding(packageName, partName);
+				}
+				else {
+					partBinding = converter.convert(irPart);
+				}
+				if (partBinding != null) {
+					bindingCache.put(packageName, partName, partBinding);
+					return partBinding;
+				}
+				else {
+					throw new RuntimeException("Part not found: " + mofSignature);
+				}
 			} catch (DeserializationException ex2) {
 				throw new RuntimeException(ex2);
 			}
        }
        return result;
         	
+    }
+    
+    private EObject findPart(String mofSignature) throws DeserializationException {
+    	try {
+    		return irEnv.find(mofSignature);
+    	}
+    	catch(MofObjectNotFoundException e1) {
+    		return null;
+    	}
     }
     
     public IPartBinding getNewPartBinding(String[] packageName, String caseSensitiveInternedPartName, int kind) {

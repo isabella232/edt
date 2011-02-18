@@ -12,6 +12,8 @@
 package org.eclipse.edt.mof.egl.sql.impl;
 
 import org.eclipse.edt.mof.egl.LHSExpr;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.sql.SqlHostVariableToken;
 
 
@@ -37,4 +39,10 @@ public class SqlHostVariableTokenImpl extends SqlTokenImpl implements SqlHostVar
 		slotSet(Slot_hostVarExpression, value);
 	}
 	
+	@Override
+	public Member getMember() {
+		return (Member)((Name)getHostVarExpression()).getNamedElement();
+	}
+	
+
 }

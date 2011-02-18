@@ -11,7 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.sql.impl;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.edt.mof.egl.sql.SqlClause;
 import org.eclipse.edt.mof.egl.sql.SqlCloseStatement;
 
 public class SqlCloseStatementImpl extends SqlIOStatementImpl implements SqlCloseStatement {
+
 }

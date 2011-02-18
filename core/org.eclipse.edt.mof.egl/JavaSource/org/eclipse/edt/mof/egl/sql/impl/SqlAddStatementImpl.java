@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.sql.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.edt.mof.egl.sql.SqlAddStatement;
 import org.eclipse.edt.mof.egl.sql.SqlClause;
 
@@ -30,6 +33,16 @@ public class SqlAddStatementImpl extends SqlIOStatementImpl implements SqlAddSta
 		Slot_insertIntoClause += offset;
 		Slot_valuesClause += offset;
 	}
+
+	@Override
+	public List<SqlClause> getSqlClauses() {
+		List<SqlClause> clauses = new ArrayList<SqlClause>();
+		if (getColumnsClause() != null) clauses.add(getColumnsClause());
+		if (getInsertIntoClause() != null) clauses.add(getInsertIntoClause());
+		if (getValuesClause() != null) clauses.add(getValuesClause());
+		return clauses;
+	}
+
 	@Override
 	public SqlClause getColumnsClause() {
 		return (SqlClause)slotGet(Slot_columnsClause);

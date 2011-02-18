@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.sql.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.edt.mof.egl.Expression;
@@ -37,6 +38,12 @@ public abstract class SqlIOStatementImpl extends IOStatementImpl implements SqlI
 		Slot_intoExpressions += offset;
 		Slot_hasExplicitSql += offset;
 	}
+	
+	@Override
+	public List<SqlClause> getSqlClauses() {
+		return Collections.emptyList();
+	}
+	
 	@Override
 	public String getPreparedStatementId() {
 		return (String)slotGet(Slot_preparedStatementId);
@@ -72,11 +79,5 @@ public abstract class SqlIOStatementImpl extends IOStatementImpl implements SqlI
 	public void setHasExplicitSql(Boolean value) {
 		slotSet(Slot_hasExplicitSql, value);
 	}
-	
-	
-	@Override
-	public List<SqlClause> getSqlClauses() {
-		// TODO: Default generated implementation
-		return null;
-	}
+
 }

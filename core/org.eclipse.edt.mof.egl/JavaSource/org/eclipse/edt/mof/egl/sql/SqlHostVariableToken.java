@@ -12,10 +12,13 @@
 package org.eclipse.edt.mof.egl.sql;
 
 import org.eclipse.edt.mof.egl.LHSExpr;
+import org.eclipse.edt.mof.egl.Member;
 
 public interface SqlHostVariableToken extends SqlToken {
 	LHSExpr getHostVarExpression();
 	
 	void setHostVarExpression(LHSExpr value);
 	
+	Member getMember();
+
 }

@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.sql.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.edt.mof.egl.ExecuteStatement;
 import org.eclipse.edt.mof.egl.sql.SqlClause;
 import org.eclipse.edt.mof.egl.sql.SqlExecuteStatement;
@@ -36,6 +39,14 @@ public class SqlExecuteStatementImpl extends SqlIOStatementImpl implements SqlEx
 		Slot_isUpdate += offset;
 		Slot_sqlClause += offset;
 	}
+
+	@Override
+	public List<SqlClause> getSqlClauses() {
+		List<SqlClause> clauses = new ArrayList<SqlClause>();
+		if (getSqlClause() != null) clauses.add(getSqlClause());
+		return clauses;
+	}
+
 	@Override
 	public Boolean isDelete() {
 		return (Boolean)slotGet(Slot_isDelete);

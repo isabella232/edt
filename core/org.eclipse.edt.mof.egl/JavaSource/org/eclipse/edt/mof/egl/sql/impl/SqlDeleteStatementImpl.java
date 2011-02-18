@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.sql.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.edt.mof.egl.sql.SqlClause;
 import org.eclipse.edt.mof.egl.sql.SqlDeleteStatement;
 
@@ -32,6 +35,16 @@ public class SqlDeleteStatementImpl extends SqlIOStatementImpl implements SqlDel
 		Slot_noCursor += offset;
 		Slot_whereClause += offset;
 	}
+
+	@Override
+	public List<SqlClause> getSqlClauses() {
+		List<SqlClause> clauses = new ArrayList<SqlClause>();
+		if (getDeleteClause() != null) clauses.add(getDeleteClause());
+		if (getFromClause() != null) clauses.add(getFromClause());
+		if (getWhereClause() != null) clauses.add(getWhereClause());
+		return clauses;
+	}
+
 	@Override
 	public SqlClause getDeleteClause() {
 		return (SqlClause)slotGet(Slot_deleteClause);
