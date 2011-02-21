@@ -13,9 +13,9 @@ package org.eclipse.edt.mof;
 
 public interface EVisitor {
 	int getParentSlotIndex();
-	EObject getParent();
-	void pushParent(EObject parent);
-	EObject popParent();
+	Object getParent();
+	void pushParent(Object parent);
+	Object popParent();
 	void pushSlotIndex(int index);
 	Integer popSlotIndex();
 

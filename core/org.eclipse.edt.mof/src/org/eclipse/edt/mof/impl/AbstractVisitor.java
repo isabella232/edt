@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
-import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.EVisitor;
 
 
@@ -25,7 +24,7 @@ public class AbstractVisitor implements EVisitor {
 	private boolean allowRevisit = true;
 	private boolean trackParent = false;
 	private Set<Object> visited;
-	private Stack<EObject> parents;
+	private Stack<Object> parents;
 	private Stack<Integer> slotIndices;
 	private Object returnData;
 	
@@ -44,7 +43,7 @@ public class AbstractVisitor implements EVisitor {
 	
 	public void allowParentTracking() {
 		trackParent = true;
-		parents = new Stack<EObject>();
+		parents = new Stack<Object>();
 		slotIndices = new Stack<Integer>();
 	}
 	
@@ -52,15 +51,15 @@ public class AbstractVisitor implements EVisitor {
 		return trackParent;
 	}
 	
-	public void pushParent(EObject parent) {
+	public void pushParent(Object parent) {
 		parents.push(parent);
 	}
 	
-	public EObject popParent() {
+	public Object popParent() {
 		return parents.pop();
 	}
 	
-	public EObject getParent() {
+	public Object getParent() {
 		return parents.peek();
 	}
 	
@@ -76,22 +75,20 @@ public class AbstractVisitor implements EVisitor {
 		return slotIndices.peek();
 	}
 
-	@SuppressWarnings("unchecked")
 	public void primEndVisit(Object obj) {
-		Class clazz = obj.getClass();
+		Class<?> clazz = obj.getClass();
 		if (!allowRevisit) {
 			if (alreadyVisited(obj)) return;
 		}
 		invokeEndVisit(clazz, obj);
 	}
 
-	@SuppressWarnings("unchecked")
 	public boolean primVisit(Object obj) {
 		if (!allowRevisit) {
 			if (alreadyVisited(obj)) return false;
 			else visited.add(obj);
 		}
-		Class clazz = obj.getClass();
+		Class<?> clazz = obj.getClass();
 		boolean visitChildren = invokeVisit(clazz, obj);
 		return visitChildren;
 	}
@@ -106,8 +103,7 @@ public class AbstractVisitor implements EVisitor {
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
-	private boolean invokeVisit(Class clazz, Object obj) {
+	private boolean invokeVisit(Class<?> clazz, Object obj) {
 		boolean visitChildren = false;
 		Method method;
 		if (clazz.getInterfaces().length == 0) {
@@ -135,8 +131,7 @@ public class AbstractVisitor implements EVisitor {
 		return visitChildren;
 
 	}
-	@SuppressWarnings("unchecked")
-	private Method primGetMethod(String methodName, Class clazz) {
+	private Method primGetMethod(String methodName, Class<?> clazz) {
 		Method method = null;
 		try {
 			method = this.getClass().getMethod(methodName, clazz);
@@ -148,14 +143,13 @@ public class AbstractVisitor implements EVisitor {
 		return method;
 	}
 	
-	@SuppressWarnings("unchecked")
-	private Method getMethod(String methodName, Class ifaceClass, boolean doGet) {
+	private Method getMethod(String methodName, Class<?> ifaceClass, boolean doGet) {
 		Method method = null;
 		if (doGet) {
 			method = primGetMethod(methodName, ifaceClass);
 		}
 		if (method == null) {
-			for (Class iface : ifaceClass.getInterfaces()) {
+			for (Class<?>iface : ifaceClass.getInterfaces()) {
 				method = primGetMethod(methodName, iface);
 				if (method != null) break;
 			}
@@ -169,7 +163,7 @@ public class AbstractVisitor implements EVisitor {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void invokeEndVisit(Class clazz, Object obj) {
+	private void invokeEndVisit(Class<?>clazz, Object obj) {
 		Method method;
 		if (clazz.getInterfaces().length == 0) {
 			endVisit(obj);

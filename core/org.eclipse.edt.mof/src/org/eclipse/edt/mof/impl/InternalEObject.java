@@ -207,9 +207,9 @@ public class InternalEObject implements Cloneable {
 		((AbstractVisitor)visitor).primEndVisit(this);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void visitChildren(EVisitor visitor) {
 		int i = -1;
+		boolean isTracking = visitor.isTrackingParent();
 		if (visitor.isTrackingParent()) {
 			visitor.pushParent((EObject)this);
 		}
@@ -221,20 +221,30 @@ public class InternalEObject implements Cloneable {
 			}
 			if (slot != null && slot.value != null) {
 				if (slot.value instanceof EObject && slot.value != this) {
-					if (visitor.isTrackingParent()) {
+					if (isTracking) {
 						visitor.pushSlotIndex(i);
 					}
 					((EObject)slot.value).accept(visitor);
-					if (visitor.isTrackingParent()) {
+					if (isTracking) {
 						visitor.popSlotIndex();
 					}
 			}
 				else if (slot.value instanceof List) {
+					if (isTracking) 
+						visitor.pushParent(slot.value);
+					int j = 0;
 					for (Object obj : (List)slot.value) {
 						if (obj != null && obj instanceof EObject && obj != this) {
+							if (isTracking)
+								visitor.pushSlotIndex(j);
 							((EObject)obj).accept(visitor);
+							if (isTracking)
+								visitor.popSlotIndex();
 						}
+						j++;
 					}
+					if (isTracking) 
+						visitor.popParent();
 				}
 			}
 		}
@@ -244,6 +254,7 @@ public class InternalEObject implements Cloneable {
 	}
 	
 	// TODO: Expensive operation 
+	@SuppressWarnings("unused")
 	private boolean isValidToSet(EField field, Object value) {
 		if (value == null) return true;
 		boolean isValid = false;
@@ -274,7 +285,6 @@ public class InternalEObject implements Cloneable {
 		return obj;
 	}
 	
-	@SuppressWarnings("unchecked")
 	private InternalEObject primClone(InternalEObject cloned) {
 		cloned.slots = new Slot[slots.length];
 		for (int i=0; i<slots.length; i++) {
