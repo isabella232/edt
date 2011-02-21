@@ -19,3 +19,4 @@ Export-Package: org.eclipse.edt.mof.egl,
  org.eclipse.edt.mof.egl.sql.impl,
  org.eclipse.edt.mof.egl.utils
 Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
