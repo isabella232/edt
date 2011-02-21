@@ -6,6 +6,7 @@ Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.eclipse.edt.compiler.internal.EGLBasePlugin
 Bundle-Vendor: IBM
 Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: .,
  java_cup.runtime,
  org.eclipse.edt.compiler,
