@@ -1,0 +1,26 @@
+<!-- A build file for use with Hudson. Note that forceContextQualifier 
+	 is being set, which overrides tag/branch values found in *.map files 
+-->
+<project default="run">
+	<target name="run">
+		<ant antfile="bootstrap.xml" target="init">
+			<property name="basebuilderTag" value="r35x_v20090811" />
+			<property name="commonrelengTag" value="HEAD" />
+			<property name="ANTCONTRIB_VERSION" value="1.0b2" />
+			<property name="ANT4ECLIPSE_VERSION" value="1.0.0.M3" />
+			<property name="build.properties" value="build.properties" />
+		</ant>
+
+<!-- Uncomment these lines when we're ready for regular builds.
+		<tstamp>
+			<format property="buildTimestamp" pattern="yyyyMMddHHmm" />
+		</tstamp>
+		<property name="forceContextQualifier" value="v${buildTimestamp}" />
+-->
+		
+		<property name="buildDir" value="${writableBuildRoot}/athena" /> 		
+		<property name="build.properties" value="build.properties" />
+		<property file="${build.properties}" />
+		<ant antfile="${relengCommonBuilderDir}/build.xml" />
+	</target>
+</project>
