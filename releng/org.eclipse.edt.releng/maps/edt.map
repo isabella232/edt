@@ -1,4 +1,4 @@
-feature@org.eclipse.edt.feature=edt_trial_build,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,
+feature@org.eclipse.edt.feature=edt_trial_build,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core
 plugin@org.eclipse.edt.compiler=edt_trial_build,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core
 plugin@org.eclipse.edt.mof=edt_trial_build,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core
 plugin@org.eclipse.edt.mof.egl=edt_trial_build,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core
