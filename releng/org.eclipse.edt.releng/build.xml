@@ -2,18 +2,49 @@
 	 is being set, which overrides tag/branch values found in *.map files 
 -->
 <project default="run">
-	<target name="run">
+	<property environment="env"/>
+	<property name="WORKSPACE" value="${env.WORKSPACE}"/>
+	<property file="build.properties" />
 
-<!-- Uncomment these lines when we're ready for regular builds.
-		<tstamp>
-			<format property="buildTimestamp" pattern="yyyyMMddHHmm" />
-		</tstamp>
-		<property name="forceContextQualifier" value="v${buildTimestamp}" />
--->
+	<tstamp>
+		<format property="buildTimestamp" pattern="yyyyMMddHHmm" />
+	</tstamp>
+	<property name="forceContextQualifier" value="v${buildTimestamp}" />
+	
+	<property name="fetchTag" value="HEAD" />
+	
+	<property name="relengBuilderDir" value="${basedir}" />
+	<dirname file="${relengBuilderDir}" property="workspaceDir" />
+	
+	<property name="writableBuildRoot" value="/tmp/build" />
+
+	<property name="buildDir" value="${writableBuildRoot}/athena" /> 		
 		
-		<property name="buildDir" value="${writableBuildRoot}/athena" /> 		
-		<property name="build.properties" value="build.properties" />
-		<property file="${build.properties}" />
-		<ant antfile="${relengCommonBuilderDir}/build.xml" />
+	<target name="init">
+		<delete dir="${buildDir}" failonerror="false"/>
 	</target>
+
+	<target name="run" depends="init">
+		<echo message="Workspace: ${WORKSPACE}"/>
+		<echo message="Writable Build Root: ${writableBuildRoot}"/>
+		<mkdir dir="${writableBuildRoot}"/>
+<!--		<property name="relengCommonBuilderDir" value="${workspaceDir}/org.eclipse.dash.common.releng" />	-->
+		<property name="relengCommonBuilderDir" value="/opt/public/cbi/build/org.eclipse.dash.common.releng" />
+		<ant antfile="${relengCommonBuilderDir}/buildAll.xml" target="runEclipse" dir="${relengCommonBuilderDir}" />
+		<antcall target="cleanUp" inheritall="true"/>
+	</target>
+	 
+	<target name="cleanUp">
+		<delete dir="${buildDir}/eclipse" failonerror="false" />
+		<delete dir="${buildDir}/testing" failonerror="false" />
+		<delete dir="${buildDir}/compilelogs" failonerror="false"/>
+		<delete dir="${buildDir}/testresults/consolelogs" failonerror="false"/>
+		<delete dir="${buildDir}/testresults/html" failonerror="false"/>
+		<delete>
+			<fileset dir="${writableBuildRoot}">
+				<include name="**/*AllFeatures*.zip"/>
+				<include name="**/*Master*.zip"/>
+			</fileset>
+		</delete>
+	</target>	
 </project>
