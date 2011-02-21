@@ -22,4 +22,7 @@ public interface Container extends Element {
 	public List<Member> getMembers();
 	
 	public void addMember(Member mbr);
+	
+	List<Member> getAllMembers();
+
 }

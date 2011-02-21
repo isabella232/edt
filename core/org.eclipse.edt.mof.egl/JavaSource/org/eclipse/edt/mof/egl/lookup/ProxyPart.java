@@ -382,4 +382,18 @@ public class ProxyPart extends ProxyEObject implements Part, DataType, Parameter
 		return false;
 	}
 
+
+	@Override
+	public List<Member> getAllMembers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void collectMembers(List<Member> members) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

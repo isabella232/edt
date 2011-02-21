@@ -250,4 +250,9 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 		return false;
 	}
 
+	@Override
+	public List<Member> getAllMembers() {
+		return getMembers();
+	}
+
 }

@@ -78,5 +78,10 @@ public class DataTypeImpl extends ClassifierImpl implements DataType {
 		members.addAll(getFunctions());
 		return null;
 	}
+
+	@Override
+	public List<Member> getAllMembers() {
+		return getMembers();
+	}
 	
 }

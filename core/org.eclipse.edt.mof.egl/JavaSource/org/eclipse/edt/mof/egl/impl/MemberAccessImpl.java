@@ -116,7 +116,7 @@ public class MemberAccessImpl extends NameImpl implements MemberAccess {
 			throw new DanglingReferenceException(getId());
 		}
 		Member result = null;
-		for (Member mbr : container.getMembers()) {
+		for (Member mbr : container.getAllMembers()) {
 			if (mbr.getId().equalsIgnoreCase(getId())) { 
 				result = mbr;
 				break;

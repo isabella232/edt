@@ -122,6 +122,11 @@ public class FunctionMemberImpl extends MemberImpl implements FunctionMember {
 	}
 
 	@Override
+	public List<Member> getAllMembers() {
+		return getMembers();
+	}
+
+	@Override
 	public Type getReturnType() {
 		return getType();
 	}

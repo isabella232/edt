@@ -80,5 +80,10 @@ public class DelegateImpl extends PartImpl implements Delegate {
 		return list;
 	}
 	
+	@Override
+	public List<Member> getAllMembers() {
+		return getMembers();
+	}
+
 	
 }
