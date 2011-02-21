@@ -30,6 +30,8 @@
 		<mkdir dir="${writableBuildRoot}"/>
 <!--		<property name="relengCommonBuilderDir" value="${workspaceDir}/org.eclipse.dash.common.releng" />	-->
 		<property name="relengCommonBuilderDir" value="/opt/public/cbi/build/org.eclipse.dash.common.releng" />
+<!--		<property name="relengBaseBuilderDir" value="${workspaceDir}/org.eclipse.releng.basebuilder" />	-->
+		<property name="relengBaseBuilderDir" value="/opt/public/cbi/build/org.eclipse.releng.basebuilder" />
 		<ant antfile="${relengCommonBuilderDir}/buildAll.xml" target="runEclipse" dir="${relengCommonBuilderDir}" />
 		<antcall target="cleanUp" inheritall="true"/>
 	</target>
