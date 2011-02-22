@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: EDT Tests Plug-in
+Bundle-SymbolicName: org.eclipse.edt.compiler.tests
+Bundle-Version: 0.7.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.junit;bundle-version="[3.8.1,4.0.0)"
