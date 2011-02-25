@@ -1,30 +1,8 @@
 <project default="run" name="org.eclipse.edt.releng/promote.xml - Promote a build from build server to production server">
 	<target name="run">
-		<!--
-			This script requires that you set buildType.  That's enough for regular
-			use.  For special builds you can also set promote.properties.
-			
-			ant -f promote.xml -DbuildType=N
-			
-				or
-			
-			ant -f promote.xml -DbuildType=N -Dpromote.properties=promote.properties.R2_0_branch
-		-->
-		<tstamp>
-			<format property="buildTimestamp" pattern="yyyyMMddHHmm" />
-		</tstamp>
 
 		<property name="promote.properties" value="promote-${buildType}.properties" />
 		<property file="${promote.properties}"/>
-
-		<!-- load build properties -->
-		<property file="build.properties" />
-
-		<!-- calculate workspaceDir as parent of this folder, the project's .releng folder (relengBuilderDir) -->
-		<property name="relengBuilderDir" value="${basedir}" />
-		<dirname file="${relengBuilderDir}" property="workspaceDir" />
-
-		<property name="buildDir" value="${writableBuildRoot}/${buildType}${buildTimestamp}" />
 
 		<!-- invoke common promotion script -->
 		<property name="relengCommonBuilderDir" value="/opt/public/cbi/build/org.eclipse.dash.common.releng" />
