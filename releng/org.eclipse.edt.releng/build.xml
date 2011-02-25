@@ -18,7 +18,7 @@
 	
 	<property name="writableBuildRoot" value="/tmp/build" />
 
-	<property name="buildDir" value="${writableBuildRoot}/athena" /> 		
+	<property name="buildDir" value="${writableBuildRoot}/${buildType}${buildTimestamp}" /> 		
 		
 	<target name="init">
 		<delete dir="${buildDir}" failonerror="false"/>
