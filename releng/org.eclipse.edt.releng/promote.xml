@@ -1,23 +1,20 @@
 <project default="run" name="org.eclipse.edt.releng/promote.xml - Promote a build from build server to production server">
 	<target name="run">
 		<!--
-			To use this script, you must have configured a promote.properties file.
+			This script requires that you set buildType.  That's enough for regular
+			use.  For special builds you can also set promote.properties.
 			
-			Then, run commandline:
+			ant -f promote.xml -DbuildType=N
 			
-			ant -f promote.xml
+				or
 			
-			If you need to reuse this script with multiple properties files (eg., from 
-			multiple Hudson builds across multiple branches), use the commandline
-			flag -Dpromote.properties:
-			
-			ant -f promote.xml -Dpromote.properties=promote.properties.R2_0_branch
+			ant -f promote.xml -DbuildType=N -Dpromote.properties=promote.properties.R2_0_branch
 		-->
 		<tstamp>
 			<format property="buildTimestamp" pattern="yyyyMMddHHmm" />
 		</tstamp>
 
-		<property name="promote.properties" value="promote-${BUILDTYPE}.properties" />
+		<property name="promote.properties" value="promote-${buildType}.properties" />
 		<property file="${promote.properties}"/>
 
 		<!-- load build properties -->
@@ -27,12 +24,6 @@
 		<property name="relengBuilderDir" value="${basedir}" />
 		<dirname file="${relengBuilderDir}" property="workspaceDir" />
 
-		<!-- 
-			can be simple path, eg., 
-			${writableBuildRoot}/${buildType}${buildTimestamp} or longer, eg.,
-			${writableBuildRoot}/${topprojectName}/${projectName}/downloads/drops/${version}/${buildType}${buildTimestamp} or
-			${writableBuildRoot}/${topprojectName}/${projectName}/${subprojectName}/downloads/drops/${version}/${buildType}${buildTimestamp}
-		-->
 		<property name="buildDir" value="${writableBuildRoot}/${buildType}${buildTimestamp}" />
 
 		<!-- invoke common promotion script -->
