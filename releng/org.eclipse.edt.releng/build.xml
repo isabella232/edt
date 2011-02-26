@@ -56,8 +56,8 @@
 	</target>	
 
 	<target name="deleteOldNightlies" if="isNightlyBuild">		
-		<delete>
-			<dirset dir="${buildDir}" failonerror="false">
+		<delete failonerror="false">
+			<dirset dir="${writableBuildRoot}">
 				<include name="N20*" />
 				<exclude name="N${buildTimestamp}" />
 			</dirset>
