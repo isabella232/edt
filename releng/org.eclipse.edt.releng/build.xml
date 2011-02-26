@@ -36,8 +36,6 @@
 		<condition property="isNightlyBuild">
 			<equals arg1="${buildType}" arg2="N" />
 		</condition>
-<!-- Using this echo to determine why deleteOldNightlies does nothing. -->
-<echo message="isNightlyBuild's value is ${isNightlyBuild}"/>
 		<antcall target="deleteOldNightlies" inheritall="true" />
 
 		<ant antfile="promote.xml" />
@@ -59,10 +57,10 @@
 
 	<target name="deleteOldNightlies" if="isNightlyBuild">		
 		<delete failonerror="false">
-			<dirset dir="${writableBuildRoot}">
+			<fileset dir="${writableBuildRoot}">
 				<include name="N20*" />
 				<exclude name="N${buildTimestamp}" />
-			</dirset>
+			</fileset>
 		</delete>
 	</target>
 </project>
