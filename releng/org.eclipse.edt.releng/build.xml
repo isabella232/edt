@@ -36,6 +36,9 @@
 		<condition property="isNightlyBuild">
 			<equals arg1="${buildType}" arg2="N" />
 		</condition>
+<!-- *** FOR DEBUGGING *** ...why aren't we deleting anything?!? -->
+<echo>isNightlyBuild is [ ${isNightlyBuild} ]</echo>
+<!-- end of stuff for debugging -->
 		<antcall target="deleteOldNightlies" inheritall="true" />
 
 		<ant antfile="promote.xml" />
@@ -55,7 +58,22 @@
 		</delete>
 	</target>	
 
-	<target name="deleteOldNightlies" if="isNightlyBuild">		
+	<target name="deleteOldNightlies" if="isNightlyBuild">
+
+<!-- *** FOR DEBUGGING *** ...why aren't we deleting anything?!? -->
+<path id="nightlies.path">
+	<fileset dir="${writableBuildRoot}">
+		<include name="N20*" />
+		<exclude name="N${buildTimestamp}" />
+	</fileset>
+</path>
+<pathconvert pathsep="${line.separator}|   |-- "
+	property="nightlies.path.compile"             
+	refid="nightlies.path">
+</pathconvert>
+<echo>nightlies.path.compile is [ ${nightlies.path.compile} ]</echo>
+<!-- end of stuff for debugging -->
+
 		<delete failonerror="false">
 			<fileset dir="${writableBuildRoot}">
 				<include name="N20*" />
