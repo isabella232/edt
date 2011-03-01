@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2005, 2010 IBM Corporation and others.
+ * Copyright ï¿½ 2005, 2010 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -44,7 +44,7 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
     
 	private static final String[] defaultPackage = InternUtil.intern(new String[0]);
 	
-	private org.eclipse.edt.mof.serialization.IEnvironment irEnv = Environment.INSTANCE;
+	protected IEnvironment irEnv = Environment.INSTANCE;
 	private List<File> irPathRoots = new ArrayList<File>();
 	private Mof2Binding converter = new Mof2Binding(this);
 	private PartBindingCache bindingCache = new PartBindingCache();
@@ -54,7 +54,7 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
 		irEnv.registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
 	}
 	
-	private boolean rootsContainPackage(String[] packageName) {
+	protected boolean rootsContainPackage(String[] packageName) {
 		String path = IRUtils.concatWithSeparator(packageName, "/");
 		for (File root : irPathRoots) {
 			File folder = new File(root, path);
@@ -193,7 +193,7 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
 	public void remove(String key) {
 		irEnv.remove(key);
 	}
-
+	
 	@Override
 	public void save(MofSerializable object) throws SerializationException {
 		irEnv.save(object);
