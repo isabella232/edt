@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2010 IBM Corporation and others.
+ * Copyright ï¿½ 2010 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,6 +13,7 @@ package org.eclipse.edt.mof.codegen.api;
 
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -39,7 +40,7 @@ public class TemplateFactory {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void load(String templateFilePaths) throws TemplateException {
+	public void load(String templateFilePaths, ClassLoader loader) throws TemplateException {
 		// the template file path will be 1 or more locations for the templates.properties files involved with this
 		// implementation. If more than 1 location is in the list, then it will be separated by a semi-colon. We need to
 		// split these out into individual locations and process them in order.
@@ -47,7 +48,7 @@ public class TemplateFactory {
 		String[] templateFiles = templateFilePaths.split("[;]");
 		for (String templateFile : templateFiles) {
 			// process this property file
-			ResourceBundle bundle = ResourceBundle.getBundle(templateFile);
+			ResourceBundle bundle = ResourceBundle.getBundle(templateFile, Locale.getDefault(), loader);
 			Enumeration<String> keys = bundle.getKeys();
 			while (keys.hasMoreElements()) {
 				String key = keys.nextElement();
@@ -58,7 +59,7 @@ public class TemplateFactory {
 					// org.eclipse.edt.gen.myImpl;org.eclipse.edt.gen.java then a class from myImpl would not be overriden by
 					// one further down the properties list.
 					if (templates.get(key) == null) {
-						Class clazz = Class.forName(className);
+						Class clazz = Class.forName(className, true, loader);
 						templates.put(key, clazz);
 					}
 				}
