@@ -45,6 +45,9 @@
 	</target>
 	 
 	<target name="cleanUp">
+<!-- *** FOR DEBUGGING *** ...why aren't we deleting anything?!? -->
+<echo>in cleanUp</echo>
+<!-- end of stuff for debugging -->
 		<delete dir="${buildDir}/eclipse" failonerror="false" />
 		<delete dir="${buildDir}/testing" failonerror="false" />
 		<delete dir="${buildDir}/compilelogs" failonerror="false"/>
