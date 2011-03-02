@@ -15,7 +15,7 @@ package org.eclipse.edt.compiler.internal.core.utils;
  * @author winghong
  */
 public class InternUtil {
- 
+
     private static final int NUM_COMPONENTS = 10; // the typical maximum number of components in a string array
     private static final int NUM_STRINGS = 5000;
     private static final int NUM_STRINGARRAYS = 250;
