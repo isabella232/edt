@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2005, 2010 IBM Corporation and others.
+ * Copyright ï¿½ 2005, 2010 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,7 +15,7 @@ package org.eclipse.edt.compiler.internal.core.utils;
  * @author winghong
  */
 public class InternUtil {
-
+ 
     private static final int NUM_COMPONENTS = 10; // the typical maximum number of components in a string array
     private static final int NUM_STRINGS = 5000;
     private static final int NUM_STRINGARRAYS = 250;
