@@ -97,4 +97,8 @@ public class ASTManager {
 		return getFileAST(declaringFile).cloneFilePart();
 	}  
 	
+	public void reset() {
+		fileLRUCache = new SoftLRUCache(MAX_NUM_FILES);
+		isVAGCompatible = false;
+	}
  }
