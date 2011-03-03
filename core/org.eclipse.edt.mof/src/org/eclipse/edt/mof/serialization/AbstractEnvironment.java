@@ -28,7 +28,11 @@ public abstract class AbstractEnvironment implements IEnvironment {
 	private Map<String, LookupDelegate> lookupDelegates = new HashMap<String, LookupDelegate>();
 	private Map<String, ObjectStore> defaultSerializeStores = new HashMap<String, ObjectStore>();
 	
-	public AbstractEnvironment() {	
+	public AbstractEnvironment() {
+		reset();
+	}
+	
+	public void reset() {
 		objectCache = new HashMap<Object, EObject>();
 		ObjectStore mofStore = new MemoryObjectStore(this);
 		setDefaultSerializeStore(IEnvironment.DefaultScheme, mofStore);
