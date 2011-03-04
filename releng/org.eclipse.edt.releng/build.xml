@@ -75,6 +75,15 @@
 	refid="nightlies.path">
 </pathconvert>
 <echo>nightlies.path.compile is [ ${nightlies.path.compile} ]</echo>
+
+<path id="nightlies.path2">
+	<dirset dir="${writableBuildRoot}" includes="N20*" excludes="N${buildTimestamp}" />
+</path>
+<pathconvert pathsep="${line.separator}|   |-- "
+	property="nightlies.path.compile2"             
+	refid="nightlies.path2">
+</pathconvert>
+<echo>nightlies.path.compile2 is [ ${nightlies.path.compile2} ]</echo>
 <!-- end of stuff for debugging -->
 
 		<delete failonerror="false">
