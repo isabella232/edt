@@ -44,16 +44,22 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
     
 	private static final String[] defaultPackage = InternUtil.intern(new String[0]);
 	
-	protected IEnvironment irEnv = Environment.INSTANCE;
+	protected IEnvironment irEnv;
 	private List<File> irPathRoots = new ArrayList<File>();
 	private Mof2Binding converter = new Mof2Binding(this);
 	private PartBindingCache bindingCache = new PartBindingCache();
 	private PackageBinding rootPackageBinding = new PackageBinding(defaultPackage, null, this);
 
 	public EGL2IREnvironment() {
+		irEnv = Environment.INSTANCE;
 		irEnv.registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
 	}
 	
+	public EGL2IREnvironment(IEnvironment irEnv) {
+		irEnv.registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
+		this.irEnv = irEnv;
+	}
+
 	protected boolean rootsContainPackage(String[] packageName) {
 		String path = IRUtils.concatWithSeparator(packageName, "/");
 		for (File root : irPathRoots) {
