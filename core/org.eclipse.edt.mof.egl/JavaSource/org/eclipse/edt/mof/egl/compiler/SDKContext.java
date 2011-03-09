@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2010 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -28,14 +28,14 @@ public class SDKContext extends Context{
 
 	
 	public SDKContext(File file) {
-		super(file.getAbsolutePath());
+		super(file.getAbsolutePath(), file.getName());
 		this.file = file;
 	}
 
 	private File getFile() {
 		if (file == null) {
-			if (getFileName() != null) {
-		        file = new File(getFileName());
+			if (getAbsolutePath() != null) {
+		        file = new File(getAbsolutePath());
 			}
 		}
 		return file;

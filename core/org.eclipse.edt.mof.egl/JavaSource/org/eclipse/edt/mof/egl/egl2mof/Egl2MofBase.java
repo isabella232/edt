@@ -1730,6 +1730,12 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			
 			elem.addAnnotation(ann);
 		}
+		if (obj instanceof Classifier) {
+			String fileName = ((Classifier)obj).getPackageName().replace('.', '/');
+			fileName += "/" + context.getSimpleFileName();
+			// TODO: Make be a relative path
+			((Classifier)obj).setFileName(fileName);
+		}
 
 	}
 	
