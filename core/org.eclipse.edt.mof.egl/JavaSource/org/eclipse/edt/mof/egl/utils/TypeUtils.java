@@ -19,6 +19,7 @@ import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.NullType;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Part;
@@ -434,8 +435,9 @@ public class TypeUtils implements MofConversion {
 	
 	public static List<Function> getBestFitFunction(StructPart container, String name, StructPart...argumentTypes) {
 		List<Function> ops = new ArrayList<Function>();
-		for (Function op : container.getFunctions()) {
-			if (op.getName().equalsIgnoreCase(name)) {
+		for (Member mbr : container.getAllMembers()) {
+			Function op = mbr instanceof Function ? (Function)mbr : null;
+			if (op != null && op.getName().equalsIgnoreCase(name)) {
 				if (op.getParameters().size() == argumentTypes.length) {
 					ops.add(op);
 				}

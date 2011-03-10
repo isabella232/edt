@@ -20,6 +20,7 @@ import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AmbiguousReferenceException;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ArrayLiteral;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
@@ -175,6 +176,11 @@ public class IRUtils {
 		
 		public boolean visit(TypeName name) {
 			name.getType().accept(this);
+			return false;
+		}
+		
+		public boolean visit(ArrayLiteral expr) {
+			expr.getType().accept(this);
 			return false;
 		}
 		
