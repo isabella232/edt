@@ -86,11 +86,8 @@
 <echo>nightlies.path.compile2 is [ ${nightlies.path.compile2} ]</echo>
 <!-- end of stuff for debugging -->
 
-		<delete failonerror="false">
-			<fileset dir="${writableBuildRoot}">
-				<include name="N20*" />
-				<exclude name="N${buildTimestamp}" />
-			</fileset>
+		<delete failonerror="false" includeemptydirs="true">
+			<dirset dir="${writableBuildRoot}" includes="N20*" excludes="N${buildTimestamp}" />
 		</delete>
 	</target>
 </project>
