@@ -645,7 +645,7 @@ class Egl2MofMember extends Egl2MofPart {
 				newexpr.getArguments().add((Expression)stack.pop());
 			}
 			AssignmentStatement newStmt = createAssignmentStatement(field, newexpr);
-			setElementInformation(initializer, newexpr);
+			setElementInformation(settingsBlock, newexpr);
 			block.getStatements().add(0, newStmt);
 			field.setHasSetValuesBlock(true);
 		}
