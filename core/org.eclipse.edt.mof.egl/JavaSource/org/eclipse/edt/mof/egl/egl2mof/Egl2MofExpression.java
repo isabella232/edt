@@ -271,6 +271,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		Type type = (Type)mofTypeFor(fieldAccess.getPrimary().resolveTypeBinding());
 		if (TypeUtils.isDynamicType(type)) {
 			DynamicAccess expr = factory.createDynamicAccess();
+			setElementInformation(fieldAccess, expr);
 			StringLiteral index = factory.createStringLiteral();
 			index.setValue(fieldAccess.getID());
 			expr.setAccess(index);
@@ -343,6 +344,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 						PartName partName = factory.createPartName();
 						partName.setId(declarer.getName());
 						partName.setPackageName(concatWithSeparator(declarer.getPackageName(), "."));
+						setElementInformation(node.getTarget(), partName);
 						((QualifiedFunctionInvocation)fi).setQualifier(partName);
 					}
 					else {
