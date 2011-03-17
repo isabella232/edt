@@ -200,7 +200,7 @@ public class IRUtils {
 	 */
 	public static MofSerializable getType(String typeSignature) {
 		try {
-			return Environment.INSTANCE.findType(typeSignature);
+			return (MofSerializable)Environment.getCurrentEnv().find(typeSignature);
 		}
 		catch (Exception ex) {
 			// Should not get here

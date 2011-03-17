@@ -14,6 +14,7 @@ package org.eclipse.edt.mof.egl.compiler;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.binding.IBinding;
@@ -242,7 +243,21 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
 		return irEnv.getLookupDelegateForKey(key);
 	}
 	
+	@Override
+	public Map<String, List<ObjectStore>> getObjectStores() {
+		return irEnv.getObjectStores();
+	}
+
+	@Override
+	public Map<String, LookupDelegate> getLookupDelegates() {
+		return irEnv.getLookupDelegates();
+	}
+	
 	public Mof2Binding getConverter() {
 		return converter;
+	}
+	
+	public List<File> getPathRoots() {
+		return irPathRoots;
 	}
 }

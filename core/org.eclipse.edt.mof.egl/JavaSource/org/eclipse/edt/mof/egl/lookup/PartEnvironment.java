@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.lookup;
 
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
@@ -116,4 +119,13 @@ public class PartEnvironment implements IEnvironment {
 		return env.getLookupDelegateForKey(key);
 	}
 
+	@Override
+	public Map<String, List<ObjectStore>> getObjectStores() {
+		return env.getObjectStores();
+	}
+
+	@Override
+	public Map<String, LookupDelegate> getLookupDelegates() {
+		return env.getLookupDelegates();
+	}
 }
