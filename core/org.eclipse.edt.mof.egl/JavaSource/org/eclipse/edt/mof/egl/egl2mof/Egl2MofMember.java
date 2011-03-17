@@ -453,6 +453,7 @@ class Egl2MofMember extends Egl2MofPart {
 					org.eclipse.edt.mof.egl.IntegerLiteral indexExpr = factory.createIntegerLiteral();
 					indexExpr.setValue(String.valueOf(arrayIndex));
 					QualifiedFunctionInvocation func = factory.createQualifiedFunctionInvocation();
+					setElementInformation(expr, func);
 					func.setQualifier(qualifier);
 					func.setId("setElement");
 					func.getArguments().add((Expression)result);
