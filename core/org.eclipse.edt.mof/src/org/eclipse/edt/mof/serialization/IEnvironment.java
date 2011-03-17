@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.serialization;
 
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 
@@ -97,4 +100,7 @@ public interface IEnvironment {
 	
 	ObjectStore getDefaultSerializeStore(String keyScheme);
 	void setDefaultSerializeStore(String keyScheme, ObjectStore store);
+	
+	Map<String, List<ObjectStore>> getObjectStores();
+	Map<String, LookupDelegate> getLookupDelegates();
 }

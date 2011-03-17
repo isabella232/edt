@@ -34,6 +34,7 @@ public interface ObjectStore {
 	public void remove(String key);	
 	
 	public IEnvironment getEnvironment();
+	public void setEnvironment(IEnvironment env);
 	
 	public String getKeyScheme();
 	

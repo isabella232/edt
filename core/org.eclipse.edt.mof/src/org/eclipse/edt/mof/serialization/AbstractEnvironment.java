@@ -208,4 +208,14 @@ public abstract class AbstractEnvironment implements IEnvironment {
 		int j = key.indexOf('<');
 		return j != -1 && i > j ? DefaultScheme : key.substring(0, i);
 	}
+	
+	@Override
+	public Map<String, List<ObjectStore>> getObjectStores() {
+		return objectStores;
+	}
+	
+	@Override
+	public Map<String, LookupDelegate> getLookupDelegates() {
+		return lookupDelegates;
+	}
 }

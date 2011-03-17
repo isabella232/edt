@@ -19,69 +19,79 @@ import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.MofFactory;
 import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
 public class Bootstrap {
+	
+	public static void initialize(IEnvironment env) {
+		Bootstrap bootstrap = new Bootstrap(env);
+		bootstrap.doIt();
+	}
 	
 	public static void initialize() {
 		Bootstrap bootstrap = new Bootstrap();
 		bootstrap.doIt();
 	}
 	
-	Environment env = null;
-	EClass EObjectClass = null;
-	EClass MetadataObjectClass = null;
-	EClass ModelElementClass = null;
-	EClass MofSerializableClass = null;
-	EClass NamedElementClass = null;
-	EClass TypeClass = null;
-	EClass ClassifierClass = null;
-	EClass TypeParameterClass = null;
-	EClass GenericTypeClass = null;
-	EClass EClassClass = null;
-	EClass EEnumClass = null;
-	EClass EEnumLiteralClass = null;
-	EClass EDataTypeClass = null;
-	EClass MemberClass = null;
-	EClass MemberContainerClass = null;
-	EClass FieldClass = null;
-	EClass FunctionClass = null;
-	EClass ParameterClass = null;
-	EClass MetadataTypeClass = null;
-	EDataType JavaObject = null;
-	EDataType EString = null;
-	EDataType EBoolean = null;
-	EDataType EInt32 = null;
-	EDataType EFloat = null;
-	EDataType EDecimal = null;
-	EDataType EList = null;
+	IEnvironment env;
+	static boolean loaded;
+	static EClass EObjectClass;
+	static EClass MetadataObjectClass;
+	static EClass ModelElementClass;
+	static EClass MofSerializableClass;
+	static EClass NamedElementClass;
+	static EClass TypeClass;
+	static EClass ClassifierClass;
+	static EClass TypeParameterClass;
+	static EClass GenericTypeClass;
+	static EClass EClassClass;
+	static EClass EEnumClass;
+	static EClass EEnumLiteralClass;
+	static EClass EDataTypeClass;
+	static EClass MemberClass;
+	static EClass MemberContainerClass;
+	static EClass FieldClass;
+	static EClass FunctionClass;
+	static EClass ParameterClass;
+	static EClass MetadataTypeClass;
+	static EDataType JavaObject;
+	static EDataType EString;
+	static EDataType EBoolean;
+	static EDataType EInt32;
+	static EDataType EFloat;
+	static EDataType EDecimal;
+	static EDataType EList;
 	
 	Bootstrap() {
 		env = Environment.INSTANCE;
 	}
 	
-	Bootstrap(Environment env) {
+	Bootstrap(IEnvironment env) {
 		this.env = env;
 	}
 	
 	
 	public void doIt() {
-		System.out.println("Bootstrap initialize...");
 		initializeClasses();
 	}
 	
 	void initializeClasses() {
-		getEClassClass();
-		getFieldClass();
-		getMetadataObjectClass();
-		getMetadataTypeClass();
-		getEEnumClass();
-		getFunctionClass();
-		getEList();
-		getJavaObject();
-		getEDecimal();
-		getEFloat();
-		getEString();
+		if (!loaded) {
+			System.out.println("Bootstrap initialize...");
+			getEClassClass();
+			getFieldClass();
+			getMetadataObjectClass();
+			getMetadataTypeClass();
+			getEEnumClass();
+			getFunctionClass();
+			getEList();
+			getJavaObject();
+			getEDecimal();
+			getEFloat();
+			getEString();
+			loaded = true;
+		}
 		env.save(EObjectClass, false); 
 		env.save(ModelElementClass, false);
 		env.save(NamedElementClass, false);
