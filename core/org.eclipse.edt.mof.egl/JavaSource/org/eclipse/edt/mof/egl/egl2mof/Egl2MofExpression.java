@@ -19,6 +19,7 @@ import java.util.Stack;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.DataTableBinding;
 import org.eclipse.edt.compiler.binding.DelegateBinding;
+import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.FormBinding;
@@ -32,7 +33,6 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.LibraryBinding;
 import org.eclipse.edt.compiler.binding.LibraryDataBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
-import org.eclipse.edt.compiler.binding.SystemFunctionParameterSpecialTypeBinding;
 import org.eclipse.edt.compiler.binding.TopLevelFunctionBinding;
 import org.eclipse.edt.compiler.binding.annotationType.EGLSystemConstantAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
@@ -469,6 +469,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		else if (binding instanceof LibraryBinding 
 				|| binding instanceof DataTableBinding 
 				|| binding instanceof ExternalTypeBinding
+				|| binding instanceof EnumerationTypeBinding
 				|| binding instanceof FormBinding) {
 			// Is only a proper reference to a part if given part type is allowed to have
 			// field references to the part itself (static reference) as opposed to field

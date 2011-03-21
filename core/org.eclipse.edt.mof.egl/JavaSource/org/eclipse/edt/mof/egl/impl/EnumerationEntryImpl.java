@@ -66,7 +66,8 @@ public class EnumerationEntryImpl extends EEnumLiteralImpl implements Enumeratio
 	
 	@Override
 	public Type getType() {
-		return (Type)slotGet(Slot_type);
+		return (Type)getContainer();
+//		return (Type)slotGet(Slot_type);
 	}
 	
 	@Override
