@@ -56,7 +56,7 @@ public class NewExpressionImpl extends InvocationExpressionImpl implements NewEx
 
 	@Override
 	public Type getType() {
-		return getTarget().getType();
+		return IRUtils.getEGLType(getId());
 	}
 	
 	private void resolveTarget() throws MofObjectNotFoundException, NoSuchMemberError {

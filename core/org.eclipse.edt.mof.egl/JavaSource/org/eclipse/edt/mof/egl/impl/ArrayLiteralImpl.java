@@ -52,20 +52,21 @@ public class ArrayLiteralImpl extends LiteralImpl implements ArrayLiteral, MofCo
 				if (i != 0) {
 					typesSame = entry.getType().equals(elementType);
 					if (!typesSame) {
-						if (IRUtils.isValidWidenConversion(elementType, entry.getType())) {
-							elementType = entry.getType();
-							// Get the classifier from a parameterized type as
-							// only the classifier is used as the basis for
-							// determining valid conversions
-							if (elementType instanceof ParameterizedType) {
-								elementType = elementType.getClassifier();
-							}
-						}
-						else if (!IRUtils.isValidWidenConversion(entry.getType(), elementType) && !IRUtils.isValidNarrowConversion(entry.getType(), elementType)) {
-							// There is no conversion so the elementType has to be an ANY type
-							elementType = TypeUtils.Type_ANY;
-							break;
-						}
+						elementType = IRUtils.getCommonSupertype(elementType, entry.getType());
+//						if (IRUtils.isValidWidenConversion(elementType, entry.getType())) {
+//							elementType = entry.getType();
+//							// Get the classifier from a parameterized type as
+//							// only the classifier is used as the basis for
+//							// determining valid conversions
+//							if (elementType instanceof ParameterizedType) {
+//								elementType = elementType.getClassifier();
+//							}
+//						}
+//						else if (!IRUtils.isValidWidenConversion(entry.getType(), elementType) && !IRUtils.isValidNarrowConversion(entry.getType(), elementType)) {
+//							// There is no conversion so the elementType has to be an ANY type
+//							elementType = TypeUtils.Type_ANY;
+//							break;
+//						}
 					}
 				}
 				i++;
