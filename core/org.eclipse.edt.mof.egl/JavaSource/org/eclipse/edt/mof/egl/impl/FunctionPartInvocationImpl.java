@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
+import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.FunctionPartInvocation;
 import org.eclipse.edt.mof.egl.Type;
@@ -67,4 +68,26 @@ public class FunctionPartInvocationImpl extends FunctionInvocationImpl implement
 	public String getFullyQualifiedName() {
 		return getPackageName() + "." + getId();
 	}
+
+	@Override
+	public FunctionMember getTarget() {
+		return getFunctionPart().getFunction();
+	}
+
+	@Override
+	public void setTarget(FunctionMember value) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public FunctionMember getFunction() {
+		return getFunctionPart().getFunction();
+	}
+
+	@Override
+	public boolean isNullable() {
+		return getFunction().isNullable();
+	}
+	
+	
 }
