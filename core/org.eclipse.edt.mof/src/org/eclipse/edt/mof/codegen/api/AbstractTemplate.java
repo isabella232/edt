@@ -183,9 +183,10 @@ public abstract class AbstractTemplate implements Template {
 			}
 		}
 		if (method == null) {
-			if (ifaceClass.getInterfaces().length > 0) {
-				classes[0] = ifaceClass.getInterfaces()[0];
+			for (Class<?> iface : ifaceClass.getInterfaces()) {
+				classes[0] = iface;
 				method = getMethod(methodName, false, classes);
+				if (method != null) break;
 			}
 		}
 		return method;
