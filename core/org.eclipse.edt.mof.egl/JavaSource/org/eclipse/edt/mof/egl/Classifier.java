@@ -75,4 +75,10 @@ public interface Classifier extends NamedElement, Type {
 	 * @return Stereotype
 	 */
 	public Stereotype getStereotype();
+	
+	/**
+	 * Return a boolean stating whether or not the given Classifier can be the target of a NEW expression
+	 * @return
+	 */
+	public boolean isInstantiable();
 }

@@ -47,4 +47,10 @@ public class ProgramImpl extends EGLClassImpl implements Program {
 		slotSet(Slot_isCallable, value);
 	}
 	
+	@Override
+	public boolean isInstantiable() {
+		return false;
+	}
+	
+
 }

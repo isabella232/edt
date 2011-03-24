@@ -14,7 +14,6 @@ package org.eclipse.edt.mof.egl.egl2mof;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.AnnotationBinding;
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.ClassFieldBinding;
 import org.eclipse.edt.compiler.binding.ConstantFormFieldBinding;
 import org.eclipse.edt.compiler.binding.ConstructorBinding;
@@ -65,6 +64,7 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.FunctionStatement;
+import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
@@ -639,17 +639,19 @@ class Egl2MofMember extends Egl2MofPart {
 				block = factory.createStatementBlock();
 				field.setInitializerStatements(block);
 			}
-			NewExpression newexpr = factory.createNewExpression();
-			newexpr.setId(field.getType().getTypeSignature());
-			if (type.getKind() == Type.ARRAYTYPE && ((ArrayType)type).getInitialSize() != null) {
-				((ArrayType)type).getInitialSize().accept(this);
-				newexpr.getArguments().add((Expression)stack.pop());
+			if (field.getType().getClassifier().isInstantiable()) {
+				NewExpression newexpr = factory.createNewExpression();
+				newexpr.setId(field.getType().getTypeSignature());
+				if (type.getKind() == Type.ARRAYTYPE && ((ArrayType)type).getInitialSize() != null) {
+					((ArrayType)type).getInitialSize().accept(this);
+					newexpr.getArguments().add((Expression)stack.pop());
+				}
+				AssignmentStatement newStmt = createAssignmentStatement(field, newexpr);
+				setElementInformation(settingsBlock, newStmt.getAssignment().getLHS());
+				setElementInformation(settingsBlock, newStmt.getAssignment().getRHS());
+				block.getStatements().add(0, newStmt);
+				field.setHasSetValuesBlock(true);
 			}
-			AssignmentStatement newStmt = createAssignmentStatement(field, newexpr);
-			setElementInformation(settingsBlock, newStmt.getAssignment().getLHS());
-			setElementInformation(settingsBlock, newStmt.getAssignment().getRHS());
-			block.getStatements().add(0, newStmt);
-			field.setHasSetValuesBlock(true);
 		}
 		
 	}

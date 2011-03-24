@@ -14,4 +14,10 @@ package org.eclipse.edt.mof.egl.impl;
 import org.eclipse.edt.mof.egl.Interface;
 
 public class InterfaceImpl extends EGLClassImpl implements Interface {
+	
+	@Override
+	public boolean isInstantiable() {
+		return false;
+	}
+	
 }

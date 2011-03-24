@@ -227,6 +227,9 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 		return false;
 	}
 	
-
+	@Override
+	public boolean isInstantiable() {
+		return false;
+	}
 	
 }

@@ -14,4 +14,10 @@ package org.eclipse.edt.mof.egl.impl;
 import org.eclipse.edt.mof.egl.Library;
 
 public class LibraryImpl extends EGLClassImpl implements Library {
+	
+	@Override
+	public boolean isInstantiable() {
+		return false;
+	}
+	
 }

@@ -15,6 +15,8 @@ import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Type;
 
+//TODO Initial size of array declarations is not stored in signature so it is lost
+
 public class ArrayTypeImpl extends GenericTypeImpl implements ArrayType {
 	private static int Slot_initialSize=0;
 	private static int Slot_elementsNullable = 1;

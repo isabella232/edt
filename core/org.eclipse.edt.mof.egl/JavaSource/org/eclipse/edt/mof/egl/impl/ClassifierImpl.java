@@ -129,4 +129,10 @@ public abstract class ClassifierImpl extends NamedElementImpl implements Classif
 		return this;
 	}
 
+	@Override
+	public boolean isInstantiable() {
+		return false;
+	}
+
+	
 }

@@ -396,4 +396,11 @@ public class ProxyPart extends ProxyEObject implements Part, DataType, Parameter
 		
 	}
 
+
+	@Override
+	public boolean isInstantiable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

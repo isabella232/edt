@@ -255,4 +255,9 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 		return getMembers();
 	}
 
+	@Override
+	public boolean isInstantiable() {
+		return false;
+	}
+
 }

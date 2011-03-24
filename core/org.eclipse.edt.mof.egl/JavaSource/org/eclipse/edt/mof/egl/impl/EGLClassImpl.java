@@ -34,5 +34,11 @@ public class EGLClassImpl extends LogicAndDataPartImpl implements EGLClass {
 	public void setIsAbstract(Boolean value) {
 		slotSet(Slot_isAbstract, value);
 	}
+
+	@Override
+	public boolean isInstantiable() {
+		return true;
+	}
+	
 	
 }

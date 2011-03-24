@@ -14,4 +14,10 @@ package org.eclipse.edt.mof.egl.impl;
 import org.eclipse.edt.mof.egl.Service;
 
 public class ServiceImpl extends EGLClassImpl implements Service {
+	
+	@Override
+	public boolean isInstantiable() {
+		return false;
+	}
+
 }
