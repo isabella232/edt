@@ -635,11 +635,11 @@ class Egl2MofMember extends Egl2MofPart {
 			processSettings(field, settingsBlock);
 			// Add implicit new expression as first statement of the initialization
 			StatementBlock block = field.getInitializerStatements();
-			if (block == null) {
-				block = factory.createStatementBlock();
-				field.setInitializerStatements(block);
-			}
 			if (field.getType().getClassifier().isInstantiable()) {
+				if (block == null) {
+					block = factory.createStatementBlock();
+					field.setInitializerStatements(block);
+				}
 				NewExpression newexpr = factory.createNewExpression();
 				newexpr.setId(field.getType().getTypeSignature());
 				if (type.getKind() == Type.ARRAYTYPE && ((ArrayType)type).getInitialSize() != null) {
