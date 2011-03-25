@@ -84,7 +84,7 @@ public abstract class JavascriptTemplate extends AbstractTemplate {
 	
 	public void validate(EObject object, Context ctx, Object... args) throws TemplateException {
 		String[] details = new String[] { object.getEClass().getETypeSignature() };
-		EGLMessage message = EGLMessage.createEGLMessage(ctx.getMessageMappings(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_UNSUPPORTED_ELEMENT,
+		EGLMessage message = EGLMessage.createEGLMessage(ctx.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_UNSUPPORTED_ELEMENT,
 			object, details, 0, 0, 0, 0);
 		ctx.getMessageRequestor().addMessage(message);
 	}

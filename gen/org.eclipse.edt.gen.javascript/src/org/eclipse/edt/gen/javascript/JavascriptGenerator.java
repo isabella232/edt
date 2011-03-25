@@ -67,11 +67,11 @@ public class JavascriptGenerator extends Generator {
 		}
 		catch (TemplateException e) {
 			String[] details1 = new String[] { e.getLocalizedMessage() };
-			EGLMessage message1 = EGLMessage.createEGLMessage(context.getMessageMappings(), EGLMessage.EGL_ERROR_MESSAGE,
+			EGLMessage message1 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
 				Constants.EGLMESSAGE_EXCEPTION_OCCURED, e, details1, 0, 0, 0, 0);
 			context.getMessageRequestor().addMessage(message1);
 			String[] details2 = new String[] { e.getCause().toString() };
-			EGLMessage message2 = EGLMessage.createEGLMessage(context.getMessageMappings(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_STACK_TRACE, e,
+			EGLMessage message2 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_STACK_TRACE, e,
 				details2, 0, 0, 0, 0);
 			context.getMessageRequestor().addMessage(message2);
 			// print out the whole stack trace
