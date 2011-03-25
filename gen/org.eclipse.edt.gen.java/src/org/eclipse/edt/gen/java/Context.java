@@ -63,6 +63,10 @@ public class Context extends EglContext {
 		return debugExtension;
 	}
 
+	public String getRawPrimitiveMapping(String item) {
+		return super.getPrimitiveMapping(item);
+	}
+
 	@SuppressWarnings("unchecked")
 	public String getPrimitiveMapping(String item) {
 		String value = super.getPrimitiveMapping(item);
@@ -79,6 +83,10 @@ public class Context extends EglContext {
 			}
 		}
 		return value;
+	}
+
+	public String getRawPrimitiveMapping(Type type) {
+		return super.getPrimitiveMapping(type);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -99,6 +107,10 @@ public class Context extends EglContext {
 		return value;
 	}
 
+	public String getRawNativeImplementationMapping(Type type) {
+		return super.getNativeImplementationMapping(type);
+	}
+
 	@SuppressWarnings("unchecked")
 	public String getNativeImplementationMapping(Type type) {
 		String value = super.getNativeImplementationMapping(type);
@@ -113,6 +125,10 @@ public class Context extends EglContext {
 			}
 		}
 		return value;
+	}
+
+	public String getRawNativeInterfaceMapping(Type type) {
+		return super.getNativeInterfaceMapping(type);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -202,7 +218,7 @@ public class Context extends EglContext {
 			if (annotation.getValue(IEGLConstants.EGL_PARTOFFSET) != null)
 				startOffset = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTOFFSET)).intValue();
 		}
-		EGLMessage message = EGLMessage.createEGLMessage(getMessageMappings(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_OBJECT,
+		EGLMessage message = EGLMessage.createEGLMessage(getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_OBJECT,
 			obj, details, startLine, startOffset, endLine, endOffset);
 		getMessageRequestor().addMessage(message);
 	}
@@ -210,7 +226,7 @@ public class Context extends EglContext {
 	@Override
 	public void handleValidationError(Annotation obj) {
 		String[] details = new String[] { obj.getEClass().getETypeSignature() };
-		EGLMessage message = EGLMessage.createEGLMessage(getMessageMappings(), EGLMessage.EGL_ERROR_MESSAGE,
+		EGLMessage message = EGLMessage.createEGLMessage(getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
 			Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_ANNOTATION, obj, details, 0, 0, 0, 0);
 		getMessageRequestor().addMessage(message);
 	}
@@ -218,7 +234,7 @@ public class Context extends EglContext {
 	@Override
 	public void handleValidationError(Type obj) {
 		String[] details = new String[] { obj.getEClass().getETypeSignature() };
-		EGLMessage message = EGLMessage.createEGLMessage(getMessageMappings(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_TYPE,
+		EGLMessage message = EGLMessage.createEGLMessage(getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_TYPE,
 			obj, details, 0, 0, 0, 0);
 		getMessageRequestor().addMessage(message);
 	}
