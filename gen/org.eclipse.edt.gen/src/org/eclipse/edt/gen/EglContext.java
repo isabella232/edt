@@ -183,7 +183,7 @@ public abstract class EglContext extends TemplateContext {
 		return messageRequestor;
 	}
 
-	public Map<String, String> getMessageMappings() {
+	public Map<String, String> getMessageMapping() {
 		return messageMappings;
 	}
 
