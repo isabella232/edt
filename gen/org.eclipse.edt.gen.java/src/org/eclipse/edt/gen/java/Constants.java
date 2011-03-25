@@ -19,6 +19,7 @@ public class Constants {
 	public static final String smap_stratum = "\nJava\n*S egl\n*F\n";
 	public static final String smap_lines = "\n*L\n";
 	public static final String smap_trailer = "*E\n";
+	public static final String smap_extensiontrailer = "*X\n";
 	public static final String smap_attribute = "SourceDebugExtension";
 	public static final String smap_fileextension = ".eglsmap";
 	public static final String smap_encoding = "UTF-8";

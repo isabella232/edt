@@ -76,6 +76,7 @@ public class JavaGenerator extends Generator {
 				context.writeDebugLine();
 				context.getDebugData().append(Constants.smap_trailer);
 				context.getDebugData().append(context.getDebugExtension());
+				context.getDebugData().append(Constants.smap_extensiontrailer);
 				out.flush();
 			}
 		}
