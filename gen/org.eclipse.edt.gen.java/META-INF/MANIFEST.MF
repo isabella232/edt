@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Java Plug-in
+Bundle-SymbolicName: org.eclipse.edt.gen.java
+Bundle-Version: 1.0.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Agent-Class: org.eclipse.edt.gen.java.Transformer
+Premain-Class: org.eclipse.edt.gen.java.Transformer
+Can-Retransform-Classes: true
+Require-Bundle: org.eclipse.core.resources;bundle-version="3.4.2",
+ org.eclipse.edt.gen;bundle-version="1.0.0",
+ org.eclipse.edt.runtime.java;bundle-version="1.0.0",
+ org.eclipse.edt.mof;bundle-version="0.7.0",
+ org.eclipse.edt.mof.egl;bundle-version="0.7.0",
+ org.eclipse.edt.compiler;bundle-version="0.7.0"
+Export-Package: org.eclipse.edt.gen.java,
+ org.eclipse.edt.gen.java.templates
