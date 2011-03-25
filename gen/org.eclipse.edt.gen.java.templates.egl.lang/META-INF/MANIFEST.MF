@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Lang
+Bundle-SymbolicName: org.eclipse.edt.gen.java.templates.egl.lang
+Bundle-Version: 1.0.0
+Export-Package: org.eclipse.edt.gen.java.templates.egl.lang
+Require-Bundle: org.eclipse.edt.gen.java;bundle-version="1.0.0",
+ org.eclipse.edt.compiler;bundle-version="0.7.0",
+ org.eclipse.edt.gen;bundle-version="1.0.0",
+ org.eclipse.edt.gen.java.templates;bundle-version="1.0.0",
+ org.eclipse.edt.mof;bundle-version="0.7.0",
+ org.eclipse.edt.mof.egl;bundle-version="0.7.0"
