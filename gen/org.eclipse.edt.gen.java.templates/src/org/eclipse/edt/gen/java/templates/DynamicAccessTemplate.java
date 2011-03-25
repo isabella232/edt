@@ -1,0 +1,36 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.gen.java.templates;
+
+import org.eclipse.edt.gen.java.Context;
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.DynamicAccess;
+import org.eclipse.edt.mof.egl.Expression;
+
+public class DynamicAccessTemplate extends ExpressionTemplate {
+
+	public void genAssignment(DynamicAccess expr, Context ctx, TabbedWriter out, Object... args) {
+		genExpression(expr.getExpression(), ctx, out, args);
+		out.print(".ezeSet(");
+		genExpression(expr.getAccess(), ctx, out, args);
+		out.print(", ");
+		genExpression((Expression) args[0], ctx, out, args);
+		out.print(")");
+	}
+
+	public void genExpression(DynamicAccess expr, Context ctx, TabbedWriter out, Object... args) {
+		genExpression(expr.getExpression(), ctx, out, args);
+		out.print(".ezeGet(");
+		genExpression(expr.getAccess(), ctx, out, args);
+		out.print(")");
+	}
+}
