@@ -11,14 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.egl.lang;
 
-import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.TypeTemplate;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.EGLClass;
 
 public class AnyObjectTypeTemplate extends TypeTemplate {
 
-	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		out.print("null");
-	}
 }
