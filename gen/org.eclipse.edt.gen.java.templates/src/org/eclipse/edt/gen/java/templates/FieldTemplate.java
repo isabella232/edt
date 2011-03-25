@@ -105,7 +105,7 @@ public class FieldTemplate extends MemberTemplate {
 				ctx.getDebugExtension().append("" + ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue() + ";");
 				ctx.getDebugExtension().append(field.getName() + ";");
 				ctx.getDebugExtension().append(field.getName() + ";");
-				ctx.getDebugExtension().append(field.getType().getTypeSignature() + ";\n");
+				ctx.getDebugExtension().append(field.getType().getTypeSignature() + "\n");
 			}
 		}
 	}

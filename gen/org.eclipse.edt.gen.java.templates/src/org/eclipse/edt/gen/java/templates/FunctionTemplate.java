@@ -17,6 +17,7 @@ import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
@@ -107,14 +108,50 @@ public class FunctionTemplate extends MemberTemplate {
 			ctx.getDebugExtension().append("" + ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue() + ";");
 			ctx.getDebugExtension().append("F:" + function.getName() + ";(");
 			for (int i = 0; i < function.getParameters().size(); i++) {
-				ctx.getDebugExtension().append(generateJavaTypeSignature(function.getParameters().get(i).getType(), false));
+				FunctionParameter decl = function.getParameters().get(i);
+				if (CommonUtilities.isBoxedParameterType(ctx, decl))
+					ctx.getDebugExtension().append("Lorg/eclipse/edt/javart/AnyBoxedObject;");
+				else
+					ctx.getDebugExtension().append(generateJavaTypeSignature(function.getParameters().get(i).getType(), ctx));
 			}
-			ctx.getDebugExtension().append(")" + generateJavaTypeSignature(function.getReturnType(), true) + ";\n");
+			ctx.getDebugExtension().append(")" + generateJavaTypeSignature(function.getReturnType(), ctx) + "\n");
 		}
 	}
 
-	private String generateJavaTypeSignature(Type type, boolean isReturn) {
+	private String generateJavaTypeSignature(Type type, Context ctx) {
 		String signature = "";
+		// if this is an array, we need to handle it specially
+		if (type instanceof ArrayType)
+			signature += "L" + ctx.getRawNativeInterfaceMapping(type.getClassifier()).replaceAll("\\.", "/") + ";";
+		else {
+			// get the java primitive, if it exists
+			if (type == null)
+				signature += "V";
+			else if (ctx.mapsToPrimitiveType(type.getClassifier())) {
+				// do we want the java primitive or the object
+				// now try to match up against the known primitives
+				String value = ctx.getRawPrimitiveMapping(type.getClassifier());
+				if (value.equals("boolean"))
+					signature += "Z";
+				else if (value.equals("byte"))
+					signature += "B";
+				else if (value.equals("char"))
+					signature += "C";
+				else if (value.equals("double"))
+					signature += "D";
+				else if (value.equals("float"))
+					signature += "F";
+				else if (value.equals("int"))
+					signature += "I";
+				else if (value.equals("long"))
+					signature += "J";
+				else if (value.equals("short"))
+					signature += "S";
+				else
+					signature += "L" + value.replaceAll("\\.", "/") + ";";
+			} else
+				signature += "L" + type.getClassifier().getTypeSignature().replaceAll("\\.", "/") + ";";
+		}
 		return signature;
 	}
 }
