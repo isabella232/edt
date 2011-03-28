@@ -23,19 +23,26 @@ public class TryStatementTemplate extends StatementTemplate {
 	public void genStatementBody(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
 		out.print("try ");
 		ctx.gen(genStatement, ((TryStatement) stmt).getTryBlock(), ctx, out, args);
-		for (int i = 0; i < ((TryStatement) stmt).getExceptionBlocks().size(); i++) {
-			ExceptionBlock exceptionBlock = ((TryStatement) stmt).getExceptionBlocks().get(i);
-			out.print("catch (" + ctx.getNativeImplementationMapping(exceptionBlock.getException().getType()) + " ");
-			ctx.gen(genName, exceptionBlock.getException(), ctx, out, args);
-			out.println(") {");
-			for (int j = 0; j < exceptionBlock.getStatements().size(); j++) {
-				ctx.gen(genStatement, exceptionBlock.getStatements().get(j), ctx, out, args);
-			}
-			out.println("}");
+		for (ExceptionBlock exceptionBlock : ((TryStatement) stmt).getExceptionBlocks()) {
+			genException(exceptionBlock, ctx, out, args);
 		}
 	}
 
+	public void genException(ExceptionBlock exceptionBlock, Context ctx, TabbedWriter out, Object... args) {
+		out.print("catch (" + ctx.getNativeImplementationMapping(exceptionBlock.getException().getType()) + " ");
+		ctx.gen(genName, exceptionBlock.getException(), ctx, out, args);
+		out.println(") {");
+		for (Statement stmt : exceptionBlock.getStatements()) {
+			genExceptionStatement(stmt, ctx, out, args);
+		}
+		out.println("}");
+	}
+
+	public void genExceptionStatement(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genStatement, stmt, ctx, out, args);
+	}
+
 	public void genStatementEnd(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
-	// we don't want a semi-colon
+		// we don't want a semi-colon
 	}
 }
