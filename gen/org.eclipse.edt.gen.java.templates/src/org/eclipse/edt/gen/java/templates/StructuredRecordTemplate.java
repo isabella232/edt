@@ -29,10 +29,14 @@ public class StructuredRecordTemplate extends StructTemplate {
 	/**
 	 * Declare items and nested records.
 	 */
-	public void genFieldDeclarations(StructuredRecord part, TemplateContext ctx, TabbedWriter out, Object... args) {
+	public void genFields(StructuredRecord part, TemplateContext ctx, TabbedWriter out, Object... args) {
 		for (StructuredField field : part.getStructuredFields()) {
-			ctx.gen(genDeclaration, field, ctx, out, args);
+			genField(field, ctx, out, args);
 		}
+	}
+
+	public void genField(StructuredField field, TemplateContext ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genDeclaration, field, ctx, out, args);
 	}
 
 	/**
@@ -72,14 +76,14 @@ public class StructuredRecordTemplate extends StructTemplate {
 	}
 
 	public void validateClassBody(Part part, Context ctx, Object... args) {
-	// TODO Auto-generated method stub
+		// TODO Auto-generated method stub
 	}
 
 	public void genClassBody(Part part, Context ctx, TabbedWriter out, Object... args) {
-	// TODO Auto-generated method stub
+		// TODO Auto-generated method stub
 	}
 
 	public void genClassHeader(Part part, Context ctx, TabbedWriter out, Object... args) {
-	// TODO Auto-generated method stub
+		// TODO Auto-generated method stub
 	}
 }

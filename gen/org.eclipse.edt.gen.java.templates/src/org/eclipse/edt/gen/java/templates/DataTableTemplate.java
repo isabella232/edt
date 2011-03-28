@@ -21,7 +21,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 public class DataTableTemplate extends StructuredRecordTemplate {
 
 	public void genClassBody(Part dataTable, Context ctx, TabbedWriter out, Object... args) {
-		genFieldDeclarations((DataTable) dataTable, ctx, out, args);
+		genFields((DataTable) dataTable, ctx, out, args);
 		genInitializeMethod((DataTable) dataTable, ctx, out, args);
 	}
 

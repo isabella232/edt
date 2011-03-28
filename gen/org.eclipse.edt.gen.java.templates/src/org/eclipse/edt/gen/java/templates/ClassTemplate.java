@@ -32,7 +32,7 @@ public class ClassTemplate extends PartTemplate {
 
 	public void validateClassBody(Part part, Context ctx, Object... args) {
 		validatePartsUsed((EGLClass) part, ctx, args);
-		validateFieldDeclarations((EGLClass) part, ctx, args);
+		validateFields((EGLClass) part, ctx, args);
 		validateFunctions((EGLClass) part, ctx, args);
 	}
 
@@ -42,21 +42,29 @@ public class ClassTemplate extends PartTemplate {
 		}
 	}
 
-	public void validateFieldDeclarations(EGLClass part, Context ctx, Object... args) {
+	public void validateFields(EGLClass part, Context ctx, Object... args) {
 		for (Field field : part.getFields()) {
-			ctx.validate(validate, field, ctx, args);
+			validateField(field, ctx, args);
 		}
+	}
+
+	public void validateField(Field field, Context ctx, Object... args) {
+		ctx.validate(validate, field, ctx, args);
 	}
 
 	public void validateFunctions(EGLClass part, Context ctx, Object... args) {
 		for (Function function : part.getFunctions()) {
-			ctx.validate(validate, function, ctx, args);
+			validateFunction(function, ctx, args);
 		}
 	}
 
+	public void validateFunction(Function function, Context ctx, Object... args) {
+		ctx.validate(validate, function, ctx, args);
+	}
+
 	public void genClassBody(Part part, Context ctx, TabbedWriter out, Object... args) {
-		genFieldDeclarations((EGLClass) part, ctx, out, args);
-		genLibraryDeclarations((EGLClass) part, ctx, out, args);
+		genFields((EGLClass) part, ctx, out, args);
+		genLibraries((EGLClass) part, ctx, out, args);
 		genConstructors((EGLClass) part, ctx, out, args);
 		genInitializeMethod((EGLClass) part, ctx, out, args);
 		genFieldGetterSetters((EGLClass) part, ctx, out, args);
@@ -65,11 +73,11 @@ public class ClassTemplate extends PartTemplate {
 	}
 
 	public void genAdditionalConstructorParams(EGLClass part, TabbedWriter out, Object... args) {
-	// nothing to do here
+		// nothing to do here
 	}
 
 	public void genAdditionalSuperConstructorArgs(EGLClass part, TabbedWriter out, Object... args) {
-	// nothing to do here
+		// nothing to do here
 	}
 
 	public void genClassHeader(Part part, Context ctx, TabbedWriter out, Object... args) {
@@ -82,15 +90,11 @@ public class ClassTemplate extends PartTemplate {
 	}
 
 	public void genSuperClass(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-	// nothing to do here
+		// nothing to do here
 	}
 
 	public void genDeclaration(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-	// nothing to do here
-	}
-
-	public void genFieldDecl(Field field, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genDeclaration, field, ctx, out, args);
+		// nothing to do here
 	}
 
 	public void genFieldGetterSetters(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
@@ -118,13 +122,9 @@ public class ClassTemplate extends PartTemplate {
 		}
 	}
 
-	public void genFunction(Function function, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genDeclaration, function, ctx, out, args);
-	}
-
-	public void genFieldDeclarations(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genFields(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
 		for (Field field : part.getFields()) {
-			ctx.gen(genDeclaration, field, ctx, out, args);
+			genField(field, ctx, out, args);
 		}
 		// create the type constraint static hashmap, only if there are some parameterized types
 		boolean needConstraints = false;
@@ -152,20 +152,32 @@ public class ClassTemplate extends PartTemplate {
 		}
 	}
 
+	public void genField(Field field, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genDeclaration, field, ctx, out, args);
+	}
+
 	@SuppressWarnings("unchecked")
-	public void genLibraryDeclarations(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genLibraries(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
 		List<Library> libraries = (List<Library>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed);
 		for (Library lib : libraries) {
-			out.print("public ");
-			ctx.gen(genRuntimeTypeName, (Type) lib, ctx, out, TypeNameKind.EGLImplementation);
-			out.println(" " + Constants.LIBRARY_PREFIX + lib.getFullyQualifiedName().replace('.', '_') + ";");
+			genLibrary(lib, ctx, out, args);
 		}
+	}
+
+	public void genLibrary(Library library, Context ctx, TabbedWriter out, Object... args) {
+		out.print("public ");
+		ctx.gen(genRuntimeTypeName, (Type) library, ctx, out, TypeNameKind.EGLImplementation);
+		out.println(" " + Constants.LIBRARY_PREFIX + library.getFullyQualifiedName().replace('.', '_') + ";");
 	}
 
 	public void genFunctions(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
 		for (Function function : part.getFunctions()) {
-			ctx.gen(genDeclaration, function, ctx, out, args);
+			genFunction(function, ctx, out, args);
 		}
+	}
+
+	public void genFunction(Function function, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genDeclaration, function, ctx, out, args);
 	}
 
 	/**
