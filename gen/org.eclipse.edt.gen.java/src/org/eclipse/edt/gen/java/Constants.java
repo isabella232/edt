@@ -31,6 +31,7 @@ public class Constants {
 	public static final String Annotation_functionArgumentTemporaryVariable = "functionArgumentTemporaryVariable";
 	public static final String Annotation_functionHasReturnStatement = "functionHasReturnStatement";
 	public static final String Annotation_partLibrariesUsed = "partLibrariesUsed";
+	public static final String Annotation_partRecordsUsed = "partRecordsUsed";
 	public static final String Annotation_partTypesImported = "partTypesImported";
 	// these are annotations key values, related to the values in the IRs
 	public static final String Annotation_EGLProperty = "egl.core.eglproperty";
