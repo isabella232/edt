@@ -31,15 +31,19 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 public class ClassTemplate extends PartTemplate {
 
 	public void validateClassBody(Part part, Context ctx, Object... args) {
-		validatePartsUsed((EGLClass) part, ctx, args);
+		validateParts((EGLClass) part, ctx, args);
 		validateFields((EGLClass) part, ctx, args);
 		validateFunctions((EGLClass) part, ctx, args);
 	}
 
-	public void validatePartsUsed(EGLClass part, Context ctx, Object... args) {
+	public void validateParts(EGLClass part, Context ctx, Object... args) {
 		for (Part item : IRUtils.getReferencedPartsFor(part)) {
-			ctx.validate(validate, item, ctx, args);
+			validatePart(item, ctx, args);
 		}
+	}
+
+	public void validatePart(Part part, Context ctx, Object... args) {
+			ctx.validate(validate, part, ctx, args);
 	}
 
 	public void validateFields(EGLClass part, Context ctx, Object... args) {
