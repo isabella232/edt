@@ -23,6 +23,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public abstract class PartTemplate extends TypeTemplate {
@@ -39,6 +40,7 @@ public abstract class PartTemplate extends TypeTemplate {
 
 	public void validatePart(Part part, Context ctx, Object... args) {
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed, new ArrayList<Library>());
+		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partRecordsUsed, new ArrayList<Record>());
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partTypesImported, new ArrayList<String>());
 		validateClassBody(part, ctx, args);
 	}

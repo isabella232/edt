@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.java.templates;
 
 import java.util.List;
 
+import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Field;
@@ -21,6 +22,24 @@ import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class RecordTemplate extends ClassTemplate {
+
+	@SuppressWarnings("unchecked")
+	public void validate(Record part, Context ctx, Object... args) {
+		// process anything else the superclass needs to do
+		super.validate(part, ctx, args);
+		// when we get here, it is because a part is being referenced by the original part being validated. Add it to the
+		// parts used table if it doesn't already exist
+		boolean found = false;
+		List<Record> records = (List<Record>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partRecordsUsed);
+		for (Record record : records) {
+			if (part.getTypeSignature().equalsIgnoreCase(record.getTypeSignature())) {
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+			records.add(part);
+	}
 
 	public void genSuperClass(Record part, Context ctx, TabbedWriter out, Object... args) {
 		Stereotype stereotype = part.getStereotype();
