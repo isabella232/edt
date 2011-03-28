@@ -66,7 +66,7 @@ public class ClassTemplate extends PartTemplate {
 		genFields((EGLClass) part, ctx, out, args);
 		genLibraries((EGLClass) part, ctx, out, args);
 		genConstructors((EGLClass) part, ctx, out, args);
-		genInitializeMethod((EGLClass) part, ctx, out, args);
+		genInitializeMethods((EGLClass) part, ctx, out, args);
 		genFieldGetterSetters((EGLClass) part, ctx, out, args);
 		genLibraryAccessMethods((EGLClass) part, ctx, out, args);
 		genFunctions((EGLClass) part, ctx, out, args);
@@ -99,27 +99,35 @@ public class ClassTemplate extends PartTemplate {
 
 	public void genFieldGetterSetters(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
 		for (Field field : part.getFields()) {
-			ctx.gen(genGetterSetter, field.getType(), ctx, out, field);
+			genFieldGetterSetter(field, ctx, out, args);
 		}
+	}
+
+	public void genFieldGetterSetter(Field field, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genGetterSetter, field.getType(), ctx, out, field);
 	}
 
 	@SuppressWarnings("unchecked")
 	public void genLibraryAccessMethods(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
 		List<Library> libraries = (List<Library>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed);
-		for (Library lib : libraries) {
-			out.print("public ");
-			ctx.gen(genRuntimeTypeName, (Type) lib, ctx, out, TypeNameKind.EGLImplementation);
-			out.println(" " + Constants.LIBRARY_PREFIX + lib.getFullyQualifiedName().replace('.', '_') + "() {");
-			out.println("if (" + Constants.LIBRARY_PREFIX + lib.getFullyQualifiedName().replace('.', '_') + " == null) {");
-			out.print(Constants.LIBRARY_PREFIX + lib.getFullyQualifiedName().replace('.', '_') + " = (");
-			ctx.gen(genRuntimeTypeName, (Type) lib, ctx, out, TypeNameKind.EGLImplementation);
-			out.print(") _runUnit().getExecutable(\"");
-			ctx.gen(genRuntimeTypeName, (Type) lib, ctx, out, TypeNameKind.EGLImplementation);
-			out.println("\");");
-			out.println("}");
-			out.println("return " + Constants.LIBRARY_PREFIX + lib.getFullyQualifiedName().replace('.', '_') + ";");
-			out.println("}");
+		for (Library library : libraries) {
+			genLibraryAccessMethod(library, ctx, out, args);
 		}
+	}
+
+	public void genLibraryAccessMethod(Library library, Context ctx, TabbedWriter out, Object... args) {
+		out.print("public ");
+		ctx.gen(genRuntimeTypeName, (Type) library, ctx, out, TypeNameKind.EGLImplementation);
+		out.println(" " + Constants.LIBRARY_PREFIX + library.getFullyQualifiedName().replace('.', '_') + "() {");
+		out.println("if (" + Constants.LIBRARY_PREFIX + library.getFullyQualifiedName().replace('.', '_') + " == null) {");
+		out.print(Constants.LIBRARY_PREFIX + library.getFullyQualifiedName().replace('.', '_') + " = (");
+		ctx.gen(genRuntimeTypeName, (Type) library, ctx, out, TypeNameKind.EGLImplementation);
+		out.print(") _runUnit().getExecutable(\"");
+		ctx.gen(genRuntimeTypeName, (Type) library, ctx, out, TypeNameKind.EGLImplementation);
+		out.println("\");");
+		out.println("}");
+		out.println("return " + Constants.LIBRARY_PREFIX + library.getFullyQualifiedName().replace('.', '_') + ";");
+		out.println("}");
 	}
 
 	public void genFields(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
@@ -159,8 +167,8 @@ public class ClassTemplate extends PartTemplate {
 	@SuppressWarnings("unchecked")
 	public void genLibraries(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
 		List<Library> libraries = (List<Library>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed);
-		for (Library lib : libraries) {
-			genLibrary(lib, ctx, out, args);
+		for (Library library : libraries) {
+			genLibrary(library, ctx, out, args);
 		}
 	}
 
@@ -185,7 +193,7 @@ public class ClassTemplate extends PartTemplate {
 	 * initializers, set value blocks, or fields that are redefined records.
 	 * @return boolean
 	 */
-	public boolean needToInitialize(EGLClass part) {
+	private boolean needToInitialize(EGLClass part) {
 		Function initFunc = part.getFunction(LogicAndDataPart.INIT_FUNCTION_NAME);
 		if (initFunc != null) {
 			List<Statement> stmts = initFunc.getStatements();
@@ -208,31 +216,29 @@ public class ClassTemplate extends PartTemplate {
 		ctx.gen(genConstructor, part, ctx, out, args);
 	}
 
-	/**
-	 * Call the initialize method if the record or structured record has initializers for set value blocks defined.
-	 */
 	public void genInitialize(EGLClass part, TabbedWriter out, Object... args) {
 		if (needToInitialize(part) && part.getAnnotation(Constants.REDEFINED_ANNOTATION) == null) {
 			out.println("initialize( ezeProgram );");
 		}
 	}
 
-	/**
-	 * Generate the initialize method if the class has initializers or set value blocks defined.
-	 */
-	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genInitializeMethods(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
 		out.println("public void ezeInitialize() {");
 		// Run through the fields for the initializers
 		for (Field field : part.getFields()) {
-			if (field.getInitializerStatements() != null)
-				ctx.gen(genStatementNoBraces, field.getInitializerStatements(), ctx, out, args);
-			else {
-				ctx.gen(genName, field, ctx, out, args);
-				out.print(" = ");
-				ctx.gen(genInitialization, field, ctx, out, args);
-				out.println(';');
-			}
+			genInitializeMethod(field, ctx, out, args);
 		}
 		out.println("}");
+	}
+
+	public void genInitializeMethod(Field field, Context ctx, TabbedWriter out, Object... args) {
+		if (field.getInitializerStatements() != null)
+			ctx.gen(genStatementNoBraces, field.getInitializerStatements(), ctx, out, args);
+		else {
+			ctx.gen(genName, field, ctx, out, args);
+			out.print(" = ");
+			ctx.gen(genInitialization, field, ctx, out, args);
+			out.println(';');
+		}
 	}
 }
