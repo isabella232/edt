@@ -35,8 +35,7 @@ public class EglTransformer implements ClassFileTransformer {
 		this.location = location;
 	}
 
-	@SuppressWarnings("unchecked")
-	public byte[] transform(ClassLoader loader, String name, Class redefiningClass, ProtectionDomain domain, byte[] bytes) throws IllegalClassFormatException {
+	public byte[] transform(ClassLoader loader, String name, @SuppressWarnings("rawtypes") Class redefiningClass, ProtectionDomain domain, byte[] bytes) throws IllegalClassFormatException {
 		className = name;
 		inClassBytes = bytes;
 		// if the debug info exists, load it
