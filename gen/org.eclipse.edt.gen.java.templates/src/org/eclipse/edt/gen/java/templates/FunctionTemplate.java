@@ -92,7 +92,7 @@ public class FunctionTemplate extends MemberTemplate {
 		for (int i = 0; i < function.getParameters().size(); i++) {
 			FunctionParameter decl = function.getParameters().get(i);
 			out.print(", ");
-			if (CommonUtilities.isBoxedParameterType(ctx, decl))
+			if (CommonUtilities.isBoxedParameterType(decl, ctx))
 				ctx.gen(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
 			else
 				ctx.gen(genRuntimeTypeName, decl, ctx, out, TypeNameKind.JavaObject);
@@ -109,7 +109,7 @@ public class FunctionTemplate extends MemberTemplate {
 			ctx.getDebugExtension().append("F:" + function.getName() + ";(");
 			for (int i = 0; i < function.getParameters().size(); i++) {
 				FunctionParameter decl = function.getParameters().get(i);
-				if (CommonUtilities.isBoxedParameterType(ctx, decl))
+				if (CommonUtilities.isBoxedParameterType(decl, ctx))
 					ctx.getDebugExtension().append("Lorg/eclipse/edt/javart/AnyBoxedObject;");
 				else
 					ctx.getDebugExtension().append(generateJavaTypeSignature(function.getParameters().get(i).getType(), ctx));

@@ -25,7 +25,7 @@ public class MemberNameTemplate extends NameTemplate {
 
 	public void genAssignment(MemberName expr, Context ctx, TabbedWriter out, Object... args) {
 		// check to see if we are copying boxed function parameters
-		if (expr.getMember() instanceof FunctionParameter && CommonUtilities.isBoxedParameterType(ctx, (FunctionParameter) expr.getMember())) {
+		if (expr.getMember() instanceof FunctionParameter && CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx)) {
 			ctx.gen(genAccessor, expr.getMember(), ctx, out, args);
 			out.print(".ezeCopy(");
 			genExpression((Expression) args[0], ctx, out, args);
@@ -60,7 +60,7 @@ public class MemberNameTemplate extends NameTemplate {
 
 	public void genMemberName(MemberName expr, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genAccessor, expr.getMember(), ctx, out, args);
-		if (expr.getMember() instanceof FunctionParameter && CommonUtilities.isBoxedParameterType(ctx, (FunctionParameter) expr.getMember()))
+		if (expr.getMember() instanceof FunctionParameter && CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx))
 			out.print(".ezeUnbox()");
 	}
 }

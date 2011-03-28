@@ -20,9 +20,9 @@ import org.eclipse.edt.mof.egl.Expression;
 public class AsExpressionTemplate extends ExpressionTemplate {
 
 	public void genExpression(AsExpression asExpr, Context ctx, TabbedWriter out, Object... args) {
-		if (isHandledByJavaWithoutCast(ctx, asExpr.getObjectExpr(), asExpr)) {
+		if (isHandledByJavaWithoutCast(asExpr.getObjectExpr(), asExpr, ctx)) {
 			genExpression(asExpr.getObjectExpr(), ctx, out, args);
-		} else if (isHandledByJavaWithCast(ctx, asExpr.getObjectExpr(), asExpr)) {
+		} else if (isHandledByJavaWithCast(asExpr.getObjectExpr(), asExpr, ctx)) {
 			out.print("(" + ctx.getPrimitiveMapping(asExpr.getType()) + ")");
 			out.print("(");
 			genExpression(asExpr.getObjectExpr(), ctx, out, args);
@@ -50,7 +50,7 @@ public class AsExpressionTemplate extends ExpressionTemplate {
 		}
 	}
 
-	private boolean isHandledByJavaWithoutCast(Context ctx, Expression src, AsExpression tgt) {
+	private boolean isHandledByJavaWithoutCast(Expression src, AsExpression tgt, Context ctx) {
 		// nullables will never be handled by java natives
 		if (src.isNullable() || tgt.isNullable())
 			return false;
@@ -67,7 +67,7 @@ public class AsExpressionTemplate extends ExpressionTemplate {
 			return false;
 	}
 
-	private boolean isHandledByJavaWithCast(Context ctx, Expression src, AsExpression tgt) {
+	private boolean isHandledByJavaWithCast(Expression src, AsExpression tgt, Context ctx) {
 		// nullables will never be handled by java natives
 		if (src.isNullable() || tgt.isNullable())
 			return false;

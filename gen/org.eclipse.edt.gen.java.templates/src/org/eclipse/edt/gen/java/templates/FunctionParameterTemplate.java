@@ -19,7 +19,7 @@ import org.eclipse.edt.mof.egl.FunctionParameter;
 public class FunctionParameterTemplate extends ParameterTemplate {
 
 	public void genDeclaration(FunctionParameter decl, Context ctx, TabbedWriter out, Object... args) {
-		if (CommonUtilities.isBoxedParameterType(ctx, decl)) {
+		if (CommonUtilities.isBoxedParameterType(decl, ctx)) {
 			out.print("AnyBoxedObject<");
 			ctx.gen(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
 			out.print(">");

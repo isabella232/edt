@@ -75,7 +75,7 @@ public class StatementBlockTemplate extends StatementTemplate {
 	private void processStatements(Statement block, Context ctx, TabbedWriter out, Object... args) {
 		for (Statement stmt : ((StatementBlock) block).getStatements()) {
 			ReorganizeCode reorganizeCode = new ReorganizeCode();
-			List<StatementBlock> blockArray = reorganizeCode.reorgCode(ctx, stmt);
+			List<StatementBlock> blockArray = reorganizeCode.reorgCode(stmt, ctx);
 			if (blockArray != null && blockArray.get(0) != null)
 				ctx.gen(genStatementNoBraces, blockArray.get(0), ctx, out, args);
 			ctx.gen(genStatement, stmt, ctx, out, args);
@@ -90,7 +90,7 @@ public class StatementBlockTemplate extends StatementTemplate {
 		boolean processedStatement = false;
 
 		@SuppressWarnings("unchecked")
-		public List<StatementBlock> reorgCode(Context ctx, Statement statement) {
+		public List<StatementBlock> reorgCode(Statement statement, Context ctx) {
 			this.ctx = ctx;
 			currentFunctionMember = statement.getFunctionMember();
 			disallowRevisit();
@@ -136,7 +136,7 @@ public class StatementBlockTemplate extends StatementTemplate {
 			// and process them ahead of the if, utilizing a temporary variable instead. the reason for this is to allow the
 			// before and after logic from the function invocation to take place ahead of the if
 			ReorganizeIf reorganizeIf = new ReorganizeIf();
-			List<Statement> statementArray = reorganizeIf.reorgIf(ctx, object);
+			List<Statement> statementArray = reorganizeIf.reorgIf(object, ctx);
 			if (statementArray != null) {
 				// we have a list of statements that need to be inserted before this if statement
 				// set up the new statement block if needed
@@ -291,7 +291,7 @@ public class StatementBlockTemplate extends StatementTemplate {
 			// subsequent attempts
 			// first determine whether we are going to modify the argument and set up pre/post assignments
 			for (int i = 0; i < object.getTarget().getParameters().size(); i++) {
-				if (CommonUtilities.isArgumentToBeAltered(ctx, object.getTarget().getParameters().get(i), object.getArguments().get(i))) {
+				if (CommonUtilities.isArgumentToBeAltered(object.getTarget().getParameters().get(i), object.getArguments().get(i), ctx)) {
 					altered = true;
 					argumentToBeAltered[i] = true;
 				}
@@ -508,7 +508,7 @@ public class StatementBlockTemplate extends StatementTemplate {
 		FunctionMember currentFunctionMember;
 
 		@SuppressWarnings("unchecked")
-		public List<Statement> reorgIf(Context ctx, IfStatement statement) {
+		public List<Statement> reorgIf(IfStatement statement, Context ctx) {
 			this.ctx = ctx;
 			this.currentFunctionMember = statement.getFunctionMember();
 			disallowRevisit();
@@ -557,7 +557,7 @@ public class StatementBlockTemplate extends StatementTemplate {
 			// remember when this statement has already been processed for function invocations, and ignore on
 			// subsequent attempts
 			for (int i = 0; i < object.getTarget().getParameters().size(); i++) {
-				if (CommonUtilities.isArgumentToBeAltered(ctx, object.getTarget().getParameters().get(i), object.getArguments().get(i)))
+				if (CommonUtilities.isArgumentToBeAltered(object.getTarget().getParameters().get(i), object.getArguments().get(i), ctx))
 					altered = true;
 			}
 			// if no work needs to be done, continue with the visiting
