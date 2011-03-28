@@ -146,7 +146,7 @@ public class CommonUtilities {
 		return false;
 	}
 
-	public static boolean isArgumentToBeAltered(Context ctx, FunctionParameter parameter, Expression expression) {
+	public static boolean isArgumentToBeAltered(FunctionParameter parameter, Expression expression, Context ctx) {
 		if (parameter.getParameterKind() == ParameterKind.PARM_IN) {
 			// if the parameter is reference then do not make a temporary
 			if (TypeUtils.isReferenceType(parameter.getType()))
@@ -158,10 +158,10 @@ public class CommonUtilities {
 				return true;
 			return false;
 		} else
-			return isBoxedParameterType(ctx, parameter);
+			return isBoxedParameterType(parameter, ctx);
 	}
 
-	public static boolean isBoxedParameterType(Context ctx, FunctionParameter parameter) {
+	public static boolean isBoxedParameterType(FunctionParameter parameter, Context ctx) {
 		if (parameter.getParameterKind() == ParameterKind.PARM_INOUT) {
 			if (TypeUtils.isReferenceType(parameter.getType()))
 				return true;
