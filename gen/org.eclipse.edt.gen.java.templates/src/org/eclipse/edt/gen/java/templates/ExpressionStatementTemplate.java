@@ -31,8 +31,8 @@ public class ExpressionStatementTemplate extends StatementTemplate {
 			processEnd = false;
 	}
 
-	public void genStatementEnd(TabbedWriter out, Object... args) {
+	public void genStatementEnd(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
 		if (processEnd)
-			super.genStatementEnd(out, args);
+			super.genStatementEnd(stmt, ctx, out, args);
 	}
 }

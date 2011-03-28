@@ -35,7 +35,7 @@ public class TryStatementTemplate extends StatementTemplate {
 		}
 	}
 
-	public void genStatementEnd(TabbedWriter out, Object... args) {
+	public void genStatementEnd(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
 	// we don't want a semi-colon
 	}
 }

@@ -68,7 +68,7 @@ public class StatementBlockTemplate extends StatementTemplate {
 		processStatements(block, ctx, out, args);
 	}
 
-	public void genStatementEnd(TabbedWriter out, Object... args) {
+	public void genStatementEnd(Statement block, Context ctx, TabbedWriter out, Object... args) {
 	// StatementBlocks do not end with semicolons so do nothing here
 	}
 

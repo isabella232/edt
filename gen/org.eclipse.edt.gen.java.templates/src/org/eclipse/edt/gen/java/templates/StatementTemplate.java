@@ -25,12 +25,12 @@ public abstract class StatementTemplate extends JavaTemplate {
 
 	public void genStatement(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
 		genStatementBody(stmt, ctx, out, args);
-		genStatementEnd(out, args);
+		genStatementEnd(stmt, ctx, out, args);
 	}
 
 	public void genStatementNoBraces(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
 		genStatementBodyNoBraces(stmt, ctx, out, args);
-		genStatementEnd(out, args);
+		genStatementEnd(stmt, ctx, out, args);
 	}
 
 	public void genExpression(Expression expr, Context ctx, TabbedWriter out, Object... args) {
@@ -43,7 +43,7 @@ public abstract class StatementTemplate extends JavaTemplate {
 		genStatementBody(stmt, ctx, out, args);
 	}
 
-	public void genStatementEnd(TabbedWriter out, Object... args) {
+	public void genStatementEnd(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
 		out.println(';');
 	}
 }

@@ -36,7 +36,7 @@ public class IfStatementTemplate extends StatementTemplate {
 		ctx.popLabelStack();
 	}
 
-	public void genStatementEnd(TabbedWriter out, Object... args) {
+	public void genStatementEnd(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
 	// we don't want a semi-colon
 	}
 }
