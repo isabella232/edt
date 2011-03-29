@@ -8,5 +8,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.eclipse.edt.gen.javascript.templates"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.eclipse.edt.gen.javascript.templates.egl.core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.eclipse.edt.gen.javascript.templates.egl.lang"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.eclipse.edt.gen.javascript"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
