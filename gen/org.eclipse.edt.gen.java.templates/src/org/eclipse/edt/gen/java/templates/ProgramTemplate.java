@@ -48,10 +48,10 @@ public class ProgramTemplate extends ClassTemplate {
 		out.print("public ");
 		genClassName(program, ctx, out, args);
 		out.print("( RunUnit ru");
-		genAdditionalConstructorParams(program, out, args);
+		genAdditionalConstructorParams(program, ctx, out, args);
 		out.println(" ) {");
 		out.print("super( ru");
-		genAdditionalSuperConstructorArgs(program, out, args);
+		genAdditionalSuperConstructorArgs(program, ctx, out, args);
 		out.println(" );");
 		out.println("ezeInitialize();");
 		out.println('}');

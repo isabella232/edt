@@ -27,10 +27,10 @@ public class HandlerTemplate extends ClassTemplate {
 		out.print("public ");
 		genClassName(type, ctx, out, args);
 		out.print("( RunUnit ru");
-		genAdditionalConstructorParams(type, out, args);
+		genAdditionalConstructorParams(type, ctx, out, args);
 		out.println(" ) {");
 		out.print("super( ru");
-		genAdditionalSuperConstructorArgs(type, out, args);
+		genAdditionalSuperConstructorArgs(type, ctx, out, args);
 		out.println(" );");
 		out.println("ezeInitialize();");
 		out.println('}');

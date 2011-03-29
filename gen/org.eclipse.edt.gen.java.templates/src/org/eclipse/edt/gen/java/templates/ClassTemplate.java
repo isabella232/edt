@@ -76,11 +76,11 @@ public class ClassTemplate extends PartTemplate {
 		genFunctions((EGLClass) part, ctx, out, args);
 	}
 
-	public void genAdditionalConstructorParams(EGLClass part, TabbedWriter out, Object... args) {
+	public void genAdditionalConstructorParams(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
 		// nothing to do here
 	}
 
-	public void genAdditionalSuperConstructorArgs(EGLClass part, TabbedWriter out, Object... args) {
+	public void genAdditionalSuperConstructorArgs(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
 		// nothing to do here
 	}
 

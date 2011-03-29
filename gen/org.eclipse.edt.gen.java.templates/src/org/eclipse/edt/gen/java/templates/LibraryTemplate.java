@@ -50,10 +50,10 @@ public class LibraryTemplate extends ClassTemplate {
 		out.print("public ");
 		genClassName(library, ctx, out, args);
 		out.print("( RunUnit ru");
-		genAdditionalConstructorParams(library, out, args);
+		genAdditionalConstructorParams(library, ctx, out, args);
 		out.println(" ) {");
 		out.print("super( ru");
-		genAdditionalSuperConstructorArgs(library, out, args);
+		genAdditionalSuperConstructorArgs(library, ctx, out, args);
 		out.println(" );");
 		out.println("ezeInitialize();");
 		out.println('}');

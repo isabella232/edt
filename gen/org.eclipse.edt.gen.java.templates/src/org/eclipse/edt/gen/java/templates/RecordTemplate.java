@@ -54,10 +54,10 @@ public class RecordTemplate extends ClassTemplate {
 		out.print("public ");
 		genClassName(part, ctx, out, args);
 		out.print("( Executable ru");
-		genAdditionalConstructorParams(part, out, args);
+		genAdditionalConstructorParams(part, ctx, out, args);
 		out.println(" ) {");
 		out.print("super( ru");
-		genAdditionalSuperConstructorArgs(part, out, args);
+		genAdditionalSuperConstructorArgs(part, ctx, out, args);
 		out.println(" );");
 		out.println("ezeInitialize();");
 		out.println('}');

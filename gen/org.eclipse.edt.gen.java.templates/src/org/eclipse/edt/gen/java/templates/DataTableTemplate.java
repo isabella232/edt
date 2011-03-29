@@ -37,10 +37,10 @@ public class DataTableTemplate extends StructuredRecordTemplate {
 		out.print("public ");
 		genClassName(dataTable, ctx, out, args);
 		out.print("( RunUnit ru");
-//		genAdditionalConstructorParams(dataTable, out, args);
+//		genAdditionalConstructorParams(dataTable, ctx, out, args);
 		out.println(" ) {");
 		out.print("super( ru");
-//		genAdditionalSuperConstructorArgs(dataTable, out, args);
+//		genAdditionalSuperConstructorArgs(dataTable, ctx, out, args);
 		out.println(" );");
 		out.println("ezeInitialize();");
 		out.println('}');

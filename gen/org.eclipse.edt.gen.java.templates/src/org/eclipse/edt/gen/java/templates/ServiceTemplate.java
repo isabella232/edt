@@ -27,10 +27,10 @@ public class ServiceTemplate extends ClassTemplate {
 		out.print("public ");
 		genClassName(service, ctx, out, args);
 		out.print("( RunUnit ru");
-		genAdditionalConstructorParams(service, out, args);
+		genAdditionalConstructorParams(service, ctx, out, args);
 		out.println(" ) {");
 		out.print("super( ru");
-		genAdditionalSuperConstructorArgs(service, out, args);
+		genAdditionalSuperConstructorArgs(service, ctx, out, args);
 		out.println(" );");
 		out.println("ezeInitialize();");
 		out.println('}');
