@@ -9,5 +9,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.eclipse.edt.mof"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.eclipse.edt.gen"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.eclipse.edt.gen.java"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
