@@ -35,7 +35,7 @@ public class ListTypeTemplate extends ClassTemplate {
 		if (!generic.getTypeArguments().isEmpty()) {
 			for (int i = 0; i < generic.getTypeArguments().size(); i++) {
 				out.print(".class, ");
-				ctx.gen(genRuntimeTypeName, generic.getTypeArguments().get(i), ctx, out, RuntimeTypeNameKind.RuntimeTypeName_JavaObject);
+				ctx.gen(genRuntimeTypeName, generic.getTypeArguments().get(i), ctx, out, RuntimeTypeNameKind.JavascriptObject);
 			}
 		}
 		out.print(".class");
@@ -48,7 +48,7 @@ public class ListTypeTemplate extends ClassTemplate {
 		if (type.getTypeArguments() != null && type.getTypeArguments().size() > 0) {
 			out.print('<');
 			for (int i = 0; i < type.getTypeArguments().size(); i++) {
-				ctx.gen(genRuntimeTypeName, type.getTypeArguments().get(i), ctx, out, RuntimeTypeNameKind.RuntimeTypeName_JavaObject);
+				ctx.gen(genRuntimeTypeName, type.getTypeArguments().get(i), ctx, out, RuntimeTypeNameKind.JavascriptObject);
 			}
 			out.print('>');
 		}

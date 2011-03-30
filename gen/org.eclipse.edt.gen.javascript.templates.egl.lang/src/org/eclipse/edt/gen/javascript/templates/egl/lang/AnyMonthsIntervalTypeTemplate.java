@@ -31,7 +31,7 @@ public class AnyMonthsIntervalTypeTemplate extends IntervalTypeTemplate {
 			out.print("null");
 		else {
 			out.print("new ");
-			genRuntimeTypeName(type, ctx, out, RuntimeTypeNameKind.RuntimeTypeName_EGLImplementation);
+			genRuntimeTypeName(type, ctx, out, RuntimeTypeNameKind.EGLImplementation);
 			out.print("(");
 			ctx.gen(genConstructorOptions, (EObject) type, ctx, out, args);
 			out.print(")");
