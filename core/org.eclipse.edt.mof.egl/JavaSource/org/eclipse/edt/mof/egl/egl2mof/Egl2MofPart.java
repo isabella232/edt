@@ -189,7 +189,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.Delegate delegate) {
 		Delegate part = factory.createDelegate();
 		DelegateBinding binding = (DelegateBinding)delegate.getName().resolveBinding();
-		part.setName(binding.getName());
+		part.setName(binding.getCaseSensitiveName());
 		part.setPackageName(concatWithSeparator(binding.getPackageName(), "."));
 		
 		if (binding.getReturnType() != null) {
@@ -306,7 +306,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 				((LogicAndDataPart)currentPart).getUsedParts().add(part);
 				if (partBinding instanceof FormBinding) {
 					Field formField = factory.createField();
-					formField.setName(partBinding.getName());
+					formField.setName(partBinding.getCaseSensitiveName());
 					formField.setType(part);
 					((LogicAndDataPart)currentPart).addMember(formField);
 					eObjects.put(partBinding, formField);

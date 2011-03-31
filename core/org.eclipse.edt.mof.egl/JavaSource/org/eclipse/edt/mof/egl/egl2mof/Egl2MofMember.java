@@ -294,7 +294,7 @@ class Egl2MofMember extends Egl2MofPart {
 		EObject obj;
 		if (inMofContext) {
 			EParameter parm = mof.createEParameter(true);
-			parm.setName(parameter.getName());
+			parm.setName(parameter.getCaseSensitiveName());
 			setUpMofTypedElement(parm, parameter);
 			obj = parm;
 		}

@@ -121,7 +121,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		for (org.eclipse.edt.compiler.core.ast.Name name : (List<org.eclipse.edt.compiler.core.ast.Name>)decl.getNames()) {
 			LocalVariableBinding binding = (LocalVariableBinding)name.resolveDataBinding();
 			Field field = factory.createField();
-			field.setName(binding.getName());
+			field.setName(binding.getCaseSensitiveName());
 			field.setType((Type)mofTypeFor(binding.getType()));
 			field.setIsNullable(binding.getType().isNullable());
 			addInitializers(decl.getInitializer(), decl.getSettingsBlockOpt(), field, decl.getType());

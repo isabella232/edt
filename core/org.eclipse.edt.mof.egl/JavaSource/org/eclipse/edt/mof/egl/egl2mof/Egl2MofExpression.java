@@ -320,7 +320,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				fi = factory.createFunctionPartInvocation();
 				String packageName = concatWithSeparator(((TopLevelFunctionBinding)functionBinding).getPackageName(), ".");
 				((FunctionPartInvocation)fi).setPackageName(packageName);
-				fi.setId(functionBinding.getName());			
+				fi.setId(functionBinding.getCaseSensitiveName());			
 			}
 			else {
 				boolean isStatic = Binding.isValidBinding(functionBinding) && (functionBinding.isStatic() || declarer instanceof LibraryBinding);
@@ -340,9 +340,9 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				else {
 					if (isStatic && node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.Name) {
 						fi = factory.createQualifiedFunctionInvocation();
-						fi.setId(functionBinding.getName());
+						fi.setId(functionBinding.getCaseSensitiveName());
 						PartName partName = factory.createPartName();
-						partName.setId(declarer.getName());
+						partName.setId(declarer.getCaseSensitiveName());
 						partName.setPackageName(concatWithSeparator(declarer.getPackageName(), "."));
 						setElementInformation(node.getTarget(), partName);
 						((QualifiedFunctionInvocation)fi).setQualifier(partName);
@@ -532,12 +532,12 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		}
 			
 		if (part instanceof FormBinding) {
-			String id = ((FormBinding) part).getEnclosingFormGroup().getName();
-			id += Type.NestedPartDelimiter + part.getName();
+			String id = ((FormBinding) part).getEnclosingFormGroup().getCaseSensitiveName();
+			id += Type.NestedPartDelimiter + part.getCaseSensitiveName();
 			name.setId(id);
 		}
 		else {
-			name.setId(binding.getName());
+			name.setId(binding.getCaseSensitiveName());
 		}
 		
 		IDataBinding qualifier = (IDataBinding) node.getAttribute(org.eclipse.edt.compiler.core.ast.Name.IMPLICIT_QUALIFIER_DATA_BINDING);

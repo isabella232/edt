@@ -65,7 +65,7 @@ public class CallStatementImpl extends StatementImpl implements CallStatement {
 	
 	@Override
 	public Expression getErrorCallback() {
-		return (MemberAccess)slotGet(Slot_errorCallback);
+		return (Expression)slotGet(Slot_errorCallback);
 	}
 	
 	@Override
