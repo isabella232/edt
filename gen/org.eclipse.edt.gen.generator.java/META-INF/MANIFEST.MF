@@ -2,13 +2,14 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Java
 Bundle-SymbolicName: org.eclipse.edt.gen.generator.java;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Version: 0.7.0.qualifier
 Export-Package: org.eclipse.edt.gen.generator.java
 Require-Bundle: org.eclipse.edt.compiler;bundle-version="0.7.0";visibility:=reexport,
- org.eclipse.edt.gen;bundle-version="1.0.0";visibility:=reexport,
- org.eclipse.edt.gen.java;bundle-version="1.0.0";visibility:=reexport,
+ org.eclipse.edt.gen;bundle-version="0.7.0";visibility:=reexport,
+ org.eclipse.edt.gen.java;bundle-version="0.7.0";visibility:=reexport,
  org.eclipse.edt.mof;bundle-version="0.7.0",
  org.eclipse.edt.mof.egl;bundle-version="0.7.0",
- org.eclipse.edt.gen.java.templates;bundle-version="1.0.0";visibility:=reexport,
- org.eclipse.edt.gen.java.templates.egl.core;bundle-version="1.0.0";visibility:=reexport,
- org.eclipse.edt.gen.java.templates.egl.lang;bundle-version="1.0.0";visibility:=reexport
+ org.eclipse.edt.gen.java.templates;bundle-version="0.7.0";visibility:=reexport,
+ org.eclipse.edt.gen.java.templates.egl.core;bundle-version="0.7.0";visibility:=reexport,
+ org.eclipse.edt.gen.java.templates.egl.lang;bundle-version="0.7.0";visibility:=reexport
