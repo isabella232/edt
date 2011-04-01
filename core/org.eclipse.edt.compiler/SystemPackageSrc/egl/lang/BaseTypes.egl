@@ -12,7 +12,6 @@
 package egl.lang;
 
 import egl.lang.reflect.ClassType;
-import egl.lang.reflect.SystemClass;
 import egl.lang.reflect.mof.Operation;
 
 externalType AnyObject type ClassType	
