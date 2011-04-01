@@ -199,12 +199,15 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		else {
 			part.setIsNullable(false);
 		}
+
+		partProcessingStack.push(part);
 	
 		for (org.eclipse.edt.compiler.core.ast.Parameter parm : (List<org.eclipse.edt.compiler.core.ast.Parameter>)delegate.getParameters()) {
 			parm.accept(this);
 			part.addMember((FunctionParameter)stack.pop());
 		}
 		setElementInformation(delegate, part);
+		partProcessingStack.pop();
 		stack.push(part);
 		return false;
 	}
