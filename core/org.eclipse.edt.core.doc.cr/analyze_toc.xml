@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<!-- 
+	for file names, please use five-digit numbers with these prefixes: 
+	    cedt (concepts), tedt (for tasks), redt (reference)	
+-->
+ 
+<toc label="Analyzing EGL source with EDT">
+   <topic label="Introduction to the EGL model" href="topics/cedt01000.html"></topic>   
+</toc>
