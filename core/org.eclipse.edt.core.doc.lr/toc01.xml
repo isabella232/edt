@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<!-- 
+	for file names, please use five-digit numbers with these prefixes: 
+	    cedt (concepts), tedt (for tasks), redt (reference)	
+-->
+
+<toc label="EGL Language Reference for EDT" topic="topics/cedt00002.html">
+   <topic label="EGL overview" href="topics/cedt00002.html">     
+      <topic label="Types and instances of those types" href="topics/cedt00004.html">
+         <topic label="Built-in types" href="topics/cedt00005.html"/>
+         <topic label="Value and reference types" href="topics/cedt00012.html"/>
+         <topic label="Boxing and unboxing conversions" href="topics/cedt00025.html"/>
+         <topic label="Data items" href="topics/cedt00006.html"/>
+         <topic label="Classifiers" href="topics/cedt00007.html"/>
+         <topic label="Annotations" href="topics/cedt00008.html"/>
+         <topic label="Stereotypes" href="topics/cedt00009.html"/>
+      </topic>
+      <topic label="Generatable parts" href="topics/cedt00010.html"/>
+      <topic label="EGL packages" href="topics/cedt00014.html"/>
+      <topic label="Part imports" href="topics/cedt00017.html"/>
+      <topic label="Part-name resolution" href="topics/cedt00015.html"/>
+      <topic label="Run units" href="topics/cedt00011.html"/>
+      <topic label="Name resolution at run time" href="topics/cedt00016.html"/>
+      <topic label="Overview of simple types" href="topics/cedt00018.html">
+         <topic label="EGL character types" href="topics/cedt00020.html"/>
+         <topic label="EGL date-and-time types" href="topics/cedt00022.html"/>
+         <topic label="EGL large-object types" href="topics/cedt00023.html"/>
+         <topic label="EGL numeric types" href="topics/cedt00021.html"/>
+         <topic label="EGL miscellaneous types" href="topics/cedt00024.html"/>
+      </topic>
+      <topic label="Overview of the classifiers" href="topics/cedt00019.html">
+         <topic label="Classifiers for defining EGL data parts" href="topics/cedt00026.html">
+            <topic label="DataItem classifier overview" href="topics/cedt00030.html"/>
+            <topic label="Record classifier overview" href="topics/cedt00031.html"/>
+            <topic label="Enumeration classifier overview" href="topics/cedt00032.html"/>
+            <topic label="Class classifier overview" href="topics/cedt00029.html"/>
+         </topic>
+         <topic label="Classifiers for defining EGL logic parts" href="topics/cedt00027.html">
+            <topic label="Program classifier overview" href="topics/cedt00033.html"/>
+            <topic label="Library classifier overview" href="topics/cedt00034.html"/>
+            <topic label="Service classifier overview" href="topics/cedt00035.html"/>
+            <topic label="Handler classifier overview" href="topics/cedt00036.html"/>
+         </topic>
+         <topic label="Classifiers for defining prototype parts" href="topics/cedt00028.html">
+            <topic label="Interface classifier overview" href="topics/cedt00037.html"/>
+            <topic label="ExternalType classifier overview" href="topics/cedt00038.html"/>
+            <topic label="Delegate classifier overview" href="topics/cedt00039.html"/>
+         </topic>
+      </topic>
+      <topic label="EGL Syntax" href="topics/cedt00013.html"/>
+   </topic>
+   <topic label="EGL language-reference topics" href="topics/redt00001.html">
+      <topic label="This keyword" href="topics/redt00002.html"/>
+   </topic>
+</toc>

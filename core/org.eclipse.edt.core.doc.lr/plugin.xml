@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+<plugin>
+   <extension point="org.eclipse.help.toc"> 
+      <toc file="toc01.xml" primary="false"/>
+      <!-- index path="index/" /> -->
+   </extension>
+   <extension point="org.eclipse.help.contentProducer">
+      <binding producerId="org.eclipse.help.dynamic" />
+   </extension>   
+   <!-- extension point="org.eclipse.help.index">
+      <index file="com.ibm.edt.core.docindex.lr.xml" />
+   </extension -->
+</plugin>
