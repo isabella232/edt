@@ -82,6 +82,7 @@ import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.VariableFormField;
 import org.eclipse.edt.mof.egl.compiler.EGL2IREnvironment;
+import org.eclipse.edt.mof.egl.lookup.ProxyPart;
 import org.eclipse.edt.mof.utils.EList;
 
 
@@ -635,7 +636,7 @@ class Egl2MofMember extends Egl2MofPart {
 			processSettings(field, settingsBlock);
 			// Add implicit new expression as first statement of the initialization
 			StatementBlock block = field.getInitializerStatements();
-			if (field.getType().getClassifier().isInstantiable()) {
+			if (!(field.getType() instanceof ProxyPart) && field.getType().getClassifier().isInstantiable()) {
 				if (block == null) {
 					block = factory.createStatementBlock();
 					field.setInitializerStatements(block);
