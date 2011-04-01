@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.codegen.api;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import org.eclipse.edt.mof.EObject;
@@ -20,4 +21,5 @@ public interface Template {
 	void gen(String genMethod, EObject eObject, TemplateContext ctx, TabbedWriter out, Object...args) throws TemplateException;
 	List<Object> xlate(String xlateMethod, EObject eObject, TemplateContext ctx, Object...args) throws TemplateException;
 	void validate(String xlateMethod, EObject eObject, TemplateContext ctx, Object...args) throws TemplateException;
+	Method getMethod(String methodName, boolean doGet, Class<?>...classes);
 }

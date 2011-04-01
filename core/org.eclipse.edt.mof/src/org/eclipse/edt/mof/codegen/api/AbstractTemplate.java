@@ -169,7 +169,8 @@ public abstract class AbstractTemplate implements Template {
 		}
 	}
 
-	private Method getMethod(String methodName, boolean doGet, Class<?>...classes ) {
+	@Override
+	public Method getMethod(String methodName, boolean doGet, Class<?>...classes ) {
 		Method method = null;
 		if (doGet) {
 			method = primGetMethod(methodName, classes);
