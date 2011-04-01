@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<!-- 
+	for file names, please use five-digit numbers with these prefixes: 
+	    cedt (concepts), tedt (for tasks), redt (reference)	
+-->
+ 
+<toc label="Developing EGL applications with EDT">
+   <topic id="cedt00010" label="Introduction" href="topics/cedt00010.html"></topic>
+   <topic id="cedt00003" label="EGL process from development to run time" href="topics/cedt00003.html"/>
+   <topic id="tedt00010" label="Developing a service or program" href="topics/tedt00010.html"></topic>
+   <topic id="tedt00011" label="Developing a Rich UI application" href="topics/tedt00011.html"></topic>
+   <topic id="tedt00012" label="Accessing services, programs, and transactions" href="topics/tedt00012.html"></topic>  
+   <topic id="tedt00013" label="Calling EGL-generated code from other logic" href="topics/tedt00013.html"></topic>
+   <topic id="tedt00014" label="Securing EGL-generated code" href="topics/tedt00014.html"></topic>
+   <topic id="tedt00015" label="Supporting users globally" href="topics/tedt00015.html"></topic>  
+</toc>
