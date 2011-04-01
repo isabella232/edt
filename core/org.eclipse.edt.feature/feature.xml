@@ -120,5 +120,33 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+         
+  <plugin
+         id="org.eclipse.edt.core.doc.cr"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+  <plugin
+         id="org.eclipse.edt.core.doc.lr"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+  <plugin
+         id="org.eclipse.edt.core.doc.pg"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+  <plugin
+         id="org.eclipse.edt.core.doc.top"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>
