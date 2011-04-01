@@ -21,7 +21,7 @@ import org.eclipse.edt.mof.egl.TimestampType;
 import org.eclipse.edt.mof.egl.IntervalType;
 
 // Boolean primitive
-externalType BooleanType type ClassType
+externalType BooleanType extends AnyValue type ClassType
 
 	static function $EQ(lvalue BooleanType in, rvalue BooleanType in) returns(BooleanType) {@Operation{"=="}};
 	static function $NEQ(lvalue BooleanType in, rvalue BooleanType in) returns(BooleanType) {@Operation{"!="}};
@@ -30,6 +30,7 @@ externalType BooleanType type ClassType
 	static function $NOT(value BooleanType in) returns (BooleanType) {@Operation{"!"}};
 	
 	static function asBoolean(value AnyNumber in) returns (BooleanType) {@Operation{"narrow"}};
+	static function asString(value BooleanType in) returns (AnyString) {@Operation{"narrow"}};
 
 end
 
