@@ -74,7 +74,7 @@ public class EGL2Java extends AbstractGeneratorCommand {
 		} else {
 			nameOrAlias = part.getId();
 		}
-		buf.append(nameOrAlias);
+		buf.append(Aliaser.getAlias(nameOrAlias));
 
 		buf.append(getFileExtention());
 		return buf.toString();
