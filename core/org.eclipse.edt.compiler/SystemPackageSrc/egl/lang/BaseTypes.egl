@@ -55,6 +55,16 @@ externalType List type ClassType {
 end
 
 externalType Dictionary type ClassType
+	order OrderingKind;
+	caseSensitive BooleanType;
+	
+	//TODO dictionary functions
+end
+
+Enumeration OrderingKind
+	byKey = 1,
+	byInsertion = 2,
+	none = 3
 end
 
 externalType ArrayDictionary type ClassType
