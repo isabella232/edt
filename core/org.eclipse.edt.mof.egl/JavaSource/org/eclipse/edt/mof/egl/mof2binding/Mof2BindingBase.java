@@ -93,6 +93,14 @@ public abstract class Mof2BindingBase extends AbstractVisitor implements MofConv
 		ignoreTheseAnnotations.add(IEGLConstants.EGL_PARTABSOLUTEPATH);
 	}
 	
+	private static String[] MOFPACKAGE = InternUtil.intern(new String[] {"egl", "lang", "reflect", "mof"});
+	private static HashMap<String, String> MOF_STEREOTYPES = new HashMap<String, String>();
+	{
+		MOF_STEREOTYPES.put(InternUtil.intern("MofClass"), "org.eclipse.edt.mof.EClass");
+		MOF_STEREOTYPES.put(InternUtil.intern("MofDataType"), "org.eclipse.edt.mof.EDataType");
+		MOF_STEREOTYPES.put(InternUtil.intern("MofEnum"), "org.eclipse.edt.mof.EEnum");
+	}
+	
 	private static Object[] EMPTYARRAY =  new Object[0];
 	
 	Stack<IBinding> stack = new Stack<IBinding>();
@@ -709,7 +717,7 @@ public abstract class Mof2BindingBase extends AbstractVisitor implements MofConv
 			list = new EnumerationDataBinding[((EMetadataType)ir).getTargets().size()];
 			for (EClass eClass : ((EMetadataType)ir).getTargets()) {
 				if (eClass.getName().equals("EClass")) {
-					entry = elementKind.findData(ElementKind_ExternalTypePart);
+					entry = elementKind.findData(ElementKind_Part);
 				}
 				else if (eClass.getName().equals("EField")) {
 					entry = elementKind.findData(ElementKind_FieldMbr);
@@ -745,8 +753,40 @@ public abstract class Mof2BindingBase extends AbstractVisitor implements MofConv
 			for (int j = 0; j < annotations.size(); j++) {
 				binding.addAnnotation(createAnnotationBinding(annotations.get(j)));
 			}
+		}		
+
+		if (ir instanceof EMetadataType) {
+			
+			//BOOTSTRAP! Only certain EMetatDatTypes are stereotypes...these are:
+			// egl.lang.reflect.mof.MofClass 
+			// egl.lang.reflect.mof.MofDataType 
+			// egl.lang.reflect.mof.MofEnum 
+			if (declarer.getPackageName() == MOFPACKAGE && MOF_STEREOTYPES.keySet().contains(declarer.getName())) {
+				
+				//create and add the stereotype annotation
+				IAnnotationTypeBinding stereotypeType = StereotypeAnnotationTypeBinding.getInstance();
+				IAnnotationBinding stereotype = new AnnotationBinding(InternUtil.intern("Stereotype"), declarer, stereotypeType);
+				binding.addAnnotation(stereotype);
+				
+				//create and add the partType annotation to the record
+				FlexibleRecordBinding rec = (FlexibleRecordBinding)env.getPartBinding(InternUtil.intern(new String[]{"egl", "lang", "reflect"}), InternUtil.intern("PartType"));
+				AnnotationTypeBindingImpl partTypeType = new AnnotationTypeBindingImpl(rec, declarer);
+				IAnnotationBinding partType = new AnnotationBinding(InternUtil.intern("PartType"), declarer, partTypeType);
+				partType.setValue(MOF_STEREOTYPES.get(declarer.getName()), null, null, null, false);
+				declarer.addAnnotation(partType);
+				
+			}
 		}
+		
 		return binding;
+	}
+	
+	protected void addMofClassAnnotation(IPartBinding binding) {
+		FlexibleRecordBinding rec = (FlexibleRecordBinding)env.getPartBinding(InternUtil.intern(new String[]{"egl", "lang", "reflect", "mof"}), InternUtil.intern("MofClass"));
+		AnnotationTypeBindingImpl annType = new AnnotationTypeBindingImpl(rec, binding);
+		IAnnotationBinding ann = new AnnotationBinding(InternUtil.intern("PartType"), binding, annType);
+		binding.addAnnotation(ann);
+		
 	}
 	
 	protected IAnnotationBinding createAnnotationBinding(Annotation annotation) {

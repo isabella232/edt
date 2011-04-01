@@ -576,6 +576,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 				((EClassBinding)binding).addExtendedType((ITypeBinding)stack.pop());
 			}
 			handleMetadata(ir, binding);
+			addMofClassAnnotation(binding);
 			partStack.pop();
 		}
 		stack.push(binding);
