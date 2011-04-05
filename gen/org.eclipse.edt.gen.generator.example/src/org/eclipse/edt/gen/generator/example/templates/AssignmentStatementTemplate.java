@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,15 +15,14 @@ import org.eclipse.edt.gen.generator.example.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
-import org.eclipse.edt.mof.egl.Statement;
 
 public class AssignmentStatementTemplate extends org.eclipse.edt.gen.java.templates.AssignmentStatementTemplate {
 
-	public void genStatementBody(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(AssignmentStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		// in this example, we are overriding the default value generator method, and if the user specified
 		// extendComments=true, then we add an imbedded comment to the definition
 		if ((Boolean) ctx.getParameter(Constants.parameter_extendComments))
 			out.print("/* comment added by -extendComments parameter */");
-		ctx.gen(genExpression, ((AssignmentStatement) stmt).getAssignment(), ctx, out, args);
+		ctx.gen(genExpression, stmt.getAssignment(), ctx, out, args);
 	}
 }
