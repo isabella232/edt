@@ -16,10 +16,14 @@ import java.util.List;
 import org.eclipse.edt.compiler.binding.annotationType.EGLIsSystemPartAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
+import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.ExternalType;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Part;
@@ -172,5 +176,237 @@ public class CommonUtilities {
 		} else if (parameter.getParameterKind() == ParameterKind.PARM_OUT)
 			return true;
 		return false;
+	}
+
+	@SuppressWarnings("static-access")
+	public static String getNativeRuntimeOperationName(BinaryExpression expr) throws GenerationException {
+		// safety check to make sure the operation has been defined properly
+		if (expr.getOperation() == null || expr.getOperation().getName() == null)
+			throw new GenerationException();
+		// process the operator
+		String op = expr.getOperator();
+		if (op.equals(expr.Op_PLUS))
+			return "plus";
+		if (op.equals(expr.Op_MINUS))
+			return "minus";
+		if (op.equals(expr.Op_DIVIDE))
+			return "divide";
+		if (op.equals(expr.Op_MULTIPLY))
+			return "multiply";
+		if (op.equals(expr.Op_MODULO))
+			return "modulo";
+		if (op.equals(expr.Op_EQ))
+			return "equals";
+		if (op.equals(expr.Op_NE))
+			return "notEquals";
+		if (op.equals(expr.Op_LT))
+			return "compareTo";
+		if (op.equals(expr.Op_GT))
+			return "compareTo";
+		if (op.equals(expr.Op_LE))
+			return "compareTo";
+		if (op.equals(expr.Op_GE))
+			return "compareTo";
+		if (op.equals(expr.Op_AND))
+			return "and";
+		if (op.equals(expr.Op_OR))
+			return "or";
+		if (op.equals(expr.Op_XOR))
+			return "xor";
+		if (op.equals(expr.Op_CONCAT))
+			return "concat";
+		if (op.equals(expr.Op_NULLCONCAT))
+			return "concat";
+		if (op.equals(expr.Op_BITAND))
+			return "bitand";
+		if (op.equals(expr.Op_BITOR))
+			return "bitor";
+		if (op.equals(expr.Op_POWER))
+			return "power";
+		if (op.equals(expr.Op_IN))
+			return "in";
+		if (op.equals(expr.Op_MATCHES))
+			return "matches";
+		if (op.equals(expr.Op_LIKE))
+			return "like";
+		return "UnknownOp";
+	}
+
+	@SuppressWarnings("static-access")
+	public static String getNativeRuntimeComparisionOperation(BinaryExpression expr) {
+		String op = expr.getOperator();
+		if (op.equals(expr.Op_LT))
+			return " < 0";
+		if (op.equals(expr.Op_GT))
+			return " > 0";
+		if (op.equals(expr.Op_LE))
+			return " <= 0";
+		if (op.equals(expr.Op_GE))
+			return " >= 0";
+		return "";
+	}
+
+	@SuppressWarnings("static-access")
+	public static String getNativeJavaOperation(BinaryExpression expr, Context ctx) {
+		String op = expr.getOperator();
+		// if we are to use egl overflow checking, then don't pass back that we can do the mathematical operations in java
+		if (expr.isNullable() || (Boolean) ctx.getParameter(Constants.parameter_checkOverflow)) {
+			if (op.equals(expr.Op_EQ))
+				return " == ";
+			if (op.equals(expr.Op_NE))
+				return " != ";
+			if (op.equals(expr.Op_LT))
+				return " < ";
+			if (op.equals(expr.Op_GT))
+				return " > ";
+			if (op.equals(expr.Op_LE))
+				return " <= ";
+			if (op.equals(expr.Op_GE))
+				return " >= ";
+			if (op.equals(expr.Op_AND))
+				return " && ";
+			if (op.equals(expr.Op_OR))
+				return " || ";
+			if (op.equals(expr.Op_XOR))
+				return " ^ ";
+			if (op.equals(expr.Op_CONCAT))
+				return " + ";
+			if (op.equals(expr.Op_BITAND))
+				return " & ";
+			if (op.equals(expr.Op_BITOR))
+				return " | ";
+			return "";
+		}
+		// these are the defaults for all other types
+		// division is intentionally left off as all division must be done through the egl runtime
+		if (op.equals(expr.Op_PLUS))
+			return " + ";
+		if (op.equals(expr.Op_MINUS))
+			return " - ";
+		if (op.equals(expr.Op_MULTIPLY))
+			return " * ";
+		if (op.equals(expr.Op_MODULO))
+			return " % ";
+		if (op.equals(expr.Op_EQ))
+			return " == ";
+		if (op.equals(expr.Op_NE))
+			return " != ";
+		if (op.equals(expr.Op_LT))
+			return " < ";
+		if (op.equals(expr.Op_GT))
+			return " > ";
+		if (op.equals(expr.Op_LE))
+			return " <= ";
+		if (op.equals(expr.Op_GE))
+			return " >= ";
+		if (op.equals(expr.Op_AND))
+			return " && ";
+		if (op.equals(expr.Op_OR))
+			return " || ";
+		if (op.equals(expr.Op_XOR))
+			return " ^ ";
+		if (op.equals(expr.Op_CONCAT))
+			return " + ";
+		if (op.equals(expr.Op_BITAND))
+			return " & ";
+		if (op.equals(expr.Op_BITOR))
+			return " | ";
+		return "";
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void processImport(String qualifiedName, Context ctx) {
+		// if we didn't get a name, or it doesn't have periods in it, then we don't want to consider it for importing
+		if (qualifiedName == null || qualifiedName.indexOf('.') < 0)
+			return;
+		// check the types list we have already
+		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partTypesImported);
+		for (String imported : typesImported) {
+			if (qualifiedName.equalsIgnoreCase(imported)) {
+				// it was already found, so we have done this logic before. Simply return
+				return;
+			}
+		}
+		// if we get here, then we haven't processed this type before
+		String unqualifiedName = qualifiedName;
+		if (unqualifiedName.indexOf('.') >= 0)
+			unqualifiedName = unqualifiedName.substring(unqualifiedName.lastIndexOf('.') + 1);
+		for (String imported : typesImported) {
+			if (imported.indexOf('.') >= 0)
+				imported = imported.substring(imported.lastIndexOf('.') + 1);
+			if (unqualifiedName.equalsIgnoreCase(imported)) {
+				// we have an unqualified name that we are importing that matches the last node, Simply return
+				return;
+			}
+		}
+		typesImported.add(qualifiedName);
+	}
+
+	public static void generateDebugExtension(Field field, Context ctx) {
+		// if this isn't a temporary variable, then add the data to the debug extension buffer
+		if (!field.getName().startsWith(org.eclipse.edt.gen.Constants.temporaryVariablePrefix)) {
+			// get the line number. If it is not found, then we can't write the debug extension
+			Annotation annotation = field.getAnnotation(IEGLConstants.EGL_LOCATION);
+			if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
+				ctx.getDebugExtension().append("" + ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue() + ";");
+				ctx.getDebugExtension().append(field.getName() + ";");
+				ctx.getDebugExtension().append(field.getName() + ";");
+				ctx.getDebugExtension().append(field.getType().getTypeSignature() + "\n");
+			}
+		}
+	}
+
+	public static void generateDebugExtension(Function function, Context ctx) {
+		// get the line number. If it is not found, then we can't write the debug extension
+		Annotation annotation = function.getAnnotation(IEGLConstants.EGL_LOCATION);
+		if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
+			ctx.getDebugExtension().append("" + ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue() + ";");
+			ctx.getDebugExtension().append("F:" + function.getName() + ";(");
+			for (int i = 0; i < function.getParameters().size(); i++) {
+				FunctionParameter decl = function.getParameters().get(i);
+				if (CommonUtilities.isBoxedParameterType(decl, ctx))
+					ctx.getDebugExtension().append("Lorg/eclipse/edt/javart/AnyBoxedObject;");
+				else
+					ctx.getDebugExtension().append(generateJavaTypeSignature(function.getParameters().get(i).getType(), ctx));
+			}
+			ctx.getDebugExtension().append(")" + generateJavaTypeSignature(function.getReturnType(), ctx) + "\n");
+		}
+	}
+
+	private static String generateJavaTypeSignature(Type type, Context ctx) {
+		String signature = "";
+		// if this is an array, we need to handle it specially
+		if (type instanceof ArrayType)
+			signature += "L" + ctx.getRawNativeInterfaceMapping(type.getClassifier()).replaceAll("\\.", "/") + ";";
+		else {
+			// get the java primitive, if it exists
+			if (type == null)
+				signature += "V";
+			else if (ctx.mapsToPrimitiveType(type.getClassifier())) {
+				// do we want the java primitive or the object
+				// now try to match up against the known primitives
+				String value = ctx.getRawPrimitiveMapping(type.getClassifier());
+				if (value.equals("boolean"))
+					signature += "Z";
+				else if (value.equals("byte"))
+					signature += "B";
+				else if (value.equals("char"))
+					signature += "C";
+				else if (value.equals("double"))
+					signature += "D";
+				else if (value.equals("float"))
+					signature += "F";
+				else if (value.equals("int"))
+					signature += "I";
+				else if (value.equals("long"))
+					signature += "J";
+				else if (value.equals("short"))
+					signature += "S";
+				else
+					signature += "L" + value.replaceAll("\\.", "/") + ";";
+			} else
+				signature += "L" + type.getClassifier().getTypeSignature().replaceAll("\\.", "/") + ";";
+		}
+		return signature;
 	}
 }

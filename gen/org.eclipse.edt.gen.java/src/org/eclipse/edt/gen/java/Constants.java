@@ -33,11 +33,9 @@ public class Constants {
 	public static final String Annotation_partLibrariesUsed = "partLibrariesUsed";
 	public static final String Annotation_partRecordsUsed = "partRecordsUsed";
 	public static final String Annotation_partTypesImported = "partTypesImported";
+
 	// these are annotations key values, related to the values in the IRs
 	public static final String Annotation_EGLProperty = "egl.core.eglproperty";
-
-	public static final String REDEFINED_ANNOTATION = "EGL Java Gen redefined record flag";
-	public static final String IS_OVERLAY_ANNOTATION = "EGL Java Gen overlay class";
 
 	// Library generation constants
 	public static final String LIBRARY_PREFIX = "eze_Lib_";

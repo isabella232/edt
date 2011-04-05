@@ -96,13 +96,21 @@ public class JavaGenerator extends Generator {
 			}
 			// print out the whole stack trace
 			e.printStackTrace();
-		}
-		// dump out all validation and generation messages
-		for (EGLMessage message : context.getMessageRequestor().getMessages()) {
-			out.println(message.getBuiltMessage());
+			// write out any trace messages
+			System.out.println();
+			System.out.println("Dumping up to the last 200 template/method invocation and resolution messages");
+			for (String traceEntry : context.getTemplateTraceEntries())
+				System.out.println(traceEntry);
 		}
 		// close the output
 		out.close();
+	}
+
+	public void dumpErrorMessages() {
+		// dump out all validation and generation messages
+		for (EGLMessage message : context.getMessageRequestor().getMessages()) {
+			System.out.println(message.getBuiltMessage());
+		}
 	}
 
 	public void processFile(String fileName) {

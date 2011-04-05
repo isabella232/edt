@@ -19,7 +19,6 @@ import org.eclipse.edt.gen.EglContext;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateContext;
-import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Expression;
@@ -147,7 +146,7 @@ public class Context extends EglContext {
 		return value;
 	}
 
-	public void gen(String genMethod, Expression object, TemplateContext ctx, TabbedWriter out, Object... args) throws TemplateException {
+	public void gen(String genMethod, Expression object, TemplateContext ctx, TabbedWriter out, Object... args) {
 		// is this the first time into an expression group
 		Annotation annotation = object.getAnnotation(IEGLConstants.EGL_LOCATION);
 		if (!debugIsProcessing && annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
@@ -176,7 +175,7 @@ public class Context extends EglContext {
 		}
 	}
 
-	public void gen(String genMethod, Statement object, TemplateContext ctx, TabbedWriter out, Object... args) throws TemplateException {
+	public void gen(String genMethod, Statement object, TemplateContext ctx, TabbedWriter out, Object... args) {
 		// for statements, we only want to collect the data if this statement is part of a larger expression
 		if (debugIsProcessing) {
 			Annotation annotation = object.getAnnotation(IEGLConstants.EGL_LOCATION);
@@ -204,7 +203,6 @@ public class Context extends EglContext {
 		debugHasOutstandingLine = false;
 	}
 
-	@Override
 	public void handleValidationError(Element obj) {
 		int startLine = 0;
 		int startOffset = 0;
@@ -223,7 +221,6 @@ public class Context extends EglContext {
 		getMessageRequestor().addMessage(message);
 	}
 
-	@Override
 	public void handleValidationError(Annotation obj) {
 		String[] details = new String[] { obj.getEClass().getETypeSignature() };
 		EGLMessage message = EGLMessage.createEGLMessage(getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
@@ -231,7 +228,6 @@ public class Context extends EglContext {
 		getMessageRequestor().addMessage(message);
 	}
 
-	@Override
 	public void handleValidationError(Type obj) {
 		String[] details = new String[] { obj.getEClass().getETypeSignature() };
 		EGLMessage message = EGLMessage.createEGLMessage(getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_TYPE,
