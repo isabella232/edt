@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,28 +13,29 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public class MemberAccessTemplate extends NameTemplate {
+public class MemberAccessTemplate extends JavascriptTemplate {
 
 	public void genExpression(MemberAccess expr, Context ctx, TabbedWriter out, Object... args) {
-		if (isReferenceType(expr.getQualifier().getType()) || expr.getQualifier().isNullable()) {
+		Member member = expr.getMember();
+		if (member != null && member.getContainer() != null && member.getContainer() instanceof Type)
+			ctx.gen(genContainerBasedMemberAccess, (Type) member.getContainer(), ctx, out, expr, member);
+		else
+			genMemberAccess(expr, ctx, out, args);
+	}
+
+	public void genMemberAccess(MemberAccess expr, Context ctx, TabbedWriter out, Object... args) {
+		if (TypeUtils.isReferenceType(expr.getQualifier().getType()) || expr.getQualifier().isNullable()) {
 			out.print("egl.checkNull(");
-			genExpression(expr.getQualifier(), ctx, out, args);
-			out.print(')');
-		}
-		else {
-			genExpression(expr.getQualifier(), ctx, out, args);
-		}
-		out.print('.');
-		Annotation prop = getProperty(expr);
-		if (prop == null) {
-			genName(expr.getMember(), ctx, out, args);
-		}
-		else {
-			out.print((String)prop.getValue("getMethod"));
-			out.print("()");
-		}
+			ctx.gen(genExpression, expr.getQualifier(), ctx, out, args);
+			out.print(")");
+		} else
+			ctx.gen(genExpression, expr.getQualifier(), ctx, out, args);
+		out.print(".");
+		ctx.gen(genAccessor, expr.getMember(), ctx, out, args);
 	}
 }

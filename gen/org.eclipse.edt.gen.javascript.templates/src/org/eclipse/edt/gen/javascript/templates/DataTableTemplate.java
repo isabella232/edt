@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,19 +13,17 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.TypedElement;
+import org.eclipse.edt.mof.egl.DataTable;
 
-public class JavascriptNumberTemplate extends TypeTemplate {
+public class DataTableTemplate extends JavascriptTemplate {
 
-	public void genDefaultValue(Type type, Context ctx, TabbedWriter out, Object... args) {
-		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
-			out.print("null");
-		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
-			out.print("null");
-		else
-			out.print("0");
+	public void genClassBody(DataTable dataTable, Context ctx, TabbedWriter out, Object... args) {}
+
+	public void genSuperClass(DataTable dataTable, Context ctx, TabbedWriter out, Object... args) {
+		out.print("ExecutableBase");
 	}
 
+	public void genAccessor(DataTable dataTable, Context ctx, TabbedWriter out, Object... args) {}
+
+	public void genConstructor(DataTable dataTable, Context ctx, TabbedWriter out, Object... args) {}
 }

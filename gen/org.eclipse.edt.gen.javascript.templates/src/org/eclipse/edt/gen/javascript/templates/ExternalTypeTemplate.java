@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,25 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-public class ExternalTypeTemplate extends ClassTemplate {
+import org.eclipse.edt.gen.javascript.Context;
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.ExternalType;
 
+public class ExternalTypeTemplate extends JavascriptTemplate {
+
+	public void validateClassBody(ExternalType part, Context ctx, Object... args) {}
+
+	public void genPart(ExternalType part, Context ctx, TabbedWriter out, Object... args) {}
+
+	public void genClassBody(ExternalType part, Context ctx, TabbedWriter out, Object... args) {}
+
+	public void genClassHeader(ExternalType part, Context ctx, TabbedWriter out, Object... args) {}
+
+	public void genAccessor(ExternalType part, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genPartName, part, ctx, out, args);
+	}
+
+	public void genRuntimeTypeName(ExternalType part, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genPartName, part, ctx, out, args);
+	}
 }

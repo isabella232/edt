@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,11 +14,10 @@ package org.eclipse.edt.gen.javascript.templates;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
-import org.eclipse.edt.mof.egl.Statement;
 
-public class AssignmentStatementTemplate extends ExpressionStatementTemplate {
+public class AssignmentStatementTemplate extends JavascriptTemplate {
 
-	public void genStatementBody(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genExpression, ((AssignmentStatement) stmt).getAssignment(), ctx, out, args);
+	public void genStatementBody(AssignmentStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genExpression, stmt.getAssignment(), ctx, out, args);
 	}
 }

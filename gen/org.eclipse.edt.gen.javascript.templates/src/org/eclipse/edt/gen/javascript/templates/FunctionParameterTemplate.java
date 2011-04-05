@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,9 +15,9 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 
-public class FunctionParameterTemplate extends ParameterTemplate {
+public class FunctionParameterTemplate extends JavascriptTemplate {
 
-	public void genDeclaration(FunctionParameter decl, Context ctx, TabbedWriter out, Object...args) {
-		genName(decl, ctx, out);
+	public void genDeclaration(FunctionParameter decl, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genName, decl, ctx, out, args);
 	}
 }

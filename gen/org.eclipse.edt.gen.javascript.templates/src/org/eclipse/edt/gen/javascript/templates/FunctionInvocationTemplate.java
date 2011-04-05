@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,96 +13,19 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.codegen.api.TemplateException;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
-import org.eclipse.edt.mof.egl.FunctionParameter;
-import org.eclipse.edt.mof.egl.Name;
-import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class FunctionInvocationTemplate extends ExpressionTemplate {
+public class FunctionInvocationTemplate extends JavascriptTemplate {
 
-	public void genExpression(FunctionInvocation expr, Context ctx, TabbedWriter out, Object... args) throws TemplateException {
-		// first, make this expression's arguments compatible with the function parameters
+	public void genExpression(FunctionInvocation expr, Context ctx, TabbedWriter out, Object... args) {
+		// first, make this expression's arguments compatible
 		IRUtils.makeCompatible(expr);
-		// then process the function invocation
-		if (expr.getQualifier() != null) {
-			genExpression(expr.getQualifier(), ctx, out, args);
-			out.print('.');
-		}
-		ctx.gen(genName, expr.getFunction(), ctx, out, args);
-		out.print('(');
-		int i = 0;
-		FunctionParameter[] resetFunctionParms = null;
-		for (FunctionParameter parameter : expr.getFunction().getParameters()) {
-			Expression argExpr = expr.getArguments().get(i);
-			if (isBoxedParameterType(ctx, parameter)) {
-				if (resetFunctionParms == null) {
-					resetFunctionParms = new FunctionParameter[expr.getFunction().getParameters().size()];
-				}
-				resetFunctionParms[i] = parameter;
-			}
-
-			if (parameter.getParameterKind() == ParameterKind.PARM_IN) { 
-				if (!parameter.isNullable() && argExpr.isNullable()) {
-					out.print("(function(x){ return x != null ? ((x)) : ");
-					ctx.gen(genDefaultValue, parameter.getType(), ctx, out, args);
-					out.print("; })(");
-					ctx.gen(genExpression, expr.getArguments().get(i), ctx, out);
-					out.print(")");
-				}
-				else {
-					ctx.gen(genExpression, expr.getArguments().get(i), ctx, out);
-				}
-			}
-			else if (parameter.getParameterKind() == ParameterKind.PARM_INOUT) {
-				ctx.gen(genExpression, expr.getArguments().get(i), ctx, out);
-			}
-			else {
-				ctx.gen(genDefaultValue, parameter.getType(), ctx, out, args);
-			}
-			
-			i++;
-			if (i < expr.getArguments().size()) {
-				out.print(", ");
-			}
-		}
-		if (resetFunctionParms != null) {
-			out.print(", ");
-			out.print("function(");
-			for(int j=0; j<resetFunctionParms.length; j++) {
-				if (resetFunctionParms[j] != null) {
-					out.print(resetFunctionParmName(resetFunctionParms[j]));
-					if (j < resetFunctionParms.length-1)
-						out.print(", ");
-				}
-			}
-			out.println(") {");
-			for(int j=0; j<resetFunctionParms.length; j++) {
-				if (resetFunctionParms[j] != null && expr.getArguments().get(j) instanceof Name) {
-					out.print("this.");
-					genName(((Name)expr.getArguments().get(j)).getNamedElement(), ctx, out, args);
-					out.print(" = ");
-					out.print(resetFunctionParmName(resetFunctionParms[j]));
-					out.println(';');
-				}
-			}
-			out.println("}");
-			out.print(", this");
-		}
-		out.print(')');
-	}
-	
-	private String resetFunctionParmName(FunctionParameter parm) {
-		StringBuilder name = new StringBuilder();
-		switch(parm.getParameterKind()) {
-		case PARM_IN: name.append("in"); break;
-		case PARM_OUT: name.append("out"); break;
-		case PARM_INOUT: name.append("inout"); break;
-		}
-		name.append("$");
-		name.append(parm.getName());
-		return name.toString();
+		// if this is an egl system library, delegate to the template associated with the target function's container
+		if (expr.getTarget().getContainer() != null && ctx.mapsToNativeType((Type) expr.getTarget().getContainer()))
+			ctx.gen(genInvocation, (Type) expr.getTarget().getContainer(), ctx, out, expr);
+		else
+			ctx.gen(genInvocation, expr, ctx, out, args);
 	}
 }

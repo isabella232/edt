@@ -1,0 +1,41 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.gen.javascript.templates;
+
+import org.eclipse.edt.gen.javascript.Context;
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.DelegateInvocation;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
+
+public class DelegateInvocationTemplate extends JavascriptTemplate {
+
+	public void genExpression(DelegateInvocation expr, Context ctx, TabbedWriter out, Object... args) {
+		// first, make this expression's arguments compatible
+		IRUtils.makeCompatible(expr);
+		// cast the return value, if present
+		if (expr.getType() != null) {
+			out.print("(");
+			ctx.gen(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavascriptObject);
+			out.print(")");
+		}
+		// then process the function invocation
+		if (expr.getQualifier() != null) {
+			ctx.gen(genExpression, expr.getQualifier(), ctx, out, args);
+			out.print(".");
+		}
+		ctx.gen(genExpression, expr.getExpression(), ctx, out, args);
+		out.print(".invoke");
+		out.print("(");
+		ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out, args);
+		out.print(")");
+	}
+}

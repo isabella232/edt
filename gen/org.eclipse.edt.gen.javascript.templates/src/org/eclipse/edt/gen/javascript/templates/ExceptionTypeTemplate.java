@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,7 +11,17 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import org.eclipse.edt.gen.javascript.Context;
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Type;
 
-public class ExceptionTypeTemplate extends ClassTemplate {
+public class ExceptionTypeTemplate extends JavascriptTemplate {
 
+	public void genDefaultValue(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// this type has no default value
+	}
+
+	public void genRuntimeTypeName(Type type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genPartName, type, ctx, out, args);
+	}
 }

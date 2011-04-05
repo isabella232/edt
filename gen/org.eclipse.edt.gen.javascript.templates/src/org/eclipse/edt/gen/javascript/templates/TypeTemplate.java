@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,315 +11,342 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import org.eclipse.edt.gen.EglContext.TypeLogicKind;
 import org.eclipse.edt.gen.GenerationException;
-import org.eclipse.edt.gen.javascript.Constants;
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.codegen.api.TemplateException;
-import org.eclipse.edt.mof.egl.AsExpression;
+import org.eclipse.edt.mof.egl.ArrayAccess;
+import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.Operation;
+import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.MemberAccess;
+import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.UnaryExpression;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public abstract class TypeTemplate extends JavascriptTemplate {
+public class TypeTemplate extends JavascriptTemplate {
 
 	public void validate(Type type, Context ctx, Object... args) {
 		// types may override this validation for specific checking
-		}
+	}
 
 	public void genInstantiation(Type type, Context ctx, TabbedWriter out, Object... args) {
-		out.print("new ");
-		ctx.gen(genRuntimeTypeName, (EObject) type, ctx, out, RuntimeTypeNameKind.JavascriptImplementation);
-		out.print("(");
-		ctx.gen(genConstructorOptions, (EObject) type, ctx, out, args);
-		out.print(")");
+		// did we have a list of types to check, otherwise use the default
+		if (isProcessWithTypeList(args)) {
+			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
+			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
+			ctx.gen(genInstantiation, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
+		} else if (isProcessWithoutTypeList(args))
+			ctx.gen(genInstantiation, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
+		else {
+			out.print("new ");
+			ctx.gen(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavascriptImplementation);
+			out.print("(");
+			ctx.gen(genConstructorOptions, type, ctx, out, genWithoutTypeList(args));
+			out.print(")");
+		}
+	}
+
+	public void genInvocation(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// did we have a list of types to check, otherwise use the default
+		if (isProcessWithTypeList(args)) {
+			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
+			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
+			ctx.gen(genInvocation, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
+		} else if (isProcessWithoutTypeList(args))
+			ctx.gen(genInvocation, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
+		else
+			ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, genWithoutTypeList(args));
 	}
 
 	public void genDefaultValue(Type type, Context ctx, TabbedWriter out, Object... args) {
-		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
-			out.print("null");
-		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
-			out.print("null");
-		else if (isReferenceType(type))
-			out.print("null");
-		else
-			out.print("\"Invalid default value\"");
-	}
-	
-	public void genConversion(Type type, Context ctx, TabbedWriter out, Object...args) {
-		AsExpression asExpr = (AsExpression)args[0];
-		if (needsConversion(asExpr)) {
-			Operation conOp = asExpr.getConversionOperation();
-			Type fromType = conOp.getParameters().get(0).getType();
-			Type toType = conOp.getReturnType();
-			String fromName = getEglNameForTypeCamelCase(fromType);
-			String toName = getEglNameForTypeCamelCase(toType);
-			String methodName = "gen";
-			methodName += toName;
-			methodName += "From";
-			methodName += fromName;
-			methodName += "Conversion";
-			ctx.gen(methodName, (Type)conOp.getContainer(), ctx, out, args);
-		}
+		// did we have a list of types to check, otherwise use the default
+		if (isProcessWithTypeList(args)) {
+			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
+			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
+			ctx.gen(genDefaultValue, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
+		} else if (isProcessWithoutTypeList(args))
+			ctx.gen(genDefaultValue, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
 		else {
-			ctx.gen(genExpression, asExpr.getObjectExpr(), ctx, out, args);
+			if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
+				out.print("null");
+			else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
+				out.print("null");
+			else if (TypeUtils.isReferenceType(type))
+				out.print("null");
+			else
+				out.print("\"Invalid default value\"");
 		}
-
 	}
 
-	public void genDeclaration(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-	// nothing to do here
+	public void genRuntimeTypeName(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// did we have a list of types to check, otherwise use the default
+		if (isProcessWithTypeList(args)) {
+			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
+			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
+			ctx.gen(genRuntimeTypeName, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
+		} else if (isProcessWithoutTypeList(args))
+			ctx.gen(genRuntimeTypeName, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
+		else {
+			// are we looking for the default (java primitive) or specifically java primitive, if it exists
+			if (args.length == 0 || args[0] == null || args[0] == TypeNameKind.JavascriptPrimitive) {
+				if (ctx.mapsToPrimitiveType(type.getClassifier())) {
+					out.print(ctx.getPrimitiveMapping(type.getClassifier()));
+					return;
+				}
+			}
+			// are we looking for the java object
+			if (args[0] == TypeNameKind.JavascriptObject) {
+				if (ctx.mapsToPrimitiveType(type.getClassifier())) {
+					String item = ctx.getPrimitiveMapping(type.getClassifier());
+					if (ctx.getPrimitiveMapping(item) == null)
+						out.print(item);
+					else
+						out.print(ctx.getPrimitiveMapping(item));
+					return;
+				}
+			}
+			// we couldn't resolve the java types, so we have to check for the java implementation name
+			if (args[0] == TypeNameKind.JavascriptImplementation) {
+				if (ctx.mapsToPrimitiveType(type.getClassifier())) {
+					String item = ctx.getPrimitiveMapping(type.getClassifier());
+					if (ctx.getPrimitiveMapping(item) == null)
+						out.print(item);
+					else
+						out.print(ctx.getPrimitiveMapping(item));
+					return;
+				}
+			}
+			// type an egl implementation name
+			if (args[0] == TypeNameKind.EGLImplementation) {
+				if (ctx.mapsToNativeType(type.getClassifier())) {
+					out.print(ctx.getNativeImplementationMapping(type.getClassifier()));
+					return;
+				}
+			}
+			// select the proper default to use. we have run out of options
+			if (args[0] == TypeNameKind.JavascriptImplementation)
+				out.print(ctx.getNativeImplementationMapping(type.getClassifier()));
+			else
+				// must be an egl interface name we want
+				out.print(ctx.getNativeInterfaceMapping(type.getClassifier()));
+		}
 	}
-
-	public void genGetterSetter(Type type, Context ctx, TabbedWriter out, Object... args) throws TemplateException {
-	// nothing to do here
-	}
-
 
 	public void genConstructorOptions(Type type, Context ctx, TabbedWriter out, Object... args) {
-	// nothing to do here
+		// did we have a list of types to check, otherwise use the default
+		if (isProcessWithTypeList(args)) {
+			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
+			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
+			ctx.gen(genConstructorOptions, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
+		} else if (isProcessWithoutTypeList(args))
+			ctx.gen(genConstructorOptions, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
 	}
 
 	public void genTypeDependentOptions(Type type, Context ctx, TabbedWriter out, Object... args) {
-	// nothing to do here
+		// did we have a list of types to check, otherwise use the default
+		if (isProcessWithTypeList(args)) {
+			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
+			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
+			ctx.gen(genTypeDependentOptions, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
+		} else if (isProcessWithoutTypeList(args))
+			ctx.gen(genTypeDependentOptions, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
+	}
+
+	public void genAssignment(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// did we have a list of types to check, otherwise use the default
+		if (isProcessWithTypeList(args)) {
+			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
+			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
+			ctx.gen(genAssignment, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
+		} else if (isProcessWithoutTypeList(args))
+			ctx.gen(genAssignment, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
+		else {
+			// if the lhs is non-nullable but the rhs is nullable, we have a special case
+			if (!((Expression) args[0]).isNullable() && ((Expression) args[1]).isNullable()) {
+				out.print("(function(x){ return x != null ? (x) : ");
+				ctx.gen(genDefaultValue, ((Expression) args[0]).getType(), ctx, out);
+				out.print("; }");
+				out.print("(");
+				ctx.gen(genExpression, (Expression) args[1], ctx, out);
+				out.print(")");
+			} else {
+				ctx.gen(genExpression, (Expression) args[0], ctx, out, genWithoutTypeList(args));
+				out.print(".");
+				out.print(eze$$copy);
+				out.print("(");
+				ctx.gen(genExpression, (Expression) args[1], ctx, out, genWithoutTypeList(args));
+				out.print(")");
+			}
+		}
 	}
 
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		// if either side of this expression is nullable, or if there is no direct java operation, we need to use the runtime
-		if ((((BinaryExpression) args[0]).getLHS().isNullable() || ((BinaryExpression) args[0]).getRHS().isNullable())
-			|| getNativeJavascriptOperation((BinaryExpression) args[0], ctx).length() == 0) {
-			out.print(ctx.getNativeImplementationMapping((Type) ((BinaryExpression) args[0]).getOperation().getContainer()) + '.');
-			out.print(getNativeRuntimeOperationName((BinaryExpression) args[0]));
-			out.print("(ezeProgram, ");
-			ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, args);
-			out.print(", ");
-			ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, args);
-			out.print(")" + getNativeRuntimeComparisionOperation((BinaryExpression) args[0]));
-		} else {
-			ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, args);
-			out.print(getNativeJavascriptOperation((BinaryExpression) args[0], ctx));
-			ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, args);
-		}
-	}
-
-	public void genUnaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) throws TemplateException {
-		// we only need to check for minus sign and if found, we need to change it to -()
-		if (((UnaryExpression) args[0]).getOperator().equals("-"))
-			out.print(((UnaryExpression) args[0]).getOperator() + "(");
-		ctx.gen(genExpression, ((UnaryExpression) args[0]).getExpression(), ctx, out, args);
-		// we only need to check for minus sign and if found, we need to change it to -()
-		if (((UnaryExpression) args[0]).getOperator().equals("-"))
-			out.print(")");
-	}
-
-	@SuppressWarnings("static-access")
-	public String getNativeRuntimeOperationName(BinaryExpression expr) throws GenerationException {
-		// safety check to make sure the operation has been defined properly
-		if (expr.getOperation() == null || expr.getOperation().getName() == null)
-			throw new GenerationException();
-		// process the operator
-		String op = expr.getOperator();
-		if (op.equals(expr.Op_PLUS))
-			return "add";
-		if (op.equals(expr.Op_MINUS))
-			return "subtract";
-		if (op.equals(expr.Op_DIVIDE))
-			return "divide";
-		if (op.equals(expr.Op_MULTIPLY))
-			return "multiply";
-		if (op.equals(expr.Op_MODULO))
-			return "modulo";
-		if (op.equals(expr.Op_EQ))
-			return "equals";
-		if (op.equals(expr.Op_NE))
-			return "notEquals";
-		if (op.equals(expr.Op_LT))
-			return "compareTo";
-		if (op.equals(expr.Op_GT))
-			return "compareTo";
-		if (op.equals(expr.Op_LE))
-			return "compareTo";
-		if (op.equals(expr.Op_GE))
-			return "compareTo";
-		if (op.equals(expr.Op_AND))
-			return "and";
-		if (op.equals(expr.Op_OR))
-			return "or";
-		if (op.equals(expr.Op_XOR))
-			return "xor";
-		if (op.equals(expr.Op_CONCAT))
-			return "concat";
-		if (op.equals(expr.Op_NULLCONCAT))
-			return "concat";
-		if (op.equals(expr.Op_BITAND))
-			return "bitand";
-		if (op.equals(expr.Op_BITOR))
-			return "bitor";
-		if (op.equals(expr.Op_POWER))
-			return "power";
-		if (op.equals(expr.Op_IN))
-			return "in";
-		if (op.equals(expr.Op_MATCHES))
-			return "matches";
-		if (op.equals(expr.Op_LIKE))
-			return "like";
-		return "UnknownOp";
-	}
-
-	@SuppressWarnings("static-access")
-	public String getNativeRuntimeComparisionOperation(BinaryExpression expr) {
-		String op = expr.getOperator();
-		if (op.equals(expr.Op_LT))
-			return " < 0";
-		if (op.equals(expr.Op_GT))
-			return " > 0";
-		if (op.equals(expr.Op_LE))
-			return " <= 0";
-		if (op.equals(expr.Op_GE))
-			return " >= 0";
-		return "";
-	}
-
-	@SuppressWarnings("static-access")
-	public String getNativeJavascriptOperation(BinaryExpression expr, Context ctx) {
-		String op = expr.getOperator();
-		// if we are to use egl overflow checking, then don't pass back that we can do the mathematical operations in java
-		if (expr.isNullable()
-			|| (ctx.get(Constants.CONTEXT_USE_EGL_OVERFLOW) != null && ((Boolean) ctx.get(Constants.CONTEXT_USE_EGL_OVERFLOW)).booleanValue())) {
-			if (op.equals(expr.Op_EQ))
-				return " == ";
-			if (op.equals(expr.Op_NE))
-				return " != ";
-			if (op.equals(expr.Op_LT))
-				return " < ";
-			if (op.equals(expr.Op_GT))
-				return " > ";
-			if (op.equals(expr.Op_LE))
-				return " <= ";
-			if (op.equals(expr.Op_GE))
-				return " >= ";
-			if (op.equals(expr.Op_AND))
-				return " && ";
-			if (op.equals(expr.Op_OR))
-				return " || ";
-			if (op.equals(expr.Op_XOR))
-				return " ^ ";
-			if (op.equals(expr.Op_CONCAT))
-				return " + ";
-			if (op.equals(expr.Op_BITAND))
-				return " & ";
-			if (op.equals(expr.Op_BITOR))
-				return " | ";
-			return "";
-		}
-		// these are the defaults for all other types
-		// division is intentionally left off as all division must be done through the egl runtime
-		if (op.equals(expr.Op_PLUS))
-			return " + ";
-		if (op.equals(expr.Op_MINUS))
-			return " - ";
-		if (op.equals(expr.Op_MULTIPLY))
-			return " * ";
-		if (op.equals(expr.Op_MODULO))
-			return " % ";
-		if (op.equals(expr.Op_EQ))
-			return " == ";
-		if (op.equals(expr.Op_NE))
-			return " != ";
-		if (op.equals(expr.Op_LT))
-			return " < ";
-		if (op.equals(expr.Op_GT))
-			return " > ";
-		if (op.equals(expr.Op_LE))
-			return " <= ";
-		if (op.equals(expr.Op_GE))
-			return " >= ";
-		if (op.equals(expr.Op_AND))
-			return " && ";
-		if (op.equals(expr.Op_OR))
-			return " || ";
-		if (op.equals(expr.Op_XOR))
-			return " ^ ";
-		if (op.equals(expr.Op_CONCAT))
-			return " + ";
-		if (op.equals(expr.Op_BITAND))
-			return " & ";
-		if (op.equals(expr.Op_BITOR))
-			return " | ";
-		return "";
-	}
-	
-	public String getEglNameForType(Type type) {
-		switch (TypeUtils.getTypeKind(type)) {
-		case TypeUtils.TypeKind_ANY: return "any";
-		case TypeUtils.TypeKind_BOOLEAN: return "boolean";
-		case TypeUtils.TypeKind_BIGINT: return "bigint";
-		case TypeUtils.TypeKind_DATE: return "date";
-		case TypeUtils.TypeKind_FLOAT: return "float";
-		case TypeUtils.TypeKind_DECIMAL: return "decimal";
-		case TypeUtils.TypeKind_INT: return "int";
-		case TypeUtils.TypeKind_SMALLFLOAT: return "smallfloat";
-		case TypeUtils.TypeKind_SMALLINT: return "smallint";
-		case TypeUtils.TypeKind_STRING: return "string";
-		case TypeUtils.TypeKind_TIME: return "time";
-		case TypeUtils.TypeKind_TIMESTAMP: return "timeStamp";
-		default: return "undefined";
-		}
-	}
-	
-	public String getEglNameForTypeCamelCase(Type type) {
-		String name = getEglNameForType(type);
-		StringBuilder b = new StringBuilder(name);
-		b.setCharAt(0, Character.toUpperCase(name.charAt(0)));
-		return b.toString();
-	}
-
-	/**
-	 * Check whether a conversion of the AsExpression is actually necessary.
-	 * This is based on the implementations of these types in JavaScript and
-	 * the kind of conversion that is defined, i.e. either widening or narrowing
-	 * 
-	 * @param asExpr
-	 * @return
-	 */
-	public boolean needsConversion(AsExpression asExpr) {
-		Operation op = asExpr.getConversionOperation();
-		Type fromType = op.getParameters().get(0).getType();
-		Type toType = op.getReturnType();
-		// Always do conversions if parameterized types are involved
-		if (toType.equals(TypeUtils.Type_DECIMAL) 
-				|| toType.equals(TypeUtils.Type_TIMESTAMP)
-				|| TypeUtils.isTextType(toType)) {
-			return true;
-		}
-		if (op.isWidenConversion()) {
-			if (TypeUtils.isNumericType(fromType)) {
-				int kind = TypeUtils.getTypeKind(toType);
-				return kind == TypeUtils.TypeKind_DECIMAL 
-					|| kind == TypeUtils.TypeKind_BIGINT
-					|| kind == TypeUtils.TypeKind_DATE
-					|| TypeUtils.isTextType(toType);
-			}
-			if (TypeUtils.isTextType(toType)) {
-				return true;
-			}
-		}
+		// did we have a list of types to check, otherwise use the default
+		if (isProcessWithTypeList(args)) {
+			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
+			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
+			ctx.gen(genBinaryExpression, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
+		} else if (isProcessWithoutTypeList(args))
+			ctx.gen(genBinaryExpression, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
 		else {
-			if (TypeUtils.isNumericType(fromType)) {
-				return !(fromType.equals(TypeUtils.Type_INT)
-					&& toType.equals(TypeUtils.Type_SMALLINT));
-			}
-			else if (fromType.equals(TypeUtils.Type_TIMESTAMP)) {
-				return !toType.equals(TypeUtils.Type_TIMESTAMP);
-
+			// if either side of this expression is nullable, or if there is no direct java operation, we need to use the
+			// runtime
+			if ((((BinaryExpression) args[0]).getLHS().isNullable() || ((BinaryExpression) args[0]).getRHS().isNullable())
+				|| CommonUtilities.getNativeJavaOperation((BinaryExpression) args[0], ctx).length() == 0) {
+				out.print(ctx.getNativeImplementationMapping((Type) ((BinaryExpression) args[0]).getOperation().getContainer()) + '.');
+				out.print(CommonUtilities.getNativeRuntimeOperationName((BinaryExpression) args[0]));
+				out.print("(ezeProgram, ");
+				ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, genWithoutTypeList(args));
+				out.print(", ");
+				ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, genWithoutTypeList(args));
+				out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation((BinaryExpression) args[0]));
+			} else {
+				ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, genWithoutTypeList(args));
+				out.print(CommonUtilities.getNativeJavaOperation((BinaryExpression) args[0], ctx));
+				ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, genWithoutTypeList(args));
 			}
 		}
-		return true;
+	}
+
+	public void genUnaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// did we have a list of types to check, otherwise use the default
+		if (isProcessWithTypeList(args)) {
+			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
+			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
+			ctx.gen(genUnaryExpression, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
+		} else if (isProcessWithoutTypeList(args))
+			ctx.gen(genUnaryExpression, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
+		else {
+			// we only need to check for minus sign and if found, we need to change it to -()
+			if (((UnaryExpression) args[0]).getOperator().equals("-"))
+				out.print(((UnaryExpression) args[0]).getOperator() + "(");
+			ctx.gen(genExpression, ((UnaryExpression) args[0]).getExpression(), ctx, out, genWithoutTypeList(args));
+			// we only need to check for minus sign and if found, we need to change it to -()
+			if (((UnaryExpression) args[0]).getOperator().equals("-"))
+				out.print(")");
+		}
+	}
+
+	public void genContainerBasedAssignment(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// did we have a list of types to check, otherwise use the default
+		if (isProcessWithTypeList(args)) {
+			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
+			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
+			ctx.gen(genContainerBasedAssignment, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
+		} else if (isProcessWithoutTypeList(args))
+			ctx.gen(genContainerBasedAssignment, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
+		else
+			ctx.gen(genAssignment, (Assignment) args[0], ctx, out, args);
+	}
+
+	public void genContainerBasedArrayAccess(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// did we have a list of types to check, otherwise use the default
+		if (isProcessWithTypeList(args)) {
+			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
+			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
+			ctx.gen(genContainerBasedArrayAccess, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
+		} else if (isProcessWithoutTypeList(args))
+			ctx.gen(genContainerBasedArrayAccess, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
+		else
+			ctx.gen(genArrayAccess, (ArrayAccess) args[0], ctx, out, args);
+	}
+
+	public void genContainerBasedMemberAccess(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// did we have a list of types to check, otherwise use the default
+		if (isProcessWithTypeList(args)) {
+			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
+			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
+			ctx.gen(genContainerBasedMemberAccess, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
+		} else if (isProcessWithoutTypeList(args))
+			ctx.gen(genContainerBasedMemberAccess, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
+		else
+			ctx.gen(genMemberAccess, (MemberAccess) args[0], ctx, out, args);
+	}
+
+	public void genContainerBasedMemberName(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// did we have a list of types to check, otherwise use the default
+		if (isProcessWithTypeList(args)) {
+			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
+			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
+			ctx.gen(genContainerBasedMemberName, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
+		} else if (isProcessWithoutTypeList(args))
+			ctx.gen(genContainerBasedMemberName, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
+		else
+			ctx.gen(genMemberName, (MemberName) args[0], ctx, out, args);
+	}
+
+	public static boolean isProcessWithTypeList(Object... args) {
+		// we are looking for a TypeLogicKind.Process value followed by at least one object
+		for (int i = 0; i < args.length - 1; i++) {
+			if (args[i] instanceof TypeLogicKind && (TypeLogicKind) args[i] == TypeLogicKind.Process)
+				return true;
+		}
+		return false;
+	}
+
+	public static EObject getTypeFromList(Object... args) {
+		// we are looking for a TypeLogicKind.Process value and returning the first object past it
+		for (int i = 0; i < args.length - 1; i++) {
+			if (args[i] instanceof TypeLogicKind && (TypeLogicKind) args[i] == TypeLogicKind.Process)
+				return (EObject) args[i + 1];
+		}
+		return null;
+	}
+
+	public static Object[] genProcessWithoutTypeList(Object... args) {
+		// we need to find the TypeLogicKind.Process, keep all of the objects before it, but remove all of the objects after
+		for (int i = 0; i < args.length; i++) {
+			if (args[i] instanceof TypeLogicKind && (TypeLogicKind) args[i] == TypeLogicKind.Process) {
+				Object[] objects = new Object[i + 1];
+				for (int j = 0; j < i; j++) {
+					objects[j] = args[j];
+				}
+				objects[i] = TypeLogicKind.Process;
+				return objects;
+			}
+		}
+		return null;
+	}
+
+	public static boolean isProcessWithoutTypeList(Object... args) {
+		// we are looking for a TypeLogicKind.Process value followed by no object
+		if (args.length > 0 && args[args.length - 1] instanceof TypeLogicKind && (TypeLogicKind) args[args.length - 1] == TypeLogicKind.Process)
+			return true;
+		return false;
+	}
+
+	public static Object[] genFinishWithoutTypeList(Object... args) {
+		// we need to change the TypeLogicKind.Process to TypeLogicKind.Finish, but keep all of the objects before it
+		for (int i = 0; i < args.length; i++) {
+			if (args[i] instanceof TypeLogicKind && (TypeLogicKind) args[i] == TypeLogicKind.Process) {
+				Object[] objects = new Object[i + 1];
+				for (int j = 0; j < i; j++) {
+					objects[j] = args[j];
+				}
+				objects[i] = TypeLogicKind.Finish;
+				return objects;
+			}
+		}
+		return null;
+	}
+
+	public static Object[] genWithoutTypeList(Object... args) {
+		// we need to remove the TypeLogicKind.Process/TypeLogicKind.Finish if it exists, but keep all of the objects before
+		for (int i = 0; i < args.length; i++) {
+			if (args[i] instanceof TypeLogicKind) {
+				Object[] objects = new Object[i];
+				for (int j = 0; j < i; j++) {
+					objects[j] = args[j];
+				}
+				return objects;
+			}
+		}
+		return args;
 	}
 }

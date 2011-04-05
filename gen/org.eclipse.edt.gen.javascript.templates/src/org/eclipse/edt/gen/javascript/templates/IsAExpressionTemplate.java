@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,16 +13,15 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.IsAExpression;
 
-public class IsAExpressionTemplate extends ExpressionTemplate {
+public class IsAExpressionTemplate extends JavascriptTemplate {
 
-	public void genExpression(IsAExpression expr, Context ctx, TabbedWriter out, Object... args) throws TemplateException {
+	public void genExpression(IsAExpression expr, Context ctx, TabbedWriter out, Object... args) {
 		out.print("egl.isa(");
-		genExpression(expr.getObjectExpr(), ctx, out);
+		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
 		out.print(", ");
 		out.print(quoted(expr.getEType().getTypeSignature()));
-		out.print(')');
+		out.print(")");
 	}
 }

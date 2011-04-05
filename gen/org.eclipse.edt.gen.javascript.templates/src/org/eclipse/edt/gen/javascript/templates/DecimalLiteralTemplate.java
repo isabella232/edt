@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,15 +13,25 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.DecimalLiteral;
 
-public class DecimalLiteralTemplate extends LiteralTemplate {
+public class DecimalLiteralTemplate extends JavascriptTemplate {
 
-	public void genExpression(DecimalLiteral expr, Context ctx, TabbedWriter out, Object... args) throws TemplateException {
+	public void genExpression(DecimalLiteral expr, Context ctx, TabbedWriter out, Object... args) {
 		out.print("new egl.javascript.BigDecimal(");
 		out.print(quoted(stripLeadingZeroes(expr.getValue())));
 		out.print(")");
 	}
 
+	public String stripLeadingZeroes(String value) {
+		String minus = "";
+		if (value.charAt(0) == '-') {
+			value = value.substring(1);
+			minus = "-";
+		}
+		while (value.charAt(0) == '0' && value.length() > 1) {
+			value = value.substring(1);
+		}
+		return minus + value;
+	}
 }

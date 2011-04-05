@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,14 +13,13 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.StringLiteral;
 
-public class StringLiteralTemplate extends LiteralTemplate {
+public class StringLiteralTemplate extends JavascriptTemplate {
 
-	public void genExpression(StringLiteral expr, Context ctx, TabbedWriter out, Object... args) throws TemplateException {
-		out.print('"');
+	public void genExpression(StringLiteral expr, Context ctx, TabbedWriter out, Object... args) {
+		out.print("\"");
 		out.print(expr.getValue());
-		out.print('"');
+		out.print("\"");
 	}
 }
