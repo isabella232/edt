@@ -14,27 +14,26 @@ package org.eclipse.edt.gen.java.templates;
 import org.eclipse.edt.gen.Label;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.WhileStatement;
 
-public class WhileStatementTemplate extends StatementTemplate {
+public class WhileStatementTemplate extends JavaTemplate {
 
-	public void genStatementBody(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(WhileStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		Label label = new Label(ctx, Label.LABEL_TYPE_WHILE);
 		ctx.pushLabelStack(label);
 		out.print(label.getName() + ": ");
 		out.print("while (");
-		if (((WhileStatement) stmt).getCondition() != null)
-			genExpression(((WhileStatement) stmt).getCondition(), ctx, out, args);
+		if (stmt.getCondition() != null)
+			ctx.gen(genExpression, stmt.getCondition(), ctx, out, args);
 		else
 			out.print("true");
 		out.print(") ");
-		ctx.gen(genStatement, ((WhileStatement) stmt).getBody(), ctx, out, args);
+		ctx.gen(genStatement, stmt.getBody(), ctx, out, args);
 		// now remove the label from the stack
 		ctx.popLabelStack();
 	}
 
-	public void genStatementEnd(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementEnd(WhileStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 	// we don't want a semi-colon
 	}
 }

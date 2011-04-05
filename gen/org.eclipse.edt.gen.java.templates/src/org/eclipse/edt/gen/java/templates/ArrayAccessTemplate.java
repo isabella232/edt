@@ -21,7 +21,7 @@ import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public class ArrayAccessTemplate extends ExpressionTemplate {
+public class ArrayAccessTemplate extends JavaTemplate {
 
 	public void genAssignment(ArrayAccess expr, Context ctx, TabbedWriter out, Object... args) {
 		// are we dealing with a nullable array
@@ -31,51 +31,51 @@ public class ArrayAccessTemplate extends ExpressionTemplate {
 				String temporary = ctx.nextTempName();
 				ctx.gen(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavaObject);
 				out.print(" " + temporary + " = ");
-				genExpression((Expression) expr, ctx, out, args);
+				ctx.gen(genExpression, (Expression) expr, ctx, out, args);
 				out.println(";");
 				out.print(temporary + ".set(");
-				genExpression(expr.getIndex(), ctx, out, args);
+				ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
 				out.print(" - 1, ");
 				out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
-				genExpression((Expression) args[0], ctx, out, args);
+				ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
 				out.print(", ");
 				out.print(temporary + ".get(");
-				genExpression(expr.getIndex(), ctx, out, args);
+				ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
 				out.print(" - 1)");
 				out.print(")");
 				out.print(")");
 			} else if (TypeUtils.isReferenceType(expr.getType()) || ctx.mapsToPrimitiveType(expr.getType())) {
-				genExpression(expr.getArray(), ctx, out, args);
+				ctx.gen(genExpression, expr.getArray(), ctx, out, args);
 				out.print(".set(");
-				genExpression(expr.getIndex(), ctx, out, args);
+				ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
 				out.print(" - 1, ");
-				genExpression((Expression) args[0], ctx, out, args);
+				ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
 				out.print(")");
 			} else {
-				genExpression(expr.getArray(), ctx, out, args);
+				ctx.gen(genExpression, expr.getArray(), ctx, out, args);
 				out.print(".set(");
-				genExpression(expr.getIndex(), ctx, out, args);
+				ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
 				out.print(" - 1, ");
 				out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
-				genExpression((Expression) args[0], ctx, out, args);
+				ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
 				out.print(", ");
-				genExpression((Expression) expr, ctx, out, args);
+				ctx.gen(genExpression, (Expression) expr, ctx, out, args);
 				out.print(")");
 				out.print(")");
 			}
 		} else if (TypeUtils.isReferenceType(expr.getType()) || ctx.mapsToPrimitiveType(expr.getType())) {
-			genExpression(expr.getArray(), ctx, out, args);
+			ctx.gen(genExpression, expr.getArray(), ctx, out, args);
 			out.print(".set(");
-			genExpression(expr.getIndex(), ctx, out, args);
+			ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
 			out.print(" - 1, ");
-			genExpression((Expression) args[0], ctx, out, args);
+			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
 			out.print(")");
 		} else {
 			// non-nullable array
 			out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
-			genExpression((Expression) args[0], ctx, out, args);
+			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
 			out.print(", ");
-			genExpression((Expression) expr, ctx, out, args);
+			ctx.gen(genExpression, (Expression) expr, ctx, out, args);
 			out.print(")");
 		}
 	}
@@ -91,9 +91,9 @@ public class ArrayAccessTemplate extends ExpressionTemplate {
 	}
 
 	public void genArrayAccess(ArrayAccess expr, Context ctx, TabbedWriter out, Object... args) {
-		genExpression(expr.getArray(), ctx, out, args);
+		ctx.gen(genExpression, expr.getArray(), ctx, out, args);
 		out.print(".get(");
-		genExpression(expr.getIndex(), ctx, out, args);
+		ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
 		out.print(" - 1)");
 	}
 }

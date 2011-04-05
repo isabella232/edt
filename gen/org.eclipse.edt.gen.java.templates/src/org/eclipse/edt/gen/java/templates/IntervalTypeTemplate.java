@@ -12,11 +12,10 @@
 package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
-import org.eclipse.edt.gen.java.templates.ParameterizedTypeTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.IntervalType;
 
-public class IntervalTypeTemplate extends ParameterizedTypeTemplate {
+public class IntervalTypeTemplate extends JavaTemplate {
 
 	public void genConstructorOptions(IntervalType type, Context ctx, TabbedWriter out, Object... args) {
 		// we need to skip over the 1st comma and space

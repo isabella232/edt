@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
 
-public class EnumerationEntryTemplate extends NamedElementTemplate {
+public class EnumerationEntryTemplate extends JavaTemplate {
 
 	public void genName(EnumerationEntry element, Context ctx, TabbedWriter out, Object... args) {
 		out.print(element.getName());

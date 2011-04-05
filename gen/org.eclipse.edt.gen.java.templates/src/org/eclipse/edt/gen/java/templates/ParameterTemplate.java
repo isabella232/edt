@@ -11,6 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-public class ParameterTemplate extends MemberTemplate {
+public class ParameterTemplate extends JavaTemplate {
 
 }

@@ -16,7 +16,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.DelegateInvocation;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class DelegateInvocationTemplate extends ExpressionTemplate {
+public class DelegateInvocationTemplate extends JavaTemplate {
 
 	public void genExpression(DelegateInvocation expr, Context ctx, TabbedWriter out, Object... args) {
 		// first, make this expression's arguments compatible
@@ -29,13 +29,13 @@ public class DelegateInvocationTemplate extends ExpressionTemplate {
 		}
 		// then process the function invocation
 		if (expr.getQualifier() != null) {
-			genExpression(expr.getQualifier(), ctx, out, args);
-			out.print('.');
+			ctx.gen(genExpression, expr.getQualifier(), ctx, out, args);
+			out.print(".");
 		}
-		genExpression(expr.getExpression(), ctx, out, args);
+		ctx.gen(genExpression, expr.getExpression(), ctx, out, args);
 		out.print(".invoke");
-		out.print('(');
+		out.print("(");
 		ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out, args);
-		out.print(')');
+		out.print(")");
 	}
 }

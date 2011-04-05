@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.ArrayLiteral;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class ArrayLiteralTemplate extends LiteralTemplate {
+public class ArrayLiteralTemplate extends JavaTemplate {
 
 	public void genExpression(ArrayLiteral expr, Context ctx, TabbedWriter out, Object... args) {
 		out.print("new ");
@@ -31,7 +31,7 @@ public class ArrayLiteralTemplate extends LiteralTemplate {
 			out.print(".ezeSet(");
 			out.print(i + 1);
 			out.print(", ");
-			genExpression(IRUtils.makeExprCompatibleToType(expr.getEntries().get(i), ((ArrayType) expr.getType()).getElementType()), ctx, out, args);
+			ctx.gen(genExpression, IRUtils.makeExprCompatibleToType(expr.getEntries().get(i), ((ArrayType) expr.getType()).getElementType()), ctx, out, args);
 			out.print(")");
 		}
 	}

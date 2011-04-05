@@ -16,7 +16,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
-public class FixedPrecisionTypeTemplate extends ParameterizedTypeTemplate {
+public class FixedPrecisionTypeTemplate extends JavaTemplate {
 
 	public void genTypeDependentOptions(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(", ");

@@ -26,37 +26,23 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public abstract class PartTemplate extends TypeTemplate {
+public class PartTemplate extends JavaTemplate {
 
 	IRUtils utils = new IRUtils();
-
-	public void validate(Part part, Context ctx, Object... args) {
-		processImport(ctx.getNativeImplementationMapping(part.getClassifier()), ctx);
-		// in the case where the part name doesn't match the interface name, then we also need to process the interface name
-		// as it will exist
-		if (ctx.getNativeMapping(ctx.getNativeMapping(part.getClassifier().getTypeSignature())) != null)
-			processImport(ctx.getNativeMapping(part.getClassifier().getTypeSignature()), ctx);
-	}
 
 	public void validatePart(Part part, Context ctx, Object... args) {
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed, new ArrayList<Library>());
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partRecordsUsed, new ArrayList<Record>());
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partTypesImported, new ArrayList<String>());
-		validateClassBody(part, ctx, args);
+		ctx.validate(validateClassBody, part, ctx, args);
 	}
-
-	public abstract void validateClassBody(Part part, Context ctx, Object... args);
 
 	public void genPart(Part part, Context ctx, TabbedWriter out, Object... args) {
 		genPackageStatement(part, ctx, out, args);
-		genClassHeader(part, ctx, out, args);
-		genClassBody(part, ctx, out, args);
-		out.print('}');
+		ctx.gen(genClassHeader, part, ctx, out, args);
+		ctx.gen(genClassBody, part, ctx, out, args);
+		out.print("}");
 	}
-
-	public abstract void genClassHeader(Part part, Context ctx, TabbedWriter out, Object... args);
-
-	public abstract void genClassBody(Part part, Context ctx, TabbedWriter out, Object... args);
 
 	@SuppressWarnings("unchecked")
 	public void genPackageStatement(Part part, Context ctx, TabbedWriter out, Object... args) {
@@ -64,7 +50,7 @@ public abstract class PartTemplate extends TypeTemplate {
 		if (packageName != null && packageName.length() > 0) {
 			out.print("package ");
 			out.print(packageName);
-			out.println(';');
+			out.println(";");
 		}
 		out.println("import org.eclipse.edt.javart.resources.*;");
 		out.println("import org.eclipse.edt.javart.*;");

@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Service;
 
-public class ServiceTemplate extends ClassTemplate {
+public class ServiceTemplate extends JavaTemplate {
 
 	public void genSuperClass(Service service, Context ctx, TabbedWriter out, Object... args) {
 		// TODO handle more generally when stereotypes are involved
@@ -25,18 +25,18 @@ public class ServiceTemplate extends ClassTemplate {
 	public void genConstructor(Service service, Context ctx, TabbedWriter out, Object... args) {
 		// Generate RunUnit constructor
 		out.print("public ");
-		genClassName(service, ctx, out, args);
+		ctx.gen(genClassName, service, ctx, out, args);
 		out.print("( RunUnit ru");
-		genAdditionalConstructorParams(service, ctx, out, args);
+		ctx.gen(genAdditionalConstructorParams, service, ctx, out, args);
 		out.println(" ) {");
 		out.print("super( ru");
-		genAdditionalSuperConstructorArgs(service, ctx, out, args);
+		ctx.gen(genAdditionalSuperConstructorArgs, service, ctx, out, args);
 		out.println(" );");
 		out.println("ezeInitialize();");
-		out.println('}');
+		out.println("}");
 	}
 
 	public void genRuntimeTypeName(Service service, Context ctx, TabbedWriter out, Object... args) {
-		genPartName(service, ctx, out, args);
+		ctx.gen(genPartName, service, ctx, out, args);
 	}
 }

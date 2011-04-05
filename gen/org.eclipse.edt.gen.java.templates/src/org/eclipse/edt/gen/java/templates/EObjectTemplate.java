@@ -11,13 +11,17 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import org.eclipse.edt.gen.EGLMessages.EGLMessage;
+import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.EObject;
 
-public abstract class NativeTypeTemplate extends TypeTemplate {
+public class EObjectTemplate extends JavaTemplate {
 
-	public void genNoImplementation(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		out.print("<not implemented yet>");
+	public void validate(EObject object, Context ctx, Object... args) {
+		String[] details = new String[] { object.getEClass().getETypeSignature() };
+		EGLMessage message = EGLMessage.createEGLMessage(ctx.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_UNSUPPORTED_ELEMENT,
+			object, details, 0, 0, 0, 0);
+		ctx.getMessageRequestor().addMessage(message);
 	}
 }

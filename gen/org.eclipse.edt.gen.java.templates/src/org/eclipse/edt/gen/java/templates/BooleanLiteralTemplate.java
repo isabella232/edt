@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BooleanLiteral;
 
-public class BooleanLiteralTemplate extends LiteralTemplate {
+public class BooleanLiteralTemplate extends JavaTemplate {
 
 	public void genExpression(BooleanLiteral expr, Context ctx, TabbedWriter out, Object... args) {
 		out.print(expr.booleanValue().toString());

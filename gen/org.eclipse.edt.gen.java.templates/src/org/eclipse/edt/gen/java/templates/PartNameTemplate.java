@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.PartName;
 
-public class PartNameTemplate extends ExpressionTemplate {
+public class PartNameTemplate extends JavaTemplate {
 
 	public void genExpression(PartName expr, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genAccessor, expr.getNamedElement(), ctx, out, args);

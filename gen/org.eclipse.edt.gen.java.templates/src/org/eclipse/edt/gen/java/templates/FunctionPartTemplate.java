@@ -13,15 +13,15 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.FunctionPart;
 
-public class FunctionPartTemplate extends PartTemplate {
+public class FunctionPartTemplate extends JavaTemplate {
 
-	public void validateClassBody(Part part, Context ctx, Object... args) {}
+	public void validateClassBody(FunctionPart part, Context ctx, Object... args) {}
 
-	public void genPart(Part part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genPart(FunctionPart part, Context ctx, TabbedWriter out, Object... args) {}
 
-	public void genClassBody(Part part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassBody(FunctionPart part, Context ctx, TabbedWriter out, Object... args) {}
 
-	public void genClassHeader(Part part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassHeader(FunctionPart part, Context ctx, TabbedWriter out, Object... args) {}
 }

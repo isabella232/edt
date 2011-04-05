@@ -18,7 +18,8 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
-
+import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
@@ -30,7 +31,6 @@ import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.IfStatement;
 import org.eclipse.edt.mof.egl.InvocationExpression;
-import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
 import org.eclipse.edt.mof.egl.MemberName;
@@ -42,38 +42,34 @@ import org.eclipse.edt.mof.egl.SetValuesExpression;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.EObject;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
 import org.eclipse.edt.mof.impl.EObjectImpl;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class StatementBlockTemplate extends StatementTemplate {
+public class StatementBlockTemplate extends JavaTemplate {
 
-	private static IrFactory factory = IrFactory.INSTANCE;
-
-	public void validate(Statement block, Context ctx, Object... args) {
-		for (Statement stmt : ((StatementBlock) block).getStatements()) {
+	public void validate(StatementBlock block, Context ctx, Object... args) {
+		for (Statement stmt : block.getStatements()) {
 			ctx.validate(validate, stmt, ctx, args);
 		}
 	}
 
-	public void genStatementBody(Statement block, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(StatementBlock block, Context ctx, TabbedWriter out, Object... args) {
 		out.println("{");
 		processStatements(block, ctx, out, args);
-		out.println('}');
+		out.println("}");
 	}
 
-	public void genStatementBodyNoBraces(Statement block, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBodyNoBraces(StatementBlock block, Context ctx, TabbedWriter out, Object... args) {
 		processStatements(block, ctx, out, args);
 	}
 
-	public void genStatementEnd(Statement block, Context ctx, TabbedWriter out, Object... args) {
-	// StatementBlocks do not end with semicolons so do nothing here
+	public void genStatementEnd(StatementBlock block, Context ctx, TabbedWriter out, Object... args) {
+		// StatementBlocks do not end with semicolons so do nothing here
 	}
 
-	private void processStatements(Statement block, Context ctx, TabbedWriter out, Object... args) {
-		for (Statement stmt : ((StatementBlock) block).getStatements()) {
+	private void processStatements(StatementBlock block, Context ctx, TabbedWriter out, Object... args) {
+		for (Statement stmt : block.getStatements()) {
 			ReorganizeCode reorganizeCode = new ReorganizeCode();
 			List<StatementBlock> blockArray = reorganizeCode.reorgCode(stmt, ctx);
 			if (blockArray != null && blockArray.get(0) != null)
@@ -206,11 +202,11 @@ public class StatementBlockTemplate extends StatementTemplate {
 				// we need to create a local variable
 				String temporary = ctx.nextTempName();
 				LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
-				if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 					localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 				localDeclaration.setFunctionMember(currentFunctionMember);
 				DeclarationExpression declarationExpression = factory.createDeclarationExpression();
-				if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 					declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 				Field field = factory.createField();
 				field.setName(temporary);
@@ -222,7 +218,7 @@ public class StatementBlockTemplate extends StatementTemplate {
 				block.getStatements().add(localDeclaration);
 				// we need to create the member access for our temporary variable
 				MemberName nameExpression = factory.createMemberName();
-				if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 					nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 				nameExpression.setMember(field);
 				nameExpression.setId(field.getName());
@@ -230,17 +226,17 @@ public class StatementBlockTemplate extends StatementTemplate {
 				declarationExpression = (DeclarationExpression) ((LocalVariableDeclarationStatement) object.getSettings().getStatements().get(0))
 					.getExpression();
 				MemberName tempExpression = factory.createMemberName();
-				if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 					tempExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 				tempExpression.setMember(declarationExpression.getFields().get(0));
 				tempExpression.setId(declarationExpression.getFields().get(0).getName());
 				// we need to create an assignment statement and place inside of the setExpression block
 				AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
-				if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 					assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 				assignmentStatement.setFunctionMember(currentFunctionMember);
 				Assignment assignment = factory.createAssignment();
-				if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 					assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 				assignmentStatement.setAssignment(assignment);
 				assignment.setLHS(nameExpression);
@@ -251,7 +247,7 @@ public class StatementBlockTemplate extends StatementTemplate {
 				block.getStatements().add(object.getSettings());
 				// now replace the setValuesExpression argument with the temporary variable
 				if (getParent() instanceof List)
-					((List) getParent()).set(getParentSlotIndex(), nameExpression);
+					((List<EObject>) getParent()).set(getParentSlotIndex(), nameExpression);
 				else
 					((EObjectImpl) getParent()).slotSet(getParentSlotIndex(), nameExpression);
 			} else {
@@ -259,7 +255,7 @@ public class StatementBlockTemplate extends StatementTemplate {
 				block.getStatements().add(object.getSettings());
 				// now replace the setValuesExpression argument with the temporary variable
 				if (getParent() instanceof List)
-					((List) getParent()).set(getParentSlotIndex(), object.getTarget());
+					((List<EObject>) getParent()).set(getParentSlotIndex(), object.getTarget());
 				else
 					((EObjectImpl) getParent()).slotSet(getParentSlotIndex(), object.getTarget());
 			}
@@ -326,11 +322,11 @@ public class StatementBlockTemplate extends StatementTemplate {
 						// we need to create a local variable
 						String temporary = ctx.nextTempName();
 						LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
-						if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 						localDeclaration.setFunctionMember(currentFunctionMember);
 						DeclarationExpression declarationExpression = factory.createDeclarationExpression();
-						if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 						Field field = factory.createField();
 						field.setName(temporary);
@@ -338,17 +334,17 @@ public class StatementBlockTemplate extends StatementTemplate {
 						field.setIsNullable(parameter.isNullable());
 						// we need to create the member access
 						MemberName nameExpression = factory.createMemberName();
-						if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 						nameExpression.setMember(field);
 						nameExpression.setId(field.getName());
 						// we need to create an assignment statement
 						AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
-						if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 						assignmentStatement.setFunctionMember(currentFunctionMember);
 						Assignment assignment = factory.createAssignment();
-						if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 						assignmentStatement.setAssignment(assignment);
 						assignment.setLHS(nameExpression);
@@ -373,11 +369,11 @@ public class StatementBlockTemplate extends StatementTemplate {
 						// we need to create a local variable
 						String temporary = ctx.nextTempName();
 						LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
-						if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 						localDeclaration.setFunctionMember(currentFunctionMember);
 						DeclarationExpression declarationExpression = factory.createDeclarationExpression();
-						if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 						Field field = factory.createField();
 						field.setName(temporary);
@@ -386,17 +382,17 @@ public class StatementBlockTemplate extends StatementTemplate {
 						ctx.putAttribute(field, Constants.Annotation_functionArgumentTemporaryVariable, new Integer(1));
 						// we need to create the member access
 						MemberName nameExpression = factory.createMemberName();
-						if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 						nameExpression.setMember(field);
 						nameExpression.setId(field.getName());
 						// now do the assignment of the original to this temporary variable
 						AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
-						if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 						assignmentStatement.setFunctionMember(currentFunctionMember);
 						Assignment assignment = factory.createAssignment();
-						if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 						assignmentStatement.setAssignment(assignment);
 						assignment.setLHS(nameExpression);
@@ -425,11 +421,11 @@ public class StatementBlockTemplate extends StatementTemplate {
 							block = blockArray.get(1);
 							// we need to create an assignment statement of the local variable to the original
 							assignmentStatement = factory.createAssignmentStatement();
-							if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+							if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 								assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 							assignmentStatement.setFunctionMember(currentFunctionMember);
 							assignment = factory.createAssignment();
-							if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+							if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 								assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 							assignmentStatement.setAssignment(assignment);
 							assignment.setLHS((LHSExpr) object.getArguments().get(i));
@@ -443,11 +439,11 @@ public class StatementBlockTemplate extends StatementTemplate {
 						// we need to create a local variable for the boxing
 						String temporary = ctx.nextTempName();
 						LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
-						if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 						localDeclaration.setFunctionMember(currentFunctionMember);
 						DeclarationExpression declarationExpression = factory.createDeclarationExpression();
-						if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 						Field field = factory.createField();
 						field.setName(temporary);
@@ -456,7 +452,7 @@ public class StatementBlockTemplate extends StatementTemplate {
 						ctx.putAttribute(field, Constants.Annotation_functionArgumentTemporaryVariable, new Integer(2));
 						// we need to create the member access
 						MemberName nameExpression = factory.createMemberName();
-						if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 						nameExpression.setMember(field);
 						nameExpression.setId(field.getName());
@@ -477,11 +473,11 @@ public class StatementBlockTemplate extends StatementTemplate {
 							block = blockArray.get(1);
 							// we need to create an assignment statement of the local variable to the original
 							AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
-							if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+							if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 								assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 							assignmentStatement.setFunctionMember(currentFunctionMember);
 							Assignment assignment = factory.createAssignment();
-							if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+							if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 								assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 							assignmentStatement.setAssignment(assignment);
 							assignment.setLHS((LHSExpr) object.getArguments().get(i));
@@ -573,11 +569,11 @@ public class StatementBlockTemplate extends StatementTemplate {
 			// we need to create a local variable for the return of the function invocation
 			String temporary = ctx.nextTempName();
 			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
-			if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 			localDeclaration.setFunctionMember(currentFunctionMember);
 			DeclarationExpression declarationExpression = factory.createDeclarationExpression();
-			if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 			Field field = factory.createField();
 			field.setName(temporary);
@@ -585,17 +581,17 @@ public class StatementBlockTemplate extends StatementTemplate {
 			field.setIsNullable(object.isNullable());
 			// we need to create the member access
 			MemberName nameExpression = factory.createMemberName();
-			if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 			nameExpression.setMember(field);
 			nameExpression.setId(field.getName());
 			// we need to create an assignment statement
 			AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
-			if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 			assignmentStatement.setFunctionMember(currentFunctionMember);
 			Assignment assignment = factory.createAssignment();
-			if (object.getAnnotation(IEGLConstants.EGL_LOCATION)!=null)
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 			assignmentStatement.setAssignment(assignment);
 			assignment.setLHS(nameExpression);

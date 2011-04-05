@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class FunctionInvocationTemplate extends InvocationExpressionTemplate {
+public class FunctionInvocationTemplate extends JavaTemplate {
 
 	public void genExpression(FunctionInvocation expr, Context ctx, TabbedWriter out, Object... args) {
 		// first, make this expression's arguments compatible
@@ -26,6 +26,6 @@ public class FunctionInvocationTemplate extends InvocationExpressionTemplate {
 		if (expr.getTarget().getContainer() != null && ctx.mapsToNativeType((Type) expr.getTarget().getContainer()))
 			ctx.gen(genInvocation, (Type) expr.getTarget().getContainer(), ctx, out, expr);
 		else
-			genInvocation(expr, ctx, out, args);
+			ctx.gen(genInvocation, expr, ctx, out, args);
 	}
 }

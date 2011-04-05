@@ -18,15 +18,14 @@ import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public abstract class MemberTemplate extends NamedElementTemplate {
+public class MemberTemplate extends JavaTemplate {
 
 	public void genDeclaration(Member field, Context ctx, TabbedWriter out, Object... args) {
 		AccessKind access = field.getAccessKind();
-		if (access == AccessKind.ACC_PRIVATE) {
+		if (access == AccessKind.ACC_PRIVATE)
 			out.print("private ");
-		} else {
+		else
 			out.print("public ");
-		}
 	}
 
 	public void genRuntimeTypeName(Member mbr, Context ctx, TabbedWriter out, Object... args) {
@@ -42,7 +41,7 @@ public abstract class MemberTemplate extends NamedElementTemplate {
 		else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()))
 			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject, mbr);
 		else if (ctx.mapsToNativeType(mbr.getType().getClassifier()))
-			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.EGLObject, mbr);
+			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.EGLInterface, mbr);
 		else
 			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject, mbr);
 	}

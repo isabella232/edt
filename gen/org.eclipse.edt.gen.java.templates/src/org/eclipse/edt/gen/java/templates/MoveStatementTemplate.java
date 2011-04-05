@@ -13,15 +13,15 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Statement;
+import org.eclipse.edt.mof.egl.MoveStatement;
 
-public class MoveStatementTemplate extends StatementTemplate {
+public class MoveStatementTemplate extends JavaTemplate {
 
-	public void genStatementBody(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
-//		for (int i = 0; i < ((MoveStatement) stmt).getTargets().size(); i++) {
-//			Expression expression = ((MoveStatement) stmt).getTargets().get(i);
-//			for (int j = 0; j < ((MoveStatement) stmt).getStates().size(); j++) {
-//				String state = ((MoveStatement) stmt).getStates().get(j);
+	public void genStatementBody(MoveStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+//		for (int i = 0; i < stmt.getTargets().size(); i++) {
+//			Expression expression = stmt.getTargets().get(i);
+//			for (int j = 0; j < stmt.getStates().size(); j++) {
+//				String state = stmt.getStates().get(j);
 //				if (state.equalsIgnoreCase("empty")) {
 //					ctx.gen(genExpression, expression, ctx, out, args);
 //					out.print(".ezeSetEmpty()");
@@ -29,8 +29,8 @@ public class MoveStatementTemplate extends StatementTemplate {
 //					ctx.gen(genExpression, expression, ctx, out, args);
 //					out.print(".ezeInitialize()");
 //				}
-//				if (j < ((MoveStatement) stmt).getStates().size() - 1)
-					out.println(';');
+//				if (j < stmt.getStates().size() - 1)
+					out.println(";");
 //			}
 //		}
 	}

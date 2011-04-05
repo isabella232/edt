@@ -18,12 +18,12 @@ import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.TryStatement;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
-public class TryStatementTemplate extends StatementTemplate {
+public class TryStatementTemplate extends JavaTemplate {
 
-	public void genStatementBody(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(TryStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		out.print("try ");
-		ctx.gen(genStatement, ((TryStatement) stmt).getTryBlock(), ctx, out, args);
-		for (ExceptionBlock exceptionBlock : ((TryStatement) stmt).getExceptionBlocks()) {
+		ctx.gen(genStatement, stmt.getTryBlock(), ctx, out, args);
+		for (ExceptionBlock exceptionBlock : stmt.getExceptionBlocks()) {
 			genException(exceptionBlock, ctx, out, args);
 		}
 	}
@@ -42,7 +42,7 @@ public class TryStatementTemplate extends StatementTemplate {
 		ctx.gen(genStatement, stmt, ctx, out, args);
 	}
 
-	public void genStatementEnd(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementEnd(TryStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		// we don't want a semi-colon
 	}
 }

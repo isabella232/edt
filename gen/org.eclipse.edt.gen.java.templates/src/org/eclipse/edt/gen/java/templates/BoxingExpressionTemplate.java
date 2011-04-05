@@ -15,18 +15,18 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BoxingExpression;
 
-public class BoxingExpressionTemplate extends ExpressionTemplate {
+public class BoxingExpressionTemplate extends JavaTemplate {
 
 	public void genExpression(BoxingExpression expr, Context ctx, TabbedWriter out, Object... args) {
 		if (ctx.mapsToPrimitiveType(expr.getType())) {
 			ctx.gen(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".ezeBox(");
-			genExpression(expr.getExpr(), ctx, out, args);
+			ctx.gen(genExpression, expr.getExpr(), ctx, out, args);
 			ctx.gen(genTypeDependentOptions, expr.getType(), ctx, out, args);
 			out.print(")");
 		} else {
 			out.print("AnyObject.ezeBox(");
-			genExpression(expr.getExpr(), ctx, out, args);
+			ctx.gen(genExpression, expr.getExpr(), ctx, out, args);
 			out.print(")");
 		}
 	}

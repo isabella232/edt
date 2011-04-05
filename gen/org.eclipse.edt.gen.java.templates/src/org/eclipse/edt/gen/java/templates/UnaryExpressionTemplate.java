@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.UnaryExpression;
 
-public class UnaryExpressionTemplate extends ExpressionTemplate {
+public class UnaryExpressionTemplate extends JavaTemplate {
 
 	public void genExpression(UnaryExpression expr, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genUnaryExpression, expr.getType(), ctx, out, expr);

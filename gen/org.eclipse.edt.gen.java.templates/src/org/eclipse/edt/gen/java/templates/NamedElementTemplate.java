@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.NamedElement;
 
-public abstract class NamedElementTemplate extends JavaTemplate {
+public class NamedElementTemplate extends JavaTemplate {
 
 	public Annotation getPropertyAnnotation(NamedElement expr) {
 		return expr.getAnnotation(Constants.Annotation_EGLProperty);

@@ -12,15 +12,13 @@
 package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
-
-import org.eclipse.edt.mof.egl.Statement;
-import org.eclipse.edt.mof.egl.ThrowStatement;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.ThrowStatement;
 
-public class ThrowStatementTemplate extends StatementTemplate {
+public class ThrowStatementTemplate extends JavaTemplate {
 
-	public void genStatementBody(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(ThrowStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		out.print("throw ");
-		genExpression(((ThrowStatement) stmt).getException(), ctx, out, args);
+		ctx.gen(genExpression, stmt.getException(), ctx, out, args);
 	}
 }

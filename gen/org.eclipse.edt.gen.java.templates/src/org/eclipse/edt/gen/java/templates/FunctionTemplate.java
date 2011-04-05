@@ -11,26 +11,19 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
-import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.ReturnStatement;
-import org.eclipse.edt.mof.egl.Type;
 
-public class FunctionTemplate extends MemberTemplate {
-
-	private static IrFactory factory = IrFactory.INSTANCE;
+public class FunctionTemplate extends JavaTemplate {
 
 	public void validate(Function function, Context ctx, Object... args) {
 		ctx.validate(validate, function.getStatementBlock(), ctx, args);
@@ -38,15 +31,15 @@ public class FunctionTemplate extends MemberTemplate {
 
 	public void genDeclaration(Function function, Context ctx, TabbedWriter out, Object... args) {
 		// write out the debug extension data
-		generateDebugExtension(function, ctx);
+		CommonUtilities.generateDebugExtension(function, ctx);
 		// process the function
-		super.genDeclaration(function, ctx, out, args);
+		ctx.genSuper(genDeclaration, Function.class, function, ctx, out, args);
 		// remember what function we are processing
 		ctx.setCurrentFunction(function.getName());
-		genRuntimeTypeName(function, ctx, out, args);
-		out.print(' ');
-		genName(function, ctx, out, args);
-		out.print('(');
+		ctx.gen(genRuntimeTypeName, function, ctx, out, args);
+		out.print(" ");
+		ctx.gen(genName, function, ctx, out, args);
+		out.print("(");
 		// if this is the main function, we need to generate List<String> args
 		if (function.getName().equalsIgnoreCase("main"))
 			out.print("java.util.List<String> args");
@@ -82,12 +75,12 @@ public class FunctionTemplate extends MemberTemplate {
 			returnStatement.setExpression(nameExpression);
 			ctx.gen(genStatement, returnStatement, ctx, out, args);
 		}
-		out.println('}');
+		out.println("}");
 	}
 
 	public void genAccessor(Function function, Context ctx, TabbedWriter out, Object... args) {
 		out.print("new org.eclipse.edt.javart.Delegate(\"");
-		genName(function, ctx, out, args);
+		ctx.gen(genName, function, ctx, out, args);
 		out.print("\", this");
 		for (int i = 0; i < function.getParameters().size(); i++) {
 			FunctionParameter decl = function.getParameters().get(i);
@@ -99,59 +92,5 @@ public class FunctionTemplate extends MemberTemplate {
 			out.print(".class");
 		}
 		out.print(")");
-	}
-
-	private void generateDebugExtension(Function function, Context ctx) {
-		// get the line number. If it is not found, then we can't write the debug extension
-		Annotation annotation = function.getAnnotation(IEGLConstants.EGL_LOCATION);
-		if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
-			ctx.getDebugExtension().append("" + ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue() + ";");
-			ctx.getDebugExtension().append("F:" + function.getName() + ";(");
-			for (int i = 0; i < function.getParameters().size(); i++) {
-				FunctionParameter decl = function.getParameters().get(i);
-				if (CommonUtilities.isBoxedParameterType(decl, ctx))
-					ctx.getDebugExtension().append("Lorg/eclipse/edt/javart/AnyBoxedObject;");
-				else
-					ctx.getDebugExtension().append(generateJavaTypeSignature(function.getParameters().get(i).getType(), ctx));
-			}
-			ctx.getDebugExtension().append(")" + generateJavaTypeSignature(function.getReturnType(), ctx) + "\n");
-		}
-	}
-
-	private String generateJavaTypeSignature(Type type, Context ctx) {
-		String signature = "";
-		// if this is an array, we need to handle it specially
-		if (type instanceof ArrayType)
-			signature += "L" + ctx.getRawNativeInterfaceMapping(type.getClassifier()).replaceAll("\\.", "/") + ";";
-		else {
-			// get the java primitive, if it exists
-			if (type == null)
-				signature += "V";
-			else if (ctx.mapsToPrimitiveType(type.getClassifier())) {
-				// do we want the java primitive or the object
-				// now try to match up against the known primitives
-				String value = ctx.getRawPrimitiveMapping(type.getClassifier());
-				if (value.equals("boolean"))
-					signature += "Z";
-				else if (value.equals("byte"))
-					signature += "B";
-				else if (value.equals("char"))
-					signature += "C";
-				else if (value.equals("double"))
-					signature += "D";
-				else if (value.equals("float"))
-					signature += "F";
-				else if (value.equals("int"))
-					signature += "I";
-				else if (value.equals("long"))
-					signature += "J";
-				else if (value.equals("short"))
-					signature += "S";
-				else
-					signature += "L" + value.replaceAll("\\.", "/") + ";";
-			} else
-				signature += "L" + type.getClassifier().getTypeSignature().replaceAll("\\.", "/") + ";";
-		}
-		return signature;
 	}
 }

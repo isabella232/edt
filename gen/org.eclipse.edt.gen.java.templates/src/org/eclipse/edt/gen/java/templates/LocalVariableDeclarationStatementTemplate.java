@@ -16,7 +16,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
-public class LocalVariableDeclarationStatementTemplate extends ExpressionStatementTemplate {
+public class LocalVariableDeclarationStatementTemplate extends JavaTemplate {
 
 	public void genStatement(LocalVariableDeclarationStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genDeclarationExpression, stmt.getExpression(), ctx, out, args);

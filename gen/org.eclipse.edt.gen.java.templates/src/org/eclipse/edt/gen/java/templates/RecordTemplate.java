@@ -16,17 +16,18 @@ import java.util.List;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public class RecordTemplate extends ClassTemplate {
+public class RecordTemplate extends JavaTemplate {
 
 	@SuppressWarnings("unchecked")
 	public void validate(Record part, Context ctx, Object... args) {
 		// process anything else the superclass needs to do
-		super.validate(part, ctx, args);
+		ctx.validateSuper(validate, Record.class, part, ctx, args);
 		// when we get here, it is because a part is being referenced by the original part being validated. Add it to the
 		// parts used table if it doesn't already exist
 		boolean found = false;
@@ -41,33 +42,34 @@ public class RecordTemplate extends ClassTemplate {
 			records.add(part);
 	}
 
-	public void genSuperClass(Record part, Context ctx, TabbedWriter out, Object... args) {
-		Stereotype stereotype = part.getStereotype();
-		if (stereotype == null || stereotype.getEClass().getName().equals("BasicRecord"))
-			out.print("AnyValue");
-		else
-			ctx.gen(genSuperClass, stereotype, ctx, out, args);
-	}
-
 	public void genConstructor(Record part, Context ctx, TabbedWriter out, Object... args) {
 		// Generate RunUnit constructor
 		out.print("public ");
-		genClassName(part, ctx, out, args);
+		ctx.gen(genClassName, part, ctx, out, args);
 		out.print("( Executable ru");
-		genAdditionalConstructorParams(part, ctx, out, args);
+		ctx.gen(genAdditionalConstructorParams, part, ctx, out, args);
 		out.println(" ) {");
 		out.print("super( ru");
-		genAdditionalSuperConstructorArgs(part, ctx, out, args);
+		ctx.gen(genAdditionalSuperConstructorArgs, part, ctx, out, args);
 		out.println(" );");
 		out.println("ezeInitialize();");
-		out.println('}');
-
+		out.println("}");
 		// generate inherited methods
+		genConstructorEzeCopy(part, ctx, out, args);
+		genConstructorEzeNewValue(part, ctx, out, args);
+		genConstructorEzeSetEmpty(part, ctx, out, args);
+		genConstructorIsVariableDataLength(part, ctx, out, args);
+		genConstructorLoadFromBuffer(part, ctx, out, args);
+		genConstructorSizeInBytes(part, ctx, out, args);
+		genConstructorStoreInBuffer(part, ctx, out, args);
+	}
+
+	protected void genConstructorEzeCopy(Record part, Context ctx, TabbedWriter out, Object... args) {
 		out.println("@Override");
 		out.println("public void ezeCopy(Object source) {");
 		out.print("ezeCopy(");
 		out.print("(");
-		genClassName(part, ctx, out, args);
+		ctx.gen(genClassName, part, ctx, out, args);
 		out.println(") source);");
 		out.println("}");
 		out.println("@Override");
@@ -79,7 +81,7 @@ public class RecordTemplate extends ClassTemplate {
 					out.print("this.");
 					ctx.gen(genName, field, ctx, out, args);
 					out.print(" = ((");
-					genClassName(part, ctx, out, args);
+					ctx.gen(genClassName, part, ctx, out, args);
 					out.print(") source).");
 					ctx.gen(genName, field, ctx, out, args);
 					out.println(";");
@@ -91,7 +93,7 @@ public class RecordTemplate extends ClassTemplate {
 					ctx.gen(genName, field, ctx, out, args);
 					out.print(".ezeCopy(");
 					out.print("((");
-					genClassName(part, ctx, out, args);
+					ctx.gen(genClassName, part, ctx, out, args);
 					out.print(") source).");
 					ctx.gen(genName, field, ctx, out, args);
 					out.println(");");
@@ -100,7 +102,7 @@ public class RecordTemplate extends ClassTemplate {
 					ctx.gen(genName, field, ctx, out, args);
 					out.print(".ezeCopy(");
 					out.print("((");
-					genClassName(part, ctx, out, args);
+					ctx.gen(genClassName, part, ctx, out, args);
 					out.print(") source).");
 					ctx.gen(genName, field, ctx, out, args);
 					out.println(");");
@@ -108,23 +110,30 @@ public class RecordTemplate extends ClassTemplate {
 			}
 		}
 		out.println("}");
+	}
+
+	protected void genConstructorEzeNewValue(Record part, Context ctx, TabbedWriter out, Object... args) {
 		out.println("@Override");
 		out.print("public ");
-		genClassName(part, ctx, out, args);
+		ctx.gen(genClassName, part, ctx, out, args);
 		out.println(" ezeNewValue(Object... args) {");
 		out.print("return new ");
-		genClassName(part, ctx, out, args);
+		ctx.gen(genClassName, part, ctx, out, args);
 		out.println("(this.ezeProgram);");
 		out.println("}");
+	}
+
+	protected void genConstructorEzeSetEmpty(Record part, Context ctx, TabbedWriter out, Object... args) {
 		out.println("@Override");
 		out.println("public void ezeSetEmpty() {");
+		List<Field> fields = part.getFields();
 		if (fields != null && fields.size() != 0) {
 			for (Field field : fields) {
 				if (TypeUtils.isReferenceType(field.getType()) || ctx.mapsToPrimitiveType(field.getType())) {
 					ctx.gen(genName, field, ctx, out, args);
 					out.print(" = ");
 					ctx.gen(genInitialization, field, ctx, out, args);
-					out.println(';');
+					out.println(";");
 				} else if (field.isNullable()) {
 					out.print("if (");
 					ctx.gen(genName, field, ctx, out, args);
@@ -142,17 +151,29 @@ public class RecordTemplate extends ClassTemplate {
 			}
 		}
 		out.println("}");
+	}
+
+	protected void genConstructorIsVariableDataLength(Record part, Context ctx, TabbedWriter out, Object... args) {
 		out.println("@Override");
 		out.println("public boolean isVariableDataLength() {");
 		out.println("return false;");
 		out.println("}");
+	}
+
+	protected void genConstructorLoadFromBuffer(Record part, Context ctx, TabbedWriter out, Object... args) {
 		out.println("@Override");
 		out.println("public void loadFromBuffer(ByteStorage buffer, Program program) {");
 		out.println("}");
+	}
+
+	protected void genConstructorSizeInBytes(Record part, Context ctx, TabbedWriter out, Object... args) {
 		out.println("@Override");
 		out.println("public int sizeInBytes() {");
 		out.println("return 0;");
 		out.println("}");
+	}
+
+	protected void genConstructorStoreInBuffer(Record part, Context ctx, TabbedWriter out, Object... args) {
 		out.println("@Override");
 		out.println("public void storeInBuffer(ByteStorage buffer) {");
 		out.println("}");
@@ -167,7 +188,7 @@ public class RecordTemplate extends ClassTemplate {
 	}
 
 	public void genRuntimeTypeName(Record part, Context ctx, TabbedWriter out, Object... args) {
-		genPartName(part, ctx, out, args);
+		ctx.gen(genPartName, part, ctx, out, args);
 	}
 
 	public void genDefaultValue(Record part, Context ctx, TabbedWriter out, Object... args) {
@@ -176,54 +197,28 @@ public class RecordTemplate extends ClassTemplate {
 		out.print(") null");
 	}
 
+	public void genSuperClass(Record part, Context ctx, TabbedWriter out, Object... args) {
+		Stereotype stereotype = part.getStereotype();
+		if (stereotype == null || stereotype.getEClass().getName().equals("BasicRecord"))
+			out.print("AnyValue");
+		else
+			ctx.gen(genSuperClass, stereotype, ctx, out, args);
+	}
+
+	public void genAssignment(Record type, Context ctx, TabbedWriter out, Object... args) {
+		if (((Expression) args[0]).isNullable()) {
+			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
+			out.print(" = ");
+		}
+		out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
+		ctx.gen(genExpression, (Expression) args[1], ctx, out, args);
+		out.print(", ");
+		ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
+		out.print(")");
+	}
+
 	public void genGetterSetter(Record part, Context ctx, TabbedWriter out, Object... args) {
-		genSimpleGetter(part, ctx, out, args);
-		genSimpleSetter(part, ctx, out, args);
-	}
-
-	private void genSimpleGetter(Record part, Context ctx, TabbedWriter out, Object... args) {
-		out.print("public ");
-		genRuntimeTypeName(part, ctx, out, args);
-		out.print(" ");
-		genGetMethodName((Field) args[0], ctx, out, args);
-		out.println("() {");
-		genReturnStatement((Field) args[0], ctx, out, args);
-		out.println("}");
-	}
-
-	private void genSimpleSetter(Record part, Context ctx, TabbedWriter out, Object... args) {
-		out.print("public void ");
-		genSetMethodName((Field) args[0], ctx, out, args);
-		out.print("( ");
-		genRuntimeTypeName(part, ctx, out, args);
-		out.println(" ezeValue ) {");
-		genSetStatement((Field) args[0], ctx, out, args);
-		out.println("}");
-	}
-
-	private void genGetMethodName(Field part, Context ctx, TabbedWriter out, Object... args) {
-		out.print("get");
-		out.print(part.getName().substring(0, 1).toUpperCase());
-		if (part.getName().length() > 1)
-			out.print(part.getName().substring(1));
-	}
-
-	private void genSetMethodName(Field part, Context ctx, TabbedWriter out, Object... args) {
-		out.print("set");
-		out.print(part.getName().substring(0, 1).toUpperCase());
-		if (part.getName().length() > 1)
-			out.print(part.getName().substring(1));
-	}
-
-	private void genReturnStatement(Field part, Context ctx, TabbedWriter out, Object... args) {
-		out.print("return (");
-		out.print(part.getName());
-		out.println(");");
-	}
-
-	private void genSetStatement(Field part, Context ctx, TabbedWriter out, Object... args) {
-		out.print("this.");
-		out.print(part.getName());
-		out.println(" = ezeValue;");
+		ctx.gen(genGetter, (Field) args[0], ctx, out, args);
+		ctx.gen(genSetter, (Field) args[0], ctx, out, args);
 	}
 }

@@ -16,15 +16,15 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.egl.SubstringAccess;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
-public class SubstringAccessTemplate extends MemberNameTemplate {
+public class SubstringAccessTemplate extends JavaTemplate {
 
 	public void genExpression(SubstringAccess expr, Context ctx, TabbedWriter out, Object... args) {
 		out.print(ctx.getNativeImplementationMapping(expr.getType()) + ".substring(");
-		genExpression(expr.getStringExpression(), ctx, out, args);
+		ctx.gen(genExpression, expr.getStringExpression(), ctx, out, args);
 		out.print(", ");
-		genExpression(expr.getStart(), ctx, out, args);
+		ctx.gen(genExpression, expr.getStart(), ctx, out, args);
 		out.print(", ");
-		genExpression(expr.getEnd(), ctx, out, args);
+		ctx.gen(genExpression, expr.getEnd(), ctx, out, args);
 		out.print("))");
 	}
 }

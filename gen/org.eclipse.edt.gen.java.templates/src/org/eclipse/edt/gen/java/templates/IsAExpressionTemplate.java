@@ -15,18 +15,18 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.IsAExpression;
 
-public class IsAExpressionTemplate extends ExpressionTemplate {
+public class IsAExpressionTemplate extends JavaTemplate {
 
 	public void genExpression(IsAExpression expr, Context ctx, TabbedWriter out, Object... args) {
 		if (ctx.mapsToPrimitiveType(expr.getEType())) {
 			ctx.gen(genRuntimeTypeName, expr.getEType(), ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".ezeIsa(");
-			genExpression(expr.getObjectExpr(), ctx, out, args);
+			ctx.gen(genExpression, expr.getObjectExpr(), ctx, out, args);
 			ctx.gen(genTypeDependentOptions, expr.getEType(), ctx, out, args);
-			out.print(')');
+			out.print(")");
 		} else {
 			out.print("AnyObject.ezeIsa(");
-			genExpression(expr.getObjectExpr(), ctx, out, args);
+			ctx.gen(genExpression, expr.getObjectExpr(), ctx, out, args);
 			out.print(", ");
 			ctx.gen(genRuntimeTypeName, expr.getEType(), ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".class)");

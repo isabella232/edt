@@ -16,7 +16,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Program;
 
-public class ProgramTemplate extends ClassTemplate {
+public class ProgramTemplate extends JavaTemplate {
 
 	public void genSuperClass(Program program, Context ctx, TabbedWriter out, Object... args) {
 		out.print("ProgramBase");
@@ -29,9 +29,9 @@ public class ProgramTemplate extends ClassTemplate {
 		out.println("");
 		out.println("public static StartupInfo _startupInfo() {");
 		out.print("\treturn new StartupInfo( \"");
-		genClassName(program, ctx, out, args);
+		ctx.gen(genClassName, program, ctx, out, args);
 		out.print("\", \"" + packageName);
-		genClassName(program, ctx, out, args);
+		ctx.gen(genClassName, program, ctx, out, args);
 		out.println(".properties\", false );");
 		out.println("}");
 		out.println("public static void main(String... args) throws Exception {");
@@ -39,25 +39,25 @@ public class ProgramTemplate extends ClassTemplate {
 		out.println("\t\tinfo.setArgs( args );");
 		out.println("\t\tRunUnit ru = new RunUnitBase( info );");
 		out.print("\t\tru.start( new ");
-		genClassName(program, ctx, out, args);
+		ctx.gen(genClassName, program, ctx, out, args);
 		out.println("( ru ), args );");
 		out.println("\t\tru.exit();");
 		out.println("}");
 
 		// Generate RunUnit constructor
 		out.print("public ");
-		genClassName(program, ctx, out, args);
+		ctx.gen(genClassName, program, ctx, out, args);
 		out.print("( RunUnit ru");
-		genAdditionalConstructorParams(program, ctx, out, args);
+		ctx.gen(genAdditionalConstructorParams, program, ctx, out, args);
 		out.println(" ) {");
 		out.print("super( ru");
-		genAdditionalSuperConstructorArgs(program, ctx, out, args);
+		ctx.gen(genAdditionalSuperConstructorArgs, program, ctx, out, args);
 		out.println(" );");
 		out.println("ezeInitialize();");
-		out.println('}');
+		out.println("}");
 	}
 
 	public void genRuntimeTypeName(Program program, Context ctx, TabbedWriter out, Object... args) {
-		genPartName(program, ctx, out, args);
+		ctx.gen(genPartName, program, ctx, out, args);
 	}
 }

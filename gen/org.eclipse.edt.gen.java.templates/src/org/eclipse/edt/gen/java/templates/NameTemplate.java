@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Name;
 
-public class NameTemplate extends ExpressionTemplate {
+public class NameTemplate extends JavaTemplate {
 
 	public Annotation getPropertyAnnotation(Name expr) {
 		return expr.getNamedElement().getAnnotation(Constants.Annotation_EGLProperty);
@@ -29,7 +29,7 @@ public class NameTemplate extends ExpressionTemplate {
 		if (property != null) {
 			if (expr.getQualifier() != null) {
 				ctx.gen(genExpression, expr.getQualifier(), ctx, out, args);
-				out.print('.');
+				out.print(".");
 				if (property.getValue("setMethod") != null)
 					out.print((String) property.getValue("setMethod"));
 				else {
@@ -38,9 +38,9 @@ public class NameTemplate extends ExpressionTemplate {
 					if (expr.getNamedElement().getName().length() > 1)
 						out.print(expr.getNamedElement().getName().substring(1));
 				}
-				out.print('(');
+				out.print("(");
 				ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
-				out.print(')');
+				out.print(")");
 			} else {
 				ctx.gen(genName, expr.getNamedElement(), ctx, out, args);
 				out.print(" = ");

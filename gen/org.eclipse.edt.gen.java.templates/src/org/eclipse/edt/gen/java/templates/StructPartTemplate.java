@@ -11,22 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-import org.eclipse.edt.gen.java.Context;
+public class StructPartTemplate extends JavaTemplate {
 
-import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-
-public class StructPartTemplate extends PartTemplate {
-
-	public void validateClassBody(Part part, Context ctx, Object... args) {
-	// TODO Auto-generated method stub
-	}
-
-	public void genClassBody(Part part, Context ctx, TabbedWriter out, Object... args) {
-	// TODO Auto-generated method stub
-	}
-
-	public void genClassHeader(Part part, Context ctx, TabbedWriter out, Object... args) {
-	// TODO Auto-generated method stub
-	}
 }

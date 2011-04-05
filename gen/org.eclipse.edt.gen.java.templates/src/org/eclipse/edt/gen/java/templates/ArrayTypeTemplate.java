@@ -16,7 +16,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Field;
 
-public class ArrayTypeTemplate extends TypeTemplate {
+public class ArrayTypeTemplate extends JavaTemplate {
 
 	public void genInstantiation(ArrayType type, Context ctx, TabbedWriter out, Object... args) {
 		if (args.length == 0 || args[0] == null)
@@ -29,7 +29,7 @@ public class ArrayTypeTemplate extends TypeTemplate {
 	}
 
 	public void genRuntimeConstraint(ArrayType generic, Context ctx, TabbedWriter out, Object... args) {
-		genRuntimeTypeName(generic.getClassifier(), ctx, out, TypeNameKind.EGLImplementation);
+		ctx.gen(genRuntimeTypeName, generic.getClassifier(), ctx, out, TypeNameKind.EGLImplementation);
 		if (!generic.getTypeArguments().isEmpty()) {
 			for (int i = 0; i < generic.getTypeArguments().size(); i++) {
 				out.print(".class, ");
@@ -40,13 +40,13 @@ public class ArrayTypeTemplate extends TypeTemplate {
 	}
 
 	public void genRuntimeTypeName(ArrayType generic, Context ctx, TabbedWriter out, Object... args) {
-		genRuntimeTypeName(generic.getClassifier(), ctx, out, args);
+		ctx.gen(genRuntimeTypeName, generic.getClassifier(), ctx, out, args);
 		if (!generic.getTypeArguments().isEmpty()) {
-			out.print('<');
+			out.print("<");
 			for (int i = 0; i < generic.getTypeArguments().size(); i++) {
 				ctx.gen(genRuntimeTypeName, generic.getTypeArguments().get(i), ctx, out, TypeNameKind.JavaObject);
 			}
-			out.print('>');
+			out.print(">");
 		}
 	}
 }

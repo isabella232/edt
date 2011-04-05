@@ -11,6 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-public class ConstructorTemplate extends MemberTemplate {
+public class ConstructorTemplate extends JavaTemplate {
 
 }

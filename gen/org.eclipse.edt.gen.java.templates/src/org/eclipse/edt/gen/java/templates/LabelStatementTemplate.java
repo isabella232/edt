@@ -15,15 +15,14 @@ import org.eclipse.edt.gen.Label;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.LabelStatement;
-import org.eclipse.edt.mof.egl.Statement;
 
-public class LabelStatementTemplate extends StatementTemplate {
+public class LabelStatementTemplate extends JavaTemplate {
 
-	public void genStatementBody(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
-		out.print(Label.LABEL_NAME + ((LabelStatement) stmt).getLabel() + ": ");
+	public void genStatementBody(LabelStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+		out.print(Label.LABEL_NAME + stmt.getLabel() + ": ");
 	}
 
-	public void genStatementEnd(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
-	// we don't want a semi-colon
+	public void genStatementEnd(LabelStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+		// we don't want a semi-colon
 	}
 }

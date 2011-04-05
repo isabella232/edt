@@ -11,6 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-public class FunctionStatementTemplate extends ExpressionStatementTemplate {
+public class FunctionStatementTemplate extends JavaTemplate {
 
 }

@@ -21,33 +21,33 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Type;
 
-public class MemberNameTemplate extends NameTemplate {
+public class MemberNameTemplate extends JavaTemplate {
 
 	public void genAssignment(MemberName expr, Context ctx, TabbedWriter out, Object... args) {
 		// check to see if we are copying boxed function parameters
 		if (expr.getMember() instanceof FunctionParameter && CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx)) {
 			ctx.gen(genAccessor, expr.getMember(), ctx, out, args);
 			out.print(".ezeCopy(");
-			genExpression((Expression) args[0], ctx, out, args);
+			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
 			out.print(")");
 			// check to see if we are copying LHS boxed temporary variables (inout and out types only)
 		} else if (ctx.getAttribute(expr.getMember(), Constants.Annotation_functionArgumentTemporaryVariable) != null
 			&& ((Integer) ctx.getAttribute(expr.getMember(), Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
-			genExpression((Expression) expr, ctx, out, args);
+			ctx.gen(genExpression, (Expression) expr, ctx, out, args);
 			out.print(" = ");
 			out.print("AnyObject.ezeWrap(");
-			genExpression((Expression) args[0], ctx, out, args);
+			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
 			out.print(")");
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
 		} else if ((Expression) args[0] instanceof MemberName
 			&& ctx.getAttribute(((MemberName) (Expression) args[0]).getMember(), Constants.Annotation_functionArgumentTemporaryVariable) != null
 			&& ((Integer) ctx.getAttribute(((MemberName) (Expression) args[0]).getMember(), Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
-			genExpression((Expression) expr, ctx, out, args);
+			ctx.gen(genExpression, (Expression) expr, ctx, out, args);
 			out.print(" = ");
-			genExpression((Expression) args[0], ctx, out, args);
+			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
 			out.print(".ezeUnbox()");
 		} else
-			super.genAssignment(expr, ctx, out, args);
+			ctx.genSuper(genAssignment, MemberName.class, expr, ctx, out, args);
 	}
 
 	public void genExpression(MemberName expr, Context ctx, TabbedWriter out, Object... args) {

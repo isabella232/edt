@@ -11,18 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public class FieldTemplate extends MemberTemplate {
+public class FieldTemplate extends JavaTemplate {
 
 	public void validate(Field field, Context ctx, Object... args) {
 		ctx.validate(validate, field.getType(), ctx, args);
@@ -30,34 +27,14 @@ public class FieldTemplate extends MemberTemplate {
 
 	public void genDeclaration(Field field, Context ctx, TabbedWriter out, Object... args) {
 		// write out the debug extension data
-		generateDebugExtension(field, ctx);
+		CommonUtilities.generateDebugExtension(field, ctx);
 		// process the field
-		super.genDeclaration(field, ctx, out, args);
+		ctx.genSuper(genDeclaration, Field.class, field, ctx, out, args);
 		transientOption(field, out, args);
-		genRuntimeTypeName(field, ctx, out, args);
-		out.print(' ');
-		genName(field, ctx, out, args);
+		ctx.gen(genRuntimeTypeName, field, ctx, out, args);
+		out.print(" ");
+		ctx.gen(genName, field, ctx, out, args);
 		out.println(";");
-	}
-
-	public void genDeclaration(ConstantField field, Context ctx, TabbedWriter out, Object... args) {
-		// write out the debug extension data
-		generateDebugExtension(field, ctx);
-		// process the field
-		out.print("private static final ");
-		genRuntimeTypeName(field, ctx, out, args);
-		out.print(" ezeConst_");
-		genName(field, ctx, out, args);
-		out.print(" = ");
-		ctx.gen(genInstantiation, field.getType(), ctx, out, field);
-		out.println(';');
-		out.print("public ");
-		genRuntimeTypeName(field, ctx, out, args);
-		out.print(' ');
-		genName(field, ctx, out, args);
-		out.print(" = ezeConst_");
-		genName(field, ctx, out, args);
-		out.println(';');
 	}
 
 	public void genInstantiation(Field field, Context ctx, TabbedWriter out, Object... args) {
@@ -90,23 +67,39 @@ public class FieldTemplate extends MemberTemplate {
 		}
 	}
 
-	private void transientOption(Field field, TabbedWriter out, Object... args) {
+	public void genGetter(Field field, Context ctx, TabbedWriter out, Object... args) {
+		out.print("public ");
+		ctx.gen(genRuntimeTypeName, field, ctx, out, args);
+		out.print(" get");
+		genMethodName(field, ctx, out, args);
+		out.println("() {");
+		out.print("return (");
+		out.print(field.getName());
+		out.println(");");
+		out.println("}");
+	}
+
+	public void genSetter(Field field, Context ctx, TabbedWriter out, Object... args) {
+		out.print("public void set");
+		genMethodName(field, ctx, out, args);
+		out.print("( ");
+		ctx.gen(genRuntimeTypeName, field, ctx, out, args);
+		out.println(" ezeValue ) {");
+		out.print("this.");
+		out.print(field.getName());
+		out.println(" = ezeValue;");
+		out.println("}");
+	}
+
+	protected void genMethodName(Field field, Context ctx, TabbedWriter out, Object... args) {
+		out.print(field.getName().substring(0, 1).toUpperCase());
+		if (field.getName().length() > 1)
+			out.print(field.getName().substring(1));
+	}
+
+	protected void transientOption(Field field, TabbedWriter out, Object... args) {
 		ExternalType et = CommonUtilities.getUserDefinedExternalType(field.getType());
 		if (et != null && !CommonUtilities.isSerializable(et))
 			out.print("transient ");
-	}
-
-	private void generateDebugExtension(Field field, Context ctx) {
-		// if this isn't a temporary variable, then add the data to the debug extension buffer
-		if (!field.getName().startsWith(org.eclipse.edt.gen.Constants.temporaryVariablePrefix)) {
-			// get the line number. If it is not found, then we can't write the debug extension
-			Annotation annotation = field.getAnnotation(IEGLConstants.EGL_LOCATION);
-			if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
-				ctx.getDebugExtension().append("" + ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue() + ";");
-				ctx.getDebugExtension().append(field.getName() + ";");
-				ctx.getDebugExtension().append(field.getName() + ";");
-				ctx.getDebugExtension().append(field.getType().getTypeSignature() + "\n");
-			}
-		}
 	}
 }

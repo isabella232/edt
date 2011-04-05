@@ -16,7 +16,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 
-public class FunctionParameterTemplate extends ParameterTemplate {
+public class FunctionParameterTemplate extends JavaTemplate {
 
 	public void genDeclaration(FunctionParameter decl, Context ctx, TabbedWriter out, Object... args) {
 		if (CommonUtilities.isBoxedParameterType(decl, ctx)) {
@@ -24,8 +24,8 @@ public class FunctionParameterTemplate extends ParameterTemplate {
 			ctx.gen(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
 			out.print(">");
 		} else
-			genRuntimeTypeName(decl, ctx, out, args);
-		out.print(' ');
-		genName(decl, ctx, out, args);
+			ctx.gen(genRuntimeTypeName, decl, ctx, out, args);
+		out.print(" ");
+		ctx.gen(genName, decl, ctx, out, args);
 	}
 }

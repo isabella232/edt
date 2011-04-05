@@ -15,51 +15,50 @@ import org.eclipse.edt.gen.Label;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ForStatement;
-import org.eclipse.edt.mof.egl.Statement;
 
-public class ForStatementTemplate extends StatementTemplate {
+public class ForStatementTemplate extends JavaTemplate {
 
-	public void genStatementBody(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
-		if (((ForStatement) stmt).getDeclarationExpression() != null) {
+	public void genStatementBody(ForStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+		if (stmt.getDeclarationExpression() != null) {
 			out.println("{");
-			ctx.gen(genDeclarationExpression, ((ForStatement) stmt).getDeclarationExpression(), ctx, out, args);
+			ctx.gen(genDeclarationExpression, stmt.getDeclarationExpression(), ctx, out, args);
 		}
 		Label label = new Label(ctx, Label.LABEL_TYPE_FOR);
 		ctx.pushLabelStack(label);
 		out.print(label.getName() + ": ");
 		out.print("for (");
-		genExpression(((ForStatement) stmt).getCounterVariable(), ctx, out, args);
+		ctx.gen(genExpression, stmt.getCounterVariable(), ctx, out, args);
 		out.print(" = ");
-		if (((ForStatement) stmt).getFromExpression() != null)
-			genExpression(((ForStatement) stmt).getFromExpression(), ctx, out, args);
+		if (stmt.getFromExpression() != null)
+			ctx.gen(genExpression, stmt.getFromExpression(), ctx, out, args);
 		else
 			out.print("1");
 		out.print("; ");
-		genExpression(((ForStatement) stmt).getCounterVariable(), ctx, out, args);
-		if (((ForStatement) stmt).isIncrement())
+		ctx.gen(genExpression, stmt.getCounterVariable(), ctx, out, args);
+		if (stmt.isIncrement())
 			out.print(" <= ");
 		else
 			out.print(" >= ");
-		genExpression(((ForStatement) stmt).getToExpression(), ctx, out, args);
+		ctx.gen(genExpression, stmt.getToExpression(), ctx, out, args);
 		out.print("; ");
-		genExpression(((ForStatement) stmt).getCounterVariable(), ctx, out, args);
-		if (((ForStatement) stmt).isIncrement())
+		ctx.gen(genExpression, stmt.getCounterVariable(), ctx, out, args);
+		if (stmt.isIncrement())
 			out.print(" += ");
 		else
 			out.print(" -= ");
-		if (((ForStatement) stmt).getDeltaExpression() != null)
-			genExpression(((ForStatement) stmt).getDeltaExpression(), ctx, out, args);
+		if (stmt.getDeltaExpression() != null)
+			ctx.gen(genExpression, stmt.getDeltaExpression(), ctx, out, args);
 		else
 			out.print("1");
 		out.print(") ");
-		ctx.gen(genStatement, ((ForStatement) stmt).getBody(), ctx, out, args);
-		if (((ForStatement) stmt).getDeclarationExpression() != null)
+		ctx.gen(genStatement, stmt.getBody(), ctx, out, args);
+		if (stmt.getDeclarationExpression() != null)
 			out.println("}");
 		// now remove the label from the stack
 		ctx.popLabelStack();
 	}
 
-	public void genStatementEnd(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
-	// we don't want a semi-colon
+	public void genStatementEnd(ForStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+		// we don't want a semi-colon
 	}
 }

@@ -13,37 +13,33 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
-
-import org.eclipse.edt.mof.egl.DataTable;
-import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.DataTable;
 
-public class DataTableTemplate extends StructuredRecordTemplate {
+public class DataTableTemplate extends JavaTemplate {
 
-	public void genClassBody(Part dataTable, Context ctx, TabbedWriter out, Object... args) {
-		genFields((DataTable) dataTable, ctx, out, args);
-		genInitializeMethod((DataTable) dataTable, ctx, out, args);
+	public void genClassBody(DataTable dataTable, Context ctx, TabbedWriter out, Object... args) {
 	}
 
-	public void genSuperClass(Part dataTable, Context ctx, TabbedWriter out, Object... args) {
+	public void genSuperClass(DataTable dataTable, Context ctx, TabbedWriter out, Object... args) {
 		out.print("ExecutableBase");
 	}
 
-	public void genAccessor(Part dataTable, Context ctx, TabbedWriter out, Object... args) {
+	public void genAccessor(DataTable dataTable, Context ctx, TabbedWriter out, Object... args) {
 		out.print(Constants.LIBRARY_PREFIX + dataTable.getFullyQualifiedName().replace('.', '_') + "()");
 	}
 
-	public void genConstructor(Part dataTable, Context ctx, TabbedWriter out, Object... args) {
+	public void genConstructor(DataTable dataTable, Context ctx, TabbedWriter out, Object... args) {
 		out.print("public ");
-		genClassName(dataTable, ctx, out, args);
+		ctx.gen(genClassName, dataTable, ctx, out, args);
 		out.print("( RunUnit ru");
-//		genAdditionalConstructorParams(dataTable, ctx, out, args);
+		// genAdditionalConstructorParams(dataTable, ctx, out, args);
 		out.println(" ) {");
 		out.print("super( ru");
-//		genAdditionalSuperConstructorArgs(dataTable, ctx, out, args);
+		// genAdditionalSuperConstructorArgs(dataTable, ctx, out, args);
 		out.println(" );");
 		out.println("ezeInitialize();");
-		out.println('}');
+		out.println("}");
 
 		out.print("public ");
 		ctx.gen(genRuntimeTypeName, dataTable, ctx, out, TypeNameKind.EGLImplementation);

@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.InExpression;
 
-public class InExpressionTemplate extends ExpressionTemplate {
+public class InExpressionTemplate extends JavaTemplate {
 
 	public void genExpression(InExpression expr, Context ctx, TabbedWriter out, Object... args) {
 //		if (ctx.mapsToJavaType(expr.getEType())) {
@@ -23,7 +23,7 @@ public class InExpressionTemplate extends ExpressionTemplate {
 //			out.print(".ezeIsa(");
 //			genExpression(expr.getObjectExpr(), ctx, out, args);
 //			ctx.gen(genTypeDependentOptions, expr.getEType(), ctx, out, args);
-//			out.print(')');
+//			out.print(")");
 //		} else {
 //			out.print("AnyObject.ezeIsa(");
 //			genExpression(expr.getObjectExpr(), ctx, out, args);

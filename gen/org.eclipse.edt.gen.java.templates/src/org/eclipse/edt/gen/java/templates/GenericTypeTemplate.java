@@ -15,10 +15,10 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.GenericType;
 
-public class GenericTypeTemplate extends TypeTemplate {
+public class GenericTypeTemplate extends JavaTemplate {
 
 	public void genRuntimeConstraint(GenericType generic, Context ctx, TabbedWriter out, Object... args) {
-		genRuntimeTypeName(generic.getClassifier(), ctx, out, TypeNameKind.EGLImplementation);
+		ctx.gen(genRuntimeTypeName, generic.getClassifier(), ctx, out, TypeNameKind.EGLImplementation);
 		if (!generic.getTypeArguments().isEmpty()) {
 			for (int i = 0; i < generic.getTypeArguments().size(); i++) {
 				out.print(".class, ");
@@ -29,13 +29,13 @@ public class GenericTypeTemplate extends TypeTemplate {
 	}
 
 	public void genRuntimeTypeName(GenericType generic, Context ctx, TabbedWriter out, Object... args) {
-		genRuntimeTypeName(generic.getClassifier(), ctx, out, args);
+		ctx.gen(genRuntimeTypeName, generic.getClassifier(), ctx, out, args);
 		if (!generic.getTypeArguments().isEmpty()) {
-			out.print('<');
+			out.print("<");
 			for (int i = 0; i < generic.getTypeArguments().size(); i++) {
 				ctx.gen(genRuntimeTypeName, generic.getTypeArguments().get(i), ctx, out, TypeNameKind.JavaObject);
 			}
-			out.print('>');
+			out.print(">");
 		}
 	}
 }

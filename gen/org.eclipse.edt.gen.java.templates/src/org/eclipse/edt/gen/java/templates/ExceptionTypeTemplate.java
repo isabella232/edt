@@ -12,17 +12,16 @@
 package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
-
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Type;
 
-public class ExceptionTypeTemplate extends ClassTemplate {
+public class ExceptionTypeTemplate extends JavaTemplate {
 
-	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-	// this type has no default value
+	public void genDefaultValue(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// this type has no default value
 	}
 
-	public void genRuntimeTypeName(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		genPartName(type, ctx, out, args);
+	public void genRuntimeTypeName(Type type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genPartName, type, ctx, out, args);
 	}
 }

@@ -12,14 +12,12 @@
 package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
-
-import org.eclipse.edt.mof.egl.AssignmentStatement;
-import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.AssignmentStatement;
 
-public class AssignmentStatementTemplate extends ExpressionStatementTemplate {
+public class AssignmentStatementTemplate extends JavaTemplate {
 
-	public void genStatementBody(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genExpression, ((AssignmentStatement) stmt).getAssignment(), ctx, out, args);
+	public void genStatementBody(AssignmentStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genExpression, stmt.getAssignment(), ctx, out, args);
 	}
 }

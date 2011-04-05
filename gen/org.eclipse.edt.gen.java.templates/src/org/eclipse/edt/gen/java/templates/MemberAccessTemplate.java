@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.Type;
 
-public class MemberAccessTemplate extends NameTemplate {
+public class MemberAccessTemplate extends JavaTemplate {
 
 	public void genExpression(MemberAccess expr, Context ctx, TabbedWriter out, Object... args) {
 		Member member = expr.getMember();
@@ -28,8 +28,8 @@ public class MemberAccessTemplate extends NameTemplate {
 	}
 
 	public void genMemberAccess(MemberAccess expr, Context ctx, TabbedWriter out, Object... args) {
-		genExpression(expr.getQualifier(), ctx, out, args);
-		out.print('.');
+		ctx.gen(genExpression, expr.getQualifier(), ctx, out, args);
+		out.print(".");
 		ctx.gen(genAccessor, expr.getMember(), ctx, out, args);
 	}
 }

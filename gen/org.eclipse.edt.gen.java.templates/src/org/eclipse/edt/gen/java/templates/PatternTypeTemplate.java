@@ -11,13 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-import org.eclipse.edt.gen.java.Context;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.IntegerLiteral;
+public class PatternTypeTemplate extends JavaTemplate {
 
-public class IntegerLiteralTemplate extends JavaTemplate {
-
-	public void genExpression(IntegerLiteral expr, Context ctx, TabbedWriter out, Object... args) {
-		out.print(expr.getValue().toString());
-	}
 }

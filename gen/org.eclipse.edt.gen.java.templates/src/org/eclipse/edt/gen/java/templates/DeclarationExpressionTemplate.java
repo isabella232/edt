@@ -17,16 +17,16 @@ import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
-public class DeclarationExpressionTemplate extends ExpressionTemplate {
+public class DeclarationExpressionTemplate extends JavaTemplate {
 
 	public void genDeclarationExpression(DeclarationExpression expr, Context ctx, TabbedWriter out, Object... args) {
 		for (Field field : expr.getFields()) {
 			ctx.gen(genRuntimeTypeName, field, ctx, out, args);
-			out.print(' ');
+			out.print(" ");
 			ctx.gen(genName, field, ctx, out, args);
 			out.print(" = ");
 			ctx.gen(genInitialization, field, ctx, out, args);
-			out.println(';');
+			out.println(";");
 			if (field.getInitializerStatements() != null)
 				ctx.gen(genStatementNoBraces, field.getInitializerStatements(), ctx, out, args);
 		}

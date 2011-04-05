@@ -12,17 +12,15 @@
 package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
-
-import org.eclipse.edt.mof.egl.CallStatement;
-import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.CallStatement;
 
-public class CallStatementTemplate extends StatementTemplate {
+public class CallStatementTemplate extends JavaTemplate {
 
-	public void genStatementBody(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genExpression, ((CallStatement) stmt).getInvocationTarget(), ctx, out, args);
-		out.print('(');
-		ctx.foreach(((CallStatement) stmt).getArguments(), ',', genExpression, ctx, out, args);
-		out.print(')');
+	public void genStatementBody(CallStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genExpression, stmt.getInvocationTarget(), ctx, out, args);
+		out.print("(");
+		ctx.foreach(stmt.getArguments(), ',', genExpression, ctx, out, args);
+		out.print(")");
 	}
 }

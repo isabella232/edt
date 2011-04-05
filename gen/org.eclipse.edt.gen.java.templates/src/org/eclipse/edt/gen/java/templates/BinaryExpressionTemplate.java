@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class BinaryExpressionTemplate extends ExpressionTemplate {
+public class BinaryExpressionTemplate extends JavaTemplate {
 
 	public void genExpression(BinaryExpression expr, Context ctx, TabbedWriter out, Object... args) {
 		BinaryExpression binExpr = (BinaryExpression) expr.clone();

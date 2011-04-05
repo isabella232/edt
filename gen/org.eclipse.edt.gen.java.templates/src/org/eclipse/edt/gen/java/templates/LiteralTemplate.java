@@ -11,6 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-public abstract class LiteralTemplate extends ExpressionTemplate {
+public class LiteralTemplate extends JavaTemplate {
 
 }

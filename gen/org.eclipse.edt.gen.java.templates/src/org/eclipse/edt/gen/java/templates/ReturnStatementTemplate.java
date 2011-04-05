@@ -12,21 +12,19 @@
 package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
-
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.ReturnStatement;
-import org.eclipse.edt.mof.egl.Statement;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class ReturnStatementTemplate extends StatementTemplate {
+public class ReturnStatementTemplate extends JavaTemplate {
 
-	public void genStatementBody(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(ReturnStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		out.print("return ");
-		Expression expr = ((ReturnStatement) stmt).getExpression();
+		Expression expr = stmt.getExpression();
 		if (expr != null) {
 			expr = IRUtils.makeExprCompatibleToType(expr, stmt.getFunctionMember().getType());
-			genExpression(expr, ctx, out, args);
+			ctx.gen(genExpression, expr, ctx, out, args);
 		}
 	}
 }

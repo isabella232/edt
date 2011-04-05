@@ -13,15 +13,15 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.AnnotationType;
 
-public class AnnotationTypeTemplate extends PartTemplate {
+public class AnnotationTypeTemplate extends JavaTemplate {
 
-	public void validateClassBody(Part part, Context ctx, Object... args) {}
+	public void validateClassBody(AnnotationType part, Context ctx, Object... args) {}
 
-	public void genPart(Part part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genPart(AnnotationType part, Context ctx, TabbedWriter out, Object... args) {}
 
-	public void genClassBody(Part part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassBody(AnnotationType part, Context ctx, TabbedWriter out, Object... args) {}
 
-	public void genClassHeader(Part part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassHeader(AnnotationType part, Context ctx, TabbedWriter out, Object... args) {}
 }

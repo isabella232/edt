@@ -13,19 +13,19 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Delegate;
 
-public class DelegateTemplate extends PartTemplate {
+public class DelegateTemplate extends JavaTemplate {
 
-	public void validateClassBody(Part part, Context ctx, Object... args) {}
+	public void validateClassBody(Delegate part, Context ctx, Object... args) {}
 
-	public void genPart(Part part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genPart(Delegate part, Context ctx, TabbedWriter out, Object... args) {}
 
-	public void genClassBody(Part part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassBody(Delegate part, Context ctx, TabbedWriter out, Object... args) {}
 
-	public void genClassHeader(Part part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassHeader(Delegate part, Context ctx, TabbedWriter out, Object... args) {}
 
-	public void genRuntimeTypeName(Part part, Context ctx, TabbedWriter out, Object... args) {
+	public void genRuntimeTypeName(Delegate part, Context ctx, TabbedWriter out, Object... args) {
 		out.print("org.eclipse.edt.javart.Delegate");
 	}
 }

@@ -15,11 +15,11 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.StringLiteral;
 
-public class StringLiteralTemplate extends LiteralTemplate {
+public class StringLiteralTemplate extends JavaTemplate {
 
 	public void genExpression(StringLiteral expr, Context ctx, TabbedWriter out, Object... args) {
-		out.print('"');
+		out.print("\"");
 		out.print(expr.getValue());
-		out.print('"');
+		out.print("\"");
 	}
 }

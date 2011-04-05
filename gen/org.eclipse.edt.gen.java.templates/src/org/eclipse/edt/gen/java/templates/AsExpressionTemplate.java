@@ -17,33 +17,33 @@ import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Expression;
 
-public class AsExpressionTemplate extends ExpressionTemplate {
+public class AsExpressionTemplate extends JavaTemplate {
 
 	public void genExpression(AsExpression asExpr, Context ctx, TabbedWriter out, Object... args) {
 		if (isHandledByJavaWithoutCast(asExpr.getObjectExpr(), asExpr, ctx)) {
-			genExpression(asExpr.getObjectExpr(), ctx, out, args);
+			ctx.gen(genExpression, asExpr.getObjectExpr(), ctx, out, args);
 		} else if (isHandledByJavaWithCast(asExpr.getObjectExpr(), asExpr, ctx)) {
 			out.print("(" + ctx.getPrimitiveMapping(asExpr.getType()) + ")");
 			out.print("(");
-			genExpression(asExpr.getObjectExpr(), ctx, out, args);
+			ctx.gen(genExpression, asExpr.getObjectExpr(), ctx, out, args);
 			out.print(")");
 		} else if (asExpr.getConversionOperation() != null) {
 			// a conversion is required
 			out.print(ctx.getNativeImplementationMapping((Classifier) asExpr.getConversionOperation().getContainer()) + '.');
 			out.print(asExpr.getConversionOperation().getName());
 			out.print("(ezeProgram, ");
-			genExpression(asExpr.getObjectExpr(), ctx, out, args);
+			ctx.gen(genExpression, asExpr.getObjectExpr(), ctx, out, args);
 			ctx.gen(genTypeDependentOptions, asExpr.getEType(), ctx, out, args);
-			out.print(')');
+			out.print(")");
 		} else if (ctx.mapsToPrimitiveType(asExpr.getEType())) {
 			ctx.gen(genRuntimeTypeName, asExpr.getEType(), ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".ezeCast(");
-			genExpression(asExpr.getObjectExpr(), ctx, out, args);
+			ctx.gen(genExpression, asExpr.getObjectExpr(), ctx, out, args);
 			ctx.gen(genTypeDependentOptions, asExpr.getEType(), ctx, out, args);
-			out.print(')');
+			out.print(")");
 		} else {
 			out.print("AnyObject.ezeCast(");
-			genExpression(asExpr.getObjectExpr(), ctx, out, args);
+			ctx.gen(genExpression, asExpr.getObjectExpr(), ctx, out, args);
 			out.print(", ");
 			ctx.gen(genRuntimeTypeName, asExpr.getEType(), ctx, out, TypeNameKind.JavaImplementation);
 			out.print(".class)");

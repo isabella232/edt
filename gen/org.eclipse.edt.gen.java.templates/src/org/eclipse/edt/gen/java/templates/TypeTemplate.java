@@ -11,11 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-import java.util.List;
-
-import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.EglContext.TypeLogicKind;
-import org.eclipse.edt.gen.java.Constants;
+import org.eclipse.edt.gen.GenerationException;
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -32,58 +30,28 @@ import org.eclipse.edt.mof.egl.UnaryExpression;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public abstract class TypeTemplate extends JavaTemplate {
+public class TypeTemplate extends JavaTemplate {
 
 	public void validate(Type type, Context ctx, Object... args) {
 		// when we get here, it is because a type is being referenced by the original part being validated. Add it to the
 		// types used table if it doesn't already exist. The first thing we want to check for, is to make sure the
 		// unqualified type name (the last node in the name) is not already taken. If it is already taken, we can't do an
 		// import for it and when used throughout the program, will have to be fully qualified at all times.
-		if (ctx.mapsToNativeType(type.getClassifier())) {
-			processImport(ctx.getNativeImplementationMapping(type.getClassifier()), ctx);
-			// in the case where the model name doesn't match the interface name, then we also need to process the interface
-			// name as it will exist
-			if (ctx.getNativeMapping(ctx.getNativeMapping(type.getClassifier().getTypeSignature())) != null)
-				processImport(ctx.getNativeMapping(type.getClassifier().getTypeSignature()), ctx);
-		}
+		CommonUtilities.processImport(ctx.getNativeImplementationMapping(type.getClassifier()), ctx);
+		// in the case where the model name doesn't match the interface name, then we also need to process the interface
+		// name as it will exist
+		if (ctx.getNativeMapping(ctx.getNativeMapping(type.getClassifier().getTypeSignature())) != null)
+			CommonUtilities.processImport(ctx.getNativeMapping(type.getClassifier().getTypeSignature()), ctx);
 		if (ctx.mapsToPrimitiveType(type.getClassifier())) {
 			// if this primitive type is really a primitive, it will map back to the java object. We want to use that java
 			// object instead of the primitive mapped simply to a java object. For example, egl.lang.Int16 maps to short (the
 			// primitive) and then short maps to the java object java.lang.Short. We want to always use the object for the
 			// imports.
 			if (ctx.getPrimitiveMapping(ctx.getPrimitiveMapping(type.getClassifier().getTypeSignature())) != null)
-				processImport(ctx.getPrimitiveMapping(ctx.getPrimitiveMapping(type.getClassifier().getTypeSignature())), ctx);
+				CommonUtilities.processImport(ctx.getPrimitiveMapping(ctx.getPrimitiveMapping(type.getClassifier().getTypeSignature())), ctx);
 			else
-				processImport(ctx.getPrimitiveMapping(type.getClassifier().getTypeSignature()), ctx);
+				CommonUtilities.processImport(ctx.getPrimitiveMapping(type.getClassifier().getTypeSignature()), ctx);
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	protected void processImport(String qualifiedName, Context ctx) {
-		// if we didn't get a name, or it doesn't have periods in it, then we don't want to consider it for importing
-		if (qualifiedName == null || qualifiedName.indexOf('.') < 0)
-			return;
-		// check the types list we have already
-		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partTypesImported);
-		for (String imported : typesImported) {
-			if (qualifiedName.equalsIgnoreCase(imported)) {
-				// it was already found, so we have done this logic before. Simply return
-				return;
-			}
-		}
-		// if we get here, then we haven't processed this type before
-		String unqualifiedName = qualifiedName;
-		if (unqualifiedName.indexOf('.') >= 0)
-			unqualifiedName = unqualifiedName.substring(unqualifiedName.lastIndexOf('.') + 1);
-		for (String imported : typesImported) {
-			if (imported.indexOf('.') >= 0)
-				imported = imported.substring(imported.lastIndexOf('.') + 1);
-			if (unqualifiedName.equalsIgnoreCase(imported)) {
-				// we have an unqualified name that we are importing that matches the last node, Simply return
-				return;
-			}
-		}
-		typesImported.add(qualifiedName);
 	}
 
 	public void genInstantiation(Type type, Context ctx, TabbedWriter out, Object... args) {
@@ -147,16 +115,6 @@ public abstract class TypeTemplate extends JavaTemplate {
 			genRuntimeTypeName(type, ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".class");
 		}
-	}
-
-	public void genGetterSetter(Type type, Context ctx, TabbedWriter out, Object... args) {
-		// did we have a list of types to check, otherwise use the default
-		if (isProcessWithTypeList(args)) {
-			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
-			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
-			ctx.gen(genGetterSetter, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
-		} else if (isProcessWithoutTypeList(args))
-			ctx.gen(genGetterSetter, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
 	}
 
 	public void genRuntimeTypeName(Type type, Context ctx, TabbedWriter out, Object... args) {
@@ -288,17 +246,17 @@ public abstract class TypeTemplate extends JavaTemplate {
 			// if either side of this expression is nullable, or if there is no direct java operation, we need to use the
 			// runtime
 			if ((((BinaryExpression) args[0]).getLHS().isNullable() || ((BinaryExpression) args[0]).getRHS().isNullable())
-				|| getNativeJavaOperation((BinaryExpression) args[0], ctx).length() == 0) {
+				|| CommonUtilities.getNativeJavaOperation((BinaryExpression) args[0], ctx).length() == 0) {
 				out.print(ctx.getNativeImplementationMapping((Type) ((BinaryExpression) args[0]).getOperation().getContainer()) + '.');
-				out.print(getNativeRuntimeOperationName((BinaryExpression) args[0]));
+				out.print(CommonUtilities.getNativeRuntimeOperationName((BinaryExpression) args[0]));
 				out.print("(ezeProgram, ");
 				ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, genWithoutTypeList(args));
 				out.print(", ");
 				ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, genWithoutTypeList(args));
-				out.print(")" + getNativeRuntimeComparisionOperation((BinaryExpression) args[0]));
+				out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation((BinaryExpression) args[0]));
 			} else {
 				ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, genWithoutTypeList(args));
-				out.print(getNativeJavaOperation((BinaryExpression) args[0], ctx));
+				out.print(CommonUtilities.getNativeJavaOperation((BinaryExpression) args[0], ctx));
 				ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, genWithoutTypeList(args));
 			}
 		}
@@ -371,143 +329,7 @@ public abstract class TypeTemplate extends JavaTemplate {
 			ctx.gen(genMemberName, (MemberName) args[0], ctx, out, args);
 	}
 
-	@SuppressWarnings("static-access")
-	public String getNativeRuntimeOperationName(BinaryExpression expr) throws GenerationException {
-		// safety check to make sure the operation has been defined properly
-		if (expr.getOperation() == null || expr.getOperation().getName() == null)
-			throw new GenerationException();
-		// process the operator
-		String op = expr.getOperator();
-		if (op.equals(expr.Op_PLUS))
-			return "plus";
-		if (op.equals(expr.Op_MINUS))
-			return "minus";
-		if (op.equals(expr.Op_DIVIDE))
-			return "divide";
-		if (op.equals(expr.Op_MULTIPLY))
-			return "multiply";
-		if (op.equals(expr.Op_MODULO))
-			return "modulo";
-		if (op.equals(expr.Op_EQ))
-			return "equals";
-		if (op.equals(expr.Op_NE))
-			return "notEquals";
-		if (op.equals(expr.Op_LT))
-			return "compareTo";
-		if (op.equals(expr.Op_GT))
-			return "compareTo";
-		if (op.equals(expr.Op_LE))
-			return "compareTo";
-		if (op.equals(expr.Op_GE))
-			return "compareTo";
-		if (op.equals(expr.Op_AND))
-			return "and";
-		if (op.equals(expr.Op_OR))
-			return "or";
-		if (op.equals(expr.Op_XOR))
-			return "xor";
-		if (op.equals(expr.Op_CONCAT))
-			return "concat";
-		if (op.equals(expr.Op_NULLCONCAT))
-			return "concat";
-		if (op.equals(expr.Op_BITAND))
-			return "bitand";
-		if (op.equals(expr.Op_BITOR))
-			return "bitor";
-		if (op.equals(expr.Op_POWER))
-			return "power";
-		if (op.equals(expr.Op_IN))
-			return "in";
-		if (op.equals(expr.Op_MATCHES))
-			return "matches";
-		if (op.equals(expr.Op_LIKE))
-			return "like";
-		return "UnknownOp";
-	}
-
-	@SuppressWarnings("static-access")
-	public String getNativeRuntimeComparisionOperation(BinaryExpression expr) {
-		String op = expr.getOperator();
-		if (op.equals(expr.Op_LT))
-			return " < 0";
-		if (op.equals(expr.Op_GT))
-			return " > 0";
-		if (op.equals(expr.Op_LE))
-			return " <= 0";
-		if (op.equals(expr.Op_GE))
-			return " >= 0";
-		return "";
-	}
-
-	@SuppressWarnings("static-access")
-	public String getNativeJavaOperation(BinaryExpression expr, Context ctx) {
-		String op = expr.getOperator();
-		// if we are to use egl overflow checking, then don't pass back that we can do the mathematical operations in java
-		if (expr.isNullable() || (Boolean) ctx.getParameter(Constants.parameter_checkOverflow)) {
-			if (op.equals(expr.Op_EQ))
-				return " == ";
-			if (op.equals(expr.Op_NE))
-				return " != ";
-			if (op.equals(expr.Op_LT))
-				return " < ";
-			if (op.equals(expr.Op_GT))
-				return " > ";
-			if (op.equals(expr.Op_LE))
-				return " <= ";
-			if (op.equals(expr.Op_GE))
-				return " >= ";
-			if (op.equals(expr.Op_AND))
-				return " && ";
-			if (op.equals(expr.Op_OR))
-				return " || ";
-			if (op.equals(expr.Op_XOR))
-				return " ^ ";
-			if (op.equals(expr.Op_CONCAT))
-				return " + ";
-			if (op.equals(expr.Op_BITAND))
-				return " & ";
-			if (op.equals(expr.Op_BITOR))
-				return " | ";
-			return "";
-		}
-		// these are the defaults for all other types
-		// division is intentionally left off as all division must be done through the egl runtime
-		if (op.equals(expr.Op_PLUS))
-			return " + ";
-		if (op.equals(expr.Op_MINUS))
-			return " - ";
-		if (op.equals(expr.Op_MULTIPLY))
-			return " * ";
-		if (op.equals(expr.Op_MODULO))
-			return " % ";
-		if (op.equals(expr.Op_EQ))
-			return " == ";
-		if (op.equals(expr.Op_NE))
-			return " != ";
-		if (op.equals(expr.Op_LT))
-			return " < ";
-		if (op.equals(expr.Op_GT))
-			return " > ";
-		if (op.equals(expr.Op_LE))
-			return " <= ";
-		if (op.equals(expr.Op_GE))
-			return " >= ";
-		if (op.equals(expr.Op_AND))
-			return " && ";
-		if (op.equals(expr.Op_OR))
-			return " || ";
-		if (op.equals(expr.Op_XOR))
-			return " ^ ";
-		if (op.equals(expr.Op_CONCAT))
-			return " + ";
-		if (op.equals(expr.Op_BITAND))
-			return " & ";
-		if (op.equals(expr.Op_BITOR))
-			return " | ";
-		return "";
-	}
-
-	private boolean isProcessWithTypeList(Object... args) {
+	public static boolean isProcessWithTypeList(Object... args) {
 		// we are looking for a TypeLogicKind.Process value followed by at least one object
 		for (int i = 0; i < args.length - 1; i++) {
 			if (args[i] instanceof TypeLogicKind && (TypeLogicKind) args[i] == TypeLogicKind.Process)
@@ -516,7 +338,7 @@ public abstract class TypeTemplate extends JavaTemplate {
 		return false;
 	}
 
-	private EObject getTypeFromList(Object... args) {
+	public static EObject getTypeFromList(Object... args) {
 		// we are looking for a TypeLogicKind.Process value and returning the first object past it
 		for (int i = 0; i < args.length - 1; i++) {
 			if (args[i] instanceof TypeLogicKind && (TypeLogicKind) args[i] == TypeLogicKind.Process)
@@ -525,7 +347,7 @@ public abstract class TypeTemplate extends JavaTemplate {
 		return null;
 	}
 
-	private Object[] genProcessWithoutTypeList(Object... args) {
+	public static Object[] genProcessWithoutTypeList(Object... args) {
 		// we need to find the TypeLogicKind.Process, keep all of the objects before it, but remove all of the objects after
 		for (int i = 0; i < args.length; i++) {
 			if (args[i] instanceof TypeLogicKind && (TypeLogicKind) args[i] == TypeLogicKind.Process) {
@@ -540,14 +362,14 @@ public abstract class TypeTemplate extends JavaTemplate {
 		return null;
 	}
 
-	private boolean isProcessWithoutTypeList(Object... args) {
+	public static boolean isProcessWithoutTypeList(Object... args) {
 		// we are looking for a TypeLogicKind.Process value followed by no object
 		if (args.length > 0 && args[args.length - 1] instanceof TypeLogicKind && (TypeLogicKind) args[args.length - 1] == TypeLogicKind.Process)
 			return true;
 		return false;
 	}
 
-	private Object[] genFinishWithoutTypeList(Object... args) {
+	public static Object[] genFinishWithoutTypeList(Object... args) {
 		// we need to change the TypeLogicKind.Process to TypeLogicKind.Finish, but keep all of the objects before it
 		for (int i = 0; i < args.length; i++) {
 			if (args[i] instanceof TypeLogicKind && (TypeLogicKind) args[i] == TypeLogicKind.Process) {
@@ -562,7 +384,7 @@ public abstract class TypeTemplate extends JavaTemplate {
 		return null;
 	}
 
-	private Object[] genWithoutTypeList(Object... args) {
+	public static Object[] genWithoutTypeList(Object... args) {
 		// we need to remove the TypeLogicKind.Process/TypeLogicKind.Finish if it exists, but keep all of the objects before
 		for (int i = 0; i < args.length; i++) {
 			if (args[i] instanceof TypeLogicKind) {

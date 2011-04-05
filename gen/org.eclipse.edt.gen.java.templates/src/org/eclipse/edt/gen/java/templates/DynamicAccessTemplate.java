@@ -16,21 +16,21 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.DynamicAccess;
 import org.eclipse.edt.mof.egl.Expression;
 
-public class DynamicAccessTemplate extends ExpressionTemplate {
+public class DynamicAccessTemplate extends JavaTemplate {
 
 	public void genAssignment(DynamicAccess expr, Context ctx, TabbedWriter out, Object... args) {
-		genExpression(expr.getExpression(), ctx, out, args);
+		ctx.gen(genExpression, expr.getExpression(), ctx, out, args);
 		out.print(".ezeSet(");
-		genExpression(expr.getAccess(), ctx, out, args);
+		ctx.gen(genExpression, expr.getAccess(), ctx, out, args);
 		out.print(", ");
-		genExpression((Expression) args[0], ctx, out, args);
+		ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
 		out.print(")");
 	}
 
 	public void genExpression(DynamicAccess expr, Context ctx, TabbedWriter out, Object... args) {
-		genExpression(expr.getExpression(), ctx, out, args);
+		ctx.gen(genExpression, expr.getExpression(), ctx, out, args);
 		out.print(".ezeGet(");
-		genExpression(expr.getAccess(), ctx, out, args);
+		ctx.gen(genExpression, expr.getAccess(), ctx, out, args);
 		out.print(")");
 	}
 }

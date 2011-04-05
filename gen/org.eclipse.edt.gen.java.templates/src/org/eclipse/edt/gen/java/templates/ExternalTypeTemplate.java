@@ -13,23 +13,23 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.ExternalType;
 
-public class ExternalTypeTemplate extends PartTemplate {
+public class ExternalTypeTemplate extends JavaTemplate {
 
-	public void validateClassBody(Part part, Context ctx, Object... args) {}
+	public void validateClassBody(ExternalType part, Context ctx, Object... args) {}
 
-	public void genPart(Part part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genPart(ExternalType part, Context ctx, TabbedWriter out, Object... args) {}
 
-	public void genClassBody(Part part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassBody(ExternalType part, Context ctx, TabbedWriter out, Object... args) {}
 
-	public void genClassHeader(Part part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassHeader(ExternalType part, Context ctx, TabbedWriter out, Object... args) {}
 
-	public void genAccessor(Part part, Context ctx, TabbedWriter out, Object... args) {
-		genPartName(part, ctx, out, args);
+	public void genAccessor(ExternalType part, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genPartName, part, ctx, out, args);
 	}
 
-	public void genRuntimeTypeName(Part part, Context ctx, TabbedWriter out, Object... args) {
-		genPartName(part, ctx, out, args);
+	public void genRuntimeTypeName(ExternalType part, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genPartName, part, ctx, out, args);
 	}
 }
