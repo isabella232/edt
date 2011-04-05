@@ -66,16 +66,13 @@ public class EGL2Java extends AbstractGeneratorCommand {
 			buf.append(Aliaser.packageNameAlias(pkg.split("[.]"), '/'));
 			buf.append('/');
 		}
-
 		String nameOrAlias;
 		Annotation annot = part.getAnnotation(IEGLConstants.PROPERTY_ALIAS);
-		if (annot != null) {
+		if (annot != null)
 			nameOrAlias = (String) annot.getValue();
-		} else {
+		else
 			nameOrAlias = part.getId();
-		}
 		buf.append(Aliaser.getAlias(nameOrAlias));
-
 		buf.append(getFileExtention());
 		return buf.toString();
 	}
