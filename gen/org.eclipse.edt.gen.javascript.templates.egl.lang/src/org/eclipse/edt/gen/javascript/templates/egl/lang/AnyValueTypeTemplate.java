@@ -13,6 +13,6 @@ package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
 import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
 
-public class AnyCharTypeTemplate extends JavascriptTemplate {
+public class AnyValueTypeTemplate extends JavascriptTemplate {
 
 }

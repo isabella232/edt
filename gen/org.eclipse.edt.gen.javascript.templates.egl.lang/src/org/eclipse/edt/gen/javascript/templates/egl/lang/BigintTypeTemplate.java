@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,46 +13,58 @@ package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.Context;
+import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.TypedElement;
 
-public class BigintTypeTemplate extends AnyDecimalTypeTemplate {
+public class BigintTypeTemplate extends JavascriptTemplate {
 
-	public void genBigintFromSmallintConversion(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
+		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
+			out.print("null");
+		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
+			out.print("null");
+		else
+			out.print("egl.javascript.BigDecimal.prototype.ZERO");
+	}
+
+	public void genBigintFromSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		genBigintFromIntegerConversion(type, ctx, out, args);
 	}
-	
-	public void genBigintFromIntConversion(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+
+	public void genBigintFromIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		genBigintFromIntegerConversion(type, ctx, out, args);
 	}
 
-	public void genBigintFromIntegerConversion(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression)args[0];
+	public void genBigintFromIntegerConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		AsExpression expr = (AsExpression) args[0];
 		out.print("(new egl.javascript.BigDecimal(String(");
 		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
 		out.print(")))");
 	}
 
-	public void genBigintFromFloatConversion(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression)args[0];
+	public void genBigintFromFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		AsExpression expr = (AsExpression) args[0];
 		out.print("egl.convertFloatToBigint(");
 		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(')');
+		out.print(")");
 	}
 
-	public void genBigintFromSmallfloatConversion(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression)args[0];
+	public void genBigintFromSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		AsExpression expr = (AsExpression) args[0];
 		out.print("egl.convertFloatToBigint(");
 		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(')');
+		out.print(")");
 	}
 
-	public void genBigintFromStringConversion(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression)args[0];
+	public void genBigintFromStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		AsExpression expr = (AsExpression) args[0];
 		out.print("egl.convertStringToBigint(");
 		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(')');
+		out.print(")");
 	}
 
 }
