@@ -42,4 +42,6 @@ public abstract class Generator {
 	public abstract void processFile(String fileName);
 
 	public abstract String getResult();
+
+	public abstract void dumpErrorMessages();
 }

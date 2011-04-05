@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -34,11 +35,31 @@ import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Stereotype;
+import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.TryStatement;
 import org.eclipse.edt.mof.egl.Type;
 
 @SuppressWarnings("serial")
 public abstract class EglContext extends TemplateContext {
+
+	// this class is used within the EglContext to dynamically obtain the template and method for a signature
+	private class TemplateMethod {
+		Template template;
+		Method method;
+
+		public TemplateMethod(Template template, Method method) {
+			this.template = template;
+			this.method = method;
+		}
+
+		public Template getTemplate() {
+			return template;
+		}
+
+		public Method getMethod() {
+			return method;
+		}
+	}
 
 	// this variable is used by the gen method with the type signature, to indicate where we are in the logic for processing
 	// non-eobject and eobject types. The typetemplate will need to use this for each generator
@@ -62,6 +83,10 @@ public abstract class EglContext extends TemplateContext {
 	private Map<String, String> nativeTypeMappings;
 	private Map<String, String> messageMappings;
 
+	// maintain a list of looked up templates and methods, for performance purposes
+	private HashMap<String, TemplateMethod> templateMethods;
+	private List<String> templateTraceEntries;
+
 	// the message requestor
 	private IGenerationMessageRequestor messageRequestor;
 
@@ -73,11 +98,17 @@ public abstract class EglContext extends TemplateContext {
 		tryStack = new Stack<TryStatement>();
 		labelStack = new Stack<Label>();
 		messageRequestor = new AccumulatingGenerationMessageRequestor();
-
+		// handle the loads
 		ClassLoader loader = processor.getClass().getClassLoader();
 		nativeTypeMappings = load(processor.getNativeTypes(), loader);
 		primitiveTypeMappings = load(processor.getPrimitiveTypes(), loader);
 		messageMappings = load(processor.getEGLMessages(), loader);
+		// create our hashmap for template/methods loads
+		templateMethods = new HashMap<String, TemplateMethod>();
+		// maintain a list of method lookup trace entries, only if no tracing was requested. If the -trace option was
+		// specified, then all trace messages are written to System.out as they occur. If -trace was not set (the default),
+		// then a list of the last 50 entries will be maintained, and dumped out if there is an unhandled exception.
+		templateTraceEntries = new ArrayList<String>();
 	}
 
 	/**
@@ -273,6 +304,10 @@ public abstract class EglContext extends TemplateContext {
 			return type.getClassifier().getTypeSignature();
 	}
 
+	public List<String> getTemplateTraceEntries() {
+		return templateTraceEntries;
+	}
+
 	public Object getParameter(String internalName) {
 		Object value = null;
 		if (this.get(internalName) != null)
@@ -280,10 +315,10 @@ public abstract class EglContext extends TemplateContext {
 		return value;
 	}
 
-	public void foreachAnnotation(List<? extends Annotation> list, char separator, String genMethod, EglContext ctx, TabbedWriter out, Object... args)
+	public void foreachAnnotation(List<? extends Annotation> list, char separator, String methodName, EglContext ctx, TabbedWriter out, Object... args)
 		throws TemplateException {
 		for (int i = 0; i < list.size(); i++) {
-			this.gen(genMethod, list.get(i), ctx, out, args);
+			this.gen(methodName, list.get(i), ctx, out, args);
 			if (i < list.size() - 1) {
 				out.print(separator);
 				out.print(' ');
@@ -291,10 +326,10 @@ public abstract class EglContext extends TemplateContext {
 		}
 	}
 
-	public void foreachType(List<? extends Type> list, char separator, String genMethod, EglContext ctx, TabbedWriter out, Object... args)
+	public void foreachType(List<? extends Type> list, char separator, String methodName, EglContext ctx, TabbedWriter out, Object... args)
 		throws TemplateException {
 		for (int i = 0; i < list.size(); i++) {
-			this.gen(genMethod, list.get(i), ctx, out, args);
+			this.gen(methodName, list.get(i), ctx, out, args);
 			if (i < list.size() - 1) {
 				out.print(separator);
 				out.print(' ');
@@ -303,8 +338,30 @@ public abstract class EglContext extends TemplateContext {
 	}
 
 	public void gen(String methodName, Annotation type, EglContext ctx, TabbedWriter out, Object... args) throws TemplateException {
-		Template template = ctx.getTemplate(((AnnotationType) type.getEClass()).getTypeSignature());
-		template.gen(methodName, type, ctx, out, args);
+		TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, ((AnnotationType) type.getEClass()).getTypeSignature(), type.getClass(),
+			ctx.getClass(), out.getClass(), args.getClass());
+		try {
+			templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, out, args);
+		}
+		catch (Exception e) {
+			throw new TemplateException(e);
+		}
+	}
+
+	public void gen(String methodName, Part part, EglContext ctx, TabbedWriter out, Object... args) throws TemplateException {
+		try {
+			Stereotype stereotype = part.getStereotype();
+			TemplateMethod templateMethod = stereotype != null ? getMethodAndTemplate(methodName, stereotype, stereotype.getEClass().getETypeSignature(),
+				part.getClass(), ctx.getClass(), out.getClass(), args.getClass()) : getMethodAndTemplate(methodName, part, part.getClassifier()
+				.getTypeSignature(), part.getClass(), ctx.getClass(), out.getClass(), args.getClass());
+			templateMethod.getMethod().invoke(templateMethod.getTemplate(), part, ctx, out, args);
+		}
+		catch (TemplateException e) {
+			gen(methodName, (EObject) part, ctx, out, args);
+		}
+		catch (Exception e) {
+			throw new TemplateException(e);
+		}
 	}
 
 	public void gen(String methodName, Type type, EglContext ctx, TabbedWriter out, Object... args) throws TemplateException {
@@ -321,9 +378,10 @@ public abstract class EglContext extends TemplateContext {
 		}
 		if (!found)
 			objects[args.length] = TypeLogicKind.Process;
-		Template template = null;
 		try {
-			template = ctx.getTemplate(type.getClassifier().getTypeSignature());
+			TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClassifier().getTypeSignature(), type.getClass(), ctx.getClass(),
+				out.getClass(), args.getClass());
+			templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, out, objects);
 		}
 		catch (TemplateException e) {
 			Object[] objectsExtended = new Object[objects.length + 1];
@@ -336,57 +394,126 @@ public abstract class EglContext extends TemplateContext {
 			else
 				gen(methodName, (EObject) type, ctx, out, objectsExtended);
 		}
-		if (template != null)
-			template.gen(methodName, type, ctx, out, objects);
+		catch (Exception e) {
+			throw new TemplateException(e);
+		}
 	}
 
-	public void gen(String methodName, Part part, EglContext ctx, TabbedWriter out, Object... args) throws TemplateException {
+	public void gen(String methodName, EObject object, TemplateContext ctx, TabbedWriter out, Object... args) throws TemplateException {
+		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getEClass().getETypeSignature(), object.getClass(), ctx.getClass(),
+			out.getClass(), args.getClass());
 		try {
-			Stereotype stereotype = part.getStereotype();
-			Template template = stereotype != null ? ctx.getTemplate(stereotype.getEClass().getETypeSignature()) : ctx.getTemplate(part.getClassifier()
-				.getTypeSignature());
-			template.gen(methodName, part, ctx, out, args);
+			templateMethod.getMethod().invoke(templateMethod.getTemplate(), object, ctx, out, args);
 		}
-		catch (TemplateException e) {
-			gen(methodName, (EObject) part, ctx, out, args);
+		catch (Exception e) {
+			throw new TemplateException(e);
 		}
 	}
 
+	public void gen(String methodName, Object object, TemplateContext ctx, TabbedWriter out, Object... args) throws TemplateException {
+		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getClass().getName(), object.getClass(), ctx.getClass(),
+			out.getClass(), args.getClass());
+		try {
+			templateMethod.getMethod().invoke(templateMethod.getTemplate(), object, ctx, out, args);
+		}
+		catch (Exception e) {
+			throw new TemplateException(e);
+		}
+	}
+
+	public void genSuper(String methodName, Class<?> thisClass, EObject object, TemplateContext ctx, TabbedWriter out, Object... args) throws TemplateException {
+		TemplateMethod templateMethod = getSuperMethodAndTemplate(methodName, thisClass, object.getClass(), ctx.getClass(), out.getClass(), args.getClass());
+		try {
+			templateMethod.getMethod().invoke(templateMethod.getTemplate(), object, ctx, out, args);
+		}
+		catch (Exception e) {
+			throw new TemplateException(e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	public List<Object> xlate(String methodName, Annotation type, EglContext ctx, Object... args) throws TemplateException {
-		Template template = ctx.getTemplate(((AnnotationType) type.getEClass()).getTypeSignature());
-		return template.xlate(methodName, type, ctx, args);
-	}
-
-	public List<Object> xlate(String methodName, Type type, EglContext ctx, Object... args) throws TemplateException {
-		Template template = ctx.getTemplate(type.getClassifier().getTypeSignature());
-		return template.xlate(methodName, type, ctx, args);
-	}
-
-	public void validate(String methodName, Element object, EglContext ctx, Object... args) throws TemplateException {
+		TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, ((AnnotationType) type.getEClass()).getTypeSignature(), type.getClass(),
+			ctx.getClass(), args.getClass());
 		try {
-			super.validate(methodName, object, ctx, args);
+			return (List<Object>) templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, args);
 		}
-		catch (TemplateException ex) {
-			handleValidationError(object);
+		catch (Exception e) {
+			throw new TemplateException(e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Object> xlate(String methodName, Type type, EglContext ctx, Object... args) throws TemplateException {
+		TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClassifier().getTypeSignature(), type.getClass(), ctx.getClass(),
+			args.getClass());
+		try {
+			return (List<Object>) templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, args);
+		}
+		catch (Exception e) {
+			throw new TemplateException(e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Object> xlate(String methodName, EObject object, TemplateContext ctx, Object... args) throws TemplateException {
+		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getEClass().getETypeSignature(), object.getClass(), ctx.getClass(),
+			args.getClass());
+		try {
+			return (List<Object>) templateMethod.getMethod().invoke(templateMethod.getTemplate(), object, ctx, args);
+		}
+		catch (Exception e) {
+			throw new TemplateException(e);
 		}
 	}
 
 	public void validate(String methodName, Annotation annotation, EglContext ctx, Object... args) throws TemplateException {
-		Template template = null;
 		try {
-			template = ctx.getTemplate(((AnnotationType) annotation.getEClass()).getTypeSignature());
+			TemplateMethod templateMethod = getMethodAndTemplate(methodName, annotation, ((AnnotationType) annotation.getEClass()).getTypeSignature(),
+				annotation.getClass(), ctx.getClass(), args.getClass());
+			templateMethod.getMethod().invoke(templateMethod.getTemplate(), annotation, ctx, args);
 		}
 		catch (TemplateException e) {
 			handleValidationError(annotation);
 		}
-		if (template != null)
-			template.validate(methodName, annotation, ctx, args);
+		catch (Exception e) {
+			throw new TemplateException(e);
+		}
+	}
+
+	public void validate(String methodName, Element object, EglContext ctx, Object... args) throws TemplateException {
+		try {
+			validate(methodName, (EObject) object, ctx, args);
+		}
+		catch (TemplateException ex) {
+			handleValidationError(object);
+		}
+		catch (Exception e) {
+			throw new TemplateException(e);
+		}
+	}
+
+	public void validate(String methodName, Part part, EglContext ctx, Object... args) throws TemplateException {
+		try {
+			Stereotype stereotype = part.getStereotype();
+			TemplateMethod templateMethod = stereotype != null ? getMethodAndTemplate(methodName, stereotype, stereotype.getEClass().getETypeSignature(),
+				part.getClass(), ctx.getClass(), args.getClass()) : getMethodAndTemplate(methodName, part, part.getClassifier().getTypeSignature(),
+				part.getClass(), ctx.getClass(), args.getClass());
+			templateMethod.getMethod().invoke(templateMethod.getTemplate(), part, ctx, args);
+		}
+		catch (TemplateException e) {
+			validate(methodName, (EObject) part, ctx, args);
+		}
+		catch (Exception e) {
+			throw new TemplateException(e);
+		}
 	}
 
 	public void validate(String methodName, Type type, EglContext ctx, Object... args) throws TemplateException {
-		Template template = null;
 		try {
-			template = ctx.getTemplate(type.getClassifier().getTypeSignature());
+			TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClassifier().getTypeSignature(), Type.class, ctx.getClass(),
+				args.getClass());
+			templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, args);
 		}
 		catch (TemplateException e) {
 			if (type instanceof EGLClass && ((EGLClass) type).getSuperTypes() != null && ((EGLClass) type).getSuperTypes().size() > 0) {
@@ -405,22 +532,41 @@ public abstract class EglContext extends TemplateContext {
 				validate(methodName, (EObject) type, ctx, objects);
 			}
 		}
-		if (template != null)
-			template.validate(methodName, type, ctx, args);
+		catch (Exception e) {
+			throw new TemplateException(e);
+		}
 	}
 
-	public void validate(String methodName, Part part, EglContext ctx, Object... args) throws TemplateException {
-		Template template = null;
+	public void validate(String methodName, EObject object, TemplateContext ctx, Object... args) throws TemplateException {
+		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getEClass().getETypeSignature(), object.getClass(), ctx.getClass(),
+			args.getClass());
 		try {
-			Stereotype stereotype = part.getStereotype();
-			template = stereotype != null ? ctx.getTemplate(stereotype.getEClass().getETypeSignature()) : ctx.getTemplate(part.getClassifier()
-				.getTypeSignature());
+			templateMethod.getMethod().invoke(templateMethod.getTemplate(), object, ctx, args);
 		}
-		catch (TemplateException e) {
-			validate(methodName, (EObject) part, ctx, args);
+		catch (Exception e) {
+			throw new TemplateException(e);
 		}
-		if (template != null)
-			template.validate(methodName, part, ctx, args);
+	}
+
+	public void validate(String methodName, Object object, TemplateContext ctx, Object... args) throws TemplateException {
+		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getClass().getName(), object.getClass(), ctx.getClass(),
+			args.getClass());
+		try {
+			templateMethod.getMethod().invoke(templateMethod.getTemplate(), object, ctx, args);
+		}
+		catch (Exception e) {
+			throw new TemplateException(e);
+		}
+	}
+
+	public void validateSuper(String methodName, Class<?> thisClass, EObject object, TemplateContext ctx, Object... args) throws TemplateException {
+		TemplateMethod templateMethod = getSuperMethodAndTemplate(methodName, thisClass, object.getClass(), ctx.getClass(), args.getClass());
+		try {
+			templateMethod.getMethod().invoke(templateMethod.getTemplate(), object, ctx, args);
+		}
+		catch (Exception e) {
+			throw new TemplateException(e);
+		}
 	}
 
 	// these methods allows you to add annotation data to any object. we cannot alter the IR's by adding annotations, so this
@@ -483,4 +629,98 @@ public abstract class EglContext extends TemplateContext {
 	public abstract void handleValidationError(Annotation ex);
 
 	public abstract void handleValidationError(Type ex);
+
+	private TemplateMethod getMethodAndTemplate(String methodName, Object object, String signature, Class<?>... classes) throws TemplateException {
+		Class<?> ifaceClass = classes[0];
+		String hashKey = methodName + "/" + signature + "/" + ifaceClass.getName();
+		TemplateMethod templateMethod = templateMethods.get(hashKey);
+		addMethodTrace("gen for method name: " + methodName + " with signature: " + signature + " for argument: " + ifaceClass.getName());
+		if (templateMethod != null) {
+			addMethodTrace("Found in hash table, no lookup required. Template: " + templateMethod.getTemplate().toString());
+			return templateMethod;
+		}
+		// see if we can find the method directly
+		templateMethod = findSupertypeMethodAndTemplate(methodName, object, signature, classes);
+		if (templateMethod != null) {
+			templateMethods.put(hashKey, templateMethod);
+			addMethodTrace("Found directly in template: " + templateMethod.getTemplate().toString());
+			return templateMethod;
+		}
+		// we need to look un the interface chain
+		addMethodTrace("Not found directly, doing lookup");
+		templateMethod = findInterfaceMethodAndTemplate(methodName, ifaceClass, classes);
+		if (templateMethod != null) {
+			templateMethods.put(hashKey, templateMethod);
+			addMethodTrace("Found from lookup in template: " + templateMethod.getTemplate().toString());
+			return templateMethod;
+		} else {
+			addMethodTrace("Not found from lookup");
+			throw new TemplateException(methodName);
+		}
+	}
+
+	private TemplateMethod findSupertypeMethodAndTemplate(String methodName, Object object, String signature, Class<?>... classes) throws TemplateException {
+		Class<?> ifaceClass = classes[0];
+		// we might need to look up the external type chain, before checking the interface classes. This is because external
+		// types might extend other external types.
+		try {
+			Template template = getTemplate(signature);
+			Method method = template.getMethod(methodName, true, classes);
+			if (method != null)
+				return new TemplateMethod(template, method);
+		}
+		catch (TemplateException e) {}
+		classes[0] = ifaceClass;
+		if (object instanceof StructPart) {
+			for (StructPart iface : ((StructPart) object).getSuperTypes()) {
+				TemplateMethod templateMethod = findSupertypeMethodAndTemplate(methodName, iface, iface.getFullyQualifiedName(), classes);
+				if (templateMethod != null)
+					return templateMethod;
+			}
+		}
+		return null;
+	}
+
+	private TemplateMethod getSuperMethodAndTemplate(String methodName, Class<?> thisClass, Class<?>... classes) throws TemplateException {
+		addMethodTrace("genSuper lookup for method name: " + methodName + " with class: " + thisClass.getName());
+		TemplateMethod templateMethod = findInterfaceMethodAndTemplate(methodName, thisClass, classes);
+		if (templateMethod != null) {
+			addMethodTrace("Found from lookup in template: " + templateMethod.getTemplate().toString());
+			return templateMethod;
+		} else {
+			addMethodTrace("Not found from lookup");
+			throw new TemplateException(methodName);
+		}
+	}
+
+	private TemplateMethod findInterfaceMethodAndTemplate(String methodName, Class<?> ifaceClass, Class<?>... classes) throws TemplateException {
+		for (Class<?> iface : ifaceClass.getInterfaces()) {
+			try {
+				addMethodTrace("Looking for method in: " + iface.getName());
+				Template template = getTemplateFor(iface);
+				classes[0] = iface;
+				Method method = template.getMethod(methodName, true, classes);
+				if (method != null)
+					return new TemplateMethod(template, method);
+			}
+			catch (TemplateException e) {}
+		}
+		for (Class<?> iface : ifaceClass.getInterfaces()) {
+			classes[0] = iface;
+			TemplateMethod templateMethod = findInterfaceMethodAndTemplate(methodName, iface, classes);
+			if (templateMethod != null)
+				return templateMethod;
+		}
+		return null;
+	}
+
+	private void addMethodTrace(String entry) {
+		if ((Boolean) getParameter(Constants.parameter_trace))
+			System.out.println(entry);
+		else {
+			while (templateTraceEntries.size() >= 200)
+				templateTraceEntries.remove(0);
+			templateTraceEntries.add(entry);
+		}
+	}
 }

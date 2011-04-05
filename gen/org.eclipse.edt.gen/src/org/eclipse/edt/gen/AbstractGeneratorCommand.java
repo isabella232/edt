@@ -36,6 +36,8 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 			"Part must identify the part to be generated");
 		this.installParameter(true, Constants.parameter_root, new String[] { "root", "r" }, new String[] { null },
 			"Root must identify the root location to be used in generation");
+		this.installParameter(false, Constants.parameter_trace, new String[] { "trace" }, new Boolean[] { false, true },
+			"Trace must be defined as true or false");
 		// accept the overriden properties file lists
 		String[] templateList = this.getTemplatePath();
 		for (String template : templateList) {
@@ -88,10 +90,8 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 
 	public void generate(String[] args, Generator generator, IEnvironment environment) {
 		try {
-			if (environment != null) {
+			if (environment != null)
 				Environment.pushEnv(environment);
-			}
-
 			this.installOverrides(args);
 			// start up the generator, passing the command processor
 			try {
@@ -112,6 +112,7 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 				if (generator != null)
 					System.out.print(generator.getResult());
 			}
+			generator.dumpErrorMessages();
 		}
 		catch (PromptQueryException e) {
 			System.out.print(e.getMessage());

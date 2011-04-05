@@ -18,6 +18,7 @@ public class Constants {
 	public static final String parameter_output = "output";
 	public static final String parameter_part = "part";
 	public static final String parameter_root = "root";
+	public static final String parameter_trace = "trace";
 
 	// temporary variable prefix
 	public static final String temporaryVariablePrefix = "eze$Temp";
