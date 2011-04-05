@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.egl.lang;
 
-import org.eclipse.edt.gen.java.templates.ParameterizableTypeTemplate;
+import org.eclipse.edt.gen.java.templates.JavaTemplate;
 
-public class AnyCharTypeTemplate extends ParameterizableTypeTemplate {
+public class AnyCharTypeTemplate extends JavaTemplate {
 
 }

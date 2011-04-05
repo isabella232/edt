@@ -11,37 +11,35 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.egl.lang;
 
-import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.java.Context;
-import org.eclipse.edt.gen.java.templates.TimestampTypeTemplate;
+import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.TimestampType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 
-public class AnyTimestampTypeTemplate extends TimestampTypeTemplate {
+public class AnyTimestampTypeTemplate extends JavaTemplate {
 
+	// this method gets invoked when there is a specific timestamp needed
 	public void genDefaultValue(TimestampType type, Context ctx, TabbedWriter out, Object... args) {
+		processDefaultValue(type, ctx, out, args);
+	}
+
+	// this method gets invoked when there is a generic (unknown) timestamp needed
+	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
+		processDefaultValue(type, ctx, out, args);
+	}
+
+	public void processDefaultValue(Type type, Context ctx, TabbedWriter out, Object... args) {
 		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
 			out.print("null");
 		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
 			out.print("null");
 		else {
-			genRuntimeTypeName(type, ctx, out, TypeNameKind.EGLImplementation);
+			ctx.gen(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".defaultValue()");
 		}
-	}
-
-	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		// for timestamp type, always use the runtime
-		out.print(ctx.getNativeImplementationMapping((Type) ((BinaryExpression) args[0]).getOperation().getContainer()) + '.');
-		out.print(getNativeRuntimeOperationName((BinaryExpression) args[0]));
-		out.print("(ezeProgram, ");
-		ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, args);
-		out.print(", ");
-		ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, args);
-		out.print(")" + getNativeRuntimeComparisionOperation((BinaryExpression) args[0]));
 	}
 }

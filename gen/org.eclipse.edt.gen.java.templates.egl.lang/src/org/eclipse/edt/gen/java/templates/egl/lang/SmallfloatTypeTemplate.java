@@ -12,13 +12,13 @@
 package org.eclipse.edt.gen.java.templates.egl.lang;
 
 import org.eclipse.edt.gen.java.Context;
-import org.eclipse.edt.gen.java.templates.TypeTemplate;
+import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.TypedElement;
 
-public class SmallfloatTypeTemplate extends TypeTemplate {
+public class SmallfloatTypeTemplate extends JavaTemplate {
 
 	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())

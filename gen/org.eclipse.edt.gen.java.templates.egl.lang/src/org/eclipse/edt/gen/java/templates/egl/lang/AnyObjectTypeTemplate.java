@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.egl.lang;
 
-import org.eclipse.edt.gen.java.templates.TypeTemplate;
+import org.eclipse.edt.gen.java.templates.JavaTemplate;
 
-public class AnyObjectTypeTemplate extends TypeTemplate {
+public class AnyObjectTypeTemplate extends JavaTemplate {
 
 }

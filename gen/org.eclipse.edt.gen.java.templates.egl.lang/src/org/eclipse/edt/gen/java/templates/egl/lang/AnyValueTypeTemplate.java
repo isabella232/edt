@@ -11,23 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.egl.lang;
 
-import org.eclipse.edt.gen.java.Context;
-import org.eclipse.edt.gen.java.templates.TypeTemplate;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.gen.java.templates.JavaTemplate;
 
-public class AnyValueTypeTemplate extends TypeTemplate {
+public class AnyValueTypeTemplate extends JavaTemplate {
 
-	public void genAssignment(Type type, Context ctx, TabbedWriter out, Object... args) {
-		if (((Expression) args[0]).isNullable()) {
-			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
-			out.print(" = ");
-		}
-		out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
-		ctx.gen(genExpression, (Expression) args[1], ctx, out, args);
-		out.print(", ");
-		ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
-		out.print(")");
-	}
 }
