@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,35 +11,77 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.EglContext;
+import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Type;
 
-/**
- * A Context stores information about the Part being generated. It is usually shared by a set of analyzers and generators.
- */
 public class Context extends EglContext {
 
 	private static final long serialVersionUID = 6429116299734843162L;
+
+	private String currentFunction;
 
 	public Context(AbstractGeneratorCommand processor) {
 		super(processor);
 	}
 
-	@Override
-	public void handleValidationError(Element ex) {
-	// TODO Auto-generated method stub
+	public String getCurrentFunction() {
+		return currentFunction;
 	}
 
-	@Override
-	public void handleValidationError(Annotation ex) {
-	// TODO Auto-generated method stub
+	public void setCurrentFunction(String currentFunction) {
+		this.currentFunction = currentFunction;
 	}
 
-	@Override
-	public void handleValidationError(Type ex) {
-	// TODO Auto-generated method stub
+	public String getRawPrimitiveMapping(String item) {
+		return super.getPrimitiveMapping(item);
+	}
+
+	public String getRawPrimitiveMapping(Type type) {
+		return super.getPrimitiveMapping(type);
+	}
+
+	public String getRawNativeImplementationMapping(Type type) {
+		return super.getNativeImplementationMapping(type);
+	}
+
+	public String getRawNativeInterfaceMapping(Type type) {
+		return super.getNativeInterfaceMapping(type);
+	}
+
+	public void handleValidationError(Element obj) {
+		int startLine = 0;
+		int startOffset = 0;
+		int endLine = 0;
+		int endOffset = 0;
+		String[] details = new String[] { obj.getEClass().getETypeSignature() };
+		Annotation annotation = obj.getAnnotation(IEGLConstants.EGL_LOCATION);
+		if (annotation != null) {
+			if (annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
+				startLine = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
+			if (annotation.getValue(IEGLConstants.EGL_PARTOFFSET) != null)
+				startOffset = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTOFFSET)).intValue();
+		}
+		EGLMessage message = EGLMessage.createEGLMessage(getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_OBJECT,
+			obj, details, startLine, startOffset, endLine, endOffset);
+		getMessageRequestor().addMessage(message);
+	}
+
+	public void handleValidationError(Annotation obj) {
+		String[] details = new String[] { obj.getEClass().getETypeSignature() };
+		EGLMessage message = EGLMessage.createEGLMessage(getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
+			Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_ANNOTATION, obj, details, 0, 0, 0, 0);
+		getMessageRequestor().addMessage(message);
+	}
+
+	public void handleValidationError(Type obj) {
+		String[] details = new String[] { obj.getEClass().getETypeSignature() };
+		EGLMessage message = EGLMessage.createEGLMessage(getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_TYPE,
+			obj, details, 0, 0, 0, 0);
+		getMessageRequestor().addMessage(message);
 	}
 }

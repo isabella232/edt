@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -19,7 +19,6 @@ import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
-import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.Part;
@@ -28,9 +27,11 @@ public class JavascriptGenerator extends Generator {
 
 	protected Context context;
 	protected TabbedWriter out;
+	protected AbstractGeneratorCommand generator;
 
-	public JavascriptGenerator(AbstractGeneratorCommand processor) throws TemplateException {
+	public JavascriptGenerator(AbstractGeneratorCommand processor) {
 		super(processor);
+		generator = processor;
 		out = new TabbedWriter(new StringWriter());
 	}
 
@@ -55,10 +56,10 @@ public class JavascriptGenerator extends Generator {
 
 	public void generate(Part part) throws GenerationException {
 		try {
-			context.validate(JavascriptTemplate.validate, (EObject) part, context, (Object) null);
+			context.validate(JavascriptTemplate.validate, part, context, (Object) null);
 			if (!context.getMessageRequestor().isError()) {
 				out.getWriter().flush();
-				context.gen(JavascriptTemplate.genPart, (EObject) part, context, out, (Object) null);
+				context.gen(JavascriptTemplate.genPart, part, context, out, (Object) null);
 				out.flush();
 			}
 		}
@@ -76,14 +77,21 @@ public class JavascriptGenerator extends Generator {
 			context.getMessageRequestor().addMessage(message2);
 			// print out the whole stack trace
 			e.printStackTrace();
-		}
-		// dump out all validation and generation messages
-		out.println();
-		for (EGLMessage message : context.getMessageRequestor().getMessages()) {
-			out.println(message.getBuiltMessage());
+			// write out any trace messages
+			System.out.println();
+			System.out.println("Dumping up to the last 200 template/method invocation and resolution messages");
+			for (String traceEntry : context.getTemplateTraceEntries())
+				System.out.println(traceEntry);
 		}
 		// close the output
 		out.close();
+	}
+
+	public void dumpErrorMessages() {
+		// dump out all validation and generation messages
+		for (EGLMessage message : context.getMessageRequestor().getMessages()) {
+			System.out.println(message.getBuiltMessage());
+		}
 	}
 
 	public void processFile(String fileName) {
