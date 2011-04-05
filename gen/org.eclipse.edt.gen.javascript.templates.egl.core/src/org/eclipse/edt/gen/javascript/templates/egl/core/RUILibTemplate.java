@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,73 +11,54 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.core;
 
+import java.util.Locale;
+
 import org.eclipse.edt.gen.javascript.Context;
-import org.eclipse.edt.gen.javascript.templates.NativeTypeTemplate;
+import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Type;
 
-public class RUILibTemplate extends NativeTypeTemplate {
-	private static final String sort = "sort";
-	private static final String setTextSelectionEnabled = "setTextSelectionEnabled";
-	private static final String getTextSelectionEnabled = "getTextSelectionEnabled";
-	private static final String getUserAgent = "getUserAgent";
-	private static final String setTitle = "setTitle";
-	private static final String getTitle = "getTitle";
-	private static final String setTheme = "setTheme";
-	private static final String getTheme = "getTheme";
-
-	public void genInvocation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		InvocationExpression expr = (InvocationExpression) args[0];
-		if (expr.getTarget().getName().equalsIgnoreCase(sort))
-			genSort(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(setTextSelectionEnabled))
-			genSetTextSelectionEnabled(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getTextSelectionEnabled))
-			genGetTextSelectionEnabled(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getUserAgent))
-			genGetUserAgent(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(setTitle))
-			genSetTitle(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getTitle))
-			genGetTitle(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(setTheme))
-			genSetTheme(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getTheme))
-			genGetTheme(expr, ctx, out, args);
-		else
-			genNoImplementation(expr, ctx, out, args);
+public class RUILibTemplate extends JavascriptTemplate {
+	// the library gets invoked here, with the invocation expression passed as the 1st argument in the args list. From here,
+	// we use the lowercase function name as the lookup for the generation. This means that all system functions are
+	// implemented by the lowercase method name. This technique allows a user to add/override system functions simply by
+	// extending this class and adding/overriding the system function name as the method name, in lowercase.
+	public void genInvocation(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(((InvocationExpression) args[0]).getTarget().getName().toLowerCase(Locale.ENGLISH), (Type) type, ctx, out, args);
 	}
 
-	public void genSort(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	// all system functions are defined below, with the method name as lowercase.
+	public void sort(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genSetTextSelectionEnabled(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void settextselectionenabled(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetTextSelectionEnabled(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void gettextselectionenabled(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetUserAgent(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void getuseragent(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genSetTitle(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void settitle(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetTitle(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void gettitle(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genSetTheme(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void settheme(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetTheme(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void gettheme(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,73 +11,54 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.core;
 
+import java.util.Locale;
+
 import org.eclipse.edt.gen.javascript.Context;
-import org.eclipse.edt.gen.javascript.templates.NativeTypeTemplate;
+import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Type;
 
-public class ConverseLibTemplate extends NativeTypeTemplate {
-	private static final String clearScreen = "clearScreen";
-	private static final String displayMsgNum = "displayMsgNum";
-	private static final String fieldInputLength = "fieldInputLength";
-	private static final String pageEject = "pageEject";
-	private static final String validationFailed = "validationFailed";
-	private static final String setCursorPosition = "setCursorPosition";
-	private static final String getCursorLine = "getCursorLine";
-	private static final String getCursorColumn = "getCursorColumn";
-
-	public void genInvocation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		InvocationExpression expr = (InvocationExpression) args[0];
-		if (expr.getTarget().getName().equalsIgnoreCase(clearScreen))
-			genClearScreen(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(displayMsgNum))
-			genDisplayMsgNum(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(fieldInputLength))
-			genFieldInputLength(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(pageEject))
-			genPageEject(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(validationFailed))
-			genValidationFailed(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(setCursorPosition))
-			genSetCursorPosition(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getCursorLine))
-			genGetCursorLine(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getCursorColumn))
-			genGetCursorColumn(expr, ctx, out, args);
-		else
-			genNoImplementation(expr, ctx, out, args);
+public class ConverseLibTemplate extends JavascriptTemplate {
+	// the library gets invoked here, with the invocation expression passed as the 1st argument in the args list. From here,
+	// we use the lowercase function name as the lookup for the generation. This means that all system functions are
+	// implemented by the lowercase method name. This technique allows a user to add/override system functions simply by
+	// extending this class and adding/overriding the system function name as the method name, in lowercase.
+	public void genInvocation(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(((InvocationExpression) args[0]).getTarget().getName().toLowerCase(Locale.ENGLISH), (Type) type, ctx, out, args);
 	}
 
-	public void genClearScreen(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	// all system functions are defined below, with the method name as lowercase.
+	public void clearscreen(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genDisplayMsgNum(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void displaymsgnum(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genFieldInputLength(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void fieldinputlength(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genPageEject(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void pageeject(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genValidationFailed(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void validationfailed(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genSetCursorPosition(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void setcursorposition(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetCursorLine(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void getcursorline(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetCursorColumn(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void getcursorcolumn(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 }

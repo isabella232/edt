@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,87 +11,62 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.core;
 
+import java.util.Locale;
+
 import org.eclipse.edt.gen.javascript.Context;
-import org.eclipse.edt.gen.javascript.templates.NativeTypeTemplate;
+import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Type;
 
-public class SQLLibTemplate extends NativeTypeTemplate {
-	private static final String beginDatabaseTransaction = "beginDatabaseTransaction";
-	private static final String connect = "connect";
-	private static final String constructQuery = "constructQuery";
-	private static final String defineDatabaseAlias = "defineDatabaseAlias";
-	private static final String disconnect = "disconnect";
-	private static final String disconnectAll = "disconnectAll";
-	private static final String loadTable = "loadTable";
-	private static final String queryCurrentDatabase = "queryCurrentDatabase";
-	private static final String setCurrentDatabase = "setCurrentDatabase";
-	private static final String unloadTable = "unloadTable";
-
-	public void genInvocation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		InvocationExpression expr = (InvocationExpression) args[0];
-		if (expr.getTarget().getName().equalsIgnoreCase(beginDatabaseTransaction))
-			genBeginDatabaseTransaction(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(connect))
-			genConnect(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(constructQuery))
-			genConstructQuery(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(defineDatabaseAlias))
-			genDefineDatabaseAlias(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(disconnect))
-			genDisconnect(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(disconnectAll))
-			genDisconnectAll(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(loadTable))
-			genLoadTable(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(queryCurrentDatabase))
-			genQueryCurrentDatabase(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(setCurrentDatabase))
-			genSetCurrentDatabase(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(unloadTable))
-			genUnloadTable(expr, ctx, out, args);
-		else
-			genNoImplementation(expr, ctx, out, args);
+public class SQLLibTemplate extends JavascriptTemplate {
+	// the library gets invoked here, with the invocation expression passed as the 1st argument in the args list. From here,
+	// we use the lowercase function name as the lookup for the generation. This means that all system functions are
+	// implemented by the lowercase method name. This technique allows a user to add/override system functions simply by
+	// extending this class and adding/overriding the system function name as the method name, in lowercase.
+	public void genInvocation(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(((InvocationExpression) args[0]).getTarget().getName().toLowerCase(Locale.ENGLISH), (Type) type, ctx, out, args);
 	}
 
-	public void genBeginDatabaseTransaction(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	// all system functions are defined below, with the method name as lowercase.
+	public void begindatabasetransaction(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genConnect(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void connect(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genConstructQuery(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void constructquery(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genDefineDatabaseAlias(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void definedatabasealias(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genDisconnect(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void disconnect(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genDisconnectAll(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void disconnectall(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genLoadTable(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void loadtable(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genQueryCurrentDatabase(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void querycurrentdatabase(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genSetCurrentDatabase(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void setcurrentdatabase(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genUnloadTable(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void unloadtable(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,164 +11,106 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.core;
 
+import java.util.Locale;
+
 import org.eclipse.edt.gen.javascript.Context;
-import org.eclipse.edt.gen.javascript.templates.NativeTypeTemplate;
+import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Type;
 
-public class DateTimeLibTemplate extends NativeTypeTemplate {
-	private static final String currentDate = "currentDate";
-	private static final String currentTime = "currentTime";
-	private static final String currentTimeStamp = "currentTimeStamp";
-	private static final String dateFromInt = "dateFromInt";
-	private static final String dateValue = "dateValue";
-	private static final String dateValueFromGregorian = "dateValueFromGregorian";
-	private static final String dateValueFromJulian = "dateValueFromJulian";
-	private static final String timeValue = "timeValue";
-	private static final String intervalValue = "intervalValue";
-	private static final String intervalValueWithPattern = "intervalValueWithPattern";
-	private static final String timeStampValue = "timeStampValue";
-	private static final String timeStampValueWithPattern = "timeStampValueWithPattern";
-	private static final String timestampFrom = "timestampFrom";
-	private static final String dayOf = "dayOf";
-	private static final String monthOf = "monthOf";
-	private static final String yearOf = "yearOf";
-	private static final String weekdayOf = "weekdayOf";
-	private static final String mdy = "mdy";
-	private static final String dateOf = "dateOf";
-	private static final String timeOf = "timeOf";
-	private static final String extend = "extend";
-
-	public void genInvocation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		InvocationExpression expr = (InvocationExpression) args[0];
-		if (expr.getTarget().getName().equalsIgnoreCase(currentDate))
-			genCurrentDate(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(currentTime))
-			genCurrentTime(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(currentTimeStamp))
-			genCurrentTimeStamp(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(dateFromInt))
-			genDateFromInt(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(dateValue))
-			genDateValue(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(dateValueFromGregorian))
-			genDateValueFromGregorian(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(dateValueFromJulian))
-			genDateValueFromJulian(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(timeValue))
-			genTimeValue(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(intervalValue))
-			genIntervalValue(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(intervalValueWithPattern))
-			genIntervalValueWithPattern(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(timeStampValue))
-			genTimeStampValue(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(timeStampValueWithPattern))
-			genTimeStampValueWithPattern(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(timestampFrom))
-			genTimestampFrom(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(dayOf))
-			genDayOf(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(monthOf))
-			genMonthOf(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(yearOf))
-			genYearOf(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(weekdayOf))
-			genWeekdayOf(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(mdy))
-			genMdy(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(dateOf))
-			genDateOf(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(timeOf))
-			genTimeOf(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(extend))
-			genExtend(expr, ctx, out, args);
-		else
-			genNoImplementation(expr, ctx, out, args);
+public class DateTimeLibTemplate extends JavascriptTemplate {
+	// the library gets invoked here, with the invocation expression passed as the 1st argument in the args list. From here,
+	// we use the lowercase function name as the lookup for the generation. This means that all system functions are
+	// implemented by the lowercase method name. This technique allows a user to add/override system functions simply by
+	// extending this class and adding/overriding the system function name as the method name, in lowercase.
+	public void genInvocation(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(((InvocationExpression) args[0]).getTarget().getName().toLowerCase(Locale.ENGLISH), (Type) type, ctx, out, args);
 	}
 
-	public void genCurrentDate(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	// all system functions are defined below, with the method name as lowercase.
+	public void currentdate(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genCurrentTime(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void currenttime(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genCurrentTimeStamp(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void currenttimestamp(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genDateFromInt(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void datefromint(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genDateValue(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void datevalue(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genDateValueFromGregorian(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void datevaluefromgregorian(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genDateValueFromJulian(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void datevaluefromjulian(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genTimeValue(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void timevalue(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genIntervalValue(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void intervalvalue(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genIntervalValueWithPattern(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void intervalvaluewithpattern(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genTimeStampValue(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void timestampvalue(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genTimeStampValueWithPattern(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void timestampvaluewithpattern(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genTimestampFrom(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void timestampfrom(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genDayOf(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void dayof(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genMonthOf(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void monthof(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genYearOf(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void yearof(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genWeekdayOf(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void weekdayof(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genMdy(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void mdy(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genDateOf(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void dateof(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genTimeOf(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void timeof(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genExtend(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void extend(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 }

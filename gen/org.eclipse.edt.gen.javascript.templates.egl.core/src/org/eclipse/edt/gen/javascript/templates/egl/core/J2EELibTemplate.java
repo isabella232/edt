@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,122 +11,82 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.core;
 
+import java.util.Locale;
+
 import org.eclipse.edt.gen.javascript.Context;
-import org.eclipse.edt.gen.javascript.templates.NativeTypeTemplate;
+import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Type;
 
-public class J2EELibTemplate extends NativeTypeTemplate {
-	private static final String clearEGLSessionAttrs = "clearEGLSessionAttrs";
-	private static final String clearApplicationAttr = "clearApplicationAttr";
-	private static final String clearRequestAttr = "clearRequestAttr";
-	private static final String clearSessionAttr = "clearSessionAttr";
-	private static final String getAuthenticationType = "getAuthenticationType";
-	private static final String getQueryParameter = "getQueryParameter";
-	private static final String getRemoteUser = "getRemoteUser";
-	private static final String getRequestAttr = "getRequestAttr";
-	private static final String getSessionAttr = "getSessionAttr";
-	private static final String getApplicationAttr = "getApplicationAttr";
-	private static final String isUserInRole = "isUserInRole";
-	private static final String setApplicationAttr = "setApplicationAttr";
-	private static final String setRequestAttr = "setRequestAttr";
-	private static final String setSessionAttr = "setSessionAttr";
-	private static final String getContext = "getContext";
-
-	public void genInvocation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		InvocationExpression expr = (InvocationExpression) args[0];
-		if (expr.getTarget().getName().equalsIgnoreCase(clearEGLSessionAttrs))
-			genClearEGLSessionAttrs(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(clearApplicationAttr))
-			genClearApplicationAttr(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(clearRequestAttr))
-			genClearRequestAttr(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(clearSessionAttr))
-			genClearSessionAttr(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getAuthenticationType))
-			genGetAuthenticationType(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getQueryParameter))
-			genGetQueryParameter(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getRemoteUser))
-			genGetRemoteUser(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getRequestAttr))
-			genGetRequestAttr(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getSessionAttr))
-			genGetSessionAttr(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getApplicationAttr))
-			genGetApplicationAttr(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(isUserInRole))
-			genIsUserInRole(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(setApplicationAttr))
-			genSetApplicationAttr(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(setRequestAttr))
-			genSetRequestAttr(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(setSessionAttr))
-			genSetSessionAttr(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getContext))
-			genGetContext(expr, ctx, out, args);
-		else
-			genNoImplementation(expr, ctx, out, args);
+public class J2EELibTemplate extends JavascriptTemplate {
+	// the library gets invoked here, with the invocation expression passed as the 1st argument in the args list. From here,
+	// we use the lowercase function name as the lookup for the generation. This means that all system functions are
+	// implemented by the lowercase method name. This technique allows a user to add/override system functions simply by
+	// extending this class and adding/overriding the system function name as the method name, in lowercase.
+	public void genInvocation(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(((InvocationExpression) args[0]).getTarget().getName().toLowerCase(Locale.ENGLISH), (Type) type, ctx, out, args);
 	}
 
-	public void genClearEGLSessionAttrs(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	// all system functions are defined below, with the method name as lowercase.
+	public void cleareglsessionattrs(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genClearApplicationAttr(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void clearapplicationattr(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genClearRequestAttr(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void clearrequestattr(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genClearSessionAttr(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void clearsessionattr(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetAuthenticationType(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void getauthenticationtype(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetQueryParameter(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void getqueryparameter(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetRemoteUser(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void getremoteuser(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetRequestAttr(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void getrequestattr(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetSessionAttr(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void getsessionattr(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetApplicationAttr(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void getapplicationattr(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genIsUserInRole(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void isuserinrole(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genSetApplicationAttr(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void setapplicationattr(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genSetRequestAttr(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void setrequestattr(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genSetSessionAttr(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void setsessionattr(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetContext(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void getcontext(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 }

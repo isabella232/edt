@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,164 +11,106 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.core;
 
+import java.util.Locale;
+
 import org.eclipse.edt.gen.javascript.Context;
-import org.eclipse.edt.gen.javascript.templates.NativeTypeTemplate;
+import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Type;
 
-public class ServiceLibTemplate extends NativeTypeTemplate {
-	private static final String setWebServiceLocation = "setWebServiceLocation";
-	private static final String getWebServiceLocation = "getWebServiceLocation";
-	private static final String setTCPIPLocation = "setTCPIPLocation";
-	private static final String getTCPIPLocation = "getTCPIPLocation";
-	private static final String bindService = "bindService";
-	private static final String convertFromJSON = "convertFromJSON";
-	private static final String convertToJSON = "convertToJSON";
-	private static final String convertFromURLEncoded = "convertFromURLEncoded";
-	private static final String convertToURLEncoded = "convertToURLEncoded";
-	private static final String setRestRequestHeaders = "setRestRequestHeaders";
-	private static final String getRestRequestHeaders = "getRestRequestHeaders";
-	private static final String setSOAPRequestHeaders = "setSOAPRequestHeaders";
-	private static final String getSOAPRequestHeaders = "getSOAPRequestHeaders";
-	private static final String setHTTPBasicAuthentication = "setHTTPBasicAuthentication";
-	private static final String setProxyBasicAuthentication = "setProxyBasicAuthentication";
-	private static final String setRestServiceLocation = "setRestServiceLocation";
-	private static final String getRestServiceLocation = "getRestServiceLocation";
-	private static final String getCurrentCallbackResponse = "getCurrentCallbackResponse";
-	private static final String getOriginalRequest = "getOriginalRequest";
-	private static final String endStatefulServiceSession = "endStatefulServiceSession";
-	private static final String setCCSID = "setCCSID";
-
-	public void genInvocation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		InvocationExpression expr = (InvocationExpression) args[0];
-		if (expr.getTarget().getName().equalsIgnoreCase(setWebServiceLocation))
-			genSetWebServiceLocation(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getWebServiceLocation))
-			genGetWebServiceLocation(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(setTCPIPLocation))
-			genSetTCPIPLocation(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getTCPIPLocation))
-			genGetTCPIPLocation(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(bindService))
-			genBindService(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(convertFromJSON))
-			genConvertFromJSON(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(convertToJSON))
-			genConvertToJSON(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(convertFromURLEncoded))
-			genConvertFromURLEncoded(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(convertToURLEncoded))
-			genConvertToURLEncoded(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(setRestRequestHeaders))
-			genSetRestRequestHeaders(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getRestRequestHeaders))
-			genGetRestRequestHeaders(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(setSOAPRequestHeaders))
-			genSetSOAPRequestHeaders(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getSOAPRequestHeaders))
-			genGetSOAPRequestHeaders(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(setHTTPBasicAuthentication))
-			genSetHTTPBasicAuthentication(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(setProxyBasicAuthentication))
-			genSetProxyBasicAuthentication(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(setRestServiceLocation))
-			genSetRestServiceLocation(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getRestServiceLocation))
-			genGetRestServiceLocation(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getCurrentCallbackResponse))
-			genGetCurrentCallbackResponse(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(getOriginalRequest))
-			genGetOriginalRequest(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(endStatefulServiceSession))
-			genEndStatefulServiceSession(expr, ctx, out, args);
-		else if (expr.getTarget().getName().equalsIgnoreCase(setCCSID))
-			genSetCCSID(expr, ctx, out, args);
-		else
-			genNoImplementation(expr, ctx, out, args);
+public class ServiceLibTemplate extends JavascriptTemplate {
+	// the library gets invoked here, with the invocation expression passed as the 1st argument in the args list. From here,
+	// we use the lowercase function name as the lookup for the generation. This means that all system functions are
+	// implemented by the lowercase method name. This technique allows a user to add/override system functions simply by
+	// extending this class and adding/overriding the system function name as the method name, in lowercase.
+	public void genInvocation(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(((InvocationExpression) args[0]).getTarget().getName().toLowerCase(Locale.ENGLISH), (Type) type, ctx, out, args);
 	}
 
-	public void genSetWebServiceLocation(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	// all system functions are defined below, with the method name as lowercase.
+	public void setwebservicelocation(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetWebServiceLocation(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void getwebservicelocation(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genSetTCPIPLocation(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void settcpiplocation(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetTCPIPLocation(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void gettcpiplocation(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genBindService(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void bindservice(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genConvertFromJSON(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void convertfromjson(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genConvertToJSON(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void converttojson(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genConvertFromURLEncoded(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void convertfromurlencoded(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genConvertToURLEncoded(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void converttourlencoded(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genSetRestRequestHeaders(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void setrestrequestheaders(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetRestRequestHeaders(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void getrestrequestheaders(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genSetSOAPRequestHeaders(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void setsoaprequestheaders(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetSOAPRequestHeaders(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void getsoaprequestheaders(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genSetHTTPBasicAuthentication(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void sethttpbasicauthentication(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genSetProxyBasicAuthentication(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void setproxybasicauthentication(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genSetRestServiceLocation(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void setrestservicelocation(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetRestServiceLocation(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void getrestservicelocation(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetCurrentCallbackResponse(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void getcurrentcallbackresponse(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genGetOriginalRequest(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void getoriginalrequest(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genEndStatefulServiceSession(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void endstatefulservicesession(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 
-	public void genSetCCSID(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, expr, ctx, out, args);
+	public void setccsid(Library type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
 	}
 }
