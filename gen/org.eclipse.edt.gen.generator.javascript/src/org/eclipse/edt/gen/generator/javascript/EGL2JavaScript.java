@@ -15,13 +15,13 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.javascript.Constants;
-import org.eclipse.edt.gen.javascript.JavascriptGenerator;
+import org.eclipse.edt.gen.javascript.JavaScriptGenerator;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Part;
 
-public class EGL2Javascript extends AbstractGeneratorCommand {
+public class EGL2JavaScript extends AbstractGeneratorCommand {
 
-	public EGL2Javascript() {
+	public EGL2JavaScript() {
 		super();
 		// define our local command parameters
 		this.installParameter(false, Constants.parameter_checkOverflow, new String[] { "checkOverflow", "overflow", "co" }, new Boolean[] { false, true },
@@ -30,8 +30,8 @@ public class EGL2Javascript extends AbstractGeneratorCommand {
 
 	public static void main(String[] args) {
 		// set up the command processor and pass the overriding command line options
-		EGL2Javascript genPart = new EGL2Javascript();
-		genPart.generate(args, new JavascriptGenerator(genPart), null);
+		EGL2JavaScript genPart = new EGL2JavaScript();
+		genPart.generate(args, new JavaScriptGenerator(genPart), null);
 	}
 
 	public String getFileExtention() {
