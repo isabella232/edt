@@ -18,18 +18,18 @@ import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
-import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
+import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.Part;
 
-public class JavascriptGenerator extends Generator {
+public class JavaScriptGenerator extends Generator {
 
 	protected Context context;
 	protected TabbedWriter out;
 	protected AbstractGeneratorCommand generator;
 
-	public JavascriptGenerator(AbstractGeneratorCommand processor) {
+	public JavaScriptGenerator(AbstractGeneratorCommand processor) {
 		super(processor);
 		generator = processor;
 		out = new TabbedWriter(new StringWriter());
@@ -46,7 +46,7 @@ public class JavascriptGenerator extends Generator {
 
 	public boolean visit(Part part) {
 		try {
-			context.gen(JavascriptTemplate.genPart, part, context, out, (Object) null);
+			context.gen(JavaScriptTemplate.genPart, part, context, out, (Object) null);
 		}
 		catch (TemplateException e) {
 			e.printStackTrace();
@@ -56,10 +56,10 @@ public class JavascriptGenerator extends Generator {
 
 	public void generate(Part part) throws GenerationException {
 		try {
-			context.validate(JavascriptTemplate.validate, part, context, (Object) null);
+			context.validate(JavaScriptTemplate.validate, part, context, (Object) null);
 			if (!context.getMessageRequestor().isError()) {
 				out.getWriter().flush();
-				context.gen(JavascriptTemplate.genPart, part, context, out, (Object) null);
+				context.gen(JavaScriptTemplate.genPart, part, context, out, (Object) null);
 				out.flush();
 			}
 		}

@@ -14,7 +14,7 @@ package org.eclipse.edt.gen.javascript.templates;
 import org.eclipse.edt.mof.codegen.api.AbstractTemplate;
 import org.eclipse.edt.mof.egl.IrFactory;
 
-public abstract class JavascriptTemplate extends AbstractTemplate {
+public abstract class JavaScriptTemplate extends AbstractTemplate {
 	
 	public static final IrFactory factory = IrFactory.INSTANCE;
 
