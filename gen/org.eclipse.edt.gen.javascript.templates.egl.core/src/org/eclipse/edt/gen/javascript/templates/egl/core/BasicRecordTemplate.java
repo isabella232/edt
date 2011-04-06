@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.core;
 
-import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
+import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 
-public class BasicRecordTemplate extends JavascriptTemplate {
+public class BasicRecordTemplate extends JavaScriptTemplate {
 
 }

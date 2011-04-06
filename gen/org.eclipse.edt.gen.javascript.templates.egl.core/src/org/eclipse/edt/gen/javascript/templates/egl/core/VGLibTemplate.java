@@ -14,13 +14,13 @@ package org.eclipse.edt.gen.javascript.templates.egl.core;
 import java.util.Locale;
 
 import org.eclipse.edt.gen.javascript.Context;
-import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
+import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Type;
 
-public class VGLibTemplate extends JavascriptTemplate {
+public class VGLibTemplate extends JavaScriptTemplate {
 	// the library gets invoked here, with the invocation expression passed as the 1st argument in the args list. From here,
 	// we use the lowercase function name as the lookup for the generation. This means that all system functions are
 	// implemented by the lowercase method name. This technique allows a user to add/override system functions simply by

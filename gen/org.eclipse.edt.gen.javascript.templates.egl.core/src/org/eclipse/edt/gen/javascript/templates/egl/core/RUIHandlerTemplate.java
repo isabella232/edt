@@ -12,7 +12,7 @@
 package org.eclipse.edt.gen.javascript.templates.egl.core;
 
 import org.eclipse.edt.gen.javascript.Context;
-import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
+import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Field;
@@ -20,7 +20,7 @@ import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Stereotype;
 
-public class RUIHandlerTemplate extends JavascriptTemplate {
+public class RUIHandlerTemplate extends JavaScriptTemplate {
 	
 	public static final String FieldName_InitialUI = "initialUI";
 	public static final String FieldName_OnConstructionFunction = "onConstructionFunction";
