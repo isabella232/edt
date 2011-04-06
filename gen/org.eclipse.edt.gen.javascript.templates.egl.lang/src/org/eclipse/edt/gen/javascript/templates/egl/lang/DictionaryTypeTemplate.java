@@ -12,12 +12,12 @@
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
 import org.eclipse.edt.gen.javascript.Context;
-import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
+import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
 
-public class DictionaryTypeTemplate extends JavascriptTemplate {
+public class DictionaryTypeTemplate extends JavaScriptTemplate {
 
 	public void genInstantiation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		if (args.length == 0 || args[0] == null)

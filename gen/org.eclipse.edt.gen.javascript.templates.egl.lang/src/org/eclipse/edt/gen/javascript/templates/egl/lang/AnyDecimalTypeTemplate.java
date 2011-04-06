@@ -13,7 +13,7 @@ package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.Context;
-import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
+import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
@@ -23,7 +23,7 @@ import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 
-public class AnyDecimalTypeTemplate extends JavascriptTemplate {
+public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 
 	// this method gets invoked when there is a specific fixed precision needed
 	public void genDefaultValue(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {

@@ -12,7 +12,7 @@
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
 import org.eclipse.edt.gen.javascript.Context;
-import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
+import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
@@ -21,7 +21,7 @@ import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 
-public class AnyMonthsIntervalTypeTemplate extends JavascriptTemplate {
+public class AnyMonthsIntervalTypeTemplate extends JavaScriptTemplate {
 
 	// this method gets invoked when there is a specific interval needed
 	public void genDefaultValue(IntervalType type, Context ctx, TabbedWriter out, Object... args) {

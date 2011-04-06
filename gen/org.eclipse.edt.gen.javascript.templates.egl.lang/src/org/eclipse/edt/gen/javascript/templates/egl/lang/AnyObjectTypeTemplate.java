@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
-import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
+import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 
-public class AnyObjectTypeTemplate extends JavascriptTemplate {
+public class AnyObjectTypeTemplate extends JavaScriptTemplate {
 
 }

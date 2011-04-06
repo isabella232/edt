@@ -14,7 +14,7 @@ package org.eclipse.edt.gen.javascript.templates.egl.lang;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
-import org.eclipse.edt.gen.javascript.templates.JavascriptTemplate;
+import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
@@ -25,7 +25,7 @@ import org.eclipse.edt.mof.egl.SequenceType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 
-public class AnyStringTypeTemplate extends JavascriptTemplate {
+public class AnyStringTypeTemplate extends JavaScriptTemplate {
 
 	// this method gets invoked when there is a limited string needed
 	public void genDefaultValue(SequenceType type, Context ctx, TabbedWriter out, Object... args) {
