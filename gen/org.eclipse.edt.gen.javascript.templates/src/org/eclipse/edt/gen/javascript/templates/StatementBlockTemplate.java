@@ -16,7 +16,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
 
-public class StatementBlockTemplate extends JavascriptTemplate {
+public class StatementBlockTemplate extends JavaScriptTemplate {
 
 	public void validate(StatementBlock block, Context ctx, Object... args) {
 		for (Statement stmt : block.getStatements()) {

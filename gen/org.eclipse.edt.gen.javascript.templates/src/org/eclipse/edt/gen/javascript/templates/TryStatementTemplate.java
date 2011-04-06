@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.TryStatement;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
-public class TryStatementTemplate extends JavascriptTemplate {
+public class TryStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(TryStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		out.print("try ");

@@ -20,7 +20,7 @@ import org.eclipse.edt.mof.egl.ParameterizedType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.UnaryExpression;
 
-public class ParameterizedTypeTemplate extends JavascriptTemplate {
+public class ParameterizedTypeTemplate extends JavaScriptTemplate {
 
 	public void genAssignment(ParameterizedType type, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genAssignment, (Type) type.getParameterizableType(), ctx, out, args);

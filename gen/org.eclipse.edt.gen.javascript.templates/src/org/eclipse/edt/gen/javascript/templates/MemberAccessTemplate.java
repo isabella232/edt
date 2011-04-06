@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public class MemberAccessTemplate extends JavascriptTemplate {
+public class MemberAccessTemplate extends JavaScriptTemplate {
 
 	public void genExpression(MemberAccess expr, Context ctx, TabbedWriter out, Object... args) {
 		Member member = expr.getMember();

@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AnnotationType;
 
-public class AnnotationTypeTemplate extends JavascriptTemplate {
+public class AnnotationTypeTemplate extends JavaScriptTemplate {
 
 	public void validateClassBody(AnnotationType part, Context ctx, Object... args) {}
 

@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ThrowStatement;
 
-public class ThrowStatementTemplate extends JavascriptTemplate {
+public class ThrowStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(ThrowStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		out.print("throw ");

@@ -16,7 +16,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.Field;
 
-public class DeclarationExpressionTemplate extends JavascriptTemplate {
+public class DeclarationExpressionTemplate extends JavaScriptTemplate {
 
 	public void genDeclarationExpression(DeclarationExpression expr, Context ctx, TabbedWriter out, Object... args) {
 		for (Field field : expr.getFields()) {

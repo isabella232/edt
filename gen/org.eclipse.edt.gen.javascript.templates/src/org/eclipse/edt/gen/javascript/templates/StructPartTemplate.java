@@ -11,6 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-public class StructPartTemplate extends JavascriptTemplate {
+public class StructPartTemplate extends JavaScriptTemplate {
 
 }

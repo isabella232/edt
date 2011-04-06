@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayLiteral;
 
-public class ArrayLiteralTemplate extends JavascriptTemplate {
+public class ArrayLiteralTemplate extends JavaScriptTemplate {
 
 	public void genExpression(ArrayLiteral expr, Context ctx, TabbedWriter out, Object... args) {
 		out.print("[");

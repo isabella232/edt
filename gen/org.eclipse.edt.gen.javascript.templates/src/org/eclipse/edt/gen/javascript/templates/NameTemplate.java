@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Name;
 
-public class NameTemplate extends JavascriptTemplate {
+public class NameTemplate extends JavaScriptTemplate {
 
 	public Annotation getPropertyAnnotation(Name expr) {
 		return expr.getNamedElement().getAnnotation(Constants.Annotation_EGLProperty);

@@ -16,7 +16,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.egl.SubstringAccess;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
-public class SubstringAccessTemplate extends JavascriptTemplate {
+public class SubstringAccessTemplate extends JavaScriptTemplate {
 
 	public void genExpression(SubstringAccess expr, Context ctx, TabbedWriter out, Object... args) {
 		out.print(ctx.getNativeImplementationMapping(expr.getType()) + ".substring(");

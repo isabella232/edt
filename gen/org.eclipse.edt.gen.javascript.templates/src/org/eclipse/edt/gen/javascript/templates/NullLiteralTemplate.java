@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.NullLiteral;
 
-public class NullLiteralTemplate extends JavascriptTemplate {
+public class NullLiteralTemplate extends JavaScriptTemplate {
 
 	public void genExpression(NullLiteral expr, Context ctx, TabbedWriter out, Object... args) {
 		out.print("null");

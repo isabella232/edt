@@ -16,7 +16,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.SetStatement;
 
-public class SetStatementTemplate extends JavascriptTemplate {
+public class SetStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(SetStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		for (int i = 0; i < stmt.getTargets().size(); i++) {

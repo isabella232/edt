@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.DecimalLiteral;
 
-public class DecimalLiteralTemplate extends JavascriptTemplate {
+public class DecimalLiteralTemplate extends JavaScriptTemplate {
 
 	public void genExpression(DecimalLiteral expr, Context ctx, TabbedWriter out, Object... args) {
 		out.print("new egl.javascript.BigDecimal(");

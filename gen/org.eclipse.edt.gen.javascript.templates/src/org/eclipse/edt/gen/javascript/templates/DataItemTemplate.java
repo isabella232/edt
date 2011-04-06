@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.DataItem;
 
-public class DataItemTemplate extends JavascriptTemplate {
+public class DataItemTemplate extends JavaScriptTemplate {
 
 	public void validateClassBody(DataItem part, Context ctx, Object... args) {}
 

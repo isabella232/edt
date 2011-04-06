@@ -20,7 +20,7 @@ import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.UnaryExpression;
 
-public class ParameterizableTypeTemplate extends JavascriptTemplate {
+public class ParameterizableTypeTemplate extends JavaScriptTemplate {
 
 	public void genBinaryExpression(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		// for decimal type, always use the runtime

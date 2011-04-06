@@ -20,7 +20,7 @@ import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.ParameterKind;
 
-public class InvocationExpressionTemplate extends JavascriptTemplate {
+public class InvocationExpressionTemplate extends JavaScriptTemplate {
 
 	public void genInvocation(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
 		// process the function invocation

@@ -11,6 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-public class FunctionPartInvocationTemplate extends JavascriptTemplate {
+public class FunctionPartInvocationTemplate extends JavaScriptTemplate {
 
 }

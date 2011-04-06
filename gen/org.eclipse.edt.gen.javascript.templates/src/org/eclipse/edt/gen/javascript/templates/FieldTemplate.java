@@ -16,7 +16,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public class FieldTemplate extends JavascriptTemplate {
+public class FieldTemplate extends JavaScriptTemplate {
 
 	public void validate(Field field, Context ctx, Object... args) {
 		ctx.validate(validate, field.getType(), ctx, args);

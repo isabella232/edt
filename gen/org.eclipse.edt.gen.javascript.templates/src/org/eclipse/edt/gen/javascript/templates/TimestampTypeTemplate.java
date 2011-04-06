@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.TimestampType;
 
-public class TimestampTypeTemplate extends JavascriptTemplate {
+public class TimestampTypeTemplate extends JavaScriptTemplate {
 
 	public void genTypeDependentOptions(TimestampType type, Context ctx, TabbedWriter out, Object... args) {
 		String pattern = "yyyyMMddhhmmss";

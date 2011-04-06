@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public class MemberTemplate extends JavascriptTemplate {
+public class MemberTemplate extends JavaScriptTemplate {
 
 	public void genDeclaration(Member field, Context ctx, TabbedWriter out, Object... args) {}
 

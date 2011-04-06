@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayType;
 
-public class ArrayTypeTemplate extends JavascriptTemplate {
+public class ArrayTypeTemplate extends JavaScriptTemplate {
 
 	public void genRuntimeTypeName(ArrayType generic, Context ctx, TabbedWriter out, Object... args) {
 		out.print("Array");

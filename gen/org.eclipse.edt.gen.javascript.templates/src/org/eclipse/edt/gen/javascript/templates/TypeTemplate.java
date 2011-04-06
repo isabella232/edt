@@ -29,7 +29,7 @@ import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.UnaryExpression;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public class TypeTemplate extends JavascriptTemplate {
+public class TypeTemplate extends JavaScriptTemplate {
 
 	public void validate(Type type, Context ctx, Object... args) {
 		// types may override this validation for specific checking

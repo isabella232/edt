@@ -23,7 +23,7 @@ import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class ReturnStatementTemplate extends JavascriptTemplate {
+public class ReturnStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(ReturnStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		FunctionMember func = stmt.getFunctionMember();

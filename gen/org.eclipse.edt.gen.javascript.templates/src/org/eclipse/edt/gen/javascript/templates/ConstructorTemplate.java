@@ -11,6 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-public class ConstructorTemplate extends JavascriptTemplate {
+public class ConstructorTemplate extends JavaScriptTemplate {
 
 }

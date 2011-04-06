@@ -16,7 +16,7 @@ import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.EObject;
 
-public class EObjectTemplate extends JavascriptTemplate {
+public class EObjectTemplate extends JavaScriptTemplate {
 
 	public void validate(EObject object, Context ctx, Object... args) {
 		String[] details = new String[] { object.getEClass().getETypeSignature() };

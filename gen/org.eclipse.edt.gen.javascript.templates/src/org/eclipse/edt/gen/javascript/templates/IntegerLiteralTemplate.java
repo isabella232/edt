@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
 
-public class IntegerLiteralTemplate extends JavascriptTemplate {
+public class IntegerLiteralTemplate extends JavaScriptTemplate {
 
 	public void genExpression(IntegerLiteral expr, Context ctx, TabbedWriter out, Object... args) {
 		out.print(expr.getValue().toString());

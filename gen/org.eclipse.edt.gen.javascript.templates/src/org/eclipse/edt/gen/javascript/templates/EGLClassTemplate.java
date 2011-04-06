@@ -19,7 +19,7 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class EGLClassTemplate extends JavascriptTemplate {
+public class EGLClassTemplate extends JavaScriptTemplate {
 
 	public void validateClassBody(EGLClass part, Context ctx, Object... args) {
 		ctx.validate(validateUsedParts, part, ctx, args);

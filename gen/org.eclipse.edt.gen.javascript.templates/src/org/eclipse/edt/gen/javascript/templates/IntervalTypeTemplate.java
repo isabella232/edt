@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.IntervalType;
 
-public class IntervalTypeTemplate extends JavascriptTemplate {
+public class IntervalTypeTemplate extends JavaScriptTemplate {
 
 	public void genConstructorOptions(IntervalType type, Context ctx, TabbedWriter out, Object... args) {
 		// we need to skip over the 1st comma and space

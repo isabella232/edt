@@ -16,7 +16,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.IfStatement;
 
-public class IfStatementTemplate extends JavascriptTemplate {
+public class IfStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(IfStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		Label label = new Label(ctx, Label.LABEL_TYPE_IF);

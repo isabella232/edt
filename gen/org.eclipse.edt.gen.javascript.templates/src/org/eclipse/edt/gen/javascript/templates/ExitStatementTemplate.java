@@ -16,7 +16,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ExitStatement;
 
-public class ExitStatementTemplate extends JavascriptTemplate {
+public class ExitStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(ExitStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		// see if they specified a label

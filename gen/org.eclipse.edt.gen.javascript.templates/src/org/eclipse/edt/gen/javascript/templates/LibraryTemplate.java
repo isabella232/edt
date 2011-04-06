@@ -16,7 +16,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Library;
 
-public class LibraryTemplate extends JavascriptTemplate {
+public class LibraryTemplate extends JavaScriptTemplate {
 
 	public void genSuperClass(Library library, Context ctx, TabbedWriter out, Object... args) {
 		out.print("ExecutableBase");

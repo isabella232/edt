@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Service;
 
-public class ServiceTemplate extends JavascriptTemplate {
+public class ServiceTemplate extends JavaScriptTemplate {
 
 	public void genSuperClass(Service service, Context ctx, TabbedWriter out, Object... args) {
 		// TODO handle more generally when stereotypes are involved

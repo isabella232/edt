@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.GenericType;
 
-public class GenericTypeTemplate extends JavascriptTemplate {
+public class GenericTypeTemplate extends JavaScriptTemplate {
 
 	public void genRuntimeTypeName(GenericType generic, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genRuntimeTypeName, generic.getClassifier(), ctx, out, args);

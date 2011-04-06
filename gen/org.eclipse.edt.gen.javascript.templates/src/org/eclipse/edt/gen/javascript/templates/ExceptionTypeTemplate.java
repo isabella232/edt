@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Type;
 
-public class ExceptionTypeTemplate extends JavascriptTemplate {
+public class ExceptionTypeTemplate extends JavaScriptTemplate {
 
 	public void genDefaultValue(Type type, Context ctx, TabbedWriter out, Object... args) {
 		// this type has no default value

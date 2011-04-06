@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 
-public class AssignmentStatementTemplate extends JavascriptTemplate {
+public class AssignmentStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(AssignmentStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genExpression, stmt.getAssignment(), ctx, out, args);

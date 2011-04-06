@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.MoveStatement;
 
-public class MoveStatementTemplate extends JavascriptTemplate {
+public class MoveStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(MoveStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 //		for (int i = 0; i < stmt.getTargets().size(); i++) {

@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Delegate;
 
-public class DelegateTemplate extends JavascriptTemplate {
+public class DelegateTemplate extends JavaScriptTemplate {
 
 	public void validateClassBody(Delegate part, Context ctx, Object... args) {}
 

@@ -16,7 +16,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.NewExpression;
 
-public class NewExpressionTemplate extends JavascriptTemplate {
+public class NewExpressionTemplate extends JavaScriptTemplate {
 
 	public void genExpression(NewExpression expr, Context ctx, TabbedWriter out, Object... args) {
 		out.print("new ");

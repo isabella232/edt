@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.InExpression;
 
-public class InExpressionTemplate extends JavascriptTemplate {
+public class InExpressionTemplate extends JavaScriptTemplate {
 
 	public void genExpression(InExpression expr, Context ctx, TabbedWriter out, Object... args) {
 //		if (ctx.mapsToJavaType(expr.getEType())) {

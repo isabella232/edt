@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.SetValuesExpression;
 
-public class SetValuesExpressionTemplate extends JavascriptTemplate {
+public class SetValuesExpressionTemplate extends JavaScriptTemplate {
 
 	public void genExpression(SetValuesExpression expr, Context ctx, TabbedWriter out, Object... args) {
 		if (expr.getTarget() != null)

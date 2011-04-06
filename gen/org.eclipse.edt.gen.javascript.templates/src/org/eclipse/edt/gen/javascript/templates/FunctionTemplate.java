@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 
-public class FunctionTemplate extends JavascriptTemplate {
+public class FunctionTemplate extends JavaScriptTemplate {
 
 	public void validate(Function function, Context ctx, Object... args) {
 		ctx.validate(validate, function.getStatementBlock(), ctx, args);

@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Statement;
 
-public class StatementTemplate extends JavascriptTemplate {
+public class StatementTemplate extends JavaScriptTemplate {
 
 	public void validate(Statement stmt, Context ctx, Object... args) {
 		// statements may override this validation for specific checking

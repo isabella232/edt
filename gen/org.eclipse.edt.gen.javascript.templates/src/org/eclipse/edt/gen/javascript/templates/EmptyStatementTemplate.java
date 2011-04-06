@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EmptyStatement;
 
-public class EmptyStatementTemplate extends JavascriptTemplate {
+public class EmptyStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(EmptyStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 	// this statement is simply a ; on a line. there is nothing to generate

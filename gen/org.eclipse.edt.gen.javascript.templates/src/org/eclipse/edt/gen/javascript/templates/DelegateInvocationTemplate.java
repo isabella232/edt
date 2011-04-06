@@ -16,7 +16,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.DelegateInvocation;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class DelegateInvocationTemplate extends JavascriptTemplate {
+public class DelegateInvocationTemplate extends JavaScriptTemplate {
 
 	public void genExpression(DelegateInvocation expr, Context ctx, TabbedWriter out, Object... args) {
 		// first, make this expression's arguments compatible

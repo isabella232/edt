@@ -11,6 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-public class ParameterTemplate extends JavascriptTemplate {
+public class ParameterTemplate extends JavaScriptTemplate {
 
 }

@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.FloatingPointLiteral;
 
-public class FloatingPointLiteralTemplate extends JavascriptTemplate {
+public class FloatingPointLiteralTemplate extends JavaScriptTemplate {
 
 	public void genExpression(FloatingPointLiteral expr, Context ctx, TabbedWriter out, Object... args) {
 		out.print(expr.getValue().toString());

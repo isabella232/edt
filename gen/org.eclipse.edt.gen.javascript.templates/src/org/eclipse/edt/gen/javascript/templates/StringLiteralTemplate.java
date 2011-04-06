@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.StringLiteral;
 
-public class StringLiteralTemplate extends JavascriptTemplate {
+public class StringLiteralTemplate extends JavaScriptTemplate {
 
 	public void genExpression(StringLiteral expr, Context ctx, TabbedWriter out, Object... args) {
 		out.print("\"");

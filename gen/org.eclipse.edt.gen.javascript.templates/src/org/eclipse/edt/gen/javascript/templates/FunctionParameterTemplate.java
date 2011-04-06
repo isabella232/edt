@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 
-public class FunctionParameterTemplate extends JavascriptTemplate {
+public class FunctionParameterTemplate extends JavaScriptTemplate {
 
 	public void genDeclaration(FunctionParameter decl, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genName, decl, ctx, out, args);

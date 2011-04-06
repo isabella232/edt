@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class FunctionInvocationTemplate extends JavascriptTemplate {
+public class FunctionInvocationTemplate extends JavaScriptTemplate {
 
 	public void genExpression(FunctionInvocation expr, Context ctx, TabbedWriter out, Object... args) {
 		// first, make this expression's arguments compatible

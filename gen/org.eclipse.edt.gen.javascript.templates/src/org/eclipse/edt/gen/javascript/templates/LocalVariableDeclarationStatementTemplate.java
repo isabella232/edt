@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
 
-public class LocalVariableDeclarationStatementTemplate extends JavascriptTemplate {
+public class LocalVariableDeclarationStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatement(LocalVariableDeclarationStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genDeclarationExpression, stmt.getExpression(), ctx, out, args);

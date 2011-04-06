@@ -16,7 +16,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ContinueStatement;
 
-public class ContinueStatementTemplate extends JavascriptTemplate {
+public class ContinueStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(ContinueStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		// see if they specified a label

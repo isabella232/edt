@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.SequenceType;
 
-public class SequenceTypeTemplate extends JavascriptTemplate {
+public class SequenceTypeTemplate extends JavaScriptTemplate {
 
 	public void genTypeDependentOptions(SequenceType type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(", ");

@@ -20,7 +20,7 @@ import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class AssignmentTemplate extends JavascriptTemplate {
+public class AssignmentTemplate extends JavaScriptTemplate {
 
 	public void genExpression(Assignment expr, Context ctx, TabbedWriter out, Object... args) {
 		// first, make this expression compatible

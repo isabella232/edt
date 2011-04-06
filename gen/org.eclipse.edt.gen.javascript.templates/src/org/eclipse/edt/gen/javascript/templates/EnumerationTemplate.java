@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Enumeration;
 
-public class EnumerationTemplate extends JavascriptTemplate {
+public class EnumerationTemplate extends JavaScriptTemplate {
 
 	public void validateClassBody(Enumeration part, Context ctx, Object... args) {}
 

@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.FunctionPart;
 
-public class FunctionPartTemplate extends JavascriptTemplate {
+public class FunctionPartTemplate extends JavaScriptTemplate {
 
 	public void validateClassBody(FunctionPart part, Context ctx, Object... args) {}
 

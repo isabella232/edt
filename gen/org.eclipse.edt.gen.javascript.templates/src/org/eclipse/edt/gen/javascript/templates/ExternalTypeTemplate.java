@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ExternalType;
 
-public class ExternalTypeTemplate extends JavascriptTemplate {
+public class ExternalTypeTemplate extends JavaScriptTemplate {
 
 	public void validateClassBody(ExternalType part, Context ctx, Object... args) {}
 

@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Program;
 
-public class ProgramTemplate extends JavascriptTemplate {
+public class ProgramTemplate extends JavaScriptTemplate {
 
 	public void genSuperClass(Program program, Context ctx, TabbedWriter out, Object... args) {
 		out.print("ProgramBase");

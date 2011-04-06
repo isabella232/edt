@@ -19,7 +19,7 @@ import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Type;
 
-public class ArrayAccessTemplate extends JavascriptTemplate {
+public class ArrayAccessTemplate extends JavaScriptTemplate {
 
 	public void genAssignment(ArrayAccess expr, Context ctx, TabbedWriter out, Object... args) {
 		out.print("egl.checkNull(");

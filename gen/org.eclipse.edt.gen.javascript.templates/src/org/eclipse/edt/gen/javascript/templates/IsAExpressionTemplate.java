@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.IsAExpression;
 
-public class IsAExpressionTemplate extends JavascriptTemplate {
+public class IsAExpressionTemplate extends JavaScriptTemplate {
 
 	public void genExpression(IsAExpression expr, Context ctx, TabbedWriter out, Object... args) {
 		out.print("egl.isa(");

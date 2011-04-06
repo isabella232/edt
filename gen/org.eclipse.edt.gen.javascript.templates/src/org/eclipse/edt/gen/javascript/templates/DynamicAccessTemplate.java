@@ -16,7 +16,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.DynamicAccess;
 import org.eclipse.edt.mof.egl.Expression;
 
-public class DynamicAccessTemplate extends JavascriptTemplate {
+public class DynamicAccessTemplate extends JavaScriptTemplate {
 
 	public void genAssignment(DynamicAccess expr, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genExpression, expr.getExpression(), ctx, out, args);

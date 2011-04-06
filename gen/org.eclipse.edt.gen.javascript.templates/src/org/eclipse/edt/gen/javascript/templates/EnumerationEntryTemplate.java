@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
 
-public class EnumerationEntryTemplate extends JavascriptTemplate {
+public class EnumerationEntryTemplate extends JavaScriptTemplate {
 
 	public void genName(EnumerationEntry element, Context ctx, TabbedWriter out, Object... args) {
 		out.print(element.getName());

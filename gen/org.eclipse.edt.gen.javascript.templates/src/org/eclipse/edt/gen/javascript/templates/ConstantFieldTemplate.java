@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ConstantField;
 
-public class ConstantFieldTemplate extends JavascriptTemplate {
+public class ConstantFieldTemplate extends JavaScriptTemplate {
 
 	public void genDeclaration(ConstantField field, Context ctx, TabbedWriter out, Object... args) {
 		// process the field

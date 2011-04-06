@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.CallStatement;
 
-public class CallStatementTemplate extends JavascriptTemplate {
+public class CallStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(CallStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genExpression, stmt.getInvocationTarget(), ctx, out, args);

@@ -11,6 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-public class FunctionStatementTemplate extends JavascriptTemplate {
+public class FunctionStatementTemplate extends JavaScriptTemplate {
 
 }

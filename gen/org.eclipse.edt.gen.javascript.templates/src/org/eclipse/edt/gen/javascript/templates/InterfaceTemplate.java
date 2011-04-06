@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Interface;
 
-public class InterfaceTemplate extends JavascriptTemplate {
+public class InterfaceTemplate extends JavaScriptTemplate {
 
 	public void validateClassBody(Interface part, Context ctx, Object... args) {}
 

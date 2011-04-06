@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public class RecordTemplate extends JavascriptTemplate {
+public class RecordTemplate extends JavaScriptTemplate {
 
 	public void genConstructor(Record part, Context ctx, TabbedWriter out, Object... args) {
 		out.print(quoted("ezeCopy"));

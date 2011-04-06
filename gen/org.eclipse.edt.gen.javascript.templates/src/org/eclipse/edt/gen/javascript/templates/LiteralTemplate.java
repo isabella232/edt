@@ -11,6 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-public class LiteralTemplate extends JavascriptTemplate {
+public class LiteralTemplate extends JavaScriptTemplate {
 
 }

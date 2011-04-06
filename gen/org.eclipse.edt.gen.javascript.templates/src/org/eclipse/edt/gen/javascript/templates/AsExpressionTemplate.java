@@ -19,7 +19,7 @@ import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public class AsExpressionTemplate extends JavascriptTemplate {
+public class AsExpressionTemplate extends JavaScriptTemplate {
 
 	// All conversions are governed by the Operation associated with the AsExpression argument asExpr. This operation has
 	// come from the EGL definition that contained the operation. The conversion code generation is implemented in the

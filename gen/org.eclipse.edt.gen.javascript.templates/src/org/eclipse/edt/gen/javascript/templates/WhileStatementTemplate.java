@@ -16,7 +16,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.WhileStatement;
 
-public class WhileStatementTemplate extends JavascriptTemplate {
+public class WhileStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(WhileStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		Label label = new Label(ctx, Label.LABEL_TYPE_WHILE);

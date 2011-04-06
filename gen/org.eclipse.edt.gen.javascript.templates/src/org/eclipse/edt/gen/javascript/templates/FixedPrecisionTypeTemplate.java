@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 
-public class FixedPrecisionTypeTemplate extends JavascriptTemplate {
+public class FixedPrecisionTypeTemplate extends JavaScriptTemplate {
 
 	public void genTypeDependentOptions(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(", ");

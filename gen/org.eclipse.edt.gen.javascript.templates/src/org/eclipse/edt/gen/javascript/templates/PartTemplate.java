@@ -19,7 +19,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class PartTemplate extends JavascriptTemplate {
+public class PartTemplate extends JavaScriptTemplate {
 
 	IRUtils utils = new IRUtils();
 

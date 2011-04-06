@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Handler;
 
-public class HandlerTemplate extends JavascriptTemplate {
+public class HandlerTemplate extends JavaScriptTemplate {
 
 	public void genSuperClass(Handler type, Context ctx, TabbedWriter out, Object... args) {
 		out.print("ExecutableBase");

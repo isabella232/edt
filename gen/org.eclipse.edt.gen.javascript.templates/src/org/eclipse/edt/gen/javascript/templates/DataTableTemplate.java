@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.DataTable;
 
-public class DataTableTemplate extends JavascriptTemplate {
+public class DataTableTemplate extends JavaScriptTemplate {
 
 	public void genClassBody(DataTable dataTable, Context ctx, TabbedWriter out, Object... args) {}
 

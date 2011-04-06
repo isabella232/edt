@@ -20,7 +20,7 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Type;
 
-public class MemberNameTemplate extends JavascriptTemplate {
+public class MemberNameTemplate extends JavaScriptTemplate {
 
 	public void genAssignment(MemberName expr, Context ctx, TabbedWriter out, Object... args) {
 		// check to see if we are copying boxed function parameters

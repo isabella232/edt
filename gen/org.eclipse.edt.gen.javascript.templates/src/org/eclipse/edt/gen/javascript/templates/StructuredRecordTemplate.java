@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.StructuredRecord;
 
-public class StructuredRecordTemplate extends JavascriptTemplate {
+public class StructuredRecordTemplate extends JavaScriptTemplate {
 
 	public void validateClassBody(StructuredRecord part, Context ctx, Object... args) {}
 

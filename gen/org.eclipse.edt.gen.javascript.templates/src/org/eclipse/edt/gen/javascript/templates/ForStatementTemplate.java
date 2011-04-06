@@ -16,7 +16,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ForStatement;
 
-public class ForStatementTemplate extends JavascriptTemplate {
+public class ForStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(ForStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		if (stmt.getDeclarationExpression() != null) {

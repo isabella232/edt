@@ -16,7 +16,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.LabelStatement;
 
-public class LabelStatementTemplate extends JavascriptTemplate {
+public class LabelStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(LabelStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		out.print(Label.LABEL_NAME + stmt.getLabel() + ": ");

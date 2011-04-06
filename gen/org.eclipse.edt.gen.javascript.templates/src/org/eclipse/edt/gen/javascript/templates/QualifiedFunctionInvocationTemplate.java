@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class QualifiedFunctionInvocationTemplate extends JavascriptTemplate {
+public class QualifiedFunctionInvocationTemplate extends JavaScriptTemplate {
 
 	public void genExpression(QualifiedFunctionInvocation expr, Context ctx, TabbedWriter out, Object... args) {
 		// first, make this expression's arguments compatible

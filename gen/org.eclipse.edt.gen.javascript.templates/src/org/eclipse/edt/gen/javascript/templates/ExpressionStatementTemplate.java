@@ -16,7 +16,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ExpressionStatement;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class ExpressionStatementTemplate extends JavascriptTemplate {
+public class ExpressionStatementTemplate extends JavaScriptTemplate {
 	private boolean processEnd = true;
 
 	public void genStatementBody(ExpressionStatement stmt, Context ctx, TabbedWriter out, Object... args) {
