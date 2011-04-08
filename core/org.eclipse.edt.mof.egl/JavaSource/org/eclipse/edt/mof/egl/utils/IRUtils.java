@@ -76,6 +76,62 @@ public class IRUtils {
 	private static IrFactory factory = IrFactory.INSTANCE;
 	public static String OVERLOADED_FUNCTION = "EZE_OVERLOADED_FUNCTION";
 	
+	
+	public static class FileNameResolver extends AbstractVisitor {
+	
+		private String packageName;
+		private String fileName;
+		
+		FileNameResolver(EObject obj) {
+			disallowRevisit();
+			obj.accept(this);
+		}
+
+		private String getFilename() {
+						
+			return fileName;
+		}
+
+		private String getPackage() {
+			
+			return packageName;
+		}
+		
+		public boolean visit(Object obj) {
+			return false;
+		}
+		
+		public boolean visit(Classifier classifier) {
+			fileName = classifier.getFileName();
+			
+			if (fileName != null) {
+				int i = fileName.lastIndexOf("/");
+				if (i >= 0) {
+					fileName = fileName.substring(i + 1);
+				}
+			}
+			
+			packageName = classifier.getPackageName();
+			return false;
+		}
+		
+		public boolean visit(Statement stmt) {
+			
+			if (stmt.getFunctionMember() != null) {
+				stmt.getFunctionMember().accept(this);
+			}
+			return false;
+		}
+		
+		public boolean visit(Member mbr) {
+			if (mbr.getContainer() != null) {
+				mbr.getContainer().accept(this);
+			}
+			return false;
+		}
+		
+	}
+	
 	public class TopLevelFunctionResolver extends AbstractVisitor {
 		private LogicAndDataPart context;
 		private Function currentFunction;
@@ -757,4 +813,28 @@ public class IRUtils {
 		}
 		return false;
 	}
+
+
+	public static String getFileName(EObject obj) {
+		FileNameResolver resolver = new FileNameResolver(obj);
+		return resolver.getFilename();
+	}
+	
+	public static String getQualifiedFileName(EObject obj) {
+		FileNameResolver resolver = new FileNameResolver(obj);
+		String fileName = resolver.getFilename();
+		String packageName = resolver.getPackage();
+		
+		if (fileName == null || packageName == null) {
+			return null;
+		}
+		
+		if (packageName.length() == 0) {
+			return fileName;
+		}
+		
+		return packageName.replace('.', '/') + "/" + fileName;
+		
+	}
+
 }

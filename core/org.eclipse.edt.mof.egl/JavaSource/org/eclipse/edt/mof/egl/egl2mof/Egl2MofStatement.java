@@ -25,6 +25,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
 import org.eclipse.edt.compiler.core.ast.OtherwiseClause;
 import org.eclipse.edt.compiler.core.ast.PrepareStatement;
+import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.CallStatement;
@@ -78,6 +79,11 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		}
 	}
 	
+	private void setElementInformation(org.eclipse.edt.compiler.core.ast.Node node, Statement stmt) {
+		stmt.setFunctionMember(getCurrentFunctionMember());
+		super.setElementInformation(node, stmt);
+	}
+	
 	public boolean visit(org.eclipse.edt.compiler.core.ast.AddStatement node) {
 		IOStatementGenerator generator = getGeneratorFor(node);
 		Statement stmt = generator.genAddStatement(node, eObjects);
@@ -124,6 +130,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			field.setName(binding.getCaseSensitiveName());
 			field.setType((Type)mofTypeFor(binding.getType()));
 			field.setIsNullable(binding.getType().isNullable());
+			field.setContainer(getCurrentFunctionMember());
 			addInitializers(decl.getInitializer(), decl.getSettingsBlockOpt(), field, decl.getType());
 			expr.getFields().add(field);
 			setElementInformation(name, field);
@@ -216,6 +223,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	@Override
 	public boolean visit(OtherwiseClause otherwiseClause) {
 		StatementBlock block = factory.createStatementBlock();
+		setElementInformation(otherwiseClause, block);
 		stack.push(block);
 		for (Node node : (List<Node>)otherwiseClause.getStatements()) {
 			node.accept(this);
@@ -239,6 +247,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		clause.setTrueBranch(block);
 		stack.push(clause);
 		setElementInformation(whenClause, clause);
+		setElementInformation(whenClause, block);
 		return false;
 	}
 
@@ -392,6 +401,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		stmt.setBody(block);
 		stack.push(stmt);
 		setElementInformation(forStatement, stmt);
+		setElementInformation(forStatement, block);
 		return false;
 
 	}
@@ -471,6 +481,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		ifStatement.getCondition().accept(this);
 		stmt.setCondition((Expression)stack.pop());
 		StatementBlock block = factory.createStatementBlock();
+		setElementInformation(ifStatement, block);
 		stmt.setTrueBranch(block);
 		for (Node node : (List<Node>)ifStatement.getStmts()) {
 			node.accept(this);
@@ -478,6 +489,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		}
 		if (ifStatement.hasElse()) {
 			block = factory.createStatementBlock();
+			setElementInformation(ifStatement, block);
 			stmt.setFalseBranch(block);
 			for (Node node : (List<Node>)ifStatement.getElse().getStmts()) {
 				node.accept(this);
@@ -619,6 +631,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		stack.push(stmt);
 		setElementInformation(tryStatement, stmt);
 		StatementBlock block = factory.createStatementBlock();
+		setElementInformation(tryStatement, block);
 		stmt.setTryBlock(block);
 		for (Node node : (List<Node>)tryStatement.getStmts()) {
 			node.accept(this);
@@ -662,6 +675,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		whileStatement.getExpr().accept(this);
 		stmt.setCondition((Expression)stack.pop());
 		StatementBlock block = factory.createStatementBlock();
+		setElementInformation(whileStatement, block);
 		stmt.setBody(block);
 		for (Node node : (List<Node>)whileStatement.getStmts()) {
 			node.accept(this);

@@ -83,6 +83,7 @@ import org.eclipse.edt.mof.serialization.ProxyEObject;
 
 abstract class Egl2MofPart extends Egl2MofBase {
 	public MofSerializable currentPart;
+	protected FunctionMember currentFunction;
 	public List<NestedFunction> functionsToProcess = new ArrayList<NestedFunction>();
 	 
 
@@ -290,10 +291,12 @@ abstract class Egl2MofPart extends Egl2MofBase {
 			StatementBlock block = factory.createStatementBlock();
 			block.setFunctionMember(function);
 			function.setStatementBlock(block);
+			setCurrentFunctionMember(function);
 			for (Node stmt : (List<Node>)node.getStmts()) {
 				stmt.accept(this);
 				block.getStatements().add((Statement)stack.pop());
 			}
+			setCurrentFunctionMember(null);
 		}
 		setElementInformation(node, part);
 		stack.push(part);
@@ -389,14 +392,15 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		for (NestedFunction astFunc : functionsToProcess) {
 			IBinding binding = astFunc.getName().resolveDataBinding().getType();
 			FunctionMember irFunc = (FunctionMember)getEObjectFor(binding);
+			setCurrentFunctionMember(irFunc);
 			for (org.eclipse.edt.compiler.core.ast.Node node : (List<org.eclipse.edt.compiler.core.ast.Node>)astFunc.getStmts()) {
 				if (node instanceof org.eclipse.edt.compiler.core.ast.Statement) {
 					node.accept(this);
 					Statement irStmt = (Statement)stack.pop();
-					irStmt.setFunctionMember(irFunc);
 					irFunc.getStatements().add(irStmt);
 				}
 			}
+			setCurrentFunctionMember(null);
 		}
 		if (part instanceof LogicAndDataPart)
 			IRUtils.markOverloadedFunctions((LogicAndDataPart)part);
@@ -603,5 +607,13 @@ abstract class Egl2MofPart extends Egl2MofBase {
 				eglClass.getSuperTypes().add(superType);
 			}
 		}
-	}	
+	}
+	
+	protected void setCurrentFunctionMember(FunctionMember function) {
+		currentFunction = function;
+	}
+	
+	protected FunctionMember getCurrentFunctionMember() {
+		return currentFunction;
+	}
 }
