@@ -1,0 +1,37 @@
+package org.eclipse.edt.gen;
+
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
+
+public class CommonUtilities {
+
+	public static boolean isArgumentToBeAltered(FunctionParameter parameter, Expression expression, EglContext ctx) {
+		if (parameter.getParameterKind() == ParameterKind.PARM_IN) {
+			// if the parameter is reference then do not make a temporary
+			if (TypeUtils.isReferenceType(parameter.getType()))
+				return false;
+			// if the argument and parameter types mismatch, or if nullable, or not java primitive, then create a
+			// temporary
+			if (!parameter.getType().equals(expression.getType()) || parameter.isNullable() || expression.isNullable()
+				|| !ctx.mapsToPrimitiveType(parameter.getType()))
+				return true;
+			return false;
+		} else
+			return isBoxedParameterType(parameter, ctx);
+	}
+
+	public static boolean isBoxedParameterType(FunctionParameter parameter, EglContext ctx) {
+		if (parameter.getParameterKind() == ParameterKind.PARM_INOUT) {
+			if (TypeUtils.isReferenceType(parameter.getType()))
+				return true;
+			else if (ctx.mapsToPrimitiveType(parameter.getType()))
+				return true;
+			else if (parameter.isNullable())
+				return true;
+		} else if (parameter.getParameterKind() == ParameterKind.PARM_OUT)
+			return true;
+		return false;
+	}
+}
