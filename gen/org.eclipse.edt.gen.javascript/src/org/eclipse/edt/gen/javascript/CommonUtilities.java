@@ -13,41 +13,10 @@ package org.eclipse.edt.gen.javascript;
 
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.mof.egl.BinaryExpression;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.FunctionParameter;
-import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class CommonUtilities {
-
-	public static boolean isArgumentToBeAltered(FunctionParameter parameter, Expression expression, Context ctx) {
-		if (parameter.getParameterKind() == ParameterKind.PARM_IN) {
-			// if the parameter is reference then do not make a temporary
-			if (TypeUtils.isReferenceType(parameter.getType()))
-				return false;
-			// if the argument and parameter types mismatch, or if nullable, or not java primitive, then create a
-			// temporary
-			if (!parameter.getType().equals(expression.getType()) || parameter.isNullable() || expression.isNullable()
-				|| !ctx.mapsToPrimitiveType(parameter.getType()))
-				return true;
-			return false;
-		} else
-			return isBoxedParameterType(parameter, ctx);
-	}
-
-	public static boolean isBoxedParameterType(FunctionParameter parameter, Context ctx) {
-		if (parameter.getParameterKind() == ParameterKind.PARM_INOUT) {
-			if (TypeUtils.isReferenceType(parameter.getType()))
-				return true;
-			else if (ctx.mapsToPrimitiveType(parameter.getType()))
-				return true;
-			else if (parameter.isNullable())
-				return true;
-		} else if (parameter.getParameterKind() == ParameterKind.PARM_OUT)
-			return true;
-		return false;
-	}
 
 	public static String getEglNameForType(Type type) {
 		switch (TypeUtils.getTypeKind(type)) {
