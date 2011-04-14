@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AccessKind;
@@ -31,8 +30,8 @@ public class MemberTemplate extends JavaTemplate {
 	public void genRuntimeTypeName(Member mbr, Context ctx, TabbedWriter out, Object... args) {
 		if (mbr.getType() == null)
 			out.print("void");
-		else if (ctx.getAttribute(mbr, Constants.Annotation_functionArgumentTemporaryVariable) != null
-			&& ((Integer) ctx.getAttribute(mbr, Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
+		else if (ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
+			&& ((Integer) ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
 			out.print("AnyBoxedObject<");
 			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject, mbr);
 			out.print(">");

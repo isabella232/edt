@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-import org.eclipse.edt.gen.java.CommonUtilities;
-import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
@@ -25,14 +23,15 @@ public class MemberNameTemplate extends JavaTemplate {
 
 	public void genAssignment(MemberName expr, Context ctx, TabbedWriter out, Object... args) {
 		// check to see if we are copying boxed function parameters
-		if (expr.getMember() instanceof FunctionParameter && CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx)) {
+		if (expr.getMember() instanceof FunctionParameter
+			&& org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx)) {
 			ctx.gen(genAccessor, expr.getMember(), ctx, out, args);
 			out.print(".ezeCopy(");
 			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
 			out.print(")");
 			// check to see if we are copying LHS boxed temporary variables (inout and out types only)
-		} else if (ctx.getAttribute(expr.getMember(), Constants.Annotation_functionArgumentTemporaryVariable) != null
-			&& ((Integer) ctx.getAttribute(expr.getMember(), Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
+		} else if (ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
+			&& ((Integer) ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
 			ctx.gen(genExpression, (Expression) expr, ctx, out, args);
 			out.print(" = ");
 			out.print("AnyObject.ezeWrap(");
@@ -40,8 +39,9 @@ public class MemberNameTemplate extends JavaTemplate {
 			out.print(")");
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
 		} else if ((Expression) args[0] instanceof MemberName
-			&& ctx.getAttribute(((MemberName) (Expression) args[0]).getMember(), Constants.Annotation_functionArgumentTemporaryVariable) != null
-			&& ((Integer) ctx.getAttribute(((MemberName) (Expression) args[0]).getMember(), Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
+			&& ctx.getAttribute(((MemberName) (Expression) args[0]).getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
+			&& ((Integer) ctx.getAttribute(((MemberName) (Expression) args[0]).getMember(),
+				org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
 			ctx.gen(genExpression, (Expression) expr, ctx, out, args);
 			out.print(" = ");
 			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
@@ -60,7 +60,8 @@ public class MemberNameTemplate extends JavaTemplate {
 
 	public void genMemberName(MemberName expr, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genAccessor, expr.getMember(), ctx, out, args);
-		if (expr.getMember() instanceof FunctionParameter && CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx))
+		if (expr.getMember() instanceof FunctionParameter
+			&& org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx))
 			out.print(".ezeUnbox()");
 	}
 }

@@ -12,7 +12,6 @@
 package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.CommonUtilities;
-import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
@@ -50,8 +49,8 @@ public class FunctionTemplate extends JavaTemplate {
 		ctx.gen(genStatementNoBraces, function.getStatementBlock(), ctx, out, args);
 		// we need to create a local variable for the return, if the user didn't specify one
 		if (function.getType() != null
-			&& (ctx.getAttribute(function, Constants.Annotation_functionHasReturnStatement) == null || !((Boolean) ctx.getAttribute(function,
-				Constants.Annotation_functionHasReturnStatement)).booleanValue())) {
+			&& (ctx.getAttribute(function, org.eclipse.edt.gen.Constants.Annotation_functionHasReturnStatement) == null || !((Boolean) ctx.getAttribute(
+				function, org.eclipse.edt.gen.Constants.Annotation_functionHasReturnStatement)).booleanValue())) {
 			String temporary = ctx.nextTempName();
 			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
 			localDeclaration.setFunctionMember(function);
@@ -85,7 +84,7 @@ public class FunctionTemplate extends JavaTemplate {
 		for (int i = 0; i < function.getParameters().size(); i++) {
 			FunctionParameter decl = function.getParameters().get(i);
 			out.print(", ");
-			if (CommonUtilities.isBoxedParameterType(decl, ctx))
+			if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx))
 				ctx.gen(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
 			else
 				ctx.gen(genRuntimeTypeName, decl, ctx, out, TypeNameKind.JavaObject);

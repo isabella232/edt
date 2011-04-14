@@ -12,7 +12,6 @@
 package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.CommonUtilities;
-import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ExternalType;
@@ -44,11 +43,11 @@ public class FieldTemplate extends JavaTemplate {
 	public void genInitialization(Field field, Context ctx, TabbedWriter out, Object... args) {
 		// is this an inout or out temporary variable to a function. if so, then we need to default or instantiate for
 		// our parms, and set to null for inout
-		if (ctx.getAttribute(field, Constants.Annotation_functionArgumentTemporaryVariable) != null
-			&& ((Integer) ctx.getAttribute(field, Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
+		if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
+			&& ((Integer) ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
 			// if the value associated with the temporary variable is 2, then it is to be instantiated (OUT parm)
 			// otherwise it is to be defaulted to null (INOUT parm), as there is an assignment already created
-			if (((Integer) ctx.getAttribute(field, Constants.Annotation_functionArgumentTemporaryVariable)).intValue() == 2) {
+			if (((Integer) ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() == 2) {
 				out.print("AnyObject.ezeWrap(");
 				if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
 					ctx.gen(genDefaultValue, field.getType(), ctx, out, field);
