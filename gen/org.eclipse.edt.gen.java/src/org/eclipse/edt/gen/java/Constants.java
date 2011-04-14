@@ -17,7 +17,7 @@ public class Constants {
 	// smap constants used for debugging information
 	public static final String smap_header = "SMAP\n";
 	public static final String smap_stratum = "\nJava\n*S egl\n*F\n";
-	public static final String smap_lines = "\n*L\n";
+	public static final String smap_lines = "*L\n";
 	public static final String smap_trailer = "*E\n";
 	public static final String smap_extensiontrailer = "*X\n";
 	public static final String smap_attribute = "SourceDebugExtension";
@@ -28,8 +28,6 @@ public class Constants {
 	public static final String parameter_checkOverflow = "checkOverflow";
 
 	// these are annotation key values used as context hashmap keys
-	public static final String Annotation_functionArgumentTemporaryVariable = "functionArgumentTemporaryVariable";
-	public static final String Annotation_functionHasReturnStatement = "functionHasReturnStatement";
 	public static final String Annotation_partLibrariesUsed = "partLibrariesUsed";
 	public static final String Annotation_partRecordsUsed = "partRecordsUsed";
 	public static final String Annotation_partTypesImported = "partTypesImported";

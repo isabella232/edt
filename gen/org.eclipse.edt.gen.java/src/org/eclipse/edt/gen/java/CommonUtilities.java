@@ -20,16 +20,13 @@ import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.BinaryExpression;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
-import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class CommonUtilities {
 
@@ -147,34 +144,6 @@ public class CommonUtilities {
 			}
 		}
 
-		return false;
-	}
-
-	public static boolean isArgumentToBeAltered(FunctionParameter parameter, Expression expression, Context ctx) {
-		if (parameter.getParameterKind() == ParameterKind.PARM_IN) {
-			// if the parameter is reference then do not make a temporary
-			if (TypeUtils.isReferenceType(parameter.getType()))
-				return false;
-			// if the argument and parameter types mismatch, or if nullable, or not java primitive, then create a
-			// temporary
-			if (!parameter.getType().equals(expression.getType()) || parameter.isNullable() || expression.isNullable()
-				|| !ctx.mapsToPrimitiveType(parameter.getType()))
-				return true;
-			return false;
-		} else
-			return isBoxedParameterType(parameter, ctx);
-	}
-
-	public static boolean isBoxedParameterType(FunctionParameter parameter, Context ctx) {
-		if (parameter.getParameterKind() == ParameterKind.PARM_INOUT) {
-			if (TypeUtils.isReferenceType(parameter.getType()))
-				return true;
-			else if (ctx.mapsToPrimitiveType(parameter.getType()))
-				return true;
-			else if (parameter.isNullable())
-				return true;
-		} else if (parameter.getParameterKind() == ParameterKind.PARM_OUT)
-			return true;
 		return false;
 	}
 
@@ -348,7 +317,13 @@ public class CommonUtilities {
 			// get the line number. If it is not found, then we can't write the debug extension
 			Annotation annotation = field.getAnnotation(IEGLConstants.EGL_LOCATION);
 			if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
-				ctx.getDebugExtension().append("" + ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue() + ";");
+				ctx.getDebugExtension().append("" + ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue());
+				if (ctx.getCurrentFile() != null) {
+					if (ctx.getDebugFiles().indexOf(ctx.getCurrentFile()) < 0)
+						ctx.getDebugFiles().add(ctx.getCurrentFile());
+					ctx.getDebugExtension().append("#" + (ctx.getDebugFiles().indexOf(ctx.getCurrentFile()) + 1) + ";");
+				} else
+					ctx.getDebugExtension().append("#1" + ";");
 				ctx.getDebugExtension().append(field.getName() + ";");
 				ctx.getDebugExtension().append(field.getName() + ";");
 				ctx.getDebugExtension().append(field.getType().getTypeSignature() + "\n");
@@ -360,11 +335,17 @@ public class CommonUtilities {
 		// get the line number. If it is not found, then we can't write the debug extension
 		Annotation annotation = function.getAnnotation(IEGLConstants.EGL_LOCATION);
 		if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
-			ctx.getDebugExtension().append("" + ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue() + ";");
+			ctx.getDebugExtension().append("" + ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue());
+			if (ctx.getCurrentFile() != null) {
+				if (ctx.getDebugFiles().indexOf(ctx.getCurrentFile()) < 0)
+					ctx.getDebugFiles().add(ctx.getCurrentFile());
+				ctx.getDebugExtension().append("#" + (ctx.getDebugFiles().indexOf(ctx.getCurrentFile()) + 1) + ";");
+			} else
+				ctx.getDebugExtension().append("#1" + ";");
 			ctx.getDebugExtension().append("F:" + function.getName() + ";(");
 			for (int i = 0; i < function.getParameters().size(); i++) {
 				FunctionParameter decl = function.getParameters().get(i);
-				if (CommonUtilities.isBoxedParameterType(decl, ctx))
+				if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx))
 					ctx.getDebugExtension().append("Lorg/eclipse/edt/javart/AnyBoxedObject;");
 				else
 					ctx.getDebugExtension().append(generateJavaTypeSignature(function.getParameters().get(i).getType(), ctx));

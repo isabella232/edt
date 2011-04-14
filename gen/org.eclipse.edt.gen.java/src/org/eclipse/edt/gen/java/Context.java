@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
@@ -37,8 +38,11 @@ public class Context extends EglContext {
 	private int lastJavaLineNumber;
 
 	private String currentFunction;
+	private String currentFile;
+
 	private StringBuffer debugData = new StringBuffer();
 	private StringBuffer debugExtension = new StringBuffer();
+	private List<String> debugFiles = new ArrayList<String>();
 
 	public Context(AbstractGeneratorCommand processor) {
 		super(processor);
@@ -54,12 +58,24 @@ public class Context extends EglContext {
 		this.currentFunction = currentFunction;
 	}
 
+	public String getCurrentFile() {
+		return currentFile;
+	}
+
+	public void setCurrentFile(String currentFile) {
+		this.currentFile = currentFile;
+	}
+
 	public StringBuffer getDebugData() {
 		return debugData;
 	}
 
 	public StringBuffer getDebugExtension() {
 		return debugExtension;
+	}
+
+	public List<String> getDebugFiles() {
+		return debugFiles;
 	}
 
 	public String getRawPrimitiveMapping(String item) {
@@ -195,6 +211,12 @@ public class Context extends EglContext {
 	public void writeDebugLine() {
 		if (debugHasOutstandingLine) {
 			debugData.append("" + firstEglLineNumber);
+			if (currentFile != null) {
+				if (debugFiles.indexOf(currentFile) < 0)
+					debugFiles.add(currentFile);
+				debugData.append("#" + (debugFiles.indexOf(currentFile) + 1));
+			} else
+				debugData.append("#1");
 			debugData.append(":" + firstJavaLineNumber);
 			if (firstJavaLineNumber != lastJavaLineNumber)
 				debugData.append("," + (lastJavaLineNumber - firstJavaLineNumber + 1));

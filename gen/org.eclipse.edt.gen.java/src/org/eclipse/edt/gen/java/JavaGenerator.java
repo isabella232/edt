@@ -62,19 +62,31 @@ public class JavaGenerator extends Generator {
 			context.validate(JavaTemplate.validatePart, part, context, (Object) null);
 			if (!context.getMessageRequestor().isError()) {
 				out.getWriter().flush();
+				// get the egl file being processed
 				String eglFileName = part.getFileName();
 				if (eglFileName.indexOf('\\') >= 0)
 					eglFileName = eglFileName.substring(eglFileName.lastIndexOf('\\') + 1);
 				if (eglFileName.indexOf('/') >= 0)
 					eglFileName = eglFileName.substring(eglFileName.lastIndexOf('/') + 1);
+				// now we have a file name, without the path
 				String fileName = eglFileName;
 				if (fileName.indexOf('.') >= 0)
 					fileName = fileName.substring(0, fileName.lastIndexOf('.'));
 				fileName = fileName + generator.getFileExtention();
-				context.getDebugData().append(fileName + Constants.smap_stratum + eglFileName + Constants.smap_lines);
+				context.getDebugData().append(fileName + Constants.smap_stratum);
+				// we need to insert the file list here, but cannot do this until the part generation finished
+				context.getDebugData().append(Constants.smap_lines);
 				context.gen(JavaTemplate.genPart, part, context, out, (Object) null);
 				context.writeDebugLine();
+				// time to insert the list of files
+				int index = 0;
+				String fileList = "";
+				for (String eglFile : context.getDebugFiles())
+					fileList += "" + (++index) + " " + eglFile + "\n";
+				context.getDebugData().insert(context.getDebugData().indexOf(Constants.smap_stratum) + Constants.smap_stratum.length(), fileList);
+				// finish up the debug data
 				context.getDebugData().append(Constants.smap_trailer);
+				// add our special egl extension
 				context.getDebugData().append(context.getDebugExtension());
 				context.getDebugData().append(Constants.smap_extensiontrailer);
 				out.flush();
