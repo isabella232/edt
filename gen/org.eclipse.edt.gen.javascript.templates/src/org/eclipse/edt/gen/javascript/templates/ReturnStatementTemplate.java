@@ -14,7 +14,6 @@ package org.eclipse.edt.gen.javascript.templates;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
@@ -30,7 +29,7 @@ public class ReturnStatementTemplate extends JavaScriptTemplate {
 		if (func != null) {
 			List<FunctionParameter> parms = new ArrayList<FunctionParameter>();
 			for (FunctionParameter parm : func.getParameters()) {
-				if (CommonUtilities.isBoxedParameterType(parm, ctx))
+				if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(parm, ctx))
 					parms.add(parm);
 			}
 			if (!parms.isEmpty()) {

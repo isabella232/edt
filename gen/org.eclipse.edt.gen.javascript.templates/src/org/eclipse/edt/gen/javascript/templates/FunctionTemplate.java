@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Function;
@@ -30,7 +29,7 @@ public class FunctionTemplate extends JavaScriptTemplate {
 		out.print(": function(");
 		ctx.foreach(function.getParameters(), ',', genDeclaration, ctx, out, args);
 		for (FunctionParameter parm : function.getParameters()) {
-			if (CommonUtilities.isBoxedParameterType(parm, ctx)) {
+			if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(parm, ctx)) {
 				out.print(", ");
 				out.print(eze$$func);
 				out.print(", ");
@@ -49,7 +48,7 @@ public class FunctionTemplate extends JavaScriptTemplate {
 		// next determine if there are inout or out parameters, as we only need to alias then
 		boolean needsAlias = false;
 		for (int i = 0; i < function.getParameters().size(); i++) {
-			if (CommonUtilities.isBoxedParameterType(function.getParameters().get(i), ctx))
+			if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(function.getParameters().get(i), ctx))
 				needsAlias = true;
 		}
 		// if we need an alias, then generate it, otherwise use the original name

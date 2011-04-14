@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
@@ -24,7 +23,8 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 
 	public void genAssignment(MemberName expr, Context ctx, TabbedWriter out, Object... args) {
 		// check to see if we are copying boxed function parameters
-		if (expr.getMember() instanceof FunctionParameter && CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx)) {
+		if (expr.getMember() instanceof FunctionParameter
+			&& org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx)) {
 			ctx.gen(genAccessor, expr.getMember(), ctx, out, args);
 			out.print(".ezeCopy(");
 			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
@@ -43,7 +43,8 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 
 	public void genMemberName(MemberName expr, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genAccessor, expr.getMember(), ctx, out, args);
-		if (expr.getMember() instanceof FunctionParameter && CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx)) {
+		if (expr.getMember() instanceof FunctionParameter
+			&& org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx)) {
 			out.print(".");
 			out.print(eze$$value);
 		}

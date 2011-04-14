@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
@@ -34,7 +33,7 @@ public class InvocationExpressionTemplate extends JavaScriptTemplate {
 		FunctionParameter[] resetFunctionParms = null;
 		for (FunctionParameter parameter : expr.getTarget().getParameters()) {
 			Expression argExpr = expr.getArguments().get(i);
-			if (CommonUtilities.isBoxedParameterType(parameter, ctx)) {
+			if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(parameter, ctx)) {
 				if (resetFunctionParms == null)
 					resetFunctionParms = new FunctionParameter[expr.getTarget().getParameters().size()];
 				resetFunctionParms[i] = parameter;
