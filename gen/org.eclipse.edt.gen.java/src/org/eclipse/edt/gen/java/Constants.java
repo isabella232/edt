@@ -16,7 +16,7 @@ public class Constants {
 
 	// smap constants used for debugging information
 	public static final String smap_header = "SMAP\n";
-	public static final String smap_stratum = "\nJava\n*S egl\n*F\n";
+	public static final String smap_stratum = "\negl\n*S egl\n*F\n";
 	public static final String smap_lines = "*L\n";
 	public static final String smap_trailer = "*E\n";
 	public static final String smap_extensiontrailer = "*X\n";
