@@ -182,9 +182,9 @@ public class EGL2Example extends EGL2Java {
 		// do that, other than to keep things organized in the same fashion as EGL2Java does. We could just place all 3
 		// overriding definitions in a single EGL2Example template directory instead, and that is what we are going to do.
 		// So, let's only define 1 overriding template located in our current project. The name defines the location and the
-		// last .example defines the template file's name (.properties is automatically added). This file can be called
+		// last .templates defines the template file's name (.properties is automatically added). This file can be called
 		// anything you like.
-		templates.add("org.eclipse.edt.gen.generator.example.templates.example");
+		templates.add("org.eclipse.edt.gen.generator.example.templates.templates");
 		// Now add the ones we are extending
 		String[] others = super.getTemplatePath();
 		for (String other : others) {
