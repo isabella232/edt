@@ -15,8 +15,6 @@ import org.eclipse.edt.gen.generator.example.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.TypedElement;
 
 public class IntTypeTemplate extends org.eclipse.edt.gen.java.templates.egl.lang.IntTypeTemplate {
 
@@ -25,11 +23,7 @@ public class IntTypeTemplate extends org.eclipse.edt.gen.java.templates.egl.lang
 		// extendComments=true, then we add an imbedded comment to the definition
 		if ((Boolean) ctx.getParameter(Constants.parameter_extendComments))
 			out.print("/* comment added by -extendComments parameter */");
-		if (args.length > 1 && args[1] instanceof TypedElement && ((TypedElement) args[1]).isNullable())
-			out.print("null");
-		else if (args.length > 1 && args[1] instanceof Expression && ((Expression) args[1]).isNullable())
-			out.print("null");
-		else
-			out.print("0");
+		// pass control to the original generator's logic
+		super.genDefaultValue(type, ctx, out, args);
 	}
 }

@@ -23,6 +23,7 @@ public class AssignmentStatementTemplate extends org.eclipse.edt.gen.java.templa
 		// extendComments=true, then we add an imbedded comment to the definition
 		if ((Boolean) ctx.getParameter(Constants.parameter_extendComments))
 			out.print("/* comment added by -extendComments parameter */");
-		ctx.gen(genExpression, stmt.getAssignment(), ctx, out, args);
+		// pass control to the original generator's logic
+		super.genStatementBody(stmt, ctx, out, args);
 	}
 }
