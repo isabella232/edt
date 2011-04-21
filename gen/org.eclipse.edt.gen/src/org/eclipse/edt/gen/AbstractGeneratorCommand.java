@@ -32,7 +32,7 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 
 	public AbstractGeneratorCommand() {
 		super();
-		// define command command parameters
+		// define basic command parameters
 		this.installParameter(true, Constants.parameter_output, new String[] { "output", "out", "o" }, new String[] { null },
 			"Output must identify the location to write the output");
 		this.installParameter(true, Constants.parameter_part, new String[] { "part", "p" }, new String[] { null },
