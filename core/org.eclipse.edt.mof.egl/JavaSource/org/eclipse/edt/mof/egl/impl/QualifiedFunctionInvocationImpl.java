@@ -101,7 +101,6 @@ public class QualifiedFunctionInvocationImpl extends InvocationExpressionImpl im
 
 	}
 	
-	// TODO: Handle function overloading
 	private Function resolveFunction() {
 		StructPart container = (StructPart)getQualifier().getType().getClassifier();
 		StructPart[] argTypes = new StructPart[getArguments().size()];

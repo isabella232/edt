@@ -56,6 +56,7 @@ import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.BooleanLiteral;
 import org.eclipse.edt.mof.egl.CharLiteral;
+import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DBCharLiteral;
 import org.eclipse.edt.mof.egl.DecimalLiteral;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
@@ -86,6 +87,7 @@ import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.NullLiteral;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.SetValuesExpression;
@@ -326,15 +328,19 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				boolean isStatic = Binding.isValidBinding(functionBinding) && (functionBinding.isStatic() || declarer instanceof LibraryBinding);
 				if (node.getTarget() instanceof SimpleName && !isStatic) {
 					FunctionMember irFunc = (FunctionMember)getEObjectFor(functionBinding);
-					fi = factory.createFunctionInvocation();
-					if (irFunc == null) {
-						//TODO probably need a dangling reference here!
+					if (irFunc == null || isSuperTypeMember(irFunc)) {
+						// Qualify with this to get QualifiedFunctionInvocation which will do dynamic lookup
+						fi = factory.createQualifiedFunctionInvocation();
 						fi.setId(node.getTarget().getCanonicalString());
+						ThisExpression thisExpr = factory.createThisExpression();
+						thisExpr.setThisObject(getCurrentFunctionMember().getContainer());
+						((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
 					}
 					else {
+						fi = factory.createFunctionInvocation();
 						fi.setId(irFunc.getName());
+						((FunctionInvocation)fi).setTarget(irFunc);
 					}
-					((FunctionInvocation)fi).setTarget(irFunc);
 		
 				}
 				else {
@@ -550,9 +556,18 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				Element context = (Element)getEObjectFor(qualifier);
 				name = (Name)addQualifier(context, name);
 			}
-		} 
-		if (name instanceof MemberName)
-			((MemberName)name).setMember((Member)getEObjectFor(binding));
+		}
+		if (name instanceof MemberName) {
+			Member mbr = (Member)getEObjectFor(binding);
+			if (mbr != null && isSuperTypeMember(mbr)) {
+				ThisExpression thisExpr = factory.createThisExpression();
+				thisExpr.setThisObject((Part)currentPart);
+				name = (Name)addQualifier(thisExpr, name);
+			}
+			else {
+				((MemberName)name).setMember(mbr);
+			}
+		}
 		setElementInformation(node, name);
 		stack.push(name);
 		return false;
@@ -924,6 +939,10 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			return true;
 		}
 		return false;
+	}
+
+	private boolean isSuperTypeMember(Member mbr) {
+		return !((Container)currentPart).getMembers().contains(mbr);
 	}
 
 	private boolean isWithPatternFunction(IDataBinding binding) {

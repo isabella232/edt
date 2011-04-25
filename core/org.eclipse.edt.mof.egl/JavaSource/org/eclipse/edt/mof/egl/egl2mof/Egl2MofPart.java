@@ -13,7 +13,6 @@ package org.eclipse.edt.mof.egl.egl2mof;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 import java.util.Map.Entry;
 
 import org.eclipse.edt.compiler.binding.ClassFieldBinding;
@@ -72,6 +71,7 @@ import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
+import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.StructuredRecord;
@@ -408,10 +408,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		// Set the stereotype value if necessary
 		IPartBinding partBinding = (IPartBinding)astPart.getName().resolveBinding();
 		IAnnotationBinding subtype = partBinding.getSubTypeAnnotationBinding();
-		
-		// Set default super type if necessary
-		setDefaultSuperType(mofPart, partBinding);
-		
+				
 		if (inMofProxyContext) {
 			EMetadataObject metadata = (EMetadataObject)mofValueFrom(subtype);
 			((EClass)mofPart).getMetadataList().add(metadata);
@@ -423,6 +420,8 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		}
 		else if (mofPart instanceof Part) {
 			createAnnotations(partBinding, (Part)mofPart);
+			if (mofPart instanceof StructPart)
+				setDefaultSuperType((StructPart)mofPart);
 			setElementInformation(astPart,  (Part)mofPart);
 		}
 		
@@ -583,7 +582,31 @@ abstract class Egl2MofPart extends Egl2MofBase {
 			}
 		}
 	}
-		
+	private void setDefaultSuperType(StructPart part) {
+		Stereotype stereotype = part.getStereotype();
+		if (stereotype != null) {
+			StructPart superType = (StructPart)((StereotypeType)stereotype.getEClass()).getDefaultSuperType();
+			if (superType == null) {
+				String typeSignature = Type_AnyObject;
+				if (part instanceof Record)
+					typeSignature = Type_AnyRecord;
+				else if (part instanceof StructuredRecord) {
+					typeSignature = Type_AnyStruct;
+				}
+				else if (part instanceof AnnotationType) {
+					typeSignature = Type_Annotation;
+				}
+				else if (part instanceof StereotypeType) {
+					typeSignature = Type_Stereotype;
+				}
+				superType = (StructPart)getMofSerializable(typeSignature);
+			}
+			if (superType != null)
+				part.getSuperTypes().add(superType);
+			
+		}
+	}
+	
 	private void setDefaultSuperType(MofSerializable part, IPartBinding binding) {
 		if (part instanceof StructPart) {
 			StructPart eglClass = (StructPart)part;

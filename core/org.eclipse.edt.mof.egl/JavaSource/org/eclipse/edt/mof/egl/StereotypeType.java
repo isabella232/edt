@@ -13,7 +13,7 @@ package org.eclipse.edt.mof.egl;
 
 import java.util.List;
 
-import org.eclipse.edt.mof.EClass;
+import org.eclipse.edt.mof.MofSerializable;
 
 
 public interface StereotypeType extends AnnotationType {
@@ -29,10 +29,10 @@ public interface StereotypeType extends AnnotationType {
 	boolean isReferenceType();
 	void setIsReferenceType(boolean value);
 	
-	EClass getPartType();
-	void setPartType(EClass eClass);
+	MofSerializable getPartType();
+	void setPartType(MofSerializable eClass);
 
-	EClass getDefaultSuperType();
-	void setDefaultSuperType(EClass eClass);
+	MofSerializable getDefaultSuperType();
+	void setDefaultSuperType(MofSerializable eClass);
 
 }

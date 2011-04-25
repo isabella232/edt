@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.IrFactory;
@@ -96,22 +97,22 @@ public class StereotypeTypeImpl extends AnnotationTypeImpl implements Stereotype
 	}
 	
 	@Override
-	public EClass getPartType() {
-		return (EClass)slotGet(Slot_partType);
+	public MofSerializable getPartType() {
+		return (MofSerializable)slotGet(Slot_partType);
 	}
 
 	@Override
-	public void setPartType(EClass eClass) {
+	public void setPartType(MofSerializable eClass) {
 		slotSet(Slot_partType, eClass);
 	}
 
 	@Override
-	public EClass getDefaultSuperType() {
-		return (EClass)slotGet(Slot_defaultSuperType);
+	public MofSerializable getDefaultSuperType() {
+		return (MofSerializable)slotGet(Slot_defaultSuperType);
 	}
 
 	@Override
-	public void setDefaultSuperType(EClass eClass) {
+	public void setDefaultSuperType(MofSerializable eClass) {
 		slotSet(Slot_defaultSuperType, eClass);
 	}
 
