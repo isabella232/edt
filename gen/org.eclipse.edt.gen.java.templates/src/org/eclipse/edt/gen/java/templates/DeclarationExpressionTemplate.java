@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 
 import org.eclipse.edt.mof.egl.DeclarationExpression;
@@ -21,6 +22,9 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 
 	public void genDeclarationExpression(DeclarationExpression expr, Context ctx, TabbedWriter out, Object... args) {
 		for (Field field : expr.getFields()) {
+			// write out the debug extension data
+			CommonUtilities.generateSmapExtension(field, ctx);
+			// process the field
 			ctx.gen(genRuntimeTypeName, field, ctx, out, args);
 			out.print(" ");
 			ctx.gen(genName, field, ctx, out, args);
