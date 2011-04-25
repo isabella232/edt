@@ -23,6 +23,7 @@ import org.eclipse.edt.mof.codegen.api.TemplateContext;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
 
@@ -206,6 +207,22 @@ public class Context extends EglContext {
 		} else
 			// process the generation
 			super.gen(genMethod, object, ctx, out, args);
+	}
+
+	public void genSmapEnd(Function object, TabbedWriter out) {
+		// is this the first time into an expression group
+		Annotation annotation = object.getAnnotation(IEGLConstants.EGL_LOCATION);
+		if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
+			int thisEglLineNumber = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
+			// if there is an outstanding line, write it
+			writeSmapLine();
+			smapHasOutstandingLine = true;
+			firstEglLineNumber = thisEglLineNumber;
+			lastEglLineNumber = thisEglLineNumber;
+			firstJavaLineNumber = out.getLineNumber();
+			lastJavaLineNumber = out.getLineNumber();
+			smapIsProcessing = false;
+		}
 	}
 
 	public void writeSmapLine() {
