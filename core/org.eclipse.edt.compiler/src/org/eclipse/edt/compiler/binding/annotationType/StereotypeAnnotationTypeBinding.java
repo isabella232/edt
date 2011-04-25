@@ -33,7 +33,9 @@ public class StereotypeAnnotationTypeBinding extends ComplexAnnotationTypeBindin
 			"MemberAnnotations",	ArrayTypeBinding.getInstance(SystemPartManager.RECORDREF_BINDING),
 			"MutualExclusions",		ArrayTypeBinding.getInstance(ArrayTypeBinding.getInstance(SystemPartManager.RECORDREF_BINDING)),		
 			"ReferenceType",		PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN),
-			"StereotypeContexts",	ArrayTypeBinding.getInstance(SystemPartManager.RECORDREF_BINDING)			
+			"StereotypeContexts",	ArrayTypeBinding.getInstance(SystemPartManager.RECORDREF_BINDING),			
+			"PartType",				SystemPartManager.TYPEREF_BINDING,			
+			"DefaultSuperType",		SystemPartManager.TYPEREF_BINDING			
 		});
 	}
 	
