@@ -559,7 +559,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		}
 		if (name instanceof MemberName) {
 			Member mbr = (Member)getEObjectFor(binding);
-			if (mbr != null && isSuperTypeMember(mbr)) {
+			if (mbr == null || isSuperTypeMember(mbr)) {
 				ThisExpression thisExpr = factory.createThisExpression();
 				thisExpr.setThisObject((Part)currentPart);
 				name = (Name)addQualifier(thisExpr, name);
