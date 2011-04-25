@@ -26,7 +26,7 @@ public class FieldTemplate extends JavaTemplate {
 
 	public void genDeclaration(Field field, Context ctx, TabbedWriter out, Object... args) {
 		// write out the debug extension data
-		CommonUtilities.generateDebugExtension(field, ctx);
+		CommonUtilities.generateSmapExtension(field, ctx);
 		// process the field
 		ctx.genSuper(genDeclaration, Field.class, field, ctx, out, args);
 		transientOption(field, out, args);

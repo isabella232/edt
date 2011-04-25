@@ -21,7 +21,7 @@ public class ConstantFieldTemplate extends JavaTemplate {
 
 	public void genDeclaration(ConstantField field, Context ctx, TabbedWriter out, Object... args) {
 		// write out the debug extension data
-		CommonUtilities.generateDebugExtension((Field) field, ctx);
+		CommonUtilities.generateSmapExtension((Field) field, ctx);
 		// process the field
 		out.print("private static final ");
 		ctx.gen(genRuntimeTypeName, field, ctx, out, args);

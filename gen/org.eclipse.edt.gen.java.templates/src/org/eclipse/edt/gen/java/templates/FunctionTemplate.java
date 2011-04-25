@@ -30,7 +30,7 @@ public class FunctionTemplate extends JavaTemplate {
 
 	public void genDeclaration(Function function, Context ctx, TabbedWriter out, Object... args) {
 		// write out the debug extension data
-		CommonUtilities.generateDebugExtension(function, ctx);
+		CommonUtilities.generateSmapExtension(function, ctx);
 		// process the function
 		ctx.genSuper(genDeclaration, Function.class, function, ctx, out, args);
 		// remember what function we are processing
@@ -47,10 +47,11 @@ public class FunctionTemplate extends JavaTemplate {
 		out.println(") ");
 		out.println("{");
 		ctx.gen(genStatementNoBraces, function.getStatementBlock(), ctx, out, args);
-		// we need to create a local variable for the return, if the user didn't specify one
-		if (function.getType() != null
-			&& (ctx.getAttribute(function, org.eclipse.edt.gen.Constants.Annotation_functionHasReturnStatement) == null || !((Boolean) ctx.getAttribute(
-				function, org.eclipse.edt.gen.Constants.Annotation_functionHasReturnStatement)).booleanValue())) {
+		// if there is no return for this function, we need to add smap data for the ending }
+		if (function.getType() == null) {
+			// we will need to create a local variable for the return, if the user didn't specify one
+		} else if (ctx.getAttribute(function, org.eclipse.edt.gen.Constants.Annotation_functionHasReturnStatement) == null
+			|| !((Boolean) ctx.getAttribute(function, org.eclipse.edt.gen.Constants.Annotation_functionHasReturnStatement)).booleanValue()) {
 			String temporary = ctx.nextTempName();
 			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
 			localDeclaration.setFunctionMember(function);
