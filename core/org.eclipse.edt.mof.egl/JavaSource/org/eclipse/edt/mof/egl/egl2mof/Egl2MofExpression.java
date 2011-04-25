@@ -942,7 +942,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	}
 
 	private boolean isSuperTypeMember(Member mbr) {
-		return !((Container)currentPart).getMembers().contains(mbr);
+		return !(mbr.getContainer() instanceof FunctionMember) && !((Container)currentPart).getMembers().contains(mbr);
 	}
 
 	private boolean isWithPatternFunction(IDataBinding binding) {
