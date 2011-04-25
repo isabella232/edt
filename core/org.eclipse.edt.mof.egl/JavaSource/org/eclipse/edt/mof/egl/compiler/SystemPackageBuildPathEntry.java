@@ -104,8 +104,8 @@ public class SystemPackageBuildPathEntry extends ZipFileBuildPathEntry implement
 			}
 	}
 	
-	private String convertToStoreKey(String entry) {
-		//entries are in the form: "pkg1/pkg2/partName.eglmof". Need to convert this to:
+	protected String convertToStoreKey(String entry) {
+		//entries are in the form: "pkg1/pkg2/partName.eglxml". Need to convert this to:
 		//"egl:pkg1.pkg2.partName"
 		
 		//strip off the filename extension
@@ -123,7 +123,7 @@ public class SystemPackageBuildPathEntry extends ZipFileBuildPathEntry implement
 		entry = entry.toUpperCase().toLowerCase();
 		String[] entries = getAllEntries();
 		for (int i = 0; i < entries.length; i++) {
-			if (entry.equals(entries[i])) {
+			if (entry.equalsIgnoreCase(entries[i])) {
 				return true;
 			}
 		}

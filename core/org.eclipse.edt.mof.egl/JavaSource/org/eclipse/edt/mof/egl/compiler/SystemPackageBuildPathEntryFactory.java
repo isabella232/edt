@@ -47,11 +47,13 @@ public class SystemPackageBuildPathEntryFactory implements
 		return entry;
 	}
 
-	private void createMOFEntry(String path) {
-		SystemPackageMOFPathEntry entry = new SystemPackageMOFPathEntry(path, ZipFileObjectStore.MOFXML);
+	private SystemPackageMOFPathEntry createMOFEntry(org.eclipse.edt.compiler.internal.core.lookup.IEnvironment env, String path, ISystemPartBindingLoadedRequestor req) {
+		SystemPackageMOFPathEntry entry = new SystemPackageMOFPathEntry(env, path, req, ZipFileObjectStore.MOFXML, converter);
 		
 		ObjectStore store = new ZipFileObjectStore(new File(path), irEnv, ObjectStore.XML, ZipFileObjectStore.MOFXML, entry);
+		entry.setStore(store);
 		irEnv.registerObjectStore(org.eclipse.edt.mof.serialization.IEnvironment.DefaultScheme, store);
+		return entry;
 	}
 	
 	
@@ -68,7 +70,7 @@ public class SystemPackageBuildPathEntryFactory implements
 	  			}
 		  		else {
 			  		if (file.getName().endsWith(EDT_MOF_EXTENSION)){
-			  			createMOFEntry(file.getAbsolutePath()); 
+			  			list.add(createMOFEntry(env, file.getAbsolutePath(), req)); 
 			  		}
 		  		}
 	  		}

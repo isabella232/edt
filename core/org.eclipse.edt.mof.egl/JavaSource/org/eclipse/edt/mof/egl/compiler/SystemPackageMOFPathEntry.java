@@ -11,34 +11,38 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.compiler;
 
+import java.util.Map;
+
+import org.eclipse.edt.compiler.ISystemPackageBuildPathEntry;
+import org.eclipse.edt.compiler.ISystemPartBindingLoadedRequestor;
+import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
+import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.io.ZipFileBuildPathEntry;
+import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.mof2binding.Mof2Binding;
 import org.eclipse.edt.mof.serialization.IZipFileEntryManager;
 
 
-public class SystemPackageMOFPathEntry extends ZipFileBuildPathEntry implements IZipFileEntryManager{
+public class SystemPackageMOFPathEntry extends SystemPackageBuildPathEntry implements ISystemPackageBuildPathEntry, IZipFileEntryManager{
 
 	private String fileExtension;
 
-	public SystemPackageMOFPathEntry(String path, String fileExtension) {
-		super(path);
-
-		this.fileExtension = fileExtension;
-		processEntries();
+	public SystemPackageMOFPathEntry(IEnvironment env, String path, ISystemPartBindingLoadedRequestor req, String fileExtension, Mof2Binding converter) {
+		super(env, path, req, fileExtension, converter);
 	}
 
-	protected String getFileExtension() {
-		return fileExtension;
-	}
 	
-	public boolean hasEntry(String entry) {
+	protected String convertToStoreKey(String entry) {
+		//entries are in the form: "pkg1/pkg2/partName.mofxml". Need to convert this to:
+		//"pkg1.pkg2.partName"
 		
-		String[] entries = getAllEntries();
-		for (int i = 0; i < entries.length; i++) {
-			if (entry.equals(entries[i])) {
-				return true;
-			}
-		}
-		return false;
+		//strip off the filename extension
+		String value = entry.substring(0, entry.indexOf("."));
+		
+		return value.replaceAll("/", ".");
+		
 	}
 
 
