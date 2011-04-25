@@ -47,11 +47,10 @@ public class FunctionTemplate extends JavaTemplate {
 		out.println(") ");
 		out.println("{");
 		ctx.gen(genStatementNoBraces, function.getStatementBlock(), ctx, out, args);
-		// if there is no return for this function, we need to add smap data for the ending }
-		if (function.getType() == null) {
-			// we will need to create a local variable for the return, if the user didn't specify one
-		} else if (ctx.getAttribute(function, org.eclipse.edt.gen.Constants.Annotation_functionHasReturnStatement) == null
-			|| !((Boolean) ctx.getAttribute(function, org.eclipse.edt.gen.Constants.Annotation_functionHasReturnStatement)).booleanValue()) {
+		// we need to create a local variable for the return, if the user didn't specify one
+		if (function.getType() != null
+			&& (ctx.getAttribute(function, org.eclipse.edt.gen.Constants.Annotation_functionHasReturnStatement) == null || !((Boolean) ctx.getAttribute(
+				function, org.eclipse.edt.gen.Constants.Annotation_functionHasReturnStatement)).booleanValue())) {
 			String temporary = ctx.nextTempName();
 			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
 			localDeclaration.setFunctionMember(function);
@@ -75,6 +74,9 @@ public class FunctionTemplate extends JavaTemplate {
 			returnStatement.setExpression(nameExpression);
 			ctx.gen(genStatement, returnStatement, ctx, out, args);
 		}
+		// we always write out smap data for the final brace, just in case there is no return statement
+		ctx.genSmapEnd(function, out);
+		// write out the method ending brace
 		out.println("}");
 	}
 
