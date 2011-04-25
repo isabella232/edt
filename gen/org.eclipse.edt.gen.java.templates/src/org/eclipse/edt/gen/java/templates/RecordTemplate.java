@@ -65,14 +65,12 @@ public class RecordTemplate extends JavaTemplate {
 	}
 
 	protected void genConstructorEzeCopy(Record part, Context ctx, TabbedWriter out, Object... args) {
-		out.println("@Override");
 		out.println("public void ezeCopy(Object source) {");
 		out.print("ezeCopy(");
 		out.print("(");
 		ctx.gen(genClassName, part, ctx, out, args);
 		out.println(") source);");
 		out.println("}");
-		out.println("@Override");
 		out.println("public void ezeCopy(egl.lang.AnyValue source) {");
 		List<Field> fields = part.getFields();
 		if (fields != null && fields.size() != 0) {
@@ -113,7 +111,6 @@ public class RecordTemplate extends JavaTemplate {
 	}
 
 	protected void genConstructorEzeNewValue(Record part, Context ctx, TabbedWriter out, Object... args) {
-		out.println("@Override");
 		out.print("public ");
 		ctx.gen(genClassName, part, ctx, out, args);
 		out.println(" ezeNewValue(Object... args) {");
@@ -124,7 +121,6 @@ public class RecordTemplate extends JavaTemplate {
 	}
 
 	protected void genConstructorEzeSetEmpty(Record part, Context ctx, TabbedWriter out, Object... args) {
-		out.println("@Override");
 		out.println("public void ezeSetEmpty() {");
 		List<Field> fields = part.getFields();
 		if (fields != null && fields.size() != 0) {
@@ -154,27 +150,23 @@ public class RecordTemplate extends JavaTemplate {
 	}
 
 	protected void genConstructorIsVariableDataLength(Record part, Context ctx, TabbedWriter out, Object... args) {
-		out.println("@Override");
 		out.println("public boolean isVariableDataLength() {");
 		out.println("return false;");
 		out.println("}");
 	}
 
 	protected void genConstructorLoadFromBuffer(Record part, Context ctx, TabbedWriter out, Object... args) {
-		out.println("@Override");
 		out.println("public void loadFromBuffer(ByteStorage buffer, Program program) {");
 		out.println("}");
 	}
 
 	protected void genConstructorSizeInBytes(Record part, Context ctx, TabbedWriter out, Object... args) {
-		out.println("@Override");
 		out.println("public int sizeInBytes() {");
 		out.println("return 0;");
 		out.println("}");
 	}
 
 	protected void genConstructorStoreInBuffer(Record part, Context ctx, TabbedWriter out, Object... args) {
-		out.println("@Override");
 		out.println("public void storeInBuffer(ByteStorage buffer) {");
 		out.println("}");
 	}
