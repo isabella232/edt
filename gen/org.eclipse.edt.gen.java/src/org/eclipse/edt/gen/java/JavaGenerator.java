@@ -73,22 +73,22 @@ public class JavaGenerator extends Generator {
 				if (fileName.indexOf('.') >= 0)
 					fileName = fileName.substring(0, fileName.lastIndexOf('.'));
 				fileName = fileName + generator.getFileExtention();
-				context.getDebugData().append(fileName + Constants.smap_stratum);
+				context.getSmapData().append(fileName + Constants.smap_stratum);
 				// we need to insert the file list here, but cannot do this until the part generation finished
-				context.getDebugData().append(Constants.smap_lines);
+				context.getSmapData().append(Constants.smap_lines);
 				context.gen(JavaTemplate.genPart, part, context, out, (Object) null);
-				context.writeDebugLine();
+				context.writeSmapLine();
 				// time to insert the list of files
 				int index = 0;
 				String fileList = "";
-				for (String eglFile : context.getDebugFiles())
+				for (String eglFile : context.getSmapFiles())
 					fileList += "" + (++index) + " " + eglFile + "\n";
-				context.getDebugData().insert(context.getDebugData().indexOf(Constants.smap_stratum) + Constants.smap_stratum.length(), fileList);
-				// finish up the debug data
-				context.getDebugData().append(Constants.smap_trailer);
+				context.getSmapData().insert(context.getSmapData().indexOf(Constants.smap_stratum) + Constants.smap_stratum.length(), fileList);
+				// finish up the smap data
+				context.getSmapData().append(Constants.smap_trailer);
 				// add our special egl extension
-				context.getDebugData().append(context.getDebugExtension());
-				context.getDebugData().append(Constants.smap_extensiontrailer);
+				context.getSmapData().append(context.getSmapExtension());
+				context.getSmapData().append(Constants.smap_extensiontrailer);
 				out.flush();
 			}
 		}
@@ -132,7 +132,7 @@ public class JavaGenerator extends Generator {
 			File outSmapFile = new File(fileName.substring(0, fileName.length() - generator.getFileExtention().length()) + Constants.smap_fileextension);
 			try {
 				FileOutputStream outStream = new FileOutputStream(outSmapFile);
-				byte[] outSmapBytes = context.getDebugData().toString().getBytes(Constants.smap_encoding);
+				byte[] outSmapBytes = context.getSmapData().toString().getBytes(Constants.smap_encoding);
 				outStream.write(outSmapBytes, 0, outSmapBytes.length);
 				outStream.close();
 			}

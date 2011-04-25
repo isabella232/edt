@@ -311,46 +311,46 @@ public class CommonUtilities {
 		typesImported.add(qualifiedName);
 	}
 
-	public static void generateDebugExtension(Field field, Context ctx) {
+	public static void generateSmapExtension(Field field, Context ctx) {
 		// if this isn't a temporary variable, then add the data to the debug extension buffer
 		if (!field.getName().startsWith(org.eclipse.edt.gen.Constants.temporaryVariablePrefix)) {
 			// get the line number. If it is not found, then we can't write the debug extension
 			Annotation annotation = field.getAnnotation(IEGLConstants.EGL_LOCATION);
 			if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
-				ctx.getDebugExtension().append("" + ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue());
+				ctx.getSmapExtension().append("" + ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue());
 				if (ctx.getCurrentFile() != null) {
-					if (ctx.getDebugFiles().indexOf(ctx.getCurrentFile()) < 0)
-						ctx.getDebugFiles().add(ctx.getCurrentFile());
-					ctx.getDebugExtension().append("#" + (ctx.getDebugFiles().indexOf(ctx.getCurrentFile()) + 1) + ";");
+					if (ctx.getSmapFiles().indexOf(ctx.getCurrentFile()) < 0)
+						ctx.getSmapFiles().add(ctx.getCurrentFile());
+					ctx.getSmapExtension().append("#" + (ctx.getSmapFiles().indexOf(ctx.getCurrentFile()) + 1) + ";");
 				} else
-					ctx.getDebugExtension().append("#1" + ";");
-				ctx.getDebugExtension().append(field.getName() + ";");
-				ctx.getDebugExtension().append(field.getName() + ";");
-				ctx.getDebugExtension().append(field.getType().getTypeSignature() + "\n");
+					ctx.getSmapExtension().append("#1" + ";");
+				ctx.getSmapExtension().append(field.getName() + ";");
+				ctx.getSmapExtension().append(field.getName() + ";");
+				ctx.getSmapExtension().append(field.getType().getTypeSignature() + "\n");
 			}
 		}
 	}
 
-	public static void generateDebugExtension(Function function, Context ctx) {
+	public static void generateSmapExtension(Function function, Context ctx) {
 		// get the line number. If it is not found, then we can't write the debug extension
 		Annotation annotation = function.getAnnotation(IEGLConstants.EGL_LOCATION);
 		if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
-			ctx.getDebugExtension().append("" + ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue());
+			ctx.getSmapExtension().append("" + ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue());
 			if (ctx.getCurrentFile() != null) {
-				if (ctx.getDebugFiles().indexOf(ctx.getCurrentFile()) < 0)
-					ctx.getDebugFiles().add(ctx.getCurrentFile());
-				ctx.getDebugExtension().append("#" + (ctx.getDebugFiles().indexOf(ctx.getCurrentFile()) + 1) + ";");
+				if (ctx.getSmapFiles().indexOf(ctx.getCurrentFile()) < 0)
+					ctx.getSmapFiles().add(ctx.getCurrentFile());
+				ctx.getSmapExtension().append("#" + (ctx.getSmapFiles().indexOf(ctx.getCurrentFile()) + 1) + ";");
 			} else
-				ctx.getDebugExtension().append("#1" + ";");
-			ctx.getDebugExtension().append("F:" + function.getName() + ";(");
+				ctx.getSmapExtension().append("#1" + ";");
+			ctx.getSmapExtension().append("F:" + function.getName() + ";(");
 			for (int i = 0; i < function.getParameters().size(); i++) {
 				FunctionParameter decl = function.getParameters().get(i);
 				if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx))
-					ctx.getDebugExtension().append("Lorg/eclipse/edt/javart/AnyBoxedObject;");
+					ctx.getSmapExtension().append("Lorg/eclipse/edt/javart/AnyBoxedObject;");
 				else
-					ctx.getDebugExtension().append(generateJavaTypeSignature(function.getParameters().get(i).getType(), ctx));
+					ctx.getSmapExtension().append(generateJavaTypeSignature(function.getParameters().get(i).getType(), ctx));
 			}
-			ctx.getDebugExtension().append(")" + generateJavaTypeSignature(function.getReturnType(), ctx) + "\n");
+			ctx.getSmapExtension().append(")" + generateJavaTypeSignature(function.getReturnType(), ctx) + "\n");
 		}
 	}
 

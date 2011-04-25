@@ -30,8 +30,8 @@ public class Context extends EglContext {
 
 	private static final long serialVersionUID = 6429116299734843162L;
 
-	private boolean debugIsProcessing;
-	private boolean debugHasOutstandingLine;
+	private boolean smapIsProcessing;
+	private boolean smapHasOutstandingLine;
 	private int firstEglLineNumber;
 	private int lastEglLineNumber;
 	private int firstJavaLineNumber;
@@ -40,14 +40,14 @@ public class Context extends EglContext {
 	private String currentFunction;
 	private String currentFile;
 
-	private StringBuffer debugData = new StringBuffer();
-	private StringBuffer debugExtension = new StringBuffer();
-	private List<String> debugFiles = new ArrayList<String>();
+	private StringBuffer smapData = new StringBuffer();
+	private StringBuffer smapExtension = new StringBuffer();
+	private List<String> smapFiles = new ArrayList<String>();
 
 	public Context(AbstractGeneratorCommand processor) {
 		super(processor);
-		debugData.append(Constants.smap_header);
-		debugExtension.append("");
+		smapData.append(Constants.smap_header);
+		smapExtension.append("");
 	}
 
 	public String getCurrentFunction() {
@@ -66,16 +66,16 @@ public class Context extends EglContext {
 		this.currentFile = currentFile;
 	}
 
-	public StringBuffer getDebugData() {
-		return debugData;
+	public StringBuffer getSmapData() {
+		return smapData;
 	}
 
-	public StringBuffer getDebugExtension() {
-		return debugExtension;
+	public StringBuffer getSmapExtension() {
+		return smapExtension;
 	}
 
-	public List<String> getDebugFiles() {
-		return debugFiles;
+	public List<String> getSmapFiles() {
+		return smapFiles;
 	}
 
 	public String getRawPrimitiveMapping(String item) {
@@ -165,14 +165,14 @@ public class Context extends EglContext {
 	public void gen(String genMethod, Expression object, TemplateContext ctx, TabbedWriter out, Object... args) {
 		// is this the first time into an expression group
 		Annotation annotation = object.getAnnotation(IEGLConstants.EGL_LOCATION);
-		if (!debugIsProcessing && annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
-			debugIsProcessing = true;
+		if (!smapIsProcessing && annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
+			smapIsProcessing = true;
 			int thisEglLineNumber = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
 			// if we are continuing the same egl line, then skip writing out debug data
 			if (thisEglLineNumber != lastEglLineNumber) {
 				// if there is an outstanding line, write it
-				writeDebugLine();
-				debugHasOutstandingLine = true;
+				writeSmapLine();
+				smapHasOutstandingLine = true;
 				firstEglLineNumber = thisEglLineNumber;
 				lastEglLineNumber = thisEglLineNumber;
 				firstJavaLineNumber = out.getLineNumber();
@@ -180,20 +180,20 @@ public class Context extends EglContext {
 			// process the generation
 			super.gen(genMethod, object, ctx, out, args);
 			lastJavaLineNumber = out.getLineNumber();
-			debugIsProcessing = false;
+			smapIsProcessing = false;
 		} else {
-			if (debugIsProcessing && annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
+			if (smapIsProcessing && annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
 				lastEglLineNumber = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
 			// process the generation
 			super.gen(genMethod, object, ctx, out, args);
-			if (debugIsProcessing)
+			if (smapIsProcessing)
 				lastJavaLineNumber = out.getLineNumber();
 		}
 	}
 
 	public void gen(String genMethod, Statement object, TemplateContext ctx, TabbedWriter out, Object... args) {
 		// for statements, we only want to collect the data if this statement is part of a larger expression
-		if (debugIsProcessing) {
+		if (smapIsProcessing) {
 			Annotation annotation = object.getAnnotation(IEGLConstants.EGL_LOCATION);
 			if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
 				lastEglLineNumber = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
@@ -208,21 +208,21 @@ public class Context extends EglContext {
 			super.gen(genMethod, object, ctx, out, args);
 	}
 
-	public void writeDebugLine() {
-		if (debugHasOutstandingLine) {
-			debugData.append("" + firstEglLineNumber);
+	public void writeSmapLine() {
+		if (smapHasOutstandingLine) {
+			smapData.append("" + firstEglLineNumber);
 			if (currentFile != null) {
-				if (debugFiles.indexOf(currentFile) < 0)
-					debugFiles.add(currentFile);
-				debugData.append("#" + (debugFiles.indexOf(currentFile) + 1));
+				if (smapFiles.indexOf(currentFile) < 0)
+					smapFiles.add(currentFile);
+				smapData.append("#" + (smapFiles.indexOf(currentFile) + 1));
 			} else
-				debugData.append("#1");
-			debugData.append(":" + firstJavaLineNumber);
+				smapData.append("#1");
+			smapData.append(":" + firstJavaLineNumber);
 			if (firstJavaLineNumber != lastJavaLineNumber)
-				debugData.append("," + (lastJavaLineNumber - firstJavaLineNumber + 1));
-			debugData.append("\n");
+				smapData.append("," + (lastJavaLineNumber - firstJavaLineNumber + 1));
+			smapData.append("\n");
 		}
-		debugHasOutstandingLine = false;
+		smapHasOutstandingLine = false;
 	}
 
 	public void handleValidationError(Element obj) {
