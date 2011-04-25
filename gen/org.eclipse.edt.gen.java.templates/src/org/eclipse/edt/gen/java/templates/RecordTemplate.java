@@ -28,7 +28,7 @@ public class RecordTemplate extends JavaTemplate {
 	public void validate(Record part, Context ctx, Object... args) {
 		// process anything else the superclass needs to do
 		ctx.validateSuper(validate, Record.class, part, ctx, args);
-		// when we get here, it is because a part is being referenced by the original part being validated. Add it to the
+		// when we get here it is because a part is being referenced by the original part being validated. Add it to the
 		// parts used table if it doesn't already exist
 		boolean found = false;
 		List<Record> records = (List<Record>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partRecordsUsed);
