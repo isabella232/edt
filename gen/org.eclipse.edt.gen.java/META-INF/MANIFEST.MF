@@ -4,9 +4,6 @@ Bundle-Name: Java Plug-in
 Bundle-SymbolicName: org.eclipse.edt.gen.java
 Bundle-Version: 0.7.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Agent-Class: org.eclipse.edt.gen.java.Transformer
-Premain-Class: org.eclipse.edt.gen.java.Transformer
-Can-Retransform-Classes: true
 Require-Bundle: org.eclipse.edt.gen;bundle-version="0.7.0",
  org.eclipse.edt.mof;bundle-version="0.7.0",
  org.eclipse.edt.mof.egl;bundle-version="0.7.0",
