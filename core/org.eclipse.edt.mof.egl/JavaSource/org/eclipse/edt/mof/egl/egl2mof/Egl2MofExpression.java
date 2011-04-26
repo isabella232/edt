@@ -56,7 +56,6 @@ import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.BooleanLiteral;
 import org.eclipse.edt.mof.egl.CharLiteral;
-import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DBCharLiteral;
 import org.eclipse.edt.mof.egl.DecimalLiteral;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
@@ -93,11 +92,13 @@ import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.SetValuesExpression;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StringLiteral;
+import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.SubstringAccess;
 import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.UnaryExpression;
 import org.eclipse.edt.mof.egl.compiler.EGL2IREnvironment;
+import org.eclipse.edt.mof.egl.lookup.ProxyElement;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -942,7 +943,13 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	}
 
 	private boolean isSuperTypeMember(Member mbr) {
-		return !(mbr.getContainer() instanceof FunctionMember) && !((Container)currentPart).getMembers().contains(mbr);
+		if (mbr == null || mbr instanceof ProxyElement || (mbr.getContainer() instanceof FunctionMember))
+			return false;
+		else {
+			StructPart part = (StructPart)currentPart;
+			StructPart container = (StructPart)mbr.getContainer();
+			return  !container.equals(part) && part.isSubtypeOf(container);
+		}
 	}
 
 	private boolean isWithPatternFunction(IDataBinding binding) {
