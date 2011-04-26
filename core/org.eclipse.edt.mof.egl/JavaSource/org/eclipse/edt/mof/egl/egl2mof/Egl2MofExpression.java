@@ -948,7 +948,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		else {
 			StructPart part = (StructPart)currentPart;
 			StructPart container = (StructPart)mbr.getContainer();
-			return  !container.equals(part) && part.isSubtypeOf(container);
+			return  part != null && container != null && !container.equals(part) && part.isSubtypeOf(container);
 		}
 	}
 
