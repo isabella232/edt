@@ -90,11 +90,7 @@ public class SystemEnvironment implements IBindingEnvironment {
         systemPackages = new HashMap();
         unqualifiedSystemParts = new HashMap();
         implicitlyUsedEnumerationNames = new HashSet();
-        
-        addSystemTypes(SystemLibraryManager.getInstance().getHardCodedLibraries().values());
-        addSystemTypes(EnumerationManager.getInstance().getEnumTypes().values());
-        addSystemTypes(SystemPartManager.getInstance().getSystemParts().values());
-        
+                
         implicitlyUsedEnumerationNames.add(InternUtil.intern("AlignKind"));
         implicitlyUsedEnumerationNames.add(InternUtil.intern("CaseFormatKind"));
         implicitlyUsedEnumerationNames.add(InternUtil.intern("ColorKind"));
@@ -138,6 +134,8 @@ public class SystemEnvironment implements IBindingEnvironment {
 	  				}
 	  			});
 			}
+	        addSystemTypes(EnumerationManager.getInstance().getEnumTypes().values());
+	        addSystemTypes(SystemPartManager.getInstance().getSystemParts().values());
 			systemPackagesInitialized = true;
     	}    	
     }
