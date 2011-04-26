@@ -11,75 +11,75 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.generator.example.ide;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.edt.ide.compiler.gen.EclipseJavaGenerator;
-import org.eclipse.edt.ide.core.AbstractGenerator;
-import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.serialization.IEnvironment;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jface.preference.IPreferenceStore;
-
-public class ExampleGeneratorProvider extends AbstractGenerator {
-
-	public void generate(IFile file, Part part, IEnvironment env, boolean invokedByBuild) {
-		try {
-			EclipseExampleGenerator cmd = new EclipseExampleGenerator(file, part, this);
-			cmd.generate(buildArgs(file, part), new EclipseJavaGenerator(cmd), env);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public String[] buildArgs(IFile file, Part part) throws Exception {
-		String[] args = new String[6];
-
-		// Output directory (e.g. JavaSource folder). This is a property on the project, and it might be a directory in some
-		// other folder.
-		args[0] = "-o"; //$NON-NLS-1$
-		args[1] = getOutputDirectory(file);
-
-		// this isn't used but it's a required parameter.
-		args[2] = "-p"; //$NON-NLS-1$
-		args[3] = part.getName();
-
-		// this isn't used but it's a required parameter.
-		args[4] = "-r"; //$NON-NLS-1$
-		args[5] = file.getFullPath().toOSString();
-
-		return args;
-	}
-
-	@Override
-	public boolean supportsProject(IProject project) {
-		try {
-			return project.hasNature(JavaCore.NATURE_ID);
-		}
-		catch (CoreException ce) {
-			return false;
-		}
-	}
-
-	@Override
-	protected String getGenerationDirectoryPropertyKey() {
-		return Activator.PROPERTY_JAVAGEN_DIR;
-	}
-
-	@Override
-	protected String getProjectSettingsPluginId() {
-		return Activator.PLUGIN_ID;
-	}
-
-	@Override
-	protected String getGenerationDirectoryPreferenceKey() {
-		return Activator.PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY;
-	}
-
-	@Override
-	protected IPreferenceStore getPreferenceStore() {
-		return Activator.getDefault().getPreferenceStore();
-	}
-
-}
+//import org.eclipse.core.resources.IFile;
+//import org.eclipse.core.resources.IProject;
+//import org.eclipse.core.runtime.CoreException;
+//import org.eclipse.edt.ide.compiler.gen.EclipseJavaGenerator;
+//import org.eclipse.edt.ide.core.AbstractGenerator;
+//import org.eclipse.edt.mof.egl.Part;
+//import org.eclipse.edt.mof.serialization.IEnvironment;
+//import org.eclipse.jdt.core.JavaCore;
+//import org.eclipse.jface.preference.IPreferenceStore;
+//
+//public class ExampleGeneratorProvider extends AbstractGenerator {
+//
+//	public void generate(IFile file, Part part, IEnvironment env, boolean invokedByBuild) {
+//		try {
+//			EclipseExampleGenerator cmd = new EclipseExampleGenerator(file, part, this);
+//			cmd.generate(buildArgs(file, part), new EclipseJavaGenerator(cmd), env);
+//		}
+//		catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+//
+//	public String[] buildArgs(IFile file, Part part) throws Exception {
+//		String[] args = new String[6];
+//
+//		// Output directory (e.g. JavaSource folder). This is a property on the project, and it might be a directory in some
+//		// other folder.
+//		args[0] = "-o"; //$NON-NLS-1$
+//		args[1] = getOutputDirectory(file);
+//
+//		// this isn't used but it's a required parameter.
+//		args[2] = "-p"; //$NON-NLS-1$
+//		args[3] = part.getName();
+//
+//		// this isn't used but it's a required parameter.
+//		args[4] = "-r"; //$NON-NLS-1$
+//		args[5] = file.getFullPath().toOSString();
+//
+//		return args;
+//	}
+//
+//	@Override
+//	public boolean supportsProject(IProject project) {
+//		try {
+//			return project.hasNature(JavaCore.NATURE_ID);
+//		}
+//		catch (CoreException ce) {
+//			return false;
+//		}
+//	}
+//
+//	@Override
+//	protected String getGenerationDirectoryPropertyKey() {
+//		return Activator.PROPERTY_JAVAGEN_DIR;
+//	}
+//
+//	@Override
+//	protected String getProjectSettingsPluginId() {
+//		return Activator.PLUGIN_ID;
+//	}
+//
+//	@Override
+//	protected String getGenerationDirectoryPreferenceKey() {
+//		return Activator.PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY;
+//	}
+//
+//	@Override
+//	protected IPreferenceStore getPreferenceStore() {
+//		return Activator.getDefault().getPreferenceStore();
+//	}
+//
+//}

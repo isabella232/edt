@@ -11,66 +11,65 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.generator.example.ide;
 
-import org.eclipse.core.resources.ProjectScope;
-import org.eclipse.edt.ide.ui.internal.preferences.AbstractGeneratorTabProvider;
-import org.eclipse.edt.ide.ui.internal.preferences.GenerationSettingsComposite;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-
-/**
- * This is a sample generator tab provider class.
- */
-public class ExampleGeneratorTabProvider extends AbstractGeneratorTabProvider {
-	// TODO provide a way to specify that you want to override the parent setting, and see what the parent setting is & where
-	// it comes from.
-	// maybe a link to the property page for that resource
-
-	private GenerationSettingsComposite genSettings;
-
-	/**
-	 * Define the tab contents within the parent composite.
-	 * @param parent
-	 * @return
-	 */
-	@Override
-	public Control getTabContent(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NULL);
-
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 1;
-		composite.setLayout(layout);
-		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		composite.setFont(parent.getFont());
-
-		genSettings = new GenerationSettingsComposite(composite, SWT.NULL, getResource(), Activator.getDefault().getPreferenceStore(), getResource() == null
-			? null : new ProjectScope(getResource().getProject()).getNode(Activator.PLUGIN_ID), Activator.PROPERTY_JAVAGEN_DIR,
-			Activator.PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY, getStatusChangeListener());
-		genSettings.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		return composite;
-	}
-
-	@Override
-	public String getTitle() {
-		return ExampleCompilerStrings.javaGenTabTitle;
-	}
-
-	@Override
-	public void performApply() {
-		performOk();
-	}
-
-	@Override
-	public boolean performOk() {
-		return genSettings.performOK();
-	}
-
-	@Override
-	public void performDefaults() {
-		genSettings.performDefaults();
-	}
-
-}
+//import org.eclipse.core.resources.ProjectScope;
+//import org.eclipse.edt.ide.ui.internal.preferences.AbstractGeneratorTabProvider;
+//import org.eclipse.edt.ide.ui.internal.preferences.GenerationSettingsComposite;
+//import org.eclipse.swt.SWT;
+//import org.eclipse.swt.layout.GridData;
+//import org.eclipse.swt.layout.GridLayout;
+//import org.eclipse.swt.widgets.Composite;
+//import org.eclipse.swt.widgets.Control;
+//
+///**
+// * This is a sample generator tab provider class.
+// */
+//public class ExampleGeneratorTabProvider extends AbstractGeneratorTabProvider {
+//	// TODO provide a way to specify that you want to override the parent setting, and see what the parent setting is & where
+//	// it comes from.
+//	// maybe a link to the property page for that resource
+//
+//	private GenerationSettingsComposite genSettings;
+//
+//	/**
+//	 * Define the tab contents within the parent composite.
+//	 * @param parent
+//	 * @return
+//	 */
+//	@Override
+//	public Control getTabContent(Composite parent) {
+//		Composite composite = new Composite(parent, SWT.NULL);
+//
+//		GridLayout layout = new GridLayout();
+//		layout.numColumns = 1;
+//		composite.setLayout(layout);
+//		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+//		composite.setFont(parent.getFont());
+//
+//		genSettings = new GenerationSettingsComposite(composite, SWT.NULL, getResource(), Activator.getDefault().getPreferenceStore(), getResource() == null
+//			? null : new ProjectScope(getResource().getProject()).getNode(Activator.PLUGIN_ID), Activator.PROPERTY_JAVAGEN_DIR,
+//			Activator.PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY, getStatusChangeListener());
+//		genSettings.setLayoutData(new GridData(GridData.FILL_BOTH));
+//
+//		return composite;
+//	}
+//
+//	@Override
+//	public String getTitle() {
+//		return ExampleCompilerStrings.javaGenTabTitle;
+//	}
+//
+//	@Override
+//	public void performApply() {
+//		performOk();
+//	}
+//
+//	@Override
+//	public boolean performOk() {
+//		return genSettings.performOK();
+//	}
+//
+//	@Override
+//	public void performDefaults() {
+//		genSettings.performDefaults();
+//	}
+//}
