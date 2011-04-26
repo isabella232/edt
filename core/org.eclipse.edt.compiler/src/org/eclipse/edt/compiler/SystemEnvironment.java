@@ -90,6 +90,9 @@ public class SystemEnvironment implements IBindingEnvironment {
         systemPackages = new HashMap();
         unqualifiedSystemParts = new HashMap();
         implicitlyUsedEnumerationNames = new HashSet();
+
+        addSystemTypes(EnumerationManager.getInstance().getEnumTypes().values());
+        addSystemTypes(SystemPartManager.getInstance().getSystemParts().values());
                 
         implicitlyUsedEnumerationNames.add(InternUtil.intern("AlignKind"));
         implicitlyUsedEnumerationNames.add(InternUtil.intern("CaseFormatKind"));
