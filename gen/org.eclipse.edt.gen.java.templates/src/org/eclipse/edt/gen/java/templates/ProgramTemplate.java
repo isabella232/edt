@@ -34,13 +34,13 @@ public class ProgramTemplate extends JavaTemplate {
 		ctx.gen(genClassName, program, ctx, out, args);
 		out.println(".properties\", false );");
 		out.println("}");
-		out.println("public static void main(String... args) throws Exception {");
+		out.println("public static void main(String... ezeargs) throws Exception {");
 		out.println("\t\tStartupInfo info = _startupInfo();");
-		out.println("\t\tinfo.setArgs( args );");
+		out.println("\t\tinfo.setArgs( ezeargs );");
 		out.println("\t\tRunUnit ru = new RunUnitBase( info );");
 		out.print("\t\tru.start( new ");
 		ctx.gen(genClassName, program, ctx, out, args);
-		out.println("( ru ), args );");
+		out.println("( ru ), ezeargs );");
 		out.println("\t\tru.exit();");
 		out.println("}");
 

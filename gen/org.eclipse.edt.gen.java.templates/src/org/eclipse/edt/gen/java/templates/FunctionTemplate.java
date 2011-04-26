@@ -41,7 +41,7 @@ public class FunctionTemplate extends JavaTemplate {
 		out.print("(");
 		// if this is the main function, we need to generate List<String> args
 		if (function.getName().equalsIgnoreCase("main"))
-			out.print("java.util.List<String> args");
+			out.print("java.util.List<String> ezeargs");
 		else
 			ctx.foreach(function.getParameters(), ',', genDeclaration, ctx, out, args);
 		out.println(") ");
