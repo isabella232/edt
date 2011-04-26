@@ -342,15 +342,20 @@ public class CommonUtilities {
 				ctx.getSmapExtension().append("#" + (ctx.getSmapFiles().indexOf(ctx.getCurrentFile()) + 1) + ";");
 			} else
 				ctx.getSmapExtension().append("#1" + ";");
-			ctx.getSmapExtension().append("F:" + function.getName() + ";(");
-			for (int i = 0; i < function.getParameters().size(); i++) {
-				FunctionParameter decl = function.getParameters().get(i);
-				if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx))
-					ctx.getSmapExtension().append("Lorg/eclipse/edt/javart/AnyBoxedObject;");
-				else
-					ctx.getSmapExtension().append(generateJavaTypeSignature(function.getParameters().get(i).getType(), ctx));
+			// for the main function, we need to alter the values
+			if (function.getName().equalsIgnoreCase("main"))
+				ctx.getSmapExtension().append("F:" + "main;(Ljava/util/List;)V\n");
+			else {
+				ctx.getSmapExtension().append("F:" + function.getName() + ";(");
+				for (int i = 0; i < function.getParameters().size(); i++) {
+					FunctionParameter decl = function.getParameters().get(i);
+					if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx))
+						ctx.getSmapExtension().append("Lorg/eclipse/edt/javart/AnyBoxedObject;");
+					else
+						ctx.getSmapExtension().append(generateJavaTypeSignature(function.getParameters().get(i).getType(), ctx));
+				}
+				ctx.getSmapExtension().append(")" + generateJavaTypeSignature(function.getReturnType(), ctx) + "\n");
 			}
-			ctx.getSmapExtension().append(")" + generateJavaTypeSignature(function.getReturnType(), ctx) + "\n");
 		}
 	}
 
