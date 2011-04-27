@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.egl.lang;
 
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.TypedElement;
@@ -27,5 +29,17 @@ public class SmallintTypeTemplate extends JavaTemplate {
 			out.print("null");
 		else
 			out.print("(short) 0");
+	}
+
+	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
+		if (CommonUtilities.isHandledByJavaWithoutCast(((AsExpression) args[0]).getObjectExpr(), ((AsExpression) args[0]), ctx)) {
+			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+		} else if (CommonUtilities.isHandledByJavaWithCast(((AsExpression) args[0]).getObjectExpr(), ((AsExpression) args[0]), ctx)) {
+			out.print("(" + ctx.getPrimitiveMapping(((AsExpression) args[0]).getType()) + ")");
+			out.print("(");
+			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+			out.print(")");
+		} else
+			ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
 	}
 }
