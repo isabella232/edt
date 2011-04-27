@@ -19,7 +19,9 @@ import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -281,6 +283,55 @@ public class CommonUtilities {
 		if (op.equals(expr.Op_BITOR))
 			return " | ";
 		return "";
+	}
+
+	public static boolean isHandledByJavaWithoutCast(Expression src, AsExpression tgt, Context ctx) {
+		// nullables will never be handled by java natives
+		if (src.isNullable() || tgt.isNullable())
+			return false;
+		if (!ctx.mapsToPrimitiveType(src.getType()) || !ctx.mapsToPrimitiveType(tgt.getType()))
+			return false;
+		String srcString = ctx.getPrimitiveMapping(src.getType());
+		String tgtString = ctx.getPrimitiveMapping(tgt.getType());
+		// check see to see it is safe to allow java to handle this conversion
+		int srcIndex = getJavaAllowedType(srcString);
+		int tgtIndex = getJavaAllowedType(tgtString);
+		if (srcIndex >= 0 && tgtIndex >= 0 && srcIndex == tgtIndex)
+			return true;
+		else
+			return false;
+	}
+
+	public static boolean isHandledByJavaWithCast(Expression src, AsExpression tgt, Context ctx) {
+		// nullables will never be handled by java natives
+		if (src.isNullable() || tgt.isNullable())
+			return false;
+		if (!ctx.mapsToPrimitiveType(src.getType()) || !ctx.mapsToPrimitiveType(tgt.getType()))
+			return false;
+		String srcString = ctx.getPrimitiveMapping(src.getType());
+		String tgtString = ctx.getPrimitiveMapping(tgt.getType());
+		// check see to see it is safe to allow java to handle this conversion
+		int srcIndex = getJavaAllowedType(srcString);
+		int tgtIndex = getJavaAllowedType(tgtString);
+		if (srcIndex >= 0 && tgtIndex >= 0 && srcIndex != tgtIndex)
+			return true;
+		else
+			return false;
+	}
+
+	private static int getJavaAllowedType(String value) {
+		if (value.equals("short"))
+			return 0;
+		else if (value.equals("int"))
+			return 1;
+		else if (value.equals("long"))
+			return 2;
+		else if (value.equals("float"))
+			return 3;
+		else if (value.equals("double"))
+			return 4;
+		else
+			return -1;
 	}
 
 	@SuppressWarnings("unchecked")
