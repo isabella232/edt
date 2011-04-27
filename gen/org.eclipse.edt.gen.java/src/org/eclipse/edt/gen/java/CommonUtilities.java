@@ -21,9 +21,9 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.ExternalType;
-import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
@@ -311,7 +311,7 @@ public class CommonUtilities {
 		typesImported.add(qualifiedName);
 	}
 
-	public static void generateSmapExtension(Field field, Context ctx) {
+	public static void generateSmapExtension(Member field, Context ctx) {
 		// if this isn't a temporary variable, then add the data to the debug extension buffer
 		if (!field.getName().startsWith(org.eclipse.edt.gen.Constants.temporaryVariablePrefix)) {
 			// get the line number. If it is not found, then we can't write the debug extension
