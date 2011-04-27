@@ -499,6 +499,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			}
 
 			name.setPackageName(packageName);
+			name.setId(binding.getCaseSensitiveName());
 			return name;
 		}
 		else {
