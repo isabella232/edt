@@ -18,8 +18,10 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayAccess;
+import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.MemberAccess;
@@ -51,6 +53,39 @@ public class TypeTemplate extends JavaTemplate {
 				CommonUtilities.processImport(ctx.getPrimitiveMapping(ctx.getPrimitiveMapping(type.getClassifier().getTypeSignature())), ctx);
 			else
 				CommonUtilities.processImport(ctx.getPrimitiveMapping(type.getClassifier().getTypeSignature()), ctx);
+		}
+	}
+
+	public void genConversionOperation(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// did we have a list of types to check, otherwise use the default
+		if (isProcessWithTypeList(args)) {
+			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
+			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
+			ctx.gen(genConversionOperation, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
+		} else if (isProcessWithoutTypeList(args))
+			ctx.gen(genConversionOperation, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
+		else {
+			// check to see if a conversion is required
+			if (((AsExpression) args[0]).getConversionOperation() != null) {
+				out.print(ctx.getNativeImplementationMapping((Classifier) ((AsExpression) args[0]).getConversionOperation().getContainer()) + '.');
+				out.print(((AsExpression) args[0]).getConversionOperation().getName());
+				out.print("(ezeProgram, ");
+				ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+				ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
+				out.print(")");
+			} else if (ctx.mapsToPrimitiveType(((AsExpression) args[0]).getEType())) {
+				ctx.gen(genRuntimeTypeName, ((AsExpression) args[0]).getEType(), ctx, out, TypeNameKind.EGLImplementation);
+				out.print(".ezeCast(");
+				ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+				ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
+				out.print(")");
+			} else {
+				out.print("AnyObject.ezeCast(");
+				ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+				out.print(", ");
+				ctx.gen(genRuntimeTypeName, ((AsExpression) args[0]).getEType(), ctx, out, TypeNameKind.JavaImplementation);
+				out.print(".class)");
+			}
 		}
 	}
 
