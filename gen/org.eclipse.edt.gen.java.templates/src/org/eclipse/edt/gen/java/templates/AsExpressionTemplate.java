@@ -14,10 +14,14 @@ package org.eclipse.edt.gen.java.templates;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
+import org.eclipse.edt.mof.egl.Type;
 
 public class AsExpressionTemplate extends JavaTemplate {
 
 	public void genExpression(AsExpression asExpr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genConversionOperation, asExpr.getType(), ctx, out, asExpr);
+		if (asExpr.getConversionOperation() != null)
+			ctx.gen(genConversionOperation, (Type) asExpr.getConversionOperation().getContainer(), ctx, out, asExpr);
+		else
+			ctx.gen(genConversionOperation, asExpr.getType(), ctx, out, asExpr);
 	}
 }
