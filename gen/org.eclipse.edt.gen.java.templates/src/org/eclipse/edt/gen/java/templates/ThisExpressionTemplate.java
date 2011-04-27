@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.egl.ThisExpression;
 public class ThisExpressionTemplate extends JavaTemplate {
 
 	public void genExpression(ThisExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		// write out "this"
+		// write out the word "this"
 		out.print("this");
 	}
 }
