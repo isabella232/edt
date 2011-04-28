@@ -352,7 +352,7 @@ public abstract class EglContext extends TemplateContext {
 		try {
 			Stereotype stereotype = part.getStereotype();
 			TemplateMethod templateMethod = stereotype != null ? getMethodAndTemplate(methodName, stereotype, stereotype.getEClass().getETypeSignature(),
-				part.getClass(), ctx.getClass(), out.getClass(), args.getClass()) : getMethodAndTemplate(methodName, part, part.getClassifier()
+				stereotype.getClass(), ctx.getClass(), out.getClass(), args.getClass()) : getMethodAndTemplate(methodName, part, part.getClassifier()
 				.getTypeSignature(), part.getClass(), ctx.getClass(), out.getClass(), args.getClass());
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), part, ctx, out, args);
 		}
@@ -379,12 +379,14 @@ public abstract class EglContext extends TemplateContext {
 		if (!found)
 			objects[args.length] = TypeLogicKind.Process;
 		try {
-			// check for a stereotype, and process it, unless it is defined in the native types properties (system libraries)
-			if (type instanceof Classifier && ((Classifier) type).getStereotype() != null && !mapsToNativeType(type)) {
+			if (type instanceof Classifier && ((Classifier) type).getStereotype() != null) {
 				// if there is a stereotype, then we need to try it first, and if not found (exception), then try the
 				// standard type instead
 				try {
-					gen(methodName, (Classifier) type, ctx, out, objects);
+					Stereotype stereotype = ((Classifier) type).getStereotype();
+					TemplateMethod templateMethod = getMethodAndTemplate(methodName, stereotype, stereotype.getEClass().getETypeSignature(),
+						stereotype.getClass(), ctx.getClass(), out.getClass(), args.getClass());
+					templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, out, objects);
 				}
 				catch (TemplateException e) {
 					TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClassifier().getTypeSignature(), type.getClass(),
@@ -511,7 +513,7 @@ public abstract class EglContext extends TemplateContext {
 		try {
 			Stereotype stereotype = part.getStereotype();
 			TemplateMethod templateMethod = stereotype != null ? getMethodAndTemplate(methodName, stereotype, stereotype.getEClass().getETypeSignature(),
-				part.getClass(), ctx.getClass(), args.getClass()) : getMethodAndTemplate(methodName, part, part.getClassifier().getTypeSignature(),
+				stereotype.getClass(), ctx.getClass(), args.getClass()) : getMethodAndTemplate(methodName, part, part.getClassifier().getTypeSignature(),
 				part.getClass(), ctx.getClass(), args.getClass());
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), part, ctx, args);
 		}
@@ -525,12 +527,14 @@ public abstract class EglContext extends TemplateContext {
 
 	public void validate(String methodName, Type type, EglContext ctx, Object... args) throws TemplateException {
 		try {
-			// check for a stereotype, and process it, unless it is defined in the native types properties (system libraries)
-			if (type instanceof Classifier && ((Classifier) type).getStereotype() != null && !mapsToNativeType(type)) {
+			if (type instanceof Classifier && ((Classifier) type).getStereotype() != null) {
 				// if there is a stereotype, then we need to try it first, and if not found (exception), then try the
 				// standard type instead
 				try {
-					validate(methodName, (Classifier) type, ctx, args);
+					Stereotype stereotype = ((Classifier) type).getStereotype();
+					TemplateMethod templateMethod = getMethodAndTemplate(methodName, stereotype, stereotype.getEClass().getETypeSignature(),
+						stereotype.getClass(), ctx.getClass(), args.getClass());
+					templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, args);
 				}
 				catch (TemplateException e) {
 					TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClassifier().getTypeSignature(), Type.class, ctx.getClass(),
