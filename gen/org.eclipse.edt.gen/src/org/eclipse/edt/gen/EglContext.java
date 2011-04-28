@@ -30,10 +30,10 @@ import org.eclipse.edt.mof.codegen.api.TemplateContext;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.IrFactory;
-import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.TryStatement;
@@ -348,7 +348,7 @@ public abstract class EglContext extends TemplateContext {
 		}
 	}
 
-	public void gen(String methodName, Part part, EglContext ctx, TabbedWriter out, Object... args) throws TemplateException {
+	public void gen(String methodName, Classifier part, EglContext ctx, TabbedWriter out, Object... args) throws TemplateException {
 		try {
 			Stereotype stereotype = part.getStereotype();
 			TemplateMethod templateMethod = stereotype != null ? getMethodAndTemplate(methodName, stereotype, stereotype.getEClass().getETypeSignature(),
@@ -379,9 +379,23 @@ public abstract class EglContext extends TemplateContext {
 		if (!found)
 			objects[args.length] = TypeLogicKind.Process;
 		try {
-			TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClassifier().getTypeSignature(), type.getClass(), ctx.getClass(),
-				out.getClass(), args.getClass());
-			templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, out, objects);
+			// check for a stereotype, and process it, unless it is defined in the native types properties (system libraries)
+			if (type instanceof Classifier && ((Classifier) type).getStereotype() != null && !mapsToNativeType(type)) {
+				// if there is a stereotype, then we need to try it first, and if not found (exception), then try the
+				// standard type instead
+				try {
+					gen(methodName, (Classifier) type, ctx, out, objects);
+				}
+				catch (TemplateException e) {
+					TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClassifier().getTypeSignature(), type.getClass(),
+						ctx.getClass(), out.getClass(), args.getClass());
+					templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, out, objects);
+				}
+			} else {
+				TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClassifier().getTypeSignature(), type.getClass(),
+					ctx.getClass(), out.getClass(), args.getClass());
+				templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, out, objects);
+			}
 		}
 		catch (TemplateException e) {
 			Object[] objectsExtended = new Object[objects.length + 1];
@@ -493,7 +507,7 @@ public abstract class EglContext extends TemplateContext {
 		}
 	}
 
-	public void validate(String methodName, Part part, EglContext ctx, Object... args) throws TemplateException {
+	public void validate(String methodName, Classifier part, EglContext ctx, Object... args) throws TemplateException {
 		try {
 			Stereotype stereotype = part.getStereotype();
 			TemplateMethod templateMethod = stereotype != null ? getMethodAndTemplate(methodName, stereotype, stereotype.getEClass().getETypeSignature(),
@@ -511,9 +525,23 @@ public abstract class EglContext extends TemplateContext {
 
 	public void validate(String methodName, Type type, EglContext ctx, Object... args) throws TemplateException {
 		try {
-			TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClassifier().getTypeSignature(), Type.class, ctx.getClass(),
-				args.getClass());
-			templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, args);
+			// check for a stereotype, and process it, unless it is defined in the native types properties (system libraries)
+			if (type instanceof Classifier && ((Classifier) type).getStereotype() != null && !mapsToNativeType(type)) {
+				// if there is a stereotype, then we need to try it first, and if not found (exception), then try the
+				// standard type instead
+				try {
+					validate(methodName, (Classifier) type, ctx, args);
+				}
+				catch (TemplateException e) {
+					TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClassifier().getTypeSignature(), Type.class, ctx.getClass(),
+						args.getClass());
+					templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, args);
+				}
+			} else {
+				TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClassifier().getTypeSignature(), Type.class, ctx.getClass(),
+					args.getClass());
+				templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, args);
+			}
 		}
 		catch (TemplateException e) {
 			if (type instanceof EGLClass && ((EGLClass) type).getSuperTypes() != null && ((EGLClass) type).getSuperTypes().size() > 0) {
