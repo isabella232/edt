@@ -41,7 +41,7 @@ public class PartTemplate extends JavaTemplate {
 		genPackageStatement(part, ctx, out, args);
 		ctx.gen(genClassHeader, part, ctx, out, args);
 		ctx.gen(genClassBody, part, ctx, out, args);
-		out.print("}");
+		out.println("}");
 	}
 
 	@SuppressWarnings("unchecked")
