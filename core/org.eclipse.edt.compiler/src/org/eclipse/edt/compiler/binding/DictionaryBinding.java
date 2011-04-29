@@ -109,7 +109,7 @@ public class DictionaryBinding extends PartBinding {
 		return true;
 	}
 	
-	public IFunctionBinding findFunction(String simpleName) {
+	protected IFunctionBinding primFindFunction(String simpleName) {
 		IFunctionBinding result = (IFunctionBinding) SYSTEM_FUNCTIONS.get(simpleName);
 		if(result != null) return result;
 		

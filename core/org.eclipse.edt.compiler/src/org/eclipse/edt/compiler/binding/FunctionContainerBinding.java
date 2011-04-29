@@ -80,7 +80,7 @@ public abstract class FunctionContainerBinding extends PartBinding {
         return false;
     }
     
-    public IDataBinding findData(String simpleName) {
+    protected IDataBinding primFindData(String simpleName) {
     	for(Iterator iter = serviceReferences.iterator(); iter.hasNext();) {
             IDataBinding binding = (IDataBinding) iter.next();
             if(binding.getName().equals(simpleName)) {
@@ -113,7 +113,7 @@ public abstract class FunctionContainerBinding extends PartBinding {
         return IBinding.NOT_FOUND_BINDING;
     }
     
-	public IFunctionBinding findFunction(String simpleName) {
+	protected IFunctionBinding primFindFunction(String simpleName) {
         for(Iterator iter = declaredFunctions.iterator(); iter.hasNext();) {
             IFunctionBinding binding = (IFunctionBinding) ((NestedFunctionBinding) iter.next()).getType();
             if(binding.getName() == simpleName) {

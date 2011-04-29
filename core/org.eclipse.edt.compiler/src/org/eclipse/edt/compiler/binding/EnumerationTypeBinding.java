@@ -59,7 +59,7 @@ public class EnumerationTypeBinding extends PartBinding {
         enumerations.add(enumeration);
     }
     
-    public IDataBinding findData(String simpleName) {
+    protected IDataBinding primFindData(String simpleName) {
         for(Iterator iter = enumerations.iterator(); iter.hasNext();) {
             IDataBinding binding = (IDataBinding) iter.next();
             if(binding.getName() == simpleName) {

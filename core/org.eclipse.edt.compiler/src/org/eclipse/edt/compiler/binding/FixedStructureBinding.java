@@ -101,7 +101,7 @@ public abstract class FixedStructureBinding extends PartBinding {
         return false;
     }
 
-    public IDataBinding findData(String simpleName) {    	
+    protected IDataBinding primFindData(String simpleName) {    	
         for(Iterator iter = structureItems.iterator(); iter.hasNext();) {
             IDataBinding binding = (IDataBinding) iter.next();
             if(binding.getName() == simpleName) {

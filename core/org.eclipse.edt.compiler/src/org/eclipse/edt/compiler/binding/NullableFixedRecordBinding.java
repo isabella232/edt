@@ -91,8 +91,8 @@ class NullableFixedRecordBinding extends FixedRecordBinding implements INullable
 		return fixedRecordBinding.getPackageName();
 	}
 
-	public IDataBinding findData(String simpleName) {
-		return fixedRecordBinding.findData(simpleName);
+	protected IDataBinding primFindData(String simpleName) {
+		return fixedRecordBinding.primFindData(simpleName);
 	}
 
 	public IDataBinding findPublicData(String simpleName) {
@@ -103,8 +103,8 @@ class NullableFixedRecordBinding extends FixedRecordBinding implements INullable
 		return fixedRecordBinding.getSimpleNamesToDataBindingsMap();
 	}
 
-	public IFunctionBinding findFunction(String simpleName) {
-		return fixedRecordBinding.findFunction(simpleName);
+	protected IFunctionBinding primFindFunction(String simpleName) {
+		return fixedRecordBinding.primFindFunction(simpleName);
 	}
 
 	public IFunctionBinding findPublicFunction(String simpleName) {

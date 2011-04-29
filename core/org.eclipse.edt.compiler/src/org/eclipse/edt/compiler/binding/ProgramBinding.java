@@ -67,14 +67,14 @@ public class ProgramBinding extends FunctionContainerBinding {
 		return false;
 	}
 
-	public IDataBinding findData(String simpleName) {
+	protected IDataBinding primFindData(String simpleName) {
 		for (Iterator iter = parameters.iterator(); iter.hasNext();) {
 			IDataBinding binding = (IDataBinding) iter.next();
 			if (binding.getName().equals(simpleName)) {
 				return binding;
 			}
 		}
-		return super.findData(simpleName);
+		return super.primFindData(simpleName);
 	}
 
 	public List getDeclaredData() {

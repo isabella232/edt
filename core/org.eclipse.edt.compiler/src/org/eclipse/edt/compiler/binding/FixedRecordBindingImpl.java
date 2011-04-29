@@ -113,8 +113,8 @@ public class FixedRecordBindingImpl extends FixedRecordBinding {
 		}
 	}
 	
-	public IDataBinding findData(String simpleName) {
-		IDataBinding result = super.findData(simpleName);
+	protected IDataBinding primFindData(String simpleName) {
+		IDataBinding result = super.primFindData(simpleName);
 		
 		if(result == IBinding.NOT_FOUND_BINDING) {
 			if(simpleName == getResourceAssociationName()) {

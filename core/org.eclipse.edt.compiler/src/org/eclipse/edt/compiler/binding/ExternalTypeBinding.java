@@ -176,7 +176,7 @@ public class ExternalTypeBinding extends PartBinding {
 		return false;
 	}
 	
-	public IDataBinding findData(String simpleName) {
+	protected IDataBinding primFindData(String simpleName) {
         for(Iterator iter = getDeclaredAndInheritedData().iterator(); iter.hasNext();) {
             IDataBinding binding = (IDataBinding) iter.next();
             if(binding.getName() == simpleName) {
@@ -234,7 +234,7 @@ public class ExternalTypeBinding extends PartBinding {
 		return result;
 	}
 	
-	public IFunctionBinding findFunction(String simpleName) {
+	protected IFunctionBinding primFindFunction(String simpleName) {
         for(Iterator iter = getDeclaredAndInheritedFunctions().iterator(); iter.hasNext();) {
             IFunctionBinding binding = (IFunctionBinding) ((NestedFunctionBinding) iter.next()).getType();
             if(binding.getName().equals(simpleName)) {

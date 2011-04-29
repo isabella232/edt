@@ -90,7 +90,7 @@ public class FlexibleRecordBindingImpl extends FlexibleRecordBinding {
         return InternUtil.intern("resourceAssociation");
     }
 	
-    public IDataBinding findData(String simpleName) {
+	protected IDataBinding primFindData(String simpleName) {
         for (Iterator iter = fields.iterator(); iter.hasNext();) {
             IDataBinding binding = (IDataBinding) iter.next();
             if (binding.getName() == simpleName) {

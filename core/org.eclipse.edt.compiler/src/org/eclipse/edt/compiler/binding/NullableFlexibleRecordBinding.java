@@ -87,8 +87,8 @@ public class NullableFlexibleRecordBinding extends FlexibleRecordBinding impleme
 		return recordBinding.getPackageName();
 	}
 
-	public IDataBinding findData(String simpleName) {
-		return recordBinding.findData(simpleName);
+	protected IDataBinding primFindData(String simpleName) {
+		return recordBinding.primFindData(simpleName);
 	}
 
 	public IDataBinding findPublicData(String simpleName) {
@@ -99,8 +99,8 @@ public class NullableFlexibleRecordBinding extends FlexibleRecordBinding impleme
 		return recordBinding.getSimpleNamesToDataBindingsMap();
 	}
 
-	public IFunctionBinding findFunction(String simpleName) {
-		return recordBinding.findFunction(simpleName);
+	protected IFunctionBinding primFindFunction(String simpleName) {
+		return recordBinding.primFindFunction(simpleName);
 	}
 
 	public IFunctionBinding findPublicFunction(String simpleName) {

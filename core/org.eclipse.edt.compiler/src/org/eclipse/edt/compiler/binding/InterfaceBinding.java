@@ -61,7 +61,7 @@ public class InterfaceBinding extends PartBinding {
 		return false;
 	}
 	
-	public IDataBinding findData(String simpleName) {
+	protected IDataBinding primFindData(String simpleName) {
         OverloadedFunctionSet functionSet = new OverloadedFunctionSet();
         for(Iterator iter = getDeclaredFunctions().iterator(); iter.hasNext();) {
         	IDataBinding binding = (IDataBinding) iter.next();
@@ -112,7 +112,7 @@ public class InterfaceBinding extends PartBinding {
 		return result;
 	}
 	
-	public IFunctionBinding findFunction(String simpleName) {
+	protected IFunctionBinding primFindFunction(String simpleName) {
         for(Iterator iter = getDeclaredFunctions().iterator(); iter.hasNext();) {
             IFunctionBinding binding = (IFunctionBinding) ((NestedFunctionBinding) iter.next()).getType();
             if(binding.getName().equals(simpleName)) {

@@ -32,7 +32,6 @@ import org.eclipse.edt.compiler.binding.FixedStructureBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.FormBinding;
 import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.INullableTypeBinding;
@@ -40,17 +39,14 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IPartSubTypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.NilBinding;
+import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.binding.ServiceBinding;
 import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeBindingImpl;
-import org.eclipse.edt.compiler.binding.annotationType.IsCompatibleWithAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.annotationType.StereotypeAnnotationTypeBinding;
-import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
-import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
@@ -560,26 +556,26 @@ public class TypeCompatibilityUtil {
 		ITypeBinding sourceType = realize(sType, sourceEnv);
 		ITypeBinding targetType = realize(tType, targetEnv);
 		
-		Object[] compatTypes = getCompatibilityAnnotationValues(sourceType); 
-		if (compatTypes != null) {
-			for (int i = 0; i < compatTypes.length; i++) {
-				ITypeBinding compatType = realize((ITypeBinding)compatTypes[i], sourceEnv);
-				if (typeBindingsAreEqual(compatType, targetType) || typeBindingsAreEqual(compatType, getPartTypeAnnotationRecord(targetType))) {
-					return true;
-				}
-			}
-		}
-		
-		compatTypes = getCompatibilityAnnotationValues(targetType); 
-		if (compatTypes != null) {
-			for (int i = 0; i < compatTypes.length; i++) {
-				ITypeBinding compatType = realize((ITypeBinding)compatTypes[i], targetEnv);
-				if (typeBindingsAreEqual(compatType, sourceType) || typeBindingsAreEqual(compatType, getPartTypeAnnotationRecord(sourceType))) {
+		//Check default super types
+		if (sourceType instanceof PartBinding) {
+			PartBinding partBinding = (PartBinding) sourceType;
+			IPartBinding superType = partBinding.getDefaultSuperType();
+			if (superType != null) {
+				if (typeBindingsAreEqual(superType, targetType)) {
 					return true;
 				}
 			}
 		}
 
+		if (targetType instanceof PartBinding) {
+			PartBinding partBinding = (PartBinding) targetType;
+			IPartBinding superType = partBinding.getDefaultSuperType();
+			if (superType != null) {
+				if (typeBindingsAreEqual(superType, sourceType)) {
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 	
@@ -600,37 +596,7 @@ public class TypeCompatibilityUtil {
 		
 		return null;
 	}
-	
-	private static Object[] getCompatibilityAnnotationValues(ITypeBinding type) {
 		
-		if (!Binding.isValidBinding(type)) {
-			return null;
-		}
-		
-		//look for the annotation on the type
-		IAnnotationBinding ann = type.getAnnotation(new String[] {"egl", "core"}, IsCompatibleWithAnnotationTypeBinding.name);
-		if (ann != null) {
-			return (Object[]) ann.getValue();
-		}
-		
-		//didn't find the annotation on the type, look for the annotation on the subtype's annotation record, if the type is a part
-		if (type.isPartBinding()) {
-			IPartBinding part = (IPartBinding) type;
-			
-			IPartSubTypeAnnotationTypeBinding subType = part.getSubType();
-			if (subType == null || subType.getAnnotationRecord() == null) {
-				return null;
-			}
-			
-			ann = subType.getAnnotationRecord().getAnnotation(new String[] {"egl", "core"}, IsCompatibleWithAnnotationTypeBinding.name);
-			if (ann != null) {
-				return (Object[]) ann.getValue();
-			}
-		}
-		
-		return null;
-	}
-	
 	public static  boolean areCompatibleArrayTypes(ITypeBinding targetType, ITypeBinding sourceType, ICompilerOptions compilerOptions) {
 		return ITypeBinding.ARRAY_TYPE_BINDING == targetType.getKind() &&
 	           ITypeBinding.ARRAY_TYPE_BINDING == sourceType.getKind() &&

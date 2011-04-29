@@ -94,7 +94,7 @@ public class FormGroupBinding extends PartBinding {
 		return false;
 	}
 	
-	public IDataBinding findData(String simpleName) {
+	protected IDataBinding primFindData(String simpleName) {
 		for(Iterator iter = getForms().iterator(); iter.hasNext();) {
 			FormBinding nextForm = (FormBinding) iter.next();
 			if(nextForm.getName() == simpleName) {

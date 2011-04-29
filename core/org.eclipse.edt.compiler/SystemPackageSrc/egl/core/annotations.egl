@@ -416,17 +416,6 @@ Record Override type Annotation
   eglIsSystemAnnotation = yes}
 end
 
-record isCompatibleWith type annotation
-	{
-		targets = [
-			ElementKind.AnnotationType,
-			ElementKind.RecordPart
-		],
-		validationProxy = "org.eclipse.edt.compiler.binding.annotationType.IsCompatibleWithAnnotationTypeBinding",	
-		eglIsSystemAnnotation = yes		
-	}
-	value egl.core.reflect.typeRef[];
-end
 
 Record OneWay type Annotation
 {

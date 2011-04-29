@@ -68,7 +68,7 @@ public class FormBinding extends PartBinding {
 		unqualifiedNamesToDataBindings = null;
 	}
 	
-	public IDataBinding findData(String simpleName) {
+	protected IDataBinding primFindData(String simpleName) {
 		for( Iterator iter = formFields.iterator(); iter.hasNext();) {
 			FormFieldBinding nextField = (FormFieldBinding) iter.next();
 			if(nextField.getName() == simpleName) {

@@ -203,6 +203,22 @@ public abstract class PartBinding extends TypeBinding implements IPartBinding {
 		return super.isReference();
 	}
 	
+	public IPartBinding getDefaultSuperType() {
+		IPartSubTypeAnnotationTypeBinding subType = getSubType();
+		if(subType != null) {
+			IAnnotationBinding aBinding = getAnnotation(subType).getAnnotation(StereotypeAnnotationTypeBinding.getInstance());
+			if(aBinding != null) {
+				aBinding = (IAnnotationBinding) aBinding.findData("DefaultSuperType");
+				if(IBinding.NOT_FOUND_BINDING != aBinding) {
+					if (aBinding.getValue() instanceof IPartBinding) {
+						return (IPartBinding) aBinding.getValue();
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
 	public boolean isSystemPart() {
 		IAnnotationBinding aBinding = super.getAnnotation(EGLIsSystemPartAnnotationTypeBinding.getInstance());
 		return aBinding != null && Boolean.YES == aBinding.getValue();
@@ -215,6 +231,41 @@ public abstract class PartBinding extends TypeBinding implements IPartBinding {
 	
     public List getDeclaredFunctions() {
 		return null;
+	}
+    
+    
+	public IDataBinding findData(String simpleName) {
+		IDataBinding result = primFindData(simpleName);
+		if (result == IBinding.NOT_FOUND_BINDING && getDefaultSuperType() != null) {
+			result = getDefaultSuperType().findData(simpleName);
+		}
+		
+		if (result == IBinding.NOT_FOUND_BINDING) {
+			return super.findData(simpleName);
+		}
+
+		return result;
+	}
+
+	protected IDataBinding primFindData(String simpleName) {
+		return IBinding.NOT_FOUND_BINDING;
+	}
+
+	public IFunctionBinding findFunction(String simpleName) {
+		IFunctionBinding result = primFindFunction(simpleName);
+		if (result == IBinding.NOT_FOUND_BINDING && getDefaultSuperType() != null) {
+			result = getDefaultSuperType().findFunction(simpleName);
+		}
+		
+		if (result == IBinding.NOT_FOUND_BINDING) {
+			return super.findFunction(simpleName);
+		}
+
+		return result;
+	}
+
+	protected IFunctionBinding primFindFunction(String simpleName) {
+		return IBinding.NOT_FOUND_BINDING;
 	}
 
 }
