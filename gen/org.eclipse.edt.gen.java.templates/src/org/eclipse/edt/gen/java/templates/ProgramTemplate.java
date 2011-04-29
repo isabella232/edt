@@ -15,8 +15,18 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Program;
+import org.eclipse.edt.mof.egl.ProgramParameter;
 
 public class ProgramTemplate extends JavaTemplate {
+
+	public void validate(Program program, Context ctx, Object... args) {
+		// process anything else the superclass needs to do
+		ctx.validateSuper(validate, Program.class, program, ctx, args);
+		// when we get here, we need to add the program parameter list to the table
+		for (ProgramParameter programParameter : program.getParameters()) {
+			CommonUtilities.generateSmapExtension(programParameter, ctx);
+		}
+	}
 
 	public void genSuperClass(Program program, Context ctx, TabbedWriter out, Object... args) {
 		out.print("ProgramBase");

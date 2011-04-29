@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.java.templates;
 
 import java.util.List;
 
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -35,8 +36,10 @@ public class LibraryTemplate extends JavaTemplate {
 				break;
 			}
 		}
-		if (!found)
+		if (!found) {
 			libraries.add(library);
+			CommonUtilities.generateSmapExtension(library, ctx);
+		}
 	}
 
 	public void genSuperClass(Library library, Context ctx, TabbedWriter out, Object... args) {

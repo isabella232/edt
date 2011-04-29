@@ -21,6 +21,8 @@ import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.DataTable;
+import org.eclipse.edt.mof.egl.Form;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
@@ -31,6 +33,8 @@ public class PartTemplate extends JavaTemplate {
 	IRUtils utils = new IRUtils();
 
 	public void validatePart(Part part, Context ctx, Object... args) {
+		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partDataTablesUsed, new ArrayList<DataTable>());
+		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partFormsUsed, new ArrayList<Form>());
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed, new ArrayList<Library>());
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partRecordsUsed, new ArrayList<Record>());
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partTypesImported, new ArrayList<String>());
