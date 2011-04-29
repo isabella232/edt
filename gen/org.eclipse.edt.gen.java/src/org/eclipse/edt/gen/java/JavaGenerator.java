@@ -88,7 +88,7 @@ public class JavaGenerator extends Generator {
 				context.getSmapData().append(Constants.smap_trailer);
 				// add our special egl extension
 				context.getSmapData().append(context.getSmapExtension());
-				context.getSmapData().append(Constants.smap_extensiontrailer);
+				context.getSmapData().append(Constants.smap_extensionTrailer);
 				out.flush();
 			}
 		}
@@ -129,7 +129,7 @@ public class JavaGenerator extends Generator {
 		// do any post processing once the file has been written
 		// if no error was created, update the class file with the accumulated debug info
 		if (!context.getMessageRequestor().isError()) {
-			File outSmapFile = new File(fileName.substring(0, fileName.length() - generator.getFileExtention().length()) + Constants.smap_fileextension);
+			File outSmapFile = new File(fileName.substring(0, fileName.length() - generator.getFileExtention().length()) + Constants.smap_fileExtension);
 			try {
 				FileOutputStream outStream = new FileOutputStream(outSmapFile);
 				byte[] outSmapBytes = context.getSmapData().toString().getBytes(Constants.smap_encoding);

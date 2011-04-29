@@ -19,15 +19,22 @@ public class Constants {
 	public static final String smap_stratum = "\negl\n*S egl\n*F\n";
 	public static final String smap_lines = "*L\n";
 	public static final String smap_trailer = "*E\n";
-	public static final String smap_extensiontrailer = "*X\n";
+	public static final String smap_extensionDataTable = "*D";
+	public static final String smap_extensionForm = "*F";
+	public static final String smap_extensionUserLibrary = "*L";
+	public static final String smap_extensionSystemLibrary = "*S";
+	public static final String smap_extensionProgramParameter = "*P";
+	public static final String smap_extensionTrailer = "*X\n";
 	public static final String smap_attribute = "SourceDebugExtension";
-	public static final String smap_fileextension = ".eglsmap";
+	public static final String smap_fileExtension = ".eglsmap";
 	public static final String smap_encoding = "UTF-8";
 
 	// command parameter internal names
 	public static final String parameter_checkOverflow = "checkOverflow";
 
 	// these are annotation key values used as context hashmap keys
+	public static final String Annotation_partDataTablesUsed = "partDataTablesUsed";
+	public static final String Annotation_partFormsUsed = "partFormsUsed";
 	public static final String Annotation_partLibrariesUsed = "partLibrariesUsed";
 	public static final String Annotation_partRecordsUsed = "partRecordsUsed";
 	public static final String Annotation_partTypesImported = "partTypesImported";

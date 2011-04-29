@@ -21,12 +21,16 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.DataTable;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.ExternalType;
+import org.eclipse.edt.mof.egl.Form;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.ProgramParameter;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
 
@@ -408,6 +412,26 @@ public class CommonUtilities {
 				ctx.getSmapExtension().append(")" + generateJavaTypeSignature(function.getReturnType(), ctx) + "\n");
 			}
 		}
+	}
+
+	public static void generateSmapExtension(DataTable dataTable, Context ctx) {
+		ctx.getSmapExtension().append(Constants.smap_extensionDataTable + ";" + dataTable.getFullyQualifiedName() + "\n");
+	}
+
+	public static void generateSmapExtension(Form form, Context ctx) {
+		ctx.getSmapExtension().append(Constants.smap_extensionForm + ";" + form.getFullyQualifiedName() + "\n");
+	}
+
+	public static void generateSmapExtension(Library library, Context ctx) {
+		if (ctx.mapsToNativeType(library))
+			ctx.getSmapExtension().append(Constants.smap_extensionSystemLibrary + ";" + library.getFullyQualifiedName() + "\n");
+		else
+			ctx.getSmapExtension().append(Constants.smap_extensionUserLibrary + ";" + library.getFullyQualifiedName() + "\n");
+	}
+
+	public static void generateSmapExtension(ProgramParameter programParameter, Context ctx) {
+		ctx.getSmapExtension().append(Constants.smap_extensionProgramParameter + ";" + programParameter.getName() + ";");
+		ctx.getSmapExtension().append(generateJavaTypeSignature(programParameter.getType(), ctx) + "\n");
 	}
 
 	private static String generateJavaTypeSignature(Type type, Context ctx) {
