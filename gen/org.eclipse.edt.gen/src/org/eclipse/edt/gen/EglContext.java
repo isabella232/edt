@@ -352,7 +352,7 @@ public abstract class EglContext extends TemplateContext {
 		try {
 			Stereotype stereotype = part.getStereotype();
 			TemplateMethod templateMethod = stereotype != null ? getMethodAndTemplate(methodName, stereotype, stereotype.getEClass().getETypeSignature(),
-				stereotype.getClass(), ctx.getClass(), out.getClass(), args.getClass()) : getMethodAndTemplate(methodName, part, part.getClassifier()
+				part.getClass(), ctx.getClass(), out.getClass(), args.getClass()) : getMethodAndTemplate(methodName, part, part.getClassifier()
 				.getTypeSignature(), part.getClass(), ctx.getClass(), out.getClass(), args.getClass());
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), part, ctx, out, args);
 		}
@@ -513,7 +513,7 @@ public abstract class EglContext extends TemplateContext {
 		try {
 			Stereotype stereotype = part.getStereotype();
 			TemplateMethod templateMethod = stereotype != null ? getMethodAndTemplate(methodName, stereotype, stereotype.getEClass().getETypeSignature(),
-				stereotype.getClass(), ctx.getClass(), args.getClass()) : getMethodAndTemplate(methodName, part, part.getClassifier().getTypeSignature(),
+				part.getClass(), ctx.getClass(), args.getClass()) : getMethodAndTemplate(methodName, part, part.getClassifier().getTypeSignature(),
 				part.getClass(), ctx.getClass(), args.getClass());
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), part, ctx, args);
 		}
