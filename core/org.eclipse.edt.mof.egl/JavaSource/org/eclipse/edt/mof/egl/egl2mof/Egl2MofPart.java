@@ -583,55 +583,32 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		}
 	}
 	private void setDefaultSuperType(StructPart part) {
-		Stereotype stereotype = part.getStereotype();
-		if (stereotype != null) {
-			StructPart superType = (StructPart)((StereotypeType)stereotype.getEClass()).getDefaultSuperType();
-			if (superType == null) {
-				String typeSignature = Type_AnyObject;
-				if (part instanceof Record)
-					typeSignature = Type_AnyRecord;
-				else if (part instanceof StructuredRecord) {
-					typeSignature = Type_AnyStruct;
-				}
-				else if (part instanceof AnnotationType) {
-					typeSignature = Type_Annotation;
-				}
-				else if (part instanceof StereotypeType) {
-					typeSignature = Type_Stereotype;
-				}
-				superType = (StructPart)getMofSerializable(typeSignature);
-			}
-			if (superType != null)
-				part.getSuperTypes().add(superType);
-			
-		}
-	}
-	
-	private void setDefaultSuperType(MofSerializable part, IPartBinding binding) {
-		if (part instanceof StructPart) {
-			StructPart eglClass = (StructPart)part;
-			if (eglClass.getSuperTypes().isEmpty() && !eglClass.getMofSerializationKey().equalsIgnoreCase(Type_AnyObject)) {
-				StructPart superType = (StructPart)getDefaultSuperType(binding);
+		if (part.getSuperTypes().isEmpty()) {
+			Stereotype stereotype = part.getStereotype();
+			if (stereotype != null) {
+				StructPart superType = (StructPart)((StereotypeType)stereotype.getEClass()).getDefaultSuperType();
 				if (superType == null) {
 					String typeSignature = Type_AnyObject;
-					if (eglClass instanceof Record)
+					if (part instanceof Record)
 						typeSignature = Type_AnyRecord;
-					else if (eglClass instanceof StructuredRecord) {
+					else if (part instanceof StructuredRecord) {
 						typeSignature = Type_AnyStruct;
 					}
-					else if (eglClass instanceof AnnotationType) {
+					else if (part instanceof AnnotationType) {
 						typeSignature = Type_Annotation;
 					}
-					else if (eglClass instanceof StereotypeType) {
+					else if (part instanceof StereotypeType) {
 						typeSignature = Type_Stereotype;
 					}
 					superType = (StructPart)getMofSerializable(typeSignature);
 				}
-				eglClass.getSuperTypes().add(superType);
+				if (superType != null)
+					part.getSuperTypes().add(superType);
+				
 			}
 		}
 	}
-	
+		
 	protected void setCurrentFunctionMember(FunctionMember function) {
 		currentFunction = function;
 	}

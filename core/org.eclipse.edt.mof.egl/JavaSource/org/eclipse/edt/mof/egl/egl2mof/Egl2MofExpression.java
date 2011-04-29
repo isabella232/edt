@@ -328,8 +328,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			else {
 				boolean isStatic = Binding.isValidBinding(functionBinding) && (functionBinding.isStatic() || declarer instanceof LibraryBinding);
 				if (node.getTarget() instanceof SimpleName && !isStatic) {
-					FunctionMember irFunc = (FunctionMember)getEObjectFor(functionBinding);
-					if (irFunc == null || isSuperTypeMember(irFunc)) {
+					if (isSuperTypeMember(functionBinding)) {
 						// Qualify with this to get QualifiedFunctionInvocation which will do dynamic lookup
 						fi = factory.createQualifiedFunctionInvocation();
 						fi.setId(node.getTarget().getCanonicalString());
@@ -338,6 +337,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 						((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
 					}
 					else {
+						FunctionMember irFunc = (FunctionMember)getEObjectFor(functionBinding);
 						fi = factory.createFunctionInvocation();
 						fi.setId(irFunc.getName());
 						((FunctionInvocation)fi).setTarget(irFunc);
@@ -560,13 +560,13 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			}
 		}
 		if (name instanceof MemberName) {
-			Member mbr = (Member)getEObjectFor(binding);
-			if (mbr == null || isSuperTypeMember(mbr)) {
+			if (isSuperTypeMember(binding)) {
 				ThisExpression thisExpr = factory.createThisExpression();
 				thisExpr.setThisObject((Part)currentPart);
 				name = (Name)addQualifier(thisExpr, name);
 			}
 			else {
+				Member mbr = (Member)getEObjectFor(binding);
 				((MemberName)name).setMember(mbr);
 			}
 		}
@@ -943,14 +943,20 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		return false;
 	}
 
-	private boolean isSuperTypeMember(Member mbr) {
-		if (mbr == null || mbr instanceof ProxyElement || (mbr.getContainer() instanceof FunctionMember))
+	private boolean isSuperTypeMember(IBinding binding) {
+		if (binding == null || binding == IBinding.NOT_FOUND_BINDING)
 			return false;
-		else {
-			StructPart part = (StructPart)currentPart;
-			StructPart container = (StructPart)mbr.getContainer();
-			return  part != null && container != null && !container.equals(part) && part.isSubtypeOf(container);
+		
+		StructPart part = null;
+		if (binding.isDataBinding()) {
+			part = (StructPart)mofTypeFor(((IDataBinding)binding).getDeclaringPart());
 		}
+		else if (binding.isFunctionBinding()) {
+			part = (StructPart)mofTypeFor(((IFunctionBinding)binding).getDeclarer());
+		}
+
+		StructPart current = (StructPart)currentPart;
+		return  part != null && !current.equals(part) && part.isSubtypeOf(current);
 	}
 
 	private boolean isWithPatternFunction(IDataBinding binding) {

@@ -398,6 +398,22 @@ public class IRUtils {
 		if (exprType instanceof NullType || exprType.equals(type) || exprType.getClassifier().equals(type)) {
 			return expr;
 		}
+		if (exprType.getClassifier().equals(type.getClassifier())) {
+			if (exprType instanceof SequenceType) {
+				if (((SequenceType)exprType).getLength() < ((SequenceType)type).getLength()) {
+					return expr;
+				}
+			}
+			else if (exprType instanceof FixedPrecisionType && type instanceof FixedPrecisionType) {
+				FixedPrecisionType fpExpr = (FixedPrecisionType)exprType;
+				FixedPrecisionType fpType = (FixedPrecisionType)type;
+				
+				if (fpExpr.getLength() <= fpType.getLength() 
+						&& fpExpr.getDecimals() <= fpType.getDecimals()) {
+					return expr;
+				}
+			}
+		}
 		if (TypeUtils.isReferenceType(exprType) 
 				&& exprType instanceof StructPart 
 				&& type instanceof StructPart 
