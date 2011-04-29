@@ -956,7 +956,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		}
 
 		StructPart current = (StructPart)currentPart;
-		return  part != null && !current.equals(part) && part.isSubtypeOf(current);
+		return  part != null && !current.equals(part) && current.isSubtypeOf(part);
 	}
 
 	private boolean isWithPatternFunction(IDataBinding binding) {

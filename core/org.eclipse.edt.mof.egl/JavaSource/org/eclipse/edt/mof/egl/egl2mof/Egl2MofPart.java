@@ -386,6 +386,22 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	@SuppressWarnings("unchecked")
 	protected void handleEndVisitPart(org.eclipse.edt.compiler.core.ast.Part astPart, MofSerializable mofPart) {
 		MofSerializable part = partProcessingStack.pop();
+		
+		// Set the stereotype value if necessary
+		IPartBinding partBinding = (IPartBinding)astPart.getName().resolveBinding();
+		IAnnotationBinding subtype = partBinding.getSubTypeAnnotationBinding();
+
+		if (mofPart instanceof EClass) {
+			createAnnotations(partBinding, (EClass)mofPart);
+//			setPartInformation(astPart, (EClass)mofPart);
+		}
+		else if (mofPart instanceof Part) {
+			createAnnotations(partBinding, (Part)mofPart);
+			if (mofPart instanceof StructPart)
+				setDefaultSuperType((StructPart)mofPart);
+			setElementInformation(astPart,  (Part)mofPart);
+		}
+		
 		// Process statements of function members now since
 		// All members that expressions may reference have been
 		// created and resolved
@@ -404,26 +420,12 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		}
 		if (part instanceof LogicAndDataPart)
 			IRUtils.markOverloadedFunctions((LogicAndDataPart)part);
-		
-		// Set the stereotype value if necessary
-		IPartBinding partBinding = (IPartBinding)astPart.getName().resolveBinding();
-		IAnnotationBinding subtype = partBinding.getSubTypeAnnotationBinding();
-				
+						
 		if (inMofProxyContext) {
 			EMetadataObject metadata = (EMetadataObject)mofValueFrom(subtype);
 			((EClass)mofPart).getMetadataList().add(metadata);
 		}
 		
-		if (mofPart instanceof EClass) {
-			createAnnotations(partBinding, (EClass)mofPart);
-//			setPartInformation(astPart, (EClass)mofPart);
-		}
-		else if (mofPart instanceof Part) {
-			createAnnotations(partBinding, (Part)mofPart);
-			if (mofPart instanceof StructPart)
-				setDefaultSuperType((StructPart)mofPart);
-			setElementInformation(astPart,  (Part)mofPart);
-		}
 		
 		for (Entry<IBinding, ProxyEObject> entry : proxies.entrySet()) {
 			EObject real = eObjects.get(entry.getKey());

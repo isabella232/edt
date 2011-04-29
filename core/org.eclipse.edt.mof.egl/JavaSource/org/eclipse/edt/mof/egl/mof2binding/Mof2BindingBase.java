@@ -50,6 +50,7 @@ import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
+import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EField;
@@ -686,6 +687,22 @@ public abstract class Mof2BindingBase extends AbstractVisitor implements MofConv
 			AnnotationFieldBinding refTypeAnn = new AnnotationFieldBinding(InternUtil.intern("ReferenceType"), part, boolType, annType);
 			refTypeAnn.setValue(Boolean.YES, null, null, null, false);
 			stereotype.addField(refTypeAnn);
+		}
+		
+		if (ir.getPartType() != null) {
+			IAnnotationTypeBinding annType = AnnotationTypeManager.getInstance().getAnnotationType("Annotation");
+			AnnotationFieldBinding partTypeAnn = new AnnotationFieldBinding(InternUtil.intern("partType"), part, SystemPartManager.TYPEREF_BINDING, annType);
+			ir.getPartType().accept(this);
+			partTypeAnn.setValue(stack.pop(), null, null, null, false); 
+			stereotype.addField(partTypeAnn);
+		}
+
+		if (ir.getDefaultSuperType() != null) {
+			IAnnotationTypeBinding annType = AnnotationTypeManager.getInstance().getAnnotationType("Annotation");
+			AnnotationFieldBinding defaultSuperTypeAnn = new AnnotationFieldBinding(InternUtil.intern("defaultSuperType"), part, SystemPartManager.TYPEREF_BINDING, annType);
+			ir.getDefaultSuperType().accept(this);
+			defaultSuperTypeAnn.setValue(stack.pop(), null, null, null, false); 
+			stereotype.addField(defaultSuperTypeAnn);
 		}
 
 		return binding;
