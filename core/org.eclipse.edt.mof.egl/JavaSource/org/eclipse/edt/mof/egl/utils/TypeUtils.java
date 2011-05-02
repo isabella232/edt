@@ -236,9 +236,15 @@ public class TypeUtils implements MofConversion {
 	 * @param rhsType
 	 * @return
 	 */
-	public static boolean areCompatible(StructPart lhsType, StructPart rhsType) {
+	public static boolean areCompatible(Classifier lhsType, Classifier rhsType) {
 		if (lhsType.equals(rhsType)) return true;
-		return IRUtils.getConversionOperation(rhsType, lhsType) != null || rhsType.isSubtypeOf(lhsType);
+		
+		if (lhsType instanceof StructPart && rhsType instanceof StructPart) {
+			return IRUtils.getConversionOperation((StructPart)rhsType, (StructPart)lhsType) != null || ((StructPart)rhsType).isSubtypeOf((StructPart)lhsType);
+		}
+		else {
+			return false;
+		}
 	}
 	
 	/**
@@ -272,19 +278,24 @@ public class TypeUtils implements MofConversion {
 		return 0;  // neither is least wide
 	}
 	
-	public static int getBestFitType(StructPart srcType, List<StructPart> types) {
-		List<StructPart> candidates = new ArrayList<StructPart>();
-		for (StructPart type : types) {
+	public static int getBestFitType(Classifier srcType, List<Classifier> types) {
+		List<Classifier> classifierCandidates = new ArrayList<Classifier>();
+		for (Classifier type : types) {
 			// a value of null for a type indicates it is a generic type parameter
 			// that is dependent on the argument being passed in - so ignore it
-			if (type == null || srcType.equals(type)) candidates.add(type);
+			if (type == null || srcType.equals(type)) classifierCandidates.add(type);
 		}
-		if (candidates.size() == 1) return types.indexOf(candidates.get(0));	
-		if (candidates.size() > 1) return -1;
+		if (classifierCandidates.size() == 1) return types.indexOf(classifierCandidates.get(0));	
+		if (classifierCandidates.size() > 1) return -1;
 		
-		for (StructPart type : types) {
-			if (type != null && getWidenConversionOp(srcType, type) != null)
-				candidates.add(type);
+		List<StructPart> candidates = new ArrayList<StructPart>();
+		if (srcType instanceof StructPart) {
+			for (Classifier type : types) {
+				if (type instanceof StructPart) {
+					if (type != null && getWidenConversionOp((StructPart)srcType, (StructPart)type) != null)
+						candidates.add((StructPart)type);
+				}
+			}
 		}
 		if (candidates.size() == 1) return types.indexOf(candidates.get(0));
 		if (candidates.size() > 1) {
@@ -307,10 +318,12 @@ public class TypeUtils implements MofConversion {
 			}
 		}
 		// Now check for narrow conversions
-		if (candidates.size() == 0) {
-			for (StructPart type : types) {
-				if (getNarrowConversionOp(srcType, type) != null)
-					candidates.add(type);
+		if (candidates.size() == 0 && srcType instanceof StructPart) {
+			for (Classifier type : types) {
+				if (type instanceof StructPart) {
+					if (getNarrowConversionOp((StructPart)srcType, (StructPart)type) != null)
+						candidates.add((StructPart)type);
+				}
 			}
 			if (candidates.size() == 1) return types.indexOf(candidates.get(0));
 			if (candidates.size() > 1) {
@@ -433,7 +446,7 @@ public class TypeUtils implements MofConversion {
 		return getBestFitFunctionMember(ops, argumentTypes);
 	}
 	
-	public static List<Function> getBestFitFunction(StructPart container, String name, StructPart...argumentTypes) {
+	public static List<Function> getBestFitFunction(StructPart container, String name, Classifier...argumentTypes) {
 		List<Function> ops = new ArrayList<Function>();
 		for (Member mbr : container.getAllMembers()) {
 			Function op = mbr instanceof Function ? (Function)mbr : null;
@@ -447,7 +460,7 @@ public class TypeUtils implements MofConversion {
 		return getBestFitFunctionMember(ops, argumentTypes);
 	}
 
-	public static <T extends FunctionMember> List<T> getBestFitFunctionMember(List<T> functionMembers, StructPart...argumentTypes) {
+	public static <T extends FunctionMember> List<T> getBestFitFunctionMember(List<T> functionMembers, Classifier...argumentTypes) {
 		List<T> candidates = new ArrayList<T>();
 		// First check for exact parameter type matches
 		for (T op : functionMembers) {
@@ -475,7 +488,7 @@ public class TypeUtils implements MofConversion {
 			for (FunctionParameter parm : op.getParameters()) {
 				 // check for generic type parameter
 				if (!parm.isGenericTypeParameter()) {
-					if (!TypeUtils.areCompatible((StructPart)parm.getType().getClassifier(), argumentTypes[i])) {
+					if (!TypeUtils.areCompatible((Classifier)parm.getType().getClassifier(), argumentTypes[i])) {
 						isCandidate = false;
 					}
 					if (!isCandidate) break;
@@ -491,9 +504,9 @@ public class TypeUtils implements MofConversion {
 		if (candidates.size() > 1) {
 			int idx;
 			for (int i=0; i<argumentTypes.length; i++) {
-				List<StructPart> types = new ArrayList<StructPart>();
+				List<Classifier> types = new ArrayList<Classifier>();
 				for (T op : candidates) {
-					types.add((StructPart)op.getParameters().get(i).getType().getClassifier());
+					types.add((Classifier)op.getParameters().get(i).getType().getClassifier());
 				}
 				idx = getBestFitType(argumentTypes[i], types);
 				if (idx != -1)  // More than one fits so bail on this parameter

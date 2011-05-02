@@ -14,6 +14,7 @@ package org.eclipse.edt.mof.egl.impl;
 import java.util.List;
 
 import org.eclipse.edt.mof.egl.AmbiguousFunctionReferenceError;
+import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
@@ -103,10 +104,10 @@ public class QualifiedFunctionInvocationImpl extends InvocationExpressionImpl im
 	
 	private Function resolveFunction() {
 		StructPart container = (StructPart)getQualifier().getType().getClassifier();
-		StructPart[] argTypes = new StructPart[getArguments().size()];
+		Classifier[] argTypes = new Classifier[getArguments().size()];
 		int i = 0;
 		for (Expression expr : getArguments()) {
-			argTypes[i] = (StructPart)expr.getType().getClassifier();
+			argTypes[i] = (Classifier)expr.getType().getClassifier();
 			i++;
 		}
 		List<Function> result = null;
