@@ -19,6 +19,8 @@ public interface IBuildPathEntry {
 	boolean hasPackage(String[] packageName);
 	int hasPart(String[] packageName,String partName);
 	IEnvironment getRealizingEnvironment();
+	IPartBinding getCachedPartBinding(String[] packageName, String partName);
+
 	
 	boolean isZipFile();
 	boolean isProject();

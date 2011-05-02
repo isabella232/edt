@@ -63,7 +63,7 @@ public class ZipFileBuildPathEntry implements IBuildPathEntry{
 		return partBinding;
 	}
 	
-	protected IPartBinding getCachedPartBinding(String[] packageName,String partName){
+	public IPartBinding getCachedPartBinding(String[] packageName,String partName){
 		IPartBinding partBinding = null;
 		if (packageName == null || packageName.length == 0){
 			partBinding = (IPartBinding)partBindingsWithoutPackage.get(partName);

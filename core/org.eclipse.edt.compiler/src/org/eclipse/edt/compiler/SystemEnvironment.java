@@ -209,6 +209,18 @@ public class SystemEnvironment implements IBindingEnvironment {
         
         return result == null ? IBinding.NOT_FOUND_BINDING : result;
     }
+    
+    public IPartBinding getCachedPartBinding(String[] packageName, String partName) {
+    	IPartBinding result = null;
+    	      
+        Map map = (Map)getSystemPackages().get(packageName);
+        if (map != null) {
+            result = (IPartBinding) map.get(partName);
+        }
+        
+        return result == null ? IBinding.NOT_FOUND_BINDING : result;
+    }
+
 
     /* (non-Javadoc)
      * @see org.eclipse.edt.compiler.internal.core.lookup.IEnvironment#getNewPartBinding(java.lang.String[], java.lang.String, int)

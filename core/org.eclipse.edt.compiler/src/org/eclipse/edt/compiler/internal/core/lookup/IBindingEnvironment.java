@@ -15,5 +15,6 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 
 public interface IBindingEnvironment extends IEnvironment {
 	void addPartBindingToCache(IPartBinding partBinding);
+    IPartBinding getCachedPartBinding(String[] packageName, String partName);
 
 }
