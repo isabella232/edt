@@ -72,6 +72,7 @@ import org.eclipse.edt.mof.egl.GenericType;
 import org.eclipse.edt.mof.egl.InvalidName;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.ParameterizableType;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PatternType;
 import org.eclipse.edt.mof.egl.SequenceType;
 import org.eclipse.edt.mof.egl.StereotypeType;
@@ -365,7 +366,22 @@ public abstract class Mof2BindingBase extends AbstractVisitor implements MofConv
 	abstract IPartBinding getPartBinding();
 	
 	public IBinding getBinding(EObject ir) {
-		return elementToBindingMap.get(ir);
+		IBinding binding = elementToBindingMap.get(ir);
+		if (binding != null || !(ir instanceof Part)) {
+			return binding;
+		}
+		
+		Part part = (Part) ir;
+		
+		String[] packageName = InternUtil.intern(part.getPackageName().split("[.]"));
+		String name = InternUtil.intern(part.getName());
+		binding = env.getCachedPartBinding(packageName, name);
+		
+		if (Binding.isValidBinding(binding)) {
+			return binding;
+		}
+		
+		return null;
 	}
 	
 	public void putBinding(EObject ir,  IBinding binding) {

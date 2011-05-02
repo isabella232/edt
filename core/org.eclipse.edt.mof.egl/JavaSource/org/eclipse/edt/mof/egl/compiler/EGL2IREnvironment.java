@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.SystemEnvironment;
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -260,4 +261,17 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
 	public List<File> getPathRoots() {
 		return irPathRoots;
 	}
+	
+	public IPartBinding getPartBindingFromCache(String[] packageName, String partName) {
+		return bindingCache.get(packageName, partName);
+	}
+	public IPartBinding getCachedPartBinding(String[] packageName, String partName) {
+		IPartBinding binding = getPartBindingFromCache(packageName, partName);
+		if (Binding.isValidBinding(binding)) {
+			return binding;
+		}
+		
+		return SystemEnvironment.getInstance().getCachedPartBinding(packageName, partName);
+	}
+
 }
