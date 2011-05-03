@@ -338,8 +338,8 @@ public abstract class EglContext extends TemplateContext {
 	}
 
 	public void gen(String methodName, Annotation type, EglContext ctx, TabbedWriter out, Object... args) throws TemplateException {
-		TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, ((AnnotationType) type.getEClass()).getTypeSignature(), type.getClass(),
-			ctx.getClass(), out.getClass(), args.getClass());
+		TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClass(), ((AnnotationType) type.getEClass()).getTypeSignature(),
+			type.getClass(), ctx.getClass(), out.getClass(), args.getClass());
 		try {
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, out, args);
 		}
@@ -351,9 +351,9 @@ public abstract class EglContext extends TemplateContext {
 	public void gen(String methodName, Classifier part, EglContext ctx, TabbedWriter out, Object... args) throws TemplateException {
 		try {
 			Stereotype stereotype = part.getStereotype();
-			TemplateMethod templateMethod = stereotype != null ? getMethodAndTemplate(methodName, stereotype, stereotype.getEClass().getETypeSignature(),
-				part.getClass(), ctx.getClass(), out.getClass(), args.getClass()) : getMethodAndTemplate(methodName, part, part.getClassifier()
-				.getTypeSignature(), part.getClass(), ctx.getClass(), out.getClass(), args.getClass());
+			TemplateMethod templateMethod = stereotype != null ? getMethodAndTemplate(methodName, stereotype, part.getClass(), stereotype.getEClass()
+				.getETypeSignature(), part.getClass(), ctx.getClass(), out.getClass(), args.getClass()) : getMethodAndTemplate(methodName, part,
+				part.getClass(), part.getClassifier().getTypeSignature(), part.getClass(), ctx.getClass(), out.getClass(), args.getClass());
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), part, ctx, out, args);
 		}
 		catch (TemplateException e) {
@@ -384,18 +384,18 @@ public abstract class EglContext extends TemplateContext {
 				// standard type instead
 				try {
 					Stereotype stereotype = ((Classifier) type).getStereotype();
-					TemplateMethod templateMethod = getMethodAndTemplate(methodName, stereotype, stereotype.getEClass().getETypeSignature(),
-						stereotype.getClass(), ctx.getClass(), out.getClass(), args.getClass());
+					TemplateMethod templateMethod = getMethodAndTemplate(methodName, stereotype, stereotype.getClass(), stereotype.getEClass()
+						.getETypeSignature(), type.getClass(), ctx.getClass(), out.getClass(), args.getClass());
 					templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, out, objects);
 				}
 				catch (TemplateException e) {
-					TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClassifier().getTypeSignature(), type.getClass(),
-						ctx.getClass(), out.getClass(), args.getClass());
+					TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClass(), type.getClassifier().getTypeSignature(),
+						type.getClass(), ctx.getClass(), out.getClass(), args.getClass());
 					templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, out, objects);
 				}
 			} else {
-				TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClassifier().getTypeSignature(), type.getClass(),
-					ctx.getClass(), out.getClass(), args.getClass());
+				TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClass(), type.getClassifier().getTypeSignature(),
+					type.getClass(), ctx.getClass(), out.getClass(), args.getClass());
 				templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, out, objects);
 			}
 		}
@@ -416,8 +416,8 @@ public abstract class EglContext extends TemplateContext {
 	}
 
 	public void gen(String methodName, EObject object, TemplateContext ctx, TabbedWriter out, Object... args) throws TemplateException {
-		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getEClass().getETypeSignature(), object.getClass(), ctx.getClass(),
-			out.getClass(), args.getClass());
+		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getClass(), object.getEClass().getETypeSignature(), object.getClass(),
+			ctx.getClass(), out.getClass(), args.getClass());
 		try {
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), object, ctx, out, args);
 		}
@@ -427,8 +427,8 @@ public abstract class EglContext extends TemplateContext {
 	}
 
 	public void gen(String methodName, Object object, TemplateContext ctx, TabbedWriter out, Object... args) throws TemplateException {
-		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getClass().getName(), object.getClass(), ctx.getClass(),
-			out.getClass(), args.getClass());
+		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getClass(), object.getClass().getName(), object.getClass(),
+			ctx.getClass(), out.getClass(), args.getClass());
 		try {
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), object, ctx, out, args);
 		}
@@ -449,8 +449,8 @@ public abstract class EglContext extends TemplateContext {
 
 	@SuppressWarnings("unchecked")
 	public List<Object> xlate(String methodName, Annotation type, EglContext ctx, Object... args) throws TemplateException {
-		TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, ((AnnotationType) type.getEClass()).getTypeSignature(), type.getClass(),
-			ctx.getClass(), args.getClass());
+		TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClass(), ((AnnotationType) type.getEClass()).getTypeSignature(),
+			type.getClass(), ctx.getClass(), args.getClass());
 		try {
 			return (List<Object>) templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, args);
 		}
@@ -461,8 +461,8 @@ public abstract class EglContext extends TemplateContext {
 
 	@SuppressWarnings("unchecked")
 	public List<Object> xlate(String methodName, Type type, EglContext ctx, Object... args) throws TemplateException {
-		TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClassifier().getTypeSignature(), type.getClass(), ctx.getClass(),
-			args.getClass());
+		TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClass(), type.getClassifier().getTypeSignature(), type.getClass(),
+			ctx.getClass(), args.getClass());
 		try {
 			return (List<Object>) templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, args);
 		}
@@ -473,8 +473,8 @@ public abstract class EglContext extends TemplateContext {
 
 	@SuppressWarnings("unchecked")
 	public List<Object> xlate(String methodName, EObject object, TemplateContext ctx, Object... args) throws TemplateException {
-		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getEClass().getETypeSignature(), object.getClass(), ctx.getClass(),
-			args.getClass());
+		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getClass(), object.getEClass().getETypeSignature(), object.getClass(),
+			ctx.getClass(), args.getClass());
 		try {
 			return (List<Object>) templateMethod.getMethod().invoke(templateMethod.getTemplate(), object, ctx, args);
 		}
@@ -485,8 +485,8 @@ public abstract class EglContext extends TemplateContext {
 
 	public void validate(String methodName, Annotation annotation, EglContext ctx, Object... args) throws TemplateException {
 		try {
-			TemplateMethod templateMethod = getMethodAndTemplate(methodName, annotation, ((AnnotationType) annotation.getEClass()).getTypeSignature(),
-				annotation.getClass(), ctx.getClass(), args.getClass());
+			TemplateMethod templateMethod = getMethodAndTemplate(methodName, annotation, annotation.getClass(),
+				((AnnotationType) annotation.getEClass()).getTypeSignature(), annotation.getClass(), ctx.getClass(), args.getClass());
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), annotation, ctx, args);
 		}
 		catch (TemplateException e) {
@@ -512,9 +512,9 @@ public abstract class EglContext extends TemplateContext {
 	public void validate(String methodName, Classifier part, EglContext ctx, Object... args) throws TemplateException {
 		try {
 			Stereotype stereotype = part.getStereotype();
-			TemplateMethod templateMethod = stereotype != null ? getMethodAndTemplate(methodName, stereotype, stereotype.getEClass().getETypeSignature(),
-				part.getClass(), ctx.getClass(), args.getClass()) : getMethodAndTemplate(methodName, part, part.getClassifier().getTypeSignature(),
-				part.getClass(), ctx.getClass(), args.getClass());
+			TemplateMethod templateMethod = stereotype != null ? getMethodAndTemplate(methodName, stereotype, part.getClass(), stereotype.getEClass()
+				.getETypeSignature(), part.getClass(), ctx.getClass(), args.getClass()) : getMethodAndTemplate(methodName, part, part.getClass(), part
+				.getClassifier().getTypeSignature(), part.getClass(), ctx.getClass(), args.getClass());
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), part, ctx, args);
 		}
 		catch (TemplateException e) {
@@ -532,18 +532,18 @@ public abstract class EglContext extends TemplateContext {
 				// standard type instead
 				try {
 					Stereotype stereotype = ((Classifier) type).getStereotype();
-					TemplateMethod templateMethod = getMethodAndTemplate(methodName, stereotype, stereotype.getEClass().getETypeSignature(),
-						stereotype.getClass(), ctx.getClass(), args.getClass());
+					TemplateMethod templateMethod = getMethodAndTemplate(methodName, stereotype, stereotype.getClass(), stereotype.getEClass()
+						.getETypeSignature(), type.getClass(), ctx.getClass(), args.getClass());
 					templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, args);
 				}
 				catch (TemplateException e) {
-					TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClassifier().getTypeSignature(), Type.class, ctx.getClass(),
-						args.getClass());
+					TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, Type.class, type.getClassifier().getTypeSignature(), Type.class,
+						ctx.getClass(), args.getClass());
 					templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, args);
 				}
 			} else {
-				TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClassifier().getTypeSignature(), Type.class, ctx.getClass(),
-					args.getClass());
+				TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, Type.class, type.getClassifier().getTypeSignature(), Type.class,
+					ctx.getClass(), args.getClass());
 				templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, args);
 			}
 		}
@@ -570,8 +570,8 @@ public abstract class EglContext extends TemplateContext {
 	}
 
 	public void validate(String methodName, EObject object, TemplateContext ctx, Object... args) throws TemplateException {
-		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getEClass().getETypeSignature(), object.getClass(), ctx.getClass(),
-			args.getClass());
+		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getClass(), object.getEClass().getETypeSignature(), object.getClass(),
+			ctx.getClass(), args.getClass());
 		try {
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), object, ctx, args);
 		}
@@ -581,8 +581,8 @@ public abstract class EglContext extends TemplateContext {
 	}
 
 	public void validate(String methodName, Object object, TemplateContext ctx, Object... args) throws TemplateException {
-		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getClass().getName(), object.getClass(), ctx.getClass(),
-			args.getClass());
+		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getClass(), object.getClass().getName(), object.getClass(),
+			ctx.getClass(), args.getClass());
 		try {
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), object, ctx, args);
 		}
@@ -662,8 +662,8 @@ public abstract class EglContext extends TemplateContext {
 
 	public abstract void handleValidationError(Type ex);
 
-	private TemplateMethod getMethodAndTemplate(String methodName, Object object, String signature, Class<?>... classes) throws TemplateException {
-		Class<?> ifaceClass = classes[0];
+	private TemplateMethod getMethodAndTemplate(String methodName, Object object, Class<?> ifaceClass, String signature, Class<?>... classes)
+		throws TemplateException {
 		String hashKey = methodName + "/" + signature + "/" + ifaceClass.getName();
 		TemplateMethod templateMethod = templateMethods.get(hashKey);
 		addMethodTrace("gen for method name: " + methodName + " with signature: " + signature + " for argument: " + ifaceClass.getName());
