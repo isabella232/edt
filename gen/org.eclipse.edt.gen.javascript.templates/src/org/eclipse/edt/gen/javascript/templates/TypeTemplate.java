@@ -177,11 +177,8 @@ public class TypeTemplate extends JavaScriptTemplate {
 				out.print(")");
 			} else {
 				ctx.gen(genExpression, (Expression) args[0], ctx, out, genWithoutTypeList(args));
-				out.print(".");
-				out.print(eze$$copy);
-				out.print("(");
+				out.print(" = ");
 				ctx.gen(genExpression, (Expression) args[1], ctx, out, genWithoutTypeList(args));
-				out.print(")");
 			}
 		}
 	}

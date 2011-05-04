@@ -29,6 +29,20 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 			out.print(".ezeCopy(");
 			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
 			out.print(")");
+			// check to see if we are copying LHS boxed temporary variables (inout and out types only)
+		} else if (ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
+			&& ((Integer) ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
+			ctx.gen(genExpression, (Expression) expr, ctx, out, args);
+			out.print(" = ");
+			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
+			// check to see if we are unboxing RHS temporary variables (inout and out types only)
+		} else if ((Expression) args[0] instanceof MemberName
+			&& ctx.getAttribute(((MemberName) (Expression) args[0]).getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
+			&& ((Integer) ctx.getAttribute(((MemberName) (Expression) args[0]).getMember(),
+				org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
+			ctx.gen(genExpression, (Expression) expr, ctx, out, args);
+			out.print(" = ");
+			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
 		} else
 			ctx.genSuper(genAssignment, MemberName.class, expr, ctx, out, args);
 	}

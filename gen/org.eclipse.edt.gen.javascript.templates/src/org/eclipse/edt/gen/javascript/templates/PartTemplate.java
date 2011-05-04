@@ -31,7 +31,7 @@ public class PartTemplate extends JavaScriptTemplate {
 		ctx.gen(genClassHeader, part, ctx, out, args);
 		out.pushIndent();
 		ctx.gen(genClassBody, part, ctx, out, args);
-		out.println(")");
+		out.println("}");
 		out.popIndent();
 		out.println(");");
 	}

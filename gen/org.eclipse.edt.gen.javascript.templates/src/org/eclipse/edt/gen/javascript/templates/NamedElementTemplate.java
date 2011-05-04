@@ -25,7 +25,7 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 
 	public void genAccessor(NamedElement element, Context ctx, TabbedWriter out, Object... args) {
 		Annotation property = getPropertyAnnotation(element);
-		out.print("this.");
+		ctx.gen(genQualifier, element, ctx, out, args); 
 		if (property != null) {
 			// obtain the name of the function
 			String functionName;

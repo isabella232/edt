@@ -13,8 +13,10 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.Library;
 
 public class FunctionTemplate extends JavaScriptTemplate {
 
@@ -42,30 +44,29 @@ public class FunctionTemplate extends JavaScriptTemplate {
 		out.println("}");
 	}
 
-	public void genAccessor(Function function, Context ctx, TabbedWriter out, Object... args) {}
+	public void genAccessor(Function function, Context ctx, TabbedWriter out, Object... args){
+		out.print("new egl.egl.jsrt.Delegate(");  		
+		
+		final Container cnr = function.getContainer();
+		if (cnr instanceof Library){  //NOGO sbg -- generalize to handle any container?
+			ctx.gen(genAccessor, cnr, ctx, out, args);  
+			out.print(",");  
+			
+			ctx.gen(genName, cnr, ctx, out, args);  
+			out.print(".prototype.");   // NOGO sbg -- should use genName / genAccessor or something similar....
+			ctx.gen(genName, function, ctx, out, args);
+		}
+		
+		out.print(")");
+	}
 
 	public void genName(Function function, Context ctx, TabbedWriter out, Object... args) {
-		// next determine if there are inout or out parameters, as we only need to alias then
-		boolean needsAlias = false;
-		for (int i = 0; i < function.getParameters().size(); i++) {
-			if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(function.getParameters().get(i), ctx))
-				needsAlias = true;
-		}
-		// if we need an alias, then generate it, otherwise use the original name
-		if (needsAlias) {
-			String alias = function.getId();
-			if (function.getType() == null)
-				alias += "_void";
-			else
-				alias += "_" + function.getType().getTypeSignature();
-			for (int i = 0; i < function.getParameters().size(); i++) {
-				alias += "_" + function.getParameters().get(i).getType().getTypeSignature();
-			}
-			// now replace the period with an underscore
-			while (alias.contains("."))
-				alias = alias.replace('.', '_');
-			out.print(alias);
-		} else
-			ctx.genSuper(genName, Function.class, function, ctx, out, args);
+		ctx.genSuper(genName, Function.class, function, ctx, out, args);
 	}
+	
+	
+	public void genQualifier(Function function, Context ctx, TabbedWriter out, Object... args) {
+		// No qualifier (such as "this") is required for function members
+	}
+
 }

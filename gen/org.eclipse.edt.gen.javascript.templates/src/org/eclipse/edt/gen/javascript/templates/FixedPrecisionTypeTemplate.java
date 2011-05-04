@@ -19,9 +19,8 @@ public class FixedPrecisionTypeTemplate extends JavaScriptTemplate {
 
 	public void genTypeDependentOptions(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(", ");
-		out.print(type.getDecimals());
-		out.print(", ");
 		out.print(decimalLimit(type.getDecimals(), type.getLength()));
+		out.print(", egl.createRuntimeException");
 	}
 
 	/**

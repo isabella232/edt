@@ -24,7 +24,10 @@ public class MemberTemplate extends JavaScriptTemplate {
 	public void genRuntimeTypeName(Member mbr, Context ctx, TabbedWriter out, Object... args) {
 		if (mbr.getType() == null)
 			return;
-		else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()) && !mbr.isNullable() && TypeUtils.isValueType(mbr.getType()))
+		else if (ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
+			&& ((Integer) ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
+			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavascriptObject, mbr);
+		} else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()) && !mbr.isNullable() && TypeUtils.isValueType(mbr.getType()))
 			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavascriptPrimitive);
 		else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()))
 			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavascriptObject);

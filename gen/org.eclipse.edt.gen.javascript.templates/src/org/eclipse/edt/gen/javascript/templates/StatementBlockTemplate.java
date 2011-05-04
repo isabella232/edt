@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import java.util.List;
+
+import org.eclipse.edt.gen.ReorganizeCode;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Statement;
@@ -39,8 +42,15 @@ public class StatementBlockTemplate extends JavaScriptTemplate {
 	}
 
 	private void processStatements(StatementBlock block, Context ctx, TabbedWriter out, Object... args) {
+//TODO sbg from Java gen, related to debug		ctx.setCurrentFile(IRUtils.getFileName(block));
 		for (Statement stmt : block.getStatements()) {
+			ReorganizeCode reorganizeCode = new ReorganizeCode();
+			List<StatementBlock> blockArray = reorganizeCode.reorgCode(stmt, ctx);
+			if (blockArray != null && blockArray.get(0) != null)
+				ctx.gen(genStatementNoBraces, blockArray.get(0), ctx, out, args);
 			ctx.gen(genStatement, stmt, ctx, out, args);
+			if (blockArray != null && blockArray.get(1) != null)
+				ctx.gen(genStatementNoBraces, blockArray.get(1), ctx, out, args);
 		}
 	}
 }

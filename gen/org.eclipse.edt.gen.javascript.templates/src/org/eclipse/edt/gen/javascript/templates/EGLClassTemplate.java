@@ -65,7 +65,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.print(", ");
 		ctx.gen(genSuperClass, part, ctx, out, args);
 		out.print(", ");
-		out.println("(");
+		out.println("{");
 	}
 
 	public void genClassBody(EGLClass part, Context ctx, TabbedWriter out, Object... args) {

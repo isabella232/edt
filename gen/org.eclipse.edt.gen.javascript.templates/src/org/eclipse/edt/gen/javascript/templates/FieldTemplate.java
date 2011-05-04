@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -30,18 +31,40 @@ public class FieldTemplate extends JavaScriptTemplate {
 		ctx.gen(genName, field, ctx, out, args);
 		out.println(";");
 	}
+	
+	public void genQualifier(Field field, Context ctx, TabbedWriter out, Object... args) {
+		final Container cnr = field.getContainer();
+		if (cnr != null) {
+			ctx.gen(genQualifier, cnr, ctx, out, args);
+		}
+	}
 
 	public void genInstantiation(Field field, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genInstantiation, field.getType(), ctx, out, field);
 	}
 
 	public void genInitialization(Field field, Context ctx, TabbedWriter out, Object... args) {
-		if (field.isNullable() || TypeUtils.isReferenceType(field.getType()))
-			out.print("null");
-		else if (ctx.mapsToPrimitiveType(field.getType().getClassifier()))
-			ctx.gen(genDefaultValue, field.getType(), ctx, out, field);
-		else
-			ctx.gen(genInstantiation, field.getType(), ctx, out, field);
+		// is this an inout or out temporary variable to a function. if so, then we need to default or instantiate for
+		// our parms, and set to null for inout
+		if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
+			&& ((Integer) ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
+			// if the value associated with the temporary variable is 2, then it is to be instantiated (OUT parm)
+			// otherwise it is to be defaulted to null (INOUT parm), as there is an assignment already created
+			if (((Integer) ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() == 2) {
+				if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
+					ctx.gen(genDefaultValue, field.getType(), ctx, out, field);
+				else
+					ctx.gen(genInstantiation, field.getType(), ctx, out, field);
+			} else
+				out.print("null");
+		} else {
+			if (field.isNullable() || TypeUtils.isReferenceType(field.getType()))
+				ctx.gen(genDefaultValue, field.getType(), ctx, out, field);
+			else if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
+				ctx.gen(genDefaultValue, field.getType(), ctx, out, field);
+			else
+				ctx.gen(genInstantiation, field.getType(), ctx, out, field);
+		}
 	}
 
 	public void genGetter(Field field, Context ctx, TabbedWriter out, Object... args) {
