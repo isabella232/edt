@@ -114,7 +114,7 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_PLUS))
 			return " + ";
 		if (op.equals(expr.Op_EQ))
-			return ".equals(";
+			return " == ";
 		if (op.equals(expr.Op_NE))
 			return ".equals(";
 		if (op.equals(expr.Op_LT))
@@ -138,7 +138,7 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 	private String getNativeStringComparisionOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_EQ))
-			return ")";
+			return "";
 		if (op.equals(expr.Op_NE))
 			return ")";
 		if (op.equals(expr.Op_LT))

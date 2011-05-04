@@ -16,8 +16,10 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
+import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 
 public class BigintTypeTemplate extends JavaScriptTemplate {
@@ -34,7 +36,76 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 	public void genBigintFromSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		genBigintFromIntegerConversion(type, ctx, out, args);
 	}
+	
+	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		if (false){ //TODO sbg other impls of genBinaryExpression consider nullables
+		}
+		else {
+			out.print(getNativeStringPrefixOperation((BinaryExpression) args[0]));
+			out.print("(");
+			ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, args);
+			out.print(getNativeStringOperation((BinaryExpression) args[0]));
+			ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, args);
+			out.print(getNativeStringComparisionOperation((BinaryExpression) args[0]));
+			out.print(")");
+		}
+	}
+	
+	@SuppressWarnings("static-access")
+	private String getNativeStringPrefixOperation(BinaryExpression expr) {
+		String op = expr.getOperator();
+		if (op.equals(expr.Op_NE))
+			return "!";
+		return "";
+	}
 
+	@SuppressWarnings("static-access")
+	private String getNativeStringOperation(BinaryExpression expr) {
+		String op = expr.getOperator();
+		// these are the defaults for what can be handled by the java string class
+		if (op.equals(expr.Op_PLUS))
+			return " + ";
+		if (op.equals(expr.Op_EQ))
+			return ".compareTo(";
+		if (op.equals(expr.Op_NE))
+			return ".compareTo(";
+		if (op.equals(expr.Op_LT))
+			return ".compareTo(";
+		if (op.equals(expr.Op_GT))
+			return ".compareTo(";
+		if (op.equals(expr.Op_LE))
+			return ".compareTo(";
+		if (op.equals(expr.Op_GE))
+			return ".compareTo(";
+		if (op.equals(expr.Op_AND))
+			return " && ";
+		if (op.equals(expr.Op_OR))
+			return " || ";
+		if (op.equals(expr.Op_CONCAT))
+			return " + ";
+		return "";
+	}
+
+	
+	@SuppressWarnings("static-access")
+	private String getNativeStringComparisionOperation(BinaryExpression expr) {
+		String op = expr.getOperator();
+		if (op.equals(expr.Op_EQ))
+			return ") == 0";
+		if (op.equals(expr.Op_NE))
+			return ")";
+		if (op.equals(expr.Op_LT))
+			return ") < 0";
+		if (op.equals(expr.Op_GT))
+			return ") > 0";
+		if (op.equals(expr.Op_LE))
+			return ") <= 0";
+		if (op.equals(expr.Op_GE))
+			return ") >= 0";
+		return "";
+	}
+
+	
 	public void genBigintFromIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		genBigintFromIntegerConversion(type, ctx, out, args);
 	}

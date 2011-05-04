@@ -17,6 +17,7 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
+import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.ParameterizableType;
@@ -96,4 +97,102 @@ public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 		out.print(")");
 	}
 
+	
+	
+	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		if (false){ //TODO sbg other impls of genBinaryExpression consider nullables
+		}
+		else {
+			out.print(getNativeStringPrefixOperation((BinaryExpression) args[0]));
+			out.print("(");
+			ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, args);
+			out.print(getNativeStringOperation((BinaryExpression) args[0]));
+			ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, args);
+			out.print(getNativeStringComparisionOperation((BinaryExpression) args[0]));
+			out.print(")");
+		}
+	}
+	
+	@SuppressWarnings("static-access")
+	private String getNativeStringPrefixOperation(BinaryExpression expr) {
+		String op = expr.getOperator();
+		if (op.equals(expr.Op_NE))
+			return "!";
+		return "";
+	}
+
+	@SuppressWarnings("static-access")
+	private String getNativeStringOperation(BinaryExpression expr) {
+		String op = expr.getOperator();
+		// these are the defaults for what can be handled by the java string class
+		if (op.equals(expr.Op_PLUS))
+			return " + ";
+		if (op.equals(expr.Op_EQ))
+			return ".compareTo(";
+		if (op.equals(expr.Op_NE))
+			return ".compareTo(";
+		if (op.equals(expr.Op_LT))
+			return ".compareTo(";
+		if (op.equals(expr.Op_GT))
+			return ".compareTo(";
+		if (op.equals(expr.Op_LE))
+			return ".compareTo(";
+		if (op.equals(expr.Op_GE))
+			return ".compareTo(";
+		if (op.equals(expr.Op_AND))
+			return " && ";
+		if (op.equals(expr.Op_OR))
+			return " || ";
+		if (op.equals(expr.Op_CONCAT))
+			return " + ";
+		return "";
+	}
+
+	
+	@SuppressWarnings("static-access")
+	private String getNativeStringComparisionOperation(BinaryExpression expr) {
+		String op = expr.getOperator();
+		if (op.equals(expr.Op_EQ))
+			return ") == 0";
+		if (op.equals(expr.Op_NE))
+			return ")";
+		if (op.equals(expr.Op_LT))
+			return ") < 0";
+		if (op.equals(expr.Op_GT))
+			return ") > 0";
+		if (op.equals(expr.Op_LE))
+			return ") <= 0";
+		if (op.equals(expr.Op_GE))
+			return ") >= 0";
+		return "";
+	}
+	
+	
+	public void genTypeDependentOptions(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
+		out.print(", ");
+		out.print(decimalLimit(type.getDecimals(), type.getLength()));
+		out.print(", egl.createRuntimeException");
+	}
+
+	/**
+	 * Returns a value for the limit parameter to the convertToDecimal methods. The limit is the largest positive value that
+	 * can be assigned to a variable of the given type.
+	 */
+	private String decimalLimit(int decimals, int length) {	// TODO sbg copied from FixedPrecisionTemplate -- some way to reuse / refactor?
+		if (length > 32) {
+			String limit = "";
+			for (int len = length; len > 0; len--) {
+				limit += "9";
+			}
+			if (decimals > 0)
+				limit = limit.substring(0, length - decimals) + '.' + limit.substring(length - decimals);
+			return "new egl.javascript.BigDecimal(\"" + limit + "\")";
+		} else {
+			String limit = "egl.javascript.BigDecimal.prototype.NINES[" + (length - 1) + "]";
+			if (decimals > 0)
+				limit += ".movePointLeft(" + decimals + ")";
+			return limit;
+		}
+	}
+	
 }
