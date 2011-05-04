@@ -537,13 +537,13 @@ public abstract class EglContext extends TemplateContext {
 					templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, args);
 				}
 				catch (TemplateException e) {
-					TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, Type.class, type.getClassifier().getTypeSignature(), Type.class,
-						ctx.getClass(), args.getClass());
+					TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClass(), type.getClassifier().getTypeSignature(),
+						type.getClass(), ctx.getClass(), args.getClass());
 					templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, args);
 				}
 			} else {
-				TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, Type.class, type.getClassifier().getTypeSignature(), Type.class,
-					ctx.getClass(), args.getClass());
+				TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClass(), type.getClassifier().getTypeSignature(),
+					type.getClass(), ctx.getClass(), args.getClass());
 				templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, args);
 			}
 		}
