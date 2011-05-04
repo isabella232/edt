@@ -67,6 +67,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genName = "genName";
 	public static final String genPart = "genPart";
 	public static final String genPartName = "genPartName";
+	public static final String genQualifier = "genQualifier";
 	public static final String genRuntimeTypeName = "genRuntimeTypeName";
 	public static final String genStatement = "genStatement";
 	public static final String genStatementNoBraces = "genStatementNoBraces";
@@ -106,5 +107,9 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 
 	public String quoted(String unquoted) {
 		return "\"" + unquoted + "\"";
+	}
+	
+	public String singleQuoted(String unquoted) {
+		return "'" + unquoted + "'";
 	}
 }
