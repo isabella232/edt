@@ -672,7 +672,7 @@ public abstract class EglContext extends TemplateContext {
 			return templateMethod;
 		}
 		// see if we can find the method directly
-		templateMethod = findSupertypeMethodAndTemplate(methodName, object, signature, classes);
+		templateMethod = findSupertypeMethodAndTemplate(methodName, object, ifaceClass, signature, classes);
 		if (templateMethod != null) {
 			templateMethods.put(hashKey, templateMethod);
 			addMethodTrace("Found directly in template: " + templateMethod.getTemplate().toString());
@@ -691,8 +691,8 @@ public abstract class EglContext extends TemplateContext {
 		}
 	}
 
-	private TemplateMethod findSupertypeMethodAndTemplate(String methodName, Object object, String signature, Class<?>... classes) throws TemplateException {
-		Class<?> ifaceClass = classes[0];
+	private TemplateMethod findSupertypeMethodAndTemplate(String methodName, Object object, Class<?> ifaceClass, String signature, Class<?>... classes)
+		throws TemplateException {
 		// we might need to look up the external type chain, before checking the interface classes. This is because external
 		// types might extend other external types.
 		try {
@@ -705,7 +705,7 @@ public abstract class EglContext extends TemplateContext {
 		classes[0] = ifaceClass;
 		if (object instanceof StructPart) {
 			for (StructPart iface : ((StructPart) object).getSuperTypes()) {
-				TemplateMethod templateMethod = findSupertypeMethodAndTemplate(methodName, iface, iface.getFullyQualifiedName(), classes);
+				TemplateMethod templateMethod = findSupertypeMethodAndTemplate(methodName, iface, ifaceClass, iface.getFullyQualifiedName(), classes);
 				if (templateMethod != null)
 					return templateMethod;
 			}
@@ -713,9 +713,9 @@ public abstract class EglContext extends TemplateContext {
 		return null;
 	}
 
-	private TemplateMethod getSuperMethodAndTemplate(String methodName, Class<?> thisClass, Class<?>... classes) throws TemplateException {
-		addMethodTrace("genSuper lookup for method name: " + methodName + " with class: " + thisClass.getName());
-		TemplateMethod templateMethod = findInterfaceMethodAndTemplate(methodName, thisClass, classes);
+	private TemplateMethod getSuperMethodAndTemplate(String methodName, Class<?> ifaceClass, Class<?>... classes) throws TemplateException {
+		addMethodTrace("genSuper lookup for method name: " + methodName + " with class: " + ifaceClass.getName());
+		TemplateMethod templateMethod = findInterfaceMethodAndTemplate(methodName, ifaceClass, classes);
 		if (templateMethod != null) {
 			addMethodTrace("Found from lookup in template: " + templateMethod.getTemplate().toString());
 			return templateMethod;
