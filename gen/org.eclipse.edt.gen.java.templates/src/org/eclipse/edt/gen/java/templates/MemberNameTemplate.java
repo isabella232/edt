@@ -17,6 +17,7 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Type;
 
 public class MemberNameTemplate extends JavaTemplate {
@@ -31,7 +32,7 @@ public class MemberNameTemplate extends JavaTemplate {
 			out.print(")");
 			// check to see if we are copying LHS boxed temporary variables (inout and out types only)
 		} else if (ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
-			&& ((Integer) ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != org.eclipse.edt.gen.Constants.FunctionParmTypeKind_ParmIn) {
+			&& ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
 			ctx.gen(genExpression, (Expression) expr, ctx, out, args);
 			out.print(" = ");
 			out.print("AnyObject.ezeWrap(");
@@ -40,8 +41,7 @@ public class MemberNameTemplate extends JavaTemplate {
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
 		} else if ((Expression) args[0] instanceof MemberName
 			&& ctx.getAttribute(((MemberName) (Expression) args[0]).getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
-			&& ((Integer) ctx.getAttribute(((MemberName) (Expression) args[0]).getMember(),
-				org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != org.eclipse.edt.gen.Constants.FunctionParmTypeKind_ParmIn) {
+			&& ctx.getAttribute(((MemberName) (Expression) args[0]).getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
 			ctx.gen(genExpression, (Expression) expr, ctx, out, args);
 			out.print(" = ");
 			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
