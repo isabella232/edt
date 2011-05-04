@@ -26,9 +26,4 @@ public class Constants {
 	// these are annotation key values used as context hashmap keys
 	public static final String Annotation_functionArgumentTemporaryVariable = "functionArgumentTemporaryVariable";
 	public static final String Annotation_functionHasReturnStatement = "functionHasReturnStatement";
-
-	// these are used as values to the Annotation_functionArgumentTemporaryVariable
-	public static int FunctionParmTypeKind_ParmIn = 0;
-	public static int FunctionParmTypeKind_ParmInOut = 1;
-	public static int FunctionParmTypeKind_ParmOut = 2;
 }

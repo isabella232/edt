@@ -310,7 +310,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					// add the declaration statement block to the field
 					field.setInitializerStatements(declarationBlock);
 					field.setHasSetValuesBlock(true);
-					ctx.putAttribute(field, Constants.Annotation_functionArgumentTemporaryVariable, new Integer(Constants.FunctionParmTypeKind_ParmIn));
+					ctx.putAttribute(field, Constants.Annotation_functionArgumentTemporaryVariable, ParameterKind.PARM_IN);
 					// add the field to the declaration expression
 					declarationExpression.getFields().add(field);
 					// connect the declaration expression to the local declaration
@@ -333,7 +333,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					field.setName(temporary);
 					field.setType(parameter.getType());
 					field.setIsNullable(parameter.isNullable());
-					ctx.putAttribute(field, Constants.Annotation_functionArgumentTemporaryVariable, new Integer(Constants.FunctionParmTypeKind_ParmInOut));
+					ctx.putAttribute(field, Constants.Annotation_functionArgumentTemporaryVariable, ParameterKind.PARM_INOUT);
 					// we need to create the member access
 					MemberName nameExpression = factory.createMemberName();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -403,7 +403,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					field.setName(temporary);
 					field.setType(parameter.getType());
 					field.setIsNullable(parameter.isNullable());
-					ctx.putAttribute(field, Constants.Annotation_functionArgumentTemporaryVariable, new Integer(Constants.FunctionParmTypeKind_ParmOut));
+					ctx.putAttribute(field, Constants.Annotation_functionArgumentTemporaryVariable, ParameterKind.PARM_OUT);
 					// we need to create the member access
 					MemberName nameExpression = factory.createMemberName();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
