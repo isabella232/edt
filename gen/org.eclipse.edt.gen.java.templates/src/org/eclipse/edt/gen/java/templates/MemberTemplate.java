@@ -31,7 +31,7 @@ public class MemberTemplate extends JavaTemplate {
 		if (mbr.getType() == null)
 			out.print("void");
 		else if (ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
-			&& ((Integer) ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
+			&& ((Integer) ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != org.eclipse.edt.gen.Constants.FunctionParmTypeKind_ParmIn) {
 			out.print("AnyBoxedObject<");
 			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject, mbr);
 			out.print(">");
