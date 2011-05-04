@@ -31,7 +31,7 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 			out.print(")");
 			// check to see if we are copying LHS boxed temporary variables (inout and out types only)
 		} else if (ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
-			&& ((Integer) ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
+			&& ((Integer) ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != org.eclipse.edt.gen.Constants.FunctionParmTypeKind_ParmIn) {
 			ctx.gen(genExpression, (Expression) expr, ctx, out, args);
 			out.print(" = ");
 			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
@@ -39,7 +39,7 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 		} else if ((Expression) args[0] instanceof MemberName
 			&& ctx.getAttribute(((MemberName) (Expression) args[0]).getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
 			&& ((Integer) ctx.getAttribute(((MemberName) (Expression) args[0]).getMember(),
-				org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
+				org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != org.eclipse.edt.gen.Constants.FunctionParmTypeKind_ParmIn) {
 			ctx.gen(genExpression, (Expression) expr, ctx, out, args);
 			out.print(" = ");
 			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);

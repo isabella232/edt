@@ -25,7 +25,7 @@ public class MemberTemplate extends JavaScriptTemplate {
 		if (mbr.getType() == null)
 			return;
 		else if (ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
-			&& ((Integer) ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
+			&& ((Integer) ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != org.eclipse.edt.gen.Constants.FunctionParmTypeKind_ParmIn) {
 			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavascriptObject, mbr);
 		} else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()) && !mbr.isNullable() && TypeUtils.isValueType(mbr.getType()))
 			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavascriptPrimitive);

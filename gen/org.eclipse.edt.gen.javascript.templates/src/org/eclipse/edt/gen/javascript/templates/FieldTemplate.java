@@ -31,7 +31,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 		ctx.gen(genName, field, ctx, out, args);
 		out.println(";");
 	}
-	
+
 	public void genQualifier(Field field, Context ctx, TabbedWriter out, Object... args) {
 		final Container cnr = field.getContainer();
 		if (cnr != null) {
@@ -47,10 +47,10 @@ public class FieldTemplate extends JavaScriptTemplate {
 		// is this an inout or out temporary variable to a function. if so, then we need to default or instantiate for
 		// our parms, and set to null for inout
 		if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
-			&& ((Integer) ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != 0) {
+			&& ((Integer) ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() != org.eclipse.edt.gen.Constants.FunctionParmTypeKind_ParmIn) {
 			// if the value associated with the temporary variable is 2, then it is to be instantiated (OUT parm)
 			// otherwise it is to be defaulted to null (INOUT parm), as there is an assignment already created
-			if (((Integer) ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() == 2) {
+			if (((Integer) ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable)).intValue() == org.eclipse.edt.gen.Constants.FunctionParmTypeKind_ParmOut) {
 				if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
 					ctx.gen(genDefaultValue, field.getType(), ctx, out, field);
 				else
