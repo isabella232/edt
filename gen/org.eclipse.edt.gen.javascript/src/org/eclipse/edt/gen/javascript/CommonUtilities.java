@@ -34,6 +34,8 @@ public class CommonUtilities {
 				return "decimal";
 			case TypeUtils.TypeKind_INT:
 				return "int";
+			case TypeUtils.TypeKind_NUM:
+				return "num";
 			case TypeUtils.TypeKind_SMALLFLOAT:
 				return "smallfloat";
 			case TypeUtils.TypeKind_SMALLINT:
