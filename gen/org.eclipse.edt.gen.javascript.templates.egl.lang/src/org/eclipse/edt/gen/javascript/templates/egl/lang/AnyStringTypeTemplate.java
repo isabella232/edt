@@ -46,6 +46,37 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 			out.print(quoted(""));
 	}
 
+	public void genStringFromSmallintConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		genStringFromNumConversion(type, ctx, out, args);
+	}
+
+	public void genStringFromIntConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		genStringFromNumConversion(type, ctx, out, args);
+	}
+
+	public void genStringFromBigintConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		genStringFromNumConversion(type, ctx, out, args);
+	}
+
+	public void genStringFromDecimalConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		genStringFromNumConversion(type, ctx, out, args);
+	}
+
+	public void genStringFromNumConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		AsExpression expr = (AsExpression) args[0];
+		out.print("(");
+		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		out.print(").toString()");
+	}
+
+	public void genStringFromFloatConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		genStringFromNumConversion(type, ctx, out, args);
+	}
+
+	public void genStringFromSmallfloatConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		genStringFromNumConversion(type, ctx, out, args);
+	}
+
 	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		// if either side of this expression is nullable, or if there is no direct java operation, we need to use the runtime
 		if ((((BinaryExpression) args[0]).getLHS().isNullable() || ((BinaryExpression) args[0]).getRHS().isNullable())
@@ -66,37 +97,6 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 			ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, args);
 			out.print(getNativeStringComparisionOperation((BinaryExpression) args[0]));
 		}
-	}
-
-	public void genStringFromNumberConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(").toString()");
-	}
-
-	public void genStringFromSmallintConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genStringFromNumberConversion(type, ctx, out, args);
-	}
-
-	public void genStringFromIntConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genStringFromNumberConversion(type, ctx, out, args);
-	}
-
-	public void genStringFromBigintConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genStringFromNumberConversion(type, ctx, out, args);
-	}
-
-	public void genStringFromFloatConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genStringFromNumberConversion(type, ctx, out, args);
-	}
-
-	public void genStringFromSmallfloatConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genStringFromNumberConversion(type, ctx, out, args);
-	}
-
-	public void genStringFromDecimalConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genStringFromNumberConversion(type, ctx, out, args);
 	}
 
 	@SuppressWarnings("static-access")

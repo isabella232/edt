@@ -39,25 +39,6 @@ public class DateTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		// for date type, always use the runtime
-		out.print(ctx.getNativeImplementationMapping((Type) ((BinaryExpression) args[0]).getOperation().getContainer()) + '.');
-		out.print(CommonUtilities.getNativeRuntimeOperationName((BinaryExpression) args[0]));
-		out.print("(ezeProgram, ");
-		ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, args);
-		out.print(", ");
-		ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, args);
-		out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation((BinaryExpression) args[0]));
-	}
-
-	public void genDateFromStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print(Constants.JSRT_DATETIME_PKG);
-		out.print("dateValue(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(")");
-	}
-
 	public void genDateFromSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		genDateFromIntConversion(type, ctx, out, args);
 	}
@@ -71,27 +52,35 @@ public class DateTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genDateFromBigintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genDateFromNumberConversion(type, ctx, out, args);
+		genDateFromNumConversion(type, ctx, out, args);
 	}
 
 	public void genDateFromFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genDateFromNumberConversion(type, ctx, out, args);
+		genDateFromNumConversion(type, ctx, out, args);
 	}
 
 	public void genDateFromSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genDateFromNumberConversion(type, ctx, out, args);
+		genDateFromNumConversion(type, ctx, out, args);
 	}
 
 	public void genDateFromDecimalConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genDateFromNumberConversion(type, ctx, out, args);
+		genDateFromNumConversion(type, ctx, out, args);
 	}
 
-	public void genDateFromNumberConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genDateFromNumConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		AsExpression expr = (AsExpression) args[0];
 		out.print(Constants.JSRT_DATETIME_PKG);
 		out.print("dateFromInt(");
 		Expression intExpr = IRUtils.makeExprCompatibleToType(expr.getObjectExpr(), TypeUtils.Type_INT);
 		ctx.gen(genExpression, intExpr, ctx, out);
+		out.print(")");
+	}
+
+	public void genDateFromStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		AsExpression expr = (AsExpression) args[0];
+		out.print(Constants.JSRT_DATETIME_PKG);
+		out.print("dateValue(");
+		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
 		out.print(")");
 	}
 
@@ -106,5 +95,16 @@ public class DateTypeTemplate extends JavaScriptTemplate {
 		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
 		out.print(", ");
 		out.print("egl.egl.core.$StrLib.defaultDateFormat ");
+	}
+
+	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		// for date type, always use the runtime
+		out.print(ctx.getNativeImplementationMapping((Type) ((BinaryExpression) args[0]).getOperation().getContainer()) + '.');
+		out.print(CommonUtilities.getNativeRuntimeOperationName((BinaryExpression) args[0]));
+		out.print("(ezeProgram, ");
+		ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, args);
+		out.print(", ");
+		ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, args);
+		out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation((BinaryExpression) args[0]));
 	}
 }

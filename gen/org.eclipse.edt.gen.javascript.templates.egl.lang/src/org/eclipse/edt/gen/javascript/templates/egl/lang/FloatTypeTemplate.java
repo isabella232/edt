@@ -31,6 +31,10 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 			out.print("0");
 	}
 
+	public void genFloatFromBigintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		genFloatFromDecimalConversion(type, ctx, out, args);
+	}
+
 	public void genFloatFromDecimalConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		AsExpression expr = (AsExpression) args[0];
 		out.print("Number( (");
@@ -38,7 +42,7 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 		out.print(").toString())");
 	}
 
-	public void genFloatFromBigintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genFloatFromNumConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		genFloatFromDecimalConversion(type, ctx, out, args);
 	}
 

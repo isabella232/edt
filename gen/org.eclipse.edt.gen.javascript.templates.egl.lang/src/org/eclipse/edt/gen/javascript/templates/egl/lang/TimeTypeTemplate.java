@@ -37,17 +37,6 @@ public class TimeTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		// for time type, always use the runtime
-		out.print(ctx.getNativeImplementationMapping((Type) ((BinaryExpression) args[0]).getOperation().getContainer()) + '.');
-		out.print(CommonUtilities.getNativeRuntimeOperationName((BinaryExpression) args[0]));
-		out.print("(ezeProgram, ");
-		ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, args);
-		out.print(", ");
-		ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, args);
-		out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation((BinaryExpression) args[0]));
-	}
-
 	public void genTimeFromTimeStampConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		AsExpression expr = (AsExpression) args[0];
 		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
@@ -69,4 +58,14 @@ public class TimeTypeTemplate extends JavaScriptTemplate {
 		out.print("egl.egl.core.$StrLib.defaultTimeFormat ");
 	}
 
+	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		// for time type, always use the runtime
+		out.print(ctx.getNativeImplementationMapping((Type) ((BinaryExpression) args[0]).getOperation().getContainer()) + '.');
+		out.print(CommonUtilities.getNativeRuntimeOperationName((BinaryExpression) args[0]));
+		out.print("(ezeProgram, ");
+		ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, args);
+		out.print(", ");
+		ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, args);
+		out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation((BinaryExpression) args[0]));
+	}
 }

@@ -46,14 +46,10 @@ public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genDecimalFromSmallintConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genDecimalFromIntegerConversion(type, ctx, out, args);
+		genDecimalFromIntConversion(type, ctx, out, args);
 	}
 
 	public void genDecimalFromIntConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genDecimalFromIntegerConversion(type, ctx, out, args);
-	}
-
-	public void genDecimalFromIntegerConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		AsExpression expr = (AsExpression) args[0];
 		out.print("egl.convertIntegerToDecimal(");
 		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
@@ -62,6 +58,18 @@ public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genDecimalFromBigintConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		genDecimalFromDecimalConversion(type, ctx, out, args);
+	}
+
+	public void genDecimalFromDecimalConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		AsExpression expr = (AsExpression) args[0];
+		out.print("egl.convertDecimalToDecimal(");
+		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genTypeDependentOptions, (EObject) expr.getEType(), ctx, out);
+		out.print(", egl.createRuntimeException)");
+	}
+
+	public void genDecimalFromNumConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		genDecimalFromDecimalConversion(type, ctx, out, args);
 	}
 
@@ -81,14 +89,6 @@ public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 		out.print(")");
 	}
 
-	public void genDecimalFromDecimalConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.convertDecimalToDecimal(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		ctx.gen(genTypeDependentOptions, (EObject) expr.getEType(), ctx, out);
-		out.print(", egl.createRuntimeException)");
-	}
-
 	public void genDecimalFromStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		AsExpression expr = (AsExpression) args[0];
 		out.print("egl.convertStringToDecimal(");
@@ -97,8 +97,6 @@ public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 		out.print(")");
 	}
 
-	
-	
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		if (false){ //TODO sbg other impls of genBinaryExpression consider nullables
 		}
@@ -148,7 +146,6 @@ public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 		return "";
 	}
 
-	
 	@SuppressWarnings("static-access")
 	private String getNativeStringComparisionOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
@@ -166,7 +163,6 @@ public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 			return ") >= 0";
 		return "";
 	}
-	
 	
 	public void genTypeDependentOptions(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(", ");
@@ -194,5 +190,4 @@ public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 			return limit;
 		}
 	}
-	
 }

@@ -31,6 +31,21 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 			out.print("0");
 	}
 
+	public void genIntFromBigintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		genIntFromDecimalConversion(type, ctx, out, args);
+	}
+
+	public void genIntFromDecimalConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		AsExpression expr = (AsExpression) args[0];
+		out.print("egl.convertDecimalToInt(");
+		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		out.print(", egl.createRuntimeException)");
+	}
+
+	public void genIntFromNumConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		genIntFromDecimalConversion(type, ctx, out, args);
+	}
+
 	public void genIntFromSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		AsExpression expr = (AsExpression) args[0];
 		out.print("egl.convertFloatToInt(");
@@ -43,17 +58,6 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 		out.print("egl.convertFloatToInt(");
 		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
 		out.print(")");
-	}
-
-	public void genIntFromBigintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genIntFromDecimalConversion(type, ctx, out, args);
-	}
-
-	public void genIntFromDecimalConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.convertDecimalToInt(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(", egl.createRuntimeException)");
 	}
 
 	public void genIntFromStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {

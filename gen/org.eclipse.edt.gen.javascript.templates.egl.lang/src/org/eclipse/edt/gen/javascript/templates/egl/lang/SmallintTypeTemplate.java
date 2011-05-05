@@ -31,9 +31,9 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 			out.print("0");
 	}
 
-	public void genSmallintFromDecimalConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSmallintFromIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.convertDecimalToSmallint(");
+		out.print("egl.convertNumberToSmallint(");
 		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
 		out.print(", egl.createRuntimeException)");
 	}
@@ -42,21 +42,25 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 		genSmallintFromDecimalConversion(type, ctx, out, args);
 	}
 
-	public void genSmallintFromIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSmallintFromDecimalConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.convertNumberToSmallint(");
+		out.print("egl.convertDecimalToSmallint(");
 		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
 		out.print(", egl.createRuntimeException)");
 	}
 
-	public void genSmallintFromFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSmallintFromNumConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		genSmallintFromDecimalConversion(type, ctx, out, args);
+	}
+
+	public void genSmallintFromSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		AsExpression expr = (AsExpression) args[0];
 		out.print("egl.convertFloatToSmallint(");
 		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
 		out.print(")");
 	}
 
-	public void genSmallintFromSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSmallintFromFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		AsExpression expr = (AsExpression) args[0];
 		out.print("egl.convertFloatToSmallint(");
 		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);

@@ -14,17 +14,29 @@ package org.eclipse.edt.gen.javascript.templates.egl.lang;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
+import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.FixedPrecisionType;
+import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 
-public class BigintTypeTemplate extends JavaScriptTemplate {
+public class AnyNumberTypeTemplate extends JavaScriptTemplate {
 
-	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
+	// this method gets invoked when there is a specific fixed precision needed
+	public void genDefaultValue(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
+		processDefaultValue(type, ctx, out, args);
+	}
+
+	// this method gets invoked when there is a generic (unknown) fixed precision needed
+	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
+		processDefaultValue(type, ctx, out, args);
+	}
+
+	public void processDefaultValue(Type type, Context ctx, TabbedWriter out, Object... args) {
 		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
 			out.print("null");
 		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
@@ -33,35 +45,55 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 			out.print("egl.javascript.BigDecimal.prototype.ZERO");
 	}
 
-	public void genBigintFromSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genBigintFromIntConversion(type, ctx, out, args);
-	}
-	
-	public void genBigintFromIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("(new egl.javascript.BigDecimal(String(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(")))");
+	public void genNumFromSmallintConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		genNumFromIntConversion(type, ctx, out, args);
 	}
 
-	public void genBigintFromFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genNumFromIntConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.convertFloatToBigint(");
+		out.print("egl.convertIntegerToDecimal(");
 		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genTypeDependentOptions, (EObject) expr.getEType(), ctx, out, args);
 		out.print(")");
 	}
 
-	public void genBigintFromSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genNumFromBigintConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		genNumFromNumConversion(type, ctx, out, args);
+	}
+
+	public void genNumFromDecimalConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		genNumFromNumConversion(type, ctx, out, args);
+	}
+
+	public void genNumFromNumConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.convertFloatToBigint(");
+		out.print("egl.convertDecimalToDecimal(");
 		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genTypeDependentOptions, (EObject) expr.getEType(), ctx, out);
+		out.print(", egl.createRuntimeException)");
+	}
+
+	public void genNumFromSmallfloatConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		AsExpression expr = (AsExpression) args[0];
+		out.print("egl.convertFloatToDecimal(");
+		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genTypeDependentOptions, (EObject) expr.getEType(), ctx, out);
 		out.print(")");
 	}
 
-	public void genBigintFromStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genNumFromFloatConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.convertStringToBigint(");
+		out.print("egl.convertFloatToDecimal(");
 		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genTypeDependentOptions, (EObject) expr.getEType(), ctx, out);
+		out.print(")");
+	}
+
+	public void genNumFromStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		AsExpression expr = (AsExpression) args[0];
+		out.print("egl.convertStringToDecimal(");
+		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genTypeDependentOptions, (EObject) expr.getEType(), ctx, out);
 		out.print(")");
 	}
 
@@ -113,7 +145,7 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 			return " + ";
 		return "";
 	}
-
+	
 	@SuppressWarnings("static-access")
 	private String getNativeStringComparisionOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
@@ -130,5 +162,32 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_GE))
 			return ") >= 0";
 		return "";
+	}
+	
+	public void genTypeDependentOptions(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
+		out.print(", ");
+		out.print(decimalLimit(type.getDecimals(), type.getLength()));
+		out.print(", egl.createRuntimeException");
+	}
+
+	/**
+	 * Returns a value for the limit parameter to the convertToDecimal methods. The limit is the largest positive value that
+	 * can be assigned to a variable of the given type.
+	 */
+	private String decimalLimit(int decimals, int length) {	// TODO sbg copied from FixedPrecisionTemplate -- some way to reuse / refactor?
+		if (length > 32) {
+			String limit = "";
+			for (int len = length; len > 0; len--) {
+				limit += "9";
+			}
+			if (decimals > 0)
+				limit = limit.substring(0, length - decimals) + '.' + limit.substring(length - decimals);
+			return "new egl.javascript.BigDecimal(\"" + limit + "\")";
+		} else {
+			String limit = "egl.javascript.BigDecimal.prototype.NINES[" + (length - 1) + "]";
+			if (decimals > 0)
+				limit += ".movePointLeft(" + decimals + ")";
+			return limit;
+		}
 	}
 }

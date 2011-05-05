@@ -31,11 +31,8 @@ public class SmallfloatTypeTemplate extends JavaScriptTemplate {
 			out.print("0");
 	}
 
-	public void genSmallfloatFromStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.convertStringToSmallfloat(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(")");
+	public void genSmallfloatFromBigintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		genSmallfloatFromDecimalConversion(type, ctx, out, args);
 	}
 
 	public void genSmallfloatFromDecimalConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
@@ -47,6 +44,10 @@ public class SmallfloatTypeTemplate extends JavaScriptTemplate {
 		out.print(")");
 	}
 
+	public void genSmallfloatFromNumConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		genSmallfloatFromDecimalConversion(type, ctx, out, args);
+	}
+
 	public void genSmallfloatFromFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		AsExpression expr = (AsExpression) args[0];
 		out.print("egl.convertFloatToSmallfloat(");
@@ -54,7 +55,10 @@ public class SmallfloatTypeTemplate extends JavaScriptTemplate {
 		out.print(")");
 	}
 
-	public void genSmallfloatFromBigintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genSmallfloatFromDecimalConversion(type, ctx, out, args);
+	public void genSmallfloatFromStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		AsExpression expr = (AsExpression) args[0];
+		out.print("egl.convertStringToSmallfloat(");
+		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		out.print(")");
 	}
 }
