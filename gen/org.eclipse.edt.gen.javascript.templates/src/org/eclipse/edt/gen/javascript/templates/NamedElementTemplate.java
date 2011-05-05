@@ -49,4 +49,8 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 	public void genName(NamedElement element, Context ctx, TabbedWriter out, Object... args) {
 		out.print(element.getName());
 	}
+
+	public void genQualifier(NamedElement element, Context ctx, TabbedWriter out, Object... args) {
+		// nothing is generated
+	}
 }

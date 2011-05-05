@@ -126,13 +126,6 @@ public class TypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	public void genQualifier(Type type, Context ctx, TabbedWriter out, Object... args) {
-		// did we have a list of types to check, otherwise use the default
-		if (!org.eclipse.edt.gen.CommonUtilities.processTypeList(genQualifier, type, ctx, out, args)) {
-			// no default
-		}
-	}
-
 	public void genAssignment(Type type, Context ctx, TabbedWriter out, Object... args) {
 		// did we have a list of types to check, otherwise use the default
 		if (!org.eclipse.edt.gen.CommonUtilities.processTypeList(genAssignment, type, ctx, out, args)) {
