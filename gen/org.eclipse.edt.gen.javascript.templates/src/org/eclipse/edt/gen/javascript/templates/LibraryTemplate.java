@@ -107,7 +107,15 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		ctx.gen(genPartName, library, ctx, out, args);
 	}
 	
-	public void genQualifier(Library library, Context ctx, TabbedWriter out, Object... args) {
-		// No qualifier (such as "this") is required for library members
+	
+	public void genContainerBasedAccessor(Library library, Context ctx, TabbedWriter out, Object... args) {
+		out.print("new egl.egl.jsrt.Delegate(");  		
+		ctx.gen(genAccessor, library, ctx, out, args);  
+		out.print(",");  
+		
+		ctx.gen(genName, library, ctx, out, args);  
+		out.print(".prototype.");   
+		ctx.gen(genName, args[0], ctx, out, args);
+		out.print(")");
 	}
 }

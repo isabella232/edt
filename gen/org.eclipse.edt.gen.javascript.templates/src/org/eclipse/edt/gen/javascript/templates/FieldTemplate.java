@@ -13,9 +13,9 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class FieldTemplate extends JavaScriptTemplate {
@@ -34,9 +34,8 @@ public class FieldTemplate extends JavaScriptTemplate {
 	}
 
 	public void genQualifier(Field field, Context ctx, TabbedWriter out, Object... args) {
-		final Container cnr = field.getContainer();
-		if (cnr != null) {
-			ctx.gen(genQualifier, cnr, ctx, out, args);
+		if ((field != null ) && (field.getContainer() != null) && (field.getContainer() instanceof Type)){
+			ctx.gen(genQualifier, field.getContainer(), ctx, out, args);
 		}
 	}
 

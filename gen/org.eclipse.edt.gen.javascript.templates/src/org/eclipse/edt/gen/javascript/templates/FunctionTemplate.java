@@ -13,10 +13,9 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
-import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Type;
 
 public class FunctionTemplate extends JavaScriptTemplate {
 
@@ -45,28 +44,15 @@ public class FunctionTemplate extends JavaScriptTemplate {
 	}
 
 	public void genAccessor(Function function, Context ctx, TabbedWriter out, Object... args){
-		out.print("new egl.egl.jsrt.Delegate(");  		
-		
-		final Container cnr = function.getContainer();
-		if (cnr instanceof Library){  //NOGO sbg -- generalize to handle any container?
-			ctx.gen(genAccessor, cnr, ctx, out, args);  
-			out.print(",");  
-			
-			ctx.gen(genName, cnr, ctx, out, args);  
-			out.print(".prototype.");   // NOGO sbg -- should use genName / genAccessor or something similar....
+		if ((function != null ) && (function.getContainer() != null) && (function.getContainer() instanceof Type)){
+			ctx.gen(genContainerBasedAccessor, (Type)function.getContainer(), ctx, out, function);
+		}
+		else {
 			ctx.gen(genName, function, ctx, out, args);
 		}
-		
-		out.print(")");
 	}
 
 	public void genName(Function function, Context ctx, TabbedWriter out, Object... args) {
 		ctx.genSuper(genName, Function.class, function, ctx, out, args);
 	}
-	
-	
-	public void genQualifier(Function function, Context ctx, TabbedWriter out, Object... args) {
-		// No qualifier (such as "this") is required for function members
-	}
-
 }

@@ -242,6 +242,34 @@ public class TypeTemplate extends JavaScriptTemplate {
 			ctx.gen(genAssignment, (Assignment) args[0], ctx, out, args);
 	}
 
+	public void genContainerBasedAccessor(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// did we have a list of types to check, otherwise use the default
+		if (isProcessWithTypeList(args)) {
+			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
+			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
+			ctx.gen(genContainerBasedAccessor, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
+		} else if (isProcessWithoutTypeList(args))
+			ctx.gen(genContainerBasedAccessor, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
+		else {
+			// default case is to do nothing
+		}
+			
+	}
+	
+	public void genQualifier(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// did we have a list of types to check, otherwise use the default
+		if (isProcessWithTypeList(args)) {
+			// pass the first type in the list (just past the TypeLogicKind value and the field). We must cast to EObject to
+			// avoid reaccessing the logic that brought us here, located in the Type version of ctx.gen
+			ctx.gen(genContainerBasedAccessor, getTypeFromList(args), ctx, out, genProcessWithoutTypeList(args));
+		} else if (isProcessWithoutTypeList(args))
+			ctx.gen(genContainerBasedAccessor, (EObject) type, ctx, out, genFinishWithoutTypeList(args));
+		else {
+			// default case is to do nothing
+		}
+			
+	}
+
 	public void genContainerBasedArrayAccess(Type type, Context ctx, TabbedWriter out, Object... args) {
 		// did we have a list of types to check, otherwise use the default
 		if (isProcessWithTypeList(args)) {
