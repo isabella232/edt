@@ -843,7 +843,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 	protected EObject mofTypeFromTypedElement(IDataBinding element) {
-		ITypeBinding type;
+		ITypeBinding type = null;
 		if (element instanceof FunctionBinding) { 
 			type = ((FunctionBinding)element).getReturnType();
 		} 
@@ -853,7 +853,11 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		else if (element instanceof ConstructorBinding) {
 			type = ((ConstructorBinding)element).getDeclaringPart();
 		}
-		else { type = element.getType(); }
+		else {
+			if (Binding.isValidBinding(element)) {
+				type = element.getType(); 
+			}
+		}
 		if (type != null)
 			return mofTypeFor(type);
 		else
@@ -1764,7 +1768,10 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			}
 		}
 		obj.setType(type);
-		obj.setName(edtObj.getCaseSensitiveName());
+		
+		if (Binding.isValidBinding(edtObj)) {
+			obj.setName(edtObj.getCaseSensitiveName());
+		}
 		
 		// Nullable is an attribute of TypedElement not the type itself
 		if (type != null) {

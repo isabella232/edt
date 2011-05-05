@@ -14,6 +14,7 @@ package org.eclipse.edt.mof.egl.egl2mof;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.AnnotationBinding;
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.ClassFieldBinding;
 import org.eclipse.edt.compiler.binding.ConstantFormFieldBinding;
 import org.eclipse.edt.compiler.binding.ConstructorBinding;
@@ -96,6 +97,12 @@ class Egl2MofMember extends Egl2MofPart {
 	@Override
 	public boolean visit(ClassDataDeclaration node) {
 		IDataBinding field = ((org.eclipse.edt.compiler.core.ast.Name)node.getNames().get(0)).resolveDataBinding();
+		
+//		//Do not create fields that have invalid types!
+//		if (!Binding.isValidBinding(field)) {
+//			return false;
+//		}
+		
 		EObject obj;
 		if (inMofContext) {
 			EField f = mof.createEField(true);
@@ -623,6 +630,10 @@ class Egl2MofMember extends Egl2MofPart {
 	}
 	
 	public void addInitializers(org.eclipse.edt.compiler.core.ast.Expression initializer, SettingsBlock settingsBlock, Field field, Type type) {
+		if (field.getType() == null) {
+			return;
+		}
+		
 		if (initializer != null) {
 			field.setInitializerStatements(factory.createStatementBlock());
 			initializer.accept(this);
