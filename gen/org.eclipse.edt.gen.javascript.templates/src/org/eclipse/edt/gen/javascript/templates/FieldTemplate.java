@@ -34,9 +34,8 @@ public class FieldTemplate extends JavaScriptTemplate {
 	}
 
 	public void genQualifier(Field field, Context ctx, TabbedWriter out, Object... args) {
-		if ((field != null ) && (field.getContainer() != null) && (field.getContainer() instanceof Type)){
+		if (field.getContainer() != null && field.getContainer() instanceof Type)
 			ctx.gen(genQualifier, field.getContainer(), ctx, out, args);
-		}
 	}
 
 	public void genInstantiation(Field field, Context ctx, TabbedWriter out, Object... args) {

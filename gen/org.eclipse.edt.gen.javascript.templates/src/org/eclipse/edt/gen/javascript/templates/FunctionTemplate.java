@@ -43,13 +43,11 @@ public class FunctionTemplate extends JavaScriptTemplate {
 		out.println("}");
 	}
 
-	public void genAccessor(Function function, Context ctx, TabbedWriter out, Object... args){
-		if ((function != null ) && (function.getContainer() != null) && (function.getContainer() instanceof Type)){
-			ctx.gen(genContainerBasedAccessor, (Type)function.getContainer(), ctx, out, function);
-		}
-		else {
+	public void genAccessor(Function function, Context ctx, TabbedWriter out, Object... args) {
+		if (function.getContainer() != null && function.getContainer() instanceof Type)
+			ctx.gen(genContainerBasedAccessor, (Type) function.getContainer(), ctx, out, function);
+		else
 			ctx.gen(genName, function, ctx, out, args);
-		}
 	}
 
 	public void genName(Function function, Context ctx, TabbedWriter out, Object... args) {
