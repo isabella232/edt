@@ -43,7 +43,7 @@ public class PartTemplate extends JavaScriptTemplate {
 			out.print(part.getTypeSignature());
 	}
 
-	public void genClassName(Part part, TabbedWriter out, Object... args) {
+	public void genClassName(Part part, Context ctx, TabbedWriter out, Object... args) {
 		// Data tables might have an alias property.
 		String nameOrAlias;
 		Annotation annot = part.getAnnotation(IEGLConstants.PROPERTY_ALIAS);
