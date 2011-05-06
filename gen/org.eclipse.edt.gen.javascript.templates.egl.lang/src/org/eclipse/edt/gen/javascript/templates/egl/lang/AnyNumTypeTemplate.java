@@ -24,7 +24,7 @@ import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 
-public class AnyNumberTypeTemplate extends JavaScriptTemplate {
+public class AnyNumTypeTemplate extends JavaScriptTemplate {
 
 	// this method gets invoked when there is a specific fixed precision needed
 	public void genDefaultValue(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
