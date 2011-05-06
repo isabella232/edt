@@ -42,8 +42,8 @@ public class RUIHandlerTemplate extends JavaScriptTemplate {
 	}
 
 	public void genClassBody(Handler type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genConstructor, (Element) type, ctx, out);
-		ctx.gen(genFunctions, (Element) type, ctx, out);
+		ctx.gen(genConstructor, (Element) type, ctx, out, args);
+		ctx.gen(genFunctions, (Element) type, ctx, out, args);
 		out.println("};");
 	}
 
@@ -74,7 +74,7 @@ public class RUIHandlerTemplate extends JavaScriptTemplate {
 		MemberName onConstruction = (MemberName) stereotype.getValue(FieldName_OnConstructionFunction);
 		if (onConstruction != null) {
 			out.print("this.");
-			ctx.gen(genName, onConstruction.getMember(), ctx, out);
+			ctx.gen(genName, onConstruction.getMember(), ctx, out, args);
 			out.println("();");
 		}
 		out.println("}");
