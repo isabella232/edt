@@ -57,46 +57,34 @@ public class AnyTimestampTypeTemplate extends JavaScriptTemplate {
 		out.print(quoted(pattern));
 	}
 
-	public void genTimeStampFromStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
+	public void genStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		out.print(Constants.JSRT_DATETIME_PKG);
 		out.print("timeStampValueWithPattern(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(", ");
-		ctx.gen(genTypeDependentOptions, (EObject) expr.getEType(), ctx, out);
+		ctx.gen(genTypeDependentOptions, (EObject) ((AsExpression) args[0]).getEType(), ctx, out, args);
 		out.print(")");
 	}
 
-	public void genTimeStampFromDateConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
+	public void genDateConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		out.print(Constants.JSRT_DATETIME_PKG);
 		out.print("extend(");
-		out.print(CommonUtilities.getEglNameForType(expr.getObjectExpr().getType()));
+		out.print(CommonUtilities.getEglNameForType(((AsExpression) args[0]).getObjectExpr().getType()));
 		out.print(", ");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(", ");
-		ctx.gen(genTypeDependentOptions, (EObject) expr.getEType(), ctx, out);
+		ctx.gen(genTypeDependentOptions, (EObject) ((AsExpression) args[0]).getEType(), ctx, out, args);
 		out.print(")");
 	}
 
-	public void genTimeStampFromTimeStampConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
+	public void genTimeStampConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		out.print(Constants.JSRT_DATETIME_PKG);
 		out.print("extend(");
 		out.print(CommonUtilities.getEglNameForType(type));
 		out.print(", ");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(", ");
-		ctx.gen(genTypeDependentOptions, (EObject) expr.getEType(), ctx, out);
+		ctx.gen(genTypeDependentOptions, (EObject) ((AsExpression) args[0]).getEType(), ctx, out, args);
 		out.print(", egl.createRuntimeException)");
 	}
-
-	public void genStringFromTimeStampConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.egl.core.$StrLib.formatTimeStamp(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(", ");
-		out.print("egl.egl.core.$StrLib.defaultTimeStampFormat )");
-	}
-
 }

@@ -20,10 +20,12 @@ import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.SequenceType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class AnyStringTypeTemplate extends JavaScriptTemplate {
 
@@ -46,35 +48,58 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 			out.print(quoted(""));
 	}
 
-	public void genStringFromSmallintConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genStringFromNumConversion(type, ctx, out, args);
+	protected boolean needsConversion(Operation conOp) {
+		Type fromType = conOp.getParameters().get(0).getType();
+		Type toType = conOp.getReturnType();
+		// don't convert matching types
+		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
+			return false;
+		if (TypeUtils.isNumericType(fromType))
+			return true;
+		return false;
 	}
 
-	public void genStringFromIntConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genStringFromNumConversion(type, ctx, out, args);
+	public void genConversionOperation(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
+		// can we intercept and directly generate this conversion
+		if (((AsExpression) args[0]).getConversionOperation() != null && needsConversion(((AsExpression) args[0]).getConversionOperation())) {
+			out.print("(");
+			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+			out.print(").toString()");
+		} else {
+			// we need to invoke the logic in type template to call back to the other conversion situations
+			ctx.genSuper(genConversionOperation, ParameterizableType.class, type, ctx, out, args);
+		}
 	}
 
-	public void genStringFromBigintConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genStringFromNumConversion(type, ctx, out, args);
+	public void genStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
-	public void genStringFromDecimalConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genStringFromNumConversion(type, ctx, out, args);
+	public void genDateConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		out.print("egl.egl.core.$StrLib.formatDate(");
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+		out.print(", ");
+		out.print("egl.egl.core.$StrLib.defaultDateFormat ");
 	}
 
-	public void genStringFromNumConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
+	public void genTimeConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		out.print("egl.egl.core.$StrLib.formatTime(");
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+		out.print(", ");
+		out.print("egl.egl.core.$StrLib.defaultTimeFormat ");
+	}
+
+	public void genTimeStampConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		out.print("egl.egl.core.$StrLib.formatTimeStamp(");
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+		out.print(", ");
+		out.print("egl.egl.core.$StrLib.defaultTimeStampFormat )");
+	}
+
+	public void genBooleanConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		out.print("(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(").toString()");
-	}
-
-	public void genStringFromFloatConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genStringFromNumConversion(type, ctx, out, args);
-	}
-
-	public void genStringFromSmallfloatConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genStringFromNumConversion(type, ctx, out, args);
 	}
 
 	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
@@ -100,7 +125,7 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 	}
 
 	@SuppressWarnings("static-access")
-	private String getNativeStringPrefixOperation(BinaryExpression expr) {
+	protected String getNativeStringPrefixOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_NE))
 			return "!";
@@ -108,7 +133,7 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 	}
 
 	@SuppressWarnings("static-access")
-	private String getNativeStringOperation(BinaryExpression expr) {
+	protected String getNativeStringOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		// these are the defaults for what can be handled by the java string class
 		if (op.equals(expr.Op_PLUS))
@@ -135,7 +160,7 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 	}
 
 	@SuppressWarnings("static-access")
-	private String getNativeStringComparisionOperation(BinaryExpression expr) {
+	protected String getNativeStringComparisionOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_EQ))
 			return "";

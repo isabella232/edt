@@ -12,6 +12,7 @@
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
 import org.eclipse.edt.gen.GenerationException;
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -19,8 +20,10 @@ import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class BigintTypeTemplate extends JavaScriptTemplate {
 
@@ -33,42 +36,56 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 			out.print("egl.javascript.BigDecimal.prototype.ZERO");
 	}
 
-	public void genBigintFromSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genBigintFromIntConversion(type, ctx, out, args);
+	protected boolean needsConversion(Operation conOp) {
+		Type fromType = conOp.getParameters().get(0).getType();
+		Type toType = conOp.getReturnType();
+		// don't convert matching types
+		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
+			return false;
+		if (TypeUtils.isNumericType(fromType) && !fromType.equals(TypeUtils.Type_INT) && !fromType.equals(TypeUtils.Type_SMALLINT))
+			return true;
+		return false;
 	}
-	
-	public void genBigintFromIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
+
+	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
+		// can we intercept and directly generate this conversion
+		if (((AsExpression) args[0]).getConversionOperation() != null && needsConversion(((AsExpression) args[0]).getConversionOperation())) {
+			out.print("egl.convert"
+				+ CommonUtilities.getEglNameForTypeCamelCase(((AsExpression) args[0]).getConversionOperation().getParameters().get(0).getType()) + "To"
+				+ CommonUtilities.getEglNameForTypeCamelCase(type) + "(");
+			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+			out.print(", egl.createRuntimeException)");
+		} else {
+			// we need to invoke the logic in type template to call back to the other conversion situations
+			ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
+		}
+	}
+
+	public void genBigintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+	}
+
+	public void genSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		out.print("(new egl.javascript.BigDecimal(String(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")))");
 	}
 
-	public void genBigintFromFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.convertFloatToBigint(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(")");
+	public void genIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		out.print("(new egl.javascript.BigDecimal(String(");
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+		out.print(")))");
 	}
 
-	public void genBigintFromSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.convertFloatToBigint(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(")");
-	}
-
-	public void genBigintFromStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
+	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		out.print("egl.convertStringToBigint(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");
 	}
 
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		if (false){ //TODO sbg other impls of genBinaryExpression consider nullables
-		}
-		else {
+		if (false) { // TODO sbg other impls of genBinaryExpression consider nullables
+		} else {
 			out.print(getNativeStringPrefixOperation((BinaryExpression) args[0]));
 			out.print("(");
 			ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, args);
@@ -78,9 +95,9 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 			out.print(")");
 		}
 	}
-	
+
 	@SuppressWarnings("static-access")
-	private String getNativeStringPrefixOperation(BinaryExpression expr) {
+	protected String getNativeStringPrefixOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_NE))
 			return "!";
@@ -88,7 +105,7 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 	}
 
 	@SuppressWarnings("static-access")
-	private String getNativeStringOperation(BinaryExpression expr) {
+	protected String getNativeStringOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		// these are the defaults for what can be handled by the java string class
 		if (op.equals(expr.Op_PLUS))
@@ -115,7 +132,7 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 	}
 
 	@SuppressWarnings("static-access")
-	private String getNativeStringComparisionOperation(BinaryExpression expr) {
+	protected String getNativeStringComparisionOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_EQ))
 			return ") == 0";

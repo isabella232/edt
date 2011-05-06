@@ -12,13 +12,17 @@
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
 import org.eclipse.edt.gen.GenerationException;
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Operation;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class IntTypeTemplate extends JavaScriptTemplate {
 
@@ -31,39 +35,48 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 			out.print("0");
 	}
 
-	public void genIntFromBigintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genIntFromDecimalConversion(type, ctx, out, args);
+	protected boolean needsConversion(Operation conOp) {
+		Type fromType = conOp.getParameters().get(0).getType();
+		Type toType = conOp.getReturnType();
+		// don't convert matching types
+		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
+			return false;
+		if (TypeUtils.isNumericType(fromType) && !fromType.equals(TypeUtils.Type_FLOAT) && !fromType.equals(TypeUtils.Type_SMALLFLOAT))
+			return true;
+		return false;
 	}
 
-	public void genIntFromDecimalConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.convertDecimalToInt(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(", egl.createRuntimeException)");
+	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
+		// can we intercept and directly generate this conversion
+		if (((AsExpression) args[0]).getConversionOperation() != null && needsConversion(((AsExpression) args[0]).getConversionOperation())) {
+			out.print("egl.convertDecimalToInt(");
+			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+			out.print(", egl.createRuntimeException)");
+		} else {
+			// we need to invoke the logic in type template to call back to the other conversion situations
+			ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
+		}
 	}
 
-	public void genIntFromNumConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genIntFromDecimalConversion(type, ctx, out, args);
+	public void genIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
-	public void genIntFromSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
+	public void genSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		out.print("egl.convertFloatToInt(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");
 	}
 
-	public void genIntFromFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
+	public void genFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		out.print("egl.convertFloatToInt(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");
 	}
 
-	public void genIntFromStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
+	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		out.print("egl.convertStringToInt(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");
 	}
 

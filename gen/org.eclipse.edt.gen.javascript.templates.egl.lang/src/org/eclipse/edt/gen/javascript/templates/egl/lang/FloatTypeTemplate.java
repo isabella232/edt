@@ -12,13 +12,17 @@
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
 import org.eclipse.edt.gen.GenerationException;
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Operation;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class FloatTypeTemplate extends JavaScriptTemplate {
 
@@ -31,25 +35,36 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 			out.print("0");
 	}
 
-	public void genFloatFromBigintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genFloatFromDecimalConversion(type, ctx, out, args);
+	protected boolean needsConversion(Operation conOp) {
+		Type fromType = conOp.getParameters().get(0).getType();
+		Type toType = conOp.getReturnType();
+		// don't convert matching types
+		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
+			return false;
+		if (TypeUtils.isNumericType(fromType))
+			return true;
+		return false;
 	}
 
-	public void genFloatFromDecimalConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("Number( (");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(").toString())");
+	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
+		// can we intercept and directly generate this conversion
+		if (((AsExpression) args[0]).getConversionOperation() != null && needsConversion(((AsExpression) args[0]).getConversionOperation())) {
+			out.print("Number((");
+			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+			out.print(").toString())");
+		} else {
+			// we need to invoke the logic in type template to call back to the other conversion situations
+			ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
+		}
 	}
 
-	public void genFloatFromNumConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genFloatFromDecimalConversion(type, ctx, out, args);
+	public void genFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
-	public void genFloatFromStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
+	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		out.print("egl.convertStringToFloat(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");
 	}
 

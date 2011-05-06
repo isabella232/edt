@@ -31,10 +31,7 @@ public class BooleanTypeTemplate extends JavaScriptTemplate {
 			out.print("false");
 	}
 
-	public void genStringFromBooleanConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(").toString()");
+	public void genBooleanConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 }

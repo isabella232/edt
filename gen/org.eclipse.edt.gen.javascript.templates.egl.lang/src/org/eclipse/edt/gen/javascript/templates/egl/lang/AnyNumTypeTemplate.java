@@ -12,6 +12,7 @@
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
 import org.eclipse.edt.gen.GenerationException;
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.EObject;
@@ -20,9 +21,11 @@ import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
+import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class AnyNumTypeTemplate extends JavaScriptTemplate {
 
@@ -45,62 +48,46 @@ public class AnyNumTypeTemplate extends JavaScriptTemplate {
 			out.print("egl.javascript.BigDecimal.prototype.ZERO");
 	}
 
-	public void genNumFromSmallintConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genNumFromIntConversion(type, ctx, out, args);
+	protected boolean needsConversion(Operation conOp) {
+		Type fromType = conOp.getParameters().get(0).getType();
+		Type toType = conOp.getReturnType();
+		// don't convert matching types
+		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
+			return false;
+		if (TypeUtils.isNumericType(fromType))
+			return true;
+		return false;
 	}
 
-	public void genNumFromIntConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.convertIntegerToDecimal(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		ctx.gen(genTypeDependentOptions, (EObject) expr.getEType(), ctx, out, args);
-		out.print(")");
+	public void genConversionOperation(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
+		// can we intercept and directly generate this conversion
+		if (((AsExpression) args[0]).getConversionOperation() != null && needsConversion(((AsExpression) args[0]).getConversionOperation())) {
+			out.print("egl.convert"
+				+ CommonUtilities.getEglNameForTypeCamelCase(((AsExpression) args[0]).getConversionOperation().getParameters().get(0).getType()) + "To"
+				+ CommonUtilities.getEglNameForTypeCamelCase(type) + "(");
+			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+			ctx.gen(genTypeDependentOptions, (EObject) ((AsExpression) args[0]).getEType(), ctx, out, args);
+			out.print(", egl.createRuntimeException)");
+		} else {
+			// we need to invoke the logic in type template to call back to the other conversion situations
+			ctx.genSuper(genConversionOperation, ParameterizableType.class, type, ctx, out, args);
+		}
 	}
 
-	public void genNumFromBigintConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genNumFromNumConversion(type, ctx, out, args);
+	public void genNumConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
-	public void genNumFromDecimalConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genNumFromNumConversion(type, ctx, out, args);
-	}
-
-	public void genNumFromNumConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.convertDecimalToDecimal(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		ctx.gen(genTypeDependentOptions, (EObject) expr.getEType(), ctx, out);
-		out.print(", egl.createRuntimeException)");
-	}
-
-	public void genNumFromSmallfloatConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.convertFloatToDecimal(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		ctx.gen(genTypeDependentOptions, (EObject) expr.getEType(), ctx, out);
-		out.print(")");
-	}
-
-	public void genNumFromFloatConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.convertFloatToDecimal(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		ctx.gen(genTypeDependentOptions, (EObject) expr.getEType(), ctx, out);
-		out.print(")");
-	}
-
-	public void genNumFromStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
+	public void genStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		out.print("egl.convertStringToDecimal(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		ctx.gen(genTypeDependentOptions, (EObject) expr.getEType(), ctx, out);
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+		ctx.gen(genTypeDependentOptions, (EObject) ((AsExpression) args[0]).getEType(), ctx, out, args);
 		out.print(")");
 	}
 
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		if (false){ //TODO sbg other impls of genBinaryExpression consider nullables
-		}
-		else {
+		if (false) { // TODO sbg other impls of genBinaryExpression consider nullables
+		} else {
 			out.print(getNativeStringPrefixOperation((BinaryExpression) args[0]));
 			out.print("(");
 			ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, args);
@@ -110,9 +97,9 @@ public class AnyNumTypeTemplate extends JavaScriptTemplate {
 			out.print(")");
 		}
 	}
-	
+
 	@SuppressWarnings("static-access")
-	private String getNativeStringPrefixOperation(BinaryExpression expr) {
+	protected String getNativeStringPrefixOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_NE))
 			return "!";
@@ -120,7 +107,7 @@ public class AnyNumTypeTemplate extends JavaScriptTemplate {
 	}
 
 	@SuppressWarnings("static-access")
-	private String getNativeStringOperation(BinaryExpression expr) {
+	protected String getNativeStringOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		// these are the defaults for what can be handled by the java string class
 		if (op.equals(expr.Op_PLUS))
@@ -145,9 +132,9 @@ public class AnyNumTypeTemplate extends JavaScriptTemplate {
 			return " + ";
 		return "";
 	}
-	
+
 	@SuppressWarnings("static-access")
-	private String getNativeStringComparisionOperation(BinaryExpression expr) {
+	protected String getNativeStringComparisionOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_EQ))
 			return ") == 0";
@@ -163,7 +150,7 @@ public class AnyNumTypeTemplate extends JavaScriptTemplate {
 			return ") >= 0";
 		return "";
 	}
-	
+
 	public void genTypeDependentOptions(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(", ");
 		out.print(decimalLimit(type.getDecimals(), type.getLength()));
@@ -174,7 +161,8 @@ public class AnyNumTypeTemplate extends JavaScriptTemplate {
 	 * Returns a value for the limit parameter to the convertToDecimal methods. The limit is the largest positive value that
 	 * can be assigned to a variable of the given type.
 	 */
-	private String decimalLimit(int decimals, int length) {	// TODO sbg copied from FixedPrecisionTemplate -- some way to reuse / refactor?
+	protected String decimalLimit(int decimals, int length) { // TODO sbg copied from FixedPrecisionTemplate -- some way to
+																// reuse / refactor?
 		if (length > 32) {
 			String limit = "";
 			for (int len = length; len > 0; len--) {

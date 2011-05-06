@@ -37,25 +37,19 @@ public class TimeTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	public void genTimeFromTimeStampConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+	public void genTimeStampConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
-	public void genTimeFromStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
+	public void genTimeConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+	}
+
+	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		out.print(Constants.JSRT_DATETIME_PKG);
 		out.print("timeValue(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");
-	}
-
-	public void genStringFromTimeConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.egl.core.$StrLib.formatTime(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(", ");
-		out.print("egl.egl.core.$StrLib.defaultTimeFormat ");
 	}
 
 	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {

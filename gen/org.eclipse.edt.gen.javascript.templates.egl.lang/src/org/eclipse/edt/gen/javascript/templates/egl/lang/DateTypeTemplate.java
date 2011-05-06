@@ -21,6 +21,7 @@ import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
@@ -39,62 +40,44 @@ public class DateTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	public void genDateFromSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genDateFromIntConversion(type, ctx, out, args);
+	protected boolean needsConversion(Operation conOp) {
+		Type fromType = conOp.getParameters().get(0).getType();
+		Type toType = conOp.getReturnType();
+		// don't convert matching types
+		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
+			return false;
+		if (TypeUtils.isNumericType(fromType))
+			return true;
+		return false;
 	}
 
-	public void genDateFromIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print(Constants.JSRT_DATETIME_PKG);
-		out.print("dateFromInt(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(")");
+	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
+		// can we intercept and directly generate this conversion
+		if (((AsExpression) args[0]).getConversionOperation() != null && needsConversion(((AsExpression) args[0]).getConversionOperation())) {
+			out.print(Constants.JSRT_DATETIME_PKG);
+			out.print("dateFromInt(");
+			Expression intExpr = IRUtils.makeExprCompatibleToType(((AsExpression) args[0]).getObjectExpr(), TypeUtils.Type_INT);
+			ctx.gen(genExpression, intExpr, ctx, out, args);
+			out.print(")");
+		} else {
+			// we need to invoke the logic in type template to call back to the other conversion situations
+			ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
+		}
 	}
 
-	public void genDateFromBigintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genDateFromNumConversion(type, ctx, out, args);
+	public void genDateConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
-	public void genDateFromFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genDateFromNumConversion(type, ctx, out, args);
-	}
-
-	public void genDateFromSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genDateFromNumConversion(type, ctx, out, args);
-	}
-
-	public void genDateFromDecimalConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		genDateFromNumConversion(type, ctx, out, args);
-	}
-
-	public void genDateFromNumConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print(Constants.JSRT_DATETIME_PKG);
-		out.print("dateFromInt(");
-		Expression intExpr = IRUtils.makeExprCompatibleToType(expr.getObjectExpr(), TypeUtils.Type_INT);
-		ctx.gen(genExpression, intExpr, ctx, out);
-		out.print(")");
-	}
-
-	public void genDateFromStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
+	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		out.print(Constants.JSRT_DATETIME_PKG);
 		out.print("dateValue(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");
 	}
 
-	public void genDateFromTimeStampConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-	}
-
-	public void genStringFromDateConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		AsExpression expr = (AsExpression) args[0];
-		out.print("egl.egl.core.$StrLib.formatDate(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
-		out.print(", ");
-		out.print("egl.egl.core.$StrLib.defaultDateFormat ");
+	public void genTimeStampConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
 	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
