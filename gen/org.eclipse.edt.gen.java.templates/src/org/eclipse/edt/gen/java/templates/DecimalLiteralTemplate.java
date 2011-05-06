@@ -24,7 +24,7 @@ public class DecimalLiteralTemplate extends JavaTemplate {
 		out.print(decimalLiteral(expr.getValue().toString()));
 	}
 
-	private String decimalLiteral(String value) {
+	protected String decimalLiteral(String value) {
 		// Quick checks for 0, 1, 10, -1, and -10.
 		BigDecimal bd = new BigDecimal(value);
 		if (bd.signum() == 0)
@@ -47,7 +47,7 @@ public class DecimalLiteralTemplate extends JavaTemplate {
 		return "new java.math.BigDecimal( " + bigInteger(unscaled) + ", " + scale + " )";
 	}
 
-	private String bigInteger(String number) {
+	protected String bigInteger(String number) {
 		// Remove a leading plus sign if present
 		if (number.charAt(0) == '+')
 			number = number.substring(1);

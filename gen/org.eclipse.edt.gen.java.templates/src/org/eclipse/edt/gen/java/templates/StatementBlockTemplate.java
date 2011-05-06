@@ -42,7 +42,7 @@ public class StatementBlockTemplate extends JavaTemplate {
 		// StatementBlocks do not end with semicolons so do nothing here
 	}
 
-	private void processStatements(StatementBlock block, Context ctx, TabbedWriter out, Object... args) {
+	protected void processStatements(StatementBlock block, Context ctx, TabbedWriter out, Object... args) {
 		ctx.setCurrentFile(IRUtils.getFileName(block));
 		for (Statement stmt : block.getStatements()) {
 			ReorganizeCode reorganizeCode = new ReorganizeCode();

@@ -26,7 +26,7 @@ public class IntervalTypeTemplate extends JavaTemplate {
 		out.print(generateOptions(type));
 	}
 
-	private String generateOptions(IntervalType type) {
+	protected String generateOptions(IntervalType type) {
 		String value = "";
 		// default to month interval
 		String pattern = "yyyymm";
