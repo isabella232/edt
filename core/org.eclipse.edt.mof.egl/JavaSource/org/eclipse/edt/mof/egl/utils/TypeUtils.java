@@ -135,6 +135,7 @@ public class TypeUtils implements MofConversion {
 		if (type == null) return TypeKind_VOID;
 		else if (type == Type_NULLTYPE) return TypeKind_NULLTYPE;
 		else if (classifier == Type_ANY) return TypeKind_ANY;
+		else if (classifier == Type_BOOLEAN) return TypeKind_BOOLEAN;
 		else if (classifier == Type_CHAR) return TypeKind_CHAR;
 		else if (classifier == Type_MBCHAR) return TypeKind_MBCHAR;
 		else if (classifier == Type_DBCHAR) return TypeKind_DBCHAR;
