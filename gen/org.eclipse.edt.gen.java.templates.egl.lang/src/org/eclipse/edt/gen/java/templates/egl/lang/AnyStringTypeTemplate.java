@@ -68,7 +68,7 @@ public class AnyStringTypeTemplate extends JavaTemplate {
 	}
 
 	@SuppressWarnings("static-access")
-	private String getNativeStringPrefixOperation(BinaryExpression expr) {
+	protected String getNativeStringPrefixOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_NE))
 			return "!";
@@ -76,7 +76,7 @@ public class AnyStringTypeTemplate extends JavaTemplate {
 	}
 
 	@SuppressWarnings("static-access")
-	private String getNativeStringOperation(BinaryExpression expr) {
+	protected String getNativeStringOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		// these are the defaults for what can be handled by the java string class
 		if (op.equals(expr.Op_PLUS))
@@ -103,7 +103,7 @@ public class AnyStringTypeTemplate extends JavaTemplate {
 	}
 
 	@SuppressWarnings("static-access")
-	private String getNativeStringComparisionOperation(BinaryExpression expr) {
+	protected String getNativeStringComparisionOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_EQ))
 			return ")";
