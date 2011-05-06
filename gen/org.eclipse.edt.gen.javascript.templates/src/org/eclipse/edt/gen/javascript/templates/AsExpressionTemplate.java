@@ -48,8 +48,9 @@ public class AsExpressionTemplate extends JavaScriptTemplate {
 		Type toType = conOp.getReturnType();
 		// always do conversions if parameterized types are involved
 		if (toType.equals(TypeUtils.Type_DECIMAL)
-			|| toType.equals(TypeUtils.Type_DATE)    
-			|| toType.equals(TypeUtils.Type_TIME)    
+			|| toType.equals(TypeUtils.Type_NUM)
+			|| toType.equals(TypeUtils.Type_DATE)
+			|| toType.equals(TypeUtils.Type_TIME)
 			|| toType.equals(TypeUtils.Type_TIMESTAMP)
 			|| (TypeUtils.isTextType(toType) && !CommonUtilities.getEglNameForTypeCamelCase(toType)
 				.equals(CommonUtilities.getEglNameForTypeCamelCase(fromType))))
@@ -57,8 +58,8 @@ public class AsExpressionTemplate extends JavaScriptTemplate {
 		if (conOp.isWidenConversion()) {
 			if (TypeUtils.isNumericType(fromType)) {
 				int kind = TypeUtils.getTypeKind(toType);
-				return kind == TypeUtils.TypeKind_DECIMAL || kind == TypeUtils.TypeKind_BIGINT || kind == TypeUtils.TypeKind_DATE
-					|| TypeUtils.isTextType(toType);
+				return kind == TypeUtils.TypeKind_DECIMAL || kind == TypeUtils.TypeKind_NUM || kind == TypeUtils.TypeKind_BIGINT
+					|| kind == TypeUtils.TypeKind_DATE || TypeUtils.isTextType(toType);
 			}
 			if (TypeUtils.isTextType(toType)
 				&& !CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
