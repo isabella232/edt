@@ -43,12 +43,12 @@ public class InvocationExpressionTemplate extends JavaScriptTemplate {
 					out.print("(function(x){ return x != null ? ((x)) : ");
 					ctx.gen(genDefaultValue, parameter.getType(), ctx, out, args);
 					out.print("; })(");
-					ctx.gen(genExpression, expr.getArguments().get(i), ctx, out);
+					ctx.gen(genExpression, expr.getArguments().get(i), ctx, out, args);
 					out.print(")");
 				} else
-					ctx.gen(genExpression, expr.getArguments().get(i), ctx, out);
+					ctx.gen(genExpression, expr.getArguments().get(i), ctx, out, args);
 			} else if (parameter.getParameterKind() == ParameterKind.PARM_INOUT)
-				ctx.gen(genExpression, expr.getArguments().get(i), ctx, out);
+				ctx.gen(genExpression, expr.getArguments().get(i), ctx, out, args);
 			else
 				ctx.gen(genDefaultValue, parameter.getType(), ctx, out, args);
 			i++;
@@ -81,7 +81,7 @@ public class InvocationExpressionTemplate extends JavaScriptTemplate {
 		out.print(")");
 	}
 
-	private String resetFunctionParmName(FunctionParameter parm) {
+	protected String resetFunctionParmName(FunctionParameter parm) {
 		StringBuilder name = new StringBuilder();
 		switch (parm.getParameterKind()) {
 			case PARM_IN:

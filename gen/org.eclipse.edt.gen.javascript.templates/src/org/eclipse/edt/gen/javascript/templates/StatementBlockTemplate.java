@@ -41,7 +41,7 @@ public class StatementBlockTemplate extends JavaScriptTemplate {
 		// StatementBlocks do not end with semicolons so do nothing here
 	}
 
-	private void processStatements(StatementBlock block, Context ctx, TabbedWriter out, Object... args) {
+	protected void processStatements(StatementBlock block, Context ctx, TabbedWriter out, Object... args) {
 //TODO sbg from Java gen, related to debug		ctx.setCurrentFile(IRUtils.getFileName(block));
 		for (Statement stmt : block.getStatements()) {
 			ReorganizeCode reorganizeCode = new ReorganizeCode();

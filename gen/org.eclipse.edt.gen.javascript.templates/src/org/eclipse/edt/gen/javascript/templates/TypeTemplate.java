@@ -16,6 +16,7 @@ import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayAccess;
+import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.Expression;
@@ -31,6 +32,23 @@ public class TypeTemplate extends JavaScriptTemplate {
 
 	public void validate(Type type, Context ctx, Object... args) {
 		// types may override this validation for specific checking
+	}
+
+	public void genConversionOperation(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// did we have a list of types to check, otherwise use the default
+		if (!org.eclipse.edt.gen.CommonUtilities.processTypeList(genConversionOperation, type, ctx, out, args)) {
+			if (((AsExpression) args[0]).getConversionOperation() != null)
+				ctx.gen("gen" + CommonUtilities.getEglNameForTypeCamelCase(((AsExpression) args[0]).getConversionOperation().getParameters().get(0).getType())
+					+ "Conversion", ((AsExpression) args[0]).getConversionOperation().getReturnType(), ctx, out, args);
+			else if (TypeUtils.Type_ANY.equals(((AsExpression) args[0]).getObjectExpr().getType())) {
+				out.print("egl.convertAnyToType(");
+				ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+				out.print(", ");
+				out.print(quoted(((AsExpression) args[0]).getEType().getTypeSignature()));
+				out.print(")");
+			} else
+				ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+		}
 	}
 
 	public void genInstantiation(Type type, Context ctx, TabbedWriter out, Object... args) {
@@ -132,10 +150,10 @@ public class TypeTemplate extends JavaScriptTemplate {
 			// if the lhs is non-nullable but the rhs is nullable, we have a special case
 			if (!((Expression) args[0]).isNullable() && ((Expression) args[1]).isNullable()) {
 				out.print("(function(x){ return x != null ? (x) : ");
-				ctx.gen(genDefaultValue, ((Expression) args[0]).getType(), ctx, out);
+				ctx.gen(genDefaultValue, ((Expression) args[0]).getType(), ctx, out, args);
 				out.print("; }");
 				out.print("(");
-				ctx.gen(genExpression, (Expression) args[1], ctx, out);
+				ctx.gen(genExpression, (Expression) args[1], ctx, out, args);
 				out.print(")");
 			} else {
 				ctx.gen(genExpression, (Expression) args[0], ctx, out, org.eclipse.edt.gen.CommonUtilities.genWithoutTypeList(args));

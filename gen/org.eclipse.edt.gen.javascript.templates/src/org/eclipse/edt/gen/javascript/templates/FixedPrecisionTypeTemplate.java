@@ -27,7 +27,7 @@ public class FixedPrecisionTypeTemplate extends JavaScriptTemplate {
 	 * Returns a value for the limit parameter to the convertToDecimal methods. The limit is the largest positive value that
 	 * can be assigned to a variable of the given type.
 	 */
-	private String decimalLimit(int decimals, int length) {
+	protected String decimalLimit(int decimals, int length) {
 		if (length > 32) {
 			String limit = "";
 			for (int len = length; len > 0; len--) {

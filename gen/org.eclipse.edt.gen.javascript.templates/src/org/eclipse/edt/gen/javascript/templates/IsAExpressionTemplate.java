@@ -19,7 +19,7 @@ public class IsAExpressionTemplate extends JavaScriptTemplate {
 
 	public void genExpression(IsAExpression expr, Context ctx, TabbedWriter out, Object... args) {
 		out.print("egl.isa(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out);
+		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out, args);
 		out.print(", ");
 		out.print(quoted(expr.getEType().getTypeSignature()));
 		out.print(")");

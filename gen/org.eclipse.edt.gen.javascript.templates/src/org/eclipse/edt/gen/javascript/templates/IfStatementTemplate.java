@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import org.eclipse.edt.gen.Label;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.IfStatement;
@@ -18,6 +19,9 @@ import org.eclipse.edt.mof.egl.IfStatement;
 public class IfStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(IfStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+		Label label = new Label(ctx, Label.LABEL_TYPE_IF);
+		ctx.pushLabelStack(label);
+		out.print(label.getName() + ": ");
 		out.print("if (");
 		ctx.gen(genExpression, stmt.getCondition(), ctx, out, args);
 		out.print(") ");
@@ -27,6 +31,8 @@ public class IfStatementTemplate extends JavaScriptTemplate {
 			out.print("else ");
 			ctx.gen(genStatement, stmt.getFalseBranch(), ctx, out, args);
 		}
+		// now remove the label from the stack
+		ctx.popLabelStack();
 	}
 
 	public void genStatementEnd(IfStatement stmt, Context ctx, TabbedWriter out, Object... args) {
