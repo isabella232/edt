@@ -86,10 +86,8 @@ public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genTypeDependentOptions(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		// if we get here, then we have been given an integer literal, to be represented as a FixedPrecisionType. So, we must
-		// set the dependend options to be a list of nines
 		out.print(", ");
-		out.print("egl.javascript.BigDecimal.prototype.NINES[" + (((IntegerLiteral) ((AsExpression) args[0]).getObjectExpr()).getValue().length() - 1) + "]");
+		out.print("egl.javascript.BigDecimal.prototype.NINES[8]");
 	}
 
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
