@@ -21,7 +21,9 @@ public class IfStatementTemplate extends JavaTemplate {
 	public void genStatementBody(IfStatement stmt, Context ctx, TabbedWriter out, Object... args) {
 		Label label = new Label(ctx, Label.LABEL_TYPE_IF);
 		ctx.pushLabelStack(label);
-		out.print(label.getName() + ": ");
+		if (ctx.getAttribute(stmt, org.eclipse.edt.gen.Constants.Annotation_statementNeedsLabel) != null
+			&& ((Boolean) ctx.getAttribute(stmt, org.eclipse.edt.gen.Constants.Annotation_statementNeedsLabel)).booleanValue())
+			out.print(label.getName() + ": ");
 		out.print("if (");
 		ctx.gen(genExpression, stmt.getCondition(), ctx, out, args);
 		out.print(") ");

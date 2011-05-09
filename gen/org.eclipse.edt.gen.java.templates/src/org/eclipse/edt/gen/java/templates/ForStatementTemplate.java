@@ -25,7 +25,9 @@ public class ForStatementTemplate extends JavaTemplate {
 		}
 		Label label = new Label(ctx, Label.LABEL_TYPE_FOR);
 		ctx.pushLabelStack(label);
-		out.print(label.getName() + ": ");
+		if (ctx.getAttribute(stmt, org.eclipse.edt.gen.Constants.Annotation_statementNeedsLabel) != null
+			&& ((Boolean) ctx.getAttribute(stmt, org.eclipse.edt.gen.Constants.Annotation_statementNeedsLabel)).booleanValue())
+			out.print(label.getName() + ": ");
 		out.print("for (");
 		ctx.gen(genExpression, stmt.getCounterVariable(), ctx, out, args);
 		out.print(" = ");
