@@ -13,7 +13,6 @@ package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
-import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.IntervalType;
@@ -42,7 +41,7 @@ public class AnyMonthsIntervalTypeTemplate extends JavaScriptTemplate {
 			out.print("new ");
 			ctx.gen(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
 			out.print("(");
-			ctx.gen(genConstructorOptions, (EObject) type, ctx, out, args);
+			ctx.gen(genConstructorOptions, type, ctx, out, args);
 			out.print(")");
 		}
 	}

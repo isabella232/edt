@@ -15,12 +15,12 @@ import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
-import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
+import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
@@ -66,7 +66,7 @@ public class AnyNumTypeTemplate extends JavaScriptTemplate {
 				+ CommonUtilities.getEglNameForTypeCamelCase(((AsExpression) args[0]).getConversionOperation().getParameters().get(0).getType()) + "To"
 				+ CommonUtilities.getEglNameForTypeCamelCase(type) + "(");
 			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-			ctx.gen(genTypeDependentOptions, (EObject) ((AsExpression) args[0]).getEType(), ctx, out, args);
+			ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
 			out.print(", egl.createRuntimeException)");
 		} else {
 			// we need to invoke the logic in type template to call back to the other conversion situations
@@ -81,8 +81,15 @@ public class AnyNumTypeTemplate extends JavaScriptTemplate {
 	public void genStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		out.print("egl.convertStringToDecimal(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		ctx.gen(genTypeDependentOptions, (EObject) ((AsExpression) args[0]).getEType(), ctx, out, args);
+		ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
 		out.print(")");
+	}
+
+	public void genTypeDependentOptions(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
+		// if we get here, then we have been given an integer literal, to be represented as a FixedPrecisionType. So, we must
+		// set the dependend options to be a list of nines
+		out.print(", ");
+		out.print("egl.javascript.BigDecimal.prototype.NINES[" + (((IntegerLiteral) ((AsExpression) args[0]).getObjectExpr()).getValue().length() - 1) + "]");
 	}
 
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
@@ -149,33 +156,5 @@ public class AnyNumTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_GE))
 			return ") >= 0";
 		return "";
-	}
-
-	public void genTypeDependentOptions(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
-		out.print(", ");
-		out.print(decimalLimit(type.getDecimals(), type.getLength()));
-		out.print(", egl.createRuntimeException");
-	}
-
-	/**
-	 * Returns a value for the limit parameter to the convertToDecimal methods. The limit is the largest positive value that
-	 * can be assigned to a variable of the given type.
-	 */
-	protected String decimalLimit(int decimals, int length) { // TODO sbg copied from FixedPrecisionTemplate -- some way to
-																// reuse / refactor?
-		if (length > 32) {
-			String limit = "";
-			for (int len = length; len > 0; len--) {
-				limit += "9";
-			}
-			if (decimals > 0)
-				limit = limit.substring(0, length - decimals) + '.' + limit.substring(length - decimals);
-			return "new egl.javascript.BigDecimal(\"" + limit + "\")";
-		} else {
-			String limit = "egl.javascript.BigDecimal.prototype.NINES[" + (length - 1) + "]";
-			if (decimals > 0)
-				limit += ".movePointLeft(" + decimals + ")";
-			return limit;
-		}
 	}
 }

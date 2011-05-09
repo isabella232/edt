@@ -16,7 +16,6 @@ import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
-import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Expression;
@@ -62,7 +61,7 @@ public class AnyTimestampTypeTemplate extends JavaScriptTemplate {
 		out.print("timeStampValueWithPattern(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(", ");
-		ctx.gen(genTypeDependentOptions, (EObject) ((AsExpression) args[0]).getEType(), ctx, out, args);
+		ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
 		out.print(")");
 	}
 
@@ -73,7 +72,7 @@ public class AnyTimestampTypeTemplate extends JavaScriptTemplate {
 		out.print(", ");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(", ");
-		ctx.gen(genTypeDependentOptions, (EObject) ((AsExpression) args[0]).getEType(), ctx, out, args);
+		ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
 		out.print(")");
 	}
 
@@ -84,7 +83,7 @@ public class AnyTimestampTypeTemplate extends JavaScriptTemplate {
 		out.print(", ");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(", ");
-		ctx.gen(genTypeDependentOptions, (EObject) ((AsExpression) args[0]).getEType(), ctx, out, args);
+		ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
 		out.print(", egl.createRuntimeException)");
 	}
 }
