@@ -12,7 +12,6 @@
 package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
-import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.ParameterKind;
@@ -35,6 +34,6 @@ public class MemberTemplate extends JavaScriptTemplate {
 		else if (ctx.mapsToNativeType(mbr.getType().getClassifier()))
 			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.EGLInterface);
 		else
-			ctx.gen(genRuntimeTypeName, (EObject) mbr.getType(), ctx, out, TypeNameKind.JavascriptObject);
+			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavascriptObject);
 	}
 }
