@@ -7,9 +7,14 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
+import org.eclipse.edt.mof.egl.CaseStatement;
+import org.eclipse.edt.mof.egl.ContinueStatement;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.DelegateInvocation;
+import org.eclipse.edt.mof.egl.ExitStatement;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.ForEachStatement;
+import org.eclipse.edt.mof.egl.ForStatement;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionMember;
@@ -20,6 +25,7 @@ import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
 import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.OpenUIStatement;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
@@ -28,6 +34,7 @@ import org.eclipse.edt.mof.egl.SetValuesExpression;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.WhileStatement;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
 import org.eclipse.edt.mof.impl.EObjectImpl;
@@ -81,8 +88,52 @@ public class ReorganizeCode extends AbstractVisitor {
 		return true;
 	}
 
+	public boolean visit(CaseStatement object) {
+		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
+		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
+		if (reorganizeLabel.reorgLabel(object, ctx))
+			ctx.putAttribute(object, Constants.Annotation_statementNeedsLabel, new Boolean(true));
+		return true;
+	}
+
+	public boolean visit(ForStatement object) {
+		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
+		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
+		if (reorganizeLabel.reorgLabel(object, ctx))
+			ctx.putAttribute(object, Constants.Annotation_statementNeedsLabel, new Boolean(true));
+		return true;
+	}
+
+	public boolean visit(ForEachStatement object) {
+		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
+		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
+		if (reorganizeLabel.reorgLabel(object, ctx))
+			ctx.putAttribute(object, Constants.Annotation_statementNeedsLabel, new Boolean(true));
+		return true;
+	}
+
+	public boolean visit(OpenUIStatement object) {
+		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
+		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
+		if (reorganizeLabel.reorgLabel(object, ctx))
+			ctx.putAttribute(object, Constants.Annotation_statementNeedsLabel, new Boolean(true));
+		return true;
+	}
+
+	public boolean visit(WhileStatement object) {
+		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
+		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
+		if (reorganizeLabel.reorgLabel(object, ctx))
+			ctx.putAttribute(object, Constants.Annotation_statementNeedsLabel, new Boolean(true));
+		return true;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean visit(IfStatement object) {
+		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
+		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
+		if (reorganizeLabel.reorgLabel(object, ctx))
+			ctx.putAttribute(object, Constants.Annotation_statementNeedsLabel, new Boolean(true));
 		// if the condition of the if statement has side effects, then we need to extract the functions in the condition
 		// and process them ahead of the if, utilizing a temporary variable instead. the reason for this is to allow the
 		// before and after logic from the function invocation to take place ahead of the if
@@ -564,6 +615,100 @@ public class ReorganizeCode extends AbstractVisitor {
 			statementArray.add(localDeclaration);
 			// now replace the function invocation with the temporary variable
 			((EObjectImpl) getParent()).slotSet(getParentSlotIndex(), nameExpression);
+		}
+	}
+
+	// this reorganization logic for statements might need labels. We will check to see if any exit or continue statements
+	// are embedded in the immediate logic blocks and set a flag as needed
+	public class ReorganizeLabel extends AbstractVisitor {
+		EglContext ctx;
+		boolean needsLabel;
+		boolean processed;
+
+		public boolean reorgLabel(Statement statement, EglContext ctx) {
+			this.ctx = ctx;
+			disallowRevisit();
+			allowParentTracking();
+			statement.accept(this);
+			return needsLabel;
+		}
+
+		public boolean visit(EObject object) {
+			return true;
+		}
+
+		public boolean visit(Function object) {
+			return false;
+		}
+
+		public boolean visit(Type object) {
+			return false;
+		}
+
+		public boolean visit(Operation object) {
+			return false;
+		}
+
+		public boolean visit(ContinueStatement object) {
+			needsLabel = true;
+			return false;
+		}
+
+		public boolean visit(ExitStatement object) {
+			needsLabel = true;
+			return false;
+		}
+
+		public boolean visit(CaseStatement object) {
+			if (!processed) {
+				processed = true;
+				return true;
+			} else
+				return false;
+		}
+
+		public boolean visit(ForStatement object) {
+			if (!processed) {
+				processed = true;
+				return true;
+			} else
+				return false;
+		}
+
+		public boolean visit(ForEachStatement object) {
+			if (!processed) {
+				processed = true;
+				return true;
+			} else
+				return false;
+		}
+
+		public boolean visit(IfStatement object) {
+			if (!processed) {
+				processed = true;
+				return true;
+			} else
+				return false;
+		}
+
+		public boolean visit(OpenUIStatement object) {
+			if (!processed) {
+				processed = true;
+				return true;
+			} else
+				return false;
+		}
+
+		public boolean visit(WhileStatement object) {
+			if (!processed) {
+				processed = true;
+				return true;
+			} else
+				return false;
+		}
+
+		public boolean visit(Statement object) {
+			return true;
 		}
 	}
 }
