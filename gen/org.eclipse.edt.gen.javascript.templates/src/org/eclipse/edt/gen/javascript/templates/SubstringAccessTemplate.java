@@ -25,6 +25,17 @@ public class SubstringAccessTemplate extends JavaScriptTemplate {
 		ctx.gen(genExpression, expr.getStart(), ctx, out, args);
 		out.print(", ");
 		ctx.gen(genExpression, expr.getEnd(), ctx, out, args);
-		out.print("))");
+		out.print(")");
+	}
+
+	public void genAssignment(SubstringAccess expr, Context ctx, TabbedWriter out, Object... args) {
+		// TODO this needs work
+		out.print(ctx.getNativeImplementationMapping(expr.getType()) + ".substring(");
+		ctx.gen(genExpression, expr.getStringExpression(), ctx, out, args);
+		out.print(", ");
+		ctx.gen(genExpression, expr.getStart(), ctx, out, args);
+		out.print(", ");
+		ctx.gen(genExpression, expr.getEnd(), ctx, out, args);
+		out.print(")");
 	}
 }
