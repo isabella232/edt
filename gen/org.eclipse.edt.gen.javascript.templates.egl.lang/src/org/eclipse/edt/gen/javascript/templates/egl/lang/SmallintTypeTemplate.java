@@ -19,6 +19,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
@@ -49,13 +50,24 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		// can we intercept and directly generate this conversion
 		if (((AsExpression) args[0]).getConversionOperation() != null && needsConversion(((AsExpression) args[0]).getConversionOperation())) {
-			out.print("egl.convertDecimalToSmallint(");
-			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-			out.print(", egl.createRuntimeException)");
+			if (((AsExpression) args[0]).getObjectExpr() instanceof IntegerLiteral
+				&& (((IntegerLiteral) ((AsExpression) args[0]).getObjectExpr()).getIntValue() >= -32768 && ((IntegerLiteral) ((AsExpression) args[0])
+					.getObjectExpr()).getIntValue() <= 32767)) {
+				// we need to invoke the logic in type template to call back to the other conversion situations
+				ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
+			} else {
+				out.print("egl.convertDecimalToSmallint(");
+				ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+				out.print(", egl.createRuntimeException)");
+			}
 		} else {
 			// we need to invoke the logic in type template to call back to the other conversion situations
 			ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
 		}
+	}
+
+	public void genIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
 	public void genSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
