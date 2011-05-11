@@ -25,6 +25,8 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
+import org.eclipse.edt.compiler.binding.ProgramBinding;
+import org.eclipse.edt.compiler.binding.ProgramParameterBinding;
 import org.eclipse.edt.compiler.binding.StructureItemBinding;
 import org.eclipse.edt.compiler.binding.SystemFunctionParameterSpecialTypeBinding;
 import org.eclipse.edt.compiler.binding.VariableFormFieldBinding;
@@ -50,6 +52,7 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.ProgramParameter;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.TypedElement;
@@ -231,6 +234,22 @@ public abstract class Mof2BindingMember extends Mof2BindingPart {
 			else if (parm.getParameterKind() == ParameterKind.PARM_OUT) {
 				((FunctionParameterBinding)binding).setOutput(true);
 			}
+			
+			putBinding(parm, binding);
+		}
+		stack.push(binding);
+		return false;
+	}
+	public boolean visit(ProgramParameter parm) {
+		IBinding binding = getBinding(parm);
+		if (binding == null) {
+			String name = InternUtil.intern(parm.getName());
+			parm.getType().accept(this);
+			ITypeBinding type = (ITypeBinding)stack.pop();
+			
+			IPartBinding declarer;
+			declarer = (IPartBinding)getBinding(((Member)parm.getContainer()).getContainer());				
+			binding = new ProgramParameterBinding(name, declarer, type);
 			
 			putBinding(parm, binding);
 		}
