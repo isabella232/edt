@@ -11,12 +11,19 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import java.util.ArrayList;
+
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.DataTable;
+import org.eclipse.edt.mof.egl.Form;
+import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class PartTemplate extends JavaScriptTemplate {
@@ -24,6 +31,10 @@ public class PartTemplate extends JavaScriptTemplate {
 	IRUtils utils = new IRUtils();
 
 	public void validatePart(Part part, Context ctx, Object... args) {
+		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partDataTablesUsed, new ArrayList<DataTable>());
+		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partFormsUsed, new ArrayList<Form>());
+		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed, new ArrayList<Library>());
+		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partRecordsUsed, new ArrayList<Record>());
 		ctx.validate(validateClassBody, part, ctx, args);
 	}
 
