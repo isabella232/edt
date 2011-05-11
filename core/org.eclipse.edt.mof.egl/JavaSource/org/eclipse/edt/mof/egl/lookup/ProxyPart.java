@@ -403,4 +403,11 @@ public class ProxyPart extends ProxyEObject implements Part, DataType, Parameter
 		return false;
 	}
 
+
+	@Override
+	public List<Operation> getOperations(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

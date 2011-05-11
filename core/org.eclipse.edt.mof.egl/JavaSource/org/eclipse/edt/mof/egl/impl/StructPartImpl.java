@@ -102,6 +102,16 @@ public class StructPartImpl extends PartImpl implements StructPart {
 		}
 		return list;
 	}
+	@Override
+	public List<Operation> getOperations(String name) {
+		List<Operation> list = new EList<Operation>();
+		for (Operation f : getOperations()) {
+			if (f.getName().equalsIgnoreCase(name)) {
+				list.add(f);
+			}
+		}
+		return list;
+	}
 	
 	@Override
 	public Function getFunction(String name) {

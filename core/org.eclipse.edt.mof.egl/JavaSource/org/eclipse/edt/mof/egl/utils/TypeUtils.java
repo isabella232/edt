@@ -14,8 +14,15 @@ package org.eclipse.edt.mof.egl.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.MofSerializable;
+import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.DataItem;
+import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.ElementKind;
+import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -23,9 +30,12 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.NullType;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.SequenceType;
 import org.eclipse.edt.mof.egl.Stereotype;
+import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
+import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.egl2mof.MofConversion;
 import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
@@ -246,6 +256,191 @@ public class TypeUtils implements MofConversion {
 		else {
 			return false;
 		}
+	}
+	
+	/**
+	 * This method is used to tell if two different versions of the same type is equivalent
+	 * from the point of view of any clients that are using the given type.  Any differences that
+	 * cause the two versions to be not equivalent will signify that any dependents that use
+	 * the given type must be updated.
+	 * 
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
+	public static boolean areStructurallyEquivalent(MofSerializable p1, MofSerializable p2) {
+		if (p1 == null || p2 == null) return false;
+		if (!((EObject)p1).getEClass().equals(((EObject)p2).getEClass()))
+			return false;
+		if (!p1.getMofSerializationKey().equalsIgnoreCase(p2.getMofSerializationKey()))
+			return false;
+		if (p1 instanceof Part) {
+			Stereotype s1 = ((Part) p1).getStereotype();
+			Stereotype s2 = ((Part) p2).getStereotype();
+			if (s1 == null && s2 != null)
+				return false;
+			if (s1 != null && s2 == null)
+				return false;
+			if (s1 != null && s2 != null)
+				if (!s1.getEClass().equals(s2.getEClass()))
+					return false;
+			
+		}
+		if (p1 instanceof Program) {
+			// Only need to check the CALL signature is the same
+			Program prog1 = (Program)p1;
+			Program prog2 = (Program)p2;
+			if (prog1.getParameters().size() != prog2.getParameters().size())
+				return false;
+			for (int i=0; i<prog1.getParameters().size(); i++) {
+				Type t1 = prog1.getParameters().get(i).getType();
+				Type t2 = prog2.getParameters().get(i).getType();
+				if (!t1.equals(t2)) {
+					return false;
+				}
+			}
+			return true;
+		}
+		if (p1 instanceof DataItem) {
+			return ((DataItem)p1).getBaseType().equals(((DataItem)p2).getBaseType());
+		}
+		if (p1 instanceof Delegate) {
+			Delegate d1 = (Delegate)p1;
+			Delegate d2 = (Delegate)p2;
+			if (d1.getParameters().size() == d2.getParameters().size()) {
+				for (int j=0; j<d1.getParameters().size(); j++) {
+					FunctionParameter parm1 = d1.getParameters().get(j);
+					FunctionParameter parm2 = d2.getParameters().get(j);
+					if (!parm1.getType().equals(parm2.getType()))
+						return false;
+					if (!parm1.getParameterKind().equals(parm2.getParameterKind()))
+						return false;
+				}
+			}
+			return d1.getReturnType().equals(d2.getReturnType());
+		}
+		if (p1 instanceof EGLClass && p2 instanceof EGLClass) {
+			EGLClass s1 = (EGLClass)p1;
+			EGLClass s2 = (EGLClass)p2;
+			if (s1.getSuperTypes().size() == s2.getSuperTypes().size()) {
+				for (int i=0; i<s1.getSuperTypes().size(); i++) {
+					if (!s1.getSuperTypes().get(i).equals(s1.getSuperTypes().get(i)))
+						return false;
+				}
+			}
+			if (s1.getStructuredFields().size() == s2.getStructuredFields().size()) {
+				// Order matters for value type structures so they must match by index
+				for (int i=0; i<s1.getStructuredFields().size(); i++) {
+					StructuredField f1 = s1.getStructuredFields().get(i);
+					StructuredField f2 = s2.getStructuredFields().get(i);
+					if (!f1.getName().equalsIgnoreCase(f2.getName()))
+						return false;
+					if (!f1.getType().equals(f2.getType()))
+						return false;
+					if (!(f1.getOccurs() != f2.getOccurs()))
+						return false;
+					if (f1.getParent() == null && f2.getParent() != null)
+						return false;
+					if (f1.getParent() != null && f2.getParent() == null)
+						return false;
+					if (!f1.getParent().getName().equalsIgnoreCase(f2.getParent().getName()))
+						return false;
+				}
+			}
+			if (s1.getFields().size() == s2.getFields().size()) {
+				for (int i=0; i<s1.getFields().size(); i++) {
+					Field f1 = s1.getFields().get(i);
+					Field f2 = null;
+					if (isValueType(s1)) {
+						f2 = s2.getFields().get(i);
+						if (!f1.getName().equalsIgnoreCase(f2.getName()))
+							return false;
+					}
+					else {	
+						f2 = s2.getField(f1.getName());
+					}
+					return f2 != null && f1.getType().equals(f2.getType());
+				}
+			}
+			if (s1.getFunctions().size() == s2.getFunctions().size()) {
+				for (int i=0; i<s1.getFunctions().size(); i++) {
+					Function f1 = s1.getFunctions().get(i);
+					Function f2 = null;
+					List<Function> functions = s2.getFunctions(f1.getName());
+					if (functions.isEmpty())
+						return false;
+					for (Function func : functions) {
+						if (f1.getParameters().size() == func.getParameters().size()) {
+							for (int j=0; j<f1.getParameters().size(); j++) {
+								FunctionParameter parm1 = f1.getParameters().get(j);
+								FunctionParameter parm2 = func.getParameters().get(j);
+								if (!parm1.getType().equals(parm2.getType()))
+									return false;
+								if (!parm1.getParameterKind().equals(parm2.getParameterKind()))
+									return false;
+							}
+						}
+						if (!f1.getType().equals(func.getType())) {
+							return false;
+						}
+						f2 = func;
+					}
+					return f2 != null && f1.getAccessKind().equals(f2.getAccessKind());
+				}
+			}
+			if (s1.getOperations().size() == s2.getOperations().size()) {
+				for (int i=0; i<s1.getOperations().size(); i++) {
+					Operation f1 = s1.getOperations().get(i);
+					Operation f2 = null;
+					List<Operation> ops = s2.getOperations(f1.getName());
+					if (ops.isEmpty())
+						return false;
+					for (Operation op : ops) {
+						if (f1.getParameters().size() == op.getParameters().size()) {
+							for (int j=0; j<f1.getParameters().size(); j++) {
+								FunctionParameter parm1 = f1.getParameters().get(j);
+								FunctionParameter parm2 = op.getParameters().get(j);
+								if (!parm1.getType().equals(parm2.getType()))
+									return false;
+								if (!parm1.getParameterKind().equals(parm2.getParameterKind()))
+									return false;
+							}
+						}
+						if (!f1.getType().equals(op.getType())) {
+							return false;
+						}
+						f2 = op;
+					}
+					return f2 != null && f1.getAccessKind().equals(f2.getAccessKind());
+				}
+			}
+
+		}
+		if (p1 instanceof AnnotationType) {
+			AnnotationType t1 = (AnnotationType)p1;
+			AnnotationType t2 = (AnnotationType)p2;
+			if (t1.getTargets().size() != t2.getTargets().size())
+				return false;
+			for (ElementKind e1 : t1.getTargets()) {
+				if (!t2.getTargets().contains(e1))
+					return false;
+			}
+		}
+		if (p1 instanceof StereotypeType) {
+			StereotypeType t1 = (StereotypeType)p1;
+			StereotypeType t2 = (StereotypeType)p2;
+			if (!t1.getDefaultSuperType().equals(t2.getDefaultSuperType()))
+				return false;
+			if (t1.getMemberAnnotations().size() != t1.getMemberAnnotations().size())
+				return false;
+			for (AnnotationType type : t1.getMemberAnnotations()) {
+				if (!t2.getMemberAnnotations().contains(type))
+					return false;
+			}
+			if (!t1.getPartType().equals(t2.getPartType()))
+				return false;
+		}
+		return true;
 	}
 	
 	/**
