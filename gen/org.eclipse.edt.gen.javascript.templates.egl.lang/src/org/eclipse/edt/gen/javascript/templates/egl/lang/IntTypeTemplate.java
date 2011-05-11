@@ -41,7 +41,8 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 		// don't convert matching types
 		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
 			return false;
-		if (TypeUtils.isNumericType(fromType) && !fromType.equals(TypeUtils.Type_FLOAT) && !fromType.equals(TypeUtils.Type_SMALLFLOAT))
+		if (TypeUtils.isNumericType(fromType) && !fromType.equals(TypeUtils.Type_SMALLINT) && !fromType.equals(TypeUtils.Type_FLOAT)
+			&& !fromType.equals(TypeUtils.Type_SMALLFLOAT))
 			return true;
 		return false;
 	}
@@ -59,6 +60,10 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+	}
+
+	public void genSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 

@@ -42,7 +42,8 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 		// don't convert matching types
 		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
 			return false;
-		if (TypeUtils.isNumericType(fromType) && !fromType.equals(TypeUtils.Type_FLOAT) && !fromType.equals(TypeUtils.Type_SMALLFLOAT))
+		if (TypeUtils.isNumericType(fromType) && !fromType.equals(TypeUtils.Type_INT) && !fromType.equals(TypeUtils.Type_FLOAT)
+			&& !fromType.equals(TypeUtils.Type_SMALLFLOAT))
 			return true;
 		return false;
 	}
@@ -50,16 +51,9 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		// can we intercept and directly generate this conversion
 		if (((AsExpression) args[0]).getConversionOperation() != null && needsConversion(((AsExpression) args[0]).getConversionOperation())) {
-			if (((AsExpression) args[0]).getObjectExpr() instanceof IntegerLiteral
-				&& (((IntegerLiteral) ((AsExpression) args[0]).getObjectExpr()).getIntValue() >= -32768 && ((IntegerLiteral) ((AsExpression) args[0])
-					.getObjectExpr()).getIntValue() <= 32767)) {
-				// we need to invoke the logic in type template to call back to the other conversion situations
-				ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
-			} else {
-				out.print("egl.convertDecimalToSmallint(");
-				ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-				out.print(", egl.createRuntimeException)");
-			}
+			out.print("egl.convertDecimalToSmallint(");
+			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+			out.print(", egl.createRuntimeException)");
 		} else {
 			// we need to invoke the logic in type template to call back to the other conversion situations
 			ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
@@ -67,7 +61,15 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+		if (((AsExpression) args[0]).getObjectExpr() instanceof IntegerLiteral
+			&& (((IntegerLiteral) ((AsExpression) args[0]).getObjectExpr()).getIntValue() >= -32768 && ((IntegerLiteral) ((AsExpression) args[0])
+				.getObjectExpr()).getIntValue() <= 32767))
+			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+		else {
+			out.print("egl.convertNumberToSmallint(");
+			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+			out.print(", egl.createRuntimeException)");
+		}
 	}
 
 	public void genSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
