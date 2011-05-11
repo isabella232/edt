@@ -32,6 +32,8 @@ public interface StructPart extends Part, Container {
 	
 	List<Function> getFunctions(String name);
 	
+	List<Operation> getOperations(String name);
+	
 	Function getFunction(String name);
 	
 	void collectMembers(List<Member> members);
