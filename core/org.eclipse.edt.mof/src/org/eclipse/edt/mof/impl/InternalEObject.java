@@ -23,6 +23,7 @@ import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.EVisitor;
+import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.serialization.ProxyEObject;
 import org.eclipse.edt.mof.utils.EList;
 
@@ -290,7 +291,11 @@ public class InternalEObject implements Cloneable {
 		for (int i=0; i<slots.length; i++) {
 			cloned.slots[i] = slots[i] == null ? new Slot() : (Slot)slots[i].clone();
 			Object value = slotGet(i);
-			if (value instanceof EObject) {
+			// References to MofSerializable should not be cloned
+			if (value instanceof MofSerializable) {
+				cloned.slots[i].set(value);
+			}
+			else if (value instanceof EObject) {
 				cloned.slots[i].set(((EObject)value).clone());
 			}
 			else if (value instanceof EList) {

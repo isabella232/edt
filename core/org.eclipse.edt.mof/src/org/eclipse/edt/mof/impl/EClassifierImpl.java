@@ -96,16 +96,6 @@ public class EClassifierImpl extends ENamedElementImpl implements EClassifier {
 		return this;
 	}
 	
-	
-	
-	@Override
-	/**
-	 * EClassifiers should not be copied
-	 */
-	public Object clone() {
-		return this;
-	}
-
 	@Override
 	public String toStringHeader() {
 		StringBuffer signature = new StringBuffer();
