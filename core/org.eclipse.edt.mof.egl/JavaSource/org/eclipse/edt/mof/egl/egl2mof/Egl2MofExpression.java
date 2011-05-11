@@ -33,6 +33,7 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.LibraryBinding;
 import org.eclipse.edt.compiler.binding.LibraryDataBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
+import org.eclipse.edt.compiler.binding.ProgramBinding;
 import org.eclipse.edt.compiler.binding.TopLevelFunctionBinding;
 import org.eclipse.edt.compiler.binding.annotationType.EGLSystemConstantAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
@@ -98,7 +99,6 @@ import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.UnaryExpression;
 import org.eclipse.edt.mof.egl.compiler.EGL2IREnvironment;
-import org.eclipse.edt.mof.egl.lookup.ProxyElement;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -328,7 +328,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			else {
 				boolean isStatic = Binding.isValidBinding(functionBinding) && (functionBinding.isStatic() || declarer instanceof LibraryBinding);
 				if (node.getTarget() instanceof SimpleName && !isStatic) {
-					if (isSuperTypeMember(functionBinding)) {
+					if (functionBinding == null || isSuperTypeMember(functionBinding)) {
 						// Qualify with this to get QualifiedFunctionInvocation which will do dynamic lookup
 						fi = factory.createQualifiedFunctionInvocation();
 						fi.setId(node.getTarget().getCanonicalString());
@@ -477,7 +477,8 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				|| binding instanceof DataTableBinding 
 				|| binding instanceof ExternalTypeBinding
 				|| binding instanceof EnumerationTypeBinding
-				|| binding instanceof FormBinding) {
+				|| binding instanceof FormBinding
+				|| binding instanceof ProgramBinding) {
 			// Is only a proper reference to a part if given part type is allowed to have
 			// field references to the part itself (static reference) as opposed to field
 			// of an instance.  SimpleName AST values may be referencing a Part in the case
