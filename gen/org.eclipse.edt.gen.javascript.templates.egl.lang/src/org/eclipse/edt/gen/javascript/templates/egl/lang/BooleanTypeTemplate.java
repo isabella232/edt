@@ -18,6 +18,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 
 public class BooleanTypeTemplate extends JavaScriptTemplate {
@@ -29,6 +30,10 @@ public class BooleanTypeTemplate extends JavaScriptTemplate {
 			out.print("null");
 		else
 			out.print("false");
+	}
+
+	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		out.print(quoted("0;"));
 	}
 
 	public void genBooleanConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {

@@ -36,6 +36,10 @@ public class AnyTimestampTypeTemplate extends JavaScriptTemplate {
 		processDefaultValue(type, ctx, out, args);
 	}
 
+	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		out.print(quoted("J;"));
+	}
+
 	public void processDefaultValue(Type type, Context ctx, TabbedWriter out, Object... args) {
 		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
 			out.print("null");

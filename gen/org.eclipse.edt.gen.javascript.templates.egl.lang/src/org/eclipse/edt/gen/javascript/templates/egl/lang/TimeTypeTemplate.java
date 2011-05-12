@@ -37,6 +37,10 @@ public class TimeTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
+	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		out.print(quoted("L;"));
+	}
+
 	public void genTimeStampConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}

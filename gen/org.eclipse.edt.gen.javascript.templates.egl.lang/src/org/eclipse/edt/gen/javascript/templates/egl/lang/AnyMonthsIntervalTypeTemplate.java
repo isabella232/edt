@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
+import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -30,6 +31,10 @@ public class AnyMonthsIntervalTypeTemplate extends JavaScriptTemplate {
 	// this method gets invoked when there is a generic (unknown) interval needed
 	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
 		processDefaultValue(type, ctx, out, args);
+	}
+
+	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		out.print(quoted("Q;"));
 	}
 
 	public void processDefaultValue(Type type, Context ctx, TabbedWriter out, Object... args) {

@@ -40,6 +40,10 @@ public class DateTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
+	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		out.print(quoted("K;"));
+	}
+
 	protected boolean needsConversion(Operation conOp) {
 		Type fromType = conOp.getParameters().get(0).getType();
 		Type toType = conOp.getReturnType();

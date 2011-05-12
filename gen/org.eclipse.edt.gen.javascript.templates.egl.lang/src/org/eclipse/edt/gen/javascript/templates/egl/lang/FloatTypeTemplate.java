@@ -35,6 +35,10 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 			out.print("0");
 	}
 
+	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+		out.print(quoted("F;"));
+	}
+
 	protected boolean needsConversion(Operation conOp) {
 		Type fromType = conOp.getParameters().get(0).getType();
 		Type toType = conOp.getReturnType();
