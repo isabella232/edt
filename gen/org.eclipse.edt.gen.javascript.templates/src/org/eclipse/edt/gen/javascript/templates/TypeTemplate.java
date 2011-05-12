@@ -44,7 +44,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 				out.print("egl.convertAnyToType(");
 				ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 				out.print(", ");
-				out.print(quoted(((AsExpression) args[0]).getEType().getTypeSignature()));
+				ctx.gen(genSignature, ((AsExpression) args[0]).getEType(), ctx, out, args);
 				out.print(")");
 			} else
 				ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
@@ -196,6 +196,15 @@ public class TypeTemplate extends JavaScriptTemplate {
 			if (((UnaryExpression) args[0]).getOperator().equals("-"))
 				out.print(")");
 		}
+	}
+
+	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// TODO sbg In RBD, the type may be null which has a runtime signature of "V;" -- do we need to handle that, and if
+		// so, how?
+
+		// did we have a list of types to check, otherwise use the default
+		if (!org.eclipse.edt.gen.CommonUtilities.processTypeList(genSignature, type, ctx, out, args))
+			out.print(type.getTypeSignature());
 	}
 
 	public void genContainerBasedAssignment(Type type, Context ctx, TabbedWriter out, Object... args) {

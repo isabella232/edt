@@ -17,6 +17,7 @@ import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class EGLClassTemplate extends JavaScriptTemplate {
@@ -147,7 +148,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	}
 
 	public void genInitializeMethodBody(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
-		out.println("eze$setEmpty();");
+		// TODO sbg Not sure whether we need this out.println("eze$setEmpty();");
 		for (Field field : part.getFields()) {
 			ctx.gen(genInitializeMethod, part, ctx, out, field);
 		}
@@ -156,6 +157,14 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
 		if (((Field) args[0]).getInitializerStatements() != null)
 			ctx.gen(genStatementNoBraces, ((Field) args[0]).getInitializerStatements(), ctx, out, args);
+		else {
+			if (((Field) args[0]).getContainer() != null && ((Field) args[0]).getContainer() instanceof Type)
+				ctx.gen(genQualifier, ((Field) args[0]).getContainer(), ctx, out, args);
+			ctx.gen(genName, ((Field) args[0]), ctx, out, args);
+			out.print(" = ");
+			ctx.gen(genInitialization, ((Field) args[0]), ctx, out, args);
+			out.println(";");
+		}
 	}
 
 	public void genCloneMethods(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
@@ -199,7 +208,9 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	}
 
 	public void genGetterSetters(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+		String delim = ",";
 		for (Field field : part.getFields()) {
+			out.print(delim);
 			ctx.gen(genGetterSetter, part, ctx, out, field);
 		}
 	}

@@ -30,9 +30,9 @@ public class MemberAccessTemplate extends JavaScriptTemplate {
 
 	public void genMemberAccess(MemberAccess expr, Context ctx, TabbedWriter out, Object... args) {
 		if (TypeUtils.isReferenceType(expr.getQualifier().getType()) || expr.getQualifier().isNullable()) {
-			out.print("egl.checkNull(");
+			// TODO sbg doesn't seem to be quite the right place out.print("egl.checkNull(");
 			ctx.gen(genExpression, expr.getQualifier(), ctx, out, args);
-			out.print(")");
+			// TODO sbg doesn't seem to be quite the right place out.print(")");
 		} else
 			ctx.gen(genExpression, expr.getQualifier(), ctx, out, args);
 		out.print(".");

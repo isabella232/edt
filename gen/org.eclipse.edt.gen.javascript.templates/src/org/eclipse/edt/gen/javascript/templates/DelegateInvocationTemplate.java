@@ -21,19 +21,12 @@ public class DelegateInvocationTemplate extends JavaScriptTemplate {
 	public void genExpression(DelegateInvocation expr, Context ctx, TabbedWriter out, Object... args) {
 		// first, make this expression's arguments compatible
 		IRUtils.makeCompatible(expr);
-		// cast the return value, if present
-		if (expr.getType() != null) {
-			out.print("(");
-			ctx.gen(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavascriptObject);
-			out.print(")");
-		}
 		// then process the function invocation
 		if (expr.getQualifier() != null) {
 			ctx.gen(genExpression, expr.getQualifier(), ctx, out, args);
 			out.print(".");
 		}
 		ctx.gen(genExpression, expr.getExpression(), ctx, out, args);
-		out.print(".invoke");
 		out.print("(");
 		ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out, args);
 		out.print(")");

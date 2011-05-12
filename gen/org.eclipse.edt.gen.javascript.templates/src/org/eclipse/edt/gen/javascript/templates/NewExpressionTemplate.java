@@ -23,8 +23,11 @@ public class NewExpressionTemplate extends JavaScriptTemplate {
 		ctx.gen(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavascriptImplementation);
 		out.print("(");
 		if (expr.getArguments() != null && expr.getArguments().size() > 0) {
+			String delim = "";
 			for (Expression argument : expr.getArguments()) {
+				out.print(delim);
 				ctx.gen(genExpression, argument, ctx, out, args);
+				delim = ", ";
 			}
 		} else
 			ctx.gen(genConstructorOptions, expr.getType(), ctx, out, args);

@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
@@ -70,7 +71,7 @@ public class LibraryTemplate extends JavaScriptTemplate {
 
 	public void genName(Library library, Context ctx, TabbedWriter out, Object... args) {
 		// TODO Use Aliaser stuff from RBD
-		out.print("egl." + library.getPackageName().toLowerCase() + "." + library.getName());
+		out.print(eglnamespace + library.getPackageName().toLowerCase() + "." + library.getName());
 	}
 
 	public void genAccessor(Library library, Context ctx, TabbedWriter out, Object... args) {
@@ -89,6 +90,8 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		out.println(";");
 		ctx.gen(genAccessor, library, ctx, out, args);
 		out.println("=this;");
+		ctx.gen(genInitializeMethodBody, library, ctx, out, args);
+
 		out.println("this.jsrt$SysVar = new egl.egl.core.SysVar();");
 		// instantiate each user part
 		List<Part> usedParts = library.getUsedParts();
@@ -122,6 +125,7 @@ public class LibraryTemplate extends JavaScriptTemplate {
 
 	public void genGetterSetter(Library library, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genGetter, (Field) args[0], ctx, out, args);
+		out.println(",");
 		ctx.gen(genSetter, (Field) args[0], ctx, out, args);
 	}
 
@@ -137,5 +141,10 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		out.print(".prototype.");
 		ctx.gen(genName, args[0], ctx, out, args);
 		out.print(")");
+	}
+
+	public void genQualifier(Library library, Context ctx, TabbedWriter out, Object... args) {
+		if ((args.length > 0) && (args[0] instanceof Expression) && (((Expression) args[0]).getQualifier() == null))
+			out.print("this.");
 	}
 }

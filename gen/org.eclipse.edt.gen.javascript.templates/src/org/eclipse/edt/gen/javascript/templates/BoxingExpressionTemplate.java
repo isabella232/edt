@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.javascript.templates;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BoxingExpression;
+import org.eclipse.edt.mof.egl.Type;
 
 public class BoxingExpressionTemplate extends JavaScriptTemplate {
 
@@ -25,7 +26,7 @@ public class BoxingExpressionTemplate extends JavaScriptTemplate {
 		out.print(", ");
 		out.print(eze$$signature);
 		out.print(" : ");
-		out.print(quoted(expr.getExpr().getType().getTypeSignature()));
+		ctx.gen(genSignature, (Type) expr.getExpr().getType(), ctx, out, args);
 		out.print("}");
 	}
 }
