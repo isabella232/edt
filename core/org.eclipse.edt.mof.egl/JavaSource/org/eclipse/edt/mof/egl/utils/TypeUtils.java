@@ -16,8 +16,10 @@ import java.util.List;
 
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
+import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.DataItem;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
@@ -328,7 +330,10 @@ public class TypeUtils implements MofConversion {
 						return false;
 				}
 			}
-			if (s1.getStructuredFields().size() == s2.getStructuredFields().size()) {
+			if (s1.getStructuredFields().size() != s2.getStructuredFields().size()) {
+				return false;
+			}
+			else {
 				// Order matters for value type structures so they must match by index
 				for (int i=0; i<s1.getStructuredFields().size(); i++) {
 					StructuredField f1 = s1.getStructuredFields().get(i);
@@ -347,74 +352,32 @@ public class TypeUtils implements MofConversion {
 						return false;
 				}
 			}
-			if (s1.getFields().size() == s2.getFields().size()) {
-				for (int i=0; i<s1.getFields().size(); i++) {
-					Field f1 = s1.getFields().get(i);
+			List<Field> flds1 = collectPublicMembers(s1.getFields()); 
+			List<Field> flds2 = collectPublicMembers(s2.getFields()); 
+			if (flds1.size() != flds2.size()) {
+				return false;
+			}
+			else {
+				for (int i=0; i<flds1.size(); i++) {
+					Field f1 = flds1.get(i);
 					Field f2 = null;
 					if (isValueType(s1)) {
-						f2 = s2.getFields().get(i);
+						f2 = flds2.get(i);
 						if (!f1.getName().equalsIgnoreCase(f2.getName()))
 							return false;
 					}
 					else {	
 						f2 = s2.getField(f1.getName());
 					}
-					return f2 != null && f1.getType().equals(f2.getType());
+					return f2 != null && f1.getType().equals(f2.getType()) && f1.isNullable() == f2.isNullable();
 				}
 			}
-			if (s1.getFunctions().size() == s2.getFunctions().size()) {
-				for (int i=0; i<s1.getFunctions().size(); i++) {
-					Function f1 = s1.getFunctions().get(i);
-					Function f2 = null;
-					List<Function> functions = s2.getFunctions(f1.getName());
-					if (functions.isEmpty())
-						return false;
-					for (Function func : functions) {
-						if (f1.getParameters().size() == func.getParameters().size()) {
-							for (int j=0; j<f1.getParameters().size(); j++) {
-								FunctionParameter parm1 = f1.getParameters().get(j);
-								FunctionParameter parm2 = func.getParameters().get(j);
-								if (!parm1.getType().equals(parm2.getType()))
-									return false;
-								if (!parm1.getParameterKind().equals(parm2.getParameterKind()))
-									return false;
-							}
-						}
-						if (!f1.getType().equals(func.getType())) {
-							return false;
-						}
-						f2 = func;
-					}
-					return f2 != null && f1.getAccessKind().equals(f2.getAccessKind());
-				}
-			}
-			if (s1.getOperations().size() == s2.getOperations().size()) {
-				for (int i=0; i<s1.getOperations().size(); i++) {
-					Operation f1 = s1.getOperations().get(i);
-					Operation f2 = null;
-					List<Operation> ops = s2.getOperations(f1.getName());
-					if (ops.isEmpty())
-						return false;
-					for (Operation op : ops) {
-						if (f1.getParameters().size() == op.getParameters().size()) {
-							for (int j=0; j<f1.getParameters().size(); j++) {
-								FunctionParameter parm1 = f1.getParameters().get(j);
-								FunctionParameter parm2 = op.getParameters().get(j);
-								if (!parm1.getType().equals(parm2.getType()))
-									return false;
-								if (!parm1.getParameterKind().equals(parm2.getParameterKind()))
-									return false;
-							}
-						}
-						if (!f1.getType().equals(op.getType())) {
-							return false;
-						}
-						f2 = op;
-					}
-					return f2 != null && f1.getAccessKind().equals(f2.getAccessKind());
-				}
-			}
-
+			if (!areStructurallyEquivalentFunctionMembers(s1.getConstructors(), s2.getConstructors()))
+				return false;
+			if (!areStructurallyEquivalentFunctionMembers(s1.getFunctions(), s2.getFunctions()))
+				return false;
+			if (!areStructurallyEquivalentFunctionMembers(s1.getOperations(), s2.getOperations()))
+				return false;
 		}
 		if (p1 instanceof AnnotationType) {
 			AnnotationType t1 = (AnnotationType)p1;
@@ -442,7 +405,42 @@ public class TypeUtils implements MofConversion {
 		}
 		return true;
 	}
-	
+
+	private static <T extends FunctionMember> boolean areStructurallyEquivalentFunctionMembers(List<T> mbrs1, List<T> mbrs2) {
+		List<T> funcs1 = collectPublicMembers(mbrs1); 
+		List<T> funcs2 = collectPublicMembers(mbrs2); 
+		if (funcs1.size() != funcs2.size()) {
+			return false;
+		}
+		else {
+			for (int i=0; i<funcs1.size(); i++) {
+				T f1 = funcs1.get(i);
+				T f2 = null;
+				for (T func : funcs2) {
+					if ((func instanceof Constructor || f1.getName().equalsIgnoreCase(func.getName())) && f1.getParameters().size() == func.getParameters().size()) {
+						for (int j=0; j<f1.getParameters().size(); j++) {
+							FunctionParameter parm1 = f1.getParameters().get(j);
+							FunctionParameter parm2 = func.getParameters().get(j);
+							if (!parm1.getType().equals(parm2.getType()))
+								break;
+							if (!parm1.getParameterKind().equals(parm2.getParameterKind()))
+								break;
+						}
+						if (!f1.getType().equals(func.getType())) {
+							break;
+						}
+						f2 = func;
+						break;
+					}
+				}
+				if (f2 == null || !f1.getAccessKind().equals(f2.getAccessKind()) || !f1.isStatic().equals(f2.isStatic()))
+					return false;
+			}
+		}
+		return true;
+
+	}
+
 	/**
 	 * Tests which type between the two passed in is the least wide.
 	 * This is determined by which of the two types has a widening conversion
@@ -714,4 +712,14 @@ public class TypeUtils implements MofConversion {
 		return result;
 	}
 
+	public static <T extends Member> List<T> collectPublicMembers(List<T> source) {
+		List<T> result = new ArrayList<T>();
+		for (T mbr : source) {
+			if (mbr.getAccessKind() != AccessKind.ACC_PRIVATE) {
+				result.add(mbr);
+			}
+		}
+		return result;
+	}
+	
 }
