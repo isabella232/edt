@@ -19,6 +19,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
@@ -60,7 +61,15 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+		if (((AsExpression) args[0]).getObjectExpr() instanceof IntegerLiteral
+			&& (((IntegerLiteral) ((AsExpression) args[0]).getObjectExpr()).getIntValue() >= -2147483648 && ((IntegerLiteral) ((AsExpression) args[0])
+				.getObjectExpr()).getIntValue() <= 2147483647))
+			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+		else {
+			out.print("egl.convertNumberToInt(");
+			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+			out.print(", egl.createRuntimeException)");
+		}
 	}
 
 	public void genSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
