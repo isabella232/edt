@@ -122,14 +122,6 @@ public abstract class ClassifierImpl extends NamedElementImpl implements Classif
 	}
 
 	@Override
-	/**
-	 * Classifiers should not be copied
-	 */
-	public Object clone() {
-		return this;
-	}
-
-	@Override
 	public boolean isInstantiable() {
 		return false;
 	}
