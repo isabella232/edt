@@ -30,7 +30,8 @@ public class Constants {
 	public static final String SERIAL_VERSION_UID = "80";
 
 	// Commonly used package names
-	public static final String JSRT_DATETIME_PKG = "egl.egl.core.$DateTimeLib.";
+	public static final String JSRT_STRLIB_PKG = "egl.egl.core.StrLib['$inst'].";
+	public static final String JSRT_DTTMLIB_PKG = "egl.egl.core.DateTimeLib['$inst'].";
 
 	// EGL message id's
 	public static final String EGLMESSAGE_UNSUPPORTED_ELEMENT = "1000";
