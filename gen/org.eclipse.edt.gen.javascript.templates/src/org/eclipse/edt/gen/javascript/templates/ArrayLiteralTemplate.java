@@ -21,5 +21,8 @@ public class ArrayLiteralTemplate extends JavaScriptTemplate {
 		out.print("[");
 		ctx.foreach(expr.getEntries(), ',', genExpression, ctx, out, args);
 		out.print("]");
+		out.print(".setType(");
+		ctx.gen(genSignature, expr.getEntries().get(0).getType(), ctx, out, args);
+		out.print(")");
 	}
 }
