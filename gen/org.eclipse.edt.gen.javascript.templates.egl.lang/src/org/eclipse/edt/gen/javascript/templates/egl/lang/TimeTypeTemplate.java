@@ -31,10 +31,8 @@ public class TimeTypeTemplate extends JavaScriptTemplate {
 			out.print("null");
 		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
 			out.print("null");
-		else {
-			out.print(Constants.JSRT_DATETIME_PKG);
-			out.print("currentTime()");
-		}
+		else
+			out.print(Constants.JSRT_DTTMLIB_PKG + "currentTime()");
 	}
 
 	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
@@ -50,8 +48,7 @@ public class TimeTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		out.print(Constants.JSRT_DATETIME_PKG);
-		out.print("timeValue(");
+		out.print(Constants.JSRT_DTTMLIB_PKG + "timeValue(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");
 	}

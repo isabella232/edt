@@ -46,8 +46,7 @@ public class AnyTimestampTypeTemplate extends JavaScriptTemplate {
 		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
 			out.print("null");
 		else {
-			out.print(Constants.JSRT_DATETIME_PKG);
-			out.print("currentTimeStamp(");
+			out.print(Constants.JSRT_DTTMLIB_PKG + "currentTimeStamp(");
 			ctx.gen(genTypeDependentOptions, type, ctx, out, args);
 			out.print(")");
 		}
@@ -61,8 +60,7 @@ public class AnyTimestampTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		out.print(Constants.JSRT_DATETIME_PKG);
-		out.print("timeStampValueWithPattern(");
+		out.print(Constants.JSRT_DTTMLIB_PKG + "timeStampValueWithPattern(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(", ");
 		ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
@@ -70,8 +68,7 @@ public class AnyTimestampTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genDateConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		out.print(Constants.JSRT_DATETIME_PKG);
-		out.print("extend(");
+		out.print(Constants.JSRT_DTTMLIB_PKG + "extend(");
 		out.print(CommonUtilities.getEglNameForType(((AsExpression) args[0]).getObjectExpr().getType()));
 		out.print(", ");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
@@ -81,8 +78,7 @@ public class AnyTimestampTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genTimeStampConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		out.print(Constants.JSRT_DATETIME_PKG);
-		out.print("extend(");
+		out.print(Constants.JSRT_DTTMLIB_PKG + "extend(");
 		out.print(CommonUtilities.getEglNameForType(type));
 		out.print(", ");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);

@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -80,24 +81,24 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genDateConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		out.print("egl.egl.core.$StrLib.formatDate(");
+		out.print(Constants.JSRT_STRLIB_PKG + "formatDate(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(", ");
-		out.print("egl.egl.core.$StrLib.defaultDateFormat ");
+		out.print(Constants.JSRT_STRLIB_PKG + "defaultDateFormat ");
 	}
 
 	public void genTimeConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		out.print("egl.egl.core.$StrLib.formatTime(");
+		out.print(Constants.JSRT_STRLIB_PKG + "formatTime(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(", ");
-		out.print("egl.egl.core.$StrLib.defaultTimeFormat ");
+		out.print(Constants.JSRT_STRLIB_PKG + "defaultTimeFormat ");
 	}
 
 	public void genTimeStampConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		out.print("egl.egl.core.$StrLib.formatTimeStamp(");
+		out.print(Constants.JSRT_STRLIB_PKG + "formatTimeStamp(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(", ");
-		out.print("egl.egl.core.$StrLib.defaultTimeStampFormat )");
+		out.print(Constants.JSRT_STRLIB_PKG + "defaultTimeStampFormat )");
 	}
 
 	public void genBooleanConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {

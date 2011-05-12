@@ -34,10 +34,8 @@ public class DateTypeTemplate extends JavaScriptTemplate {
 			out.print("null");
 		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
 			out.print("null");
-		else {
-			out.print(Constants.JSRT_DATETIME_PKG);
-			out.print("currentDate()");
-		}
+		else
+			out.print(Constants.JSRT_DTTMLIB_PKG + "currentDate()");
 	}
 
 	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
@@ -58,8 +56,7 @@ public class DateTypeTemplate extends JavaScriptTemplate {
 	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		// can we intercept and directly generate this conversion
 		if (((AsExpression) args[0]).getConversionOperation() != null && needsConversion(((AsExpression) args[0]).getConversionOperation())) {
-			out.print(Constants.JSRT_DATETIME_PKG);
-			out.print("dateFromInt(");
+			out.print(Constants.JSRT_DTTMLIB_PKG + "dateFromInt(");
 			Expression intExpr = IRUtils.makeExprCompatibleToType(((AsExpression) args[0]).getObjectExpr(), TypeUtils.Type_INT);
 			ctx.gen(genExpression, intExpr, ctx, out, args);
 			out.print(")");
@@ -74,8 +71,7 @@ public class DateTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
-		out.print(Constants.JSRT_DATETIME_PKG);
-		out.print("dateValue(");
+		out.print(Constants.JSRT_DTTMLIB_PKG + "dateValue(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");
 	}
