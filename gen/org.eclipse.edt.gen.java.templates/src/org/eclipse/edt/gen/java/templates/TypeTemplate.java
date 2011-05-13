@@ -219,6 +219,20 @@ public class TypeTemplate extends JavaTemplate {
 		}
 	}
 
+	public void genSubstringAssignment(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// did we have a list of types to check, otherwise use the default
+		if (!org.eclipse.edt.gen.CommonUtilities.processTypeList(genSubstringAssignment, type, ctx, out, args)) {
+			// no default
+		}
+	}
+
+	public void genSubstringAccess(Type type, Context ctx, TabbedWriter out, Object... args) {
+		// did we have a list of types to check, otherwise use the default
+		if (!org.eclipse.edt.gen.CommonUtilities.processTypeList(genSubstringAccess, type, ctx, out, args)) {
+			// no default
+		}
+	}
+
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
 		// did we have a list of types to check, otherwise use the default
 		if (!org.eclipse.edt.gen.CommonUtilities.processTypeList(genBinaryExpression, type, ctx, out, args)) {
