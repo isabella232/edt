@@ -78,6 +78,8 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genStatementBody = "genStatementBody";
 	public static final String genStatementBodyNoBraces = "genStatementBodyNoBraces";
 	public static final String genStatementEnd = "genStatementEnd";
+	public static final String genSubstringAccess = "genSubstringAccess";
+	public static final String genSubstringAssignment = "genSubstringAssignment";
 	public static final String genSuperClass = "genSuperClass";
 	public static final String genTypeDependentOptions = "genTypeDependentOptions";
 	public static final String genUnaryExpression = "genUnaryExpression";
