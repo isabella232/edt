@@ -24,6 +24,7 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.SequenceType;
+import org.eclipse.edt.mof.egl.SubstringAccess;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -51,6 +52,50 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 			out.print("null");
 		else
 			out.print(quoted(""));
+	}
+
+	// this method gets invoked when there is a limited string needed
+	public void genSubstringAssignment(SequenceType type, Context ctx, TabbedWriter out, Object... args) {
+		processSubstringAssignment(type, ctx, out, args);
+	}
+
+	// this method gets invoked when there is a string needed
+	public void genSubstringAssignment(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
+		processSubstringAssignment(type, ctx, out, args);
+	}
+
+	public void processSubstringAssignment(Type type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genExpression, ((SubstringAccess) args[0]).getStringExpression(), ctx, out, args);
+		out.print(" = ");
+		out.print(ctx.getNativeImplementationMapping(((SubstringAccess) args[0]).getType()) + ".substringAssign(");
+		ctx.gen(genExpression, ((SubstringAccess) args[0]).getStringExpression(), ctx, out, args);
+		out.print(", ");
+		ctx.gen(genExpression, (Expression) args[1], ctx, out, args);
+		out.print(", ");
+		ctx.gen(genExpression, ((SubstringAccess) args[0]).getStart(), ctx, out, args);
+		out.print(", ");
+		ctx.gen(genExpression, ((SubstringAccess) args[0]).getEnd(), ctx, out, args);
+		out.print(")");
+	}
+
+	// this method gets invoked when there is a limited string needed
+	public void genSubstringAccess(SequenceType type, Context ctx, TabbedWriter out, Object... args) {
+		processSubstringAccess(type, ctx, out, args);
+	}
+
+	// this method gets invoked when there is a string needed
+	public void genSubstringAccess(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
+		processSubstringAccess(type, ctx, out, args);
+	}
+
+	public void processSubstringAccess(Type type, Context ctx, TabbedWriter out, Object... args) {
+		out.print(ctx.getNativeImplementationMapping(((SubstringAccess) args[0]).getType()) + ".substring(");
+		ctx.gen(genExpression, ((SubstringAccess) args[0]).getStringExpression(), ctx, out, args);
+		out.print(", ");
+		ctx.gen(genExpression, ((SubstringAccess) args[0]).getStart(), ctx, out, args);
+		out.print(", ");
+		ctx.gen(genExpression, ((SubstringAccess) args[0]).getEnd(), ctx, out, args);
+		out.print(")");
 	}
 
 	protected boolean needsConversion(Operation conOp) {
