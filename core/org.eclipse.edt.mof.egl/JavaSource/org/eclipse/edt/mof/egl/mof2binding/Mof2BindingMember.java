@@ -248,7 +248,7 @@ public abstract class Mof2BindingMember extends Mof2BindingPart {
 			ITypeBinding type = (ITypeBinding)stack.pop();
 			
 			IPartBinding declarer;
-			declarer = (IPartBinding)getBinding(((Member)parm.getContainer()).getContainer());				
+			declarer = (IPartBinding)getBinding(parm.getContainer());				
 			binding = new ProgramParameterBinding(name, declarer, type);
 			
 			putBinding(parm, binding);

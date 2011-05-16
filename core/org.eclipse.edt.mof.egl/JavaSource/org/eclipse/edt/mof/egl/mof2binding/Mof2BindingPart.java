@@ -41,6 +41,7 @@ import org.eclipse.edt.compiler.binding.LibraryBinding;
 import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.binding.ProgramBinding;
+import org.eclipse.edt.compiler.binding.ProgramParameterBinding;
 import org.eclipse.edt.compiler.binding.ServiceBinding;
 import org.eclipse.edt.compiler.binding.StructureItemBinding;
 import org.eclipse.edt.compiler.binding.TopLevelFunctionBinding;
@@ -75,6 +76,7 @@ import org.eclipse.edt.mof.egl.Parameter;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
+import org.eclipse.edt.mof.egl.ProgramParameter;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.StereotypeType;
@@ -176,13 +178,18 @@ public class Mof2BindingPart extends Mof2BindingBase {
 
 
 	public boolean visit(Program ir) {
-		IPartBinding binding = (IPartBinding)getBinding(ir);
+		ProgramBinding binding = (ProgramBinding)getBinding(ir);
 		if (binding == null) {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new ProgramBinding(packageName, name);
 			partStack.push(binding);
 			handleVisitLogicAndDataPart((LogicAndDataPart)ir, (FunctionContainerBinding)binding);
+			for (ProgramParameter parm : ir.getParameters()) {
+				parm.accept(this);
+				binding.addParameter((ProgramParameterBinding)stack.pop());
+			}
+			binding.setCallable(true);
 			partStack.pop();
 		}
 		stack.push(binding);
