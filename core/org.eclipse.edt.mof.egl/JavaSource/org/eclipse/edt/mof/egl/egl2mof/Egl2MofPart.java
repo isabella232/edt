@@ -345,6 +345,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 				parm.setContainer(program);
 				program.getParameters().add(parm);
 			}
+			program.setIsCallable(pgmAst.isCallable());
 		}
 	}
 

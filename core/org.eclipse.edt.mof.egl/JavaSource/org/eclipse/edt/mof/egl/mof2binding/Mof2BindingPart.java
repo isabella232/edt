@@ -189,7 +189,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 				parm.accept(this);
 				binding.addParameter((ProgramParameterBinding)stack.pop());
 			}
-			binding.setCallable(true);
+			binding.setCallable(ir.isCallable());
 			partStack.pop();
 		}
 		stack.push(binding);
