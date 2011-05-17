@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
-import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
@@ -35,7 +34,7 @@ public class SmallfloatTypeTemplate extends JavaScriptTemplate {
 			out.print("0");
 	}
 
-	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(quoted("f;"));
 	}
 
@@ -65,17 +64,17 @@ public class SmallfloatTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	public void genSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
-	public void genFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		out.print("egl.convertFloatToSmallfloat(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");
 	}
 
-	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		out.print("egl.convertStringToSmallfloat(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");

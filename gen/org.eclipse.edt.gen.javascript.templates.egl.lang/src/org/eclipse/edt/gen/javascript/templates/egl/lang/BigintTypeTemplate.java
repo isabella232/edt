@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
-import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
@@ -36,7 +35,7 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 			out.print("egl.javascript.BigDecimal.prototype.ZERO");
 	}
 
-	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(quoted("B;"));
 	}
 
@@ -65,29 +64,29 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	public void genBigintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genBigintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
-	public void genSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		out.print("(new egl.javascript.BigDecimal(String(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")))");
 	}
 
-	public void genIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		out.print("(new egl.javascript.BigDecimal(String(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")))");
 	}
 
-	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		out.print("egl.convertStringToBigint(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");
 	}
 
-	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) {
 		if (false) { // TODO sbg other impls of genBinaryExpression consider nullables
 		} else {
 			out.print(getNativeStringPrefixOperation((BinaryExpression) args[0]));

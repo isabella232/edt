@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
-import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
@@ -36,7 +35,7 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 			out.print("0");
 	}
 
-	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(quoted("i;"));
 	}
 
@@ -64,7 +63,7 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	public void genIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		if (((AsExpression) args[0]).getObjectExpr() instanceof IntegerLiteral
 			&& (((IntegerLiteral) ((AsExpression) args[0]).getObjectExpr()).getIntValue() >= -32768 && ((IntegerLiteral) ((AsExpression) args[0])
 				.getObjectExpr()).getIntValue() <= 32767))
@@ -76,23 +75,23 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	public void genSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
-	public void genSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		out.print("egl.convertFloatToSmallint(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");
 	}
 
-	public void genFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		out.print("egl.convertFloatToSmallint(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");
 	}
 
-	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		out.print("egl.convertStringToSmallint(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");

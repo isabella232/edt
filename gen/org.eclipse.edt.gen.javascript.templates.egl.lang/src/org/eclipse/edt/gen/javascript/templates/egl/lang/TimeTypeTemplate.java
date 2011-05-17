@@ -35,19 +35,19 @@ public class TimeTypeTemplate extends JavaScriptTemplate {
 			out.print(Constants.JSRT_DTTMLIB_PKG + "currentTime()");
 	}
 
-	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(quoted("L;"));
 	}
 
-	public void genTimeStampConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genTimeStampConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
-	public void genTimeConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genTimeConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
-	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(Constants.JSRT_DTTMLIB_PKG + "timeValue(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");

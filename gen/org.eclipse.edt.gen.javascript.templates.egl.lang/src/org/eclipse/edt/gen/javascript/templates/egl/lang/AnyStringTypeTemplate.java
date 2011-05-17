@@ -41,7 +41,7 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 		processDefaultValue(type, ctx, out, args);
 	}
 
-	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(quoted("S;"));
 	}
 
@@ -121,32 +121,32 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	public void genStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
-	public void genDateConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genDateConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(Constants.JSRT_STRLIB_PKG + "formatDate(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(", ");
 		out.print(Constants.JSRT_STRLIB_PKG + "defaultDateFormat ");
 	}
 
-	public void genTimeConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genTimeConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(Constants.JSRT_STRLIB_PKG + "formatTime(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(", ");
 		out.print(Constants.JSRT_STRLIB_PKG + "defaultTimeFormat ");
 	}
 
-	public void genTimeStampConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genTimeStampConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(Constants.JSRT_STRLIB_PKG + "formatTimeStamp(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(", ");
 		out.print(Constants.JSRT_STRLIB_PKG + "defaultTimeStampFormat )");
 	}
 
-	public void genBooleanConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genBooleanConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
 		out.print("(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(").toString()");

@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
-import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
@@ -39,7 +38,7 @@ public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 		processDefaultValue(type, ctx, out, args);
 	}
 
-	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(quoted("d;"));
 	}
 
@@ -78,11 +77,11 @@ public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	public void genDecimalConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genDecimalConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
-	public void genStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
 		out.print("egl.convertStringToDecimal(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
@@ -105,7 +104,7 @@ public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 			out.print("egl.javascript.BigDecimal.prototype.NINES[8]");
 	}
 
-	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) {
 		if (false) { // TODO sbg other impls of genBinaryExpression consider nullables
 		} else {
 			out.print(getNativeStringPrefixOperation((BinaryExpression) args[0]));

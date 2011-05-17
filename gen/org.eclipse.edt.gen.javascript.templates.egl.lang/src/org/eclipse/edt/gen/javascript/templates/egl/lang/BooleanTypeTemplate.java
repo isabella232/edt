@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
-import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -32,11 +31,11 @@ public class BooleanTypeTemplate extends JavaScriptTemplate {
 			out.print("false");
 	}
 
-	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(quoted("0;"));
 	}
 
-	public void genBooleanConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genBooleanConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 }

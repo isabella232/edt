@@ -38,7 +38,7 @@ public class DateTypeTemplate extends JavaScriptTemplate {
 			out.print(Constants.JSRT_DTTMLIB_PKG + "currentDate()");
 	}
 
-	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(quoted("K;"));
 	}
 
@@ -66,17 +66,17 @@ public class DateTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	public void genDateConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genDateConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
-	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(Constants.JSRT_DTTMLIB_PKG + "dateValue(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(")");
 	}
 
-	public void genTimeStampConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genTimeStampConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 

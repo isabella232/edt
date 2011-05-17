@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
-import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
@@ -36,7 +35,7 @@ public class AnyTimestampTypeTemplate extends JavaScriptTemplate {
 		processDefaultValue(type, ctx, out, args);
 	}
 
-	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(quoted("J;"));
 	}
 
@@ -59,7 +58,7 @@ public class AnyTimestampTypeTemplate extends JavaScriptTemplate {
 		out.print(quoted(pattern));
 	}
 
-	public void genStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(Constants.JSRT_DTTMLIB_PKG + "timeStampValueWithPattern(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(", ");
@@ -67,7 +66,7 @@ public class AnyTimestampTypeTemplate extends JavaScriptTemplate {
 		out.print(")");
 	}
 
-	public void genDateConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genDateConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(Constants.JSRT_DTTMLIB_PKG + "extend(");
 		out.print(CommonUtilities.getEglNameForType(((AsExpression) args[0]).getObjectExpr().getType()));
 		out.print(", ");
@@ -77,7 +76,7 @@ public class AnyTimestampTypeTemplate extends JavaScriptTemplate {
 		out.print(")");
 	}
 
-	public void genTimeStampConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genTimeStampConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(Constants.JSRT_DTTMLIB_PKG + "extend(");
 		out.print(CommonUtilities.getEglNameForType(type));
 		out.print(", ");
