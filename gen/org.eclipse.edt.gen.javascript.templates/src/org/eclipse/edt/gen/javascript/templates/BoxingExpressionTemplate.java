@@ -26,7 +26,9 @@ public class BoxingExpressionTemplate extends JavaScriptTemplate {
 		out.print(", ");
 		out.print(eze$$signature);
 		out.print(" : ");
-		ctx.gen(genSignature, (Type) expr.getExpr().getType(), ctx, out, args);
+		out.print("\"");
+		ctx.gen(genSignature, (Type) expr.getExpr().getType(), ctx, out, expr.getExpr());
+		out.print("\"");
 		out.print("}");
 	}
 }

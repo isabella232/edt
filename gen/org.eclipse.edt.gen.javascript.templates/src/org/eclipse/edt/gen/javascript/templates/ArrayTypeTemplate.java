@@ -32,7 +32,9 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 			out.print(" = []; ");
 			out.print(temporary);
 			out.print(".setType(");
-			ctx.gen(genSignature, generic.getElementType(), ctx, out, args);
+			out.print("\"");
+			genSignature(generic, ctx, out, args);
+			out.print("\"");
 			if (generic.getInitialSize() == null)
 				out.println(");");
 			else {
@@ -47,6 +49,14 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 			out.print(";})()");
 		} else
 			out.print("null");
+	}
+
+	public void genSignature(ArrayType generic, Context ctx, TabbedWriter out, Object... args) {
+		if (!generic.getTypeArguments().isEmpty()) {
+			for (int i = 0; i < generic.getTypeArguments().size(); i++)
+				out.print("[");
+		}
+		ctx.gen(genSignature, generic.getElementType(), ctx, out, args);
 	}
 
 	public void genRuntimeTypeName(ArrayType generic, Context ctx, TabbedWriter out, Object... args) {

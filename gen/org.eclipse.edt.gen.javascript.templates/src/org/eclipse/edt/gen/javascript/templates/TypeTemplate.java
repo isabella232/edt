@@ -44,7 +44,9 @@ public class TypeTemplate extends JavaScriptTemplate {
 				out.print("egl.convertAnyToType(");
 				ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 				out.print(", ");
-				ctx.gen(genSignature, ((AsExpression) args[0]).getEType(), ctx, out, args);
+				out.print("\"");
+				ctx.gen(genSignature, ((AsExpression) args[0]).getEType(), ctx, out, ((AsExpression) args[0]).getObjectExpr());
+				out.print("\"");
 				out.print(")");
 			} else
 				ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
