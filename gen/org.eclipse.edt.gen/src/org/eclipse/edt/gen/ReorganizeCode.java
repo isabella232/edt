@@ -624,6 +624,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		EglContext ctx;
 		boolean needsLabel;
 		boolean processed;
+		int labelType;
 
 		public boolean reorgLabel(Statement statement, EglContext ctx) {
 			this.ctx = ctx;
@@ -650,18 +651,51 @@ public class ReorganizeCode extends AbstractVisitor {
 		}
 
 		public boolean visit(ContinueStatement object) {
-			needsLabel = true;
+			if (object.getLabel() != null && object.getLabel().length() > 0) {
+				// no labels for this type
+			} else if (object.getContinueType() == ContinueStatement.CONTINUE_FOR && labelType == Label.LABEL_TYPE_FOR)
+				needsLabel = true;
+			else if (object.getContinueType() == ContinueStatement.CONTINUE_FOREACH && labelType == Label.LABEL_TYPE_FOREACH)
+				needsLabel = true;
+			else if (object.getContinueType() == ContinueStatement.CONTINUE_OPENUI && labelType == Label.LABEL_TYPE_OPENUI)
+				needsLabel = true;
+			else if (object.getContinueType() == ContinueStatement.CONTINUE_WHILE && labelType == Label.LABEL_TYPE_WHILE)
+				needsLabel = true;
+			else if (object.getContinueType() == 0)
+				needsLabel = true;
 			return false;
 		}
 
 		public boolean visit(ExitStatement object) {
-			needsLabel = true;
+			if (object.getLabel() != null && object.getLabel().length() > 0) {
+				// no labels for this type
+			} else if (object.getExitStatementType() == ExitStatement.EXIT_CASE && labelType == Label.LABEL_TYPE_CASE)
+				needsLabel = true;
+			else if (object.getExitStatementType() == ExitStatement.EXIT_FOR && labelType == Label.LABEL_TYPE_FOR)
+				needsLabel = true;
+			else if (object.getExitStatementType() == ExitStatement.EXIT_FOREACH && labelType == Label.LABEL_TYPE_FOREACH)
+				needsLabel = true;
+			else if (object.getExitStatementType() == ExitStatement.EXIT_IF && labelType == Label.LABEL_TYPE_IF)
+				needsLabel = true;
+			else if (object.getExitStatementType() == ExitStatement.EXIT_OPENUI && labelType == Label.LABEL_TYPE_OPENUI)
+				needsLabel = true;
+			else if (object.getExitStatementType() == ExitStatement.EXIT_WHILE && labelType == Label.LABEL_TYPE_WHILE)
+				needsLabel = true;
+			else if (object.getExitStatementType() == ExitStatement.EXIT_RUNUNIT) {
+				// no labels for this type
+			} else if (object.getExitStatementType() == ExitStatement.EXIT_PROGRAM) {
+				// no labels for this type
+			} else if (object.getExitStatementType() == ExitStatement.EXIT_STACK) {
+				// no labels for this type
+			} else if (object.getExitStatementType() == 0)
+				needsLabel = true;
 			return false;
 		}
 
 		public boolean visit(CaseStatement object) {
 			if (!processed) {
 				processed = true;
+				labelType = Label.LABEL_TYPE_CASE;
 				return true;
 			} else
 				return false;
@@ -670,6 +704,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		public boolean visit(ForStatement object) {
 			if (!processed) {
 				processed = true;
+				labelType = Label.LABEL_TYPE_FOR;
 				return true;
 			} else
 				return false;
@@ -678,6 +713,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		public boolean visit(ForEachStatement object) {
 			if (!processed) {
 				processed = true;
+				labelType = Label.LABEL_TYPE_FOREACH;
 				return true;
 			} else
 				return false;
@@ -686,14 +722,20 @@ public class ReorganizeCode extends AbstractVisitor {
 		public boolean visit(IfStatement object) {
 			if (!processed) {
 				processed = true;
+				labelType = Label.LABEL_TYPE_IF;
 				return true;
-			} else
-				return false;
+			} else {
+				if (labelType == Label.LABEL_TYPE_IF)
+					return false;
+				else
+					return true;
+			}
 		}
 
 		public boolean visit(OpenUIStatement object) {
 			if (!processed) {
 				processed = true;
+				labelType = Label.LABEL_TYPE_OPENUI;
 				return true;
 			} else
 				return false;
@@ -702,6 +744,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		public boolean visit(WhileStatement object) {
 			if (!processed) {
 				processed = true;
+				labelType = Label.LABEL_TYPE_WHILE;
 				return true;
 			} else
 				return false;
