@@ -38,10 +38,6 @@ public class AnyNumTypeTemplate extends JavaScriptTemplate {
 		processDefaultValue(type, ctx, out, args);
 	}
 
-	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) {
-		out.print(quoted("N;"));
-	}
-
 	public void processDefaultValue(Type type, Context ctx, TabbedWriter out, Object... args) {
 		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
 			out.print("null");
@@ -49,6 +45,28 @@ public class AnyNumTypeTemplate extends JavaScriptTemplate {
 			out.print("null");
 		else
 			out.print("egl.javascript.BigDecimal.prototype.ZERO");
+	}
+
+	// this method gets invoked when there is a specific fixed precision needed
+	public void genSignature(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
+		String signature = "";
+		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
+			signature += "?";
+		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
+			signature += "?";
+		signature += "N" + type.getLength() + ":" + type.getDecimals() + ";";
+		out.print(signature);
+	}
+
+	// this method gets invoked when there is a generic (unknown) fixed precision needed
+	public void genSignature(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
+		String signature = "";
+		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
+			signature += "?";
+		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
+			signature += "?";
+		signature += "N;";
+		out.print(signature);
 	}
 
 	protected boolean needsConversion(Operation conOp) {

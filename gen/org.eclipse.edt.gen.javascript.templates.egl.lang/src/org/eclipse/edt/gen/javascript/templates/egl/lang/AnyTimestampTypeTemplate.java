@@ -35,10 +35,6 @@ public class AnyTimestampTypeTemplate extends JavaScriptTemplate {
 		processDefaultValue(type, ctx, out, args);
 	}
 
-	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) {
-		out.print(quoted("J;"));
-	}
-
 	public void processDefaultValue(Type type, Context ctx, TabbedWriter out, Object... args) {
 		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
 			out.print("null");
@@ -49,6 +45,28 @@ public class AnyTimestampTypeTemplate extends JavaScriptTemplate {
 			ctx.gen(genTypeDependentOptions, type, ctx, out, args);
 			out.print(")");
 		}
+	}
+
+	// this method gets invoked when there is a specific timestamp needed
+	public void genSignature(TimestampType type, Context ctx, TabbedWriter out, Object... args) {
+		String signature = "";
+		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
+			signature += "?";
+		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
+			signature += "?";
+		signature += "J'" + type.getPattern() + "';";
+		out.print(signature);
+	}
+
+	// this method gets invoked when there is a generic (unknown) timestamp needed
+	public void genSignature(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
+		String signature = "";
+		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
+			signature += "?";
+		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
+			signature += "?";
+		signature += "J;";
+		out.print(signature);
 	}
 
 	public void genTypeDependentOptions(TimestampType type, Context ctx, TabbedWriter out, Object... args) {

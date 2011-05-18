@@ -32,10 +32,6 @@ public class AnyMonthsIntervalTypeTemplate extends JavaScriptTemplate {
 		processDefaultValue(type, ctx, out, args);
 	}
 
-	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) {
-		out.print(quoted("Q;"));
-	}
-
 	public void processDefaultValue(Type type, Context ctx, TabbedWriter out, Object... args) {
 		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
 			out.print("null");
@@ -48,5 +44,27 @@ public class AnyMonthsIntervalTypeTemplate extends JavaScriptTemplate {
 			ctx.gen(genConstructorOptions, type, ctx, out, args);
 			out.print(")");
 		}
+	}
+
+	// this method gets invoked when there is a specific interval needed
+	public void genSignature(IntervalType type, Context ctx, TabbedWriter out, Object... args) {
+		String signature = "";
+		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
+			signature += "?";
+		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
+			signature += "?";
+		signature += "Q'" + type.getPattern() + "';";
+		out.print(signature);
+	}
+
+	// this method gets invoked when there is a generic (unknown) interval needed
+	public void genSignature(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
+		String signature = "";
+		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
+			signature += "?";
+		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
+			signature += "?";
+		signature += "Q;";
+		out.print(signature);
 	}
 }

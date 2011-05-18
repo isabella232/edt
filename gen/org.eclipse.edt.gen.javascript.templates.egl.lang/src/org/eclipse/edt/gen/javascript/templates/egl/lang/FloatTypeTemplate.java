@@ -34,8 +34,14 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 			out.print("0");
 	}
 
-	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) {
-		out.print(quoted("F;"));
+	public void genSignature(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
+		String signature = "";
+		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
+			signature += "?";
+		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
+			signature += "?";
+		signature += "F;";
+		out.print(signature);
 	}
 
 	protected boolean needsConversion(Operation conOp) {

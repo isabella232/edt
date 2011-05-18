@@ -35,8 +35,14 @@ public class TimeTypeTemplate extends JavaScriptTemplate {
 			out.print(Constants.JSRT_DTTMLIB_PKG + "currentTime()");
 	}
 
-	public void genSignature(Type type, Context ctx, TabbedWriter out, Object... args) {
-		out.print(quoted("L;"));
+	public void genSignature(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
+		String signature = "";
+		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
+			signature += "?";
+		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
+			signature += "?";
+		signature += "L;";
+		out.print(signature);
 	}
 
 	public void genTimeStampConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
