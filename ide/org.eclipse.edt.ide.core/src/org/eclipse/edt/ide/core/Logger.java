@@ -20,7 +20,6 @@ import java.util.logging.Level;
  * the console. This class should only be used by classes in this plugin. Other
  * plugins should make their own copy, with appropriate ID.
  */
-
 public class Logger {
 
 	private static java.util.logging.Logger msgLogger;
