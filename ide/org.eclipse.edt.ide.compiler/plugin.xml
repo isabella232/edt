@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension point="org.eclipse.edt.ide.core.compilers">
+    	<compiler
+    		id="org.eclipse.edt.ide.compiler.edtCompiler"
+    		class="org.eclipse.edt.ide.compiler.EDTCompiler"
+    		name="%edtCompilerName"
+    		preferencePageId="org.eclipse.edt.ide.compiler.edtCompilerPreferences"
+    		version="0.7.0"/>
+   	   	<compiler
+    		id="org.eclipse.edt.ide.compiler.rbdCompiler"
+    		class="org.eclipse.edt.ide.compiler.RBDCompiler"
+    		name="%rbdCompilerName"
+    		preferencePageId="org.eclipse.edt.ide.compiler.rbdCompilerPreferences"
+    		version="0.7.0"/>
+    </extension>
+    
+    <extension point="org.eclipse.edt.ide.core.generators">
+		<provider
+			id="org.eclipse.edt.ide.gen.JavaGenProvider"
+			class="org.eclipse.edt.ide.compiler.gen.JavaGeneratorProvider"
+			name="%JavaGeneratorName"
+			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
+			version="0.7.0"
+			provider="IBM"
+			description="%JavaGeneratorDescription"
+		/>
+		<provider
+			id="org.eclipse.edt.ide.gen.WorthlessProvider"
+			class="org.eclipse.edt.ide.compiler.gen.WorthlessGeneratorProvider"
+			name="Worthless Generator"
+			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
+			version="0.7.0"
+			provider="IBM"
+			description="A generator that just generates stub classes. For illustration purposes only."
+			parentGeneratorId="org.eclipse.edt.ide.gen.JavaGenProvider"
+		/>
+		<provider
+			id="org.eclipse.edt.ide.gen.JavaScriptGenProvider"
+			class="org.eclipse.edt.ide.compiler.gen.JavaScriptGeneratorProvider"
+			name="%JavaScriptGeneratorName"
+			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
+			version="0.7.0"
+			provider="IBM"
+			description="%JavaScriptGeneratorDescription"
+		/>
+	</extension>
+	
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+            name="%EDTCompilerPageName"
+            category="org.eclipse.edt.ide.ui.compilerPreferences"
+            class="org.eclipse.edt.ide.compiler.gen.ui.EDTCompilerPreferencePage"
+            id="org.eclipse.edt.ide.compiler.edtCompilerPreferences">
+		</page>
+		<page
+            name="%RBDCompilerPageName"
+            category="org.eclipse.edt.ide.ui.compilerPreferences"
+            class="org.eclipse.edt.ide.compiler.gen.ui.RBDCompilerPreferencePage"
+            id="org.eclipse.edt.ide.compiler.rbdCompilerPreferences">
+		</page>
+	</extension>
+	
+	<extension point="org.eclipse.edt.ide.ui.edtGeneratorTabs">  
+		<generatorTab 
+			generatorId="org.eclipse.edt.ide.gen.JavaGenProvider"
+			class="org.eclipse.edt.ide.compiler.gen.ui.JavaGeneratorTabProvider">
+		</generatorTab>
+		<generatorTab 
+			generatorId="org.eclipse.edt.ide.gen.WorthlessProvider"
+			class="org.eclipse.edt.ide.compiler.gen.ui.WorthlessTabProvider">
+		</generatorTab>
+		<generatorTab 
+			generatorId="org.eclipse.edt.ide.gen.JavaScriptGenProvider"
+			class="org.eclipse.edt.ide.compiler.gen.ui.JavaScriptGeneratorTabProvider">
+		</generatorTab>
+		<generalTab 
+			compilerId="org.eclipse.edt.ide.compiler.edtCompiler"
+			tabName="Sample EDT Tab"
+			class="org.eclipse.edt.ide.compiler.gen.ui.SampleEDTTabProvider">
+		</generalTab>
+		<generalTab 
+			compilerId="org.eclipse.edt.ide.compiler.rbdCompiler"
+			tabName="Sample RBD Tab"
+			class="org.eclipse.edt.ide.compiler.gen.ui.SampleRBDTabProvider">
+		</generalTab>
+   	</extension>
+</plugin>
