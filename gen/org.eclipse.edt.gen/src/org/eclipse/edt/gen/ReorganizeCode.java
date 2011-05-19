@@ -8,6 +8,7 @@ import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.CaseStatement;
+import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.ContinueStatement;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.DelegateInvocation;
@@ -44,13 +45,13 @@ public class ReorganizeCode extends AbstractVisitor {
 	public static final IrFactory factory = IrFactory.INSTANCE;
 
 	EglContext ctx;
-	FunctionMember currentFunctionMember;
+	Container currentStatementContainer;
 	boolean processedStatement = false;
 
 	@SuppressWarnings("unchecked")
 	public List<StatementBlock> reorgCode(Statement statement, EglContext ctx) {
 		this.ctx = ctx;
-		currentFunctionMember = statement.getFunctionMember();
+		currentStatementContainer = statement.getContainer();
 		disallowRevisit();
 		allowParentTracking();
 		setReturnData(null);
@@ -84,7 +85,7 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	public boolean visit(ReturnStatement object) {
-		ctx.putAttribute(object.getFunctionMember(), Constants.Annotation_functionHasReturnStatement, new Boolean(true));
+		ctx.putAttribute(object.getContainer(), Constants.Annotation_functionHasReturnStatement, new Boolean(true));
 		return true;
 	}
 
@@ -155,7 +156,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			// we need to add this to block list 0
 			if (blockArray.get(0) == null) {
 				block = factory.createStatementBlock();
-				block.setFunctionMember(currentFunctionMember);
+				block.setContainer(currentStatementContainer);
 				blockArray.set(0, block);
 			}
 			block = blockArray.get(0);
@@ -173,7 +174,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			if (IRUtils.hasSideEffects(((IfStatement) object.getFalseBranch()).getCondition())) {
 				// create the statement block
 				StatementBlock block = factory.createStatementBlock();
-				block.setFunctionMember(currentFunctionMember);
+				block.setContainer(currentStatementContainer);
 				block.getStatements().add(object.getFalseBranch());
 				// now replace the false branch with this statement block
 				object.setFalseBranch(block);
@@ -199,7 +200,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		// we need to add this to block list 0
 		if (blockArray.get(0) == null) {
 			block = factory.createStatementBlock();
-			block.setFunctionMember(currentFunctionMember);
+			block.setContainer(currentStatementContainer);
 			blockArray.set(0, block);
 		}
 		block = blockArray.get(0);
@@ -210,7 +211,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-			localDeclaration.setFunctionMember(currentFunctionMember);
+			localDeclaration.setContainer(currentStatementContainer);
 			DeclarationExpression declarationExpression = factory.createDeclarationExpression();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
@@ -239,7 +240,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-			assignmentStatement.setFunctionMember(currentFunctionMember);
+			assignmentStatement.setContainer(currentStatementContainer);
 			Assignment assignment = factory.createAssignment();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
@@ -319,7 +320,7 @@ public class ReorganizeCode extends AbstractVisitor {
 				// we need to add this to block list 0
 				if (blockArray.get(0) == null) {
 					block = factory.createStatementBlock();
-					block.setFunctionMember(currentFunctionMember);
+					block.setContainer(currentStatementContainer);
 					blockArray.set(0, block);
 				}
 				block = blockArray.get(0);
@@ -329,7 +330,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-					localDeclaration.setFunctionMember(currentFunctionMember);
+					localDeclaration.setContainer(currentStatementContainer);
 					DeclarationExpression declarationExpression = factory.createDeclarationExpression();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
@@ -347,7 +348,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-					assignmentStatement.setFunctionMember(currentFunctionMember);
+					assignmentStatement.setContainer(currentStatementContainer);
 					Assignment assignment = factory.createAssignment();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
@@ -356,7 +357,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					assignment.setRHS(object.getArguments().get(i));
 					// add the assignment to the declaration statement block
 					StatementBlock declarationBlock = factory.createStatementBlock();
-					declarationBlock.setFunctionMember(currentFunctionMember);
+					declarationBlock.setContainer(currentStatementContainer);
 					declarationBlock.getStatements().add(assignmentStatement);
 					// add the declaration statement block to the field
 					field.setInitializerStatements(declarationBlock);
@@ -376,7 +377,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-					localDeclaration.setFunctionMember(currentFunctionMember);
+					localDeclaration.setContainer(currentStatementContainer);
 					DeclarationExpression declarationExpression = factory.createDeclarationExpression();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
@@ -395,7 +396,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-					assignmentStatement.setFunctionMember(currentFunctionMember);
+					assignmentStatement.setContainer(currentStatementContainer);
 					Assignment assignment = factory.createAssignment();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
@@ -404,7 +405,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					assignment.setRHS(object.getArguments().get(i));
 					// add the assignment to the declaration statement block
 					StatementBlock declarationBlock = factory.createStatementBlock();
-					declarationBlock.setFunctionMember(currentFunctionMember);
+					declarationBlock.setContainer(currentStatementContainer);
 					declarationBlock.getStatements().add(assignmentStatement);
 					// add the declaration statement block to the field
 					field.setInitializerStatements(declarationBlock);
@@ -420,7 +421,7 @@ public class ReorganizeCode extends AbstractVisitor {
 						// we need to add this to block list 1
 						if (blockArray.get(1) == null) {
 							block = factory.createStatementBlock();
-							block.setFunctionMember(currentFunctionMember);
+							block.setContainer(currentStatementContainer);
 							blockArray.set(1, block);
 						}
 						block = blockArray.get(1);
@@ -428,7 +429,7 @@ public class ReorganizeCode extends AbstractVisitor {
 						assignmentStatement = factory.createAssignmentStatement();
 						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-						assignmentStatement.setFunctionMember(currentFunctionMember);
+						assignmentStatement.setContainer(currentStatementContainer);
 						assignment = factory.createAssignment();
 						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
@@ -446,7 +447,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-					localDeclaration.setFunctionMember(currentFunctionMember);
+					localDeclaration.setContainer(currentStatementContainer);
 					DeclarationExpression declarationExpression = factory.createDeclarationExpression();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
@@ -472,7 +473,7 @@ public class ReorganizeCode extends AbstractVisitor {
 						// we need to add this to block list 1
 						if (blockArray.get(1) == null) {
 							block = factory.createStatementBlock();
-							block.setFunctionMember(currentFunctionMember);
+							block.setContainer(currentStatementContainer);
 							blockArray.set(1, block);
 						}
 						block = blockArray.get(1);
@@ -480,7 +481,7 @@ public class ReorganizeCode extends AbstractVisitor {
 						AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
 						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-						assignmentStatement.setFunctionMember(currentFunctionMember);
+						assignmentStatement.setContainer(currentStatementContainer);
 						Assignment assignment = factory.createAssignment();
 						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
@@ -505,12 +506,12 @@ public class ReorganizeCode extends AbstractVisitor {
 	// inserted ahead of the if statement being processed
 	public class ReorganizeIf extends AbstractVisitor {
 		EglContext ctx;
-		FunctionMember currentFunctionMember;
+		Container currentStatementContainer;
 
 		@SuppressWarnings("unchecked")
 		public List<Statement> reorgIf(IfStatement statement, EglContext ctx) {
 			this.ctx = ctx;
-			this.currentFunctionMember = statement.getFunctionMember();
+			this.currentStatementContainer = statement.getContainer();
 			disallowRevisit();
 			allowParentTracking();
 			setReturnData(null);
@@ -575,7 +576,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-			localDeclaration.setFunctionMember(currentFunctionMember);
+			localDeclaration.setContainer(currentStatementContainer);
 			DeclarationExpression declarationExpression = factory.createDeclarationExpression();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
@@ -593,7 +594,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-			assignmentStatement.setFunctionMember(currentFunctionMember);
+			assignmentStatement.setContainer(currentStatementContainer);
 			Assignment assignment = factory.createAssignment();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
@@ -602,7 +603,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			assignment.setRHS(object);
 			// add the assignment to the declaration statement block
 			StatementBlock declarationBlock = factory.createStatementBlock();
-			declarationBlock.setFunctionMember(currentFunctionMember);
+			declarationBlock.setContainer(currentStatementContainer);
 			declarationBlock.getStatements().add(assignmentStatement);
 			// add the declaration statement block to the field
 			field.setInitializerStatements(declarationBlock);
