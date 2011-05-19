@@ -1,0 +1,23 @@
+<!--
+  Copyright © 2011 IBM Corporation and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+ 
+  Contributors:
+  IBM Corporation - initial API and implementation
+ 
+-->
+<!--
+	Builds the transformer jar so that the debugger will work in a development environment.
+	
+	We intentionally exclude transformer.jar from build.properties since it's not needed by an end user.
+-->
+<project name="buildTransformer" default="build" basedir=".">
+
+	<target name="build">
+		<jar destfile="transformer.jar" basedir="bin" includes="org/eclipse/edt/debug/core/*Transformer*.class" manifest="META-INF/MANIFEST.MF" />
+	</target>
+
+</project>
