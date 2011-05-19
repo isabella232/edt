@@ -53,7 +53,7 @@ public class FunctionTemplate extends JavaTemplate {
 				function, org.eclipse.edt.gen.Constants.Annotation_functionHasReturnStatement)).booleanValue())) {
 			String temporary = ctx.nextTempName();
 			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
-			localDeclaration.setFunctionMember(function);
+			localDeclaration.setContainer(function);
 			DeclarationExpression declarationExpression = factory.createDeclarationExpression();
 			Field field = factory.createField();
 			field.setName(temporary);
@@ -70,7 +70,7 @@ public class FunctionTemplate extends JavaTemplate {
 			ctx.gen(genStatement, localDeclaration, ctx, out, args);
 			// create a return statement
 			ReturnStatement returnStatement = factory.createReturnStatement();
-			returnStatement.setFunctionMember(function);
+			returnStatement.setContainer(function);
 			returnStatement.setExpression(nameExpression);
 			ctx.gen(genStatement, returnStatement, ctx, out, args);
 		}
