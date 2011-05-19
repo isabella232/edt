@@ -1,0 +1,1013 @@
+/*******************************************************************************
+ * Copyright © 2008, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.ide.core.internal.generation;
+
+import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.compiler.internal.util.EGLMessage;
+import org.eclipse.edt.ide.core.CoreIDEPluginStrings;
+import org.eclipse.edt.ide.core.IGenerator;
+import org.eclipse.edt.ide.core.Logger;
+import org.eclipse.edt.ide.core.generation.IGenerationMessageRequestor;
+import org.eclipse.edt.ide.core.internal.binding.BinaryFileManager;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectInfo;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectInfoManager;
+import org.eclipse.edt.ide.core.internal.lookup.generate.GenerateEnvironment;
+import org.eclipse.edt.ide.core.internal.lookup.generate.GenerateEnvironmentManager;
+import org.eclipse.edt.ide.core.internal.utils.StringOutputBuffer;
+import org.eclipse.edt.ide.core.internal.utils.Util;
+import org.eclipse.edt.ide.core.model.EGLCore;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
+import org.eclipse.edt.mof.egl.InvalidPartTypeException;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.PartNotFoundException;
+import org.eclipse.edt.mof.serialization.IEnvironment;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
+
+import com.ibm.icu.util.StringTokenizer;
+
+public class GeneratePartsOperation extends GenerateOperation{
+	
+//	protected static class MessageContributor implements IEGLComponentMessageContributor {
+//
+//		private String resourceName;
+//
+//		private IEGLLocation startLocation;
+//
+//		private CommandRequestor commandRequestor;
+//
+//		/**
+//		 * 
+//		 */
+//
+//		protected MessageContributor(Element element, CommandRequestor commandRequestor) {
+//			super();
+//			this.commandRequestor = commandRequestor;
+//			resourceName = getResourceName(element);
+//			startLocation = getLocation(element, resourceName);
+//		}
+//
+//		private String getResourceName(Element element) {
+//			if (element == null) {
+//				return null;
+//			}
+//			if (element instanceof Part) {
+//				return ((Part) element).getFileName();
+//			}
+//			if (element instanceof Function) {
+//				Function func = (Function) element;
+//				//TODO EDT
+////				if (func.getFileName() != null) {
+////					return func.getFileName();
+////				}
+//			}
+//			
+//			if (element instanceof Member) {
+//				Member member = (Member)element;
+//				if (member.getContainer() instanceof Member) {
+//					return getResourceName((Member) member.getContainer());
+//				}
+//			}
+//			return null;
+//		}
+//
+//		private Location getLocation(Element element, String resourceName) {
+//			if (element == null || resourceName == null) {
+//				return null;
+//			}
+//			Annotation ann = element.getAnnotation(EGLLineNumberAnnotationTypeBinding.name);
+//			if (ann == null) {
+//				if (element instanceof Member) {
+//					return getLocation(((Member) element).getContainer(), resourceName);
+//				}
+//				return null;
+//			} else {
+//				return getLocation(((Integer) ann.getValue()).intValue(), resourceName);
+//			}
+//		}
+//
+//		private Location getLocation(int lineNumber, String resourceName) {
+//			try {
+//				String contents = commandRequestor.getFileContents(resourceName);
+//				SimpleLineTracker tracker = new SimpleLineTracker(contents);
+//				int[] offsets = tracker.getOffsetsForLine(lineNumber);
+//				return new Location(lineNumber, 0, offsets[0], offsets[1] - offsets[0]);
+//			} catch (Exception e) {
+//				return null;
+//			}
+//
+//		}
+//
+//		public IEGLComponentMessageContributor getMessageContributor() {
+//			return this;
+//		}
+//
+//		public String getResourceName() {
+//			return resourceName;
+//		}
+//
+//		public IEGLLocation getStart() {
+//			return startLocation;
+//		}
+//
+//		public IEGLLocation getEnd() {
+//			IEGLLocation start = getStart();
+//			if (start == null) {
+//				return null;
+//			}
+//			return new Location(start.getLine(), start.getColumn(), start.getOffset() + start.getLength() - 1, start.getLength());
+//		}
+//
+//	}
+//
+//	public static boolean useGenContextCache = false;
+//	// TODO do we need this static var
+//	static {
+//		useGenContextCache = System.getProperty("EGL_USE_GEN_CONTEXT_CACHE") != null; //$NON-NLS-1$ //$NON-NLS-2$
+//	}
+//
+//	public static final String EGL_GENERATION_RESULTS_VIEWER = "com.ibm.etools.egl.core.view.EGLGenerationResultsViewPart"; //$NON-NLS-1$
+
+	/**
+	 * A Generation Lock... only one generateParts can be running at a time,
+	 * across all instances of this type.
+	 */
+	private static final Object lock = new Object();
+
+//	private boolean isDebug = false;
+//	
+//	protected CommandRequestor requestor;
+//	private HashSet alreadyGenerated =  new HashSet();
+//
+//	public HashSet getAlreadyGenerated() {
+//		return alreadyGenerated;
+//	}
+//
+//	public void setAlreadyGenerated(HashSet alreadyGenerated) {
+//		this.alreadyGenerated = alreadyGenerated;
+//	}
+//
+//	/**
+//	 * listeners - the listeners for this generate command
+//	 */
+//	private ArrayList listeners = new ArrayList();
+//
+	private ArrayList<GenerationRequest> genRequestList;
+	
+	private final boolean invokedByBuild;
+	
+	public GeneratePartsOperation( boolean invokedByBuild ) {
+		this.genRequestList = new ArrayList<GenerationRequest>();
+		this.invokedByBuild = invokedByBuild;
+	}
+
+	public void addGenerationRequest(GenerationRequest request) {
+		synchronized (genRequestList) {
+			genRequestList.add(request);
+		}
+	}
+
+	public void generate(GenerationRequest request) {
+
+		addGenerationRequest(request);
+
+		// Create a new job for each generation request
+		Job generationJob = createGenerationJob(true, false);
+		generationJob.schedule();
+	}
+	
+	public void generate(GenerationRequest[] requests, boolean respectBuildBeforeGenerate, boolean runInBackground) {
+
+		for (int i = 0; i < requests.length; i++) {
+			addGenerationRequest(requests[i]);
+		}		
+
+		// Create a new job for each generation request
+		Job generationJob = createGenerationJob(respectBuildBeforeGenerate, runInBackground);
+		generationJob.schedule();
+	}
+
+	public void generate(IEGLPartWrapper[] parts, boolean respectBuildBeforeGenerate, boolean runInBackground) {
+
+		GenerationRequest gr = new GenerationRequest(parts);
+
+		synchronized (genRequestList) {
+			genRequestList.add(gr);
+		}
+
+		// Create a new job for each generation request
+		Job generationJob = createGenerationJob(respectBuildBeforeGenerate, runInBackground);
+		generationJob.schedule();
+	}
+
+	/**
+	 * Create a job to run the part generation. This job will block the entire
+	 * worskpace for writing
+	 */
+	private Job createGenerationJob(boolean respectBuildBeforeGenerate, final boolean runInBackground) {
+
+		if (respectBuildBeforeGenerate && !ResourcesPlugin.getWorkspace().isAutoBuilding()) {
+			//TODO EDT for now we only generate on build. no need to run a build first.
+//			IPreferenceStore store = new ScopedPreferenceStore(new InstanceScope(), "com.ibm.etools.egl.ui");//$NON-NLS-1$
+//			boolean build = store.getBoolean("com.ibm.etools.egl.parteditor.buildBeforeGenerate");//$NON-NLS-1$
+			boolean build = false;
+			if (build) {
+				try {
+					ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		Job generationJob = new Job(CoreIDEPluginStrings.GeneratePartsOperation_JobName) {
+			public boolean shouldRun() {
+				return super.shouldRun() && !isWorkbenchClosing();
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
+			 */
+			public IStatus run(IProgressMonitor monitor) {
+
+				WorkspaceModifyOperation modifyOperation = new WorkspaceModifyOperation() {
+					/*
+					 * (non-Javadoc)
+					 * 
+					 * @see org.eclipse.ui.actions.WorkspaceModifyOperation#execute(org.eclipse.core.runtime.IProgressMonitor)
+					 */
+					protected void execute(IProgressMonitor monitor) throws CoreException, InvocationTargetException, InterruptedException {
+						generateParts(monitor);
+					}
+				};
+
+				try {
+
+					modifyOperation.run(monitor);
+				} catch (InvocationTargetException e) {
+					Logger.log(this, "GeneratePartsOperation.createGenerationJob():  InvocationTargetException", e); //$NON-NLS-1$
+				} catch (InterruptedException e) {
+					Logger.log(this, "GeneratePartsOperation.createGenerationJob():  InterruptedException", e); //$NON-NLS-1$
+				}
+				return Status.OK_STATUS;
+			}
+		};
+
+		generationJob.setRule(ResourcesPlugin.getWorkspace().getRoot());
+		generationJob.setUser(!runInBackground);
+		generationJob.setSystem(false);
+		generationJob.setPriority(Job.LONG);
+
+		return generationJob;
+	}
+
+	protected static IGenerationMessageRequestor createMessageRequestor() {
+		return new IGenerationMessageRequestor() {
+			ArrayList list = new ArrayList();
+
+			boolean error = false;
+
+			public void addMessage(EGLMessage message) {
+				list.add(message);
+				if (message.isError()) {
+					error = true;
+				}
+			}
+
+			public void addMessages(List list) {
+				Iterator i = list.iterator();
+				while (i.hasNext()) {
+					addMessage((EGLMessage) i.next());
+				}
+			}
+
+			public List getMessages() {
+				return list;
+			}
+
+			public boolean isError() {
+				return error;
+			}
+
+			public void clear() {
+				error = false;
+				list = new ArrayList();
+			}
+		};
+	}
+	
+	protected boolean isWorkbenchClosing() {
+		try {
+			return PlatformUI.getWorkbench().isClosing();
+		} catch (RuntimeException e) {
+			return false;
+		}
+	}
+
+//	public CommandRequestor getRequestor() {
+//		if (requestor == null) {
+//			if (isDebug()) {
+//				requestor = new IDECommandRequestor() {
+//					public int getGenerationMode() {
+//						return EGLGenerationModeSetting.DEVELOPMENT_GENERATION_MODE;
+//					}
+//				};
+//			}
+//			else {
+//				requestor = new IDECommandRequestor(){
+//					public int getGenerationMode() {
+//						return EGLGenerationModeSetting.DEPLOYMENT_GENERATION_MODE;
+//					}
+//				};
+//			}
+//		}
+//		return requestor;
+//	}
+	
+	public void generateParts(final IProgressMonitor monitor) {
+
+		synchronized (lock) {
+
+			clearGenerationCaches();
+			GenerationRequest genRequest = null;
+			IEGLPartWrapper[] partList = null;
+
+			while(true){
+				synchronized (genRequestList) {
+					if (genRequestList.size() > 0) {
+						genRequest = genRequestList.remove(0);
+					}else{
+						break;
+					}
+				}
+	
+				if (genRequest != null) {
+					partList = genRequest.getGenerationUnits();
+	
+					// setup the monitor
+					if (monitor != null) {
+						monitor.beginTask(CoreIDEPluginStrings.GeneratePartsOperation_TaskName, (partList.length * 2));
+					}
+					
+					for (int i = 0; i < partList.length; i++) {
+						if (isWorkbenchClosing()) {
+							break;
+						}
+	
+						if (monitor != null) {
+							monitor.worked(1);
+	
+							if (monitor.isCanceled()) {
+								break;
+							}
+						}
+	
+//						requestor = null;
+						
+						String partFile = partList[i].getPartPath();
+						String partName = partList[i].getPartName();
+						
+						if (monitor != null) {
+							monitor.subTask(CoreIDEPluginStrings.bind(CoreIDEPluginStrings.GeneratePartsOperation_SubTaskName, partName));
+						}
+						
+						IGenerationMessageRequestor messageRequestor = createMessageRequestor();
+	
+						IProject project = getProject(partFile);
+						if (project == null || !project.exists()) {
+							EGLMessage message = EGLMessage.createEGLValidationErrorMessage(EGLMessage.EGLMESSAGE_PROJECT_NOT_FOUND, null,
+									partFile);
+							messageRequestor.addMessage(message);
+						} else {
+							Part part = null;
+							try {
+								GenerateEnvironment environment = GenerateEnvironmentManager.getInstance().getGenerateEnvironment(project, false);
+								
+								String[] packageName;
+								if (EGLCore.create(project).isBinary()) {
+									packageName = getPackageName(partFile, environment);
+								}
+								else {
+									packageName = getPackageName(partFile, ProjectInfoManager.getInstance().getProjectInfo(project));
+								}
+	
+								part = environment.findPart(InternUtil.intern(packageName), InternUtil.intern(partName));
+								
+//								if (part != null && part.isSystemPart()) {
+//									EGLMessage message = EGLMessage.createEGLValidationInformationalMessage
+//									(EGLMessage.EGLMESSAGE_SYSTEM_PART_NOT_GENABLE, (Object)null, part.getId());
+//									IGenerationResult result = new GenerationResult(partList[i].getPart(),
+//											new EGLMessage[] {message}, partList[i].isGenDebug() ? IGenerationResult.DEBUG : IGenerationResult.TARGET);
+//	
+//									postResult(result);
+//									continue;
+//								}
+	
+								//TODO EDT message requestor, check for errors, etc. see original file's generate(Part)
+								if (part != null) {
+									IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(partFile));
+									if (file != null && file.exists()) {
+										invokeGenerators(file, part);
+									}
+								}
+//							} catch (BuildException e) {
+//								buildProblemDuringBuildMessage(e, messageRequestor, part);
+							} catch (PartNotFoundException e) {
+								buildPartNotFoundMessage(e, messageRequestor, partName);
+//							} catch (InvalidPartTypeException e) {
+//								buildInvalidPartTypeMessage(e, messageRequestor, partName);
+							} catch (RuntimeException e) {
+								handleRuntimeException(e, messageRequestor, partName, new HashSet());
+							} catch (final Exception e) {
+								handleUnknownException(e, messageRequestor);
+							} finally {
+								clearGenerationCaches();
+							}
+						}
+						if (monitor != null) {
+							monitor.worked(1);
+						}
+	
+						// post the results
+						//TODO EDT
+//						try {
+//							List messages = messageRequestor.getMessages();
+//	
+//							IGenerationResult result = new GenerationResult(partList[i].getPart(),
+//									(EGLMessage[]) messages.toArray(new EGLMessage[messages.size()]), partList[i].isGenDebug() ? IGenerationResult.DEBUG : IGenerationResult.TARGET);
+//	
+//							postResult(result);
+//						} catch (Exception f) {
+//							Logger.log(this, "EGLGenerationWizardGeneratePartsOperation.generateParts(): Error retrieving results", f); //$NON-NLS-1$
+//						}
+					}
+					clearGenerationCaches();
+				}
+			}
+			
+			if (monitor != null) {
+				monitor.done();
+			}
+		}
+	}
+	
+	protected void handleRuntimeException(RuntimeException e, IGenerationMessageRequestor messageRequestor, String partName, HashSet seen) {
+		if (seen.contains(e)) {
+			handleUnknownException(e, messageRequestor);
+			return;
+		}
+		seen.add(e);
+
+		Throwable cause = e.getCause();
+		if (cause instanceof PartNotFoundException) {
+			buildPartNotFoundMessage((PartNotFoundException) cause, messageRequestor, partName);
+			return;
+		}
+		if (cause instanceof InvalidPartTypeException) {
+			buildInvalidPartTypeMessage((InvalidPartTypeException) cause, messageRequestor, partName);
+			return;
+		}
+		//TODO EDT
+//		if (cause instanceof NoSuchMemberException || cause instanceof InvalidMemberReferenceException) {
+//			buildNoSuchMemberMessage(cause.getMessage(), messageRequestor, partName);
+//			return;
+//		}
+
+		if (cause instanceof RuntimeException) {
+			handleRuntimeException((RuntimeException) cause, messageRequestor, partName, seen);
+			return;
+		}
+
+		handleUnknownException(e, messageRequestor);
+		return;
+	}
+
+	protected void handleUnknownException(Exception e, IGenerationMessageRequestor messageRequestor) {
+		buildExceptionMessage(e, messageRequestor);
+		buildStackTraceMessages(e, messageRequestor);
+		Logger.log(this, "GeneratePartsOperation.generateParts():  Error during generation", e); //$NON-NLS-1$
+
+	}
+
+	protected void clearGenerationCaches() {
+		GenerateEnvironmentManager.getInstance().clearAllCaches();
+	}
+	
+	protected boolean hasError(IFile file) {
+		if (!ResourcesPlugin.getWorkspace().isAutoBuilding()) {
+			return false;
+		}
+
+		if (file == null || !file.exists()) {
+			return false;
+		}
+
+		try {
+			IMarker[] markers = file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO);
+			if (markers == null) {
+				return false;
+			}
+			for (int i = 0; i < markers.length; i++) {
+				int severity = markers[i].getAttribute(IMarker.SEVERITY, 0);
+				if (severity >= IMarker.SEVERITY_ERROR) {
+					return true;
+				}
+			}
+			return false;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	protected Part findPart(String partName, GenerateEnvironment environment) throws PartNotFoundException {
+
+		String[] packageName = getPackageName(partName);
+
+		int index = partName.lastIndexOf(".");
+		String name = partName;
+		if (index > -1) {
+			name = name.substring(index + 1);
+		}
+
+		return environment.findPart(InternUtil.intern(packageName), InternUtil.intern(name));
+
+	}
+
+	protected String[] getPackageName(String partName) {
+		List list = new ArrayList();
+		String remaining = partName;
+		int index = partName.indexOf(".");
+		while (index > -1) {
+			String pkg = remaining.substring(0, index);
+			remaining = remaining.substring(index + 1);
+			list.add(pkg);
+			index = remaining.indexOf(".");
+		}
+		return (String[]) list.toArray(new String[list.size()]);
+
+	}
+	
+	//TODO EDT
+//	protected void buildProblemDuringBuildMessage(BuildException e, IGenerationMessageRequestor result, Part part) {
+//		EGLMessage message = EGLMessage.createEGLValidationErrorMessage(EGLMessage.EGLMESSAGE_BUILD_ERROR, null, new String[] {
+//				part.getId(), e.getResultsFileName() });
+//		result.addMessage(message);
+//	}
+
+	protected void buildPartNotFoundMessage(PartNotFoundException e, IGenerationMessageRequestor result, String partName) {
+		EGLMessage message = EGLMessage.createEGLValidationErrorMessage(EGLMessage.EGLMESSAGE_PARTNOTFOUND, null, new String[] { partName,
+				e.getMessage() });
+		result.addMessage(message);
+	}
+
+	protected void buildInvalidPartTypeMessage(InvalidPartTypeException e, IGenerationMessageRequestor result, String partName) {
+		EGLMessage message = EGLMessage.createEGLValidationErrorMessage(EGLMessage.EGLMESSAGE_PARTNOTFOUND, null, new String[] { partName,
+				e.getMessage() });
+		result.addMessage(message);
+	}
+
+//	private void buildNoSuchMemberMessage(String msg, IGenerationMessageRequestor result, String partName) {
+//		EGLMessage message = EGLMessage.createEGLValidationErrorMessage(EGLMessage.EGLMESSAGE_NOSUCHMEMBER, null, new String[] { partName,
+//				msg });
+//		result.addMessage(message);
+//	}
+//
+//	public void generate(Part part, IGenerationMessageRequestor messageRequestor) throws Exception{
+//		startGenerators(Activator.getPlugin().getGenerators());
+//		try {
+//			PartsList parts = PartsListToGenerateHelper.buildListOfPartsToGenerate(part);
+//
+//			invokeGenerators(part, messageRequestor, parts.getPrimaryParts());
+//			if (parts.getSecondaryParts().size() > 0) {
+//				//Must end the generators and start them again so they know that the UI records and web tables are
+//				//in this group
+//				endGenerators(Activator.getPlugin().getGenerators());
+//				startGenerators(Activator.getPlugin().getGenerators());
+//				invokeGenerators(part, messageRequestor, parts.getSecondaryParts());
+//			}
+//			
+//		} catch (Exception e) {
+//			endGenerators(Activator.getPlugin().getGenerators());
+//			throw e;
+//		}
+//		endGenerators(Activator.getPlugin().getGenerators());
+//	}
+	
+	/**
+	 * A project has a single generator associated with it. Look for it in the list of generators, and invoke it.
+	 */
+	private void invokeGenerators(IFile file, Part part) throws Exception {
+		IGenerator[] generators = ProjectSettingsUtility.getGenerators(file);
+		if (generators.length != 0) {
+			IEnvironment env = BinaryFileManager.getInstance().getEnvironment(file.getProject());
+			for (int i = 0; i < generators.length; i++) {
+				generators[i].generate(file, (Part)part.clone(), env, invokedByBuild);
+			}
+		}
+	}
+	
+//	private void invokeGenerators(Part part, IGenerationMessageRequestor mainRequestor, List parts) throws Exception {
+//
+//		Generator[] generators = Activator.getPlugin().getGenerators();
+//		Iterator iter = parts.iterator();
+//		while (iter.hasNext() ) {//TODO EDT && !bd.getGenerationStatusRequestor().isCanceled()) {
+//			Part genPart = (Part) iter.next();
+//			IGenerationMessageRequestor req = createMessageRequestor();
+//
+//			if (isAutoGenPart(part, genPart)) {
+//				continue;
+//			}
+//
+//			//If this is not the main part, and we already generated it, dont generate it again
+//			if (alreadyGenerated(genPart) && genPart != part) {
+//				continue;
+//			}
+//			
+//			req.addMessage(EGLMessage.createEGLValidationInformationalMessage(
+//					EGLMessage.EGLMESSAGE_GENERATION_PROGRAM_RESULTS_VIEW_MESSAGE, null, new String[] { genPart.getFullyQualifiedName(),
+//							bd.getName(), bd.getResourceName() }));
+//
+//			validatePart(genPart, req, getRequestor(), true);
+//			List autoGenParts = new ArrayList();
+//
+//			if (genPart == part) {
+//				buildAutoGenParts(genPart, parts, bd, autoGenParts);
+//				Iterator i = autoGenParts.iterator();
+//				while (i.hasNext()) {
+//					Part autoPart = (Part) i.next();
+//					validatePart(autoPart, req, bd, getRequestor(), false);
+//				}
+//			}
+//
+//			try {
+//				if (!req.isError()) {
+//					bindExpressions(genPart);
+//					Iterator i = autoGenParts.iterator();
+//					while (i.hasNext()) {
+//						Part autoPart = (Part) i.next();
+//						bindExpressions(autoPart);
+//					}
+//					
+//					Annotation ann = new AnnotationImpl();
+//					ann.setValue(IEGLConstants.EGL_HAS_ERROR, Boolean.valueOf(req.isError()));
+//					genPart.addAnnotation(ann);
+//					
+//					invokeGenerators(generators, genPart, req);
+//					talkToGenerationListeners(genPart, parts);
+//				}
+//				buildGenerationCompleteMessage(genPart, req, getRequestor());
+//				mainRequestor.addMessages(req.getMessages());
+//				bd.setGenerationMessageRequestor(mainRequestor);
+//			} catch (Exception e) {
+//				mainRequestor.addMessages(req.getMessages());
+//				bd.setGenerationMessageRequestor(mainRequestor);
+//				throw e;
+//			}
+//
+//		}
+//	}
+//
+//	private void talkToGenerationListeners(Part part, List parts) throws Exception{
+//		if (GenerationServer.hasListeners()) {
+//			GenerationServer.acceptGeneratedPart(part.getPartInfo());
+//  
+//			part.link();
+//			Part[] refs = part.getReferencedParts();
+//			if (refs == null) {
+//				return;
+//			}
+//			
+//			for (int i = 0; i < refs.length; i++) {
+//				if (!parts.contains(refs[i]) && !refs[i].isSystemPart()) {
+//					if (refs[i].getPartType() == Part.PART_DATATABLE || refs[i].getPartType() == Part.PART_FORMGROUP
+//							|| refs[i].getPartType() == Part.PART_HANDLER || refs[i].getPartType() == Part.PART_LIBRARY
+//							|| refs[i].getPartType() == Part.PART_PROGRAM || refs[i].getPartType() == Part.PART_SERVICE) {
+//						GenerationServer.acceptAssociatedPart(refs[i].getPartInfo());
+//					}
+//				}
+//			}
+//		}
+//	}
+//
+//
+//	private void validatePart(Part currentPart, IGenerationMessageRequestor req, CommandRequestor commandReq,
+//			boolean outputErrors) {
+//		boolean isLP = 	currentPart instanceof LogicAndDataPart;
+//
+//		Part[] refParts = null;
+//		
+//		if (isLP) {
+//			refParts = getReferencedParts((LogicAndDataPart)currentPart);
+//		}
+//		
+//		if (!checkForCompileErrors(currentPart, req, commandReq, outputErrors)) {
+//			IRValidator validator = new IRValidator(bd, req, commandReq, currentPart);
+//			currentPart.accept(validator);
+//			if (isLP) {
+//				LogicAndDataPart ldPart = (LogicAndDataPart) currentPart;
+//				Iterator i = validator.getNewFunctionsWithoutLooseTypes().keySet().iterator();
+//				while (i.hasNext()) {
+//					Function looseFunction = (Function) i.next();
+//					
+//					//The ldPart may no longer contain the function, because it may have been eliminated
+//					//when we elimimated the system dependant code
+//					if (contains(ldPart.getFunctions(), looseFunction)) {
+//						List list = (List) validator.getNewFunctionsWithoutLooseTypes().get(looseFunction);
+//						Iterator j = list.iterator();
+//						while (j.hasNext()) {
+//							ldPart.addFunction((Function) j.next());
+//						}
+//						ldPart.removeFunction(looseFunction);
+//					}
+//				}
+//				eliminateUnusedSystemDependentPartsAndUnsupportedParts(ldPart, refParts, validator);
+//			}
+//		}
+//	}
+//	
+//	private Part[] getReferencedParts(LogicAndDataPart curPart) {
+//		
+//		final HashSet set = new HashSet();
+//		EVisitor visitor = new AbstractVisitor() {
+//			List visited = new ArrayList();
+//			public boolean visit(com.ibm.etools.edt.core.ir.api.NameType nameType) {
+//				Part part = nameType.getPart();
+//				if (part != null && !set.contains(part)) {
+//					set.add(part);
+//				}
+//				return false;
+//			}
+//			public boolean visit(com.ibm.etools.edt.core.ir.api.EmbeddedPartNameType ir) {
+//				Part part = ir.getPart();
+//				if (part != null && !set.contains(part)) {
+//					set.add(part);
+//				}
+//				return false;
+//			}
+//
+//			public boolean visit(Annotation annotation) {
+//
+//				Iterator i = annotation.getValues().values().iterator();
+//
+//				while (i.hasNext()) {
+//					Object obj = i.next();
+//					if (obj instanceof Element) {
+//						if (!visited.contains(obj)) {
+//							visited.add(obj);
+//							((Element) obj).accept(this);
+//						}
+//					}
+//				}
+//
+//				return false;
+//			}
+//		};
+//		curPart.accept(visitor);
+//		return (Part[]) set.toArray(new Part[set.size()]);
+//		
+//	}
+//
+//
+//	protected static boolean checkForCompileErrors(final Part part, final IGenerationMessageRequestor msgReq,
+//			final CommandRequestor commandRequestor, boolean outputErrors) {
+//		return checkForCompileErrors(part, part, msgReq, commandRequestor, new HashSet(), outputErrors);
+//	}
+//
+//	private static boolean checkForCompileErrors(final Part mainPart, final Part part, final IGenerationMessageRequestor msgReq,
+//			final CommandRequestor commandRequestor, HashSet alreadyVisited, boolean outputErrors) {
+//
+//		if (alreadyVisited.contains(part)) {
+//			return false;
+//		}
+//
+//		alreadyVisited.add(part);
+//
+//		final boolean[] errors = new boolean[1];
+//		if (part.hasCompileErrors()) {
+//			if (outputErrors) {
+//				if (part == mainPart) {
+//					EGLMessage message = EGLMessage.createEGLValidationErrorMessage(EGLMessage.EGLMESSAGE_COMPILE_ERRORS,
+//							new MessageContributor(part, commandRequestor), new String[] { part.getId() });
+//					msgReq.addMessage(message);
+//				} else {
+//					EGLMessage message = EGLMessage.createEGLValidationErrorMessage(EGLMessage.EGLMESSAGE_COMPILE_ERRORS_IN_SUBPART,
+//							new MessageContributor(part, commandRequestor), new String[] { mainPart.getId(), part.getId() });
+//					msgReq.addMessage(message);
+//				}
+//			}
+//			errors[0] = true;
+//		}
+//		part.accept(new AbstractVisitor() {
+//			public boolean visit(Function function) {
+//				if (function.hasCompileErrors()) {
+//					EGLMessage message = EGLMessage.createEGLValidationErrorMessage(EGLMessage.EGLMESSAGE_COMPILE_ERRORS_IN_SUBPART,
+//							new MessageContributor(function, commandRequestor), new String[] { mainPart.getId(), function.getId() });
+//					msgReq.addMessage(message);
+//					errors[0] = true;
+//				}
+//				return false;
+//			}
+//		});
+//
+//		Part[] refParts = part.getReferencedParts();
+//		if (refParts != null) {
+//			for (int i = 0; i < refParts.length; i++) {
+//				if (!refParts[i].isSystemPart() && refParts[i].getAnnotation("annotation") == null) {
+//					if (refParts[i].getPartType() == Part.PART_RECORD || refParts[i].getPartType() == Part.PART_STRUCTURED_RECORD
+//							|| refParts[i].getPartType() == Part.PART_DATAITEM || refParts[i].getPartType() == Part.PART_INTERFACE
+//							|| refParts[i].getPartType() == Part.PART_EXTERNALTYPE || refParts[i].getPartType() == Part.PART_FORM) {
+//						errors[0] = errors[0]
+//								|| checkForCompileErrors(mainPart, refParts[i], msgReq, commandRequestor, alreadyVisited, outputErrors);
+//					}
+//				}
+//			}
+//		}
+//		return errors[0];
+//	}
+//
+//	private String getKeyForPreviousGen(Part part) {
+//		return  part.getFileName() + " " + part.getId();
+//	}
+//	
+//	private boolean alreadyGenerated(Part part) {
+//		String genName = getKeyForPreviousGen(part);
+//		
+//		return (part.getFileName() != null && alreadyGenerated.contains(genName));
+//	}
+//	
+//	private static void bindExpressions(Part part) {
+//		part.accept(new AbstractVisitor() {
+//			List visited = new ArrayList();
+//
+//			public boolean visit(Name simpleName) {
+//				simpleName.getMember();
+//				return true;
+//			}
+//
+//			public boolean visit(FieldAccess fieldAccess) {
+//				fieldAccess.getMember();
+//				return true;
+//			}
+//
+//			public boolean visit(FunctionInvocation functionInvocation) {
+//				functionInvocation.getMember();
+//				return true;
+//			}
+//
+//			public boolean visit(Annotation annotation) {
+//
+//				Iterator i = annotation.getValues().values().iterator();
+//
+//				while (i.hasNext()) {
+//					Object obj = i.next();
+//					if (obj instanceof Element) {
+//						if (!visited.contains(obj)) {
+//							visited.add(obj);
+//							((Element) obj).accept(this);
+//						}
+//					}
+//				}
+//
+//				return false;
+//			}
+//		});
+//	}
+
+	/**
+	 * Insert the method's description here. Creation date: (1/21/2002 9:32:15
+	 * PM)
+	 * 
+	 * @param e
+	 *            java.lang.Exception
+	 * @param compilationUnit
+	 *            com.ibm.etools.egl.internal.compiler.env.api.CompilationUnit
+	 */
+	public void buildExceptionMessage(Exception e, IGenerationMessageRequestor result) {
+		String text = e.getMessage();
+		if (text != null) {
+			EGLMessage message = EGLMessage.createEGLValidationErrorMessage(EGLMessage.EGLMESSAGE_EXCEPTION_MESSAGE, null, text);
+			result.addMessage(message);
+		}
+	}
+//
+//	/**
+//	 * Insert the method's description here. Creation date: (1/21/2002 9:32:15
+//	 * PM)
+//	 * 
+//	 * @param e
+//	 *            java.lang.Exception
+//	 * @param compilationUnit
+//	 *            com.ibm.etools.egl.internal.compiler.env.api.CompilationUnit
+//	 */
+//	public static void buildGenerationCompleteMessage(Part part, IGenerationMessageRequestor result, CommandRequestor commandRequestor) {
+//
+//		if (result.isError()) {
+//			EGLMessage message = EGLMessage.createEGLValidationErrorMessage(EGLMessage.EGLMESSAGE_GENERATION_FAILED, new MessageContributor(part, commandRequestor), part.getFullyQualifiedName());
+//			result.addMessage(message);
+//		} else {
+//			EGLMessage message = EGLMessage.createEGLValidationInformationalMessage(EGLMessage.EGLMESSAGE_GENERATION_COMPLETE, new MessageContributor(part, commandRequestor), part.getFullyQualifiedName());
+//			result.addMessage(message);
+//		}
+//	}
+//
+	/**
+	 * Insert the method's description here. Creation date: (1/21/2002 9:32:15
+	 * PM)
+	 * 
+	 * @param e
+	 *            java.lang.Throwable
+	 * @param compilationUnit
+	 *            com.ibm.etools.egl.internal.compiler.env.api.CompilationUnit
+	 */
+	public static void buildStackTraceMessages(Throwable e, IGenerationMessageRequestor result) {
+		StringOutputBuffer buffer = new StringOutputBuffer();
+		PrintWriter writer = new PrintWriter(buffer);
+		e.printStackTrace(writer);
+		writer.flush();
+		String text = buffer.toString();
+		char[] token;
+		StringTokenizer tokenizer = new StringTokenizer(text, "\n\r\f"); //$NON-NLS-1$
+		while (tokenizer.hasMoreElements()) {
+			token = tokenizer.nextToken().toCharArray();
+			StringBuffer stringBuffer = new StringBuffer();
+			for (int i = 0; i < token.length; i++) {
+				if (token[i] == '\t') {
+					stringBuffer.append("      "); //$NON-NLS-1$
+				} else {
+					stringBuffer.append(token[i]);
+				}
+			}
+
+			EGLMessage message = EGLMessage.createEGLValidationErrorMessage(EGLMessage.EGLMESSAGE_EXCEPTION_STACKTRACE, null, stringBuffer
+					.toString());
+			result.addMessage(message);
+		}
+	}
+	
+	protected String[] getPackageName(String filename, ProjectInfo projectInfo) {
+		IPath path = new Path(filename);
+		path = path.removeFirstSegments(1); // project name
+		path = path.removeLastSegments(1);// filename
+		String[] retVal = Util.pathToStringArray(path);
+		while (retVal.length > 0) {
+			if (projectInfo.hasPackage(InternUtil.intern(retVal))) {
+				break;
+			}
+			path = path.removeFirstSegments(1);// source folder
+			retVal = Util.pathToStringArray(path);
+		}
+		return retVal;
+	}
+	
+	protected String[] getPackageName(String filename, GenerateEnvironment env) {
+		IPath path = new Path(filename);
+		path = path.removeFirstSegments(1); // project name
+		path = path.removeLastSegments(1);// filename
+		String[] retVal = Util.pathToStringArray(path);
+		while (retVal.length > 0) {
+			if (env.hasPackage(InternUtil.intern(retVal))) {
+				break;
+			}
+			path = path.removeFirstSegments(1);// source folder
+			retVal = Util.pathToStringArray(path);
+		}
+		return retVal;
+	}
+
+	protected IProject getProject(String filename) {
+		IPath path = new Path(filename);
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(path.segment(0));
+		return project;
+	}
+}

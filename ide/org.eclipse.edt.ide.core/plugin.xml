@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension-point id="compilers" name="Compilers" schema="schema/compilers.exsd"/>
+	<extension-point id="generators" name="Generators" schema="schema/generators.exsd"/>
+	
+	<extension
+         id="EGLNature"
+         name="EGL Nature"
+         point="org.eclipse.core.resources.natures">
+		<runtime>
+			<run
+               class="org.eclipse.edt.ide.core.EGLNature">
+         	</run>
+      	</runtime>
+	</extension>
+	<extension
+         id="eglnature"
+         name="EGL"
+         point="org.eclipse.core.resources.natures">
+      	<runtime>
+        	<run
+               class="org.eclipse.edt.ide.core.internal.model.EGLProject">
+         	</run>
+      	</runtime>
+    </extension>
+    <extension
+         id="EDTBuilder"
+         name="%edtBuilderName"
+         point="org.eclipse.core.resources.builders">
+      <builder hasNature="false">
+         <run class="org.eclipse.edt.ide.core.internal.builder.Builder"/>
+      </builder>
+   </extension>
+   <extension
+          id="problem"
+          name="%edtProblemName"
+          point="org.eclipse.core.resources.markers">
+       <super type="org.eclipse.core.resources.problemmarker"/>
+       <persistent value="true"/>
+    </extension>
+    <extension
+          id="contextSpecificProblem"
+          name="%edtContextSpecificProblemName"
+          point="org.eclipse.core.resources.markers">
+       <super type="org.eclipse.edt.ide.core.problem"/>
+       <persistent value="true"/>
+    </extension>
+    <extension
+          id="fileProblem"
+          name="%edtFileProblemName"
+          point="org.eclipse.core.resources.markers">
+       <super type="org.eclipse.edt.ide.core.problem"/>
+       <persistent value="true"/>
+    </extension>
+    <extension
+          id="syntaxProblem"
+          name="%edtSyntaxProblemName"
+          point="org.eclipse.core.resources.markers">
+       <super type="org.eclipse.edt.ide.core.problem"/>
+       <persistent value="true"/>
+    </extension>
+    <extension
+          id="unsupportedSyntaxProblem"
+          name="%edtUnsupportedSyntaxProblemName"
+          point="org.eclipse.core.resources.markers">
+       <super type="org.eclipse.edt.ide.core.problem"/>
+       <persistent value="true"/>
+    </extension>
+    
+     <extension
+      point="org.eclipse.jdt.core.classpathContainerInitializer">
+      <classpathContainerInitializer
+            class="org.eclipse.edt.ide.core.internal.EDTRuntimeContainerInitializer"
+            id="org.eclipse.edt.ide.core.EDT_CONTAINER">
+      </classpathContainerInitializer>
+   	</extension>
+   
+	<extension
+        point="org.eclipse.core.runtime.contentTypes">
+    	<content-type id="egl" name="%eglContentTypeName"
+       		base-type="org.eclipse.core.runtime.text"
+			priority="high"			
+			file-extensions="egl">
+		</content-type>
+   	</extension>
+   	
+  	<extension 
+		point="org.eclipse.core.runtime.preferences">
+        <initializer class="org.eclipse.edt.ide.core.internal.EDTCorePreferenceInitializer"/>
+    </extension>
+</plugin>

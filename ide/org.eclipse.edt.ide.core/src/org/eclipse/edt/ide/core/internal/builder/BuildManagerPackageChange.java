@@ -1,0 +1,59 @@
+/*******************************************************************************
+ * Copyright © 2005, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.ide.core.internal.builder;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
+import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+
+
+/**
+ * @author svihovec
+ *
+ */
+public class BuildManagerPackageChange extends BuildManagerChange {
+
+	private String[] packageName;
+	
+	public BuildManagerPackageChange(String[] packageName){
+		this.packageName = packageName;
+	}
+	
+	public boolean isPackage() {
+		return true;
+	}
+	
+	public String[] getPackageName(){
+		return packageName;
+	}
+	
+	public int hashCode() {
+		return packageName.hashCode();
+	}
+	
+	public boolean equals(Object obj) {
+		if(obj == this){
+			return true;
+		}
+		
+		if(obj instanceof BuildManagerPackageChange){
+			return ((BuildManagerPackageChange)obj).packageName == packageName;
+		}
+		return false;
+	}
+	
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		packageName = InternUtil.intern(packageName);
+	}
+}

@@ -1,0 +1,125 @@
+/*******************************************************************************
+ * Copyright © 2000, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.ide.core.internal.model;
+
+
+/**
+ * <p>This operation adds an import declaration to an existing compilation unit.
+ * If the compilation unit already includes the specified import declaration,
+ * the import is not generated (it does not generate duplicates).
+ * Note that it is valid to specify both a single-type import and an on-demand import
+ * for the same package, for example <code>"java.io.File"</code> and
+ * <code>"java.io.*"</code>, in which case both are preserved since the semantics
+ * of this are not the same as just importing <code>"java.io.*"</code>.
+ * Importing <code>"java.lang.*"</code>, or the package in which the compilation unit
+ * is defined, are not treated as special cases.  If they are specified, they are
+ * included in the result.
+ *
+ * <p>Required Attributes:<ul>
+ *  <li>Compilation unit
+ *  <li>Import name - the name of the import to add to the
+ *      compilation unit. For example: <code>"java.io.File"</code> or <code>"java.awt.*"</code>
+ * </ul>
+ */
+public class CreateImportOperation /* extends CreateElementInEGLFileOperation */ {
+
+	/**
+	 * The name of the import to be created.
+	 */
+	protected String fImportName;
+/**
+ * When executed, this operation will add an import to the given compilation unit.
+ */
+//public CreateImportOperation(String importName, IEGLFile parentElement) {
+//	super(parentElement);
+//	fImportName = importName;
+//}
+///**
+// * @see CreateTypeMemberOperation#generateElementDOM
+// */
+//protected IDOMNode generateElementDOM() throws EGLModelException {
+//	if (fCUDOM.getChild(fImportName) == null) {
+//		DOMFactory factory = new DOMFactory();
+//		//not a duplicate
+//		IDOMImport imp = factory.createImport();
+//		imp.setName(fImportName);
+//		return imp;
+//	}
+//	
+//	//no new import was generated
+//	fCreationOccurred = false;
+//	//all the work has already been done
+//	return null;
+//}
+///**
+// * @see CreateElementInCUOperation#generateResultHandle
+// */
+//protected IEGLElement generateResultHandle() {
+//	return getEGLFile().getImport(fImportName);
+//}
+///**
+// * @see CreateElementInCUOperation#getMainTaskName()
+// */
+//public String getMainTaskName(){
+//	return Util.bind("operation.createImportsProgress"); //$NON-NLS-1$
+//}
+///**
+// * Sets the correct position for the new import:<ul>
+// * <li> after the last import
+// * <li> if no imports, before the first type
+// * <li> if no type, after the package statement
+// * <li> and if no package statement - first thing in the CU
+// */
+//protected void initializeDefaultPosition() {
+//	try {
+//		IEGLFile cu = getEGL();
+//		IImportDeclaration[] imports = cu.getImports();
+//		if (imports.length > 0) {
+//			createAfter(imports[imports.length - 1]);
+//			return;
+//		}
+//		IType[] types = cu.getTypes();
+//		if (types.length > 0) {
+//			createBefore(types[0]);
+//			return;
+//		}
+//		IEGLElement[] children = cu.getChildren();
+//		//look for the package declaration
+//		for (int i = 0; i < children.length; i++) {
+//			if (children[i].getElementType() == IEGLElement.PACKAGE_DECLARATION) {
+//				createAfter(children[i]);
+//				return;
+//			}
+//		}
+//	} catch (EGLModelException npe) {
+//	}
+//}
+///**
+// * Possible failures: <ul>
+// *  <li>NO_ELEMENTS_TO_PROCESS - the compilation unit supplied to the operation is
+// * 		<code>null</code>.
+// *  <li>INVALID_NAME - not a valid import declaration name.
+// * </ul>
+// * @see IEGLModelStatus
+// * @see EGLConventions
+// */
+//public IEGLModelStatus verify() {
+//	IEGLModelStatus status = super.verify();
+//	if (!status.isOK()) {
+//		return status;
+//	}
+//	if (EGLConventions.validateImportDeclaration(fImportName).getSeverity() == IStatus.ERROR) {
+//		return new EGLModelStatus(IEGLModelStatusConstants.INVALID_NAME, fImportName);
+//	}
+//	return EGLModelStatus.VERIFIED_OK;
+//}
+}

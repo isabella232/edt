@@ -1,0 +1,44 @@
+/*******************************************************************************
+ * Copyright © 2000, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.ide.core.internal.model;
+
+import org.eclipse.edt.ide.core.model.Signature;
+
+class SourceUseElementInfo extends MemberElementInfo {
+
+	/**
+	 * The type name of this field.
+	 */
+	protected char[] typeName;
+
+	/**
+	 * Returns the type name of the field.
+	 */
+	public char[] getTypeName() {
+		return this.typeName;
+	}
+	/**
+	 * Returns the type signature of the field.
+	 *
+	 * @see Signature
+	 */
+	protected String getTypeSignature() {
+		return Signature.createTypeSignature(this.typeName, false);
+	}
+
+	/**
+	 * Sets the type name of the field.
+	 */
+	protected void setTypeName(char[] typeName) {
+		this.typeName = typeName;
+	}
+}
