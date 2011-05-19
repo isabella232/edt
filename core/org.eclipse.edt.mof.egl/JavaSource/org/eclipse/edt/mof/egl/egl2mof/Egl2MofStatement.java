@@ -79,8 +79,8 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		}
 	}
 	
-	private void setElementInformation(org.eclipse.edt.compiler.core.ast.Node node, Statement stmt) {
-		stmt.setFunctionMember(getCurrentFunctionMember());
+	protected void setElementInformation(org.eclipse.edt.compiler.core.ast.Node node, Statement stmt) {
+		stmt.setContainer(getCurrentFunctionMember());
 		super.setElementInformation(node, stmt);
 	}
 	

@@ -13,8 +13,8 @@ package org.eclipse.edt.mof.egl;
 
 
 public interface Statement extends Element {
-	FunctionMember getFunctionMember();
+	Container getContainer();
 	
-	void setFunctionMember(FunctionMember value);
+	void setContainer(Container value);
 	
 }

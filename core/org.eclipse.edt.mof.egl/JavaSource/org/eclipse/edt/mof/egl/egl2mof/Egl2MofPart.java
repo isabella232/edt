@@ -289,7 +289,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 				function.setType((Type)mofTypeFor(node.getReturnType().resolveTypeBinding()));
 			}
 			StatementBlock block = factory.createStatementBlock();
-			block.setFunctionMember(function);
+			block.setContainer(function);
 			function.setStatementBlock(block);
 			setCurrentFunctionMember(function);
 			for (Node stmt : (List<Node>)node.getStmts()) {
@@ -481,7 +481,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		setUpEglTypedElement(func, function);
 				
 		StatementBlock stmts = factory.createStatementBlock();
-		stmts.setFunctionMember(func);
+		stmts.setContainer(func);
 		func.setStatementBlock(stmts);
 
 		for (FunctionParameterBinding parmBinding : (List<FunctionParameterBinding>)functionBinding.getParameters()) {
@@ -619,4 +619,17 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	protected FunctionMember getCurrentFunctionMember() {
 		return currentFunction;
 	}
+	
+	protected void setElementInformation(org.eclipse.edt.compiler.core.ast.Node node, EObject obj) {
+		
+		if (obj instanceof Statement) {
+			Statement stmt = (Statement) obj;
+			if (stmt.getContainer() == null && (currentPart instanceof Container)) {
+				stmt.setContainer((Container)currentPart);
+			}
+		}
+		
+		super.setElementInformation(node, obj);
+	}
+
 }

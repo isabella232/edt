@@ -11,11 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
+import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.Statement;
 
 public abstract class StatementImpl extends ElementImpl implements Statement {
-	private static int Slot_functionMember=0;
+	private static int Slot_container=0;
 	private static int totalSlots = 1;
 	
 	public static int totalSlots() {
@@ -24,16 +25,16 @@ public abstract class StatementImpl extends ElementImpl implements Statement {
 	
 	static {
 		int offset = ElementImpl.totalSlots();
-		Slot_functionMember += offset;
+		Slot_container += offset;
 	}
 	@Override
-	public FunctionMember getFunctionMember() {
-		return (FunctionMember)slotGet(Slot_functionMember);
+	public Container getContainer() {
+		return (Container)slotGet(Slot_container);
 	}
 	
 	@Override
-	public void setFunctionMember(FunctionMember value) {
-		slotSet(Slot_functionMember, value);
+	public void setContainer(Container value) {
+		slotSet(Slot_container, value);
 	}
 	
 }

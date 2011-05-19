@@ -681,6 +681,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		SetValuesExpression sve = factory.createSetValuesExpression();
 		sve.setTarget(target);
 		StatementBlock block = factory.createStatementBlock();
+		setElementInformation(settings, block);
 		
 		// Can assume no annotations
 		int arrayIndex = 0;
@@ -692,8 +693,10 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			decl = factory.createField();	
 			decl.setName("eze$SettingTarget" + sveStack.size());
 			decl.setType(target.getType());
+			setElementInformation(settings, decl);
 			declExpr.getFields().add(decl);
 			local.setExpression(declExpr);
+			setElementInformation(settings, local);
 			Assignment assignExpr = factory.createAssignment();
 			localRef = factory.createMemberName();
 			localRef.setId(decl.getName());
@@ -703,8 +706,12 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			assignExpr.setLHS(localRef);
 			assignExpr.setRHS(target);
 			StatementBlock initializer = factory.createStatementBlock();
-			initializer.getStatements().add(createAssignmentStatement(assignExpr));
+			AssignmentStatement stmt = createAssignmentStatement(assignExpr);
+			setElementInformation(settings, stmt);
+			initializer.getStatements().add(stmt);
+			setElementInformation(settings, initializer);
 			decl.setInitializerStatements(initializer);
+			decl.setContainer(initializer.getContainer());
 			block.getStatements().add(local);
 		}
 		else {
@@ -754,6 +761,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				func.getArguments().add(indexExpr);
 				FunctionStatement stmt = factory.createFunctionStatement();
 				stmt.setExpr(func);
+				setElementInformation(setting, stmt);
 				block.getStatements().add(stmt);
 			}
 		}

@@ -66,6 +66,7 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.FunctionStatement;
+import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
@@ -255,7 +256,7 @@ class Egl2MofMember extends Egl2MofPart {
 					
 			if (!node.isAbstract() && !isEglSystemFunction(function)) {
 				StatementBlock stmts = factory.createStatementBlock();
-				stmts.setFunctionMember(func);
+				stmts.setContainer(func);
 				func.setStatementBlock(stmts);
 				functionsToProcess.add(node);
 			}
@@ -672,6 +673,7 @@ class Egl2MofMember extends Egl2MofPart {
 		
 		if (initializer != null) {
 			field.setInitializerStatements(factory.createStatementBlock());
+			setElementInformation(initializer, field.getInitializerStatements());
 			initializer.accept(this);
 			Expression expr = (Expression)stack.pop();
 			Statement stmt = createAssignmentStatement(field, expr);
@@ -687,6 +689,7 @@ class Egl2MofMember extends Egl2MofPart {
 				if (block == null) {
 					block = factory.createStatementBlock();
 					field.setInitializerStatements(block);
+					setElementInformation(initializer, field.getInitializerStatements());
 				}
 				NewExpression newexpr = factory.createNewExpression();
 				newexpr.setId(field.getType().getTypeSignature());

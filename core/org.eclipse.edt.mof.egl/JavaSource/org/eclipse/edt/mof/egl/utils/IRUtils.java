@@ -117,8 +117,8 @@ public class IRUtils {
 		
 		public boolean visit(Statement stmt) {
 			
-			if (stmt.getFunctionMember() != null) {
-				stmt.getFunctionMember().accept(this);
+			if (stmt.getContainer() != null) {
+				stmt.getContainer().accept(this);
 			}
 			return false;
 		}
