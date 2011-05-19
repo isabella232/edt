@@ -25,7 +25,7 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 public class ReturnStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(ReturnStatement stmt, Context ctx, TabbedWriter out, Object... args) {
-		FunctionMember func = stmt.getFunctionMember();
+		FunctionMember func = (FunctionMember)stmt.getContainer();
 		if (func != null) {
 			List<FunctionParameter> parms = new ArrayList<FunctionParameter>();
 			for (FunctionParameter parm : func.getParameters()) {
@@ -44,7 +44,7 @@ public class ReturnStatementTemplate extends JavaScriptTemplate {
 		out.print("return ");
 		Expression expr = stmt.getExpression();
 		if (expr != null) {
-			expr = IRUtils.makeExprCompatibleToType(expr, stmt.getFunctionMember().getType());
+			expr = IRUtils.makeExprCompatibleToType(expr, ((FunctionMember)stmt.getContainer()).getType());
 			ctx.gen(genExpression, expr, ctx, out, args);
 		}
 	}
