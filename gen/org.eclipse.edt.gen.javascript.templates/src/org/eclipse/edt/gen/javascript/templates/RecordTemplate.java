@@ -18,6 +18,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -27,6 +28,10 @@ public class RecordTemplate extends JavaScriptTemplate {
 	public void validate(Record part, Context ctx, Object... args) {
 		// process anything else the superclass needs to do
 		ctx.validateSuper(validate, Record.class, part, ctx, args);
+		// ignore adding this entry to the list, if it is the part we are currently generating
+		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
+			part.getFullyQualifiedName()))
+			return;
 		// when we get here, it is because a part is being referenced by the original part being validated. Add it to the
 		// parts used table if it doesn't already exist
 		boolean found = false;
