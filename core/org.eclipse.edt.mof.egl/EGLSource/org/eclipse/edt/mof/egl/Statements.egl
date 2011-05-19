@@ -16,7 +16,7 @@ import egl.lang.reflect.mof.MofClass;
 import egl.lang.reflect.mof.MofName;
 
 externalType Statement extends Element type MofClass {isAbstract=true}
-	functionMember FunctionMember;
+	container Container;
 end
 
 externalType StatementBlock extends Statement type MofClass
