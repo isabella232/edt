@@ -18,6 +18,7 @@ import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.DataTable;
+import org.eclipse.edt.mof.egl.Part;
 
 public class DataTableTemplate extends JavaTemplate {
 
@@ -25,6 +26,10 @@ public class DataTableTemplate extends JavaTemplate {
 	public void validate(DataTable dataTable, Context ctx, Object... args) {
 		// process anything else the superclass needs to do
 		ctx.validateSuper(validate, DataTable.class, dataTable, ctx, args);
+		// ignore adding this entry to the list, if it is the part we are currently generating
+		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
+			dataTable.getFullyQualifiedName()))
+			return;
 		// when we get here, it is because a part is being referenced by the original part being validated. Add it to the
 		// parts used table if it doesn't already exist
 		boolean found = false;

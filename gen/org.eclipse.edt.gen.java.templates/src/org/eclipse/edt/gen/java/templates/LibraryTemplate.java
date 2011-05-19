@@ -19,6 +19,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Part;
 
 public class LibraryTemplate extends JavaTemplate {
 
@@ -26,6 +27,10 @@ public class LibraryTemplate extends JavaTemplate {
 	public void validate(Library library, Context ctx, Object... args) {
 		// process anything else the superclass needs to do
 		ctx.validateSuper(validate, Library.class, library, ctx, args);
+		// ignore adding this entry to the list, if it is the part we are currently generating
+		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
+			library.getFullyQualifiedName()))
+			return;
 		// when we get here, it is because a part is being referenced by the original part being validated. Add it to the
 		// parts used table if it doesn't already exist
 		boolean found = false;
