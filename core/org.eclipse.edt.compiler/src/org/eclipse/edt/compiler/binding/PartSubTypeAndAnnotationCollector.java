@@ -82,6 +82,8 @@ public class PartSubTypeAndAnnotationCollector extends DefaultASTVisitor {
                             subTypeAnnotationBinding = new AnnotationBinding(typeBinding.getCaseSensitiveName(), partBinding, typeBinding);
                             foundSubTypeInSettingsBlock = true;
                             annotationExpression.getName().setBinding(subTypeAnnotationBinding);
+                            annotationExpression.getName().setTypeBinding(typeBinding);
+                            annotationExpression.setTypeBinding(typeBinding);
                             partBinding.addAnnotation(subTypeAnnotationBinding);
                         } else {
                             problemRequestor.acceptProblem(annotationExpression.getName(), IProblemRequestor.DUPLICATE_PART_SUBTYPE);
