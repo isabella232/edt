@@ -1,0 +1,158 @@
+/*******************************************************************************
+ * Copyright © 2000, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.ide.ui.internal.wizards;
+
+import java.lang.reflect.InvocationTargetException;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.edt.ide.ui.internal.EGLLogger;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
+import org.eclipse.edt.ide.ui.wizards.EGLFileConfiguration;
+import org.eclipse.edt.ide.ui.wizards.EGLPackageConfiguration;
+import org.eclipse.edt.ide.ui.wizards.PartTemplateException;
+import org.eclipse.edt.ide.ui.wizards.RUIWidgetConfiguration;
+import org.eclipse.edt.ide.ui.wizards.RUIWidgetOperation;
+import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IWorkbench;
+
+public class RUIWidgetWizard extends EGLPartWizard implements INewWizard {
+	
+	private static final String WIZPAGENAME_RUIWidgetWizardPage = "WIZPAGENAME_RUIWidgetWizardPage"; //$NON-NLS-1$
+	RUIWidgetConfiguration configuration;
+	private static String Visual_Editor_Registered_ID = "org.eclipse.edt.ide.ui.rui.visualeditor.EvEditor";   //$NON-NLS-1$
+
+	public RUIWidgetWizard() {
+		super();
+		setDefaultPageImageDescriptor(PluginImages.DESC_WIZBAN_NEWRUIWIDGET);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.IWizard#performFinish()
+	 */
+	public boolean performFinish() {
+		if (!super.performFinish())
+			return false;
+		
+		RUIWidgetOperation operation = new RUIWidgetOperation((RUIWidgetConfiguration)getConfiguration());
+		
+		try{
+			getContainer().run(false, true, operation);
+		}
+		catch (InterruptedException e) {
+			boolean dialogResult = false;
+			if(e.getMessage().indexOf(':')!=-1){
+				PartTemplateException pe = new PartTemplateException(e.getMessage());
+				if(pe.getTemplateExcpetion().compareTo(EGLFileConfiguration.TEMPLATE_NOT_FOUND)==0){
+					dialogResult = ((EGLPartWizardPage)this.getPage(WIZPAGENAME_RUIWidgetWizardPage)).handleTemplateError(pe.getPartType(), pe.getPartDescription());
+				}
+				else if(pe.getTemplateExcpetion().compareTo(EGLFileConfiguration.TEMPLATE_DISABLED)==0){
+					//is there a way to tell this?
+				}
+				else if(pe.getTemplateExcpetion().compareTo(EGLFileConfiguration.TEMPLATE_CORRUPTED)==0){
+					dialogResult = ((EGLPartWizardPage)this.getPage(WIZPAGENAME_RUIWidgetWizardPage)).handleTemplateError(pe.getPartType(), pe.getPartDescription());
+				}
+				
+				if(dialogResult)
+					return performFinish();
+				else
+					return false;
+			}
+			else{
+				EGLLogger.log(this, e);
+				return false;
+			}
+		}
+		catch (InvocationTargetException e) {
+			if(e.getTargetException() instanceof CoreException) {
+				ErrorDialog.openError(
+					getContainer().getShell(),
+					null,
+					null,
+					((CoreException) e.getTargetException()).getStatus());
+			}
+			else {
+				EGLLogger.log(this, e);
+			}
+			return false;
+		}
+		
+		//update the dialog settings
+		((RUIWidgetWizardPage)getPage(WIZPAGENAME_RUIWidgetWizardPage)).finishPage();
+		
+		//open the file
+		// KCS - pulled this out so that subclasses could override
+		openResourceFile();
+		
+		return true;
+	}
+	
+	protected void openResourceFile() {
+		openResource(configuration.getFile());
+	}
+	
+// TODO EDT Uncomment when visual editor is ready	
+//	protected void openResource(final IFile resource) {
+//
+//		final IWorkbenchPage activePage;
+//		IWorkbenchWindow window= PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+//		if (window == null)
+//			activePage = null;
+//		else
+//			activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+//		
+//		if (activePage != null) {
+//			final Display display= getShell().getDisplay();
+//			if (display != null) {
+//				display.asyncExec(new Runnable() {
+//					public void run() {
+//						try {
+//							/**
+//							 * open the widget using the visual editor
+//							 */
+//							IDE.openEditor(activePage, resource, Visual_Editor_Registered_ID);
+//							/**
+//							 * set the visual editor as the default for this file
+//							 */
+//							IDE.setDefaultEditor(resource, Visual_Editor_Registered_ID);
+//						} catch (PartInitException e) {
+//							//EDTUIPlugin.log(e);
+//						}
+//					}
+//				});
+//			}
+//		}
+//	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
+	 */
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		getConfiguration().init(workbench, selection);
+		setWindowTitle(NewWizardMessages.NewEGLRUIWidgetWizardPageTitle);
+	}
+	
+	public EGLPackageConfiguration getConfiguration() {
+		if (configuration == null)
+			configuration = new RUIWidgetConfiguration();
+		return configuration;
+	}
+	
+	public void addPages() {
+		addPage(new RUIWidgetWizardPage(WIZPAGENAME_RUIWidgetWizardPage));
+	}
+	
+	protected boolean checkForEmptyPackage() {
+		return false;
+	}
+}

@@ -1,0 +1,119 @@
+/*******************************************************************************
+ * Copyright © 2010, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.ide.ui.internal.editor;
+
+import java.util.StringTokenizer;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IStorage;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.edt.ide.core.internal.model.JarPackageFragment;
+import org.eclipse.edt.ide.core.internal.model.JarPackageFragmentRoot;
+import org.eclipse.edt.ide.core.model.EGLCore;
+import org.eclipse.edt.ide.core.model.EGLModelException;
+import org.eclipse.edt.ide.core.model.IClassFile;
+import org.eclipse.edt.ide.core.model.IEGLProject;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IPersistableElement;
+import org.eclipse.ui.IStorageEditorInput;
+
+
+public class BinaryEditorInput implements IStorageEditorInput {
+    private BinaryReadOnlyFile binaryReadOnlyFile;
+    private IClassFile classFile;
+    
+    public BinaryEditorInput(BinaryReadOnlyFile binaryReadOnlyFile) {this.binaryReadOnlyFile = binaryReadOnlyFile;}
+    public boolean exists() {return true;}
+    public ImageDescriptor getImageDescriptor() {return null;}
+    
+    /*
+	 * get the ir file name (without package, with extension)
+	 * e.g.
+	 * demointerface.ir
+	 */
+    public String getName() {
+       return binaryReadOnlyFile.getName();
+    }
+    public IPersistableElement getPersistable() {return null;}
+    public IStorage getStorage() {
+       return binaryReadOnlyFile;
+    }
+    public String getToolTipText() {
+       return "file: " + getName();
+    }
+    public Object getAdapter(Class adapter) {
+      return null;
+    }
+    
+    public void setClassFile(IClassFile classFile){
+    	this.classFile = classFile;
+    }
+    
+    public IClassFile getClassFile(){
+    	if(classFile != null)
+    		return classFile;
+		IProject proj = null;
+		//get the IProject element of current project (i.e. under which project the class file is to be open)
+		proj = (IProject)ResourcesPlugin.getWorkspace().getRoot().findMember(binaryReadOnlyFile.getProject());
+		if(proj == null){
+    		return null;
+    	}
+		IEGLProject eglProj = EGLCore.create(proj);
+		try {
+			JarPackageFragmentRoot packageFragmentRoot = (JarPackageFragmentRoot)eglProj.getPackageFragmentRoot(binaryReadOnlyFile.getEGLARPath());
+			if(packageFragmentRoot != null && packageFragmentRoot.exists()){
+				String pkg = binaryReadOnlyFile.getPackage();
+				StringTokenizer token = new StringTokenizer(pkg, ".");
+				String[] pkgName = new String[token.countTokens()];
+				int i = 0;
+				while(token.hasMoreTokens()){
+					//for file system, the package name can be case sensitive thus variable 'pkg' is case sensitive,
+					//but inside eglar, the package name is case insensitive, so convert to lower case
+					pkgName[i++] = token.nextToken().toLowerCase();
+				}
+				JarPackageFragment packageFragment = (JarPackageFragment)packageFragmentRoot.getPackageFragment(pkgName);
+				if(packageFragment != null && packageFragment.exists()){
+					classFile = packageFragment.getClassFile(binaryReadOnlyFile.getName().toLowerCase());
+				}
+			}
+			
+			
+		} catch (EGLModelException e) {
+			e.printStackTrace();
+		}
+		return classFile;
+    }
+    
+    /*
+	 * get the full path for the ir file
+	 * e.g.
+	 * TestProj1/Test.eglar|com/ibm/egl/test/interfaces/demointerface.ir
+	 * C:/Temp/Test.eglar|com/ibm/egl/test/interfaces/demointerface.ir
+	 * TestProj1/Test.eglar|demointerface.ir
+	 * 
+	 */
+    public String getFullPath() {
+    	return binaryReadOnlyFile.getFullPath().toString();
+    }
+    
+    public String getProject(){
+    	return binaryReadOnlyFile.getProject();
+    }
+    
+    public boolean equals(Object o) {
+    	if(o instanceof BinaryEditorInput) {
+    		return (this.getFullPath().equals(((BinaryEditorInput) o).getFullPath()) && this.getProject().equals(((BinaryEditorInput) o).getProject()));
+    	}
+    	return super.equals(o);
+    }
+	
+}

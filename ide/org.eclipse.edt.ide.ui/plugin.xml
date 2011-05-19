@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension-point id="eglFoldingStructureProviders" name="EGL Folding Structure Provider" schema="schema/eglFoldingStructureProviders.exsd"/>
+	<extension-point id="edtGeneratorTabs" name="EDT Generator Tabs" schema="schema/edtGeneratorTabs.exsd"/>
+	<extension-point id="projectType" name="New EGL Project Type" schema="schema/projectType.exsd"/>
+	   
+	<extension 
+		point="org.eclipse.core.runtime.preferences">
+        <initializer class="org.eclipse.edt.ide.ui.internal.EDTUIPreferenceInitializer"/>
+    </extension>
+    
+	<extension point="org.eclipse.ui.bindings">
+		<!-- Navigate -->
+		<key
+            commandId="org.eclipse.edt.ide.ui.navigate.openOnSelection"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            contextId="org.eclipse.edt.ide.ui.eglEditorScope"
+            sequence="F3"/>
+        <!-- Source import -->
+       	<key
+            commandId="org.eclipse.edt.ide.ui.source.importGroup.addImport"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            contextId="org.eclipse.edt.ide.ui.eglEditorScope"
+            sequence="Ctrl+Shift+M"/>
+       	<key
+            commandId="org.eclipse.edt.ide.ui.source.importGroup.organizeImports"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            contextId="org.eclipse.edt.ide.ui.eglEditorScope"
+            sequence="Ctrl+Shift+O"/>
+        <!-- Source edit -->
+       	<key
+            commandId="org.eclipse.edt.ide.ui.source.editGroup.format"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            contextId="org.eclipse.edt.ide.ui.eglEditorScope"
+            sequence="Ctrl+Shift+F"/>
+        <!-- Source edit SQL -->
+       	<key
+            commandId="org.eclipse.edt.ide.ui.source.sqlGroup.addSQLStatement"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            contextId="org.eclipse.edt.ide.ui.eglEditorScope"
+            sequence="Ctrl+Shift+A"/>
+  	</extension>
+	
+	<extension 
+		point="org.eclipse.ui.commands">
+		<!-- Navigate -->
+		<command
+	  		name="%OpenOnSelection.name"
+			description="%OpenOnSelection.description"	  		
+			id="org.eclipse.edt.ide.ui.navigate.openOnSelection"/>
+ 		<!-- Source import -->
+		<command
+	  		name="%AddImport.name"
+			description="%AddImport.description"	  		
+			id="org.eclipse.edt.ide.ui.source.importGroup.addImport"/>
+		<command
+	  		name="%OrganizeImports.name"
+			description="%OrganizeImports.description"	  		
+			id="org.eclipse.edt.ide.ui.source.importGroup.organizeImports"/>
+		<!-- Source edit -->
+		<command
+	  		name="%Format.name"
+			description="%Format.description"	  		
+			id="org.eclipse.edt.ide.ui.source.editGroup.format"/>
+		<!-- Source edit SQL -->
+		<command
+	  		name="%AddSQLStatement.name"
+			description="%AddSQLStatement.description"	  		
+			id="org.eclipse.edt.ide.ui.source.sqlGroup.addSQLStatement"/>
+		<!-- Ruler -->
+		<command
+	  		name="%Folding.name"
+			description="%Folding.description"	  		
+			id="org.eclipse.edt.ide.ui.ruler.folding"/>
+	</extension>   
+	
+	<extension 
+		point="org.eclipse.ui.menus">
+		<menuContribution locationURI="menu:navigate?after=open.ext">
+			<command commandId="org.eclipse.edt.ide.ui.navigate.openOnSelection">
+       	 		<visibleWhen>
+       				<with variable="activePartId">
+       					<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+       				</with>
+     			</visibleWhen>
+     		</command>
+  		</menuContribution>
+  		<menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=edit">
+     		<menu id="org.eclipse.edt.ide.ui.source.menu" 
+     			label="%SourceMenu.name">
+       	 		<command commandId="org.eclipse.edt.ide.ui.source.editGroup.format"/>
+       	 		<separator name="importGroup" visible="true"/>
+       	 		<command commandId="org.eclipse.edt.ide.ui.source.importGroup.addImport"/>
+   	 			<command commandId="org.eclipse.edt.ide.ui.source.importGroup.organizeImports"/>
+   	 			<separator name="sqlGroup" visible="true"/>
+   	 			<command commandId="org.eclipse.edt.ide.ui.source.sqlGroup.addSQLStatement"/>
+       	 		<separator name="additions" visible="false"/>
+       	 		<visibleWhen>
+       				<with variable="activePartId">
+           				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+           			</with>
+     			</visibleWhen>
+    	 	</menu>
+  		</menuContribution>
+  		<menuContribution locationURI="popup:#EGLEditorContext">
+			<command commandId="org.eclipse.edt.ide.ui.navigate.openOnSelection">
+				<visibleWhen>
+       				<with variable="activePartId">
+       					<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+       				</with>
+     			</visibleWhen>
+     		</command>
+ 		</menuContribution>
+  		<menuContribution locationURI="popup:#EGLEditorContext">
+     		<menu id="org.eclipse.edt.ide.ui.popup.source.menu" 
+     			label="%SourceMenu.name">
+       	 		<command commandId="org.eclipse.edt.ide.ui.source.editGroup.format"/>
+       	 		<separator name="importGroup" visible="true"/>
+       	 		<command commandId="org.eclipse.edt.ide.ui.source.importGroup.addImport"/>
+       	 		<command commandId="org.eclipse.edt.ide.ui.source.importGroup.organizeImports"/>
+       	 		<separator name="sqlGroup" visible="true"/>
+   	 			<command commandId="org.eclipse.edt.ide.ui.source.sqlGroup.addSQLStatement"/>
+       	 		<separator name="additions" visible="false"/>
+       	 		<visibleWhen>
+       				<with variable="activePartId">
+           				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+           			</with>
+     			</visibleWhen>
+    	 	</menu>
+  		</menuContribution>
+  			<menuContribution locationURI="popup:#EGLRulerContext">
+			<command commandId="org.eclipse.edt.ide.ui.ruler.folding">
+				<visibleWhen>
+       				<with variable="activePartId">
+       					<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+       				</with>
+     			</visibleWhen>
+     		</command>
+ 		</menuContribution>
+	</extension>
+	
+	<extension 
+		point="org.eclipse.ui.handlers">
+		<handler
+        	class="org.eclipse.edt.ide.ui.internal.handlers.OpenOnSelectionHandler"
+        	commandId="org.eclipse.edt.ide.ui.navigate.openOnSelection">
+   		</handler>
+  		<handler
+        	class="org.eclipse.edt.ide.ui.internal.handlers.FormattingHandler"
+        	commandId="org.eclipse.edt.ide.ui.source.editGroup.format">
+   		</handler>
+   		<handler
+        	class="org.eclipse.edt.ide.ui.internal.handlers.AddImportHandler"
+        	commandId="org.eclipse.edt.ide.ui.source.importGroup.addImport">
+  		</handler>
+  		<handler
+        	class="org.eclipse.edt.ide.ui.internal.handlers.OrganizeImportsHandler"
+        	commandId="org.eclipse.edt.ide.ui.source.importGroup.organizeImports">
+  		</handler>
+  		<handler
+        	class="org.eclipse.edt.ide.ui.internal.handlers.AddSQLStatementHandler"
+        	commandId="org.eclipse.edt.ide.ui.source.sqlGroup.addSQLStatement">
+  		</handler>
+  		<handler
+        	class="org.eclipse.edt.ide.ui.internal.handlers.FoldingHandler"
+        	commandId="org.eclipse.edt.ide.ui.ruler.folding">
+  		</handler>
+	</extension>
+	
+	<extension
+    	point="org.eclipse.compare.contentViewers">
+		<viewer
+        	extensions="egl"
+            class="org.eclipse.edt.ide.ui.internal.compare.TextViewerCreator"
+            id="org.eclipse.edt.ide.ui.internal.ui.compare.TextViewerCreator">
+      	</viewer>
+      	<contentTypeBinding
+			contentTypeId="org.eclipse.edt.ide.ui.egl"
+            contentViewerId="org.eclipse.edt.ide.ui.internal.compare.TextViewerCreator">
+	  	</contentTypeBinding>
+	</extension>
+   
+	<extension
+        point="org.eclipse.compare.contentMergeViewers">
+      	<viewer
+            extensions="egl"
+            class="org.eclipse.edt.ide.ui.internal.compare.ContentViewerCreator"
+            id="org.eclipse.edt.ide.ui.internal.compare.ContentViewerCreator">
+      	</viewer>
+      	<contentTypeBinding
+			contentTypeId="org.eclipse.edt.ide.ui.egl"
+            contentMergeViewerId="org.eclipse.edt.ide.ui.internal.compare.ContentViewerCreator">
+	  	</contentTypeBinding>
+   	</extension>
+   	
+   	<extension
+    	point="org.eclipse.ui.actionSets">
+        <actionSet
+            label="%EGLActionSet.label"
+            description="%EGLActionSet.description"
+            visible="false"
+            id="org.eclipse.edt.ide.ui.EGLActionSet">
+        <action
+               definitionId="org.eclipse.edt.ide.ui.navigate.openPart"
+               label="%OpenPartAction.label"
+               icon="icons/ctool16/opnprt_nav.gif"
+               class="org.eclipse.edt.ide.ui.internal.actions.OpenPartAction"
+               tooltip="%OpenPartAction.tooltip"
+               menubarPath="navigate/open.ext2"
+               toolbarPath="org.eclipse.search.searchActionSet/Search"
+               id="org.eclipse.edt.ide.ui.search.OpenPart">
+        </action>
+        </actionSet>
+		<actionSet
+      		label="%EGLProjectWizardActionSet.label"
+            description="%EGLProjectWizardActionSet.description"
+            visible="false"
+            id="org.eclipse.edt.ide.ui.EGLProjectWizardActionSet">
+ 		<action
+            definitionId="org.eclipse.edt.ide.ui.newProgramWizard"
+            label="%ProgramAction.label"
+            icon="icons/ctool16/newpgm_wiz.gif"
+            tooltip="%ProgramAction.tooltip"
+            class="org.eclipse.edt.ide.ui.internal.actions.NewProgramAction"
+            toolbarPath="EGLMain"
+            id="org.eclipse.edt.ide.ui.newProgramAction">
+        </action>
+        <action
+            definitionId="org.eclipse.edt.ide.ui.newRuiHandlerWizard"
+            label="%RUIHandlerAction.label"
+            icon="icons/ctool16/newruihandler_wiz.gif"
+            tooltip="%RUIHandlerAction.tooltip"
+            class="org.eclipse.edt.ide.ui.internal.actions.NewRUIHandlerAction"
+            toolbarPath="EGLMain"
+            id="org.eclipse.edt.ide.ui.newRUIHandlerAction">
+        </action>
+        <action
+            definitionId="org.eclipse.edt.ide.ui.newSourceFileWizard"
+            label="%SourceFileAction.label"
+            icon="icons/ctool16/newfle_wiz.gif"
+            tooltip="%SourceFileAction.tooltip"
+            class="org.eclipse.edt.ide.ui.internal.actions.NewSourceFileAction"
+            toolbarPath="EGLMain"
+            id="org.eclipse.edt.ide.ui.newSourceFileAction">
+        </action>
+        <action
+            definitionId="org.eclipse.edt.ide.ui.newProjectWizard"
+            label="%EGLProjectAction.label"
+            icon="icons/ctool16/newegl_wiz.gif"
+            tooltip="%EGLProjectAction.tooltip"
+            class="org.eclipse.edt.ide.ui.internal.actions.NewEGLProjectAction"
+            toolbarPath="EGLMain"
+            id="org.eclipse.edt.ide.ui.newEGLProjectAction">
+        </action>
+		</actionSet>
+	</extension>
+   	
+	<extension 
+		point="org.eclipse.ui.contexts">
+		<context
+        	name="%context.editingEGLSource.name"
+            description="%context.editingEGLSource.description"
+            parentId="org.eclipse.ui.textEditorScope"
+            id="org.eclipse.edt.ide.ui.eglEditorScope">
+      	</context>
+	</extension>
+	
+	<extension 
+		point="org.eclipse.ui.decorators">
+    	<decorator adaptable="true"
+            class="org.eclipse.edt.ide.ui.internal.packageexplorer.EGLProjectDecorator"
+            id="org.eclipse.edt.ide.ui.EGLProjectDecorator"
+            label="%EGLProjectDecorator.label"
+            lightweight="true"
+            state="true"
+            location="TOP_RIGHT">
+            <enablement>
+	            <and>
+		            <objectClass name="org.eclipse.core.resources.IProject"/>
+		            <or>
+		            	<objectState name="projectNature" value="org.eclipse.edt.ide.core.EGLNature"/>
+		            </or>
+	           </and>
+         	</enablement>
+      	</decorator>
+   	</extension>
+	
+	<extension point="org.eclipse.ui.editors">
+		<editor
+			name="%pgmEditorName"
+			icon="icons/obj16/eglfile_obj.gif"
+			extensions="egl"
+			class="org.eclipse.edt.ide.ui.internal.editor.EGLEditor"
+			symbolicFontName="org.eclipse.edt.ide.ui.editors.textfont"
+			id="org.eclipse.edt.ide.ui.EGLEditor"
+			default="true">
+         </editor>
+   		<editor
+			id="org.eclipse.edt.ide.ui.BinaryFileEditor"
+			default="true"
+			name="%BinaryEditorName"
+			icon="icons/obj16/eglfile_obj.gif"
+			extensions="ir"
+			class="org.eclipse.edt.ide.ui.internal.editor.BinaryFileEditor" />   
+	</extension>
+	
+	<!--
+***********************************************************************
+Templates
+	To add a new egl component, for templates you need to:
+	- add a new contextType and include element here
+	- create a new templates.xml file and templates.properties file
+	- create a new org.eclipse.edt.ide.ui.internal.templates.xxxContextType.Java file
+	- register the xxxContextType in Activator.getTemplateContextRegistry()
+	- update org.eclipse.edt.ide.ui.internal.templates.EGLTemplateStore.hasCapabilityEnabled()
+***********************************************************************
+-->
+	<extension point="org.eclipse.ui.editors.templates">
+		<contextType
+        	name="%CoreTemplates"
+            class="org.eclipse.edt.ide.ui.internal.templates.CoreContextType"
+            id="egl-core">
+      	</contextType>
+      	<include
+      		file="templates/eglcoredefault-templates.xml"
+      		translations="templates/eglcoredefault-templates.properties">
+      	</include>
+      	<contextType
+            name="%RUITemplates"
+            class="org.eclipse.edt.ide.ui.internal.templates.RUIContextType"
+            id="egl-rui">
+      	</contextType>
+      	<include
+      		file="templates/eglruidefault-templates.xml"
+      		translations="templates/eglruidefault-templates.properties">
+      	</include>
+	</extension>
+	
+	<extension point="org.eclipse.ui.ide.projectNatureImages">
+      	<image
+            icon="icons/ovr16/egl_ovr.gif"
+            natureId="org.eclipse.edt.ide.core.EGLNature"
+            id="org.eclipse.edt.ide.ui.eglProjectNatureImage">
+      	</image>
+	</extension>	
+	
+	<extension point="org.eclipse.ui.navigator.navigatorContent">
+      <navigatorContent
+      		activeByDefault="true"
+            contentProvider="org.eclipse.edt.ide.ui.internal.packageexplorer.EGLNavigatorContentProvider"      		
+            icon="icons/cview16/eglperspective.gif"            
+            id="org.eclipse.edt.ide.ui.navigator.EGLContent"
+            labelProvider="org.eclipse.edt.ide.ui.internal.packageexplorer.EGLElementLabelProvider"
+            name="EGL"
+            priority="higher">
+			<triggerPoints>
+				<or>						
+					<adapt
+							type="org.eclipse.core.resources.IProject" >
+						<test
+							property="org.eclipse.core.resources.projectNature"
+							value="org.eclipse.edt.ide.core.EGLNature" />
+					</adapt>
+<!--					
+					<instanceof
+							value="org.eclipse.edt.ide.core.model.IEGLProject"/>
+-->							
+					<instanceof
+							value="org.eclipse.edt.ide.core.model.IEGLElement" />
+				</or>	
+			</triggerPoints>
+			<possibleChildren>
+				<or>
+					<instanceof
+							value="org.eclipse.core.resources.IFolder" />
+					<instanceof
+							value="org.eclipse.core.resources.IFile" />				
+					<instanceof
+							value="org.eclipse.edt.ide.core.model.IEGLProject"/>							
+					<instanceof
+							value="org.eclipse.edt.ide.core.model.IEGLElement" />
+				</or>
+			</possibleChildren>
+			<override
+					policy="InvokeAlwaysRegardlessOfSuppressedExt"
+					suppressedExtensionId="org.eclipse.ui.navigator.resourceContent"/>
+		 </navigatorContent>
+	</extension>
+	
+	<extension point="org.eclipse.ui.newWizards">
+ 		<category
+            name="%EGLWizardCategoryName"
+            id="org.eclipse.edt.ide.ui.wizards.new.category">
+      	</category>
+   		<wizard
+            name="%DataTable"
+            icon="icons/ctool16/newdta_wiz.gif"
+            category="org.eclipse.edt.ide.ui.wizards.new.category"
+            class="org.eclipse.edt.ide.ui.internal.wizards.DataTableWizard"
+            id="org.eclipse.edt.ide.ui.newTableWizard">
+        </wizard> 
+      	<wizard
+            name="%EGLFile"
+            icon="icons/ctool16/newfle_wiz.gif"
+            category="org.eclipse.edt.ide.ui.wizards.new.category"
+            class="org.eclipse.edt.ide.ui.internal.wizards.EGLFileWizard"
+            id="org.eclipse.edt.ide.ui.newSourceFileWizard">
+      	</wizard>
+      	<wizard
+            name="%Library"
+            icon="icons/ctool16/newlib_wiz.gif"
+            category="org.eclipse.edt.ide.ui.wizards.new.category"
+            class="org.eclipse.edt.ide.ui.internal.wizards.LibraryWizard"
+            id="org.eclipse.edt.ide.ui.newLibraryWizard">
+         </wizard>
+      	<wizard
+            name="%EGLPackage"
+            icon="icons/ctool16/newpkg_wiz.gif"
+            category="org.eclipse.edt.ide.ui.wizards.new.category"
+            class="org.eclipse.edt.ide.ui.internal.wizards.EGLPackageWizard"
+            id="org.eclipse.edt.ide.ui.newPackageWizard">
+       	</wizard>
+  		<wizard
+            name="%Program"
+            icon="icons/ctool16/newpgm_wiz.gif"
+            category="org.eclipse.edt.ide.ui.wizards.new.category"
+            class="org.eclipse.edt.ide.ui.internal.wizards.ProgramWizard"
+            id="org.eclipse.edt.ide.ui.newProgramWizard">
+		</wizard>
+	   	<wizard
+        	name="%EGLProject"
+            icon="icons/ctool16/newegl_wiz.gif"
+            category="org.eclipse.edt.ide.ui.wizards.new.category"
+            class="org.eclipse.edt.ide.ui.internal.project.wizards.NewEGLProjectWizard"
+            project="true"
+            id="org.eclipse.edt.ide.ui.newProjectWizard">
+ 		</wizard>
+		<wizard
+            name="%RUIHandler"
+            icon="icons/ctool16/newruihandler_wiz.gif"
+            category="org.eclipse.edt.ide.ui.wizards.new.category"
+            class="org.eclipse.edt.ide.ui.internal.wizards.RUIHandlerWizard"
+            id="org.eclipse.edt.ide.ui.newRuiHandlerWizard">
+ 		</wizard>
+      	<wizard
+            name="%RUIWidget"
+            icon="icons/ctool16/newruiwidget_wiz.gif"
+            category="org.eclipse.edt.ide.ui.wizards.new.category"
+            class="org.eclipse.edt.ide.ui.internal.wizards.RUIWidgetWizard"
+            id="org.eclipse.edt.ide.ui.newRuiWidgetWizard">
+		</wizard>
+        <wizard
+            name="%EGLSourceFolder"
+            icon="icons/ctool16/newsrc_wiz.gif"
+            category="org.eclipse.edt.ide.ui.wizards.new.category"
+            class="org.eclipse.edt.ide.ui.internal.wizards.EGLSourceFolderWizard"
+            id="org.eclipse.edt.ide.ui.newSourceWizard">
+   		</wizard>
+	</extension>
+    	
+	<extension
+        point="org.eclipse.ui.perspectives">
+		<perspective
+        	name="%EGLPerspective.name"
+            icon="icons/cview16/eglperspective.gif"
+            class="org.eclipse.edt.ide.ui.internal.EGLPerspectiveFactory"
+            id="org.eclipse.edt.ide.ui.EGLPerspective">
+      	</perspective>
+   	</extension>	
+	
+	<extension point="org.eclipse.ui.perspectiveExtensions">
+		<perspectiveExtension
+      		targetID="org.eclipse.edt.ide.ui.EGLPerspective">
+      		<showInPart 
+	      		id="org.eclipse.ui.navigator.ProjectExplorer">
+      		</showInPart>
+      	</perspectiveExtension>
+	</extension>
+	
+	<extension 
+ 		point="org.eclipse.ui.popupMenus">
+		<objectContribution
+        	adaptable="true"
+           	id="org.eclipse.edt.convert.projectpopupmenu"
+           	objectClass="org.eclipse.core.resources.IProject">
+           	<visibility>
+           		<not>
+      				<objectState
+                		name="projectNature"
+                  		value="org.eclipse.edt.ide.core.EGLNature"/>
+                 </not>
+       	 	</visibility>
+			<action
+				class="org.eclipse.edt.ide.ui.internal.actions.ConvertToEGLProjectAction"
+				enablesFor="*"
+				menubarPath="org.eclipse.ui.projectConfigure/additions"				
+				id="org.eclipse.edt.convert.project"
+				label="%ConvertToEGLProject">
+			</action> 
+		</objectContribution>
+	</extension>
+	
+   <extension point="org.eclipse.ui.preferencePages">
+		<page
+            name="%EGLPreferencePageName"
+            class="org.eclipse.edt.ide.ui.internal.preferences.BasePreferencePage"
+            id="org.eclipse.edt.ide.ui.preferences">
+		</page>
+		<page
+            name="%EditorPreferencePageName"
+            category="org.eclipse.edt.ide.ui.preferences"
+            class="org.eclipse.edt.ide.ui.internal.preferences.EditorPreferencePage"
+            id="org.eclipse.edt.ide.ui.editorPreferences">
+		</page>
+		<page
+      		name="%FoldingPreferencePageName"
+            category="org.eclipse.edt.ide.ui.editorPreferences"
+            class="org.eclipse.edt.ide.ui.internal.preferences.FoldingPreferencePage"
+            id="org.eclipse.edt.ide.ui.foldingPreferences">
+		</page>
+		<page
+            name="%CompilerPreferencePageName"
+            category="org.eclipse.edt.ide.ui.preferences"
+            class="org.eclipse.edt.ide.ui.internal.preferences.CompilerSelectionPreferencePage"
+            id="org.eclipse.edt.ide.ui.compilerPreferences">
+		</page>
+		<page
+            name="%SourceStylesPreferencePageName"
+            category="org.eclipse.edt.ide.ui.editorPreferences"
+            class="org.eclipse.edt.ide.ui.internal.preferences.StylePreferencePage"
+            id="org.eclipse.edt.ide.ui.scriptpreferences">
+		</page>
+	</extension>
+	
+	<extension point="org.eclipse.ui.propertyPages">
+		<page
+			objectClass="org.eclipse.core.resources.IProject"
+			adaptable="true"
+            name="%EGLProjectBuildPath"
+            class="org.eclipse.edt.ide.ui.internal.property.pages.EGLProjectBuildPathPropertyPage"
+           	id="org.eclipse.edt.ide.ui.EGLProjectBuildPathPropertyPage">
+      		<filter
+        		name="projectNature"
+        		value="org.eclipse.edt.ide.core.EGLNature">
+      		</filter>
+   		</page>
+   		<page
+			objectClass="org.eclipse.core.resources.IProject"
+			adaptable="true"
+            name="%CompilerPropertyPageName"
+            class="org.eclipse.edt.ide.ui.internal.preferences.CompilerPropertyAndPreferencePage"
+           	id="org.eclipse.edt.ide.ui.projectCompilerPropertyPage">
+      		<filter
+        		name="projectNature"
+        		value="org.eclipse.edt.ide.core.EGLNature">
+      		</filter>
+   		</page>
+   		<page
+			objectClass="org.eclipse.core.resources.IFolder"
+			adaptable="true"
+            name="%CompilerPropertyPageName"
+            class="org.eclipse.edt.ide.ui.internal.preferences.CompilerPropertyAndPreferencePage"
+           	id="org.eclipse.edt.ide.ui.folderCompilerPropertyPage">
+			<filter
+        		name="projectNature"
+        		value="org.eclipse.edt.ide.core.EGLNature">
+      		</filter>
+   		</page>
+   		<page
+			objectClass="org.eclipse.core.resources.IFile"
+			adaptable="true"
+            name="%CompilerPropertyPageName"
+            nameFilter="*.egl"
+            class="org.eclipse.edt.ide.ui.internal.preferences.CompilerPropertyAndPreferencePage"
+           	id="org.eclipse.edt.ide.ui.fileCompilerPropertyPage">
+      		<filter
+        		name="projectNature"
+        		value="org.eclipse.edt.ide.core.EGLNature">
+      		</filter>
+		</page>
+ 	</extension>
+
+	<extension point="org.eclipse.emf.ecore.generated_package">
+		<package 
+			uri = "http://www.ibm.com/xmlns/egl/formatting/1.0" 
+			class = "org.eclipse.edt.ide.ui.internal.formatting.profile.ProfilePackage"
+ 			genModel = "model/EGLFormatProfile.genmodel" />        
+	</extension>
+	
+	<extension point="org.eclipse.emf.ecore.extension_parser">
+ 		<parser
+       		type="profile" 
+       		class="org.eclipse.edt.ide.ui.internal.formatting.profile.util.ProfileResourceFactoryImpl" />
+	</extension>
+   
+   	<extension point="org.eclipse.ui.themes">
+		<themeElementCategory label="%Presentation_Label" id="org.eclipse.edt.ide.ui.presentation"/>
+		<fontDefinition
+			label="%Editor_Font_Definiton_Label"
+			defaultsTo="org.eclipse.jface.textfont"
+			categoryId="org.eclipse.edt.ide.ui.presentation"
+			id="org.eclipse.edt.ide.ui.editors.textfont">
+			<description>%Editor_Font_Defintion_Description</description>
+		</fontDefinition>
+		<fontDefinition
+			label="%eglCompareFontDefiniton.label"
+			defaultsTo="org.eclipse.edt.ide.ui.editors.textfont"
+			categoryId="org.eclipse.compare.contentmergeviewer.TextMergeViewer"
+			id="org.eclipse.edt.ide.ui.internal.compare.EGLMergeViewer">
+			<description>%eglCompareFontDefiniton.description</description>
+		</fontDefinition>
+	</extension>
+   
+   <!-- EGL Editor Folding provider -->
+	<extension
+		point= "org.eclipse.edt.ide.ui.eglFoldingStructureProviders">
+		<provider
+			id="org.eclipse.edt.ide.ui.internal.editor.folding.EGLFoldingStructureProvider"
+			name= "%defaultEGLFoldingStructureProviderName"
+			class="org.eclipse.edt.ide.ui.internal.editor.folding.FoldingStructureProvider"
+			preferencesClass="org.eclipse.edt.ide.ui.internal.editor.folding.FoldingPreferenceBlock">
+		</provider>
+	</extension>
+	
+	<extension
+         id="eglnature"
+         name="%eglNatureName"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="org.eclipse.edt.ide.core.internal.model.EGLProject">
+         </run>
+      </runtime>
+   </extension>
+   
+   <extension
+         id="eglbuilder"
+         name="%eglBuilderName"
+         point="org.eclipse.core.resources.builders">
+      <builder>
+         <run
+               class="org.eclipse.edt.ide.core.internal.model.builder.EGLRemoveMarkersBuilder">
+         </run>
+      </builder>
+   </extension>
+   
+   <!-- EGL buildpath problems -->
+
+	<extension id="buildpath_problem" point="org.eclipse.core.resources.markers" name="%buildPathProblemName">
+		<super type="org.eclipse.core.resources.problemmarker"/>
+		<super type="org.eclipse.core.resources.textmarker"/>
+		<persistent value="true"/>
+		<attribute name ="cycleDetected"/>
+		<attribute name="id"/>
+		<attribute name="arguments"/>
+	</extension>
+	
+	 <extension
+         point="org.eclipse.jdt.ui.classpathContainerPage">
+      <classpathContainerPage
+            name="%EDTRuntimeName"
+            class="org.eclipse.edt.ide.ui.internal.wizards.EDTRuntimeContainerWizardPage"
+            id="org.eclipse.edt.ide.core.EDT_CONTAINER">
+      </classpathContainerPage>
+   </extension>   
+   
+<!-- =============================================================================== -->
+<!--                                                                                 -->
+<!-- Define the processor extension point                                            -->
+<!--                                                                                 -->
+<!-- =============================================================================== -->
+   <extension-point id="processor" name="Processor"/>
+<!-- =============================================================================== -->
+<!--                                                                                 -->
+<!-- Define the eglproject utility extension point                                   -->
+<!--                                                                                 -->
+<!-- =============================================================================== -->
+   <extension-point id="eglprojectFileUtility" name="EglprojectFileUtility"/>
+</plugin>

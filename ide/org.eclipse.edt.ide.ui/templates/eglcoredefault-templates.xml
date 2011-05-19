@@ -1,0 +1,823 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright © 2008, 2011 IBM Corporation and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+ 
+  Contributors:
+  IBM Corporation - initial API and implementation
+ 
+-->
+
+<templates>
+<template name="dataItem" description="%Templates.string_data_item" id="org.eclipse.edt.ide.ui.templates.string_data_item" context = "egl-core" enabled="true">// string dataItem
+dataItem ${dataItemName} string
+end
+</template>
+
+<template name="dataItem" description="%Templates.numeric_data_item_with_decimals" id="org.eclipse.edt.ide.ui.templates.numeric_data_item_with_decimals" context = "egl-core" enabled="true">// dataItem with decimals
+dataItem ${dataItemName} decimal(4, 2)
+end
+</template>
+
+<template name="dataTable" description="%Templates.basic_table" id="org.eclipse.edt.ide.ui.templates.basic_table" context = "egl-core" enabled="true">// basic dataTable
+//
+dataTable ${dataTableName} type BasicTable {shared = no, resident = no}
+	
+	3 column1 char(3);
+	
+	{contents = [
+		["abc"], 
+		["xyz"]
+	]}
+	
+end
+</template>
+
+<template name="dataTable" description="%Templates.message_table" id="org.eclipse.edt.ide.ui.templates.message_table" context = "egl-core" enabled="true">// message dataTable
+//
+dataTable ${dataTableName} type MsgTable {shared = no, resident = no}
+	
+	3 messageNumber num(4); 
+	3 messageText char(60);
+	
+	{contents = [
+		[1, "Warning message"],
+		[2, "Error message"]
+	]}
+	
+end
+</template>
+
+<template name="dataTable" description="%Templates.match_valid_table" id="org.eclipse.edt.ide.ui.templates.match_valid_table" context = "egl-core" enabled="true">// match valid dataTable
+//
+dataTable ${dataTableName} type MatchValidTable {shared = no, resident = no}
+	
+	3 matchColumn char(2); 
+	3 otherColumn char(20); 
+	
+	{contents = [
+		["MN", "Minnesota"],
+		["NC", "North Carolina"]
+	]}
+	
+end
+</template>
+
+<template name="dataTable" description="%Templates.match_invalid_table" id="org.eclipse.edt.ide.ui.templates.match_invalid_table" context = "egl-core" enabled="true">// match invalid dataTable
+//
+dataTable ${dataTableName} type MatchInvalidTable {shared = no, resident = no}
+	
+	3 matchColumn char(2); 
+	3 otherColumn char(20);
+   
+	{contents = [
+		["MN", "Minnesota"],
+		["NC", "North Carolina"]
+	]}
+	
+end
+</template>
+
+<template name="dataTable" description="%Templates.range_check_table" id="org.eclipse.edt.ide.ui.templates.range_check_table" context = "egl-core" enabled="true">// range check dataTable
+//
+dataTable ${dataTableName} type RangeChkTable {shared = yes, resident = yes}
+	
+	3 lowerValue int;
+	3 upperValue int;
+	3 otherColumn char(3); 
+	
+	{contents = [
+		[1, 5, "abc"],
+		[6, 10, "xyz"]
+	]}
+	
+end
+</template>
+
+<template name="function" description="%Templates.abstract_function" id="org.eclipse.edt.ide.ui.templates.abstract_function" context = "egl-core" enabled="true">// abstract function
+function ${functionName}(parameterName string) returns (int);
+</template>
+
+<template name="function" description="%Templates.basic_function" id="org.eclipse.edt.ide.ui.templates.basic_function" context = "egl-core" enabled="true">// function
+function ${functionName}()
+
+	// Variable Declarations
+	${cursor}
+	// Function Logic
+
+end
+</template>
+
+<template name="function" description="%Templates.function_with_parameters_and_return_value" id="org.eclipse.edt.ide.ui.templates.function_with_parameters_and_return_value" context = "egl-core" enabled="true">// function with parameters and returns
+function ${functionName}(parameterName string inOut) returns(int) 
+	
+	// Variable Declarations
+	${cursor}
+	// Function Logic
+	
+	return(0);
+	
+end
+</template>
+
+<template name="record" description="%Templates.fixed_basic_record" id="org.eclipse.edt.ide.ui.templates.fixed_basic_record" context = "egl-core" enabled="true">// structured basic record
+//
+record ${recordName} type BasicRecord
+	
+	3 itemName int;
+	
+end
+</template>
+
+<template name="record" description="%Templates.flexible_basic_record" id="org.eclipse.edt.ide.ui.templates.flexible_basic_record" context = "egl-core" enabled="true">// basic record
+//
+record ${recordName} type BasicRecord
+	
+	itemName string;
+	
+end
+</template>
+
+<template name="record" description="%Templates.fixed_serial_record" id="org.eclipse.edt.ide.ui.templates.fixed_serial_record" context = "egl-core" enabled="true">// structured serial record
+//
+record ${recordName} type SerialRecord  
+	{fileName = &quot;${resourceAssociationName}&quot;, 
+	 lengthItem = ${itemName1}, numElementsItem = ${itemName2}}
+	
+	3 ${itemName1} int;
+	3 ${itemName2} int;
+	3 ${itemName3} char(5)[2];
+	
+end
+</template>
+
+<template name="record" description="%Templates.fixed_indexed_record" id="org.eclipse.edt.ide.ui.templates.fixed_indexed_record" context = "egl-core" enabled="true">// structured indexed record
+//
+record ${recordName} type IndexedRecord  
+	{fileName = &quot;${resourceAssociationName}&quot;, keyItem = ${itemName1}, 
+	 lengthItem = ${itemName2}, numElementsItem = ${itemName3}}
+	
+	3 ${itemName1} char(5);
+	3 ${itemName2} int;
+	3 ${itemName3} int;
+	3 ${itemName4} char(5)[2];
+	
+end
+</template>
+
+<template name="record" description="%Templates.fixed_relative_record" id="org.eclipse.edt.ide.ui.templates.fixed_relative_record" context = "egl-core" enabled="true">// structured relative record
+//
+record ${recordName} type RelativeRecord  
+	{fileName = &quot;${resourceAssociationName}&quot;, recordNumItem = "itemName2"}
+	
+	3 ${itemName1} char(5);
+	3 itemName2 int;
+	
+end
+</template>
+
+<template name="record" description="%Templates.exception_record" id="org.eclipse.edt.ide.ui.templates.exception_record" context = "egl-core" enabled="true">// exception record
+//
+record ${recordName} type Exception
+
+	${itemName} string;
+	
+end
+</template>
+
+<template name="record" description="%Templates.csv_record" id="org.eclipse.edt.ide.ui.templates.csv_record" context = "egl-core" enabled="true">// csv record
+//
+record ${recordName} type CSVRecord {fileName=&quot;${csvRecordName}&quot;, delimiter=",", style=CsvStyle.escaped, labels=["Name", "Age"]}
+
+	name string;
+	age int;
+	
+end
+</template>
+
+<template name="program" description="%Templates.basic_called_program" id="org.eclipse.edt.ide.ui.templates.basic_called_program" context = "egl-core" enabled="true">// basic called program
+//
+program ${programName} type BasicProgram(parm1 int, parm2 string) {}
+	
+	// Use Declarations
+	//use usePartReference;
+	
+  	// Constant Declarations
+	const constantName string = &quot;literalString&quot;;
+	
+	// Variable Declarations
+	variableName string;
+	
+	function main()
+	end
+	
+end
+</template>
+
+<template name="program" description="%Templates.basic_program" id="org.eclipse.edt.ide.ui.templates.basic_program" context = "egl-core" enabled="true">// basic program
+//
+program ${programName} type BasicProgram {}
+	
+	// Use Declarations
+	//use usePartReference;
+	
+  	// Constant Declarations
+	const constantName string = &quot;literalString&quot;;
+	
+	// Variable Declarations
+	variableName string;
+	
+	function main()
+	end
+	
+end
+</template>
+
+<template name="program" description="%Templates.ui_program" id="org.eclipse.edt.ide.ui.templates.ui_program" context = "egl-core" enabled="true">// UIProgram
+//
+program ${programName} type UIProgram {
+	//inputRecord = ${recordName} 
+	}
+	
+	// Use Declarations
+	//use usePartReference;
+	
+  	// Constant Declarations
+	const constantName string = &quot;literalString&quot;;
+	
+	// Variable Declarations
+	variableName string;
+	
+	function main()
+	end
+	
+end
+</template>
+
+<template name="library" description="%Templates.basic_library" id="org.eclipse.edt.ide.ui.templates.basic_library" context = "egl-core" enabled="true">// basic library
+library ${libraryName} type BasicLibrary {}
+	
+	// Use Declarations
+	//use usePartReference;
+	
+  	// Constant Declarations
+	const constantName string = &quot;literalString&quot;;
+	
+	// Variable Declarations
+	variableName string;
+	
+	// Function Declarations
+	function ${functionName}()
+	end
+	
+end
+</template>
+
+<template name="library" description="%Templates.native_library" id="org.eclipse.edt.ide.ui.templates.native_library" context = "egl-core" enabled="true">// native library
+library ${libraryName} type NativeLibrary {callingConvention = I4GL, dllname = &quot;${dllname}&quot;}
+	
+	// Function Declarations
+	function ${entryPoint}() {}
+	end
+	
+end
+</template>
+
+<template name="handler" description="%Templates.basic_handler" id="org.eclipse.edt.ide.ui.templates.basic_handler_part" context = "egl-core" enabled="true">// basic handler
+handler ${handlerName} type BasicHandler
+	
+	// Use Declarations
+	//use usePartReference;
+	
+  	// Constant Declarations
+	const constantName string = &quot;literalString&quot;;
+	
+	// Variable Declarations
+	variableName string;
+	
+	// Function Declarations
+	function ${functionName}()
+	end
+	
+end
+</template>
+
+<template name="delegate" description="%Templates.delegate" id="org.eclipse.edt.ide.ui.templates.delegate" context = "egl-core" enabled="true">// delegate
+delegate ${delegateName}(parameterName string inOut) returns (int) end
+</template>
+
+<template name="externalType" description="%Templates.javaObject_externalType" id="org.eclipse.edt.ide.ui.templates.javaObject.externalType" context = "egl-core" enabled="true">// externalType
+externalType ${externalTypeName} extends ${extendsName} type JavaObject {packageName = &quot;${packageName}&quot;}
+	
+	// Constructor Declarations
+	constructor(parameterName int);
+	
+	// Variable Declarations
+	variableName string;
+
+	// Function Declarations
+	function ${entryPoint}(functionParameterName string in) returns(int);
+end
+</template>
+
+<template name="import" description="%Templates.import_statement" id="org.eclipse.edt.ide.ui.templates.import_statement" context = "egl-core" enabled="true">import ${partSpaceName};</template>
+
+<template name="package" description="%Templates.package_statement" id="org.eclipse.edt.ide.ui.templates.package_statement" context = "egl-core" enabled="true">package ${packageName};</template>
+
+<template name="call" description="%Templates.call_statement" id="org.eclipse.edt.ide.ui.templates.call_statement" context = "egl-core" enabled="true">call ${programName};</template>
+
+<template name="call" description="%Templates.call_statement_with_multiple_arguments" id="org.eclipse.edt.ide.ui.templates.call_statement_with_multiple_arguments" context = "egl-core" enabled="true">call ${programName} ${arg1}, ${arg2};</template>
+
+<template name="case" description="%Templates.case_statement" id="org.eclipse.edt.ide.ui.templates.case_statement" context = "egl-core" enabled="true">case (${criterion})
+	when (${matchExpression1}, ${matchExpression2})
+		// EGL statements
+	when (${matchExpression3})
+		// EGL statements
+	otherwise
+		// EGL statements
+end</template>
+
+<template name="case" description="%Templates.case_statement_with_no_criterion" id="org.eclipse.edt.ide.ui.templates.case_statement_with_no_criterion" context = "egl-core" enabled="true">case
+	when (${booleanMatchExpression1})
+		// EGL statements
+	when (${booleanMatchExpression2})
+		// EGL statements
+	otherwise
+		// EGL statements
+end</template>
+
+<template name="case" description="%Templates.case_statement_testing_key_values" id="org.eclipse.edt.ide.ui.templates.case_statement_testing_key_values" context = "egl-core" enabled="true">case (converseVar.eventKey)
+	when (${keyValue1})
+		// EGL statements
+	when (${keyValue2})
+		// EGL statements
+	otherwise
+		// EGL statements
+end</template>
+
+<template name="case" description="%Templates.case_statement_testing_system_type" id="org.eclipse.edt.ide.ui.templates.case_statement_testing_system_type" context = "egl-core" enabled="true">case (sysVar.systemType)
+	when (${sysValue1})
+		// EGL statements
+	when (${sysValue2})
+		// EGL statements
+	otherwise
+		// EGL statements
+end</template>
+
+<template name="continue" description="%Templates.continue_for_statement" id="org.eclipse.edt.ide.ui.templates.continue_for_statement" context = "egl-core" enabled="true">continue for;</template>
+
+<template name="continue" description="%Templates.continue_foreach_statement" id="org.eclipse.edt.ide.ui.templates.continue_foreach_statement" context = "egl-core" enabled="true">continue foreach;</template>
+
+<template name="continue" description="%Templates.continue_while_statement" id="org.eclipse.edt.ide.ui.templates.continue_while_statement" context = "egl-core" enabled="true">continue while;</template>
+
+<template name="exit" description="%Templates.exit_statement" id="org.eclipse.edt.ide.ui.templates.exit_statement" context = "egl-core" enabled="true">exit;</template>
+
+<template name="exit" description="%Templates.exit_program" id="org.eclipse.edt.ide.ui.templates.exit_program" context = "egl-core" enabled="true">exit program;</template>
+
+<template name="exit" description="%Templates.exit_stack" id="org.eclipse.edt.ide.ui.templates.exit_stack" context = "egl-core" enabled="true">exit stack;</template>
+
+<template name="exit" description="%Templates.exit_if" id="org.eclipse.edt.ide.ui.templates.exit_if" context = "egl-core" enabled="true">exit if;</template>
+
+<template name="exit" description="%Templates.exit_while" id="org.eclipse.edt.ide.ui.templates.exit_while" context = "egl-core" enabled="true">exit while;</template>
+
+<template name="exit" description="%Templates.exit_case" id="org.eclipse.edt.ide.ui.templates.exit_case" context = "egl-core" enabled="true">exit case;</template>
+
+<template name="exit" description="%Templates.exit_for" id="org.eclipse.edt.ide.ui.templates.exit_for" context = "egl-core" enabled="true">exit for;</template>
+
+<template name="exit" description="%Templates.exit_foreach" id="org.eclipse.edt.ide.ui.templates.exit_foreach" context = "egl-core" enabled="true">exit foreach;</template>
+
+<template name="exit" description="%Templates.exit_program_with_return_code" id="org.eclipse.edt.ide.ui.templates.exit_program_with_return_code" context = "egl-core" enabled="true">exit program (${returnCode});</template>
+
+<template name="exit" description="%Templates.exit_stack_to_location" id="org.eclipse.edt.ide.ui.templates.exit_stack_to_location" context = "egl-core" enabled="true">exit stack ${exitLabel};</template>
+
+<template name="for" description="%Templates.for_statement" id="org.eclipse.edt.ide.ui.templates.for_statement" context = "egl-core" enabled="true">for (${counter} from ${start} to ${end} by ${delta})
+	// EGL statements
+	${cursor}
+end</template>
+
+<template name="foreach" description="%Templates.foreach_statement" id="org.eclipse.edt.ide.ui.templates.foreach_statement" context = "egl-core" enabled="true">foreach (${target} into ${item})
+	// EGL statements
+	${cursor}
+end</template>
+
+<template name="function invocation" description="%Templates.unqualified_function_invocation_with_single_argument" id="org.eclipse.edt.ide.ui.templates.unqualified_function_invocation_with_single_argument" context = "egl-core" enabled="true">${functionName}(${arg1});</template>
+
+<template name="function invocation" description="%Templates.unqualified_function_invocation_with_multiple_arguments" id="org.eclipse.edt.ide.ui.templates.unqualified_function_invocation_with_multiple_arguments" context = "egl-core" enabled="true">${functionName}(${arg1}, ${arg2});</template>
+
+<template name="function invocation" description="%Templates.unqualified_function_invocation" id="org.eclipse.edt.ide.ui.templates.unqualified_function_invocation" context = "egl-core" enabled="true">${functionName}();</template>
+
+<template name="function invocation" description="%Templates.qualified_function_invocation_with_single_argument" id="org.eclipse.edt.ide.ui.templates.qualified_function_invocation_with_single_argument" context = "egl-core" enabled="true">${qualifier}.${functionName}(${arg1});</template>
+
+<template name="function invocation" description="%Templates.qualified_function_invocation_with_multiple_arguments" id="org.eclipse.edt.ide.ui.templates.qualified_function_invocation_with_multiple_arguments" context = "egl-core" enabled="true">${qualifier}.${functionName}(${arg1}, ${arg2});</template>
+
+<template name="function invocation" description="%Templates.qualified_function_invocation" id="org.eclipse.edt.ide.ui.templates.ualified_function_invocatio" context = "egl-core" enabled="true">${qualifier}.${functionName}();</template>
+
+<template name="goto" description="%Templates.goto_label_statement" id="org.eclipse.edt.ide.ui.templates.goto_label_statement" context = "egl-core" enabled="true">goto ${gotoLabel};</template>
+
+<template name="if" description="%Templates.if_statement" id="org.eclipse.edt.ide.ui.templates.if_statement" context = "egl-core" enabled="true">if (${condition})
+	// EGL statements
+	${cursor}
+end</template>
+
+<template name="ifelse" description="%Templates.if_else_statement" id="org.eclipse.edt.ide.ui.templates.if_else_statement" context = "egl-core" enabled="true">if (${condition})
+	// EGL statements
+	${cursor}
+else
+	// EGL statements
+end</template>
+
+<template name="move" description="%Templates.move_statement" id="org.eclipse.edt.ide.ui.templates.move_statement" context = "egl-core" enabled="true">move ${source} to ${target};</template>
+
+<template name="move" description="%Templates.move_by_position" id="org.eclipse.edt.ide.ui.templates.move_by_position" context = "egl-core" enabled="true">move ${source} to ${target} byPosition;</template>
+
+<template name="move" description="%Templates.move_by_name" id="org.eclipse.edt.ide.ui.templates.move_by_name" context = "egl-core" enabled="true">move ${source} to ${target} byName;</template>
+
+<template name="move" description="%Templates.move_for_all" id="org.eclipse.edt.ide.ui.templates.move_for_all" context = "egl-core" enabled="true">move ${source} to ${target} for all;</template>
+
+<template name="move" description="%Templates.move_for_count" id="org.eclipse.edt.ide.ui.templates.move_for_count" context = "egl-core" enabled="true">move ${source} to ${target} for ${count};</template>
+
+<template name="return" description="%Templates.return_statement" id="org.eclipse.edt.ide.ui.templates.return_statement" context = "egl-core" enabled="true">return;</template>
+
+<template name="return" description="%Templates.return_statement_with_return_code" id="org.eclipse.edt.ide.ui.templates.return_statement_with_return_code" context = "egl-core" enabled="true">return (${returnValue});</template>
+
+<template name="set" description="%Templates.set_one_state" id="org.eclipse.edt.ide.ui.templates.set_one_state" context = "egl-core" enabled="true">set ${dataReference} ${state};</template>
+
+<template name="set" description="%Templates.set_multiple_states" id="org.eclipse.edt.ide.ui.templates.set_multiple_states" context = "egl-core" enabled="true">set ${dataReference} ${state1}, ${state2};</template>
+
+<template name="throw" description="%Templates.throw_statement" id="org.eclipse.edt.ide.ui.templates.throw_statement" context = "egl-core" enabled="true">throw ${exceptionDeclaration};</template>
+
+<template name="transfer" description="%Templates.transfer_to_program" id="org.eclipse.edt.ide.ui.templates.transfer_to_program" context = "egl-core" enabled="true">transfer to program ${target};</template>
+
+<template name="transfer" description="%Templates.transfer_to_transaction" id="org.eclipse.edt.ide.ui.templates.transfer_to_transaction" context = "egl-core" enabled="true">transfer to transaction ${target};</template>
+
+<template name="transfer" description="%Templates.transfer_to_program_passing_record" id="org.eclipse.edt.ide.ui.templates.transfer_to_program_passing_record" context = "egl-core" enabled="true">transfer to program ${target} passing ${recordName};</template>
+
+<template name="transfer" description="%Templates.transfer_to_transaction_passing_record" id="org.eclipse.edt.ide.ui.templates.transfer_to_transaction_passing_record" context = "egl-core" enabled="true">transfer to transaction ${target} passing ${recordName};</template>
+
+<template name="try onException" description="%Templates.try_on_exception_statement" id="org.eclipse.edt.ide.ui.templates.try_on_exception_statement" context = "egl-core" enabled="true">try
+	// EGL statements
+	${cursor}
+onException(exception NullValueException)
+	// EGL statements
+onException(exception AnyException)
+	// EGL statements
+end</template>
+
+<template name="while" description="%Templates.while_statement" id="org.eclipse.edt.ide.ui.templates.while_statement" context = "egl-core" enabled="true">while (${booleanExpression})
+	// EGL statements
+	${cursor}
+end</template>
+
+<template name="assignment" description="%Templates.assignment_statement" id="org.eclipse.edt.ide.ui.templates.assignment_statement" context = "egl-core" enabled="true">${target} = ${source};</template>
+
+<template name="assignment" description="%Templates.assignment_statement_with_rounding" id="org.eclipse.edt.ide.ui.templates.assignment_statement_with_rounding" context = "egl-core" enabled="true">${target} = mathLib.round(${numericExpression});</template>
+
+<template name="close" description="%Templates.close_record_I/O_statement" id="org.eclipse.edt.ide.ui.templates.close_record_I/O_statement" context = "egl-core" enabled="true">close ${recordNameOrResultSetIdentifier};</template>
+	
+<template name="add" description="%Templates.add_I/O_statement" id="org.eclipse.edt.ide.ui.templates.add_I/O_statement" context = "egl-core" enabled="true">add ${recordName};</template>
+
+<template name="replace" description="%Templates.replace_I/O_statement" id="org.eclipse.edt.ide.ui.templates.replace_I/O_statement" context = "egl-core" enabled="true">replace ${recordName};</template>
+
+<template name="delete" description="%Templates.delete_I/O_statement" id="org.eclipse.edt.ide.ui.templates.delete_I/O_statement" context = "egl-core" enabled="true">delete ${recordName};
+</template>
+
+<template name="get" description="%Templates.get_by_key" id="org.eclipse.edt.ide.ui.templates.get_by_key" context = "egl-core" enabled="true">get ${recordName};
+</template>
+
+<template name="get" description="%Templates.get_by_position" id="org.eclipse.edt.ide.ui.templates.get_by_position" context = "egl-core" enabled="true">get ${directive} ${recordName};
+</template>
+
+
+
+<template name="interface" description="%Templates.interface" id="org.eclipse.edt.ide.ui.templates.interface" context = "egl-core" enabled="true">// interface
+interface ${interfaceName}
+
+	function ${functionName}(parameterName string in) returns (int);
+
+end
+</template>
+
+<template name="service" description="%Templates.service" id="org.eclipse.edt.ide.ui.templates.service" context = "egl-core" enabled="true">// service
+service ${serviceName}
+	
+	// Variable Declarations
+	variableName string;
+	
+	// Function Declarations
+	function ${functionName}()
+	end
+
+end
+</template>
+
+<template name="service declaration" description="%Templates.service_declaration" id="org.eclipse.edt.ide.ui.templates.service_declaration" context = "egl-core" enabled="true">${variableName} ${serviceName} {@bindService};</template>
+
+
+
+<template name="record" description="%Templates.fixed_SQL_record_with_table_names" id="org.eclipse.edt.ide.ui.templates.fixed_SQL_record_with_table_names" context = "egl-core" enabled="true">// structured SQL record with table names
+//
+record ${recordName} type SQLRecord  
+	{tableNames = [[&quot;${tableName}&quot;, &quot;${L1}&quot;]], keyItems = [${keyItemName}],
+	 defaultSelectCondition = #sqlCondition{ ${column1} = :${hostVariable1} }}
+	
+	3 ${keyItemName} char(5);
+	3 itemName2 int {column = &quot;${columnName}&quot;, isReadOnly = no, isSqlNullable = yes};
+	
+end
+</template>
+
+<template name="record" description="%Templates.fixed_SQL_record_with_table_name_variables" id="org.eclipse.edt.ide.ui.templates.fixed_SQL_record_with_table_name_variables" context = "egl-core" enabled="true">// structured SQL record with table name variables
+//
+record ${recordName} type SQLRecord  
+	{tableNameVariables = [[&quot;${tableNameVariable}&quot;, &quot;${L1}&quot;]], keyItems = [${keyItemName}],
+	 defaultSelectCondition = #sqlCondition{ ${column1} = :${hostVariable1} }}
+	
+	3 ${keyItemName} char(5);
+	3 itemName2 int {column = &quot;${columnName}&quot;, isReadOnly = no, isSqlNullable = yes};
+	
+end
+</template>
+
+<template name="record" description="%Templates.flexible_SQL_record_with_table_names" id="org.eclipse.edt.ide.ui.templates.flexible_SQL_record_with_table_names" context = "egl-core" enabled="true">// SQL record with table names
+//
+record ${recordName} type SQLRecord  
+	{tableNames = [[&quot;${tableName}&quot;, &quot;${L1}&quot;]], keyItems = [${keyItemName}],
+	 defaultSelectCondition = #sqlCondition{ ${column1} = :${hostVariable1} }}
+	
+	${keyItemName} string;
+	itemName2 int {column = &quot;${columnName}&quot;, isReadOnly = no, isSqlNullable = yes};
+	
+end
+</template>
+
+<template name="execute" description="%Templates.execute_with_SQL_delete_statement" id="org.eclipse.edt.ide.ui.templates.execute_with_SQL_delete_statement" context = "egl-core" enabled="true">execute 
+	#sql{
+		delete from ${tableOrViewName}
+			where
+				${column1} = :${hostVariable1}
+	};
+</template>
+
+<template name="execute" description="%Templates.execute_with_SQL_delete_statement_from_result_set" id="org.eclipse.edt.ide.ui.templates.execute_with_SQL_delete_statement_from_result_set" context = "egl-core" enabled="true">execute
+	#sql{
+		delete from ${tableOrViewName}
+			where current of ${resultSetIdentifier}
+	};
+</template>
+
+<template name="execute" description="%Templates.execute_with_SQL_insert_statement" id="org.eclipse.edt.ide.ui.templates.execute_with_SQL_insert_statement" context = "egl-core" enabled="true">execute 
+	#sql{
+		insert into ${tableOrViewName}
+			(${column1}, ${column2}, ${column3})
+		values
+			(:${hostVariable1}, :${hostVariable2}, :${hostVariable3})
+	};
+</template>
+
+<template name="execute" description="%Templates.execute_with_SQL_update_statement" id="org.eclipse.edt.ide.ui.templates.execute_with_SQL_update_statemen" context = "egl-core" enabled="true">execute
+	#sql{
+		update ${tableOrViewName}
+		set
+			${column2} = :${hostVariable2},
+			${column3} = :${hostVariable3}
+		where
+			${column1} = :${hostVariable1}
+	};
+</template>
+
+<template name="execute" description="%Templates.execute_with_SQL_update_statement_from_result_set" id="org.eclipse.edt.ide.ui.templates.execute_with_SQL_update_statement_from_result_set" context = "egl-core" enabled="true">execute
+	#sql{
+		update ${tableOrViewName}
+		set
+			${column2} = :${hostVariable2},
+			${column3} = :${hostVariable3}
+		where current of ${resultSetIdentifier}
+	};
+</template>
+
+<template name="execute" description="%Templates.execute_SQL_statement_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.execute_SQL_statement_for_SQL_record" context = "egl-core" enabled="true">execute ${sqlStatement} for ${sqlRecord};</template>
+
+<template name="execute" description="%Templates.execute_with_prepared_SQL_statement" id="org.eclipse.edt.ide.ui.templates.execute_with_prepared_SQL_statement" context = "egl-core" enabled="true">execute ${preparedStatementReference}
+	using ${item1}, ${item2}, ${item3};</template>
+
+<template name="open" description="%Templates.open_with_SQL_select_statement" id="org.eclipse.edt.ide.ui.templates.open_with_SQL_select_statement" context = "egl-core" enabled="true">open ${resultSetIdentifier}
+	usingKeys ${item1}, ${item2}, ${item3}		 
+	with
+		#sql{
+			select
+				${column1}, ${column2}, ${column3}
+			from
+				${tableOrViewName} ${t1}
+			where
+				${column1} = :${hostVariable1}
+			order by
+				${column1} asc
+		}
+	into ${item4}, ${item5}, ${item6}
+	for ${recordName};
+</template>
+
+<template name="open" description="%Templates.open_with_SQL_select_statement_with_forUpdate" id="org.eclipse.edt.ide.ui.templates.open_with_SQL_select_statement_with_forUpdate" context = "egl-core" enabled="true">open ${resultSetIdentifier} 
+	usingKeys ${item1}, ${item2}, ${item3}		 
+	with
+		#sql{
+			select
+				${column1}, ${column2}, ${column3}
+			from
+				${tableOrViewName} ${t1}
+			where
+				${column1} = :${hostVariable1}
+			for update of
+				${column2}, ${column3}
+		}
+	into ${item4}, ${item5}, ${item6}
+	for ${recordName};
+</template>
+
+<template name="open" description="%Templates.open_with_SQL_select_statement_with_hold" id="org.eclipse.edt.ide.ui.templates.open_with_SQL_select_statement_with_hold" context = "egl-core" enabled="true">open ${resultSetIdentifier} hold
+	usingKeys ${item1}, ${item2}, ${item3}		 
+	with
+		#sql{
+			select
+				${column1}, ${column2}, ${column3}
+			from
+				${tableOrViewName} ${t1}
+			where
+				${column1} = :${hostVariable1}
+			order by
+				${column1} asc
+		}
+	into ${item4}, ${item5}, ${item6}
+	for ${recordName};
+</template>
+
+<template name="open" description="%Templates.open_with_prepared_SQL_statement" id="org.eclipse.edt.ide.ui.templates.open_with_prepared_SQL_statement" context = "egl-core" enabled="true">open ${resultSetIdentifier}
+	with ${preparedStatementReference}
+	using ${item1}, ${item2}, ${item3};
+</template>
+
+<template name="prepare" description="%Templates.prepare_SQL_statement" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_statement" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} from ${stringExpression};</template>
+
+<template name="prepare" description="%Templates.prepare_SQL_statement_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_statement_for_SQL_record" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} from ${stringExpression} for ${sqlRecord};</template>
+
+<template name="prepare" description="%Templates.prepare_SQL_delete_statement_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_delete_statement_for_SQL_record" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} 
+	from
+		"delete from ${tableOrView} " +
+		"where ${column1} = ?"
+	for ${sqlRecord};</template>
+	
+<template name="prepare" description="%Templates.prepare_SQL_delete_statement_from_result_set_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_delete_statement_from_result_set_for_SQL_record" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} 
+	from
+		"delete from ${tableOrView} " +
+		"where current of ${resultSetIdentifier}"
+	for ${sqlRecord};</template>	
+	
+<template name="prepare" description="%Templates.prepare_SQL_insert_statement_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_insert_statement_for_SQL_record" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} 
+	from
+		"insert into ${tableOrView} " +
+		"(${column1}, ${column2}, ${column3}) " +	
+		"values (?, ?, ?)"
+	for ${sqlRecord};</template>
+	
+<template name="prepare" description="%Templates.prepare_SQL_select_statement_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_select_statement_for_SQL_record" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} 
+	from
+		"select ${column1}, ${column2}, ${column3} " +
+		"from ${tableOrView1} ${t1} " +
+		"where ${column1} = ? " +
+		"order by ${column1} asc"
+	for ${sqlRecord};</template>	
+	
+<template name="prepare" description="%Templates.prepare_SQL_select_statement_with_forUpdate_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_select_statement_with_forUpdate_for_SQL_record" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} 
+	from
+		"select ${column1}, ${column2}, ${column3} " +
+		"from ${tableOrView1} ${t1} " +
+		"where ${column1} = ? " +
+		"for update of ${column2}, ${column3}"
+	for ${sqlRecord};</template>	
+	
+<template name="prepare" description="%Templates.prepare_SQL_update_statement_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_update_statement_for_SQL_record" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} 
+	from
+		"update ${tableOrView} " +
+		"set ${column2} = ?, ${column3} = ? " +
+		"where ${column1} = ?"
+	for ${sqlRecord};</template>	
+	
+<template name="prepare" description="%Templates.prepare_SQL_update_statement_from_result_set_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_update_statement_from_result_set_for_SQL_record" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} 
+	from
+		"update ${tableOrView} " +
+		"set ${column2} = ?, ${column3} = ? " +
+		"where current of ${resultSetIdentifier}"
+	for ${sqlRecord};</template>	
+
+<template name="replace" description="%Templates.replace_with_SQL_update_statement" id="org.eclipse.edt.ide.ui.templates.replace_with_SQL_update_statement" context = "egl-core" enabled="true">replace ${recordName}
+	with
+		#sql{
+			update ${tableOrViewName}
+			set
+				${column2} = :${hostVariable2},
+				${column3} = :${hostVariable3}
+		};
+</template>
+
+<template name="replace" description="%Templates.replace_with_SQL_update_statement_from_result_set" id="org.eclipse.edt.ide.ui.templates.replace_with_SQL_update_statement_from_result_set" context = "egl-core" enabled="true">replace ${recordName}
+	with
+		#sql{
+			update ${tableOrViewName}
+			set
+				${column2} = :${hostVariable2},
+				${column3} = :${hostVariable3}
+			where current of ${resultSetIdentifier}
+		};
+</template>
+
+<template name="execute" description="%Templates.execute_with_SQL_delete_statement" id="org.eclipse.edt.ide.ui.templates.execute_with_SQL_delete_statement" context = "egl-core" enabled="true">execute 
+	#sql{
+		delete from ${tableOrViewName}
+			where
+				${column1} = :${hostVariable1}
+	};
+</template>
+
+<template name="add" description="%Templates.add_with_SQL_insert_statement" id="org.eclipse.edt.ide.ui.templates.add_with_SQL_insert_statement" context = "egl-core" enabled="true">add ${recordName} 
+	with 
+		#sql{
+			insert into ${tableOrViewName}
+				(${column1}, ${column2}, ${column3})
+			values
+				(:${hostVariable1}, :${hostVariable2}, :${hostVariable3})
+		};
+</template>
+
+<template name="delete" description="%Templates.delete_from_SQL_result_set" id="org.eclipse.edt.ide.ui.templates.delete_from_SQL_result_set" context = "egl-core" enabled="true">delete ${recordName} from ${resultSetIdentifier};
+</template>
+
+<template name="get" description="%Templates.get_by_position_with_SQL_into" id="org.eclipse.edt.ide.ui.templates.get_by_position_with_SQL_into" context = "egl-core" enabled="true">get ${directive} ${recordName}
+	into ${item1}, ${item2}, ${item3};
+</template>
+
+<template name="get" description="%Templates.get_by_position_from_SQL_result_set" id="org.eclipse.edt.ide.ui.templates.get_by_position_from_SQL_result_set" context = "egl-core" enabled="true">get ${directive} ${recordName}
+	from ${resultSetIdentifier};
+</template>
+
+<template name="get" description="%Templates.get_by_position_from_SQL_result_set_with_into" id="org.eclipse.edt.ide.ui.templates.get_by_position_from_SQL_result_set_with_into" context = "egl-core" enabled="true">get ${directive} ${recordName}
+	from ${resultSetIdentifier}
+	into ${item1}, ${item2}, ${item3};
+</template>
+
+<template name="get" description="%Templates.get_by_key_with_SQL_select_statement" id="org.eclipse.edt.ide.ui.templates.get_by_key_with_SQL_select_statement" context = "egl-core" enabled="true">get ${recordName}
+	usingKeys ${item1}, ${item2}, ${item3}
+	with
+		#sql{
+			select
+				${column1}, ${column2}, ${column3}
+			from
+				${tableOrViewName} ${t1}
+			where
+				${column1} = :${hostVariable1}
+			order by
+				${column1} asc
+		}
+	into ${item4}, ${item5}, ${item6};
+</template>				
+
+<template name="get" description="%Templates.get_by_key_with_prepared_SQL_statement" id="org.eclipse.edt.ide.ui.templates.get_by_key_with_prepared_SQL_statement" context = "egl-core" enabled="true">get ${recordName}
+	with ${preparedStatementReference}
+	using ${item1}, ${item2}, ${item3};
+</template>	
+
+<template name="get" description="%Templates.get_by_key_with_SQL_select_statement_with_singleRow" id="org.eclipse.edt.ide.ui.templates.get_by_key_with_SQL_select_statement_with_singleRow" context = "egl-core" enabled="true">get ${recordName} singleRow
+	with
+		#sql{
+			select
+				${column1}, ${column2}, ${column3}
+			from
+				${tableOrViewName} ${t1}
+			where
+				${column1} = :${hostVariable1}
+			order by
+				${column1} asc
+		}
+	into ${item4}, ${item5}, ${item6};
+</template>
+
+<template name="get" description="%Templates.get_by_key_with_SQL_select_with_forUpdate" id="org.eclipse.edt.ide.ui.templates.get_by_key_with_SQL_select_with_forUpdate" context = "egl-core" enabled="true">get ${recordName}
+	usingKeys ${item1}, ${item2}, ${item3}
+	with
+		#sql{
+			select
+				${column1}, ${column2}, ${column3}
+			from
+				${tableOrViewName} ${t1}
+			where
+				${column1} = :${hostVariable1}
+			for update of
+				${column2}, ${column3}
+		}
+	into ${item4}, ${item5}, ${item6};
+</template>
+
+</templates>
