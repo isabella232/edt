@@ -69,4 +69,5 @@ public class JavaGeneratorTabProvider extends AbstractGeneratorTabProvider
 	public void performDefaults() {
 		genSettings.performDefaults();
 	}
+	
 }
