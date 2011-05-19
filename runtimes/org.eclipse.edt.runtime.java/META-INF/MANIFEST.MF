@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Java Plug-in
+Bundle-SymbolicName: org.eclipse.edt.runtime.java
+Bundle-Version: 0.7.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: com.ibm.icu;bundle-version="3.8.1"
+Export-Package: egl.lang,
+ org.eclipse.edt.javart,
+ org.eclipse.edt.javart.json,
+ org.eclipse.edt.javart.messages,
+ org.eclipse.edt.javart.resources,
+ org.eclipse.edt.javart.services,
+ org.eclipse.edt.javart.util,
+ org.eclipse.edt.runtime.java.egl.lang

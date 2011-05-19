@@ -1,0 +1,544 @@
+/*******************************************************************************
+ * Copyright © 2006, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.javart.util;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+
+/**
+ * Helper class used to calculate arguments to be passed when instantiating
+ * timestamp and interval types.
+ */
+public class TimestampIntervalMask implements Serializable
+{
+	private static final long serialVersionUID = 70L;
+	
+	/**
+	 * The pattern associated with a timestamp or interval.
+	 */
+	private String pattern = "";
+	private transient String lowerCasePattern = pattern;
+	
+	private static final int YEAR_CODE = 0;
+	private static final int MONTH_CODE = 1;
+	private static final int DAY_CODE = 2;
+	private static final int HOUR_CODE = 3;
+	private static final int MINUTE_CODE = 4;
+	private static final int SECOND_CODE = 5;
+	private static final int FRACTION1_CODE = 6;
+	private static final int FRACTION2_CODE = 7;
+	private static final int FRACTION3_CODE = 8;
+	private static final int FRACTION4_CODE = 9;
+	private static final int FRACTION5_CODE = 10;
+	private static final int FRACTION6_CODE = 11;
+	
+	public TimestampIntervalMask(String pattern) 
+	{
+		if ( pattern != null )
+		{
+			pattern = pattern.trim();
+			for ( int i = 0; i < pattern.length(); i++ )
+			{
+				switch ( pattern.charAt( i ) )
+				{
+					case 'y':
+					case 'Y':
+					case 'm':
+					case 'M':
+					case 'd':
+					case 'D':
+					case 'h':
+					case 'H':
+					case 's':
+					case 'S':
+					case 'f':
+					case 'F':
+						break;
+					default:
+						return;
+				}
+			}
+			this.pattern = pattern;
+			
+			// Before we make the lowerCasePattern, replace 'S' with 'f' so we can
+			// tell the difference between 'S' and 's'.  They'll both be 's' after
+			// conversion to lower case.
+			this.lowerCasePattern = pattern.replace( 'S', 'f' ).toLowerCase();
+		}
+	}
+	
+	/**
+	 * Get the start code.
+	 */
+	public int getStartCode()
+	{
+		//TODO rewrite as a switch...come on people!!!
+		if( lowerCasePattern.startsWith("y") )
+		{
+			return YEAR_CODE;
+		}
+		else if( lowerCasePattern.startsWith("m") )
+		{
+			return isMonth( true ) ? MONTH_CODE : MINUTE_CODE;
+		}
+		else if( lowerCasePattern.startsWith("d") )
+		{
+			return DAY_CODE;
+		}
+		else if( lowerCasePattern.startsWith("h") )
+		{
+			return HOUR_CODE;
+		}
+		else if( lowerCasePattern.startsWith("s") )
+		{
+			return SECOND_CODE; 
+		}
+		else if( lowerCasePattern.startsWith("f") )
+		{
+			switch( numStartChars() )
+			{
+	            case 1:
+	            	return FRACTION1_CODE;
+	            case 2:
+	            	return FRACTION2_CODE;
+	            case 3:
+	            	return FRACTION3_CODE;
+	            case 4:
+	            	return FRACTION4_CODE;
+	            case 5:
+	            	return FRACTION5_CODE;
+	            case 6:
+	            	return FRACTION6_CODE;
+            }
+			// willnot happen
+			return -1;
+		}
+		else
+		{
+			// will not happen
+			return -1;
+		}
+	}
+	
+	/**
+	 * get the end code.
+	 */
+	public int getEndCode()
+	{
+		//TODO rewrite as a switch
+		if( lowerCasePattern.endsWith("y") )
+		{
+			return YEAR_CODE;
+		}
+		else if( lowerCasePattern.endsWith("m") )
+		{
+			return isMonth( false ) ? MONTH_CODE : MINUTE_CODE;
+		}
+		else if( lowerCasePattern.endsWith("d") )
+		{
+			return DAY_CODE;
+		}
+		else if( lowerCasePattern.endsWith("h") )
+		{
+			return HOUR_CODE;
+		}
+		else if( lowerCasePattern.endsWith("s") )
+		{
+			return SECOND_CODE;
+		}
+		else if( lowerCasePattern.endsWith("f") )
+		{
+			switch( numEndChars() )
+			{
+	            case 1:
+	            	return FRACTION1_CODE;
+	            case 2:
+	            	return FRACTION2_CODE;
+	            case 3:
+	            	return FRACTION3_CODE;
+	            case 4:
+	            	return FRACTION4_CODE;
+	            case 5:
+	            	return FRACTION5_CODE;
+	            case 6:
+	            	return FRACTION6_CODE;
+            }
+			// willnot happen
+			return -1;
+		}
+		else
+		{
+			// will not happen
+			return -1;
+		}
+	}
+	
+	/**
+	 * Check if 'm' represents a month or not.
+	 */
+	private boolean isMonth( boolean isStartCode )
+	{
+		int count;
+        if( isStartCode )
+        {
+            count = numStartChars();
+            if( lowerCasePattern.length() == count )
+            {
+            	// The pattern contains only 'm's, decide based on the case of first 'm'
+            	if( pattern.charAt(0) == 'M' )
+            		return true;
+            	else
+            		return false;
+            }
+            else
+            {
+                return ( lowerCasePattern.charAt(count) == 'd' );
+            }
+        }
+        else
+        {
+            count = numEndChars();
+            if( lowerCasePattern.length() == count )
+            {
+            	// The pattern contains only 'm's, decide based on the case of first 'm'.
+            	if( pattern.charAt(0) == 'M' )
+            		return true;
+            	else
+            		return false;
+            }
+            else
+            {
+                return( lowerCasePattern.charAt(lowerCasePattern.length() - count - 1) == 'y' );
+            }
+        }
+	}
+	
+	/**
+	 * Number of start characters
+	 */
+	private int numStartChars()
+	{
+        int count = 1;
+        char prevCh = lowerCasePattern.charAt(0);
+        for( int i = 1; i < lowerCasePattern.length(); i++ )
+        {
+            if( lowerCasePattern.charAt(i) == prevCh )
+            {
+                prevCh = lowerCasePattern.charAt(i);
+                count++;
+            }
+            else
+            {
+                break;
+            }
+        }
+        return count;
+    }
+	
+	/**
+	 * Number of end characters
+	 */
+	private int numEndChars()
+	{
+        int count = 1;
+        char prevCh = lowerCasePattern.charAt( lowerCasePattern.length() - 1 );
+        for( int i = lowerCasePattern.length() - 2; i >= 0; i-- )
+        {
+            if (lowerCasePattern.charAt(i) == prevCh)
+            {
+                prevCh = lowerCasePattern.charAt(i);
+                count++;
+            }
+            else
+            {
+                break;
+            }
+        }
+        return count;
+    }
+	
+	/**
+	 * Get the formatting string. 
+	 */
+	public String getFormattingPattern( int startCode, int endCode )
+	{
+		StringBuilder buf = new StringBuilder();
+		
+		int idx = 0;
+		int length = lowerCasePattern.length();
+
+		switch( startCode )
+		{
+			case YEAR_CODE:
+				for( ; idx < length && lowerCasePattern.charAt( idx ) == 'y'; idx++ )
+				{
+					buf.append('y');
+				}
+				if( endCode == YEAR_CODE )
+					break;
+
+			case MONTH_CODE:
+				if( startCode != MONTH_CODE )
+				{
+					buf.append('-');
+				}
+				for( ; idx < length && lowerCasePattern.charAt( idx ) == 'm'; idx++ )
+				{
+					buf.append('M');
+				}
+				if( endCode == MONTH_CODE )
+					break;
+
+			case DAY_CODE:
+				if( startCode != DAY_CODE )
+				{
+					buf.append('-');
+				}
+				for( ; idx < length && lowerCasePattern.charAt( idx ) == 'd'; idx++ )
+				{
+					buf.append('d');
+				}
+				if( endCode == DAY_CODE )
+					break;
+
+			case HOUR_CODE:
+				if( startCode != HOUR_CODE )
+				{
+					buf.append(' ');
+				}
+				for( ; idx < length && lowerCasePattern.charAt( idx ) == 'h'; idx++ )
+				{
+					buf.append('H');
+				}
+				if( endCode == HOUR_CODE )
+					break;
+
+			case MINUTE_CODE:
+				if( startCode != MINUTE_CODE )
+				{
+					buf.append(':');
+				}
+				for( ; idx < length && lowerCasePattern.charAt( idx ) == 'm'; idx++ )
+				{
+					buf.append('m');
+				}
+				if( endCode == MINUTE_CODE )
+					break;
+
+			case SECOND_CODE:
+				if( startCode != SECOND_CODE )
+				{
+					buf.append(':');
+				}
+				for( ; idx < length && lowerCasePattern.charAt( idx ) == 's'; idx++ )
+				{
+					buf.append('s');
+				}
+				if( endCode == SECOND_CODE )
+					break;
+
+			case FRACTION1_CODE:
+			case FRACTION2_CODE:
+			case FRACTION3_CODE:
+			case FRACTION4_CODE:
+			case FRACTION5_CODE:
+			case FRACTION6_CODE:
+				if( startCode <= SECOND_CODE )
+				{
+					buf.append('.');
+				}
+				for( int i = 0; i < endCode - SECOND_CODE; i++ )
+				{
+					buf.append('S');
+				}
+		}
+		return buf.toString();
+	}
+	
+	/**
+	 * Return length of the mask.
+	 */
+	public int getMaskLength()
+	{
+		return pattern.length();
+	}
+	
+	/**
+	 * Generate the number of y's in the mask.
+	 */
+	public int getYearDigits()
+	{
+		return getDigits('y');
+	}
+	
+	/**
+	 * Generate the number of M's in the mask.
+	 */
+	public int getMonthDigits()
+	{
+		return getDigits('m');
+	}
+	
+	/**
+	 * Generate the number of d's in the mask.
+	 */
+	public int getDayDigits()
+	{
+		return getDigits('d');
+	}
+	
+	/**
+	 * Generate the number of h's in the mask.
+	 */
+	public int getHourDigits()
+	{
+		return getDigits('h');
+	}
+	
+	/**
+	 * Generate the number of m's in the mask.
+	 */
+	public int getMinuteDigits()
+	{
+		return getDigits('m');
+	}
+	
+	/**
+	 * Generate the number of s's in the mask.
+	 */
+	public int getSecondDigits()
+	{
+		return getDigits('s');
+	}
+	
+	/**
+	 * Generate the number of f's in the mask.
+	 */
+	public int getFractionDigits()
+	{
+		return getDigits('f');
+	}
+	
+	private int getDigits(char type)
+	{
+		int first = lowerCasePattern.indexOf(type);
+		if (first >= 0)
+		{
+			int last = lowerCasePattern.lastIndexOf(type);
+			return (last - first + 1);
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	/**
+	 * The maxValue is the maximum number of months that an interval(month) can store.
+	 */
+	public long getMaxMonthValue()
+	{
+		long maxValue = 0;
+		int firstY = lowerCasePattern.indexOf('y');
+		int firstM = lowerCasePattern.indexOf('m');
+		if (firstM >= 0)
+		{
+			// Pattern contains y's and M's
+			if (firstY >= 0)
+			{
+				maxValue = 11;
+			}
+			else
+			// Pattern only contains M's
+			{
+				int lastM = lowerCasePattern.lastIndexOf('m');
+				maxValue = maxValue(lastM - firstM + 1);
+			}
+		}
+		
+		if (firstY >= 0)
+		{	
+			int lastY = lowerCasePattern.lastIndexOf('y');
+			maxValue += maxValue(lastY - firstY + 1) * 12;
+		}
+		
+		return maxValue;
+	}
+	
+	/**
+	 * The maxValue is the maximum number of seconds that an interval(second)
+	 * can store before overflowing.
+	 */
+	public long getMaxSecondValue()
+	{
+		long maxValue = 0;
+		int multiplier;
+		char firstChar = lowerCasePattern.charAt(0);
+		
+		switch (firstChar)
+		{
+			case 'd': multiplier = DateTimeUtil.SECONDS_PER_DAY;
+				break;
+			case 'h': multiplier = 3600;
+				break;
+			case 'm': multiplier = 60;
+				break;
+			case 's': multiplier = 1;
+				break;
+			default: multiplier = 0;
+				break;
+		}
+		
+		maxValue = (maxValue(lowerCasePattern.lastIndexOf(firstChar) + 1) + 1)
+				* multiplier - 1;
+		
+		return maxValue;
+	}
+	
+	/**
+	 * Calculate the maximum value that can be stored in a certain
+	 * number of digits.  Each digit has a value of 9.
+	 * @param digits	Number of digits
+	 * @return			Maximum value 
+	 */
+	private long maxValue(int digits)
+	{
+		switch( digits )
+		{
+			case 1: return 9;
+			case 2: return 99;
+			case 3: return 999;
+			case 4: return 9999;
+			case 5: return 99999;
+			case 6: return 999999;
+			case 7: return 9999999;
+			case 8: return 99999999;
+			case 9: return 999999999;
+			default: return 0;
+		}
+	}
+	
+	/**
+	 * Deserializes an instance of this class.
+	 * 
+	 * @param in  The input stream.
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	private void readObject( ObjectInputStream in )
+			throws IOException, ClassNotFoundException
+	{
+		in.defaultReadObject();
+		lowerCasePattern = (pattern == null ? "" : pattern.toLowerCase());
+	}
+}
