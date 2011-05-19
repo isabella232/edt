@@ -287,7 +287,7 @@ public class EDTUIPlugin extends AbstractUIPlugin {
 			};
 			
 			getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
-}
+		}
 		return fTemplateStore;
 	}
 	
