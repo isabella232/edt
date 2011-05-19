@@ -20,6 +20,7 @@ import org.eclipse.edt.compiler.binding.ConstantFormFieldBinding;
 import org.eclipse.edt.compiler.binding.ConstructorBinding;
 import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
+import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
@@ -65,7 +66,6 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.FunctionStatement;
-import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
@@ -98,11 +98,12 @@ class Egl2MofMember extends Egl2MofPart {
 	public boolean visit(ClassDataDeclaration node) {
 		IDataBinding field = ((org.eclipse.edt.compiler.core.ast.Name)node.getNames().get(0)).resolveDataBinding();
 		
-//		//Do not create fields that have invalid types!
-//		if (!Binding.isValidBinding(field)) {
-//			return false;
-//		}
-		
+		// Do not create members that have invalid types!
+		if (!Binding.isValidBinding(field)) {
+			stack.push(null);
+			return false;
+		}
+	
 		EObject obj;
 		if (inMofContext) {
 			EField f = mof.createEField(true);
@@ -135,6 +136,11 @@ class Egl2MofMember extends Egl2MofPart {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.StructureItem node) {
 		IDataBinding field = node.getName() == null ? (IDataBinding)node.resolveBinding() : node.getName().resolveDataBinding();
+		// Do not create members that have invalid types!
+		if (!Binding.isValidBinding(field)) {
+			stack.push(null);
+			return false;
+		}
 		EObject obj;
 		if (inMofContext) {
 			EField f = mof.createEField(true);
@@ -187,6 +193,11 @@ class Egl2MofMember extends Egl2MofPart {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ConstantFormField node) {
 		ConstantFormFieldBinding binding = (ConstantFormFieldBinding)node.resolveBinding();
+		// Do not create members that have invalid types!
+		if (!Binding.isValidBinding(binding)) {
+			stack.push(null);
+			return false;
+		}
 		ConstantFormField field = factory.createConstantFormField();		
 		field.setOccurs(binding.getOccurs() == 0 ? 1 : binding.getOccurs());
 		createAnnotations(binding, field);
@@ -200,6 +211,11 @@ class Egl2MofMember extends Egl2MofPart {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.VariableFormField node) {
 		VariableFormFieldBinding binding = (VariableFormFieldBinding)node.getName().resolveDataBinding();
+		// Do not create members that have invalid types!
+		if (!Binding.isValidBinding(binding)) {
+			stack.push(null);
+			return false;
+		}
 		VariableFormField field = factory.createVariableFormField();
 		field.setOccurs(binding.getOccurs() == 0 ? 1 : binding.getOccurs());
 		setUpEglTypedElement(field, binding);
@@ -216,6 +232,11 @@ class Egl2MofMember extends Egl2MofPart {
 	@SuppressWarnings("unchecked")
 	public boolean visit(org.eclipse.edt.compiler.core.ast.NestedFunction node) {
 		NestedFunctionBinding function = (NestedFunctionBinding)node.getName().resolveDataBinding();
+		// Do not create members that have invalid types!
+		if (!Binding.isValidBinding(function)) {
+			stack.push(null);
+			return false;
+		}
 		EObject obj = null;
 		if (inMofContext) {
 			EFunction func = mof.createEFunction(true);
@@ -262,11 +283,16 @@ class Egl2MofMember extends Egl2MofPart {
 	@Override
 	@SuppressWarnings("unchecked")
 	public boolean visit(org.eclipse.edt.compiler.core.ast.Constructor node) {
-		EObject obj = null;
+		org.eclipse.edt.compiler.core.ast.Part etAST = (org.eclipse.edt.compiler.core.ast.Part)node.getParent();
+		IPartBinding constBinding = (IPartBinding)etAST.getName().resolveBinding();
+		if (!Binding.isValidBinding(constBinding)) {
+			stack.push(null);
+			return false;
+		}
 
-		ExternalType etAST = (ExternalType)node.getParent();		
-		ConstructorBinding constructor = new ConstructorBinding((IPartBinding)etAST.getName().resolveBinding());
+		ConstructorBinding constructor = new ConstructorBinding(constBinding);
 		
+		EObject obj = null;
 		if (inMofContext) {  //not possible
 			obj = null;
 		}
@@ -299,6 +325,11 @@ class Egl2MofMember extends Egl2MofPart {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.FunctionParameter node) {
 		FunctionParameterBinding parameter = (FunctionParameterBinding)node.getName().resolveDataBinding();
+		// Do not create members that have invalid types!
+		if (!Binding.isValidBinding(parameter)) {
+			stack.push(null);
+			return false;
+		}
 		EObject obj;
 		if (inMofContext) {
 			EParameter parm = mof.createEParameter(true);
@@ -330,6 +361,11 @@ class Egl2MofMember extends Egl2MofPart {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ProgramParameter node) {
 		ProgramParameterBinding parameter = (ProgramParameterBinding)node.getName().resolveDataBinding();
+		// Do not create members that have invalid types!
+		if (!Binding.isValidBinding(parameter)) {
+			stack.push(null);
+			return false;
+		}
 		EObject obj;
 		ProgramParameter parm = factory.createProgramParameter();
 		setUpEglTypedElement(parm, parameter);
