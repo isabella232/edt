@@ -33,6 +33,7 @@ public class Constants {
 	public static final String parameter_checkOverflow = "checkOverflow";
 
 	// these are annotation key values used as context hashmap keys
+	public static final String Annotation_partBeingGenerated = "partBeingGenerated";
 	public static final String Annotation_partDataTablesUsed = "partDataTablesUsed";
 	public static final String Annotation_partFormsUsed = "partFormsUsed";
 	public static final String Annotation_partLibrariesUsed = "partLibrariesUsed";

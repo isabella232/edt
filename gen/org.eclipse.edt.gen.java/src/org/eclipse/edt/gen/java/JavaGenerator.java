@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.GenerationException;
@@ -24,6 +25,7 @@ import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
+import org.eclipse.edt.mof.egl.DataTable;
 import org.eclipse.edt.mof.egl.Part;
 
 public class JavaGenerator extends Generator {
@@ -59,6 +61,7 @@ public class JavaGenerator extends Generator {
 
 	public void generate(Part part) throws GenerationException {
 		try {
+			context.putAttribute(context.getClass(), Constants.Annotation_partBeingGenerated, part);
 			context.validate(JavaTemplate.validatePart, part, context, (Object) null);
 			if (!context.getMessageRequestor().isError()) {
 				out.getWriter().flush();
