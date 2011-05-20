@@ -7,8 +7,11 @@
 			class="org.eclipse.edt.gen.generator.example.ide.ExampleGeneratorProvider"
 			name="%ExampleGeneratorName"
 			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
+			version="0.7.0"
+			provider="IBM"
+			description="%ExampleGeneratorDescription"
 		/>
-	</extension>
+   	</extension>
 	<extension point="org.eclipse.edt.ide.ui.edtGeneratorTabs">
 		<generatorTab 
 			generatorId="org.eclipse.edt.gen.generator.example.ide.ExampleGeneratorProvider"
