@@ -67,6 +67,7 @@ public interface MofConversion {
 	String Type_DBChar = EGL_lang_package+".AnyDBChar";
 	String Type_Hex = EGL_lang_package+".AnyHex";
 	String Type_String = EGL_lang_package+".AnyString";
+	String Type_NULL = EGL_lang_package+".NullType";
 	String Type_Unicode = EGL_lang_package+".AnyUnicode";
 	String Type_Blob = EGL_lang_package+".AnyBlob";
 	String Type_Clob = EGL_lang_package+".AnyClob";

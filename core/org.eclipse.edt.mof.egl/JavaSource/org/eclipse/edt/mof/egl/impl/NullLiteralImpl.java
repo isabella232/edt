@@ -12,14 +12,15 @@
 package org.eclipse.edt.mof.egl.impl;
 
 import org.eclipse.edt.mof.egl.NullLiteral;
-import org.eclipse.edt.mof.egl.NullType;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.egl2mof.MofConversion;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class NullLiteralImpl extends LiteralImpl implements NullLiteral {
+public class NullLiteralImpl extends LiteralImpl implements NullLiteral, MofConversion {
 
 	@Override
 	public Type getType() {
-		return NullType.INSTANCE;
+		return IRUtils.getEGLType(Type_NULL);
 	}
 
 	@Override

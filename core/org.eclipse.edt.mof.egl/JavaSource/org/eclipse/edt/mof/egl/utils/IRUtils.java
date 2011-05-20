@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.edt.compiler.core.ast.NullLiteral;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AmbiguousReferenceException;
@@ -49,7 +50,6 @@ import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.NoSuchMemberError;
-import org.eclipse.edt.mof.egl.NullType;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.ParameterizableType;
@@ -395,7 +395,11 @@ public class IRUtils {
 			NamedElement mbr = ((Name)expr).getNamedElement();
 			if (mbr instanceof Function) return expr;
 		}
-		if (exprType instanceof NullType || exprType.equals(type) || exprType.getClassifier().equals(type)) {
+		
+		if (expr instanceof NullLiteral) {
+			return expr;
+		}
+		if (exprType.equals(type) || exprType.getClassifier().equals(type)) {
 			return expr;
 		}
 		if (exprType.getClassifier().equals(type.getClassifier())) {

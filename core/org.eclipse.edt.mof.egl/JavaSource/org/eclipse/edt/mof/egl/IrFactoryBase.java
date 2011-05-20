@@ -445,7 +445,6 @@ public interface IrFactoryBase extends EFactory  {
 	public MoveStatement createMoveStatement();
 	public NewExpression createNewExpression();
 	public NullLiteral createNullLiteral();
-	public NullType createNullType();
 	public OpenStatement createOpenStatement();
 	public OpenUIStatement createOpenUIStatement();
 	public Operation createOperation();

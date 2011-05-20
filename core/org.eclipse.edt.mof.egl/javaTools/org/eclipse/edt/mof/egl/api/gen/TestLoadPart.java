@@ -17,11 +17,18 @@ import java.util.Set;
 import org.eclipse.edt.compiler.internal.sdk.utils.Util;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofFactory;
+import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
+import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.compiler.SystemPackageBuildPathEntryFactory;
 import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.impl.AbstractVisitor;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.FileSystemObjectStore;
@@ -70,6 +77,7 @@ public class TestLoadPart {
 				System.out.println("Time to load: " + (System.currentTimeMillis()-start));
 			}
 			if (eClass instanceof Part) {
+				visitStuff((Part)eClass);
 				Set<Part> types = IRUtils.getReferencedPartsFor((Part)eClass);
 				System.out.println("Referenced parts for: " + ((Part)eClass).getFullyQualifiedName());
 				for (Part part : types) {
@@ -86,6 +94,41 @@ public class TestLoadPart {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void visitStuff(Part part) {
+		AbstractVisitor visitor = new MyVisitor();
+		visitor.disallowRevisit();
+		part.accept(visitor);
+	}
+	
+	
+	public static class MyVisitor extends AbstractVisitor {
+//		public boolean visit(QualifiedFunctionInvocation inv) {
+//			FunctionMember function = inv.getTarget();
+//			return false;
+//		}
+		
+		public boolean visit(BinaryExpression expr) {
+			Operation op = expr.getOperation();
+			return false;
+		}
+		
+//		public boolean visit(Field field) {
+//			
+//			String name = IRUtils.getFileName(field);
+//			System.out.println("Field: " + field.getId() + " = " + name);
+//			
+//			return true;
+//		}
+//		
+//		public boolean visit(Statement stmt) {
+//
+//			String name = IRUtils.getFileName(stmt);
+//			System.out.println("Statement: " + stmt.getClass().getName() + " = " + name);
+//			
+//			return true;
+//		}
 	}
 
 }

@@ -689,7 +689,7 @@ class Egl2MofMember extends Egl2MofPart {
 				if (block == null) {
 					block = factory.createStatementBlock();
 					field.setInitializerStatements(block);
-					setElementInformation(initializer, field.getInitializerStatements());
+					setElementInformation(settingsBlock, block);
 				}
 				NewExpression newexpr = factory.createNewExpression();
 				newexpr.setId(field.getType().getTypeSignature());
@@ -700,6 +700,7 @@ class Egl2MofMember extends Egl2MofPart {
 				AssignmentStatement newStmt = createAssignmentStatement(field, newexpr);
 				setElementInformation(settingsBlock, newStmt.getAssignment().getLHS());
 				setElementInformation(settingsBlock, newStmt.getAssignment().getRHS());
+				setElementInformation(settingsBlock, newStmt);
 				block.getStatements().add(0, newStmt);
 				field.setHasSetValuesBlock(true);
 			}

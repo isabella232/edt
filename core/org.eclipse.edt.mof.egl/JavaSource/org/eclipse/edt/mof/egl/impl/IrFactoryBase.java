@@ -1312,12 +1312,7 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	public NullLiteral createNullLiteral() {
 		return (NullLiteral)getNullLiteralEClass().newInstance();
 	}
-	
-	@Override
-	public NullType createNullType() {
-		return (NullType)getNullTypeEClass().newInstance();
-	}
-	
+		
 	@Override
 	public OpenStatement createOpenStatement() {
 		return (OpenStatement)getOpenStatementEClass().newInstance();

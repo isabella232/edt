@@ -149,9 +149,6 @@ externalType EClassProxy extends EGLClass type MofClass
 	proxiedEClass EClass;
 end
 
-externalType NullType extends EGLType type MofClass
-end
-
 externalType Classifier extends NamedElement, EGLType type MofClass {isAbstract=yes}
 	fileName string;
 	hasCompileErrors boolean;

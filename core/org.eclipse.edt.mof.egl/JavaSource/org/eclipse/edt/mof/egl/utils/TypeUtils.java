@@ -29,7 +29,6 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.NullType;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
@@ -45,7 +44,7 @@ import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 
 public class TypeUtils implements MofConversion {
-	public static final Type Type_NULLTYPE = NullType.INSTANCE;
+	public static final Type Type_NULLTYPE = getType(Type_EGLNullType);
 	public static final Type Type_ANY = getType(Type_EGLAny);
 	public static final Type Type_CHAR = getType(Type_EGLChar);
 	public static final Type Type_MBCHAR = getType(Type_EGLMBChar);
@@ -145,7 +144,7 @@ public class TypeUtils implements MofConversion {
 		Classifier classifier = type.getClassifier();
 		type = type.getClassifier();
 		if (type == null) return TypeKind_VOID;
-		else if (type == Type_NULLTYPE) return TypeKind_NULLTYPE;
+		else if (classifier == Type_NULLTYPE) return TypeKind_NULLTYPE;
 		else if (classifier == Type_ANY) return TypeKind_ANY;
 		else if (classifier == Type_BOOLEAN) return TypeKind_BOOLEAN;
 		else if (classifier == Type_CHAR) return TypeKind_CHAR;
