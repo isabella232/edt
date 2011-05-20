@@ -15,6 +15,12 @@ import egl.lang.reflect.ClassType;
 import egl.lang.reflect.mof.Operation;
 
 externalType AnyObject type ClassType	
+	static function $EQ(lvalue AnyObject in, rvalue AnyObject in) returns(BooleanType) {@Operation{"=="}};
+	static function $NEQ(lvalue AnyObject in, rvalue AnyObject in) returns(BooleanType) {@Operation{"!="}};
+
+	// Valid Conversions
+	static function AnyObject(value AnyObject in) returns(AnyObject) {@Operation{"widen"}};
+
 end
 
 externalType AnyException extends AnyObject type ClassType
@@ -23,6 +29,22 @@ externalType AnyException extends AnyObject type ClassType
 end
 
 externalType AnyValue extends AnyObject type ClassType
+end
+
+externalType NullType extends AnyObject type ClassType
+	static function $EQ(lvalue NullType in, rvalue NullType in) returns(BooleanType) {@Operation{"=="}};
+	static function $NEQ(lvalue NullType in, rvalue NullType in) returns(BooleanType) {@Operation{"!="}};
+
+
+	static function asNullType(value Int32 in) returns(NullType) {@Operation{"narrow"}};
+	static function asNullType(value Int64 in) returns(NullType) {@Operation{"narrow"}};
+	static function asNullType(value Float32 in) returns(NullType) {@Operation{"narrow"}};
+	static function asNullType(value Float64 in) returns(NullType) {@Operation{"narrow"}};
+	static function asNullType(value AnyNum in) returns(NullType) {@Operation{"narrow"}};
+	static function asNullType(value AnyDecimal in) returns(NullType) {@Operation{"narrow"}};
+	static function asNullType(value AnyString in) returns(NullType) {@Operation{"narrow"}};
+	static function asNullType(value List in) returns(NullType) {@Operation{"narrow"}};
+
 end
 
 externalType AnyRecord extends AnyValue type ClassType {isAbstract=yes}

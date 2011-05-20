@@ -3,13 +3,13 @@ cd ..
 del org.eclipse.edt.compiler\lib\*.eglar
 del org.eclipse.edt.compiler\lib\*.mofar
 
-java -classpath %IBM_ICU%;.\org.eclipse.edt.compiler\bin;.\org.eclipse.edt.mof.egl\bin;.\org.eclipse.edt.mof.egl\bin2;.\org.eclipse.edt.mof\bin; org.eclipse.edt.mof.egl.tools.CompileSystemMofParts  
-java -classpath %IBM_ICU%;.\org.eclipse.edt.compiler\bin;.\org.eclipse.edt.mof.egl\bin;.\org.eclipse.edt.mof.egl\bin2;.\org.eclipse.edt.mof\bin; org.eclipse.edt.mof.egl.tools.CompileSystemMofParts  
+java -classpath .\com.ibm.icu\com.ibm.icu_3.8.1.v20080530.jar;.\org.eclipse.edt.compiler\bin;.\org.eclipse.edt.mof.egl\bin;.\org.eclipse.edt.mof.egl\bin2;.\org.eclipse.edt.mof\bin; org.eclipse.edt.mof.egl.tools.CompileSystemMofParts  
+java -classpath .\com.ibm.icu\com.ibm.icu_3.8.1.v20080530.jar;.\org.eclipse.edt.compiler\bin;.\org.eclipse.edt.mof.egl\bin;.\org.eclipse.edt.mof.egl\bin2;.\org.eclipse.edt.mof\bin; org.eclipse.edt.mof.egl.tools.CompileSystemMofParts  
 
-java -classpath %IBM_ICU%;.\org.eclipse.edt.compiler\bin;.\org.eclipse.edt.mof.egl\bin;.\org.eclipse.edt.mof.egl\bin2;.\org.eclipse.edt.mof\bin; org.eclipse.edt.mof.egl.tools.CompileSystemReflectParts  
-java -classpath %IBM_ICU%;.\org.eclipse.edt.compiler\bin;.\org.eclipse.edt.mof.egl\bin;.\org.eclipse.edt.mof.egl\bin2;.\org.eclipse.edt.mof\bin; org.eclipse.edt.mof.egl.tools.CompileSystemReflectParts  
+java -classpath .\com.ibm.icu\com.ibm.icu_3.8.1.v20080530.jar;.\org.eclipse.edt.compiler\bin;.\org.eclipse.edt.mof.egl\bin;.\org.eclipse.edt.mof.egl\bin2;.\org.eclipse.edt.mof\bin; org.eclipse.edt.mof.egl.tools.CompileSystemReflectParts  
+java -classpath .\com.ibm.icu\com.ibm.icu_3.8.1.v20080530.jar;.\org.eclipse.edt.compiler\bin;.\org.eclipse.edt.mof.egl\bin;.\org.eclipse.edt.mof.egl\bin2;.\org.eclipse.edt.mof\bin; org.eclipse.edt.mof.egl.tools.CompileSystemReflectParts  
 
-java -classpath %IBM_ICU%;.\org.eclipse.edt.compiler\bin;.\org.eclipse.edt.mof.egl\bin;.\org.eclipse.edt.mof.egl\bin2;.\org.eclipse.edt.mof\bin; org.eclipse.edt.mof.egl.tools.CompileSystemEglParts  
+java -classpath .\com.ibm.icu\com.ibm.icu_3.8.1.v20080530.jar;.\org.eclipse.edt.compiler\bin;.\org.eclipse.edt.mof.egl\bin;.\org.eclipse.edt.mof.egl\bin2;.\org.eclipse.edt.mof\bin; org.eclipse.edt.mof.egl.tools.CompileSystemEglParts  
 
 cd org.eclipse.edt.compiler\SystemPackageBin
 
