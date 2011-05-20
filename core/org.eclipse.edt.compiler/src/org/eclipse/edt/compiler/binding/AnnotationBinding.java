@@ -505,7 +505,11 @@ public class AnnotationBinding extends DataBinding implements IAnnotationBinding
     		fields.add(annotation);
     	}
     	else {
-    		super.addAnnotation(annotation);
+    		
+    		//We may attempt to add an an annotation to itself for the following type of case:  Record myrecord {@sqlrecord{...}}
+    		if (this != annotation) {
+    			super.addAnnotation(annotation);
+    		}
     	}
     }
     

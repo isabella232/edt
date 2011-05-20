@@ -73,8 +73,36 @@ public class PartSubTypeAndAnnotationCollector extends DefaultASTVisitor {
                 return true;
             }
             public boolean visit(AnnotationExpression annotationExpression) {
-                IAnnotationTypeBinding typeBinding = AnnotationTypeManager.getInstance().getAnnotationType(
-                        InternUtil.intern(annotationExpression.getName().getCanonicalName()));
+            	
+            	IAnnotationTypeBinding typeBinding = null;
+            	
+                ITypeBinding resolvedType = null;
+                try {
+                	resolvedType = abstractBinder.bindTypeName(annotationExpression.getName());
+                }
+                catch(ResolutionException e) {
+                	resolvedType = IBinding.NOT_FOUND_BINDING;        	
+                }
+                
+            	annotationExpression.getName().setBinding(null); //reset the type so that resolution will work later
+
+            	if(IBinding.NOT_FOUND_BINDING != resolvedType) {
+                	if(resolvedType.isPartBinding() && !resolvedType.isValid() && resolvedType != partBinding) {
+                		resolvedType = ((IPartBinding) resolvedType).realize();
+                	}
+                	if(hasAnnotation(resolvedType, AnnotationAnnotationTypeBinding.getInstance())) {
+                		IAnnotationTypeBinding aTypeBinding = new AnnotationTypeBindingImpl((FlexibleRecordBinding) resolvedType, partBinding);
+                		if(aTypeBinding.isPartSubType()) {        			
+                			typeBinding = aTypeBinding;       			
+                		}
+                	}
+                }
+
+            	if (typeBinding == null) {
+                    typeBinding = AnnotationTypeManager.getInstance().getAnnotationType(
+                            InternUtil.intern(annotationExpression.getName().getCanonicalName()));
+            	}          	
+            	
                 if (typeBinding != null && typeBinding.isPartSubType()) {
                     if (typeBinding.isApplicableFor(partBinding)) {
 
@@ -84,7 +112,6 @@ public class PartSubTypeAndAnnotationCollector extends DefaultASTVisitor {
                             annotationExpression.getName().setBinding(subTypeAnnotationBinding);
                             annotationExpression.getName().setTypeBinding(typeBinding);
                             annotationExpression.setTypeBinding(typeBinding);
-                            partBinding.addAnnotation(subTypeAnnotationBinding);
                         } else {
                             problemRequestor.acceptProblem(annotationExpression.getName(), IProblemRequestor.DUPLICATE_PART_SUBTYPE);
                         }
@@ -200,11 +227,7 @@ public class PartSubTypeAndAnnotationCollector extends DefaultASTVisitor {
         	if(hasAnnotation(resolvedType, AnnotationAnnotationTypeBinding.getInstance())) {
         		IAnnotationTypeBinding aTypeBinding = new AnnotationTypeBindingImpl((FlexibleRecordBinding) resolvedType, partBinding);
         		if(aTypeBinding.isPartSubType()) {        			
-        			typeBinding = aTypeBinding;
-        			
-        			if(aTypeBinding.getAnnotation(EGLNotInCurrentReleaseAnnotationTypeBinding.getInstance()) != null) {
-        				problemRequestor.acceptProblem(name, IProblemRequestor.SYSTEM_PART_NOT_SUPPORTED, new String[] {aTypeBinding.getCaseSensitiveName()});
-        			}
+        			typeBinding = aTypeBinding;       			
         		}
         	}
         }
