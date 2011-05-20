@@ -435,7 +435,7 @@ public class GeneratePartsOperation extends GenerateOperation{
 //								}
 	
 								//TODO EDT message requestor, check for errors, etc. see original file's generate(Part)
-								if (part != null) {
+								if (part != null && !part.hasCompileErrors()) {
 									IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(partFile));
 									if (file != null && file.exists()) {
 										invokeGenerators(file, part);
