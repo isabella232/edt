@@ -84,6 +84,7 @@ public interface MofConversion {
 	String Type_ArrayDictionary = EGL_lang_package+".ArrayDictionary";
 
 	// EGL Base Types with KeyScheme prefix
+	String Type_EGLNullType = EGL_KeyScheme+Type_NULL;;
 	String Type_EGLAny = EGL_KeyScheme+Type_Any;
 	String Type_EGLInt = EGL_KeyScheme+Type_Int;
 	String Type_EGLSmallint = EGL_KeyScheme+Type_Smallint;
@@ -137,7 +138,6 @@ public interface MofConversion {
 	String Type_EGLService = EGL_reflect_package+".EGLService";
 	String Type_EGLAnnotationType = EGL_reflect_package+".AnnotationType";
 	String Type_EGLStereotypeType = EGL_reflect_package+".StereotypeType";
-	String Type_EGLNullType = EGL_reflect_package+".NullType";
 	
 	String Type_Part = EGL_reflect_package+".Part";
 	String Type_Record = EGL_reflect_package+".Record";
@@ -159,7 +159,6 @@ public interface MofConversion {
 	String Type_Stereotype = EGL_reflect_package+".Stereotype";
 	String Type_AnnotationType = EGL_reflect_package+".AnnotationType";
 	String Type_StereotypeType = EGL_reflect_package+".StereotypeType";
-	String Type_NullType = EGL_reflect_package+".NullType";
 	String Type_ElementKind = EGL_reflect_package+".ElementKind";
 	
 	// EGL Model Types
