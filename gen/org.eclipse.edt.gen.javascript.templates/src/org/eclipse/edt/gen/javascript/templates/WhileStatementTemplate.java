@@ -15,6 +15,8 @@ import org.eclipse.edt.gen.Label;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.WhileStatement;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class WhileStatementTemplate extends JavaScriptTemplate {
 
@@ -26,7 +28,7 @@ public class WhileStatementTemplate extends JavaScriptTemplate {
 			out.print(label.getName() + ": ");
 		out.print("while (");
 		if (stmt.getCondition() != null)
-			ctx.gen(genExpression, stmt.getCondition(), ctx, out, args);
+			ctx.gen(genExpression, IRUtils.makeExprCompatibleToType(stmt.getCondition(), TypeUtils.Type_BOOLEAN), ctx, out, args);
 		else
 			out.print("true");
 		out.print(") ");

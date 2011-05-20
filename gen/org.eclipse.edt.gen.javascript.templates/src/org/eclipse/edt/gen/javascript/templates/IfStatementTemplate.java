@@ -15,6 +15,8 @@ import org.eclipse.edt.gen.Label;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.IfStatement;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class IfStatementTemplate extends JavaScriptTemplate {
 
@@ -25,7 +27,7 @@ public class IfStatementTemplate extends JavaScriptTemplate {
 			&& ((Boolean) ctx.getAttribute(stmt, org.eclipse.edt.gen.Constants.Annotation_statementNeedsLabel)).booleanValue())
 			out.print(label.getName() + ": ");
 		out.print("if (");
-		ctx.gen(genExpression, stmt.getCondition(), ctx, out, args);
+		ctx.gen(genExpression, IRUtils.makeExprCompatibleToType(stmt.getCondition(), TypeUtils.Type_BOOLEAN), ctx, out, args);
 		out.print(") ");
 		if (stmt.getTrueBranch() != null)
 			ctx.gen(genStatement, stmt.getTrueBranch(), ctx, out, args);
