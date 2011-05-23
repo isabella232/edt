@@ -69,7 +69,12 @@ public class FormImpl extends FormImplBase implements Form {
 
 	@Override
 	public String getMofSerializationKey() {
-		return getContainer().getMofSerializationKey() + Type.NestedPartDelimiter + getName();
+		if (getContainer() == null) {
+			return super.getMofSerializationKey();
+		}
+		else {
+			return getContainer().getMofSerializationKey() + Type.NestedPartDelimiter + getName();
+		}
 	}
 	
 }
