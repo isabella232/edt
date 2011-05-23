@@ -12,6 +12,8 @@
 package org.eclipse.edt.gen.generator.example.ide;
 
 import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin;
 import org.eclipse.edt.ide.ui.internal.preferences.AbstractGeneratorTabProvider;
 import org.eclipse.edt.ide.ui.internal.preferences.GenerationSettingsComposite;
 import org.eclipse.swt.SWT;
@@ -29,6 +31,7 @@ public class ExampleGeneratorTabProvider extends AbstractGeneratorTabProvider {
 	// maybe a link to the property page for that resource
 
 	private GenerationSettingsComposite genSettings;
+	private IEclipsePreferences projectPreferenceStore;
 
 	/**
 	 * Define the tab contents within the parent composite.
@@ -44,9 +47,12 @@ public class ExampleGeneratorTabProvider extends AbstractGeneratorTabProvider {
 		composite.setLayout(layout);
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		composite.setFont(parent.getFont());
-
-		genSettings = new GenerationSettingsComposite(composite, SWT.NULL, getResource(), Activator.getDefault().getPreferenceStore(), getResource() == null
-			? null : new ProjectScope(getResource().getProject()).getNode(Activator.PLUGIN_ID), Activator.PROPERTY_JAVAGEN_DIR,
+		
+		if( getResource() != null ) {
+			this.projectPreferenceStore = new ProjectScope(getResource().getProject()).getNode(EDTCompilerIDEPlugin.PLUGIN_ID);
+		}
+		genSettings = new GenerationSettingsComposite(composite, SWT.NULL, getResource(), Activator.getDefault().getPreferenceStore(),
+			this.projectPreferenceStore, Activator.PROPERTY_JAVAGEN_DIR,
 			Activator.PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY, getStatusChangeListener());
 		genSettings.setLayoutData(new GridData(GridData.FILL_BOTH));
 
@@ -72,5 +78,9 @@ public class ExampleGeneratorTabProvider extends AbstractGeneratorTabProvider {
 	public void performDefaults() {
 		genSettings.performDefaults();
 	}
-
+	
+	@Override
+	public IEclipsePreferences getProjectPreferenceStore() {
+		return this.projectPreferenceStore;
+	}
 }
