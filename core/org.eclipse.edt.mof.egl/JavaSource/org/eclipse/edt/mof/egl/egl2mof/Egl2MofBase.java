@@ -869,7 +869,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
         File declaringFile = SourcePathInfo.getInstance().getDeclaringFile(binding.getPackageName(), partName);
         Node partAST = ASTManager.getInstance().getAST(declaringFile, partName);
         Egl2Mof converter = new Egl2Mof(env);
-        return converter.convert((org.eclipse.edt.compiler.core.ast.Part)partAST, null);
+        return converter.convert((org.eclipse.edt.compiler.core.ast.Part)partAST, null, null);
 	}
 	
 	
