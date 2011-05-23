@@ -127,12 +127,6 @@ externalType AnyUnicode extends AnyText type ParameterizableType {
 }
 end
 
-// Numeric primitives
-externalType AnyMoney extends AnyDecimal type ParameterizableType {
-	parameterizedType = FixedPrecisionType
-}
-end
-
 externalType Int16 extends AnyNumber type ClassType 
 
 	static function $Plus(value Int16 in) returns (Int32) {@Operation{"+"}};
