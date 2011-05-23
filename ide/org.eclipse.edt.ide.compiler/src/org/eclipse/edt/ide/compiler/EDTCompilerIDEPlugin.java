@@ -30,12 +30,14 @@ public class EDTCompilerIDEPlugin extends AbstractUIPlugin {
 	 */
 	public static final String PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY = PLUGIN_ID + ".defaultJavaGenDirectory"; //$NON-NLS-1$
 	public static final String PREFERENCE_DEFAULT_JAVASCRIPTGEN_DIRECTORY = PLUGIN_ID + ".defaultJavaScriptGenDirectory"; //$NON-NLS-1$
+	public static final String PREFERENCE_DEFAULT_WORTHLESSGEN_DIRECTORY = PLUGIN_ID + ".defaultWorthlessGenDirectory"; //$NON-NLS-1$
 	
 	/**
 	 * Project-level property key indicating the directory to use for the Java generator.
 	 */
 	public static final String PROPERTY_JAVAGEN_DIR = "javaGenDirectory"; //$NON-NLS-1$
 	public static final String PROPERTY_JAVASCRIPTGEN_DIR = "jsGenDirectory"; //$NON-NLS-1$
+	public static final String PROPERTY_WORTHLESSGEN_DIR = "worthlessGenDirectory"; //$NON-NLS-1$
 
 	// The shared instance
 	private static EDTCompilerIDEPlugin plugin;
@@ -85,6 +87,6 @@ public class EDTCompilerIDEPlugin extends AbstractUIPlugin {
 	protected void initializeDefaultPreferences(IPreferenceStore store) {
 		store.setDefault(PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY, "generatedJava"); //$NON-NLS-1$
 		store.setDefault(PREFERENCE_DEFAULT_JAVASCRIPTGEN_DIRECTORY, "generatedJavaScript"); //$NON-NLS-1$
-		store.setDefault(EDTCompilerIDEPlugin.PLUGIN_ID + ".worthlessGenDefaultDirectory", "worthlessOutput");//TODO remove this eventually
+		store.setDefault(PREFERENCE_DEFAULT_WORTHLESSGEN_DIRECTORY, "worthlessOutput");//TODO remove this eventually
 	}
 }

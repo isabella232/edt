@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.compiler.gen.ui;
 
 import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin;
 import org.eclipse.edt.ide.ui.internal.preferences.AbstractGeneratorTabProvider;
 import org.eclipse.edt.ide.ui.internal.preferences.GenerationSettingsComposite;
@@ -30,7 +31,8 @@ public class JavaGeneratorTabProvider extends AbstractGeneratorTabProvider
 	//maybe a link to the property page for that resource
 	
 	private GenerationSettingsComposite genSettings;
-	
+	private IEclipsePreferences projectPreferenceStore;
+
 	/**
 	 * Define the tab contents within the parent composite.
 	 * 
@@ -39,20 +41,31 @@ public class JavaGeneratorTabProvider extends AbstractGeneratorTabProvider
 	 */
 	@Override
 	public Control getTabContent(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NULL);
-		
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 1;
-		composite.setLayout(layout);
-		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		composite.setFont(parent.getFont());
-		
-		genSettings = new GenerationSettingsComposite(composite, SWT.NULL, getResource(), EDTCompilerIDEPlugin.getDefault().getPreferenceStore(),
-				getResource() == null ? null : new ProjectScope(getResource().getProject()).getNode(EDTCompilerIDEPlugin.PLUGIN_ID),
-				EDTCompilerIDEPlugin.PROPERTY_JAVAGEN_DIR, EDTCompilerIDEPlugin.PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY, getStatusChangeListener());
-		genSettings.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-		return composite;
+		if( getComposite() == null ) {
+			setComposite( new Composite(parent, SWT.NULL) );
+
+			GridLayout layout = new GridLayout();
+			layout.numColumns = 1;
+			getComposite().setLayout(layout);
+			getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
+			getComposite().setFont(parent.getFont());
+
+			if( getResource() != null ) {
+				this.projectPreferenceStore = new ProjectScope(getResource().getProject()).getNode(EDTCompilerIDEPlugin.PLUGIN_ID);
+			}
+			genSettings = new GenerationSettingsComposite(getComposite(), SWT.NULL, 
+					getResource(), EDTCompilerIDEPlugin.getDefault().getPreferenceStore(),
+					this.projectPreferenceStore,
+					EDTCompilerIDEPlugin.PROPERTY_JAVAGEN_DIR, EDTCompilerIDEPlugin.PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY, getStatusChangeListener());
+			genSettings.setLayoutData(new GridData(GridData.FILL_BOTH));		
+
+		}
+		return this.getComposite();
+	}
+	
+	@Override
+	public IEclipsePreferences getProjectPreferenceStore() {
+		return this.projectPreferenceStore;
 	}
 	
 	@Override
@@ -68,6 +81,20 @@ public class JavaGeneratorTabProvider extends AbstractGeneratorTabProvider
 	@Override
 	public void performDefaults() {
 		genSettings.performDefaults();
+	}
+	
+	@Override
+	public void removePreferencesForAResource() {
+		if( this.projectPreferenceStore != null ) {
+			genSettings.removePreferencesForAResource();
+		}
+	}
+	
+	@Override
+	public void removePreferencesForAllResources() {
+		if( this.projectPreferenceStore != null ) {
+			genSettings.removePreferencesForAllResources();
+		}
 	}
 	
 }

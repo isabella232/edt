@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.compiler.gen.ui;
 
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.edt.ide.ui.internal.preferences.AbstractGeneratorTabProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -51,12 +52,17 @@ public class SampleEDTTabProvider extends AbstractGeneratorTabProvider
 		composite.setLayoutData(data);
 		
 		Label label;
-		for( int i=0; i<30; i++ ) {
+		for( int i=0; i<10; i++ ) {
 			label = new Label(composite, SWT.LEFT);
 			label.setText( "Scroll if needed..." );
 		}
 		composite.setSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		return sComp;
+	}
+	
+	@Override
+	public IEclipsePreferences getProjectPreferenceStore() {
+		return null;
 	}
 	
 }

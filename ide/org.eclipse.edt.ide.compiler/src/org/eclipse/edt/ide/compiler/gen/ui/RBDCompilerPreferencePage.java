@@ -20,7 +20,7 @@ public class RBDCompilerPreferencePage extends CompilerPropertyAndPreferencePage
 	/**
 	 * Returns the id of the compiler that this preference page for.
 	 */
-	public String getCompilerId() {
+	public String getPreferencePageCompilerId() {
 		return "org.eclipse.edt.ide.compiler.rbdCompiler";
 	}
 	

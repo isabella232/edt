@@ -21,7 +21,7 @@ public class EDTCompilerPreferencePage extends CompilerPropertyAndPreferencePage
 	/**
 	 * Returns the id of the compiler that this preference page is for.
 	 */
-	public String getCompilerId() {
+	public String getPreferencePageCompilerId() {
 		return "org.eclipse.edt.ide.compiler.edtCompiler";
 	}
 	

@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.compiler.gen.ui;
 
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.edt.ide.ui.internal.preferences.AbstractGeneratorTabProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -53,6 +54,11 @@ public class SampleRBDTabProvider extends AbstractGeneratorTabProvider
 		label.setLayoutData(data);
 		
 		return composite;
+	}
+	
+	@Override
+	public IEclipsePreferences getProjectPreferenceStore() {
+		return null;
 	}
 	
 	@Override
