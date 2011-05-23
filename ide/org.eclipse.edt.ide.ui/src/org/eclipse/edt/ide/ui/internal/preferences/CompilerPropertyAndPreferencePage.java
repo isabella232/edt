@@ -277,8 +277,10 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 			String savedCompiler = convertCompilerIdToName( savedCompilerId );
 			String[] savedGenerators = ProjectSettingsUtility.getGeneratorIds( this.resource );
 			List<String> savedGeneratorsList = new ArrayList<String>();
-			for( String compilerId : savedGenerators ) {
-				savedGeneratorsList.add( convertGeneratorIdToName( compilerId ) );
+			if (savedGenerators != null) {
+				for( String generatorId : savedGenerators ) {
+					savedGeneratorsList.add( convertGeneratorIdToName( generatorId ) );
+				}
 			}
 
 			Set<Button> availableCompilers = this.buttonMap.keySet();
@@ -293,7 +295,7 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 							selectedGenerators.add( currGenerator.getText() );
 						}
 						currGenerator.setEnabled( true );
-					}		
+					}
 					addCompilerTabsAndProviders( this.selectedCompiler );
 				}					
 			}
