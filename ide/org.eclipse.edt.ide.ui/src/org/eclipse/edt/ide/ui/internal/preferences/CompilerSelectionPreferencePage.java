@@ -21,7 +21,7 @@ public class CompilerSelectionPreferencePage extends CompilerPropertyAndPreferen
 	/**
 	 * Returns the id of the compiler that this preference page is for.
 	 */
-	public String getCompilerId() {
+	public String getPreferencePageCompilerId() {
 		return COMPILER_SELECTION_ID;
 	}
 	

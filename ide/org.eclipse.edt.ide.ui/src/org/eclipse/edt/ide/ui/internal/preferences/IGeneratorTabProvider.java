@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.ui.internal.preferences;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.edt.ide.ui.internal.wizards.IStatusChangeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -24,6 +25,13 @@ import org.eclipse.swt.widgets.Control;
  */
 
 public interface IGeneratorTabProvider {
+	public String getCompilerId();	
+	public void setCompilerId( String compilerId );
+	public String getGeneratorId(); 	
+	public void setGeneratorId( String generatorId );
+	
+	public String getTitle();
+	public void setTitle( String title );
 	public String getHelpId();
 	public Image getImage();
 	public Control getTabContent( Composite parent );
@@ -34,6 +42,11 @@ public interface IGeneratorTabProvider {
 	public void performDefaults();
 	public boolean performOk();
 	public boolean performCancel();
+	
 	public void dispose();
+	public IEclipsePreferences getProjectPreferenceStore();
+	public void removePreferencesForAResource();
+	public void removePreferencesForAllResources();
+	
 	
 }

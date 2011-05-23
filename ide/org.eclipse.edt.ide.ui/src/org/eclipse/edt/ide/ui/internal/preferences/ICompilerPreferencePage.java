@@ -24,6 +24,6 @@ public interface ICompilerPreferencePage {
 	/**
 	 * Returns the id of the compiler that this preference page is for.
 	 */
-	public String getCompilerId();
+	public String getPreferencePageCompilerId();
 }	
 

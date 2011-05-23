@@ -250,7 +250,7 @@ public abstract class PropertyAndPreferencePage extends PreferencePage implement
 	 * when the status has changed
 	 * @return The new listener
 	 */
-	protected IStatusChangeListener getNewStatusChangedListener() {
+	public IStatusChangeListener getNewStatusChangedListener() {
 		return new IStatusChangeListener() {
 			public void statusChanged(IStatus status) {
 				setPreferenceContentStatus(status);

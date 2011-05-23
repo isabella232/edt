@@ -14,7 +14,6 @@ package org.eclipse.edt.ide.ui;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -34,22 +33,21 @@ public class EDTUIPreferenceConstants {
 	}
 	
 	/**
-	 * A named preference that specifies the name of the EGL source folder
-	 * in an EGL project.
+	 * A named preference that specifies the default compiler.
 	 * <p>
 	 * Value is of type <code>String</code>
 	 * </p>
 	 */
-//	public static final String EGL_SOURCE_FOLDER = "eglSourceFolder";
+	public static final String COMPILER_ID = "compilerId";
 	
 	/**
-	 * A named preference that specifies the name of the EGL output folder
-	 * in an EGL project.
+	 * A named preference that specifies the id(s) of the default
+	 * generator(s).  Multiple generators id are separated by commas. 
 	 * <p>
 	 * Value is of type <code>String</code>
 	 * </p>
 	 */
-//	public static final String EGL_OUTPUT_FOLDER = "eglOutputFolder";
+	public static final String GENERATOR_IDS = "generatorIds";
 	
 	/**
 	 * Initializes the given preference store with the default values.
@@ -58,9 +56,10 @@ public class EDTUIPreferenceConstants {
 	 */
 	public static void initializeDefaultValues(IPreferenceStore store) {
 		
-		// BasePreferencePage
-//		store.setDefault( EGL_SOURCE_FOLDER, "eglsource" ); 
-//		store.setDefault( EGL_OUTPUT_FOLDER , "eglbin" );	
+		// CompilerPreferencePage
+		store.setDefault( COMPILER_ID, "org.eclipse.edt.ide.compiler.edtCompiler" ); 
+		store.setDefault( GENERATOR_IDS , "org.eclipse.edt.ide.gen.JavaGenProvider,org.eclipse.edt.ide.gen.JavaScriptGenProvider" );
+		
 	}
 
 	/**

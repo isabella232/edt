@@ -33,9 +33,9 @@ public class UINlsStrings extends NLS {
 		return bundleForConstructedKeys;
 	}
 	
-	// New for EDT
 	public static String CompilerPreferencePage_title;
 	public static String CompilerPreferencePage_description;
+	public static String CompilerPropertyPage_errorCleaningUpPrefStore;
 	
 	public static String BasePreferencePage_EGLFolderGroup_label;
 	public static String BasePreferencePage_EGLSourceFolder_label;

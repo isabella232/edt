@@ -366,5 +366,35 @@ public class GenerationSettingsComposite extends Composite {
 		
 		return true;
 	}
+	
+	/**
+	 * Remove any preferences that this tab previously stored in a 
+	 * resource's preference store.
+	 */
+	public void removePreferencesForAResource() {
+		try {
+			ProjectSettingsUtility.setGenerationDirectory(resource, null, projectPrefs, propertyID);
+		}
+		catch (BackingStoreException e) {
+			Logger.log("GenerationSettingsComposite.cleanUpResourcePreferences", NLS.bind(UINlsStrings.CompilerPropertyPage_errorCleaningUpPrefStore, resource.getFullPath().toString()), e); //$NON-NLS-1$
+		}
+	}
+	
+	/**
+	 * Remove ALL preferences that this composite previously stored in a 
+	 * resource's preference store.
+	 */
+	public void removePreferencesForAllResources() {
+		try {
+			for( String key: projectPrefs.keys() ) {
+				if( key.indexOf( propertyID ) > -1 ) {
+					projectPrefs.remove( key );
+				}
+			}
+			projectPrefs.flush();
+		} catch( BackingStoreException e ) {
+			Logger.log("GenerationSettingsComposite.removePreferencesForAllResources", NLS.bind(UINlsStrings.CompilerPropertyPage_errorCleaningUpPrefStore, resource.getFullPath().toString()), e); //$NON-NLS-1$
+		}
+	}
 
 }
