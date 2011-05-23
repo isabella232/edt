@@ -253,7 +253,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
     	//TODO EDT once we allow multiple output folders, need to implement this:
 //    	env.setDefaultOutputFolder(someUtilityToGetOutputFolder(declaringFile));
         Egl2Mof generator = new Egl2Mof(env);
-        return (MofSerializable)generator.convert(partAST, new IDEContext(declaringFile));
+        return (MofSerializable)generator.convert(partAST, new IDEContext(declaringFile), problemRequestor);
     }
 
 	protected void addPartFromCompiledFile(String[] packageName, String partName){}
