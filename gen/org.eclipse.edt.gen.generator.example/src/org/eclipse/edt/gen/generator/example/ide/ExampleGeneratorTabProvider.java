@@ -83,4 +83,18 @@ public class ExampleGeneratorTabProvider extends AbstractGeneratorTabProvider {
 	public IEclipsePreferences getProjectPreferenceStore() {
 		return this.projectPreferenceStore;
 	}
+	
+	@Override
+	public void removePreferencesForAResource() {
+		if( this.projectPreferenceStore != null ) {
+			genSettings.removePreferencesForAResource();
+		}
+	}
+	
+	@Override
+	public void removePreferencesForAllResources() {
+		if( this.projectPreferenceStore != null ) {
+			genSettings.removePreferencesForAllResources();
+		}
+	}
 }
