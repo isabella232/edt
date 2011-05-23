@@ -36,6 +36,16 @@ public class ProjectSettingsUtility {
 	}
 	
 	/**
+	 * Constant for empty generator array.
+	 */
+	private static final IGenerator[] EMPTY_GENERATORS = {};
+	
+	/**
+	 * Constant for empty generator ID array.
+	 */
+	private static final String[] EMPTY_GENERATOR_IDS = {};
+	
+	/**
 	 * Constant for the project-level property indicating the generator to use for the project.
 	 */
 	public static final String PROPERTY_COMPILER_ID = "compilerId"; //$NON-NLS-1$
@@ -58,6 +68,9 @@ public class ProjectSettingsUtility {
 	 */
 	public static ICompiler getCompiler(IProject project) {
 		String id = getCompilerId(project);
+		if (id == null) {
+			// TODO Get the setting from preferences (once available)
+		}
 		if (id != null) {
 			ICompiler[] compilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
 			for (int i = 0; i < compilers.length; i++) {
@@ -116,7 +129,10 @@ public class ProjectSettingsUtility {
 	 */
 	public static IGenerator[] getGenerators(IResource resource) {
 		String[] ids = getGeneratorIds(resource);
-		if (ids.length != 0) {
+		if (ids == null) {
+			// TODO Get the setting from preferences (once available)
+		}
+		if (ids != null && ids.length != 0) {
 			IGenerator[] gens = EDTCoreIDEPlugin.getPlugin().getGenerators();
 			if (gens.length > 0) {
 				List<IGenerator> generators = new ArrayList<IGenerator>(ids.length);
@@ -133,16 +149,16 @@ public class ProjectSettingsUtility {
 			}
 		}
 		
-		return new IGenerator[0];
+		return EMPTY_GENERATORS;
 	}
 	
 	/**
 	 * Returns the IDs of the generators associated with the resource. This will first check the given resource for a
-	 * generator setting. If it doesn't have one, its parent is check, and so on all the way to the project setting.
-	 * If there is no generated for the resource, this returns an empty array.
+	 * generator setting. If it doesn't have one, its parent is checked, and so on all the way to the project setting.
+	 * If there are no generators for the resource, this returns null.
 	 * 
 	 * @param resource  The resource (a file, folder, or project)
-	 * @return a non-null array of the generator IDs
+	 * @return an array of the generator IDs, possibly null
 	 */
 	public static String[] getGeneratorIds(IResource resource) {
 		IProject project = resource.getProject();
@@ -162,9 +178,10 @@ public class ProjectSettingsUtility {
 				
 				return ids;
 			}
+			return EMPTY_GENERATOR_IDS;
 		}
 		
-		return new String[0];
+		return null;
 	}
 	
 	/**
