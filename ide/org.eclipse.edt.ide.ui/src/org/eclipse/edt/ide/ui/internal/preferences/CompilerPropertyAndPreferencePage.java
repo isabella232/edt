@@ -24,11 +24,11 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
+import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.ICompiler;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
 import org.eclipse.edt.ide.ui.internal.util.TabFolderLayout;
@@ -150,7 +150,7 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 			boolean defaultCompiler = false;
 			String compilerId = ProjectSettingsUtility.getCompilerId( project );
 			if( compilerId == null ) {
-				compilerId = EDTUIPlugin.getDefault().getPreferenceStore().getString( EDTUIPreferenceConstants.COMPILER_ID );
+				compilerId = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( EDTCorePreferenceConstants.COMPILER_ID );
 				defaultCompiler = true;
 			}
 			setSelectedCompiler( convertCompilerIdToName( compilerId ) );
@@ -192,7 +192,7 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 			return false;
 		} 
 		// Validate the saved compiler still exists in the workspace
-		defaultWSCompilerId = EDTUIPlugin.getDefault().getPreferenceStore().getString( EDTUIPreferenceConstants.COMPILER_ID );
+		defaultWSCompilerId = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( EDTCorePreferenceConstants.COMPILER_ID );
 		if( !validateCompilerExists( defaultWSCompilerId ) ) {
 			promptForNewCompiler();
 			if( !latestStatus.isOK() ) {
@@ -375,7 +375,7 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	 * @return
 	 */
 	protected List<String> getWorkspaceSelectedGenerators() {
-		String genString = EDTUIPlugin.getDefault().getPreferenceStore().getString( EDTUIPreferenceConstants.GENERATOR_IDS );
+		String genString = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( EDTCorePreferenceConstants.GENERATOR_IDS );
 		if( genString != null && genString.length() > 0 ) {
 			genString = genString.trim();
 			if( genString.length() != 0 ) {
@@ -697,11 +697,11 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	public void performDefaults() {
 		if( resource == null ) {
 			if( getPreferencePageCompilerId() == CompilerSelectionPreferencePage.COMPILER_SELECTION_ID ) {
-				String defaultCompilerId = EDTUIPlugin.getDefault().getPreferenceStore().getDefaultString( EDTUIPreferenceConstants.COMPILER_ID );
+				String defaultCompilerId = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getDefaultString( EDTCorePreferenceConstants.COMPILER_ID );
 				setSelectedCompiler( convertCompilerIdToName( defaultCompilerId ) );
 				compilerAndGeneratorControls.getCompilerComponent().selectCompiler( selectedCompiler );
 			} else {
-				String genString = EDTUIPlugin.getDefault().getPreferenceStore().getDefaultString( EDTUIPreferenceConstants.GENERATOR_IDS );
+				String genString = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getDefaultString( EDTCorePreferenceConstants.GENERATOR_IDS );
 				if( genString != null ) {
 					genString = genString.trim();
 					if( genString.length() != 0 ) {
@@ -787,8 +787,8 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 				if( this.selectedCompiler.length() > 0 ) {
 					String id = convertCompilerNameToId( this.selectedCompiler );
 					if( id.length() > 0 ) {
-						EDTUIPlugin.getDefault().getPreferenceStore().setValue( 
-								EDTUIPreferenceConstants.COMPILER_ID, id
+						EDTCoreIDEPlugin.getPlugin().getPreferenceStore().setValue( 
+								EDTCorePreferenceConstants.COMPILER_ID, id
 						);
 					}
 				}
@@ -875,8 +875,8 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	}
 	
 	protected boolean isSelectedGeneratorsSameAsDefault( List<String> newSelectedGens ) {
-		String defaultGens = EDTUIPlugin.getDefault().getPreferenceStore().getString( 
-				EDTUIPreferenceConstants.GENERATOR_IDS );
+		String defaultGens = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( 
+				EDTCorePreferenceConstants.GENERATOR_IDS );
 		if( defaultGens != null && defaultGens.length() > 0 ) {
 			defaultGens = defaultGens.trim();
 			if( defaultGens.length() != 0 ) {
@@ -905,8 +905,8 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	}
 
 	protected void replaceGeneratorsInPrefStoreForCompiler( String compilerId, String newGens ) {
-		String genString = EDTUIPlugin.getDefault().getPreferenceStore().getString( 
-				EDTUIPreferenceConstants.GENERATOR_IDS );
+		String genString = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( 
+				EDTCorePreferenceConstants.GENERATOR_IDS );
 		if( genString != null && genString.length() > 0 ) {
 			genString = genString.trim();
 			if( genString.length() != 0 ) {
@@ -936,14 +936,14 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 					} else {
 						gensToStore = buf.toString();
 					}
-					EDTUIPlugin.getDefault().getPreferenceStore().setValue( 
-							EDTUIPreferenceConstants.GENERATOR_IDS, gensToStore );
+					EDTCoreIDEPlugin.getPlugin().getPreferenceStore().setValue( 
+							EDTCorePreferenceConstants.GENERATOR_IDS, gensToStore );
 					return;
 				}
 			}
 		} 
-		EDTUIPlugin.getDefault().getPreferenceStore().setValue( 
-				EDTUIPreferenceConstants.GENERATOR_IDS, newGens );		
+		EDTCoreIDEPlugin.getPlugin().getPreferenceStore().setValue( 
+				EDTCorePreferenceConstants.GENERATOR_IDS, newGens );		
 	}
 
 	/**
@@ -971,7 +971,6 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	 */
 	protected void removeTabPropertiesFromProjectResources() {
 		IGeneratorTabProvider tabProvider;
-		IEclipsePreferences store;
 		for( int i = 0; i < this.allTabProviders.size(); i++ ) {
 			tabProvider = this.allTabProviders.get(i);
 			// If generator isn't selected

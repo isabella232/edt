@@ -22,11 +22,10 @@ import java.util.TreeMap;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
+import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.ICompiler;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
-import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.util.PixelConverter;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -563,7 +562,7 @@ public class CompilerAndGeneratorControls {
 			// Only return 1 compiler
 			ICompiler comp = ProjectSettingsUtility.getCompiler( parentPage.getResource().getProject() );
 			if( comp == null ) {
-				String wsComp = EDTUIPlugin.getDefault().getPreferenceStore().getString( EDTUIPreferenceConstants.COMPILER_ID );
+				String wsComp = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( EDTCorePreferenceConstants.COMPILER_ID );
 				for( ICompiler currCompiler : availableCompilers ) { 
 					if( currCompiler.getId().equalsIgnoreCase( wsComp ) ) {
 						comp = currCompiler;
