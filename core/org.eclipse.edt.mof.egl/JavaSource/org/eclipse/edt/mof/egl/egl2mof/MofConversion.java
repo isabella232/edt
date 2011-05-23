@@ -55,7 +55,6 @@ public interface MofConversion {
 	String Type_Float = EGL_lang_package+".Float64";
 	String Type_Smallfloat = EGL_lang_package+".Float32";
 	String Type_Decimal = EGL_lang_package+".AnyDecimal";
-	String Type_Money = EGL_lang_package+".AnyMoney";
 	String Type_Num = EGL_lang_package+".AnyNum";
 	String Type_Bin = EGL_lang_package+".AnyBin";
 	String Type_Number = EGL_lang_package+".AnyNumber";
@@ -92,7 +91,6 @@ public interface MofConversion {
 	String Type_EGLFloat = EGL_KeyScheme+Type_Float;
 	String Type_EGLSmallfloat = EGL_KeyScheme+Type_Smallfloat;
 	String Type_EGLDecimal = EGL_KeyScheme+Type_Decimal;
-	String Type_EGLMoney = EGL_KeyScheme+Type_Money;
 	String Type_EGLNum = EGL_KeyScheme+Type_Num;
 	String Type_EGLBin = EGL_KeyScheme+Type_Bin;
 	String Type_EGLNumber = EGL_KeyScheme+Type_Number;

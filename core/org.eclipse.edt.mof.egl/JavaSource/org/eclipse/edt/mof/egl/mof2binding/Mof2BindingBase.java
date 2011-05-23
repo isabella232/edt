@@ -199,9 +199,6 @@ public abstract class Mof2BindingBase extends AbstractVisitor implements MofConv
 		if (str.equalsIgnoreCase(Type_EGLDecimal)) {
 			return Primitive.DECIMAL;
 		}
-		else if (str.equalsIgnoreCase(Type_EGLMoney)) {
-			return Primitive.MONEY;
-		}
 		else if (str.equalsIgnoreCase(Type_EGLBin)) {
 			return Primitive.BIN;
 		}

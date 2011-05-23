@@ -1094,7 +1094,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			case Primitive.HEX_PRIMITIVE: typeSignature = Type_EGLHex;break; 
 			case Primitive.INTERVAL_PRIMITIVE: typeSignature = Type_EGLInterval;break; 
 			case Primitive.MBCHAR_PRIMITIVE: typeSignature = Type_EGLMBChar;break; 
-			case Primitive.MONEY_PRIMITIVE: typeSignature = Type_EGLMoney; break;
+			case Primitive.MONEY_PRIMITIVE: typeSignature = Type_EGLDecimal; break;
 			case Primitive.MONTHSPAN_INTERVAL_PRIMITIVE: typeSignature = Type_EGLMonthInterval;break; 
 			case Primitive.NUM_PRIMITIVE: typeSignature = Type_EGLNum; break;
 			case Primitive.NUMBER_PRIMITIVE: typeSignature = Type_EGLNumber; break;
