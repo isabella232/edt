@@ -236,8 +236,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 			}
         }
         
-        String[] genIds = ProjectSettingsUtility.getGeneratorIds(declaringFile);
-        if (genIds != null && genIds.length > 0) {
+        if (ProjectSettingsUtility.getGenerators(declaringFile).length > 0) {
         	generationQueue.add(partAST, declaringFile);
         }
 		

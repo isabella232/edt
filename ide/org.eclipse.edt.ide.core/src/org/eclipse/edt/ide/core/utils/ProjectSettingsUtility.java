@@ -20,6 +20,7 @@ import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
+import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.ICompiler;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -58,7 +59,7 @@ public class ProjectSettingsUtility {
 	/**
 	 * Constant for the key used on project-level settings.
 	 */
-	public static final String PROJECT_KEY = "<project>";
+	public static final String PROJECT_KEY = "<project>"; //$NON-NLS-1$
 	
 	/**
 	 * Returns the ICompiler registered for the given project. This returns null if there is no compiler.
@@ -69,7 +70,8 @@ public class ProjectSettingsUtility {
 	public static ICompiler getCompiler(IProject project) {
 		String id = getCompilerId(project);
 		if (id == null) {
-			// TODO Get the setting from preferences (once available)
+			// When the project doesn't have its own settings, use the workspace defaults
+			id = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( EDTCorePreferenceConstants.COMPILER_ID );
 		}
 		if (id != null) {
 			ICompiler[] compilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
@@ -130,7 +132,11 @@ public class ProjectSettingsUtility {
 	public static IGenerator[] getGenerators(IResource resource) {
 		String[] ids = getGeneratorIds(resource);
 		if (ids == null) {
-			// TODO Get the setting from preferences (once available)
+			// When the project doesn't have its own settings, use the workspace defaults
+			String defaultIDs = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString(EDTCorePreferenceConstants.GENERATOR_IDS);
+			if (defaultIDs != null && (defaultIDs = defaultIDs.trim()).length() != 0) {
+				ids = defaultIDs.split(",");
+			}
 		}
 		if (ids != null && ids.length != 0) {
 			IGenerator[] gens = EDTCoreIDEPlugin.getPlugin().getGenerators();
@@ -139,7 +145,7 @@ public class ProjectSettingsUtility {
 				for (int i = 0; i < gens.length; i++) {
 					String nextId = gens[i].getId();
 					for (int j = 0; j < ids.length; j++) {
-						if (nextId.equals(ids[j])) {
+						if (nextId.equals(ids[j].trim())) {
 							generators.add(gens[i]);
 							break;
 						}
