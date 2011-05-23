@@ -51,14 +51,35 @@ public class EDTCorePreferenceConstants {
 	public static final String EGL_OUTPUT_FOLDER = "eglOutputFolder";
 	
 	/**
+	 * A named preference that specifies the default compiler.
+	 * <p>
+	 * Value is of type <code>String</code>
+	 * </p>
+	 */
+	public static final String COMPILER_ID = "compilerId";
+	
+	/**
+	 * A named preference that specifies the id(s) of the default
+	 * generator(s).  Multiple generators id are separated by commas. 
+	 * <p>
+	 * Value is of type <code>String</code>
+	 * </p>
+	 */
+	public static final String GENERATOR_IDS = "generatorIds";
+	
+	/**
 	 * Initializes the given preference store with the default values.
 	 * 
 	 * @param store the preference store to be initialized
 	 */
 	public static void initializeDefaultValues(IPreferenceStore store) {		
 		// BasePreferencePage
-		store.setDefault( EGL_SOURCE_FOLDER, "eglsource" ); 
-		store.setDefault( EGL_OUTPUT_FOLDER , "eglbin" );	
+		store.setDefault( EGL_SOURCE_FOLDER, "eglsource" );
+		store.setDefault( EGL_OUTPUT_FOLDER, "eglbin" );
+		
+		// CompilerPreferencePage
+		store.setDefault( COMPILER_ID, "org.eclipse.edt.ide.compiler.edtCompiler" ); 
+		store.setDefault( GENERATOR_IDS, "org.eclipse.edt.ide.gen.JavaGenProvider,org.eclipse.edt.ide.gen.JavaScriptGenProvider" );
 	}
 
 	/**
