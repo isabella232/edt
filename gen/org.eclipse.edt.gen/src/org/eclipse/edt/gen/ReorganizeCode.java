@@ -18,7 +18,6 @@ import org.eclipse.edt.mof.egl.ForEachStatement;
 import org.eclipse.edt.mof.egl.ForStatement;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
-import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.IfStatement;
 import org.eclipse.edt.mof.egl.InvocationExpression;
@@ -698,8 +697,12 @@ public class ReorganizeCode extends AbstractVisitor {
 				processed = true;
 				labelType = Label.LABEL_TYPE_CASE;
 				return true;
-			} else
-				return false;
+			} else {
+				if (labelType == Label.LABEL_TYPE_CASE)
+					return false;
+				else
+					return true;
+			}
 		}
 
 		public boolean visit(ForStatement object) {
@@ -707,8 +710,12 @@ public class ReorganizeCode extends AbstractVisitor {
 				processed = true;
 				labelType = Label.LABEL_TYPE_FOR;
 				return true;
-			} else
-				return false;
+			} else {
+				if (labelType == Label.LABEL_TYPE_FOR)
+					return false;
+				else
+					return true;
+			}
 		}
 
 		public boolean visit(ForEachStatement object) {
@@ -716,8 +723,12 @@ public class ReorganizeCode extends AbstractVisitor {
 				processed = true;
 				labelType = Label.LABEL_TYPE_FOREACH;
 				return true;
-			} else
-				return false;
+			} else {
+				if (labelType == Label.LABEL_TYPE_FOREACH)
+					return false;
+				else
+					return true;
+			}
 		}
 
 		public boolean visit(IfStatement object) {
@@ -738,8 +749,12 @@ public class ReorganizeCode extends AbstractVisitor {
 				processed = true;
 				labelType = Label.LABEL_TYPE_OPENUI;
 				return true;
-			} else
-				return false;
+			} else {
+				if (labelType == Label.LABEL_TYPE_OPENUI)
+					return false;
+				else
+					return true;
+			}
 		}
 
 		public boolean visit(WhileStatement object) {
@@ -747,8 +762,12 @@ public class ReorganizeCode extends AbstractVisitor {
 				processed = true;
 				labelType = Label.LABEL_TYPE_WHILE;
 				return true;
-			} else
-				return false;
+			} else {
+				if (labelType == Label.LABEL_TYPE_WHILE)
+					return false;
+				else
+					return true;
+			}
 		}
 
 		public boolean visit(Statement object) {
