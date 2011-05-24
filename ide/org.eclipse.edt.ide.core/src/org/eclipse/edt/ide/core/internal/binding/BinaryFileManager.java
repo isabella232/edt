@@ -275,14 +275,31 @@ public class BinaryFileManager implements IResourceChangeListener {
 			}
 		}
 		
-		//TODO when removing an environment, it's still being referenced by the stores that reference it
-		// until the stores gets re-used. should probably null-out the environment in its stores.
 		public void remove(IProject project){
-			projectMap.remove(project);
+			IDEEnvironment env = projectMap.remove(project);
+			
+			if (env != null) {
+				// Null out the environment in the stores that had this environment set.
+				for (Iterator<List<ObjectStore>> it = storeCache.storeMap.values().iterator(); it.hasNext();) {
+					for (Iterator<ObjectStore> stores = it.next().iterator(); stores.hasNext();) {
+						ObjectStore store = stores.next();
+						if (store.getEnvironment() == env) {
+							store.setEnvironment(null);
+						}
+					}
+				}
+			}
 		}
 		
 		public void clear(){
 			projectMap.clear();
+			
+			// Null-out all environments in the stores.
+			for (Iterator<List<ObjectStore>> it = storeCache.storeMap.values().iterator(); it.hasNext();) {
+				for (Iterator<ObjectStore> stores = it.next().iterator(); stores.hasNext();) {
+					stores.next().setEnvironment(null);
+				}
+			}
 		}
 		
 		private String key(String[] packageName, String partName) {
@@ -508,13 +525,13 @@ public class BinaryFileManager implements IResourceChangeListener {
     }
     
     public void remove(IProject project){
-    	environmentCache.remove(project);
     	environmentCache.storeCache.removeAllStores(project);
+    	environmentCache.remove(project);
     }
     
     public void clean(IProject project){
-    	environmentCache.remove(project);
     	environmentCache.storeCache.removeObsoleteStores(project);
+    	environmentCache.remove(project);
      }
     
     public static IFile getOutputFileForWrite(String[] packageName, String partName, IProject project) throws CoreException{
