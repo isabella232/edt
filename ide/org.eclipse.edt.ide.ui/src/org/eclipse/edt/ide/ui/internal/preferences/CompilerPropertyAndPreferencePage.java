@@ -45,6 +45,8 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.osgi.service.prefs.BackingStoreException;
 
+import com.ibm.icu.text.MessageFormat;
+
 public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage {
 
 	public static final String PROP_ID= "org.eclipse.edt.ide.ui.projectCompilerPropertyPage"; //$NON-NLS-1$
@@ -145,36 +147,13 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 		} else {
 			// Property page	
 			IProject project = resource.getProject();
-
-			// Get compiler id from the project.  If none, get from workspace preferences.
-			boolean defaultCompiler = false;
-			String compilerId = ProjectSettingsUtility.getCompilerId( project );
-			if( compilerId == null ) {
-				compilerId = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( EDTCorePreferenceConstants.COMPILER_ID );
-				defaultCompiler = true;
-			}
-			setSelectedCompiler( convertCompilerIdToName( compilerId ) );
+			setSelectedCompiler( getCompilerName( project ) );
 			createCompilerComposite( composite );
 
 			validateGenerators();
 			if( latestStatus.isOK() ) {
-				// TODO Use same code as createPreferenceContent
 				// Get generator ids from the project.  If none, get from workspace preferences.
-				String[] genIds = ProjectSettingsUtility.getGeneratorIds( resource );
-				String[] genNames;
-				if( genIds != null ) {
-					genNames = convertGeneratorIdsToNames( genIds );
-				} else {
-					List<String> genList = getWorkspaceSelectedGenerators();
-					genNames = genList.toArray( new String[genList.size()]);
-					// Using default compiler & generators
-					if( defaultCompiler ) {
-						// TODO Uncheck project specific settings
-						
-					}
-				}
-				setSelectedGenerators( new ArrayList<String>( Arrays.asList( genNames ) ) );
-
+				setSelectedGenerators( getGeneratorNames() );
 				createGeneratorsComposite( composite );
 				createGeneratorTabsComposite( composite );	
 				createTabProviders();
@@ -193,12 +172,14 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 		} 
 		// Validate the saved compiler still exists in the workspace
 		defaultWSCompilerId = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( EDTCorePreferenceConstants.COMPILER_ID );
-		if( !validateCompilerExists( defaultWSCompilerId ) ) {
-			promptForNewCompiler();
-			if( !latestStatus.isOK() ) {
-				return false;
-			} else {
-				defaultWSCompilerId = getFirstValidCompiler();
+		if( defaultWSCompilerId != null & defaultWSCompilerId.length() > 0 ) {
+			if( !validateCompilerExists( defaultWSCompilerId ) ) {
+				promptForNewCompiler();
+				if( !latestStatus.isOK() ) {
+					return false;
+				} else {
+					defaultWSCompilerId = getFirstValidCompiler();
+				}
 			}
 		}
 		// If on a compiler preference page, verify the compiler still exists in the workspace
@@ -206,7 +187,8 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 			String id = getPreferencePageCompilerId();
 			if( id != CompilerSelectionPreferencePage.COMPILER_SELECTION_ID ) {
 				if( !validateCompilerExists( id ) ) {
-					latestStatus.setWarning( "The compiler corresponding to this preference page no longer exists in the workspace." );
+					// TODO Add insert
+					latestStatus.setWarning( UINlsStrings.CompilerPreferencePage_compilerNoLongerExistsError );
 					statusChangeListener.statusChanged( latestStatus );
 					return false;
 				}
@@ -239,13 +221,15 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 		List<String> compilerNames = new ArrayList<String>();
 		for( ICompiler comp : availableCompilers ) {			
 			if( compilerNames.contains( comp.getName() ) ) {
-				latestStatus.setWarning( "Compiler names must be unique.  Found duplicate name \"" + comp.getName() + "\"." );
+				latestStatus.setWarning( MessageFormat.format( UINlsStrings.CompilerPreferencePage_duplicateCompilerNames, 
+						new Object[] { comp.getName() } ) );
 				statusChangeListener.statusChanged( latestStatus );
 			} else {
 				compilerNames.add( comp.getName() );
 			}
 			if( compilerIds.contains( comp.getId() ) ) {
-				latestStatus.setWarning( "Compiler ids must be unique.  Found duplicate id \"" + comp.getId() + "\"." );
+				latestStatus.setWarning( MessageFormat.format( UINlsStrings.CompilerPreferencePage_duplicateCompilerIds, 
+						new Object[] { comp.getId() } ) );
 				statusChangeListener.statusChanged( latestStatus );
 			} else {
 				compilerIds.add( comp.getId() );
@@ -261,12 +245,10 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	 * @return whether a compiler exists in the workspace
 	 */
 	protected boolean validateCompilerExists( String id ) {
-		if( id != null ) {
-			ICompiler[] availableCompilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
-			for( ICompiler comp : availableCompilers ) {		
-				if( comp.getId().equalsIgnoreCase( id ) ) {
-					return true;
-				}
+		ICompiler[] availableCompilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
+		for( ICompiler comp : availableCompilers ) {		
+			if( comp.getId().equalsIgnoreCase( id ) ) {
+				return true;
 			}
 		}
 		return false;
@@ -666,6 +648,9 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	 * Return true if the project has data stored in its preference store.
 	 */
 	protected boolean hasProjectSpecificOptions(IProject project) {
+//		if( !( resource instanceof IProject ) ) {
+//			return true;
+//		}
 		if( ( project != null ) && useDefaultCompilerAndGenerators( project ) ) {
 			return false;
 		} else {
@@ -683,6 +668,22 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	}
 
 	public void performApply() {
+		// If 'enable project specific settings' is not checked for a project,
+		// use workspace settings.
+		if( this.resource != null && !useProjectSettings() ) {
+			try {
+				ProjectSettingsUtility.setCompiler( getProject(),  null );
+				ProjectSettingsUtility.setGeneratorIds( getProject(), null );
+				// TODO narrow down to compiler?
+				for( IGeneratorTabProvider tabProvider : this.allTabProviders ) {
+					tabProvider.removePreferencesForAResource();
+				}
+			}
+			catch( BackingStoreException e ) {
+				EDTUIPlugin.log( e );
+			}
+			return;
+		}	
 		for( IGeneratorTabProvider currProvider : this.currTabProviders ) {
 			currProvider.performApply();
 		}
@@ -721,35 +722,31 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 				}
 			}
 		} else {
-			try {
-				// If 'enable project specific settings' isn't checked, use workspace preferences
-				if( !useProjectSettings() ) {
-					ProjectSettingsUtility.setCompiler( getProject(),  null );
-					ProjectSettingsUtility.setGeneratorIds( getProject(), null );
-				} else {
-					String defaultCompilerId = ProjectSettingsUtility.getCompilerId( getProject() );
-					setSelectedCompiler( convertCompilerIdToName( defaultCompilerId ) );
-					String[] gens = ProjectSettingsUtility.getGeneratorIds( resource );
-					for( int i = 0; i < gens.length; i++ ) {
-						gens[i] = convertGeneratorIdToName( gens[i].trim() );
-					}
-					setSelectedGenerators( new ArrayList<String>( Arrays.asList( gens ) ) );
-				}
-				compilerAndGeneratorControls.getCompilerComponent().showCompilerPropertyPageBookPage( selectedCompiler );
+			// Only restore defaults if using project settings
+			if( !useProjectSettings() ) {
+				return;
+			}			
+			// Check box if using workspace defaults
+			boolean useProjectSettings= hasProjectSpecificOptions(getProject());
+			enableProjectSpecificSettings(useProjectSettings);
 
-				removeCurrentCompilerTabs();
-				addCompilerTabs( selectedCompiler );
-				for( IGeneratorTabProvider currProvider : this.currTabProviders ) {
-					currProvider.performDefaults();
-				}
-			}
-			catch( BackingStoreException e ) {
-				EDTUIPlugin.log( e );
+			setSelectedCompiler( getCompilerName( getProject() ) );
+			setSelectedGenerators( getGeneratorNames() );
+
+			compilerAndGeneratorControls.getCompilerComponent().showCompilerPropertyPageBookPage( selectedCompiler );
+
+			removeCurrentCompilerTabs();
+			addCompilerTabs( selectedCompiler );
+			for( IGeneratorTabProvider currProvider : this.currTabProviders ) {
+				currProvider.performDefaults();
 			}
 		}
 	}
 
 	public boolean performCancel() {
+		if( this.resource != null && !useProjectSettings() ) {
+			return true;
+		}
 		boolean retValue = true;
 		for( IGeneratorTabProvider currProvider : this.currTabProviders ) {
 			if( !currProvider.performCancel() ) {
@@ -760,13 +757,28 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	}
 
 	public boolean performOk() {
+		// If 'enable project specific settings' is not checked for a project,
+		// use workspace settings.
+		if( this.resource != null && !useProjectSettings() ) {
+			try {
+				ProjectSettingsUtility.setCompiler( getProject(),  null );
+				ProjectSettingsUtility.setGeneratorIds( getProject(), null );
+				// TODO narrow down to compiler?
+				for( IGeneratorTabProvider tabProvider : this.allTabProviders ) {
+					tabProvider.removePreferencesForAResource();
+				}
+				return true;
+			}
+			catch( BackingStoreException e ) {
+				EDTUIPlugin.log( e );
+				return false;				
+			}
+		}			
 		boolean retValue = true;
-		IGeneratorTabProvider provider;
-		for( int i = 0; i < this.currTabItems.size(); i++ ) {
-			provider = this.currTabProviders.get(i);
-			if( !provider.performOk() ) {
+		for( IGeneratorTabProvider currProvider : this.currTabProviders ) {
+			if( !currProvider.performOk() ) {
 				retValue = false;
-			}		
+			}
 		}
 		storeValues();
 		// If a generator is no longer selected, remove its properties from the
@@ -808,12 +820,6 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 			}
 		} else {
 			try {	
-				// If 'enable project specific settings' isn't checked, use workspace preferences
-				if( !useProjectSettings() ) {
-					ProjectSettingsUtility.setCompiler( getProject(),  null );
-					ProjectSettingsUtility.setGeneratorIds( getProject(), null );
-					return;
-				}				
 				// Store compiler
 				String compilerId = convertCompilerNameToId( this.selectedCompiler );
 				String previousCompilerId = ProjectSettingsUtility.getCompilerId( getProject() );
@@ -971,6 +977,7 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	 */
 	protected void removeTabPropertiesFromProjectResources() {
 		IGeneratorTabProvider tabProvider;
+		IEclipsePreferences store;
 		for( int i = 0; i < this.allTabProviders.size(); i++ ) {
 			tabProvider = this.allTabProviders.get(i);
 			// If generator isn't selected
@@ -1109,5 +1116,46 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 			return availableCompilers[0].getId();
 		}
 		return null;
+	}
+	
+	/**
+	 * Get the compiler id from the project.  If none, get from workspace preferences.
+	 * 
+	 * @param project
+	 * @return
+	 */
+	protected String getCompilerName( IProject project ) {
+		String compilerId = ProjectSettingsUtility.getCompilerId( project );
+		if( compilerId == null ) {
+			compilerId = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( EDTCorePreferenceConstants.COMPILER_ID );
+		}
+		return convertCompilerIdToName( compilerId );
+	}
+	
+	/**
+	 * Get generator ids from the project.  If none, get from workspace preferences.
+	 * 
+	 * @param project
+	 * @return
+	 */
+	protected List<String> getGeneratorNames() {
+		String[] genIds = ProjectSettingsUtility.getGeneratorIds( resource );
+		String[] genNames;
+		if( genIds != null ) {
+			genNames = convertGeneratorIdsToNames( genIds );
+		} else {
+			List<String> genList = getWorkspaceSelectedGenerators();
+			genNames = genList.toArray( new String[genList.size()]);
+		}
+		return( new ArrayList<String>( Arrays.asList( genNames ) ) );
+	}
+	
+	protected boolean isUsingWorkspaceDefaults() {
+		String compilerId = ProjectSettingsUtility.getCompilerId( getProject() );
+		String[] genIds = ProjectSettingsUtility.getGeneratorIds( resource );
+		if( compilerId == null && genIds == null ) {
+			return true;
+		}
+		return false;
 	}
 }
