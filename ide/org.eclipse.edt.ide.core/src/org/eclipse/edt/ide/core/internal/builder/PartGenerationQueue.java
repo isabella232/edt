@@ -11,9 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.builder;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
@@ -34,9 +32,7 @@ public class PartGenerationQueue {
 				display.asyncExec(new Runnable() {
 					public void run() {
 						GeneratePartsOperation genOp = new GeneratePartsOperation(true);
-						List<PartWrapper> generationRequestList = new ArrayList<PartWrapper>();
-						generationRequestList.addAll(partsToGenerate);
-						genOp.generate((IEGLPartWrapper[]) generationRequestList.toArray(new IEGLPartWrapper[partsToGenerate.size()]), false, true);
+						genOp.generate((IEGLPartWrapper[]) partsToGenerate.toArray(new IEGLPartWrapper[partsToGenerate.size()]), false, true);
 					}
 				});
 			}
@@ -46,30 +42,4 @@ public class PartGenerationQueue {
 	public void add(Part partAST, IFile eglFile) {
 		partsToGenerate.add(new PartWrapper(partAST.getIdentifier(), eglFile));
 	}
-
-	// TODO EDT
-	// /**
-	// * Add the generation results view as a listener to this generation operation
-	// */
-	// private void addGenerationListener(GeneratePartsOperation genOp) {
-	// // add the results view for this workbench as a listener to this operation
-	// IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-	// //JON - Brian had a case where this was null. Need to find out why???
-	// if (workbenchWindow != null) {
-	// IWorkbenchPage page = workbenchWindow.getActivePage();
-	// if (page != null) {
-	//				
-	// //Get the generation results view for this workbench
-	// try {
-	// IViewPart view = page.showView(GeneratePartsOperation.EGL_GENERATION_RESULTS_VIEWER,null,IWorkbenchPage.VIEW_CREATE);
-	// if (view != null) {
-	// // add this view as a listener to the gen operation
-	// genOp.addGenerationListener((IGenerationResultsViewer) view);
-	// }
-	// } catch (PartInitException e) {
-	// e.printStackTrace();
-	// }
-	// }
-	// }
-	// }
 }
