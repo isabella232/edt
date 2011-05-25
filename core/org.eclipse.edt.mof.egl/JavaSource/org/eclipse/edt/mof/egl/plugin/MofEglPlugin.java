@@ -28,16 +28,21 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 public class MofEglPlugin extends Plugin{
+	
+	private static boolean sysPackagesLoaded;
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		initializeSystemPackages();
 	}
 	
 	public static void fred(){
 		
 	}
 	public static void initializeSystemPackages(){
+		if (sysPackagesLoaded) {
+			return;
+		}
+		sysPackagesLoaded = true;
 		Bundle bundle = Platform.getBundle("org.eclipse.edt.compiler"); //$NON-NLS-1$
 		try {
 			String file = FileLocator.resolve( bundle.getEntry( "/" ) ).getFile(); //$NON-NLS-1$
