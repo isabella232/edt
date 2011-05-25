@@ -431,7 +431,7 @@ public class TypeUtils implements MofConversion {
 						}
 						if ((f1.getType() == null && func.getType() != null) || (f1.getType() != null && func.getType() == null))
 							break;
-						if ((f1 != null) && !f1.getType().equals(func.getType())) {
+						if ((f1.getType() != null) && !f1.getType().equals(func.getType())) {
 							break;
 						}
 						f2 = func;
