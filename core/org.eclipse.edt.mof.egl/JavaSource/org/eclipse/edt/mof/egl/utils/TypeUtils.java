@@ -438,7 +438,7 @@ public class TypeUtils implements MofConversion {
 						break;
 					}
 				}
-				if (f2 == null || !f1.getAccessKind().equals(f2.getAccessKind()) || !f1.isStatic().equals(f2.isStatic()))
+				if (f2 == null || f1.getAccessKind() != f2.getAccessKind() || f1.isStatic() != f2.isStatic())
 					return false;
 			}
 		}
