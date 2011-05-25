@@ -40,5 +40,12 @@ public class EBoolean extends AnyBoxedObject<Boolean> {
 		}
 		return number.floatValue() != 0;
 	}
+
+	public static String asString(Executable program, Boolean bool) throws JavartException {
+		if (bool == null) {
+			throw new NullValueException();
+		}
+		return bool ? "true" : "false";
+	}
 	
 }
