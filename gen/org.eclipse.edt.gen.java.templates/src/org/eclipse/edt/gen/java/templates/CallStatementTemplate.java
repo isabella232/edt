@@ -18,9 +18,10 @@ import org.eclipse.edt.mof.egl.CallStatement;
 public class CallStatementTemplate extends JavaTemplate {
 
 	public void genStatementBody(CallStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+		out.print("ezeProgram._runUnit().getCallers().localCall(");
 		ctx.gen(genExpression, stmt.getInvocationTarget(), ctx, out, args);
-		out.print("(");
+		out.print(", new com.ibm.javart.JavartSerializable[] {");
 		ctx.foreach(stmt.getArguments(), ',', genExpression, ctx, out, args);
-		out.print(")");
+		out.print("}, null, \"x\", ezeProgram )");
 	}
 }
