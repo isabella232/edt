@@ -391,7 +391,11 @@ public class TypeUtils implements MofConversion {
 		if (p1 instanceof StereotypeType) {
 			StereotypeType t1 = (StereotypeType)p1;
 			StereotypeType t2 = (StereotypeType)p2;
-			if (!t1.getDefaultSuperType().equals(t2.getDefaultSuperType()))
+			MofSerializable s1 = t1.getDefaultSuperType();
+			MofSerializable s2 = t2.getDefaultSuperType();
+			if ((s1 == null && s2 != null) || (s1 != null && s2 == null))
+				return false;
+			if (!s1.equals(s2))
 				return false;
 			if (t1.getMemberAnnotations().size() != t1.getMemberAnnotations().size())
 				return false;
