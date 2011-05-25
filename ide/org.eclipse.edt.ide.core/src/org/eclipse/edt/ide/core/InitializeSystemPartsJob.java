@@ -28,7 +28,7 @@ public class InitializeSystemPartsJob extends UIJob {
 		}
 		protected IStatus run(IProgressMonitor monitor) {
 			// Referencing this class is all that's needed to get the plug-in to load, which loads the system parts.
-			MofEglPlugin.fred();
+			MofEglPlugin.initializeSystemPackages();
 			return Status.OK_STATUS;
 		}
 		public boolean belongsTo(Object family) {
