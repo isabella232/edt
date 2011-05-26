@@ -11,10 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.runtime.java.egl.lang;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
@@ -23,12 +20,9 @@ import java.util.Locale;
 import org.eclipse.edt.javart.EglException;
 import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
-import org.eclipse.edt.javart.Program;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.messages.Message;
-import org.eclipse.edt.javart.resources.ExecutableBase;
-import org.eclipse.edt.javart.resources.SysLibJni;
-import org.eclipse.edt.javart.resources.Trace;
+import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.util.JavartUtil;
 
 
@@ -187,64 +181,123 @@ public class System extends ExecutableBase {
 	 *            The command to run
 	 * @throws JavartException
 	 */
-	public void callCmd( String commandString ) throws JavartException
+	public static void callCmd( String commandString ) throws JavartException
 	{
-		callCmd( commandString, "line" );
+		callCmd( commandString, true );
 	}
 
 	/**
 	 * Run an external program in the foreground. This does not return until the
 	 * command has completed.
 	 * 
-	 * @param program
-	 *            The program
 	 * @param commandString
 	 *            The command string
-	 * @param modeString
-	 *            The mode value ("form" or "line")
+	 * @param lineMode
+	 *            true for line mode, false for form mode.
 	 * @throws JavartException
 	 */
-	public void callCmd( String commandString, String modeString )
+	public static void callCmd( String commandString, boolean lineMode )
 			throws JavartException
 	{
-		SysLibJni.callCmd( _runUnit(), commandString, modeString );
-	}
-	
-	public long currentTimeMillis() {
-		return java.lang.System.currentTimeMillis();
+		runCommand( commandString, lineMode, true );
 	}
 
 	/**
 	 * Run an external command in the background, in LINE mode. This returns
 	 * immediately, not waiting for the command to complete.
 	 * 
-	 * @param program
-	 *            The program
 	 * @param commandString
 	 *            The command to run
 	 * @throws JavartException
 	 */
-	public void startCmd( Program program, String commandString ) throws JavartException
+	public static void startCmd( String commandString ) throws JavartException
 	{
-		startCmd( program, commandString, "line" );
+		startCmd( commandString, true );
 	}
 
 	/**
 	 * Start an external command in the background. This returns immediately,
 	 * not waiting for the command to complete.
 	 * 
-	 * @param program
-	 *            The program
 	 * @param commandString
 	 *            The command
-	 * @param modeString
-	 *            The mode value ("form" or "line")
+	 * @param lineMode
+	 *            true for line mode, false for form mode.
 	 * @throws JavartException
 	 */
-	public void startCmd( Executable program, String commandString, String modeString )
+	public static void startCmd( String commandString, boolean lineMode )
+		throws JavartException
+	{
+		runCommand( commandString, lineMode, false );
+	}
+	
+    private static void runCommand( String commandString, boolean lineMode, boolean wait )
 			throws JavartException
 	{
-		SysLibJni.startCmd( program._runUnit(), commandString, modeString );
+    	final Process proc;
+    	try
+    	{
+			proc = Platform.SYSTEM_TYPE == Platform.WIN
+					? Runtime.getRuntime().exec( new String[] {
+							"cmd", "/c", commandString
+					} )
+					: Runtime.getRuntime().exec( new String[] {
+							"/bin/sh", "-c", commandString
+					} );
+    	}
+    	catch ( IOException ex )
+    	{
+    		throw new RuntimeException( ex );
+    	}
+		
+		if ( wait )
+		{
+			new Thread()
+			{
+				public void run()
+				{
+					InputStream inputStream = proc.getErrorStream();
+					try
+					{
+						while ( inputStream.read() != -1 )
+							;
+					}
+					catch ( IOException ioe )
+					{
+					}
+				}
+			}.start();
+	
+			new Thread()
+			{
+				public void run()
+				{
+					InputStream inputStream = proc.getInputStream();
+					try
+					{
+						while ( inputStream.read() != -1 )
+							;
+					}
+					catch ( IOException ioe )
+					{
+					}
+				}
+			}.start();
+	
+			try
+			{
+				proc.waitFor();
+			}
+			catch ( InterruptedException ex )
+			{
+				throw new RuntimeException( ex );
+			}
+		}
+	}
+
+	public long currentTimeMillis() 
+	{
+		return java.lang.System.currentTimeMillis();
 	}
 
 	/**

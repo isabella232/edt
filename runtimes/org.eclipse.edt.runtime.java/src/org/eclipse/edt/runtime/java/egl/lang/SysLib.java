@@ -23,11 +23,9 @@ import java.util.Locale;
 import org.eclipse.edt.javart.EglException;
 import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
-import org.eclipse.edt.javart.Program;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
-import org.eclipse.edt.javart.resources.SysLibJni;
 import org.eclipse.edt.javart.resources.Trace;
 import org.eclipse.edt.javart.util.JavartUtil;
 
@@ -173,8 +171,6 @@ public class SysLib extends ExecutableBase {
 	 * Run an external command in the foreground, in LINE mode. This does not
 	 * return until the command has completed.
 	 * 
-	 * @param program
-	 *            The program
 	 * @param commandString
 	 *            The command to run
 	 * @throws JavartException
@@ -188,8 +184,6 @@ public class SysLib extends ExecutableBase {
 	 * Run an external program in the foreground. This does not return until the
 	 * command has completed.
 	 * 
-	 * @param program
-	 *            The program
 	 * @param commandString
 	 *            The command string
 	 * @param modeString
@@ -199,41 +193,36 @@ public class SysLib extends ExecutableBase {
 	public void callCmd( String commandString, String modeString )
 			throws JavartException
 	{
-		SysLibJni.callCmd( _runUnit(), commandString, modeString );
+		System.callCmd( commandString, modeString.equalsIgnoreCase( "line" ) );
 	}
 
 	/**
 	 * Run an external command in the background, in LINE mode. This returns
 	 * immediately, not waiting for the command to complete.
 	 * 
-	 * @param program
-	 *            The program
 	 * @param commandString
 	 *            The command to run
 	 * @throws JavartException
 	 */
-	public void startCmd( Program program, String commandString ) throws JavartException
+	public void startCmd( String commandString ) throws JavartException
 	{
-		startCmd( program, commandString, "line" );
+		startCmd( commandString, "line" );
 	}
 
 	/**
 	 * Start an external command in the background. This returns immediately,
 	 * not waiting for the command to complete.
 	 * 
-	 * @param program
-	 *            The program
 	 * @param commandString
 	 *            The command
 	 * @param modeString
 	 *            The mode value ("form" or "line")
 	 * @throws JavartException
 	 */
-	public void startCmd( Executable program, String commandString, String modeString )
+	public void startCmd( String commandString, String modeString )
 			throws JavartException
 	{
-		SysLibJni.startCmd( program._runUnit(), commandString, modeString );
-
+		System.startCmd( commandString, modeString.equalsIgnoreCase( "line" ) );
 	}
 
 	/**
