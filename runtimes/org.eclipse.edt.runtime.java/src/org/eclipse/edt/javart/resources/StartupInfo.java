@@ -14,16 +14,16 @@ package org.eclipse.edt.javart.resources;
 import java.io.Serializable;
 
 /**
- * Used by a Program to describes the kind of RunUnit that it wants. 
+ * Used by a Program to describe the kind of RunUnit that it wants. 
  */
 public class StartupInfo implements Serializable
 {
 	private static final long serialVersionUID = 70L;
 
 	/**
-	 * The J2EE flag, defaults to false.
+	 * The JEE flag, defaults to false.
 	 */
-	private boolean isJ2EE;
+	private boolean isJEE;
 	
 	/**
 	 * The name for the run unit, defaults to null.
@@ -41,57 +41,28 @@ public class StartupInfo implements Serializable
 	private String propertyFilePath;
 	
 	/**
-	 * The EJB flag, defaults to false.
-	 */
-	private boolean isEJB;
-	
-	/**
 	 * Command line arguments for main programs
 	 */
 	private String[] commandLineArgs;
 	
 	/**
-	 * LWI flag, default to false
-	 */
-	private boolean isLWI = false;
-	
-	/**
 	 * Creates a StartupInfo.
 	 */
-	public StartupInfo( String ruName, String propertyFilePath, boolean isJ2EE )
+	public StartupInfo( String ruName, String propertyFilePath, boolean isJEE )
 	{
 		this.ruName = ruName;
 		this.propertyFilePath = propertyFilePath;
-		this.isJ2EE = isJ2EE;
-	}
-	
-	/**
-	 * Creates a StartupInfo.
-	 */
-	public StartupInfo( String ruName, String propertyFilePath, boolean isJ2EE, boolean isLWI )
-	{
-		this( ruName, propertyFilePath, isJ2EE );
-		this.isLWI = isLWI;
+		this.isJEE = isJEE;
 	}
 
 	/**
-	 * Returns the isJ2EE flag.
+	 * Returns the isJEE flag.
 	 * 
-	 * @return the isJ2EE flag.
+	 * @return the isJEE flag.
 	 */
-	public boolean isJ2EE()
+	public boolean isJEE()
 	{
-		return isJ2EE;
-	}
-	
-	/**
-	 * Returns the isLWI flag.
-	 * 
-	 * @return the isLWI flag.
-	 */
-	public boolean isLWI()
-	{
-		return isLWI;
+		return isJEE;
 	}
 
 	/**
@@ -132,26 +103,6 @@ public class StartupInfo implements Serializable
 	public String getPropertyFilePath()
 	{
 		return propertyFilePath;
-	}
-
-	/**
-	 * Returns the isEJB flag.
-	 * 
-	 * @return the isEJB flag.
-	 */
-	public boolean isEJB()
-	{
-		return isEJB;
-	}
-
-	/**
-	 * Sets the isEJB flag.
-	 * 
-	 * @param isEJB  the new isEJB flag. 
-	 */
-	public void setEJB( boolean isEJB )
-	{
-		this.isEJB = isEJB;
 	}
 	
 	/**
