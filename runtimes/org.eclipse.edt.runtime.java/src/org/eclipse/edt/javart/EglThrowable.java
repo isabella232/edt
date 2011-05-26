@@ -24,12 +24,12 @@ public class EglThrowable extends Exception
 	/**
 	 * To improve performance, we override the usual implementation of this method,
 	 * which is VERY expensive.  But unfortunately this means a stack trace for this
-	 * exception will not be available.  That's OK since EGL users don't seem them
+	 * exception will not be available.  That's OK since EGL users don't see them
 	 * anyway.
 	 * <P>
 	 * For debugging, you can get stack traces in your EglThrowables (and loose
 	 * the performance improvement) by setting the system property 
-	 * com.ibm.javart.StackTraces to true.  
+	 * org.eclipse.edt.javart.StackTraces to true.  
 	 *
 	 * @return this object.
 	 */
