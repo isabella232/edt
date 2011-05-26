@@ -137,14 +137,14 @@ public class EString extends AnyBoxedObject<String> {
 		return !equals(program, op1, op2);
 	}
 	
-	public static String substring(String op1, Integer op2, Integer op3) throws JavartException {
-		if (op1 == null || op2 == null || op3 == null) {
+	public static String substring(String str, Integer startIndex, Integer endIndex) throws JavartException {
+		if (str == null || startIndex == null || endIndex == null) {
 			throw new NullValueException();
 		}
 
-		int start = op2;
-		int end = op3;
-		int max = op1.length();
+		int start = startIndex;
+		int end = endIndex;
+		int max = str.length();
 
 		if ( start < 1 || start > max )
 		{
@@ -159,6 +159,56 @@ public class EString extends AnyBoxedObject<String> {
 			throw ex;
 		}
 		
-		return op1.substring( start - 1, end );
+		return str.substring( start - 1, end );
+	}
+	
+	public static String substringAssign(String str, String newValue, Integer startIndex, Integer endIndex) throws JavartException {
+		if (str == null || newValue == null || startIndex == null || endIndex == null) {
+			throw new NullValueException();
+		}
+
+		int start = startIndex;
+		int end = endIndex;
+		int max = str.length();
+
+		if ( start < 1 || start > max )
+		{
+			IndexOutOfBoundsException ex = new IndexOutOfBoundsException();
+			ex.indexValue = start;
+			throw ex;
+		}
+		else if ( end < start || end < 1 || end > max )
+		{
+			IndexOutOfBoundsException ex = new IndexOutOfBoundsException();
+			ex.indexValue = end;
+			throw ex;
+		}
+		
+		int valLength = newValue.length();
+		int subLength = end - start + 1;
+		
+		String substringValue;
+		if ( valLength > subLength )
+		{
+			substringValue = newValue.substring( 0, subLength );
+		}
+		else if ( valLength < subLength )
+		{
+			StringBuilder paddedBuf = new StringBuilder( newValue );
+			for ( int i = valLength; i < subLength; i++ )
+			{
+				paddedBuf.append( ' ' );
+			}
+			substringValue = paddedBuf.toString();
+		}
+		else
+		{
+			substringValue = newValue;
+		}
+		
+		StringBuilder buf = new StringBuilder( str );
+		buf.replace( startIndex - 1, endIndex, substringValue );
+		
+		return buf.toString();
 	}
 }
