@@ -136,4 +136,29 @@ public class EString extends AnyBoxedObject<String> {
 	public static boolean notEquals(Executable program, String op1, String op2) throws JavartException {
 		return !equals(program, op1, op2);
 	}
+	
+	public static String substring(String op1, Integer op2, Integer op3) throws JavartException {
+		if (op1 == null || op2 == null || op3 == null) {
+			throw new NullValueException();
+		}
+
+		int start = op2;
+		int end = op3;
+		int max = op1.length();
+
+		if ( start < 1 || start > max )
+		{
+			IndexOutOfBoundsException ex = new IndexOutOfBoundsException();
+			ex.indexValue = start;
+			throw ex;
+		}
+		else if ( end < start || end < 1 || end > max )
+		{
+			IndexOutOfBoundsException ex = new IndexOutOfBoundsException();
+			ex.indexValue = end;
+			throw ex;
+		}
+		
+		return op1.substring( start - 1, end );
+	}
 }
