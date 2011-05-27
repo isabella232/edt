@@ -12,7 +12,7 @@
 package org.eclipse.edt.ide.compiler.gen.ui;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.edt.ide.ui.internal.preferences.AbstractGeneratorTabProvider;
+import org.eclipse.edt.ide.ui.preferences.AbstractGeneratorTabProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;

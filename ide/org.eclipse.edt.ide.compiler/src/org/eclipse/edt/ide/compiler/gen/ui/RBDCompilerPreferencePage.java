@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.compiler.gen.ui;
 
-import org.eclipse.edt.ide.ui.internal.preferences.CompilerPropertyAndPreferencePage;
-import org.eclipse.edt.ide.ui.internal.preferences.ICompilerPreferencePage;
+import org.eclipse.edt.ide.ui.preferences.CompilerPropertyAndPreferencePage;
+import org.eclipse.edt.ide.ui.preferences.ICompilerPreferencePage;
 
 public class RBDCompilerPreferencePage extends CompilerPropertyAndPreferencePage 
 										implements ICompilerPreferencePage{
