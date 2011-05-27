@@ -38,6 +38,11 @@ public class UINlsStrings extends NLS {
 	public static String CompilerPreferencePage_compilerNoLongerExistsError;
 	public static String CompilerPreferencePage_duplicateCompilerIds;
 	public static String CompilerPreferencePage_duplicateCompilerNames;
+	public static String CompilerPreferencePage_duplicateGeneratorIds;
+	public static String CompilerPreferencePage_duplicateGeneratorNames;
+	public static String CompilerPreferencePage_compilerNoLongerAvailable;
+	public static String CompilerPreferencePage_compilerNoLongerAvailable_title;
+	public static String CompilerPreferencePage_cannotDisplayCompiler;
 	public static String CompilerPropertyPage_errorCleaningUpPrefStore;
 	
 	public static String BasePreferencePage_EGLFolderGroup_label;

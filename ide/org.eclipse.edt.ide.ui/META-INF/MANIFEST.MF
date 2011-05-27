@@ -33,9 +33,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
 Export-Package: 
- org.eclipse.edt.ide.ui,
- org.eclipse.edt.ide.ui.internal.editor,
- org.eclipse.edt.ide.ui.internal.preferences,
- org.eclipse.edt.ide.ui.internal.util,
- org.eclipse.edt.ide.ui.internal.wizards,
- org.eclipse.edt.ide.ui.internal.dialogs
+ org.eclipse.edt.ide.ui, 
+ org.eclipse.edt.ide.ui.preferences

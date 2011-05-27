@@ -202,7 +202,7 @@ public class NewWizardMessages extends NLS {
 
 	public static String NewPackageWizardPageErrorPackageExists;
 	public static String NewPackageWizardPageErrorEnterName;
-//	public static String NewPackageWizardpageErrorEmptyName;
+	public static String NewPackageWizardPageErrorEmptyName;
 	public static String NewPackageWizardPageWarningPackageNotShown;
 //	public static String NewPackageWizardPageWarningDiscouragedPackageName;
 
@@ -536,17 +536,17 @@ public class NewWizardMessages extends NLS {
 //	public static String BuildOptionsDialogDeploymentOptionsHostMachineSQLDatabasePassword;
 //	public static String BuildOptionsDialogDeploymentOptionsHostMachineDSNLoadLib;
 //	public static String BuildOptionsDialogDeploymentOptionsHostMachineEGLLoadLib;
-//
-//	public static String EGLMoveDialogTitle;
-//	public static String EGLMoveDialogMessage;
-//
-//	public static String EGLRenameDialogAction;
-//	public static String EGLRenameDialogMessage;
-//	public static String EGLRenameDialogElementTypeEGLFile;
-//	public static String EGLRenameDialogElementTypeEGLPackage;
-//	public static String EGLRenameDialogElementTypeEGLSourceFolder;
-//	public static String EGLRenameDialogElementTypeResource;
-//
+
+	public static String EGLMoveDialogTitle;
+	public static String EGLMoveDialogMessage;
+
+	public static String EGLRenameDialogAction;
+	public static String EGLRenameDialogMessage;
+	public static String EGLRenameDialogElementTypeEGLFile;
+	public static String EGLRenameDialogElementTypeEGLPackage;
+	public static String EGLRenameDialogElementTypeEGLSourceFolder;
+	public static String EGLRenameDialogElementTypeResource;
+
 //	public static String EGLDeleteDialogAction;
 //	public static String EGLDeleteDialogMessageSingular;
 //	public static String EGLDeleteDialogMessagePlural;
@@ -554,10 +554,10 @@ public class NewWizardMessages extends NLS {
 //	public static String EGLDeleteDialogElementTypeEGLPackage;
 //	public static String EGLDeleteDialogElementTypeEGLSourceFolder;
 //	public static String EGLDeleteDialogElementTypeResource;
-//
-//	public static String EGLPasteConflictRenamepackageNoArg;
-//	public static String EGLPasteConflictRenamepackageOneArg;
-//	public static String CopyFilesAndFoldersOperation_inputDialogMessage;
+
+	public static String EGLPasteConflictRenamepackageNoArg;
+	public static String EGLPasteConflictRenamepackageOneArg;
+	public static String CopyFilesAndFoldersOperation_inputDialogMessage;
 
 	public static String NewContainerWizardPageFileButton;
 

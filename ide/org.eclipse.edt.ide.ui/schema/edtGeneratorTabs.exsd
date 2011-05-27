@@ -77,7 +77,7 @@
                   The provider class for this generator tab.
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="org.eclipse.edt.ide.ui.internal.preferences.AbstractGeneratorTabProvider:org.eclipse.edt.ide.compiler.gen.ui.IGeneratorTabProvider"/>
+                  <meta.attribute kind="java" basedOn="org.eclipse.edt.ide.ui.preferences.AbstractGeneratorTabProvider:org.eclipse.edt.ide.ui.preferences.IGeneratorTabProvider"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -104,7 +104,7 @@
                   The provider class for this generator tab.
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="org.eclipse.edt.ide.ui.internal.preferences.AbstractGeneratorTabProvider:org.eclipse.edt.ide.compiler.gen.ui.IGeneratorTabProvider"/>
+                  <meta.attribute kind="java" basedOn="org.eclipse.edt.ide.ui.preferences.AbstractGeneratorTabProvider:org.eclipse.edt.ide.ui.preferences.IGeneratorTabProvider"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -137,21 +137,21 @@
          Before extending this extension point, add a compiler preference page under the EGL Compiler category as follows,
 &lt;ol&gt; 
 &lt;li&gt;Extend the &lt;code&gt;org.eclipse.ui.preferencePages&lt;/code&gt; extension point in the plugin.xml.  Specify &lt;code&gt;org.eclipse.edt.ide.ui.compilerPreferences&lt;/code&gt; as the category.&lt;/li&gt; 
-&lt;li&gt;Subclass &lt;code&gt;org.eclipse.edt.ide.ui.internal.preferences.CompilerPropertyAndPreferencePage&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Implement &lt;code&gt;org.eclipse.edt.ide.ui.internal.preferences.ICompilerPreferencePage&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Subclass &lt;code&gt;org.eclipse.edt.ide.ui.preferences.CompilerPropertyAndPreferencePage&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Implement &lt;code&gt;org.eclipse.edt.ide.ui.preferences.ICompilerPreferencePage&lt;/code&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;br&gt;To add a generator tab on a compiler preference page or on the EGL Compiler property page, extend this extension point as follows,
 &lt;ol&gt; 
 &lt;li&gt;Specify a generatorTab if this generator tab is for a specific generator.&lt;/li&gt;
 &lt;ul&gt;
 &lt;li&gt;Specify the id of the generator (generatorId).  The generator has an associated compiler.  This tab will appear on the preference page of that compiler.  This tab will appear on a property page if the generator is selected for a resource (project, folder, file).  The name of the generator will be displayed on the tab.&lt;/li&gt;
-&lt;li&gt;Specify the provider class that provides the tab content and other data/functionality by subclassing &lt;code&gt;org.eclipse.edt.ide.ui.internal.preferences.AbstractGeneratorTabProvider&lt;/code&gt;, which implements &lt;code&gt;org.eclipse.edt.ide.compiler.gen.ui.IGeneratorTabProvider&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Specify the provider class that provides the tab content and other data/functionality by subclassing &lt;code&gt;org.eclipse.edt.ide.ui.preferences.AbstractGeneratorTabProvider&lt;/code&gt;, which implements &lt;code&gt;org.eclipse.edt.ide.ui.preferences.IGeneratorTabProvider&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;li&gt;Specify a generalTab if this generator tab contains general information across generators associated with a compiler.&lt;/li&gt;
 &lt;ul&gt;  
 &lt;li&gt;Specify the id of the compiler (compilerId) associated with this generator tab.  This tab will appear on the preference page of that compiler.  It will appear on a property page if that compiler is selected for a project.&lt;/li&gt;
 &lt;li&gt;Specify a name to be displayed on the tab (tabName).&lt;/li&gt;
-&lt;li&gt;Specify the provider class that provides the tab content and other data/functionality by subclassing &lt;code&gt;org.eclipse.edt.ide.ui.internal.preferences.AbstractGeneratorTabProvider&lt;/code&gt;, which implements &lt;code&gt;org.eclipse.edt.ide.compiler.gen.ui.IGeneratorTabProvider&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Specify the provider class that provides the tab content and other data/functionality by subclassing &lt;code&gt;org.eclipse.edt.ide.ui.preferences.AbstractGeneratorTabProvider&lt;/code&gt;, which implements &lt;code&gt;org.eclipse.edt.ide.ui.preferences.IGeneratorTabProvider&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;     
 &lt;/ol&gt;
       </documentation>

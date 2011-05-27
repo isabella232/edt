@@ -35,11 +35,13 @@
             contextId="org.eclipse.edt.ide.ui.eglEditorScope"
             sequence="Ctrl+Shift+F"/>
         <!-- Source edit SQL -->
+<!-- Uncomment when SQL support is ready
        	<key
             commandId="org.eclipse.edt.ide.ui.source.sqlGroup.addSQLStatement"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             contextId="org.eclipse.edt.ide.ui.eglEditorScope"
             sequence="Ctrl+Shift+A"/>
+-->            
   	</extension>
 	
 	<extension 
@@ -64,10 +66,12 @@
 			description="%Format.description"	  		
 			id="org.eclipse.edt.ide.ui.source.editGroup.format"/>
 		<!-- Source edit SQL -->
+<!-- Uncomment when SQL support is ready
 		<command
 	  		name="%AddSQLStatement.name"
 			description="%AddSQLStatement.description"	  		
 			id="org.eclipse.edt.ide.ui.source.sqlGroup.addSQLStatement"/>
+-->			
 		<!-- Ruler -->
 		<command
 	  		name="%Folding.name"
@@ -93,8 +97,10 @@
        	 		<separator name="importGroup" visible="true"/>
        	 		<command commandId="org.eclipse.edt.ide.ui.source.importGroup.addImport"/>
    	 			<command commandId="org.eclipse.edt.ide.ui.source.importGroup.organizeImports"/>
+<!-- Uncomment when SQL support is ready
    	 			<separator name="sqlGroup" visible="true"/>
    	 			<command commandId="org.eclipse.edt.ide.ui.source.sqlGroup.addSQLStatement"/>
+-->   	 			
        	 		<separator name="additions" visible="false"/>
        	 		<visibleWhen>
        				<with variable="activePartId">
@@ -119,8 +125,10 @@
        	 		<separator name="importGroup" visible="true"/>
        	 		<command commandId="org.eclipse.edt.ide.ui.source.importGroup.addImport"/>
        	 		<command commandId="org.eclipse.edt.ide.ui.source.importGroup.organizeImports"/>
+<!-- Uncomment when SQL support is ready
        	 		<separator name="sqlGroup" visible="true"/>
    	 			<command commandId="org.eclipse.edt.ide.ui.source.sqlGroup.addSQLStatement"/>
+-->
        	 		<separator name="additions" visible="false"/>
        	 		<visibleWhen>
        				<with variable="activePartId">
@@ -158,10 +166,12 @@
         	class="org.eclipse.edt.ide.ui.internal.handlers.OrganizeImportsHandler"
         	commandId="org.eclipse.edt.ide.ui.source.importGroup.organizeImports">
   		</handler>
+<!-- Uncomment when SQL support is ready 		
   		<handler
         	class="org.eclipse.edt.ide.ui.internal.handlers.AddSQLStatementHandler"
         	commandId="org.eclipse.edt.ide.ui.source.sqlGroup.addSQLStatement">
   		</handler>
+-->  		
   		<handler
         	class="org.eclipse.edt.ide.ui.internal.handlers.FoldingHandler"
         	commandId="org.eclipse.edt.ide.ui.ruler.folding">
@@ -549,7 +559,7 @@ Templates
 			objectClass="org.eclipse.core.resources.IProject"
 			adaptable="true"
             name="%CompilerPropertyPageName"
-            class="org.eclipse.edt.ide.ui.internal.preferences.CompilerPropertyAndPreferencePage"
+            class="org.eclipse.edt.ide.ui.preferences.CompilerPropertyAndPreferencePage"
            	id="org.eclipse.edt.ide.ui.projectCompilerPropertyPage">
       		<filter
         		name="projectNature"
@@ -560,7 +570,7 @@ Templates
 			objectClass="org.eclipse.core.resources.IFolder"
 			adaptable="true"
             name="%CompilerPropertyPageName"
-            class="org.eclipse.edt.ide.ui.internal.preferences.CompilerPropertyAndPreferencePage"
+            class="org.eclipse.edt.ide.ui.preferences.CompilerPropertyAndPreferencePage"
            	id="org.eclipse.edt.ide.ui.folderCompilerPropertyPage">
 			<filter
         		name="projectNature"
@@ -572,7 +582,7 @@ Templates
 			adaptable="true"
             name="%CompilerPropertyPageName"
             nameFilter="*.egl"
-            class="org.eclipse.edt.ide.ui.internal.preferences.CompilerPropertyAndPreferencePage"
+            class="org.eclipse.edt.ide.ui.preferences.CompilerPropertyAndPreferencePage"
            	id="org.eclipse.edt.ide.ui.fileCompilerPropertyPage">
       		<filter
         		name="projectNature"

@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.preferences;
 
+import org.eclipse.edt.ide.ui.preferences.CompilerPropertyAndPreferencePage;
+import org.eclipse.edt.ide.ui.preferences.ICompilerPreferencePage;
+
 
 
 public class CompilerSelectionPreferencePage extends CompilerPropertyAndPreferencePage 
