@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.edt.sdk.feature"
+      label="EDT SDK Feature"
+      version="0.7.0.qualifier">
+
+   <description>
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license>
+      %license
+   </license>
+
+   <includes
+         id="org.eclipse.edt.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.edt.source"
+         version="0.0.0"/>
+
+</feature>
