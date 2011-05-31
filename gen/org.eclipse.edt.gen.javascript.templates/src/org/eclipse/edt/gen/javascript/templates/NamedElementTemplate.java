@@ -25,7 +25,7 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 
 	public void genAccessor(NamedElement element, Context ctx, TabbedWriter out, Object... args) {
 		Annotation property = getPropertyAnnotation(element);
-		ctx.gen(genQualifier, element, ctx, out, args); 
+		ctx.gen(genQualifier, element, ctx, out, args);
 		if (property != null) {
 			// obtain the name of the function
 			String functionName;
@@ -50,7 +50,5 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 		out.print(element.getName());
 	}
 
-	public void genQualifier(NamedElement element, Context ctx, TabbedWriter out, Object... args) {
-		// nothing is generated
-	}
+	public void genQualifier(NamedElement element, Context ctx, TabbedWriter out, Object... args) {}
 }

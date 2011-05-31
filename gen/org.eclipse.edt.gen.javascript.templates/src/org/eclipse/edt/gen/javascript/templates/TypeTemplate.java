@@ -151,9 +151,11 @@ public class TypeTemplate extends JavaScriptTemplate {
 		if (!org.eclipse.edt.gen.CommonUtilities.processTypeList(genAssignment, type, ctx, out, args)) {
 			// if the lhs is non-nullable but the rhs is nullable, we have a special case
 			if (!((Expression) args[0]).isNullable() && ((Expression) args[1]).isNullable()) {
+				ctx.gen(genExpression, (Expression) args[0], ctx, out, org.eclipse.edt.gen.CommonUtilities.genWithoutTypeList(args));
+				out.print(" = ");
 				out.print("(function(x){ return x != null ? (x) : ");
 				ctx.gen(genDefaultValue, ((Expression) args[0]).getType(), ctx, out, args);
-				out.print("; }");
+				out.print("; })");
 				out.print("(");
 				ctx.gen(genExpression, (Expression) args[1], ctx, out, args);
 				out.print(")");

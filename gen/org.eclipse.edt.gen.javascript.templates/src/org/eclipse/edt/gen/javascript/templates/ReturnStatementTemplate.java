@@ -11,40 +11,20 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FunctionMember;
-import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class ReturnStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(ReturnStatement stmt, Context ctx, TabbedWriter out, Object... args) {
-		FunctionMember func = (FunctionMember)stmt.getContainer();
-		if (func != null) {
-			List<FunctionParameter> parms = new ArrayList<FunctionParameter>();
-			for (FunctionParameter parm : func.getParameters()) {
-				if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(parm, ctx))
-					parms.add(parm);
-			}
-			if (!parms.isEmpty()) {
-				out.print(eze$$func);
-				out.print(".call(");
-				out.print(caller);
-				out.print(",");
-				ctx.foreach(parms, ',', genName, ctx, out);
-				out.println(");");
-			}
-		}
 		out.print("return ");
 		Expression expr = stmt.getExpression();
 		if (expr != null) {
-			expr = IRUtils.makeExprCompatibleToType(expr, ((FunctionMember)stmt.getContainer()).getType());
+			expr = IRUtils.makeExprCompatibleToType(expr, ((FunctionMember) stmt.getContainer()).getType());
 			ctx.gen(genExpression, expr, ctx, out, args);
 		}
 	}

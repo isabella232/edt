@@ -16,8 +16,10 @@ import java.util.List;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -47,15 +49,21 @@ public class RecordTemplate extends JavaScriptTemplate {
 	}
 
 	public void genConstructor(Record part, Context ctx, TabbedWriter out, Object... args) {
+		out.print(quoted("constructor"));
+		out.println(": function() {");
+		out.println("this.eze$$XMLRootElementName = " + quoted(part.getName()) + ";");
+		out.println("this.eze$$setInitial();");
+		out.println("}");
+		out.println(",");
+
 		out.print(quoted("ezeCopy"));
 		out.println(": function(source) {");
 		for (Field field : part.getFields()) {
 			if (TypeUtils.isReferenceType(field.getType()) || ctx.mapsToPrimitiveType(field.getType())) {
 				out.print("this.");
 				ctx.gen(genName, field, ctx, out, args);
-				out.print(" = ((");
-				ctx.gen(genClassName, part, ctx, out, args);
-				out.print(") source).");
+				out.print(" = ");
+				out.print("source.");
 				ctx.gen(genName, field, ctx, out, args);
 				out.println(";");
 			} else {
@@ -67,7 +75,22 @@ public class RecordTemplate extends JavaScriptTemplate {
 				out.println(");");
 			}
 		}
-		out.println("};");
+		out.println("}");
+	}
+
+	public void genInitializeMethods(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+		out.print(quoted("eze$$setInitial"));
+		out.println(": function() {");
+		out.println("this.eze$$setEmpty();");
+		ctx.gen(genInitializeMethodBody, part, ctx, out, args);
+		out.println("}");
+	}
+
+	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+		if (((Field) args[0]).getInitializerStatements() != null) {
+			out.print("this."); // TODO sbg likely NOT the right place
+			ctx.gen(genStatementNoBraces, ((Field) args[0]).getInitializerStatements(), ctx, out, args);
+		}
 	}
 
 	public void genAccessor(Record part, Context ctx, TabbedWriter out, Object... args) {
@@ -104,8 +127,10 @@ public class RecordTemplate extends JavaScriptTemplate {
 		out.print(")");
 	}
 
-	public void genGetterSetter(Record part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genGetter, (Field) args[0], ctx, out, args);
-		ctx.gen(genSetter, (Field) args[0], ctx, out, args);
+	public void genGetterSetters(Record part, Context ctx, TabbedWriter out, Object... args) {}
+
+	public void genQualifier(Library library, Context ctx, TabbedWriter out, Object... args) {
+		if ((args.length > 0) && (args[0] instanceof Expression) && (((Expression) args[0]).getQualifier() == null))
+			out.print("this.");
 	}
 }

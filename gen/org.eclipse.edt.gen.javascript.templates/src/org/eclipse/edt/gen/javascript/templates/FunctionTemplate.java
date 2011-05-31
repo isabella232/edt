@@ -14,7 +14,6 @@ package org.eclipse.edt.gen.javascript.templates;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Function;
-import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Type;
 
 public class FunctionTemplate extends JavaScriptTemplate {
@@ -29,15 +28,6 @@ public class FunctionTemplate extends JavaScriptTemplate {
 		out.print("\"");
 		out.print(": function(");
 		ctx.foreach(function.getParameters(), ',', genDeclaration, ctx, out, args);
-		for (FunctionParameter parm : function.getParameters()) {
-			if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(parm, ctx)) {
-				out.print(", ");
-				out.print(eze$$func);
-				out.print(", ");
-				out.print(caller);
-				break;
-			}
-		}
 		out.println(") {");
 		ctx.gen(genStatementNoBraces, function.getStatementBlock(), ctx, out, args);
 		out.println("}");

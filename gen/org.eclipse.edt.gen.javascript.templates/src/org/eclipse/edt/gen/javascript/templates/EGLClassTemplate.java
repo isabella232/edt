@@ -60,7 +60,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 
 	public void genClassHeader(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
 		out.print("egl.defineClass(");
-		out.print(quoted(part.getPackageName()));
+		out.print(singleQuoted(part.getPackageName().toLowerCase()));
 		out.print(", ");
 		out.print(quoted(part.getName()));
 		out.print(", ");
@@ -123,7 +123,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.print(quoted("eze$$setEmpty"));
 		out.println(": function() {");
 		ctx.gen(genSetEmptyMethodBody, part, ctx, out, args);
-		out.println("};");
+		out.println("}");
 	}
 
 	public void genSetEmptyMethodBody(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
@@ -171,7 +171,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.print(quoted("eze$$clone"));
 		out.println(": function() {");
 		ctx.gen(genCloneMethodBody, part, ctx, out, args);
-		out.println("};");
+		out.println("}");
 	}
 
 	public void genCloneMethodBody(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
@@ -185,10 +185,23 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.print(" = ");
 		ctx.gen(genInstantiation, part, ctx, out, args);
 		out.println(";");
+
+		out.print(temp2);
+		out.println(".eze$$isNull = this.eze$$isNull;");
+
+		out.print(temp2);
+		out.println(".eze$$isNullable = this.eze$$isNullable;");
+
 		// clone fields
 		for (Field field : part.getFields()) {
 			ctx.gen(genCloneMethod, part, ctx, out, field);
 		}
+
+		out.print(temp2);
+		out.print(".setNull(");
+		out.print(temp1);
+		out.println("eze$$isNull)");
+
 		out.print("return ");
 		out.print(temp2);
 		out.println(";");

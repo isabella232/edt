@@ -56,6 +56,8 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 			for (int i = 0; i < generic.getTypeArguments().size(); i++)
 				out.print("[");
 		}
+		if (generic.elementsNullable())
+			out.print("?");
 		ctx.gen(genSignature, generic.getElementType(), ctx, out, args);
 	}
 

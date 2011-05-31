@@ -27,9 +27,9 @@ public class ArrayAccessTemplate extends JavaScriptTemplate {
 		out.print(")");
 		out.print("[");
 		ctx.gen(genExpression, expr.getArray(), ctx, out, args);
-		out.print(".checkIndex((");
+		out.print(".checkIndex(");
 		ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
-		out.print(") - 1]");
+		out.print(" - 1)]");
 	}
 
 	public void genExpression(ArrayAccess expr, Context ctx, TabbedWriter out, Object... args) {
@@ -55,9 +55,9 @@ public class ArrayAccessTemplate extends JavaScriptTemplate {
 			out.print(")");
 			out.print("[");
 			ctx.gen(genExpression, expr.getArray(), ctx, out, args);
-			out.print(".checkIndex((");
+			out.print(".checkIndex(");
 			ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
-			out.print(") - 1]");
+			out.print(" - 1)]");
 		}
 	}
 }

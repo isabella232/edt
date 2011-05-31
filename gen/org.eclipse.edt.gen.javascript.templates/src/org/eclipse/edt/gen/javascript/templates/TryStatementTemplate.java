@@ -12,11 +12,10 @@
 package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
-
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ExceptionBlock;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.TryStatement;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
 public class TryStatementTemplate extends JavaScriptTemplate {
 
@@ -29,12 +28,19 @@ public class TryStatementTemplate extends JavaScriptTemplate {
 	}
 
 	public void genException(ExceptionBlock exceptionBlock, Context ctx, TabbedWriter out, Object... args) {
-		out.print("catch (" + ctx.getNativeImplementationMapping(exceptionBlock.getException().getType()) + " ");
+		String exceptionVar = ctx.nextTempName();
+		out.println("catch (" + exceptionVar + "){");
+		out.println("if ( " + exceptionVar + " instanceof " + ctx.getNativeImplementationMapping(exceptionBlock.getException().getType()) + " ) {");
+		out.print("var ");
 		ctx.gen(genName, exceptionBlock.getException(), ctx, out, args);
-		out.println(") {");
+		out.println(" = " + exceptionVar + ";");
 		for (Statement stmt : exceptionBlock.getStatements()) {
 			genExceptionStatement(stmt, ctx, out, args);
 		}
+		out.println("}");
+		out.println("else {");
+		out.println("throw " + exceptionVar + ";");
+		out.println("}");
 		out.println("}");
 	}
 
