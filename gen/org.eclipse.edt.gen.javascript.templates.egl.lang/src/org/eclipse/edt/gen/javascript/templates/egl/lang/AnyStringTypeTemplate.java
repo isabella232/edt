@@ -57,7 +57,7 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 			signature += "?";
 		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
 			signature += "?";
-		signature += "S" + type.getLength() + ";";
+		signature += "S;";
 		out.print(signature);
 	}
 
@@ -147,14 +147,14 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 		out.print(Constants.JSRT_STRLIB_PKG + "formatDate(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(", ");
-		out.print(Constants.JSRT_STRLIB_PKG + "defaultDateFormat ");
+		out.print(Constants.JSRT_STRLIB_PKG + "defaultDateFormat )");
 	}
 
 	public void genTimeConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
 		out.print(Constants.JSRT_STRLIB_PKG + "formatTime(");
 		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		out.print(", ");
-		out.print(Constants.JSRT_STRLIB_PKG + "defaultTimeFormat ");
+		out.print(Constants.JSRT_STRLIB_PKG + "defaultTimeFormat )");
 	}
 
 	public void genTimeStampConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
@@ -196,7 +196,7 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 	protected String getNativeStringPrefixOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_NE))
-			return "!";
+			return "";
 		return "";
 	}
 
@@ -209,15 +209,15 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_EQ))
 			return " == ";
 		if (op.equals(expr.Op_NE))
-			return ".equals(";
+			return " != ";
 		if (op.equals(expr.Op_LT))
-			return ".compareTo(";
+			return " < ";
 		if (op.equals(expr.Op_GT))
-			return ".compareTo(";
+			return " > ";
 		if (op.equals(expr.Op_LE))
-			return ".compareTo(";
+			return " <= ";
 		if (op.equals(expr.Op_GE))
-			return ".compareTo(";
+			return " >= ";
 		if (op.equals(expr.Op_AND))
 			return " && ";
 		if (op.equals(expr.Op_OR))
@@ -233,15 +233,15 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_EQ))
 			return "";
 		if (op.equals(expr.Op_NE))
-			return ")";
+			return "";
 		if (op.equals(expr.Op_LT))
-			return ") < 0";
+			return "";
 		if (op.equals(expr.Op_GT))
-			return ") > 0";
+			return "";
 		if (op.equals(expr.Op_LE))
-			return ") <= 0";
+			return "";
 		if (op.equals(expr.Op_GE))
-			return ") >= 0";
+			return "";
 		return "";
 	}
 }

@@ -71,10 +71,6 @@ public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 
 	protected boolean needsConversion(Operation conOp) {
 		Type fromType = conOp.getParameters().get(0).getType();
-		Type toType = conOp.getReturnType();
-		// don't convert matching types
-		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
-			return false;
 		if (TypeUtils.isNumericType(fromType))
 			return true;
 		return false;
