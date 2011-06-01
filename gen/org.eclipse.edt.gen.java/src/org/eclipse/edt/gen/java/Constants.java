@@ -53,12 +53,14 @@ public class Constants {
 	public static final String EGLMESSAGE_MISSING_TEMPLATE_FOR_OBJECT = "1001";
 	public static final String EGLMESSAGE_MISSING_TEMPLATE_FOR_ANNOTATION = "1002";
 	public static final String EGLMESSAGE_MISSING_TEMPLATE_FOR_TYPE = "1003";
+	public static final String EGLMESSAGE_ENCODING_ERROR = "8000";
 	public static final String EGLMESSAGE_SMAPFILE_WRITE_FAILED = "9970";
 	public static final String EGLMESSAGE_SMAPFILE_ENCODING_FAILED = "9971";
 	public static final String EGLMESSAGE_VALIDATION_FAILED = "9980";
 	public static final String EGLMESSAGE_VALIDATION_COMPLETED = "9981";
 	public static final String EGLMESSAGE_GENERATION_FAILED = "9990";
 	public static final String EGLMESSAGE_GENERATION_COMPLETED = "9991";
+	public static final String EGLMESSAGE_GENERATION_REPORT_FAILED = "9992";
 	public static final String EGLMESSAGE_EXCEPTION_OCCURED = "9998";
 	public static final String EGLMESSAGE_STACK_TRACE = "9999";
 }

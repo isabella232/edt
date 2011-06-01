@@ -16,16 +16,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
+import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
-import org.eclipse.edt.mof.egl.DataTable;
 import org.eclipse.edt.mof.egl.Part;
 
 public class JavaGenerator extends Generator {
@@ -37,11 +36,21 @@ public class JavaGenerator extends Generator {
 	public JavaGenerator(AbstractGeneratorCommand processor) {
 		super(processor);
 		generator = processor;
-		out = new TabbedWriter(new StringWriter());
+		
+		out = (Boolean.TRUE 
+			==	(Boolean) context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)
+			) ?  new TabbedReportWriter("org.eclipse.edt.gen.java.templates.", new StringWriter())
+		      :  new TabbedWriter(new StringWriter());
 	}
 
 	public String getResult() {
 		return out.getWriter().toString();
+	}
+	
+	@Override
+	public TabbedReportWriter getReport() {
+		return (out instanceof TabbedReportWriter) ? (TabbedReportWriter)out
+												   :  null;
 	}
 
 	public Context makeContext(AbstractGeneratorCommand processor) {
@@ -130,6 +139,9 @@ public class JavaGenerator extends Generator {
 
 	public void processFile(String fileName) {
 		// do any post processing once the file has been written
+		
+		writeReport(context, fileName, getReport(), Constants.EGLMESSAGE_ENCODING_ERROR, Constants.EGLMESSAGE_GENERATION_REPORT_FAILED);
+		
 		// if no error was created, update the class file with the accumulated debug info
 		if (!context.getMessageRequestor().isError()) {
 			File outSmapFile = new File(fileName.substring(0, fileName.length() - generator.getFileExtention().length()) + Constants.smap_fileExtension);
