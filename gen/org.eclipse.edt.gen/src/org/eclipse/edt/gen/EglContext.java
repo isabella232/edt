@@ -639,7 +639,7 @@ public abstract class EglContext extends TemplateContext {
 		// the fileList will be 1 or more locations for the properties files involved with this implementation. If more than
 		// 1 location is in the list, then it will be separated by a semi-colon. We need to split these out into individual
 		// locations and process them in order.
-		String[] files = fileList.split("[;]");
+		String[] files = fileList.length() == 0 ? new String[0] : fileList.split("[;]");
 		for (String file : files) {
 			// process this property file
 			ResourceBundle bundle = ResourceBundle.getBundle(file, Locale.getDefault(), loader);
