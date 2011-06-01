@@ -26,7 +26,7 @@ public class TemplateContext extends HashMap<Object, Object> {
 	TemplateFactory tFactory;
 	Map<String, Template> templates = new HashMap<String, Template>();
 	
-	private class TemplateMethod {
+	public class TemplateMethod {
 		Method method;
 		Template template;
 		
@@ -115,7 +115,7 @@ public class TemplateContext extends HashMap<Object, Object> {
 //		return tm;
 //	}
 	
-	private TemplateMethod getTemplateMethod(String methodName, Class<?> objectClass, Class<?>...classes) throws TemplateException {
+	private TemplateMethod getTemplateMethod(String methodName, Class<?> objectClass, Object...args) throws TemplateException {
 		TemplateMethod tm = null;
 		Method method = null;
 		Template template = null;
@@ -125,125 +125,161 @@ public class TemplateContext extends HashMap<Object, Object> {
 			for (Class<?> iface : objectClass.getInterfaces()) {
 				template = getTemplateForClass(iface);
 				if (template != null) {
-					classes[0] = iface;
 					objectClass = iface;
 					break;
 				}
 			}
 		}
 		if (template != null) {
-			method = primGetMethod(methodName, template.getClass(), classes);
+			method = primGetMethod(methodName, template.getClass(), objectClass, args);
 			if (method != null) {
 				return new TemplateMethod(template, method);
 			}
 		}
-		if (objectClass.getSuperclass() != null) {
-			Class<?> superClass = objectClass.getSuperclass();
-			tm = getTemplateMethod(methodName, superClass, classes);
-		}
 		if (tm == null) {
 			for (Class<?> iface : objectClass.getInterfaces()) {
-				classes[0] = iface;
-				tm = getTemplateMethod(methodName, iface, classes);
+				tm = getTemplateMethod(methodName, iface, args);
 				if (tm != null) break;
 			}
 		}
-		if (tm == null) {
-			StringBuilder builder = new StringBuilder();
-			builder.append("No such method ");
-			builder.append(methodName);
-			builder.append("(");
-			builder.append(objectClass.getName());
-			builder.append(", ");
-			for (Class<?> arg : classes) {
-				builder.append(arg.getName());
-				builder.append(", ");
-			}
-			builder.append(") for any template for Class " );
-			builder.append(objectClass.getName());
-			throw new TemplateException(builder.toString());
-
+		if (objectClass.getSuperclass() != null) {
+			Class<?> superClass = objectClass.getSuperclass();
+			tm = getTemplateMethod(methodName, superClass, args);
 		}
 		return tm;
 	}
 	
 	private Template getTemplateForClass(Class<?> clazz) {
-		Template template = null;
 		try {
-			template = getTemplate(clazz.getName());
+			return getTemplate(clazz.getName());
 		}
 		catch (TemplateException tex) {}
-		return template;
+		return null;
+	}
+	
+
+	public Object invoke(String methodName, Object object, Object...args) {
+		TemplateMethod tm = getTemplateMethod(methodName, object.getClass(), args);
+		if (tm != null) {
+			return doInvoke(tm.method, tm.template, object, args);
+		}
+		else {
+			StringBuilder builder = new StringBuilder();
+			builder.append("No such method ");
+			builder.append(methodName);
+			builder.append("(");
+			builder.append(object.getClass().getName());
+			builder.append(", ");
+			for (Object arg : args) {
+				builder.append(arg.getClass().getName());
+				builder.append(", ");
+			}
+			builder.append(") for any template for Class " );
+			builder.append(object.getClass().getName());
+			throw new TemplateException(builder.toString());
+		}
+	}
+	
+	public Object invoke(String methodName, Class<?> clazz, Object...args) {
+		TemplateMethod tm = getTemplateMethod(methodName, clazz, args);
+		if (tm != null) {
+			return doInvoke(tm.method, tm.template, clazz, args);
+		}
+		else {
+			return invoke(methodName, (Object)clazz, args);
+		}
 	}
 
+	public Object invokeSuper(String methodName, Object object, Object...args) {
+		Class<?> superClass = object.getClass().getSuperclass();
+		if (superClass == null) {
+			throw new IllegalArgumentException("Class " + object.getClass().getName() + " has no super class");
+		}
+		TemplateMethod tm = getTemplateMethod(methodName, superClass, args);
+		if (tm != null) {
+			return doInvoke(tm.method, tm.template, object, args);
+		}
+		else {
+			return invoke(methodName, (Object)object, args);
+		}
+	}
 	
-	private Method primGetMethod(String methodName, Class<?> templateClass, Class<?>...classes) {
-		Method method = null;
-		try {
-			method = templateClass.getMethod(methodName, classes);
+	public Object invokeSuper(String methodName, Class<?> clazz, Object...args) {
+		Class<?> superClass = clazz.getSuperclass();
+		if (superClass == null) {
+			return invokeSuper(methodName, (Object)clazz, args);
+		}
+		TemplateMethod tm = getTemplateMethod(methodName, superClass, args);
+		if (tm != null) {
+			return doInvoke(tm.method, tm.template, clazz, args);
+		}
+		else {
+			return invokeSuper(methodName, (Object)clazz, args);
+		}
+
+	}
+
+	public Method primGetMethod(String methodName, Class<?> templateClass, Class<?> objectClass, Object...args) {
+		Class<?>[] classes = new Class<?>[args.length];
+		for (int i=0; i<args.length; i++) {
+			if (args[i] instanceof EObject) {
+				classes[i] = args[i].getClass().getInterfaces()[0];
+			}
+			else {
+				classes[i] = args[i].getClass();
+			}
+		}
+ 		try {
+			switch (args.length) {
+			case 0: return templateClass.getMethod(methodName, objectClass);
+			case 1: return templateClass.getMethod(methodName, objectClass, classes[0]);
+			case 2: return templateClass.getMethod(methodName, objectClass, classes[0], classes[1]);
+			case 3: return templateClass.getMethod(methodName, objectClass, classes[0], classes[1], classes[2]);
+			case 4: return templateClass.getMethod(methodName, objectClass, classes[0], classes[1], classes[2], classes[3]);
+			case 5: return templateClass.getMethod(methodName, objectClass, classes[0], classes[1], classes[2], classes[3], classes[4]);
+			case 6: return templateClass.getMethod(methodName, objectClass, classes[0], classes[1], classes[2], classes[3], classes[4], classes[5]);
+			case 7: return templateClass.getMethod(methodName, objectClass, classes[0], classes[1], classes[2], classes[3], classes[4], classes[5], classes[6]);
+			case 8: return templateClass.getMethod(methodName, objectClass, classes[0], classes[1], classes[2], classes[3], classes[4], classes[5], classes[6], classes[7]);
+			case 9: return templateClass.getMethod(methodName, objectClass, classes[0], classes[1], classes[2], classes[3], classes[4], classes[5], classes[6], classes[7], classes[8]);
+			default: return templateClass.getMethod(methodName, objectClass);
+			}
 		} catch (SecurityException e) {
 			throw new RuntimeException(e);
 		} catch (NoSuchMethodException e) {
 			// Do nothing to allow search to continue
 		}
-		return method;
-	}	
-	
-	public Object invoke(String methodName, Object object, Object...args) {
-		return primInvoke(methodName, object.getClass(), object, args);
-	}
-	
-	public Object invokeSuper(String methodName, Object object, Object...args) {
-		Class<?> clazz = object.getClass().getSuperclass();
-		if (clazz == null) {
-			throw new IllegalArgumentException("Class " + object.getClass().getName() + " has no super class");
-		}
-		return primInvoke(methodName, clazz, object, args);
-
-	}
-
-	private Object primInvoke(String methodName, Class<?> objectClass, Object object, Object...args) {
-		Class<?>[] argClasses = new Class<?>[args.length+1];
-		argClasses[0] = objectClass;
-		for (int i=1; i<argClasses.length; i++) {
-			argClasses[i] = args[i-1].getClass();
-		}
-		TemplateMethod tm = getTemplateMethod(methodName, argClasses[0], argClasses);
-		if (tm != null) {
-			try {
-				return doInvoke(tm.method, tm.template, object, args);
-			}
-			catch (TemplateException te) {
-				throw te;
-			}
-			catch (InvocationTargetException itx) {
-				Throwable t = itx.getTargetException();
-				if (t instanceof TemplateException)
-					throw (TemplateException)t;
-				else 
-					throw new TemplateException(t);
-			}
-			catch (Exception e) {
-				throw new TemplateException(e);
-			}
-		}
 		return null;
+	}	
 
-	}
-
-	private Object doInvoke(Method method, Template template, Object object, Object[] args) throws Exception {
-		switch (args.length) {
-		case 0: return method.invoke(template, object);
-		case 1: return method.invoke(template, object, args[0]);
-		case 2: return method.invoke(template, object, args[0], args[1]);
-		case 3: return method.invoke(template, object, args[0], args[1], args[2]);
-		case 4: return method.invoke(template, object, args[0], args[1], args[2], args[3]);
-		case 5: return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4]);
-		case 6: return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5]);
-		case 7: return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
-		case 8: return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
-		case 9: return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
-		default: return method.invoke(template, object, args);
+	public Object doInvoke(Method method, Template template, Object object, Object[] args) {
+		try {
+			switch (args.length) {
+			case 0: return method.invoke(template, object);
+			case 1: return method.invoke(template, object, args[0]);
+			case 2: return method.invoke(template, object, args[0], args[1]);
+			case 3: return method.invoke(template, object, args[0], args[1], args[2]);
+			case 4: return method.invoke(template, object, args[0], args[1], args[2], args[3]);
+			case 5: return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4]);
+			case 6: return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5]);
+			case 7: return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+			case 8: return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+			case 9: return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
+			default: return method.invoke(template, object, args);
+			}
+		} 
+		catch (TemplateException te) {
+			throw te;
 		}
+		catch (InvocationTargetException itx) {
+			Throwable t = itx.getTargetException();
+			if (t instanceof TemplateException)
+				throw (TemplateException)t;
+			else 
+				throw new TemplateException(t);
+		}
+		catch (Exception e) {
+			throw new TemplateException(e);
+		}
+
 	}
 }
