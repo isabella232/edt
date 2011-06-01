@@ -20,6 +20,7 @@ import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.generator.javascript.EGL2JavaScript;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
+import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.LoadPartException;
 
@@ -49,6 +50,17 @@ public class EclipseEGL2JavaScript extends EGL2JavaScript {
 		String outputFolder = (String) parameterMapping.get(Constants.parameter_output).getValue();
 		if (EclipseUtilities.shouldWriteFileInEclipse(outputFolder)) {
 			IFile outputFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, generator.getResult(), getRelativeFileName(part));
+
+			// write out generation report if there is one
+			TabbedReportWriter report = generator.getReport();
+			if (report != null) {
+				{
+					String fn = getRelativeFileName(part);
+					fn = fn.substring(0, fn.lastIndexOf('.')) + Constants.report_fileExtension;
+					String rpt = report.rpt.getWriter().toString();
+					IFile reportFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, rpt, fn);
+				}
+			}
 
 			// make sure it's a source folder
 			EclipseUtilities.addToJavaBuildPathIfNecessary(outputFile.getProject(), outputFolder);
