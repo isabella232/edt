@@ -34,6 +34,7 @@ public class Constants {
 	public static final String JSRT_EGL_NAMESPACE = "egl.";
 	public static final String JSRT_STRLIB_PKG = "egl.egl.core.StrLib['$inst'].";
 	public static final String JSRT_DTTMLIB_PKG = "egl.egl.core.DateTimeLib['$inst'].";
+	public static final String JSRT_XMLLIB_PKG = "egl.egl.core.XMLLib['$inst'].";
 
 	// EGL message id's
 	public static final String EGLMESSAGE_UNSUPPORTED_ELEMENT = "1000";

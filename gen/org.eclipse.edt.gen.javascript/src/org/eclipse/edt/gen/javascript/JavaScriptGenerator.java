@@ -133,4 +133,10 @@ public class JavaScriptGenerator extends Generator {
 	public String getFileExtention() {
 		return ".js";
 	}
+
+	@Override
+	public void generate(Object objectClass) throws GenerationException {
+		// TODO Auto-generated method stub
+		
+	}
 }
