@@ -34,10 +34,6 @@ public class EGL2Java extends AbstractGeneratorCommand {
 		genPart.generate(args, new JavaGenerator(genPart), null);
 	}
 
-	public String getFileExtention() {
-		return ".java";
-	}
-
 	public String[] getNativeTypePath() {
 		// this defined the locations of the nativeTypes.properties files to be loaded and used
 		return new String[] { "org.eclipse.edt.gen.java.nativeTypes" };
@@ -59,21 +55,5 @@ public class EGL2Java extends AbstractGeneratorCommand {
 			"org.eclipse.edt.gen.java.templates.templates" };
 	}
 
-	protected String getRelativeFileName(Part part) {
-		StringBuilder buf = new StringBuilder(50);
-		String pkg = part.getPackageName();
-		if (pkg.length() > 0) {
-			buf.append(Aliaser.packageNameAlias(pkg.split("[.]"), '/'));
-			buf.append('/');
-		}
-		String nameOrAlias;
-		Annotation annot = part.getAnnotation(IEGLConstants.PROPERTY_ALIAS);
-		if (annot != null)
-			nameOrAlias = (String) annot.getValue();
-		else
-			nameOrAlias = part.getId();
-		buf.append(Aliaser.getAlias(nameOrAlias));
-		buf.append(getFileExtention());
-		return buf.toString();
-	}
+
 }
