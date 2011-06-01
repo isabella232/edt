@@ -19,6 +19,7 @@ import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
+import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.Part;
@@ -32,11 +33,19 @@ public class JavaScriptGenerator extends Generator {
 	public JavaScriptGenerator(AbstractGeneratorCommand processor) {
 		super(processor);
 		generator = processor;
-		out = new TabbedWriter(new StringWriter());
+
+		out = (Boolean.TRUE
+		 == (Boolean) context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)
+		) ? new TabbedReportWriter("org.eclipse.edt.gen.javascript.templates.", new StringWriter()) : new TabbedWriter(new StringWriter());
 	}
 
 	public String getResult() {
 		return out.getWriter().toString();
+	}
+
+	@Override
+	public TabbedReportWriter getReport() {
+		return (out instanceof TabbedReportWriter) ? (TabbedReportWriter) out : null;
 	}
 
 	public Context makeContext(AbstractGeneratorCommand processor) {
@@ -96,6 +105,7 @@ public class JavaScriptGenerator extends Generator {
 	}
 
 	public void processFile(String fileName) {
-	// do any post processing once the file has been written
+		// do any post processing once the file has been written
+		writeReport(context, fileName, getReport(), Constants.EGLMESSAGE_ENCODING_ERROR, Constants.EGLMESSAGE_GENERATION_REPORT_FAILED);
 	}
 }

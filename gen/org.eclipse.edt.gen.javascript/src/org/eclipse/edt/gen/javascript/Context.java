@@ -53,6 +53,10 @@ public class Context extends EglContext {
 		return super.getNativeInterfaceMapping(type);
 	}
 
+	public String getNativeImplementationMapping(Type type) {
+		return Constants.JSRT_EGL_NAMESPACE + super.getNativeImplementationMapping(type);
+	}
+
 	public void handleValidationError(Element obj) {
 		int startLine = 0;
 		int startOffset = 0;
@@ -84,4 +88,20 @@ public class Context extends EglContext {
 			obj, details, 0, 0, 0, 0);
 		getMessageRequestor().addMessage(message);
 	}
+
+	/*
+	 * TODO sbg need to revisit support for EGL src line numbers public void gen(String methodName, Annotation type,
+	 * EglContext ctx, TabbedWriter out, Object... args) throws TemplateException { updateEGLLocation(type, out);
+	 * super.gen(methodName, type, ctx, out, args); } public void gen(String methodName, Classifier part, EglContext ctx,
+	 * TabbedWriter out, Object... args) throws TemplateException { updateEGLLocation(part, out); super.gen(methodName, part,
+	 * ctx, out, args); } public void gen(String methodName, EObject object, TemplateContext ctx, TabbedWriter out, Object...
+	 * args) throws TemplateException { if (object instanceof Element){ updateEGLLocation((Element)object, out); }
+	 * super.gen(methodName, object, ctx, out, args); } public void gen(String methodName, Object object, TemplateContext
+	 * ctx, TabbedWriter out, Object... args) throws TemplateException { if (object instanceof Element){
+	 * updateEGLLocation((Element)object, out); } super.gen(methodName, object, ctx, out, args); } public void gen(String
+	 * methodName, Type type, EglContext ctx, TabbedWriter out, Object... args) throws TemplateException {
+	 * updateEGLLocation(type, out); super.gen(methodName, type, ctx, out, args); } private void updateEGLLocation(Element
+	 * element, TabbedWriter out) { if (out instanceof TabbedReportWriter){ for (Annotation ann : element.getAnnotations()) {
+	 * if ("EGL_Location".equals(ann.getEClass().getName())) { // ((TabbedReportWriter)out).location = ann; break; } } } }
+	 */
 }
