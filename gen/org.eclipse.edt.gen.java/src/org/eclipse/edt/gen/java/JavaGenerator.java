@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.Generator;
@@ -25,6 +27,7 @@ import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Part;
 
 public class JavaGenerator extends Generator {
@@ -84,7 +87,7 @@ public class JavaGenerator extends Generator {
 				String fileName = eglFileName;
 				if (fileName.indexOf('.') >= 0)
 					fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-				fileName = fileName + generator.getFileExtention();
+				fileName = fileName + getFileExtention();
 				context.getSmapData().append(fileName + Constants.smap_stratum);
 				// we need to insert the file list here, but cannot do this until the part generation finished
 				context.getSmapData().append(Constants.smap_lines);
@@ -144,7 +147,7 @@ public class JavaGenerator extends Generator {
 		
 		// if no error was created, update the class file with the accumulated debug info
 		if (!context.getMessageRequestor().isError()) {
-			File outSmapFile = new File(fileName.substring(0, fileName.length() - generator.getFileExtention().length()) + Constants.smap_fileExtension);
+			File outSmapFile = new File(fileName.substring(0, fileName.length() - getFileExtention().length()) + Constants.smap_fileExtension);
 			try {
 				FileOutputStream outStream = new FileOutputStream(outSmapFile);
 				byte[] outSmapBytes = context.getSmapData().toString().getBytes(Constants.smap_encoding);
@@ -165,5 +168,29 @@ public class JavaGenerator extends Generator {
 				return;
 			}
 		}
+	}
+
+	@Override
+	public String getRelativeFileName(Part part) {
+		StringBuilder buf = new StringBuilder(50);
+		String pkg = part.getPackageName();
+		if (pkg.length() > 0) {
+			buf.append(Aliaser.packageNameAlias(pkg.split("[.]"), '/'));
+			buf.append('/');
+		}
+		String nameOrAlias;
+		Annotation annot = part.getAnnotation(IEGLConstants.PROPERTY_ALIAS);
+		if (annot != null)
+			nameOrAlias = (String) annot.getValue();
+		else
+			nameOrAlias = part.getId();
+		buf.append(Aliaser.getAlias(nameOrAlias));
+		buf.append(getFileExtention());
+		return buf.toString();
+	}	
+	
+	@Override
+	public String getFileExtention() {
+		return ".java";
 	}
 }
