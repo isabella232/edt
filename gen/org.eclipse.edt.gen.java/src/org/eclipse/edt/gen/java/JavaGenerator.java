@@ -193,4 +193,10 @@ public class JavaGenerator extends Generator {
 	public String getFileExtention() {
 		return ".java";
 	}
+
+	@Override
+	public void generate(Object objectClass) throws GenerationException {
+		// TODO Auto-generated method stub
+		
+	}
 }
