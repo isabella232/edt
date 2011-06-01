@@ -14,6 +14,8 @@ package org.eclipse.edt.gen.javascript;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.Generator;
@@ -22,6 +24,7 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Part;
 
 public class JavaScriptGenerator extends Generator {
@@ -107,5 +110,27 @@ public class JavaScriptGenerator extends Generator {
 	public void processFile(String fileName) {
 		// do any post processing once the file has been written
 		writeReport(context, fileName, getReport(), Constants.EGLMESSAGE_ENCODING_ERROR, Constants.EGLMESSAGE_GENERATION_REPORT_FAILED);
+	}
+	
+	public String getRelativeFileName(Part part) {
+		StringBuilder buf = new StringBuilder(50);
+		String pkg = part.getPackageName();
+		if (pkg.length() > 0) {
+			buf.append(Aliaser.packageNameAlias(pkg.split("[.]"), '/'));
+			buf.append('/');
+		}
+		String nameOrAlias;
+		Annotation annot = part.getAnnotation(IEGLConstants.PROPERTY_ALIAS);
+		if (annot != null)
+			nameOrAlias = (String) annot.getValue();
+		else
+			nameOrAlias = part.getId();
+		buf.append(Aliaser.getAlias(nameOrAlias));
+		buf.append(getFileExtention());
+		return buf.toString();
+	}	
+	
+	public String getFileExtention() {
+		return ".js";
 	}
 }
