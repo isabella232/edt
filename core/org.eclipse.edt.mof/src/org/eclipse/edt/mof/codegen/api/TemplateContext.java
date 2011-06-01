@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EClassifier;
 import org.eclipse.edt.mof.EObject;
 
@@ -132,9 +131,11 @@ public class TemplateContext extends HashMap<Object, Object> {
 				if (tm != null) break;
 			}
 		}
-		if (objectClass.getSuperclass() != null) {
-			Class<?> superClass = objectClass.getSuperclass();
-			tm = getTemplateMethod(methodName, superClass, args);
+		if (tm == null) {
+			if (objectClass.getSuperclass() != null) {
+				Class<?> superClass = objectClass.getSuperclass();
+				tm = getTemplateMethod(methodName, superClass, args);
+			}
 		}
 		return tm;
 	}
