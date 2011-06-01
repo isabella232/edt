@@ -44,7 +44,7 @@ public class EclipseJavaGenerator extends JavaGenerator {
 		// if no error was created, update the class file with the accumulated debug info
 		if (!context.getMessageRequestor().isError()) {
 			IFile outSmapFile = ResourcesPlugin.getWorkspace().getRoot().getFile(
-					new Path(fileName.substring(0, fileName.length() - generator.getFileExtention().length()) + Constants.smap_fileExtension));
+					new Path(fileName.substring(0, fileName.length() - getFileExtention().length()) + Constants.smap_fileExtension));
 			
 			ByteArrayInputStream dataStream = null;
 			try {
