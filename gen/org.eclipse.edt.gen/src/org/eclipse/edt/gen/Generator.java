@@ -45,6 +45,8 @@ public abstract class Generator {
 
 	public abstract void generate(Part part) throws GenerationException;
 
+	public abstract void generate(Object objectClass) throws GenerationException;
+
 	public abstract void processFile(String fileName);
 
 	public abstract String getResult();
