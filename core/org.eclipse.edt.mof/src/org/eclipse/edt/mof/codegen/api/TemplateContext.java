@@ -29,10 +29,18 @@ public class TemplateContext extends HashMap<Object, Object> {
 		Method method;
 		Template template;
 		
-		TemplateMethod(Template template, Method method) {
+		public TemplateMethod(Template template, Method method) {
 			this.template = template;
 			this.method = method;
 		}
+		public Method getMethod() {
+			return method;
+		}
+
+		public Template getTemplate() {
+			return template;
+		}
+
 	}
 	
 	public void setTemplateFactory(TemplateFactory factory) {
