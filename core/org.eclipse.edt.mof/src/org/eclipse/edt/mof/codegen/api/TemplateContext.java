@@ -120,16 +120,6 @@ public class TemplateContext extends HashMap<Object, Object> {
 		Method method = null;
 		Template template = null;
 		template = getTemplateForClass(objectClass);
-		if (template == null) {
-			// Try the interfaces if any
-			for (Class<?> iface : objectClass.getInterfaces()) {
-				template = getTemplateForClass(iface);
-				if (template != null) {
-					objectClass = iface;
-					break;
-				}
-			}
-		}
 		if (template != null) {
 			method = primGetMethod(methodName, template.getClass(), objectClass, args);
 			if (method != null) {
