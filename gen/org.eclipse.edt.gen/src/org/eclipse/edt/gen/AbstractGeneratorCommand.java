@@ -79,8 +79,7 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 		return EGLMessages;
 	}
 
-	// the command processor must implement the method for providing the file extention to write files out as
-	public abstract String getFileExtention();
+
 
 	// the command processor must implement the method for providing the location of the nativeTypes.properties files
 	public abstract String[] getNativeTypePath();
@@ -203,7 +202,7 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 		String fileName = ((String) parameterMapping.get(Constants.parameter_output).getValue()).replaceAll("\\\\", "/");
 		if (!fileName.endsWith("/"))
 			fileName = fileName + "/";
-		fileName = fileName + getRelativeFileName(part);
+		fileName = fileName + generator.getRelativeFileName(part);
 		int offset = fileName.lastIndexOf("/");
 		if (offset > 0)
 			new File(fileName.substring(0, offset)).mkdirs();
@@ -214,11 +213,5 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 		generator.processFile(fileName);
 	}
 
-	/**
-	 * By default the relative file name will be the same as the source file, with the generator's file extension. This is
-	 * intended to be overridden as necessary.
-	 */
-	protected String getRelativeFileName(Part part) {
-		return part.getTypeSignature().replaceAll("\\.", "/") + this.getFileExtention();
-	}
+
 }

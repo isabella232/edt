@@ -50,6 +50,17 @@ public abstract class Generator {
 	public abstract String getResult();
 
 	public abstract void dumpErrorMessages();
+	
+	/**
+	 * By default the relative file name will be the same as the source file, with the generator's file extension. This is
+	 * intended to be overridden as necessary.
+	 */
+	public String getRelativeFileName(Part part) {
+		return part.getTypeSignature().replaceAll("\\.", "/") + this.getFileExtention();
+	}
+	
+	// the command processor must implement the method for providing the file extention to write files out as
+	public abstract String getFileExtention();
 
 	protected static void writeFileUtil(EglContext context, String fileName, String output, String encoding, String encodingError, String writeError) {
 		File outFile = new File(fileName);
@@ -90,4 +101,5 @@ public abstract class Generator {
 			System.err.println("Error writing generation report for " + fileName);
 		}
 	}
+
 }
