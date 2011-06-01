@@ -182,7 +182,7 @@ public class TemplateContext extends HashMap<Object, Object> {
 	public Object invokeSuper(String methodName, Object object, Object...args) {
 		// Find the base method first
 		TemplateMethod tm = getTemplateMethod(methodName, object.getClass(), args);
-		Class<?> superClass = tm.method.getDeclaringClass().getSuperclass();
+		Class<?> superClass = tm.method.getParameterTypes()[0].getSuperclass();
 		if (superClass == null) {
 			throw new IllegalArgumentException("Class " + object.getClass().getName() + " has no super class");
 		}
@@ -198,7 +198,7 @@ public class TemplateContext extends HashMap<Object, Object> {
 	public Object invokeSuper(String methodName, Class<?> clazz, Object...args) {
 		// Find the base method first
 		TemplateMethod tm = getTemplateMethod(methodName, clazz, args);
-		Class<?> superClass = tm.method.getDeclaringClass().getSuperclass();
+		Class<?> superClass = tm.method.getParameterTypes()[0].getSuperclass();
 		if (superClass == null) {
 			return invokeSuper(methodName, (Object)clazz, args);
 		}
