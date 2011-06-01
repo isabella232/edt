@@ -42,25 +42,6 @@ import org.eclipse.edt.mof.egl.Type;
 @SuppressWarnings("serial")
 public abstract class EglContext extends TemplateContext {
 
-	// this class is used within the EglContext to dynamically obtain the template and method for a signature
-	private class TemplateMethod {
-		Template template;
-		Method method;
-
-		public TemplateMethod(Template template, Method method) {
-			this.template = template;
-			this.method = method;
-		}
-
-		public Template getTemplate() {
-			return template;
-		}
-
-		public Method getMethod() {
-			return method;
-		}
-	}
-
 	// this variable is used by the gen method with the type signature, to indicate where we are in the logic for processing
 	// non-eobject and eobject types. The typetemplate will need to use this for each generator
 	public enum TypeLogicKind {
@@ -661,6 +642,100 @@ public abstract class EglContext extends TemplateContext {
 	public abstract void handleValidationError(Annotation ex);
 
 	public abstract void handleValidationError(Type ex);
+	
+	public Object invoke(String methodName, Type type, Object...args) {
+		TemplateMethod tm = getTemplateMethod(methodName, type.getClassifier(), args);
+		if (tm != null) {
+			return doInvoke(tm.getMethod(), tm.getTemplate(), type, args);
+		}
+		else {
+			StringBuilder builder = new StringBuilder();
+			builder.append("No such method ");
+			builder.append(methodName);
+			builder.append("(");
+			builder.append(type.getClassifier().getTypeSignature());
+			builder.append(", ");
+			for (Object arg : args) {
+				builder.append(arg.getClass().getName());
+				builder.append(", ");
+			}
+			builder.append(") for any template for Classifier " );
+			builder.append(type.getClassifier().getTypeSignature());
+			throw new TemplateException(builder.toString());
+		}
+	}
+	
+	public Object invokeSuper(String methodName, Type type, Object...args) {
+		// Get Classifier that lead to base method in associated template
+		Classifier classifier = getTemplateMethodType(methodName, type.getClassifier(), args);
+		StructPart superType = null;
+		if (classifier instanceof StructPart && !((StructPart)classifier).getSuperTypes().isEmpty()) {
+			superType = ((StructPart)type.getClassifier()).getSuperTypes().get(0);
+		}
+		if (superType == null) {
+			return invokeSuper(methodName, type, args);
+		}
+		TemplateMethod tm = getTemplateMethod(methodName, superType, args);
+		if (tm != null) {
+			return doInvoke(tm.getMethod(), tm.getTemplate(), type, args);
+		}
+		else {
+			return invokeSuper(methodName, (Object)type, args);
+		}
+
+	}
+		
+	private TemplateMethod getTemplateMethod(String methodName, Classifier classifier, Object...args) throws TemplateException {
+		TemplateMethod tm = null;
+		Method method = null;
+		Template template = null;
+		template = getTemplateForClassifier(classifier);
+		Class<?> classifierClass = classifier.getClass();
+		if (template != null) {
+			method = primGetMethod(methodName, template.getClass(), classifierClass, args);
+			if (method != null) {
+				return new TemplateMethod(template, method);
+			}
+		}
+		if (tm == null && classifier instanceof StructPart) {
+			for (StructPart part : ((StructPart)classifier).getSuperTypes()) {
+				tm = getTemplateMethod(methodName, part, args);
+				if (tm != null) break;
+			}
+		}
+		return tm;
+	}
+	
+	private Classifier getTemplateMethodType(String methodName, Classifier classifier, Object...args) throws TemplateException {
+		Classifier result = null;
+		Method method = null;
+		Template template = null;
+		template = getTemplateForClassifier(classifier);
+		Class<?> classifierClass = classifier.getClass();
+		if (template != null) {
+			method = primGetMethod(methodName, template.getClass(), classifierClass, args);
+			if (method != null) {
+				return classifier;
+			}
+		}
+		if (result == null && classifier instanceof StructPart) {
+			for (StructPart part : ((StructPart)classifier).getSuperTypes()) {
+				result = getTemplateMethodType(methodName, part, args);
+				if (result != null) break;
+			}
+		}
+		return result;
+	}
+
+	
+	private Template getTemplateForClassifier(Classifier clazz) {
+		try {
+			return getTemplate(clazz.getTypeSignature());
+		}
+		catch (TemplateException tex) {}
+		return null;
+	}
+
 
 	private TemplateMethod getMethodAndTemplate(String methodName, Object object, Class<?> ifaceClass, String signature, Class<?>... classes)
 		throws TemplateException {
