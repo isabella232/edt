@@ -131,11 +131,9 @@ public class TemplateContext extends HashMap<Object, Object> {
 				if (tm != null) break;
 			}
 		}
-		if (tm == null) {
-			if (objectClass.getSuperclass() != null) {
-				Class<?> superClass = objectClass.getSuperclass();
-				tm = getTemplateMethod(methodName, superClass, args);
-			}
+		if (tm == null && objectClass.getSuperclass() != null) {
+			Class<?> superClass = objectClass.getSuperclass();
+			tm = getTemplateMethod(methodName, superClass, args);
 		}
 		return tm;
 	}
@@ -211,35 +209,34 @@ public class TemplateContext extends HashMap<Object, Object> {
 	}
 
 	public Method primGetMethod(String methodName, Class<?> templateClass, Class<?> objectClass, Object...args) {
-		Class<?>[] classes = new Class<?>[args.length];
-		for (int i=0; i<args.length; i++) {
-			if (args[i] instanceof EObject) {
-				classes[i] = args[i].getClass().getInterfaces()[0];
+		Method method = null;
+		for (Method m : templateClass.getMethods()) {
+			boolean matches = true;
+			if (m.getName().equals(methodName)) {
+				if (m.getParameterTypes().length == args.length + 1) {
+					Class<?>[] pTypes = m.getParameterTypes();
+					if (pTypes[0].isAssignableFrom(objectClass)) {
+						for (int i=0; i<args.length; i++) {
+							if (!pTypes[i+1].isAssignableFrom(args[i].getClass())) {
+								matches = false;
+								break;
+							}
+						}
+					}
+					else {
+						matches = false;
+					}
+				}
 			}
 			else {
-				classes[i] = args[i].getClass();
+				matches = false;
+			}
+			if (matches) {
+				method = m;
+				break;
 			}
 		}
- 		try {
-			switch (args.length) {
-			case 0: return templateClass.getMethod(methodName, objectClass);
-			case 1: return templateClass.getMethod(methodName, objectClass, classes[0]);
-			case 2: return templateClass.getMethod(methodName, objectClass, classes[0], classes[1]);
-			case 3: return templateClass.getMethod(methodName, objectClass, classes[0], classes[1], classes[2]);
-			case 4: return templateClass.getMethod(methodName, objectClass, classes[0], classes[1], classes[2], classes[3]);
-			case 5: return templateClass.getMethod(methodName, objectClass, classes[0], classes[1], classes[2], classes[3], classes[4]);
-			case 6: return templateClass.getMethod(methodName, objectClass, classes[0], classes[1], classes[2], classes[3], classes[4], classes[5]);
-			case 7: return templateClass.getMethod(methodName, objectClass, classes[0], classes[1], classes[2], classes[3], classes[4], classes[5], classes[6]);
-			case 8: return templateClass.getMethod(methodName, objectClass, classes[0], classes[1], classes[2], classes[3], classes[4], classes[5], classes[6], classes[7]);
-			case 9: return templateClass.getMethod(methodName, objectClass, classes[0], classes[1], classes[2], classes[3], classes[4], classes[5], classes[6], classes[7], classes[8]);
-			default: return templateClass.getMethod(methodName, objectClass);
-			}
-		} catch (SecurityException e) {
-			throw new RuntimeException(e);
-		} catch (NoSuchMethodException e) {
-			// Do nothing to allow search to continue
-		}
-		return null;
+		return method;
 	}	
 
 	public Object doInvoke(Method method, Template template, Object object, Object[] args) {
