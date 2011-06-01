@@ -19,6 +19,10 @@ public class Constants {
 	public static final String parameter_part = "part";
 	public static final String parameter_root = "root";
 	public static final String parameter_trace = "trace";
+	public static final String parameter_report = "report";
+
+	// Extension to use for generation reports
+	public static final String report_fileExtension = ".html";
 
 	// temporary variable prefix
 	public static final String temporaryVariablePrefix = "eze$Temp";

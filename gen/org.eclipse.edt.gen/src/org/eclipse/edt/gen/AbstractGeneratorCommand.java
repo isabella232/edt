@@ -41,6 +41,9 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 			"Root must identify the root location to be used in generation");
 		this.installParameter(false, Constants.parameter_trace, new String[] { "trace" }, new Boolean[] { false, true },
 			"Trace must be defined as true or false");
+		this.installParameter(false, Constants.parameter_report, new String[] { "report" }, new Boolean[] { false, true },
+			"Report must be defined as true or false");
+
 		// accept the overriden properties file lists
 		String[] templateList = this.getTemplatePath();
 		for (String template : templateList) {

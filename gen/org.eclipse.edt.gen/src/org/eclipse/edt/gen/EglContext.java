@@ -339,7 +339,7 @@ public abstract class EglContext extends TemplateContext {
 
 	public void gen(String methodName, Annotation type, EglContext ctx, TabbedWriter out, Object... args) throws TemplateException {
 		TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClass(), ((AnnotationType) type.getEClass()).getTypeSignature(),
-			type.getClass(), ctx.getClass(), out.getClass(), args.getClass());
+			type.getClass(), ctx.getClass(), TabbedWriter.class, args.getClass());
 		try {
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, out, args);
 		}
@@ -352,8 +352,8 @@ public abstract class EglContext extends TemplateContext {
 		try {
 			Stereotype stereotype = part.getStereotype();
 			TemplateMethod templateMethod = stereotype != null ? getMethodAndTemplate(methodName, stereotype, part.getClass(), stereotype.getEClass()
-				.getETypeSignature(), part.getClass(), ctx.getClass(), out.getClass(), args.getClass()) : getMethodAndTemplate(methodName, part,
-				part.getClass(), part.getClassifier().getTypeSignature(), part.getClass(), ctx.getClass(), out.getClass(), args.getClass());
+				.getETypeSignature(), part.getClass(), ctx.getClass(), TabbedWriter.class, args.getClass()) : getMethodAndTemplate(methodName, part,
+				part.getClass(), part.getClassifier().getTypeSignature(), part.getClass(), ctx.getClass(), TabbedWriter.class, args.getClass());
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), part, ctx, out, args);
 		}
 		catch (TemplateException e) {
@@ -385,17 +385,17 @@ public abstract class EglContext extends TemplateContext {
 				try {
 					Stereotype stereotype = ((Classifier) type).getStereotype();
 					TemplateMethod templateMethod = getMethodAndTemplate(methodName, stereotype, stereotype.getClass(), stereotype.getEClass()
-						.getETypeSignature(), type.getClass(), ctx.getClass(), out.getClass(), args.getClass());
+						.getETypeSignature(), type.getClass(), ctx.getClass(), TabbedWriter.class, args.getClass());
 					templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, out, objects);
 				}
 				catch (TemplateException e) {
 					TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClass(), type.getClassifier().getTypeSignature(),
-						type.getClass(), ctx.getClass(), out.getClass(), args.getClass());
+						type.getClass(), ctx.getClass(), TabbedWriter.class, args.getClass());
 					templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, out, objects);
 				}
 			} else {
 				TemplateMethod templateMethod = getMethodAndTemplate(methodName, type, type.getClass(), type.getClassifier().getTypeSignature(),
-					type.getClass(), ctx.getClass(), out.getClass(), args.getClass());
+					type.getClass(), ctx.getClass(), TabbedWriter.class, args.getClass());
 				templateMethod.getMethod().invoke(templateMethod.getTemplate(), type, ctx, out, objects);
 			}
 		}
@@ -417,7 +417,7 @@ public abstract class EglContext extends TemplateContext {
 
 	public void gen(String methodName, EObject object, TemplateContext ctx, TabbedWriter out, Object... args) throws TemplateException {
 		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getClass(), object.getEClass().getETypeSignature(), object.getClass(),
-			ctx.getClass(), out.getClass(), args.getClass());
+			ctx.getClass(), TabbedWriter.class, args.getClass());
 		try {
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), object, ctx, out, args);
 		}
@@ -428,7 +428,7 @@ public abstract class EglContext extends TemplateContext {
 
 	public void gen(String methodName, Object object, TemplateContext ctx, TabbedWriter out, Object... args) throws TemplateException {
 		TemplateMethod templateMethod = getMethodAndTemplate(methodName, object, object.getClass(), object.getClass().getName(), object.getClass(),
-			ctx.getClass(), out.getClass(), args.getClass());
+			ctx.getClass(), TabbedWriter.class, args.getClass());
 		try {
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), object, ctx, out, args);
 		}
@@ -438,7 +438,7 @@ public abstract class EglContext extends TemplateContext {
 	}
 
 	public void genSuper(String methodName, Class<?> thisClass, EObject object, TemplateContext ctx, TabbedWriter out, Object... args) throws TemplateException {
-		TemplateMethod templateMethod = getSuperMethodAndTemplate(methodName, thisClass, object.getClass(), ctx.getClass(), out.getClass(), args.getClass());
+		TemplateMethod templateMethod = getSuperMethodAndTemplate(methodName, thisClass, object.getClass(), ctx.getClass(), TabbedWriter.class, args.getClass());
 		try {
 			templateMethod.getMethod().invoke(templateMethod.getTemplate(), object, ctx, out, args);
 		}

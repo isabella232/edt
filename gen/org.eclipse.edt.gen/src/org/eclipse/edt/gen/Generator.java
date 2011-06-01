@@ -11,9 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.gen;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.edt.gen.EGLMessages.EGLMessage;
+import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateFactory;
 import org.eclipse.edt.mof.egl.Part;
 
@@ -44,4 +50,44 @@ public abstract class Generator {
 	public abstract String getResult();
 
 	public abstract void dumpErrorMessages();
+
+	protected static void writeFileUtil(EglContext context, String fileName, String output, String encoding, String encodingError, String writeError) {
+		File outFile = new File(fileName);
+		try {
+			FileOutputStream outStream = new FileOutputStream(outFile);
+			byte[] outBytes = output.getBytes(encoding);
+			outStream.write(outBytes, 0, outBytes.length);
+			outStream.close();
+		}
+		catch (UnsupportedEncodingException e) {
+			String[] details = new String[] { encoding };
+			EGLMessage message = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, encodingError, null, details, 0, 0, 0,
+				0);
+			context.getMessageRequestor().addMessage(message);
+		}
+		catch (IOException e) {
+			String[] details = new String[] { outFile.getName() };
+			EGLMessage message = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, writeError, null, details, 0, 0, 0, 0);
+			context.getMessageRequestor().addMessage(message);
+			return;
+		}
+	}
+
+	public TabbedReportWriter getReport() {
+		return null;
+	}
+
+	protected static void writeReport(EglContext context, String fileName, TabbedReportWriter report, String encodingError, String writeError) {
+		try {
+			if ((report != null)) {
+				String fn = fileName.substring(0, fileName.lastIndexOf('.')) + Constants.report_fileExtension;
+				String rpt = report.rpt.getWriter().toString();
+
+				writeFileUtil(context, fn, rpt, "UTF-8", encodingError, writeError);
+			}
+		}
+		catch (Exception e) {
+			System.err.println("Error writing generation report for " + fileName);
+		}
+	}
 }
