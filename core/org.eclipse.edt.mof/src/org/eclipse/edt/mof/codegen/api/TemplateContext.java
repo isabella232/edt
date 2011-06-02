@@ -17,12 +17,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EClassifier;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 
 @SuppressWarnings("serial")
 public class TemplateContext extends HashMap<Object, Object> {
 	TemplateFactory tFactory;
+	IEnvironment env;
 	Map<String, Template> templates = new HashMap<String, Template>();
 	
 	public class TemplateMethod {
@@ -41,6 +45,14 @@ public class TemplateContext extends HashMap<Object, Object> {
 			return template;
 		}
 
+	}
+	
+	public TemplateContext() {
+		this.env = Environment.INSTANCE;
+	}
+	
+	public TemplateContext(IEnvironment env) {
+		this.env = env;
 	}
 	
 	public void setTemplateFactory(TemplateFactory factory) {
@@ -136,6 +148,12 @@ public class TemplateContext extends HashMap<Object, Object> {
 		Method method = null;
 		Template template = null;
 		template = getTemplateForClass(objectClass);
+		if (template == null) {
+			for (Class<?> iface : objectClass.getInterfaces()) {
+				template = getTemplateForClass(iface);
+				if (template != null) break;
+			}
+		}
 		if (template != null) {
 			method = primGetMethod(methodName, template.getClass(), objectClass, args);
 			if (method != null) {
@@ -155,6 +173,28 @@ public class TemplateContext extends HashMap<Object, Object> {
 		return tm;
 	}
 	
+	public TemplateMethod getTemplateMethod(String methodName, EClassifier eClass, Object...args) throws TemplateException {
+		TemplateMethod tm = null;
+		Method method = null;
+		Template template = null;
+		template = getTemplateForEClassifier(eClass);
+		if (template != null) {
+			method = primGetMethod(methodName, template.getClass(), eClass.getClass(), args);
+			if (method != null) {
+				tm = new TemplateMethod(template, method);
+			}
+			else {
+				if (eClass instanceof EClass) {
+					for (EClass part : ((EClass)eClass).getSuperTypes()) {
+						tm = getTemplateMethod(methodName, part, args);
+						if (tm != null) break;
+					}
+				}
+			}
+		}
+		return tm;
+	}
+
 	private Template getTemplateForClass(Class<?> clazz) {
 		try {
 			return getTemplate(clazz.getName());
@@ -162,6 +202,15 @@ public class TemplateContext extends HashMap<Object, Object> {
 		catch (TemplateException tex) {}
 		return null;
 	}
+	
+	private Template getTemplateForEClassifier(EClassifier clazz) {
+		try {
+			return getTemplate(clazz.getETypeSignature());
+		}
+		catch (TemplateException tex) {}
+		return null;
+	}
+
 	
 	private Class<?> getClassForTemplate(Template template) {
 		String signature = getTemplateKey(template);
@@ -171,7 +220,16 @@ public class TemplateContext extends HashMap<Object, Object> {
 		catch (Exception tex) {}
 		return null;
 	}
-	
+
+	private EClassifier getEClassifierForTemplate(Template template) {
+		String signature = getTemplateKey(template);
+		try {
+			return (EClassifier)env.find(signature);
+		}
+		catch (Exception tex) {}
+		return null;
+	}
+
 
 	public Object invoke(String methodName, Object object, Object...args) {
 		TemplateMethod tm = getTemplateMethod(methodName, object.getClass(), args);
@@ -238,6 +296,59 @@ public class TemplateContext extends HashMap<Object, Object> {
 
 	}
 
+	public Object invoke(String methodName, EObject object, Object...args) {
+		TemplateMethod tm = getTemplateMethod(methodName, object.getEClass(), args);
+		if (tm != null) {
+			return doInvoke(tm.method, tm.template, object, args);
+		}
+		else {
+			return invoke(methodName, (Object)object, args);
+		}
+	}
+
+	public Object invoke(String methodName, EClassifier eClass, Object...args) {
+		TemplateMethod tm = getTemplateMethod(methodName, eClass, args);
+		if (tm != null) {
+			return doInvoke(tm.method, tm.template, eClass, args);
+		}
+		else {
+			return invoke(methodName, (EObject)eClass, args);
+		}
+	}
+
+	public Object invokeSuper(Template template, String methodName, EObject object, Object...args) {
+		// Get EClassifier associated with the given template
+		EClass clazz = (EClass)getEClassifierForTemplate(template);
+		EClass superClass = clazz.getSuperTypes().isEmpty() ? null : clazz.getSuperTypes().get(0);
+		if (superClass == null) {
+			throw new IllegalArgumentException("EClass " + object.getEClass().getETypeSignature() + " has no super class");
+		}
+		TemplateMethod tm = getTemplateMethod(methodName, superClass, args);
+		if (tm != null) {
+			return doInvoke(tm.method, tm.template, object, args);
+		}
+		else {
+			return invoke(methodName, (Object)object, args);
+		}
+	}
+	
+	public Object invokeSuper(Template template, String methodName, EClass clazz, Object...args) {
+		// Get Class associated with the given template
+		EClass baseclass = (EClass)getEClassifierForTemplate(template);
+		EClass superClass = baseclass.getSuperTypes().isEmpty() ? null : baseclass.getSuperTypes().get(0);
+		if (superClass == null) {
+			return invokeSuper(template, methodName, (EObject)clazz, args);
+		}
+		TemplateMethod tm = getTemplateMethod(methodName, superClass, args);
+		if (tm != null) {
+			return doInvoke(tm.method, tm.template, clazz, args);
+		}
+		else {
+			return invokeSuper(template, methodName, (EObject)clazz, args);
+		}
+
+	}
+	
 	public Method primGetMethod(String methodName, Class<?> templateClass, Class<?> objectClass, Object...args) {
 		Method method = null;
 		for (Method m : templateClass.getMethods()) {
