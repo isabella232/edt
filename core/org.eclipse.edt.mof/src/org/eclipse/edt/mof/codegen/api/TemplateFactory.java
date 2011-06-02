@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
 
 public class TemplateFactory {
 	Map<String, Class<? extends Template>> templates = new HashMap<String, Class<? extends Template>>();
+	ClassLoader classloader;
 
 	public TemplateFactory() {
 		super();
@@ -41,6 +42,7 @@ public class TemplateFactory {
 
 	@SuppressWarnings("unchecked")
 	public void load(String templateFilePaths, ClassLoader loader) throws TemplateException {
+		classloader = loader;
 		// the template file path will be 1 or more locations for the templates.properties files involved with this
 		// implementation. If more than 1 location is in the list, then it will be separated by a semi-colon. We need to
 		// split these out into individual locations and process them in order.

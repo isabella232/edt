@@ -56,6 +56,15 @@ public class TemplateContext extends HashMap<Object, Object> {
 		return template;
 	}
 	
+	public String getTemplateKey(Template template) {
+		for (java.util.Map.Entry<String, Class<? extends Template>> entry : tFactory.templates.entrySet()) {
+			if (entry.getValue().equals(template)) {
+				return entry.getKey();
+			}
+		}
+		return null;
+	}
+	
 	public Template getTemplateFor(EClassifier eClassifier) throws TemplateException {
 		return getTemplate(eClassifier.getETypeSignature());
 	}
@@ -154,6 +163,15 @@ public class TemplateContext extends HashMap<Object, Object> {
 		return null;
 	}
 	
+	private Class<?> getClassForTemplate(Template template) {
+		String signature = getTemplateKey(template);
+		try {
+			return Class.forName(signature, true, tFactory.classloader);
+		}
+		catch (Exception tex) {}
+		return null;
+	}
+	
 
 	public Object invoke(String methodName, Object object, Object...args) {
 		TemplateMethod tm = getTemplateMethod(methodName, object.getClass(), args);
@@ -187,14 +205,14 @@ public class TemplateContext extends HashMap<Object, Object> {
 		}
 	}
 
-	public Object invokeSuper(String methodName, Object object, Object...args) {
-		// Find the base method first
-		TemplateMethod tm = getTemplateMethod(methodName, object.getClass(), args);
-		Class<?> superClass = tm.method.getParameterTypes()[0].getSuperclass();
+	public Object invokeSuper(Template template, String methodName, Object object, Object...args) {
+		// Get Class associated with the given template
+		Class<?> clazz = getClassForTemplate(template);
+		Class<?> superClass = clazz.getSuperclass();
 		if (superClass == null) {
 			throw new IllegalArgumentException("Class " + object.getClass().getName() + " has no super class");
 		}
-		tm = getTemplateMethod(methodName, superClass, args);
+		TemplateMethod tm = getTemplateMethod(methodName, superClass, args);
 		if (tm != null) {
 			return doInvoke(tm.method, tm.template, object, args);
 		}
@@ -203,19 +221,19 @@ public class TemplateContext extends HashMap<Object, Object> {
 		}
 	}
 	
-	public Object invokeSuper(String methodName, Class<?> clazz, Object...args) {
-		// Find the base method first
-		TemplateMethod tm = getTemplateMethod(methodName, clazz, args);
-		Class<?> superClass = tm.method.getParameterTypes()[0].getSuperclass();
+	public Object invokeSuper(Template template, String methodName, Class<?> clazz, Object...args) {
+		// Get Class associated with the given template
+		Class<?> baseclass = getClassForTemplate(template);
+		Class<?> superClass = baseclass.getSuperclass();
 		if (superClass == null) {
-			return invokeSuper(methodName, (Object)clazz, args);
+			return invokeSuper(template, methodName, (Object)clazz, args);
 		}
-		tm = getTemplateMethod(methodName, superClass, args);
+		TemplateMethod tm = getTemplateMethod(methodName, superClass, args);
 		if (tm != null) {
 			return doInvoke(tm.method, tm.template, clazz, args);
 		}
 		else {
-			return invokeSuper(methodName, (Object)clazz, args);
+			return invokeSuper(template, methodName, (Object)clazz, args);
 		}
 
 	}
