@@ -90,6 +90,10 @@ public class TimeStampAndIntervalPatternFixer {
 
 	private PatternEntry parse(String pattern) {
 		
+		if (pattern == null) {
+			return null;
+		}
+		
 		PatternEntry firstEntry = null;
 		PatternEntry currentEntry = null;
 		
@@ -140,6 +144,10 @@ public class TimeStampAndIntervalPatternFixer {
 	}
 	
 	public String toString() {
+		if (first == null) {
+			return null;
+		}
+		
 		StringBuffer buffer = new StringBuffer();
 		PatternEntry curEntry = first;
 		while (curEntry != null) {
