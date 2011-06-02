@@ -38,6 +38,7 @@ import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.TryStatement;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 @SuppressWarnings("serial")
 public abstract class EglContext extends TemplateContext {
@@ -649,38 +650,26 @@ public abstract class EglContext extends TemplateContext {
 			return doInvoke(tm.getMethod(), tm.getTemplate(), type, args);
 		}
 		else {
-			StringBuilder builder = new StringBuilder();
-			builder.append("No such method ");
-			builder.append(methodName);
-			builder.append("(");
-			builder.append(type.getClassifier().getTypeSignature());
-			builder.append(", ");
-			for (Object arg : args) {
-				builder.append(arg.getClass().getName());
-				builder.append(", ");
-			}
-			builder.append(") for any template for Classifier " );
-			builder.append(type.getClassifier().getTypeSignature());
-			throw new TemplateException(builder.toString());
+			return invoke(methodName, (Object)type, args);
 		}
 	}
 	
-	public Object invokeSuper(String methodName, Type type, Object...args) {
-		// Get Classifier that lead to base method in associated template
-		Classifier classifier = getTemplateMethodType(methodName, type.getClassifier(), args);
+	public Object invokeSuper(Template template, String methodName, Type type, Object...args) {
+		// Get Classifier associated with the given template, tClass
+		Classifier classifier = getClassifierForTemplate(template);
 		StructPart superType = null;
 		if (classifier instanceof StructPart && !((StructPart)classifier).getSuperTypes().isEmpty()) {
 			superType = ((StructPart)type.getClassifier()).getSuperTypes().get(0);
 		}
 		if (superType == null) {
-			return invokeSuper(methodName, type, args);
+			return invokeSuper(template, methodName, (Object)type, args);
 		}
 		TemplateMethod tm = getTemplateMethod(methodName, superType, args);
 		if (tm != null) {
 			return doInvoke(tm.getMethod(), tm.getTemplate(), type, args);
 		}
 		else {
-			return invokeSuper(methodName, (Object)type, args);
+			return invokeSuper(template, methodName, (Object)type, args);
 		}
 
 	}
@@ -691,39 +680,28 @@ public abstract class EglContext extends TemplateContext {
 		Template template = null;
 		template = getTemplateForClassifier(classifier);
 		Class<?> classifierClass = classifier.getClass();
+		// If no template found drop out completely
+		// Inherited method lookup only done if there 
+		// are templates for all Classifiers involved
 		if (template != null) {
 			method = primGetMethod(methodName, template.getClass(), classifierClass, args);
 			if (method != null) {
 				return new TemplateMethod(template, method);
 			}
-		}
-		if (tm == null && classifier instanceof StructPart) {
-			for (StructPart part : ((StructPart)classifier).getSuperTypes()) {
-				tm = getTemplateMethod(methodName, part, args);
-				if (tm != null) break;
+			else if (classifier instanceof StructPart) {
+				for (StructPart part : ((StructPart)classifier).getSuperTypes()) {
+					tm = getTemplateMethod(methodName, part, args);
+					if (tm != null) break;
+				}
 			}
 		}
 		return tm;
 	}
 	
-	private Classifier getTemplateMethodType(String methodName, Classifier classifier, Object...args) throws TemplateException {
+	private Classifier getClassifierForTemplate(Template template) throws TemplateException {
 		Classifier result = null;
-		Method method = null;
-		Template template = null;
-		template = getTemplateForClassifier(classifier);
-		Class<?> classifierClass = classifier.getClass();
-		if (template != null) {
-			method = primGetMethod(methodName, template.getClass(), classifierClass, args);
-			if (method != null) {
-				return classifier;
-			}
-		}
-		if (result == null && classifier instanceof StructPart) {
-			for (StructPart part : ((StructPart)classifier).getSuperTypes()) {
-				result = getTemplateMethodType(methodName, part, args);
-				if (result != null) break;
-			}
-		}
+		String signature = getTemplateKey(template);
+		result = (Classifier)TypeUtils.getEGLType(signature);
 		return result;
 	}
 
