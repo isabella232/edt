@@ -107,6 +107,7 @@ import org.eclipse.edt.mof.egl.compiler.Context;
 import org.eclipse.edt.mof.egl.compiler.EGL2IREnvironment;
 import org.eclipse.edt.mof.egl.lookup.ProxyElement;
 import org.eclipse.edt.mof.egl.lookup.ProxyPart;
+import org.eclipse.edt.mof.egl.utils.TimeStampAndIntervalPatternFixer;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 import org.eclipse.edt.mof.serialization.ProxyEClass;
@@ -945,7 +946,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 						case Primitive.TIMESTAMP_PRIMITIVE:
 						case Primitive.MONTHSPAN_INTERVAL_PRIMITIVE:
 						case Primitive.SECONDSPAN_INTERVAL_PRIMITIVE: {
-							eSet(eType, "pattern", prim.getPattern());
+							eSet(eType, "pattern", getPattern(prim));
 							break;
 						}
 					}
@@ -1136,18 +1137,22 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		case Primitive.INTERVAL_PRIMITIVE:
 		case Primitive.MONTHSPAN_INTERVAL_PRIMITIVE:
 		case Primitive.SECONDSPAN_INTERVAL_PRIMITIVE: {
-			typeSignature += (type.getPattern() == null ? "" : "(" + type.getPattern() + ")");
+			typeSignature += (type.getPattern() == null ? "" : "(" + getPattern(type) + ")");
 			break;
 		}
 //		case Primitive.TIME_PRIMITIVE:
 		case Primitive.TIMESTAMP_PRIMITIVE: {
-			typeSignature += "(" + type.getPattern() + ")";
+			typeSignature += "(" + getPattern(type) + ")";
 			break;
 		}
 
 	}
 	
 		return typeSignature;
+	}
+	
+	private String getPattern(PrimitiveTypeBinding type) {
+		return new TimeStampAndIntervalPatternFixer(type.getPattern()).toString();
 	}
 	
 	protected String getParameterizedTypeSignature(PrimitiveTypeBinding type) {
