@@ -680,14 +680,15 @@ public abstract class EglContext extends TemplateContext {
 		Method method = null;
 		Template template = null;
 		template = getTemplateForClassifier(classifier);
-		Class<?> classifierClass = classifier.getClass();
 		// If no template found try Stereotype based lookup
 		if (template == null && classifier instanceof Part) {
 			Stereotype stereotype = ((Part)classifier).getStereotype();
-			if (stereotype != null)
-				tm = getTemplateMethod(methodName, stereotype.getEClass(), args);
+			if (stereotype != null) {
+				template = getTemplateForEClassifier(stereotype.getEClass());
+			}
 		}
-		else {
+		if (template != null) {
+			Class<?> classifierClass = classifier.getClass();
 			method = primGetMethod(methodName, template.getClass(), classifierClass, args);
 			if (method != null) {
 				return new TemplateMethod(template, method);
