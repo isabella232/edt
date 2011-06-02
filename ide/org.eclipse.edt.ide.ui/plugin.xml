@@ -358,7 +358,7 @@ Templates
 	<extension point="org.eclipse.ui.navigator.navigatorContent">
       <navigatorContent
       		activeByDefault="true"
-            contentProvider="org.eclipse.edt.ide.ui.internal.packageexplorer.EGLNavigatorContentProvider"      		
+            contentProvider="org.eclipse.edt.ide.ui.internal.packageexplorer.NavigatorContentProvider"      		
             icon="icons/cview16/eglperspective.gif"            
             id="org.eclipse.edt.ide.ui.navigator.EGLContent"
             labelProvider="org.eclipse.edt.ide.ui.internal.packageexplorer.EGLElementLabelProvider"
@@ -395,7 +395,195 @@ Templates
 			<override
 					policy="InvokeAlwaysRegardlessOfSuppressedExt"
 					suppressedExtensionId="org.eclipse.ui.navigator.resourceContent"/>
-		 </navigatorContent>
+			<commonSorter
+					class="org.eclipse.edt.ide.ui.internal.packageexplorer.EGLElementSorter"
+					id="org.eclipse.edt.ide.ui.packageexplorer.EGLElementSorter"/>   				
+		    <actionProvider 
+		    		id="org.eclipse.edt.ide.ui.packageexplorer.OpenActions"
+					class="org.eclipse.edt.ide.ui.internal.packageexplorer.OpenActionProvider"
+    		        overrides="org.eclipse.ui.navigator.resources.OpenActions">
+					<enablement>
+						<or>
+							<instanceof value="org.eclipse.edt.ide.core.model.IEGLElement" /> 	
+						</or>
+					</enablement>					
+			</actionProvider> 	
+<!-- Uncomment when refactoring is ready
+			<actionProvider
+		            class="org.eclipse.edt.ide.ui.internal.packageexplorer.EditActionGroup"
+		            overrides="org.eclipse.ui.navigator.resources.actions.RefactorActions">
+		         	<enablement>
+		         		<or>
+							<instanceof value="org.eclipse.edt.ide.core.model.IEGLElement" />	         	
+						</or>
+		         	</enablement>
+		    </actionProvider>	
+-->    
+			<!-- Add wizards to New context menu of Project Explorer view -->
+			<commonWizard
+				type="new"
+				menuGroupId="org.eclipse.edt.ide.ui.wizards.menuGroup"
+				wizardId="org.eclipse.edt.ide.ui.newLibraryWizard">
+				<enablement>
+ 		        	<or>
+	 					<adapt
+								type="org.eclipse.core.resources.IProject" >
+							<test
+								property="org.eclipse.core.resources.projectNature"
+								value="org.eclipse.edt.ide.core.EGLNature" />
+						</adapt>
+						<instanceof
+								value="org.eclipse.edt.ide.core.model.IEGLElement" />
+ 		        	</or>         					
+				</enablement>
+			</commonWizard>
+			<commonWizard
+				type="new"
+				menuGroupId="org.eclipse.edt.ide.ui.wizards.menuGroup"
+				wizardId="org.eclipse.edt.ide.ui.newPackageWizard">
+				<enablement>
+ 		        	<or>
+	 					<adapt
+								type="org.eclipse.core.resources.IProject" >
+							<test
+								property="org.eclipse.core.resources.projectNature"
+								value="org.eclipse.edt.ide.core.EGLNature" />
+						</adapt>
+						<instanceof
+								value="org.eclipse.edt.ide.core.model.IEGLElement" />
+ 		        	</or>         					
+				</enablement>
+			</commonWizard>
+			<commonWizard
+            	type="new"
+            	menuGroupId="org.eclipse.edt.ide.ui.project.wizards.menuGroup"
+            	wizardId="org.eclipse.edt.ide.ui.newProjectWizard">
+         		<enablement>
+            		<or>
+            			<adapt
+								type="org.eclipse.core.resources.IProject" >
+							<test
+								property="org.eclipse.core.resources.projectNature"
+								value="org.eclipse.edt.ide.core.EGLNature" />
+						</adapt>
+               			<and>
+					  		<instanceof value="java.util.Collection"/>
+					  		<count value="0" />
+						</and>	
+               			<instanceof value="org.eclipse.core.resources.IWorkspaceRoot" />
+            		</or>
+         		</enablement>
+      		</commonWizard>		      
+			<commonWizard
+				type="new"
+				menuGroupId="org.eclipse.edt.ide.ui.wizards.menuGroup"
+				wizardId="org.eclipse.edt.ide.ui.newProgramWizard">
+				<enablement>
+ 		        	<or>
+	 					<adapt
+								type="org.eclipse.core.resources.IProject" >
+							<test
+								property="org.eclipse.core.resources.projectNature"
+								value="org.eclipse.edt.ide.core.EGLNature" />
+						</adapt>
+						<instanceof
+								value="org.eclipse.edt.ide.core.model.IEGLElement" />
+ 		        	</or>         					
+				</enablement>
+			</commonWizard>			
+			<commonWizard
+				type="new"
+				menuGroupId="org.eclipse.edt.ide.ui.wizards.menuGroup"
+				wizardId="org.eclipse.edt.ide.ui.newRuiHandlerWizard">
+				<enablement>
+ 		        	<or>
+	 					<adapt
+								type="org.eclipse.core.resources.IProject" >
+							<test
+								property="org.eclipse.core.resources.projectNature"
+								value="org.eclipse.edt.ide.core.EGLNature" />
+						</adapt>
+						<instanceof
+								value="org.eclipse.edt.ide.core.model.IEGLElement" />
+ 		        	</or>         					
+				</enablement>
+			</commonWizard>	
+			<commonWizard
+				type="new"
+				menuGroupId="org.eclipse.edt.ide.ui.wizards.menuGroup"
+				wizardId="org.eclipse.edt.ide.ui.newRuiWidgetWizard">
+				<enablement>
+ 		        	<or>
+	 					<adapt
+								type="org.eclipse.core.resources.IProject" >
+							<test
+								property="org.eclipse.core.resources.projectNature"
+								value="org.eclipse.edt.ide.core.EGLNature" />
+						</adapt>
+						<instanceof
+								value="org.eclipse.edt.ide.core.model.IEGLElement" />
+ 		        	</or>         					
+				</enablement>
+			</commonWizard>
+			<commonWizard
+				type="new"
+				menuGroupId="org.eclipse.edt.ide.ui.wizards.menuGroup"
+				wizardId="org.eclipse.edt.ide.ui.newSourceFileWizard">
+				<enablement>
+ 		        	<or>
+	 					<adapt
+								type="org.eclipse.core.resources.IProject" >
+							<test
+								property="org.eclipse.core.resources.projectNature"
+								value="org.eclipse.edt.ide.core.EGLNature" />
+						</adapt>
+						<instanceof
+								value="org.eclipse.edt.ide.core.model.IEGLElement" />
+ 		        	</or>         					
+				</enablement>
+			</commonWizard>		
+	      </navigatorContent>
+      <commonFilter
+            class="org.eclipse.edt.ide.ui.internal.packageexplorer.EmptyEGLInnerPackageFilter"                  
+            description="%EmptyEGLPackages.description"
+            id="org.eclipse.edt.ide.ui.packageexplorer.filter.EmptyEGLInnerPackageFilter"            
+            name="%EmptyEGLPackages"            
+            activeByDefault="false">
+      </commonFilter>
+      <commonFilter
+            class="org.eclipse.edt.ide.ui.internal.packageexplorer.EmptyEGLInnerParentPackageFilter"                  
+            description="%EmptyEGLParentPackages.description"
+            id="org.eclipse.edt.ide.ui.packageexplorer.filter.EmptyEGLInnerParentPackageFilter"            
+            name="%EmptyEGLParentPackages"            
+            activeByDefault="true">
+      </commonFilter>					
+	</extension>
+	
+	<extension
+   		point = "org.eclipse.ui.navigator.viewer">
+    	<viewerContentBinding
+        	viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+        	<includes>
+           		<contentExtension pattern="org.eclipse.edt.ide.ui.navigator.EGLContent"/>
+           		<contentExtension pattern="org.eclipse.edt.ide.ui.packageexplorer.filter.*"/>
+           		<contentExtension pattern="org.eclipse.edt.ide.ui.packageexplorer.EGLEditorLinkHelper"/>
+        	</includes>
+      	</viewerContentBinding>
+    </extension>
+    
+    <!-- link with editor -->
+ 	<extension
+        point="org.eclipse.ui.navigator.linkHelper">
+    	<linkHelper
+        	class="org.eclipse.edt.ide.ui.internal.packageexplorer.EGLEditorLinkHelper"
+            id="org.eclipse.edt.ide.ui.packageexplorer.EGLEditorLinkHelper">
+          	<selectionEnablement>
+            	<instanceof value="org.eclipse.edt.ide.core.model.IEGLElement"/>
+          	</selectionEnablement>                        
+         	<editorInputEnablement>
+	        	<instanceof value="org.eclipse.ui.IStorageEditorInput" />
+         	</editorInputEnablement>
+      	</linkHelper>
 	</extension>
 	
 	<extension point="org.eclipse.ui.newWizards">
