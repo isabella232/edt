@@ -34,6 +34,7 @@ import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.TryStatement;
@@ -680,10 +681,13 @@ public abstract class EglContext extends TemplateContext {
 		Template template = null;
 		template = getTemplateForClassifier(classifier);
 		Class<?> classifierClass = classifier.getClass();
-		// If no template found drop out completely
-		// Inherited method lookup only done if there 
-		// are templates for all Classifiers involved
-		if (template != null) {
+		// If no template found try Stereotype based lookup
+		if (template == null && classifier instanceof Part) {
+			Stereotype stereotype = ((Part)classifier).getStereotype();
+			if (stereotype != null)
+				tm = getTemplateMethod(methodName, stereotype.getEClass(), args);
+		}
+		else {
 			method = primGetMethod(methodName, template.getClass(), classifierClass, args);
 			if (method != null) {
 				return new TemplateMethod(template, method);
