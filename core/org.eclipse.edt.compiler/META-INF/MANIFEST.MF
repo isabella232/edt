@@ -52,4 +52,5 @@ Require-Bundle: org.junit;bundle-version="[3.8.1,4.0.0)",
  com.ibm.icu;bundle-version="[3.8.0,5.0.0)";visibility:=reexport,
  org.eclipse.ui;bundle-version="[3.4.2,4.0.0)"
 Eclipse-AutoStart: true
+Bundle-ClassPath: src.jar
 
