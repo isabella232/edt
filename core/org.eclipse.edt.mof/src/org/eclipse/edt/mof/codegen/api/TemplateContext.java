@@ -196,12 +196,12 @@ public class TemplateContext extends HashMap<Object, Object> {
 		Template template = null;
 		template = getTemplateForEClassifier(eClass);
 		if (template != null) {
-			method = primGetMethod(methodName, template.getClass(), eClass.getClass(), args);
+			method = primGetMethod(methodName, template.getClass(), eClass, args);
 			if (method != null) {
 				tm = new TemplateMethod(template, method);
 			}
 		}
-		else if (eClass instanceof EClass) {
+		if (tm == null && eClass instanceof EClass) {
 			for (EClass part : ((EClass)eClass).getSuperTypes()) {
 				tm = getTemplateMethod(methodName, part, args);
 				if (tm != null) break;
@@ -358,6 +358,17 @@ public class TemplateContext extends HashMap<Object, Object> {
 		}
 
 	}
+
+	public Method primGetMethod(String methodName, Class<?> templateClass, EClassifier eClassifier, Object...args) {
+		Class<?> clazz = null;
+		try {
+			clazz = Class.forName(eClassifier.getETypeSignature(), true, tFactory.classloader);
+		}
+		catch(Exception x) {}
+		if (clazz == null)
+			clazz = eClassifier.getClass();
+		return primGetMethod(methodName, templateClass, clazz, args);
+	}
 	
 	public Method primGetMethod(String methodName, Class<?> templateClass, Class<?> objectClass, Object...args) {
 		Method method = null;
@@ -368,20 +379,20 @@ public class TemplateContext extends HashMap<Object, Object> {
 					Class<?>[] pTypes = m.getParameterTypes();
 					if (pTypes[0].isAssignableFrom(objectClass)) {
 						for (int i=0; i<args.length; i++) {
-							if (!pTypes[i+1].isAssignableFrom(args[i].getClass())) {
+							if (args[i] != null && !pTypes[i+1].isAssignableFrom(args[i].getClass())) {
 								matches = false;
 								break;
 							}
 						}
 					}
-					else {
+					else
 						matches = false;
-					}
 				}
+				else
+					matches = false;
 			}
-			else {
+			else
 				matches = false;
-			}
 			if (matches) {
 				method = m;
 				break;
