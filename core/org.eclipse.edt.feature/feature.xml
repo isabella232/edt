@@ -5,23 +5,22 @@
       version="0.7.0.qualifier">
 
    <description>
-	%description
+      %description
    </description>
 
    <copyright>
-	%copyright
+      %copyright
    </copyright>
 
    <license>
-	%license
+      %license
    </license>
 
    <plugin
          id="org.eclipse.edt.compiler"
          download-size="0"
          install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.edt.mof"
@@ -120,71 +119,71 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
-  <plugin
+
+   <plugin
          id="org.eclipse.edt.core.doc.cr"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
-  <plugin
+   <plugin
          id="org.eclipse.edt.core.doc.lr"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
-  <plugin
+   <plugin
          id="org.eclipse.edt.core.doc.pg"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
-  <plugin
+   <plugin
          id="org.eclipse.edt.core.doc.top"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
-  <plugin
+   <plugin
          id="org.eclipse.edt.runtime.java"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
-  <plugin
+   <plugin
          id="org.eclipse.edt.ide.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
-  <plugin
+   <plugin
          id="org.eclipse.edt.ide.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
-  <plugin
+   <plugin
          id="org.eclipse.edt.ide.compiler"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
-  <plugin
+   <plugin
          id="org.eclipse.edt.debug.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
-  <plugin
+   <plugin
          id="org.eclipse.edt.debug.ui"
          download-size="0"
          install-size="0"
