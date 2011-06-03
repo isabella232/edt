@@ -165,26 +165,20 @@ public class TemplateContext extends HashMap<Object, Object> {
 		Method method = null;
 		Template template = null;
 		template = getTemplateForClass(objectClass);
-		if (template == null) {
-			for (Class<?> iface : objectClass.getInterfaces()) {
-				template = getTemplateForClass(iface);
-				if (template != null) break;
-			}
-		}
 		if (template != null) {
 			method = primGetMethod(methodName, template.getClass(), objectClass, args);
 			if (method != null) {
 				tm = new TemplateMethod(template, method);
 			}
-			else {
-				for (Class<?> iface : objectClass.getInterfaces()) {
-					tm = getTemplateMethod(methodName, iface, args);
-					if (tm != null) break;
-				}
-				if (tm == null && objectClass.getSuperclass() != null) {
-					Class<?> superClass = objectClass.getSuperclass();
-					tm = getTemplateMethod(methodName, superClass, args);
-				}
+		}
+		if (tm == null) {
+			for (Class<?> iface : objectClass.getInterfaces()) {
+				tm = getTemplateMethod(methodName, iface, args);
+				if (tm != null) break;
+			}
+			if (tm == null && objectClass.getSuperclass() != null) {
+				Class<?> superClass = objectClass.getSuperclass();
+				tm = getTemplateMethod(methodName, superClass, args);
 			}
 		}
 		return tm;
