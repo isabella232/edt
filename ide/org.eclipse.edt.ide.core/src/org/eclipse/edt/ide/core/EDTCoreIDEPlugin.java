@@ -395,7 +395,9 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 		return service;
 	}
 	
-	public void stop(BundleContext context) throws CoreException {
+	public void stop(BundleContext context) throws Exception {
+		super.stop(context);
+		
 		ITargetPlatformService tps = (ITargetPlatformService) acquireService(ITargetPlatformService.class.getName());
 		if (tps instanceof TargetPlatformService) {
 			//((TargetPlatformService) tps).cleanOrphanedTargetDefinitionProfiles();
