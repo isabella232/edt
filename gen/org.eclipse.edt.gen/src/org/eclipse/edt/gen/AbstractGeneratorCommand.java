@@ -106,7 +106,7 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 					// now try to write out the file, based on the output location and the part's type signature
 					try {
 						// only write the data, if there was some
-						if (generator.getResult().length() > 0)
+						if (generator.getResult() instanceof String && ((String)generator.getResult()).length() > 0)
 							writeFile(part, generator);
 					}
 					catch (Throwable e) {
@@ -207,7 +207,7 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 		if (offset > 0)
 			new File(fileName.substring(0, offset)).mkdirs();
 		FileWriter writer = new FileWriter(fileName);
-		writer.write(generator.getResult());
+		writer.write(generator.getResult().toString());
 		writer.close();
 		// call back to the generator, to see if it wants to do any supplementary tasks
 		generator.processFile(fileName);
