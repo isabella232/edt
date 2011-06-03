@@ -49,7 +49,7 @@ public class EclipseEGL2JavaScript extends EGL2JavaScript {
 	protected void writeFile(Part part, Generator generator) throws Exception {
 		String outputFolder = (String) parameterMapping.get(Constants.parameter_output).getValue();
 		if (EclipseUtilities.shouldWriteFileInEclipse(outputFolder)) {
-			IFile outputFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, generator.getResult(), generator.getRelativeFileName(part));
+			IFile outputFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, generator.getResult().toString(), generator.getRelativeFileName(part));
 
 			// write out generation report if there is one
 			TabbedReportWriter report = generator.getReport();
