@@ -39,6 +39,22 @@ public class TemplateFactory {
 			throw new TemplateException(e2);
 		}
 	}
+	
+	public Template createTemplateRaw(String key) throws TemplateException {
+		Class<? extends Template> clazz = templates.get(key);
+		if (clazz == null)
+			return null;
+		try {
+			return (Template) clazz.newInstance();
+		}
+		catch (IllegalAccessException e) {
+			throw new TemplateException(e);
+		}
+		catch (InstantiationException e2) {
+			throw new TemplateException(e2);
+		}
+	}
+	
 
 	@SuppressWarnings("unchecked")
 	public void load(String templateFilePaths, ClassLoader loader) throws TemplateException {

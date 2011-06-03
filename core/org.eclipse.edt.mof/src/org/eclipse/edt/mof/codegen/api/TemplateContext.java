@@ -20,6 +20,7 @@ import java.util.Map;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EClassifier;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
@@ -68,9 +69,25 @@ public class TemplateContext extends HashMap<Object, Object> {
 		return template;
 	}
 	
+	/**
+	 * Returns template instance associated with given key.  
+	 * Only attempt creation of a new template instance if a 
+	 * Template class for the given key exists.
+	 * @param key
+	 * @return
+	 */
+	public Template getTemplateRaw(String key) {
+		Template template = templates.get(key);
+		if (template == null && tFactory.templates.containsKey(key)) {
+			template = tFactory.createTemplateRaw(key);
+			templates.put(key, template);
+		}
+		return template;
+	}
+	
 	public String getTemplateKey(Template template) {
 		for (java.util.Map.Entry<String, Class<? extends Template>> entry : tFactory.templates.entrySet()) {
-			if (entry.getValue().equals(template)) {
+			if (entry.getValue().equals(template.getClass())) {
 				return entry.getKey();
 			}
 		}
@@ -194,19 +211,11 @@ public class TemplateContext extends HashMap<Object, Object> {
 	}
 
 	public Template getTemplateForClass(Class<?> clazz) {
-		try {
-			return getTemplate(clazz.getName());
-		}
-		catch (TemplateException tex) {}
-		return null;
+		return getTemplateRaw(clazz.getName());
 	}
 	
 	public Template getTemplateForEClassifier(EClassifier clazz) {
-		try {
-			return getTemplate(clazz.getETypeSignature());
-		}
-		catch (TemplateException tex) {}
-		return null;
+		return getTemplateRaw(clazz.getETypeSignature());
 	}
 
 	
@@ -304,13 +313,16 @@ public class TemplateContext extends HashMap<Object, Object> {
 		}
 	}
 
-	public Object invoke(String methodName, EClassifier eClass, Object...args) {
-		TemplateMethod tm = getTemplateMethod(methodName, eClass, args);
+	public Object invoke(String methodName, EType etype, Object...args) {
+		TemplateMethod tm = getTemplateMethod(methodName, etype.getEClassifier(), args);
+		if (tm == null) {
+			tm = getTemplateMethod(methodName, etype.getEClassifier().getEClass(), args);
+		}
 		if (tm != null) {
-			return doInvoke(tm.method, tm.template, eClass, args);
+			return doInvoke(tm.method, tm.template, etype, args);
 		}
 		else {
-			return invoke(methodName, (EObject)eClass, args);
+			return invoke(methodName, (Object)etype, args);
 		}
 	}
 
