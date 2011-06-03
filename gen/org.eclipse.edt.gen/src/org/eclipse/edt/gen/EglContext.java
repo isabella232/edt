@@ -647,7 +647,10 @@ public abstract class EglContext extends TemplateContext {
 	
 	public Object invoke(String methodName, Type type, Object...args) {
 		TemplateMethod tm = getTemplateMethod(methodName, type.getClassifier(), args);
-		if (tm != null) {
+		if (tm == null) {
+			tm = getTemplateMethod(methodName, type.getClassifier().getEClass(), args);
+		}
+		if (tm != null) {				
 			return doInvoke(tm.getMethod(), tm.getTemplate(), type, args);
 		}
 		else {
@@ -656,7 +659,7 @@ public abstract class EglContext extends TemplateContext {
 	}
 	
 	public Object invokeSuper(Template template, String methodName, Type type, Object...args) {
-		// Get Classifier associated with the given template, tClass
+		// Get Classifier associated with the given template
 		Classifier classifier = getClassifierForTemplate(template);
 		StructPart superType = null;
 		if (classifier instanceof StructPart && !((StructPart)classifier).getSuperTypes().isEmpty()) {
@@ -703,7 +706,7 @@ public abstract class EglContext extends TemplateContext {
 		return tm;
 	}
 	
-	private Classifier getClassifierForTemplate(Template template) throws TemplateException {
+	public Classifier getClassifierForTemplate(Template template) throws TemplateException {
 		Classifier result = null;
 		String signature = getTemplateKey(template);
 		result = (Classifier)TypeUtils.getEGLType(signature);
@@ -711,12 +714,8 @@ public abstract class EglContext extends TemplateContext {
 	}
 
 	
-	private Template getTemplateForClassifier(Classifier clazz) {
-		try {
-			return getTemplate(clazz.getTypeSignature());
-		}
-		catch (TemplateException tex) {}
-		return null;
+	public Template getTemplateForClassifier(Classifier clazz) {
+		return getTemplateRaw(clazz.getTypeSignature());
 	}
 
 
