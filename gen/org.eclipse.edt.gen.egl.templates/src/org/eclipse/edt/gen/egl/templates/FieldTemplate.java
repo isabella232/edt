@@ -1,0 +1,55 @@
+package org.eclipse.edt.gen.egl.templates;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+import org.eclipse.edt.gen.egl.Context;
+import org.eclipse.edt.mof.egl.LogicAndDataPart;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
+
+public class FieldTemplate extends EglTemplate{
+
+	public void genName(Field field, Context ctx, Member member) {
+		member.setName(CommonUtilities.getValidEGLName((field.getName())));
+	}
+	public void genField(Field field, Context ctx, Class<?> clazz, LogicAndDataPart part) throws MofObjectNotFoundException, DeserializationException {
+		boolean isJavaProperty = isJavaProperty(field, clazz);
+		if( isJavaProperty ||
+				Modifier.isPublic(field.getModifiers())){
+			org.eclipse.edt.mof.egl.Field eField = ctx.getFactory().createField();
+			part.getFields().add(eField);
+			ctx.invoke(genName, (Object)field, ctx, eField);
+			if(Modifier.isStatic((field.getModifiers()))){
+				eField.setIsStatic(Modifier.isStatic((field.getModifiers())));
+			}
+			ctx.invoke(genType, (Object)field.getGenericType(), ctx, eField);
+			if(isJavaProperty){
+				org.eclipse.edt.mof.egl.Annotation annotation = CommonUtilities.getAnnotation(ctx, Constants.JavaProperty);
+				if(annotation != null){
+					eField.addAnnotation(annotation);
+				}
+			}
+			if(!eField.getName().equals(field.getName())){
+				org.eclipse.edt.mof.egl.Annotation annotation = CommonUtilities.getAnnotation(ctx, Constants.JavaName);
+				if(annotation != null){
+					annotation.setValue(field.getName());
+					eField.addAnnotation(annotation);
+				}
+			}
+			ctx.invoke(genAnnotations, (Object)field, ctx, eField);
+		}
+	}
+	public void genAnnotations(Field field, Context ctx, Member member){
+		for(Annotation annotation : field.getDeclaredAnnotations()){
+			ctx.invoke(genAnnotation, (Object)annotation, ctx, member);
+		}
+	}
+	public static boolean isJavaProperty(Field field, Class<?> parent){
+		return CommonUtilities.getSetter(field.getName(), field.getType(), parent) != null && CommonUtilities.getGetter(field.getName(), field.getType(), parent) != null;
+		
+	}
+
+}
