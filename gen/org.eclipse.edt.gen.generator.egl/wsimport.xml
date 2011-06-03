@@ -1,0 +1,14 @@
+<project name="WsImport" default="init" basedir=".">
+
+
+	<target name="init">
+		<property name="pluginName.temp.path"	value="${tempDir}/${pluginName}/plugins/${pluginName}"/>
+	    <echo message="processing ${selected_resource_loc}." />
+<!--	  <exec executable="wsimport">
+	    <arg value="-keep"/>
+	    <arg value="ant.bat"/>
+	    <arg value="-p"/>
+	  </exec> -->
+	</target>
+
+</project>
