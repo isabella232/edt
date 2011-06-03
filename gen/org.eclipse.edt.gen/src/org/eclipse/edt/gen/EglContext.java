@@ -687,17 +687,17 @@ public abstract class EglContext extends TemplateContext {
 				template = getTemplateForEClassifier(stereotype.getEClass());
 			}
 		}
-		if (template != null) {
+		if (template == null && classifier instanceof StructPart) {
+			for (StructPart part : ((StructPart)classifier).getSuperTypes()) {
+				tm = getTemplateMethod(methodName, part, args);
+				if (tm != null) break;
+			}
+		}
+		else {
 			Class<?> classifierClass = classifier.getClass();
 			method = primGetMethod(methodName, template.getClass(), classifierClass, args);
 			if (method != null) {
 				return new TemplateMethod(template, method);
-			}
-			else if (classifier instanceof StructPart) {
-				for (StructPart part : ((StructPart)classifier).getSuperTypes()) {
-					tm = getTemplateMethod(methodName, part, args);
-					if (tm != null) break;
-				}
 			}
 		}
 		return tm;
