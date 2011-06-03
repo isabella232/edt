@@ -183,19 +183,17 @@ public class TemplateContext extends HashMap<Object, Object> {
 			if (method != null) {
 				tm = new TemplateMethod(template, method);
 			}
-			else {
-				if (eClass instanceof EClass) {
-					for (EClass part : ((EClass)eClass).getSuperTypes()) {
-						tm = getTemplateMethod(methodName, part, args);
-						if (tm != null) break;
-					}
-				}
+		}
+		else if (eClass instanceof EClass) {
+			for (EClass part : ((EClass)eClass).getSuperTypes()) {
+				tm = getTemplateMethod(methodName, part, args);
+				if (tm != null) break;
 			}
 		}
 		return tm;
 	}
 
-	private Template getTemplateForClass(Class<?> clazz) {
+	public Template getTemplateForClass(Class<?> clazz) {
 		try {
 			return getTemplate(clazz.getName());
 		}
@@ -203,7 +201,7 @@ public class TemplateContext extends HashMap<Object, Object> {
 		return null;
 	}
 	
-	private Template getTemplateForEClassifier(EClassifier clazz) {
+	public Template getTemplateForEClassifier(EClassifier clazz) {
 		try {
 			return getTemplate(clazz.getETypeSignature());
 		}
@@ -212,7 +210,7 @@ public class TemplateContext extends HashMap<Object, Object> {
 	}
 
 	
-	private Class<?> getClassForTemplate(Template template) {
+	public Class<?> getClassForTemplate(Template template) {
 		String signature = getTemplateKey(template);
 		try {
 			return Class.forName(signature, true, tFactory.classloader);
@@ -221,7 +219,7 @@ public class TemplateContext extends HashMap<Object, Object> {
 		return null;
 	}
 
-	private EClassifier getEClassifierForTemplate(Template template) {
+	public EClassifier getEClassifierForTemplate(Template template) {
 		String signature = getTemplateKey(template);
 		try {
 			return (EClassifier)env.find(signature);
