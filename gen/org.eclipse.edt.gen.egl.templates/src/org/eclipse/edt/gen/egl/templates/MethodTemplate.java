@@ -43,7 +43,6 @@ public class MethodTemplate extends EglTemplate{
 			ctx.invoke(genName, (Object)method, ctx, eFunction);
 			ctx.invoke(genFunctionParameters, (Object)method, ctx, eFunction);
 			if(!void.class.equals(method.getGenericReturnType())){
-				//FIXME
 				ctx.invoke(genType, (Object)method.getGenericReturnType(), ctx, eFunction);
 			}
 
