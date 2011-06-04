@@ -129,7 +129,7 @@ public class CommonUtilities {
 		org.eclipse.edt.mof.egl.Type eType = null;
 		String nativeType = ctx.getNativeMapping(className);
 		if(nativeType != null){
-			eType = TypeUtils.getType(className);
+			eType = TypeUtils.getType(nativeType);
 		}
 		else{
 			EObject eObject = ctx.getEnvironment().find("egl:" + CommonUtilities.getValidEGLName(className), true);

@@ -17,7 +17,10 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 
 import org.eclipse.edt.gen.egl.Context;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.egl2mof.MofConversion;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 
@@ -26,30 +29,35 @@ public class TypeTemplate extends EglTemplate{
 		member.setType(convertToEglType(ctx, type));
 		member.setIsNullable(CommonUtilities.isNullable(type));
 	}
+	
 	private org.eclipse.edt.mof.egl.Type convertToEglType(Context ctx, Type type) throws MofObjectNotFoundException, DeserializationException{
 		org.eclipse.edt.mof.egl.Type eType = null;
-		//FIXME handle arrays
-		while((type instanceof Class && ((Class<?>)type).isArray())
+		if((type instanceof Class && ((Class<?>)type).isArray())
 				|| type instanceof ParameterizedType
 				|| type instanceof GenericArrayType){
 			eType = ctx.getFactory().createArrayType();
+			org.eclipse.edt.mof.egl.Type elementType = null;
 			if(type instanceof Class){
 				type = ((Class<?>)type).getComponentType();
+				elementType =convertToEglType(ctx, type);
 			}
 			else if(type instanceof Type){
 				type = getJavaType(type);
+				elementType = convertToEglType(ctx, type);
 			}
+			((ArrayType)eType).setClassifier((Classifier)ctx.getEnvironment().find((MofConversion.Type_EGLList)));
+			((ArrayType)eType).setElementType(elementType);
+			((ArrayType)eType).setElementsNullable(CommonUtilities.isNullable(type));
 		}
-		
-		String className = "";
-		if( type instanceof Class ){
-			className = ((Class<?>)type).getName();
+		else{
+			String className = "";
+			if( type instanceof Class ){
+				className = ((Class<?>)type).getName();
+			}
+			eType = CommonUtilities.findType(ctx, className);
 		}
-		eType = CommonUtilities.findType(ctx, className);
-		
 		return eType;
 	}
-	
 	private Type getJavaType(Type type){
 		 if(type instanceof ParameterizedType){
 			return ((ParameterizedType)type).getActualTypeArguments()[0];
