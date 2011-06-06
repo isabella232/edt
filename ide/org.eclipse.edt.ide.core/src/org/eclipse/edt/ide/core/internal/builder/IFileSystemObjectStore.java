@@ -71,7 +71,7 @@ public class IFileSystemObjectStore extends AbstractObjectStore implements Cachi
 	
 	public Deserializer createDeserializer(String typeSignature) {
 		try {
-			IPath path = root.append(typeSignature.replace('.', '/') + getFileExtension());
+			IPath path = root.append(typeSignature.toUpperCase().toLowerCase().replace('.', '/') + getFileExtension());
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 			
 			if (file.exists()) {
