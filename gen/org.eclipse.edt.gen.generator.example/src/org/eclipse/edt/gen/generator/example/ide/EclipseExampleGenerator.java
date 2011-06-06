@@ -45,7 +45,7 @@ public class EclipseExampleGenerator extends EGL2Example {
 	protected void writeFile(Part part, Generator generator) throws Exception {
 		String outputFolder = (String) parameterMapping.get(Constants.parameter_output).getValue();
 		if (EclipseUtilities.shouldWriteFileInEclipse(outputFolder)) {
-			IFile outputFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, generator.getResult(), generator.getRelativeFileName(part));
+			IFile outputFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, generator.getResult().toString(), generator.getRelativeFileName(part));
 
 			// make sure it's a source folder
 			EclipseUtilities.addToJavaBuildPathIfNecessary(outputFile.getProject(), outputFolder);
