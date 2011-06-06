@@ -21,10 +21,10 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.edt.compiler.IGenerator;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.ICompiler;
-import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.ide.ui.internal.util.PixelConverter;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;

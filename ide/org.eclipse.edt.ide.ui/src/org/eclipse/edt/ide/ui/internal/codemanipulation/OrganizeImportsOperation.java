@@ -53,6 +53,7 @@ import org.eclipse.edt.compiler.core.ast.SyntaxError;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemEnvironmentPackageNames;
 import org.eclipse.edt.ide.core.ast.rewrite.ASTRewrite;
+import org.eclipse.edt.ide.core.internal.builder.IDEEnvironment;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
@@ -467,7 +468,7 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 					monitor);
 				
 				removeTypesInDefaultPackage(typeList);
-				addSystemTypes(typeList, unresolvedTypeName);
+				addSystemTypes(typeList, unresolvedTypeName, eglProj.getProject());
 				
 				int foundCnts = typeList.size();
 				if(foundCnts == 1)
@@ -514,8 +515,8 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 		}
 	}
 
-	private void addSystemTypes(List typeList, String unresolvedTypeName) {		
-		IPartBinding sysPartBinding = SystemEnvironment.getInstance().getPartBinding(null, unresolvedTypeName);
+	private void addSystemTypes(List typeList, String unresolvedTypeName, IProject project) {		
+		IPartBinding sysPartBinding = IDEEnvironment.findSystemEnvironment(project).getPartBinding(null, unresolvedTypeName);
 		if(sysPartBinding != null && sysPartBinding != IBinding.NOT_FOUND_BINDING){
 			//conver the IPartBinding to PartInfo
 			String[] pkgName = sysPartBinding.getPackageName();
@@ -536,7 +537,7 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 		}
 	}
 
-	private void bindFile(IProject proj, String currPackageName, final OrganizedImportSection resolvedTypes, final Map unresolvedTypes, final Set oldImports) throws EGLModelException {
+	private void bindFile(final IProject proj, String currPackageName, final OrganizedImportSection resolvedTypes, final Map unresolvedTypes, final Set oldImports) throws EGLModelException {
 		//bind the ast tree with live env and scope
 		IWorkingCopy[] currRegedWCs = EGLCore.getSharedWorkingCopies(EGLUI.getBufferFactory());
 		
@@ -556,7 +557,7 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 								Boolean isIncludeRefFunc = isIncludeReferenceFunction(boundPartBinding);
 								Boolean topFuncUseContainerContext = isUseContainerContextDependent(boundPartBinding);
 															
-								final OrganizeImportsVisitor visitor = new OrganizeImportsVisitor(resolvedTypes, unresolvedTypes, oldImports, isIncludeRefFunc);							
+								final OrganizeImportsVisitor visitor = new OrganizeImportsVisitor(resolvedTypes, unresolvedTypes, oldImports, isIncludeRefFunc, proj);							
 								visitor.setCurrentPartName(boundPart.getName());
 								
 								//if boundPart is not a topLevel function

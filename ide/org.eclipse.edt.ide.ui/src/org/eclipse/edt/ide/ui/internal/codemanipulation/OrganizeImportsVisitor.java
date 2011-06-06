@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.binding.AmbiguousTypeBinding;
@@ -53,6 +54,7 @@ import org.eclipse.edt.compiler.core.ast.TopLevelForm;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.TransferStatement;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
+import org.eclipse.edt.ide.core.internal.builder.IDEEnvironment;
 import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.ui.internal.codemanipulation.OrganizeImportsOperation.OrganizedImportSection;
 
@@ -62,13 +64,15 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 	private Map /*<String>, <Name>*/unresolvedTypes;
 	Set /*<ImportDeclaration>*/ originalImports;
 	private Boolean fIsIncludeRefFunc;
+	private IProject project;
 
-	public OrganizeImportsVisitor(OrganizedImportSection resolvedTypes, Map unresolvedTypes, Set /*<ImportDeclaration>*/ oldImports, Boolean isIncludeRefFunc) {
+	public OrganizeImportsVisitor(OrganizedImportSection resolvedTypes, Map unresolvedTypes, Set /*<ImportDeclaration>*/ oldImports, Boolean isIncludeRefFunc, IProject project) {
 		super(); 
 		this.resolvedTypes = resolvedTypes;
 		this.unresolvedTypes = unresolvedTypes;
 		this.originalImports = oldImports;
 		this.fIsIncludeRefFunc = isIncludeRefFunc;
+		this.project = project;
 	}
 
 	public void setCurrentPartName(Name partName)
@@ -117,7 +121,7 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 		// Defect 61502 - Add user-defined annotations like MVC to unresolved list
 		// sysPartBinding is a FlexibleRecordBinding for system annotations
 		// sysPartBinding is a NotFoundBinding for user-defined annotations
-		IPartBinding sysPartBinding = SystemEnvironment.getInstance().getPartBinding(null, annotationName.getIdentifier());
+		IPartBinding sysPartBinding = IDEEnvironment.findSystemEnvironment(project).getPartBinding(null, annotationName.getIdentifier());
 		if( !Binding.isValidBinding(sysPartBinding) ) {
 			addUnresolvedName(annotationName);
 		}
