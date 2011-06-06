@@ -11,17 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.serialization.IEnvironment;
 
 /**
  * Enables clients to run a generation request for a particular generator. The implementation
  * should take care of any setup required for the generator to run. It should also be stateless, in that
  * the same instance can be used to run any number of generations, possibly at the same time.
  */
-public interface IGenerator extends org.eclipse.edt.compiler.IGenerator{
+public interface IGenerator extends org.eclipse.edt.compiler.IGenerator {
 				
 	/**
 	 * @return true if this generator supports the given project.

@@ -32,7 +32,6 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.EGLAliasJsfNamesSetting;
 import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
-import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.CappedProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.GenericTopLevelFunctionProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
@@ -50,6 +49,7 @@ import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.binding.BinaryFileManager;
 import org.eclipse.edt.ide.core.internal.compiler.Compiler;
+import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraph;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraphManager;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyInfo;
@@ -64,9 +64,13 @@ import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfo;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfoManager;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
+import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.egl2mof.Egl2Mof;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 
 /**
  * @author svihovec
@@ -211,14 +215,21 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 
 		MofSerializable previousPart;
 		try {
-			previousPart = BinaryFileManager.getInstance().readPart(packageName, caseInsensitiveInternedString, project);
-			
-			// reading the previous IR caches it, so we need to remove the cached value otherwise the new IR won't be created
-			BinaryFileManager.getInstance().removePart(packageName, caseInsensitiveInternedString, project, false);
+			EObject eobj = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getIREnvironment().find(key(packageName, caseInsensitiveInternedString));
+			if (eobj instanceof MofSerializable) {
+				previousPart = (MofSerializable)eobj;
+			}
+			else {
+				previousPart = null;
+			}
 		}
-		catch (BuildException e) {
+		catch (Exception e) {
 			// if we couldn't load the part, just assume it's structurally different
 			previousPart = null;
+		}
+		finally {
+			// Remove from the cache.
+			BinaryFileManager.getInstance().removePart(packageName, caseInsensitiveInternedString, project, false);
 		}
 		
 		MofSerializable part = createIRFromBoundAST(partAST, declaringFile, functionInfos, fileAST.getImportDeclarations(), cappedProblemRequestor);
@@ -242,14 +253,24 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
         notifier.subTask(BuilderResources.buildCreatingIR + qualifiedName);
         
 		if (canSave(caseInsensitiveInternedString)) {
-			BinaryFileManager.getInstance().write(part, packageName, caseInsensitiveInternedString, project);
+			ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getIREnvironment().save(part, true);
 		}
+	}
+	
+	private String key(String[] packageName, String partName) {
+		StringBuilder buf = new StringBuilder();
+		buf.append(Type.EGL_KeyScheme);
+		buf.append(Type.KeySchemeDelimiter);
+		if (packageName != null && packageName.length > 0) {
+			buf.append(IRUtils.concatWithSeparator(packageName, "."));
+			buf.append('.');
+		}
+		buf.append(partName);
+		return buf.toString();
 	}
     
     private MofSerializable createIRFromBoundAST(Part partAST, IFile declaringFile,TopLevelFunctionInfo[] functions, List imports, IProblemRequestor problemRequestor) {
-    	IDEEnvironment env = BinaryFileManager.getInstance().getEnvironment(project);
-    	//TODO EDT once we allow multiple output folders, need to implement this:
-//    	env.setDefaultOutputFolder(someUtilityToGetOutputFolder(declaringFile));
+    	IEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getIREnvironment();
         Egl2Mof generator = new Egl2Mof(env);
         return (MofSerializable)generator.convert(partAST, new IDEContext(declaringFile), problemRequestor);
     }
@@ -285,7 +306,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 		}else{
 			String fileName = org.eclipse.edt.ide.core.internal.utils.Util.getFilePartName(declaringFile);
 			IPartBinding fileBinding = projectEnvironment.getPartBinding(packageName, fileName);
-			scope = new SystemScope(new FileScope(new EnvironmentScope(projectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo), IDEEnvironment.findSystemEnvironment(project));
+			scope = new SystemScope(new FileScope(new EnvironmentScope(projectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo), SystemEnvironmentManager.findSystemEnvironment(project));
 		}
 		return scope;
 	}

@@ -12,7 +12,6 @@
 package org.eclipse.edt.ide.core.internal.lookup.workingcopy;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -22,7 +21,7 @@ import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
-import org.eclipse.edt.ide.core.internal.builder.IDEEnvironment;
+import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 
@@ -118,7 +117,7 @@ public class WorkingCopyProjectEnvironment implements IEnvironment {
 
 	@Override
 	public IBindingEnvironment getSystemEnvironment() {
-		return IDEEnvironment.findSystemEnvironment(getProject());
+		return SystemEnvironmentManager.findSystemEnvironment(getProject());
 	}
 
 }

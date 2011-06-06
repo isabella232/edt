@@ -17,15 +17,18 @@ import org.eclipse.edt.compiler.ZipFileBindingBuildPathEntry;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.compiler.internal.io.ZipFileBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.utils.AbsolutePathUtility;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.mof2binding.Mof2Binding;
 import org.eclipse.edt.mof.serialization.IZipFileEntryManager;
-//TODO extend edt.common build path entry
-public class EclipseZipFileBuildPathEntry extends ZipFileBindingBuildPathEntry implements IZipFileEntryManager {
+import org.eclipse.edt.mof.serialization.ObjectStore;
 
-	private IPath path = null;
+public class EclipseZipFileBuildPathEntry extends ZipFileBindingBuildPathEntry implements IZipFileEntryManager, IProjectBuildPathEntry {
+
+	private IPath path;
 	private Object project;
+	private ObjectStore[] stores;
 	
 	public EclipseZipFileBuildPathEntry(Object project,IPath path){
 		
@@ -34,7 +37,7 @@ public class EclipseZipFileBuildPathEntry extends ZipFileBindingBuildPathEntry i
 		this.project = project;
 		processEntries();
 	}
-		
+	
 	public IPath getZipFilePath(){
 		return path;
 	}
@@ -80,8 +83,24 @@ public class EclipseZipFileBuildPathEntry extends ZipFileBindingBuildPathEntry i
 		}
 		return converter;
 	}
+	
+	@Override
+	public Part findPart( String[] packageName, String name ) throws PartNotFoundException {
+		//TODO EDT
+		return null;
+	}
+	
+	protected void setObjectStores(ObjectStore[] stores) {
+		this.stores = stores;
+	}
+	
+	@Override
+	public ObjectStore[] getObjectStores() {
+		return stores;
+	}
 
-
+	@Override
+	public void addPartBindingToCache(IPartBinding partBinding) {
+		// TODO EDT
+	}
 }
-
-

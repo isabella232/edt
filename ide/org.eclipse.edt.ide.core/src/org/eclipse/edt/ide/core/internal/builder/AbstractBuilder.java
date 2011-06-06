@@ -140,7 +140,6 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 					notifier.subTask(BuilderResources.buildSavingDependencyGraph);
 					dependencyGraph.save();
 					notifier.subTask(BuilderResources.buildSavingIRFiles);
-					BinaryFileManager.getInstance().close(builder.getProject());
 					DuplicatePartManager.getInstance().saveDuplicatePartList(builder.getProject());
 				}
 

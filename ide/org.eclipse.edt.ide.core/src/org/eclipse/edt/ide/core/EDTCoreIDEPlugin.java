@@ -36,7 +36,6 @@ import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.edt.ide.core.internal.binding.BinaryFileManager;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
 import org.eclipse.edt.ide.core.internal.builder.ResourceChangeProcessor;
 import org.eclipse.edt.ide.core.internal.lookup.ExternalProjectManager;
@@ -50,7 +49,6 @@ import org.eclipse.edt.ide.core.internal.model.bde.target.TargetPlatformService;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IMember;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -321,8 +319,6 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 
 		workspace.addResourceChangeListener(ASTManager.getInstance(), IResourceChangeEvent.PRE_BUILD);
 		
-		workspace.addResourceChangeListener(BinaryFileManager.getInstance(), IResourceChangeEvent.PRE_BUILD | IResourceChangeEvent.POST_BUILD);
-
 		workspace.addResourceChangeListener(WorkingCopyResourceChangeProcessor.getInstance(), IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE
 				| IResourceChangeEvent.POST_CHANGE);
 		
@@ -338,7 +334,7 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 		// request state folder creation (workaround 19885)
 		EGLCore.getPlugin().getStateLocation();
 
-		ISavedState lastState = workspace.addSaveParticipant(getPlugin(), new ISaveParticipant() {
+		ISavedState lastState = workspace.addSaveParticipant(PLUGIN_ID, new ISaveParticipant() {
 
 			public void doneSaving(ISaveContext context) {
 			}
@@ -598,11 +594,11 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	 * @see org.eclipse.core.runtime.Plugin#shutdown()
 	 */
 	public void shutdown() {
-
+		//TODO this should probably be moved to stop(), then delete this method
 //		savePluginPreferences();
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		workspace.removeResourceChangeListener(EGLModelManager.getEGLModelManager().deltaProcessor);
-		workspace.removeSaveParticipant(getPlugin());
+		workspace.removeSaveParticipant(PLUGIN_ID);
 
 		((EGLModelManager) EGLModelManager.getEGLModelManager()).shutdown();
 	}

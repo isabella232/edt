@@ -20,7 +20,6 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.File;
@@ -40,8 +39,8 @@ import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
 import org.eclipse.edt.ide.core.internal.compiler.Compiler;
+import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyInfo;
-import org.eclipse.edt.ide.core.internal.lookup.ExternalProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfo;
@@ -53,7 +52,6 @@ import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.ide.core.internal.search.IFilePartInfo;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IClassFile;
-import org.eclipse.edt.ide.core.model.IPackageFragment;
 
 /**
  * @author svihovec
@@ -309,7 +307,7 @@ public class TopLevelFunctionProcessingQueue {
 			IPartBinding fileBinding = functionProjectEnvironment.getPartBinding(functionPackageName, fileName);
 			fileScope = new FileScope(new EnvironmentScope(functionProjectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);	
 		}
-		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,IDEEnvironment.findSystemEnvironment(functionProject)), functionContainerScope);
+		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironmentManager.findSystemEnvironment(functionProject)), functionContainerScope);
 		return scope;
 	}
 	
@@ -326,7 +324,7 @@ public class TopLevelFunctionProcessingQueue {
 			IPartBinding fileBinding = env.getDeclaringProjectBuildPathEntry().getFileBinding(functionPackageName, fileNameKey, fileAST);
 			fileScope = new FileScope(new EnvironmentScope(env, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);	
 		}
-		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,IDEEnvironment.findSystemEnvironment(env.getProject())), functionContainerScope);
+		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironmentManager.findSystemEnvironment(env.getProject())), functionContainerScope);
 		return scope;
 	}
 	

@@ -17,7 +17,6 @@ import java.util.HashSet;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 
 /**
  * @author cduval
@@ -28,21 +27,21 @@ public class ProjectBuildPath extends AbstractProjectBuildPath {
         super(project);
     }
 
-	protected IBuildPathEntry getProjectBuildPathEntry(IProject project) {
+	protected IProjectBuildPathEntry getProjectBuildPathEntry(IProject project) {
 		return ProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry(project);
 	}
 
-	protected IBuildPathEntry getZipFileBuildPathEntry(Object project, IPath zipFilePath) {
+	protected IProjectBuildPathEntry getZipFileBuildPathEntry(Object project, IPath zipFilePath) {
 		return ZipFileBuildPathEntryManager.getInstance().getZipFileBuildPathEntry(project, zipFilePath);
 	}
 
-	public IBuildPathEntry[] getBuildPathEntries(){
+	public IProjectBuildPathEntry[] getBuildPathEntries(){
 		ArrayList projectInfoEnvironments = new ArrayList();
         initializeEGLPathEntriesHelper(projectInfoEnvironments, new HashSet(), project, project);
-        return (IBuildPathEntry[]) projectInfoEnvironments.toArray(new IBuildPathEntry[projectInfoEnvironments.size()]);
+        return (IProjectBuildPathEntry[]) projectInfoEnvironments.toArray(new IProjectBuildPathEntry[projectInfoEnvironments.size()]);
 	}
 	
-	protected IBuildPathEntry getProjectBuildPathEntry(ExternalProject project) {
+	protected IProjectBuildPathEntry getProjectBuildPathEntry(ExternalProject project) {
 		return ExternalProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry(project);
 	}
 

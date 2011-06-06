@@ -36,7 +36,6 @@ import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.builder.NullBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
-import org.eclipse.edt.ide.core.internal.binding.BinaryFileManager;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraphManager;
 import org.eclipse.edt.ide.core.internal.lookup.ExternalProjectManager;
 import org.eclipse.edt.ide.core.internal.lookup.FileInfoManager;
@@ -197,7 +196,6 @@ public class Builder extends IncrementalProjectBuilder {
         ProjectBuildPathEntryManager.getInstance().clear(getProject());
         ProjectBuildPathManager.getInstance().clear(getProject());
         ProjectInfoManager.getInstance().clear(getProject());					// ProjectInfo
-     	BinaryFileManager.getInstance().clean(getProject());					// .bin files
      	cleanOutputDir(getProject());
         DependencyGraphManager.getInstance().clear(getProject());				// Dependency Graph
         BuildManager.getInstance().clear(getProject());							// Build Manager

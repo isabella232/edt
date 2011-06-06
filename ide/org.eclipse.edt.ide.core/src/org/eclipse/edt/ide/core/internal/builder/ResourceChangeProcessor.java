@@ -32,7 +32,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
-import org.eclipse.edt.ide.core.internal.binding.BinaryFileManager;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraph;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraphManager;
 import org.eclipse.edt.ide.core.internal.dependency.IFunctionRequestor;
@@ -102,7 +101,6 @@ public class ResourceChangeProcessor implements IResourceChangeListener {
 	        ProjectBuildPathEntryManager.getInstance().remove(project);
 	        ProjectBuildPathManager.getInstance().remove(project);
 	        ProjectInfoManager.getInstance().remove(project);					// ProjectInfo
-	     	BinaryFileManager.getInstance().remove(project);			// .bin files
 	        DependencyGraphManager.getInstance().remove(project);				// Dependency Graph
 	        BuildManager.getInstance().removeProject(project);							// Build Manager
 	        DuplicatePartManager.getInstance().remove(project);					// Duplicate Parts

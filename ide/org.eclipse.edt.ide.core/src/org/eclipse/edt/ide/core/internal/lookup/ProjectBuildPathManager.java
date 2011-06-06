@@ -14,7 +14,6 @@ package org.eclipse.edt.ide.core.internal.lookup;
 import java.util.HashMap;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 
 
 /**

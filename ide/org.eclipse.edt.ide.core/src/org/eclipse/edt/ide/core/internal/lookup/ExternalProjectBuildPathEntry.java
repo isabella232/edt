@@ -23,7 +23,6 @@ import org.eclipse.edt.compiler.internal.core.compiler.BindingCompletor;
 import org.eclipse.edt.compiler.internal.core.dependency.NullDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
-import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
@@ -31,8 +30,11 @@ import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.IWorkingCopyBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.PartNotFoundException;
+import org.eclipse.edt.mof.serialization.ObjectStore;
 
-public class ExternalProjectBuildPathEntry implements IBuildPathEntry, IWorkingCopyBuildPathEntry{
+public class ExternalProjectBuildPathEntry implements IProjectBuildPathEntry, IWorkingCopyBuildPathEntry{
 	
 	ExternalProject project;
 	
@@ -103,10 +105,10 @@ public class ExternalProjectBuildPathEntry implements IBuildPathEntry, IWorkingC
 				return false;
 			}
 
-			public String getSourcePath() {
-				// TODO Auto-generated method stub
-				return null;
-			}
+//			public String getSourcePath() {
+//				// TODO Auto-generated method stub
+//				return null;
+//			}
 			
 		};
 	
@@ -173,5 +175,22 @@ public class ExternalProjectBuildPathEntry implements IBuildPathEntry, IWorkingC
         	fileBinding.clear();
         }
         return fileBinding;
-    }    
+    }
+
+	@Override
+	public Part findPart( String[] packageName, String name ) throws PartNotFoundException {
+		// TODO
+		return null;
+	}
+
+	@Override
+	public ObjectStore[] getObjectStores() {
+		// TODO
+		return new ObjectStore[0];
+	}
+
+	@Override
+	public void addPartBindingToCache(IPartBinding partBinding) {
+		// TODO
+	}
 }

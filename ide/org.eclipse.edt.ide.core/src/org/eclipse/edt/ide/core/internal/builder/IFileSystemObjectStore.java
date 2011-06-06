@@ -15,6 +15,8 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -24,19 +26,24 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
+import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.compiler.EGL2IR;
 import org.eclipse.edt.mof.serialization.AbstractObjectStore;
+import org.eclipse.edt.mof.serialization.CachingObjectStore;
+import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.Deserializer;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 import org.eclipse.edt.mof.serialization.SerializationException;
 
-public class IFileSystemObjectStore extends AbstractObjectStore {
+public class IFileSystemObjectStore extends AbstractObjectStore implements CachingObjectStore {
 	private static final boolean DEBUG = false;
 	
 	static final String MOFBIN = ".mofbin";
 	static final String MOFXML = ".mofxml"; 
+	
+	private Map<String,EObject> cache;
 	
 	IPath root;
 	String fileExtension;
@@ -44,12 +51,14 @@ public class IFileSystemObjectStore extends AbstractObjectStore {
 	public IFileSystemObjectStore(IPath root, IEnvironment env) {
 		super(env);
 		this.root = root;
+		this.cache = new HashMap<String, EObject>();
 	}
 	
 	public IFileSystemObjectStore(IPath root, IEnvironment env, String storageFormat) {
 		super(env, storageFormat);
 		this.root = root;
 		this.fileExtension = storageFormat == ObjectStore.XML ? MOFXML : MOFBIN;
+		this.cache = new HashMap<String, EObject>();
 	}
 
 	public IFileSystemObjectStore(IPath root, IEnvironment env, String storageFormat, String fileExtension) {
@@ -57,6 +66,7 @@ public class IFileSystemObjectStore extends AbstractObjectStore {
 		this.root = root;
 		this.fileExtension = fileExtension;
 		this.supportedScheme = fileExtension.equals(EGL2IR.EGLXML) ? Type.EGL_KeyScheme : ObjectStore.DefaultScheme;
+		this.cache = new HashMap<String, EObject>();
 	}
 	
 	public Deserializer createDeserializer(String typeSignature) {
@@ -82,6 +92,19 @@ public class IFileSystemObjectStore extends AbstractObjectStore {
 
 	@Override
 	public void primRemove(String key) {
+		// key already has the scheme removed
+		String normKey = key.toUpperCase().toLowerCase();
+		cache.remove(normKey);
+	}
+	
+	@Override
+	public void put(String key, EObject obj) throws SerializationException {
+		super.put(key, obj);
+		
+		if (obj != null) {
+			String normKey = removeSchemeFromKey(key).toUpperCase().toLowerCase();
+			cache.put(normKey, obj);
+		}
 	}
 
 	@Override
@@ -102,7 +125,7 @@ public class IFileSystemObjectStore extends AbstractObjectStore {
 			    if (entry.length > 0) {
 			    	file.setContents(inputStream, true, false, null);
 					if (!file.isDerived()) {
-						file.setDerived(true);
+						file.setDerived(true, null);
 					}
 			    }
 			    else {
@@ -115,7 +138,7 @@ public class IFileSystemObjectStore extends AbstractObjectStore {
 			        System.out.println("Writing new file " + file.getName());//$NON-NLS-1$
 			    }
 			    file.create(inputStream, IResource.FORCE, null);
-			    file.setDerived(true);
+			    file.setDerived(true, null);
 			}
 		}
 		catch(CoreException e) {
@@ -165,5 +188,29 @@ public class IFileSystemObjectStore extends AbstractObjectStore {
 			fileExtension = storageFormat.equals(BINARY) ? MOFBIN : MOFXML;
 		}
 		return fileExtension;
+	}
+	
+	@Override
+	public EObject get(String key) throws DeserializationException {
+		String normKey = removeSchemeFromKey(key).toUpperCase().toLowerCase();
+		EObject value = cache.get(normKey);
+		if (value == null) {
+			value = super.get(key);
+			if (value != null) {
+				cache.put(normKey, value);
+			}
+		}
+		return value;
+	}
+
+	@Override
+	public EObject getFromCache(String key) {
+		String normKey = key.toUpperCase().toLowerCase();
+		return cache.get(normKey);
+	}
+
+	@Override
+	public void clearCache() {
+		cache.clear();
 	}
 }

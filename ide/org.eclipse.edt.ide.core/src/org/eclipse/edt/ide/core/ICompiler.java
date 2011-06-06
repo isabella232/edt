@@ -11,14 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core;
 
-import java.util.List;
-
-import org.eclipse.edt.compiler.ISystemEnvironment;
-
 /**
  * Enables clients to define a compiler. A compiler may contribute to the System parts used during compilation.
  */
-public interface ICompiler extends org.eclipse.edt.compiler.ICompiler{
+public interface ICompiler extends org.eclipse.edt.compiler.ICompiler {
 		
 	/**
 	 * @return the preference page id of this compiler.
@@ -33,9 +29,7 @@ public interface ICompiler extends org.eclipse.edt.compiler.ICompiler{
 	public void setPreferencePageId(String id);
 	
 	/**
-	 * @return Returns true if the compiler is running in an Eclipse IDE
+	 * @return true if the compiler is running in an Eclipse IDE
 	 */
 	public boolean isIDE();
-
-	
 }

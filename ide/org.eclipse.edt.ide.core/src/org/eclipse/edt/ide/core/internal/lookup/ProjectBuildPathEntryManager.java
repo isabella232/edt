@@ -15,6 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.edt.ide.core.internal.builder.IFileSystemObjectStore;
+import org.eclipse.edt.mof.egl.compiler.EGL2IR;
+import org.eclipse.edt.mof.serialization.ObjectStore;
 
 
 /**
@@ -48,7 +52,17 @@ public class ProjectBuildPathEntryManager {
 			result = new ProjectBuildPathEntry(ProjectInfoManager.getInstance().getProjectInfo(project));
 			projectBuildPathEntries.put(project, result);
 			
-			result.setDeclaringEnvironment(ProjectEnvironmentManager.getInstance().getProjectEnvironment(project));
+			// Set the stores before asking for the project environment, in case the environment has to be initialized with the stores.
+			ProjectBuildPath buildPath = ProjectBuildPathManager.getInstance().getProjectBuildPath(project);
+			IPath path = buildPath.getOutputLocation().getFullPath();
+			ProjectIREnvironment irEnv = ProjectEnvironmentManager.getInstance().getIREnvironment(project);
+			result.setObjectStores(new ObjectStore[] {
+					new IFileSystemObjectStore(path, irEnv, ObjectStore.XML),
+					new IFileSystemObjectStore(path, irEnv, ObjectStore.XML, EGL2IR.EGLXML)
+				});
+			
+			ProjectEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
+			result.setDeclaringEnvironment(env);
 		}
 		
 		return result;

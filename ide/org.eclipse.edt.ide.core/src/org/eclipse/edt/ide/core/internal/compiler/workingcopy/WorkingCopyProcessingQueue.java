@@ -18,7 +18,6 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
@@ -45,9 +44,9 @@ import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
-import org.eclipse.edt.ide.core.internal.builder.IDEEnvironment;
 import org.eclipse.edt.ide.core.internal.compiler.Binder;
 import org.eclipse.edt.ide.core.internal.compiler.Compiler;
+import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.dependency.AbstractDependencyInfo;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyBuildNotifier;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectBuildPathEntry;
@@ -186,7 +185,7 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 		}else{
 			String fileName = Util.getFilePartName(declaringFile);
 			IPartBinding fileBinding = projectEnvironment.getPartBinding(packageName, fileName);
-			scope = new SystemScope(new FileScope(new EnvironmentScope(projectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo),IDEEnvironment.findSystemEnvironment(project));
+			scope = new SystemScope(new FileScope(new EnvironmentScope(projectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo),SystemEnvironmentManager.findSystemEnvironment(project));
 		}
 		return scope;
 	}

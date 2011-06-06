@@ -15,16 +15,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.builder.AbstractBuilder;
 import org.eclipse.edt.ide.core.internal.builder.AbstractProcessingQueue;
+import org.eclipse.edt.mof.serialization.Environment;
 
 /**
  * @author winghong
  */
 public class ProjectEnvironmentManager {
     
-    private Map projectEnvironments;
+    private Map<IProject, ProjectEnvironment> projectEnvironments;
+    private Map<IProject, ProjectIREnvironment> irEnvironments;
     
     private static final ProjectEnvironmentManager INSTANCE = new ProjectEnvironmentManager();
     
@@ -42,27 +43,37 @@ public class ProjectEnvironmentManager {
     }
     
     public void clear(IProject project) {
-    	ProjectEnvironment result = (ProjectEnvironment) projectEnvironments.get(project);
-    	if(result != null){
+    	// Clear the IR environment first, since the resetting the project environment will re-add the object stores to the environment.
+    	ProjectIREnvironment env = irEnvironments.get(project);
+    	if (env != null) {
+    		env.reset();
+    	}
+    	
+    	ProjectEnvironment result = projectEnvironments.get(project);
+    	if (result != null){
     		result.clear();
     	}
     }
     
     public void remove(IProject project){
     	projectEnvironments.remove(project);
+    	irEnvironments.remove(project);
     }
     
     private void init() {
-        projectEnvironments = new HashMap();
+        projectEnvironments = new HashMap<IProject, ProjectEnvironment>();
+        irEnvironments = new HashMap<IProject, ProjectIREnvironment>();
     }
     
     public ProjectEnvironment getProjectEnvironment(IProject project) {
-        ProjectEnvironment result = (ProjectEnvironment) projectEnvironments.get(project);
+        ProjectEnvironment result = projectEnvironments.get(project);
         
         if(result == null) {
             result = new ProjectEnvironment(project);
             projectEnvironments.put(project, result);
             
+            ProjectIREnvironment env = getIREnvironment(project);
+            result.setIREnvironment(env);
             result.setProjectBuildPathEntries(getProjectBuildPathEntriesFor(project));
             result.setDeclaringProjectBuildPathEntry(ProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry(project));
         }
@@ -70,7 +81,16 @@ public class ProjectEnvironmentManager {
         return result;
     }
     
-    private IBuildPathEntry[] getProjectBuildPathEntriesFor(IProject project) {
+    public ProjectIREnvironment getIREnvironment(IProject project) {
+    	ProjectIREnvironment env = irEnvironments.get(project);
+    	if (env == null) {
+    		env = new ProjectIREnvironment();
+    		irEnvironments.put(project, env);
+    	}
+    	return env;
+    }
+    
+    private IProjectBuildPathEntry[] getProjectBuildPathEntriesFor(IProject project) {
         ProjectBuildPath projectBuildPath = ProjectBuildPathManager.getInstance().getProjectBuildPath(project);
         return projectBuildPath.getBuildPathEntries();
     }
@@ -82,13 +102,17 @@ public class ProjectEnvironmentManager {
         AbstractProcessingQueue processingQueue = builder.getProcessingQueue();
         ProjectBuildPathEntry entry = ProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry(project);
         entry.setProcessingQueue(processingQueue);
-        getProjectEnvironment(project).clearRootPackage();
+        
+        ProjectEnvironment env = getProjectEnvironment(project);
+        env.clearRootPackage();
+        Environment.pushEnv(env.getIREnvironment());
     }
 
     public void endBuilding(AbstractBuilder builder) {
         IProject project = builder.getBuilder().getProject();
         ProjectBuildPathEntry entry = ProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry(project);
         entry.setProcessingQueue(null);
+        Environment.popEnv();
     }
 
     // Debug

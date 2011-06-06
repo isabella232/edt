@@ -15,12 +15,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.File;
@@ -39,11 +37,10 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
-import org.eclipse.edt.ide.core.internal.builder.IDEEnvironment;
 import org.eclipse.edt.ide.core.internal.compiler.Binder;
 import org.eclipse.edt.ide.core.internal.compiler.Compiler;
+import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.dependency.AbstractDependencyInfo;
-import org.eclipse.edt.ide.core.internal.lookup.ExternalProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectInfo;
@@ -289,7 +286,7 @@ public class WorkingCopyTopLevelFunctionProcessingQueue {
 			fileScope = new FileScope(new EnvironmentScope(env, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);	
 			dependencyInfo.recordTypeBinding(fileBinding);			
 		}
-		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,IDEEnvironment.findSystemEnvironment(env.getProject())), functionContainerScope);
+		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironmentManager.findSystemEnvironment(env.getProject())), functionContainerScope);
 		return scope;
 	}
 	 
@@ -306,7 +303,7 @@ public class WorkingCopyTopLevelFunctionProcessingQueue {
 			fileScope = new FileScope(new EnvironmentScope(functionProjectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);	
 			dependencyInfo.recordTypeBinding(fileBinding);			
 		}
-		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,IDEEnvironment.findSystemEnvironment(functionProject)), functionContainerScope);
+		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironmentManager.findSystemEnvironment(functionProject)), functionContainerScope);
 		return scope;
 	}
 

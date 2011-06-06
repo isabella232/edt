@@ -296,10 +296,13 @@ public abstract class AbstractProjectBuildPath {
 	                        }
                     }
 	                	
-	                }else
+	                }else {
 	            	// TODO a required projects source folder may not be exported	            	
 		                if(resolvedEGLPath[i].getEntryKind() == IEGLPathEntry.CPE_SOURCE) {
-		                    entries.add(getProjectBuildPathEntry(project));
+		                	IBuildPathEntry entry = getProjectBuildPathEntry(project);
+		                	if (!entries.contains(entry)) {
+		                		entries.add(entry);
+		                	}
 		                } else if (resolvedEGLPath[i].getEntryKind() == IEGLPathEntry.CPE_LIBRARY){
 		                	if((project == requestingProject) || (resolvedEGLPath[i].isExported())) {
 		                		entries.add(getZipFileBuildPathEntry(project, resolvePath(resolvedEGLPath[i].getPath(), project, null)));
@@ -312,6 +315,7 @@ public abstract class AbstractProjectBuildPath {
 		                        }
 		                    }
 		                }
+	                }
 	            }
         	}
         } catch (EGLModelException e) {

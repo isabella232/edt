@@ -13,7 +13,6 @@ package org.eclipse.edt.ide.core.internal.lookup;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -31,24 +30,30 @@ import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileASTScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
 import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
-import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
-import org.eclipse.edt.ide.core.internal.binding.BinaryFileManager;
+import org.eclipse.edt.ide.core.internal.binding.PartRestoreFailedException;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
-import org.eclipse.edt.ide.core.internal.builder.IDEEnvironment;
+import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.utils.Util;
+import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.PartNotFoundException;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.serialization.CachingObjectStore;
+import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.ObjectStore;
 
 /**
  * @author winghong
  */
-public class ProjectBuildPathEntry implements IBuildPathEntry{
+public class ProjectBuildPathEntry implements IProjectBuildPathEntry {
 	
-	private class RealizingEnvironment implements IEnvironment{
+	private class RealizingEnvironment implements IEnvironment {
 
 		public IPartBinding getPartBinding(String[] packageName, String partName) {
 			return ProjectBuildPathEntry.this.getPartBinding(packageName, partName, true);
@@ -65,28 +70,45 @@ public class ProjectBuildPathEntry implements IBuildPathEntry{
 		public IPackageBinding getRootPackage() {
 			return declaringEnvironment.getRootPackage();
 		}
-
+		
 		@Override
 		public IBindingEnvironment getSystemEnvironment() {
-			return IDEEnvironment.findSystemEnvironment(getProject());
-		}		
-	}	
+			return SystemEnvironmentManager.findSystemEnvironment(getProject());
+		}
+	}
 	
 	private ProjectInfo projectInfo;
-    private PartBindingCache bindingCache = new PartBindingCache();
+    private PartBindingCache bindingCache;
     private AbstractProcessingQueue processingQueue;
     private ProjectEnvironment declaringEnvironment;
     private IEnvironment realizingEnvironment;
+    private ObjectStore[] stores;
+    private static final ObjectStore[] EMPTY_STORES = new ObjectStore[0];
     
     protected ProjectBuildPathEntry(ProjectInfo projectInfo) {
         this.projectInfo = projectInfo;
-        
-        realizingEnvironment = new RealizingEnvironment();
+        this.bindingCache = new PartBindingCache();
+        this.stores = EMPTY_STORES;
+        this.realizingEnvironment = new RealizingEnvironment();
     }
     
     protected void setDeclaringEnvironment(ProjectEnvironment projectEnvironment) {
         this.declaringEnvironment = projectEnvironment;
     }
+    
+    protected void setObjectStores(ObjectStore[] stores) {
+    	if (stores == null) {
+    		this.stores = EMPTY_STORES;
+    	}
+    	else {
+    		this.stores = stores;
+    	}
+    }
+    
+    @Override
+	public ObjectStore[] getObjectStores() {
+		return stores;
+	}
     
     public void setProcessingQueue(AbstractProcessingQueue processingQueue) {
         this.processingQueue = processingQueue;
@@ -173,15 +195,20 @@ public class ProjectBuildPathEntry implements IBuildPathEntry{
     }
     
     private IPartBinding readPartBinding(String[] packageName, String partName) {
-        // Read the part binding from disk
-        IPartBinding partBinding = BinaryFileManager.getInstance().readPartBinding(packageName, partName, projectInfo.getProject());
-        if(partBinding != null){
-        	partBinding.setValid(true);
-	        partBinding.setEnvironment(declaringEnvironment);
-	        bindingCache.put(packageName, partName, partBinding);
-        }
-
-        return partBinding;
+    	try {
+	    	EObject ir = readPart(packageName, partName);
+	    	if (ir != null) {
+	    		IPartBinding partBinding = declaringEnvironment.getConverter().convert(ir);
+	    		if (partBinding != null) {
+	    			bindingCache.put(packageName, partName, partBinding);
+	    			return partBinding;
+	    		}
+	    	}
+	    	return null;
+    	}
+    	catch(Exception e) {
+    		throw new PartRestoreFailedException(packageName, partName, e);
+    	}
     }
     
     /**
@@ -204,9 +231,9 @@ public class ProjectBuildPathEntry implements IBuildPathEntry{
         	String fileName = Util.getFilePartName(declaringFile);
 			IPartBinding fileBinding = getPartBinding(packageName, fileName, true);
 			if(!fileBinding.isValid()){
-				scope = new SystemScope(new FileASTScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, ASTManager.getInstance().getFileAST(declaringFile)),IDEEnvironment.findSystemEnvironment(getProject()));
+				scope = new SystemScope(new FileASTScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, ASTManager.getInstance().getFileAST(declaringFile)),SystemEnvironmentManager.findSystemEnvironment(getProject()));
 			}else{
-				scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()),IDEEnvironment.findSystemEnvironment(getProject()));
+				scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()),SystemEnvironmentManager.findSystemEnvironment(getProject()));
 			}
         }
         BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, new ICompilerOptions(){
@@ -253,7 +280,13 @@ public class ProjectBuildPathEntry implements IBuildPathEntry{
 	}
 
 	public void clear() {
-		bindingCache = new PartBindingCache();		
+		bindingCache = new PartBindingCache();
+		
+		for (ObjectStore store : stores) {
+			if (store instanceof CachingObjectStore) {
+				((CachingObjectStore)store).clearCache();
+			}
+		}
 	}
 	
 	public boolean isZipFile(){
@@ -307,5 +340,42 @@ public class ProjectBuildPathEntry implements IBuildPathEntry{
 		return getPartBindingFromCache(packageName, partName);
 	}
 
+	public void addPartBindingToCache(IPartBinding partBinding) {
+		bindingCache.put(partBinding.getPackageName(), partBinding.getCaseSensitiveName(), partBinding);
+	}
 	
+	private EObject readPart(String[] packageName, String name) throws DeserializationException {
+		String key;
+    	if (packageName != null && packageName.length > 0) {
+    		key = IRUtils.concatWithSeparator(packageName, ".") + "." + name;
+    	}
+    	else {
+    		key = name;
+    	}
+    	
+    	for (int i = 0; i < stores.length; i++) {
+    		EObject ir = stores[i].get(key);
+    		if (ir != null) {
+    			return ir;
+    		}
+    	}
+    	return null;
+	}
+
+	@Override
+	public Part findPart(String[] packageName, String name) throws PartNotFoundException {
+		if(ProjectBuildPathManager.getInstance().getProjectBuildPath(projectInfo.getProject()).isReadOnly()
+				|| projectInfo.hasPart(packageName, name) != ITypeBinding.NOT_FOUND_BINDING){
+			try {
+				EObject ir = readPart(packageName, name);
+				if (ir instanceof Part) {
+					return (Part)ir;
+				}
+			}
+			catch (DeserializationException e) {
+				throw new PartNotFoundException(e);
+			}
+		}
+		return null;
+	}
 }

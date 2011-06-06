@@ -18,6 +18,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyZipFileBuildPathEntry;
+import org.eclipse.edt.mof.serialization.ObjectStore;
 
 
 /**
@@ -71,10 +72,12 @@ public class ZipFileBuildPathEntryManager {
 				result = new WorkingCopyZipFileBuildPathEntry(project,zipfilepath);
 			}
 			else {
-			result = new EclipseZipFileBuildPathEntry(project,zipfilepath);
+				result = new EclipseZipFileBuildPathEntry(project,zipfilepath);
 			}
 			projectMap.put(zipfilepath, result);
-
+			
+			//TODO EDT create stores for the path entries once we support eglars
+			result.setObjectStores(new ObjectStore[0]);
 		}
 		
 		return result;
