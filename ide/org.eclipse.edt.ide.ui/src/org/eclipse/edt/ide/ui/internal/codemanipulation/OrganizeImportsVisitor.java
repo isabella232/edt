@@ -17,7 +17,6 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.binding.AmbiguousTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
@@ -54,7 +53,7 @@ import org.eclipse.edt.compiler.core.ast.TopLevelForm;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.TransferStatement;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
-import org.eclipse.edt.ide.core.internal.builder.IDEEnvironment;
+import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.ui.internal.codemanipulation.OrganizeImportsOperation.OrganizedImportSection;
 
@@ -121,7 +120,7 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 		// Defect 61502 - Add user-defined annotations like MVC to unresolved list
 		// sysPartBinding is a FlexibleRecordBinding for system annotations
 		// sysPartBinding is a NotFoundBinding for user-defined annotations
-		IPartBinding sysPartBinding = IDEEnvironment.findSystemEnvironment(project).getPartBinding(null, annotationName.getIdentifier());
+		IPartBinding sysPartBinding = SystemEnvironmentManager.findSystemEnvironment(project).getPartBinding(null, annotationName.getIdentifier());
 		if( !Binding.isValidBinding(sysPartBinding) ) {
 			addUnresolvedName(annotationName);
 		}

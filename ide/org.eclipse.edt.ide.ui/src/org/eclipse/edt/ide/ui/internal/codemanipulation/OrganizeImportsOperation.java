@@ -35,7 +35,6 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
-import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -53,7 +52,7 @@ import org.eclipse.edt.compiler.core.ast.SyntaxError;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemEnvironmentPackageNames;
 import org.eclipse.edt.ide.core.ast.rewrite.ASTRewrite;
-import org.eclipse.edt.ide.core.internal.builder.IDEEnvironment;
+import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
@@ -516,7 +515,7 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 	}
 
 	private void addSystemTypes(List typeList, String unresolvedTypeName, IProject project) {		
-		IPartBinding sysPartBinding = IDEEnvironment.findSystemEnvironment(project).getPartBinding(null, unresolvedTypeName);
+		IPartBinding sysPartBinding = SystemEnvironmentManager.findSystemEnvironment(project).getPartBinding(null, unresolvedTypeName);
 		if(sysPartBinding != null && sysPartBinding != IBinding.NOT_FOUND_BINDING){
 			//conver the IPartBinding to PartInfo
 			String[] pkgName = sysPartBinding.getPackageName();
