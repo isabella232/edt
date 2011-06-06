@@ -24,7 +24,7 @@ import org.eclipse.edt.mof.MofSerializable;
 public abstract class AbstractEnvironment implements IEnvironment {
 	
 	private Map<Object, EObject> objectCache;
-	private Map<String, List<ObjectStore>> objectStores = new HashMap<String, List<ObjectStore>>();
+	protected Map<String, List<ObjectStore>> objectStores = new HashMap<String, List<ObjectStore>>();
 	private Map<String, LookupDelegate> lookupDelegates = new HashMap<String, LookupDelegate>();
 	private Map<String, ObjectStore> defaultSerializeStores = new HashMap<String, ObjectStore>();
 	
@@ -202,7 +202,7 @@ public abstract class AbstractEnvironment implements IEnvironment {
 		return lookupDelegates.get(scheme);
 	}
 	
-	private String getKeySchemeFromKey(String key) {
+	protected String getKeySchemeFromKey(String key) {
 		int i = key.indexOf(":");
 		if (i == -1) return DefaultScheme;
 		int j = key.indexOf('<');

@@ -38,6 +38,14 @@ public class Environment extends AbstractEnvironment {
 		super();
 	}
 			
+	public void saveType(MofSerializable type) { 
+		save(type);
+	}
+			
+	public void removeType(String mofSignature) {
+		remove(mofSignature);
+	}	
+	
 	public MofSerializable findType(String mofSignature) throws TypeNotFoundException, DeserializationException {
 		EObject type;
 		try {
@@ -47,12 +55,5 @@ public class Environment extends AbstractEnvironment {
 		}
 		return (MofSerializable)type;
 	}
-		
-	public void saveType(MofSerializable type) { 
-		save(type);
-	}
-			
-	public void removeType(String mofSignature) {
-		remove(mofSignature);
-	}	
+
 }

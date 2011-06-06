@@ -61,7 +61,7 @@ public class EFactoryImpl implements EFactory {
 	@Override
 	public EClassifier getTypeNamed(String typeName) {
 		try {
-			return (EClassifier)Environment.INSTANCE.findType(typeName);
+			return (EClassifier)Environment.getCurrentEnv().findType(typeName);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

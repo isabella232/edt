@@ -103,4 +103,7 @@ public interface IEnvironment {
 	
 	Map<String, List<ObjectStore>> getObjectStores();
 	Map<String, LookupDelegate> getLookupDelegates();
+	
+	public MofSerializable findType(String mofSignature) throws TypeNotFoundException, DeserializationException;
+
 }
