@@ -13,7 +13,9 @@ package org.eclipse.edt.gen.generator.example.ide;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.ide.compiler.gen.EclipseJavaGenerator;
 import org.eclipse.edt.ide.core.AbstractGenerator;
 import org.eclipse.edt.mof.egl.Part;
@@ -23,8 +25,9 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 public class ExampleGeneratorProvider extends AbstractGenerator {
 
-	public void generate(IFile file, Part part, IEnvironment env, boolean invokedByBuild) {
+	public void generate(String filePath, Part part, IEnvironment env, boolean invokedByBuild) {
 		try {
+			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
 			EclipseExampleGenerator cmd = new EclipseExampleGenerator(file, part, this);
 			cmd.generate(buildArgs(file, part), new EclipseJavaGenerator(cmd), env);
 		}
