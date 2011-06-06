@@ -30,15 +30,22 @@ import org.eclipse.edt.mof.serialization.TypeNotFoundException;
 
 
 public class PartEnvironment implements IEnvironment {
-	public static PartEnvironment INSTANCE = new PartEnvironment();
-	
-	PartEnvironment() {
-		Environment.INSTANCE.registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
-	}
-	
-	Environment env = Environment.INSTANCE;
+	public static PartEnvironment INSTANCE = new PartEnvironment(Environment.INSTANCE);
+	IEnvironment env;
 	IRUtils irUtils = new IRUtils();
 	
+	public PartEnvironment() {
+		this(Environment.getCurrentEnv());
+	}
+	
+	PartEnvironment(IEnvironment env) {
+		this.env = env;
+		if (env.getLookupDelegates().get(Type.EGL_KeyScheme) == null) {
+			env.registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
+		}
+	}
+
+		
 	@Override
 	public EObject find(String key) throws MofObjectNotFoundException, DeserializationException {
 		return find(key, false);
