@@ -22,14 +22,14 @@ import java.util.zip.ZipFile;
 import org.eclipse.edt.mof.EObject;
 
 
-public class ZipFileObjectStore extends AbstractObjectStore {
+public class ZipFileObjectStore extends AbstractObjectStore implements CachingObjectStore {
 	public static final String MOFBIN = ".mofbin";
 	public static final String MOFXML = ".mofxml"; 
 
 	File zipFile;
 	String fileExtension;
 	IZipFileEntryManager entryManager;
-	Map cache = new HashMap();
+	Map<String, EObject> cache = new HashMap<String, EObject>();
 	
 	public ZipFileObjectStore(File zipFile, IEnvironment env) {
 		super(env);
@@ -104,8 +104,9 @@ public class ZipFileObjectStore extends AbstractObjectStore {
 
 	@Override
 	public void primRemove(String key) {
-		// TODO Auto-generated method stub
-		
+		// key already has the scheme removed
+		String normKey = key.toUpperCase().toLowerCase();
+		cache.remove(normKey);
 	}
 
 	@Override
@@ -126,13 +127,22 @@ public class ZipFileObjectStore extends AbstractObjectStore {
 	@Override
 	public EObject get(String key) throws DeserializationException {
 		String normKey = key.toUpperCase().toLowerCase();
-		EObject value = (EObject) cache.get(normKey);
+		EObject value = cache.get(normKey);
 		if (value == null) {
 			value = super.get(key);
+			cache.put(normKey, value);
 		}
-		cache.put(normKey, value);
 		return value;
 	}
 
+	@Override
+	public EObject getFromCache(String key) {
+		String normKey = key.toUpperCase().toLowerCase();
+		return cache.get(normKey);
+	}
 
+	@Override
+	public void clearCache() {
+		cache.clear();
+	}
 }

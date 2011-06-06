@@ -24,9 +24,9 @@ import org.eclipse.edt.mof.MofSerializable;
 public abstract class AbstractEnvironment implements IEnvironment {
 	
 	private Map<Object, EObject> objectCache;
-	protected Map<String, List<ObjectStore>> objectStores = new HashMap<String, List<ObjectStore>>();
-	private Map<String, LookupDelegate> lookupDelegates = new HashMap<String, LookupDelegate>();
-	private Map<String, ObjectStore> defaultSerializeStores = new HashMap<String, ObjectStore>();
+	protected Map<String, List<ObjectStore>> objectStores;
+	private Map<String, LookupDelegate> lookupDelegates;
+	private Map<String, ObjectStore> defaultSerializeStores;
 	
 	public AbstractEnvironment() {
 		reset();
@@ -34,6 +34,10 @@ public abstract class AbstractEnvironment implements IEnvironment {
 	
 	public void reset() {
 		objectCache = new HashMap<Object, EObject>();
+		objectStores = new HashMap<String, List<ObjectStore>>();
+		lookupDelegates = new HashMap<String, LookupDelegate>();
+		defaultSerializeStores = new HashMap<String, ObjectStore>();
+		
 		ObjectStore mofStore = new MemoryObjectStore(this);
 		setDefaultSerializeStore(IEnvironment.DefaultScheme, mofStore);
 		registerLookupDelegate(IEnvironment.DefaultScheme, new MofLookupDelegate());
@@ -190,14 +194,14 @@ public abstract class AbstractEnvironment implements IEnvironment {
 		return getDelegateForKey(key);
 	}
 
-	private void save(String key, EObject object, ObjectStore store) throws SerializationException {
+	protected void save(String key, EObject object, ObjectStore store) throws SerializationException {
 		LookupDelegate delegate = getDelegateForKey(key);
 		String storeKey = delegate.normalizeKey(key);
 		objectCache.put(storeKey, object);
 		if (store != null) store.put(storeKey, object);
 	}
 	
-	private LookupDelegate getDelegateForKey(String key) {
+	protected LookupDelegate getDelegateForKey(String key) {
 		String scheme = getKeySchemeFromKey(key);
 		return lookupDelegates.get(scheme);
 	}
