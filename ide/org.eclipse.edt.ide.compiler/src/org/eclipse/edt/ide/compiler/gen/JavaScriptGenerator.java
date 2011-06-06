@@ -27,17 +27,17 @@ import org.eclipse.jface.preference.IPreferenceStore;
 /**
  * Provides know-how for hooking the Java Generator into the IDE.
  */
-public class JavaGeneratorProvider extends AbstractGenerator {
+public class JavaScriptGenerator extends AbstractGenerator {
 	
-	public JavaGeneratorProvider() {
-		runtimeContainers = new EDTRuntimeContainer[] { EDTCompilerIDEPlugin.JAVA_RUNTIME_CONTAINER };
+	public JavaScriptGenerator() {
+		runtimeContainers = new EDTRuntimeContainer[] { EDTCompilerIDEPlugin.JAVASCRIPT_RUNTIME_CONTAINER };
 	}
 	
 	public void generate(String filePath, Part part, IEnvironment env, boolean invokedByBuild) {
 		try {
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
-			EclipseEGL2Java cmd = new EclipseEGL2Java(file, part, this);
-			cmd.generate(buildArgs(file, part), new EclipseJavaGenerator(cmd), env);
+			EclipseEGL2JavaScript cmd = new EclipseEGL2JavaScript(file, part, this);
+			cmd.generate(buildArgs(file, part), new EclipseJavaScriptGenerator(cmd), env);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -74,7 +74,7 @@ public class JavaGeneratorProvider extends AbstractGenerator {
 	
 	@Override
 	protected String getGenerationDirectoryPropertyKey() {
-		return EDTCompilerIDEPlugin.PROPERTY_JAVAGEN_DIR;
+		return EDTCompilerIDEPlugin.PROPERTY_JAVASCRIPTGEN_DIR;
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class JavaGeneratorProvider extends AbstractGenerator {
 
 	@Override
 	protected String getGenerationDirectoryPreferenceKey() {
-		return EDTCompilerIDEPlugin.PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY;
+		return EDTCompilerIDEPlugin.PREFERENCE_DEFAULT_JAVASCRIPTGEN_DIRECTORY;
 	}
 
 	@Override
@@ -92,3 +92,4 @@ public class JavaGeneratorProvider extends AbstractGenerator {
 		return EDTCompilerIDEPlugin.getDefault().getPreferenceStore();
 	}
 }
+

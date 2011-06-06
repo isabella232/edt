@@ -24,9 +24,9 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
-public class WorthlessGeneratorProvider extends JavaGeneratorProvider {
+public class WorthlessGenerator extends JavaGenerator {
 	
-	public WorthlessGeneratorProvider() {
+	public WorthlessGenerator() {
 		runtimeContainers = null;
 	}
 	
@@ -35,16 +35,16 @@ public class WorthlessGeneratorProvider extends JavaGeneratorProvider {
 		try {
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
 			EclipseEGL2Java cmd = new EclipseEGL2Java(file, part, this);
-			cmd.generate(buildArgs(file, part), new WorthlessGenerator(cmd), env);
+			cmd.generate(buildArgs(file, part), new EclipseWorthlessGenerator(cmd), env);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private static class WorthlessGenerator extends EclipseJavaGenerator {
+	private static class EclipseWorthlessGenerator extends EclipseJavaGenerator {
 
-		public WorthlessGenerator(AbstractGeneratorCommand processor) {
+		public EclipseWorthlessGenerator(AbstractGeneratorCommand processor) {
 			super(processor);
 		}
 		
