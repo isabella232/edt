@@ -76,34 +76,8 @@ public class EnumerationManager {
     private void initializeEnumTypes() {
         enumTypes = new HashMap();
         resolvableEnumTypes =  new ArrayList();
-//        addEnumType(AlignKind.INSTANCE);
-//        addEnumType(CallingConventionKind.INSTANCE);
-//        addEnumType(CaseFormatKind.INSTANCE);
-//        addEnumType(ColorKind.INSTANCE);
-//        addEnumType(DataSource.INSTANCE);
-//        addEnumType(DeviceTypeKind.INSTANCE);
-//        addEnumType(DisplayUseKind.INSTANCE);
-//        addEnumType(DLICallInterfaceKind.INSTANCE);
         addEnumType(ElementKind.INSTANCE);
-//        addEnumType(EventKind.INSTANCE);
-//        addEnumType(ExportFormat.INSTANCE);
-//        addEnumType(HighlightKind.INSTANCE);
-//        addEnumType(IndexOrientationKind.INSTANCE);
-//        addEnumType(IntensityKind.INSTANCE);
-//        addEnumType(LineWrapKind.INSTANCE);
-//        addEnumType(OrderingKind.INSTANCE);
-//        addEnumType(OutlineKind.INSTANCE);
-//        addEnumType(PCBKind.INSTANCE);
-//        addEnumType(PFKeyKind.INSTANCE);
-//        addEnumType(ProtectKind.INSTANCE);
-//        addEnumType(ScopeKind.INSTANCE);
-//        addEnumType(SelectTypeKind.INSTANCE);
-//        addEnumType(SignKind.INSTANCE);
         addEnumType(TypeKind.INSTANCE);
-//        addEnumType(ParameterModifierKind.INSTANCE);
-//        addEnumType(UITypeKind.INSTANCE);
-//        addEnumType(WhitespaceKind.INSTANCE);
-//        addEnumType(WindowAttributeKind.INSTANCE);        
     }
     
     private void addEnumType(Enumeration enumeration) {

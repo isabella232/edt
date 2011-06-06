@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.sdk.compile;
 
-import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
 import org.eclipse.edt.compiler.binding.PartBinding;
+import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 
@@ -33,6 +33,20 @@ public class EGLCEnvironment implements IEnvironment {
 	private PartPathEntry  irOutputPathEntry = null;
 	
 	private PackageBinding rootPackageBinding = new PackageBinding(defaultPackage, null, this);
+	private IBindingEnvironment systemEnvironment;
+
+	public IBindingEnvironment getSystemEnvironment() {
+		return systemEnvironment;
+	}
+
+	public EGLCEnvironment(IBindingEnvironment systemEnvironment) {
+		super();
+		this.systemEnvironment = systemEnvironment;
+	}
+
+	public void setSystemEnvironment(IBindingEnvironment systemEnvironment) {
+		this.systemEnvironment = systemEnvironment;
+	}
 
 	public void setPartPathEntries(PartPathEntry[] partPathEntries){
     	this.partPathEntries = partPathEntries;
@@ -81,7 +95,7 @@ public class EGLCEnvironment implements IEnvironment {
 	        	return partPathEntry.getPartBinding(packageName, partName);
 	        } 
 	        
-	        return SystemEnvironment.getInstance().getPartBinding(packageName, partName);
+	        return getSystemEnvironment().getPartBinding(packageName, partName);
     	}else{
     		return result;
     	}
@@ -102,7 +116,7 @@ public class EGLCEnvironment implements IEnvironment {
 			}
 		}
     	
-    	return SystemEnvironment.getInstance().hasPackage(packageName);
+    	return getSystemEnvironment().hasPackage(packageName);
     }
     
     public IPackageBinding getRootPackage() {

@@ -18,10 +18,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.edt.compiler.internal.sdk.utils.Util;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
-import org.eclipse.edt.compiler.internal.sdk.utils.Util;
 import org.eclipse.edt.compiler.sdk.compile.BuildPathException;
 
 

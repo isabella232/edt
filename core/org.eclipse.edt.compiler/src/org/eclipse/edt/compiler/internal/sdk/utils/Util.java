@@ -21,8 +21,6 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.ISystemPackageBuildPathEntryFactory;
-import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.DataItem;
 import org.eclipse.edt.compiler.core.ast.DataTable;
@@ -49,7 +47,6 @@ import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
  */
 public class Util {
 
-	public static final String INIT_CLASS = "/org/eclipse/edt/compiler/SystemEnvironment.class";	
     public final static char[] SUFFIX_egl = ".egl".toCharArray(); //$NON-NLS-1$
 	public final static char[] SUFFIX_EGL = ".EGL".toCharArray(); //$NON-NLS-1$
 	
@@ -168,80 +165,7 @@ public class Util {
 	    System.out.println(message);
 	    e.printStackTrace();
 	}
-
-	public static boolean initializeSystemPackages(ISystemPackageBuildPathEntryFactory factory){
-		URL classUrl = SystemEnvironment.getInstance().getClass().getResource(INIT_CLASS);
 		
-		if (classUrl != null && classUrl.getProtocol().equals( "file" )){
-			String initializerPath = classUrl.getFile();
-			
-			initializerPath = getSystemLibraryPath(initializerPath);
-			
-			try {
-				initializerPath = URLDecoder.decode(initializerPath, System.getProperty("file.encoding"));
-			} catch (UnsupportedEncodingException e) {
-			}
-			
-			SystemEnvironment.getInstance().initializeSystemPackages(initializerPath, factory);
-			return true;
-		}else if (classUrl != null && classUrl.getProtocol().equals( "jar" )){
-			String initializerPath = classUrl.getFile();
-			if (initializerPath.startsWith("file:")){
-				initializerPath = initializerPath.substring(5);
-			}								
-			
-			initializerPath = getSystemLibraryPath(initializerPath);
-			try {
-				initializerPath = URLDecoder.decode(initializerPath, System.getProperty("file.encoding"));
-			} catch (UnsupportedEncodingException e) {
-			}			
-			
-			SystemEnvironment.getInstance().initializeSystemPackages(initializerPath, factory);
-			return true;
-		}else if (classUrl != null && classUrl.getProtocol().equals("bundleresource")){
-			// We are running EGLC/EGLG from within a running workbench.  The system packages were initialized
-			// when the edt.common plugin started
-			return true;
-		}
-		
-		return false;
-	}
-	
-	private static String getSystemLibraryPath(String fileURL){
-		String initializerPath = fileURL;
-		int pluginIndex = initializerPath.indexOf(SystemEnvironment.EDT_COMMON_DIRECTORY);
-		if (pluginIndex >= 0) {
-			int separatorIndex = initializerPath.indexOf("/", pluginIndex);
-			initializerPath = initializerPath.substring(0, separatorIndex + 1); // + 1 for separator
-			initializerPath = initializerPath.concat(SystemEnvironment.EDT_LIB_DIRECTORY);
-			
-			// RATLC01375317 - more than spaces get encoded. Such as DBCS characters...oops!
-//			initializerPath = initializerPath.replaceAll("%20", " ");
-			try {
-				initializerPath = new URI(initializerPath).getPath();
-			}
-			catch ( URISyntaxException e ){
-				// Fall back on previous routine.
-				initializerPath = initializerPath.replaceAll("%20", " ");
-			}
-		}
-		else {
-			//Strip off the subDirectory
-			int index = initializerPath.lastIndexOf("/com/");
-			initializerPath = initializerPath.substring(0, index);
-			//Strip off the jar file name
-			index = initializerPath.lastIndexOf("/");
-			initializerPath = initializerPath.substring(0, index);
-			//Strip off the directory containing the jar file
-			index = initializerPath.lastIndexOf("/");
-			initializerPath = initializerPath.substring(0, index + 1);
-			//Add back in the LIB directory
-			initializerPath = initializerPath.concat(SystemEnvironment.EDT_LIB_DIRECTORY);
-		}
-		
-		return initializerPath;
-	}
-	
     public static List getPartFiles(String pattern,String extension) {
     	ArrayList list = new ArrayList();
     	if(pattern.indexOf('*')> 0 || pattern.indexOf('?')> 0){

@@ -24,7 +24,8 @@ public interface IEnvironment {
     
     boolean hasPackage(String[] packageName);
     IPackageBinding getRootPackage();
-    
+    IBindingEnvironment getSystemEnvironment();
+        
     
 
 }

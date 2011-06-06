@@ -76,24 +76,7 @@ public class SystemPartManager {
     	systemParts = new HashMap();
     	systemParts.put(InternUtil.intern(IEGLConstants.MIXED_DICTIONARY_STRING), DictionaryBinding.INSTANCE);
     	systemParts.put(InternUtil.intern(IEGLConstants.MIXED_ARRAYDICTIONARY_STRING), ArrayDictionaryBinding.INSTANCE);
-    	
-//    	systemParts.put(InternUtil.intern(IEGLConstants.EGL_CONSOLE_UI_MENUITEM), MENUITEM_BINDING);
-//    	systemParts.put(InternUtil.intern(IEGLConstants.EGL_CONSOLE_UI_MENU), MENU_BINDING);
-//    	systemParts.put(InternUtil.intern(IEGLConstants.EGL_CONSOLE_UI_CONSOLEFIELD), CONSOLEFIELD_BINDING);
-//    	systemParts.put(InternUtil.intern(IEGLConstants.EGL_CONSOLE_UI_WINDOW), WINDOW_BINDING);
-//    	systemParts.put(InternUtil.intern(IEGLConstants.EGL_CONSOLE_UI_PRESENTATIONATTRIBUTES), PRESENTATIONATTRIBUTES_BINDING);
-//    	systemParts.put(InternUtil.intern(IEGLConstants.EGL_CONSOLE_UI_PROMPT), PROMPT_BINDING);
-    	
-//    	systemParts.put(InternUtil.intern(IEGLConstants.EGL_REPORTS_REPORTDATA), REPORTDATA_BINDING);
-//    	systemParts.put(InternUtil.intern(IEGLConstants.EGL_REPORTS_REPORT), REPORT_BINDING);
-    	
-//    	systemParts.putAll(getDLIFixedRecordsMap());
-//    	systemParts.put(InternUtil.intern(IEGLConstants.PSBDATARECORD_STRING), PSBDATARECORD_BINDING);
-    	
-//    	systemParts.put(InternUtil.intern("AnyException"), ANYEXCEPTION_BINDING);
-    	
-    	systemParts.put(InternUtil.intern("InternalRef"), INTERNALREF_BINDING);
-    	
+    	systemParts.put(InternUtil.intern("InternalRef"), INTERNALREF_BINDING);    	
     	systemParts.put(InternUtil.intern("FieldRef"), FIELDREF_BINDING);
     	systemParts.put(InternUtil.intern("FieldInTargetRef"), FIELDINTARGETREF_BINDING);
     	systemParts.put(InternUtil.intern("FunctionRef"), FUNCTIONREF_BINDING);

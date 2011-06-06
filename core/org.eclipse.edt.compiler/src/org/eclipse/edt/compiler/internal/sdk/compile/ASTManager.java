@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.edt.compiler.internal.sdk.utils.Util;
 import org.eclipse.edt.compiler.core.ast.ErrorCorrectingParser;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.Lexer;
@@ -24,7 +25,6 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.VAGLexer;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.utils.SoftLRUCache;
-import org.eclipse.edt.compiler.internal.sdk.utils.Util;
 
 
 /**

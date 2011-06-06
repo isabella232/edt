@@ -18,7 +18,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.eclipse.edt.compiler.SystemEnvironment;
+import org.eclipse.edt.compiler.internal.sdk.utils.Util;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.Part;
@@ -33,7 +33,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
-import org.eclipse.edt.compiler.internal.sdk.utils.Util;
 import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
 
 /**
@@ -189,7 +188,7 @@ public class TopLevelFunctionProcessor {
 			fileScope = new FileScope(new EnvironmentScope(environment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);	
 			dependencyInfo.recordTypeBinding(fileBinding);			
 		}
-		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironment.getInstance()), functionContainerScope);
+		Scope scope = new FunctionContainerScope(new SystemScope(fileScope, environment.getSystemEnvironment()), functionContainerScope);
 		return scope;
 	}
 	

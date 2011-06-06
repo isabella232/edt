@@ -20,36 +20,28 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
-import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 
 import com.ibm.icu.util.StringTokenizer;
 
-public class ZipFileBuildPathEntry implements IBuildPathEntry{
+public abstract class ZipFileBuildPathEntry{
 	private DefaultZipFileIOBufferReader reader = null;
 	private HashMap partNamesByPackage = new HashMap();
-	private HashMap partBindingsByPackage = new HashMap();
 	private HashMap partNamesWithoutPackage = new HashMap();
-	private HashMap partBindingsWithoutPackage = new HashMap();
 	protected HashMap partCache = new HashMap();
 	private String path = null;
 	
 	public ZipFileBuildPathEntry(String  path){
 		this.path = path;
-		reader = new DefaultZipFileIOBufferReader(path);
-		
+		reader = new DefaultZipFileIOBufferReader(path);		
 	}
-
+	
 	public void clear(){
 		reader = null;
 		partNamesByPackage.clear();
-		partBindingsByPackage.clear();
 		partNamesWithoutPackage.clear();
-		partBindingsWithoutPackage.clear();
 		partCache = new HashMap();
 	}
 	
@@ -57,25 +49,6 @@ public class ZipFileBuildPathEntry implements IBuildPathEntry{
 		partCache = new HashMap();
 	}
 	
-	public IPartBinding getPartBinding(String[] packageName,String partName){
-		IPartBinding partBinding = getCachedPartBinding(packageName,partName);
-		
-		return partBinding;
-	}
-	
-	public IPartBinding getCachedPartBinding(String[] packageName,String partName){
-		IPartBinding partBinding = null;
-		if (packageName == null || packageName.length == 0){
-			partBinding = (IPartBinding)partBindingsWithoutPackage.get(partName);
-		}else{
-			Map partpackage = (Map)partBindingsByPackage.get(packageName);
-			if (partpackage != null){
-				partBinding = (IPartBinding)partpackage.get(partName);
-			}
-		}
-		
-		return partBinding;
-	}
 	
 	public boolean hasPackage(String[] packageName){
 		if (packageName == null || packageName.length == 0){
@@ -98,20 +71,6 @@ public class ZipFileBuildPathEntry implements IBuildPathEntry{
 		
 		return entry;
 	}
-	
-	public int hasPart(String[] packageName,String partName){
-		IPartBinding partBinding = getPartBinding(packageName,partName);
-		if (partBinding != null){
-			return partBinding.getKind();
-		}
-		
-		return ITypeBinding.NOT_FOUND_BINDING;
-	}
-	
-	public IEnvironment getRealizingEnvironment(){
-		throw new UnsupportedOperationException();
-	}
-	
 		
 	protected String[] getPackageName(String packagename){
 		ArrayList list = new ArrayList();
@@ -122,14 +81,12 @@ public class ZipFileBuildPathEntry implements IBuildPathEntry{
 		}
 		//remove last -- partname
 		list.remove(list.size()-1);
-		return (String[]) list.toArray(new String[list.size()]);
+		return InternUtil.intern((String[]) list.toArray(new String[list.size()]));
 	}
 	
 	protected boolean processEntry(String entry){
 		if (entry.endsWith(getFileExtension())){
-			File temppath = new File(entry);
-			String partname = temppath.getName();
-			partname = InternUtil.intern(partname.substring(0,partname.indexOf('.')));
+			String partname = getPartName(entry);
 			String[] packageName = InternUtil.intern(getPackageName(entry));
 
 			if (packageName == null || packageName.length == 0){
@@ -150,6 +107,12 @@ public class ZipFileBuildPathEntry implements IBuildPathEntry{
 		}else return false;
 	}
 	
+	protected String getPartName(String entry) {
+		File temppath = new File(entry);
+		String partname = temppath.getName();
+		return InternUtil.intern(partname.substring(0,partname.indexOf('.')));
+	}
+	
 	protected String getFileExtension() {
 		return ".ir";
 	}
@@ -166,16 +129,7 @@ public class ZipFileBuildPathEntry implements IBuildPathEntry{
 		
 		return (String[]) list.toArray(new String[list.size()]);
 	}
-	
-	protected Map getPackagePartBinding(String[] packageName) {
-		Map map = (Map)partBindingsByPackage.get(packageName);
-	    if (map == null) {
-	        map = new HashMap();
-	        partBindingsByPackage.put(packageName, map);
-	    }
-	    return map;
-	}
-	  
+		  
    private Map getPackagePartNames(String[] packageName) {
         Map map = (Map)partNamesByPackage.get(packageName);
         if (map == null) {
@@ -203,11 +157,7 @@ public class ZipFileBuildPathEntry implements IBuildPathEntry{
 	public boolean isZipFile(){
 		return true;
 	}
-	
-	public boolean isProject(){
-		return false;
-	}
-	
+		
 	
 	public String getID(){
 		return path;
@@ -225,10 +175,6 @@ public class ZipFileBuildPathEntry implements IBuildPathEntry{
 	
 	public String getResourceLocation(String relativePath){
 		throw new UnsupportedOperationException();
-	}
-
-	public HashMap getPartBindingsWithoutPackage() {
-		return partBindingsWithoutPackage;
 	}
 
 	public HashMap getPartNamesByPackage() {

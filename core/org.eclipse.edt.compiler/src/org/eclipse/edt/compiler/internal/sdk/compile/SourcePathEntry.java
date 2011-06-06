@@ -13,7 +13,7 @@ package org.eclipse.edt.compiler.internal.sdk.compile;
 
 import java.io.File;
 
-import org.eclipse.edt.compiler.SystemEnvironment;
+import org.eclipse.edt.compiler.internal.sdk.utils.Util;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
@@ -30,7 +30,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
-import org.eclipse.edt.compiler.internal.sdk.utils.Util;
 
 
 /**
@@ -118,7 +117,7 @@ public class SourcePathEntry {
         }else{
         	String fileName = Util.getFilePartName(declaringFile);
 			IPartBinding fileBinding = getOrCompilePartBinding(packageName, fileName, true);
-			scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()),SystemEnvironment.getInstance());
+			scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()), declaringEnvironment.getSystemEnvironment());
         }
         BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, new ICompilerOptions(){
             public boolean isVAGCompatible() {
