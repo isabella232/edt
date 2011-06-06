@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IBinding;
@@ -40,6 +41,7 @@ import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 import org.eclipse.edt.mof.serialization.SerializationException;
+import org.eclipse.edt.mof.serialization.TypeNotFoundException;
 
 
 public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
@@ -51,6 +53,7 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
 	private Mof2Binding converter = new Mof2Binding(this);
 	private PartBindingCache bindingCache = new PartBindingCache();
 	private PackageBinding rootPackageBinding = new PackageBinding(defaultPackage, null, this);
+	private ISystemEnvironment systemEnvironment;
 
 	public EGL2IREnvironment() {
 		irEnv = Environment.INSTANCE;
@@ -60,6 +63,10 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
 	public EGL2IREnvironment(IEnvironment irEnv) {
 		irEnv.registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
 		this.irEnv = irEnv;
+	}
+	
+	public void setSystemEnvironment(ISystemEnvironment sysEnv) {
+		this.systemEnvironment = sysEnv;
 	}
 
 	protected boolean rootsContainPackage(String[] packageName) {
@@ -107,7 +114,7 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
 				if (irPart == null) irPart = findPart(mofSignature);
 				IPartBinding partBinding;
 				if (irPart == null) {
-					partBinding = SystemEnvironment.getInstance().getPartBinding(packageName, partName);
+					partBinding = getSystemEnvironment().getPartBinding(packageName, partName);
 				}
 				else {
 					partBinding = converter.convert(irPart);
@@ -143,7 +150,7 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
     public boolean hasPackage(String[] packageName) {
         return SourcePathEntry.getInstance().hasPackage(packageName)
 	      	|| rootsContainPackage(packageName)
-	      	|| SystemEnvironment.getInstance().hasPackage(packageName);
+	      	|| getSystemEnvironment().hasPackage(packageName);
     }
     
     public IPackageBinding getRootPackage() {
@@ -271,7 +278,17 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
 			return binding;
 		}
 		
-		return SystemEnvironment.getInstance().getCachedPartBinding(packageName, partName);
+		return getSystemEnvironment().getCachedPartBinding(packageName, partName);
 	}
+
+	@Override
+	public IBindingEnvironment getSystemEnvironment() {
+		return systemEnvironment;
+	}
+	
+	public MofSerializable findType(String mofSignature) throws TypeNotFoundException, DeserializationException {
+		return irEnv.findType(mofSignature);
+	}
+
 
 }

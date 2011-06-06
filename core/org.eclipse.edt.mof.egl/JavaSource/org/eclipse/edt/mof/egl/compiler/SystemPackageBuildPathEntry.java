@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.eclipse.edt.compiler.ISystemPackageBuildPathEntry;
 import org.eclipse.edt.compiler.ISystemPartBindingLoadedRequestor;
+import org.eclipse.edt.compiler.ZipFileBindingBuildPathEntry;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
@@ -28,106 +29,38 @@ import org.eclipse.edt.mof.serialization.IZipFileEntryManager;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 
 
-public class SystemPackageBuildPathEntry extends ZipFileBuildPathEntry implements ISystemPackageBuildPathEntry, IZipFileEntryManager{
+public class SystemPackageBuildPathEntry extends ZipFileBindingBuildPathEntry implements ISystemPackageBuildPathEntry{
 
-	private IEnvironment ienvironment = null;
 	private ISystemPartBindingLoadedRequestor requestor = null;
-	private ObjectStore store;
-	private String fileExtension;
-	private Mof2Binding converter;
+	private IEnvironment ienvironment = null;
 	
 	
 	public SystemPackageBuildPathEntry(IEnvironment env, String path, ISystemPartBindingLoadedRequestor req, String fileExtension, Mof2Binding converter) {
-		super(path);
-		
-		ienvironment = env;
+		super(path, fileExtension, converter);
+
+		this.ienvironment = env;
 		requestor = req;
-		this.fileExtension = fileExtension;
-		this.converter = converter;
-		processEntries();
 	}
-	
-	protected String getFileExtension() {
-		return fileExtension;
-	}
-	
-	
-	protected void setStore(ObjectStore store) {
-		this.store = store;
-	}
-	 
+		 
 	public void readPartBindings(){
 		
 		String[] entries = getAllEntries();
 
+		//force all the parts to be read and converted to bindings
 		for (int i = 0; i < entries.length; i++) {
-			IPartBinding partBinding = getPartBinding(entries[i]);
-			if (requestor != null && partBinding != null){
-				partBinding.setEnvironment(ienvironment);
-				requestor.partBindingLoaded(partBinding);
-			}
+			getPartBinding(entries[i]);
 		}
 	}
 	
-	
-	public IPartBinding getPartBinding(String entry){
-		if (entry == null || entry.length() == 0){
-			return null;
+	protected void bindingLoaded(IPartBinding partBinding) {
+		if (requestor != null && partBinding != null){
+			requestor.partBindingLoaded(partBinding);
 		}
-		
-		IPartBinding retVal = null;
-		EObject part = getPartObject(entry);
-		if(part != null){
-			
-    		retVal = converter.convert(part);;
-    		if (retVal != null){
-    			Map partpackage = getPackagePartBinding(InternUtil.intern(retVal.getPackageName()));
-    			partpackage.put(InternUtil.intern(retVal.getName()),retVal);
-    			
-    		}
-    	}
-    	return retVal;
-		
-	}
-	
-	protected EObject getPartObject(String entry){
-				
-			if (entry == null || entry.length() == 0){
-				return null;
-			}			
-			String key = convertToStoreKey(entry);
-			try {
-				return store.get(key);
-			} catch (DeserializationException e) {
-				e.printStackTrace();
-				throw new BuildException(e);
-			}
-	}
-	
-	protected String convertToStoreKey(String entry) {
-		//entries are in the form: "pkg1/pkg2/partName.eglxml". Need to convert this to:
-		//"egl:pkg1.pkg2.partName"
-		
-		//strip off the filename extension
-		String value = entry.substring(0, entry.indexOf("."));
-		
-		value = value.replaceAll("/", ".");
-		value = Type.EGL_KeyScheme + ":" + value;
-		
-		return value;
-		
-	}
-	
-	public boolean hasEntry(String entry) {
-		
-		entry = entry.toUpperCase().toLowerCase();
-		String[] entries = getAllEntries();
-		for (int i = 0; i < entries.length; i++) {
-			if (entry.equalsIgnoreCase(entries[i])) {
-				return true;
-			}
-		}
-		return false;
 	}
 
+	@Override
+	protected IEnvironment getEnvironment() {
+		return ienvironment;
+	}
+				
 }

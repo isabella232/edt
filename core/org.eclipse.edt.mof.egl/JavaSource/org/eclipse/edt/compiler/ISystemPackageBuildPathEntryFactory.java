@@ -9,8 +9,16 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.egl;
+package org.eclipse.edt.compiler;
+
+import java.io.File;
+import java.util.List;
+
+import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
-public interface NullLiteral extends Literal {
+public interface ISystemPackageBuildPathEntryFactory {
+	public static final String EDT_JAR_EXTENSION = ".eglar";
+	public static final String EDT_MOF_EXTENSION = ".mofar";
+	List<ISystemPackageBuildPathEntry> createEntries(ISystemEnvironment env, IEnvironment irEnv, File[] files,ISystemPartBindingLoadedRequestor req);
 }

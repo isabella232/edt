@@ -16,7 +16,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.SystemEnvironment;
+import org.eclipse.edt.compiler.Util;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
@@ -43,7 +45,6 @@ import org.eclipse.edt.compiler.internal.sdk.compile.ISDKProblemRequestorFactory
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathEntry;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathInfo;
 import org.eclipse.edt.compiler.internal.sdk.compile.TopLevelFunctionProcessor;
-import org.eclipse.edt.compiler.internal.sdk.utils.Util;
 import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.egl2mof.Egl2Mof;
@@ -57,14 +58,16 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
 
     private EGL2IREnvironment environment;
     private ISDKProblemRequestorFactory problemRequestorFactory;
+    private ISystemEnvironment sysEnv;
 
-    public Processor(IBuildNotifier notifier, ICompilerOptions compilerOptions, ISDKProblemRequestorFactory problemRequestorFactory) {
+    public Processor(IBuildNotifier notifier, ICompilerOptions compilerOptions, ISDKProblemRequestorFactory problemRequestorFactory, ISystemEnvironment sysEnv) {
         super(notifier, compilerOptions);
         this.problemRequestorFactory = problemRequestorFactory;
         if (problemRequestorFactory == null){
         	this.problemRequestorFactory = new DefaultSDKProblemRequestorFactory();
 
         }
+        this.sysEnv = sysEnv;
     }
     
     public void setEnvironment(EGL2IREnvironment environment){
@@ -152,7 +155,7 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
 		}else{
 			String fileName = Util.getFilePartName(declaringFile);
 			IPartBinding fileBinding = environment.getPartBinding(packageName, fileName);
-			scope = new SystemScope(new FileScope(new EnvironmentScope(environment, dependencyRequestor), (FileBinding)fileBinding, dependencyRequestor),SystemEnvironment.getInstance());
+			scope = new SystemScope(new FileScope(new EnvironmentScope(environment, dependencyRequestor), (FileBinding)fileBinding, dependencyRequestor), sysEnv);
 		}
 		return scope;
 	}

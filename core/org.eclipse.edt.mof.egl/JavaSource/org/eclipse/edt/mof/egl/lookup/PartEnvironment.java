@@ -26,6 +26,7 @@ import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 import org.eclipse.edt.mof.serialization.SerializationException;
+import org.eclipse.edt.mof.serialization.TypeNotFoundException;
 
 
 public class PartEnvironment implements IEnvironment {
@@ -42,6 +43,17 @@ public class PartEnvironment implements IEnvironment {
 	public EObject find(String key) throws MofObjectNotFoundException, DeserializationException {
 		return find(key, false);
 	}
+	
+	public MofSerializable findType(String mofSignature) throws TypeNotFoundException, DeserializationException {
+		EObject type;
+		try {
+			type = find(mofSignature);
+		} catch (MofObjectNotFoundException e) {
+			throw new TypeNotFoundException(e);
+		}
+		return (MofSerializable)type;
+	}
+
 
 	@Override
 	public EObject find(String key, boolean useProxies) throws MofObjectNotFoundException, DeserializationException {

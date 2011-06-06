@@ -18,7 +18,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.SystemEnvironment;
+import org.eclipse.edt.compiler.SystemEnvironmentUtil;
+import org.eclipse.edt.compiler.Util;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
@@ -29,6 +32,7 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.NullBuildNotifier;
+import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.sdk.IPartRequestor;
@@ -37,11 +41,14 @@ import org.eclipse.edt.compiler.internal.sdk.compile.ISDKProblemRequestorFactory
 import org.eclipse.edt.compiler.internal.sdk.compile.PartPathEntry;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathEntry;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathInfo;
-import org.eclipse.edt.compiler.internal.sdk.utils.Util;
 import org.eclipse.edt.compiler.internal.util.NameUtil;
 import org.eclipse.edt.compiler.sdk.compile.BuildPathException;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.impl.ProgramImpl;
+import org.eclipse.edt.mof.egl.lookup.EglLookupDelegate;
 import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
+import org.eclipse.edt.mof.egl.mof2binding.Mof2Binding;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.FileSystemObjectStore;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.ObjectStore;
@@ -67,6 +74,7 @@ public class EGL2IR {
 	
 	public static EGL2IREnvironment eglcEnv;
 	public static String SystemLibFolderPath;
+	public static ISystemEnvironment systemEnvironment;
 	public static void main(String[] args) {
 
 		EGL2IRArgumentProcessor.EGL2IRArguments processedArguments = new EGL2IRArgumentProcessor().processArguments(args);
@@ -112,6 +120,22 @@ public class EGL2IR {
     			initializeEGLPath(processedArgs);
     			
 	        	ASTManager.getInstance().setVAGComaptiblity(processedArgs.isVAGCompatible());
+	        	
+	        	SystemEnvironment sysEnv = new SystemEnvironment(Environment.INSTANCE, null);
+	        	Environment.INSTANCE.registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
+	            SystemPackageBuildPathEntryFactory factory = new SystemPackageBuildPathEntryFactory(new Mof2Binding(sysEnv));
+
+	            
+	            
+	            if (SystemLibFolderPath == null) {
+	            	String mofPath = SystemEnvironmentUtil.getSystemLibraryPath(ProgramImpl.class, "lib");
+	            	String compilerPath = SystemEnvironmentUtil.getSystemLibraryPath(BindingCreator.class, "lib");
+	            	SystemLibFolderPath = compilerPath;
+	            }
+            	sysEnv.initializeSystemPackages(SystemLibFolderPath, factory);
+            	
+            	eglcEnv.setSystemEnvironment(sysEnv);
+
 			    
 			    Processor processor = new Processor(NullBuildNotifier.getInstance(), new ICompilerOptions(){
 			        private boolean isVAGCompatible = processedArgs.isVAGCompatible();
@@ -124,52 +148,36 @@ public class EGL2IR {
 						// TODO Auto-generated method stub
 						return false;
 					}	        
-			    },problemRequestorFactory);
+			    },problemRequestorFactory, sysEnv);
 			    
 			    processor.setEnvironment(eglcEnv);
 			    
 	        	SourcePathInfo.getInstance().setSourceLocations(resolveSourcePathLocations(processedArgs.getSourcePathEntries(),processedArgs.getIROutputPath()));
 	            SourcePathEntry.getInstance().setDeclaringEnvironment(eglcEnv);
 	            SourcePathEntry.getInstance().setProcessor(processor);
-    			
-	            SystemPackageBuildPathEntryFactory factory = new SystemPackageBuildPathEntryFactory(eglcEnv, eglcEnv.getConverter());
-	            boolean result;
-	            if (SystemLibFolderPath == null) {
-	            	result = Util.initializeSystemPackages(new SystemPackageBuildPathEntryFactory(eglcEnv, eglcEnv.getConverter()));
-	            }
-	            else {
-	            	SystemEnvironment.getInstance().initializeSystemPackages(SystemLibFolderPath, factory);
-	            	result = true;
-	            }
 	            
-	    		if (result){
-	        					    
+	            
+    				            
+			    for (int j = 0; j < files.length;j++){
+			    	File file = files[j];
+				    org.eclipse.edt.compiler.core.ast.File fileAST = ASTManager.getInstance().getFileAST(file);
+		        	String[] packageName = createPackageName(fileAST);
+				    processor.addPart(packageName, Util.getCaseSensitiveFilePartName(file));
+				    SourcePathInfo.getInstance().addPart(packageName, Util.getFilePartName(file), ITypeBinding.FILE_BINDING, file, Util.getCaseSensitiveFilePartName(file));
 				    
-				    for (int j = 0; j < files.length;j++){
-				    	File file = files[j];
-					    org.eclipse.edt.compiler.core.ast.File fileAST = ASTManager.getInstance().getFileAST(file);
-			        	String[] packageName = createPackageName(fileAST);
-					    processor.addPart(packageName, Util.getCaseSensitiveFilePartName(file));
-					    SourcePathInfo.getInstance().addPart(packageName, Util.getFilePartName(file), ITypeBinding.FILE_BINDING, file, Util.getCaseSensitiveFilePartName(file));
-					    
-			        	for (Iterator iter = fileAST.getParts().iterator(); iter.hasNext();) {
-							Part part = (Part) iter.next();
-				            processor.addPart(packageName, part.getName().getCaseSensitiveIdentifier());
-				            addMessageTable(processor, part, file, processedArgs.getNlsCode(), processedArgs.getMsgTablePrefix());				            
-				            SourcePathInfo.getInstance().addPart(packageName, part.getName().getIdentifier(), Util.getPartType(part), file, part.getName().getCaseSensitiveIdentifier());
-				            if (part.isGeneratable() && partRequestor != null){
-				            	partRequestor.acceptPart(packageName, part.getName().getCaseSensitiveIdentifier());
-				            }
-			        	}
-				    }
+		        	for (Iterator iter = fileAST.getParts().iterator(); iter.hasNext();) {
+						Part part = (Part) iter.next();
+			            processor.addPart(packageName, part.getName().getCaseSensitiveIdentifier());
+			            addMessageTable(processor, part, file, processedArgs.getNlsCode(), processedArgs.getMsgTablePrefix());				            
+			            SourcePathInfo.getInstance().addPart(packageName, part.getName().getIdentifier(), Util.getPartType(part), file, part.getName().getCaseSensitiveIdentifier());
+			            if (part.isGeneratable() && partRequestor != null){
+			            	partRequestor.acceptPart(packageName, part.getName().getCaseSensitiveIdentifier());
+			            }
+		        	}
+			    }
 				    
 		
-		            processor.process();
-	    		}else{
-	    			System.out.println();
-	    			System.out.println("cannot find system packages.");
-	    			throw new RuntimeException("cannot find system packages.");
-	    		}
+		        processor.process();
 	    		
 		      }else{
 		            throw new RuntimeException("cannot find target file");

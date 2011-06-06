@@ -1,0 +1,80 @@
+package org.eclipse.edt.compiler;
+
+import java.util.List;
+
+public interface ICompiler {
+	
+	/**
+	 * @return a unique identifier for this compiler, which matches the ID in the plugin.xml extension.
+	 */
+	public String getId();
+	
+	/**
+	 * Sets the identifier for this compiler. This will be called when the class is instantiated, passing in the value from plugin.xml.
+	 * 
+	 * @param id  The identifier.
+	 */
+	public void setId(String id);
+	
+	/**
+	 * @return the display name for this compiler, never null or blank.
+	 */
+	public String getName();
+	
+	/**
+	 * Sets the name of this compiler (typically used for display purposes).
+	 * 
+	 * @param name  The name of this compiler.
+	 */
+	public void setName(String name);
+		
+	/**
+	 * @return the generators registered with this compiler, never null.
+	 */
+	public List<IGenerator> getGenerators();
+	
+	/**
+	 * Adds a generator to be used with this compiler.
+	 * 
+	 * @param generator  The generator.
+	 */
+	public void addGenerator(IGenerator generator);
+		
+	/**
+	 * Sets the version of this compiler.
+	 * 
+	 * @param version  The compiler version.
+	 */
+	public void setVersion(String version);
+	
+	/**
+	 * @return the version of this compiler, e.g. "1.0.0", never null.
+	 */
+	public String getVersion();
+	
+	/**
+	 * Returns the system environment. This is based on the path returned from getSystemEnvironment 
+	 * 
+	 * @return the system environment, never null.
+	 */
+	public ISystemEnvironment getSystemEnvironment();
+	
+
+	/**
+	 * Returns a string representing the path (path segments separated by java.io.File.pathSeparator) to the directories containing
+	 * archive file(s) (*.eglar, *.mofar). This set of directory paths is used to construct the chain of system environments. If a compiler
+	 * does not wish to contribute to the set of system parts,
+	 * 
+	 * @return the system environment path, possibly null.
+	 */
+	public String getSystemEnvironmentPath();
+
+	/**
+	 * Sets the path to the directory/directories containing the system parts.
+	 * 
+	 * @param path  The system environment path.
+	 */
+	public void setSystemEnvironmentPath(String path);
+
+	
+}

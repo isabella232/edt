@@ -9,8 +9,10 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.egl;
+package org.eclipse.edt.compiler;
 
+import org.eclipse.edt.compiler.binding.IPartBinding;
 
-public interface NullLiteral extends Literal {
+public interface ISystemPartBindingLoadedRequestor {
+	void partBindingLoaded(IPartBinding part);
 }

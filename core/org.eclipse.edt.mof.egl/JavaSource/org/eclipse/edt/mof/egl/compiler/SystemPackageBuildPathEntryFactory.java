@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.ISystemPackageBuildPathEntry;
 import org.eclipse.edt.compiler.ISystemPackageBuildPathEntryFactory;
 import org.eclipse.edt.compiler.ISystemPartBindingLoadedRequestor;
@@ -29,17 +30,17 @@ public class SystemPackageBuildPathEntryFactory implements
 		ISystemPackageBuildPathEntryFactory {
 
 	IEnvironment irEnv;
+	ISystemEnvironment sysEnv;
 	Mof2Binding converter;
 	
-	public SystemPackageBuildPathEntryFactory(IEnvironment irEnv, Mof2Binding converter) {
+	public SystemPackageBuildPathEntryFactory(Mof2Binding converter) {
 		super();
-		this.irEnv = irEnv;
 		this.converter = converter;
 	}
 
 
-	private SystemPackageBuildPathEntry createEGLEntry(org.eclipse.edt.compiler.internal.core.lookup.IEnvironment env, String path, ISystemPartBindingLoadedRequestor req) {
-		SystemPackageBuildPathEntry entry = new SystemPackageBuildPathEntry(env, path, req, EGL2IR.EGLXML, converter);
+	private SystemPackageBuildPathEntry createEGLEntry(String path, ISystemPartBindingLoadedRequestor req) {
+		SystemPackageBuildPathEntry entry = new SystemPackageBuildPathEntry(sysEnv, path, req, EGL2IR.EGLXML, converter);
 		
 		ObjectStore store = new ZipFileObjectStore(new File(path), irEnv, ObjectStore.XML, EGL2IR.EGLXML, entry);
 		entry.setStore(store);
@@ -47,8 +48,8 @@ public class SystemPackageBuildPathEntryFactory implements
 		return entry;
 	}
 
-	private SystemPackageMOFPathEntry createMOFEntry(org.eclipse.edt.compiler.internal.core.lookup.IEnvironment env, String path, ISystemPartBindingLoadedRequestor req) {
-		SystemPackageMOFPathEntry entry = new SystemPackageMOFPathEntry(env, path, req, ZipFileObjectStore.MOFXML, converter);
+	private SystemPackageMOFPathEntry createMOFEntry(String path, ISystemPartBindingLoadedRequestor req) {
+		SystemPackageMOFPathEntry entry = new SystemPackageMOFPathEntry(sysEnv, path, req, ZipFileObjectStore.MOFXML, converter);
 		
 		ObjectStore store = new ZipFileObjectStore(new File(path), irEnv, ObjectStore.XML, ZipFileObjectStore.MOFXML, entry);
 		entry.setStore(store);
@@ -57,35 +58,30 @@ public class SystemPackageBuildPathEntryFactory implements
 	}
 	
 	
-	public ISystemPackageBuildPathEntry[] createEntries(org.eclipse.edt.compiler.internal.core.lookup.IEnvironment env, File[] files,
+	public List<ISystemPackageBuildPathEntry> createEntries(ISystemEnvironment sysEnv, IEnvironment irEnv, File[] files,
 			ISystemPartBindingLoadedRequestor req) {
 		
-		List list = new ArrayList();
+		this.irEnv = irEnv;
+		this.sysEnv = sysEnv;
+		
+		List<ISystemPackageBuildPathEntry> list = new ArrayList();
 
 	  	for (int i = 0; i < files.length; i++){
 	  		File file = files[i];
 	  		if (file.isFile()) {
 		  		if (file.getName().endsWith(EDT_JAR_EXTENSION)){
-		  			list.add(createEGLEntry(env, file.getAbsolutePath(), req));
+		  			list.add(createEGLEntry(file.getAbsolutePath(), req));
 	  			}
 		  		else {
 			  		if (file.getName().endsWith(EDT_MOF_EXTENSION)){
-			  			list.add(createMOFEntry(env, file.getAbsolutePath(), req)); 
+			  			list.add(createMOFEntry(file.getAbsolutePath(), req)); 
 			  		}
 		  		}
 	  		}
 	  		
 		 }	
-	  
-	  	SystemPackageBuildPathEntry[] result = (SystemPackageBuildPathEntry[])list.toArray(new SystemPackageBuildPathEntry[list.size()]);
-
-	  	if (converter != null) {
-		  	for (int i = 0; i < result.length; i++) {
-				result[i].readPartBindings();
-			}
-	  	}
-	  	
-	  	return result;
+	  	  	
+	  	return list;
 	}
 
 

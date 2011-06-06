@@ -14,7 +14,10 @@ package org.eclipse.edt.mof.egl.api.gen;
 import java.io.File;
 import java.util.Set;
 
-import org.eclipse.edt.compiler.internal.sdk.utils.Util;
+import org.eclipse.edt.compiler.SystemEnvironment;
+import org.eclipse.edt.compiler.SystemEnvironmentUtil;
+import org.eclipse.edt.compiler.Util;
+import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofFactory;
 import org.eclipse.edt.mof.egl.BinaryExpression;
@@ -26,7 +29,9 @@ import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.compiler.SystemPackageBuildPathEntryFactory;
+import org.eclipse.edt.mof.egl.lookup.EglLookupDelegate;
 import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
+import org.eclipse.edt.mof.egl.mof2binding.Mof2Binding;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
 import org.eclipse.edt.mof.serialization.DeserializationException;
@@ -66,7 +71,11 @@ public class TestLoadPart {
 		typeStore = new FileSystemObjectStore(root, PartEnvironment.INSTANCE, "XML", ".eglxml");
 		PartEnvironment.INSTANCE.registerObjectStore(Type.EGL_KeyScheme, typeStore);
 		
-		Util.initializeSystemPackages(new SystemPackageBuildPathEntryFactory(PartEnvironment.INSTANCE, null));
+    	SystemEnvironment sysEnv = new SystemEnvironment(Environment.INSTANCE, null);
+    	Environment.INSTANCE.registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
+        SystemPackageBuildPathEntryFactory factory = new SystemPackageBuildPathEntryFactory(new Mof2Binding(sysEnv));
+        String sysPath = SystemEnvironmentUtil.getSystemLibraryPath(BindingCreator.class, "lib");
+    	sysEnv.initializeSystemPackages(sysPath, factory);
 
 		try {
 			MofFactory mof = MofFactory.INSTANCE;
@@ -109,18 +118,18 @@ public class TestLoadPart {
 //			return false;
 //		}
 		
-		public boolean visit(BinaryExpression expr) {
-			Operation op = expr.getOperation();
-			return false;
-		}
-		
-//		public boolean visit(Field field) {
-//			
-//			String name = IRUtils.getFileName(field);
-//			System.out.println("Field: " + field.getId() + " = " + name);
-//			
-//			return true;
+//		public boolean visit(BinaryExpression expr) {
+//			Operation op = expr.getOperation();
+//			return false;
 //		}
+		
+		public boolean visit(Field field) {
+			
+			String name = IRUtils.getFileName(field);
+			System.out.println("Field: " + field.getId() + " = " + name);
+			
+			return true;
+		}
 //		
 //		public boolean visit(Statement stmt) {
 //

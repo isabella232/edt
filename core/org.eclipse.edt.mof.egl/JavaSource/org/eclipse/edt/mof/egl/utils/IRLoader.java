@@ -15,12 +15,18 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.Vector;
 
-import org.eclipse.edt.compiler.internal.sdk.utils.Util;
+import org.eclipse.edt.compiler.SystemEnvironment;
+import org.eclipse.edt.compiler.SystemEnvironmentUtil;
+import org.eclipse.edt.compiler.Util;
+import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.compiler.SystemPackageBuildPathEntryFactory;
+import org.eclipse.edt.mof.egl.impl.ProgramImpl;
+import org.eclipse.edt.mof.egl.lookup.EglLookupDelegate;
 import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
+import org.eclipse.edt.mof.egl.mof2binding.Mof2Binding;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.FileSystemObjectStore;
@@ -75,7 +81,11 @@ public class IRLoader {
 		typeStore = new FileSystemObjectStore(root, PartEnvironment.INSTANCE, "XML", ".eglxml");
 		PartEnvironment.INSTANCE.registerObjectStore(Type.EGL_KeyScheme, typeStore);
 
-		Util.initializeSystemPackages(new SystemPackageBuildPathEntryFactory(PartEnvironment.INSTANCE, null));
+    	SystemEnvironment sysEnv = new SystemEnvironment(Environment.INSTANCE, null);
+    	Environment.INSTANCE.registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
+        SystemPackageBuildPathEntryFactory factory = new SystemPackageBuildPathEntryFactory(new Mof2Binding(sysEnv));
+        String sysPath = SystemEnvironmentUtil.getSystemLibraryPath(BindingCreator.class, "lib");
+    	sysEnv.initializeSystemPackages(sysPath, factory);
 		
 		EObject eClass = null;
 		eClass = Environment.INSTANCE.find(key);
