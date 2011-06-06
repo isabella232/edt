@@ -4,11 +4,11 @@
     <extension point="org.eclipse.edt.ide.core.generators">
 		<provider
 			id="org.eclipse.edt.gen.generator.example.ide.ExampleGeneratorProvider"
-			class="org.eclipse.edt.gen.generator.example.ide.ExampleGeneratorProvider"
+			class="org.eclipse.edt.gen.generator.example.ide.ExampleGenerator"
 			name="%ExampleGeneratorName"
 			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
 			version="0.7.0"
-			provider="IBM"
+			provider="Eclipse"
 			description="%ExampleGeneratorDescription"
 		/>
    	</extension>

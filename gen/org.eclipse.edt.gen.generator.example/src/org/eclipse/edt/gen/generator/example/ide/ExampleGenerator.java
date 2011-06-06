@@ -23,7 +23,7 @@ import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-public class ExampleGeneratorProvider extends AbstractGenerator {
+public class ExampleGenerator extends AbstractGenerator {
 
 	public void generate(String filePath, Part part, IEnvironment env, boolean invokedByBuild) {
 		try {
