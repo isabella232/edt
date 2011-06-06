@@ -310,6 +310,8 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		fBundleContext = context;
+		
+		AbstractCompiler.setIDE(true);
 
 //		fTargetPlatformService = context.registerService(ITargetPlatformService.class.getName(), TargetPlatformService.getDefault(), new Hashtable());
 		
@@ -369,9 +371,6 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 		
 		startIndexing();
 		
-		if (PlatformUI.isWorkbenchRunning()) {
-			new InitializeSystemPartsJob().schedule(); // Do this as the last line of start() to avoid classloader deadlock
-		}
 	}
 
 	public BundleContext getBundleContext() {

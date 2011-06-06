@@ -91,12 +91,14 @@ public class ProjectSettingsUtility {
 	 * @return the project's compiler ID, possibly null.
 	 */
 	public static String getCompilerId(IProject project) {
-		Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_COMPILER_ID);
-		String setting = findSetting(project.getFullPath(), prefs, false);
-		if (setting != null) {
-			setting = setting.trim();
-			if (setting.length() != 0) {
-				return setting;
+		if (project != null) {
+			Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_COMPILER_ID);
+			String setting = findSetting(project.getFullPath(), prefs, false);
+			if (setting != null) {
+				setting = setting.trim();
+				if (setting.length() != 0) {
+					return setting;
+				}
 			}
 		}
 		return null;

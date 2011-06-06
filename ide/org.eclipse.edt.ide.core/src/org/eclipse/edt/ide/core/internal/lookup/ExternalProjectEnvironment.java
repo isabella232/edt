@@ -15,6 +15,7 @@ import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
+import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
@@ -52,13 +53,7 @@ public class ExternalProjectEnvironment extends AbstractProjectEnvironment{
 	}
 
     public IPartBinding getPartBinding(String[] packageName, String partName) {
-        IPartBinding result = null;
-        for(int i = 0; i < buildPathEntries.length; i++) {
-	        result = buildPathEntries[i].getPartBinding(packageName, partName);
-	        if(result != null) return result;
-	    }
-        
-       return SystemEnvironment.getInstance().getPartBinding(packageName, partName);
+    	return null;
     }
     
     public IPartBinding getNewPartBinding(String[] packageName, String caseSensitiveInternedPartName, int kind) {
@@ -66,13 +61,7 @@ public class ExternalProjectEnvironment extends AbstractProjectEnvironment{
     }
       
     public boolean hasPackage(String[] packageName) {
-        for(int i = 0; i < buildPathEntries.length; i++) {
-            if(buildPathEntries[i].hasPackage(packageName)) {
-                return true;
-            }
-        }
-        
-        return SystemEnvironment.getInstance().hasPackage(packageName);
+    	return false;
     }
     
     public IPackageBinding getRootPackage() {
@@ -113,5 +102,11 @@ public class ExternalProjectEnvironment extends AbstractProjectEnvironment{
 	
 	public String getProjectName() {
 		return getProject().getName();
+	}
+
+	@Override
+	public IBindingEnvironment getSystemEnvironment() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

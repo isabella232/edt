@@ -48,20 +48,9 @@ public class GenerateEnvironmentManager {
     private void init() {
         projectEnvironments = new HashMap();
     }
-    
-    public void clearAllCaches() {
-		SystemEnvironment.getInstance().clearParts();
-		GenerateEnvironmentManager.getInstance().clearAll();
-		GenerateBuildPathEntryManager.getInstance().clearAll();
-		GenerateZipFileBuildPathEntryManager.getInstance().clearAll();
-    }
-    
-    public GenerateEnvironment getGenerateEnvironment(Object project, boolean clearAllCaches) {
-    	
-    	if (clearAllCaches) {
-    		clearAllCaches();
-    	}
-    	
+        
+    public GenerateEnvironment getGenerateEnvironment(Object project) {
+    	    	
     	GenerateEnvironment result = (GenerateEnvironment) projectEnvironments.get(project);
         
         if(result == null) {

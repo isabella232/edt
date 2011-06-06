@@ -359,7 +359,6 @@ public class GeneratePartsOperation extends GenerateOperation{
 
 		synchronized (lock) {
 
-			clearGenerationCaches();
 			GenerationRequest genRequest = null;
 			IEGLPartWrapper[] partList = null;
 
@@ -412,7 +411,7 @@ public class GeneratePartsOperation extends GenerateOperation{
 						} else {
 							Part part = null;
 							try {
-								GenerateEnvironment environment = GenerateEnvironmentManager.getInstance().getGenerateEnvironment(project, false);
+								GenerateEnvironment environment = GenerateEnvironmentManager.getInstance().getGenerateEnvironment(project);
 								
 								String[] packageName;
 								if (EGLCore.create(project).isBinary()) {
@@ -452,7 +451,6 @@ public class GeneratePartsOperation extends GenerateOperation{
 							} catch (final Exception e) {
 								handleUnknownException(e, messageRequestor);
 							} finally {
-								clearGenerationCaches();
 							}
 						}
 						if (monitor != null) {
@@ -472,7 +470,6 @@ public class GeneratePartsOperation extends GenerateOperation{
 //							Logger.log(this, "EGLGenerationWizardGeneratePartsOperation.generateParts(): Error retrieving results", f); //$NON-NLS-1$
 //						}
 					}
-					clearGenerationCaches();
 				}
 			}
 			
@@ -518,10 +515,6 @@ public class GeneratePartsOperation extends GenerateOperation{
 		buildStackTraceMessages(e, messageRequestor);
 		Logger.log(this, "GeneratePartsOperation.generateParts():  Error during generation", e); //$NON-NLS-1$
 
-	}
-
-	protected void clearGenerationCaches() {
-		GenerateEnvironmentManager.getInstance().clearAllCaches();
 	}
 	
 	protected boolean hasError(IFile file) {
@@ -632,7 +625,7 @@ public class GeneratePartsOperation extends GenerateOperation{
 		if (generators.length != 0) {
 			IEnvironment env = BinaryFileManager.getInstance().getEnvironment(file.getProject());
 			for (int i = 0; i < generators.length; i++) {
-				generators[i].generate(file, (Part)part.clone(), env, invokedByBuild);
+				generators[i].generate(file.getFullPath().toString(), (Part)part.clone(), env, invokedByBuild);
 			}
 		}
 	}

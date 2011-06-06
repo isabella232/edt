@@ -18,8 +18,10 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
 import org.eclipse.edt.compiler.binding.PartBinding;
+import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.ide.core.internal.builder.IDEEnvironment;
 
 /**
  * ProjectEnvironment is the environment to use when compiling a part for real
@@ -60,7 +62,7 @@ public class ProjectEnvironment extends AbstractProjectEnvironment {
 	        if(result != null) return result;
 	    }
         
-       return SystemEnvironment.getInstance().getPartBinding(packageName, partName);
+       return getSystemEnvironment().getPartBinding(packageName, partName);
     }
     
 	public IPartBinding getCachedPartBinding(String[] packageName, String partName) {
@@ -85,7 +87,7 @@ public class ProjectEnvironment extends AbstractProjectEnvironment {
             }
         }
         
-        return SystemEnvironment.getInstance().hasPackage(packageName);
+        return getSystemEnvironment().hasPackage(packageName);
     }
     
     public void markPartBindingInvalid(String[] packageName, String partName) {
@@ -126,7 +128,7 @@ public class ProjectEnvironment extends AbstractProjectEnvironment {
 	        }
 	    }
 
-        return SystemEnvironment.getInstance().getPartBinding(packageName, caseInsensitiveInternedPartName);
+        return IDEEnvironment.findSystemEnvironment(project).getPartBinding(packageName, caseInsensitiveInternedPartName);
 	}
 	
 	public String getProjectName() {
@@ -135,5 +137,10 @@ public class ProjectEnvironment extends AbstractProjectEnvironment {
 
 	public ProjectBuildPathEntry getDeclaringProjectBuildPathEntry() {
 		return declaringProjectBuildPathEntry;
+	}
+
+	@Override
+	public IBindingEnvironment getSystemEnvironment() {
+		return IDEEnvironment.findSystemEnvironment(project);
 	}
 }

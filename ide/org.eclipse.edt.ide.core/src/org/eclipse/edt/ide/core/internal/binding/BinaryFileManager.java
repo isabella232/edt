@@ -239,17 +239,11 @@ public class BinaryFileManager implements IResourceChangeListener {
 		        // 1. Register object stores for the project and its dependencies.
 		        storeCache.registerObjectStores(project, env, new ArrayList());
 		        
-		        // 2. Register object stores for contributed system environments.
-		        ICompiler compiler = ProjectSettingsUtility.getCompiler(project);
+		        // 2. Register object stores for system environments.
+		        ICompiler compiler = ProjectSettingsUtility.getCompiler(project);		        
 		        if (compiler != null) {
-		        	IDEEnvironment systemEnv = SystemEnvironmentManager.getSystemEnvironment(compiler);
-		        	if (systemEnv != null) {
-		        		env.appendEnvironment(systemEnv);
-		        	}
+		        	 env.appendStores(compiler.getSystemEnvironment().getStores());
 		        }
-		        
-		        // 3. Register object stores for the base system environment.
-		        env.appendEnvironment(Environment.INSTANCE);
 			}
 			return env;
 		}

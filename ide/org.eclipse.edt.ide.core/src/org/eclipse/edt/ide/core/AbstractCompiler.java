@@ -12,28 +12,25 @@
 package org.eclipse.edt.ide.core;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.edt.compiler.ISystemEnvironment;
+import org.eclipse.edt.compiler.internal.util.NameUtil;
+import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
+import org.osgi.framework.Bundle;
 
 /**
  * Base implementation of ICompiler intended to be subclassed by clients.
  */
-public abstract class AbstractCompiler implements ICompiler {
-	
+public abstract class AbstractCompiler extends org.eclipse.edt.compiler.AbstractCompiler implements ICompiler {
+
 	/**
-	 * The id.
+	 * Tells if the compiler is running in an Eclipse IDE.
 	 */
-	protected String id;
+	private static boolean isIDE;
 	
-	/**
-	 * The (display) name.
-	 */
-	protected String name;
-	
-	/**
-	 * The generators.
-	 */
-	protected List<IGenerator> generators;
 	
 	/**
 	 * The id of the preference page associated with this compiler.
@@ -41,57 +38,25 @@ public abstract class AbstractCompiler implements ICompiler {
 	protected String preferencePageId;
 	
 	/**
-	 * The compiler version.
-	 */
-	protected String version;
-	
-	/**
 	 * Constructor.
 	 */
 	public AbstractCompiler() {
-		this.generators = new ArrayList<IGenerator>();
+		super();
 	}
+		
 	
+	/**
+	 * The id of the preference page associated with this compiler.
+	 */
+	protected static void setIDE(boolean bool) {
+		isIDE = bool;
+	}
+
 	@Override
-	public void setId(String id) {
-		this.id = id;
+	public boolean isIDE() {
+		return isIDE;
 	}
-	
-	@Override
-	public String getId() {
-		return id;
-	}
-	
-	@Override
-	public void setName(String name) {
-		if (name != null && name.length() == 0) { // treat blank like null
-			this.name = null;
-		}
-		else {
-			this.name = name;
-		}
-	}
-	
-	@Override
-	public String getName() {
-		return name == null ? id : name;
-	}
-	
-	@Override
-	public File getSystemEnvironmentRoot() {
-		return null;
-	}
-	
-	@Override
-	public List<IGenerator> getGenerators() {
-		return generators;
-	}
-	
-	@Override
-	public void addGenerator(IGenerator generator) {
-		generators.add(generator);
-	}
-	
+
 	@Override
 	public void setPreferencePageId(String id) {
 		this.preferencePageId = id;
@@ -101,14 +66,52 @@ public abstract class AbstractCompiler implements ICompiler {
 	public String getPreferencePageId() {
 		return preferencePageId;
 	}
-	
-	@Override
-	public void setVersion(String version) {
-		this.version = version;
+		
+	protected String getPathToPluginDirectory(String pluginID, String subDir) {
+		Bundle bundle = Platform.getBundle(pluginID);
+		try {
+			String file = FileLocator.resolve( bundle.getEntry( "/" ) ).getFile(); //$NON-NLS-1$
+			
+			// Replace Eclipse's slashes with the system's file separator.
+			file = file.replace( '/', File.separatorChar );
+			file = file + subDir;
+			return file;
+		}
+		catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+		return null;
 	}
 	
 	@Override
-	public String getVersion() {
-		return version == null ? "" : version; //$NON-NLS-1$
+	public String getSystemEnvironmentPath() {
+		
+		if (systemEnvironmentRootPath == null) {
+
+			if (isIDE()) {
+				systemEnvironmentRootPath = getPathToPluginDirectory("org.eclipse.edt.compiler", "lib");
+			}
+			else {
+				return super.getSystemEnvironmentPath();
+			}
+		}
+		
+		return systemEnvironmentRootPath;
 	}
+
+	protected ISystemEnvironment createSystemEnvironment() {
+		if (!isIDE()) {
+			return super.createSystemEnvironment();
+		}
+		
+		String[] paths = NameUtil.toStringArray(getSystemEnvironmentPath(), File.pathSeparator);
+		
+		ISystemEnvironment currEnv = null;
+		for (int i = paths.length-1; i >= 0; i--) {
+			currEnv = SystemEnvironmentManager.getSystemEnvironment(paths[i], currEnv);
+		}
+		return currEnv;
+	}
+
+	
 }

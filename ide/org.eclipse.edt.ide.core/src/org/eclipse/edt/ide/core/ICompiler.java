@@ -11,58 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core;
 
-import java.io.File;
 import java.util.List;
+
+import org.eclipse.edt.compiler.ISystemEnvironment;
 
 /**
  * Enables clients to define a compiler. A compiler may contribute to the System parts used during compilation.
  */
-public interface ICompiler {
-	
-	/**
-	 * @return a unique identifier for this compiler, which matches the ID in the plugin.xml extension.
-	 */
-	public String getId();
-	
-	/**
-	 * Sets the identifier for this compiler. This will be called when the class is instantiated, passing in the value from plugin.xml.
-	 * 
-	 * @param id  The identifier.
-	 */
-	public void setId(String id);
-	
-	/**
-	 * @return the display name for this compiler, never null or blank.
-	 */
-	public String getName();
-	
-	/**
-	 * Sets the name of this compiler (typically used for display purposes).
-	 * 
-	 * @param name  The name of this compiler.
-	 */
-	public void setName(String name);
-	
-	/**
-	 * Returns an optional system environment to be appended to the core system environment. The file should
-	 * be a handle to the directory containing any archives (*.eglar, *.mofar).
-	 * 
-	 * @return the system environment path, possibly null.
-	 */
-	public File getSystemEnvironmentRoot();
-	
-	/**
-	 * @return the generators registered with this compiler, never null.
-	 */
-	public List<IGenerator> getGenerators();
-	
-	/**
-	 * Adds a generator to be used with this compiler.
-	 * 
-	 * @param generator  The generator.
-	 */
-	public void addGenerator(IGenerator generator);
-	
+public interface ICompiler extends org.eclipse.edt.compiler.ICompiler{
+		
 	/**
 	 * @return the preference page id of this compiler.
 	 */
@@ -76,14 +33,9 @@ public interface ICompiler {
 	public void setPreferencePageId(String id);
 	
 	/**
-	 * Sets the version of this compiler.
-	 * 
-	 * @param version  The compiler version.
+	 * @return Returns true if the compiler is running in an Eclipse IDE
 	 */
-	public void setVersion(String version);
+	public boolean isIDE();
+
 	
-	/**
-	 * @return the version of this compiler, e.g. "1.0.0", never null.
-	 */
-	public String getVersion();
 }

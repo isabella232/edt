@@ -216,76 +216,6 @@ public class TopLevelFunctionProcessingQueue {
 		}
 	}
 
-    private void compileUsingExternalProjectEnvironment(TopLevelFunctionProcessingUnit functionUnit) {
-		
-    	ExternalProjectEnvironment functionExternalProjectEnvironment = (ExternalProjectEnvironment)functionUnit.function.getEnvironment();
-	 	IProject functionProject = functionExternalProjectEnvironment.getProject().getReferencingProject();
-		String[] functionPackageName = functionUnit.function.getPackageName();
-		String functionPackageNameString = asString(functionPackageName);
-		String functionPartName = functionUnit.function.getName();
-		String[] contextPackageName = containerContext.getPackageName();
-		String contextPartName = containerContext.getName();
-		String contextSpecificCaseSensitiveInternedFunctionName = functionUnit.contextSpecificCaseSensitiveInternedFunctionName;
-			
-		if(Builder.DEBUG){
-		    System.out.println("\nProcessing Top Level Function: " + contextSpecificCaseSensitiveInternedFunctionName); //$NON-NLS-1$
-		}
-		
-		// compile the top level function within the context of the part stored in the processing unit
-		// get declaring file from other project
-		
-		IClassFile classFile = getClassFile(functionProject, functionPackageNameString, functionPartName);			
-		String functionDeclaringFileSource = null;
-		
-		try {
-			functionDeclaringFileSource = classFile.getSource();
-		} catch (EGLModelException e) {
-		}
-		
-		if (functionDeclaringFileSource == null || functionDeclaringFileSource.length() == 0){
-			throw new BuildException("Unable to compile top level function " + functionUnit.function.getPackageQualifiedName() + " : EGL source code not be found.");
-		}
-		
-		String fileAstKey = getFileAstKey(classFile, functionProject, functionPackageNameString);
-		
-		File fileAST  = ASTManager.getInstance().getFileAST(fileAstKey, functionDeclaringFileSource);
-		TopLevelFunction functionAST  = (TopLevelFunction)ASTManager.getInstance().getPartAST(fileAST, null, functionPartName);
-		boolean isContainerContextDependent = functionAST.isContainerContextDependent();
-		
-		AccumulatingProblemrRequestor accumulationProblemRequestor = new AccumulatingProblemrRequestor();
-		IProblemRequestor functionProbReq = new FunctionContainerContextTopLevelFunctionProblemRequestor(accumulationProblemRequestor, isContainerContextDependent);
-		
-		//TODO will eventually need to set a more accurate filename in the functionInfo
-		processedFunctionInfos.add(new TopLevelFunctionInfo(functionAST, fileAstKey, functionProbReq, classFile));
-		IPartBinding functionBinding = new BindingCreator(contextProjectEnvrionment, functionPackageName, contextSpecificCaseSensitiveInternedFunctionName, functionAST).getPartBinding();
-		functionBinding.setEnvironment(contextProjectEnvrionment);
-		
-		
-		
-		Scope scope = createScope(functionExternalProjectEnvironment, functionPackageName, contextPackageName, contextPartName, fileAST, fileAstKey, isContainerContextDependent);
-		
-		IProblemRequestor saveReq = cappedProblemRequestor.getRequestor();
-		cappedProblemRequestor.setRequestor(functionProbReq);
-		Compiler.getInstance().compileTopLevelFunction(functionAST, functionBinding, scope, containerContext, dependencyInfo, cappedProblemRequestor, compilerOptions);
-		
-		if (functionProbReq.hasError()) {
-			
-			MarkerProblemRequestor contextReq = createContextProblemRequestor(contextPackageName, contextPartName);
-			cappedProblemRequestor.setRequestor(contextReq);
-			cappedProblemRequestor.acceptProblem(getContextAst(contextReq.file, contextPartName).getName(), IProblemRequestor.VALIDATION_ERROR_COMPILING_BINARY_FUNCTION, new String[]{buildPartName(functionPackageName, functionPartName), contextPartName});
-		}
-		
-		for (Iterator iter = dependencyInfo.getTopLevelFunctions().iterator(); iter.hasNext();) {
-			IPartBinding function = (IPartBinding) iter.next();
-			addPart(function);
-		}
-		cappedProblemRequestor.setRequestor(saveReq);
-		
-		if(Builder.DEBUG){
-		    System.out.println("Finished Processing: " + contextSpecificCaseSensitiveInternedFunctionName + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-	}
-
     private void compileUsingProjectEnvironmentWithEglar(TopLevelFunctionProcessingUnit functionUnit) {
 		
     	ProjectEnvironment functionProjectEnv = (ProjectEnvironment)functionUnit.function.getEnvironment();
@@ -363,10 +293,6 @@ public class TopLevelFunctionProcessingQueue {
 			return;
 		}
 		
-		if (functionUnit.function.getEnvironment() instanceof ExternalProjectEnvironment) {
-			compileUsingExternalProjectEnvironment(functionUnit);
-			return;
-		}
 		throw new BuildException("Unable to compile top level function " + functionUnit.function.getPackageQualifiedName() + " : EGL source code not be found.");
 		
 	}
@@ -383,26 +309,10 @@ public class TopLevelFunctionProcessingQueue {
 			IPartBinding fileBinding = functionProjectEnvironment.getPartBinding(functionPackageName, fileName);
 			fileScope = new FileScope(new EnvironmentScope(functionProjectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);	
 		}
-		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironment.getInstance()), functionContainerScope);
+		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,IDEEnvironment.findSystemEnvironment(functionProject)), functionContainerScope);
 		return scope;
 	}
 	
-	private Scope createScope(ExternalProjectEnvironment env, String[] functionPackageName, String[] contextPackageName, String contextPartName, File fileAST, String fileNameKey, boolean isContainerContextDependent) {
-		Scope fileScope;
-		if(isContainerContextDependent){
-			String fileName = org.eclipse.edt.ide.core.internal.utils.Util.getFilePartName(contextProjectInfo.getPartOrigin(contextPackageName, contextPartName).getEGLFile());
-			IPartBinding fileBinding = contextProjectEnvrionment.getPartBinding(contextPackageName, fileName);
-			fileScope = new FileScope(new EnvironmentScope(contextProjectEnvrionment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);
-		}else{
-			
-			
-			IPartBinding fileBinding = env.getDeclaringProjectBuildPathEntry().getFileBinding(functionPackageName, fileNameKey, fileAST);
-			fileScope = new FileScope(new EnvironmentScope(env, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);	
-		}
-		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironment.getInstance()), functionContainerScope);
-		return scope;
-	}
-
 	
 	private Scope createScope(ProjectEnvironment env, String[] functionPackageName, String[] contextPackageName, String contextPartName, File fileAST, String fileNameKey, boolean isContainerContextDependent) {
 		Scope fileScope;
@@ -416,7 +326,7 @@ public class TopLevelFunctionProcessingQueue {
 			IPartBinding fileBinding = env.getDeclaringProjectBuildPathEntry().getFileBinding(functionPackageName, fileNameKey, fileAST);
 			fileScope = new FileScope(new EnvironmentScope(env, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);	
 		}
-		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironment.getInstance()), functionContainerScope);
+		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,IDEEnvironment.findSystemEnvironment(env.getProject())), functionContainerScope);
 		return scope;
 	}
 	

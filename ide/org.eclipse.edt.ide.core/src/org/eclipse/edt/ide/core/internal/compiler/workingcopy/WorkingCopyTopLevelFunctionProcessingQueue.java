@@ -39,6 +39,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
+import org.eclipse.edt.ide.core.internal.builder.IDEEnvironment;
 import org.eclipse.edt.ide.core.internal.compiler.Binder;
 import org.eclipse.edt.ide.core.internal.compiler.Compiler;
 import org.eclipse.edt.ide.core.internal.dependency.AbstractDependencyInfo;
@@ -165,81 +166,8 @@ public class WorkingCopyTopLevelFunctionProcessingQueue {
 		if (functionUnit.function.getEnvironment() instanceof WorkingCopyProjectEnvironment) {
 			compileUsingProjectEnvironment(functionUnit);
 			return;
-		}
-		
-		if (functionUnit.function.getEnvironment() instanceof ExternalProjectEnvironment) {
-			compileUsingExternalProjectEnvironment(functionUnit);
-			return;
-		}
-		
+		}		
 	}
-
-	 private void compileUsingExternalProjectEnvironment(WorkingCopyTopLevelFunctionProcessingUnit functionUnit) {
-	    	ExternalProjectEnvironment functionExternalProjectEnvironment = (ExternalProjectEnvironment)functionUnit.function.getEnvironment();
-		 	IProject functionProject = functionExternalProjectEnvironment.getProject().getReferencingProject();
-			String[] functionPackageName = functionUnit.function.getPackageName();
-			String functionPackageNameString = asString(functionPackageName);
-			String functionPartName = functionUnit.function.getName();
-			String[] contextPackageName = containerContext.getPackageName();
-			String contextPartName = containerContext.getName();
-			String contextSpecificCaseSensitiveInternedFunctionName = functionUnit.contextSpecificCaseSensitiveInternedFunctionName;
-				
-			// compile the top level function within the context of the part stored in the processing unit
-			// get declaring file from other project
-			
-			IClassFile classFile = getClassFile(functionProject, functionPackageNameString, functionPartName);			
-			String functionDeclaringFileSource = null;
-			
-			try {
-				functionDeclaringFileSource = classFile.getSource();
-			} catch (EGLModelException e) {
-			}
-						
-			String fileAstKey = getFileAstKey(classFile, functionProject, functionPackageNameString);
-			
-			File fileAST  = WorkingCopyASTManager.getInstance().getFileAST(fileAstKey, functionDeclaringFileSource);
-			TopLevelFunction functionAST  = (TopLevelFunction)WorkingCopyASTManager.getInstance().getPartAST(fileAST, null, functionPartName);
-						
-			boolean isContainerContextDependent = functionAST.isContainerContextDependent();
-			AccumulatingProblemrRequestor accumulationProblemRequestor = new AccumulatingProblemrRequestor();
-			IProblemRequestor functionProbReq = new FunctionContainerContextTopLevelFunctionProblemRequestor(accumulationProblemRequestor, isContainerContextDependent);
-			
-			topLevelFunctionInfos.add(new TopLevelFunctionInfo(functionAST, fileAstKey, functionProbReq, classFile));;
-			IPartBinding functionBinding = new BindingCreator(contextProjectEnvrionment, functionPackageName, contextSpecificCaseSensitiveInternedFunctionName, functionAST).getPartBinding();
-			functionBinding.setEnvironment(contextProjectEnvrionment);
-			
-			Scope scope = createScope(functionExternalProjectEnvironment, functionPackageName, contextPackageName, contextPartName, fileAST, fileAstKey, isContainerContextDependent);
-			IFile file = contextProjectInfo.getPartOrigin(contextPackageName, contextPartName).getEGLFile();
-			
-			IProblemRequestor contextReq = problemRequestorFactory.getFileProblemRequestor(file);
-			
-			if(contextReq != null && contextReq != NullProblemRequestor.getInstance()){
-				Compiler.getInstance().compilePart(functionAST, functionBinding, scope, dependencyInfo, functionProbReq, compilerOptions);
-				
-				//if we found a compile error on the TLF when compiling in the context of the container, add an error to the context's problem requestor
-				if (functionProbReq.hasError()) {					
-					contextReq.acceptProblem(getContextAst(file, contextPartName).getName(), IProblemRequestor.VALIDATION_ERROR_COMPILING_BINARY_FUNCTION, new String[]{buildPartName(functionPackageName, functionPartName), contextPartName});
-				}
-				
-			}else{
-				Binder.getInstance().bindPart(functionAST, functionBinding, scope, dependencyInfo, functionProbReq, compilerOptions);
-			}
-	
-			IProblemRequestor problemRequestor = problemRequestorFactory.getContainerContextTopLevelProblemRequestor(null, functionPartName, contextPartName, contextProjectInfo.getPartOrigin(containerContext.getPackageName(), containerContext.getName()).getEGLFile().getFullPath(), isContainerContextDependent);
-			if (problemRequestor != null && problemRequestor != NullProblemRequestor.getInstance()){
-				//add any problems to the correct problem requestor
-				Iterator i = accumulationProblemRequestor.getProblems().iterator();
-				while(i.hasNext()) {
-					Problem prob = (Problem)i.next();
-					problemRequestor.acceptProblem(prob.getStartOffset(), prob.getEndOffset(), prob.getSeverity(), prob.getProblemKind(), prob.getInserts());
-				}
-			}
-			for (Iterator iter = dependencyInfo.getTopLevelFunctions().iterator(); iter.hasNext();) {
-				IPartBinding function = (IPartBinding) iter.next();
-				addPart(function);
-			}
-			
-		}
 
 	 private void compileUsingProjectEnvironmentWithEglar(WorkingCopyTopLevelFunctionProcessingUnit functionUnit) {
 		 	WorkingCopyProjectEnvironment functionProjectEnv = (WorkingCopyProjectEnvironment)functionUnit.function.getEnvironment();
@@ -361,24 +289,9 @@ public class WorkingCopyTopLevelFunctionProcessingQueue {
 			fileScope = new FileScope(new EnvironmentScope(env, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);	
 			dependencyInfo.recordTypeBinding(fileBinding);			
 		}
-		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironment.getInstance()), functionContainerScope);
+		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,IDEEnvironment.findSystemEnvironment(env.getProject())), functionContainerScope);
 		return scope;
 	}
-
-	private Scope createScope(ExternalProjectEnvironment env, String[] functionPackageName, String[] contextPackageName, String contextPartName, File fileAST, String fileNameKey, boolean isContainerContextDependent) {
-		Scope fileScope;
-		if(isContainerContextDependent){
-			String fileName = Util.getFilePartName(contextProjectInfo.getPartOrigin(contextPackageName, contextPartName).getEGLFile());
-			IPartBinding fileBinding = contextProjectEnvrionment.getPartBinding(contextPackageName, fileName);
-			fileScope = new FileScope(new EnvironmentScope(contextProjectEnvrionment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);
-		}else{
-			IPartBinding fileBinding = env.getDeclaringProjectBuildPathEntry().getFileBinding(functionPackageName, fileNameKey, fileAST);
-			fileScope = new FileScope(new EnvironmentScope(env, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);	
-			dependencyInfo.recordTypeBinding(fileBinding);			
-		}
-		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironment.getInstance()), functionContainerScope);
-		return scope;
-	}	
 	 
 	private Scope createScope(IProject functionProject, String[] functionPackageName, String[] contextPackageName, String contextPartName, IFile functionDeclaringFile, boolean isContainerContextDependent) {
 		Scope fileScope;
@@ -393,7 +306,7 @@ public class WorkingCopyTopLevelFunctionProcessingQueue {
 			fileScope = new FileScope(new EnvironmentScope(functionProjectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);	
 			dependencyInfo.recordTypeBinding(fileBinding);			
 		}
-		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironment.getInstance()), functionContainerScope);
+		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,IDEEnvironment.findSystemEnvironment(functionProject)), functionContainerScope);
 		return scope;
 	}
 

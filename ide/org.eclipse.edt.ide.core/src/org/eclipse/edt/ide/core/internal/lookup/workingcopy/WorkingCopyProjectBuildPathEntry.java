@@ -31,6 +31,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileASTScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
+import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
@@ -39,6 +40,7 @@ import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
+import org.eclipse.edt.ide.core.internal.builder.IDEEnvironment;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyASTManager;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyProcessingQueue;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
@@ -69,6 +71,11 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 
 		public IPackageBinding getRootPackage() {
 			return declaringEnvironment.getRootPackage();
+		}
+
+		@Override
+		public IBindingEnvironment getSystemEnvironment() {
+			return WorkingCopyProjectBuildPathEntry.this.getSystemEnvironment();
 		}		
 	}	
 	
@@ -235,9 +242,9 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
         	String fileName = Util.getFilePartName(declaringFile);
 			IPartBinding fileBinding = getPartBinding(packageName, fileName, true);
 			if(!fileBinding.isValid()){
-				scope = new SystemScope(new FileASTScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, ASTManager.getInstance().getFileAST(declaringFile)),SystemEnvironment.getInstance());
+				scope = new SystemScope(new FileASTScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, ASTManager.getInstance().getFileAST(declaringFile)), getSystemEnvironment());
 			}else{
-				scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()),SystemEnvironment.getInstance());
+				scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()),getSystemEnvironment());
 			}
         }
         BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, new ICompilerOptions(){
@@ -369,5 +376,9 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
     public FileBinding getFileBindingFromCache(String[] packageName, String partName){
         return (FileBinding)bindingCache.get(packageName, partName);
     }
+    
+	private IBindingEnvironment getSystemEnvironment() {
+		return IDEEnvironment.findSystemEnvironment(getProject());
+	}		
 	
 }

@@ -19,8 +19,10 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
 import org.eclipse.edt.compiler.binding.PartBinding;
+import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.ide.core.internal.builder.IDEEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 
@@ -63,7 +65,7 @@ public class WorkingCopyProjectEnvironment implements IEnvironment {
 	        if(result != null) return result;
 	    }
         
-       return SystemEnvironment.getInstance().getPartBinding(packageName, partName);
+       return getSystemEnvironment().getPartBinding(packageName, partName);
 	}
 
 	public IPartBinding getNewPartBinding(String[] packageName,	String caseSensitiveInternedPartName, int kind) {
@@ -81,7 +83,7 @@ public class WorkingCopyProjectEnvironment implements IEnvironment {
             }
         }
         
-        return SystemEnvironment.getInstance().hasPackage(packageName);
+        return getSystemEnvironment().hasPackage(packageName);
 	}
 
 	public IPackageBinding getRootPackage() {
@@ -100,7 +102,7 @@ public class WorkingCopyProjectEnvironment implements IEnvironment {
 	        }
 	    }
 
-        return SystemEnvironment.getInstance().getPartBinding(packageName, caseInsensitiveInternedPartName);
+        return getSystemEnvironment().getPartBinding(packageName, caseInsensitiveInternedPartName);
 	}	
 	
 	public void clear() {
@@ -111,6 +113,12 @@ public class WorkingCopyProjectEnvironment implements IEnvironment {
 
 	public WorkingCopyProjectBuildPathEntry getDeclaringProjectBuildPathEntry() {
 		return declaringProjectBuildPathEntry;
+	}
+
+
+	@Override
+	public IBindingEnvironment getSystemEnvironment() {
+		return IDEEnvironment.findSystemEnvironment(getProject());
 	}
 
 }

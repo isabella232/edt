@@ -15,6 +15,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.edt.compiler.ISystemEnvironment;
+import org.eclipse.edt.compiler.SystemEnvironment;
+import org.eclipse.edt.compiler.SystemIREnvironment;
 import org.eclipse.edt.compiler.internal.core.builder.NullBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathEntry;
@@ -22,6 +25,7 @@ import org.eclipse.edt.ide.core.ICompiler;
 import org.eclipse.edt.ide.core.internal.builder.IDEEnvironment;
 import org.eclipse.edt.mof.egl.compiler.Processor;
 import org.eclipse.edt.mof.egl.compiler.SystemPackageBuildPathEntryFactory;
+import org.eclipse.edt.mof.egl.mof2binding.Mof2Binding;
 import org.eclipse.edt.mof.serialization.Environment;
 
 /**
@@ -29,34 +33,17 @@ import org.eclipse.edt.mof.serialization.Environment;
  */
 public class SystemEnvironmentManager {
 	
-	private static Map<ICompiler, IDEEnvironment> storeMap = new HashMap();
+	private static Map<String, ISystemEnvironment> storeMap = new HashMap();
 	
-	public static IDEEnvironment getSystemEnvironment(ICompiler compiler) {
-		if (storeMap.containsKey(compiler)) {
-			return storeMap.get(compiler);
+	public static ISystemEnvironment getSystemEnvironment(String path, ISystemEnvironment parentEnv) {
+		if (storeMap.containsKey(path)) {
+			return storeMap.get(path);
 		}
+				
+		SystemEnvironment sysEnv = new SystemEnvironment(new SystemIREnvironment(), parentEnv);
+		sysEnv.initializeSystemPackages(path,  new SystemPackageBuildPathEntryFactory(new Mof2Binding(sysEnv)));
 		
-		IDEEnvironment env;
-		File root = compiler.getSystemEnvironmentRoot();
-		if (root == null || !root.exists()) {
-			env = null;
-		}
-		else {
-			Processor processor = new Processor(NullBuildNotifier.getInstance(), new ICompilerOptions(){		            
-			        public boolean isVAGCompatible() {return true;}
-					public boolean isAliasJSFNames() {return false;}}
-					,null);
-			    
-			env = new IDEEnvironment(null);
-			env.appendEnvironment(Environment.INSTANCE);
-			processor.setEnvironment(env);			    
-			SourcePathEntry.getInstance().setDeclaringEnvironment(env);
-			SourcePathEntry.getInstance().setProcessor(processor);
-			ContributedSystemEnvironment systemEnv = new ContributedSystemEnvironment();
-			systemEnv.initializeSystemPackages(root, new SystemPackageBuildPathEntryFactory(env, env.getConverter()));
-		}
-		
-		storeMap.put(compiler, env);
-		return env;
+		storeMap.put(path, sysEnv);
+		return sysEnv;
 	}
 }
