@@ -31,7 +31,7 @@ import org.eclipse.edt.mof.egl.ReplaceStatement;
 import org.eclipse.edt.mof.egl.ShowStatement;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
-import org.eclipse.edt.mof.egl.compiler.EGL2IREnvironment;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
 public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
@@ -42,7 +42,7 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 		super(null);
 	}
 
-	public DefaultIOStatementGenerator(EGL2IREnvironment env) {
+	public DefaultIOStatementGenerator(IEnvironment env) {
 		super(env);
 	}
 

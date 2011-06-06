@@ -104,11 +104,11 @@ import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeName;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.compiler.Context;
-import org.eclipse.edt.mof.egl.compiler.EGL2IREnvironment;
 import org.eclipse.edt.mof.egl.lookup.ProxyElement;
 import org.eclipse.edt.mof.egl.lookup.ProxyPart;
 import org.eclipse.edt.mof.egl.utils.TimeStampAndIntervalPatternFixer;
 import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 import org.eclipse.edt.mof.serialization.ProxyEClass;
 import org.eclipse.edt.mof.serialization.ProxyEObject;
@@ -126,7 +126,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 
 	MofFactory mof;
 	IrFactory factory;
-	EGL2IREnvironment env;
+	IEnvironment env;
 	Context context;
 	
 	// Is the type being created in the Mof meta model hierarchy
@@ -151,7 +151,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	public Map<IBinding, ProxyEObject> proxies;
 	
 	
-	Egl2MofBase(EGL2IREnvironment env) {
+	Egl2MofBase(IEnvironment env) {
 		this.env = env;
 		this.mof = MofFactory.INSTANCE;
 		this.factory = IrFactory.INSTANCE;
@@ -160,7 +160,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		proxies = new HashMap<IBinding, ProxyEObject>();
 	}
 	
-	public void setEnvironment(EGL2IREnvironment env) {
+	public void setEnvironment(IEnvironment env) {
 		this.env = env;
 	}
 

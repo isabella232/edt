@@ -98,9 +98,9 @@ import org.eclipse.edt.mof.egl.SubstringAccess;
 import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.UnaryExpression;
-import org.eclipse.edt.mof.egl.compiler.EGL2IREnvironment;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
 abstract class Egl2MofExpression extends Egl2MofStatement {
@@ -108,7 +108,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	private Stack<Expression> sveStack = new Stack<Expression>();
 	private Stack<Name> localStack = new Stack<Name>();
  
-	Egl2MofExpression(EGL2IREnvironment env) {
+	Egl2MofExpression(IEnvironment env) {
 		super(env);
 	}
 

@@ -20,9 +20,8 @@ import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.compiler.Context;
-import org.eclipse.edt.mof.egl.compiler.EGL2IREnvironment;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.TypeStore;
 
 
@@ -144,11 +143,11 @@ public class Egl2Mof extends Egl2MofExpression {
 
 	}
 			
- 	public Egl2Mof(EGL2IREnvironment env) {
+ 	public Egl2Mof(IEnvironment env) {
 		super(env);
 	}
 
- 	public Egl2Mof(EGL2IREnvironment env, TypeStore store) {
+ 	public Egl2Mof(IEnvironment env, TypeStore store) {
 		this(env);
 		env.setDefaultSerializeStore(Type.EGL_KeyScheme, store);
 	}

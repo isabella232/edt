@@ -20,7 +20,6 @@ import org.eclipse.edt.compiler.binding.ConstantFormFieldBinding;
 import org.eclipse.edt.compiler.binding.ConstructorBinding;
 import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
@@ -35,7 +34,6 @@ import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.BooleanLiteral;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.EnumerationField;
-import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.FloatLiteral;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -66,7 +64,6 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.FunctionStatement;
-import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
@@ -83,14 +80,14 @@ import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.VariableFormField;
-import org.eclipse.edt.mof.egl.compiler.EGL2IREnvironment;
 import org.eclipse.edt.mof.egl.lookup.ProxyPart;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.utils.EList;
 
 
 class Egl2MofMember extends Egl2MofPart {
 
-	Egl2MofMember(EGL2IREnvironment env) {
+	Egl2MofMember(IEnvironment env) {
 		super(env);
 	}
 

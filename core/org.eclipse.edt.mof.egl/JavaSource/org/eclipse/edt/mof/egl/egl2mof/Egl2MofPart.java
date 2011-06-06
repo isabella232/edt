@@ -76,8 +76,8 @@ import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.StructuredRecord;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.compiler.EGL2IREnvironment;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.ProxyEObject;
 
 
@@ -87,7 +87,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	public List<NestedFunction> functionsToProcess = new ArrayList<NestedFunction>();
 	 
 
- 	Egl2MofPart(EGL2IREnvironment env) {
+ 	Egl2MofPart(IEnvironment env) {
 		super(env);
 	}
 

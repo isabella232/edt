@@ -32,7 +32,7 @@ import org.eclipse.edt.mof.egl.OpenStatement;
 import org.eclipse.edt.mof.egl.PrepareStatement;
 import org.eclipse.edt.mof.egl.ReplaceStatement;
 import org.eclipse.edt.mof.egl.ShowStatement;
-import org.eclipse.edt.mof.egl.compiler.EGL2IREnvironment;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
 public class AbstractIOStatementGenerator extends Egl2Mof implements
@@ -40,7 +40,7 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 	
 	public IrFactory irFactory = IrFactory.INSTANCE;
 
-	public AbstractIOStatementGenerator(EGL2IREnvironment env) {
+	public AbstractIOStatementGenerator(IEnvironment env) {
 		super(env);
 	}
 

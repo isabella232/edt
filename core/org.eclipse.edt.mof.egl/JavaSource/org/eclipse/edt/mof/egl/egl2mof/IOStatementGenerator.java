@@ -30,13 +30,13 @@ import org.eclipse.edt.mof.egl.OpenStatement;
 import org.eclipse.edt.mof.egl.PrepareStatement;
 import org.eclipse.edt.mof.egl.ReplaceStatement;
 import org.eclipse.edt.mof.egl.ShowStatement;
-import org.eclipse.edt.mof.egl.compiler.EGL2IREnvironment;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
 public interface IOStatementGenerator {
 	Map<String, IOStatementGenerator> Registry = new HashMap<String, IOStatementGenerator>();
 
-	void setEnvironment(EGL2IREnvironment env);
+	void setEnvironment(IEnvironment env);
 	
 	AddStatement genAddStatement(org.eclipse.edt.compiler.core.ast.AddStatement stmt, Map<IBinding, EObject> bindingToElementMap );
 	CloseStatement genCloseStatement(org.eclipse.edt.compiler.core.ast.CloseStatement stmt, Map<IBinding, EObject> bindingToElementMap );

@@ -25,7 +25,6 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
 import org.eclipse.edt.compiler.core.ast.OtherwiseClause;
 import org.eclipse.edt.compiler.core.ast.PrepareStatement;
-import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.CallStatement;
@@ -59,10 +58,9 @@ import org.eclipse.edt.mof.egl.ThrowStatement;
 import org.eclipse.edt.mof.egl.TransferStatement;
 import org.eclipse.edt.mof.egl.TryStatement;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.WhenClause;
 import org.eclipse.edt.mof.egl.WhileStatement;
-import org.eclipse.edt.mof.egl.compiler.EGL2IREnvironment;
 import org.eclipse.edt.mof.egl.egl2mof.sql.SQLIOStatementGenerator;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
 @SuppressWarnings("unchecked")
@@ -72,7 +70,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		IOStatementGenerator.Registry.put(EGL_lang_package, new DefaultIOStatementGenerator());
 	}
 	
-	Egl2MofStatement(EGL2IREnvironment env) {
+	Egl2MofStatement(IEnvironment env) {
 		super(env);
 		for (Entry<String, IOStatementGenerator> entry : IOStatementGenerator.Registry.entrySet()) {
 			entry.getValue().setEnvironment(env);

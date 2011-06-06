@@ -38,11 +38,9 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
-import org.eclipse.edt.mof.egl.compiler.EGL2IREnvironment;
 import org.eclipse.edt.mof.egl.egl2mof.DefaultIOStatementGenerator;
 import org.eclipse.edt.mof.egl.sql.SqlAddStatement;
 import org.eclipse.edt.mof.egl.sql.SqlClause;
-import org.eclipse.edt.mof.egl.sql.SqlCloseStatement;
 import org.eclipse.edt.mof.egl.sql.SqlDeleteStatement;
 import org.eclipse.edt.mof.egl.sql.SqlExecuteStatement;
 import org.eclipse.edt.mof.egl.sql.SqlFactory;
@@ -55,6 +53,7 @@ import org.eclipse.edt.mof.egl.sql.SqlPrepareStatement;
 import org.eclipse.edt.mof.egl.sql.SqlReplaceStatement;
 import org.eclipse.edt.mof.egl.sql.SqlToken;
 import org.eclipse.edt.mof.egl.sql.SqlWhereCurrentOfToken;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
 public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
@@ -67,7 +66,7 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 		super(null);
 	}
 	
-	public SQLIOStatementGenerator(EGL2IREnvironment env) {
+	public SQLIOStatementGenerator(IEnvironment env) {
 		super(env);
 	}
 
