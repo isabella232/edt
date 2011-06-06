@@ -107,6 +107,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new EClassBinding(packageName, name);
+			binding.setValid(true);
 			putProxy(binding, ir);
 			putBinding(ir, binding);
 		}
@@ -144,6 +145,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 					String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 					String name = InternUtil.intern(ir.getName());
 					binding = new ClassBinding(packageName, name);
+					((ClassBinding)binding).setValid(true);
 					partStack.push((IPartBinding)binding);
 					handleVisitLogicAndDataPart(ir, (ClassBinding)binding);
 					partStack.pop();				
@@ -166,6 +168,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 					String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 					String name = InternUtil.intern(ir.getName());
 					binding = new ClassBinding(packageName, name);
+					((ClassBinding)binding).setValid(true);
 					partStack.push((IPartBinding)binding);
 					handleVisitStructPart(ir, (ClassBinding)binding);
 					partStack.pop();				
@@ -183,6 +186,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new ProgramBinding(packageName, name);
+			binding.setValid(true);
 			partStack.push(binding);
 			handleVisitLogicAndDataPart((LogicAndDataPart)ir, (FunctionContainerBinding)binding);
 			for (ProgramParameter parm : ir.getParameters()) {
@@ -202,6 +206,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new HandlerBinding(packageName, name);
+			binding.setValid(true);
 			partStack.push(binding);
 			handleVisitLogicAndDataPart((LogicAndDataPart)ir, (FunctionContainerBinding)binding);
 			partStack.pop();
@@ -216,6 +221,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new LibraryBinding(packageName, name);
+			binding.setValid(true);
 			partStack.push(binding);
 			handleVisitLogicAndDataPart((LogicAndDataPart)ir, (FunctionContainerBinding)binding);
 			partStack.pop();
@@ -230,6 +236,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new ServiceBinding(packageName, name);
+			binding.setValid(true);
 			partStack.push(binding);
 			handleVisitLogicAndDataPart((LogicAndDataPart)ir, (FunctionContainerBinding)binding);
 			for (Interface iface : ir.getInterfaces()) {
@@ -249,6 +256,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new InterfaceBinding(packageName, name);
+			binding.setValid(true);
 			partStack.push(binding);
 			handleVisitLogicAndDataPart(ir, (InterfaceBinding)binding);
 			partStack.pop();
@@ -263,6 +271,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new ExternalTypeBinding(packageName, name);
+			binding.setValid(true);
 			partStack.push(binding);
 			handleVisitLogicAndDataPart(ir, (ExternalTypeBinding)binding);
 			for (StructPart type : ir.getSuperTypes()) {
@@ -293,6 +302,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new FlexibleRecordBindingImpl(packageName, name);
+			binding.setValid(true);
 			partStack.push(binding);
 			handleDataPart(ir, (FlexibleRecordBinding)binding);
 			partStack.pop();
@@ -316,6 +326,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new FixedRecordBindingImpl(packageName, name);
+			binding.setValid(true);
 			partStack.push(binding);
 			handleDataPart(ir, (FixedRecordBinding)binding);
 			partStack.pop();
@@ -333,6 +344,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new FormGroupBinding(packageName, name);
+			binding.setValid(true);
 			partStack.push(binding);
 			handleVisitPart(ir, binding);
 			for (Form form : ir.getForms()) {
@@ -352,6 +364,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String name = InternUtil.intern(ir.getName());
 			FormGroupBinding parent = (FormGroupBinding)getBinding(ir.getContainer());
 			binding = new FormBinding(packageName, name, parent);
+			((FormBinding)binding).setValid(true);
 			partStack.push((FormBinding)binding);
 			handleDataPart(ir, (FormBinding)binding);
 			partStack.pop();
@@ -366,6 +379,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new DelegateBinding(packageName, name);
+			binding.setValid(true);
 			partStack.push(binding);
 			handleVisitPart(ir, binding);
 			partStack.pop();
@@ -393,6 +407,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new TopLevelFunctionBinding(packageName, name);
+			binding.setValid(true);
 			handleVisitPart(ir, binding);
 			for (Parameter parm : ir.getFunction().getParameters()) {
 				parm.accept(this);
@@ -414,6 +429,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new DataTableBinding(packageName, name);
+			binding.setValid(true);
 			partStack.push(binding);
 			handleDataPart(ir, (DataTableBinding)binding);
 			partStack.pop();
@@ -428,6 +444,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new DataItemBinding(packageName, name);
+			binding.setValid(true);
 			partStack.push(binding);
 			handleVisitPart(ir, binding);
 			ir.getBaseType().accept(this);
@@ -444,6 +461,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new FlexibleRecordBindingImpl(packageName, name);
+			binding.setValid(true);
 			putBinding(ir,  binding);
 			partStack.push(binding);
 			handleAnnotations(ir, binding);
@@ -466,6 +484,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new FlexibleRecordBindingImpl(packageName, name);
+			binding.setValid(true);
 			partStack.push(binding);
 			putBinding(ir,  binding);
 			handleAnnotations(ir, binding);
@@ -488,6 +507,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new FlexibleRecordBindingImpl(packageName, name);
+			binding.setValid(true);
 			putBinding(ir,  binding);
 			partStack.push(binding);
 			for (EField field : ir.getEFields()) {
@@ -555,6 +575,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new EClassBinding(packageName, name);
+			binding.setValid(true);
 			putPartBinding(key,  binding);
 			if (ir instanceof ProxyEClass) {
 				putProxy(binding, (ProxyEClass)ir);
@@ -595,6 +616,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new EnumerationTypeBinding(packageName, name);
+			binding.setValid(true);
 			putBinding(ir,  binding);
 			partStack.push(binding);
 			for (EEnumLiteral field : ir.getEntries()) {
@@ -625,6 +647,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
 			binding = new EnumerationTypeBinding(packageName, name);
+			binding.setValid(true);
 			putBinding(ir,  binding);
 			partStack.push(binding);
 			for (EEnumLiteral field : ir.getLiterals()) {
