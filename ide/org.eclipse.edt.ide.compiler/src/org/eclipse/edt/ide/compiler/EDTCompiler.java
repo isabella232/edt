@@ -12,13 +12,9 @@
 package org.eclipse.edt.ide.compiler;
 
 import java.io.File;
-import java.io.IOException;
 
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.compiler.SystemEnvironmentUtil;
 import org.eclipse.edt.ide.core.AbstractCompiler;
-import org.osgi.framework.Bundle;
 
 public class EDTCompiler extends AbstractCompiler {
 	/**
