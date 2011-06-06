@@ -13,7 +13,9 @@ package org.eclipse.edt.ide.compiler.gen;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin;
 import org.eclipse.edt.ide.core.AbstractGenerator;
 import org.eclipse.edt.ide.core.EDTRuntimeContainer;
@@ -31,8 +33,9 @@ public class JavaGeneratorProvider extends AbstractGenerator {
 		runtimeContainers = new EDTRuntimeContainer[] { EDTCompilerIDEPlugin.JAVA_RUNTIME_CONTAINER };
 	}
 	
-	public void generate(IFile file, Part part, IEnvironment env, boolean invokedByBuild) {
+	public void generate(String filePath, Part part, IEnvironment env, boolean invokedByBuild) {
 		try {
+			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
 			EclipseEGL2Java cmd = new EclipseEGL2Java(file, part, this);
 			cmd.generate(buildArgs(file, part), new EclipseJavaGenerator(cmd), env);
 		}

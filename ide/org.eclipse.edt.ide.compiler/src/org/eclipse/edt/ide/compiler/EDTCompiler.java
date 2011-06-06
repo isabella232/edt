@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.edt.compiler.SystemEnvironmentUtil;
 import org.eclipse.edt.ide.core.AbstractCompiler;
 import org.osgi.framework.Bundle;
 
@@ -26,23 +27,25 @@ public class EDTCompiler extends AbstractCompiler {
 	protected File systemRoot;
 	
 	public EDTCompiler() {
-		//TODO this is just to test it out. it's unknown if this family will actually have a system root.
-		Bundle bundle = Platform.getBundle( EDTCompilerIDEPlugin.PLUGIN_ID );
-		try {
-			String file = FileLocator.resolve( bundle.getEntry( "/" ) ).getFile(); //$NON-NLS-1$
-			
-			// Replace Eclipse's slashes with the system's file separator.
-			file = file.replace( '/', File.separatorChar );
-			file = file + "lib";
-			systemRoot = new File(file);
-		}
-		catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
+		
 	}
 	
 	@Override
-	public File getSystemEnvironmentRoot() {
-		return systemRoot;
+	public String getSystemEnvironmentPath() {
+		
+		if (systemEnvironmentRootPath == null) {
+
+			String path;
+			if (isIDE()) {
+				path = getPathToPluginDirectory( EDTCompilerIDEPlugin.PLUGIN_ID, "lib");
+			}
+			else {
+				path = SystemEnvironmentUtil.getSystemLibraryPath(EDTCompilerIDEPlugin.class, "lib");
+			}
+			
+			systemEnvironmentRootPath = path + File.pathSeparator + super.getSystemEnvironmentPath();
+		}
+		
+		return systemEnvironmentRootPath;
 	}
 }

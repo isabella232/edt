@@ -12,6 +12,8 @@
 package org.eclipse.edt.ide.compiler.gen;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
@@ -29,8 +31,9 @@ public class WorthlessGeneratorProvider extends JavaGeneratorProvider {
 	}
 	
 	@Override
-	public void generate(IFile file, Part part, IEnvironment env, boolean invokedByBuild) {
+	public void generate(String filePath, Part part, IEnvironment env, boolean invokedByBuild) {
 		try {
+			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
 			EclipseEGL2Java cmd = new EclipseEGL2Java(file, part, this);
 			cmd.generate(buildArgs(file, part), new WorthlessGenerator(cmd), env);
 		}
