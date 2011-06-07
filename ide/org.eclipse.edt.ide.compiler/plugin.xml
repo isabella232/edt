@@ -23,7 +23,7 @@
 			name="%JavaGeneratorName"
 			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
 			version="0.7.0"
-			provider="Eclipse"
+			provider="Eclipse.org"
 			description="%JavaGeneratorDescription"
 		/>
 		<provider
@@ -32,7 +32,7 @@
 			name="Worthless Generator"
 			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
 			version="0.7.0"
-			provider="Eclipse"
+			provider="Eclipse.org"
 			description="A generator that just generates stub classes. For illustration purposes only."
 			parentGeneratorId="org.eclipse.edt.ide.gen.JavaGenProvider"
 		/>
@@ -42,7 +42,7 @@
 			name="%JavaScriptGeneratorName"
 			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
 			version="0.7.0"
-			provider="Eclipse"
+			provider="Eclipse.org"
 			description="%JavaScriptGeneratorDescription"
 		/>
 	</extension>
