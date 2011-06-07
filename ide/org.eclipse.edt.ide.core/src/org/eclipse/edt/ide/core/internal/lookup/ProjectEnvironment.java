@@ -48,7 +48,7 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
     
     private ProjectIREnvironment irEnvironment;
     
-    private final Mof2Binding converter;
+    private Mof2Binding converter;
     
     protected ProjectEnvironment(IProject project) {
         super();
@@ -113,7 +113,7 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
 	        if(result != null) return result;
 	    }
         
-       return null;
+        return getSystemEnvironment().getCachedPartBinding(packageName, partName);
 	}
 
     
