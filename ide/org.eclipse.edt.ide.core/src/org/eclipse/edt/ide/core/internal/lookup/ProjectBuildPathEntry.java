@@ -279,12 +279,14 @@ public class ProjectBuildPathEntry implements IProjectBuildPathEntry {
 		return realizingEnvironment;
 	}
 
-	public void clear() {
+	public void clear(boolean clean) {
 		bindingCache = new PartBindingCache();
 		
-		for (ObjectStore store : stores) {
-			if (store instanceof CachingObjectStore) {
-				((CachingObjectStore)store).clearCache();
+		if (clean) {
+			for (ObjectStore store : stores) {
+				if (store instanceof CachingObjectStore) {
+					((CachingObjectStore)store).clearCache();
+				}
 			}
 		}
 	}

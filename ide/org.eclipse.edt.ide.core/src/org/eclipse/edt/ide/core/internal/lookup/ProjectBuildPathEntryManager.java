@@ -72,11 +72,11 @@ public class ProjectBuildPathEntryManager {
 		projectBuildPathEntries.remove(project);
 	}
 
-	public void clear(IProject project) {
+	public void clear(IProject project, boolean clean) {
 		ProjectBuildPathEntry result  = (ProjectBuildPathEntry)projectBuildPathEntries.get(project);
 		
 		if(result != null){
-			result.clear();
+			result.clear(clean);
 		}		
 	}
 	

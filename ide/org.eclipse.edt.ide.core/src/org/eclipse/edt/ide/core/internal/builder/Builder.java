@@ -93,7 +93,7 @@ public class Builder extends IncrementalProjectBuilder {
 			     	doClean();
 			     	cleanBuild(null,notifier);
 				}else if (BuildManager.getInstance().isFullBuildRequired(getProject())){
-					ProjectBuildPathEntryManager.getInstance().clear(getProject());
+					ProjectBuildPathEntryManager.getInstance().clear(getProject(), true);
 			     	fullBuild(delta,notifier);
 			     }else if (hasEGLPathChanged()) {
 			     	doClean();
@@ -106,7 +106,7 @@ public class Builder extends IncrementalProjectBuilder {
 			        	doClean();
 			        	cleanBuild(delta,notifier);
 			        } else{
-			        	ProjectBuildPathEntryManager.getInstance().clear(getProject());
+			        	ProjectBuildPathEntryManager.getInstance().clear(getProject(), false);
 			        	if (incrementalBuild(delta,notifier)){
 			        		fullBuild(null,notifier);
 			        	}
@@ -193,7 +193,7 @@ public class Builder extends IncrementalProjectBuilder {
      	DuplicatePartManager.getInstance().clear(getProject());					// Duplicate parts list
      	FileInfoManager.getInstance().clear(getProject());						// Cached FileInfos
         ProjectEnvironmentManager.getInstance().clear(getProject());			// Environment
-        ProjectBuildPathEntryManager.getInstance().clear(getProject());
+        ProjectBuildPathEntryManager.getInstance().clear(getProject(), true);
         ProjectBuildPathManager.getInstance().clear(getProject());
         ProjectInfoManager.getInstance().clear(getProject());					// ProjectInfo
      	cleanOutputDir(getProject());
