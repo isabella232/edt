@@ -28,7 +28,7 @@ public class SmallfloatTypeTemplate extends JavaTemplate {
 		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
 			out.print("null");
 		else
-			out.print("0");
+			out.print("0.0f");
 	}
 
 	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
