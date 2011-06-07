@@ -153,6 +153,7 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
 
 	public void clear() {
 		this.buildPathEntries = null;
+		this.converter = new Mof2Binding(this);
 		ProjectBuildPath projectBuildPath = ProjectBuildPathManager.getInstance().getProjectBuildPath(project);
         setProjectBuildPathEntries(projectBuildPath.getBuildPathEntries());
 	}
