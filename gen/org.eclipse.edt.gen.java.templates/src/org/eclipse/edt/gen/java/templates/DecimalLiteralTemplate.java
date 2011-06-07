@@ -21,7 +21,7 @@ import org.eclipse.edt.mof.egl.DecimalLiteral;
 public class DecimalLiteralTemplate extends JavaTemplate {
 
 	public void genExpression(DecimalLiteral expr, Context ctx, TabbedWriter out, Object... args) {
-		out.print(decimalLiteral(expr.getValue().toString()));
+		out.print(decimalLiteral(expr.getValue()));
 	}
 
 	protected String decimalLiteral(String value) {

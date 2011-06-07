@@ -18,6 +18,6 @@ import org.eclipse.edt.mof.egl.IntegerLiteral;
 public class IntegerLiteralTemplate extends JavaTemplate {
 
 	public void genExpression(IntegerLiteral expr, Context ctx, TabbedWriter out, Object... args) {
-		out.print(expr.getValue().toString());
+		out.print(expr.getValue());
 	}
 }
