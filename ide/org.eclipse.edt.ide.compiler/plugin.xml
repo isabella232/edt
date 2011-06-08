@@ -4,13 +4,13 @@
 	<extension point="org.eclipse.edt.ide.core.compilers">
     	<compiler
     		id="org.eclipse.edt.ide.compiler.edtCompiler"
-    		class="org.eclipse.edt.ide.compiler.EDTCompiler"
+    		class="org.eclipse.edt.ide.compiler.IDEEDTCompiler"
     		name="%edtCompilerName"
     		preferencePageId="org.eclipse.edt.ide.compiler.edtCompilerPreferences"
     		version="0.7.0"/>
    	   	<compiler
     		id="org.eclipse.edt.ide.compiler.rbdCompiler"
-    		class="org.eclipse.edt.ide.compiler.RBDCompiler"
+    		class="org.eclipse.edt.ide.compiler.IDERBDCompiler"
     		name="%rbdCompilerName"
     		preferencePageId="org.eclipse.edt.ide.compiler.rbdCompilerPreferences"
     		version="0.7.0"/>
