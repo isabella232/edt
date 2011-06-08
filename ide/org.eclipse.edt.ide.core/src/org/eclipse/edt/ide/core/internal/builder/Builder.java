@@ -36,6 +36,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.builder.NullBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
+import org.eclipse.edt.ide.core.IIDECompiler;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraphManager;
 import org.eclipse.edt.ide.core.internal.lookup.ExternalProjectManager;
 import org.eclipse.edt.ide.core.internal.lookup.FileInfoManager;
@@ -297,6 +298,14 @@ public class Builder extends IncrementalProjectBuilder {
      	
    		if (!savedOutputLoc.equals(newOutputLocation)){
      			return true;
+   		}
+   		
+   		IIDECompiler compiler = ProjectSettingsUtility.getCompiler(getProject());
+   		if (compiler != null) { // should never be null, we wouldn't have gotten here if the compiler was null (see isWorthBuilding())
+   			String oldCompilerId = BuildManager.getInstance().getCompilerId(getProject());
+   			if (!oldCompilerId.equals(compiler.getId())) {
+   				return true;
+   			}
    		}
       	
     	return false;

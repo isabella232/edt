@@ -22,6 +22,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ISaveContext;
@@ -49,6 +50,9 @@ import org.eclipse.edt.ide.core.internal.model.bde.target.TargetPlatformService;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IMember;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -84,6 +88,8 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	private static BDEPreferencesManager fPreferenceManager;
 	
 	private PluginModelManager fModelManager;
+	
+	private IPropertyChangeListener propertyChangeListener = new PreferenceListener();
 	
 	/***
 	 * imageServicesManager - the manager used to load/save images and delegate them.
@@ -142,6 +148,26 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	private final Object compilersAndGeneratorsSynchObj = new Object();
 	
 	private ResourceChangeProcessor resourceChangeProcessor = new ResourceChangeProcessor();
+	
+	private class PreferenceListener implements IPropertyChangeListener {
+		@Override
+		public void propertyChange(PropertyChangeEvent event) {
+			if (EDTCorePreferenceConstants.COMPILER_ID.equals(event.getProperty())) {
+				// Touch all projects using the default compiler so that autobuild is triggered.
+				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+				for (IProject project : projects) {
+					if (ProjectSettingsUtility.getCompilerId(project) == null) {
+						try {
+							project.touch(null);
+						}
+						catch (CoreException e) {
+							log(e);
+						}
+					}
+				}
+			}
+		}
+	}
 
 //	/**
 //	 * This class will operate on state changes that took place while our plugin
@@ -311,6 +337,8 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 
 //		fTargetPlatformService = context.registerService(ITargetPlatformService.class.getName(), TargetPlatformService.getDefault(), new Hashtable());
 		
+		getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
+		
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		workspace.addResourceChangeListener(resourceChangeProcessor, IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE
 				| IResourceChangeEvent.PRE_BUILD);
@@ -391,6 +419,8 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
 		
+		getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
+		
 		ITargetPlatformService tps = (ITargetPlatformService) acquireService(ITargetPlatformService.class.getName());
 		if (tps instanceof TargetPlatformService) {
 			//((TargetPlatformService) tps).cleanOrphanedTargetDefinitionProfiles();
@@ -417,6 +447,10 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 		workspace.removeResourceChangeListener(ASTManager.getInstance());
 		workspace.removeResourceChangeListener(resourceChangeProcessor);
 		workspace.removeResourceChangeListener(WorkingCopyResourceChangeProcessor.getInstance());
+		workspace.removeResourceChangeListener(EGLModelManager.getEGLModelManager().deltaProcessor);
+		workspace.removeSaveParticipant(PLUGIN_ID);
+
+		((EGLModelManager) EGLModelManager.getEGLModelManager()).shutdown();
 		
 		fBundleContext = null;
 	}
@@ -477,128 +511,6 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 			status = new Status(IStatus.ERROR, PLUGIN_ID, IStatus.OK, message, e);
 		}
 		log(status);
-	}
-	
-	/**
-	 * Initializes the default preferences settings for this plug-in.
-	 */
-	protected void initializeDefaultPluginPreferences() {
-
-//		Preferences preferences = getPluginPreferences();
-//		HashSet optionNames = EGLModelManager.OptionNames;
-		// TODO Set up proper preferences
-		/*
-		// Builder settings
-		preferences.setDefault(CORE_EGL_BUILD_RESOURCE_COPY_FILTER, ""); //$NON-NLS-1$
-		optionNames.add(CORE_EGL_BUILD_RESOURCE_COPY_FILTER);
-		
-		preferences.setDefault(CORE_EGL_BUILD_INVALID_EGLPATH, ABORT); 
-		optionNames.add(CORE_EGL_BUILD_INVALID_EGLPATH);
-		
-		preferences.setDefault(CORE_EGL_BUILD_DUPLICATE_RESOURCE, WARNING); 
-		optionNames.add(CORE_EGL_BUILD_DUPLICATE_RESOURCE);
-		
-		preferences.setDefault(CORE_EGL_BUILD_CLEAN_OUTPUT_FOLDER, CLEAN); 
-		optionNames.add(CORE_EGL_BUILD_CLEAN_OUTPUT_FOLDER);
-		
-		// EGLCore settings
-		preferences.setDefault(CORE_EGL_BUILD_ORDER, IGNORE); 
-		optionNames.add(CORE_EGL_BUILD_ORDER);
-		
-		preferences.setDefault(CORE_CIRCULAR_EGLPATH, ERROR); 
-		optionNames.add(CORE_CIRCULAR_EGLPath);
-		
-		preferences.setDefault(CORE_INCOMPLETE_EGLPATH, ERROR); 
-		optionNames.add(CORE_INCOMPLETE_EGLPath);
-		
-		preferences.setDefault(CORE_ENABLE_EGLPATH_EXCLUSION_PATTERNS, ENABLED); 
-		optionNames.add(CORE_ENABLE_EGLPath_EXCLUSION_PATTERNS);
-		
-		preferences.setDefault(CORE_ENABLE_EGLPATH_MULTIPLE_OUTPUT_LOCATIONS, ENABLED); 
-		optionNames.add(CORE_ENABLE_EGLPath_MULTIPLE_OUTPUT_LOCATIONS);
-		
-		// encoding setting comes from resource plug-in
-		optionNames.add(CORE_ENCODING);
-		
-		// Formatter settings
-		preferences.setDefault(FORMATTER_NEWLINE_OPENING_BRACE, DO_NOT_INSERT); 
-		optionNames.add(FORMATTER_NEWLINE_OPENING_BRACE);
-		
-		preferences.setDefault(FORMATTER_NEWLINE_CONTROL, DO_NOT_INSERT);
-		optionNames.add(FORMATTER_NEWLINE_CONTROL);
-		
-		preferences.setDefault(FORMATTER_CLEAR_BLANK_LINES, PRESERVE_ONE); 
-		optionNames.add(FORMATTER_CLEAR_BLANK_LINES);
-		
-		preferences.setDefault(FORMATTER_NEWLINE_ELSE_IF, DO_NOT_INSERT);
-		optionNames.add(FORMATTER_NEWLINE_ELSE_IF);
-		
-		preferences.setDefault(FORMATTER_NEWLINE_EMPTY_BLOCK, INSERT); 
-		optionNames.add(FORMATTER_NEWLINE_EMPTY_BLOCK);
-		
-		preferences.setDefault(FORMATTER_LINE_SPLIT, "80"); //$NON-NLS-1$
-		optionNames.add(FORMATTER_LINE_SPLIT);
-		
-		preferences.setDefault(FORMATTER_COMPACT_ASSIGNMENT, NORMAL); 
-		optionNames.add(FORMATTER_COMPACT_ASSIGNMENT);
-		
-		preferences.setDefault(FORMATTER_TAB_CHAR, TAB); 
-		optionNames.add(FORMATTER_TAB_CHAR);
-		
-		preferences.setDefault(FORMATTER_TAB_SIZE, "4"); //$NON-NLS-1$ 
-		optionNames.add(FORMATTER_TAB_SIZE);
-		
-		preferences.setDefault(FORMATTER_SPACE_CASTEXPRESSION, INSERT); //$NON-NLS-1$ 
-		optionNames.add(FORMATTER_SPACE_CASTEXPRESSION);
-		
-		// CodeAssist settings
-		preferences.setDefault(CODEASSIST_VISIBILITY_CHECK, DISABLED); //$NON-NLS-1$
-		optionNames.add(CODEASSIST_VISIBILITY_CHECK);
-		
-		preferences.setDefault(CODEASSIST_IMPLICIT_QUALIFICATION, DISABLED); //$NON-NLS-1$
-		optionNames.add(CODEASSIST_IMPLICIT_QUALIFICATION);
-		
-		preferences.setDefault(CODEASSIST_FIELD_PREFIXES, ""); //$NON-NLS-1$
-		optionNames.add(CODEASSIST_FIELD_PREFIXES);
-		
-		preferences.setDefault(CODEASSIST_STATIC_FIELD_PREFIXES, ""); //$NON-NLS-1$
-		optionNames.add(CODEASSIST_STATIC_FIELD_PREFIXES);
-		
-		preferences.setDefault(CODEASSIST_LOCAL_PREFIXES, ""); //$NON-NLS-1$
-		optionNames.add(CODEASSIST_LOCAL_PREFIXES);
-		
-		preferences.setDefault(CODEASSIST_ARGUMENT_PREFIXES, ""); //$NON-NLS-1$
-		optionNames.add(CODEASSIST_ARGUMENT_PREFIXES);
-		
-		preferences.setDefault(CODEASSIST_FIELD_SUFFIXES, ""); //$NON-NLS-1$
-		optionNames.add(CODEASSIST_FIELD_SUFFIXES);
-		
-		preferences.setDefault(CODEASSIST_STATIC_FIELD_SUFFIXES, ""); //$NON-NLS-1$
-		optionNames.add(CODEASSIST_STATIC_FIELD_SUFFIXES);
-		
-		preferences.setDefault(CODEASSIST_LOCAL_SUFFIXES, ""); //$NON-NLS-1$
-		optionNames.add(CODEASSIST_LOCAL_SUFFIXES);
-		
-		preferences.setDefault(CODEASSIST_ARGUMENT_SUFFIXES, ""); //$NON-NLS-1$
-		optionNames.add(CODEASSIST_ARGUMENT_SUFFIXES);
-		*/
-	}
-	
-	/**
-	 * Shutdown the EGLCore plug-in.
-	 * <p>
-	 * De-registers the EGLModelManager as a resource changed listener and save participant.
-	 * <p>
-	 * @see org.eclipse.core.runtime.Plugin#shutdown()
-	 */
-	public void shutdown() {
-		//TODO this should probably be moved to stop(), then delete this method
-//		savePluginPreferences();
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		workspace.removeResourceChangeListener(EGLModelManager.getEGLModelManager().deltaProcessor);
-		workspace.removeSaveParticipant(PLUGIN_ID);
-
-		((EGLModelManager) EGLModelManager.getEGLModelManager()).shutdown();
 	}
 	
 	public URL getInstallURL() {

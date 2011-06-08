@@ -32,6 +32,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
+import org.eclipse.edt.ide.core.IIDECompiler;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 
 
 /**
@@ -94,6 +96,7 @@ public class BuildManager {
     	private String[] sourceLocations = NO_SOURCE_LOCATIONS;
     	private String   outputLocation = NO_OUTPUT_LOCATION;
     	private BuildPathEntry[] pathEntries = NO_EGLPATH_ENTRIES;
+    	private String compilerId = NO_COMPILER;
     	
     	public BuildManagerEntry(){
     		this.mailBox = new MailBox();
@@ -145,6 +148,14 @@ public class BuildManager {
 		public void setOutputLocation(String outputLocation) {
 			this.outputLocation = outputLocation;
 		}
+		
+		public String getCompilerId() {
+			return compilerId;
+		}
+		
+		public void setCompilerId(String id) {
+			this.compilerId = id;
+		}
     }
     
     private static class MailBox implements Serializable{
@@ -180,6 +191,7 @@ public class BuildManager {
 	private static final String[] NO_REQUIRED_PROJECTS = new String[0];
 	private static final String[] NO_SOURCE_LOCATIONS = new String[0];
 	private static final BuildPathEntry[] NO_EGLPATH_ENTRIES = new BuildPathEntry[0];
+	private static final String NO_COMPILER = ""; //$NON-NLS-1$
     
     private BuildManager() {
 		super();
@@ -264,7 +276,15 @@ public class BuildManager {
 	    	entry.setOutputLocation(outputLocation.getFullPath().toString());
     	}else{
     		entry.setOutputLocation(NO_OUTPUT_LOCATION);
-    	}    	
+    	}
+    	
+    	IIDECompiler compiler = ProjectSettingsUtility.getCompiler(project);
+    	if (compiler == null) {
+    		entry.setCompilerId(NO_COMPILER);
+    	}
+    	else {
+    		entry.setCompilerId(compiler.getId());
+    	}
 
     	if (pathentries != null){
     		BuildPathEntry[]newpaths = new BuildPathEntry[pathentries.length];
@@ -343,6 +363,11 @@ public class BuildManager {
     	return entry.getOutputLocation();
     }
     
+    public String getCompilerId(IProject project){
+    	BuildManagerEntry entry = getEntry(project);
+    	return entry.getCompilerId();
+    }
+    
     public void setProjectState(IProject project, boolean state){
     	BuildManagerEntry entry = getEntry(project);
     	entry.setState(state ? EDT_VERSION: FULL_BUILD_REQUIRED_STATE);
@@ -375,6 +400,7 @@ public class BuildManager {
     	entry.setSourceLocations(NO_SOURCE_LOCATIONS);
     	entry.setOutputLocation(NO_OUTPUT_LOCATION);
     	entry.setPathEntries(NO_EGLPATH_ENTRIES);
+    	entry.setCompilerId(NO_COMPILER);
     	removeDependentProject(entry);
     	
     	save();
