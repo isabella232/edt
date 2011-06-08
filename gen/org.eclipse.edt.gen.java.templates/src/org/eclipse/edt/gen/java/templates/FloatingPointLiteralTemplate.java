@@ -18,6 +18,6 @@ import org.eclipse.edt.mof.egl.FloatingPointLiteral;
 public class FloatingPointLiteralTemplate extends JavaTemplate {
 
 	public void genExpression(FloatingPointLiteral expr, Context ctx, TabbedWriter out, Object... args) {
-		out.print(expr.getValue().toString());
+		out.print(expr.getValue());
 	}
 }
