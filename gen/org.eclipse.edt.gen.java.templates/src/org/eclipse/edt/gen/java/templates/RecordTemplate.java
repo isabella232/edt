@@ -51,12 +51,12 @@ public class RecordTemplate extends JavaTemplate {
 		// Generate RunUnit constructor
 		out.print("public ");
 		ctx.gen(genClassName, part, ctx, out, args);
-		out.print("( Executable ru");
+		out.print("(");
 		ctx.gen(genAdditionalConstructorParams, part, ctx, out, args);
-		out.println(" ) {");
-		out.print("super( ru");
+		out.println(") {");
+		out.print("super(");
 		ctx.gen(genAdditionalSuperConstructorArgs, part, ctx, out, args);
-		out.println(" );");
+		out.println(");");
 		out.println("ezeInitialize();");
 		out.println("}");
 		// generate inherited methods
@@ -121,7 +121,7 @@ public class RecordTemplate extends JavaTemplate {
 		out.println(" ezeNewValue(Object... args) {");
 		out.print("return new ");
 		ctx.gen(genClassName, part, ctx, out, args);
-		out.println("(this.ezeProgram);");
+		out.println("();");
 		out.println("}");
 	}
 
@@ -176,9 +176,7 @@ public class RecordTemplate extends JavaTemplate {
 		out.println("}");
 	}
 
-	public void genConstructorOptions(Record part, Context ctx, TabbedWriter out, Object... args) {
-		out.print("ezeProgram");
-	}
+	public void genConstructorOptions(Record part, Context ctx, TabbedWriter out, Object... args) {}
 
 	public void genAccessor(Record part, Context ctx, TabbedWriter out, Object... args) {
 		ctx.gen(genName, part, ctx, out, args);

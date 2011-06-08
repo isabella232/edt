@@ -61,7 +61,7 @@ public class TypeTemplate extends JavaTemplate {
 			if (((AsExpression) args[0]).getConversionOperation() != null) {
 				out.print(ctx.getNativeImplementationMapping((Classifier) ((AsExpression) args[0]).getConversionOperation().getContainer()) + '.');
 				out.print(((AsExpression) args[0]).getConversionOperation().getName());
-				out.print("(ezeProgram, ");
+				out.print("(");
 				ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 				ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
 				out.print(")");
@@ -242,7 +242,7 @@ public class TypeTemplate extends JavaTemplate {
 				|| CommonUtilities.getNativeJavaOperation((BinaryExpression) args[0], ctx).length() == 0) {
 				out.print(ctx.getNativeImplementationMapping((Type) ((BinaryExpression) args[0]).getOperation().getContainer()) + '.');
 				out.print(CommonUtilities.getNativeRuntimeOperationName((BinaryExpression) args[0]));
-				out.print("(ezeProgram, ");
+				out.print("(");
 				ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, org.eclipse.edt.gen.CommonUtilities.genWithoutTypeList(args));
 				out.print(", ");
 				ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, org.eclipse.edt.gen.CommonUtilities.genWithoutTypeList(args));

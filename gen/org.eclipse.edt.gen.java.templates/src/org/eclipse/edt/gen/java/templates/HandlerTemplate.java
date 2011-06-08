@@ -37,7 +37,7 @@ public class HandlerTemplate extends JavaTemplate {
 	}
 
 	public void genConstructorOptions(Handler type, Context ctx, TabbedWriter out, Object... args) {
-		out.print("ezeProgram._runUnit()");
+		out.print("_runUnit()");
 	}
 
 	public void genRuntimeTypeName(Handler type, Context ctx, TabbedWriter out, Object... args) {
