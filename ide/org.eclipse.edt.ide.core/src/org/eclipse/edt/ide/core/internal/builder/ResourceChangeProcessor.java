@@ -31,7 +31,6 @@ import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraph;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraphManager;
 import org.eclipse.edt.ide.core.internal.dependency.IFunctionRequestor;
@@ -43,6 +42,7 @@ import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfoManager;
 import org.eclipse.edt.ide.core.internal.lookup.ZipFileBuildPathEntryManager;
 import org.eclipse.edt.ide.core.internal.model.EGLProject;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 /**
  * @author cduval

@@ -28,7 +28,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.ide.core.internal.model.EGLModel;
 import org.eclipse.edt.ide.core.internal.model.index.impl.JarFileEntryDocument;
 import org.eclipse.edt.ide.core.internal.search.PartDeclarationInfo;
@@ -44,6 +43,7 @@ import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
 import org.eclipse.edt.ide.core.utils.EGLProjectFileUtility;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

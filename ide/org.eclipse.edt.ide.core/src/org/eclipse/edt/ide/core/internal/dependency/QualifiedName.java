@@ -15,8 +15,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.ide.core.internal.utils.Util;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 /**
  * @author svihovec

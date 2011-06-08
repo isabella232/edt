@@ -24,8 +24,8 @@ import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.model.IProperty;
 import org.eclipse.edt.ide.core.model.IPropertyContainer;
 import org.eclipse.edt.ide.core.model.IUseDeclaration;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 
 
 /**

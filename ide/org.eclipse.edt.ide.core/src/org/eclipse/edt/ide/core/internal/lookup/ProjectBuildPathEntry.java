@@ -13,6 +13,7 @@ package org.eclipse.edt.ide.core.internal.lookup;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -29,12 +30,10 @@ import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileASTScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
-import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
 import org.eclipse.edt.ide.core.internal.binding.PartRestoreFailedException;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
@@ -44,6 +43,7 @@ import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.CachingObjectStore;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.ObjectStore;
@@ -72,7 +72,7 @@ public class ProjectBuildPathEntry implements IProjectBuildPathEntry {
 		}
 		
 		@Override
-		public IBindingEnvironment getSystemEnvironment() {
+		public ISystemEnvironment getSystemEnvironment() {
 			return SystemEnvironmentManager.findSystemEnvironment(getProject());
 		}
 	}

@@ -25,8 +25,8 @@ import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 
 public class JarPackageFragmentRoot extends PackageFragmentRoot {
 	protected final IPath jarPath;

@@ -11,14 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.lookup;
 
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 public class ExternalProjectEnvironment extends AbstractProjectEnvironment{
     
@@ -105,7 +106,7 @@ public class ExternalProjectEnvironment extends AbstractProjectEnvironment{
 	}
 
 	@Override
-	public IBindingEnvironment getSystemEnvironment() {
+	public ISystemEnvironment getSystemEnvironment() {
 		// TODO Auto-generated method stub
 		return null;
 	}

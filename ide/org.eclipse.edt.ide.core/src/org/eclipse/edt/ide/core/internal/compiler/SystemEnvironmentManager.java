@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.compiler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
@@ -30,12 +32,12 @@ public class SystemEnvironmentManager {
 	
 	private static Map<String, ISystemEnvironment> storeMap = new HashMap();
 	
-	public static ISystemEnvironment getSystemEnvironment(String path, ISystemEnvironment parentEnv) {
+	public static ISystemEnvironment getSystemEnvironment(String path, ISystemEnvironment parentEnv, List<String> implicitEnums) {
 		if (storeMap.containsKey(path)) {
 			return storeMap.get(path);
 		}
 				
-		SystemEnvironment sysEnv = new SystemEnvironment(new SystemIREnvironment(), parentEnv);
+		SystemEnvironment sysEnv = new SystemEnvironment(new SystemIREnvironment(), parentEnv, implicitEnums);
 		sysEnv.initializeSystemPackages(path,  new SystemPackageBuildPathEntryFactory(new Mof2Binding(sysEnv)));
 		
 		storeMap.put(path, sysEnv);
@@ -47,7 +49,7 @@ public class SystemEnvironmentManager {
         if (compiler != null) {
         	return compiler.getSystemEnvironment();
         }
-        return new SystemEnvironment(new SystemIREnvironment(), null);
+        return new SystemEnvironment(new SystemIREnvironment(), null, new ArrayList());
 
 	}
 }

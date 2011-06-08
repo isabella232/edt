@@ -308,8 +308,6 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		fBundleContext = context;
-		
-		AbstractCompiler.setIDE(true);
 
 //		fTargetPlatformService = context.registerService(ITargetPlatformService.class.getName(), TargetPlatformService.getDefault(), new Hashtable());
 		

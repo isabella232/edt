@@ -12,18 +12,18 @@
 package org.eclipse.edt.ide.core.internal.lookup.workingcopy;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
 import org.eclipse.edt.compiler.binding.PartBinding;
-import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 // TODO Refactor common code between this environment and project environment - level01Compile, getPartBinding, hasPackage
 public class WorkingCopyProjectEnvironment implements IEnvironment {
@@ -116,7 +116,7 @@ public class WorkingCopyProjectEnvironment implements IEnvironment {
 
 
 	@Override
-	public IBindingEnvironment getSystemEnvironment() {
+	public ISystemEnvironment getSystemEnvironment() {
 		return SystemEnvironmentManager.findSystemEnvironment(getProject());
 	}
 

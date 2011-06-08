@@ -27,9 +27,4 @@ public interface ICompiler extends org.eclipse.edt.compiler.ICompiler {
 	 * @param name  The preference page id.
 	 */
 	public void setPreferencePageId(String id);
-	
-	/**
-	 * @return true if the compiler is running in an Eclipse IDE
-	 */
-	public boolean isIDE();
-}
+	}

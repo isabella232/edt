@@ -41,7 +41,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.compiler.Binder;
@@ -56,6 +55,7 @@ import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEn
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectInfo;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectInfoManager;
 import org.eclipse.edt.ide.core.internal.utils.Util;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 

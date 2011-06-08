@@ -44,7 +44,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.binding.BinaryFileManager;
@@ -69,6 +68,7 @@ import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.egl2mof.Egl2Mof;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 

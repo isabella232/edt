@@ -27,7 +27,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.io.IIOBufferReader;
 import org.eclipse.edt.compiler.internal.io.IIOBufferWriter;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
@@ -36,6 +35,7 @@ import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.SerializationException;
 
 /**

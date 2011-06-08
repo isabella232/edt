@@ -14,7 +14,7 @@ package org.eclipse.edt.ide.core.internal.builder;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

@@ -26,13 +26,13 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.ide.core.internal.model.Util;
 import org.eclipse.edt.ide.core.internal.partinfo.EGLBinaryProjectOrigin;
 import org.eclipse.edt.ide.core.internal.partinfo.EGLFileOrigin;
 import org.eclipse.edt.ide.core.internal.partinfo.EGLSourcelessProjectOrigin;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 /**
  * @author winghong

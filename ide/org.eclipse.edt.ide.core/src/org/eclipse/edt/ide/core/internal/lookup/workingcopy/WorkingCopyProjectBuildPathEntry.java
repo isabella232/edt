@@ -15,6 +15,7 @@ import java.io.File;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -30,12 +31,10 @@ import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileASTScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
-import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
@@ -44,6 +43,7 @@ import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyASTMana
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyProcessingQueue;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.ide.core.internal.utils.Util;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 /**
  * Project Build Path entries are caches used when binding an AST tree.  A new WorkingCopyProjectBuildPathEntry must be created each time a set of AST trees
@@ -73,7 +73,7 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 		}
 
 		@Override
-		public IBindingEnvironment getSystemEnvironment() {
+		public ISystemEnvironment getSystemEnvironment() {
 			return WorkingCopyProjectBuildPathEntry.this.getSystemEnvironment();
 		}		
 	}	
@@ -376,7 +376,7 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
         return (FileBinding)bindingCache.get(packageName, partName);
     }
     
-	private IBindingEnvironment getSystemEnvironment() {
+	private ISystemEnvironment getSystemEnvironment() {
 		return SystemEnvironmentManager.findSystemEnvironment(getProject());
 	}		
 	

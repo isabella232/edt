@@ -31,7 +31,6 @@ import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.CancelledException;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.ide.core.internal.builder.AbstractDuplicatePartManager.DuplicatePartList;
 import org.eclipse.edt.ide.core.internal.builder.workingcopy.WorkingCopyDuplicatePartManager;
 import org.eclipse.edt.ide.core.internal.builder.workingcopy.WorkingCopyUnsavedDuplicatePartRequestor;
@@ -58,6 +57,7 @@ import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IWorkingCopy;
 import org.eclipse.edt.ide.core.search.ICompiledFileUnit;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 // Because our compilers require the ability to access other objects through singleton managers, we can only allow one working copy compile to run at a time.
 

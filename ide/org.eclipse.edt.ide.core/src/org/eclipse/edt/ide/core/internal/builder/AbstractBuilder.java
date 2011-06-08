@@ -31,7 +31,6 @@ import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.CancelledException;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.ide.core.internal.binding.BinaryFileManager;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraph;
@@ -47,6 +46,7 @@ import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfo;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfoManager;
 import org.eclipse.edt.ide.core.internal.lookup.ResourceFileInfoCreator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 /**
  * The abstract superclass of EGL builders. Provides the building and

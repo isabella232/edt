@@ -23,11 +23,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.utils.ReadWriteMonitor;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.lookup.AbstractProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.utils.Util;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 /**
  * @author svihovec

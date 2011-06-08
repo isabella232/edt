@@ -19,8 +19,8 @@ import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 public abstract class AbstractBatchBuilder extends AbstractBuilder {
 
