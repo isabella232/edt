@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.eclipse.edt.compiler.tools.IRLoader;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.compiler.IRLoader;
 import org.eclipse.edt.mof.egl.utils.LoadPartException;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
@@ -191,10 +191,12 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 				if (irFileRelativePath.startsWith(File.separator))
 					irFileRelativePath = irFileRelativePath.substring(File.separator.length());
 				parts
-					.add(IRLoader.loadEGLPart(rootName, irFileRelativePath.substring(0, irFileRelativePath.lastIndexOf(".")).replace(File.separatorChar, '.')));
+				//TODO should pass the compiler to IRLoader
+					.add(IRLoader.loadEGLPart(rootName, irFileRelativePath.substring(0, irFileRelativePath.lastIndexOf(".")).replace(File.separatorChar, '.'), null));
 			}
 		} else
-			parts.add(IRLoader.loadEGLPart(rootName, partName));
+			//TODO should pass the compiler to IRLoader
+			parts.add(IRLoader.loadEGLPart(rootName, partName, null));
 		return parts;
 	}
 
