@@ -312,17 +312,22 @@ public class TypeUtils implements MofConversion {
 		if (p1 instanceof Delegate) {
 			Delegate d1 = (Delegate)p1;
 			Delegate d2 = (Delegate)p2;
-			if (d1.getParameters().size() == d2.getParameters().size()) {
-				for (int j=0; j<d1.getParameters().size(); j++) {
-					FunctionParameter parm1 = d1.getParameters().get(j);
-					FunctionParameter parm2 = d2.getParameters().get(j);
-					if (!parm1.getType().equals(parm2.getType()))
-						return false;
-					if (!parm1.getParameterKind().equals(parm2.getParameterKind()))
-						return false;
-				}
+			if (d1.getParameters().size() != d2.getParameters().size()) {
+				return false;
 			}
-			return d1.getReturnType().equals(d2.getReturnType());
+			for (int j=0; j<d1.getParameters().size(); j++) {
+				FunctionParameter parm1 = d1.getParameters().get(j);
+				FunctionParameter parm2 = d2.getParameters().get(j);
+				if (!parm1.getType().equals(parm2.getType()))
+					return false;
+				if (!parm1.getParameterKind().equals(parm2.getParameterKind()))
+					return false;
+			}
+			Type rt1 = d1.getReturnType();
+			if (rt1 == null) {
+				return d2.getReturnType() == null;
+			}
+			return rt1.equals(d2.getReturnType());
 		}
 		if (p1 instanceof EGLClass && p2 instanceof EGLClass) {
 			EGLClass s1 = (EGLClass)p1;
