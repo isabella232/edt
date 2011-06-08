@@ -62,7 +62,7 @@
                   The provider class for the compiler
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="org.eclipse.edt.ide.core.AbstractCompiler:org.eclipse.edt.ide.core.ICompiler"/>
+                  <meta.attribute kind="java" basedOn="org.eclipse.edt.ide.core.IDEBaseCompiler:org.eclipse.edt.ide.core.IIDECompiler"/>
                </appinfo>
             </annotation>
          </attribute>
