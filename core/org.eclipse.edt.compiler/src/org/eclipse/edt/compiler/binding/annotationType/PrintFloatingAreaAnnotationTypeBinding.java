@@ -23,9 +23,9 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.DeviceTypeKind;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.NonNegativeIntegerAnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.TwoElementArrayWhoseElementsAreGreaterThanZeroAnnotationValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class PrintFloatingAreaAnnotationTypeBinding extends ComplexAnnotationTypeBinding {

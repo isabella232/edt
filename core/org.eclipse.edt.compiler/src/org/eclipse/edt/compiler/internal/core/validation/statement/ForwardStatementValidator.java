@@ -40,8 +40,8 @@ import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.compiler.core.ast.SubstringAccess;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

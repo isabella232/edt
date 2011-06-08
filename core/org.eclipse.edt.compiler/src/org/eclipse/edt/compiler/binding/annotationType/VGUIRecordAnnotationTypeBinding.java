@@ -26,13 +26,13 @@ import org.eclipse.edt.compiler.binding.UserDefinedValueValidationRule;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AliasForVGUIRecordValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.NumElementsItemForVGUIRecordItemValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.PrimitiveTypeNotAllowedInPartOfSubtypeValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.SelectedIndexItemForVGUIRecordItemValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.UITypeForVGUIRecordItemValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ValidatorFunctionAnnotationValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

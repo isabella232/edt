@@ -12,7 +12,7 @@
 package org.eclipse.edt.compiler.binding;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

@@ -17,7 +17,7 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.ElementKind;
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.TypeKind;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

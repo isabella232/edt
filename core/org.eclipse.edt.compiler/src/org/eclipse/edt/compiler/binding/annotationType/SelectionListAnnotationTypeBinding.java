@@ -18,9 +18,9 @@ import java.util.List;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.UserDefinedValueValidationRule;
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.LabelItemAnnotationValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ValueItemAnnotationValueValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 public class SelectionListAnnotationTypeBinding extends ComplexAnnotationTypeBinding {

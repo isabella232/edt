@@ -19,7 +19,7 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.IndexOrientationKind;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

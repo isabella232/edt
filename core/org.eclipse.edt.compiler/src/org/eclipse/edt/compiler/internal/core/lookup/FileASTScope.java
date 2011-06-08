@@ -23,7 +23,7 @@ import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.internal.core.dependency.NullDependencyRequestor;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

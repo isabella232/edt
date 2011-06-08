@@ -26,10 +26,10 @@ import org.eclipse.edt.compiler.binding.UserDefinedValueValidationRule;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.PCBKind;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.HierarchyValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.MustBeDLINameAnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.PCBValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class PCBAnnotationTypeBinding extends ComplexAnnotationTypeBinding {

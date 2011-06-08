@@ -23,11 +23,11 @@ import org.eclipse.edt.compiler.binding.UserDefinedValueValidationRule;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AliasForProgramValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.InputRecordForProgramValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.MsgTablePrefixAnnotationValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.UnloadOnExitForProgramValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

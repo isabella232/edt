@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

@@ -19,7 +19,7 @@ import java.util.Map;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**
@@ -203,7 +203,7 @@ public class BindingUtilities {
 		   ITypeBinding.FLEXIBLE_RECORD_BINDING == typeBinding.getKind() ||
 		   ITypeBinding.DATAITEM_BINDING == typeBinding.getKind() ||
 		   ITypeBinding.ENUMERATION_BINDING == typeBinding.getKind() ||
-		   SystemPartManager.getInstance().findType(typeBinding.getName()) == typeBinding ||
+		   SystemPartManager.findType(typeBinding.getName()) == typeBinding ||
 		   typeBinding.isReference()) {
     		return true;
     	}

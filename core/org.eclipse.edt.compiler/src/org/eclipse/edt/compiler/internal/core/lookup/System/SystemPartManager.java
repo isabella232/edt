@@ -29,7 +29,7 @@ import org.eclipse.edt.compiler.binding.StructureItemBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemEnvironmentPackageNames;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**
@@ -37,23 +37,14 @@ import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
  */
 public class SystemPartManager {
     
-    private static SystemPartManager INSTANCE = new SystemPartManager();
+        
+    private static Map systemParts = Collections.EMPTY_MAP;
     
-    public static SystemPartManager getInstance() {
-        return INSTANCE;
-    }
-    
-    private Map systemParts = Collections.EMPTY_MAP;
-
-    private SystemPartManager() {
-        super();
-    }
-    
-    public ITypeBinding findType(String simpleName) {
+    public static ITypeBinding findType(String simpleName) {
         return (ITypeBinding) getSystemParts().get(simpleName);
     }
     
-    public Map getSystemParts() {
+    public static Map getSystemParts() {
         if (systemParts == Collections.EMPTY_MAP) {
             initializeSystemParts();
         }
@@ -72,7 +63,7 @@ public class SystemPartManager {
     public static final IPartBinding SQLSTRING_BINDING = createEGLCoreReflectBinding("SQLString");
     public static final IPartBinding TYPEREF_BINDING = createEGLCoreReflectBinding("TypeRef");    
     
-    private void initializeSystemParts() {    
+    private static void initializeSystemParts() {    
     	systemParts = new HashMap();
     	systemParts.put(InternUtil.intern(IEGLConstants.MIXED_DICTIONARY_STRING), DictionaryBinding.INSTANCE);
     	systemParts.put(InternUtil.intern(IEGLConstants.MIXED_ARRAYDICTIONARY_STRING), ArrayDictionaryBinding.INSTANCE);

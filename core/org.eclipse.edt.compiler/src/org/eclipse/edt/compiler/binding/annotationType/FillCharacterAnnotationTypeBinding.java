@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.UserDefinedAnnotationValidationRule;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.FillCharacterValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class FillCharacterAnnotationTypeBinding extends StringValueAnnotationTypeBinding {

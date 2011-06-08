@@ -20,7 +20,7 @@ import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.ParameterModifierKind;
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.TypeKind;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 public class FunctionDeclarationAnnotationTypeBinding extends ComplexAnnotationTypeBinding {

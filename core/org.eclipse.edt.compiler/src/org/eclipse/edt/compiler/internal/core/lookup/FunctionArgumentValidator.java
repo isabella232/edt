@@ -69,11 +69,11 @@ import org.eclipse.edt.compiler.core.ast.SubstringAccess;
 import org.eclipse.edt.compiler.core.ast.UnaryExpression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 import org.eclipse.edt.compiler.internal.core.validation.statement.LValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 import com.sun.xml.internal.ws.api.model.ParameterBinding;
 
@@ -999,7 +999,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     			argIsValid = true;
     		}
     		else if(ITypeBinding.INTERFACE_BINDING == argType.getKind()) {
-    			argIsValid = SystemPartManager.getInstance().findType(argType.getName()) != argType;
+    			argIsValid = SystemPartManager.findType(argType.getName()) != argType;
     		}
     		
     		if(!argIsValid) {

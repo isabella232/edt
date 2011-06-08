@@ -30,8 +30,8 @@ import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeBindingImpl
 import org.eclipse.edt.compiler.binding.annotationType.EGLSpecificValuesAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.enumerations.EGLEnumeration;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 

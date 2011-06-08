@@ -28,7 +28,7 @@ import org.eclipse.edt.compiler.core.ast.MBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.compiler.core.ast.UnaryExpression;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class ValueAnnotationTypeBinding extends AnnotationTypeBinding {

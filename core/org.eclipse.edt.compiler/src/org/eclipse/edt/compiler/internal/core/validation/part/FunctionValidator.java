@@ -83,7 +83,6 @@ import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.AddStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
@@ -120,6 +119,7 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.ThrowStatemen
 import org.eclipse.edt.compiler.internal.core.validation.statement.TransferStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.TryStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.WhileStatementValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**
@@ -320,7 +320,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 			ITypeBinding elementType = ((ArrayTypeBinding) parmType).getBaseType();
 			if(ITypeBinding.SERVICE_BINDING == elementType.getKind() ||
 			   (ITypeBinding.INTERFACE_BINDING == elementType.getKind() &&
-			   	SystemPartManager.getInstance().findType(elementType.getName()) != elementType)) {
+			   	SystemPartManager.findType(elementType.getName()) != elementType)) {
 				problemRequestor.acceptProblem(
 					functionParameter.getType(),
 					IProblemRequestor.SERVICE_OR_INTERFACE_ARRAYS_NOT_SUPPORTED);

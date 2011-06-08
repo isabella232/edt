@@ -18,8 +18,8 @@ import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IntegerGreaterThanOneValueValidationRule;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.PropertyApplicableForSpecificPrimitiveOnlyAnnotationValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class MaxLenAnnotationTypeBinding extends IntegerValueAnnotationTypeBinding {

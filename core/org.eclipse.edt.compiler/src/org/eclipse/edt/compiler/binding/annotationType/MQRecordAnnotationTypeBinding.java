@@ -27,7 +27,6 @@ import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.LengthItemForSerialMessageOrIndexedRecordValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.MinimumInputForStructureItemValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.NumElementsItemForSerialMessageOrIndexedRecordValidator;
@@ -36,6 +35,7 @@ import org.eclipse.edt.compiler.internal.core.validation.annotation.TypeAheadFun
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ValidValuesForPageItemAnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ValidatorDataTableForPageItemFieldValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ValueForNonFormFieldValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

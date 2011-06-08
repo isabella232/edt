@@ -87,7 +87,6 @@ import org.eclipse.edt.compiler.internal.core.builder.NullProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.Problem;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.dli.DLIInfo;
 import org.eclipse.edt.compiler.internal.dli.DLIModel;
 import org.eclipse.edt.compiler.internal.dli.DLIParser;
@@ -118,6 +117,7 @@ import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLReplaceStatementFa
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLStatementFactory;
 import org.eclipse.edt.compiler.internal.sql.util.SQLUtility;
 import org.eclipse.edt.compiler.internal.sqltokenizer.EGLSQLParser;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

@@ -18,7 +18,7 @@ import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.WhitespaceKind;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class XSFacetAnnotationTypeBinding extends ComplexAnnotationTypeBinding {

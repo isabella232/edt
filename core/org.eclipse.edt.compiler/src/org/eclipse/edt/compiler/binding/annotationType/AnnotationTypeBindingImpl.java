@@ -41,7 +41,7 @@ import org.eclipse.edt.compiler.binding.UsedTypeBinding;
 import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.internal.core.lookup.SpecificTypedLiteral;
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.ElementKind;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
  
  

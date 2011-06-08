@@ -16,7 +16,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import org.eclipse.edt.compiler.internal.core.lookup.EnumerationManager;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**
@@ -49,7 +49,7 @@ public class SystemEnumerationDataBinding extends EnumerationDataBinding {
         in.defaultReadObject();
         String typeName = in.readUTF();
         typeName =  InternUtil.intern(typeName);
-        typeBinding = (ITypeBinding)EnumerationManager.getInstance().getEnumTypes().get(typeName);
+        typeBinding = (ITypeBinding)EnumerationManager.getEnumTypes().get(typeName);
     }
     
     protected Object readResolve() {		

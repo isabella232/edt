@@ -20,8 +20,8 @@ import java.util.Stack;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

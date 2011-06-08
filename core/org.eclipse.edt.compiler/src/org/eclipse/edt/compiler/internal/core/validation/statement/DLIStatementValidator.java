@@ -24,7 +24,6 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.UsingPCBClause;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.MustBeDLINameAnnotationValidator;
 import org.eclipse.edt.compiler.internal.dli.IBooleanExpression;
 import org.eclipse.edt.compiler.internal.dli.IBooleanExpressionSSAConditions;
@@ -40,6 +39,7 @@ import org.eclipse.edt.compiler.internal.dli.stmtFactory.IHierarchy;
 import org.eclipse.edt.compiler.internal.dli.stmtFactory.IHierarchyEntry;
 import org.eclipse.edt.compiler.internal.dli.stmtFactory.IPCB;
 import org.eclipse.edt.compiler.internal.dli.stmtFactory.IRelationship;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

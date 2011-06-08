@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 import com.ibm.icu.util.StringTokenizer;
 

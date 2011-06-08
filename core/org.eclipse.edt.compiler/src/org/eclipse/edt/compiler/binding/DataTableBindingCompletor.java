@@ -18,7 +18,7 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.DataTableScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

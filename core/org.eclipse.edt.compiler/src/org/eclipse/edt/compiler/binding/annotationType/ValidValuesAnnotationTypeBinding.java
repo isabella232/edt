@@ -22,8 +22,8 @@ import org.eclipse.edt.compiler.binding.IValidValuesElement;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.binding.UserDefinedAnnotationValidationRule;
 import org.eclipse.edt.compiler.core.ast.Primitive;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ValidValuesAnnotationValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class ValidValuesAnnotationTypeBinding extends AnnotationTypeBinding {

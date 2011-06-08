@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationNotValidForArrayAnnotationValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 public class TypeaheadFunctionAnnotationTypeBinding extends ResolvableNameAnnotationTypeBinding {

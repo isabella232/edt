@@ -21,7 +21,7 @@ import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.Primitive;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class ContentsAnnotationTypeBinding extends AnnotationTypeBinding {

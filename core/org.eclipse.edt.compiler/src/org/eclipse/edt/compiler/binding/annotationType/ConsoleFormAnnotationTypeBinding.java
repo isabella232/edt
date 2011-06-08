@@ -26,13 +26,13 @@ import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValueMustBeGreaterThanOrEqualToZeroForFormFieldValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValueMustBeGreaterThanZeroForFormFieldValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.PositionForConsoleFieldValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.PositionRequiredForConsoleFieldUnlessSegmentsDefinedValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.PrimitiveTypeNotAllowedInPartOfSubtypeValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.TwoElementArrayWhoseElementsAreGreaterThanZeroAnnotationValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

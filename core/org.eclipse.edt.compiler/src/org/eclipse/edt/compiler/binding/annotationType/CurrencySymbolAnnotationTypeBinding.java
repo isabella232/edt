@@ -17,9 +17,9 @@ import java.util.List;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.UserDefinedAnnotationValidationRule;
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.CurrencySymbolValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.PropertyApplicableForNumericTypeOnlyAnnotationValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class CurrencySymbolAnnotationTypeBinding extends StringValueAnnotationTypeBinding {

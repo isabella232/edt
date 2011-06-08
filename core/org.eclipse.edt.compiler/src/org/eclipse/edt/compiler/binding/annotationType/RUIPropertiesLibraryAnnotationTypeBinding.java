@@ -21,9 +21,9 @@ import org.eclipse.edt.compiler.binding.PartSubTypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.UserDefinedAnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.UserDefinedValueValidationRule;
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.PropertiesFileAnnotationValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.RUIPropertiesLibraryValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

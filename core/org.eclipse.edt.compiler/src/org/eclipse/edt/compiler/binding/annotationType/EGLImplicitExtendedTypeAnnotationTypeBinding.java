@@ -15,7 +15,7 @@ import org.eclipse.edt.compiler.binding.AnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 public class EGLImplicitExtendedTypeAnnotationTypeBinding extends AnnotationTypeBinding {

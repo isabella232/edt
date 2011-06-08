@@ -28,17 +28,22 @@ import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.ParameterModif
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.TypeKind;
 
 
-/**
- * @author Harmon
- */
 public class EnumerationManager {
-    private static EnumerationManager INSTANCE = new EnumerationManager();
-
     private Map resolvableEnumDataBindings = Collections.EMPTY_MAP;
-    private Map enumTypes =  Collections.EMPTY_MAP;
-    private List resolvableEnumTypes =  Collections.EMPTY_LIST;
+    private static Map enumTypes =  Collections.EMPTY_MAP;
+    private static List resolvableEnumTypes =  Collections.EMPTY_LIST;
     
-    public IDataBinding findData(String simpleName) {
+    
+    
+    public EnumerationManager(EnumerationManager parentManager) {
+		super();
+		if (parentManager != null) {
+			resolvableEnumDataBindings = new HashMap();
+			resolvableEnumDataBindings.putAll(parentManager.resolvableEnumDataBindings);
+		}
+	}
+
+	public IDataBinding findData(String simpleName) {
         EnumerationDataBinding result = (EnumerationDataBinding) getResolvableEnumDataBindings().get(simpleName);
         if (result != null) {
             EnumerationTypeBinding type = (EnumerationTypeBinding)result.getType();
@@ -47,25 +52,21 @@ public class EnumerationManager {
         return result;
     }
      
-    public static EnumerationManager getInstance() {
-        return INSTANCE;
-    }
-
-    public List getResolvableEnumTypes() {
+    private static List getResolvableEnumTypes() {
         if (resolvableEnumTypes == Collections.EMPTY_LIST) {
             initializeEnumTypes();
         }
         return resolvableEnumTypes;
     }
 
-    public Map getEnumTypes() {
+    public static Map getEnumTypes() {
         if (enumTypes == Collections.EMPTY_MAP) {
             initializeEnumTypes();
         }
         return enumTypes;
     }
 
-    private Map getResolvableEnumDataBindings() {
+    public Map getResolvableEnumDataBindings() {
         if (resolvableEnumDataBindings == Collections.EMPTY_MAP) {
             initializeResolvableEnumDataBindings();
         }
@@ -73,14 +74,14 @@ public class EnumerationManager {
     }
 
 
-    private void initializeEnumTypes() {
+    private static void initializeEnumTypes() {
         enumTypes = new HashMap();
         resolvableEnumTypes =  new ArrayList();
         addEnumType(ElementKind.INSTANCE);
         addEnumType(TypeKind.INSTANCE);
     }
     
-    private void addEnumType(Enumeration enumeration) {
+    private static void addEnumType(Enumeration enumeration) {
         EnumerationTypeBinding enumType =  enumeration.getType();
         enumTypes.put(enumType.getName(), enumType);
         if (enumeration.isResolvable()) {

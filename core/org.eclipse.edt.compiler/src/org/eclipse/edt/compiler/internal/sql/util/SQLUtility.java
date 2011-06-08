@@ -21,8 +21,8 @@ import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.Record;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.sql.SQLConstants;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 public class SQLUtility {

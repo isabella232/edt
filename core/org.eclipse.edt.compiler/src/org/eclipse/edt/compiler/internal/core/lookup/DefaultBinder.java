@@ -142,7 +142,6 @@ import org.eclipse.edt.compiler.internal.core.builder.NullProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.LengthItemForSerialMessageOrIndexedRecordValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.RecordNumItemValidator;
@@ -150,6 +149,7 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.LValueValidat
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.type.PrimitiveTypeValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 
@@ -1413,7 +1413,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 				   ITypeBinding.INTERFACE_BINDING == type.getKind()) {
 					//Don't want to issue error for built-in interface types
 					//like window, consoleField, etc...
-					if(type != SystemPartManager.getInstance().findType(type.getName())) {
+					if(type != SystemPartManager.findType(type.getName())) {
 						problemRequestor.acceptProblem(
 							newExpression.getType(),
 							IProblemRequestor.NEW_NOT_SUPPORTED_FOR_SERVICE_OR_INTERFACE);

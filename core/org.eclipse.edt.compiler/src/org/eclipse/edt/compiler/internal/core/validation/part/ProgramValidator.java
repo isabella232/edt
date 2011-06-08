@@ -34,12 +34,12 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.ProgramParameterValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.IOStatementValidatorConstants;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

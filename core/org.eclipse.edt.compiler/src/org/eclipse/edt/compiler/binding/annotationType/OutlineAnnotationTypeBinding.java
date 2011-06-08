@@ -17,7 +17,7 @@ import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.OutlineKind;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class OutlineAnnotationTypeBinding extends AnnotationTypeBinding {

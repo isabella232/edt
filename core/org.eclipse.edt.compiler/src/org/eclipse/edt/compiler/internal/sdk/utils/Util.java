@@ -39,7 +39,7 @@ import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.TopLevelForm;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.sdk.compile;
 
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -19,7 +20,7 @@ import org.eclipse.edt.compiler.binding.PackageBinding;
 import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**
@@ -33,18 +34,18 @@ public class EGLCEnvironment implements IEnvironment {
 	private PartPathEntry  irOutputPathEntry = null;
 	
 	private PackageBinding rootPackageBinding = new PackageBinding(defaultPackage, null, this);
-	private IBindingEnvironment systemEnvironment;
+	private ISystemEnvironment systemEnvironment;
 
-	public IBindingEnvironment getSystemEnvironment() {
+	public ISystemEnvironment getSystemEnvironment() {
 		return systemEnvironment;
 	}
 
-	public EGLCEnvironment(IBindingEnvironment systemEnvironment) {
+	public EGLCEnvironment(ISystemEnvironment systemEnvironment) {
 		super();
 		this.systemEnvironment = systemEnvironment;
 	}
 
-	public void setSystemEnvironment(IBindingEnvironment systemEnvironment) {
+	public void setSystemEnvironment(ISystemEnvironment systemEnvironment) {
 		this.systemEnvironment = systemEnvironment;
 	}
 

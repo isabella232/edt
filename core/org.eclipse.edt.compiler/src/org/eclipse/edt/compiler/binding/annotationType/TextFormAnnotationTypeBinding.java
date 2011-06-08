@@ -26,7 +26,6 @@ import org.eclipse.edt.compiler.binding.UserDefinedValueValidationRule;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValueMustBeGreaterThanOrEqualToZeroForFormFieldValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValueMustBeGreaterThanZeroForFormFieldValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.DateFormatForFormFieldValidator;
@@ -40,6 +39,7 @@ import org.eclipse.edt.compiler.internal.core.validation.annotation.ScreenSizesA
 import org.eclipse.edt.compiler.internal.core.validation.annotation.TwoElementArrayWhoseElementsAreGreaterThanZeroAnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ValidatorFunctionAnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ValueForFormFieldValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

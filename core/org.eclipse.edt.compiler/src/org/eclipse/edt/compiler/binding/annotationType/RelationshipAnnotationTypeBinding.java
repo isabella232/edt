@@ -19,7 +19,7 @@ import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.RequiredFieldInComplexPropertyAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class RelationshipAnnotationTypeBinding extends ComplexAnnotationTypeBinding {

@@ -19,8 +19,8 @@ import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.UserDefinedAnnotationValidationRule;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.RedefinesAnnotationValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class RedefinesAnnotationTypeBinding extends ResolvableSimpleNameAnnotationTypeBinding {

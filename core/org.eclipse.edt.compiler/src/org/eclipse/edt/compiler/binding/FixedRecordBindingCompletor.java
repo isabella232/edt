@@ -33,7 +33,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.TypeBindingScope;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

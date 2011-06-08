@@ -16,9 +16,9 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.UserDefinedValueValidationRule;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.DateFormatAnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.DateFormatAnnotationValueValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class DateFormatAnnotationTypeBinding extends StringValueAnnotationTypeBinding {

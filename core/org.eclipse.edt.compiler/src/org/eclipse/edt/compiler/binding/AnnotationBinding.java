@@ -44,9 +44,9 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemEnvironmentPackageNames;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 
@@ -421,7 +421,7 @@ public class AnnotationBinding extends DataBinding implements IAnnotationBinding
 	}
     
     private boolean typeIsResolvable(ITypeBinding singleValueType) {
-    	IPartBinding matchingSystemPart = (IPartBinding) SystemPartManager.getInstance().findType(singleValueType.getName());
+    	IPartBinding matchingSystemPart = (IPartBinding) SystemPartManager.findType(singleValueType.getName());
 		if(matchingSystemPart == singleValueType) {
 			return SystemEnvironmentPackageNames.EGL_CORE_REFLECT == matchingSystemPart.getPackageName() &&
 		           matchingSystemPart != SystemPartManager.SQLSTRING_BINDING;

@@ -19,7 +19,7 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PartSubTypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.UserDefinedFieldAccessAnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.UserDefinedFieldContentAnnotationValidationRule;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

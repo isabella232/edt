@@ -18,9 +18,9 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.DefaultFieldContentAnnotationValidationRule;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IFieldContentAnnotationValidationRule;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class DelimiterAnnotationTypeBinding extends DefaultFieldContentAnnotationValidationRule {

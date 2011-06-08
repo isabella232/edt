@@ -32,18 +32,18 @@ import org.eclipse.edt.compiler.binding.VariableBinding;
  */
 public class SystemLibraryManager {
     
-    private static SystemLibraryManager INSTANCE = new SystemLibraryManager();
-    
-    public static SystemLibraryManager getInstance() {
-        return INSTANCE;
-    }
     
     private Map libraries = new HashMap();
     private Map libraryData = new HashMap();
     private Map libraryFunctions =  new HashMap();   
 
-    private SystemLibraryManager() {
+    public SystemLibraryManager(SystemLibraryManager parentLib) {
         super();
+        if (parentLib != null) {
+        	libraries.putAll(parentLib.libraries);
+        	libraryData.putAll(parentLib.libraryData);
+        	libraryFunctions.putAll(parentLib.libraryFunctions);
+        }
     }
     
     public ITypeBinding findType(String simpleName) {
@@ -58,10 +58,6 @@ public class SystemLibraryManager {
         return (IFunctionBinding) getLibraryFunctions().get(simpleName);
     }
     
-    public Map getHardCodedLibraries() {
-            return initializeLibraries();
-    }
-
     public Map getLibraries() {
         return libraries;
     }
@@ -73,30 +69,7 @@ public class SystemLibraryManager {
     private Map getLibraryFunctions() {
          return libraryFunctions;
     }
-    
-    private Map initializeLibraries() {    
-        HashMap templibraries = new HashMap();
         
-//        templibraries.put(ConsoleLib.LIBRARY.getName(),		ConsoleLib.LIBRARY);
-//        templibraries.put(ConverseLib.LIBRARY.getName(),	ConverseLib.LIBRARY);
-//        templibraries.put(ConverseVar.LIBRARY.getName(),	ConverseVar.LIBRARY);
-//        templibraries.put(DateTimeLib.LIBRARY.getName(),	DateTimeLib.LIBRARY);
-//        templibraries.put(DLILib.LIBRARY.getName(),			DLILib.LIBRARY);
-//        templibraries.put(DLIVar.LIBRARY.getName(),			DLIVar.LIBRARY);
-//        templibraries.put(JavaLib.LIBRARY.getName(),		JavaLib.LIBRARY);
-//        templibraries.put(J2EELib.LIBRARY.getName(),		J2EELib.LIBRARY);
-//        templibraries.put(LobLib.LIBRARY.getName(),			LobLib.LIBRARY);
-//        templibraries.put(MathLib.LIBRARY.getName(),		MathLib.LIBRARY);
-//        templibraries.put(ReportLib.LIBRARY.getName(),		ReportLib.LIBRARY);
-//        templibraries.put(ServiceLib.LIBRARY.getName(),		ServiceLib.LIBRARY);
-//        templibraries.put(StrLib.LIBRARY.getName(),			StrLib.LIBRARY);
-//        templibraries.put(SysLib.LIBRARY.getName(),			SysLib.LIBRARY);
-//        templibraries.put(SysVar.LIBRARY.getName(),			SysVar.LIBRARY);        
-//        templibraries.put(VGLib.LIBRARY.getName(),			VGLib.LIBRARY);
-//        templibraries.put(VGVar.LIBRARY.getName(),			VGVar.LIBRARY);
-        return templibraries;
-    }
-    
     public void addSystemLibrary(LibraryBinding libraryBinding){
     	libraries.put(libraryBinding.getName(),libraryBinding);
     	addLibraryData(libraryBinding);

@@ -18,7 +18,7 @@ import org.eclipse.edt.compiler.binding.SystemConstantBinding;
 import org.eclipse.edt.compiler.binding.SystemFunctionBinding;
 import org.eclipse.edt.compiler.binding.SystemVariableBinding;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

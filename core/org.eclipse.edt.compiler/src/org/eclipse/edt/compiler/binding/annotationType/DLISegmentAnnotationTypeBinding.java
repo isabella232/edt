@@ -24,10 +24,10 @@ import org.eclipse.edt.compiler.binding.UserDefinedValueValidationRule;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.KeyItemForDLISegmentValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.MustBeDLINameAnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.MustBeDLINameForDLISegmentAnnotationValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

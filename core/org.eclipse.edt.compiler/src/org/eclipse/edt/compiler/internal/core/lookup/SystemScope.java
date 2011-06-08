@@ -58,7 +58,7 @@ public class SystemScope extends Scope {
     	IFunctionBinding result =  parentScope.findFunction(simpleName);
     	if(result != IBinding.NOT_FOUND_BINDING) return result;
     	
-    	result = SystemLibraryManager.getInstance().findFunction(simpleName);
+    	result = sysEnvironment.getSystemEnvironment().getSystemLibraryManager().findFunction(simpleName);
     	if(result == null) result = IBinding.NOT_FOUND_BINDING;
     	if(result != IBinding.NOT_FOUND_BINDING) return result;
         
@@ -77,12 +77,12 @@ public class SystemScope extends Scope {
     		return ((TopLevelFunctionBinding) topLevelFunctionBinding).getStaticTopLevelFunctionDataBinding();
     	}
     	
-        IDataBinding result = SystemLibraryManager.getInstance().findData(simpleName);
+        IDataBinding result = sysEnvironment.getSystemEnvironment().getSystemLibraryManager().findData(simpleName);
         if (result != null) {
             return result;
         }
         
-        result = EnumerationManager.getInstance().findData(simpleName);
+        result = sysEnvironment.getSystemEnvironment().getEnumerationManager().findData(simpleName);
         if (result != null) {
             return result;
         }

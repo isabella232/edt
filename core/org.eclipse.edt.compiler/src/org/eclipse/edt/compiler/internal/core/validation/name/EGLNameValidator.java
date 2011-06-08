@@ -28,7 +28,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibraryManager;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 
@@ -301,7 +301,6 @@ public class EGLNameValidator {
 
 	 			validateNameTokenSequence(nameParser.getNames(), input, problemRequestor);
 	 			start = 0;
- 				start = isQualifiedSystemReference( nameParser.getNames(), problemRequestor);
 	 
 				//now validate each name
  				for (int ii = start; ii < nameParser.getNames().size(); ii++) {
@@ -324,7 +323,6 @@ public class EGLNameValidator {
 				//"this", "syslib", "sysvar" and "mathlib" keywords are allowed  
 	 			validateNameTokenSequence(nameParser.getNames(), input, problemRequestor);
 	 			start = 0;
- 				start = isQualifiedSystemReference( nameParser.getNames(), problemRequestor );
 	 
 				//now validate each name
  				for (int ii = start; ii < nameParser.getNames().size(); ii++) {
@@ -379,7 +377,6 @@ public class EGLNameValidator {
 				// no subscripts allowed
 				validateNameTokenSequence(nameParser.getNames(), input, problemRequestor);
 	 			start = 0;
- 				start = isQualifiedSystemReference( nameParser.getNames(), problemRequestor );
 	 
 				//now validate each name
  				for (int ii = start; ii < nameParser.getNames().size(); ii++) {
@@ -474,7 +471,6 @@ public class EGLNameValidator {
 				//"this", "syslib", "sysvar" and "mathlib" keywords are allowed
 				validateNameTokenSequence(nameParser.getNames(), input, problemRequestor);
 	 			start = 0;
- 				start = isQualifiedSystemReference( nameParser.getNames(), problemRequestor );
 	 
 				//now validate each name
  				for (int ii = start; ii < nameParser.getNames().size(); ii++) {
@@ -1581,21 +1577,5 @@ public class EGLNameValidator {
 				new String[] { input });
 		}
 	}
-	
-	private static int isQualifiedSystemReference (ArrayList names, IProblemRequestor problemRequestor) {
-		if (names.size() == 1) {
-			return 0;  // single name can't be qualified system word reference
-		}
-		else {//have qualified name
-			if (isSystemLibraryQualifier( ((EGLNameToken)names.get(0)).getText() ) || 
-				((EGLNameToken)names.get(0)).getText().equalsIgnoreCase(IEGLConstants.KEYWORD_THIS) ) {
-				return 2;
-			}
-		}
-		return 0;
-	}
-	
-	public static boolean isSystemLibraryQualifier(String name) {
-		return SystemLibraryManager.getInstance().getLibraries().get(InternUtil.intern(name)) != null;
-	}
+		
 }

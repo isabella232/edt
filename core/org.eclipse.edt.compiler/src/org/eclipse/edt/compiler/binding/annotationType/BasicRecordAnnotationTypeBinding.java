@@ -19,13 +19,13 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.MutuallyExclusiveAnnotationAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.PartSubTypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.UserDefinedFieldContentAnnotationValidationRule;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.MinimumInputForStructureItemValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.TypeAheadAnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.TypeAheadFunctionForRecordAnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ValidValuesForPageItemAnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ValidatorDataTableForPageItemFieldValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ValueForNonFormFieldValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

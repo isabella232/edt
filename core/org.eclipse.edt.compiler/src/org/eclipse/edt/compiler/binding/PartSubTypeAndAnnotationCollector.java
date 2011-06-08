@@ -38,7 +38,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 public class PartSubTypeAndAnnotationCollector extends DefaultASTVisitor {
@@ -99,7 +99,7 @@ public class PartSubTypeAndAnnotationCollector extends DefaultASTVisitor {
                 }
 
             	if (typeBinding == null) {
-                    typeBinding = AnnotationTypeManager.getInstance().getAnnotationType(
+                    typeBinding = AnnotationTypeManager.getAnnotationType(
                             InternUtil.intern(annotationExpression.getName().getCanonicalName()));
             	}          	
             	
@@ -233,7 +233,7 @@ public class PartSubTypeAndAnnotationCollector extends DefaultASTVisitor {
         }
         	
         if(typeBinding == null) {
-        	typeBinding = AnnotationTypeManager.getInstance().getAnnotationType(name);
+        	typeBinding = AnnotationTypeManager.getAnnotationType(name);
         }
         
         if (typeBinding != null && typeBinding.isPartSubType()) {

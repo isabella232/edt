@@ -15,7 +15,7 @@ import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class AliasAnnotationTypeBinding extends StringValueAnnotationTypeBinding {

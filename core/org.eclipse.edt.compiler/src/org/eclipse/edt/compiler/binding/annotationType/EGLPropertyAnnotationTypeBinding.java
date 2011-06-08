@@ -19,10 +19,10 @@ import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.UserDefinedAnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.UserDefinedValueValidationRule;
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.EGLPropertyValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.GetMethodAnnotationValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.SetMethodAnnotationValueValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 public class EGLPropertyAnnotationTypeBinding extends ComplexAnnotationTypeBinding {

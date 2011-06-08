@@ -8,5 +8,5 @@
 <booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.edt.compiler.core.ast.NodeNameUtilityGenerator"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="${workspace_loc}\org.eclipse.edt.compiler.core\src\com\ibm\etools\edt\core\ast\NodeTypes.java"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.edt.mof.egl"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.edt.compiler"/>
 </launchConfiguration>

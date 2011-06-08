@@ -71,8 +71,8 @@ import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.core.lookup.TypeBindingScope;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.utils.TypeParser;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
@@ -362,7 +362,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		private boolean annotationTypeIsResolvable(IAnnotationTypeBinding aTypeBinding) {
 			if (aTypeBinding.hasSingleValue()) {
 				ITypeBinding singleValueType = aTypeBinding.getSingleValueType().getBaseType();
-				IPartBinding matchingSystemPart = (IPartBinding) SystemPartManager.getInstance().findType(singleValueType.getName());
+				IPartBinding matchingSystemPart = (IPartBinding) SystemPartManager.findType(singleValueType.getName());
 				if (matchingSystemPart == singleValueType) {
 					return SystemEnvironmentPackageNames.EGL_CORE_REFLECT == matchingSystemPart.getPackageName()
 							&& matchingSystemPart != SystemPartManager.SQLSTRING_BINDING;

@@ -106,8 +106,8 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**
@@ -797,7 +797,7 @@ public class StatementValidator implements IOStatementValidatorConstants{
 				
 					if(ITypeBinding.SERVICE_BINDING == typeBinding.getKind() ||
 					   (ITypeBinding.INTERFACE_BINDING == typeBinding.getKind() &&
-					   	SystemPartManager.getInstance().findType(typeBinding.getName()) != typeBinding)) {
+					   	SystemPartManager.findType(typeBinding.getName()) != typeBinding)) {
 						problemRequestor.acceptProblem(
 							type,
 							IProblemRequestor.SERVICE_OR_INTERFACE_ARRAYS_NOT_SUPPORTED);

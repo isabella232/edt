@@ -28,7 +28,7 @@ import org.eclipse.edt.compiler.core.ast.IDliIOStatement;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

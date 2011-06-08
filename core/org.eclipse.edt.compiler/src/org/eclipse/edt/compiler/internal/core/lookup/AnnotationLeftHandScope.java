@@ -112,7 +112,7 @@ public class AnnotationLeftHandScope extends Scope {
         notApplicableBinding = null;
         
         if(resolveToAnnotations) {
-	        IAnnotationTypeBinding typeBinding = AnnotationTypeManager.getInstance().getAnnotationType(simpleName);
+	        IAnnotationTypeBinding typeBinding = AnnotationTypeManager.getAnnotationType(simpleName);
 	        if (typeBinding != null) {
 	            if (isApplicableFor(typeBinding, bindingBeingAnnotated, index)) {
 	                annotationFoundUsingThisScope = true;

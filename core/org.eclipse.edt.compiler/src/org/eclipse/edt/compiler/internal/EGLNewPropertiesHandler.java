@@ -32,7 +32,7 @@ import org.eclipse.edt.compiler.binding.annotationType.EGLAnnotationGroupAnnotat
 import org.eclipse.edt.compiler.binding.annotationType.StereotypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.ElementKind;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 public class EGLNewPropertiesHandler {
@@ -1953,20 +1953,20 @@ public class EGLNewPropertiesHandler {
 	
 	private static Collection createRulesFor(AnnotationRecordFilter filter, boolean subtypes) {
 		Set result = new TreeSet(new EGLCaseInsensitiveComparator());
-		for(Iterator iter = AnnotationTypeManager.getInstance().getSystemPackageAnnotations().values().iterator(); iter.hasNext();) {
-			FlexibleRecordBinding rec = (FlexibleRecordBinding) iter.next();
-			if(rec.getAnnotation(AnnotationAnnotationTypeBinding.getInstance()) != null) {
-				AnnotationTypeBindingImpl aTypeBindingImpl = new AnnotationTypeBindingImpl(rec, null);
-				if(AnnotationAnnotationTypeBinding.getInstance() == aTypeBindingImpl.getAnnotationRecord().getSubType()) {
-					if(subtypes && aTypeBindingImpl.isPartSubType() ||
-					   !subtypes && !aTypeBindingImpl.isPartSubType()) {
-						if(filter.passes(aTypeBindingImpl)) {
-							result.add(new EGLPropertyRule(aTypeBindingImpl));
-						}
-					}
-				}
-			}
-		}
+//		for(Iterator iter = AnnotationTypeManager.getInstance().getSystemPackageAnnotations().values().iterator(); iter.hasNext();) {
+//			FlexibleRecordBinding rec = (FlexibleRecordBinding) iter.next();
+//			if(rec.getAnnotation(AnnotationAnnotationTypeBinding.getInstance()) != null) {
+//				AnnotationTypeBindingImpl aTypeBindingImpl = new AnnotationTypeBindingImpl(rec, null);
+//				if(AnnotationAnnotationTypeBinding.getInstance() == aTypeBindingImpl.getAnnotationRecord().getSubType()) {
+//					if(subtypes && aTypeBindingImpl.isPartSubType() ||
+//					   !subtypes && !aTypeBindingImpl.isPartSubType()) {
+//						if(filter.passes(aTypeBindingImpl)) {
+//							result.add(new EGLPropertyRule(aTypeBindingImpl));
+//						}
+//					}
+//				}
+//			}
+//		}
 		return result;
 	}
 	
@@ -1977,7 +1977,8 @@ public class EGLNewPropertiesHandler {
 	private static Collection createRulesForField(String complexPropertyName, String fieldName) {
 		Set result = new TreeSet(new EGLCaseInsensitiveComparator());
 		
-		FlexibleRecordBinding rec = (FlexibleRecordBinding) AnnotationTypeManager.getInstance().getSystemPackageAnnotations().get(InternUtil.intern(complexPropertyName));
+		FlexibleRecordBinding rec = null;
+//		FlexibleRecordBinding rec = (FlexibleRecordBinding) AnnotationTypeManager.getInstance().getSystemPackageAnnotations().get(InternUtil.intern(complexPropertyName));
 		if(rec != null) {
 			IDataBinding[] fields = rec.getFields();
 			for(int i = 0; i < fields.length; i++) {
@@ -1993,7 +1994,8 @@ public class EGLNewPropertiesHandler {
 	}
 	
 	public static Collection createRulesFor(String propertyName) {
-		FlexibleRecordBinding rec = (FlexibleRecordBinding) AnnotationTypeManager.getInstance().getSystemPackageAnnotations().get(InternUtil.intern(propertyName));
+		FlexibleRecordBinding rec = null;
+//		FlexibleRecordBinding rec = (FlexibleRecordBinding) AnnotationTypeManager.getInstance().getSystemPackageAnnotations().get(InternUtil.intern(propertyName));
 		if(rec != null) {
 			AnnotationTypeBindingImpl aTypeBindingImpl = new AnnotationTypeBindingImpl(rec, null);
 			return Arrays.asList(new EGLPropertyRule[] {new EGLPropertyRule(aTypeBindingImpl)});
@@ -2003,7 +2005,8 @@ public class EGLNewPropertiesHandler {
 	
 	public static Collection createRulesForMemberAnnotations(String stereotypeName) {
 		Set result = new TreeSet();
-		FlexibleRecordBinding rec = (FlexibleRecordBinding) AnnotationTypeManager.getInstance().getSystemPackageAnnotations().get(InternUtil.intern(stereotypeName));
+		FlexibleRecordBinding rec = null;
+//		FlexibleRecordBinding rec = (FlexibleRecordBinding) AnnotationTypeManager.getInstance().getSystemPackageAnnotations().get(InternUtil.intern(stereotypeName));
 		if(rec != null) {
 			IAnnotationBinding aBinding = rec.getAnnotation(StereotypeAnnotationTypeBinding.getInstance());
 			if(aBinding != null) {

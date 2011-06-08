@@ -17,9 +17,9 @@ import java.util.List;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.SignKind;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.PropertyApplicableForNumericTypeOnlyAnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.SignAnnotationValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class SignAnnotationTypeBinding extends EnumerationValueAnnotationTypeBinding {

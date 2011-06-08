@@ -18,7 +18,7 @@ import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.UsedTypeBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.PFKeyKind;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 class ValidationBypassKeysAnnotationTypeBinding extends AnnotationTypeBinding {

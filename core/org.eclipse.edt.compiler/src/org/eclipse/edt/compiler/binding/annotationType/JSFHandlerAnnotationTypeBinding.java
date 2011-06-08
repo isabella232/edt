@@ -29,7 +29,6 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.ScopeKind;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.BypassValidationForPageItemFieldValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.DateAndTimeFormatForJSFHandlerValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.JSFHandlerOnPrerenderFunctionAndOnConstructionFunctionValidator;
@@ -47,6 +46,7 @@ import org.eclipse.edt.compiler.internal.core.validation.annotation.ValidValuesF
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ValidatorDataTableForPageItemFieldValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ValidatorFunctionAnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ValueForNonFormFieldValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**

@@ -15,7 +15,7 @@ import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
 import org.eclipse.edt.compiler.binding.SystemEnumerationDataBinding;
 import org.eclipse.edt.compiler.binding.SystemEnumerationTypeBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemEnvironmentPackageNames;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 public class ProtectKind extends Enumeration{

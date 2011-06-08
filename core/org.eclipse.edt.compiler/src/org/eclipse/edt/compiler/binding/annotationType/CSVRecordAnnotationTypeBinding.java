@@ -23,13 +23,13 @@ import org.eclipse.edt.compiler.binding.RequiredFieldInPartTypeAnnotationTypeBin
 import org.eclipse.edt.compiler.binding.UserDefinedFieldContentAnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.UserDefinedValueValidationRule;
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.DelimiterForCSVRecordValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.TextQualifierForCSVRecordValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.TypeAheadAnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.TypeAheadFunctionForRecordAnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ValidValuesForPageItemAnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ValidatorDataTableForPageItemFieldValidator;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**
