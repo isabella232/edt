@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.swt.graphics.Image;
 
