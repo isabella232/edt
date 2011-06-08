@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.utils.IRLoader;
+import org.eclipse.edt.mof.egl.compiler.IRLoader;
 import org.eclipse.edt.mof.egl.utils.LoadPartException;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
