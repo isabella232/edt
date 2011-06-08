@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/org.eclipse.edt.mof.egl/JavaSource/org/eclipse/edt/mof/egl/compiler/EGL2IR.java"/>
+<listEntry value="/org.eclipse.edt.compiler/src/org/eclipse/edt/mof/egl/compiler/EGL2IR.java"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
@@ -13,5 +13,5 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.edt.mof.egl.compiler.EGL2IR"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-eglpath &quot;D:\Workspaces\EGL_CE\org.eclipse.edt.mof.egl\SystemPackagesSrc;D:\Workspaces\EGL_CE\org.eclipse.edt.mof.egl\EGLSource;D:\Workspaces\EGL_CE\org.eclipse.edt.mof.egl\EGL_Test&quot; -irDestination &quot;D:\Workspaces\EGL_CE\org.eclipse.edt.mof.egl\EGL_MOF_BIN&quot;  -isVAGCompatible &quot;${folder_prompt}/*.egl&quot;"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.edt.mof.egl"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.edt.compiler"/>
 </launchConfiguration>

@@ -15,11 +15,9 @@ import java.util.List;
 
 import org.eclipse.edt.mof.egl.ArrayLiteral;
 import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.ParameterizedType;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.egl2mof.MofConversion;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 public class ArrayLiteralImpl extends LiteralImpl implements ArrayLiteral, MofConversion {

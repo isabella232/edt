@@ -13,7 +13,6 @@ package org.eclipse.edt.mof.egl.impl;
 
 import java.util.List;
 
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -24,6 +23,7 @@ import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeParameter;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.impl.EClassImpl;
 import org.eclipse.edt.mof.utils.EList;
 

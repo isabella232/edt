@@ -14,7 +14,6 @@ package org.eclipse.edt.mof.egl.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
 import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -26,6 +25,7 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeParameter;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.impl.EEnumImpl;
 
 

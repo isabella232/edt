@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.egl2mof.MofConversion;
 
 
 public abstract class PrimitiveTypeLiteralImpl extends LiteralImpl implements PrimitiveTypeLiteral, MofConversion {

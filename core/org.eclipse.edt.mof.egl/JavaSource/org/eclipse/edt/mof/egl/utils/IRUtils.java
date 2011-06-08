@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.edt.compiler.core.ast.NullLiteral;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AmbiguousReferenceException;
@@ -50,6 +49,7 @@ import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.NoSuchMemberError;
+import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.ParameterizableType;

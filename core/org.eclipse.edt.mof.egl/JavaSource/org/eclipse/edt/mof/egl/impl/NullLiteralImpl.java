@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.egl2mof.MofConversion;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class NullLiteralImpl extends LiteralImpl implements NullLiteral, MofConversion {

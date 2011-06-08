@@ -9,10 +9,9 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.egl.egl2mof;
+package org.eclipse.edt.mof.egl;
 
-import org.eclipse.edt.compiler.internal.core.utils.InternUtil;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 public interface MofConversion {
 	

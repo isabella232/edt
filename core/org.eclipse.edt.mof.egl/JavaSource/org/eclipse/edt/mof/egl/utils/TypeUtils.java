@@ -29,6 +29,7 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
@@ -38,7 +39,6 @@ import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.egl2mof.MofConversion;
 import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
@@ -119,7 +119,7 @@ public class TypeUtils implements MofConversion {
 
 	public static Type getType(String signature) {
 		try {
-			return (Type)PartEnvironment.INSTANCE.find(signature);
+			return (Type)new PartEnvironment().find(signature);
 		} catch (MofObjectNotFoundException e) {
 			return null;
 		} catch (DeserializationException e) {
@@ -270,6 +270,10 @@ public class TypeUtils implements MofConversion {
 	 * @return
 	 */
 	public static boolean areStructurallyEquivalent(MofSerializable p1, MofSerializable p2) {
+		if (p1 == p2) {
+			return true;
+		}
+		
 		if (p1 == null || p2 == null) return false;
 		if (!((EObject)p1).getEClass().equals(((EObject)p2).getEClass()))
 			return false;
@@ -357,10 +361,13 @@ public class TypeUtils implements MofConversion {
 				return false;
 			}
 			else {
-				for (int i=0; i<flds1.size(); i++) {
+				for (int i = 0; i < flds1.size(); i++) {
 					Field f1 = flds1.get(i);
 					Field f2 = null;
 					if (isValueType(s1)) {
+						if (flds2.size() < i) {
+							return false;
+						}
 						f2 = flds2.get(i);
 						if (!f1.getName().equalsIgnoreCase(f2.getName()))
 							return false;
@@ -368,7 +375,11 @@ public class TypeUtils implements MofConversion {
 					else {	
 						f2 = s2.getField(f1.getName());
 					}
-					return f2 != null && f1.getType().equals(f2.getType()) && f1.isNullable() == f2.isNullable();
+					if (f2 != null && f1.getType().equals(f2.getType()) && f1.isNullable() == f2.isNullable()) {
+					}
+					else {
+						return false;
+					}
 				}
 			}
 			if (!areStructurallyEquivalentFunctionMembers(s1.getConstructors(), s2.getConstructors()))
@@ -395,7 +406,7 @@ public class TypeUtils implements MofConversion {
 			MofSerializable s2 = t2.getDefaultSuperType();
 			if ((s1 == null && s2 != null) || (s1 != null && s2 == null))
 				return false;
-			if (!s1.equals(s2))
+			if (s1 != null && !s1.equals(s2))
 				return false;
 			if (t1.getMemberAnnotations().size() != t1.getMemberAnnotations().size())
 				return false;
@@ -403,7 +414,15 @@ public class TypeUtils implements MofConversion {
 				if (!t2.getMemberAnnotations().contains(type))
 					return false;
 			}
-			if (!t1.getPartType().equals(t2.getPartType()))
+			
+			if (t1.getPartType() == null && t2.getPartType() != null) {
+				return false;
+			}
+			if (t1.getPartType() != null && t2.getPartType() == null) {
+				return false;
+			}
+			
+			if (t1.getPartType() != null && !t1.getPartType().equals(t2.getPartType()))
 				return false;
 		}
 		return true;
@@ -549,7 +568,6 @@ public class TypeUtils implements MofConversion {
 	}
 	
 	public static Operation getBinaryOperation(StructPart clazz, String opSymbol ) {
-		Operation result = null;
 		for (Operation op : clazz.getOperations()) {
 			if (op.getOpSymbol().equals(opSymbol) 
 					&& op.getParameters().size() == 2
