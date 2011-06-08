@@ -141,15 +141,18 @@ public class ProjectSettingsUtility {
 			}
 		}
 		if (ids != null && ids.length != 0) {
+			ICompiler compiler = getCompiler(resource.getProject());
 			IGenerator[] gens = EDTCoreIDEPlugin.getPlugin().getGenerators();
 			if (gens.length > 0) {
 				List<IGenerator> generators = new ArrayList<IGenerator>(ids.length);
 				for (int i = 0; i < gens.length; i++) {
-					String nextId = gens[i].getId();
-					for (int j = 0; j < ids.length; j++) {
-						if (nextId.equals(ids[j].trim())) {
-							generators.add(gens[i]);
-							break;
+					if (gens[i].getCompiler() == compiler) { // only return generators that belong to the resource's compiler
+						String nextId = gens[i].getId();
+						for (int j = 0; j < ids.length; j++) {
+							if (nextId.equals(ids[j].trim())) {
+								generators.add(gens[i]);
+								break;
+							}
 						}
 					}
 				}
