@@ -14,11 +14,10 @@ package org.eclipse.edt.compiler;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.compiler.SystemPackageBuildPathEntryFactory;
 import org.eclipse.edt.mof.egl.impl.ProgramImpl;
 import org.eclipse.edt.mof.egl.lookup.EglLookupDelegate;
-import org.eclipse.edt.mof.egl.mof2binding.Mof2Binding;
 import org.eclipse.edt.mof.serialization.Environment;
 
 /**

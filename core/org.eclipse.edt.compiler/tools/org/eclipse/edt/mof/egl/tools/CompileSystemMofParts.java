@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.tools;
 
-import org.eclipse.edt.mof.egl.compiler.EGL2IR;
+import org.eclipse.edt.compiler.tools.EGL2IR;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 
