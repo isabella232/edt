@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.ZipFileBindingBuildPathEntry;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
+import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.ide.core.internal.utils.AbsolutePathUtility;
@@ -24,7 +25,7 @@ import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.serialization.IZipFileEntryManager;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 
-public class EclipseZipFileBuildPathEntry extends ZipFileBindingBuildPathEntry implements IZipFileEntryManager, IProjectBuildPathEntry {
+public class EclipseZipFileBuildPathEntry extends ZipFileBindingBuildPathEntry implements IZipFileEntryManager, IBuildPathEntry {
 
 	private IPath path;
 	private Object project;

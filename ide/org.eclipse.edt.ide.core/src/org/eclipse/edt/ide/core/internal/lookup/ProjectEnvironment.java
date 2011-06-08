@@ -20,6 +20,7 @@ import org.eclipse.edt.compiler.binding.PackageBinding;
 import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
+import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.mof.egl.Part;
@@ -40,7 +41,7 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
 	
 	private final IProject project;
 	
-    private IProjectBuildPathEntry[] buildPathEntries;
+    private IBuildPathEntry[] buildPathEntries;
     
     private ProjectBuildPathEntry declaringProjectBuildPathEntry;
     
@@ -60,7 +61,7 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
     	return this.converter;
     }
     
-	protected void setProjectBuildPathEntries(IProjectBuildPathEntry[] projectBuildPathEntries){
+	protected void setProjectBuildPathEntries(IBuildPathEntry[] projectBuildPathEntries){
     	this.buildPathEntries = projectBuildPathEntries;
     	
     	// Add the object stores for the path entries to the backing environment.

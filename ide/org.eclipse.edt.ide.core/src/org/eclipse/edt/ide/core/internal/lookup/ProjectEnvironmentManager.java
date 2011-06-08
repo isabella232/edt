@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.builder.AbstractBuilder;
 import org.eclipse.edt.ide.core.internal.builder.AbstractProcessingQueue;
 import org.eclipse.edt.mof.serialization.Environment;
@@ -90,7 +91,7 @@ public class ProjectEnvironmentManager {
     	return env;
     }
     
-    private IProjectBuildPathEntry[] getProjectBuildPathEntriesFor(IProject project) {
+    private IBuildPathEntry[] getProjectBuildPathEntriesFor(IProject project) {
         ProjectBuildPath projectBuildPath = ProjectBuildPathManager.getInstance().getProjectBuildPath(project);
         return projectBuildPath.getBuildPathEntries();
     }

@@ -43,7 +43,9 @@ import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyASTMana
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyProcessingQueue;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.ide.core.internal.utils.Util;
+import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.serialization.ObjectStore;
 
 /**
  * Project Build Path entries are caches used when binding an AST tree.  A new WorkingCopyProjectBuildPathEntry must be created each time a set of AST trees
@@ -378,6 +380,23 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
     
 	private ISystemEnvironment getSystemEnvironment() {
 		return SystemEnvironmentManager.findSystemEnvironment(getProject());
+	}
+
+	@Override
+	public void addPartBindingToCache(IPartBinding partBinding) {
+		bindingCache.put(InternUtil.intern(partBinding.getPackageName()), InternUtil.intern(partBinding.getCaseSensitiveName()), partBinding );
+	}
+
+	@Override
+	public ObjectStore[] getObjectStores() {
+		// TODO
+		return new ObjectStore[0];
+	}
+
+	@Override
+	public org.eclipse.edt.mof.egl.Part findPart(String[] packageName, String name) throws PartNotFoundException {
+		// TODO
+		return null;
 	}		
 	
 }

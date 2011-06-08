@@ -30,6 +30,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileASTScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
+import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
@@ -51,7 +52,7 @@ import org.eclipse.edt.mof.serialization.ObjectStore;
 /**
  * @author winghong
  */
-public class ProjectBuildPathEntry implements IProjectBuildPathEntry {
+public class ProjectBuildPathEntry implements IBuildPathEntry {
 	
 	private class RealizingEnvironment implements IEnvironment {
 
