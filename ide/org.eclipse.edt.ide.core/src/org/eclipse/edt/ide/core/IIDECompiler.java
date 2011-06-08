@@ -14,7 +14,7 @@ package org.eclipse.edt.ide.core;
 /**
  * Enables clients to define a compiler. A compiler may contribute to the System parts used during compilation.
  */
-public interface ICompiler extends org.eclipse.edt.compiler.ICompiler {
+public interface IIDECompiler extends org.eclipse.edt.compiler.ICompiler {
 		
 	/**
 	 * @return the preference page id of this compiler.

@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
-import org.eclipse.edt.ide.core.ICompiler;
+import org.eclipse.edt.ide.core.IIDECompiler;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.osgi.service.prefs.BackingStoreException;
@@ -67,14 +67,14 @@ public class ProjectSettingsUtility {
 	 * @param project  The project.
 	 * @return the project's compiler, possibly null.
 	 */
-	public static ICompiler getCompiler(IProject project) {
+	public static IIDECompiler getCompiler(IProject project) {
 		String id = getCompilerId(project);
 		if (id == null) {
 			// When the project doesn't have its own settings, use the workspace defaults
 			id = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( EDTCorePreferenceConstants.COMPILER_ID );
 		}
 		if (id != null) {
-			ICompiler[] compilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
+			IIDECompiler[] compilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
 			for (int i = 0; i < compilers.length; i++) {
 				if (compilers[i].getId().equals(id)) {
 					return compilers[i];
@@ -141,7 +141,7 @@ public class ProjectSettingsUtility {
 			}
 		}
 		if (ids != null && ids.length != 0) {
-			ICompiler compiler = getCompiler(resource.getProject());
+			IIDECompiler compiler = getCompiler(resource.getProject());
 			IGenerator[] gens = EDTCoreIDEPlugin.getPlugin().getGenerators();
 			if (gens.length > 0) {
 				List<IGenerator> generators = new ArrayList<IGenerator>(ids.length);

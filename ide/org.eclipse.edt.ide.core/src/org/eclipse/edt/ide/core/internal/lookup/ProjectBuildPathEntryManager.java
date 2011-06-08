@@ -16,8 +16,8 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.edt.compiler.tools.EGL2IR;
 import org.eclipse.edt.ide.core.internal.builder.IFileSystemObjectStore;
-import org.eclipse.edt.mof.egl.compiler.EGL2IR;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 
 

@@ -132,7 +132,7 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	/**
 	 * The various compilers available.
 	 */
-	private ICompiler[] compilers;
+	private IIDECompiler[] compilers;
 	
 	/**
 	 * The various generators available.
@@ -644,12 +644,12 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 		// First the compilers
 		IConfigurationElement[] elements = Platform.getExtensionRegistry().getConfigurationElementsFor(PLUGIN_ID + "." + PT_COMPILERS); //$NON-NLS-1$
 		if (elements != null) {
-			List<ICompiler> compilers = new ArrayList();
+			List<IIDECompiler> compilers = new ArrayList();
 			for (int i = 0; i < elements.length; i++) {
 				try {
 					Object command = elements[i].createExecutableExtension(CLASS);
-					if (command instanceof ICompiler) {
-						ICompiler compiler = (ICompiler)command;
+					if (command instanceof IIDECompiler) {
+						IIDECompiler compiler = (IIDECompiler)command;
 						// An ID is required.
 						String id = elements[i].getAttribute(ID);
 						if (id != null && id.length() != 0) {
@@ -664,10 +664,10 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 					e.printStackTrace();
 				}
 			}
-			this.compilers = compilers.toArray(new ICompiler[compilers.size()]);
+			this.compilers = compilers.toArray(new IIDECompiler[compilers.size()]);
 		}
 		else {
-			this.compilers = new ICompiler[0];
+			this.compilers = new IIDECompiler[0];
 		}
 		
 		// Now the generators
@@ -684,7 +684,7 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 						String id = elements[i].getAttribute(ID);
 						if (id != null && id.length() != 0) {
 							// As well as a compiler.
-							ICompiler compiler = findCompiler(elements[i].getAttribute(COMPILER));
+							IIDECompiler compiler = findCompiler(elements[i].getAttribute(COMPILER));
 							if (compiler != null) {
 								gen.setId(id);
 								gen.setName(elements[i].getAttribute(NAME));
@@ -712,7 +712,7 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	/**
 	 * This method assumes the compilers have been initialized already.
 	 */
-	private ICompiler findCompiler(String id) {
+	private IIDECompiler findCompiler(String id) {
 		if (id == null || id.length() == 0 || compilers == null) {
 			return null;
 		}
@@ -741,7 +741,7 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	/**
 	 * @return a non-null array of ICompilers.
 	 */
-	public ICompiler[] getCompilers() {
+	public IIDECompiler[] getCompilers() {
 		synchronized(compilersAndGeneratorsSynchObj) {
 			if (compilers == null) {
 				setupCompilersAndGenerators();

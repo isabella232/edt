@@ -26,12 +26,12 @@ import org.osgi.framework.Bundle;
 /**
  * Base implementation of ICompiler intended to be subclassed by clients.
  */
-public class IDEBaseCompiler implements ICompiler {
+public class IDEBaseCompiler implements IIDECompiler {
 
 	protected ISystemEnvironment systemEnvironment;
 
 	protected org.eclipse.edt.compiler.ICompiler baseCompiler;
-	protected ICompiler parentCompiler;
+	protected IIDECompiler parentCompiler;
 	
 	/**
 	 * The id of the preference page associated with this compiler.

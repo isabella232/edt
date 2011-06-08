@@ -20,10 +20,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.SystemIREnvironment;
-import org.eclipse.edt.ide.core.ICompiler;
+import org.eclipse.edt.compiler.SystemPackageBuildPathEntryFactory;
+import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
+import org.eclipse.edt.ide.core.IIDECompiler;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
-import org.eclipse.edt.mof.egl.compiler.SystemPackageBuildPathEntryFactory;
-import org.eclipse.edt.mof.egl.mof2binding.Mof2Binding;
 
 /**
  * Keeps track of environments for additional system roots provided by a compiler.
@@ -45,7 +45,7 @@ public class SystemEnvironmentManager {
 	}
 	
 	public static ISystemEnvironment findSystemEnvironment(IProject project) {
-        ICompiler compiler = ProjectSettingsUtility.getCompiler(project);
+        IIDECompiler compiler = ProjectSettingsUtility.getCompiler(project);
         if (compiler != null) {
         	return compiler.getSystemEnvironment();
         }
