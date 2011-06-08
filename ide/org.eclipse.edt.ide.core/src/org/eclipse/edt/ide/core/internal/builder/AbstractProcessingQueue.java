@@ -71,6 +71,7 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.IEnvironment;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * @author svihovec
@@ -152,7 +153,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 		    System.out.println("\nProcessing: " + getQualifiedName(packageName, caseInsensitiveInternedString)); //$NON-NLS-1$
 		}
 		
-		notifier.subTask(BuilderResources.buildCompiling + qualifiedName);
+		notifier.subTask(NLS.bind(BuilderResources.buildCompiling, qualifiedName));
 		
 		IFile declaringFile = projectInfo.getPartOrigin(packageName, caseInsensitiveInternedString).getEGLFile();
 		Node partAST = ASTManager.getInstance().getAST(declaringFile, caseInsensitiveInternedString);
@@ -210,7 +211,8 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 			notifier.subTask(BuilderResources.buildProcessingTopLevelFunctions);
 			functionInfos = processTopLevelFunctions(dependencyInfo.getTopLevelFunctions(), dependencyInfo.getFunctionContainerScope(), declaringFile, dependencyInfo, cappedProblemRequestor);
 		}
-
+		
+		notifier.subTask(NLS.bind(BuilderResources.buildCreatingIR, qualifiedName));
 		File fileAST = ASTManager.getInstance().getFileAST(declaringFile);
 
 		MofSerializable previousPart;
@@ -234,7 +236,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 		
 		MofSerializable part = createIRFromBoundAST(partAST, declaringFile, functionInfos, fileAST.getImportDeclarations(), cappedProblemRequestor);
         if(previousPart == null || !TypeUtils.areStructurallyEquivalent(previousPart, part)){
-        	notifier.subTask(BuilderResources.buildAddingDependentsOf + qualifiedName);
+        	notifier.subTask(NLS.bind(BuilderResources.buildAddingDependentsOf, qualifiedName));
 			
 			// If a part binding does not previously exist, do not add dependents of this part, because we have added dependents already before we processed the part.
         	if(previousPart != null){
@@ -250,7 +252,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
         	generationQueue.add(partAST, declaringFile);
         }
 		
-        notifier.subTask(BuilderResources.buildCreatingIR + qualifiedName);
+        notifier.subTask(NLS.bind(BuilderResources.buildSavingIR, qualifiedName));
         
 		if (canSave(caseInsensitiveInternedString)) {
 			ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getIREnvironment().save(part, true);

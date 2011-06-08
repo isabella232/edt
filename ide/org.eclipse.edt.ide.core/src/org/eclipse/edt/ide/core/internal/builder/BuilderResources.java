@@ -40,6 +40,7 @@ public class BuilderResources extends NLS {
 	public static String buildAddingDependentsOf;
 	public static String buildProcessingTopLevelFunctions;
 	public static String buildCreatingIR;
+	public static String buildSavingIR;
 	public static String buildProcessingDependentChanges;
 	public static String buildAnalyzingAllEGLFiles;
 	public static String buildDone;
