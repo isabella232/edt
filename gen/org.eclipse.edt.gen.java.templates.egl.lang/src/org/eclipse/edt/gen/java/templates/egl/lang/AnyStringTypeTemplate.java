@@ -96,7 +96,7 @@ public class AnyStringTypeTemplate extends JavaTemplate {
 			|| getNativeStringOperation((BinaryExpression) args[0]).length() == 0) {
 			out.print(ctx.getNativeImplementationMapping((Type) ((BinaryExpression) args[0]).getOperation().getContainer()) + '.');
 			out.print(CommonUtilities.getNativeRuntimeOperationName((BinaryExpression) args[0]));
-			out.print("(ezeProgram, ");
+			out.print("(");
 			ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, args);
 			out.print(", ");
 			ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, args);
