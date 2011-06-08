@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
 
 /**
@@ -109,12 +108,6 @@ public class EDictionary extends AnyObject implements egl.lang.EDictionary
 	@Override
 	public void setOrder(int orderConstant) {
 		this.order = orderConstant;
-		
-	}
-
-	@Override
-	public void removeElement(String key) throws JavartException {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -376,7 +369,7 @@ public class EDictionary extends AnyObject implements egl.lang.EDictionary
 	 * @return The StringArray
 	 * @throws JavartException
 	 */
-	public EList<java.lang.String> getKeys( Executable program ) throws JavartException
+	public EList<java.lang.String> getKeys() throws JavartException
 	{
 		EList<java.lang.String> keys = new EList<java.lang.String>();
 		for ( java.lang.String key : this.map.keySet() )
@@ -394,7 +387,7 @@ public class EDictionary extends AnyObject implements egl.lang.EDictionary
 	 * @return The ReferenceArray
 	 * @throws JavartException
 	 */
-	public EList<Object> getValues( Executable program ) throws JavartException
+	public EList<Object> getValues() throws JavartException
 	{
 		EList<Object> vals = new EList<Object>();
 		for ( Object value : this.map.values() )
@@ -437,7 +430,8 @@ public class EDictionary extends AnyObject implements egl.lang.EDictionary
 	 * @throws AbnormalException
 	 *             if no element with specified key exists
 	 */
-	public void removeElement( Executable program, java.lang.String key ) throws JavartException
+	@Override
+	public void removeElement( java.lang.String key ) throws JavartException
 	{
 		if ( !this.caseSensitive )
 		{
@@ -510,7 +504,7 @@ public class EDictionary extends AnyObject implements egl.lang.EDictionary
 	 * @param key
 	 * @return The AnyRef entry, or a DictionaryEntryMaker proxy object
 	 */
-	public Object lookup( java.lang.String key, Executable program )
+	public Object lookup( java.lang.String key )
 	{
 		if ( !this.caseSensitive )
 		{

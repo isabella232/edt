@@ -14,7 +14,6 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import java.math.BigDecimal;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
 
 import egl.lang.AnyNumber;
@@ -39,52 +38,52 @@ public class EFloat32 extends AnyBoxedObject<Float> implements AnyNumber {
 		return value instanceof EFloat32;
 	}
 	
-	public static Float asFloat32(Executable program, Short value) {
+	public static Float asFloat32(Short value) {
 		if (value == null) return null;
 		return value.floatValue();
 	}
 	
-	public static Float asFloat32(Executable program, Integer value) {
+	public static Float asFloat32(Integer value) {
 		if (value == null) return null;
 		return value.floatValue();
 	}
 	
-	public static Float asFloat32(Executable program, Long value) {
+	public static Float asFloat32(Long value) {
 		if (value == null) return null;
 		return value.floatValue();
 	}
 		
-	public static Float asFloat32(Executable program, BigDecimal value) {
+	public static Float asFloat32(BigDecimal value) {
 		if (value == null) return null;
 		return value.floatValue();
 
 	}
 
-	public static Float asFloat32(Executable program, String value) throws JavartException {
+	public static Float asFloat32(String value) throws JavartException {
 		if (value == null) return null;
-		return asFloat32(program, EDecimal.asDecimal(program, value));
+		return asFloat32(EDecimal.asDecimal(value));
 	}
 	
-	public static Float asFloat32(Executable program, Double value) throws JavartException {
+	public static Float asFloat32(Double value) throws JavartException {
 		if (value == null) return null;
 		return value.floatValue();
 	}
 
-	public static int compareTo(Executable program, Float op1, Float op2) throws JavartException {
+	public static int compareTo(Float op1, Float op2) throws JavartException {
 		if (op1 == null || op2 == null) {
 			throw new NullValueException();
 		}
 		return op1.compareTo(op2);
 	}
 
-	public static boolean equals(Executable program, Float op1, Float op2) {
+	public static boolean equals(Float op1, Float op2) {
 		if (op1 == null && op2 == null) return true;
 		if ((op1 != null && op2 == null) || (op1 == null && op2 != null)) return false;
 		return op1.equals(op2);
 	}
 	
-	public static boolean notEquals(Executable program, Float op1, Float op2) {
-		return !equals(program, op1, op2);
+	public static boolean notEquals(Float op1, Float op2) {
+		return !equals(op1, op2);
 	}
 
 }

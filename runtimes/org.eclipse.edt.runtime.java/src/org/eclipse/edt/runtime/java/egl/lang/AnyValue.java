@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.runtime.java.egl.lang;
 
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
 
 
@@ -22,8 +21,6 @@ public abstract class AnyValue extends AnyObject implements egl.lang.AnyValue {
 	private static final long serialVersionUID = 70L;
 	
 	public AnyValue() { super(); }
-	
-	public AnyValue(final Executable program) { super(program); }
 	
 	public abstract void ezeSetEmpty();
 	public abstract void ezeCopy(Object source);

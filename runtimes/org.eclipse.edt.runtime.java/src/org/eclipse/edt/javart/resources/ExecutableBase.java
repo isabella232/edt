@@ -36,8 +36,6 @@ public abstract class ExecutableBase implements Executable, Serializable
 	 * The RunUnit.
 	 */
 	public RunUnit runUnit;
-	
-	public Executable ezeProgram;
 
 	
 	/**
@@ -71,7 +69,6 @@ public abstract class ExecutableBase implements Executable, Serializable
 		throws JavartException
 	{
 		this.runUnit = runUnit;
-		this.ezeProgram = this;
 	}
 	
 	/**

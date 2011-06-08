@@ -16,7 +16,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.TypeConstraints;
 
@@ -25,10 +24,6 @@ public abstract class AnyObject implements egl.lang.AnyObject {
 	 * The version ID used in serialization.
 	 */
 	private static final long serialVersionUID = 70L;
-	
-	public static egl.lang.AnyObject box(Executable program, Object value) throws JavartException {
-		return ezeBox(value);
-	}
 
 	public static egl.lang.AnyObject box(egl.lang.AnyObject value) throws JavartException {
 		return ezeBox(value);
@@ -37,7 +32,7 @@ public abstract class AnyObject implements egl.lang.AnyObject {
 	@SuppressWarnings("unchecked")
 	public static <R extends Object> AnyBoxedObject<R> ezeBox(R object) throws JavartException {
 		if (object instanceof AnyValue) {
-			AnyValue newValue = ((AnyValue)object).ezeNewValue(((AnyValue)object).ezeProgram);
+			AnyValue newValue = ((AnyValue)object).ezeNewValue();
 			newValue.ezeCopy((AnyValue)object);
 			return new AnyBoxedObject<R>((R)newValue);
 		}
@@ -78,11 +73,10 @@ public abstract class AnyObject implements egl.lang.AnyObject {
 			// Conversion operation needs to be invoked
 			Method method = null;
 			Object unboxed = value instanceof egl.lang.AnyObject ? ((egl.lang.AnyObject)value).ezeUnbox() : value;
-			Class[] parmTypes = new Class[parameterTypes.length + 2];
-			parmTypes[0] =  Executable.class;
-			parmTypes[1] = unboxed.getClass();
+			Class[] parmTypes = new Class[parameterTypes.length + 1];
+			parmTypes[0] = unboxed.getClass();
 			if (parameterTypes != null)
-				java.lang.System.arraycopy(parameterTypes, 0, parmTypes, 2, parameterTypes.length);
+				java.lang.System.arraycopy(parameterTypes, 0, parmTypes, 1, parameterTypes.length);
 			try {
 				method = clazz.getMethod(conversionMethod, parmTypes);
 			}
@@ -115,14 +109,8 @@ public abstract class AnyObject implements egl.lang.AnyObject {
 	public static <T extends Object> boolean ezeIsa(Object object, Class<T> clazz) {
 		return clazz.isInstance(object);
 	}
-
-	public Executable ezeProgram;
 	
 	public AnyObject() { super(); }
-	
-	public AnyObject(final Executable program) {
-		ezeProgram = program;
-	}
 	
 	public java.lang.String ezeTypeSignature() {
 		return getClass().getName();

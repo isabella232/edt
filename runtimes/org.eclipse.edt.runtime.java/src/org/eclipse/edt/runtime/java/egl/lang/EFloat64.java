@@ -14,7 +14,6 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import java.math.BigDecimal;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
 
 import egl.lang.AnyNumber;
@@ -39,52 +38,52 @@ public class EFloat64 extends AnyBoxedObject<Double> implements AnyNumber {
 		return value instanceof EFloat64;
 	}
 
-	public static Double asFloat64(Executable program, Short value) {
+	public static Double asFloat64(Short value) {
 		if (value == null) return null;
 		return Double.valueOf(value);
 	}
 	
-	public static Double asFloat64(Executable program, Integer value) {
+	public static Double asFloat64(Integer value) {
 		if (value == null) return null;
 		return Double.valueOf(value);
 	}
 	
-	public static Double asFloat64(Executable program, Long value) {
+	public static Double asFloat64(Long value) {
 		if (value == null) return null;
 		return Double.valueOf(value);
 	}
 	
-	public static Double asFloat64(Executable program, Float value) {
+	public static Double asFloat64(Float value) {
 		if (value == null) return null;
 		return Double.valueOf(value);
 	}
 
-	public static Double asFloat64(Executable program, BigDecimal value) {
+	public static Double asFloat64(BigDecimal value) {
 		if (value == null) return null;
 		return value.doubleValue();
 
 	}
 
-	public static Double asFloat64(Executable program, String value) throws JavartException {
+	public static Double asFloat64(String value) throws JavartException {
 		if (value == null) return null;
-		return asFloat64(program, EDecimal.asDecimal(program, value));
+		return asFloat64(EDecimal.asDecimal(value));
 	}
 	
-	public static int compareTo(Executable program, Double op1, Double op2) throws JavartException {
+	public static int compareTo(Double op1, Double op2) throws JavartException {
 		if (op1 == null || op2 == null) {
 			throw new NullValueException();
 		}
 		return op1.compareTo(op2);
 	}
 	
-	public static boolean equals(Executable program, Double op1, Double op2) {
+	public static boolean equals(Double op1, Double op2) {
 		if (op1 == null && op2 == null) return true;
 		if ((op1 != null && op2 == null) || (op1 == null && op2 != null)) return false;
 		return op1.equals(op2);
 	}
 	
-	public static boolean notEquals(Executable program, Double op1, Double op2) {
-		return !equals(program, op1, op2);
+	public static boolean notEquals(Double op1, Double op2) {
+		return !equals(op1, op2);
 	}
 
 }

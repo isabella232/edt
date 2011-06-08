@@ -14,7 +14,6 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import java.math.BigDecimal;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
 
 import egl.lang.AnyNumber;
@@ -42,12 +41,12 @@ public class EInt32 extends AnyBoxedObject<Integer> implements AnyNumber {
 	}
 
 	
-	public static Integer asInt32(Executable program, Short value) throws JavartException {
+	public static Integer asInt32(Short value) throws JavartException {
 		if (value == null) return null;
 		return value.intValue();
 	}
 	
-	public static Integer asInt32(Executable program, Long value) throws JavartException {
+	public static Integer asInt32(Long value) throws JavartException {
 		if (value == null) return null;
 
 		boolean throwOverflowExceptions = false;  // TODO need program flag on whether to throw exceptions or not.
@@ -62,7 +61,7 @@ public class EInt32 extends AnyBoxedObject<Integer> implements AnyNumber {
 	}
 	
 
-	public static Integer asInt32(Executable program, BigDecimal value) throws JavartException {
+	public static Integer asInt32(BigDecimal value) throws JavartException {
 		if (value == null) return null;
 		boolean throwOverflowExceptions = false;  // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
@@ -75,7 +74,7 @@ public class EInt32 extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 	
-	public static Integer asInt32(Executable program, Float value) throws JavartException {
+	public static Integer asInt32(Float value) throws JavartException {
 		if (value == null) return null;
 		boolean throwOverflowExceptions = false;  // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;;
@@ -88,7 +87,7 @@ public class EInt32 extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 	
-	public static Integer asInt32(Executable program, Double value) throws JavartException {
+	public static Integer asInt32(Double value) throws JavartException {
 		if (value == null) return null;
 		boolean throwOverflowExceptions = false;  // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;;
@@ -101,54 +100,53 @@ public class EInt32 extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 	
-	public static Integer asInt32(Executable program, String value) throws JavartException {
+	public static Integer asInt32(String value) throws JavartException {
 		if (value == null) return null;
-		return asInt32(program, EDecimal.asDecimal(program, value));
+		return asInt32(EDecimal.asDecimal(value));
 	}
 	
 	public static int defaultValue() { return DefaultValue; }
 	
 	public static int precision() { return Precision; }
 				
-	public static int plus(Executable program, Integer op1, Integer op2) throws JavartException {
+	public static int plus(Integer op1, Integer op2) throws JavartException {
 		if (op1 == null || op2 == null) throw new NullValueException();
 		return BigDecimal.valueOf((long)op1 + op2).intValueExact();
 	}
 
-	public static int minus(Executable program, Integer op1, Integer op2) throws JavartException {
+	public static int minus(Integer op1, Integer op2) throws JavartException {
 		if (op1 == null || op2 == null) throw new NullValueException();
 		return BigDecimal.valueOf((long)op1 - op2).intValueExact();
 	}
 
-	public static BigDecimal divide(Executable program, Integer op1, Integer op2) throws JavartException {
+	public static BigDecimal divide(Integer op1, Integer op2) throws JavartException {
 		if (op1 == null || op2 == null) throw new NullValueException();
 		return BigDecimal.valueOf(op1).divide( BigDecimal.valueOf(op2), EDecimal.BIGDECIMAL_RESULT_SCALE, EDecimal.ROUND_BD);
 	}
 
-	public static int multiply(Executable program, Integer op1, Integer op2) throws JavartException {
+	public static int multiply(Integer op1, Integer op2) throws JavartException {
 		if (op1 == null || op2 == null) throw new NullValueException();
 		return BigDecimal.valueOf((long)op1 * op2).intValueExact();
 	}
 
-	public static int remainder(Executable program, Integer op1, Integer op2) throws JavartException {
+	public static int remainder(Integer op1, Integer op2) throws JavartException {
 		if (op1 == null || op2 == null) throw new NullValueException();
 		return op1 % op2;
 	}
 	
-	public static int compareTo(Executable program, Integer op1, Integer op2) throws JavartException {
+	public static int compareTo(Integer op1, Integer op2) throws JavartException {
 		if (op1 == null && op2 == null) return 0;
 		if ((op1 != null && op2 == null) || (op1 == null && op2 != null)) throw new NullValueException();
 		return op1.compareTo(op2);
 	}
 
-	public static boolean equals(Executable program, Integer op1, Integer op2) {
+	public static boolean equals(Integer op1, Integer op2) {
 		if (op1 == null && op2 == null) return true;
 		if ((op1 != null && op2 == null) || (op1 == null && op2 != null)) return false;
 		return op1.equals(op2);
 	}
 	
-	public static boolean notEquals(Executable program, Integer op1, Integer op2) {
-		return !equals(program, op1, op2);
+	public static boolean notEquals(Integer op1, Integer op2) {
+		return !equals(op1, op2);
 	}
-
 }

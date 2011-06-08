@@ -17,7 +17,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
@@ -134,7 +133,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return isa;
 	}
 	
-	public static Calendar asTimestamp( Executable program, Calendar timestamp, String timespanMask )
+	public static Calendar asTimestamp( Calendar timestamp, String timespanMask )
 	throws JavartException
 	{
 		if (timestamp == null) return null;
@@ -154,10 +153,10 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			startCode = mask.getStartCode();
 			endCode = mask.getEndCode();
 		}
-		return asTimestamp(program, timestamp, startCode, endCode);
+		return asTimestamp(timestamp, startCode, endCode);
 	}
 	
-	public static Calendar asTimestamp( Executable program, String timestampString, String timespanMask )
+	public static Calendar asTimestamp( String timestampString, String timespanMask )
 	throws JavartException
 	{
 		// Default values in case the pattern doesn't specify things.
@@ -173,7 +172,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return convert(timestampString, startCode, endCode);
 	}
 	
-	public static Calendar asTimestamp(Executable program, Calendar date, int startCode, int endCode) {
+	public static Calendar asTimestamp(Calendar date, int startCode, int endCode) {
 		if (date == null) return null;
 		Calendar result = DateTimeUtil.getBaseCalendar();
 		// Get values for the full set of fields.  Fields that we need will be
@@ -361,7 +360,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * @throws JavartException
 	 *             if there's a parse error.
 	 */
-	public static Calendar asTimestamp( Executable program, String source, String format, int startCode, int endCode )
+	public static Calendar asTimestamp( String source, String format, int startCode, int endCode )
 		throws JavartException
 	{
 		if (source == null) return null;
@@ -370,7 +369,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 
 		if ( format == null || format.length() == 0 )
 		{
-			format = program._runUnit().getDefaultTimestampFormat();
+//			format = program._runUnit().getDefaultTimestampFormat();
+			format = DefaultFormatPattern;
 		}
 		
 		try {
@@ -393,15 +393,16 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * @return The string value
 	 * @throws JavartException
 	 */
-	public static String asString( Executable program, Calendar value ) throws JavartException
+	public static String asString( Calendar value ) throws JavartException
 	{
 		// Get the format pattern to use.
-		String format = program._runUnit().getDefaultTimestampFormat();
-		if ( format.length() == 0 )
-		{
-			// Use the one made specially for this item.
-			format = DefaultFormatPattern; 
-		}
+//		String format = program._runUnit().getDefaultTimestampFormat();
+//		if ( format.length() == 0 )
+//		{
+//			// Use the one made specially for this item.
+//			format = DefaultFormatPattern; 
+//		}
+		String format = DefaultFormatPattern; 
 		
 		// Get a formatter for the value, set it up, and run it.
 		boolean reset = false;

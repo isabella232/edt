@@ -14,7 +14,6 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import java.math.BigDecimal;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
 
 public class EString extends AnyBoxedObject<String> {
@@ -52,9 +51,9 @@ public class EString extends AnyBoxedObject<String> {
 	 * @return
 	 * @throws JavartException
 	 */
-	public static BigDecimal asNumber(Executable program, String value) throws JavartException {
+	public static BigDecimal asNumber(String value) throws JavartException {
 		if (value == null) return null;
-		return EDecimal.asDecimal(program, value);
+		return EDecimal.asDecimal(value);
 	}
 	
 	public static String ezeCast(Object value, Integer...args) throws JavartException {
@@ -69,72 +68,71 @@ public class EString extends AnyBoxedObject<String> {
 		return isa;
 	}
 	
-	public static String asString(Executable program, Short value, Integer...length) {
+	public static String asString(Short value, Integer...length) {
 		if (value == null) return null;
-		return asString(program, String.valueOf(value), length);
-			
+		return asString(String.valueOf(value), length);			
 	}
 
-	public static String asString(Executable program, Integer value, Integer...length) {
+	public static String asString(Integer value, Integer...length) {
 		if (value == null) return null;
-		return asString(program, String.valueOf(value), length);
+		return asString(String.valueOf(value), length);
 	}
 
-	public static String asString(Executable program, Long value, Integer...length) {
+	public static String asString(Long value, Integer...length) {
 		if (value == null) return null;
-		return asString(program, String.valueOf(value), length);
+		return asString(String.valueOf(value), length);
 	}
 	
-	public static String asString(Executable program, Float value, Integer...length) {
+	public static String asString(Float value, Integer...length) {
 		if (value == null) return null;
-		return asString(program, String.valueOf(value), length);
+		return asString(String.valueOf(value), length);
 	}
 	
-	public static String asString(Executable program, Double value, Integer...length) {
+	public static String asString(Double value, Integer...length) {
 		if (value == null) return null;
-		return asString(program, String.valueOf(value), length);
+		return asString(String.valueOf(value), length);
 	}
 	
-	public static String asString(Executable program, BigDecimal value, Integer...length) {
+	public static String asString(BigDecimal value, Integer...length) {
 		if (value == null) return null;
-		return asString(program, String.valueOf(value), length);
+		return asString(String.valueOf(value), length);
 	}
 
-	public static String asString(Executable program, String value, Integer...length) {
+	public static String asString(String value, Integer...length) {
 		if (length.length != 0 && value.length() > length[0]) {
 			value = value.substring(0, length[0]);
 		}
 		return value;
 	}
 		
-	public static String plus(Executable program, String op1, String op2) throws JavartException {
+	public static String plus(String op1, String op2) throws JavartException {
 		if (op1 == null || op2 == null) {
 			throw new NullValueException();
 		}
 		return op1 + op2;
 	}
 	
-	public static String concat(Executable program, String op1, String op2) throws JavartException {
+	public static String concat(String op1, String op2) throws JavartException {
 		if (op1 == null || op2 == null) {
 			throw new NullValueException();
 		}
 		return op1 + op2;
 	}
 	
-	public static String concatNull(Executable program, String op1, String op2) {
+	public static String concatNull(String op1, String op2) {
 		if (op1 == null || op2 == null) return null;
 		return op1 + op2;
 	}
 	
-	public static boolean equals(Executable program, String op1, String op2) throws JavartException {
+	public static boolean equals(String op1, String op2) throws JavartException {
 		if (op1 == null || op2 == null) {
 			throw new NullValueException();
 		}
 		return op1.equals(op2);
 	}
 	
-	public static boolean notEquals(Executable program, String op1, String op2) throws JavartException {
-		return !equals(program, op1, op2);
+	public static boolean notEquals(String op1, String op2) throws JavartException {
+		return !equals(op1, op2);
 	}
 	
 	public static String substring(String str, Integer startIndex, Integer endIndex) throws JavartException {

@@ -14,7 +14,6 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import java.math.BigDecimal;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
 
 import egl.lang.AnyNumber;
@@ -37,12 +36,12 @@ public class EInt16 extends AnyBoxedObject<Short> implements AnyNumber {
 		return value instanceof EInt16;
 	}
 
-	public static Short asInt16(Executable program, Short value) {
+	public static Short asInt16(Short value) {
 		if (value == null) return null;
 		return value;
 	}
 	
-	public static Short asInt16(Executable program, Integer value) throws JavartException {
+	public static Short asInt16(Integer value) throws JavartException {
 		if (value == null) return null;
 
 		boolean throwOverflowExceptions = true;  // TODO need program flag on whether to throw exceptions or not.
@@ -62,7 +61,7 @@ public class EInt16 extends AnyBoxedObject<Short> implements AnyNumber {
 	}
 	
 	
-	public static Short asInt16(Executable program, Long value) throws JavartException {
+	public static Short asInt16(Long value) throws JavartException {
 		if (value == null) return null;
 
 		boolean throwOverflowExceptions = true;  // TODO need program flag on whether to throw exceptions or not.
@@ -82,7 +81,7 @@ public class EInt16 extends AnyBoxedObject<Short> implements AnyNumber {
 	}
 	
 	
-	public static Short asInt16(Executable program, Float value) throws JavartException {
+	public static Short asInt16(Float value) throws JavartException {
 		if (value == null) return null;
 		
 		boolean throwOverflowExceptions = true;  // TODO need program flag on whether to throw exceptions or not.
@@ -101,7 +100,7 @@ public class EInt16 extends AnyBoxedObject<Short> implements AnyNumber {
 		return result;
 	}
 
-	public static Short asInt16(Executable program, Double value) throws JavartException {
+	public static Short asInt16(Double value) throws JavartException {
 		if (value == null) return null;
 		
 		boolean throwOverflowExceptions = true;  // TODO need program flag on whether to throw exceptions or not.
@@ -120,7 +119,7 @@ public class EInt16 extends AnyBoxedObject<Short> implements AnyNumber {
 		return result;
 	}
 	
-	public static Short asInt16(Executable program, BigDecimal value) throws JavartException {
+	public static Short asInt16(BigDecimal value) throws JavartException {
 		if (value == null) return null;
 		
 		boolean throwOverflowExceptions = true;  // TODO need program flag on whether to throw exceptions or not.
@@ -139,28 +138,28 @@ public class EInt16 extends AnyBoxedObject<Short> implements AnyNumber {
 		return result;
 	}
 
-	public static Short asInt16(Executable program, String value) throws JavartException {
+	public static Short asInt16(String value) throws JavartException {
 		if (value == null) return null;
 
-		return asInt16(program, EDecimal.asDecimal(program, value));
+		return asInt16(EDecimal.asDecimal(value));
 	}
 	
-	public static int plus(Executable program, Short op1, Short op2) throws JavartException  {
+	public static int plus(Short op1, Short op2) throws JavartException  {
 		if (op1 == null || op2 == null) throw new NullValueException();
 		return op1 + op2;
 	}
 
-	public static int minus(Executable program, Short op1, Short op2) throws JavartException {
+	public static int minus(Short op1, Short op2) throws JavartException {
 		if (op1 == null || op2 == null) throw new NullValueException();
 		return op1 - op2;
 	}
 
-	public static BigDecimal divide(Executable program, Short op1, Short op2) throws JavartException  {
+	public static BigDecimal divide(Short op1, Short op2) throws JavartException  {
 		if (op1 == null || op2 == null) throw new NullValueException();
 		return BigDecimal.valueOf(op1).divide( BigDecimal.valueOf(op2), EDecimal.BIGDECIMAL_RESULT_SCALE, EDecimal.ROUND_BD);
 	}
 
-	public static int multiply(Executable program, Short op1, Short op2) throws JavartException {
+	public static int multiply(Short op1, Short op2) throws JavartException {
 		if (op1 == null || op2 == null) throw new NullValueException();
 		try {
 			return BigDecimal.valueOf(op1 * op2).intValueExact();
@@ -170,25 +169,25 @@ public class EInt16 extends AnyBoxedObject<Short> implements AnyNumber {
 		}
 	}
 
-	public static int remainder(Executable program, Short op1, Short op2) throws JavartException  {
+	public static int remainder(Short op1, Short op2) throws JavartException  {
 		if (op1 == null || op2 == null) throw new NullValueException();
 		return op1 % op2;
 	}
 
-	public static int compareTo(Executable program, Short op1, Short op2) throws JavartException {
+	public static int compareTo(Short op1, Short op2) throws JavartException {
 		if (op1 == null && op2 == null) return 0;
 		if ((op1 != null && op2 == null) || (op1 == null && op2 != null)) throw new NullValueException();
 		return op1.compareTo(op2);
 	}
 	
-	public static boolean equals(Executable program, Short op1, Short op2) {
+	public static boolean equals(Short op1, Short op2) {
 		if (op1 == null && op2 == null) return true;
 		if ((op1 != null && op2 == null) || (op1 == null && op2 != null)) return false;
 		return op1.equals(op2);
 	}
 	
-	public static boolean notEquals(Executable program, Short op1, Short op2) {
-		return !equals(program, op1, op2);
+	public static boolean notEquals(Short op1, Short op2) {
+		return !equals(op1, op2);
 	}
 		
 	public int precision() {

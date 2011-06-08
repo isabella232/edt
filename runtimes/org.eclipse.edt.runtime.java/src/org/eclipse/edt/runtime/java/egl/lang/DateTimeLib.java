@@ -78,7 +78,7 @@ public class DateTimeLib extends ExecutableBase
 	{
 		if ( timespanPattern == null )
 		{
-			return extend( ETimestamp.asTimestamp(this, extensionField, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE) );
+			return extend( ETimestamp.asTimestamp(extensionField, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE) );
 		}
 		
 		if ( extensionField == null )
@@ -98,7 +98,7 @@ public class DateTimeLib extends ExecutableBase
 				endCode = mask.getEndCode();
 			}
 			
-			return ETimestamp.asTimestamp(this, extensionField, startCode, endCode);
+			return ETimestamp.asTimestamp(extensionField, startCode, endCode);
 		}
 	}
 
@@ -182,7 +182,7 @@ public class DateTimeLib extends ExecutableBase
 	 */
 	public Calendar timeStampValueWithPattern( String timestampAsString, String pattern ) throws JavartException
 	{
-		return ETimestamp.asTimestamp( this, timestampAsString, pattern); 
+		return ETimestamp.asTimestamp( timestampAsString, pattern); 
 	}
 
 	/**

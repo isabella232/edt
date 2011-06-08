@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
 
 import egl.lang.AnyNumber;
@@ -316,7 +315,7 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 	 * @param source
 	 * @throws JavartException
 	 */
-	private static BigDecimal handleNumericOverflow( Executable program, BigDecimal value, int precision, int scale, boolean ignoreOverflow )
+	private static BigDecimal handleNumericOverflow( BigDecimal value, int precision, int scale, boolean ignoreOverflow )
 		throws JavartException
 	{
 		BigDecimal result = value;
@@ -373,77 +372,76 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 		return isa;
 	}
 
-	public static BigDecimal asDecimal(Executable program, Short value, Integer...args) throws JavartException {
+	public static BigDecimal asDecimal(Short value, Integer...args) throws JavartException {
 		if (value == null) return null;
 		
 		if (args.length == 2) {
-			return asDecimal(program, BigDecimal.valueOf(value), args[0], args[1]);
+			return asDecimal(BigDecimal.valueOf(value), args[0], args[1]);
 		}
 		else {
 			return BigDecimal.valueOf(value);
 		}
 	}
 
-	public static BigDecimal asDecimal(Executable program, Integer value, Integer...args) throws JavartException {
+	public static BigDecimal asDecimal(Integer value, Integer...args) throws JavartException {
 		if (value == null) return null;
 		
 		if (args.length == 2) {
-			return asDecimal(program, BigDecimal.valueOf(value), args[0], args[1]);
+			return asDecimal(BigDecimal.valueOf(value), args[0], args[1]);
 		}
 		else {
 			return BigDecimal.valueOf(value);
 		}
 	}
 	
-//	public static BigDecimal asDecimal(Executable program, Integer value, Integer...args) {
+//	public static BigDecimal asDecimal(Integer value, Integer...args) {
 //		if (value == null) return null;
-//		return asDecimal(program, value, args);
+//		return asDecimal(value, args);
 //	}
 
-	public static BigDecimal asDecimal(Executable program, Long value, Integer...args) throws JavartException {
+	public static BigDecimal asDecimal(Long value, Integer...args) throws JavartException {
 		if (value == null) return null;
 		
 		if (args.length == 2) {
-			return asDecimal(program, BigDecimal.valueOf(value), args[0], args[1]);
+			return asDecimal(BigDecimal.valueOf(value), args[0], args[1]);
 		}
 		else {
 			return BigDecimal.valueOf(value);
 		}
 	}
 	
-	public static BigDecimal asDecimal(Executable program, BigDecimal value, Integer...args) throws JavartException {
+	public static BigDecimal asDecimal(BigDecimal value, Integer...args) throws JavartException {
 		if (args.length == 2) {
-			return asDecimal(program, value, args[0], args[1]);
+			return asDecimal(value, args[0], args[1]);
 		}
 		else {
 			return value;
 		}
 	}
 	
-	public static BigDecimal asDecimal(Executable program, BigDecimal value, int precision, int scale) throws JavartException {
-		return asDecimal(program, value,getMaxValue(precision, scale), getMinValue(precision, scale), precision, scale, false);
+	public static BigDecimal asDecimal(BigDecimal value, int precision, int scale) throws JavartException {
+		return asDecimal(value,getMaxValue(precision, scale), getMinValue(precision, scale), precision, scale, false);
 	}
 
-	public static BigDecimal asDecimal(Executable program, BigDecimal value, BigDecimal max, BigDecimal min, int precision, int scale) throws JavartException {
-		return asDecimal(program, value, max, min, precision, scale, false);
+	public static BigDecimal asDecimal(BigDecimal value, BigDecimal max, BigDecimal min, int precision, int scale) throws JavartException {
+		return asDecimal(value, max, min, precision, scale, false);
 	}
 
-	public static BigDecimal asDecimal(Executable program, BigDecimal value, BigDecimal max, BigDecimal min, int precision, int scale, boolean ignoreOverflow) throws JavartException {
+	public static BigDecimal asDecimal(BigDecimal value, BigDecimal max, BigDecimal min, int precision, int scale, boolean ignoreOverflow) throws JavartException {
 		if (value == null) return null;
 		BigDecimal result = value;
 		if ( scale < value.scale() )
 		{
 			// truncate or round the value based on the program setting
 			// TODO set this variable up in Program
-			// if ( program._truncateDecimals )
-			if (false)
-			{
-				result = value.setScale( scale, TRUNCATE_BD );
-			}
-			else
-			{
+//			if ( program._truncateDecimals )
+//			{
+//				result = value.setScale( scale, TRUNCATE_BD );
+//			}
+//			else
+//			{
 				result = value.setScale( scale, ROUND_BD );
-			}
+//			}
 		}
 		if (ignoreOverflow) {
 			return result;
@@ -457,16 +455,16 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 			}
 			else
 			{
-				return handleNumericOverflow( program, value, precision, scale, ignoreOverflow );
+				return handleNumericOverflow( value, precision, scale, ignoreOverflow );
 			}
 		}
 	}
 	
-	public static BigDecimal asDecimal(Executable program, String value, Integer...args) throws JavartException {
-		return asDecimal(program, asDecimal(program, value, false), args);
+	public static BigDecimal asDecimal(String value, Integer...args) throws JavartException {
+		return asDecimal(asDecimal(value, false), args);
 	}
 	
-	public static BigDecimal asDecimal(Executable program, String value, boolean blanksAsZero) {
+	public static BigDecimal asDecimal(String value, boolean blanksAsZero) {
 		// Check for zero length string and remove extra blanks.
 		value = value.trim();
 		if ( value.length() == 0 )
@@ -513,50 +511,49 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 
 	}
 	
-	public static String asString(Executable program, BigDecimal value) throws JavartException {
+	public static String asString(BigDecimal value) throws JavartException {
 		return value.toString();
 	}
 	
-	public static BigDecimal plus(Executable program, BigDecimal op1, BigDecimal op2) {
+	public static BigDecimal plus(BigDecimal op1, BigDecimal op2) {
 		if (op1 == null || op2 == null) return null;
 		return op1.add( op2 );
 	}
 
-	public static BigDecimal minus(Executable program, BigDecimal op1, BigDecimal op2) {
+	public static BigDecimal minus(BigDecimal op1, BigDecimal op2) {
 		if (op1 == null || op2 == null) return null;
 		return op1.subtract( op2 );
 	}
 
-	public static BigDecimal divide(Executable program, BigDecimal op1, BigDecimal op2) {
+	public static BigDecimal divide(BigDecimal op1, BigDecimal op2) {
 		if (op1 == null || op2 == null) return null;
 		return op1.divide( op2, BIGDECIMAL_RESULT_SCALE, ROUND_BD);
 	}
 
-	public static BigDecimal multiply(Executable program, BigDecimal op1, BigDecimal op2) {
+	public static BigDecimal multiply(BigDecimal op1, BigDecimal op2) {
 		if (op1 == null || op2 == null) return null;
 		return op1.multiply( op2 );
 	}
 
-	public static BigDecimal remainder(Executable program, BigDecimal op1, BigDecimal op2) {
+	public static BigDecimal remainder(BigDecimal op1, BigDecimal op2) {
 		if (op1 == null || op2 == null) return null;
 		return op1.remainder( op2 );
 	}
 	
-	public static int compareTo(Executable program, BigDecimal op1, BigDecimal op2) throws JavartException {
+	public static int compareTo(BigDecimal op1, BigDecimal op2) throws JavartException {
 		if (op1 == null || op2 == null) {
 			throw new NullValueException();
 		}
 		return op1.compareTo(op2);
 	}
 	
-	public static boolean equals(Executable program, BigDecimal op1, BigDecimal op2) {
+	public static boolean equals(BigDecimal op1, BigDecimal op2) {
 		if (op1 == null && op2 == null) return true;
 		if ((op1 != null && op2 == null) || (op1 == null && op2 != null)) return false;
 		return op1.equals(op2);
 	}
 	
-	public static boolean notEquals(Executable program, BigDecimal op1, BigDecimal op2) {
-		return !equals(program, op1, op2);
+	public static boolean notEquals(BigDecimal op1, BigDecimal op2) {
+		return !equals(op1, op2);
 	}
-	
 }

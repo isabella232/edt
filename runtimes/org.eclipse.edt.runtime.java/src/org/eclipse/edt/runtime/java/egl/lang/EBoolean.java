@@ -12,7 +12,6 @@
 package org.eclipse.edt.runtime.java.egl.lang;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
 
 public class EBoolean extends AnyBoxedObject<Boolean> {
@@ -34,14 +33,14 @@ public class EBoolean extends AnyBoxedObject<Boolean> {
 		return value instanceof EBoolean;
 	}
 
-	public static boolean asBoolean(Executable program, Number number) throws JavartException {
+	public static boolean asBoolean(Number number) throws JavartException {
 		if (number == null) {
 			throw new NullValueException();
 		}
 		return number.floatValue() != 0;
 	}
 
-	public static String asString(Executable program, Boolean bool) throws JavartException {
+	public static String asString(Boolean bool) throws JavartException {
 		if (bool == null) {
 			throw new NullValueException();
 		}

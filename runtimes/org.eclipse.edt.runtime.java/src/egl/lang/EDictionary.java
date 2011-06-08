@@ -13,7 +13,6 @@ package egl.lang;
 
 import java.util.Map;
 
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
 
 /**
@@ -86,7 +85,5 @@ public interface EDictionary extends AnyObject, Map<java.lang.String, Object>
 	 * @param key
 	 * @return The AnyRef entry, or a DictionaryEntryMaker proxy object
 	 */
-	public Object lookup( java.lang.String key, Executable program );
-
-
+	public Object lookup( java.lang.String key );
 }
