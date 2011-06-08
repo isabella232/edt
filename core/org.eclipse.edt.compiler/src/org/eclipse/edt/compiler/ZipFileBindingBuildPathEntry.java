@@ -11,6 +11,8 @@ import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.io.ZipFileBuildPathEntry;
 import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.DeserializationException;
@@ -66,6 +68,10 @@ public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry
 		
 		return partBinding;
 	}
+	
+	public void addPartBindingToCache(IPartBinding binding) {
+		getPackagePartBinding(InternUtil.intern(binding.getPackageName())).put(InternUtil.intern(binding.getName()), binding);
+	}
 
 	public boolean isProject(){
 		return false;
@@ -78,6 +84,16 @@ public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry
 		}
 		
 		return ITypeBinding.NOT_FOUND_BINDING;
+	}
+	
+	public Part findPart(String[] packageName, String partName) throws PartNotFoundException {
+		if (hasPart(packageName, partName) != ITypeBinding.NOT_FOUND_BINDING) {
+			EObject obj = getPartObject(getEntry(packageName, partName));
+			if (obj instanceof Part) {
+				return (Part)obj;
+			}
+		}
+		return null;
 	}
 	
 	protected Map getPackagePartBinding(String[] packageName) {
@@ -167,9 +183,13 @@ public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry
 	protected void bindingLoaded(IPartBinding partBinding) {
 		//default is to do nothing
 	}
-
+	
 	public ObjectStore getObjectStore() {
 		return store;
+	}
+
+	public ObjectStore[] getObjectStores() {
+		return new ObjectStore[]{store};
 	}
 
 	public boolean hasEntry(String entry) {

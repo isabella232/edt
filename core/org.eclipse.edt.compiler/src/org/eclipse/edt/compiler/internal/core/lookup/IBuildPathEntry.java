@@ -12,6 +12,9 @@
 package org.eclipse.edt.compiler.internal.core.lookup;
 
 import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.PartNotFoundException;
+import org.eclipse.edt.mof.serialization.ObjectStore;
 
 public interface IBuildPathEntry {
 
@@ -20,6 +23,9 @@ public interface IBuildPathEntry {
 	int hasPart(String[] packageName,String partName);
 	IEnvironment getRealizingEnvironment();
 	IPartBinding getCachedPartBinding(String[] packageName, String partName);
+	public void addPartBindingToCache(IPartBinding partBinding);
+	public ObjectStore[] getObjectStores();
+	public Part findPart(String[] packageName, String name) throws PartNotFoundException;
 
 	
 	boolean isZipFile();
