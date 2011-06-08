@@ -85,7 +85,8 @@ public class ProjectSettingsUtility {
 	}
 	
 	/**
-	 * Returns the ID of the ICompiler registered for the given project. This returns null if there is no compiler.
+	 * Returns the ID of the ICompiler registered for the given project. This returns null if there is no compiler,
+	 * indicating the workspace default compiler should be used.
 	 * 
 	 * @param project  The project.
 	 * @return the project's compiler ID, possibly null.
