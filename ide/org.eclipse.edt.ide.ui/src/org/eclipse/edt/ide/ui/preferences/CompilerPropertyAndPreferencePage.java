@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.edt.compiler.IGenerator;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
-import org.eclipse.edt.ide.core.ICompiler;
+import org.eclipse.edt.ide.core.IIDECompiler;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
@@ -219,10 +219,10 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	}
 	
 	protected void validateCompilers() {
-		ICompiler[] availableCompilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
+		IIDECompiler[] availableCompilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
 		List<String> compilerIds = new ArrayList<String>();
 		List<String> compilerNames = new ArrayList<String>();
-		for( ICompiler comp : availableCompilers ) {			
+		for( IIDECompiler comp : availableCompilers ) {			
 			if( compilerNames.contains( comp.getName() ) ) {
 				latestStatus.setWarning( MessageFormat.format( UINlsStrings.CompilerPreferencePage_duplicateCompilerNames, 
 						new Object[] { comp.getName() } ) );
@@ -248,8 +248,8 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	 * @return whether a compiler exists in the workspace
 	 */
 	protected boolean validateCompilerExists( String id ) {
-		ICompiler[] availableCompilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
-		for( ICompiler comp : availableCompilers ) {		
+		IIDECompiler[] availableCompilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
+		for( IIDECompiler comp : availableCompilers ) {		
 			if( comp.getId().equalsIgnoreCase( id ) ) {
 				return true;
 			}
@@ -258,8 +258,8 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	}
 	
 	protected void validateGenerators() {
-		ICompiler[] availableCompilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
-		for( ICompiler compiler : availableCompilers ) {
+		IIDECompiler[] availableCompilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
+		for( IIDECompiler compiler : availableCompilers ) {
 			List<IGenerator> availableGenerators = compiler.getGenerators();
 			List<String> generatorIds = new ArrayList<String>();
 			List<String> generatorNames = new ArrayList<String>();
@@ -626,8 +626,8 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	 */
 	protected String getPreferencePageID() {
 		String compilerId = convertCompilerNameToId( selectedCompiler );
-		ICompiler[] compilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
-		for( ICompiler currCompiler : compilers ) {
+		IIDECompiler[] compilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
+		for( IIDECompiler currCompiler : compilers ) {
 			if( currCompiler.getId().equalsIgnoreCase( compilerId ) ) {
 				return currCompiler.getPreferencePageId();
 			}
@@ -1002,8 +1002,8 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 
 	protected String convertCompilerIdToName( String id ) {
 		if( id != null && id.length() > 0 ) {
-			ICompiler[] compilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
-			for( final ICompiler currentCompiler : compilers ) {
+			IIDECompiler[] compilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
+			for( final IIDECompiler currentCompiler : compilers ) {
 				if( currentCompiler.getId().equalsIgnoreCase( id ) )  {
 					return currentCompiler.getName();
 				}
@@ -1034,8 +1034,8 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 
 	protected String convertCompilerNameToId( String name ) {
 		if( name != null && name.length() > 0 ) {
-			ICompiler[] compilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
-			for( final ICompiler currentCompiler : compilers ) {
+			IIDECompiler[] compilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
+			for( final IIDECompiler currentCompiler : compilers ) {
 				if( currentCompiler.getName().equalsIgnoreCase( name ) )  {
 					return currentCompiler.getId();
 				}
@@ -1124,7 +1124,7 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	}	
 	
 	protected String getFirstValidCompiler() {
-		ICompiler[] availableCompilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
+		IIDECompiler[] availableCompilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
 		if( availableCompilers.length > 0 ) {
 			return availableCompilers[0].getId();
 		}

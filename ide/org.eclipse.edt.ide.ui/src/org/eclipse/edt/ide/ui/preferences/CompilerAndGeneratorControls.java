@@ -24,7 +24,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.IGenerator;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
-import org.eclipse.edt.ide.core.ICompiler;
+import org.eclipse.edt.ide.core.IIDECompiler;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.ide.ui.internal.util.PixelConverter;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
@@ -151,7 +151,7 @@ public class CompilerAndGeneratorControls {
 	protected abstract class TreeControlPreference {		
 		
 		protected TreeViewer fTreeViewer;		
-		protected ICompiler fCompiler;		
+		protected IIDECompiler fCompiler;		
 		/**
 		 * key is the white space position display name,
 		 * value is a sorted map of OptionTreeNode, sort based on the OptionTreeNode's display value
@@ -159,7 +159,7 @@ public class CompilerAndGeneratorControls {
 		 */
 		protected SortedMap<String, OptionTreeNode> fOptionNodePreferenceTreeMap;		
 		
-		protected TreeControlPreference(ICompiler compiler){			
+		protected TreeControlPreference(IIDECompiler compiler){			
 			fCompiler = compiler;
 			fOptionNodePreferenceTreeMap = new TreeMap<String, OptionTreeNode>();
 		}
@@ -234,7 +234,7 @@ public class CompilerAndGeneratorControls {
 	protected class WSOptionNodeComponent extends TreeControlPreference implements ICheckStateListener{			
 		private Composite fComposite;
 				
-		public WSOptionNodeComponent(ICompiler compiler){
+		public WSOptionNodeComponent(IIDECompiler compiler){
 			super(compiler);
 		}
 		
@@ -381,10 +381,10 @@ public class CompilerAndGeneratorControls {
 		protected Map<IGenerator, List<IGenerator>> genMap = new HashMap<IGenerator, List<IGenerator>>();
   
 	    public CompilerComponent(){
-	    	ICompiler[] compilers = getCompilersToDisplay();
+	    	IIDECompiler[] compilers = getCompilersToDisplay();
 	    	WSOptionNodeComponent node;
 	    	// Add a node for each compiler
-	    	for( ICompiler compiler : compilers ) {
+	    	for( IIDECompiler compiler : compilers ) {
 	    		node = new WSOptionNodeComponent( compiler );
 	    		compilerNodeComponents.add( node );
 	    	}
@@ -487,10 +487,10 @@ public class CompilerAndGeneratorControls {
     		}
       	}    		
 
-    	protected ICompiler getCompilerFromName( String name ) {
+    	protected IIDECompiler getCompilerFromName( String name ) {
     		if( name != null && name.length() > 0 ) {
-    			ICompiler[] compilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
-    			for( ICompiler currentCompiler : compilers ) {
+    			IIDECompiler[] compilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
+    			for( IIDECompiler currentCompiler : compilers ) {
     				if( currentCompiler.getName().equalsIgnoreCase( name ) )  {
     					return currentCompiler;
     				}
@@ -526,7 +526,7 @@ public class CompilerAndGeneratorControls {
 	}
 
 	public void createCompilersComposite( Composite parent ) {
-		ICompiler[] compilers = getCompilersToDisplay();
+		IIDECompiler[] compilers = getCompilersToDisplay();
 		String[] displayItems = new String[compilers.length];
 		for( int i = 0; i < compilers.length; i++ ) {
 			displayItems[i] = compilers[i].getName();
@@ -549,23 +549,23 @@ public class CompilerAndGeneratorControls {
 	 * 
 	 * @return ICompiler[]
 	 */
-	protected ICompiler[] getCompilersToDisplay() {
-		ICompiler[] availableCompilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
+	protected IIDECompiler[] getCompilersToDisplay() {
+		IIDECompiler[] availableCompilers = EDTCoreIDEPlugin.getPlugin().getCompilers();
 		if( (parentPage.getResource() == null) || (parentPage.getResource() instanceof IProject) ) {
 			return availableCompilers;
 		} else {
 			// Only return 1 compiler
-			ICompiler comp = ProjectSettingsUtility.getCompiler( parentPage.getResource().getProject() );
+			IIDECompiler comp = ProjectSettingsUtility.getCompiler( parentPage.getResource().getProject() );
 			if( comp == null ) {
 				String wsComp = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( EDTCorePreferenceConstants.COMPILER_ID );
-				for( ICompiler currCompiler : availableCompilers ) { 
+				for( IIDECompiler currCompiler : availableCompilers ) { 
 					if( currCompiler.getId().equalsIgnoreCase( wsComp ) ) {
 						comp = currCompiler;
 						break;
 					}
 				} 
 			}
-			return new ICompiler[] {comp };
+			return new IIDECompiler[] {comp };
 		}			
 	}
 	
