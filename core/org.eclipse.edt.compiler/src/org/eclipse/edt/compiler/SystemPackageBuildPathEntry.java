@@ -11,19 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler;
 
-import java.util.Map;
-
 import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.compiler.internal.io.ZipFileBuildPathEntry;
 import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
-import org.eclipse.edt.mof.EObject;
-import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.mof.serialization.DeserializationException;
-import org.eclipse.edt.mof.serialization.IZipFileEntryManager;
-import org.eclipse.edt.mof.serialization.ObjectStore;
 
 
 public class SystemPackageBuildPathEntry extends ZipFileBindingBuildPathEntry implements ISystemPackageBuildPathEntry{
