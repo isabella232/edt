@@ -434,27 +434,29 @@ class Egl2MofMember extends Egl2MofPart {
 				// Check if this is an Annotation value
 				org.eclipse.edt.compiler.core.ast.Assignment assignment = (org.eclipse.edt.compiler.core.ast.Assignment)expr;
 				org.eclipse.edt.compiler.core.ast.Expression lhsExpr = assignment.getLeftHandSide();
-				if (lhsExpr.resolveDataBinding() instanceof IAnnotationBinding) {
-					Annotation value = (Annotation)mofValueFrom(lhsExpr.resolveDataBinding());
-					context.getAnnotations().add(value);
-				}
-				// Check if this is setting a value into the context element, i.e. setting contents into a DataTable
-				else if (context instanceof Part) {
-					if (context.getEClass().getEField(((org.eclipse.edt.compiler.core.ast.Name)lhsExpr).getNameComponents()[0]) != null) {
-						EField field = context.getEClass().getEField(((org.eclipse.edt.compiler.core.ast.Name)lhsExpr).getNameComponents()[0]);
-						Object value = evaluateExpression(assignment.getRightHandSide());
-						context.eSet(field, value);
+				if (Binding.isValidBinding(lhsExpr.resolveDataBinding())) {
+					if (lhsExpr.resolveDataBinding() instanceof IAnnotationBinding) {
+						Annotation value = (Annotation)mofValueFrom(lhsExpr.resolveDataBinding());
+						context.getAnnotations().add(value);
 					}
-				}
-				else {
-					expr.accept(this);
-					Assignment assign = (Assignment)stack.pop();
-					assign.setLHS(addQualifier(context, assign.getLHS()));
-					if (block == null)
-						block = factory.createStatementBlock();
-					AssignmentStatement stmt = createAssignmentStatement(assign);
-					setElementInformation(expr, stmt);
-					block.getStatements().add(stmt);
+					// Check if this is setting a value into the context element, i.e. setting contents into a DataTable
+					else if (context instanceof Part) {
+						if (context.getEClass().getEField(((org.eclipse.edt.compiler.core.ast.Name)lhsExpr).getNameComponents()[0]) != null) {
+							EField field = context.getEClass().getEField(((org.eclipse.edt.compiler.core.ast.Name)lhsExpr).getNameComponents()[0]);
+							Object value = evaluateExpression(assignment.getRightHandSide());
+							context.eSet(field, value);
+						}
+					}
+					else {
+						expr.accept(this);
+						Assignment assign = (Assignment)stack.pop();
+						assign.setLHS(addQualifier(context, assign.getLHS()));
+						if (block == null)
+							block = factory.createStatementBlock();
+						AssignmentStatement stmt = createAssignmentStatement(assign);
+						setElementInformation(expr, stmt);
+						block.getStatements().add(stmt);
+					}
 				}
 			}
 			else if (expr instanceof SetValuesExpression && ((SetValuesExpression)expr).getExpression() instanceof AnnotationExpression) {

@@ -72,16 +72,16 @@ public class ExternalTypeBindingCompletor extends AbstractBinder {
         externalTypeBinding.setPrivate(externalType.isPrivate());
         
         if(externalType.hasExtendedType()) {
-        	try {
         		for(Iterator iter = externalType.getExtendedTypes().iterator(); iter.hasNext();) {
-        			ITypeBinding typeBinding = bindTypeName((Name) iter.next());
-	    			//TODO should probably check to see if this is an interfaceBinding before adding it
-	    			externalTypeBinding.addExtendedType(typeBinding);
+                	try {
+	        			ITypeBinding typeBinding = bindTypeName((Name) iter.next());
+		    			//TODO should probably check to see if this is an interfaceBinding before adding it
+		    			externalTypeBinding.addExtendedType(typeBinding);
+                	}
+	        		catch (ResolutionException e) {
+	        			problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
+	        		}
         		}
-    		}
-    		catch (ResolutionException e) {
-    			problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
-    		}
     	}
         else {
         	IPartSubTypeAnnotationTypeBinding subType = externalTypeBinding.getSubType();

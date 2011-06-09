@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.ClassFieldBinding;
 import org.eclipse.edt.compiler.binding.DataItemBinding;
 import org.eclipse.edt.compiler.binding.DelegateBinding;
@@ -130,7 +131,9 @@ abstract class Egl2MofPart extends Egl2MofBase {
 			else {
 				for (Object name : node.getExtendedTypes()) {
 					IPartBinding superType = (IPartBinding)((Name)name).resolveBinding();
-					((EGLClass)part).getSuperTypes().add((EGLClass)mofTypeFor(superType));
+					if (Binding.isValidBinding(superType)) {
+						((EGLClass)part).getSuperTypes().add((EGLClass)mofTypeFor(superType));
+					}
 				}
 			}
 			handleEndVisitPart(node, part);

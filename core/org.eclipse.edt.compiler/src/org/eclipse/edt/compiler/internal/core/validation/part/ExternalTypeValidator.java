@@ -156,7 +156,7 @@ public class ExternalTypeValidator extends AbstractASTVisitor {
 		boolean subtypeValid;
 		if(externalType.hasSubType()) {
 			subtypeValid = partBinding.getSubType() != null;
-			if (partBinding.getSubType().getName() == InternUtil.intern(IEGLConstants.PROPERTY_NATIVETYPE) &&
+			if (partBinding.getSubType() != null && partBinding.getSubType().getName() == InternUtil.intern(IEGLConstants.PROPERTY_NATIVETYPE) &&
 				partBinding.getSubType().getPackageName() == InternUtil.intern(new String[] {"egl", "core"})) {
 				problemRequestor.acceptProblem(
 						externalType.getSubType(),
