@@ -11,26 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler;
 
-import java.util.Map;
-
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.compiler.internal.io.ZipFileBuildPathEntry;
 import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
-import org.eclipse.edt.mof.EObject;
-import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.IZipFileEntryManager;
 
 
 public class SystemPackageMOFPathEntry extends SystemPackageBuildPathEntry implements ISystemPackageBuildPathEntry, IZipFileEntryManager{
 
-	private String fileExtension;
-
 	public SystemPackageMOFPathEntry(IEnvironment env, String path, ISystemPartBindingLoadedRequestor req, String fileExtension, Mof2Binding converter) {
 		super(env, path, req, fileExtension, converter);
 	}
-
 	
 	protected String convertToStoreKey(String entry) {
 		//entries are in the form: "pkg1/pkg2/partName.mofxml". Need to convert this to:
@@ -42,6 +32,4 @@ public class SystemPackageMOFPathEntry extends SystemPackageBuildPathEntry imple
 		return value.replaceAll("/", ".");
 		
 	}
-
-
 }
