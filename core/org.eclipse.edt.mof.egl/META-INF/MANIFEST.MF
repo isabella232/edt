@@ -14,3 +14,4 @@ Export-Package: org.eclipse.edt.mof.egl,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: src.jar
+Bundle-Vendor: Eclipse EGL Development Tools
