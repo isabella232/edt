@@ -122,10 +122,10 @@ public class SystemEnvironment implements ISystemEnvironment {
 				appendStoresToIREnvironment(parentSystemEnvironment);
 				if (notifier != null) {
 					notifier.checkCancel();
-					notifier.updateProgressDelta(0.05f);
+					notifier.updateProgressDelta(0.01f);
 				}
 				
-				increment = 0.91f / sysPackages.size();
+				increment = 0.9f / sysPackages.size();
 				for (ISystemPackageBuildPathEntry entry : sysPackages) {
 					if (notifier != null) {
 						// This loop is the majority of the work,
