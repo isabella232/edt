@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Java
+Bundle-Name: EDT Javascript Generator Front End
 Bundle-SymbolicName: org.eclipse.edt.gen.generator.javascript;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Export-Package: org.eclipse.edt.gen.generator.javascript
@@ -13,3 +13,4 @@ Require-Bundle: org.eclipse.edt.compiler;bundle-version="0.7.0";visibility:=reex
  org.eclipse.edt.gen.javascript.templates;bundle-version="0.7.0";visibility:=reexport,
  org.eclipse.edt.gen.javascript.templates.egl.core;bundle-version="0.7.0";visibility:=reexport,
  org.eclipse.edt.gen.javascript.templates.egl.lang;bundle-version="0.7.0";visibility:=reexport
+Bundle-Vendor: Eclipse EGL Development Tools
