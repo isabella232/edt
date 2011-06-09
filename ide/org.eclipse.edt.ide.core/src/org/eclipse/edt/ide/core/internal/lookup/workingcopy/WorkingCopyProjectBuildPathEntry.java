@@ -379,7 +379,7 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
     }
     
 	private ISystemEnvironment getSystemEnvironment() {
-		return SystemEnvironmentManager.findSystemEnvironment(getProject());
+		return SystemEnvironmentManager.findSystemEnvironment(getProject(), null);
 	}
 
 	@Override

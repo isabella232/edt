@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.compiler.BaseCompiler;
 import org.eclipse.edt.compiler.IGenerator;
 import org.eclipse.edt.compiler.ISystemEnvironment;
+import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.osgi.framework.Bundle;
 
@@ -138,18 +139,18 @@ public class IDEBaseCompiler implements IIDECompiler {
 		return getPathToPluginDirectory("org.eclipse.edt.mof.egl", "lib");
 	}
 
-	protected ISystemEnvironment createSystemEnvironment() {
+	protected ISystemEnvironment createSystemEnvironment(IBuildNotifier notifier) {
 		ISystemEnvironment parentEnv = null;
 		if (parentCompiler != null) {
-			parentEnv = parentCompiler.getSystemEnvironment();
+			parentEnv = parentCompiler.getSystemEnvironment(notifier);
 		}
-		return SystemEnvironmentManager.getSystemEnvironment(getSystemEnvironmentPathEntry(), parentEnv, getImplicitlyUsedEnumerations());
+		return SystemEnvironmentManager.getSystemEnvironment(getSystemEnvironmentPathEntry(), parentEnv, getImplicitlyUsedEnumerations(), notifier);
 	}
 
 	@Override
-	public ISystemEnvironment getSystemEnvironment() {
+	public ISystemEnvironment getSystemEnvironment(IBuildNotifier notifier) {
 		if (systemEnvironment == null) {
-			systemEnvironment = createSystemEnvironment();
+			systemEnvironment = createSystemEnvironment(notifier);
 		}
 		return systemEnvironment;
 	}

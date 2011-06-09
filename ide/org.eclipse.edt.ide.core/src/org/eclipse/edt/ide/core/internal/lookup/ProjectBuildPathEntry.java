@@ -24,6 +24,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.EGLAliasJsfNamesSetting;
 import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
 import org.eclipse.edt.compiler.internal.core.builder.AbstractProcessingQueue;
+import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.compiler.BindingCompletor;
 import org.eclipse.edt.compiler.internal.core.dependency.NullDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
@@ -74,7 +75,7 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 		
 		@Override
 		public ISystemEnvironment getSystemEnvironment() {
-			return SystemEnvironmentManager.findSystemEnvironment(getProject());
+			return SystemEnvironmentManager.findSystemEnvironment(getProject(), getNotifier());
 		}
 	}
 	
@@ -232,9 +233,9 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
         	String fileName = Util.getFilePartName(declaringFile);
 			IPartBinding fileBinding = getPartBinding(packageName, fileName, true);
 			if(!fileBinding.isValid()){
-				scope = new SystemScope(new FileASTScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, ASTManager.getInstance().getFileAST(declaringFile)),SystemEnvironmentManager.findSystemEnvironment(getProject()));
+				scope = new SystemScope(new FileASTScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, ASTManager.getInstance().getFileAST(declaringFile)),SystemEnvironmentManager.findSystemEnvironment(getProject(), getNotifier()));
 			}else{
-				scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()),SystemEnvironmentManager.findSystemEnvironment(getProject()));
+				scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()),SystemEnvironmentManager.findSystemEnvironment(getProject(), getNotifier()));
 			}
         }
         BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, new ICompilerOptions(){
@@ -380,5 +381,9 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 			}
 		}
 		return null;
+	}
+	
+	public IBuildNotifier getNotifier() {
+		return processingQueue == null ? null : processingQueue.getNotifier();
 	}
 }

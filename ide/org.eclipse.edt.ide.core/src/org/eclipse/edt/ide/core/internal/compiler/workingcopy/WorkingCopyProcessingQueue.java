@@ -185,7 +185,7 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 		}else{
 			String fileName = Util.getFilePartName(declaringFile);
 			IPartBinding fileBinding = projectEnvironment.getPartBinding(packageName, fileName);
-			scope = new SystemScope(new FileScope(new EnvironmentScope(projectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo),SystemEnvironmentManager.findSystemEnvironment(project));
+			scope = new SystemScope(new FileScope(new EnvironmentScope(projectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo),SystemEnvironmentManager.findSystemEnvironment(project, null));
 		}
 		return scope;
 	}

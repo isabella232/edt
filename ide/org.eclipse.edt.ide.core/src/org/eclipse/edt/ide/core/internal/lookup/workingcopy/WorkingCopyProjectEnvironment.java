@@ -117,7 +117,7 @@ public class WorkingCopyProjectEnvironment implements IEnvironment {
 
 	@Override
 	public ISystemEnvironment getSystemEnvironment() {
-		return SystemEnvironmentManager.findSystemEnvironment(getProject());
+		return SystemEnvironmentManager.findSystemEnvironment(getProject(), null);
 	}
 
 }

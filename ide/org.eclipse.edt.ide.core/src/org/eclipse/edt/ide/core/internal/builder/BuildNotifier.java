@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.core.internal.builder;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.edt.compiler.internal.core.builder.CancelledException;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 
@@ -26,12 +27,16 @@ public class BuildNotifier implements IBuildNotifier {
 	protected int totalWork;
 	protected String previousSubtask;
 
-	protected boolean aborted = false;
+	protected boolean aborted;
 
 	public BuildNotifier(IProgressMonitor monitor) {
+		this(monitor, 1000000);
+	}
+	
+	public BuildNotifier(IProgressMonitor monitor, int totalWork) {
 		this.monitor = monitor;
 		this.workDone = 0;
-		this.totalWork = 1000000;
+		this.totalWork = totalWork;
 	}
 	
 	public boolean isAborted() {
@@ -62,8 +67,9 @@ public class BuildNotifier implements IBuildNotifier {
 	
 	public void done() {
 		updateProgress(1.0f);
-		//TODO localize string
-		subTask(BuilderResources.buildDone);
+		if (!(monitor instanceof SubProgressMonitor)) {
+			subTask(BuilderResources.buildDone);
+		}
 		if (monitor != null)
 			monitor.done();
 		this.previousSubtask = null;
@@ -79,7 +85,6 @@ public class BuildNotifier implements IBuildNotifier {
 	
 	public void subTask(String message) {
 		if (message.equals(this.previousSubtask)) return; // avoid refreshing with same one
-		//if (JavaBuilder.DEBUG) System.out.println(msg);
 		if (monitor != null)
 			monitor.subTask(message);
 	
@@ -101,5 +106,11 @@ public class BuildNotifier implements IBuildNotifier {
 	
 	public void updateProgressDelta(float percentWorked) {
 		updateProgress(percentComplete + percentWorked);
+	}
+
+	@Override
+	public IBuildNotifier createSubNotifier(float percentFromRemaining) {
+		int subWork = (int)((this.totalWork - this.workDone) * percentFromRemaining);
+		return new BuildNotifier(new SubProgressMonitor(monitor, subWork), subWork);
 	}
 }

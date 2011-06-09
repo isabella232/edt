@@ -21,6 +21,7 @@ import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.SystemIREnvironment;
 import org.eclipse.edt.compiler.SystemPackageBuildPathEntryFactory;
+import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.ide.core.IIDECompiler;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
@@ -30,24 +31,32 @@ import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
  */
 public class SystemEnvironmentManager {
 	
-	private static Map<String, ISystemEnvironment> storeMap = new HashMap();
+	private static Map<String, ISystemEnvironment> systemMap = new HashMap();
 	
-	public static ISystemEnvironment getSystemEnvironment(String path, ISystemEnvironment parentEnv, List<String> implicitEnums) {
-		if (storeMap.containsKey(path)) {
-			return storeMap.get(path);
+	public static ISystemEnvironment getSystemEnvironment(String path, ISystemEnvironment parentEnv, List<String> implicitEnums, IBuildNotifier notifier) {
+		if (systemMap.containsKey(path)) {
+			return systemMap.get(path);
 		}
 				
 		SystemEnvironment sysEnv = new SystemEnvironment(new SystemIREnvironment(), parentEnv, implicitEnums);
-		sysEnv.initializeSystemPackages(path,  new SystemPackageBuildPathEntryFactory(new Mof2Binding(sysEnv)));
+		sysEnv.initializeSystemPackages(path,  new SystemPackageBuildPathEntryFactory(new Mof2Binding(sysEnv)), notifier);
 		
-		storeMap.put(path, sysEnv);
+		systemMap.put(path, sysEnv);
 		return sysEnv;
 	}
 	
-	public static ISystemEnvironment findSystemEnvironment(IProject project) {
+	/**
+	 * Locates the system environment for the project's compiler. If the system environment hasn't been created yet,
+	 * it is done in the current thread. An optional IBuildNotifier may be passed in for tracking progress. If a
+	 * notifier is passed in, a subnotifier will be created.
+	 */
+	public static ISystemEnvironment findSystemEnvironment(IProject project, IBuildNotifier notifier) {
         IIDECompiler compiler = ProjectSettingsUtility.getCompiler(project);
         if (compiler != null) {
-        	return compiler.getSystemEnvironment();
+        	if (notifier != null) {
+    			notifier = notifier.createSubNotifier(0.2f);
+    		}
+        	return compiler.getSystemEnvironment(notifier);
         }
         return new SystemEnvironment(new SystemIREnvironment(), null, new ArrayList());
 

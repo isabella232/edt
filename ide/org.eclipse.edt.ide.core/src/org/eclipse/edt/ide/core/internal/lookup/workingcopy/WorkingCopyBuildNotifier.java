@@ -79,4 +79,10 @@ public class WorkingCopyBuildNotifier implements IBuildNotifier {
 	public void setCanceled(boolean canceled){
 		this.cancelled = canceled;
 	}
+
+	@Override
+	public IBuildNotifier createSubNotifier(float percentFromParent) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -307,7 +307,7 @@ public class TopLevelFunctionProcessingQueue {
 			IPartBinding fileBinding = functionProjectEnvironment.getPartBinding(functionPackageName, fileName);
 			fileScope = new FileScope(new EnvironmentScope(functionProjectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);	
 		}
-		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironmentManager.findSystemEnvironment(functionProject)), functionContainerScope);
+		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironmentManager.findSystemEnvironment(functionProject, contextProjectEnvrionment.getDeclaringProjectBuildPathEntry().getNotifier())), functionContainerScope);
 		return scope;
 	}
 	
@@ -324,7 +324,7 @@ public class TopLevelFunctionProcessingQueue {
 			IPartBinding fileBinding = env.getDeclaringProjectBuildPathEntry().getFileBinding(functionPackageName, fileNameKey, fileAST);
 			fileScope = new FileScope(new EnvironmentScope(env, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);	
 		}
-		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironmentManager.findSystemEnvironment(env.getProject())), functionContainerScope);
+		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironmentManager.findSystemEnvironment(env.getProject(), contextProjectEnvrionment.getDeclaringProjectBuildPathEntry().getNotifier())), functionContainerScope);
 		return scope;
 	}
 	

@@ -286,7 +286,7 @@ public class WorkingCopyTopLevelFunctionProcessingQueue {
 			fileScope = new FileScope(new EnvironmentScope(env, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);	
 			dependencyInfo.recordTypeBinding(fileBinding);			
 		}
-		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironmentManager.findSystemEnvironment(env.getProject())), functionContainerScope);
+		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironmentManager.findSystemEnvironment(env.getProject(), null)), functionContainerScope);
 		return scope;
 	}
 	 
@@ -303,7 +303,7 @@ public class WorkingCopyTopLevelFunctionProcessingQueue {
 			fileScope = new FileScope(new EnvironmentScope(functionProjectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);	
 			dependencyInfo.recordTypeBinding(fileBinding);			
 		}
-		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironmentManager.findSystemEnvironment(functionProject)), functionContainerScope);
+		Scope scope = new FunctionContainerScope(new SystemScope(fileScope,SystemEnvironmentManager.findSystemEnvironment(functionProject, null)), functionContainerScope);
 		return scope;
 	}
 

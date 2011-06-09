@@ -77,12 +77,6 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
 	    		}
 	    	}
     	}
-    	
-    	// Initialize the project's system environment.
-    	IBindingEnvironment sysEnv = getSystemEnvironment();
-    	if (sysEnv instanceof ISystemEnvironment) {
-    		this.irEnvironment.initSystemEnvironment((ISystemEnvironment)sysEnv);
-    	}
     }
 	
     protected void setDeclaringProjectBuildPathEntry(ProjectBuildPathEntry entry) {
@@ -184,7 +178,7 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
 	
 	@Override
 	public ISystemEnvironment getSystemEnvironment() {
-		return SystemEnvironmentManager.findSystemEnvironment(project);
+		return SystemEnvironmentManager.findSystemEnvironment(project, declaringProjectBuildPathEntry == null ? null : declaringProjectBuildPathEntry.getNotifier());
 	}
 	
 	public Part findPart(String[] packageName, String partName) throws PartNotFoundException {

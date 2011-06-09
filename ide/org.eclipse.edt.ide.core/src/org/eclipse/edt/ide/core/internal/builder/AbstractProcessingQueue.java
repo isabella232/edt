@@ -308,7 +308,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 		}else{
 			String fileName = org.eclipse.edt.ide.core.internal.utils.Util.getFilePartName(declaringFile);
 			IPartBinding fileBinding = projectEnvironment.getPartBinding(packageName, fileName);
-			scope = new SystemScope(new FileScope(new EnvironmentScope(projectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo), SystemEnvironmentManager.findSystemEnvironment(project));
+			scope = new SystemScope(new FileScope(new EnvironmentScope(projectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo), SystemEnvironmentManager.findSystemEnvironment(project, notifier));
 		}
 		return scope;
 	}
