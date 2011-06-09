@@ -22,6 +22,7 @@ import org.eclipse.edt.gen.MissingParameterValueException;
 import org.eclipse.edt.gen.PromptQueryException;
 import org.eclipse.edt.gen.UnknownParameterException;
 import org.eclipse.edt.gen.egl.EglGenerator;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
 public class Java2EGL extends AbstractGeneratorCommand {
@@ -36,10 +37,12 @@ public class Java2EGL extends AbstractGeneratorCommand {
 		genPart.generate(args, new EglGenerator(genPart), null);
 	}
 
-	public void generate(String[] args, EglGenerator generator, IEnvironment env) {
+	public void generate(String[] args, EglGenerator generator, IEnvironment environment) {
 		try {
+			if (environment != null){
+				Environment.pushEnv(environment);
+			}
 			this.installOverrides(args);
-			generator.getContext().setEnvironment(env);
 			// start up the generator, passing the command processor
 			try {
 				List<Class<?>> clazzes = loadClasses();
@@ -76,10 +79,13 @@ public class Java2EGL extends AbstractGeneratorCommand {
 			System.out.print("This value for this parameter is incorrect: " + e.getMessage());
 		}
 		finally {
+			if (environment != null){
+				Environment.popEnv();
+			}
 		}
 	}
 	protected void writeFile(Class<?> clazz, EglGenerator generator) throws Exception {
-		IEnvironment env = generator.getContext().getEnvironment();
+		IEnvironment env = Environment.getCurrentEnv();
 		if(env != null && generator.getResult() != null){
 			env.save(generator.getResult());
 		}
