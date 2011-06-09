@@ -14,7 +14,7 @@ package org.eclipse.edt.ide.ui.internal;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.core.ast.ISyntaxErrorRequestor;
-import org.eclipse.edt.ide.ui.formatting.CodeFormatter;
+import org.eclipse.edt.ide.ui.editor.CodeFormatter;
 import org.eclipse.edt.ide.ui.internal.formatting.EGLCodeFormatter;
 import org.eclipse.edt.ide.ui.internal.formatting.ui.ProfileManager;
 import org.eclipse.emf.ecore.EObject;

@@ -20,7 +20,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.editor.folding.IFoldingPreferenceBlock;
+import org.eclipse.edt.ide.ui.editor.IFoldingPreferenceBlock;
 import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.preferences.OverlayPreferenceStore;
 import org.eclipse.edt.ide.ui.internal.preferences.OverlayPreferenceStore.OverlayKey;

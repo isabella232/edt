@@ -346,7 +346,17 @@ Templates
       		translations="templates/eglruidefault-templates.properties">
       	</include>
 	</extension>
-	
+<!--	
+	<extension
+		point= "org.eclipse.edt.ide.ui.eglFoldingStructureProviders">
+		<provider
+			id="org.eclipse.edt.ide.ui.editor.folding.EGLFoldingStructureProvider"
+			name= "%DefaultEGLFoldingStructureProviderName"
+			class="org.eclipse.edt.ide.ui.internal.editor.folding.FoldingStructureProvider"
+			preferencesClass="org.eclipse.edt.ide.ui.internal.editor.folding.FoldingPreferenceBlock">
+		</provider>
+	</extension>
+-->	
 	<extension point="org.eclipse.ui.ide.projectNatureImages">
       	<image
             icon="icons/ovr16/egl_ovr.gif"
@@ -408,7 +418,6 @@ Templates
 						</or>
 					</enablement>					
 			</actionProvider> 	
-<!-- Uncomment when refactoring is ready
 			<actionProvider
 		            class="org.eclipse.edt.ide.ui.internal.packageexplorer.EditActionGroup"
 		            overrides="org.eclipse.ui.navigator.resources.actions.RefactorActions">
@@ -418,7 +427,6 @@ Templates
 						</or>
 		         	</enablement>
 		    </actionProvider>	
--->    
 			<!-- Add wizards to New context menu of Project Explorer view -->
 			<commonWizard
 				type="new"
@@ -679,9 +687,9 @@ Templates
 	<extension 
  		point="org.eclipse.ui.popupMenus">
 		<objectContribution
+			objectClass="org.eclipse.core.resources.IProject"
         	adaptable="true"
-           	id="org.eclipse.edt.convert.projectpopupmenu"
-           	objectClass="org.eclipse.core.resources.IProject">
+           	id="org.eclipse.edt.ide.ui.convert.projectpopupmenu">           	
            	<visibility>
            		<not>
       				<objectState
@@ -697,6 +705,100 @@ Templates
 				label="%ConvertToEGLProject">
 			</action> 
 		</objectContribution>
+<!--	TODO EDT menubarPaths not being recognized
+		<objectContribution
+            objectClass="org.eclipse.core.resources.IProject"
+            adaptable="true"
+            id="org.eclipse.edt.ide.ui.source.projectpopupmenu">
+           	<action
+         		label="%Format.name"
+         		class="org.eclipse.edt.ide.ui.internal.actions.FormattingAction"
+          		menubarPath="org.eclipse.jdt.ui.source.menu/editGroup"
+         		enablesFor="*"
+         		id="org.eclipse.edt.ide.ui.project.source.editGroup.format">
+         	</action>         
+         	<action
+         		label="%OrganizeImports.name"
+         		class="org.eclipse.edt.ide.ui.internal.actions.OrganizeImportsAction"
+         		menubarPath="org.eclipse.jdt.ui.source.menu/importGroup"
+         		enablesFor="*"
+         		id="org.eclipse.edt.ide.ui.project.source.importGroup.organizeImports">
+         	</action>   
+         	<filter
+            	name="projectNature"
+               	value="org.eclipse.edt.ide.core.EGLNature">
+         	</filter>
+      	</objectContribution>
+-->      	
+		<objectContribution
+            objectClass="org.eclipse.core.resources.IFolder"
+            adaptable="true"
+             id="org.eclipse.edt.ide.ui.source.folderpopupmenu">
+       		<menu
+            	label="%SourceMenu.label"
+               	path="group.source"               
+               	id="org.eclipse.edt.ide.ui.folder.sourceMenu">
+            	<separator
+                	name="group1">
+            	</separator>
+            	<separator
+                	name="group2">
+            	</separator>
+        	</menu>            
+           	<action
+         		label="%Format.name"
+         		class="org.eclipse.edt.ide.ui.internal.actions.FormattingAction"
+          		menubarPath="org.eclipse.edt.ide.ui.folder.sourceMenu/group1"
+         		enablesFor="*"
+         		id="org.eclipse.edt.ide.ui.folder.source.editGroup.format">
+         	</action>         
+         	<action
+         		label="%OrganizeImports.name"
+         		class="org.eclipse.edt.ide.ui.internal.actions.OrganizeImportsAction"
+         		menubarPath="org.eclipse.edt.ide.ui.folder.sourceMenu/group2"
+         		enablesFor="*"
+         		id="org.eclipse.edt.ide.ui.folder.source.importGroup.organizeImports">
+         	</action>   
+         	<filter
+            	name="projectNature"
+               	value="org.eclipse.edt.ide.core.EGLNature">
+         	</filter>
+      	</objectContribution>
+		<objectContribution
+            objectClass="org.eclipse.core.resources.IFile"
+            adaptable="true"
+            nameFilter="*.egl"
+            id="org.eclipse.edt.ide.ui.source.filepopupmenu">
+       		<menu
+            	label="%SourceMenu.label"
+               	path="group.source"               
+               	id="org.eclipse.edt.ide.ui.file.sourceMenu">
+            	<separator
+                	name="group1">
+            	</separator>
+            	<separator
+                	name="group2">
+            	</separator>
+        	</menu>            
+           	<action
+         		label="%Format.name"
+         		class="org.eclipse.edt.ide.ui.internal.actions.FormattingAction"
+          		menubarPath="org.eclipse.edt.ide.ui.file.sourceMenu/group1"
+         		enablesFor="*"
+         		id="org.eclipse.edt.ide.ui.file.source.editGroup.format">
+         	</action>         
+         	<action
+         		label="%OrganizeImports.name"
+         		class="org.eclipse.edt.ide.ui.internal.actions.OrganizeImportsAction"
+         		menubarPath="org.eclipse.edt.ide.ui.file.sourceMenu/group2"
+         		enablesFor="*"
+         		id="org.eclipse.edt.ide.ui.file.source.importGroup.organizeImports">
+         	</action>   
+         	<filter
+            	name="projectNature"
+               	value="org.eclipse.edt.ide.core.EGLNature">
+         	</filter>
+      	</objectContribution>
 	</extension>
 	
    <extension point="org.eclipse.ui.preferencePages">
@@ -704,6 +806,12 @@ Templates
             name="%EGLPreferencePageName"
             class="org.eclipse.edt.ide.ui.internal.preferences.BasePreferencePage"
             id="org.eclipse.edt.ide.ui.preferences">
+		</page>
+		<page
+            name="%CompilerPreferencePageName"
+            category="org.eclipse.edt.ide.ui.preferences"
+            class="org.eclipse.edt.ide.ui.internal.preferences.CompilerSelectionPreferencePage"
+            id="org.eclipse.edt.ide.ui.compilerPreferences">
 		</page>
 		<page
             name="%EditorPreferencePageName"
@@ -717,25 +825,37 @@ Templates
             class="org.eclipse.edt.ide.ui.internal.preferences.FoldingPreferencePage"
             id="org.eclipse.edt.ide.ui.foldingPreferences">
 		</page>
+		<page 
+      		name="%FormatterPreferencePageName"
+      		category="org.eclipse.edt.ide.ui.editorPreferences"
+      		class="org.eclipse.edt.ide.ui.internal.preferences.CodeFormatterPreferencePage"
+      		id="org.eclipse.edt.ide.ui.formatterPreferences">
+      	</page>
+      	<page
+      		name="%OrganizeImportsPreferencePageName"
+      		category="org.eclipse.edt.ide.ui.editorPreferences"
+      		class="org.eclipse.edt.ide.ui.internal.preferences.ImportOrganizePreferencePage"
+      		id="org.eclipse.edt.ide.ui.organizeImportsPreferencePage">
+      	</page>
 		<page
-            name="%CompilerPreferencePageName"
-            category="org.eclipse.edt.ide.ui.preferences"
-            class="org.eclipse.edt.ide.ui.internal.preferences.CompilerSelectionPreferencePage"
-            id="org.eclipse.edt.ide.ui.compilerPreferences">
-		</page>
-		<page
-            name="%SourceStylesPreferencePageName"
+            name="%SyntaxColoringPreferencePageName"
             category="org.eclipse.edt.ide.ui.editorPreferences"
             class="org.eclipse.edt.ide.ui.internal.preferences.StylePreferencePage"
-            id="org.eclipse.edt.ide.ui.scriptpreferences">
+            id="org.eclipse.edt.ide.ui.sourceStylesPreferences">
 		</page>
+	    <page
+            name="%TemplatePreferencePageName"
+            category="org.eclipse.edt.ide.ui.editorPreferences"
+            class="org.eclipse.edt.ide.ui.internal.preferences.TemplatePreferencePage"
+            id="org.eclipse.edt.ide.ui.templatePreferences">
+      	</page>      
 	</extension>
 	
 	<extension point="org.eclipse.ui.propertyPages">
 		<page
 			objectClass="org.eclipse.core.resources.IProject"
 			adaptable="true"
-            name="%EGLProjectBuildPath"
+            name="%EGLBuildPathPropertyPageName"
             class="org.eclipse.edt.ide.ui.internal.property.pages.EGLProjectBuildPathPropertyPage"
            	id="org.eclipse.edt.ide.ui.EGLProjectBuildPathPropertyPage">
       		<filter
@@ -743,6 +863,30 @@ Templates
         		value="org.eclipse.edt.ide.core.EGLNature">
       		</filter>
    		</page>
+<!--   		
+  		<page 
+  			objectClass="org.eclipse.core.resources.IProject"
+			adaptable="true"
+      		name="%FormatterPropertyPageName"
+       		class="org.eclipse.edt.ide.ui.internal.preferences.CodeFormatterPreferencePage"
+      		id="org.eclipse.edt.ide.ui.formatterPropertyPage">
+      		<filter
+        		name="projectNature"
+        		value="org.eclipse.edt.ide.core.EGLNature">
+      		</filter>
+      	</page>
+     	<page
+    	 	objectClass="org.eclipse.core.resources.IProject"
+			adaptable="true"
+      		name="%OrganizeImportsPropertyPageName"
+      		class="org.eclipse.edt.ide.ui.internal.preferences.ImportOrganizePreferencePage"
+      		id="org.eclipse.edt.ide.ui.organizeImportsPropertyPage">
+      		<filter
+        		name="projectNature"
+        		value="org.eclipse.edt.ide.core.EGLNature">
+      		</filter>
+      	</page>
+-->      	
    		<page
 			objectClass="org.eclipse.core.resources.IProject"
 			adaptable="true"

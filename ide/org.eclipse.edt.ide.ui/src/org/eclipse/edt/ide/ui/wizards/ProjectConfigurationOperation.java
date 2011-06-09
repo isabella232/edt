@@ -17,7 +17,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
-import org.eclipse.edt.ide.ui.internal.util.EGLProjectUtility;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public class ProjectConfigurationOperation extends WorkspaceModifyOperation {

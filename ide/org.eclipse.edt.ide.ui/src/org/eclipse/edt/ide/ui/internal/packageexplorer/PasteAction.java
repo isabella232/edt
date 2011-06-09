@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.packageexplorer;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
+import org.eclipse.edt.ide.ui.internal.refactoring.ReorgCopyStarter;
 import org.eclipse.jface.util.Assert;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
@@ -160,22 +162,9 @@ public class PasteAction extends SelectionListenerAction {
 				
 		for(Iterator iter=selectedResources.iterator(); iter.hasNext();)
 		{
-//			try
-			{
-				Object element = iter.next();
-//				if(element instanceof IPackageFragmentRoot)
-//				{
-//					IEGLProject eglproj = (IEGLProject)element;
-//					IPath path = eglproj.getProject().getFullPath();
-//					return eglproj.findPackageFragmentRoot(path);
-//				}
-				if(element instanceof IEGLElement)
-					return (IEGLElement)element;
-			}
-//			catch(EGLModelException e)
-//			{
-//				EGLLogger.log(this, e);
-//			}
+			Object element = iter.next();
+			if(element instanceof IEGLElement)
+				return (IEGLElement)element;
 		}
 		return null;
 	}
@@ -352,18 +341,17 @@ public class PasteAction extends SelectionListenerAction {
 	}
 	
 	private boolean startRefactoring(IResource[] resources, IEGLElement[] eglElements, IEGLElement destination) throws EGLModelException{
-// TODO EDT Uncomment when EGLReorgCopyStarter is implemented		
-//		try {
-//			EGLReorgCopyStarter create = EGLReorgCopyStarter.create(eglElements, resources, destination);
-//			if(create == null) {
-//				return false;
-//			}
-//			create.run(shell);
-//		} catch (InterruptedException e) {
-//			EGLLogger.log(this, e);
-//		} catch (InvocationTargetException e) {
-//			EGLLogger.log(this, e);
-//		}
+ 		try {
+			ReorgCopyStarter create = ReorgCopyStarter.create(eglElements, resources, destination);
+			if(create == null) {
+				return false;
+			}
+			create.run(shell);
+		} catch (InterruptedException e) {
+			EGLLogger.log(this, e);
+		} catch (InvocationTargetException e) {
+			EGLLogger.log(this, e);
+		}
 		return true;
 	}
 }

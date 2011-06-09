@@ -14,9 +14,12 @@ package org.eclipse.edt.ide.ui.internal.packageexplorer;
 import java.util.Iterator;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLProject;
+import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
+import org.eclipse.edt.ide.ui.internal.refactoring.RefactoringExecutionStarter;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -37,11 +40,10 @@ public class DeleteAction extends SelectionListenerAction {
 	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
 	 */
 	public void run() {
-// TODO EDT Uncomment when refactoring is ready		
-//		try {
-//			EGLRefactoringExecutionStarter.startDeleteRefactoring(deleteSelection.toArray(), EDTUIPlugin.getActiveWorkbenchShell());
-//		} catch (CoreException e) {
-//		}
+		try {
+			RefactoringExecutionStarter.startDeleteRefactoring(deleteSelection.toArray(), EDTUIPlugin.getActiveWorkbenchShell());
+		} catch (CoreException e) {
+		}
 	}
 
 	/**
@@ -75,12 +77,11 @@ public class DeleteAction extends SelectionListenerAction {
 	}
 	
 	protected void runDelete() {
-// TODO EDT Uncomment when refactoring is ready		
-//		try {
-//			//Do not pass in a shell, this way, the starter will not display a window
-//			EGLRefactoringExecutionStarter.startDeleteRefactoring(deleteSelection.toArray(), null);
-//		} catch (CoreException e) {
-//		}
+		try {
+			//Do not pass in a shell, this way, the starter will not display a window
+			RefactoringExecutionStarter.startDeleteRefactoring(deleteSelection.toArray(), null);
+		} catch (CoreException e) {
+		}
 	}
 
 }

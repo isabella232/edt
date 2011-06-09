@@ -902,7 +902,4 @@ end"/>
       </group>
     </category>
   </defaultProfile>
-  <profile name="VAGen" isBuildIn="true" base="EGL">
-    <setting category="generalSettings" pref="keywordCase" value="1"/>
-  </profile>
 </egl:format_profiles>

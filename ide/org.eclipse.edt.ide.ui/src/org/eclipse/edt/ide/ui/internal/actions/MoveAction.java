@@ -14,6 +14,7 @@ package org.eclipse.edt.ide.ui.internal.actions;
 import java.util.Iterator;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
@@ -32,6 +33,8 @@ import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
+import org.eclipse.edt.ide.ui.internal.refactoring.RefactoringExecutionStarter;
+import org.eclipse.edt.ide.ui.internal.refactoring.reorg.ReorgPolicyFactory;
 import org.eclipse.edt.ide.ui.internal.util.FileProvidingView;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
@@ -103,7 +106,7 @@ public class MoveAction extends SelectionDispatchAction {
 //						return null;
 //					}
 //				} else {
-//					return null;
+					return null;
 //				}
 			}
 			index = index + 1;
@@ -274,9 +277,7 @@ public class MoveAction extends SelectionDispatchAction {
 					}
 					return false;
 				}
-//				return selection.size() > 0 && EGLReorgPolicyFactory.createMovePolicy(new IResource[0], getEGLElements(selection)).canEnable();
-				//TODO EDT Uncomment when policy factory is ready
-				return selection.size() > 0;
+				return selection.size() > 0 && ReorgPolicyFactory.createMovePolicy(new IResource[0], getEGLElements(selection)).canEnable();
 			}
 		} catch (EGLModelException e) {
 			EDTUIPlugin.log(e);
@@ -313,14 +314,12 @@ public class MoveAction extends SelectionDispatchAction {
 			for (int i = 0; i < partNames.length; i++) {
 				parts[i] = eglFile.getPart(partNames[i]);
 			}
-			// TODO EDT Uncomment when refactoring is ready		
-			// EGLRefactoringExecutionStarter.startMoveRefactoring(new IResource[0], parts, getShell());
+			RefactoringExecutionStarter.startMoveRefactoring(new IResource[0], parts, getShell());
 		}
 	}
 
 	private void run(IEGLElement[] eglFiles) throws CoreException {
-// TODO EDT Uncomment when refactoring is ready		
-//		EGLRefactoringExecutionStarter.startMoveRefactoring(new IResource[0], eglFiles, getShell());
+		RefactoringExecutionStarter.startMoveRefactoring(new IResource[0], eglFiles, getShell());
 	}
 
 	private static boolean isMoveAvailable(Node[] nodes) throws CoreException {

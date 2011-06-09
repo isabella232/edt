@@ -23,7 +23,7 @@ import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.core.model.document.IEGLModelChangeListener;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.editor.folding.IFoldingStructureProvider;
+import org.eclipse.edt.ide.ui.editor.IFoldingStructureProvider;
 import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -41,7 +41,6 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
-
 
 public class FoldingStructureProvider implements IProjectionListener, IEGLModelChangeListener, IFoldingStructureProvider, IPropertyChangeListener{
 

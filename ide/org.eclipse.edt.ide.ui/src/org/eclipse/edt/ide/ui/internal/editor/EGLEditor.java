@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.editor;
 
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -49,7 +48,8 @@ import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.bidi.IBIDIProvider;
-import org.eclipse.edt.ide.ui.editor.folding.IFoldingStructureProvider;
+import org.eclipse.edt.ide.ui.editor.IEGLEditor;
+import org.eclipse.edt.ide.ui.editor.IFoldingStructureProvider;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.EGLPerspectiveFactory;
 import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
@@ -130,7 +130,7 @@ import org.eclipse.ui.texteditor.DefaultRangeIndicator;
 import org.eclipse.ui.texteditor.link.EditorLinkedModeUI;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-public class EGLEditor extends TextEditor {
+public class EGLEditor extends TextEditor implements IEGLEditor {
 	/**
 	 * ID of the action to toggle the style of the presentation.
 	 */
@@ -139,6 +139,8 @@ public class EGLEditor extends TextEditor {
 	public static final String FOLDING_EXPANDALL_ID = "FoldingExpandAll"; //$NON-NLS-1$
 	public static final String FOLDING_EXPAND_ID = "FoldingExpand"; //$NON-NLS-1$	
 	public static final String FOLDING_COLLAPSE_ID = "FoldingCollapse"; //$NON-NLS-1$
+	public static final String RENAME_ID = "org.eclipse.jdt.ui.actions.Rename"; //$NON-NLS-1$
+	public static final String MOVE_ID = "org.eclipse.jdt.ui.actions.Move"; //$NON-NLS-1$
 
 	/** Preference key for compiler task tags */
 	private static final String COMPILER_TASK_TAGS = JavaCore.COMPILER_TASK_TAGS;
@@ -155,7 +157,7 @@ public class EGLEditor extends TextEditor {
 	protected HashMap nodesWithSavedWarnings;
 
 	AbstractResultsViewPart sqlErrorView;	 
-	TextTools tools;
+	protected TextTools tools;
 
 	/** The preference property change listener */
 	private IPropertyChangeListener fPropertyChangeListener;

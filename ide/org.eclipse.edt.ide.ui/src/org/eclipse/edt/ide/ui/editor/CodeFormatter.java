@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.ide.ui.formatting;
+package org.eclipse.edt.ide.ui.editor;
 
 import java.io.BufferedReader;
 import java.io.StringReader;

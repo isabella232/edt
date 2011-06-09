@@ -13,8 +13,8 @@ package org.eclipse.edt.ide.ui.internal.editor.folding;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.edt.ide.ui.editor.folding.IFoldingPreferenceBlock;
-import org.eclipse.edt.ide.ui.editor.folding.IFoldingStructureProvider;
+import org.eclipse.edt.ide.ui.editor.IFoldingPreferenceBlock;
+import org.eclipse.edt.ide.ui.editor.IFoldingStructureProvider;
 import org.eclipse.jface.text.Assert;
 
 public final class FoldingStructureProviderDescriptor {

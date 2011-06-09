@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
+import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.jdt.ui.IContextMenuConstants;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
@@ -40,6 +41,9 @@ import org.eclipse.ui.texteditor.IWorkbenchActionDefinitionIds;
 
 public class EditActionGroup extends CommonActionProvider 
 {
+	public static final String RENAME_ACTION_ID = "org.eclipse.jdt.ui.edit.text.java.rename.element"; //$NON-NLS-1$
+	public static final String MOVE_ACTION_ID = "org.eclipse.jdt.ui.edit.text.java.move.element"; //$NON-NLS-1$
+	
 	private IWorkbenchSite fSite;       
     private Clipboard fclipboard;
     
@@ -48,7 +52,6 @@ public class EditActionGroup extends CommonActionProvider
         
     private CopyAction fCopyAction;
     private PasteAction fPasteAction;
-    //private EGLCutAction fCutAction;
     private DeleteAction fDeleteAction; 
     
     private SelectionListenerAction[] fActions;
@@ -74,18 +77,17 @@ public class EditActionGroup extends CommonActionProvider
 	        fDeleteAction = new DeleteAction();
 	        fDeleteAction.setActionDefinitionId(IWorkbenchActionDefinitionIds.DELETE);
 
-// TODO EDT Uncomment when rename and move are ready
-//	        fRenameAction = new org.eclipse.edt.ide.ui.internal.actions.EGLRenameAction(fSite);
-//	        fRenameAction.setActionDefinitionId(EGLEditor.RENAME_ACTION_ID);
-//	        fRenameAction.selectionChanged((IStructuredSelection) fSite.getSelectionProvider().getSelection());
-//	        fSite.getSelectionProvider().addSelectionChangedListener(fRenameAction);
-//
-//
-//	        fMoveAction = new org.eclipse.edt.ide.ui.internal.actions.EGLMoveAction(fSite);
-//	        fMoveAction.setActionDefinitionId(EGLEditor.MOVE_ACTION_ID);
-//	        fMoveAction.selectionChanged((IStructuredSelection) fSite.getSelectionProvider().getSelection());
-//	        fSite.getSelectionProvider().addSelectionChangedListener(fMoveAction);
-//	        
+	        fRenameAction = new org.eclipse.edt.ide.ui.internal.actions.RenameAction(fSite);
+	        fRenameAction.setActionDefinitionId(RENAME_ACTION_ID);
+	        fRenameAction.selectionChanged((IStructuredSelection) fSite.getSelectionProvider().getSelection());
+	        fSite.getSelectionProvider().addSelectionChangedListener(fRenameAction);
+
+
+	        fMoveAction = new org.eclipse.edt.ide.ui.internal.actions.MoveAction(fSite);
+	        fMoveAction.setActionDefinitionId(MOVE_ACTION_ID);
+	        fMoveAction.selectionChanged((IStructuredSelection) fSite.getSelectionProvider().getSelection());
+	        fSite.getSelectionProvider().addSelectionChangedListener(fMoveAction);
+	        
 	        fActions= new SelectionListenerAction[] { /*fCutAction, */fCopyAction, fPasteAction, fDeleteAction };
 	        registerActionsAsSelectionChangeListeners();
 		}
@@ -148,10 +150,9 @@ public class EditActionGroup extends CommonActionProvider
 		if(selectionChangedToEGL(selection, fCopyAction))
 			actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), fCopyAction);
 		actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(), fPasteAction);
-// TODO EDT Uncomment when ready		
-//		actionBars.setGlobalActionHandler(ActionFactory.RENAME.getId(), fRenameAction);
-//		actionBars.setGlobalActionHandler(EGLEditor.RENAME_ID, fRenameAction);
-//		actionBars.setGlobalActionHandler(EGLEditor.MOVE_ID, fMoveAction);
+		actionBars.setGlobalActionHandler(ActionFactory.RENAME.getId(), fRenameAction);
+		actionBars.setGlobalActionHandler(EGLEditor.RENAME_ID, fRenameAction);
+		actionBars.setGlobalActionHandler(EGLEditor.MOVE_ID, fMoveAction);
 	}
 	
 	/* (non-Javadoc)
@@ -168,21 +169,21 @@ public class EditActionGroup extends CommonActionProvider
 		menu.appendToGroup(IContextMenuConstants.GROUP_REORGANIZE, fDeleteAction);
 		
 		IMenuManager submenuRef = new MenuManager(UINlsStrings.Refactor);
+	 	
+		if(fRenameAction.willLaunchOldDialog(selection)) {
+			menu.appendToGroup(IContextMenuConstants.GROUP_REORGANIZE, fRenameAction);
+		}
+		else if(fRenameAction.canRun(selection)) {
+			submenuRef.add(fRenameAction);
+		}
 		
-// TODO EDT Uncomment when ready		
-//		if(fRenameAction.willLaunchOldDialog(selection)) {
-//			menu.appendToGroup(IContextMenuConstants.GROUP_REORGANIZE, fRenameAction);
-//		}
-//		else if(fRenameAction.canRun(selection)) {
-//			submenuRef.add(fRenameAction);
-//		}
-//		
-//		if(fMoveAction.willLaunchOldDialog(selection)) {
-//			menu.appendToGroup(IContextMenuConstants.GROUP_REORGANIZE, fMoveAction);
-//		}
-//		else if(fMoveAction.canRun(selection)) {
-//			submenuRef.add(fMoveAction);
-//		}
+		if(fMoveAction.willLaunchOldDialog(selection)) {
+			menu.appendToGroup(IContextMenuConstants.GROUP_REORGANIZE, fMoveAction);
+		}
+		else if(fMoveAction.canRun(selection)) {
+			submenuRef.add(fMoveAction);
+		}	
+
 		
 		if(submenuRef.getItems().length != 0) {
 			menu.appendToGroup(IContextMenuConstants.GROUP_REORGANIZE, submenuRef);
@@ -213,75 +214,4 @@ public class EditActionGroup extends CommonActionProvider
 		deregisterActionsAsSelectionChangeListeners();
 	}
 	
-    
-/*    public void selectionChanged(SelectionChangedEvent event) { 
-//        renameAction.selectionChanged(event); 
-//        deleteEJBAction.selectionChanged(event);
-//        deleteModuleAction.selectionChanged(event);
-//        deleteResourceAction.selectionChanged(event);
-            	
-    	fOpenAction.selectionChanged(event);
-    	fCopyAction.selectionChanged(event);
-    	fPasteAction.selectionChanged(event);
-    	//fRenameAction.selectionChanged(event);
-    	//fMoveAction.selectionChanged(event);
-        //deleteAction.selectionChanged(event);
-        IActionBars actionBars = getExtensionSite().getViewSite().getActionBars();
-//        if(deleteEJBAction.isEnabled()) {
-//            actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteEJBAction); 
-//            actionBars.updateActionBars();
-//        } else if (deleteModuleAction.isEnabled()) {
-//            actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteModuleAction);
-//            actionBars.updateActionBars();
-//        }
-        
-        //associate with the actionBar, copy and paste key, and menu
-        if(fPasteAction.isEnabled())
-        {
-        	actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(), fPasteAction);
-        	actionBars.updateActionBars();        	
-        }
-        if(fCopyAction.isEnabled())
-        {
-        	actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), fCopyAction);
-        	actionBars.updateActionBars();
-        }
-    }
-    
-    
-
-    
-    
-    public void fillContextMenu(IMenuManager menu) {
-        fillEditContextMenu(menu);
-    }    
-
-    public void fillEditContextMenu(IMenuManager menu) {
-        super.fillEditContextMenu(menu);        
-
-        //addEditAction(menu, fRenameAction);
-        //addEditAction(menu, fMoveAction);
-        IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
-        boolean anyResourceSelected = !selection.isEmpty();
-        boolean isAllEGLElem = true;
-        
-		for (Iterator iter= selection.toList().iterator(); (iter.hasNext() && isAllEGLElem);) {
-			Object element= iter.next();
-			if (!(element instanceof IEGLElement))
-			{
-				isAllEGLElem = false;
-			}
-		}
-		if(anyResourceSelected && isAllEGLElem)
-		{
-	        fPasteAction.selectionChanged(selection);
-	        fCopyAction.selectionChanged(selection); 
-	        fCutAction.selectionChanged(selection);
-	        menu.insertAfter(ICommonMenuConstants.COMMON_MENU_EDIT_PASTE, fPasteAction);
-	        menu.insertAfter(ICommonMenuConstants.COMMON_MENU_EDIT_COPY, fCopyAction);
-	        //menu.insertAfter(ICommonMenuConstants.COMMON_MENU_EDIT_ACTIONS, fCutAction);
-		}
-		
-    }*/
-    	
 }

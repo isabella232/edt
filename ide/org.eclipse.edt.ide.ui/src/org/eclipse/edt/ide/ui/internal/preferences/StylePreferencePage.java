@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.preferences;
 
-
-// Modeled after Java Editor Preference Page - Syntax Tab
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -66,14 +63,6 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 	private Map fColorButtons= new HashMap();
 	
 	private Map fCheckBoxes= new HashMap();
-//	private SelectionListener fCheckBoxListener= new SelectionListener() {
-//		public void widgetDefaultSelected(SelectionEvent e) {
-//		}
-//		public void widgetSelected(SelectionEvent e) {
-//			Button button= (Button) e.widget;
-//			fOverlayStore.setValue((String) fCheckBoxes.get(button), button.getSelection());
-//		}
-//	};
 
 	private List fStyleColorList;	
 	private ColorEditor fStyleForegroundColorEditor;
@@ -109,9 +98,6 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 	
 		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EGLPreferenceConstants.EDITOR_DEFAULT_COLOR),
 		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EGLPreferenceConstants.EDITOR_DEFAULT_BOLD),
-		
-//		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EGLPreferenceConstants.EDITOR_SYSTEM_WORD_COLOR),
-//		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EGLPreferenceConstants.EDITOR_SYSTEM_WORD_BOLD),
 	};
 	
 	// make sure second entry in each is the preferencesKeyValue
@@ -121,14 +107,10 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 		{ UINlsStrings.SourceStyleLiterals, EGLPreferenceConstants.EDITOR_STRING_COLOR }, //$NON-NLS-1$
 		{ UINlsStrings.SourceStyleSingleComment, EGLPreferenceConstants.EDITOR_SINGLE_LINE_COMMENT_COLOR }, //$NON-NLS-1$
 		{ UINlsStrings.SourceStyleMultiComment, EGLPreferenceConstants.EDITOR_MULTI_LINE_COMMENT_COLOR }, //$NON-NLS-1$
-//		{ UINlsStrings.SourceStyleSystemWords), EGLPreferenceConstants.EDITOR_SYSTEM_WORD_COLOR }, //$NON-NLS-1$
-		
+
 	};
 	
-	// Jeff 10-16 - End New Variables
-	
 	public StylePreferencePage() {  
-		setDescription(UINlsStrings.SourceStyleDialogTitle); //$NON-NLS-1$
 		setPreferenceStore(EDTUIPlugin.getDefault().getPreferenceStore());
 		fOverlayStore= new OverlayPreferenceStore(getPreferenceStore(), fKeys);
 	}
@@ -286,9 +268,7 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 	}
 	
 	private Control createPreviewer(Composite parent) {
-		
-//		Preferences coreStore= createTemporaryCorePreferenceStore();
-		
+	
 		tools = new TextTools(fOverlayStore);
 	
 		fPreviewViewer= new SourceViewer(parent, null, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
@@ -371,14 +351,6 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 		return null;
 	}	
 	
-//	private Preferences createTemporaryCorePreferenceStore() {
-//		Preferences result= new Preferences();
-//	
-//		result.setValue(COMPILER_TASK_TAGS, "TASK"); //$NON-NLS-1$
-//	
-//		return result;
-//	}
-	
 	private void handleStyleColorListSelection() {	
 		int i= fStyleColorList.getSelectionIndex();
 		String key= fStyleColorListModel[i][1];
@@ -391,7 +363,6 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 		return internal();
 	}
 	public static String internal() {
-//		return "//Brenda, you need to provide a better example\nDataItem bbb CHAR(6)\nend\n// This is a single line comment\nFunction myfunction()\n	/* this is a multi\n	   line comment */\n	abc = \"literal\";\n	def = returnCode;\nend";
 		return "/* This function adds the employee to the SQL\n   table EMPLOYEE. SQL updates are backed out\n   when there is a duplicate key. */\n\nFunction addEmp()\n  try\n    add employee;\n  onException(exception SQLException)\n    if (employee is unique)    // record with duplicate key\n      sysLib.rollback();       // back out SQL add\n      msg = \"Duplicate key\";\n    else                       // database error on add\n      msg = \"Database error\";\n    end\n    setMsg();\n  end\nend"; //$NON-NLS-1$
 	}
 	
@@ -461,10 +432,8 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 			
 		fOverlayStore.propagate();
 		EDTUIPlugin.getDefault().savePluginPreferences();
-	  
-//		super.performOk();
-	  	
 		return true;
+		
 	}
 	
    /*
@@ -503,27 +472,4 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 		  super.dispose();
 	}
 	
-//	private Button addCheckBox(Composite parent, String label, String key, int indentation) {		
-//		Button checkBox= new Button(parent, SWT.CHECK);
-//		checkBox.setText(label);
-//		
-//		GridData gd= new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
-//		gd.horizontalIndent= indentation;
-//		gd.horizontalSpan= 2;
-//		checkBox.setLayoutData(gd);
-//		checkBox.addSelectionListener(fCheckBoxListener);
-//		
-//		fCheckBoxes.put(checkBox, key);
-//		
-//		return checkBox;
-//	}	
-
-//	private static Label getLabelControl(Control[] labelledTextField){
-//		return (Label)labelledTextField[0];
-//	}
-
-//	private static Text getTextControl(Control[] labelledTextField){
-//		return (Text)labelledTextField[1];
-//	}
-
 }

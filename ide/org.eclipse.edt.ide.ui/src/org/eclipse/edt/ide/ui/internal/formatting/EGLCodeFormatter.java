@@ -19,7 +19,7 @@ import org.eclipse.edt.compiler.core.ast.AccumulatingSyntaxErrorMessageRequestor
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.ISyntaxErrorRequestor;
 import org.eclipse.edt.compiler.core.ast.SyntaxError;
-import org.eclipse.edt.ide.ui.formatting.CodeFormatter;
+import org.eclipse.edt.ide.ui.editor.CodeFormatter;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;

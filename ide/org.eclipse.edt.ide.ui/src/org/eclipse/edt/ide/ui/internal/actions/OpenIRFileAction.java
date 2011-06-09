@@ -11,13 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.actions;
 
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.actions.OpenSystemEditorAction;
-
+import org.eclipse.edt.ide.core.internal.model.ClassFile;
+import org.eclipse.edt.ide.core.model.IClassFile;
 import org.eclipse.edt.ide.ui.internal.editor.BinaryFileEditor;
 import org.eclipse.edt.ide.ui.internal.util.EditorUtility;
-import org.eclipse.edt.ide.core.model.IClassFile;
-import org.eclipse.edt.ide.core.internal.model.ClassFile;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.actions.OpenSystemEditorAction;
 
 public class OpenIRFileAction extends OpenSystemEditorAction {
 	

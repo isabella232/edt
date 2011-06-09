@@ -21,6 +21,9 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IContributor;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
@@ -159,8 +162,8 @@ public class NewEGLProjectWizard extends Wizard
 	}
 	
 	protected void postPerformFinish() {
-//		DummyConfigurationElement dummy = new DummyConfigurationElement();
-//		BasicNewProjectResourceWizard.updatePerspective(dummy);
+		DummyConfigurationElement dummy = new DummyConfigurationElement();
+		ProjectWizardUtils.updatePerspective(dummy);
 		BasicNewResourceWizard.selectAndReveal(workspaceRoot.getProject(model.getProjectName()), PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 	}
 	
@@ -175,77 +178,85 @@ public class NewEGLProjectWizard extends Wizard
 	/**
 	 * This class is here purely so that we have the ability to auto switch perspectives
 	 */
-//	public class DummyConfigurationElement implements IConfigurationElement {
-//		
-//	    /**
-//	     * Extension attribute name for final perspective.
-//	     * This needs to be kept in sync with BasicNewProjectResourceWizard.FINAL_PERSPECTIVE
-//	     */
-//	    private static final String FINAL_PERSPECTIVE = "finalPerspective"; //$NON-NLS-1$
-//
-//		public Object createExecutableExtension(String propertyName) throws CoreException {
-//			return null;
-//		}
-//
-//		public String getAttribute(String name) throws InvalidRegistryObjectException {
-//			if (name.equals(FINAL_PERSPECTIVE)) {
-//				return "com.ibm.etools.egl.core.ui.EGLPerspective"; //$NON-NLS-1$
-//			}
-//			return null;
-//		}
-//
-//		public String getAttributeAsIs(String name) throws InvalidRegistryObjectException {
-//			return null;
-//		}
-//
-//		public String[] getAttributeNames() throws InvalidRegistryObjectException {
-//			return null;
-//		}
-//
-//		public IConfigurationElement[] getChildren() throws InvalidRegistryObjectException {
-//			return null;
-//		}
-//
-//		public IConfigurationElement[] getChildren(String name) throws InvalidRegistryObjectException {
-//			return null;
-//		}
-//
-//		public IContributor getContributor() throws InvalidRegistryObjectException {
-//			return null;
-//		}
-//
-//		public IExtension getDeclaringExtension() throws InvalidRegistryObjectException {
-//			return null;
-//		}
-//
-//		public String getName() throws InvalidRegistryObjectException {
-//			return null;
-//		}
-//
-//		public String getNamespace() throws InvalidRegistryObjectException {
-//			return null;
-//		}
-//
-//		public String getNamespaceIdentifier() throws InvalidRegistryObjectException {
-//			return null;
-//		}
-//
-//		public Object getParent() throws InvalidRegistryObjectException {
-//			return null;
-//		}
-//
-//		public String getValue() throws InvalidRegistryObjectException {
-//			return null;
-//		}
-//
-//		public String getValueAsIs() throws InvalidRegistryObjectException {
-//			return null;
-//		}
-//
-//		public boolean isValid() {
-//			return false;
-//		}
-//		
-//	}
+	public class DummyConfigurationElement implements IConfigurationElement {
+		
+	    /**
+	     * Extension attribute name for final perspective.
+	     * This needs to be kept in sync with BasicNewProjectResourceWizard.FINAL_PERSPECTIVE
+	     */
+	    private static final String FINAL_PERSPECTIVE = "finalPerspective"; //$NON-NLS-1$
+
+		public Object createExecutableExtension(String propertyName) throws CoreException {
+			return null;
+		}
+
+		public String getAttribute(String name) throws InvalidRegistryObjectException {
+			if (name.equals(FINAL_PERSPECTIVE)) {
+				return "org.eclipse.edt.ide.ui.EGLPerspective"; //$NON-NLS-1$
+			}
+			return null;
+		}
+		
+		public String getAttribute(String attrName, String locale) throws InvalidRegistryObjectException {
+			return getAttribute( attrName );
+		}
+
+		public String getAttributeAsIs(String name) throws InvalidRegistryObjectException {
+			return null;
+		}
+
+		public String[] getAttributeNames() throws InvalidRegistryObjectException {
+			return null;
+		}
+
+		public IConfigurationElement[] getChildren() throws InvalidRegistryObjectException {
+			return null;
+		}
+
+		public IConfigurationElement[] getChildren(String name) throws InvalidRegistryObjectException {
+			return null;
+		}
+
+		public IContributor getContributor() throws InvalidRegistryObjectException {
+			return null;
+		}
+
+		public IExtension getDeclaringExtension() throws InvalidRegistryObjectException {
+			return null;
+		}
+
+		public String getName() throws InvalidRegistryObjectException {
+			return null;
+		}
+
+		public String getNamespace() throws InvalidRegistryObjectException {
+			return null;
+		}
+
+		public String getNamespaceIdentifier() throws InvalidRegistryObjectException {
+			return null;
+		}
+
+		public Object getParent() throws InvalidRegistryObjectException {
+			return null;
+		}
+
+		public String getValue() throws InvalidRegistryObjectException {
+			return null;
+		}
+		
+		public String getValue(String locale) throws InvalidRegistryObjectException {
+			return null;
+		}
+
+		public String getValueAsIs() throws InvalidRegistryObjectException {
+			return null;
+		}
+
+		public boolean isValid() {
+			return false;
+		}
+		
+	}
 	
 }

@@ -12,7 +12,7 @@
 /**
  * 
  */
-package org.eclipse.edt.ide.ui.editor.folding;
+package org.eclipse.edt.ide.ui.editor;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;

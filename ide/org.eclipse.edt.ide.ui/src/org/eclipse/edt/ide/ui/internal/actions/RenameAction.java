@@ -40,6 +40,7 @@ import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.editor.util.BoundNodeModelUtility;
 import org.eclipse.edt.ide.ui.internal.editor.util.IBoundNodeRequestor;
+import org.eclipse.edt.ide.ui.internal.refactoring.RefactoringExecutionStarter;
 import org.eclipse.edt.ide.ui.internal.util.FileProvidingView;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
@@ -328,8 +329,7 @@ public class RenameAction extends SelectionDispatchAction {
 		IEGLFile eglFile = EGLCore.createEGLFileFrom(file);
 		if(eglFile != null) {
 			IPart part = eglFile.getPart(partName);
-			// TODO EDT Uncomment when refactoring is ready			
-//			EGLRefactoringExecutionStarter.startRenameRefactoring(part, getShell());
+			RefactoringExecutionStarter.startRenameRefactoring(part, getShell());
 		}
 	}
 	
@@ -338,15 +338,13 @@ public class RenameAction extends SelectionDispatchAction {
 		if(eglFile != null) {
 			IPart part = eglFile.getPart(((Part) nestedFunction.getParent()).getName().getCanonicalName());
 			part = new MatchLocator2(null,false,false, 0, null, null, null).createFunctionHandle(nestedFunction, part);
-			// TODO EDT Uncomment when refactoring is ready				
-//			EGLRefactoringExecutionStarter.startRenameRefactoring(part, getShell());
+			RefactoringExecutionStarter.startRenameRefactoring(part, getShell());
 		}
 	}
 
 	
 	private void run(IEGLFile eglFile) throws CoreException {
-		// TODO EDT Uncomment when refactoring is ready	
-//		EGLRefactoringExecutionStarter.startRenameRefactoring(eglFile, getShell());
+		RefactoringExecutionStarter.startRenameRefactoring(eglFile, getShell());
 	}
 
 	private static boolean isRenameAvailable(Node node) throws CoreException {

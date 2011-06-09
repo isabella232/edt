@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.editor.folding.IFoldingStructureProvider;
+import org.eclipse.edt.ide.ui.editor.IFoldingStructureProvider;
 import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
 
 public class FoldingStructureProviderRegistry {

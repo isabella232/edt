@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.ide.ui.internal.util;
+package org.eclipse.edt.ide.ui.wizards;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -35,7 +35,7 @@ import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.PPListElement;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
+import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;

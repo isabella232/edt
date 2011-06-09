@@ -81,50 +81,6 @@ public class MoveAction extends SelectionListenerAction implements IActionDelega
 						e.printStackTrace();
 					}
 				}
-				
-/*				switch(((IEGLElement)specificSelection).getElementType()){
-					case IEGLElement.EGL_FILE:
-						IEGLFile moveFile = ((IEGLFile)specificSelection);
-						try{
-							if(destination instanceof IPackageFragmentRoot)
-							{
-								IPackageFragment defaultpkg = ((IPackageFragmentRoot)destination).getPackageFragment("");
-								destination = defaultpkg;
-							}
-							if(destination instanceof IEGLElement){
-								moveFile.move(((IEGLElement)destination), null, null, true, new NullProgressMonitor());
-							}
-						}
-						catch(EGLModelException e){
-							EGLLogger.log(this, e.getMessage());
-						}
-						break;
-					case IEGLElement.PACKAGE_FRAGMENT:
-						IPackageFragment movePackage = ((IPackageFragment)specificSelection);
-						try{
-							if(destination instanceof IEGLElement){
-								movePackage.move(((IEGLElement)destination), null, null, true, new NullProgressMonitor());
-							}
-						}
-						catch(EGLModelException e){
-							EGLLogger.log(this, e.getMessage());
-						}
-						break;
-					case IEGLElement.PACKAGE_FRAGMENT_ROOT:
-						IPackageFragmentRoot movePackageRoot = ((IPackageFragmentRoot)specificSelection.getFirstElement());
-						try
-						{												
-							if(destination instanceof IEGLElement)
-							{
-								IPath destinationPath = ((IEGLElement)destination).getPath();
-								movePackageRoot.move(destinationPath, 0, 0, null, new NullProgressMonitor());
-							}
-						}
-						catch(EGLModelException e){
-							EGLLogger.log(this, e.getMessage());
-						}
-						break;
-				}*/
 			}
 		}
 	}

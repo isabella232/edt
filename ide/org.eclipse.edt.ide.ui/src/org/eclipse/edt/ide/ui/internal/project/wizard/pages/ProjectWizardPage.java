@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.ide.ui.internal.project.wizard.fragments.WizardFragment;
 import org.eclipse.edt.ide.ui.internal.project.wizard.fragments.IisCompleteListener;
+import org.eclipse.edt.ide.ui.internal.project.wizard.fragments.WizardFragment;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;

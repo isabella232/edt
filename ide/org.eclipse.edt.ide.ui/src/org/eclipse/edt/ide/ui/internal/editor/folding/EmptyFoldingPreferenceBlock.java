@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.editor.folding;
 
-import org.eclipse.edt.ide.ui.editor.folding.IFoldingPreferenceBlock;
+import org.eclipse.edt.ide.ui.editor.IFoldingPreferenceBlock;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
