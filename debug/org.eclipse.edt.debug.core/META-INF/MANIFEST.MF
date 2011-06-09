@@ -20,3 +20,4 @@ Export-Package: org.eclipse.edt.debug.core,
 Agent-Class: org.eclipse.edt.debug.core.Transformer
 Premain-Class: org.eclipse.edt.debug.core.Transformer
 Can-Retransform-Classes: true
+Bundle-Vendor: Eclipse EGL Development Tools
