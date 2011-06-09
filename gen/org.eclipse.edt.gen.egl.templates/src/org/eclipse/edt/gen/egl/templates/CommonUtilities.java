@@ -22,6 +22,7 @@ import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 
 public class CommonUtilities {
@@ -113,7 +114,7 @@ public class CommonUtilities {
 	}
 
 	public static Annotation getAnnotation(Context ctx, String key) throws MofObjectNotFoundException, DeserializationException{
-		EObject eObject = ctx.getEnvironment().find(key);
+		EObject eObject = Environment.getCurrentEnv().find(key);
 		if(eObject instanceof StereotypeType && 
 				(eObject = ((StereotypeType)eObject).newInstance()) instanceof Annotation){
 			return (Annotation)eObject;
@@ -129,10 +130,10 @@ public class CommonUtilities {
 		org.eclipse.edt.mof.egl.Type eType = null;
 		String nativeType = ctx.getNativeMapping(className);
 		if(nativeType != null){
-			eType = TypeUtils.getType(nativeType);
+			eType = TypeUtils.getType("egl:" + nativeType);
 		}
 		else{
-			EObject eObject = ctx.getEnvironment().find("egl:" + CommonUtilities.getValidEGLName(className), true);
+			EObject eObject = Environment.getCurrentEnv().find("egl:" + CommonUtilities.getValidEGLName(className), true);
 			if(eObject instanceof org.eclipse.edt.mof.egl.Type){
 				eType = (org.eclipse.edt.mof.egl.Type)eObject;
 			}
