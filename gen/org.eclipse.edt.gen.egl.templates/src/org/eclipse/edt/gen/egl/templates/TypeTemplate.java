@@ -20,8 +20,9 @@ import org.eclipse.edt.gen.egl.Context;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.egl2mof.MofConversion;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 
 public class TypeTemplate extends EglTemplate{
@@ -45,7 +46,7 @@ public class TypeTemplate extends EglTemplate{
 				type = getJavaType(type);
 				elementType = convertToEglType(ctx, type);
 			}
-			((ArrayType)eType).setClassifier((Classifier)ctx.getEnvironment().find((MofConversion.Type_EGLList)));
+			((ArrayType)eType).setClassifier((Classifier)Environment.getCurrentEnv().find((MofConversion.Type_EGLList)));
 			((ArrayType)eType).setElementType(elementType);
 			((ArrayType)eType).setElementsNullable(CommonUtilities.isNullable(type));
 		}
