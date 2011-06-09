@@ -14,36 +14,29 @@ package org.eclipse.edt.compiler;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
 import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.LibraryBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
-import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeManager;
+import org.eclipse.edt.compiler.internal.EGLBaseNlsStrings;
+import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.lookup.EnumerationManager;
-import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
-import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibraryManager;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.util.NameUtil;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.ObjectStore;
-import org.eclipse.edt.mof.serialization.IEnvironment.LookupDelegate;
+import org.eclipse.osgi.util.NLS;
 
 
 public class SystemEnvironment implements ISystemEnvironment {
@@ -99,12 +92,17 @@ public class SystemEnvironment implements ISystemEnvironment {
     
     private boolean systemPackagesInitialized = false;
     
-    public void initializeSystemPackages(String libFolderPath, ISystemPackageBuildPathEntryFactory factory){
+    public void initializeSystemPackages(String libFolderPath, ISystemPackageBuildPathEntryFactory factory, IBuildNotifier notifier){
     	if(!systemPackagesInitialized) {
-    		
+    		if (notifier != null) {
+    			notifier.begin();
+    			notifier.subTask(NLS.bind(EGLBaseNlsStrings.SystemPackagesInit, libFolderPath));
+    			notifier.checkCancel();
+    		}
     		try {
     			Environment.pushEnv(irEnv);
 				String[] paths = NameUtil.toStringArray(libFolderPath, File.pathSeparator);
+				float increment = 0.5f / paths.length;
 				for (int i = 0; i < paths.length; i++) {
 					File libfolder = new File(paths[i]);
 					if (libfolder.exists() && libfolder.isDirectory()){
@@ -115,20 +113,50 @@ public class SystemEnvironment implements ISystemEnvironment {
 							}
 						}));
 					}
+					if (notifier != null) {
+						notifier.checkCancel();
+						notifier.updateProgressDelta(increment);
+					}
 				}
 				
 				appendStoresToIREnvironment(parentSystemEnvironment);
-
-				for (ISystemPackageBuildPathEntry entry : sysPackages) {
-					entry.readPartBindings();
+				if (notifier != null) {
+					notifier.checkCancel();
+					notifier.updateProgressDelta(0.05f);
 				}
-				addSystemTypes(EnumerationManager.getEnumTypes().values());
-				addSystemTypes(SystemPartManager.getSystemParts().values());
 				
-
+				increment = 0.91f / sysPackages.size();
+				for (ISystemPackageBuildPathEntry entry : sysPackages) {
+					if (notifier != null) {
+						// This loop is the majority of the work,
+						notifier.subTask(NLS.bind(EGLBaseNlsStrings.SystemPackagesProcessingArchive, entry.getID()));
+					}
+					entry.readPartBindings();
+					if (notifier != null) {
+						notifier.checkCancel();
+						notifier.updateProgressDelta(increment);
+					}
+				}
+				
+				addSystemTypes(EnumerationManager.getEnumTypes().values());
+				if (notifier != null) {
+					notifier.checkCancel();
+					notifier.updateProgressDelta(0.02f);
+				}
+				
+				addSystemTypes(SystemPartManager.getSystemParts().values());
+				if (notifier != null) {
+					notifier.checkCancel();
+					notifier.updateProgressDelta(0.02f);
+				}
+				
 				systemPackagesInitialized = true;
 			} finally {
 				Environment.popEnv();
+				
+				if (notifier != null) {
+					notifier.done();
+				}
 			}
 					
     	}    	

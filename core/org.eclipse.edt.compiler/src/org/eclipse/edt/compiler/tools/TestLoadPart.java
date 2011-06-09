@@ -74,7 +74,7 @@ public class TestLoadPart {
 		PartEnvironment.INSTANCE.registerObjectStore(Type.EGL_KeyScheme, typeStore);
 		
 		//initialize the system parts
-		new EDTCompiler().getSystemEnvironment();
+		new EDTCompiler().getSystemEnvironment(null);
 
 		try {
 			MofFactory mof = MofFactory.INSTANCE;

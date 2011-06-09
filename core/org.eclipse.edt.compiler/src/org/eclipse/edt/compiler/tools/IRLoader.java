@@ -87,7 +87,7 @@ public class IRLoader {
 			compiler = new EDTCompiler();
 		}
 		// make sure the system parts are initialized
-		compiler.getSystemEnvironment();
+		compiler.getSystemEnvironment(null);
 		
 		EObject eClass = null;
 		eClass = Environment.INSTANCE.find(key);

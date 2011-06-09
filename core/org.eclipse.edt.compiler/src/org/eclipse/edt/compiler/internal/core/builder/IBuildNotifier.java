@@ -43,4 +43,6 @@ public interface IBuildNotifier {
 	public abstract void updateProgress(float percentComplete);
 
 	public abstract void updateProgressDelta(float percentWorked);
+	
+	public abstract IBuildNotifier createSubNotifier(float percentFromRemaining);
 }

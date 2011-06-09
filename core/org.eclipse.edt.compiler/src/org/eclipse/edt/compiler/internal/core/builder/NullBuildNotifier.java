@@ -105,4 +105,8 @@ public class NullBuildNotifier implements IBuildNotifier {
         
     }
 
+	@Override
+	public IBuildNotifier createSubNotifier(float percentFromParent) {
+		return null;
+	}
 }

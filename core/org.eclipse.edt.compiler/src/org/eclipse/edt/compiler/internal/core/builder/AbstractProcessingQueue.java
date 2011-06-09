@@ -283,4 +283,8 @@ public abstract class AbstractProcessingQueue {
 	protected boolean canSave(String partName) {
 		return !EGLNameValidator.isWindowsReservedFileName(partName);
 	}
+	
+	public IBuildNotifier getNotifier() {
+		return this.notifier;
+	}
 }

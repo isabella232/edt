@@ -87,7 +87,7 @@ public class EGLG {
 	        	ASTManager.getInstance().setVAGComaptiblity(processedArgs.isVAGCompatible());
 	        	
 	            
-	            ISystemEnvironment sysEnv = compiler.getSystemEnvironment();            	
+	            ISystemEnvironment sysEnv = compiler.getSystemEnvironment(null);
             	eglcEnv.setSystemEnvironment(sysEnv);
 
 			    

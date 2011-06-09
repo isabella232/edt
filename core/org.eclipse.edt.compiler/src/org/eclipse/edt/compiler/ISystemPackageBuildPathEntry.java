@@ -26,4 +26,5 @@ public interface ISystemPackageBuildPathEntry {
 	public HashMap getPartNamesByPackage();
 	public ObjectStore getObjectStore();
 	public void readPartBindings();
+	public String getID();
 }

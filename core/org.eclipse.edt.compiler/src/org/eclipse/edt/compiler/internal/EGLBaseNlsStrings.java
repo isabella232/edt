@@ -33,6 +33,9 @@ public class EGLBaseNlsStrings extends NLS {
 	public static String CAProposalArrayVariableSystemWord;
 
 	public static String PropertyNoValueSet;
+	
+	public static String SystemPackagesInit;
+	public static String SystemPackagesProcessingArchive;
 
 	public static String DataItemBINMnemonicString;
 	public static String DataItemCHARMnemonicString;

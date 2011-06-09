@@ -14,6 +14,7 @@ package org.eclipse.edt.compiler;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.impl.ProgramImpl;
@@ -109,17 +110,17 @@ public class BaseCompiler implements ICompiler {
 	}
 		
 	@Override
-	public ISystemEnvironment getSystemEnvironment() {
+	public ISystemEnvironment getSystemEnvironment(IBuildNotifier notifier) {
 		if (systemEnvironment == null) {
-			systemEnvironment = createSystemEnvironment();
+			systemEnvironment = createSystemEnvironment(notifier);
 		}
 		return systemEnvironment;
 	}
 	
-	protected ISystemEnvironment createSystemEnvironment() {
+	protected ISystemEnvironment createSystemEnvironment(IBuildNotifier notifier) {
 		SystemEnvironment sysEnv = new SystemEnvironment(Environment.INSTANCE, null, getAllImplicitlyUsedEnumerations());
     	Environment.INSTANCE.registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
-		sysEnv.initializeSystemPackages(getSystemEnvironmentPath(), new SystemPackageBuildPathEntryFactory(new Mof2Binding(sysEnv)));
+		sysEnv.initializeSystemPackages(getSystemEnvironmentPath(), new SystemPackageBuildPathEntryFactory(new Mof2Binding(sysEnv)), notifier);
 		return sysEnv;
 	}
 	

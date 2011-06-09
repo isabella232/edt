@@ -2,6 +2,8 @@ package org.eclipse.edt.compiler;
 
 import java.util.List;
 
+import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
+
 public interface ICompiler {
 	
 	/**
@@ -55,9 +57,10 @@ public interface ICompiler {
 	/**
 	 * Returns the system environment. This is based on the path returned from getSystemEnvironment 
 	 * 
+	 * @param notifier  Used to report progress of loading the parts; this may be null.
 	 * @return the system environment, never null.
 	 */
-	public ISystemEnvironment getSystemEnvironment();
+	public ISystemEnvironment getSystemEnvironment(IBuildNotifier notifier);
 	
 
 	/**
