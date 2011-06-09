@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.mof
 Bundle-Version: 0.7.0.qualifier
-Bundle-Vendor: IBM
+Bundle-Vendor: Eclipse EGL Development Tools
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-BuddyPolicy: dependent
 Export-Package: org.eclipse.edt.mof,
