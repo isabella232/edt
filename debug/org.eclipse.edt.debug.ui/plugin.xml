@@ -81,7 +81,7 @@
    <extension point="org.eclipse.core.runtime.adapters">
          <factory 
             class="org.eclipse.edt.debug.internal.ui.actions.EGLBreakpointsAdapterFactory"
-            adaptableType="org.eclipse.edt.ide.ui.internal.editor.EGLEditor">
+            adaptableType="org.eclipse.edt.ide.ui.editor.IEGLEditor">
             <adapter type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget"/>
          </factory>
    </extension>

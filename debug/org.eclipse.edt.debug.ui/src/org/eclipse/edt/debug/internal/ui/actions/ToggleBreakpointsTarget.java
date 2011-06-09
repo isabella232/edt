@@ -29,7 +29,7 @@ import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IPackageDeclaration;
-import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
+import org.eclipse.edt.ide.ui.editor.IEGLEditor;
 import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
 import org.eclipse.jdt.debug.core.IJavaStratumLineBreakpoint;
 import org.eclipse.jdt.debug.core.JDIDebugModel;
@@ -99,9 +99,9 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 							else
 							{
 								int line;
-								if ( editor instanceof EGLEditor )
+								if ( editor instanceof IEGLEditor )
 								{
-									EGLEditor eglEditor = (EGLEditor)editor;
+									IEGLEditor eglEditor = (IEGLEditor)editor;
 									line = eglEditor.getLineAtOffset( eglEditor.getStatementNode(
 											textSelection.getStartLine() ).getOffset() ) + 1;
 								}
@@ -200,10 +200,10 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 				}
 			}
 			
-			if ( textEditor instanceof EGLEditor )
+			if ( textEditor instanceof IEGLEditor )
 			{
 				// Otherwise validate it's an okay location to add a breakpoint.
-				return ((EGLEditor)textEditor).isBreakpointValid( textSelection.getStartLine() );
+				return ((IEGLEditor)textEditor).isBreakpointValid( textSelection.getStartLine() );
 			}
 		}
 		return false;

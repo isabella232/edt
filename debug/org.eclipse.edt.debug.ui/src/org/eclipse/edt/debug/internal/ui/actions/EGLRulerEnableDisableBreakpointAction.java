@@ -16,7 +16,7 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.internal.ui.actions.breakpoints.RulerEnableDisableBreakpointAction;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
-import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
+import org.eclipse.edt.ide.ui.editor.IEGLEditor;
 import org.eclipse.jface.text.source.IVerticalRulerInfo;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
@@ -43,9 +43,9 @@ public class EGLRulerEnableDisableBreakpointAction extends RulerEnableDisableBre
 		{
 			ITextEditor editor = getEditor();
 			IEditorInput input = editor.getEditorInput();
-			if ( editor instanceof EGLEditor && input instanceof IFileEditorInput )
+			if ( editor instanceof IEGLEditor && input instanceof IFileEditorInput )
 			{
-				EGLEditor eglEditor = ((EGLEditor)editor);
+				IEGLEditor eglEditor = ((IEGLEditor)editor);
 				
 				int line = getVerticalRulerInfo().getLineOfLastMouseButtonActivity();
 				if ( line != -1 )
