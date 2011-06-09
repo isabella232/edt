@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Java Plug-in
+Bundle-Name: EDT Java Runtime
 Bundle-SymbolicName: org.eclipse.edt.runtime.java
 Bundle-Version: 0.7.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -13,3 +13,4 @@ Export-Package: egl.lang,
  org.eclipse.edt.javart.services,
  org.eclipse.edt.javart.util,
  org.eclipse.edt.runtime.java.egl.lang
+Bundle-Vendor: Eclipse EGL Development Tools
