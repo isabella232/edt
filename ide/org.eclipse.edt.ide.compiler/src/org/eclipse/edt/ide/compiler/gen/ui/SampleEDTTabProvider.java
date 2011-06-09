@@ -51,11 +51,10 @@ public class SampleEDTTabProvider extends AbstractGeneratorTabProvider
 		data.horizontalAlignment = GridData.FILL;
 		composite.setLayoutData(data);
 		
-		Label label;
-		for( int i=0; i<10; i++ ) {
-			label = new Label(composite, SWT.LEFT);
-			label.setText( "Scroll if needed..." );
-		}
+		Label label = new Label(composite, SWT.LEFT);
+		label.setText( "This is a sample EDT tab not associated with a generator." );
+		label.setLayoutData(data);
+		
 		composite.setSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		return sComp;
 	}
