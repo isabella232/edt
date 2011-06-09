@@ -20,14 +20,12 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.serialization.IEnvironment;
 
 public class Context  extends EglContext{
 
 	private static final long serialVersionUID = 6429116299734843162L;
 	private String generationTime;
 	private LogicAndDataPart part;
-	protected IEnvironment env;
 	
 	public Context(AbstractGeneratorCommand processor) {
 		super(processor);
@@ -58,11 +56,5 @@ public class Context  extends EglContext{
 	}
 	public LogicAndDataPart getResult() {
 		return part;
-	}
-	public void setEnvironment(IEnvironment env) {
-		this.env = env;
-	}
-	public IEnvironment getEnvironment() {
-		return env;
 	}
 }
