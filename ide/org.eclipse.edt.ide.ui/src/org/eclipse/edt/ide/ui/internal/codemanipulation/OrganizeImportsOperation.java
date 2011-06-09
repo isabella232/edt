@@ -515,7 +515,7 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 	}
 
 	private void addSystemTypes(List typeList, String unresolvedTypeName, IProject project) {		
-		IPartBinding sysPartBinding = SystemEnvironmentManager.findSystemEnvironment(project).getPartBinding(null, unresolvedTypeName);
+		IPartBinding sysPartBinding = SystemEnvironmentManager.findSystemEnvironment(project, null).getPartBinding(null, unresolvedTypeName);
 		if(sysPartBinding != null && sysPartBinding != IBinding.NOT_FOUND_BINDING){
 			//conver the IPartBinding to PartInfo
 			String[] pkgName = sysPartBinding.getPackageName();

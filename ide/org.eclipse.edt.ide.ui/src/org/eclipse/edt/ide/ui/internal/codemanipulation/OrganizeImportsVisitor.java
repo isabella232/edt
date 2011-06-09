@@ -120,7 +120,7 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 		// Defect 61502 - Add user-defined annotations like MVC to unresolved list
 		// sysPartBinding is a FlexibleRecordBinding for system annotations
 		// sysPartBinding is a NotFoundBinding for user-defined annotations
-		IPartBinding sysPartBinding = SystemEnvironmentManager.findSystemEnvironment(project).getPartBinding(null, annotationName.getIdentifier());
+		IPartBinding sysPartBinding = SystemEnvironmentManager.findSystemEnvironment(project, null).getPartBinding(null, annotationName.getIdentifier());
 		if( !Binding.isValidBinding(sysPartBinding) ) {
 			addUnresolvedName(annotationName);
 		}
