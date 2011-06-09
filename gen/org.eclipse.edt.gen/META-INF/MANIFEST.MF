@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Gen Plug-in
+Bundle-Name: EDT Generation Framework
 Bundle-SymbolicName: org.eclipse.edt.gen;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -13,3 +13,4 @@ Export-Package: org.eclipse.edt.gen,
  org.eclipse.edt.gen.EGLMessages
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.edt.gen.GeneratorPlugin
+Bundle-Vendor: Eclipse EGL Development Tools
