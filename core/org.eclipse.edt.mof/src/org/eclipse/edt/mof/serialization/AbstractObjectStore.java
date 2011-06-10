@@ -38,10 +38,14 @@ public abstract class AbstractObjectStore implements ObjectStore {
 		this(env, BINARY);
 	}
 	public AbstractObjectStore(IEnvironment env, String storageFormat) {
+		this(env, storageFormat, ObjectStore.DefaultScheme);
+	}
+	
+	public AbstractObjectStore(IEnvironment env, String storageFormat, String keyScheme) {
 		this.env = env;
 		this.storageFormat = storageFormat;
-		factory = SerializationFactory.Registry.INSTANCE.getFactory(storageFormat);
-		supportedScheme = ObjectStore.DefaultScheme;
+		this.factory = SerializationFactory.Registry.INSTANCE.getFactory(storageFormat);
+		this.supportedScheme = keyScheme;
 	}
 	
 	public void setEnvironment(IEnvironment env) {

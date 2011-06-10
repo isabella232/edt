@@ -49,6 +49,13 @@ public class ZipFileObjectStore extends AbstractObjectStore implements CachingOb
 		this.entryManager = manager;
 	}
 	
+	public ZipFileObjectStore(File root, IEnvironment env, String storageFormat, String fileExtension, String keyScheme, IZipFileEntryManager manager) {
+		super(env, storageFormat, keyScheme);
+		this.zipFile = root;
+		this.fileExtension = fileExtension;
+		this.entryManager = manager;
+	}
+	
 	public Deserializer createDeserializer(String typeSignature) {
 		
 		if (!containsKey(typeSignature)) {
