@@ -15,6 +15,7 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.serialization.CachingObjectStore;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.IZipFileEntryManager;
 import org.eclipse.edt.mof.serialization.ObjectStore;
@@ -43,6 +44,10 @@ public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry
 		super.clear();
 		partBindingsByPackage.clear();
 		partBindingsWithoutPackage.clear();
+		
+		if (store instanceof CachingObjectStore) {
+			((CachingObjectStore)store).clearCache();
+		}
 	}
 
 	public IPartBinding getPartBinding(String[] packageName,String partName){

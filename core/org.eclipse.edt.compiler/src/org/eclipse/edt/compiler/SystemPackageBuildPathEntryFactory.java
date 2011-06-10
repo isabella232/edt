@@ -39,7 +39,7 @@ public class SystemPackageBuildPathEntryFactory implements
 	private SystemPackageBuildPathEntry createEGLEntry(String path, ISystemPartBindingLoadedRequestor req) {
 		SystemPackageBuildPathEntry entry = new SystemPackageBuildPathEntry(sysEnv, path, req, EGL2IR.EGLXML, converter);
 		
-		ObjectStore store = new ZipFileObjectStore(new File(path), irEnv, ObjectStore.XML, EGL2IR.EGLXML, entry);
+		ObjectStore store = new ZipFileObjectStore(new File(path), irEnv, ObjectStore.XML, EGL2IR.EGLXML, Type.EGL_KeyScheme, entry);
 		entry.setStore(store);
 		irEnv.registerObjectStore(Type.EGL_KeyScheme, store);
 		return entry;
