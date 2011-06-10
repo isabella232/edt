@@ -11,14 +11,20 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.lookup;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyZipFileBuildPathEntry;
+import org.eclipse.edt.compiler.tools.EGL2IR;
+import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyEglarBuildPathEntry;
+import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyMofarBuildPathEntry;
+import org.eclipse.edt.ide.core.internal.utils.AbsolutePathUtility;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.serialization.ObjectStore;
+import org.eclipse.edt.mof.serialization.ZipFileObjectStore;
 
 
 /**
@@ -26,6 +32,9 @@ import org.eclipse.edt.mof.serialization.ObjectStore;
  *
  */
 public class ZipFileBuildPathEntryManager {
+	
+	public static final String MOFAR_EXTENSION = "mofar"; //$NON-NLS-1$
+	public static final String EGLAR_EXTENSION = "eglar"; //$NON-NLS-1$
 
 	private static final ZipFileBuildPathEntryManager INSTANCE = new ZipFileBuildPathEntryManager(false);
 	private static final ZipFileBuildPathEntryManager WCC_INSTANCE = new ZipFileBuildPathEntryManager(true);
@@ -62,25 +71,49 @@ public class ZipFileBuildPathEntryManager {
 		return retVal;
 	}
 
-	public EclipseZipFileBuildPathEntry getZipFileBuildPathEntry(Object project,IPath zipfilepath){
+	public EglarBuildPathEntry getZipFileBuildPathEntry(Object project,IPath zipfilepath){
 		Map projectMap = getProjectEntry(project);
-		EclipseZipFileBuildPathEntry result  = (EclipseZipFileBuildPathEntry)projectMap.get(zipfilepath);
+		EglarBuildPathEntry result  = (EglarBuildPathEntry)projectMap.get(zipfilepath);
 		
 		if(result == null){
-			
-			if (isWCC) {
-				result = new WorkingCopyZipFileBuildPathEntry(project,zipfilepath);
-			}
-			else {
-				result = new EclipseZipFileBuildPathEntry(project,zipfilepath);
-			}
+			result = createEntry(ProjectEnvironmentManager.getInstance().getProjectEnvironment((IProject)project), zipfilepath);
 			projectMap.put(zipfilepath, result);
-			
-			//TODO EDT create stores for the path entries once we support eglars
-			result.setObjectStores(new ObjectStore[0]);
 		}
 		
 		return result;
+	}
+	
+	private EglarBuildPathEntry createEntry(ProjectEnvironment env, IPath path) {
+		String extension = path.getFileExtension();
+		if (extension.equalsIgnoreCase(MOFAR_EXTENSION)) {
+			MofarBuildPathEntry entry;
+			if (isWCC) {
+				entry = new WorkingCopyMofarBuildPathEntry(env, path, ZipFileObjectStore.MOFXML, env.getConverter());
+			}
+			else {
+				entry = new MofarBuildPathEntry(env, path, ZipFileObjectStore.MOFXML, env.getConverter());
+			}
+			
+			ObjectStore store = new ZipFileObjectStore(new File(AbsolutePathUtility.getAbsolutePathString(path)), env.getIREnvironment(), ObjectStore.XML, ZipFileObjectStore.MOFXML, entry);
+			entry.setStore(store);
+			
+			return entry;
+		}
+		else if (extension.equalsIgnoreCase(EGLAR_EXTENSION)) {
+			EglarBuildPathEntry entry;
+			if (isWCC) {
+				entry = new WorkingCopyEglarBuildPathEntry(env, path, EGL2IR.EGLXML, env.getConverter());
+			}
+			else {
+				entry = new EglarBuildPathEntry(env, path, EGL2IR.EGLXML, env.getConverter());
+			}
+			
+			ObjectStore store = new ZipFileObjectStore(new File(AbsolutePathUtility.getAbsolutePathString(path)), env.getIREnvironment(), ObjectStore.XML, EGL2IR.EGLXML, Type.EGL_KeyScheme, entry);
+			entry.setStore(store);
+			
+			return entry;
+		}
+		return null;
 	}
 
 	public void clear() {
@@ -92,7 +125,7 @@ public class ZipFileBuildPathEntryManager {
 		if (projectMap != null){
 			Iterator iter = projectMap.values().iterator();
 			while(iter.hasNext()){
-				EclipseZipFileBuildPathEntry result  = (EclipseZipFileBuildPathEntry)iter.next();
+				EglarBuildPathEntry result  = (EglarBuildPathEntry)iter.next();
 				if(result != null){
 					result.clear();
 				}

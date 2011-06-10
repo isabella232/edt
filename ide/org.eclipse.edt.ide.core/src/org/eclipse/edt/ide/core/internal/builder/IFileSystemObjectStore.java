@@ -36,12 +36,10 @@ import org.eclipse.edt.mof.serialization.Deserializer;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 import org.eclipse.edt.mof.serialization.SerializationException;
+import org.eclipse.edt.mof.serialization.ZipFileObjectStore;
 
 public class IFileSystemObjectStore extends AbstractObjectStore implements CachingObjectStore {
 	private static final boolean DEBUG = false;
-	
-	static final String MOFBIN = ".mofbin";
-	static final String MOFXML = ".mofxml"; 
 	
 	private Map<String,EObject> cache;
 	
@@ -55,17 +53,13 @@ public class IFileSystemObjectStore extends AbstractObjectStore implements Cachi
 	}
 	
 	public IFileSystemObjectStore(IPath root, IEnvironment env, String storageFormat) {
-		super(env, storageFormat);
-		this.root = root;
-		this.fileExtension = storageFormat == ObjectStore.XML ? MOFXML : MOFBIN;
-		this.cache = new HashMap<String, EObject>();
+		this(root, env, storageFormat, ObjectStore.XML.equals(storageFormat) ? ZipFileObjectStore.MOFXML : ZipFileObjectStore.MOFBIN);
 	}
 
 	public IFileSystemObjectStore(IPath root, IEnvironment env, String storageFormat, String fileExtension) {
-		super(env, storageFormat);
+		super(env, storageFormat, EGL2IR.EGLXML.equals(fileExtension) ? Type.EGL_KeyScheme : ObjectStore.DefaultScheme);
 		this.root = root;
 		this.fileExtension = fileExtension;
-		this.supportedScheme = fileExtension.equals(EGL2IR.EGLXML) ? Type.EGL_KeyScheme : ObjectStore.DefaultScheme;
 		this.cache = new HashMap<String, EObject>();
 	}
 	
@@ -185,7 +179,7 @@ public class IFileSystemObjectStore extends AbstractObjectStore implements Cachi
 	
 	public String getFileExtension() {
 		if (fileExtension == null) {
-			fileExtension = storageFormat.equals(BINARY) ? MOFBIN : MOFXML;
+			fileExtension = BINARY.equals(storageFormat) ? ZipFileObjectStore.MOFBIN : ZipFileObjectStore.MOFXML;
 		}
 		return fileExtension;
 	}

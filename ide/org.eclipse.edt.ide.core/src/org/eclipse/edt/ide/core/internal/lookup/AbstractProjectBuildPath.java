@@ -305,7 +305,10 @@ public abstract class AbstractProjectBuildPath {
 		                	}
 		                } else if (resolvedEGLPath[i].getEntryKind() == IEGLPathEntry.CPE_LIBRARY){
 		                	if((project == requestingProject) || (resolvedEGLPath[i].isExported())) {
-		                		entries.add(getZipFileBuildPathEntry(project, resolvePath(resolvedEGLPath[i].getPath(), project, null)));
+		                		IBuildPathEntry entry = getZipFileBuildPathEntry(project, resolvePath(resolvedEGLPath[i].getPath(), project, null));
+		                		if (entry != null) {
+		                			entries.add(entry);
+		                		}
 		                	}
 		                }else if(resolvedEGLPath[i].getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
 		                    if((project == requestingProject) || (resolvedEGLPath[i].isExported())) {
@@ -362,7 +365,10 @@ public abstract class AbstractProjectBuildPath {
             }
             else if (resolvedEGLPath[i].getEntryKind() == IEGLPathEntry.CPE_LIBRARY){
             	if((project == requestingProject) || (resolvedEGLPath[i].isExported())) {
-            		entries.add(getZipFileBuildPathEntry(project, resolvePath(resolvedEGLPath[i].getPath(), project.getReferencingProject(), project)));
+            		IBuildPathEntry entry = getZipFileBuildPathEntry(project, resolvePath(resolvedEGLPath[i].getPath(), project.getReferencingProject(), project));
+            		if (entry != null) {
+            			entries.add(entry);
+            		}
             	}
             }else if(resolvedEGLPath[i].getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
                 if((project == requestingProject) || (resolvedEGLPath[i].isExported())) {

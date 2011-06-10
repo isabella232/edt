@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.IWorkingCopyBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectBuildPathEntryManager;
-import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyZipFileBuildPathEntry;
 
 /**
  * @author cduval
@@ -47,12 +46,12 @@ public class ExternalProjectBuildPath extends AbstractProjectBuildPath {
 	}
 
 	protected IBuildPathEntry getZipFileBuildPathEntry(Object project, IPath zipFilePath) {
-		if (isWCC) {
-			return new WorkingCopyZipFileBuildPathEntry(project, zipFilePath);
-		}
-		else {
+//		if (isWCC) {
+//			return new WorkingCopyZipFileBuildPathEntry(project, zipFilePath);
+//		}
+//		else {
 			return ZipFileBuildPathEntryManager.getInstance().getZipFileBuildPathEntry(project, zipFilePath);
-		}
+//		}
 	}
 
 	public IBuildPathEntry[] getBuildPathEntries(){

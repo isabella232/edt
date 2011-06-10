@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2008, 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,31 +11,20 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.lookup.workingcopy;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.ide.core.internal.lookup.EclipseZipFileBuildPathEntry;
-import org.eclipse.edt.ide.core.internal.lookup.ExternalProject;
-import org.eclipse.edt.ide.core.internal.lookup.ExternalProjectEnvironmentManager;
+import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
+import org.eclipse.edt.ide.core.internal.lookup.MofarBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.ide.core.internal.partinfo.ZipFileOrigin;
 
-public class WorkingCopyZipFileBuildPathEntry extends EclipseZipFileBuildPathEntry
-		implements IWorkingCopyBuildPathEntry {
+public class WorkingCopyMofarBuildPathEntry extends MofarBuildPathEntry implements IWorkingCopyBuildPathEntry {
 
-	public WorkingCopyZipFileBuildPathEntry(Object project,IPath path){
-		super(project,path);
+	public WorkingCopyMofarBuildPathEntry(IEnvironment environment, IPath path, String fileExtension, Mof2Binding converter){
+		super(environment, path, fileExtension, converter);
 	}
+	
 	public IPartOrigin getPartOrigin(String[] packageName, String partName) {
 		return new ZipFileOrigin();
-	}
-
-	protected IEnvironment getEnvironment() {
-		if (getProject() instanceof IProject) {
-			return WorkingCopyProjectEnvironmentManager.getInstance().getProjectEnvironment((IProject)getProject());
-		}
-		else {
-			return ExternalProjectEnvironmentManager.getWCCInstance().getProjectEnvironment((ExternalProject)getProject());
-		}
 	}
 }
