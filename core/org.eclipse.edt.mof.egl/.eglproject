@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <resource name="org.eclipse.edt.mof.egl">
 	<storedValue key="DefaultBuildDescriptorJavaScriptTargetPath" value="org.eclipse.edt.mof.egl/EGLSource/com_ibm_egl_model_api.eglbld"/>
 	<storedValue key="DefaultBuildDescriptorJavaScriptDebugPath" value="org.eclipse.edt.mof.egl/EGLSource/com_ibm_egl_model_api.eglbld"/>

@@ -2,5 +2,5 @@
 <eglpath>
 	<eglpathentry kind="src" path="EGLSource"/>
 	<eglpathentry kind="src" path="EGL_Test"/>
-	<eglpathentry kind="output" path="EGLbin"/>
+	<eglpathentry kind="output" path="eglbin"/>
 </eglpath>

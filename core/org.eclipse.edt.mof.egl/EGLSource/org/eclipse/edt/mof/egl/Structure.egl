@@ -11,9 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl;
 
-import egl.core.reflect.TypeRef;
-import egl.lang.reflect.mof.Containment;
-import egl.lang.reflect.mof.EClass;
+import egl.lang.reflect.mof.Containment;     
+import egl.lang.reflect.mof.EClass;    
 import egl.lang.reflect.mof.EEnum;
 import egl.lang.reflect.mof.EEnumLiteral;
 import egl.lang.reflect.mof.EMetadataObject;
@@ -41,7 +40,7 @@ externalType Stereotype extends Annotation type MofClass
 end
 
 externalType AnnotationType extends EClass, Part type MofClass
-	targets ElementKind[];
+	targets ElementKind[];  
 end
 
 externalType StereotypeType extends AnnotationType type MofClass 
@@ -123,7 +122,7 @@ end
 
 externalType EGLType extends Element, MofSerializable type MofClass {name="Type", isAbstract=yes, isInterface=yes}
 	function getClassifier() returns(Classifier);
-	
+	  
 	function equals(eglType EGLType in) returns(boolean);
 	function getTypeSignature() returns(string);
 end
@@ -170,7 +169,7 @@ externalType StructPart extends Part type MofClass
 	functions EGLFunction[] {containment=true};
 	operations EGLOperation[] {containment=true};
 	
-	function isSubtypeOf(part StructPart) returns (boolean);
+	function isSubtypeOf(part StructPart in) returns (boolean);
 end
 
 externalType DataType extends Classifier, Container type MofClass

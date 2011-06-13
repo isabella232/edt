@@ -150,7 +150,6 @@ externalType ForStatement extends LoopStatement type MofClass
 	counterVariable Expression {containment=true};
 	fromExpression Expression {containment=true};
 	toExpression Expression {containment=true};
-	isIncrement boolean = true;
 	elabel string {mofName="label"};
 end
 
