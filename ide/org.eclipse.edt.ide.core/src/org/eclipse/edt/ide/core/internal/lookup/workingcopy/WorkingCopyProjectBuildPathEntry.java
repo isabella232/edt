@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.lookup.workingcopy;
 
-import java.io.File;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.ISystemEnvironment;
@@ -22,7 +20,6 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.EGLAliasJsfNamesSetting;
 import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
 import org.eclipse.edt.compiler.internal.core.compiler.BindingCompletor;
@@ -36,15 +33,22 @@ import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
-import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
+import org.eclipse.edt.ide.core.internal.binding.PartRestoreFailedException;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyASTManager;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyProcessingQueue;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathEntry;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.ide.core.internal.utils.Util;
+import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.serialization.CachingObjectStore;
+import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 
 /**
@@ -80,16 +84,18 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 		}		
 	}	
 	
-	private PartBindingCache bindingCache = new PartBindingCache();
+	private PartBindingCache bindingCache;
 	private WorkingCopyProjectEnvironment declaringEnvironment;
 	private WorkingCopyProjectInfo projectInfo;
 	private IEnvironment realizingEnvironment;
 	private WorkingCopyProcessingQueue processingQueue;
+	private ObjectStore[] stores;
 	 
 	public WorkingCopyProjectBuildPathEntry(WorkingCopyProjectInfo projectInfo){
 		this.projectInfo = projectInfo;
-		
-		realizingEnvironment = new RealizingEnvironment();
+		this.bindingCache = new PartBindingCache();
+		this.stores = ProjectBuildPathEntry.EMPTY_STORES;
+		this.realizingEnvironment = new RealizingEnvironment();
 	}
 	
 	 public boolean hasPackage(String[] packageName) {
@@ -291,7 +297,13 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 	}
 
 	public void clear() {
-		bindingCache = new PartBindingCache();		
+		bindingCache = new PartBindingCache();
+		
+		for (ObjectStore store : stores) {
+			if (store instanceof CachingObjectStore) {
+				((CachingObjectStore)store).clearCache();
+			}
+		}
 	}
 	
 	public boolean isZipFile(){
@@ -306,43 +318,39 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 		return getProject().getName();
 	}
 	
-	private Part readPart(File partFile) {
-		//TODO EDT
-//		try {
-//			DeserializationManagerImpl manager = new DeserializationManagerImpl();
-//			BufferedInputStream is = new BufferedInputStream(new FileInputStream(partFile));
-//			Part result;
-//			try{
-//				result = manager.getDeserializedPart(is);
-//			}finally{
-//				is.close();
-//			}
-//			return result;
-//		} catch (Exception e) {
-//			CoreIDEPlugin.getDefault().log("WorkingCopyProjectBuildPathEntry: Error reading file " + partFile.getAbsolutePath(), e);
-//		}
-		return null;
+	private EObject readPart(String[] packageName, String name) throws DeserializationException {
+		String key;
+    	if (packageName != null && packageName.length > 0) {
+    		key = IRUtils.concatWithSeparator(packageName, ".") + "." + name;
+    	}
+    	else {
+    		key = name;
+    	}
+    	
+    	for (int i = 0; i < stores.length; i++) {
+    		EObject ir = stores[i].get(key);
+    		if (ir != null) {
+    			return ir;
+    		}
+    	}
+    	return null;
 	}
 	
 	private IPartBinding readPartBinding(String[] packageName, String partName) {
-		IPartBinding partBinding = null;
-		//TODO EDT
-//		File irFile = getIRFile(packageName, partName);
-//		if(irFile.exists()){
-//			Part part = readPart(irFile);
-//			partBinding = IrToBindingUtil.IRToPartBinding(part);
-//			if(partBinding != null){
-//				partBinding.setValid(true);
-//				partBinding.setEnvironment(declaringEnvironment);
-//		        bindingCache.put(packageName, InternUtil.intern(partName), partBinding);
-//		        //TODO? WorkingCopyASTManager.getInstance().reportNestedFunctions(partAST,declaringFile);
-//			}
-//		}
-		return partBinding;				
-	}
-	
-	private File getIRFile(String[] packageName, String partName){
-		return WorkingCopyProjectBuildPathManager.getInstance().getProjectBuildPath(projectInfo.getProject()).getOutputLocation().getFile(Util.stringArrayToPath(IRFileNameUtility.toIRFileName(packageName)).append(IRFileNameUtility.toIRFileName(partName)).addFileExtension("ir")).getLocation().toFile();
+		try {
+	    	EObject ir = readPart(packageName, partName);
+	    	if (ir != null) {
+	    		IPartBinding partBinding = declaringEnvironment.getConverter().convert(ir);
+	    		if (partBinding != null) {
+	    			bindingCache.put(packageName, partName, partBinding);
+	    			return partBinding;
+	    		}
+	    	}
+	    	return null;
+    	}
+    	catch(Exception e) {
+    		throw new PartRestoreFailedException(packageName, partName, e);
+    	}		
 	}
 	
     public FileBinding getFileBinding(String[] packageName, String fileName, org.eclipse.edt.compiler.core.ast.File fileAST) {
@@ -386,16 +394,35 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 	public void addPartBindingToCache(IPartBinding partBinding) {
 		bindingCache.put(InternUtil.intern(partBinding.getPackageName()), InternUtil.intern(partBinding.getCaseSensitiveName()), partBinding );
 	}
+	
+	protected void setObjectStores(ObjectStore[] stores) {
+    	if (stores == null) {
+    		this.stores = ProjectBuildPathEntry.EMPTY_STORES;
+    	}
+    	else {
+    		this.stores = stores;
+    	}
+    }
 
 	@Override
 	public ObjectStore[] getObjectStores() {
-		// TODO
-		return new ObjectStore[0];
+		return stores;
 	}
 
 	@Override
 	public org.eclipse.edt.mof.egl.Part findPart(String[] packageName, String name) throws PartNotFoundException {
-		// TODO
+		if(ProjectBuildPathManager.getInstance().getProjectBuildPath(projectInfo.getProject()).isReadOnly()
+				|| projectInfo.hasPart(packageName, name) != ITypeBinding.NOT_FOUND_BINDING){
+			try {
+				EObject ir = readPart(packageName, name);
+				if (ir instanceof Part) {
+					return (Part)ir;
+				}
+			}
+			catch (DeserializationException e) {
+				throw new PartNotFoundException(e);
+			}
+		}
 		return null;
 	}		
 	

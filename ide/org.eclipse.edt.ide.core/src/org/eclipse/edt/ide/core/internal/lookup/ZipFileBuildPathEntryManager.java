@@ -21,6 +21,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.tools.EGL2IR;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyEglarBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyMofarBuildPathEntry;
+import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironment;
+import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.utils.AbsolutePathUtility;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.serialization.ObjectStore;
@@ -41,7 +43,7 @@ public class ZipFileBuildPathEntryManager {
 	
 	private boolean isWCC;
 
-	private Map zipfileProjectEntries;
+	private Map<Object, Map<IPath, EglarBuildPathEntry>> zipfileProjectEntries;
 	
 	private ZipFileBuildPathEntryManager(boolean isWCC){
 		 super();
@@ -50,7 +52,7 @@ public class ZipFileBuildPathEntryManager {
 	}
 	
 	private void init() {
-		zipfileProjectEntries = new HashMap();		
+		zipfileProjectEntries = new HashMap<Object, Map<IPath,EglarBuildPathEntry>>();
 	}
 
 	public static ZipFileBuildPathEntryManager getInstance(){
@@ -62,9 +64,9 @@ public class ZipFileBuildPathEntryManager {
 	}
 	
 	protected Map getProjectEntry(Object project){
-		Map retVal = (Map)zipfileProjectEntries.get(project);
+		Map<IPath, EglarBuildPathEntry> retVal = zipfileProjectEntries.get(project);
 		if (retVal == null){
-			retVal = new HashMap();
+			retVal = new HashMap<IPath, EglarBuildPathEntry>();
 			zipfileProjectEntries.put(project,retVal);
 		}
 		
@@ -72,11 +74,16 @@ public class ZipFileBuildPathEntryManager {
 	}
 
 	public EglarBuildPathEntry getZipFileBuildPathEntry(Object project,IPath zipfilepath){
-		Map projectMap = getProjectEntry(project);
-		EglarBuildPathEntry result  = (EglarBuildPathEntry)projectMap.get(zipfilepath);
+		Map<IPath, EglarBuildPathEntry> projectMap = getProjectEntry(project);
+		EglarBuildPathEntry result = projectMap.get(zipfilepath);
 		
 		if(result == null){
-			result = createEntry(ProjectEnvironmentManager.getInstance().getProjectEnvironment((IProject)project), zipfilepath);
+			if (isWCC) {
+				result = createEntry(WorkingCopyProjectEnvironmentManager.getInstance().getProjectEnvironment((IProject)project), zipfilepath);
+			}
+			else {
+				result = createEntry(ProjectEnvironmentManager.getInstance().getProjectEnvironment((IProject)project), zipfilepath);
+			}
 			projectMap.put(zipfilepath, result);
 		}
 		
@@ -86,31 +93,32 @@ public class ZipFileBuildPathEntryManager {
 	private EglarBuildPathEntry createEntry(ProjectEnvironment env, IPath path) {
 		String extension = path.getFileExtension();
 		if (extension.equalsIgnoreCase(MOFAR_EXTENSION)) {
-			MofarBuildPathEntry entry;
-			if (isWCC) {
-				entry = new WorkingCopyMofarBuildPathEntry(env, path, ZipFileObjectStore.MOFXML, env.getConverter());
-			}
-			else {
-				entry = new MofarBuildPathEntry(env, path, ZipFileObjectStore.MOFXML, env.getConverter());
-			}
-			
+			MofarBuildPathEntry entry = new MofarBuildPathEntry(env, path, ZipFileObjectStore.MOFXML, env.getConverter());
 			ObjectStore store = new ZipFileObjectStore(new File(AbsolutePathUtility.getAbsolutePathString(path)), env.getIREnvironment(), ObjectStore.XML, ZipFileObjectStore.MOFXML, entry);
 			entry.setStore(store);
-			
 			return entry;
 		}
 		else if (extension.equalsIgnoreCase(EGLAR_EXTENSION)) {
-			EglarBuildPathEntry entry;
-			if (isWCC) {
-				entry = new WorkingCopyEglarBuildPathEntry(env, path, EGL2IR.EGLXML, env.getConverter());
-			}
-			else {
-				entry = new EglarBuildPathEntry(env, path, EGL2IR.EGLXML, env.getConverter());
-			}
-			
+			EglarBuildPathEntry entry = new EglarBuildPathEntry(env, path, EGL2IR.EGLXML, env.getConverter());
 			ObjectStore store = new ZipFileObjectStore(new File(AbsolutePathUtility.getAbsolutePathString(path)), env.getIREnvironment(), ObjectStore.XML, EGL2IR.EGLXML, Type.EGL_KeyScheme, entry);
 			entry.setStore(store);
-			
+			return entry;
+		}
+		return null;
+	}
+	
+	private EglarBuildPathEntry createEntry(WorkingCopyProjectEnvironment env, IPath path) {
+		String extension = path.getFileExtension();
+		if (extension.equalsIgnoreCase(MOFAR_EXTENSION)) {
+			MofarBuildPathEntry entry = new WorkingCopyMofarBuildPathEntry(env, path, ZipFileObjectStore.MOFXML, env.getConverter());
+			ObjectStore store = new ZipFileObjectStore(new File(AbsolutePathUtility.getAbsolutePathString(path)), env.getIREnvironment(), ObjectStore.XML, ZipFileObjectStore.MOFXML, entry);
+			entry.setStore(store);
+			return entry;
+		}
+		else if (extension.equalsIgnoreCase(EGLAR_EXTENSION)) {
+			EglarBuildPathEntry entry = new WorkingCopyEglarBuildPathEntry(env, path, EGL2IR.EGLXML, env.getConverter());
+			ObjectStore store = new ZipFileObjectStore(new File(AbsolutePathUtility.getAbsolutePathString(path)), env.getIREnvironment(), ObjectStore.XML, EGL2IR.EGLXML, Type.EGL_KeyScheme, entry);
+			entry.setStore(store);
 			return entry;
 		}
 		return null;
@@ -121,11 +129,11 @@ public class ZipFileBuildPathEntryManager {
 	}
 	
 	public void clear(IProject project) {
-		Map projectMap = (Map) zipfileProjectEntries.get(project);
+		Map<IPath, EglarBuildPathEntry> projectMap = zipfileProjectEntries.get(project);
 		if (projectMap != null){
-			Iterator iter = projectMap.values().iterator();
+			Iterator<EglarBuildPathEntry> iter = projectMap.values().iterator();
 			while(iter.hasNext()){
-				EglarBuildPathEntry result  = (EglarBuildPathEntry)iter.next();
+				EglarBuildPathEntry result  = iter.next();
 				if(result != null){
 					result.clear();
 				}

@@ -29,7 +29,7 @@ public class ProjectBuildPathEntryManager {
 
 	private static final ProjectBuildPathEntryManager INSTANCE = new ProjectBuildPathEntryManager();
 	
-	private Map projectBuildPathEntries;
+	private Map<IProject, ProjectBuildPathEntry> projectBuildPathEntries;
 	
 	private ProjectBuildPathEntryManager(){
 		 super();
@@ -37,7 +37,7 @@ public class ProjectBuildPathEntryManager {
 	}
 	
 	private void init() {
-		projectBuildPathEntries = new HashMap();		
+		projectBuildPathEntries = new HashMap<IProject, ProjectBuildPathEntry>();
 	}
 
 	public static ProjectBuildPathEntryManager getInstance(){
@@ -46,7 +46,7 @@ public class ProjectBuildPathEntryManager {
 	
 	public ProjectBuildPathEntry getProjectBuildPathEntry(IProject project){
 		
-		ProjectBuildPathEntry result  = (ProjectBuildPathEntry)projectBuildPathEntries.get(project);
+		ProjectBuildPathEntry result  = projectBuildPathEntries.get(project);
 		
 		if(result == null){
 			result = new ProjectBuildPathEntry(ProjectInfoManager.getInstance().getProjectInfo(project));
@@ -61,8 +61,7 @@ public class ProjectBuildPathEntryManager {
 					new IFileSystemObjectStore(path, irEnv, ObjectStore.XML, EGL2IR.EGLXML)
 				});
 			
-			ProjectEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
-			result.setDeclaringEnvironment(env);
+			result.setDeclaringEnvironment(ProjectEnvironmentManager.getInstance().getProjectEnvironment(project));
 		}
 		
 		return result;
@@ -73,7 +72,7 @@ public class ProjectBuildPathEntryManager {
 	}
 
 	public void clear(IProject project, boolean clean) {
-		ProjectBuildPathEntry result  = (ProjectBuildPathEntry)projectBuildPathEntries.get(project);
+		ProjectBuildPathEntry result  = projectBuildPathEntries.get(project);
 		
 		if(result != null){
 			result.clear(clean);

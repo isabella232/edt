@@ -16,12 +16,17 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.edt.compiler.tools.EGL2IR;
+import org.eclipse.edt.ide.core.internal.builder.IFileSystemObjectStore;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectIREnvironment;
+import org.eclipse.edt.mof.serialization.ObjectStore;
 
 public class WorkingCopyProjectBuildPathEntryManager {
 
 	private static final WorkingCopyProjectBuildPathEntryManager INSTANCE = new WorkingCopyProjectBuildPathEntryManager();
 	
-	private Map projectBuildPathEntries;
+	private Map<IProject, WorkingCopyProjectBuildPathEntry> projectBuildPathEntries;
 	
 	private WorkingCopyProjectBuildPathEntryManager(){
 		 super();
@@ -29,7 +34,7 @@ public class WorkingCopyProjectBuildPathEntryManager {
 	}
 	
 	private void init() {
-		projectBuildPathEntries = new HashMap();		
+		projectBuildPathEntries = new HashMap<IProject, WorkingCopyProjectBuildPathEntry>();		
 	}
 
 	public static WorkingCopyProjectBuildPathEntryManager getInstance(){
@@ -38,11 +43,20 @@ public class WorkingCopyProjectBuildPathEntryManager {
 	
 	public WorkingCopyProjectBuildPathEntry getProjectBuildPathEntry(IProject project){
 		
-		WorkingCopyProjectBuildPathEntry result  = (WorkingCopyProjectBuildPathEntry)projectBuildPathEntries.get(project);
+		WorkingCopyProjectBuildPathEntry result = projectBuildPathEntries.get(project);
 		
 		if(result == null){
 			result = new WorkingCopyProjectBuildPathEntry(WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project));
 			projectBuildPathEntries.put(project, result);
+			
+			// Set the stores before asking for the project environment, in case the environment has to be initialized with the stores.
+			WorkingCopyProjectBuildPath buildPath = WorkingCopyProjectBuildPathManager.getInstance().getProjectBuildPath(project);
+			IPath path = buildPath.getOutputLocation().getFullPath();
+			ProjectIREnvironment irEnv = WorkingCopyProjectEnvironmentManager.getInstance().getIREnvironment(project);
+			result.setObjectStores(new ObjectStore[] {
+					new IFileSystemObjectStore(path, irEnv, ObjectStore.XML),
+					new IFileSystemObjectStore(path, irEnv, ObjectStore.XML, EGL2IR.EGLXML)
+				});
 			
 			result.setDeclaringEnvironment(WorkingCopyProjectEnvironmentManager.getInstance().getProjectEnvironment(project));
 		}
@@ -51,9 +65,9 @@ public class WorkingCopyProjectBuildPathEntryManager {
 	}
 	
 	public void clear() {
-		for (Iterator iter = projectBuildPathEntries.values().iterator(); iter.hasNext();) {
-			WorkingCopyProjectBuildPathEntry entry = (WorkingCopyProjectBuildPathEntry) iter.next();
-			entry.clear();			
+		for (Iterator<WorkingCopyProjectBuildPathEntry> iter = projectBuildPathEntries.values().iterator(); iter.hasNext();) {
+			WorkingCopyProjectBuildPathEntry entry = iter.next();
+			entry.clear();
 		}
 	}
 

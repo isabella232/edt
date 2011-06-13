@@ -75,7 +75,7 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 		
 		@Override
 		public ISystemEnvironment getSystemEnvironment() {
-			return SystemEnvironmentManager.findSystemEnvironment(getProject(), getNotifier());
+			return ProjectBuildPathEntry.this.getSystemEnvironment();
 		}
 	}
 	
@@ -85,7 +85,7 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
     private ProjectEnvironment declaringEnvironment;
     private IEnvironment realizingEnvironment;
     private ObjectStore[] stores;
-    private static final ObjectStore[] EMPTY_STORES = new ObjectStore[0];
+    public static final ObjectStore[] EMPTY_STORES = new ObjectStore[0];
     
     protected ProjectBuildPathEntry(ProjectInfo projectInfo) {
         this.projectInfo = projectInfo;
@@ -233,9 +233,9 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
         	String fileName = Util.getFilePartName(declaringFile);
 			IPartBinding fileBinding = getPartBinding(packageName, fileName, true);
 			if(!fileBinding.isValid()){
-				scope = new SystemScope(new FileASTScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, ASTManager.getInstance().getFileAST(declaringFile)),SystemEnvironmentManager.findSystemEnvironment(getProject(), getNotifier()));
+				scope = new SystemScope(new FileASTScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, ASTManager.getInstance().getFileAST(declaringFile)),getSystemEnvironment());
 			}else{
-				scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()),SystemEnvironmentManager.findSystemEnvironment(getProject(), getNotifier()));
+				scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()),getSystemEnvironment());
 			}
         }
         BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, new ICompilerOptions(){
@@ -381,6 +381,10 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 			}
 		}
 		return null;
+	}
+	
+	protected ISystemEnvironment getSystemEnvironment() {
+		return SystemEnvironmentManager.findSystemEnvironment(getProject(), getNotifier());
 	}
 	
 	public IBuildNotifier getNotifier() {

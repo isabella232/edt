@@ -19,26 +19,42 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
 import org.eclipse.edt.compiler.binding.PartBinding;
-import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
+import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
+import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectIREnvironment;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.serialization.ObjectStore;
 
 // TODO Refactor common code between this environment and project environment - level01Compile, getPartBinding, hasPackage
-public class WorkingCopyProjectEnvironment implements IEnvironment {
+public class WorkingCopyProjectEnvironment implements IBindingEnvironment {
 
 	private PackageBinding rootPackageBinding = new PackageBinding(ProjectEnvironment.defaultPackage, null, this);
-    private IProject project;
+    private final IProject project;
 	private WorkingCopyProjectBuildPathEntry declaringProjectBuildPathEntry;
 	private IWorkingCopyBuildPathEntry[] buildPathEntries;
-	
+    private Mof2Binding converter;
+    private ProjectIREnvironment irEnvironment;
 	
 	public WorkingCopyProjectEnvironment(IProject project) {
 		super();
 		this.project = project;
+		this.converter = new Mof2Binding(this);
 	}
-
+	
+	public void setIREnvironment(ProjectIREnvironment environment) {
+    	this.irEnvironment = environment;
+    }
+    
+    public ProjectIREnvironment getIREnvironment() {
+    	return this.irEnvironment;
+    }
+	
+	public Mof2Binding getConverter() {
+    	return this.converter;
+    }
 	
 	public IProject getProject() {
 		return project;
@@ -50,7 +66,16 @@ public class WorkingCopyProjectEnvironment implements IEnvironment {
 	}
 
 	public void setProjectBuildPathEntries(IWorkingCopyBuildPathEntry[] projectBuildPathEntries) {
-		this.buildPathEntries = projectBuildPathEntries;		
+		this.buildPathEntries = projectBuildPathEntries;
+		
+		if (this.buildPathEntries != null) {
+	    	for (int i = 0; i < buildPathEntries.length; i++) {
+	    		ObjectStore[] stores = buildPathEntries[i].getObjectStores();
+	    		for (int j = 0; j < stores.length; j++) {
+	    			this.irEnvironment.registerObjectStore(stores[j].getKeyScheme(), stores[j]);
+	    		}
+	    	}
+    	}
 	}
 	
 	protected void setDeclaringProjectBuildPathEntry(WorkingCopyProjectBuildPathEntry entry) {
@@ -107,6 +132,7 @@ public class WorkingCopyProjectEnvironment implements IEnvironment {
 	public void clear() {
 		buildPathEntries = null;
 		rootPackageBinding = new PackageBinding(ProjectEnvironment.defaultPackage, null, this);
+		this.converter = new Mof2Binding(this);
 	}
 
 
@@ -119,5 +145,25 @@ public class WorkingCopyProjectEnvironment implements IEnvironment {
 	public ISystemEnvironment getSystemEnvironment() {
 		return SystemEnvironmentManager.findSystemEnvironment(getProject(), null);
 	}
-
+	
+	@Override
+	public IPartBinding getCachedPartBinding(String[] packageName, String partName) {
+        IPartBinding result = null;
+        for(int i = 0; i < buildPathEntries.length; i++) {
+	        result = buildPathEntries[i].getCachedPartBinding(packageName, partName);
+	        if(result != null) return result;
+	    }
+        
+        return getSystemEnvironment().getCachedPartBinding(packageName, partName);
+	}
+	
+	@Override
+	public void addPartBindingToCache(IPartBinding partBinding) {
+		for (int i = 0; i < buildPathEntries.length; i++) {
+        	if (buildPathEntries[i].hasPart(partBinding.getPackageName(), partBinding.getCaseSensitiveName()) != ITypeBinding.NOT_FOUND_BINDING) {
+        		buildPathEntries[i].addPartBindingToCache(partBinding);
+        		break;
+        	}
+        }
+	}
 }
