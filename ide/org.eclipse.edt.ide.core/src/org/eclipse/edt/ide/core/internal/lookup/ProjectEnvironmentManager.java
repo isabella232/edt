@@ -15,8 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.edt.compiler.ISystemEnvironment;
-import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.builder.AbstractBuilder;
 import org.eclipse.edt.ide.core.internal.builder.AbstractProcessingQueue;
@@ -75,8 +73,7 @@ public class ProjectEnvironmentManager {
             result = new ProjectEnvironment(project);
             projectEnvironments.put(project, result);
             
-            ProjectIREnvironment env = getIREnvironment(project);
-            result.setIREnvironment(env);
+            result.setIREnvironment(getIREnvironment(project));
             result.setProjectBuildPathEntries(getProjectBuildPathEntriesFor(project));
             result.setDeclaringProjectBuildPathEntry(ProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry(project));
         }
@@ -111,10 +108,7 @@ public class ProjectEnvironmentManager {
         
     	// Initialize the project's system environment if necessary. We do this here so that the IBuildNotifier will be
         // available if the system environment needed to be initialized.
-    	IBindingEnvironment sysEnv = env.getSystemEnvironment();
-    	if (sysEnv instanceof ISystemEnvironment) {
-    		env.getIREnvironment().initSystemEnvironment((ISystemEnvironment)sysEnv);
-    	}
+   		env.getIREnvironment().initSystemEnvironment(env.getSystemEnvironment());
         
         Environment.pushEnv(env.getIREnvironment());
     }
