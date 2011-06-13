@@ -413,9 +413,9 @@ public class TypeUtils implements MofConversion {
 				return false;
 			if (s1 != null && !s1.equals(s2))
 				return false;
-			if (t1.getMemberAnnotations().size() != t1.getMemberAnnotations().size())
+			if (t1.getMemberAnnotations().size() != t2.getMemberAnnotations().size())
 				return false;
-			for (AnnotationType type : t1.getMemberAnnotations()) {
+			for (Object type : t1.getMemberAnnotations()) {
 				if (!t2.getMemberAnnotations().contains(type))
 					return false;
 			}
