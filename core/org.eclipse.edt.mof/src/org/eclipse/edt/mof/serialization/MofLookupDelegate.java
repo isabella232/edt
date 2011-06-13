@@ -113,7 +113,7 @@ public class MofLookupDelegate implements LookupDelegate {
 		}
 		EClass superType = (EClass)env.find(names[1]);
 		((EClass)eClass).getSuperTypes().add(superType);
-		Environment.INSTANCE.save(eClass, false);
+		env.save(eClass, false);
 		return eClass;
 	}
 }
