@@ -1,0 +1,14 @@
+<project name="BuildPlugin" default="Jarem" basedir="../">
+
+<property name="pluginName" value="org.eclipse.edt.compiler"/>
+
+<target name="init">    
+    <echo message="processing ${pluginName}." />
+	<property name="eglBin" value="eglbin"/>
+</target>
+	
+<target name="Jarem" depends="init">	
+	<jar basedir="./${eglBin}" destfile="./lib/edtCompiler.eglar"></jar>
+</target>
+	
+</project>

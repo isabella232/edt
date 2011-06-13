@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eglpath>
+	<eglpathentry kind="src" path="eglsource"/>
+	<eglpathentry kind="src" path="/org.eclipse.edt.mof.egl"/>
+	<eglpathentry kind="output" path="eglbin"/>
+</eglpath>

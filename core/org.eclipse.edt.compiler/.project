@@ -3,6 +3,7 @@
 	<name>org.eclipse.edt.compiler</name>
 	<comment></comment>
 	<projects>
+		<project>org.eclipse.edt.mof.egl</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -25,10 +26,17 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.edt.ide.core.EDTBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.pde.PluginNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
+		<nature>org.eclipse.edt.ide.core.EGLNature</nature>
+		<nature>org.eclipse.edt.ide.core.eglnature</nature>
 	</natures>
 </projectDescription>
