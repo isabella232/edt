@@ -86,6 +86,7 @@ import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.NullLiteral;
+import org.eclipse.edt.mof.egl.NumericLiteral;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
@@ -262,7 +263,6 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.DecimalLiteral literal) {
 		DecimalLiteral lit = factory.createDecimalLiteral();
 		lit.setValue(literal.getValue());
-		lit.setIsNegated(literal.getValue().charAt(0) == '-');
 		setElementInformation(literal, lit);
 		stack.push(lit);
 		return false;
@@ -446,7 +446,6 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.IntegerLiteral literal) {
 		IntegerLiteral lit = factory.createIntegerLiteral();
 		lit.setValue(literal.getValue());
-		lit.setIsNegated(literal.getValue().charAt(0) == '-');
 		setElementInformation(literal, lit);
 		stack.push(lit);
 		return false;
@@ -801,12 +800,23 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.UnaryExpression unaryExpression) {
-		UnaryExpression expr = factory.createUnaryExpression();
-		setElementInformation(unaryExpression, expr);
-		stack.push(expr);
 		unaryExpression.getExpression().accept(this);
-		expr.setExpression((Expression)stack.pop());
-		expr.setOperator(unaryExpression.getOperator().toString());
+		Expression subExpr = (Expression)stack.pop();
+		boolean isBang = unaryExpression.getOperator() == org.eclipse.edt.compiler.core.ast.UnaryExpression.Operator.BANG;
+
+		if (subExpr instanceof NumericLiteral && !isBang) {
+			if (unaryExpression.getOperator() == org.eclipse.edt.compiler.core.ast.UnaryExpression.Operator.MINUS) {
+				((NumericLiteral)subExpr).setIsNegated(true);
+			}
+			stack.push(subExpr);
+		}
+		else {		
+			UnaryExpression expr = factory.createUnaryExpression();
+			setElementInformation(unaryExpression, expr);
+			stack.push(expr);
+			expr.setExpression(subExpr);
+			expr.setOperator(unaryExpression.getOperator().toString());
+		}
 		return false;
 	}
 
