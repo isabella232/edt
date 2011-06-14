@@ -35,4 +35,34 @@ public abstract class NumericLiteralImpl extends PrimitiveTypeLiteralImpl implem
 		slotSet(Slot_isNegated, value);
 	}
 	
+	@Override
+	public String getValue() {
+		if (isNegated()) {
+			return ("-" + super.getValue());
+		}
+		
+		return super.getValue();
+	}
+	
+	@Override
+	public void setValue(String value) {
+		if (value.startsWith("+")) {
+			setValue(value.substring(1));
+			return;
+		}
+		
+		if (value.startsWith("-")) {
+			setIsNegated(!isNegated());
+			setValue(value.substring(1));
+			return;
+		}
+		
+		super.setValue(value);
+	}
+	
+	@Override
+	public String getUnsignedValue() {
+		return super.getValue();
+	}
+	
 }

@@ -26,6 +26,10 @@ public class FloatingPointLiteralImpl extends NumericLiteralImpl implements Floa
 	@Override
 	public void setFloatValue(Double value) {
 		// TODO EGL syntax for float is not the same as java...
+		if (value < 0) {
+			setIsNegated(true);
+			value = -value;
+		}
 		setValue(String.valueOf(value));
 	}
 	

@@ -11,12 +11,17 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
+import java.math.BigInteger;
+
 import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 
 public class IntegerLiteralImpl extends NumericLiteralImpl implements IntegerLiteral {
+	
+	private Type type = null;
+	
 	@Override
 	public Integer getIntValue() {
 		return Integer.decode(getValue());
@@ -24,12 +29,38 @@ public class IntegerLiteralImpl extends NumericLiteralImpl implements IntegerLit
 	
 	@Override
 	public void setIntValue(Integer value) {
+		if (value < 0) {
+			setIsNegated(true);
+			value = -value;
+		}
 		setValue(String.valueOf(value));
 	}
 	
 	@Override
 	public Type getType() {
-		return IRUtils.getEGLPrimitiveType(Type_Int);
+		if (type == null) {
+			String value = getUnsignedValue();
+			BigInteger bigInt = new BigInteger(value);
+			
+			if (bigInt.bitLength() < 16) {
+				type = IRUtils.getEGLPrimitiveType(Type_Smallint);
+				return type;
+			}
+
+			if (bigInt.bitLength() < 32) {
+				type = IRUtils.getEGLPrimitiveType(Type_Int);
+				return type;
+			}
+
+			if (bigInt.bitLength() < 64) {
+				type = IRUtils.getEGLPrimitiveType(Type_Bigint);
+				return type;
+			}
+			
+			type = IRUtils.getEGLPrimitiveType(Type_Num, value.length(), 0);
+			return type;
+		}
+		return type;
 	}
 
 }

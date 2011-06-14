@@ -21,8 +21,9 @@ public class DecimalLiteralImpl extends NumericLiteralImpl implements DecimalLit
 	@Override
 	public Type getType() {
 		int i = getValue().indexOf('.');
-		int decimals = getValue().substring(i+1).length();
-		return IRUtils.getEGLPrimitiveType(Type_Decimal, getValue().length()-1, decimals);
+		String val = getUnsignedValue();
+		int decimals = val.substring(i+1).length();
+		return IRUtils.getEGLPrimitiveType(Type_Decimal, val.length()-1, decimals);
 	}
 
 }

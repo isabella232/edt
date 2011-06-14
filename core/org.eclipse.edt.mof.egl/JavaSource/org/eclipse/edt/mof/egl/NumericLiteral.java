@@ -17,4 +17,6 @@ public interface NumericLiteral extends PrimitiveTypeLiteral {
 	
 	void setIsNegated(Boolean value);
 	
+	String getUnsignedValue();
+	
 }
