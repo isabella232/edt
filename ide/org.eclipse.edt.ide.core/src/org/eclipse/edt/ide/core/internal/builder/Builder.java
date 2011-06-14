@@ -94,7 +94,6 @@ public class Builder extends IncrementalProjectBuilder {
 			     	doClean();
 			     	cleanBuild(null,notifier);
 				}else if (BuildManager.getInstance().isFullBuildRequired(getProject())){
-					ProjectBuildPathEntryManager.getInstance().clear(getProject(), true);
 			     	fullBuild(delta,notifier);
 			     }else if (hasEGLPathChanged()) {
 			     	doClean();
@@ -107,7 +106,6 @@ public class Builder extends IncrementalProjectBuilder {
 			        	doClean();
 			        	cleanBuild(delta,notifier);
 			        } else{
-			        	ProjectBuildPathEntryManager.getInstance().clear(getProject(), false);
 			        	if (incrementalBuild(delta,notifier)){
 			        		fullBuild(null,notifier);
 			        	}
