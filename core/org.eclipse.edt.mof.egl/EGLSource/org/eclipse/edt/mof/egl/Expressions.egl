@@ -124,11 +124,17 @@ end
 externalType SystemFunctionArgumentMnemonicName extends Name type MofClass
 end
 
-externalType BinaryExpression extends Expression type MofClass
-	LHS Expression {containment=yes};
-	RHS Expression {containment=yes};
+externalType MultiOperandExpression extends Expression type MofClass
+	operands Expression[] {containment=true};
 	operator string;
 	operation EGLOperation {transient=true};
+end
+
+externalType BinaryExpression extends MultiOperandExpression type MofClass
+	function getLHS() returns(Expression);
+	function getRHS() returns(Expression);
+	function setLHS(expr Expression in);
+	function setRHS(expr Expression in);
 end
 
 externalType UnaryExpression extends Expression type MofClass
@@ -146,6 +152,7 @@ externalType DynamicAccess extends Expression, LHSExpr type MofClass
 end
 
 externalType Assignment extends Expression type MofClass
+	operator String;
 	LHS LHSExpr {containment=true};
 	RHS Expression {containment=true};
 end
@@ -204,10 +211,6 @@ externalType AsExpression extends TypeExpression type MofClass
 end
 
 externalType IsAExpression extends TypeExpression type MofClass
-end
-
-externalType InExpression extends BinaryExpression type MofClass
-	_from Expression {containment=yes, mofName="from"};
 end
 
 externalType IsNotExpression extends Expression type MofClass
