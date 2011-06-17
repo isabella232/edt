@@ -32,6 +32,7 @@ import org.eclipse.edt.compiler.internal.io.IIOBufferWriter;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectIREnvironment;
 import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
@@ -165,9 +166,16 @@ public class BinaryFileManager {
         return INSTANCE;
     }
 
-    private IFile getOutputFileForRead(String[] packageName, String partName, IProject project){
+    private IFile[] getOutputFileForRead(String[] packageName, String partName, IProject project){
     	try{
-    		return ProjectBuildPathManager.getInstance().getProjectBuildPath(project).getOutputLocation().getFile(Util.stringArrayToPath(IRFileNameUtility.toIRFileName(packageName)).append(IRFileNameUtility.toIRFileName(partName)).addFileExtension("ir"));
+    		IContainer output = ProjectBuildPathManager.getInstance().getProjectBuildPath(project).getOutputLocation();
+    		IPath pathWithoutExt = Util.stringArrayToPath(IRFileNameUtility.toIRFileName(packageName)).append(IRFileNameUtility.toIRFileName(partName));
+    		return new IFile[] {
+    				output.getFile(pathWithoutExt.addFileExtension("eglxml")),
+    				output.getFile(pathWithoutExt.addFileExtension("eglbin")),
+    				output.getFile(pathWithoutExt.addFileExtension("mofxml")),
+    				output.getFile(pathWithoutExt.addFileExtension("mofbin"))
+    		};
     	}catch(Exception e){
     		throw new BuildException(e);
     	}
@@ -180,21 +188,37 @@ public class BinaryFileManager {
     
     public void removePart(String[] packageName, String name, IProject project, boolean deleteFromDisk){
     	if (deleteFromDisk) {
-	   		IPath path = getOutputFileForRead(packageName, name, project).getFullPath();
+	   		IFile[] files = getOutputFileForRead(packageName, name, project);
 	   		
 	   		// Remove from the disk
-	   		Writer writer = new Writer(ResourcesPlugin.getWorkspace().getRoot().getFile(path));
-	   		writer.allEntriesRemoved();
+	   		for (IFile file : files) {
+	   			if (file.exists()) {
+			   		Writer writer = new Writer(ResourcesPlugin.getWorkspace().getRoot().getFile(file.getFullPath()));
+			   		writer.allEntriesRemoved();
+	   			}
+	   		}
     	}
     	
-	    // remove this part from our part cache
-    	ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getIREnvironment().remove(key(packageName, name));
+	    // remove this part from the part cache
+    	ProjectIREnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getIREnvironment();
+    	env.remove(eglIRKey(packageName, name));
+    	env.remove(mofIRKey(packageName, name));
     }
     
-    private String key(String[] packageName, String partName) {
+    public static String eglIRKey(String[] packageName, String partName) {
 		StringBuilder buf = new StringBuilder();
 		buf.append(Type.EGL_KeyScheme);
 		buf.append(Type.KeySchemeDelimiter);
+		if (packageName != null && packageName.length > 0) {
+			buf.append(IRUtils.concatWithSeparator(packageName, "."));
+			buf.append('.');
+		}
+		buf.append(partName);
+		return buf.toString();
+	}
+    
+    public static String mofIRKey(String[] packageName, String partName) {
+		StringBuilder buf = new StringBuilder();
 		if (packageName != null && packageName.length > 0) {
 			buf.append(IRUtils.concatWithSeparator(packageName, "."));
 			buf.append('.');
