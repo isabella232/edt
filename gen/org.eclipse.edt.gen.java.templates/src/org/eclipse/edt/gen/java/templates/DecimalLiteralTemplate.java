@@ -18,60 +18,60 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.DecimalLiteral;
 
-public class DecimalLiteralTemplate extends JavaTemplate {
-
-	public void genExpression(DecimalLiteral expr, Context ctx, TabbedWriter out, Object... args) {
-		out.print(decimalLiteral(expr.getValue()));
-	}
-
-	protected String decimalLiteral(String value) {
-		// Quick checks for 0, 1, 10, -1, and -10.
-		BigDecimal bd = new BigDecimal(value);
-		if (bd.signum() == 0)
-			return "java.math.BigDecimal.ZERO";
-		else if (bd.compareTo(BigDecimal.ONE) == 0)
-			return "java.math.BigDecimal.ONE";
-		else if (bd.compareTo(BigDecimal.valueOf(-1)) == 0)
-			return "java.math.BigDecimal.ONE.negate()";
-		else if (bd.compareTo(BigDecimal.TEN) == 0)
-			return "java.math.BigDecimal.TEN";
-		else if (bd.compareTo(BigDecimal.valueOf(-10)) == 0)
-			return "java.math.BigDecimal.TEN.negate()";
-		// Make a BigDecimal from a BigInteger (the unscaled value) and an int (the scale).
-		int length = value.length();
-		// Find the location of the decimal point.
-		int pointIndex = value.indexOf('.');
-		// Now get the scale and the unscaled value, and print them.
-		int scale = length - pointIndex - 1;
-		String unscaled = value.substring(0, pointIndex) + value.substring(pointIndex + 1, length);
-		return "new java.math.BigDecimal( " + bigInteger(unscaled) + ", " + scale + " )";
-	}
-
-	protected String bigInteger(String number) {
-		// Remove a leading plus sign if present
-		if (number.charAt(0) == '+')
-			number = number.substring(1);
-		BigInteger bi = new BigInteger(number);
-		// Quick checks for 0, 1, 10, -1, and -10.
-		if (bi.equals(BigInteger.ZERO))
-			return "java.math.BigInteger.ZERO";
-		else if (bi.equals(BigInteger.ONE))
-			return "java.math.BigInteger.ONE";
-		else if (bi.equals(BigInteger.ONE.negate()))
-			return "java.math.BigInteger.ONE.negate()";
-		else if (bi.equals(BigInteger.TEN))
-			return "java.math.BigInteger.TEN";
-		else if (bi.equals(BigInteger.TEN.negate()))
-			return "java.math.BigInteger.TEN.negate()";
-		// Make a new BigInteger from bytes.
-		byte[] bytes = bi.toByteArray();
-		String str = "new java.math.BigInteger( new byte[] {";
-		for (int i = 0; i < bytes.length; i++) {
-			if (bytes[i] >= 0)
-				str += " 0x" + Integer.toHexString(bytes[i] & 0xff) + ',';
-			else
-				str += " (byte)0x" + Integer.toHexString(bytes[i] & 0xff) + ',';
+public class DecimalLiteralTemplate extends JavaTemplate 
+{
+	public void genExpression( DecimalLiteral expr, Context ctx, TabbedWriter out, Object... args ) 
+	{
+		// Quick checks for 0, 1, and 10.
+		BigDecimal bd = new BigDecimal( expr.getValue() );
+		if ( bd.signum() == 0 )
+		{
+			out.print( "java.math.BigDecimal.ZERO" );
 		}
-		return str + " } )";
+		else if ( bd.compareTo( BigDecimal.ONE ) == 0 )
+		{
+			out.print( "java.math.BigDecimal.ONE" );
+		}
+		else if ( bd.compareTo( BigDecimal.TEN ) == 0 )
+		{
+			out.print( "java.math.BigDecimal.TEN" );
+		}
+		else
+		{
+			// Use the fast valueOf method if the unscaled value fits in a long.
+			BigInteger unscaled = bd.unscaledValue();
+			if ( unscaled.bitLength() < 63 )
+			{
+				out.print( "java.math.BigDecimal.valueOf(" );
+				out.print( unscaled.toString() );
+				out.print( "L, " );
+				out.print( bd.scale() );
+				out.print( ')' );
+			}
+			else
+			{
+				// Make a BigDecimal from a BigInteger (the unscaled value) and an int (the scale).
+				byte[] bytes = unscaled.toByteArray();
+				out.print( "new java.math.BigDecimal( new java.math.BigInteger( new byte[] {" );
+				for ( int i = 0; i < bytes.length; i++ )
+				{
+					if ( bytes[ i ] >= 0 )
+					{
+						out.print( " 0x" + Integer.toHexString( bytes[ i ] & 0xff ) );
+					}
+					else
+					{
+						out.print( " (byte)0x" + Integer.toHexString( bytes[ i ] & 0xff ) );
+					}
+					if ( i < bytes.length - 1 )
+					{
+						out.print( ',' );
+					}
+				}
+				out.print( " } ), " );
+				out.print( bd.scale() );
+				out.print( ')' );
+			}
+		}
 	}
 }

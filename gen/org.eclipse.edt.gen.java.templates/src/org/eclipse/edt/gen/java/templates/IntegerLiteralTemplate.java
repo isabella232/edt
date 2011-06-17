@@ -11,13 +11,80 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import java.math.BigInteger;
+
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public class IntegerLiteralTemplate extends JavaTemplate {
-
-	public void genExpression(IntegerLiteral expr, Context ctx, TabbedWriter out, Object... args) {
-		out.print(expr.getValue());
+public class IntegerLiteralTemplate extends JavaTemplate 
+{
+	public void genExpression( IntegerLiteral expr, Context ctx, TabbedWriter out, Object... args ) 
+	{
+		Type type = expr.getType();
+		if ( type.equals( TypeUtils.Type_SMALLINT ) )
+		{
+			// Generate a short.
+			out.print( "(short)" );
+			if ( expr.isNegated() )
+			{
+				out.print( '-' );
+			}
+			out.print( trimLeadingZeros( expr.getUnsignedValue() ) );
+		}
+		else if ( type.equals( TypeUtils.Type_INT ) )
+		{
+			// Generate an int.
+			if ( expr.isNegated() )
+			{
+				out.print( '-' );
+			}
+			out.print( trimLeadingZeros( expr.getUnsignedValue() ) );
+		}
+		else if ( type.equals( TypeUtils.Type_BIGINT ) )
+		{
+			// Generate a long.
+			if ( expr.isNegated() )
+			{
+				out.print( '-' );
+			}
+			out.print( trimLeadingZeros( expr.getUnsignedValue() ) );
+			out.print( 'L' );
+		}
+		else
+		{
+			// Generate a BigInteger.
+			byte[] bytes = new BigInteger( expr.getValue() ).toByteArray();
+			out.print( "new java.math.BigInteger( new byte[] {" );
+			for ( int i = 0; i < bytes.length; i++ )
+			{
+				if ( bytes[ i ] >= 0 )
+				{
+					out.print( " 0x" + Integer.toHexString( bytes[ i ] & 0xff ) );
+				}
+				else
+				{
+					out.print( " (byte)0x" + Integer.toHexString( bytes[ i ] & 0xff ) );
+				}
+				if ( i < bytes.length - 1 )
+				{
+					out.print( ',' );
+				}
+			}
+			out.print( " } )" );
+		}
+	}
+	
+	private String trimLeadingZeros( String str )
+	{
+		int start = 0;
+		int stop = str.length() - 1;
+		while ( str.charAt( start ) == '0' && start < stop )
+		{
+			start++;
+		}
+		return start == 0 ? str : str.substring( start );
 	}
 }
