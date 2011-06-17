@@ -591,7 +591,9 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 	}
 	
 	protected boolean isOKToCopy(String name){
-		return !org.eclipse.edt.ide.core.internal.model.Util.isEGLBLDFileName(name) && !name.endsWith(".ir") && !org.eclipse.edt.ide.core.internal.model.Util.isEGLFileName(name); //$NON-NLS-1$
+		return !org.eclipse.edt.ide.core.internal.model.Util.isEGLBLDFileName(name)
+				&& !org.eclipse.edt.ide.core.internal.model.Util.isEGLIRFileName(name)
+				&& !org.eclipse.edt.ide.core.internal.model.Util.isEGLFileName(name);
 	}
 	
 	protected void copyFileToOutputLocation(IFile file,String[] packageName){
