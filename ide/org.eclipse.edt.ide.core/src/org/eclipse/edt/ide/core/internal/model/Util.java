@@ -91,8 +91,16 @@ public class Util {
 	public final static char[] SUFFIX_ZIP = ".ZIP".toCharArray(); //$NON-NLS-1$
 	public final static char[] SUFFIX_eglar = ".eglar".toCharArray(); //$NON-NLS-1$
 	public final static char[] SUFFIX_EGLAR = ".EGLAR".toCharArray(); //$NON-NLS-1$
-	public final static char[] SUFFIX_eglir = ".ir".toCharArray(); //$NON-NLS-1$
-	public final static char[] SUFFIX_EGLIR = ".IR".toCharArray(); //$NON-NLS-1$
+	public final static char[] SUFFIX_mofar = ".mofar".toCharArray(); //$NON-NLS-1$
+	public final static char[] SUFFIX_MOFAR = ".MOFAR".toCharArray(); //$NON-NLS-1$
+	public final static char[] SUFFIX_eglxml = ".eglxml".toCharArray(); //$NON-NLS-1$
+	public final static char[] SUFFIX_EGLXML = ".EGLXML".toCharArray(); //$NON-NLS-1$
+	public final static char[] SUFFIX_eglbin = ".eglbin".toCharArray(); //$NON-NLS-1$
+	public final static char[] SUFFIX_EGLBIN = ".EGLBIN".toCharArray(); //$NON-NLS-1$
+	public final static char[] SUFFIX_mofxml = ".mofxml".toCharArray(); //$NON-NLS-1$
+	public final static char[] SUFFIX_MOFXML = ".MOFXML".toCharArray(); //$NON-NLS-1$
+	public final static char[] SUFFIX_mofbin = ".mofbin".toCharArray(); //$NON-NLS-1$
+	public final static char[] SUFFIX_MOFBIN = ".MOFBIN".toCharArray(); //$NON-NLS-1$
 
 	static {
 		relocalize();
@@ -496,36 +504,43 @@ public class Util {
 		return result;
 	}
 	/**
-	 * Returns true iff str.toLowerCase().endsWith(".eglar" or ".EGLAR")
+	 * Returns true iff str.toLowerCase().endsWith(".eglar" or ".mofar")
 	 * implementation is not creating extra strings.
 	 */
 	public final static boolean isEGLARFileName(String name) {
-		int nameLength = name == null ? 0 : name.length();
-		int suffixLength = SUFFIX_eglar.length;
+		if (name == null) {
+			return false;
+		}
+		
+		return matchesFileName(name, SUFFIX_eglar, SUFFIX_EGLAR)
+				|| matchesFileName(name, SUFFIX_mofar, SUFFIX_MOFAR);
+	}
+	
+	private final static boolean matchesFileName(String name, char[] lowercaseExtension, char[] uppercaseExtension) {
+		int nameLength = name.length();
+		int suffixLength = lowercaseExtension.length;
 		if (nameLength < suffixLength)
 			return false;
 		for (int i = 0, offset = nameLength - suffixLength; i < suffixLength; i++) {
 			char c = name.charAt(offset + i);
-			if (c != SUFFIX_eglar[i] && c != SUFFIX_EGLAR[i])
+			if (c != lowercaseExtension[i] && c != uppercaseExtension[i])
 				return false;
 		}
 		return true;
-	}	
+	}
+	
 	/**
-	 * Returns true iff str.toLowerCase().endsWith(".ir" or ".IR")
+	 * Returns true iff str.toLowerCase().endsWith(".eglxml" or ".eglbin" or ".mofxml" or ".mofbin")
 	 * implementation is not creating extra strings.
 	 */	
 	public static boolean isEGLIRFileName(String name) {
-		int nameLength = name == null ? 0 : name.length();
-		int suffixLength = SUFFIX_eglir.length;
-		if (nameLength < suffixLength)
+		if (name == null) {
 			return false;
-		for (int i = 0, offset = nameLength - suffixLength; i < suffixLength; i++) {
-			char c = name.charAt(offset + i);
-			if (c != SUFFIX_eglir[i] && c != SUFFIX_EGLIR[i])
-				return false;
 		}
-		return true;
+		return matchesFileName(name, SUFFIX_eglxml, SUFFIX_EGLXML)
+				|| matchesFileName(name, SUFFIX_eglbin, SUFFIX_EGLBIN)
+				|| matchesFileName(name, SUFFIX_mofxml, SUFFIX_MOFXML)
+				|| matchesFileName(name, SUFFIX_mofbin, SUFFIX_MOFBIN);
 	}
 	
 	/**
@@ -550,7 +565,7 @@ public class Util {
 		return true;
 	}
 	/**
-	 * Returns true iff str.toLowerCase().endsWith(".egl")
+	 * Returns true iff str.toLowerCase().endsWith(".eglbld")
 	 * implementation is not creating extra strings.
 	 */
 	public final static boolean isEGLBLDFileName(String name) {
