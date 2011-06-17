@@ -37,6 +37,8 @@ import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
 import org.eclipse.edt.ide.core.internal.builder.ResourceChangeProcessor;
 import org.eclipse.edt.ide.core.internal.lookup.ExternalProjectManager;
@@ -57,6 +59,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * <p>
@@ -660,5 +663,24 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 			}
 		}
 		return compilers;
+	}
+	
+	/**
+	 * Return the Core plug-in preferences, which is the same as the Core
+	 * preference store.
+	 * 
+	 * @return Core plug-in preferences
+	 */
+	public IEclipsePreferences getCorePluginPreferences() {
+		return new InstanceScope().getNode( PLUGIN_ID );
+	}
+	
+	public void saveCorePluginPreferences() {
+		IEclipsePreferences prefs =  getCorePluginPreferences();
+		try {
+		    prefs.flush();
+		} catch(BackingStoreException e) {
+		   log( e );
+		}
 	}
 }
