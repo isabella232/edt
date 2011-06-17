@@ -36,8 +36,8 @@ public class IDEContext extends Context {
 	
 	private IFile getFile() {
 		if (file == null) {
-			if (getFileName() != null) {
-				org.eclipse.core.runtime.IPath path = new Path(getFileName());
+			if (getAbsolutePath() != null) {
+				org.eclipse.core.runtime.IPath path = new Path(getAbsolutePath());
 				try {
 					file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 				} catch (Exception e) {
