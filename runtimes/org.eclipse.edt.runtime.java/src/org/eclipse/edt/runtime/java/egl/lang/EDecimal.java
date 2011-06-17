@@ -420,7 +420,11 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 	}
 	
 	public static BigDecimal asDecimal(BigDecimal value, int precision, int scale) throws JavartException {
-		return asDecimal(value,getMaxValue(precision, scale), getMinValue(precision, scale), precision, scale, false);
+		return asDecimal(value, getMaxValue(precision, scale), getMinValue(precision, scale), precision, scale, false);
+	}
+	
+	public static BigDecimal asDecimal(BigInteger value, int precision, int scale) throws JavartException {
+		return asDecimal(new BigDecimal(value), getMaxValue(precision, scale), getMinValue(precision, scale), precision, scale, false);
 	}
 
 	public static BigDecimal asDecimal(BigDecimal value, BigDecimal max, BigDecimal min, int precision, int scale) throws JavartException {

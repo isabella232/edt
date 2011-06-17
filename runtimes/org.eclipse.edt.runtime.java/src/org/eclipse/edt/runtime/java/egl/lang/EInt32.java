@@ -12,6 +12,7 @@
 package org.eclipse.edt.runtime.java.egl.lang;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.JavartException;
@@ -60,6 +61,18 @@ public class EInt32 extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 	
+	public static Integer asInt32(BigInteger value) throws JavartException {
+		if (value == null) return null;
+		boolean throwOverflowExceptions = false;  // TODO need program flag on whether to throw exceptions or not.
+		int result = 0;
+		if (throwOverflowExceptions) {
+			result = new BigDecimal(value).intValueExact();
+		}
+		else {
+			result = value.intValue();
+		}
+		return result;
+	}
 
 	public static Integer asInt32(BigDecimal value) throws JavartException {
 		if (value == null) return null;
