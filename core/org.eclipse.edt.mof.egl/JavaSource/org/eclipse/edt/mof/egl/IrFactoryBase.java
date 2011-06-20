@@ -169,6 +169,7 @@ public interface IrFactoryBase extends EFactory  {
 	String StructuredRecord = packageName+".StructuredRecord";
 	String SubstringAccess = packageName+".SubstringAccess";
 	String SystemFunctionArgumentMnemonicName = packageName+".SystemFunctionArgumentMnemonicName";
+	String TernaryExpression = packageName+".TernaryExpression";
 	String TextTypeLiteral = packageName+".TextTypeLiteral";
 	String ThisExpression = packageName+".ThisExpression";
 	String ThrowStatement = packageName+".ThrowStatement";
@@ -337,6 +338,7 @@ public interface IrFactoryBase extends EFactory  {
 	EClass getStructuredRecordEClass();
 	EClass getSubstringAccessEClass();
 	EClass getSystemFunctionArgumentMnemonicNameEClass();
+	EClass getTernaryExpressionEClass();
 	EClass getTextTypeLiteralEClass();
 	EClass getThisExpressionEClass();
 	EClass getThrowStatementEClass();
@@ -429,7 +431,6 @@ public interface IrFactoryBase extends EFactory  {
 	public Handler createHandler();
 	public HexLiteral createHexLiteral();
 	public IfStatement createIfStatement();
-	public InExpression createInExpression();
 	public IntegerLiteral createIntegerLiteral();
 	public Interface createInterface();
 	public IntervalType createIntervalType();
@@ -478,6 +479,7 @@ public interface IrFactoryBase extends EFactory  {
 	public StructuredRecord createStructuredRecord();
 	public SubstringAccess createSubstringAccess();
 	public SystemFunctionArgumentMnemonicName createSystemFunctionArgumentMnemonicName();
+	public TernaryExpression createTernaryExpression();
 	public TextTypeLiteral createTextTypeLiteral();
 	public ThisExpression createThisExpression();
 	public ThrowStatement createThrowStatement();

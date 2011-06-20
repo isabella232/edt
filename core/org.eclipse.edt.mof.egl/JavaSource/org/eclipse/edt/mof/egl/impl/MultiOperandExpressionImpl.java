@@ -11,50 +11,51 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
-import org.eclipse.edt.mof.egl.Assignment;
+import java.util.List;
+
 import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.LHSExpr;
+import org.eclipse.edt.mof.egl.MultiOperandExpression;
+import org.eclipse.edt.mof.egl.NoSuchFunctionError;
+import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
 
-public class AssignmentImpl extends ExpressionImpl implements Assignment {
-	private static int Slot_LHS=0;
-	private static int Slot_RHS=1;
-	private static int Slot_operator=2;
+public abstract class MultiOperandExpressionImpl extends ExpressionImpl implements MultiOperandExpression{
+	private static int Slot_operands=0;
+	private static int Slot_operator=1;
+	private static int Slot_operation=2;
 	private static int totalSlots = 3;
-	
+
 	public static int totalSlots() {
 		return totalSlots + ExpressionImpl.totalSlots();
 	}
-	
+
 	static {
 		int offset = ExpressionImpl.totalSlots();
-		Slot_LHS += offset;
-		Slot_RHS += offset;
+		Slot_operands += offset;
 		Slot_operator += offset;
+		Slot_operation += offset;
 	}
+
 	@Override
-	public LHSExpr getLHS() {
-		return (LHSExpr)slotGet(Slot_LHS);
+	public Operation getOperation() {
+		if (slotGet(Slot_operation) == null) {
+			try {
+				setOperation(resolveOperation());
+			} catch (NoSuchFunctionError e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return (Operation)slotGet(Slot_operation);
 	}
 	
 	@Override
-	public void setLHS(LHSExpr value) {
-		slotSet(Slot_LHS, value);
-	}
-	
-	@Override
-	public Expression getRHS() {
-		return (Expression)slotGet(Slot_RHS);
-	}
-	
-	@Override
-	public void setRHS(Expression value) {
-		slotSet(Slot_RHS, value);
+	public void setOperation(Operation value) {
+		slotSet(Slot_operation, value);
 	}
 	
 	@Override
 	public Type getType() {
-		return getLHS().getType();
+		return getOperation().getType();
 	}
 
 	@Override
@@ -67,4 +68,12 @@ public class AssignmentImpl extends ExpressionImpl implements Assignment {
 		slotSet(Slot_operator, opSymbol);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Expression> getOperands() {
+		return (List<Expression>)slotGet(Slot_operands);
+	}
+
+	protected abstract Operation resolveOperation();
+	
 }

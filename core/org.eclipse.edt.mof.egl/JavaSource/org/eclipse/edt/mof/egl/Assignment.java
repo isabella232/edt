@@ -14,11 +14,12 @@ package org.eclipse.edt.mof.egl;
 
 public interface Assignment extends Expression {
 	LHSExpr getLHS();
-	
 	void setLHS(LHSExpr value);
 	
-	Expression getRHS();
-	
+	Expression getRHS();	
 	void setRHS(Expression value);
 	
+	String getOperator();
+	void setOperator(String opSymbol);
+
 }

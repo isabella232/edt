@@ -11,16 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
-import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.NoSuchFunctionError;
 import org.eclipse.edt.mof.egl.Operation;
+import org.eclipse.edt.mof.egl.TernaryExpression;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class BinaryExpressionImpl extends MultiOperandExpressionImpl implements BinaryExpression {
+public class TernaryExpressionImpl extends MultiOperandExpressionImpl implements TernaryExpression{
 
 	private boolean initialized = false;
-	
+
 	private void ensureInitialized() {
 		if (initialized) {
 			return;
@@ -29,36 +29,57 @@ public class BinaryExpressionImpl extends MultiOperandExpressionImpl implements 
 		if (getOperands().isEmpty()) {
 			getOperands().add(null);
 			getOperands().add(null);
+			getOperands().add(null);
 		}
 	}
-	
+
 	@Override
-	public Expression getLHS() {
-		ensureInitialized();
-		return getOperands().get(0);
-	}
-	
-	@Override
-	public void setLHS(Expression value) {
-		ensureInitialized();
-		getOperands().set(0, value);
-	}
-	
-	@Override
-	public Expression getRHS() {
-		ensureInitialized();
-		return getOperands().get(1);
-	}
-	
-	@Override
-	public void setRHS(Expression value) {
-		ensureInitialized();
-		getOperands().set(1, value);
-	}
-	
 	protected Operation resolveOperation() {
-		Operation op = IRUtils.getBinaryOperation(getLHS().getType().getClassifier(), getRHS().getType().getClassifier(), getOperator());
+		Operation op = IRUtils.getBinaryOperation(getFirst().getType().getClassifier(), getSecond().getType().getClassifier(), getOperator());
 		if (op == null) throw new NoSuchFunctionError();
 		return op;
 	}
+
+
+	@Override
+	public Expression getFirst() {
+		ensureInitialized();
+		return getOperands().get(0);
+	}
+
+
+	@Override
+	public Expression getSecond() {
+		ensureInitialized();
+		return getOperands().get(1);
+	}
+
+
+	@Override
+	public Expression getThird() {
+		ensureInitialized();
+		return getOperands().get(2);
+	}
+
+
+	@Override
+	public void setFirst(Expression expr) {
+		ensureInitialized();
+		getOperands().set(0, expr);		
+	}
+
+
+	@Override
+	public void setSecond(Expression expr) {
+		ensureInitialized();
+		getOperands().set(1, expr);		
+	}
+
+
+	@Override
+	public void setThird(Expression expr) {
+		ensureInitialized();
+		getOperands().set(2, expr);		
+	}
+
 }

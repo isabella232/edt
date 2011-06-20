@@ -12,29 +12,7 @@
 package org.eclipse.edt.mof.egl;
 
 
-public interface BinaryExpression extends Expression {
-	String Op_PLUS = "+";
-	String Op_MINUS = "-";
-	String Op_MULTIPLY = "*";
-	String Op_POWER = "**";
-	String Op_DIVIDE = "/";
-	String Op_MODULO = "%";
-	String Op_AND = "&&";
-	String Op_OR = "||";
-	String Op_XOR = "xor";
-	String Op_BITAND = "&";
-	String Op_BITOR = "|";
-	String Op_EQ = "==";
-	String Op_NE = "!=";
-	String Op_GT = ">";
-	String Op_LT = "<";
-	String Op_LE = "<=";
-	String Op_GE = ">=";
-	String Op_CONCAT = "::";
-	String Op_NULLCONCAT = "?:";
-	String Op_IN = "in";
-	String Op_MATCHES = "matches";
-	String Op_LIKE = "like";
+public interface BinaryExpression extends MultiOperandExpression {
 	
 	Expression getLHS();
 	
@@ -44,10 +22,4 @@ public interface BinaryExpression extends Expression {
 	
 	void setRHS(Expression value);
 	
-	Operation getOperation();
-	
-	void setOperation(Operation operation);
-	
-	String getOperator();
-	void setOperator(String opSymbol);
 }

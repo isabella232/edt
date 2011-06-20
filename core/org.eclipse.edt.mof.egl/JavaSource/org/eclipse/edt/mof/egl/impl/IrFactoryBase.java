@@ -778,6 +778,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	}
 	
 	@Override
+	public EClass getTernaryExpressionEClass() {
+		return (EClass)getTypeNamed(TernaryExpression);
+	}
+
+	@Override
 	public EClass getTextTypeLiteralEClass() {
 		return (EClass)getTypeNamed(TextTypeLiteral);
 	}
@@ -1232,12 +1237,7 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	public IfStatement createIfStatement() {
 		return (IfStatement)getIfStatementEClass().newInstance();
 	}
-	
-	@Override
-	public InExpression createInExpression() {
-		return (InExpression)getInExpressionEClass().newInstance();
-	}
-	
+		
 	@Override
 	public IntegerLiteral createIntegerLiteral() {
 		return (IntegerLiteral)getIntegerLiteralEClass().newInstance();
@@ -1478,6 +1478,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 		return (SystemFunctionArgumentMnemonicName)getSystemFunctionArgumentMnemonicNameEClass().newInstance();
 	}
 	
+	@Override
+	public TernaryExpression createTernaryExpression() {
+		return (TernaryExpression)getTernaryExpressionEClass().newInstance();
+	}
+
 	@Override
 	public TextTypeLiteral createTextTypeLiteral() {
 		return (TextTypeLiteral)getTextTypeLiteralEClass().newInstance();
