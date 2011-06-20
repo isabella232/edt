@@ -13,11 +13,11 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.InExpression;
+import org.eclipse.edt.mof.egl.TernaryExpression;
 
-public class InExpressionTemplate extends JavaTemplate {
+public class TernaryExpressionTemplate extends JavaTemplate {
 
-	public void genExpression(InExpression expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(TernaryExpression expr, Context ctx, TabbedWriter out, Object... args) {
 //		if (ctx.mapsToJavaType(expr.getEType())) {
 //			ctx.gen(genRuntimeTypeName, expr.getEType(), ctx, out, ImplementationKind.EGLImplementation);
 //			out.print(".ezeIsa(");
