@@ -33,6 +33,14 @@
       </builder>
    </extension>
    <extension
+         id="EDTGenBuilder"
+         name="%edtGenBuilderName"
+         point="org.eclipse.core.resources.builders">
+      <builder hasNature="false">
+         <run class="org.eclipse.edt.ide.core.internal.generation.GenerationBuilder"/>
+      </builder>
+   </extension>
+   <extension
           id="problem"
           name="%edtProblemName"
           point="org.eclipse.core.resources.markers">

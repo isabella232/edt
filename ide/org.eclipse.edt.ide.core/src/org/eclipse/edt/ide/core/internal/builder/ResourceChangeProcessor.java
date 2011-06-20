@@ -34,6 +34,7 @@ import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraph;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraphManager;
 import org.eclipse.edt.ide.core.internal.dependency.IFunctionRequestor;
+import org.eclipse.edt.ide.core.internal.generation.GenerationBuildManager;
 import org.eclipse.edt.ide.core.internal.lookup.FileInfoManager;
 import org.eclipse.edt.ide.core.internal.lookup.IFileInfo;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathEntryManager;
@@ -96,13 +97,14 @@ public class ResourceChangeProcessor implements IResourceChangeListener {
 		    collectContextSpecificMarkersForRemoval(project);
 		    
 		    ZipFileBuildPathEntryManager.getInstance().clear(project);
-	     	FileInfoManager.getInstance().removeProject(project);						// Cached FileInfos
+	     	FileInfoManager.getInstance().removeProject(project);				// Cached FileInfos
 	        ProjectEnvironmentManager.getInstance().remove(project);			// Environment
 	        ProjectBuildPathEntryManager.getInstance().remove(project);
 	        ProjectBuildPathManager.getInstance().remove(project);
 	        ProjectInfoManager.getInstance().remove(project);					// ProjectInfo
 	        DependencyGraphManager.getInstance().remove(project);				// Dependency Graph
-	        BuildManager.getInstance().removeProject(project);							// Build Manager
+	        BuildManager.getInstance().removeProject(project);					// Build Manager
+	        GenerationBuildManager.getInstance().removeProject(project);		// Generation Build Manager
 	        DuplicatePartManager.getInstance().remove(project);					// Duplicate Parts
 		}
 	}

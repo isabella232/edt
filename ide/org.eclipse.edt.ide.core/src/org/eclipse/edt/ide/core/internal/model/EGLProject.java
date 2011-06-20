@@ -201,17 +201,9 @@ public class EGLProject extends Openable implements IEGLProject, IProjectNature 
 	 */
 	public void configure() throws CoreException {
 
-		// register EGL builder
-		// The EGL Builder is in its own plugin, which requires this plugin, so we don't have access to a constant value
-		addToBuildSpec(EDTCoreIDEPlugin.BUILDER_ID, false); //$NON-NLS-1$
-
-	}
-	
-	public void addJasperReportBuildSpec() throws CoreException {
-	    //	  The Jasper builder is in its own plugin, which requires this plugin, so we don't have
-		// access to a constant value
-		//jasper builder needs to be after the java builder
-		addToBuildSpec("com.ibm.etools.egl.jasperreport.eglJRBuilder", false); //$NON-NLS-1$
+		// register EGL builders. add them to the top of the build order, with the gen builder second
+		addToBuildSpec(EDTCoreIDEPlugin.GENERATION_BUILDER_ID, true);
+		addToBuildSpec(EDTCoreIDEPlugin.BUILDER_ID, true);
 	}
 	
 	/**

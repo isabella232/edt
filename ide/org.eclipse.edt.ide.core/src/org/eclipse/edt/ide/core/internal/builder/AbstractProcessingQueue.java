@@ -63,11 +63,8 @@ import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfo;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfoManager;
-import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
-import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.IEnvironment;
@@ -86,8 +83,6 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
     private ProjectEnvironment projectEnvironment;
     private IProcessorRequestor requestor;
    
-    private PartGenerationQueue generationQueue = new PartGenerationQueue();
-	
     public class TopLevelFunctionPartKey {
     	private String projectName;
 	    private String[] packageName;
@@ -133,12 +128,6 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
         this.project = project;
         this.projectInfo = ProjectInfoManager.getInstance().getProjectInfo(project);
         this.projectEnvironment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
-    }
-    
-    public void process() {
-        super.process();
-        
-        generationQueue.generate();
     }
     
     protected boolean hasExceededMaxLoop() {
@@ -217,7 +206,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 
 		MofSerializable previousPart;
 		try {
-			EObject eobj = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getIREnvironment().find(key(packageName, caseInsensitiveInternedString));
+			EObject eobj = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).findPart(packageName, caseInsensitiveInternedString);
 			if (eobj instanceof MofSerializable) {
 				previousPart = (MofSerializable)eobj;
 			}
@@ -248,10 +237,6 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 			}
         }
         
-        if (ProjectSettingsUtility.getGenerators(declaringFile).length > 0) {
-        	generationQueue.add(partAST, declaringFile);
-        }
-		
         notifier.subTask(NLS.bind(BuilderResources.buildSavingIR, qualifiedName));
         
 		if (canSave(caseInsensitiveInternedString)) {
@@ -259,18 +244,6 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 		}
 	}
 	
-	private String key(String[] packageName, String partName) {
-		StringBuilder buf = new StringBuilder();
-		buf.append(Type.EGL_KeyScheme);
-		buf.append(Type.KeySchemeDelimiter);
-		if (packageName != null && packageName.length > 0) {
-			buf.append(IRUtils.concatWithSeparator(packageName, "."));
-			buf.append('.');
-		}
-		buf.append(partName);
-		return buf.toString();
-	}
-    
     private MofSerializable createIRFromBoundAST(Part partAST, IFile declaringFile,TopLevelFunctionInfo[] functions, List imports, IProblemRequestor problemRequestor) {
     	IEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getIREnvironment();
         Egl2Mof generator = new Egl2Mof(env);
