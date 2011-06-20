@@ -36,13 +36,13 @@ public class ProjectConfigurationOperation extends WorkspaceModifyOperation {
 		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 		IProject project = workspaceRoot.getProject(this.configuration.getProjectName());
 		
+		// Add the Java nature, for now. Do this first so that we insert our builders ahead of the Java builder.
+		EGLProjectUtility.createJavaConfiguration( project, monitor );
+		
 		// Add EGL nature to the .project file
 		EGLProjectUtility.addEGLNature( project, monitor );
 			
 		// configure EGL build path
 		EGLProjectUtility.createEGLConfiguration( this.configuration, monitor);
-		
-		// Add the Java nature, for now
-		EGLProjectUtility.createJavaConfiguration( project, monitor );
 	}
 }
