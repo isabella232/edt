@@ -114,32 +114,47 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		inEMetadataTypeContext = isEMetadataType(partBinding);
 		inAnnotationTypeContext = isAnnotationType(partBinding) || isStereotypeType(partBinding);
 		inMofContext = isMofReflectType(partBinding) || inEMetadataTypeContext;
-		MofSerializable part = (MofSerializable)env.get(mofSerializationKeyFor(partBinding));
-		if (part == null || part instanceof ProxyEObject || isTempEClass(part) ) {
-			part = handleVisitPart(node);
-			handleContents(node, part);
-			if (part instanceof EClass) {
-				// handle all super types together to allow
-				// proper handling of multiple inheritance
-				List<EClass> superTypes = new ArrayList<EClass>();
-				for (Object name : node.getExtendedTypes()) {
-					IPartBinding superType = (IPartBinding)((Name)name).resolveBinding();
-					superTypes.add((EClass)mofTypeFor(superType));
-				}
-				((EClass)part).addSuperTypes(superTypes);
+		MofSerializable part = handleVisitPart(node);
+		handleContents(node, part);
+		if (part instanceof EClass) {
+			// handle all super types together to allow
+			// proper handling of multiple inheritance
+			List<EClass> superTypes = new ArrayList<EClass>();
+			for (Object name : node.getExtendedTypes()) {
+				IPartBinding superType = (IPartBinding)((Name)name).resolveBinding();
+				EClass superTypeClass = (EClass)mofTypeFor(superType);
+				fixSuperTypes(superTypeClass);
+				superTypes.add((EClass)mofTypeFor(superType));
 			}
-			else {
-				for (Object name : node.getExtendedTypes()) {
-					IPartBinding superType = (IPartBinding)((Name)name).resolveBinding();
-					if (Binding.isValidBinding(superType)) {
-						((EGLClass)part).getSuperTypes().add((EGLClass)mofTypeFor(superType));
-					}
-				}
-			}
-			handleEndVisitPart(node, part);
+			((EClass)part).addSuperTypes(superTypes);
 		}
+		else {
+			for (Object name : node.getExtendedTypes()) {
+				IPartBinding superType = (IPartBinding)((Name)name).resolveBinding();
+				if (Binding.isValidBinding(superType)) {
+					((EGLClass)part).getSuperTypes().add((EGLClass)mofTypeFor(superType));
+				}
+			}
+		}
+		handleEndVisitPart(node, part);
 		stack.push(part);
 		return false;
+	}
+	
+	// fix object identity problems that can occur when compiling the mof model
+	private void fixSuperTypes(EClass eclass) {
+		List<EClass> superTypes = eclass.getSuperTypes();
+		for (int i = 0; i < superTypes.size(); i++) {
+			EObject obj = getMofSerializable(superTypes.get(i).getMofSerializationKey());
+			if (obj instanceof EClass) {
+				if (obj == superTypes.get(i)) {
+					fixSuperTypes((EClass) obj);
+				}
+				else {
+					superTypes.set(i, ((EClass)obj));
+				}
+			}
+		}
 	}
 
 	@Override
@@ -277,30 +292,27 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.TopLevelFunction node) {
 		TopLevelFunctionBinding binding = (TopLevelFunctionBinding) node.getName().resolveBinding();
-		FunctionPart part = (FunctionPart)env.get(mofSerializationKeyFor((ITypeBinding)binding));
-		if (part == null) {
-			part = (FunctionPart)handleVisitPart(node);
-			Function function = factory.createFunction();
-			setElementInformation(node, function);
-			part.setFunction(function);
-			function.setName(part.getName());
-			for (Node parm : (List<Node>)node.getFunctionParameters()) {
-				parm.accept(this);
-				function.addMember((FunctionParameter)stack.pop());
-			}
-			if (node.getReturnDeclaration() != null) {
-				function.setType((Type)mofTypeFor(node.getReturnType().resolveTypeBinding()));
-			}
-			StatementBlock block = factory.createStatementBlock();
-			block.setContainer(function);
-			function.setStatementBlock(block);
-			setCurrentFunctionMember(function);
-			for (Node stmt : (List<Node>)node.getStmts()) {
-				stmt.accept(this);
-				block.getStatements().add((Statement)stack.pop());
-			}
-			setCurrentFunctionMember(null);
+		FunctionPart part = (FunctionPart)handleVisitPart(node);
+		Function function = factory.createFunction();
+		setElementInformation(node, function);
+		part.setFunction(function);
+		function.setName(part.getName());
+		for (Node parm : (List<Node>)node.getFunctionParameters()) {
+			parm.accept(this);
+			function.addMember((FunctionParameter)stack.pop());
 		}
+		if (node.getReturnDeclaration() != null) {
+			function.setType((Type)mofTypeFor(node.getReturnType().resolveTypeBinding()));
+		}
+		StatementBlock block = factory.createStatementBlock();
+		block.setContainer(function);
+		function.setStatementBlock(block);
+		setCurrentFunctionMember(function);
+		for (Node stmt : (List<Node>)node.getStmts()) {
+			stmt.accept(this);
+			block.getStatements().add((Statement)stack.pop());
+		}
+		setCurrentFunctionMember(null);
 		setElementInformation(node, part);
 		stack.push(part);
 		return false;
@@ -328,13 +340,12 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	
 	protected MofSerializable defaultHandleVisitPart(org.eclipse.edt.compiler.core.ast.Part node) {
 		IBinding binding = node.getName().resolveBinding();
-		MofSerializable part = (MofSerializable)env.get(mofSerializationKeyFor((ITypeBinding)binding));
-		if (part == null || part instanceof ProxyEObject) {
-			part = handleVisitPart(node);
-			handleContents(node, part);
-			handleParms(node, part);
-			handleEndVisitPart(node, part);
-		}
+		MofSerializable part;
+		part = handleVisitPart(node);
+		handleContents(node, part);
+		handleParms(node, part);
+		handleEndVisitPart(node, part);
+		
 		return part;
 	}
 	
@@ -354,37 +365,30 @@ abstract class Egl2MofPart extends Egl2MofBase {
 
 	protected MofSerializable handleVisitPart(org.eclipse.edt.compiler.core.ast.Part part) {
 		IPartBinding partBinding = (IPartBinding)part.getName().resolveBinding();
-		// Look to see if the part has already exists
-		MofSerializable obj = (MofSerializable)env.get(mofSerializationKeyFor(partBinding));
-		if (obj == null || isTempEClass(obj) || obj instanceof ProxyEObject) {
-			// EGL Enumerations are treated as straight Mof EEnum types
-			inMofProxyContext = isMofProxy(partBinding);
-			inEMetadataTypeContext = isEMetadataType(partBinding);
-			inAnnotationTypeContext = isAnnotationType(partBinding) || isStereotypeType(partBinding);
-			inMofContext = isMofReflectType(partBinding) || inEMetadataTypeContext;
-			EClass typeClass = (EClass)getMofSerializable(mofPartTypeSignatureFor(part));
-			MofSerializable eObj = (MofSerializable)typeClass.newInstance();
-			partProcessingStack.push(eObj);
-			// Use dynamic interface to handle both MOF or EGL types
-			eObj.eSet("name", partBinding.getCaseSensitiveName());
-			eObj.eSet("packageName", concatWithSeparator(partBinding.getPackageName(), "."));
-			IAnnotationBinding subtype = partBinding.getSubTypeAnnotationBinding();
-			if (!inMofProxyContext) setReflectTypeValues(eObj, subtype);
-			
-			if (obj instanceof ProxyEObject) {
-				((ProxyEObject)obj).updateReferences(eObj);
-			}
-			env.save(mofSerializationKeyFor(partBinding), eObj, false);
-			if (!mofSerializationKeyFor(partBinding).equals(eObj.getMofSerializationKey())) {
-				env.save(((MofSerializable)eObj).getMofSerializationKey(), eObj, false);
-			}
-			if (!inMofContext) { 
-				eObjects.put(partBinding, eObj);
-				currentPart = eObj;
-			}
-			obj = eObj;
-		} 
-		return obj;
+
+		// EGL Enumerations are treated as straight Mof EEnum types
+		inMofProxyContext = isMofProxy(partBinding);
+		inEMetadataTypeContext = isEMetadataType(partBinding);
+		inAnnotationTypeContext = isAnnotationType(partBinding) || isStereotypeType(partBinding);
+		inMofContext = isMofReflectType(partBinding) || inEMetadataTypeContext;
+		EClass typeClass = (EClass)getMofSerializable(mofPartTypeSignatureFor(part));
+		MofSerializable eObj = (MofSerializable)typeClass.newInstance();
+		partProcessingStack.push(eObj);
+		// Use dynamic interface to handle both MOF or EGL types
+		eObj.eSet("name", partBinding.getCaseSensitiveName());
+		eObj.eSet("packageName", concatWithSeparator(partBinding.getPackageName(), "."));
+		IAnnotationBinding subtype = partBinding.getSubTypeAnnotationBinding();
+		if (!inMofProxyContext) setReflectTypeValues(eObj, subtype);
+		
+		env.save(mofSerializationKeyFor(partBinding), eObj, false);
+		if (!mofSerializationKeyFor(partBinding).equals(eObj.getMofSerializationKey())) {
+			env.save(((MofSerializable)eObj).getMofSerializationKey(), eObj, false);
+		}
+		if (!inMofContext) { 
+			eObjects.put(partBinding, eObj);
+			currentPart = eObj;
+		}
+		return eObj;
 	}
 
 	@SuppressWarnings("unchecked")

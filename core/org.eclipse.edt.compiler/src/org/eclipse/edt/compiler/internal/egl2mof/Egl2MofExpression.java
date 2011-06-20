@@ -72,7 +72,6 @@ import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.FunctionPartInvocation;
 import org.eclipse.edt.mof.egl.FunctionStatement;
 import org.eclipse.edt.mof.egl.HexLiteral;
-import org.eclipse.edt.mof.egl.InExpression;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IsAExpression;
@@ -83,6 +82,7 @@ import org.eclipse.edt.mof.egl.MBCharLiteral;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.MultiOperandExpression;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.NullLiteral;
@@ -95,6 +95,7 @@ import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StringLiteral;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.SubstringAccess;
+import org.eclipse.edt.mof.egl.TernaryExpression;
 import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.UnaryExpression;
@@ -186,6 +187,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.Assignment assignment) {
 		Assignment expr = factory.createAssignment();
+		expr.setOperator(assignment.getOperator().toString());
 		setElementInformation(assignment, expr);
 		stack.push(expr);
 		assignment.getLeftHandSide().accept(this);
@@ -428,16 +430,17 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.InExpression inExpression) {
-		InExpression inExpr = factory.createInExpression();
+		TernaryExpression inExpr = factory.createTernaryExpression();
 		setElementInformation(inExpression, inExpr);
 		stack.push(inExpr);
 		inExpression.getFirstExpression().accept(this);
-		inExpr.setLHS((Expression)stack.pop());
+		inExpr.setFirst((Expression)stack.pop());
 		inExpression.getSecondExpression().accept(this);
-		inExpr.setRHS((Expression)stack.pop());
+		inExpr.setSecond((Expression)stack.pop());
+		inExpr.setOperator(MultiOperandExpression.Op_IN);
 		if (inExpression.getFromExpression() != null) {
 			inExpression.getFromExpression().accept(this);
-			inExpr.setFrom((Expression)stack.pop());			
+			inExpr.setThird((Expression)stack.pop());			
 		}
 		return false;
 	}
@@ -632,8 +635,21 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 
 	@Override
 	public boolean visit(LikeMatchesExpression likeMatchesExpression) {
-		// TODO Auto-generated method stub
-		return super.visit(likeMatchesExpression);
+		TernaryExpression expr = factory.createTernaryExpression();
+		setElementInformation(likeMatchesExpression, expr);
+		stack.push(expr);
+		likeMatchesExpression.getFirstExpression().accept(this);
+		expr.setFirst((Expression)stack.pop());
+		likeMatchesExpression.getSecondExpression().accept(this);
+		expr.setSecond((Expression)stack.pop());
+		expr.setOperator(likeMatchesExpression.getOperator().toString());
+		if (likeMatchesExpression.getEscapeString() != null) {
+			StringLiteral lit = factory.createStringLiteral();
+			lit.setValue(likeMatchesExpression.getEscapeString());
+			setElementInformation(likeMatchesExpression, lit);
+			expr.setThird(lit);			
+		}
+		return false;
 	}
 
 	@Override

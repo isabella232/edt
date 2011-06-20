@@ -596,6 +596,23 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return true;
 	}
 	
+	private boolean isSpecialNamedElementCase(Object o, EType type) {
+		if (o instanceof String && type instanceof EClass) {
+			if (((EClass)type).isSubClassOf(factory.getNamedElementEClass())) {
+				return true;
+			}
+			
+			//more special processing to handle the case where the system mof parts are being compiled. In this case, there can be
+			//an object identity problem with the type object retrieved from the field, and the types returned by the environment
+			EObject newType = getMofSerializable(type.getMofSerializationKey());
+			if (newType instanceof EClass) {
+				if (((EClass)newType).isSubClassOf(factory.getNamedElementEClass())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	protected void setReflectTypeValues(EObject target, IAnnotationBinding reflectTypeBinding) {
 		if (reflectTypeBinding == null) return;
 		EClass eClass = target.getEClass();
@@ -608,7 +625,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 						for (Object o : (List)obj) {
 							// Special handling for reflect values that are just strings but can be converted to instances of the target field's type
 							EType type = (EType)((EGenericType)field.getEType()).getETypeArguments().get(0);
-							if ((o instanceof String) && type instanceof EClass && ((EClass)type).isSubClassOf(factory.getNamedElementEClass())) {
+							if (isSpecialNamedElementCase(o, type)) {
 								o = convertStringValueToNamedElementType((String)o, (EClass)type);
 							}
 							((List)(target.eGet(field))).add(o);
