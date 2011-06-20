@@ -47,12 +47,12 @@ import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.bidi.IBIDIProvider;
 import org.eclipse.edt.ide.ui.editor.IEGLEditor;
 import org.eclipse.edt.ide.ui.editor.IFoldingStructureProvider;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.EGLPerspectiveFactory;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.outline.ImportGroup;
@@ -483,7 +483,7 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 			eglSourceViewer = (EGLSourceViewer)sourceViewer;
 		
 		IPreferenceStore store = getPreferenceStore();
-		if(eglSourceViewer != null && isFoldingEnabled() && (store == null || !store.getBoolean(EGLPreferenceConstants.EDITOR_SHOW_SEGMENTS)))
+		if(eglSourceViewer != null && isFoldingEnabled() && (store == null || !store.getBoolean(EDTUIPreferenceConstants.EDITOR_SHOW_SEGMENTS)))
 			eglSourceViewer.prepareDelayedProjection();
 		
 		super.doSetInput(input);
@@ -686,7 +686,7 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 	
 	private boolean isFoldingEnabled() {
 		IPreferenceStore store= getPreferenceStore();
-		return store.getBoolean(EGLPreferenceConstants.EDITOR_FOLDING_ENABLED);
+		return store.getBoolean(EDTUIPreferenceConstants.EDITOR_FOLDING_ENABLED);
 	}	
 
 	public synchronized boolean isEditingScriptRunning() {
@@ -926,7 +926,7 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 
 			String property = event.getProperty();
 
-			if (EGLPreferenceConstants.EDITOR_TAB_WIDTH.equals(property)) {
+			if (EDTUIPreferenceConstants.EDITOR_TAB_WIDTH.equals(property)) {
 				Object value = event.getNewValue();
 				if (value instanceof Integer) {
 					sourceViewer.getTextWidget().setTabs(((Integer) value).intValue());
@@ -936,7 +936,7 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 				return;
 			}
 			
-			if(EGLPreferenceConstants.EDITOR_FOLDING_PROVIDER.equals(property))
+			if(EDTUIPreferenceConstants.EDITOR_FOLDING_PROVIDER.equals(property))
 			{
 				if(sourceViewer instanceof ProjectionViewer)
 				{
@@ -951,14 +951,14 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 				}
 			}
 			
-			if (EGLPreferenceConstants.EDITOR_FOLDING_ENABLED.equals(property)) {
+			if (EDTUIPreferenceConstants.EDITOR_FOLDING_ENABLED.equals(property)) {
 				if (sourceViewer instanceof ProjectionViewer) {
 					new ToggleFoldingRunner().runWhenNextVisible();
 				}
 				return;
 			}
 			
-			if (EGLPreferenceConstants.CODEASSIST_AUTOACTIVATION.equals(property)) {
+			if (EDTUIPreferenceConstants.CODEASSIST_AUTOACTIVATION.equals(property)) {
 				IContentAssistant c = ((AdaptedSourceViewer)sourceViewer).getContentAssistant();
 				if (c instanceof ContentAssistant) {
 					ContentAssistPreference.changeConfiguration((ContentAssistant) c, getPreferenceStore(), event);

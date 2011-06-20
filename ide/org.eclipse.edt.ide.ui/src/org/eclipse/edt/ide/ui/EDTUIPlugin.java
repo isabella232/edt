@@ -24,6 +24,8 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.edt.ide.ui.internal.editor.DocumentProvider;
 import org.eclipse.edt.ide.ui.internal.editor.ProblemMarkerManager;
 import org.eclipse.edt.ide.ui.internal.editor.folding.FoldingStructureProviderRegistry;
@@ -44,6 +46,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.editors.text.templates.ContributionContextTypeRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -138,7 +141,7 @@ public class EDTUIPlugin extends AbstractUIPlugin {
 	
 	public static void log(Throwable e) {
 		// TODO Use real NLS strings
-		log(new Status(IStatus.ERROR, getPluginId(), INTERNAL_ERROR, "EGLUIPlugin.internal_error", e)); //$NON-NLS-1$
+		log(new Status(IStatus.ERROR, getPluginId(), INTERNAL_ERROR, "EDTUIPlugin.internal_error", e)); //$NON-NLS-1$
 	}
 	
 	public static void logErrorMessage(String message) {
@@ -295,4 +298,22 @@ public class EDTUIPlugin extends AbstractUIPlugin {
 		return fDefaultTemplateStore;
 	}
 	
+	/**
+	 * Return the UI plug-in preferences, which is the same as the UI 
+	 * preference store.
+	 * 
+	 * @return UI plug-in preferences
+	 */
+	public IEclipsePreferences getUIPluginPreferences() {
+		return new InstanceScope().getNode( PLUGIN_ID );
+	}
+	
+	public void saveUIPluginPreferences() {
+		IEclipsePreferences prefs =  getUIPluginPreferences();
+		try {
+		    prefs.flush();
+		} catch(BackingStoreException e) {
+		   log( e );
+		}
+	}
 }

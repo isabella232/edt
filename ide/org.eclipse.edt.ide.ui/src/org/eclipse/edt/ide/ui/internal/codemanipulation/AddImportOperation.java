@@ -39,6 +39,7 @@ import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
+import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.EGLUIStatus;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.editor.util.BoundNodeModelUtility;
@@ -162,11 +163,9 @@ public class AddImportOperation extends OrganizeImportsOperation {
 									try {
 										replace.apply(fEGLDoc);
 									} catch (MalformedTreeException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
+										EDTUIPlugin.log(e);
 									} catch (BadLocationException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
+										EDTUIPlugin.log(e);
 									}
 								}		
 							}

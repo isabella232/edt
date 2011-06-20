@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
@@ -74,39 +74,39 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 	private SourceViewer fPreviewViewer;
 	private Color fBackgroundColor;
 	
-	private static final String BOLD= EGLPreferenceConstants.EDITOR_BOLD_SUFFIX;
+	private static final String BOLD= EDTUIPreferenceConstants.EDITOR_BOLD_SUFFIX;
 	
 	public final OverlayPreferenceStore.OverlayKey[] fKeys= new OverlayPreferenceStore.OverlayKey[] {
 		
-		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EGLPreferenceConstants.EDITOR_FOREGROUND_COLOR),
-		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EGLPreferenceConstants.EDITOR_FOREGROUND_DEFAULT_COLOR),
+		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EDTUIPreferenceConstants.EDITOR_FOREGROUND_COLOR),
+		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EDTUIPreferenceConstants.EDITOR_FOREGROUND_DEFAULT_COLOR),
 
-		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EGLPreferenceConstants.EDITOR_BACKGROUND_COLOR),
-		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EGLPreferenceConstants.EDITOR_BACKGROUND_DEFAULT_COLOR),
+		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EDTUIPreferenceConstants.EDITOR_BACKGROUND_COLOR),
+		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EDTUIPreferenceConstants.EDITOR_BACKGROUND_DEFAULT_COLOR),
 	
-		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EGLPreferenceConstants.EDITOR_MULTI_LINE_COMMENT_COLOR),
-		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EGLPreferenceConstants.EDITOR_MULTI_LINE_COMMENT_BOLD),
+		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EDTUIPreferenceConstants.EDITOR_MULTI_LINE_COMMENT_COLOR),
+		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EDTUIPreferenceConstants.EDITOR_MULTI_LINE_COMMENT_BOLD),
 	
-		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EGLPreferenceConstants.EDITOR_SINGLE_LINE_COMMENT_COLOR),
-		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EGLPreferenceConstants.EDITOR_SINGLE_LINE_COMMENT_BOLD),
+		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EDTUIPreferenceConstants.EDITOR_SINGLE_LINE_COMMENT_COLOR),
+		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EDTUIPreferenceConstants.EDITOR_SINGLE_LINE_COMMENT_BOLD),
 	
-		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EGLPreferenceConstants.EDITOR_KEYWORD_COLOR),
-		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EGLPreferenceConstants.EDITOR_KEYWORD_BOLD),
+		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EDTUIPreferenceConstants.EDITOR_KEYWORD_COLOR),
+		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EDTUIPreferenceConstants.EDITOR_KEYWORD_BOLD),
 			
-		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EGLPreferenceConstants.EDITOR_STRING_COLOR),
-		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EGLPreferenceConstants.EDITOR_STRING_BOLD),
+		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EDTUIPreferenceConstants.EDITOR_STRING_COLOR),
+		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EDTUIPreferenceConstants.EDITOR_STRING_BOLD),
 	
-		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EGLPreferenceConstants.EDITOR_DEFAULT_COLOR),
-		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EGLPreferenceConstants.EDITOR_DEFAULT_BOLD),
+		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EDTUIPreferenceConstants.EDITOR_DEFAULT_COLOR),
+		new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EDTUIPreferenceConstants.EDITOR_DEFAULT_BOLD),
 	};
 	
 	// make sure second entry in each is the preferencesKeyValue
 	private final String[][] fStyleColorListModel= new String[][] {
-		{ UINlsStrings.SourceStyleDefault, EGLPreferenceConstants.EDITOR_DEFAULT_COLOR }, //$NON-NLS-1$
-		{ UINlsStrings.SourceStyleKeywords, EGLPreferenceConstants.EDITOR_KEYWORD_COLOR }, //$NON-NLS-1$
-		{ UINlsStrings.SourceStyleLiterals, EGLPreferenceConstants.EDITOR_STRING_COLOR }, //$NON-NLS-1$
-		{ UINlsStrings.SourceStyleSingleComment, EGLPreferenceConstants.EDITOR_SINGLE_LINE_COMMENT_COLOR }, //$NON-NLS-1$
-		{ UINlsStrings.SourceStyleMultiComment, EGLPreferenceConstants.EDITOR_MULTI_LINE_COMMENT_COLOR }, //$NON-NLS-1$
+		{ UINlsStrings.SourceStyleDefault, EDTUIPreferenceConstants.EDITOR_DEFAULT_COLOR }, //$NON-NLS-1$
+		{ UINlsStrings.SourceStyleKeywords, EDTUIPreferenceConstants.EDITOR_KEYWORD_COLOR }, //$NON-NLS-1$
+		{ UINlsStrings.SourceStyleLiterals, EDTUIPreferenceConstants.EDITOR_STRING_COLOR }, //$NON-NLS-1$
+		{ UINlsStrings.SourceStyleSingleComment, EDTUIPreferenceConstants.EDITOR_SINGLE_LINE_COMMENT_COLOR }, //$NON-NLS-1$
+		{ UINlsStrings.SourceStyleMultiComment, EDTUIPreferenceConstants.EDITOR_MULTI_LINE_COMMENT_COLOR }, //$NON-NLS-1$
 
 	};
 	
@@ -148,7 +148,7 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 			public void widgetSelected(SelectionEvent e) {				
 				boolean custom= fBackgroundCustomRadioButton.getSelection();
 				fBackgroundColorButton.setEnabled(custom);
-				fOverlayStore.setValue(EGLPreferenceConstants.EDITOR_BACKGROUND_DEFAULT_COLOR, !custom);
+				fOverlayStore.setValue(EDTUIPreferenceConstants.EDITOR_BACKGROUND_DEFAULT_COLOR, !custom);
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {}
 		};
@@ -245,7 +245,7 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 				// do nothing
 			}
 			public void widgetSelected(SelectionEvent e) {
-				PreferenceConverter.setValue(fOverlayStore, EGLPreferenceConstants.EDITOR_BACKGROUND_COLOR, fBackgroundColorEditor.getColorValue());					
+				PreferenceConverter.setValue(fOverlayStore, EDTUIPreferenceConstants.EDITOR_BACKGROUND_COLOR, fBackgroundColorEditor.getColorValue());					
 			}
 		});
 
@@ -260,20 +260,17 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 			}
 		});
 				
-		initialize();
-		
-		Dialog.applyDialogFont(colorComposite);
-				
+		initialize();		
+		Dialog.applyDialogFont(colorComposite);				
 		return colorComposite;
 	}
 	
-	private Control createPreviewer(Composite parent) {
-	
+	private Control createPreviewer(Composite parent) {	
 		tools = new TextTools(fOverlayStore);
 	
 		fPreviewViewer= new SourceViewer(parent, null, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		fPreviewViewer.configure(new EGLSourceViewerConfiguration(tools, null));
-		Font font = JFaceResources.getFont(EGLPreferenceConstants.EDITOR_TEXT_FONT);
+		Font font = JFaceResources.getFont(EDTUIPreferenceConstants.EDITOR_TEXT_FONT);
 		fPreviewViewer.getTextWidget().setFont(font);
 		fPreviewViewer.setEditable(false);
 	
@@ -291,16 +288,15 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 		fOverlayStore.addPropertyChangeListener(new IPropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent event) {
 				String p= event.getProperty();
-				if (p.equals(EGLPreferenceConstants.EDITOR_BACKGROUND_COLOR) ||
-					p.equals(EGLPreferenceConstants.EDITOR_BACKGROUND_DEFAULT_COLOR))
+				if (p.equals(EDTUIPreferenceConstants.EDITOR_BACKGROUND_COLOR) ||
+					p.equals(EDTUIPreferenceConstants.EDITOR_BACKGROUND_DEFAULT_COLOR))
 				{
 					initializeViewerColors(fPreviewViewer);
 				}
 				
 				fPreviewViewer.invalidateTextPresentation();
 			}
-		});
-	
+		});	
 		return fPreviewViewer.getControl();
 	}
 	
@@ -309,19 +305,15 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 	 * 
 	 * @param viewer the viewer to be initialized
 	 */
-	private void initializeViewerColors(ISourceViewer viewer) {
-	
+	private void initializeViewerColors(ISourceViewer viewer) {	
 		IPreferenceStore store= fOverlayStore;
-		if (store != null) {
-		
-			StyledText styledText= viewer.getTextWidget();
-					
+		if (store != null) {		
+			StyledText styledText= viewer.getTextWidget();					
 			// ---------- background color ----------------------
-			Color color= store.getBoolean(EGLPreferenceConstants.EDITOR_BACKGROUND_DEFAULT_COLOR)
+			Color color= store.getBoolean(EDTUIPreferenceConstants.EDITOR_BACKGROUND_DEFAULT_COLOR)
 				? null
-				: createColor(store, EGLPreferenceConstants.EDITOR_BACKGROUND_COLOR, styledText.getDisplay());
-			styledText.setBackground(color);
-			
+				: createColor(store, EDTUIPreferenceConstants.EDITOR_BACKGROUND_COLOR, styledText.getDisplay());
+			styledText.setBackground(color);			
 			if (fBackgroundColor != null)
 				fBackgroundColor.dispose();
 			
@@ -334,11 +326,8 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 	 * Returns <code>null</code> if there is no such information available.
 	 */
 	private Color createColor(IPreferenceStore store, String key, Display display) {
-
-		RGB rgb= null;		
-	
-		if (store.contains(key)) {
-		
+		RGB rgb= null;			
+		if (store.contains(key)) {		
 			if (store.isDefault(key))
 				rgb= PreferenceConverter.getDefaultColor(store, key);
 			else
@@ -346,8 +335,7 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 	
 			if (rgb != null)
 				return new Color(display, rgb);
-		}
-	
+		}	
 		return null;
 	}	
 	
@@ -399,10 +387,10 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 			b.setSelection(fOverlayStore.getBoolean(key));
 		}
 		
-		RGB rgb= PreferenceConverter.getColor(fOverlayStore, EGLPreferenceConstants.EDITOR_BACKGROUND_COLOR);
+		RGB rgb= PreferenceConverter.getColor(fOverlayStore, EDTUIPreferenceConstants.EDITOR_BACKGROUND_COLOR);
 		fBackgroundColorEditor.setColorValue(rgb);		
 		
-		boolean default_= fOverlayStore.getBoolean(EGLPreferenceConstants.EDITOR_BACKGROUND_DEFAULT_COLOR);
+		boolean default_= fOverlayStore.getBoolean(EDTUIPreferenceConstants.EDITOR_BACKGROUND_DEFAULT_COLOR);
 		fBackgroundDefaultRadioButton.setSelection(default_);
 		fBackgroundCustomRadioButton.setSelection(!default_);
 		fBackgroundColorButton.setEnabled(!default_);
@@ -413,62 +401,52 @@ public class StylePreferencePage extends PreferencePage implements IWorkbenchPre
 		
 		IPreferenceStore prefs = getPreferenceStore();
 			
-		if (!prefs.contains(EGLPreferenceConstants.EDITOR_BACKGROUND_COLOR)) {
+		if (!prefs.contains(EDTUIPreferenceConstants.EDITOR_BACKGROUND_COLOR)) {
 			RGB rgb= getControl().getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND).getRGB();
-			PreferenceConverter.setDefault(fOverlayStore, EGLPreferenceConstants.EDITOR_BACKGROUND_COLOR, rgb);
-			PreferenceConverter.setDefault(prefs, EGLPreferenceConstants.EDITOR_BACKGROUND_COLOR, rgb);
+			PreferenceConverter.setDefault(fOverlayStore, EDTUIPreferenceConstants.EDITOR_BACKGROUND_COLOR, rgb);
+			PreferenceConverter.setDefault(prefs, EDTUIPreferenceConstants.EDITOR_BACKGROUND_COLOR, rgb);
 		}
-		if (!prefs.contains(EGLPreferenceConstants.EDITOR_FOREGROUND_COLOR)) {
+		if (!prefs.contains(EDTUIPreferenceConstants.EDITOR_FOREGROUND_COLOR)) {
 			RGB rgb= getControl().getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND).getRGB();
-			PreferenceConverter.setDefault(fOverlayStore, EGLPreferenceConstants.EDITOR_FOREGROUND_COLOR, rgb);
-			PreferenceConverter.setDefault(prefs, EGLPreferenceConstants.EDITOR_FOREGROUND_COLOR, rgb);
+			PreferenceConverter.setDefault(fOverlayStore, EDTUIPreferenceConstants.EDITOR_FOREGROUND_COLOR, rgb);
+			PreferenceConverter.setDefault(prefs, EDTUIPreferenceConstants.EDITOR_FOREGROUND_COLOR, rgb);
 		}			
 	}		
 
 	/*
 	 * @see PreferencePage#performOk()
 	 */
-	public boolean performOk() {
-			
+	public boolean performOk() {			
 		fOverlayStore.propagate();
-		EDTUIPlugin.getDefault().savePluginPreferences();
-		return true;
-		
+		EDTUIPlugin.getDefault().saveUIPluginPreferences();
+		return true;		
 	}
 	
    /*
 	* @see PreferencePage#performDefaults()
 	*/
-	protected void performDefaults() {
-		
+	protected void performDefaults() {		
 		fOverlayStore.loadDefaults();
-
 		initializeFields();
-
-		handleStyleColorListSelection();
-		 
+		handleStyleColorListSelection();		 
 		super.performDefaults();
-
 		fPreviewViewer.invalidateTextPresentation();
 	}
 	
 	/*
 	 * @see DialogPage#dispose()
 	 */
-	public void dispose() {
-				
+	public void dispose() {				
 		if (fOverlayStore != null) {
 			fOverlayStore.stop();
 			fOverlayStore= null;
 		}
 		if (fBackgroundColor != null && !fBackgroundColor.isDisposed())
-			fBackgroundColor.dispose();
-		
+			fBackgroundColor.dispose();		
 		if (tools != null) {
 			tools.dispose();
 			tools = null;
-		}
-		
+		}		
 		  super.dispose();
 	}
 	

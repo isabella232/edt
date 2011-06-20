@@ -12,20 +12,26 @@
 package org.eclipse.edt.ide.ui.internal.preferences;
 
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
+import org.eclipse.edt.ide.ui.internal.util.PixelConverter;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.editors.text.EditorsUI;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 
 public class EditorPreferencePage extends AbstractPreferencePage {
-	protected Button showLineNumbersButton = null;
 	protected Button annotateErrorsButton = null;				// annotate errors in text
 	protected Button annotateErrorsInOverviewButton = null;		// annotate errors in overview ruler
 	protected Button annotateErrorsAsYouTypeButton = null;
@@ -33,20 +39,14 @@ public class EditorPreferencePage extends AbstractPreferencePage {
 
 	public EditorPreferencePage(){
 //		setDescription(UINlsStrings.EditorPreferencePageDescription);
-		setPreferenceStore(doGetPreferenceStore());		
+		setPreferenceStore(EDTUIPlugin.getDefault().getPreferenceStore());	
 	}
 	
-	protected IPreferenceStore doGetPreferenceStore() {
-		return EDTUIPlugin.getDefault().getPreferenceStore();
-	}
-	protected void doSavePreferenceStore() {
-		EDTUIPlugin.getDefault().savePluginPreferences();		
-	}
 	protected Control createContents(Composite parent) {
 		Composite composite = (Composite) super.createContents(parent);
+		createHeader(composite);
 		
 		Composite internalComposite = createComposite(composite, 1);
-		showLineNumbersButton = createCheckBox(internalComposite, UINlsStrings.ShowLineNumbersLabel);
 		annotateErrorsButton =  createCheckBox(internalComposite, UINlsStrings.AnnotateErrorsLabel);
 		annotateErrorsInOverviewButton = createCheckBox(internalComposite, UINlsStrings.AnnotateErrorsInOverviewLabel);
 		annotateErrorsAsYouTypeButton = createCheckBox(internalComposite, UINlsStrings.AnnotateErrorsAsYouTypeLabel);
@@ -64,41 +64,61 @@ public class EditorPreferencePage extends AbstractPreferencePage {
 		return composite;
 	}
 	
-	private IPreferenceStore getEditorUIPreferenceStore(){
-		return EditorsUI.getPreferenceStore();
-	}
+	private void createHeader(Composite contents) {
+		final Shell shell= contents.getShell();
+		String text = UINlsStrings.TextEditorLink;
+		Link link= new Link(contents, SWT.NONE);
+		link.setText(text);
+		link.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				PreferencesUtil.createPreferenceDialogOn(shell, "org.eclipse.ui.preferencePages.GeneralTextEditor", null, null); //$NON-NLS-1$
+			}
+		});
+		link.setToolTipText( UINlsStrings.TextEditorTooltip );
 
+		GridData gridData= new GridData(SWT.FILL, SWT.BEGINNING, true, false);
+		gridData.widthHint= 150; // only expand further if anyone else requires it
+		link.setLayoutData(gridData);
+
+		addFiller(contents);
+	}
+	
+	private void addFiller(Composite composite) {
+		PixelConverter pixelConverter= new PixelConverter(composite);
+
+		Label filler= new Label(composite, SWT.LEFT );
+		GridData gd= new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+		gd.horizontalSpan= 2;
+		gd.heightHint= pixelConverter.convertHeightInCharsToPixels(1) / 2;
+		filler.setLayoutData(gd);
+	}
+	
 	protected void performDefaults() {
-		showLineNumbersButton.setSelection(getEditorUIPreferenceStore().getDefaultBoolean(EGLPreferenceConstants.EDITOR_LINE_NUMBER_RULER));
-		annotateErrorsButton.setSelection(getEditorUIPreferenceStore().getDefaultBoolean(EGLPreferenceConstants.EDITOR_ERROR_INDICATION));
-		annotateErrorsInOverviewButton.setSelection(getEditorUIPreferenceStore().getDefaultBoolean(EGLPreferenceConstants.EDITOR_ERROR_INDICATION_IN_OVERVIEW_RULER));
-		annotateErrorsAsYouTypeButton.setSelection(getPreferenceStore().getDefaultBoolean(EGLPreferenceConstants.EDITOR_HANDLE_DYNAMIC_PROBLEMS));
-		autoActivationButton.setSelection(getPreferenceStore().getDefaultBoolean(EGLPreferenceConstants.CODEASSIST_AUTOACTIVATION));
+		annotateErrorsButton.setSelection(getPreferenceStore().getDefaultBoolean(EDTUIPreferenceConstants.EDITOR_ERROR_INDICATION));
+		annotateErrorsInOverviewButton.setSelection(getPreferenceStore().getDefaultBoolean(EDTUIPreferenceConstants.EDITOR_ERROR_INDICATION_IN_OVERVIEW_RULER));
+		annotateErrorsAsYouTypeButton.setSelection(getPreferenceStore().getDefaultBoolean(EDTUIPreferenceConstants.EDITOR_HANDLE_DYNAMIC_PROBLEMS));
+		autoActivationButton.setSelection(getPreferenceStore().getDefaultBoolean(EDTUIPreferenceConstants.CODEASSIST_AUTOACTIVATION));
 
 		super.performDefaults();
 	}
 
 	protected void initializeValues() {
-		showLineNumbersButton.setSelection(getEditorUIPreferenceStore().getBoolean(EGLPreferenceConstants.EDITOR_LINE_NUMBER_RULER)); //$NON-NLS-1$
-		annotateErrorsButton.setSelection(getEditorUIPreferenceStore().getBoolean(EGLPreferenceConstants.EDITOR_ERROR_INDICATION));
-		annotateErrorsInOverviewButton.setSelection(getEditorUIPreferenceStore().getBoolean(EGLPreferenceConstants.EDITOR_ERROR_INDICATION_IN_OVERVIEW_RULER));
-		annotateErrorsAsYouTypeButton.setSelection(getPreferenceStore().getBoolean(EGLPreferenceConstants.EDITOR_HANDLE_DYNAMIC_PROBLEMS));
-		autoActivationButton.setSelection(getPreferenceStore().getBoolean(EGLPreferenceConstants.CODEASSIST_AUTOACTIVATION));
+		annotateErrorsButton.setSelection(getPreferenceStore().getBoolean(EDTUIPreferenceConstants.EDITOR_ERROR_INDICATION));
+		annotateErrorsInOverviewButton.setSelection(getPreferenceStore().getBoolean(EDTUIPreferenceConstants.EDITOR_ERROR_INDICATION_IN_OVERVIEW_RULER));
+		annotateErrorsAsYouTypeButton.setSelection(getPreferenceStore().getBoolean(EDTUIPreferenceConstants.EDITOR_HANDLE_DYNAMIC_PROBLEMS));
+		autoActivationButton.setSelection(getPreferenceStore().getBoolean(EDTUIPreferenceConstants.CODEASSIST_AUTOACTIVATION));
 	}
 
 	protected void storeValues() {
-		getEditorUIPreferenceStore().setValue(EGLPreferenceConstants.EDITOR_LINE_NUMBER_RULER, showLineNumbersButton.getSelection());
-		getEditorUIPreferenceStore().setValue(EGLPreferenceConstants.EDITOR_ERROR_INDICATION, annotateErrorsButton.getSelection());
-		getEditorUIPreferenceStore().setValue(EGLPreferenceConstants.EDITOR_ERROR_INDICATION_IN_OVERVIEW_RULER, annotateErrorsInOverviewButton.getSelection());
-		getPreferenceStore().setValue(EGLPreferenceConstants.EDITOR_HANDLE_DYNAMIC_PROBLEMS, annotateErrorsAsYouTypeButton.getSelection());
-		getPreferenceStore().setValue(EGLPreferenceConstants.CODEASSIST_AUTOACTIVATION, autoActivationButton.getSelection());
+		getPreferenceStore().setValue(EDTUIPreferenceConstants.EDITOR_ERROR_INDICATION, annotateErrorsButton.getSelection());
+		getPreferenceStore().setValue(EDTUIPreferenceConstants.EDITOR_ERROR_INDICATION_IN_OVERVIEW_RULER, annotateErrorsInOverviewButton.getSelection());
+		getPreferenceStore().setValue(EDTUIPreferenceConstants.EDITOR_HANDLE_DYNAMIC_PROBLEMS, annotateErrorsAsYouTypeButton.getSelection());
+		getPreferenceStore().setValue(EDTUIPreferenceConstants.CODEASSIST_AUTOACTIVATION, autoActivationButton.getSelection());
 	}
 
 	public boolean performOk() {
 		boolean result = super.performOk();
-
-		doSavePreferenceStore();
-
+		EDTUIPlugin.getDefault().saveUIPluginPreferences();		
 		return result;
 	}
 }

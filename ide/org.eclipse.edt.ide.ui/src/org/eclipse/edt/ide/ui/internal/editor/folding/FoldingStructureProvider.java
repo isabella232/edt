@@ -23,8 +23,8 @@ import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.core.model.document.IEGLModelChangeListener;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.editor.IFoldingStructureProvider;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
@@ -97,7 +97,7 @@ public class FoldingStructureProvider implements IProjectionListener, IEGLModelC
 	
 	public void propertyChange(PropertyChangeEvent event) {
 		String property = event.getProperty();
-		if(EGLPreferenceConstants.EDITOR_FOLDING_PROPERTIESBLOCKS_THRESHOLD.equals(property))
+		if(EDTUIPreferenceConstants.EDITOR_FOLDING_PROPERTIESBLOCKS_THRESHOLD.equals(property))
 		{
 			modelChanged();
 		}		
@@ -197,8 +197,7 @@ public class FoldingStructureProvider implements IProjectionListener, IEGLModelC
 		    }
 			fstore.removePropertyChangeListener(this);
 		} catch (BadPositionCategoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			EDTUIPlugin.log(e);
 		}		
 	}
 

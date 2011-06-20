@@ -41,7 +41,7 @@ import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.TopLevelForm;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -74,14 +74,14 @@ public class FoldingVisitor extends AbstractASTVisitor{
 
 	private void initializePreferences() {
 		IPreferenceStore store= EDTUIPlugin.getDefault().getPreferenceStore();
-		fCollapseComments = store.getBoolean(EGLPreferenceConstants.EDITOR_FOLDING_COMMENTS);
-		fCollapseParts = store.getBoolean(EGLPreferenceConstants.EDITOR_FOLDING_PARTS);
+		fCollapseComments = store.getBoolean(EDTUIPreferenceConstants.EDITOR_FOLDING_COMMENTS);
+		fCollapseParts = store.getBoolean(EDTUIPreferenceConstants.EDITOR_FOLDING_PARTS);
 		//fCollapseSubParts = store.getBoolean(EGLPreferenceConstants.EDITOR_FOLDING_SUBPARTS);
-		fCollapseFunctions = store.getBoolean(EGLPreferenceConstants.EDITOR_FOLDING_FUNCTIONS);
-		fCollapseImportContainer = store.getBoolean(EGLPreferenceConstants.EDITOR_FOLDING_IMPORTS);
-		fCollapseProperties = store.getBoolean(EGLPreferenceConstants.EDITOR_FOLDING_PROPERTIESBLOCKS);
-		fPropThreshold = store.getInt(EGLPreferenceConstants.EDITOR_FOLDING_PROPERTIESBLOCKS_THRESHOLD);
-		fCollapsePartition = store.getBoolean(EGLPreferenceConstants.EDITOR_FOLDING_PARTITIONS);
+		fCollapseFunctions = store.getBoolean(EDTUIPreferenceConstants.EDITOR_FOLDING_FUNCTIONS);
+		fCollapseImportContainer = store.getBoolean(EDTUIPreferenceConstants.EDITOR_FOLDING_IMPORTS);
+		fCollapseProperties = store.getBoolean(EDTUIPreferenceConstants.EDITOR_FOLDING_PROPERTIESBLOCKS);
+		fPropThreshold = store.getInt(EDTUIPreferenceConstants.EDITOR_FOLDING_PROPERTIESBLOCKS_THRESHOLD);
+		fCollapsePartition = store.getBoolean(EDTUIPreferenceConstants.EDITOR_FOLDING_PARTITIONS);
 	}
 
 	public boolean visit(DataItem dataItem) {

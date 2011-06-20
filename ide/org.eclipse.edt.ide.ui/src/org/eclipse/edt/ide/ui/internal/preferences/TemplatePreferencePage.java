@@ -16,10 +16,8 @@ import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.activities.ActivityManagerEvent;
-import org.eclipse.ui.activities.IActivityManagerListener;
 
-public class TemplatePreferencePage extends org.eclipse.ui.texteditor.templates.TemplatePreferencePage implements IActivityManagerListener{
+public class TemplatePreferencePage extends org.eclipse.ui.texteditor.templates.TemplatePreferencePage {
 	public TemplatePreferencePage() {
 		setPreferenceStore(EDTUIPlugin.getDefault().getPreferenceStore());
 		setTemplateStore(EDTUIPlugin.getDefault().getTemplateStore());
@@ -39,18 +37,13 @@ public class TemplatePreferencePage extends org.eclipse.ui.texteditor.templates.
 	 */
 	public boolean performOk() {
 		boolean ok = super.performOk();
-		EDTUIPlugin.getDefault().savePluginPreferences();
+		EDTUIPlugin.getDefault().saveUIPluginPreferences();
 		return ok;
 	}
 
 	protected Control createContents(Composite ancestor) {
 		Control control = super.createContents(ancestor);
 		return control;
-	}
-
-	public void activityManagerChanged(ActivityManagerEvent activityManagerEvent) {
-		if (!getTableViewer().getTable().isDisposed())
-			getTableViewer().refresh();
 	}
 
 }

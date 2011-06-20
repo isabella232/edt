@@ -31,14 +31,13 @@ import org.eclipse.edt.ide.core.model.IBuffer;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.codemanipulation.ImportComparator;
 import org.eclipse.edt.ide.ui.internal.editor.DocumentAdapter;
 import org.eclipse.edt.ide.ui.internal.refactoring.changes.TextChangeCompatibility;
 import org.eclipse.edt.ide.ui.internal.refactoring.util.TextChangeManager;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
 
@@ -190,8 +189,7 @@ public class ImportManager {
 		}
 		
 		private int getOnDemandThreshold() {
-			IPreferenceStore store = EGLPreferenceConstants.getPreferenceStore();
-			return store.getInt(EGLPreferenceConstants.ORGIMPORTS_ONDEMANDTHRESHOLD);
+			return EDTUIPlugin.getDefault().getPreferenceStore().getInt(EDTUIPreferenceConstants.ORGIMPORTS_ONDEMANDTHRESHOLD);
 
 		}
 		

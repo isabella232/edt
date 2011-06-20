@@ -22,12 +22,12 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.model.EGLConventions;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLModelStatus;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
@@ -101,7 +101,7 @@ public class EGLSourceFolderOperation extends WorkspaceModifyOperation {
 			IEGLModelStatus status= EGLConventions.validateEGLPath(fCurrEProject, fNewEntries, fNewOutputLocation);
 			if (!status.isOK()) {
 				if (fOutputLocation.equals(projPath)) {
-					fNewOutputLocation= projPath.append(EGLPreferenceConstants.getPreferenceStore().getString(EGLPreferenceConstants.SRCBIN_BINNAME));
+					fNewOutputLocation= projPath.append(EDTCorePreferenceConstants.getPreferenceStore().getString(EDTCorePreferenceConstants.EGL_OUTPUT_FOLDER));
 				}
 			}
 

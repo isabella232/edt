@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.preferences;
 
-import org.eclipse.core.runtime.Preferences;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.PreferencePage;
@@ -185,12 +184,6 @@ public class AbstractPreferencePage extends PreferencePage implements ModifyList
 	protected void enableValues() {
 	}
 
-	protected Preferences getModelPreferences() {
-		//EGL70Migration - needs test
-		//return SSECorePlugin.getDefault().getPluginPreferences();
-		return  org.eclipse.edt.ide.core.model.EGLCore.getPlugin().getPluginPreferences();
-	}
-
 	public void init(IWorkbench workbench) {
 	}
 
@@ -237,12 +230,6 @@ public class AbstractPreferencePage extends PreferencePage implements ModifyList
 		return true;
 	}
 
-//EGL70Migration - do we needs this method?	
-//	protected void setInvalidInputMessage(String widthText) {
-//		String msg = NLS.bind(SSEUIMessages._4concat, (new Object[]{widthText}));
-//		setErrorMessage(msg);
-//	}
-
 	protected void setSize(Composite composite) {
 		if (composite != null) {
 			Point minSize = composite.computeSize(SWT.DEFAULT, SWT.DEFAULT);
@@ -259,9 +246,7 @@ public class AbstractPreferencePage extends PreferencePage implements ModifyList
 	}
 
 	protected void storeValues() {
-		//EGL70Migration - needs test
-		//SSEUIPlugin.getDefault().savePluginPreferences();
-		EDTUIPlugin.getDefault().savePluginPreferences();
+		EDTUIPlugin.getDefault().saveUIPluginPreferences();
 	}
 
 	protected void validateValues() {

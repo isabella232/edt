@@ -31,7 +31,7 @@ import org.eclipse.edt.ide.core.model.IWorkingCopy;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.core.model.document.IEGLModelChangeListener;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextInputListener;
@@ -201,7 +201,7 @@ public class ProblemReconciler implements IReconciler {
 	private class EGLPropertyChangeListener implements IPropertyChangeListener {
 
 		public void propertyChange(PropertyChangeEvent event) {
-			if (EGLPreferenceConstants.EDITOR_HANDLE_DYNAMIC_PROBLEMS.equals(event.getProperty())) {
+			if (EDTUIPreferenceConstants.EDITOR_HANDLE_DYNAMIC_PROBLEMS.equals(event.getProperty())) {
 				boolean enable = fModel.shouldEnableDynamicProblems();
 				fModel.setIsHandlingDynamicProblems(enable);
 				if (enable == true && isEditorActive()) {

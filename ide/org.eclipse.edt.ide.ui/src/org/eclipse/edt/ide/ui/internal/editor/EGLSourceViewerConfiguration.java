@@ -21,6 +21,8 @@ import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.IUndoManager;
 import org.eclipse.jface.text.TextViewerUndoManager;
+import org.eclipse.jface.text.formatter.IContentFormatter;
+import org.eclipse.jface.text.formatter.MultiPassContentFormatter;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.reconciler.IReconciler;
@@ -34,7 +36,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.sse.ui.internal.derived.HTMLTextPresenter;
 
 //import org.eclipse.edt.ide.ui.internal.contentassist.EGLContentAssistProcessor;
-//import org.eclipse.edt.ide.ui.internal.formatting.EGLFormattingStrategy;
+import org.eclipse.edt.ide.ui.internal.formatting.FormattingStrategy;
 
 /**
  * Example configuration for an <code>SourceViewer</code> which shows Java code.
@@ -91,6 +93,7 @@ public class EGLSourceViewerConfiguration extends TextSourceViewerConfiguration 
 	/* (non-Javadoc)
 	 * Method declared on SourceViewerConfiguration
 	 */
+// TODO EDT Uncomment when content assist is ready	
 //	public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
 //
 //		//TODO Adjust content assist tips & link to preferences (for colors, timings, etc.)
@@ -129,16 +132,16 @@ public class EGLSourceViewerConfiguration extends TextSourceViewerConfiguration 
 //		return assistant;
 //	}
 
-//	public IContentFormatter getContentFormatter(ISourceViewer sourceViewer) {
-//		final MultiPassContentFormatter formatter= new MultiPassContentFormatter(getConfiguredDocumentPartitioning(sourceViewer), IDocument.DEFAULT_CONTENT_TYPE);
-//
-//		formatter.setMasterStrategy(new FormattingStrategy());;
-////		formatter.setSlaveStrategy(strategy, IPartitions.DLI_CONTENT_TYPE);
-////		formatter.setSlaveStrategy(strategy, IPartitions.SQL_CONTENT_TYPE);
-////		formatter.setSlaveStrategy(strategy, IPartitions.SQL_CONDITION_CONTENT_TYPE);
-//
-//		return formatter;
-//	}
+	public IContentFormatter getContentFormatter(ISourceViewer sourceViewer) {
+		final MultiPassContentFormatter formatter= new MultiPassContentFormatter(getConfiguredDocumentPartitioning(sourceViewer), IDocument.DEFAULT_CONTENT_TYPE);
+
+		formatter.setMasterStrategy(new FormattingStrategy());;
+//		formatter.setSlaveStrategy(strategy, IPartitions.DLI_CONTENT_TYPE);
+//		formatter.setSlaveStrategy(strategy, IPartitions.SQL_CONTENT_TYPE);
+//		formatter.setSlaveStrategy(strategy, IPartitions.SQL_CONDITION_CONTENT_TYPE);
+
+		return formatter;
+	}
 	
 	/* (non-Javadoc)
 	 * Method declared on SourceViewerConfiguration

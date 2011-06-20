@@ -22,7 +22,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.edt.ide.core.model.EGLConventions;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
@@ -50,16 +50,15 @@ import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 
 
 public class ImportOrganizeConfigurationBlock extends OptionsConfigurationBlock {
-	// TODO EDT preference option missing message
-//	private static final Key PREF_IMPORTORDER= getEGLUIKey(EGLPreferenceConstants.ORGIMPORTS_IMPORTORDER);
-//	private static final Key PREF_ONDEMANDTHRESHOLD= getEGLUIKey(EGLPreferenceConstants.ORGIMPORTS_ONDEMANDTHRESHOLD);
+	private static final Key PREF_IMPORTORDER= getEGLUIKey(EDTUIPreferenceConstants.ORGIMPORTS_IMPORTORDER);
+	private static final Key PREF_ONDEMANDTHRESHOLD= getEGLUIKey(EDTUIPreferenceConstants.ORGIMPORTS_ONDEMANDTHRESHOLD);
 	
 	private static final String DIALOGSETTING_LASTLOADPATH= EDTUIPlugin.PLUGIN_ID + ".importorder.loadpath"; //$NON-NLS-1$
 	private static final String DIALOGSETTING_LASTSAVEPATH= EDTUIPlugin.PLUGIN_ID + ".importorder.savepath"; //$NON-NLS-1$
 
 	private static Key[] getAllKeys() {
 		return new Key[] {
-//			PREF_IMPORTORDER, PREF_ONDEMANDTHRESHOLD
+			PREF_IMPORTORDER, PREF_ONDEMANDTHRESHOLD
 		};	
 	}
 
@@ -382,14 +381,13 @@ public class ImportOrganizeConfigurationBlock extends OptionsConfigurationBlock 
 	
 	protected final void updateModel(DialogField field) {
 		// set values in working copy
-// TODO EDT Uncoment when ready		
-//		if (field == fOrderListField) {
-//	  		setValue(PREF_IMPORTORDER, packOrderList(fOrderListField.getElements()));
-//		} else if (field == fThresholdField) {
-//	  		setValue(PREF_ONDEMANDTHRESHOLD, fThresholdField.getText());
-//	  		
-//	  		doThresholdChanged();	  		
-//		}
+		if (field == fOrderListField) {
+	  		setValue(PREF_IMPORTORDER, packOrderList(fOrderListField.getElements()));
+		} else if (field == fThresholdField) {
+	  		setValue(PREF_ONDEMANDTHRESHOLD, fThresholdField.getText());
+	  		
+	  		doThresholdChanged();	  		
+		}
 	}
 		
 	protected String[] getFullBuildDialogStrings(boolean workspaceSettings) {
@@ -423,26 +421,24 @@ public class ImportOrganizeConfigurationBlock extends OptionsConfigurationBlock 
 	}
 	
 	private ImportOrderEntry[] getImportOrderPreference() {
-// TODO EDT		
-//		String str= getValue(PREF_IMPORTORDER);
-//		if (str != null) {
-//			return unpackOrderList(str);
-//		}
+		String str= getValue(PREF_IMPORTORDER);
+		if (str != null) {
+			return unpackOrderList(str);
+		}
 		return new ImportOrderEntry[0];
 	}
 	
 	private int getImportNumberThreshold() {
-// TODO EDT		
-//		String thresholdStr= getValue(PREF_ONDEMANDTHRESHOLD);
-//		try {
-//			int threshold= Integer.parseInt(thresholdStr);
-//			if (threshold < 0) {
-//				threshold= Integer.MAX_VALUE;
-//			}
-//			return threshold;
-//		} catch (NumberFormatException e) {
+		String thresholdStr= getValue(PREF_ONDEMANDTHRESHOLD);
+		try {
+			int threshold= Integer.parseInt(thresholdStr);
+			if (threshold < 0) {
+				threshold= Integer.MAX_VALUE;
+			}
+			return threshold;
+		} catch (NumberFormatException e) {
 			return Integer.MAX_VALUE;
-//		}
+		}
 	}
 	
 }

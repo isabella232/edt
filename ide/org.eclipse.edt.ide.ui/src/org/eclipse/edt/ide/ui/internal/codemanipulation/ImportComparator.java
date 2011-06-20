@@ -13,7 +13,7 @@ package org.eclipse.edt.ide.ui.internal.codemanipulation;
 
 import java.util.Comparator;
 
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.ibm.icu.util.StringTokenizer;
@@ -26,8 +26,8 @@ public class ImportComparator implements Comparator {
 		super();
 		
 		//get the package ordering group from preferences
-		IPreferenceStore store = EGLPreferenceConstants.getPreferenceStore();
-		String orderString = store.getString(EGLPreferenceConstants.ORGIMPORTS_IMPORTORDER);
+		IPreferenceStore store = EDTUIPreferenceConstants.getPreferenceStore();
+		String orderString = store.getString(EDTUIPreferenceConstants.ORGIMPORTS_IMPORTORDER);
 		
 		order = unpackList(orderString, ";"); //$NON-NLS-1$
 	}

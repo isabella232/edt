@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.preferences;
 
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -28,8 +28,8 @@ public class ContentAssistPreference {
 	 */
 	public static void changeConfiguration(ContentAssistant assistant, IPreferenceStore store, PropertyChangeEvent event) {
 		String p= event.getProperty();
-		if (EGLPreferenceConstants.CODEASSIST_AUTOACTIVATION.equals(p)) {
-			boolean enabled= store.getBoolean(EGLPreferenceConstants.CODEASSIST_AUTOACTIVATION);
+		if (EDTUIPreferenceConstants.CODEASSIST_AUTOACTIVATION.equals(p)) {
+			boolean enabled= store.getBoolean(EDTUIPreferenceConstants.CODEASSIST_AUTOACTIVATION);
 			assistant.enableAutoActivation(enabled);
 		} 
 	}

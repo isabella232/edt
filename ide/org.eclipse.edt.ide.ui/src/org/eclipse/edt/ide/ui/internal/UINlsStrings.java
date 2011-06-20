@@ -45,9 +45,16 @@ public class UINlsStrings extends NLS {
 	public static String CompilerPreferencePage_cannotDisplayCompiler;
 	public static String CompilerPropertyPage_errorCleaningUpPrefStore;
 	
+	public static String BasePreferencePage_title;
+	public static String BasePreferencePage_description;
 	public static String BasePreferencePage_EGLFolderGroup_label;
 	public static String BasePreferencePage_EGLSourceFolder_label;
 	public static String BasePreferencePage_EGLOutputFolder_label;
+	public static String BasePreferencePage_missingSourceFolderName;
+	public static String BasePreferencePage_missingOutputFolderName;
+	public static String BasePreferencePage_invalidSourceFolderName;
+	public static String BasePreferencePage_invalidOutputFolderName;
+	public static String BasePreferencePage_invalidBuildPath;
 	
 	public static String EGLBasePreferencePage_BasePreferencePage_ProjFeatureOptLabel;
 	public static String EGLCopyAction_CopyToClipboardProblemDialog_message;
@@ -418,6 +425,8 @@ public class UINlsStrings extends NLS {
 	
 	// EGL Editor Preference	
 	public static String EGLEditorName;
+	public static String TextEditorLink;
+	public static String TextEditorTooltip;
 	public static String EditorPreferencePageDescription;
 	public static String EditorFoldingPreferencePageDescription;
 	public static String EditorFoldingPreferencePageEnable;

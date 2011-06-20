@@ -170,19 +170,20 @@ public class EditActionGroup extends CommonActionProvider
 		
 		IMenuManager submenuRef = new MenuManager(UINlsStrings.Refactor);
 	 	
-		if(fRenameAction.willLaunchOldDialog(selection)) {
-			menu.appendToGroup(IContextMenuConstants.GROUP_REORGANIZE, fRenameAction);
-		}
-		else if(fRenameAction.canRun(selection)) {
+// TODO EDT Can we just use the Refactoring submenu?		
+//		if(fRenameAction.willLaunchOldDialog(selection)) {
+//			menu.appendToGroup(IContextMenuConstants.GROUP_REORGANIZE, fRenameAction);
+//		}
+//		else if(fRenameAction.canRun(selection)) {
 			submenuRef.add(fRenameAction);
-		}
+//		}
 		
-		if(fMoveAction.willLaunchOldDialog(selection)) {
-			menu.appendToGroup(IContextMenuConstants.GROUP_REORGANIZE, fMoveAction);
-		}
-		else if(fMoveAction.canRun(selection)) {
+//		if(fMoveAction.willLaunchOldDialog(selection)) {
+//			menu.appendToGroup(IContextMenuConstants.GROUP_REORGANIZE, fMoveAction);
+//		}
+//		else if(fMoveAction.canRun(selection)) {
 			submenuRef.add(fMoveAction);
-		}	
+//		}	
 
 		
 		if(submenuRef.getItems().length != 0) {

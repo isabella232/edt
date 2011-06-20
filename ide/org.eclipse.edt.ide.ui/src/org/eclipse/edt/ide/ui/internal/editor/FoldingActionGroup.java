@@ -14,7 +14,7 @@ package org.eclipse.edt.ide.ui.internal.editor;
 import java.util.ResourceBundle;
 
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -77,8 +77,8 @@ public class FoldingActionGroup extends ActionGroup {
 			fToggle= new PreferenceAction(UINlsStrings.getResourceBundleForConstructedKeys(), "Projection.Toggle.", IAction.AS_CHECK_BOX){//$NON-NLS-1$
 				public void run() {
 					IPreferenceStore store= EDTUIPlugin.getDefault().getPreferenceStore();
-					boolean current= store.getBoolean(EGLPreferenceConstants.EDITOR_FOLDING_ENABLED);
-					store.setValue(EGLPreferenceConstants.EDITOR_FOLDING_ENABLED, !current);
+					boolean current= store.getBoolean(EDTUIPreferenceConstants.EDITOR_FOLDING_ENABLED);
+					store.setValue(EDTUIPreferenceConstants.EDITOR_FOLDING_ENABLED, !current);
 				}
 				
 				public void update() {

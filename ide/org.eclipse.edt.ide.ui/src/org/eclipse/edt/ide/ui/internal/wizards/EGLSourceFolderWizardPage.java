@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.model.EGLConventions;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
@@ -29,7 +30,6 @@ import org.eclipse.edt.ide.core.model.IEGLModelStatus;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
 import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.DialogField;
@@ -382,7 +382,7 @@ public class EGLSourceFolderWizardPage extends EGLContainerWizardPage {
 				IEGLModelStatus status= EGLConventions.validateEGLPath(fCurrEProject, fNewEntries, fNewOutputLocation);
 				if (!status.isOK()) {
 					if (fOutputLocation.equals(projPath)) {
-						fNewOutputLocation= projPath.append(EGLPreferenceConstants.getPreferenceStore().getString(EGLPreferenceConstants.SRCBIN_BINNAME));
+						fNewOutputLocation= projPath.append(EDTCorePreferenceConstants.getPreferenceStore().getString(EDTCorePreferenceConstants.EGL_OUTPUT_FOLDER));
 						IStatus status2= EGLConventions.validateEGLPath(fCurrEProject, fNewEntries, fNewOutputLocation);
 						if (status2.isOK()) {
 							if (fIsProjectAsSourceFolder) {

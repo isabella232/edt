@@ -18,7 +18,7 @@ import java.util.List;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Position;
@@ -30,7 +30,7 @@ import org.eclipse.ui.texteditor.ResourceMarkerAnnotationModel;
 public class EGLMarkerAnnotationModel extends ResourceMarkerAnnotationModel {
 
 	/** Preference key for dynamic problems */
-	private final static String HANDLE_DYNAMIC_PROBLEMS = EGLPreferenceConstants.EDITOR_HANDLE_DYNAMIC_PROBLEMS;
+	private final static String HANDLE_DYNAMIC_PROBLEMS = EDTUIPreferenceConstants.EDITOR_HANDLE_DYNAMIC_PROBLEMS;
 	
 	private ReverseMap fReverseMap = new ReverseMap();
 	private List fGeneratedAnnotations;

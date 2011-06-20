@@ -67,11 +67,11 @@ public class GenConstructedFormattingMessagesNLS {
 		
 		//figure out the current class file location
 
-		URL classUrl = genNLSMsgs.getClass().getResource("/org/eclipse/edt/ide/ui/internal/formatting/ui/GenConstructedFormattingMessagesNLS.class");
+		URL classUrl = genNLSMsgs.getClass().getResource("/org/eclipse/edt/ide/ui/internal/formatting/GenConstructedFormattingMessagesNLS.class");
 		if (classUrl != null && classUrl.getProtocol().equals( "file" )){
 			String initializerPath = classUrl.getFile();
 			
-			//try to get the egl.ui plugin directory
+			//try to get the ide.ui plugin directory
 			IPath path = new Path(initializerPath);			
 			String[] segs = path.segments();
 			for(int i=segs.length-1; i>=0; i--){
@@ -91,6 +91,7 @@ public class GenConstructedFormattingMessagesNLS {
 	
 	//need to register these EMF package and resource factory, since we're not running in eclipse env	
 	private void registerEMF(){
+		//TODO EDT Update?
 		EPackage.Registry.INSTANCE.put("http://www.ibm.com/xmlns/egl/formatting/1.0", new EPackage.Descriptor() {
 
 			public EFactory getEFactory() {

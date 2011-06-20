@@ -16,7 +16,6 @@ import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.jdt.internal.ui.preferences.IPreferenceConfigurationBlock;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -31,13 +30,9 @@ public class FoldingPreferencePage extends PreferencePage implements IWorkbenchP
 	
 	public FoldingPreferencePage() {
 		setDescription(UINlsStrings.EditorFoldingPreferencePageDescription);
-		setPreferenceStore(doGetPreferenceStore());
+		setPreferenceStore(EDTUIPlugin.getDefault().getPreferenceStore());
 		fOverlayStore = new OverlayPreferenceStore(getPreferenceStore(), new OverlayPreferenceStore.OverlayKey[] {});
 		fConfigurationBlock= createConfigurationBlock(fOverlayStore);
-	}
-
-	protected IPreferenceStore doGetPreferenceStore() {
-		return EDTUIPlugin.getDefault().getPreferenceStore();
 	}
 
 	/*
@@ -54,12 +49,9 @@ public class FoldingPreferencePage extends PreferencePage implements IWorkbenchP
 	
 	protected Control createContents(Composite parent) {
 		fOverlayStore.load();
-		fOverlayStore.start();
-		
-		Control content = fConfigurationBlock.createControl(parent);
-		
-		initialize();
-		
+		fOverlayStore.start();		
+		Control content = fConfigurationBlock.createControl(parent);		
+		initialize();		
 		Dialog.applyDialogFont(content);
 		return content;		
 	}
@@ -73,30 +65,23 @@ public class FoldingPreferencePage extends PreferencePage implements IWorkbenchP
 	
 	public boolean performOk() {
 		fConfigurationBlock.performOk();
-
-		fOverlayStore.propagate();
-		
-		EDTUIPlugin.getDefault().savePluginPreferences();
+		fOverlayStore.propagate();		
+		EDTUIPlugin.getDefault().saveUIPluginPreferences();
 		return true;		
 	}
 	
-	public void performDefaults() {
-		
+	public void performDefaults() {		
 		fOverlayStore.loadDefaults();
 		fConfigurationBlock.performDefaults();
-
 		super.performDefaults();
 	}
 	
-	public void dispose() {
-		
-		fConfigurationBlock.dispose();
-		
+	public void dispose() {		
+		fConfigurationBlock.dispose();		
 		if (fOverlayStore != null) {
 			fOverlayStore.stop();
 			fOverlayStore= null;
-		}
-		
+		}		
 		super.dispose();
 	}	
 	

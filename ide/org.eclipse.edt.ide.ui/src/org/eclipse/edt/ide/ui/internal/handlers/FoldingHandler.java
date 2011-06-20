@@ -22,7 +22,7 @@ import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.editor.folding.FoldingStructureProvider;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -74,9 +74,9 @@ public class FoldingHandler extends AbstractHandler implements IHandler {
 	
 	public void run() {
 		IPreferenceStore store= EDTUIPlugin.getDefault().getPreferenceStore();
-		boolean current= store.getBoolean(EGLPreferenceConstants.EDITOR_FOLDING_ENABLED);
+		boolean current= store.getBoolean(EDTUIPreferenceConstants.EDITOR_FOLDING_ENABLED);
 		if(!current)		//enable folding
-			store.setValue(EGLPreferenceConstants.EDITOR_FOLDING_ENABLED, !current);		
+			store.setValue(EDTUIPreferenceConstants.EDITOR_FOLDING_ENABLED, !current);		
 		
 		addFoldingRegions();
 	}
@@ -137,8 +137,7 @@ public class FoldingHandler extends AbstractHandler implements IHandler {
 		} catch (BadLocationException be) {
 			//ignore as document has changed
 		} catch (BadPositionCategoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			EDTUIPlugin.log(e);
 		}
 		
 	}

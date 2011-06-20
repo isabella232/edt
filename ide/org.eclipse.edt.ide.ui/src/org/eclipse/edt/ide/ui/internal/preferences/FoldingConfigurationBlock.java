@@ -20,8 +20,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.editor.IFoldingPreferenceBlock;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.editor.folding.FoldingStructureProviderDescriptor;
 import org.eclipse.edt.ide.ui.internal.editor.folding.FoldingStructureProviderRegistry;
@@ -128,8 +128,8 @@ public class FoldingConfigurationBlock implements IPreferenceConfigurationBlock 
 		
 		ArrayList overlayKeys= new ArrayList();
 
-		overlayKeys.add(new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EGLPreferenceConstants.EDITOR_FOLDING_ENABLED));
-		overlayKeys.add(new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EGLPreferenceConstants.EDITOR_FOLDING_PROVIDER));
+		overlayKeys.add(new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, EDTUIPreferenceConstants.EDITOR_FOLDING_ENABLED));
+		overlayKeys.add(new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, EDTUIPreferenceConstants.EDITOR_FOLDING_PROVIDER));
 		
 		OverlayPreferenceStore.OverlayKey[] keys= new OverlayPreferenceStore.OverlayKey[overlayKeys.size()];
 		overlayKeys.toArray(keys);
@@ -163,7 +163,7 @@ public class FoldingConfigurationBlock implements IPreferenceConfigurationBlock 
 		fFoldingCheckbox.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
 				boolean enabled= fFoldingCheckbox.getSelection(); 
-				fStore.setValue(EGLPreferenceConstants.EDITOR_FOLDING_ENABLED, enabled);
+				fStore.setValue(EDTUIPreferenceConstants.EDITOR_FOLDING_ENABLED, enabled);
 				updateCheckboxDependencies();
 			}
 
@@ -261,7 +261,7 @@ public class FoldingConfigurationBlock implements IPreferenceConfigurationBlock 
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection sel= (IStructuredSelection) event.getSelection();
 				if (!sel.isEmpty()) {
-					fStore.setValue(EGLPreferenceConstants.EDITOR_FOLDING_PROVIDER, ((FoldingStructureProviderDescriptor) sel.getFirstElement()).getId());
+					fStore.setValue(EDTUIPreferenceConstants.EDITOR_FOLDING_PROVIDER, ((FoldingStructureProviderDescriptor) sel.getFirstElement()).getId());
 					updateListDependencies();
 				}
 			}
@@ -276,7 +276,7 @@ public class FoldingConfigurationBlock implements IPreferenceConfigurationBlock 
 	}
 
 	void updateListDependencies() {
-		String id= fStore.getString(EGLPreferenceConstants.EDITOR_FOLDING_PROVIDER);
+		String id= fStore.getString(EDTUIPreferenceConstants.EDITOR_FOLDING_PROVIDER);
 		FoldingStructureProviderDescriptor desc= (FoldingStructureProviderDescriptor) fProviderDescriptors.get(id);
 		IFoldingPreferenceBlock prefs;
 		
@@ -344,11 +344,11 @@ public class FoldingConfigurationBlock implements IPreferenceConfigurationBlock 
 	}
 
 	private void restoreFromPreferences() {
-		boolean enabled= fStore.getBoolean(EGLPreferenceConstants.EDITOR_FOLDING_ENABLED);
+		boolean enabled= fStore.getBoolean(EDTUIPreferenceConstants.EDITOR_FOLDING_ENABLED);
 		fFoldingCheckbox.setSelection(enabled);
 		updateCheckboxDependencies();
 		
-		String id= fStore.getString(EGLPreferenceConstants.EDITOR_FOLDING_PROVIDER);
+		String id= fStore.getString(EDTUIPreferenceConstants.EDITOR_FOLDING_PROVIDER);
 		Object provider= fProviderDescriptors.get(id);
 		if (provider != null) {
 			if (fProviderViewer == null)

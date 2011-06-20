@@ -73,16 +73,14 @@ import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.editor.DocumentAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
@@ -276,8 +274,8 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 		{			
 			Set /*<String>*/newImports = new LinkedHashSet();		//list of imported part or packages, i.e. "pkg1.pkg2.a", "pkg3.*"..., it is in the order that will be displayed 
 			
-			IPreferenceStore store = EGLPreferenceConstants.getPreferenceStore();
-			int onDemandThreshold = store.getInt(EGLPreferenceConstants.ORGIMPORTS_ONDEMANDTHRESHOLD);
+			IPreferenceStore store = EDTUIPlugin.getDefault().getPreferenceStore();
+			int onDemandThreshold = store.getInt(EDTUIPreferenceConstants.ORGIMPORTS_ONDEMANDTHRESHOLD);
 			
 			Set packages = imports.keySet();
 			Iterator it = packages.iterator();
@@ -682,12 +680,8 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 	    		});
 			}
 						
-		} catch (MalformedTreeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			EDTUIPlugin.log(e);
 		}
 	}
 	

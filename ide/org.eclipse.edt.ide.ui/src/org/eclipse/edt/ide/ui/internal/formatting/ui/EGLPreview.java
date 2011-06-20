@@ -26,7 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.editor.EGLSourceViewer;
 import org.eclipse.edt.ide.ui.internal.editor.EGLSourceViewerConfiguration;
 import org.eclipse.edt.ide.ui.internal.editor.TextTools;
@@ -64,8 +64,8 @@ public class EGLPreview {
 	    
 	    final IPropertyChangeListener fontListener= new IPropertyChangeListener() {
 	        public void propertyChange(PropertyChangeEvent event) {
-	            if (event.getProperty().equals(EGLPreferenceConstants.EDITOR_TEXT_FONT)) {
-					final Font font= JFaceResources.getFont(EGLPreferenceConstants.EDITOR_TEXT_FONT);
+	            if (event.getProperty().equals(EDTUIPreferenceConstants.EDITOR_TEXT_FONT)) {
+					final Font font= JFaceResources.getFont(EDTUIPreferenceConstants.EDITOR_TEXT_FONT);
 					fSourceViewer.getTextWidget().setFont(font);
 					if (fMarginPainter != null) {
 						fMarginPainter.initialize();
@@ -127,7 +127,7 @@ public class EGLPreview {
 		fSourceViewer = new EGLSourceViewer(parent, null, null, false, styles); //@bd1c
 		fViewerConfiguration = new EGLSourceViewerConfiguration(ftools);
 		fSourceViewer.configure(fViewerConfiguration);
-		fSourceViewer.getTextWidget().setFont(JFaceResources.getFont(EGLPreferenceConstants.EDITOR_TEXT_FONT));
+		fSourceViewer.getTextWidget().setFont(JFaceResources.getFont(EDTUIPreferenceConstants.EDITOR_TEXT_FONT));
 
 		fMarginPainter = new MarginPainter(fSourceViewer);
 		final RGB rgb = PreferenceConverter.getColor(fPreferenceStore, AbstractDecoratedTextEditorPreferenceConstants.EDITOR_PRINT_MARGIN_COLOR);

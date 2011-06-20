@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.EGLKeywordHandler;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.preferences.ColorProvider;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IRule;
@@ -39,7 +39,6 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 public class CodeScanner extends AbstractCodeScanner {
 
 	public static String[] keywords = EGLKeywordHandler.getKeywordNamesToLowerCase();
-//	public static List systemWords = EGLSystemWordHandler.getSystemWordNamesToLowerCase();
 
 	private ColorProvider colorProvider = null;
 	/**
@@ -55,19 +54,16 @@ public class CodeScanner extends AbstractCodeScanner {
 	 * @see AbstractJavaScanner#affectsBehavior(PropertyChangeEvent)
 	 */	
 	public boolean affectsBehavior(PropertyChangeEvent event) {
-		return event.getProperty().equals(EGLPreferenceConstants.EDITOR_KEYWORD_COLOR) ||
-				event.getProperty().equals(EGLPreferenceConstants.EDITOR_KEYWORD_BOLD) ||
-				event.getProperty().equals(EGLPreferenceConstants.EDITOR_STRING_COLOR) ||
-				event.getProperty().equals(EGLPreferenceConstants.EDITOR_STRING_BOLD) ||
-				event.getProperty().equals(EGLPreferenceConstants.EDITOR_MULTI_LINE_COMMENT_COLOR) ||
-				event.getProperty().equals(EGLPreferenceConstants.EDITOR_MULTI_LINE_COMMENT_BOLD) ||
-				event.getProperty().equals(EGLPreferenceConstants.EDITOR_SINGLE_LINE_COMMENT_COLOR) ||
-				event.getProperty().equals(EGLPreferenceConstants.EDITOR_SINGLE_LINE_COMMENT_BOLD) ||
-				event.getProperty().equals(EGLPreferenceConstants.EDITOR_DEFAULT_COLOR) ||
-				event.getProperty().equals(EGLPreferenceConstants.EDITOR_DEFAULT_BOLD);
-//				event.getProperty().equals(EGLPreferenceConstants.EDITOR_SYSTEM_WORD_COLOR) ||
-//				event.getProperty().equals(EGLPreferenceConstants.EDITOR_SYSTEM_WORD_BOLD);
-//		|| super.affectsBehavior(event)
+		return event.getProperty().equals(EDTUIPreferenceConstants.EDITOR_KEYWORD_COLOR) ||
+				event.getProperty().equals(EDTUIPreferenceConstants.EDITOR_KEYWORD_BOLD) ||
+				event.getProperty().equals(EDTUIPreferenceConstants.EDITOR_STRING_COLOR) ||
+				event.getProperty().equals(EDTUIPreferenceConstants.EDITOR_STRING_BOLD) ||
+				event.getProperty().equals(EDTUIPreferenceConstants.EDITOR_MULTI_LINE_COMMENT_COLOR) ||
+				event.getProperty().equals(EDTUIPreferenceConstants.EDITOR_MULTI_LINE_COMMENT_BOLD) ||
+				event.getProperty().equals(EDTUIPreferenceConstants.EDITOR_SINGLE_LINE_COMMENT_COLOR) ||
+				event.getProperty().equals(EDTUIPreferenceConstants.EDITOR_SINGLE_LINE_COMMENT_BOLD) ||
+				event.getProperty().equals(EDTUIPreferenceConstants.EDITOR_DEFAULT_COLOR) ||
+				event.getProperty().equals(EDTUIPreferenceConstants.EDITOR_DEFAULT_BOLD);
 	}
 
 	/**
@@ -78,38 +74,25 @@ public class CodeScanner extends AbstractCodeScanner {
 		Token currentToken = null;
 		TextAttribute attr = null;
 				
-//		ColorProvider.other = new Token(ColorProvider.DEFAULT);
-//		ColorProvider.keyword = new Token(ColorProvider.KEYWORD);
-//		ColorProvider.singleLineComment = new Token(ColorProvider.SINGLE_LINE_COMMENT);
-//		ColorProvider.multiLineComment = new Token(ColorProvider.MULTI_LINE_COMMENT);
-//		ColorProvider.literal = new Token(ColorProvider.LITERAL);
-//		ColorProvider.systemWord = new Token(ColorProvider.SYSTEM_WORD);
-
 		List rules = new ArrayList();		
 		
 		// Add rule for single line comments.
 		attr = colorProvider.getTextAttribute(ColorProvider.SINGLE_LINE_COMMENT);
 		currentToken = new Token(attr);
-		//rules.add(new EndOfLineRule(CodeConstants.EGL_SINGLE_LINE_COMMENT, currentToken)); //$NON-NLS-1$
-//		rules.add(new EndOfLineRule("//", ColorProvider.singleLineComment)); //$NON-NLS-1$
 
 		// Add rules for multi-line comments.
 		attr = colorProvider.getTextAttribute(ColorProvider.MULTI_LINE_COMMENT);
 		currentToken = new Token(attr);
-		//rules.add(new MultiLineRule(CodeConstants.EGL_MULTI_LINE_COMMENT_START, CodeConstants.EGL_MULTI_LINE_COMMENT_END, currentToken)); //$NON-NLS-1$ //$NON-NLS-2$
-//		rules.add(new MultiLineRule("/*", "*/", ColorProvider.multiLineComment)); //$NON-NLS-1$ //$NON-NLS-2$
 
 		// Add rule for strings and character constants.
 		attr = colorProvider.getTextAttribute(ColorProvider.LITERAL);
 		currentToken = new Token(attr);
 		rules.add(new SingleLineRule(CodeConstants.EGL_STRING_COMMENT, CodeConstants.EGL_STRING_COMMENT, currentToken, '\\')); //$NON-NLS-1$ //$NON-NLS-2$
-//		rules.add(new SingleLineRule("\"", "\"", ColorProvider.literal, '\\')); //$NON-NLS-1$ //$NON-NLS-2$
 
 		// Add generic number rule.
 		attr = colorProvider.getTextAttribute(ColorProvider.DEFAULT);
 		currentToken = new Token(attr);
 		rules.add(new NumberRule(currentToken)); //$NON-NLS-1$
-//		rules.add(new NumberRule(ColorProvider.other));
 
 		// Add generic whitespace rule.
 		rules.add(new WhitespaceRule(new EGLWhitespaceDetector()));
@@ -120,15 +103,7 @@ public class CodeScanner extends AbstractCodeScanner {
 		currentToken = new Token(attr);
 		for (int i = 0; i < keywords.length; i++) {
 			wordRule.addWord((String) keywords[i], currentToken);
-//			wordRule.addWord((String) keywords[i], ColorProvider.keyword);
 		}
-
-		// Add rules for system words
-//		attr = colorProvider.getTextAttribute(ColorProvider.SYSTEM_WORD);
-//		currentToken = new Token(attr);
-//		for (int i = 0; i < systemWords.size(); i++) {
-//			wordRule.addWord((String) systemWords.get(i), currentToken);
-//		}
 
 		rules.add(wordRule);
 		

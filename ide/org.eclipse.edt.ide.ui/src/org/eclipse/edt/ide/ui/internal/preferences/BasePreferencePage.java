@@ -16,8 +16,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.model.EGLConventions;
@@ -40,7 +38,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
-import org.osgi.service.prefs.BackingStoreException;
 
 import com.ibm.icu.text.MessageFormat;
 
@@ -54,10 +51,10 @@ public class BasePreferencePage extends AbstractPreferencePage {
 	public BasePreferencePage() {
 		super();
 		setPreferenceStore( EDTUIPlugin.getDefault().getPreferenceStore() );
-		setDescription( "Specify general settings for EGL");
+		setDescription( UINlsStrings.BasePreferencePage_description );
 
 		// title used when opened programatically
-		setTitle( "EGL" );
+		setTitle( UINlsStrings.BasePreferencePage_title );
 		
 		modifyListener = new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -78,15 +75,6 @@ public class BasePreferencePage extends AbstractPreferencePage {
 	 */
 	protected IPreferenceStore getCorePreferenceStore() {
 		return EDTCoreIDEPlugin.getPlugin().getPreferenceStore();
-	}
-
-	protected void saveCorePreferenceStore() {
-		IEclipsePreferences preferences = new InstanceScope().getNode( EDTCoreIDEPlugin.PLUGIN_ID );
-		try {
-			preferences.flush();
-		} catch( BackingStoreException e ) {
-			EDTUIPlugin.log( e );
- 		}
 	}
 
 	protected Control createContents(Composite parent) {
@@ -125,9 +113,9 @@ public class BasePreferencePage extends AbstractPreferencePage {
 
 	protected void performDefaultsForEGLFoldersGroup() {
 		sourceFolderName.setText( 
-				EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getDefaultString( EDTCorePreferenceConstants.EGL_SOURCE_FOLDER ) );
+				getCorePreferenceStore().getDefaultString( EDTCorePreferenceConstants.EGL_SOURCE_FOLDER ) );
 		outputFolderName.setText( 
-				EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getDefaultString( EDTCorePreferenceConstants.EGL_OUTPUT_FOLDER ) );
+				getCorePreferenceStore().getDefaultString( EDTCorePreferenceConstants.EGL_OUTPUT_FOLDER ) );
 	}
 
 	protected void initializeValues() {
@@ -136,9 +124,9 @@ public class BasePreferencePage extends AbstractPreferencePage {
 
 	protected void initializeEGLFoldersGroup() {
 		sourceFolderName.setText( 
-				EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( EDTCorePreferenceConstants.EGL_SOURCE_FOLDER ) );
+				getCorePreferenceStore().getString( EDTCorePreferenceConstants.EGL_SOURCE_FOLDER ) );
 		outputFolderName.setText( 
-				EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( EDTCorePreferenceConstants.EGL_OUTPUT_FOLDER ) );
+				getCorePreferenceStore().getString( EDTCorePreferenceConstants.EGL_OUTPUT_FOLDER ) );
 	}
 
 	private void controlModified( Widget widget ) {
@@ -151,11 +139,11 @@ public class BasePreferencePage extends AbstractPreferencePage {
 		String srcName= sourceFolderName.getText();
 		String binName= outputFolderName.getText();
 		if( srcName.length() == 0 ) {
-			updateStatus( new StatusInfo( IStatus.ERROR,  "Enter source folder name." ) );
+			updateStatus( new StatusInfo( IStatus.ERROR,  UINlsStrings.BasePreferencePage_missingSourceFolderName ) );
 			return;
 		}
 		if( binName.length() == 0 ) {
-			updateStatus( new StatusInfo( IStatus.ERROR,  "Enter output folder name." ) );
+			updateStatus( new StatusInfo( IStatus.ERROR, UINlsStrings.BasePreferencePage_missingOutputFolderName ) );
 			return;
 		}
 		IWorkspace workspace = EDTUIPlugin.getWorkspace();
@@ -166,7 +154,7 @@ public class BasePreferencePage extends AbstractPreferencePage {
 		if( srcName.length() != 0 ) {
 			status = workspace.validatePath( srcPath.toString(), IResource.FOLDER );
 			if( !status.isOK() ) {
-				String message = MessageFormat.format( "Invalid source folder name: {0}", new Object[] { status.getMessage() } );
+				String message = MessageFormat.format( UINlsStrings.BasePreferencePage_invalidSourceFolderName, new Object[] { status.getMessage() } );
 				updateStatus( new StatusInfo( IStatus.ERROR, message ) );
 				return;
 			}
@@ -175,7 +163,7 @@ public class BasePreferencePage extends AbstractPreferencePage {
 		if( binName.length() != 0 ) {
 			status = workspace.validatePath( binPath.toString(), IResource.FOLDER );
 			if (!status.isOK()) {
-				String message = MessageFormat.format( "Invalid output folder name: {0}", new Object[] { status.getMessage() } );
+				String message = MessageFormat.format( UINlsStrings.BasePreferencePage_invalidOutputFolderName, new Object[] { status.getMessage() } );
 				updateStatus( new StatusInfo( IStatus.ERROR, message ) );
 				return;
 			}
@@ -183,7 +171,7 @@ public class BasePreferencePage extends AbstractPreferencePage {
 		IEGLPathEntry entry = EGLCore.newSourceEntry(srcPath);
 		status = EGLConventions.validateEGLPath(EGLCore.create(dmy), new IEGLPathEntry[] { entry }, binPath);
 		if( !status.isOK() ) {
-			String message = "Settings will result in an invalid build path. Check for nested folders.";
+			String message = UINlsStrings.BasePreferencePage_invalidBuildPath;
 			updateStatus( new StatusInfo( IStatus.ERROR, message ) );
 			return;
 		}
@@ -200,15 +188,17 @@ public class BasePreferencePage extends AbstractPreferencePage {
 	}
 
 	protected void storeEGLFoldersGroup() {		
-		EDTCoreIDEPlugin.getPlugin().getPreferenceStore().setValue( 
+		getCorePreferenceStore().setValue( 
 				EDTCorePreferenceConstants.EGL_SOURCE_FOLDER, sourceFolderName.getText() );
-		EDTCoreIDEPlugin.getPlugin().getPreferenceStore().setValue( 
+		getCorePreferenceStore().setValue( 
 				EDTCorePreferenceConstants.EGL_OUTPUT_FOLDER, outputFolderName.getText() );
 	}
 
 	public boolean performOk() {
 		super.performOk();
-		saveCorePreferenceStore();
+		EDTCoreIDEPlugin.getPlugin().saveCorePluginPreferences();
+		// Uncomment when saving to UI preference store
+		// EDTUIPlugin.getDefault().saveUIPluginPreferences();
 
 		return true;
 	}

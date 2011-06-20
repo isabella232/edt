@@ -20,8 +20,8 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.editor.IFoldingStructureProvider;
-import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
 
 public class FoldingStructureProviderRegistry {
 
@@ -72,7 +72,7 @@ public class FoldingStructureProviderRegistry {
 	 * @return the current provider according to the preferences
 	 */
 	public IFoldingStructureProvider getCurrentFoldingProvider() {
-		String id= EDTUIPlugin.getDefault().getPreferenceStore().getString(EGLPreferenceConstants.EDITOR_FOLDING_PROVIDER);
+		String id= EDTUIPlugin.getDefault().getPreferenceStore().getString(EDTUIPreferenceConstants.EDITOR_FOLDING_PROVIDER);
 		FoldingStructureProviderDescriptor desc= getFoldingProviderDescriptor(id);
 		if (desc != null) {
 			try {
