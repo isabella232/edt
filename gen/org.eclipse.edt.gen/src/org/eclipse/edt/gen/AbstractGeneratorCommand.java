@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.compiler.tools.IRLoader;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.LoadPartException;
@@ -93,14 +94,14 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 	// the command processor must implement the method for providing the location of the templates.properties files
 	public abstract String[] getTemplatePath();
 
-	public void generate(String[] args, Generator generator, IEnvironment environment) {
+	public void generate(String[] args, Generator generator, IEnvironment environment, ICompiler compiler) {
 		try {
 			if (environment != null)
 				Environment.pushEnv(environment);
 			this.installOverrides(args);
 			// start up the generator, passing the command processor
 			try {
-				List<Part> parts = loadEGLParts();
+				List<Part> parts = loadEGLParts(compiler);
 				for (Part part : parts) {
 					generator.generate(part);
 					// now try to write out the file, based on the output location and the part's type signature
@@ -164,7 +165,7 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 		}
 	}
 
-	protected List<Part> loadEGLParts() throws LoadPartException {
+	protected List<Part> loadEGLParts(ICompiler compiler) throws LoadPartException {
 		List<Part> parts = new ArrayList<Part>();
 		// check to see if the part has an asterisk, indicating that all matching files are desired
 		String rootName = (String) parameterMapping.get(Constants.parameter_root).getValue();
@@ -195,8 +196,7 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 					.add(IRLoader.loadEGLPart(rootName, irFileRelativePath.substring(0, irFileRelativePath.lastIndexOf(".")).replace(File.separatorChar, '.'), null));
 			}
 		} else
-			//TODO should pass the compiler to IRLoader
-			parts.add(IRLoader.loadEGLPart(rootName, partName, null));
+			parts.add(IRLoader.loadEGLPart(rootName, partName, compiler));
 		return parts;
 	}
 
