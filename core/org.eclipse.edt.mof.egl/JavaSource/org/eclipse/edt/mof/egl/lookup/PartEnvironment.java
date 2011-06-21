@@ -13,6 +13,7 @@ package org.eclipse.edt.mof.egl.lookup;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
@@ -33,12 +34,26 @@ public class PartEnvironment implements IEnvironment {
 	public static PartEnvironment INSTANCE = new PartEnvironment(Environment.INSTANCE);
 	IEnvironment env;
 	IRUtils irUtils = new IRUtils();
+
+	private static Stack<PartEnvironment> currentEnvs = new Stack<PartEnvironment>();
 	
+	public static synchronized PartEnvironment getCurrentEnv() {
+		return currentEnvs.size() == 0 ? INSTANCE : currentEnvs.peek();
+	}
+
+	public static synchronized void pushEnv(PartEnvironment env) {
+		currentEnvs.push(env);
+	}
+	
+	public static synchronized PartEnvironment popEnv() {
+		return currentEnvs.pop();
+	}
+
 	public PartEnvironment() {
 		this(Environment.getCurrentEnv());
 	}
 	
-	PartEnvironment(IEnvironment env) {
+	public PartEnvironment(IEnvironment env) {
 		this.env = env;
 		if (env.getLookupDelegates().get(Type.EGL_KeyScheme) == null) {
 			env.registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
@@ -146,5 +161,17 @@ public class PartEnvironment implements IEnvironment {
 	@Override
 	public Map<String, LookupDelegate> getLookupDelegates() {
 		return env.getLookupDelegates();
+	}
+	
+	public void registerObjectStores(Map<String, List<ObjectStore>> newStores) {
+		
+		for (Map.Entry<String, List<ObjectStore>> entry : newStores.entrySet()) {
+			String scheme = entry.getKey();
+			List<ObjectStore> stores = entry.getValue();
+			
+			for (ObjectStore store : stores) {
+				registerObjectStore(scheme, store);
+			}
+		}
 	}
 }
