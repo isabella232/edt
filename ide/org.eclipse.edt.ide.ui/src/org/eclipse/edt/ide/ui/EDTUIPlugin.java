@@ -20,12 +20,16 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.edt.ide.ui.internal.ResourceAdapterFactory;
 import org.eclipse.edt.ide.ui.internal.editor.DocumentProvider;
 import org.eclipse.edt.ide.ui.internal.editor.ProblemMarkerManager;
 import org.eclipse.edt.ide.ui.internal.editor.folding.FoldingStructureProviderRegistry;
@@ -73,6 +77,7 @@ public class EDTUIPlugin extends AbstractUIPlugin {
 	private TemplateStore fTemplateStore;
 	private ContextTypeRegistry fContextTypeRegistry;	
 	private IPropertyChangeListener propertyChangeListener; 
+	private ResourceAdapterFactory fResourceAdapterFactory; 
 	
 	/**
 	 * The constructor
@@ -87,6 +92,7 @@ public class EDTUIPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		registerAdapters();
 	}
 
 	/*
@@ -96,6 +102,18 @@ public class EDTUIPlugin extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
+		unregisterAdapters();
+	}
+	
+	private void registerAdapters() {
+		fResourceAdapterFactory= new ResourceAdapterFactory();
+		IAdapterManager manager= Platform.getAdapterManager();		
+		manager.registerAdapters(fResourceAdapterFactory, IResource.class);
+	}
+	
+	private void unregisterAdapters() {
+		IAdapterManager manager= Platform.getAdapterManager();
+		manager.unregisterAdapters(fResourceAdapterFactory);
 	}
 
 	/**

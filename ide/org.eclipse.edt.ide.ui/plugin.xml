@@ -10,6 +10,17 @@
         <initializer class="org.eclipse.edt.ide.ui.internal.EDTUIPreferenceInitializer"/>
     </extension>
     
+    <!-- EGL Editor Folding provider -->
+	<extension
+		point= "org.eclipse.edt.ide.ui.eglFoldingStructureProviders">
+		<provider
+			id="org.eclipse.edt.ide.ui.internal.editor.folding.eglFoldingStructureProviders"
+			name= "%DefaultEGLFoldingStructureProviderName"
+			class="org.eclipse.edt.ide.ui.internal.editor.folding.FoldingStructureProvider"
+			preferencesClass="org.eclipse.edt.ide.ui.internal.editor.folding.FoldingPreferenceBlock">
+		</provider>
+	</extension>
+    
 	<extension point="org.eclipse.ui.bindings">
 		<!-- Navigate -->
 		<key
@@ -211,60 +222,90 @@
             description="%EGLActionSet.description"
             visible="false"
             id="org.eclipse.edt.ide.ui.EGLActionSet">
-        <action
-               definitionId="org.eclipse.edt.ide.ui.navigate.openPart"
-               label="%OpenPartAction.label"
-               icon="icons/ctool16/opnprt_nav.gif"
-               class="org.eclipse.edt.ide.ui.internal.actions.OpenPartAction"
-               tooltip="%OpenPartAction.tooltip"
-               menubarPath="navigate/open.ext2"
-               toolbarPath="org.eclipse.search.searchActionSet/Search"
-               id="org.eclipse.edt.ide.ui.search.OpenPart">
-        </action>
+       		<action
+               	definitionId="org.eclipse.edt.ide.ui.navigate.openPart"
+               	label="%OpenPartAction.label"
+               	icon="icons/ctool16/opnprt_nav.gif"
+               	class="org.eclipse.edt.ide.ui.internal.actions.OpenPartAction"
+              	tooltip="%OpenPartAction.tooltip"
+               	menubarPath="navigate/open.ext2"
+               	toolbarPath="org.eclipse.search.searchActionSet/Search"
+               	id="org.eclipse.edt.ide.ui.search.OpenPart">
+        	</action>
         </actionSet>
 		<actionSet
       		label="%EGLProjectWizardActionSet.label"
             description="%EGLProjectWizardActionSet.description"
             visible="false"
             id="org.eclipse.edt.ide.ui.EGLProjectWizardActionSet">
- 		<action
-            definitionId="org.eclipse.edt.ide.ui.newProgramWizard"
-            label="%ProgramAction.label"
-            icon="icons/ctool16/newpgm_wiz.gif"
-            tooltip="%ProgramAction.tooltip"
-            class="org.eclipse.edt.ide.ui.internal.actions.NewProgramAction"
-            toolbarPath="EGLMain"
-            id="org.eclipse.edt.ide.ui.newProgramAction">
-        </action>
-        <action
-            definitionId="org.eclipse.edt.ide.ui.newRuiHandlerWizard"
-            label="%RUIHandlerAction.label"
-            icon="icons/ctool16/newruihandler_wiz.gif"
-            tooltip="%RUIHandlerAction.tooltip"
-            class="org.eclipse.edt.ide.ui.internal.actions.NewRUIHandlerAction"
-            toolbarPath="EGLMain"
-            id="org.eclipse.edt.ide.ui.newRUIHandlerAction">
-        </action>
-        <action
-            definitionId="org.eclipse.edt.ide.ui.newSourceFileWizard"
-            label="%SourceFileAction.label"
-            icon="icons/ctool16/newfle_wiz.gif"
-            tooltip="%SourceFileAction.tooltip"
-            class="org.eclipse.edt.ide.ui.internal.actions.NewSourceFileAction"
-            toolbarPath="EGLMain"
-            id="org.eclipse.edt.ide.ui.newSourceFileAction">
-        </action>
-        <action
-            definitionId="org.eclipse.edt.ide.ui.newProjectWizard"
-            label="%EGLProjectAction.label"
-            icon="icons/ctool16/newegl_wiz.gif"
-            tooltip="%EGLProjectAction.tooltip"
-            class="org.eclipse.edt.ide.ui.internal.actions.NewEGLProjectAction"
-            toolbarPath="EGLMain"
-            id="org.eclipse.edt.ide.ui.newEGLProjectAction">
-        </action>
+ 			<action
+         	   	definitionId="org.eclipse.edt.ide.ui.newProgramWizard"
+           		label="%ProgramAction.label"
+            	icon="icons/ctool16/newpgm_wiz.gif"
+            	tooltip="%ProgramAction.tooltip"
+            	class="org.eclipse.edt.ide.ui.internal.actions.NewProgramAction"
+            	toolbarPath="EGLMain"
+            	id="org.eclipse.edt.ide.ui.newProgramAction">
+        	</action>
+        	<action
+            	definitionId="org.eclipse.edt.ide.ui.newRuiHandlerWizard"
+            	label="%RUIHandlerAction.label"
+            	icon="icons/ctool16/newruihandler_wiz.gif"
+            	tooltip="%RUIHandlerAction.tooltip"
+            	class="org.eclipse.edt.ide.ui.internal.actions.NewRUIHandlerAction"
+            	toolbarPath="EGLMain"
+            	id="org.eclipse.edt.ide.ui.newRUIHandlerAction">
+        	</action>
+        	<action
+            	definitionId="org.eclipse.edt.ide.ui.newSourceFileWizard"
+            	label="%SourceFileAction.label"
+            	icon="icons/ctool16/newfle_wiz.gif"
+            	tooltip="%SourceFileAction.tooltip"
+            	class="org.eclipse.edt.ide.ui.internal.actions.NewSourceFileAction"
+            	toolbarPath="EGLMain"
+            	id="org.eclipse.edt.ide.ui.newSourceFileAction">
+        	</action>
+        	<action
+            	definitionId="org.eclipse.edt.ide.ui.newProjectWizard"
+            	label="%EGLProjectAction.label"
+            	icon="icons/ctool16/newegl_wiz.gif"
+            	tooltip="%EGLProjectAction.tooltip"
+            	class="org.eclipse.edt.ide.ui.internal.actions.NewEGLProjectAction"
+            	toolbarPath="EGLMain"
+            	id="org.eclipse.edt.ide.ui.newEGLProjectAction">
+        	</action>
 		</actionSet>
+		<actionSet
+            label="%EGLSearchActionSet.label"
+            description="%EGLSearchActionSet.description"
+            visible="false"
+            id="org.eclipse.edt.ide.ui.SearchActionSet">
+         	<action
+               	label="%openEGLSearchPageAction.label"
+               	icon="icons/ctool16/esrch_nav.gif"
+               	class="org.eclipse.edt.ide.ui.internal.search.OpenEGLSearchPageAction"
+               	menubarPath="org.eclipse.search.menu/dialogGroup"
+               	id="org.eclipse.edt.ide.ui.search.OpenEGLSearchPage">
+         	</action>      
+         	<menu
+               	label="%searchMenu.label"
+               	id="org.eclipse.search.menu">
+         	</menu>
+      	</actionSet>         
 	</extension>
+	
+	<extension
+    	point="org.eclipse.ui.actionSetPartAssociations">
+      	<actionSetPartAssociation
+        	targetID="org.eclipse.edt.ide.ui.SearchActionSet">
+         	<part
+            	id="org.eclipse.edt.ide.ui.EGLEditor">
+         	</part>
+         	<part
+            	id="org.eclipse.search.SearchResultView">
+         	</part>
+      	</actionSetPartAssociation>
+   	</extension>
    	
 	<extension 
 		point="org.eclipse.ui.contexts">
@@ -346,17 +387,7 @@ Templates
       		translations="templates/eglruidefault-templates.properties">
       	</include>
 	</extension>
-<!--	
-	<extension
-		point= "org.eclipse.edt.ide.ui.eglFoldingStructureProviders">
-		<provider
-			id="org.eclipse.edt.ide.ui.editor.folding.EGLFoldingStructureProvider"
-			name= "%DefaultEGLFoldingStructureProviderName"
-			class="org.eclipse.edt.ide.ui.internal.editor.folding.FoldingStructureProvider"
-			preferencesClass="org.eclipse.edt.ide.ui.internal.editor.folding.FoldingPreferenceBlock">
-		</provider>
-	</extension>
--->	
+
 	<extension point="org.eclipse.ui.ide.projectNatureImages">
       	<image
             icon="icons/ovr16/egl_ovr.gif"
@@ -420,7 +451,8 @@ Templates
 			</actionProvider> 	
 			<actionProvider
 		            class="org.eclipse.edt.ide.ui.internal.packageexplorer.EditActionGroup"
-		            overrides="org.eclipse.ui.navigator.resources.actions.RefactorActions">
+		            overrides="org.eclipse.jdt.internal.ui.navigator.PackageExplorerActionProvider">
+		<!--        overrides="org.eclipse.ui.navigator.resources.actions.RefactorActions"> -->
 		         	<enablement>
 		         		<or>
 							<instanceof value="org.eclipse.edt.ide.core.model.IEGLElement" />	         	
@@ -922,6 +954,32 @@ Templates
       		</filter>
 		</page>
  	</extension>
+ 	
+    <extension
+    	point="org.eclipse.search.searchPages">
+      	<page
+            id="org.eclipse.edt.ide.ui.search.EGLSearchPage"
+            class="org.eclipse.edt.ide.ui.internal.search.EGLSearchPage"
+            canSearchEnclosingProjects="true"
+            enabled="true"
+            extensions="egl:90, *:1"
+            sizeHint="500, 180"
+            icon="icons/ctool16/esrch_nav.gif"
+            showScopeSection="true"
+            label="%EGLSearchPage.label"
+            tabPosition="2">
+      	</page>
+   	</extension>
+   
+	<extension
+        point="org.eclipse.search.searchResultViewPages"
+        id="EGLSearchResultPage">
+    	<viewPage
+        	searchResultClass="org.eclipse.edt.ide.ui.internal.search.EGLSearchResult"
+            class="org.eclipse.edt.ide.ui.internal.search.EGLSearchResultPage"
+            id="org.eclipse.edt.ide.ui.search.EGLSearchResultPage">
+      	</viewPage>
+   	</extension>
 
 	<extension point="org.eclipse.emf.ecore.generated_package">
 		<package 
@@ -954,18 +1012,7 @@ Templates
 		</fontDefinition>
 	</extension>
    
-   <!-- EGL Editor Folding provider -->
-	<extension
-		point= "org.eclipse.edt.ide.ui.eglFoldingStructureProviders">
-		<provider
-			id="org.eclipse.edt.ide.ui.internal.editor.folding.EGLFoldingStructureProvider"
-			name= "%defaultEGLFoldingStructureProviderName"
-			class="org.eclipse.edt.ide.ui.internal.editor.folding.FoldingStructureProvider"
-			preferencesClass="org.eclipse.edt.ide.ui.internal.editor.folding.FoldingPreferenceBlock">
-		</provider>
-	</extension>
-	
-	<extension
+ 	<extension
          id="eglnature"
          name="%eglNatureName"
          point="org.eclipse.core.resources.natures">
