@@ -130,10 +130,10 @@ public class CommonUtilities {
 		org.eclipse.edt.mof.egl.Type eType = null;
 		String nativeType = ctx.getNativeMapping(className);
 		if(nativeType != null){
-			eType = TypeUtils.getType("egl:" + nativeType);
+			eType = TypeUtils.getType(org.eclipse.edt.mof.egl.Type.EGL_KeyScheme + org.eclipse.edt.mof.egl.Type.KeySchemeDelimiter + nativeType);
 		}
 		else{
-			EObject eObject = Environment.getCurrentEnv().find("egl:" + CommonUtilities.getValidEGLName(className), true);
+			EObject eObject = Environment.getCurrentEnv().find(org.eclipse.edt.mof.egl.Type.EGL_KeyScheme + org.eclipse.edt.mof.egl.Type.KeySchemeDelimiter + CommonUtilities.getValidEGLName(className), true);
 			if(eObject instanceof org.eclipse.edt.mof.egl.Type){
 				eType = (org.eclipse.edt.mof.egl.Type)eObject;
 			}
