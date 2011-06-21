@@ -371,21 +371,6 @@ public interface IEGLProject extends IParent, IEGLElement, IOpenable {
 	String[] getRequiredProjectNames() throws EGLModelException;
 
 	/**
-	 * Returns the names of the projects that are directly required by this
-	 * project. A project is required if it is in its EGLPath.
-	 * <p>
-	 * The project names are returned in the order they appear on the EGLPath.
-	 *
-	 * @param includeExternalFunctions bolean indicating if the name of external projects
-	 * (projects in the target platform) should be returned
-	 * @return the names of the projects that are directly required by this
-	 * project in EGLPath order
-	 * @exception EGLModelException if this element does not exist or if an
-	 *		exception occurs while accessing its corresponding resource
-	 */
-	String[] getRequiredProjectNames(boolean includeExternalFunctions) throws EGLModelException;
-
-	/**
 	 * This is a helper method returning the resolved EGLPath for the project
 	 * as a list of simple (non-variable, non-container) EGLPath entries.
 	 * All EGLPath variable and EGLPath container entries in the project's

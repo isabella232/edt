@@ -1379,28 +1379,7 @@ public class EGLModelManager {
 	protected synchronized void resetJarTypeCache() {
 		this.cache.resetJarTypeCache();
 	}
-	
-	public HashSet getExternalWorkingCopyProjects() {
-		synchronized (this.perWorkingCopyInfos) {
-			HashSet result = null;
-			Iterator values = this.perWorkingCopyInfos.values().iterator();
-			while (values.hasNext()) {
-				Map ownerCopies = (Map) values.next();
-				Iterator workingCopies = ownerCopies.keySet().iterator();
-				while (workingCopies.hasNext()) {
-					IEGLFile workingCopy = (IEGLFile) workingCopies.next();
-					IEGLProject project = workingCopy.getEGLProject();
-					if (project.getElementName().equals(ExternalEGLProject.EXTERNAL_PROJECT_NAME)) {
-						if (result == null)
-							result = new HashSet();
-						result.add(project);
-					}
-				}
-			}
-			return result;
-		}
-	}
-	
+		
 	/**
 	 * Starts caching ZipFiles.
 	 * Ignores if there are already clients.

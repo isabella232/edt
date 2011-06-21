@@ -35,11 +35,6 @@ public class PPListElement {
 	
 	private int fEntryKind;
 	private IPath fPath;
-	/**
-	 * This field is used only for projects in the target platform,
-	 * it represents the full path including the target platform directory.
-	 */
-	private IPath fFullPath;
 	private IResource fResource;
 	private boolean fIsExported;
 	private boolean fIsMissing;
@@ -47,21 +42,7 @@ public class PPListElement {
 	private PPListElement fParentContainer;
 		
 	private IEGLPathEntry fCachedEntry;
-	private ArrayList fChildren;
-	/**
-	 * The construct is used when creating the entry for projects in the TP.
-	 * @param project The project
-	 * @param entryKind The entry type
-	 * @param path Need the path including the target platform directory.
-	 */
-	public PPListElement(IEGLProject project, int entryKind, IPath path) {
-		this.fFullPath = path;
-		fProject= project;
-		fEntryKind= entryKind;
-		this.fPath = new Path("/" + path.lastSegment());
-		this.initial();
-	}
-	
+	private ArrayList fChildren;	
 	
 	public PPListElement(IEGLProject project, int entryKind, IPath path, IResource res) {
 		fProject= project;
@@ -83,9 +64,6 @@ public class PPListElement {
 			case IEGLPathEntry.CPE_SOURCE:
 				createAttributeElement(OUTPUT, null);
 				createAttributeElement(EXCLUSION, new Path[0]);
-				//TODO If it's binary projects in the TP, then need to handle the source attachment.
-				if(this.fFullPath != null)
-					createAttributeElement(SOURCEATTACHMENT, null);
 				break;
 			case IEGLPathEntry.CPE_LIBRARY:
 			case IEGLPathEntry.CPE_VARIABLE:
@@ -129,27 +107,14 @@ public class PPListElement {
 			case IEGLPathEntry.CPE_LIBRARY:
 				IPath attach= (IPath) getAttribute(SOURCEATTACHMENT);
 				IEGLPathEntry entry = EGLCore.newLibraryEntry(fPath, attach, null, isExported());
-				if(this.fFullPath != null) {
-					entry.setBinaryProject(true);
-					entry.setExternal(true);
-				}
 				return entry;
 			case IEGLPathEntry.CPE_PROJECT:
-				if(this.fFullPath == null) {
-					IEGLPathEntry entryTemp = EGLCore.newProjectEntry(fPath, isExported());
-					if(fResource != null && fResource instanceof IProject) {
-						IEGLProject proj = EGLCore.create((IProject)fResource);
-						entryTemp.setBinaryProject(proj.isBinary());
-						entryTemp.setExternal(false);
-					}
-					return entryTemp;
-				} else {
-					IPath attach1 = (IPath) getAttribute(SOURCEATTACHMENT);
-					IEGLPathEntry entry1 = EGLCore.newLibraryEntry(fPath, attach1, null, isExported());
-					entry1.setBinaryProject(true);
-					entry1.setExternal(true);
-					return entry1;
+				IEGLPathEntry entryTemp = EGLCore.newProjectEntry(fPath, isExported());
+				if(fResource != null && fResource instanceof IProject) {
+					IEGLProject proj = EGLCore.create((IProject)fResource);
+					entryTemp.setBinaryProject(proj.isBinary());
 				}
+				return entryTemp;
 			case IEGLPathEntry.CPE_CONTAINER:
 				return EGLCore.newContainerEntry(fPath, isExported());
 			case IEGLPathEntry.CPE_VARIABLE:
@@ -352,25 +317,7 @@ public class PPListElement {
 				isMissing= (res == null);
 				break;
 		}
-		PPListElement elem= null;
-		//If it's a source project entry or if it's a binary project but locates in the workspace.
-		if(!curr.isBinaryProject() || (curr.isBinaryProject() && (!curr.isExternal()))) {
-			elem = new PPListElement(project, curr.getEntryKind(), path, res);
-		} else {
-			StringBuffer sb = new StringBuffer(path.getDevice());
-			sb.append("/");
-			int i = 0;
-			for(String tempPath : path.segments()){
-				if(i == path.segmentCount() - 1) {
-					sb.deleteCharAt(sb.length() - 1);
-					break;
-				}
-				sb.append(tempPath);
-				sb.append("/");
-				i++;
-			}
-			elem = new PPListElement(project, curr.getEntryKind(), new Path(sb.toString()));
-		}
+		PPListElement elem = new PPListElement(project, curr.getEntryKind(), path, res);
 		elem.setExported(curr.isExported());
 		elem.setAttribute(SOURCEATTACHMENT, curr.getSourceAttachmentPath());
 		elem.setAttribute(JAVADOC, javaDocLocation);
@@ -407,14 +354,6 @@ public class PPListElement {
 			}
 		}		
 		return (PPListElementAttribute[]) res.toArray(new PPListElementAttribute[res.size()]);
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public IPath getFullPath() {
-		return fFullPath;
 	}
 
 }

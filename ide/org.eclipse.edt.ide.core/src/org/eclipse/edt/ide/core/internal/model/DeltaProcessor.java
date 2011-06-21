@@ -475,22 +475,9 @@ public class DeltaProcessor implements IResourceChangeListener {
 		try {
 			if (monitor != null) monitor.beginTask("", 1); //$NON-NLS-1$
 
-			boolean hasExternalWorkingCopyProject = false;
 			for (int i = 0, length = elementsScope.length; i < length; i++) {
 				IEGLElement element = elementsScope[i];
 				this.addForRefresh(elementsScope[i]);
-				if (element.getElementType() == IEGLElement.EGL_MODEL) {
-					// ensure external working copies' projects' caches are reset
-					HashSet projects = EGLModelManager.getEGLModelManager().getExternalWorkingCopyProjects();
-					if (projects != null) {
-						hasExternalWorkingCopyProject = true;
-						Iterator iterator = projects.iterator();
-						while (iterator.hasNext()) {
-							EGLProject project = (EGLProject) iterator.next();
-							project.resetCaches();
-						}
-					}
-				}
 			}
 			HashSet elementsToRefresh = this.removeExternalElementsToRefresh();
 			boolean hasDelta = elementsToRefresh != null && createExternalArchiveDelta(elementsToRefresh, monitor);
@@ -528,10 +515,7 @@ public class DeltaProcessor implements IResourceChangeListener {
 				if (this.currentDelta != null) { // if delta has not been fired while creating markers
 					EGLModelManager.getEGLModelManager().fire(this.currentDelta, DEFAULT_CHANGE_EVENT);
 				}
-			} else if (hasExternalWorkingCopyProject) {
-				// flush jar type cache
-				EGLModelManager.getEGLModelManager().resetJarTypeCache();
-			}
+			} 
 		} finally {
 			this.currentDelta = null;
 			if (monitor != null) monitor.done();

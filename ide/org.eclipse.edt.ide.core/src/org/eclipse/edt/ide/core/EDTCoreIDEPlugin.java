@@ -41,20 +41,16 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
 import org.eclipse.edt.ide.core.internal.builder.ResourceChangeProcessor;
-import org.eclipse.edt.ide.core.internal.lookup.ExternalProjectManager;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyFileInfoManager;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyResourceChangeProcessor;
 import org.eclipse.edt.ide.core.internal.model.EGLModelManager;
-import org.eclipse.edt.ide.core.internal.model.bde.BDEPreferencesManager;
-import org.eclipse.edt.ide.core.internal.model.bde.PluginModelManager;
-import org.eclipse.edt.ide.core.internal.model.bde.target.ITargetPlatformService;
-import org.eclipse.edt.ide.core.internal.model.bde.target.TargetPlatformService;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IMember;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.pde.internal.core.PluginModelManager;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -87,9 +83,7 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	 * Bundle project service.
 	 */
 	private ServiceRegistration fBundleProjectService;
-	
-	private static BDEPreferencesManager fPreferenceManager;
-	
+		
 	private PluginModelManager fModelManager;
 	
 	private IPropertyChangeListener propertyChangeListener = new PreferenceListener();
@@ -247,18 +241,6 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	}
 	
 	/**
-	 * Returns the singleton instance of if the {@link BDEPreferencesManager} for this bundle
-	 * @return the preference manager for this bundle
-	 * 
-	 */
-	public synchronized BDEPreferencesManager getPreferencesManager() {
-		if (fPreferenceManager == null) {
-			fPreferenceManager = new BDEPreferencesManager(PLUGIN_ID);
-		}
-		return fPreferenceManager;
-	}
-
-	/**
 	 * @see ISaveParticipant
 	 */
 	public void prepareToSave(ISaveContext context) throws CoreException {
@@ -398,9 +380,6 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 			});
 		}
 		
-		//Initialize the external project manager
-		ExternalProjectManager.getInstance();
-		
 		startIndexing();
 		
 	}
@@ -431,15 +410,6 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 		
 		getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 		
-		ITargetPlatformService tps = (ITargetPlatformService) acquireService(ITargetPlatformService.class.getName());
-		if (tps instanceof TargetPlatformService) {
-			//((TargetPlatformService) tps).cleanOrphanedTargetDefinitionProfiles();
-		}
-
-		if (fPreferenceManager != null) {
-			fPreferenceManager.savePluginPreferences();
-		}
-
 		if (fModelManager != null) {
 			fModelManager.shutdown();
 			fModelManager = null;

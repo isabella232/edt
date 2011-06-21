@@ -338,19 +338,11 @@ public interface IEGLPathEntry {
 	boolean isExported();
 	
 	/**
-	 * Return if this entry is created from binary project. For example, an entry created 
-	 * from target platform.
+	 * Return if this entry is created from binary project. 
 	 * @return
 	 */
 	boolean isBinaryProject();
 	
 	void setBinaryProject(boolean isBinaryProject);
-	/**
-	 * Return if this entry is created from external project.
-	 * True is from target platform, while false is from workspace.
-	 * @return
-	 */
-	boolean isExternal();
 	
-	void setExternal(boolean isExternal);
 }

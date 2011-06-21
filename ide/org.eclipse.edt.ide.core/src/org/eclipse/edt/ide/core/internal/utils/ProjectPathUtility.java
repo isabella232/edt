@@ -23,13 +23,10 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.edt.ide.core.internal.lookup.ExternalProject;
-import org.eclipse.edt.ide.core.internal.lookup.ExternalProjectManager;
 import org.eclipse.edt.ide.core.internal.model.EGLProject;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
-import org.eclipse.edt.ide.core.utils.EGLProjectFileUtility;
 
 /**
  * @author jshavor
@@ -73,36 +70,26 @@ public class ProjectPathUtility {
 				{
 					IEGLPathEntry entry = entries[ i ];
 
-					//External Project
-					if (isExternalProjectEntry(entry)) {
-			            ExternalProject extProj = ExternalProjectManager.getInstance().getProject(entry, project);
-			            if (extProj != null) {
-			            	addEglPathOfProject(extProj, eglPath, root, visited);
-			            }
-			         }
-					else {
-					
-						// Add all the SOURCE entries and recurse on all the 
-						// PROJECT entries.
-						if ( entry.getEntryKind() == IEGLPathEntry.CPE_SOURCE )
+					// Add all the SOURCE entries and recurse on all the 
+					// PROJECT entries.
+					if ( entry.getEntryKind() == IEGLPathEntry.CPE_SOURCE )
+					{
+						IResource member = root.findMember( entry.getPath() );
+						if ( member != null && member.getLocation() != null) 
 						{
-							IResource member = root.findMember( entry.getPath() );
-							if ( member != null && member.getLocation() != null) 
-							{
-								eglPath.add( member.getLocation().toOSString() );
-							}						
-						}
+							eglPath.add( member.getLocation().toOSString() );
+						}						
+					}
 
-						else if (entry.getEntryKind() == IEGLPathEntry.CPE_LIBRARY){
-		                		eglPath.add(resolvePathString(entry.getPath(), project, null));
-						}
-						else if ( entry.getEntryKind() == IEGLPathEntry.CPE_PROJECT )
+					else if (entry.getEntryKind() == IEGLPathEntry.CPE_LIBRARY){
+	                		eglPath.add(resolvePathString(entry.getPath()));
+					}
+					else if ( entry.getEntryKind() == IEGLPathEntry.CPE_PROJECT )
+					{
+						IResource member = root.findMember( entry.getPath() ); 
+						if ( member != null && member.getType() == IResource.PROJECT )
 						{
-							IResource member = root.findMember( entry.getPath() ); 
-							if ( member != null && member.getType() == IResource.PROJECT )
-							{
-								addEglPathOfProject( (IProject)member, eglPath, root, visited );
-							}
+							addEglPathOfProject( (IProject)member, eglPath, root, visited );
 						}
 					}
 				}
@@ -118,62 +105,6 @@ public class ProjectPathUtility {
 		eglPath.add( project.getLocation().toOSString() );
 	}
 
-	/**
-	 * Adds the project's location and the source folders of the project's EGL
-	 * path to the Collection.  If other projects are referenced, their locations
-	 * and source folders are added recusively.
-	 * 
-	 * @param project  the project.
-	 * @param eglPath  the Collection to add to.
-	 * @param root     the workspace root.
-	 * @param visited  the projects that have already been examined.
-	 */
-	static public void addEglPathOfProject( 
-		ExternalProject project, 
-		Collection eglPath,
-		IWorkspaceRoot root, 
-		Set visited )
-	{
-		// Break cycles and prevent repetition.
-		if ( visited.contains( project ) )
-		{
-			return;
-		}
-		else
-		{
-			visited.add( project );
-		}
-
-		// Get the project and its EGL path.
-		IEGLPathEntry[] entries = project.getResolvedEGLPath(  );
-		for ( int i = 0; i < entries.length; i++ )
-		{
-			IEGLPathEntry entry = entries[ i ];
-			//External Project
-			if (isExternalProjectEntry(entry)) {
-	            ExternalProject extProj = ExternalProjectManager.getInstance().getProject(entry, project.getReferencingProject());
-	            if (extProj != null) {
-	            	addEglPathOfProject(extProj, eglPath, root, visited);
-	            }
-	         }
-			else if (entry.getEntryKind() == IEGLPathEntry.CPE_LIBRARY){
-        		eglPath.add(resolvePathString(entry.getPath(), project.getReferencingProject(), project));
-			}
-			else if ( entry.getEntryKind() == IEGLPathEntry.CPE_PROJECT )
-			{
-				IResource member = root.findMember( entry.getPath() ); 
-				if ( member != null && member.getType() == IResource.PROJECT )
-				{
-					addEglPathOfProject( (IProject)member, eglPath, root, visited );
-				}
-			}
-		}
-	}
-
-    private static boolean isExternalProjectEntry(IEGLPathEntry entry) {
-    	return entry.isBinaryProject() && entry.isExternal();
-    }
-	
 	
 	/**
 	 * returns a string representing the project's EGL path.  
@@ -205,13 +136,7 @@ public class ProjectPathUtility {
 		return eglProjectPathString;
 	}
 
-    private static String resolvePathString(IPath path, IProject wsProject, ExternalProject extProject) {
-    	
-    	IPath newPath = new EGLProjectFileUtility().resolvePathToEGLAR(path, wsProject, extProject);
-    	if (newPath != null) {
-    		return AbsolutePathUtility.getAbsolutePathString(newPath);
-    	}
-    	
-    	return path.toOSString();    	
+    private static String resolvePathString(IPath path) {   	
+    	return AbsolutePathUtility.getAbsolutePathString(path);
     }	
 }

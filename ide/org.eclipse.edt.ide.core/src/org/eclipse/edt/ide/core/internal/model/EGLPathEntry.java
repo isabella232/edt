@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.model;
 
-import java.io.File;
 import java.util.LinkedHashMap;
 
 import org.eclipse.core.resources.IProject;
@@ -19,15 +18,11 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
-import org.eclipse.edt.ide.core.internal.model.bde.BinaryProjectInTPImpl;
 import org.w3c.dom.Element;
-
-import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
 
 /**
  * @see IEGLPathEntry
@@ -123,7 +118,6 @@ public class EGLPathEntry implements IEGLPathEntry {
 
 	private boolean isBinaryProject; 
 	
-	private boolean isExternal;
 	/**
 	 * Creates a class path entry of the specified kind with the given path.
 	 */
@@ -143,7 +137,6 @@ public class EGLPathEntry implements IEGLPathEntry {
 	    } else {
 			this.fullCharExclusionPatterns = null; // empty exclusion pattern means nothing is excluded
 	    }
-	    initialPath();
 	}
 	/**
 	 * Creates a class path entry of the specified kind with the given path.
@@ -172,23 +165,8 @@ public class EGLPathEntry implements IEGLPathEntry {
 		this.sourceAttachmentRootPath = sourceAttachmentRootPath;
 		this.specificOutputLocation = specificOutputLocation;
 		this.isExported = isExported;
-		initialPath();
 	}
 	
-	/**
-	 * If it's binary project, then need to initial path to the absolute path. 
-	 */
-	private void initialPath() {
-		if(this.entryKind == IEGLPathEntry.CPE_LIBRARY && (!isExported)) {
-			String projSegment = path.segment(0);
-			if(!(isProjectExistedInWS(projSegment) || isProjectDisabledInTP(projSegment))) {
-				IPath eglarIPath = getEGLARPathInTP(path);
-				if(eglarIPath != null) {
-					path = eglarIPath;
-				}
-			}
-		}
-	}
 	/*
 	 * Returns a char based representation of the exclusions patterns full path.
 	 */
@@ -369,20 +347,11 @@ public class EGLPathEntry implements IEGLPathEntry {
 					If no, then try to find the project in the target platform,
 					and create the entry as a library entry which reference to an EGLAR! 
 					*/
-					if(isProjectExistedInWS(projSegment) || isProjectDisabledInTP(projSegment)) {
+					if(isProjectExistedInWS(projSegment) ) {
 						return EGLCore.newProjectEntry(path, isExported);
-					} else {
-						IPath eglarIPath = getEGLARPathInTP(path);
-						if(eglarIPath != null) {
-							IEGLPathEntry entry = EGLCore.newLibraryEntry(eglarIPath, sourceAttachmentPath,
-									sourceAttachmentRootPath, isExported);
-							entry.setBinaryProject(true);
-							entry.setExternal(true);
-							return entry;
-						}
-					}
+					} 
 					//if we get here, assume its going to be in the workspace
-					//One possible is that in both TP & workspace cannot find the project, assume the 
+					//One possible is that workspace cannot find the project, assume the 
 					//project is not imported to the workspace.
 					return EGLCore.newSourceEntry(path, exclusionPatterns, outputLocation);
 
@@ -418,24 +387,6 @@ public class EGLPathEntry implements IEGLPathEntry {
 	}
 	
 	/**
-	 * 
-	 * @return
-	 */
-	protected static IPath getEGLARPathInTP(IPath projectName) {
-		IEclipsePreferences preferences = new InstanceScope().getNode("org.eclipse.edt.ide.core");
-		String platformPath = preferences.get("platform_path", "");
-		if(!"".equals(platformPath)) {
-			String eglarPath = platformPath + projectName + projectName + ".eglar";
-			IPath eglarIPath = new Path(eglarPath);
-			File eglarFile = eglarIPath.toFile();
-			if (!eglarFile.exists()) {
-				return null;
-			}
-			return eglarIPath;
-		}
-		return null;
-	}
-	/**
 	 * Check if the project is existed in the workspace.
 	 * @param projSegment
 	 * @return
@@ -450,22 +401,7 @@ public class EGLPathEntry implements IEGLPathEntry {
 		}
 		return false;
 	}
-	
-	/**
-	 * Check if the project can be found in the target platform (TP), while it is enabled/disabled in the TP. <br/>
-	 * If cannot find the project in the TP, then return true; <br/>
-	 * If can find the project in the TP, while it's disabled in the preference page, then return true; <br/>
-	 * If can find the project in the TP, and it's enabled in the preference page, then return false.  <br/>
-	 * @param projname The project name to be determined.
-	 * @return true means the project cannot be found in TP or it's disabled although it can be found in the TP.
-	 * false means the project can be found but it's enabled.
-	 */
-	public static boolean isProjectDisabledInTP(String projname) {
-		IBinaryProjectInTP projectInTP = new BinaryProjectInTPImpl();
-		return projectInTP.isProjectDisabledInTP(projname);
-	}
-
-	
+		
 	/**
 	 * Returns true if the given object is a eglpath entry
 	 * with equivalent attributes.
@@ -799,11 +735,4 @@ public class EGLPathEntry implements IEGLPathEntry {
 		this.isBinaryProject = isBinaryProject;
 	}
 	
-	public boolean isExternal() {
-		return isExternal;
-	}
-	
-	public void setExternal(boolean isExternal) {
-		this.isExternal = isExternal;
-	}
 }

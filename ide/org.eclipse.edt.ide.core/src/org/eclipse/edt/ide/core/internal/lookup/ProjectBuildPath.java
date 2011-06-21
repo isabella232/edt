@@ -42,8 +42,4 @@ public class ProjectBuildPath extends AbstractProjectBuildPath {
         return (IBuildPathEntry[]) projectInfoEnvironments.toArray(new IBuildPathEntry[projectInfoEnvironments.size()]);
 	}
 	
-	protected IBuildPathEntry getProjectBuildPathEntry(ExternalProject project) {
-		return ExternalProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry(project);
-	}
-
 }

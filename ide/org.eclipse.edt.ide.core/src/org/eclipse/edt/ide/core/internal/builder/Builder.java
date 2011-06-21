@@ -38,7 +38,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.IIDECompiler;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraphManager;
-import org.eclipse.edt.ide.core.internal.lookup.ExternalProjectManager;
 import org.eclipse.edt.ide.core.internal.lookup.FileInfoManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPath;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathEntryManager;
@@ -63,7 +62,7 @@ public class Builder extends IncrementalProjectBuilder {
 		//get required projects here so we can return to eclipse if exception during build.
 		ProjectBuildPath projBP = ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject());
 		
-        IProject[] reqProjects = projBP.getRequiredProjects(false);
+        IProject[] reqProjects = projBP.getRequiredProjects();
        
         boolean isOK = false;
         IBuildNotifier notifier = null;
@@ -198,7 +197,6 @@ public class Builder extends IncrementalProjectBuilder {
      	cleanOutputDir(getProject());
         DependencyGraphManager.getInstance().clear(getProject());				// Dependency Graph
         BuildManager.getInstance().clear(getProject());							// Build Manager
-        ExternalProjectManager.getInstance().clearEverything();					// External project stuff
         deleteAllMarkers();   													// Markers
      }
 

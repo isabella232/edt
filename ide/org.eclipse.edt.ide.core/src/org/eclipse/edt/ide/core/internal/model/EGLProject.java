@@ -1379,12 +1379,6 @@ public class EGLProject extends Openable implements IEGLProject, IProjectNature 
 		perProjectInfo.outputLocation = outputLocation;
 		return eglpath;
 	}
-	/**
-	 * @see IEGLProject#getRequiredProjectNames
-	 */
-	public String[] getRequiredProjectNames() throws EGLModelException {
-		return getRequiredProjectNames(false);
-	}
 
 	/**
 	 * @see IEGLProject
@@ -1883,10 +1877,6 @@ public class EGLProject extends Openable implements IEGLProject, IProjectNature 
 	}
 
 	public String[] projectPrerequisites(IEGLPathEntry[] entries) throws EGLModelException {
-		return projectPrerequisites(entries, false);
-	}
-
-	public String[] projectPrerequisites(IEGLPathEntry[] entries, boolean includeExternalProjects) throws EGLModelException {
 
 		ArrayList prerequisites = new ArrayList();
 		// need resolution
@@ -1898,13 +1888,8 @@ public class EGLProject extends Openable implements IEGLProject, IProjectNature 
 		);
 		for (int i = 0, length = entries.length; i < length; i++) {
 			IEGLPathEntry entry = entries[i];
-			if (includeExternalProjects && entry.isBinaryProject() && entry.isExternal()) {
-				prerequisites.add(Util.getExternalProjectName(entry));
-			}
-			else {
-				if (entry.getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
-					prerequisites.add(entry.getPath().lastSegment());
-				}
+			if (entry.getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
+				prerequisites.add(entry.getPath().lastSegment());
 			}
 		}
 		int size = prerequisites.size();
@@ -2406,9 +2391,9 @@ public class EGLProject extends Openable implements IEGLProject, IProjectNature 
 //		}
 	}
 
-	public String[] getRequiredProjectNames(boolean includeExternalProjects)
+	public String[] getRequiredProjectNames()
 			throws EGLModelException {
-		return this.projectPrerequisites(getResolvedEGLPath(true), includeExternalProjects);
+		return this.projectPrerequisites(getResolvedEGLPath(true));
 	}
 
 	public boolean isBinary() {

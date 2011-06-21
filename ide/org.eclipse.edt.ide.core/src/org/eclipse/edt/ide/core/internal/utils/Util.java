@@ -185,11 +185,7 @@ public class Util {
     }
 	
     private static String getAbsolutePathStringForEGLAR(IPath path, IProject proj) {
-    	IPath newPath = new EGLProjectFileUtility().resolvePathToEGLAR(path, proj, null);
-    	if (newPath != null) {
-    		return AbsolutePathUtility.getAbsolutePathString(path);
-    	}
-    	return path.toOSString();
+    	return AbsolutePathUtility.getAbsolutePathString(path);
     }
 	
 	public static PartInfo getUsePart(IEGLProject project, String partDeclPackage, String partTypeName)

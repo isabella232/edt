@@ -121,81 +121,29 @@ public abstract class AbstractProjectBuildPath {
 		}
 	}
 	
-	public IProject[] getRequiredProjects() {
-		return getRequiredProjects(false);
-	}
 
-
-	private Object getProject(String projectName, boolean searchThroughExternalProjects) {
+	private Object getProject(String projectName) {
 		Object newProject = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		if (newProject != null && ((IProject)newProject).exists()) {
 			return newProject;
 		}
-		
-		if (searchThroughExternalProjects) {
-			ExternalProject extProj = ExternalProjectManager.getInstance().getProject(projectName, getProject());
-			if (extProj != null) {
-				return extProj;
-			}
-		}
-		
+				
 		return newProject;
 	}
-	
-	//for the given external project, return the list of all workspace projects that it requires.
-	//This is done as a depth first search of the project path
-	
-	private List getRequiredProjects(ExternalProject project, List alreadySeen) {
-		List projects = new ArrayList();
-		if (alreadySeen.contains(project) || project == null) {
-			return projects;
-		}
 		
-		IEGLPathEntry[] entries = project.getResolvedEGLPath();
-		for (int i = 0; i < entries.length; i++) {
-			if (isExternalProjectEntry(entries[i])) {
-				projects.addAll(getRequiredProjects(ExternalProjectManager.getInstance().getProject(entries[i], project.getReferencingProject()), alreadySeen));
-			}
-			else {
-				if (entries[i].getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
-					IProject wsProject = ResourcesPlugin.getWorkspace().getRoot().getProject(entries[i].getPath().lastSegment());
-					if (wsProject != null && ((IProject)wsProject).exists()) {
-						projects.add(wsProject);
-					}
-				}
-			}
-
-			
-			
-		}
-		return projects;
-	}
-	
-	public IProject[] getRequiredProjects(boolean searchThroughExternalProjects) {
+	public IProject[] getRequiredProjects() {
 		try {
 			
 			List seenExternalProjects = new ArrayList();
 			IEGLProject eglProject = EGLCore.create(project);
-			String[] requiredProjectNames = eglProject.getRequiredProjectNames(searchThroughExternalProjects);
+			String[] requiredProjectNames = eglProject.getRequiredProjectNames();
 			List requiredProjects = new ArrayList();;
 			for (int i = 0; i < requiredProjectNames.length; i++) {
 				
-				Object reqProject = getProject(requiredProjectNames[i], searchThroughExternalProjects);
-				if (reqProject instanceof ExternalProject) {
-					List extProjectReqires = getRequiredProjects((ExternalProject) reqProject, seenExternalProjects);
-					Iterator iter = extProjectReqires.iterator();
-					while(iter.hasNext()) {
-						IProject proj = (IProject) iter.next();
-						if (!requiredProjects.contains(proj)) {
-							requiredProjects.add(proj);
-						}
-					}
+				Object reqProject = getProject(requiredProjectNames[i]);
+				if (!requiredProjects.contains(reqProject)) {
+					requiredProjects.add(reqProject);
 				}
-				else {
-					if (!requiredProjects.contains(reqProject)) {
-						requiredProjects.add(reqProject);
-					}
-				}				
 			}
 			
 			return (IProject[])requiredProjects.toArray(new IProject[requiredProjects.size()]);
@@ -287,53 +235,34 @@ public abstract class AbstractProjectBuildPath {
 	            IEGLPathEntry[] resolvedEGLPath = eglProject.getResolvedEGLPath(true);
 	            for(int i = 0; i < resolvedEGLPath.length; i++) {
 	            	
-	            	//Handle external projects
-	                if(isExternalProjectEntry(resolvedEGLPath[i])) {
+            	// TODO a required projects source folder may not be exported	            	
+	                if(resolvedEGLPath[i].getEntryKind() == IEGLPathEntry.CPE_SOURCE) {
+	                	IBuildPathEntry entry = getProjectBuildPathEntry(project);
+	                	if (!entries.contains(entry)) {
+	                		entries.add(entry);
+	                	}
+	                } else if (resolvedEGLPath[i].getEntryKind() == IEGLPathEntry.CPE_LIBRARY){
+	                	if((project == requestingProject) || (resolvedEGLPath[i].isExported())) {
+	                		IBuildPathEntry entry = getZipFileBuildPathEntry(project, resolvedEGLPath[i].getPath());
+	                		if (entry != null) {
+	                			entries.add(entry);
+	                		}
+	                	}
+	                }else if(resolvedEGLPath[i].getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
 	                    if((project == requestingProject) || (resolvedEGLPath[i].isExported())) {
-	                        ExternalProject requiredProject = ExternalProjectManager.getInstance().getProject(resolvedEGLPath[i], project);
-	                        if(requiredProject != null && !visitedProjects.contains(requiredProject)) {
+	                        IProject requiredProject = ResourcesPlugin.getWorkspace().getRoot().getProject(resolvedEGLPath[i].getPath().toString());
+	                        if(!visitedProjects.contains(requiredProject)) {
 	                            initializeEGLPathEntriesHelper(entries, visitedProjects, requiredProject, requestingProject);
 	                        }
-                    }
-	                	
-	                }else {
-	            	// TODO a required projects source folder may not be exported	            	
-		                if(resolvedEGLPath[i].getEntryKind() == IEGLPathEntry.CPE_SOURCE) {
-		                	IBuildPathEntry entry = getProjectBuildPathEntry(project);
-		                	if (!entries.contains(entry)) {
-		                		entries.add(entry);
-		                	}
-		                } else if (resolvedEGLPath[i].getEntryKind() == IEGLPathEntry.CPE_LIBRARY){
-		                	if((project == requestingProject) || (resolvedEGLPath[i].isExported())) {
-		                		IBuildPathEntry entry = getZipFileBuildPathEntry(project, resolvePath(resolvedEGLPath[i].getPath(), project, null));
-		                		if (entry != null) {
-		                			entries.add(entry);
-		                		}
-		                	}
-		                }else if(resolvedEGLPath[i].getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
-		                    if((project == requestingProject) || (resolvedEGLPath[i].isExported())) {
-		                        IProject requiredProject = ResourcesPlugin.getWorkspace().getRoot().getProject(resolvedEGLPath[i].getPath().toString());
-		                        if(!visitedProjects.contains(requiredProject)) {
-		                            initializeEGLPathEntriesHelper(entries, visitedProjects, requiredProject, requestingProject);
-		                        }
-		                    }
-		                }
+	                    }
 	                }
-	            }
-        	}
+                }
+            }
         } catch (EGLModelException e) {
 			throw new BuildException(e);
         }
     }
-    
-    private IPath resolvePath(IPath path, IProject wsProject, ExternalProject extProject) {
-    	return new EGLProjectFileUtility().resolvePathToEGLAR(path, wsProject, extProject);
-    }
-    
-    private boolean isExternalProjectEntry(IEGLPathEntry entry) {
-    	return entry.isBinaryProject() && entry.isExternal();
-    }
-
+            
 	/**
      * Perform a depth first search on the EGL Path, adding all source directories from required projects and their exported projects.
      * 
@@ -344,46 +273,7 @@ public abstract class AbstractProjectBuildPath {
      * will not traverse the M<->N<->O chain twice, because if we have managed to get to project B in the EGLPath, we have already searched M,N,O and
      * have not found any of the required parts.  This algorithm will produce an EGLPath of A,M,N,O,B.
      */
-    protected void initializeEGLPathEntriesHelper(List entries, Set visitedProjects, ExternalProject project, Object requestingProject) {
-        visitedProjects.add(project);
-        IEGLPathEntry[] resolvedEGLPath = project.getResolvedEGLPath();
-        
-        //External projects dont have "useable" source entries, so just create a dummy entry for
-        //the external project	            
-        entries.add(getProjectBuildPathEntry(project));
-        
-        for(int i = 0; i < resolvedEGLPath.length; i++) {
-        	
-        	//Handle external projects
-            if(isExternalProjectEntry(resolvedEGLPath[i])) {
-                if((project == requestingProject) || (resolvedEGLPath[i].isExported())) {
-                    ExternalProject requiredProject = ExternalProjectManager.getInstance().getProject(resolvedEGLPath[i], project.getReferencingProject());
-                    if(requiredProject != null && !visitedProjects.contains(requiredProject)) {
-                        initializeEGLPathEntriesHelper(entries, visitedProjects, requiredProject, requestingProject);
-                   }
-                }                   
-            }
-            else if (resolvedEGLPath[i].getEntryKind() == IEGLPathEntry.CPE_LIBRARY){
-            	if((project == requestingProject) || (resolvedEGLPath[i].isExported())) {
-            		IBuildPathEntry entry = getZipFileBuildPathEntry(project, resolvePath(resolvedEGLPath[i].getPath(), project.getReferencingProject(), project));
-            		if (entry != null) {
-            			entries.add(entry);
-            		}
-            	}
-            }else if(resolvedEGLPath[i].getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
-                if((project == requestingProject) || (resolvedEGLPath[i].isExported())) {
-                    IProject requiredProject = ResourcesPlugin.getWorkspace().getRoot().getProject(resolvedEGLPath[i].getPath().toString());
-                    //If the project is external (in the target platform), we must handle it separately
-                    if(!visitedProjects.contains(requiredProject)) {
-                        initializeEGLPathEntriesHelper(entries, visitedProjects, requiredProject, requestingProject);
-                    }
-                }
-            }
-        }
-	            
-    }
 
-	protected abstract IBuildPathEntry getProjectBuildPathEntry(ExternalProject project);
 	protected abstract IBuildPathEntry getProjectBuildPathEntry(IProject project);
 	protected abstract IBuildPathEntry getZipFileBuildPathEntry(Object project, IPath zipFilePath);
 }
