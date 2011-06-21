@@ -31,8 +31,12 @@ public class ExpressionTemplate extends JavaTemplate {
 		if (annotation != null) {
 			if (annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
 				startLine = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
-			if (annotation.getValue(IEGLConstants.EGL_PARTOFFSET) != null)
-				startOffset = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTOFFSET)).intValue();
+			if (annotation.getValue(IEGLConstants.EGL_PARTOFFSET) != null) {
+				endOffset = startOffset = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTOFFSET)).intValue();
+				if (annotation.getValue(IEGLConstants.EGL_PARTLENGTH) != null) {
+					endOffset += ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLENGTH)).intValue();
+				}
+			}
 		}
 		EGLMessage message = EGLMessage.createEGLMessage(ctx.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
 			Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_OBJECT, expr, details, startLine, startOffset, endLine, endOffset);
