@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin;
 import org.eclipse.edt.ide.core.AbstractGenerator;
 import org.eclipse.edt.ide.core.EDTRuntimeContainer;
@@ -33,15 +34,11 @@ public class JavaScriptGenerator extends AbstractGenerator {
 		runtimeContainers = new EDTRuntimeContainer[] { EDTCompilerIDEPlugin.JAVASCRIPT_RUNTIME_CONTAINER };
 	}
 	
-	public void generate(String filePath, Part part, IEnvironment env, boolean invokedByBuild) {
-		try {
-			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
-			EclipseEGL2JavaScript cmd = new EclipseEGL2JavaScript(file, part, this);
-			cmd.generate(buildArgs(file, part), new EclipseJavaScriptGenerator(cmd), env);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+	@Override
+	public void generate(String filePath, Part part, IEnvironment env, IGenerationMessageRequestor msgRequestor) throws Exception {
+		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
+		EclipseEGL2JavaScript cmd = new EclipseEGL2JavaScript(file, part, this);
+		cmd.generate(buildArgs(file, part), new EclipseJavaScriptGenerator(cmd, msgRequestor), env);
 	}
 	
 	protected String[] buildArgs(IFile file, Part part) throws Exception {

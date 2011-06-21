@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.gen.java.Constants;
@@ -30,8 +31,8 @@ import org.eclipse.edt.gen.java.JavaGenerator;
  */
 public class EclipseJavaGenerator extends JavaGenerator {
 
-	public EclipseJavaGenerator(AbstractGeneratorCommand processor) {
-		super(processor);
+	public EclipseJavaGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
+		super(processor, requestor);
 	}
 	
 	/**
@@ -78,5 +79,9 @@ public class EclipseJavaGenerator extends JavaGenerator {
 				}
 			}
 		}
+	}
+	
+	public void dumpErrorMessages() {
+		// Do nothing. Errors will be reported in the IDE after generation is complete.
 	}
 }

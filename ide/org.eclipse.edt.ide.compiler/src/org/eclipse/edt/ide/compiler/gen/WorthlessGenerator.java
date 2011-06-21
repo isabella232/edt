@@ -16,6 +16,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
+import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.java.CommonUtilities;
@@ -31,21 +32,16 @@ public class WorthlessGenerator extends JavaGenerator {
 	}
 	
 	@Override
-	public void generate(String filePath, Part part, IEnvironment env, boolean invokedByBuild) {
-		try {
-			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
-			EclipseEGL2Java cmd = new EclipseEGL2Java(file, part, this);
-			cmd.generate(buildArgs(file, part), new EclipseWorthlessGenerator(cmd), env);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void generate(String filePath, Part part, IEnvironment env, IGenerationMessageRequestor msgRequestor) throws Exception {
+		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
+		EclipseEGL2Java cmd = new EclipseEGL2Java(file, part, this);
+		cmd.generate(buildArgs(file, part), new EclipseWorthlessGenerator(cmd, msgRequestor), env);
 	}
 	
 	private static class EclipseWorthlessGenerator extends EclipseJavaGenerator {
 
-		public EclipseWorthlessGenerator(AbstractGeneratorCommand processor) {
-			super(processor);
+		public EclipseWorthlessGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
+			super(processor, requestor);
 		}
 		
 		public void generate(Part part) throws GenerationException {

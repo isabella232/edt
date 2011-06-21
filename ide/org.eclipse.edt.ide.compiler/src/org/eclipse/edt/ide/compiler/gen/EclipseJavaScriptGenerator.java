@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.compiler.gen;
 
+import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.javascript.JavaScriptGenerator;
 
@@ -19,9 +20,16 @@ import org.eclipse.edt.gen.javascript.JavaScriptGenerator;
  */
 public class EclipseJavaScriptGenerator extends JavaScriptGenerator {
 
-	public EclipseJavaScriptGenerator(AbstractGeneratorCommand processor) {
-		super(processor);
+	public EclipseJavaScriptGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
+		super(processor, requestor);
 	}
 
-	public void processFile(String fileName) {}
+	@Override
+	public void processFile(String fileName) {
+	}
+	
+	@Override
+	public void dumpErrorMessages() {
+		// Do nothing. Errors will be reported in the IDE after generation is complete.
+	}
 }
