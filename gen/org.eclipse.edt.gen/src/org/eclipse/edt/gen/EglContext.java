@@ -21,8 +21,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Stack;
 
+import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.EGLMessages.AccumulatingGenerationMessageRequestor;
-import org.eclipse.edt.gen.EGLMessages.IGenerationMessageRequestor;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.Template;
@@ -34,7 +34,6 @@ import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.IrFactory;
-import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.TryStatement;
@@ -195,6 +194,10 @@ public abstract class EglContext extends TemplateContext {
 
 	public IGenerationMessageRequestor getMessageRequestor() {
 		return messageRequestor;
+	}
+	
+	public void setMessageRequestor(IGenerationMessageRequestor requestor) {
+		this.messageRequestor = requestor;
 	}
 
 	public Map<String, String> getMessageMapping() {

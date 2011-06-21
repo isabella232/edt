@@ -18,6 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateFactory;
@@ -26,10 +27,17 @@ import org.eclipse.edt.mof.egl.Part;
 public abstract class Generator {
 
 	protected TemplateFactory factory = new TemplateFactory();
+	protected EglContext context;
 
-	public Generator(AbstractGeneratorCommand processor) {
+	public Generator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
 		// create a context based on the generator being driven
-		EglContext context = makeContext(processor);
+		context = makeContext(processor);
+		
+		// Clients may specify their own message requestor.
+		if (requestor != null) {
+			context.setMessageRequestor(requestor);
+		}
+		
 		// define our template factory to the context
 		context.setTemplateFactory(this.factory);
 		// add all of the command processor keys to the context
@@ -52,6 +60,10 @@ public abstract class Generator {
 	public abstract Object getResult();
 
 	public abstract void dumpErrorMessages();
+	
+	public EglContext getContext() {
+		return context;
+	}
 	
 	/**
 	 * By default the relative file name will be the same as the source file, with the generator's file extension. This is

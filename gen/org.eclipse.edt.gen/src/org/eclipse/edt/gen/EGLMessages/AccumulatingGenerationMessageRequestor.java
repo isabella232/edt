@@ -15,29 +15,32 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
+import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
+
 public class AccumulatingGenerationMessageRequestor implements IGenerationMessageRequestor {
-	List<EGLMessage> list = new ArrayList<EGLMessage>();
+	List<IGenerationResultsMessage> list = new ArrayList<IGenerationResultsMessage>();
 	boolean error = false;
 
 	public AccumulatingGenerationMessageRequestor() {
 		super();
 	}
 
-	public void addMessage(EGLMessage message) {
+	public void addMessage(IGenerationResultsMessage message) {
 		list.add(message);
 		if (message.isError())
 			error = true;
 	}
 
-	public void addMessages(List<EGLMessage> newmsgs) {
-		Iterator<EGLMessage> i = newmsgs.iterator();
+	public void addMessages(List<IGenerationResultsMessage> newmsgs) {
+		Iterator<IGenerationResultsMessage> i = newmsgs.iterator();
 		while (i.hasNext()) {
-			EGLMessage msg = i.next();
+			IGenerationResultsMessage msg = i.next();
 			addMessage(msg);
 		}
 	}
 
-	public List<EGLMessage> getMessages() {
+	public List<IGenerationResultsMessage> getMessages() {
 		return list;
 	}
 
@@ -47,6 +50,6 @@ public class AccumulatingGenerationMessageRequestor implements IGenerationMessag
 
 	public void clear() {
 		error = false;
-		list = new ArrayList<EGLMessage>();
+		list = new ArrayList<IGenerationResultsMessage>();
 	}
 }

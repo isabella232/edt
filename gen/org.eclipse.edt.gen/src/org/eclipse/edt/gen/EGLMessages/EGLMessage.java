@@ -14,6 +14,10 @@ package org.eclipse.edt.gen.EGLMessages;
 import java.text.MessageFormat;
 import java.util.Map;
 
+import org.eclipse.edt.compiler.internal.interfaces.IEGLMessageContributor;
+import org.eclipse.edt.compiler.internal.interfaces.IEGLNestedMessageContributor;
+import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
+
 public class EGLMessage extends Object implements IGenerationResultsMessage {
 
 	protected int severity = 0;
@@ -58,7 +62,7 @@ public class EGLMessage extends Object implements IGenerationResultsMessage {
 		id = anId;
 		params = aParams;
 		setStartOffset(aStartOffset);
-		setEndOffset(anEndOffset);
+		setEndOffset(Math.max(anEndOffset, aStartOffset));
 		builtMessage = buildMessageText(anId, aParams);
 		if (aMessageContributor != null) {
 			if (aMessageContributor instanceof IEGLMessageContributor) {
@@ -86,8 +90,8 @@ public class EGLMessage extends Object implements IGenerationResultsMessage {
 
 	public EGLMessage(Map<String, String> mapping, int aSeverity, String anId, Object aMessageContributor, java.lang.String[] aParams, int aStartLine,
 		int aStartColumn, int anEndLine, int anEndColumn) {
-		int aStartOffset = 0;
-		int anEndOffset = 0;
+		int aStartOffset = aStartColumn;
+		int anEndOffset = Math.max(anEndColumn, aStartOffset);
 		messageBundle = mapping;
 		severity = aSeverity;
 		id = anId;
