@@ -74,23 +74,33 @@ public class IRLoader {
 		}
 
 		File root = new File(rootDir);
-
-		// Register MOF model object store
-		ObjectStore typeStore = new FileSystemObjectStore(root, PartEnvironment.INSTANCE, "XML");
-		PartEnvironment.INSTANCE.registerObjectStore(IEnvironment.DefaultScheme, typeStore);
-
-		// Register EGL parts object store
-		typeStore = new FileSystemObjectStore(root, PartEnvironment.INSTANCE, "XML", ".eglxml");
-		PartEnvironment.INSTANCE.registerObjectStore(Type.EGL_KeyScheme, typeStore);
-
-		if (compiler == null) {
-			compiler = new EDTCompiler();
-		}
-		// make sure the system parts are initialized
-		compiler.getSystemEnvironment(null);
-		
 		EObject eClass = null;
-		eClass = Environment.INSTANCE.find(key);
+		
+		try {
+			Environment env = new Environment();
+			Environment.pushEnv(env);
+			
+			PartEnvironment partEnv = new PartEnvironment(env);
+			PartEnvironment.pushEnv(partEnv);
+			
+			// Register MOF model object store
+			ObjectStore typeStore = new FileSystemObjectStore(root, partEnv, "XML");
+			partEnv.registerObjectStore(IEnvironment.DefaultScheme, typeStore);
+
+			// Register EGL parts object store
+			typeStore = new FileSystemObjectStore(root, partEnv, "XML", ".eglxml");
+			partEnv.registerObjectStore(Type.EGL_KeyScheme, typeStore);
+			
+			if (compiler == null) {
+				compiler = new EDTCompiler();
+			}
+			partEnv.registerObjectStores(compiler.getSystemEnvironment(null).getStores());
+			
+			eClass = Environment.getCurrentEnv().find(key);
+		} finally {
+			Environment.popEnv();
+			PartEnvironment.popEnv();
+		}
 		return eClass;
 	}
 	
