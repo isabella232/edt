@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.ide.compiler.gen.EclipseJavaGenerator;
 import org.eclipse.edt.ide.core.AbstractGenerator;
 import org.eclipse.edt.mof.egl.Part;
@@ -25,15 +26,10 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 public class ExampleGenerator extends AbstractGenerator {
 
-	public void generate(String filePath, Part part, IEnvironment env, boolean invokedByBuild) {
-		try {
-			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
-			EclipseExampleGenerator cmd = new EclipseExampleGenerator(file, part, this);
-			cmd.generate(buildArgs(file, part), new EclipseJavaGenerator(cmd), env);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void generate(String filePath, Part part, IEnvironment env, IGenerationMessageRequestor msgRequestor) throws Exception {
+		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
+		EclipseExampleGenerator cmd = new EclipseExampleGenerator(file, part, this);
+		cmd.generate(buildArgs(file, part), new EclipseJavaGenerator(cmd, msgRequestor), env);
 	}
 
 	public String[] buildArgs(IFile file, Part part) throws Exception {
