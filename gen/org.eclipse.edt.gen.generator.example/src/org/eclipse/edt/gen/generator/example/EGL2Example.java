@@ -132,7 +132,7 @@ public class EGL2Example extends EGL2Java {
 		// generation can begin. The new JavaGenerator(genPart) defines the generator to use. You can use the default one, or
 		// provide your own generator that extends the default.
 		EGL2Example genPart = new EGL2Example();
-		genPart.generate(args, new JavaGenerator(genPart), null);
+		genPart.generate(args, new JavaGenerator(genPart), null, null);
 	}
 
 	public String[] getNativeTypePath() {
