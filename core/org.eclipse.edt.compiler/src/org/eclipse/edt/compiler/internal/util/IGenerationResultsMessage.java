@@ -18,6 +18,8 @@ public interface IGenerationResultsMessage {
 	public final int EGL_INFORMATIONAL_MESSAGE = EGLMessage.EGL_INFORMATIONAL_MESSAGE;
 	
 	boolean isError();
+	boolean isWarning();
+	boolean isInformational();
 	String getResourceName();
 	int getSeverity();
 	String getBuiltMessage();

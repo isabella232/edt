@@ -1,5 +1,6 @@
 package org.eclipse.edt.compiler;
 
+import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
@@ -8,12 +9,13 @@ public interface IGenerator {
 	/**
 	 * Generates a part.
 	 * 
-	 * @param file            The path to the file from which the generation was run. Can be a source file or IR file.
+	 * @param filePath        The path to the file from which the generation was run. Can be a source file or IR file.
 	 * @param part            The IR of the part to generate.
 	 * @param environment     The environment to use during generation for part lookups.
-	 * @param invokedByBuild  Flag indicating if this generation is due to a build; false if from a user action.
+	 * @param msgRequestor    Collects generation messages.
+	 * @throws Exception
 	 */
-	public void generate(String filePath, Part part, IEnvironment environment, boolean invokedByBuild);
+	public void generate(String filePath, Part part, IEnvironment environment, IGenerationMessageRequestor msgRequestor) throws Exception;
 	
 	/**
 	 * @return a unique identifier for this generator, which matches the ID in the plugin.xml extension.
