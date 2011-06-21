@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.generator.example.EGL2Example;
@@ -36,7 +37,7 @@ public class EclipseExampleGenerator extends EGL2Example {
 		this.generatorProvider = generator;
 	}
 
-	protected List<Part> loadEGLParts() throws LoadPartException {
+	protected List<Part> loadEGLParts(ICompiler compiler) throws LoadPartException {
 		List<Part> parts = new ArrayList<Part>();
 		parts.add(part);
 		return parts;

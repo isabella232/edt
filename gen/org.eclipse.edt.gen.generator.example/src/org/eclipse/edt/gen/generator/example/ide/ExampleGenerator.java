@@ -29,7 +29,7 @@ public class ExampleGenerator extends AbstractGenerator {
 	public void generate(String filePath, Part part, IEnvironment env, IGenerationMessageRequestor msgRequestor) throws Exception {
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
 		EclipseExampleGenerator cmd = new EclipseExampleGenerator(file, part, this);
-		cmd.generate(buildArgs(file, part), new EclipseJavaGenerator(cmd, msgRequestor), env);
+		cmd.generate(buildArgs(file, part), new EclipseJavaGenerator(cmd, msgRequestor), env, null);
 	}
 
 	public String[] buildArgs(IFile file, Part part) throws Exception {
