@@ -31,7 +31,7 @@ public class EGL2Java extends AbstractGeneratorCommand {
 	public static void main(String[] args) {
 		// set up the command processor and pass the overriding command line options
 		EGL2Java genPart = new EGL2Java();
-		genPart.generate(args, new JavaGenerator(genPart), null);
+		genPart.generate(args, new JavaGenerator(genPart), null, null);
 	}
 
 	public String[] getNativeTypePath() {
