@@ -13,6 +13,8 @@ package org.eclipse.edt.gen.egl;
 
 
 import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
+import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
+import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.EglContext;
 import org.eclipse.edt.gen.GenerationException;
@@ -29,7 +31,11 @@ public class EglGenerator extends Generator{
 	protected AbstractGeneratorCommand generator;
 
 	public EglGenerator(AbstractGeneratorCommand processor) {
-		super(processor);
+		this(processor, null);
+	}
+	
+	public EglGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
+		super(processor, requestor);
 		generator = processor;
 	}
 
@@ -72,7 +78,7 @@ public class EglGenerator extends Generator{
 
 	public void dumpErrorMessages() {
 		// dump out all validation and generation messages
-		for (EGLMessage message : context.getMessageRequestor().getMessages()) {
+		for (IGenerationResultsMessage message : context.getMessageRequestor().getMessages()) {
 			System.out.println(message.getBuiltMessage());
 		}
 	}
