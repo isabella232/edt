@@ -92,6 +92,14 @@ public class GenerationResultsMessage implements IGenerationResultsMessage{
 		return getSeverity() == EGL_ERROR_MESSAGE;
 	}
 	
+	public boolean isWarning() {
+		return getSeverity() == EGL_WARNING_MESSAGE;
+	}
+	
+	public boolean isInformational() {
+		return getSeverity() == EGL_INFORMATIONAL_MESSAGE;
+	}
+	
 	private IEGLMessageContributor getContributor() {
 		if (resourceName == null) {
 			return null;

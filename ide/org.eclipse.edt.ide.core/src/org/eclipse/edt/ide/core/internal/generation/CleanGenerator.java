@@ -8,6 +8,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.ide.core.CoreIDEPluginStrings;
+import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 /**
@@ -34,7 +35,7 @@ public class CleanGenerator extends AbstractGenerator {
 							if (!processedFiles.contains(resource)) {
 								IPath fullPath = resource.getFullPath();
 								IPath packagePath = fullPath.removeFirstSegments(segmentCount).removeLastSegments(1);
-								generationQueue.addPart(InternUtil.intern(org.eclipse.edt.ide.core.internal.utils.Util.pathToStringArray(packagePath)), InternUtil.intern(fullPath.removeFileExtension().lastSegment()));
+								generationQueue.addPart(InternUtil.intern(Util.pathToStringArray(packagePath)), InternUtil.intern(fullPath.removeFileExtension().lastSegment()));
 							}
 							return false;
 					}

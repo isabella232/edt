@@ -114,6 +114,11 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	public static final String GENERATION_BUILDER_ID = PLUGIN_ID + ".EDTGenBuilder"; //$NON-NLS-1$
 	
 	/**
+	 * ID for generation error markers.
+	 */
+	public static final String GENERATION_PROBLEM = PLUGIN_ID + ".generationProblem"; //$NON-NLS-1$
+	
+	/**
 	 * Name of the handle id attribute in a EGL marker.
 	 */
 	public static final String ATT_HANDLE_ID = "org.eclipse.edt.ide.core.internal.model.EGLModelManager.handleId"; //$NON-NLS-1$

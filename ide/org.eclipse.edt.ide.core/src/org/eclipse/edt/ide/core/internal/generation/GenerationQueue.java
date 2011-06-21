@@ -8,18 +8,27 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.builder.NullBuildNotifier;
+import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.EGLMessage;
+import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.ide.core.CoreIDEPluginStrings;
+import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.core.Logger;
-import org.eclipse.edt.ide.core.generation.IGenerationMessageRequestor;
+import org.eclipse.edt.ide.core.internal.builder.AbstractMarkerProblemRequestor;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.utils.StringOutputBuffer;
+import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
@@ -146,7 +155,7 @@ public class GenerationQueue {
 		}
 		
 		if (DEBUG) {
-			System.out.println("Generation Finished:" + " [Time: " + (System.currentTimeMillis() - startTime) + ", Num Parts: " + unitsGenerated); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			System.out.println("Generation Finished: [Time: " + (System.currentTimeMillis() - startTime) + ", Num Parts: " + unitsGenerated); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 	
@@ -160,11 +169,11 @@ public class GenerationQueue {
 		increment = increment/2;	
 	}
 	
-	private void updateProgress (){
+	private void updateProgress () {
    		notifier.compiled();
    		unitsGenerated++;
-   		   		
-   		if (unitsGenerated == generateThreshold && !pendingUnits.isEmpty()){
+   		  		
+   		if (unitsGenerated == generateThreshold && !pendingUnits.isEmpty()) {
    			initProgress();
    		}
 	}
@@ -176,16 +185,32 @@ public class GenerationQueue {
 		
 		IGenerationMessageRequestor messageRequestor = createMessageRequestor();
 		
+		IFile file = null;
 		try {
 			ProjectEnvironment environment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
 			Part part = environment.findPart(InternUtil.intern(genUnit.packageName), InternUtil.intern(genUnit.caseSensitiveInternedPartName));
 			
-			//TODO gather errors reported by the generators, check for errors of dependent parts, etc.
+			//TODO should we skip generation if dependent parts have compile errors?
 			if (part != null && !part.hasCompileErrors()) {
 				for (IPackageFragmentRoot root : pkgFragmentRoots) {
-					IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(root.getPath().append(part.getFileName()));
+					file = ResourcesPlugin.getWorkspace().getRoot().getFile(root.getPath().append(part.getFileName()));
 					if (file != null && file.exists()) {
-						invokeGenerators(file, part);
+						try {
+							//TODO can change this to the commented out code if we enforce 1 part per file
+							//file.deleteMarkers(EDTCoreIDEPlugin.GENERATION_PROBLEM, true, IResource.DEPTH_ONE);
+							IMarker[] markers = file.findMarkers(EDTCoreIDEPlugin.GENERATION_PROBLEM, true, IResource.DEPTH_ONE);
+							for (IMarker marker : markers) {
+								String attr = marker.getAttribute(AbstractMarkerProblemRequestor.PART_NAME, null);
+								if (attr != null && attr.equalsIgnoreCase(genUnit.caseSensitiveInternedPartName)) {
+									marker.delete();
+								}
+							}
+						}
+						catch (CoreException e) {
+							EDTCoreIDEPlugin.log(e);
+						}
+						
+						invokeGenerators(file, part, messageRequestor);
 						break;
 					}
 				}
@@ -198,6 +223,47 @@ public class GenerationQueue {
 			handleUnknownException(e, messageRequestor);
 		}
 		
+		// We might have failed before looking for the file (e.g. couldn't find the IR). Try to resolve the file.
+		if (file == null || !file.exists()) {
+			IPath filePath = Util.stringArrayToPath(genUnit.packageName).append(genUnit.caseSensitiveInternedPartName);
+			for (IPackageFragmentRoot root : pkgFragmentRoots) {
+				file = ResourcesPlugin.getWorkspace().getRoot().getFile(root.getPath().append(filePath));
+				if (file != null && file.exists()) {
+					break;
+				}
+			}
+		}
+		
+		// Create markers
+		if (file != null && file.exists()) {
+			for (IGenerationResultsMessage msg : messageRequestor.getMessages()) {
+				if (msg.isError() || msg.isWarning()) {
+					try {
+						IMarker marker = file.createMarker(EDTCoreIDEPlugin.GENERATION_PROBLEM);
+						marker.setAttribute(IMarker.LINE_NUMBER, msg.getStartLine());
+						marker.setAttribute(IMarker.SEVERITY, msg.isError() ? IMarker.SEVERITY_ERROR : IMarker.SEVERITY_WARNING);
+						marker.setAttribute(IMarker.MESSAGE, msg.getBuiltMessage());
+						marker.setAttribute(IMarker.CHAR_START, msg.getStartOffset());
+						marker.setAttribute(IMarker.CHAR_END, msg.getEndOffset());
+						
+						//TODO can remove this if we enforce 1 part per file
+						marker.setAttribute(AbstractMarkerProblemRequestor.PART_NAME, genUnit.caseSensitiveInternedPartName);
+					}
+					catch (CoreException e) {
+						throw new BuildException(e);
+					}
+				}
+			}
+		}
+		else {
+			// Last resort - write errors to the log.
+			for (IGenerationResultsMessage msg : messageRequestor.getMessages()) {
+				if (msg.isError()) {
+					EDTCoreIDEPlugin.logErrorMessage(msg.getBuiltMessage());
+				}
+			}
+		}
+		
 		updateProgress();
 	}
 	
@@ -205,12 +271,20 @@ public class GenerationQueue {
 	 * A file has zero or more generators associated with it. These may be specified directly on the file, or the settings
 	 * can be inherited from a parent resource (including the workspace defaults).
 	 */
-	private void invokeGenerators(IFile file, Part part) throws Exception {
+	private void invokeGenerators(IFile file, Part part, IGenerationMessageRequestor messageRequestor) throws Exception {
 		IGenerator[] generators = ProjectSettingsUtility.getGenerators(file);
 		if (generators.length != 0) {
 			IEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getIREnvironment();
 			for (int i = 0; i < generators.length; i++) {
-				generators[i].generate(file.getFullPath().toString(), (Part)part.clone(), env, true);
+				try {
+					generators[i].generate(file.getFullPath().toString(), (Part)part.clone(), env, messageRequestor);
+				}
+				catch (RuntimeException e) {
+					handleRuntimeException(e, messageRequestor, part.getId(), new HashSet());
+				}
+				catch (final Exception e) {
+					handleUnknownException(e, messageRequestor);
+				}
 			}
 		}
 	}
@@ -224,23 +298,21 @@ public class GenerationQueue {
 
 		Throwable cause = e.getCause();
 		if (cause instanceof PartNotFoundException) {
-			buildPartNotFoundMessage((PartNotFoundException) cause, messageRequestor, partName);
+			buildPartNotFoundMessage((PartNotFoundException)cause, messageRequestor, partName);
 			return;
 		}
 		if (cause instanceof InvalidPartTypeException) {
-			buildInvalidPartTypeMessage((InvalidPartTypeException) cause, messageRequestor, partName);
+			buildInvalidPartTypeMessage((InvalidPartTypeException)cause, messageRequestor, partName);
 			return;
 		}
-
 		if (cause instanceof RuntimeException) {
-			handleRuntimeException((RuntimeException) cause, messageRequestor, partName, seen);
+			handleRuntimeException((RuntimeException)cause, messageRequestor, partName, seen);
 			return;
 		}
 
 		handleUnknownException(e, messageRequestor);
-		return;
 	}
-
+	
 	protected void handleUnknownException(Exception e, IGenerationMessageRequestor messageRequestor) {
 		buildExceptionMessage(e, messageRequestor);
 		buildStackTraceMessages(e, messageRequestor);
@@ -294,35 +366,40 @@ public class GenerationQueue {
 	
 	protected static IGenerationMessageRequestor createMessageRequestor() {
 		return new IGenerationMessageRequestor() {
-			ArrayList list = new ArrayList();
-
-			boolean error = false;
-
-			public void addMessage(EGLMessage message) {
+			ArrayList<IGenerationResultsMessage> list = new ArrayList<IGenerationResultsMessage>();
+			
+			boolean error;
+			
+			@Override
+			public void addMessage(IGenerationResultsMessage message) {
 				list.add(message);
 				if (message.isError()) {
 					error = true;
 				}
 			}
-
-			public void addMessages(List list) {
-				Iterator i = list.iterator();
+			
+			@Override
+			public void addMessages(List<IGenerationResultsMessage> list) {
+				Iterator<IGenerationResultsMessage> i = list.iterator();
 				while (i.hasNext()) {
-					addMessage((EGLMessage) i.next());
+					addMessage(i.next());
 				}
 			}
-
-			public List getMessages() {
+			
+			@Override
+			public List<IGenerationResultsMessage> getMessages() {
 				return list;
 			}
-
+			
+			@Override
 			public boolean isError() {
 				return error;
 			}
-
+			
+			@Override
 			public void clear() {
 				error = false;
-				list = new ArrayList();
+				list = new ArrayList<IGenerationResultsMessage>();
 			}
 		};
 	}

@@ -3,11 +3,13 @@ package org.eclipse.edt.ide.core.internal.generation;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.CancelledException;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.builder.NullBuildNotifier;
@@ -85,9 +87,18 @@ public class GenerationBuilder extends IncrementalProjectBuilder {
 	}
 	
 	protected void doClean() {
-		GenerationBuildManager.getInstance().clear(getProject());		// Generation Build Manager
+		GenerationBuildManager.getInstance().clear(getProject());
+		deleteAllMarkers();
 		
-		//TODO What should be done here? Tell the generators to "clean up" their generated artifacts?
+		//TODO What else should be done here? Tell the generators to "clean up" their generated artifacts?
 	}
 	
+	protected void deleteAllMarkers() {
+		try {
+			getProject().deleteMarkers(EDTCoreIDEPlugin.GENERATION_PROBLEM, true, IResource.DEPTH_INFINITE);
+		}
+		catch (CoreException e) {
+			throw new BuildException(e);
+		}
+	}
 }

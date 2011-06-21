@@ -31,11 +31,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.EGLMessage;
+import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.ide.core.CoreIDEPluginStrings;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.core.Logger;
-import org.eclipse.edt.ide.core.generation.IGenerationMessageRequestor;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfo;
@@ -158,11 +159,8 @@ public class GeneratePartsOperation {
 	
 	private ArrayList<GenerationRequest> genRequestList;
 	
-	private final boolean invokedByBuild;
-	
-	public GeneratePartsOperation( boolean invokedByBuild ) {
+	public GeneratePartsOperation() {
 		this.genRequestList = new ArrayList<GenerationRequest>();
-		this.invokedByBuild = invokedByBuild;
 	}
 
 	public void addGenerationRequest(GenerationRequest request) {
@@ -269,25 +267,25 @@ public class GeneratePartsOperation {
 
 	protected static IGenerationMessageRequestor createMessageRequestor() {
 		return new IGenerationMessageRequestor() {
-			ArrayList list = new ArrayList();
+			ArrayList<IGenerationResultsMessage> list = new ArrayList<IGenerationResultsMessage>();
 
 			boolean error = false;
 
-			public void addMessage(EGLMessage message) {
+			public void addMessage(IGenerationResultsMessage message) {
 				list.add(message);
 				if (message.isError()) {
 					error = true;
 				}
 			}
 
-			public void addMessages(List list) {
-				Iterator i = list.iterator();
+			public void addMessages(List<IGenerationResultsMessage> list) {
+				Iterator<IGenerationResultsMessage> i = list.iterator();
 				while (i.hasNext()) {
-					addMessage((EGLMessage) i.next());
+					addMessage(i.next());
 				}
 			}
 
-			public List getMessages() {
+			public List<IGenerationResultsMessage> getMessages() {
 				return list;
 			}
 
@@ -398,11 +396,11 @@ public class GeneratePartsOperation {
 	
 								part = environment.findPart(InternUtil.intern(packageName), InternUtil.intern(partName));
 								
-								//TODO EDT message requestor, check for errors of dependent parts, etc.
+								//TODO EDT check for errors of dependent parts?
 								if (part != null && !part.hasCompileErrors()) {
 									IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(partFile));
 									if (file != null && file.exists()) {
-										invokeGenerators(file, part);
+										invokeGenerators(file, part, messageRequestor);
 									}
 								}
 							} catch (PartNotFoundException e) {
@@ -502,12 +500,12 @@ public class GeneratePartsOperation {
 	/**
 	 * A project has a single generator associated with it. Look for it in the list of generators, and invoke it.
 	 */
-	private void invokeGenerators(IFile file, Part part) throws Exception {
+	private void invokeGenerators(IFile file, Part part, IGenerationMessageRequestor req) throws Exception {
 		IGenerator[] generators = ProjectSettingsUtility.getGenerators(file);
 		if (generators.length != 0) {
 			IEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment(file.getProject()).getIREnvironment();
 			for (int i = 0; i < generators.length; i++) {
-				generators[i].generate(file.getFullPath().toString(), (Part)part.clone(), env, invokedByBuild);
+				generators[i].generate(file.getFullPath().toString(), (Part)part.clone(), env, req);
 			}
 		}
 	}
