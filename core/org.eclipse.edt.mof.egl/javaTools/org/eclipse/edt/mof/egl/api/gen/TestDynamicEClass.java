@@ -39,10 +39,10 @@ public class TestDynamicEClass {
 		else {
 			root = new File("d:/workspaces/EGL_CE/org.eclipse.edt.mof.egl/EGL_MOF_OUTPUT");
 		}
-		ObjectStore typeStore = new FileSystemObjectStore(root, PartEnvironment.INSTANCE, "XML");
-		PartEnvironment.INSTANCE.registerObjectStore(IEnvironment.DefaultScheme, typeStore);
-		typeStore = new FileSystemObjectStore(root, PartEnvironment.INSTANCE, "XML");
-		PartEnvironment.INSTANCE.registerObjectStore(Type.EGL_KeyScheme, typeStore);
+		ObjectStore typeStore = new FileSystemObjectStore(root, PartEnvironment.getCurrentEnv(), "XML");
+		PartEnvironment.getCurrentEnv().registerObjectStore(IEnvironment.DefaultScheme, typeStore);
+		typeStore = new FileSystemObjectStore(root, PartEnvironment.getCurrentEnv(), "XML");
+		PartEnvironment.getCurrentEnv().registerObjectStore(Type.EGL_KeyScheme, typeStore);
 		
 		Annotation dyn = IrFactory.INSTANCE.createAnnotation("Location");
 		dyn.setValue("abc");
