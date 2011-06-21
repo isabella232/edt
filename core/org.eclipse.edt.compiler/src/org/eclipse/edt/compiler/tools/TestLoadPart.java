@@ -67,11 +67,11 @@ public class TestLoadPart {
 			partName = "egl:lc.eksportremburs.datatables.common.lcget01";
 		}
 		// Register MOF model object store
-		ObjectStore typeStore = new FileSystemObjectStore(root, PartEnvironment.INSTANCE, "XML");
-		PartEnvironment.INSTANCE.registerObjectStore(IEnvironment.DefaultScheme, typeStore);
+		ObjectStore typeStore = new FileSystemObjectStore(root, PartEnvironment.getCurrentEnv(), "XML");
+		PartEnvironment.getCurrentEnv().registerObjectStore(IEnvironment.DefaultScheme, typeStore);
 		// Register EGL parts object store
-		typeStore = new FileSystemObjectStore(root, PartEnvironment.INSTANCE, "XML", ".eglxml");
-		PartEnvironment.INSTANCE.registerObjectStore(Type.EGL_KeyScheme, typeStore);
+		typeStore = new FileSystemObjectStore(root, PartEnvironment.getCurrentEnv(), "XML", ".eglxml");
+		PartEnvironment.getCurrentEnv().registerObjectStore(Type.EGL_KeyScheme, typeStore);
 		
 		//initialize the system parts
 		new EDTCompiler().getSystemEnvironment(null);
