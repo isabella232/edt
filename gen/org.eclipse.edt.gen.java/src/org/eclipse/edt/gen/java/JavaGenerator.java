@@ -19,6 +19,8 @@ import java.io.UnsupportedEncodingException;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
+import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
+import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.Generator;
@@ -37,7 +39,11 @@ public class JavaGenerator extends Generator {
 	protected AbstractGeneratorCommand generator;
 
 	public JavaGenerator(AbstractGeneratorCommand processor) {
-		super(processor);
+		this(processor, null);
+	}
+	
+	public JavaGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
+		super(processor, requestor);
 		generator = processor;
 		
 		out = (Boolean.TRUE 
@@ -135,7 +141,7 @@ public class JavaGenerator extends Generator {
 
 	public void dumpErrorMessages() {
 		// dump out all validation and generation messages
-		for (EGLMessage message : context.getMessageRequestor().getMessages()) {
+		for (IGenerationResultsMessage message : context.getMessageRequestor().getMessages()) {
 			System.out.println(message.getBuiltMessage());
 		}
 	}
