@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
@@ -123,17 +124,19 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		stack.push(stmt);
 		DeclarationExpression expr = factory.createDeclarationExpression();
 		for (org.eclipse.edt.compiler.core.ast.Name name : (List<org.eclipse.edt.compiler.core.ast.Name>)decl.getNames()) {
-			LocalVariableBinding binding = (LocalVariableBinding)name.resolveDataBinding();
-			Field field = factory.createField();
-			field.setName(binding.getCaseSensitiveName());
-			field.setType((Type)mofTypeFor(binding.getType()));
-			field.setIsNullable(binding.getType().isNullable());
-			field.setContainer(getCurrentFunctionMember());
-			addInitializers(decl.getInitializer(), decl.getSettingsBlockOpt(), field, decl.getType());
-			expr.getFields().add(field);
-			setElementInformation(name, field);
-			// Register new field
-			eObjects.put(binding, field);
+			if (Binding.isValidBinding(name.resolveDataBinding())) {
+				LocalVariableBinding binding = (LocalVariableBinding)name.resolveDataBinding();
+				Field field = factory.createField();
+				field.setName(binding.getCaseSensitiveName());
+				field.setType((Type)mofTypeFor(binding.getType()));
+				field.setIsNullable(binding.getType().isNullable());
+				field.setContainer(getCurrentFunctionMember());
+				addInitializers(decl.getInitializer(), decl.getSettingsBlockOpt(), field, decl.getType());
+				expr.getFields().add(field);
+				setElementInformation(name, field);
+				// Register new field
+				eObjects.put(binding, field);
+			}			
 		}
 		setElementInformation(decl, stmt);
 		stmt.setExpression(expr);
