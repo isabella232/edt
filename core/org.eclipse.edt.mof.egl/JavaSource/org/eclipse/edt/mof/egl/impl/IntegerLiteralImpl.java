@@ -26,16 +26,7 @@ public class IntegerLiteralImpl extends NumericLiteralImpl implements IntegerLit
 	public Integer getIntValue() {
 		return Integer.decode(getValue());
 	}
-	
-	@Override
-	public void setIntValue(Integer value) {
-		if (value < 0) {
-			setIsNegated(true);
-			value = -value;
-		}
-		setValue(String.valueOf(value));
-	}
-	
+		
 	@Override
 	public Type getType() {
 		if (type == null) {

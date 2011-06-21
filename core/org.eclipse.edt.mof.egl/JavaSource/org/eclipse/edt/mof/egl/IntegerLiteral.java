@@ -14,7 +14,5 @@ package org.eclipse.edt.mof.egl;
 
 public interface IntegerLiteral extends NumericLiteral {
 	Integer getIntValue();
-	
-	void setIntValue(Integer value);
-	
+		
 }
