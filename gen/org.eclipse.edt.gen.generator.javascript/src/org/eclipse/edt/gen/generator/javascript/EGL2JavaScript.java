@@ -27,7 +27,7 @@ public class EGL2JavaScript extends AbstractGeneratorCommand {
 	public static void main(String[] args) {
 		// set up the command processor and pass the overriding command line options
 		EGL2JavaScript genPart = new EGL2JavaScript();
-		genPart.generate(args, new JavaScriptGenerator(genPart), null);
+		genPart.generate(args, new JavaScriptGenerator(genPart), null, null);
 	}
 
 	public String[] getNativeTypePath() {
