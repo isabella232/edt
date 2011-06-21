@@ -35,7 +35,7 @@ public class WorthlessGenerator extends JavaGenerator {
 	public void generate(String filePath, Part part, IEnvironment env, IGenerationMessageRequestor msgRequestor) throws Exception {
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
 		EclipseEGL2Java cmd = new EclipseEGL2Java(file, part, this);
-		cmd.generate(buildArgs(file, part), new EclipseWorthlessGenerator(cmd, msgRequestor), env);
+		cmd.generate(buildArgs(file, part), new EclipseWorthlessGenerator(cmd, msgRequestor), env, null);
 	}
 	
 	private static class EclipseWorthlessGenerator extends EclipseJavaGenerator {
