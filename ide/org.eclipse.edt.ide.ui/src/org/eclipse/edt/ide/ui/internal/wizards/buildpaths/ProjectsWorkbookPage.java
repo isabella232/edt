@@ -16,16 +16,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLModel;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.PPListElement;
-import org.eclipse.edt.ide.core.model.bde.IPluginModelBase;
-import org.eclipse.edt.ide.core.model.bde.PluginRegistry;
-import org.eclipse.edt.ide.core.model.bde.WorkspacePluginModel;
 import org.eclipse.edt.ide.ui.internal.util.PixelConverter;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.CheckedListDialogField;
@@ -82,7 +77,7 @@ public class ProjectsWorkbookPage extends BuildPathBasePage {
 			List cpelements= fClassPathList.getElements();
 			for (int i= cpelements.size() - 1 ; i >= 0; i--) {
 				PPListElement cpelem= (PPListElement)cpelements.get(i);
-				if (isEntryKind(cpelem.getEntryKind()) || (cpelem.getFullPath() != null)) {
+				if (isEntryKind(cpelem.getEntryKind())) {
 					checkedProjects.add(cpelem);
 					projects.add(cpelem);
 				} 
@@ -104,17 +99,6 @@ public class ProjectsWorkbookPage extends BuildPathBasePage {
 					projects.add(new PPListElement(fCurrJProject, IEGLPathEntry.CPE_PROJECT, proj.getFullPath(), proj));
 				}
 			}	
-			IPluginModelBase[] models = getElements();
-			for(IPluginModelBase model : models) {
-				if(model instanceof WorkspacePluginModel) {
-					continue;
-				}
-				IPath path = new Path(model.getInstallLocation());
-				PPListElement ele = new PPListElement(fCurrJProject, IEGLPathEntry.CPE_PROJECT, path);
-				if(!checkIfBinaryProjExisting(projects, ele)) {
-					projects.add(ele);	
-				} 
-			}
 			
 			fProjectsList.setElements(projects);
 			fProjectsList.setCheckedElements(checkedProjects);
@@ -137,9 +121,6 @@ public class ProjectsWorkbookPage extends BuildPathBasePage {
 		return false;
 	}
 	
-	private static IPluginModelBase[] getElements() {
-		return PluginRegistry.getActiveModels();
-	}
 	// -------- UI creation ---------
 		
 	public Control getControl(Composite parent) {
@@ -176,7 +157,7 @@ public class ProjectsWorkbookPage extends BuildPathBasePage {
 		// backwards, as entries will be deleted
 		for (int i= cpelements.size() -1; i >= 0 ; i--) {
 			PPListElement cpe= (PPListElement)cpelements.get(i);
-			if (isEntryKind(cpe.getEntryKind()) || (cpe.getFullPath() != null)) {
+			if (isEntryKind(cpe.getEntryKind())) {
 				if (!projelements.remove(cpe)) {
 					cpelements.remove(i);
 					remove= true;

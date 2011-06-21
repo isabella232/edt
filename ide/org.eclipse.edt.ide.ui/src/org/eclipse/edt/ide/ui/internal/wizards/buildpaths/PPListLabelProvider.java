@@ -189,11 +189,7 @@ public class PPListLabelProvider extends LabelProvider {
 					return fFolderImage;
 				}
 			case IEGLPathEntry.CPE_LIBRARY:
-				if(cpentry.getFullPath() == null) {
-					return PluginImages.DESC_OBJS_PACKFRAG_ROOT_EGLAR;
-				} else {
-					return PluginImages.DESC_OBJS_EGL_BINARY_PROJECT_OPEN;
-				}
+				return PluginImages.DESC_OBJS_PACKFRAG_ROOT_EGLAR;
 			case IEGLPathEntry.CPE_PROJECT:
 				if(cpentry.getEGLPathEntry().isBinaryProject()) {
 					return PluginImages.DESC_OBJS_EGL_BINARY_PROJECT_OPEN;
