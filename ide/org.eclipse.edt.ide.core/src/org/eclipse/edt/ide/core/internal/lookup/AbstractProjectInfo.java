@@ -131,11 +131,15 @@ public abstract class AbstractProjectInfo {
 		}
 		
 		public void removePackage(String packageName){
-			packages.remove(packageName);
+			if (packages != null) {
+				packages.remove(packageName);
+			}
 		}
 		
 		public void removePart(String partName){
-			parts.remove(partName);
+			if (parts != null) {
+				parts.remove(partName);
+			}
 		}
 		
 		public String toString(){
