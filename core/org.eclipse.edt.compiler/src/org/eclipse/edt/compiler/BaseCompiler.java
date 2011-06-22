@@ -118,8 +118,8 @@ public class BaseCompiler implements ICompiler {
 	}
 	
 	protected ISystemEnvironment createSystemEnvironment(IBuildNotifier notifier) {
-		SystemEnvironment sysEnv = new SystemEnvironment(Environment.INSTANCE, null, getAllImplicitlyUsedEnumerations());
-    	Environment.INSTANCE.registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
+		SystemEnvironment sysEnv = new SystemEnvironment(Environment.getCurrentEnv(), null, getAllImplicitlyUsedEnumerations());
+    	Environment.getCurrentEnv().registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
 		sysEnv.initializeSystemPackages(getSystemEnvironmentPath(), new SystemPackageBuildPathEntryFactory(new Mof2Binding(sysEnv)), notifier);
 		return sysEnv;
 	}
