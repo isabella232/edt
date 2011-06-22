@@ -37,7 +37,6 @@ import org.eclipse.edt.ide.core.model.IEGLModelMarker;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
-import org.eclipse.edt.ide.core.utils.EGLProjectFileUtility;
 
 /**
  * @author cduval
@@ -133,8 +132,6 @@ public abstract class AbstractProjectBuildPath {
 		
 	public IProject[] getRequiredProjects() {
 		try {
-			
-			List seenExternalProjects = new ArrayList();
 			IEGLProject eglProject = EGLCore.create(project);
 			String[] requiredProjectNames = eglProject.getRequiredProjectNames();
 			List requiredProjects = new ArrayList();;
