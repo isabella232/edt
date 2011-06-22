@@ -133,7 +133,7 @@ public class ZipFileObjectStore extends AbstractObjectStore implements CachingOb
 	
 	@Override
 	public EObject get(String key) throws DeserializationException {
-		String normKey = key.toUpperCase().toLowerCase();
+		String normKey = removeSchemeFromKey(key).toUpperCase().toLowerCase();
 		EObject value = cache.get(normKey);
 		if (value == null) {
 			value = super.get(key);
@@ -144,7 +144,7 @@ public class ZipFileObjectStore extends AbstractObjectStore implements CachingOb
 
 	@Override
 	public EObject getFromCache(String key) {
-		String normKey = key.toUpperCase().toLowerCase();
+		String normKey = removeSchemeFromKey(key).toUpperCase().toLowerCase();
 		return cache.get(normKey);
 	}
 
