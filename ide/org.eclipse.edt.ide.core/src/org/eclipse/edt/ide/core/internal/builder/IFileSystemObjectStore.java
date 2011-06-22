@@ -199,7 +199,7 @@ public class IFileSystemObjectStore extends AbstractObjectStore implements Cachi
 
 	@Override
 	public EObject getFromCache(String key) {
-		String normKey = key.toUpperCase().toLowerCase();
+		String normKey = removeSchemeFromKey(key).toUpperCase().toLowerCase();
 		return cache.get(normKey);
 	}
 
