@@ -52,6 +52,10 @@ public abstract class AbstractEnvironment implements IEnvironment {
 			stores = new ArrayList<ObjectStore>();
 			objectStores.put(scheme, stores);
 		}
+		//Sometimes (especially with the object stores for the systemParts), the store is already registered. Dont add dupicates
+		if (stores.contains(objectStore)) {
+			return;
+		}
 		LookupDelegate delegate = lookupDelegates.get(scheme);
 		objectStore.setProxyClass(delegate.getProxyClass());
 		stores.add(objectStore);
