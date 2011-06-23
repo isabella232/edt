@@ -50,11 +50,9 @@ import org.eclipse.edt.ide.core.model.IMember;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.pde.internal.core.PluginModelManager;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
@@ -73,18 +71,6 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	 */
 	private static EDTCoreIDEPlugin eglCorePlugin;
 	private BundleContext fBundleContext;
-	
-	/**
-	 * Target platform service.
-	 */
-	private ServiceRegistration fTargetPlatformService;
-	
-	/**
-	 * Bundle project service.
-	 */
-	private ServiceRegistration fBundleProjectService;
-		
-	private PluginModelManager fModelManager;
 	
 	private IPropertyChangeListener propertyChangeListener = new PreferenceListener();
 	
@@ -218,14 +204,6 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	public void doneSaving(ISaveContext context) {
 	}
 //	/**
-//	 * Insert the method's description here.
-//	 * Creation date: (10/15/2001 1:01:23 PM)
-//	 * @param message java.lang.String
-//	 */
-//	public static void fixit(String message) {
-//		Logger.log(EGLCorePlugin.class, "EGLCorePlugin:" + message);  //$NON-NLS-1$
-//	}
-//	/**
 //	 * Get the image services manager from the plugin.
 //	 * Creation date: (8/20/2001 5:05:05 PM)
 //	 * @return org.eclipse.edt.core.ImageServicesManager
@@ -327,8 +305,6 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 		super.start(context);
 		fBundleContext = context;
 
-//		fTargetPlatformService = context.registerService(ITargetPlatformService.class.getName(), TargetPlatformService.getDefault(), new Hashtable());
-		
 		getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 		
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
@@ -410,19 +386,6 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 		
 		getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 		
-		if (fModelManager != null) {
-			fModelManager.shutdown();
-			fModelManager = null;
-		}
-		if (fTargetPlatformService != null) {
-			fTargetPlatformService.unregister();
-			fTargetPlatformService = null;
-		}
-		if (fBundleProjectService != null) {
-			fBundleProjectService.unregister();
-			fBundleProjectService = null;
-		}
-		
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		workspace.removeResourceChangeListener(ASTManager.getInstance());
 		workspace.removeResourceChangeListener(resourceChangeProcessor);
@@ -433,18 +396,6 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 		((EGLModelManager) EGLModelManager.getEGLModelManager()).shutdown();
 		
 		fBundleContext = null;
-	}
-	
-	public PluginModelManager getModelManager() {
-		if (fModelManager == null) {
-			fModelManager = new PluginModelManager();
-		}
-		return fModelManager;
-	}
-
-
-	public boolean areModelsInitialized() {
-		return fModelManager != null && fModelManager.isInitialized();
 	}
 	
 	public void log(String msg, Exception e) {
