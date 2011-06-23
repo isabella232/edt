@@ -62,7 +62,28 @@ public class PartTemplate extends JavaTemplate {
 		for (String imported : typesImported) {
 			// we don't want to use ctx.gen here, because we want the type template logic to handle this to avoid any array <
 			// ... > being added
-			out.println("import " + imported + ";");
+			String type;
+			int lastDot = imported.lastIndexOf( '.' );
+			if ( lastDot == -1 )
+			{
+				type = Aliaser.getJavaSafeAlias( imported );
+			}
+			else
+			{
+				String pkg = CommonUtilities.packageName( imported.substring( 0, lastDot ) );
+				if ( pkg.equals( "java.lang" ) )
+				{
+					// If we're intentionally importing a class from java.lang, don't
+					// alias the name.
+					type = imported;
+				}
+				else
+				{
+					type = pkg + '.' + Aliaser.getJavaSafeAlias( imported.substring( lastDot + 1 ) );
+				}
+			}
+
+			out.println("import " + type + ";");
 		}
 	}
 
