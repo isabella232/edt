@@ -24,7 +24,7 @@ import org.eclipse.edt.ide.core.CoreIDEPluginStrings;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.core.Logger;
-import org.eclipse.edt.ide.core.internal.builder.AbstractMarkerProblemRequestor;
+import org.eclipse.edt.ide.core.internal.builder.MarkerProblemRequestor;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.utils.StringOutputBuffer;
@@ -195,21 +195,6 @@ public class GenerationQueue {
 				for (IPackageFragmentRoot root : pkgFragmentRoots) {
 					file = ResourcesPlugin.getWorkspace().getRoot().getFile(root.getPath().append(part.getFileName()));
 					if (file != null && file.exists()) {
-						try {
-							//TODO can change this to the commented out code if we enforce 1 part per file
-							//file.deleteMarkers(EDTCoreIDEPlugin.GENERATION_PROBLEM, true, IResource.DEPTH_ONE);
-							IMarker[] markers = file.findMarkers(EDTCoreIDEPlugin.GENERATION_PROBLEM, true, IResource.DEPTH_ONE);
-							for (IMarker marker : markers) {
-								String attr = marker.getAttribute(AbstractMarkerProblemRequestor.PART_NAME, null);
-								if (attr != null && attr.equalsIgnoreCase(genUnit.caseSensitiveInternedPartName)) {
-									marker.delete();
-								}
-							}
-						}
-						catch (CoreException e) {
-							EDTCoreIDEPlugin.log(e);
-						}
-						
 						invokeGenerators(file, part, messageRequestor);
 						break;
 					}
@@ -234,8 +219,23 @@ public class GenerationQueue {
 			}
 		}
 		
-		// Create markers
+		// Delete existing and create new markers
 		if (file != null && file.exists()) {
+			try {
+				//TODO can change this to the commented out code if we enforce 1 part per file
+				//file.deleteMarkers(EDTCoreIDEPlugin.GENERATION_PROBLEM, true, IResource.DEPTH_ONE);
+				IMarker[] markers = file.findMarkers(EDTCoreIDEPlugin.GENERATION_PROBLEM, true, IResource.DEPTH_ONE);
+				for (IMarker marker : markers) {
+					String attr = InternUtil.intern(marker.getAttribute(MarkerProblemRequestor.PART_NAME, "")); //$NON-NLS-1$
+					if (attr == genUnit.caseSensitiveInternedPartName) {
+						marker.delete();
+					}
+				}
+			}
+			catch (CoreException e) {
+				EDTCoreIDEPlugin.log(e);
+			}
+			
 			for (IGenerationResultsMessage msg : messageRequestor.getMessages()) {
 				if (msg.isError() || msg.isWarning()) {
 					try {
@@ -247,7 +247,7 @@ public class GenerationQueue {
 						marker.setAttribute(IMarker.CHAR_END, msg.getEndOffset());
 						
 						//TODO can remove this if we enforce 1 part per file
-						marker.setAttribute(AbstractMarkerProblemRequestor.PART_NAME, genUnit.caseSensitiveInternedPartName);
+						marker.setAttribute(MarkerProblemRequestor.PART_NAME, genUnit.caseSensitiveInternedPartName);
 					}
 					catch (CoreException e) {
 						throw new BuildException(e);
