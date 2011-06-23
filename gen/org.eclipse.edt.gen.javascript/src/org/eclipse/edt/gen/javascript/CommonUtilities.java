@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.javascript;
 
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -193,4 +194,19 @@ public class CommonUtilities {
 			return " | ";
 		return "";
 	}
+	
+	public static String createNamespaceFromPackage( Part part )
+	{
+		String ePackage = part.getPackageName();
+		if ( ePackage == null || ePackage.length() == 0 )
+		{
+			return "http://default";
+		}
+		else
+		{
+			return "http://"  + ePackage;
+		}
+
+	}
+	
 }

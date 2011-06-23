@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.EglContext;
@@ -24,6 +27,7 @@ public class Context extends EglContext {
 	private static final long serialVersionUID = 6429116299734843162L;
 
 	private String currentFunction;
+	private Map<String, String> namespaceMap = new HashMap<String, String>();
 
 	public Context(AbstractGeneratorCommand processor) {
 		super(processor);
@@ -89,6 +93,13 @@ public class Context extends EglContext {
 		getMessageRequestor().addMessage(message);
 	}
 
+	public void addNamespace(String namespace, String localName, String qualifiedPart){
+		namespaceMap.put(namespace + '{' + localName + '}', qualifiedPart);
+	}
+	
+	public Map<String, String> getNamespaceMap(){
+		return namespaceMap;
+	}
 	/*
 	 * TODO sbg need to revisit support for EGL src line numbers public void gen(String methodName, Annotation type,
 	 * EglContext ctx, TabbedWriter out, Object... args) throws TemplateException { updateEGLLocation(type, out);

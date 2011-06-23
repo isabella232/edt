@@ -63,6 +63,8 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genInitializeMethods = "genInitializeMethods";
 	public static final String genInstantiation = "genInstantiation";
 	public static final String genInvocation = "genInvocation";
+	public static final String genLibrary = "genLibrary";
+	public static final String genLibraries = "genLibraries";
 	public static final String genMemberAccess = "genMemberAccess";
 	public static final String genMemberName = "genMemberName";
 	public static final String genName = "genName";
