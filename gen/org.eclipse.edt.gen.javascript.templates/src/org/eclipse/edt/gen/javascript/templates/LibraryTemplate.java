@@ -55,6 +55,10 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		ctx.gen(genFunctions, library, ctx, out, args);
 		ctx.gen(genFields, library, ctx, out, args);
 		ctx.gen(genGetterSetters, library, ctx, out, args);
+		out.println(",");
+		ctx.gen("genXmlAnnotations", library, ctx, out, args);
+		out.println(",");
+		ctx.gen("genNamespaceMap", library, ctx, out, args);
 	}
 
 	public void genClassHeader(Library library, Context ctx, TabbedWriter out, Object... args) {
@@ -83,7 +87,6 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		out.print("['$inst']");
 	}
 
-	@SuppressWarnings("unchecked")
 	public void genConstructor(Library library, Context ctx, TabbedWriter out, Object... args) {
 		out.print(quoted("constructor"));
 		out.println(": function() {");
@@ -103,15 +106,8 @@ public class LibraryTemplate extends JavaScriptTemplate {
 			ctx.gen(genInstantiation, part, ctx, out, args);
 			out.println(";");
 		}
-		// instantiate each system library
-		List<Library> libraries = (List<Library>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed);
-		for (Library part : libraries) {
-			// if this is a system library, then generate code
-			if (ctx.mapsToNativeType((Type) part)) {
-				ctx.gen(genInstantiation, part, ctx, out, args);
-				out.println(";");
-			}
-		}
+		// instantiate each library
+		ctx.gen(genLibraries, library, ctx, out, args);
 		out.println("}");
 	}
 

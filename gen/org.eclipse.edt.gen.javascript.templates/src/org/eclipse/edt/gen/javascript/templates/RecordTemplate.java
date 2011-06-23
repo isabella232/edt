@@ -51,7 +51,6 @@ public class RecordTemplate extends JavaScriptTemplate {
 	public void genConstructor(Record part, Context ctx, TabbedWriter out, Object... args) {
 		out.print(quoted("constructor"));
 		out.println(": function() {");
-		out.println("this.eze$$XMLRootElementName = " + quoted(part.getName()) + ";");
 		out.println("this.eze$$setInitial();");
 		out.println("}");
 		out.println(",");
@@ -120,10 +119,9 @@ public class RecordTemplate extends JavaScriptTemplate {
 			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
 			out.print(" = ");
 		}
-		out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
-		ctx.gen(genExpression, (Expression) args[1], ctx, out, args);
-		out.print(", ");
 		ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
+		out.print(".ezeCopy(");
+		ctx.gen(genExpression, (Expression) args[1], ctx, out, args);
 		out.print(")");
 	}
 

@@ -11,11 +11,19 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.edt.gen.javascript.CommonUtilities;
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
@@ -26,8 +34,28 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		ctx.validate(validateUsedParts, part, ctx, args);
 		ctx.validate(validateFields, part, ctx, args);
 		ctx.validate(validateFunctions, part, ctx, args);
+		addNamespaceMap(part, ctx);
 	}
 
+	private void addNamespaceMap(EGLClass part, Context ctx){
+		String localName = part.getName();
+		String namespace = CommonUtilities.createNamespaceFromPackage(part);
+		Annotation annot = part.getAnnotation("egl.core.xmlRootElement");
+		if(annot != null){
+			if (annot.getValue("namespace") != null && 
+					((String)annot.getValue("namespace")).length() > 0)
+			{
+				namespace = (String) annot.getValue("namespace");
+			}
+			if (annot.getValue("name") != null && 
+					((String)annot.getValue("name")).length() > 0)
+			{
+				localName = (String) annot.getValue("name");
+			}
+			
+		}
+		ctx.addNamespace(namespace, localName, part.getFullyQualifiedName());
+	}
 	public void validateUsedParts(EGLClass part, Context ctx, Object... args) {
 		for (Part item : IRUtils.getReferencedPartsFor(part)) {
 			ctx.validate(validateUsedPart, part, ctx, item);
@@ -86,10 +114,10 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		// out.println(",");
 		// genToJSONMethod(part, ctx, out, args);
 		// out.println(",");
-		// genFromXMLMethod(part, ctx, out, args);
-		// out.println(",");
-		// genToXMLMethod(part, ctx, out, args);
-		// out.println(",");
+		out.println(",");
+		ctx.gen("genXmlAnnotations", part, ctx, out, args);
+		out.println(",");
+		ctx.gen("genNamespaceMap", part, ctx, out, args);
 		ctx.gen(genFunctions, part, ctx, out, args);
 		ctx.gen(genFields, part, ctx, out, args);
 		ctx.gen(genGetterSetters, part, ctx, out, args);
@@ -111,14 +139,24 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		// Generate default constructor
 		out.print(quoted("constructor"));
 		out.println(": function() {");
-		out.print("this.");
-		out.print("eze$$XMLRootElementName = ");
-		out.print(quoted(part.getName()));
-		out.println(";");
+		ctx.gen(genLibraries, part, ctx, out, args);
 		out.println("this.eze$$setInitial();");
 		out.println("}");
 	}
 
+	@SuppressWarnings("unchecked")
+	public void genLibraries(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+		List<Library> libraries = (List<Library>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed);
+		for (Library library : libraries) {
+			ctx.gen(genLibrary, part, ctx, out, library);
+		}
+	}
+	
+	public void genLibrary(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genInstantiation, args[0], ctx, out, args);
+		out.println(";");
+	}
+	
 	public void genSetEmptyMethods(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
 		out.print(quoted("eze$$setEmpty"));
 		out.println(": function() {");
@@ -200,7 +238,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.print(temp2);
 		out.print(".setNull(");
 		out.print(temp1);
-		out.println("eze$$isNull)");
+		out.println("eze$$isNull);");
 
 		out.print("return ");
 		out.print(temp2);
@@ -249,4 +287,92 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	public void genDeclaration(EGLClass part, Context ctx, TabbedWriter out, Object... args) {}
 
 	public void genSuperClass(EGLClass part, Context ctx, TabbedWriter out, Object... args) {}
+
+	public void genXmlAnnotations(EGLClass part, Context ctx, TabbedWriter out, Object... args){
+		out.print(quoted("eze$$getXmlPartAnnotations"));
+		out.println(": function() {");
+		//create the XMLAnnotationMap
+		out.println("var xmlAnnotations = {};");
+		Annotation annot = part.getAnnotation("egl.core.xmlRootElement");
+		String namespace = null;
+		if (annot != null && annot.getValue("namespace") != null && 
+				((String)annot.getValue("namespace")).length() > 0)
+		{
+			namespace = (String) annot.getValue("namespace");
+		}
+		String name = part.getName();
+		if (annot != null && annot.getValue("name") != null && 
+				((String)annot.getValue("name")).length() > 0)
+		{
+			name = (String) annot.getValue("name");
+		}
+		Boolean isNillable = Boolean.FALSE;
+		if (annot != null && annot.getValue("isNillable") instanceof Boolean)
+		{
+			isNillable = (Boolean) annot.getValue("isNillable");
+		}
+		out.println("xmlAnnotations[\"XMLRootElement\"] = new egl.egl.core.xml.XMLRootElement(" + 
+				(name == null ? "null" : quoted(name)) + ", " +
+				(namespace == null ? "null" : quoted(namespace)) + 
+				", " + isNillable.toString() + ");");
+		
+		annot = part.getAnnotation("egl.core.XMLStructure");
+		if (annot != null && annot.getValue("value") != null) 
+		{
+			String value;
+			/*  choice = 1,
+			  sequence = 2,
+			  simpleContent = 3,
+			  unordered = 4*/
+			switch((Integer)annot.getValue("value")){
+				case 1:
+					value = "choice";
+					break;
+				case 2:
+					value = "sequence";
+					break;
+				case 3:
+					value = "simpleContent";
+					break;
+				default:
+					value = "unordered";
+			}
+			out.println("xmlAnnotations[\"XMLStructure\"] = egl.egl.core.xml.XMLStructure(" + quoted(value) + ");");
+		} 		
+
+		out.println("return xmlAnnotations;");
+		out.println("},");
+		out.print(quoted("eze$$getXmlFields"));
+		out.println(": function() {");
+		out.println("var xmlAnnotations;");
+		out.println("fields = new Array();");
+		int idx = 0;
+		for (Field field : part.getFields()) {
+			if (field instanceof ConstantField ||
+					field.isStatic()) {
+				continue;
+			}
+			ctx.gen("genXmlField", field, ctx, out, Integer.valueOf(idx));
+			idx++;
+		}		
+		out.println("return fields;");
+		out.println("}");
+	}
+	public void genNamespaceMap(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+		out.print(quoted("eze$$resolvePart"));
+		out.println(": function(/*string*/ namespace, /*string*/ localName) {");
+		out.println("if(this.namespaceMap == undefined){");
+		out.println("this.namespaceMap = {};");
+		for (Map.Entry<String, String> entry : ctx.getNamespaceMap().entrySet()) {
+			out.println("this.namespaceMap[" + quoted(entry.getKey())+ "] = " + quoted(entry.getValue()) + ";");
+		}		
+		out.println("}");
+		out.println("var newObject = null;");
+		out.println("var className = this.namespaceMap[namespace + \"{\" + localName + \"}\"];");
+		out.println("if(className != undefined && className != null){");
+		out.println("newObject = instantiate(className, []);");
+		out.println("};");
+		out.println("return newObject;");
+		out.println("}");
+	}
 }
