@@ -42,20 +42,20 @@ public class RUIHandlerTemplate extends JavaScriptTemplate {
 	}
 
 	public void genClassBody(Handler type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genConstructor, (Element) type, ctx, out, args);
+		ctx.gen(genConstructor, type, ctx, out, args);
 		ctx.gen(genFunctions, (Element) type, ctx, out, args);
-		out.println("};");
+		out.println(",");
+		ctx.gen("genXmlAnnotations", type, ctx, out, args);
+		out.println(",");
+		ctx.gen("genNamespaceMap", type, ctx, out, args);
 	}
 
 	public void genConstructor(Handler type, Context ctx, TabbedWriter out, Object... args) {
 		// Generate default constructor
-		Stereotype stereotype = (Stereotype) args[0];
+		Stereotype stereotype = type.getStereotype();
 		out.print(quoted("constructor"));
 		out.println(": function() {");
-		out.print("this.");
-		out.print("eze$$XMLRootElementName = ");
-		out.print(quoted(type.getName()));
-		out.println(";");
+		
 		for (Field field : type.getFields()) {
 			if (field.getInitializerStatements() != null)
 				ctx.gen(genStatementNoBraces, field.getInitializerStatements(), ctx, out, args);
@@ -64,13 +64,14 @@ public class RUIHandlerTemplate extends JavaScriptTemplate {
 		// handled properly in the bindings front end that has this value. Assume
 		// for now the initialUI is the field named 'ui'
 		// List<MemberName> initialUI = (List<MemberName>)stereotype.getValue(FieldName_InitialUI);
-		Field initialUI = type.getField("ui");
+		Field initialUI = type.getField("initialUI");
 		if (initialUI != null) {
 			out.print("this.initialUI = [ ");
 			// ctx.foreach(initialUI, ',', genExpression, ctx, out, args);
 			out.print("this.ui");
 			out.println(" ];");
 		}
+		ctx.gen(genLibraries, type, ctx, out, args);
 		MemberName onConstruction = (MemberName) stereotype.getValue(FieldName_OnConstructionFunction);
 		if (onConstruction != null) {
 			out.print("this.");
