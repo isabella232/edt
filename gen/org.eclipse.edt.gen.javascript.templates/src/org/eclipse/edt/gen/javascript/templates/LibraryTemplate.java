@@ -56,9 +56,9 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		ctx.gen(genFields, library, ctx, out, args);
 		ctx.gen(genGetterSetters, library, ctx, out, args);
 		out.println(",");
-		ctx.gen("genXmlAnnotations", library, ctx, out, args);
+		ctx.gen(genXmlAnnotations, library, ctx, out, args);
 		out.println(",");
-		ctx.gen("genNamespaceMap", library, ctx, out, args);
+		ctx.gen(genNamespaceMap, library, ctx, out, args);
 	}
 
 	public void genClassHeader(Library library, Context ctx, TabbedWriter out, Object... args) {

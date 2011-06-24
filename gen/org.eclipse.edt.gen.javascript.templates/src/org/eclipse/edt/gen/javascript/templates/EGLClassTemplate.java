@@ -115,9 +115,9 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		// genToJSONMethod(part, ctx, out, args);
 		// out.println(",");
 		out.println(",");
-		ctx.gen("genXmlAnnotations", part, ctx, out, args);
+		ctx.gen(genXmlAnnotations, part, ctx, out, args);
 		out.println(",");
-		ctx.gen("genNamespaceMap", part, ctx, out, args);
+		ctx.gen(genNamespaceMap, part, ctx, out, args);
 		ctx.gen(genFunctions, part, ctx, out, args);
 		ctx.gen(genFields, part, ctx, out, args);
 		ctx.gen(genGetterSetters, part, ctx, out, args);
