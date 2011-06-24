@@ -360,10 +360,21 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 						if (node.getTarget() instanceof FieldAccess) {
 							FieldAccess fa = (FieldAccess) node.getTarget();
 							if (fa.getPrimary() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression) {
-								FunctionMember irFunc = (FunctionMember)getEObjectFor(functionBinding);
-								fi = factory.createFunctionInvocation();
-								fi.setId(irFunc.getName());
-								((FunctionInvocation)fi).setTarget(irFunc);
+								
+								if (functionBinding == null || isSuperTypeMember(functionBinding)) {
+									// Qualify with this to get QualifiedFunctionInvocation which will do dynamic lookup
+									fi = factory.createQualifiedFunctionInvocation();
+									fi.setId(node.getTarget().getCanonicalString());
+									ThisExpression thisExpr = factory.createThisExpression();
+									thisExpr.setThisObject(getCurrentFunctionMember().getContainer());
+									((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
+								}
+								else {								
+									FunctionMember irFunc = (FunctionMember)getEObjectFor(functionBinding);
+									fi = factory.createFunctionInvocation();
+									fi.setId(irFunc.getName());
+									((FunctionInvocation)fi).setTarget(irFunc);
+								}
 							}
 							else {
 								fi = factory.createQualifiedFunctionInvocation();

@@ -686,6 +686,14 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	}
 
 	private IOStatementGenerator getGeneratorFor(org.eclipse.edt.compiler.core.ast.Statement node) {
+		IOStatementGenerator generator = primGetGeneratorFor(node);
+		if (generator != null) {
+			generator.setCurrentPart(currentPart);
+		}
+		return generator;
+	}
+	
+	private IOStatementGenerator primGetGeneratorFor(org.eclipse.edt.compiler.core.ast.Statement node) {
 		org.eclipse.edt.compiler.core.ast.Name nameExpr = null;
 		if (!node.getIOObjects().isEmpty()) {
 			nameExpr = (org.eclipse.edt.compiler.core.ast.Name)node.getIOObjects().get(0);

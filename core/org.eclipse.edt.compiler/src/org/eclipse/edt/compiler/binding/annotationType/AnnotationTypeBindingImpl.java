@@ -246,7 +246,9 @@ public class AnnotationTypeBindingImpl extends AnnotationTypeBinding implements 
 	
 	public IDataBinding findData(String simpleName) {
 		IDataBinding fieldBinding = annotationRecord.findData(InternUtil.intern(simpleName));
-		if(IBinding.NOT_FOUND_BINDING != fieldBinding) {
+
+		// Check the declarer, because defaultSuperType fields may be found
+		if(IBinding.NOT_FOUND_BINDING != fieldBinding && fieldBinding.getDeclaringPart() == annotationRecord) {
 			final AnnotationTypeBinding aTypeBinding = this;
 			final ITypeBinding fieldBindingType = fieldBinding.getType();
 			return new AnnotationFieldBinding(fieldBinding.getCaseSensitiveName(), declaringPart, new AnnotationTypeBinding(fieldBinding.getCaseSensitiveName(), new Object[0]) {

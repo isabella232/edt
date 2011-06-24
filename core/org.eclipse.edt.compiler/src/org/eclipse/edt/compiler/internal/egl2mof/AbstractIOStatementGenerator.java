@@ -16,6 +16,7 @@ import java.util.Map;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AddStatement;
 import org.eclipse.edt.mof.egl.CloseStatement;
 import org.eclipse.edt.mof.egl.ConverseStatement;
@@ -200,6 +201,11 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 		}
 
 		return null;
+	}
+
+	@Override
+	public void setCurrentPart(MofSerializable currentPart) {
+		this.currentPart = currentPart;
 	}
 
 }

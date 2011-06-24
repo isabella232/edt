@@ -17,6 +17,7 @@ import java.util.Map;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AddStatement;
 import org.eclipse.edt.mof.egl.CloseStatement;
 import org.eclipse.edt.mof.egl.ConverseStatement;
@@ -52,4 +53,5 @@ public interface IOStatementGenerator {
 	PrepareStatement genPrepareStatement(org.eclipse.edt.compiler.core.ast.PrepareStatement stmt, Map<IBinding, EObject> bindingToElementMap );
 	ReplaceStatement genReplaceStatement(org.eclipse.edt.compiler.core.ast.ReplaceStatement stmt, Map<IBinding, EObject> bindingToElementMap );
 	ShowStatement genShowStatement(org.eclipse.edt.compiler.core.ast.ShowStatement stmt, Map<IBinding, EObject> bindingToElementMap );
+	void setCurrentPart(MofSerializable currentPart);
 }
