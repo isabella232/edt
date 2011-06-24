@@ -136,10 +136,7 @@ public class ProjectSettingsUtility {
 		String[] ids = getGeneratorIds(resource);
 		if (ids == null) {
 			// When the project doesn't have its own settings, use the workspace defaults
-			String defaultIDs = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString(EDTCorePreferenceConstants.GENERATOR_IDS);
-			if (defaultIDs != null && (defaultIDs = defaultIDs.trim()).length() != 0) {
-				ids = defaultIDs.split(",");
-			}
+			ids = getWorkspaceGeneratorIds();
 		}
 		if (ids != null && ids.length != 0) {
 			IIDECompiler compiler = getCompiler(resource.getProject());
@@ -162,6 +159,19 @@ public class ProjectSettingsUtility {
 		}
 		
 		return EMPTY_GENERATORS;
+	}
+	
+	/**
+	 * @return the default generator IDs from workspace preferences, never null.
+	 */
+	public static String[] getWorkspaceGeneratorIds() {
+		String genIDs = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString(EDTCorePreferenceConstants.GENERATOR_IDS);
+		if (genIDs != null && (genIDs = genIDs.trim()).length() != 0) {
+			return genIDs.split(",");
+		}
+		else {
+			return EMPTY_GENERATOR_IDS;
+		}
 	}
 	
 	/**

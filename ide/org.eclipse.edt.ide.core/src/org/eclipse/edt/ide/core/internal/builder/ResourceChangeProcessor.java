@@ -26,6 +26,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceProxy;
 import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.runtime.CoreException;
@@ -74,11 +75,36 @@ public class ResourceChangeProcessor implements IResourceChangeListener {
 		final boolean projectDeleting = event.getType() == IResourceChangeEvent.PRE_DELETE;
 		final boolean projectClosing = event.getType() == IResourceChangeEvent.PRE_CLOSE;
 		final boolean preBuilding = event.getType() == IResourceChangeEvent.PRE_BUILD;
+		final boolean postChange = event.getType() == IResourceChangeEvent.POST_CHANGE;
 		
-		if (projectDeleting || projectClosing){
+		if (projectDeleting || projectClosing) {
 			this.processProjectDelete((IProject)event.getResource());
-		}else if(preBuilding){
+		}
+		else if (preBuilding) {
 			this.removeContextSpecificMarkers();
+		}
+		else if (postChange) {
+			IResourceDelta delta = event.getDelta();
+			IResourceDelta[] affectedChildren = delta.getAffectedChildren();
+		    
+		    for (IResourceDelta child : affectedChildren) {
+		    	if ((child.getFlags() & IResourceDelta.OPEN) != 0) {
+			    	IResource resource = child.getResource();
+			    	// No need to check if the project is open, if it was being closed we wouldn't have gotten here.
+					if (resource.getType() == IResource.PROJECT && EGLProject.hasEGLNature((IProject)resource)) {
+						ProjectSettingsListenerManager.getInstance().addProject((IProject)resource);
+					}
+		    	}
+		    	else if (child.getKind() == IResourceDelta.CHANGED) {
+		    		IResource resource = child.getResource();
+					if (resource.getType() == IResource.PROJECT && EGLProject.hasEGLNature((IProject)resource)) {
+						// We only care if the .project file changed, since it might mean we added the EGL nature to the project,
+						// however it's faster to check if the map in ProjectSettingsListenerManager already has an entry for the project,
+						// than to process its grandkids to see if .project was changed.
+						ProjectSettingsListenerManager.getInstance().addProject((IProject)resource);
+					}
+		    	}
+			}
 		}
 	}
 
@@ -106,6 +132,7 @@ public class ResourceChangeProcessor implements IResourceChangeListener {
 	        BuildManager.getInstance().removeProject(project);					// Build Manager
 	        GenerationBuildManager.getInstance().removeProject(project);		// Generation Build Manager
 	        DuplicatePartManager.getInstance().remove(project);					// Duplicate Parts
+	        ProjectSettingsListenerManager.getInstance().removeProject(project);
 		}
 	}
 	

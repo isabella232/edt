@@ -40,10 +40,12 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
+import org.eclipse.edt.ide.core.internal.builder.ProjectSettingsListenerManager;
 import org.eclipse.edt.ide.core.internal.builder.ResourceChangeProcessor;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyFileInfoManager;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyResourceChangeProcessor;
 import org.eclipse.edt.ide.core.internal.model.EGLModelManager;
+import org.eclipse.edt.ide.core.internal.model.EGLProject;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IMember;
@@ -142,11 +144,12 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	private class PreferenceListener implements IPropertyChangeListener {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
-			if (EDTCorePreferenceConstants.COMPILER_ID.equals(event.getProperty())) {
+			if (EDTCorePreferenceConstants.COMPILER_ID.equals(event.getProperty())
+					|| EDTCorePreferenceConstants.GENERATOR_IDS.equals(event.getProperty())) {
 				// Touch all projects using the default compiler so that autobuild is triggered.
 				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 				for (IProject project : projects) {
-					if (ProjectSettingsUtility.getCompilerId(project) == null) {
+					if (project.isAccessible() && EGLProject.hasEGLNature(project) && ProjectSettingsUtility.getCompilerId(project) == null) {
 						try {
 							project.touch(null);
 						}
@@ -309,12 +312,14 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 		
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		workspace.addResourceChangeListener(resourceChangeProcessor, IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE
-				| IResourceChangeEvent.PRE_BUILD);
+				| IResourceChangeEvent.PRE_BUILD | IResourceChangeEvent.POST_CHANGE);
 
 		workspace.addResourceChangeListener(ASTManager.getInstance(), IResourceChangeEvent.PRE_BUILD);
 		
 		workspace.addResourceChangeListener(WorkingCopyResourceChangeProcessor.getInstance(), IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE
 				| IResourceChangeEvent.POST_CHANGE);
+		
+		ProjectSettingsListenerManager.getInstance(); // Make sure existing projects register preference listeners
 		
 		EGLModelManager manager = EGLModelManager.getEGLModelManager();
 		workspace.addResourceChangeListener(

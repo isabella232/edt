@@ -135,6 +135,18 @@ public class GenerationBuildManager {
 		save();
 	}
 	
+	public String[] getDefaultGenIDs(IProject project) {
+		BuildManagerEntry entry = getEntry(project);
+		return entry.getDefaultGenIDs();
+	}
+	
+	public void putProject(IProject project, String[] defaultGenIDs){
+		BuildManagerEntry entry = getEntry(project);
+		entry.setDefaultGenIDs(defaultGenIDs);
+		entry.setState(BuildManager.EDT_VERSION);
+		save();
+	}
+	
 	private static class BuildManagerEntry implements Serializable {
 		private static final long serialVersionUID = 3834040728112637975L;
 		
@@ -142,12 +154,22 @@ public class GenerationBuildManager {
 		// state >= 0, project successfully built, integer is build version number
 		private int state = BuildManager.FULL_BUILD_REQUIRED_STATE;
 		
+		private String[] defaultGenIds;
+		
 		public int getState() {
 			return state;
 		}
 		
 		public void setState(int state) {
 			this.state = state;
+		}
+		
+		public String[] getDefaultGenIDs() {
+			return defaultGenIds;
+		}
+		
+		public void setDefaultGenIDs(String[] ids) {
+			this.defaultGenIds = ids;
 		}
 	}
 }

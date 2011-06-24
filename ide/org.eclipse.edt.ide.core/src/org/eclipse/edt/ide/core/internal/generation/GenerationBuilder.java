@@ -15,9 +15,9 @@ import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.builder.NullBuildNotifier;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.builder.BuildNotifier;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 
 //TODO:
-// listen for generator preference changes on project/folder/file and regen the changed heirarchy
 // should we generate binary projects?
 /**
  * Builder that runs generation on compiled EGL parts.
@@ -46,6 +46,10 @@ public class GenerationBuilder extends IncrementalProjectBuilder {
 		     	doClean();
 		     	cleanBuild(null, notifier);
         	}
+        	else if (needFullBuild()) {
+		     	doClean();
+		     	cleanBuild(null, notifier);
+        	}
         	else {
 	        	if (delta == null) {
 		        	doClean();
@@ -59,7 +63,16 @@ public class GenerationBuilder extends IncrementalProjectBuilder {
         } catch (CancelledException canceledException) {
 			throw new OperationCanceledException();
         } finally {
-        	GenerationBuildManager.getInstance().setProjectState(getProject(), isOK);
+        	if (!isOK) {
+        		GenerationBuildManager.getInstance().setProjectState(getProject(), false);
+			}
+        	else {
+				GenerationBuildManager.getInstance().putProject(
+						getProject(),
+						// only store the default gen IDs if they're being used for this project
+						ProjectSettingsUtility.getCompilerId(getProject()) == null ? ProjectSettingsUtility.getWorkspaceGeneratorIds() : null);
+			}
+        	
         	notifier.done();
         }
 		return null;
@@ -100,5 +113,45 @@ public class GenerationBuilder extends IncrementalProjectBuilder {
 		catch (CoreException e) {
 			throw new BuildException(e);
 		}
+	}
+	
+	private boolean needFullBuild() {
+		if (ProjectSettingsUtility.getCompilerId(getProject()) == null) {
+			// When using the workspace settings, regenerate everything if the default generators changed.
+			String[] oldIds = GenerationBuildManager.getInstance().getDefaultGenIDs(getProject());
+			
+			// When using the workspace settings, regenerate everything we previously weren't using the workspace settings.
+			if (oldIds == null) {
+				return true;
+			}
+			
+			// When using the workspace settings, regenerate everything if the default generators changed.
+			String[] currIds = ProjectSettingsUtility.getWorkspaceGeneratorIds();
+			if (currIds.length != oldIds.length) {
+				return true;
+			}
+			
+			for (String curr : currIds) {
+				boolean foundMatch = false;
+				for (String old : oldIds) {
+					if (curr.equals(old)) {
+						foundMatch = true;
+						break;
+					}
+				}
+				
+				if (!foundMatch) {
+					return true;
+				}
+			}
+		}
+		else {
+			if (GenerationBuildManager.getInstance().getDefaultGenIDs(getProject()) != null) {
+				// When using project-specific settings, regenerate everything if we previously used the workspace settings.
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }
