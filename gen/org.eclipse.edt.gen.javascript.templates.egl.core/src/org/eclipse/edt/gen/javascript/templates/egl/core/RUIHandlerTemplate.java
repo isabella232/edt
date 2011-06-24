@@ -45,9 +45,9 @@ public class RUIHandlerTemplate extends JavaScriptTemplate {
 		ctx.gen(genConstructor, type, ctx, out, args);
 		ctx.gen(genFunctions, (Element) type, ctx, out, args);
 		out.println(",");
-		ctx.gen("genXmlAnnotations", type, ctx, out, args);
+		ctx.gen(genXmlAnnotations, type, ctx, out, args);
 		out.println(",");
-		ctx.gen("genNamespaceMap", type, ctx, out, args);
+		ctx.gen(genNamespaceMap, type, ctx, out, args);
 	}
 
 	public void genConstructor(Handler type, Context ctx, TabbedWriter out, Object... args) {
