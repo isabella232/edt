@@ -64,6 +64,7 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.FunctionStatement;
+import org.eclipse.edt.mof.egl.InvalidName;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
@@ -731,9 +732,18 @@ class Egl2MofMember extends Egl2MofPart {
 	}
 	
 	public LHSExpr addQualifier(Element context, LHSExpr expr) {
-		if (context instanceof Member) return addQualifier((Member)context, (Name)expr);
-		else if (context instanceof Expression) return ((Name)expr).addQualifier((Expression)context);
-		else throw new IllegalArgumentException("Qualifier " + context.toString() + " must be a Member or Expression");
+		if (context instanceof Member) {
+			return addQualifier((Member)context, (Name)expr);
+		}
+		
+		if (context instanceof Expression) {
+			if (expr instanceof InvalidName) {
+				return expr;
+			}
+			return ((Name)expr).addQualifier((Expression)context);
+		}
+		
+		throw new IllegalArgumentException("Qualifier " + context.toString() + " must be a Member or Expression");
 	}
 	
 	public LHSExpr addQualifier(Member context, Name nameExpr) {

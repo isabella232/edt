@@ -137,18 +137,27 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			indexExpr.accept(this);
 			Expression index = (Expression)stack.pop();
 			ITypeBinding exprType = indexExpr.resolveTypeBinding();
-			boolean isDynamicAccess = TypeUtils.isTextType((Type)mofTypeFor(exprType));
-			
-			if (isDynamicAccess) {
-				DynamicAccess ax = factory.createDynamicAccess();
-				ax.setAccess(index);
-				ax.setExpression(arrayExpression);
-				lastAC = ax;
-			} else {
+			if (!Binding.isValidBinding(exprType)) {
 				ArrayAccess ax = factory.createArrayAccess();
-				ax.setIndex(IRUtils.createAsExpression(index, mofPrimitiveFor(Primitive.INT)));
+				ax.setIndex(index);
 				ax.setArray(arrayExpression);
 				lastAC = ax;
+			}
+			else {
+			
+				boolean isDynamicAccess = TypeUtils.isTextType((Type)mofTypeFor(exprType));
+				
+				if (isDynamicAccess) {
+					DynamicAccess ax = factory.createDynamicAccess();
+					ax.setAccess(index);
+					ax.setExpression(arrayExpression);
+					lastAC = ax;
+				} else {
+					ArrayAccess ax = factory.createArrayAccess();
+					ax.setIndex(IRUtils.createAsExpression(index, mofPrimitiveFor(Primitive.INT)));
+					ax.setArray(arrayExpression);
+					lastAC = ax;
+				}
 			}
 
 		}
