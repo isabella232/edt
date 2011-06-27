@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.java.templates;
 
 import java.util.List;
 
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -184,7 +185,7 @@ public class EGLClassTemplate extends JavaTemplate {
 		out.print(Constants.LIBRARY_PREFIX + ((Library) args[0]).getFullyQualifiedName().replace('.', '_') + " = (");
 		ctx.gen(genRuntimeTypeName, (Type) (Library) args[0], ctx, out, TypeNameKind.EGLImplementation);
 		out.print(") _runUnit().getExecutable(\"");
-		ctx.gen(genRuntimeTypeName, (Type) (Library) args[0], ctx, out, TypeNameKind.EGLImplementation);
+		out.print( CommonUtilities.fullClassAlias( (Library) args[0] ) );
 		out.println("\");");
 		out.println("}");
 		out.println("return " + Constants.LIBRARY_PREFIX + ((Library) args[0]).getFullyQualifiedName().replace('.', '_') + ";");
