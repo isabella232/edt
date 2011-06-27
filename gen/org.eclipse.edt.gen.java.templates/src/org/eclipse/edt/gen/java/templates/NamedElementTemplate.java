@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -46,6 +47,6 @@ public class NamedElementTemplate extends JavaTemplate {
 	}
 
 	public void genName(NamedElement element, Context ctx, TabbedWriter out, Object... args) {
-		out.print(element.getName());
+		out.print(Aliaser.getJavaSafeAlias(element.getName()));
 	}
 }

@@ -99,11 +99,13 @@ public class PartTemplate extends JavaTemplate {
 				if (value.equalsIgnoreCase(imported)) {
 					// it was is the table, so use the short name
 					if (value.indexOf('.') >= 0)
-						value = value.substring(value.lastIndexOf('.') + 1);
-					break;
+					{
+						out.print( CommonUtilities.classAlias( part ) );
+						return;
+					}
 				}
 			}
-			out.print(value);
+			out.print( CommonUtilities.fullClassAlias( part ) );
 		}
 	}
 
