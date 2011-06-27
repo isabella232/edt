@@ -37,7 +37,7 @@ import org.eclipse.edt.mof.egl.Type;
 public class CommonUtilities {
 
 	public static String packageName(Part part) {
-		return Aliaser.packageNameAlias(part.getPackageName().split("[.]"), '.');
+		return packageName(part.getPackageName());
 	}
 
 	public static String packageName(String pkg) {
@@ -48,6 +48,35 @@ public class CommonUtilities {
 		return pkg;
 	}
 
+	/**
+	 * Returns the fully-qualified name for the Part's runtime class.
+	 * 
+	 * @param part
+	 * @return
+	 */
+	public static String fullClassAlias( Part part )
+	{
+		String alias = Aliaser.getJavaSafeAlias( part.getName() );
+		String pkg = part.getPackageName();
+		if ( pkg.length() > 0 )
+		{
+			pkg = packageName( pkg );
+			return pkg + '.' + alias;
+		}
+		return alias;
+	}
+
+	/**
+	 * Returns the unqualified name for the Part's runtime class.
+	 * 
+	 * @param part
+	 * @return
+	 */
+	public static String classAlias( Part part )
+	{
+		return Aliaser.getJavaSafeAlias( part.getName() );
+	}
+	
 	/**
 	 * Returns true if the type is an ExternalType, with subtype JavaObject or NativeType, and does not have {
 	 * eglIsSystemPart = yes }.
