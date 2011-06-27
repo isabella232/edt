@@ -201,6 +201,15 @@ public class ProxyPart extends ProxyEObject implements Part, DataType, Parameter
 		}
 		return getFullyQualifiedName().substring(0, index);
 	}
+	
+	@Override
+	public String getName() {
+		int index = getFullyQualifiedName().lastIndexOf(".");
+		if (index < 0) {
+			return getFullyQualifiedName();
+		}
+		return getFullyQualifiedName().substring(index + 1);
+	}
 
 	@Override
 	public void setPackageName(String value) {

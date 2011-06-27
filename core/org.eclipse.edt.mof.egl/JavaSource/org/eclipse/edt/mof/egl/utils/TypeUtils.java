@@ -210,7 +210,7 @@ public class TypeUtils implements MofConversion {
 	}
 	
 	public static boolean isTextType(Type type) {
-		if (type.getClassifier() instanceof EGLClass) {
+		if (type != null && type.getClassifier() instanceof EGLClass) {
 			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_AnyText));
 		}
 		else {
