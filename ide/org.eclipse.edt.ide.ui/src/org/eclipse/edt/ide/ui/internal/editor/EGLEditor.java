@@ -92,6 +92,7 @@ import org.eclipse.jface.text.reconciler.IReconciler;
 import org.eclipse.jface.text.source.IOverviewRuler;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.IVerticalRuler;
+import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.jface.text.source.projection.ProjectionSupport;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -1492,6 +1493,14 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 		}else{
 			return super.isPrefQuickDiffAlwaysOn();
 		}
+	}
+	
+	public SourceViewerConfiguration getSourceViewerConfig() {
+		return getSourceViewerConfiguration();
+	}
+	
+	public IVerticalRuler getEditorVerticalRuler() {
+		return super.getVerticalRuler();
 	}
 
 }

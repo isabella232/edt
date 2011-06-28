@@ -28,6 +28,18 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             contextId="org.eclipse.edt.ide.ui.eglEditorScope"
             sequence="F3"/>
+        <!-- Source comment -->
+       	<key
+            commandId="org.eclipse.edt.ide.ui.source.commentGroup.toggle"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            contextId="org.eclipse.edt.ide.ui.eglEditorScope"
+            sequence="Ctrl+7"/>
+        <!-- Source edit -->
+       	<key
+            commandId="org.eclipse.edt.ide.ui.source.editGroup.format"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            contextId="org.eclipse.edt.ide.ui.eglEditorScope"
+            sequence="Ctrl+Shift+F"/>            
         <!-- Source import -->
        	<key
             commandId="org.eclipse.edt.ide.ui.source.importGroup.addImport"
@@ -39,12 +51,16 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             contextId="org.eclipse.edt.ide.ui.eglEditorScope"
             sequence="Ctrl+Shift+O"/>
-        <!-- Source edit -->
        	<key
-            commandId="org.eclipse.edt.ide.ui.source.editGroup.format"
+            commandId="org.eclipse.edt.ide.ui.search.findWorkspaceReferences"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             contextId="org.eclipse.edt.ide.ui.eglEditorScope"
-            sequence="Ctrl+Shift+F"/>
+            sequence="Ctrl+Shift+G"/>
+       	<key
+            commandId="org.eclipse.edt.ide.ui.search.findWorkspaceDeclarations"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            contextId="org.eclipse.edt.ide.ui.eglEditorScope"
+            sequence="Ctrl+G"/>            
         <!-- Source edit SQL -->
 <!-- Uncomment when SQL support is ready
        	<key
@@ -62,6 +78,11 @@
 	  		name="%OpenOnSelection.name"
 			description="%OpenOnSelection.description"	  		
 			id="org.eclipse.edt.ide.ui.navigate.openOnSelection"/>
+		<!-- Source edit -->
+		<command
+	  		name="%Format.name"
+			description="%Format.description"	  		
+			id="org.eclipse.edt.ide.ui.source.editGroup.format"/>			
  		<!-- Source import -->
 		<command
 	  		name="%AddImport.name"
@@ -71,11 +92,43 @@
 	  		name="%OrganizeImports.name"
 			description="%OrganizeImports.description"	  		
 			id="org.eclipse.edt.ide.ui.source.importGroup.organizeImports"/>
-		<!-- Source edit -->
+		<!-- Source create -->
+<!-- Uncomment when callback function is ready
 		<command
-	  		name="%Format.name"
-			description="%Format.description"	  		
-			id="org.eclipse.edt.ide.ui.source.editGroup.format"/>
+	  		name="%CreateCallbackFunction.name"
+			description="%CreateCallbackFunction.description"	  		
+			id="org.eclipse.edt.ide.ui.source.createGroup.callbackFunction"/>
+-->	
+		<!-- References/Project -->
+		<command
+			name="%InProject.name"
+			description="%InProject.description"
+			id="org.eclipse.edt.ide.ui.search.findProjectReferences"/>
+		<!-- Declarations/Project -->
+		<command
+			name="%InProject.name"
+			description="%InProject.description"
+			id="org.eclipse.edt.ide.ui.search.findProjectDeclarations"/>
+		<!-- References/Working set -->
+		<command
+			name="%InWorkingSet.name"
+			description="%InWorkingSet.description"
+			id="org.eclipse.edt.ide.ui.search.findWorkingSetReferences"/>
+		<!-- Declarations/Working set -->
+		<command
+			name="%InWorkingSet.name"
+			description="%InWorkingSet.description"
+			id="org.eclipse.edt.ide.ui.search.findWorkingSetDeclarations"/>
+		<!-- References/Workspace -->
+		<command
+			name="%InWorkspace.name"
+			description="%InWorkspace.description"
+			id="org.eclipse.edt.ide.ui.search.findWorkspaceReferences"/>
+		<!-- Declarations/Workspace -->
+		<command
+			name="%InWorkspace.name"
+			description="%InWorkspace.description"
+			id="org.eclipse.edt.ide.ui.search.findWorkspaceDeclarations"/>			
 		<!-- Source edit SQL -->
 <!-- Uncomment when SQL support is ready
 		<command
@@ -84,6 +137,10 @@
 			id="org.eclipse.edt.ide.ui.source.sqlGroup.addSQLStatement"/>
 -->			
 		<!-- Ruler -->
+	    <command
+            name="Toggle Comment"
+            description="Toggle comment"
+            id="org.eclipse.edt.ide.ui.source.commentGroup.toggle"/>
 		<command
 	  		name="%Folding.name"
 			description="%Folding.description"	  		
@@ -92,22 +149,19 @@
 	
 	<extension 
 		point="org.eclipse.ui.menus">
-		<menuContribution locationURI="menu:navigate?after=open.ext">
-			<command commandId="org.eclipse.edt.ide.ui.navigate.openOnSelection">
-       	 		<visibleWhen>
-       				<with variable="activePartId">
-       					<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
-       				</with>
-     			</visibleWhen>
-     		</command>
-  		</menuContribution>
-  		<menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=edit">
+   		<menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=edit">
      		<menu id="org.eclipse.edt.ide.ui.source.menu" 
      			label="%SourceMenu.name">
+     			<command commandId="org.eclipse.edt.ide.ui.source.commentGroup.toggle"/>
+     			<separator name="editGroup" visible="true"/>
        	 		<command commandId="org.eclipse.edt.ide.ui.source.editGroup.format"/>
        	 		<separator name="importGroup" visible="true"/>
        	 		<command commandId="org.eclipse.edt.ide.ui.source.importGroup.addImport"/>
    	 			<command commandId="org.eclipse.edt.ide.ui.source.importGroup.organizeImports"/>
+<!-- Uncomment when callback function is ready   	 			
+   	 			<separator name="createGroup" visible="true"/>
+   	 			<command commandId="org.eclipse.edt.ide.ui.source.createGroup.callbackFunction"/>
+-->   	 			
 <!-- Uncomment when SQL support is ready
    	 			<separator name="sqlGroup" visible="true"/>
    	 			<command commandId="org.eclipse.edt.ide.ui.source.sqlGroup.addSQLStatement"/>
@@ -120,22 +174,28 @@
      			</visibleWhen>
     	 	</menu>
   		</menuContribution>
-  		<menuContribution locationURI="popup:#EGLEditorContext">
+  		<menuContribution locationURI="menu:navigate?after=open.ext">
 			<command commandId="org.eclipse.edt.ide.ui.navigate.openOnSelection">
-				<visibleWhen>
+       	 		<visibleWhen>
        				<with variable="activePartId">
        					<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
        				</with>
      			</visibleWhen>
      		</command>
- 		</menuContribution>
-  		<menuContribution locationURI="popup:#EGLEditorContext">
-     		<menu id="org.eclipse.edt.ide.ui.popup.source.menu" 
+  		</menuContribution>
+   		<menuContribution locationURI="popup:#EGLEditorContext">
+			<menu id="org.eclipse.edt.ide.ui.popup.source.menu" 
      			label="%SourceMenu.name">
+     			<command commandId="org.eclipse.edt.ide.ui.source.commentGroup.toggle"/>
+     			<separator name="editGroup" visible="true"/>
        	 		<command commandId="org.eclipse.edt.ide.ui.source.editGroup.format"/>
        	 		<separator name="importGroup" visible="true"/>
        	 		<command commandId="org.eclipse.edt.ide.ui.source.importGroup.addImport"/>
        	 		<command commandId="org.eclipse.edt.ide.ui.source.importGroup.organizeImports"/>
+<!-- Uncomment when callback function is ready       	 		
+       	 		<separator name="createGroup" visible="true"/>
+   	 			<command commandId="org.eclipse.edt.ide.ui.source.createGroup.callbackFunction"/>
+-->   	 			
 <!-- Uncomment when SQL support is ready
        	 		<separator name="sqlGroup" visible="true"/>
    	 			<command commandId="org.eclipse.edt.ide.ui.source.sqlGroup.addSQLStatement"/>
@@ -147,8 +207,45 @@
            			</with>
      			</visibleWhen>
     	 	</menu>
+ 		</menuContribution>
+  		<menuContribution locationURI="popup:#EGLEditorContext?after=org.eclipse.edt.ide.ui.popup.source.menu">
+  			<command commandId="org.eclipse.edt.ide.ui.navigate.openOnSelection">
+				<visibleWhen>
+       				<with variable="activePartId">
+       					<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+       				</with>
+     			</visibleWhen>
+ 			</command>
+ 		</menuContribution>
+   		<menuContribution locationURI="popup:#EGLEditorContext?after=org.eclipse.edt.ide.ui.navigate.openOnSelection">
+     		<menu id="org.eclipse.edt.ide.ui.popup.references.menu" 
+     			label="%ReferencesMenu.name">
+       	 		<command commandId="org.eclipse.edt.ide.ui.search.findWorkspaceReferences"/>
+       	 		<command commandId="org.eclipse.edt.ide.ui.search.findProjectReferences"/>
+       	 		<command commandId="org.eclipse.edt.ide.ui.search.findWorkingSetReferences"/>
+       	 		<separator name="additions" visible="false"/>
+       	 		<visibleWhen>
+       				<with variable="activePartId">
+           				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+           			</with>
+     			</visibleWhen>
+    	 	</menu>
   		</menuContribution>
-  			<menuContribution locationURI="popup:#EGLRulerContext">
+  		<menuContribution locationURI="popup:#EGLEditorContext?after=org.eclipse.edt.ide.ui.popup.references.menu">
+     		<menu id="org.eclipse.edt.ide.ui.popup.declarations.menu" 
+     			label="%DeclarationsMenu.name">
+       	 		<command commandId="org.eclipse.edt.ide.ui.search.findWorkspaceDeclarations"/>
+       	 		<command commandId="org.eclipse.edt.ide.ui.search.findProjectDeclarations"/>
+       	 		<command commandId="org.eclipse.edt.ide.ui.search.findWorkingSetDeclarations"/>
+       	 		<separator name="additions" visible="false"/>
+       	 		<visibleWhen>
+       				<with variable="activePartId">
+           				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+           			</with>
+     			</visibleWhen>
+    	 	</menu>
+  		</menuContribution>
+ 		<menuContribution locationURI="popup:#EGLRulerContext">
 			<command commandId="org.eclipse.edt.ide.ui.ruler.folding">
 				<visibleWhen>
        				<with variable="activePartId">
@@ -165,6 +262,10 @@
         	class="org.eclipse.edt.ide.ui.internal.handlers.OpenOnSelectionHandler"
         	commandId="org.eclipse.edt.ide.ui.navigate.openOnSelection">
    		</handler>
+   		<handler
+  			class="org.eclipse.edt.ide.ui.internal.handlers.ToggleCommentHandler"
+  			commandId="org.eclipse.edt.ide.ui.source.commentGroup.toggle">
+  		</handler>
   		<handler
         	class="org.eclipse.edt.ide.ui.internal.handlers.FormattingHandler"
         	commandId="org.eclipse.edt.ide.ui.source.editGroup.format">
@@ -177,6 +278,36 @@
         	class="org.eclipse.edt.ide.ui.internal.handlers.OrganizeImportsHandler"
         	commandId="org.eclipse.edt.ide.ui.source.importGroup.organizeImports">
   		</handler>
+<!-- Uncomment when callback function is ready  		
+  		<handler
+  			class="org.eclipse.edt.ide.ui.internal.handlers.FixCallbackFunctionHandler"
+  			commandId="org.eclipse.edt.ide.ui.source.createGroup.callbackFunction">
+		</handler>  
+-->					
+  		<handler
+        	class="org.eclipse.edt.ide.ui.internal.handlers.FindProjectReferencesHandler"
+        	commandId="org.eclipse.edt.ide.ui.search.findProjectReferences">
+   		</handler>
+   		<handler
+        	class="org.eclipse.edt.ide.ui.internal.handlers.FindProjectDeclarationsHandler"
+        	commandId="org.eclipse.edt.ide.ui.search.findProjectDeclarations">
+   		</handler>
+   		<handler
+        	class="org.eclipse.edt.ide.ui.internal.handlers.FindWorkingSetReferencesHandler"
+        	commandId="org.eclipse.edt.ide.ui.search.findWorkingSetReferences">
+   		</handler>
+   		<handler
+        	class="org.eclipse.edt.ide.ui.internal.handlers.FindWorkingSetDeclarationsHandler"
+        	commandId="org.eclipse.edt.ide.ui.search.findWorkingSetDeclarations">
+   		</handler>
+   		<handler
+        	class="org.eclipse.edt.ide.ui.internal.handlers.FindWorkspaceReferencesHandler"
+        	commandId="org.eclipse.edt.ide.ui.search.findWorkspaceReferences">
+   		</handler>
+   		<handler
+        	class="org.eclipse.edt.ide.ui.internal.handlers.FindWorkspaceDeclarationsHandler"
+        	commandId="org.eclipse.edt.ide.ui.search.findWorkspaceDeclarations">
+   		</handler>
 <!-- Uncomment when SQL support is ready 		
   		<handler
         	class="org.eclipse.edt.ide.ui.internal.handlers.AddSQLStatementHandler"
@@ -189,32 +320,6 @@
   		</handler>
 	</extension>
 	
-	<extension
-    	point="org.eclipse.compare.contentViewers">
-		<viewer
-        	extensions="egl"
-            class="org.eclipse.edt.ide.ui.internal.compare.TextViewerCreator"
-            id="org.eclipse.edt.ide.ui.internal.ui.compare.TextViewerCreator">
-      	</viewer>
-      	<contentTypeBinding
-			contentTypeId="org.eclipse.edt.ide.ui.egl"
-            contentViewerId="org.eclipse.edt.ide.ui.internal.compare.TextViewerCreator">
-	  	</contentTypeBinding>
-	</extension>
-   
-	<extension
-        point="org.eclipse.compare.contentMergeViewers">
-      	<viewer
-            extensions="egl"
-            class="org.eclipse.edt.ide.ui.internal.compare.ContentViewerCreator"
-            id="org.eclipse.edt.ide.ui.internal.compare.ContentViewerCreator">
-      	</viewer>
-      	<contentTypeBinding
-			contentTypeId="org.eclipse.edt.ide.ui.egl"
-            contentMergeViewerId="org.eclipse.edt.ide.ui.internal.compare.ContentViewerCreator">
-	  	</contentTypeBinding>
-   	</extension>
-   	
    	<extension
     	point="org.eclipse.ui.actionSets">
         <actionSet
@@ -280,17 +385,6 @@
             description="%EGLSearchActionSet.description"
             visible="false"
             id="org.eclipse.edt.ide.ui.SearchActionSet">
-         	<action
-               	label="%openEGLSearchPageAction.label"
-               	icon="icons/ctool16/esrch_nav.gif"
-               	class="org.eclipse.edt.ide.ui.internal.search.OpenEGLSearchPageAction"
-               	menubarPath="org.eclipse.search.menu/dialogGroup"
-               	id="org.eclipse.edt.ide.ui.search.OpenEGLSearchPage">
-         	</action>      
-         	<menu
-               	label="%searchMenu.label"
-               	id="org.eclipse.search.menu">
-         	</menu>
       	</actionSet>         
 	</extension>
 	
@@ -895,7 +989,7 @@ Templates
         		value="org.eclipse.edt.ide.core.EGLNature">
       		</filter>
    		</page>
-<!--   		
+<!-- Uncomment if we want these to show up
   		<page 
   			objectClass="org.eclipse.core.resources.IProject"
 			adaptable="true"

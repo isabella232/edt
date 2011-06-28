@@ -124,6 +124,7 @@ public class OrganizeImportsAction extends ResourceAction implements
 	//init the selection and site, called from the editor menu
 	public void init(EGLEditor editor)
 	{
+		fEditor = editor;
 		if(selection == null && editor != null)
 		{	
 			IEditorInput editorInput = editor.getEditorInput();
@@ -131,7 +132,7 @@ public class OrganizeImportsAction extends ResourceAction implements
 			if (editorInput instanceof IFileEditorInput) {
 				IResource resource = ((IFileEditorInput) editorInput).getFile();
 				IEGLElement element = EGLCore.create(resource);
-				init(element, editor.getSite(), editor);
+				init(element, editor.getSite());
 			}
 	    }			
 	}
@@ -140,14 +141,13 @@ public class OrganizeImportsAction extends ResourceAction implements
 	public void init(IResource resource, IWorkbenchSite site)
 	{
 		IEGLElement element = EGLCore.create(resource);
-		init(element, site, null);		
+		init(element, site);		
 	}
 	
-	protected void init(IEGLElement eglfile, IWorkbenchSite site, EGLEditor editor)
+	protected void init(IEGLElement eglfile, IWorkbenchSite site)
 	{
 		fSite = site;
-		selection = new StructuredSelection(eglfile);
-		fEditor = editor;
+		selection = new StructuredSelection(eglfile);		
 	}
 		
 	public void run(IAction action) {
@@ -164,7 +164,7 @@ public class OrganizeImportsAction extends ResourceAction implements
 			if (editorInput instanceof IFileEditorInput) {
 				IResource resource = ((IFileEditorInput) editorInput).getFile();
 				IEGLElement element = EGLCore.create(resource);
-				init(element, fEditor.getSite(), fEditor);
+				init(element, fEditor.getSite());
 			}
 		}
 	    if(selection != null)

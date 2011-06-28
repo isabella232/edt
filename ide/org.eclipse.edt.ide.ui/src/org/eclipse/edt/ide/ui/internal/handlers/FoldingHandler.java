@@ -13,17 +13,9 @@ package org.eclipse.edt.ide.ui.internal.handlers;
 
 import java.util.Iterator;
 
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.IHandler;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.edt.ide.core.model.EGLCore;
-import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
-import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.editor.folding.FoldingStructureProvider;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
@@ -33,45 +25,10 @@ import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.IWorkbenchSite;
-import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
-public class FoldingHandler extends AbstractHandler implements IHandler {
+public class FoldingHandler extends EGLHandler {
 
-	protected IStructuredSelection fSelection;
-	protected IWorkbenchSite fSite;	
-	protected EGLEditor fEditor;
-	
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
-		// Initialize editor 
-		IEditorPart editor = HandlerUtil.getActiveEditor( event );
-		if( editor instanceof EGLEditor ) {
-			fEditor = (EGLEditor)editor;
-			if(editor != null)
-			{	
-				IEditorInput editorInput = editor.getEditorInput();
-				if (editorInput instanceof IFileEditorInput) {
-					IResource resource = ((IFileEditorInput) editorInput).getFile();
-					IEGLElement element = EGLCore.create(resource);
-					fSite = editor.getSite();
-					fSelection = new StructuredSelection( element );
-				}			
-		    }			
-		}			
-		if( fSelection != null )
-		{
-			run();
-		}
-		return null;
-	}
-	
 	public void run() {
 		IPreferenceStore store= EDTUIPlugin.getDefault().getPreferenceStore();
 		boolean current= store.getBoolean(EDTUIPreferenceConstants.EDITOR_FOLDING_ENABLED);

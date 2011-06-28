@@ -12,20 +12,14 @@
 package org.eclipse.edt.ide.ui.internal.handlers;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
@@ -38,13 +32,9 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.edt.ide.core.model.EGLCore;
-import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IBuffer;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLFile;
-import org.eclipse.edt.ide.core.model.IEGLProject;
-import org.eclipse.edt.ide.core.model.IPackageFragment;
-import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.model.IRegion;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.CodeFormatterUtil;
@@ -80,26 +70,18 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.progress.IProgressService;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-public class FormattingHandler extends AbstractHandler implements IHandler {
+public class FormattingHandler extends EGLHandler {
 
-	protected IStructuredSelection fSelection;
-	protected IWorkbenchSite fSite;	
-	protected EGLEditor fEditor;
-	
-    //key is the IEGLFile, value is IEditorPart, use HashMap, so it allows null as value
-    //if file is opened in an editor, then it does not need to be saved
-    //otherwise the file needs to be saved
-    private HashMap fileNeedsSave = new HashMap();    
     private DocumentRewriteSession fRewriteSession;
     private IRegion fPartialRegion = null;
 	
+    @Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
 		// Initialize selection	if called from Part Reference or Part List
@@ -128,67 +110,35 @@ public class FormattingHandler extends AbstractHandler implements IHandler {
 		
 		if( fSelection != null )
 		{
-			List eglFiles = getEGLFiles( fSelection );
-			int selCnt = eglFiles.size();
-			if( selCnt == 0 )
-				return null;
-			
-			if( selCnt > 1 && fSite != null ){
-				int returnCode = OptionalMessageDialog.open("EGLFormat",  //$NON-NLS-1$
-						fSite.getShell(), 
-						UINlsStrings.FormatTitle, null, 
-						UINlsStrings.UndoNotSupportedMsg, 
-						MessageDialog.WARNING, 
-						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, 0);
-				if( returnCode != OptionalMessageDialog.NOT_SHOWN &&
-						returnCode != Window.OK ) {
-					return null;		
-				}
-			}			
-			if( selCnt > 1 ) {
-				runOnMultiple( eglFiles, null );
-			} else {
-				runOnSingle((IEGLFile)eglFiles.get(0));
-			}
+			run();
 		}
 		return null;
 	}
 	
-	private List getEGLFiles(IStructuredSelection selection)
-	{
-	    List result = new ArrayList();
-	    if(selection != null)
-	    {
-	        Iterator it = selection.iterator();
-	        while(it.hasNext())
-	        {
-	        	try
-				{
-		            Object element = it.next();
-		            if(element instanceof IEGLElement)
-		            {
-		                IEGLElement eglElem = (IEGLElement)element;
-		                getEGLElements( eglElem, result );
-		            }
-		            else if(element instanceof IProject)
-		            {
-		            	 IEGLProject eglproj = EGLCore.create((IProject)element);
-		            	 getEGLElements( eglproj, result );
-		            }
-		            else if(element instanceof IResource)
-		            {
-		            	IEGLElement eglResourceElem = EGLCore.create((IResource)element);
-		            	getEGLElements( eglResourceElem, result );
-		            }
-				}
-	        	catch(EGLModelException e)
-				{
-	        		EDTUIPlugin.log(e);
-				}
-	        }
-	    }
-	    return result;
-	}	
+	public void run() {
+		List eglFiles = getEGLFiles( fSelection );
+		int selCnt = eglFiles.size();
+		if( selCnt == 0 )
+			return;
+		
+		if( selCnt > 1 && fSite != null ){
+			int returnCode = OptionalMessageDialog.open("EGLFormat",  //$NON-NLS-1$
+					fSite.getShell(), 
+					UINlsStrings.FormatTitle, null, 
+					UINlsStrings.UndoNotSupportedMsg, 
+					MessageDialog.WARNING, 
+					new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, 0);
+			if( returnCode != OptionalMessageDialog.NOT_SHOWN &&
+					returnCode != Window.OK ) {
+				return;		
+			}
+		}			
+		if( selCnt > 1 ) {
+			runOnMultiple( eglFiles, null );
+		} else {
+			runOnSingle((IEGLFile)eglFiles.get(0));
+		}
+	}
 	
 	private void runOnMultiple(final List eglfiles, final String formatProfileName){
 		String message = UINlsStrings.FormatComplete;
@@ -421,55 +371,6 @@ public class FormattingHandler extends AbstractHandler implements IHandler {
 			//highlight the syntax error location
 			if(editor != null && syntaxErr.fSynErr.startOffset > 0)
 				editor.selectAndReveal(syntaxErr.fSynErr.startOffset, syntaxErr.fSynErr.endOffset-syntaxErr.fSynErr.startOffset+1);
-		}
-	}
-	
-	private void getEGLElements(IEGLElement eglElem, List result) throws EGLModelException
-	{
-		if(eglElem != null)
-		{
-	        switch(eglElem.getElementType())
-	        {
-	        case IEGLElement.EGL_PROJECT:
-	        	IPackageFragmentRoot[] pkgRoots = ((IEGLProject)eglElem).getPackageFragmentRoots();
-	        	for(int i=0; i<pkgRoots.length; i++)
-	        	{
-	        		collectEGLFiles(pkgRoots[i], result);
-	        	}		                	
-	            break;
-	        case IEGLElement.PACKAGE_FRAGMENT_ROOT:
-	        	collectEGLFiles((IPackageFragmentRoot)eglElem, result);
-	            break;
-	        case IEGLElement.PACKAGE_FRAGMENT:
-	        	collectEGLFiles((IPackageFragment)eglElem, result);
-	            break;
-	        case IEGLElement.EGL_FILE:
-	            result.add(eglElem);	
-	            fileNeedsSave.put(eglElem, EditorUtility.isOpenInEditor(eglElem));
-	            break;
-	        }
-		}
-	}
-	
-	private void collectEGLFiles(IPackageFragment pkg, List result) throws EGLModelException
-	{
-    	IEGLFile[] eglfiles = pkg.getEGLFiles();
-    	for(int i=0; i<eglfiles.length; i++)
-    	{
-    		result.add(eglfiles[i]);
-    		fileNeedsSave.put(eglfiles[i], EditorUtility.isOpenInEditor(eglfiles[i]));
-    	}
-	}
-	
-	private void collectEGLFiles(IPackageFragmentRoot pkgRoot, List result) throws EGLModelException
-	{
-		if(pkgRoot.getKind() == IPackageFragmentRoot.K_SOURCE)
-		{
-			IEGLElement[] children = pkgRoot.getChildren();
-			for(int i=0; i<children.length; i++)
-			{
-				collectEGLFiles((IPackageFragment)children[i], result);
-			}
 		}
 	}
 	

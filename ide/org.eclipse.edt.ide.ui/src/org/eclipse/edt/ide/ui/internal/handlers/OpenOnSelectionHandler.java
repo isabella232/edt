@@ -13,12 +13,7 @@ package org.eclipse.edt.ide.ui.internal.handlers;
 
 import java.util.Iterator;
 
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IBinding;
@@ -49,29 +44,20 @@ import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.ide.core.internal.utils.BoundNodeLocationUtility;
 import org.eclipse.edt.ide.core.internal.utils.IBoundNodeAddress;
-import org.eclipse.edt.ide.core.model.EGLCore;
-import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.editor.BinaryFileEditor;
-import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.editor.util.BoundNodeModelUtility;
 import org.eclipse.edt.ide.ui.internal.editor.util.IBoundNodeRequestor;
 import org.eclipse.edt.ide.ui.internal.util.EditorUtility;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.IWorkbenchSite;
-import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.part.FileEditorInput;
 
-public class OpenOnSelectionHandler extends AbstractHandler implements IHandler {
+public class OpenOnSelectionHandler extends EGLHandler {
 
 	private static class LocalVariableDeclarationFinder extends AbstractASTVisitor {
 		Name localVariableDeclarationName;
@@ -109,39 +95,10 @@ public class OpenOnSelectionHandler extends AbstractHandler implements IHandler 
 		}
 	}
 	
-	protected IStructuredSelection fSelection;
-	protected IWorkbenchSite fSite;	
-	protected EGLEditor fEditor;
-	
 	private boolean beep;
 	private IBinding targetBinding;
-	
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
-		// Initialize editor if called from EGL Editor
-		IEditorPart editor = HandlerUtil.getActiveEditor( event );
-		if( editor instanceof EGLEditor ) {
-			fEditor = (EGLEditor)editor;
-			if(fEditor != null)
-			{	
-				IEditorInput editorInput = editor.getEditorInput();
-				if (editorInput instanceof IFileEditorInput) {
-					IResource resource = ((IFileEditorInput) editorInput).getFile();
-					IEGLElement element = EGLCore.create(resource);
-					fSite = editor.getSite();
-					fSelection = new StructuredSelection( element );
-				}			
-		    }			
-		}	
-		
-		if( fSelection != null )
-		{
-			run();
-		}
-		return null;
-	}
-	
-	private void run() {
+
+	public void run() {
 		beep = true;
 
 		ISelection selection = fEditor.getSelectionProvider().getSelection();
