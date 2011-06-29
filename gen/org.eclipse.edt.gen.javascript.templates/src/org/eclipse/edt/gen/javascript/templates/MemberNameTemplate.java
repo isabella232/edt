@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
@@ -35,7 +36,7 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 			&& ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
 			ctx.gen(genExpression, (Expression) expr, ctx, out, args);
 			out.print(" = ");
-			out.print("egl.org.eclipse.edt.runtime.javascript.egl.lang.AnyObject.ezeWrap(");
+			out.print(Constants.JSRT_EGL_NAMESPACE + ctx.getNativeMapping("egl.lang.AnyObject") + ".ezeWrap(");
 			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
 			out.print(")");
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
@@ -62,7 +63,7 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 		ctx.gen(genAccessor, expr.getMember(), ctx, out, args);
 		if (expr.getMember() instanceof FunctionParameter
 			&& org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx)) {
-			out.print(".ezeUnbox()"); 
+			out.print(".ezeUnbox()");
 		}
 	}
 }

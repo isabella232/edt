@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.javascript.templates;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.TypedElement;
@@ -63,5 +64,9 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 
 	public void genRuntimeTypeName(ArrayType generic, Context ctx, TabbedWriter out, Object... args) {
 		out.print("Array");
+	}
+
+	public void genConversionOperation(ArrayType type, Context ctx, TabbedWriter out, Object... args) {
+		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 }

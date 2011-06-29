@@ -14,10 +14,27 @@ package org.eclipse.edt.gen.javascript.templates;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class IntegerLiteralTemplate extends JavaScriptTemplate {
 
 	public void genExpression(IntegerLiteral expr, Context ctx, TabbedWriter out, Object... args) {
-		out.print(expr.getValue().toString());
+		Type type = expr.getType();
+		if (type.equals(TypeUtils.Type_SMALLINT) || (type.equals(TypeUtils.Type_INT))) {
+			if (expr.isNegated()) {
+				out.print('-');
+			}
+			out.print(stripLeadingZeroes(expr.getUnsignedValue()));
+		} else {
+			out.print("new ");
+			out.print(ctx.getPrimitiveMapping("egl.lang.Int64"));
+			out.print("(\"");
+			if (expr.isNegated()) {
+				out.print('-');
+			}
+			out.print(stripLeadingZeroes(expr.getUnsignedValue()));
+			out.print("\")");
+		}
 	}
 }

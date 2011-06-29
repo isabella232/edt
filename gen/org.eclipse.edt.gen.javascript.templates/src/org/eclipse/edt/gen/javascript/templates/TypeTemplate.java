@@ -19,6 +19,7 @@ import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.MemberAccess;
@@ -37,19 +38,29 @@ public class TypeTemplate extends JavaScriptTemplate {
 	public void genConversionOperation(Type type, Context ctx, TabbedWriter out, Object... args) {
 		// did we have a list of types to check, otherwise use the default
 		if (!org.eclipse.edt.gen.CommonUtilities.processTypeList(genConversionOperation, type, ctx, out, args)) {
-			if (((AsExpression) args[0]).getConversionOperation() != null)
-				ctx.gen("gen" + CommonUtilities.getEglNameForTypeCamelCase(((AsExpression) args[0]).getConversionOperation().getParameters().get(0).getType())
-					+ "Conversion", ((AsExpression) args[0]).getConversionOperation().getReturnType(), ctx, out, args);
-			else if (TypeUtils.Type_ANY.equals(((AsExpression) args[0]).getObjectExpr().getType())) {
-				out.print("egl.convertAnyToType(");
-				ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-				out.print(", ");
-				out.print("\"");
-				ctx.gen(genSignature, ((AsExpression) args[0]).getEType(), ctx, out, ((AsExpression) args[0]).getObjectExpr());
-				out.print("\"");
+			// check to see if a conversion is required
+			AsExpression asExpr = (AsExpression) args[0];
+			if (asExpr.getConversionOperation() != null) {
+				out.print(ctx.getNativeImplementationMapping((Classifier) asExpr.getConversionOperation().getContainer()) + '.');
+				out.print("from");
+				out.print(ctx.getNativeTypeName(asExpr.getConversionOperation().getParameters().get(0).getType()));
+				out.print("(");
+				ctx.gen(genExpression, asExpr.getObjectExpr(), ctx, out, args);
+				ctx.gen(genTypeDependentOptions, asExpr.getEType(), ctx, out, args);
 				out.print(")");
-			} else
-				ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+			} else if (ctx.mapsToPrimitiveType(asExpr.getEType())) {
+				ctx.gen(genRuntimeTypeName, asExpr.getEType(), ctx, out, TypeNameKind.EGLImplementation);
+				out.print(".ezeCast(");
+				ctx.gen(genExpression, asExpr.getObjectExpr(), ctx, out, args);
+				ctx.gen(genTypeDependentOptions, asExpr.getEType(), ctx, out, args);
+				out.print(")");
+			} else {
+				out.print("AnyObject.ezeCast(");
+				ctx.gen(genExpression, asExpr.getObjectExpr(), ctx, out, args);
+				out.print(", ");
+				ctx.gen(genRuntimeTypeName, asExpr.getEType(), ctx, out);
+				out.print(".class)");
+			}
 		}
 	}
 

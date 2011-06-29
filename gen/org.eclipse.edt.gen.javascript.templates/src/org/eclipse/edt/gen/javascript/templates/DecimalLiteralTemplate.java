@@ -22,16 +22,4 @@ public class DecimalLiteralTemplate extends JavaScriptTemplate {
 		out.print(quoted(stripLeadingZeroes(expr.getValue())));
 		out.print(")");
 	}
-
-	public String stripLeadingZeroes(String value) {
-		String minus = "";
-		if (value.charAt(0) == '-') {
-			value = value.substring(1);
-			minus = "-";
-		}
-		while (value.charAt(0) == '0' && value.length() > 1) {
-			value = value.substring(1);
-		}
-		return minus + value;
-	}
 }

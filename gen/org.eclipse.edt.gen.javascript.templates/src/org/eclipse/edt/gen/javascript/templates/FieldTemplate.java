@@ -12,6 +12,7 @@
 package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.compiler.core.ast.FieldAccess;
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -53,7 +54,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 			// if the value associated with the temporary variable is 2, then it is to be instantiated (OUT parm)
 			// otherwise it is to be defaulted to null (INOUT parm), as there is an assignment already created
 			if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) == ParameterKind.PARM_OUT) {
-				out.print("egl.org.eclipse.edt.runtime.javascript.egl.lang.AnyObject.ezeWrap(");
+				out.print(Constants.JSRT_EGL_NAMESPACE+ctx.getNativeMapping("egl.lang.AnyObject")+".ezeWrap(");
 				if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
 					ctx.gen(genDefaultValue, field.getType(), ctx, out, field);
 				else

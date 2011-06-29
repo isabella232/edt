@@ -18,18 +18,7 @@ import org.eclipse.edt.mof.egl.TernaryExpression;
 public class TernaryExpressionTemplate extends JavaScriptTemplate {
 
 	public void genExpression(TernaryExpression expr, Context ctx, TabbedWriter out, Object... args) {
-//		if (ctx.mapsToJavaType(expr.getEType())) {
-//			ctx.gen(genRuntimeTypeName, expr.getEType(), ctx, out, ImplementationKind.EGLImplementation);
-//			out.print(".ezeIsa(");
-//			genExpression(expr.getObjectExpr(), ctx, out, args);
-//			ctx.gen(genTypeDependentOptions, expr.getEType(), ctx, out, args);
-//			out.print(")");
-//		} else {
-//			out.print("AnyObject.ezeIsa(");
-//			genExpression(expr.getObjectExpr(), ctx, out, args);
-//			out.print(", ");
-//			ctx.gen(genRuntimeTypeName, expr.getEType(), ctx, out, ImplementationKind.EGLImplementation);
-			out.print(".class)");
-//		}
+		out.print(ctx.getPrimitiveMapping("egl.lang.String") + '.');
+		out.print(expr.getOperator());
 	}
 }
