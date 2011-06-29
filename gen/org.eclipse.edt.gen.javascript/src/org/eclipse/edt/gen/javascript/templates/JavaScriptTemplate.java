@@ -115,11 +115,24 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String caller = "caller";
 	public static final String eglnamespace = "egl.";
 
-	public String quoted(String unquoted) {
+	public static String quoted(String unquoted) {
 		return "\"" + unquoted + "\"";
 	}
-	
-	public String singleQuoted(String unquoted) {
+
+	public static String singleQuoted(String unquoted) {
 		return "'" + unquoted + "'";
 	}
+
+	public static String stripLeadingZeroes(String value) {
+		String minus = "";
+		if (value.charAt(0) == '-') {
+			value = value.substring(1);
+			minus = "-";
+		}
+		while (value.charAt(0) == '0' && value.length() > 1) {
+			value = value.substring(1);
+		}
+		return minus + value;
+	}
+
 }

@@ -61,6 +61,11 @@ public class Context extends EglContext {
 		return Constants.JSRT_EGL_NAMESPACE + super.getNativeImplementationMapping(type);
 	}
 
+	public String getNativeTypeName(Type type) {
+		String typeName = getNativeImplementationMapping(type);
+		return typeName.substring(typeName.lastIndexOf(".") + 1);
+	}
+
 	public void handleValidationError(Element obj) {
 		int startLine = 0;
 		int startOffset = 0;
@@ -93,11 +98,11 @@ public class Context extends EglContext {
 		getMessageRequestor().addMessage(message);
 	}
 
-	public void addNamespace(String namespace, String localName, String qualifiedPart){
+	public void addNamespace(String namespace, String localName, String qualifiedPart) {
 		namespaceMap.put(namespace + '{' + localName + '}', qualifiedPart);
 	}
-	
-	public Map<String, String> getNamespaceMap(){
+
+	public Map<String, String> getNamespaceMap() {
 		return namespaceMap;
 	}
 	/*

@@ -13,6 +13,9 @@ package org.eclipse.edt.gen.javascript;
 
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.FixedPrecisionType;
+import org.eclipse.edt.mof.egl.Operation;
+import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -194,19 +197,71 @@ public class CommonUtilities {
 			return " | ";
 		return "";
 	}
-	
-	public static String createNamespaceFromPackage( Part part )
-	{
+
+	public static String createNamespaceFromPackage(Part part) {
 		String ePackage = part.getPackageName();
-		if ( ePackage == null || ePackage.length() == 0 )
-		{
+		if (ePackage == null || ePackage.length() == 0) {
 			return "http://default";
-		}
-		else
-		{
-			return "http://"  + ePackage;
+		} else {
+			return "http://" + ePackage;
 		}
 
 	}
-	
+
+	/**
+	 * needsConversion inspects the specified types and indicates whether the two are semantically equivalent in the
+	 * JavaScript runtime; this is used to filter out EGL type conversions that would otherwise occur in the generation
+	 * framework, particularly in IRUtils.makeCompatible(....).
+	 * @param fromType
+	 * @param toType
+	 * @return
+	 */
+	public static boolean needsConversion(Type fromType, Type toType) {
+		boolean result = true;
+
+		if ((fromType instanceof FixedPrecisionType) && (toType instanceof FixedPrecisionType)) {
+			// This logic is borrowed from IRUtils.makeExprCompatibleToType
+			FixedPrecisionType fpExpr = (FixedPrecisionType) fromType;
+			FixedPrecisionType fpType = (FixedPrecisionType) toType;
+
+			result = !(fpExpr.getLength() <= fpType.getLength() && fpExpr.getDecimals() <= fpType.getDecimals());
+		}
+
+		return result;
+	}
+
+	public static boolean proceedWithConversion(Context ctx, Operation conOp) {
+		/*
+		 * At this point, we have a conversion operation -- an AsExpression either explicitly coded in EGL or implied by the
+		 * EGL types involved. The goal of this function is to identify conversions that are semantically equivalent in the
+		 * runtime and therefore the conversion can be ignored.
+		 */
+		boolean result = true;
+
+		Type fromType = conOp.getParameters().get(0).getType();
+		Type toType = conOp.getReturnType();
+
+		/*
+		 * If neither type is parameterizable, then the conversion is required only if the resulting runtime types are
+		 * different.....
+		 */
+		if (!conOp.isNarrowConversion() && !(fromType instanceof ParameterizableType) && !(toType instanceof ParameterizableType)) {
+			String fromType_RT = ctx.getPrimitiveMapping(fromType);
+			String toType_RT = ctx.getPrimitiveMapping(toType);
+			if (fromType_RT != null && toType_RT != null) {
+				result = !fromType_RT.equals(toType_RT);
+			}
+		}
+		return result;
+	}
+
+	public static boolean isJavaScriptNumber(Type type) {
+		return (TypeUtils.Type_INT.equals(type) || TypeUtils.Type_SMALLINT.equals(type) || TypeUtils.Type_FLOAT.equals(type) || TypeUtils.Type_SMALLFLOAT
+			.equals(type));
+	}
+
+	public static boolean isJavaScriptBigDecimal(Type type) {
+		return (TypeUtils.Type_BIGINT.equals(type) || TypeUtils.Type_NUM.equals(type) || TypeUtils.Type_DECIMAL.equals(type) || TypeUtils.Type_MONEY
+			.equals(type));
+	}
 }
