@@ -14,7 +14,6 @@ package org.eclipse.edt.gen.javascript.templates.egl.lang;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
@@ -41,10 +40,6 @@ public class BooleanTypeTemplate extends JavaScriptTemplate {
 			signature += "?";
 		signature += "0;";
 		out.print(signature);
-	}
-
-	public void genBooleanConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 	}
 
 	public void genUnaryExpression(EGLClass type, Context ctx, TabbedWriter out, Object... args) {

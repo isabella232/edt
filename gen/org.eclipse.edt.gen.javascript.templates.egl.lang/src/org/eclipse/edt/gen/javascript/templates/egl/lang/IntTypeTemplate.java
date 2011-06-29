@@ -19,7 +19,6 @@ import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
@@ -36,6 +35,27 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 			out.print("0");
 	}
 
+	protected boolean needsConversion(Operation conOp) {
+		boolean result = true;
+		Type fromType = conOp.getParameters().get(0).getType();
+		Type toType = conOp.getReturnType();
+		// don't convert matching types
+		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
+			result = false;
+		if (TypeUtils.isNumericType(fromType) && CommonUtilities.isJavaScriptNumber(fromType))
+			result = conOp.isNarrowConversion();
+		return result;
+	}
+
+	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
+		if (((AsExpression) args[0]).getConversionOperation() != null && !needsConversion(((AsExpression) args[0]).getConversionOperation())) {
+			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+		} else {
+			// we need to invoke the logic in type template to call back to the other conversion situations
+			ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
+		}
+	}
+
 	public void genSignature(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
 		String signature = "";
 		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
@@ -44,64 +64,6 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 			signature += "?";
 		signature += "I;";
 		out.print(signature);
-	}
-
-	protected boolean needsConversion(Operation conOp) {
-		Type fromType = conOp.getParameters().get(0).getType();
-		Type toType = conOp.getReturnType();
-		// don't convert matching types
-		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
-			return false;
-		if (TypeUtils.isNumericType(fromType) && !fromType.equals(TypeUtils.Type_SMALLINT) && !fromType.equals(TypeUtils.Type_FLOAT)
-			&& !fromType.equals(TypeUtils.Type_SMALLFLOAT))
-			return true;
-		return false;
-	}
-
-	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		// can we intercept and directly generate this conversion
-		if (((AsExpression) args[0]).getConversionOperation() != null && needsConversion(((AsExpression) args[0]).getConversionOperation())) {
-			out.print("egl.convertDecimalToInt(");
-			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-			out.print(", egl.createRuntimeException)");
-		} else {
-			// we need to invoke the logic in type template to call back to the other conversion situations
-			ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
-		}
-	}
-
-	public void genIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		if (((AsExpression) args[0]).getObjectExpr() instanceof IntegerLiteral
-			&& (((IntegerLiteral) ((AsExpression) args[0]).getObjectExpr()).getIntValue() >= -2147483648 && ((IntegerLiteral) ((AsExpression) args[0])
-				.getObjectExpr()).getIntValue() <= 2147483647))
-			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		else {
-			out.print("egl.convertNumberToInt(");
-			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-			out.print(", egl.createRuntimeException)");
-		}
-	}
-
-	public void genSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-	}
-
-	public void genSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		out.print("egl.convertFloatToInt(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(")");
-	}
-
-	public void genFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		out.print("egl.convertFloatToInt(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(")");
-	}
-
-	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		out.print("egl.convertStringToInt(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(")");
 	}
 
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) {
@@ -131,6 +93,10 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 		// these are the defaults for what can be handled by the java string class
 		if (op.equals(expr.Op_PLUS))
 			return " + ";
+		if (op.equals(expr.Op_MINUS))
+			return " - ";
+		if (op.equals(expr.Op_MULTIPLY))
+			return " * ";
 		if (op.equals(expr.Op_EQ))
 			return " == ";
 		if (op.equals(expr.Op_NE))

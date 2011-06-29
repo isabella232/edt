@@ -11,12 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
-import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.TimestampType;
@@ -74,33 +72,5 @@ public class AnyTimestampTypeTemplate extends JavaScriptTemplate {
 		if (type.getPattern() != null && !type.getPattern().equalsIgnoreCase("null"))
 			pattern = type.getPattern();
 		out.print(quoted(pattern));
-	}
-
-	public void genStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		out.print(Constants.JSRT_DTTMLIB_PKG + "timeStampValueWithPattern(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(", ");
-		ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
-		out.print(")");
-	}
-
-	public void genDateConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		out.print(Constants.JSRT_DTTMLIB_PKG + "extend(");
-		out.print(CommonUtilities.getEglNameForType(((AsExpression) args[0]).getObjectExpr().getType()));
-		out.print(", ");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(", ");
-		ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
-		out.print(")");
-	}
-
-	public void genTimeStampConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		out.print(Constants.JSRT_DTTMLIB_PKG + "extend(");
-		out.print(CommonUtilities.getEglNameForType(type));
-		out.print(", ");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(", ");
-		ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
-		out.print(", egl.createRuntimeException)");
 	}
 }

@@ -45,44 +45,23 @@ public class SmallfloatTypeTemplate extends JavaScriptTemplate {
 	}
 
 	protected boolean needsConversion(Operation conOp) {
+		boolean result = true;
 		Type fromType = conOp.getParameters().get(0).getType();
 		Type toType = conOp.getReturnType();
 		// don't convert matching types
 		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
-			return false;
-		if (TypeUtils.isNumericType(fromType) && !fromType.equals(TypeUtils.Type_FLOAT))
-			return true;
-		return false;
+			result = false;
+		if (TypeUtils.isNumericType(fromType) && CommonUtilities.isJavaScriptNumber(fromType))
+			result = conOp.isNarrowConversion();
+		return result;
 	}
 
 	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		// can we intercept and directly generate this conversion
-		if (((AsExpression) args[0]).getConversionOperation() != null && needsConversion(((AsExpression) args[0]).getConversionOperation())) {
-			out.print("egl.convertFloatToSmallfloat(");
-			AsExpression expr = (AsExpression) args[0];
-			out.print("Number((");
-			ctx.gen(genExpression, expr.getObjectExpr(), ctx, out, args);
-			out.print(").toString())");
-			out.print(")");
+		if (((AsExpression) args[0]).getConversionOperation() != null && !needsConversion(((AsExpression) args[0]).getConversionOperation())) {
+			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
 		} else {
 			// we need to invoke the logic in type template to call back to the other conversion situations
 			ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
 		}
-	}
-
-	public void genSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-	}
-
-	public void genFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		out.print("egl.convertFloatToSmallfloat(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(")");
-	}
-
-	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		out.print("egl.convertStringToSmallfloat(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(")");
 	}
 }

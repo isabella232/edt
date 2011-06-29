@@ -11,18 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
-import org.eclipse.edt.gen.javascript.CommonUtilities;
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class BigintTypeTemplate extends JavaScriptTemplate {
 
@@ -31,8 +28,9 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 			out.print("null");
 		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
 			out.print("null");
-		else
-			out.print("egl.javascript.BigDecimal.prototype.ZERO");
+		else {
+			out.print(Constants.JSRT_EGL_NAMESPACE + ctx.getNativeMapping("egl.lang.Int64") + ".ZERO");
+		}
 	}
 
 	public void genSignature(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
@@ -43,53 +41,6 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 			signature += "?";
 		signature += "B;";
 		out.print(signature);
-	}
-
-	protected boolean needsConversion(Operation conOp) {
-		Type fromType = conOp.getParameters().get(0).getType();
-		Type toType = conOp.getReturnType();
-		// don't convert matching types
-		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
-			return false;
-		if (TypeUtils.isNumericType(fromType) && !fromType.equals(TypeUtils.Type_INT) && !fromType.equals(TypeUtils.Type_SMALLINT))
-			return true;
-		return false;
-	}
-
-	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		// can we intercept and directly generate this conversion
-		if (((AsExpression) args[0]).getConversionOperation() != null && needsConversion(((AsExpression) args[0]).getConversionOperation())) {
-			out.print("egl.convert"
-				+ CommonUtilities.getEglNameForTypeCamelCase(((AsExpression) args[0]).getConversionOperation().getParameters().get(0).getType()) + "To"
-				+ CommonUtilities.getEglNameForTypeCamelCase(type) + "(");
-			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-			out.print(", egl.createRuntimeException)");
-		} else {
-			// we need to invoke the logic in type template to call back to the other conversion situations
-			ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
-		}
-	}
-
-	public void genBigintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-	}
-
-	public void genSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		out.print("(new egl.javascript.BigDecimal(String(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(")))");
-	}
-
-	public void genIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		out.print("(new egl.javascript.BigDecimal(String(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(")))");
-	}
-
-	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		out.print("egl.convertStringToBigint(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(")");
 	}
 
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) {

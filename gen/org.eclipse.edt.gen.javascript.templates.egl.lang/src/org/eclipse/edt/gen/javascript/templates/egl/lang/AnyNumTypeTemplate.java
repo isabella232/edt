@@ -20,7 +20,6 @@ import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
-import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
@@ -69,41 +68,33 @@ public class AnyNumTypeTemplate extends JavaScriptTemplate {
 		out.print(signature);
 	}
 
-	protected boolean needsConversion(Operation conOp) {
-		Type fromType = conOp.getParameters().get(0).getType();
-		Type toType = conOp.getReturnType();
-		// don't convert matching types
-		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
-			return false;
-		if (TypeUtils.isNumericType(fromType))
-			return true;
-		return false;
+	protected boolean needsConversion(Type fromType, Type toType) {
+		boolean result = true;
+		if (TypeUtils.isNumericType(fromType) && !CommonUtilities.needsConversion(fromType, toType))
+			result = CommonUtilities.isJavaScriptBigDecimal(toType);
+		return result;
 	}
 
-	public void genConversionOperation(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		// can we intercept and directly generate this conversion
-		if (((AsExpression) args[0]).getConversionOperation() != null && needsConversion(((AsExpression) args[0]).getConversionOperation())) {
-			out.print("egl.convert"
-				+ CommonUtilities.getEglNameForTypeCamelCase(((AsExpression) args[0]).getConversionOperation().getParameters().get(0).getType()) + "To"
-				+ CommonUtilities.getEglNameForTypeCamelCase(type) + "(");
-			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-			ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
-			out.print(", egl.createRuntimeException)");
+	public void genConversionOperation(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
+		AsExpression asExpr = (AsExpression) args[0];
+		Type toType = asExpr.getEType();
+		Type fromType = asExpr.getObjectExpr().getType();
+		if ((asExpr.getConversionOperation() == null) && TypeUtils.isNumericType(fromType)) {
+			if (needsConversion(fromType, toType)) {
+				out.print(ctx.getNativeImplementationMapping(toType) + '.');
+				out.print("from");
+				out.print(ctx.getNativeTypeName(fromType));
+				out.print("(");
+				ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+				ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
+				out.print(")");
+			} else {
+				ctx.gen(genExpression, asExpr.getObjectExpr(), ctx, out, args);
+			}
 		} else {
 			// we need to invoke the logic in type template to call back to the other conversion situations
-			ctx.genSuper(genConversionOperation, ParameterizableType.class, type, ctx, out, args);
+			ctx.genSuper(genConversionOperation, FixedPrecisionType.class, type, ctx, out, args);
 		}
-	}
-
-	public void genNumConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-	}
-
-	public void genStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		out.print("egl.convertStringToDecimal(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
-		out.print(")");
 	}
 
 	public void genTypeDependentOptions(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {

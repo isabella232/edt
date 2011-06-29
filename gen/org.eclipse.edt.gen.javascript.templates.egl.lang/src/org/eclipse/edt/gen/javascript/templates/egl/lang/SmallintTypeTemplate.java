@@ -18,7 +18,6 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
@@ -46,61 +45,24 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 	}
 
 	protected boolean needsConversion(Operation conOp) {
+		boolean result = true;
 		Type fromType = conOp.getParameters().get(0).getType();
 		Type toType = conOp.getReturnType();
 		// don't convert matching types
 		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
-			return false;
-		if (TypeUtils.isNumericType(fromType) && !fromType.equals(TypeUtils.Type_INT) && !fromType.equals(TypeUtils.Type_FLOAT)
-			&& !fromType.equals(TypeUtils.Type_SMALLFLOAT))
-			return true;
-		return false;
+			result = false;
+		if (TypeUtils.isNumericType(fromType) && CommonUtilities.isJavaScriptNumber(fromType))
+			result = conOp.isNarrowConversion();
+		return result;
 	}
 
 	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		// can we intercept and directly generate this conversion
-		if (((AsExpression) args[0]).getConversionOperation() != null && needsConversion(((AsExpression) args[0]).getConversionOperation())) {
-			out.print("egl.convertDecimalToSmallint(");
+		if (((AsExpression) args[0]).getConversionOperation() != null && !needsConversion(((AsExpression) args[0]).getConversionOperation())) {
 			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-			out.print(", egl.createRuntimeException)");
 		} else {
 			// we need to invoke the logic in type template to call back to the other conversion situations
 			ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
 		}
-	}
-
-	public void genIntConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		if (((AsExpression) args[0]).getObjectExpr() instanceof IntegerLiteral
-			&& (((IntegerLiteral) ((AsExpression) args[0]).getObjectExpr()).getIntValue() >= -32768 && ((IntegerLiteral) ((AsExpression) args[0])
-				.getObjectExpr()).getIntValue() <= 32767))
-			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		else {
-			out.print("egl.convertNumberToSmallint(");
-			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-			out.print(", egl.createRuntimeException)");
-		}
-	}
-
-	public void genSmallintConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-	}
-
-	public void genSmallfloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		out.print("egl.convertFloatToSmallint(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(")");
-	}
-
-	public void genFloatConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		out.print("egl.convertFloatToSmallint(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(")");
-	}
-
-	public void genStringConversion(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		out.print("egl.convertStringToSmallint(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(")");
 	}
 
 }

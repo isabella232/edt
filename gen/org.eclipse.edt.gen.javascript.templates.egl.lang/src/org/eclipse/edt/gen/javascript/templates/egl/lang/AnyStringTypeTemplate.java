@@ -13,21 +13,17 @@ package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
-import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.SequenceType;
 import org.eclipse.edt.mof.egl.SubstringAccess;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class AnyStringTypeTemplate extends JavaScriptTemplate {
 
@@ -114,60 +110,6 @@ public class AnyStringTypeTemplate extends JavaScriptTemplate {
 		out.print(", ");
 		ctx.gen(genExpression, ((SubstringAccess) args[0]).getEnd(), ctx, out, args);
 		out.print(")");
-	}
-
-	protected boolean needsConversion(Operation conOp) {
-		Type fromType = conOp.getParameters().get(0).getType();
-		Type toType = conOp.getReturnType();
-		// don't convert matching types
-		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
-			return false;
-		if (TypeUtils.isNumericType(fromType))
-			return true;
-		return false;
-	}
-
-	public void genConversionOperation(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		// can we intercept and directly generate this conversion
-		if (((AsExpression) args[0]).getConversionOperation() != null && needsConversion(((AsExpression) args[0]).getConversionOperation())) {
-			out.print("(");
-			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-			out.print(").toString()");
-		} else {
-			// we need to invoke the logic in type template to call back to the other conversion situations
-			ctx.genSuper(genConversionOperation, ParameterizableType.class, type, ctx, out, args);
-		}
-	}
-
-	public void genStringConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-	}
-
-	public void genDateConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		out.print(Constants.JSRT_STRLIB_PKG + "formatDate(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(", ");
-		out.print(Constants.JSRT_STRLIB_PKG + "defaultDateFormat )");
-	}
-
-	public void genTimeConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		out.print(Constants.JSRT_STRLIB_PKG + "formatTime(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(", ");
-		out.print(Constants.JSRT_STRLIB_PKG + "defaultTimeFormat )");
-	}
-
-	public void genTimeStampConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		out.print(Constants.JSRT_STRLIB_PKG + "formatTimeStamp(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(", ");
-		out.print(Constants.JSRT_STRLIB_PKG + "defaultTimeStampFormat )");
-	}
-
-	public void genBooleanConversion(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		out.print("(");
-		ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		out.print(").toString()");
 	}
 
 	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
