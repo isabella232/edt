@@ -64,7 +64,7 @@ public class JavaScriptGenerator extends Generator {
 
 	public boolean visit(Part part) {
 		try {
-			context.gen(JavaScriptTemplate.genPart, part, context, out, (Object) null);
+			context.invoke(JavaScriptTemplate.genPart, part, context, out);
 		}
 		catch (TemplateException e) {
 			e.printStackTrace();
@@ -75,10 +75,10 @@ public class JavaScriptGenerator extends Generator {
 	public void generate(Part part) throws GenerationException {
 		try {
 			context.putAttribute(context.getClass(), Constants.Annotation_partBeingGenerated, part);
-			context.validate(JavaScriptTemplate.validatePart, part, context, (Object) null);
+			context.invoke(JavaScriptTemplate.validatePart, part, context);
 			if (!context.getMessageRequestor().isError()) {
 				out.getWriter().flush();
-				context.gen(JavaScriptTemplate.genPart, part, context, out, (Object) null);
+				context.invoke(JavaScriptTemplate.genPart, part, context, out);
 				out.flush();
 			}
 		}
@@ -96,11 +96,6 @@ public class JavaScriptGenerator extends Generator {
 			context.getMessageRequestor().addMessage(message2);
 			// print out the whole stack trace
 			e.printStackTrace();
-			// write out any trace messages
-			System.out.println();
-			System.out.println("Dumping up to the last 200 template/method invocation and resolution messages");
-			for (String traceEntry : context.getTemplateTraceEntries())
-				System.out.println(traceEntry);
 		}
 		// close the output
 		out.close();

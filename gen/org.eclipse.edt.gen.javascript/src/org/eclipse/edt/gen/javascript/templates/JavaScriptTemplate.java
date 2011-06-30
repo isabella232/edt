@@ -88,6 +88,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genSuperClass = "genSuperClass";
 	public static final String genTypeDependentOptions = "genTypeDependentOptions";
 	public static final String genXmlAnnotations = "genXmlAnnotations";
+	public static final String genXmlField = "genXmlField";
 	public static final String genUnaryExpression = "genUnaryExpression";
 	// constants that allow container based processing. each of these will attempt to find the user provided container based
 	// method, and if not found, will then end up back in type template and invoked the method name without "containerbased"
