@@ -163,7 +163,7 @@ public class Context extends EglContext {
 		return value;
 	}
 
-	public void gen(String genMethod, Expression object, TemplateContext ctx, TabbedWriter out, Object... args) {
+	public void invoke(String genMethod, Expression object, TemplateContext ctx, TabbedWriter out) {
 		// is this the first time into an expression group
 		Annotation annotation = object.getAnnotation(IEGLConstants.EGL_LOCATION);
 		if (!smapIsProcessing && annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
@@ -179,34 +179,34 @@ public class Context extends EglContext {
 				firstJavaLineNumber = out.getLineNumber();
 			}
 			// process the generation
-			super.gen(genMethod, object, ctx, out, args);
+			super.invoke(genMethod, object, ctx, out);
 			lastJavaLineNumber = out.getLineNumber();
 			smapIsProcessing = false;
 		} else {
 			if (smapIsProcessing && annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
 				lastEglLineNumber = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
 			// process the generation
-			super.gen(genMethod, object, ctx, out, args);
+			super.invoke(genMethod, object, ctx, out);
 			if (smapIsProcessing)
 				lastJavaLineNumber = out.getLineNumber();
 		}
 	}
 
-	public void gen(String genMethod, Statement object, TemplateContext ctx, TabbedWriter out, Object... args) {
+	public void invoke(String genMethod, Statement object, TemplateContext ctx, TabbedWriter out) {
 		// for statements, we only want to collect the data if this statement is part of a larger expression
 		if (smapIsProcessing) {
 			Annotation annotation = object.getAnnotation(IEGLConstants.EGL_LOCATION);
 			if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
 				lastEglLineNumber = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
 			// process the generation
-			super.gen(genMethod, object, ctx, out, args);
+			super.invoke(genMethod, object, ctx, out);
 			// the last line is 1 less because this is a statement
 			lastJavaLineNumber = out.getLineNumber() - 1;
 			if (firstJavaLineNumber > lastJavaLineNumber)
 				lastJavaLineNumber = firstJavaLineNumber;
 		} else
 			// process the generation
-			super.gen(genMethod, object, ctx, out, args);
+			super.invoke(genMethod, object, ctx, out);
 	}
 
 	public void genSmapEnd(Function object, TabbedWriter out) {

@@ -69,7 +69,7 @@ public class JavaGenerator extends Generator {
 
 	public boolean visit(Part part) {
 		try {
-			context.gen(JavaTemplate.genPart, part, context, out, (Object) null);
+			context.invoke(JavaTemplate.genPart, part, context, out);
 		}
 		catch (TemplateException e) {
 			e.printStackTrace();
@@ -80,7 +80,7 @@ public class JavaGenerator extends Generator {
 	public void generate(Part part) throws GenerationException {
 		try {
 			context.putAttribute(context.getClass(), Constants.Annotation_partBeingGenerated, part);
-			context.validate(JavaTemplate.validatePart, part, context, (Object) null);
+			context.invoke(JavaTemplate.validatePart, part, context);
 			if (!context.getMessageRequestor().isError()) {
 				out.getWriter().flush();
 				// get the egl file being processed
@@ -97,7 +97,7 @@ public class JavaGenerator extends Generator {
 				context.getSmapData().append(fileName + Constants.smap_stratum);
 				// we need to insert the file list here, but cannot do this until the part generation finished
 				context.getSmapData().append(Constants.smap_lines);
-				context.gen(JavaTemplate.genPart, part, context, out, (Object) null);
+				context.invoke(JavaTemplate.genPart, part, context, out);
 				context.writeSmapLine();
 				// time to insert the list of files
 				int index = 0;
@@ -129,11 +129,6 @@ public class JavaGenerator extends Generator {
 			}
 			// print out the whole stack trace
 			e.printStackTrace();
-			// write out any trace messages
-			System.out.println();
-			System.out.println("Dumping up to the last 200 template/method invocation and resolution messages");
-			for (String traceEntry : context.getTemplateTraceEntries())
-				System.out.println(traceEntry);
 		}
 		// close the output
 		out.close();

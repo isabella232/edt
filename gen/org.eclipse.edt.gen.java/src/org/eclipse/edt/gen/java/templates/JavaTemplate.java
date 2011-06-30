@@ -27,7 +27,7 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static enum TypeNameKind {
 		JavaPrimitive, JavaObject, EGLInterface, EGLImplementation, JavaImplementation
 	}
-	// Constants that represent all the method names invoked using the dynamic Template.gen() methods
+	// Constants that represent all the method names invoked using the dynamic Template.invoke() methods
 	// This allows one to find all references to invocations of the methods being invoked dynamically
 	public static final String genAccessor = "genAccessor";
 	public static final String genAdditionalConstructorParams = "genAdditionalConstructorParams";
