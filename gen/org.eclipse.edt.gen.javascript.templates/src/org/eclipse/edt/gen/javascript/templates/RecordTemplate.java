@@ -130,7 +130,6 @@ public class RecordTemplate extends JavaScriptTemplate {
 	public void genQualifier(Record part, Context ctx, TabbedWriter out) {}
 	
 	public void genQualifier(Record part, Context ctx, TabbedWriter out, NamedElement arg) {
-//		if (arg.getQualifier() == null)
-			out.print("this.");
+//			out.print("this.");
 	}
 }

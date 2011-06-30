@@ -147,7 +147,6 @@ public class LibraryTemplate extends JavaScriptTemplate {
 	public void genQualifier(Library library, Context ctx, TabbedWriter out) {}
 
 	public void genQualifier(Library library, Context ctx, TabbedWriter out, NamedElement arg) {
-		// if (arg.getQualifier() == null)
-		out.print("this.");
+//		out.print("this.");
 	}
 }

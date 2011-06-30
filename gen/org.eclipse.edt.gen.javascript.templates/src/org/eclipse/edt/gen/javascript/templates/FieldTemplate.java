@@ -38,6 +38,10 @@ public class FieldTemplate extends JavaScriptTemplate {
 	}
 
 	public void genQualifier(Field field, Context ctx, TabbedWriter out) {
+		/* TODO sbg Ensure that genQualifier is needed for something (e.g., 
+		 * generating "this" in handlers or widgets) -- otherwise, remove it
+		 * altogether.
+		 */
 		if (field.getContainer() != null && field.getContainer() instanceof Type)
 			ctx.invoke(genQualifier, field.getContainer(), ctx, out, field);
 	}
