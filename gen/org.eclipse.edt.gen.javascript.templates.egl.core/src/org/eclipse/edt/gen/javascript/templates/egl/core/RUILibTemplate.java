@@ -18,47 +18,46 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.Library;
-import org.eclipse.edt.mof.egl.Type;
 
 public class RUILibTemplate extends JavaScriptTemplate {
 	// the library gets invoked here, with the invocation expression passed as the 1st argument in the args list. From here,
 	// we use the lowercase function name as the lookup for the generation. This means that all system functions are
 	// implemented by the lowercase method name. This technique allows a user to add/override system functions simply by
 	// extending this class and adding/overriding the system function name as the method name, in lowercase.
-	public void genInvocation(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(((InvocationExpression) args[0]).getTarget().getName().toLowerCase(Locale.ENGLISH), (Type) type, ctx, out, args);
+	public void genInvocation(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(arg.getTarget().getName().toLowerCase(Locale.ENGLISH), type, ctx, out, arg);
 	}
 
 	// all system functions are defined below, with the method name as lowercase.
-	public void sort(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void sort(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void settextselectionenabled(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void settextselectionenabled(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void gettextselectionenabled(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void gettextselectionenabled(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void getuseragent(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void getuseragent(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void settitle(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void settitle(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void gettitle(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void gettitle(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void settheme(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void settheme(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void gettheme(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void gettheme(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 }

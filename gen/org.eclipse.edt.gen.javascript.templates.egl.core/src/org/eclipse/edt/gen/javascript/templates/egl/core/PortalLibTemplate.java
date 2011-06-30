@@ -18,87 +18,86 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.Library;
-import org.eclipse.edt.mof.egl.Type;
 
 public class PortalLibTemplate extends JavaScriptTemplate {
 	// the library gets invoked here, with the invocation expression passed as the 1st argument in the args list. From here,
 	// we use the lowercase function name as the lookup for the generation. This means that all system functions are
 	// implemented by the lowercase method name. This technique allows a user to add/override system functions simply by
 	// extending this class and adding/overriding the system function name as the method name, in lowercase.
-	public void genInvocation(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(((InvocationExpression) args[0]).getTarget().getName().toLowerCase(Locale.ENGLISH), (Type) type, ctx, out, args);
+	public void genInvocation(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(arg.getTarget().getName().toLowerCase(Locale.ENGLISH), type, ctx, out, arg);
 	}
 
 	// all system functions are defined below, with the method name as lowercase.
-	public void getportletsessionattr(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void getportletsessionattr(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void setportletsessionattr(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void setportletsessionattr(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void clearportletsessionattr(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void clearportletsessionattr(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void setportletmode(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void setportletmode(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void getportletmode(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void getportletmode(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void setwindowstate(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void setwindowstate(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void getwindowstate(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void getwindowstate(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void ispreferencereadonly(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void ispreferencereadonly(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void getpreferencevalue(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void getpreferencevalue(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void getpreferencevalues(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void getpreferencevalues(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void resetpreference(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void resetpreference(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void setpreferencevalue(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void setpreferencevalue(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void setpreferencevalues(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void setpreferencevalues(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void savepreferences(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void savepreferences(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void createvaultslot(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void createvaultslot(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void deletevaultslot(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void deletevaultslot(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void setcredential(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void setcredential(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void getcredential(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void getcredential(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 }

@@ -18,99 +18,98 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.Library;
-import org.eclipse.edt.mof.egl.Type;
 
 public class DateTimeLibTemplate extends JavaScriptTemplate {
 	// the library gets invoked here, with the invocation expression passed as the 1st argument in the args list. From here,
 	// we use the lowercase function name as the lookup for the generation. This means that all system functions are
 	// implemented by the lowercase method name. This technique allows a user to add/override system functions simply by
 	// extending this class and adding/overriding the system function name as the method name, in lowercase.
-	public void genInvocation(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(((InvocationExpression) args[0]).getTarget().getName().toLowerCase(Locale.ENGLISH), (Type) type, ctx, out, args);
+	public void genInvocation(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(arg.getTarget().getName().toLowerCase(Locale.ENGLISH), type, ctx, out, arg);
 	}
 
 	// all system functions are defined below, with the method name as lowercase.
-	public void currentdate(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void currentdate(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void currenttime(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void currenttime(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void currenttimestamp(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void currenttimestamp(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void datefromint(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void datefromint(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void datevalue(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void datevalue(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void datevaluefromgregorian(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void datevaluefromgregorian(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void datevaluefromjulian(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void datevaluefromjulian(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void timevalue(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void timevalue(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void intervalvalue(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void intervalvalue(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void intervalvaluewithpattern(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void intervalvaluewithpattern(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void timestampvalue(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void timestampvalue(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void timestampvaluewithpattern(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void timestampvaluewithpattern(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void timestampfrom(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void timestampfrom(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void dayof(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void dayof(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void monthof(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void monthof(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void yearof(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void yearof(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void weekdayof(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void weekdayof(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void mdy(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void mdy(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void dateof(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void dateof(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void timeof(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void timeof(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void extend(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void extend(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 }

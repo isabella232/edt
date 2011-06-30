@@ -18,91 +18,90 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.Library;
-import org.eclipse.edt.mof.egl.Type;
 
 public class VGLibTemplate extends JavaScriptTemplate {
 	// the library gets invoked here, with the invocation expression passed as the 1st argument in the args list. From here,
 	// we use the lowercase function name as the lookup for the generation. This means that all system functions are
 	// implemented by the lowercase method name. This technique allows a user to add/override system functions simply by
 	// extending this class and adding/overriding the system function name as the method name, in lowercase.
-	public void genInvocation(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(((InvocationExpression) args[0]).getTarget().getName().toLowerCase(Locale.ENGLISH), (Type) type, ctx, out, args);
+	public void genInvocation(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(arg.getTarget().getName().toLowerCase(Locale.ENGLISH), type, ctx, out, arg);
 	}
 
 	// all system functions are defined below, with the method name as lowercase.
-	public void comparebytes(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void comparebytes(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void comparenum(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void comparenum(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void comparestr(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void comparestr(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void concatenate(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void concatenate(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void concatenatebytes(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void concatenatebytes(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void concatenatewithseparator(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void concatenatewithseparator(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void connectionservice(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void connectionservice(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void copybytes(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void copybytes(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void copystr(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void copystr(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void findstr(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void findstr(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void floatingdifference(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void floatingdifference(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void floatingmod(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void floatingmod(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void floatingproduct(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void floatingproduct(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void floatingquotient(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void floatingquotient(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void floatingsum(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void floatingsum(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void getvagsystype(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void getvagsystype(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void setsubstr(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void setsubstr(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void starttransaction(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void starttransaction(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void vgtdli(Library type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInvocation, (InvocationExpression) args[0], ctx, out, args);
+	public void vgtdli(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 }

@@ -25,7 +25,7 @@ public class RUIHandlerTemplate extends JavaScriptTemplate {
 	public static final String FieldName_InitialUI = "initialUI";
 	public static final String FieldName_OnConstructionFunction = "onConstructionFunction";
 
-	public void genClassHeader(Handler type, Context ctx, TabbedWriter out, Object... args) {
+	public void genClassHeader(Handler type, Context ctx, TabbedWriter out) {
 		out.print("egl.defineRUIHandler(");
 		out.print(quoted(type.getPackageName()));
 		out.print(", ");
@@ -41,16 +41,16 @@ public class RUIHandlerTemplate extends JavaScriptTemplate {
 		out.println(",");
 	}
 
-	public void genClassBody(Handler type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genConstructor, type, ctx, out, args);
-		ctx.gen(genFunctions, (Element) type, ctx, out, args);
+	public void genClassBody(Handler type, Context ctx, TabbedWriter out) {
+		ctx.invoke(genConstructor, type, ctx, out);
+		ctx.invoke(genFunctions, (Element) type, ctx, out);
 		out.println(",");
-		ctx.gen(genXmlAnnotations, type, ctx, out, args);
+		ctx.invoke(genXmlAnnotations, type, ctx, out);
 		out.println(",");
-		ctx.gen(genNamespaceMap, type, ctx, out, args);
+		ctx.invoke(genNamespaceMap, type, ctx, out);
 	}
 
-	public void genConstructor(Handler type, Context ctx, TabbedWriter out, Object... args) {
+	public void genConstructor(Handler type, Context ctx, TabbedWriter out) {
 		// Generate default constructor
 		Stereotype stereotype = type.getStereotype();
 		out.print(quoted("constructor"));
@@ -58,7 +58,7 @@ public class RUIHandlerTemplate extends JavaScriptTemplate {
 		
 		for (Field field : type.getFields()) {
 			if (field.getInitializerStatements() != null)
-				ctx.gen(genStatementNoBraces, field.getInitializerStatements(), ctx, out, args);
+				ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
 		}
 		// TODO: initialUI value is not stored in RUIHandler stereotype as it is not
 		// handled properly in the bindings front end that has this value. Assume
@@ -71,11 +71,11 @@ public class RUIHandlerTemplate extends JavaScriptTemplate {
 			out.print("this.ui");
 			out.println(" ];");
 		}
-		ctx.gen(genLibraries, type, ctx, out, args);
+		ctx.invoke(genLibraries, type, ctx, out);
 		MemberName onConstruction = (MemberName) stereotype.getValue(FieldName_OnConstructionFunction);
 		if (onConstruction != null) {
 			out.print("this.");
-			ctx.gen(genName, onConstruction.getMember(), ctx, out, args);
+			ctx.invoke(genName, onConstruction.getMember(), ctx, out);
 			out.println("();");
 		}
 		out.println("}");
