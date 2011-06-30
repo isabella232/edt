@@ -24,11 +24,11 @@ public class NameTemplate extends JavaTemplate {
 		return expr.getNamedElement().getAnnotation(Constants.Annotation_EGLProperty);
 	}
 
-	public void genAssignment(Name expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genAssignment(Name expr, Context ctx, TabbedWriter out, Expression arg) {
 		Annotation property = getPropertyAnnotation(expr);
 		if (property != null) {
 			if (expr.getQualifier() != null) {
-				ctx.gen(genExpression, expr.getQualifier(), ctx, out, args);
+				ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
 				out.print(".");
 				if (property.getValue("setMethod") != null)
 					out.print((String) property.getValue("setMethod"));
@@ -39,20 +39,14 @@ public class NameTemplate extends JavaTemplate {
 						out.print(expr.getNamedElement().getName().substring(1));
 				}
 				out.print("(");
-				ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
+				ctx.invoke(genExpression, arg, ctx, out);
 				out.print(")");
 			} else {
-				ctx.gen(genName, expr.getNamedElement(), ctx, out, args);
+				ctx.invoke(genName, expr.getNamedElement(), ctx, out);
 				out.print(" = ");
-				ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
+				ctx.invoke(genExpression, arg, ctx, out);
 			}
-		} else {
-			Object[] objects = new Object[args.length + 1];
-			objects[0] = expr;
-			for (int i = 0; i < args.length; i++) {
-				objects[i + 1] = args[i];
-			}
-			ctx.gen(genAssignment, expr.getType(), ctx, out, objects);
-		}
+		} else
+			ctx.invoke(genAssignment, expr.getType(), ctx, out, expr, arg);
 	}
 }

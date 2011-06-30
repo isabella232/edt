@@ -18,16 +18,16 @@ import org.eclipse.edt.mof.egl.NewExpression;
 
 public class NewExpressionTemplate extends JavaTemplate {
 
-	public void genExpression(NewExpression expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(NewExpression expr, Context ctx, TabbedWriter out) {
 		out.print("new ");
-		ctx.gen(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavaImplementation);
+		ctx.invoke(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavaImplementation);
 		out.print("(");
 		if (expr.getArguments() != null && expr.getArguments().size() > 0) {
 			for (Expression argument : expr.getArguments()) {
-				ctx.gen(genExpression, argument, ctx, out, args);
+				ctx.invoke(genExpression, argument, ctx, out);
 			}
 		} else
-			ctx.gen(genConstructorOptions, expr.getType(), ctx, out, args);
+			ctx.invoke(genConstructorOptions, expr.getType(), ctx, out);
 		out.print(")");
 	}
 }

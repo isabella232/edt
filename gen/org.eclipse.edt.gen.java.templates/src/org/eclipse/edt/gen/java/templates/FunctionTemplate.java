@@ -24,29 +24,29 @@ import org.eclipse.edt.mof.egl.ReturnStatement;
 
 public class FunctionTemplate extends JavaTemplate {
 
-	public void validate(Function function, Context ctx, Object... args) {
-		ctx.validate(validate, function.getStatementBlock(), ctx, args);
+	public void validate(Function function, Context ctx) {
+		ctx.invoke(validate, function.getStatementBlock(), ctx);
 	}
 
-	public void genDeclaration(Function function, Context ctx, TabbedWriter out, Object... args) {
+	public void genDeclaration(Function function, Context ctx, TabbedWriter out) {
 		// write out the debug extension data
 		CommonUtilities.generateSmapExtension(function, ctx);
 		// process the function
-		ctx.genSuper(genDeclaration, Function.class, function, ctx, out, args);
+		ctx.invokeSuper(this, genDeclaration, function, ctx, out);
 		// remember what function we are processing
 		ctx.setCurrentFunction(function.getName());
-		ctx.gen(genRuntimeTypeName, function, ctx, out, args);
+		ctx.invoke(genRuntimeTypeName, function, ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(" ");
-		ctx.gen(genName, function, ctx, out, args);
+		ctx.invoke(genName, function, ctx, out);
 		out.print("(");
 		// if this is the main function, we need to generate List<String> args
 		if (function.getName().equalsIgnoreCase("main"))
 			out.print("java.util.List<String> ezeargs");
 		else
-			ctx.foreach(function.getParameters(), ',', genDeclaration, ctx, out, args);
+			ctx.foreach(function.getParameters(), ',', genDeclaration, ctx, out);
 		out.println(") ");
 		out.println("{");
-		ctx.gen(genStatementNoBraces, function.getStatementBlock(), ctx, out, args);
+		ctx.invoke(genStatementNoBraces, function.getStatementBlock(), ctx, out);
 		// we need to create a local variable for the return, if the user didn't specify one
 		if (function.getType() != null
 			&& (ctx.getAttribute(function, org.eclipse.edt.gen.Constants.Annotation_functionHasReturnStatement) == null || !((Boolean) ctx.getAttribute(
@@ -67,12 +67,12 @@ public class FunctionTemplate extends JavaTemplate {
 			declarationExpression.getFields().add(field);
 			// connect the declaration expression to the local declaration
 			localDeclaration.setExpression(declarationExpression);
-			ctx.gen(genStatement, localDeclaration, ctx, out, args);
+			ctx.invoke(genStatement, localDeclaration, ctx, out);
 			// create a return statement
 			ReturnStatement returnStatement = factory.createReturnStatement();
 			returnStatement.setContainer(function);
 			returnStatement.setExpression(nameExpression);
-			ctx.gen(genStatement, returnStatement, ctx, out, args);
+			ctx.invoke(genStatement, returnStatement, ctx, out);
 		}
 		// we always write out smap data for the final brace, just in case there is no return statement
 		ctx.genSmapEnd(function, out);
@@ -80,17 +80,17 @@ public class FunctionTemplate extends JavaTemplate {
 		out.println("}");
 	}
 
-	public void genAccessor(Function function, Context ctx, TabbedWriter out, Object... args) {
+	public void genAccessor(Function function, Context ctx, TabbedWriter out) {
 		out.print("new org.eclipse.edt.javart.Delegate(\"");
-		ctx.gen(genName, function, ctx, out, args);
+		ctx.invoke(genName, function, ctx, out);
 		out.print("\", this");
 		for (int i = 0; i < function.getParameters().size(); i++) {
 			FunctionParameter decl = function.getParameters().get(i);
 			out.print(", ");
 			if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx))
-				ctx.gen(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
+				ctx.invoke(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
 			else
-				ctx.gen(genRuntimeTypeName, decl, ctx, out, TypeNameKind.JavaObject);
+				ctx.invoke(genRuntimeTypeName, decl, ctx, out, TypeNameKind.JavaObject);
 			out.print(".class");
 		}
 		out.print(")");

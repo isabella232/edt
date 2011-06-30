@@ -20,7 +20,7 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class MemberTemplate extends JavaTemplate {
 
-	public void genDeclaration(Member field, Context ctx, TabbedWriter out, Object... args) {
+	public void genDeclaration(Member field, Context ctx, TabbedWriter out) {
 		AccessKind access = field.getAccessKind();
 		if (access == AccessKind.ACC_PRIVATE)
 			out.print("private ");
@@ -28,21 +28,21 @@ public class MemberTemplate extends JavaTemplate {
 			out.print("public ");
 	}
 
-	public void genRuntimeTypeName(Member mbr, Context ctx, TabbedWriter out, Object... args) {
+	public void genRuntimeTypeName(Member mbr, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		if (mbr.getType() == null)
 			out.print("void");
 		else if (ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
 			&& ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
 			out.print("AnyBoxedObject<");
-			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject, mbr);
+			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject);
 			out.print(">");
 		} else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()) && !mbr.isNullable() && TypeUtils.isValueType(mbr.getType()))
-			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaPrimitive, mbr);
+			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaPrimitive);
 		else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()))
-			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject, mbr);
+			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject);
 		else if (ctx.mapsToNativeType(mbr.getType().getClassifier()))
-			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.EGLInterface, mbr);
+			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.EGLInterface);
 		else
-			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject, mbr);
+			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject);
 	}
 }

@@ -17,18 +17,18 @@ import org.eclipse.edt.mof.egl.TernaryExpression;
 
 public class TernaryExpressionTemplate extends JavaTemplate {
 
-	public void genExpression(TernaryExpression expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(TernaryExpression expr, Context ctx, TabbedWriter out) {
 //		if (ctx.mapsToJavaType(expr.getEType())) {
-//			ctx.gen(genRuntimeTypeName, expr.getEType(), ctx, out, ImplementationKind.EGLImplementation);
+//			ctx.invoke(genRuntimeTypeName, expr.getEType(), ctx, out, ImplementationKind.EGLImplementation);
 //			out.print(".ezeIsa(");
-//			genExpression(expr.getObjectExpr(), ctx, out, args);
-//			ctx.gen(genTypeDependentOptions, expr.getEType(), ctx, out, args);
+//			genExpression(expr.getObjectExpr(), ctx, out);
+//			ctx.invoke(genTypeDependentOptions, expr.getEType(), ctx, out);
 //			out.print(")");
 //		} else {
 //			out.print("AnyObject.ezeIsa(");
-//			genExpression(expr.getObjectExpr(), ctx, out, args);
+//			genExpression(expr.getObjectExpr(), ctx, out);
 //			out.print(", ");
-//			ctx.gen(genRuntimeTypeName, expr.getEType(), ctx, out, ImplementationKind.EGLImplementation);
+//			ctx.invoke(genRuntimeTypeName, expr.getEType(), ctx, out, ImplementationKind.EGLImplementation);
 			out.print(".class)");
 //		}
 	}

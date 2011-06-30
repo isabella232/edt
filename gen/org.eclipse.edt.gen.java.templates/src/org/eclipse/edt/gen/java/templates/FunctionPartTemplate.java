@@ -17,11 +17,11 @@ import org.eclipse.edt.mof.egl.FunctionPart;
 
 public class FunctionPartTemplate extends JavaTemplate {
 
-	public void validateClassBody(FunctionPart part, Context ctx, Object... args) {}
+	public void validateClassBody(FunctionPart part, Context ctx) {}
 
-	public void genPart(FunctionPart part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genPart(FunctionPart part, Context ctx, TabbedWriter out) {}
 
-	public void genClassBody(FunctionPart part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassBody(FunctionPart part, Context ctx, TabbedWriter out) {}
 
-	public void genClassHeader(FunctionPart part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassHeader(FunctionPart part, Context ctx, TabbedWriter out) {}
 }

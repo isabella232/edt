@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.egl.ContinueStatement;
 
 public class ContinueStatementTemplate extends JavaTemplate {
 
-	public void genStatementBody(ContinueStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(ContinueStatement stmt, Context ctx, TabbedWriter out) {
 		// see if they specified a label
 		if (stmt.getLabel() != null && stmt.getLabel().length() > 0) {
 			out.print("continue " + stmt.getLabel());

@@ -18,16 +18,16 @@ import org.eclipse.edt.mof.egl.FunctionParameter;
 
 public class FunctionParameterTemplate extends JavaTemplate {
 
-	public void genDeclaration(FunctionParameter decl, Context ctx, TabbedWriter out, Object... args) {
+	public void genDeclaration(FunctionParameter decl, Context ctx, TabbedWriter out) {
 		// write out the debug extension data
 		CommonUtilities.generateSmapExtension(decl, ctx);
 		if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx)) {
 			out.print("AnyBoxedObject<");
-			ctx.gen(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
+			ctx.invoke(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
 			out.print(">");
 		} else
-			ctx.gen(genRuntimeTypeName, decl, ctx, out, args);
+			ctx.invoke(genRuntimeTypeName, decl, ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(" ");
-		ctx.gen(genName, decl, ctx, out, args);
+		ctx.invoke(genName, decl, ctx, out);
 	}
 }

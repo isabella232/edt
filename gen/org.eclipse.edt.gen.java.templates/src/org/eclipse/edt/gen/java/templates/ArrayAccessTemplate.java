@@ -23,77 +23,77 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class ArrayAccessTemplate extends JavaTemplate {
 
-	public void genAssignment(ArrayAccess expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genAssignment(ArrayAccess expr, Context ctx, TabbedWriter out, Expression arg) {
 		// are we dealing with a nullable array
 		if (expr.isNullable()) {
 			// if this is a well-behaved assignment, we can avoid the temporary
 			if (IRUtils.hasSideEffects(expr)) {
 				String temporary = ctx.nextTempName();
-				ctx.gen(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavaObject);
+				ctx.invoke(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavaObject);
 				out.print(" " + temporary + " = ");
-				ctx.gen(genExpression, (Expression) expr, ctx, out, args);
+				ctx.invoke(genExpression, (Expression) expr, ctx, out);
 				out.println(";");
 				out.print(temporary + ".set(");
-				ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
+				ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 				out.print(" - 1, ");
 				out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
-				ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
+				ctx.invoke(genExpression, arg, ctx, out);
 				out.print(", ");
 				out.print(temporary + ".get(");
-				ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
+				ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 				out.print(" - 1)");
 				out.print(")");
 				out.print(")");
 			} else if (TypeUtils.isReferenceType(expr.getType()) || ctx.mapsToPrimitiveType(expr.getType())) {
-				ctx.gen(genExpression, expr.getArray(), ctx, out, args);
+				ctx.invoke(genExpression, expr.getArray(), ctx, out);
 				out.print(".set(");
-				ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
+				ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 				out.print(" - 1, ");
-				ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
+				ctx.invoke(genExpression, arg, ctx, out);
 				out.print(")");
 			} else {
-				ctx.gen(genExpression, expr.getArray(), ctx, out, args);
+				ctx.invoke(genExpression, expr.getArray(), ctx, out);
 				out.print(".set(");
-				ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
+				ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 				out.print(" - 1, ");
 				out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
-				ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
+				ctx.invoke(genExpression, arg, ctx, out);
 				out.print(", ");
-				ctx.gen(genExpression, (Expression) expr, ctx, out, args);
+				ctx.invoke(genExpression, (Expression) expr, ctx, out);
 				out.print(")");
 				out.print(")");
 			}
 		} else if (TypeUtils.isReferenceType(expr.getType()) || ctx.mapsToPrimitiveType(expr.getType())) {
-			ctx.gen(genExpression, expr.getArray(), ctx, out, args);
+			ctx.invoke(genExpression, expr.getArray(), ctx, out);
 			out.print(".set(");
-			ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
+			ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 			out.print(" - 1, ");
-			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
+			ctx.invoke(genExpression, arg, ctx, out);
 			out.print(")");
 		} else {
 			// non-nullable array
 			out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
-			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
+			ctx.invoke(genExpression, arg, ctx, out);
 			out.print(", ");
-			ctx.gen(genExpression, (Expression) expr, ctx, out, args);
+			ctx.invoke(genExpression, (Expression) expr, ctx, out);
 			out.print(")");
 		}
 	}
 
-	public void genExpression(ArrayAccess expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(ArrayAccess expr, Context ctx, TabbedWriter out) {
 		Field field = null;
 		if (((Name) expr.getArray()).getNamedElement() instanceof Field)
 			field = (Field) ((Name) expr.getArray()).getNamedElement();
 		if (field != null && field.getContainer() != null && field.getContainer() instanceof Type)
-			ctx.gen(genContainerBasedArrayAccess, (Type) field.getContainer(), ctx, out, expr, field);
+			ctx.invoke(genContainerBasedArrayAccess, (Type) field.getContainer(), ctx, out, expr, field);
 		else
-			genArrayAccess(expr, ctx, out, args);
+			genArrayAccess(expr, ctx, out);
 	}
 
-	public void genArrayAccess(ArrayAccess expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genExpression, expr.getArray(), ctx, out, args);
+	public void genArrayAccess(ArrayAccess expr, Context ctx, TabbedWriter out) {
+		ctx.invoke(genExpression, expr.getArray(), ctx, out);
 		out.print(".get(");
-		ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
+		ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 		out.print(" - 1)");
 	}
 }

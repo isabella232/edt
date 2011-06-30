@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.EmptyStatement;
 
 public class EmptyStatementTemplate extends JavaTemplate {
 
-	public void genStatementBody(EmptyStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(EmptyStatement stmt, Context ctx, TabbedWriter out) {
 	// this statement is simply a ; on a line. there is nothing to generate
 	}
 }

@@ -19,13 +19,13 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class FunctionInvocationTemplate extends JavaTemplate {
 
-	public void genExpression(FunctionInvocation expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(FunctionInvocation expr, Context ctx, TabbedWriter out) {
 		// first, make this expression's arguments compatible
 		IRUtils.makeCompatible(expr);
 		// if this is an egl system library, delegate to the template associated with the target function's container
 		if (expr.getTarget().getContainer() != null && ctx.mapsToNativeType((Type) expr.getTarget().getContainer()))
-			ctx.gen(genInvocation, (Type) expr.getTarget().getContainer(), ctx, out, expr);
+			ctx.invoke(genInvocation, (Type) expr.getTarget().getContainer(), ctx, out, expr);
 		else
-			ctx.gen(genInvocation, expr, ctx, out, args);
+			ctx.invoke(genInvocation, expr, ctx, out);
 	}
 }

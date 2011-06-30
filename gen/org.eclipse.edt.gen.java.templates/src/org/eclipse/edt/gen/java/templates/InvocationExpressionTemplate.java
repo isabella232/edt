@@ -17,15 +17,15 @@ import org.eclipse.edt.mof.egl.InvocationExpression;
 
 public class InvocationExpressionTemplate extends JavaTemplate {
 
-	public void genInvocation(InvocationExpression expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genInvocation(InvocationExpression expr, Context ctx, TabbedWriter out) {
 		// then process the function invocation
 		if (expr.getQualifier() != null) {
-			ctx.gen(genExpression, expr.getQualifier(), ctx, out, args);
+			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
 			out.print(".");
 		}
-		ctx.gen(genName, expr.getTarget(), ctx, out, args);
+		ctx.invoke(genName, expr.getTarget(), ctx, out);
 		out.print("(");
-		ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out, args);
+		ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out);
 		out.print(")");
 	}
 }

@@ -19,18 +19,18 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 public class ExpressionStatementTemplate extends JavaTemplate {
 	private boolean processEnd = true;
 
-	public void genStatementBody(ExpressionStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(ExpressionStatement stmt, Context ctx, TabbedWriter out) {
 		// an expression statement with an expression that simply points at a member name is not valid and needs to be
 		// ignored. normally, this won't happen in the IRs, but can occur when our statementblock processing logic alters the
 		// set values expression statements, when resetting the slot for the temporary variable
 		if (IRUtils.hasSideEffects(stmt.getExpr()))
-			ctx.gen(genExpression, stmt.getExpr(), ctx, out, args);
+			ctx.invoke(genExpression, stmt.getExpr(), ctx, out);
 		else
 			processEnd = false;
 	}
 
-	public void genStatementEnd(ExpressionStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementEnd(ExpressionStatement stmt, Context ctx, TabbedWriter out) {
 		if (processEnd)
-			ctx.genSuper(genStatementEnd, ExpressionStatement.class, stmt, ctx, out, args);
+			ctx.invokeSuper(this, genStatementEnd, stmt, ctx, out);
 	}
 }

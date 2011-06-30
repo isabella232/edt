@@ -13,16 +13,17 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.SubstringAccess;
 import org.eclipse.edt.mof.egl.Type;
 
 public class SubstringAccessTemplate extends JavaTemplate {
 
-	public void genExpression(SubstringAccess expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genSubstringAccess, (Type) expr.getType(), ctx, out, expr);
+	public void genExpression(SubstringAccess expr, Context ctx, TabbedWriter out) {
+		ctx.invoke(genSubstringAccess, (Type) expr.getType(), ctx, out, expr);
 	}
 
-	public void genAssignment(SubstringAccess expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genSubstringAssignment, (Type) expr.getType(), ctx, out, expr, args[0]);
+	public void genAssignment(SubstringAccess expr, Context ctx, TabbedWriter out, Expression arg) {
+		ctx.invoke(genSubstringAssignment, (Type) expr.getType(), ctx, out, expr, arg);
 	}
 }

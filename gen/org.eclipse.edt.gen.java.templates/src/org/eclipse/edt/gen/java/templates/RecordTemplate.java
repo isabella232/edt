@@ -26,9 +26,9 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 public class RecordTemplate extends JavaTemplate {
 
 	@SuppressWarnings("unchecked")
-	public void validate(Record part, Context ctx, Object... args) {
+	public void validate(Record part, Context ctx) {
 		// process anything else the superclass needs to do
-		ctx.validateSuper(validate, Record.class, part, ctx, args);
+		ctx.invokeSuper(this, validate, part, ctx);
 		// ignore adding this entry to the list, if it is the part we are currently generating
 		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
 			part.getFullyQualifiedName()))
@@ -47,33 +47,33 @@ public class RecordTemplate extends JavaTemplate {
 			records.add(part);
 	}
 
-	public void genConstructor(Record part, Context ctx, TabbedWriter out, Object... args) {
+	public void genConstructor(Record part, Context ctx, TabbedWriter out) {
 		// Generate RunUnit constructor
 		out.print("public ");
-		ctx.gen(genClassName, part, ctx, out, args);
+		ctx.invoke(genClassName, part, ctx, out);
 		out.print("(");
-		ctx.gen(genAdditionalConstructorParams, part, ctx, out, args);
+		ctx.invoke(genAdditionalConstructorParams, part, ctx, out);
 		out.println(") {");
 		out.print("super(");
-		ctx.gen(genAdditionalSuperConstructorArgs, part, ctx, out, args);
+		ctx.invoke(genAdditionalSuperConstructorArgs, part, ctx, out);
 		out.println(");");
 		out.println("ezeInitialize();");
 		out.println("}");
 		// generate inherited methods
-		genConstructorEzeCopy(part, ctx, out, args);
-		genConstructorEzeNewValue(part, ctx, out, args);
-		genConstructorEzeSetEmpty(part, ctx, out, args);
-		genConstructorIsVariableDataLength(part, ctx, out, args);
-		genConstructorLoadFromBuffer(part, ctx, out, args);
-		genConstructorSizeInBytes(part, ctx, out, args);
-		genConstructorStoreInBuffer(part, ctx, out, args);
+		genConstructorEzeCopy(part, ctx, out);
+		genConstructorEzeNewValue(part, ctx, out);
+		genConstructorEzeSetEmpty(part, ctx, out);
+		genConstructorIsVariableDataLength(part, ctx, out);
+		genConstructorLoadFromBuffer(part, ctx, out);
+		genConstructorSizeInBytes(part, ctx, out);
+		genConstructorStoreInBuffer(part, ctx, out);
 	}
 
-	protected void genConstructorEzeCopy(Record part, Context ctx, TabbedWriter out, Object... args) {
+	protected void genConstructorEzeCopy(Record part, Context ctx, TabbedWriter out) {
 		out.println("public void ezeCopy(Object source) {");
 		out.print("ezeCopy(");
 		out.print("(");
-		ctx.gen(genClassName, part, ctx, out, args);
+		ctx.invoke(genClassName, part, ctx, out);
 		out.println(") source);");
 		out.println("}");
 		out.println("public void ezeCopy(egl.lang.AnyValue source) {");
@@ -82,32 +82,32 @@ public class RecordTemplate extends JavaTemplate {
 			for (Field field : fields) {
 				if (TypeUtils.isReferenceType(field.getType()) || ctx.mapsToPrimitiveType(field.getType())) {
 					out.print("this.");
-					ctx.gen(genName, field, ctx, out, args);
+					ctx.invoke(genName, field, ctx, out);
 					out.print(" = ((");
-					ctx.gen(genClassName, part, ctx, out, args);
+					ctx.invoke(genClassName, part, ctx, out);
 					out.print(") source).");
-					ctx.gen(genName, field, ctx, out, args);
+					ctx.invoke(genName, field, ctx, out);
 					out.println(";");
 				} else if (field.isNullable()) {
 					out.print("if (");
-					ctx.gen(genName, field, ctx, out, args);
+					ctx.invoke(genName, field, ctx, out);
 					out.println(" == null)");
 					out.print("this.");
-					ctx.gen(genName, field, ctx, out, args);
+					ctx.invoke(genName, field, ctx, out);
 					out.print(".ezeCopy(");
 					out.print("((");
-					ctx.gen(genClassName, part, ctx, out, args);
+					ctx.invoke(genClassName, part, ctx, out);
 					out.print(") source).");
-					ctx.gen(genName, field, ctx, out, args);
+					ctx.invoke(genName, field, ctx, out);
 					out.println(");");
 				} else {
 					out.print("this.");
-					ctx.gen(genName, field, ctx, out, args);
+					ctx.invoke(genName, field, ctx, out);
 					out.print(".ezeCopy(");
 					out.print("((");
-					ctx.gen(genClassName, part, ctx, out, args);
+					ctx.invoke(genClassName, part, ctx, out);
 					out.print(") source).");
-					ctx.gen(genName, field, ctx, out, args);
+					ctx.invoke(genName, field, ctx, out);
 					out.println(");");
 				}
 			}
@@ -115,37 +115,37 @@ public class RecordTemplate extends JavaTemplate {
 		out.println("}");
 	}
 
-	protected void genConstructorEzeNewValue(Record part, Context ctx, TabbedWriter out, Object... args) {
+	protected void genConstructorEzeNewValue(Record part, Context ctx, TabbedWriter out) {
 		out.print("public ");
-		ctx.gen(genClassName, part, ctx, out, args);
+		ctx.invoke(genClassName, part, ctx, out);
 		out.println(" ezeNewValue(Object... args) {");
 		out.print("return new ");
-		ctx.gen(genClassName, part, ctx, out, args);
+		ctx.invoke(genClassName, part, ctx, out);
 		out.println("();");
 		out.println("}");
 	}
 
-	protected void genConstructorEzeSetEmpty(Record part, Context ctx, TabbedWriter out, Object... args) {
+	protected void genConstructorEzeSetEmpty(Record part, Context ctx, TabbedWriter out) {
 		out.println("public void ezeSetEmpty() {");
 		List<Field> fields = part.getFields();
 		if (fields != null && fields.size() != 0) {
 			for (Field field : fields) {
 				if (TypeUtils.isReferenceType(field.getType()) || ctx.mapsToPrimitiveType(field.getType())) {
-					ctx.gen(genName, field, ctx, out, args);
+					ctx.invoke(genName, field, ctx, out);
 					out.print(" = ");
-					ctx.gen(genInitialization, field, ctx, out, args);
+					ctx.invoke(genInitialization, field, ctx, out);
 					out.println(";");
 				} else if (field.isNullable()) {
 					out.print("if (");
-					ctx.gen(genName, field, ctx, out, args);
+					ctx.invoke(genName, field, ctx, out);
 					out.println(" == null)");
 					out.print("this.");
-					ctx.gen(genName, field, ctx, out, args);
+					ctx.invoke(genName, field, ctx, out);
 					out.print(".ezeSetEmpty(");
 					out.println(");");
 				} else {
 					out.print("this.");
-					ctx.gen(genName, field, ctx, out, args);
+					ctx.invoke(genName, field, ctx, out);
 					out.print(".ezeSetEmpty(");
 					out.println(");");
 				}
@@ -154,66 +154,66 @@ public class RecordTemplate extends JavaTemplate {
 		out.println("}");
 	}
 
-	protected void genConstructorIsVariableDataLength(Record part, Context ctx, TabbedWriter out, Object... args) {
+	protected void genConstructorIsVariableDataLength(Record part, Context ctx, TabbedWriter out) {
 		out.println("public boolean isVariableDataLength() {");
 		out.println("return false;");
 		out.println("}");
 	}
 
-	protected void genConstructorLoadFromBuffer(Record part, Context ctx, TabbedWriter out, Object... args) {
+	protected void genConstructorLoadFromBuffer(Record part, Context ctx, TabbedWriter out) {
 		out.println("public void loadFromBuffer(ByteStorage buffer, Program program) {");
 		out.println("}");
 	}
 
-	protected void genConstructorSizeInBytes(Record part, Context ctx, TabbedWriter out, Object... args) {
+	protected void genConstructorSizeInBytes(Record part, Context ctx, TabbedWriter out) {
 		out.println("public int sizeInBytes() {");
 		out.println("return 0;");
 		out.println("}");
 	}
 
-	protected void genConstructorStoreInBuffer(Record part, Context ctx, TabbedWriter out, Object... args) {
+	protected void genConstructorStoreInBuffer(Record part, Context ctx, TabbedWriter out) {
 		out.println("public void storeInBuffer(ByteStorage buffer) {");
 		out.println("}");
 	}
 
-	public void genConstructorOptions(Record part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genConstructorOptions(Record part, Context ctx, TabbedWriter out) {}
 
-	public void genAccessor(Record part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genName, part, ctx, out, args);
+	public void genAccessor(Record part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genName, part, ctx, out);
 	}
 
-	public void genRuntimeTypeName(Record part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genPartName, part, ctx, out, args);
+	public void genRuntimeTypeName(Record part, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genPartName, part, ctx, out);
 	}
 
-	public void genDefaultValue(Record part, Context ctx, TabbedWriter out, Object... args) {
+	public void genDefaultValue(Record part, Context ctx, TabbedWriter out) {
 		out.print("(");
-		genRuntimeTypeName(part, ctx, out, args);
+		genRuntimeTypeName(part, ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(") null");
 	}
 
-	public void genSuperClass(Record part, Context ctx, TabbedWriter out, Object... args) {
+	public void genSuperClass(Record part, Context ctx, TabbedWriter out) {
 		Stereotype stereotype = part.getStereotype();
 		if (stereotype == null || stereotype.getEClass().getName().equals("BasicRecord"))
 			out.print("AnyValue");
 		else
-			ctx.gen(genSuperClass, stereotype, ctx, out, args);
+			ctx.invoke(genSuperClass, stereotype, ctx, out);
 	}
 
-	public void genAssignment(Record type, Context ctx, TabbedWriter out, Object... args) {
-		if (((Expression) args[0]).isNullable()) {
-			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
+	public void genAssignment(Record type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2) {
+		if (arg1.isNullable()) {
+			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(" = ");
 		}
 		out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
-		ctx.gen(genExpression, (Expression) args[1], ctx, out, args);
+		ctx.invoke(genExpression, arg2, ctx, out);
 		out.print(", ");
-		ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
+		ctx.invoke(genExpression, arg1, ctx, out);
 		out.print(")");
 	}
 
-	public void genGetterSetter(Record part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genGetter, (Field) args[0], ctx, out, args);
-		ctx.gen(genSetter, (Field) args[0], ctx, out, args);
+	public void genGetterSetter(Record part, Context ctx, TabbedWriter out, Field arg) {
+		ctx.invoke(genGetter, arg, ctx, out);
+		ctx.invoke(genSetter, arg, ctx, out);
 	}
 }

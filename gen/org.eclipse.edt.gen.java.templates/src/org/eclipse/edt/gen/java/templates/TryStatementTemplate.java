@@ -20,29 +20,29 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
 public class TryStatementTemplate extends JavaTemplate {
 
-	public void genStatementBody(TryStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(TryStatement stmt, Context ctx, TabbedWriter out) {
 		out.print("try ");
-		ctx.gen(genStatement, stmt.getTryBlock(), ctx, out, args);
+		ctx.invoke(genStatement, stmt.getTryBlock(), ctx, out);
 		for (ExceptionBlock exceptionBlock : stmt.getExceptionBlocks()) {
-			genException(exceptionBlock, ctx, out, args);
+			genException(exceptionBlock, ctx, out);
 		}
 	}
 
-	public void genException(ExceptionBlock exceptionBlock, Context ctx, TabbedWriter out, Object... args) {
+	public void genException(ExceptionBlock exceptionBlock, Context ctx, TabbedWriter out) {
 		out.print("catch (" + ctx.getNativeImplementationMapping(exceptionBlock.getException().getType()) + " ");
-		ctx.gen(genName, exceptionBlock.getException(), ctx, out, args);
+		ctx.invoke(genName, exceptionBlock.getException(), ctx, out);
 		out.println(") {");
 		for (Statement stmt : exceptionBlock.getStatements()) {
-			genExceptionStatement(stmt, ctx, out, args);
+			genExceptionStatement(stmt, ctx, out);
 		}
 		out.println("}");
 	}
 
-	public void genExceptionStatement(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genStatement, stmt, ctx, out, args);
+	public void genExceptionStatement(Statement stmt, Context ctx, TabbedWriter out) {
+		ctx.invoke(genStatement, stmt, ctx, out);
 	}
 
-	public void genStatementEnd(TryStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementEnd(TryStatement stmt, Context ctx, TabbedWriter out) {
 		// we don't want a semi-colon
 	}
 }

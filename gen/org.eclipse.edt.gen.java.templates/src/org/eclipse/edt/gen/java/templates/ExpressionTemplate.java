@@ -21,7 +21,7 @@ import org.eclipse.edt.mof.egl.Expression;
 
 public class ExpressionTemplate extends JavaTemplate {
 
-	public void genExpression(Expression expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(Expression expr, Context ctx, TabbedWriter out) {
 		int startLine = 0;
 		int startOffset = 0;
 		int endLine = 0;

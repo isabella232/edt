@@ -19,17 +19,17 @@ import org.eclipse.edt.mof.egl.Type;
 
 public class MemberAccessTemplate extends JavaTemplate {
 
-	public void genExpression(MemberAccess expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(MemberAccess expr, Context ctx, TabbedWriter out) {
 		Member member = expr.getMember();
 		if (member != null && member.getContainer() != null && member.getContainer() instanceof Type)
-			ctx.gen(genContainerBasedMemberAccess, (Type) member.getContainer(), ctx, out, expr, member);
+			ctx.invoke(genContainerBasedMemberAccess, (Type) member.getContainer(), ctx, out, expr, member);
 		else
-			genMemberAccess(expr, ctx, out, args);
+			genMemberAccess(expr, ctx, out);
 	}
 
-	public void genMemberAccess(MemberAccess expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genExpression, expr.getQualifier(), ctx, out, args);
+	public void genMemberAccess(MemberAccess expr, Context ctx, TabbedWriter out) {
+		ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
 		out.print(".");
-		ctx.gen(genAccessor, expr.getMember(), ctx, out, args);
+		ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 	}
 }

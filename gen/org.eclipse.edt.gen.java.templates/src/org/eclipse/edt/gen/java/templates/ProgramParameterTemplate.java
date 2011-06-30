@@ -19,7 +19,7 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class ProgramParameterTemplate extends JavaTemplate {
 
-	public void genDeclaration(ProgramParameter field, Context ctx, TabbedWriter out, Object... args) {
+	public void genDeclaration(ProgramParameter field, Context ctx, TabbedWriter out) {
 		AccessKind access = field.getAccessKind();
 		if (access == AccessKind.ACC_PRIVATE)
 			out.print("private ");
@@ -27,16 +27,16 @@ public class ProgramParameterTemplate extends JavaTemplate {
 			out.print("public ");
 	}
 
-	public void genRuntimeTypeName(ProgramParameter mbr, Context ctx, TabbedWriter out, Object... args) {
+	public void genRuntimeTypeName(ProgramParameter mbr, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		if (mbr.getType() == null)
 			out.print("void");
 		else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()) && !mbr.isNullable() && TypeUtils.isValueType(mbr.getType()))
-			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaPrimitive, mbr);
+			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaPrimitive, mbr);
 		else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()))
-			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject, mbr);
+			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject, mbr);
 		else if (ctx.mapsToNativeType(mbr.getType().getClassifier()))
-			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.EGLInterface, mbr);
+			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.EGLInterface, mbr);
 		else
-			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject, mbr);
+			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject, mbr);
 	}
 }

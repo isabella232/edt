@@ -21,27 +21,27 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class FieldTemplate extends JavaTemplate {
 
-	public void validate(Field field, Context ctx, Object... args) {
-		ctx.validate(validate, field.getType(), ctx, args);
+	public void validate(Field field, Context ctx) {
+		ctx.invoke(validate, field.getType(), ctx);
 	}
 
-	public void genDeclaration(Field field, Context ctx, TabbedWriter out, Object... args) {
+	public void genDeclaration(Field field, Context ctx, TabbedWriter out) {
 		// write out the debug extension data
 		CommonUtilities.generateSmapExtension(field, ctx);
 		// process the field
-		ctx.genSuper(genDeclaration, Field.class, field, ctx, out, args);
-		transientOption(field, out, args);
-		ctx.gen(genRuntimeTypeName, field, ctx, out, args);
+		ctx.invokeSuper(this, genDeclaration, field, ctx, out);
+		transientOption(field, out);
+		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(" ");
-		ctx.gen(genName, field, ctx, out, args);
+		ctx.invoke(genName, field, ctx, out);
 		out.println(";");
 	}
 
-	public void genInstantiation(Field field, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInstantiation, field.getType(), ctx, out, field);
+	public void genInstantiation(Field field, Context ctx, TabbedWriter out) {
+		ctx.invoke(genInstantiation, field.getType(), ctx, out, field);
 	}
 
-	public void genInitialization(Field field, Context ctx, TabbedWriter out, Object... args) {
+	public void genInitialization(Field field, Context ctx, TabbedWriter out) {
 		// is this an inout or out temporary variable to a function. if so, then we need to default or instantiate for
 		// our parms, and set to null for inout
 		if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
@@ -51,27 +51,27 @@ public class FieldTemplate extends JavaTemplate {
 			if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) == ParameterKind.PARM_OUT) {
 				out.print("AnyObject.ezeWrap(");
 				if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
-					ctx.gen(genDefaultValue, field.getType(), ctx, out, field);
+					ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
 				else
-					ctx.gen(genInstantiation, field.getType(), ctx, out, field);
+					ctx.invoke(genInstantiation, field.getType(), ctx, out, field);
 				out.print(")");
 			} else
 				out.print("null");
 		} else {
 			if (field.isNullable() || TypeUtils.isReferenceType(field.getType()))
-				ctx.gen(genDefaultValue, field.getType(), ctx, out, field);
+				ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
 			else if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
-				ctx.gen(genDefaultValue, field.getType(), ctx, out, field);
+				ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
 			else
-				ctx.gen(genInstantiation, field.getType(), ctx, out, field);
+				ctx.invoke(genInstantiation, field.getType(), ctx, out, field);
 		}
 	}
 
-	public void genGetter(Field field, Context ctx, TabbedWriter out, Object... args) {
+	public void genGetter(Field field, Context ctx, TabbedWriter out) {
 		out.print("public ");
-		ctx.gen(genRuntimeTypeName, field, ctx, out, args);
+		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(" get");
-		genMethodName(field, ctx, out, args);
+		genMethodName(field, ctx, out);
 		out.println("() {");
 		out.print("return (");
 		out.print(field.getName());
@@ -79,11 +79,11 @@ public class FieldTemplate extends JavaTemplate {
 		out.println("}");
 	}
 
-	public void genSetter(Field field, Context ctx, TabbedWriter out, Object... args) {
+	public void genSetter(Field field, Context ctx, TabbedWriter out) {
 		out.print("public void set");
-		genMethodName(field, ctx, out, args);
+		genMethodName(field, ctx, out);
 		out.print("( ");
-		ctx.gen(genRuntimeTypeName, field, ctx, out, args);
+		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
 		out.println(" ezeValue ) {");
 		out.print("this.");
 		out.print(field.getName());
@@ -91,13 +91,13 @@ public class FieldTemplate extends JavaTemplate {
 		out.println("}");
 	}
 
-	protected void genMethodName(Field field, Context ctx, TabbedWriter out, Object... args) {
+	protected void genMethodName(Field field, Context ctx, TabbedWriter out) {
 		out.print(field.getName().substring(0, 1).toUpperCase());
 		if (field.getName().length() > 1)
 			out.print(field.getName().substring(1));
 	}
 
-	protected void transientOption(Field field, TabbedWriter out, Object... args) {
+	protected void transientOption(Field field, TabbedWriter out) {
 		ExternalType et = CommonUtilities.getUserDefinedExternalType(field.getType());
 		if (et != null && !CommonUtilities.isSerializable(et))
 			out.print("transient ");

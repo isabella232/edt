@@ -28,64 +28,64 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class EGLClassTemplate extends JavaTemplate {
 
-	public void validateClassBody(EGLClass part, Context ctx, Object... args) {
-		ctx.validate(validateUsedParts, part, ctx, args);
-		ctx.validate(validateFields, part, ctx, args);
-		ctx.validate(validateFunctions, part, ctx, args);
+	public void validateClassBody(EGLClass part, Context ctx) {
+		ctx.invoke(validateUsedParts, part, ctx);
+		ctx.invoke(validateFields, part, ctx);
+		ctx.invoke(validateFunctions, part, ctx);
 	}
 
-	public void validateUsedParts(EGLClass part, Context ctx, Object... args) {
+	public void validateUsedParts(EGLClass part, Context ctx) {
 		for (Part item : IRUtils.getReferencedPartsFor(part)) {
-			ctx.validate(validateUsedPart, part, ctx, item);
+			ctx.invoke(validateUsedPart, part, ctx, item);
 		}
 	}
 
-	public void validateUsedPart(EGLClass part, Context ctx, Object... args) {
-		ctx.validate(validate, (Part) args[0], ctx, args);
+	public void validateUsedPart(EGLClass part, Context ctx, Part arg) {
+		ctx.invoke(validate, arg, ctx);
 	}
 
-	public void validateFields(EGLClass part, Context ctx, Object... args) {
+	public void validateFields(EGLClass part, Context ctx) {
 		for (Field field : part.getFields()) {
-			ctx.validate(validateField, part, ctx, field);
+			ctx.invoke(validateField, part, ctx, field);
 		}
 	}
 
-	public void validateField(EGLClass part, Context ctx, Object... args) {
-		ctx.validate(validate, (Field) args[0], ctx, args);
+	public void validateField(EGLClass part, Context ctx, Field arg) {
+		ctx.invoke(validate, arg, ctx);
 	}
 
-	public void validateFunctions(EGLClass part, Context ctx, Object... args) {
+	public void validateFunctions(EGLClass part, Context ctx) {
 		for (Function function : part.getFunctions()) {
-			ctx.validate(validateFunction, part, ctx, function);
+			ctx.invoke(validateFunction, part, ctx, function);
 		}
 	}
 
-	public void validateFunction(EGLClass part, Context ctx, Object... args) {
-		ctx.validate(validate, (Function) args[0], ctx, args);
+	public void validateFunction(EGLClass part, Context ctx, Function arg) {
+		ctx.invoke(validate, arg, ctx);
 	}
 
-	public void genClassHeader(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genClassHeader(EGLClass part, Context ctx, TabbedWriter out) {
 		out.print("public class ");
-		ctx.gen(genClassName, part, ctx, out, args);
+		ctx.invoke(genClassName, part, ctx, out);
 		out.print(" extends ");
-		ctx.gen(genSuperClass, part, ctx, out, args);
+		ctx.invoke(genSuperClass, part, ctx, out);
 		out.println(" {");
-		ctx.gen(genSerialVersionUID, part, ctx, out, args);
+		ctx.invoke(genSerialVersionUID, part, ctx, out);
 	}
 
-	public void genClassBody(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genFields, part, ctx, out, args);
-		ctx.gen(genLibraries, part, ctx, out, args);
-		ctx.gen(genConstructors, part, ctx, out, args);
-		ctx.gen(genInitializeMethods, part, ctx, out, args);
-		ctx.gen(genGetterSetters, part, ctx, out, args);
-		ctx.gen(genLibraryAccessMethods, part, ctx, out, args);
-		ctx.gen(genFunctions, part, ctx, out, args);
+	public void genClassBody(EGLClass part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genFields, part, ctx, out);
+		ctx.invoke(genLibraries, part, ctx, out);
+		ctx.invoke(genConstructors, part, ctx, out);
+		ctx.invoke(genInitializeMethods, part, ctx, out);
+		ctx.invoke(genGetterSetters, part, ctx, out);
+		ctx.invoke(genLibraryAccessMethods, part, ctx, out);
+		ctx.invoke(genFunctions, part, ctx, out);
 	}
 
-	public void genFields(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genFields(EGLClass part, Context ctx, TabbedWriter out) {
 		for (Field field : part.getFields()) {
-			ctx.gen(genField, part, ctx, out, field);
+			ctx.invoke(genField, part, ctx, out, field);
 		}
 		// create the type constraint static hashmap, only if there are some parameterized types
 		boolean needConstraints = false;
@@ -103,9 +103,9 @@ public class EGLClassTemplate extends JavaTemplate {
 				// we only want to add constraints for parameterized types
 				if (field.getType() instanceof ParameterizedType) {
 					out.print("ezeTypeConstraints.put(\"");
-					ctx.gen(genName, field, ctx, out, args);
+					ctx.invoke(genName, field, ctx, out);
 					out.print("\", new TypeConstraints(");
-					ctx.gen(genRuntimeConstraint, field.getType(), ctx, out, args);
+					ctx.invoke(genRuntimeConstraint, field.getType(), ctx, out);
 					out.println("));");
 				}
 			}
@@ -113,100 +113,100 @@ public class EGLClassTemplate extends JavaTemplate {
 		}
 	}
 
-	public void genField(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genDeclaration, (Field) args[0], ctx, out, args);
+	public void genField(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
+		ctx.invoke(genDeclaration, arg, ctx, out);
 	}
 
 	@SuppressWarnings("unchecked")
-	public void genLibraries(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genLibraries(EGLClass part, Context ctx, TabbedWriter out) {
 		List<Library> libraries = (List<Library>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed);
 		for (Library library : libraries) {
-			ctx.gen(genLibrary, part, ctx, out, library);
+			ctx.invoke(genLibrary, part, ctx, out, library);
 		}
 	}
 
-	public void genLibrary(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genLibrary(EGLClass part, Context ctx, TabbedWriter out, Library arg) {
 		out.print("public ");
-		ctx.gen(genRuntimeTypeName, (Type) args[0], ctx, out, TypeNameKind.EGLImplementation);
-		out.println(" " + Constants.LIBRARY_PREFIX + ((Library) args[0]).getFullyQualifiedName().replace('.', '_') + ";");
+		ctx.invoke(genRuntimeTypeName, (Type) arg, ctx, out, TypeNameKind.EGLImplementation);
+		out.println(" " + Constants.LIBRARY_PREFIX + arg.getFullyQualifiedName().replace('.', '_') + ";");
 	}
 
-	public void genConstructors(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genConstructor, part, ctx, out, args);
+	public void genConstructors(EGLClass part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genConstructor, part, ctx, out);
 	}
 
-	public void genConstructor(EGLClass part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genConstructor(EGLClass part, Context ctx, TabbedWriter out) {}
 
-	public void genInitializeMethods(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genInitializeMethods(EGLClass part, Context ctx, TabbedWriter out) {
 		out.println("public void ezeInitialize() {");
-		ctx.gen(genInitializeMethodBody, part, ctx, out, args);
+		ctx.invoke(genInitializeMethodBody, part, ctx, out);
 		out.println("}");
 	}
 
-	public void genInitializeMethodBody(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genInitializeMethodBody(EGLClass part, Context ctx, TabbedWriter out) {
 		for (Field field : part.getFields()) {
-			ctx.gen(genInitializeMethod, part, ctx, out, field);
+			ctx.invoke(genInitializeMethod, part, ctx, out, field);
 		}
 	}
 
-	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
-		if (((Field) args[0]).getInitializerStatements() != null)
-			ctx.gen(genStatementNoBraces, ((Field) args[0]).getInitializerStatements(), ctx, out, args);
+	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
+		if (arg.getInitializerStatements() != null)
+			ctx.invoke(genStatementNoBraces, arg.getInitializerStatements(), ctx, out);
 		else {
-			ctx.gen(genName, ((Field) args[0]), ctx, out, args);
+			ctx.invoke(genName, arg, ctx, out);
 			out.print(" = ");
-			ctx.gen(genInitialization, ((Field) args[0]), ctx, out, args);
+			ctx.invoke(genInitialization, arg, ctx, out);
 			out.println(";");
 		}
 	}
 
-	public void genGetterSetters(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genGetterSetters(EGLClass part, Context ctx, TabbedWriter out) {
 		for (Field field : part.getFields()) {
-			ctx.gen(genGetterSetter, part, ctx, out, field);
+			ctx.invoke(genGetterSetter, part, ctx, out, field);
 		}
 	}
 
 	// we only generate getter and setters for fields within records or libraries, so do nothing if it gets back here
-	public void genGetterSetter(EGLClass part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genGetterSetter(EGLClass part, Context ctx, TabbedWriter out, Field arg) {}
 
 	@SuppressWarnings("unchecked")
-	public void genLibraryAccessMethods(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genLibraryAccessMethods(EGLClass part, Context ctx, TabbedWriter out) {
 		List<Library> libraries = (List<Library>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed);
 		for (Library library : libraries) {
-			ctx.gen(genLibraryAccessMethod, part, ctx, out, library);
+			ctx.invoke(genLibraryAccessMethod, part, ctx, out, library);
 		}
 	}
 
-	public void genLibraryAccessMethod(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genLibraryAccessMethod(EGLClass part, Context ctx, TabbedWriter out, Library arg) {
 		out.print("public ");
-		ctx.gen(genRuntimeTypeName, (Type) (Library) args[0], ctx, out, TypeNameKind.EGLImplementation);
-		out.println(" " + Constants.LIBRARY_PREFIX + ((Library) args[0]).getFullyQualifiedName().replace('.', '_') + "() {");
-		out.println("if (" + Constants.LIBRARY_PREFIX + ((Library) args[0]).getFullyQualifiedName().replace('.', '_') + " == null) {");
-		out.print(Constants.LIBRARY_PREFIX + ((Library) args[0]).getFullyQualifiedName().replace('.', '_') + " = (");
-		ctx.gen(genRuntimeTypeName, (Type) (Library) args[0], ctx, out, TypeNameKind.EGLImplementation);
+		ctx.invoke(genRuntimeTypeName, (Type) arg, ctx, out, TypeNameKind.EGLImplementation);
+		out.println(" " + Constants.LIBRARY_PREFIX + arg.getFullyQualifiedName().replace('.', '_') + "() {");
+		out.println("if (" + Constants.LIBRARY_PREFIX + arg.getFullyQualifiedName().replace('.', '_') + " == null) {");
+		out.print(Constants.LIBRARY_PREFIX + arg.getFullyQualifiedName().replace('.', '_') + " = (");
+		ctx.invoke(genRuntimeTypeName, (Type) arg, ctx, out, TypeNameKind.EGLImplementation);
 		out.print(") _runUnit().getExecutable(\"");
-		out.print( CommonUtilities.fullClassAlias( (Library) args[0] ) );
+		out.print(CommonUtilities.fullClassAlias(arg));
 		out.println("\");");
 		out.println("}");
-		out.println("return " + Constants.LIBRARY_PREFIX + ((Library) args[0]).getFullyQualifiedName().replace('.', '_') + ";");
+		out.println("return " + Constants.LIBRARY_PREFIX + arg.getFullyQualifiedName().replace('.', '_') + ";");
 		out.println("}");
 	}
 
-	public void genFunctions(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genFunctions(EGLClass part, Context ctx, TabbedWriter out) {
 		for (Function function : part.getFunctions()) {
-			ctx.gen(genFunction, part, ctx, out, function);
+			ctx.invoke(genFunction, part, ctx, out, function);
 		}
 	}
 
-	public void genFunction(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genDeclaration, (Function) args[0], ctx, out, args);
+	public void genFunction(EGLClass part, Context ctx, TabbedWriter out, Function arg) {
+		ctx.invoke(genDeclaration, arg, ctx, out);
 	}
 
-	public void genAdditionalConstructorParams(EGLClass part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genAdditionalConstructorParams(EGLClass part, Context ctx, TabbedWriter out) {}
 
-	public void genAdditionalSuperConstructorArgs(EGLClass part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genAdditionalSuperConstructorArgs(EGLClass part, Context ctx, TabbedWriter out) {}
 
-	public void genDeclaration(EGLClass part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genDeclaration(EGLClass part, Context ctx, TabbedWriter out) {}
 
-	public void genSuperClass(EGLClass part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genSuperClass(EGLClass part, Context ctx, TabbedWriter out) {}
 }

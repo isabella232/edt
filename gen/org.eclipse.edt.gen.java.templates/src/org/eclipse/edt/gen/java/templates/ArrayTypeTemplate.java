@@ -14,37 +14,65 @@ package org.eclipse.edt.gen.java.templates;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.AsExpression;
+import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Field;
 
 public class ArrayTypeTemplate extends JavaTemplate {
 
-	public void genInstantiation(ArrayType type, Context ctx, TabbedWriter out, Object... args) {
-		if (args.length == 0 || args[0] == null)
-			out.print("null");
-		else if (args[0] instanceof Field && ((Field) args[0]).hasSetValuesBlock()) {
+	public void genInstantiation(ArrayType type, Context ctx, TabbedWriter out) {
+		out.print("null");
+	}
+
+	public void genInstantiation(ArrayType type, Context ctx, TabbedWriter out, Field arg) {
+		if (arg.hasSetValuesBlock()) {
 			genRuntimeTypeName(type, ctx, out, TypeNameKind.JavaImplementation);
 			out.print("()");
 		} else
 			out.print("null");
 	}
 
-	public void genRuntimeConstraint(ArrayType generic, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genRuntimeTypeName, generic.getClassifier(), ctx, out, TypeNameKind.EGLImplementation);
+	public void genConversionOperation(ArrayType type, Context ctx, TabbedWriter out, AsExpression arg) {
+		// check to see if a conversion is required
+		if (arg.getConversionOperation() != null) {
+			out.print(ctx.getNativeImplementationMapping((Classifier) arg.getConversionOperation().getContainer()) + '.');
+			out.print(arg.getConversionOperation().getName());
+			out.print("(");
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
+			out.print(")");
+		} else if (ctx.mapsToPrimitiveType(arg.getEType())) {
+			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
+			out.print(".ezeCast(");
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
+			out.print(")");
+		} else {
+			out.print("AnyObject.ezeCast(");
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			out.print(", ");
+			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.JavaImplementation);
+			out.print(".class)");
+		}
+	}
+
+	public void genRuntimeConstraint(ArrayType generic, Context ctx, TabbedWriter out) {
+		ctx.invoke(genRuntimeTypeName, generic.getClassifier(), ctx, out, TypeNameKind.EGLImplementation);
 		if (!generic.getTypeArguments().isEmpty()) {
 			for (int i = 0; i < generic.getTypeArguments().size(); i++) {
 				out.print(".class, ");
-				ctx.gen(genRuntimeTypeName, generic.getTypeArguments().get(i), ctx, out, TypeNameKind.JavaObject);
+				ctx.invoke(genRuntimeTypeName, generic.getTypeArguments().get(i), ctx, out, TypeNameKind.JavaObject);
 			}
 		}
 		out.print(".class");
 	}
 
-	public void genRuntimeTypeName(ArrayType generic, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genRuntimeTypeName, generic.getClassifier(), ctx, out, args);
+	public void genRuntimeTypeName(ArrayType generic, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genRuntimeTypeName, generic.getClassifier(), ctx, out, arg);
 		if (!generic.getTypeArguments().isEmpty()) {
 			out.print("<");
 			for (int i = 0; i < generic.getTypeArguments().size(); i++) {
-				ctx.gen(genRuntimeTypeName, generic.getTypeArguments().get(i), ctx, out, TypeNameKind.JavaObject);
+				ctx.invoke(genRuntimeTypeName, generic.getTypeArguments().get(i), ctx, out, TypeNameKind.JavaObject);
 			}
 			out.print(">");
 		}

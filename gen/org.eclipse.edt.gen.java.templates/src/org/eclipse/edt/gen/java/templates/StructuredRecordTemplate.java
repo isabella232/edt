@@ -17,11 +17,11 @@ import org.eclipse.edt.mof.egl.StructuredRecord;
 
 public class StructuredRecordTemplate extends JavaTemplate {
 
-	public void validateClassBody(StructuredRecord part, Context ctx, Object... args) {}
+	public void validateClassBody(StructuredRecord part, Context ctx) {}
 
-	public void genPart(StructuredRecord part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genPart(StructuredRecord part, Context ctx, TabbedWriter out) {}
 
-	public void genClassBody(StructuredRecord part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassBody(StructuredRecord part, Context ctx, TabbedWriter out) {}
 
-	public void genClassHeader(StructuredRecord part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassHeader(StructuredRecord part, Context ctx, TabbedWriter out) {}
 }

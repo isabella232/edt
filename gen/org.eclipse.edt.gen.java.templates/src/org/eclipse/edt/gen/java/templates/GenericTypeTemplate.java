@@ -17,23 +17,23 @@ import org.eclipse.edt.mof.egl.GenericType;
 
 public class GenericTypeTemplate extends JavaTemplate {
 
-	public void genRuntimeConstraint(GenericType generic, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genRuntimeTypeName, generic.getClassifier(), ctx, out, TypeNameKind.EGLImplementation);
+	public void genRuntimeConstraint(GenericType generic, Context ctx, TabbedWriter out) {
+		ctx.invoke(genRuntimeTypeName, generic.getClassifier(), ctx, out, TypeNameKind.EGLImplementation);
 		if (!generic.getTypeArguments().isEmpty()) {
 			for (int i = 0; i < generic.getTypeArguments().size(); i++) {
 				out.print(".class, ");
-				ctx.gen(genRuntimeTypeName, generic.getTypeArguments().get(i), ctx, out, TypeNameKind.JavaObject);
+				ctx.invoke(genRuntimeTypeName, generic.getTypeArguments().get(i), ctx, out, TypeNameKind.JavaObject);
 			}
 		}
 		out.print(".class");
 	}
 
-	public void genRuntimeTypeName(GenericType generic, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genRuntimeTypeName, generic.getClassifier(), ctx, out, args);
+	public void genRuntimeTypeName(GenericType generic, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genRuntimeTypeName, generic.getClassifier(), ctx, out, arg);
 		if (!generic.getTypeArguments().isEmpty()) {
 			out.print("<");
 			for (int i = 0; i < generic.getTypeArguments().size(); i++) {
-				ctx.gen(genRuntimeTypeName, generic.getTypeArguments().get(i), ctx, out, TypeNameKind.JavaObject);
+				ctx.invoke(genRuntimeTypeName, generic.getTypeArguments().get(i), ctx, out, TypeNameKind.JavaObject);
 			}
 			out.print(">");
 		}

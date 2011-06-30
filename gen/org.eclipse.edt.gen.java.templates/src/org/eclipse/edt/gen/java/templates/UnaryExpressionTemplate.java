@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.UnaryExpression;
 
 public class UnaryExpressionTemplate extends JavaTemplate {
 
-	public void genExpression(UnaryExpression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genUnaryExpression, expr.getType(), ctx, out, expr);
+	public void genExpression(UnaryExpression expr, Context ctx, TabbedWriter out) {
+		ctx.invoke(genUnaryExpression, expr.getType(), ctx, out, expr);
 	}
 }

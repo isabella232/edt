@@ -17,21 +17,21 @@ import org.eclipse.edt.mof.egl.Statement;
 
 public class StatementTemplate extends JavaTemplate {
 
-	public void validate(Statement stmt, Context ctx, Object... args) {
+	public void validate(Statement stmt, Context ctx) {
 		// statements may override this validation for specific checking
 	}
 
-	public void genStatement(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genStatementBody, stmt, ctx, out, args);
-		ctx.gen(genStatementEnd, stmt, ctx, out, args);
+	public void genStatement(Statement stmt, Context ctx, TabbedWriter out) {
+		ctx.invoke(genStatementBody, stmt, ctx, out);
+		ctx.invoke(genStatementEnd, stmt, ctx, out);
 	}
 
-	public void genStatementNoBraces(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genStatementBodyNoBraces, stmt, ctx, out, args);
-		ctx.gen(genStatementEnd, stmt, ctx, out, args);
+	public void genStatementNoBraces(Statement stmt, Context ctx, TabbedWriter out) {
+		ctx.invoke(genStatementBodyNoBraces, stmt, ctx, out);
+		ctx.invoke(genStatementEnd, stmt, ctx, out);
 	}
 
-	public void genStatementEnd(Statement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementEnd(Statement stmt, Context ctx, TabbedWriter out) {
 		out.println(";");
 	}
 }

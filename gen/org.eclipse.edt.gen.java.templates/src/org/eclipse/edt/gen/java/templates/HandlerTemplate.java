@@ -17,30 +17,30 @@ import org.eclipse.edt.mof.egl.Handler;
 
 public class HandlerTemplate extends JavaTemplate {
 
-	public void genSuperClass(Handler type, Context ctx, TabbedWriter out, Object... args) {
+	public void genSuperClass(Handler type, Context ctx, TabbedWriter out) {
 		out.print("ExecutableBase");
 	}
 
-	public void genConstructor(Handler type, Context ctx, TabbedWriter out, Object... args) {
+	public void genConstructor(Handler type, Context ctx, TabbedWriter out) {
 		out.println("");
 		// Generate RunUnit constructor
 		out.print("public ");
-		ctx.gen(genClassName, type, ctx, out, args);
+		ctx.invoke(genClassName, type, ctx, out);
 		out.print("( RunUnit ru");
-		ctx.gen(genAdditionalConstructorParams, type, ctx, out, args);
+		ctx.invoke(genAdditionalConstructorParams, type, ctx, out);
 		out.println(" ) {");
 		out.print("super( ru");
-		ctx.gen(genAdditionalSuperConstructorArgs, type, ctx, out, args);
+		ctx.invoke(genAdditionalSuperConstructorArgs, type, ctx, out);
 		out.println(" );");
 		out.println("ezeInitialize();");
 		out.println("}");
 	}
 
-	public void genConstructorOptions(Handler type, Context ctx, TabbedWriter out, Object... args) {
+	public void genConstructorOptions(Handler type, Context ctx, TabbedWriter out) {
 		out.print("_runUnit()");
 	}
 
-	public void genRuntimeTypeName(Handler type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genPartName, type, ctx, out, args);
+	public void genRuntimeTypeName(Handler type, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genPartName, type, ctx, out);
 	}
 }

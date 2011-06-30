@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.TimestampType;
 
 public class TimestampTypeTemplate extends JavaTemplate {
 
-	public void genTypeDependentOptions(TimestampType type, Context ctx, TabbedWriter out, Object... args) {
+	public void genTypeDependentOptions(TimestampType type, Context ctx, TabbedWriter out) {
 		String pattern = "yyyyMMddhhmmss";
 		if (type.getPattern() != null && !type.getPattern().equalsIgnoreCase("null"))
 			pattern = type.getPattern();
@@ -38,7 +38,7 @@ public class TimestampTypeTemplate extends JavaTemplate {
 		else if (pattern.startsWith("f"))
 			start = ".FRACTION1_CODE";
 		out.print(", ");
-		ctx.gen(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
+		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
 		out.print(start);
 		if (pattern.endsWith("yyyy"))
 			end = ".YEAR_CODE";
@@ -65,7 +65,7 @@ public class TimestampTypeTemplate extends JavaTemplate {
 		else if (pattern.endsWith("f"))
 			end = ".FRACTION1_CODE";
 		out.print(", ");
-		ctx.gen(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
+		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
 		out.print(end);
 	}
 }

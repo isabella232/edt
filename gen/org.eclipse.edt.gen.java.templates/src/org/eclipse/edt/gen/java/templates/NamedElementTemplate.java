@@ -24,7 +24,7 @@ public class NamedElementTemplate extends JavaTemplate {
 		return expr.getAnnotation(Constants.Annotation_EGLProperty);
 	}
 
-	public void genAccessor(NamedElement element, Context ctx, TabbedWriter out, Object... args) {
+	public void genAccessor(NamedElement element, Context ctx, TabbedWriter out) {
 		Annotation property = getPropertyAnnotation(element);
 		if (property != null) {
 			// obtain the name of the function
@@ -39,14 +39,14 @@ public class NamedElementTemplate extends JavaTemplate {
 			// if the function name matches the name of the current function, then this is the getter and we simply output
 			// the name of the variable, instead of creating an infinite loop of calls to the same function
 			if (functionName.equals(ctx.getCurrentFunction()))
-				genName(element, ctx, out, args);
+				genName(element, ctx, out);
 			else
 				out.print(functionName + "()");
 		} else
-			genName(element, ctx, out, args);
+			genName(element, ctx, out);
 	}
 
-	public void genName(NamedElement element, Context ctx, TabbedWriter out, Object... args) {
+	public void genName(NamedElement element, Context ctx, TabbedWriter out) {
 		out.print(Aliaser.getJavaSafeAlias(element.getName()));
 	}
 }

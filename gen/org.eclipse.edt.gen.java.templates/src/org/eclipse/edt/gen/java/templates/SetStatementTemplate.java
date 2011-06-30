@@ -18,16 +18,16 @@ import org.eclipse.edt.mof.egl.SetStatement;
 
 public class SetStatementTemplate extends JavaTemplate {
 
-	public void genStatementBody(SetStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(SetStatement stmt, Context ctx, TabbedWriter out) {
 		for (int i = 0; i < stmt.getTargets().size(); i++) {
 			Expression expression = stmt.getTargets().get(i);
 			for (int j = 0; j < stmt.getStates().size(); j++) {
 				String state = stmt.getStates().get(j);
 				if (state.equalsIgnoreCase("empty")) {
-					ctx.gen(genExpression, expression, ctx, out, args);
+					ctx.invoke(genExpression, expression, ctx, out);
 					out.print(".ezeSetEmpty()");
 				} else if (state.equalsIgnoreCase("initial")) {
-					ctx.gen(genExpression, expression, ctx, out, args);
+					ctx.invoke(genExpression, expression, ctx, out);
 					out.print(".ezeInitialize()");
 				}
 				if (j < stmt.getStates().size() - 1)

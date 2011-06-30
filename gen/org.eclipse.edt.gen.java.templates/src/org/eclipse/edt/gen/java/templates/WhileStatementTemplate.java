@@ -20,7 +20,7 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class WhileStatementTemplate extends JavaTemplate {
 
-	public void genStatementBody(WhileStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(WhileStatement stmt, Context ctx, TabbedWriter out) {
 		Label label = new Label(ctx, Label.LABEL_TYPE_WHILE);
 		ctx.pushLabelStack(label);
 		if (ctx.getAttribute(stmt, org.eclipse.edt.gen.Constants.Annotation_statementNeedsLabel) != null
@@ -28,16 +28,16 @@ public class WhileStatementTemplate extends JavaTemplate {
 			out.print(label.getName() + ": ");
 		out.print("while (");
 		if (stmt.getCondition() != null)
-			ctx.gen(genExpression, IRUtils.makeExprCompatibleToType(stmt.getCondition(), TypeUtils.Type_BOOLEAN), ctx, out, args);
+			ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(stmt.getCondition(), TypeUtils.Type_BOOLEAN), ctx, out);
 		else
 			out.print("true");
 		out.print(") ");
-		ctx.gen(genStatement, stmt.getBody(), ctx, out, args);
+		ctx.invoke(genStatement, stmt.getBody(), ctx, out);
 		// now remove the label from the stack
 		ctx.popLabelStack();
 	}
 
-	public void genStatementEnd(WhileStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementEnd(WhileStatement stmt, Context ctx, TabbedWriter out) {
 		// we don't want a semi-colon
 	}
 }

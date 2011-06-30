@@ -24,9 +24,9 @@ import org.eclipse.edt.mof.egl.Part;
 public class LibraryTemplate extends JavaTemplate {
 
 	@SuppressWarnings("unchecked")
-	public void validate(Library library, Context ctx, Object... args) {
+	public void validate(Library library, Context ctx) {
 		// process anything else the superclass needs to do
-		ctx.validateSuper(validate, Library.class, library, ctx, args);
+		ctx.invokeSuper(this, validate, library, ctx);
 		// ignore adding this entry to the list, if it is the part we are currently generating
 		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
 			library.getFullyQualifiedName()))
@@ -47,39 +47,39 @@ public class LibraryTemplate extends JavaTemplate {
 		}
 	}
 
-	public void genSuperClass(Library library, Context ctx, TabbedWriter out, Object... args) {
+	public void genSuperClass(Library library, Context ctx, TabbedWriter out) {
 		out.print("ExecutableBase");
 	}
 
-	public void genAccessor(Library library, Context ctx, TabbedWriter out, Object... args) {
+	public void genAccessor(Library library, Context ctx, TabbedWriter out) {
 		out.print(Constants.LIBRARY_PREFIX + library.getFullyQualifiedName().replace('.', '_') + "()");
 	}
 
-	public void genConstructor(Library library, Context ctx, TabbedWriter out, Object... args) {
+	public void genConstructor(Library library, Context ctx, TabbedWriter out) {
 		out.print("public ");
-		ctx.gen(genClassName, library, ctx, out, args);
+		ctx.invoke(genClassName, library, ctx, out);
 		out.print("( RunUnit ru");
-		ctx.gen(genAdditionalConstructorParams, library, ctx, out, args);
+		ctx.invoke(genAdditionalConstructorParams, library, ctx, out);
 		out.println(" ) {");
 		out.print("super( ru");
-		ctx.gen(genAdditionalSuperConstructorArgs, library, ctx, out, args);
+		ctx.invoke(genAdditionalSuperConstructorArgs, library, ctx, out);
 		out.println(" );");
 		out.println("ezeInitialize();");
 		out.println("}");
 
 		out.print("public ");
-		genRuntimeTypeName(library, ctx, out, args);
+		genRuntimeTypeName(library, ctx, out, TypeNameKind.JavaPrimitive);
 		out.println(" " + Constants.LIBRARY_PREFIX + library.getFullyQualifiedName().replace('.', '_') + "() {");
 		out.println("return this;");
 		out.println("}");
 	}
 
-	public void genGetterSetter(Library library, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genGetter, (Field) args[0], ctx, out, args);
-		ctx.gen(genSetter, (Field) args[0], ctx, out, args);
+	public void genGetterSetter(Library library, Context ctx, TabbedWriter out, Field arg) {
+		ctx.invoke(genGetter, arg, ctx, out);
+		ctx.invoke(genSetter, arg, ctx, out);
 	}
 
-	public void genRuntimeTypeName(Library library, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genPartName, library, ctx, out, args);
+	public void genRuntimeTypeName(Library library, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genPartName, library, ctx, out);
 	}
 }

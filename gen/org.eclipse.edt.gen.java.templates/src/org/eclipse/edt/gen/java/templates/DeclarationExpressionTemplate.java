@@ -13,26 +13,25 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
-
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
 public class DeclarationExpressionTemplate extends JavaTemplate {
 
-	public void genDeclarationExpression(DeclarationExpression expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genDeclarationExpression(DeclarationExpression expr, Context ctx, TabbedWriter out) {
 		for (Field field : expr.getFields()) {
 			// write out the debug extension data
 			CommonUtilities.generateSmapExtension(field, ctx);
 			// process the field
-			ctx.gen(genRuntimeTypeName, field, ctx, out, args);
+			ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
 			out.print(" ");
-			ctx.gen(genName, field, ctx, out, args);
+			ctx.invoke(genName, field, ctx, out);
 			out.print(" = ");
-			ctx.gen(genInitialization, field, ctx, out, args);
+			ctx.invoke(genInitialization, field, ctx, out);
 			out.println(";");
 			if (field.getInitializerStatements() != null)
-				ctx.gen(genStatementNoBraces, field.getInitializerStatements(), ctx, out, args);
+				ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
 		}
 	}
 }

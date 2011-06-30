@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.StringLiteral;
 
 public class StringLiteralTemplate extends JavaTemplate {
 
-	public void genExpression(StringLiteral expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(StringLiteral expr, Context ctx, TabbedWriter out) {
 		out.print("\"");
 		out.print(expr.getValue());
 		out.print("\"");

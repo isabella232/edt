@@ -32,24 +32,24 @@ public class PartTemplate extends JavaTemplate {
 
 	IRUtils utils = new IRUtils();
 
-	public void validatePart(Part part, Context ctx, Object... args) {
+	public void validatePart(Part part, Context ctx) {
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partDataTablesUsed, new ArrayList<DataTable>());
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partFormsUsed, new ArrayList<Form>());
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed, new ArrayList<Library>());
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partRecordsUsed, new ArrayList<Record>());
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partTypesImported, new ArrayList<String>());
-		ctx.validate(validateClassBody, part, ctx, args);
+		ctx.invoke(validateClassBody, part, ctx);
 	}
 
-	public void genPart(Part part, Context ctx, TabbedWriter out, Object... args) {
-		genPackageStatement(part, ctx, out, args);
-		ctx.gen(genClassHeader, part, ctx, out, args);
-		ctx.gen(genClassBody, part, ctx, out, args);
+	public void genPart(Part part, Context ctx, TabbedWriter out) {
+		genPackageStatement(part, ctx, out);
+		ctx.invoke(genClassHeader, part, ctx, out);
+		ctx.invoke(genClassBody, part, ctx, out);
 		out.println("}");
 	}
 
 	@SuppressWarnings("unchecked")
-	public void genPackageStatement(Part part, Context ctx, TabbedWriter out, Object... args) {
+	public void genPackageStatement(Part part, Context ctx, TabbedWriter out) {
 		String packageName = CommonUtilities.packageName(part);
 		if (packageName != null && packageName.length() > 0) {
 			out.print("package ");
@@ -63,32 +63,25 @@ public class PartTemplate extends JavaTemplate {
 			// we don't want to use ctx.gen here, because we want the type template logic to handle this to avoid any array <
 			// ... > being added
 			String type;
-			int lastDot = imported.lastIndexOf( '.' );
-			if ( lastDot == -1 )
-			{
-				type = Aliaser.getJavaSafeAlias( imported );
-			}
-			else
-			{
-				String pkg = CommonUtilities.packageName( imported.substring( 0, lastDot ) );
-				if ( pkg.equals( "java.lang" ) )
-				{
+			int lastDot = imported.lastIndexOf('.');
+			if (lastDot == -1) {
+				type = Aliaser.getJavaSafeAlias(imported);
+			} else {
+				String pkg = CommonUtilities.packageName(imported.substring(0, lastDot));
+				if (pkg.equals("java.lang")) {
 					// If we're intentionally importing a class from java.lang, don't
 					// alias the name.
 					type = imported;
-				}
-				else
-				{
-					type = pkg + '.' + Aliaser.getJavaSafeAlias( imported.substring( lastDot + 1 ) );
+				} else {
+					type = pkg + '.' + Aliaser.getJavaSafeAlias(imported.substring(lastDot + 1));
 				}
 			}
-
 			out.println("import " + type + ";");
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public void genPartName(Part part, Context ctx, TabbedWriter out, Object... args) {
+	public void genPartName(Part part, Context ctx, TabbedWriter out) {
 		if (ctx.mapsToNativeType(part))
 			out.print(ctx.getNativeImplementationMapping(part));
 		else {
@@ -98,18 +91,17 @@ public class PartTemplate extends JavaTemplate {
 			for (String imported : typesImported) {
 				if (value.equalsIgnoreCase(imported)) {
 					// it was is the table, so use the short name
-					if (value.indexOf('.') >= 0)
-					{
-						out.print( CommonUtilities.classAlias( part ) );
+					if (value.indexOf('.') >= 0) {
+						out.print(CommonUtilities.classAlias(part));
 						return;
 					}
 				}
 			}
-			out.print( CommonUtilities.fullClassAlias( part ) );
+			out.print(CommonUtilities.fullClassAlias(part));
 		}
 	}
 
-	public void genClassName(Part part, Context ctx, TabbedWriter out, Object... args) {
+	public void genClassName(Part part, Context ctx, TabbedWriter out) {
 		// Data tables might have an alias property.
 		String nameOrAlias;
 		Annotation annot = part.getAnnotation(IEGLConstants.PROPERTY_ALIAS);
@@ -120,11 +112,11 @@ public class PartTemplate extends JavaTemplate {
 		out.print(Aliaser.getAlias(nameOrAlias));
 	}
 
-	public void genSuperClass(Part part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genSuperClass, part, ctx, out, args);
+	public void genSuperClass(Part part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genSuperClass, part, ctx, out);
 	}
 
-	public void genSerialVersionUID(Part part, Context ctx, TabbedWriter out, Object... args) {
+	public void genSerialVersionUID(Part part, Context ctx, TabbedWriter out) {
 		out.println("private static final long serialVersionUID = " + Constants.SERIAL_VERSION_UID + "L;");
 	}
 }

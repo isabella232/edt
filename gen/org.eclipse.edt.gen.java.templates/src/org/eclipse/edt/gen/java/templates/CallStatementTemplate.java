@@ -17,11 +17,11 @@ import org.eclipse.edt.mof.egl.CallStatement;
 
 public class CallStatementTemplate extends JavaTemplate {
 
-	public void genStatementBody(CallStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(CallStatement stmt, Context ctx, TabbedWriter out) {
 		out.print("ezeProgram._runUnit().getCallers().localCall(");
-		ctx.gen(genExpression, stmt.getInvocationTarget(), ctx, out, args);
+		ctx.invoke(genExpression, stmt.getInvocationTarget(), ctx, out);
 		out.print(", new com.ibm.javart.JavartSerializable[] {");
-		ctx.foreach(stmt.getArguments(), ',', genExpression, ctx, out, args);
+		ctx.foreach(stmt.getArguments(), ',', genExpression, ctx, out);
 		out.print("}, null, \"x\", ezeProgram )");
 	}
 }

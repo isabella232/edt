@@ -17,16 +17,16 @@ import org.eclipse.edt.mof.egl.BoxingExpression;
 
 public class BoxingExpressionTemplate extends JavaTemplate {
 
-	public void genExpression(BoxingExpression expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(BoxingExpression expr, Context ctx, TabbedWriter out) {
 		if (ctx.mapsToPrimitiveType(expr.getType())) {
-			ctx.gen(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.EGLImplementation);
+			ctx.invoke(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".ezeBox(");
-			ctx.gen(genExpression, expr.getExpr(), ctx, out, args);
-			ctx.gen(genTypeDependentOptions, expr.getType(), ctx, out, args);
+			ctx.invoke(genExpression, expr.getExpr(), ctx, out);
+			ctx.invoke(genTypeDependentOptions, expr.getType(), ctx, out);
 			out.print(")");
 		} else {
 			out.print("AnyObject.ezeBox(");
-			ctx.gen(genExpression, expr.getExpr(), ctx, out, args);
+			ctx.invoke(genExpression, expr.getExpr(), ctx, out);
 			out.print(")");
 		}
 	}
