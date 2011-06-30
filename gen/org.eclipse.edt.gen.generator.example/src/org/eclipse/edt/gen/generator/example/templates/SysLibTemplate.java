@@ -19,14 +19,14 @@ import org.eclipse.edt.mof.egl.Library;
 
 public class SysLibTemplate extends org.eclipse.edt.gen.java.templates.egl.core.SysLibTemplate {
 	
-	public void writestdout(Library type, Context ctx, TabbedWriter out, Object... args) {
+	public void writestdout(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
 		// in this example, we are overriding the default value generator method, and if the user specified
 		// extendComments=true, then we add an imbedded comment to the definition. You can of course, execute the super
 		// method in the original SysLibTemplate if you like
 		out.print("java.lang.System.out.println(");
 		if ((Boolean) ctx.getParameter(Constants.parameter_extendComments))
 			out.print("/* comment added by -extendComments parameter */");
-		ctx.foreach(((InvocationExpression) args[0]).getArguments(), ',', genExpression, ctx, out, args);
+		ctx.foreach(arg.getArguments(), ',', genExpression, ctx, out);
 		out.print(")");
 	}
 }

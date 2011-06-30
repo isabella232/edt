@@ -18,12 +18,12 @@ import org.eclipse.edt.mof.egl.AssignmentStatement;
 
 public class AssignmentStatementTemplate extends org.eclipse.edt.gen.java.templates.AssignmentStatementTemplate {
 
-	public void genStatementBody(AssignmentStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(AssignmentStatement stmt, Context ctx, TabbedWriter out) {
 		// in this example, we are overriding the default value generator method, and if the user specified
 		// extendComments=true, then we add an imbedded comment to the definition
 		if ((Boolean) ctx.getParameter(Constants.parameter_extendComments))
 			out.print("/* comment added by -extendComments parameter */");
 		// pass control to the original generator's logic
-		super.genStatementBody(stmt, ctx, out, args);
+		super.genStatementBody(stmt, ctx, out);
 	}
 }

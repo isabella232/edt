@@ -18,12 +18,12 @@ import org.eclipse.edt.mof.egl.EGLClass;
 
 public class IntTypeTemplate extends org.eclipse.edt.gen.java.templates.egl.lang.IntTypeTemplate {
 
-	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
+	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
 		// in this example, we are overriding the default value generator method, and if the user specified
 		// extendComments=true, then we add an imbedded comment to the definition
 		if ((Boolean) ctx.getParameter(Constants.parameter_extendComments))
 			out.print("/* comment added by -extendComments parameter */");
 		// pass control to the original generator's logic
-		super.genDefaultValue(type, ctx, out, args);
+		super.genDefaultValue(type, ctx, out);
 	}
 }
