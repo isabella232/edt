@@ -17,30 +17,18 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class SmallfloatTypeTemplate extends JavaScriptTemplate {
 
-	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
-			out.print("null");
-		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
-			out.print("null");
-		else
-			out.print("0");
+	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
+		out.print("0");
 	}
 
-	public void genSignature(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		String signature = "";
-		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
-			signature += "?";
-		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
-			signature += "?";
-		signature += "f;";
+	public void genSignature(EGLClass type, Context ctx, TabbedWriter out) {
+		String signature = "f;";
 		out.print(signature);
 	}
 
@@ -56,12 +44,12 @@ public class SmallfloatTypeTemplate extends JavaScriptTemplate {
 		return result;
 	}
 
-	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		if (((AsExpression) args[0]).getConversionOperation() != null && !needsConversion(((AsExpression) args[0]).getConversionOperation())) {
-			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, AsExpression arg) {
+		if (arg.getConversionOperation() != null && !needsConversion(arg.getConversionOperation())) {
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 		} else {
 			// we need to invoke the logic in type template to call back to the other conversion situations
-			ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
+			ctx.invokeSuper(this, genConversionOperation, type, ctx, out, arg);
 		}
 	}
 }

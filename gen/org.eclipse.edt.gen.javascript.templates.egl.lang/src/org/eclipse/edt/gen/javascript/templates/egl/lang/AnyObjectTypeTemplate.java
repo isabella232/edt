@@ -11,8 +11,37 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
+import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.AsExpression;
+import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.Type;
 
 public class AnyObjectTypeTemplate extends JavaScriptTemplate {
 
+	public void genConversionOperation(Type type, Context ctx, TabbedWriter out, AsExpression arg) {
+		// check to see if a conversion is required
+		if (arg.getConversionOperation() != null) {
+			out.print(ctx.getNativeImplementationMapping((Classifier) arg.getConversionOperation().getContainer()) + '.');
+			out.print("from");
+			out.print(ctx.getNativeTypeName(arg.getConversionOperation().getParameters().get(0).getType()));
+			out.print("(");
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
+			out.print(")");
+		} else if (ctx.mapsToPrimitiveType(arg.getEType())) {
+			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
+			out.print(".ezeCast(");
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
+			out.print(")");
+		} else {
+			out.print("AnyObject.ezeCast(");
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			out.print(", ");
+			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.JavascriptImplementation);
+			out.print(".class)");
+		}
+	}
 }

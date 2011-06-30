@@ -16,48 +16,36 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.UnaryExpression;
 
 public class BooleanTypeTemplate extends JavaScriptTemplate {
 
-	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
-			out.print("null");
-		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
-			out.print("null");
-		else
-			out.print("false");
+	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
+		out.print("false");
 	}
 
-	public void genSignature(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		String signature = "";
-		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
-			signature += "?";
-		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
-			signature += "?";
-		signature += "0;";
+	public void genSignature(EGLClass type, Context ctx, TabbedWriter out) {
+		String signature = "0;";
 		out.print(signature);
 	}
 
-	public void genUnaryExpression(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
+	public void genUnaryExpression(EGLClass type, Context ctx, TabbedWriter out, UnaryExpression arg) {
 		// TODO sbg Confirm with Jeff, possibly incorporate into TypeTypeTemplate.genUnary....
-		out.print(((UnaryExpression) args[0]).getOperator() + "(");
-		ctx.gen(genExpression, ((UnaryExpression) args[0]).getExpression(), ctx, out, org.eclipse.edt.gen.CommonUtilities.genWithoutTypeList(args));
+		out.print(arg.getOperator() + "(");
+		ctx.invoke(genExpression, arg.getExpression(), ctx, out);
 		out.print(")");
 	}
 
-	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) {
+	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) {
 		if (false) { // TODO sbg other impls of genBinaryExpression consider nullables
 		} else {
-			out.print(getNativeStringPrefixOperation((BinaryExpression) args[0]));
+			out.print(getNativeStringPrefixOperation(arg));
 			out.print("(");
-			ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, args);
-			out.print(getNativeStringOperation((BinaryExpression) args[0]));
-			ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, args);
-			out.print(getNativeStringComparisionOperation((BinaryExpression) args[0]));
+			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
+			out.print(getNativeStringOperation(arg));
+			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+			out.print(getNativeStringComparisionOperation(arg));
 			out.print(")");
 		}
 	}

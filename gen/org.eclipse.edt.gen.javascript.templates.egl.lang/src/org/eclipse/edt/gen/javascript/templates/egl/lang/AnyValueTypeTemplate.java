@@ -15,18 +15,11 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.TypedElement;
 
 public class AnyValueTypeTemplate extends JavaScriptTemplate {
 
-	public void genSignature(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		String signature = "";
-		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
-			signature += "?";
-		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
-			signature += "?";
-		signature += "A;";
+	public void genSignature(EGLClass type, Context ctx, TabbedWriter out) {
+		String signature = "A;";
 		out.print(signature);
 	}
 }

@@ -19,64 +19,47 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 
 	// this method gets invoked when there is a specific fixed precision needed
-	public void genDefaultValue(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
-		processDefaultValue(type, ctx, out, args);
+	public void genDefaultValue(FixedPrecisionType type, Context ctx, TabbedWriter out) {
+		processDefaultValue(type, ctx, out);
 	}
 
 	// this method gets invoked when there is a generic (unknown) fixed precision needed
-	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		processDefaultValue(type, ctx, out, args);
+	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out) {
+		processDefaultValue(type, ctx, out);
 	}
 
-	public void processDefaultValue(Type type, Context ctx, TabbedWriter out, Object... args) {
-		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
-			out.print("null");
-		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
-			out.print("null");
-		else
-			out.print(Constants.JSRT_EGL_NAMESPACE + ctx.getNativeMapping("egl.lang.AnyDecimal") + ".ZERO");
+	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
+		out.print(Constants.JSRT_EGL_NAMESPACE + ctx.getNativeMapping("egl.lang.AnyDecimal") + ".ZERO");
 	}
 
 	// this method gets invoked when there is a specific fixed precision needed
-	public void genSignature(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
-		String signature = "";
-		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
-			signature += "?";
-		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
-			signature += "?";
-		signature += "d" + type.getLength() + ":" + type.getDecimals() + ";";
+	public void genSignature(FixedPrecisionType type, Context ctx, TabbedWriter out) {
+		String signature = "d" + type.getLength() + ":" + type.getDecimals() + ";";
 		out.print(signature);
 	}
 
 	// this method gets invoked when there is a generic (unknown) fixed precision needed
-	public void genSignature(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		String signature = "";
-		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
-			signature += "?";
-		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
-			signature += "?";
-		signature += "d;";
+	public void genSignature(ParameterizableType type, Context ctx, TabbedWriter out) {
+		String signature = "d;";
 		out.print(signature);
 	}
 
-	public void genTypeDependentOptions(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
+	public void genTypeDependentOptions(ParameterizableType type, Context ctx, TabbedWriter out, AsExpression arg) {
 		out.print(", ");
 		// if we get here, then we have been given an integer literal, to be represented as a FixedPrecisionType. So, we must
 		// set the dependend options to be a list of nines
-		if (((AsExpression) args[0]).getObjectExpr() instanceof IntegerLiteral) {
-			String value = ((IntegerLiteral) ((AsExpression) args[0]).getObjectExpr()).getValue();
+		if (arg.getObjectExpr() instanceof IntegerLiteral) {
+			String value = ((IntegerLiteral) arg.getObjectExpr()).getValue();
 			if (value.startsWith("-"))
 				value = value.substring(1);
 			if (value.length() > 4)
@@ -87,15 +70,20 @@ public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 			out.print("egl.javascript.BigDecimal.prototype.NINES[8]");
 	}
 
-	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, Object... args) {
+	public void genTypeDependentOptions(ParameterizableType type, Context ctx, TabbedWriter out) {
+		out.print(", ");
+		out.print("egl.javascript.BigDecimal.prototype.NINES[8]");
+	}
+
+	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) {
 		if (false) { // TODO sbg other impls of genBinaryExpression consider nullables
 		} else {
-			out.print(getNativeStringPrefixOperation((BinaryExpression) args[0]));
+			out.print(getNativeStringPrefixOperation(arg));
 			out.print("(");
-			ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, args);
-			out.print(getNativeStringOperation((BinaryExpression) args[0]));
-			ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, args);
-			out.print(getNativeStringComparisionOperation((BinaryExpression) args[0]));
+			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
+			out.print(getNativeStringOperation(arg));
+			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+			out.print(getNativeStringComparisionOperation(arg));
 			out.print(")");
 		}
 	}
@@ -107,25 +95,24 @@ public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 		return result;
 	}
 
-	public void genConversionOperation(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
-		AsExpression asExpr = (AsExpression) args[0];
-		Type toType = asExpr.getEType();
-		Type fromType = asExpr.getObjectExpr().getType();
-		if ((asExpr.getConversionOperation() == null) && TypeUtils.isNumericType(fromType)) {
-			if (needsConversion(fromType, toType) && CommonUtilities.proceedWithConversion(ctx, asExpr.getConversionOperation())) {
+	public void genConversionOperation(FixedPrecisionType type, Context ctx, TabbedWriter out, AsExpression arg) {
+		Type toType = arg.getEType();
+		Type fromType = arg.getObjectExpr().getType();
+		if ((arg.getConversionOperation() == null) && TypeUtils.isNumericType(fromType)) {
+			if (needsConversion(fromType, toType) && CommonUtilities.proceedWithConversion(ctx, arg.getConversionOperation())) {
 				out.print(ctx.getNativeImplementationMapping(toType) + '.');
 				out.print("from");
 				out.print(ctx.getNativeTypeName(fromType));
 				out.print("(");
-				ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-				ctx.gen(genTypeDependentOptions, ((AsExpression) args[0]).getEType(), ctx, out, args);
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+				ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
 				out.print(")");
 			} else {
-				ctx.gen(genExpression, asExpr.getObjectExpr(), ctx, out, args);
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			}
 		} else {
 			// we need to invoke the logic in type template to call back to the other conversion situations
-			ctx.genSuper(genConversionOperation, FixedPrecisionType.class, type, ctx, out, args);
+			ctx.invokeSuper(this, genConversionOperation, type, ctx, out, arg);
 		}
 	}
 
@@ -141,12 +128,12 @@ public class AnyDecimalTypeTemplate extends JavaScriptTemplate {
 		return result;
 	}
 
-	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		if (((AsExpression) args[0]).getConversionOperation() != null && !needsConversion(((AsExpression) args[0]).getConversionOperation())) {
-			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, AsExpression arg) {
+		if (arg.getConversionOperation() != null && !needsConversion(arg.getConversionOperation())) {
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 		} else {
 			// we need to invoke the logic in type template to call back to the other conversion situations
-			ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
+			ctx.invokeSuper(this, genConversionOperation, type, ctx, out, arg);
 		}
 	}
 

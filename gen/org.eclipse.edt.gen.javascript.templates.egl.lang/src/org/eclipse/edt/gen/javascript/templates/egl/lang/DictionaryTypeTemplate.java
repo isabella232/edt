@@ -15,30 +15,25 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.TypedElement;
 
 public class DictionaryTypeTemplate extends JavaScriptTemplate {
 
-	public void genSignature(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		String signature = "";
-		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
-			signature += "?";
-		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
-			signature += "?";
-		signature += "y;";
+	public void genSignature(EGLClass type, Context ctx, TabbedWriter out) {
+		String signature = "y;";
 		out.print(signature);
 	}
 
-	public void genInstantiation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		if (args.length == 0 || args[0] == null)
-			out.print("null");
-		else if (args[0] instanceof Field && ((Field) args[0]).hasSetValuesBlock()) {
-			ctx.gen(genRuntimeTypeName, type, ctx, out, args);
+	public void genInstantiation(EGLClass type, Context ctx, TabbedWriter out, Field arg) {
+		if (arg.hasSetValuesBlock()) {
+			ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavascriptPrimitive);
 			out.print("()");
 		} else {
 			out.print("null");
 		}
+	}
+
+	public void genInstantiation(EGLClass type, Context ctx, TabbedWriter out) {
+		out.print("null");
 	}
 }
