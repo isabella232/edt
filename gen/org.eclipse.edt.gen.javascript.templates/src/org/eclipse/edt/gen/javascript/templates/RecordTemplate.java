@@ -19,6 +19,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -128,8 +129,8 @@ public class RecordTemplate extends JavaScriptTemplate {
 
 	public void genQualifier(Record part, Context ctx, TabbedWriter out) {}
 	
-	public void genQualifier(Record part, Context ctx, TabbedWriter out, Expression arg) {
-		if (arg.getQualifier() == null)
+	public void genQualifier(Record part, Context ctx, TabbedWriter out, NamedElement arg) {
+//		if (arg.getQualifier() == null)
 			out.print("this.");
 	}
 }

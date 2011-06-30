@@ -47,6 +47,6 @@ public class NameTemplate extends JavaScriptTemplate {
 				ctx.invoke(genExpression, arg, ctx, out);
 			}
 		} else
-			ctx.invoke(genAssignment, expr.getType(), ctx, out, arg);
+			ctx.invoke(genAssignment, expr.getType(), ctx, out, expr, arg);
 	}
 }
