@@ -167,7 +167,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 			ctx.invoke(genName, field, ctx, out);
 			out.print("\", \"");
 		}
-		ctx.invoke(genSignature, field.getType(), ctx, out, arg);
+		ctx.invoke(genSignature, field.getType(), ctx, out);
 		out.print("\", ");
 		ctx.invoke(genRuntimeTypeName, field.getType(), ctx, out, TypeNameKind.JavascriptImplementation);
 		out.println(", xmlAnnotations);");
