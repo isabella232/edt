@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.MoveStatement;
 
 public class MoveStatementTemplate extends JavaScriptTemplate {
 
-	public void genStatementBody(MoveStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(MoveStatement stmt, Context ctx, TabbedWriter out) {
 //		for (int i = 0; i < stmt.getTargets().size(); i++) {
 //			Expression expression = stmt.getTargets().get(i);
 //			for (int j = 0; j < stmt.getStates().size(); j++) {

@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.FixedPrecisionType;
 
 public class FixedPrecisionTypeTemplate extends JavaScriptTemplate {
 
-	public void genTypeDependentOptions(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
+	public void genTypeDependentOptions(FixedPrecisionType type, Context ctx, TabbedWriter out) {
 		out.print(", ");
 		out.print(type.getDecimals());
 		out.print(", ");

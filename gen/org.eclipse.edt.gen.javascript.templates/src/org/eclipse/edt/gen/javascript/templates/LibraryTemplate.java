@@ -16,18 +16,19 @@ import java.util.List;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 
 public class LibraryTemplate extends JavaScriptTemplate {
 
 	@SuppressWarnings("unchecked")
-	public void validate(Library library, Context ctx, Object... args) {
+	public void validate(Library library, Context ctx) {
 		// process anything else the superclass needs to do
-		ctx.validateSuper(validate, Library.class, library, ctx, args);
+		ctx.invokeSuper(this, validate, library, ctx);
 		// ignore adding this entry to the list, if it is the part we are currently generating
 		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
 			library.getFullyQualifiedName()))
@@ -46,22 +47,22 @@ public class LibraryTemplate extends JavaScriptTemplate {
 			libraries.add(library);
 	}
 
-	public void genSuperClass(Library library, Context ctx, TabbedWriter out, Object... args) {
+	public void genSuperClass(Library library, Context ctx, TabbedWriter out) {
 		out.print("ExecutableBase");
 	}
 
-	public void genClassBody(Library library, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genConstructors, library, ctx, out, args);
-		ctx.gen(genFunctions, library, ctx, out, args);
-		ctx.gen(genFields, library, ctx, out, args);
-		ctx.gen(genGetterSetters, library, ctx, out, args);
+	public void genClassBody(Library library, Context ctx, TabbedWriter out) {
+		ctx.invoke(genConstructors, library, ctx, out);
+		ctx.invoke(genFunctions, library, ctx, out);
+		ctx.invoke(genFields, library, ctx, out);
+		ctx.invoke(genGetterSetters, library, ctx, out);
 		out.println(",");
-		ctx.gen(genXmlAnnotations, library, ctx, out, args);
+		ctx.invoke(genXmlAnnotations, library, ctx, out);
 		out.println(",");
-		ctx.gen(genNamespaceMap, library, ctx, out, args);
+		ctx.invoke(genNamespaceMap, library, ctx, out);
 	}
 
-	public void genClassHeader(Library library, Context ctx, TabbedWriter out, Object... args) {
+	public void genClassHeader(Library library, Context ctx, TabbedWriter out) {
 		// TODO sbg consider refactoring into a separate extension
 		out.print("egl.defineRUILibrary(");
 		out.print(singleQuoted(library.getPackageName().toLowerCase()));
@@ -77,74 +78,76 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		out.println(", ");
 	}
 
-	public void genName(Library library, Context ctx, TabbedWriter out, Object... args) {
+	public void genName(Library library, Context ctx, TabbedWriter out) {
 		// TODO Use Aliaser stuff from RBD
 		out.print(eglnamespace + library.getPackageName().toLowerCase() + "." + library.getName());
 	}
 
-	public void genAccessor(Library library, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genName, library, ctx, out, args);
+	public void genAccessor(Library library, Context ctx, TabbedWriter out) {
+		ctx.invoke(genName, library, ctx, out);
 		out.print("['$inst']");
 	}
 
-	public void genConstructor(Library library, Context ctx, TabbedWriter out, Object... args) {
+	public void genConstructor(Library library, Context ctx, TabbedWriter out) {
 		out.print(quoted("constructor"));
 		out.println(": function() {");
 		out.print("if(");
-		ctx.gen(genAccessor, library, ctx, out, args);
+		ctx.invoke(genAccessor, library, ctx, out);
 		out.print(") return ");
-		ctx.gen(genAccessor, library, ctx, out, args);
+		ctx.invoke(genAccessor, library, ctx, out);
 		out.println(";");
-		ctx.gen(genAccessor, library, ctx, out, args);
+		ctx.invoke(genAccessor, library, ctx, out);
 		out.println("=this;");
-		ctx.gen(genInitializeMethodBody, library, ctx, out, args);
+		ctx.invoke(genInitializeMethodBody, library, ctx, out);
 
 		out.println("this.jsrt$SysVar = new egl.egl.core.SysVar();");
 		// instantiate each user part
 		List<Part> usedParts = library.getUsedParts();
 		for (Part part : usedParts) {
-			ctx.gen(genInstantiation, part, ctx, out, args);
+			ctx.invoke(genInstantiation, part, ctx, out);
 			out.println(";");
 		}
 		// instantiate each library
-		ctx.gen(genLibraries, library, ctx, out, args);
+		ctx.invoke(genLibraries, library, ctx, out);
 		out.println("}");
 	}
 
-	public void genSetEmptyMethods(Library library, Context ctx, TabbedWriter out, Object... args) {}
+	public void genSetEmptyMethods(Library library, Context ctx, TabbedWriter out) {}
 
-	public void genSetEmptyMethod(Library library, Context ctx, TabbedWriter out, Object... args) {}
+	public void genSetEmptyMethod(Library library, Context ctx, TabbedWriter out) {}
 
-	public void genInitializeMethods(Library library, Context ctx, TabbedWriter out, Object... args) {}
+	public void genInitializeMethods(Library library, Context ctx, TabbedWriter out) {}
 
-	public void genInstantiation(Type type, Context ctx, TabbedWriter out, Object... args) {
+	public void genInstantiation(Type type, Context ctx, TabbedWriter out) {
 		out.print("new ");
-		ctx.gen(genName, type, ctx, out, args);
+		ctx.invoke(genName, type, ctx, out);
 		out.print("()");
 	}
 
-	public void genGetterSetter(Library library, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genGetter, (Field) args[0], ctx, out, args);
+	public void genGetterSetter(Library library, Context ctx, TabbedWriter out, Field arg) {
+		ctx.invoke(genGetter, arg, ctx, out);
 		out.println(",");
-		ctx.gen(genSetter, (Field) args[0], ctx, out, args);
+		ctx.invoke(genSetter, arg, ctx, out);
 	}
 
-	public void genRuntimeTypeName(Library library, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genPartName, library, ctx, out, args);
+	public void genRuntimeTypeName(Library library, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genPartName, library, ctx, out);
 	}
 
-	public void genContainerBasedAccessor(Library library, Context ctx, TabbedWriter out, Object... args) {
+	public void genContainerBasedAccessor(Library library, Context ctx, TabbedWriter out, Function arg) {
 		out.print("new egl.egl.jsrt.Delegate(");
-		ctx.gen(genAccessor, library, ctx, out, args);
+		ctx.invoke(genAccessor, library, ctx, out);
 		out.print(",");
-		ctx.gen(genName, library, ctx, out, args);
+		ctx.invoke(genName, library, ctx, out);
 		out.print(".prototype.");
-		ctx.gen(genName, args[0], ctx, out, args);
+		ctx.invoke(genName, arg, ctx, out);
 		out.print(")");
 	}
 
-	public void genQualifier(Library library, Context ctx, TabbedWriter out, Object... args) {
-		if ((args.length > 0) && (args[0] instanceof Expression) && (((Expression) args[0]).getQualifier() == null))
-			out.print("this.");
+	public void genQualifier(Library library, Context ctx, TabbedWriter out) {}
+
+	public void genQualifier(Library library, Context ctx, TabbedWriter out, NamedElement arg) {
+		// if (arg.getQualifier() == null)
+		out.print("this.");
 	}
 }

@@ -17,13 +17,13 @@ import org.eclipse.edt.mof.egl.Program;
 
 public class ProgramTemplate extends JavaScriptTemplate {
 
-	public void genSuperClass(Program program, Context ctx, TabbedWriter out, Object... args) {
+	public void genSuperClass(Program program, Context ctx, TabbedWriter out) {
 		out.print("ProgramBase");
 	}
 
-	public void genConstructor(Program program, Context ctx, TabbedWriter out, Object... args) {}
+	public void genConstructor(Program program, Context ctx, TabbedWriter out) {}
 
-	public void genRuntimeTypeName(Program program, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genPartName, program, ctx, out, args);
+	public void genRuntimeTypeName(Program program, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genPartName, program, ctx, out);
 	}
 }

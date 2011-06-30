@@ -18,11 +18,11 @@ import org.eclipse.edt.mof.egl.LabelStatement;
 
 public class LabelStatementTemplate extends JavaScriptTemplate {
 
-	public void genStatementBody(LabelStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(LabelStatement stmt, Context ctx, TabbedWriter out) {
 		out.print(Label.LABEL_NAME + stmt.getLabel() + ": ");
 	}
 
-	public void genStatementEnd(LabelStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementEnd(LabelStatement stmt, Context ctx, TabbedWriter out) {
 		// we don't want a semi-colon
 	}
 }

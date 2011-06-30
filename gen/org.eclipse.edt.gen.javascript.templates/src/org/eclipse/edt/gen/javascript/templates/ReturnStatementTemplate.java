@@ -20,12 +20,12 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class ReturnStatementTemplate extends JavaScriptTemplate {
 
-	public void genStatementBody(ReturnStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(ReturnStatement stmt, Context ctx, TabbedWriter out) {
 		out.print("return ");
 		Expression expr = stmt.getExpression();
 		if (expr != null) {
 			expr = IRUtils.makeExprCompatibleToType(expr, ((FunctionMember) stmt.getContainer()).getType());
-			ctx.gen(genExpression, expr, ctx, out, args);
+			ctx.invoke(genExpression, expr, ctx, out);
 		}
 	}
 }

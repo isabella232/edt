@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.egl.ExitStatement;
 
 public class ExitStatementTemplate extends JavaScriptTemplate {
 
-	public void genStatementBody(ExitStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(ExitStatement stmt, Context ctx, TabbedWriter out) {
 		// see if they specified a label
 		if (stmt.getLabel() != null && stmt.getLabel().length() > 0) {
 			out.print("break " + Label.LABEL_NAME + stmt.getLabel());
@@ -53,13 +53,13 @@ public class ExitStatementTemplate extends JavaScriptTemplate {
 			if (label == null) {
 				out.print("return ");
 				if (stmt.getReturnExpr() != null)
-					ctx.gen(genExpression, stmt.getReturnExpr(), ctx, out, args);
+					ctx.invoke(genExpression, stmt.getReturnExpr(), ctx, out);
 			} else
 				out.print("break " + label.getName());
 		}
 	}
 
-	public void genStatementEnd(ExitStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementEnd(ExitStatement stmt, Context ctx, TabbedWriter out) {
 		out.println(";");
 	}
 }

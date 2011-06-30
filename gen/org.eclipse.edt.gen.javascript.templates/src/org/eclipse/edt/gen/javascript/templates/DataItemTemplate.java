@@ -17,11 +17,11 @@ import org.eclipse.edt.mof.egl.DataItem;
 
 public class DataItemTemplate extends JavaScriptTemplate {
 
-	public void validateClassBody(DataItem part, Context ctx, Object... args) {}
+	public void validateClassBody(DataItem part, Context ctx) {}
 
-	public void genPart(DataItem part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genPart(DataItem part, Context ctx, TabbedWriter out) {}
 
-	public void genClassBody(DataItem part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassBody(DataItem part, Context ctx, TabbedWriter out) {}
 
-	public void genClassHeader(DataItem part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassHeader(DataItem part, Context ctx, TabbedWriter out) {}
 }

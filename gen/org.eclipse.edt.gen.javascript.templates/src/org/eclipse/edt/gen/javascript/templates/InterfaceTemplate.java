@@ -17,12 +17,12 @@ import org.eclipse.edt.mof.egl.Interface;
 
 public class InterfaceTemplate extends JavaScriptTemplate {
 
-	public void validateClassBody(Interface part, Context ctx, Object... args) {}
+	public void validateClassBody(Interface part, Context ctx) {}
 
-	public void genPart(Interface part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genPart(Interface part, Context ctx, TabbedWriter out) {}
 
-	public void genClassBody(Interface part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassBody(Interface part, Context ctx, TabbedWriter out) {}
 
-	public void genClassHeader(Interface part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassHeader(Interface part, Context ctx, TabbedWriter out) {}
 
 }

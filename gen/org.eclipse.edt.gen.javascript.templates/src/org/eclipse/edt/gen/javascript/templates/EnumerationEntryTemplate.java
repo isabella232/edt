@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.EnumerationEntry;
 
 public class EnumerationEntryTemplate extends JavaScriptTemplate {
 
-	public void genName(EnumerationEntry element, Context ctx, TabbedWriter out, Object... args) {
+	public void genName(EnumerationEntry element, Context ctx, TabbedWriter out) {
 		out.print(element.getName());
 	}
 }

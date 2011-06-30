@@ -18,15 +18,15 @@ import org.eclipse.edt.mof.egl.Field;
 
 public class DeclarationExpressionTemplate extends JavaScriptTemplate {
 
-	public void genDeclarationExpression(DeclarationExpression expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genDeclarationExpression(DeclarationExpression expr, Context ctx, TabbedWriter out) {
 		for (Field field : expr.getFields()) {
 			out.print("var ");
-			ctx.gen(genName, field, ctx, out, args);
+			ctx.invoke(genName, field, ctx, out);
 			out.print(" = ");
-			ctx.gen(genInitialization, field, ctx, out, args);
+			ctx.invoke(genInitialization, field, ctx, out);
 			out.println(";");
 			if (field.getInitializerStatements() != null)
-				ctx.gen(genStatementNoBraces, field.getInitializerStatements(), ctx, out, args);
+				ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
 		}
 	}
 }

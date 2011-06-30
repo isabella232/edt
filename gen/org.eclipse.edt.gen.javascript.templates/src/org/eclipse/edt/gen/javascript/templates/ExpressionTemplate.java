@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.Expression;
 
 public class ExpressionTemplate extends JavaScriptTemplate {
 
-	public void genExpression(Expression expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genExpression, expr, ctx, out, args);
+	public void genExpression(Expression expr, Context ctx, TabbedWriter out) {
+		ctx.invoke(genExpression, expr, ctx, out);
 	}
 }

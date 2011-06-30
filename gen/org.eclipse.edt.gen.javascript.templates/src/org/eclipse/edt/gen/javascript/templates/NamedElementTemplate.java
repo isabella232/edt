@@ -23,9 +23,9 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 		return expr.getAnnotation(Constants.Annotation_EGLProperty);
 	}
 
-	public void genAccessor(NamedElement element, Context ctx, TabbedWriter out, Object... args) {
+	public void genAccessor(NamedElement element, Context ctx, TabbedWriter out) {
 		Annotation property = getPropertyAnnotation(element);
-		ctx.gen(genQualifier, element, ctx, out, args);
+		ctx.invoke(genQualifier, element, ctx, out);
 		if (property != null) {
 			// obtain the name of the function
 			String functionName;
@@ -39,16 +39,16 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 			// if the function name matches the name of the current function, then this is the getter and we simply output
 			// the name of the variable, instead of creating an infinite loop of calls to the same function
 			if (functionName.equals(ctx.getCurrentFunction()))
-				genName(element, ctx, out, args);
+				genName(element, ctx, out);
 			else
 				out.print(functionName + "()");
 		} else
-			genName(element, ctx, out, args);
+			genName(element, ctx, out);
 	}
 
-	public void genName(NamedElement element, Context ctx, TabbedWriter out, Object... args) {
+	public void genName(NamedElement element, Context ctx, TabbedWriter out) {
 		out.print(element.getName());
 	}
 
-	public void genQualifier(NamedElement element, Context ctx, TabbedWriter out, Object... args) {}
+	public void genQualifier(NamedElement element, Context ctx, TabbedWriter out) {}
 }

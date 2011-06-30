@@ -22,7 +22,7 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class AssignmentTemplate extends JavaScriptTemplate {
 
-	public void genExpression(Assignment expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(Assignment expr, Context ctx, TabbedWriter out) {
 		// first, make this expression compatible
 		IRUtils.makeCompatible(expr);
 		// generate the assignment based on the lhs, but pass along the rhs
@@ -32,12 +32,12 @@ public class AssignmentTemplate extends JavaScriptTemplate {
 		else if (expr.getLHS() instanceof Name && ((Name) expr.getLHS()).getNamedElement() instanceof Field)
 			field = (Field) ((Name) expr.getLHS()).getNamedElement();
 		if (field != null && field.getContainer() != null && field.getContainer() instanceof Type)
-			ctx.gen(genContainerBasedAssignment, (Type) field.getContainer(), ctx, out, expr, field);
+			ctx.invoke(genContainerBasedAssignment, (Type) field.getContainer(), ctx, out, expr, field);
 		else
-			genAssignment(expr, ctx, out, args);
+			genAssignment(expr, ctx, out);
 	}
 
-	public void genAssignment(Assignment expr, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genAssignment, expr.getLHS(), ctx, out, expr.getRHS());
+	public void genAssignment(Assignment expr, Context ctx, TabbedWriter out) {
+		ctx.invoke(genAssignment, expr.getLHS(), ctx, out, expr.getRHS());
 	}
 }

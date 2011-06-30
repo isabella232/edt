@@ -30,10 +30,10 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class EGLClassTemplate extends JavaScriptTemplate {
 
-	public void validateClassBody(EGLClass part, Context ctx, Object... args) {
-		ctx.validate(validateUsedParts, part, ctx, args);
-		ctx.validate(validateFields, part, ctx, args);
-		ctx.validate(validateFunctions, part, ctx, args);
+	public void validateClassBody(EGLClass part, Context ctx) {
+		ctx.invoke(validateUsedParts, part, ctx);
+		ctx.invoke(validateFields, part, ctx);
+		ctx.invoke(validateFunctions, part, ctx);
 		addNamespaceMap(part, ctx);
 	}
 
@@ -56,55 +56,55 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		}
 		ctx.addNamespace(namespace, localName, part.getFullyQualifiedName());
 	}
-	public void validateUsedParts(EGLClass part, Context ctx, Object... args) {
+	public void validateUsedParts(EGLClass part, Context ctx) {
 		for (Part item : IRUtils.getReferencedPartsFor(part)) {
-			ctx.validate(validateUsedPart, part, ctx, item);
+			ctx.invoke(validateUsedPart, part, ctx, item);
 		}
 	}
 
-	public void validateUsedPart(EGLClass part, Context ctx, Object... args) {
-		ctx.validate(validate, (Part) args[0], ctx, args);
+	public void validateUsedPart(EGLClass part, Context ctx, Part arg) {
+		ctx.invoke(validate, arg, ctx);
 	}
 
-	public void validateFields(EGLClass part, Context ctx, Object... args) {
+	public void validateFields(EGLClass part, Context ctx) {
 		for (Field field : part.getFields()) {
-			ctx.validate(validateField, part, ctx, field);
+			ctx.invoke(validateField, part, ctx, field);
 		}
 	}
 
-	public void validateField(EGLClass part, Context ctx, Object... args) {
-		ctx.validate(validate, (Field) args[0], ctx, args);
+	public void validateField(EGLClass part, Context ctx, Field arg) {
+		ctx.invoke(validate, arg, ctx);
 	}
 
-	public void validateFunctions(EGLClass part, Context ctx, Object... args) {
+	public void validateFunctions(EGLClass part, Context ctx) {
 		for (Function function : part.getFunctions()) {
-			ctx.validate(validateFunction, part, ctx, function);
+			ctx.invoke(validateFunction, part, ctx, function);
 		}
 	}
 
-	public void validateFunction(EGLClass part, Context ctx, Object... args) {
-		ctx.validate(validate, (Function) args[0], ctx, args);
+	public void validateFunction(EGLClass part, Context ctx, Function arg) {
+		ctx.invoke(validate, arg, ctx);
 	}
 
-	public void genClassHeader(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genClassHeader(EGLClass part, Context ctx, TabbedWriter out) {
 		out.print("egl.defineClass(");
 		out.print(singleQuoted(part.getPackageName().toLowerCase()));
 		out.print(", ");
 		out.print(quoted(part.getName()));
 		out.print(", ");
-		ctx.gen(genSuperClass, part, ctx, out, args);
+		ctx.invoke(genSuperClass, part, ctx, out);
 		out.print(", ");
 		out.println("{");
 	}
 
-	public void genClassBody(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genConstructors, part, ctx, out, args);
+	public void genClassBody(EGLClass part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genConstructors, part, ctx, out);
 		out.println(",");
-		ctx.gen(genSetEmptyMethods, part, ctx, out, args);
+		ctx.invoke(genSetEmptyMethods, part, ctx, out);
 		out.println(",");
-		ctx.gen(genInitializeMethods, part, ctx, out, args);
+		ctx.invoke(genInitializeMethods, part, ctx, out);
 		out.println(",");
-		ctx.gen(genCloneMethods, part, ctx, out, args);
+		ctx.invoke(genCloneMethods, part, ctx, out);
 		// out.println(",");
 		// genGetFieldSignaturesMethod(part, ctx, out, args);
 		// out.println(",");
@@ -115,104 +115,104 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		// genToJSONMethod(part, ctx, out, args);
 		// out.println(",");
 		out.println(",");
-		ctx.gen(genXmlAnnotations, part, ctx, out, args);
+		ctx.invoke(genXmlAnnotations, part, ctx, out);
 		out.println(",");
-		ctx.gen(genNamespaceMap, part, ctx, out, args);
-		ctx.gen(genFunctions, part, ctx, out, args);
-		ctx.gen(genFields, part, ctx, out, args);
-		ctx.gen(genGetterSetters, part, ctx, out, args);
+		ctx.invoke(genNamespaceMap, part, ctx, out);
+		ctx.invoke(genFunctions, part, ctx, out);
+		ctx.invoke(genFields, part, ctx, out);
+		ctx.invoke(genGetterSetters, part, ctx, out);
 	}
 
-	public void genFields(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genFields(EGLClass part, Context ctx, TabbedWriter out) {
 		for (Field field : part.getFields()) {
-			ctx.gen(genField, part, ctx, out, field);
+			ctx.invoke(genField, part, ctx, out, field);
 		}
 	}
 
-	public void genField(EGLClass part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genField(EGLClass part, Context ctx, TabbedWriter out, Field arg) {}
 
-	public void genConstructors(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genConstructor, part, ctx, out, args);
+	public void genConstructors(EGLClass part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genConstructor, part, ctx, out);
 	}
 
-	public void genConstructor(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genConstructor(EGLClass part, Context ctx, TabbedWriter out) {
 		// Generate default constructor
 		out.print(quoted("constructor"));
 		out.println(": function() {");
-		ctx.gen(genLibraries, part, ctx, out, args);
+		ctx.invoke(genLibraries, part, ctx, out);
 		out.println("this.eze$$setInitial();");
 		out.println("}");
 	}
 
 	@SuppressWarnings("unchecked")
-	public void genLibraries(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genLibraries(EGLClass part, Context ctx, TabbedWriter out) {
 		List<Library> libraries = (List<Library>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed);
 		for (Library library : libraries) {
-			ctx.gen(genLibrary, part, ctx, out, library);
+			ctx.invoke(genLibrary, part, ctx, out, library);
 		}
 	}
 	
-	public void genLibrary(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInstantiation, args[0], ctx, out, args);
+	public void genLibrary(EGLClass part, Context ctx, TabbedWriter out, Library arg) {
+		ctx.invoke(genInstantiation, arg, ctx, out);
 		out.println(";");
 	}
 	
-	public void genSetEmptyMethods(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genSetEmptyMethods(EGLClass part, Context ctx, TabbedWriter out) {
 		out.print(quoted("eze$$setEmpty"));
 		out.println(": function() {");
-		ctx.gen(genSetEmptyMethodBody, part, ctx, out, args);
+		ctx.invoke(genSetEmptyMethodBody, part, ctx, out);
 		out.println("}");
 	}
 
-	public void genSetEmptyMethodBody(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genSetEmptyMethodBody(EGLClass part, Context ctx, TabbedWriter out) {
 		for (Field field : part.getFields()) {
-			ctx.gen(genSetEmptyMethod, part, ctx, out, field);
+			ctx.invoke(genSetEmptyMethod, part, ctx, out, field);
 		}
 	}
 
-	public void genSetEmptyMethod(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genSetEmptyMethod(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
 		out.print("this.");
-		ctx.gen(genName, ((Field) args[0]), ctx, out, args);
+		ctx.invoke(genName, arg, ctx, out);
 		out.print(" = ");
-		ctx.gen(genInitialization, ((Field) args[0]), ctx, out, args);
+		ctx.invoke(genInitialization, arg, ctx, out);
 		out.println(";");
 	}
 
-	public void genInitializeMethods(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genInitializeMethods(EGLClass part, Context ctx, TabbedWriter out) {
 		out.print(quoted("eze$$setInitial"));
 		out.println(": function() {");
-		ctx.gen(genInitializeMethodBody, part, ctx, out, args);
+		ctx.invoke(genInitializeMethodBody, part, ctx, out);
 		out.println("};");
 	}
 
-	public void genInitializeMethodBody(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genInitializeMethodBody(EGLClass part, Context ctx, TabbedWriter out) {
 		// TODO sbg Not sure whether we need this out.println("eze$setEmpty();");
 		for (Field field : part.getFields()) {
-			ctx.gen(genInitializeMethod, part, ctx, out, field);
+			ctx.invoke(genInitializeMethod, part, ctx, out, field);
 		}
 	}
 
-	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
-		if (((Field) args[0]).getInitializerStatements() != null)
-			ctx.gen(genStatementNoBraces, ((Field) args[0]).getInitializerStatements(), ctx, out, args);
+	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
+		if (arg.getInitializerStatements() != null)
+			ctx.invoke(genStatementNoBraces, arg.getInitializerStatements(), ctx, out);
 		else {
-			if (((Field) args[0]).getContainer() != null && ((Field) args[0]).getContainer() instanceof Type)
-				ctx.gen(genQualifier, ((Field) args[0]).getContainer(), ctx, out, args);
-			ctx.gen(genName, ((Field) args[0]), ctx, out, args);
+			if (arg.getContainer() != null && arg.getContainer() instanceof Type)
+				ctx.invoke(genQualifier, arg.getContainer(), ctx, out, arg);
+			ctx.invoke(genName, arg, ctx, out);
 			out.print(" = ");
-			ctx.gen(genInitialization, ((Field) args[0]), ctx, out, args);
+			ctx.invoke(genInitialization, arg, ctx, out);
 			out.println(";");
 		}
 	}
 
-	public void genCloneMethods(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genCloneMethods(EGLClass part, Context ctx, TabbedWriter out) {
 		out.print(quoted("eze$$clone"));
 		out.println(": function() {");
-		ctx.gen(genCloneMethodBody, part, ctx, out, args);
+		ctx.invoke(genCloneMethodBody, part, ctx, out);
 		out.println("}");
 	}
 
-	public void genCloneMethodBody(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genCloneMethodBody(EGLClass part, Context ctx, TabbedWriter out) {
 		String temp1 = "ezert$$1";
 		String temp2 = "ezert$$2";
 		out.print("var ");
@@ -221,7 +221,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.print("var ");
 		out.print(temp2);
 		out.print(" = ");
-		ctx.gen(genInstantiation, part, ctx, out, args);
+		ctx.invoke(genInstantiation, part, ctx, out);
 		out.println(";");
 
 		out.print(temp2);
@@ -232,7 +232,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 
 		// clone fields
 		for (Field field : part.getFields()) {
-			ctx.gen(genCloneMethod, part, ctx, out, field);
+			ctx.invoke(genCloneMethod, part, ctx, out, field);
 		}
 
 		out.print(temp2);
@@ -245,50 +245,50 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.println(";");
 	}
 
-	public void genCloneMethod(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genCloneMethod(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
 		String temp1 = "ezert$$1";
 		String temp2 = "ezert$$2";
 		out.print(temp2);
 		out.print(".");
-		ctx.gen(genName, ((Field) args[0]), ctx, out, args);
+		ctx.invoke(genName, arg, ctx, out);
 		out.print(" = ");
 		out.print(temp1);
 		out.print(".");
-		ctx.gen(genName, ((Field) args[0]), ctx, out, args);
+		ctx.invoke(genName, arg, ctx, out);
 		out.println(";");
 	}
 
-	public void genGetterSetters(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genGetterSetters(EGLClass part, Context ctx, TabbedWriter out) {
 		String delim = ",";
 		for (Field field : part.getFields()) {
 			out.print(delim);
-			ctx.gen(genGetterSetter, part, ctx, out, field);
+			ctx.invoke(genGetterSetter, part, ctx, out, field);
 		}
 	}
 
 	// we only generate getter and setters for fields within records or libraries, so do nothing if it gets back here
-	public void genGetterSetter(EGLClass part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genGetterSetter(EGLClass part, Context ctx, TabbedWriter out, Field arg) {}
 
-	public void genFunctions(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genFunctions(EGLClass part, Context ctx, TabbedWriter out) {
 		for (Function function : part.getFunctions()) {
-			ctx.gen(genFunction, part, ctx, out, function);
+			ctx.invoke(genFunction, part, ctx, out, function);
 		}
 	}
 
-	public void genFunction(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genFunction(EGLClass part, Context ctx, TabbedWriter out, Function arg) {
 		out.println(",");
-		ctx.gen(genDeclaration, (Function) args[0], ctx, out, args);
+		ctx.invoke(genDeclaration, arg, ctx, out);
 	}
 
-	public void genAdditionalConstructorParams(EGLClass part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genAdditionalConstructorParams(EGLClass part, Context ctx, TabbedWriter out) {}
 
-	public void genAdditionalSuperConstructorArgs(EGLClass part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genAdditionalSuperConstructorArgs(EGLClass part, Context ctx, TabbedWriter out) {}
 
-	public void genDeclaration(EGLClass part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genDeclaration(EGLClass part, Context ctx, TabbedWriter out) {}
 
-	public void genSuperClass(EGLClass part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genSuperClass(EGLClass part, Context ctx, TabbedWriter out) {}
 
-	public void genXmlAnnotations(EGLClass part, Context ctx, TabbedWriter out, Object... args){
+	public void genXmlAnnotations(EGLClass part, Context ctx, TabbedWriter out){
 		out.print(quoted("eze$$getXmlPartAnnotations"));
 		out.println(": function() {");
 		//create the XMLAnnotationMap
@@ -352,13 +352,13 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 					field.isStatic()) {
 				continue;
 			}
-			ctx.gen("genXmlField", field, ctx, out, Integer.valueOf(idx));
+			ctx.invoke(genXmlField, field, ctx, out, Integer.valueOf(idx));
 			idx++;
 		}		
 		out.println("return fields;");
 		out.println("}");
 	}
-	public void genNamespaceMap(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genNamespaceMap(EGLClass part, Context ctx, TabbedWriter out) {
 		out.print(quoted("eze$$resolvePart"));
 		out.println(": function(/*string*/ namespace, /*string*/ localName) {");
 		out.println("if(this.namespaceMap == undefined){");

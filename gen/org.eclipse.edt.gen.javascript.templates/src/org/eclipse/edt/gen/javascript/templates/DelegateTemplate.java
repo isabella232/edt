@@ -17,13 +17,13 @@ import org.eclipse.edt.mof.egl.Delegate;
 
 public class DelegateTemplate extends JavaScriptTemplate {
 
-	public void validateClassBody(Delegate part, Context ctx, Object... args) {}
+	public void validateClassBody(Delegate part, Context ctx) {}
 
-	public void genPart(Delegate part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genPart(Delegate part, Context ctx, TabbedWriter out) {}
 
-	public void genClassBody(Delegate part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassBody(Delegate part, Context ctx, TabbedWriter out) {}
 
-	public void genClassHeader(Delegate part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassHeader(Delegate part, Context ctx, TabbedWriter out) {}
 
-	public void genRuntimeTypeName(Delegate part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genRuntimeTypeName(Delegate part, Context ctx, TabbedWriter out, TypeNameKind arg) {}
 }

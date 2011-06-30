@@ -15,48 +15,49 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Type;
 
 public class ArrayAccessTemplate extends JavaScriptTemplate {
 
-	public void genAssignment(ArrayAccess expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genAssignment(ArrayAccess expr, Context ctx, TabbedWriter out, Expression arg) {
 		out.print("egl.checkNull(");
-		ctx.gen(genExpression, expr.getArray(), ctx, out, args);
+		ctx.invoke(genExpression, expr.getArray(), ctx, out);
 		out.print(")");
 		out.print("[");
-		ctx.gen(genExpression, expr.getArray(), ctx, out, args);
+		ctx.invoke(genExpression, expr.getArray(), ctx, out);
 		out.print(".checkIndex(");
-		ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
+		ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 		out.print(" - 1)]");
 	}
 
-	public void genExpression(ArrayAccess expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(ArrayAccess expr, Context ctx, TabbedWriter out) {
 		Field field = null;
 		if (((Name) expr.getArray()).getNamedElement() instanceof Field)
 			field = (Field) ((Name) expr.getArray()).getNamedElement();
 		if (field != null && field.getContainer() != null && field.getContainer() instanceof Type)
-			ctx.gen(genContainerBasedArrayAccess, (Type) field.getContainer(), ctx, out, expr, field);
+			ctx.invoke(genContainerBasedArrayAccess, (Type) field.getContainer(), ctx, out, expr, field);
 		else
-			genArrayAccess(expr, ctx, out, args);
+			genArrayAccess(expr, ctx, out);
 	}
 
-	public void genArrayAccess(ArrayAccess expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genArrayAccess(ArrayAccess expr, Context ctx, TabbedWriter out) {
 		if (((ArrayType) expr.getArray().getType()).elementsNullable()) {
 			out.print("egl.nullableCheckIndex(");
-			ctx.gen(genExpression, expr.getArray(), ctx, out, args);
+			ctx.invoke(genExpression, expr.getArray(), ctx, out);
 			out.print(", ");
-			ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
+			ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 			out.print(")");
 		} else {
 			out.print("egl.checkNull(");
-			ctx.gen(genExpression, expr.getArray(), ctx, out, args);
+			ctx.invoke(genExpression, expr.getArray(), ctx, out);
 			out.print(")");
 			out.print("[");
-			ctx.gen(genExpression, expr.getArray(), ctx, out, args);
+			ctx.invoke(genExpression, expr.getArray(), ctx, out);
 			out.print(".checkIndex(");
-			ctx.gen(genExpression, expr.getIndex(), ctx, out, args);
+			ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 			out.print(" - 1)]");
 		}
 	}

@@ -17,12 +17,13 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Enumeration;
+import org.eclipse.edt.mof.egl.Type;
 
 public class EnumerationTemplate extends JavaScriptTemplate {
 
-	public void validateClassBody(Enumeration part, Context ctx, Object... args) {}
+	public void validateClassBody(Enumeration part, Context ctx) {}
 
-	public void genClassBody(Enumeration part, Context ctx, TabbedWriter out, Object... args) {
+	public void genClassBody(Enumeration part, Context ctx, TabbedWriter out) {
 		// generate enumerated fields
 		List<EEnumLiteral> enums = part.getEntries();
 		if (enums != null && enums.size() != 0) {
@@ -31,13 +32,13 @@ public class EnumerationTemplate extends JavaScriptTemplate {
 				if (needsSeparator)
 					out.println(",");
 				needsSeparator = true;
-				ctx.gen(genName, literal, ctx, out, args);
+				ctx.invoke(genName, literal, ctx, out);
 				out.print("(" + literal.getValue() + ")");
 			}
 			out.println(";");
 		}
 		out.println("private final int value;");
-		ctx.gen(genClassName, part, ctx, out, args);
+		ctx.invoke(genClassName, (Type) part, ctx, out);
 		out.println("(int value) {");
 		out.println("\tthis.value = value;");
 		out.println("}");
@@ -46,17 +47,17 @@ public class EnumerationTemplate extends JavaScriptTemplate {
 		out.println("}");
 	}
 
-	public void genClassHeader(Enumeration part, Context ctx, TabbedWriter out, Object... args) {
+	public void genClassHeader(Enumeration part, Context ctx, TabbedWriter out) {
 		out.print("public enum ");
-		ctx.gen(genClassName, part, ctx, out, args);
+		ctx.invoke(genClassName, (Type) part, ctx, out);
 		out.println(" {");
 	}
 
-	public void genAccessor(Enumeration part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genClassName, part, ctx, out, args);
+	public void genAccessor(Enumeration part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genClassName, (Type) part, ctx, out);
 	}
 
-	public void genRuntimeTypeName(Enumeration part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genClassName, part, ctx, out, args);
+	public void genRuntimeTypeName(Enumeration part, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genClassName, (Type) part, ctx, out);
 	}
 }

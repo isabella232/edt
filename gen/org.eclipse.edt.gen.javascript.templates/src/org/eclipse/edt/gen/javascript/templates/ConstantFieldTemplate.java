@@ -17,21 +17,21 @@ import org.eclipse.edt.mof.egl.ConstantField;
 
 public class ConstantFieldTemplate extends JavaScriptTemplate {
 
-	public void genDeclaration(ConstantField field, Context ctx, TabbedWriter out, Object... args) {
+	public void genDeclaration(ConstantField field, Context ctx, TabbedWriter out) {
 		// process the field
 		out.print("private static final ");
-		ctx.gen(genRuntimeTypeName, field, ctx, out, args);
+		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavascriptPrimitive);
 		out.print(" ezeConst_");
-		ctx.gen(genName, field, ctx, out, args);
+		ctx.invoke(genName, field, ctx, out);
 		out.print(" = ");
-		ctx.gen(genInstantiation, field.getType(), ctx, out, field);
+		ctx.invoke(genInstantiation, field.getType(), ctx, out, field);
 		out.println(";");
 		out.print("public ");
-		ctx.gen(genRuntimeTypeName, field, ctx, out, args);
+		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavascriptPrimitive);
 		out.print(" ");
-		ctx.gen(genName, field, ctx, out, args);
+		ctx.invoke(genName, field, ctx, out);
 		out.print(" = ezeConst_");
-		ctx.gen(genName, field, ctx, out, args);
+		ctx.invoke(genName, field, ctx, out);
 		out.println(";");
 	}
 }

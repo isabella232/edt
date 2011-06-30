@@ -19,21 +19,21 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class MemberTemplate extends JavaScriptTemplate {
 
-	public void genDeclaration(Member field, Context ctx, TabbedWriter out, Object... args) {}
+	public void genDeclaration(Member field, Context ctx, TabbedWriter out) {}
 
-	public void genRuntimeTypeName(Member mbr, Context ctx, TabbedWriter out, Object... args) {
+	public void genRuntimeTypeName(Member mbr, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		if (mbr.getType() == null)
 			return;
 		else if (ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
 			&& ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
-			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavascriptObject, mbr);
+			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavascriptObject);
 		} else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()) && !mbr.isNullable() && TypeUtils.isValueType(mbr.getType()))
-			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavascriptPrimitive);
+			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavascriptPrimitive);
 		else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()))
-			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavascriptObject);
+			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavascriptObject);
 		else if (ctx.mapsToNativeType(mbr.getType().getClassifier()))
-			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.EGLInterface);
+			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.EGLInterface);
 		else
-			ctx.gen(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavascriptObject);
+			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavascriptObject);
 	}
 }

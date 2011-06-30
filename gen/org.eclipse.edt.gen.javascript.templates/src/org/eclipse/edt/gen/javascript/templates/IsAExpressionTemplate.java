@@ -17,9 +17,9 @@ import org.eclipse.edt.mof.egl.IsAExpression;
 
 public class IsAExpressionTemplate extends JavaScriptTemplate {
 
-	public void genExpression(IsAExpression expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(IsAExpression expr, Context ctx, TabbedWriter out) {
 		out.print("egl.isa(");
-		ctx.gen(genExpression, expr.getObjectExpr(), ctx, out, args);
+		ctx.invoke(genExpression, expr.getObjectExpr(), ctx, out);
 		out.print(", ");
 		out.print(quoted(expr.getEType().getTypeSignature()));
 		out.print(")");

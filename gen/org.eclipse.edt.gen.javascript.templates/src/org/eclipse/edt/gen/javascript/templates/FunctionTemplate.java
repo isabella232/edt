@@ -18,29 +18,29 @@ import org.eclipse.edt.mof.egl.Type;
 
 public class FunctionTemplate extends JavaScriptTemplate {
 
-	public void validate(Function function, Context ctx, Object... args) {
-		ctx.validate(validate, function.getStatementBlock(), ctx, args);
+	public void validate(Function function, Context ctx) {
+		ctx.invoke(validate, function.getStatementBlock(), ctx);
 	}
 
-	public void genDeclaration(Function function, Context ctx, TabbedWriter out, Object... args) {
+	public void genDeclaration(Function function, Context ctx, TabbedWriter out) {
 		out.print("\"");
-		genName(function, ctx, out, args);
+		genName(function, ctx, out);
 		out.print("\"");
 		out.print(": function(");
-		ctx.foreach(function.getParameters(), ',', genDeclaration, ctx, out, args);
+		ctx.foreach(function.getParameters(), ',', genDeclaration, ctx, out);
 		out.println(") {");
-		ctx.gen(genStatementNoBraces, function.getStatementBlock(), ctx, out, args);
+		ctx.invoke(genStatementNoBraces, function.getStatementBlock(), ctx, out);
 		out.println("}");
 	}
 
-	public void genAccessor(Function function, Context ctx, TabbedWriter out, Object... args) {
+	public void genAccessor(Function function, Context ctx, TabbedWriter out) {
 		if (function.getContainer() != null && function.getContainer() instanceof Type)
-			ctx.gen(genContainerBasedAccessor, (Type) function.getContainer(), ctx, out, function);
+			ctx.invoke(genContainerBasedAccessor, (Type) function.getContainer(), ctx, out, function);
 		else
-			ctx.gen(genName, function, ctx, out, args);
+			ctx.invoke(genName, function, ctx, out);
 	}
 
-	public void genName(Function function, Context ctx, TabbedWriter out, Object... args) {
-		ctx.genSuper(genName, Function.class, function, ctx, out, args);
+	public void genName(Function function, Context ctx, TabbedWriter out) {
+		ctx.invokeSuper(this, genName, function, ctx, out);
 	}
 }

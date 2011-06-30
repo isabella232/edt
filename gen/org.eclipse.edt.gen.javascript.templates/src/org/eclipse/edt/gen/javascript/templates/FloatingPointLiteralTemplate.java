@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.FloatingPointLiteral;
 
 public class FloatingPointLiteralTemplate extends JavaScriptTemplate {
 
-	public void genExpression(FloatingPointLiteral expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(FloatingPointLiteral expr, Context ctx, TabbedWriter out) {
 		out.print(stripLeadingZeroes(expr.getValue()));
 	}
 }

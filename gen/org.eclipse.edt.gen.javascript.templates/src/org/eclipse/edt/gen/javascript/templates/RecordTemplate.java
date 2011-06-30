@@ -19,7 +19,6 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -27,9 +26,9 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 public class RecordTemplate extends JavaScriptTemplate {
 
 	@SuppressWarnings("unchecked")
-	public void validate(Record part, Context ctx, Object... args) {
+	public void validate(Record part, Context ctx) {
 		// process anything else the superclass needs to do
-		ctx.validateSuper(validate, Record.class, part, ctx, args);
+		ctx.invokeSuper(this, validate, part, ctx);
 		// ignore adding this entry to the list, if it is the part we are currently generating
 		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
 			part.getFullyQualifiedName()))
@@ -48,7 +47,7 @@ public class RecordTemplate extends JavaScriptTemplate {
 			records.add(part);
 	}
 
-	public void genConstructor(Record part, Context ctx, TabbedWriter out, Object... args) {
+	public void genConstructor(Record part, Context ctx, TabbedWriter out) {
 		out.print(quoted("constructor"));
 		out.println(": function() {");
 		out.println("this.eze$$setInitial();");
@@ -60,53 +59,53 @@ public class RecordTemplate extends JavaScriptTemplate {
 		for (Field field : part.getFields()) {
 			if (TypeUtils.isReferenceType(field.getType()) || ctx.mapsToPrimitiveType(field.getType())) {
 				out.print("this.");
-				ctx.gen(genName, field, ctx, out, args);
+				ctx.invoke(genName, field, ctx, out);
 				out.print(" = ");
 				out.print("source.");
-				ctx.gen(genName, field, ctx, out, args);
+				ctx.invoke(genName, field, ctx, out);
 				out.println(";");
 			} else {
 				out.print("this.");
-				ctx.gen(genName, field, ctx, out, args);
+				ctx.invoke(genName, field, ctx, out);
 				out.print(".ezeCopy(");
 				out.print("source.");
-				ctx.gen(genName, field, ctx, out, args);
+				ctx.invoke(genName, field, ctx, out);
 				out.println(");");
 			}
 		}
 		out.println("}");
 	}
 
-	public void genInitializeMethods(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
+	public void genInitializeMethods(EGLClass part, Context ctx, TabbedWriter out) {
 		out.print(quoted("eze$$setInitial"));
 		out.println(": function() {");
 		out.println("this.eze$$setEmpty();");
-		ctx.gen(genInitializeMethodBody, part, ctx, out, args);
+		ctx.invoke(genInitializeMethodBody, part, ctx, out);
 		out.println("}");
 	}
 
-	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Object... args) {
-		if (((Field) args[0]).getInitializerStatements() != null) {
+	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
+		if (arg.getInitializerStatements() != null) {
 			out.print("this."); // TODO sbg likely NOT the right place
-			ctx.gen(genStatementNoBraces, ((Field) args[0]).getInitializerStatements(), ctx, out, args);
+			ctx.invoke(genStatementNoBraces, arg.getInitializerStatements(), ctx, out);
 		}
 	}
 
-	public void genAccessor(Record part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genName, part, ctx, out, args);
+	public void genAccessor(Record part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genName, part, ctx, out);
 	}
 
-	public void genRuntimeTypeName(Record part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genPartName, part, ctx, out, args);
+	public void genRuntimeTypeName(Record part, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genPartName, part, ctx, out);
 	}
 
-	public void genDefaultValue(Record part, Context ctx, TabbedWriter out, Object... args) {
+	public void genDefaultValue(Record part, Context ctx, TabbedWriter out) {
 		out.print("(");
-		genRuntimeTypeName(part, ctx, out, args);
+		genRuntimeTypeName(part, ctx, out, TypeNameKind.JavascriptPrimitive);
 		out.print(") null");
 	}
 
-	public void genSuperClass(Record type, Context ctx, TabbedWriter out, Object... args) {
+	public void genSuperClass(Record type, Context ctx, TabbedWriter out) {
 		// TODO: make a constant
 		out.print(quoted("egl.jsrt"));
 		out.print(", ");
@@ -114,21 +113,23 @@ public class RecordTemplate extends JavaScriptTemplate {
 		out.print(quoted("Record"));
 	}
 
-	public void genAssignment(Record type, Context ctx, TabbedWriter out, Object... args) {
-		if (((Expression) args[0]).isNullable()) {
-			ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
+	public void genAssignment(Record type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2) {
+		if (arg1.isNullable()) {
+			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(" = ");
 		}
-		ctx.gen(genExpression, (Expression) args[0], ctx, out, args);
+		ctx.invoke(genExpression, arg1, ctx, out);
 		out.print(".ezeCopy(");
-		ctx.gen(genExpression, (Expression) args[1], ctx, out, args);
+		ctx.invoke(genExpression, arg2, ctx, out);
 		out.print(")");
 	}
 
-	public void genGetterSetters(Record part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genGetterSetters(Record part, Context ctx, TabbedWriter out) {}
 
-	public void genQualifier(Library library, Context ctx, TabbedWriter out, Object... args) {
-		if ((args.length > 0) && (args[0] instanceof Expression) && (((Expression) args[0]).getQualifier() == null))
+	public void genQualifier(Record part, Context ctx, TabbedWriter out) {}
+	
+	public void genQualifier(Record part, Context ctx, TabbedWriter out, Expression arg) {
+		if (arg.getQualifier() == null)
 			out.print("this.");
 	}
 }

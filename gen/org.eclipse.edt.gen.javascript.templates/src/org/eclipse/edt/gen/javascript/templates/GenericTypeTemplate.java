@@ -17,12 +17,12 @@ import org.eclipse.edt.mof.egl.GenericType;
 
 public class GenericTypeTemplate extends JavaScriptTemplate {
 
-	public void genRuntimeTypeName(GenericType generic, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genRuntimeTypeName, generic.getClassifier(), ctx, out, args);
+	public void genRuntimeTypeName(GenericType generic, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genRuntimeTypeName, generic.getClassifier(), ctx, out, arg);
 		if (!generic.getTypeArguments().isEmpty()) {
 			out.print("<");
 			for (int i = 0; i < generic.getTypeArguments().size(); i++) {
-				ctx.gen(genRuntimeTypeName, generic.getTypeArguments().get(i), ctx, out, TypeNameKind.JavascriptObject);
+				ctx.invoke(genRuntimeTypeName, generic.getTypeArguments().get(i), ctx, out, TypeNameKind.JavascriptObject);
 			}
 			out.print(">");
 		}

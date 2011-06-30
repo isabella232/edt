@@ -17,13 +17,13 @@ import org.eclipse.edt.mof.egl.ArrayLiteral;
 
 public class ArrayLiteralTemplate extends JavaScriptTemplate {
 
-	public void genExpression(ArrayLiteral expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(ArrayLiteral expr, Context ctx, TabbedWriter out) {
 		out.print("[");
-		ctx.foreach(expr.getEntries(), ',', genExpression, ctx, out, args);
+		ctx.foreach(expr.getEntries(), ',', genExpression, ctx, out);
 		out.print("]");
 		out.print(".setType(");
 		out.print("\"");
-		ctx.gen(genSignature, expr.getEntries().get(0).getType(), ctx, out, expr.getEntries().get(0));
+		ctx.invoke(genSignature, expr.getEntries().get(0).getType(), ctx, out, expr.getEntries().get(0));
 		out.print("\"");
 		out.print(")");
 	}

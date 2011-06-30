@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.FunctionParameter;
 
 public class FunctionParameterTemplate extends JavaScriptTemplate {
 
-	public void genDeclaration(FunctionParameter decl, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genName, decl, ctx, out, args);
+	public void genDeclaration(FunctionParameter decl, Context ctx, TabbedWriter out) {
+		ctx.invoke(genName, decl, ctx, out);
 	}
 }

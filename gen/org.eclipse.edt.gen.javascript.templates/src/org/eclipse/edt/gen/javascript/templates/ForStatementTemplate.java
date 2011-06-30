@@ -18,10 +18,10 @@ import org.eclipse.edt.mof.egl.ForStatement;
 
 public class ForStatementTemplate extends JavaScriptTemplate {
 
-	public void genStatementBody(ForStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(ForStatement stmt, Context ctx, TabbedWriter out) {
 		if (stmt.getDeclarationExpression() != null) {
 			out.println("{");
-			ctx.gen(genDeclarationExpression, stmt.getDeclarationExpression(), ctx, out, args);
+			ctx.invoke(genDeclarationExpression, stmt.getDeclarationExpression(), ctx, out);
 		}
 		Label label = new Label(ctx, Label.LABEL_TYPE_FOR);
 		ctx.pushLabelStack(label);
@@ -29,38 +29,38 @@ public class ForStatementTemplate extends JavaScriptTemplate {
 			&& ((Boolean) ctx.getAttribute(stmt, org.eclipse.edt.gen.Constants.Annotation_statementNeedsLabel)).booleanValue())
 			out.print(label.getName() + ": ");
 		out.print("for (");
-		ctx.gen(genExpression, stmt.getCounterVariable(), ctx, out, args);
+		ctx.invoke(genExpression, stmt.getCounterVariable(), ctx, out);
 		out.print(" = ");
 		if (stmt.getFromExpression() != null)
-			ctx.gen(genExpression, stmt.getFromExpression(), ctx, out, args);
+			ctx.invoke(genExpression, stmt.getFromExpression(), ctx, out);
 		else
 			out.print("1");
 		out.print("; ");
-		ctx.gen(genExpression, stmt.getCounterVariable(), ctx, out, args);
+		ctx.invoke(genExpression, stmt.getCounterVariable(), ctx, out);
 		if (stmt.isIncrement())
 			out.print(" <= ");
 		else
 			out.print(" >= ");
-		ctx.gen(genExpression, stmt.getToExpression(), ctx, out, args);
+		ctx.invoke(genExpression, stmt.getToExpression(), ctx, out);
 		out.print("; ");
-		ctx.gen(genExpression, stmt.getCounterVariable(), ctx, out, args);
+		ctx.invoke(genExpression, stmt.getCounterVariable(), ctx, out);
 		if (stmt.isIncrement())
 			out.print(" += ");
 		else
 			out.print(" -= ");
 		if (stmt.getDeltaExpression() != null)
-			ctx.gen(genExpression, stmt.getDeltaExpression(), ctx, out, args);
+			ctx.invoke(genExpression, stmt.getDeltaExpression(), ctx, out);
 		else
 			out.print("1");
 		out.print(") ");
-		ctx.gen(genStatement, stmt.getBody(), ctx, out, args);
+		ctx.invoke(genStatement, stmt.getBody(), ctx, out);
 		if (stmt.getDeclarationExpression() != null)
 			out.println("}");
 		// now remove the label from the stack
 		ctx.popLabelStack();
 	}
 
-	public void genStatementEnd(ForStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementEnd(ForStatement stmt, Context ctx, TabbedWriter out) {
 		// we don't want a semi-colon
 	}
 }

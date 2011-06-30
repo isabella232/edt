@@ -18,17 +18,17 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class DelegateInvocationTemplate extends JavaScriptTemplate {
 
-	public void genExpression(DelegateInvocation expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(DelegateInvocation expr, Context ctx, TabbedWriter out) {
 		// first, make this expression's arguments compatible
 		IRUtils.makeCompatible(expr);
 		// then process the function invocation
 		if (expr.getQualifier() != null) {
-			ctx.gen(genExpression, expr.getQualifier(), ctx, out, args);
+			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
 			out.print(".");
 		}
-		ctx.gen(genExpression, expr.getExpression(), ctx, out, args);
+		ctx.invoke(genExpression, expr.getExpression(), ctx, out);
 		out.print("(");
-		ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out, args);
+		ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out);
 		out.print(")");
 	}
 }

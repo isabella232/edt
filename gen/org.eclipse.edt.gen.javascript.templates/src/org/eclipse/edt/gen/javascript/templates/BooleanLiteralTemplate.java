@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.BooleanLiteral;
 
 public class BooleanLiteralTemplate extends JavaScriptTemplate {
 
-	public void genExpression(BooleanLiteral expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(BooleanLiteral expr, Context ctx, TabbedWriter out) {
 		out.print(expr.booleanValue().toString());
 	}
 }

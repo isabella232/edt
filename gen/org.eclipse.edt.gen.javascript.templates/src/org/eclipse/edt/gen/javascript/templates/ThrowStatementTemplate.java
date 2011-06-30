@@ -17,8 +17,8 @@ import org.eclipse.edt.mof.egl.ThrowStatement;
 
 public class ThrowStatementTemplate extends JavaScriptTemplate {
 
-	public void genStatementBody(ThrowStatement stmt, Context ctx, TabbedWriter out, Object... args) {
+	public void genStatementBody(ThrowStatement stmt, Context ctx, TabbedWriter out) {
 		out.print("throw ");
-		ctx.gen(genExpression, stmt.getException(), ctx, out, args);
+		ctx.invoke(genExpression, stmt.getException(), ctx, out);
 	}
 }

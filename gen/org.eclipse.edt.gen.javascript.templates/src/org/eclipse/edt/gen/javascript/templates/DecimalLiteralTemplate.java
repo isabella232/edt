@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.DecimalLiteral;
 
 public class DecimalLiteralTemplate extends JavaScriptTemplate {
 
-	public void genExpression(DecimalLiteral expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(DecimalLiteral expr, Context ctx, TabbedWriter out) {
 		out.print("new egl.javascript.BigDecimal(");
 		out.print(quoted(stripLeadingZeroes(expr.getValue())));
 		out.print(")");

@@ -22,9 +22,9 @@ import org.eclipse.edt.mof.egl.Part;
 public class DataTableTemplate extends JavaScriptTemplate {
 
 	@SuppressWarnings("unchecked")
-	public void validate(DataTable dataTable, Context ctx, Object... args) {
+	public void validate(DataTable dataTable, Context ctx) {
 		// process anything else the superclass needs to do
-		ctx.validateSuper(validate, DataTable.class, dataTable, ctx, args);
+		ctx.invokeSuper(this, validate, dataTable, ctx);
 		// ignore adding this entry to the list, if it is the part we are currently generating
 		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
 			dataTable.getFullyQualifiedName()))
@@ -43,13 +43,13 @@ public class DataTableTemplate extends JavaScriptTemplate {
 			dataTables.add(dataTable);
 	}
 
-	public void genClassBody(DataTable dataTable, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassBody(DataTable dataTable, Context ctx, TabbedWriter out) {}
 
-	public void genSuperClass(DataTable dataTable, Context ctx, TabbedWriter out, Object... args) {
+	public void genSuperClass(DataTable dataTable, Context ctx, TabbedWriter out) {
 		out.print("ExecutableBase");
 	}
 
-	public void genAccessor(DataTable dataTable, Context ctx, TabbedWriter out, Object... args) {}
+	public void genAccessor(DataTable dataTable, Context ctx, TabbedWriter out) {}
 
-	public void genConstructor(DataTable dataTable, Context ctx, TabbedWriter out, Object... args) {}
+	public void genConstructor(DataTable dataTable, Context ctx, TabbedWriter out) {}
 }

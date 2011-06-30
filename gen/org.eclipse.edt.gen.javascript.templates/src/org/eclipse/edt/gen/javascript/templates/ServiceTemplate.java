@@ -17,26 +17,26 @@ import org.eclipse.edt.mof.egl.Service;
 
 public class ServiceTemplate extends JavaScriptTemplate {
 
-	public void genSuperClass(Service service, Context ctx, TabbedWriter out, Object... args) {
+	public void genSuperClass(Service service, Context ctx, TabbedWriter out) {
 		// TODO handle more generally when stereotypes are involved
 		out.print("ExecutableBase");
 	}
 
-	public void genConstructor(Service service, Context ctx, TabbedWriter out, Object... args) {
+	public void genConstructor(Service service, Context ctx, TabbedWriter out) {
 		// Generate RunUnit constructor
 		out.print("public ");
-		ctx.gen(genClassName, service, ctx, out, args);
+		ctx.invoke(genClassName, service, ctx, out);
 		out.print("( RunUnit ru");
-		ctx.gen(genAdditionalConstructorParams, service, ctx, out, args);
+		ctx.invoke(genAdditionalConstructorParams, service, ctx, out);
 		out.println(" ) {");
 		out.print("super( ru");
-		ctx.gen(genAdditionalSuperConstructorArgs, service, ctx, out, args);
+		ctx.invoke(genAdditionalSuperConstructorArgs, service, ctx, out);
 		out.println(" );");
 		out.println("ezeInitialize();");
 		out.println("}");
 	}
 
-	public void genRuntimeTypeName(Service service, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genPartName, service, ctx, out, args);
+	public void genRuntimeTypeName(Service service, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genPartName, service, ctx, out);
 	}
 }

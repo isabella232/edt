@@ -17,19 +17,19 @@ import org.eclipse.edt.mof.egl.ExternalType;
 
 public class ExternalTypeTemplate extends JavaScriptTemplate {
 
-	public void validateClassBody(ExternalType part, Context ctx, Object... args) {}
+	public void validateClassBody(ExternalType part, Context ctx) {}
 
-	public void genPart(ExternalType part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genPart(ExternalType part, Context ctx, TabbedWriter out) {}
 
-	public void genClassBody(ExternalType part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassBody(ExternalType part, Context ctx, TabbedWriter out) {}
 
-	public void genClassHeader(ExternalType part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassHeader(ExternalType part, Context ctx, TabbedWriter out) {}
 
-	public void genAccessor(ExternalType part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genPartName, part, ctx, out, args);
+	public void genAccessor(ExternalType part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genPartName, part, ctx, out);
 	}
 
-	public void genRuntimeTypeName(ExternalType part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genPartName, part, ctx, out, args);
+	public void genRuntimeTypeName(ExternalType part, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genPartName, part, ctx, out);
 	}
 }

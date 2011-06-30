@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.NullLiteral;
 
 public class NullLiteralTemplate extends JavaScriptTemplate {
 
-	public void genExpression(NullLiteral expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(NullLiteral expr, Context ctx, TabbedWriter out) {
 		out.print("null");
 	}
 }

@@ -24,29 +24,29 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class FieldTemplate extends JavaScriptTemplate {
 
-	public void validate(Field field, Context ctx, Object... args) {
-		ctx.validate(validate, field.getType(), ctx, args);
+	public void validate(Field field, Context ctx) {
+		ctx.invoke(validate, field.getType(), ctx);
 	}
 
-	public void genDeclaration(Field field, Context ctx, TabbedWriter out, Object... args) {
+	public void genDeclaration(Field field, Context ctx, TabbedWriter out) {
 		// process the field
-		ctx.genSuper(genDeclaration, Field.class, field, ctx, out, args);
-		ctx.gen(genRuntimeTypeName, field, ctx, out, args);
+		ctx.invokeSuper(this, genDeclaration, field, ctx, out);
+		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavascriptPrimitive);
 		out.print(" ");
-		ctx.gen(genName, field, ctx, out, args);
+		ctx.invoke(genName, field, ctx, out);
 		out.println(";");
 	}
 
-	public void genQualifier(Field field, Context ctx, TabbedWriter out, Object... args) {
+	public void genQualifier(Field field, Context ctx, TabbedWriter out) {
 		if (field.getContainer() != null && field.getContainer() instanceof Type)
-			ctx.gen(genQualifier, field.getContainer(), ctx, out, args);
+			ctx.invoke(genQualifier, field.getContainer(), ctx, out, field);
 	}
 
-	public void genInstantiation(Field field, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genInstantiation, field.getType(), ctx, out, field);
+	public void genInstantiation(Field field, Context ctx, TabbedWriter out) {
+		ctx.invoke(genInstantiation, field.getType(), ctx, out, field);
 	}
 
-	public void genInitialization(Field field, Context ctx, TabbedWriter out, Object... args) {
+	public void genInitialization(Field field, Context ctx, TabbedWriter out) {
 		// is this an inout or out temporary variable to a function. if so, then we need to default or instantiate for
 		// our parms, and set to null for inout
 		if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
@@ -56,27 +56,27 @@ public class FieldTemplate extends JavaScriptTemplate {
 			if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) == ParameterKind.PARM_OUT) {
 				out.print(Constants.JSRT_EGL_NAMESPACE+ctx.getNativeMapping("egl.lang.AnyObject")+".ezeWrap(");
 				if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
-					ctx.gen(genDefaultValue, field.getType(), ctx, out, field);
+					ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
 				else
-					ctx.gen(genInstantiation, field.getType(), ctx, out, field);
+					ctx.invoke(genInstantiation, field.getType(), ctx, out, field);
 				out.print(")");
 			} else
 				out.print("null");
 		} else {
 			if (field.isNullable() || TypeUtils.isReferenceType(field.getType()))
-				ctx.gen(genDefaultValue, field.getType(), ctx, out, field);
+				ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
 			else if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
-				ctx.gen(genDefaultValue, field.getType(), ctx, out, field);
+				ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
 			else
-				ctx.gen(genInstantiation, field.getType(), ctx, out, field);
+				ctx.invoke(genInstantiation, field.getType(), ctx, out, field);
 		}
 	}
 
-	public void genGetter(Field field, Context ctx, TabbedWriter out, Object... args) {
+	public void genGetter(Field field, Context ctx, TabbedWriter out) {
 		out.print(quoted(genGetterSetterFunctionName("get", field)));
 		out.println(": function() {");
 		out.print("return ");
-		ctx.gen(genName, field, ctx, out, args);
+		ctx.invoke(genName, field, ctx, out);
 		out.println(";");
 		out.println("}");
 	}
@@ -89,16 +89,16 @@ public class FieldTemplate extends JavaScriptTemplate {
 		return name.toString();
 	}
 	
-	public void genSetter(Field field, Context ctx, TabbedWriter out, Object... args) {
+	public void genSetter(Field field, Context ctx, TabbedWriter out) {
 		out.print(quoted(genGetterSetterFunctionName("set", field)));
 		out.println(": function(ezeValue) {");
 		out.print("this.");
-		ctx.gen(genName, field, ctx, out, args);
+		ctx.invoke(genName, field, ctx, out);
 		out.println(" = ezeValue;");
 		out.println("}");
 	}
 	
-	public void genXmlField(Field field, Context ctx, TabbedWriter out, Object... args){
+	public void genXmlField(Field field, Context ctx, TabbedWriter out, Integer arg){
 		//create the XMLAnnotationMap
 		out.println("xmlAnnotations = {};");
 		//add attribute or element
@@ -150,7 +150,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 			}
 			out.println(");");
 		}
-		out.print("fields[" + ((Integer)args[0]).toString() + "] =");
+		out.print("fields[" + arg.toString() + "] =");
 		out.print("new egl.egl.core.xml.XMLFieldInfo(");
 		Annotation annot = field.getAnnotation("egl.idl.java.JavaProperty");
 		if(annot != null){
@@ -161,15 +161,15 @@ public class FieldTemplate extends JavaScriptTemplate {
 		}
 		else{
 			out.print("\"");
-			ctx.gen(genName, field, ctx, out, args);
+			ctx.invoke(genName, field, ctx, out);
 			out.print("\", ");
 			out.print("\"");
-			ctx.gen(genName, field, ctx, out, args);
+			ctx.invoke(genName, field, ctx, out);
 			out.print("\", \"");
 		}
-		ctx.gen(genSignature, field.getType(), ctx, out, args);
+		ctx.invoke(genSignature, field.getType(), ctx, out, arg);
 		out.print("\", ");
-		ctx.gen(genRuntimeTypeName, field.getType(), ctx, out, TypeNameKind.JavascriptImplementation);
+		ctx.invoke(genRuntimeTypeName, field.getType(), ctx, out, TypeNameKind.JavascriptImplementation);
 		out.println(", xmlAnnotations);");
 	}
 	public static String getXMLName(Field field)

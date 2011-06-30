@@ -17,11 +17,11 @@ import org.eclipse.edt.mof.egl.AnnotationType;
 
 public class AnnotationTypeTemplate extends JavaScriptTemplate {
 
-	public void validateClassBody(AnnotationType part, Context ctx, Object... args) {}
+	public void validateClassBody(AnnotationType part, Context ctx) {}
 
-	public void genPart(AnnotationType part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genPart(AnnotationType part, Context ctx, TabbedWriter out) {}
 
-	public void genClassBody(AnnotationType part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassBody(AnnotationType part, Context ctx, TabbedWriter out) {}
 
-	public void genClassHeader(AnnotationType part, Context ctx, TabbedWriter out, Object... args) {}
+	public void genClassHeader(AnnotationType part, Context ctx, TabbedWriter out) {}
 }

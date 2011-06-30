@@ -17,15 +17,15 @@ import org.eclipse.edt.mof.egl.Handler;
 
 public class HandlerTemplate extends JavaScriptTemplate {
 
-	public void genSuperClass(Handler type, Context ctx, TabbedWriter out, Object... args) {
+	public void genSuperClass(Handler type, Context ctx, TabbedWriter out) {
 		out.print("ExecutableBase");
 	}
 
-	public void genConstructor(Handler type, Context ctx, TabbedWriter out, Object... args) {}
+	public void genConstructor(Handler type, Context ctx, TabbedWriter out) {}
 
-	public void genConstructorOptions(Handler type, Context ctx, TabbedWriter out, Object... args) {}
+	public void genConstructorOptions(Handler type, Context ctx, TabbedWriter out) {}
 
-	public void genRuntimeTypeName(Handler type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genPartName, type, ctx, out, args);
+	public void genRuntimeTypeName(Handler type, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genPartName, type, ctx, out);
 	}
 }

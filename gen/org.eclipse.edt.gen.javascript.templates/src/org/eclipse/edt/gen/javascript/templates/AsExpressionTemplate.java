@@ -18,10 +18,10 @@ import org.eclipse.edt.mof.egl.Type;
 
 public class AsExpressionTemplate extends JavaScriptTemplate {
 
-	public void genExpression(AsExpression asExpr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(AsExpression asExpr, Context ctx, TabbedWriter out) {
 		if (asExpr.getConversionOperation() != null)
-			ctx.gen(genConversionOperation, (Type) asExpr.getConversionOperation().getContainer(), ctx, out, asExpr);
+			ctx.invoke(genConversionOperation, (Type) asExpr.getConversionOperation().getContainer(), ctx, out, asExpr);
 		else
-			ctx.gen(genConversionOperation, asExpr.getType(), ctx, out, asExpr);
+			ctx.invoke(genConversionOperation, asExpr.getType(), ctx, out, asExpr);
 	}
 }

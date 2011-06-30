@@ -17,12 +17,12 @@ import org.eclipse.edt.mof.egl.IntervalType;
 
 public class IntervalTypeTemplate extends JavaScriptTemplate {
 
-	public void genConstructorOptions(IntervalType type, Context ctx, TabbedWriter out, Object... args) {
+	public void genConstructorOptions(IntervalType type, Context ctx, TabbedWriter out) {
 		// we need to skip over the 1st comma and space
 		out.print(generateOptions(type).substring(2));
 	}
 
-	public void genTypeDependentOptions(IntervalType type, Context ctx, TabbedWriter out, Object... args) {
+	public void genTypeDependentOptions(IntervalType type, Context ctx, TabbedWriter out) {
 		out.print(generateOptions(type));
 	}
 

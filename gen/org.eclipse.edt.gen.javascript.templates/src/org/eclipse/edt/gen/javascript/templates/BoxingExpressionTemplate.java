@@ -18,16 +18,16 @@ import org.eclipse.edt.mof.egl.Type;
 
 public class BoxingExpressionTemplate extends JavaScriptTemplate {
 
-	public void genExpression(BoxingExpression expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(BoxingExpression expr, Context ctx, TabbedWriter out) {
 		out.print("{");
 		out.print(eze$$value);
 		out.print(" : ");
-		ctx.gen(genExpression, expr.getExpr(), ctx, out, args);
+		ctx.invoke(genExpression, expr.getExpr(), ctx, out);
 		out.print(", ");
 		out.print(eze$$signature);
 		out.print(" : ");
 		out.print("\"");
-		ctx.gen(genSignature, (Type) expr.getExpr().getType(), ctx, out, expr.getExpr());
+		ctx.invoke(genSignature, (Type) expr.getExpr().getType(), ctx, out, expr.getExpr());
 		out.print("\"");
 		out.print("}");
 	}

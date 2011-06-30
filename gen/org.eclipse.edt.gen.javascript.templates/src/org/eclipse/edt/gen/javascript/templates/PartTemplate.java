@@ -30,24 +30,24 @@ public class PartTemplate extends JavaScriptTemplate {
 
 	IRUtils utils = new IRUtils();
 
-	public void validatePart(Part part, Context ctx, Object... args) {
+	public void validatePart(Part part, Context ctx) {
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partDataTablesUsed, new ArrayList<DataTable>());
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partFormsUsed, new ArrayList<Form>());
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed, new ArrayList<Library>());
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partRecordsUsed, new ArrayList<Record>());
-		ctx.validate(validateClassBody, part, ctx, args);
+		ctx.invoke(validateClassBody, part, ctx);
 	}
 
-	public void genPart(Part part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genClassHeader, part, ctx, out, args);
+	public void genPart(Part part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genClassHeader, part, ctx, out);
 		out.pushIndent();
-		ctx.gen(genClassBody, part, ctx, out, args);
+		ctx.invoke(genClassBody, part, ctx, out);
 		out.println("}");
 		out.popIndent();
 		out.println(");");
 	}
 
-	public void genPartName(Part part, Context ctx, TabbedWriter out, Object... args) {
+	public void genPartName(Part part, Context ctx, TabbedWriter out) {
 		if (ctx.mapsToNativeType(part))
 			out.print(ctx.getNativeImplementationMapping(part));
 		else
@@ -55,7 +55,7 @@ public class PartTemplate extends JavaScriptTemplate {
 																									// from RBD
 	}
 
-	public void genClassName(Part part, Context ctx, TabbedWriter out, Object... args) {
+	public void genClassName(Part part, Context ctx, TabbedWriter out) {
 		// Data tables might have an alias property.
 		String nameOrAlias;
 		Annotation annot = part.getAnnotation(IEGLConstants.PROPERTY_ALIAS);
@@ -66,7 +66,7 @@ public class PartTemplate extends JavaScriptTemplate {
 		out.print(Aliaser.getAlias(nameOrAlias));
 	}
 
-	public void genSuperClass(Part part, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genSuperClass, part, ctx, out, args);
+	public void genSuperClass(Part part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genSuperClass, part, ctx, out);
 	}
 }

@@ -17,10 +17,10 @@ import org.eclipse.edt.mof.egl.CallStatement;
 
 public class CallStatementTemplate extends JavaScriptTemplate {
 
-	public void genStatementBody(CallStatement stmt, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genExpression, stmt.getInvocationTarget(), ctx, out, args);
+	public void genStatementBody(CallStatement stmt, Context ctx, TabbedWriter out) {
+		ctx.invoke(genExpression, stmt.getInvocationTarget(), ctx, out);
 		out.print("(");
-		ctx.foreach(stmt.getArguments(), ',', genExpression, ctx, out, args);
+		ctx.foreach(stmt.getArguments(), ',', genExpression, ctx, out);
 		out.print(")");
 	}
 }

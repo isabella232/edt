@@ -17,10 +17,10 @@ import org.eclipse.edt.mof.egl.SetValuesExpression;
 
 public class SetValuesExpressionTemplate extends JavaScriptTemplate {
 
-	public void genExpression(SetValuesExpression expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(SetValuesExpression expr, Context ctx, TabbedWriter out) {
 		if (expr.getTarget() != null)
-			ctx.gen(genExpression, expr.getTarget(), ctx, out, args);
+			ctx.invoke(genExpression, expr.getTarget(), ctx, out);
 		if (expr.getSettings() != null)
-			ctx.gen(genStatement, expr.getSettings(), ctx, out, args);
+			ctx.invoke(genStatement, expr.getSettings(), ctx, out);
 	}
 }

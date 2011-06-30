@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.StringLiteral;
 
 public class StringLiteralTemplate extends JavaScriptTemplate {
 
-	public void genExpression(StringLiteral expr, Context ctx, TabbedWriter out, Object... args) {
+	public void genExpression(StringLiteral expr, Context ctx, TabbedWriter out) {
 		if (expr.isHex()) {
 			String value = expr.getValue();
 			int numSegments = value.length() / 4;
