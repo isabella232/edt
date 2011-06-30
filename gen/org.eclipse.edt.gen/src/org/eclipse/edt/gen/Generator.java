@@ -32,12 +32,10 @@ public abstract class Generator {
 	public Generator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
 		// create a context based on the generator being driven
 		context = makeContext(processor);
-		
 		// Clients may specify their own message requestor.
 		if (requestor != null) {
 			context.setMessageRequestor(requestor);
 		}
-		
 		// define our template factory to the context
 		context.setTemplateFactory(this.factory);
 		// add all of the command processor keys to the context
@@ -47,6 +45,10 @@ public abstract class Generator {
 		}
 		// load the template path and template factories
 		this.factory.load(processor.getTemplates(), processor.getClass().getClassLoader());
+	}
+
+	public EglContext getContext() {
+		return context;
 	}
 
 	public abstract EglContext makeContext(AbstractGeneratorCommand processor);
@@ -60,10 +62,6 @@ public abstract class Generator {
 	public abstract Object getResult();
 
 	public abstract void dumpErrorMessages();
-	
-	public EglContext getContext() {
-		return context;
-	}
 	
 	/**
 	 * By default the relative file name will be the same as the source file, with the generator's file extension. This is

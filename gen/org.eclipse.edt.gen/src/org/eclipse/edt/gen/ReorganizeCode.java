@@ -614,7 +614,10 @@ public class ReorganizeCode extends AbstractVisitor {
 			// add the local variable to the statement list
 			statementArray.add(localDeclaration);
 			// now replace the function invocation with the temporary variable
-			((EObjectImpl) getParent()).slotSet(getParentSlotIndex(), nameExpression);
+			if (getParent() instanceof List)
+				((List<EObject>) getParent()).set(getParentSlotIndex(), nameExpression);
+			else
+				((EObjectImpl) getParent()).slotSet(getParentSlotIndex(), nameExpression);
 		}
 	}
 

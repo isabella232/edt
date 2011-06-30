@@ -96,8 +96,10 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 
 	public void generate(String[] args, Generator generator, IEnvironment environment, ICompiler compiler) {
 		try {
-			if (environment != null)
+			if (environment != null) {
 				Environment.pushEnv(environment);
+				generator.getContext().setEnvironment(environment);
+			}
 			this.installOverrides(args);
 			// start up the generator, passing the command processor
 			try {
