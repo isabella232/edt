@@ -38,14 +38,13 @@ public class JavaScriptGenerator extends Generator {
 	public JavaScriptGenerator(AbstractGeneratorCommand processor) {
 		this(processor, null);
 	}
-	
+
 	public JavaScriptGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
 		super(processor, requestor);
 		generator = processor;
 
-		out = (Boolean.TRUE
-		 == (Boolean) context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)
-		) ? new TabbedReportWriter("org.eclipse.edt.gen.javascript.templates.", new StringWriter()) : new TabbedWriter(new StringWriter());
+		out = (Boolean.TRUE == (Boolean) context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)) ? new TabbedReportWriter(
+			"org.eclipse.edt.gen.javascript.templates.", new StringWriter()) : new TabbedWriter(new StringWriter());
 	}
 
 	public String getResult() {
@@ -90,10 +89,12 @@ public class JavaScriptGenerator extends Generator {
 			EGLMessage message1 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
 				Constants.EGLMESSAGE_EXCEPTION_OCCURED, e, details1, 0, 0, 0, 0);
 			context.getMessageRequestor().addMessage(message1);
-			String[] details2 = new String[] { e.getCause().toString() };
-			EGLMessage message2 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_STACK_TRACE, e,
-				details2, 0, 0, 0, 0);
-			context.getMessageRequestor().addMessage(message2);
+			if (e.getCause() != null) {
+				String[] details2 = new String[] { e.getCause().toString() };
+				EGLMessage message2 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_STACK_TRACE,
+					e, details2, 0, 0, 0, 0);
+				context.getMessageRequestor().addMessage(message2);
+			}
 			// print out the whole stack trace
 			e.printStackTrace();
 		}
@@ -112,7 +113,7 @@ public class JavaScriptGenerator extends Generator {
 		// do any post processing once the file has been written
 		writeReport(context, fileName, getReport(), Constants.EGLMESSAGE_ENCODING_ERROR, Constants.EGLMESSAGE_GENERATION_REPORT_FAILED);
 	}
-	
+
 	public String getRelativeFileName(Part part) {
 		StringBuilder buf = new StringBuilder(50);
 		String pkg = part.getPackageName();
@@ -129,8 +130,8 @@ public class JavaScriptGenerator extends Generator {
 		buf.append(Aliaser.getAlias(nameOrAlias));
 		buf.append(getFileExtention());
 		return buf.toString();
-	}	
-	
+	}
+
 	public String getFileExtention() {
 		return ".js";
 	}
@@ -138,6 +139,6 @@ public class JavaScriptGenerator extends Generator {
 	@Override
 	public void generate(Object objectClass) throws GenerationException {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
