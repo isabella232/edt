@@ -19,14 +19,15 @@ import org.eclipse.edt.mof.egl.Field;
 
 public class DictionaryTypeTemplate extends JavaTemplate {
 
-	public void genInstantiation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		if (args.length == 0 || args[0] == null)
-			out.print("null");
-		else if (args[0] instanceof Field && ((Field) args[0]).hasSetValuesBlock()) {
-			ctx.gen(genRuntimeTypeName, type, ctx, out, args);
+	public void genInstantiation(EGLClass type, Context ctx, TabbedWriter out) {
+		out.print("null");
+	}
+
+	public void genInstantiation(EGLClass type, Context ctx, TabbedWriter out, Field arg) {
+		if (arg.hasSetValuesBlock()) {
+			ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavaPrimitive);
 			out.print("()");
-		} else {
+		} else
 			out.print("null");
-		}
 	}
 }

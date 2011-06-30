@@ -14,35 +14,27 @@ package org.eclipse.edt.gen.java.templates.egl.lang;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.IntervalType;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.TypedElement;
 
 public class AnyMonthsIntervalTypeTemplate extends JavaTemplate {
 
 	// this method gets invoked when there is a specific interval needed
-	public void genDefaultValue(IntervalType type, Context ctx, TabbedWriter out, Object... args) {
-		processDefaultValue(type, ctx, out, args);
+	public void genDefaultValue(IntervalType type, Context ctx, TabbedWriter out) {
+		processDefaultValue(type, ctx, out);
 	}
 
 	// this method gets invoked when there is a generic (unknown) interval needed
-	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		processDefaultValue(type, ctx, out, args);
+	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out) {
+		processDefaultValue(type, ctx, out);
 	}
 
-	public void processDefaultValue(Type type, Context ctx, TabbedWriter out, Object... args) {
-		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
-			out.print("null");
-		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
-			out.print("null");
-		else {
-			out.print("new ");
-			ctx.gen(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
-			out.print("(");
-			ctx.gen(genConstructorOptions, type, ctx, out, args);
-			out.print(")");
-		}
+	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
+		out.print("new ");
+		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
+		out.print("(");
+		ctx.invoke(genConstructorOptions, type, ctx, out);
+		out.print(")");
 	}
 }

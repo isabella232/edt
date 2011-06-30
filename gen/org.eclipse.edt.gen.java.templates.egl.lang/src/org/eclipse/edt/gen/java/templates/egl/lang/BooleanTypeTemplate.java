@@ -15,17 +15,10 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.TypedElement;
 
 public class BooleanTypeTemplate extends JavaTemplate {
 
-	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
-			out.print("null");
-		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
-			out.print("null");
-		else
-			out.print("false");
+	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
+		out.print("false");
 	}
 }

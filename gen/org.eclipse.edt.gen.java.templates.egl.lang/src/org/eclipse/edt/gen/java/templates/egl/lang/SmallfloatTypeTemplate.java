@@ -17,29 +17,22 @@ import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.TypedElement;
 
 public class SmallfloatTypeTemplate extends JavaTemplate {
 
-	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
-			out.print("null");
-		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
-			out.print("null");
-		else
-			out.print("0.0f");
+	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
+		out.print("0.0f");
 	}
 
-	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, Object... args) {
-		if (CommonUtilities.isHandledByJavaWithoutCast(((AsExpression) args[0]).getObjectExpr(), ((AsExpression) args[0]), ctx)) {
-			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
-		} else if (CommonUtilities.isHandledByJavaWithCast(((AsExpression) args[0]).getObjectExpr(), ((AsExpression) args[0]), ctx)) {
-			out.print("(" + ctx.getPrimitiveMapping(((AsExpression) args[0]).getType()) + ")");
+	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, AsExpression arg) {
+		if (CommonUtilities.isHandledByJavaWithoutCast(arg.getObjectExpr(), arg, ctx)) {
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+		} else if (CommonUtilities.isHandledByJavaWithCast(arg.getObjectExpr(), arg, ctx)) {
+			out.print("(" + ctx.getPrimitiveMapping(arg.getType()) + ")");
 			out.print("(");
-			ctx.gen(genExpression, ((AsExpression) args[0]).getObjectExpr(), ctx, out, args);
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(")");
 		} else
-			ctx.genSuper(genConversionOperation, EGLClass.class, type, ctx, out, args);
+			ctx.invokeSuper(this, genConversionOperation, type, ctx, out, arg);
 	}
 }

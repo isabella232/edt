@@ -18,97 +18,44 @@ import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.SequenceType;
-import org.eclipse.edt.mof.egl.SubstringAccess;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.TypedElement;
 
 public class AnyStringTypeTemplate extends JavaTemplate {
 
 	// this method gets invoked when there is a limited string needed
-	public void genDefaultValue(SequenceType type, Context ctx, TabbedWriter out, Object... args) {
-		processDefaultValue(type, ctx, out, args);
+	public void genDefaultValue(SequenceType type, Context ctx, TabbedWriter out) {
+		processDefaultValue(type, ctx, out);
 	}
 
 	// this method gets invoked when there is a string needed
-	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		processDefaultValue(type, ctx, out, args);
+	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out) {
+		processDefaultValue(type, ctx, out);
 	}
 
-	public void processDefaultValue(Type type, Context ctx, TabbedWriter out, Object... args) {
-		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
-			out.print("null");
-		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
-			out.print("null");
-		else
-			out.print("Constants.EMPTY_STRING");
+	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
+		out.print("Constants.EMPTY_STRING");
 	}
 
-	// this method gets invoked when there is a limited string needed
-	public void genSubstringAssignment(SequenceType type, Context ctx, TabbedWriter out, Object... args) {
-		processSubstringAssignment(type, ctx, out, args);
-	}
-
-	// this method gets invoked when there is a string needed
-	public void genSubstringAssignment(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		processSubstringAssignment(type, ctx, out, args);
-	}
-
-	public void processSubstringAssignment(Type type, Context ctx, TabbedWriter out, Object... args) {
-		ctx.gen(genExpression, ((SubstringAccess) args[0]).getStringExpression(), ctx, out, args);
-		out.print(" = ");
-		out.print(ctx.getNativeImplementationMapping(((SubstringAccess) args[0]).getType()) + ".substringAssign(");
-		ctx.gen(genExpression, ((SubstringAccess) args[0]).getStringExpression(), ctx, out, args);
-		out.print(", ");
-		ctx.gen(genExpression, (Expression) args[1], ctx, out, args);
-		out.print(", ");
-		ctx.gen(genExpression, ((SubstringAccess) args[0]).getStart(), ctx, out, args);
-		out.print(", ");
-		ctx.gen(genExpression, ((SubstringAccess) args[0]).getEnd(), ctx, out, args);
-		out.print(")");
-	}
-
-	// this method gets invoked when there is a limited string needed
-	public void genSubstringAccess(SequenceType type, Context ctx, TabbedWriter out, Object... args) {
-		processSubstringAccess(type, ctx, out, args);
-	}
-
-	// this method gets invoked when there is a string needed
-	public void genSubstringAccess(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		processSubstringAccess(type, ctx, out, args);
-	}
-
-	public void processSubstringAccess(Type type, Context ctx, TabbedWriter out, Object... args) {
-		out.print(ctx.getNativeImplementationMapping(((SubstringAccess) args[0]).getType()) + ".substring(");
-		ctx.gen(genExpression, ((SubstringAccess) args[0]).getStringExpression(), ctx, out, args);
-		out.print(", ");
-		ctx.gen(genExpression, ((SubstringAccess) args[0]).getStart(), ctx, out, args);
-		out.print(", ");
-		ctx.gen(genExpression, ((SubstringAccess) args[0]).getEnd(), ctx, out, args);
-		out.print(")");
-	}
-
-	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, Object... args) throws GenerationException {
+	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
 		// if either side of this expression is nullable, or if there is no direct java operation, we need to use the runtime
-		if ((((BinaryExpression) args[0]).getLHS().isNullable() || ((BinaryExpression) args[0]).getRHS().isNullable())
-			|| getNativeStringOperation((BinaryExpression) args[0]).length() == 0) {
-			out.print(ctx.getNativeImplementationMapping((Type) ((BinaryExpression) args[0]).getOperation().getContainer()) + '.');
-			out.print(CommonUtilities.getNativeRuntimeOperationName((BinaryExpression) args[0]));
+		if ((arg.getLHS().isNullable() || arg.getRHS().isNullable()) || getNativeStringOperation(arg).length() == 0) {
+			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
+			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
 			out.print("(");
-			ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, args);
+			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
 			out.print(", ");
-			ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, args);
-			out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation((BinaryExpression) args[0]));
+			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+			out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
 		} else {
-			out.print(getNativeStringPrefixOperation((BinaryExpression) args[0]));
+			out.print(getNativeStringPrefixOperation(arg));
 			out.print("(");
-			ctx.gen(genExpression, ((BinaryExpression) args[0]).getLHS(), ctx, out, args);
+			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
 			out.print(")");
-			out.print(getNativeStringOperation((BinaryExpression) args[0]));
-			ctx.gen(genExpression, ((BinaryExpression) args[0]).getRHS(), ctx, out, args);
-			out.print(getNativeStringComparisionOperation((BinaryExpression) args[0]));
+			out.print(getNativeStringOperation(arg));
+			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+			out.print(getNativeStringComparisionOperation(arg));
 		}
 	}
 

@@ -14,32 +14,24 @@ package org.eclipse.edt.gen.java.templates.egl.lang;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.TypedElement;
 
 public class AnyDecimalTypeTemplate extends JavaTemplate {
 
 	// this method gets invoked when there is a specific fixed precision needed
-	public void genDefaultValue(FixedPrecisionType type, Context ctx, TabbedWriter out, Object... args) {
-		processDefaultValue(type, ctx, out, args);
+	public void genDefaultValue(FixedPrecisionType type, Context ctx, TabbedWriter out) {
+		processDefaultValue(type, ctx, out);
 	}
 
 	// this method gets invoked when there is a generic (unknown) fixed precision needed
-	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out, Object... args) {
-		processDefaultValue(type, ctx, out, args);
+	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out) {
+		processDefaultValue(type, ctx, out);
 	}
 
-	public void processDefaultValue(Type type, Context ctx, TabbedWriter out, Object... args) {
-		if (args.length > 0 && args[0] instanceof TypedElement && ((TypedElement) args[0]).isNullable())
-			out.print("null");
-		else if (args.length > 0 && args[0] instanceof Expression && ((Expression) args[0]).isNullable())
-			out.print("null");
-		else {
-			ctx.gen(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavaImplementation);
-			out.print(".ZERO");
-		}
+	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
+		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavaImplementation);
+		out.print(".ZERO");
 	}
 }
