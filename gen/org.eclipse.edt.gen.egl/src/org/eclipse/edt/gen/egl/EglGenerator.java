@@ -68,11 +68,6 @@ public class EglGenerator extends Generator{
 			}
 			// print out the whole stack trace
 			e.printStackTrace();
-			// write out any trace messages
-			System.out.println();
-			System.out.println("Dumping up to the last 200 template/method invocation and resolution messages");
-			for (String traceEntry : context.getTemplateTraceEntries())
-				System.out.println(traceEntry);
 		}
 	}
 
