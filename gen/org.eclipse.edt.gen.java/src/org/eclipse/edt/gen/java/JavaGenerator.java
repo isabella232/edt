@@ -80,7 +80,7 @@ public class JavaGenerator extends Generator {
 	public void generate(Part part) throws GenerationException {
 		try {
 			context.putAttribute(context.getClass(), Constants.Annotation_partBeingGenerated, part);
-			context.invoke(JavaTemplate.validatePart, part, context);
+			context.invoke(JavaTemplate.preGenPart, part, context);
 			if (!context.getMessageRequestor().isError()) {
 				out.getWriter().flush();
 				// get the egl file being processed

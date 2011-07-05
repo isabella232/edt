@@ -89,15 +89,15 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genContainerBasedAssignment = "genContainerBasedAssignment";
 	public static final String genContainerBasedMemberAccess = "genContainerBasedMemberAccess";
 	public static final String genContainerBasedMemberName = "genContainerBasedMemberName";
-	// these are used by the validation step. Validate is used to validate individual items within the part being generated.
-	// ValidatePart is invoked by the generator and should not be overridden or used by extending logic
-	public static final String validate = "validate";
-	public static final String validateClassBody = "validateClassBody";
-	public static final String validatePart = "validatePart";
-	public static final String validateField = "validateField";
-	public static final String validateFields = "validateFields";
-	public static final String validateFunction = "validateFunction";
-	public static final String validateFunctions = "validateFunctions";
-	public static final String validateUsedPart = "validateUsedPart";
-	public static final String validateUsedParts = "validateUsedParts";
+	// these are used by the validation step. preGen is used to preGen individual items within the part being generated.
+	// preGenPart is invoked by the generator and should not be overridden or used by extending logic
+	public static final String preGen = "preGen";
+	public static final String preGenClassBody = "preGenClassBody";
+	public static final String preGenPart = "preGenPart";
+	public static final String preGenField = "preGenField";
+	public static final String preGenFields = "preGenFields";
+	public static final String preGenFunction = "preGenFunction";
+	public static final String preGenFunctions = "preGenFunctions";
+	public static final String preGenUsedPart = "preGenUsedPart";
+	public static final String preGenUsedParts = "preGenUsedParts";
 }
