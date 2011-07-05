@@ -7,7 +7,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -208,13 +210,17 @@ public class GenerationQueue {
 			handleUnknownException(e, messageRequestor);
 		}
 		
-		// We might have failed before looking for the file (e.g. couldn't find the IR). Try to resolve the file.
+		// We might have failed before looking for the file (e.g. couldn't find the IR). Try to resolve the file. Keep in mind
+		// the file might be in a different case, so a case-insensitive search must be done.
 		if (file == null || !file.exists()) {
-			IPath filePath = Util.stringArrayToPath(genUnit.packageName).append(genUnit.caseSensitiveInternedPartName);
+			IPath filePath = Util.stringArrayToPath(genUnit.packageName).append(genUnit.caseSensitiveInternedPartName).addFileExtension("egl");
 			for (IPackageFragmentRoot root : pkgFragmentRoots) {
-				file = ResourcesPlugin.getWorkspace().getRoot().getFile(root.getPath().append(filePath));
-				if (file != null && file.exists()) {
-					break;
+				IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder(root.getPath());
+				if (folder != null && folder.exists()) {
+					file = findFileCaseInsensitive(folder, filePath, 0);
+					if (file != null && file.exists()) {
+						break;
+					}
 				}
 			}
 		}
@@ -265,6 +271,39 @@ public class GenerationQueue {
 		}
 		
 		updateProgress();
+	}
+	
+	/**
+	 * Case-insensitive search for a file within a folder.
+	 * 
+	 * @param root  The current folder whose members are being looked at
+	 * @param filePath  The path of the file relative to the source directory
+	 * @param currentSegment  The starting segment number for filePath to be checked within root.
+	 * @return the file if found, or null.
+	 */
+	private IFile findFileCaseInsensitive(IContainer root, IPath filePath, int currentSegment) {
+		try {
+			IResource[] members = root.members();
+			
+			for (IResource member : members) {
+				if (member.getName().equalsIgnoreCase(filePath.segment(currentSegment))) {
+					switch (member.getType()) {
+						case IResource.FILE:
+							if (currentSegment + 1 == filePath.segmentCount()) {
+								return (IFile)member;
+							}
+							break;
+							
+						case IResource.FOLDER:
+							return findFileCaseInsensitive((IFolder)member, filePath, currentSegment + 1);
+					}
+				}
+			}
+		}
+		catch (CoreException e) {
+		}
+		
+		return null;
 	}
 	
 	/**
