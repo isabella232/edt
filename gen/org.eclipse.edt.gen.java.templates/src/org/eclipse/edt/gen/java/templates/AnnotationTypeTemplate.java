@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.AnnotationType;
 
 public class AnnotationTypeTemplate extends JavaTemplate {
 
-	public void validateClassBody(AnnotationType part, Context ctx) {}
+	public void preGenClassBody(AnnotationType part, Context ctx) {}
 
 	public void genPart(AnnotationType part, Context ctx, TabbedWriter out) {}
 

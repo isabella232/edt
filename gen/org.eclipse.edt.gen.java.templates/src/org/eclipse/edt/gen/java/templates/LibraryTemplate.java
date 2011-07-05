@@ -24,14 +24,14 @@ import org.eclipse.edt.mof.egl.Part;
 public class LibraryTemplate extends JavaTemplate {
 
 	@SuppressWarnings("unchecked")
-	public void validate(Library library, Context ctx) {
+	public void preGen(Library library, Context ctx) {
 		// process anything else the superclass needs to do
-		ctx.invokeSuper(this, validate, library, ctx);
+		ctx.invokeSuper(this, preGen, library, ctx);
 		// ignore adding this entry to the list, if it is the part we are currently generating
 		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
 			library.getFullyQualifiedName()))
 			return;
-		// when we get here, it is because a part is being referenced by the original part being validated. Add it to the
+		// when we get here, it is because a part is being referenced by the original part being generated. Add it to the
 		// parts used table if it doesn't already exist
 		boolean found = false;
 		List<Library> libraries = (List<Library>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed);

@@ -26,14 +26,14 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 public class RecordTemplate extends JavaTemplate {
 
 	@SuppressWarnings("unchecked")
-	public void validate(Record part, Context ctx) {
+	public void preGen(Record part, Context ctx) {
 		// process anything else the superclass needs to do
-		ctx.invokeSuper(this, validate, part, ctx);
+		ctx.invokeSuper(this, preGen, part, ctx);
 		// ignore adding this entry to the list, if it is the part we are currently generating
 		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
 			part.getFullyQualifiedName()))
 			return;
-		// when we get here, it is because a part is being referenced by the original part being validated. Add it to the
+		// when we get here, it is because a part is being referenced by the original part being generated. Add it to the
 		// parts used table if it doesn't already exist
 		boolean found = false;
 		List<Record> records = (List<Record>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partRecordsUsed);

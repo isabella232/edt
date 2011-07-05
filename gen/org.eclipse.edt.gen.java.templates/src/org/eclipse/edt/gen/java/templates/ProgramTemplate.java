@@ -19,9 +19,9 @@ import org.eclipse.edt.mof.egl.ProgramParameter;
 
 public class ProgramTemplate extends JavaTemplate {
 
-	public void validate(Program program, Context ctx) {
+	public void preGen(Program program, Context ctx) {
 		// process anything else the superclass needs to do
-		ctx.invokeSuper(this, validate, program, ctx);
+		ctx.invokeSuper(this, preGen, program, ctx);
 		// when we get here, we need to add the program parameter list to the table
 		for (ProgramParameter programParameter : program.getParameters()) {
 			CommonUtilities.generateSmapExtension(programParameter, ctx);

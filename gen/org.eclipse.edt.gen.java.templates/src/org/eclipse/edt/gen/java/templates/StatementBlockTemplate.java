@@ -22,9 +22,9 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class StatementBlockTemplate extends JavaTemplate {
 
-	public void validate(StatementBlock block, Context ctx) {
+	public void preGen(StatementBlock block, Context ctx) {
 		for (Statement stmt : block.getStatements()) {
-			ctx.invoke(validate, stmt, ctx);
+			ctx.invoke(preGen, stmt, ctx);
 		}
 	}
 

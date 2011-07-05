@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.Statement;
 
 public class StatementTemplate extends JavaTemplate {
 
-	public void validate(Statement stmt, Context ctx) {
+	public void preGen(Statement stmt, Context ctx) {
 		// statements may override this validation for specific checking
 	}
 

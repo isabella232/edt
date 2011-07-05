@@ -33,8 +33,8 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class TypeTemplate extends JavaTemplate {
 
-	public void validate(Type type, Context ctx) {
-		// when we get here, it is because a type is being referenced by the original part being validated. Add it to the
+	public void preGen(Type type, Context ctx) {
+		// when we get here, it is because a type is being referenced by the original part being generated. Add it to the
 		// types used table if it doesn't already exist. The first thing we want to check for, is to make sure the
 		// unqualified type name (the last node in the name) is not already taken. If it is already taken, we can't do an
 		// import for it and when used throughout the program, will have to be fully qualified at all times.
