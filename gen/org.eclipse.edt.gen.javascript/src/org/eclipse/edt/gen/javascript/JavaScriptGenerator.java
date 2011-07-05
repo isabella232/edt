@@ -74,7 +74,7 @@ public class JavaScriptGenerator extends Generator {
 	public void generate(Part part) throws GenerationException {
 		try {
 			context.putAttribute(context.getClass(), Constants.Annotation_partBeingGenerated, part);
-			context.invoke(JavaScriptTemplate.validatePart, part, context);
+			context.invoke(JavaScriptTemplate.preGenPart, part, context);
 			if (!context.getMessageRequestor().isError()) {
 				out.getWriter().flush();
 				context.invoke(JavaScriptTemplate.genPart, part, context, out);
