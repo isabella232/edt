@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.FunctionPart;
 
 public class FunctionPartTemplate extends JavaScriptTemplate {
 
-	public void validateClassBody(FunctionPart part, Context ctx) {}
+	public void preGenClassBody(FunctionPart part, Context ctx) {}
 
 	public void genPart(FunctionPart part, Context ctx, TabbedWriter out) {}
 

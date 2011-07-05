@@ -21,7 +21,7 @@ import org.eclipse.edt.mof.egl.Type;
 
 public class EnumerationTemplate extends JavaScriptTemplate {
 
-	public void validateClassBody(Enumeration part, Context ctx) {}
+	public void preGenClassBody(Enumeration part, Context ctx) {}
 
 	public void genClassBody(Enumeration part, Context ctx, TabbedWriter out) {
 		// generate enumerated fields

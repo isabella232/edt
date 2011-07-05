@@ -24,8 +24,8 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class FieldTemplate extends JavaScriptTemplate {
 
-	public void validate(Field field, Context ctx) {
-		ctx.invoke(validate, field.getType(), ctx);
+	public void preGen(Field field, Context ctx) {
+		ctx.invoke(preGen, field.getType(), ctx);
 	}
 
 	public void genDeclaration(Field field, Context ctx, TabbedWriter out) {

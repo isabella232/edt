@@ -30,12 +30,12 @@ public class PartTemplate extends JavaScriptTemplate {
 
 	IRUtils utils = new IRUtils();
 
-	public void validatePart(Part part, Context ctx) {
+	public void preGenPart(Part part, Context ctx) {
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partDataTablesUsed, new ArrayList<DataTable>());
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partFormsUsed, new ArrayList<Form>());
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed, new ArrayList<Library>());
 		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partRecordsUsed, new ArrayList<Record>());
-		ctx.invoke(validateClassBody, part, ctx);
+		ctx.invoke(preGenClassBody, part, ctx);
 	}
 
 	public void genPart(Part part, Context ctx, TabbedWriter out) {

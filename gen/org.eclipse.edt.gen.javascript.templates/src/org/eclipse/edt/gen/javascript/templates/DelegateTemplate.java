@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.Delegate;
 
 public class DelegateTemplate extends JavaScriptTemplate {
 
-	public void validateClassBody(Delegate part, Context ctx) {}
+	public void preGenClassBody(Delegate part, Context ctx) {}
 
 	public void genPart(Delegate part, Context ctx, TabbedWriter out) {}
 

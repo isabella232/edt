@@ -22,14 +22,14 @@ import org.eclipse.edt.mof.egl.Part;
 public class DataTableTemplate extends JavaScriptTemplate {
 
 	@SuppressWarnings("unchecked")
-	public void validate(DataTable dataTable, Context ctx) {
+	public void preGen(DataTable dataTable, Context ctx) {
 		// process anything else the superclass needs to do
-		ctx.invokeSuper(this, validate, dataTable, ctx);
+		ctx.invokeSuper(this, preGen, dataTable, ctx);
 		// ignore adding this entry to the list, if it is the part we are currently generating
 		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
 			dataTable.getFullyQualifiedName()))
 			return;
-		// when we get here, it is because a part is being referenced by the original part being validated. Add it to the
+		// when we get here, it is because a part is being referenced by the original part being generated. Add it to the
 		// parts used table if it doesn't already exist
 		boolean found = false;
 		List<DataTable> dataTables = (List<DataTable>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partDataTablesUsed);

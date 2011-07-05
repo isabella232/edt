@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.DataItem;
 
 public class DataItemTemplate extends JavaScriptTemplate {
 
-	public void validateClassBody(DataItem part, Context ctx) {}
+	public void preGenClassBody(DataItem part, Context ctx) {}
 
 	public void genPart(DataItem part, Context ctx, TabbedWriter out) {}
 

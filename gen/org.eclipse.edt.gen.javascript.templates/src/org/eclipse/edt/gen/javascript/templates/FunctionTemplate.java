@@ -18,8 +18,8 @@ import org.eclipse.edt.mof.egl.Type;
 
 public class FunctionTemplate extends JavaScriptTemplate {
 
-	public void validate(Function function, Context ctx) {
-		ctx.invoke(validate, function.getStatementBlock(), ctx);
+	public void preGen(Function function, Context ctx) {
+		ctx.invoke(preGen, function.getStatementBlock(), ctx);
 	}
 
 	public void genDeclaration(Function function, Context ctx, TabbedWriter out) {

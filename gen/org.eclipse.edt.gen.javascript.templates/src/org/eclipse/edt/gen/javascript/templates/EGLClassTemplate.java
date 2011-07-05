@@ -30,10 +30,10 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class EGLClassTemplate extends JavaScriptTemplate {
 
-	public void validateClassBody(EGLClass part, Context ctx) {
-		ctx.invoke(validateUsedParts, part, ctx);
-		ctx.invoke(validateFields, part, ctx);
-		ctx.invoke(validateFunctions, part, ctx);
+	public void preGenClassBody(EGLClass part, Context ctx) {
+		ctx.invoke(preGenUsedParts, part, ctx);
+		ctx.invoke(preGenFields, part, ctx);
+		ctx.invoke(preGenFunctions, part, ctx);
 		addNamespaceMap(part, ctx);
 	}
 
@@ -56,34 +56,34 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		}
 		ctx.addNamespace(namespace, localName, part.getFullyQualifiedName());
 	}
-	public void validateUsedParts(EGLClass part, Context ctx) {
+	public void preGenUsedParts(EGLClass part, Context ctx) {
 		for (Part item : IRUtils.getReferencedPartsFor(part)) {
-			ctx.invoke(validateUsedPart, part, ctx, item);
+			ctx.invoke(preGenUsedPart, part, ctx, item);
 		}
 	}
 
-	public void validateUsedPart(EGLClass part, Context ctx, Part arg) {
-		ctx.invoke(validate, arg, ctx);
+	public void preGenUsedPart(EGLClass part, Context ctx, Part arg) {
+		ctx.invoke(preGen, arg, ctx);
 	}
 
-	public void validateFields(EGLClass part, Context ctx) {
+	public void preGenFields(EGLClass part, Context ctx) {
 		for (Field field : part.getFields()) {
-			ctx.invoke(validateField, part, ctx, field);
+			ctx.invoke(preGenField, part, ctx, field);
 		}
 	}
 
-	public void validateField(EGLClass part, Context ctx, Field arg) {
-		ctx.invoke(validate, arg, ctx);
+	public void preGenField(EGLClass part, Context ctx, Field arg) {
+		ctx.invoke(preGen, arg, ctx);
 	}
 
-	public void validateFunctions(EGLClass part, Context ctx) {
+	public void preGenFunctions(EGLClass part, Context ctx) {
 		for (Function function : part.getFunctions()) {
-			ctx.invoke(validateFunction, part, ctx, function);
+			ctx.invoke(preGenFunction, part, ctx, function);
 		}
 	}
 
-	public void validateFunction(EGLClass part, Context ctx, Function arg) {
-		ctx.invoke(validate, arg, ctx);
+	public void preGenFunction(EGLClass part, Context ctx, Function arg) {
+		ctx.invoke(preGen, arg, ctx);
 	}
 
 	public void genClassHeader(EGLClass part, Context ctx, TabbedWriter out) {

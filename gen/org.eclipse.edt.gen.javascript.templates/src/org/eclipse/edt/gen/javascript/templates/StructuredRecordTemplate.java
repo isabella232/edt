@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.StructuredRecord;
 
 public class StructuredRecordTemplate extends JavaScriptTemplate {
 
-	public void validateClassBody(StructuredRecord part, Context ctx) {}
+	public void preGenClassBody(StructuredRecord part, Context ctx) {}
 
 	public void genPart(StructuredRecord part, Context ctx, TabbedWriter out) {}
 

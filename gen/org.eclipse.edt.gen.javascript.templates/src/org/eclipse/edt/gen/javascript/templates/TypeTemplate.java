@@ -33,7 +33,7 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class TypeTemplate extends JavaScriptTemplate {
 
-	public void validate(Type type, Context ctx) {
+	public void preGen(Type type, Context ctx) {
 		// types may override this validation for specific checking
 	}
 

@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.ExternalType;
 
 public class ExternalTypeTemplate extends JavaScriptTemplate {
 
-	public void validateClassBody(ExternalType part, Context ctx) {}
+	public void preGenClassBody(ExternalType part, Context ctx) {}
 
 	public void genPart(ExternalType part, Context ctx, TabbedWriter out) {}
 

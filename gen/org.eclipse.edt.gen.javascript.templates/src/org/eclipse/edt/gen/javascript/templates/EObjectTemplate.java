@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.EObject;
 
 public class EObjectTemplate extends JavaScriptTemplate {
 
-	public void validate(EObject object, Context ctx) {
+	public void preGen(EObject object, Context ctx) {
 		String[] details = new String[] { object.getEClass().getETypeSignature() };
 		EGLMessage message = EGLMessage.createEGLMessage(ctx.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_UNSUPPORTED_ELEMENT,
 			object, details, 0, 0, 0, 0);
