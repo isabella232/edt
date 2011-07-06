@@ -58,6 +58,7 @@ import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IWorkingCopy;
 import org.eclipse.edt.ide.core.search.ICompiledFileUnit;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.serialization.Environment;
 
 // Because our compilers require the ability to access other objects through singleton managers, we can only allow one working copy compile to run at a time.
 
@@ -154,6 +155,7 @@ public class WorkingCopyCompiler {
 				}
 			}
 		}finally{
+			Environment.popEnv();
 			lock.release(); // allow changes to be processed
 		}
 	}
@@ -194,9 +196,8 @@ public class WorkingCopyCompiler {
 			processWorkingCopies(workingCopies, problemRequestorFactory);
 			 
 			WorkingCopyProcessingQueue queue = new WorkingCopyProcessingQueue(project, problemRequestorFactory);
-			WorkingCopyProjectInfo projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
 			try{
-				
+				WorkingCopyProjectInfo projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
 				String[] internedPackageName = InternUtil.intern(packageName);
 				// We only need to check the package because the parts will exist - we know this because we just parsed the file
 				if(projectInfo.hasPackage(internedPackageName)){
@@ -222,6 +223,7 @@ public class WorkingCopyCompiler {
 			}catch(RuntimeException e){
 			    throw new BuildException(e);
 	        }finally {
+	        	Environment.popEnv();
 				cleanup();			
 	        }
 		}finally{
@@ -266,55 +268,60 @@ public class WorkingCopyCompiler {
 							
 							// No Working Copies used in this search
 							WorkingCopyProcessingQueue queue = new WorkingCopyProcessingQueue(project, NullProblemRequestorFactory.getInstance());
-							WorkingCopyProjectInfo projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
-							
-							File fileAST = null;
-							
-							fileAST = WorkingCopyASTManager.getInstance().getFileAST(file);
-							searchTarget.setFileAST(fileAST);
-							
-							String[] internedPackageName = InternUtil.intern(((EGLFile)eglFile).getPackageName());
-							
-							// We only need to check the package because the parts will exist - we know this because we just parsed the file
-							if(projectInfo.hasPackage(internedPackageName)){
-								for (Iterator iter = fileAST.getParts().iterator(); iter.hasNext();) {
-									Part part = (Part) iter.next();
-									IPartOrigin partOrigin = projectInfo.getPartOrigin(internedPackageName, part.getIdentifier());
-									if(partOrigin != null){
-										IFile declaringFile = partOrigin.getEGLFile();
-										if(declaringFile.equals(file)){
-											if (searchTarget.getFileBinding() == null){
-												String fileName = Util.getFilePartName(declaringFile);
-												IPartBinding fileBinding = WorkingCopyProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getPartBinding(internedPackageName, fileName);
-												searchTarget.setFileBinding((FileBinding)fileBinding);
+							try {
+								WorkingCopyProjectInfo projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
+								
+								File fileAST = null;
+								
+								fileAST = WorkingCopyASTManager.getInstance().getFileAST(file);
+								searchTarget.setFileAST(fileAST);
+								
+								String[] internedPackageName = InternUtil.intern(((EGLFile)eglFile).getPackageName());
+								
+								// We only need to check the package because the parts will exist - we know this because we just parsed the file
+								if(projectInfo.hasPackage(internedPackageName)){
+									for (Iterator iter = fileAST.getParts().iterator(); iter.hasNext();) {
+										Part part = (Part) iter.next();
+										IPartOrigin partOrigin = projectInfo.getPartOrigin(internedPackageName, part.getIdentifier());
+										if(partOrigin != null){
+											IFile declaringFile = partOrigin.getEGLFile();
+											if(declaringFile.equals(file)){
+												if (searchTarget.getFileBinding() == null){
+													String fileName = Util.getFilePartName(declaringFile);
+													IPartBinding fileBinding = WorkingCopyProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getPartBinding(internedPackageName, fileName);
+													searchTarget.setFileBinding((FileBinding)fileBinding);
+												}
+												
+												if (compileGeneratable){
+														if (part instanceof Program ||
+																part instanceof Library ||
+																part instanceof Handler||
+																part instanceof FormGroup||
+																part instanceof Service){
+															queue.addPart(internedPackageName, part.getName().getCaseSensitiveIdentifier());
+															break;
+														}
+												}else queue.addPart(internedPackageName, part.getName().getCaseSensitiveIdentifier());
+												
 											}
-											
-											if (compileGeneratable){
-													if (part instanceof Program ||
-															part instanceof Library ||
-															part instanceof Handler||
-															part instanceof FormGroup||
-															part instanceof Service){
-														queue.addPart(internedPackageName, part.getName().getCaseSensitiveIdentifier());
-														break;
-													}
-											}else queue.addPart(internedPackageName, part.getName().getCaseSensitiveIdentifier());
-											
 										}
 									}
+									
+									queue.setCompileRequestor(new IWorkingCopyCompileRequestor(){
+										public void acceptResult(WorkingCopyCompilationResult result){
+											if (result.getDeclaringFile().equals(file)){
+												Part part = (Part)result.getBoundPart();
+												searchTarget.addBoundPart(result.getDeclaringFile(),part);
+												
+											}
+										}
+									});
+									
+									queue.process();
 								}
-								
-								queue.setCompileRequestor(new IWorkingCopyCompileRequestor(){
-									public void acceptResult(WorkingCopyCompilationResult result){
-										if (result.getDeclaringFile().equals(file)){
-											Part part = (Part)result.getBoundPart();
-											searchTarget.addBoundPart(result.getDeclaringFile(),part);
-											
-										}
-									}
-								});
-								
-								queue.process();
+							}
+							finally {
+								Environment.popEnv();
 							}
 						}
 					}

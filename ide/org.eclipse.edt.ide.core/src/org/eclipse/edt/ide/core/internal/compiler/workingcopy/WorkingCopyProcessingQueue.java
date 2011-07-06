@@ -56,6 +56,7 @@ import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectIn
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectInfoManager;
 import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.serialization.Environment;
 
 public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 
@@ -122,6 +123,8 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
         this.projectEnvironment = WorkingCopyProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
         this.projectEnvironment.getIREnvironment().initSystemEnvironment(this.projectEnvironment.getSystemEnvironment());
 		this.projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
+		
+		Environment.pushEnv(this.projectEnvironment.getIREnvironment());
 	}
 
 	public void setCompileRequestor(IWorkingCopyCompileRequestor requestor){
