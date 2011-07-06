@@ -19,18 +19,22 @@ import org.eclipse.edt.mof.MofSerializable;
 public class Environment extends AbstractEnvironment {
 	public static Environment INSTANCE = new Environment();
 	
-	private static Stack<IEnvironment> currentEnvs = new Stack<IEnvironment>();
+	private static ThreadLocal<Stack<IEnvironment>> currentEnvs = new ThreadLocal<Stack<IEnvironment>>() {
+		protected synchronized Stack<IEnvironment> initialValue() {
+            return new Stack<IEnvironment>();
+        }
+	};
 	
 	public static synchronized IEnvironment getCurrentEnv() {
-		return currentEnvs.size() == 0 ? INSTANCE : currentEnvs.peek();
+		return currentEnvs.get().size() == 0 ? INSTANCE : currentEnvs.get().peek();
 	}
 	
 	public static synchronized void pushEnv(IEnvironment env) {
-		currentEnvs.push(env);
+		currentEnvs.get().push(env);
 	}
 	
 	public static synchronized IEnvironment popEnv() {
-		return currentEnvs.pop();
+		return currentEnvs.get().pop();
 	}
 
 			
