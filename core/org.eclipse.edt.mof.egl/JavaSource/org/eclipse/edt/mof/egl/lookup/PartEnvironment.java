@@ -35,18 +35,22 @@ public class PartEnvironment implements IEnvironment {
 	IEnvironment env;
 	IRUtils irUtils = new IRUtils();
 
-	private static Stack<PartEnvironment> currentEnvs = new Stack<PartEnvironment>();
+	private static ThreadLocal<Stack<PartEnvironment>> currentEnvs = new ThreadLocal<Stack<PartEnvironment>>() {
+		protected synchronized Stack<PartEnvironment> initialValue() {
+            return new Stack<PartEnvironment>();
+        }
+	};
 	
 	public static synchronized PartEnvironment getCurrentEnv() {
-		return currentEnvs.size() == 0 ? INSTANCE : currentEnvs.peek();
+		return currentEnvs.get().size() == 0 ? INSTANCE : currentEnvs.get().peek();
 	}
 
 	public static synchronized void pushEnv(PartEnvironment env) {
-		currentEnvs.push(env);
+		currentEnvs.get().push(env);
 	}
 	
 	public static synchronized PartEnvironment popEnv() {
-		return currentEnvs.pop();
+		return currentEnvs.get().pop();
 	}
 
 	public PartEnvironment() {
