@@ -75,13 +75,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genRuntimeTypeName(Type type, Context ctx, TabbedWriter out) {
-		// are we looking for the default (java primitive) or specifically java primitive, if it exists
-		if (ctx.mapsToPrimitiveType(type.getClassifier())) {
-			out.print(ctx.getPrimitiveMapping(type.getClassifier()));
-			return;
-		} else
-			// must be an egl interface name we want
-			out.print(ctx.getNativeInterfaceMapping(type.getClassifier()));
+		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavascriptPrimitive);
 	}
 
 	public void genRuntimeTypeName(Type type, Context ctx, TabbedWriter out, TypeNameKind arg) {
