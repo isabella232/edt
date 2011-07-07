@@ -638,6 +638,11 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 						else if (obj instanceof PartName) {
 							obj = ((PartName)obj).getPart();
 						}
+						
+						//change to use a proxy part if the type did not resolve correctly
+						if (obj instanceof String && type == mof.getETypeClass()) {
+							obj = createProxyPart((String) obj);
+						}
 						target.eSet(field, obj);
 					}
 				}
