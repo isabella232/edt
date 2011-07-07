@@ -27,6 +27,7 @@ public class ProjectEnvironmentManager {
     
     private Map<IProject, ProjectEnvironment> projectEnvironments;
     private Map<IProject, ProjectIREnvironment> irEnvironments;
+    private boolean environmentPushed = false;
     
     private static final ProjectEnvironmentManager INSTANCE = new ProjectEnvironmentManager();
     
@@ -111,13 +112,17 @@ public class ProjectEnvironmentManager {
    		env.getIREnvironment().initSystemEnvironment(env.getSystemEnvironment());
         
         Environment.pushEnv(env.getIREnvironment());
+        environmentPushed = true;
     }
 
     public void endBuilding(AbstractBuilder builder) {
         IProject project = builder.getBuilder().getProject();
         ProjectBuildPathEntry entry = ProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry(project);
         entry.setProcessingQueue(null);
-        Environment.popEnv();
+        if (environmentPushed) {
+            Environment.popEnv();
+            environmentPushed = false;
+        }
     }
 
     // Debug
