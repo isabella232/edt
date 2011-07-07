@@ -25,11 +25,5 @@ public class ExampleCompilerStrings {
 	}
 
 	public static String javaGenTabTitle;
-	public static String javaGenDirSelectionTitle;
-	public static String javaGenDirSelectionMsg;
-	public static String javaGenInsideWorkbench;
-	public static String javaGenOutsideWorkbench;
-	public static String javaGenDefaultGenDir;
-	public static String javaGenSaveError;
 
 }
