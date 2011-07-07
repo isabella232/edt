@@ -611,6 +611,8 @@ ExternalType Widget type JavaScriptObject{relativePath = "egl/ui/rui",
 				default = "\"No\""
 			}
 		};
+		
+	displayStyle string {@JavaScriptProperty  { getMethod = "getDisplayStyle", setMethod = "setDisplayStyle" }};
 
 	function getError() returns (boolean);
 	function setError(value boolean in);
