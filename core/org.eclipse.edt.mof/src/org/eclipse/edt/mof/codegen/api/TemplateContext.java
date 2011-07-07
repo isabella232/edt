@@ -278,16 +278,17 @@ public class TemplateContext extends HashMap<Object, Object> {
 	public Object invokeSuper(Template template, String methodName, EObject object, Object... args) {
 		// Get EClassifier associated with the given template
 		EClass clazz = (EClass) getEClassifierForTemplate(template);
-		EClass superClass = clazz.getSuperTypes().isEmpty() ? null : clazz.getSuperTypes().get(0);
-		if (superClass == null) {
-			throw new IllegalArgumentException("EClass " + object.getEClass().getETypeSignature() + " has no super class");
+		if (clazz != null) {
+			EClass superClass = clazz.getSuperTypes().isEmpty() ? null : clazz.getSuperTypes().get(0);
+			if (superClass == null) {
+				throw new IllegalArgumentException("EClass " + object.getEClass().getETypeSignature() + " has no super class");
+			}
+			TemplateMethod tm = getTemplateMethod(methodName, superClass, args);
+			if (tm != null) {
+				return doInvoke(tm.method, tm.template, object, args);
+			}
 		}
-		TemplateMethod tm = getTemplateMethod(methodName, superClass, args);
-		if (tm != null) {
-			return doInvoke(tm.method, tm.template, object, args);
-		} else {
-			return invoke(methodName, (Object) object, args);
-		}
+		return invoke(methodName, (Object) object, args);
 	}
 
 	public Object invokeSuper(Template template, String methodName, EClass clazz, Object... args) {
