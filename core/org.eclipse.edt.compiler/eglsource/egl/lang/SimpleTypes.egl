@@ -51,7 +51,9 @@ externalType AnyString extends AnyText type ParameterizableType {
 	parameterizedType = SequenceType
 }
 	static function $Plus(lvalue AnyString in, rvalue AnyString in) returns(AnyString) {@Operation{"+"}};
+	static function $Plus(lvalue AnyString in, rvalue AnyValue in) returns(AnyString) {@Operation{"+"}};
 	static function $Concat(value AnyString in, rvalue AnyString in) returns (AnyString) {@Operation{"::"}};
+	static function $Concat(value AnyString in, rvalue AnyValue in) returns (AnyString) {@Operation{"::"}};
 	static function $ConcatNull(value AnyString in, rvalue AnyString in) returns(AnyString) {@Operation{"?:"}};
 	static function $Matches(value AnyString in, rvalue AnyString in) returns(BooleanType) {@Operation{"matches"}};
 	static function $Like(value AnyString in, rvalue AnyString in) returns(BooleanType) {@Operation{"like"}};
@@ -99,9 +101,9 @@ end
 externalType AnyMbChar extends AnyText type ParameterizableType {
 	parameterizedType = SequenceType
 }
-	static function $Plus(lvalue AnyMbChar in, rvalue AnyMbChar in) returns(AnyChar) {@Operation{"+"}};
-	static function $Concat(value AnyMbChar in, rvalue AnyMbChar in) returns (AnyChar) {@Operation{"::"}};
-	static function $ConcatNull(value AnyMbChar in, rvalue AnyMbChar in) returns(AnyChar) {@Operation{"?:"}};
+	static function $Plus(lvalue AnyMbChar in, rvalue AnyMbChar in) returns(AnyMbChar) {@Operation{"+"}};
+	static function $Concat(value AnyMbChar in, rvalue AnyMbChar in) returns (AnyMbChar) {@Operation{"::"}};
+	static function $ConcatNull(value AnyMbChar in, rvalue AnyMbChar in) returns(AnyMbChar) {@Operation{"?:"}};
 	static function $Matches(value AnyMbChar in, rvalue AnyMbChar in) returns(boolean) {@Operation{"matches"}};
 	static function $Like(value AnyMbChar in, rvalue AnyMbChar in) returns(boolean) {@Operation{"like"}};
 	static function $LT(lvalue AnyMbChar in, rvalue AnyMbChar in) returns (BooleanType) {@Operation{"<"}};
@@ -109,12 +111,13 @@ externalType AnyMbChar extends AnyText type ParameterizableType {
 	static function $LTE(lvalue AnyMbChar in, rvalue AnyMbChar in) returns (BooleanType) {@Operation{"<="}};
 	static function $GTE(lvalue AnyMbChar in, rvalue AnyMbChar in) returns (BooleanType) {@Operation{">="}};
 	static function $EQ(lvalue AnyMbChar in, rvalue AnyMbChar in) returns(BooleanType) {@Operation{"=="}};
+	static function $NEQ(lvalue AnyMbChar in, rvalue AnyMbChar in) returns(BooleanType) {@Operation{"!="}};
 	
 	// Valid Conversions
-	static function AnyMbChar(value AnyString in) returns(AnyMbChar) {@Operation{"widen"}};
-	static function AnyMbChar(value AnyChar in) returns(AnyMbChar) {@Operation{"widen"}};
-	static function AnyMbChar(value Int32 in) returns(AnyMbChar) {@Operation{"narrow"}};
-	static function AnyMbChar(value Int16 in) returns(AnyMbChar) {@Operation{"narrow"}};
+	static function asMbChar(value AnyString in) returns(AnyMbChar) {@Operation{"widen"}};
+	static function asMbChar(value AnyChar in) returns(AnyMbChar) {@Operation{"widen"}};
+	static function asMbChar(value Int32 in) returns(AnyMbChar) {@Operation{"narrow"}};
+	static function asMbChar(value Int16 in) returns(AnyMbChar) {@Operation{"narrow"}};
 end
 
 externalType AnyDbChar extends AnyText type ParameterizableType {
@@ -145,6 +148,7 @@ externalType Int16 extends AnyNumber type ClassType
 	static function $LTE(lvalue Int16 in, rvalue Int16 in) returns (BooleanType) {@Operation{"<="}};
 	static function $GTE(lvalue Int16 in, rvalue Int16 in) returns (BooleanType) {@Operation{">="}};
 	static function $EQ(lvalue Int16 in, rvalue Int16 in) returns(BooleanType) {@Operation{"=="}};
+	static function $NEQ(lvalue Int16 in, rvalue Int16 in) returns(BooleanType) {@Operation{"!="}};
 	
 	// Valid Conversions
 	static function asInt16(value Int32 in) returns(Int16) {@Operation{"narrow"}};
@@ -174,6 +178,7 @@ externalType Int32 extends AnyNumber type ClassType
 	static function $LTE(lvalue Int32 in, rvalue Int32 in) returns (BooleanType) {@Operation{"<="}};
 	static function $GTE(lvalue Int32 in, rvalue Int32 in) returns (BooleanType) {@Operation{">="}};
 	static function $EQ(lvalue Int32 in, rvalue Int32 in) returns(BooleanType) {@Operation{"=="}};
+	static function $NEQ(lvalue Int32 in, rvalue Int32 in) returns(BooleanType) {@Operation{"!="}};
 
 	// Valid Conversions
 	static function asInt32(value Int16 in) returns(Int32) {@Operation{"widen"}};
@@ -203,6 +208,7 @@ externalType Int64 extends AnyNumber type ClassType
 	static function $LTE(lvalue Int64 in, rvalue Int64 in) returns (BooleanType) {@Operation{"<="}};
 	static function $GTE(lvalue Int64 in, rvalue Int64 in) returns (BooleanType) {@Operation{">="}};
 	static function $EQ(lvalue Int64 in, rvalue Int64 in) returns(BooleanType) {@Operation{"=="}};
+	static function $NEQ(lvalue Int64 in, rvalue Int64 in) returns(BooleanType) {@Operation{"!="}};
 	
 	// Valid Conversions
 	static function asInt64(value Int16 in) returns(Int64) {@Operation{"widen"}};
@@ -227,6 +233,7 @@ externalType Float32 extends AnyNumber type ClassType
 	static function $LTE(lvalue Float32 in, rvalue Float32 in) returns (BooleanType) {@Operation{"<="}};
 	static function $GTE(lvalue Float32 in, rvalue Float32 in) returns (BooleanType) {@Operation{">="}};
 	static function $EQ(lvalue Float32 in, rvalue Int16 in) returns(BooleanType) {@Operation{"=="}};
+	static function $NEQ(lvalue Float32 in, rvalue Int16 in) returns(BooleanType) {@Operation{"!="}};
 	
 	// Valid Conversions
 	static function asFloat32(value Int16 in) returns(Float32) {@Operation{"widen"}};
@@ -251,6 +258,7 @@ externalType Float64 extends AnyNumber type ClassType
 	static function $LTE(lvalue Float64 in, rvalue Float64 in) returns (BooleanType) {@Operation{"<="}};
 	static function $GTE(lvalue Float64 in, rvalue Float64 in) returns (BooleanType) {@Operation{">="}};
 	static function $EQ(lvalue Float64 in, rvalue Float64 in) returns(BooleanType) {@Operation{"=="}};
+	static function $NEQ(lvalue Float64 in, rvalue Float64 in) returns(BooleanType) {@Operation{"!="}};
 	
 	// Valid Conversions
 	static function asFloat64(value Int16 in) returns(Float64) {@Operation{"widen"}};
@@ -278,6 +286,7 @@ externalType AnyDecimal extends AnyNumber type ParameterizableType {
 	static function $LTE(lvalue AnyDecimal in, rvalue AnyDecimal in) returns (BooleanType) {@Operation{"<="}};
 	static function $GTE(lvalue AnyDecimal in, rvalue AnyDecimal in) returns (BooleanType) {@Operation{">="}};
 	static function $EQ(lvalue AnyDecimal in, rvalue AnyDecimal in) returns(BooleanType) {@Operation{"=="}};
+	static function $NEQ(lvalue AnyDecimal in, rvalue AnyDecimal in) returns(BooleanType) {@Operation{"!="}};
 
 	// Valid Conversions
 	static function asDecimal(value Int16 in) returns(AnyDecimal) {@Operation{"widen"}};
