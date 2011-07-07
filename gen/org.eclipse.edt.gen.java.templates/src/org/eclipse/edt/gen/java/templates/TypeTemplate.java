@@ -102,13 +102,7 @@ public class TypeTemplate extends JavaTemplate {
 	}
 
 	public void genRuntimeTypeName(Type type, Context ctx, TabbedWriter out) {
-		// are we looking for the default (java primitive) or specifically java primitive, if it exists
-		if (ctx.mapsToPrimitiveType(type.getClassifier())) {
-			out.print(ctx.getPrimitiveMapping(type.getClassifier()));
-			return;
-		} else
-			// must be an egl interface name we want
-			out.print(ctx.getNativeInterfaceMapping(type.getClassifier()));
+		ctx.invoke(genDefaultValue, type, ctx, out, TypeNameKind.JavaPrimitive);
 	}
 
 	public void genRuntimeTypeName(Type type, Context ctx, TabbedWriter out, TypeNameKind arg) {
