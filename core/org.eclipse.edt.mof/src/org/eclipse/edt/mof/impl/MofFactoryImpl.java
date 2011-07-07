@@ -78,7 +78,7 @@ public class MofFactoryImpl extends EFactoryImpl implements MofFactory {
 		return modelElementClass;
 	}
 	public  EClass getENamedElementClass() {
-		return eObjectClass;
+		return namedElementClass;
 	}
 	public  EClass getETypeClass() {
 		return typeClass;
