@@ -63,12 +63,6 @@ public class EclipseEGL2JavaScript extends EGL2JavaScript {
 				}
 			}
 
-			// make sure it's a source folder
-			EclipseUtilities.addToJavaBuildPathIfNecessary(outputFile.getProject(), outputFolder);
-
-			// Add required runtimes.
-			EclipseUtilities.addRuntimesToProject(outputFile.getProject(), generatorProvider.getRuntimeContainers());
-
 			// call back to the generator, to see if it wants to do any supplementary tasks
 			generator.processFile(outputFile.getFullPath().toString());
 		} else {
