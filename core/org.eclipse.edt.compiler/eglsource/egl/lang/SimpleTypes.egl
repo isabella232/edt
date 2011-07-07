@@ -218,7 +218,7 @@ externalType Float32 extends AnyNumber type ClassType
 	static function $Plus(value Float32 in) returns (Float32) {@Operation{"+"}};
 	static function $Plus(lvalue Float32 in, rvalue Float32 in) returns (Float32) {@Operation{"+"}};
 	static function $Minus(value Float32 in) returns (Float32) {@Operation{"-"}};
-	static function $Minus(lvalue Float32 in, rvalue Float32 in) returns (Float32) {@Operation{"*"}};
+	static function $Minus(lvalue Float32 in, rvalue Float32 in) returns (Float32) {@Operation{"-"}};
 	static function $Multiply(value Float32 in, rvalue Float32 in) returns (Float32) {@Operation{"*"}};
 	static function $Divide(value Float32 in, rvalue Float32 in) returns (Float32) {@Operation{"/"}};
 	static function $PowerOf(value Float32 in, rvalue Float32 in) returns (Float64) {@Operation{"**"}};
@@ -242,7 +242,7 @@ externalType Float64 extends AnyNumber type ClassType
 	static function $Plus(value Float64 in) returns (Float64) {@Operation{"+"}};
 	static function $Plus(lvalue Float64 in, rvalue Float64 in) returns (Float64) {@Operation{"+"}};
 	static function $Minus(value Float64 in) returns (Float64) {@Operation{"-"}};
-	static function $Minus(lvalue Float64 in, rvalue Float64 in) returns (Float64) {@Operation{"*"}};
+	static function $Minus(lvalue Float64 in, rvalue Float64 in) returns (Float64) {@Operation{"-"}};
 	static function $Multiply(value Float64 in, rvalue Float64 in) returns (Float64) {@Operation{"*"}};
 	static function $Divide(value Float64 in, rvalue Float64 in) returns (Float64) {@Operation{"/"}};
 	static function $PowerOf(value Float64 in, rvalue Float64 in) returns (Float64) {@Operation{"**"}};
