@@ -119,6 +119,7 @@ public class WorkingCopyCompiler {
 			return;
 		}
 		
+		WorkingCopyProcessingQueue queue = null;
 		try{
 			// Acquire the compiling lock
 			lock.acquire();
@@ -127,7 +128,7 @@ public class WorkingCopyCompiler {
 			
 			processWorkingCopies(workingCopies, problemRequestorFactory);
 			
-			WorkingCopyProcessingQueue queue = new WorkingCopyProcessingQueue(project, problemRequestorFactory);
+			queue = new WorkingCopyProcessingQueue(project, problemRequestorFactory);
 			WorkingCopyProjectInfo projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
 			
 			String[] internedPackageName = InternUtil.intern(packageName);
@@ -155,7 +156,9 @@ public class WorkingCopyCompiler {
 				}
 			}
 		}finally{
-			Environment.popEnv();
+			if (queue != null && queue.pushedEnvironment()) {
+				Environment.popEnv();
+			}
 			lock.release(); // allow changes to be processed
 		}
 	}
@@ -187,6 +190,7 @@ public class WorkingCopyCompiler {
 			return;
 		}
 		
+		WorkingCopyProcessingQueue queue = null;
 		try{
 			// Acquire the compiling lock
 			lock.acquire();
@@ -195,9 +199,9 @@ public class WorkingCopyCompiler {
 			
 			processWorkingCopies(workingCopies, problemRequestorFactory);
 			 
-			WorkingCopyProcessingQueue queue = new WorkingCopyProcessingQueue(project, problemRequestorFactory);
+			queue = new WorkingCopyProcessingQueue(project, problemRequestorFactory);
+			WorkingCopyProjectInfo projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
 			try{
-				WorkingCopyProjectInfo projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
 				String[] internedPackageName = InternUtil.intern(packageName);
 				// We only need to check the package because the parts will exist - we know this because we just parsed the file
 				if(projectInfo.hasPackage(internedPackageName)){
@@ -223,10 +227,12 @@ public class WorkingCopyCompiler {
 			}catch(RuntimeException e){
 			    throw new BuildException(e);
 	        }finally {
-	        	Environment.popEnv();
 				cleanup();			
 	        }
 		}finally{
+			if (queue != null && queue.pushedEnvironment()) {
+				Environment.popEnv();
+			}
 			lock.release(); // allow changes to be processed
 		}
 	}
@@ -267,8 +273,9 @@ public class WorkingCopyCompiler {
 							IProject project = file.getProject();
 							
 							// No Working Copies used in this search
-							WorkingCopyProcessingQueue queue = new WorkingCopyProcessingQueue(project, NullProblemRequestorFactory.getInstance());
+							WorkingCopyProcessingQueue queue = null;
 							try {
+								queue = new WorkingCopyProcessingQueue(project, NullProblemRequestorFactory.getInstance());
 								WorkingCopyProjectInfo projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
 								
 								File fileAST = null;
@@ -321,7 +328,9 @@ public class WorkingCopyCompiler {
 								}
 							}
 							finally {
-								Environment.popEnv();
+								if (queue != null && queue.pushedEnvironment()) {
+									Environment.popEnv();
+								}
 							}
 						}
 					}

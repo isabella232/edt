@@ -67,6 +67,9 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 	private WorkingCopyProjectEnvironment projectEnvironment;
 	private WorkingCopyProjectInfo projectInfo;
 	
+	// Need to pop the environment if it got pushed. Will only be false if an error was thrown before we pushed.
+	private boolean pushedEnvironment;
+	
 	private class WorkingCopyDependencyInfo extends AbstractDependencyInfo {
 
 		protected void recordQualifiedName(String[] strings) {
@@ -125,6 +128,11 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 		this.projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
 		
 		Environment.pushEnv(this.projectEnvironment.getIREnvironment());
+		this.pushedEnvironment = true;
+	}
+	
+	public boolean pushedEnvironment() {
+		return this.pushedEnvironment;
 	}
 
 	public void setCompileRequestor(IWorkingCopyCompileRequestor requestor){
