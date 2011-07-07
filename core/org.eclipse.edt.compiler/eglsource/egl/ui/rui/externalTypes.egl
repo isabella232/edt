@@ -70,6 +70,7 @@ ExternalType Widget type JavaScriptObject{relativePath = "egl/ui/rui",
 		javaScriptName = "Widget",
 		eglIsSystemAnnotation = yes
 }
+	private document Document;
 	pixelWidth int { @JavaScriptProperty { getMethod = "getPixelWidth", setMethod = "setPixelWidth" } };
 	function getPixelWidth() returns (int);
 	function setPixelWidth(value int in);
@@ -431,11 +432,7 @@ ExternalType Widget type JavaScriptObject{relativePath = "egl/ui/rui",
 	function select();
 	
 	function toString() returns(string);
-	
-	displayStyle string { @JavaScriptProperty  { getMethod = "getDisplayStyle", setMethod = "setDisplayStyle" } };	
-	function getDisplayStyle() returns (String);
-	function setDisplayStyle(style String in);
-		
+			
 	onStartDrag StartDragFunction { @JavaScriptProperty { getMethod = "getOnStartDrag", setMethod = "setOnStartDrag"}};
 	function getOnStartDrag() returns (StartDragFunction);
 	function setOnStartDrag(drag StartDragFunction in);
@@ -585,15 +582,46 @@ ExternalType Widget type JavaScriptObject{relativePath = "egl/ui/rui",
 		};
 	function getOnContextMenu() returns (EventHandler[]);
 	function setOnContextMenu(handlers EventHandler[] in);
-	
-	function getChildVariables() returns (String);
-	
+		
 	function morph(duration int in, callback EffectCallback in, morphFunction MorphFunction in);
 	function fadeIn(duration int in, callback EffectCallback in);
 	function fadeOut(duration int in, callback EffectCallback in);
 	function resize(width int in, height int in, duration int in, callback EffectCallback in);
+	
+	numericSwap String {
+			@VEProperty{
+				category = "Bidi",
+				propertyType = "choice",
+				choices = [
+					@VEPropertyChoice{id = "\"Yes\"", displayName = "Yes"},
+					@VEPropertyChoice{id = "\"No\"", displayName = "No"}
+				],
+				default = "\"No\""
+			}
+		};
+	
+	symmetricSwap String {
+			@VEProperty{
+				category = "Bidi",
+				propertyType = "choice",
+				choices = [
+					@VEPropertyChoice{id = "\"Yes\"", displayName = "Yes"},
+					@VEPropertyChoice{id = "\"No\"", displayName = "No"}
+				],
+				default = "\"No\""
+			}
+		};
+
+	function getError() returns (boolean);
+	function setError(value boolean in);
 
 	function setBiDiMarkers(isTextTypeVisual boolean in, isTextOrientationRightToLeft boolean in);
+	function setBiDiStyles(value1 boolean in, value2 boolean in);
+	function cleanBiDiMarkers();
+	function getSymmetricSwap() returns (string);
+	function setSymmetricSwap(value string in);
+	function getNumericSwap() returns (string);
+	function setNumericSwap(value string in);
 	
 end
 
