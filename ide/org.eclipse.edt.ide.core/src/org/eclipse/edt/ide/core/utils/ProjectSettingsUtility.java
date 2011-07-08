@@ -239,6 +239,18 @@ public class ProjectSettingsUtility {
 	}
 	
 	/**
+	 * Removes any generator ID settings for everything in the project.
+	 * 
+	 * @param project  The project.
+	 * @throws BackingStoreException
+	 */
+	public static void clearAllGeneratorIds(IProject project) throws BackingStoreException {
+		Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_GENERATOR_IDS);
+		prefs.clear();
+		prefs.flush();
+	}
+	
+	/**
 	 * Searches for a setting on the path. If there was no setting, checks the parent path, and so on, until
 	 * it has reached the root.
 	 * 
