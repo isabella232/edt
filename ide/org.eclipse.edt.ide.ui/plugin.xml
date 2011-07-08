@@ -1014,19 +1014,6 @@ Templates
       	</page>
 -->      	
    		<page
-			objectClass="org.eclipse.core.resources.IProject"
-			adaptable="true"
-            name="%CompilerPropertyPageName"
-            class="org.eclipse.edt.ide.ui.preferences.CompilerPropertyAndPreferencePage"
-           	id="org.eclipse.edt.ide.ui.projectCompilerPropertyPage">
-      		<filter
-        		name="projectNature"
-        		value="org.eclipse.edt.ide.core.EGLNature">
-      		</filter>
-   		</page>
-   		<page
-			objectClass="org.eclipse.core.resources.IFolder"
-			adaptable="true"
             name="%CompilerPropertyPageName"
             class="org.eclipse.edt.ide.ui.preferences.CompilerPropertyAndPreferencePage"
            	id="org.eclipse.edt.ide.ui.folderCompilerPropertyPage">
@@ -1034,19 +1021,23 @@ Templates
         		name="projectNature"
         		value="org.eclipse.edt.ide.core.EGLNature">
       		</filter>
+   <enabledWhen>
+      <or>
+         <adapt
+               type="org.eclipse.edt.ide.core.model.IEGLFile">
+         </adapt>
+         <adapt
+               type="org.eclipse.core.resources.IProject">
+         </adapt>
+         <adapt
+               type="org.eclipse.edt.ide.core.model.IPackageFragment">
+         </adapt>
+         <adapt
+               type="org.eclipse.edt.ide.core.model.IPackageFragmentRoot">
+         </adapt>
+      </or>
+   </enabledWhen>
    		</page>
-   		<page
-			objectClass="org.eclipse.core.resources.IFile"
-			adaptable="true"
-            name="%CompilerPropertyPageName"
-            nameFilter="*.egl"
-            class="org.eclipse.edt.ide.ui.preferences.CompilerPropertyAndPreferencePage"
-           	id="org.eclipse.edt.ide.ui.fileCompilerPropertyPage">
-      		<filter
-        		name="projectNature"
-        		value="org.eclipse.edt.ide.core.EGLNature">
-      		</filter>
-		</page>
  	</extension>
  	
     <extension

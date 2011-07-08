@@ -57,7 +57,7 @@ public abstract class PropertyAndPreferencePage extends PreferencePage implement
 	private Control fConfigurationBlockControl;
 	private ControlEnableState fBlockEnableState;
 	private Link fChangeWorkspaceSettings;
-	private SelectionButtonDialogField fUseProjectSettings;
+	protected SelectionButtonDialogField fUseProjectSettings;
 	private IStatus fBlockStatus;
 	private Composite fParentComposite;
 	

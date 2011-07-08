@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.preferences;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,8 +22,9 @@ import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.edt.compiler.IGenerator;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
@@ -33,25 +35,34 @@ import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
 import org.eclipse.edt.ide.ui.internal.preferences.CompilerSelectionPreferencePage;
 import org.eclipse.edt.ide.ui.internal.preferences.PropertyAndPreferencePage;
+import org.eclipse.edt.ide.ui.internal.util.PixelConverter;
 import org.eclipse.edt.ide.ui.internal.util.TabFolderLayout;
 import org.eclipse.edt.ide.ui.internal.wizards.IStatusChangeListener;
+import org.eclipse.jface.dialogs.ControlEnableState;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
 
 import com.ibm.icu.text.MessageFormat;
 
 public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage {
 
-	public static final String PROP_ID= "org.eclipse.edt.ide.ui.projectCompilerPropertyPage"; //$NON-NLS-1$
+	public static final String PROP_ID = "org.eclipse.edt.ide.ui.projectCompilerPropertyPage"; //$NON-NLS-1$
 
 	public static final String EXTENSIONPOINT_GENERATOR_TABS = org.eclipse.edt.ide.ui.EDTUIPlugin.PLUGIN_ID + ".edtGeneratorTabs"; //$NON-NLS-1$
 	public static final String GENERATOR_TAB = "generatorTab"; //$NON-NLS-1$
@@ -71,10 +82,16 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 
 	// Currently selected generator names
 	private List<String> selectedGenerators = new ArrayList<String>();
+	
+	// Generator properties override section
+	private Composite generatorComposite;
+	private Button generatorOverrideCheckbox;
+	private ControlEnableState generatorEnableState;
+	
 
 	// Folder and composite to update
 	protected TabFolder tabFolder;
-	protected Composite tabComposite;	
+	protected Composite tabComposite;
 
 	protected List<TabItem> currTabItems = new ArrayList<TabItem>();
 	protected List<IGeneratorTabProvider> currTabProviders =  new ArrayList<IGeneratorTabProvider>();
@@ -147,24 +164,96 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 
 			}
 		} else {
-			// Property page	
+			// Property page
 			IProject project = resource.getProject();
 			setSelectedCompiler( getCompilerName( project ) );
 			createCompilerComposite( composite );
+			
+			if (resource.getType() != IResource.PROJECT) {
+				fUseProjectSettings.setEnabled( false );
+			}
 
 			validateGenerators();
 			if( latestStatus.isOK() ) {
 				// Get generator ids from the project.  If none, get from workspace preferences.
 				setSelectedGenerators( getGeneratorNames() );
-				createGeneratorsComposite( composite );
-				createGeneratorTabsComposite( composite );	
+				
+				generatorOverrideCheckbox = new Button( composite, SWT.CHECK );
+				data = new GridData( GridData.FILL_HORIZONTAL );
+				data.verticalIndent = 10;
+				generatorOverrideCheckbox.setLayoutData( data );
+				
+				generatorComposite = new Composite( composite, SWT.NULL );
+				layout = new GridLayout();
+				layout.numColumns = 1;
+				generatorComposite.setLayout(layout);
+				generatorComposite.setFont(parent.getFont());
+				data = new GridData(GridData.FILL_BOTH);
+				data.horizontalIndent = 0;
+				generatorComposite.setLayoutData(data);
+				
+				createGeneratorsComposite( generatorComposite );
+				createGeneratorTabsComposite( generatorComposite );
 				createTabProviders();
 				addCompilerTabs( this.selectedCompiler );
+				
+				generatorOverrideCheckbox.addSelectionListener( new SelectionAdapter() {
+					public void widgetSelected(SelectionEvent e) {
+						updateGeneratorControlEnablement(((Button)e.widget).getSelection());
+					};
+				});
+				
+				// Initialize label and checked state
+				Preferences genPrefs = new ProjectScope( resource.getProject() ).getNode( EDTCoreIDEPlugin.PLUGIN_ID).node( ProjectSettingsUtility.PROPERTY_GENERATOR_IDS );
+				IPath parentSettingPath = null;
+				if (resource.getType() != IResource.PROJECT) {
+					parentSettingPath = ProjectSettingsUtility.findPathForSetting( resource.getFullPath().removeLastSegments( 1 ), genPrefs );
+				}
+				
+				// Label is based on the parent path
+				if (parentSettingPath == null) {
+					generatorOverrideCheckbox.setText( UINlsStrings.CompilerPropertyPage_overrideWorkspaceGenPrefs );
+				}
+				else {
+					generatorOverrideCheckbox.setText( NLS.bind( UINlsStrings.CompilerPropertyPage_overrideResourceGenPrefs, parentSettingPath.toString() ) );
+				}
+				
+				initGeneratorOverrideCheckboxState();
 			}
 		}
 
 		Dialog.applyDialogFont(composite);
 		return composite;
+	}
+	
+	public void updateGeneratorControlEnablement(boolean enabled) {
+		if (enabled) {
+			if (generatorEnableState != null) {
+				generatorEnableState.restore();
+				generatorEnableState = null;
+			}
+		} else {
+			if (generatorEnableState == null) {
+				generatorEnableState = ControlEnableState.disable(generatorComposite);
+			}
+		}
+	}
+	
+	private void initGeneratorOverrideCheckboxState() {
+		// Enablement is based on whether this specific resource has the setting
+		Preferences genPrefs = new ProjectScope( resource.getProject() ).getNode( EDTCoreIDEPlugin.PLUGIN_ID).node( ProjectSettingsUtility.PROPERTY_GENERATOR_IDS );
+		setGeneratorOverrideCheckboxState( ProjectSettingsUtility.findSetting( resource.getFullPath(), genPrefs, false ) != null );
+	}
+	
+	public void setGeneratorOverrideCheckboxState(boolean checked) {
+		if ( checked ) {
+			generatorOverrideCheckbox.setSelection( true ); // won't fire an event
+			updateGeneratorControlEnablement( true );
+		}
+		else {
+			generatorOverrideCheckbox.setSelection( false ); // won't fire an event
+			updateGeneratorControlEnablement( false );
+		}
 	}
 	
 	protected boolean isValidWorkspaceExtensions() {
@@ -353,7 +442,13 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 
 		GridLayout tabLayout = new GridLayout();
 		tabLayout.marginWidth = 0;
-		tabLayout.numColumns = 1;		
+		tabLayout.numColumns = 1;
+		PixelConverter pixelConverter = new PixelConverter(composite);
+		tabLayout.verticalSpacing = (int)(1.5 * pixelConverter.convertVerticalDLUsToPixels(IDialogConstants.VERTICAL_SPACING));
+		tabLayout.horizontalSpacing = pixelConverter.convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_SPACING);
+		tabLayout.marginTop = 3;
+		tabLayout.marginWidth = pixelConverter.convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_MARGIN);
+		
 		this.tabComposite.setLayout(tabLayout);
 		this.tabComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		this.tabFolder = new TabFolder( this.tabComposite, SWT.NONE );
@@ -659,10 +754,6 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	 * Return true if the project has data stored in its preference store.
 	 */
 	protected boolean hasProjectSpecificOptions(IProject project) {
-// TODO EDT Disable ws checkbox/link if resoruce is not project	
-//		if( !( resource instanceof IProject ) ) {
-//			return true;
-//		}
 		if( ( project != null ) && useDefaultCompilerAndGenerators( project ) ) {
 			return false;
 		} else {
@@ -676,34 +767,6 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 			return true;
 		} else {
 			return false;
-		}
-	}
-
-	public void performApply() {
-		// If 'enable project specific settings' is not checked for a project,
-		// use workspace settings.
-		if( this.resource != null && !useProjectSettings() ) {
-			try {
-				ProjectSettingsUtility.setCompiler( getProject(),  null );
-				ProjectSettingsUtility.setGeneratorIds( getProject(), null );
-				// TODO narrow down to compiler?
-				for( IGeneratorTabProvider tabProvider : this.allTabProviders ) {
-					tabProvider.removePreferencesForAResource();
-				}
-			}
-			catch( BackingStoreException e ) {
-				EDTUIPlugin.log( e );
-			}
-			return;
-		}	
-		for( IGeneratorTabProvider currProvider : this.currTabProviders ) {
-			currProvider.performApply();
-		}
-		storeValues();
-		// If a generator is no longer selected, remove its properties from the
-		// resources' preference store.
-		if( this.resource != null ) {
-			removeTabPropertiesFromProjectResources();
 		}
 	}
 
@@ -725,20 +788,21 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 						}
 						clearSelectedGenerators();
 						setSelectedGenerators( new ArrayList<String>( Arrays.asList( gens ) ) );
-						// TODO Update gen tabs
 					}
 				}
 				compilerAndGeneratorControls.getCompilerComponent().showCompilerPreferencePageBookPage();
-
+				
+				removeCurrentCompilerTabs();
+				addCompilerTabs( convertCompilerIdToName( getPreferencePageCompilerId() ) );
 				for( IGeneratorTabProvider currProvider : this.currTabProviders ) {
 					currProvider.performDefaults();
 				}
 			}
 		} else {
-			// Only restore defaults if using project settings
-			if( !useProjectSettings() ) {
-				return;
-			}			
+			// Revert ControlEnableStates before we do anything else, which might be enabling/disabling controls programatically.
+			enablePreferenceContent( true );
+			updateGeneratorControlEnablement( true );
+			
 			// Check box if using workspace defaults
 			boolean useProjectSettings= hasProjectSpecificOptions(getProject());
 			enableProjectSpecificSettings(useProjectSettings);
@@ -753,6 +817,8 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 			for( IGeneratorTabProvider currProvider : this.currTabProviders ) {
 				currProvider.performDefaults();
 			}
+			
+			initGeneratorOverrideCheckboxState();
 		}
 	}
 
@@ -768,38 +834,73 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 		}
 		return retValue;
 	}
+	
+	public void performApply() {
+		doPerformOk( true );
+	}
 
 	public boolean performOk() {
-		// If 'enable project specific settings' is not checked for a project,
-		// use workspace settings.
-		if( this.resource != null && !useProjectSettings() ) {
-			try {
-				ProjectSettingsUtility.setCompiler( getProject(),  null );
-				ProjectSettingsUtility.setGeneratorIds( getProject(), null );
-				// TODO narrow down to compiler?
-				for( IGeneratorTabProvider tabProvider : this.allTabProviders ) {
-					tabProvider.removePreferencesForAResource();
+		return doPerformOk( false );
+	}
+	
+	protected boolean doPerformOk( final boolean isApply ) {
+		final boolean[] retValue = {true};
+		
+		// Use a WorkspaceModifyOperation to prevent builds from running before we've finished updating settings.
+		WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
+			@Override
+			protected void execute( IProgressMonitor monitor ) throws CoreException, InvocationTargetException, InterruptedException {
+				// If 'enable project specific settings' is not checked for a project,
+				// use workspace settings.
+				if ( resource != null && !useProjectSettings() ) {
+					try {
+						ProjectSettingsUtility.setCompiler( getProject(),  null );
+						ProjectSettingsUtility.clearAllGeneratorIds( getProject() );
+						for ( IGeneratorTabProvider tabProvider : allTabProviders ) {
+							tabProvider.removePreferencesForAllResources();
+						}
+					}
+					catch ( BackingStoreException e ) {
+						EDTUIPlugin.log( e );
+						retValue[0] = false;
+					}
+				}			
+				else if ( resource == null || generatorOverrideCheckbox.getSelection() ) {
+					for ( IGeneratorTabProvider currProvider : currTabProviders ) {
+						if ( isApply ) {
+							currProvider.performApply();
+						}
+						else {
+							if ( !currProvider.performOk() ) {
+								retValue[0] = false;
+							}
+						}
+					}
 				}
-				return true;
+				else {
+					for ( IGeneratorTabProvider currProvider : allTabProviders ) {
+						currProvider.removePreferencesForAResource();
+					}
+				}
+				storeValues();
+				// If a generator is no longer selected, remove its properties from the
+				// resources' preference store.
+				if ( resource != null && generatorOverrideCheckbox.getSelection() ) {
+					removeTabPropertiesFromProjectResources();
+				}
 			}
-			catch( BackingStoreException e ) {
-				EDTUIPlugin.log( e );
-				return false;				
-			}
-		}			
-		boolean retValue = true;
-		for( IGeneratorTabProvider currProvider : this.currTabProviders ) {
-			if( !currProvider.performOk() ) {
-				retValue = false;
-			}
+		};
+		
+		try {
+			PlatformUI.getWorkbench().getProgressService().run( false, true, op );
 		}
-		storeValues();
-		// If a generator is no longer selected, remove its properties from the
-		// resources' preference store.
-		if( this.resource != null ) {
-			removeTabPropertiesFromProjectResources();
+		catch ( InterruptedException e ) {
 		}
-		return retValue;
+		catch ( InvocationTargetException e ) {
+			EDTUIPlugin.log( e.getTargetException() );
+		}
+		
+		return retValue[0];
 	}
 
 	/**
@@ -840,15 +941,13 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 					// Compiler changed
 					if( previousCompilerId != null ) {
 						// Remove old generators for resources in the project.
-						IEclipsePreferences prefs = new ProjectScope(getProject()).getNode(EDTCoreIDEPlugin.PLUGIN_ID);
-						removePreferencesForAllResources( prefs, ProjectSettingsUtility.PROPERTY_GENERATOR_IDS );
+						ProjectSettingsUtility.clearAllGeneratorIds( getProject() );
 
-						// Remove old generator tab preferences for resources
-						// in the project.
-						IGeneratorTabProvider tabProvider;
-						for( String genName : this.selectedGenerators ) {
-							tabProvider = getGenTabProviderForName( genName );
-							tabProvider.removePreferencesForAllResources();
+						// Remove old generator tab preferences for resources in the project.
+						for( IGeneratorTabProvider tabProvider : this.allTabProviders) {
+							if ( tabProvider.getCompilerId().equals( previousCompilerId ) ) {
+								tabProvider.removePreferencesForAllResources();
+							}
 						}
 					}
 					// Set the new compiler.
@@ -856,25 +955,31 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 				}				
 
 				// Store generators
-				List<String> genIds = new ArrayList<String>();
-				List<String> newSelectedGens = new ArrayList<String>();
-				String id;
-				for( String genName : this.selectedGenerators ) {
-					id = convertGeneratorNameToId( genName );
-					IGenerator gen = getGeneratorFromId( id );
-					// At the project level, only store the generators corresponding
-					// to the selected compiler.  At the folder/file level, only the
-					// selected compiler is available so don't need to check this.
-					if( resource instanceof IProject ) {
-						if( !gen.getCompiler().getId().equalsIgnoreCase( compilerId ) ) {
-							continue;
+				if (generatorOverrideCheckbox.getSelection()) {
+					List<String> genIds = new ArrayList<String>();
+					List<String> newSelectedGens = new ArrayList<String>();
+					String id;
+					for( String genName : this.selectedGenerators ) {
+						id = convertGeneratorNameToId( genName );
+						IGenerator gen = getGeneratorFromId( id );
+						// At the project level, only store the generators corresponding
+						// to the selected compiler.  At the folder/file level, only the
+						// selected compiler is available so don't need to check this.
+						if( resource instanceof IProject ) {
+							if( !gen.getCompiler().getId().equalsIgnoreCase( compilerId ) ) {
+								continue;
+							}
 						}
+						genIds.add( convertGeneratorNameToId( genName ) );
+						newSelectedGens.add( genName );
 					}
-					genIds.add( convertGeneratorNameToId( genName ) );
-					newSelectedGens.add( genName );
+					ProjectSettingsUtility.setGeneratorIds( this.resource, genIds.toArray( new String[genIds.size()] ) );
+					setSelectedGenerators( newSelectedGens );
 				}
-				ProjectSettingsUtility.setGeneratorIds( this.resource, genIds.toArray( new String[genIds.size()] ) );
-				setSelectedGenerators( newSelectedGens );
+				else {
+					ProjectSettingsUtility.setGeneratorIds( this.resource, null );
+					setSelectedGenerators( new ArrayList<String>( 0 ) );
+				}
 			}
 			catch( BackingStoreException e ) {
 				EDTUIPlugin.log( e );
@@ -934,10 +1039,9 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 				List<String> idsToKeep = new ArrayList<String>();
 				for( int i = 0; i < gens.length; i++ ) {
 					gens[i] = gens[i].trim();
-					// TODO If generator extensions have changed, gen will be null.  Clean up pref store.
 					gen = getGeneratorFromId( gens[i] );
 					// Keep the gen ids that don't belong to this compiler
-					if( !gen.getCompiler().getId().equalsIgnoreCase( compilerId ) ) {
+					if( gen != null && !gen.getCompiler().getId().equalsIgnoreCase( compilerId ) ) {
 						idsToKeep.add( gens[i] );
 					}
 				}
@@ -966,31 +1070,12 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	}
 
 	/**
-	 * Remove a property id from the preference store for all resources in
-	 * the project.  
-	 */
-	protected void removePreferencesForAllResources( IEclipsePreferences prefs, 
-			String propertyId ) {
-		try {
-			for( String key: prefs.keys() ) {
-				if( key.indexOf( propertyId ) > -1 ) {
-					prefs.remove( key );
-				}
-			}
-			prefs.flush();
-		} catch( BackingStoreException ex ) {
-			EDTUIPlugin.log( ex );
-		}
-	}
-	
-	/**
 	 * When a generator is no longer selected, allow the generator
 	 * tab provider to remove any preferences it had added to the
 	 * project's preference store for this resource.
 	 */
 	protected void removeTabPropertiesFromProjectResources() {
 		IGeneratorTabProvider tabProvider;
-		IEclipsePreferences store;
 		for( int i = 0; i < this.allTabProviders.size(); i++ ) {
 			tabProvider = this.allTabProviders.get(i);
 			// If generator isn't selected

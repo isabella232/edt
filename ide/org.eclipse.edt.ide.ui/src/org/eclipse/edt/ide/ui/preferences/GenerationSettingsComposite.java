@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
 
 public class GenerationSettingsComposite extends Composite {
 	
@@ -372,11 +373,13 @@ public class GenerationSettingsComposite extends Composite {
 	 * resource's preference store.
 	 */
 	public void removePreferencesForAResource() {
-		try {
-			ProjectSettingsUtility.setGenerationDirectory(resource, null, projectPrefs, propertyID);
-		}
-		catch (BackingStoreException e) {
-			Logger.log("GenerationSettingsComposite.cleanUpResourcePreferences", NLS.bind(UINlsStrings.CompilerPropertyPage_errorCleaningUpPrefStore, resource.getFullPath().toString()), e); //$NON-NLS-1$
+		if (projectPrefs != null) {
+			try {
+				ProjectSettingsUtility.setGenerationDirectory(resource, null, projectPrefs, propertyID);
+			}
+			catch (BackingStoreException e) {
+				Logger.log("GenerationSettingsComposite.removePreferencesForAResource", NLS.bind(UINlsStrings.CompilerPropertyPage_errorCleaningUpPrefStore, resource.getFullPath().toString()), e); //$NON-NLS-1$
+			}
 		}
 	}
 	
@@ -385,16 +388,14 @@ public class GenerationSettingsComposite extends Composite {
 	 * resource's preference store.
 	 */
 	public void removePreferencesForAllResources() {
-		try {
-			// TODO EDT Fix - not working any more
-			for( String key: projectPrefs.keys() ) {
-				if( key.indexOf( propertyID ) > -1 ) {
-					projectPrefs.remove( key );
-				}
+		if (projectPrefs != null) {
+			try {
+				Preferences propertyPrefs = projectPrefs.node( propertyID );
+				propertyPrefs.clear();
+				propertyPrefs.flush();
+			} catch( BackingStoreException e ) {
+				Logger.log("GenerationSettingsComposite.removePreferencesForAllResources", NLS.bind(UINlsStrings.CompilerPropertyPage_errorCleaningUpPrefStore, resource.getFullPath().toString()), e); //$NON-NLS-1$
 			}
-			projectPrefs.flush();
-		} catch( BackingStoreException e ) {
-			Logger.log("GenerationSettingsComposite.removePreferencesForAllResources", NLS.bind(UINlsStrings.CompilerPropertyPage_errorCleaningUpPrefStore, resource.getFullPath().toString()), e); //$NON-NLS-1$
 		}
 	}
 

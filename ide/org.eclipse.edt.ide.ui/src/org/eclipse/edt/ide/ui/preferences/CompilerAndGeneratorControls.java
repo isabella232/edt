@@ -21,11 +21,13 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.edt.compiler.IGenerator;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.IIDECompiler;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
+import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.util.PixelConverter;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -183,11 +185,11 @@ public class CompilerAndGeneratorControls {
 			TreeColumn versionColumn = new TreeColumn(tree, SWT.LEFT); 
 			TreeColumn providerColumn = new TreeColumn(tree, SWT.LEFT); 
 			nameColumn.setWidth(200);
-			nameColumn.setText( NAME_COLUMN_HEADER );
+			nameColumn.setText( UINlsStrings.CompilerPreferencePage_nameLabel );
 			versionColumn.setWidth(50);
-			versionColumn.setText( VERSION_COLUMN_HEADER );
+			versionColumn.setText( UINlsStrings.CompilerPreferencePage_versionLabel );
 			providerColumn.setWidth(200);
-			providerColumn.setText( PROVIDER_COLUMN_HEADER );
+			providerColumn.setText( UINlsStrings.CompilerPreferencePage_ProviderLabel );
 		}
 		
 		protected void populatePreferenceMapData(Map<IGenerator, List<IGenerator>> genMap){
@@ -395,6 +397,7 @@ public class CompilerAndGeneratorControls {
             String compilerName = fCompilerCombo.getItem( index );
             if( !compilerName.equalsIgnoreCase( parentPage.getSelectedCompiler() ) ) {
             	// Compiler changed
+            	parentPage.updateGeneratorControlEnablement( true );
             	parentPage.setSelectedCompiler( compilerName );
 
             	// For project, only save generators corresponding to the selected compiler
@@ -402,7 +405,7 @@ public class CompilerAndGeneratorControls {
             		Control control  = compilerNodeComponents.get(index).getControl();
             		if( control != null ) {
             			// Update generator selection
-            			compilerNodeComponents.get(index).refreshState();            	            		
+            			compilerNodeComponents.get(index).refreshState();
             			fPageBook.showPage( control );
  
             			// Update tabs
@@ -410,14 +413,16 @@ public class CompilerAndGeneratorControls {
             			parentPage.addCompilerTabs( compilerName );
             		}
             	}
+            	
+            	parentPage.setGeneratorOverrideCheckboxState( false );
             }
          }
         
         public void createPageBookContents( int numColumns, Composite parent ) {
         	if( parentPage.getResource() == null ) {
-        		createLabel( 1, parent, DEFAULT_GENERATORS_LABEL );
+        		createLabel( 1, parent, UINlsStrings.CompilerPreferencePage_defaultGeneratorsLabel );
         	} else {
-        		createLabel( 1, parent, GENERATORS_LABEL );
+        		createLabel( 1, parent, UINlsStrings.CompilerPreferencePage_selectedGeneratorsLabel );
         	}
             fPageBook= new PageBook( parent, SWT.NONE );
             fPageBook.setLayoutData( createGridData( numColumns, GridData.FILL_BOTH, SWT.DEFAULT ) );
@@ -504,14 +509,6 @@ public class CompilerAndGeneratorControls {
     	}
 	}	
 	
-	public static final String COMPILER_LABEL = "Compiler:";
-	public static final String DEFAULT_COMPILER_LABEL = "Default compiler:";
-	public static final String GENERATORS_LABEL = "Generators:";
-	public static final String DEFAULT_GENERATORS_LABEL = "Default generators:";
-	public static final String NAME_COLUMN_HEADER = "Name";
-	public static final String VERSION_COLUMN_HEADER = "Version";
-	public static final String PROVIDER_COLUMN_HEADER = "Provider";
-	
 	protected CompilerPropertyAndPreferencePage parentPage;
 	private CompilerComponent compilerComponent;
 	
@@ -533,13 +530,17 @@ public class CompilerAndGeneratorControls {
 		}
 		String compilerLabel;
 		if( parentPage.getResource() == null ) {
-			compilerLabel = DEFAULT_COMPILER_LABEL;
+			compilerLabel = UINlsStrings.CompilerPreferencePage_defaultCompilerLabel;
 		} else {
-			compilerLabel = COMPILER_LABEL;
+			compilerLabel = UINlsStrings.CompilerPreferencePage_selectedCompilerLabel;
 		}
 		ComboPreference comboPref= new ComboPreference(parent, 2, compilerLabel, displayItems );
 		compilerComponent.fCompilerCombo = (Combo)comboPref.getControl();
 		compilerComponent.fCompilerCombo.addSelectionListener( compilerComponent );
+		
+		if (this.parentPage.getResource() != null && this.parentPage.getResource().getType() != IResource.PROJECT) {
+			compilerComponent.fCompilerCombo.setEnabled( false );
+		}
 	}
 	
 	/**
@@ -571,15 +572,16 @@ public class CompilerAndGeneratorControls {
 	
 	public void createGeneratorsComposite( Composite parent ) {
 		if (fPixelConverter == null) {
-			fPixelConverter= new PixelConverter(parent);
+			fPixelConverter = new PixelConverter(parent);
 		}
-		Composite settingsPane= new Composite(parent, SWT.NONE);
-		GridLayout layout= new GridLayout(2, false);
-		layout.verticalSpacing= (int)(1.5 * fPixelConverter.convertVerticalDLUsToPixels(IDialogConstants.VERTICAL_SPACING));
-		layout.horizontalSpacing= fPixelConverter.convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_SPACING);
-		layout.marginHeight= fPixelConverter.convertVerticalDLUsToPixels(IDialogConstants.VERTICAL_MARGIN);
-		layout.marginWidth= fPixelConverter.convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_MARGIN);
+		Composite settingsPane = new Composite(parent, SWT.NONE);
+		GridLayout layout = new GridLayout(2, false);
+		layout.verticalSpacing = (int)(1.5 * fPixelConverter.convertVerticalDLUsToPixels(IDialogConstants.VERTICAL_SPACING));
+		layout.horizontalSpacing = fPixelConverter.convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_SPACING);
+		layout.marginHeight = 0;
+		layout.marginWidth = fPixelConverter.convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_MARGIN);
 		settingsPane.setLayout(layout);
+		settingsPane.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		createPageBookAndTree( settingsPane );
 		initializePage();
