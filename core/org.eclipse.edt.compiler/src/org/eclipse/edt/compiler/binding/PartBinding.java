@@ -233,12 +233,66 @@ public abstract class PartBinding extends TypeBinding implements IPartBinding {
 		return null;
 	}
     
+    private boolean isNestedFunctionOrOverloadedFunctionSet(IDataBinding binding) {
+    	if (!Binding.isValidBinding(binding)) {
+    		return false;
+    	}
+    	
+    	int kind = binding.getKind();
+    	
+    	return 
+    		kind == IDataBinding.NESTED_FUNCTION_BINDING ||
+    		kind == IDataBinding.OVERLOADED_FUNCTION_SET_BINDING;
+    }
+    
+    private void addAllFunctionsToSet(OverloadedFunctionSet set, IDataBinding binding) {
+    	if (!Binding.isValidBinding(binding)) {
+    		return;
+    	}
+    	
+    	if (binding.getKind() == IDataBinding.OVERLOADED_FUNCTION_SET_BINDING) {
+    		OverloadedFunctionSet oldSet = (OverloadedFunctionSet)binding;
+    		Iterator i = oldSet.getNestedFunctionBindings().iterator();
+    		while (i.hasNext()) {
+    			IDataBinding next = (IDataBinding)i.next();
+    			set.addNestedFunctionBinding(next);
+    		}
+    	}
+    	else {
+        	if (binding.getKind() == IDataBinding.NESTED_FUNCTION_BINDING) {
+        		set.addNestedFunctionBinding(binding);
+        	}
+    	}
+    }
+    
     
 	public IDataBinding findData(String simpleName) {
 		IDataBinding result = primFindData(simpleName);
-		if (result == IBinding.NOT_FOUND_BINDING && getDefaultSuperType() != null) {
-			result = getDefaultSuperType().findData(simpleName);
+		
+		//if we found the data as a non-function (i.e. a field) just return it
+		if (Binding.isValidBinding(result) && !isNestedFunctionOrOverloadedFunctionSet(result)) {
+			return result;
 		}
+		
+		if (getDefaultSuperType() != null) {
+			IDataBinding superResult = getDefaultSuperType().findData(simpleName);
+
+			if (Binding.isValidBinding(superResult)) {
+				//We found data in our defaultSuperType! If it is not a function or function set, just return it
+				if (result == IBinding.NOT_FOUND_BINDING || !isNestedFunctionOrOverloadedFunctionSet(superResult)) {
+					return superResult;
+				}
+				
+				//at this point, we found functions in this part and in our defaultSuperType. Merge them all together into a single
+				//overloadedFunctionSet
+		        OverloadedFunctionSet functionSet = new OverloadedFunctionSet();
+		        functionSet.setName(result.getCaseSensitiveName());
+				addAllFunctionsToSet(functionSet, result);
+				addAllFunctionsToSet(functionSet, superResult);
+				return functionSet;				
+			}			
+		}
+		
 		
 		if (result == IBinding.NOT_FOUND_BINDING) {
 			return super.findData(simpleName);
