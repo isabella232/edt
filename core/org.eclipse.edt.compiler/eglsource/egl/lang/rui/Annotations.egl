@@ -11,23 +11,5 @@
  *******************************************************************************/
 package egl.lang.rui;
 
-import egl.lang.reflect.DefaultSuperType;
-
-Record JSObject type Annotation {
-	targets=[ElementKind.ExternalTypePart],
-	@Stereotype
-}
-end
-
-externalType Widget type JSObject 
-	children Widget[];
-end
-
-Record RUIHandlerType type Annotation {
-	targets=[ElementKind.HandlerPart],
-	@DefaultSuperType{Widget},
-	@Stereotype
-}
-end
 
 
