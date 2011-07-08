@@ -26,9 +26,6 @@ import org.eclipse.swt.widgets.Control;
  * This is a sample generator tab provider class.
  */
 public class ExampleGeneratorTabProvider extends AbstractGeneratorTabProvider {
-	// TODO provide a way to specify that you want to override the parent setting, and see what the parent setting is & where
-	// it comes from.
-	// maybe a link to the property page for that resource
 
 	private GenerationSettingsComposite genSettings;
 	private IEclipsePreferences projectPreferenceStore;
@@ -86,14 +83,14 @@ public class ExampleGeneratorTabProvider extends AbstractGeneratorTabProvider {
 	
 	@Override
 	public void removePreferencesForAResource() {
-		if( this.projectPreferenceStore != null ) {
+		if ( genSettings != null ) {
 			genSettings.removePreferencesForAResource();
 		}
 	}
 	
 	@Override
 	public void removePreferencesForAllResources() {
-		if( this.projectPreferenceStore != null ) {
+		if ( genSettings != null ) {
 			genSettings.removePreferencesForAllResources();
 		}
 	}
