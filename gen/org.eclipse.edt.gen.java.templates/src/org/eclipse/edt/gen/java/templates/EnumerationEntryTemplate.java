@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
+import org.eclipse.edt.gen.JavaAliaser;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
@@ -19,6 +19,6 @@ import org.eclipse.edt.mof.egl.EnumerationEntry;
 public class EnumerationEntryTemplate extends JavaTemplate {
 
 	public void genName(EnumerationEntry element, Context ctx, TabbedWriter out) {
-		out.print(Aliaser.getJavaSafeAlias(element.getName()));
+		out.print(JavaAliaser.getJavaSafeAlias(element.getName()));
 	}
 }

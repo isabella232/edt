@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
+import org.eclipse.edt.gen.JavaAliaser;
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
@@ -65,7 +65,7 @@ public class PartTemplate extends JavaTemplate {
 			String type;
 			int lastDot = imported.lastIndexOf('.');
 			if (lastDot == -1) {
-				type = Aliaser.getJavaSafeAlias(imported);
+				type = JavaAliaser.getJavaSafeAlias(imported);
 			} else {
 				String pkg = CommonUtilities.packageName(imported.substring(0, lastDot));
 				if (pkg.equals("java.lang")) {
@@ -73,7 +73,7 @@ public class PartTemplate extends JavaTemplate {
 					// alias the name.
 					type = imported;
 				} else {
-					type = pkg + '.' + Aliaser.getJavaSafeAlias(imported.substring(lastDot + 1));
+					type = pkg + '.' + JavaAliaser.getJavaSafeAlias(imported.substring(lastDot + 1));
 				}
 			}
 			out.println("import " + type + ";");
@@ -109,7 +109,7 @@ public class PartTemplate extends JavaTemplate {
 			nameOrAlias = (String) annot.getValue();
 		else
 			nameOrAlias = part.getId();
-		out.print(Aliaser.getAlias(nameOrAlias));
+		out.print(JavaAliaser.getAlias(nameOrAlias));
 	}
 
 	public void genSuperClass(Part part, Context ctx, TabbedWriter out) {
