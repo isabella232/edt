@@ -11,13 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.generator.java;
 
-import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.JavaGenerator;
-import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.Part;
 
 public class EGL2Java extends AbstractGeneratorCommand {
 
