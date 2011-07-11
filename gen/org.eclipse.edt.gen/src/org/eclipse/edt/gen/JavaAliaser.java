@@ -13,388 +13,244 @@ package org.eclipse.edt.gen;
 
 import java.util.Properties;
 
-/**
- * This is a copy of the Java Aliaser since we cannot have a dependency of the Java Plugin 
- */
-public class JavaAliaser
-{
+public class JavaAliaser {
 	/**
-	 * A registry for the aliases that we have to use for
-	 * Java's keywords.
+	 * A registry for the aliases that we have to use for Java's keywords.
 	 */
 	private static final Properties keywordCache = new Properties();
 
-	/**
-	 * A registry for the aliases that we have to use for
-	 * part names, backed by the keywordCache
-	 */
-	private static final Properties aliasCache = new Properties( keywordCache );
-
-	static
-	{
-		// To prevent compilation errors, insert aliases for
-		// Java's keywords.
-		keywordCache.put( "abstract", "abstract_" );
-		keywordCache.put( "assert", "assert_" );
-		keywordCache.put( "boolean", "boolean_" );
-		keywordCache.put( "break", "break_" );
-		keywordCache.put( "byte", "byte_" );
-		keywordCache.put( "case", "case_" );
-		keywordCache.put( "catch", "catch_" );
-		keywordCache.put( "char", "char_" );
-		keywordCache.put( "class", "class_" );
-		keywordCache.put( "const", "const_" );
-		keywordCache.put( "continue", "continue_" );
-		keywordCache.put( "default", "default_" );
-		keywordCache.put( "do", "do_" );
-		keywordCache.put( "double", "double_" );
-		keywordCache.put( "else", "else_" );
-		keywordCache.put( "extends", "extends_" );
-		keywordCache.put( "false", "false_" );
-		keywordCache.put( "final", "final_" );
-		keywordCache.put( "finally", "finally_" );
-		keywordCache.put( "float", "float_" );
-		keywordCache.put( "for", "for_" );
-		keywordCache.put( "goto", "goto_" );
-		keywordCache.put( "if", "if_" );
-		keywordCache.put( "implements", "implements_" );
-		keywordCache.put( "import", "import_" );
-		keywordCache.put( "instanceof", "instanceof_" );
-		keywordCache.put( "int", "int_" );
-		keywordCache.put( "interface", "interface_" );
-		keywordCache.put( "long", "long_" );
-		keywordCache.put( "native", "native_" );
-		keywordCache.put( "new", "new_" );
-		keywordCache.put( "null", "null_" );
-		keywordCache.put( "package", "package_" );
-		keywordCache.put( "private", "private_" );
-		keywordCache.put( "protected", "protected_" );
-		keywordCache.put( "public", "public_" );
-		keywordCache.put( "return", "return_" );
-		keywordCache.put( "short", "short_" );
-		keywordCache.put( "static", "static_" );
-		keywordCache.put( "strictfp", "strictfp_" );
-		keywordCache.put( "super", "super_" );
-		keywordCache.put( "switch", "switch_" );
-		keywordCache.put( "synchronized", "synchronized_" );
-		keywordCache.put( "this", "this_" );
-		keywordCache.put( "throw", "throw_" );
-		keywordCache.put( "throws", "throws_" );
-		keywordCache.put( "transient", "transient_" );
-		keywordCache.put( "true", "true_" );
-		keywordCache.put( "try", "try_" );
-		keywordCache.put( "void", "void_" );
-		keywordCache.put( "volatile", "volatile_" );
-		keywordCache.put( "while", "while_" );
+	static {
+		// To prevent compilation errors, insert aliases for Java's keywords.
+		keywordCache.put("abstract", "eze_abstract");
+		keywordCache.put("assert", "eze_assert");
+		keywordCache.put("boolean", "eze_boolean");
+		keywordCache.put("break", "eze_break");
+		keywordCache.put("byte", "eze_byte");
+		keywordCache.put("case", "eze_case");
+		keywordCache.put("catch", "eze_catch");
+		keywordCache.put("char", "eze_char");
+		keywordCache.put("class", "eze_class");
+		keywordCache.put("const", "eze_const");
+		keywordCache.put("continue", "eze_continue");
+		keywordCache.put("default", "eze_default");
+		keywordCache.put("do", "eze_do");
+		keywordCache.put("double", "eze_double");
+		keywordCache.put("else", "eze_else");
+		keywordCache.put("extends", "eze_extends");
+		keywordCache.put("false", "eze_false");
+		keywordCache.put("final", "eze_final");
+		keywordCache.put("finally", "eze_finally");
+		keywordCache.put("float", "eze_float");
+		keywordCache.put("for", "eze_for");
+		keywordCache.put("goto", "eze_goto");
+		keywordCache.put("if", "eze_if");
+		keywordCache.put("implements", "eze_implements");
+		keywordCache.put("import", "eze_import");
+		keywordCache.put("instanceof", "eze_instanceof");
+		keywordCache.put("int", "eze_int");
+		keywordCache.put("interface", "eze_interface");
+		keywordCache.put("long", "eze_long");
+		keywordCache.put("native", "eze_native");
+		keywordCache.put("new", "eze_new");
+		keywordCache.put("null", "eze_null");
+		keywordCache.put("package", "eze_package");
+		keywordCache.put("private", "eze_private");
+		keywordCache.put("protected", "eze_protected");
+		keywordCache.put("public", "eze_public");
+		keywordCache.put("return", "eze_return");
+		keywordCache.put("short", "eze_short");
+		keywordCache.put("static", "eze_static");
+		keywordCache.put("strictfp", "eze_strictfp");
+		keywordCache.put("super", "eze_super");
+		keywordCache.put("switch", "eze_switch");
+		keywordCache.put("synchronized", "eze_synchronized");
+		keywordCache.put("this", "eze_this");
+		keywordCache.put("throw", "eze_throw");
+		keywordCache.put("throws", "eze_throws");
+		keywordCache.put("transient", "eze_transient");
+		keywordCache.put("true", "eze_true");
+		keywordCache.put("try", "eze_try");
+		keywordCache.put("void", "eze_void");
+		keywordCache.put("volatile", "eze_volatile");
+		keywordCache.put("while", "eze_while");
 	}
-	
+
 	/**
 	 * Maps names of classes in the java.lang package to their aliases.
 	 */
 	private static final Properties javaLangNames = new Properties();
-	
-	static
-	{
-		// Initialize javaLangNames.
-		javaLangNames.put( "AbstractMethodError", "AbstractMethodError_" );
-		javaLangNames.put( "ArithmeticException", "ArithmeticException_" );
-		javaLangNames.put( "ArrayIndexOutOfBoundsException", "ArrayIndexOutOfBoundsException_" );
-		javaLangNames.put( "ArrayStoreException", "ArrayStoreException_" );
-		javaLangNames.put( "AssertionError", "AssertionError_" );
-		javaLangNames.put( "Boolean", "Boolean_" );
-		javaLangNames.put( "Byte", "Byte_" );
-		javaLangNames.put( "CharSequence", "CharSequence_" );
-		javaLangNames.put( "Character", "Character_" );
-		javaLangNames.put( "Class", "Class_" );
-		javaLangNames.put( "ClassCastException", "ClassCastException_" );
-		javaLangNames.put( "ClassCircularityError", "ClassCircularityError_" );
-		javaLangNames.put( "ClassFormatError", "ClassFormatError_" );
-		javaLangNames.put( "ClassLoader", "ClassLoader_" );
-		javaLangNames.put( "ClassNotFoundException", "ClassNotFoundException_" );
-		javaLangNames.put( "CloneNotSupportedException", "CloneNotSupportedException_" );
-		javaLangNames.put( "Cloneable", "Cloneable_" );
-		javaLangNames.put( "Comparable", "Comparable_" );
-		javaLangNames.put( "Compiler", "Compiler_" );
-		javaLangNames.put( "Double", "Double_" );
-		javaLangNames.put( "Error", "Error_" );
-		javaLangNames.put( "Exception", "Exception_" );
-		javaLangNames.put( "ExceptionInInitializerError", "ExceptionInInitializerError_" );
-		javaLangNames.put( "Float", "Float_" );
-		javaLangNames.put( "IllegalAccessError", "IllegalAccessError_" );
-		javaLangNames.put( "IllegalAccessException", "IllegalAccessException_" );
-		javaLangNames.put( "IllegalArgumentException", "IllegalArgumentException_" );
-		javaLangNames.put( "IllegalMonitorStateException", "IllegalMonitorStateException_" );
-		javaLangNames.put( "IllegalStateException", "IllegalStateException_" );
-		javaLangNames.put( "IllegalThreadStateException", "IllegalThreadStateException_" );
-		javaLangNames.put( "IncompatibleClassChangeError", "IncompatibleClassChangeError_" );
-		javaLangNames.put( "IndexOutOfBoundsException", "IndexOutOfBoundsException_" );
-		javaLangNames.put( "InheritableThreadLocal", "InheritableThreadLocal_" );
-		javaLangNames.put( "InstantiationError", "InstantiationError_" );
-		javaLangNames.put( "InstantiationException", "InstantiationException_" );
-		javaLangNames.put( "Integer", "Integer_" );
-		javaLangNames.put( "InternalError", "InternalError_" );
-		javaLangNames.put( "InterruptedException", "InterruptedException_" );
-		javaLangNames.put( "LinkageError", "LinkageError_" );
-		javaLangNames.put( "Long", "Long_" );
-		javaLangNames.put( "Math", "Math_" );
-		javaLangNames.put( "NegativeArraySizeException", "NegativeArraySizeException_" );
-		javaLangNames.put( "NoClassDefFoundError", "NoClassDefFoundError_" );
-		javaLangNames.put( "NoSuchFieldError", "NoSuchFieldError_" );
-		javaLangNames.put( "NoSuchFieldException", "NoSuchFieldException_" );
-		javaLangNames.put( "NoSuchMethodError", "NoSuchMethodError_" );
-		javaLangNames.put( "NoSuchMethodException", "NoSuchMethodException_" );
-		javaLangNames.put( "NullPointerException", "NullPointerException_" );
-		javaLangNames.put( "Number", "Number_" );
-		javaLangNames.put( "NumberFormatException", "NumberFormatException_" );
-		javaLangNames.put( "Object", "Object_" );
-		javaLangNames.put( "OutOfMemoryError", "OutOfMemoryError_" );
-		javaLangNames.put( "Package", "Package_" );
-		javaLangNames.put( "Process", "Process_" );
-		javaLangNames.put( "Runnable", "Runnable_" );
-		javaLangNames.put( "Runtime", "Runtime_" );
-		javaLangNames.put( "RuntimeException", "RuntimeException_" );
-		javaLangNames.put( "RuntimePermission", "RuntimePermission_" );
-		javaLangNames.put( "SecurityException", "SecurityException_" );
-		javaLangNames.put( "SecurityManager", "SecurityManager_" );
-		javaLangNames.put( "Short", "Short_" );
-		javaLangNames.put( "StackOverflowError", "StackOverflowError_" );
-		javaLangNames.put( "StackTraceElement", "StackTraceElement_" );
-		javaLangNames.put( "StrictMath", "StrictMath_" );
-		javaLangNames.put( "String", "String_" );
-		javaLangNames.put( "StringBuffer", "StringBuffer_" );
-		javaLangNames.put( "StringIndexOutOfBoundsException", "StringIndexOutOfBoundsException_" );
-		javaLangNames.put( "System", "System_" );
-		javaLangNames.put( "Thread", "Thread_" );
-		javaLangNames.put( "ThreadDeath", "ThreadDeath_" );
-		javaLangNames.put( "ThreadGroup", "ThreadGroup_" );
-		javaLangNames.put( "ThreadLocal", "ThreadLocal_" );
-		javaLangNames.put( "Throwable", "Throwable_" );
-		javaLangNames.put( "UnknownError", "UnknownError_" );
-		javaLangNames.put( "UnsatisfiedLinkError", "UnsatisfiedLinkError_" );
-		javaLangNames.put( "UnsupportedClassVersionError", "UnsupportedClassVersionError_" );
-		javaLangNames.put( "UnsupportedOperationException", "UnsupportedOperationException_" );
-		javaLangNames.put( "VerifyError", "VerifyError_" );
-		javaLangNames.put( "VirtualMachineError", "VirtualMachineError_" );
-		javaLangNames.put( "Void", "Void_" );
-	}
-	
-	/**
-	 * Adds an alias for the character to the buffer.  The
-	 * alias is the escape char followed by the four-digit hex
-	 * representation of the Unicode character.
-	 *
-	 * @param buffer  the buffer to write the alias to.
-	 * @param c       the character to be aliased.
-	 * @param escapeChar the escape character.
-	 */
-	private static void addCharacterAlias( StringBuffer buffer, char c, char escapeChar )
-	{
-		buffer.append( escapeChar );
-		String hex = Integer.toHexString( c );
-		
-		// For VG parts, uppercase it.
-		if ( escapeChar == 'x' )
-		{
-			hex = hex.toUpperCase();
-		}
 
-		// Make sure we get four digits.
-		if ( c < '\u0010' )
-		{
-			buffer.append( "000" );
-		}
-		else if ( c < '\u0100' )
-		{
-			buffer.append( "00" );
-		}
-		else if ( c < '\u1000' )
-		{
-			buffer.append( '0' );
-		}
-		buffer.append( hex );
+	static {
+		// Initialize javaLangNames.
+		javaLangNames.put("AbstractMethodError", "eze_AbstractMethodError");
+		javaLangNames.put("ArithmeticException", "eze_ArithmeticException");
+		javaLangNames.put("ArrayIndexOutOfBoundsException", "eze_ArrayIndexOutOfBoundsException");
+		javaLangNames.put("ArrayStoreException", "eze_ArrayStoreException");
+		javaLangNames.put("AssertionError", "eze_AssertionError");
+		javaLangNames.put("Boolean", "eze_Boolean");
+		javaLangNames.put("Byte", "eze_Byte");
+		javaLangNames.put("CharSequence", "eze_CharSequence");
+		javaLangNames.put("Character", "eze_Character");
+		javaLangNames.put("Class", "eze_Class");
+		javaLangNames.put("ClassCastException", "eze_ClassCastException");
+		javaLangNames.put("ClassCircularityError", "eze_ClassCircularityError");
+		javaLangNames.put("ClassFormatError", "eze_ClassFormatError");
+		javaLangNames.put("ClassLoader", "eze_ClassLoader");
+		javaLangNames.put("ClassNotFoundException", "eze_ClassNotFoundException");
+		javaLangNames.put("CloneNotSupportedException", "eze_CloneNotSupportedException");
+		javaLangNames.put("Cloneable", "eze_Cloneable");
+		javaLangNames.put("Comparable", "eze_Comparable");
+		javaLangNames.put("Compiler", "eze_Compiler");
+		javaLangNames.put("Double", "eze_Double");
+		javaLangNames.put("Error", "eze_Error");
+		javaLangNames.put("Exception", "eze_Exception");
+		javaLangNames.put("ExceptionInInitializerError", "eze_ExceptionInInitializerError");
+		javaLangNames.put("Float", "eze_Float");
+		javaLangNames.put("IllegalAccessError", "eze_IllegalAccessError");
+		javaLangNames.put("IllegalAccessException", "eze_IllegalAccessException");
+		javaLangNames.put("IllegalArgumentException", "eze_IllegalArgumentException");
+		javaLangNames.put("IllegalMonitorStateException", "eze_IllegalMonitorStateException");
+		javaLangNames.put("IllegalStateException", "eze_IllegalStateException");
+		javaLangNames.put("IllegalThreadStateException", "eze_IllegalThreadStateException");
+		javaLangNames.put("IncompatibleClassChangeError", "eze_IncompatibleClassChangeError");
+		javaLangNames.put("IndexOutOfBoundsException", "eze_IndexOutOfBoundsException");
+		javaLangNames.put("InheritableThreadLocal", "eze_InheritableThreadLocal");
+		javaLangNames.put("InstantiationError", "eze_InstantiationError");
+		javaLangNames.put("InstantiationException", "eze_InstantiationException");
+		javaLangNames.put("Integer", "eze_Integer");
+		javaLangNames.put("InternalError", "eze_InternalError");
+		javaLangNames.put("InterruptedException", "eze_InterruptedException");
+		javaLangNames.put("LinkageError", "eze_LinkageError");
+		javaLangNames.put("Long", "eze_Long");
+		javaLangNames.put("Math", "eze_Math");
+		javaLangNames.put("NegativeArraySizeException", "eze_NegativeArraySizeException");
+		javaLangNames.put("NoClassDefFoundError", "eze_NoClassDefFoundError");
+		javaLangNames.put("NoSuchFieldError", "eze_NoSuchFieldError");
+		javaLangNames.put("NoSuchFieldException", "eze_NoSuchFieldException");
+		javaLangNames.put("NoSuchMethodError", "eze_NoSuchMethodError");
+		javaLangNames.put("NoSuchMethodException", "eze_NoSuchMethodException");
+		javaLangNames.put("NullPointerException", "eze_NullPointerException");
+		javaLangNames.put("Number", "eze_Number");
+		javaLangNames.put("NumberFormatException", "eze_NumberFormatException");
+		javaLangNames.put("Object", "eze_Object");
+		javaLangNames.put("OutOfMemoryError", "eze_OutOfMemoryError");
+		javaLangNames.put("Package", "eze_Package");
+		javaLangNames.put("Process", "eze_Process");
+		javaLangNames.put("Runnable", "eze_Runnable");
+		javaLangNames.put("Runtime", "eze_Runtime");
+		javaLangNames.put("RuntimeException", "eze_RuntimeException");
+		javaLangNames.put("RuntimePermission", "eze_RuntimePermission");
+		javaLangNames.put("SecurityException", "eze_SecurityException");
+		javaLangNames.put("SecurityManager", "eze_SecurityManager");
+		javaLangNames.put("Short", "eze_Short");
+		javaLangNames.put("StackOverflowError", "eze_StackOverflowError");
+		javaLangNames.put("StackTraceElement", "eze_StackTraceElement");
+		javaLangNames.put("StrictMath", "eze_StrictMath");
+		javaLangNames.put("String", "eze_String");
+		javaLangNames.put("StringBuffer", "eze_StringBuffer");
+		javaLangNames.put("StringIndexOutOfBoundsException", "eze_StringIndexOutOfBoundsException");
+		javaLangNames.put("System", "eze_System");
+		javaLangNames.put("Thread", "eze_Thread");
+		javaLangNames.put("ThreadDeath", "eze_ThreadDeath");
+		javaLangNames.put("ThreadGroup", "eze_ThreadGroup");
+		javaLangNames.put("ThreadLocal", "eze_ThreadLocal");
+		javaLangNames.put("Throwable", "eze_Throwable");
+		javaLangNames.put("UnknownError", "eze_UnknownError");
+		javaLangNames.put("UnsatisfiedLinkError", "eze_UnsatisfiedLinkError");
+		javaLangNames.put("UnsupportedClassVersionError", "eze_UnsupportedClassVersionError");
+		javaLangNames.put("UnsupportedOperationException", "eze_UnsupportedOperationException");
+		javaLangNames.put("VerifyError", "eze_VerifyError");
+		javaLangNames.put("VirtualMachineError", "eze_VirtualMachineError");
+		javaLangNames.put("Void", "eze_Void");
 	}
 
 	/**
 	 * Returns true if name is a Java keyword that we should use an alias for.
-	 * 
-	 * @param name  the name to check.
+	 * @param name the name to check.
 	 * @return true if name is a Java keyword that we should use an alias for.
 	 */
-	public static boolean isJavaKeyword( String name )
-	{
-		return JavaAliaser.keywordCache.containsKey( name );
+	public static boolean isJavaKeyword(String name) {
+		return JavaAliaser.keywordCache.containsKey(name);
 	}
 
 	/**
-	 * Returns an alias for the part name.  Aliases are only different
-	 * from the name when the name is a Java keyword or it contains the 
-	 * characters $, -, @, _, or #.  Java keywords are aliased by adding a 
-	 * dollar sign at the end of the name.  Invalid characters are aliased
-	 * by replacing them with a string made from the escape character plus the 
-	 * Unicode value of the aliased character in hex.  For example, if the
-	 * escape character is '_', the alias for HELLO is HELLO, the alias for throws
-	 * is throws_, the alias for sand$ is sand_0024, and the alias for rice-a-roni
-	 * is rice_002da_002droni.
-	 *
-	 * @param partName   the name of the part.
-	 * @param escapeChar the escape character to use.
-	 * @return either an alias for the part name, or the part
-	 *                  name if it doesn't need an alias.
+	 * Returns an alias for the part name. Aliases are only different from the name when the name is a Java keyword. Java
+	 * keywords are aliased by prefixing the keyword with eze_.
+	 * @param partName the name of the part.
+	 * @return either an alias for the part name, or the part name if it doesn't need an alias.
 	 */
-	public static String getAlias( String partName, char escapeChar )
-	{
-		// First check our cache of names so we don't have to
-		// examine each character in the part name every time.
-		String alias = JavaAliaser.aliasCache.getProperty( partName );
-		if ( alias != null )
-		{
-			return alias;
-		}
-	
-		// We have to examine the part name to make an alias
-		// for it.
-		char[] chars = partName.toCharArray();
-		int start = 0;
-		StringBuffer buffer = null;
-		for ( int i = 0; i < chars.length; i++ )
-		{
-			if ( /*chars[ i ] == '$' || */ chars[ i ] == '-' || /* chars[ i ] == '_' || */
-			     chars[ i ] == '@' /* ||  chars[ i ] == '#' */ )
-			{
-				if ( buffer == null )
-				{
-					// Make a buffer to hold the alias in.
-					buffer = new StringBuffer( chars.length + 16 );
-				}
-	
-				// Put the characters that don't need to be
-				// aliased into the buffer.
-				buffer.append( chars, start, i - start );
-	
-				// Put the hex for this character into the
-				// buffer.
-				JavaAliaser.addCharacterAlias( buffer, chars[ i ], escapeChar );
-				start = i + 1;
-			}
-		}
-	
-		// Save the value in the cache and return it.
-		if ( buffer == null )
-		{
-			// No alias was needed.
-			JavaAliaser.aliasCache.put( partName, partName );
+	public static String getAlias(String partName) {
+		// check our cache of names so we don't have to examine each character in the part name every time.
+		String alias = JavaAliaser.keywordCache.getProperty(partName);
+		if (alias == null)
 			return partName;
-		}
 		else
-		{
-			// An alias was needed.
-			buffer.append( chars, start, chars.length - start );
-			alias = buffer.toString();
-			JavaAliaser.aliasCache.put( partName, alias );
 			return alias;
-		}
 	}
 
 	/**
-	 * Returns an alias for the part name with '_' as the escape character.
-	 * @param  partName
-	 * @return either an alias for the part name, or the part
-	 *                  name if it doesn't need an alias.
+	 * This is the same as getAlias, with one more step. The value it returns will not be the name of any class in the
+	 * java.lang package.
+	 * @param partName the name of the part.
+	 * @return either an alias for the part name, or the part name if it doesn't need an alias.
 	 */
-	public static String getAlias( String partName )
-	{
-		return( getAlias( partName, '_' ) );
+	public static String getJavaSafeAlias(String partName) {
+		String alias = JavaAliaser.getAlias(partName);
+		return JavaAliaser.javaLangNames.getProperty(alias, alias);
 	}
 
 	/**
-	 * This is the same as getAlias, with one more step.  The value it returns
-	 * will not be the name of any class in the java.lang package.
-	 * 
-	 * @param partName  the name of the part.
-	 * @return either an alias for the part name, or the part
-	 *                  name if it doesn't need an alias.
-	 */
-	public static String getJavaSafeAlias( String partName )
-	{
-		String alias = JavaAliaser.getAlias( partName );
-		return JavaAliaser.javaLangNames.getProperty( alias, alias );
-	}
-	
-	/**
-	 * Return the package name in lowercase with folders separated by 
-	 * a separator character.
-	 * @param pkg		String array of folder names
+	 * Return the package name in lowercase with folders separated by a separator character.
+	 * @param pkg String array of folder names
 	 * @param separator Character separator
-	 * @return		Legal Java gen package name
+	 * @return Legal Java gen package name
 	 */
-	public static String packageNameAlias(String[] pkg, char separator)
-	{
+	public static String packageNameAlias(String[] pkg, char separator) {
 		StringBuffer buff = new StringBuffer();
-		for (int i=0; i<pkg.length; i++) 
-		{
-			if (i>0)
-			{
+		for (int i = 0; i < pkg.length; i++) {
+			if (i > 0)
 				buff.append(separator);
-			}	
 			buff.append(getJavaSafeAlias(pkg[i]).toLowerCase());
-		}		
+		}
 		return buff.toString();
 	}
 
 	/**
-	 * @return a String made from packageName, lowercased, with each part aliased. 
+	 * @return a String made from packageName, lowercased, with each part aliased.
 	 */
-	public static String packageNameAlias( String packageName )
-	{
+	public static String packageNameAlias(String packageName) {
 		String unAliased = packageName.toLowerCase();
 		String aliased = "";
-		int dotIndex = unAliased.indexOf( '.' );
-		if ( dotIndex == -1 )
-		{
-			aliased = getJavaSafeAlias( unAliased );
-		}
-		else
-		{
-			while ( dotIndex != -1 )
-			{
-				String piece = unAliased.substring( 0, dotIndex );
-				aliased = 
-					( aliased.length() == 0 ? aliased : aliased + '.' )
-					+ getJavaSafeAlias( piece );
-				unAliased = unAliased.substring( dotIndex + 1 );
-				dotIndex = unAliased.indexOf( '.' );
+		int dotIndex = unAliased.indexOf('.');
+		if (dotIndex == -1)
+			aliased = getJavaSafeAlias(unAliased);
+		else {
+			while (dotIndex != -1) {
+				String piece = unAliased.substring(0, dotIndex);
+				aliased = (aliased.length() == 0 ? aliased : aliased + '.') + getJavaSafeAlias(piece);
+				unAliased = unAliased.substring(dotIndex + 1);
+				dotIndex = unAliased.indexOf('.');
 			}
-			aliased = 
-				aliased + '.' + getJavaSafeAlias( unAliased );
+			aliased = aliased + '.' + getJavaSafeAlias(unAliased);
 		}
-		
 		return aliased;
 	}
-	
+
 	public static boolean isValidJavaIdentifier(String str, boolean validateNotKeyword) {
-		if (str == null) {
+		if (str == null)
 			return false;
-		}
-		if (str == "") {
+		if (str == "")
 			return true;
-		}
 		if (validateNotKeyword) {
-			if (isJavaKeyword(str)) {
+			if (isJavaKeyword(str))
 				return false;
-			}
 		}
-		
-		if (!Character.isJavaIdentifierStart(str.charAt(0))) {
+		if (!Character.isJavaIdentifierStart(str.charAt(0)))
 			return false;
-		}
-		
 		for (int i = 1; i < str.length(); i++) {
-			if (!Character.isJavaIdentifierPart(str.charAt(i))) {
+			if (!Character.isJavaIdentifierPart(str.charAt(i)))
 				return false;
-			}
 		}
 		return true;
-
 	}
-		
 }
