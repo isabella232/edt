@@ -41,6 +41,8 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
+import org.eclipse.edt.compiler.core.ast.FunctionParameter.AttrType;
+import org.eclipse.edt.compiler.core.ast.FunctionParameter.UseType;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
@@ -48,12 +50,9 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
-import org.eclipse.edt.compiler.core.ast.FunctionParameter.AttrType;
-import org.eclipse.edt.compiler.core.ast.FunctionParameter.UseType;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibrary;
-import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
@@ -274,10 +273,10 @@ public class HandlerValidator extends FunctionContainerValidator {
 		
 		handler.accept(new AbstractASTVisitor() {
 			public boolean visit(Handler handler) {
-				if (!Aliaser.isValidJavaIdentifier(handler.getName().getCanonicalString(), true)) {
-					problemRequestor.acceptProblem(handler.getName(), IProblemRequestor.NAME_MUST_BE_VALID_JAVA_IDENTIFIER, new String[] {
-						handler.getName().getCanonicalString() });
-				}
+//				if (!Aliaser.isValidJavaIdentifier(handler.getName().getCanonicalString(), true)) {
+//					problemRequestor.acceptProblem(handler.getName(), IProblemRequestor.NAME_MUST_BE_VALID_JAVA_IDENTIFIER, new String[] {
+//						handler.getName().getCanonicalString() });
+//				}
 				return true;
 			}
 			public boolean visit(NestedFunction nestedFunction) {
@@ -293,9 +292,9 @@ public class HandlerValidator extends FunctionContainerValidator {
 			}
 			
 			private boolean isValidFunctionName(String name) {
-				if (!Aliaser.isValidJavaIdentifier(name, true)) {
-					return false;
-				}
+//				if (!Aliaser.isValidJavaIdentifier(name, true)) {
+//					return false;
+//				}
 				
 				if (name.length() > 0) {
 					if (name.startsWith("_"))  {
@@ -315,10 +314,10 @@ public class HandlerValidator extends FunctionContainerValidator {
 					Iterator i = classDataDeclaration.getNames().iterator();
 					while (i.hasNext()) {
 						Name name = (Name) i.next();
-						if (!Aliaser.isValidJavaIdentifier(name.getCanonicalString(), true)) {
-							problemRequestor.acceptProblem(name, IProblemRequestor.NAME_MUST_BE_VALID_JAVA_IDENTIFIER, new String[] {
-								name.getCanonicalString() });
-						}
+//						if (!Aliaser.isValidJavaIdentifier(name.getCanonicalString(), true)) {
+//							problemRequestor.acceptProblem(name, IProblemRequestor.NAME_MUST_BE_VALID_JAVA_IDENTIFIER, new String[] {
+//								name.getCanonicalString() });
+//						}
 						deepValidate(name.resolveDataBinding(), classDataDeclaration.getType(), new HashSet());
 					}
 				}
@@ -357,10 +356,10 @@ public class HandlerValidator extends FunctionContainerValidator {
 			private void deepValidateStructItem(StructureItemBinding siBinding, Node node, FixedRecordBinding rec) {
 				String name = siBinding.getCaseSensitiveName();
 				if (!name.equals("*")) {
-					if (!Aliaser.isValidJavaIdentifier(name, true)) {
-						problemRequestor.acceptProblem(node, IProblemRequestor.FIELD_NAME_MUST_BE_VALID_JAVA_IDENTIFIER, new String[] {
-							name, rec.getCaseSensitiveName()});
-					}
+//					if (!Aliaser.isValidJavaIdentifier(name, true)) {
+//						problemRequestor.acceptProblem(node, IProblemRequestor.FIELD_NAME_MUST_BE_VALID_JAVA_IDENTIFIER, new String[] {
+//							name, rec.getCaseSensitiveName()});
+//					}
 				}
 				
 				Iterator i = siBinding.getChildren().iterator();
@@ -373,10 +372,10 @@ public class HandlerValidator extends FunctionContainerValidator {
 				for (int i = 0; i < fields.length; i++) {
 					String name = fields[i].getCaseSensitiveName();
 					if (!name.equals("*")) {
-						if (!Aliaser.isValidJavaIdentifier(name, true)) {
-							problemRequestor.acceptProblem(node, IProblemRequestor.FIELD_NAME_MUST_BE_VALID_JAVA_IDENTIFIER, new String[] {
-								name, rec.getCaseSensitiveName()});
-						}
+//						if (!Aliaser.isValidJavaIdentifier(name, true)) {
+//							problemRequestor.acceptProblem(node, IProblemRequestor.FIELD_NAME_MUST_BE_VALID_JAVA_IDENTIFIER, new String[] {
+//								name, rec.getCaseSensitiveName()});
+//						}
 						deepValidate(fields[i], node, alreadySeen);
 					}
 				}

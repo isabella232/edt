@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.part;
 
-import org.eclipse.edt.compiler.binding.AnnotationFieldBinding;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.FixedRecordBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
@@ -25,19 +24,15 @@ import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.PrintStatement;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
 import org.eclipse.edt.compiler.internal.core.validation.ProgramParameterValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.IOStatementValidatorConstants;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
@@ -83,7 +78,8 @@ public class ProgramValidator extends FunctionContainerValidator {
 			name = program.getName().getCanonicalName();
 		}
 		
-		String aliasedName = Aliaser.getAlias(name);
+//		String aliasedName = Aliaser.getAlias(name);
+		String aliasedName = name;
 		
 		if (aliasedName.length() > 8) {
 			Node node = program.getName();
