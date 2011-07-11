@@ -74,7 +74,7 @@ public class FieldTemplate extends JavaTemplate {
 		genMethodName(field, ctx, out);
 		out.println("() {");
 		out.print("return (");
-		out.print(field.getName());
+		ctx.invoke(genName, field, ctx, out);
 		out.println(");");
 		out.println("}");
 	}
@@ -86,7 +86,7 @@ public class FieldTemplate extends JavaTemplate {
 		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
 		out.println(" ezeValue ) {");
 		out.print("this.");
-		out.print(field.getName());
+		ctx.invoke(genName, field, ctx, out);
 		out.println(" = ezeValue;");
 		out.println("}");
 	}
