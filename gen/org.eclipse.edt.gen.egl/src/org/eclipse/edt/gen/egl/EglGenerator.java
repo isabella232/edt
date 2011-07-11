@@ -12,7 +12,6 @@ package org.eclipse.edt.gen.egl;
  *******************************************************************************/
 
 
-import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
@@ -89,17 +88,6 @@ public class EglGenerator extends Generator{
 	public void generate(Part part) throws GenerationException {
 	}
 	
-	public String getRelativeFileName(Class<?> clazz) {
-		StringBuilder buf = new StringBuilder(50);
-		String pkg = clazz.getPackage().getName();
-		if (pkg.length() > 0) {
-			buf.append(Aliaser.packageNameAlias(pkg.split("[.]"), '/'));
-			buf.append('/');
-		}
-		buf.append(Aliaser.getAlias(clazz.getSimpleName()));
-		buf.append(getFileExtention());
-		return buf.toString();
-	}
 	public Context getContext() {
 		return context;
 	}
