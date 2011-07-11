@@ -28,21 +28,20 @@ import org.eclipse.osgi.util.NLS;
  */
 public class SMAPTransformer implements ClassFileTransformer
 {
-	private File location;
+	private File defaultLocation;
 	
 	public SMAPTransformer( String location )
 	{
 		super();
-		
 		if ( location != null && location.length() != 0 )
 		{
-			this.location = new File( location );
+			this.defaultLocation = new File( location );
 		}
 	}
 	
 	@Override
-	public byte[] transform( ClassLoader loader, String name, @SuppressWarnings("rawtypes") Class redefiningClass,
-			ProtectionDomain domain, byte[] bytes ) throws IllegalClassFormatException
+	public byte[] transform( ClassLoader loader, String name, @SuppressWarnings("rawtypes") Class redefiningClass, ProtectionDomain domain,
+			byte[] bytes ) throws IllegalClassFormatException
 	{
 		// This is being called by multiple threads so we must remain stateless. Run the transform in a stateful manner.
 		return new TransformerWorker().transform( loader, name, redefiningClass, domain, bytes );
@@ -58,8 +57,8 @@ public class SMAPTransformer implements ClassFileTransformer
 		private byte[] outClassBytes;
 		private int outClassIndex;
 		
-		byte[] transform( ClassLoader loader, String name, @SuppressWarnings("rawtypes") Class redefiningClass,
-				ProtectionDomain domain, byte[] bytes ) throws IllegalClassFormatException
+		byte[] transform( ClassLoader loader, String name, @SuppressWarnings("rawtypes") Class redefiningClass, ProtectionDomain domain, byte[] bytes )
+				throws IllegalClassFormatException
 		{
 			className = name;
 			inClassBytes = bytes;
@@ -67,21 +66,31 @@ public class SMAPTransformer implements ClassFileTransformer
 			// if the debug info exists, load it
 			try
 			{
-				if ( location == null )
+				File location;
+				try
 				{
-					try
-					{
-						// URI will handle spaces, among other things.
-						location = new File( domain.getCodeSource().getLocation().toURI() );
-					}
-					catch ( URISyntaxException e )
-					{
-						// Failsafe - just handles spaces.
-						location = new File( domain.getCodeSource().getLocation().getFile().replaceAll( "%20", " " ) ); //$NON-NLS-1$ //$NON-NLS-2$
-					}
+					// URI will handle spaces, among other things.
+					location = new File( domain.getCodeSource().getLocation().toURI() );
 				}
-				File inSmapFile = new File( location, className + Constants.smap_fileExtension );
-				FileInputStream inputStream = new FileInputStream( inSmapFile );
+				catch ( URISyntaxException e )
+				{
+					// Failsafe - just handles spaces.
+					location = new File( domain.getCodeSource().getLocation().getFile().replaceAll( "%20", " " ) ); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+				
+				File inSmapFile;
+				FileInputStream inputStream = null;
+				try
+				{
+					inSmapFile = new File( location, className + Constants.smap_fileExtension );
+					inputStream = new FileInputStream( inSmapFile );
+				}
+				catch ( Exception e )
+				{
+					inSmapFile = new File( defaultLocation, className + Constants.smap_fileExtension );
+					inputStream = new FileInputStream( inSmapFile );
+				}
+				
 				int length = (int)inSmapFile.length();
 				debugInfoBytes = new byte[ length ];
 				inputStream.read( debugInfoBytes, 0, length );
@@ -284,8 +293,7 @@ public class SMAPTransformer implements ClassFileTransformer
 						}
 						catch ( UnsupportedEncodingException e )
 						{
-							System.out.println( NLS.bind( EDTDebugCoreMessages.TransformerUnsupportedEncoding,
-									className ) );
+							System.out.println( NLS.bind( EDTDebugCoreMessages.TransformerUnsupportedEncoding, className ) );
 							return false;
 						}
 						if ( str.equals( Constants.smap_attribute ) )
