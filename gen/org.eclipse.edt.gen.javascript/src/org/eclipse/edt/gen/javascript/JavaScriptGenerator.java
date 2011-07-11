@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
@@ -118,7 +117,7 @@ public class JavaScriptGenerator extends Generator {
 		StringBuilder buf = new StringBuilder(50);
 		String pkg = part.getPackageName();
 		if (pkg.length() > 0) {
-			buf.append(Aliaser.packageNameAlias(pkg.split("[.]"), '/'));
+			buf.append(JavaScriptAliaser.packageNameAlias(pkg.split("[.]"), '/'));
 			buf.append('/');
 		}
 		String nameOrAlias;
@@ -127,7 +126,7 @@ public class JavaScriptGenerator extends Generator {
 			nameOrAlias = (String) annot.getValue();
 		else
 			nameOrAlias = part.getId();
-		buf.append(Aliaser.getAlias(nameOrAlias));
+		buf.append(JavaScriptAliaser.getAlias(nameOrAlias));
 		buf.append(getFileExtention());
 		return buf.toString();
 	}
