@@ -23,8 +23,8 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.ui.actions.IToggleBreakpointsTargetExtension;
-import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
 import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
+import org.eclipse.edt.gen.JavaAliaser;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLFile;
@@ -153,7 +153,7 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 				IPackageDeclaration[] pkg = eglFile.getPackageDeclarations();
 				if ( pkg != null && pkg.length > 0 )
 				{
-					buf.append( Aliaser.packageNameAlias( pkg[ 0 ].getElementName() ) );
+					buf.append( JavaAliaser.packageNameAlias( pkg[ 0 ].getElementName() ) );
 					buf.append( '.' );
 				}
 				
@@ -165,7 +165,7 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 					name = name.substring( 0, idx );
 				}
 				
-				buf.append( Aliaser.getAlias( name ) );
+				buf.append( JavaAliaser.getAlias( name ) );
 				return buf.toString();
 			}
 			catch ( EGLModelException e )
