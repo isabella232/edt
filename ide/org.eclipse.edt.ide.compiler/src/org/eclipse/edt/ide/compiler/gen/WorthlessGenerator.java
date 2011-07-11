@@ -15,7 +15,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.GenerationException;
@@ -59,7 +58,7 @@ public class WorthlessGenerator extends JavaGenerator {
 				nameOrAlias = (String) annot.getValue();
 			else
 				nameOrAlias = part.getId();
-			out.print(Aliaser.getAlias(nameOrAlias));
+			out.print(nameOrAlias);
 			out.println(" {");
 			out.println("// I'm a completely worthless generator!");
 			out.println("}");
