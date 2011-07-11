@@ -15,8 +15,8 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.binding.annotationType.EGLIsSystemPartAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.utils.Aliaser;
 import org.eclipse.edt.gen.GenerationException;
+import org.eclipse.edt.gen.JavaAliaser;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.AsExpression;
@@ -42,7 +42,7 @@ public class CommonUtilities {
 
 	public static String packageName(String pkg) {
 		if (pkg != null && pkg.length() > 0) {
-			return Aliaser.packageNameAlias(pkg);
+			return JavaAliaser.packageNameAlias(pkg);
 		}
 
 		return pkg;
@@ -56,7 +56,7 @@ public class CommonUtilities {
 	 */
 	public static String fullClassAlias( Part part )
 	{
-		String alias = Aliaser.getJavaSafeAlias( part.getName() );
+		String alias = JavaAliaser.getJavaSafeAlias( part.getName() );
 		String pkg = part.getPackageName();
 		if ( pkg.length() > 0 )
 		{
@@ -74,7 +74,7 @@ public class CommonUtilities {
 	 */
 	public static String classAlias( Part part )
 	{
-		return Aliaser.getJavaSafeAlias( part.getName() );
+		return JavaAliaser.getJavaSafeAlias( part.getName() );
 	}
 	
 	/**
