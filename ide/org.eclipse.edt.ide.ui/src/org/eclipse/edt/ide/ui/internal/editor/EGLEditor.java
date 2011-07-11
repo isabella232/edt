@@ -52,7 +52,6 @@ import org.eclipse.edt.ide.ui.bidi.IBIDIProvider;
 import org.eclipse.edt.ide.ui.editor.IEGLEditor;
 import org.eclipse.edt.ide.ui.editor.IFoldingStructureProvider;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
-import org.eclipse.edt.ide.ui.internal.EGLPerspectiveFactory;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.outline.ImportGroup;
@@ -811,7 +810,7 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 		if(required == IShowInTargetList.class){
 			return new IShowInTargetList(){
 				public String[] getShowInTargetIds() {
-					return new String[]{EGLPerspectiveFactory.ID_PROJECT_EXPLORER_VIEW, IPageLayout.ID_OUTLINE, IPageLayout.ID_RES_NAV };
+					return new String[]{IPageLayout.ID_PROJECT_EXPLORER, IPageLayout.ID_OUTLINE, IPageLayout.ID_RES_NAV };
 				}				
 			};
 		}

@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal;
 
+import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
+import org.eclipse.ui.console.IConsoleConstants;
 
 public class EGLPerspectiveFactory implements IPerspectiveFactory {
 
@@ -29,8 +31,6 @@ public class EGLPerspectiveFactory implements IPerspectiveFactory {
 	public static String ID_NEW_EGL_RUIHANDLER_WIZARD = "org.eclipse.edt.ide.ui.newRuiHandlerWizard"; //$NON-NLS-1$	
 	public static String ID_NEW_EGL_RUIWIDGET_WIZARD = "org.eclipse.edt.ide.ui.newRuiWidgetWizard"; //$NON-NLS-1$	
 
-	public static String ID_PROJECT_EXPLORER_VIEW 	= "org.eclipse.ui.navigator.ProjectExplorer"; //$NON-NLS-1$
-	public static String ID_CONSOLE_VIEW 			= "org.eclipse.ui.console.ConsoleView"; //$NON-NLS-1$
 	public static String ID_SERVERS_VIEW 			= "org.eclipse.wst.server.ui.ServersView"; //$NON-NLS-1$
 
 	public static String ID_EGL_DATA_VIEW 			= "org.eclipse.edt.ide.ui.rui.visualeditor.views.PageDataView"; //$NON-NLS-1$
@@ -39,7 +39,6 @@ public class EGLPerspectiveFactory implements IPerspectiveFactory {
 	public static String ID_SQL_RESULTS_VIEW 		= "org.eclipse.edt.ide.ui.sql.view.EGLSQLResultsViewPart"; //$NON-NLS-1$
 
 	public static String ID_DATABASE_DEV_PERSPECTIVE = "org.eclipse.datatools.sqltools.sqleditor.perspectives.EditorPerspective";
-	public static String ID_DEBUG_PERSPECTIVE 		= "org.eclipse.debug.ui.DebugPerspective";
 	public static String ID_WEB_PERSPECTIVE 		= "org.eclipse.wst.web.ui.webDevPerspective";
 
 	// add new EGL wizard to the wizard menu	
@@ -67,7 +66,7 @@ public class EGLPerspectiveFactory implements IPerspectiveFactory {
 
 		// Top left.
 		IFolderLayout topLeft = layout.createFolder("topLeft", IPageLayout.LEFT, (float)0.26, editorArea);//$NON-NLS-1$
-		topLeft.addView(ID_PROJECT_EXPLORER_VIEW);
+		topLeft.addView(IPageLayout.ID_PROJECT_EXPLORER);
 		topLeft.addPlaceholder(IPageLayout.ID_RES_NAV);
 //		topLeft.addPlaceholder(ID_PARTS_REFERENCE_VIEW);
 
@@ -79,7 +78,7 @@ public class EGLPerspectiveFactory implements IPerspectiveFactory {
 		// Bottom right.
 		IFolderLayout bottomRight = layout.createFolder("bottomRight", IPageLayout.BOTTOM, (float)0.66, editorArea); //$NON-NLS-1$
 		bottomRight.addView(IPageLayout.ID_PROBLEM_VIEW);
-		bottomRight.addView(ID_CONSOLE_VIEW);
+		bottomRight.addView(IConsoleConstants.ID_CONSOLE_VIEW);
 		bottomRight.addView(IPageLayout.ID_PROP_SHEET);
 		bottomRight.addView(ID_SERVERS_VIEW);
 //		bottomRight.addPlaceholder(ID_SQL_RESULTS_VIEW);
@@ -91,16 +90,16 @@ public class EGLPerspectiveFactory implements IPerspectiveFactory {
 //		layout.addShowViewShortcut(ID_PARTS_REFERENCE_VIEW);	
 //		layout.addShowViewShortcut(ID_SQL_RESULTS_VIEW);	
 
-		layout.addShowViewShortcut(ID_CONSOLE_VIEW);
+		layout.addShowViewShortcut(IConsoleConstants.ID_CONSOLE_VIEW);
 		layout.addShowViewShortcut(IPageLayout.ID_OUTLINE);
-		layout.addShowViewShortcut(ID_PROJECT_EXPLORER_VIEW);
+		layout.addShowViewShortcut(IPageLayout.ID_PROJECT_EXPLORER);
 		layout.addShowViewShortcut(IPageLayout.ID_PROP_SHEET);
 		layout.addShowViewShortcut(ID_SERVERS_VIEW);
 		layout.addShowViewShortcut(IPageLayout.ID_PROBLEM_VIEW);	
 
 		// add related perspectives to the perspective menu
 		layout.addPerspectiveShortcut(ID_DATABASE_DEV_PERSPECTIVE); 
-		layout.addPerspectiveShortcut(ID_DEBUG_PERSPECTIVE);
+		layout.addPerspectiveShortcut(IDebugUIConstants.ID_DEBUG_PERSPECTIVE);
 		layout.addPerspectiveShortcut(JavaUI.ID_PERSPECTIVE);
 		layout.addPerspectiveShortcut(ID_WEB_PERSPECTIVE);
 
@@ -111,6 +110,7 @@ public class EGLPerspectiveFactory implements IPerspectiveFactory {
 
 		// add open part button to toolbar and action to Navigate menu
 		layout.addActionSet(EGLUI.ID_ACTION_SET);
+		layout.addActionSet(IDebugUIConstants.LAUNCH_ACTION_SET);
 
 		// add wizard action set to toolbar
 		layout.addActionSet(EGLUI.ID_NON_WEB_WIZARD_ACTION_SET);
