@@ -76,95 +76,6 @@ public class JavaAliaser {
 	}
 
 	/**
-	 * Maps names of classes in the java.lang package to their aliases.
-	 */
-	private static final Properties javaLangNames = new Properties();
-
-	static {
-		// Initialize javaLangNames.
-		javaLangNames.put("AbstractMethodError", "eze_AbstractMethodError");
-		javaLangNames.put("ArithmeticException", "eze_ArithmeticException");
-		javaLangNames.put("ArrayIndexOutOfBoundsException", "eze_ArrayIndexOutOfBoundsException");
-		javaLangNames.put("ArrayStoreException", "eze_ArrayStoreException");
-		javaLangNames.put("AssertionError", "eze_AssertionError");
-		javaLangNames.put("Boolean", "eze_Boolean");
-		javaLangNames.put("Byte", "eze_Byte");
-		javaLangNames.put("CharSequence", "eze_CharSequence");
-		javaLangNames.put("Character", "eze_Character");
-		javaLangNames.put("Class", "eze_Class");
-		javaLangNames.put("ClassCastException", "eze_ClassCastException");
-		javaLangNames.put("ClassCircularityError", "eze_ClassCircularityError");
-		javaLangNames.put("ClassFormatError", "eze_ClassFormatError");
-		javaLangNames.put("ClassLoader", "eze_ClassLoader");
-		javaLangNames.put("ClassNotFoundException", "eze_ClassNotFoundException");
-		javaLangNames.put("CloneNotSupportedException", "eze_CloneNotSupportedException");
-		javaLangNames.put("Cloneable", "eze_Cloneable");
-		javaLangNames.put("Comparable", "eze_Comparable");
-		javaLangNames.put("Compiler", "eze_Compiler");
-		javaLangNames.put("Double", "eze_Double");
-		javaLangNames.put("Error", "eze_Error");
-		javaLangNames.put("Exception", "eze_Exception");
-		javaLangNames.put("ExceptionInInitializerError", "eze_ExceptionInInitializerError");
-		javaLangNames.put("Float", "eze_Float");
-		javaLangNames.put("IllegalAccessError", "eze_IllegalAccessError");
-		javaLangNames.put("IllegalAccessException", "eze_IllegalAccessException");
-		javaLangNames.put("IllegalArgumentException", "eze_IllegalArgumentException");
-		javaLangNames.put("IllegalMonitorStateException", "eze_IllegalMonitorStateException");
-		javaLangNames.put("IllegalStateException", "eze_IllegalStateException");
-		javaLangNames.put("IllegalThreadStateException", "eze_IllegalThreadStateException");
-		javaLangNames.put("IncompatibleClassChangeError", "eze_IncompatibleClassChangeError");
-		javaLangNames.put("IndexOutOfBoundsException", "eze_IndexOutOfBoundsException");
-		javaLangNames.put("InheritableThreadLocal", "eze_InheritableThreadLocal");
-		javaLangNames.put("InstantiationError", "eze_InstantiationError");
-		javaLangNames.put("InstantiationException", "eze_InstantiationException");
-		javaLangNames.put("Integer", "eze_Integer");
-		javaLangNames.put("InternalError", "eze_InternalError");
-		javaLangNames.put("InterruptedException", "eze_InterruptedException");
-		javaLangNames.put("LinkageError", "eze_LinkageError");
-		javaLangNames.put("Long", "eze_Long");
-		javaLangNames.put("Math", "eze_Math");
-		javaLangNames.put("NegativeArraySizeException", "eze_NegativeArraySizeException");
-		javaLangNames.put("NoClassDefFoundError", "eze_NoClassDefFoundError");
-		javaLangNames.put("NoSuchFieldError", "eze_NoSuchFieldError");
-		javaLangNames.put("NoSuchFieldException", "eze_NoSuchFieldException");
-		javaLangNames.put("NoSuchMethodError", "eze_NoSuchMethodError");
-		javaLangNames.put("NoSuchMethodException", "eze_NoSuchMethodException");
-		javaLangNames.put("NullPointerException", "eze_NullPointerException");
-		javaLangNames.put("Number", "eze_Number");
-		javaLangNames.put("NumberFormatException", "eze_NumberFormatException");
-		javaLangNames.put("Object", "eze_Object");
-		javaLangNames.put("OutOfMemoryError", "eze_OutOfMemoryError");
-		javaLangNames.put("Package", "eze_Package");
-		javaLangNames.put("Process", "eze_Process");
-		javaLangNames.put("Runnable", "eze_Runnable");
-		javaLangNames.put("Runtime", "eze_Runtime");
-		javaLangNames.put("RuntimeException", "eze_RuntimeException");
-		javaLangNames.put("RuntimePermission", "eze_RuntimePermission");
-		javaLangNames.put("SecurityException", "eze_SecurityException");
-		javaLangNames.put("SecurityManager", "eze_SecurityManager");
-		javaLangNames.put("Short", "eze_Short");
-		javaLangNames.put("StackOverflowError", "eze_StackOverflowError");
-		javaLangNames.put("StackTraceElement", "eze_StackTraceElement");
-		javaLangNames.put("StrictMath", "eze_StrictMath");
-		javaLangNames.put("String", "eze_String");
-		javaLangNames.put("StringBuffer", "eze_StringBuffer");
-		javaLangNames.put("StringIndexOutOfBoundsException", "eze_StringIndexOutOfBoundsException");
-		javaLangNames.put("System", "eze_System");
-		javaLangNames.put("Thread", "eze_Thread");
-		javaLangNames.put("ThreadDeath", "eze_ThreadDeath");
-		javaLangNames.put("ThreadGroup", "eze_ThreadGroup");
-		javaLangNames.put("ThreadLocal", "eze_ThreadLocal");
-		javaLangNames.put("Throwable", "eze_Throwable");
-		javaLangNames.put("UnknownError", "eze_UnknownError");
-		javaLangNames.put("UnsatisfiedLinkError", "eze_UnsatisfiedLinkError");
-		javaLangNames.put("UnsupportedClassVersionError", "eze_UnsupportedClassVersionError");
-		javaLangNames.put("UnsupportedOperationException", "eze_UnsupportedOperationException");
-		javaLangNames.put("VerifyError", "eze_VerifyError");
-		javaLangNames.put("VirtualMachineError", "eze_VirtualMachineError");
-		javaLangNames.put("Void", "eze_Void");
-	}
-
-	/**
 	 * Returns true if name is a Java keyword that we should use an alias for.
 	 * @param name the name to check.
 	 * @return true if name is a Java keyword that we should use an alias for.
@@ -185,17 +96,6 @@ public class JavaAliaser {
 	}
 
 	/**
-	 * This is the same as getAlias, with one more step. The value it returns will not be the name of any class in the
-	 * java.lang package.
-	 * @param partName the name of the part.
-	 * @return either an alias for the part name, or the part name if it doesn't need an alias.
-	 */
-	public static String getJavaSafeAlias(String partName) {
-		String alias = getAlias(partName);
-		return javaLangNames.getProperty(alias, alias);
-	}
-
-	/**
 	 * Return the package name in lowercase with folders separated by a separator character.
 	 * @param pkg String array of folder names
 	 * @param separator Character separator
@@ -206,7 +106,7 @@ public class JavaAliaser {
 		for (int i = 0; i < pkg.length; i++) {
 			if (i > 0)
 				buff.append(separator);
-			buff.append(getJavaSafeAlias(pkg[i]).toLowerCase());
+			buff.append(getAlias(pkg[i]).toLowerCase());
 		}
 		return buff.toString();
 	}
@@ -219,15 +119,15 @@ public class JavaAliaser {
 		String aliased = "";
 		int dotIndex = unAliased.indexOf('.');
 		if (dotIndex == -1)
-			aliased = getJavaSafeAlias(unAliased);
+			aliased = getAlias(unAliased);
 		else {
 			while (dotIndex != -1) {
 				String piece = unAliased.substring(0, dotIndex);
-				aliased = (aliased.length() == 0 ? aliased : aliased + '.') + getJavaSafeAlias(piece);
+				aliased = (aliased.length() == 0 ? aliased : aliased + '.') + getAlias(piece);
 				unAliased = unAliased.substring(dotIndex + 1);
 				dotIndex = unAliased.indexOf('.');
 			}
-			aliased = aliased + '.' + getJavaSafeAlias(unAliased);
+			aliased = aliased + '.' + getAlias(unAliased);
 		}
 		return aliased;
 	}
