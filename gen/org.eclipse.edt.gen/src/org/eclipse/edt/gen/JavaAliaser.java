@@ -170,7 +170,7 @@ public class JavaAliaser {
 	 * @return true if name is a Java keyword that we should use an alias for.
 	 */
 	public static boolean isJavaKeyword(String name) {
-		return JavaAliaser.keywordCache.containsKey(name);
+		return keywordCache.containsKey(name);
 	}
 
 	/**
@@ -180,12 +180,8 @@ public class JavaAliaser {
 	 * @return either an alias for the part name, or the part name if it doesn't need an alias.
 	 */
 	public static String getAlias(String partName) {
-		// check our cache of names so we don't have to examine each character in the part name every time.
-		String alias = JavaAliaser.keywordCache.getProperty(partName);
-		if (alias == null)
-			return partName;
-		else
-			return alias;
+		// check our cache of names
+		return keywordCache.getProperty(partName, partName);
 	}
 
 	/**
@@ -195,8 +191,8 @@ public class JavaAliaser {
 	 * @return either an alias for the part name, or the part name if it doesn't need an alias.
 	 */
 	public static String getJavaSafeAlias(String partName) {
-		String alias = JavaAliaser.getAlias(partName);
-		return JavaAliaser.javaLangNames.getProperty(alias, alias);
+		String alias = getAlias(partName);
+		return javaLangNames.getProperty(alias, alias);
 	}
 
 	/**
