@@ -12,5 +12,6 @@ Export-Package: egl.lang,
  org.eclipse.edt.javart.resources,
  org.eclipse.edt.javart.services,
  org.eclipse.edt.javart.util,
- org.eclipse.edt.runtime.java.egl.lang
+ org.eclipse.edt.runtime.java.egl.lang,
+ org.eclipse.edt.runtime.java.eglx.xml
 Bundle-Vendor: Eclipse EGL Development Tools
