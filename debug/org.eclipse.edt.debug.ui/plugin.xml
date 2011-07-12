@@ -43,7 +43,7 @@
             targetID="org.eclipse.edt.ide.ui.EGLEditor"
             id="org.eclipse.edt.debug.EGLEditor.BreakpointRulerActions">
          <action
-               label="Toggle Breakpoint"
+               label="%AddBreakpoint.label"
                class="org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
                actionID="RulerDoubleClick"
                id="org.eclipse.edt.debug.ui.actions.ManageBreakpointRulerAction">
@@ -53,6 +53,29 @@
    
    <extension
          point="org.eclipse.ui.popupMenus">
+         <viewerContribution
+            targetID="#EGLRulerContext"
+            id="org.eclipse.edt.debug.ui.EGLEditorRulerPopupActions">
+            <action
+               class="org.eclipse.debug.ui.actions.RunToLineActionDelegate"
+               definitionId="org.eclipse.debug.ui.commands.RunToLine"
+               helpContextId="run_to_line_action_context"
+               id="org.eclipse.edt.debug.ui.actions.RunToLine"
+               label="%runToLineAction.label"
+               menubarPath="debug">
+            </action>
+            <visibility>
+               <and>
+                  <systemProperty
+                     name="org.eclipse.jdt.debug.ui.debuggerActive"
+                     value="true">
+                  </systemProperty>
+                  <objectClass
+                     name="org.eclipse.jface.text.ITextSelection">
+                  </objectClass>
+               </and>
+            </visibility>
+         </viewerContribution>
          <viewerContribution
             targetID="#EGLRulerContext"
             id="org.eclipse.edt.debug.ui.EGLEditorRulerPopupActions">
@@ -76,6 +99,30 @@
                menubarPath="debug">
             </action>
          </viewerContribution>
+         <viewerContribution
+               id="org.eclipse.edt.debug.ui.EGLEditorPopupActions"
+               targetID="#EGLEditorContext">
+            <visibility>
+               <and>
+                  <systemProperty
+                        name="org.eclipse.jdt.debug.ui.debuggerActive"
+                        value="true">
+                  </systemProperty>
+                  <objectClass
+                        name="org.eclipse.jface.text.ITextSelection">
+                  </objectClass>
+               </and>
+            </visibility>
+            <action
+                  class="org.eclipse.debug.ui.actions.RunToLineActionDelegate"
+                  definitionId="org.eclipse.debug.ui.commands.RunToLine"
+                  helpContextId="run_to_line_action_context"
+                  icon="icons/full/elcl16/runtoline_co.gif"
+                  id="org.eclipse.edt.debug.ui.actions.RunToLine"
+                  label="%runToLineAction.label"
+                  menubarPath="debug">
+            </action>
+         </viewerContribution>
    </extension>
    
    <extension point="org.eclipse.core.runtime.adapters">
@@ -83,6 +130,7 @@
             class="org.eclipse.edt.debug.internal.ui.actions.EGLBreakpointsAdapterFactory"
             adaptableType="org.eclipse.edt.ide.ui.editor.IEGLEditor">
             <adapter type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget"/>
+            <adapter type="org.eclipse.debug.ui.actions.IRunToLineTarget"/>
          </factory>
    </extension>
    

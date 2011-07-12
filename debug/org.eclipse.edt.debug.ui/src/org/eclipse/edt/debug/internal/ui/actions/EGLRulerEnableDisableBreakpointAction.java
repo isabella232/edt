@@ -50,14 +50,13 @@ public class EGLRulerEnableDisableBreakpointAction extends RulerEnableDisableBre
 				int line = getVerticalRulerInfo().getLineOfLastMouseButtonActivity();
 				if ( line != -1 )
 				{
-					Statement stmt = eglEditor.getStatementNode( line );
+					Statement stmt = BreakpointUtils.getStatementNode( eglEditor, line );
 					if ( stmt != null )
 					{
 						line = eglEditor.getLineAtOffset( stmt.getOffset() ) + 1;
 						try
 						{
-							bp = ToggleBreakpointsTarget.stratumBreakpointExists( ((IFileEditorInput)input).getFile(),
-									line, EDTDebugCorePlugin.EGL_STRATUM );
+							bp = BreakpointUtils.stratumBreakpointExists( ((IFileEditorInput)input).getFile(), line, EDTDebugCorePlugin.EGL_STRATUM );
 						}
 						catch ( CoreException ce )
 						{

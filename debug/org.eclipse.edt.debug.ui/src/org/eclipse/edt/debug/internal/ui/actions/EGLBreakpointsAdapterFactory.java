@@ -12,6 +12,7 @@
 package org.eclipse.edt.debug.internal.ui.actions;
 
 import org.eclipse.core.runtime.IAdapterFactory;
+import org.eclipse.debug.ui.actions.IRunToLineTarget;
 import org.eclipse.debug.ui.actions.IToggleBreakpointsTarget;
 
 /**
@@ -32,6 +33,10 @@ public class EGLBreakpointsAdapterFactory implements IAdapterFactory
 		{
 			return new ToggleBreakpointsTarget();
 		}
+		if ( adapterType == IRunToLineTarget.class )
+		{
+			return new RunToLineTarget();
+		}
 		return null;
 	}
 	
@@ -41,6 +46,6 @@ public class EGLBreakpointsAdapterFactory implements IAdapterFactory
 	 */
 	public Class[] getAdapterList()
 	{
-		return new Class[] { IToggleBreakpointsTarget.class };
+		return new Class[] { IToggleBreakpointsTarget.class, IRunToLineTarget.class };
 	}
 }
