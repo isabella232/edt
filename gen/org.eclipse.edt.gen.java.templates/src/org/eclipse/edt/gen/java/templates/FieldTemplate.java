@@ -11,9 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+
+
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.ParameterKind;
@@ -29,12 +32,23 @@ public class FieldTemplate extends JavaTemplate {
 		// write out the debug extension data
 		CommonUtilities.generateSmapExtension(field, ctx);
 		// process the field
+		out.println("@javax.xml.bind.annotation.XmlTransient");
 		ctx.invokeSuper(this, genDeclaration, field, ctx, out);
 		transientOption(field, out);
 		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(" ");
 		ctx.invoke(genName, field, ctx, out);
 		out.println(";");
+	}
+
+	public void genXmlAnnotation(Field field, Context ctx, TabbedWriter out) {
+		Annotation annot = field.getAnnotation("eglx.xml._bind.annotation.XmlAttribute");
+		if(annot != null){
+			ctx.invoke(genXmlAnnotation, annot.getEClass(), ctx, out, annot);
+		}
+		else if((annot = field.getAnnotation("eglx.xml._bind.annotation.XmlElement")) != null){
+			ctx.invoke(genXmlAnnotation, annot.getEClass(), ctx, out, annot);
+		}
 	}
 
 	public void genInstantiation(Field field, Context ctx, TabbedWriter out) {
@@ -68,6 +82,7 @@ public class FieldTemplate extends JavaTemplate {
 	}
 
 	public void genGetter(Field field, Context ctx, TabbedWriter out) {
+		ctx.invoke(genXmlAnnotation, field, ctx, out);
 		out.print("public ");
 		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(" get");

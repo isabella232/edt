@@ -17,6 +17,7 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
@@ -65,6 +66,7 @@ public class EGLClassTemplate extends JavaTemplate {
 	}
 
 	public void genClassHeader(EGLClass part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genXmlAnnotation, part, ctx, out);
 		out.print("public class ");
 		ctx.invoke(genClassName, part, ctx, out);
 		out.print(" extends ");
@@ -73,6 +75,12 @@ public class EGLClassTemplate extends JavaTemplate {
 		ctx.invoke(genSerialVersionUID, part, ctx, out);
 	}
 
+	public void genXmlAnnotation(EGLClass part, Context ctx, TabbedWriter out) {
+		Annotation annot = part.getAnnotation("eglx.xml._bind.annotation.XMLRootElement");
+		if(annot != null){
+			ctx.invoke(genXmlAnnotation, annot.getEClass(), ctx, out, annot);
+		}
+	}
 	public void genClassBody(EGLClass part, Context ctx, TabbedWriter out) {
 		ctx.invoke(genFields, part, ctx, out);
 		ctx.invoke(genLibraries, part, ctx, out);
@@ -185,7 +193,12 @@ public class EGLClassTemplate extends JavaTemplate {
 		out.print(Constants.LIBRARY_PREFIX + arg.getFullyQualifiedName().replace('.', '_') + " = (");
 		ctx.invoke(genRuntimeTypeName, (Type) arg, ctx, out, TypeNameKind.EGLImplementation);
 		out.print(") _runUnit().getExecutable(\"");
-		out.print(CommonUtilities.fullClassAlias(arg));
+		if(ctx.mapsToNativeType(arg)){
+			out.print(ctx.getNativeMapping(arg.getFullyQualifiedName()));
+		}
+		else{
+			out.print(CommonUtilities.fullClassAlias(arg));
+		}
 		out.println("\");");
 		out.println("}");
 		out.println("return " + Constants.LIBRARY_PREFIX + arg.getFullyQualifiedName().replace('.', '_') + ";");
