@@ -56,7 +56,7 @@ public class CommonUtilities {
 	 */
 	public static String fullClassAlias( Part part )
 	{
-		String alias = JavaAliaser.getJavaSafeAlias( part.getName() );
+		String alias = JavaAliaser.getAlias( part.getName() );
 		String pkg = part.getPackageName();
 		if ( pkg.length() > 0 )
 		{
@@ -74,7 +74,7 @@ public class CommonUtilities {
 	 */
 	public static String classAlias( Part part )
 	{
-		return JavaAliaser.getJavaSafeAlias( part.getName() );
+		return JavaAliaser.getAlias( part.getName() );
 	}
 	
 	/**
