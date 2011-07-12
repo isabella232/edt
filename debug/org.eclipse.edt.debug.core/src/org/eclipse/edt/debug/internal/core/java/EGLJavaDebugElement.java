@@ -23,6 +23,7 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ITerminate;
 import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.edt.debug.core.IEGLDebugTarget;
+import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 
 /**
  * Super class of all EGL Java Debug framework classes.
@@ -55,6 +56,11 @@ public abstract class EGLJavaDebugElement extends DebugElement
 		{
 			return getDebugTarget();
 		}
+		if ( adapter == IJavaDebugTarget.class )
+		{
+			return getEGLJavaDebugTarget().getJavaDebugTarget();
+		}
+		
 		return super.getAdapter( adapter );
 	}
 	
