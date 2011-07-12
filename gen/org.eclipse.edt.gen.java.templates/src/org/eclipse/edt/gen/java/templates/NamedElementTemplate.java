@@ -47,6 +47,6 @@ public class NamedElementTemplate extends JavaTemplate {
 	}
 
 	public void genName(NamedElement element, Context ctx, TabbedWriter out) {
-		out.print(JavaAliaser.getJavaSafeAlias(element.getName()));
+		out.print(JavaAliaser.getAlias(element.getName()));
 	}
 }

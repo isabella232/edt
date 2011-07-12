@@ -19,6 +19,6 @@ import org.eclipse.edt.mof.egl.EnumerationEntry;
 public class EnumerationEntryTemplate extends JavaTemplate {
 
 	public void genName(EnumerationEntry element, Context ctx, TabbedWriter out) {
-		out.print(JavaAliaser.getJavaSafeAlias(element.getName()));
+		out.print(JavaAliaser.getAlias(element.getName()));
 	}
 }

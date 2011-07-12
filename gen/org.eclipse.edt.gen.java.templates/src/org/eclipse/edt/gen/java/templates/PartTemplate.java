@@ -65,7 +65,7 @@ public class PartTemplate extends JavaTemplate {
 			String type;
 			int lastDot = imported.lastIndexOf('.');
 			if (lastDot == -1) {
-				type = JavaAliaser.getJavaSafeAlias(imported);
+				type = JavaAliaser.getAlias(imported);
 			} else {
 				String pkg = CommonUtilities.packageName(imported.substring(0, lastDot));
 				if (pkg.equals("java.lang")) {
@@ -73,7 +73,7 @@ public class PartTemplate extends JavaTemplate {
 					// alias the name.
 					type = imported;
 				} else {
-					type = pkg + '.' + JavaAliaser.getJavaSafeAlias(imported.substring(lastDot + 1));
+					type = pkg + '.' + JavaAliaser.getAlias(imported.substring(lastDot + 1));
 				}
 			}
 			out.println("import " + type + ";");
