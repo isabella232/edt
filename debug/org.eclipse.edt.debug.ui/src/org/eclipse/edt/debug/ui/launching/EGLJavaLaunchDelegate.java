@@ -21,6 +21,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
+import org.eclipse.edt.debug.core.IEGLDebugTarget;
 import org.eclipse.edt.debug.internal.core.java.EGLJavaDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.launching.AbstractJavaLaunchConfigurationDelegate;
@@ -33,8 +34,7 @@ import org.eclipse.jdt.launching.JavaLaunchDelegate;
 public class EGLJavaLaunchDelegate extends AbstractJavaLaunchConfigurationDelegate
 {
 	@Override
-	public void launch( ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor )
-			throws CoreException
+	public void launch( ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor ) throws CoreException
 	{
 		// Set up the javaagent for instrumenting the SMAP info. Do this on a working copy so that it's not saved
 		// since the jar location can change.
@@ -76,10 +76,9 @@ public class EGLJavaLaunchDelegate extends AbstractJavaLaunchConfigurationDelega
 			if ( events != null && events.length != 0 && events[ 0 ].getKind() == DebugEvent.CREATE )
 			{
 				Object src = events[ 0 ].getSource();
-				if ( src instanceof IDebugTarget )
+				if ( src instanceof IDebugTarget && !(src instanceof IEGLDebugTarget) )
 				{
-					IJavaDebugTarget javaTarget = (IJavaDebugTarget)((IDebugTarget)src)
-							.getAdapter( IJavaDebugTarget.class );
+					IJavaDebugTarget javaTarget = (IJavaDebugTarget)((IDebugTarget)src).getAdapter( IJavaDebugTarget.class );
 					if ( javaTarget != null && javaTarget.getLaunch() == launch )
 					{
 						EGLJavaDebugTarget edtTarget = new EGLJavaDebugTarget( (IJavaDebugTarget)javaTarget );
