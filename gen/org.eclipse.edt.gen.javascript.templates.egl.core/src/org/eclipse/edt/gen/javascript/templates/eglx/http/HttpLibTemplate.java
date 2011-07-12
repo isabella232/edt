@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.javascript.templates.egl.core;
+package org.eclipse.edt.gen.javascript.templates.eglx.http;
 
 import java.util.Locale;
 
@@ -19,7 +19,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.Library;
 
-public class XMLLibTemplate extends JavaScriptTemplate {
+public class HttpLibTemplate extends JavaScriptTemplate {
 	// the library gets invoked here, with the invocation expression passed as the 1st argument in the args list. From here,
 	// we use the lowercase function name as the lookup for the generation. This means that all system functions are
 	// implemented by the lowercase method name. This technique allows a user to add/override system functions simply by
@@ -28,12 +28,21 @@ public class XMLLibTemplate extends JavaScriptTemplate {
 		ctx.invoke(arg.getTarget().getName().toLowerCase(Locale.ENGLISH), type, ctx, out, arg);
 	}
 
-	// all system functions are defined below, with the method name as lowercase.
-	public void convertfromxml(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+
+	public void convertfromurlencoded(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void converttoxml(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+	public void converttourlencoded(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
+
+	public void sethttpbasicauthentication(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
+	}
+
+	public void setproxybasicauthentication(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
+	}
+
 }

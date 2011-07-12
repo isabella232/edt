@@ -1,0 +1,57 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.gen.javascript.templates.eglx._service;
+
+import java.util.List;
+import java.util.Locale;
+
+import org.eclipse.edt.compiler.binding.annotationType.DeleteRestAnnotationTypeBinding;
+import org.eclipse.edt.compiler.binding.annotationType.GetRestAnnotationTypeBinding;
+import org.eclipse.edt.compiler.binding.annotationType.PostRestAnnotationTypeBinding;
+import org.eclipse.edt.compiler.binding.annotationType.PutRestAnnotationTypeBinding;
+import org.eclipse.edt.gen.javascript.Constants;
+import org.eclipse.edt.gen.javascript.Context;
+import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.AsExpression;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Type;
+
+public class ServiceLibTemplate extends JavaScriptTemplate {
+	// the library gets invoked here, with the invocation expression passed as the 1st argument in the args list. From here,
+	// we use the lowercase function name as the lookup for the generation. This means that all system functions are
+	// implemented by the lowercase method name. This technique allows a user to add/override system functions simply by
+	// extending this class and adding/overriding the system function name as the method name, in lowercase.
+	public void genInvocation(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		ctx.invoke(arg.getTarget().getName().toLowerCase(Locale.ENGLISH), type, ctx, out, arg);
+	}
+
+	public void bindservice(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		List<Expression> args = arg.getArguments();
+		if(args.size() == 2){
+			if(args.get(1) instanceof AsExpression){
+				Expression expr = ((AsExpression)args.get(1)).getObjectExpr();
+				ctx.invoke(genExpression, expr, ctx, out);
+				out.print(" = ");
+				ctx.invoke(genExpression, args.get(0), ctx, out);
+				out.println(";");
+			}
+		}
+		else{
+			
+		}
+	}
+
+}
