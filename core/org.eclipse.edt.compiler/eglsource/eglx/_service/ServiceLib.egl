@@ -9,20 +9,25 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package egl.core;
+package eglx._service;
 
-record SqlData type basicRecord
+import egl.lang.reflect.InterfacePart;
+
+library ServiceLib
 {
-	eglIsSystemPart = yes
+    eglIsSystemPart = yes
 }
-	10 sqlca hex(272){eglSystemConstant = 733};
-		20 * hex(24);
-		20 sqlcode int {eglSystemConstant = 732};
-		20 * hex(4);
-		20 sqlerrmc char(70) {eglSystemConstant = 735};
-		20 * hex(16);
-		20 sqlerrd int[6] {eglSystemConstant = 734};
-		20 sqlwarn char(1)[11] {eglSystemConstant = 736};
-		20 sqlstate char(5) {eglSystemConstant = 748};
+	//delegate
+	serviceExceptionHandler  serviceExceptionHandler {eglSystemConstant = 466};
+	
+//    function bindService (bindingKey string in) returns (egl.lang.reflect.ServicePart)
+//        {eglSystemConstant = 454}
+//    end
+    
+    function bindService(http eglx.http.HttpREST inout, intrface any const in)
+    end
+
 end
 
+Delegate serviceExceptionHandler(exp AnyException in) {eglIsSystemPart = yes}
+end

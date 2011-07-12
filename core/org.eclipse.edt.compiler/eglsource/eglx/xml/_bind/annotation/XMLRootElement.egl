@@ -1,0 +1,16 @@
+package eglx.xml._bind.annotation;
+
+Record XMLRootElement type Annotation
+{ targets = [ 
+		ElementKind.libraryPart,
+		ElementKind.programPart,
+		ElementKind.handlerPart,
+		ElementKind.recordPart,
+		ElementKind.servicePart,
+		ElementKind.interfacePart
+ ]}
+  name string = "##default";
+  namespace string = "##default";
+  nillable boolean;
+end
+

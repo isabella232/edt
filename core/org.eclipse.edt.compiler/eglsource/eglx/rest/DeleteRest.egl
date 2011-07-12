@@ -1,0 +1,16 @@
+package eglx.rest;
+
+Record DeleteRest type Annotation
+{ 
+	targets = [ ElementKind.functionMbr], 
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.DeleteRestAnnotationTypeBinding",
+	eglIsSystemAnnotation = yes
+}
+	uriTemplate string?;
+	requestFormat eglx._service.Encoding?;
+	requestCharset string = "UTF-8";
+	requestContentType string?;//default based on encoding
+	responseFormat eglx._service.Encoding?;
+	responseCharset string?;
+	responseContentType string?;//default based on encoding
+end

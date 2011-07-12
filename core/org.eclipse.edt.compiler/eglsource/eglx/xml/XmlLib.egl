@@ -9,20 +9,15 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package egl.core;
+package eglx.xml;
 
-record SqlData type basicRecord
-{
-	eglIsSystemPart = yes
-}
-	10 sqlca hex(272){eglSystemConstant = 733};
-		20 * hex(24);
-		20 sqlcode int {eglSystemConstant = 732};
-		20 * hex(4);
-		20 sqlerrmc char(70) {eglSystemConstant = 735};
-		20 * hex(16);
-		20 sqlerrd int[6] {eglSystemConstant = 734};
-		20 sqlwarn char(1)[11] {eglSystemConstant = 736};
-		20 sqlstate char(5) {eglSystemConstant = 748};
+library XmlLib{eglIsSystemPart = yes}
+
+    function convertFromXML(xmlstr string in, eglType any const in)
+    	{eglSystemConstant = 145}
+    end
+
+    function convertToXML(eglType any const in, document boolean in) returns(string)
+    	{eglSystemConstant = 146, eglValidNumberOfArguments = [1, 2]}
+    end
 end
-

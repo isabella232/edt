@@ -1,0 +1,9 @@
+package eglx.http;
+
+import eglx.jws.SOAPEnvelope;
+
+record HttpSOAP
+	request HttpRequest{method=HttpMethod.POST, encoding=eglx._service.Encoding.XML, charset = "UTF-8", contentType = "application/soap"};
+	response HttpResponse{encoding=eglx._service.Encoding.USE_CONTENTTYPE};
+	soapMessage SOAPEnvelope;
+end

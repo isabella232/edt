@@ -1,0 +1,6 @@
+package eglx.http; 
+
+record HttpREST
+	request HttpRequest{method=HttpMethod.POST, encoding=eglx._service.Encoding.JSON, charset = "UTF-8", contentType = "application/xml"};
+	response HttpResponse{encoding=eglx._service.Encoding.USE_CONTENTTYPE};
+end

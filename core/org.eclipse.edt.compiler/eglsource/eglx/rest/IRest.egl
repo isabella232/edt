@@ -9,15 +9,14 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package egl.core;
+package eglx.rest;
 
-library XMLLib{eglIsSystemPart = yes}
+// interface
+interface IRest
 
-    function convertFromXML(xmlstr string in, eglType any const in)
-    	{eglSystemConstant = 145}
-    end
+    function invokeGet(reqURL string in) returns(string)  {@getRest {uriTemplate="{reqURL}"}};
+    function invokePost(reqURL string in, representation string in) returns(string){@postRest {uriTemplate="{reqURL}"}};
+    function invokePut(reqURL string in, representation string in) returns(string)  {@putRest {uriTemplate="{reqURL}"}};
+    function invokeDelete(reqURL string in, representation string in) returns(string) {@deleteRest {uriTemplate="{reqURL}"}};
 
-    function convertToXML(eglType any const in, document boolean in) returns(string)
-    	{eglSystemConstant = 146, eglValidNumberOfArguments = [1, 2]}
-    end
 end

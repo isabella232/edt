@@ -47,29 +47,6 @@ Record LobProcessingException type Exception
 	resource String;
 end
 
-Record ServiceInvocationException type Exception
-{
-	eglIsSystemPart = yes
-}
-	source ServiceKind;
-  	detail1 string;
-  	detail2 string;
-  	detail3 string;
-end
-
-Record XMLProcessingException type Exception
-{
-	eglIsSystemPart = yes
-}
-  	detail string;
-end
-
-Record ServiceBindingException type Exception
-{
-	eglIsSystemPart = yes
-}
-end
-
 Record TypeCastException type Exception
 {
 	eglIsSystemPart = yes

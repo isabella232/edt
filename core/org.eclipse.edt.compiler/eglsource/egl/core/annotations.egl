@@ -45,15 +45,6 @@ Record AllowUnqualifiedItemReferences type Annotation
 	value boolean = yes;
 end
 
-Record BindService type Annotation
-{
-	targets = [elementKind.fieldMbr]/*,
-	targetTypes = [ServiceRef, InterfaceRef]*/,
-	eglIsSystemAnnotation = yes
-}
-  	bindingKey string;
-end
-
 Record CaseSensitive type Annotation
 {
 	targets = [ElementKind.fieldMbr],
@@ -72,15 +63,6 @@ Record ContainerContextDependent type Annotation
 	eglIsSystemAnnotation = yes
 }
 	value boolean = yes;
-end
-
-Record DedicatedService type Annotation
-{
-	targets = [elementKind.fieldMbr]/*,
-	targetTypes = [ServiceRef, InterfaceRef]*/,
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.DedicatedServiceAnnotationTypeBinding",
-	eglIsSystemAnnotation = yes
-}
 end
 
 Record DeleteAfterUse type Annotation
@@ -174,80 +156,6 @@ Record UnloadOnExit type Annotation {
 	value boolean = yes;
 end
 
-Record GetRest type Annotation
-{ 
-	targets = [ ElementKind.functionMbr], 
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.GetRestAnnotationTypeBinding",
-	eglIsSystemAnnotation = yes
-}
-	uriTemplate string;
-	requestFormat restFormatKind;
-	responseFormat restFormatKind;
-end
-
-Record PostRest type Annotation
-{ 
-	targets = [ ElementKind.functionMbr], 
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.PostRestAnnotationTypeBinding",
-	eglIsSystemAnnotation = yes
-}
-	uriTemplate string;
-	requestFormat restFormatKind;
-	responseFormat restFormatKind;
-end
-
-Record PutRest type Annotation
-{ 
-	targets = [ ElementKind.functionMbr], 
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.PutRestAnnotationTypeBinding",
-	eglIsSystemAnnotation = yes
-}
-	uriTemplate string;
-	requestFormat restFormatKind;
-	responseFormat restFormatKind;
-end
-
-Record DeleteRest type Annotation
-{ 
-	targets = [ ElementKind.functionMbr], 
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.DeleteRestAnnotationTypeBinding",
-	eglIsSystemAnnotation = yes
-}
-	uriTemplate string;
-	requestFormat restFormatKind;
-	responseFormat restFormatKind;
-end
-
-Record RestBinding type Annotation
-{ 
-    targets = [elementKind.fieldMbr]/*,
-    targetTypes = [ServiceRef, InterfaceRef]*/,
-	eglIsSystemAnnotation = yes
-}  
-  	baseURI string;
-  	sessionCookieId string;
-end
-
-Record WebBinding type Annotation
-{
-    targets = [elementKind.fieldMbr]/*,
-    targetTypes = [ServiceRef, InterfaceRef]*/,
-    eglIsSystemAnnotation = yes
-}
-	wsdlLocation string;
-	wsdlService string;
-	wsdlPort string;
-	uri string;
-end
-
-Record Timeout type Annotation {
-	targets = [
-		ElementKind.callStatement
-	],
-	eglIsSystemAnnotation = yes
-}
-	value int;
-end
 
 Record IsNoRefresh type Annotation
 {
@@ -341,43 +249,6 @@ Record V60ExceptionCompatibility type Annotation {
 	value boolean = false;
 end
 
-Record XML type Annotation
-{
-	targets = [
-		ElementKind.functionMbr,
-		ElementKind.servicePart,
-		ElementKind.interfacePart
-	],
-	eglIsSystemAnnotation = yes
-}
-	name string;
-	namespace string;
-end
-
-Record XMLRootElement type Annotation
-{ targets = [ ElementKind.recordPart ], eglIsSystemAnnotation = yes}
-  name string;
-  namespace string;
-  nillable boolean;
-end
-
-Record XMLStructure type Annotation
-{ targets = [ ElementKind.recordPart ], eglIsSystemAnnotation = yes}
-  value XMLStructureKind;
-end
-
-Record XMLElement type Annotation
-{ targets = [ ElementKind.fieldMbr ], eglIsSystemAnnotation = yes}
-  name string;
-  namespace string;
-  nillable boolean;
-end
-
-Record XMLAttribute type Annotation
-{ targets = [ ElementKind.fieldMbr ], eglIsSystemAnnotation = yes}
-  name string;
-  namespace string;
-end
 
 Record FORMName type Annotation
 { 
@@ -389,18 +260,6 @@ Record FORMName type Annotation
 }
   value string;
 end
-
-Record JSONName type Annotation
-{ 
-	targets = [ 
-		ElementKind.fieldMbr,
-		ElementKind.structuredFieldMbr
-	], 
-	eglIsSystemAnnotation = yes
-}
-  value string;
-end
-
 
 Record EGLProperty type Annotation
 { targets = [ElementKind.FieldMbr],
@@ -417,12 +276,4 @@ Record Override type Annotation
 end
 
 
-Record OneWay type Annotation
-{
-	targets = [
-		ElementKind.functionMbr
-	],
-	eglIsSystemAnnotation = yes
-}
-	value boolean = yes;
-end
+

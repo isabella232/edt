@@ -38,17 +38,6 @@ Enumeration OrderingKind
 	none = 3
 end
 
-Enumeration ServiceKind
-{
-	EGLSystemConstant = 118,
-	eglIsSystemPart = yes
-}
-	EGL = 1,
-	WEB = 2,
-	NATIVE = 3,
-	REST = 4
-end
-
 Enumeration WhitespaceKind
 {
     EGLSystemConstant = 119,
@@ -59,24 +48,5 @@ Enumeration WhitespaceKind
     collapseWhitespace = 3
 end
 
-Enumeration restFormatKind
-{
-	EGLSystemConstant = 137,
-    eglIsSystemPart = yes
-}
-    NONE = 1,
-    XML = 2,
-    JSON = 3,
-    FORMDATA = 4
-end
 
-Enumeration XMLStructureKind
-{
-  EGLSystemConstant = 145,
-  eglIsSystemPart = yes
-}
-  choice = 1,
-  sequence = 2,
-  simpleContent = 3,
-  unordered = 4
-end
+

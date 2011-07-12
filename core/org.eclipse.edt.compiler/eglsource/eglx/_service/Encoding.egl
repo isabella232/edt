@@ -1,0 +1,8 @@
+package eglx._service;
+
+enumeration Encoding
+	NONE,
+	JSON,
+	XML,
+	USE_CONTENTTYPE
+end

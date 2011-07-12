@@ -9,14 +9,21 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package egl.core;
+package eglx.json;
 
-// interface
-interface IRest
+import egl.lang.reflect.InterfacePart;
 
-    function invokeGet(reqURL string in) returns(string)  {@getRest {uriTemplate="{reqURL}"}};
-    function invokePost(reqURL string in, representation string in) returns(string){@postRest {uriTemplate="{reqURL}"}};
-    function invokePut(reqURL string in, representation string in) returns(string)  {@putRest {uriTemplate="{reqURL}"}};
-    function invokeDelete(reqURL string in, representation string in) returns(string) {@deleteRest {uriTemplate="{reqURL}"}};
+library JsonLib
+{
+    eglIsSystemPart = yes
+}
+   
+    function convertFromJSON(json string in, eglType any const in)
+        {eglSystemConstant = 144}
+    end
+
+    function convertToJSON(eglType any const in) returns(string)
+        {eglSystemConstant = 147}
+    end
 
 end

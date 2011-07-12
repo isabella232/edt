@@ -1,0 +1,11 @@
+package eglx.http;
+
+record HttpRequest
+	uri string;
+	method HttpMethod=HttpMethod.POST;
+	encoding eglx._service.Encoding=eglx._service.Encoding.JSON;
+	charset string = "UTF-8";
+	contentType string?;//default based on encoding
+	headers dictionary;
+	body string?;
+end
