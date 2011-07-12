@@ -60,6 +60,7 @@
                class="org.eclipse.debug.ui.actions.RunToLineActionDelegate"
                definitionId="org.eclipse.debug.ui.commands.RunToLine"
                helpContextId="run_to_line_action_context"
+               icon="icons/full/elcl16/runtoline_co.gif"
                id="org.eclipse.edt.debug.ui.actions.RunToLine"
                label="%runToLineAction.label"
                menubarPath="debug">
