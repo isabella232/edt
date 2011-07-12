@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Interface;
 
 public class InterfaceTemplate extends JavaScriptTemplate {
@@ -24,5 +25,9 @@ public class InterfaceTemplate extends JavaScriptTemplate {
 	public void genClassBody(Interface part, Context ctx, TabbedWriter out) {}
 
 	public void genClassHeader(Interface part, Context ctx, TabbedWriter out) {}
+
+	public void genConversionOperation(Interface part, Context ctx, TabbedWriter out, AsExpression asExpr){
+		ctx.invoke(genExpression, asExpr.getObjectExpr(), ctx, out);
+	}
 
 }

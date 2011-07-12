@@ -311,7 +311,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		{
 			isNillable = (Boolean) annot.getValue("isNillable");
 		}
-		out.println("xmlAnnotations[\"XMLRootElement\"] = new egl.egl.core.xml.XMLRootElement(" + 
+		out.println("xmlAnnotations[\"XMLRootElement\"] = new egl.eglx.xml._bind.annotation.XMLRootElement(" + 
 				(name == null ? "null" : quoted(name)) + ", " +
 				(namespace == null ? "null" : quoted(namespace)) + 
 				", " + isNillable.toString() + ");");
@@ -337,7 +337,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 				default:
 					value = "unordered";
 			}
-			out.println("xmlAnnotations[\"XMLStructure\"] = egl.egl.core.xml.XMLStructure(" + quoted(value) + ");");
+			out.println("xmlAnnotations[\"XMLStructure\"] = egl.eglx.xml._bind.annotation.XMLStructure(" + quoted(value) + ");");
 		} 		
 
 		out.println("return xmlAnnotations;");

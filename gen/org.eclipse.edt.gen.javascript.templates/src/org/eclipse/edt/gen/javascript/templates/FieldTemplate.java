@@ -114,10 +114,10 @@ public class FieldTemplate extends JavaScriptTemplate {
 		}
 		boolean isAttribute = isAttribute(field);
 		if(isAttribute){
-			out.print("new egl.egl.core.xml.XMLAttribute(");
+			out.print("new egl.eglx.xml._bind.annotation.XMLAttribute(");
 		}
 		else {
-			out.print("new egl.egl.core.xml.XMLElement(");
+			out.print("new egl.eglx.xml._bind.annotation.XMLElement(");
 		}
 		out.print("\"" + xmlName + "\", ");
 		out.print(xmlNamespace == null ? "null" : "\"" + xmlNamespace + "\"");
@@ -129,13 +129,13 @@ public class FieldTemplate extends JavaScriptTemplate {
 		//add xmlschema type
 		String xmlSchemaType = getXmlSchemaType(field);
 		if(xmlSchemaType != null){
-			out.println("xmlAnnotations[\"XMLSchemaType\"] = new egl.egl.core.xml.XMLSchemaType(\"" + xmlSchemaType + "\");");
+			out.println("xmlAnnotations[\"XMLSchemaType\"] = new egl.eglx.xml._bind.annotation.XMLSchemaType(\"" + xmlSchemaType + "\");");
 		}
 
 
 		Annotation xmlArray = field.getAnnotation("egl.core.XMLArray");
 		if(xmlArray != null){
-			out.print("xmlAnnotations[\"XMLArray\"] = new egl.egl.core.xml.XMLArray(");
+			out.print("xmlAnnotations[\"XMLArray\"] = new egl.eglx.xml._bind.annotation.XMLArray(");
 			out.print(xmlArray.getValue("wrapped") == null ? "true, " : (((Boolean)xmlArray.getValue("wrapped")).toString() + ", "));
 			String[] elementNames = (String[])xmlArray.getValue("names");
 			if(elementNames != null && elementNames.length > 0){
@@ -155,7 +155,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 			out.println(");");
 		}
 		out.print("fields[" + arg.toString() + "] =");
-		out.print("new egl.egl.core.xml.XMLFieldInfo(");
+		out.print("new egl.eglx.xml._bind.annotation.XMLFieldInfo(");
 		Annotation annot = field.getAnnotation("egl.idl.java.JavaProperty");
 		if(annot != null){
 			out.print(FieldTemplate.genGetterSetterFunctionName("get", field));
