@@ -11,40 +11,18 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.editor;
 
-import org.eclipse.edt.compiler.core.ast.Statement;
+import org.eclipse.jface.text.source.ISourceViewer;
 
 public interface IEGLEditor {
 	
 	/**
-	 * Return the line number for the offset into the file.
-	 * 
-	 * @param offset
-	 * @return
+	 * @param offset  The editor offset of the line.
+	 * @return the line number for the offset into the file.
 	 */
 	public int getLineAtOffset(int offset);
 	
 	/**
-	 * Return the EGL Statement node for a line in the editor.
-	 * 
-	 * @param line
-	 * @return
+	 * @return the source viewer.
 	 */
-	public Statement getStatementNode(int line);
-	
-	/**
-	 * Return whether a breakpoint at line is valid
-	 * 
-	 * @param line
-	 * @return
-	 */
-	// TODO EDT Justin, should these two be moved to a debug plug-in?
-	public boolean isBreakpointValid(int line);
-	
-	/**
-	 * Return whether a breakpoint is valid for a statement
-	 * @param statement
-	 * @return
-	 */
-	public boolean isBreakpointValidForStatement(Statement statement);
-	
+	public ISourceViewer getViewer();
 }

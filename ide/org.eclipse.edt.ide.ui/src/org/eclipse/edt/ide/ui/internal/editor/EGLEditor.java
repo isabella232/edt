@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
@@ -24,23 +23,12 @@ import java_cup.runtime.Symbol;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
-import org.eclipse.edt.compiler.core.ast.ElseBlock;
-import org.eclipse.edt.compiler.core.ast.EmptyStatement;
-import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.Lexer;
-import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.NodeTypes;
-import org.eclipse.edt.compiler.core.ast.OnEventBlock;
-import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
-import org.eclipse.edt.compiler.core.ast.OtherwiseClause;
 import org.eclipse.edt.compiler.core.ast.PackageDeclaration;
-import org.eclipse.edt.compiler.core.ast.Statement;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.VAGLexer;
-import org.eclipse.edt.compiler.core.ast.WhenClause;
 import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
 import org.eclipse.edt.ide.core.internal.model.document.EGLDocument;
 import org.eclipse.edt.ide.core.model.EGLCore;
@@ -561,127 +549,6 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 
 	public synchronized void editingScriptEnded() {
 		--fIgnoreOutlinePageSelection;
-	}
-
-	public Statement getStatementNode(int line) {
-		EGLDocument document = (EGLDocument) getViewer().getDocument();
-		if (document == null) {
-			return null;
-		}
-		
-		int docOffset;
-		try {
-			//use the 1st non space character of the line as the document offset to avoid boundary conditions
-			docOffset = document.getLineOffset(line);
-			int lineEndOffset = docOffset + document.getLineLength(line);
-			//get the 1st non space character
-			char thechar = document.getChar(docOffset);
-			while((thechar ==' ' || thechar =='\t') && docOffset <= lineEndOffset){
-				docOffset++;
-				thechar = document.getChar(docOffset);
-			}
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-			EGLLogger.log(this, e);
-			return null;
-		}
-
-		Node node = document.getNewModelNodeAtOffset(docOffset);
-		if (node == null)
-			return null;
-		
-		//If we found a statement that contains statements, need to get the list of 
-		//statements and loop thru them to find the right one
-		final Node[] statementContainerNode = new Node[1];
-		final List[] statements = new List[1];
-		node.accept(new DefaultASTVisitor() {
-			public boolean visit(ElseBlock visitedNode) {
-				statementContainerNode[0] = visitedNode;
-				statements[0] = visitedNode.getStmts();
-				return false;
-			}
-			public boolean visit(NestedFunction visitedNode) {
-				statementContainerNode[0] = visitedNode;
-				statements[0] = visitedNode.getStmts();
-				return false;
-			}
-			public boolean visit(OnExceptionBlock visitedNode) {
-				statementContainerNode[0] = visitedNode;
-				statements[0] = visitedNode.getStmts();
-				return false;
-			}
-			public boolean visit(OnEventBlock visitedNode) {
-				statementContainerNode[0] = visitedNode;
-				statements[0] = visitedNode.getStatements();
-				return false;
-			}
-			public boolean visit(TopLevelFunction visitedNode) {
-				statementContainerNode[0] = visitedNode;
-				statements[0] = visitedNode.getStmts();
-				return false;
-			}
-			public boolean visit(WhenClause visitedNode) {
-				statementContainerNode[0] = visitedNode;
-				statements[0] = visitedNode.getStmts();
-				return false;
-			}
-			public boolean visit(OtherwiseClause visitedNode) {
-				statementContainerNode[0] = visitedNode;
-				statements[0] = visitedNode.getStatements();
-				return false;
-			}
-		});
-		
-		// If we did not find a statement that contains statements, look up the node parent chain
-		//until a statement is found and return it
-		if (statementContainerNode[0] == null) {
-			while (node != null && !(node instanceof Statement)) {
-				node = node.getParent();
-			}
-			return (Statement) node;
-		}
-		//If we found a statement that contains statements, need to get the list of 
-		//statements and loop thru them to find the right one
-		else {
-			Statement statement = null;
-			for (Iterator iter = statements[0].iterator(); iter.hasNext();) {
-				Node nodex = (Node) iter.next();
-				if (nodex instanceof Statement) {
-					statement = (Statement) nodex;
-					try {
-						int statementLine = document.getLineOfOffset(statement.getOffset())+1;
-						if (statementLine > line && isBreakpointValidForStatement(statement))
-							return statement;
-					} catch (BadLocationException e) {
-						e.printStackTrace();
-						EGLLogger.log(this, e);
-					}
-				}
-			}
-		}
-			
-		return null;
-	}
-	
-	public boolean isBreakpointValidForStatement(Statement statement) {
-		if (statement instanceof EmptyStatement)
-			return false;
-		
-		//check if function data declaration has an initializer or not
-		if (statement instanceof FunctionDataDeclaration)
-			return ((FunctionDataDeclaration) statement).getInitializer() != null;
-		
-		return true;
-	}
-
-	public boolean isBreakpointValid(int line) {
-		Statement statement = getStatementNode(line);
-		if (statement != null) {
-			return isBreakpointValidForStatement(statement);
-		}
-		
-		return false;
-
 	}
 	
 	private boolean isFoldingEnabled() {
