@@ -47,6 +47,6 @@ public class SMAPFunctionInfo
 	 */
 	public String toString()
 	{
-		return eglName + " (line=" + lineDeclared + ", signature=" + signature + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return eglName + " (line=" + lineDeclared + ") (signature=" + signature + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 }
