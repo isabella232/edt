@@ -158,7 +158,6 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 	private ProjectionSupport fProjectionSupport;
 	private IFoldingStructureProvider fFoldingStructureProvider;
 	private IBIDIProvider fBIDIProvider;
-	private FoldingActionGroup fFoldingGroup;
 	
 	private ToggleFoldingRunner fFoldingRunner;
 	
@@ -368,10 +367,6 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 		
 	}
 
-    protected FoldingActionGroup getFoldingActionGroup() {
-        return fFoldingGroup;
-    }
-	
     protected boolean isEditorInputIncludedInContextMenu() {
     	return false;
     }

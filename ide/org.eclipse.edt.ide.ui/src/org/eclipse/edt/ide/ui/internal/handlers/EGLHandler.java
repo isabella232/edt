@@ -29,8 +29,12 @@ import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.util.EditorUtility;
+import org.eclipse.jface.text.ITextOperationTarget;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
@@ -172,4 +176,22 @@ public abstract class EGLHandler extends AbstractHandler implements IHandler {
 		return needSave;
 	}
 
+	protected void doTextOperation(final int operationCode){
+		final ITextOperationTarget  fOperationTarget = (ITextOperationTarget) fEditor.getAdapter(ITextOperationTarget.class);
+		if(null != fOperationTarget && fOperationTarget.canDoOperation(operationCode)){
+			
+			Display display= null;
+			Shell shell= fSite.getShell();
+			if (shell != null && !shell.isDisposed()){
+				display= shell.getDisplay();
+			}
+			
+			BusyIndicator.showWhile(display, new Runnable() {
+				public void run() {
+					fOperationTarget.doOperation(operationCode);
+				}
+			});
+		}
+	}
+	
 }

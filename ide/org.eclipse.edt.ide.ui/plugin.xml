@@ -68,7 +68,33 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             contextId="org.eclipse.edt.ide.ui.eglEditorScope"
             sequence="Ctrl+Shift+A"/>
--->            
+-->        
+	<!--Key binding for folding-->    
+      <key
+            commandId="org.eclipse.edt.ide.ui.ruler.folding.toggle"
+            contextId="org.eclipse.edt.ide.ui.eglEditorScope"
+            sequence="M1+NUMPAD_DIVIDE"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            commandId="org.eclipse.edt.ide.ui.ruler.folding.expandAll"
+            contextId="org.eclipse.edt.ide.ui.eglEditorScope"
+            sequence="M1+NUMPAD_MULTIPLY"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            commandId="org.eclipse.edt.ide.ui.ruler.folding.collapseAll"
+            contextId="org.eclipse.edt.ide.ui.eglEditorScope"
+            sequence="M1+M2+NUMPAD_DIVIDE"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            commandId="org.eclipse.edt.ide.ui.ruler.folding.expand"
+            contextId="org.eclipse.edt.ide.ui.eglEditorScope"
+            sequence="M1+NUMPAD_ADD"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            commandId="org.eclipse.edt.ide.ui.ruler.folding.collapse"
+            contextId="org.eclipse.edt.ide.ui.eglEditorScope"
+            sequence="M1+NUMPAD_SUBTRACT"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>            
   	</extension>
 	
 	<extension 
@@ -141,10 +167,27 @@
             name="Toggle Comment"
             description="Toggle comment"
             id="org.eclipse.edt.ide.ui.source.commentGroup.toggle"/>
-		<command
-	  		name="%Folding.name"
-			description="%Folding.description"	  		
-			id="org.eclipse.edt.ide.ui.ruler.folding"/>
+        <!-- folding -->
+        <command
+            name="%Command.folding.expandAll.name"
+            description="%Command.folding.expandAll.description"
+            id="org.eclipse.edt.ide.ui.ruler.folding.expandAll"/>
+        <command
+            name="%Command.folding.collapseAll.name"
+            description="%Command.folding.collapseAll.description"
+            id="org.eclipse.edt.ide.ui.ruler.folding.collapseAll"/>
+      	<command
+            name="%Command.folding.expand.name"
+            description="%Command.folding.expand.description"
+            id="org.eclipse.edt.ide.ui.ruler.folding.expand"/>
+     	<command
+            name="%Command.folding.collapse.name"
+            description="%Command.folding.collapse.description"
+            id="org.eclipse.edt.ide.ui.ruler.folding.collapse"/>
+      	<command
+            name="%Command.folding.toggle.name"
+            description="%Command.folding.toggle.description"
+            id="org.eclipse.edt.ide.ui.ruler.folding.toggle"/>
 	</extension>   
 	
 	<extension 
@@ -246,13 +289,18 @@
     	 	</menu>
   		</menuContribution>
  		<menuContribution locationURI="popup:#EGLRulerContext">
-			<command commandId="org.eclipse.edt.ide.ui.ruler.folding">
+ 			<menu label="%Command.folding.name" tooltip="%Command.folding.description">
+                <command commandId="org.eclipse.edt.ide.ui.ruler.folding.toggle" style="toggle"/>
+         		<command commandId="org.eclipse.edt.ide.ui.ruler.folding.expandAll"/>
+         		<command commandId="org.eclipse.edt.ide.ui.ruler.folding.collapseAll"/>
+         		<command commandId="org.eclipse.edt.ide.ui.ruler.folding.expand"/>
+         		<command commandId="org.eclipse.edt.ide.ui.ruler.folding.collapse"/>
 				<visibleWhen>
        				<with variable="activePartId">
        					<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
        				</with>
      			</visibleWhen>
-     		</command>
+ 			</menu>
  		</menuContribution>
 	</extension>
 	
@@ -314,10 +362,16 @@
         	commandId="org.eclipse.edt.ide.ui.source.sqlGroup.addSQLStatement">
   		</handler>
 -->  		
-  		<handler
-        	class="org.eclipse.edt.ide.ui.internal.handlers.FoldingHandler"
-        	commandId="org.eclipse.edt.ide.ui.ruler.folding">
-  		</handler>
+  		<handler class="org.eclipse.edt.ide.ui.internal.handlers.folding.FoldingExpandAllHandler"
+        	commandId="org.eclipse.edt.ide.ui.ruler.folding.expandAll"/>
+  		<handler class="org.eclipse.edt.ide.ui.internal.handlers.folding.FoldingCollapseAllHandler"
+        	commandId="org.eclipse.edt.ide.ui.ruler.folding.collapseAll"/>
+  	  	<handler class="org.eclipse.edt.ide.ui.internal.handlers.folding.FoldingExpandHandler"
+        	commandId="org.eclipse.edt.ide.ui.ruler.folding.expand"/>
+   	  	<handler class="org.eclipse.edt.ide.ui.internal.handlers.folding.FoldingCollapseHandler"
+        	commandId="org.eclipse.edt.ide.ui.ruler.folding.collapse"/>
+   	  	<handler class="org.eclipse.edt.ide.ui.internal.handlers.folding.FoldingToggleHandler"
+        	commandId="org.eclipse.edt.ide.ui.ruler.folding.toggle"/>       
 	</extension>
 	
    	<extension
@@ -925,6 +979,26 @@ Templates
                	value="org.eclipse.edt.ide.core.EGLNature">
          	</filter>
       	</objectContribution>
+      	<viewerContribution
+             id="org.eclipse.edt.ide.ui.EGLEditorPopupActions"
+             targetID="#EGLRulerContext">
+            <action
+               label="%AddTask.label"
+               helpContextId="org.eclipse.ui.AddTask_action_context"
+               tooltip="%AddTask.tooltip"
+               class="org.eclipse.ui.texteditor.TaskRulerAction"
+               menubarPath="add"
+               id="org.eclipse.ui.texteditor.TaskRulerAction">
+         	</action>
+            <action
+               label="%AddBookmark.label"
+               helpContextId="org.eclipse.ui.bookmark_action_context"
+               tooltip="%AddBookmark.tooltip"
+               class="org.eclipse.ui.texteditor.BookmarkRulerAction"
+               menubarPath="add"
+               id="org.eclipse.ui.texteditor.BookmarkRulerAction">
+         	</action>
+      	</viewerContribution>
 	</extension>
 	
    <extension point="org.eclipse.ui.preferencePages">
