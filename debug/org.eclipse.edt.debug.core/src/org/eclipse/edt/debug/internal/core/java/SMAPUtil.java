@@ -165,12 +165,16 @@ public class SMAPUtil
 					}
 					else if ( tokenLen > semicolon + 2 && next.charAt( semicolon + 1 ) == 'F' && next.charAt( semicolon + 2 ) == ':' )
 					{
-						// It's a function line.
-						currentFunction = next.substring( semicolon + 3 );
-						
-						if ( frame != null && currentFunction != null && currentFunction.equals( javaFrameSignature ) )
-						{
-							frame.setSMAPFunctionInfo( new SMAPFunctionInfo( currentFunction, line ) );
+						// It's a function line. First portion is the egl name, second is the java signature.
+						int semicolon2 = next.indexOf( ';', semicolon + 1 );
+						if (semicolon2 != -1){
+							String eglName = next.substring( semicolon + 3, semicolon2 );
+							currentFunction = next.substring( semicolon2 + 1 );
+							
+							if ( frame != null && currentFunction != null && currentFunction.equals( javaFrameSignature ) )
+							{
+								frame.setSMAPFunctionInfo( new SMAPFunctionInfo( eglName, currentFunction, line ) );
+							}
 						}
 					}
 					else
