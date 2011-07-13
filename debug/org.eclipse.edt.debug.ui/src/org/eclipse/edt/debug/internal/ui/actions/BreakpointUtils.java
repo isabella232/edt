@@ -53,9 +53,17 @@ import org.eclipse.ui.texteditor.ITextEditor;
  */
 public class BreakpointUtils
 {
+	private BreakpointUtils()
+	{
+		// No instances.
+	}
+	
 	// Would be nice if JDT made this public so we didn't have to duplicate it.
 	public static final String STRATUM_BREAKPOINT = "org.eclipse.jdt.debug.javaStratumLineBreakpointMarker"; //$NON-NLS-1$
 	
+	/**
+	 * @return the text editor for the part, possibly null.
+	 */
 	public static ITextEditor getEditor( IWorkbenchPart part )
 	{
 		if ( part instanceof ITextEditor )
@@ -65,6 +73,9 @@ public class BreakpointUtils
 		return (ITextEditor)part.getAdapter( ITextEditor.class );
 	}
 	
+	/**
+	 * @return the fully-qualified class name of the generated file.
+	 */
 	public static String getGeneratedClassName( ITextSelection selection, IFile file )
 	{
 		IEGLFile eglFile = (IEGLFile)EGLCore.create( file );
@@ -80,7 +91,6 @@ public class BreakpointUtils
 					buf.append( '.' );
 				}
 				
-				// TODO get alias annotation
 				String name = eglFile.getElementName();
 				int idx = name.lastIndexOf( '.' );
 				if ( idx != -1 )
@@ -98,6 +108,15 @@ public class BreakpointUtils
 		return null;
 	}
 	
+	/**
+	 * Returns true if a stratum breakpoint exists on the resource at the given line number.
+	 * 
+	 * @param resource The resource.
+	 * @param lineNumber The line number.
+	 * @param stratum The stratum type (e.g. "egl").
+	 * @return true if a stratum breakpoint exists on the resource at the given line number.
+	 * @throws CoreException
+	 */
 	public static IJavaStratumLineBreakpoint stratumBreakpointExists( IResource resource, int lineNumber, String stratum ) throws CoreException
 	{
 		String modelId = JDIDebugModel.getPluginIdentifier();
@@ -122,18 +141,29 @@ public class BreakpointUtils
 		return null;
 	}
 	
+	/**
+	 * @return true if a breakpoint can be placed on a line containing the statement. For example you can't put a breakpoint on a local variable
+	 *         declaration unless it has an initializer.
+	 */
 	public static boolean isBreakpointValidForStatement( Statement statement )
 	{
 		if ( statement instanceof EmptyStatement )
+		{
 			return false;
+		}
 		
 		// check if function data declaration has an initializer or not
 		if ( statement instanceof FunctionDataDeclaration )
+		{
 			return ((FunctionDataDeclaration)statement).getInitializer() != null;
+		}
 		
 		return true;
 	}
 	
+	/**
+	 * @return true if the line of the editor is a valid location for a breakpoint.
+	 */
 	public static boolean isBreakpointValid( IEGLEditor editor, int line )
 	{
 		Statement statement = getStatementNode( editor, line );
@@ -145,6 +175,9 @@ public class BreakpointUtils
 		return false;
 	}
 	
+	/**
+	 * @return the AST statement node at the line of the editor.
+	 */
 	public static Statement getStatementNode( IEGLEditor editor, int line )
 	{
 		EGLDocument document = (EGLDocument)editor.getViewer().getDocument();
@@ -176,7 +209,9 @@ public class BreakpointUtils
 		
 		Node node = document.getNewModelNodeAtOffset( docOffset );
 		if ( node == null )
+		{
 			return null;
+		}
 		
 		// If we found a statement that contains statements, need to get the list of
 		// statements and loop thru them to find the right one
