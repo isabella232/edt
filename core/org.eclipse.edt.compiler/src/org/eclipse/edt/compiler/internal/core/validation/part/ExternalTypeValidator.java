@@ -14,11 +14,9 @@ package org.eclipse.edt.compiler.internal.core.validation.part;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
@@ -128,15 +126,7 @@ public class ExternalTypeValidator extends AbstractASTVisitor {
 				boolean typeIsValid = false;
 				
 				if(ITypeBinding.EXTERNALTYPE_BINDING == extendedType.getKind()) {
-					ITypeBinding extendedTypeSubtype = ((IPartBinding) extendedType).getSubType();
-					
-					if(Binding.isValidBinding(extendedTypeSubtype)){
-						ITypeBinding mySubtype = partBinding.getSubType();
-						typeIsValid = mySubtype.getName() == extendedTypeSubtype.getName() &&
-						              mySubtype.getPackageName() == extendedTypeSubtype.getPackageName();
-					}else{
-						typeIsValid = true;
-					}
+					typeIsValid = true;
 				}
 				
 				if(!typeIsValid) {
@@ -144,8 +134,7 @@ public class ExternalTypeValidator extends AbstractASTVisitor {
 							nameAST,
 						IProblemRequestor.EXTERNALTYPE_MUST_EXTEND_EXTERNALTYPE,
 						new String[] {
-							extendedType.getCaseSensitiveName(),
-							externalType.getName().getCanonicalName()
+							extendedType.getCaseSensitiveName()
 						});
 				}
 			}
