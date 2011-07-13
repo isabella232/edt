@@ -43,7 +43,7 @@ public class StatementBlockTemplate extends JavaTemplate {
 	}
 
 	protected void processStatements(StatementBlock block, Context ctx, TabbedWriter out) {
-		ctx.setCurrentFile(IRUtils.getFileName(block));
+		ctx.setCurrentFile(IRUtils.getQualifiedFileName(block));
 		for (Statement stmt : block.getStatements()) {
 			ReorganizeCode reorganizeCode = new ReorganizeCode();
 			List<StatementBlock> blockArray = reorganizeCode.reorgCode(stmt, ctx);
