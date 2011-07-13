@@ -40,13 +40,11 @@ public class SMAPUtil
 	}
 	
 	/**
-	 * The SMAP will contain variable information after the normal end of the SMAP ("*E"). Any entries that are
-	 * malformed will be ignored.
+	 * The SMAP will contain variable information after the normal end of the SMAP ("*E"). Any entries that are malformed will be ignored.
 	 * 
 	 * @param smap The SMAP retrieved from the class.
-	 * @param frame The EGL-wrapped stack frame, if we are parsing variables for a stack frame. Pass in null if the SMAP
-	 *            is for a value instead. If we find function information in the SMAP corresponding to the frame, the
-	 *            information will be passed to the frame.
+	 * @param frame The EGL-wrapped stack frame, if we are parsing variables for a stack frame. Pass in null if the SMAP is for a value instead. If we
+	 *            find function information in the SMAP corresponding to the frame, the information will be passed to the frame.
 	 * @return an array of {@link SMAPVariableInfo}s, never null.
 	 */
 	public static SMAPVariableInfo[] parseVariables( String smap, EGLJavaStackFrame frame )
@@ -70,8 +68,7 @@ public class SMAPUtil
 			{
 				try
 				{
-					javaFrameSignature = frame.getJavaStackFrame().getMethodName()
-							+ ";" + frame.getJavaStackFrame().getSignature(); //$NON-NLS-1$ //$NON-NLS-2$
+					javaFrameSignature = frame.getJavaStackFrame().getMethodName() + ";" + frame.getJavaStackFrame().getSignature(); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				catch ( DebugException de )
 				{
@@ -83,6 +80,8 @@ public class SMAPUtil
 			int pound;
 			int semicolon;
 			int tokenLen;
+			int line;
+			boolean specialGlobalType;
 			while ( tok.hasMoreTokens() )
 			{
 				// If we encounter anything unexpected, skip the entry. Shouldn't be a problem so long
@@ -101,30 +100,77 @@ public class SMAPUtil
 					break;
 				}
 				
-				pound = next.indexOf( "#" ); //$NON-NLS-1$
-				if ( pound == -1 )
-				{
-					continue;
-				}
-				
-				semicolon = next.indexOf( ";", pound ); //$NON-NLS-1$
-				if ( semicolon == -1 )
-				{
-					continue;
-				}
+				specialGlobalType = next.charAt( 0 ) == '*';
 				
 				try
 				{
-					if ( tokenLen > semicolon + 2 && next.charAt( semicolon + 1 ) == 'F'
-							&& next.charAt( semicolon + 2 ) == ':' )
+					if ( specialGlobalType )
+					{
+						line = -1;
+						semicolon = next.indexOf( ';' );
+					}
+					else
+					{
+						pound = next.indexOf( '#' );
+						if ( pound == -1 )
+						{
+							continue;
+						}
+						
+						line = Integer.parseInt( next.substring( 0, pound ) );
+						semicolon = next.indexOf( ';', pound );
+					}
+					
+					if ( semicolon == -1 )
+					{
+						continue;
+					}
+					
+					if ( specialGlobalType )
+					{
+						// It's a global type that doesn't have a specific line (library, table, form, program parameter).
+						semiTok = new StringTokenizer( next.substring( semicolon + 1 ), ";" ); //$NON-NLS-1$
+						int tokenCount = semiTok.countTokens();
+						if ( tokenCount > 0 )
+						{
+							String eglName;
+							String javaName;
+							String type;
+							
+							// Required token: egl name
+							eglName = semiTok.nextToken();
+							
+							// Next token: java name (defaults to egl name)
+							if ( tokenCount > 1 )
+							{
+								javaName = semiTok.nextToken();
+							}
+							else
+							{
+								javaName = eglName;
+							}
+							
+							// Next token: egl type (defaults to egl name)
+							if ( tokenCount > 2 )
+							{
+								type = semiTok.nextToken();
+							}
+							else
+							{
+								type = eglName;
+							}
+							
+							vars.add( new SMAPVariableInfo( eglName, javaName, type, line ) );
+						}
+					}
+					else if ( tokenLen > semicolon + 2 && next.charAt( semicolon + 1 ) == 'F' && next.charAt( semicolon + 2 ) == ':' )
 					{
 						// It's a function line.
 						currentFunction = next.substring( semicolon + 3 );
 						
 						if ( frame != null && currentFunction != null && currentFunction.equals( javaFrameSignature ) )
 						{
-							frame.setSMAPFunctionInfo( new SMAPFunctionInfo( currentFunction, Integer.parseInt( next
-									.substring( 0, pound ) ) ) );
+							frame.setSMAPFunctionInfo( new SMAPFunctionInfo( currentFunction, line ) );
 						}
 					}
 					else
@@ -133,8 +179,7 @@ public class SMAPUtil
 						semiTok = new StringTokenizer( next.substring( semicolon + 1 ), ";" ); //$NON-NLS-1$
 						if ( semiTok.countTokens() == 3 )
 						{
-							vars.add( new SMAPVariableInfo( semiTok.nextToken(), semiTok.nextToken(), semiTok
-									.nextToken(), Integer.parseInt( next.substring( 0, pound ) ), currentFunction ) );
+							vars.add( new SMAPVariableInfo( semiTok.nextToken(), semiTok.nextToken(), semiTok.nextToken(), line, currentFunction ) );
 						}
 					}
 				}
@@ -150,8 +195,8 @@ public class SMAPUtil
 	}
 	
 	/**
-	 * Returns the SMAP information for the Java type. It will never be null. If there is no SMAP information, or the
-	 * Java type was not a type that we recognize (currently only JDIReferenceType), then this will return blank.
+	 * Returns the SMAP information for the Java type. It will never be null. If there is no SMAP information, or the Java type was not a type that we
+	 * recognize (currently only JDIReferenceType), then this will return blank.
 	 * 
 	 * @param type The Java type.
 	 * @return the SMAP information.
@@ -178,8 +223,8 @@ public class SMAPUtil
 	}
 	
 	/**
-	 * Given a set of Java variables, and SMAP variable information, this will determine which Java variables should be
-	 * displayed. Any variables to be displayed will be wrapped inside an EGLJavaVariable.
+	 * Given a set of Java variables, and SMAP variable information, this will determine which Java variables should be displayed. Any variables to be
+	 * displayed will be wrapped inside an EGLJavaVariable.
 	 * 
 	 * @param javaVariables The Java variables, not null.
 	 * @param existingEGLVars EGL variables that were processed from a previous call, possibly null.
@@ -190,28 +235,24 @@ public class SMAPUtil
 	 * @return the filtered, EGL-wrapped variables.
 	 * @throws DebugException
 	 */
-	public static List<EGLJavaVariable> filterAndWrapVariables( IVariable[] javaVariables,
-			EGLJavaVariable[] existingEGLVars, SMAPVariableInfo[] infos, EGLJavaStackFrame frame,
-			EGLJavaDebugTarget target, boolean skipLocals ) throws DebugException
+	public static List<EGLJavaVariable> filterAndWrapVariables( IVariable[] javaVariables, EGLJavaVariable[] existingEGLVars,
+			SMAPVariableInfo[] infos, EGLJavaStackFrame frame, EGLJavaDebugTarget target, boolean skipLocals ) throws DebugException
 	{
 		List<EGLJavaVariable> newEGLVariables = new ArrayList<EGLJavaVariable>( javaVariables.length );
 		
 		// The frame will be null when we're getting variables of a value. Field variables are never local,
 		// so this information isn't needed. Fields of records are always "visible", global fields of other logic
 		// parts like libraries are always "visible".
-		String javaFrameSignature = frame == null
-				? "" : frame.getJavaStackFrame().getMethodName() + ";" + frame.getJavaStackFrame().getSignature(); //$NON-NLS-1$ //$NON-NLS-2$
+		String javaFrameSignature = frame == null ? "" : frame.getJavaStackFrame().getMethodName() + ";" + frame.getJavaStackFrame().getSignature(); //$NON-NLS-1$ //$NON-NLS-2$
 		int currentLine = frame == null ? -1 : frame.getLineNumber();
-		int frameStartLine = frame == null || frame.getSMAPFunctionInfo() == null
-				? -1
-				: frame.getSMAPFunctionInfo().lineDeclared;
+		int frameStartLine = frame == null || frame.getSMAPFunctionInfo() == null ? -1 : frame.getSMAPFunctionInfo().lineDeclared;
 		
 		for ( int i = 0; i < javaVariables.length; i++ )
 		{
 			IJavaVariable javaVar = (IJavaVariable)javaVariables[ i ];
 			String javaName = javaVar.getName();
 			
-			if ( javaName.startsWith( "eze" ) ) //$NON-NLS-1$
+			if ( javaName.startsWith( "eze" ) && !javaName.startsWith( "eze_" ) ) //$NON-NLS-1$ //$NON-NLS-2$
 			{
 				continue;
 			}
@@ -246,8 +287,7 @@ public class SMAPUtil
 								// Validate the signature and make sure the info is in scope. There could be multiple
 								// local variables of different types with the same name, in different scopes within the
 								// function.
-								if ( info.javaMethodSignature != null
-										&& info.javaMethodSignature.equals( javaFrameSignature )
+								if ( info.javaMethodSignature != null && info.javaMethodSignature.equals( javaFrameSignature )
 										&& (currentLine >= info.lineDeclared || currentLine == frameStartLine) )
 								{
 									if ( matchingInfo == null || matchingInfo.lineDeclared < info.lineDeclared )
@@ -269,7 +309,7 @@ public class SMAPUtil
 				}
 				else
 				{
-					if ( "this".equals( javaVar.getName() ) ) //$NON-NLS-1$
+					if ( "this".equals( javaName ) ) //$NON-NLS-1$
 					{
 						newEGLVariables.add( new EGLJavaFunctionContainerVariable( target, javaVar ) );
 						continue;
