@@ -93,8 +93,7 @@ public class JavaGenerator extends Generator {
 				String fileName = eglFileName;
 				if (fileName.indexOf('.') >= 0)
 					fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-				fileName = fileName + getFileExtention();
-				context.getSmapData().append(fileName + Constants.smap_stratum);
+				context.getSmapData().append(JavaAliaser.getAlias(fileName) + getFileExtention() + Constants.smap_stratum);
 				// we need to insert the file list here, but cannot do this until the part generation finished
 				context.getSmapData().append(Constants.smap_lines);
 				context.invoke(JavaTemplate.genPart, part, context, out);
@@ -103,7 +102,7 @@ public class JavaGenerator extends Generator {
 				int index = 0;
 				String fileList = "";
 				for (String eglFile : context.getSmapFiles())
-					fileList += "" + (++index) + " " + eglFile + "\n";
+					fileList += "+ " + (++index) + " " + unqualifyFileName(eglFile) + "\n" + eglFile + "\n";
 				context.getSmapData().insert(context.getSmapData().indexOf(Constants.smap_stratum) + Constants.smap_stratum.length(), fileList);
 				// finish up the smap data
 				context.getSmapData().append(Constants.smap_trailer);
@@ -132,6 +131,14 @@ public class JavaGenerator extends Generator {
 		}
 		// close the output
 		out.close();
+	}
+	
+	private String unqualifyFileName(String fileName) {
+		int lastSlash = fileName.lastIndexOf( '/' );
+		if (lastSlash != -1) {
+			return fileName.substring( lastSlash + 1 );
+		}
+		return fileName;
 	}
 
 	public void dumpErrorMessages() {
