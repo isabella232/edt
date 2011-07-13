@@ -256,11 +256,6 @@ public class SMAPUtil
 			IJavaVariable javaVar = (IJavaVariable)javaVariables[ i ];
 			String javaName = javaVar.getName();
 			
-			if ( javaName.startsWith( "eze" ) && !javaName.startsWith( "eze_" ) ) //$NON-NLS-1$ //$NON-NLS-2$
-			{
-				continue;
-			}
-			
 			boolean addNew = true;
 			if ( existingEGLVars != null )
 			{
