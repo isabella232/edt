@@ -428,7 +428,7 @@ public class CommonUtilities {
 				ctx.getSmapExtension().append("#1" + ";");
 			// for the main function, we need to alter the values
 			if (function.getName().equalsIgnoreCase("main"))
-				ctx.getSmapExtension().append("F:" + "main;(Ljava/util/List;)V\n");
+				ctx.getSmapExtension().append("F:" + "main;main;(Ljava/util/List;)V\n");
 			else {
 				ctx.getSmapExtension().append("F:" + function.getName() + ";" + JavaAliaser.getAlias(function.getName()) + ";(");
 				for (int i = 0; i < function.getParameters().size(); i++) {
