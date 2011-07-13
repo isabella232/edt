@@ -30,7 +30,7 @@ public class AnnotationTypeTemplate extends JavaTemplate {
 		if("eglx.xml._bind.annotation.XmlAttribute".equalsIgnoreCase(type.getFullyQualifiedName())){
 			String name = (String)annot.getValue("name");
 			String namespace = (String)annot.getValue("namespace");
-			Boolean required = (Boolean)annot.getValue("required");
+			Boolean required = convertBoolean(annot.getValue("required"));
 			out.print("@javax.xml.bind.annotation.XmlAttribute(");
 			boolean addComma = false;
 			if(name != null && !"##default".equals(name)){
@@ -55,8 +55,8 @@ public class AnnotationTypeTemplate extends JavaTemplate {
 		else if("eglx.xml._bind.annotation.XmlElement".equalsIgnoreCase(type.getFullyQualifiedName())){
 			String name = (String)annot.getValue("name");
 			String namespace = (String)annot.getValue("namespace");
-			Boolean required = (Boolean)annot.getValue("required");
-			Boolean nillable = (Boolean)annot.getValue("nillable");
+			Boolean required = convertBoolean(annot.getValue("required"));
+			Boolean nillable =  convertBoolean(annot.getValue("nillable"));
 			out.print("@javax.xml.bind.annotation.XmlElement(");
 			boolean addComma = false;
 			if(name != null && !"##default".equals(name)){
@@ -104,4 +104,12 @@ public class AnnotationTypeTemplate extends JavaTemplate {
 		}
 	}
 
+	//FIXME I shouldn't need to do this, but a clean causes the init boolean values on annotations to be strings
+	//If you build th eindividual part file like a record it will be a boolean.
+	private Boolean convertBoolean(Object value){
+		if(value instanceof String){
+			return new Boolean((String)value);
+		}
+		return (Boolean)value;
+	}
 }
