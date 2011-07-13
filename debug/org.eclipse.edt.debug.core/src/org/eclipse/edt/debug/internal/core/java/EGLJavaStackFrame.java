@@ -338,6 +338,7 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLStackF
 	
 	public SMAPFunctionInfo getSMAPFunctionInfo() throws DebugException
 	{
+		getSMAPVariableInfos(); // Make sure we've parsed the SMAP data
 		return smapFunctionInfo;
 	}
 	
