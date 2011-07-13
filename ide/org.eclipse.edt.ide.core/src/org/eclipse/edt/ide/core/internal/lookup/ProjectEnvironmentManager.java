@@ -107,9 +107,9 @@ public class ProjectEnvironmentManager {
         ProjectEnvironment env = getProjectEnvironment(project);
         env.clearRootPackage();
         
-    	// Initialize the project's system environment if necessary. We do this here so that the IBuildNotifier will be
-        // available if the system environment needed to be initialized.
-   		env.getIREnvironment().initSystemEnvironment(env.getSystemEnvironment());
+    	// Initialize the project's system environment if necessary, as well as the projects on its path. We do this here
+        // so that the IBuildNotifier will be available if the system environment needed to be initialized.
+   		env.initIREnvironments();
         
         Environment.pushEnv(env.getIREnvironment());
         environmentPushed = true;

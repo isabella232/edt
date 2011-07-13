@@ -51,6 +51,8 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
     
     private Mof2Binding converter;
     
+    private boolean initialized;
+    
     protected ProjectEnvironment(IProject project) {
         super();
         this.project = project;
@@ -89,6 +91,20 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
     
     public ProjectIREnvironment getIREnvironment() {
     	return this.irEnvironment;
+    }
+    
+    public void initIREnvironments() {
+    	if (initialized) {
+    		return;
+    	}
+    	
+    	initialized = true;
+    	irEnvironment.initSystemEnvironment(getSystemEnvironment());
+    	for (IBuildPathEntry entry : buildPathEntries) {
+    		if (entry instanceof ProjectBuildPathEntry) {
+    			((ProjectBuildPathEntry)entry).getDeclaringEnvironment().initIREnvironments();
+    		}
+    	}
     }
 
     public IPartBinding getPartBinding(String[] packageName, String partName) {
@@ -147,6 +163,7 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
     }
 
 	public void clear() {
+		this.initialized = false;
 		this.buildPathEntries = null;
 		this.converter = new Mof2Binding(this);
 		ProjectBuildPath projectBuildPath = ProjectBuildPathManager.getInstance().getProjectBuildPath(project);

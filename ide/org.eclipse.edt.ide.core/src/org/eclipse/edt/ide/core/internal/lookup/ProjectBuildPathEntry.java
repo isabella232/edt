@@ -94,6 +94,10 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
         this.realizingEnvironment = new RealizingEnvironment();
     }
     
+    protected ProjectEnvironment getDeclaringEnvironment() {
+		return this.declaringEnvironment;
+	}
+    
     protected void setDeclaringEnvironment(ProjectEnvironment projectEnvironment) {
         this.declaringEnvironment = projectEnvironment;
     }
