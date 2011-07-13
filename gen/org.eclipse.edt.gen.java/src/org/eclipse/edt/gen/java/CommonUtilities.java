@@ -430,7 +430,7 @@ public class CommonUtilities {
 			if (function.getName().equalsIgnoreCase("main"))
 				ctx.getSmapExtension().append("F:" + "main;(Ljava/util/List;)V\n");
 			else {
-				ctx.getSmapExtension().append("F:" + function.getName() + ";(");
+				ctx.getSmapExtension().append("F:" + function.getName() + ";" + JavaAliaser.getAlias(function.getName()) + ";(");
 				for (int i = 0; i < function.getParameters().size(); i++) {
 					FunctionParameter decl = function.getParameters().get(i);
 					if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx))
