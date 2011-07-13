@@ -51,7 +51,7 @@ public class ArrayTypeTemplate extends JavaTemplate {
 			out.print("AnyObject.ezeCast(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(", ");
-			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.JavaImplementation);
+			ctx.invoke(genRuntimeTypeName, type.getClassifier(), ctx, out, TypeNameKind.JavaImplementation);
 			out.print(".class)");
 		}
 	}
