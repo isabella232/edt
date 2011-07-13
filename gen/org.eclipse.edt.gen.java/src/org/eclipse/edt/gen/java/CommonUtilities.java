@@ -409,7 +409,7 @@ public class CommonUtilities {
 				} else
 					ctx.getSmapExtension().append("#1" + ";");
 				ctx.getSmapExtension().append(field.getName() + ";");
-				ctx.getSmapExtension().append(field.getName() + ";");
+				ctx.getSmapExtension().append(JavaAliaser.getAlias(field.getName()) + ";");
 				ctx.getSmapExtension().append(field.getType().getTypeSignature() + "\n");
 			}
 		}
@@ -444,23 +444,30 @@ public class CommonUtilities {
 	}
 
 	public static void generateSmapExtension(DataTable dataTable, Context ctx) {
-		ctx.getSmapExtension().append(Constants.smap_extensionDataTable + ";" + dataTable.getFullyQualifiedName() + "\n");
+		//TODO uncomment when tables are supported. this might also need to be updated
+//		ctx.getSmapExtension().append(Constants.smap_extensionDataTable + ";" + dataTable.getFullyQualifiedName()
+//				+ ";" + dataTable.getFullyQualifiedName().replace('.', '_')+ "\n");
 	}
 
 	public static void generateSmapExtension(Form form, Context ctx) {
-		ctx.getSmapExtension().append(Constants.smap_extensionForm + ";" + form.getFullyQualifiedName() + "\n");
+		//TODO uncomment when forms are supported. this might also need to be updated
+//		ctx.getSmapExtension().append(Constants.smap_extensionForm + ";" + form.getFullyQualifiedName()
+//				+ ";" + form.getFullyQualifiedName().replace('.', '_')+ "\n");
 	}
 
 	public static void generateSmapExtension(Library library, Context ctx) {
 		if (ctx.mapsToNativeType(library))
-			ctx.getSmapExtension().append(Constants.smap_extensionSystemLibrary + ";" + library.getFullyQualifiedName() + "\n");
+			ctx.getSmapExtension().append(Constants.smap_extensionSystemLibrary + ";" + library.getFullyQualifiedName() + ";"
+					+ Constants.LIBRARY_PREFIX + library.getFullyQualifiedName().replace('.', '_') + "\n");
 		else
-			ctx.getSmapExtension().append(Constants.smap_extensionUserLibrary + ";" + library.getFullyQualifiedName() + "\n");
+			ctx.getSmapExtension().append(Constants.smap_extensionUserLibrary + ";" + library.getFullyQualifiedName() + ";"
+					+ Constants.LIBRARY_PREFIX + library.getFullyQualifiedName().replace('.', '_') + "\n");
 	}
 
 	public static void generateSmapExtension(ProgramParameter programParameter, Context ctx) {
-		ctx.getSmapExtension().append(Constants.smap_extensionProgramParameter + ";" + programParameter.getName() + ";");
-		ctx.getSmapExtension().append(generateJavaTypeSignature(programParameter.getType(), ctx) + "\n");
+		ctx.getSmapExtension().append(Constants.smap_extensionProgramParameter + ";" + programParameter.getName() + ";"
+				+ JavaAliaser.getAlias(programParameter.getName()) + ";");
+		ctx.getSmapExtension().append(programParameter.getType().getTypeSignature()+ "\n");
 	}
 
 	private static String generateJavaTypeSignature(Type type, Context ctx) {
