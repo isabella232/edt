@@ -23,6 +23,10 @@ public class BigintTypeTemplate extends JavaTemplate {
 	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
 		out.print("(long) 0");
 	}
+	
+	public void genConstructorOptions(EGLClass type, Context ctx, TabbedWriter out) {
+		genDefaultValue(type, ctx, out);
+	}
 
 	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, AsExpression arg) {
 		if (CommonUtilities.isHandledByJavaWithoutCast(arg.getObjectExpr(), arg, ctx)) {
