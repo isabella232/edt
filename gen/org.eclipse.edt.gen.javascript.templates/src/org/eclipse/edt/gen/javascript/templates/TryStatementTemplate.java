@@ -14,7 +14,6 @@ package org.eclipse.edt.gen.javascript.templates;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ExceptionBlock;
-import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.TryStatement;
 
 public class TryStatementTemplate extends JavaScriptTemplate {
@@ -34,18 +33,12 @@ public class TryStatementTemplate extends JavaScriptTemplate {
 		out.print("var ");
 		ctx.invoke(genName, exceptionBlock.getException(), ctx, out);
 		out.println(" = " + exceptionVar + ";");
-		for (Statement stmt : exceptionBlock.getStatements()) {
-			genExceptionStatement(stmt, ctx, out);
-		}
+		ctx.invoke(genStatement, exceptionBlock, ctx, out);
 		out.println("}");
 		out.println("else {");
 		out.println("throw " + exceptionVar + ";");
 		out.println("}");
 		out.println("}");
-	}
-
-	public void genExceptionStatement(Statement stmt, Context ctx, TabbedWriter out) {
-		ctx.invoke(genStatement, stmt, ctx, out);
 	}
 
 	public void genStatementEnd(TryStatement stmt, Context ctx, TabbedWriter out) {
