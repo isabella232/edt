@@ -14,13 +14,11 @@ package org.eclipse.edt.ide.compiler.gen;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin;
-import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
@@ -50,15 +48,8 @@ public class WorthlessGenerator extends JavaGenerator {
 				out.print(packageName);
 				out.println(';');
 			}
-			
 			out.print("class ");
-			String nameOrAlias;
-			Annotation annot = part.getAnnotation(IEGLConstants.PROPERTY_ALIAS);
-			if (annot != null)
-				nameOrAlias = (String) annot.getValue();
-			else
-				nameOrAlias = part.getId();
-			out.print(nameOrAlias);
+			out.print(part.getId());
 			out.println(" {");
 			out.println("// I'm a completely worthless generator!");
 			out.println("}");
