@@ -46,7 +46,7 @@ public class Constants {
 	// Library generation constants
 	public static final String LIBRARY_PREFIX = "eze_Lib_";
 	public static final String _HELPER = "_Helper";
-	public static final String SERIAL_VERSION_UID = "80";
+	public static final String SERIAL_VERSION_UID = "10";
 
 	// EGL message id's
 	public static final String EGLMESSAGE_UNSUPPORTED_ELEMENT = "1000";
