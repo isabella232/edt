@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.edt.compiler.EGL2IRArgumentProcessor;
 import org.eclipse.edt.compiler.EGL2IREnvironment;
@@ -81,7 +82,7 @@ public class EGLG {
 	        	}
 	        	
     			initializeOutputPath(processedArgs);
-    			initializeSystemRoot(processedArgs);
+    			initializeSystemRoot(processedArgs, compiler);
     			initializeEGLPath(processedArgs);
     			
 	        	ASTManager.getInstance().setVAGComaptiblity(processedArgs.isVAGCompatible());
@@ -369,19 +370,33 @@ public class EGLG {
 		eglcEnv.addRoot(path);
 	}
 	
-	private static void initializeSystemRoot (final EGL2IRArgumentProcessor.EGL2IRArguments processedArgs){
+	private static void initializeSystemRoot (final EGL2IRArgumentProcessor.EGL2IRArguments processedArgs, ICompiler compiler){
 		
 		String outType = processedArgs.getXMLOut() ? ObjectStore.XML : ObjectStore.BINARY;
 
 		File path = processedArgs.getSystemRoot();
-		ObjectStore store = new FileSystemObjectStore(path, eglcEnv, outType);
-		eglcEnv.registerObjectStore(IEnvironment.DefaultScheme, store);
-		
-		String fileext = processedArgs.xmlOut ? EGLXML : EGLBIN;
-//		store = new FileSystemObjectStore(path, PartEnvironment.INSTANCE,outType);
-		store = new FileSystemObjectStore(path, eglcEnv,outType, fileext);
-		eglcEnv.registerObjectStore(Type.EGL_KeyScheme, store);
-		eglcEnv.addRoot(path);
+		if (path != null && path.exists()) {
+			ObjectStore store = new FileSystemObjectStore(path, eglcEnv, outType);
+			eglcEnv.registerObjectStore(IEnvironment.DefaultScheme, store);
+			
+			String fileext = processedArgs.xmlOut ? EGLXML : EGLBIN;
+	//		store = new FileSystemObjectStore(path, PartEnvironment.INSTANCE,outType);
+			store = new FileSystemObjectStore(path, eglcEnv,outType, fileext);
+			eglcEnv.registerObjectStore(Type.EGL_KeyScheme, store);
+			eglcEnv.addRoot(path);
+		}
+		else if (compiler != null) {
+			ISystemEnvironment env = compiler.getSystemEnvironment(null);
+			Map<String, List<ObjectStore>> systemMap = env.getStores();
+			for (Map.Entry<String, List<ObjectStore>> entry : systemMap.entrySet()) {
+				String scheme = entry.getKey();
+				List<ObjectStore> stores = entry.getValue();
+				
+				for (ObjectStore store : stores) {
+					eglcEnv.registerObjectStore(scheme, store);
+				}
+			}
+		}
 	}
 
 	

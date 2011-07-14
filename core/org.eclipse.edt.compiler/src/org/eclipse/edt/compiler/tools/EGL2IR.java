@@ -11,52 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.tools;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.eclipse.edt.compiler.EDTCompiler;
 import org.eclipse.edt.compiler.EGL2IRArgumentProcessor;
 import org.eclipse.edt.compiler.EGL2IREnvironment;
+import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.compiler.ISystemEnvironment;
-import org.eclipse.edt.compiler.Processor;
-import org.eclipse.edt.compiler.SystemEnvironment;
-import org.eclipse.edt.compiler.SystemEnvironmentUtil;
-import org.eclipse.edt.compiler.SystemPackageBuildPathEntryFactory;
-import org.eclipse.edt.compiler.Util;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
-import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
-import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.StringLiteral;
-import org.eclipse.edt.compiler.internal.core.builder.BuildException;
-import org.eclipse.edt.compiler.internal.core.builder.NullBuildNotifier;
-import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.compiler.internal.sdk.IPartRequestor;
-import org.eclipse.edt.compiler.internal.sdk.compile.ASTManager;
 import org.eclipse.edt.compiler.internal.sdk.compile.ISDKProblemRequestorFactory;
-import org.eclipse.edt.compiler.internal.sdk.compile.PartPathEntry;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathEntry;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathInfo;
-import org.eclipse.edt.compiler.internal.util.NameUtil;
-import org.eclipse.edt.compiler.sdk.compile.BuildPathException;
-import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.impl.ProgramImpl;
-import org.eclipse.edt.mof.egl.lookup.EglLookupDelegate;
-import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.mof.serialization.Environment;
-import org.eclipse.edt.mof.serialization.FileSystemObjectStore;
-import org.eclipse.edt.mof.serialization.IEnvironment;
-import org.eclipse.edt.mof.serialization.ObjectStore;
 
 
 
@@ -81,37 +44,49 @@ public class EGL2IR {
 	public static String SystemLibFolderPath;
 	public static ISystemEnvironment systemEnvironment;
 	public static void main(String[] args) {
-
+		main(args, (ICompiler)null);
+	}
+	
+	public static void main(String[] args, ICompiler compiler) {
 		EGL2IRArgumentProcessor.EGL2IRArguments processedArguments = new EGL2IRArgumentProcessor().processArguments(args);
 
 		if(processedArguments != null){
-		    compile(processedArguments, null,null);
+		    compile(processedArguments, null,null,compiler);
 		}
 	}
 
 	public static void main(String[] args, IPartRequestor partRequestor, ISDKProblemRequestorFactory problemRequestorFactory) {
-
+		main(args, partRequestor, problemRequestorFactory, null);
+	}
+	
+	public static void main(String[] args, IPartRequestor partRequestor, ISDKProblemRequestorFactory problemRequestorFactory, ICompiler compiler) {
 		EGL2IRArgumentProcessor.EGL2IRArguments processedArguments = new EGL2IRArgumentProcessor().processArguments(args);
 
 		if(processedArguments != null){
-		    compile(processedArguments, problemRequestorFactory, partRequestor);
+		    compile(processedArguments, problemRequestorFactory, partRequestor,compiler);
 		}
 	}
 
 	public static void main(String[] args,ISDKProblemRequestorFactory problemRequestorFactory) {
-
+		main(args, problemRequestorFactory, null);
+	}
+	
+	public static void main(String[] args,ISDKProblemRequestorFactory problemRequestorFactory, ICompiler compiler) {
 		EGL2IRArgumentProcessor.EGL2IRArguments processedArguments = new EGL2IRArgumentProcessor().processArguments(args);
 		
 		SourcePathInfo.getInstance().reset();
 		SourcePathEntry.getInstance().reset();
 
 		if(processedArguments != null){
-		    compile(processedArguments,problemRequestorFactory,null);
+		    compile(processedArguments,problemRequestorFactory,null,compiler);
 		}
 	}
 	
-	public static void compile(final EGL2IRArgumentProcessor.EGL2IRArguments processedArgs,ISDKProblemRequestorFactory problemRequestorFactory,IPartRequestor partRequestor){
-		EGLG.compile(processedArgs, new EDTCompiler(), problemRequestorFactory, partRequestor);
+	public static void compile(final EGL2IRArgumentProcessor.EGL2IRArguments processedArgs,ISDKProblemRequestorFactory problemRequestorFactory,IPartRequestor partRequestor, ICompiler compiler){
+		if (compiler == null){
+			compiler = new EDTCompiler();
+		}
+		EGLG.compile(processedArgs, compiler, problemRequestorFactory, partRequestor);
 	}
 
 }
