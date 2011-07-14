@@ -13,8 +13,10 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
+import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -28,6 +30,14 @@ public class MemberAccessTemplate extends JavaScriptTemplate {
 			genMemberAccess(expr, ctx, out);
 	}
 
+	public void genCallbackAccesor(MemberAccess expr, Context ctx, TabbedWriter out) {
+		ctx.invoke(genExpression, expr, ctx, out);
+	}
+	
+	public Function getCallbackFunction(MemberName expr, Context ctx) {
+		return (Function)ctx.invoke(getCallbackFunction, expr.getMember(), ctx);
+	}
+	
 	public void genMemberAccess(MemberAccess expr, Context ctx, TabbedWriter out) {
 		if (TypeUtils.isReferenceType(expr.getQualifier().getType()) || expr.getQualifier().isNullable()) {
 			// TODO sbg doesn't seem to be quite the right place out.print("egl.checkNull(");

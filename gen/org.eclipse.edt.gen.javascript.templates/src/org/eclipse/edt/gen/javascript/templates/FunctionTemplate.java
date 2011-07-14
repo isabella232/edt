@@ -43,4 +43,9 @@ public class FunctionTemplate extends JavaScriptTemplate {
 	public void genName(Function function, Context ctx, TabbedWriter out) {
 		ctx.invokeSuper(this, genName, function, ctx, out);
 	}
+	
+	public Function getCallbackFunction(Function function, Context ctx) {
+		return function;
+	}
+	
 }

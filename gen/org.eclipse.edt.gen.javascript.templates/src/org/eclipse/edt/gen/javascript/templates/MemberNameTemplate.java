@@ -15,6 +15,7 @@ import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
@@ -59,6 +60,14 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 			genMemberName(expr, ctx, out);
 	}
 
+	public Function getCallbackFunction(MemberName expr, Context ctx) {
+		return (Function)ctx.invoke(getCallbackFunction, expr.getMember(), ctx);
+	}
+	
+	public void genCallbackAccesor(MemberName expr, Context ctx, TabbedWriter out) {
+		ctx.invoke(genName, expr.getMember(), ctx, out);
+	}
+	
 	public void genMemberName(MemberName expr, Context ctx, TabbedWriter out) {
 		ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 		if (expr.getMember() instanceof FunctionParameter

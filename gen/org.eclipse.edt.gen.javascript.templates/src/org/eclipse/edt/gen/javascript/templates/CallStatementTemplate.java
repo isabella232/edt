@@ -90,10 +90,15 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 			out.println("\"" + operationName(serviceInterfaceFunction) + "\", ");
 			@SuppressWarnings("unchecked")
 			List<Expression> tempArgs = (List<Expression>)ctx.getAttribute(stmt, Constants.Annotation_callStatementTempVariables);
+			Function callbackFunction = null;
+			if(stmt.getCallback() != null){
+				callbackFunction = (Function)ctx.invoke(getCallbackFunction, stmt.getCallback(), ctx);
+			}
+			
 			genInParamVals(serviceInterfaceFunction, tempArgs, ctx, out);
 			genInParamSignature(serviceInterfaceFunction, stmt.getArguments(), ctx, out);
 			genParamOrders(serviceInterfaceFunction, ctx, out);
-			genCallbackArgs(serviceInterfaceFunction, ctx, out)	;			
+			genCallbackArgs(callbackFunction, ctx, out);			
 			
 			out.println(hasXXXRestAnnotation + ", ");		
 			//generate the following arguments
@@ -104,7 +109,21 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 			//        /*String, Dictionary, Record or XMLElement*/ resourceParamIn,
 			genRestParameters(serviceInterfaceFunction, tempArgs, getRest, putRest, postRest, deleteRest, ctx, out);
 			
-			out.println(");");
+			out.print(", ");
+			if(stmt.getCallback() != null){
+				ctx.invoke(genCallbackAccesor, stmt.getCallback(), ctx, out);
+				out.print(", ");
+			}
+			else{
+				out.print("null, ");
+			}
+			if(stmt.getErrorCallback() != null){
+				ctx.invoke(genCallbackAccesor, stmt.getErrorCallback(), ctx, out);
+				out.println(");");
+			}
+			else{
+				out.println("null);");
+			}
 			out.popIndent();
 			out.popIndent();
 	//		if (context.getGenerationMode() == EGLGenerationModeSetting.DEVELOPMENT_GENERATION_MODE) {
@@ -130,30 +149,29 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 
 		int resourceParamIndex = -1;
 		String restMethod = "";
+		Annotation restOperation = null;
 		if(getRest != null){
 			restMethod = "GET";
-			resourceParamIndex = genRESTParameters(getRest, mapFuncParams, serviceInterfaceFunction.getReturnType(), ctx, out);					
+			restOperation = getRest;
 		}
 		else if(putRest != null){
 			restMethod = "PUT";
-			resourceParamIndex = genRESTParameters(putRest, mapFuncParams, serviceInterfaceFunction.getReturnType(), ctx, out);						
+			restOperation = putRest;						
 		}
 		else if(postRest != null){
 			restMethod = "POST";
-			resourceParamIndex = genRESTParameters(postRest, mapFuncParams, serviceInterfaceFunction.getReturnType(), ctx, out);				
+			restOperation = postRest;				
 		}
 		else if(deleteRest != null){
 			restMethod = "DELETE";
-			resourceParamIndex = genRESTParameters(deleteRest, mapFuncParams, serviceInterfaceFunction.getReturnType(), ctx, out);											
+			restOperation = deleteRest;											
 		}						
-		else{
-			out.println("\"\", -1, -1, ");
-		}
 		
 		//need to set the method, rest method parameter		
 		//              /*String*/ restMethod,				
-		out.println(", \"" + restMethod + "\", ");							
+		out.println(" \"" + restMethod + "\", ");							
 		
+		resourceParamIndex = genRESTParameters(restOperation, mapFuncParams, serviceInterfaceFunction.getReturnType(), ctx, out);					
 		//generate resource parameter or query parameter for 'GET'
 		//                /*String, Dictionary, Record or XMLElement*/ parameters){				
 		if(resourceParamIndex != -1){
@@ -199,6 +217,7 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 		out.print(", ");
 		printQuotedString((String)methodRestAnnotation.getValue("responseContentType"), out);;
 		
+		out.println(", ");
 		return resourceRestArg != null ? resourceRestArg.getParamIndex() : -1;			
 	}
 	
@@ -332,17 +351,17 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 	private void genInParamSignature(Function serviceInterfaceFunction, List<Expression> args, Context ctx, TabbedWriter out) {
 		
 		out.print("[");		
-		String signature="";
 		boolean isFirst = true;
 		for(FunctionParameter param : serviceInterfaceFunction.getParameters()){
 			if(param.getParameterKind() != ParameterKind.PARM_OUT){			
 				if(!isFirst)
-					signature += ", ";
-				signature += "\"" +param.getType().getTypeSignature() + "\"";
+					out.print(", ");				
+				out.print("\"");				
+				ctx.invoke(genRuntimeTypeName, param.getType(), ctx, out, TypeNameKind.EGLImplementation);
+				out.print("\"");				
 				isFirst = false;
 			}
 		}	
-		out.print(signature);
 		out.println("], ");				
 	}
 		
@@ -391,26 +410,23 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 		out.println("], ");
 	}
 
-	private void genCallbackArgs(Function serviceInterfaceFunction, Context ctx, TabbedWriter out){
+	private void genCallbackArgs(Function callbackFunction, Context ctx, TabbedWriter out){
 		out.print("[");
-		boolean isFirst = true;
-		for(FunctionParameter param : serviceInterfaceFunction.getParameters()){
-			if(param.getParameterKind() != ParameterKind.PARM_IN){
-				if(!isFirst)
-					out.print(", ");
-				
-				//get the temp var name
-				ctx.invoke(genSignature, param.getType(), ctx, out);
-				isFirst = false;				
+		if(callbackFunction != null){
+			boolean isFirst = true;
+			for(FunctionParameter param : callbackFunction.getParameters()){
+				if(param.getParameterKind() == ParameterKind.PARM_IN){
+					if(!isFirst)
+						out.print(", ");
+					
+					//get the temp var name
+					out.print("\"");				
+					ctx.invoke(genRuntimeTypeName, param.getType(), ctx, out, TypeNameKind.EGLImplementation);
+					out.print("\"");				
+					isFirst = false;				
+				}
 			}
 		}
-		if(serviceInterfaceFunction.getReturnType() != null){
-			if(!isFirst)
-				out.print(", ");
-			
-			ctx.invoke(genSignature, serviceInterfaceFunction.getReturnType(), ctx, out);
-		}
-
 		out.println("], ");
 	}	
 	private void printQuotedString(String val, TabbedWriter out){
