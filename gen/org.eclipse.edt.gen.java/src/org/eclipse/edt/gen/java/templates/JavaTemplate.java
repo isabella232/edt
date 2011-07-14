@@ -84,6 +84,8 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genTypeDependentOptions = "genTypeDependentOptions";
 	public static final String genUnaryExpression = "genUnaryExpression";
 	public static final String genXmlAnnotation = "genXmlAnnotation";
+	public static final String genXmlTransient = "genXmlTransient";
+	
 	// constants that allow container based processing. each of these will attempt to find the user provided container based
 	// method, and if not found, will then end up back in type template and invoked the method name without "containerbased"
 	public static final String genContainerBasedArrayAccess = "genContainerBasedArrayAccess";
