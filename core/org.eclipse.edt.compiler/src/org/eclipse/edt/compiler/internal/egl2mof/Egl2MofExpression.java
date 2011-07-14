@@ -319,9 +319,12 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			((DelegateInvocation)fi).setExpression((Expression)stack.pop());
 		}
 		else {
-			IFunctionBinding functionBinding = (IFunctionBinding)node.getTarget().resolveTypeBinding();
+						
+			ITypeBinding targetBinding = node.getTarget().resolveTypeBinding();
+			IFunctionBinding functionBinding = null;
 			IPartBinding declarer = null;
-			if (Binding.isValidBinding(functionBinding)) {
+			if (Binding.isValidBinding(targetBinding) && (targetBinding instanceof IFunctionBinding)) {
+				functionBinding = (IFunctionBinding) targetBinding;
 				functionParmBindings =  functionBinding.getParameters();
 				declarer = functionBinding.getDeclarer();
 			}
@@ -394,11 +397,19 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	
 						}
 						else {
-							fi = factory.createQualifiedFunctionInvocation();
-							QualifiedName name = (QualifiedName)node.getTarget();
-							fi.setId(name.getIdentifier());
-							name.getQualifier().accept(this);
-							((QualifiedFunctionInvocation)fi).setQualifier((Expression)stack.pop());
+							if (node.getTarget() instanceof QualifiedName) {
+								fi = factory.createQualifiedFunctionInvocation();
+								QualifiedName name = (QualifiedName)node.getTarget();
+								fi.setId(name.getIdentifier());
+								name.getQualifier().accept(this);
+								((QualifiedFunctionInvocation)fi).setQualifier((Expression)stack.pop());
+							}
+							else {
+								//Catch error cases
+								fi = factory.createFunctionInvocation();
+								fi.setId(node.getTarget().getCanonicalString());
+
+							}
 						}
 					}
 				}
