@@ -14,20 +14,13 @@ package org.eclipse.edt.gen.javascript.templates.eglx._service;
 import java.util.List;
 import java.util.Locale;
 
-import org.eclipse.edt.compiler.binding.annotationType.DeleteRestAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.annotationType.GetRestAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.annotationType.PostRestAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.annotationType.PutRestAnnotationTypeBinding;
-import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.Library;
-import org.eclipse.edt.mof.egl.Type;
 
 public class ServiceLibTemplate extends JavaScriptTemplate {
 	// the library gets invoked here, with the invocation expression passed as the 1st argument in the args list. From here,
@@ -46,7 +39,6 @@ public class ServiceLibTemplate extends JavaScriptTemplate {
 				ctx.invoke(genExpression, expr, ctx, out);
 				out.print(" = ");
 				ctx.invoke(genExpression, args.get(0), ctx, out);
-				out.println(";");
 			}
 		}
 		else{
