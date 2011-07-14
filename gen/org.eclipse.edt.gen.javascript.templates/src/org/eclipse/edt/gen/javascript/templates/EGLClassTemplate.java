@@ -40,7 +40,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	private void addNamespaceMap(EGLClass part, Context ctx){
 		String localName = part.getName();
 		String namespace = CommonUtilities.createNamespaceFromPackage(part);
-		Annotation annot = part.getAnnotation("egl.core.xmlRootElement");
+		Annotation annot = part.getAnnotation("eglx.xml._bind.annotation.xmlRootElement");
 		if(annot != null){
 			if (annot.getValue("namespace") != null && 
 					((String)annot.getValue("namespace")).length() > 0)
@@ -293,7 +293,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.println(": function() {");
 		//create the XMLAnnotationMap
 		out.println("var xmlAnnotations = {};");
-		Annotation annot = part.getAnnotation("egl.core.xmlRootElement");
+		Annotation annot = part.getAnnotation("eglx.xml._bind.annotation.xmlRootElement");
 		String namespace = null;
 		if (annot != null && annot.getValue("namespace") != null && 
 				((String)annot.getValue("namespace")).length() > 0)
@@ -307,16 +307,16 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			name = (String) annot.getValue("name");
 		}
 		Boolean isNillable = Boolean.FALSE;
-		if (annot != null && annot.getValue("isNillable") instanceof Boolean)
+		if (annot != null && annot.getValue("nillable") != null)
 		{
-			isNillable = (Boolean) annot.getValue("isNillable");
+			isNillable = CommonUtilities.convertBoolean(annot.getValue("nillable"));
 		}
 		out.println("xmlAnnotations[\"XMLRootElement\"] = new egl.eglx.xml._bind.annotation.XMLRootElement(" + 
 				(name == null ? "null" : quoted(name)) + ", " +
 				(namespace == null ? "null" : quoted(namespace)) + 
 				", " + isNillable.toString() + ");");
 		
-		annot = part.getAnnotation("egl.core.XMLStructure");
+		annot = part.getAnnotation("eglx.xml._bind.annotation.XMLStructure");
 		if (annot != null && annot.getValue("value") != null) 
 		{
 			String value;

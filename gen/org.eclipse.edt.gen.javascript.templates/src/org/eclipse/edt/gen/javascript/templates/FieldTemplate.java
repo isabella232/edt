@@ -12,6 +12,7 @@
 package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.compiler.core.ast.FieldAccess;
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -133,7 +134,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 		}
 
 
-		Annotation xmlArray = field.getAnnotation("egl.core.XMLArray");
+		Annotation xmlArray = field.getAnnotation("eglx.xml._bind.annotation.XMLArray");
 		if(xmlArray != null){
 			out.print("xmlAnnotations[\"XMLArray\"] = new egl.eglx.xml._bind.annotation.XMLArray(");
 			out.print(xmlArray.getValue("wrapped") == null ? "true, " : (((Boolean)xmlArray.getValue("wrapped")).toString() + ", "));
@@ -181,7 +182,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 		String name = field.getId();
 		Annotation annot;
 		if (isAttribute(field)) {
-			annot = field.getAnnotation("egl.core.xmlAttribute");
+			annot = field.getAnnotation("eglx.xml._bind.annotation.xmlAttribute");
 			if (annot != null) {
 				String xmlName = (String) annot.getValue("name");
 				if (xmlName != null && ((String)xmlName).length() > 0)
@@ -190,7 +191,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 		}
 		else
 		{
-			annot = field.getAnnotation("egl.core.xmlElement");
+			annot = field.getAnnotation("eglx.xml._bind.annotation.xmlElement");
 			if (annot != null) {
 				String xmlName = (String) annot.getValue("name");
 				if (xmlName != null && ((String)xmlName).length() > 0)
@@ -201,7 +202,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 		return name;
 	}
 	static boolean isAttribute(Field field) {
-		Annotation annot = field.getAnnotation("egl.core.xmlAttribute");
+		Annotation annot = field.getAnnotation("eglx.xml._bind.annotation.xmlAttribute");
 		if (annot != null)
 			return true;
 		
@@ -212,14 +213,14 @@ public class FieldTemplate extends JavaScriptTemplate {
 		if (isAttribute(field))
 			return false;
 		
-		Annotation annot = field.getAnnotation("egl.core.xmlElement");
+		Annotation annot = field.getAnnotation("eglx.xml._bind.annotation.xmlElement");
 		if (annot != null)
 			return true;
 		
 		//Fields in a record default to xmlElement unless the xmlStructure of the record 
 		// is simpleContent.  Then the field is either xmlAttribute (must have annotation)
 		// or it is a value node.
-		annot = field.getContainer().getAnnotation("egl.core.xmlStructure");
+		annot = field.getContainer().getAnnotation("eglx.xml._bind.annotation.xmlStructure");
 		if (annot != null) 
 		{
 			FieldAccess structure = (FieldAccess) annot.getValue();
@@ -240,9 +241,9 @@ public class FieldTemplate extends JavaScriptTemplate {
 	
 	private boolean isXMLNillable(Field field)
 	{
-		Annotation annot = field.getAnnotation("egl.core.xmlElement");
+		Annotation annot = field.getAnnotation("eglx.xml._bind.annotation.xmlElement");
 		if (annot != null) {
-			Boolean isNillable = (Boolean) annot.getValue("nillable");
+			Boolean isNillable = CommonUtilities.convertBoolean(annot.getValue("nillable"));
 			return (isNillable != null && isNillable.booleanValue());
 		}
 		
@@ -251,7 +252,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 	public static String getXmlSchemaType(Field field)
 	{
 		String xmlSchemaType = null;
-		Annotation annot = field.getAnnotation("egl.core.XMLSchemaType");
+		Annotation annot = field.getAnnotation("eglx.xml._bind.annotation.XMLSchemaType");
 		if (annot != null) 
 		{
 			if (annot.getValue("name") != null && 
@@ -266,7 +267,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 	public static String getNamespace(Field field)
 	{
 		String namespace = null;
-		Annotation annot = field.getAnnotation("egl.core.xmlAttribute");
+		Annotation annot = field.getAnnotation("eglx.xml._bind.annotation.xmlAttribute");
 		if (annot != null) 
 		{
 			if (annot.getValue("namespace") != null && 
@@ -278,7 +279,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 		} 
 		else
 		{
-			annot = field.getAnnotation("egl.core.xmlElement");
+			annot = field.getAnnotation("eglx.xml._bind.annotation.xmlElement");
 			if (annot != null && 
 					annot.getValue("namespace") != null && 
 					((String)annot.getValue("namespace")).length() > 0)
