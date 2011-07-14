@@ -35,6 +35,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genArrayAccess = "genArrayAccess";
 	public static final String genAssignment = "genAssignment";
 	public static final String genBinaryExpression = "genBinaryExpression";
+	public static final String genCallbackAccesor = "genCallbackAccesor";
 	public static final String genClassBody = "genClassBody";
 	public static final String genClassHeader = "genClassHeader";
 	public static final String genClassName = "genClassName";
@@ -97,6 +98,10 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genContainerBasedAssignment = "genContainerBasedAssignment";
 	public static final String genContainerBasedMemberAccess = "genContainerBasedMemberAccess";
 	public static final String genContainerBasedMemberName = "genContainerBasedMemberName";
+
+	//get functions
+	public static final String getCallbackFunction = "getCallbackFunction";
+
 	// these are used by the validation step. preGen is used to preGen individual items within the part being generated.
 	// preGenPart is invoked by the generator and should not be overridden or used by extending logic
 	public static final String preGen = "preGen";
