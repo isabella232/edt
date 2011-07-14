@@ -461,10 +461,12 @@ class Egl2MofMember extends Egl2MofPart {
 				}
 			}
 			else if (expr instanceof SetValuesExpression && ((SetValuesExpression)expr).getExpression() instanceof AnnotationExpression) {
-				IAnnotationBinding annBinding = (IAnnotationBinding)((AnnotationExpression)((SetValuesExpression)expr).getExpression()).resolveDataBinding();
-				if (!isEMetadataObject(annBinding)) {
-					Annotation value = (Annotation)evaluateExpression(expr);
-					context.getAnnotations().add(value);
+				if (((AnnotationExpression)((SetValuesExpression)expr).getExpression()).resolveDataBinding() instanceof IAnnotationBinding) { 
+					IAnnotationBinding annBinding = (IAnnotationBinding)((AnnotationExpression)((SetValuesExpression)expr).getExpression()).resolveDataBinding();
+					if (!isEMetadataObject(annBinding)) {
+						Annotation value = (Annotation)evaluateExpression(expr);
+						context.getAnnotations().add(value);
+					}
 				}
 			}
 			else {
