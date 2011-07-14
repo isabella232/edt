@@ -234,4 +234,7 @@ public class TypeTemplate extends JavaTemplate {
 	public void genContainerBasedMemberName(Type type, Context ctx, TabbedWriter out, MemberName arg1, Member arg2) {
 		ctx.invoke(genMemberName, arg1, ctx, out);
 	}
+	
+	public void genXmlTransient(Type type, TabbedWriter out){ }
+	
 }

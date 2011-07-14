@@ -20,6 +20,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class FieldTemplate extends JavaTemplate {
@@ -32,7 +33,9 @@ public class FieldTemplate extends JavaTemplate {
 		// write out the debug extension data
 		CommonUtilities.generateSmapExtension(field, ctx);
 		// process the field
-		out.println("@javax.xml.bind.annotation.XmlTransient");
+		if(field.getContainer() instanceof Type){
+			ctx.invoke(genXmlTransient, field.getContainer(), out);
+		}
 		ctx.invokeSuper(this, genDeclaration, field, ctx, out);
 		transientOption(field, out);
 		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
