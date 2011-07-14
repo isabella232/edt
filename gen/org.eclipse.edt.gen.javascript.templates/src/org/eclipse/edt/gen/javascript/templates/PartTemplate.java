@@ -13,12 +13,10 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import java.util.ArrayList;
 
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.DataTable;
 import org.eclipse.edt.mof.egl.Form;
 import org.eclipse.edt.mof.egl.Library;
@@ -56,14 +54,7 @@ public class PartTemplate extends JavaScriptTemplate {
 	}
 
 	public void genClassName(Part part, Context ctx, TabbedWriter out) {
-		// Data tables might have an alias property.
-		String nameOrAlias;
-		Annotation annot = part.getAnnotation(IEGLConstants.PROPERTY_ALIAS);
-		if (annot != null)
-			nameOrAlias = (String) annot.getValue();
-		else
-			nameOrAlias = part.getId();
-		out.print(JavaScriptAliaser.getAlias(nameOrAlias));
+		out.print(JavaScriptAliaser.getAlias(part.getId()));
 	}
 
 	public void genSuperClass(Part part, Context ctx, TabbedWriter out) {
