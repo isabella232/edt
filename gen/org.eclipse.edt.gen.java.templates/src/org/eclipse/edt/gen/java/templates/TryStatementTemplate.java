@@ -12,11 +12,9 @@
 package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
-
-import org.eclipse.edt.mof.egl.ExceptionBlock;
-import org.eclipse.edt.mof.egl.Statement;
-import org.eclipse.edt.mof.egl.TryStatement;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.ExceptionBlock;
+import org.eclipse.edt.mof.egl.TryStatement;
 
 public class TryStatementTemplate extends JavaTemplate {
 
@@ -31,15 +29,8 @@ public class TryStatementTemplate extends JavaTemplate {
 	public void genException(ExceptionBlock exceptionBlock, Context ctx, TabbedWriter out) {
 		out.print("catch (" + ctx.getNativeImplementationMapping(exceptionBlock.getException().getType()) + " ");
 		ctx.invoke(genName, exceptionBlock.getException(), ctx, out);
-		out.println(") {");
-		for (Statement stmt : exceptionBlock.getStatements()) {
-			genExceptionStatement(stmt, ctx, out);
-		}
-		out.println("}");
-	}
-
-	public void genExceptionStatement(Statement stmt, Context ctx, TabbedWriter out) {
-		ctx.invoke(genStatement, stmt, ctx, out);
+		out.print(") ");
+		ctx.invoke(genStatement, exceptionBlock, ctx, out);
 	}
 
 	public void genStatementEnd(TryStatement stmt, Context ctx, TabbedWriter out) {
