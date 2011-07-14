@@ -264,4 +264,13 @@ public class CommonUtilities {
 		return (TypeUtils.Type_BIGINT.equals(type) || TypeUtils.Type_NUM.equals(type) || TypeUtils.Type_DECIMAL.equals(type) || TypeUtils.Type_MONEY
 			.equals(type));
 	}
+	
+	//FIXME BUGZILLA 350710 - I shouldn't need to do this, but a clean causes the init boolean values on annotations to be strings
+	//If you build th eindividual part file like a record it will be a boolean.
+	public static Boolean convertBoolean(Object value){
+		if(value instanceof String){
+			return new Boolean((String)value);
+		}
+		return (Boolean)value;
+	}
 }
