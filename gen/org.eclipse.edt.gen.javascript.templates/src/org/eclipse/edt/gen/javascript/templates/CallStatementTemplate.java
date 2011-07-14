@@ -11,64 +11,410 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-import org.eclipse.edt.compiler.binding.annotationType.DeleteRestAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.annotationType.GetRestAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.annotationType.PostRestAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.annotationType.PutRestAnnotationTypeBinding;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.MemberAccess;
+import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class CallStatementTemplate extends JavaScriptTemplate {
+	private static class RestArgument{
+		private int index;
+		private FunctionParameter param;
+		private Expression arg;
+		private boolean isResourceArg = true;
+		
+		public RestArgument(FunctionParameter param, Expression arg, int index){
+			this.param = param;
+			this.arg = arg;
+			this.index = index;
+			isResourceArg = true;
+		}
+
+		public Expression getArg() {
+			return arg;
+		}
+		
+		public FunctionParameter getParam(){
+			return param;
+		}
+
+		public boolean isResourceArg() {
+			return isResourceArg;
+		}
+
+		public void setResourceArg(boolean isResourceArg) {
+			this.isResourceArg = isResourceArg;
+		}
+		
+		public int getParamIndex(){
+			return index;
+		}
+	}
 
 	public void genStatementBody(CallStatement stmt, Context ctx, TabbedWriter out) {
-		Expression serviceInterface = stmt.getInvocationTarget();
-		Annotation rest;
-		String method = "POST";
-		rest = serviceInterface.getAnnotation(PostRestAnnotationTypeBinding.name);
-		if(rest == null){
-			rest = serviceInterface.getAnnotation(PutRestAnnotationTypeBinding.name);
-			method = "PUT";
-			if(rest == null){
-				rest = serviceInterface.getAnnotation(DeleteRestAnnotationTypeBinding.name);
-				method = "DELETE";
-				if(rest == null){
-					rest = serviceInterface.getAnnotation(GetRestAnnotationTypeBinding.name);
-					method = "GET";
-				}
-			}
+		Function serviceInterfaceFunction = (Function)((MemberAccess)stmt.getInvocationTarget()).getMember();
+				
+		//check to see if the invokable memeber has any of the getRest, putRest, postRest or deleteRest annotations
+		//if none, then this is a egl service
+		Annotation getRest = serviceInterfaceFunction.getAnnotation("eglx.rest.GetRest");
+		Annotation putRest = serviceInterfaceFunction.getAnnotation("eglx.rest.PutRest");
+		Annotation postRest = serviceInterfaceFunction.getAnnotation("eglx.rest.PostRest");
+		Annotation deleteRest = serviceInterfaceFunction.getAnnotation("eglx.rest.DeleteRest");
+		
+		boolean hasXXXRestAnnotation = (getRest != null || putRest != null || postRest != null || deleteRest != null);					
+
+		if(hasXXXRestAnnotation){
+			out.print("egl.eglx.rest.invokeService(");  //handler parameter
+			ctx.invoke(genExpression, stmt.getInvocationTarget().getQualifier(), ctx, out);
+			out.println(", ");
+			out.pushIndent();
+			out.pushIndent();
+	//		genCallbackParameters(callback, errorCallback);
+	//		genTimeoutParams(serviceTimeout);
+			out.println("\"" + operationName(serviceInterfaceFunction) + "\", ");
+			@SuppressWarnings("unchecked")
+			List<Expression> tempArgs = (List<Expression>)ctx.getAttribute(stmt, Constants.Annotation_callStatementTempVariables);
+			genInParamVals(serviceInterfaceFunction, tempArgs, ctx, out);
+			genInParamSignature(serviceInterfaceFunction, stmt.getArguments(), ctx, out);
+			genParamOrders(serviceInterfaceFunction, ctx, out);
+			genCallbackArgs(serviceInterfaceFunction, ctx, out)	;			
+			
+			out.println(hasXXXRestAnnotation + ", ");		
+			//generate the following arguments
+			//        /*String*/ resolvedUriTemplate,
+			//        /*int*/ requestFormat,
+			//        /*int*/ responseFormat,
+			//        /*String*/ restMethod,                        
+			//        /*String, Dictionary, Record or XMLElement*/ resourceParamIn,
+			genRestParameters(serviceInterfaceFunction, tempArgs, getRest, putRest, postRest, deleteRest, ctx, out);
+			
+			out.println(");");
+			out.popIndent();
+			out.popIndent();
+	//		if (context.getGenerationMode() == EGLGenerationModeSetting.DEVELOPMENT_GENERATION_MODE) {
+	//			out.popIndent();
+	//			out.println("}");
+	//		}	*/	
 		}
-		if(rest != null){
-			buildHttpRestBind(rest, method, out);
+		
+	}
+
+	private void genRestParameters(Function serviceInterfaceFunction, List<Expression> tempArgs, Annotation getRest,
+			Annotation putRest, Annotation postRest, Annotation deleteRest, Context ctx, TabbedWriter out) {
+		Map<String, RestArgument> mapFuncParams = new Hashtable<String, RestArgument>();	//key is String(parameter variable name in lower case), value is the RestArugment
+		for (int idx=0; idx<serviceInterfaceFunction.getParameters().size(); idx++){
+			FunctionParameter param = serviceInterfaceFunction.getParameters().get(idx);
+			mapFuncParams.put(param.getId().toLowerCase(), new RestArgument(param, tempArgs.get(idx), idx));
+		}
+		
+		//generate the following 3 arguments
+		//              /*String*/ resolvedUriTemplate,
+		//              /*int*/ requestFormat,
+		//              /*int*/ responseFormat,				
+
+		int resourceParamIndex = -1;
+		String restMethod = "";
+		if(getRest != null){
+			restMethod = "GET";
+			resourceParamIndex = genRESTParameters(getRest, mapFuncParams, serviceInterfaceFunction.getReturnType(), ctx, out);					
+		}
+		else if(putRest != null){
+			restMethod = "PUT";
+			resourceParamIndex = genRESTParameters(putRest, mapFuncParams, serviceInterfaceFunction.getReturnType(), ctx, out);						
+		}
+		else if(postRest != null){
+			restMethod = "POST";
+			resourceParamIndex = genRESTParameters(postRest, mapFuncParams, serviceInterfaceFunction.getReturnType(), ctx, out);				
+		}
+		else if(deleteRest != null){
+			restMethod = "DELETE";
+			resourceParamIndex = genRESTParameters(deleteRest, mapFuncParams, serviceInterfaceFunction.getReturnType(), ctx, out);											
+		}						
+		else{
+			out.println("\"\", -1, -1, ");
+		}
+		
+		//need to set the method, rest method parameter		
+		//              /*String*/ restMethod,				
+		out.println(", \"" + restMethod + "\", ");							
+		
+		//generate resource parameter or query parameter for 'GET'
+		//                /*String, Dictionary, Record or XMLElement*/ parameters){				
+		if(resourceParamIndex != -1){
+			//use the temp var, since resource parameter should be IN
+			Expression expr = tempArgs.get(resourceParamIndex);
+			if(expr != null){
+				ctx.invoke(genExpression, expr, ctx, out);
+			}
+			else	; //should NEVER be in else, since the resource param is IN, all IN param has a temp var generated
 		}
 		else{
-			buildHttpSoapBind();
+			out.print("{}");
 		}
 	}
-	private void buildHttpRestBind(Annotation rest, String method, TabbedWriter out){
-		out.print(", " + quoted(method));
-		printQuotedString((String)rest.getValue("uriTemplate"), out);
-		printInteger((Integer)rest.getValue("requestFormat"), out);
-		printQuotedString((String)rest.getValue("requestCharset"), out);;
-		printQuotedString((String)rest.getValue("requestContentType"), out);;
-		printInteger((Integer)rest.getValue("responseFormat"), out);
-		printQuotedString((String)rest.getValue("responseCharset"), out);;
-		printQuotedString((String)rest.getValue("responseContentType"), out);;
+
+	private int genRESTParameters(Annotation methodRestAnnotation, Map<String, RestArgument> funcParams, Type returnType, Context ctx, TabbedWriter out){
+		String uriTemplate = (String)methodRestAnnotation.getValue("uriTemplate");
+		
+		out.println("//" + uriTemplate);
+		genURITemplate(uriTemplate, false, funcParams, ctx, out);
+		out.println(", ");
+		
+		//generate the requestFormat parameter
+		//find the resource parameter, there should only be one
+		RestArgument resourceRestArg = null;
+		for(Iterator<RestArgument> it = funcParams.values().iterator(); (it.hasNext() && resourceRestArg == null);){
+			RestArgument restArg = it.next();
+			if(restArg.isResourceArg()){
+				resourceRestArg = restArg;
+			}
+		}
+		
+		genFormatKind((Integer)methodRestAnnotation.getValue("requestFormat"), resourceRestArg != null ? resourceRestArg.getParam().getType() : null, ctx, out);
+		out.print(", ");
+		printQuotedString((String)methodRestAnnotation.getValue("requestCharset"), out);;
+		out.print(", ");
+		printQuotedString((String)methodRestAnnotation.getValue("requestContentType"), out);;
+		out.print(", ");
+		
+		genFormatKind((Integer)methodRestAnnotation.getValue("responseFormat"), returnType, ctx, out);
+		out.print(", ");
+		printQuotedString((String)methodRestAnnotation.getValue("responseCharset"), out);;
+		out.print(", ");
+		printQuotedString((String)methodRestAnnotation.getValue("responseContentType"), out);;
+		
+		return resourceRestArg != null ? resourceRestArg.getParamIndex() : -1;			
 	}
 	
+	private void genFormatKind(Integer format, Type eglType, final Context ctx, TabbedWriter out) {
+		if(format != null){
+			//String id = fieldAccess.getId();
+			switch(format.intValue()){
+			case 0:
+				out.print("egl.formatXML");
+				break;
+			case 1:
+				out.print("egl.formatJSON");
+				break;
+			case 2:
+				out.print("egl.formatFORM");	
+				break;
+			default:	//case RESTFormatKind.NONE_CONSTANT:
+				out.print("egl.formatNONE");	
+				break;								
+			}			
+		}
+		else{
+			//use the default format based on the egl type
+			//String => none
+			//dictionary => json
+			//xmlelement => xml
+			//record => xml
+			if(eglType != null && ctx.mapsToPrimitiveType(eglType)){
+				out.print("egl.formatNONE");
+			}
+			else if(eglType != null && "egl.lang.Dictionary".equals(eglType.getTypeSignature())){
+				out.print("egl.formatJSON");
+			}
+			else if(eglType != null){
+				out.print("egl.formatXML");	
+			}
+			else{
+				out.print("egl.formatNONE");
+			}
+		}
+	}
+
+	private void genURITemplate(String uriTemplate, boolean needs2PrintPlus, Map<String, RestArgument> mapFunctionParams, Context ctx, TabbedWriter out){
+		int length = 0;
+		if(uriTemplate != null)
+			length = uriTemplate.length();
+		if(uriTemplate != null && length>0){	
+			String leftOfOpenCurly = uriTemplate;
+			String subsitutionVar = "";
+			int fndOpenCurly = uriTemplate.indexOf('{');
+			if(fndOpenCurly != -1){						
+				leftOfOpenCurly = uriTemplate.substring(0, fndOpenCurly);
+				if(leftOfOpenCurly.length() > 0){
+					if(needs2PrintPlus)
+						out.print(" + ");
+					out.print("\"" + leftOfOpenCurly + "\"");
+					needs2PrintPlus = true;
+				}
+				
+				int fndCloseCurly = uriTemplate.indexOf('}', fndOpenCurly);
+				if(fndCloseCurly != -1){
+					//found the subsitution var
+					subsitutionVar = uriTemplate.substring(fndOpenCurly+1, fndCloseCurly);
+					//write out the value of the subsitutionVar
+					if(subsitutionVar.length()>0){
+						if(needs2PrintPlus)
+							out.print(" + ");						
+						
+						String key = subsitutionVar.toLowerCase();
+						RestArgument restArg = (RestArgument)mapFunctionParams.get(key);
+						if(restArg!= null){
+							restArg.setResourceArg(false);		//uri subsitution variable can not be resource parameter							
+							
+							//need to url encode the argument
+							if(needs2PrintPlus)
+								out.print("egl.eglx.http.$HttpLib.convertToURLEncoded(");
+							else
+								out.print("egl.eglx.http.$HttpLib.checkURLEncode(");      		//if starts with http, do not url encode it
+							
+							Expression arg = restArg.getArg();
+							if(arg != null){
+								//convert the the primitive parameter to string to be used inside convertToURLEncoded js function
+								AsExpression asExpr = IRUtils.createAsExpression(arg, TypeUtils.Type_STRING);
+								ctx.invoke(genExpression, asExpr, ctx, out);
+							}
+							else	;//should NEVER be in the else case, because uriTemplate variables are all IN param, which should be generated as temp var							
+
+							out.print(")");
+							needs2PrintPlus = true;			
+						}						
+					}
+					String rightOfCloseCurly = uriTemplate.substring(fndCloseCurly+1, length);
+					genURITemplate(rightOfCloseCurly, needs2PrintPlus, mapFunctionParams, ctx, out);
+				}
+				else{
+					//should not happen, validation should have caught this
+					//syntax error, needs the closing curly bracket
+				}
+			}
+			else{
+				if(needs2PrintPlus)
+					out.print(" + ");
+				out.print("\"" + leftOfOpenCurly + "\"");
+				needs2PrintPlus = true;
+			}			
+		}
+		else{
+			if(!needs2PrintPlus)
+				out.print("\"\"");			
+		}
+	}
+	
+	private void genInParamVals(Function serviceInterfaceFunction, List<Expression> args, Context ctx, TabbedWriter out)
+	{
+		out.print("[");		
+		boolean isFirst = true;
+		for (int idx=0; idx<serviceInterfaceFunction.getParameters().size(); idx++){
+			//Expression arg = args[i];
+						
+			if(serviceInterfaceFunction.getParameters().get(idx).getParameterKind() != ParameterKind.PARM_OUT){
+				if(!isFirst)
+					out.print(", ");
+				
+				isFirst = false;
+				//get the temp var name
+				ctx.invoke(genExpression, args.get(idx), ctx, out);
+			}				
+		}
+		out.println("], ");		
+	}
+	private void genInParamSignature(Function serviceInterfaceFunction, List<Expression> args, Context ctx, TabbedWriter out) {
+		
+		out.print("[");		
+		String signature="";
+		boolean isFirst = true;
+		for(FunctionParameter param : serviceInterfaceFunction.getParameters()){
+			if(param.getParameterKind() != ParameterKind.PARM_OUT){			
+				if(!isFirst)
+					signature += ", ";
+				signature += "\"" +param.getType().getTypeSignature() + "\"";
+				isFirst = false;
+			}
+		}	
+		out.print(signature);
+		out.println("], ");				
+	}
+		
+	public static String operationName(Function function){
+		String operationName = null;
+		Annotation annot = function.getAnnotation( IEGLConstants.PROPERTY_XML );
+		if ( annot != null )
+		{
+			operationName = (String)annot.getValue( IEGLConstants.PROPERTY_NAME );
+		}
+		if ( operationName==null || operationName.length()==0 )
+		{	
+			annot = function.getAnnotation( IEGLConstants.PROPERTY_ALIAS);
+			if (annot != null)
+			{				
+				operationName = (String)annot.getValue();
+			}
+		}
+		if ( operationName==null || operationName.length()==0 )
+		{
+				operationName = function.getId();
+		}
+		return operationName;
+	}
+	
+	private void genParamOrders(Function serviceInterfaceFunction, Context ctx, TabbedWriter out) {
+		out.print("[");
+		boolean isFirst = true;
+		for(FunctionParameter param : serviceInterfaceFunction.getParameters()){
+			if(!isFirst)
+				out.print(", ");
+			out.print("\"");
+			ctx.invoke(genName, param, ctx, out);
+			out.print("\"");
+			isFirst = false;
+		}
+		
+		if(serviceInterfaceFunction.getReturnField() != null){
+			if(!isFirst)
+				out.print(", ");
+			out.print("\"");
+			ctx.invoke(genName, serviceInterfaceFunction.getReturnField(), ctx, out);
+			out.print("\"");
+			isFirst = false;
+		}
+		out.println("], ");
+	}
+
+	private void genCallbackArgs(Function serviceInterfaceFunction, Context ctx, TabbedWriter out){
+		out.print("[");
+		boolean isFirst = true;
+		for(FunctionParameter param : serviceInterfaceFunction.getParameters()){
+			if(param.getParameterKind() != ParameterKind.PARM_IN){
+				if(!isFirst)
+					out.print(", ");
+				
+				//get the temp var name
+				ctx.invoke(genSignature, param.getType(), ctx, out);
+				isFirst = false;				
+			}
+		}
+		if(serviceInterfaceFunction.getReturnType() != null){
+			if(!isFirst)
+				out.print(", ");
+			
+			ctx.invoke(genSignature, serviceInterfaceFunction.getReturnType(), ctx, out);
+		}
+
+		out.println("], ");
+	}	
 	private void printQuotedString(String val, TabbedWriter out){
-		out.print(", ");
 		out.print(val == null ? "null" : quoted(val));
 	}
 	
-	private void printInteger(Integer val, TabbedWriter out){
-		out.print(", ");
-		out.print(val == null ? "null" : val.toString());
-	}
-	
-	private void buildHttpSoapBind(){
-		
-	}
 }
