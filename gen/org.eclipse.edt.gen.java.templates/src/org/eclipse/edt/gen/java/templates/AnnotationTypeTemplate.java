@@ -104,7 +104,7 @@ public class AnnotationTypeTemplate extends JavaTemplate {
 		}
 	}
 
-	//FIXME I shouldn't need to do this, but a clean causes the init boolean values on annotations to be strings
+	//FIXME BUGZILLA 350710 - I shouldn't need to do this, but a clean causes the init boolean values on annotations to be strings
 	//If you build th eindividual part file like a record it will be a boolean.
 	private Boolean convertBoolean(Object value){
 		if(value instanceof String){
