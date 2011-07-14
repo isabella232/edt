@@ -14,13 +14,11 @@ package org.eclipse.edt.gen.java.templates;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.JavaAliaser;
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.DataTable;
 import org.eclipse.edt.mof.egl.Form;
 import org.eclipse.edt.mof.egl.Library;
@@ -102,14 +100,7 @@ public class PartTemplate extends JavaTemplate {
 	}
 
 	public void genClassName(Part part, Context ctx, TabbedWriter out) {
-		// Data tables might have an alias property.
-		String nameOrAlias;
-		Annotation annot = part.getAnnotation(IEGLConstants.PROPERTY_ALIAS);
-		if (annot != null)
-			nameOrAlias = (String) annot.getValue();
-		else
-			nameOrAlias = part.getId();
-		out.print(JavaAliaser.getAlias(nameOrAlias));
+		out.print(JavaAliaser.getAlias(part.getId()));
 	}
 
 	public void genSuperClass(Part part, Context ctx, TabbedWriter out) {
