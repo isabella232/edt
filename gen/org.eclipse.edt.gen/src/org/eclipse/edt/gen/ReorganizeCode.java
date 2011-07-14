@@ -7,6 +7,7 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
+import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.CaseStatement;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.ContinueStatement;
@@ -24,6 +25,7 @@ import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
+import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.OpenUIStatement;
 import org.eclipse.edt.mof.egl.Operation;
@@ -85,6 +87,21 @@ public class ReorganizeCode extends AbstractVisitor {
 
 	public boolean visit(ReturnStatement object) {
 		ctx.putAttribute(object.getContainer(), Constants.Annotation_functionHasReturnStatement, new Boolean(true));
+		return true;
+	}
+
+	public boolean visit(CallStatement object) {
+		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
+		if(object.getInvocationTarget() instanceof MemberAccess && 
+				((MemberAccess)object.getInvocationTarget()).getMember() instanceof Function){
+			Function serviceInterfaceFunction = (Function)((MemberAccess)object.getInvocationTarget()).getMember();
+			FunctionInvocation invocation = factory.createFunctionInvocation();
+			invocation.setTarget(serviceInterfaceFunction);
+			invocation.setId(serviceInterfaceFunction.getId());
+			invocation.getArguments().addAll(object.getArguments());
+			processInvocation(invocation);
+			ctx.putAttribute(object, Constants.Annotation_callStatementTempVariables, invocation.getArguments());
+		}
 		return true;
 	}
 

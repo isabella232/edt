@@ -30,4 +30,5 @@ public class Constants {
 	public static final String Annotation_functionArgumentTemporaryVariable = "functionArgumentTemporaryVariable";
 	public static final String Annotation_functionHasReturnStatement = "functionHasReturnStatement";
 	public static final String Annotation_statementNeedsLabel = "statementNeedsLabel";
+	public static final String Annotation_callStatementTempVariables = "callStatementTempVariables";
 }
