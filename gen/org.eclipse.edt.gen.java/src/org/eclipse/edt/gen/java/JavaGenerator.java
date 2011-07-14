@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
@@ -29,7 +28,6 @@ import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
-import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Part;
 
 public class JavaGenerator extends Generator {
@@ -186,13 +184,7 @@ public class JavaGenerator extends Generator {
 			buf.append(JavaAliaser.packageNameAlias(pkg.split("[.]"), '/'));
 			buf.append('/');
 		}
-		String nameOrAlias;
-		Annotation annot = part.getAnnotation(IEGLConstants.PROPERTY_ALIAS);
-		if (annot != null)
-			nameOrAlias = (String) annot.getValue();
-		else
-			nameOrAlias = part.getId();
-		buf.append(JavaAliaser.getAlias(nameOrAlias));
+		buf.append(JavaAliaser.getAlias(part.getId()));
 		buf.append(getFileExtention());
 		return buf.toString();
 	}	
