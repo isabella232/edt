@@ -28,7 +28,7 @@ public class Constants {
 	public static final String Annotation_EGLProperty = "egl.core.eglproperty";
 
 	// command parameter internal names
-	public static final String SERIAL_VERSION_UID = "80";
+	public static final String SERIAL_VERSION_UID = "10";
 
 	// Commonly used package names
 	public static final String JSRT_EGL_NAMESPACE = "egl.";
