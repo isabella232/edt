@@ -19,5 +19,5 @@ public interface PrimitiveTypeLiteral extends Literal {
 	void setValue(String value);
 	
 	
-	public void getObjectValue();
+	public Object getObjectValue();
 }

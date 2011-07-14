@@ -16,16 +16,12 @@ import java.math.BigInteger;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 public class IntegerLiteralImpl extends NumericLiteralImpl implements IntegerLiteral {
 	
 	private Type type = null;
-	
-	@Override
-	public Integer getIntValue() {
-		return Integer.decode(getValue());
-	}
 		
 	@Override
 	public Type getType() {
@@ -54,4 +50,17 @@ public class IntegerLiteralImpl extends NumericLiteralImpl implements IntegerLit
 		return type;
 	}
 
+	@Override
+	public Object getObjectValue() {
+		Type type = getType();
+		if (type.equals(TypeUtils.Type_SMALLINT)) {
+			return new Short( getValue() );
+		} else if (type.equals(TypeUtils.Type_INT)) {
+			return new Integer( getValue() );
+		} else if (type.equals(TypeUtils.Type_BIGINT)) {
+			return new Long( getValue() );
+		} else {
+			return new BigInteger( getValue() );
+		}
+	}
 }

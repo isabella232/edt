@@ -38,12 +38,6 @@ public abstract class PrimitiveTypeLiteralImpl extends LiteralImpl implements Pr
 		slotSet(Slot_value, value);
 	}
 	
-	
-	@Override
-	public void getObjectValue() {
-		// TODO: Default generated implementation
-	}
-	
 	@Override
 	public abstract Type getType(); 
 

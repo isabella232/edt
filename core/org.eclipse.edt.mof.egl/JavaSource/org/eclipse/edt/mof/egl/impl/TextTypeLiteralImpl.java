@@ -35,4 +35,8 @@ public abstract class TextTypeLiteralImpl extends PrimitiveTypeLiteralImpl imple
 		slotSet(Slot_isHex, value);
 	}
 	
+	@Override
+	public Object getObjectValue() {
+		return getValue();
+	}
 }

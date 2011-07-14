@@ -38,4 +38,8 @@ public class FloatingPointLiteralImpl extends NumericLiteralImpl implements Floa
 		return IRUtils.getEGLPrimitiveType(Type_Float);
 	}
 
+	@Override
+	public Object getObjectValue() {
+		return getFloatValue();
+	}
 }

@@ -32,4 +32,8 @@ public class BooleanLiteralImpl extends PrimitiveTypeLiteralImpl implements Bool
 		return IRUtils.getEGLPrimitiveType(Type_Boolean);
 	}
 
+	@Override
+	public Object getObjectValue() {
+		return booleanValue();
+	}
 }

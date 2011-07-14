@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
+import java.math.BigDecimal;
+
 import org.eclipse.edt.mof.egl.DecimalLiteral;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
@@ -26,4 +28,8 @@ public class DecimalLiteralImpl extends NumericLiteralImpl implements DecimalLit
 		return IRUtils.getEGLPrimitiveType(Type_Decimal, val.length()-1, decimals);
 	}
 
+	@Override
+	public Object getObjectValue() {
+		return new BigDecimal( getValue() );
+	}
 }

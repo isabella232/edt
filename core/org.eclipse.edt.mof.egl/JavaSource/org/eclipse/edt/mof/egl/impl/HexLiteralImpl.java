@@ -22,4 +22,9 @@ public class HexLiteralImpl extends PrimitiveTypeLiteralImpl implements HexLiter
 	public Type getType() {
 		return IRUtils.getEGLPrimitiveType(Type_Hex, getValue().length());
 	}
+
+	@Override
+	public Object getObjectValue() {
+		return getValue();
+	}
 }
