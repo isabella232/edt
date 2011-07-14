@@ -14,7 +14,6 @@ package org.eclipse.edt.gen.javascript;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
@@ -25,7 +24,6 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
-import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Part;
 
 public class JavaScriptGenerator extends Generator {
@@ -120,13 +118,7 @@ public class JavaScriptGenerator extends Generator {
 			buf.append(JavaScriptAliaser.packageNameAlias(pkg.split("[.]"), '/'));
 			buf.append('/');
 		}
-		String nameOrAlias;
-		Annotation annot = part.getAnnotation(IEGLConstants.PROPERTY_ALIAS);
-		if (annot != null)
-			nameOrAlias = (String) annot.getValue();
-		else
-			nameOrAlias = part.getId();
-		buf.append(JavaScriptAliaser.getAlias(nameOrAlias));
+		buf.append(JavaScriptAliaser.getAlias(part.getId()));
 		buf.append(getFileExtention());
 		return buf.toString();
 	}
