@@ -19,7 +19,7 @@ public class ExitRunUnit extends EglExit
 	/**
 	 * The version ID used in serialization.
 	 */
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	/** Only one instance of this exception may be created - this is it */
 	private static ExitRunUnit theinstance = null;

@@ -16,11 +16,13 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.ListIterator;
 
+import org.eclipse.edt.javart.Constants;
+
 public class EList<T> extends AnyObject implements egl.lang.EList<T> {
 	/**
 	 * The version ID used in serialization.
 	 */
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	
 	private java.util.List<T> list;
 	private int maxSize;

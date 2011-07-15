@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.TypeConstraints;
 
@@ -23,7 +24,7 @@ public abstract class AnyObject implements egl.lang.AnyObject {
 	/**
 	 * The version ID used in serialization.
 	 */
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	public static egl.lang.AnyObject box(egl.lang.AnyObject value) throws JavartException {
 		return ezeBox(value);

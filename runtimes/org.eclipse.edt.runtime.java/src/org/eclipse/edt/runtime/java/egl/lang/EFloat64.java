@@ -14,6 +14,7 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import java.math.BigDecimal;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 
 import egl.lang.AnyNumber;
@@ -22,7 +23,7 @@ public class EFloat64 extends AnyBoxedObject<Double> implements AnyNumber {
 	/**
 	 * The version ID used in serialization.
 	 */
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 		
 	private EFloat64(Double value) { super(value); }
 	

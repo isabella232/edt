@@ -10,6 +10,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.resources.ExecutableBase;
@@ -18,7 +19,7 @@ import egl.lang.AnyValue;
 
 public class XmlLib extends ExecutableBase {
 
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	
 	public XmlLib( RunUnit ru ) {
 		super( ru );

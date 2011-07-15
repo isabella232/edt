@@ -21,6 +21,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.util.JavartUtil;
 
@@ -29,7 +30,7 @@ import org.eclipse.edt.javart.util.JavartUtil;
  */
 public class LocalizedText implements Serializable
 {
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	/**
 	 * The properties of the RunUnit.

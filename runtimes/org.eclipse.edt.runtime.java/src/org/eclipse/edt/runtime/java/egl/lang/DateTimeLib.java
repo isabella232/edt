@@ -13,6 +13,7 @@ package org.eclipse.edt.runtime.java.egl.lang;
 
 import java.util.Calendar;
 
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.resources.ExecutableBase;
@@ -25,7 +26,7 @@ import org.eclipse.edt.javart.util.TimestampIntervalMask;
  */
 public class DateTimeLib extends ExecutableBase
 {
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	
 	public DateTimeLib( RunUnit ru ) throws JavartException
 	{

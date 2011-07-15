@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.runtime.java.egl.lang;
 
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 
 
@@ -18,7 +19,7 @@ public abstract class AnyValue extends AnyObject implements egl.lang.AnyValue {
 	/**
 	 * The version ID used in serialization.
 	 */
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	
 	public AnyValue() { super(); }
 	

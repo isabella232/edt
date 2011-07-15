@@ -32,6 +32,7 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.TreeSet;
 
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.EglExit;
 import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.ExitProgram;
@@ -49,7 +50,7 @@ import org.eclipse.edt.javart.util.JavartUtil;
  */
 public class RunUnitBase implements RunUnit, Serializable
 {
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	
 	/**
 	 * Version information (major.minor only).

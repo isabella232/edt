@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 
 import egl.lang.AnyNumber;
@@ -22,7 +23,7 @@ import egl.lang.AnyNumber;
 
 
 public class EInt32 extends AnyBoxedObject<Integer> implements AnyNumber {
-	private static final long serialVersionUID = 80L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	private static final int DefaultValue = 0;
 	private static final int Precision = 9;
 		

@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.runtime.java.egl.lang;
 
+import org.eclipse.edt.javart.Constants;
+
 public class NumericOverflowException extends RuntimeException {
 
-	private static final long serialVersionUID = 80L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	public NumericOverflowException() {
 	}

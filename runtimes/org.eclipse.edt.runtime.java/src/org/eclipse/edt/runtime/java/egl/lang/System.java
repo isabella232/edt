@@ -17,6 +17,7 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.Locale;
 
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.EglException;
 import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
@@ -29,7 +30,7 @@ import org.eclipse.edt.javart.util.JavartUtil;
 
 public class System extends ExecutableBase {
 
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	/**
 	 * The stream for startLog and errorlog system functions

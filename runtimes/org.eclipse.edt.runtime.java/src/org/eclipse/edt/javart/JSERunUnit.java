@@ -15,7 +15,7 @@ import org.eclipse.edt.javart.resources.RunUnitBase;
 import org.eclipse.edt.javart.resources.StartupInfo;
 
 public class JSERunUnit extends RunUnitBase {
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	public JSERunUnit(StartupInfo startInfo) throws JavartException {
 		super(startInfo);

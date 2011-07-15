@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.RunUnit;
@@ -30,7 +31,7 @@ import org.eclipse.edt.javart.RunUnit;
  */
 public abstract class ExecutableBase implements Executable, Serializable
 {
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	/**
 	 * The RunUnit.

@@ -14,10 +14,11 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import java.math.BigDecimal;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 
 public class EString extends AnyBoxedObject<String> {
-	private static final long serialVersionUID = 80L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	protected static final java.lang.String DefaultValue = "";
 
 	private int maxLength;

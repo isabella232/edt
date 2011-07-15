@@ -19,6 +19,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.util.JavartUtil;
 
 /**
@@ -34,7 +35,7 @@ import org.eclipse.edt.javart.util.JavartUtil;
  */
 public class Trace implements Serializable
 {
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	
 	/**
 	 * The underlying object that tracing is written to.

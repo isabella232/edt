@@ -26,7 +26,7 @@ import org.eclipse.edt.javart.resources.Platform;
  */
 public class ConversionAttributeSet implements Serializable
 {
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	/** 
 	 * The byte order used to store the data (ByteStorage.BYTEORDER_xxx).

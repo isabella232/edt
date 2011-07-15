@@ -18,6 +18,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
+import org.eclipse.edt.javart.Constants;
+
 /**
  * This class gets properties from properties files.  Properties come from
  * up to three files: rununit.properties, a file named after the first program
@@ -30,7 +32,7 @@ import java.util.Properties;
  */
 public class JavartPropertiesFile extends JavartProperties
 {
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	/**
 	 * Contains the run unit property settings.

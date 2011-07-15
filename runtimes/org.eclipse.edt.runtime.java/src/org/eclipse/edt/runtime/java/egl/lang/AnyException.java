@@ -13,12 +13,13 @@ package org.eclipse.edt.runtime.java.egl.lang;
 
 import java.lang.reflect.Field;
 
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.TypeConstraints;
 
 public class AnyException extends JavartException implements egl.lang.AnyException
 {
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	
 	public String message;
 

@@ -11,11 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.runtime.java.egl.lang;
 
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 
 public class DynamicAccessException extends AnyException
 {
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	
 	public String memberName;
 	public String typeName;

@@ -25,7 +25,7 @@ import org.eclipse.edt.javart.util.DateTimeUtil;
  */
 public class TimestampData implements Cloneable, Serializable
 {
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	
 	/**
 	 * The value, except for fractions of seconds.

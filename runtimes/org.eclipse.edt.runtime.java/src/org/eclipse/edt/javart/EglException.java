@@ -22,7 +22,7 @@ public class EglException extends JavartException
 	/**
 	 * The version ID used in serialization.
 	 */
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	
 	/**
 	 * The exception's record

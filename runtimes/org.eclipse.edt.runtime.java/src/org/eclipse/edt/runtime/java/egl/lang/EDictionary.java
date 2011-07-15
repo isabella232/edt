@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 
 /**
@@ -26,7 +27,7 @@ import org.eclipse.edt.javart.JavartException;
  */
 public class EDictionary extends AnyObject implements egl.lang.EDictionary
 {
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	
 	/** Value for Dictionary.order */
 	public static final int NONE = 0;

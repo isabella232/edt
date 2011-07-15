@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.Program;
 import org.eclipse.edt.javart.RunUnit;
@@ -36,7 +37,7 @@ import egl.lang.AnyValue;
  */
 public abstract class ProgramBase extends ExecutableBase implements Program, Serializable
 {
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 				
 	/**

@@ -14,6 +14,7 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import java.io.Serializable;
 
 import org.eclipse.edt.javart.ByteStorage;
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.util.JavartUtil;
@@ -27,7 +28,7 @@ import org.eclipse.edt.javart.util.JavartUtil;
  *
  */
 public abstract class AnyStruct extends AnyValue implements Serializable {
-	private static final long serialVersionUID = 80L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	private static final byte ZERO = (byte)0;
 
 	protected ByteStorage buffer;

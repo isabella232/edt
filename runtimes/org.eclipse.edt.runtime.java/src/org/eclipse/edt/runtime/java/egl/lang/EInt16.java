@@ -14,12 +14,13 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import java.math.BigDecimal;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 
 import egl.lang.AnyNumber;
 
 public class EInt16 extends AnyBoxedObject<Short> implements AnyNumber {
-	private static final long serialVersionUID = 80L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	private static final int precision = 4;
 
 	private EInt16(Short value) { super(value); }

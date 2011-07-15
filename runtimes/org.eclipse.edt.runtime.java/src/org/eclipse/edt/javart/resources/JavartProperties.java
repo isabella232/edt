@@ -14,12 +14,14 @@ package org.eclipse.edt.javart.resources;
 import java.io.Serializable;
 import java.util.*;
 
+import org.eclipse.edt.javart.Constants;
+
 /**
  * JavartProperties holds the runtime properties.
  */
 public abstract class JavartProperties implements Serializable
 {
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	/**
 	 * Retrieves the property value associated with given key.

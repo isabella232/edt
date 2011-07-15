@@ -15,13 +15,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 
+import org.eclipse.edt.javart.Constants;
+
 /**
  * Helper class used to calculate arguments to be passed when instantiating
  * timestamp and interval types.
  */
 public class TimestampIntervalMask implements Serializable
 {
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	
 	/**
 	 * The pattern associated with a timestamp or interval.

@@ -19,7 +19,7 @@ public class EglThrowable extends Exception
 	/**
 	 * The version ID used in serialization.
 	 */
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	
 	/**
 	 * To improve performance, we override the usual implementation of this method,

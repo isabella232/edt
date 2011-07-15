@@ -13,12 +13,14 @@ package org.eclipse.edt.javart.resources;
 
 import java.io.Serializable;
 
+import org.eclipse.edt.javart.Constants;
+
 /**
  * Used by a Program to describe the kind of RunUnit that it wants. 
  */
 public class StartupInfo implements Serializable
 {
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	/**
 	 * The JEE flag, defaults to false.

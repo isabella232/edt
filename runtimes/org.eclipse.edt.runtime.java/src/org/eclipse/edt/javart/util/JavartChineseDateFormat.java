@@ -16,6 +16,8 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 
+import org.eclipse.edt.javart.Constants;
+
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.ChineseDateFormat;
 import com.ibm.icu.util.Calendar;
@@ -30,7 +32,7 @@ public class JavartChineseDateFormat extends ChineseDateFormat
 	/**
 	 * The version ID used in serialization.
 	 */
-	private static final long serialVersionUID = 70L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	/**
 	 * The number of microseconds.

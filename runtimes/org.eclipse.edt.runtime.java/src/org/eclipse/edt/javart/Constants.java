@@ -26,6 +26,11 @@ public class Constants
 	}
 	
 	/**
+	 * The serialization (version) number
+	 */
+	public static final long SERIAL_VERSION_UID = 10L;
+	
+	/**
 	 * The blank character in the local codepage.
 	 */
 	public static final byte BLANK_BYTE = " ".getBytes()[ 0 ];

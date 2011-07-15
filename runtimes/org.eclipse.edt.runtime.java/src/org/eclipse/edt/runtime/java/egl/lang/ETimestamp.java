@@ -17,6 +17,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
@@ -34,7 +35,7 @@ import org.eclipse.edt.javart.util.TimestampIntervalMask;
  * @author mheitz
  */
 public class ETimestamp extends AnyBoxedObject<Calendar> {
-	private static final long serialVersionUID = 80L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	public static final String DefaultPattern = "yyyyMMddHHmmss";
 	public static final String DefaultFormatPattern = "yyyy-MM-dd HH:mm:ss.SSSSSS";
 	

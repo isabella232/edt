@@ -12,10 +12,11 @@
 package org.eclipse.edt.runtime.java.egl.lang;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 
 public class EBoolean extends AnyBoxedObject<Boolean> {
-	private static final long serialVersionUID = 80L;
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	public static final boolean DefaultValue = false;
 
 		
