@@ -166,6 +166,7 @@ externalType Assignment extends Expression type MofClass
 	LHS LHSExpr {containment=true};
 	RHS Expression {containment=true};
 	operator String;
+	operation EGLOperation {transient=true};
 end
 
 externalType ArrayAccess extends Expression, LHSExpr type MofClass

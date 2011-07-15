@@ -22,4 +22,6 @@ public interface Assignment extends Expression {
 	String getOperator();
 	void setOperator(String opSymbol);
 
+	Operation getOperation();
+	void setOperation(Operation operation);
 }

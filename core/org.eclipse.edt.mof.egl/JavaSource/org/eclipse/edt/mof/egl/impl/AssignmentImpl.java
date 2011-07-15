@@ -14,13 +14,17 @@ package org.eclipse.edt.mof.egl.impl;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.LHSExpr;
+import org.eclipse.edt.mof.egl.NoSuchFunctionError;
+import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class AssignmentImpl extends ExpressionImpl implements Assignment {
 	private static int Slot_LHS=0;
 	private static int Slot_RHS=1;
 	private static int Slot_operator=2;
-	private static int totalSlots = 3;
+	private static int Slot_operation=3;
+	private static int totalSlots = 4;
 	
 	public static int totalSlots() {
 		return totalSlots + ExpressionImpl.totalSlots();
@@ -31,6 +35,7 @@ public class AssignmentImpl extends ExpressionImpl implements Assignment {
 		Slot_LHS += offset;
 		Slot_RHS += offset;
 		Slot_operator += offset;
+		Slot_operation += offset;
 	}
 	@Override
 	public LHSExpr getLHS() {
@@ -67,4 +72,33 @@ public class AssignmentImpl extends ExpressionImpl implements Assignment {
 		slotSet(Slot_operator, opSymbol);
 	}
 
+	@Override
+	public Operation getOperation() {
+		if (slotGet(Slot_operation) == null) {
+			try {
+				setOperation(resolveOperation());
+			} catch (NoSuchFunctionError e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return (Operation)slotGet(Slot_operation);
+	}
+	
+	@Override
+	public void setOperation(Operation op) {
+		slotSet(Slot_operation, op);
+	}
+	
+	protected Operation resolveOperation() {
+		String operator = getOperator();
+		if (operator.length() > 1 && operator.endsWith("=")) {
+			Operation rhsOp = IRUtils.getBinaryOperation(getLHS().getType().getClassifier(), getRHS().getType().getClassifier(),
+					operator.substring(0, operator.length() - 1));
+			if (rhsOp == null) {
+				throw new NoSuchFunctionError();
+			}
+			return rhsOp;
+		}
+		return null;
+	}
 }
