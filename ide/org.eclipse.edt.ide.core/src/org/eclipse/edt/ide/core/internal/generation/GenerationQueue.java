@@ -39,6 +39,7 @@ import org.eclipse.edt.mof.egl.InvalidPartTypeException;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
 import com.ibm.icu.util.StringTokenizer;
@@ -188,8 +189,10 @@ public class GenerationQueue {
 		IGenerationMessageRequestor messageRequestor = createMessageRequestor();
 		
 		IFile file = null;
+		ProjectEnvironment environment = null;
 		try {
-			ProjectEnvironment environment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
+			environment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
+			Environment.pushEnv(environment.getIREnvironment());
 			Part part = environment.findPart(InternUtil.intern(genUnit.packageName), InternUtil.intern(genUnit.caseSensitiveInternedPartName));
 			
 			//TODO should we skip generation if dependent parts have compile errors?
@@ -208,11 +211,16 @@ public class GenerationQueue {
 			handleRuntimeException(e, messageRequestor, genUnit.caseSensitiveInternedPartName, new HashSet());
 		} catch (final Exception e) {
 			handleUnknownException(e, messageRequestor);
+		} finally {
+			if (environment != null) {
+				Environment.popEnv();
+			}
 		}
 		
 		// We might have failed before looking for the file (e.g. couldn't find the IR). Try to resolve the file. Keep in mind
 		// the file might be in a different case, so a case-insensitive search must be done.
 		if (file == null || !file.exists()) {
+			//TODO should use the part info cache to find the source file, since a file name can be different than the part name
 			IPath filePath = Util.stringArrayToPath(genUnit.packageName).append(genUnit.caseSensitiveInternedPartName).addFileExtension("egl");
 			for (IPackageFragmentRoot root : pkgFragmentRoots) {
 				IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder(root.getPath());
