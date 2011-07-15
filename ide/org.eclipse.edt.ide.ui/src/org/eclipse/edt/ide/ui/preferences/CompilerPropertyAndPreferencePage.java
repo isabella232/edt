@@ -864,6 +864,7 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 						EDTUIPlugin.log( e );
 						retValue[0] = false;
 					}
+					return;
 				}			
 				else if ( resource == null || generatorOverrideCheckbox.getSelection() ) {
 					for ( IGeneratorTabProvider currProvider : currTabProviders ) {
