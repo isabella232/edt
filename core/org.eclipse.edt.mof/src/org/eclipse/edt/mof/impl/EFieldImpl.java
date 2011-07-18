@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.impl;
 
+import org.eclipse.edt.mof.EDataType;
 import org.eclipse.edt.mof.EField;
+import org.eclipse.edt.mof.EType;
 
 public class EFieldImpl extends EMemberImpl implements EField {
 	private static final long serialVersionUID = 1L;
@@ -56,7 +58,21 @@ public class EFieldImpl extends EMemberImpl implements EField {
 	
 	@Override
 	public Object getInitialValue() {
-		return slotGet(Slot_initialValue);
+		Object value = slotGet(Slot_initialValue);
+		if (value instanceof String) {
+			EType type = getEType();
+			if (type instanceof EDataType) {
+				String typeName = ((EDataType)type).getJavaClassName();
+				if (typeName != null){
+					if (typeName.equals("java.lang.Integer")) {
+						value = Integer.valueOf((String)value);
+					} else if (typeName.equals("java.lang.Boolean")) {
+						value = Boolean.valueOf((String)value);
+					}
+				}
+			}
+		}
+		return value;
 	}
 
 	@Override
