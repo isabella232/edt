@@ -14,7 +14,7 @@ package org.eclipse.edt.mof.egl.impl;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.IsNotExpression;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 public class IsNotExpressionImpl extends ExpressionImpl implements IsNotExpression {
@@ -65,7 +65,7 @@ public class IsNotExpressionImpl extends ExpressionImpl implements IsNotExpressi
 
 	@Override
 	public Type getType() {
-		return IRUtils.getEGLPrimitiveType("egl.lang.EGLBoolean");
+		return TypeUtils.Type_BOOLEAN;
 	}
 	
 }
