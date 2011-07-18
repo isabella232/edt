@@ -82,6 +82,7 @@ import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.VariableFormField;
 import org.eclipse.edt.mof.egl.lookup.ProxyPart;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.utils.EList;
 
@@ -657,7 +658,7 @@ class Egl2MofMember extends Egl2MofPart {
 	}
 	
 	public boolean isEglSystemFunction(NestedFunctionBinding func) {
-		return func.getAnnotation(AnnotationTypeManager.getAnnotationType("eglSystemConstant")) != null;
+		return func.getAnnotation(AnnotationTypeManager.getAnnotationType(InternUtil.intern("eglSystemConstant"))) != null;
 	}
 
 	public void addInitializers(StructureItem node, Field field, Type type) {

@@ -671,7 +671,7 @@ public abstract class Mof2BindingBase extends AbstractVisitor implements MofConv
 				i = i + 1;
 			}		
 			ITypeBinding arrayType = ArrayTypeBinding.getInstance(PrimitiveTypeBinding.getInstance(Primitive.ANY));
-			IAnnotationTypeBinding annType = AnnotationTypeManager.getAnnotationType("Annotation");
+			IAnnotationTypeBinding annType = AnnotationTypeManager.getAnnotationType(InternUtil.intern("Annotation"));
 			AnnotationFieldBinding targets = new AnnotationFieldBinding(InternUtil.intern("implicitFields"), part, arrayType, annType);
 			targets.setValue(implicitFields, null, null, null, false);
 			binding.addField(targets);
@@ -725,7 +725,7 @@ public abstract class Mof2BindingBase extends AbstractVisitor implements MofConv
 	// with an Annotation stereotype instance.  We must recreate that
 	protected IAnnotationBinding createAnnotationSubtypeFor(EClass ir) {
 		FlexibleRecordBinding declarer = (FlexibleRecordBinding)getBinding(ir);
-		IAnnotationTypeBinding annType = AnnotationTypeManager.getAnnotationType("Annotation");
+		IAnnotationTypeBinding annType = AnnotationTypeManager.getAnnotationType(InternUtil.intern("Annotation"));
 		String name = InternUtil.intern(ir.getName());
 		IAnnotationBinding binding = new AnnotationBinding(annType.getName(), declarer, annType, true);
 		for  (FlexibleRecordFieldBinding field : (List<FlexibleRecordFieldBinding>)declarer.getDeclaredFields()) {
