@@ -436,6 +436,11 @@ public class IRUtils {
 		expr.setObjectExpr(objExpr);
 		expr.setEType(target);
 		expr.setConversionOperation(getConversionOperation(objExpr, target));
+		
+		Annotation annot = objExpr.getAnnotation("EGL_Location");
+		if (annot != null) {
+			expr.addAnnotation(annot);
+		}
 		return expr;
 	}
 	
