@@ -7,15 +7,12 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
+import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.builder.NullBuildNotifier;
@@ -29,11 +26,9 @@ import org.eclipse.edt.ide.core.Logger;
 import org.eclipse.edt.ide.core.internal.builder.MarkerProblemRequestor;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectInfo;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectInfoManager;
 import org.eclipse.edt.ide.core.internal.utils.StringOutputBuffer;
-import org.eclipse.edt.ide.core.internal.utils.Util;
-import org.eclipse.edt.ide.core.model.EGLCore;
-import org.eclipse.edt.ide.core.model.EGLModelException;
-import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.egl.InvalidPartTypeException;
 import org.eclipse.edt.mof.egl.Part;
@@ -60,15 +55,16 @@ public class GenerationQueue {
 	 */
 	protected IBuildNotifier notifier;
 	
-	/**
-	 * The project being processed.
-	 */
-	protected IProject project;
 	
 	/**
-	 * The package fragment roots of the project, used for locating the .egl IFile. 
+	 * The ProjectInfo for the project being processed.
 	 */
-	protected IPackageFragmentRoot[] pkgFragmentRoots;
+	protected ProjectInfo projectInfo;
+	
+	/**
+	 * The ProjectEnvironment for the project being processed.
+	 */
+	protected ProjectEnvironment projectEnvironment;
 	
 	// Progress reporting
 	protected int unitsGenerated;
@@ -123,14 +119,8 @@ public class GenerationQueue {
     	
     	this.pendingUnits = new LinkedHashMap<GenerationQueue.GenerationUnitKey, GenerationQueue.GenerationUnit>();
     	this.increment = 0.40f;
-    	this.project = project;
-    	
-    	try {
-	    	pkgFragmentRoots = EGLCore.create(project).getPackageFragmentRoots();
-    	}
-    	catch (EGLModelException e) {
-    		pkgFragmentRoots = new IPackageFragmentRoot[0];
-    	}
+    	this.projectInfo = ProjectInfoManager.getInstance().getProjectInfo(project);
+    	this.projectEnvironment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
     }
 	
     /**
@@ -148,13 +138,11 @@ public class GenerationQueue {
 		
 		initProgress();
 		
-		if (pkgFragmentRoots.length > 0) { // Can't do anything without the source folders
-			while (!pendingUnits.isEmpty()) {
-				notifier.checkCancel();
-				Iterator<GenerationUnit> iterator = pendingUnits.values().iterator();
-	            GenerationUnit genUnit = iterator.next();
-	            generate(genUnit);
-			}
+		while (!pendingUnits.isEmpty()) {
+			notifier.checkCancel();
+			Iterator<GenerationUnit> iterator = pendingUnits.values().iterator();
+            GenerationUnit genUnit = iterator.next();
+            generate(genUnit);
 		}
 		
 		if (DEBUG) {
@@ -189,19 +177,24 @@ public class GenerationQueue {
 		IGenerationMessageRequestor messageRequestor = createMessageRequestor();
 		
 		IFile file = null;
-		ProjectEnvironment environment = null;
 		try {
-			environment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
-			Environment.pushEnv(environment.getIREnvironment());
-			Part part = environment.findPart(InternUtil.intern(genUnit.packageName), InternUtil.intern(genUnit.caseSensitiveInternedPartName));
-			
-			//TODO should we skip generation if dependent parts have compile errors?
-			if (part != null && !part.hasCompileErrors()) {
-				for (IPackageFragmentRoot root : pkgFragmentRoots) {
-					file = ResourcesPlugin.getWorkspace().getRoot().getFile(root.getPath().append(part.getFileName()));
-					if (file != null && file.exists()) {
-						invokeGenerators(file, part, messageRequestor);
-						break;
+			if (projectInfo.hasPart(genUnit.packageName, genUnit.caseSensitiveInternedPartName) != ITypeBinding.NOT_FOUND_BINDING) {
+				file = projectInfo.getPartOrigin(genUnit.packageName, genUnit.caseSensitiveInternedPartName).getEGLFile();
+				if (file != null && file.exists()) {
+					IGenerator[] generators = ProjectSettingsUtility.getGenerators(file);
+					if (generators.length != 0) {
+						try {
+							Environment.pushEnv(projectEnvironment.getIREnvironment());
+							Part part = projectEnvironment.findPart(InternUtil.intern(genUnit.packageName), InternUtil.intern(genUnit.caseSensitiveInternedPartName));
+							
+							//TODO should we skip generation if dependent parts have compile errors?
+							if (part != null && !part.hasCompileErrors()) {
+								invokeGenerators(file, part, messageRequestor, generators, projectEnvironment.getIREnvironment());
+							}
+						}
+						finally {
+							Environment.popEnv();
+						}
 					}
 				}
 			}
@@ -211,26 +204,6 @@ public class GenerationQueue {
 			handleRuntimeException(e, messageRequestor, genUnit.caseSensitiveInternedPartName, new HashSet());
 		} catch (final Exception e) {
 			handleUnknownException(e, messageRequestor);
-		} finally {
-			if (environment != null) {
-				Environment.popEnv();
-			}
-		}
-		
-		// We might have failed before looking for the file (e.g. couldn't find the IR). Try to resolve the file. Keep in mind
-		// the file might be in a different case, so a case-insensitive search must be done.
-		if (file == null || !file.exists()) {
-			//TODO should use the part info cache to find the source file, since a file name can be different than the part name
-			IPath filePath = Util.stringArrayToPath(genUnit.packageName).append(genUnit.caseSensitiveInternedPartName).addFileExtension("egl");
-			for (IPackageFragmentRoot root : pkgFragmentRoots) {
-				IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder(root.getPath());
-				if (folder != null && folder.exists()) {
-					file = findFileCaseInsensitive(folder, filePath, 0);
-					if (file != null && file.exists()) {
-						break;
-					}
-				}
-			}
 		}
 		
 		// Delete existing and create new markers
@@ -282,56 +255,19 @@ public class GenerationQueue {
 	}
 	
 	/**
-	 * Case-insensitive search for a file within a folder.
-	 * 
-	 * @param root  The current folder whose members are being looked at
-	 * @param filePath  The path of the file relative to the source directory
-	 * @param currentSegment  The starting segment number for filePath to be checked within root.
-	 * @return the file if found, or null.
-	 */
-	private IFile findFileCaseInsensitive(IContainer root, IPath filePath, int currentSegment) {
-		try {
-			IResource[] members = root.members();
-			
-			for (IResource member : members) {
-				if (member.getName().equalsIgnoreCase(filePath.segment(currentSegment))) {
-					switch (member.getType()) {
-						case IResource.FILE:
-							if (currentSegment + 1 == filePath.segmentCount()) {
-								return (IFile)member;
-							}
-							break;
-							
-						case IResource.FOLDER:
-							return findFileCaseInsensitive((IFolder)member, filePath, currentSegment + 1);
-					}
-				}
-			}
-		}
-		catch (CoreException e) {
-		}
-		
-		return null;
-	}
-	
-	/**
 	 * A file has zero or more generators associated with it. These may be specified directly on the file, or the settings
 	 * can be inherited from a parent resource (including the workspace defaults).
 	 */
-	private void invokeGenerators(IFile file, Part part, IGenerationMessageRequestor messageRequestor) throws Exception {
-		IGenerator[] generators = ProjectSettingsUtility.getGenerators(file);
-		if (generators.length != 0) {
-			IEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getIREnvironment();
-			for (int i = 0; i < generators.length; i++) {
-				try {
-					generators[i].generate(file.getFullPath().toString(), (Part)part.clone(), env, messageRequestor);
-				}
-				catch (RuntimeException e) {
-					handleRuntimeException(e, messageRequestor, part.getId(), new HashSet());
-				}
-				catch (final Exception e) {
-					handleUnknownException(e, messageRequestor);
-				}
+	private void invokeGenerators(IFile file, Part part, IGenerationMessageRequestor messageRequestor, IGenerator[] generators, IEnvironment env) throws Exception {
+		for (int i = 0; i < generators.length; i++) {
+			try {
+				generators[i].generate(file.getFullPath().toString(), (Part)part.clone(), env, messageRequestor);
+			}
+			catch (RuntimeException e) {
+				handleRuntimeException(e, messageRequestor, part.getId(), new HashSet());
+			}
+			catch (final Exception e) {
+				handleUnknownException(e, messageRequestor);
 			}
 		}
 	}
