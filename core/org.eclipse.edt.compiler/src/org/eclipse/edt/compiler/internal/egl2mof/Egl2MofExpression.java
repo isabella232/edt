@@ -238,6 +238,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CharLiteral literal) {
 		CharLiteral lit = factory.createCharLiteral();
 		lit.setValue(literal.getValue());
+		lit.setIsHex(literal.isHex());
 		setElementInformation(literal, lit);
 		stack.push(lit);
 		return false;
@@ -247,6 +248,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.DBCharLiteral literal) {
 		DBCharLiteral lit = factory.createDBCharLiteral();
 		lit.setValue(literal.getValue());
+		lit.setIsHex(literal.isHex());
 		setElementInformation(literal, lit);
 		stack.push(lit);
 		return false;
@@ -256,6 +258,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.MBCharLiteral literal) {
 		MBCharLiteral lit = factory.createMBCharLiteral();
 		lit.setValue(literal.getValue());
+		lit.setIsHex(literal.isHex());
 		setElementInformation(literal, lit);
 		stack.push(lit);
 		return false;
@@ -645,6 +648,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.StringLiteral literal) {
 		StringLiteral lit = factory.createStringLiteral();
 		lit.setValue(literal.getValue());
+		lit.setIsHex(literal.isHex());
 		setElementInformation(literal, lit);
 		stack.push(lit);
 		return false;
