@@ -310,11 +310,21 @@ public abstract class EglContext extends TemplateContext {
 		List<Annotation> list = (List<Annotation>) this.get(key);
 		if (list == null)
 			return null;
+		Annotation annotation = findAnnotation(value, list);
+		if(annotation != null){
+			return annotation.getValue();
+		}
+		else{
+			return null;
+		}
+	}
+
+	private Annotation findAnnotation(String value, List<Annotation> list) {
 		// we need to search the list of annotations looking for the string value, then return the associated data value
 		for (int i = 0; i < list.size(); i++) {
 			Annotation annotation = list.get(i);
 			if (value.equalsIgnoreCase(annotation.getEClass().getName()))
-				return annotation.getValue();
+				return annotation;
 		}
 		return null;
 	}
@@ -328,10 +338,13 @@ public abstract class EglContext extends TemplateContext {
 			this.put(key, list);
 		}
 		// create the annotation
-		Annotation annotation = factory.createAnnotation(value);
+		Annotation annotation = findAnnotation(value, list);
+		if(annotation == null){
+			annotation = factory.createAnnotation(value);
+			// add the annotation to the list
+			list.add(annotation);
+		}
 		annotation.setValue(entry);
-		// add the annotation to the list
-		list.add(annotation);
 	}
 
 	public Map<String, String> load(String fileList, ClassLoader loader) {
