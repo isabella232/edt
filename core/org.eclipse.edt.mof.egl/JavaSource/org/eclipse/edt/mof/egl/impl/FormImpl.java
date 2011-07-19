@@ -17,6 +17,7 @@ import org.eclipse.edt.mof.egl.ConstantFormField;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Form;
 import org.eclipse.edt.mof.egl.FormField;
+import org.eclipse.edt.mof.egl.FormGroup;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.VariableFormField;
@@ -38,7 +39,8 @@ public class FormImpl extends FormImplBase implements Form {
 	
 	@Override
 	public String getFullyQualifiedName() {
-		return getContainer().getFullyQualifiedName() + "." + getName();
+		FormGroup fg = getContainer();
+		return fg == null ? super.getFullyQualifiedName() : fg.getFullyQualifiedName() + Type.NestedPartDelimiter + getName();
 	}
 	
 	@SuppressWarnings("unchecked")
