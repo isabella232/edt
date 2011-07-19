@@ -23,6 +23,7 @@ import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.FormBinding;
+import org.eclipse.edt.compiler.binding.FormGroupBinding;
 import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
@@ -523,7 +524,8 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			PartName name = factory.createPartName();
 			String packageName;
 			if (binding instanceof FormBinding) {
-				packageName = concatWithSeparator(((FormBinding)binding).getEnclosingFormGroup().getPackageName(), ".");
+				FormGroupBinding fg = ((FormBinding)binding).getEnclosingFormGroup();
+				packageName = concatWithSeparator(fg == null ? binding.getPackageName() : fg.getPackageName(), ".");
 			}
 			else {
 				packageName = concatWithSeparator(((ITypeBinding)binding).getPackageName(), ".");
@@ -577,8 +579,14 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		}
 			
 		if (part instanceof FormBinding) {
-			String id = ((FormBinding) part).getEnclosingFormGroup().getCaseSensitiveName();
-			id += Type.NestedPartDelimiter + part.getCaseSensitiveName();
+			FormGroupBinding fg = ((FormBinding) part).getEnclosingFormGroup();
+			String id;
+			if (fg == null) {
+				id = part.getCaseSensitiveName();
+			}
+			else {
+				id = fg.getCaseSensitiveName() + Type.NestedPartDelimiter + part.getCaseSensitiveName();
+			}
 			name.setId(id);
 		}
 		else {

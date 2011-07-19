@@ -921,15 +921,20 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		}
 		case ITypeBinding.FORM_BINDING: {
 			FormGroupBinding fgBinding = ((FormBinding)type).getEnclosingFormGroup();
-			FormGroup fg = (FormGroup)mofTypeFor(fgBinding);
 			eType = null;
-			for (Form form : fg.getForms()) {
-				if (form.getName().equalsIgnoreCase(((FormBinding)type).getName())) {
-					eType = form;
-					break;
+			if (fgBinding != null) {
+				FormGroup fg = (FormGroup)mofTypeFor(fgBinding);
+				for (Form form : fg.getForms()) {
+					if (form.getName().equalsIgnoreCase(((FormBinding)type).getName())) {
+						eType = form;
+						break;
+					}
 				}
 			}
-			break;
+			if (eType != null) {
+				break;
+			}
+			// Fall through.
 		}
 		default: {
 			String key = mofSerializationKeyFor(type); 
