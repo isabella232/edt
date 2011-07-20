@@ -5,11 +5,12 @@
 		<provider
 			id="org.eclipse.edt.gen.generator.example.ide.ExampleGeneratorProvider"
 			class="org.eclipse.edt.gen.generator.example.ide.ExampleGenerator"
-			name="%ExampleGeneratorName"
+			name="%GeneratorName"
 			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
-			version="0.7.0"
+			version="1.0"
 			provider="Eclipse"
-			description="%ExampleGeneratorDescription"
+			parentGeneratorId="org.eclipse.edt.ide.gen.JavaGenProvider"
+			description="%GeneratorDescription"
 		/>
    	</extension>
 	<extension point="org.eclipse.edt.ide.ui.edtGeneratorTabs">

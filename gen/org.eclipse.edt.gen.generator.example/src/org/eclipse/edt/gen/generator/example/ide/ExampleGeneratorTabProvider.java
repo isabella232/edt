@@ -13,7 +13,6 @@ package org.eclipse.edt.gen.generator.example.ide;
 
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin;
 import org.eclipse.edt.ide.ui.preferences.AbstractGeneratorTabProvider;
 import org.eclipse.edt.ide.ui.preferences.GenerationSettingsComposite;
 import org.eclipse.swt.SWT;
@@ -37,28 +36,23 @@ public class ExampleGeneratorTabProvider extends AbstractGeneratorTabProvider {
 	 */
 	@Override
 	public Control getTabContent(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NULL);
+		if (getComposite() == null) {
+			setComposite(new Composite(parent, SWT.NULL));
 
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 1;
-		composite.setLayout(layout);
-		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		composite.setFont(parent.getFont());
-		
-		if( getResource() != null ) {
-			this.projectPreferenceStore = new ProjectScope(getResource().getProject()).getNode(EDTCompilerIDEPlugin.PLUGIN_ID);
+			GridLayout layout = new GridLayout();
+			layout.numColumns = 1;
+			getComposite().setLayout(layout);
+			getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
+			getComposite().setFont(parent.getFont());
+
+			if (getResource() != null) {
+				this.projectPreferenceStore = new ProjectScope(getResource().getProject()).getNode(Activator.PLUGIN_ID);
+			}
+			genSettings = new GenerationSettingsComposite(getComposite(), SWT.NULL, getResource(), Activator.getDefault().getPreferenceStore(),
+				this.projectPreferenceStore, Activator.PROPERTY_EXAMPLEGEN_DIR, Activator.PREFERENCE_DEFAULT_EXAMPLEGEN_DIRECTORY, getStatusChangeListener());
+			genSettings.setLayoutData(new GridData(GridData.FILL_BOTH));
 		}
-		genSettings = new GenerationSettingsComposite(composite, SWT.NULL, getResource(), Activator.getDefault().getPreferenceStore(),
-			this.projectPreferenceStore, Activator.PROPERTY_JAVAGEN_DIR,
-			Activator.PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY, getStatusChangeListener());
-		genSettings.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		return composite;
-	}
-
-	@Override
-	public String getTitle() {
-		return ExampleCompilerStrings.javaGenTabTitle;
+		return this.getComposite();
 	}
 
 	@Override
@@ -75,22 +69,22 @@ public class ExampleGeneratorTabProvider extends AbstractGeneratorTabProvider {
 	public void performDefaults() {
 		genSettings.performDefaults();
 	}
-	
+
 	@Override
 	public IEclipsePreferences getProjectPreferenceStore() {
 		return this.projectPreferenceStore;
 	}
-	
+
 	@Override
 	public void removePreferencesForAResource() {
-		if ( genSettings != null ) {
+		if (genSettings != null) {
 			genSettings.removePreferencesForAResource();
 		}
 	}
-	
+
 	@Override
 	public void removePreferencesForAllResources() {
-		if ( genSettings != null ) {
+		if (genSettings != null) {
 			genSettings.removePreferencesForAllResources();
 		}
 	}

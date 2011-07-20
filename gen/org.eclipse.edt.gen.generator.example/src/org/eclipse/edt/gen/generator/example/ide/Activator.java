@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.generator.example.ide;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -19,11 +20,11 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractUIPlugin {
 
-	public static final String PROPERTY_JAVAGEN_DIR = "javaGenDirectory"; //$NON-NLS-1$
+	public static final String PROPERTY_EXAMPLEGEN_DIR = "exampleGenDirectory"; //$NON-NLS-1$
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.eclipse.edt.gen.generator.example"; //$NON-NLS-1$
 
-	public static final String PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY = PLUGIN_ID + ".defaultJavaGenDirectory"; //$NON-NLS-1$
+	public static final String PREFERENCE_DEFAULT_EXAMPLEGEN_DIRECTORY = PLUGIN_ID + ".defaultExampleGenDirectory"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;
@@ -59,4 +60,7 @@ public class Activator extends AbstractUIPlugin {
 		return plugin;
 	}
 
+	protected void initializeDefaultPreferences(IPreferenceStore store) {
+		store.setDefault(PREFERENCE_DEFAULT_EXAMPLEGEN_DIRECTORY, "generatedOutput"); //$NON-NLS-1$
+	}
 }

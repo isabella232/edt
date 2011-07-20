@@ -63,7 +63,7 @@ public class ExampleGenerator extends AbstractGenerator {
 
 	@Override
 	protected String getGenerationDirectoryPropertyKey() {
-		return Activator.PROPERTY_JAVAGEN_DIR;
+		return Activator.PROPERTY_EXAMPLEGEN_DIR;
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class ExampleGenerator extends AbstractGenerator {
 
 	@Override
 	protected String getGenerationDirectoryPreferenceKey() {
-		return Activator.PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY;
+		return Activator.PREFERENCE_DEFAULT_EXAMPLEGEN_DIRECTORY;
 	}
 
 	@Override
