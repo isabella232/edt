@@ -376,6 +376,9 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			decl.getFields().add(field);
 			eObjects.put(forStatement.getVariableDeclarationName().resolveDataBinding(), field);
 			stmt.setDeclarationExpression(decl);
+			
+			setElementInformation(forStatement.getVariableDeclarationName(), field);
+			setElementInformation(forStatement.getVariableDeclarationName(), decl);
 		}
 		else {
 			forStatement.getCounterVariable().accept(this);
