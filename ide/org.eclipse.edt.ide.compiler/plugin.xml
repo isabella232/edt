@@ -27,16 +27,6 @@
 			description="%JavaGeneratorDescription"
 		/>
 		<provider
-			id="org.eclipse.edt.ide.gen.WorthlessProvider"
-			class="org.eclipse.edt.ide.compiler.gen.WorthlessGenerator"
-			name="Worthless Generator"
-			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
-			version="0.7.0"
-			provider="Eclipse.org"
-			description="A generator that just generates stub classes. For illustration purposes only."
-			parentGeneratorId="org.eclipse.edt.ide.gen.JavaGenProvider"
-		/>
-		<provider
 			id="org.eclipse.edt.ide.gen.JavaScriptGenProvider"
 			class="org.eclipse.edt.ide.compiler.gen.JavaScriptGenerator"
 			name="%JavaScriptGeneratorName"
@@ -66,10 +56,6 @@
 		<generatorTab 
 			generatorId="org.eclipse.edt.ide.gen.JavaGenProvider"
 			class="org.eclipse.edt.ide.compiler.gen.ui.JavaGeneratorTabProvider">
-		</generatorTab>
-		<generatorTab 
-			generatorId="org.eclipse.edt.ide.gen.WorthlessProvider"
-			class="org.eclipse.edt.ide.compiler.gen.ui.WorthlessTabProvider">
 		</generatorTab>
 		<generatorTab 
 			generatorId="org.eclipse.edt.ide.gen.JavaScriptGenProvider"
