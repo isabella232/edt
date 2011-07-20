@@ -396,8 +396,8 @@ public class CommonUtilities {
 	}
 
 	public static void generateSmapExtension(Member field, Context ctx) {
-		// if this isn't a temporary variable, then add the data to the debug extension buffer
-		if (!field.getName().startsWith(org.eclipse.edt.gen.Constants.temporaryVariablePrefix)) {
+		// if this isn't an internal variable, then add the data to the debug extension buffer
+		if (!field.getName().startsWith("eze")) {
 			// get the line number. If it is not found, then we can't write the debug extension
 			Annotation annotation = field.getAnnotation(IEGLConstants.EGL_LOCATION);
 			if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
