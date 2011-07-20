@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ExceptionBlock;
@@ -27,6 +28,7 @@ public class TryStatementTemplate extends JavaTemplate {
 	}
 
 	public void genException(ExceptionBlock exceptionBlock, Context ctx, TabbedWriter out) {
+		CommonUtilities.generateSmapExtension(exceptionBlock.getException(), ctx);
 		out.print("catch (" + ctx.getNativeImplementationMapping(exceptionBlock.getException().getType()) + " ");
 		ctx.invoke(genName, exceptionBlock.getException(), ctx, out);
 		out.print(") ");
