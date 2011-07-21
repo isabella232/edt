@@ -131,9 +131,9 @@ public class CommonUtilities {
 	}
 
 	@SuppressWarnings("static-access")
-	public static String getNativeJavaOperation(BinaryExpression expr, Context ctx) {
+	public static String getNativeJavaScriptOperation(BinaryExpression expr, Context ctx) {
 		String op = expr.getOperator();
-		// if we are to use egl overflow checking, then don't pass back that we can do the mathematical operations in java
+		// if we are to use egl overflow checking, then don't pass back that we can do the mathematical operations in js
 		if (expr.isNullable() || (Boolean) ctx.getParameter(Constants.parameter_checkOverflow)) {
 			if (op.equals(expr.Op_EQ))
 				return " == ";
@@ -196,6 +196,12 @@ public class CommonUtilities {
 		if (op.equals(expr.Op_BITOR))
 			return " | ";
 		return "";
+	}
+
+	public static String getNativeJavaScriptAssignment(String op) {
+		if (op.equals("xor="))
+			return "^=";
+		return op;
 	}
 
 	public static String createNamespaceFromPackage(Part part) {
@@ -264,13 +270,14 @@ public class CommonUtilities {
 		return (TypeUtils.Type_BIGINT.equals(type) || TypeUtils.Type_NUM.equals(type) || TypeUtils.Type_DECIMAL.equals(type) || TypeUtils.Type_MONEY
 			.equals(type));
 	}
-	
-	//FIXME BUGZILLA 350710 - I shouldn't need to do this, but a clean causes the init boolean values on annotations to be strings
-	//If you build th eindividual part file like a record it will be a boolean.
-	public static Boolean convertBoolean(Object value){
-		if(value instanceof String){
-			return new Boolean((String)value);
+
+	// FIXME BUGZILLA 350710 - I shouldn't need to do this, but a clean causes the init boolean values on annotations to be
+	// strings
+	// If you build th eindividual part file like a record it will be a boolean.
+	public static Boolean convertBoolean(Object value) {
+		if (value instanceof String) {
+			return new Boolean((String) value);
 		}
-		return (Boolean)value;
+		return (Boolean) value;
 	}
 }
