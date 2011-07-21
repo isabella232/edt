@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-import org.eclipse.edt.gen.JavaAliaser;
 import org.eclipse.edt.gen.java.Context;
+import org.eclipse.edt.gen.java.JavaAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
 
