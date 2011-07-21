@@ -78,7 +78,7 @@ public class EglGenerator extends Generator{
 	}
 
 	@Override
-	public String getFileExtention() {
+	public String getFileExtension() {
 		return "";
 	}
 	public void processFile(String fileName) {
