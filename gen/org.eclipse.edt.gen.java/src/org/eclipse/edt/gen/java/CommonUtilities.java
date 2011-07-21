@@ -318,6 +318,12 @@ public class CommonUtilities {
 		return "";
 	}
 
+	public static String getNativeJavaAssignment(String op) {
+		if (op.equals("xor="))
+			return "^=";
+		return op;
+	}
+
 	public static boolean isHandledByJavaWithoutCast(Expression src, AsExpression tgt, Context ctx) {
 		// nullables will never be handled by java natives
 		if (src.isNullable() || tgt.isNullable())
