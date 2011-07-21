@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayAccess;
@@ -38,6 +39,9 @@ public class AssignmentTemplate extends JavaScriptTemplate {
 	}
 
 	public void genAssignment(Assignment expr, Context ctx, TabbedWriter out) {
-		ctx.invoke(genAssignment, expr.getLHS(), ctx, out, expr.getRHS());
+		String operator = "=";
+		if (expr.getOperator() != null && expr.getOperator().length() > 0)
+			operator = expr.getOperator();
+		ctx.invoke(genAssignment, expr.getLHS(), ctx, out, expr.getRHS(), " " + CommonUtilities.getNativeJavaScriptAssignment(operator) + " ");
 	}
 }

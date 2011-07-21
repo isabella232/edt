@@ -114,10 +114,10 @@ public class RecordTemplate extends JavaScriptTemplate {
 		out.print(quoted("Record"));
 	}
 
-	public void genAssignment(Record type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2) {
+	public void genAssignment(Record type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
 		if (arg1.isNullable()) {
 			ctx.invoke(genExpression, arg1, ctx, out);
-			out.print(" = ");
+			out.print(arg3);
 		}
 		ctx.invoke(genExpression, arg1, ctx, out);
 		out.print(".ezeCopy(");

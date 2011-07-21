@@ -23,8 +23,8 @@ import org.eclipse.edt.mof.egl.UnaryExpression;
 
 public class ParameterizedTypeTemplate extends JavaScriptTemplate {
 
-	public void genAssignment(ParameterizedType type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2) {
-		ctx.invoke(genAssignment, (Type) type.getParameterizableType(), ctx, out, arg1, arg2);
+	public void genAssignment(ParameterizedType type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
+		ctx.invoke(genAssignment, (Type) type.getParameterizableType(), ctx, out, arg1, arg2, arg3);
 	}
 
 	public void genRuntimeTypeName(ParameterizedType type, Context ctx, TabbedWriter out, TypeNameKind arg) {

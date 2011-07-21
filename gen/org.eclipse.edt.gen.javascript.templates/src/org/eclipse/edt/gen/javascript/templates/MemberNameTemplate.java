@@ -24,32 +24,32 @@ import org.eclipse.edt.mof.egl.Type;
 
 public class MemberNameTemplate extends JavaScriptTemplate {
 
-	public void genAssignment(MemberName expr, Context ctx, TabbedWriter out, Expression arg) {
+	public void genAssignment(MemberName expr, Context ctx, TabbedWriter out, Expression arg1, String arg2) {
 		// check to see if we are copying boxed function parameters
 		if (expr.getMember() instanceof FunctionParameter
 			&& org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx)) {
 			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 			out.print(".ezeCopy(");
-			ctx.invoke(genExpression, arg, ctx, out);
+			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(")");
 			// check to see if we are copying LHS boxed temporary variables (inout and out types only)
 		} else if (ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
 			&& ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
-			out.print(" = ");
+			out.print(arg2);
 			out.print(Constants.JSRT_EGL_NAMESPACE + ctx.getNativeMapping("egl.lang.AnyObject") + ".ezeWrap(");
-			ctx.invoke(genExpression, arg, ctx, out);
+			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(")");
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
-		} else if (arg instanceof MemberName
-			&& ctx.getAttribute(((MemberName) arg).getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
-			&& ctx.getAttribute(((MemberName) arg).getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
+		} else if (arg1 instanceof MemberName
+			&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
+			&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
-			out.print(" = ");
-			ctx.invoke(genExpression, arg, ctx, out);
+			out.print(arg2);
+			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(".ezeUnbox()");
 		} else
-			ctx.invokeSuper(this, genAssignment, expr, ctx, out, arg);
+			ctx.invokeSuper(this, genAssignment, expr, ctx, out, arg1, arg2);
 	}
 
 	public void genExpression(MemberName expr, Context ctx, TabbedWriter out) {
@@ -61,13 +61,13 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 	}
 
 	public Function getCallbackFunction(MemberName expr, Context ctx) {
-		return (Function)ctx.invoke(getCallbackFunction, expr.getMember(), ctx);
+		return (Function) ctx.invoke(getCallbackFunction, expr.getMember(), ctx);
 	}
-	
+
 	public void genCallbackAccesor(MemberName expr, Context ctx, TabbedWriter out) {
 		ctx.invoke(genName, expr.getMember(), ctx, out);
 	}
-	
+
 	public void genMemberName(MemberName expr, Context ctx, TabbedWriter out) {
 		ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 		if (expr.getMember() instanceof FunctionParameter

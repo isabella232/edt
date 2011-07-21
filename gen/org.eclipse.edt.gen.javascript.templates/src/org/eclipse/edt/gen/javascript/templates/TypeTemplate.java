@@ -135,11 +135,11 @@ public class TypeTemplate extends JavaScriptTemplate {
 		// no default
 	}
 
-	public void genAssignment(Type type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2) {
+	public void genAssignment(Type type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
 		// if the lhs is non-nullable but the rhs is nullable, we have a special case
 		if (!arg1.isNullable() && arg2.isNullable()) {
 			ctx.invoke(genExpression, arg1, ctx, out);
-			out.print(" = ");
+			out.print(arg3);
 			out.print("(function(x){ return x != null ? (x) : ");
 			ctx.invoke(genDefaultValue, type, ctx, out, arg1);
 			out.print("; })");
@@ -148,14 +148,14 @@ public class TypeTemplate extends JavaScriptTemplate {
 			out.print(")");
 		} else {
 			ctx.invoke(genExpression, arg1, ctx, out);
-			out.print(" = ");
+			out.print(arg3);
 			ctx.invoke(genExpression, arg2, ctx, out);
 		}
 	}
 
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
 		// if either side of this expression is nullable, or if there is no direct java operation, we need to use the runtime
-		if ((arg.getLHS().isNullable() || arg.getRHS().isNullable()) || CommonUtilities.getNativeJavaOperation(arg, ctx).length() == 0) {
+		if ((arg.getLHS().isNullable() || arg.getRHS().isNullable()) || CommonUtilities.getNativeJavaScriptOperation(arg, ctx).length() == 0) {
 			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
 			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
 			out.print("(ezeProgram, ");
@@ -165,7 +165,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 			out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
 		} else {
 			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
-			out.print(CommonUtilities.getNativeJavaOperation(arg, ctx));
+			out.print(CommonUtilities.getNativeJavaScriptOperation(arg, ctx));
 			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
 		}
 	}

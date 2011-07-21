@@ -22,7 +22,7 @@ import org.eclipse.edt.mof.egl.Type;
 
 public class ArrayAccessTemplate extends JavaScriptTemplate {
 
-	public void genAssignment(ArrayAccess expr, Context ctx, TabbedWriter out, Expression arg) {
+	public void genAssignment(ArrayAccess expr, Context ctx, TabbedWriter out, Expression arg1, String arg2) {
 		out.print("egl.checkNull(");
 		ctx.invoke(genExpression, expr.getArray(), ctx, out);
 		out.print(")");
