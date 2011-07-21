@@ -68,11 +68,11 @@ public abstract class Generator {
 	 * intended to be overridden as necessary.
 	 */
 	public String getRelativeFileName(Part part) {
-		return part.getTypeSignature().replaceAll("\\.", "/") + this.getFileExtention();
+		return part.getTypeSignature().replaceAll("\\.", "/") + this.getFileExtension();
 	}
 	
-	// the command processor must implement the method for providing the file extention to write files out as
-	public abstract String getFileExtention();
+	// the command processor must implement the method for providing the file extension to write files out as
+	public abstract String getFileExtension();
 
 	protected static void writeFileUtil(EglContext context, String fileName, String output, String encoding, String encodingError, String writeError) {
 		File outFile = new File(fileName);
