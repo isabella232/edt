@@ -39,7 +39,8 @@ public class EGLJavaFunctionVariable extends EGLJavaVariable
 	{
 		super( frame.getDebugTarget(), null, new SMAPVariableInfo( frame.getSMAPFunctionInfo() == null
 				? frame.getName()
-				: frame.getSMAPFunctionInfo().eglName, frame.getName(), "", -1 ) ); //$NON-NLS-1$
+				: frame.getSMAPFunctionInfo().eglName, frame.getName(),
+				"", -1, frame.getSMAPFunctionInfo() == null ? null : frame.getSMAPFunctionInfo().smapEntry ) ); //$NON-NLS-1$
 		this.frame = frame;
 		value = new EGLJavaFunctionValue( frame );
 	}

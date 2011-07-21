@@ -16,6 +16,9 @@ package org.eclipse.edt.debug.internal.core.java;
  */
 public class SMAPFunctionInfo
 {
+	/**
+	 * The name of the function as defined in the EGL source.
+	 */
 	public final String eglName;
 	
 	/**
@@ -29,17 +32,24 @@ public class SMAPFunctionInfo
 	public final int lineDeclared;
 	
 	/**
+	 * The original line from the SMAP. This will be null for internal function infos (not corresponding to SMAP entries)
+	 */
+	public final String smapEntry;
+	
+	/**
 	 * Constructor.
 	 * 
 	 * @param eglName The name of the function as it's declared in the EGL source.
-	 * @param signature The Java signature of the function
+	 * @param signature The Java signature of the function.
 	 * @param lineDeclared The line number where the function is declared.
+	 * @param smapEntry The original line from the SMAP.
 	 */
-	public SMAPFunctionInfo( String eglName, String signature, int lineDeclared )
+	public SMAPFunctionInfo( String eglName, String signature, int lineDeclared, String smapEntry )
 	{
 		this.eglName = eglName;
 		this.signature = signature;
 		this.lineDeclared = lineDeclared;
+		this.smapEntry = smapEntry;
 	}
 	
 	/**
@@ -47,6 +57,8 @@ public class SMAPFunctionInfo
 	 */
 	public String toString()
 	{
-		return eglName + " (line=" + lineDeclared + ") (signature=" + signature + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return smapEntry == null
+				? "<internal> " + eglName + " (line=" + lineDeclared + ") (signature=" + signature + ")" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				: smapEntry;
 	}
 }

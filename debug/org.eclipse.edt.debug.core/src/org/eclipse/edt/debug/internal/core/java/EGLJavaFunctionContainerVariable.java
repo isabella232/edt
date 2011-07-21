@@ -32,7 +32,7 @@ public class EGLJavaFunctionContainerVariable extends EGLJavaVariable
 	 */
 	public EGLJavaFunctionContainerVariable( IDebugTarget target, IJavaVariable javaVariable ) throws DebugException
 	{
-		super( target, javaVariable, new SMAPVariableInfo( getDisplayName( javaVariable ), javaVariable.getReferenceTypeName(), "", -1 ) ); //$NON-NLS-1$
+		super( target, javaVariable, new SMAPVariableInfo( getDisplayName( javaVariable ), javaVariable.getReferenceTypeName(), "", -1, null ) ); //$NON-NLS-1$
 	}
 	
 	private static String getDisplayName( IJavaVariable variable ) throws DebugException
