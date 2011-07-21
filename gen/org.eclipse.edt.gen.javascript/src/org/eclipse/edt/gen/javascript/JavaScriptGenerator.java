@@ -119,11 +119,11 @@ public class JavaScriptGenerator extends Generator {
 			buf.append('/');
 		}
 		buf.append(JavaScriptAliaser.getAlias(part.getId()));
-		buf.append(getFileExtention());
+		buf.append(getFileExtension());
 		return buf.toString();
 	}
 
-	public String getFileExtention() {
+	public String getFileExtension() {
 		return ".js";
 	}
 
