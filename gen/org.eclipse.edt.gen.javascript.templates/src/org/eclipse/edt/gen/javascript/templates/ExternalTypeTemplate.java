@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.javascript.templates;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ExternalType;
+import org.eclipse.edt.mof.egl.NamedElement;
 
 public class ExternalTypeTemplate extends JavaScriptTemplate {
 
@@ -31,5 +32,9 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 
 	public void genRuntimeTypeName(ExternalType part, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genPartName, part, ctx, out);
+	}
+
+	public void genQualifier(ExternalType part, Context ctx, TabbedWriter out, NamedElement arg) {
+		// out.print("this.");
 	}
 }

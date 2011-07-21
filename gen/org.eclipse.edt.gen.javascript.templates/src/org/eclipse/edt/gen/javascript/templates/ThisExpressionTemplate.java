@@ -13,20 +13,12 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.ArrayLiteral;
+import org.eclipse.edt.mof.egl.ThisExpression;
 
-public class ArrayLiteralTemplate extends JavaScriptTemplate {
+public class ThisExpressionTemplate extends JavaScriptTemplate {
 
-	public void genExpression(ArrayLiteral expr, Context ctx, TabbedWriter out) {
-		out.print("[");
-		ctx.foreach(expr.getEntries(), ',', genExpression, ctx, out);
-		out.print("]");
-		if (!expr.getEntries().isEmpty()) {
-			out.print(".setType(");
-			out.print("\"");
-			ctx.invoke(genSignature, expr.getEntries().get(0).getType(), ctx, out, expr.getEntries().get(0));
-			out.print("\"");
-			out.print(")");
-		}
+	public void genExpression(ThisExpression expr, Context ctx, TabbedWriter out) {
+		// write out the word "this"
+		out.print("this");
 	}
 }

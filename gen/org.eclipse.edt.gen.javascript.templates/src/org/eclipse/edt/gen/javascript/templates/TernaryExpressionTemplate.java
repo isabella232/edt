@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.egl.TernaryExpression;
 public class TernaryExpressionTemplate extends JavaScriptTemplate {
 
 	public void genExpression(TernaryExpression expr, Context ctx, TabbedWriter out) {
-		out.print(ctx.getPrimitiveMapping("egl.lang.String") + '.');
+		out.print(ctx.getNativeMapping("egl.lang.AnyString") + '.');
 		out.print(expr.getOperator());
 	}
 }
