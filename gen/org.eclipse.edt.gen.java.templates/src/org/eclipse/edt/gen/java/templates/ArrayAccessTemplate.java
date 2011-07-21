@@ -23,7 +23,7 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class ArrayAccessTemplate extends JavaTemplate {
 
-	public void genAssignment(ArrayAccess expr, Context ctx, TabbedWriter out, Expression arg) {
+	public void genAssignment(ArrayAccess expr, Context ctx, TabbedWriter out, Expression arg1, String arg2) {
 		// are we dealing with a nullable array
 		if (expr.isNullable()) {
 			// if this is a well-behaved assignment, we can avoid the temporary
@@ -37,7 +37,7 @@ public class ArrayAccessTemplate extends JavaTemplate {
 				ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 				out.print(" - 1, ");
 				out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
-				ctx.invoke(genExpression, arg, ctx, out);
+				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(", ");
 				out.print(temporary + ".get(");
 				ctx.invoke(genExpression, expr.getIndex(), ctx, out);
@@ -49,7 +49,7 @@ public class ArrayAccessTemplate extends JavaTemplate {
 				out.print(".set(");
 				ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 				out.print(" - 1, ");
-				ctx.invoke(genExpression, arg, ctx, out);
+				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(")");
 			} else {
 				ctx.invoke(genExpression, expr.getArray(), ctx, out);
@@ -57,7 +57,7 @@ public class ArrayAccessTemplate extends JavaTemplate {
 				ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 				out.print(" - 1, ");
 				out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
-				ctx.invoke(genExpression, arg, ctx, out);
+				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(", ");
 				ctx.invoke(genExpression, (Expression) expr, ctx, out);
 				out.print(")");
@@ -68,12 +68,12 @@ public class ArrayAccessTemplate extends JavaTemplate {
 			out.print(".set(");
 			ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 			out.print(" - 1, ");
-			ctx.invoke(genExpression, arg, ctx, out);
+			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(")");
 		} else {
 			// non-nullable array
 			out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
-			ctx.invoke(genExpression, arg, ctx, out);
+			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(", ");
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
 			out.print(")");

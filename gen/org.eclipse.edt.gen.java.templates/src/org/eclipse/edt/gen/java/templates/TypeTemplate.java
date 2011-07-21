@@ -158,7 +158,7 @@ public class TypeTemplate extends JavaTemplate {
 		// no default
 	}
 
-	public void genAssignment(Type type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2) {
+	public void genAssignment(Type type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
 		// if the lhs is non-nullable but the rhs is nullable, we have a special case
 		if (!TypeUtils.isReferenceType(arg1.getType()) && !arg1.isNullable() && arg2.isNullable()) {
 			// if this is a well-behaved assignment, we can avoid the temporary
@@ -169,16 +169,16 @@ public class TypeTemplate extends JavaTemplate {
 				ctx.invoke(genExpression, arg2, ctx, out);
 				out.println(";");
 				ctx.invoke(genExpression, arg1, ctx, out);
-				out.print(" = " + temporary + " == null ? ");
+				out.print(arg3 + temporary + " == null ? ");
 				ctx.invoke(genDefaultValue, type, ctx, out, arg1);
 				out.print(" : " + temporary);
 			} else if (TypeUtils.isReferenceType(arg2.getType())) {
 				ctx.invoke(genExpression, arg1, ctx, out);
-				out.print(" = ");
+				out.print(arg3);
 				ctx.invoke(genExpression, arg2, ctx, out);
 			} else {
 				ctx.invoke(genExpression, arg1, ctx, out);
-				out.print(" = ");
+				out.print(arg3);
 				ctx.invoke(genExpression, arg2, ctx, out);
 				out.print(" == null ? ");
 				ctx.invoke(genDefaultValue, type, ctx, out, arg1);
@@ -187,7 +187,7 @@ public class TypeTemplate extends JavaTemplate {
 			}
 		} else {
 			ctx.invoke(genExpression, arg1, ctx, out);
-			out.print(" = ");
+			out.print(arg3);
 			ctx.invoke(genExpression, arg2, ctx, out);
 		}
 	}

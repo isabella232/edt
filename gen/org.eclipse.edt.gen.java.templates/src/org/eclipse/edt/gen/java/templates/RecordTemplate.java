@@ -200,10 +200,10 @@ public class RecordTemplate extends JavaTemplate {
 			ctx.invoke(genSuperClass, stereotype, ctx, out);
 	}
 
-	public void genAssignment(Record type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2) {
+	public void genAssignment(Record type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
 		if (arg1.isNullable()) {
 			ctx.invoke(genExpression, arg1, ctx, out);
-			out.print(" = ");
+			out.print(arg3);
 		}
 		out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
 		ctx.invoke(genExpression, arg2, ctx, out);

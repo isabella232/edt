@@ -23,7 +23,7 @@ public class SubstringAccessTemplate extends JavaTemplate {
 		ctx.invoke(genSubstringAccess, (Type) expr.getType(), ctx, out, expr);
 	}
 
-	public void genAssignment(SubstringAccess expr, Context ctx, TabbedWriter out, Expression arg) {
-		ctx.invoke(genSubstringAssignment, (Type) expr.getType(), ctx, out, expr, arg);
+	public void genAssignment(SubstringAccess expr, Context ctx, TabbedWriter out, Expression arg1, String arg2) {
+		ctx.invoke(genSubstringAssignment, (Type) expr.getType(), ctx, out, expr, arg1);
 	}
 }

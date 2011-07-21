@@ -18,12 +18,12 @@ import org.eclipse.edt.mof.egl.Expression;
 
 public class DynamicAccessTemplate extends JavaTemplate {
 
-	public void genAssignment(DynamicAccess expr, Context ctx, TabbedWriter out, Expression arg) {
+	public void genAssignment(DynamicAccess expr, Context ctx, TabbedWriter out, Expression arg1, String arg2) {
 		ctx.invoke(genExpression, expr.getExpression(), ctx, out);
 		out.print(".ezeSet(");
 		ctx.invoke(genExpression, expr.getAccess(), ctx, out);
 		out.print(", ");
-		ctx.invoke(genExpression, arg, ctx, out);
+		ctx.invoke(genExpression, arg1, ctx, out);
 		out.print(")");
 	}
 

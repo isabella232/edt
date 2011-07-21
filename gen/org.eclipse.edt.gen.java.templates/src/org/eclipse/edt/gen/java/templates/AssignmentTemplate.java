@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayAccess;
@@ -38,6 +39,9 @@ public class AssignmentTemplate extends JavaTemplate {
 	}
 
 	public void genAssignment(Assignment expr, Context ctx, TabbedWriter out) {
-		ctx.invoke(genAssignment, expr.getLHS(), ctx, out, expr.getRHS());
+		String operator = "=";
+		if (expr.getOperator() != null && expr.getOperator().length() > 0)
+			operator = expr.getOperator();
+		ctx.invoke(genAssignment, expr.getLHS(), ctx, out, expr.getRHS(), " " + CommonUtilities.getNativeJavaAssignment(operator) + " ");
 	}
 }

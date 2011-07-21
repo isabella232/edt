@@ -24,7 +24,7 @@ public class NameTemplate extends JavaTemplate {
 		return expr.getNamedElement().getAnnotation(Constants.Annotation_EGLProperty);
 	}
 
-	public void genAssignment(Name expr, Context ctx, TabbedWriter out, Expression arg) {
+	public void genAssignment(Name expr, Context ctx, TabbedWriter out, Expression arg1, String arg2) {
 		Annotation property = getPropertyAnnotation(expr);
 		if (property != null) {
 			if (expr.getQualifier() != null) {
@@ -39,14 +39,14 @@ public class NameTemplate extends JavaTemplate {
 						out.print(expr.getNamedElement().getName().substring(1));
 				}
 				out.print("(");
-				ctx.invoke(genExpression, arg, ctx, out);
+				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(")");
 			} else {
 				ctx.invoke(genName, expr.getNamedElement(), ctx, out);
-				out.print(" = ");
-				ctx.invoke(genExpression, arg, ctx, out);
+				out.print(arg2);
+				ctx.invoke(genExpression, arg1, ctx, out);
 			}
 		} else
-			ctx.invoke(genAssignment, expr.getType(), ctx, out, expr, arg);
+			ctx.invoke(genAssignment, expr.getType(), ctx, out, expr, arg1, arg2);
 	}
 }
