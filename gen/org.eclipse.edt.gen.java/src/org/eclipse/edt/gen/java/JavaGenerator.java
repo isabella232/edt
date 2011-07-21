@@ -90,7 +90,7 @@ public class JavaGenerator extends Generator {
 				String fileName = eglFileName;
 				if (fileName.indexOf('.') >= 0)
 					fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-				context.getSmapData().append(JavaAliaser.getAlias(fileName) + getFileExtention() + Constants.smap_stratum);
+				context.getSmapData().append(JavaAliaser.getAlias(fileName) + getFileExtension() + Constants.smap_stratum);
 				// we need to insert the file list here, but cannot do this until the part generation finished
 				context.getSmapData().append(Constants.smap_lines);
 				context.invoke(JavaTemplate.genPart, part, context, out);
@@ -152,7 +152,7 @@ public class JavaGenerator extends Generator {
 		
 		// if no error was created, update the class file with the accumulated debug info
 		if (!context.getMessageRequestor().isError()) {
-			File outSmapFile = new File(fileName.substring(0, fileName.length() - getFileExtention().length()) + Constants.smap_fileExtension);
+			File outSmapFile = new File(fileName.substring(0, fileName.length() - getFileExtension().length()) + Constants.smap_fileExtension);
 			try {
 				FileOutputStream outStream = new FileOutputStream(outSmapFile);
 				byte[] outSmapBytes = context.getSmapData().toString().getBytes(Constants.smap_encoding);
@@ -184,12 +184,12 @@ public class JavaGenerator extends Generator {
 			buf.append('/');
 		}
 		buf.append(JavaAliaser.getAlias(part.getId()));
-		buf.append(getFileExtention());
+		buf.append(getFileExtension());
 		return buf.toString();
 	}	
 	
 	@Override
-	public String getFileExtention() {
+	public String getFileExtension() {
 		return ".java";
 	}
 
