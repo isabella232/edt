@@ -34,7 +34,7 @@ import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.WhenClause;
 import org.eclipse.edt.debug.internal.ui.EDTDebugUIPlugin;
-import org.eclipse.edt.gen.JavaAliaser;
+import org.eclipse.edt.gen.java.JavaAliaser;
 import org.eclipse.edt.ide.core.internal.model.document.EGLDocument;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;

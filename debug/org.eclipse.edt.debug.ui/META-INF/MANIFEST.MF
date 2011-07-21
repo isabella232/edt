@@ -19,7 +19,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.edt.ide.ui,
  org.eclipse.ui.editors,
  org.eclipse.jdt.ui,
- org.eclipse.edt.gen
+ org.eclipse.edt.gen.java
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
