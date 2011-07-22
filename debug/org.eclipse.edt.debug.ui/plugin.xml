@@ -57,30 +57,6 @@
             targetID="#EGLRulerContext"
             id="org.eclipse.edt.debug.ui.EGLEditorRulerPopupActions">
             <action
-               class="org.eclipse.debug.ui.actions.RunToLineActionDelegate"
-               definitionId="org.eclipse.debug.ui.commands.RunToLine"
-               helpContextId="run_to_line_action_context"
-               icon="icons/full/elcl16/runtoline_co.gif"
-               id="org.eclipse.edt.debug.ui.actions.RunToLine"
-               label="%runToLineAction.label"
-               menubarPath="debug">
-            </action>
-            <visibility>
-               <and>
-                  <systemProperty
-                     name="org.eclipse.jdt.debug.ui.debuggerActive"
-                     value="true">
-                  </systemProperty>
-                  <objectClass
-                     name="org.eclipse.jface.text.ITextSelection">
-                  </objectClass>
-               </and>
-            </visibility>
-         </viewerContribution>
-         <viewerContribution
-            targetID="#EGLRulerContext"
-            id="org.eclipse.edt.debug.ui.EGLEditorRulerPopupActions">
-            <action
                label="%BreakpointProperties.label"
                class="org.eclipse.jdt.debug.ui.actions.JavaBreakpointPropertiesRulerActionDelegate"
                menubarPath="group.properties"
