@@ -23,41 +23,60 @@ public class EnumerationTemplate extends JavaScriptTemplate {
 
 	public void preGenClassBody(Enumeration part, Context ctx) {}
 
-	public void genClassBody(Enumeration part, Context ctx, TabbedWriter out) {
-		// generate enumerated fields
+	public void genPart(Enumeration part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genClassHeader, (Type)part, ctx, out);
+		out.pushIndent();
+		ctx.invoke(genClassBody, (Type)part, ctx, out);
+		out.println("}");
+		out.popIndent();
+		out.println(");");
 		List<EEnumLiteral> enums = part.getEntries();
 		if (enums != null && enums.size() != 0) {
-			boolean needsSeparator = false;
-			for (EEnumLiteral literal : enums) {
-				if (needsSeparator)
-					out.println(",");
-				needsSeparator = true;
-				ctx.invoke(genName, literal, ctx, out);
-				out.print("(" + literal.getValue() + ")");
+			for (int idx = 0; idx < enums.size(); idx++) {
+				ctx.invoke(genRuntimeTypeName, (Type)part, ctx, out, TypeNameKind.JavascriptImplementation);
+				out.print(".");
+				ctx.invoke(genName, enums.get(idx), ctx, out);
+				out.print(" = ");
+				ctx.putAttribute(part, genConstructorOptions, enums.get(idx).getValue() == 0 ? Integer.valueOf(idx + 1) : Integer.valueOf(enums.get(idx).getValue())  );
+				ctx.invoke(genInstantiation, (Type)part, ctx, out);
+				out.println(";");
 			}
-			out.println(";");
 		}
-		out.println("private final int value;");
-		ctx.invoke(genClassName, (Type) part, ctx, out);
-		out.println("(int value) {");
-		out.println("\tthis.value = value;");
+		out.println(";");
+	}
+
+	public void genConstructorOptions(Enumeration type, Context ctx, TabbedWriter out) {
+		Integer literalValue = (Integer)ctx.getAttribute((Type)type, genConstructorOptions);
+		out.print(((Integer)literalValue).toString());
+	}
+
+	public void genConstructor(Enumeration part, Context ctx, TabbedWriter out) {
+		// Generate default constructor
+		out.print(quoted("constructor"));
+		out.println(": function(valueIn) {");
+		out.println("this.value = valueIn;");
 		out.println("}");
-		out.println("public int getValue() {");
-		out.println("\treturn value;");
-		out.println("}");
+	}
+
+	public void genClassBody(Enumeration part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genConstructors, (Type)part, ctx, out);
+	}
+	
+	public void genConstructors(Enumeration part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genConstructor, (Type)part, ctx, out);
 	}
 
 	public void genClassHeader(Enumeration part, Context ctx, TabbedWriter out) {
-		out.print("public enum ");
-		ctx.invoke(genClassName, (Type) part, ctx, out);
-		out.println(" {");
+		out.print("egl.defineClass(");
+		out.print(singleQuoted(part.getPackageName().toLowerCase()));
+		out.print(", ");
+		out.print(quoted(part.getName()));
+		out.print(", ");
+		out.println("{");
 	}
 
 	public void genAccessor(Enumeration part, Context ctx, TabbedWriter out) {
-		ctx.invoke(genClassName, (Type) part, ctx, out);
+		ctx.invoke(genRuntimeTypeName, (Type)part, ctx, out, TypeNameKind.JavascriptImplementation);
 	}
 
-	public void genRuntimeTypeName(Enumeration part, Context ctx, TabbedWriter out, TypeNameKind arg) {
-		ctx.invoke(genClassName, (Type) part, ctx, out);
-	}
 }
