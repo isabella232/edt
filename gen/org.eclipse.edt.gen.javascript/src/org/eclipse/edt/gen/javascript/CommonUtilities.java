@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.javascript;
 
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterizableType;
@@ -279,5 +280,45 @@ public class CommonUtilities {
 			return new Boolean((String) value);
 		}
 		return (Boolean) value;
+	}
+
+	public static boolean isRUIHandler(Object obj) {
+		if (obj instanceof EGLClass) {
+			return ((EGLClass) obj).getAnnotation("RUIHandler") != null;
+		}
+
+		return false;
+	}
+
+	public static boolean isRUIWidget(Object obj) {
+		if (obj instanceof EGLClass) {
+			return ((EGLClass) obj).getAnnotation("egl.ui.rui.RUIWidget") != null;
+		}
+
+		return false;
+	}
+
+	public static boolean isBasicHandler(Object obj) {
+		if (obj instanceof EGLClass) {
+			return ((EGLClass) obj).getAnnotation("BasicHandler") != null; // TODO sbg need correct annotation name
+		}
+
+		return false;
+	}
+
+	public static boolean isBasicLibrary(Object obj) {
+		if (obj instanceof EGLClass) {
+			return ((EGLClass) obj).getAnnotation("BasicLibrary") != null;// TODO sbg need correct annotation name
+		}
+
+		return false;
+	}
+
+	public static boolean isRUIPropertiesLibrary(Object obj) {
+		if (obj instanceof EGLClass) {
+			return ((EGLClass) obj).getAnnotation("RUIPropertiesLibrary") != null;// TODO sbg need correct annotation name
+		}
+
+		return false;
 	}
 }
