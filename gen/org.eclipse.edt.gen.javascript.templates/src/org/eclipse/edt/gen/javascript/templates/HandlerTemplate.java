@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import java.util.List;
 
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Handler;
@@ -25,19 +26,23 @@ public class HandlerTemplate extends JavaScriptTemplate {
 		out.print("ExecutableBase");
 	}
 
-	public void genClassHeader(Handler library, Context ctx, TabbedWriter out) {
-		// TODO sbg Not all handlers are RUIWidgets, so this may need to be refactored
-		out.print("egl.defineRUIWidget(");
-		out.print(singleQuoted(library.getPackageName().toLowerCase()));
+	public void genClassHeader(Handler handler, Context ctx, TabbedWriter out) {
+		if (CommonUtilities.isBasicHandler(handler)) {
+			out.print("egl.defineClass(");
+		} else if (CommonUtilities.isRUIWidget(handler)) {
+			out.print("egl.defineRUIWidget(");
+		}
+
+		out.print(singleQuoted(handler.getPackageName().toLowerCase()));
 		out.print(", ");
-		out.print(singleQuoted(library.getName()));
+		out.print(singleQuoted(handler.getName()));
 		out.println(", ");
 		out.println("{");
 		out.print("'eze$$fileName': ");
-		out.print(singleQuoted(library.getFileName()));
+		out.print(singleQuoted(handler.getFileName()));
 		out.println(", ");
 		out.print("'eze$$runtimePropertiesFile': ");
-		out.print(singleQuoted(library.getFullyQualifiedName()));
+		out.print(singleQuoted(handler.getFullyQualifiedName()));
 		out.println(", ");
 	}
 
