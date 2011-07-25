@@ -31,13 +31,13 @@ public class RecordTemplate extends JavaScriptTemplate {
 		// process anything else the superclass needs to do
 		ctx.invokeSuper(this, preGen, part, ctx);
 		// ignore adding this entry to the list, if it is the part we are currently generating
-		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
+		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
 			part.getFullyQualifiedName()))
 			return;
 		// when we get here, it is because a part is being referenced by the original part being generated. Add it to the
 		// parts used table if it doesn't already exist
 		boolean found = false;
-		List<Record> records = (List<Record>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partRecordsUsed);
+		List<Record> records = (List<Record>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partRecordsUsed);
 		for (Record record : records) {
 			if (part.getTypeSignature().equalsIgnoreCase(record.getTypeSignature())) {
 				found = true;

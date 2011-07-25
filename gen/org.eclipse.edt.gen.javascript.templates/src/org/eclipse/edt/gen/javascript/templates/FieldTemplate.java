@@ -54,11 +54,11 @@ public class FieldTemplate extends JavaScriptTemplate {
 	public void genInitialization(Field field, Context ctx, TabbedWriter out) {
 		// is this an inout or out temporary variable to a function. if so, then we need to default or instantiate for
 		// our parms, and set to null for inout
-		if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
-			&& ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
+		if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
+			&& ctx.getAttribute(field, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
 			// if the value associated with the temporary variable is 2, then it is to be instantiated (OUT parm)
 			// otherwise it is to be defaulted to null (INOUT parm), as there is an assignment already created
-			if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) == ParameterKind.PARM_OUT) {
+			if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) == ParameterKind.PARM_OUT) {
 				out.print(Constants.JSRT_EGL_NAMESPACE+ctx.getNativeMapping("egl.lang.AnyObject")+".ezeWrap(");
 				if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
 					ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);

@@ -89,7 +89,7 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 	//		genTimeoutParams(serviceTimeout);
 			out.println("\"" + operationName(serviceInterfaceFunction) + "\", ");
 			@SuppressWarnings("unchecked")
-			List<Expression> tempArgs = (List<Expression>)ctx.getAttribute(stmt, Constants.Annotation_callStatementTempVariables);
+			List<Expression> tempArgs = (List<Expression>)ctx.getAttribute(stmt, Constants.SubKey_callStatementTempVariables);
 			Function callbackFunction = null;
 			if(stmt.getCallback() != null){
 				callbackFunction = (Function)ctx.invoke(getCallbackFunction, stmt.getCallback(), ctx);

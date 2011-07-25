@@ -26,13 +26,13 @@ public class DataTableTemplate extends JavaScriptTemplate {
 		// process anything else the superclass needs to do
 		ctx.invokeSuper(this, preGen, dataTable, ctx);
 		// ignore adding this entry to the list, if it is the part we are currently generating
-		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
+		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
 			dataTable.getFullyQualifiedName()))
 			return;
 		// when we get here, it is because a part is being referenced by the original part being generated. Add it to the
 		// parts used table if it doesn't already exist
 		boolean found = false;
-		List<DataTable> dataTables = (List<DataTable>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partDataTablesUsed);
+		List<DataTable> dataTables = (List<DataTable>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partDataTablesUsed);
 		for (DataTable table : dataTables) {
 			if (dataTable.getTypeSignature().equalsIgnoreCase(table.getTypeSignature())) {
 				found = true;

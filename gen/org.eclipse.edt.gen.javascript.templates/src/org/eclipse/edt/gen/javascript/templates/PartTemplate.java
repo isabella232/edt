@@ -29,10 +29,10 @@ public class PartTemplate extends JavaScriptTemplate {
 	IRUtils utils = new IRUtils();
 
 	public void preGenPart(Part part, Context ctx) {
-		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partDataTablesUsed, new ArrayList<DataTable>());
-		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partFormsUsed, new ArrayList<Form>());
-		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed, new ArrayList<Library>());
-		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partRecordsUsed, new ArrayList<Record>());
+		ctx.putAttribute(ctx.getClass(), Constants.SubKey_partDataTablesUsed, new ArrayList<DataTable>());
+		ctx.putAttribute(ctx.getClass(), Constants.SubKey_partFormsUsed, new ArrayList<Form>());
+		ctx.putAttribute(ctx.getClass(), Constants.SubKey_partLibrariesUsed, new ArrayList<Library>());
+		ctx.putAttribute(ctx.getClass(), Constants.SubKey_partRecordsUsed, new ArrayList<Record>());
 		ctx.invoke(preGenClassBody, part, ctx);
 	}
 

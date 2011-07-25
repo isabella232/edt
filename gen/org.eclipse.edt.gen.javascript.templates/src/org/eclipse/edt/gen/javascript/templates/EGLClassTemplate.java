@@ -146,7 +146,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 
 	@SuppressWarnings("unchecked")
 	public void genLibraries(EGLClass part, Context ctx, TabbedWriter out) {
-		List<Library> libraries = (List<Library>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed);
+		List<Library> libraries = (List<Library>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partLibrariesUsed);
 		for (Library library : libraries) {
 			ctx.invoke(genLibrary, part, ctx, out, library);
 		}
