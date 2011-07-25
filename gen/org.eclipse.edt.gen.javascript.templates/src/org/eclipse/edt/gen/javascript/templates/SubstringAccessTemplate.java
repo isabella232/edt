@@ -13,7 +13,6 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.SubstringAccess;
 import org.eclipse.edt.mof.egl.Type;
 
@@ -21,9 +20,5 @@ public class SubstringAccessTemplate extends JavaScriptTemplate {
 
 	public void genExpression(SubstringAccess expr, Context ctx, TabbedWriter out) {
 		ctx.invoke(genSubstringAccess, (Type) expr.getType(), ctx, out, expr);
-	}
-
-	public void genAssignment(SubstringAccess expr, Context ctx, TabbedWriter out, Expression arg1, String arg2) {
-		ctx.invoke(genSubstringAssignment, (Type) expr.getType(), ctx, out, expr, arg1);
 	}
 }

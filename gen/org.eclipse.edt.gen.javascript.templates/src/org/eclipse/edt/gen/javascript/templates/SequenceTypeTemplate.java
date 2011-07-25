@@ -13,8 +13,6 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.SequenceType;
 import org.eclipse.edt.mof.egl.SubstringAccess;
 
@@ -32,20 +30,6 @@ public class SequenceTypeTemplate extends JavaScriptTemplate {
 		ctx.invoke(genExpression, arg.getStart(), ctx, out);
 		out.print(", ");
 		ctx.invoke(genExpression, arg.getEnd(), ctx, out);
-		out.print(")");
-	}
-
-	public void genSubstringAssignment(ParameterizableType type, Context ctx, TabbedWriter out, SubstringAccess arg1, Expression arg2) {
-		ctx.invoke(genExpression, arg1.getStringExpression(), ctx, out);
-		out.print(" = ");
-		out.print(ctx.getNativeImplementationMapping(arg1.getType()) + ".substringAssign(");
-		ctx.invoke(genExpression, arg1.getStringExpression(), ctx, out);
-		out.print(", ");
-		ctx.invoke(genExpression, arg2, ctx, out);
-		out.print(", ");
-		ctx.invoke(genExpression, arg1.getStart(), ctx, out);
-		out.print(", ");
-		ctx.invoke(genExpression, arg1.getEnd(), ctx, out);
 		out.print(")");
 	}
 }
