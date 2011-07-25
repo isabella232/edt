@@ -37,7 +37,9 @@ public class SequenceTypeTemplate extends JavaTemplate {
 	public void genSubstringAssignment(SequenceType type, Context ctx, TabbedWriter out, SubstringAccess arg1, Expression arg2) {
 		ctx.invoke(genExpression, arg1.getStringExpression(), ctx, out);
 		out.print(" = ");
-		out.print(ctx.getNativeImplementationMapping(arg1.getType()) + ".substring(");
+		out.print(ctx.getNativeImplementationMapping(arg1.getType()) + ".substringAssign(");
+		ctx.invoke(genExpression, arg1.getStringExpression(), ctx, out);
+		out.print(", ");
 		ctx.invoke(genExpression, arg2, ctx, out);
 		out.print(", ");
 		ctx.invoke(genExpression, arg1.getStart(), ctx, out);
