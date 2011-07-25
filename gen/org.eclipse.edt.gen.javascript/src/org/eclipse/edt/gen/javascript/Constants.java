@@ -17,12 +17,12 @@ public class Constants {
 	// command parameter internal names
 	public static final String parameter_checkOverflow = "checkOverflow";
 
-	// these are annotation key values used as context hashmap keys
-	public static final String Annotation_partBeingGenerated = "partBeingGenerated";
-	public static final String Annotation_partDataTablesUsed = "partDataTablesUsed";
-	public static final String Annotation_partFormsUsed = "partFormsUsed";
-	public static final String Annotation_partLibrariesUsed = "partLibrariesUsed";
-	public static final String Annotation_partRecordsUsed = "partRecordsUsed";
+	// these are sub key values used as context hashmap keys
+	public static final String SubKey_partBeingGenerated = "partBeingGenerated";
+	public static final String SubKey_partDataTablesUsed = "partDataTablesUsed";
+	public static final String SubKey_partFormsUsed = "partFormsUsed";
+	public static final String SubKey_partLibrariesUsed = "partLibrariesUsed";
+	public static final String SubKey_partRecordsUsed = "partRecordsUsed";
 
 	// these are annotations key values, related to the values in the IRs
 	public static final String Annotation_EGLProperty = "egl.core.eglproperty";
