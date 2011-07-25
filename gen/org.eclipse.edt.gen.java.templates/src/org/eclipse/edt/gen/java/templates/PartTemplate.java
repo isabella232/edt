@@ -31,11 +31,11 @@ public class PartTemplate extends JavaTemplate {
 	IRUtils utils = new IRUtils();
 
 	public void preGenPart(Part part, Context ctx) {
-		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partDataTablesUsed, new ArrayList<DataTable>());
-		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partFormsUsed, new ArrayList<Form>());
-		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partLibrariesUsed, new ArrayList<Library>());
-		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partRecordsUsed, new ArrayList<Record>());
-		ctx.putAttribute(ctx.getClass(), Constants.Annotation_partTypesImported, new ArrayList<String>());
+		ctx.putAttribute(ctx.getClass(), Constants.SubKey_partDataTablesUsed, new ArrayList<DataTable>());
+		ctx.putAttribute(ctx.getClass(), Constants.SubKey_partFormsUsed, new ArrayList<Form>());
+		ctx.putAttribute(ctx.getClass(), Constants.SubKey_partLibrariesUsed, new ArrayList<Library>());
+		ctx.putAttribute(ctx.getClass(), Constants.SubKey_partRecordsUsed, new ArrayList<Record>());
+		ctx.putAttribute(ctx.getClass(), Constants.SubKey_partTypesImported, new ArrayList<String>());
 		ctx.invoke(preGenClassBody, part, ctx);
 	}
 
@@ -56,7 +56,7 @@ public class PartTemplate extends JavaTemplate {
 		}
 		out.println("import org.eclipse.edt.javart.resources.*;");
 		out.println("import org.eclipse.edt.javart.*;");
-		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partTypesImported);
+		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partTypesImported);
 		for (String imported : typesImported) {
 			// we don't want to use ctx.gen here, because we want the type template logic to handle this to avoid any array <
 			// ... > being added
@@ -85,7 +85,7 @@ public class PartTemplate extends JavaTemplate {
 		else {
 			String value = part.getClassifier().getTypeSignature();
 			// check to see if this is in the list of imported types. If it is, then we can use the short name.
-			List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partTypesImported);
+			List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partTypesImported);
 			for (String imported : typesImported) {
 				if (value.equalsIgnoreCase(imported)) {
 					// it was is the table, so use the short name

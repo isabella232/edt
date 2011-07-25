@@ -49,8 +49,8 @@ public class FunctionTemplate extends JavaTemplate {
 		ctx.invoke(genStatementNoBraces, function.getStatementBlock(), ctx, out);
 		// we need to create a local variable for the return, if the user didn't specify one
 		if (function.getType() != null
-			&& (ctx.getAttribute(function, org.eclipse.edt.gen.Constants.Annotation_functionHasReturnStatement) == null || !((Boolean) ctx.getAttribute(
-				function, org.eclipse.edt.gen.Constants.Annotation_functionHasReturnStatement)).booleanValue())) {
+			&& (ctx.getAttribute(function, org.eclipse.edt.gen.Constants.SubKey_functionHasReturnStatement) == null || !((Boolean) ctx.getAttribute(
+				function, org.eclipse.edt.gen.Constants.SubKey_functionHasReturnStatement)).booleanValue())) {
 			String temporary = ctx.nextTempName();
 			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
 			localDeclaration.setContainer(function);

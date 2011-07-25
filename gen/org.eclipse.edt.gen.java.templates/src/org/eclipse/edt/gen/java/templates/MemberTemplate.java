@@ -31,8 +31,8 @@ public class MemberTemplate extends JavaTemplate {
 	public void genRuntimeTypeName(Member mbr, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		if (mbr.getType() == null)
 			out.print("void");
-		else if (ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
-			&& ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
+		else if (ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
+			&& ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
 			out.print("AnyBoxedObject<");
 			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject);
 			out.print(">");

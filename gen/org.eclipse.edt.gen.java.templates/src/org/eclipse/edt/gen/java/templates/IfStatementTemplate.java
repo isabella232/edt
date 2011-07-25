@@ -23,8 +23,8 @@ public class IfStatementTemplate extends JavaTemplate {
 	public void genStatementBody(IfStatement stmt, Context ctx, TabbedWriter out) {
 		Label label = new Label(ctx, Label.LABEL_TYPE_IF);
 		ctx.pushLabelStack(label);
-		if (ctx.getAttribute(stmt, org.eclipse.edt.gen.Constants.Annotation_statementNeedsLabel) != null
-			&& ((Boolean) ctx.getAttribute(stmt, org.eclipse.edt.gen.Constants.Annotation_statementNeedsLabel)).booleanValue())
+		if (ctx.getAttribute(stmt, org.eclipse.edt.gen.Constants.SubKey_statementNeedsLabel) != null
+			&& ((Boolean) ctx.getAttribute(stmt, org.eclipse.edt.gen.Constants.SubKey_statementNeedsLabel)).booleanValue())
 			out.print(label.getName() + ": ");
 		out.print("if (");
 		ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(stmt.getCondition(), TypeUtils.Type_BOOLEAN), ctx, out);

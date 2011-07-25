@@ -31,8 +31,8 @@ public class MemberNameTemplate extends JavaTemplate {
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(")");
 			// check to see if we are copying LHS boxed temporary variables (inout and out types only)
-		} else if (ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
-			&& ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
+		} else if (ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
+			&& ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
 			out.print(arg2);
 			out.print("AnyObject.ezeWrap(");
@@ -40,8 +40,8 @@ public class MemberNameTemplate extends JavaTemplate {
 			out.print(")");
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
 		} else if (arg1 instanceof MemberName
-			&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != null
-			&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.Annotation_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
+			&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
+			&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
 			out.print(arg2);
 			ctx.invoke(genExpression, arg1, ctx, out);
