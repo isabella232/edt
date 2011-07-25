@@ -18,6 +18,6 @@ import eglx.xml._bind.annotation.*;
 </soapenv:Envelope>
 **/
 record SOAPEnvelope{@XMLRootElement{name="Envelope", namespace="http://schemas.xmlsoap.org/soap/envelope/"}}
-	soapHeader any{XMLElement{name="Header", namespace="http://schemas.xmlsoap.org/soap/envelope/"}};
-	body any{XMLElement{name="Body", namespace="http://schemas.xmlsoap.org/soap/envelope/"}};
+	soapHeader any{XMLElement{name="Header", namespace="http://schemas.xmlsoap.org/soap/envelope/"}} = null;
+	body any{XMLElement{name="Body", namespace="http://schemas.xmlsoap.org/soap/envelope/"}} = null;
 end

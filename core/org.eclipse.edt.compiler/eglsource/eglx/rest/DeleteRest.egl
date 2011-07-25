@@ -1,5 +1,7 @@
 package eglx.rest;
 
+import eglx._service.Encoding;
+
 Record DeleteRest type Annotation
 { 
 	targets = [ ElementKind.functionMbr], 
@@ -7,10 +9,10 @@ Record DeleteRest type Annotation
 	eglIsSystemAnnotation = yes
 }
 	uriTemplate string?;
-	requestFormat eglx._service.Encoding?;
-	requestCharset string = "UTF-8";
-	requestContentType string?;//default based on encoding
-	responseFormat eglx._service.Encoding?;
+	requestFormat Encoding?;
+	requestCharset string? = "UTF-8";
+	requestContentType string?;
+	responseFormat Encoding?;
 	responseCharset string?;
-	responseContentType string?;//default based on encoding
+	responseContentType string?;
 end
