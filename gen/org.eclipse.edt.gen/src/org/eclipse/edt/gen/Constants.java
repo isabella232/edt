@@ -26,9 +26,9 @@ public class Constants {
 	// temporary variable prefix
 	public static final String temporaryVariablePrefix = "eze$Temp";
 
-	// these are annotation key values used as context hashmap keys
-	public static final String Annotation_functionArgumentTemporaryVariable = "functionArgumentTemporaryVariable";
-	public static final String Annotation_functionHasReturnStatement = "functionHasReturnStatement";
-	public static final String Annotation_statementNeedsLabel = "statementNeedsLabel";
-	public static final String Annotation_callStatementTempVariables = "callStatementTempVariables";
+	// these are sub key values used as context hashmap keys
+	public static final String SubKey_functionArgumentTemporaryVariable = "functionArgumentTemporaryVariable";
+	public static final String SubKey_functionHasReturnStatement = "functionHasReturnStatement";
+	public static final String SubKey_statementNeedsLabel = "statementNeedsLabel";
+	public static final String SubKey_callStatementTempVariables = "callStatementTempVariables";
 }

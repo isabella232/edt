@@ -86,7 +86,7 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	public boolean visit(ReturnStatement object) {
-		ctx.putAttribute(object.getContainer(), Constants.Annotation_functionHasReturnStatement, new Boolean(true));
+		ctx.putAttribute(object.getContainer(), Constants.SubKey_functionHasReturnStatement, new Boolean(true));
 		return true;
 	}
 
@@ -100,7 +100,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			invocation.setId(serviceInterfaceFunction.getId());
 			invocation.getArguments().addAll(object.getArguments());
 			processInvocation(invocation);
-			ctx.putAttribute(object, Constants.Annotation_callStatementTempVariables, invocation.getArguments());
+			ctx.putAttribute(object, Constants.SubKey_callStatementTempVariables, invocation.getArguments());
 		}
 		return true;
 	}
@@ -109,7 +109,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
-			ctx.putAttribute(object, Constants.Annotation_statementNeedsLabel, new Boolean(true));
+			ctx.putAttribute(object, Constants.SubKey_statementNeedsLabel, new Boolean(true));
 		return true;
 	}
 
@@ -117,7 +117,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
-			ctx.putAttribute(object, Constants.Annotation_statementNeedsLabel, new Boolean(true));
+			ctx.putAttribute(object, Constants.SubKey_statementNeedsLabel, new Boolean(true));
 		return true;
 	}
 
@@ -125,7 +125,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
-			ctx.putAttribute(object, Constants.Annotation_statementNeedsLabel, new Boolean(true));
+			ctx.putAttribute(object, Constants.SubKey_statementNeedsLabel, new Boolean(true));
 		return true;
 	}
 
@@ -133,7 +133,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
-			ctx.putAttribute(object, Constants.Annotation_statementNeedsLabel, new Boolean(true));
+			ctx.putAttribute(object, Constants.SubKey_statementNeedsLabel, new Boolean(true));
 		return true;
 	}
 
@@ -141,7 +141,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
-			ctx.putAttribute(object, Constants.Annotation_statementNeedsLabel, new Boolean(true));
+			ctx.putAttribute(object, Constants.SubKey_statementNeedsLabel, new Boolean(true));
 		return true;
 	}
 
@@ -150,7 +150,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
-			ctx.putAttribute(object, Constants.Annotation_statementNeedsLabel, new Boolean(true));
+			ctx.putAttribute(object, Constants.SubKey_statementNeedsLabel, new Boolean(true));
 		// if the condition of the if statement has side effects, then we need to extract the functions in the condition
 		// and process them ahead of the if, utilizing a temporary variable instead. the reason for this is to allow the
 		// before and after logic from the function invocation to take place ahead of the if
@@ -378,7 +378,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					// add the declaration statement block to the field
 					field.setInitializerStatements(declarationBlock);
 					field.setHasSetValuesBlock(true);
-					ctx.putAttribute(field, Constants.Annotation_functionArgumentTemporaryVariable, ParameterKind.PARM_IN);
+					ctx.putAttribute(field, Constants.SubKey_functionArgumentTemporaryVariable, ParameterKind.PARM_IN);
 					// add the field to the declaration expression
 					declarationExpression.getFields().add(field);
 					// connect the declaration expression to the local declaration
@@ -401,7 +401,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					field.setName(temporary);
 					field.setType(parameter.getType());
 					field.setIsNullable(parameter.isNullable());
-					ctx.putAttribute(field, Constants.Annotation_functionArgumentTemporaryVariable, ParameterKind.PARM_INOUT);
+					ctx.putAttribute(field, Constants.SubKey_functionArgumentTemporaryVariable, ParameterKind.PARM_INOUT);
 					// we need to create the member access
 					MemberName nameExpression = factory.createMemberName();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -471,7 +471,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					field.setName(temporary);
 					field.setType(parameter.getType());
 					field.setIsNullable(parameter.isNullable());
-					ctx.putAttribute(field, Constants.Annotation_functionArgumentTemporaryVariable, ParameterKind.PARM_OUT);
+					ctx.putAttribute(field, Constants.SubKey_functionArgumentTemporaryVariable, ParameterKind.PARM_OUT);
 					// we need to create the member access
 					MemberName nameExpression = factory.createMemberName();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
