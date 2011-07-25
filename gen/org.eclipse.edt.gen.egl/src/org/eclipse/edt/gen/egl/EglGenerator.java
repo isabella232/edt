@@ -49,7 +49,7 @@ public class EglGenerator extends Generator{
 
 	public void generate(Object part) throws GenerationException {
 		try {
-			context.putAttribute(context.getClass(), Constants.Annotation_partBeingGenerated, part);
+			context.putAttribute(context.getClass(), Constants.SubKey_partBeingGenerated, part);
 			if (!context.getMessageRequestor().isError()) {
 				context.invoke(EglTemplate.genPart, (Object)part, context);
 			}

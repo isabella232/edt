@@ -13,7 +13,7 @@ package org.eclipse.edt.gen.egl;
 
 public class Constants {
 	private Constants() {}
-	public static final String Annotation_partBeingGenerated = "partBeingGenerated";
+	public static final String SubKey_partBeingGenerated = "partBeingGenerated";
 	public static final String EGLMESSAGE_EXCEPTION_OCCURED = "9998";
 	public static final String EGLMESSAGE_STACK_TRACE = "9999";
 
