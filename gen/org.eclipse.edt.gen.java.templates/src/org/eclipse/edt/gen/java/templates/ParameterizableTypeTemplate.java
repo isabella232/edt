@@ -16,7 +16,6 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BinaryExpression;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.SubstringAccess;
 import org.eclipse.edt.mof.egl.Type;
@@ -31,20 +30,6 @@ public class ParameterizableTypeTemplate extends JavaTemplate {
 		ctx.invoke(genExpression, arg.getStart(), ctx, out);
 		out.print(", ");
 		ctx.invoke(genExpression, arg.getEnd(), ctx, out);
-		out.print(")");
-	}
-
-	public void genSubstringAssignment(ParameterizableType type, Context ctx, TabbedWriter out, SubstringAccess arg1, Expression arg2) {
-		ctx.invoke(genExpression, arg1.getStringExpression(), ctx, out);
-		out.print(" = ");
-		out.print(ctx.getNativeImplementationMapping(arg1.getType()) + ".substringAssign(");
-		ctx.invoke(genExpression, arg1.getStringExpression(), ctx, out);
-		out.print(", ");
-		ctx.invoke(genExpression, arg2, ctx, out);
-		out.print(", ");
-		ctx.invoke(genExpression, arg1.getStart(), ctx, out);
-		out.print(", ");
-		ctx.invoke(genExpression, arg1.getEnd(), ctx, out);
 		out.print(")");
 	}
 
