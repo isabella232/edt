@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.internal.core.java;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IBreakpoint;
@@ -27,6 +30,8 @@ import org.eclipse.jdt.debug.core.IJavaThread;
  */
 public class EGLJavaThread extends EGLJavaDebugElement implements IEGLThread
 {
+	private static final boolean FILTER_RUNTIMES = !System.getProperty( "edt.debug.filter.runtimes", "yes" ).equalsIgnoreCase( "false" );
+	
 	/**
 	 * The underlying Java thread.
 	 */
@@ -42,6 +47,12 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLThread
 	 */
 	private IStackFrame[] previousJavaFrames;
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param target The debug target.
+	 * @param thread The Java thread.
+	 */
 	public EGLJavaThread( IDebugTarget target, IJavaThread thread )
 	{
 		super( target );
@@ -186,6 +197,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLThread
 		
 		if ( recompute )
 		{
+			int size = 0;
 			EGLJavaStackFrame[] newEGLFrames = new EGLJavaStackFrame[ javaFrames.length ];
 			for ( int i = 0; i < javaFrames.length; i++ )
 			{
@@ -196,19 +208,39 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLThread
 						if ( eglFrames[ j ].getJavaStackFrame() == javaFrames[ i ] )
 						{
 							// Reuse this frame.
-							newEGLFrames[ i ] = eglFrames[ j ];
+							newEGLFrames[ size ] = eglFrames[ j ];
 							break;
 						}
 					}
 				}
 				
-				if ( newEGLFrames[ i ] == null )
+				// Filtering rules:
+				// 1. don't filter anything if the system property is set
+				// 2. don't filter the top frame
+				// 3. filter the initial main method (if there is one - there won't be if running on a server)
+				if ( newEGLFrames[ size ] == null
+						&& (!FILTER_RUNTIMES || (i == 0 || (!filterFrameType( (IJavaStackFrame)javaFrames[ i ] ) && (i + 1 < javaFrames.length || !isMainMethod( (IJavaStackFrame)javaFrames[ i ] ))))) )
 				{
-					newEGLFrames[ i ] = new EGLJavaStackFrame( (IJavaStackFrame)javaFrames[ i ], this );
+					newEGLFrames[ size ] = new EGLJavaStackFrame( (IJavaStackFrame)javaFrames[ i ], this );
+				}
+				
+				if ( newEGLFrames[ size ] != null )
+				{
+					// Only increment if we didn't filter it.
+					size++;
 				}
 			}
 			previousJavaFrames = javaFrames;
-			eglFrames = newEGLFrames;
+			
+			if ( size == newEGLFrames.length )
+			{
+				eglFrames = newEGLFrames;
+			}
+			else
+			{
+				eglFrames = new EGLJavaStackFrame[ size ];
+				System.arraycopy( newEGLFrames, 0, eglFrames, 0, size );
+			}
 		}
 		
 		return eglFrames;
@@ -257,29 +289,121 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLThread
 			return;
 		}
 		
+		List<DebugEvent> savedEvents = new ArrayList<DebugEvent>();
 		Object src = events[ 0 ].getSource();
 		if ( src == javaThread )
 		{
 			for ( int i = 0; i < events.length; i++ )
 			{
-				if ( src instanceof IThread )
+				switch ( events[ i ].getKind() )
 				{
-					switch ( events[ i ].getKind() )
-					{
-						case DebugEvent.CREATE:
-							fireCreationEvent();
-							break;
-						case DebugEvent.TERMINATE:
-							getEGLJavaDebugTarget().removeThread( javaThread );
-							fireTerminateEvent();
-							break;
-						default:
-							super.handleDebugEvents( events );
-							break;
-					}
+					case DebugEvent.CREATE:
+						fireCreationEvent();
+						break;
+					case DebugEvent.TERMINATE:
+						getEGLJavaDebugTarget().removeThread( javaThread );
+						fireTerminateEvent();
+						break;
+					case DebugEvent.RESUME:
+						if ( FILTER_RUNTIMES && events[ i ].getDetail() == DebugEvent.STEP_INTO )
+						{
+							IStackFrame topJavaFrame = previousJavaFrames == null || previousJavaFrames.length == 0
+									? null
+									: previousJavaFrames[ 0 ];
+							EGLJavaStackFrame topEGLFrame = eglFrames == null || eglFrames.length == 0
+									? null
+									: eglFrames[ 0 ];
+							
+							if ( topEGLFrame != null && topEGLFrame.getJavaElement() == topJavaFrame )
+							{
+								try
+								{
+									topEGLFrame.setLineBeforeStepInto( topEGLFrame.getLineNumber() );
+								}
+								catch ( DebugException e )
+								{
+									topEGLFrame.setLineBeforeStepInto( -1 );
+								}
+							}
+						}
+						savedEvents.add( events[ i ] );
+						break;
+					case DebugEvent.SUSPEND:
+						if ( FILTER_RUNTIMES && events[ i ].getDetail() == DebugEvent.STEP_END )
+						{
+							try
+							{
+								IJavaStackFrame topJavaFrame = (IJavaStackFrame)javaThread.getTopStackFrame();
+								if ( topJavaFrame != null )
+								{
+									if ( shouldStepInto( topJavaFrame ) )
+									{
+										topJavaFrame.stepInto();
+										break;
+									}
+									else if ( shouldStepReturn( topJavaFrame ) )
+									{
+										topJavaFrame.stepReturn();
+										break;
+									}
+									else
+									{
+										// If we forced a return after a step into, we might be at the same line as before.
+										// If we're at the same line, do another step into so the user isn't confused.
+										EGLJavaStackFrame topEGLFrame = (EGLJavaStackFrame)getTopStackFrame();
+										if ( topEGLFrame != null && topEGLFrame.getJavaStackFrame() == topJavaFrame
+												&& topEGLFrame.getLineBeforeStepInto() != -1
+												&& topEGLFrame.getLineBeforeStepInto() == topEGLFrame.getLineNumber() )
+										{
+											stepInto();
+											break;
+										}
+									}
+								}
+							}
+							catch ( DebugException de )
+							{
+								// We tried, we failed, but we carry on...
+							}
+						}
+						savedEvents.add( events[ i ] );
+						break;
+					default:
+						savedEvents.add( events[ i ] );
+						break;
 				}
 			}
 		}
+		
+		if ( savedEvents.size() > 0 )
+		{
+			super.handleDebugEvents( savedEvents.toArray( new DebugEvent[ savedEvents.size() ] ) );
+		}
+	}
+	
+	private boolean filterFrameType( IJavaStackFrame frame ) throws DebugException
+	{
+		return shouldStepInto( frame ) || shouldStepReturn( frame );
+	}
+	
+	private boolean shouldStepReturn( IJavaStackFrame frame ) throws DebugException
+	{
+		// TODO make this dynamic/extensible. For now just include JRE packages.
+		String type = frame.getDeclaringTypeName();
+		return type.startsWith( "java." ) || type.startsWith( "javax." ) || type.startsWith( "com.ibm." ) || type.startsWith( "com.sun." )
+				|| type.startsWith( "sun." );
+	}
+	
+	private boolean shouldStepInto( IJavaStackFrame frame ) throws DebugException
+	{
+		// TODO make this dynamic/extensible. For now just include EDT runtime packages.
+		String type = frame.getDeclaringTypeName();
+		return type.startsWith( "org.eclipse.edt." ) || type.startsWith( "egl." );
+	}
+	
+	private boolean isMainMethod( IJavaStackFrame frame ) throws DebugException
+	{
+		return frame.isStatic() && "main".equals( frame.getName() ) && "([Ljava/lang/String;)V".equals( frame.getSignature() );
 	}
 	
 	/**
