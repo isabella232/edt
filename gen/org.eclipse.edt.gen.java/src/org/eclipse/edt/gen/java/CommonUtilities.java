@@ -378,7 +378,7 @@ public class CommonUtilities {
 		if (qualifiedName == null || qualifiedName.indexOf('.') < 0)
 			return;
 		// check the types list we have already
-		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.Annotation_partTypesImported);
+		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partTypesImported);
 		for (String imported : typesImported) {
 			if (qualifiedName.equalsIgnoreCase(imported)) {
 				// it was already found, so we have done this logic before. Simply return

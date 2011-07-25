@@ -88,7 +88,7 @@ public class Context extends EglContext {
 		String value = super.getPrimitiveMapping(item);
 		if (value != null) {
 			// check to see if this is in the list of imported types. If it is, then we can use the short name.
-			List<String> typesImported = (List<String>) this.getAttribute(this.getClass(), Constants.Annotation_partTypesImported);
+			List<String> typesImported = (List<String>) this.getAttribute(this.getClass(), Constants.SubKey_partTypesImported);
 			for (String imported : typesImported) {
 				if (value.equalsIgnoreCase(imported)) {
 					// it was is the table, so use the short name
@@ -110,7 +110,7 @@ public class Context extends EglContext {
 		String value = super.getPrimitiveMapping(type);
 		if (value != null) {
 			// check to see if this is in the list of imported types. If it is, then we can use the short name.
-			List<String> typesImported = (List<String>) this.getAttribute(this.getClass(), Constants.Annotation_partTypesImported);
+			List<String> typesImported = (List<String>) this.getAttribute(this.getClass(), Constants.SubKey_partTypesImported);
 			for (String imported : typesImported) {
 				if (value.equalsIgnoreCase(imported)) {
 					// it was is the table, so use the short name
@@ -131,7 +131,7 @@ public class Context extends EglContext {
 	public String getNativeImplementationMapping(Type type) {
 		String value = super.getNativeImplementationMapping(type);
 		// check to see if this is in the list of imported types. If it is, then we can use the short name.
-		List<String> typesImported = (List<String>) this.getAttribute(this.getClass(), Constants.Annotation_partTypesImported);
+		List<String> typesImported = (List<String>) this.getAttribute(this.getClass(), Constants.SubKey_partTypesImported);
 		for (String imported : typesImported) {
 			if (value.equalsIgnoreCase(imported)) {
 				// it was is the table, so use the short name
@@ -151,7 +151,7 @@ public class Context extends EglContext {
 	public String getNativeInterfaceMapping(Type type) {
 		String value = super.getNativeInterfaceMapping(type);
 		// check to see if this is in the list of imported types. If it is, then we can use the short name.
-		List<String> typesImported = (List<String>) this.getAttribute(this.getClass(), Constants.Annotation_partTypesImported);
+		List<String> typesImported = (List<String>) this.getAttribute(this.getClass(), Constants.SubKey_partTypesImported);
 		for (String imported : typesImported) {
 			if (value.equalsIgnoreCase(imported)) {
 				// it was is the table, so use the short name
