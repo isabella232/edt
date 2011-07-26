@@ -84,8 +84,6 @@ public class EGLLibrariesWorkbookPage extends BuildPathBasePage {
 		String[] buttonLabels= new String[] { 
 			NewWizardMessages.LibrariesWorkbookPage_libraries_addeglar_button,	
 			NewWizardMessages.LibrariesWorkbookPage_libraries_addexteglar_button,
-//			NewWizardMessages.LibrariesWorkbookPage_libraries_addvariable_button, 
-//			NewWizardMessages.LibrariesWorkbookPage_libraries_addlibrary_button, 
 			NewWizardMessages.LibrariesWorkbookPage_libraries_edit_button, 
 			NewWizardMessages.LibrariesWorkbookPage_libraries_remove_button
 		};		
@@ -114,6 +112,7 @@ public class EGLLibrariesWorkbookPage extends BuildPathBasePage {
 				}
 			});
 		}
+		updateEnabledState();
 	}
 	
 	private void updateLibrariesList() {
@@ -173,10 +172,11 @@ public class EGLLibrariesWorkbookPage extends BuildPathBasePage {
 		}
 
 		public Object[] getChildren(TreeListDialogField field, Object element) {
-			if (element instanceof PPListElement) {
+			//RTC76899: disable source attachment
+			/*if (element instanceof PPListElement) {
 				if(!((PPListElement) element).getEGLPathEntry().isBinaryProject())
 					return ((PPListElement) element).getChildren(false);
-			}
+			}*/
 			return EMPTY_ARR;
 		}
 
@@ -486,8 +486,19 @@ public class EGLLibrariesWorkbookPage extends BuildPathBasePage {
 	private void libaryPageSelectionChanged(DialogField field) {
 		updateEnabledState();
 	}
+	
+	private void disableAllButtons(){
+		fLibrariesList.enableButton(IDX_ADDJAR, false);
+		fLibrariesList.enableButton(IDX_ADDEXT, false);
+		fLibrariesList.enableButton(IDX_EDIT, false);
+		fLibrariesList.enableButton(IDX_REMOVE, false);
+	}
 
 	private void updateEnabledState() {
+		if(fCurrProject != null && fCurrProject.isBinary()){
+			disableAllButtons();
+			return;
+		}
 		List selElements= fLibrariesList.getSelectedElements();
 		fLibrariesList.enableButton(IDX_EDIT, canEdit(selElements));
 		fLibrariesList.enableButton(IDX_REMOVE, canRemove(selElements));

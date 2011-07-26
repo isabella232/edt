@@ -51,6 +51,7 @@ import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfigurationOperation;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.PreferencePage;
@@ -87,9 +88,8 @@ public class EGLProjectBuildPathPropertyPage extends PropertyPage {
 	private CheckedListDialogField 	fClassPathList;
 	private StringButtonDialogField fBuildPathDialogField;
 	private ProjectsWorkbookPage 	fProjectsPage;	
-	//69755: Remove some of UI for EGLAR & binary project for tech-preview in 8011
-	//private EGLLibrariesWorkbookPage fLibrariesPage;	
-	//69755	
+	private EGLLibrariesWorkbookPage fLibrariesPage;
+	private EGLPathOrderingWorkbookPage fOrderPage;
 
 	/**
 	 * @see PreferencePage#createContents(Composite)
@@ -298,26 +298,25 @@ public class EGLProjectBuildPathPropertyPage extends PropertyPage {
 		Image cpoImage= PluginImages.DESC_OBJS_EGLBUILDPATH_ORDER.createImage();
 //		composite.addDisposeListener(new ImageDisposer(cpoImage));	
 		
-		EGLPathOrderingWorkbookPage ordpage= new EGLPathOrderingWorkbookPage(fClassPathList);		
+		fOrderPage = new EGLPathOrderingWorkbookPage(fClassPathList);		
 		item= new TabItem(folder, SWT.NONE);
 		item.setText(NewWizardMessages.BuildPathsBlockTabOrder);
 		item.setImage(cpoImage);
-		item.setData(ordpage);
-		item.setControl(ordpage.getControl(folder));	
-		//69755: Remove some of UI for EGLAR & binary project for tech-preview in 8011
-//		Image libImage= EGLPluginImages.DESC_OBJS_EGLBUILDPATH_ORDER.createImage();
-//		fLibrariesPage = new EGLLibrariesWorkbookPage(fClassPathList);
-//		item= new TabItem(folder, SWT.NONE);
-//		item.setText(NewWizardMessages.BuildPathsBlockTabLibraries);
-//		item.setImage(libImage);
-//		item.setData(fLibrariesPage);
-//		item.setControl(fLibrariesPage.getControl(folder));	
-		//69755
+		item.setData(fOrderPage);
+		item.setControl(fOrderPage.getControl(folder));	
+		
+		Image libImage= PluginImages.DESC_OBJS_EGLBUILDPATH_ORDER.createImage();
+		fLibrariesPage = new EGLLibrariesWorkbookPage(fClassPathList);
+		item= new TabItem(folder, SWT.NONE);
+		item.setText(NewWizardMessages.BuildPathsBlockTabLibraries);
+		item.setImage(libImage);
+		item.setData(fLibrariesPage);
+		item.setControl(fLibrariesPage.getControl(folder));	
 			
 		if (fCurrProject != null) {
-		//69755: Remove some of UI for EGLAR & binary project for tech-preview in 8011
-//			fLibrariesPage.init(EGLCore.create(fCurrProject));
-		////69755	
+			fLibrariesPage.init(EGLCore.create(fCurrProject));
+			fProjectsPage.init(EGLCore.create(fCurrProject));
+			fOrderPage.init(EGLCore.create(fCurrProject));
 		}
 	}	
   
@@ -390,11 +389,12 @@ public class EGLProjectBuildPathPropertyPage extends PropertyPage {
 			fProjectsPage.init(fCurrEProject);
 		}
 			
-		//69755: Remove some of UI for EGLAR & binary project for tech-preview in 8011	
-//		if (fLibrariesPage != null) {
-//			fLibrariesPage.init(fCurrEProject);
-//		}
-		//69755
+		if (fLibrariesPage != null) {
+			fLibrariesPage.init(fCurrEProject);
+		}
+		if (fOrderPage != null) {
+			fOrderPage.init(fCurrEProject);
+		}
 		
 		fOutputLocationPath = outputLocation;
 	}	
@@ -435,6 +435,26 @@ public class EGLProjectBuildPathPropertyPage extends PropertyPage {
 			} else {
 				fEGLPathStatus.setWarning(NewWizardMessages.bind(NewWizardMessages.BuildPathsBlockWarningEntriesMissing, String.valueOf(nEntriesMissing))); //$NON-NLS-1$
 			}
+		}
+		
+		if (nEntriesMissing > 0) {
+			if (nEntriesMissing == 1) {
+				fEGLPathStatus.setWarning(NewWizardMessages.bind(
+						NewWizardMessages.BuildPathsBlockWarningEntryMissing,
+						entryMissing.getPath().toString())); //$NON-NLS-1$
+				setMessage(NewWizardMessages.bind(
+						NewWizardMessages.BuildPathsBlockWarningEntryMissing,
+						entryMissing.getPath().toString()), IMessageProvider.WARNING);
+				
+			} else {
+				fEGLPathStatus.setWarning(NewWizardMessages.bind(
+						NewWizardMessages.BuildPathsBlockWarningEntriesMissing,
+						String.valueOf(nEntriesMissing))); //$NON-NLS-1$
+				setMessage(NewWizardMessages.bind(
+						NewWizardMessages.BuildPathsBlockWarningEntryMissing,
+						String.valueOf(nEntriesMissing)), IMessageProvider.WARNING);
+			}
+			setErrorMessage(null);
 		}
 				
 /*		if (fCurrJProject.hasClasspathCycle(entries)) {

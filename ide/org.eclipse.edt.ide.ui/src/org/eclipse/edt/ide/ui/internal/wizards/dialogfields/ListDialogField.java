@@ -889,5 +889,7 @@ public class ListDialogField extends DialogField {
 	}	
 
 
-
+	public void setTableEnablement(boolean enable){
+		fTable.getControl().setEnabled(enable);
+	}
 }

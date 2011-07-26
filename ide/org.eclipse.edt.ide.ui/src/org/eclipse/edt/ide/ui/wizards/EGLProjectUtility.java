@@ -11,11 +11,17 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.wizards;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -27,13 +33,18 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.edt.compiler.internal.eglar.EglarFile;
+import org.eclipse.edt.compiler.internal.eglar.EglarFileCache;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.EGLNature;
+import org.eclipse.edt.ide.core.internal.model.RUINature;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.PPListElement;
+import org.eclipse.edt.ide.core.utils.EGLProjectFileUtility;
+import org.eclipse.edt.ide.core.utils.EGLProjectInfoUtility;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -75,16 +86,15 @@ public final class EGLProjectUtility {
 		}
 	}
 	
-//	public static void addRUINature(IProject project, IProgressMonitor monitor) throws CoreException {
-//TODO EDT Add RUINature
-//		boolean hasRUINatureID = project.hasNature(RUINature.RUI_NATURE_ID);
-//		
-//		if (!hasRUINatureID) {	
-//			addNatureToProject(project, RUINature.RUI_NATURE_ID, monitor);
-//		} else {
-//			monitor.worked(1);
-//		}
-//	}
+	public static void addRUINature(IProject project, IProgressMonitor monitor) throws CoreException {
+		boolean hasRUINatureID = project.hasNature(RUINature.RUI_NATURE_ID);
+		
+		if (!hasRUINatureID) {	
+			addNatureToProject(project, RUINature.RUI_NATURE_ID, monitor);
+		} else {
+			monitor.worked(1);
+		}
+	}
 
 	private static void addNatureToProject(IProject proj, String natureId,
 			IProgressMonitor monitor) throws CoreException {
@@ -131,11 +141,10 @@ public final class EGLProjectUtility {
 		}
 	}
 
-	public static void createEGLConfiguration(ProjectConfiguration configuration,
+	public static IEGLPathEntry[] createEGLConfiguration(ProjectConfiguration configuration,
 			IProgressMonitor monitor) throws CoreException {
 
-		IWorkspaceRoot fWorkspaceRoot = ResourcesPlugin.getWorkspace()
-				.getRoot();
+		IWorkspaceRoot fWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 		IProject project= fWorkspaceRoot.getProject(configuration.getProjectName());
 		IEGLProject fCurrEProject = EGLCore.create(project);
 
@@ -144,8 +153,7 @@ public final class EGLProjectUtility {
 			eglPathEntries = initializeEGLPathEntries(project);
 		}
 
-		IPath eglOutputLocation = EGLProjectUtility
-				.getDefaultEGLOutputPath(fCurrEProject);
+		IPath eglOutputLocation = EGLProjectUtility.getDefaultEGLOutputPath(fCurrEProject);
 		// create and set the output path first
 		if (!fWorkspaceRoot.exists(eglOutputLocation)) {
 			IFolder folder = fWorkspaceRoot.getFolder(eglOutputLocation);
@@ -183,6 +191,8 @@ public final class EGLProjectUtility {
 		monitor.worked(1);
 		fCurrEProject.setRawEGLPath(classpath, eglOutputLocation,
 				new SubProgressMonitor(monitor, 7));
+		
+		return classpath;
 
 	}
 
@@ -474,4 +484,302 @@ public final class EGLProjectUtility {
 		}		
 		return false;
 	}
+   
+   public static EglarFile createEglarFileFromPathEntry(IEGLProject project, IEGLPathEntry entry) throws IOException {
+	    	IPath entryPath = entry.getPath();
+	    	String eglarFile = getEglarAbsolutePath(entryPath, project.getProject());
+	    	
+	    	if(new File(eglarFile).exists()){
+	    		return EglarFileCache.instance.getEglarFile(eglarFile);
+	    	}
+	    	else{
+	    		return null;
+	    	}
+   }
+   
+   public static String getEglarAbsolutePath(IPath path, IProject project){
+   	  String eglarFilePath = path.toOSString();
+   	//if the eglar is external, then just use the path as the path for EglarFile
+   	//else, consider if the eglar in under the given project or not.
+   	if( ResourcesPlugin.getWorkspace().getRoot().exists( path )){
+   		int index = eglarFilePath.indexOf(File.separator);
+   		if(index == 0){
+   			eglarFilePath = eglarFilePath.substring(1);
+   			index = eglarFilePath.indexOf(File.separator);
+   		}
+   		if(index > -1){
+   			String eglarProjName = eglarFilePath.substring(0, index);
+   			if(eglarProjName.equals(project.getName())){	//use the eglar under this project
+   				eglarFilePath = project.getProject().getLocation().toFile().getParentFile().getAbsolutePath() + File.separator + eglarFilePath;
+   			} else{	//use eglar under other project
+   				IProject eglarProject = project.getProject().getWorkspace().getRoot().getProject(eglarProjName);
+   				eglarFilePath = eglarProject.getProject().getLocation().toFile().getParentFile().getAbsolutePath() + File.separator + eglarFilePath;
+   			}
+   		}
+   	}
+   	return eglarFilePath;
+   }
+   
+   public static IFile[] createFilesFromEglar(IResource destination, EglarFile eglarFile, String[] entries, boolean useEntryFolder){
+		IFile[] files = new IFile[entries.length];
+		for(int i=0; i<entries.length; i++){
+			String entryName = entries[i];
+			if(useEntryFolder){
+				files[i] = EGLProjectUtility.createFileFromEglar(destination, eglarFile, entryName, entryName);
+			}
+			else{
+				String fileName = entryName;
+				int index = fileName.lastIndexOf("/");
+				if(index > -1){
+					fileName = fileName.substring(index + 1);
+				}				
+				files[i] = EGLProjectUtility.createFileFromEglar(destination, eglarFile, entryName, fileName);
+			}
+		}
+		return files;
+	}
+   
+   public static IFile[] createFilesFromEglar(IResource destination, EglarFile eglarFile, String[] entries){
+		return createFilesFromEglar(destination, eglarFile, entries, true);
+   }
+   
+   
+   /**
+	 * copy the jar from eglar into the destination location under project
+	 * @param destination
+	 * @param eglarFile
+	 * @param jarEntry
+	 */
+	public static IFile createFileFromEglar(IResource destination, EglarFile eglarFile, String entryName, String createFileName){
+		try {
+			if(!(destination instanceof IContainer)){
+				return null;
+			}
+			if(!destination.exists()){
+				if(destination instanceof IFolder) {
+					EGLProjectFileUtility.createFolder(destination.getProject(), destination.getProjectRelativePath());
+				}
+				else {
+					return null;
+				}
+			}
+			
+			ZipEntry zipEntry = eglarFile.getEntry(entryName);
+			IFile targetResource = ((IContainer)destination).getFile(new Path(createFileName));
+			InputStream is = eglarFile.getInputStream(zipEntry);
+			if(targetResource.exists()){
+				targetResource.setContents(is,IResource.KEEP_HISTORY, null);
+			}
+			else{
+				int index = createFileName.lastIndexOf("/");
+				if(index > 0){
+					String folder = createFileName.substring(0, index);
+					EGLProjectFileUtility.createFolder((IContainer)destination, new Path(folder));
+				}
+				targetResource.create(is, false, null);
+			}
+			return targetResource;			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static void addClasspathEntriesIfNecessary(IProject project, IClasspathEntry[] classpathEntries) throws CoreException{
+		IJavaProject javaProject; //The Java "view" of the project.
+		if(project.hasNature(JavaCore.NATURE_ID)){
+			javaProject = JavaCore.create(project);
+			int index = -1;
+			IClasspathEntry curEntry;
+			List<IClasspathEntry> newClasspaths = new ArrayList<IClasspathEntry>();
+			IClasspathEntry[] oldEntries = javaProject.getRawClasspath();
+			
+			for(IClasspathEntry pathEntry: classpathEntries){
+				// Look for the jar file in the current build path
+				for (int i = 0; i < oldEntries.length; i++){
+					curEntry = oldEntries[i];
+					if (curEntry.getPath() != null ) 
+					{
+						if (  curEntry.getPath().toOSString().equalsIgnoreCase(pathEntry.getPath().toOSString()) )
+						{
+							index = i;
+							break;
+						} 
+					}
+				}			
+				// We will add a new entry if the entry does not exist.
+				if ( index < 0 )
+				{
+					newClasspaths.add(pathEntry);
+				}
+			}
+			addClasspathLibraryEntries(javaProject, newClasspaths.toArray(new IClasspathEntry[newClasspaths.size()]));
+		}
+	}
+	
+	public static void addClasspathLibraryEntries( IJavaProject javaProject, IClasspathEntry[] classpathEntries )throws CoreException{
+		IClasspathEntry[] oldEntries = javaProject.getRawClasspath();
+		IClasspathEntry [] newEntries = new IClasspathEntry[oldEntries.length + classpathEntries.length];
+		
+		System.arraycopy(oldEntries, 0, newEntries, 0, oldEntries.length);
+		for(int i=0; i<classpathEntries.length; i++){
+			newEntries[oldEntries.length + i] = classpathEntries[i];
+		}
+		javaProject.setRawClasspath(newEntries, null);
+	}
+	
+	public static IFile[] removeFilesFromEglar(IResource target, EglarFile eglarFile, String[] entries, boolean useEntryFolder){
+		IFile[] files = new IFile[entries.length];
+		for(int i=0; i<entries.length; i++){
+			String entryName = entries[i];
+			if(useEntryFolder){
+				files[i] = EGLProjectUtility.removeFileFromEglar(target, eglarFile, entryName, entryName);
+			}
+			else{
+				String fileName = entryName;
+				int index = fileName.lastIndexOf("/");
+				if(index > -1){
+					fileName = fileName.substring(index + 1);
+				}				
+				files[i] = EGLProjectUtility.removeFileFromEglar(target, eglarFile, entryName, fileName);
+			}
+		}
+		return files;
+	}
+	
+	public static IFile[] removeFilesFromEglar(IResource target, EglarFile eglarFile, String[] entries){
+		return removeFilesFromEglar(target, eglarFile, entries, true);
+	}
+	
+	/**
+	 * copy the jar from eglar into the destination location under project
+	 * @param destination
+	 * @param eglarFile
+	 * @param jarEntry
+	 */
+	public static IFile removeFileFromEglar(IResource target, EglarFile eglarFile, String entryName, String createFileName){
+		try {
+			if(!target.exists() || !(target instanceof IContainer)){
+				return null;
+			}
+			
+			ZipEntry zipEntry = eglarFile.getEntry(entryName);
+			IFile toDelResource = ((IContainer)target).getFile(new Path(createFileName));
+			InputStream is = eglarFile.getInputStream(zipEntry);
+			if(toDelResource.exists()){
+				toDelResource.delete(false, null);
+				
+				List<String> parents = new ArrayList<String>();
+				String fileName = createFileName;
+				int index = fileName.lastIndexOf("/");
+				while(index > 0){
+					fileName = fileName.substring(0, index);
+					parents.add(fileName);
+					index = fileName.lastIndexOf("/");
+				}
+				
+				for(String parent: parents){
+					IFolder parentFolder = ((IContainer)target).getFolder(new Path(parent));
+					if(parentFolder.exists()){
+						if(parentFolder.members().length == 0){
+							parentFolder.delete(false, null);	//the folder is introduced by adding eglar library, delete it
+						}
+					}
+					else{
+						return null;
+					}
+				}
+			}
+			else{
+				return null;
+			}
+			return toDelResource;		
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static void removeClasspathLibraryEntriesIfNecessary( IProject project, IPath[] jarPaths ) throws CoreException {
+		IJavaProject javaProject; //The Java "view" of the project.
+		if(project.hasNature(JavaCore.NATURE_ID)){
+			javaProject = JavaCore.create(project);
+			int jarIndex = -1;
+			IClasspathEntry curEntry;
+			List<IPath> delJarPaths = new ArrayList<IPath>(); 
+			
+			for(IPath jarPath: jarPaths){
+//				String jarFile = jarPath.lastSegment();
+				IClasspathEntry[] oldEntries = javaProject.getRawClasspath();
+		
+				// Look for the jar file in the current build path
+				for (int i = 0; i < oldEntries.length; i++)
+				{
+					curEntry = oldEntries[i];
+					if (curEntry.getPath() != null ) 
+					{
+						if (curEntry.getPath().equals(jarPath))
+						{
+							jarIndex = i;
+							break;
+						} 	
+					}
+				}	
+				
+				// We will add a new entry into delJarPaths if the entry does exist.
+				if ( jarIndex > 0 )
+				{
+					delJarPaths.add(jarPath);
+				}
+				
+			}
+			removeClasspathLibraryEntries(javaProject, delJarPaths.toArray(new IPath[delJarPaths.size()]));
+		}
+	}
+	
+	public  static void removeClasspathLibraryEntries( IJavaProject javaProject, IPath[] jarPaths ) throws CoreException {
+		IClasspathEntry[] oldEntries = javaProject.getRawClasspath();
+		if(oldEntries.length < jarPaths.length)
+			return;		//there are more paths to be deleted than the existing paths, should not reach here
+		IClasspathEntry [] newEntries = new IClasspathEntry[oldEntries.length - jarPaths.length];
+		int k = 0;
+		
+		for (int i = 0; i < oldEntries.length; i++) {
+			boolean isEntryKept = true;
+			for(int j = 0; j < jarPaths.length; j++){
+				if(jarPaths[j].toString().equalsIgnoreCase(oldEntries[i].getPath().toString())){
+					isEntryKept = false;
+					break;
+				}
+			}
+			if(isEntryKept){
+				newEntries[k++] = oldEntries[i];
+			}
+		}		
+		javaProject.setRawClasspath(newEntries, null);
+	}		
+	
+	public static void modifyClasspathLibraryEntry(IProject project, IClasspathEntry[] modifiedEntries) throws CoreException{
+		IJavaProject javaProject; //The Java "view" of the project.
+		if(project.hasNature(JavaCore.NATURE_ID)){
+			javaProject = JavaCore.create(project);
+			IClasspathEntry[] entries = javaProject.getRawClasspath();
+			IClasspathEntry[] newEntries = entries;
+			
+			for(int j = 0; j < modifiedEntries.length; j++){
+				for (int i = 0; i < entries.length; i++){
+					if(modifiedEntries[j].getPath().toOSString().equalsIgnoreCase(entries[i].getPath().toOSString())){
+						newEntries[i] = modifiedEntries[j];
+						break;
+					}
+				}
+			}
+			javaProject.setRawClasspath(newEntries, null);
+		}
+	}
+	
 }

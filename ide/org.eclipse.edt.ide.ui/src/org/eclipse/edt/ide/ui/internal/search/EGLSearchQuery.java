@@ -102,10 +102,10 @@ public class EGLSearchQuery implements ISearchQuery, IEGLSearchConstants
 		}
 		catch(EGLModelException ex)
 		{
-		    
+			System.out.println("EGLSearchQuery"+ex);
 		}
 		catch(NullPointerException e){
-			
+			System.out.println("EGLSearchQuery"+e);
 		}
 	
 		String message= EGLSearchMessages.EGLSearchQueryStatusOkMessage;

@@ -22,6 +22,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import org.eclipse.edt.ide.core.model.IEGLProject;
+
 public class EGLPathOrderingWorkbookPage extends BuildPathBasePage {
 	
 	private ListDialogField fClassPathList;
@@ -65,4 +67,15 @@ public class EGLPathOrderingWorkbookPage extends BuildPathBasePage {
 		return true;
 	}
 
+	public void init(IEGLProject jproject) {
+		if(jproject != null && jproject.isBinary()){
+			disableAllButtons();
+			fClassPathList.setTableEnablement(false);
+		}
+	}
+	
+	private void disableAllButtons(){
+		fClassPathList.enableButton(3, false);
+		fClassPathList.enableButton(4, false);
+	}
 }

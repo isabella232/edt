@@ -16,11 +16,11 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRootContainer;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragment;
-import org.eclipse.edt.ide.core.model.JarPackageFragmentRootContainer;
 import org.eclipse.edt.ide.ui.internal.EGLElementImageDescriptor;
 import org.eclipse.edt.ide.ui.internal.viewsupport.EGLElementLabels;
 import org.eclipse.edt.ide.ui.internal.viewsupport.ElementImageProvider;
@@ -159,7 +159,7 @@ public class EGLElementLabelProvider extends LabelProvider implements ICommonLab
 		int searchDepth = IResource.DEPTH_INFINITE;
 		
 		try{
-			if(element instanceof JarPackageFragmentRootContainer) {
+			if(element instanceof EglarPackageFragmentRootContainer) {
 				
 			}
 			else if(element instanceof IEGLProject || element instanceof IEGLElement){

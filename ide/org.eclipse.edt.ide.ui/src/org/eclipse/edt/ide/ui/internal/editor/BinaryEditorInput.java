@@ -16,12 +16,13 @@ import java.util.StringTokenizer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.edt.ide.core.internal.model.JarPackageFragment;
-import org.eclipse.edt.ide.core.internal.model.JarPackageFragmentRoot;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragment;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IClassFile;
 import org.eclipse.edt.ide.core.model.IEGLProject;
+import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.IStorageEditorInput;
@@ -69,8 +70,9 @@ public class BinaryEditorInput implements IStorageEditorInput {
     	}
 		IEGLProject eglProj = EGLCore.create(proj);
 		try {
-			JarPackageFragmentRoot packageFragmentRoot = (JarPackageFragmentRoot)eglProj.getPackageFragmentRoot(binaryReadOnlyFile.getEGLARPath());
-			if(packageFragmentRoot != null && packageFragmentRoot.exists()){
+			IPackageFragmentRoot myRoot = eglProj.getPackageFragmentRoot(binaryReadOnlyFile.getEGLARPath());
+			if(myRoot instanceof  EglarPackageFragmentRoot && myRoot.exists()){
+				EglarPackageFragmentRoot packageFragmentRoot = (EglarPackageFragmentRoot)myRoot;
 				String pkg = binaryReadOnlyFile.getPackage();
 				StringTokenizer token = new StringTokenizer(pkg, ".");
 				String[] pkgName = new String[token.countTokens()];
@@ -80,13 +82,11 @@ public class BinaryEditorInput implements IStorageEditorInput {
 					//but inside eglar, the package name is case insensitive, so convert to lower case
 					pkgName[i++] = token.nextToken().toLowerCase();
 				}
-				JarPackageFragment packageFragment = (JarPackageFragment)packageFragmentRoot.getPackageFragment(pkgName);
+				EglarPackageFragment packageFragment = (EglarPackageFragment)packageFragmentRoot.getPackageFragment(pkgName);
 				if(packageFragment != null && packageFragment.exists()){
 					classFile = packageFragment.getClassFile(binaryReadOnlyFile.getName().toLowerCase());
 				}
 			}
-			
-			
 		} catch (EGLModelException e) {
 			e.printStackTrace();
 		}

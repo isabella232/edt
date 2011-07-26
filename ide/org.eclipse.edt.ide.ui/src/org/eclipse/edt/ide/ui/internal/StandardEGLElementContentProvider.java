@@ -19,7 +19,8 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.edt.ide.core.internal.model.JarPackageFragmentRoot;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRootContainer;
 import org.eclipse.edt.ide.core.internal.model.util.EGLModelUtil;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
@@ -33,7 +34,6 @@ import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.model.IParent;
 import org.eclipse.edt.ide.core.model.ISourceReference;
-import org.eclipse.edt.ide.core.model.JarPackageFragmentRootContainer;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -198,8 +198,8 @@ public class StandardEGLElementContentProvider implements ITreeContentProvider, 
 			else if(element instanceof IEGLProject){
 				return getPackageFragmentRoots((IEGLProject)element); 
 			}
-			if(element instanceof JarPackageFragmentRootContainer) {
-				return ((JarPackageFragmentRootContainer)element).getAllJarPackageFragmentRoot();
+			if(element instanceof EglarPackageFragmentRootContainer) {
+				return ((EglarPackageFragmentRootContainer)element).getAllJarPackageFragmentRoot();
 			}
 			if (element instanceof IPackageFragmentRoot) 
 				return getPackageFragments((IPackageFragmentRoot)element);
@@ -253,8 +253,8 @@ public class StandardEGLElementContentProvider implements ITreeContentProvider, 
 			}	
 		}
 		
-		if(element instanceof JarPackageFragmentRootContainer) {
-			JarPackageFragmentRootContainer container = (JarPackageFragmentRootContainer)element;
+		if(element instanceof EglarPackageFragmentRootContainer) {
+			EglarPackageFragmentRootContainer container = (EglarPackageFragmentRootContainer)element;
 			return container.hasJarPackageFragmentRoot();
 		}
 		
@@ -294,7 +294,7 @@ public class StandardEGLElementContentProvider implements ITreeContentProvider, 
 			
 		IPackageFragmentRoot[] roots= project.getPackageFragmentRoots();
 		List list= new ArrayList();
-		JarPackageFragmentRootContainer container = null;
+		EglarPackageFragmentRootContainer container = null;
 		boolean foundJarPkgRoot = false;
 		// filter out package fragments that correspond to projects and
 		// replace them with the package fragments directly
@@ -306,13 +306,13 @@ public class StandardEGLElementContentProvider implements ITreeContentProvider, 
 					list.add(children[k]);
 			} 
 			else if (hasChildren(root)) {
-				if(root instanceof JarPackageFragmentRoot && ((JarPackageFragmentRoot)root).isBinaryProject()) {
+				if(root instanceof EglarPackageFragmentRoot && ((EglarPackageFragmentRoot)root).isBinaryProject()) {
 					if(!foundJarPkgRoot) {
-						container = new JarPackageFragmentRootContainer(project);
+						container = new EglarPackageFragmentRootContainer(project);
 						foundJarPkgRoot = true;
 						list.add(container);
 					}
-					container.addJarPackageFragmentRoot((JarPackageFragmentRoot) root);
+					container.addJarPackageFragmentRoot((EglarPackageFragmentRoot) root);
 				} else {
 					list.add(root);	
 				}

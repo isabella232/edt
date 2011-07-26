@@ -1225,4 +1225,35 @@ Templates
 <!--                                                                                 -->
 <!-- =============================================================================== -->
    <extension-point id="eglprojectFileUtility" name="EglprojectFileUtility"/>
+   
+<!-- =========================================================================== -->
+<!-- Export wizard category                                                      -->
+<!-- =========================================================================== -->
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <category
+	     name="%exportWizards.category"
+	     id="com.ibm.etools.EGL">
+	  </category>
+   </extension>
+   
+<!-- =========================================================================== -->
+<!-- EGLAR Packager                                                              -->
+<!-- =========================================================================== -->
+ <extension
+         point="org.eclipse.ui.exportWizards">
+      <wizard
+            name="%eglarExportWizard.label"
+            icon="icons/obj16/eglfile_obj.gif"
+            class="org.eclipse.edt.ide.ui.internal.eglarpackager.EglarPackageWizard"
+            category="com.ibm.etools.EGL"
+            id="org.eclipse.edt.ide.ui.internal.eglarpackager.EglarPackageWizard">
+         <description>
+            %eglarExportWizard.description
+         </description>
+         <selection
+               class="org.eclipse.core.resources.IProject">
+         </selection>
+      </wizard>
+   </extension>
 </plugin>

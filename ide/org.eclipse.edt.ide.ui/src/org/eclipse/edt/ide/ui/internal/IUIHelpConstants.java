@@ -281,5 +281,6 @@ public interface IUIHelpConstants {
 	public static final String EGLDDWIZ_ADDWS = PREFIX + "ddwiz0011";
 	
 	public static final String EGLAR_EXPORT_WIZARD = PREFIX + "eglar_export_wizard";
+	public static final String EGLAR_OPTIONS_WIZARD_PAGE  = PREFIX + "eglar_export_wizard_option";
 	public static final String BINARY_PROJECT_EXPORT_WIZARD = PREFIX + "binary_project_export_wizard";
 }

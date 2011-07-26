@@ -13,13 +13,13 @@ package org.eclipse.edt.ide.ui.internal.viewsupport;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.edt.ide.core.internal.model.JarPackageFragmentRoot;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRootContainer;
 import org.eclipse.edt.ide.core.internal.model.util.EGLModelUtil;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
-import org.eclipse.edt.ide.core.model.JarPackageFragmentRootContainer;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.jdt.ui.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -442,14 +442,10 @@ public class EGLElementLabels {
 			if (resource != null)
 				buf.append(resource.getProjectRelativePath().toString());
 			else
-				if(root instanceof JarPackageFragmentRootContainer) {
+				if(root instanceof EglarPackageFragmentRootContainer) {
 					buf.append(NewWizardMessages.EGLElementLabels_jar_package_fragment_root_container);
-				}
-				else if(root instanceof JarPackageFragmentRoot) {
-					int dotIndex = root.getElementName().lastIndexOf(".");
-					if(dotIndex != -1) {
-						buf.append(root.getElementName().subSequence(0, dotIndex));
-					}
+				} else if(root instanceof EglarPackageFragmentRoot) {
+					buf.append(root.getElementName());
 					buf.append(CONCAT_STRING);
 					buf.append(root.getPath().removeLastSegments(1).toOSString());
 				} else {

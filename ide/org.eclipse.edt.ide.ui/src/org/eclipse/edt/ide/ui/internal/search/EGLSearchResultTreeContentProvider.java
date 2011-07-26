@@ -18,6 +18,9 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragment;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot;
+import org.eclipse.edt.ide.core.model.IClassFile;
 import org.eclipse.edt.ide.core.model.IFunction;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
@@ -83,6 +86,15 @@ public class EGLSearchResultTreeContentProvider
     		IPart part = (IPart) element;
 			return part.getPackageFragment();
 		}
+    	if (element instanceof IClassFile) {
+			return ((IClassFile) element).getParent();
+		}
+    	if (element instanceof EglarPackageFragment){
+    		return ((EglarPackageFragment)element).getPackageFragmentRoot();
+    	}
+    	if (element instanceof EglarPackageFragmentRoot){
+    		return ((EglarPackageFragmentRoot)element).getEGLProject().getProject();
+    	}
     	
     	return null;
     }
@@ -182,12 +194,3 @@ public class EGLSearchResultTreeContentProvider
     	}
     }    
 }
-
-
-
-
-
-
-
-
-

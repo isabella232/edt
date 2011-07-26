@@ -15,7 +15,9 @@ import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.edt.ide.core.internal.model.JarPackageFragment;
+import org.eclipse.edt.ide.core.internal.model.ClassFile;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragment;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IFunction;
 import org.eclipse.edt.ide.core.model.IPart;
@@ -70,19 +72,20 @@ public class EGLSearchResultLabelProvider extends LabelProvider
 			} else {
 				return fullName;
 			}
-		} else if (element instanceof IPart) {
+		} else if (element instanceof IPart || element instanceof ClassFile) {
 			int matchCount= 0;
 			AbstractTextSearchResult result= fPage.getInput();
 			if (result != null)
 				matchCount= result.getMatchCount(element);
 			if (matchCount <= 1)
-				return ((IPart) element).getElementName();
+				return ((IEGLElement) element).getElementName();
 			String format= EGLSearchMessages.EGLSearchResultLabelProviderCountFormat;
 			return MessageFormat.format(format, new Object[] { ((IPart) element).getElementName(), new Integer(matchCount) });
+			
 		} else if(element instanceof IEGLElement) {
-			if(element instanceof JarPackageFragment){
-				String eglarName = ((IEGLElement) element).getParent().getElementName();
-				String projName = ((IEGLElement) element).getEGLProject().getElementName();
+			if(element instanceof EglarPackageFragment){
+				//String eglarName = ((IEGLElement) element).getParent().getElementName();
+				//String projName = ((IEGLElement) element).getEGLProject().getElementName();
 				//fix for RTC64685
 				//element is a JarPackageFragment; for those in the default package, "((IEGLElement) element).getElementName()"
 				//returns an empty string. Should handle such case.
@@ -90,7 +93,10 @@ public class EGLSearchResultLabelProvider extends LabelProvider
 				if(packageName == null || packageName.trim().length() == 0){
 					packageName = EGLSearchMessages.EGLSearchResultLabelProviderDefaultPackage;
 				}
-				return packageName + " - " + eglarName + " - " + projName;
+				return packageName;
+			} else if(element instanceof EglarPackageFragmentRoot){
+				String eglarName = ((IEGLElement) element).getElementName();
+				return eglarName;
 			}
 		}
 		else if (!(element instanceof IResource))
@@ -149,27 +155,23 @@ public class EGLSearchResultLabelProvider extends LabelProvider
 			ImageDescriptorRegistry reg = EDTUIPlugin.getImageDescriptorRegistry();
 			ImageDescriptor desp = PluginImages.DESC_OBJS_FUNCTION;
 			return reg.get(desp);
-		} else if (element instanceof IPart) {
+		} else if (element instanceof IPart || element instanceof ClassFile) {
 			ImageDescriptorRegistry reg = EDTUIPlugin.getImageDescriptorRegistry();
 			ImageDescriptor desp = PluginImages.DESC_OBJS_CFILE;
+			return reg.get(desp);
+		} else if (element instanceof EglarPackageFragmentRoot) {
+			ImageDescriptorRegistry reg = EDTUIPlugin.getImageDescriptorRegistry();
+			ImageDescriptor desp = PluginImages.DESC_OBJS_PACKFRAG_ROOT_EGLAR;
 			return reg.get(desp);
 		} else if(element instanceof IEGLElement) {
 			ImageDescriptorRegistry reg = EDTUIPlugin.getImageDescriptorRegistry();
 			ImageDescriptor desp = PluginImages.DESC_OBJS_PACKAGE;
 			return reg.get(desp);
-		}		
-		else if (!(element instanceof IResource))
+		} else if (!(element instanceof IResource))
 			return null; //$NON-NLS-1$
 
 		IResource resource= (IResource)element;
 		Image image= fLabelProvider.getImage(resource);
-/*
-		if (fDecorator != null) {
-			Image decoratedImage= fDecorator.decorateImage(image, resource);
-			if (decoratedImage != null)
-				return decoratedImage;
-		}
-*/
 		return image;
 	}
 
