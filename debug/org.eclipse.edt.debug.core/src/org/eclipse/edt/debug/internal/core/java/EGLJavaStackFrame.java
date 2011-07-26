@@ -64,6 +64,11 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLStackF
 	private SMAPFunctionInfo smapFunctionInfo;
 	
 	/**
+	 * The line number this frame was suspended at before a stepInto was performed.
+	 */
+	private int lineBeforeStepInto;
+	
+	/**
 	 * Constructor.
 	 * 
 	 * @param frame The Java stack frame.
@@ -345,5 +350,15 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLStackF
 	public void setSMAPFunctionInfo( SMAPFunctionInfo info )
 	{
 		this.smapFunctionInfo = info;
+	}
+	
+	public int getLineBeforeStepInto()
+	{
+		return this.lineBeforeStepInto;
+	}
+	
+	public void setLineBeforeStepInto( int line )
+	{
+		this.lineBeforeStepInto = line;
 	}
 }
