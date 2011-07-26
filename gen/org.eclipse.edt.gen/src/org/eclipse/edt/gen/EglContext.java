@@ -121,8 +121,8 @@ public abstract class EglContext extends TemplateContext {
 		// we are interested in scanning lifo for the entries
 		while (i > 0) {
 			Label label = this.labelStack.get(--i);
-			// are we trying to match the nearest generic or a specific one
-			if (type == Label.LABEL_TYPE_GENERIC || label.getType() == type)
+			// are we trying to match the nearest (non-if statement) generic or a specific one
+			if ((type == Label.LABEL_TYPE_GENERIC && label.getType() != Label.LABEL_TYPE_IF) || label.getType() == type)
 				return label;
 		}
 		return null;
@@ -177,7 +177,7 @@ public abstract class EglContext extends TemplateContext {
 	public IGenerationMessageRequestor getMessageRequestor() {
 		return messageRequestor;
 	}
-	
+
 	public void setMessageRequestor(IGenerationMessageRequestor requestor) {
 		this.messageRequestor = requestor;
 	}
@@ -311,10 +311,9 @@ public abstract class EglContext extends TemplateContext {
 		if (list == null)
 			return null;
 		Annotation annotation = findAnnotation(value, list);
-		if(annotation != null){
+		if (annotation != null) {
 			return annotation.getValue();
-		}
-		else{
+		} else {
 			return null;
 		}
 	}
@@ -339,7 +338,7 @@ public abstract class EglContext extends TemplateContext {
 		}
 		// create the annotation
 		Annotation annotation = findAnnotation(value, list);
-		if(annotation == null){
+		if (annotation == null) {
 			annotation = factory.createAnnotation(value);
 			// add the annotation to the list
 			list.add(annotation);
@@ -424,7 +423,7 @@ public abstract class EglContext extends TemplateContext {
 				if (tm != null)
 					break;
 			}
-		} else  if (template != null) {
+		} else if (template != null) {
 			Class<?> classifierClass = type.getClass();
 			method = primGetMethod(methodName, template.getClass(), classifierClass, args);
 			if (method != null) {
