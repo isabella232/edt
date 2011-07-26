@@ -529,6 +529,14 @@ public class Util {
 		return true;
 	}
 	
+	public static boolean isValidMofPackage(String fullPath) {
+		if(fullPath != null && fullPath.contains("eglgen")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	/**
 	 * Returns true iff str.toLowerCase().endsWith(".eglxml" or ".eglbin" or ".mofxml" or ".mofbin")
 	 * implementation is not creating extra strings.

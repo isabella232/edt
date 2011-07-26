@@ -639,7 +639,7 @@ public static String getSourceAttachmentProperty(IPath path) throws CoreExceptio
 			}
 			rootPathToAttachments.put(path, property);
 			return property;
-	} else if (property.equals(JarPackageFragmentRoot.NO_SOURCE_ATTACHMENT)) {
+	} else if (property.equals(EglarPackageFragmentRoot.NO_SOURCE_ATTACHMENT)) {
 		return null;
 	} else
 		return property;

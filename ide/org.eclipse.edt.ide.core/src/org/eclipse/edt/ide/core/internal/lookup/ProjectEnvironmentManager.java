@@ -114,6 +114,11 @@ public class ProjectEnvironmentManager {
         Environment.pushEnv(env.getIREnvironment());
         environmentPushed = true;
     }
+    
+    public void beginEGLarSearch(IProject project) {
+        ProjectEnvironment env = getProjectEnvironment(project);
+   		env.initIREnvironments();
+    }
 
     public void endBuilding(AbstractBuilder builder) {
         IProject project = builder.getBuilder().getProject();

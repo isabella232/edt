@@ -257,13 +257,13 @@ public void indexAll(IProject project, boolean forceReIndex) {
 	} catch(EGLModelException e){ // cannot retrieve classpath info
 	}
 
-	if (!eglProject.isReadOnly()) {
-		// check if the same request is not already in the queue
-		IndexRequest request = new IndexAllProject(project, this, forceReIndex);
-		for (int i = this.jobEnd; i > this.jobStart; i--) // NB: don't check job at jobStart, as it may have already started (see http://bugs.eclipse.org/bugs/show_bug.cgi?id=32488)
+	
+	// check if the same request is not already in the queue
+	IndexRequest request = new IndexAllProject(project, this, forceReIndex);
+	for (int i = this.jobEnd; i > this.jobStart; i--) // NB: don't check job at jobStart, as it may have already started (see http://bugs.eclipse.org/bugs/show_bug.cgi?id=32488)
 			if (request.equals(this.awaitingJobs[i])) return;
-		this.request(request);
-	}
+	this.request(request);
+	
 }
 /**
  * Trigger addition of a library to an index
@@ -536,7 +536,16 @@ private IPath[] getProjectPaths(){
 	try {
 		IEGLProject[] projects = EGLModelManager.getEGLModelManager().getEGLModel().getEGLProjects();
 		for (int i = 0, length = projects.length; i < length; i++){
-			list.add(projects[i].getProject().getFullPath());
+			// no need to index binary project, only the eglars in the binary project are indexed in
+			if ( !projects[i].isBinary() ) {
+				list.add(projects[i].getProject().getFullPath());
+			}
+			IEGLPathEntry[] entries = projects[i].getResolvedEGLPath(true);	
+			for (int j = 0; j < entries.length; j++) {
+				IEGLPathEntry entry= entries[j];
+				if (entry.getEntryKind() == IEGLPathEntry.CPE_LIBRARY)
+					list.add(entry.getPath());
+			}
 		}
 	} catch (EGLModelException ignored) {
 	}	

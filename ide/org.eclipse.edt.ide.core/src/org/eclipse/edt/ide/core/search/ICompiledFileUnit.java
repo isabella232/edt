@@ -31,4 +31,5 @@ public interface ICompiledFileUnit {
 	Node getPartAST(IBinding partBinding);
 	Node getPartInContextAST(FunctionContainerBinding functionContainerBinding, TopLevelFunctionBinding functionBinding);
 	Node[] getAllParts();
+	List<IBinding> getIBindingsFromIR();
 }

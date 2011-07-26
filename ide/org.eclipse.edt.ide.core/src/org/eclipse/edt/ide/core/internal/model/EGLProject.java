@@ -50,6 +50,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Preferences;
+import org.eclipse.edt.compiler.internal.eglar.FileInEglar;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.internal.model.util.EGLProjectFileUtilityLocator;
@@ -379,14 +380,14 @@ public class EGLProject extends Openable implements IEGLProject, IProjectNature 
 				if (target instanceof IResource){
 					// internal target
 					root = getPackageFragmentRoot((IResource) target);
-					if(root instanceof JarPackageFragmentRoot) {
-						((JarPackageFragmentRoot)root).setBinaryProject(resolvedEntry.isBinaryProject());
+					if(root instanceof EglarPackageFragmentRoot) {
+						((EglarPackageFragmentRoot)root).setBinaryProject(resolvedEntry.isBinaryProject());
 					}
 				} else if (target instanceof File) {
 					// external target
 					if (EGLModel.isFile(target)) {
-						root = new JarPackageFragmentRoot(entryPath, this);
-						((JarPackageFragmentRoot)root).setBinaryProject(resolvedEntry.isBinaryProject());
+						root = new EglarPackageFragmentRoot(entryPath, this);
+						((EglarPackageFragmentRoot)root).setBinaryProject(resolvedEntry.isBinaryProject());
 					} else if (((File) target).isDirectory()) {
 //						TODO IPackageFragmentRoot root = new ExternalPackageFragmentRoot(entryPath, this);
 					}
@@ -1204,7 +1205,12 @@ public class EGLProject extends Openable implements IEGLProject, IProjectNature 
 		if (path.segmentCount() == 1) { // default project root
 			return getPackageFragmentRoot(getProject());
 		}
-		return getPackageFragmentRoot(getProject().getWorkspace().getRoot().getFolder(path));
+		
+		if ( path.toOSString().endsWith(FileInEglar.EGLAR_EXTENSION) ) {
+			return new EglarPackageFragmentRoot(path, this);
+		} else {
+			return getPackageFragmentRoot(getProject().getWorkspace().getRoot().getFolder(path));
+		}
 	}
 
 	/**
@@ -1217,7 +1223,7 @@ public class EGLProject extends Openable implements IEGLProject, IProjectNature 
 				if (Util.isEGLFileName(resource.getName())) {
 					return new PackageFragmentRoot(resource, this, resource.getName());
 				} else if(Util.isEGLARFileName(resource.getName())) { 
-					return new JarPackageFragmentRoot(resource, this, resource.getName());
+					return new EglarPackageFragmentRoot(resource, this, resource.getName());
 				}else {
 					return null;
 				}
@@ -1243,7 +1249,7 @@ public class EGLProject extends Openable implements IEGLProject, IProjectNature 
 	 */
 	public IPackageFragmentRoot getPackageFragmentRoot0(IPath eglPath) {
 		if(Util.isEGLARFileName(eglPath.lastSegment())) {
-			return new JarPackageFragmentRoot(eglPath,this);
+			return new EglarPackageFragmentRoot(eglPath,this);
 		}
 		return new PackageFragmentRoot(null, this, "jarPackageFragment"); //$NON-NLS-1$
 	}

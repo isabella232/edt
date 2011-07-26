@@ -114,7 +114,7 @@ public abstract class Openable extends EGLElement implements IOpenable, IBufferC
 			return parentExists() && resourceExists();
 		} else if ( getElementType() == IEGLElement.PACKAGE_FRAGMENT && root.isArchive() ) {
 			try {
-				JarPackageFragmentRootInfo info = (JarPackageFragmentRootInfo)root.getElementInfo();
+				EglarPackageFragmentRootInfo info = (EglarPackageFragmentRootInfo)root.getElementInfo();
 				return info.rawPackageInfo.containsKey(((PackageFragment)this).names);
 			}
 			catch (EGLModelException e) {

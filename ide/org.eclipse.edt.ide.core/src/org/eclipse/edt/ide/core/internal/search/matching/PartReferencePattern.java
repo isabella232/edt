@@ -933,7 +933,6 @@ public boolean matchesPartType(IPartBinding partBinding){
 
 	@Override
 	public int matchesFunctionPartType(IFunction function){
-		//TODO, ChongYuan
 		try {
 			if(function.getParent() instanceof IPart &&
 				((SourcePartElementInfo)((EGLElement)function.getParent()).getElementInfo()).isDelegate()){

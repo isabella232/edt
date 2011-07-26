@@ -30,8 +30,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
+import org.eclipse.edt.compiler.tools.EGL2IR;
 import org.eclipse.edt.ide.core.internal.model.index.IDocument;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IBuffer;
@@ -103,10 +103,8 @@ public class ClassFile extends Openable implements IClassFile, IDocument {
 
 		// generate structure
 		IRFileStructureRequestor requestor = new IRFileStructureRequestor(this, unitInfo, newElements);
-		
-// TODO EDT Add BinaryElementParser		
-//		BinaryElementParser parser = new BinaryElementParser(requestor);
-//		parser.parseDocument(this, true);
+		BinaryElementParser parser = new BinaryElementParser(requestor,underlyingResource.getProject());
+		parser.parseDocument(this, true);
 //		if (isWorkingCopy()) {
 //			EGLFile original = (EGLFile) getOriginalElement();
 //			// might be IResource.NULL_STAMP if original does not exist
@@ -117,7 +115,6 @@ public class ClassFile extends Openable implements IClassFile, IDocument {
 
 	@Override
 	protected char getHandleMementoDelimiter() {
-
 		return 0;
 	}
 
@@ -142,7 +139,6 @@ public class ClassFile extends Openable implements IClassFile, IDocument {
 	}
 
 	public IEGLElement rootedAt(IEGLProject project) {
-
 		return null;
 	}
 
@@ -152,8 +148,8 @@ public class ClassFile extends Openable implements IClassFile, IDocument {
 
 	public byte[] getBytes() throws EGLModelException {
 		EGLElement pkg = (EGLElement) getParent();
-		if (pkg instanceof JarPackageFragment) {
-			JarPackageFragmentRoot root = (JarPackageFragmentRoot) pkg.getParent();
+		if (pkg instanceof EglarPackageFragment) {
+			EglarPackageFragmentRoot root = (EglarPackageFragmentRoot) pkg.getParent();
 			ZipFile zip = null;
 			try {
 				zip = root.getJar();
@@ -181,7 +177,6 @@ public class ClassFile extends Openable implements IClassFile, IDocument {
 	}
 
 	public IEGLElement getElementAt(int position) throws EGLModelException {
-
 		return null;
 	}
 
@@ -220,7 +215,7 @@ public class ClassFile extends Openable implements IClassFile, IDocument {
 		return array;
 	}
 	public String getElementName() {
-		return this.name + ".ir";
+		return this.name + EGL2IR.EGLXML;
 	}
 	/*
 	 * (non-Javadoc)

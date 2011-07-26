@@ -12,6 +12,8 @@
 package org.eclipse.edt.ide.core.internal.search.matching;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -37,6 +39,7 @@ import org.eclipse.edt.ide.core.internal.model.index.IEntryResult;
 import org.eclipse.edt.ide.core.internal.model.index.impl.IndexInput;
 import org.eclipse.edt.ide.core.internal.model.index.impl.IndexedFile;
 import org.eclipse.edt.ide.core.internal.model.indexing.AbstractIndexer;
+import org.eclipse.edt.ide.core.internal.search.EGLSearchScope;
 import org.eclipse.edt.ide.core.internal.search.IIndexSearchRequestor;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
@@ -150,10 +153,27 @@ public void feedIndexRequestor(IIndexSearchRequestor requestor, int detailLevel,
 				}
 				
 			}
+			
+			if(Util.isEGLARFileName(filePkgRootPath)){
+				if(scope instanceof EGLSearchScope){
+					Map<IPath, Set> eglarProjectsMap = ((EGLSearchScope)scope).getEglarProjectsMap();
+					if(eglarProjectsMap != null){
+						Set<IEGLProject> projects = eglarProjectsMap.get(new Path(filePkgRootPath));
+						if(projects != null){
+							for(IEGLProject eglProj: projects){
+								requestor.acceptPartDeclaration(eglProj.getPath(), path, decodedSimpleName, decodedPartTypes, decodedEnclosingTypeNames, decodedPackage);
+							}
+							return;
+						}
+					}
+				}
+			}
 
 			IPath[] enclosingPaths = scope.enclosingProjects();
 			IPath projectPath = null;
 			
+			//1. for resource in workspace (both source and eglar)
+			//2. for external eglar
 			for(int j=0; j<enclosingPaths.length; j++){
 				if(enclosingPaths[j].segmentCount() > 1){	//not project, ignore this
 					continue;
@@ -170,14 +190,13 @@ public void feedIndexRequestor(IIndexSearchRequestor requestor, int detailLevel,
 							}
 						}
 						projectPath = enclosingPaths[j];
-						break;
+						requestor.acceptPartDeclaration(projectPath, path, decodedSimpleName, decodedPartTypes, decodedEnclosingTypeNames, decodedPackage);
 					}					
 				} catch (EGLModelException e) {
 					e.printStackTrace();
 				}
 				
 			}
-			requestor.acceptPartDeclaration(projectPath, path, decodedSimpleName, decodedPartTypes, decodedEnclosingTypeNames, decodedPackage);
 		}
 	}
 }

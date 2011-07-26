@@ -12,8 +12,11 @@
 package org.eclipse.edt.ide.core.internal.search;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -31,10 +34,10 @@ import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
+import org.eclipse.edt.compiler.internal.eglar.FileInEglar;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.model.EGLElement;
 import org.eclipse.edt.ide.core.internal.model.EGLProject;
-import org.eclipse.edt.ide.core.internal.model.index.impl.JarFileEntryDocument;
 import org.eclipse.edt.ide.core.internal.model.indexing.AbstractSearchScope;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
@@ -66,6 +69,8 @@ public class EGLSearchScope extends AbstractSearchScope implements IEGLSearchSco
 	private IPath[] enclosingProjects;
 
     private ArrayList parts;
+    
+    private Map<IPath, Set> eglarProjectsMap;
 	
 public EGLSearchScope() {
 	this.initialize();
@@ -225,7 +230,11 @@ private void add(IPath path, boolean withSubFolders) {
  * @see IEGLSearchScope#encloses(String)
  */
 public boolean encloses(String resourcePathString) {
-	int index = resourcePathString.indexOf(JarFileEntryDocument.JAR_FILE_ENTRY_SEPARATOR);
+	if ( resourcePathString.startsWith( FileInEglar.EGLAR_PREFIX ) ) {
+		resourcePathString = resourcePathString.substring( FileInEglar.EGLAR_PREFIX.length() );
+	}
+	
+	int index = resourcePathString.indexOf(FileInEglar.EGLAR_SEPARATOR);
 	if(index != -1) {
 		StringBuffer sb = new StringBuffer();
 		sb.append(resourcePathString.substring(0, index));
@@ -451,5 +460,21 @@ public String toString() {
 	}
 	return result.toString();
 }
+
+  public void putIntoEglarProjectsMap(IPath eglarPath, IEGLProject projPath){
+	  if(eglarProjectsMap == null){
+		 eglarProjectsMap = new HashMap<IPath, Set>();
+	  }
+	  Set<IEGLProject> projects = eglarProjectsMap.get(eglarPath);
+	  if(projects == null){
+		projects = new HashSet<IEGLProject>();
+		eglarProjectsMap.put(eglarPath, projects);
+	  }
+	 projects.add(projPath);
+  }
+
+  public Map<IPath, Set> getEglarProjectsMap(){
+	 return eglarProjectsMap;
+  }
 
 }

@@ -22,19 +22,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.ide.core.internal.model.ClassFile;
 import org.eclipse.edt.ide.core.internal.model.EGLModelManager;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragment;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot;
 import org.eclipse.edt.ide.core.internal.model.indexing.EGLModelSearchResources;
 import org.eclipse.edt.ide.core.internal.model.indexing.IndexManager;
 import org.eclipse.edt.ide.core.internal.model.indexing.IndexSelector;
-import org.eclipse.edt.ide.core.model.EGLCore;
-import org.eclipse.edt.ide.core.model.EGLModelException;
-import org.eclipse.edt.ide.core.model.IEGLElement;
-import org.eclipse.edt.ide.core.model.IEGLFile;
-import org.eclipse.edt.ide.core.model.IEGLProject;
-import org.eclipse.edt.ide.core.model.IIndexConstants;
-import org.eclipse.edt.ide.core.model.IMember;
-import org.eclipse.edt.ide.core.model.IWorkingCopy;
-
 import org.eclipse.edt.ide.core.internal.search.EGLSearchScope;
 import org.eclipse.edt.ide.core.internal.search.EGLWorkspaceScope;
 import org.eclipse.edt.ide.core.internal.search.IIndexSearchRequestor;
@@ -46,6 +40,14 @@ import org.eclipse.edt.ide.core.internal.search.matching.MatchLocator2;
 import org.eclipse.edt.ide.core.internal.search.matching.PartDeclarationPattern;
 import org.eclipse.edt.ide.core.internal.search.matching.PartReferencePattern;
 import org.eclipse.edt.ide.core.internal.search.matching.SearchPattern;
+import org.eclipse.edt.ide.core.model.EGLCore;
+import org.eclipse.edt.ide.core.model.EGLModelException;
+import org.eclipse.edt.ide.core.model.IEGLElement;
+import org.eclipse.edt.ide.core.model.IEGLFile;
+import org.eclipse.edt.ide.core.model.IEGLProject;
+import org.eclipse.edt.ide.core.model.IIndexConstants;
+import org.eclipse.edt.ide.core.model.IMember;
+import org.eclipse.edt.ide.core.model.IWorkingCopy;
 
 /**
  * A <code>SearchEngine</code> searches for egl elements following a search pattern.
@@ -203,6 +205,11 @@ public static IEGLSearchScope createEGLSearchScope(IEGLElement[] elements, boole
 					scope.add((IEGLProject)element, includeReferencedProjects, visitedProjects);
 				} else {
 					scope.add(element);
+					if(element instanceof EglarPackageFragmentRoot ||
+							element instanceof EglarPackageFragment ||
+							element instanceof ClassFile) {
+						scope.putIntoEglarProjectsMap(element.getPath(), element.getEGLProject());
+					}
 				}
 			} catch (EGLModelException e) {
 				// ignore

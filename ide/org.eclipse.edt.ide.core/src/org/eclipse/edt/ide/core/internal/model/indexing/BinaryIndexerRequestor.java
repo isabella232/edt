@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.model.indexing;
 
+import org.eclipse.edt.compiler.core.ast.Part;
+import org.eclipse.edt.ide.core.internal.model.IRPartType;
 import org.eclipse.edt.ide.core.internal.model.ISourceElementRequestor;
 import org.eclipse.edt.ide.core.internal.model.index.IDocument;
 import org.eclipse.edt.ide.core.model.IIndexConstants;
@@ -61,7 +63,7 @@ public class BinaryIndexerRequestor implements ISourceElementRequestor, IIndexCo
 	public void acceptPartReference(char[][] typeName, int sourceStart, int sourceEnd) {
 		int length = typeName.length;
 		for (int i = 0; i < length - 1; i++)
-			acceptUnknownReference(typeName[i], 0); // ?
+			acceptUnknownReference(typeName[i], 0); 
 		acceptPartReference(typeName[length - 1], 0);
 	}
 
@@ -113,7 +115,7 @@ public class BinaryIndexerRequestor implements ISourceElementRequestor, IIndexCo
 	}
 
 	public void enterEGLFile() {
-
+		
 	}
 
 	public void enterField(int declarationStart, int modifiers, char[] type, char[] typeDeclaredPackage, char[] name, int nameSourceStart, int nameSourceEnd, boolean hasOccurs,
@@ -135,31 +137,23 @@ public class BinaryIndexerRequestor implements ISourceElementRequestor, IIndexCo
 		enclosingTypeNames = null;
 		enclosingTypeNames = enclosingTypeNames();
 		
-//		if (this.methodDepth > 0) {
-//			enclosingTypeNames = ONE_ZERO_CHAR;
-//		} else {
-//			enclosingTypeNames = this.enclosingTypeNames();
-//		}
 		char partChar = PART_SUFFIX;
-		// TODO Handle parttype searches
 		switch (partType) {
-// TODO EDT Uncomment when available
-//			case Part.PART_FUNCTION : 	partChar = FUNCTION_SUFFIX; break;
-//			case Part.PART_FORM : 		partChar = FORM_SUFFIX; break;
-//			case Part.PART_FORMGROUP : 	partChar = FORMGRP_SUFFIX; break;
-//			case Part.PART_LIBRARY : 	partChar = LIBRARY_SUFFIX; break;
-//			case Part.PART_PROGRAM : 	partChar = PROGRAM_SUFFIX; break;
-//			case Part.PART_DATATABLE : 	partChar = TABLE_SUFFIX; break;
-//			case Part.PART_STRUCTURED_RECORD:
-//			case Part.PART_RECORD : 	partChar = RECORD_SUFFIX; break;
-//			case Part.PART_DATAITEM :	partChar = ITEM_SUFFIX; break;
-//			case Part.PART_HANDLER : 	partChar = HANDLER_SUFFIX; break;
-//			case Part.PART_INTERFACE : 	partChar = INTERFACE_SUFFIX; break;
-//			case Part.PART_DELEGATE : 	partChar = DELEGATE_SUFFIX; break;
-//			case Part.PART_EXTERNALTYPE : partChar = EXTERNALTYPE_SUFFIX; break;
-//			case Part.PART_ENUMERATION : partChar = ENUMERATION_SUFFIX; break;
-//			case Part.PART_SERVICE : 	partChar = SERVICE_SUFFIX; break;
-			default : 					partChar = PART_SUFFIX; break;
+			case IRPartType.PART_FUNCTION : 	partChar = FUNCTION_SUFFIX; break;
+			case IRPartType.PART_FORM : 		partChar = FORM_SUFFIX; break;
+			case IRPartType.PART_FORMGROUP : 	partChar = FORMGRP_SUFFIX; break;
+			case IRPartType.PART_LIBRARY : 	    partChar = LIBRARY_SUFFIX; break;
+			case IRPartType.PART_PROGRAM : 	    partChar = PROGRAM_SUFFIX; break;
+			case IRPartType.PART_DATATABLE : 	partChar = TABLE_SUFFIX; break;
+			case IRPartType.PART_RECORD : 	    partChar = RECORD_SUFFIX; break;
+			case IRPartType.PART_DATAITEM :	    partChar = ITEM_SUFFIX; break;
+			case IRPartType.PART_HANDLER : 	    partChar = HANDLER_SUFFIX; break;
+			case IRPartType.PART_INTERFACE : 	partChar = INTERFACE_SUFFIX; break;
+			case IRPartType.PART_DELEGATE : 	partChar = DELEGATE_SUFFIX; break;
+			case IRPartType.PART_EXTERNALTYPE : partChar = EXTERNALTYPE_SUFFIX; break;
+			case IRPartType.PART_ENUMERATION :  partChar = ENUMERATION_SUFFIX; break;
+			case IRPartType.PART_SERVICE : 	    partChar = SERVICE_SUFFIX; break;
+			default : 					        partChar = PART_SUFFIX; break;
 		}
 		this.indexer.addPartDeclaration(partChar, modifiers, packageName, name, enclosingTypeNames, interfaces);
 		this.indexer.addNameReference(subType);
@@ -200,9 +194,9 @@ public class BinaryIndexerRequestor implements ISourceElementRequestor, IIndexCo
 		try {
 			int partType = partTypes[--partTypesDepth];
 			partTypes[partTypesDepth] = 0;
-//			if(partType == Part.PART_FORMGROUP){
-//				enclosingTypeNames[--depth] = null;
-//			}
+			if(partType == Part.FORMGROUP){
+				enclosingTypeNames[--depth] = null;
+			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
 		}
@@ -214,9 +208,9 @@ public class BinaryIndexerRequestor implements ISourceElementRequestor, IIndexCo
 		if (partTypesDepth == partTypes.length){
 			System.arraycopy(partTypes, 0, partTypes = new int[partTypesDepth*2], 0, partTypesDepth);
 		}
-//		if(partType == Part.PART_FORMGROUP){
-//			enclosingTypeNames[depth++] = typeName;
-//		}
+		if(partType == Part.FORMGROUP){
+			enclosingTypeNames[depth++] = typeName;
+		}
 		partTypes[partTypesDepth++] = partType;
 	}
 	

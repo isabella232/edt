@@ -13,16 +13,23 @@ package org.eclipse.edt.ide.core.internal.model.indexing;
 
 import java.io.IOException;
 
-// TODO EDT Add BinaryElementParser and BinaryIndexRequestor
-//import org.eclipse.edt.ide.core.internal.model.BinaryElementParser;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.edt.ide.core.internal.model.BinaryElementParser;
 import org.eclipse.edt.ide.core.internal.model.index.IDocument;
 
 
 public class BinaryIndexer extends AbstractIndexer {
-	/**
-	 * 
-	 */
-	public static final String[] FILE_TYPES = new String[] { "ir", "eglar" }; //$NON-NLS-1$
+	
+	public static final String[] FILE_TYPES = new String[] { "eglxml", "eglar" }; //$NON-NLS-1$
+	private IProject project;
+	
+	public BinaryIndexer() {
+		this.project = null;
+	}
+	
+	public BinaryIndexer(IProject project) {
+		this.project = project;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -42,8 +49,8 @@ public class BinaryIndexer extends AbstractIndexer {
 		}
 		output.addDocument(document);
 		// Create a new Parser
-//		BinaryIndexerRequestor requestor = new BinaryIndexerRequestor(this, document);
-//		BinaryElementParser parser = new BinaryElementParser(requestor); 
+		BinaryIndexerRequestor requestor = new BinaryIndexerRequestor(this, document);
+		BinaryElementParser parser = new BinaryElementParser(requestor,this.project); 
 
 		// Launch the parser
 		byte[] source = null;
@@ -55,11 +62,10 @@ public class BinaryIndexer extends AbstractIndexer {
 		}
 		if (source == null || name == null) return; // could not retrieve document info (e.g. resource was discarded)
 		try {
-//			parser.parseDocument(document, true);
+			parser.parseDocument(document, true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-//		index(contents);
 	}
 
 

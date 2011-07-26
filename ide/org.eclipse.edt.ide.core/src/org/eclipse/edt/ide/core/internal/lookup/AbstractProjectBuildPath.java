@@ -30,7 +30,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.internal.model.EGLProject;
-import org.eclipse.edt.ide.core.internal.model.JarPackageFragmentRoot;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLModelMarker;
@@ -106,7 +106,7 @@ public abstract class AbstractProjectBuildPath {
 			IPackageFragmentRoot[] packageFragmentRoots = eglProject.getPackageFragmentRoots();
 			ArrayList<IContainer> sourceLocationsArr = new ArrayList<IContainer>();
 			for (int i = 0; i < packageFragmentRoots.length; i++) {
-				if(packageFragmentRoots[i] instanceof JarPackageFragmentRoot) {
+				if(packageFragmentRoots[i] instanceof EglarPackageFragmentRoot) {
 					continue;
 				}
 				IContainer root = (IContainer)packageFragmentRoots[i].getResource();

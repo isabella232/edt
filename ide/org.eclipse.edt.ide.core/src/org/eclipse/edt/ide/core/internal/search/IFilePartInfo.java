@@ -19,7 +19,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.edt.ide.core.internal.model.JarPackageFragment;
+import org.eclipse.edt.compiler.internal.eglar.FileInEglar;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragment;
 import org.eclipse.edt.ide.core.internal.model.Util;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
@@ -83,11 +84,7 @@ public class IFilePartInfo extends PartInfo {
 			if(iResource == null){
 				return null;
 			}
-			IPackageFragment packageFragment = getPackageFragment(iResource, fPackage, EGLAR_FILE);
-			if(packageFragment == null){
-				return null;
-			}
-			IClassFile classFile = packageFragment.getClassFile(fFile + "." + fExtension);
+			IClassFile classFile = getClassFile( iResource, fPackage, EGLAR_FILE, fFile + "." + fExtension );
 			return classFile;
 		} else {
 			iResource = ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(getPath()));
@@ -120,10 +117,10 @@ public class IFilePartInfo extends PartInfo {
 			IEGLProject eglProject = EGLCore.create(iResource.getProject());
 			IPackageFragment[] fragments = eglProject.getPackageFragments();
 			for(IPackageFragment fragment : fragments) {
-				if(fileType == EGL_FILE && fragment instanceof JarPackageFragment){
+				if(fileType == EGL_FILE && fragment instanceof EglarPackageFragment){
 					continue;
 				}
-				if(fileType == EGLAR_FILE && !(fragment instanceof JarPackageFragment)){
+				if(fileType == EGLAR_FILE && !(fragment instanceof EglarPackageFragment)){
 					continue;
 				}
 				if(fragment.getElementName().equalsIgnoreCase(packageName)) {
@@ -142,10 +139,10 @@ public class IFilePartInfo extends PartInfo {
 			IEGLProject eglProject = EGLCore.create(iResource.getProject());
 			IPackageFragment[] fragments = eglProject.getPackageFragments();
 			for(IPackageFragment fragment : fragments) {
-				if(fileType == EGL_FILE && fragment instanceof JarPackageFragment){
+				if(fileType == EGL_FILE && fragment instanceof EglarPackageFragment){
 					continue;
 				}
-				if(fileType == EGLAR_FILE && !(fragment instanceof JarPackageFragment)){
+				if(fileType == EGLAR_FILE && !(fragment instanceof EglarPackageFragment)){
 					continue;
 				}
 				if(fragment.getElementName().equalsIgnoreCase(packageName)) {
@@ -190,7 +187,8 @@ public class IFilePartInfo extends PartInfo {
 	//for Part in eglar, getPath() returns the full path of the ir file where it is contained, rather
 	//than where it is imported into
 	public String getPath() {
-		StringBuffer result = new StringBuffer(fContainerLoc);
+		StringBuffer result = new StringBuffer( ( Util.isEGLARFileName(fFolder) ? FileInEglar.EGLAR_PREFIX  : "" ) + fContainerLoc);
+		
 		if (fFolder != null && fFolder.length() > 0) {
 			if(!isExternal){
 				result.append(PartInfo.SEPARATOR);
@@ -200,7 +198,7 @@ public class IFilePartInfo extends PartInfo {
 			result.append(fFolder);			
 		}
 		if(Util.isEGLARFileName(fFolder)) {
-			return result.toString();
+			result.append( FileInEglar.EGLAR_SEPARATOR );
 		}
 		result.append(PartInfo.SEPARATOR);
 		String packageName = getPackageName();

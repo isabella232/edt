@@ -14,7 +14,9 @@ package org.eclipse.edt.ide.core.internal.utils;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +30,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
+import org.eclipse.edt.compiler.internal.eglar.FileInEglar;
 import org.eclipse.edt.ide.core.internal.model.EGLModel;
 import org.eclipse.edt.ide.core.internal.model.index.impl.JarFileEntryDocument;
 import org.eclipse.edt.ide.core.internal.search.PartDeclarationInfo;
@@ -40,11 +43,12 @@ import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IIndexConstants;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
+import org.eclipse.edt.ide.core.search.IEGLSearchResultCollector;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
+import org.eclipse.edt.ide.core.search.ISearchPattern;
 import org.eclipse.edt.ide.core.search.SearchEngine;
 import org.eclipse.edt.ide.core.utils.EGLProjectFileUtility;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
-
 
 /**
  * @author svihovec
@@ -377,7 +381,7 @@ public class Util {
 	//3. /Test1/Test.eglar|t1.ir -> /Test1/Test.eglar
 	//4. c:/example/temp/Test.eglar|mypkg/t1.ir -> c:/example/temp/Test.eglar
 	public static String getPackageFragmentRootPath(String pathString){
-		int index = pathString.indexOf(JarFileEntryDocument.JAR_FILE_ENTRY_SEPARATOR);
+		int index = pathString.indexOf(FileInEglar.EGLAR_SEPARATOR);
 		if (index == -1){
 			int ind = pathString.lastIndexOf("/");
 			if(ind != -1){
@@ -389,5 +393,84 @@ public class Util {
 		return jarPath;
 	}
 	
+	public static ResourceAndTLFMap[] getSourceFileAndTLFsMaps(IEGLProject eglProj)
+	{
+		final HashMap<IResource, ResourceAndTLFMap> resMap = new HashMap<IResource, ResourceAndTLFMap>();
+		
+		IEGLSearchResultCollector collector = new IEGLSearchResultCollector(){
+			private HashMap<IResource, String> fileCache = new HashMap<IResource, String>();
+			
+			public void aboutToStart() { /* do nothing */ }
+			public void done() { /* do nothing */ }
 
+			public void accept(IResource resource, int start, int end,
+					IEGLElement enclosingElement, int accuracy)
+					throws CoreException {
+				String fileContents = fileCache.get(resource);
+				if(fileContents == null) {
+					if(resource instanceof IFile) {
+						fileContents = getFileContent(((IFile)resource).getContents());
+						fileCache.put(resource, fileContents);
+					}
+				}
+				int lastCharIndex = -1;
+				if(fileContents != null) {
+					lastCharIndex = fileContents.length() - 1;
+				}
+				if(start > lastCharIndex || end > lastCharIndex) {
+					System.out.println("Wrong position!");
+					return;
+				}
+				String irFileName = fileContents.substring(start, end);
+				IPath resPath = resource.getFullPath();
+				//Get the package name
+				resPath = resPath.removeFirstSegments(2).removeLastSegments(1);
+				resPath = resPath.append(irFileName.toLowerCase());//The IR files always in lower case.
+				ResourceAndTLFMap map = resMap.get(resource);
+				if(map != null) {
+					map.addPath(resPath);
+				} else {
+					map = new ResourceAndTLFMap(resource, resPath);
+					resMap.put(resource, map);
+				}
+			}
+
+			public void accept(IEGLElement element, int start, int end,
+					IResource resource, int accuracy) throws CoreException {
+				/* do nothing */
+			}
+
+			public IProgressMonitor getProgressMonitor() {
+				return null;
+			}
+			
+			private String getFileContent(InputStream inputStream) {
+				InputStreamReader reader = new InputStreamReader(new BufferedInputStream(inputStream));
+				StringBuffer s = new StringBuffer();
+				try {
+					char cbuf[] = new char[4096];
+					int length = 0;
+					while ((length = reader.read(cbuf)) >= 0) {
+						s.append(cbuf, 0, length);
+					}
+				} catch (IOException e) {
+				}
+				return s.toString();
+			}
+			
+		};
+		
+		try
+		{
+			IEGLSearchScope searchScope = SearchEngine.createEGLSearchScope(new IEGLProject[]{eglProj} , true);
+			ISearchPattern pattern = SearchEngine.createSearchPattern("*", IEGLSearchConstants.FUNCTION_PART, IEGLSearchConstants.DECLARATIONS, false);
+			new SearchEngine().search(ResourcesPlugin.getWorkspace(), pattern, searchScope, collector);
+		}
+		catch (EGLModelException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return resMap.values().toArray(new ResourceAndTLFMap[resMap.values().size()]);
+	}
 }

@@ -21,6 +21,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.internal.eglar.FileInEglar;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IClassFile;
@@ -29,8 +30,6 @@ import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
-
-import org.eclipse.edt.ide.core.internal.model.index.impl.JarFileEntryDocument;
 
 /**
  * Creates egl element handles.
@@ -68,7 +67,10 @@ public class HandleFactory {
 	 */
 	public Openable createOpenable(String resourcePath){//, IEGLSearchScope scope) {
 		int separatorIndex;
-		if ((separatorIndex= resourcePath.indexOf(JarFileEntryDocument.JAR_FILE_ENTRY_SEPARATOR)) > -1) {
+		if ( resourcePath.startsWith( FileInEglar.EGLAR_PREFIX ) ) {
+			resourcePath = resourcePath.substring( FileInEglar.EGLAR_PREFIX.length() );
+		}
+		if ((separatorIndex= resourcePath.indexOf(FileInEglar.EGLAR_SEPARATOR)) > -1) {
 			// path to a class file inside a jar
 			// Optimization: cache package fragment root handle and package handles
 			int rootPathLength;

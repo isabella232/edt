@@ -59,7 +59,10 @@ public class IndexAllProject extends IndexRequest {
 	 * since the index was produced.
 	 */
 	public boolean execute(IProgressMonitor progressMonitor) {
-
+		if (EGLCore.create(project).isReadOnly()){
+			return true;
+		}
+		
 		if (progressMonitor != null && progressMonitor.isCanceled()) return true;
 		if (!project.isAccessible()) return true; // nothing to do
 

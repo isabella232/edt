@@ -85,7 +85,7 @@ public class PartDeclarationInfo extends IFilePartInfo {
 	public boolean isBinary(){
 		if(getExtension().endsWith(IEGLConstants.EGL)){
 			return false;
-		} else if(getExtension().endsWith("eglar") || getExtension().endsWith("ir")){
+		} else if(getExtension().endsWith("eglar") || getExtension().endsWith("eglxml")){
 			return true;
 		}
 		return false;

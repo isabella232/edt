@@ -18,6 +18,7 @@ import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
+import org.eclipse.edt.ide.core.internal.model.Util;
 
 public abstract class PartInfo {
 
@@ -97,7 +98,25 @@ public abstract class PartInfo {
 	 * Returns true if the info is enclosed in the given scope
 	 */
 	public boolean isEnclosed(IEGLSearchScope scope) {
-		return scope.encloses(getPath());
+		boolean enclosing = scope.encloses(getPath());
+		//for eglar, also should verify if the part's project is in the scope
+		if(enclosing && this instanceof PartDeclarationInfo){
+			PartDeclarationInfo partInfo = (PartDeclarationInfo)this;
+			if(Util.isEGLARFileName(partInfo.getFolder())){
+				IPath[] projects = scope.enclosingProjects();
+				String eglarRefProj = partInfo.getProject();
+				boolean projectEquals = false;
+				for(IPath scopeProj: projects){
+					String scopeProjName = scopeProj.lastSegment();
+					if(scopeProjName.equalsIgnoreCase(eglarRefProj)){
+						projectEquals = true;
+						break;
+					}
+				}
+				enclosing = projectEquals;
+			}
+		}
+		return enclosing;
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2000, 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,23 +9,22 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.ide.core.model;
+package org.eclipse.edt.ide.core.internal.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.edt.ide.core.internal.model.JarPackageFragmentRoot;
+import org.eclipse.edt.ide.core.model.IEGLProject;
 
+public class EglarPackageFragmentRootContainer extends EglarPackageFragmentRoot {
+	private List<EglarPackageFragmentRoot> roots = new ArrayList<EglarPackageFragmentRoot>();
 
-public class JarPackageFragmentRootContainer extends JarPackageFragmentRoot {
-	private List<JarPackageFragmentRoot> roots = new ArrayList<JarPackageFragmentRoot>();
-
-	public JarPackageFragmentRootContainer(IEGLProject project) {
+	public EglarPackageFragmentRootContainer(IEGLProject project) {
 		this(null, project);
 	}
-	protected JarPackageFragmentRootContainer(IPath externalJarPath, IEGLProject project) {
+	protected EglarPackageFragmentRootContainer(IPath externalJarPath, IEGLProject project) {
 		super(externalJarPath, project);
 	}
 	
@@ -33,7 +32,7 @@ public class JarPackageFragmentRootContainer extends JarPackageFragmentRoot {
 	 * 
 	 * @param root
 	 */
-	public void addJarPackageFragmentRoot(JarPackageFragmentRoot root) {
+	public void addJarPackageFragmentRoot(EglarPackageFragmentRoot root) {
 		roots.add(root);
 	}
 	
@@ -42,7 +41,7 @@ public class JarPackageFragmentRootContainer extends JarPackageFragmentRoot {
 	 * @param root
 	 * @return
 	 */
-	public JarPackageFragmentRoot removeJarPackageFragmentRoot(JarPackageFragmentRoot root) {
+	public EglarPackageFragmentRoot removeJarPackageFragmentRoot(EglarPackageFragmentRoot root) {
 		int index = roots.indexOf(root);
 		if(index > -1) {
 			return roots.remove(index);
@@ -50,8 +49,8 @@ public class JarPackageFragmentRootContainer extends JarPackageFragmentRoot {
 		return null;
 	}
 	
-	public JarPackageFragmentRoot[] getAllJarPackageFragmentRoot() {
-		JarPackageFragmentRoot[] ret = new JarPackageFragmentRoot[roots.size()];
+	public EglarPackageFragmentRoot[] getAllJarPackageFragmentRoot() {
+		EglarPackageFragmentRoot[] ret = new EglarPackageFragmentRoot[roots.size()];
 		roots.toArray(ret);
 		return ret;
 	}
@@ -65,8 +64,8 @@ public class JarPackageFragmentRootContainer extends JarPackageFragmentRoot {
 	}
 	
 	public boolean equals(Object o) {
-		if(o instanceof JarPackageFragmentRootContainer) {
-			return getParent().equals(((JarPackageFragmentRootContainer)o).getParent());
+		if(o instanceof EglarPackageFragmentRootContainer) {
+			return getParent().equals(((EglarPackageFragmentRootContainer)o).getParent());
 		}
 		return false;
 	}

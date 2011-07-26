@@ -43,6 +43,7 @@ import org.eclipse.edt.ide.core.internal.compiler.workingcopy.CompiledFileUnit;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
+import org.eclipse.edt.ide.core.internal.model.BinaryPart;
 import org.eclipse.edt.ide.core.internal.model.ClassFile;
 import org.eclipse.edt.ide.core.internal.model.EGLElement;
 import org.eclipse.edt.ide.core.internal.model.EGLFile;
@@ -585,17 +586,6 @@ public class MatchLocator2 {//extends MatchLocator {
 		this.compilationAborted = false;
 		
 		this.createAndResolveBindings(potentialMatches, start, length);
-
-//		// create hierarchy resolver if needed
-//		try {
-//			if (!this.compilationAborted && !this.createHierarchyResolver(copy)) {
-//				// focus type is not visible, use the super type names instead of the bindings
-//				//computeSuperTypeNames();
-//				if (this.allSuperTypeNames == null) return;
-//			}
-//		} catch (AbortCompilation e) {
-//			this.compilationAborted = true;
-//		}
 		
 		// free memory
 		copy = null;
@@ -851,35 +841,17 @@ public class MatchLocator2 {//extends MatchLocator {
 			if(unit.getFile() == null) { //Created from IR, no files
 				if (this.currentPotentialMatch.openable instanceof ClassFile) {
 					ClassFile classFile = (ClassFile) this.currentPotentialMatch.openable;
-//					classFile.open(null);
-//					IBinaryType info = null;
-//					try {
-//						info = getBinaryInfo(classFile, classFile.getResource());
-//					}
-//					catch (CoreException ce) {
-//						// Do nothing
-//					}
-//					if (info != null) {
-//						boolean mayBeGeneric = this.patternLocator.mayBeGeneric;
-//						this.patternLocator.mayBeGeneric = false; // there's no longer generic in class files
 						try {
 							new ClassFileMatchLocator(this).locateMatches(classFile/*, info*/);
-						}
-						finally {
+						} finally {
 //							this.patternLocator.mayBeGeneric = mayBeGeneric;
 						}
-//					}
 						return;
 				}
 			}
-// EGLTODO Handle duplicate part names?
-//			if (hasAlreadyDefinedType(unit)) {
-//				// skip type has it is hidden so not visible
-//				return;
-//			}
 	
 			this.matchVisitor.matchSet = this.currentPotentialMatch.matchingNodeSet;
-//			getMethodBodies(unit, i);
+
 						
 			// report matches that don't need resolve
 			matchingNodeSet.cuHasBeenResolved = this.compilationAborted;
@@ -893,9 +865,6 @@ public class MatchLocator2 {//extends MatchLocator {
 					System.out.println("Resolving " + this.currentPotentialMatch.openable.toStringWithAncestors()); //$NON-NLS-1$
 				}
 
-				// refresh the total number of units known at this stage
-//				unit.getProcessingResult().totalUnitsKnown = totalUnits;
-
 				// report matches that needed resolve
 				matchingNodeSet.cuHasBeenResolved = true;
 				matchingNodeSet.reportMatching(unit);
@@ -906,40 +875,7 @@ public class MatchLocator2 {//extends MatchLocator {
 			this.currentPotentialMatch = null;
 		}
 	}
-//	protected IBinaryType getBinaryInfo(ClassFile classFile, IResource resource) throws CoreException {
-//		IPart binaryType = classFile.getPart();
-//		if (classFile.isOpen())
-//			return (IBinaryType) binaryType.getElementInfo(); // reuse the info from the java model cache
-//
-//		// create a temporary info
-//		IBinaryType info;
-//		try {
-//			PackageFragment pkg = (PackageFragment) classFile.getParent();
-//			PackageFragmentRoot root = (PackageFragmentRoot) pkg.getParent();
-//			if (root.isArchive()) {
-//				// class file in a jar
-//				String classFileName = classFile.getElementName();
-//				String classFilePath = Util.concatWith(pkg.names, classFileName, '/');
-//				ZipFile zipFile = null;
-//				try {
-//					zipFile = ((JarPackageFragmentRoot) root).getJar();
-//					info = ClassFileReader.read(zipFile, classFilePath);
-//				} finally {
-//					JavaModelManager.getJavaModelManager().closeZipFile(zipFile);
-//				}
-//			} else {
-//				// class file in a directory
-//				info = Util.newClassFileReader(resource);
-//			}
-//			if (info == null) throw binaryType.newNotPresentException();
-//			return info;
-//		} catch (ClassFormatException e) {
-//			//e.printStackTrace();
-//			return null;
-//		} catch (java.io.IOException e) {
-//			throw new JavaModelException(e, IJavaModelStatusConstants.IO_EXCEPTION);
-//		}
-//	}	
+
 	public void report(int sourceStart,	int sourceEnd,IEGLElement element,int accuracy)	throws CoreException {
 
 		if (this.scope.encloses(element)) {
@@ -1226,8 +1162,8 @@ public class MatchLocator2 {//extends MatchLocator {
 	public void reportReference(IPart element, IEGLElement parent, int accuracy){
 		try {
 			this.collector.accept(
-					(parent == null) ? element : parent, element.getSourceRange().getOffset(),
-					element.getSourceRange().getOffset() + element.getSourceRange().getLength(),
+					(parent == null) ? element.getClassFile() : ((parent instanceof BinaryPart) ? ((BinaryPart)parent).getClassFile() : parent), element.getSourceRange().getOffset(),
+							element.getSourceRange().getOffset() + element.getSourceRange().getLength(),
 					this.getCurrentResource(),
 					accuracy);
 		} catch (CoreException e) {
@@ -1340,7 +1276,7 @@ public class MatchLocator2 {//extends MatchLocator {
 		// accept class or interface declaration
 		
 		this.collector.accept(
-				(parent == null) ? partDeclaration : parent, partDeclaration.getNameRange().getOffset(),
+				(parent == null) ? partDeclaration.getClassFile() : ((parent instanceof BinaryPart) ? ((BinaryPart)parent).getClassFile() : parent), partDeclaration.getNameRange().getOffset(),
 				partDeclaration.getNameRange().getOffset() + partDeclaration.getNameRange().getLength(),
 				this.getCurrentResource(),
 				accuracy);
@@ -1353,7 +1289,7 @@ public class MatchLocator2 {//extends MatchLocator {
 		//TODO Name name = partDeclaration.getName();
 		// accept class or interface declaration
 		this.collector.accept(
-				(parent == null) ? member : parent, 0,
+				(parent == null) ? member.getClassFile() : ((parent instanceof BinaryPart) ? ((BinaryPart)parent).getClassFile() : parent), 0,
 				0,
 				this.getCurrentResource(),
 				accuracy);
@@ -1379,22 +1315,22 @@ public class MatchLocator2 {//extends MatchLocator {
 	public void reportFunctionDeclaration(NestedFunction functionDeclaration,	IEGLElement parent,
 			int accuracy)throws CoreException {
 
-			Name name = functionDeclaration.getName();
-			// accept class or interface declaration
-			this.report(
-				name.getOffset(),
-				name.getOffset() + name.getLength(),
-				(parent == null) ?
-					this.createPartHandle(name.getCanonicalName()) :
-					parent,
-				accuracy);
-		}
+		Name name = functionDeclaration.getName();
+		// accept class or interface declaration
+		this.report(
+			name.getOffset(),
+			name.getOffset() + name.getLength(),
+			(parent == null) ?
+				this.createPartHandle(name.getCanonicalName()) :
+				parent,
+			accuracy);
+	}
 	
 	public void reportFunctionDeclaration(IFunction functionDeclaration, IEGLElement parent,
 			int accuracy) throws CoreException {
 		//TODO Name name = partDeclaration.getName();
 		this.collector.accept(
-				(parent == null) ? functionDeclaration : parent, 0,
+				(parent == null) ? functionDeclaration.getClassFile() : ((parent instanceof BinaryPart) ? ((BinaryPart)parent).getClassFile() : parent), 0,
 				0,
 				this.getCurrentResource(),
 				accuracy);

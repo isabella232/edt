@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
+import org.eclipse.edt.compiler.tools.EGL2IR;
 import org.eclipse.edt.ide.core.CoreIDEPluginStrings;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
@@ -167,7 +168,7 @@ public class ProjectSettingsListenerManager {
 										if (resource.getType() == IResource.FILE) {
 											// We really don't know which extension the IR will have, so check for all known extensions.
 											String relativePath = IRFileNameUtility.toIRFileName(resource.getFullPath().removeFirstSegments(sourceDirSegments).removeFileExtension().toString());
-											IResource file = outputFolder.findMember(relativePath + ".eglxml"); //$NON-NLS-1$
+											IResource file = outputFolder.findMember(relativePath + EGL2IR.EGLXML); //$NON-NLS-1$
 											if (file != null) {
 												file.touch(null);
 											}

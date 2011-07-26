@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.model;
 
-/*
+/**
  * Part of the source element parser responsible for building the output.
  * It gets notified of structural information as they are detected, relying
  * on the requestor to assemble them together, based on the notifications it got.
@@ -39,105 +39,94 @@ package org.eclipse.edt.ide.core.internal.model;
  */
  
 public interface ISourceElementRequestor {
-/**
- * @param declarationStart This is the position of the first character of the
- *		  				   import keyword.
- * @param declarationEnd This is the position of the ';' ending the import statement
- *						 or the end of the comment following the import.
- * @param name This is the name of the import like specified in the source including the dots. The '.*'
- *             is never included in the name.
- * @param onDemand set to true if the import is an import on demand (e.g. import java.io.*). False otherwise.
- */
-/*
- * Table of line separator position. This table is passed once at the end
- * of the parse action, so as to allow computation of normalized ranges.
- *
- * A line separator might corresponds to several characters in the source,
- * 
- */
-void acceptLineSeparatorPositions(int[] positions);
-void acceptFunctionReference(char[] functionName, int argCount, int sourcePosition);
-void acceptPartReference(char[][] typeName, int sourceStart, int sourceEnd);
-void acceptPartReference(char[] typeName, int sourcePosition);
-void acceptUnknownReference(char[][] name, int sourceStart, int sourceEnd);
-void acceptUnknownReference(char[] name, int sourcePosition);
-void acceptProperty(int declarationStart, int declarationEnd, char[] name);
-public void acceptPropertyLiteralName(int declarationStart, int declarationEnd, char[] name);
-void acceptField(
-	int declarationStart,
-	int declarationEnd,
-	int modifiers,
-	char[] type,
-	char[] name,
-	int nameSourceStart,
-	int nameSourceEnd);
-void acceptImport(
-	int declarationStart,
-	int declarationEnd,
-	char[] name,
-	boolean onDemand);
-void acceptPackage(
-	int declarationStart,
-	int declarationEnd,
-	char[] name);
-void acceptUse(
-	int declarationStart,
-	int declarationEnd,
-	char[] name);
-void enterPart(
-	int partType,
-	char[] subType,
-	int contentCode,
-	int declarationStart,
-	int modifiers,
-	char[] name,
-	int nameSourceStart,
-	int nameSourceEnd,
-	char[][] interfaces,
-	char[][] parameterNames,
-	char[][] parameterTypes,
-	char[][] usagePartTypes,
-	char[][] usagePartPackages,
-	String eglFileName);
-void enterEGLFile();
-void enterField(
-	int declarationStart,
-	int modifiers,
-	char[] type,
-	char[] typeDeclaredPackage,
-	char[] name,
-	int nameSourceStart,
-	int nameSourceEnd,
-	boolean hasOccurs,
-	int declarationEnd);
-void enterFunction(
-	int declarationStart,
-	int modifiers,
-	char[] returnType,
-	char[] returnTypePackage,
-	char[] name,
-	int nameSourceStart,
-	int nameSourceEnd,	
-	char[][] parameterTypes,
-	char[][] parameterNames,
-	char[][] parameterUseTypes,
-	boolean[] areNullable,
-	char[][] parameterPackages);
-void enterPropertyBlock(int declarationStart, char[] name);
-void exitPropertyBlock(int declarationEnd);
-void exitPart(int declarationEnd);
-void exitEGLFile(int declarationEnd);
-void exitUse(int declarationEnd);
-/*
- * initializationStart denotes the source start of the expression used for initializing
- * the field if any (-1 if no initialization).
- */
-void exitField(int declarationEnd);
-void exitFunction(int declarationEnd);
+	/**
+	 * Table of line separator position. This table is passed once at the end of
+	 * the parse action, so as to allow computation of normalized ranges.
+	 * 
+	 * A line separator might corresponds to several characters in the source,
+	 * 
+	 */
+	void acceptLineSeparatorPositions(int[] positions);
 
-//purpose: for function parameter type identifier. May extend to common field, etc. 
-public static final int UNKNOWN_TYPE = 0;
-public static final int PRIMITIVE_TYPE = 1;
-public static final int DATAITEM_TYPE = 2;
-public static final int RECORD_TYPE = 3;
+	void acceptFunctionReference(char[] functionName, int argCount,
+			int sourcePosition);
+
+	void acceptPartReference(char[][] typeName, int sourceStart, int sourceEnd);
+
+	void acceptPartReference(char[] typeName, int sourcePosition);
+
+	void acceptUnknownReference(char[][] name, int sourceStart, int sourceEnd);
+
+	void acceptUnknownReference(char[] name, int sourcePosition);
+
+	void acceptProperty(int declarationStart, int declarationEnd, char[] name);
+
+	public void acceptPropertyLiteralName(int declarationStart,
+			int declarationEnd, char[] name);
+
+	void acceptField(int declarationStart, int declarationEnd, int modifiers,
+			char[] type, char[] name, int nameSourceStart, int nameSourceEnd);
+
+	/**
+	 * @param declarationStart
+	 *            This is the position of the first character of the import
+	 *            keyword.
+	 * @param declarationEnd
+	 *            This is the position of the ';' ending the import statement or
+	 *            the end of the comment following the import.
+	 * @param name
+	 *            This is the name of the import like specified in the source
+	 *            including the dots. The '.*' is never included in the name.
+	 * @param onDemand
+	 *            set to true if the import is an import on demand (e.g. import
+	 *            java.io.*). False otherwise.
+	 */
+	void acceptImport(int declarationStart, int declarationEnd, char[] name, boolean onDemand);
+
+	void acceptPackage(int declarationStart, int declarationEnd, char[] name);
+
+	void acceptUse(int declarationStart, int declarationEnd, char[] name);
+
+	void enterPart(int partType, char[] subType, int contentCode,
+			int declarationStart, int modifiers, char[] name,
+			int nameSourceStart, int nameSourceEnd, char[][] interfaces,
+			char[][] parameterNames, char[][] parameterTypes,
+			char[][] usagePartTypes, char[][] usagePartPackages,
+			String eglFileName);
+
+	void enterEGLFile();
+
+	void enterField(int declarationStart, int modifiers, char[] type,
+			char[] typeDeclaredPackage, char[] name, int nameSourceStart,
+			int nameSourceEnd, boolean hasOccurs, int declarationEnd);
+
+	void enterFunction(int declarationStart, int modifiers, char[] returnType,
+			char[] returnTypePackage, char[] name, int nameSourceStart,
+			int nameSourceEnd, char[][] parameterTypes,
+			char[][] parameterNames, char[][] parameterUseTypes,
+			boolean[] areNullable, char[][] parameterPackages);
+
+	void enterPropertyBlock(int declarationStart, char[] name);
+
+	void exitPropertyBlock(int declarationEnd);
+
+	void exitPart(int declarationEnd);
+
+	void exitEGLFile(int declarationEnd);
+
+	void exitUse(int declarationEnd);
+
+	/**
+	 * initializationStart denotes the source start of the expression used for
+	 * initializing the field if any (-1 if no initialization).
+	 */
+	void exitField(int declarationEnd);
+
+	void exitFunction(int declarationEnd);
+
+	// purpose: for function parameter type identifier. May extend to common field, etc.
+	public static final int UNKNOWN_TYPE = 0;
+	public static final int PRIMITIVE_TYPE = 1;
+	public static final int DATAITEM_TYPE = 2;
+	public static final int RECORD_TYPE = 3;
 }

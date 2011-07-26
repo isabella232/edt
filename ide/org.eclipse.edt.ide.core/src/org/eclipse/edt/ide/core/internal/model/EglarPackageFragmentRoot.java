@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2010, 2011 IBM Corporation and others.
+ * Copyright © 2000, 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -26,9 +26,9 @@ import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.jdt.core.IJavaElement;
 
-
-public class JarPackageFragmentRoot extends PackageFragmentRoot {
+public class EglarPackageFragmentRoot extends PackageFragmentRoot {
 	protected final IPath jarPath;
 	private boolean isBinaryProject = false;
 
@@ -43,7 +43,7 @@ public class JarPackageFragmentRoot extends PackageFragmentRoot {
 	 * based on a JAR file that is not contained in a <code>IJavaProject</code> and
 	 * does not have an associated <code>IResource</code>.
 	 */
-	protected JarPackageFragmentRoot(IPath externalJarPath, IEGLProject project) {
+	protected EglarPackageFragmentRoot(IPath externalJarPath, IEGLProject project) {
 		super(null, project, null);
 		this.jarPath = externalJarPath;
 	}
@@ -53,7 +53,7 @@ public class JarPackageFragmentRoot extends PackageFragmentRoot {
 	 * @param project
 	 * @param name
 	 */
-	protected JarPackageFragmentRoot(IResource resource, IEGLProject project, String name) {
+	protected EglarPackageFragmentRoot(IResource resource, IEGLProject project, String name) {
 		super(resource, project, name);
 		this.jarPath = resource.getFullPath();
 	}
@@ -67,9 +67,6 @@ public class JarPackageFragmentRoot extends PackageFragmentRoot {
 		IEGLElement[] children;
 		ZipFile jar = null;
 		try {
-//			IEGLProject project = getEGLProject();
-//			String sourceLevel = project.getOption(JavaCore.COMPILER_SOURCE, true);
-//			String compliance = project.getOption(JavaCore.COMPILER_COMPLIANCE, true);
 			jar = getJar();
 
 			// always create the default package
@@ -104,12 +101,12 @@ public class JarPackageFragmentRoot extends PackageFragmentRoot {
 		}
 
 		info.setChildren(children);
-		((JarPackageFragmentRootInfo) info).rawPackageInfo = rawPackageInfo;
+		((EglarPackageFragmentRootInfo) info).rawPackageInfo = rawPackageInfo;
 		return true;
 	}
 	@Override
 	protected OpenableElementInfo createElementInfo() {
-		return new JarPackageFragmentRootInfo();
+		return new EglarPackageFragmentRootInfo();
 	}
 	/**
 	 * A Jar is always K_BINARY.
@@ -127,8 +124,8 @@ public class JarPackageFragmentRoot extends PackageFragmentRoot {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (o instanceof JarPackageFragmentRoot) {
-			JarPackageFragmentRoot other= (JarPackageFragmentRoot) o;
+		if (o instanceof EglarPackageFragmentRoot) {
+			EglarPackageFragmentRoot other= (EglarPackageFragmentRoot) o;
 			return (this.jarPath.equals(other.jarPath) && this.getParent().equals(other.getParent()));
 		}
 		return false;
@@ -161,41 +158,16 @@ public class JarPackageFragmentRoot extends PackageFragmentRoot {
 	 * Returns an array of non-java resources contained in the receiver.
 	 */
 	public Object[] getNonJavaResources() throws EGLModelException {
-		// We want to show non java resources of the default package at the root (see PR #1G58NB8)
-//		Object[] defaultPkgResources =  ((JarPackageFragment) getPackageFragment(CharOperation.NO_STRINGS)).storedNonJavaResources();
-//		int length = defaultPkgResources.length;
-//		if (length == 0)
-//			return defaultPkgResources;
-//		Object[] nonJavaResources = new Object[length];
-//		for (int i = 0; i < length; i++) {
-//			JarEntryResource nonJavaResource = (JarEntryResource) defaultPkgResources[i];
-//			nonJavaResources[i] = nonJavaResource.clone(this);
-//		}
-//		return nonJavaResources;
 		return null;
 	}
-//	public PackageFragment getPackageFragment(String[] pkgName) {
-//		return new JarPackageFragment(this, pkgName);
-//	}
-//	public IPath internalPath() {
-//		if (isExternal()) {
-//			return this.jarPath;
-//		} else {
-//			return super.internalPath();
-//		}
-//	}
+
 	public IResource resource(PackageFragmentRoot root) {
-//		if (this.resource == null) {
-//			// external jar
-//			return null;
-//		}
-//		return super.resource(root);
 		return null;
 	}
 	
 	@Override
 	public PackageFragment getPackageFragment(String[] pkgName) {
-		return new JarPackageFragment(this, pkgName);
+		return new EglarPackageFragment(this, pkgName);
 	}
 	/**
 	 * @see IJavaElement
@@ -252,7 +224,7 @@ public class JarPackageFragmentRoot extends PackageFragmentRoot {
 		ArrayList[] children = (ArrayList[]) rawPackageInfo.get(pkgName);
 		if (Util.isEGLIRFileName(entryName)) {
 			if (children[0/*JAVA*/] == EMPTY_LIST) children[0/*JAVA*/] = new ArrayList();
-			String nameWithoutExtension = entryName.substring(lastSeparator + 1, entryName.length() - 3);
+			String nameWithoutExtension = entryName.substring(lastSeparator + 1, entryName.length() - Util.SUFFIX_eglxml.length);
 			children[0/*JAVA*/].add(nameWithoutExtension);
 		} else {
 			if (children[1/*NON_JAVA*/] == EMPTY_LIST) children[1/*NON_JAVA*/] = new ArrayList();

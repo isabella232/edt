@@ -11,8 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.utils;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.edt.ide.core.internal.model.util.IEGLProjectFileUtility;
 
@@ -27,5 +31,26 @@ public class EGLProjectFileUtility implements IEGLProjectFileUtility {
 		return false;
 	}
 	
-
+	 public static IFolder createFolder(IContainer root, IPath folderPath){
+	    	IFolder folder = null;
+	    	if((folder = root.getFolder(folderPath)).exists()){
+	    		return folder;	//already exist
+	    	}
+	    	String[] segs = folderPath.segments();
+	    	for(String seg: segs){
+				if(segs != null){
+					IFolder curFolder = root.getFolder(new Path(seg));
+					if(!curFolder.exists()){
+						try {
+							curFolder.create(false, true, null);
+						} catch (CoreException e) {
+							e.printStackTrace();
+							return null;
+						}
+					}
+					root = curFolder;
+				}
+			}
+	    	return root.getFolder(folderPath);
+	    }
 }

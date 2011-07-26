@@ -14,7 +14,7 @@ package org.eclipse.edt.ide.core.internal.model.search;
 import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.edt.ide.core.model.IIndexConstants;
+import org.eclipse.edt.compiler.internal.eglar.FileInEglar;
 
 
 public class EGLSearchDocument extends SearchDocument {
@@ -23,7 +23,7 @@ public class EGLSearchDocument extends SearchDocument {
 	private String zipFilePath; 
 //private IDocument 
 	public EGLSearchDocument(java.util.zip.ZipEntry zipEntry, IPath zipFilePath, byte[] contents, SearchParticipant participant) {
-		super(zipFilePath + IIndexConstants.JAR_FILE_ENTRY_SEPARATOR + zipEntry.getName(), participant);
+		super(zipFilePath + FileInEglar.EGLAR_SEPARATOR + zipEntry.getName(), participant);
 		this.byteContents = contents;
 		this.zipFilePath = zipFilePath.toOSString();
 	}
@@ -53,7 +53,7 @@ public class EGLSearchDocument extends SearchDocument {
 	}
 
 	public String getType() {
-		return "ir";
+		return "eglxml";
 	}
 
 }

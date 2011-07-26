@@ -13,7 +13,6 @@ package org.eclipse.edt.ide.core.model;
 
 
 public interface IIndexConstants {
-	static final String JAR_FILE_ENTRY_SEPARATOR = "|";
 	/* index encoding */
 	char[] REF= "ref/".toCharArray(); //$NON-NLS-1$
 	char[] FIELD_REF= "fieldRef/".toCharArray(); //$NON-NLS-1$

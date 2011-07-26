@@ -362,8 +362,8 @@ public class EGLModelManager {
 			IEGLPathEntry entry = ((EGLProject)project).getEGLPathEntryFor(resourcePath);
 			if (entry != null) {
 				IPackageFragmentRoot root = project.getPackageFragmentRoot(file);
-				if(root instanceof JarPackageFragmentRoot) {
-					((JarPackageFragmentRoot)root).setBinaryProject(entry.isBinaryProject());
+				if(root instanceof EglarPackageFragmentRoot) {
+					((EglarPackageFragmentRoot)root).setBinaryProject(entry.isBinaryProject());
 				}
 				return root;
 			}

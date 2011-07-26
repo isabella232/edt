@@ -19,14 +19,14 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.internal.eglar.FileInEglar;
 import org.eclipse.edt.ide.core.internal.model.index.IIndex;
 import org.eclipse.edt.ide.core.internal.model.index.IQueryResult;
-import org.eclipse.edt.ide.core.internal.model.index.impl.IFileDocument;
-
 import org.eclipse.edt.ide.core.internal.model.search.EGLSearchDocument;
 import org.eclipse.edt.ide.core.internal.model.search.EGLSearchParticipant;
 import org.eclipse.edt.ide.core.internal.model.search.SearchParticipant;
@@ -36,37 +36,21 @@ import org.eclipse.edt.ide.core.internal.model.util.Util;
 
 
 public class AddEglarFileToIndex extends IndexRequest {
-	
-	private static final String JAR_FILE_ENTRY_SEPARATOR = "|";
-	
-	IFile resource;
-//	Scanner scanner;
+
+	private IFile resource;
+	private IProject project;
 	
 	public AddEglarFileToIndex(IFile resource, IndexManager manager) {
 		super(resource.getFullPath(), manager);
 		this.resource = resource;
+		this.project = resource.getProject();
 	}
 
 	public AddEglarFileToIndex(IPath jarPath, IndexManager manager) {
 		// external EGLAR scenario - no resource
 		super(jarPath, manager);
 	}
-	public boolean equals(Object o) {
-		if (o instanceof AddEglarFileToIndex) {
-			if (this.resource != null)
-				return this.resource.equals(((AddEglarFileToIndex) o).resource);
-			if (this.indexPath != null)
-				return this.indexPath.equals(((AddEglarFileToIndex) o).indexPath);
-		}
-		return false;
-	}
-	public int hashCode() {
-		if (this.resource != null)
-			return this.resource.hashCode();
-		if (this.indexPath != null)
-			return this.indexPath.hashCode();
-		return -1;
-	}
+	
 	public boolean execute(IProgressMonitor progressMonitor) {
 
 		if (this.isCancelled || progressMonitor != null && progressMonitor.isCanceled()) return true;
@@ -93,7 +77,7 @@ public class AddEglarFileToIndex extends IndexRequest {
 					JobManager.verbose("-> index for " + this.indexPath + " just got deleted"); //$NON-NLS-1$//$NON-NLS-2$
 				return true; // index got deleted since acquired
 			}
-//			index.separator = JAR_SEPARATOR;
+
 			ZipFile zip = null;
 			try {
 				// this path will be a relative path to the workspace in case the zipfile in the workspace otherwise it will be a path in the
@@ -181,17 +165,7 @@ public class AddEglarFileToIndex extends IndexRequest {
 					}
 				}
 
-				// Index the jar for the first time or reindex the jar in case the previous index file has been corrupted
-				// index already existed: recreate it so that we forget about previous entries
-				//TODO Rocky
-//				SearchParticipant participant = SearchEngine.getDefaultSearchParticipant();
-//				if (!this.manager.resetIndex(this.indexPath)) {
-//					// failed to recreate index, see 73330
-//					this.manager.removeIndex(this.indexPath);
-//					return false;
-//				}
-//				index.separator = JAR_SEPARATOR;
-				BinaryIndexer binaryIndexer = new BinaryIndexer();
+				BinaryIndexer binaryIndexer = new BinaryIndexer(this.project);
 				SearchParticipant participant = new EGLSearchParticipant();
 				for (Enumeration e = zip.entries(); e.hasMoreElements();) {
 					if (this.isCancelled) {
@@ -207,7 +181,7 @@ public class AddEglarFileToIndex extends IndexRequest {
 							isValidPackageNameForIR(zipEntryName)) {
 						// index only classes coming from valid packages - https://bugs.eclipse.org/bugs/show_bug.cgi?id=293861
 						final byte[] classFileBytes = Util.getZipEntryByteContent(ze, zip);
-						String path = ((IPath)zipFilePath) + JAR_FILE_ENTRY_SEPARATOR + ze.getName();
+						String path = ((IPath)zipFilePath) + FileInEglar.EGLAR_SEPARATOR + ze.getName();
 						EGLSearchDocument entryDocument = new EGLSearchDocument(ze, zipFilePath, classFileBytes, participant);
 						index.add(entryDocument, binaryIndexer);
 					}
@@ -219,8 +193,6 @@ public class AddEglarFileToIndex extends IndexRequest {
 						+ (System.currentTimeMillis() - initialTime) + "ms)"); //$NON-NLS-1$
 			} finally {
 				if (zip != null) {
-//					if (JavaModelManager.ZIP_ACCESS_VERBOSE)
-//						System.out.println("(" + Thread.currentThread() + ") [AddJarFileToIndex.execute()] Closing ZipFile " + zip); //$NON-NLS-1$	//$NON-NLS-2$
 					zip.close();
 				}
 				monitor.exitWrite(); // free write lock
@@ -235,39 +207,41 @@ public class AddEglarFileToIndex extends IndexRequest {
 		}
 		return true;
 	}
+	
 	public String getJobFamily() {
-//TODO		if (this.resource != null)
-//			return super.getJobFamily();
 		return this.indexPath.toOSString(); // external jar
 	}	
+	
 	private  boolean isValidPackageNameForIR(String className) {
-//TODO Rocky, will it be invalid?
-//		char[] classNameArray = className.toCharArray();
-//		if (this.scanner == null)
-//			this.scanner = new Scanner(false /* comment */, true /* whitespace */, false /* nls */,
-//					ClassFileConstants.JDK1_3/* sourceLevel */, null/* taskTag */, null/* taskPriorities */, true /* taskCaseSensitive */);
-//		this.scanner.setSource(classNameArray); 
-//		this.scanner.eofPosition = classNameArray.length - SuffixConstants.SUFFIX_CLASS.length;
-//		try {
-//			if (this.scanner.scanIdentifier() == TerminalTokens.TokenNameIdentifier) {
-//				while (this.scanner.eofPosition > this.scanner.currentPosition) {
-//					if (this.scanner.getNextChar() != '/' || this.scanner.eofPosition <= this.scanner.currentPosition) {
-//						return false;
-//					}
-//					if (this.scanner.scanIdentifier() != TerminalTokens.TokenNameIdentifier) {
-//						return false;
-//					}
-//				}
-//				return true;
-//			}
-//		} catch (InvalidInputException e) {
-//			// invalid class name
-//		}
-		return true;
+		if(org.eclipse.edt.ide.core.internal.model.Util.isValidMofPackage(className)) {
+			return false;
+		} else {
+			return true;
+		}
 	}
+	
 	protected Integer updatedIndexState() {
 		return IndexManager.REBUILDING_STATE;
 	}
+	
+	public boolean equals(Object o) {
+		if (o instanceof AddEglarFileToIndex) {
+			if (this.resource != null)
+				return this.resource.equals(((AddEglarFileToIndex) o).resource);
+			if (this.indexPath != null)
+				return this.indexPath.equals(((AddEglarFileToIndex) o).indexPath);
+		}
+		return false;
+	}
+	
+	public int hashCode() {
+		if (this.resource != null)
+			return this.resource.hashCode();
+		if (this.indexPath != null)
+			return this.indexPath.hashCode();
+		return -1;
+	}
+	
 	public String toString() {
 		return "indexing " + this.indexPath.toString(); //$NON-NLS-1$
 	}

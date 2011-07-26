@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.edt.compiler.internal.eglar.FileInEglar;
 import org.eclipse.edt.ide.core.internal.model.index.impl.JarFileEntryDocument;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
@@ -73,8 +74,8 @@ public class PartInfoFactory {
 	}
 	
 	//example of path:
-	//1. /Test1/Test.eglar|rec_without_package.ir
-	//2. /Test1/Test.eglar|int1/rec1.ir
+	//1. /Test1/Test.eglar|rec_without_package.eglxml
+	//2. /Test1/Test.eglar|int1/rec1.eglxml
 	//3. /Test1/EGLSource/pgm1.egl
 	//4. /Test1/EGLSource/mypkg/pkg1/pgm1.egl
 	//example of projecT:
@@ -102,12 +103,12 @@ public class PartInfoFactory {
 		}
 		String rest = path.substring(index); // the first slashes.
 		//example of rest:
-		//1. /Test.eglar|rec_without_package.ir
-		//2. /Test.eglar|int1/rec1.ir
+		//1. /Test.eglar|rec_without_package.eglxml
+		//2. /Test.eglar|int1/rec1.eglxml
 		//3. /EGLSource/pgm1.egl
 		//4. /EGLSource/mypkg/pkg1/pgm1.egl	
 		
-		index = rest.indexOf(JarFileEntryDocument.JAR_FILE_ENTRY_SEPARATOR);
+		index = rest.indexOf(FileInEglar.EGLAR_SEPARATOR);
 		if(index == -1){	//for source part			
 			index = rest.lastIndexOf(PartInfo.SEPARATOR);
 			if (index == -1)
@@ -215,12 +216,14 @@ public class PartInfoFactory {
 	}	
 	
 	//example of path:
-	//1. c:\temp\Test.eglar|rec_without_package.ir
-	//2. c:\temp\Test.eglar|int1/rec1.ir
+	//1. c:\temp\Test.eglar|rec_without_package.eglxml
+	//2. c:\temp\Test.eglar|int1/rec1.eglxml
 	private PartInfo createExternalPartDeclarationInfo(String packageName, String typeName, char[][] enclosingName, char partType, String path, IFilePartInfo last, String project) {
 		String rest = path;
-		
-		int index = rest.lastIndexOf("|");
+		if ( rest.startsWith( FileInEglar.EGLAR_PREFIX ) ) {
+			rest = rest.substring( FileInEglar.EGLAR_PREFIX.length() );
+		}
+		int index = rest.lastIndexOf(FileInEglar.EGLAR_SEPARATOR);
 		if (index == -1)
 			return null;
 		

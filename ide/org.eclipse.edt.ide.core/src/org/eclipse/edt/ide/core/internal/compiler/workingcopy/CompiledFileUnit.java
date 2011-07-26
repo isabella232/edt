@@ -41,6 +41,7 @@ public class CompiledFileUnit implements ICompiledFileUnit,IPartASTRequestor {
 	ArrayList asts = new ArrayList();
 	HashMap referenceFiles = new HashMap();
 	HashMap referencedParts = new HashMap();
+	private List<IBinding> bindings = new ArrayList<IBinding>();
 	
 	public CompiledFileUnit(){
 		
@@ -164,5 +165,15 @@ public class CompiledFileUnit implements ICompiledFileUnit,IPartASTRequestor {
 			}
 						
 		}
+	}
+	
+	public void addIBinding(IBinding binding) {
+		if(!bindings.contains(binding))
+			bindings.add(binding);
+	}
+	
+	public List<IBinding> getIBindingsFromIR() {
+		List<IBinding> temp = new ArrayList<IBinding>(this.bindings);
+		return temp;
 	}
 }

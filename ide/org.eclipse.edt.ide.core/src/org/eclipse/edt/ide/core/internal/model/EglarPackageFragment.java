@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2010, 2011 IBM Corporation and others.
+ * Copyright © 2000, 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,29 +14,27 @@ package org.eclipse.edt.ide.core.internal.model;
 import java.util.ArrayList;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IClassFile;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 
-public class JarPackageFragment extends PackageFragment {
-
-	protected JarPackageFragment(PackageFragmentRoot root, String name) {
+public class EglarPackageFragment extends PackageFragment {
+	protected EglarPackageFragment(PackageFragmentRoot root, String name) {
 		super(root, name);
 	}
 	
-	protected JarPackageFragment(PackageFragmentRoot root, String[] names) {
+	protected EglarPackageFragment(PackageFragmentRoot root, String[] names) {
 		super(root, names);
 	}
 	
 	@Override
 	protected void buildStructure(OpenableElementInfo info, IProgressMonitor monitor) throws EGLModelException {
-		JarPackageFragmentRoot root = (JarPackageFragmentRoot) getParent();
-		JarPackageFragmentRootInfo parentInfo = (JarPackageFragmentRootInfo) root.getElementInfo();
+		EglarPackageFragmentRoot root = (EglarPackageFragmentRoot) getParent();
+		EglarPackageFragmentRootInfo parentInfo = (EglarPackageFragmentRootInfo) root.getElementInfo();
 		ArrayList[] entries = (ArrayList[]) parentInfo.rawPackageInfo.get(this.names);
 		if (entries == null)
 			throw newNotPresentException();
-		JarPackageFragmentInfo fragInfo = (JarPackageFragmentInfo) info;
+		EglarPackageFragmentInfo fragInfo = (EglarPackageFragmentInfo) info;
 
 		// compute children
 		fragInfo.setChildren(computeChildren(entries[0/*class files*/]));
@@ -71,71 +69,15 @@ public class JarPackageFragment extends PackageFragment {
 		int length = entryNames.size();
 		if (length == 0)
 			return EGLElementInfo.NO_NON_EGL_RESOURCES;
-//		HashMap jarEntries = new HashMap(); // map from IPath to IJarEntryResource
-//		HashMap childrenMap = new HashMap(); // map from IPath to ArrayList<IJarEntryResource>
+
 		ArrayList topJarEntries = new ArrayList();
-//		for (int i = 0; i < length; i++) {
-//			String resName = (String) entryNames.get(i);
-//			// consider that a .java file is not a non-java resource (see bug 12246 Packages view shows .class and .java files when JAR has source)
-//			if (!Util.isEGLFileName(resName)) {
-//				IPath filePath = new Path(resName);
-//				IPath childPath = filePath.removeFirstSegments(this.names.length);
-//				if (jarEntries.containsKey(childPath)) {
-//					// see https://bugs.eclipse.org/bugs/show_bug.cgi?id=222665
-//					continue;
-//				}
-//				JarEntryFile file = new JarEntryFile(filePath.lastSegment());
-//				jarEntries.put(childPath, file);
-//				if (childPath.segmentCount() == 1) {
-//					file.setParent(this);
-//					topJarEntries.add(file);
-//				} else {
-//					IPath parentPath = childPath.removeLastSegments(1);
-//					while (parentPath.segmentCount() > 0) {
-//						ArrayList parentChildren = (ArrayList) childrenMap.get(parentPath);
-//						if (parentChildren == null) {
-//							Object dir = new JarEntryDirectory(parentPath.lastSegment());
-//							jarEntries.put(parentPath, dir);
-//							childrenMap.put(parentPath, parentChildren = new ArrayList());
-//							parentChildren.add(childPath);
-//							if (parentPath.segmentCount() == 1) {
-//								topJarEntries.add(dir);
-//								break;
-//							}
-//							childPath = parentPath;
-//							parentPath = childPath.removeLastSegments(1);
-//						} else {
-//							parentChildren.add(childPath);
-//							break; // all parents are already registered
-//						}
-//					}
-//				}
-//			}
-//		}
-//		Iterator entries = childrenMap.entrySet().iterator();
-//		while (entries.hasNext()) {
-//			Map.Entry entry = (Map.Entry) entries.next();
-//			IPath entryPath = (IPath) entry.getKey();
-//			ArrayList entryValue =  (ArrayList) entry.getValue();
-//			JarEntryDirectory jarEntryDirectory = (JarEntryDirectory) jarEntries.get(entryPath);
-//			int size = entryValue.size();
-//			IJarEntryResource[] children = new IJarEntryResource[size];
-//			for (int i = 0; i < size; i++) {
-//				JarEntryResource child = (JarEntryResource) jarEntries.get(entryValue.get(i));
-//				child.setParent(jarEntryDirectory);
-//				children[i] = child;
-//			}
-//			jarEntryDirectory.setChildren(children);
-//			if (entryPath.segmentCount() == 1) {
-//				jarEntryDirectory.setParent(this);
-//			}
-//		}
+
 		return topJarEntries.toArray(new Object[topJarEntries.size()]);
 	}	
 	
 	@Override
 	protected OpenableElementInfo createElementInfo() {
-		return new JarPackageFragmentInfo();
+		return new EglarPackageFragmentInfo();
 	}
 	/**
 	 * Returns an array of non-java resources contained in the receiver.
@@ -155,14 +97,35 @@ public class JarPackageFragment extends PackageFragment {
 		return true;
 	}
 	protected Object[] storedNonJavaResources() throws EGLModelException {
-		return ((JarPackageFragmentInfo) getElementInfo()).getNonJavaResources();
+		return ((EglarPackageFragmentInfo) getElementInfo()).getNonJavaResources();
 	}	
 	@Override
 	protected boolean resourceExists() {
-		if(fParent instanceof JarPackageFragmentRoot) {
-			return ((JarPackageFragmentRoot) fParent).resourceExists();
+		if(fParent instanceof EglarPackageFragmentRoot) {
+			return ((EglarPackageFragmentRoot) fParent).resourceExists();
 		}
 		return super.resourceExists();
+	}
+	
+	public IClassFile getClassFile(String name) {
+		if (!Util.isEGLIRFileName(name)) {
+			throw new IllegalArgumentException();
+		}
+		try {
+			EGLElementInfo openableInfo;
+			openableInfo = (EGLElementInfo) this.getElementInfo();
+			IEGLElement[] elements = openableInfo.getChildren();
+			for ( int i = 0; i < elements.length; i ++ ) {
+				if ( elements[i].getElementName().equals( name ) ) {
+					return (IClassFile)elements[i];
+				}
+			}
+		} catch (EGLModelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
 	}
 	
 	@Override

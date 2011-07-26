@@ -2266,7 +2266,7 @@ protected void updateIndex(Openable element, IResourceDelta delta) {
 				IPackageFragmentRoot root = (IPackageFragmentRoot)element;
 				//for eglar inside BP, should handle in different way
 				IProject proj = root.getEGLProject().getProject();
-				if(kind == IResourceDelta.ADDED && org.eclipse.edt.ide.core.internal.model.util.Util.isBinaryProject(proj) && root instanceof JarPackageFragmentRoot){
+				if(kind == IResourceDelta.ADDED && org.eclipse.edt.ide.core.internal.model.util.Util.isBinaryProject(proj) && root instanceof EglarPackageFragmentRoot){
 					this.indexManager.indexLibrary(root.getPath(), proj);
 					return;
 				}

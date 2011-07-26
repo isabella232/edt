@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.internal.eglar.FileInEglar;
 
 
 /**
@@ -25,7 +26,6 @@ public class JarFileEntryDocument extends PropertyDocument {
 	protected ZipEntry zipEntry;
 	protected byte[] byteContents;
 	protected Path zipFilePath;
-	public static final String JAR_FILE_ENTRY_SEPARATOR = "|"; //$NON-NLS-1$
 /**
  * JarFileEntryDocument constructor comment.
  */
@@ -59,7 +59,7 @@ public String getEncoding() {
 	 * @see org.eclipse.edt.ide.core.internal.model.index.jdt.internal.core.index.IDocument#getName()
 	 */
 	public String getName() {
-		return zipFilePath + JAR_FILE_ENTRY_SEPARATOR + zipEntry.getName();
+		return zipFilePath + FileInEglar.EGLAR_SEPARATOR + zipEntry.getName();
 	}
 /**
  * This API always return null for a JarFileDocument

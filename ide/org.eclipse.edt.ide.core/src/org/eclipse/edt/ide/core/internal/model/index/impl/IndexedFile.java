@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.core.internal.model.index.impl;
 
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.internal.eglar.FileInEglar;
 import org.eclipse.edt.ide.core.internal.model.index.IDocument;
 import org.eclipse.edt.ide.core.internal.model.index.IQueryResult;
 
@@ -59,7 +60,10 @@ public class IndexedFile implements IQueryResult {
 	 * </ul>
 	 */
 	public static String convertPath(String pathString) {
-		int index = pathString.indexOf(JarFileEntryDocument.JAR_FILE_ENTRY_SEPARATOR);
+		if ( pathString.startsWith( FileInEglar.EGLAR_PREFIX ) ) {
+			pathString = pathString.substring( FileInEglar.EGLAR_PREFIX.length() );
+		}
+		int index = pathString.indexOf(FileInEglar.EGLAR_SEPARATOR);
 		if (index == -1)
 			return pathString;
 			
