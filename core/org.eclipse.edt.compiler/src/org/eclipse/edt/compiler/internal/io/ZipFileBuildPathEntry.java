@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
+import org.eclipse.edt.compiler.tools.EGL2IR;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 import com.ibm.icu.util.StringTokenizer;
@@ -113,7 +114,7 @@ public abstract class ZipFileBuildPathEntry{
 	}
 	
 	protected String getFileExtension() {
-		return ".ir";
+		return EGL2IR.EGLXML;
 	}
 	
 	protected String[] getAllEntries() {
