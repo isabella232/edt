@@ -40,4 +40,8 @@ public class ContinueStatementTemplate extends JavaScriptTemplate {
 				out.print("continue " + label.getName());
 		}
 	}
+
+	public void genStatementEnd(ContinueStatement stmt, Context ctx, TabbedWriter out) {
+		out.println(";");
+	}
 }
