@@ -405,23 +405,27 @@ class Egl2MofMember extends Egl2MofPart {
 	}
 
 	public void setUpMofTypedElement(EMember obj, IDataBinding edtObj) {
-		EType type = (EType)mofTypeFromTypedElement(edtObj);
-		obj.setEType(type);
-		if (edtObj.getType().isNullable()) { 
-			obj.setIsNullable(true);
+		EObject eObj = mofTypeFromTypedElement(edtObj);
+		
+		if (eObj instanceof EType) {
+			EType type = (EType)eObj;
+			obj.setEType(type);
+			if (edtObj.getType().isNullable()) { 
+				obj.setIsNullable(true);
+			}
+			if (obj instanceof EField) {
+				IAnnotationBinding ann = this.getAnnotation(edtObj, "transient");
+				if (ann != null) ((EField)obj).setIsTransient((Boolean)getValue(edtObj, ann.getValue(), false));
+				
+				ann = this.getAnnotation(edtObj, "containment");
+				if (ann != null) ((EField)obj).setContainment((Boolean)getValue(edtObj, ann.getValue(), false));
+			}
+			IAnnotationBinding mofName = this.getAnnotation(edtObj, "mofName");
+			if (mofName != null) 
+				obj.setName((String)getValue(null, mofName.getValue(), false));
+			else 
+				obj.setName(edtObj.getCaseSensitiveName());
 		}
-		if (obj instanceof EField) {
-			IAnnotationBinding ann = this.getAnnotation(edtObj, "transient");
-			if (ann != null) ((EField)obj).setIsTransient((Boolean)getValue(edtObj, ann.getValue(), false));
-			
-			ann = this.getAnnotation(edtObj, "containment");
-			if (ann != null) ((EField)obj).setContainment((Boolean)getValue(edtObj, ann.getValue(), false));
-		}
-		IAnnotationBinding mofName = this.getAnnotation(edtObj, "mofName");
-		if (mofName != null) 
-			obj.setName((String)getValue(null, mofName.getValue(), false));
-		else 
-			obj.setName(edtObj.getCaseSensitiveName());
 	}
 	
 	public void processSettings(Element context, SettingsBlock settings) {
@@ -464,7 +468,7 @@ class Egl2MofMember extends Egl2MofPart {
 			else if (expr instanceof SetValuesExpression && ((SetValuesExpression)expr).getExpression() instanceof AnnotationExpression) {
 				if (((AnnotationExpression)((SetValuesExpression)expr).getExpression()).resolveDataBinding() instanceof IAnnotationBinding) { 
 					IAnnotationBinding annBinding = (IAnnotationBinding)((AnnotationExpression)((SetValuesExpression)expr).getExpression()).resolveDataBinding();
-					if (!isEMetadataObject(annBinding)) {
+					if (Binding.isValidBinding(annBinding) && !isEMetadataObject(annBinding)) {
 						Annotation value = (Annotation)evaluateExpression(expr);
 						context.getAnnotations().add(value);
 					}
