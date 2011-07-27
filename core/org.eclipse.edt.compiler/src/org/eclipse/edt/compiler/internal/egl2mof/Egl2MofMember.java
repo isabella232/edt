@@ -528,9 +528,7 @@ class Egl2MofMember extends Egl2MofPart {
 	
 	@SuppressWarnings("unchecked")
 	/**
-	 * Evaluate an AST Expression in the MOF context where only
-	 * Literal expressions and simple assignment of Primitive, 
-	 * Annotation or List values is allowed
+	 * Evaluate an AST Expression in the MOF context
 	 */
 	public Object evaluateExpression(Node expr) {
 		Object value = null;
@@ -562,6 +560,11 @@ class Egl2MofMember extends Egl2MofPart {
 			if (((SetValuesExpression)expr).getSettingsBlock() != null)
 				executeSettings(value, ((SetValuesExpression)expr).getSettingsBlock());		
 		}
+		else if (expr instanceof org.eclipse.edt.compiler.core.ast.Name) {
+			expr.accept(this);
+			value = stack.pop();
+		}
+		
 		return value;
 	}
 	
