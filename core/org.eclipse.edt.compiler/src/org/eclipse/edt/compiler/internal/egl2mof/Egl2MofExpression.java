@@ -380,7 +380,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 								if (functionBinding == null || isSuperTypeMember(functionBinding)) {
 									// Qualify with this to get QualifiedFunctionInvocation which will do dynamic lookup
 									fi = factory.createQualifiedFunctionInvocation();
-									fi.setId(node.getTarget().getCanonicalString());
+									fi.setId(fa.getID());
 									ThisExpression thisExpr = factory.createThisExpression();
 									thisExpr.setThisObject(getCurrentFunctionMember().getContainer());
 									((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
