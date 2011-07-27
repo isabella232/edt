@@ -17,7 +17,6 @@ import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Handler;
-import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Part;
 
 public class HandlerTemplate extends JavaScriptTemplate {
@@ -67,9 +66,5 @@ public class HandlerTemplate extends JavaScriptTemplate {
 
 	public void genRuntimeTypeName(Handler type, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genPartName, type, ctx, out);
-	}
-
-	public void genQualifier(Handler type, Context ctx, TabbedWriter out, NamedElement arg) {
-		out.print("this.");
 	}
 }

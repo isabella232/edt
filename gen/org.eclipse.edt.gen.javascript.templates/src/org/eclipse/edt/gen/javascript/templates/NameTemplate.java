@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -21,7 +20,8 @@ import org.eclipse.edt.mof.egl.Name;
 public class NameTemplate extends JavaScriptTemplate {
 
 	public Annotation getPropertyAnnotation(Name expr) {
-		return expr.getNamedElement().getAnnotation(Constants.Annotation_EGLProperty);
+		Annotation result = expr.getNamedElement().getAnnotation("egl.javascript.JavaScriptProperty"); // TODO need constant
+		return result;
 	}
 
 	public void genAssignment(Name expr, Context ctx, TabbedWriter out, Expression arg1, String arg2) {

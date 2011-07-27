@@ -19,7 +19,6 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Library;
-import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 
@@ -142,11 +141,5 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		out.print(".prototype.");
 		ctx.invoke(genName, arg, ctx, out);
 		out.print(")");
-	}
-
-	public void genQualifier(Library library, Context ctx, TabbedWriter out) {}
-
-	public void genQualifier(Library library, Context ctx, TabbedWriter out, NamedElement arg) {
-//		out.print("this.");
 	}
 }

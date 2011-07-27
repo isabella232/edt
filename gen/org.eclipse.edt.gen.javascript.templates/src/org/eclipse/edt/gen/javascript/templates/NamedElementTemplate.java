@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
+import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.NamedElement;
@@ -25,7 +26,6 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 
 	public void genAccessor(NamedElement element, Context ctx, TabbedWriter out) {
 		Annotation property = getPropertyAnnotation(element);
-		ctx.invoke(genQualifier, element, ctx, out);
 		if (property != null) {
 			// obtain the name of the function
 			String functionName;
@@ -47,7 +47,7 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 	}
 
 	public void genName(NamedElement element, Context ctx, TabbedWriter out) {
-		out.print(element.getName());
+		out.print(JavaScriptAliaser.getAlias(element.getName()));
 	}
 
 	public void genQualifier(NamedElement element, Context ctx, TabbedWriter out) {}

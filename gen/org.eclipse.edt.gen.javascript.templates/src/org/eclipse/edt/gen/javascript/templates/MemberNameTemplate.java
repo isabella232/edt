@@ -15,6 +15,7 @@ import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
@@ -69,6 +70,14 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 	}
 
 	public void genMemberName(MemberName expr, Context ctx, TabbedWriter out) {
+		/*
+		 * Determine whether we need an implicit "this." as required by JavaScript for when accessing local fields within
+		 * their containing part
+		 */
+		if ((expr.getQualifier() == null) && (expr.getMember() instanceof Field)) {
+			ctx.invoke(genQualifier, (Field) expr.getMember(), ctx, out);
+		}
+
 		ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 		if (expr.getMember() instanceof FunctionParameter
 			&& org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx)) {

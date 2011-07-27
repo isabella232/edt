@@ -23,6 +23,8 @@ public class InvocationExpressionTemplate extends JavaScriptTemplate {
 		if (expr.getQualifier() != null) {
 			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
 			out.print(".");
+		} else {
+			ctx.invoke(genQualifier, expr.getTarget(), ctx, out);
 		}
 		ctx.invoke(genName, expr.getTarget(), ctx, out);
 		out.print("(");

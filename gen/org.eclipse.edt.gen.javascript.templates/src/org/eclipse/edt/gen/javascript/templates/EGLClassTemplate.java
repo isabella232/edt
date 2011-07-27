@@ -24,6 +24,8 @@ import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
@@ -37,25 +39,22 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		addNamespaceMap(part, ctx);
 	}
 
-	private void addNamespaceMap(EGLClass part, Context ctx){
+	private void addNamespaceMap(EGLClass part, Context ctx) {
 		String localName = part.getName();
 		String namespace = CommonUtilities.createNamespaceFromPackage(part);
 		Annotation annot = part.getAnnotation("eglx.xml._bind.annotation.xmlRootElement");
-		if(annot != null){
-			if (annot.getValue("namespace") != null && 
-					((String)annot.getValue("namespace")).length() > 0)
-			{
+		if (annot != null) {
+			if (annot.getValue("namespace") != null && ((String) annot.getValue("namespace")).length() > 0) {
 				namespace = (String) annot.getValue("namespace");
 			}
-			if (annot.getValue("name") != null && 
-					((String)annot.getValue("name")).length() > 0)
-			{
+			if (annot.getValue("name") != null && ((String) annot.getValue("name")).length() > 0) {
 				localName = (String) annot.getValue("name");
 			}
-			
+
 		}
 		ctx.addNamespace(namespace, localName, part.getFullyQualifiedName());
 	}
+
 	public void preGenUsedParts(EGLClass part, Context ctx) {
 		for (Part item : IRUtils.getReferencedPartsFor(part)) {
 			ctx.invoke(preGenUsedPart, part, ctx, item);
@@ -151,12 +150,12 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			ctx.invoke(genLibrary, part, ctx, out, library);
 		}
 	}
-	
+
 	public void genLibrary(EGLClass part, Context ctx, TabbedWriter out, Library arg) {
 		ctx.invoke(genInstantiation, arg, ctx, out);
 		out.println(";");
 	}
-	
+
 	public void genSetEmptyMethods(EGLClass part, Context ctx, TabbedWriter out) {
 		out.print(quoted("eze$$setEmpty"));
 		out.println(": function() {");
@@ -288,43 +287,34 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 
 	public void genSuperClass(EGLClass part, Context ctx, TabbedWriter out) {}
 
-	public void genXmlAnnotations(EGLClass part, Context ctx, TabbedWriter out){
+	public void genXmlAnnotations(EGLClass part, Context ctx, TabbedWriter out) {
 		out.print(quoted("eze$$getXmlPartAnnotations"));
 		out.println(": function() {");
-		//create the XMLAnnotationMap
+		// create the XMLAnnotationMap
 		out.println("var xmlAnnotations = {};");
 		Annotation annot = part.getAnnotation("eglx.xml._bind.annotation.xmlRootElement");
 		String namespace = null;
-		if (annot != null && annot.getValue("namespace") != null && 
-				((String)annot.getValue("namespace")).length() > 0)
-		{
+		if (annot != null && annot.getValue("namespace") != null && ((String) annot.getValue("namespace")).length() > 0) {
 			namespace = (String) annot.getValue("namespace");
 		}
 		String name = part.getName();
-		if (annot != null && annot.getValue("name") != null && 
-				((String)annot.getValue("name")).length() > 0)
-		{
+		if (annot != null && annot.getValue("name") != null && ((String) annot.getValue("name")).length() > 0) {
 			name = (String) annot.getValue("name");
 		}
 		Boolean isNillable = Boolean.FALSE;
-		if (annot != null && annot.getValue("nillable") != null)
-		{
+		if (annot != null && annot.getValue("nillable") != null) {
 			isNillable = CommonUtilities.convertBoolean(annot.getValue("nillable"));
 		}
-		out.println("xmlAnnotations[\"XMLRootElement\"] = new egl.eglx.xml._bind.annotation.XMLRootElement(" + 
-				(name == null ? "null" : quoted(name)) + ", " +
-				(namespace == null ? "null" : quoted(namespace)) + 
-				", " + isNillable.toString() + ");");
-		
+		out.println("xmlAnnotations[\"XMLRootElement\"] = new egl.eglx.xml._bind.annotation.XMLRootElement(" + (name == null ? "null" : quoted(name)) + ", "
+			+ (namespace == null ? "null" : quoted(namespace)) + ", " + isNillable.toString() + ");");
+
 		annot = part.getAnnotation("eglx.xml._bind.annotation.XMLStructure");
-		if (annot != null && annot.getValue("value") != null) 
-		{
+		if (annot != null && annot.getValue("value") != null) {
 			String value;
-			/*  choice = 1,
-			  sequence = 2,
-			  simpleContent = 3,
-			  unordered = 4*/
-			switch((Integer)annot.getValue("value")){
+			/*
+			 * choice = 1, sequence = 2, simpleContent = 3, unordered = 4
+			 */
+			switch ((Integer) annot.getValue("value")) {
 				case 1:
 					value = "choice";
 					break;
@@ -338,7 +328,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 					value = "unordered";
 			}
 			out.println("xmlAnnotations[\"XMLStructure\"] = egl.eglx.xml._bind.annotation.XMLStructure(" + quoted(value) + ");");
-		} 		
+		}
 
 		out.println("return xmlAnnotations;");
 		out.println("},");
@@ -348,24 +338,24 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.println("fields = new Array();");
 		int idx = 0;
 		for (Field field : part.getFields()) {
-			if (field instanceof ConstantField ||
-					field.isStatic()) {
+			if (field instanceof ConstantField || field.isStatic()) {
 				continue;
 			}
 			ctx.invoke(genXmlField, field, ctx, out, Integer.valueOf(idx));
 			idx++;
-		}		
+		}
 		out.println("return fields;");
 		out.println("}");
 	}
+
 	public void genNamespaceMap(EGLClass part, Context ctx, TabbedWriter out) {
 		out.print(quoted("eze$$resolvePart"));
 		out.println(": function(/*string*/ namespace, /*string*/ localName) {");
 		out.println("if(this.namespaceMap == undefined){");
 		out.println("this.namespaceMap = {};");
 		for (Map.Entry<String, String> entry : ctx.getNamespaceMap().entrySet()) {
-			out.println("this.namespaceMap[" + quoted(entry.getKey())+ "] = " + quoted(entry.getValue()) + ";");
-		}		
+			out.println("this.namespaceMap[" + quoted(entry.getKey()) + "] = " + quoted(entry.getValue()) + ";");
+		}
 		out.println("}");
 		out.println("var newObject = null;");
 		out.println("var className = this.namespaceMap[namespace + \"{\" + localName + \"}\"];");
@@ -374,5 +364,14 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.println("};");
 		out.println("return newObject;");
 		out.println("}");
+	}
+
+	public void genQualifier(EGLClass part, Context ctx, TabbedWriter out, NamedElement arg) {
+		for (Member mbr : part.getAllMembers()) {
+			if (mbr.getId().equalsIgnoreCase(arg.getId())) {
+				out.print("this.");
+				break;
+			}
+		}
 	}
 }
