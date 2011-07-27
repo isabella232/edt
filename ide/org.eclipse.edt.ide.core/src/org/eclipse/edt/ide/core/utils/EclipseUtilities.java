@@ -18,10 +18,12 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -159,7 +161,7 @@ public class EclipseUtilities {
 				createFolder((IFolder)parent);
 			}
 			folder.create(true, true, null);
-			folder.setDerived(true);
+			folder.setDerived(true, null);
 		}
 	}
 	
@@ -299,6 +301,43 @@ public class EclipseUtilities {
 						newEntries[classpath.length + i] = additions.get(i);
 					}
 					javaProject.setRawClasspath(newEntries, null);
+				}
+			}
+		}
+		catch (CoreException e) {
+			EDTCoreIDEPlugin.log(e);
+		}
+	}
+	
+	/**
+	 * Adds the SMAP builder to the project if necessary. This does nothing if the project is not a Java project.
+	 * @param project  The Java project.
+	 */
+	public static void addSMAPBuilder(IProject project) {
+		try {
+			if (project.hasNature(JavaCore.NATURE_ID)) {
+				String builderID = "org.eclipse.edt.debug.core.smapBuilder";
+				IProjectDescription description = project.getDescription();
+				
+				ICommand smapCommand = null;
+				ICommand[] commands = description.getBuildSpec();
+				for (ICommand command : commands) {
+					if (command.getBuilderName().equals(builderID)) {
+						smapCommand = command;
+						break;
+					}
+				}
+				
+				if (smapCommand == null) {
+					smapCommand = description.newCommand();
+					smapCommand.setBuilderName(builderID);
+					
+					ICommand[] newCommands = new ICommand[commands.length + 1];
+					System.arraycopy(commands, 0, newCommands, 0, commands.length);
+					newCommands[commands.length] = smapCommand;
+					
+					description.setBuildSpec(newCommands);
+					project.setDescription(description, null);
 				}
 			}
 		}
