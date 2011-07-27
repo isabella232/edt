@@ -40,14 +40,66 @@ public class SMAPTransformer implements ClassFileTransformer
 	}
 	
 	@Override
-	public byte[] transform( ClassLoader loader, String name, @SuppressWarnings("rawtypes") Class redefiningClass, ProtectionDomain domain,
-			byte[] bytes ) throws IllegalClassFormatException
+	public byte[] transform( ClassLoader loader, String className, @SuppressWarnings("rawtypes") Class redefiningClass, ProtectionDomain domain,
+			byte[] classBytes ) throws IllegalClassFormatException
 	{
 		// This is being called by multiple threads so we must remain stateless. Run the transform in a stateful manner.
-		return new TransformerWorker().transform( loader, name, redefiningClass, domain, bytes );
+		
+		// if the debug info exists, load it
+		FileInputStream inputStream = null;
+		try
+		{
+			File location;
+			try
+			{
+				// URI will handle spaces, among other things.
+				location = new File( domain.getCodeSource().getLocation().toURI() );
+			}
+			catch ( URISyntaxException e )
+			{
+				// Failsafe - just handles spaces.
+				location = new File( domain.getCodeSource().getLocation().getFile().replaceAll( "%20", " " ) ); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+			
+			File inSmapFile;
+			try
+			{
+				inSmapFile = new File( location, className + '.' + IEGLDebugCoreConstants.SMAP_EXTENSION );
+				inputStream = new FileInputStream( inSmapFile );
+			}
+			catch ( Exception e )
+			{
+				inSmapFile = new File( defaultLocation, className + '.' + IEGLDebugCoreConstants.SMAP_EXTENSION );
+				inputStream = new FileInputStream( inSmapFile );
+			}
+			
+			int length = (int)inSmapFile.length();
+			byte[] smapBytes = new byte[ length ];
+			inputStream.read( smapBytes, 0, length );
+			
+			return new TransformerWorker().transform( className, classBytes, smapBytes );
+		}
+		catch ( IOException e )
+		{
+			return null;
+		}
+		finally
+		{
+			if ( inputStream != null )
+			{
+				try
+				{
+					inputStream.close();
+				}
+				catch ( IOException e )
+				{
+					// Ignore.
+				}
+			}
+		}
 	}
 	
-	private class TransformerWorker
+	public static class TransformerWorker
 	{
 		private String className;
 		private int sourceDebugExtensionIndex;
@@ -57,52 +109,14 @@ public class SMAPTransformer implements ClassFileTransformer
 		private byte[] outClassBytes;
 		private int outClassIndex;
 		
-		byte[] transform( ClassLoader loader, String name, @SuppressWarnings("rawtypes") Class redefiningClass, ProtectionDomain domain, byte[] bytes )
-				throws IllegalClassFormatException
+		public byte[] transform( String name, byte[] classBytes, byte[] smapBytes ) throws IllegalClassFormatException
 		{
 			className = name;
-			inClassBytes = bytes;
-			
-			// if the debug info exists, load it
-			try
-			{
-				File location;
-				try
-				{
-					// URI will handle spaces, among other things.
-					location = new File( domain.getCodeSource().getLocation().toURI() );
-				}
-				catch ( URISyntaxException e )
-				{
-					// Failsafe - just handles spaces.
-					location = new File( domain.getCodeSource().getLocation().getFile().replaceAll( "%20", " " ) ); //$NON-NLS-1$ //$NON-NLS-2$
-				}
-				
-				File inSmapFile;
-				FileInputStream inputStream = null;
-				try
-				{
-					inSmapFile = new File( location, className + Constants.smap_fileExtension );
-					inputStream = new FileInputStream( inSmapFile );
-				}
-				catch ( Exception e )
-				{
-					inSmapFile = new File( defaultLocation, className + Constants.smap_fileExtension );
-					inputStream = new FileInputStream( inSmapFile );
-				}
-				
-				int length = (int)inSmapFile.length();
-				debugInfoBytes = new byte[ length ];
-				inputStream.read( debugInfoBytes, 0, length );
-				inputStream.close();
-			}
-			catch ( IOException e )
-			{
-				return null;
-			}
+			inClassBytes = classBytes;
+			debugInfoBytes = smapBytes;
 			
 			// update the class file
-			outClassBytes = new byte[ bytes.length + debugInfoBytes.length + 100 ];
+			outClassBytes = new byte[ classBytes.length + debugInfoBytes.length + 100 ];
 			if ( updateClass() )
 			{
 				// Trim it down to size. IBM JREs don't seem to care, but Sun JREs consider the class invalid if there's

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.jdt.debug.core.IJavaType;
@@ -236,13 +237,13 @@ public class SMAPUtil
 	 * @param existingEGLVars EGL variables that were processed from a previous call, possibly null.
 	 * @param infos The variable information from the SMAP, not null.
 	 * @param frame The active EGL-wrapped stack frame, possible null.
-	 * @param target The EGL-wrapped debug target.
+	 * @param target The debug target.
 	 * @param skipLocals True if local variables should be omitted.
 	 * @return the filtered, EGL-wrapped variables.
 	 * @throws DebugException
 	 */
 	public static List<EGLJavaVariable> filterAndWrapVariables( IVariable[] javaVariables, EGLJavaVariable[] existingEGLVars,
-			SMAPVariableInfo[] infos, EGLJavaStackFrame frame, EGLJavaDebugTarget target, boolean skipLocals ) throws DebugException
+			SMAPVariableInfo[] infos, EGLJavaStackFrame frame, IDebugTarget target, boolean skipLocals ) throws DebugException
 	{
 		List<EGLJavaVariable> newEGLVariables = new ArrayList<EGLJavaVariable>( javaVariables.length );
 		

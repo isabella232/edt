@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension
+		id="smapBuilder"
+		name="%smapBuilderName"
+		point="org.eclipse.core.resources.builders">
+		<builder hasNature="false">
+			<run class="org.eclipse.edt.debug.internal.core.java.SMAPBuilder"/>
+		</builder>
+	</extension>
+	<extension point="org.eclipse.ui.startup">
+    	<startup class="org.eclipse.edt.debug.internal.core.java.DebugTargetWrapper"/>
+	</extension>
+</plugin>

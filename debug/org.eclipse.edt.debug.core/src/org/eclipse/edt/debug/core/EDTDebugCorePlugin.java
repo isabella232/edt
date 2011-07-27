@@ -41,16 +41,6 @@ public class EDTDebugCorePlugin extends Plugin implements BundleActivator
 	public static final String PLUGIN_ID = "org.eclipse.edt.debug.core"; //$NON-NLS-1$
 	
 	/**
-	 * The ID of the EGL Java model presentation.
-	 */
-	public static final String EGL_JAVA_MODEL_PRESENTATION_ID = "org.eclipse.edt.debug.ui.presentation.java"; //$NON-NLS-1$
-	
-	/**
-	 * Constant for the EGL stratum.
-	 */
-	public static final String EGL_STRATUM = "egl"; //$NON-NLS-1$
-	
-	/**
 	 * The shared instance.
 	 */
 	private static EDTDebugCorePlugin plugin;

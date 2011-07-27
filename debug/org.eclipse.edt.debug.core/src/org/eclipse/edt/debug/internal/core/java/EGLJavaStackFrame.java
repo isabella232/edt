@@ -208,8 +208,8 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLStackF
 		{
 			// We could just manually add a "this" variable and a "function" variable, but this way if the language gets
 			// extended by some client, e.g. concept of 'static' added to EGL, this would support that.
-			List<EGLJavaVariable> newEGLVariables = SMAPUtil.filterAndWrapVariables( javaVariables, eglVariables,
-					getSMAPVariableInfos(), this, getEGLJavaDebugTarget(), true );
+			List<EGLJavaVariable> newEGLVariables = SMAPUtil.filterAndWrapVariables( javaVariables, eglVariables, getSMAPVariableInfos(), this,
+					getDebugTarget(), true );
 			previousJavaVariables = javaVariables;
 			eglVariables = new EGLJavaVariable[ newEGLVariables.size() + 1 ];
 			newEGLVariables.toArray( eglVariables );
@@ -264,8 +264,7 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLStackF
 	@Override
 	public Object getAdapter( Class adapter )
 	{
-		if ( adapter == IStackFrame.class || adapter == EGLJavaStackFrame.class || adapter == IEGLStackFrame.class
-				|| adapter == IDropToFrame.class )
+		if ( adapter == IStackFrame.class || adapter == EGLJavaStackFrame.class || adapter == IEGLStackFrame.class || adapter == IDropToFrame.class )
 		{
 			return this;
 		}
@@ -310,8 +309,8 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLStackF
 	}
 	
 	/**
-	 * Returns the SMAP information for the stack frame. It will never be null. If there is no SMAP information, or the
-	 * Java type was not a type that we recognize, then this will return blank.
+	 * Returns the SMAP information for the stack frame. It will never be null. If there is no SMAP information, or the Java type was not a type that
+	 * we recognize, then this will return blank.
 	 * 
 	 * @return the SMAP information.
 	 * @throws DebugException
@@ -326,8 +325,8 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLStackF
 	}
 	
 	/**
-	 * Returns the variable information from the SMAP for the stack frame. It will never be null. If there is no SMAP
-	 * information, or the Java type was not a type that we recognize, then this will return empty.
+	 * Returns the variable information from the SMAP for the stack frame. It will never be null. If there is no SMAP information, or the Java type
+	 * was not a type that we recognize, then this will return empty.
 	 * 
 	 * @return the variable information
 	 * @throws DebugException

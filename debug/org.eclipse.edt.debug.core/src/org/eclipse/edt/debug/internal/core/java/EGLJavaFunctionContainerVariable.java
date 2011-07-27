@@ -14,7 +14,7 @@ package org.eclipse.edt.debug.internal.core.java;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IValue;
-import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
+import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.jdt.debug.core.IJavaReferenceType;
 import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
@@ -42,7 +42,7 @@ public class EGLJavaFunctionContainerVariable extends EGLJavaVariable
 		{
 			if ( variable.getJavaType() instanceof IJavaReferenceType )
 			{
-				String[] paths = ((IJavaReferenceType)variable.getJavaType()).getSourcePaths( EDTDebugCorePlugin.EGL_STRATUM );
+				String[] paths = ((IJavaReferenceType)variable.getJavaType()).getSourcePaths( IEGLDebugCoreConstants.EGL_STRATUM );
 				if ( paths.length > 0 )
 				{
 					String path = paths[ 0 ];

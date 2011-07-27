@@ -131,7 +131,7 @@ public class EGLJavaValue extends EGLJavaDebugElement implements IEGLValue
 		if ( recompute )
 		{
 			List<EGLJavaVariable> newEGLVariables = SMAPUtil.filterAndWrapVariables( javaVariables, eglVariables,
-					getSMAPVariableInfos(), null, getEGLJavaDebugTarget(), false );
+					getSMAPVariableInfos(), null, getDebugTarget(), false );
 			previousJavaVariables = javaVariables;
 			eglVariables = newEGLVariables.toArray( new EGLJavaVariable[ newEGLVariables.size() ] );
 		}

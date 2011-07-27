@@ -79,7 +79,7 @@ public class EGLJavaFunctionValue extends EGLJavaDebugElement implements IValue
 		if ( recompute )
 		{
 			List<EGLJavaVariable> newEGLVariables = SMAPUtil.filterAndWrapVariables( javaVariables, eglVariables,
-					frame.getSMAPVariableInfos(), frame, frame.getEGLJavaDebugTarget(), false );
+					frame.getSMAPVariableInfos(), frame, frame.getDebugTarget(), false );
 			previousJavaVariables = javaVariables;
 			eglVariables = newEGLVariables.toArray( new EGLJavaVariable[ newEGLVariables.size() ] );
 		}

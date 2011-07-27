@@ -30,7 +30,7 @@ import org.eclipse.jdt.debug.core.IJavaThread;
  */
 public class EGLJavaThread extends EGLJavaDebugElement implements IEGLThread
 {
-	private static final boolean FILTER_RUNTIMES = !System.getProperty( "edt.debug.filter.runtimes", "yes" ).equalsIgnoreCase( "false" );
+	private static final boolean FILTER_RUNTIMES = !System.getProperty( "edt.debug.filter.runtimes", "yes" ).equalsIgnoreCase( "false" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	
 	/**
 	 * The underlying Java thread.
@@ -301,7 +301,11 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLThread
 						fireCreationEvent();
 						break;
 					case DebugEvent.TERMINATE:
-						getEGLJavaDebugTarget().removeThread( javaThread );
+						EGLJavaDebugTarget target = getEGLJavaDebugTarget();
+						if ( target != null )
+						{
+							target.removeThread( javaThread );
+						}
 						fireTerminateEvent();
 						break;
 					case DebugEvent.RESUME:
@@ -390,20 +394,20 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLThread
 	{
 		// TODO make this dynamic/extensible. For now just include JRE packages.
 		String type = frame.getDeclaringTypeName();
-		return type.startsWith( "java." ) || type.startsWith( "javax." ) || type.startsWith( "com.ibm." ) || type.startsWith( "com.sun." )
-				|| type.startsWith( "sun." );
+		return type.startsWith( "java." ) || type.startsWith( "javax." ) || type.startsWith( "com.ibm." ) || type.startsWith( "com.sun." ) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				|| type.startsWith( "sun." ) || type.startsWith( "org.apache." ); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	private boolean shouldStepInto( IJavaStackFrame frame ) throws DebugException
 	{
 		// TODO make this dynamic/extensible. For now just include EDT runtime packages.
 		String type = frame.getDeclaringTypeName();
-		return type.startsWith( "org.eclipse.edt." ) || type.startsWith( "egl." );
+		return type.startsWith( "org.eclipse.edt." ) || type.startsWith( "egl." ); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	private boolean isMainMethod( IJavaStackFrame frame ) throws DebugException
 	{
-		return frame.isStatic() && "main".equals( frame.getName() ) && "([Ljava/lang/String;)V".equals( frame.getSignature() );
+		return frame.isStatic() && "main".equals( frame.getName() ) && "([Ljava/lang/String;)V".equals( frame.getSignature() ); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	/**

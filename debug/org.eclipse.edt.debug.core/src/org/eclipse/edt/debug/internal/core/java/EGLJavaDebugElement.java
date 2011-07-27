@@ -21,7 +21,7 @@ import org.eclipse.debug.core.model.DebugElement;
 import org.eclipse.debug.core.model.IDebugElement;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ITerminate;
-import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
+import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.edt.debug.core.IEGLDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 
@@ -38,7 +38,7 @@ public abstract class EGLJavaDebugElement extends DebugElement
 	@Override
 	public String getModelIdentifier()
 	{
-		return EDTDebugCorePlugin.EGL_JAVA_MODEL_PRESENTATION_ID;
+		return IEGLDebugCoreConstants.EGL_JAVA_MODEL_PRESENTATION_ID;
 	}
 	
 	@Override
@@ -48,25 +48,39 @@ public abstract class EGLJavaDebugElement extends DebugElement
 		{
 			return this;
 		}
-		if ( adapter == IDebugTarget.class || adapter == IEGLDebugTarget.class || adapter == EGLJavaDebugTarget.class )
-		{
-			return getEGLJavaDebugTarget();
-		}
-		if ( adapter == ITerminate.class )
+		if ( adapter == IDebugTarget.class || adapter == ITerminate.class )
 		{
 			return getDebugTarget();
 		}
+		if ( adapter == IEGLDebugTarget.class || adapter == EGLJavaDebugTarget.class )
+		{
+			return getEGLJavaDebugTarget();
+		}
 		if ( adapter == IJavaDebugTarget.class )
 		{
-			return getEGLJavaDebugTarget().getJavaDebugTarget();
+			IDebugTarget target = getDebugTarget();
+			if ( target instanceof IJavaDebugTarget )
+			{
+				return target;
+			}
+			if ( target instanceof EGLJavaDebugTarget )
+			{
+				return ((EGLJavaDebugTarget)target).getJavaDebugTarget();
+			}
 		}
 		
 		return super.getAdapter( adapter );
 	}
 	
+	/**
+	 * @return The EGL debug target, or null if this thread is within a non-EGL debug target.
+	 */
 	public EGLJavaDebugTarget getEGLJavaDebugTarget()
 	{
-		return (EGLJavaDebugTarget)getDebugTarget();
+		IDebugTarget target = getDebugTarget();
+		return target instanceof EGLJavaDebugTarget
+				? (EGLJavaDebugTarget)target
+				: null;
 	}
 	
 	/**
