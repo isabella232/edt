@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.Generator;
@@ -59,15 +60,20 @@ public class EclipseEGL2Java extends EGL2Java {
 					String fn = generator.getRelativeFileName(part);
 					fn = fn.substring(0, fn.lastIndexOf('.')) + Constants.report_fileExtension;
 					String rpt = report.rpt.getWriter().toString();
-					IFile reportFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, rpt, fn);
+					/*IFile reportFile =*/ EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, rpt, fn);
 				}
 			}
+			
+			IProject targetProject = outputFile.getProject();
 
 			// make sure it's a source folder
-			EclipseUtilities.addToJavaBuildPathIfNecessary(outputFile.getProject(), outputFolder);
+			EclipseUtilities.addToJavaBuildPathIfNecessary(targetProject, outputFolder);
 
 			// Add required runtimes.
-			EclipseUtilities.addRuntimesToProject(outputFile.getProject(), generatorProvider.getRuntimeContainers());
+			EclipseUtilities.addRuntimesToProject(targetProject, generatorProvider.getRuntimeContainers());
+			
+			// Add the SMAP builder
+			EclipseUtilities.addSMAPBuilder(targetProject);
 
 			// call back to the generator, to see if it wants to do any supplementary tasks
 			generator.processFile(outputFile.getFullPath().toString());
