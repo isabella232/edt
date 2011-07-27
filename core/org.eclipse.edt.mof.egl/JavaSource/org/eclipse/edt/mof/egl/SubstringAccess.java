@@ -25,4 +25,7 @@ public interface SubstringAccess extends Expression, LHSExpr {
 	
 	void setEnd(Expression value);
 	
+	Operation getOperation();
+	
+	void setOperation(Operation operation);
 }

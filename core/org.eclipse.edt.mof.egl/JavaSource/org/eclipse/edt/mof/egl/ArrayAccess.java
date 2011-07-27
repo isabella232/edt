@@ -21,4 +21,7 @@ public interface ArrayAccess extends Expression, LHSExpr {
 	
 	void setIndex(Expression value);
 	
+	Operation getOperation();
+	
+	void setOperation(Operation operation);
 }

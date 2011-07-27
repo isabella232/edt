@@ -160,6 +160,7 @@ end
 externalType DynamicAccess extends Expression, LHSExpr type MofClass
 	access Expression {containment=true};
 	expression Expression {containment=true};	
+	operation EGLOperation {transient=true};
 end
 
 externalType Assignment extends Expression type MofClass
@@ -172,6 +173,7 @@ end
 externalType ArrayAccess extends Expression, LHSExpr type MofClass
 	array Expression {containment=true};
 	index Expression {containment=true};
+	operation EGLOperation {transient=true};
 end
 
 externalType InvocationExpression extends Expression type MofClass { isAbstract=true }
@@ -253,4 +255,5 @@ externalType SubstringAccess extends Expression type MofClass
 	stringExpression Expression {containment=true};
 	start Expression {containment=true};
 	_end Expression {containment=true, mofName="end"}; 
+	operation EGLOperation {transient=true};
 end

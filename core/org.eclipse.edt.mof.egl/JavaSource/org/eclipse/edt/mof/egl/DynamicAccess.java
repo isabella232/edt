@@ -21,4 +21,7 @@ public interface DynamicAccess extends Expression, LHSExpr {
 	
 	void setExpression(Expression value);
 	
+	Operation getOperation();
+	
+	void setOperation(Operation operation);
 }

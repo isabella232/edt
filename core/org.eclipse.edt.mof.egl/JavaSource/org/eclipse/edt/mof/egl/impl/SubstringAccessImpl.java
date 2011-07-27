@@ -11,15 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.SubstringAccess;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.*;
 
 public class SubstringAccessImpl extends ExpressionImpl implements SubstringAccess {
 	private static int Slot_stringExpression=0;
 	private static int Slot_start=1;
 	private static int Slot_end=2;
-	private static int totalSlots = 3;
+	private static int Slot_operation=3;
+	private static int totalSlots = 4;
 	
 	public static int totalSlots() {
 		return totalSlots + ExpressionImpl.totalSlots();
@@ -30,6 +29,7 @@ public class SubstringAccessImpl extends ExpressionImpl implements SubstringAcce
 		Slot_stringExpression += offset;
 		Slot_start += offset;
 		Slot_end += offset;
+		Slot_operation += offset;
 	}
 	@Override
 	public Expression getStringExpression() {
@@ -66,4 +66,27 @@ public class SubstringAccessImpl extends ExpressionImpl implements SubstringAcce
 		return getStringExpression().getType();
 	}
 	
+	@Override
+	public Operation getOperation() {
+		if (slotGet(Slot_operation) == null) {
+			try {
+				setOperation(resolveOperation());
+			} catch (NoSuchFunctionError e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return (Operation)slotGet(Slot_operation);
+	}
+	
+	@Override
+	public void setOperation(Operation value) {
+		slotSet(Slot_operation, value);
+	}
+	
+	private Operation resolveOperation() {
+		throw new NoSuchFunctionError();
+//		Operation op = IRUtils.getMyOperation(getLHS().getType().getClassifier(), getRHS().getType().getClassifier());
+//		if (op == null) throw new NoSuchFunctionError();
+//		return op;
+	}
 }

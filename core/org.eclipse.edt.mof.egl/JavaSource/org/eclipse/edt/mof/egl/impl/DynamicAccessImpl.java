@@ -11,16 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
-import org.eclipse.edt.mof.egl.DynamicAccess;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.*;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 public class DynamicAccessImpl extends ExpressionImpl implements DynamicAccess {
 	private static int Slot_access=0;
 	private static int Slot_expression=1;
-	private static int totalSlots = 2;
+	private static int Slot_operation=2;
+	private static int totalSlots = 3;
 	
 	public static int totalSlots() {
 		return totalSlots + ExpressionImpl.totalSlots();
@@ -30,6 +29,7 @@ public class DynamicAccessImpl extends ExpressionImpl implements DynamicAccess {
 		int offset = ExpressionImpl.totalSlots();
 		Slot_access += offset;
 		Slot_expression += offset;
+		Slot_operation += offset;
 	}
 	@Override
 	public Expression getAccess() {
@@ -56,4 +56,27 @@ public class DynamicAccessImpl extends ExpressionImpl implements DynamicAccess {
 		return TypeUtils.Type_ANY;
 	}
 	
+	@Override
+	public Operation getOperation() {
+		if (slotGet(Slot_operation) == null) {
+			try {
+				setOperation(resolveOperation());
+			} catch (NoSuchFunctionError e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return (Operation)slotGet(Slot_operation);
+	}
+	
+	@Override
+	public void setOperation(Operation value) {
+		slotSet(Slot_operation, value);
+	}
+	
+	private Operation resolveOperation() {
+		throw new NoSuchFunctionError();
+//		Operation op = IRUtils.getMyOperation(getLHS().getType().getClassifier(), getRHS().getType().getClassifier());
+//		if (op == null) throw new NoSuchFunctionError();
+//		return op;
+	}
 }

@@ -11,18 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
-import org.eclipse.edt.mof.egl.ArrayAccess;
-import org.eclipse.edt.mof.egl.ArrayType;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.GenericType;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.*;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 public class ArrayAccessImpl extends ExpressionImpl implements ArrayAccess {
 	private static int Slot_array=0;
 	private static int Slot_index=1;
-	private static int totalSlots = 2;
+	private static int Slot_operation=2;
+	private static int totalSlots = 3;
 	
 	public static int totalSlots() {
 		return totalSlots + ExpressionImpl.totalSlots();
@@ -32,6 +29,7 @@ public class ArrayAccessImpl extends ExpressionImpl implements ArrayAccess {
 		int offset = ExpressionImpl.totalSlots();
 		Slot_array += offset;
 		Slot_index += offset;
+		Slot_operation += offset;
 	}
 	@Override
 	public Expression getArray() {
@@ -73,5 +71,27 @@ public class ArrayAccessImpl extends ExpressionImpl implements ArrayAccess {
 		}
 	}
 
+	@Override
+	public Operation getOperation() {
+		if (slotGet(Slot_operation) == null) {
+			try {
+				setOperation(resolveOperation());
+			} catch (NoSuchFunctionError e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return (Operation)slotGet(Slot_operation);
+	}
 	
+	@Override
+	public void setOperation(Operation value) {
+		slotSet(Slot_operation, value);
+	}
+	
+	private Operation resolveOperation() {
+		throw new NoSuchFunctionError();
+//		Operation op = IRUtils.getMyOperation(getLHS().getType().getClassifier(), getRHS().getType().getClassifier());
+//		if (op == null) throw new NoSuchFunctionError();
+//		return op;
+	}
 }
