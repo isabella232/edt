@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.ui.actions.IToggleBreakpointsTargetExtension;
-import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
+import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.edt.ide.ui.editor.IEGLEditor;
 import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
 import org.eclipse.jdt.debug.core.JDIDebugModel;
@@ -78,7 +78,7 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 							
 							// First check if there's a breakpoint on the actual line selected.
 							IJavaLineBreakpoint breakpoint = BreakpointUtils.stratumBreakpointExists( file, textSelection.getStartLine() + 1,
-									EDTDebugCorePlugin.EGL_STRATUM );
+									IEGLDebugCoreConstants.EGL_STRATUM );
 							if ( breakpoint != null )
 							{
 								DebugPlugin.getDefault().getBreakpointManager().removeBreakpoint( breakpoint, true );
@@ -101,7 +101,7 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 								// line contains a breakpoint already.
 								if ( line != textSelection.getStartLine() + 1 )
 								{
-									breakpoint = BreakpointUtils.stratumBreakpointExists( file, line, EDTDebugCorePlugin.EGL_STRATUM );
+									breakpoint = BreakpointUtils.stratumBreakpointExists( file, line, IEGLDebugCoreConstants.EGL_STRATUM );
 								}
 								if ( breakpoint != null )
 								{
@@ -109,7 +109,7 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 								}
 								else
 								{
-									JDIDebugModel.createStratumBreakpoint( file, EDTDebugCorePlugin.EGL_STRATUM, file.getName(), null, qualName,
+									JDIDebugModel.createStratumBreakpoint( file, IEGLDebugCoreConstants.EGL_STRATUM, file.getName(), null, qualName,
 											line, -1, -1, 0, true, null );
 								}
 							}
@@ -144,7 +144,7 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 				try
 				{
 					if ( BreakpointUtils.stratumBreakpointExists( ((IFileEditorInput)textEditor.getEditorInput()).getFile(),
-							textSelection.getStartLine() + 1, EDTDebugCorePlugin.EGL_STRATUM ) != null )
+							textSelection.getStartLine() + 1, IEGLDebugCoreConstants.EGL_STRATUM ) != null )
 					{
 						return true;
 					}

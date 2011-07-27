@@ -9,7 +9,7 @@
       </debugModelPresentation>
    </extension>
    
-   <extension
+   <!--<extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
             delegate="org.eclipse.edt.debug.ui.launching.EGLJavaLaunchDelegate"
@@ -35,7 +35,7 @@
             class="org.eclipse.jdt.internal.debug.ui.launcher.LocalJavaApplicationTabGroup"
             id="org.eclipse.edt.debug.ui.launching.EGLJavaMainApplicationTabGroup">
       </launchConfigurationTabGroup>
-   </extension>
+   </extension>-->
    
    <extension
          point="org.eclipse.ui.editorActions">
@@ -111,7 +111,7 @@
          </factory>
    </extension>
    
-   <extension
+   <!--<extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
             class="org.eclipse.edt.debug.ui.launching.EGLJavaLaunchShortcut"
@@ -152,5 +152,5 @@
                mode="debug">
          </description>
       </shortcut>
-   </extension>
+   </extension>-->
 </plugin>

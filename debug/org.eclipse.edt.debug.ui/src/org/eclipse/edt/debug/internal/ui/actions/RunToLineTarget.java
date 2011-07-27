@@ -27,7 +27,7 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ISuspendResume;
 import org.eclipse.debug.ui.actions.IRunToLineTarget;
 import org.eclipse.debug.ui.actions.RunToLineHandler;
-import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
+import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.edt.debug.core.IEGLDebugTarget;
 import org.eclipse.edt.debug.internal.ui.EDTDebugUIPlugin;
 import org.eclipse.edt.ide.ui.editor.IEGLEditor;
@@ -83,7 +83,7 @@ public class RunToLineTarget implements IRunToLineTarget
 										Map attributes = new HashMap( 4 );
 										org.eclipse.jdt.internal.debug.ui.BreakpointUtils.addRunToLineAttributes( attributes );
 										IBreakpoint bp = JDIDebugModel.createStratumBreakpoint( ResourcesPlugin.getWorkspace().getRoot(),
-												EDTDebugCorePlugin.EGL_STRATUM, file.getName(), null, qualName, line, -1, -1, 1, false, attributes );
+												IEGLDebugCoreConstants.EGL_STRATUM, file.getName(), null, qualName, line, -1, -1, 1, false, attributes );
 										
 										RunToLineHandler handler = new RunToLineHandler( debugTarget, target, bp );
 										handler.run( new NullProgressMonitor() );
