@@ -25,7 +25,7 @@ public interface Operation extends Function {
 	String BITAND = "&";
 	String BITOR = "|";
 	String CONCAT = "::";
-	String NULL_CONCAT = "?::";
+	String NULL_CONCAT = "?:";
 	String GREATER = ">";
 	String LESS = "<";
 	String LESS_EQUALS = "<=";
@@ -38,6 +38,9 @@ public interface Operation extends Function {
 	String ISNOT = "IS NOT";
 	String LIKE = "LIKE";
 	String MATCHES = "MATCHES";
+	String ARRAY_ACCESS = "[]";
+	String SUBSTRING = "[:";
+	String DYNAMIC_ACCESS = "['";
 	
 	String getOpSymbol();
 	void setOpSymbol(String opSymbol);
