@@ -49,11 +49,15 @@ public class ExitStatementTemplate extends JavaScriptTemplate {
 			// if we did not find a label, search for an eligible generic one
 			if (label == null)
 				label = ctx.searchLabelStack(Label.LABEL_TYPE_GENERIC);
-			// if we still don't have one, then it must be a function return
+			// if we still don't have one, then it must be a function return or exit from an if
 			if (label == null) {
-				out.print("return ");
-				if (stmt.getReturnExpr() != null)
-					ctx.invoke(genExpression, stmt.getReturnExpr(), ctx, out);
+				label = ctx.searchLabelStack(Label.LABEL_TYPE_IF);
+				if (label == null) {
+					out.print("return ");
+					if (stmt.getReturnExpr() != null)
+						ctx.invoke(genExpression, stmt.getReturnExpr(), ctx, out);
+				} else
+					out.print("break " + label.getName());
 			} else
 				out.print("break " + label.getName());
 		}
