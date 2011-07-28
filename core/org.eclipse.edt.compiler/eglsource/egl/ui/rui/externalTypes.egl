@@ -13,6 +13,8 @@ package egl.ui.rui;
 
 import egl.javascript.*;
 import egl.core.*;
+import egl.lang.reflect.mof.Operation;
+
 
 ExternalType Event type JavaScriptObject {
 		relativePath = "egl/ui/rui",
@@ -625,6 +627,13 @@ ExternalType Widget type JavaScriptObject{relativePath = "egl/ui/rui",
 	function getNumericSwap() returns (string);
 	function setNumericSwap(value string in);
 	
+	
+	static function $EQ(lvalue Widget in, rvalue Widget in) returns(BooleanType) {@Operation{"=="}};
+	static function $NEQ(lvalue Widget in, rvalue Widget in) returns(BooleanType) {@Operation{"!="}};
+
+	static function asWidget(value Widget in) returns(Widget) {@Operation{"widen"}};
+	
+	
 end
 
 
@@ -638,6 +647,10 @@ ExternalType View type JavaScriptObject{relativePath = "egl/ui/rui",
 	private document Document;
 	private initialUI Widget[];
 	
+	static function $EQ(lvalue View in, rvalue View in) returns(BooleanType) {@Operation{"=="}};
+	static function $NEQ(lvalue View in, rvalue View in) returns(BooleanType) {@Operation{"!="}};
+
+	static function asView(value View in) returns(View) {@Operation{"widen"}};
 	
 
 end
