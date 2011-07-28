@@ -108,42 +108,43 @@ public class EGLWizardUtilities {
 	}
 	
 	public static void createProject(String name, int eglFeatureMask) throws CoreException, InterruptedException, InvocationTargetException {
-		createProject(name, new ArrayList(), eglFeatureMask);
+		createProject(name, new ArrayList<String>(), eglFeatureMask);
 	}
 	
-	public static void createProject(String name, List dependencies) throws CoreException, InterruptedException, InvocationTargetException {
+	public static void createProject(String name, List <String>dependencies) throws CoreException, InterruptedException, InvocationTargetException {
 		createProject(name, dependencies, getEGLFeatureMaskFrPreference(false));
 	}
 	
-	public static void createProject(String name, List dependencies, int eglFeatureMask) throws CoreException, InterruptedException, InvocationTargetException {
+	public static void createProject(String name, List <String>dependencies, int eglFeatureMask) throws CoreException, InterruptedException, InvocationTargetException {
 		ProjectConfiguration conf = new ProjectConfiguration();
+		conf.setDefaultAttributes();
 		conf.setProjectName(name);	
 // TODO EDT Uncomment if using build descriptors		
 //		conf.init(null, null);
 		createProject(name, dependencies, conf, eglFeatureMask);		
 	}	
 	
-	public static void createProject(String name, List dependencies, ProjectConfiguration projConfig) throws CoreException, InterruptedException, InvocationTargetException {
+	public static void createProject(String name, List <String>dependencies, ProjectConfiguration projConfig) throws CoreException, InterruptedException, InvocationTargetException {
 		createProject(name, dependencies, projConfig, getEGLFeatureMaskFrPreference(false));
 	}
 		
-	public static void createProject(String name, List dependencies, ProjectConfiguration projConfig, int eglFeatureMask) throws CoreException, InterruptedException, InvocationTargetException {
+	public static void createProject(String name, List <String>dependencies, ProjectConfiguration projConfig, int eglFeatureMask) throws CoreException, InterruptedException, InvocationTargetException {
 		//this is a list of PPLElement in the projConfig
-		List requiredProjs = projConfig.getRequiredProjects();
+		List <PPListElement>requiredProjs = projConfig.getRequiredProjects();
 		
-		List projectDependencies = null;
+		List <PPListElement>projectDependencies = null;
 		if (!dependencies.isEmpty()) {
 			projectDependencies = getProjectDependencies(name, dependencies);
 		}
 		
-		Set set = new HashSet();		//to avoid duplicates
+		Set <PPListElement>set = new HashSet<PPListElement>();		//to avoid duplicates
 		if(requiredProjs != null && !requiredProjs.isEmpty())
 			set.addAll(requiredProjs);
 		if(projectDependencies != null && !projectDependencies.isEmpty())
 			set.addAll(projectDependencies);
 				
 		if(!set.isEmpty()){
-			List mergedProjDependencies = new ArrayList();
+			List <PPListElement>mergedProjDependencies = new ArrayList<PPListElement>();
 			mergedProjDependencies.addAll(set);
 			projConfig.setRequiredProjects(mergedProjDependencies);
 		}
@@ -410,10 +411,10 @@ public class EGLWizardUtilities {
 	 * @return the List of PPListElement objects containing the project dependencies.
 	 */
 
-	public static List getProjectDependencies(String projectName, List dependencies)
+	public static List <PPListElement>getProjectDependencies(String projectName, List <String>dependencies)
 			throws CoreException {
-		List projectDependencies = new ArrayList();
-		List newEGLPath = null;
+		List <PPListElement>projectDependencies = new ArrayList<PPListElement>();
+		List <PPListElement>newEGLPath = null;
 		IPath newPath = null;
 		IPath currPath = null;
 		PPListElement newElement = null;
@@ -462,13 +463,13 @@ public class EGLWizardUtilities {
 	 * @return the List of PPListElement objects containing the existing project dependencies.
 	 */
 
-	public static ArrayList getExistingProjectDependencies(String projectName)
+	public static ArrayList <PPListElement>getExistingProjectDependencies(String projectName)
 			throws CoreException {
 
 		IProject project = null;
 		IEGLProject eglProject = null;
 		IEGLPathEntry[] eglPathEntries = null;
-		ArrayList newEGLPath = new ArrayList();
+		ArrayList <PPListElement>newEGLPath = new ArrayList<PPListElement>();
 		IResource resource = null;
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();
@@ -506,18 +507,18 @@ public class EGLWizardUtilities {
 	 */
 
 
-	public static ArrayList getNewProjectDependencies(String projectName, List dependencies) {
+	public static ArrayList <PPListElement> getNewProjectDependencies(String projectName, List <String>dependencies) {
 
 		// Get the new project dependencies and merge with the old ones.
 
-		Iterator dependenciesIterator = null;
+		Iterator <String>dependenciesIterator = null;
 		String dependentProjectName = ""; //$NON-NLS-1$
 		IProject dependentProject = null;
 		PPListElement currentDependent = null;
 		IResource resource = null;
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();
-		ArrayList projectDependencies = new ArrayList();
+		ArrayList <PPListElement>projectDependencies = new ArrayList<PPListElement>();
 
 		dependenciesIterator = dependencies.iterator();
 		while (dependenciesIterator.hasNext()) {
