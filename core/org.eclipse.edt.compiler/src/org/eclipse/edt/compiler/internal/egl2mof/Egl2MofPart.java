@@ -33,6 +33,7 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
 import org.eclipse.edt.compiler.binding.TopLevelFunctionBinding;
+import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
@@ -51,10 +52,13 @@ import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Assignment;
+import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DataItem;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Form;
 import org.eclipse.edt.mof.egl.FormField;
@@ -390,6 +394,50 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		}
 		return eObj;
 	}
+	
+	private void createInitializerStatements(org.eclipse.edt.compiler.core.ast.Part astPart, StructPart structPart) {
+		
+		final Egl2MofPart converter = this;
+		final List<Statement> statements = new ArrayList<Statement>();
+		
+		DefaultASTVisitor visitor = new DefaultASTVisitor() {
+			public boolean visit(org.eclipse.edt.compiler.core.ast.SettingsBlock settingsBlock) {
+				for (Node node : (List<Node>)settingsBlock.getSettings()) {
+					node.accept(this);
+				}
+				return false;
+			}
+			
+			public boolean visit(org.eclipse.edt.compiler.core.ast.Assignment assignment) {
+				
+				//ignore annotations
+				if (assignment.resolveBinding() == null && Binding.isValidBinding(assignment.getLeftHandSide().resolveDataBinding())) {
+					assignment.accept(converter);
+					Assignment assign = (Assignment)stack.pop();
+					AssignmentStatement stmt = factory.createAssignmentStatement();
+					stmt.setExpr(assign);
+					setElementInformation(assignment, stmt);
+					statements.add(stmt);
+				}
+				
+				return false;
+			}
+			
+		};
+		
+		for (Node node : (List<Node>)astPart.getContents()) {
+			node.accept(visitor);
+		}
+		
+		if (!statements.isEmpty()) {
+			StatementBlock block = factory.createStatementBlock();
+			structPart.setInitializerStatements(block);
+			
+			for (Statement stmt : statements) {
+				block.getStatements().add(stmt);
+			}
+		}
+	}
 
 	@SuppressWarnings("unchecked")
 	protected void handleEndVisitPart(org.eclipse.edt.compiler.core.ast.Part astPart, MofSerializable mofPart) {
@@ -408,6 +456,10 @@ abstract class Egl2MofPart extends Egl2MofBase {
 			if (mofPart instanceof StructPart)
 				setDefaultSuperType((StructPart)mofPart);
 			setElementInformation(astPart,  (Part)mofPart);
+			
+			if (mofPart instanceof StructPart) {
+				createInitializerStatements(astPart, (StructPart)mofPart);
+			}
 		}
 		
 		// Process statements of function members now since
