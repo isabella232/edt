@@ -1,0 +1,117 @@
+/*******************************************************************************
+ * Copyright © 2006, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package eglx._service;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.eclipse.edt.javart.JavartException;
+import org.eclipse.edt.javart.resources.ExecutableBase;
+import org.eclipse.edt.javart.util.JavartUtil;
+
+
+
+public class ServiceUtilities 
+{
+	public static String UTF8 = "UTF-8";
+
+	
+	private ServiceUtilities() 
+	{
+	}
+
+	
+	public static JavartException buildServiceInvocationException( ExecutableBase program, String id, Object[] params, Throwable t, ServiceKind serviceKind )
+	{
+		String message = JavartUtil.errorMessage( program, id, params );
+		JavartException jrte = null;
+		try
+		{
+			jrte = ServiceUtilities.buildInvocationException( program, id, message, "", "", "", t, serviceKind );
+		}
+		catch( JavartException jrte2 ) 
+		{
+			jrte = new ServiceInvocationException(t);
+		}
+		return jrte;
+	}
+	private static JavartException buildInvocationException( ExecutableBase prog, String id, String message, String detail1, String detail2, String detail3, Throwable t, ServiceKind serviceKind ) 
+	{
+		while( t instanceof InvocationTargetException &&
+				((InvocationTargetException)t).getCause() != null ){
+			t = ((InvocationTargetException)t).getCause();
+		}
+		ServiceInvocationException sie = (t == null ? new ServiceInvocationException() : new ServiceInvocationException(t));
+		if(detail3 == null || detail3.length() == 0){
+			detail3 = getMessage(t);
+		}
+		sie.setMessage((message==null)?"":message);
+		sie.setMessageID( (id==null)?"":id );
+		sie.setDetail1((detail1==null)?"":detail1);
+		sie.setDetail2((detail2==null)?"":detail2);
+		sie.setDetail3((detail3==null)?"":detail3);
+		sie.setServiceKind(serviceKind);
+		return sie;
+	}
+
+	public static String getMessage( Throwable t )
+	{
+		while( t instanceof InvocationTargetException &&
+				((InvocationTargetException)t).getCause() != null ){
+			t = ((InvocationTargetException)t).getCause();
+		}
+		if( t instanceof JavartException )
+		{
+			return t.getMessage();
+		}
+		else if( t != null && t.getMessage() != null )
+		{
+			return t.getClass().getName() + ":" + t.getMessage();
+		}
+		else if( t != null &&  t.toString() != null )
+		{
+			return t.toString();
+		}
+		else
+		{
+			return "";
+		}
+
+	}
+    static String convert( Map<?, ?> map )
+    {
+    	StringBuilder buffer = new StringBuilder();
+    	Map.Entry<?, ?> entry;
+    	for( Iterator<?> itr = map.entrySet().iterator(); itr.hasNext(); buffer.append( ' ' ) )
+    	{
+    		entry = (Map.Entry<?, ?>)itr.next();
+    		if( entry.getKey() != null )
+    		{
+    			buffer.append( entry.getKey().toString() );
+    			buffer.append( ':' );
+    		}
+    		if( entry.getValue() instanceof Map<?, ?> )
+    		{
+    			buffer.append( '(' );
+    			buffer.append( convert( (Map<?, ?>)entry.getValue() ) );
+    			buffer.append( ')' );
+    		}
+    		else if(  entry.getValue() != null )
+    		{
+       			buffer.append( entry.getValue().toString() );
+    		}
+    	}
+    	return buffer.toString();
+    }
+	
+}
