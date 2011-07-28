@@ -48,6 +48,7 @@ import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.core.lookup.System.ISystemLibrary;
+import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.ArrayLiteral;
@@ -611,8 +612,11 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				name = (Name)addQualifier(thisExpr, name);
 			}
 			else {
-				Member mbr = (Member)getEObjectFor(binding);
-				((MemberName)name).setMember(mbr);
+				EObject result = getEObjectFor(binding);
+				if (result instanceof Member) {
+					Member mbr = (Member)result;
+					((MemberName)name).setMember(mbr);
+				}
 			}
 		}
 		setElementInformation(node, name);
