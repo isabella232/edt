@@ -44,6 +44,7 @@ externalType NullType extends AnyObject type ClassType
 	static function asNullType(value AnyDecimal in) returns(NullType) {@Operation{"narrow"}};
 	static function asNullType(value AnyString in) returns(NullType) {@Operation{"narrow"}};
 	static function asNullType(value List in) returns(NullType) {@Operation{"narrow"}};
+	static function asNullType(value AnyObject in) returns(NullType) {@Operation{"narrow"}};
 
 end
 
