@@ -4,7 +4,8 @@ Bundle-Name: EDT Java Runtime
 Bundle-SymbolicName: org.eclipse.edt.runtime.java
 Bundle-Version: 0.7.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: com.ibm.icu;bundle-version="3.8.1"
+Require-Bundle: com.ibm.icu;bundle-version="3.8.1",
+ javax.servlet;bundle-version="2.5.0";resolution:=optional
 Export-Package: egl.lang,
  org.eclipse.edt.javart,
  org.eclipse.edt.javart.json,
