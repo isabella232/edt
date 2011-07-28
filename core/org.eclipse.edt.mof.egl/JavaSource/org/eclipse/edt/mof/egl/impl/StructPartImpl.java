@@ -19,6 +19,7 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Operation;
+import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.utils.EList;
@@ -30,7 +31,8 @@ public class StructPartImpl extends PartImpl implements StructPart {
 	private static int Slot_constructors=3;
 	private static int Slot_functions=4;
 	private static int Slot_operations=5;
-	private static int totalSlots = 6;
+	private static int Slot_initializerStatements=6;
+	private static int totalSlots = 7;
 	
 	public static int totalSlots() {
 		return totalSlots + PartImpl.totalSlots();
@@ -44,6 +46,7 @@ public class StructPartImpl extends PartImpl implements StructPart {
 		Slot_constructors += offset;
 		Slot_functions += offset;
 		Slot_operations += offset;
+		Slot_initializerStatements += offset;
 	}
 	@SuppressWarnings("unchecked")
 	@Override
@@ -184,8 +187,15 @@ public class StructPartImpl extends PartImpl implements StructPart {
 		}
 
 	}
-
-
-
 	
+	@Override
+	public StatementBlock getInitializerStatements() {
+		return (StatementBlock)slotGet(Slot_initializerStatements);
+	}   
+	
+	@Override
+	public void setInitializerStatements(StatementBlock value) {
+		slotSet(Slot_initializerStatements, value);
+	}
+
 }
