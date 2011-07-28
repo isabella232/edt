@@ -405,7 +405,7 @@ public class ProxyPart extends ProxyEObject implements Part, DataType, Parameter
 		
 	}
 
-
+  
 	@Override
 	public boolean isInstantiable() {
 		// TODO Auto-generated method stub
@@ -417,6 +417,20 @@ public class ProxyPart extends ProxyEObject implements Part, DataType, Parameter
 	public List<Operation> getOperations(String name) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public StatementBlock getInitializerStatements() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setInitializerStatements(StatementBlock value) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
