@@ -168,6 +168,7 @@ externalType StructPart extends Part type MofClass
 	constructors EGLConstructor[] {containment=true};
 	functions EGLFunction[] {containment=true};
 	operations EGLOperation[] {containment=true};
+	initializerStatements StatementBlock {containment=true};
 	
 	function isSubtypeOf(part StructPart in) returns (boolean);
 end
