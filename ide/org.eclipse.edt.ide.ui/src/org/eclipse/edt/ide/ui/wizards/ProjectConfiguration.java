@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.compiler.internal.EGLBasePlugin;
+import org.eclipse.edt.ide.core.model.PPListElement;
 import org.eclipse.edt.ide.core.utils.EGLProjectInfoUtility;
 
 public class ProjectConfiguration {
@@ -48,7 +49,7 @@ public class ProjectConfiguration {
 	private String sourceFolderName;
 	
 	/** Required projects */
-	private List requiredProjects;
+	private List <PPListElement>requiredProjects;
 	
 	private List<String> selectedWidgetLibraries;
 	
@@ -60,7 +61,7 @@ public class ProjectConfiguration {
 		initialProjectLocation = Platform.getLocation().toOSString();
 		customProjectLocation = ""; //$NON-NLS-1$
 		targetRuntimeValue = EGLProjectInfoUtility.JAVA_PLATFORM;
-		requiredProjects = new ArrayList();
+		requiredProjects = new ArrayList<PPListElement>();
 		selectedWidgetLibraries = new ArrayList<String>();
 	}
 
@@ -88,7 +89,7 @@ public class ProjectConfiguration {
 	/**
 	 * @return
 	 */
-	public List getRequiredProjects() {
+	public List <PPListElement> getRequiredProjects() {
 		return requiredProjects;
 	}
 
@@ -123,7 +124,7 @@ public class ProjectConfiguration {
 	/**
 	 * @param projects
 	 */
-	public void setRequiredProjects(List projects) {
+	public void setRequiredProjects(List <PPListElement>projects) {
 		requiredProjects = projects;
 	}
 
