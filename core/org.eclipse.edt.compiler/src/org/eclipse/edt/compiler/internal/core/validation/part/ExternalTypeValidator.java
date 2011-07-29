@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
+import org.eclipse.edt.compiler.binding.IPartSubTypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
@@ -30,6 +31,7 @@ import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
@@ -65,11 +67,11 @@ public class ExternalTypeValidator extends AbstractASTVisitor {
 	public boolean visit(ClassDataDeclaration classDataDeclaration) {
 		classDataDeclaration.accept(new ClassDataDeclarationValidator(problemRequestor, compilerOptions));
 		
-		if(classDataDeclaration.hasInitializer()) {
-			problemRequestor.acceptProblem(
-				classDataDeclaration.getInitializer(),
-				IProblemRequestor.INITIALIZER_NOT_ALLOWED_FOR_EXTERNALTYPE_FIELD);
-		}
+//		if(classDataDeclaration.hasInitializer()) {
+//			problemRequestor.acceptProblem(
+//				classDataDeclaration.getInitializer(),
+//				IProblemRequestor.INITIALIZER_NOT_ALLOWED_FOR_EXTERNALTYPE_FIELD);
+//		}
 		return false;
 	}
 	
@@ -88,6 +90,15 @@ public class ExternalTypeValidator extends AbstractASTVisitor {
 	}
 	
 	private void checkParameters(List parameters) {
+		
+		if (partBinding != null && partBinding.getSubType() != null) {
+			
+			// do not validate the parms for NativeType
+			if (AbstractBinder.annotationIs(partBinding.getSubType(), new String[] {"egl", "lang", "reflect"}, "NativeType")) {
+				return;
+			}
+		}
+		
 		for(Iterator iter = parameters.iterator(); iter.hasNext();) {
 			FunctionParameter parm = (FunctionParameter) iter.next();
 			if (parm.isParmConst()) {
@@ -108,9 +119,9 @@ public class ExternalTypeValidator extends AbstractASTVisitor {
 			public boolean visit(Assignment assignment) {
 				IDataBinding lhDBinding = assignment.getLeftHandSide().resolveDataBinding();
 				if(lhDBinding != null && IBinding.NOT_FOUND_BINDING != lhDBinding && IDataBinding.CLASS_FIELD_BINDING == lhDBinding.getKind()) {
-					problemRequestor.acceptProblem(
-						assignment,
-						IProblemRequestor.INITIALIZER_NOT_ALLOWED_FOR_EXTERNALTYPE_FIELD);
+//					problemRequestor.acceptProblem(
+//						assignment,
+//						IProblemRequestor.INITIALIZER_NOT_ALLOWED_FOR_EXTERNALTYPE_FIELD);
 				}
 				return false;
 			}
