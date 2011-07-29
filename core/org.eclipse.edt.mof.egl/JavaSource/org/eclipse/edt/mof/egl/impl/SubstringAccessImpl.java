@@ -12,6 +12,7 @@
 package org.eclipse.edt.mof.egl.impl;
 
 import org.eclipse.edt.mof.egl.*;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class SubstringAccessImpl extends ExpressionImpl implements SubstringAccess {
 	private static int Slot_stringExpression=0;
@@ -84,9 +85,8 @@ public class SubstringAccessImpl extends ExpressionImpl implements SubstringAcce
 	}
 	
 	private Operation resolveOperation() {
-		throw new NoSuchFunctionError();
-//		Operation op = IRUtils.getMyOperation(getLHS().getType().getClassifier(), getRHS().getType().getClassifier());
-//		if (op == null) throw new NoSuchFunctionError();
-//		return op;
+		Operation op = IRUtils.getMyOperation(getStringExpression().getType().getClassifier(), "[:");
+		if (op == null) throw new NoSuchFunctionError();
+		return op;
 	}
 }

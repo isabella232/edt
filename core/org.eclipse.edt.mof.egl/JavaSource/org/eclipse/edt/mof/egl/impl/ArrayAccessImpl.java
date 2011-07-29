@@ -11,7 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
-import org.eclipse.edt.mof.egl.*;
+import org.eclipse.edt.mof.egl.ArrayAccess;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.GenericType;
+import org.eclipse.edt.mof.egl.NoSuchFunctionError;
+import org.eclipse.edt.mof.egl.Operation;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
@@ -89,9 +96,8 @@ public class ArrayAccessImpl extends ExpressionImpl implements ArrayAccess {
 	}
 	
 	private Operation resolveOperation() {
-		throw new NoSuchFunctionError();
-//		Operation op = IRUtils.getMyOperation(getLHS().getType().getClassifier(), getRHS().getType().getClassifier());
-//		if (op == null) throw new NoSuchFunctionError();
-//		return op;
+		Operation op = IRUtils.getMyOperation(getArray().getType().getClassifier(), "[]");
+		if (op == null) throw new NoSuchFunctionError();
+		return op;
 	}
 }

@@ -563,7 +563,21 @@ public class IRUtils {
 		
 
 	}
-	
+
+	//TODO this needs to be made more sophisticated in the future. The code will  need to be
+	//able to resolve the correct operation based on all arguments to the various Access expressions
+	public static Operation getMyOperation(Classifier classifier, String opSymbol) {
+		if (!(classifier instanceof StructPart)) return null;
+		
+		StructPart clazz = (StructPart) classifier;
+		for (Operation op : clazz.getOperations()) {
+			if (op.getOpSymbol().equals(opSymbol))  {
+				return op;
+			}
+		}  
+		return null;
+	}
+
 	public static Operation getBinaryOperation(Classifier lhs, Classifier rhs, String opSymbol) {
 		if (!(lhs instanceof StructPart)) return null;
 		StructPart clazz = null;
