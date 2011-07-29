@@ -218,15 +218,6 @@ public class TypeUtils implements MofConversion {
 		}
 	}
 	
-	public static boolean isSystemLibrary(Part type) {
-		for ( Stereotype stereo : type.getStereotypes() ) {
-			if (stereo.getEClass().getETypeSignature().equals(Type_SystemLibrary)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	public static boolean isDynamicType(Type type) {
 		// TODO Implement DynamicType interface that is referenced by
 		// types that are allowed to be dynamic types
