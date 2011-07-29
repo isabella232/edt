@@ -9,16 +9,11 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package eglx.http;
-import org.eclipse.edt.javart.resources.*;
-import org.eclipse.edt.javart.*;
-import eglx.http.HttpMethod;
-import eglx.http.HttpRequest;
-import eglx.http.HttpResponse;
-import eglx.http.HttpREST;
-import org.eclipse.edt.runtime.java.egl.lang.EBoolean;
-import java.lang.Boolean;
-import eglx._service.Encoding;
+import org.eclipse.edt.javart.ByteStorage;
+import org.eclipse.edt.javart.Program;
 import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
+
+import eglx._service.Encoding;
 public class HttpREST extends AnyValue {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient

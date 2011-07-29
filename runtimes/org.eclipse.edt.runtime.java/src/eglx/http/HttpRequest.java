@@ -9,14 +9,11 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package eglx.http;
-import org.eclipse.edt.javart.resources.*;
-import org.eclipse.edt.javart.*;
-import eglx.http.HttpMethod;
-import org.eclipse.edt.runtime.java.egl.lang.EString;
-import java.lang.String;
+import org.eclipse.edt.javart.ByteStorage;
+import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.Program;
 import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
-import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
-import eglx.http.HttpRequest;
+
 import eglx._service.Encoding;
 public class HttpRequest extends AnyValue {
 	private static final long serialVersionUID = 10L;
