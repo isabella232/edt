@@ -353,6 +353,13 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 										topJavaFrame.stepReturn();
 										break;
 									}
+									else if ( javaThread.getFrameCount() == 1 && isMainMethod( topJavaFrame ) )
+									{
+										// Don't step into the initial main frame - there's no EGL source for it, users will be confused.
+										// Note: stepReturn isn't supported on a bottom frame in JDT so we must use resume.
+										topJavaFrame.resume();
+										break;
+									}
 									else
 									{
 										// If we forced a return after a step into, we might be at the same line as before.
