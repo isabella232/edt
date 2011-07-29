@@ -71,7 +71,7 @@ public class EnumerationTemplate extends JavaScriptTemplate {
 		out.print(singleQuoted(part.getPackageName().toLowerCase()));
 		out.print(", ");
 		out.print(quoted(part.getName()));
-		out.print(", ");
+		out.print(", \"egl.lang.reflect\", \"Enumeration\",");
 		out.println("{");
 	}
 
