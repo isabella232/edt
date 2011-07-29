@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.egl2mof;
 
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -83,6 +84,7 @@ import org.eclipse.edt.mof.egl.StructuredRecord;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.serialization.IEnvironment;
+import org.eclipse.edt.mof.serialization.ProxyEClass;
 import org.eclipse.edt.mof.serialization.ProxyEObject;
 
 
@@ -644,11 +646,46 @@ abstract class Egl2MofPart extends Egl2MofBase {
 			}
 		}
 	}
+	
+	private MofSerializable resolveProxy(ProxyEClass proxy) {
+		String key = proxy.getMofSerializationKey();
+		EObject result = getMofSerializable(key);
+		
+		if (result instanceof MofSerializable) {
+			return (MofSerializable)result;
+		}
+		
+		//look for it with an EGL scheme if we are not in Mof context
+		if (!inMofContext) {
+			if (key.indexOf(Type.KeySchemeDelimiter) < 0) {
+				key = Type.EGL_KeyScheme + Type.KeySchemeDelimiter + key;
+				result = getMofSerializable(key);
+				
+				if (result instanceof MofSerializable) {
+					return (MofSerializable)result;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
 	private void setDefaultSuperType(StructPart part) {
 		if (part.getSuperTypes().isEmpty()) {
 			Stereotype stereotype = part.getStereotype();
 			if (stereotype != null) {
-				StructPart superType = (StructPart)((StereotypeType)stereotype.getEClass()).getDefaultSuperType();
+				
+				MofSerializable mofST = ((StereotypeType)stereotype.getEClass()).getDefaultSuperType();
+				StructPart superType = null;
+				
+				if (mofST instanceof ProxyEClass) {
+					mofST = resolveProxy((ProxyEClass) mofST);
+				}
+				
+				//make sure that it is a StructPart and not a proxy. Also make sure that the default supertype is not the same as the object being compiled
+				if (mofST instanceof StructPart && !mofST.getMofSerializationKey().equalsIgnoreCase(part.getMofSerializationKey())) {
+					superType = (StructPart)mofST;
+				}
 				if (superType == null) {
 					String typeSignature = Type_AnyObject;
 					if (part instanceof Record)
