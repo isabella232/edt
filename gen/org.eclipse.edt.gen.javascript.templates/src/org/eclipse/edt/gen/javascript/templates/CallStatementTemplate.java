@@ -80,58 +80,104 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 		boolean hasXXXRestAnnotation = (getRest != null || putRest != null || postRest != null || deleteRest != null);					
 
 		if(hasXXXRestAnnotation){
-			out.print("egl.eglx.rest.invokeService(");  //handler parameter
-			ctx.invoke(genExpression, stmt.getInvocationTarget().getQualifier(), ctx, out);
-			out.println(", ");
-			out.pushIndent();
-			out.pushIndent();
-	//		genCallbackParameters(callback, errorCallback);
-	//		genTimeoutParams(serviceTimeout);
-			out.println("\"" + operationName(serviceInterfaceFunction) + "\", ");
-			@SuppressWarnings("unchecked")
-			List<Expression> tempArgs = (List<Expression>)ctx.getAttribute(stmt, Constants.SubKey_callStatementTempVariables);
-			Function callbackFunction = null;
-			if(stmt.getCallback() != null){
-				callbackFunction = (Function)ctx.invoke(getCallbackFunction, stmt.getCallback(), ctx);
-			}
-			
-			genInParamVals(serviceInterfaceFunction, tempArgs, ctx, out);
-			genInParamSignature(serviceInterfaceFunction, stmt.getArguments(), ctx, out);
-			genParamOrders(serviceInterfaceFunction, ctx, out);
-			genCallbackArgs(callbackFunction, ctx, out);			
-			
-			out.println(hasXXXRestAnnotation + ", ");		
-			//generate the following arguments
-			//        /*String*/ resolvedUriTemplate,
-			//        /*int*/ requestFormat,
-			//        /*int*/ responseFormat,
-			//        /*String*/ restMethod,                        
-			//        /*String, Dictionary, Record or XMLElement*/ resourceParamIn,
-			genRestParameters(serviceInterfaceFunction, tempArgs, getRest, putRest, postRest, deleteRest, ctx, out);
-			
-			out.print(", ");
-			if(stmt.getCallback() != null){
-				ctx.invoke(genCallbackAccesor, stmt.getCallback(), ctx, out);
-				out.print(", ");
-			}
-			else{
-				out.print("null, ");
-			}
-			if(stmt.getErrorCallback() != null){
-				ctx.invoke(genCallbackAccesor, stmt.getErrorCallback(), ctx, out);
-				out.println(");");
-			}
-			else{
-				out.println("null);");
-			}
-			out.popIndent();
-			out.popIndent();
-	//		if (context.getGenerationMode() == EGLGenerationModeSetting.DEVELOPMENT_GENERATION_MODE) {
-	//			out.popIndent();
-	//			out.println("}");
-	//		}	*/	
+			genTrueRestInvocation(stmt, serviceInterfaceFunction, getRest, putRest, postRest, deleteRest, ctx, out);
+		}
+		else{
+			genEglRestInvocation(stmt, serviceInterfaceFunction, ctx, out);
 		}
 		
+	}
+
+	private void genEglRestInvocation(CallStatement stmt, Function serviceInterfaceFunction, Context ctx, TabbedWriter out) {
+		
+		out.print("egl.eglx.rest.invokeEglService(");  //handler parameter
+		ctx.invoke(genExpression, stmt.getInvocationTarget().getQualifier(), ctx, out);
+		out.println(", ");
+		out.pushIndent();
+		out.pushIndent();
+//		genTimeoutParams(serviceTimeout);
+		out.println("\"" + operationName(serviceInterfaceFunction) + "\", ");
+		@SuppressWarnings("unchecked")
+		List<Expression> tempArgs = (List<Expression>)ctx.getAttribute(stmt, Constants.SubKey_callStatementTempVariables);
+		Function callbackFunction = null;
+		if(stmt.getCallback() != null){
+			callbackFunction = (Function)ctx.invoke(getCallbackFunction, stmt.getCallback(), ctx);
+		}
+		
+		genInParamVals(serviceInterfaceFunction, tempArgs, ctx, out);
+		genInParamSignature(serviceInterfaceFunction, stmt.getArguments(), ctx, out);
+		genParamOrders(serviceInterfaceFunction, ctx, out);
+		genCallbackArgs(callbackFunction, ctx, out);			
+		
+//		genRestParameters(serviceInterfaceFunction, tempArgs, getRest, putRest, postRest, deleteRest, ctx, out);
+		
+		out.print(", ");
+		if(stmt.getCallback() != null){
+			ctx.invoke(genCallbackAccesor, stmt.getCallback(), ctx, out);
+			out.print(", ");
+		}
+		else{
+			out.print("null, ");
+		}
+		if(stmt.getErrorCallback() != null){
+			ctx.invoke(genCallbackAccesor, stmt.getErrorCallback(), ctx, out);
+			out.println(");");
+		}
+		else{
+			out.println("null);");
+		}
+		out.popIndent();
+		out.popIndent();
+//		if (context.getGenerationMode() == EGLGenerationModeSetting.DEVELOPMENT_GENERATION_MODE) {
+//			out.popIndent();
+//			out.println("}");
+//		}	*/	
+	}
+	private void genTrueRestInvocation(CallStatement stmt, Function serviceInterfaceFunction,
+			Annotation getRest, Annotation putRest, Annotation postRest,
+			Annotation deleteRest, Context ctx, TabbedWriter out) {
+		out.print("egl.eglx.rest.invokeService(");  //handler parameter
+		ctx.invoke(genExpression, stmt.getInvocationTarget().getQualifier(), ctx, out);
+		out.println(", ");
+		out.pushIndent();
+		out.pushIndent();
+//		genTimeoutParams(serviceTimeout);
+//		out.println("\"" + operationName(serviceInterfaceFunction) + "\", ");
+		@SuppressWarnings("unchecked")
+		List<Expression> tempArgs = (List<Expression>)ctx.getAttribute(stmt, Constants.SubKey_callStatementTempVariables);
+		Function callbackFunction = null;
+		if(stmt.getCallback() != null){
+			callbackFunction = (Function)ctx.invoke(getCallbackFunction, stmt.getCallback(), ctx);
+		}
+		
+		genInParamVals(serviceInterfaceFunction, tempArgs, ctx, out);
+		genInParamSignature(serviceInterfaceFunction, stmt.getArguments(), ctx, out);
+		genParamOrders(serviceInterfaceFunction, ctx, out);
+		genCallbackArgs(callbackFunction, ctx, out);			
+		
+		genRestParameters(serviceInterfaceFunction, tempArgs, getRest, putRest, postRest, deleteRest, ctx, out);
+		
+		out.print(", ");
+		if(stmt.getCallback() != null){
+			ctx.invoke(genCallbackAccesor, stmt.getCallback(), ctx, out);
+			out.print(", ");
+		}
+		else{
+			out.print("null, ");
+		}
+		if(stmt.getErrorCallback() != null){
+			ctx.invoke(genCallbackAccesor, stmt.getErrorCallback(), ctx, out);
+			out.println(");");
+		}
+		else{
+			out.println("null);");
+		}
+		out.popIndent();
+		out.popIndent();
+//		if (context.getGenerationMode() == EGLGenerationModeSetting.DEVELOPMENT_GENERATION_MODE) {
+//			out.popIndent();
+//			out.println("}");
+//		}	*/	
 	}
 
 	private void genRestParameters(Function serviceInterfaceFunction, List<Expression> tempArgs, Annotation getRest,
@@ -204,14 +250,14 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 			}
 		}
 		
-		genFormatKind((Integer)methodRestAnnotation.getValue("requestFormat"), resourceRestArg != null ? resourceRestArg.getParam().getType() : null, ctx, out);
+		genFormatKind(methodRestAnnotation.getValue("requestFormat"), resourceRestArg != null ? resourceRestArg.getParam().getType() : null, ctx, out);
 		out.print(", ");
 		printQuotedString((String)methodRestAnnotation.getValue("requestCharset"), out);;
 		out.print(", ");
 		printQuotedString((String)methodRestAnnotation.getValue("requestContentType"), out);;
 		out.print(", ");
 		
-		genFormatKind((Integer)methodRestAnnotation.getValue("responseFormat"), returnType, ctx, out);
+		genFormatKind(methodRestAnnotation.getValue("responseFormat"), returnType, ctx, out);
 		out.print(", ");
 		printQuotedString((String)methodRestAnnotation.getValue("responseCharset"), out);;
 		out.print(", ");
@@ -221,23 +267,10 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 		return resourceRestArg != null ? resourceRestArg.getParamIndex() : -1;			
 	}
 	
-	private void genFormatKind(Integer format, Type eglType, final Context ctx, TabbedWriter out) {
-		if(format != null){
+	private void genFormatKind(Object formatEnum, Type eglType, final Context ctx, TabbedWriter out) {
+		if(formatEnum instanceof Expression){
 			//String id = fieldAccess.getId();
-			switch(format.intValue()){
-			case 0:
-				out.print("egl.formatXML");
-				break;
-			case 1:
-				out.print("egl.formatJSON");
-				break;
-			case 2:
-				out.print("egl.formatFORM");	
-				break;
-			default:	//case RESTFormatKind.NONE_CONSTANT:
-				out.print("egl.formatNONE");	
-				break;								
-			}			
+			ctx.invoke(genExpression, formatEnum, ctx, out);
 		}
 		else{
 			//use the default format based on the egl type
@@ -246,16 +279,16 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 			//xmlelement => xml
 			//record => xml
 			if(eglType != null && ctx.mapsToPrimitiveType(eglType)){
-				out.print("egl.formatNONE");
+				out.print("egl.eglx._service.Encoding.NONE");
 			}
 			else if(eglType != null && "egl.lang.Dictionary".equals(eglType.getTypeSignature())){
-				out.print("egl.formatJSON");
+				out.print("egl.eglx._service.Encoding.JSON");
 			}
 			else if(eglType != null){
-				out.print("egl.formatXML");	
+				out.print("egl.eglx._service.Encoding.XML");	
 			}
 			else{
-				out.print("egl.formatNONE");
+				out.print("egl.eglx._service.Encoding.NONE");
 			}
 		}
 	}
@@ -300,8 +333,13 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 							Expression arg = restArg.getArg();
 							if(arg != null){
 								//convert the the primitive parameter to string to be used inside convertToURLEncoded js function
-								AsExpression asExpr = IRUtils.createAsExpression(arg, TypeUtils.Type_STRING);
-								ctx.invoke(genExpression, asExpr, ctx, out);
+								if(!arg.getType().equals(TypeUtils.Type_STRING)){
+									AsExpression asExpr = IRUtils.createAsExpression(arg, TypeUtils.Type_STRING);
+									ctx.invoke(genExpression, asExpr, ctx, out);
+								}
+								else{
+									ctx.invoke(genExpression, arg, ctx, out);
+								}
 							}
 							else	;//should NEVER be in the else case, because uriTemplate variables are all IN param, which should be generated as temp var							
 
