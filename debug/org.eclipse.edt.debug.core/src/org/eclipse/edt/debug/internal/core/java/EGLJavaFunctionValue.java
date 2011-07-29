@@ -16,17 +16,25 @@ import java.util.List;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
-import org.eclipse.edt.debug.core.IEGLVariable;
+import org.eclipse.edt.debug.core.IEGLValue;
+import org.eclipse.edt.debug.core.java.IEGLJavaValue;
+import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
+import org.eclipse.jdt.debug.core.IJavaValue;
 
 /**
  * A value that contains local variables.
  */
-public class EGLJavaFunctionValue extends EGLJavaDebugElement implements IValue
+public class EGLJavaFunctionValue extends EGLJavaDebugElement implements IEGLJavaValue
 {
 	/**
 	 * The EGL-wrapped stack frame.
 	 */
 	private final EGLJavaStackFrame frame;
+	
+	/**
+	 * The variable to which this value belongs.
+	 */
+	protected final IEGLJavaVariable parentVariable;
 	
 	/**
 	 * The EGL-wrapped variables.
@@ -43,10 +51,11 @@ public class EGLJavaFunctionValue extends EGLJavaDebugElement implements IValue
 	 * 
 	 * @param frame The EGL-wrapped stack frame.
 	 */
-	public EGLJavaFunctionValue( EGLJavaStackFrame frame )
+	public EGLJavaFunctionValue( EGLJavaStackFrame frame, EGLJavaFunctionVariable parentVariable )
 	{
 		super( frame.getDebugTarget() );
 		this.frame = frame;
+		this.parentVariable = parentVariable;
 	}
 	
 	@Override
@@ -78,8 +87,8 @@ public class EGLJavaFunctionValue extends EGLJavaDebugElement implements IValue
 		
 		if ( recompute )
 		{
-			List<EGLJavaVariable> newEGLVariables = SMAPUtil.filterAndWrapVariables( javaVariables, eglVariables,
-					frame.getSMAPVariableInfos(), frame, frame.getDebugTarget(), false );
+			List<IEGLJavaVariable> newEGLVariables = VariableUtil.filterAndWrapVariables( javaVariables, eglVariables, frame.getSMAPVariableInfos(),
+					frame, false, this );
 			previousJavaVariables = javaVariables;
 			eglVariables = newEGLVariables.toArray( new EGLJavaVariable[ newEGLVariables.size() ] );
 		}
@@ -90,7 +99,7 @@ public class EGLJavaFunctionValue extends EGLJavaDebugElement implements IValue
 	@Override
 	public Object getAdapter( Class adapter )
 	{
-		if ( adapter == IVariable.class || adapter == EGLJavaVariable.class || adapter == IEGLVariable.class )
+		if ( adapter == IValue.class || adapter == IEGLValue.class || adapter == IEGLJavaValue.class || adapter == EGLJavaFunctionValue.class )
 		{
 			return this;
 		}
@@ -121,9 +130,29 @@ public class EGLJavaFunctionValue extends EGLJavaDebugElement implements IValue
 		return getVariables().length > 0;
 	}
 	
+	/**
+	 * @return the underlying Java debug element.
+	 */
 	@Override
-	public Object getJavaElement()
+	public Object getJavaDebugElement()
 	{
 		return frame;
+	}
+	
+	public String computeDetail()
+	{
+		return ""; //$NON-NLS-1$
+	}
+	
+	@Override
+	public IJavaValue getJavaValue()
+	{
+		return null;
+	}
+	
+	@Override
+	public IEGLJavaVariable getParentVariable()
+	{
+		return parentVariable;
 	}
 }

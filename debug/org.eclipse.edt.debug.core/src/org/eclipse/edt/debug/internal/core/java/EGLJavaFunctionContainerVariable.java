@@ -15,6 +15,8 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
+import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
+import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
 import org.eclipse.jdt.debug.core.IJavaReferenceType;
 import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
@@ -30,9 +32,9 @@ public class EGLJavaFunctionContainerVariable extends EGLJavaVariable
 	 * @param target The debug target.
 	 * @param javaVariable The underlying Java variable.
 	 */
-	public EGLJavaFunctionContainerVariable( IDebugTarget target, IJavaVariable javaVariable ) throws DebugException
+	public EGLJavaFunctionContainerVariable( IDebugTarget target, IJavaVariable javaVariable, IEGLJavaStackFrame frame ) throws DebugException
 	{
-		super( target, javaVariable, new SMAPVariableInfo( getDisplayName( javaVariable ), javaVariable.getReferenceTypeName(), "", -1, null ) ); //$NON-NLS-1$
+		super( target, javaVariable, new SMAPVariableInfo( getDisplayName( javaVariable ), javaVariable.getReferenceTypeName(), "", -1, null ), frame, null ); //$NON-NLS-1$
 	}
 	
 	private static String getDisplayName( IJavaVariable variable ) throws DebugException
@@ -74,5 +76,11 @@ public class EGLJavaFunctionContainerVariable extends EGLJavaVariable
 			return value;
 		}
 		return javaValue;
+	}
+	
+	@Override
+	public boolean isLocal()
+	{
+		return false;
 	}
 }

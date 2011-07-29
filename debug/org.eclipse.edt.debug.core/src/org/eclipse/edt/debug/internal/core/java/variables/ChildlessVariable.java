@@ -1,0 +1,40 @@
+package org.eclipse.edt.debug.internal.core.java.variables;
+
+import org.eclipse.debug.core.model.IDebugTarget;
+import org.eclipse.debug.core.model.IVariable;
+import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
+import org.eclipse.edt.debug.core.java.IEGLJavaValue;
+import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
+import org.eclipse.edt.debug.internal.core.java.EGLJavaValue;
+import org.eclipse.edt.debug.internal.core.java.EGLJavaVariable;
+import org.eclipse.jdt.debug.core.IJavaValue;
+import org.eclipse.jdt.debug.core.IJavaVariable;
+
+/**
+ * Variable that reports it has no kids, even if it does.
+ */
+public class ChildlessVariable extends EGLJavaVariable
+{
+	public ChildlessVariable( IDebugTarget target, IJavaVariable javaVariable, SMAPVariableInfo variableInfo, IEGLJavaStackFrame frame, IEGLJavaValue parent )
+	{
+		super( target, javaVariable, variableInfo, frame, parent );
+	}
+	
+	@Override
+	protected IEGLJavaValue createEGLValue( IJavaValue javaValue )
+	{
+		return new EGLJavaValue( getDebugTarget(), (IJavaValue)javaValue, this ) {
+			@Override
+			public IVariable[] getVariables()
+			{
+				return new IVariable[ 0 ];
+			}
+			
+			@Override
+			public boolean hasVariables()
+			{
+				return false;
+			}
+		};
+	}
+}

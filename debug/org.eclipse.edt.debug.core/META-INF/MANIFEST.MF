@@ -18,6 +18,7 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.edt.debug.core,
+ org.eclipse.edt.debug.core.java,
  org.eclipse.edt.debug.internal.core.java
 Agent-Class: org.eclipse.edt.debug.core.Transformer
 Premain-Class: org.eclipse.edt.debug.core.Transformer

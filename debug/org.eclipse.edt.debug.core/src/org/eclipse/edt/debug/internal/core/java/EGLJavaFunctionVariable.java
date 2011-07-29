@@ -13,17 +13,13 @@ package org.eclipse.edt.debug.internal.core.java;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
+import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
 
 /**
  * Variable whose value contains the local variables. There is no corresponding Java variable.
  */
 public class EGLJavaFunctionVariable extends EGLJavaVariable
 {
-	/**
-	 * The EGL-wrapped stack frame.
-	 */
-	private final EGLJavaStackFrame frame;
-	
 	/**
 	 * The EGL-wrapped value for this variable.
 	 */
@@ -39,10 +35,10 @@ public class EGLJavaFunctionVariable extends EGLJavaVariable
 	{
 		super( frame.getDebugTarget(), null, new SMAPVariableInfo( frame.getSMAPFunctionInfo() == null
 				? frame.getName()
-				: frame.getSMAPFunctionInfo().eglName, frame.getName(),
-				"", -1, frame.getSMAPFunctionInfo() == null ? null : frame.getSMAPFunctionInfo().smapEntry ) ); //$NON-NLS-1$
-		this.frame = frame;
-		value = new EGLJavaFunctionValue( frame );
+				: frame.getSMAPFunctionInfo().eglName, frame.getName(), "", -1, frame.getSMAPFunctionInfo() == null //$NON-NLS-1$
+				? null
+				: frame.getSMAPFunctionInfo().smapEntry ), frame, null );
+		value = new EGLJavaFunctionValue( frame, this );
 	}
 	
 	@Override
@@ -58,8 +54,14 @@ public class EGLJavaFunctionVariable extends EGLJavaVariable
 	}
 	
 	@Override
-	public Object getJavaElement()
+	public Object getJavaDebugElement()
 	{
 		return frame.getJavaStackFrame();
+	}
+	
+	@Override
+	public boolean isLocal()
+	{
+		return true;
 	}
 }

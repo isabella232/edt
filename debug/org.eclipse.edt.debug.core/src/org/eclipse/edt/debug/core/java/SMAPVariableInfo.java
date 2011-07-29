@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.debug.internal.core.java;
+package org.eclipse.edt.debug.core.java;
 
 /**
  * Represents a line of variable information parsed from the SMAP. This can be used to map the Java variables to EGL variables, filter those that

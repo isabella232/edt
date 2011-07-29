@@ -9,20 +9,15 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.debug.core;
+package org.eclipse.edt.debug.core.java;
 
-import org.eclipse.osgi.util.NLS;
+import org.eclipse.edt.debug.core.IEGLDebugTarget;
+import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 
-public class EDTDebugCoreMessages extends NLS
+public interface IEGLJavaDebugTarget extends IEGLDebugTarget, IEGLJavaDebugElement
 {
-	private static final String BUNDLE_NAME = "org.eclipse.edt.debug.core.EDTDebugCoreMessages"; //$NON-NLS-1$
-	
-	static
-	{
-		NLS.initializeMessages( BUNDLE_NAME, EDTDebugCoreMessages.class );
-	}
-	
-	public static String TransformerUnknownTag;
-	public static String TransformerUnsupportedEncoding;
-	public static String ErrorRetrievingValue;
+	/**
+	 * @return the underlying debug target.
+	 */
+	public IJavaDebugTarget getJavaDebugTarget();
 }

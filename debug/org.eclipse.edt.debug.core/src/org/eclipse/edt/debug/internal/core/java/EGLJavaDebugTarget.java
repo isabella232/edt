@@ -33,13 +33,15 @@ import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.edt.debug.core.IEGLDebugTarget;
+import org.eclipse.edt.debug.core.java.IEGLJavaDebugTarget;
+import org.eclipse.edt.debug.core.java.IEGLJavaThread;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaThread;
 
 /**
  * Wraps an IJavaDebugTarget.
  */
-public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLDebugTarget, IDebugEventFilter
+public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaDebugTarget, IDebugEventFilter
 {
 	/**
 	 * The underlying Java debug target.
@@ -54,14 +56,14 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLDebug
 	/**
 	 * The EGL-wrapped threads.
 	 */
-	private final List<EGLJavaThread> eglThreads;
+	private final List<IEGLJavaThread> eglThreads;
 	
 	public EGLJavaDebugTarget( IJavaDebugTarget target )
 	{
 		super( null );
 		javaTarget = target;
 		threads = new HashMap<IJavaThread, EGLJavaThread>();
-		eglThreads = new ArrayList<EGLJavaThread>();
+		eglThreads = new ArrayList<IEGLJavaThread>();
 		
 		// Add the initial threads, which are created before the target.
 		try
@@ -101,7 +103,8 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLDebug
 	@Override
 	public Object getAdapter( Class adapter )
 	{
-		if ( adapter == IDebugTarget.class || adapter == EGLJavaDebugTarget.class || adapter == IEGLDebugTarget.class )
+		if ( adapter == IDebugTarget.class || adapter == EGLJavaDebugTarget.class || adapter == IEGLDebugTarget.class
+				|| adapter == IEGLJavaDebugTarget.class )
 		{
 			return this;
 		}
@@ -350,10 +353,10 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLDebug
 	}
 	
 	/**
-	 * @return the underlying Java element.
+	 * @return the underlying Java debug element.
 	 */
 	@Override
-	public Object getJavaElement()
+	public Object getJavaDebugElement()
 	{
 		return getJavaDebugTarget();
 	}

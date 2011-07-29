@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.debug.internal.core.java;
+package org.eclipse.edt.debug.core.java;
 
 /**
  * Represents a line of function information parsed from the SMAP.

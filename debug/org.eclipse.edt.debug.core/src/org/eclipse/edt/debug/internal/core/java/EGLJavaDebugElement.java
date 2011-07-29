@@ -23,12 +23,14 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ITerminate;
 import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.edt.debug.core.IEGLDebugTarget;
+import org.eclipse.edt.debug.core.java.IEGLJavaDebugElement;
+import org.eclipse.edt.debug.core.java.IEGLJavaDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 
 /**
  * Super class of all EGL Java Debug framework classes.
  */
-public abstract class EGLJavaDebugElement extends DebugElement
+public abstract class EGLJavaDebugElement extends DebugElement implements IEGLJavaDebugElement
 {
 	public EGLJavaDebugElement( IDebugTarget target )
 	{
@@ -44,7 +46,7 @@ public abstract class EGLJavaDebugElement extends DebugElement
 	@Override
 	public Object getAdapter( Class adapter )
 	{
-		if ( adapter == EGLJavaDebugElement.class || adapter == IDebugElement.class )
+		if ( adapter == EGLJavaDebugElement.class || adapter == IDebugElement.class || adapter == IEGLJavaDebugElement.class )
 		{
 			return this;
 		}
@@ -52,7 +54,7 @@ public abstract class EGLJavaDebugElement extends DebugElement
 		{
 			return getDebugTarget();
 		}
-		if ( adapter == IEGLDebugTarget.class || adapter == EGLJavaDebugTarget.class )
+		if ( adapter == IEGLDebugTarget.class || adapter == EGLJavaDebugTarget.class || adapter == IEGLJavaDebugTarget.class )
 		{
 			return getEGLJavaDebugTarget();
 		}
@@ -125,9 +127,4 @@ public abstract class EGLJavaDebugElement extends DebugElement
 		
 		return grouped;
 	}
-	
-	/**
-	 * @return the underlying Java element.
-	 */
-	public abstract Object getJavaElement();
 }

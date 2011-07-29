@@ -18,32 +18,36 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.edt.debug.core.IEGLValue;
+import org.eclipse.edt.debug.core.java.IEGLJavaValue;
+import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
+import org.eclipse.edt.debug.core.java.SMAPUtil;
+import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
 import org.eclipse.jdt.debug.core.IJavaValue;
 
 /**
  * Wraps an IJavaValue.
  */
-public class EGLJavaValue extends EGLJavaDebugElement implements IEGLValue
+public class EGLJavaValue extends EGLJavaDebugElement implements IEGLJavaValue
 {
 	/**
 	 * The underlying Java value.
 	 */
-	private final IJavaValue javaValue;
+	protected final IJavaValue javaValue;
 	
 	/**
 	 * The variable to which this value belongs.
 	 */
-	private final EGLJavaVariable parentVariable;
+	protected final IEGLJavaVariable parentVariable;
 	
 	/**
 	 * The EGL-wrapped variables.
 	 */
-	private EGLJavaVariable[] eglVariables;
+	protected IEGLJavaVariable[] eglVariables;
 	
 	/**
 	 * The previous Java variables that were wrapped.
 	 */
-	private IVariable[] previousJavaVariables;
+	protected IVariable[] previousJavaVariables;
 	
 	/**
 	 * The SMAP data from the source debug extension of the class file, if applicable.
@@ -62,7 +66,7 @@ public class EGLJavaValue extends EGLJavaDebugElement implements IEGLValue
 	 * @param value The underlying Java value.
 	 * @param parent The variable to which this value belongs.
 	 */
-	public EGLJavaValue( IDebugTarget target, IJavaValue value, EGLJavaVariable parent )
+	public EGLJavaValue( IDebugTarget target, IJavaValue value, IEGLJavaVariable parent )
 	{
 		super( target );
 		this.javaValue = value;
@@ -72,7 +76,7 @@ public class EGLJavaValue extends EGLJavaDebugElement implements IEGLValue
 	@Override
 	public Object getAdapter( Class adapter )
 	{
-		if ( adapter == IValue.class || adapter == EGLJavaValue.class || adapter == IEGLValue.class )
+		if ( adapter == IValue.class || adapter == EGLJavaValue.class || adapter == IEGLValue.class || adapter == IEGLJavaValue.class )
 		{
 			return this;
 		}
@@ -130,8 +134,8 @@ public class EGLJavaValue extends EGLJavaDebugElement implements IEGLValue
 		
 		if ( recompute )
 		{
-			List<EGLJavaVariable> newEGLVariables = SMAPUtil.filterAndWrapVariables( javaVariables, eglVariables,
-					getSMAPVariableInfos(), null, getDebugTarget(), false );
+			List<IEGLJavaVariable> newEGLVariables = VariableUtil.filterAndWrapVariables( javaVariables, eglVariables, getSMAPVariableInfos(),
+					parentVariable.getEGLStackFrame(), false, this );
 			previousJavaVariables = javaVariables;
 			eglVariables = newEGLVariables.toArray( new EGLJavaVariable[ newEGLVariables.size() ] );
 		}
@@ -145,26 +149,21 @@ public class EGLJavaValue extends EGLJavaDebugElement implements IEGLValue
 		return javaValue.hasVariables() && getVariables().length != 0;
 	}
 	
-	/**
-	 * @return the underlying Java element.
-	 */
 	@Override
-	public Object getJavaElement()
+	public Object getJavaDebugElement()
 	{
-		return getJavaValue();
+		return javaValue;
 	}
 	
-	/**
-	 * @return the underlying value.
-	 */
+	@Override
 	public IJavaValue getJavaValue()
 	{
 		return javaValue;
 	}
 	
 	/**
-	 * Returns the SMAP information for the value. It will never be null. If there is no SMAP information, or the Java
-	 * type was not a type that we recognize, then this will return blank.
+	 * Returns the SMAP information for the value. It will never be null. If there is no SMAP information, or the Java type was not a type that we
+	 * recognize, then this will return blank.
 	 * 
 	 * @return the SMAP information.
 	 * @throws DebugException
@@ -179,8 +178,8 @@ public class EGLJavaValue extends EGLJavaDebugElement implements IEGLValue
 	}
 	
 	/**
-	 * Returns the variable information from the SMAP for the value. It will never be null. If there is no SMAP
-	 * information, or the Java type was not a type that we recognize, then this will return empty.
+	 * Returns the variable information from the SMAP for the value. It will never be null. If there is no SMAP information, or the Java type was not
+	 * a type that we recognize, then this will return empty.
 	 * 
 	 * @return the variable information
 	 * @throws DebugException
@@ -193,5 +192,17 @@ public class EGLJavaValue extends EGLJavaDebugElement implements IEGLValue
 			smapVariableInfos = (SMAPVariableInfo[])SMAPUtil.parseVariables( getSMAP(), null );
 		}
 		return smapVariableInfos;
+	}
+	
+	@Override
+	public String computeDetail()
+	{
+		return null;
+	}
+	
+	@Override
+	public IEGLJavaVariable getParentVariable()
+	{
+		return parentVariable;
 	}
 }

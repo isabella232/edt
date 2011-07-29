@@ -13,16 +13,23 @@ package org.eclipse.edt.debug.internal.core.java;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IDebugTarget;
+import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
+import org.eclipse.edt.debug.core.IEGLStackFrame;
 import org.eclipse.edt.debug.core.IEGLVariable;
+import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
+import org.eclipse.edt.debug.core.java.IEGLJavaValue;
+import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
+import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
+import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 
 /**
  * Wraps an IJavaVariable.
  */
-public class EGLJavaVariable extends EGLJavaDebugElement implements IEGLVariable
+public class EGLJavaVariable extends EGLJavaDebugElement implements IEGLJavaVariable
 {
 	/**
 	 * The underlying Java variable.
@@ -32,12 +39,22 @@ public class EGLJavaVariable extends EGLJavaDebugElement implements IEGLVariable
 	/**
 	 * The EGL-wrapped value of the variable.
 	 */
-	protected EGLJavaValue value;
+	protected IEGLJavaValue value;
 	
 	/**
 	 * The variable information retrieved from the SMAP.
 	 */
 	protected final SMAPVariableInfo variableInfo;
+	
+	/**
+	 * The stack frame.
+	 */
+	protected final IEGLJavaStackFrame frame;
+	
+	/**
+	 * This variable's parent.
+	 */
+	protected final IEGLJavaValue parent;
 	
 	/**
 	 * Constructor.
@@ -46,23 +63,35 @@ public class EGLJavaVariable extends EGLJavaDebugElement implements IEGLVariable
 	 * @param variableInfo The variable information retreived from the SMAP.
 	 * @param parent The parent of this variable; this should be null if the variable is toplevel.
 	 */
-	public EGLJavaVariable( IDebugTarget target, IJavaVariable javaVariable, SMAPVariableInfo variableInfo )
+	public EGLJavaVariable( IDebugTarget target, IJavaVariable javaVariable, SMAPVariableInfo variableInfo, IEGLJavaStackFrame frame,
+			IEGLJavaValue parent )
 	{
 		super( target );
 		this.javaVariable = javaVariable;
 		this.variableInfo = variableInfo;
+		this.frame = frame;
+		this.parent = parent;
 	}
 	
 	@Override
 	public Object getAdapter( Class adapter )
 	{
-		if ( adapter == IVariable.class || adapter == EGLJavaVariable.class || adapter == IEGLVariable.class )
+		if ( adapter == IVariable.class || adapter == EGLJavaVariable.class || adapter == IEGLVariable.class || adapter == IEGLJavaVariable.class )
 		{
 			return this;
 		}
 		if ( adapter == IJavaVariable.class )
 		{
 			return javaVariable;
+		}
+		if ( adapter == IStackFrame.class || adapter == IEGLStackFrame.class || adapter == IEGLJavaStackFrame.class
+				|| adapter == EGLJavaStackFrame.class )
+		{
+			return frame;
+		}
+		if ( adapter == IJavaStackFrame.class )
+		{
+			return frame.getJavaStackFrame();
 		}
 		return super.getAdapter( adapter );
 	}
@@ -103,11 +132,16 @@ public class EGLJavaVariable extends EGLJavaDebugElement implements IEGLVariable
 		{
 			if ( value == null || value.getJavaValue() != javaValue )
 			{
-				value = new EGLJavaValue( getDebugTarget(), (IJavaValue)javaValue, this );
+				value = createEGLValue( (IJavaValue)javaValue );
 			}
 			return value;
 		}
 		return javaValue;
+	}
+	
+	protected IEGLJavaValue createEGLValue( IJavaValue javaValue )
+	{
+		return new EGLJavaValue( getDebugTarget(), (IJavaValue)javaValue, this );
 	}
 	
 	@Override
@@ -128,20 +162,40 @@ public class EGLJavaVariable extends EGLJavaDebugElement implements IEGLVariable
 		return javaVariable.hasValueChanged();
 	}
 	
-	/**
-	 * @return the underlying variable.
-	 */
+	@Override
 	public IJavaVariable getJavaVariable()
 	{
 		return javaVariable;
 	}
 	
-	/**
-	 * @return the underlying Java element.
-	 */
 	@Override
-	public Object getJavaElement()
+	public Object getJavaDebugElement()
 	{
 		return getJavaVariable();
+	}
+	
+	@Override
+	public IEGLJavaStackFrame getEGLStackFrame()
+	{
+		return frame;
+	}
+	
+	@Override
+	public SMAPVariableInfo getVariableInfo()
+	{
+		return variableInfo;
+	}
+	
+	@Override
+	public boolean isLocal()
+	{
+		if ( parent != null )
+		{
+			if ( parent.getParentVariable() != null )
+			{
+				parent.getParentVariable().isLocal();
+			}
+		}
+		return false;
 	}
 }

@@ -22,13 +22,15 @@ import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.edt.debug.core.IEGLStackFrame;
 import org.eclipse.edt.debug.core.IEGLThread;
+import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
+import org.eclipse.edt.debug.core.java.IEGLJavaThread;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaThread;
 
 /**
  * Wraps an IJavaThread.
  */
-public class EGLJavaThread extends EGLJavaDebugElement implements IEGLThread
+public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 {
 	private static final boolean FILTER_RUNTIMES = !System.getProperty( "edt.debug.filter.runtimes", "yes" ).equalsIgnoreCase( "false" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	
@@ -62,11 +64,12 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLThread
 	@Override
 	public Object getAdapter( Class adapter )
 	{
-		if ( adapter == IThread.class || adapter == EGLJavaThread.class || adapter == IEGLThread.class )
+		if ( adapter == IThread.class || adapter == EGLJavaThread.class || adapter == IEGLThread.class || adapter == IEGLJavaThread.class )
 		{
 			return this;
 		}
-		if ( adapter == IStackFrame.class || adapter == EGLJavaStackFrame.class || adapter == IEGLStackFrame.class )
+		if ( adapter == IStackFrame.class || adapter == EGLJavaStackFrame.class || adapter == IEGLStackFrame.class
+				|| adapter == IEGLJavaStackFrame.class )
 		{
 			try
 			{
@@ -318,7 +321,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLThread
 									? null
 									: eglFrames[ 0 ];
 							
-							if ( topEGLFrame != null && topEGLFrame.getJavaElement() == topJavaFrame )
+							if ( topEGLFrame != null && topEGLFrame.getJavaDebugElement() == topJavaFrame )
 							{
 								try
 								{
@@ -410,19 +413,14 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLThread
 		return frame.isStatic() && "main".equals( frame.getName() ) && "([Ljava/lang/String;)V".equals( frame.getSignature() ); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
-	/**
-	 * @return the underlying thread.
-	 */
+	@Override
 	public IJavaThread getJavaThread()
 	{
 		return javaThread;
 	}
 	
-	/**
-	 * @return the underlying Java element.
-	 */
 	@Override
-	public Object getJavaElement()
+	public Object getJavaDebugElement()
 	{
 		return getJavaThread();
 	}

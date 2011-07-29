@@ -37,4 +37,10 @@ public class EGLJavaFunctionContainerValue extends EGLJavaValue
 	{
 		return ""; //$NON-NLS-1$
 	}
+	
+	@Override
+	public String computeDetail()
+	{
+		return ""; //$NON-NLS-1$
+	}
 }

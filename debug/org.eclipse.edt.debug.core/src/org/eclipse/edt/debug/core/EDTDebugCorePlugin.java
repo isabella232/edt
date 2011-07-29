@@ -15,14 +15,20 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.edt.debug.core.java.IVariableAdapter;
+import org.eclipse.edt.debug.internal.core.java.variables.DefaultVariableAdapter;
 import org.eclipse.edt.ide.core.EDTRuntimeContainerEntry;
 import org.eclipse.equinox.frameworkadmin.BundleInfo;
 import org.eclipse.equinox.simpleconfigurator.manipulator.SimpleConfiguratorManipulator;
@@ -41,6 +47,11 @@ public class EDTDebugCorePlugin extends Plugin implements BundleActivator
 	public static final String PLUGIN_ID = "org.eclipse.edt.debug.core"; //$NON-NLS-1$
 	
 	/**
+	 * The ID for the variable adapters extension point.
+	 */
+	public static final String EXTENSION_POINT_VARIABLE_ADAPTERS = "variableAdapters"; //$NON-NLS-1$
+	
+	/**
 	 * The shared instance.
 	 */
 	private static EDTDebugCorePlugin plugin;
@@ -49,6 +60,11 @@ public class EDTDebugCorePlugin extends Plugin implements BundleActivator
 	 * The absolute path to the transformer jar.
 	 */
 	private String transformerPath;
+	
+	/**
+	 * The variable adapters.
+	 */
+	private IVariableAdapter[] variableAdapters;
 	
 	/*
 	 * (non-Javadoc)
@@ -147,5 +163,38 @@ public class EDTDebugCorePlugin extends Plugin implements BundleActivator
 		{
 			log( new Status( IStatus.ERROR, PLUGIN_ID, DebugPlugin.ERROR, "Internal Error", t ) ); //$NON-NLS-1$
 		}
+	}
+	
+	/**
+	 * @return the variable adapter extensions.
+	 */
+	public synchronized IVariableAdapter[] getVariableAdapters()
+	{
+		if ( variableAdapters == null )
+		{
+			IConfigurationElement[] elements = Platform.getExtensionRegistry().getConfigurationElementsFor( PLUGIN_ID,
+					EXTENSION_POINT_VARIABLE_ADAPTERS );
+			List<IVariableAdapter> adapters = new ArrayList<IVariableAdapter>( elements.length );
+			for ( IConfigurationElement element : elements )
+			{
+				try
+				{
+					Object o = element.createExecutableExtension( "class" ); //$NON-NLS-1$
+					if ( o instanceof IVariableAdapter )
+					{
+						adapters.add( (IVariableAdapter)o );
+					}
+				}
+				catch ( CoreException e )
+				{
+					log( e );
+				}
+			}
+			
+			variableAdapters = new IVariableAdapter[ adapters.size() + 1 ];
+			adapters.toArray( variableAdapters );
+			variableAdapters[ variableAdapters.length - 1 ] = new DefaultVariableAdapter();
+		}
+		return variableAdapters;
 	}
 }

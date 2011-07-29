@@ -9,18 +9,15 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.debug.internal.core.java;
+package org.eclipse.edt.debug.core.java;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import org.eclipse.debug.core.DebugException;
-import org.eclipse.debug.core.model.IDebugTarget;
-import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.jdt.debug.core.IJavaType;
-import org.eclipse.jdt.debug.core.IJavaVariable;
 import org.eclipse.jdt.internal.debug.core.model.JDIReferenceType;
 
 import com.sun.jdi.AbsentInformationException;
@@ -48,7 +45,7 @@ public class SMAPUtil
 	 *            find function information in the SMAP corresponding to the frame, the information will be passed to the frame.
 	 * @return an array of {@link SMAPVariableInfo}s, never null.
 	 */
-	public static SMAPVariableInfo[] parseVariables( String smap, EGLJavaStackFrame frame )
+	public static SMAPVariableInfo[] parseVariables( String smap, IEGLJavaStackFrame frame )
 	{
 		if ( smap == null || smap.trim().length() == 0 )
 		{
@@ -226,119 +223,7 @@ public class SMAPUtil
 			}
 		}
 		
-		return smap == null ? "" : smap.trim(); //$NON-NLS-1$
-	}
-	
-	/**
-	 * Given a set of Java variables, and SMAP variable information, this will determine which Java variables should be displayed. Any variables to be
-	 * displayed will be wrapped inside an EGLJavaVariable.
-	 * 
-	 * @param javaVariables The Java variables, not null.
-	 * @param existingEGLVars EGL variables that were processed from a previous call, possibly null.
-	 * @param infos The variable information from the SMAP, not null.
-	 * @param frame The active EGL-wrapped stack frame, possible null.
-	 * @param target The debug target.
-	 * @param skipLocals True if local variables should be omitted.
-	 * @return the filtered, EGL-wrapped variables.
-	 * @throws DebugException
-	 */
-	public static List<EGLJavaVariable> filterAndWrapVariables( IVariable[] javaVariables, EGLJavaVariable[] existingEGLVars,
-			SMAPVariableInfo[] infos, EGLJavaStackFrame frame, IDebugTarget target, boolean skipLocals ) throws DebugException
-	{
-		List<EGLJavaVariable> newEGLVariables = new ArrayList<EGLJavaVariable>( javaVariables.length );
-		
-		// The frame will be null when we're getting variables of a value. Field variables are never local,
-		// so this information isn't needed. Fields of records are always "visible", global fields of other logic
-		// parts like libraries are always "visible".
-		String javaFrameSignature = frame == null ? "" : frame.getJavaStackFrame().getMethodName() + ";" + frame.getJavaStackFrame().getSignature(); //$NON-NLS-1$ //$NON-NLS-2$
-		int currentLine = frame == null ? -1 : frame.getLineNumber();
-		int frameStartLine = frame == null || frame.getSMAPFunctionInfo() == null ? -1 : frame.getSMAPFunctionInfo().lineDeclared;
-		
-		for ( int i = 0; i < javaVariables.length; i++ )
-		{
-			IJavaVariable javaVar = (IJavaVariable)javaVariables[ i ];
-			String javaName = javaVar.getName();
-			
-			boolean addNew = true;
-			if ( existingEGLVars != null )
-			{
-				for ( int j = 0; j < existingEGLVars.length; j++ )
-				{
-					if ( existingEGLVars[ j ].getJavaVariable() == javaVar )
-					{
-						// Reuse this variable.
-						newEGLVariables.add( existingEGLVars[ j ] );
-						addNew = false;
-						break;
-					}
-				}
-			}
-			
-			if ( addNew )
-			{
-				if ( javaVar.isLocal() )
-				{
-					if ( !skipLocals )
-					{
-						SMAPVariableInfo matchingInfo = null;
-						for ( int j = 0; j < infos.length; j++ )
-						{
-							SMAPVariableInfo info = infos[ j ];
-							if ( info.javaName.equals( javaName ) )
-							{
-								// Validate the signature and make sure the info is in scope. There could be multiple
-								// local variables of different types with the same name, in different scopes within the
-								// function.
-								if ( info.javaMethodSignature != null && info.javaMethodSignature.equals( javaFrameSignature )
-										&& (currentLine >= info.lineDeclared || currentLine == frameStartLine) )
-								{
-									if ( matchingInfo == null || matchingInfo.lineDeclared < info.lineDeclared )
-									{
-										matchingInfo = info;
-									}
-									
-									// Don't break - keep looping to see if there's a better match. We want the info
-									// with the highest line number that's within scope.
-								}
-							}
-						}
-						
-						if ( matchingInfo != null )
-						{
-							newEGLVariables.add( new EGLJavaVariable( target, javaVar, matchingInfo ) );
-						}
-					}
-				}
-				else
-				{
-					if ( "this".equals( javaName ) ) //$NON-NLS-1$
-					{
-						newEGLVariables.add( new EGLJavaFunctionContainerVariable( target, javaVar ) );
-						continue;
-					}
-					
-					SMAPVariableInfo matchingInfo = null;
-					for ( int j = 0; j < infos.length; j++ )
-					{
-						SMAPVariableInfo info = infos[ j ];
-						if ( info.javaName.equals( javaName ) )
-						{
-							// Make sure it has no signature
-							if ( info.javaMethodSignature == null )
-							{
-								matchingInfo = info;
-								break;
-							}
-						}
-					}
-					
-					if ( matchingInfo != null )
-					{
-						newEGLVariables.add( new EGLJavaVariable( target, javaVar, matchingInfo ) );
-					}
-				}
-			}
-		}
-		return newEGLVariables;
+		return smap == null
+				? "" : smap.trim(); //$NON-NLS-1$
 	}
 }

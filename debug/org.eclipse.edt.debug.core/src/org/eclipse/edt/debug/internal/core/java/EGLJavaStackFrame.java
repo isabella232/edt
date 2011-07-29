@@ -21,12 +21,18 @@ import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.edt.debug.core.IEGLStackFrame;
 import org.eclipse.edt.debug.core.IEGLThread;
+import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
+import org.eclipse.edt.debug.core.java.IEGLJavaThread;
+import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
+import org.eclipse.edt.debug.core.java.SMAPFunctionInfo;
+import org.eclipse.edt.debug.core.java.SMAPUtil;
+import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 
 /**
  * Wraps an IJavaStackFrame.
  */
-public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLStackFrame, IDropToFrame
+public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaStackFrame, IDropToFrame
 {
 	/**
 	 * The underlying Java stack frame.
@@ -36,12 +42,12 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLStackF
 	/**
 	 * The EGL-wrapped thread.
 	 */
-	private final EGLJavaThread eglThread;
+	private final IEGLJavaThread eglThread;
 	
 	/**
 	 * The EGL-wrapped variables.
 	 */
-	private EGLJavaVariable[] eglVariables;
+	private IEGLJavaVariable[] eglVariables;
 	
 	/**
 	 * The previous Java variables that were wrapped.
@@ -178,6 +184,12 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLStackF
 	}
 	
 	@Override
+	public IEGLJavaThread getEGLThread()
+	{
+		return eglThread;
+	}
+	
+	@Override
 	public IVariable[] getVariables() throws DebugException
 	{
 		if ( getSMAP().length() == 0 )
@@ -208,8 +220,8 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLStackF
 		{
 			// We could just manually add a "this" variable and a "function" variable, but this way if the language gets
 			// extended by some client, e.g. concept of 'static' added to EGL, this would support that.
-			List<EGLJavaVariable> newEGLVariables = SMAPUtil.filterAndWrapVariables( javaVariables, eglVariables, getSMAPVariableInfos(), this,
-					getDebugTarget(), true );
+			List<IEGLJavaVariable> newEGLVariables = VariableUtil.filterAndWrapVariables( javaVariables, eglVariables, getSMAPVariableInfos(), this,
+					true, null );
 			previousJavaVariables = javaVariables;
 			eglVariables = new EGLJavaVariable[ newEGLVariables.size() + 1 ];
 			newEGLVariables.toArray( eglVariables );
@@ -264,11 +276,12 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLStackF
 	@Override
 	public Object getAdapter( Class adapter )
 	{
-		if ( adapter == IStackFrame.class || adapter == EGLJavaStackFrame.class || adapter == IEGLStackFrame.class || adapter == IDropToFrame.class )
+		if ( adapter == IStackFrame.class || adapter == EGLJavaStackFrame.class || adapter == IEGLStackFrame.class || adapter == IDropToFrame.class
+				|| adapter == IEGLJavaStackFrame.class )
 		{
 			return this;
 		}
-		if ( adapter == IThread.class || adapter == EGLJavaThread.class || adapter == IEGLThread.class )
+		if ( adapter == IThread.class || adapter == EGLJavaThread.class || adapter == IEGLThread.class || adapter == IEGLJavaThread.class )
 		{
 			return getThread();
 		}
@@ -288,10 +301,10 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLStackF
 	}
 	
 	/**
-	 * @return the underlying Java element.
+	 * @return the underlying Java debug element.
 	 */
 	@Override
-	public Object getJavaElement()
+	public Object getJavaDebugElement()
 	{
 		return getJavaStackFrame();
 	}
@@ -324,13 +337,7 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLStackF
 		return smap;
 	}
 	
-	/**
-	 * Returns the variable information from the SMAP for the stack frame. It will never be null. If there is no SMAP information, or the Java type
-	 * was not a type that we recognize, then this will return empty.
-	 * 
-	 * @return the variable information
-	 * @throws DebugException
-	 */
+	@Override
 	public SMAPVariableInfo[] getSMAPVariableInfos() throws DebugException
 	{
 		if ( smapVariableInfos == null )
@@ -340,12 +347,20 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLStackF
 		return smapVariableInfos;
 	}
 	
+	@Override
+	public void setSMAPVariableInfos( SMAPVariableInfo[] infos )
+	{
+		this.smapVariableInfos = infos;
+	}
+	
+	@Override
 	public SMAPFunctionInfo getSMAPFunctionInfo() throws DebugException
 	{
 		getSMAPVariableInfos(); // Make sure we've parsed the SMAP data
 		return smapFunctionInfo;
 	}
 	
+	@Override
 	public void setSMAPFunctionInfo( SMAPFunctionInfo info )
 	{
 		this.smapFunctionInfo = info;
