@@ -21,6 +21,7 @@ import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Stereotype;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class RecordTemplate extends JavaTemplate {
@@ -29,6 +30,10 @@ public class RecordTemplate extends JavaTemplate {
 	public void preGen(Record part, Context ctx) {
 		// process anything else the superclass needs to do
 		ctx.invokeSuper(this, preGen, part, ctx);
+		
+		// Add SMAP file
+		ctx.setCurrentFile(IRUtils.getQualifiedFileName(part));
+		
 		// ignore adding this entry to the list, if it is the part we are currently generating
 		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
 			part.getFullyQualifiedName()))
