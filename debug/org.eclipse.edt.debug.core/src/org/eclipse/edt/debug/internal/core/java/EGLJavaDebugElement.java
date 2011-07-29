@@ -65,9 +65,9 @@ public abstract class EGLJavaDebugElement extends DebugElement implements IEGLJa
 			{
 				return target;
 			}
-			if ( target instanceof EGLJavaDebugTarget )
+			if ( target instanceof IEGLJavaDebugTarget )
 			{
-				return ((EGLJavaDebugTarget)target).getJavaDebugTarget();
+				return ((IEGLJavaDebugTarget)target).getJavaDebugTarget();
 			}
 		}
 		
