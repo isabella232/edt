@@ -133,16 +133,8 @@ public class FlexibleRecordBindingCompletor extends DefaultBinder {
     protected void processSubType(PartSubTypeAndAnnotationCollector collector) {
         if (!collector.isFoundSubTypeInSettingsBlock()) {
             if (collector.getSubTypeAnnotationBinding() == null) {
-            	try {
-	        		AnnotationTypeBinding annotationType = new AnnotationTypeBindingImpl((FlexibleRecordBinding) currentScope.findPackage(InternUtil.intern("egl")).resolvePackage(InternUtil.intern("core")).resolveType(InternUtil.intern("BasicRecord")), recordBinding);	            	
-	                AnnotationBinding annotation = new AnnotationBinding(InternUtil.internCaseSensitive("BasicRecord"), recordBinding, annotationType);
-	                recordBinding.addAnnotation(annotation);
-	                partSubTypeAnnotationBinding = annotation;
-            	}
-            	catch(ClassCastException e) {
-            		partSubTypeAnnotationBinding = null;
-            	}
-            } else {
+            	partSubTypeAnnotationBinding = null;
+             } else {
                 partSubTypeAnnotationBinding = collector.getSubTypeAnnotationBinding();
             }
         } else {
