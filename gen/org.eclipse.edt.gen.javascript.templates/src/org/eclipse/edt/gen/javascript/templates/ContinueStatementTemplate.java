@@ -34,7 +34,7 @@ public class ContinueStatementTemplate extends JavaScriptTemplate {
 				label = ctx.searchLabelStack(Label.LABEL_TYPE_WHILE);
 			// if we did not find a label, search for an eligible generic one
 			if (label == null)
-				label = ctx.searchLabelStack(Label.LABEL_TYPE_GENERIC);
+				label = ctx.searchLabelStack(Label.LABEL_TYPE_GENERIC, Label.LABEL_TYPE_IF);
 			// if we still don't have one, then ignore it
 			if (label != null)
 				out.print("continue " + label.getName());
