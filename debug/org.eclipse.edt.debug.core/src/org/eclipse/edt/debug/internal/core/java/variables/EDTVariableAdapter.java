@@ -17,6 +17,7 @@ import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
 import org.eclipse.edt.debug.core.java.IVariableAdapter;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
+import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 
 public class EDTVariableAdapter implements IVariableAdapter
@@ -29,9 +30,21 @@ public class EDTVariableAdapter implements IVariableAdapter
 			String type = variable.getReferenceTypeName();
 			if ( type != null )
 			{
-				if ( type.startsWith( "egl.lang.EList<" ) ) //$NON-NLS-1$
+				if ( type.startsWith( "egl.lang.EList<" ) //$NON-NLS-1$
+						|| type.startsWith( "org.eclipse.edt.runtime.java.egl.lang.EList<" ) ) //$NON-NLS-1$
 				{
 					return new ListVariable( frame.getDebugTarget(), variable, info, frame, parent );
+				}
+				else if ( type.equals( "egl.lang.EDictionary" ) //$NON-NLS-1$
+						|| type.equals( "org.eclipse.edt.runtime.java.egl.lang.EDictionary" ) ) //$NON-NLS-1$
+				{
+					return new MapVariable( frame.getDebugTarget(), variable, info, frame, parent ) {
+						@Override
+						protected String getTypeNameForElement( IJavaValue value )
+						{
+							return "egl.lang.AnyObject"; //$NON-NLS-1$
+						}
+					};
 				}
 			}
 		}
