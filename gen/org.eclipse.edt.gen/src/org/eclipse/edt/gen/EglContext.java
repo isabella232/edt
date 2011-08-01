@@ -121,8 +121,23 @@ public abstract class EglContext extends TemplateContext {
 		// we are interested in scanning lifo for the entries
 		while (i > 0) {
 			Label label = this.labelStack.get(--i);
-			// are we trying to match the nearest (non-if statement) generic or a specific one
-			if ((type == Label.LABEL_TYPE_GENERIC && label.getType() != Label.LABEL_TYPE_IF) || label.getType() == type)
+			// are we trying to match the nearest generic or a specific one
+			if (type == Label.LABEL_TYPE_GENERIC || label.getType() == type)
+				return label;
+		}
+		return null;
+	}
+
+	/**
+	 * try and locate the first entry beginning with the passed string and return the value or null
+	 */
+	public Label searchLabelStack(int type, int ignore) {
+		int i = this.labelStack.size();
+		// we are interested in scanning lifo for the entries
+		while (i > 0) {
+			Label label = this.labelStack.get(--i);
+			// are we trying to match the nearest generic, ignoring a specific type
+			if (type == Label.LABEL_TYPE_GENERIC && label.getType() != ignore)
 				return label;
 		}
 		return null;
