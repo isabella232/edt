@@ -125,7 +125,6 @@ public class LibraryTemplate extends JavaScriptTemplate {
 
 	public void genGetterSetter(Library library, Context ctx, TabbedWriter out, Field arg) {
 		ctx.invoke(genGetter, arg, ctx, out);
-		out.println(",");
 		ctx.invoke(genSetter, arg, ctx, out);
 	}
 

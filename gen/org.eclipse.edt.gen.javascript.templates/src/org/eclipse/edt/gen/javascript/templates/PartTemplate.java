@@ -42,7 +42,12 @@ public class PartTemplate extends JavaScriptTemplate {
 		ctx.invoke(genClassBody, part, ctx, out);
 		out.println("}");
 		out.popIndent();
+		ctx.invoke(genClassFooter, part, ctx, out);
 		out.println(");");
+	}
+
+	public void genClassFooter(Part part, Context ctx, TabbedWriter out) {
+		// do nothing...
 	}
 
 	public void genPartName(Part part, Context ctx, TabbedWriter out) {

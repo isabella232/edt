@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-import org.eclipse.edt.gen.javascript.Constants;
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -20,18 +20,16 @@ import org.eclipse.edt.mof.egl.NamedElement;
 
 public class NamedElementTemplate extends JavaScriptTemplate {
 
-	public Annotation getPropertyAnnotation(NamedElement expr) {
-		return expr.getAnnotation(Constants.Annotation_EGLProperty);
-	}
-
 	public void genAccessor(NamedElement element, Context ctx, TabbedWriter out) {
-		Annotation property = getPropertyAnnotation(element);
+		Annotation property = CommonUtilities.getPropertyAnnotation(element);
 		if (property != null) {
-			// obtain the name of the function
-			String functionName;
-			if (property.getValue("getMethod") != null)
-				functionName = (String) property.getValue("getMethod");
-			else {
+			String functionName = null;
+			
+			Object propertyFn = property.getValue("getMethod");
+			if (propertyFn != null) {
+				functionName = CommonUtilities.getPropertyFunction(propertyFn);
+			}
+			if ((functionName == null) || (functionName.trim().length() == 0)) {
 				functionName = "get" + element.getName().substring(0, 1).toUpperCase();
 				if (element.getName().length() > 1)
 					functionName = functionName + element.getName().substring(1);

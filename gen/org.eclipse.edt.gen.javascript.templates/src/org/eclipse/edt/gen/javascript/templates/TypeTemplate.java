@@ -158,7 +158,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 		if ((arg.getLHS().isNullable() || arg.getRHS().isNullable()) || CommonUtilities.getNativeJavaScriptOperation(arg, ctx).length() == 0) {
 			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
 			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
-			out.print("(ezeProgram, ");
+			out.print("("); // TODO sbg Not needed for JavaScript? ezeProgram, ");
 			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
 			out.print(", ");
 			ctx.invoke(genExpression, arg.getRHS(), ctx, out);

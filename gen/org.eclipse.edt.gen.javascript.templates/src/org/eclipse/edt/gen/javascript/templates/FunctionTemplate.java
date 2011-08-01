@@ -32,6 +32,7 @@ public class FunctionTemplate extends JavaScriptTemplate {
 		out.println(") {");
 		ctx.invoke(genStatementNoBraces, function.getStatementBlock(), ctx, out);
 		out.println("}");
+		ctx.setCurrentFunction(null);
 	}
 
 	public void genAccessor(Function function, Context ctx, TabbedWriter out) {

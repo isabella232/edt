@@ -120,6 +120,15 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		ctx.invoke(genFunctions, part, ctx, out);
 		ctx.invoke(genFields, part, ctx, out);
 		ctx.invoke(genGetterSetters, part, ctx, out);
+		ctx.invoke(genToString, part, ctx, out);
+	}
+
+	public void genToString(EGLClass part, Context ctx, TabbedWriter out) {
+		out.println(",");
+		out.print(quoted("toString"));
+		out.println(": function() {");
+		out.println("return \"[" + part.getId() + "]\";");
+		out.println("}");
 	}
 
 	public void genFields(EGLClass part, Context ctx, TabbedWriter out) {
@@ -181,13 +190,21 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.print(quoted("eze$$setInitial"));
 		out.println(": function() {");
 		ctx.invoke(genInitializeMethodBody, part, ctx, out);
-		out.println("};");
+		out.println("}");
 	}
 
 	public void genInitializeMethodBody(EGLClass part, Context ctx, TabbedWriter out) {
 		// TODO sbg Not sure whether we need this out.println("eze$setEmpty();");
 		for (Field field : part.getFields()) {
 			ctx.invoke(genInitializeMethod, part, ctx, out, field);
+		}
+
+		/*
+		 * If there are part-level initializer statements, process them AFTER the field-level initializers so that they take
+		 * precedence. TODO confirm this with Tim et al.
+		 */
+		if (part.getInitializerStatements() != null) {
+			ctx.invoke(genStatementNoBraces, part.getInitializerStatements(), ctx, out);
 		}
 	}
 
@@ -258,9 +275,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	}
 
 	public void genGetterSetters(EGLClass part, Context ctx, TabbedWriter out) {
-		String delim = ",";
 		for (Field field : part.getFields()) {
-			out.print(delim);
 			ctx.invoke(genGetterSetter, part, ctx, out, field);
 		}
 	}

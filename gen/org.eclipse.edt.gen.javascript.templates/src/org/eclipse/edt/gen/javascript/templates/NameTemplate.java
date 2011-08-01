@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -19,20 +20,18 @@ import org.eclipse.edt.mof.egl.Name;
 
 public class NameTemplate extends JavaScriptTemplate {
 
-	public Annotation getPropertyAnnotation(Name expr) {
-		Annotation result = expr.getNamedElement().getAnnotation("egl.javascript.JavaScriptProperty"); // TODO need constant
-		return result;
-	}
-
 	public void genAssignment(Name expr, Context ctx, TabbedWriter out, Expression arg1, String arg2) {
-		Annotation property = getPropertyAnnotation(expr);
+		Annotation property = CommonUtilities.getPropertyAnnotation(expr.getNamedElement());
 		if (property != null) {
 			if (expr.getQualifier() != null) {
 				ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
 				out.print(".");
-				if (property.getValue("setMethod") != null)
-					out.print((String) property.getValue("setMethod"));
-				else {
+				
+				Object propertyFn = property.getValue("setMethod");
+				
+				if (propertyFn != null) {
+					out.print(CommonUtilities.getPropertyFunction(propertyFn));
+				} else {
 					out.print("set");
 					out.print(expr.getNamedElement().getName().substring(0, 1).toUpperCase());
 					if (expr.getNamedElement().getName().length() > 1)
@@ -42,6 +41,7 @@ public class NameTemplate extends JavaScriptTemplate {
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(")");
 			} else {
+				ctx.invoke(genQualifier, expr.getNamedElement(), ctx, out);
 				ctx.invoke(genName, expr.getNamedElement(), ctx, out);
 				out.print(arg2);
 				ctx.invoke(genExpression, arg1, ctx, out);

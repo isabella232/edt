@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Part;
 
@@ -48,7 +49,6 @@ public class HandlerTemplate extends JavaScriptTemplate {
 	public void genConstructor(Handler handler, Context ctx, TabbedWriter out) {
 		out.print(quoted("constructor"));
 		out.println(": function() {");
-		ctx.invoke(genInitializeMethodBody, handler, ctx, out);
 
 		out.println("this.jsrt$SysVar = new egl.egl.core.SysVar();");
 		// instantiate each user part
@@ -59,6 +59,7 @@ public class HandlerTemplate extends JavaScriptTemplate {
 		}
 		// instantiate each library
 		ctx.invoke(genLibraries, handler, ctx, out);
+		out.println("this.eze$$setInitial();");
 		out.println("}");
 	}
 
@@ -66,5 +67,15 @@ public class HandlerTemplate extends JavaScriptTemplate {
 
 	public void genRuntimeTypeName(Handler type, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genPartName, type, ctx, out);
+	}
+
+	public void genClassFooter(Handler handler, Context ctx, TabbedWriter out) {
+		if (CommonUtilities.isRUIWidget(handler)) {
+			Annotation a = handler.getAnnotation("egl.ui.rui.RUIWidget"); // TODO sbg Need constant
+			String tagName = (String) a.getValue("tagName");// TODO sbg Need constant
+			if ((tagName != null) && (tagName.trim().length() > 0)) {
+				out.println(", '" + tagName + "'");
+			}
+		}
 	}
 }

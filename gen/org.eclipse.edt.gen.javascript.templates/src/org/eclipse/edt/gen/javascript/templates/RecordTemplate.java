@@ -86,7 +86,6 @@ public class RecordTemplate extends JavaScriptTemplate {
 
 	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
 		if (arg.getInitializerStatements() != null) {
-			out.print("this."); // TODO sbg likely NOT the right place
 			ctx.invoke(genStatementNoBraces, arg.getInitializerStatements(), ctx, out);
 		}
 	}
@@ -100,9 +99,7 @@ public class RecordTemplate extends JavaScriptTemplate {
 	}
 
 	public void genDefaultValue(Record part, Context ctx, TabbedWriter out) {
-		out.print("(");
-		genRuntimeTypeName(part, ctx, out, TypeNameKind.JavascriptPrimitive);
-		out.print(") null");
+		out.print("null");
 	}
 
 	public void genSuperClass(Record type, Context ctx, TabbedWriter out) {
