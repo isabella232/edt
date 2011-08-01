@@ -12,9 +12,12 @@
 package org.eclipse.edt.gen.javascript;
 
 import org.eclipse.edt.gen.GenerationException;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
+import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Part;
@@ -320,5 +323,29 @@ public class CommonUtilities {
 		}
 
 		return false;
+	}
+
+	public static Annotation getPropertyAnnotation(Element element) {
+		/*
+		 * Note that EGLProperty cannot be used on fields of external types, whereas Property can only be used on fields of
+		 * external types; so we can only encounter one of these two annotations on a given field.
+		 */
+		Annotation result = element.getAnnotation("eglx.lang.Property"); // TODO need constant
+		if (result == null) {
+			result = element.getAnnotation("egl.javascript.JavaScriptProperty"); // TODO sbg Delete; this isn't in EDT
+		}
+		if (result == null) {
+			result = element.getAnnotation(Constants.Annotation_EGLProperty);
+		}
+		return result;
+	}
+	
+	
+	public static String getPropertyFunction(Object property){
+		String result = null;
+		if (property != null) {
+			result = property instanceof MemberName ? ((MemberName) property).getNamedElement().getName() : (String) property;
+		}
+		return result;
 	}
 }

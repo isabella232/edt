@@ -37,6 +37,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genBinaryExpression = "genBinaryExpression";
 	public static final String genCallbackAccesor = "genCallbackAccesor";
 	public static final String genClassBody = "genClassBody";
+	public static final String genClassFooter = "genClassFooter";
 	public static final String genClassHeader = "genClassHeader";
 	public static final String genClassName = "genClassName";
 	public static final String genCloneMethod = "genCloneMethod";
@@ -87,6 +88,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genSubstringAccess = "genSubstringAccess";
 	public static final String genSuperClass = "genSuperClass";
 	public static final String genTypeDependentOptions = "genTypeDependentOptions";
+	public static final String genToString = "genToString";
 	public static final String genXmlAnnotations = "genXmlAnnotations";
 	public static final String genXmlField = "genXmlField";
 	public static final String genUnaryExpression = "genUnaryExpression";
