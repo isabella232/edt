@@ -28,6 +28,11 @@ public class AnyObjectTypeTemplate extends JavaScriptTemplate {
 			out.print(ctx.getNativeTypeName(arg.getConversionOperation().getParameters().get(0).getType()));
 			out.print("(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			if (ctx.getPrimitiveMapping(arg.getObjectExpr().getType()) == null) {
+				out.print(",\"");
+				ctx.invoke(genSignature, arg.getObjectExpr().getType(), ctx, out, arg);
+				out.print("\"");
+			}
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
 			out.print(")");
 		} else if (ctx.mapsToPrimitiveType(arg.getEType())) {
@@ -37,11 +42,17 @@ public class AnyObjectTypeTemplate extends JavaScriptTemplate {
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
 			out.print(")");
 		} else {
-			out.print("AnyObject.ezeCast(");
+			out.print(eglnamespace + "egl.lang.AnyObject.ezeCast("); // TODO sbg need to dynamically get class name
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(", ");
 			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.JavascriptImplementation);
-			out.print(".class)");
+			out.print(")");
 		}
+	}
+
+	public void genSignature(Type type, Context ctx, TabbedWriter out) {
+		out.print("T");
+		out.print(type.getTypeSignature().replaceAll("\\.", "/"));
+		out.print(";");
 	}
 }
