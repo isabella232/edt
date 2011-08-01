@@ -138,6 +138,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 				eObjects.put(binding, field);
 			}			
 		}
+		setElementInformation(decl, expr);
 		setElementInformation(decl, stmt);
 		stmt.setExpression(expr);
 		return false;
