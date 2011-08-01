@@ -12,11 +12,13 @@
 package org.eclipse.edt.debug.internal.core.java.variables;
 
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
 import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
 import org.eclipse.edt.debug.core.java.IVariableAdapter;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
+import org.eclipse.edt.debug.internal.core.java.VariableUtil;
 import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 
@@ -45,6 +47,18 @@ public class EDTVariableAdapter implements IVariableAdapter
 							return "egl.lang.AnyObject"; //$NON-NLS-1$
 						}
 					};
+				}
+				else if ( type.startsWith( "org.eclipse.edt.javart.AnyBoxedObject<" ) ) //$NON-NLS-1$
+				{
+					// Look for the "object" field and wrap that.
+					IVariable[] kids = variable.getValue().getVariables();
+					for ( IVariable kid : kids )
+					{
+						if ( kid instanceof IJavaVariable && "object".equals( kid.getName() ) ) //$NON-NLS-1$
+						{
+							return VariableUtil.createEGLVariable( (IJavaVariable)kid, info, frame, parent );
+						}
+					}
 				}
 			}
 		}
