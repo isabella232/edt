@@ -4,6 +4,7 @@
 	<extension-point id="eglFoldingStructureProviders" name="EGL Folding Structure Provider" schema="schema/eglFoldingStructureProviders.exsd"/>
 	<extension-point id="edtGeneratorTabs" name="EDT Generator Tabs" schema="schema/edtGeneratorTabs.exsd"/>
 	<extension-point id="projectType" name="New EGL Project Type" schema="schema/projectType.exsd"/>
+    <extension-point id="eglProjectFeature" name="EGL Project Feature" schema="schema/eglProjectFeature.exsd"/>
 	   
 	<extension 
 		point="org.eclipse.core.runtime.preferences">

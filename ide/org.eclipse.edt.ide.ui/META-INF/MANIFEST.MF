@@ -34,13 +34,31 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ltk.core.refactoring,
  org.eclipse.ltk.ui.refactoring,
  org.eclipse.search;bundle-version="3.6.0",
- org.eclipse.debug.ui;bundle-version="3.6.0"
+ org.eclipse.debug.ui;bundle-version="3.6.0",
+ org.eclipse.edt.mof;bundle-version="0.7.0",
+ org.eclipse.jst.servlet.ui;bundle-version="1.1.404",
+ org.eclipse.jst.j2ee.core;bundle-version="1.2.4",
+ org.eclipse.wst.server.ui;bundle-version="1.1.207",
+ org.eclipse.wst.web.ui;bundle-version="1.1.400",
+ org.eclipse.wst.common.project.facet.ui;bundle-version="1.4.103",
+ org.eclipse.jst.j2ee.ui;bundle-version="1.1.404",
+ org.eclipse.wst.common.frameworks.ui;bundle-version="1.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
 Export-Package: 
  org.eclipse.edt.ide.ui,
  org.eclipse.edt.ide.ui.editor,
+ org.eclipse.edt.ide.ui.internal,
+ org.eclipse.edt.ide.ui.internal.dialogs,
+ org.eclipse.edt.ide.ui.internal.editor,
+ org.eclipse.edt.ide.ui.internal.packageexplorer,
+ org.eclipse.edt.ide.ui.internal.project.features,
+ org.eclipse.edt.ide.ui.internal.project.features.operations,
+ org.eclipse.edt.ide.ui.internal.util,
+ org.eclipse.edt.ide.ui.internal.viewsupport,
+ org.eclipse.edt.ide.ui.internal.wizards,
+ org.eclipse.edt.ide.ui.internal.wizards.dialogfields,
  org.eclipse.edt.ide.ui.preferences,
  org.eclipse.edt.ide.ui.wizards
 Bundle-Vendor: Eclipse EGL Development Tools

@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
+import org.eclipse.edt.ide.ui.internal.project.features.operations.EGLFeatureOperationsUtilities;
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardTypePage;
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.SourceProjectWizardCapabilityPage;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
@@ -138,6 +139,7 @@ public class NewEGLProjectWizard extends Wizard
 		
 //		AddProjectDependencyOperation addProjectDependencyOperation = new AddProjectDependencyOperation(eglProjConfiguration, rule);
 //		listOps.add(addProjectDependencyOperation);		
+		EGLFeatureOperationsUtilities.getEGLFeatureOperations(eglProjConfiguration.getProjectName(), listOps, rule, 0, eglFeatureMask, false, false);		
 		
 		return listOps;
 	}

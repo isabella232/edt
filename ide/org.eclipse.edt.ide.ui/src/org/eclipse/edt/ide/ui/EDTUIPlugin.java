@@ -41,6 +41,7 @@ import org.eclipse.jface.text.templates.ContextTypeRegistry;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -48,6 +49,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.editors.text.templates.ContributionContextTypeRegistry;
+import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.prefs.BackingStoreException;
@@ -61,6 +63,7 @@ public class EDTUIPlugin extends AbstractUIPlugin {
 	
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.eclipse.edt.ide.ui";
+	public static final String EGL_EDITOR_ID = "org.eclipse.edt.ide.ui.EGLEditor"; //$NON-NLS-1$
 	public static final int INTERNAL_ERROR= 10001;
 	public static final int TARGET_RUNTIME_JAVA_MASK = 1 << 0;
 	public static final int TARGET_RUNTIME_JAVASCRIPT_MASK = 1 << 1;
@@ -68,7 +71,9 @@ public class EDTUIPlugin extends AbstractUIPlugin {
 
 	// The shared instance
 	private static EDTUIPlugin plugin;
-	
+
+	public static final String CLASS = "class"; //$NON-NLS-1$
+
 	private ProblemMarkerManager fProblemMarkerManager;
 	private DocumentProvider fEGLDocumentProvider;
 	private ImageDescriptorRegistry fImageDescriptorRegistry;
@@ -78,6 +83,8 @@ public class EDTUIPlugin extends AbstractUIPlugin {
 	private ContextTypeRegistry fContextTypeRegistry;	
 	private IPropertyChangeListener propertyChangeListener; 
 	private ResourceAdapterFactory fResourceAdapterFactory; 
+	private FormColors formColors;
+	
 	
 	/**
 	 * The constructor
@@ -334,4 +341,13 @@ public class EDTUIPlugin extends AbstractUIPlugin {
 		   log( e );
 		}
 	}
+	
+	public FormColors getFormColors(Display display) {
+		if (formColors == null) {
+			formColors = new FormColors(display);
+			formColors.markShared();
+		}
+		return formColors;
+	}
+	
 }
