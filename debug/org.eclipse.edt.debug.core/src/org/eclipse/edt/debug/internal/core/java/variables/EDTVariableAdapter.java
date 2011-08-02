@@ -48,15 +48,19 @@ public class EDTVariableAdapter implements IVariableAdapter
 						}
 					};
 				}
-				else if ( type.startsWith( "org.eclipse.edt.javart.AnyBoxedObject<" ) ) //$NON-NLS-1$
+				else
 				{
-					// Look for the "object" field and wrap that.
-					IVariable[] kids = variable.getValue().getVariables();
-					for ( IVariable kid : kids )
+					String generic = variable.getGenericSignature();
+					if ( generic != null && generic.startsWith( "Lorg/eclipse/edt/javart/AnyBoxedObject<" ) ) //$NON-NLS-1$
 					{
-						if ( kid instanceof IJavaVariable && "object".equals( kid.getName() ) ) //$NON-NLS-1$
+						// Look for the "object" field and wrap that.
+						IVariable[] kids = variable.getValue().getVariables();
+						for ( IVariable kid : kids )
 						{
-							return VariableUtil.createEGLVariable( (IJavaVariable)kid, info, frame, parent );
+							if ( kid instanceof IJavaVariable && "object".equals( kid.getName() ) ) //$NON-NLS-1$
+							{
+								return VariableUtil.createEGLVariable( (IJavaVariable)kid, info, frame, parent );
+							}
 						}
 					}
 				}
