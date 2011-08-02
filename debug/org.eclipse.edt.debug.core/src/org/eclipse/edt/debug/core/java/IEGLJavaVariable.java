@@ -35,4 +35,17 @@ public interface IEGLJavaVariable extends IEGLVariable, IEGLJavaDebugElement
 	 * @return true if this is a local variable.
 	 */
 	public boolean isLocal();
+	
+	/**
+	 * Initializes the variable from newVariable, resetting its value if necessary.
+	 * 
+	 * @param newVariable The new variable.
+	 * @param newParent The new parent value, possibly null.
+	 */
+	public void initialize( IEGLJavaVariable newVariable, IEGLJavaValue newParent );
+	
+	/**
+	 * @return the variable's parent value, or null if it has no parent.
+	 */
+	public IEGLJavaValue getParentValue();
 }

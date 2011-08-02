@@ -37,14 +37,9 @@ public class EGLJavaFunctionValue extends EGLJavaDebugElement implements IEGLJav
 	protected final IEGLJavaVariable parentVariable;
 	
 	/**
-	 * The EGL-wrapped variables.
+	 * The children variables.
 	 */
-	private EGLJavaVariable[] eglVariables;
-	
-	/**
-	 * The previous Java variables that were wrapped.
-	 */
-	private IVariable[] previousJavaVariables;
+	protected IVariable[] children;
 	
 	/**
 	 * Constructor.
@@ -59,41 +54,26 @@ public class EGLJavaFunctionValue extends EGLJavaDebugElement implements IEGLJav
 	}
 	
 	@Override
-	public IVariable[] getVariables() throws DebugException
+	public synchronized IVariable[] getVariables() throws DebugException
 	{
+		if ( children != null )
+		{
+			return children;
+		}
+		
 		if ( frame.getSMAP().length() == 0 )
 		{
-			// Couldn't get the variable info from the SMAP...just return the Java variables.
-			return frame.getJavaStackFrame().getLocalVariables();
+			// Couldn't get the variable info from the SMAP...just return the local Java variables.
+			children = frame.getJavaStackFrame().getLocalVariables();
 		}
-		
-		boolean recompute = true;
-		IVariable[] javaVariables = frame.getJavaStackFrame().getLocalVariables();
-		if ( previousJavaVariables != null )
+		else
 		{
-			if ( javaVariables.length == previousJavaVariables.length )
-			{
-				recompute = false;
-				for ( int i = 0; i < javaVariables.length; i++ )
-				{
-					if ( javaVariables[ i ] != previousJavaVariables[ i ] )
-					{
-						recompute = true;
-						break;
-					}
-				}
-			}
+			List<IEGLJavaVariable> newEGLVariables = VariableUtil.filterAndWrapVariables( frame.getJavaStackFrame().getLocalVariables(),
+					parentVariable.getEGLStackFrame(), false, this );
+			children = newEGLVariables.toArray( new EGLJavaVariable[ newEGLVariables.size() ] );
 		}
 		
-		if ( recompute )
-		{
-			List<IEGLJavaVariable> newEGLVariables = VariableUtil.filterAndWrapVariables( javaVariables, eglVariables, frame.getSMAPVariableInfos(),
-					frame, false, this );
-			previousJavaVariables = javaVariables;
-			eglVariables = newEGLVariables.toArray( new EGLJavaVariable[ newEGLVariables.size() ] );
-		}
-		
-		return eglVariables;
+		return children;
 	}
 	
 	@Override

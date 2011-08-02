@@ -28,8 +28,8 @@ public interface IEGLJavaStackFrame extends IEGLStackFrame, IEGLJavaDebugElement
 	public IJavaStackFrame getJavaStackFrame();
 	
 	/**
-	 * Returns the variable information from the frame's SMAP. It should never be null. If there is no SMAP information, or the Java type
-	 * was not a type that we recognize, then this will return an empty array.
+	 * Returns the variable information from the frame's SMAP. It should never be null. If there is no SMAP information, or the Java type was not a
+	 * type that we recognize, then this will return an empty array.
 	 * 
 	 * @return the variable information
 	 * @throws DebugException
@@ -57,4 +57,15 @@ public interface IEGLJavaStackFrame extends IEGLStackFrame, IEGLJavaDebugElement
 	 * @param info The function information.
 	 */
 	public void setSMAPFunctionInfo( SMAPFunctionInfo info );
+	
+	/**
+	 * Returns the corresponding EGL variable given the new variable. Implementations may choose to just
+	 * return the new variable that was passed in, but this allows a frame to reuse an existing variable.
+	 * 
+	 * @param newVariable The new EGL variable.
+	 * @param parent The parent value, possibly null.
+	 * @return the corresponding EGL variable.
+	 * @throws DebugException
+	 */
+	public IEGLJavaVariable getCorrespondingVariable( IEGLJavaVariable newVariable, IEGLJavaValue parent ) throws DebugException;
 }

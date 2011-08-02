@@ -21,11 +21,6 @@ import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
 public class EGLJavaFunctionVariable extends EGLJavaVariable
 {
 	/**
-	 * The EGL-wrapped value for this variable.
-	 */
-	private final EGLJavaFunctionValue value;
-	
-	/**
 	 * Constructor.
 	 * 
 	 * @param frame The EGL-wrapped stack frame.
@@ -38,7 +33,6 @@ public class EGLJavaFunctionVariable extends EGLJavaVariable
 				: frame.getSMAPFunctionInfo().eglName, frame.getName(), "", -1, frame.getSMAPFunctionInfo() == null //$NON-NLS-1$
 				? null
 				: frame.getSMAPFunctionInfo().smapEntry ), frame, null );
-		value = new EGLJavaFunctionValue( frame, this );
 	}
 	
 	@Override
@@ -50,6 +44,10 @@ public class EGLJavaFunctionVariable extends EGLJavaVariable
 	@Override
 	public IValue getValue() throws DebugException
 	{
+		if ( value == null )
+		{
+			value = new EGLJavaFunctionValue( (EGLJavaStackFrame)frame, this );
+		}
 		return value;
 	}
 	

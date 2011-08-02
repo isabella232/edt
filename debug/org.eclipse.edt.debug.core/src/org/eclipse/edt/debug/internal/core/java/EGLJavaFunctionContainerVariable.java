@@ -13,9 +13,9 @@ package org.eclipse.edt.debug.internal.core.java;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IDebugTarget;
-import org.eclipse.debug.core.model.IValue;
 import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
+import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
 import org.eclipse.jdt.debug.core.IJavaReferenceType;
 import org.eclipse.jdt.debug.core.IJavaValue;
@@ -64,18 +64,9 @@ public class EGLJavaFunctionContainerVariable extends EGLJavaVariable
 	}
 	
 	@Override
-	public IValue getValue() throws DebugException
+	protected IEGLJavaValue createEGLValue( IJavaValue javaValue )
 	{
-		IValue javaValue = javaVariable.getValue();
-		if ( javaValue instanceof IJavaValue )
-		{
-			if ( value == null || value.getJavaValue() != javaValue )
-			{
-				value = new EGLJavaFunctionContainerValue( getDebugTarget(), (IJavaValue)javaValue, this );
-			}
-			return value;
-		}
-		return javaValue;
+		return new EGLJavaFunctionContainerValue( getDebugTarget(), javaValue, this );
 	}
 	
 	@Override

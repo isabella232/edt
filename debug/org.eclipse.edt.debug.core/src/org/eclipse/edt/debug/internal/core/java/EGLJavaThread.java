@@ -12,7 +12,10 @@
 package org.eclipse.edt.debug.internal.core.java;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
@@ -34,6 +37,8 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 {
 	private static final boolean FILTER_RUNTIMES = !System.getProperty( "edt.debug.filter.runtimes", "yes" ).equalsIgnoreCase( "false" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	
+	private static final EGLJavaStackFrame[] EMPTY_FRAMES = new EGLJavaStackFrame[ 0 ];
+	
 	/**
 	 * The underlying Java thread.
 	 */
@@ -45,9 +50,19 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	private EGLJavaStackFrame[] eglFrames;
 	
 	/**
-	 * The previous Java stack frames that were wrapped.
+	 * The previous Java frames.
 	 */
 	private IStackFrame[] previousJavaFrames;
+	
+	/**
+	 * The current stack frames.
+	 */
+	private Map<IStackFrame, EGLJavaStackFrame> currentStackFrames;
+	
+	/**
+	 * The previous stack frames.
+	 */
+	private Map<IStackFrame, EGLJavaStackFrame> previousStackFrames;
 	
 	/**
 	 * Constructor.
@@ -59,6 +74,17 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	{
 		super( target );
 		javaThread = thread;
+		disposeStackFrames();
+	}
+	
+	protected void disposeStackFrames()
+	{
+		if ( currentStackFrames != null && currentStackFrames != Collections.EMPTY_MAP )
+		{
+			previousStackFrames = currentStackFrames;
+		}
+		currentStackFrames = null;
+		eglFrames = null;
 	}
 	
 	@Override
@@ -180,73 +206,62 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	@Override
 	public IStackFrame[] getStackFrames() throws DebugException
 	{
-		boolean recompute = true;
-		IStackFrame[] javaFrames = javaThread.getStackFrames();
-		if ( previousJavaFrames != null )
+		refreshFrames();
+		return eglFrames;
+	}
+	
+	protected synchronized void refreshFrames() throws DebugException
+	{
+		if ( eglFrames == null )
 		{
-			if ( javaFrames.length == previousJavaFrames.length )
+			IStackFrame[] javaFrames = javaThread.getStackFrames();
+			if ( javaFrames.length > 0 )
 			{
-				recompute = false;
+				int size = 0;
+				EGLJavaStackFrame[] newEGLFrames = new EGLJavaStackFrame[ javaFrames.length ];
+				currentStackFrames = new HashMap<IStackFrame, EGLJavaStackFrame>( javaFrames.length );
 				for ( int i = 0; i < javaFrames.length; i++ )
 				{
-					if ( javaFrames[ i ] != previousJavaFrames[ i ] )
+					// Filtering rules:
+					// 1. don't filter anything if the system property is set
+					// 2. don't filter the top frame
+					// 3. filter the initial main method (if there is one - there won't be if running on a server)
+					if ( !FILTER_RUNTIMES
+							|| (i == 0 || (!filterFrameType( (IJavaStackFrame)javaFrames[ i ] ) && (i + 1 < javaFrames.length || !isMainMethod( (IJavaStackFrame)javaFrames[ i ] )))) )
 					{
-						recompute = true;
-						break;
-					}
-				}
-			}
-		}
-		
-		if ( recompute )
-		{
-			int size = 0;
-			EGLJavaStackFrame[] newEGLFrames = new EGLJavaStackFrame[ javaFrames.length ];
-			for ( int i = 0; i < javaFrames.length; i++ )
-			{
-				if ( eglFrames != null )
-				{
-					for ( int j = 0; j < eglFrames.length; j++ )
-					{
-						if ( eglFrames[ j ].getJavaStackFrame() == javaFrames[ i ] )
+						EGLJavaStackFrame frame = previousStackFrames == null
+								? null
+								: previousStackFrames.get( javaFrames[ i ] );
+						if ( frame == null )
 						{
-							// Reuse this frame.
-							newEGLFrames[ size ] = eglFrames[ j ];
-							break;
+							frame = new EGLJavaStackFrame( (IJavaStackFrame)javaFrames[ i ], this );
 						}
+						else
+						{
+							frame.bind( (IJavaStackFrame)javaFrames[ i ] );
+						}
+						currentStackFrames.put( javaFrames[ i ], frame );
+						newEGLFrames[ size++ ] = frame;
 					}
 				}
 				
-				// Filtering rules:
-				// 1. don't filter anything if the system property is set
-				// 2. don't filter the top frame
-				// 3. filter the initial main method (if there is one - there won't be if running on a server)
-				if ( newEGLFrames[ size ] == null
-						&& (!FILTER_RUNTIMES || (i == 0 || (!filterFrameType( (IJavaStackFrame)javaFrames[ i ] ) && (i + 1 < javaFrames.length || !isMainMethod( (IJavaStackFrame)javaFrames[ i ] ))))) )
+				if ( size == newEGLFrames.length )
 				{
-					newEGLFrames[ size ] = new EGLJavaStackFrame( (IJavaStackFrame)javaFrames[ i ], this );
+					eglFrames = newEGLFrames;
 				}
-				
-				if ( newEGLFrames[ size ] != null )
+				else
 				{
-					// Only increment if we didn't filter it.
-					size++;
+					eglFrames = new EGLJavaStackFrame[ size ];
+					System.arraycopy( newEGLFrames, 0, eglFrames, 0, size );
 				}
-			}
-			previousJavaFrames = javaFrames;
-			
-			if ( size == newEGLFrames.length )
-			{
-				eglFrames = newEGLFrames;
 			}
 			else
 			{
-				eglFrames = new EGLJavaStackFrame[ size ];
-				System.arraycopy( newEGLFrames, 0, eglFrames, 0, size );
+				currentStackFrames = Collections.EMPTY_MAP;
+				eglFrames = EMPTY_FRAMES;
 			}
+			previousJavaFrames = javaFrames;
 		}
-		
-		return eglFrames;
 	}
 	
 	@Override
@@ -321,7 +336,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 									? null
 									: eglFrames[ 0 ];
 							
-							if ( topEGLFrame != null && topEGLFrame.getJavaDebugElement() == topJavaFrame )
+							if ( topEGLFrame != null && topEGLFrame.getJavaStackFrame() == topJavaFrame )
 							{
 								try
 								{
@@ -380,6 +395,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 								// We tried, we failed, but we carry on...
 							}
 						}
+						disposeStackFrames();
 						savedEvents.add( events[ i ] );
 						break;
 					default:

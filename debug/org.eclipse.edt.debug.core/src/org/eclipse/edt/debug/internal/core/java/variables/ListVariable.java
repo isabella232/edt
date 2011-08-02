@@ -48,79 +48,60 @@ public class ListVariable extends EGLJavaVariable
 	
 	private class ListValue extends EGLJavaValue
 	{
-		private IVariable[] variables;
-		
 		public ListValue( IDebugTarget target, IJavaValue value, EGLJavaVariable parent )
 		{
 			super( target, value, parent );
 		}
 		
 		@Override
-		public IVariable[] getVariables() throws DebugException
+		public synchronized IVariable[] getVariables() throws DebugException
 		{
-			boolean recompute = true;
-			IVariable[] javaVariables = javaValue.getVariables();
-			if ( previousJavaVariables != null )
+			if ( children != null )
 			{
-				if ( javaVariables.length == previousJavaVariables.length )
+				return children;
+			}
+			
+			if ( javaValue instanceof IJavaObject )
+			{
+				IJavaValue toArrayValue = ((IJavaObject)javaValue).sendMessage( "toArray", "()[Ljava/lang/Object;", null, parentVariable //$NON-NLS-1$ //$NON-NLS-2$
+						.getEGLStackFrame().getEGLThread().getJavaThread(), false );
+				if ( toArrayValue != null )
 				{
-					recompute = false;
-					for ( int i = 0; i < javaVariables.length; i++ )
+					IVariable[] vars = toArrayValue.getVariables();
+					List<IEGLJavaVariable> list = new ArrayList<IEGLJavaVariable>( vars.length );
+					
+					SMAPVariableInfo parentInfo = parentVariable.getVariableInfo();
+					
+					String elementType = parentInfo.type;
+					int idx = parentInfo.type.indexOf( '<' );
+					if ( idx != -1 )
 					{
-						if ( javaVariables[ i ] != previousJavaVariables[ i ] || javaVariables[ i ].hasValueChanged() )
+						int idx2 = parentInfo.type.indexOf( '>', idx );
+						if ( idx2 != -1 )
 						{
-							recompute = true;
-							break;
+							elementType = parentInfo.type.substring( idx + 1, idx2 );
 						}
 					}
+					
+					for ( IVariable var : vars )
+					{
+						if ( var instanceof IJavaVariable )
+						{
+							SMAPVariableInfo info = new SMAPVariableInfo( var.getName(), var.getName(), elementType, parentInfo.lineDeclared,
+									parentInfo.smapEntry );
+							list.add( VariableUtil.createEGLVariable( (IJavaVariable)var, info, parentVariable.getEGLStackFrame(), this ) );
+						}
+					}
+					
+					children = list.toArray( new IEGLJavaVariable[ list.size() ] );
 				}
 			}
 			
-			if ( recompute )
+			if ( children == null )
 			{
-				if ( javaValue instanceof IJavaObject )
-				{
-					IJavaValue toArrayValue = ((IJavaObject)javaValue).sendMessage( "toArray", "()[Ljava/lang/Object;", null, parentVariable //$NON-NLS-1$ //$NON-NLS-2$
-							.getEGLStackFrame().getEGLThread().getJavaThread(), false );
-					if ( toArrayValue != null )
-					{
-						IVariable[] vars = toArrayValue.getVariables();
-						List<IEGLJavaVariable> list = new ArrayList<IEGLJavaVariable>( vars.length );
-						
-						SMAPVariableInfo parentInfo = parentVariable.getVariableInfo();
-						
-						String elementType = parentInfo.type;
-						int idx = parentInfo.type.indexOf( '<' );
-						if ( idx != -1 )
-						{
-							int idx2 = parentInfo.type.indexOf( '>', idx );
-							if ( idx2 != -1 )
-							{
-								elementType = parentInfo.type.substring( idx + 1, idx2 );
-							}
-						}
-						
-						for ( IVariable var : vars )
-						{
-							if ( var instanceof IJavaVariable )
-							{
-								SMAPVariableInfo info = new SMAPVariableInfo( var.getName(), var.getName(), elementType, parentInfo.lineDeclared,
-										parentInfo.smapEntry );
-								list.add( VariableUtil.createEGLVariable( (IJavaVariable)var, info, parentVariable.getEGLStackFrame(), this ) );
-							}
-						}
-						
-						variables = list.toArray( new IEGLJavaVariable[ list.size() ] );
-					}
-				}
-				
-				if ( variables == null )
-				{
-					variables = super.getVariables();
-				}
-				previousJavaVariables = javaVariables;
+				children = super.getVariables();
 			}
-			return variables;
+			return children;
 		}
 		
 		@Override

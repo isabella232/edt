@@ -50,83 +50,64 @@ public class MapVariable extends EGLJavaVariable
 	
 	private class MapValue extends EGLJavaValue
 	{
-		private IVariable[] variables;
-		
 		public MapValue( IDebugTarget target, IJavaValue value, EGLJavaVariable parent )
 		{
 			super( target, value, parent );
 		}
 		
 		@Override
-		public IVariable[] getVariables() throws DebugException
+		public synchronized IVariable[] getVariables() throws DebugException
 		{
-			boolean recompute = true;
-			IVariable[] javaVariables = javaValue.getVariables();
-			if ( previousJavaVariables != null )
+			if ( children != null )
 			{
-				if ( javaVariables.length == previousJavaVariables.length )
+				return children;
+			}
+			
+			if ( javaValue instanceof IJavaObject )
+			{
+				IJavaValue entrySetValue = ((IJavaObject)javaValue).sendMessage( "entrySet", "()Ljava/util/Set;", null, //$NON-NLS-1$ //$NON-NLS-2$
+						parentVariable.getEGLStackFrame().getEGLThread().getJavaThread(), false );
+				if ( entrySetValue instanceof IJavaObject )
 				{
-					recompute = false;
-					for ( int i = 0; i < javaVariables.length; i++ )
+					IJavaValue toArrayValue = ((IJavaObject)entrySetValue).sendMessage( "toArray", "()[Ljava/lang/Object;", null, //$NON-NLS-1$ //$NON-NLS-2$
+							parentVariable.getEGLStackFrame().getEGLThread().getJavaThread(), false );
+					if ( toArrayValue != null )
 					{
-						if ( javaVariables[ i ] != previousJavaVariables[ i ] || javaVariables[ i ].hasValueChanged() )
+						IVariable[] vars = toArrayValue.getVariables();
+						List<IEGLJavaVariable> list = new ArrayList<IEGLJavaVariable>( vars.length );
+						
+						SMAPVariableInfo parentInfo = parentVariable.getVariableInfo();
+						
+						for ( IVariable var : vars )
 						{
-							recompute = true;
-							break;
+							IValue value = var.getValue();
+							if ( value instanceof IJavaObject )
+							{
+								IJavaValue nextkey = ((IJavaObject)value).sendMessage( "getKey", "()Ljava/lang/Object;", null, //$NON-NLS-1$ //$NON-NLS-2$
+										parentVariable.getEGLStackFrame().getEGLThread().getJavaThread(), false );
+								IJavaValue nextvalue = ((IJavaObject)value).sendMessage( "getValue", "()Ljava/lang/Object;", null, //$NON-NLS-1$ //$NON-NLS-2$
+										parentVariable.getEGLStackFrame().getEGLThread().getJavaThread(), false );
+								
+								if ( nextkey != null && nextvalue instanceof IJavaValue )
+								{
+									SMAPVariableInfo info = new SMAPVariableInfo( nextkey.getValueString(), nextkey.getValueString(),
+											getTypeNameForElement( nextvalue ), parentInfo.lineDeclared, parentInfo.smapEntry ); //$NON-NLS-1$
+									list.add( VariableUtil.createEGLVariable( new JDIPlaceholderVariable( nextkey.getValueString(), nextvalue ),
+											info, parentVariable.getEGLStackFrame(), this ) );
+								}
+							}
 						}
+						
+						children = list.toArray( new IEGLJavaVariable[ list.size() ] );
 					}
 				}
 			}
 			
-			if ( recompute )
+			if ( children == null )
 			{
-				if ( javaValue instanceof IJavaObject )
-				{
-					IJavaValue entrySetValue = ((IJavaObject)javaValue).sendMessage( "entrySet", "()Ljava/util/Set;", null, //$NON-NLS-1$ //$NON-NLS-2$
-							parentVariable.getEGLStackFrame().getEGLThread().getJavaThread(), false );
-					if ( entrySetValue instanceof IJavaObject )
-					{
-						IJavaValue toArrayValue = ((IJavaObject)entrySetValue).sendMessage( "toArray", "()[Ljava/lang/Object;", null, //$NON-NLS-1$ //$NON-NLS-2$
-								parentVariable.getEGLStackFrame().getEGLThread().getJavaThread(), false );
-						if ( toArrayValue != null )
-						{
-							IVariable[] vars = toArrayValue.getVariables();
-							List<IEGLJavaVariable> list = new ArrayList<IEGLJavaVariable>( vars.length );
-							
-							SMAPVariableInfo parentInfo = parentVariable.getVariableInfo();
-							
-							for ( IVariable var : vars )
-							{
-								IValue value = var.getValue();
-								if ( value instanceof IJavaObject )
-								{
-									IJavaValue nextkey = ((IJavaObject)value).sendMessage( "getKey", "()Ljava/lang/Object;", null, //$NON-NLS-1$ //$NON-NLS-2$
-											parentVariable.getEGLStackFrame().getEGLThread().getJavaThread(), false );
-									IJavaValue nextvalue = ((IJavaObject)value).sendMessage( "getValue", "()Ljava/lang/Object;", null, //$NON-NLS-1$ //$NON-NLS-2$
-											parentVariable.getEGLStackFrame().getEGLThread().getJavaThread(), false );
-									
-									if ( nextkey != null && nextvalue instanceof IJavaValue )
-									{
-										SMAPVariableInfo info = new SMAPVariableInfo( nextkey.getValueString(), nextkey.getValueString(),
-												getTypeNameForElement( nextvalue ), parentInfo.lineDeclared, parentInfo.smapEntry ); //$NON-NLS-1$
-										list.add( VariableUtil.createEGLVariable( new JDIPlaceholderVariable( nextkey.getValueString(), nextvalue ),
-												info, parentVariable.getEGLStackFrame(), this ) );
-									}
-								}
-							}
-							
-							variables = list.toArray( new IEGLJavaVariable[ list.size() ] );
-						}
-					}
-				}
-				
-				if ( variables == null )
-				{
-					variables = super.getVariables();
-				}
-				previousJavaVariables = javaVariables;
+				children = super.getVariables();
 			}
-			return variables;
+			return children;
 		}
 		
 		@Override

@@ -34,7 +34,7 @@ public class EGLJavaVariable extends EGLJavaDebugElement implements IEGLJavaVari
 	/**
 	 * The underlying Java variable.
 	 */
-	protected final IJavaVariable javaVariable;
+	protected IJavaVariable javaVariable;
 	
 	/**
 	 * The EGL-wrapped value of the variable.
@@ -44,33 +44,47 @@ public class EGLJavaVariable extends EGLJavaDebugElement implements IEGLJavaVari
 	/**
 	 * The variable information retrieved from the SMAP.
 	 */
-	protected final SMAPVariableInfo variableInfo;
+	protected SMAPVariableInfo variableInfo;
 	
 	/**
 	 * The stack frame.
 	 */
-	protected final IEGLJavaStackFrame frame;
+	protected IEGLJavaStackFrame frame;
 	
 	/**
 	 * This variable's parent.
 	 */
-	protected final IEGLJavaValue parent;
+	protected IEGLJavaValue parent;
 	
 	/**
 	 * Constructor.
 	 * 
+	 * @param target The debug target.
 	 * @param javaVariable The underlying Java variable.
 	 * @param variableInfo The variable information retreived from the SMAP.
+	 * @param frame The stack frame owning this variable.
 	 * @param parent The parent of this variable; this should be null if the variable is toplevel.
 	 */
 	public EGLJavaVariable( IDebugTarget target, IJavaVariable javaVariable, SMAPVariableInfo variableInfo, IEGLJavaStackFrame frame,
 			IEGLJavaValue parent )
 	{
 		super( target );
-		this.javaVariable = javaVariable;
-		this.variableInfo = variableInfo;
+		initialize( frame, variableInfo, javaVariable, parent );
+	}
+	
+	@Override
+	public void initialize( IEGLJavaVariable newVariable, IEGLJavaValue newParent )
+	{
+		initialize( newVariable.getEGLStackFrame(), newVariable.getVariableInfo(), newVariable.getJavaVariable(), newParent );
+	}
+	
+	private void initialize( IEGLJavaStackFrame frame, SMAPVariableInfo varInfo, IJavaVariable javaVar, IEGLJavaValue parent )
+	{
 		this.frame = frame;
+		this.variableInfo = varInfo;
+		this.javaVariable = javaVar;
 		this.parent = parent;
+		this.value = null;
 	}
 	
 	@Override
@@ -127,16 +141,11 @@ public class EGLJavaVariable extends EGLJavaDebugElement implements IEGLJavaVari
 	@Override
 	public IValue getValue() throws DebugException
 	{
-		IValue javaValue = javaVariable.getValue();
-		if ( javaValue instanceof IJavaValue )
+		if ( value == null )
 		{
-			if ( value == null || value.getJavaValue() != javaValue )
-			{
-				value = createEGLValue( (IJavaValue)javaValue );
-			}
-			return value;
+			value = createEGLValue( (IJavaValue)javaVariable.getValue() );
 		}
-		return javaValue;
+		return value;
 	}
 	
 	protected IEGLJavaValue createEGLValue( IJavaValue javaValue )
@@ -197,5 +206,11 @@ public class EGLJavaVariable extends EGLJavaDebugElement implements IEGLJavaVari
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public IEGLJavaValue getParentValue()
+	{
+		return parent;
 	}
 }

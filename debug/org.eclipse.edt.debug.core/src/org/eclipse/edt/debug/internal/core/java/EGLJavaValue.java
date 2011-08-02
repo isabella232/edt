@@ -40,14 +40,9 @@ public class EGLJavaValue extends EGLJavaDebugElement implements IEGLJavaValue
 	protected final IEGLJavaVariable parentVariable;
 	
 	/**
-	 * The EGL-wrapped variables.
+	 * The children variables.
 	 */
-	protected IEGLJavaVariable[] eglVariables;
-	
-	/**
-	 * The previous Java variables that were wrapped.
-	 */
-	protected IVariable[] previousJavaVariables;
+	protected IVariable[] children;
 	
 	/**
 	 * The SMAP data from the source debug extension of the class file, if applicable.
@@ -106,41 +101,26 @@ public class EGLJavaValue extends EGLJavaDebugElement implements IEGLJavaValue
 	}
 	
 	@Override
-	public IVariable[] getVariables() throws DebugException
+	public synchronized IVariable[] getVariables() throws DebugException
 	{
+		if ( children != null )
+		{
+			return children;
+		}
+		
 		if ( getSMAP().length() == 0 )
 		{
 			// Couldn't get the variable info from the SMAP...just return the Java variables.
-			return javaValue.getVariables();
+			children = javaValue.getVariables();
 		}
-		
-		boolean recompute = true;
-		IVariable[] javaVariables = javaValue.getVariables();
-		if ( previousJavaVariables != null )
+		else
 		{
-			if ( javaVariables.length == previousJavaVariables.length )
-			{
-				recompute = false;
-				for ( int i = 0; i < javaVariables.length; i++ )
-				{
-					if ( javaVariables[ i ] != previousJavaVariables[ i ] )
-					{
-						recompute = true;
-						break;
-					}
-				}
-			}
-		}
-		
-		if ( recompute )
-		{
-			List<IEGLJavaVariable> newEGLVariables = VariableUtil.filterAndWrapVariables( javaVariables, eglVariables, getSMAPVariableInfos(),
+			List<IEGLJavaVariable> newEGLVariables = VariableUtil.filterAndWrapVariables( javaValue.getVariables(),
 					parentVariable.getEGLStackFrame(), false, this );
-			previousJavaVariables = javaVariables;
-			eglVariables = newEGLVariables.toArray( new EGLJavaVariable[ newEGLVariables.size() ] );
+			children = newEGLVariables.toArray( new EGLJavaVariable[ newEGLVariables.size() ] );
 		}
 		
-		return eglVariables;
+		return children;
 	}
 	
 	@Override

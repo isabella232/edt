@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.internal.core.java;
 
+import java.util.Hashtable;
 import java.util.List;
 
 import org.eclipse.debug.core.DebugException;
@@ -23,6 +24,7 @@ import org.eclipse.edt.debug.core.IEGLStackFrame;
 import org.eclipse.edt.debug.core.IEGLThread;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
 import org.eclipse.edt.debug.core.java.IEGLJavaThread;
+import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
 import org.eclipse.edt.debug.core.java.SMAPFunctionInfo;
 import org.eclipse.edt.debug.core.java.SMAPUtil;
@@ -37,7 +39,7 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 	/**
 	 * The underlying Java stack frame.
 	 */
-	private final IJavaStackFrame javaFrame;
+	private IJavaStackFrame javaFrame;
 	
 	/**
 	 * The EGL-wrapped thread.
@@ -47,12 +49,17 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 	/**
 	 * The EGL-wrapped variables.
 	 */
-	private IEGLJavaVariable[] eglVariables;
+	private IVariable[] variables;
 	
 	/**
-	 * The previous Java variables that were wrapped.
+	 * The current cached EGL variables.
 	 */
-	private IVariable[] previousJavaVariables;
+	private Hashtable<String, IEGLJavaVariable> currentEGLVariables;
+	
+	/**
+	 * The cached EGL variables from the last time we suspended.
+	 */
+	private Hashtable<String, IEGLJavaVariable> previousEGLVariables;
 	
 	/**
 	 * The SMAP data from the source debug extension of the class file.
@@ -83,8 +90,32 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 	public EGLJavaStackFrame( IJavaStackFrame frame, EGLJavaThread thread )
 	{
 		super( thread.getDebugTarget() );
-		javaFrame = frame;
-		eglThread = thread;
+		this.eglThread = thread;
+		bind( frame );
+	}
+	
+	/**
+	 * Binds to the given Java frame.
+	 * 
+	 * @param javaFrame The underlying Java stack frame.
+	 */
+	protected void bind( IJavaStackFrame javaFrame )
+	{
+		this.javaFrame = javaFrame;
+		previousEGLVariables = currentEGLVariables;
+		
+		int hashSize = 10;
+		if ( previousEGLVariables != null )
+		{
+			int oldSize = previousEGLVariables.size();
+			if ( oldSize > hashSize )
+			{
+				hashSize = oldSize;
+			}
+		}
+		currentEGLVariables = new Hashtable<String, IEGLJavaVariable>( hashSize );
+		
+		this.variables = null;
 	}
 	
 	@Override
@@ -190,45 +221,30 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 	}
 	
 	@Override
-	public IVariable[] getVariables() throws DebugException
+	public synchronized IVariable[] getVariables() throws DebugException
 	{
+		if ( variables != null )
+		{
+			return variables;
+		}
+		
 		if ( getSMAP().length() == 0 )
 		{
 			// Couldn't get the variable info from the SMAP...just return the Java variables.
-			return javaFrame.getVariables();
+			variables = javaFrame.getVariables();
 		}
-		
-		boolean recompute = true;
-		IVariable[] javaVariables = javaFrame.getVariables();
-		if ( previousJavaVariables != null )
-		{
-			if ( javaVariables.length == previousJavaVariables.length )
-			{
-				recompute = false;
-				for ( int i = 0; i < javaVariables.length; i++ )
-				{
-					if ( javaVariables[ i ] != previousJavaVariables[ i ] )
-					{
-						recompute = true;
-						break;
-					}
-				}
-			}
-		}
-		
-		if ( recompute )
+		else
 		{
 			// We could just manually add a "this" variable and a "function" variable, but this way if the language gets
 			// extended by some client, e.g. concept of 'static' added to EGL, this would support that.
-			List<IEGLJavaVariable> newEGLVariables = VariableUtil.filterAndWrapVariables( javaVariables, eglVariables, getSMAPVariableInfos(), this,
+			List<IEGLJavaVariable> newEGLVariables = VariableUtil.filterAndWrapVariables( javaFrame.getVariables(), this,
 					true, null );
-			previousJavaVariables = javaVariables;
-			eglVariables = new EGLJavaVariable[ newEGLVariables.size() + 1 ];
-			newEGLVariables.toArray( eglVariables );
-			eglVariables[ eglVariables.length - 1 ] = new EGLJavaFunctionVariable( this );
+			variables = new EGLJavaVariable[ newEGLVariables.size() + 1 ];
+			newEGLVariables.toArray( variables );
+			variables[ variables.length - 1 ] = getCorrespondingVariable( new EGLJavaFunctionVariable( this ), null );
 		}
 		
-		return eglVariables;
+		return variables;
 	}
 	
 	@Override
@@ -374,5 +390,33 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 	public void setLineBeforeStepInto( int line )
 	{
 		this.lineBeforeStepInto = line;
+	}
+	
+	@Override
+	public IEGLJavaVariable getCorrespondingVariable( IEGLJavaVariable newVariable, IEGLJavaValue parent ) throws DebugException
+	{
+		IEGLJavaVariable eglVar = null;
+		
+		String qualifiedName = VariableUtil.getQualifiedName( newVariable );
+		if ( previousEGLVariables != null )
+		{
+			eglVar = previousEGLVariables.get( qualifiedName );
+		}
+		
+		if ( eglVar != null )
+		{
+			eglVar.initialize( newVariable, parent );
+		}
+		else
+		{
+			eglVar = newVariable;
+		}
+		
+		if ( currentEGLVariables != null )
+		{
+			currentEGLVariables.put( qualifiedName, eglVar );
+		}
+		
+		return eglVar;
 	}
 }

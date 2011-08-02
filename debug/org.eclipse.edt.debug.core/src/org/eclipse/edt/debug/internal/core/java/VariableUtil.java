@@ -29,6 +29,8 @@ import org.eclipse.jdt.debug.core.IJavaVariable;
  */
 public class VariableUtil
 {
+	public static final IVariable[] EMPTY_VARIABLES = {};
+	
 	private VariableUtil()
 	{
 		// No instances.
@@ -39,7 +41,8 @@ public class VariableUtil
 	 * displayed will be wrapped inside an EGLJavaVariable.
 	 * 
 	 * @param javaVariables The Java variables, not null.
-	 * @param existingEGLVars EGL variables that were processed from a previous call, possibly null.
+	 * @param currVariables The currently cached EGL variables, not null.
+	 * @param prevVariables The EGL variables from the last time we processed variables, possibly null.
 	 * @param infos The variable information from the SMAP, not null.
 	 * @param frame The active EGL-wrapped stack frame, not null.
 	 * @param skipLocals True if local variables should be omitted.
@@ -47,13 +50,13 @@ public class VariableUtil
 	 * @return the filtered, EGL-wrapped variables.
 	 * @throws DebugException
 	 */
-	public static List<IEGLJavaVariable> filterAndWrapVariables( IVariable[] javaVariables, IEGLJavaVariable[] existingEGLVars,
-			SMAPVariableInfo[] infos, IEGLJavaStackFrame frame, boolean skipLocals, IEGLJavaValue parent )
-			throws DebugException
+	public static List<IEGLJavaVariable> filterAndWrapVariables( IVariable[] javaVariables, IEGLJavaStackFrame frame, boolean skipLocals,
+			IEGLJavaValue parent ) throws DebugException
 	{
 		List<IEGLJavaVariable> newEGLVariables = new ArrayList<IEGLJavaVariable>( javaVariables.length );
 		
-		String javaFrameSignature = frame.getJavaStackFrame().getMethodName() + ";" + frame.getJavaStackFrame().getSignature(); //$NON-NLS-1$ //$NON-NLS-2$
+		SMAPVariableInfo[] infos = frame.getSMAPVariableInfos();
+		String javaFrameSignature = frame.getJavaStackFrame().getMethodName() + ";" + frame.getJavaStackFrame().getSignature(); //$NON-NLS-1$
 		int currentLine = frame.getLineNumber();
 		int frameStartLine = frame.getSMAPFunctionInfo() == null
 				? -1
@@ -64,83 +67,69 @@ public class VariableUtil
 			IJavaVariable javaVar = (IJavaVariable)javaVariables[ i ];
 			String javaName = javaVar.getName();
 			
-			boolean addNew = true;
-			if ( existingEGLVars != null )
+			if ( javaVar.isLocal() )
 			{
-				for ( int j = 0; j < existingEGLVars.length; j++ )
+				if ( !skipLocals )
 				{
-					if ( existingEGLVars[ j ].getJavaVariable() == javaVar )
+					SMAPVariableInfo matchingInfo = null;
+					for ( int j = 0; j < infos.length; j++ )
 					{
-						// Reuse this variable.
-						newEGLVariables.add( existingEGLVars[ j ] );
-						addNew = false;
-						break;
+						SMAPVariableInfo info = infos[ j ];
+						if ( info.javaName.equals( javaName ) )
+						{
+							// Validate the signature and make sure the info is in scope. There could be multiple
+							// local variables of different types with the same name, in different scopes within the
+							// function.
+							if ( info.javaMethodSignature != null && info.javaMethodSignature.equals( javaFrameSignature )
+									&& (currentLine >= info.lineDeclared || currentLine == frameStartLine) )
+							{
+								if ( matchingInfo == null || matchingInfo.lineDeclared < info.lineDeclared )
+								{
+									matchingInfo = info;
+								}
+								
+								// Don't break - keep looping to see if there's a better match. We want the info
+								// with the highest line number that's within scope.
+							}
+						}
+					}
+					
+					if ( matchingInfo != null )
+					{
+						IEGLJavaVariable var = frame.getCorrespondingVariable( createEGLVariable( javaVar, matchingInfo, frame, parent ), parent );
+						newEGLVariables.add( var );
 					}
 				}
 			}
-			
-			if ( addNew )
+			else
 			{
-				if ( javaVar.isLocal() )
+				if ( "this".equals( javaName ) ) //$NON-NLS-1$
 				{
-					if ( !skipLocals )
-					{
-						SMAPVariableInfo matchingInfo = null;
-						for ( int j = 0; j < infos.length; j++ )
-						{
-							SMAPVariableInfo info = infos[ j ];
-							if ( info.javaName.equals( javaName ) )
-							{
-								// Validate the signature and make sure the info is in scope. There could be multiple
-								// local variables of different types with the same name, in different scopes within the
-								// function.
-								if ( info.javaMethodSignature != null && info.javaMethodSignature.equals( javaFrameSignature )
-										&& (currentLine >= info.lineDeclared || currentLine == frameStartLine) )
-								{
-									if ( matchingInfo == null || matchingInfo.lineDeclared < info.lineDeclared )
-									{
-										matchingInfo = info;
-									}
-									
-									// Don't break - keep looping to see if there's a better match. We want the info
-									// with the highest line number that's within scope.
-								}
-							}
-						}
-						
-						if ( matchingInfo != null )
-						{
-							newEGLVariables.add( createEGLVariable( javaVar, matchingInfo, frame, parent ) );
-						}
-					}
+					IEGLJavaVariable var = frame.getCorrespondingVariable( new EGLJavaFunctionContainerVariable( frame.getDebugTarget(), javaVar,
+							frame ), parent );
+					newEGLVariables.add( var );
 				}
 				else
 				{
-					if ( "this".equals( javaName ) ) //$NON-NLS-1$
+					SMAPVariableInfo matchingInfo = null;
+					for ( int j = 0; j < infos.length; j++ )
 					{
-						newEGLVariables.add( new EGLJavaFunctionContainerVariable( frame.getDebugTarget(), javaVar, frame ) );
-					}
-					else
-					{
-						SMAPVariableInfo matchingInfo = null;
-						for ( int j = 0; j < infos.length; j++ )
+						SMAPVariableInfo info = infos[ j ];
+						if ( info.javaName.equals( javaName ) )
 						{
-							SMAPVariableInfo info = infos[ j ];
-							if ( info.javaName.equals( javaName ) )
+							// Make sure it has no signature
+							if ( info.javaMethodSignature == null )
 							{
-								// Make sure it has no signature
-								if ( info.javaMethodSignature == null )
-								{
-									matchingInfo = info;
-									break;
-								}
+								matchingInfo = info;
+								break;
 							}
 						}
-						
-						if ( matchingInfo != null )
-						{
-							newEGLVariables.add( createEGLVariable( javaVar, matchingInfo, frame, parent ) );
-						}
+					}
+					
+					if ( matchingInfo != null )
+					{
+						IEGLJavaVariable var = frame.getCorrespondingVariable( createEGLVariable( javaVar, matchingInfo, frame, parent ), parent );
+						newEGLVariables.add( var );
 					}
 				}
 			}
@@ -157,8 +146,8 @@ public class VariableUtil
 	 * @param parentVariable The parent of this variable, possibly null.
 	 * @return
 	 */
-	public static IEGLJavaVariable createEGLVariable( IJavaVariable javaVariable, SMAPVariableInfo info,
-			IEGLJavaStackFrame frame, IEGLJavaValue parent )
+	public static IEGLJavaVariable createEGLVariable( IJavaVariable javaVariable, SMAPVariableInfo info, IEGLJavaStackFrame frame,
+			IEGLJavaValue parent )
 	{
 		// Consult the adapters.
 		for ( IVariableAdapter adapter : EDTDebugCorePlugin.getDefault().getVariableAdapters() )
@@ -171,5 +160,29 @@ public class VariableUtil
 		}
 		
 		return new EGLJavaVariable( frame.getDebugTarget(), javaVariable, info, frame, parent );
+	}
+	
+	/**
+	 * @return the qualified name of the variable with '|' as the delimeter, e.g. parentVarName|childVarName
+	 * @throws DebugException
+	 */
+	public static String getQualifiedName( IEGLJavaVariable var ) throws DebugException
+	{
+		if ( var == null )
+		{
+			return null;
+		}
+		
+		IEGLJavaValue parent = var.getParentValue();
+		if ( parent == null || parent.getParentVariable() == null )
+		{
+			return var.getName();
+		}
+		
+		StringBuilder buf = new StringBuilder( 100 );
+		buf.append( getQualifiedName( parent.getParentVariable() ) );
+		buf.append( '|' );
+		buf.append( var.getName() );
+		return buf.toString();
 	}
 }
