@@ -14,141 +14,141 @@ externalType EDecimal extends EglNumber type ParameterizableType {
 	parameterizedType = FixedPrecisionType
 }
 	/**
-	 * @Operation{"+"} A unary plus (has no effect on the numeric value).
+	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */
 	static function $Plus(value EDecimal in) returns (EDecimal) {@Operation{"+"}};
 
 	/**
-	 * @Operation{"+"} Adds two numbers.
+	 * {@Operation +} Adds two numbers.
 	 */
 	static function $Plus(lvalue EDecimal in, rvalue EDecimal in) returns (EDecimal) {@Operation{"+"}};
 
 	/**
-	 * @Operation{"-"} Negates the value.
+	 * {@Operation -} Negates the value.
 	 */
 	static function $Minus(value EDecimal in) returns (EDecimal) {@Operation{"-"}};
 
 	/**
-	 * @Operation{"-"} Subtracts one number from another.
+	 * {@Operation -} Subtracts one number from another.
 	 */
 	static function $Minus(lvalue EDecimal in, rvalue EDecimal in) returns (EDecimal) {@Operation{"-"}};
 
 	/**
-	 * @Operation{"*"} Multiplies two numbers.
+	 * {@Operation *} Multiplies two numbers.
 	 */
 	static function $Multiply(lvalue EDecimal in, rvalue EDecimal in) returns (EDecimal) {@Operation{"*"}};
 
 	/**
-	 * @Operation{"/"} Divides one number by another.
+	 * {@Operation /} Divides one number by another.
 	 */
 	static function $Divide(lvalue EDecimal in, rvalue EDecimal in) returns (EDecimal) {@Operation{"/"}};
 
 	/**
-	 * @Operation{"%"} Computes the remainder of dividing one number by another.
+	 * {@Operation %} Computes the remainder of dividing one number by another.
 	 */
 	static function $Modulus(lvalue EDecimal in, rvalue EDecimal in) returns (EDecimal) {@Operation{"%"}};
 
 	/**
-	 * @Operation{"**"} Computes lvalue to the power of rvalue.
+	 * {@Operation **} Computes lvalue to the power of rvalue.
 	 */
 	static function $PowerOf(lvalue EDecimal in, rvalue EDecimal in) returns (EFloat) {@Operation{"**"}};
 
 	/**
-	 * @Operation{"<"} Compares two numbers.
+	 * {@Operation <} Compares two numbers.
 	 */
 	static function $LT(lvalue EDecimal in, rvalue EDecimal in) returns (EBoolean) {@Operation{"<"}};
 
 	/**
-	 * @Operation{">"} Compares two numbers.
+	 * {@Operation >} Compares two numbers.
 	 */
 	static function $GT(lvalue EDecimal in, rvalue EDecimal in) returns (EBoolean) {@Operation{">"}};
 
 	/**
-	 * @Operation{"<="} Compares two numbers.
+	 * {@Operation <=} Compares two numbers.
 	 */
 	static function $LTE(lvalue EDecimal in, rvalue EDecimal in) returns (EBoolean) {@Operation{"<="}};
 
 	/**
-	 * @Operation{">="} Compares two numbers.
+	 * {@Operation >=} Compares two numbers.
 	 */
 	static function $GTE(lvalue EDecimal in, rvalue EDecimal in) returns (EBoolean) {@Operation{">="}};
 
 	/**
-	 * @Operation{"=="} Compares two numbers.
+	 * {@Operation ==} Compares two numbers.
 	 */
 	static function $EQ(lvalue EDecimal in, rvalue EDecimal in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
-	 * @Operation{"!="} Compares two numbers.
+	 * {@Operation !=} Compares two numbers.
 	 */
 	static function $NEQ(lvalue EDecimal in, rvalue EDecimal in) returns(EBoolean) {@Operation{"!="}};
 
 	/**
-	 * @Operation{"widen"} Converts a bigint to a decimal of arbitrary precision.
+	 * {@Operation widen} Converts a bigint to a decimal of arbitrary precision.
 	 */
 	static function asDecimal(value EBigint in) returns(EDecimal) {@Operation{"widen"}};
 
 	/**
-	 * @Operation{"narrow"} Converts a bigint to a decimal with the specified precision.
+	 * {@Operation narrow} Converts a bigint to a decimal with the specified precision.
 	 *
 	 * @throws TypeCastException if the value can't be represented with the specified precision.
 	 */
 	static function asDecimal(value EBigint in, length EInt in, decimals EInt in) returns(EDecimal) {@Operation{"narrow"}};
 
 	/**
-	 * @Operation{"narrow"} Converts any decimal to a decimal with the specified precision.
+	 * {@Operation narrow} Converts any decimal to a decimal with the specified precision.
 	 *
 	 * @throws TypeCastException if the value can't be represented with the specified precision.
 	 */
 	static function asDecimal(value EDecimal in, length EInt in, decimals EInt in) returns(EDecimal) {@Operation{"narrow"}};
 
 	/**
-	 * @Operation{"widen"} Converts a smallint to a decimal of arbitrary precision.
+	 * {@Operation widen} Converts a smallint to a decimal of arbitrary precision.
 	 */
 	static function asDecimal(value ESmallint in) returns(EDecimal) {@Operation{"widen"}};
 
 	/**
-	 * @Operation{"narrow"} Converts a smallint to a decimal with the specified precision.
+	 * {@Operation narrow} Converts a smallint to a decimal with the specified precision.
 	 *
 	 * @throws TypeCastException if the value can't be represented with the specified precision.
 	 */
 	static function asDecimal(value ESmallint in, length EInt in, decimals EInt in) returns(EDecimal) {@Operation{"narrow"}};
 
 	/**
-	 * @Operation{"narrow"} Converts a smallfloat to a decimal of arbitrary precision.
+	 * {@Operation narrow} Converts a smallfloat to a decimal of arbitrary precision.
 	 *
 	 * @throws TypeCastException if the value is out of range.
 	 */
 	static function asDecimal(value ESmallfloat in) returns(EDecimal) {@Operation{"narrow"}};
 
 	/**
-	 * @Operation{"narrow"} Converts a smallfloat to a decimal with the specified precision.
+	 * {@Operation narrow} Converts a smallfloat to a decimal with the specified precision.
 	 *
 	 * @throws TypeCastException if the value can't be represented with the specified precision.
 	 */
 	static function asDecimal(value ESmallfloat in, length EInt in, decimals EInt in) returns(EDecimal) {@Operation{"narrow"}};
 
 	/**
-	 * @Operation{"widen"} Converts an int to a decimal of arbitrary precision.
+	 * {@Operation widen} Converts an int to a decimal of arbitrary precision.
 	 */
 	static function asDecimal(value EInt in) returns(EDecimal) {@Operation{"widen"}};
 
 	/**
-	 * @Operation{"narrow"} Converts an int to a decimal with the specified precision.
+	 * {@Operation narrow} Converts an int to a decimal with the specified precision.
 	 *
 	 * @throws TypeCastException if the value can't be represented with the specified precision.
 	 */
 	static function asDecimal(value EInt in, length EInt in, decimals EInt in) returns(EDecimal) {@Operation{"narrow"}};
 
 	/**
-	 * @Operation{"narrow"} Converts a float to a decimal of arbitrary precision.
+	 * {@Operation narrow} Converts a float to a decimal of arbitrary precision.
 	 *
 	 * @throws TypeCastException if the value is out of range.
 	 */
 	static function asDecimal(value EFloat in) returns(EDecimal) {@Operation{"narrow"}};
 
 	/**
-	 * @Operation{"narrow"} Converts a float to a decimal with the specified precision.
+	 * {@Operation narrow} Converts a float to a decimal with the specified precision.
 	 *
 	 * @throws TypeCastException if the value is out of range.
 	 */
@@ -161,7 +161,7 @@ externalType EDecimal extends EglNumber type ParameterizableType {
 	static function asDecimal(value EString in, length EInt in, decimals EInt in) returns(EDecimal) {@Operation{"narrow"}};
 
 	/**
-	 * @Operation{"widen"} Converts a decimal to a number.
+	 * {@Operation widen} Converts a decimal to a number.
 	 */
 	static function asNumber(value EDecimal in) returns(EglNumber) {@Operation{"widen"}};
 end

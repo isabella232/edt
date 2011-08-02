@@ -6,72 +6,72 @@ import egl.lang.reflect.mof.Operation;
 
 externalType EFloat extends EglNumber type ClassType
 	/**
-	 * @Operation{"+"} A unary plus (has no effect on the numeric value).
+	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */
 	static function $Plus(value EFloat in) returns (EFloat) {@Operation{"+"}};
 
 	/**
-	 * @Operation{"+"} Adds two numbers.
+	 * {@Operation +} Adds two numbers.
 	 */
 	static function $Plus(lvalue EFloat in, rvalue EFloat in) returns (EFloat) {@Operation{"+"}};
 
 	/**
-	 * @Operation{"-"} Negates the value.
+	 * {@Operation -} Negates the value.
 	 */
 	static function $Minus(value EFloat in) returns (EFloat) {@Operation{"-"}};
 
 	/**
-	 * @Operation{"-"} Subtracts one number from another.
+	 * {@Operation -} Subtracts one number from another.
 	 */
 	static function $Minus(lvalue EFloat in, rvalue EFloat in) returns (EFloat) {@Operation{"-"}};
 
 	/**
-	 * @Operation{"*"} Multiplies two numbers.
+	 * {@Operation *} Multiplies two numbers.
 	 */
 	static function $Multiply(value EFloat in, rvalue EFloat in) returns (EFloat) {@Operation{"*"}};
 
 	/**
-	 * @Operation{"/"} Divides one number by another.
+	 * {@Operation /} Divides one number by another.
 	 */
 	static function $Divide(value EFloat in, rvalue EFloat in) returns (EFloat) {@Operation{"/"}};
 
 	/**
-	 * @Operation{"%"} Computes the remainder of dividing one number by another.
+	 * {@Operation %} Computes the remainder of dividing one number by another.
 	 */
 	static function $Modulus(lvalue EFloat in, rvalue EFloat in) returns (EFloat) {@Operation{"%"}};
 
 	/**
-	 * @Operation{"**"} Computes lvalue to the power of rvalue.
+	 * {@Operation **} Computes lvalue to the power of rvalue.
 	 */
 	static function $PowerOf(value EFloat in, rvalue EFloat in) returns (EFloat) {@Operation{"**"}};
 
 	/**
-	 * @Operation{"<"} Compares two numbers.
+	 * {@Operation <} Compares two numbers.
 	 */
 	static function $LT(lvalue EFloat in, rvalue EFloat in) returns (EBoolean) {@Operation{"<"}};
 
 	/**
-	 * @Operation{">"} Compares two numbers.
+	 * {@Operation >} Compares two numbers.
 	 */
 	static function $GT(lvalue EFloat in, rvalue EFloat in) returns (EBoolean) {@Operation{">"}};
 
 	/**
-	 * @Operation{"<="} Compares two numbers.
+	 * {@Operation <=} Compares two numbers.
 	 */
 	static function $LTE(lvalue EFloat in, rvalue EFloat in) returns (EBoolean) {@Operation{"<="}};
 
 	/**
-	 * @Operation{">="} Compares two numbers.
+	 * {@Operation >=} Compares two numbers.
 	 */
 	static function $GTE(lvalue EFloat in, rvalue EFloat in) returns (EBoolean) {@Operation{">="}};
 
 	/**
-	 * @Operation{"=="} Compares two numbers.
+	 * {@Operation ==} Compares two numbers.
 	 */
 	static function $EQ(lvalue EFloat in, rvalue EFloat in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
-	 * @Operation{"!="} Compares two numbers.
+	 * {@Operation !=} Compares two numbers.
 	 */
 	static function $NEQ(lvalue EFloat in, rvalue EFloat in) returns(EBoolean) {@Operation{"!="}};
 	

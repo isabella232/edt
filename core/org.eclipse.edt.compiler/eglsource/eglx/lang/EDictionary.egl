@@ -10,7 +10,7 @@ import egl.lang.reflect.mof.Operation;
  */
 externalType EDictionary extends EglAny type ClassType
 	/**
-	 * @Operation{"['"} Returns the value with the given key.
+	 * {@Operation ['} Returns the value with the given key.
 	 * @throws DynamicAccessException  if there's no key with the given name.
 	 */
 	static function $Lookup(dict EDictionary in, key EString in) returns(EglAny) {@Operation{"['"}};

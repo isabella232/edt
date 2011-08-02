@@ -9,37 +9,37 @@ import egl.lang.reflect.mof.Operation;
  */
 externalType EDate extends AnyValue type ClassType
 	/**
-	 * @Operation{"<"} Compares two dates.
+	 * {@Operation <} Compares two dates.
 	 */
 	static function $LT(lvalue EDate in, rvalue EDate in) returns (EBoolean) {@Operation{"<"}};
 
 	/**
-	 * @Operation{">"} Compares two dates.
+	 * {@Operation >} Compares two dates.
 	 */
 	static function $GT(lvalue EDate in, rvalue EDate in) returns (EBoolean) {@Operation{">"}};
 
 	/**
-	 * @Operation{"<="} Compares two dates.
+	 * {@Operation <=} Compares two dates.
 	 */
 	static function $LTE(lvalue EDate in, rvalue EDate in) returns (EBoolean) {@Operation{"<="}};
 
 	/**
-	 * @Operation{">="} Compares two dates.
+	 * {@Operation >=} Compares two dates.
 	 */
 	static function $GTE(lvalue EDate in, rvalue EDate in) returns (EBoolean) {@Operation{">="}};
 
 	/**
-	 * @Operation{"=="} Compares two dates.
+	 * {@Operation ==} Compares two dates.
 	 */
 	static function $EQ(lvalue EDate in, rvalue EDate in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
-	 * @Operation{"!="} Compares two dates.
+	 * {@Operation !=} Compares two dates.
 	 */
 	static function $NEQ(lvalue EDate in, rvalue EDate in) returns(EBoolean) {@Operation{"!="}};
 
 	/**
-	 * @Operation{"narrow"} Converts a string to a date.  The string is parsed
+	 * {@Operation narrow} Converts a string to a date.  The string is parsed
 	 * by searching for the month, then the day, then the year.  One or two digits
 	 * can be specified for the month and day.  The year requires at least one
 	 * digit, and at least four digits -- in other words, some implementations

@@ -166,13 +166,13 @@ library StrLib
 		end
 	end
 	
-	/* TODO 
 	function getNextToken(source string inout, index int inout, delimiters string in) returns (string?)
+		return( eglx.lang.StrLib.getNextToken( source, index, delimiters ) );
 	end
 	
 	function getTokenCount(source string in, delimiters string in) returns (int)
+		return( eglx.lang.StrLib.getTokenCount( source, delimiters ) );
 	end
-	*/
 	
 	function indexOf(source string inout, pattern string in) returns (int)
 		return( source.indexOf( pattern ) );

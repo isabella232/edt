@@ -13,27 +13,27 @@ import egl.lang.reflect.mof.Operation;
 externalType EBoolean extends EglBoolean type ClassType
 
 	/**
-	 * @Operation{"=="} Compares two booleans.
+	 * {@Operation ==} Compares two booleans.
 	 */
 	static function $EQ(lvalue EBoolean in, rvalue EBoolean in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
-	 * @Operation{"!="} Compares two booleans.
+	 * {@Operation !=} Compares two booleans.
 	 */
 	static function $NEQ(lvalue EBoolean in, rvalue EBoolean in) returns(EBoolean) {@Operation{"!="}};
 
 	/**
-	 * @Operation{"&&"} Returns true when both operands are true.
+	 * {@Operation &&} Returns true when both operands are true.
 	 */
 	static function $AND(lvalue EBoolean in, rvalue EBoolean in) returns(EBoolean) {@Operation{"&&"}};
 
 	/**
-	 * @Operation{"||"} Returns true when either operand is true.
+	 * {@Operation ||} Returns true when either operand is true.
 	 */
 	static function $OR(lvalue EBoolean in, rvalue EBoolean in) returns(EBoolean) {@Operation{"||"}};
 
 	/**
-	 * @Operation{"!"} Negates a boolean.
+	 * {@Operation !} Negates a boolean.
 	 */
 	static function $NOT(value EBoolean in) returns (EBoolean) {@Operation{"!"}};
 end

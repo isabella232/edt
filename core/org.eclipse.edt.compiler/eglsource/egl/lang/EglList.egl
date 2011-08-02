@@ -20,7 +20,7 @@ externalType EglList type ClassType {
 	constructor(initialSize EglInt in);
 
 	/**
-	 * @Operation{"+"} Creates a new array consisting of the first operand's elements
+	 * {@Operation +} Creates a new array consisting of the first operand's elements
 	 * followed by the second operand.  The assigning form of the operator (+=) does 
 	 * not create a new array: the appendElement function is used to add the second 
 	 * operand to the end of the first operand.
@@ -31,7 +31,7 @@ externalType EglList type ClassType {
 	static function $Plus(lvalue EglList in, rvalue EglAny in) returns (EglList) {@Operation{"+"}};
 
 	/**
-	 * @Operation{"::"} Creates a new array consisting of the first operand's elements
+	 * {@Operation ::} Creates a new array consisting of the first operand's elements
 	 * followed by the second operand.  The assigning form of the operator (::=) does 
 	 * not create a new array: the appendElement function is used to add the second 
 	 * operand to the end of the first operand.
@@ -42,7 +42,7 @@ externalType EglList type ClassType {
 	static function $Concat(value EglList in, rvalue EglAny in) returns (EglList) {@Operation{"::"}};
 
 	/**
-	 * @Operation{"+"} Creates a new array consisting of the first operand followed 
+	 * {@Operation +} Creates a new array consisting of the first operand followed 
 	 * by the second operand's elements.  The assigning form of the operator (+=) does
 	 * not create a new array: the insertElement function is used to add the second
 	 * operand to the front of the first operand.
@@ -53,7 +53,7 @@ externalType EglList type ClassType {
 	static function $Plus(lvalue EglAny in, rvalue EglList in) returns (EglList) {@Operation{"+"}};
 
 	/**
-	 * @Operation{"::"} Creates a new array consisting of the first operand followed 
+	 * {@Operation ::} Creates a new array consisting of the first operand followed 
 	 * by the second operand's elements.  The assigning form of the operator (::=) does
 	 * not create a new array: the insertElement function is used to add the second
 	 * operand to the front of the first operand.
@@ -64,7 +64,7 @@ externalType EglList type ClassType {
 	static function $Concat(value EglAny in, rvalue EglList in) returns (EglList) {@Operation{"::"}};
 
 	/**
-	 * @Operation{"+"} Creates a new array consisting of the first operand's elements
+	 * {@Operation +} Creates a new array consisting of the first operand's elements
 	 * followed by the second operand's elements.  The assigning form of the operator
 	 * (+=) does not create a new array: the appendAll function is used to add the 
 	 * second operand's elements to the end of the first operand.
@@ -75,7 +75,7 @@ externalType EglList type ClassType {
 	static function $Plus(lvalue EglList in, rvalue EglList in) returns (EglList) {@Operation{"+"}};
 
 	/**
-	 * @Operation{"::"} Creates a new array consisting of the first operand's elements
+	 * {@Operation ::} Creates a new array consisting of the first operand's elements
 	 * followed by the second operand's elements.  The assigning form of the operator
 	 * (::=) does not create a new array: the appendAll function is used to add the 
 	 * second operand's elements to the end of the first operand.
@@ -86,7 +86,7 @@ externalType EglList type ClassType {
 	static function $Concat(value EglList in, rvalue EglList in) returns (EglList) {@Operation{"::"}};
 
 	/**
-	 * @Operation{"[]"} Returns the element at the specified index.
+	 * {@Operation []} Returns the element at the specified index.
 	 * @throws InvalidIndexException  if the index is less than 1 or greater than the size.
 	 */
 	static function $Get(value EglList in, index EglInt in) returns(EglAny) {@Operation{"[]"}};

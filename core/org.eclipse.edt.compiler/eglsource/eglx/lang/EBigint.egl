@@ -9,77 +9,77 @@ import egl.lang.reflect.mof.Operation;
  */
 externalType EBigint extends EglNumber type ClassType
 	/**
-	 * @Operation{"+"} A unary plus (has no effect on the numeric value).
+	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */
 	static function $Plus(value EBigint in) returns (EBigint) {@Operation{"+"}};
 
 	/**
-	 * @Operation{"+"} Adds two numbers.
+	 * {@Operation +} Adds two numbers.
 	 */
 	static function $Plus(lvalue EBigint in, rvalue EBigint in) returns (EBigint) {@Operation{"+"}};
 
 	/**
-	 * @Operation{"-"} Negates the value.
+	 * {@Operation -} Negates the value.
 	 */
 	static function $Minus(value EBigint in) returns (EBigint) {@Operation{"-"}};
 
 	/**
-	 * @Operation{"-"} Subtracts one number from another.
+	 * {@Operation -} Subtracts one number from another.
 	 */
 	static function $Minus(lvalue EBigint in, rvalue EBigint in) returns (EBigint) {@Operation{"-"}};
 
 	/**
-	 * @Operation{"*"} Multiplies two numbers.
+	 * {@Operation *} Multiplies two numbers.
 	 */
 	static function $Multiply(lvalue EBigint in, rvalue EBigint in) returns (EBigint) {@Operation{"*"}};
 
 	/**
-	 * @Operation{"/"} Divides one number by another.
+	 * {@Operation /} Divides one number by another.
 	 */
 	static function $Divide(lvalue EBigint in, rvalue EBigint in) returns (EDecimal) {@Operation{"/"}};
 
 	/**
-	 * @Operation{"%"} Computes the remainder of dividing one number by another.
+	 * {@Operation %} Computes the remainder of dividing one number by another.
 	 */
 	static function $Modulus(lvalue EBigint in, rvalue EBigint in) returns (EDecimal) {@Operation{"%"}};
 
 	/**
-	 * @Operation{"**"} Computes lvalue to the power of rvalue.
+	 * {@Operation **} Computes lvalue to the power of rvalue.
 	 */
 	static function $PowerOf(lvalue EBigint in, rvalue EBigint in) returns (EFloat) {@Operation{"**"}};
 
 	/**
-	 * @Operation{"<"} Compares two numbers.
+	 * {@Operation <} Compares two numbers.
 	 */
 	static function $LT(lvalue EBigint in, rvalue EBigint in) returns (EBoolean) {@Operation{"<"}};
 
 	/**
-	 * @Operation{">"} Compares two numbers.
+	 * {@Operation >} Compares two numbers.
 	 */
 	static function $GT(lvalue EBigint in, rvalue EBigint in) returns (EBoolean) {@Operation{">"}};
 
 	/**
-	 * @Operation{"<="} Compares two numbers.
+	 * {@Operation <=} Compares two numbers.
 	 */
 	static function $LTE(lvalue EBigint in, rvalue EBigint in) returns (EBoolean) {@Operation{"<="}};
 
 	/**
-	 * @Operation{">="} Compares two numbers.
+	 * {@Operation >=} Compares two numbers.
 	 */
 	static function $GTE(lvalue EBigint in, rvalue EBigint in) returns (EBoolean) {@Operation{">="}};
 
 	/**
-	 * @Operation{"=="} Compares two numbers.
+	 * {@Operation ==} Compares two numbers.
 	 */
 	static function $EQ(lvalue EBigint in, rvalue EBigint in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
-	 * @Operation{"!="} Compares two numbers.
+	 * {@Operation !=} Compares two numbers.
 	 */
 	static function $NEQ(lvalue EBigint in, rvalue EBigint in) returns(EBoolean) {@Operation{"!="}};
 
 	/**
-	 * @Operation{"narrow"} Converts a string to a bigint.  The string is parsed
+	 * {@Operation narrow} Converts a string to a bigint.  The string is parsed
 	 * as follows: It may begin with an optional + or - sign.  After the sign there
 	 * must be a sequence of one or more digit characters.  Nothing may follow the
 	 * digits.  The digits in the string must be within the valid range for a bigint.
@@ -89,12 +89,12 @@ externalType EBigint extends EglNumber type ClassType
 	static function asBigint(value EString in) returns(EBigint) {@Operation{"narrow"}};
 
 	/**
-	 * @Operation{"widen"} Converts a smallint to a bigint.
+	 * {@Operation widen} Converts a smallint to a bigint.
 	 */
 	static function asBigint(value ESmallint in) returns(EBigint) {@Operation{"widen"}};
 
 	/**
-	 * @Operation{"narrow"} Converts a smallfloat to a bigint.  Digits after the
+	 * {@Operation narrow} Converts a smallfloat to a bigint.  Digits after the
 	 * decimal point are discarded.
 	 *
 	 * @throws TypeCastException if the smallfloat is out of range for a bigint.
@@ -102,12 +102,12 @@ externalType EBigint extends EglNumber type ClassType
 	static function asBigint(value ESmallfloat in) returns(EBigint) {@Operation{"narrow"}};
 
 	/**
-	 * @Operation{"widen"} Converts an int to a bigint.
+	 * {@Operation widen} Converts an int to a bigint.
 	 */
 	static function asBigint(value EInt in) returns(EBigint) {@Operation{"widen"}};
 
 	/**
-	 * @Operation{"narrow"} Converts a float to a bigint.  Digits after the
+	 * {@Operation narrow} Converts a float to a bigint.  Digits after the
 	 * decimal point are discarded.
 	 *
 	 * @throws TypeCastException if the float is out of range for a bigint.
@@ -115,7 +115,7 @@ externalType EBigint extends EglNumber type ClassType
 	static function asBigint(value EFloat in) returns(EBigint) {@Operation{"narrow"}};
 
 	/**
-	 * @Operation{"narrow"} Converts a decimal to a bigint.  Digits after the
+	 * {@Operation narrow} Converts a decimal to a bigint.  Digits after the
 	 * decimal point are discarded.
 	 *
 	 * @throws TypeCastException if the decimal is out of range for a bigint.
@@ -123,7 +123,7 @@ externalType EBigint extends EglNumber type ClassType
 	static function asBigint(value EDecimal in) returns(EBigint) {@Operation{"narrow"}};
 
 	/**
-	 * @Operation{"widen"} Converts a bigint to a number.
+	 * {@Operation widen} Converts a bigint to a number.
 	 */
 	static function asNumber(value EBigint in) returns(EglNumber) {@Operation{"widen"}};
 end

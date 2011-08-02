@@ -10,7 +10,7 @@ import egl.lang.reflect.mof.Operation;
 externalType EglAny type ClassType
 	// This is necessary because it results in boxing.
 	/**
-	 * @Operation{"widen"} Performs conversion from any to any.
+	 * {@Operation widen} Performs conversion from any to any.
 	 */
 	static function asAny(value EglAny in) returns(EglAny) {@Operation{"widen"}};
 end
