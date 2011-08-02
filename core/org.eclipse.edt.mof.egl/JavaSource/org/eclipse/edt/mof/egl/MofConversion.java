@@ -63,7 +63,7 @@ public interface MofConversion {
 	String Type_Time = EGLX_lang_package+".ETime";
 	String Type_Timestamp = EGLX_lang_package+".ETimestamp";
 	String Type_List = EGL_lang_package+".EglList";
-	String Type_Dictionary = EGLX_lang_package+".Dictionary";
+	String Type_Dictionary = EGLX_lang_package+".EDictionary";
 	// Below here are types not supported in EDT 0.7.
 	String Type_Num = EGL_lang_package+".AnyNum";
 	String Type_Bin = EGL_lang_package+".AnyBin";
@@ -81,7 +81,7 @@ public interface MofConversion {
 	String Type_SecondsInterval = EGL_lang_package+".AnySecondsInterval";
 	String Type_UBin = EGL_lang_package+".AnyUBin";
 	String Type_UnicodeNum = EGL_lang_package+".AnyUnicodeNum";
-	String Type_ArrayDictionary = EGL_lang_package+".ArrayDictionary";
+	String Type_ArrayDictionary = EGL_lang_package+".EArrayDictionary";
 
 	// EGL Base Types with KeyScheme prefix
 	String Type_EGLNullType = EGL_KeyScheme+Type_NULL;
