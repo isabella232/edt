@@ -313,7 +313,7 @@ public class SourceProjectWizardCapabilityPage extends ContainerWizardPage {
 		
 		boolean projectExists= false;
 		
-		List newEGLPath= null;
+		List<PPListElement> newEGLPath= null;
 		
 		try {
 			IProject project= fCurrEProject.getProject();
