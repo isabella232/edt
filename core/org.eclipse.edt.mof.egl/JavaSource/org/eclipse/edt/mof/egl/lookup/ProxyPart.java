@@ -48,12 +48,15 @@ public class ProxyPart extends ProxyEObject implements Part, DataType, Parameter
 		if (i == -1)
 			this.typeSignature = typeSignature;
 		else 
-			this.typeSignature = typeSignature.substring(i);
+			this.typeSignature = typeSignature.substring(i + KeyScheme.length());
 	}	
 	
 
 	@Override
 	public String getMofSerializationKey() {
+		if (typeSignature.startsWith(KeyScheme)) {
+			return typeSignature;
+		}
 		return KeyScheme + typeSignature;
 	}
 	

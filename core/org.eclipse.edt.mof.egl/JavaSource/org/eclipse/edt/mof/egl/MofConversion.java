@@ -20,6 +20,7 @@ public interface MofConversion {
 	String EGL_lang_package = "egl.lang";
 	String EGL_lang_reflect_package = "egl.lang.reflect";
 	String EGL_lang_reflect_refTypes_package = "egl.lang.reflect.refTypes";
+	String EGLX_lang_package = "eglx.lang";
 	String EGL_KeyScheme = Type.EGL_KeyScheme + Type.KeySchemeDelimiter;
 	String EGL_SerializationKeyPrefix = EGL_KeyScheme + EGL_lang_package;
 	
@@ -44,45 +45,46 @@ public interface MofConversion {
 	String Type_EEnumLiteral = Mof_package_name+".EEnumLiteral";
 	String Type_EMetadataObject = Mof_package_name+".EMetadataObject";
 	String Type_EField = Mof_package_name+".EField";
-	
+	    
 	
 	// EGL Base Types without keyScheme prefix
-	String Type_Any = EGL_lang_package+".AnyObject";
-	String Type_Int = EGL_lang_package+".Int32";
-	String Type_Smallint = EGL_lang_package+".Int16";
-	String Type_Bigint = EGL_lang_package+".Int64";
-	String Type_Float = EGL_lang_package+".Float64";
-	String Type_Smallfloat = EGL_lang_package+".Float32";
-	String Type_Decimal = EGL_lang_package+".AnyDecimal";
+	String Type_Any = EGL_lang_package+".EglAny";
+	String Type_Int = EGLX_lang_package+".EdtInt";
+	String Type_Smallint = EGLX_lang_package+".EdtSmallint";
+	String Type_Bigint = EGLX_lang_package+".EdtBigint";
+	String Type_Float = EGLX_lang_package+".EdtFloat";
+	String Type_Smallfloat = EGLX_lang_package+".EdtSmallfloat";
+	String Type_Decimal = EGLX_lang_package+".EdtDecimal";
+	String Type_Number = EGL_lang_package+".EglNumber";
+	String Type_Boolean = EGLX_lang_package+".EdtBoolean";
+	String Type_String = EGLX_lang_package+".EdtString";
+	String Type_NULL = EGL_lang_package+".NullType";
+	String Type_Date = EGLX_lang_package+".EdtDate";
+	String Type_Time = EGLX_lang_package+".EdtTime";
+	String Type_Timestamp = EGLX_lang_package+".EdtTimestamp";
+	String Type_List = EGL_lang_package+".List";
+	String Type_Dictionary = EGLX_lang_package+".Dictionary";
+	// Below here are types not supported in EDT 0.7.
 	String Type_Num = EGL_lang_package+".AnyNum";
 	String Type_Bin = EGL_lang_package+".AnyBin";
-	String Type_Number = EGL_lang_package+".AnyNumber";
 	String Type_Numc = EGL_lang_package+".AnyNumc";
 	String Type_Pacf = EGL_lang_package+".AnyPacf";
-	String Type_Boolean = EGL_lang_package+".BooleanType";
 	String Type_Char = EGL_lang_package+".AnyChar";
 	String Type_MBChar = EGL_lang_package+".AnyMBChar";
 	String Type_DBChar = EGL_lang_package+".AnyDBChar";
 	String Type_Hex = EGL_lang_package+".AnyHex";
-	String Type_String = EGL_lang_package+".AnyString";
-	String Type_NULL = EGL_lang_package+".NullType";
 	String Type_Unicode = EGL_lang_package+".AnyUnicode";
 	String Type_Blob = EGL_lang_package+".AnyBlob";
 	String Type_Clob = EGL_lang_package+".AnyClob";
-	String Type_Date = EGL_lang_package+".EDate";
-	String Type_Time = EGL_lang_package+".ETime";
-	String Type_Timestamp = EGL_lang_package+".AnyTimestamp";
 	String Type_Interval = EGL_lang_package+".AnyInterval";
 	String Type_MonthInterval = EGL_lang_package+".AnyMonthsInterval";
 	String Type_SecondsInterval = EGL_lang_package+".AnySecondsInterval";
 	String Type_UBin = EGL_lang_package+".AnyUBin";
 	String Type_UnicodeNum = EGL_lang_package+".AnyUnicodeNum";
-	String Type_List = EGL_lang_package+".List";
-	String Type_Dictionary = EGL_lang_package+".Dictionary";
 	String Type_ArrayDictionary = EGL_lang_package+".ArrayDictionary";
 
 	// EGL Base Types with KeyScheme prefix
-	String Type_EGLNullType = EGL_KeyScheme+Type_NULL;;
+	String Type_EGLNullType = EGL_KeyScheme+Type_NULL;
 	String Type_EGLAny = EGL_KeyScheme+Type_Any;
 	String Type_EGLInt = EGL_KeyScheme+Type_Int;
 	String Type_EGLSmallint = EGL_KeyScheme+Type_Smallint;
@@ -216,7 +218,6 @@ public interface MofConversion {
 	String Type_RecordRef = EGL_lang_reflect_refTypes_package+".EGLRecordRef";
 	String Type_ServiceRef = EGL_lang_reflect_refTypes_package+".EGLServiceRef";
 	String Type_SQLStringRef = EGL_lang_reflect_refTypes_package+".EGLSQLStringRef";
-	String Type_SystemLibrary = EGL_lang_reflect_package+".SystemLibrary";
 
 	// EGL System parts
 	String Type_SqlRecord = "egl.io.sql.SQLRecord";
