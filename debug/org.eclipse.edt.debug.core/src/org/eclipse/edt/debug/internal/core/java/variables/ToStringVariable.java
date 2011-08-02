@@ -20,6 +20,7 @@ import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
 import org.eclipse.edt.debug.internal.core.java.EGLJavaValue;
 import org.eclipse.edt.debug.internal.core.java.EGLJavaVariable;
+import org.eclipse.edt.debug.internal.core.java.VariableUtil;
 import org.eclipse.jdt.debug.core.IJavaObject;
 import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
@@ -74,7 +75,7 @@ public class ToStringVariable extends EGLJavaVariable
 			@Override
 			public IVariable[] getVariables()
 			{
-				return new IVariable[ 0 ];
+				return VariableUtil.EMPTY_VARIABLES;
 			}
 			
 			@Override
