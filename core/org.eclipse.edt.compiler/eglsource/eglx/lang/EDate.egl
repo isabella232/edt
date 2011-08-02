@@ -41,12 +41,12 @@ externalType EDate extends AnyValue type ClassType
 	/**
 	 * {@Operation narrow} Converts a string to a date.  The string is parsed
 	 * by searching for the month, then the day, then the year.  One or two digits
-	 * can be specified for the month and day.  The year requires at least one
-	 * digit, and at least four digits -- in other words, some implementations
-	 * may support years beyond 9999.  One separator character is required
-	 * between the month and day, and another between the day and year.  The
-	 * separator character can be any character (even a digit, though that's probably
-	 * a bad idea) and the two separator characters don't have to be identical.  
+	 * can be specified for the month and day.  The year requires a minimum of one
+	 * digit and a maximum of at least four digits (in other words, some implementations
+	 * can support years beyond 9999).  One separator character is required between
+	 * the month and day, and another between the day and year.  The separator 
+	 * character can be anything, even a digit (though that's probably a bad idea)
+	 * and the two separator characters don't have to be identical.  
 	 *
 	 * @throws TypeCastException if the string can't be parsed into a date.
 	 */
