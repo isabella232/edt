@@ -53,7 +53,7 @@ ExternalType Object type RootJavaObject
 	Function equals(obj Object in) returns (boolean);
 end
 
-ExternalType Class type RootJavaObject
+ExternalType Class extends Object type RootJavaObject
 	{
 		packageName = "java.lang"
 	}
