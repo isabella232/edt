@@ -1,0 +1,59 @@
+package eglx.lang;
+
+import egl.lang.Value;
+import egl.lang.reflect.ParameterizableType;
+import egl.lang.reflect.mof.Operation;
+
+import org.eclipse.edt.mof.egl.TimestampType;
+
+externalType ETimestamp extends AnyValue type ParameterizableType {
+	parameterizedType = TimestampType
+}
+	/**  
+	 * @Operation{"<"} Compares two timestamps.
+	 */
+	static function $LT(lvalue ETimestamp in, rvalue ETimestamp in) returns (EBoolean) {@Operation{"<"}};
+   
+	/**
+	 * @Operation{">"} Compares two timestamps.
+	 */
+	static function $GT(lvalue ETimestamp in, rvalue ETimestamp in) returns (EBoolean) {@Operation{">"}};
+
+	/**
+	 * @Operation{"<="} Compares two timestamps.
+	 */
+	static function $LTE(lvalue ETimestamp in, rvalue ETimestamp in) returns (EBoolean) {@Operation{"<="}};
+
+	/**
+	 * @Operation{">="} Compares two timestamps.
+	 */
+	static function $GTE(lvalue ETimestamp in, rvalue ETimestamp in) returns (EBoolean) {@Operation{">="}};
+
+	/**
+	 * @Operation{"=="} Compares two timestamps.
+	 */
+	static function $EQ(lvalue ETimestamp in, rvalue ETimestamp in) returns(EBoolean) {@Operation{"=="}};
+
+	/**
+	 * @Operation{"!="} Compares two timestamps.
+	 */
+	static function $NEQ(lvalue ETimestamp in, rvalue ETimestamp in) returns(EBoolean) {@Operation{"!="}};
+
+	static function asTimestamp(value EString in) returns (ETimestamp) {@Operation{"narrow"}};
+	static function asTimestamp(value EString in, pattern EString in) returns (ETimestamp) {@Operation{"narrow"}};
+	static function asTimestamp(value ETimestamp in) returns (ETimestamp) {@Operation{"narrow"}};
+
+	function dayOf() returns(EInt);
+
+	function monthOf() returns(EInt);
+
+	function yearOf() returns(EInt);
+
+	function weekdayOf() returns(EInt);
+
+	function dateOf() returns(EDate);
+
+	function timeOf() returns(ETimestamp);//TODO this really should return ETimestamp("hhmmss"), but we can't handle that.
+
+	function extend(timeSpanPattern EString in) returns(ETimestamp);
+end

@@ -3,7 +3,7 @@ package egl.lang;
 import egl.lang.reflect.ClassType;
 import egl.lang.reflect.mof.Operation;
 
-externalType EglNumber extends Value type ClassType
+externalType EglNumber extends AnyValue type ClassType
 	/**
 	 * @Operation{"+"} A unary plus (has no effect on the numeric value).
 	 */

@@ -6,7 +6,7 @@ import egl.lang.reflect.mof.Operation;
 /**
  * This is the definition of the boolean type.
  */
-externalType EglBoolean extends Value type ClassType
+externalType EglBoolean extends AnyValue type ClassType
 	/**
 	 * @Operation{"=="} Tests if two booleans are equal.
 	 */

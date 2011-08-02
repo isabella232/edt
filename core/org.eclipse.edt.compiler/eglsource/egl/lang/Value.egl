@@ -1,9 +1,0 @@
-package egl.lang;
-
-import egl.lang.reflect.ClassType;
-
-/**
- * Value is the supertype of every type that's not a reference type.
- */
-externalType Value extends EglAny type ClassType {isAbstract=yes}
-end

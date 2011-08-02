@@ -7,13 +7,13 @@ externalType MathLib type NativeType
 	// Returns a float, greater than or equal to 0.0 and less than 1.0.
 	static function random() returns (float);
 	
-	//TODO once validation allows it, change every 'EdtDecimal' to 'decimal' 
+	//TODO once validation allows it, change every 'EDecimal' to 'decimal' 
 	// the bug for this is https://bugs.eclipse.org/bugs/show_bug.cgi?id=353444
 	
 	static function abs(value smallint in) returns(smallint);
 	static function abs(value int in) returns(int);
 	static function abs(value bigint in) returns(bigint);
-	static function abs(value EdtDecimal in) returns(EdtDecimal);
+	static function abs(value EDecimal in) returns(EDecimal);
 	static function abs(value smallfloat in) returns(smallfloat);
 	static function abs(value float in) returns(float);
 
@@ -31,7 +31,7 @@ externalType MathLib type NativeType
 
 	static function cosh(value float in) returns(float);
 	
-	static function decimals(value EdtDecimal in) returns(int);
+	static function decimals(value EDecimal in) returns(int);
 
 	static function exp(value float in) returns(float);
 
@@ -50,14 +50,14 @@ externalType MathLib type NativeType
 	static function max(val1 bigint in, val2 bigint in) returns(bigint);
 	static function max(val1 float in, val2 float in) returns(float);
 	static function max(val1 smallfloat in, val2 smallfloat in) returns(smallfloat);
-	static function max(val1 EdtDecimal in, val2 EdtDecimal in) returns(EdtDecimal);
+	static function max(val1 EDecimal in, val2 EDecimal in) returns(EDecimal);
 	
 	static function min(val1 smallint in, val2 smallint in) returns(smallint);
 	static function min(val1 int in, val2 int in) returns(int);
 	static function min(val1 bigint in, val2 bigint in) returns(bigint);
 	static function min(val1 float in, val2 float in) returns(float);
 	static function min(val1 smallfloat in, val2 smallfloat in) returns(smallfloat);
-	static function min(val1 EdtDecimal in, val2 EdtDecimal in) returns(EdtDecimal);
+	static function min(val1 EDecimal in, val2 EDecimal in) returns(EDecimal);
 
 	static function modf(val1 float in, val2 bigint out) returns (float);
 	
@@ -68,14 +68,14 @@ externalType MathLib type NativeType
 	static function precision(value bigint in) returns(int);
 	static function precision(value float in) returns(int);
 	static function precision(value smallfloat in) returns(int);
-	static function precision(value EdtDecimal in) returns(int);
+	static function precision(value EDecimal in) returns(int);
 
 	static function round(val1 float in, powOf10 int in) returns (float);
 	static function round(val1 smallfloat in, powOf10 int in) returns (smallfloat);
-	static function round(val1 EdtDecimal in, powOf10 int in) returns (EdtDecimal);
-	static function round(val1 float in, powOf10 EdtDecimal in) returns (float);
-	static function round(val1 smallfloat in, powOf10 EdtDecimal in) returns (smallfloat);
-	static function round(val1 EdtDecimal in, powOf10 EdtDecimal in) returns (EdtDecimal);
+	static function round(val1 EDecimal in, powOf10 int in) returns (EDecimal);
+	static function round(val1 float in, powOf10 EDecimal in) returns (float);
+	static function round(val1 smallfloat in, powOf10 EDecimal in) returns (smallfloat);
+	static function round(val1 EDecimal in, powOf10 EDecimal in) returns (EDecimal);
 
 	static function sin(value float in) returns(float);
 

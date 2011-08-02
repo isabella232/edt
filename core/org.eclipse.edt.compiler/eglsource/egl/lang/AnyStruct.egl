@@ -1,4 +1,4 @@
 package egl.lang;
 
-externalType AnyStruct extends Value type ClassType {isAbstract=yes}
+externalType AnyStruct extends AnyValue type ClassType {isAbstract=yes}
 end

@@ -7,76 +7,76 @@ import egl.lang.reflect.mof.Operation;
 /**
  * This is the class for bigints, 64-bit signed binary numbers.
  */
-externalType EdtBigint extends EglNumber type ClassType
+externalType EBigint extends EglNumber type ClassType
 	/**
 	 * @Operation{"+"} A unary plus (has no effect on the numeric value).
 	 */
-	static function $Plus(value EdtBigint in) returns (EdtBigint) {@Operation{"+"}};
+	static function $Plus(value EBigint in) returns (EBigint) {@Operation{"+"}};
 
 	/**
 	 * @Operation{"+"} Adds two numbers.
 	 */
-	static function $Plus(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtBigint) {@Operation{"+"}};
+	static function $Plus(lvalue EBigint in, rvalue EBigint in) returns (EBigint) {@Operation{"+"}};
 
 	/**
 	 * @Operation{"-"} Negates the value.
 	 */
-	static function $Minus(value EdtBigint in) returns (EdtBigint) {@Operation{"-"}};
+	static function $Minus(value EBigint in) returns (EBigint) {@Operation{"-"}};
 
 	/**
 	 * @Operation{"-"} Subtracts one number from another.
 	 */
-	static function $Minus(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtBigint) {@Operation{"-"}};
+	static function $Minus(lvalue EBigint in, rvalue EBigint in) returns (EBigint) {@Operation{"-"}};
 
 	/**
 	 * @Operation{"*"} Multiplies two numbers.
 	 */
-	static function $Multiply(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtBigint) {@Operation{"*"}};
+	static function $Multiply(lvalue EBigint in, rvalue EBigint in) returns (EBigint) {@Operation{"*"}};
 
 	/**
 	 * @Operation{"/"} Divides one number by another.
 	 */
-	static function $Divide(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtDecimal) {@Operation{"/"}};
+	static function $Divide(lvalue EBigint in, rvalue EBigint in) returns (EDecimal) {@Operation{"/"}};
 
 	/**
 	 * @Operation{"%"} Computes the remainder of dividing one number by another.
 	 */
-	static function $Modulus(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtDecimal) {@Operation{"%"}};
+	static function $Modulus(lvalue EBigint in, rvalue EBigint in) returns (EDecimal) {@Operation{"%"}};
 
 	/**
 	 * @Operation{"**"} Computes lvalue to the power of rvalue.
 	 */
-	static function $PowerOf(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtFloat) {@Operation{"**"}};
+	static function $PowerOf(lvalue EBigint in, rvalue EBigint in) returns (EFloat) {@Operation{"**"}};
 
 	/**
 	 * @Operation{"<"} Compares two numbers.
 	 */
-	static function $LT(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtBoolean) {@Operation{"<"}};
+	static function $LT(lvalue EBigint in, rvalue EBigint in) returns (EBoolean) {@Operation{"<"}};
 
 	/**
 	 * @Operation{">"} Compares two numbers.
 	 */
-	static function $GT(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtBoolean) {@Operation{">"}};
+	static function $GT(lvalue EBigint in, rvalue EBigint in) returns (EBoolean) {@Operation{">"}};
 
 	/**
 	 * @Operation{"<="} Compares two numbers.
 	 */
-	static function $LTE(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtBoolean) {@Operation{"<="}};
+	static function $LTE(lvalue EBigint in, rvalue EBigint in) returns (EBoolean) {@Operation{"<="}};
 
 	/**
 	 * @Operation{">="} Compares two numbers.
 	 */
-	static function $GTE(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtBoolean) {@Operation{">="}};
+	static function $GTE(lvalue EBigint in, rvalue EBigint in) returns (EBoolean) {@Operation{">="}};
 
 	/**
 	 * @Operation{"=="} Compares two numbers.
 	 */
-	static function $EQ(lvalue EdtBigint in, rvalue EdtBigint in) returns(EdtBoolean) {@Operation{"=="}};
+	static function $EQ(lvalue EBigint in, rvalue EBigint in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
 	 * @Operation{"!="} Compares two numbers.
 	 */
-	static function $NEQ(lvalue EdtBigint in, rvalue EdtBigint in) returns(EdtBoolean) {@Operation{"!="}};
+	static function $NEQ(lvalue EBigint in, rvalue EBigint in) returns(EBoolean) {@Operation{"!="}};
 
 	/**
 	 * @Operation{"narrow"} Converts a string to a bigint.  The string is parsed
@@ -86,12 +86,12 @@ externalType EdtBigint extends EglNumber type ClassType
 	 *
 	 * @throws TypeCastException if the string can't be parsed into a bigint.
 	 */
-	static function asBigint(value EdtString in) returns(EdtBigint) {@Operation{"narrow"}};
+	static function asBigint(value EString in) returns(EBigint) {@Operation{"narrow"}};
 
 	/**
 	 * @Operation{"widen"} Converts a smallint to a bigint.
 	 */
-	static function asBigint(value EdtSmallint in) returns(EdtBigint) {@Operation{"widen"}};
+	static function asBigint(value ESmallint in) returns(EBigint) {@Operation{"widen"}};
 
 	/**
 	 * @Operation{"narrow"} Converts a smallfloat to a bigint.  Digits after the
@@ -99,12 +99,12 @@ externalType EdtBigint extends EglNumber type ClassType
 	 *
 	 * @throws TypeCastException if the smallfloat is out of range for a bigint.
 	 */
-	static function asBigint(value EdtSmallfloat in) returns(EdtBigint) {@Operation{"narrow"}};
+	static function asBigint(value ESmallfloat in) returns(EBigint) {@Operation{"narrow"}};
 
 	/**
 	 * @Operation{"widen"} Converts an int to a bigint.
 	 */
-	static function asBigint(value EdtInt in) returns(EdtBigint) {@Operation{"widen"}};
+	static function asBigint(value EInt in) returns(EBigint) {@Operation{"widen"}};
 
 	/**
 	 * @Operation{"narrow"} Converts a float to a bigint.  Digits after the
@@ -112,7 +112,7 @@ externalType EdtBigint extends EglNumber type ClassType
 	 *
 	 * @throws TypeCastException if the float is out of range for a bigint.
 	 */
-	static function asBigint(value EdtFloat in) returns(EdtBigint) {@Operation{"narrow"}};
+	static function asBigint(value EFloat in) returns(EBigint) {@Operation{"narrow"}};
 
 	/**
 	 * @Operation{"narrow"} Converts a decimal to a bigint.  Digits after the
@@ -120,10 +120,10 @@ externalType EdtBigint extends EglNumber type ClassType
 	 *
 	 * @throws TypeCastException if the decimal is out of range for a bigint.
 	 */
-	static function asBigint(value EdtDecimal in) returns(EdtBigint) {@Operation{"narrow"}};
+	static function asBigint(value EDecimal in) returns(EBigint) {@Operation{"narrow"}};
 
 	/**
 	 * @Operation{"widen"} Converts a bigint to a number.
 	 */
-	static function asNumber(value EdtBigint in) returns(EglNumber) {@Operation{"widen"}};
+	static function asNumber(value EBigint in) returns(EglNumber) {@Operation{"widen"}};
 end

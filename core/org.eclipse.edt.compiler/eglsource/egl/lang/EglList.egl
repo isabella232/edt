@@ -4,11 +4,11 @@ import egl.lang.reflect.ClassType;
 import egl.lang.reflect.mof.Operation;
 
 /**
- * List defines the API of arrays in EGL.  Arrays have a size, which is the number
+ * EglList defines the API of arrays in EGL.  Arrays have a size, which is the number
  * of element they contain.  The size may be zero.  Arrays also have a maximum
  * size, beyond which they cannot grow.
  */
-externalType List type ClassType {  
+externalType EglList type ClassType {  
 	typeParameters = ["E"]
 }
 	/**
@@ -28,7 +28,7 @@ externalType List type ClassType {
 	 * @throws ArraySizeException  if the array's size is 2147483647, or the
 	 * assigning form of the operator was used and the array is at its maximum size.
 	 */
-	static function $Plus(lvalue List in, rvalue EglAny in) returns (List) {@Operation{"+"}};
+	static function $Plus(lvalue EglList in, rvalue EglAny in) returns (EglList) {@Operation{"+"}};
 
 	/**
 	 * @Operation{"::"} Creates a new array consisting of the first operand's elements
@@ -39,7 +39,7 @@ externalType List type ClassType {
 	 * @throws ArraySizeException  if the array's size is 2147483647, or the
 	 * assigning form of the operator was used and the array is at its maximum size.
 	 */
-	static function $Concat(value List in, rvalue EglAny in) returns (List) {@Operation{"::"}};
+	static function $Concat(value EglList in, rvalue EglAny in) returns (EglList) {@Operation{"::"}};
 
 	/**
 	 * @Operation{"+"} Creates a new array consisting of the first operand followed 
@@ -50,7 +50,7 @@ externalType List type ClassType {
 	 * @throws ArraySizeException  if the array's size is 2147483647, or the
 	 * assigning form of the operator was used and the array is at its maximum size.
 	 */
-	static function $Plus(lvalue EglAny in, rvalue List in) returns (List) {@Operation{"+"}};
+	static function $Plus(lvalue EglAny in, rvalue EglList in) returns (EglList) {@Operation{"+"}};
 
 	/**
 	 * @Operation{"::"} Creates a new array consisting of the first operand followed 
@@ -61,7 +61,7 @@ externalType List type ClassType {
 	 * @throws ArraySizeException  if the array's size is 2147483647, or the
 	 * assigning form of the operator was used and the array is at its maximum size.
 	 */
-	static function $Concat(value EglAny in, rvalue List in) returns (List) {@Operation{"::"}};
+	static function $Concat(value EglAny in, rvalue EglList in) returns (EglList) {@Operation{"::"}};
 
 	/**
 	 * @Operation{"+"} Creates a new array consisting of the first operand's elements
@@ -72,7 +72,7 @@ externalType List type ClassType {
 	 * @throws ArraySizeException  if the combined array's size would be greater
 	 * than 2147483647.
 	 */
-	static function $Plus(lvalue List in, rvalue List in) returns (List) {@Operation{"+"}};
+	static function $Plus(lvalue EglList in, rvalue EglList in) returns (EglList) {@Operation{"+"}};
 
 	/**
 	 * @Operation{"::"} Creates a new array consisting of the first operand's elements
@@ -83,13 +83,13 @@ externalType List type ClassType {
 	 * @throws ArraySizeException  if the combined array's size would be greater
 	 * than 2147483647.
 	 */
-	static function $Concat(value List in, rvalue List in) returns (List) {@Operation{"::"}};
+	static function $Concat(value EglList in, rvalue EglList in) returns (EglList) {@Operation{"::"}};
 
 	/**
 	 * @Operation{"[]"} Returns the element at the specified index.
 	 * @throws InvalidIndexException  if the index is less than 1 or greater than the size.
 	 */
-	static function $Get(value List in, index EglInt in) returns(EglAny) {@Operation{"[]"}};
+	static function $Get(value EglList in, index EglInt in) returns(EglAny) {@Operation{"[]"}};
 	
 	/**
 	 * Adds an element to the end of this array.
@@ -107,7 +107,7 @@ externalType List type ClassType {
 	 * exception will be thrown before any elements are added, so this function
 	 * will either add all elements or none of them.
 	 */
-	function appendAll(other List in);
+	function appendAll(other EglList in);
 	
 	/**
 	 * Inserts an element into this array at a specified position.  Any elements

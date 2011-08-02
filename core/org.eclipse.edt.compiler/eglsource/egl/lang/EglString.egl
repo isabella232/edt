@@ -5,7 +5,7 @@ import egl.lang.reflect.mof.Operation;
 
 import org.eclipse.edt.mof.egl.SequenceType;
 
-externalType EglString extends Text type ParameterizableType {
+externalType EglString extends AnyText type ParameterizableType {
 	parameterizedType = SequenceType
 }
 	/**
