@@ -1,0 +1,4 @@
+package egl.lang;
+
+externalType AnyRecord extends AnyStruct type ClassType {isAbstract=yes}
+end

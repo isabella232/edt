@@ -1,0 +1,102 @@
+package eglx.lang;
+
+import egl.lang.EglInt;
+import egl.lang.EglNumber;
+import egl.lang.reflect.ClassType;
+import egl.lang.reflect.mof.Operation;
+
+externalType EdtInt extends EglInt type ClassType
+	/**
+	 * @Operation{"+"} A unary plus (has no effect on the numeric value).
+	 */
+	static function $Plus(value EdtInt in) returns (EdtInt) {@Operation{"+"}};
+
+	/**
+	 * @Operation{"+"} Adds two numbers.
+	 */
+	static function $Plus(lvalue EdtInt in, rvalue EdtInt in) returns (EdtInt) {@Operation{"+"}};
+
+	/**
+	 * @Operation{"-"} Negates the value.
+	 */
+	static function $Minus(value EdtInt in) returns (EdtInt) {@Operation{"-"}};
+
+	/**
+	 * @Operation{"-"} Subtracts one number from another.
+	 */
+	static function $Minus(lvalue EdtInt in, rvalue EdtInt in) returns (EdtInt) {@Operation{"-"}};
+
+	/**
+	 * @Operation{"*"} Multiplies two numbers.
+	 */
+	static function $Multiply(lvalue EdtInt in, rvalue EdtInt in) returns (EdtInt) {@Operation{"*"}};
+
+	/**
+	 * @Operation{"/"} Divides one number by another.
+	 */
+	static function $Divide(lvalue EdtInt in, rvalue EdtInt in) returns (EdtDecimal) {@Operation{"/"}};
+
+	/**
+	 * @Operation{"%"} Computes the remainder of dividing one number by another.
+	 */
+	static function $Modulus(lvalue EdtInt in, rvalue EdtInt in) returns (EdtDecimal) {@Operation{"%"}};
+
+	/**
+	 * @Operation{"**"} Computes lvalue to the power of rvalue.
+	 */
+	static function $PowerOf(lvalue EdtInt in, rvalue EdtInt in) returns (EdtFloat) {@Operation{"**"}};
+
+	/**
+	 * @Operation{"&"} Computes the bitwise AND of two numbers.
+	 */
+	static function $BitAnd(lvalue EdtInt in, rvalue EdtInt in) returns (EdtInt) {@Operation{"&"}};
+
+	/**
+	 * @Operation{"|"} Computes the bitwise OR of two numbers.
+	 */
+	static function $BitOr(lvalue EdtInt in, rvalue EdtInt in) returns (EdtInt) {@Operation{"|"}};
+
+	/**
+	 * @Operation{"xor"} Computes the bitwise exclusive OR of two numbers.
+	 */
+	static function $BitXor(lvalue EdtInt in, rvalue EdtInt in) returns (EdtInt) {@Operation{"xor"}};
+
+	/**
+	 * @Operation{"<"} Compares two numbers.
+	 */
+	static function $LT(lvalue EdtInt in, rvalue EdtInt in) returns (EdtBoolean) {@Operation{"<"}};
+
+	/**
+	 * @Operation{">"} Compares two numbers.
+	 */
+	static function $GT(lvalue EdtInt in, rvalue EdtInt in) returns (EdtBoolean) {@Operation{">"}};
+
+	/**
+	 * @Operation{"<="} Compares two numbers.
+	 */
+	static function $LTE(lvalue EdtInt in, rvalue EdtInt in) returns (EdtBoolean) {@Operation{"<="}};
+
+	/**
+	 * @Operation{">="} Compares two numbers.
+	 */
+	static function $GTE(lvalue EdtInt in, rvalue EdtInt in) returns (EdtBoolean) {@Operation{">="}};
+
+	/**
+	 * @Operation{"=="} Compares two numbers.
+	 */
+	static function $EQ(lvalue EdtInt in, rvalue EdtInt in) returns(EdtBoolean) {@Operation{"=="}};
+
+	/**
+	 * @Operation{"!="} Compares two numbers.
+	 */
+	static function $NEQ(lvalue EdtInt in, rvalue EdtInt in) returns(EdtBoolean) {@Operation{"!="}};
+
+	static function asInt(value EdtString in) returns(EdtInt) {@Operation{"narrow"}};
+	static function asInt(value EdtSmallint in) returns(EdtInt) {@Operation{"widen"}};
+	static function asInt(value EdtSmallfloat in) returns(EdtInt) {@Operation{"narrow"}};
+	static function asInt(value EdtDecimal in) returns(EdtInt) {@Operation{"narrow"}};
+	static function asInt(value EdtFloat in) returns(EdtInt) {@Operation{"narrow"}};
+	static function asInt(value EdtBigint in) returns(EdtInt) {@Operation{"narrow"}};
+
+	static function asNumber(value EdtInt in) returns(EglNumber) {@Operation{"widen"}};
+end

@@ -1,0 +1,21 @@
+package eglx.javascript;
+
+import eglx.lang.Property;
+
+ExternalType Job type JavaScriptObject {
+		relativePath = "egl/javascript",
+		javaScriptName = "Job"
+	}
+	
+	name String { @Property { getMethod = "getName", setMethod = "setName" } };
+	runFunction RunFunction { @Property { getMethod = "getRunFunction", setMethod = "setRunFunction" } };
+
+	function schedule();
+	function schedule(duration int in);
+	function repeat(duration int in);
+	function cancel();
+	
+end
+
+Delegate RunFunction()
+end

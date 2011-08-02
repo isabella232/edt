@@ -1,0 +1,129 @@
+package eglx.lang;
+
+import egl.lang.EglNumber;
+import egl.lang.reflect.ClassType;
+import egl.lang.reflect.mof.Operation;
+
+/**
+ * This is the class for bigints, 64-bit signed binary numbers.
+ */
+externalType EdtBigint extends EglNumber type ClassType
+	/**
+	 * @Operation{"+"} A unary plus (has no effect on the numeric value).
+	 */
+	static function $Plus(value EdtBigint in) returns (EdtBigint) {@Operation{"+"}};
+
+	/**
+	 * @Operation{"+"} Adds two numbers.
+	 */
+	static function $Plus(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtBigint) {@Operation{"+"}};
+
+	/**
+	 * @Operation{"-"} Negates the value.
+	 */
+	static function $Minus(value EdtBigint in) returns (EdtBigint) {@Operation{"-"}};
+
+	/**
+	 * @Operation{"-"} Subtracts one number from another.
+	 */
+	static function $Minus(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtBigint) {@Operation{"-"}};
+
+	/**
+	 * @Operation{"*"} Multiplies two numbers.
+	 */
+	static function $Multiply(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtBigint) {@Operation{"*"}};
+
+	/**
+	 * @Operation{"/"} Divides one number by another.
+	 */
+	static function $Divide(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtDecimal) {@Operation{"/"}};
+
+	/**
+	 * @Operation{"%"} Computes the remainder of dividing one number by another.
+	 */
+	static function $Modulus(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtDecimal) {@Operation{"%"}};
+
+	/**
+	 * @Operation{"**"} Computes lvalue to the power of rvalue.
+	 */
+	static function $PowerOf(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtFloat) {@Operation{"**"}};
+
+	/**
+	 * @Operation{"<"} Compares two numbers.
+	 */
+	static function $LT(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtBoolean) {@Operation{"<"}};
+
+	/**
+	 * @Operation{">"} Compares two numbers.
+	 */
+	static function $GT(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtBoolean) {@Operation{">"}};
+
+	/**
+	 * @Operation{"<="} Compares two numbers.
+	 */
+	static function $LTE(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtBoolean) {@Operation{"<="}};
+
+	/**
+	 * @Operation{">="} Compares two numbers.
+	 */
+	static function $GTE(lvalue EdtBigint in, rvalue EdtBigint in) returns (EdtBoolean) {@Operation{">="}};
+
+	/**
+	 * @Operation{"=="} Compares two numbers.
+	 */
+	static function $EQ(lvalue EdtBigint in, rvalue EdtBigint in) returns(EdtBoolean) {@Operation{"=="}};
+
+	/**
+	 * @Operation{"!="} Compares two numbers.
+	 */
+	static function $NEQ(lvalue EdtBigint in, rvalue EdtBigint in) returns(EdtBoolean) {@Operation{"!="}};
+
+	/**
+	 * @Operation{"narrow"} Converts a string to a bigint.  The string is parsed
+	 * as follows: It may begin with an optional + or - sign.  After the sign there
+	 * must be a sequence of one or more digit characters.  Nothing may follow the
+	 * digits.  The digits in the string must be within the valid range for a bigint.
+	 *
+	 * @throws TypeCastException if the string can't be parsed into a bigint.
+	 */
+	static function asBigint(value EdtString in) returns(EdtBigint) {@Operation{"narrow"}};
+
+	/**
+	 * @Operation{"widen"} Converts a smallint to a bigint.
+	 */
+	static function asBigint(value EdtSmallint in) returns(EdtBigint) {@Operation{"widen"}};
+
+	/**
+	 * @Operation{"narrow"} Converts a smallfloat to a bigint.  Digits after the
+	 * decimal point are discarded.
+	 *
+	 * @throws TypeCastException if the smallfloat is out of range for a bigint.
+	 */
+	static function asBigint(value EdtSmallfloat in) returns(EdtBigint) {@Operation{"narrow"}};
+
+	/**
+	 * @Operation{"widen"} Converts an int to a bigint.
+	 */
+	static function asBigint(value EdtInt in) returns(EdtBigint) {@Operation{"widen"}};
+
+	/**
+	 * @Operation{"narrow"} Converts a float to a bigint.  Digits after the
+	 * decimal point are discarded.
+	 *
+	 * @throws TypeCastException if the float is out of range for a bigint.
+	 */
+	static function asBigint(value EdtFloat in) returns(EdtBigint) {@Operation{"narrow"}};
+
+	/**
+	 * @Operation{"narrow"} Converts a decimal to a bigint.  Digits after the
+	 * decimal point are discarded.
+	 *
+	 * @throws TypeCastException if the decimal is out of range for a bigint.
+	 */
+	static function asBigint(value EdtDecimal in) returns(EdtBigint) {@Operation{"narrow"}};
+
+	/**
+	 * @Operation{"widen"} Converts a bigint to a number.
+	 */
+	static function asNumber(value EdtBigint in) returns(EglNumber) {@Operation{"widen"}};
+end

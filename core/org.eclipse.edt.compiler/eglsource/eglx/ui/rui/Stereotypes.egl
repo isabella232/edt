@@ -1,0 +1,27 @@
+package eglx.ui.rui;
+
+Record RUIHandler type Annotation
+	{
+		targets = [ElementKind.handlerPart],
+		@Stereotype
+			{defaultSuperType=View},
+		validationProxy = "org.eclipse.edt.compiler.binding.annotationType.RUIHandlerAnnotationTypeBinding"
+	}
+	
+	onConstructionFunction FunctionMemberRef;
+	includeFile String;
+	cssFile String;
+	title String;
+	theme String; //TODO the initial value is "claro"
+end
+
+Record RUIWidget type Annotation {
+	targets = [ElementKind.handlerPart],
+	@Stereotype{defaultSuperType=Widget},
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.RUIWidgetAnnotationTypeBinding"	
+}
+	tagName String;
+	onConstructionFunction FunctionMemberRef;
+	includeFile String;
+	cssFile String;
+end

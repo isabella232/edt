@@ -1,0 +1,83 @@
+package eglx.lang;
+
+import egl.lang.EglAny;
+import egl.lang.EglNumber;
+import egl.lang.EglString;
+import egl.lang.reflect.ParameterizableType;
+import egl.lang.reflect.mof.Operation;
+
+import org.eclipse.edt.mof.egl.SequenceType;
+
+externalType EdtString extends EglString type ParameterizableType {
+	parameterizedType = SequenceType
+}
+	static function $Plus(lvalue EdtString in, rvalue EdtString in) returns(EdtString) {@Operation{"+"}};
+	static function $Plus(lvalue EdtString in, rvalue EglAny in) returns(EdtString) {@Operation{"+"}};
+	static function $Concat(value EdtString in, rvalue EdtString in) returns (EdtString) {@Operation{"::"}};
+	static function $Concat(value EdtString in, rvalue EglAny in) returns (EdtString) {@Operation{"::"}};
+	static function $ConcatNull(value EdtString in, rvalue EdtString in) returns(EdtString) {@Operation{"?:"}};
+	static function $ConcatNull(value EdtString in, rvalue EglAny in) returns(EdtString) {@Operation{"?:"}};
+
+	/**
+	 * @Operation{"<"} Compares two strings.
+	 */
+	static function $LT(lvalue EdtString in, rvalue EdtString in) returns (EdtBoolean) {@Operation{"<"}};
+
+	/**
+	 * @Operation{">"} Compares two strings.
+	 */
+	static function $GT(lvalue EdtString in, rvalue EdtString in) returns (EdtBoolean) {@Operation{">"}};
+
+	/**
+	 * @Operation{"<="} Compares two strings.
+	 */
+	static function $LTE(lvalue EdtString in, rvalue EdtString in) returns (EdtBoolean) {@Operation{"<="}};
+
+	/**
+	 * @Operation{">="} Compares two strings.
+	 */
+	static function $GTE(lvalue EdtString in, rvalue EdtString in) returns (EdtBoolean) {@Operation{">="}};
+
+	/**
+	 * @Operation{"=="} Compares two strings.
+	 */
+	static function $EQ(lvalue EdtString in, rvalue EdtString in) returns(EdtBoolean) {@Operation{"=="}};
+
+	/**
+	 * @Operation{"!="} Compares two strings.
+	 */
+	static function $NEQ(lvalue EdtString in, rvalue EdtString in) returns(EdtBoolean) {@Operation{"!="}};
+
+	/**
+	 * @Operation{"[:"} Returns the substring starting at fromIndex and ending at toIndex.
+	 * @throws InvalidIndexException  if either index is out of range, or fromIndex is >= toIndex.
+	 */
+	static function $Substr(value EdtString in, fromIndex EdtInt in, toIndex EdtInt in) returns(EdtString) {@Operation{"[:"}};
+	
+	static function asNumber(value EdtString in) returns(EglNumber) {@Operation{"narrow"}};
+	
+	static function asString(value EdtBigint in) returns (EdtString) {@Operation{"widen"}};
+	static function asString(value EdtBoolean in) returns (EdtString) {@Operation{"widen"}};
+	static function asString(value EdtDate in) returns (EdtString) {@Operation{"widen"}};
+	static function asString(value EdtDecimal in) returns (EdtString) {@Operation{"widen"}};
+	static function asString(value EdtFloat in) returns (EdtString) {@Operation{"widen"}};
+	static function asString(value EdtInt in) returns (EdtString) {@Operation{"widen"}};
+	static function asString(value EdtSmallfloat in) returns (EdtString) {@Operation{"widen"}};
+	static function asString(value EdtSmallint in) returns (EdtString) {@Operation{"widen"}};
+	static function asString(value EdtTimestamp in) returns (EdtString) {@Operation{"widen"}};
+	
+	function length() returns(EdtInt);
+	function clip() returns(EdtString);
+	function clipLeading() returns(EdtString);
+	function trim() returns(EdtString);
+	function toUpperCase() returns(EdtString);
+	function toLowerCase() returns(EdtString);
+	function indexOf(substr EdtString in) returns (EdtInt);
+	function indexOf(substr EdtString in, startIndex EdtInt in) returns (EdtInt);
+	function lastIndexOf(substr EdtString in) returns (EdtInt);
+	function endsWith(suffix EdtString in) returns(EdtBoolean);
+	function startsWith(prefix EdtString in) returns(EdtBoolean);
+	// replace all occurances of target
+	function replaceStr(target EdtString in, replacement EdtString in) returns(EdtString);
+	function charCodeAt(index EdtInt in) returns(EdtInt);
+end

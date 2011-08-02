@@ -1,0 +1,9 @@
+package egl.lang;
+
+import egl.lang.reflect.ClassType;
+
+/**
+ * Text is the supertype of every type which represents a collection of characters.
+ */
+externalType Text extends Value type ClassType {isAbstract=yes}
+end

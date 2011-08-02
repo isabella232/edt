@@ -1,0 +1,9 @@
+package egl.lang.reflect;
+
+record EClassProxy type Annotation {
+	targets = [ElementKind.ExternalTypePart],
+	@PartType{"org.eclipse.edt.mof.egl.EClassProxy"},
+	@Stereotype
+}
+	proxiedEClass TypeRef;
+end

@@ -1,9 +1,9 @@
 package eglx.http;
 
 record HttpResponse
-	status int?;
-  	statusMessage string?;
-	encoding eglx._service.Encoding?;
+	status int;
+  	statusMessage string;
+	encoding eglx.services.Encoding=eglx.services.Encoding.USE_CONTENTTYPE;
 	charset string?;
 	contentType string?;
 	headers dictionary;

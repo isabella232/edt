@@ -1,0 +1,39 @@
+package eglx.lang;
+
+import egl.lang.EglAny;
+import egl.lang.EglBoolean;
+import egl.lang.EglNumber;
+import egl.lang.Value;
+import egl.lang.reflect.ClassType;
+import egl.lang.reflect.mof.Operation;
+
+/**
+ * This is the class for booleans: true/false values.
+ */
+externalType EdtBoolean extends EglBoolean type ClassType
+
+	/**
+	 * @Operation{"=="} Compares two booleans.
+	 */
+	static function $EQ(lvalue EdtBoolean in, rvalue EdtBoolean in) returns(EdtBoolean) {@Operation{"=="}};
+
+	/**
+	 * @Operation{"!="} Compares two booleans.
+	 */
+	static function $NEQ(lvalue EdtBoolean in, rvalue EdtBoolean in) returns(EdtBoolean) {@Operation{"!="}};
+
+	/**
+	 * @Operation{"&&"} Returns true when both operands are true.
+	 */
+	static function $AND(lvalue EdtBoolean in, rvalue EdtBoolean in) returns(EdtBoolean) {@Operation{"&&"}};
+
+	/**
+	 * @Operation{"||"} Returns true when either operand is true.
+	 */
+	static function $OR(lvalue EdtBoolean in, rvalue EdtBoolean in) returns(EdtBoolean) {@Operation{"||"}};
+
+	/**
+	 * @Operation{"!"} Negates a boolean.
+	 */
+	static function $NOT(value EdtBoolean in) returns (EdtBoolean) {@Operation{"!"}};
+end

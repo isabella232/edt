@@ -1,0 +1,48 @@
+package eglx.lang;
+
+import egl.lang.NativeType;
+
+/**
+ * Utility functions related to date/time processing.
+ */
+externaltype DateTimeLib type NativeType
+	/**
+	 * Creates a date from an int by interpreting the int's value as a Gregorian
+	 * date.  Gregorian dates use the format yyyyMMdd, so December 31, 1899 is
+	 * represented by the number 18991231.
+	 *
+	 * @param gregorianDateAsInteger  the Gregorian date value.
+	 * @return a new date.
+	 */
+	static function dateFromGregorian(gregorianDateAsInteger EdtInt in) returns (EdtDate);
+	
+	/**
+	 * Creates a date from an int by interpreting the int's value as a Julian date.
+	 * Julian dates use the format yyyyDDD, so the number 1899356 represents
+	 * December 31, 1899.
+	 *
+	 * @param julianDateAsInteger  the Julian date value.
+	 * @return a new date.
+	 */
+	static function dateFromJulian(julianDateAsInteger EdtInt in) returns (EdtDate);
+	
+	/**
+	 * Creates a date from an int by interpreting the int's value as a number of
+	 * days after December 31, 1899.  Negative numbers are interpreted as a number
+	 * of days before December 31, 1899.
+	 *
+	 * @param numberOfDays  the number of days after December 31, 1899.
+	 * @return a new date.
+	 */
+	static function dateFromInt(numberOfDays EdtInt in) returns (EdtDate);
+	
+	/**
+	 * Creates a date from ints representing a month, day, and year.
+	 *
+	 * @param monthValue  a value from 1 to 12, representing the month.
+	 * @param dayValue    a value representing the day of the month, from 1 to 31 (or less, depending on the month).
+	 * @param yearValue   the year.
+	 * @return a new date.
+	 */
+	static function mdy(monthValue EdtInt in, dayValue EdtInt in, yearValue EdtInt in) returns(EdtDate);
+end

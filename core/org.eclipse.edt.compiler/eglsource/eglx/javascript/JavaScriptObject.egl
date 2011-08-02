@@ -1,0 +1,21 @@
+package eglx.javascript;
+
+import eglx.lang.Property;
+
+Record JavaScriptObject type Annotation
+	{ 
+		targets = [	ElementKind.ExternalTypePart ],
+	 
+		@Stereotype
+			{
+		  		// State annotations that may be placed on
+	 	 		// members of an ExternalType definition
+	 	 		memberAnnotations = [ Property ]
+			},
+		validationProxy = "org.eclipse.edt.compiler.binding.annotationType.JavaScriptObjectAnnotationTypeBinding"
+	}
+
+	relativePath String;
+	javaScriptName String;
+	includeFile String;
+end

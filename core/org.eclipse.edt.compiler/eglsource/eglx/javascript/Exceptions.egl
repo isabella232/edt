@@ -1,0 +1,7 @@
+package eglx.javascript;
+
+import egl.lang.Exception;
+
+Record JavaScriptObjectException type Exception
+	name String;
+end

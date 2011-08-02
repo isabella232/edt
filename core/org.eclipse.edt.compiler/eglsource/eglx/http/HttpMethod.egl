@@ -1,7 +1,5 @@
 package eglx.http;
 
-
-
 enumeration HttpMethod
 	_GET = 1,
 	POST = 2,

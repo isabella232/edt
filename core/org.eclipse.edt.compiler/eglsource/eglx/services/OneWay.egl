@@ -1,0 +1,10 @@
+package eglx.services;
+
+Record OneWay type Annotation
+{
+	targets = [
+		ElementKind.functionMbr
+	]
+}
+	value boolean = yes;
+end

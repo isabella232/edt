@@ -1,0 +1,17 @@
+package eglx.xml.binding.annotation;
+
+Record XMLType type Annotation
+{
+	targets = [
+		ElementKind.functionMbr,
+		ElementKind.libraryPart,
+		ElementKind.programPart,
+		ElementKind.handlerPart,
+		ElementKind.recordPart,
+		ElementKind.servicePart,
+		ElementKind.interfacePart
+	]
+}
+	name string;
+	namespace string;
+end

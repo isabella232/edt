@@ -1,0 +1,8 @@
+package eglx.services;
+
+Enumeration ServiceKind
+	EGL = 1,
+	WEB = 2,
+	NATIVE = 3,
+	REST = 4
+end

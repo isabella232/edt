@@ -24,7 +24,7 @@ public class ArrayDictionaryBinding extends PartBinding {
 	public static ArrayDictionaryBinding INSTANCE = new ArrayDictionaryBinding();
 	
 	private ArrayDictionaryBinding() {
-		super(InternUtil.intern(SystemEnvironmentPackageNames.EGL_CORE), InternUtil.internCaseSensitive(IEGLConstants.MIXED_ARRAYDICTIONARY_STRING));
+		super(InternUtil.intern(SystemEnvironmentPackageNames.EGLX_LANG), InternUtil.internCaseSensitive(IEGLConstants.MIXED_ARRAYDICTIONARY_STRING));
 	}
 
 	public int getKind() {

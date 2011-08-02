@@ -1,0 +1,11 @@
+package egl.lang.reflect;
+
+record ClassType type Annotation {
+	targets = [ElementKind.ExternalTypePart],
+	@PartType{"org.eclipse.edt.mof.egl.EGLClass"},
+	@Stereotype
+}
+	name string;
+	isAbstract boolean;
+	typeParameters string[];
+end

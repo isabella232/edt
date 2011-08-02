@@ -1,0 +1,29 @@
+package eglx.lang;
+
+import egl.lang.NativeType;
+
+externalType SysLib type NativeType
+	
+	static function callCmd(commandString string in);
+	static function startCmd(commandString string in);
+	
+	static function commit();
+	static function rollback();
+	
+	static function getProperty(textVariableOrLiteral string in) returns(string?);
+	
+	static function setLocale(languageCode string in);
+	static function setLocale(languageCode string in, countryCode string in);
+	static function setLocale(languageCode string in, countryCode string in, variant string in);
+
+	static function sort(array any[] in, sortFunction SortFunction);
+	
+	static function wait(seconds decimal(9,2) in);
+
+	static function writeStderr(text string in);
+	static function writeStdout(text string in);
+end
+
+Delegate
+	SortFunction(a any in, b any in) returns (int)
+end

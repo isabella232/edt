@@ -1,0 +1,86 @@
+package eglx.lang;
+
+import egl.lang.EglNumber;
+import egl.lang.reflect.ClassType;
+import egl.lang.reflect.mof.Operation;
+
+externalType EdtSmallint extends EglNumber type ClassType
+	/**
+	 * @Operation{"+"} A unary plus (has no effect on the numeric value).
+	 */
+	static function $Plus(value EdtSmallint in) returns (EdtSmallint) {@Operation{"+"}};
+
+	/**
+	 * @Operation{"+"} Adds two numbers.
+	 */
+	static function $Plus(lvalue EdtSmallint in, rvalue EdtSmallint in) returns (EdtSmallint) {@Operation{"+"}};
+
+	/**
+	 * @Operation{"-"} Negates the value.
+	 */
+	static function $Minus(value EdtSmallint in) returns (EdtSmallint) {@Operation{"-"}};
+
+	/**
+	 * @Operation{"-"} Subtracts one number from another.
+	 */
+	static function $Minus(lvalue EdtSmallint in, rvalue EdtSmallint in) returns (EdtSmallint) {@Operation{"-"}};
+
+	/**
+	 * @Operation{"*"} Multiplies two numbers.
+	 */
+	static function $Multiply(lvalue EdtSmallint in, rvalue EdtSmallint in) returns (EdtSmallint) {@Operation{"*"}};
+
+	/**
+	 * @Operation{"/"} Divides one number by another.
+	 */
+	static function $Divide(lvalue EdtSmallint in, rvalue EdtSmallint in) returns (EdtDecimal) {@Operation{"/"}};
+
+	/**
+	 * @Operation{"%"} Computes the remainder of dividing one number by another.
+	 */
+	static function $Modulus(lvalue EdtSmallint in, rvalue EdtSmallint in) returns (EdtDecimal) {@Operation{"%"}};
+
+	/**
+	 * @Operation{"**"} Computes lvalue to the power of rvalue.
+	 */
+	static function $PowerOf(lvalue EdtSmallint in, rvalue EdtSmallint in) returns (EdtFloat) {@Operation{"**"}};
+
+	/**
+	 * @Operation{"<"} Compares two numbers.
+	 */
+	static function $LT(lvalue EdtSmallint in, rvalue EdtSmallint in) returns (EdtBoolean) {@Operation{"<"}};
+
+	/**
+	 * @Operation{">"} Compares two numbers.
+	 */
+	static function $GT(lvalue EdtSmallint in, rvalue EdtSmallint in) returns (EdtBoolean) {@Operation{">"}};
+
+	/**
+	 * @Operation{"<="} Compares two numbers.
+	 */
+	static function $LTE(lvalue EdtSmallint in, rvalue EdtSmallint in) returns (EdtBoolean) {@Operation{"<="}};
+
+	/**
+	 * @Operation{">="} Compares two numbers.
+	 */
+	static function $GTE(lvalue EdtSmallint in, rvalue EdtSmallint in) returns (EdtBoolean) {@Operation{">="}};
+
+	/**
+	 * @Operation{"=="} Compares two numbers.
+	 */
+	static function $EQ(lvalue EdtSmallint in, rvalue EdtSmallint in) returns(EdtBoolean) {@Operation{"=="}};
+
+	/**
+	 * @Operation{"!="} Compares two numbers.
+	 */
+	static function $NEQ(lvalue EdtSmallint in, rvalue EdtSmallint in) returns(EdtBoolean) {@Operation{"!="}};
+
+	static function asNumber(value EdtSmallint in) returns(EglNumber) {@Operation{"widen"}};
+
+	static function asSmallint(value EdtDecimal in) returns(EdtSmallint) {@Operation{"narrow"}};
+	static function asSmallint(value EdtFloat in) returns(EdtSmallint) {@Operation{"narrow"}};
+	static function asSmallint(value EdtInt in) returns(EdtSmallint) {@Operation{"narrow"}};
+	static function asSmallint(value EdtString in) returns(EdtSmallint) {@Operation{"narrow"}};
+	static function asSmallint(value EdtSmallfloat in) returns(EdtSmallint) {@Operation{"narrow"}};
+	static function asSmallint(value EdtBigint in) returns(EdtSmallint) {@Operation{"narrow"}};
+end

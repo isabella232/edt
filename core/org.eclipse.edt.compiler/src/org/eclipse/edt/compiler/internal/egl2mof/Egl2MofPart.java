@@ -687,7 +687,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 					superType = (StructPart)mofST;
 				}
 				if (superType == null) {
-					String typeSignature = Type_AnyObject;
+					String typeSignature = Type_EGLAny;
 					if (part instanceof Record)
 						typeSignature = Type_AnyRecord;
 					else if (part instanceof StructuredRecord) {

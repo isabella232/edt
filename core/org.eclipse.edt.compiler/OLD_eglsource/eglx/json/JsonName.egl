@@ -1,0 +1,14 @@
+package eglx.json;
+
+Record JsonName type Annotation
+{ 
+	targets = [ 
+		ElementKind.fieldMbr,
+		ElementKind.structuredFieldMbr
+	], 
+	eglIsSystemAnnotation = yes
+}
+  value string;
+end
+
+

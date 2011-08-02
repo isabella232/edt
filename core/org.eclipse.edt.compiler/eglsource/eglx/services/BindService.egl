@@ -1,0 +1,10 @@
+package eglx.services;
+
+Record BindService type Annotation
+{
+	targets = [elementKind.fieldMbr]
+//	targetTypes = [InterfacePart, ServicePart]
+}
+  	bindingKey string;
+end
+

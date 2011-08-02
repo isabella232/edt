@@ -1,0 +1,7 @@
+package egl.lang;
+
+Record NativeType type Annotation { 
+	targets = [ElementKind.ExternalTypePart],
+	@Stereotype { memberAnnotations = [EventListener] }
+}
+end

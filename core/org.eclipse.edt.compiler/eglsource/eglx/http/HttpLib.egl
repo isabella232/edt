@@ -12,29 +12,17 @@
 package eglx.http;
 
 import egl.lang.reflect.InterfacePart;
+import egl.lang.NativeType;
 
-library HttpLib
-{
-    eglIsSystemPart = yes
-}
-    
-    function convertFromURLEncoded(urlEncoded string in) returns (string)
-        {eglSystemConstant = 148}
-    end
+externaltype HttpLib type NativeType   
+    static function convertFromURLEncoded(urlEncoded string in) returns (string);
 
-    function convertToURLEncoded(eglType string in) returns(string)
-        {eglSystemConstant = 149}
-    end
+    static function convertToURLEncoded(eglType string in) returns(string);
     
-    function setHTTPBasicAuthentication(http eglx.http.HttpREST in, userID string in, userPassword string in)
-    end
+    static function setHTTPBasicAuthentication(http eglx.http.HttpREST in, userID string in, userPassword string in);
     
-    function setHTTPBasicAuthentication(http eglx.http.HttpSOAP in, userID string in, userPassword string in)
-    end
-    
-    function setProxyBasicAuthentication( userID string in, userPassword string in )
-//
-    end
+    static function setHTTPBasicAuthentication(http eglx.http.HttpSOAP in, userID string in, userPassword string in);
         
+    static function setProxyBasicAuthentication( userID string in, userPassword string in );        
 end
 

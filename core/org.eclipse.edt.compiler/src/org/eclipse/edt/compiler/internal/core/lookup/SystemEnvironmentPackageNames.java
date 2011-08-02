@@ -19,6 +19,7 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 public  class SystemEnvironmentPackageNames {
     
     public static final String[] EGL_CORE = InternUtil.intern(new String[] {"egl", "core"});
+    public static final String[] EGLX_LANG = InternUtil.intern(new String[] {"eglx", "lang"});
     public static final String[] EGL_UI_CONSOLE = InternUtil.intern(new String[] {"egl", "ui", "console"});
     public static final String[] EGL_REPORTS_JASPER = InternUtil.intern(new String[] {"egl", "reports", "jasper"});
     public static final String[] EGLX_DLI = InternUtil.intern(new String[] {"eglx", "dli"});

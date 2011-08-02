@@ -1,0 +1,81 @@
+package egl.lang;
+
+import egl.lang.reflect.ClassType;
+import egl.lang.reflect.mof.Operation;
+
+externalType EglNumber extends Value type ClassType
+	/**
+	 * @Operation{"+"} A unary plus (has no effect on the numeric value).
+	 */
+	static function $Plus(value EglNumber in) returns (EglNumber) {@Operation{"+"}};
+
+	/**
+	 * @Operation{"+"} Adds two numbers.
+	 */
+	static function $Plus(lvalue EglNumber in, rvalue EglNumber in) returns (EglNumber) {@Operation{"+"}};
+
+	/**
+	 * @Operation{"-"} Negates the value.
+	 */
+	static function $Minus(value EglNumber in) returns (EglNumber) {@Operation{"-"}};
+
+	/**
+	 * @Operation{"-"} Subtracts one number from another.
+	 */
+	static function $Minus(lvalue EglNumber in, rvalue EglNumber in) returns (EglNumber) {@Operation{"-"}};
+
+	/**
+	 * @Operation{"*"} Multiplies two numbers.
+	 */
+	static function $Multiply(lvalue EglNumber in, rvalue EglNumber in) returns (EglNumber) {@Operation{"*"}};
+
+	/**
+	 * @Operation{"/"} Divides one number by another.
+	 */
+	static function $Divide(lvalue EglNumber in, rvalue EglNumber in) returns (EglNumber) {@Operation{"/"}};
+
+	/**
+	 * @Operation{"%"} Computes the remainder of dividing one number by another.
+	 */
+	static function $Modulus(lvalue EglNumber in, rvalue EglNumber in) returns (EglNumber) {@Operation{"%"}};
+
+	/**
+	 * @Operation{"**"} Computes lvalue to the power of rvalue.
+	 */
+	static function $PowerOf(lvalue EglNumber in, rvalue EglNumber in) returns (EglNumber) {@Operation{"**"}};
+
+	/**
+	 * @Operation{"<"} Compares two numbers.
+	 */
+	static function $LT(lvalue EglNumber in, rvalue EglNumber in) returns (EglBoolean) {@Operation{"<"}};
+
+	/**
+	 * @Operation{">"} Compares two numbers.
+	 */
+	static function $GT(lvalue EglNumber in, rvalue EglNumber in) returns (EglBoolean) {@Operation{">"}};
+
+	/**
+	 * @Operation{"<="} Compares two numbers.
+	 */
+	static function $LTE(lvalue EglNumber in, rvalue EglNumber in) returns (EglBoolean) {@Operation{"<="}};
+
+	/**
+	 * @Operation{">="} Compares two numbers.
+	 */
+	static function $GTE(lvalue EglNumber in, rvalue EglNumber in) returns (EglBoolean) {@Operation{">="}};
+
+	/**
+	 * @Operation{"=="} Compares two numbers.
+	 */
+	static function $EQ(lvalue EglNumber in, rvalue EglNumber in) returns(EglBoolean) {@Operation{"=="}};
+
+	/**
+	 * @Operation{"!="} Compares two numbers.
+	 */
+	static function $NEQ(lvalue EglNumber in, rvalue EglNumber in) returns(EglBoolean) {@Operation{"!="}};
+
+	/**
+	 * @Operation{"widen"} Converts an int to a number.
+	 */
+	static function asNumber(value EglInt in) returns(EglNumber) {@Operation{"widen"}};
+end

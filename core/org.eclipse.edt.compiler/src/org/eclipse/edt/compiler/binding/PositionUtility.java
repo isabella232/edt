@@ -44,7 +44,7 @@ public class PositionUtility {
     }
     
     public void checkPosition() {
-    	ITypeBinding positionType = currentScope.findPackage(InternUtil.intern("egl")).resolvePackage(InternUtil.intern("ui")).resolveType(InternUtil.intern("Position"));
+    	ITypeBinding positionType = currentScope.findPackage(InternUtil.intern("eglx")).resolvePackage(InternUtil.intern("ui")).resolveType(InternUtil.intern("Position"));
         if(IBinding.NOT_FOUND_BINDING == positionType) {
         	return;
         }

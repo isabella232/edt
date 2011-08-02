@@ -3,14 +3,13 @@ package eglx.rest;
 Record PostRest type Annotation
 { 
 	targets = [ ElementKind.functionMbr], 
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.PostRestAnnotationTypeBinding",
-	eglIsSystemAnnotation = yes
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.PostRestAnnotationTypeBinding"
 }
 	uriTemplate string?;
-	requestFormat Encoding?;
-	requestCharset string? = "UTF-8";
-	requestContentType string?;
-	responseFormat Encoding?;
+	requestFormat eglx.services.Encoding?;
+	requestCharset string = "UTF-8";
+	requestContentType string?;//default based on encoding
+	responseFormat eglx.services.Encoding?;
 	responseCharset string?;
-	responseContentType string?;
+	responseContentType string?;//default based on encoding
 end

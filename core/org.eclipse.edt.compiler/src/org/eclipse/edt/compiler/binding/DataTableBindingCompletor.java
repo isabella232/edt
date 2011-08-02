@@ -52,7 +52,7 @@ public class DataTableBindingCompletor extends FixedStructureBindingCompletor {
 
     protected IPartSubTypeAnnotationTypeBinding getDefaultSubType() {
     	try {
-    		return new AnnotationTypeBindingImpl((FlexibleRecordBinding) currentScope.findPackage(InternUtil.intern("egl")).resolvePackage(InternUtil.intern("core")).resolveType(InternUtil.intern("BasicTable")), tableBinding);
+    		return new AnnotationTypeBindingImpl((FlexibleRecordBinding) currentScope.findPackage(InternUtil.intern("eglx")).resolvePackage(InternUtil.intern("lang")).resolveType(InternUtil.intern("BasicTable")), tableBinding);
     	}
     	catch(UnsupportedOperationException e) {
     		return null;
