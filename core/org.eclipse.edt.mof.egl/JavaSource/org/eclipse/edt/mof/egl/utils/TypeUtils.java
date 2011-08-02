@@ -439,7 +439,9 @@ public class TypeUtils implements MofConversion {
 						for (int j=0; j<f1.getParameters().size(); j++) {
 							FunctionParameter parm1 = f1.getParameters().get(j);
 							FunctionParameter parm2 = func.getParameters().get(j);
-							if (!parm1.getType().equals(parm2.getType()))
+							if ((parm1.getType() == null && parm2.getType() != null) || (parm1.getType() != null && parm2.getType() == null))
+								break;
+							if ((parm1.getType() != null) && !parm1.getType().equals(parm2.getType()))
 								break;
 							if (!parm1.getParameterKind().equals(parm2.getParameterKind()))
 								break;
