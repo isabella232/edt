@@ -74,7 +74,7 @@ public class DefaultVariableAdapter implements IVariableAdapter
 	{
 		if ( supportedTypes == null )
 		{
-			supportedTypes = new HashMap<String, Object>( 9 );
+			supportedTypes = new HashMap<String, Object>( 11 );
 			supportedTypes.put( "java.lang.Integer", null ); //$NON-NLS-1$
 			supportedTypes.put( "java.lang.Long", null ); //$NON-NLS-1$
 			supportedTypes.put( "java.lang.Short", null ); //$NON-NLS-1$
