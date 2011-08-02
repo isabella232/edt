@@ -232,7 +232,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"if"				{ return symbol(NodeTypes.IF); }
 	"implements"		{ return symbol(NodeTypes.IMPLEMENTS); }
 	"import"			{ return symbol(NodeTypes.IMPORT); }
-//	"in"				{ return symbol(NodeTypes.IN); }
+	"in"				{ return symbol(NodeTypes.IN); }
 	"insert"			{ return symbol(NodeTypes.INSERT); }
 	"interface"			{ return symbol(NodeTypes.INTERFACE); }
 	"into"				{ return symbol(NodeTypes.INTO); }
