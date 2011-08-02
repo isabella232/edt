@@ -3,7 +3,6 @@ package eglx.lang;
 import egl.lang.EglAny;
 import egl.lang.EglBoolean;
 import egl.lang.EglNumber;
-import egl.lang.Value;
 import egl.lang.reflect.ClassType;
 import egl.lang.reflect.mof.Operation;
 
