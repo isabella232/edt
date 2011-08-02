@@ -121,6 +121,13 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	public static final String DESCRIPTION = "description"; //$NON-NLS-1$
 	public static final String PROVIDER = "provider"; //$NON-NLS-1$
 	public static final String PARENT_GEN_ID = "parentGeneratorId"; //$NON-NLS-1$
+
+
+	/**
+	 * Control flag for features 
+	 */
+	public static final boolean SUPPORT_SOAP = false;
+	
 	
 	/**
 	 * ID used as a qualified for all EDTRuntimeContainers.
