@@ -704,8 +704,14 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.NewExpression newExpression) {
 		NewExpression expr = factory.createNewExpression();
 		ITypeBinding type = newExpression.resolveTypeBinding();
+		if (!Binding.isValidBinding(type)) {
+			stack.push(expr);
+			return false;
+		}
+		
 		Type mofType = (Type)mofTypeFor(type);
 		expr.setId(mofType.getTypeSignature());
+		
 		setElementInformation(newExpression, expr);
 		for (Node node : (List<Node>)newExpression.getArguments()) {
 			node.accept(this);

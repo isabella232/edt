@@ -713,6 +713,11 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 
 	protected EObject mofValueFrom(IAnnotationBinding binding) {
+		
+		if (!Binding.isValidBinding(binding)) {
+			return null;
+		}
+		
 		EObject value;
 		if (binding.getAnnotationType() instanceof AnnotationTypeBindingImpl) {
 			EClass typeClass = (EClass)mofTypeFor(binding.getAnnotationType());
