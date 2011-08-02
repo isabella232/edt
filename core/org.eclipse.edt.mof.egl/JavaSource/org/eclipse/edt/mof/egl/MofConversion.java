@@ -49,20 +49,20 @@ public interface MofConversion {
 	
 	// EGL Base Types without keyScheme prefix
 	String Type_Any = EGL_lang_package+".EglAny";
-	String Type_Int = EGLX_lang_package+".EdtInt";
-	String Type_Smallint = EGLX_lang_package+".EdtSmallint";
-	String Type_Bigint = EGLX_lang_package+".EdtBigint";
-	String Type_Float = EGLX_lang_package+".EdtFloat";
-	String Type_Smallfloat = EGLX_lang_package+".EdtSmallfloat";
-	String Type_Decimal = EGLX_lang_package+".EdtDecimal";
+	String Type_Int = EGLX_lang_package+".EInt";
+	String Type_Smallint = EGLX_lang_package+".ESmallint";
+	String Type_Bigint = EGLX_lang_package+".EBigint";
+	String Type_Float = EGLX_lang_package+".EFloat";
+	String Type_Smallfloat = EGLX_lang_package+".ESmallfloat";
+	String Type_Decimal = EGLX_lang_package+".EDecimal";
 	String Type_Number = EGL_lang_package+".EglNumber";
-	String Type_Boolean = EGLX_lang_package+".EdtBoolean";
-	String Type_String = EGLX_lang_package+".EdtString";
+	String Type_Boolean = EGLX_lang_package+".EBoolean";
+	String Type_String = EGLX_lang_package+".EString";
 	String Type_NULL = EGL_lang_package+".NullType";
-	String Type_Date = EGLX_lang_package+".EdtDate";
-	String Type_Time = EGLX_lang_package+".EdtTime";
-	String Type_Timestamp = EGLX_lang_package+".EdtTimestamp";
-	String Type_List = EGL_lang_package+".List";
+	String Type_Date = EGLX_lang_package+".EDate";
+	String Type_Time = EGLX_lang_package+".ETime";
+	String Type_Timestamp = EGLX_lang_package+".ETimestamp";
+	String Type_List = EGL_lang_package+".EglList";
 	String Type_Dictionary = EGLX_lang_package+".Dictionary";
 	// Below here are types not supported in EDT 0.7.
 	String Type_Num = EGL_lang_package+".AnyNum";
