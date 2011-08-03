@@ -83,6 +83,12 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 		return asSmallfloat(EDecimal.asDecimal(EString.asString(value, length)));
 	}
 
+	public static Float divide(Float op1, Float op2) throws JavartException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return op1 / op2;
+	}
+
 	public static int compareTo(Float op1, Float op2) throws JavartException {
 		if (op1 == null || op2 == null)
 			throw new NullValueException();

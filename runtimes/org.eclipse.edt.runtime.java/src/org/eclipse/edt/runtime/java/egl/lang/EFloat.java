@@ -83,6 +83,12 @@ public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 		return asFloat(EDecimal.asDecimal(EString.asString(value, length)));
 	}
 
+	public static Double divide(Double op1, Double op2) throws JavartException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return op1 / op2;
+	}
+
 	public static int compareTo(Double op1, Double op2) throws JavartException {
 		if (op1 == null || op2 == null)
 			throw new NullValueException();
