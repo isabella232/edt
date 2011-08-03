@@ -212,7 +212,7 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 			new UseType[]		{UseType.IN},
 			0
 		);
-	public static final SystemFunctionBinding ISLIKE = SystemLibrary.createSystemFunction(
+	public static final SystemFunctionBinding ISLIKE1 = SystemLibrary.createSystemFunction(
 			"isLike",
 			null,
 			PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN),
@@ -221,7 +221,24 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 			new UseType[]		{UseType.IN},
 			0
 		);
-	public static final SystemFunctionBinding MATCHESPATTERN = SystemLibrary.createSystemFunction(
+	public static final SystemFunctionBinding ISLIKE2 = SystemLibrary.createSystemFunction(
+			"isLike",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN),
+			new String[]		{"value", "esc"},
+			new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.STRING), PrimitiveTypeBinding.getInstance(Primitive.STRING)},
+			new UseType[]		{UseType.IN, UseType.IN},
+			0
+		);
+
+	public static final OverloadedFunctionSet ISLIKE3 = new OverloadedFunctionSet();
+	static {
+		ISLIKE3.setName(ISLIKE1.getCaseSensitiveName());
+		ISLIKE3.addNestedFunctionBinding(new NestedFunctionBinding(ISLIKE1.getCaseSensitiveName(), null, ISLIKE1));
+		ISLIKE3.addNestedFunctionBinding(new NestedFunctionBinding(ISLIKE2.getCaseSensitiveName(), null, ISLIKE2));
+	}
+
+	public static final SystemFunctionBinding MATCHESPATTERN1 = SystemLibrary.createSystemFunction(
 			"matchesPattern",
 			null,
 			PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN),
@@ -231,6 +248,22 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 			0
 		);
 
+	public static final SystemFunctionBinding MATCHESPATTERN2 = SystemLibrary.createSystemFunction(
+			"matchesPattern",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN),
+			new String[]		{"value", "esc"},
+			new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.STRING), PrimitiveTypeBinding.getInstance(Primitive.STRING)},
+			new UseType[]		{UseType.IN, UseType.IN},
+			0
+		);
+
+	public static final OverloadedFunctionSet MATCHESPATTERN3 = new OverloadedFunctionSet();
+	static {
+		MATCHESPATTERN3.setName(MATCHESPATTERN1.getCaseSensitiveName());
+		MATCHESPATTERN3.addNestedFunctionBinding(new NestedFunctionBinding(MATCHESPATTERN1.getCaseSensitiveName(), null, MATCHESPATTERN1));
+		MATCHESPATTERN3.addNestedFunctionBinding(new NestedFunctionBinding(MATCHESPATTERN2.getCaseSensitiveName(), null, MATCHESPATTERN2));
+	}
 	
 	protected static final Map<String, IDataBinding> SYSTEM_FUNCTIONS = new HashMap();
 	static {		
@@ -246,8 +279,8 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 		SYSTEM_FUNCTIONS.put(STARTSWITH.getName(), new NestedFunctionBinding(STARTSWITH.getName(), null, STARTSWITH));
 		SYSTEM_FUNCTIONS.put(REPLACESTR.getName(), new NestedFunctionBinding(REPLACESTR.getName(), null, REPLACESTR));
 		SYSTEM_FUNCTIONS.put(CHARCODEAT.getName(), new NestedFunctionBinding(CHARCODEAT.getName(), null, CHARCODEAT));
-		SYSTEM_FUNCTIONS.put(ISLIKE.getName(), new NestedFunctionBinding(ISLIKE.getName(), null, ISLIKE));
-		SYSTEM_FUNCTIONS.put(MATCHESPATTERN.getName(), new NestedFunctionBinding(MATCHESPATTERN.getName(), null, MATCHESPATTERN));
+		SYSTEM_FUNCTIONS.put(ISLIKE3.getName(), ISLIKE3);
+		SYSTEM_FUNCTIONS.put(MATCHESPATTERN3.getName(), MATCHESPATTERN3);
 	}
 
     
