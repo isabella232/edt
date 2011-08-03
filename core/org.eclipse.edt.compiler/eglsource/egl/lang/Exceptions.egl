@@ -45,3 +45,10 @@ record DynamicAccessException type Exception
 	 */
 	key string;
 end
+
+/**
+ * InvalidPatternExceptions are thrown when a malformed pattern is used while
+ * formatting, parsing, or pattern matching with a string.
+ */
+record InvalidPatternException type Exception
+end
