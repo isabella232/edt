@@ -673,10 +673,10 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	private void setDefaultSuperType(StructPart part) {
 		if (part.getSuperTypes().isEmpty()) {
 			Stereotype stereotype = part.getStereotype();
+			StructPart superType = null;
 			if (stereotype != null) {
 				
 				MofSerializable mofST = ((StereotypeType)stereotype.getEClass()).getDefaultSuperType();
-				StructPart superType = null;
 				
 				if (mofST instanceof ProxyEClass) {
 					mofST = resolveProxy((ProxyEClass) mofST);
@@ -686,25 +686,25 @@ abstract class Egl2MofPart extends Egl2MofBase {
 				if (mofST instanceof StructPart && !mofST.getMofSerializationKey().equalsIgnoreCase(part.getMofSerializationKey())) {
 					superType = (StructPart)mofST;
 				}
-				if (superType == null) {
-					String typeSignature = Type_EGLAny;
-					if (part instanceof Record)
-						typeSignature = Type_AnyRecord;
-					else if (part instanceof StructuredRecord) {
-						typeSignature = Type_AnyStruct;
-					}
-					else if (part instanceof AnnotationType) {
-						typeSignature = Type_Annotation;
-					}
-					else if (part instanceof StereotypeType) {
-						typeSignature = Type_Stereotype;
-					}
-					superType = (StructPart)getMofSerializable(typeSignature);
-				}
-				if (superType != null)
-					part.getSuperTypes().add(superType);
-				
 			}
+			if (superType == null) {
+				String typeSignature = Type_EGLAny;
+				if (part instanceof Record)
+					typeSignature = Type_AnyRecord;
+				else if (part instanceof StructuredRecord) {
+					typeSignature = Type_AnyStruct;
+				}
+				else if (part instanceof AnnotationType) {
+					typeSignature = Type_Annotation;
+				}
+				else if (part instanceof StereotypeType) {
+					typeSignature = Type_Stereotype;
+				}
+				superType = (StructPart)getMofSerializable(typeSignature);
+			}
+			if (superType != null)
+				part.getSuperTypes().add(superType);
+				
 		}
 	}
 		
