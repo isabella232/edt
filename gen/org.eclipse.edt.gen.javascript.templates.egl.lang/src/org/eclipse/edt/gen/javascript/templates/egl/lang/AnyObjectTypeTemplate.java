@@ -42,7 +42,7 @@ public class AnyObjectTypeTemplate extends JavaScriptTemplate {
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
 			out.print(")");
 		} else {
-			out.print(eglnamespace + "egl.lang.AnyObject.ezeCast("); // TODO sbg need to dynamically get class name
+			out.print(eglnamespace + "egl.lang.EglAny.ezeCast("); // TODO sbg need to dynamically get class name
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(", ");
 			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.JavascriptImplementation);
