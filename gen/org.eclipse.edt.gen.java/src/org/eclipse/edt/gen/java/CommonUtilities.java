@@ -16,7 +16,9 @@ import java.util.List;
 import org.eclipse.edt.compiler.binding.annotationType.EGLIsSystemPartAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.GenerationException;
+import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
@@ -30,8 +32,12 @@ import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.ProgramParameter;
+import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 
 public class CommonUtilities {
 
@@ -510,5 +516,17 @@ public class CommonUtilities {
 				signature += "L" + type.getClassifier().getTypeSignature().replaceAll("\\.", "/") + ";";
 		}
 		return signature;
+	}
+	public static Annotation getAnnotation(Context ctx, String key) throws MofObjectNotFoundException, DeserializationException{
+		EObject eObject = Environment.getCurrentEnv().find(key);
+		if(eObject instanceof StereotypeType && 
+				(eObject = ((StereotypeType)eObject).newInstance()) instanceof Annotation){
+			return (Annotation)eObject;
+		}
+		else if(eObject instanceof AnnotationType &&
+				(eObject = ((AnnotationType)eObject).newInstance()) instanceof Annotation){
+			return (Annotation)eObject;
+		}
+		return null;
 	}
 }

@@ -30,6 +30,8 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	// Constants that represent all the method names invoked using the dynamic Template.invoke() methods
 	// This allows one to find all references to invocations of the methods being invoked dynamically
 	public static final String genAccessor = "genAccessor";
+	public static final String genAnnotations = "genAnnotations";
+	public static final String genAnnotation = "genAnnotation";
 	public static final String genAdditionalConstructorParams = "genAdditionalConstructorParams";
 	public static final String genAdditionalSuperConstructorArgs = "genAdditionalSuperConstructorArgs";
 	public static final String genArrayAccess = "genArrayAccess";
@@ -82,7 +84,6 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genSuperClass = "genSuperClass";
 	public static final String genTypeDependentOptions = "genTypeDependentOptions";
 	public static final String genUnaryExpression = "genUnaryExpression";
-	public static final String genXmlAnnotation = "genXmlAnnotation";
 	public static final String genXmlTransient = "genXmlTransient";
 	
 	// constants that allow container based processing. each of these will attempt to find the user provided container based
