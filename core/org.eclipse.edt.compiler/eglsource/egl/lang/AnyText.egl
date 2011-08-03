@@ -1,0 +1,9 @@
+package egl.lang;
+
+import egl.lang.reflect.ClassType;
+
+/**
+ * AnyText is the supertype of every type which represents a collection of characters.
+ */
+externalType AnyText extends AnyValue type ClassType {isAbstract=yes}
+end

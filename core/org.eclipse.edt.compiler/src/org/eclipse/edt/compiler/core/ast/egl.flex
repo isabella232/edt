@@ -242,8 +242,8 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"label"			 	{ return symbol(NodeTypes.LABEL); }
 	"last"				{ return symbol(NodeTypes.LAST); }
 	"library"			{ return symbol(NodeTypes.LIBRARY); }
-	"like"				{ return symbol(NodeTypes.LIKE); }
-	"matches"			{ return symbol(NodeTypes.MATCHES); }
+//	"like"				{ return symbol(NodeTypes.LIKE); }
+//	"matches"			{ return symbol(NodeTypes.MATCHES); }
 	"move"				{ return symbol(NodeTypes.MOVE); }
 	"next"				{ return symbol(NodeTypes.NEXT); }
 	"new"			 	{ return symbol(NodeTypes.NEW); }	
@@ -348,33 +348,33 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	// Primitive Types
 	"any"			 	{ return symbol(NodeTypes.PRIMITIVE, Primitive.ANY); }
 	"bigint"			{ return symbol(NodeTypes.PRIMITIVE, Primitive.BIGINT); }
-	"bin"			 	{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.BIN); }
+//	"bin"			 	{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.BIN); }
 	"boolean"			{ return symbol(NodeTypes.PRIMITIVE, Primitive.BOOLEAN); }
-	"char"				{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.CHAR); }
-	"dbchar"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.DBCHAR); }
+//	"char"				{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.CHAR); }
+//	"dbchar"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.DBCHAR); }
 	"decimal"			{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.DECIMAL); }
 	"float"			 	{ return symbol(NodeTypes.PRIMITIVE, Primitive.FLOAT); }
-	"hex"			 	{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.HEX); }
+//	"hex"			 	{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.HEX); }
 	"int"			 	{ return symbol(NodeTypes.PRIMITIVE, Primitive.INT); }
-	"mbchar"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.MBCHAR); }
-	"money"			 	{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.MONEY); }
-	"num"			 	{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.NUM); }
+//	"mbchar"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.MBCHAR); }
+//	"money"			 	{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.MONEY); }
+//	"num"			 	{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.NUM); }
 	"number"			{ return symbol(NodeTypes.PRIMITIVE, Primitive.NUMBER); }
-	"numc"				{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.NUMC); }
-	"pacf"				{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.PACF); }
+//	"numc"				{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.NUMC); }
+//	"pacf"				{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.PACF); }
 	"smallfloat"		{ return symbol(NodeTypes.PRIMITIVE, Primitive.SMALLFLOAT); }
 	"smallint"		    { return symbol(NodeTypes.PRIMITIVE, Primitive.SMALLINT); }
 	"string"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.STRING); }
-	"unicode"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.UNICODE); }
+//	"unicode"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.UNICODE); }
 
 	// Large Object Type Keywords
-	"blob"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.BLOB); }
-	"clob"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.CLOB); }
+//	"blob"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.BLOB); }
+//	"clob"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.CLOB); }
 	
 	// Date/Time Type Keywords
 	"date"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.DATE); }
-	"interval"		    { return symbol(NodeTypes.TIMESTAMPINTERVALPRIMITIVE, null); }
-	"time"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.TIME); }
+//	"interval"		    { return symbol(NodeTypes.TIMESTAMPINTERVALPRIMITIVE, null); }
+//	"time"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.TIME); }
 	"timestamp"			{ return symbol(NodeTypes.TIMESTAMPINTERVALPRIMITIVE, Primitive.TIMESTAMP); }
 
 	// Keywords reserved for future

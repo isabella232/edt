@@ -553,7 +553,9 @@ class Egl2MofMember extends Egl2MofPart {
 		else if (expr instanceof AnnotationExpression) {
 			ITypeBinding typeBinding = ((AnnotationExpression)expr).resolveTypeBinding();
 			EClass annType = (EClass)mofTypeFor(typeBinding);
-			value = annType.newInstance();
+			if (annType != null) {
+				value = annType.newInstance();
+			}
 		}
 		else if (expr instanceof SetValuesExpression) {
 			value = evaluateExpression(((SetValuesExpression)expr).getExpression());

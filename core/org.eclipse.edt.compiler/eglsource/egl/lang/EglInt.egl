@@ -1,0 +1,108 @@
+package egl.lang;
+
+import egl.lang.reflect.ClassType;
+import egl.lang.reflect.mof.Operation;
+
+externalType EglInt extends EglNumber type ClassType
+	/**
+	 * {@Operation +} A unary plus (has no effect on the numeric value).
+	 */
+	static function $Plus(value EglInt in) returns (EglInt) {@Operation{"+"}};
+
+	/**
+	 * {@Operation +} Adds two numbers.
+	 */
+	static function $Plus(lvalue EglInt in, rvalue EglInt in) returns (EglInt) {@Operation{"+"}};
+
+	/**
+	 * {@Operation -} Negates the value.
+	 */
+	static function $Minus(value EglInt in) returns (EglInt) {@Operation{"-"}};
+
+	/**
+	 * {@Operation -} Subtracts one number from another.
+	 */
+	static function $Minus(lvalue EglInt in, rvalue EglInt in) returns (EglInt) {@Operation{"-"}};
+
+	/**
+	 * {@Operation *} Multiplies two numbers.
+	 */
+	static function $Multiply(lvalue EglInt in, rvalue EglInt in) returns (EglInt) {@Operation{"*"}};
+
+	/**
+	 * {@Operation /} Divides one number by another.
+	 */
+	static function $Divide(lvalue EglInt in, rvalue EglInt in) returns (EglNumber) {@Operation{"/"}};
+
+	/**
+	 * {@Operation %} Computes the remainder of dividing one number by another.
+	 */
+	static function $Modulus(lvalue EglInt in, rvalue EglInt in) returns (EglNumber) {@Operation{"%"}};
+
+	/**
+	 * {@Operation **} Computes lvalue to the power of rvalue.
+	 */
+	static function $PowerOf(lvalue EglInt in, rvalue EglInt in) returns (EglNumber) {@Operation{"**"}};
+
+	/**
+	 * {@Operation &} Does a bitwise AND on the values.
+	 */
+	static function $BitAnd(lvalue EglInt in, rvalue EglInt in) returns (EglInt) {@Operation{"&"}};
+
+	/**
+	 * {@Operation |} Does a bitwise OR on the values.
+	 */
+	static function $BitOr(lvalue EglInt in, rvalue EglInt in) returns (EglInt) {@Operation{"|"}};
+
+	/**
+	 * {@Operation xor} Does a bitwise XOR on the values.
+	 */
+	static function $BitXor(lvalue EglInt in, rvalue EglInt in) returns (EglInt) {@Operation{"xor"}};
+
+	/**
+	 * {@Operation <} Compares two numbers.
+	 */
+	static function $LT(lvalue EglInt in, rvalue EglInt in) returns (EglBoolean) {@Operation{"<"}};
+
+	/**
+	 * {@Operation >} Compares two numbers.
+	 */
+	static function $GT(lvalue EglInt in, rvalue EglInt in) returns (EglBoolean) {@Operation{">"}};
+
+	/**
+	 * {@Operation <=} Compares two numbers.
+	 */
+	static function $LTE(lvalue EglInt in, rvalue EglInt in) returns (EglBoolean) {@Operation{"<="}};
+
+	/**
+	 * {@Operation >=} Compares two numbers.
+	 */
+	static function $GTE(lvalue EglInt in, rvalue EglInt in) returns (EglBoolean) {@Operation{">="}};
+
+	/**
+	 * {@Operation ==} Compares two numbers.
+	 */
+	static function $EQ(lvalue EglInt in, rvalue EglInt in) returns(EglBoolean) {@Operation{"=="}};
+
+	/**
+	 * {@Operation ==} Compares two numbers.
+	 */
+	static function $NEQ(lvalue EglInt in, rvalue EglInt in) returns(EglBoolean) {@Operation{"!="}};
+
+	/**
+	 * {@Operation narrow} Converts a string to an int.  The string is parsed
+	 * as follows: It may begin with an optional + or - sign.  After the sign there
+	 * must be a sequence of one or more digit characters.  Nothing may follow the
+	 * digits.  The digits in the string must be within the valid range for an int.
+	 *
+	 * @throws TypeCastException if the string can't be parsed into an int.
+	 */
+	static function asInt(value EglString in) returns(EglInt) {@Operation{"narrow"}};
+
+	/**
+	 * {@Operation narrow} Converts a number to an int.
+	 *
+	 * @throws TypeCastException  if the number is too large or small to be an int.
+	 */
+	static function asInt(value EglNumber in) returns(EglInt) {@Operation{"narrow"}};
+end

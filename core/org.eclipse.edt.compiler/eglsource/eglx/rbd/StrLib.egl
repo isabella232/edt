@@ -1,0 +1,223 @@
+package eglx.rbd;
+
+library StrLib
+	function booleanAsString(value boolean in) returns(string)
+		if ( value )
+			return( "true" );
+		else
+			return( "false" );
+		end
+	end
+	
+	function characterLen(text string in) returns(int)
+		return( text.trim().length() );
+	end
+	
+	function clip(source string? in) returns(string?)
+		if ( source == null )
+			return( null );
+		else
+			return( source.clip() );
+		end
+	end
+	
+	function clip(source string? in, clipType int? in) returns(string?)
+		if ( source == null || clipType == null )
+			return( null );
+		else
+			case ( clipType )
+				when (0)
+					return( source.trim() );
+				when (1)
+					return( source.clipLeading() );
+				when (2)
+					return( source.clip() );
+				otherwise
+					return( source );
+			end
+		end
+	end
+	
+	function formatDate(dateValue date? in) returns(string?)
+		if ( dateValue == null )
+			return( null );
+		else
+			return( eglx.lang.StrLib.format( dateValue, defaultDateFormat ) );
+		end
+	end
+	
+	function formatDate(dateValue date? in, format string? in) returns(string?)
+		if ( dateValue == null || format == null )
+			return( null );
+		else
+			return( eglx.lang.StrLib.format( dateValue, format ) );
+		end
+	end
+	
+	function formatNumber(intValue smallint? in) returns (string?)
+		if ( intValue == null )
+			return( null );
+		else
+			return( eglx.lang.StrLib.format( intValue, defaultNumericFormat ) );
+		end
+	end
+	
+	function formatNumber(intValue smallint? in, format string? in) returns (string?)
+		if ( intValue == null || format == null )
+			return( null );
+		else
+			return( eglx.lang.StrLib.format( intValue, format ) );
+		end
+	end
+	
+	function formatNumber(intValue int? in) returns (string?)
+		if ( intValue == null )
+			return( null );
+		else
+			return( eglx.lang.StrLib.format( intValue, defaultNumericFormat ) );
+		end
+	end
+	
+	function formatNumber(intValue int? in, format string? in) returns (string?)
+		if ( intValue == null || format == null )
+			return( null );
+		else
+			return( eglx.lang.StrLib.format( intValue, format ) );
+		end
+	end
+	
+	function formatNumber(intValue bigint? in) returns (string?)
+		if ( intValue == null )
+			return( null );
+		else
+			return( eglx.lang.StrLib.format( intValue, defaultNumericFormat ) );
+		end
+	end
+	
+	function formatNumber(intValue bigint? in, format string? in) returns (string?)
+		if ( intValue == null || format == null )
+			return( null );
+		else
+			return( eglx.lang.StrLib.format( intValue, format ) );
+		end
+	end
+	
+	function formatNumber(decValue decimal? in) returns (string?)
+		if ( decValue == null )
+			return( null );
+		else
+			return( eglx.lang.StrLib.format( decValue, defaultNumericFormat ) );
+		end
+	end
+	
+	function formatNumber(decValue decimal? in, format string? in) returns (string?)
+		if ( decValue == null || format == null )
+			return( null );
+		else
+			return( eglx.lang.StrLib.format( decValue, format ) );
+		end
+	end
+	
+	function formatNumber(floatValue smallfloat? in) returns (string?)
+		if ( floatValue == null )
+			return( null );
+		else
+			return( eglx.lang.StrLib.format( floatValue, defaultNumericFormat ) );
+		end
+	end
+	
+	function formatNumber(floatValue smallfloat? in, format string? in) returns (string?)
+		if ( floatValue == null || format == null )
+			return( null );
+		else
+			return( eglx.lang.StrLib.format( floatValue, format ) );
+		end
+	end
+	
+	function formatNumber(floatValue float? in) returns (string?)
+		if ( floatValue == null )
+			return( null );
+		else
+			return( eglx.lang.StrLib.format( floatValue, defaultNumericFormat ) );
+		end
+	end
+	
+	function formatNumber(floatValue float? in, format string? in) returns (string?)
+		if ( floatValue == null || format == null )
+			return( null );
+		else
+			return( eglx.lang.StrLib.format( floatValue, format ) );
+		end
+	end
+	
+	function formatTimeStamp(timestampvalue timestamp("yyyyMMddHHmmssffffff")? in) returns (string?)
+		if ( timestampvalue == null )
+			return( null );
+		else
+			return( eglx.lang.StrLib.format( timestampvalue, defaultTimestampFormat ) );
+		end
+	end
+	
+	function formatTimeStamp(timestampvalue timestamp("yyyyMMddHHmmssffffff")? in, format string? in) returns (string?)
+		if ( timestampvalue == null || format == null )
+			return( null );
+		else
+			return( eglx.lang.StrLib.format( timestampvalue, format ) );
+		end
+	end
+	
+	function getNextToken(source string inout, index int inout, delimiters string in) returns (string?)
+		return( eglx.lang.StrLib.getNextToken( source, index, delimiters ) );
+	end
+	
+	function getTokenCount(source string in, delimiters string in) returns (int)
+		return( eglx.lang.StrLib.getTokenCount( source, delimiters ) );
+	end
+	
+	function indexOf(source string inout, pattern string in) returns (int)
+		return( source.indexOf( pattern ) );
+	end
+	
+	function indexOf(source string inout, pattern string in, startIndex int in) returns (int)
+		return( source.indexOf( pattern, startIndex ) );
+	end
+	
+	function lowerCase(characterItem string? in) returns(string?)
+		if ( characterItem == null )
+			return( null );
+		else
+			return( characterItem.toLowerCase() );
+		end
+	end
+
+	function spaces(characterCount int? in) returns(string?)
+		if ( characterCount == null )
+			return( null );
+		else
+			result string;
+			fiftyBlanks string = "                                                  ";
+			while ( characterCount >= 50 )
+				result ::= fiftyBlanks;
+				characterCount -= 50;
+			end
+			if ( characterCount > 0 )
+				result ::= fiftyBlanks[1:characterCount];
+			end
+			return( result );
+		end
+	end
+
+	function upperCase(characterItem string? in) returns(string?)
+		if ( characterItem == null )
+			return( null );
+		else
+			return( characterItem.toUpperCase() );
+		end
+	end
+
+	defaultDateFormat string;
+	defaultTimeFormat string;
+	defaultTimeStampFormat string;
+	defaultMoneyFormat string;
+	defaultNumericFormat string;
+end

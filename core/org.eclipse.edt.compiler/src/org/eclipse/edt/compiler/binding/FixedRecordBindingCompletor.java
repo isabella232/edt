@@ -65,17 +65,6 @@ public class FixedRecordBindingCompletor extends FixedStructureBindingCompletor 
 		return false;
 	}
 
-	protected IPartSubTypeAnnotationTypeBinding getDefaultSubType() {
-		try {
-			return new AnnotationTypeBindingImpl((FlexibleRecordBinding) currentScope.findPackage(InternUtil.intern("egl")).resolvePackage(
-					InternUtil.intern("core")).resolveType(InternUtil.intern("BasicRecord")), recordBinding);
-		} catch (UnsupportedOperationException e) {
-			return null;
-		} catch (ClassCastException e) {
-			return null;
-		}
-	}
-
 	protected Scope getFixedStructureScope() {
 		return new FixedStructureScope(currentScope, recordBinding);
 	}
@@ -275,6 +264,10 @@ public class FixedRecordBindingCompletor extends FixedStructureBindingCompletor 
 
 	private boolean isUIRecord() {
 		return (recordBinding.getAnnotation(new String[] { "egl", "ui", "webTransaction" }, "VGUIRecord") != null);
+	}
+
+	protected IPartSubTypeAnnotationTypeBinding getDefaultSubType() {
+		return null;
 	}
 
 }

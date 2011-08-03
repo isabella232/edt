@@ -1,0 +1,8 @@
+package eglx.xml.binding.annotation;
+
+Enumeration XMLStructureKind
+  choice = 1,
+  sequence = 2,
+  simpleContent = 3,
+  unordered = 4
+end

@@ -11,10 +11,14 @@
  *******************************************************************************/
 package egl.lang.reflect;
 
-import egl.lang.AnyStruct;
+//TODO lines commented out with "//KEYWORD" use the wrong name for the type, because
+// the correct type's name includes EGL keywords.  For example TypeType refers to
+// org.eclipse.edt.mof.egl.EGLType but the correct name is org.eclipse.edt.mof.egl.Type.
+// Either the proxiedEClass should be a string, or the MOF classes should be renamed.
 
 // Part types
 externalType TypeType type EClassProxy {
+//KEYWORD	
 	proxiedEClass = org.eclipse.edt.mof.egl.EGLType
 }
 end
@@ -29,53 +33,45 @@ externalType ClassPart extends Part type EClassProxy {
 }
 end
 
-externalTYpe StructPart extends Part type EClassProxy {
-	proxiedEClass = org.eclipse.edt.mof.egl.StructPart
-}
-end
-
-externalTYpe RecordPart extends ClassPart type EClassProxy {
+externalType RecordPart extends ClassPart type EClassProxy {
+//KEYWORD	
 	proxiedEClass = org.eclipse.edt.mof.egl.EGLRecord
 }
 end
 
-externalTYpe DelegatePart extends ClassPart type EClassProxy {
+externalType DelegatePart extends ClassPart type EClassProxy {
+//KEYWORD	
 	proxiedEClass = org.eclipse.edt.mof.egl.EGLDelegate
 }
 end
 
-externalTYpe HandlerPart extends ClassPart type EClassProxy {
+externalType HandlerPart extends ClassPart type EClassProxy {
+//KEYWORD	
 	proxiedEClass = org.eclipse.edt.mof.egl.EGLHandler
 }
 end
 
-externalTYpe ProgramPart extends ClassPart type EClassProxy {
+externalType ProgramPart extends ClassPart type EClassProxy {
+//KEYWORD	
 	proxiedEClass = org.eclipse.edt.mof.egl.EGLProgram
 }
 end
 
-externalTYpe LibraryPart extends ClassPart type EClassProxy {
+externalType LibraryPart extends ClassPart type EClassProxy {
+//KEYWORD	
 	proxiedEClass = org.eclipse.edt.mof.egl.EGLLibrary
 }
 end
 
-externalTYpe InterfacePart extends ClassPart type EClassProxy {
+externalType InterfacePart extends ClassPart type EClassProxy {
+//KEYWORD	
 	proxiedEClass = org.eclipse.edt.mof.egl.EGLInterface
 }
 end
 
-externalTYpe ServicePart extends ClassPart type EClassProxy {
+externalType ServicePart extends ClassPart type EClassProxy {
+//KEYWORD	
 	proxiedEClass = org.eclipse.edt.mof.egl.EGLService
-}
-end
-
-externalTYpe StructuredRecordPart extends StructPart type EClassProxy {
-	proxiedEClass = org.eclipse.edt.mof.egl.StructuredRecord
-}
-end
-
-externalTYpe DataTablePart extends StructPart type EClassProxy {
-	proxiedEClass = org.eclipse.edt.mof.egl.EGLDataTable
 }
 end
 
@@ -86,21 +82,23 @@ externalType Member type EClassProxy {
 end
 
 externalType FieldMbr extends Member type EClassProxy {
+//KEYWORD	
 	proxiedEClass = org.eclipse.edt.mof.egl.EGLField
 }
 end
 
 externalType FunctionMbr extends Member type EClassProxy {
+//KEYWORD	
 	proxiedEClass = org.eclipse.edt.mof.egl.EGLFunction
 }
 end
 
 externalType ConstructorMbr extends Member type EClassProxy {
+//KEYWORD	
 	proxiedEClass = org.eclipse.edt.mof.egl.EGLConstructor
 }
 end
 
-// Simple Struct types
 externalType SequenceType type EClassProxy {
 	proxiedEClass = org.eclipse.edt.mof.egl.SequenceType
 }
@@ -120,5 +118,3 @@ externalType IntervalType type EClassProxy {
 	proxiedEClass = org.eclipse.edt.mof.egl.IntervalType
 }
 end
-
-

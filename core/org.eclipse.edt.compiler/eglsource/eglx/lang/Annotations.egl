@@ -1,0 +1,31 @@
+package eglx.lang;
+
+/**
+ * Put EGLProperty on a field to indicate that it should always be accessed through
+ * getter and/or setter functions in generated code.  If only getMethod is set,
+ * the field is read-only.
+ *
+ * Use the Property annotation, not EGLProperty, on fields of ExternalTypes.
+ */
+Record EGLProperty type Annotation
+{
+	targets = [ElementKind.FieldMbr],
+	validationProxy = "com.ibm.etools.edt.binding.annotationType.EGLPropertyAnnotationTypeBinding"
+} 
+	getMethod FunctionMemberRef;
+	setMethod FunctionMemberRef;
+end
+
+/**
+ * Put Property on a field of an ExternalType to indicate that it should always 
+ * be accessed through getter and/or setter functions in generated code.  If only
+ * getMethod is set, the field is read-only. 
+ */
+Record Property type Annotation
+{
+	targets = [ElementKind.FieldMbr]
+}
+	getMethod String;
+	setMethod String;
+end
+

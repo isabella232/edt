@@ -52,7 +52,7 @@ public class FieldLenUtility {
             return;
         }
 
-        ITypeBinding fieldLenType = currentScope.findPackage(InternUtil.intern("egl")).resolvePackage(InternUtil.intern("ui")).resolveType(InternUtil.intern("FieldLen"));
+        ITypeBinding fieldLenType = currentScope.findPackage(InternUtil.intern("eglx")).resolvePackage(InternUtil.intern("ui")).resolveType(InternUtil.intern("FieldLen"));
         if(IBinding.NOT_FOUND_BINDING != fieldLenType) {        
 			AnnotationBinding fieldLen = new AnnotationBinding(InternUtil.internCaseSensitive("FieldLen"), dataBinding.getDeclaringPart(), new AnnotationTypeBindingImpl((FlexibleRecordBinding) fieldLenType, dataBinding.getDeclaringPart()));
 	        

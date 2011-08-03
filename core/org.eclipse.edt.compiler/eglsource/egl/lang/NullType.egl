@@ -1,0 +1,9 @@
+package egl.lang;
+
+import egl.lang.reflect.ClassType;
+
+/**
+ * This is the type for the null literal.
+ */
+externalType NullType extends EglAny type ClassType
+end

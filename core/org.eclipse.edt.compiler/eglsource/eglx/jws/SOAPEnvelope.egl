@@ -1,6 +1,6 @@
 package eglx.jws;
 
-import eglx.xml._bind.annotation.*;
+import eglx.xml.binding.annotation.*;
 /**
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns1="http://services" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <soapenv:Header xmlns:tns10="http://www.w3.org/2005/08/addressing">
@@ -18,6 +18,6 @@ import eglx.xml._bind.annotation.*;
 </soapenv:Envelope>
 **/
 record SOAPEnvelope{@XMLRootElement{name="Envelope", namespace="http://schemas.xmlsoap.org/soap/envelope/"}}
-	soapHeader any{XMLElement{name="Header", namespace="http://schemas.xmlsoap.org/soap/envelope/"}} = null;
-	body any{XMLElement{name="Body", namespace="http://schemas.xmlsoap.org/soap/envelope/"}} = null;
+	soapHeader any{XMLElement{name="Header", namespace="http://schemas.xmlsoap.org/soap/envelope/"}};
+	body any{XMLElement{name="Body", namespace="http://schemas.xmlsoap.org/soap/envelope/"}};
 end

@@ -1,0 +1,73 @@
+package eglx.lang;
+
+import egl.lang.AnyValue;
+import egl.lang.reflect.ParameterizableType;
+import egl.lang.reflect.mof.Operation;
+
+import org.eclipse.edt.mof.egl.TimestampType;
+
+externalType ETimestamp extends AnyValue type ParameterizableType {
+	parameterizedType = TimestampType
+}
+	/**  
+	 * {@Operation <} Compares two timestamps.
+	 */
+	static function $LT(lvalue ETimestamp in, rvalue ETimestamp in) returns (EBoolean) {@Operation{"<"}};
+   
+	/**
+	 * {@Operation >} Compares two timestamps.
+	 */
+	static function $GT(lvalue ETimestamp in, rvalue ETimestamp in) returns (EBoolean) {@Operation{">"}};
+
+	/**
+	 * {@Operation <=} Compares two timestamps.
+	 */
+	static function $LTE(lvalue ETimestamp in, rvalue ETimestamp in) returns (EBoolean) {@Operation{"<="}};
+
+	/**
+	 * {@Operation >=} Compares two timestamps.
+	 */
+	static function $GTE(lvalue ETimestamp in, rvalue ETimestamp in) returns (EBoolean) {@Operation{">="}};
+
+	/**
+	 * {@Operation ==} Compares two timestamps.
+	 */
+	static function $EQ(lvalue ETimestamp in, rvalue ETimestamp in) returns(EBoolean) {@Operation{"=="}};
+
+	/**
+	 * {@Operation !=} Compares two timestamps.
+	 */
+	static function $NEQ(lvalue ETimestamp in, rvalue ETimestamp in) returns(EBoolean) {@Operation{"!="}};
+
+	/**
+	 * {@Operation narrow} Converts a string to a timestamp.  The string is parsed
+	 * by searching for the timestamp fields specified in the pattern, in order
+	 * from years down to fractions of seconds.  Each field from the pattern must
+	 * be present in the string.  Years must be represented with four digits,
+	 * fractions of seconds with six digits, and other fields with two digits.
+	 * One separator character must appear in between each field.  Any character
+	 * may be used as a separator, and the separators do not have to match.
+	 *
+	 * @throws TypeCastException if the string can't be parsed into a timestamp or the pattern is invalid.
+	 */
+	static function asTimestamp(value EString in, pattern EString in) returns (ETimestamp) {@Operation{"narrow"}};
+
+	/**
+	 * {@Operation widen} Converts any timestamp to a timestamp with the specified pattern.
+	 */
+	static function asTimestamp(value ETimestamp in, pattern EString in) returns (ETimestamp) {@Operation{"widen"}};
+
+	function dayOf() returns(EInt);
+
+	function monthOf() returns(EInt);
+
+	function yearOf() returns(EInt);
+
+	function weekdayOf() returns(EInt);
+
+	function dateOf() returns(EDate);
+
+	function timeOf() returns(ETimestamp);//TODO this really should return ETimestamp("hhmmss"), but we can't handle that.
+
+	function extend(timeSpanPattern EString in) returns(ETimestamp);
+end

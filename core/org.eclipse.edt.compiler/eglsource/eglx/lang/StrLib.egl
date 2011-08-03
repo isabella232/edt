@@ -1,0 +1,25 @@
+package eglx.lang;
+
+import egl.lang.NativeType;
+
+externalType StrLib type NativeType
+	
+	static function format(intValue smallint in, pattern string in) returns (string);
+	static function format(intValue int in, pattern string in) returns (string);
+	static function format(intValue bigint in, pattern string in) returns (string);
+	//TODO once validation allows it, change EDecimal to decimal
+	// the bug for this is https://bugs.eclipse.org/bugs/show_bug.cgi?id=353444
+	static function format(decValue EDecimal in, pattern string in) returns (string);
+	static function format(floatValue smallfloat in, pattern string in) returns (string);
+	static function format(floatValue float in, pattern string in) returns (string);
+	static function format(d date in, pattern string in) returns(string);
+	static function format(ts timestamp in, pattern string in) returns(string);
+
+	static function getNextToken(source string in, index int inout, delimiters string in) returns (string);
+
+	static function getTokenCount(source string in, delimiters string in) returns (int);
+
+	static function fromCharCode(c int in) returns(string);
+
+	static function spaces(characterCount int in) returns(string);
+end

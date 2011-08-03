@@ -726,7 +726,13 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 				else {
 					part = (Part)mofTypeFor(typeBinding);
 				}
-				generatorKey = part.getStereotype().getEClass().getETypeSignature();
+				
+				if (part.getStereotype() == null) {
+					generatorKey = EGL_lang_package;
+				}
+				else {
+					generatorKey = part.getStereotype().getEClass().getETypeSignature();
+				}
 			}
 			IOStatementGenerator generator = IOStatementGenerator.Registry.get(generatorKey);
 			if (generator == null) {

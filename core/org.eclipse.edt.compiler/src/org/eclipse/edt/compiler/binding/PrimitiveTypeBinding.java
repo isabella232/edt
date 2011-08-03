@@ -16,7 +16,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
+import org.eclipse.edt.compiler.core.ast.FunctionParameter.UseType;
+import org.eclipse.edt.compiler.internal.core.lookup.System.ISystemLibrary;
+import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibrary;
 
 
 
@@ -99,6 +103,153 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 	public abstract int getKind();
 	
 	public abstract int getBytes();
+	
+	
+	public static final SystemFunctionBinding LENGTH = SystemLibrary.createSystemFunction(
+			"length",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.INT),
+			0
+		);
+	public static final SystemFunctionBinding CLIP = SystemLibrary.createSystemFunction(
+			"clip",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.STRING),
+			0
+		);
+	public static final SystemFunctionBinding CLIPLEADING = SystemLibrary.createSystemFunction(
+			"clipLeading",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.STRING),
+			0
+		);
+	public static final SystemFunctionBinding TRIM = SystemLibrary.createSystemFunction(
+			"trim",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.STRING),
+			0
+		);
+	public static final SystemFunctionBinding TOUPPERCASE = SystemLibrary.createSystemFunction(
+			"toUpperCase",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.STRING),
+			0
+		);
+	public static final SystemFunctionBinding TOLOWERCASE = SystemLibrary.createSystemFunction(
+			"toLowerCase",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.STRING),
+			0
+		);
+	public static final SystemFunctionBinding INDEXOF1 = SystemLibrary.createSystemFunction(
+			"indexOf",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.INT),
+			new String[]		{"substr"},
+			new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.STRING)},
+			new UseType[]		{UseType.IN},
+			0
+		);
+	public static final SystemFunctionBinding INDEXOF2 = SystemLibrary.createSystemFunction(
+			"indexOf",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.INT),
+			new String[]		{"substr", "startIndex"},
+			new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.STRING), PrimitiveTypeBinding.getInstance(Primitive.INT)},
+			new UseType[]		{UseType.IN, UseType.IN},
+			0
+		);
+	public static final OverloadedFunctionSet INDEXOF3 = new OverloadedFunctionSet();
+	static {
+		INDEXOF3.setName(INDEXOF1.getCaseSensitiveName());
+		INDEXOF3.addNestedFunctionBinding(new NestedFunctionBinding(INDEXOF1.getCaseSensitiveName(), null, INDEXOF1));
+		INDEXOF3.addNestedFunctionBinding(new NestedFunctionBinding(INDEXOF2.getCaseSensitiveName(), null, INDEXOF2));
+	}
+	
+	
+	public static final SystemFunctionBinding LASTINDEXOF = SystemLibrary.createSystemFunction(
+			"lastIndexOf",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.INT),
+			new String[]		{"substr"},
+			new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.STRING)},
+			new UseType[]		{UseType.IN},
+			0
+		);
+	public static final SystemFunctionBinding ENDSWITH = SystemLibrary.createSystemFunction(
+			"endsWith",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN),
+			new String[]		{"suffix"},
+			new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.STRING)},
+			new UseType[]		{UseType.IN},
+			0
+		);
+	public static final SystemFunctionBinding STARTSWITH = SystemLibrary.createSystemFunction(
+			"startsWith",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN),
+			new String[]		{"prefix"},
+			new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.STRING)},
+			new UseType[]		{UseType.IN},
+			0
+		);
+	public static final SystemFunctionBinding REPLACESTR = SystemLibrary.createSystemFunction(
+			"replaceStr",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.STRING),
+			new String[]		{"target", "replacement"},
+			new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.STRING), PrimitiveTypeBinding.getInstance(Primitive.STRING)},
+			new UseType[]		{UseType.IN, UseType.IN},
+			0
+		);
+	public static final SystemFunctionBinding CHARCODEAT = SystemLibrary.createSystemFunction(
+			"charCodeAt",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.INT),
+			new String[]		{"index"},
+			new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.INT)},
+			new UseType[]		{UseType.IN},
+			0
+		);
+	public static final SystemFunctionBinding ISLIKE = SystemLibrary.createSystemFunction(
+			"isLike",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN),
+			new String[]		{"value"},
+			new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.STRING)},
+			new UseType[]		{UseType.IN},
+			0
+		);
+	public static final SystemFunctionBinding MATCHESPATTERN = SystemLibrary.createSystemFunction(
+			"matchesPattern",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN),
+			new String[]		{"value"},
+			new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.STRING)},
+			new UseType[]		{UseType.IN},
+			0
+		);
+
+	
+	protected static final Map<String, IDataBinding> SYSTEM_FUNCTIONS = new HashMap();
+	static {		
+		SYSTEM_FUNCTIONS.put(LENGTH.getName(), new NestedFunctionBinding(LENGTH.getName(), null, LENGTH));
+		SYSTEM_FUNCTIONS.put(CLIP.getName(), new NestedFunctionBinding(CLIP.getName(), null, CLIP));
+		SYSTEM_FUNCTIONS.put(CLIPLEADING.getName(), new NestedFunctionBinding(CLIPLEADING.getName(), null, CLIPLEADING));
+		SYSTEM_FUNCTIONS.put(TRIM.getName(), new NestedFunctionBinding(TRIM.getName(), null, TRIM));
+		SYSTEM_FUNCTIONS.put(TOUPPERCASE.getName(), new NestedFunctionBinding(TOUPPERCASE.getName(), null, TOUPPERCASE));
+		SYSTEM_FUNCTIONS.put(TOLOWERCASE.getName(), new NestedFunctionBinding(TOLOWERCASE.getName(), null, TOLOWERCASE));
+		SYSTEM_FUNCTIONS.put(INDEXOF3.getName(), INDEXOF3);
+		SYSTEM_FUNCTIONS.put(LASTINDEXOF.getName(), new NestedFunctionBinding(LASTINDEXOF.getName(), null, LASTINDEXOF));
+		SYSTEM_FUNCTIONS.put(ENDSWITH.getName(), new NestedFunctionBinding(ENDSWITH.getName(), null, ENDSWITH));
+		SYSTEM_FUNCTIONS.put(STARTSWITH.getName(), new NestedFunctionBinding(STARTSWITH.getName(), null, STARTSWITH));
+		SYSTEM_FUNCTIONS.put(REPLACESTR.getName(), new NestedFunctionBinding(REPLACESTR.getName(), null, REPLACESTR));
+		SYSTEM_FUNCTIONS.put(CHARCODEAT.getName(), new NestedFunctionBinding(CHARCODEAT.getName(), null, CHARCODEAT));
+		SYSTEM_FUNCTIONS.put(ISLIKE.getName(), new NestedFunctionBinding(ISLIKE.getName(), null, ISLIKE));
+		SYSTEM_FUNCTIONS.put(MATCHESPATTERN.getName(), new NestedFunctionBinding(MATCHESPATTERN.getName(), null, MATCHESPATTERN));
+	}
+
     
 	protected PrimitiveTypeBinding(String caseSensitiveInternedName) {
 		super(caseSensitiveInternedName);
@@ -139,4 +290,16 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 	public boolean isReference() {
 		return REFERENCE_PRIMITIVES.contains(getPrimitive());
 	}
+	
+	public IDataBinding findData(String simpleName) {
+		
+		if (getPrimitive() == Primitive.STRING) {
+			IDataBinding result = (IDataBinding) SYSTEM_FUNCTIONS.get(simpleName);
+			if(result != null) return result;
+			
+		}
+			
+		return IBinding.NOT_FOUND_BINDING;
+	}
+
 }

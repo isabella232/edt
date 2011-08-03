@@ -1,0 +1,102 @@
+package eglx.lang;
+
+import egl.lang.EglInt;
+import egl.lang.EglNumber;
+import egl.lang.reflect.ClassType;
+import egl.lang.reflect.mof.Operation;
+
+externalType EInt extends EglInt type ClassType
+	/**
+	 * {@Operation +} A unary plus (has no effect on the numeric value).
+	 */
+	static function $Plus(value EInt in) returns (EInt) {@Operation{"+"}};
+
+	/**
+	 * {@Operation +} Adds two numbers.
+	 */
+	static function $Plus(lvalue EInt in, rvalue EInt in) returns (EInt) {@Operation{"+"}};
+
+	/**
+	 * {@Operation -} Negates the value.
+	 */
+	static function $Minus(value EInt in) returns (EInt) {@Operation{"-"}};
+
+	/**
+	 * {@Operation -} Subtracts one number from another.
+	 */
+	static function $Minus(lvalue EInt in, rvalue EInt in) returns (EInt) {@Operation{"-"}};
+
+	/**
+	 * {@Operation *} Multiplies two numbers.
+	 */
+	static function $Multiply(lvalue EInt in, rvalue EInt in) returns (EInt) {@Operation{"*"}};
+
+	/**
+	 * {@Operation /} Divides one number by another.
+	 */
+	static function $Divide(lvalue EInt in, rvalue EInt in) returns (EDecimal) {@Operation{"/"}};
+
+	/**
+	 * {@Operation %} Computes the remainder of dividing one number by another.
+	 */
+	static function $Modulus(lvalue EInt in, rvalue EInt in) returns (EDecimal) {@Operation{"%"}};
+
+	/**
+	 * {@Operation **} Computes lvalue to the power of rvalue.
+	 */
+	static function $PowerOf(lvalue EInt in, rvalue EInt in) returns (EFloat) {@Operation{"**"}};
+
+	/**
+	 * {@Operation &} Computes the bitwise AND of two numbers.
+	 */
+	static function $BitAnd(lvalue EInt in, rvalue EInt in) returns (EInt) {@Operation{"&"}};
+
+	/**
+	 * {@Operation |} Computes the bitwise OR of two numbers.
+	 */
+	static function $BitOr(lvalue EInt in, rvalue EInt in) returns (EInt) {@Operation{"|"}};
+
+	/**
+	 * {@Operation xor} Computes the bitwise exclusive OR of two numbers.
+	 */
+	static function $BitXor(lvalue EInt in, rvalue EInt in) returns (EInt) {@Operation{"xor"}};
+
+	/**
+	 * {@Operation <} Compares two numbers.
+	 */
+	static function $LT(lvalue EInt in, rvalue EInt in) returns (EBoolean) {@Operation{"<"}};
+
+	/**
+	 * {@Operation >} Compares two numbers.
+	 */
+	static function $GT(lvalue EInt in, rvalue EInt in) returns (EBoolean) {@Operation{">"}};
+
+	/**
+	 * {@Operation <=} Compares two numbers.
+	 */
+	static function $LTE(lvalue EInt in, rvalue EInt in) returns (EBoolean) {@Operation{"<="}};
+
+	/**
+	 * {@Operation >=} Compares two numbers.
+	 */
+	static function $GTE(lvalue EInt in, rvalue EInt in) returns (EBoolean) {@Operation{">="}};
+
+	/**
+	 * {@Operation ==} Compares two numbers.
+	 */
+	static function $EQ(lvalue EInt in, rvalue EInt in) returns(EBoolean) {@Operation{"=="}};
+
+	/**
+	 * {@Operation !=} Compares two numbers.
+	 */
+	static function $NEQ(lvalue EInt in, rvalue EInt in) returns(EBoolean) {@Operation{"!="}};
+
+	static function asInt(value EString in) returns(EInt) {@Operation{"narrow"}};
+	static function asInt(value ESmallint in) returns(EInt) {@Operation{"widen"}};
+	static function asInt(value ESmallfloat in) returns(EInt) {@Operation{"narrow"}};
+	static function asInt(value EDecimal in) returns(EInt) {@Operation{"narrow"}};
+	static function asInt(value EFloat in) returns(EInt) {@Operation{"narrow"}};
+	static function asInt(value EBigint in) returns(EInt) {@Operation{"narrow"}};
+
+	static function asNumber(value EInt in) returns(EglNumber) {@Operation{"widen"}};
+end

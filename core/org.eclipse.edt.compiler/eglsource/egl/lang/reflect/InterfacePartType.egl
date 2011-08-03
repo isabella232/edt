@@ -1,0 +1,10 @@
+package egl.lang.reflect;
+
+record InterfacePartType type Annotation {
+	targets = [ElementKind.ExternalTypePart],
+	@PartType{"org.eclipse.edt.mof.egl.Interface"},
+	@Stereotype
+}
+	name string;
+	typeParameters string[];
+end

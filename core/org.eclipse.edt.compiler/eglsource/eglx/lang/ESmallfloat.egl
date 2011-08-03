@@ -1,0 +1,86 @@
+package eglx.lang;
+
+import egl.lang.EglNumber;
+import egl.lang.reflect.ClassType;
+import egl.lang.reflect.mof.Operation;
+
+externalType ESmallfloat extends EglNumber type ClassType
+	/**
+	 * {@Operation +} A unary plus (has no effect on the numeric value).
+	 */
+	static function $Plus(value ESmallfloat in) returns (ESmallfloat) {@Operation{"+"}};
+
+	/**
+	 * {@Operation +} Adds two numbers.
+	 */
+	static function $Plus(lvalue ESmallfloat in, rvalue ESmallfloat in) returns (ESmallfloat) {@Operation{"+"}};
+
+	/**
+	 * {@Operation -} Negates the value.
+	 */
+	static function $Minus(value ESmallfloat in) returns (ESmallfloat) {@Operation{"-"}};
+
+	/**
+	 * {@Operation -} Subtracts one number from another.
+	 */
+	static function $Minus(lvalue ESmallfloat in, rvalue ESmallfloat in) returns (ESmallfloat) {@Operation{"-"}};
+
+	/**
+	 * {@Operation *} Multiplies two numbers.
+	 */
+	static function $Multiply(lvalue ESmallfloat in, rvalue ESmallfloat in) returns (ESmallfloat) {@Operation{"*"}};
+
+	/**
+	 * {@Operation /} Divides one number by another.
+	 */
+	static function $Divide(lvalue ESmallfloat in, rvalue ESmallfloat in) returns (ESmallfloat) {@Operation{"/"}};
+
+	/**
+	 * {@Operation %} Computes the remainder of dividing one number by another.
+	 */
+	static function $Modulus(lvalue ESmallfloat in, rvalue ESmallfloat in) returns (ESmallfloat) {@Operation{"%"}};
+
+	/**
+	 * {@Operation **} Computes lvalue to the power of rvalue.
+	 */
+	static function $PowerOf(lvalue ESmallfloat in, rvalue ESmallfloat in) returns (EFloat) {@Operation{"**"}};
+
+	/**
+	 * {@Operation <} Compares two numbers.
+	 */
+	static function $LT(lvalue ESmallfloat in, rvalue ESmallfloat in) returns (EBoolean) {@Operation{"<"}};
+
+	/**
+	 * {@Operation >} Compares two numbers.
+	 */
+	static function $GT(lvalue ESmallfloat in, rvalue ESmallfloat in) returns (EBoolean) {@Operation{">"}};
+
+	/**
+	 * {@Operation <=} Compares two numbers.
+	 */
+	static function $LTE(lvalue ESmallfloat in, rvalue ESmallfloat in) returns (EBoolean) {@Operation{"<="}};
+
+	/**
+	 * {@Operation >=} Compares two numbers.
+	 */
+	static function $GTE(lvalue ESmallfloat in, rvalue ESmallfloat in) returns (EBoolean) {@Operation{">="}};
+
+	/**
+	 * {@Operation ==} Compares two numbers.
+	 */
+	static function $EQ(lvalue ESmallfloat in, rvalue ESmallfloat in) returns(EBoolean) {@Operation{"=="}};
+
+	/**
+	 * {@Operation !=} Compares two numbers.
+	 */
+	static function $NEQ(lvalue ESmallfloat in, rvalue ESmallfloat in) returns(EBoolean) {@Operation{"!="}};
+
+	static function asNumber(value ESmallfloat in) returns(EglNumber) {@Operation{"widen"}};
+
+	static function asSmallfloat(value EDecimal in) returns(ESmallfloat) {@Operation{"narrow"}};
+	static function asSmallfloat(value EString in) returns(ESmallfloat) {@Operation{"narrow"}};
+	static function asSmallfloat(value ESmallint in) returns(ESmallfloat) {@Operation{"widen"}};
+	static function asSmallfloat(value EInt in) returns(ESmallfloat) {@Operation{"narrow"}};
+	static function asSmallfloat(value EFloat in) returns(ESmallfloat) {@Operation{"narrow"}};
+	static function asSmallfloat(value EBigint in) returns(ESmallfloat) {@Operation{"narrow"}};
+end

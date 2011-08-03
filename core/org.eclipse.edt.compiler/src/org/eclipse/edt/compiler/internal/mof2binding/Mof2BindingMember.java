@@ -312,8 +312,12 @@ public abstract class Mof2BindingMember extends Mof2BindingPart {
 	public boolean visit(EParameter parm) {
 		IBinding binding = getBinding(parm);
 		String name = InternUtil.intern(parm.getName());
-		parm.getEType().accept(this);
-		ITypeBinding type = (ITypeBinding)stack.pop();
+		
+		ITypeBinding type = null;
+		if (parm.getEType() != null) {
+			parm.getEType().accept(this);
+			type = (ITypeBinding)stack.pop();
+		}
 		IPartBinding declarer = (IPartBinding)getBinding(parm.getFunction().getDeclarer());
 		FunctionBinding func = (FunctionBinding)getBinding(parm.getFunction());
 		binding = new EParameterBinding(name, declarer, type, func);

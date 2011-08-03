@@ -1,0 +1,47 @@
+package egl.lang;
+
+/**
+ * ArraySizeExceptions are thrown to indicate errors such as a negative initial
+ * size for an array, or an attempt to expand an array beyond its maximum size.
+ */
+record ArraySizeException type Exception
+end
+
+/**
+ * InvalidIndexExceptions are thrown when a subscript or substring index is
+ * out of bounds.
+ */
+record InvalidIndexException type Exception
+end
+
+/**
+ * A NullValueException is thrown because of an attempt to get the value of a 
+ * null reference. 
+ */
+record NullValueException type Exception
+end
+
+/**
+ * When a value can't be converted to a particular type, a TypeCastException is thrown.
+ */
+record TypeCastException type Exception
+	/**
+	 * The name of the type to which conversion was attempted.
+	 */
+	castToName string;
+	
+	/**
+	 * Names the type of the value.
+	 */
+	actualTypeName string;
+end
+
+/**
+ * A DynamicAccessException is thrown when dynamic access fails to find the specified field.
+ */
+record DynamicAccessException type Exception
+	/**
+	 * The name of the nonexistant field.
+	 */
+	key string;
+end

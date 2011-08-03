@@ -1,0 +1,8 @@
+package eglx.xml.binding.annotation;
+
+Record XMLAttribute type Annotation
+{ targets = [ ElementKind.fieldMbr ]}
+  name string  = "##default";
+  namespace string = "##default";
+  required boolean = false;
+end

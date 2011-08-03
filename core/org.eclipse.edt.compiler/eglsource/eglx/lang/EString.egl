@@ -1,0 +1,97 @@
+package eglx.lang;
+
+import egl.lang.EglAny;
+import egl.lang.EglNumber;
+import egl.lang.EglString;
+import egl.lang.reflect.ParameterizableType;
+import egl.lang.reflect.mof.Operation;
+
+import org.eclipse.edt.mof.egl.SequenceType;
+
+externalType EString extends EglString type ParameterizableType {
+	parameterizedType = SequenceType
+}
+	static function $Plus(lvalue EString in, rvalue EString in) returns(EString) {@Operation{"+"}};
+	static function $Plus(lvalue EString in, rvalue EglAny in) returns(EString) {@Operation{"+"}};
+	static function $Concat(value EString in, rvalue EString in) returns (EString) {@Operation{"::"}};
+	static function $Concat(value EString in, rvalue EglAny in) returns (EString) {@Operation{"::"}};
+	static function $ConcatNull(value EString in, rvalue EString in) returns(EString) {@Operation{"?:"}};
+	static function $ConcatNull(value EString in, rvalue EglAny in) returns(EString) {@Operation{"?:"}};
+
+	/**
+	 * {@Operation <} Compares two strings.
+	 */
+	static function $LT(lvalue EString in, rvalue EString in) returns (EBoolean) {@Operation{"<"}};
+
+	/**
+	 * {@Operation >} Compares two strings.
+	 */
+	static function $GT(lvalue EString in, rvalue EString in) returns (EBoolean) {@Operation{">"}};
+
+	/**
+	 * {@Operation <=} Compares two strings.
+	 */
+	static function $LTE(lvalue EString in, rvalue EString in) returns (EBoolean) {@Operation{"<="}};
+
+	/**
+	 * {@Operation >=} Compares two strings.
+	 */
+	static function $GTE(lvalue EString in, rvalue EString in) returns (EBoolean) {@Operation{">="}};
+
+	/**
+	 * {@Operation ==} Compares two strings.
+	 */
+	static function $EQ(lvalue EString in, rvalue EString in) returns(EBoolean) {@Operation{"=="}};
+
+	/**
+	 * {@Operation !=} Compares two strings.
+	 */
+	static function $NEQ(lvalue EString in, rvalue EString in) returns(EBoolean) {@Operation{"!="}};
+
+	/**
+	 * {@Operation [:} Returns the substring starting at fromIndex and ending at toIndex.
+	 * @throws InvalidIndexException  if either index is out of range, or fromIndex is >= toIndex.
+	 */
+	static function $Substr(value EString in, fromIndex EInt in, toIndex EInt in) returns(EString) {@Operation{"[:"}};
+	
+	static function asNumber(value EString in) returns(EglNumber) {@Operation{"narrow"}};
+	
+	static function asString(value EBigint in) returns (EString) {@Operation{"widen"}};
+	static function asString(value EBoolean in) returns (EString) {@Operation{"widen"}};
+	
+	/**
+	 * {@Operation widen} Converts a date to a string in the format "MM/dd/yyyy".
+	 * Leading zeros are included in the string, so April 1st in the year 9 A.D. is
+	 * converted to "04/01/0009".
+	 */
+	static function asString(value EDate in) returns (EString) {@Operation{"widen"}};
+	static function asString(value EDecimal in) returns (EString) {@Operation{"widen"}};
+	static function asString(value EFloat in) returns (EString) {@Operation{"widen"}};
+	static function asString(value EInt in) returns (EString) {@Operation{"widen"}};
+	static function asString(value ESmallfloat in) returns (EString) {@Operation{"widen"}};
+	static function asString(value ESmallint in) returns (EString) {@Operation{"widen"}};
+	
+	/**
+	 * {@Operation widen} Converts a timestamp to a string.  The 26-character string
+	 * will include all possible fields of a timestamp, from years down to fractions
+	 * of seconds, in the format "yyyy-MM-dd HH:mm:ss.SSSSSS".  Leading zeros are 
+	 * included in each field of the string when necessary, e.g. January is 
+	 * represented as "01" not "1". 
+	 */
+	static function asString(value ETimestamp in) returns (EString) {@Operation{"widen"}};
+	
+	function length() returns(EInt);
+	function clip() returns(EString);
+	function clipLeading() returns(EString);
+	function trim() returns(EString);
+	function toUpperCase() returns(EString);
+	function toLowerCase() returns(EString);
+	function indexOf(substr EString in) returns (EInt);
+	function indexOf(substr EString in, startIndex EInt in) returns (EInt);
+	function lastIndexOf(substr EString in) returns (EInt);
+	function endsWith(suffix EString in) returns(EBoolean);
+	function startsWith(prefix EString in) returns(EBoolean);
+	// replace all occurances of target
+	function replaceStr(target EString in, replacement EString in) returns(EString);
+	function charCodeAt(index EInt in) returns(EInt);
+end

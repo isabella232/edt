@@ -11,9 +11,8 @@
  *******************************************************************************/
 package eglx.xml;
 
+import egl.lang.Exception;
+
 Record XMLProcessingException type Exception
-{
-	eglIsSystemPart = yes
-}
   	detail string;
 end

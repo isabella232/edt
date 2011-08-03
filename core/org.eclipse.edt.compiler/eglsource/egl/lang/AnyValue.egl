@@ -1,0 +1,9 @@
+package egl.lang;
+
+import egl.lang.reflect.ClassType;
+
+/**
+ * AnyValue is the supertype of every type that's not a reference type.
+ */
+externalType AnyValue extends EglAny type ClassType {isAbstract=yes}
+end

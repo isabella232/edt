@@ -1,0 +1,60 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package eglx.java;
+
+import egl.lang.EventListener;
+import egl.lang.reflect.NoReflect;
+
+import eglx.lang.Property;
+    
+Record JavaObject type Annotation { 
+	targets = [ ElementKind.ExternalTypePart ],
+	  
+	@Stereotype {
+		memberAnnotations = [
+			EventListener, Property
+		],
+		defaultSuperType = Object     
+	},
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.JavaObjectAnnotationTypeBinding"
+}
+	packageName String {@NoReflect};   //mark this as noReflect, so that setting this field does not change the EClass that specifies this stereotype
+	javaName String;
+end
+
+Record RootJavaObject type Annotation { 
+	targets = [ ElementKind.ExternalTypePart ],
+	  
+	@Stereotype {
+		memberAnnotations = [
+			EventListener, Property
+		]
+	}
+}
+	packageName String {@NoReflect};   //mark this as noReflect, so that setting this field does not change the EClass that specifies this stereotype
+end
+
+ExternalType Object type RootJavaObject
+	{
+		packageName = "java.lang"
+	}
+	    
+	Function toString() returns (string);     
+	Function getClass() returns (Class);   
+	Function equals(obj Object in) returns (boolean);
+end
+
+ExternalType Class extends Object type RootJavaObject
+	{
+		packageName = "java.lang"
+	}
+end

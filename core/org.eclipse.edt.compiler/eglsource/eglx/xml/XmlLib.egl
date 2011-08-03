@@ -11,13 +11,11 @@
  *******************************************************************************/
 package eglx.xml;
 
-library XmlLib{eglIsSystemPart = yes}
+import egl.lang.NativeType;
 
-    function convertFromXML(xmlstr string in, eglType any const in)
-    	{eglSystemConstant = 145}
-    end
+externaltype XmlLib type NativeType
 
-    function convertToXML(eglType any const in, document boolean in) returns(string)
-    	{eglSystemConstant = 146, eglValidNumberOfArguments = [1, 2]}
-    end
+    static function convertFromXML(xmlstr string in, eglType any const in);
+
+    static function convertToXML(eglType any const in, document boolean in) returns(string);
 end

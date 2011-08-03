@@ -63,10 +63,6 @@ public class PrimitiveTypeBindingImpl extends PrimitiveTypeBinding {
 		return PRIMITIVE_TYPE_BINDING;
 	}
 
-	public IDataBinding findData(String simpleName) {
-		return IBinding.NOT_FOUND_BINDING;
-	}
-
 	public boolean isReferentiallyEqual(ITypeBinding anotherTypeBinding) {
 		// TODO Auto-generated method stub
 		return false;

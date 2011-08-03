@@ -12,18 +12,11 @@
 package eglx.json;
 
 import egl.lang.reflect.InterfacePart;
+import egl.lang.NativeType;
 
-library JsonLib
-{
-    eglIsSystemPart = yes
-}
+externaltype JsonLib type NativeType
    
-    function convertFromJSON(json string in, eglType any const in)
-        {eglSystemConstant = 144}
-    end
+    static function convertFromJSON(json string in,  eglType any const in);
 
-    function convertToJSON(eglType any const in) returns(string)
-        {eglSystemConstant = 147}
-    end
-
+    static function convertToJSON(eglType any const in) returns(string);
 end

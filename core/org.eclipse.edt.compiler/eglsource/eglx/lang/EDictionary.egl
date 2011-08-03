@@ -1,0 +1,93 @@
+package eglx.lang;
+
+import egl.lang.EglAny;
+import egl.lang.reflect.ClassType;
+import egl.lang.reflect.mof.Operation;
+
+/**
+ * An EDictionary stores named values.  The name of a value -- its key -- is used
+ * to access that value.  The keys are strings and the values are of type Any.
+ */
+externalType EDictionary extends EglAny type ClassType
+	/**
+	 * {@Operation ['} Returns the value with the given key.
+	 * @throws DynamicAccessException  if there's no key with the given name.
+	 */
+	static function $Lookup(dict EDictionary in, key EString in) returns(EglAny) {@Operation{"['"}};
+
+	/**
+	 * This determines how the getKeys and getValues functions populate the arrays
+	 * they return.  If this field is set to byKey, the elements of those arrays are
+	 * in alphabetical order of the keys.  If this field is set to byInsertion,
+	 * the elements of those arrays are in the order that keys were added to the
+	 * dictionary.  If this field is set to none (the default), the elements of 
+	 * those arrays may be in any order whatsoever.
+	 */
+	order OrderingKind;
+
+	/**
+	 * True if keys are case-sensitive, false if they are not.  The default is false.
+	 */
+	caseSensitive EBoolean;
+	
+	/**
+	 * Tells if there's a value stored with the given key.
+	 *
+	 * @param key  the key.
+	 * @return true if the key is in this dictionary.
+	 */
+	function containsKey(key EString in) returns(EBoolean);
+	
+	/**
+	 * Returns an array containing all of the keys, in the order specified by
+	 * the order field.
+	 *
+	 * @return the keys.
+	 */
+	function getKeys() returns(EString[]);
+	
+	/**
+	 * Returns an array containing all of the values, in the order specified by
+	 * the order field.
+	 *
+	 * @return the values.
+	 */
+	function getValues() returns(EglAny[]);
+
+	/**
+	 * Puts all of the key-value pairs from one dictionary into this dictionary.
+	 *
+	 * @param other  the source of the new key-value pairs.
+	 */
+	function insertAll(other EDictionary in);
+
+	/**
+	 * Removes all of the key-value pairs from this dictionary.
+	 */
+	function removeAll();
+
+	/**
+	 * Removes the key-value pair which uses the specified key.
+	 *
+	 * @param key  the key.
+	 * @throws DynamicAccessException  if there's no key-value pair with the given key.
+	 */
+	function removeElement(key EString in);
+	
+	/**
+	 * Returns the number of key-value pairs in this dictionary.
+	 *
+	 * @return the size.
+	 */
+	function size() returns( EInt );
+end
+
+/**
+ * OrderingKind provides values for the order field of dictionary.  See the
+ * documentation of EDictionary.order for more information.
+ */
+enumeration OrderingKind
+	byKey = 1,
+	byInsertion = 2,
+	none = 3
+end

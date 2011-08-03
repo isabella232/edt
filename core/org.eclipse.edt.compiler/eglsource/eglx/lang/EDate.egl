@@ -1,0 +1,83 @@
+package eglx.lang;
+
+import egl.lang.AnyValue;
+import egl.lang.reflect.ClassType;
+import egl.lang.reflect.mof.Operation;
+
+/**
+ * A date stores a day, month, and year.
+ */
+externalType EDate extends AnyValue type ClassType
+	/**
+	 * {@Operation <} Compares two dates.
+	 */
+	static function $LT(lvalue EDate in, rvalue EDate in) returns (EBoolean) {@Operation{"<"}};
+
+	/**
+	 * {@Operation >} Compares two dates.
+	 */
+	static function $GT(lvalue EDate in, rvalue EDate in) returns (EBoolean) {@Operation{">"}};
+
+	/**
+	 * {@Operation <=} Compares two dates.
+	 */
+	static function $LTE(lvalue EDate in, rvalue EDate in) returns (EBoolean) {@Operation{"<="}};
+
+	/**
+	 * {@Operation >=} Compares two dates.
+	 */
+	static function $GTE(lvalue EDate in, rvalue EDate in) returns (EBoolean) {@Operation{">="}};
+
+	/**
+	 * {@Operation ==} Compares two dates.
+	 */
+	static function $EQ(lvalue EDate in, rvalue EDate in) returns(EBoolean) {@Operation{"=="}};
+
+	/**
+	 * {@Operation !=} Compares two dates.
+	 */
+	static function $NEQ(lvalue EDate in, rvalue EDate in) returns(EBoolean) {@Operation{"!="}};
+
+	/**
+	 * {@Operation narrow} Converts a string to a date.  The string is parsed
+	 * by searching for the month, then the day, then the year.  One or two digits
+	 * can be specified for the month and day.  The year requires a minimum of one
+	 * digit and a maximum of at least four digits (in other words, some implementations
+	 * can support years beyond 9999).  One separator character is required between
+	 * the month and day, and another between the day and year.  The separator 
+	 * character can be anything, even a digit (though that's probably a bad idea)
+	 * and the two separator characters don't have to be identical.  
+	 *
+	 * @throws TypeCastException if the string can't be parsed into a date.
+	 */
+	static function asDate(value EString in) returns (EDate) {@Operation{"narrow"}};
+	
+	// this replaces date-time math: date - date = int
+	/**
+	 * Returns the number of days between two dates.  The result is positive when
+	 * this date is later than the other date, and negative when the other date
+	 * is later than this date.
+	 *
+	 * @param other  the other date.
+	 * @return how many days the two days differ.
+	 */
+	function daysDifferent(other EDate in) returns(EInt);
+
+	// this replaces date-time math: number + date = date, data +/- number = date
+	/**
+	 * Returns a new date representing this date plus a given number of days.
+	 * Use negative numbers to subtract days instead of adding them. 
+	 *
+	 * @param days  the number of days to add.
+	 * @return a new date.
+	 */
+	function addDays(days EInt in) returns(EDate);
+
+	/**
+	 * Creates a timestamp from a date.
+	 *
+	 * @param timeSpanPattern  the desired pattern for the timestamp.
+	 * @return a new timestamp.
+	 */
+	function extend(timeSpanPattern EString in) returns(ETimestamp);
+end
