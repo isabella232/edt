@@ -96,29 +96,4 @@ externalType EglString extends AnyText type ParameterizableType {
 	 * "true" or "false".
 	 */
 	static function asString(value EglBoolean in) returns (EglString) {@Operation{"widen"}};
-
-	/**
-	 * A pattern-matching function which compares this string to a pattern using
-	 * the rules of SQL's LIKE operator.  There are three special characters:
-	 *   _ matches any one character 
-	 *   % matches zero or more characters
-	 *   \ is the escape character 
-	 *
-	 * TODO put more details here
-	 *
-	 * @param value  the pattern to compare with this string.
-	 * @return true if this string matches the pattern.
-	 */
-	function isLike(value EglString in) returns(EglBoolean);
-
-	/**
-	 * A pattern-matching function which compares this string to a pattern using
-	 * the rules of Informix's MATCHES operator.
-	 *
-	 * TODO put more details here
-	 *
-	 * @param value  the pattern to compare with this string.
-	 * @return true if this string matches the pattern.
-	 */
-	function matchesPattern(value EglString in) returns(EglBoolean);
 end
