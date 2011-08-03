@@ -21,9 +21,7 @@ import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.TimestampIntervalMask;
 
 /**
- * A class for Timestamps. The value is a Calendar and a number of microseconds (an int) which is encapsulated in a
- * TimestampData object. Timestamps store a varying set of fields, from years down to microseconds. The first and last fields
- * are indicated by the startCode and endCode fields, which are set from the "CODE" constants.
+ * A class for Dates. The value is a Calendar.
  * @author mheitz
  */
 public class EDate extends AnyBoxedObject<Calendar> {
@@ -53,6 +51,17 @@ public class EDate extends AnyBoxedObject<Calendar> {
 
 	public static boolean ezeIsa(Object value) {
 		return value instanceof EDate;
+	}
+
+	public static Calendar defaultValue() {
+		long now = java.lang.System.currentTimeMillis();
+		Calendar cal = DateTimeUtil.getBaseCalendar();
+		cal.setTimeInMillis( now );
+		cal.set( Calendar.MILLISECOND, 0 );
+		cal.set( cal.get( Calendar.YEAR ), cal.get( Calendar.MONTH ), 
+				cal.get( Calendar.DAY_OF_MONTH ), 0, 0, 0 );
+
+		return cal;
 	}
 
 	public static Calendar asDate(String date, Integer... length) throws JavartException {
