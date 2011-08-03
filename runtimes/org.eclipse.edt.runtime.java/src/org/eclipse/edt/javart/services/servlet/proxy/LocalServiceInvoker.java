@@ -13,11 +13,11 @@ package org.eclipse.edt.javart.services.servlet.proxy;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.services.servlet.ServletUtilities;
 
-import eglx._service.Encoding;
-import eglx._service.ServiceKind;
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
 import eglx.http.HttpUtilities;
+import eglx.services.Encoding;
+import eglx.services.ServiceKind;
 
 public class LocalServiceInvoker extends ServiceInvoker{
 	private long elapseTime;

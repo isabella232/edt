@@ -17,9 +17,9 @@ import org.eclipse.edt.javart.json.StringNode;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.runtime.java.egl.lang.AnyException;
 
-import eglx._service.ServiceKind;
-import eglx._service.ServiceUtilities;
 import eglx.http.HttpUtilities;
+import eglx.services.ServiceKind;
+import eglx.services.ServiceUtilities;
 
 
 public class JsonUtilities {

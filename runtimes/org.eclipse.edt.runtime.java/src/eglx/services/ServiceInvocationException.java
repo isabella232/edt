@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package eglx._service;
+package eglx.services;
 
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.runtime.java.egl.lang.AnyException;

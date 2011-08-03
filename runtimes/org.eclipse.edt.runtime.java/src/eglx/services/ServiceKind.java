@@ -8,17 +8,16 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package eglx._service;
+package eglx.services;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-public enum Encoding {
-	NONE(1),
-	JSON(2),
-	XML(3),
-	_FORM(4),
-	USE_CONTENTTYPE(4);
+public enum ServiceKind {
+	EGL(1),
+	WEB(2),
+	NATIVE(3),
+	REST(4);
 	private final int value;
-	Encoding(int value) {
+	ServiceKind(int value) {
 		this.value = value;
 	}
 	public int getValue() {

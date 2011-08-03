@@ -20,7 +20,7 @@ import java.util.StringTokenizer;
 
 import org.eclipse.edt.javart.Constants;
 
-import eglx._service.Encoding;
+import eglx.services.Encoding;
 
 class RestServiceProjectInfo	implements Serializable
 {

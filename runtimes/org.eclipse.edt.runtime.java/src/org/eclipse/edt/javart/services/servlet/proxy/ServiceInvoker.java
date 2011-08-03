@@ -27,11 +27,8 @@ import org.eclipse.edt.javart.services.bindings.EGLBinding;
 import org.eclipse.edt.javart.services.bindings.ProtocolLOCAL;
 import org.eclipse.edt.javart.services.bindings.WebBinding;
 
-import eglx._service.Encoding;
-import eglx._service.ServiceInvocationException;
-import eglx._service.ServiceKind;
-import eglx._service.ServiceUtilities;
 import eglx.http.HttpResponse;
+import eglx.services.*;
 
 
 

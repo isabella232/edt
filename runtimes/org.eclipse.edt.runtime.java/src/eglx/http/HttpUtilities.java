@@ -26,7 +26,7 @@ import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.services.servlet.proxy.ServiceInvoker;
 import org.eclipse.edt.javart.util.JavartUtil;
 
-import eglx._service.ServiceUtilities;
+import eglx.services.ServiceUtilities;
 
 public class HttpUtilities {
 	public static final int HTTP_STATUS_FAILED = 500;

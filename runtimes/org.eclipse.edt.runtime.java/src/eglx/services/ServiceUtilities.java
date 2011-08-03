@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package eglx._service;
+package eglx.services;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;

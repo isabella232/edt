@@ -33,12 +33,12 @@ import org.eclipse.edt.javart.services.servlet.ServletUtilities;
 import org.eclipse.edt.javart.util.JavartUtil;
 
 import egl.lang.EDictionary;
-import eglx._service.ServiceKind;
-import eglx._service.ServiceUtilities;
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
 import eglx.http.HttpUtilities;
 import eglx.json.JsonUtilities;
+import eglx.services.ServiceKind;
+import eglx.services.ServiceUtilities;
 
 
 public class HttpServiceHandler

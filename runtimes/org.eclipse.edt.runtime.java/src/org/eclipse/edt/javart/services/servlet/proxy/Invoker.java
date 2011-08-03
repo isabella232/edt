@@ -13,9 +13,9 @@ package org.eclipse.edt.javart.services.servlet.proxy;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.resources.Trace;
 
-import eglx._service.ServiceKind;
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
+import eglx.services.ServiceKind;
 
 abstract class Invoker {
 	private Trace tracer;

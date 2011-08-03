@@ -13,7 +13,7 @@ import org.eclipse.edt.javart.ByteStorage;
 import org.eclipse.edt.javart.Program;
 import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
 
-import eglx._service.Encoding;
+import eglx.services.Encoding;
 public class HttpResponse extends AnyValue {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient

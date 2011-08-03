@@ -16,12 +16,12 @@ import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.resources.Trace;
 import org.eclipse.edt.javart.services.servlet.ServletUtilities;
 
-import eglx._service.ServiceBindingException;
-import eglx._service.ServiceInvocationException;
-import eglx._service.ServiceUtilities;
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
 import eglx.http.HttpUtilities;
+import eglx.services.ServiceBindingException;
+import eglx.services.ServiceInvocationException;
+import eglx.services.ServiceUtilities;
 
 
 public class ProxyEventHandler //extends EglHttpConnection

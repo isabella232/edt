@@ -31,12 +31,12 @@ import org.eclipse.edt.javart.resources.StartupInfo;
 import org.eclipse.edt.javart.resources.Trace;
 import org.eclipse.edt.javart.services.servlet.proxy.RuiBrowserHttpRequest;
 
-import eglx._service.ServiceKind;
-import eglx._service.ServiceUtilities;
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
 import eglx.http.HttpUtilities;
 import eglx.json.JsonUtilities;
+import eglx.services.ServiceKind;
+import eglx.services.ServiceUtilities;
 
 
 

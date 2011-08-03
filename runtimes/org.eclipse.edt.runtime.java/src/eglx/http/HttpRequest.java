@@ -14,7 +14,7 @@ import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.Program;
 import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
 
-import eglx._service.Encoding;
+import eglx.services.Encoding;
 public class HttpRequest extends AnyValue {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient

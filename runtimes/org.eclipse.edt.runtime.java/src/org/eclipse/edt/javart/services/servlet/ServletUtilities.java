@@ -16,10 +16,10 @@ import org.eclipse.edt.javart.json.JsonParser;
 import org.eclipse.edt.javart.json.ParseException;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 
-import eglx._service.ServiceInvocationException;
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
 import eglx.json.JSONToEGLConverter;
+import eglx.services.ServiceInvocationException;
 
 
 
