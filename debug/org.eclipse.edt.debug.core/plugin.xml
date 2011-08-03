@@ -18,4 +18,35 @@
 		point="org.eclipse.edt.debug.core.variableAdapters">
 		<adapter class="org.eclipse.edt.debug.internal.core.java.variables.EDTVariableAdapter"/>
 	</extension>
+ <extension
+       point="org.eclipse.debug.core.breakpoints">
+    <breakpoint
+          class="org.eclipse.edt.debug.core.breakpoints.EGLLineBreakpoint"
+          id="eglLineBreakpoint"
+          markerType="org.eclipse.edt.debug.core.eglLineBreakpointMarker"
+          name="%eglLineBreakpointName">
+    </breakpoint>
+ </extension>
+ <extension
+       id="eglBreakpointMarker"
+       name="%eglBreakpointMarkerName"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.debug.core.breakpointMarker">
+    </super>
+ </extension>
+ <extension
+       id="eglLineBreakpointMarker"
+       name="%eglLineBreakpointMarkerName"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.edt.debug.core.eglBreakpointMarker">
+    </super>
+    <super
+          type="org.eclipse.debug.core.lineBreakpointMarker">
+    </super>
+    <persistent
+          value="true">
+    </persistent>
+ </extension>
 </plugin>

@@ -14,12 +14,14 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.equinox.frameworkadmin,
  org.eclipse.edt.ide.core,
  org.eclipse.ui,
- org.eclipse.jdt.core
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.debug.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.edt.debug.core,
+ org.eclipse.edt.debug.core.breakpoints,
  org.eclipse.edt.debug.core.java,
- org.eclipse.edt.debug.internal.core.java
+ org.eclipse.edt.debug.internal.core.java;x-friends:="org.eclipse.edt.debug.ui"
 Agent-Class: org.eclipse.edt.debug.core.Transformer
 Premain-Class: org.eclipse.edt.debug.core.Transformer
 Can-Retransform-Classes: true

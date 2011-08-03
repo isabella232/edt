@@ -18,10 +18,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IBreakpointManager;
+import org.eclipse.debug.core.IBreakpointManagerListener;
 import org.eclipse.debug.core.IDebugEventFilter;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IBreakpoint;
@@ -32,16 +38,28 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
+import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.edt.debug.core.IEGLDebugTarget;
+import org.eclipse.edt.debug.core.breakpoints.EGLLineBreakpoint;
 import org.eclipse.edt.debug.core.java.IEGLJavaDebugTarget;
 import org.eclipse.edt.debug.core.java.IEGLJavaThread;
+import org.eclipse.edt.gen.java.JavaAliaser;
+import org.eclipse.edt.ide.core.model.EGLCore;
+import org.eclipse.edt.ide.core.model.EGLModelException;
+import org.eclipse.edt.ide.core.model.IEGLFile;
+import org.eclipse.edt.ide.core.model.IPackageDeclaration;
+import org.eclipse.jdt.debug.core.IJavaBreakpoint;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
+import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
 import org.eclipse.jdt.debug.core.IJavaThread;
+import org.eclipse.jdt.debug.core.JDIDebugModel;
+import org.eclipse.jdt.internal.debug.ui.BreakpointUtils;
 
 /**
  * Wraps an IJavaDebugTarget.
  */
-public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaDebugTarget, IDebugEventFilter
+@SuppressWarnings("restriction")
+public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaDebugTarget, IDebugEventFilter, IBreakpointManagerListener
 {
 	/**
 	 * The underlying Java debug target.
@@ -58,12 +76,18 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 	 */
 	private final List<IEGLJavaThread> eglThreads;
 	
+	/**
+	 * The breakpoints registered with this target.
+	 */
+	private final Map<EGLLineBreakpoint, IJavaBreakpoint> breakpoints;
+	
 	public EGLJavaDebugTarget( IJavaDebugTarget target )
 	{
 		super( null );
 		javaTarget = target;
 		threads = new HashMap<IJavaThread, EGLJavaThread>();
 		eglThreads = new ArrayList<IEGLJavaThread>();
+		breakpoints = new HashMap<EGLLineBreakpoint, IJavaBreakpoint>();
 		
 		// Add the initial threads, which are created before the target.
 		try
@@ -83,6 +107,7 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 		}
 		
 		DebugPlugin.getDefault().addDebugEventFilter( this );
+		initializeBreakpoints();
 	}
 	
 	/*
@@ -159,22 +184,298 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 		javaTarget.suspend();
 	}
 	
+	/**
+	 * Adds the initial EGL breakpoints.
+	 */
+	private void initializeBreakpoints()
+	{
+		IBreakpointManager manager = DebugPlugin.getDefault().getBreakpointManager();
+		manager.addBreakpointListener( this );
+		manager.addBreakpointManagerListener( this );
+		IBreakpoint[] bps = manager.getBreakpoints( IEGLDebugCoreConstants.EGL_JAVA_MODEL_PRESENTATION_ID );
+		
+		for ( IBreakpoint bp : bps )
+		{
+			if ( bp instanceof EGLLineBreakpoint )
+			{
+				breakpointAdded( bp );
+			}
+		}
+	}
+	
+	@Override
+	public boolean supportsBreakpoint( IBreakpoint breakpoint )
+	{
+		return javaTarget.supportsBreakpoint( breakpoint ) || breakpoint instanceof EGLLineBreakpoint;
+	}
+	
 	@Override
 	public void breakpointAdded( IBreakpoint breakpoint )
 	{
-		javaTarget.breakpointAdded( breakpoint );
+		if ( breakpoint instanceof EGLLineBreakpoint )
+		{
+			EGLLineBreakpoint eglBP = (EGLLineBreakpoint)breakpoint;
+			if ( !breakpoints.containsKey( eglBP ) )
+			{
+				try
+				{
+					IJavaBreakpoint javaBP = createStratumBreakpoint( eglBP );
+					if ( javaBP != null )
+					{
+						javaBP.setEnabled( eglBP.isEnabled() );
+						breakpoints.put( eglBP, javaBP );
+						
+						// Add to the java target so long as either the bp manager is enabled, or the egl bp isn't registered with the manager.
+						if ( DebugPlugin.getDefault().getBreakpointManager().isEnabled() || !eglBP.isRegistered() )
+						{
+							javaTarget.breakpointAdded( javaBP );
+						}
+					}
+				}
+				catch ( CoreException e )
+				{
+					EDTDebugCorePlugin.log( e );
+				}
+			}
+		}
+		else if ( notifyJavaTarget( breakpoint ) )
+		{
+			javaTarget.breakpointAdded( breakpoint );
+		}
 	}
 	
 	@Override
 	public void breakpointRemoved( IBreakpoint breakpoint, IMarkerDelta delta )
 	{
-		javaTarget.breakpointRemoved( breakpoint, delta );
+		if ( breakpoint instanceof EGLLineBreakpoint )
+		{
+			IJavaBreakpoint javaBP = breakpoints.remove( breakpoint );
+			if ( javaBP != null )
+			{
+				javaTarget.breakpointRemoved( javaBP, delta );
+				try
+				{
+					javaBP.delete();
+				}
+				catch ( CoreException e )
+				{
+					EDTDebugCorePlugin.log( e );
+				}
+			}
+			
+			// If this isn't a registered breakpoint, delete it when it's removed.
+			try
+			{
+				if ( !breakpoint.isRegistered() )
+				{
+					breakpoint.delete();
+				}
+			}
+			catch ( CoreException e )
+			{
+				EDTDebugCorePlugin.log( e );
+			}
+		}
+		else if ( notifyJavaTarget( breakpoint ) )
+		{
+			javaTarget.breakpointRemoved( breakpoint, delta );
+		}
 	}
 	
 	@Override
 	public void breakpointChanged( IBreakpoint breakpoint, IMarkerDelta delta )
 	{
-		javaTarget.breakpointChanged( breakpoint, delta );
+		if ( breakpoint instanceof EGLLineBreakpoint )
+		{
+			EGLLineBreakpoint eglBP = (EGLLineBreakpoint)breakpoint;
+			IJavaBreakpoint javaBP = breakpoints.get( eglBP );
+			if ( javaBP != null )
+			{
+				IMarker marker = eglBP.getMarker();
+				
+				// If the line number has changed then we need to recreate the java bp (there's no setLineNumber()).
+				if ( lineNumberChanged( marker, delta ) )
+				{
+					try
+					{
+						javaBP.delete();
+						javaBP = createStratumBreakpoint( eglBP );
+						if ( javaBP != null )
+						{
+							javaBP.setEnabled( breakpoint.isEnabled() );
+							breakpoints.put( eglBP, javaBP );
+							javaTarget.breakpointAdded( javaBP );
+						}
+						else
+						{
+							breakpoints.remove( eglBP );
+						}
+					}
+					catch ( CoreException e )
+					{
+						EDTDebugCorePlugin.log( e );
+					}
+				}
+				else if ( enablementChanged( marker, delta ) )
+				{
+					try
+					{
+						javaBP.setEnabled( eglBP.isEnabled() );
+					}
+					catch ( CoreException e )
+					{
+						EDTDebugCorePlugin.log( e );
+					}
+				}
+			}
+		}
+		else if ( notifyJavaTarget( breakpoint ) )
+		{
+			javaTarget.breakpointChanged( breakpoint, delta );
+		}
+	}
+	
+	private boolean notifyJavaTarget( IBreakpoint bp )
+	{
+		try
+		{
+			return !bp.isRegistered() || (bp instanceof IJavaLineBreakpoint && BreakpointUtils.isRunToLineBreakpoint( (IJavaLineBreakpoint)bp ));
+		}
+		catch ( CoreException e )
+		{
+			return false;
+		}
+	}
+	
+	@Override
+	public void breakpointManagerEnablementChanged( boolean enabled )
+	{
+		for ( Map.Entry<EGLLineBreakpoint, IJavaBreakpoint> entry : breakpoints.entrySet() )
+		{
+			if ( enabled )
+			{
+				javaTarget.breakpointAdded( entry.getValue() );
+			}
+			else
+			{
+				// When the manager is disabled, only remove the breakpoints that are registered with it.
+				try
+				{
+					if ( entry.getKey().isRegistered() )
+					{
+						javaTarget.breakpointRemoved( entry.getValue(), null );
+					}
+				}
+				catch ( CoreException e )
+				{
+					EDTDebugCorePlugin.log( e );
+				}
+			}
+		}
+	}
+	
+	private boolean lineNumberChanged( IMarker marker, IMarkerDelta delta )
+	{
+		if ( delta != null )
+		{
+			return delta.getAttribute( IMarker.LINE_NUMBER, -1 ) != marker.getAttribute( IMarker.LINE_NUMBER, -1 );
+		}
+		
+		// Must assume it changed.
+		return true;
+	}
+	
+	private boolean enablementChanged( IMarker marker, IMarkerDelta delta )
+	{
+		if ( delta != null )
+		{
+			return delta.getAttribute( IBreakpoint.ENABLED, true ) != marker.getAttribute( IBreakpoint.ENABLED, true );
+		}
+		
+		// Must assume it changed.
+		return true;
+	}
+	
+	private IJavaBreakpoint createStratumBreakpoint( EGLLineBreakpoint bp ) throws CoreException
+	{
+		IMarker marker = bp.getMarker();
+		if ( marker != null && marker.exists() )
+		{
+			IResource resource = null;
+			if ( bp.isRunToLine() )
+			{
+				// RTL is created on the workspace root so that the marker doesn't appear in the editor.
+				// It will have stored its resource path.
+				String path = marker.getAttribute( IEGLDebugCoreConstants.RUN_TO_LINE_PATH, null );
+				if ( path != null )
+				{
+					resource = ResourcesPlugin.getWorkspace().getRoot().findMember( path );
+				}
+			}
+			else
+			{
+				resource = marker.getResource();
+			}
+			
+			if ( resource == null )
+			{
+				return null;
+			}
+			
+			String qualifiedName = getGeneratedClassName( resource );
+			if ( qualifiedName != null )
+			{
+				int hitcount = 0;
+				Map attributes = null;
+				if ( bp.isRunToLine() )
+				{
+					hitcount = 1;
+					attributes = new HashMap( 2 );
+					BreakpointUtils.addRunToLineAttributes( attributes );
+				}
+				
+				return JDIDebugModel.createStratumBreakpoint( marker.getResource(), IEGLDebugCoreConstants.EGL_STRATUM, resource.getName(), null, qualifiedName,
+						bp.getLineNumber(), bp.getCharStart(), bp.getCharEnd(), hitcount, false, attributes );
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * @return the fully-qualified class name of the generated file.
+	 */
+	private String getGeneratedClassName( IResource resource )
+	{
+		// TODO remove this dependency on the Java generator. need some other way to get the generated name for a resource.
+		// Different Java generators will use different naming conventions
+		IEGLFile eglFile = (IEGLFile)EGLCore.create( resource );
+		if ( eglFile != null && eglFile.exists() )
+		{
+			try
+			{
+				StringBuilder buf = new StringBuilder( 50 );
+				IPackageDeclaration[] pkg = eglFile.getPackageDeclarations();
+				if ( pkg != null && pkg.length > 0 )
+				{
+					buf.append( JavaAliaser.packageNameAlias( pkg[ 0 ].getElementName() ) );
+					buf.append( '.' );
+				}
+				
+				String name = eglFile.getElementName();
+				int idx = name.lastIndexOf( '.' );
+				if ( idx != -1 )
+				{
+					name = name.substring( 0, idx );
+				}
+				
+				buf.append( JavaAliaser.getAlias( name ) );
+				return buf.toString();
+			}
+			catch ( EGLModelException e )
+			{
+			}
+		}
+		return null;
 	}
 	
 	@Override
@@ -216,13 +517,16 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 	@Override
 	public IThread[] getThreads() throws DebugException
 	{
-		return eglThreads.toArray( new EGLJavaThread[ eglThreads.size() ] );
+		synchronized ( eglThreads )
+		{
+			return eglThreads.toArray( new EGLJavaThread[ eglThreads.size() ] );
+		}
 	}
 	
 	@Override
 	public boolean hasThreads() throws DebugException
 	{
-		return getThreads().length != 0;
+		return eglThreads.size() > 0;
 	}
 	
 	@Override
@@ -231,30 +535,42 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 		return javaTarget.getName();
 	}
 	
-	@Override
-	public boolean supportsBreakpoint( IBreakpoint breakpoint )
-	{
-		return javaTarget.supportsBreakpoint( breakpoint );
-	}
-	
 	protected EGLJavaThread getThread( IJavaThread javaThread )
 	{
-		EGLJavaThread eglThread = threads.get( javaThread );
+		EGLJavaThread eglThread;
+		synchronized ( threads )
+		{
+			eglThread = threads.get( javaThread );
+		}
 		if ( eglThread == null )
 		{
 			eglThread = new EGLJavaThread( this, javaThread );
-			threads.put( javaThread, eglThread );
-			eglThreads.add( eglThread );
+			synchronized ( threads )
+			{
+				threads.put( javaThread, eglThread );
+			}
+			synchronized ( eglThreads )
+			{
+				eglThreads.add( eglThread );
+			}
 		}
 		return eglThread;
 	}
 	
 	EGLJavaThread removeThread( IJavaThread javaThread )
 	{
-		EGLJavaThread eglThread = threads.remove( javaThread );
+		EGLJavaThread eglThread;
+		synchronized ( threads )
+		{
+			eglThread = threads.remove( javaThread );
+		}
+		
 		if ( eglThread != null )
 		{
-			eglThreads.remove( eglThread );
+			synchronized ( eglThreads )
+			{
+				eglThreads.remove( eglThread );
+			}
 			return eglThread;
 		}
 		return null;
@@ -338,9 +654,54 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 		{
 			if ( events[ 0 ].getKind() == DebugEvent.TERMINATE )
 			{
-				DebugPlugin.getDefault().removeDebugEventFilter( this );
+				cleanup();
 			}
 			super.handleDebugEvents( events );
+		}
+	}
+	
+	private void cleanup()
+	{
+		DebugPlugin plugin = DebugPlugin.getDefault();
+		plugin.getBreakpointManager().removeBreakpointListener( this );
+		plugin.getBreakpointManager().removeBreakpointManagerListener( this );
+		plugin.removeDebugEventFilter( this );
+		
+		// Delete all the stratum breakpoints we created.
+		for ( IJavaBreakpoint bp : breakpoints.values() )
+		{
+			try
+			{
+				bp.delete();
+			}
+			catch ( CoreException e )
+			{
+			}
+		}
+		
+		// Make sure any non-persisted EGL breakpoints are also deleted.
+		for ( EGLLineBreakpoint bp : breakpoints.keySet() )
+		{
+			try
+			{
+				if ( !bp.isPersisted() )
+				{
+					bp.delete();
+				}
+			}
+			catch ( CoreException e )
+			{
+			}
+		}
+		breakpoints.clear();
+		
+		synchronized ( threads )
+		{
+			threads.clear();
+		}
+		synchronized ( eglThreads )
+		{
+			eglThreads.clear();
 		}
 	}
 	
