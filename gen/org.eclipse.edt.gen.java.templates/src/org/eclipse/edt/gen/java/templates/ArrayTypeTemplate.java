@@ -48,7 +48,7 @@ public class ArrayTypeTemplate extends JavaTemplate {
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
 		} else {
-			out.print("AnyObject.ezeCast(");
+			out.print("EglAny.ezeCast(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(", ");
 			ctx.invoke(genRuntimeTypeName, type.getClassifier(), ctx, out, TypeNameKind.JavaImplementation);

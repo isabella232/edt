@@ -35,7 +35,7 @@ public class MemberNameTemplate extends JavaTemplate {
 			&& ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
 			out.print(arg2);
-			out.print("AnyObject.ezeWrap(");
+			out.print("EglAny.ezeWrap(");
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(")");
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)

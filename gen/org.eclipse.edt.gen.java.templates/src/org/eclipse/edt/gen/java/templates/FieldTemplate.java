@@ -62,7 +62,7 @@ public class FieldTemplate extends JavaTemplate {
 			// if the value associated with the temporary variable is 2, then it is to be instantiated (OUT parm)
 			// otherwise it is to be defaulted to null (INOUT parm), as there is an assignment already created
 			if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) == ParameterKind.PARM_OUT) {
-				out.print("AnyObject.ezeWrap(");
+				out.print("EglAny.ezeWrap(");
 				if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
 					ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
 				else

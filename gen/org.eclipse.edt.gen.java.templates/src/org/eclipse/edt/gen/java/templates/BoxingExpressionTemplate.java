@@ -25,7 +25,7 @@ public class BoxingExpressionTemplate extends JavaTemplate {
 			ctx.invoke(genTypeDependentOptions, expr.getType(), ctx, out);
 			out.print(")");
 		} else {
-			out.print("AnyObject.ezeBox(");
+			out.print("EglAny.ezeBox(");
 			ctx.invoke(genExpression, expr.getExpr(), ctx, out);
 			out.print(")");
 		}

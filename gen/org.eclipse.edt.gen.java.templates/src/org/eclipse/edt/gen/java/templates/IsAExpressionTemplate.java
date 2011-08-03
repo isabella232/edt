@@ -25,7 +25,7 @@ public class IsAExpressionTemplate extends JavaTemplate {
 			ctx.invoke(genTypeDependentOptions, expr.getEType(), ctx, out);
 			out.print(")");
 		} else {
-			out.print("AnyObject.ezeIsa(");
+			out.print("EglAny.ezeIsa(");
 			ctx.invoke(genExpression, expr.getObjectExpr(), ctx, out);
 			out.print(", ");
 			ctx.invoke(genRuntimeTypeName, expr.getEType(), ctx, out, TypeNameKind.EGLImplementation);
