@@ -44,13 +44,9 @@ public class FieldTemplate extends JavaTemplate {
 		out.println(";");
 	}
 
-	public void genXmlAnnotation(Field field, Context ctx, TabbedWriter out) {
-		Annotation annot = field.getAnnotation("eglx.xml._bind.annotation.XmlAttribute");
-		if(annot != null){
-			ctx.invoke(genXmlAnnotation, annot.getEClass(), ctx, out, annot);
-		}
-		else if((annot = field.getAnnotation("eglx.xml._bind.annotation.XmlElement")) != null){
-			ctx.invoke(genXmlAnnotation, annot.getEClass(), ctx, out, annot);
+	public void genAnnotations(Field field, Context ctx, TabbedWriter out) {
+		for(Annotation annot : field.getAnnotations()){
+			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field);
 		}
 	}
 
@@ -85,7 +81,7 @@ public class FieldTemplate extends JavaTemplate {
 	}
 
 	public void genGetter(Field field, Context ctx, TabbedWriter out) {
-		ctx.invoke(genXmlAnnotation, field, ctx, out);
+		ctx.invoke(genAnnotations, field, ctx, out);
 		out.print("public ");
 		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(" get");

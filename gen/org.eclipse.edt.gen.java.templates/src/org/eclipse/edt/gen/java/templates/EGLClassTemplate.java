@@ -66,7 +66,7 @@ public class EGLClassTemplate extends JavaTemplate {
 	}
 
 	public void genClassHeader(EGLClass part, Context ctx, TabbedWriter out) {
-		ctx.invoke(genXmlAnnotation, part, ctx, out);
+		ctx.invoke(genAnnotations, part, ctx, out);
 		out.print("public class ");
 		ctx.invoke(genClassName, part, ctx, out);
 		out.print(" extends ");
@@ -75,10 +75,9 @@ public class EGLClassTemplate extends JavaTemplate {
 		ctx.invoke(genSerialVersionUID, part, ctx, out);
 	}
 
-	public void genXmlAnnotation(EGLClass part, Context ctx, TabbedWriter out) {
-		Annotation annot = part.getAnnotation("eglx.xml._bind.annotation.XMLRootElement");
-		if(annot != null){
-			ctx.invoke(genXmlAnnotation, annot.getEClass(), ctx, out, annot);
+	public void genAnnotations(EGLClass part, Context ctx, TabbedWriter out) {
+		for(Annotation annot : part.getAnnotations()){
+			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot);
 		}
 	}
 	public void genClassBody(EGLClass part, Context ctx, TabbedWriter out) {

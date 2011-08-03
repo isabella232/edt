@@ -9,20 +9,21 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.java.templates;
+package org.eclipse.edt.gen.java.annotation.templates;
 
 import org.eclipse.edt.gen.java.Context;
+import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Field;
 
-public class AnnotationTypeTemplate extends JavaTemplate {
+public class AnnotationTemplate extends JavaTemplate {
 
-	public void preGenClassBody(AnnotationType part, Context ctx) {}
+	public void genAnnotation(AnnotationType annotType, Context ctx, TabbedWriter out, Annotation annot) {
+	}
 
-	public void genPart(AnnotationType part, Context ctx, TabbedWriter out) {}
-
-	public void genClassBody(AnnotationType part, Context ctx, TabbedWriter out) {}
-
-	public void genClassHeader(AnnotationType part, Context ctx, TabbedWriter out) {}
+	public void genAnnotation(AnnotationType annotType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
+	}
 
 }
