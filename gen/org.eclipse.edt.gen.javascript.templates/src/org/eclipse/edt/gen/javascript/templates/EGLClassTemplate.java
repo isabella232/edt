@@ -42,7 +42,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	private void addNamespaceMap(EGLClass part, Context ctx) {
 		String localName = part.getName();
 		String namespace = CommonUtilities.createNamespaceFromPackage(part);
-		Annotation annot = part.getAnnotation("eglx.xml._bind.annotation.xmlRootElement");
+		Annotation annot = part.getAnnotation("eglx.xml.binding.annotation.xmlRootElement");
 		if (annot != null) {
 			if (annot.getValue("namespace") != null && ((String) annot.getValue("namespace")).length() > 0) {
 				namespace = (String) annot.getValue("namespace");
@@ -307,7 +307,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.println(": function() {");
 		// create the XMLAnnotationMap
 		out.println("var xmlAnnotations = {};");
-		Annotation annot = part.getAnnotation("eglx.xml._bind.annotation.xmlRootElement");
+		Annotation annot = part.getAnnotation("eglx.xml.binding.annotation.xmlRootElement");
 		String namespace = null;
 		if (annot != null && annot.getValue("namespace") != null && ((String) annot.getValue("namespace")).length() > 0) {
 			namespace = (String) annot.getValue("namespace");
@@ -320,10 +320,10 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		if (annot != null && annot.getValue("nillable") != null) {
 			isNillable = CommonUtilities.convertBoolean(annot.getValue("nillable"));
 		}
-		out.println("xmlAnnotations[\"XMLRootElement\"] = new egl.eglx.xml._bind.annotation.XMLRootElement(" + (name == null ? "null" : quoted(name)) + ", "
+		out.println("xmlAnnotations[\"XMLRootElement\"] = new egl.eglx.xml.binding.annotation.XMLRootElement(" + (name == null ? "null" : quoted(name)) + ", "
 			+ (namespace == null ? "null" : quoted(namespace)) + ", " + isNillable.toString() + ");");
 
-		annot = part.getAnnotation("eglx.xml._bind.annotation.XMLStructure");
+		annot = part.getAnnotation("eglx.xml.binding.annotation.XMLStructure");
 		if (annot != null && annot.getValue("value") != null) {
 			String value;
 			/*
@@ -342,7 +342,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 				default:
 					value = "unordered";
 			}
-			out.println("xmlAnnotations[\"XMLStructure\"] = egl.eglx.xml._bind.annotation.XMLStructure(" + quoted(value) + ");");
+			out.println("xmlAnnotations[\"XMLStructure\"] = egl.eglx.xml.binding.annotation.XMLStructure(" + quoted(value) + ");");
 		}
 
 		out.println("return xmlAnnotations;");

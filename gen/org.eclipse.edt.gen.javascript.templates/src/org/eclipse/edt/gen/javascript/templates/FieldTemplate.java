@@ -116,9 +116,9 @@ public class FieldTemplate extends JavaScriptTemplate {
 		}
 		boolean isAttribute = isAttribute(field);
 		if (isAttribute) {
-			out.print("new egl.eglx.xml._bind.annotation.XMLAttribute(");
+			out.print("new egl.eglx.xml.binding.annotation.XMLAttribute(");
 		} else {
-			out.print("new egl.eglx.xml._bind.annotation.XMLElement(");
+			out.print("new egl.eglx.xml.binding.annotation.XMLElement(");
 		}
 		out.print("\"" + xmlName + "\", ");
 		out.print(xmlNamespace == null ? "null" : "\"" + xmlNamespace + "\"");
@@ -130,12 +130,12 @@ public class FieldTemplate extends JavaScriptTemplate {
 		// add xmlschema type
 		String xmlSchemaType = getXmlSchemaType(field);
 		if (xmlSchemaType != null) {
-			out.println("xmlAnnotations[\"XMLSchemaType\"] = new egl.eglx.xml._bind.annotation.XMLSchemaType(\"" + xmlSchemaType + "\");");
+			out.println("xmlAnnotations[\"XMLSchemaType\"] = new egl.eglx.xml.binding.annotation.XMLSchemaType(\"" + xmlSchemaType + "\");");
 		}
 
-		Annotation xmlArray = field.getAnnotation("eglx.xml._bind.annotation.XMLArray");
+		Annotation xmlArray = field.getAnnotation("eglx.xml.binding.annotation.XMLArray");
 		if (xmlArray != null) {
-			out.print("xmlAnnotations[\"XMLArray\"] = new egl.eglx.xml._bind.annotation.XMLArray(");
+			out.print("xmlAnnotations[\"XMLArray\"] = new egl.eglx.xml.binding.annotation.XMLArray(");
 			out.print(xmlArray.getValue("wrapped") == null ? "true, " : (((Boolean) xmlArray.getValue("wrapped")).toString() + ", "));
 			String[] elementNames = (String[]) xmlArray.getValue("names");
 			if (elementNames != null && elementNames.length > 0) {
@@ -154,7 +154,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 			out.println(");");
 		}
 		out.print("fields[" + arg.toString() + "] =");
-		out.print("new egl.eglx.xml._bind.annotation.XMLFieldInfo(");
+		out.print("new egl.eglx.xml.binding.annotation.XMLFieldInfo(");
 		Annotation annot = field.getAnnotation("egl.idl.java.JavaProperty");
 		if (annot != null) {
 			out.print(FieldTemplate.genGetterSetterFunctionName("get", field));
@@ -179,14 +179,14 @@ public class FieldTemplate extends JavaScriptTemplate {
 		String name = field.getId();
 		Annotation annot;
 		if (isAttribute(field)) {
-			annot = field.getAnnotation("eglx.xml._bind.annotation.xmlAttribute");
+			annot = field.getAnnotation("eglx.xml.binding.annotation.xmlAttribute");
 			if (annot != null) {
 				String xmlName = (String) annot.getValue("name");
 				if (xmlName != null && ((String) xmlName).length() > 0)
 					name = xmlName;
 			}
 		} else {
-			annot = field.getAnnotation("eglx.xml._bind.annotation.xmlElement");
+			annot = field.getAnnotation("eglx.xml.binding.annotation.xmlElement");
 			if (annot != null) {
 				String xmlName = (String) annot.getValue("name");
 				if (xmlName != null && ((String) xmlName).length() > 0)
@@ -198,7 +198,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 	}
 
 	static boolean isAttribute(Field field) {
-		Annotation annot = field.getAnnotation("eglx.xml._bind.annotation.xmlAttribute");
+		Annotation annot = field.getAnnotation("eglx.xml.binding.annotation.xmlAttribute");
 		if (annot != null)
 			return true;
 
@@ -209,14 +209,14 @@ public class FieldTemplate extends JavaScriptTemplate {
 		if (isAttribute(field))
 			return false;
 
-		Annotation annot = field.getAnnotation("eglx.xml._bind.annotation.xmlElement");
+		Annotation annot = field.getAnnotation("eglx.xml.binding.annotation.xmlElement");
 		if (annot != null)
 			return true;
 
 		// Fields in a record default to xmlElement unless the xmlStructure of the record
 		// is simpleContent. Then the field is either xmlAttribute (must have annotation)
 		// or it is a value node.
-		annot = field.getContainer().getAnnotation("eglx.xml._bind.annotation.xmlStructure");
+		annot = field.getContainer().getAnnotation("eglx.xml.binding.annotation.xmlStructure");
 		if (annot != null) {
 			FieldAccess structure = (FieldAccess) annot.getValue();
 			if (structure != null && structure.getID().equalsIgnoreCase("simpleContent")) {
@@ -230,7 +230,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 	}
 
 	private boolean isXMLNillable(Field field) {
-		Annotation annot = field.getAnnotation("eglx.xml._bind.annotation.xmlElement");
+		Annotation annot = field.getAnnotation("eglx.xml.binding.annotation.xmlElement");
 		if (annot != null) {
 			Boolean isNillable = CommonUtilities.convertBoolean(annot.getValue("nillable"));
 			return (isNillable != null && isNillable.booleanValue());
@@ -241,7 +241,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 
 	public static String getXmlSchemaType(Field field) {
 		String xmlSchemaType = null;
-		Annotation annot = field.getAnnotation("eglx.xml._bind.annotation.XMLSchemaType");
+		Annotation annot = field.getAnnotation("eglx.xml.binding.annotation.XMLSchemaType");
 		if (annot != null) {
 			if (annot.getValue("name") != null && ((String) annot.getValue("name")).length() > 0)
 
@@ -254,7 +254,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 
 	public static String getNamespace(Field field) {
 		String namespace = null;
-		Annotation annot = field.getAnnotation("eglx.xml._bind.annotation.xmlAttribute");
+		Annotation annot = field.getAnnotation("eglx.xml.binding.annotation.xmlAttribute");
 		if (annot != null) {
 			if (annot.getValue("namespace") != null && ((String) annot.getValue("namespace")).length() > 0)
 
@@ -262,7 +262,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 				namespace = (String) annot.getValue("namespace");
 			}
 		} else {
-			annot = field.getAnnotation("eglx.xml._bind.annotation.xmlElement");
+			annot = field.getAnnotation("eglx.xml.binding.annotation.xmlElement");
 			if (annot != null && annot.getValue("namespace") != null && ((String) annot.getValue("namespace")).length() > 0) {
 				namespace = (String) annot.getValue("namespace");
 			}

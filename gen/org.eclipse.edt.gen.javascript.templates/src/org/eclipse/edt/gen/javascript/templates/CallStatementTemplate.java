@@ -279,16 +279,16 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 			//xmlelement => xml
 			//record => xml
 			if(eglType != null && ctx.mapsToPrimitiveType(eglType)){
-				out.print("egl.eglx._service.Encoding.NONE");
+				out.print("egl.eglx.services.Encoding.NONE");
 			}
-			else if(eglType != null && "egl.lang.Dictionary".equals(eglType.getTypeSignature())){
-				out.print("egl.eglx._service.Encoding.JSON");
+			else if(eglType != null && "eglx.lang.EDictionary".equals(eglType.getTypeSignature())){
+				out.print("egl.eglx.services.Encoding.JSON");
 			}
 			else if(eglType != null){
-				out.print("egl.eglx._service.Encoding.XML");	
+				out.print("egl.eglx.services.Encoding.XML");	
 			}
 			else{
-				out.print("egl.eglx._service.Encoding.NONE");
+				out.print("egl.eglx.services.Encoding.NONE");
 			}
 		}
 	}
