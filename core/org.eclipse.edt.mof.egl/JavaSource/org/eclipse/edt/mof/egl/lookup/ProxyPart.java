@@ -55,9 +55,9 @@ public class ProxyPart extends ProxyEObject implements Part, DataType, Parameter
 	@Override
 	public String getMofSerializationKey() {
 		if (typeSignature.startsWith(KeyScheme)) {
-			return typeSignature;
+			return typeSignature.toUpperCase().toLowerCase();
 		}
-		return KeyScheme + typeSignature;
+		return (KeyScheme + typeSignature).toUpperCase().toLowerCase();
 	}
 	
 	@Override
