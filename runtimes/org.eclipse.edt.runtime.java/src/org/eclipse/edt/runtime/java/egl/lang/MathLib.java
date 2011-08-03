@@ -103,40 +103,40 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes the absolute value of <code>numericField</code>.
 	 */
-	public Short abs(Short numericField) {
+	public static Short abs(Short numericField) {
 		if (numericField < 0)
 			return new Short((short) (0 - numericField));
 		return numericField;
 	}
 
-	public Integer abs(Integer numericField) {
+	public static Integer abs(Integer numericField) {
 		if (numericField < 0)
 			return new Integer((int) (0 - numericField));
 		return numericField;
 	}
 
-	public Long abs(Long numericField) {
+	public static Long abs(Long numericField) {
 		if (numericField < 0)
 			return new Long((long) (0 - numericField));
 		return numericField;
 	}
 
-	public Double abs(Double numericField) {
+	public static Double abs(Double numericField) {
 		return StrictMath.abs(numericField);
 	}
 
-	public Double abs(Float numericField) {
+	public static Double abs(Float numericField) {
 		return StrictMath.abs(numericField.doubleValue());
 	}
 
-	public BigDecimal abs(BigDecimal numericField) {
+	public static BigDecimal abs(BigDecimal numericField) {
 		return numericField.abs();
 	}
 
 	/**
 	 * Computes the arc cos of <code>numericField</code>.
 	 */
-	public Double acos(Double numericField) throws JavartException {
+	public static Double acos(Double numericField) throws JavartException {
 		if (numericField < -1 || numericField > 1)
 			return Double.NaN;
 		return StrictMath.acos(numericField);
@@ -145,7 +145,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes the arc sin of <code>numericField</code>.
 	 */
-	public Double asin(Double numericField) throws JavartException {
+	public static Double asin(Double numericField) throws JavartException {
 		if (numericField < -1 || numericField > 1)
 			return Double.NaN;
 		return StrictMath.asin(numericField);
@@ -154,14 +154,14 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes the arc tan of <code>numericField</code>.
 	 */
-	public Double atan(Double numericField) throws JavartException {
+	public static Double atan(Double numericField) throws JavartException {
 		return StrictMath.atan(numericField);
 	}
 
 	/**
 	 * Computes the arc tan of <code>numericField1 / numericField2</code> in the range -PI to PI.
 	 */
-	public Double atan2(Double numericField1, Double numericField2) {
+	public static Double atan2(Double numericField1, Double numericField2) {
 		return StrictMath.atan2(numericField1, numericField2);
 	}
 
@@ -169,7 +169,7 @@ public class MathLib extends ExecutableBase {
 	 * Computes the ceiling of <code>numericField</code>. Ceiling is the smallest (closest to negative infinity)
 	 * floating-point value that is not less than the argument and is equal to a mathematical integer.
 	 */
-	public Double ceiling(Double numericField) {
+	public static Double ceiling(Double numericField) {
 		return StrictMath.ceil(numericField);
 	}
 
@@ -177,35 +177,35 @@ public class MathLib extends ExecutableBase {
 	 * Computes the ceiling of <code>numericField</code>. Ceiling is the smallest (closest to negative infinity)
 	 * floating-point value that is not less than the argument and is equal to a mathematical integer.
 	 */
-	public BigDecimal ceiling(BigDecimal numericField) {
+	public static BigDecimal ceiling(BigDecimal numericField) {
 		return numericField.setScale(0, BigDecimal.ROUND_CEILING);
 	}
 
 	/**
 	 * Computes the cos of <code>numericField</code>.
 	 */
-	public Double cos(Double numericField) {
+	public static Double cos(Double numericField) {
 		return StrictMath.cos(numericField);
 	}
 
 	/**
 	 * Computes the hyperbolic cosine of <code>numericField</code>.
 	 */
-	public Double cosh(Double numericField) throws JavartException {
+	public static Double cosh(Double numericField) throws JavartException {
 		return StrictMath.cosh(numericField);
 	}
 
 	/**
 	 * Returns the number of digits to the right of the decimal point that the value can store.
 	 */
-	public int decimals(BigDecimal numericField) {
+	public static int decimals(BigDecimal numericField) {
 		return numericField.scale();
 	}
 
 	/**
 	 * Computes the exp of <code>numericField</code>. e to the power(<code>numericField</code>)
 	 */
-	public Double exp(Double numericField) {
+	public static Double exp(Double numericField) {
 		return StrictMath.exp(numericField);
 	}
 
@@ -213,7 +213,7 @@ public class MathLib extends ExecutableBase {
 	 * Computes the floor of <code>numericField</code>: the largest (closest to positive infinity) floating-point value that
 	 * is not greater than the argument and is equal to a mathematical integer.
 	 */
-	public Double floor(Double numericField) {
+	public static Double floor(Double numericField) {
 		return StrictMath.floor(numericField);
 	}
 
@@ -221,7 +221,7 @@ public class MathLib extends ExecutableBase {
 	 * Computes the floor of <code>numericField</code>: the largest (closest to positive infinity) floating-point value that
 	 * is not greater than the argument and is equal to a mathematical integer.
 	 */
-	public BigDecimal floor(BigDecimal numericField) {
+	public static BigDecimal floor(BigDecimal numericField) {
 		return numericField.setScale(0, BigDecimal.ROUND_FLOOR);
 	}
 
@@ -229,7 +229,7 @@ public class MathLib extends ExecutableBase {
 	 * Breaks <code>numericField</code> into its mantissa, which is stored in <code>result</code>, and its exponent, which is
 	 * stored in <code>exponent</code>.
 	 */
-	public Double frexp(Double numericField, AnyBoxedObject<Integer> exponent) throws JavartException {
+	public static Double frexp(Double numericField, AnyBoxedObject<Integer> exponent) throws JavartException {
 		// Get the number to be split.
 		double value = numericField;
 		// Extract the exponent.
@@ -258,7 +258,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Multiplies <code>numericField</code> by 2<sup><code>power</code></sup> and stores the answer in <code>result</code>.
 	 */
-	public Double ldexp(Double numericField, Integer pow) throws JavartException {
+	public static Double ldexp(Double numericField, Integer pow) throws JavartException {
 		// Convert the value of numericField to its bit pattern, get the current
 		// exponent, and remove it from the bit string.
 		double value = numericField;
@@ -278,7 +278,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes the log of <code>numericField</code>. the natural logarithm (base e) of <code>numericField</code>
 	 */
-	public Double log(Double numericField) throws JavartException {
+	public static Double log(Double numericField) throws JavartException {
 		if (numericField <= 0)
 			return Double.NaN;
 		return StrictMath.log(numericField);
@@ -287,7 +287,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes the log of <code>numericField</code>. the logarithm (base 10) of <code>numericField</code>
 	 */
-	public Double log10(Double numericField) throws JavartException {
+	public static Double log10(Double numericField) throws JavartException {
 		if (numericField <= 0)
 			return Double.NaN;
 		// Compute the log and return the result. Since Java has no
@@ -298,73 +298,73 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes the maximum of the fields
 	 */
-	public Short max(Short numericField1, Short numericField2) {
+	public static Short max(Short numericField1, Short numericField2) {
 		if (numericField1 < numericField2)
 			return numericField2;
 		return numericField1;
 	}
 
-	public Integer max(Integer numericField1, Integer numericField2) {
+	public static Integer max(Integer numericField1, Integer numericField2) {
 		if (numericField1 < numericField2)
 			return numericField2;
 		return numericField1;
 	}
 
-	public Long max(Long numericField1, Long numericField2) {
+	public static Long max(Long numericField1, Long numericField2) {
 		if (numericField1 < numericField2)
 			return numericField2;
 		return numericField1;
 	}
 
-	public Double max(Double numericField1, Double numericField2) {
+	public static Double max(Double numericField1, Double numericField2) {
 		return StrictMath.max(numericField1, numericField2);
 	}
 
-	public Float max(Float numericField1, Float numericField2) {
+	public static Float max(Float numericField1, Float numericField2) {
 		return StrictMath.max(numericField1, numericField2);
 	}
 
-	public BigDecimal max(BigDecimal numericField1, BigDecimal numericField2) {
+	public static BigDecimal max(BigDecimal numericField1, BigDecimal numericField2) {
 		return numericField1.max(numericField2);
 	}
 
 	/**
 	 * Computes the minimum of the fields
 	 */
-	public Short min(Short numericField1, Short numericField2) {
+	public static Short min(Short numericField1, Short numericField2) {
 		if (numericField1 < numericField2)
 			return numericField1;
 		return numericField2;
 	}
 
-	public Integer min(Integer numericField1, Integer numericField2) {
+	public static Integer min(Integer numericField1, Integer numericField2) {
 		if (numericField1 < numericField2)
 			return numericField1;
 		return numericField2;
 	}
 
-	public Long min(Long numericField1, Long numericField2) {
+	public static Long min(Long numericField1, Long numericField2) {
 		if (numericField1 < numericField2)
 			return numericField1;
 		return numericField2;
 	}
 
-	public Double min(Double numericField1, Double numericField2) {
+	public static Double min(Double numericField1, Double numericField2) {
 		return StrictMath.min(numericField1, numericField2);
 	}
 
-	public Float min(Float numericField1, Float numericField2) {
+	public static Float min(Float numericField1, Float numericField2) {
 		return StrictMath.min(numericField1, numericField2);
 	}
 
-	public BigDecimal min(BigDecimal numericField1, BigDecimal numericField2) {
+	public static BigDecimal min(BigDecimal numericField1, BigDecimal numericField2) {
 		return numericField1.min(numericField2);
 	}
 
 	/**
 	 * Stores the integral part of <code>op1</code> in <code>op2</code> and the fractional part in <code>result</code>
 	 */
-	public Double modf(Double numericField1, AnyBoxedObject<Long> numericField2) throws JavartException {
+	public static Double modf(Double numericField1, AnyBoxedObject<Long> numericField2) throws JavartException {
 		// Get the number and split it.
 		BigDecimal bd = new BigDecimal(numericField1);
 		BigInteger intPart = bd.toBigInteger();
@@ -377,7 +377,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes <code>op1</code> to the power of <code>op2</code>.
 	 */
-	public Double pow(Double op1, Double op2) throws JavartException {
+	public static Double pow(Double op1, Double op2) throws JavartException {
 		// Check the args. If op1 is 0, op2 must be > 0. If op1 is
 		// negative, op2 must be a whole number.
 		if (op1 == 0 && op2 <= 0)
@@ -393,41 +393,41 @@ public class MathLib extends ExecutableBase {
 	 * the maximum number of decimal digits that can be represented in the number for the system on which the program is
 	 * running.
 	 */
-	public int precision(Short numericField) {
+	public static int precision(Short numericField) {
 		return SHORT_PRECISION;
 	}
 
-	public int precision(Integer numericField) {
+	public static int precision(Integer numericField) {
 		return INT_PRECISION;
 	}
 
-	public int precision(Long numericField) {
+	public static int precision(Long numericField) {
 		return LONG_PRECISION;
 	}
 
-	public int precision(Float numericField) {
+	public static int precision(Float numericField) {
 		return FLOAT_PRECISION;
 	}
 
-	public int precision(Double numericField) {
+	public static int precision(Double numericField) {
 		return DOUBLE_PRECISION;
 	}
 
-	public int precision(BigDecimal numericField) {
+	public static int precision(BigDecimal numericField) {
 		return numericField.precision() - numericField.scale();
 	}
 
 	/**
 	 * Generates a random number between 0 (inclusive) and 1 (exclusive). 
 	 */
-	public Float random() {
+	public static Float random() {
 		return new Float(Math.random());
 	}
 
 	/**
 	 * Rounds a number or expression to a nearest value (for example, to the nearest thousands) and returns the result.
 	 */
-	public Float round(Float value, Integer exp) {
+	public static Float round(Float value, Integer exp) {
 		// Round it.
 		BigDecimal rounder;
 		if (exp > 0) {
@@ -448,7 +448,7 @@ public class MathLib extends ExecutableBase {
 		return value;
 	}
 
-	public Double round(Double value, Integer exp) {
+	public static Double round(Double value, Integer exp) {
 		// Round it.
 		BigDecimal rounder;
 		if (exp > 0) {
@@ -469,7 +469,7 @@ public class MathLib extends ExecutableBase {
 		return value;
 	}
 
-	public BigDecimal round(BigDecimal value, Integer exp) {
+	public static BigDecimal round(BigDecimal value, Integer exp) {
 		// Round it.
 		BigDecimal rounder;
 		if (exp > 0) {
@@ -499,21 +499,21 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes the sine of <code>numericField</code>.
 	 */
-	public Double sin(Double numericField) {
+	public static Double sin(Double numericField) {
 		return StrictMath.sin(numericField);
 	}
 
 	/**
 	 * Computes the hyperbolic sine of <code>numericField</code>.
 	 */
-	public Double sinh(Double numericField) throws JavartException {
+	public static Double sinh(Double numericField) throws JavartException {
 		return StrictMath.sinh(numericField);
 	}
 
 	/**
 	 * Computes the squareroot of <code>numericField</code>.
 	 */
-	public Double sqrt(Double numericField) throws JavartException {
+	public static Double sqrt(Double numericField) throws JavartException {
 		if (numericField < 0)
 			return Double.NaN;
 		return StrictMath.sqrt(numericField);
@@ -522,14 +522,14 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes the tangent of <code>numericField</code>.
 	 */
-	public Double tan(Double numericField) {
+	public static Double tan(Double numericField) {
 		return StrictMath.tan(numericField);
 	}
 
 	/**
 	 * Computes the hyperbolic tangent of <code>numericField</code>.
 	 */
-	public Double tanh(Double numericField) throws JavartException {
+	public static Double tanh(Double numericField) throws JavartException {
 		return StrictMath.tanh(numericField);
 	}
 }

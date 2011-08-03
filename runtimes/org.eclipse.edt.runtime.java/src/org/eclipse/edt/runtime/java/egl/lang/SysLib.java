@@ -39,7 +39,7 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * The stream for startLog and errorlog system functions
 	 */
-	private transient PrintWriter outputStream = null;
+	private static transient PrintWriter outputStream = null;
 
 	/**
 	 * Current Exception
@@ -58,8 +58,8 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * Returns the value of the named property, or a null/empty string if there's no such property.
 	 */
-	public String getProperty(String propertyName) {
-		String value = _runUnit().getProperties().get(propertyName.trim());
+	public static String getProperty(RunUnit ru, String propertyName) {
+		String value = ru.getProperties().get(propertyName.trim());
 		if (value == null)
 			value = java.lang.System.getProperty(propertyName.trim());
 		return value;
@@ -69,7 +69,7 @@ public class SysLib extends ExecutableBase {
 	 * Suspend current thread for a specified amount of time. The time to wait is specified in seconds in EGL, with fractions
 	 * honored down to two decimal places.
 	 */
-	public void wait(BigDecimal time) {
+	public static void wait(BigDecimal time) {
 		// Truncate any extra digits by shifting the decimal point
 		// over two places and converting the value to a long.
 		time = time.movePointRight(2);
@@ -88,9 +88,9 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * The startLog function opens an error log file.
 	 */
-	public void startLog(String filename) throws JavartException {
+	public static void startLog(String filename) throws JavartException {
 		try {
-			this.outputStream = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)), true);
+			outputStream = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)), true);
 		}
 		catch (IOException e) {
 			JavartUtil.throwRuntimeException(Message.SYSTEM_FUNCTION_ERROR,
@@ -101,25 +101,25 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * The errorLog() function adds a message to the current log file.
 	 */
-	public void errorLog(String errorMsg) {
-		if (this.outputStream == null)
+	public static void errorLog(RunUnit ru, String errorMsg) {
+		if (outputStream == null)
 			return;
 		// DateFormatter is a com.ibm.icu class...fix this
-		this.outputStream.println(_runUnit().getLocalizedText().getDateFormatter().format(new Date()));
-		this.outputStream.println(errorMsg);
+		outputStream.println(ru.getLocalizedText().getDateFormatter().format(new Date()));
+		outputStream.println(errorMsg);
 	}
 
 	/**
 	 * Returns true if startLog has been called successfully.
 	 */
-	public boolean _errorLogIsOn() {
+	public static boolean _errorLogIsOn() {
 		return outputStream != null;
 	}
 
 	/**
 	 * Run an external command in the foreground, in LINE mode. This does not return until the command has completed.
 	 */
-	public void callCmd(String commandString) throws JavartException {
+	public static void callCmd(String commandString) throws JavartException {
 		runCommand(commandString, true, true);
 	}
 
@@ -127,7 +127,7 @@ public class SysLib extends ExecutableBase {
 	 * Run an external command in the background, in LINE mode. This returns immediately, not waiting for the command to
 	 * complete.
 	 */
-	public void startCmd(String commandString) throws JavartException {
+	public static void startCmd(String commandString) throws JavartException {
 		runCommand(commandString, true, true);
 	}
 
@@ -174,14 +174,14 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * Returns a formatted message from the RunUnit's message bundle, or null if no message with the key is found.
 	 */
-	public String getMessage(String key) {
-		return getMessage(key, null);
+	public static String getMessage(RunUnit ru, String key) {
+		return getMessage(ru, key, null);
 	}
 
 	/**
 	 * Returns a formatted message from the RunUnit's message bundle, or null if no message with the key is found.
 	 */
-	public String getMessage(String key, egl.lang.EglList<String> inserts) {
+	public static String getMessage(RunUnit ru, String key, egl.lang.EglList<String> inserts) {
 		// Get the inserts as Strings.
 		String[] insertStrings = null;
 		if (inserts != null) {
@@ -192,16 +192,16 @@ public class SysLib extends ExecutableBase {
 		}
 		// Look up the message.
 		key = key.trim();
-		String message = _runUnit().getLocalizedText().getMessage(key, insertStrings);
+		String message = ru.getLocalizedText().getMessage(key, insertStrings);
 		return message;
 	}
 
 	/**
 	 * Calls the Power Server to commit changes.
 	 */
-	public void commit() throws JavartException {
+	public static void commit(RunUnit ru) throws JavartException {
 		RuntimeException errorException = null;
-		Trace trace = _runUnit().getTrace();
+		Trace trace = ru.getTrace();
 		boolean tracing = trace.traceIsOn(Trace.GENERAL_TRACE);
 		try {
 			if (tracing) {
@@ -210,10 +210,10 @@ public class SysLib extends ExecutableBase {
 			}
 
 			/* Commit recoverable resource */
-			_runUnit().commit();
+			ru.commit();
 		}
 		catch (JavartException jx) {
-			String message = JavartUtil.errorMessage(this, Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.commit", jx.getMessage() });
+			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.commit", jx.getMessage() });
 			errorException = new RuntimeException(Message.SYSTEM_FUNCTION_ERROR, message);
 		}
 		finally {
@@ -233,9 +233,9 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * Calls the Power Server and resource manager to rollback changes.
 	 */
-	public void rollback() throws JavartException {
+	public static void rollback(RunUnit ru) throws JavartException {
 		RuntimeException errorException = null;
-		Trace trace = _runUnit().getTrace();
+		Trace trace = ru.getTrace();
 		boolean tracing = trace.traceIsOn(Trace.GENERAL_TRACE);
 		try {
 			if (tracing) {
@@ -243,10 +243,10 @@ public class SysLib extends ExecutableBase {
 				trace.put("    resetting Recoverable Resources ...");
 			}
 			/* Roll back recoverable resources */
-			_runUnit().rollback();
+			ru.rollback();
 		}
 		catch (JavartException jx) {
-			String message = JavartUtil.errorMessage(this, Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.rollBack", jx.getMessage() });
+			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.rollBack", jx.getMessage() });
 			errorException = new RuntimeException(Message.SYSTEM_FUNCTION_ERROR, message);
 		}
 		finally {
@@ -266,41 +266,41 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * Change the locale of the running program dynamically.
 	 */
-	public void setLocale(String languageCode) {
+	public static void setLocale(RunUnit ru, String languageCode) {
 		Locale locale;
 		locale = new Locale(languageCode);
-		_runUnit().switchLocale(locale);
+		ru.switchLocale(locale);
 	}
 
 	/**
 	 * Change the locale of the running program dynamically.
 	 */
-	public void setLocale(String languageCode, String countryCode) {
+	public static void setLocale(RunUnit ru, String languageCode, String countryCode) {
 		Locale locale;
 		locale = new Locale(languageCode, countryCode);
-		_runUnit().switchLocale(locale);
+		ru.switchLocale(locale);
 	}
 
 	/**
 	 * Change the locale of the running program dynamically.
 	 */
-	public void setLocale(String languageCode, String countryCode, String variant) {
+	public static void setLocale(RunUnit ru, String languageCode, String countryCode, String variant) {
 		Locale locale;
 		locale = new Locale(languageCode, countryCode, variant);
-		_runUnit().switchLocale(locale);
+		ru.switchLocale(locale);
 	}
 
 	/**
 	 * Write to standard output
 	 */
-	public void writeStdout(String output) {
+	public static void writeStdout(String output) {
 		java.lang.System.out.println(output);
 	}
 
 	/**
 	 * Write to standard error
 	 */
-	public void writeStderr(String output) {
+	public static void writeStderr(String output) {
 		java.lang.System.err.println(output);
 	}
 

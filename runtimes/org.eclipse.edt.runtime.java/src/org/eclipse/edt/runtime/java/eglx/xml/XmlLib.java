@@ -25,7 +25,7 @@ public class XmlLib extends ExecutableBase {
 		super( ru );
 	}
 	
-	public String convertToXML(Object storage, boolean buildDocument) throws JavartException{
+	public static String convertToXML(Object storage, boolean buildDocument) throws JavartException{
 		if(storage instanceof AnyBoxedObject){
 			storage = ((AnyBoxedObject)storage).ezeUnbox();
 		}
@@ -39,7 +39,7 @@ public class XmlLib extends ExecutableBase {
 		}
 	}
 
-	public void convertFromXML(String xml, final Object storage) throws JavartException{
+	public static void convertFromXML(String xml, final Object storage) throws JavartException{
 		try{
 			Object egl;
 			if(storage instanceof AnyBoxedObject){

@@ -14,6 +14,7 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import java.util.Calendar;
 
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.messages.Message;
@@ -31,7 +32,7 @@ public class DateTimeLib extends ExecutableBase {
 	/**
 	 * Returns a Calendar that reflects an int.
 	 */
-	public Calendar dateFromInt(Integer dateint) throws JavartException {
+	public static Calendar dateFromInt(Integer dateint) throws JavartException {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		cal.setTimeInMillis(dateint * 1000 * DateTimeUtil.SECONDS_PER_DAY);
 		return cal;
@@ -40,7 +41,7 @@ public class DateTimeLib extends ExecutableBase {
 	/**
 	 * Returns a Calendar that represents a Gregorian date.
 	 */
-	public Calendar dateValueFromGregorian(Integer gregorianIntDate) throws JavartException {
+	public static Calendar dateValueFromGregorian(Integer gregorianIntDate) throws JavartException {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		cal.set(Calendar.YEAR, gregorianIntDate / 10000);
 		cal.set(Calendar.MONTH, ((gregorianIntDate % 10000) / 100) - 1);
@@ -49,7 +50,7 @@ public class DateTimeLib extends ExecutableBase {
 			cal.get(Calendar.YEAR);
 		}
 		catch (IllegalArgumentException e) {
-			String message = JavartUtil.errorMessage(this, Message.SYSTEM_FUNCTION_ERROR,
+			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR,
 				new Object[] { "DateTimeLib.dateValueFromJulian", String.valueOf(gregorianIntDate) });
 			throw new TypeCastException(Message.DATA_FORMAT_ERROR, message);
 		}
@@ -59,7 +60,7 @@ public class DateTimeLib extends ExecutableBase {
 	/**
 	 * Returns a Calendar that represents a Julian date.
 	 */
-	public Calendar dateValueFromJulian(Integer julianIntDate) throws JavartException {
+	public static Calendar dateValueFromJulian(Integer julianIntDate) throws JavartException {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		// This is a workaround for a problem seen in Java 1.5 but not in 1.4.
 		// It forces the Calendar to recompute its internal values. If we don't do it, the Calendar won't let us set
@@ -72,7 +73,7 @@ public class DateTimeLib extends ExecutableBase {
 			cal.get(Calendar.YEAR);
 		}
 		catch (IllegalArgumentException e) {
-			String message = JavartUtil.errorMessage(this, Message.SYSTEM_FUNCTION_ERROR,
+			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR,
 				new Object[] { "DateTimeLib.dateValueFromJulian", String.valueOf(julianIntDate) });
 			throw new TypeCastException(Message.DATA_FORMAT_ERROR, message);
 		}
@@ -82,7 +83,7 @@ public class DateTimeLib extends ExecutableBase {
 	/**
 	 * Returns a Calendar that reflects the month, the day of the month, and the year of a calendar date.
 	 */
-	public Calendar mdy(Integer month, Integer day, Integer year) throws JavartException {
+	public static Calendar mdy(Integer month, Integer day, Integer year) throws JavartException {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month - 1);
@@ -95,7 +96,7 @@ public class DateTimeLib extends ExecutableBase {
 			cal.get(Calendar.YEAR);
 		}
 		catch (IllegalArgumentException e) {
-			String message = JavartUtil.errorMessage(this, Message.SYSTEM_FUNCTION_ERROR,
+			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR,
 				new Object[] { "DateTimeLib.mdy", String.valueOf(month), String.valueOf(day), String.valueOf(year) });
 			throw new TypeCastException(Message.DATA_FORMAT_ERROR, message);
 		}
