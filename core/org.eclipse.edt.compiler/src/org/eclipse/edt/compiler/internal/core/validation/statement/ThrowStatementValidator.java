@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.statement;
 
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -20,6 +21,7 @@ import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ThrowStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**
@@ -48,8 +50,8 @@ public class ThrowStatementValidator extends DefaultASTVisitor {
 			else {
 				ITypeBinding tBinding = throwStatement.getExpression().resolveTypeBinding();
 				if(tBinding != null && IBinding.NOT_FOUND_BINDING != tBinding) {
-					if(SystemPartManager.ANYEXCEPTION_BINDING != tBinding &&
-					   tBinding.getAnnotation(new String[] {"egl", "core"}, "Exception") == null) {
+					if(!isAnyException(tBinding) &&
+					   tBinding.getAnnotation(new String[] {"egl", "lang"}, "Exception") == null) {
 						problemRequestor.acceptProblem(
 							throwStatement.getExpression(),
 							IProblemRequestor.THROW_TARGET_MUST_BE_EXCEPTION,
@@ -59,5 +61,26 @@ public class ThrowStatementValidator extends DefaultASTVisitor {
 			}			
 		}
 		return false;
+	}
+	
+	private boolean isAnyException(ITypeBinding type) {
+		
+		if (!Binding.isValidBinding(type)) {
+			return false;
+		}
+		
+		if (type.getKind() != ITypeBinding.EXTERNALTYPE_BINDING) {
+			return false;
+		}
+		
+		if (type.getName() != InternUtil.intern("anyException")) {
+			return false;
+		}
+		
+		if (type.getPackageName() != InternUtil.intern(new String[] {"egl", "lang"})) {
+			return false;
+		}
+		
+		return true;
 	}
 }

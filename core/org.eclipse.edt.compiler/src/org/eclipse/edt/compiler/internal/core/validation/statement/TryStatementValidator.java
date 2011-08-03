@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -27,6 +28,7 @@ import org.eclipse.edt.compiler.core.ast.TryStatement;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**
@@ -75,8 +77,8 @@ public class TryStatementValidator extends DefaultASTVisitor {
 								new String[] {exceptionType.getCanonicalName()});
 						}
 						else {
-							if(SystemPartManager.ANYEXCEPTION_BINDING != exceptionTypeBinding &&
-							   exceptionTypeBinding.getAnnotation(new String[] {"egl", "core"}, "Exception") == null) {
+							if(!isAnyException(exceptionTypeBinding) &&
+							   exceptionTypeBinding.getAnnotation(new String[] {"egl", "lang"}, "Exception") == null) {
 								problemRequestor.acceptProblem(
 									exceptionType,
 									IProblemRequestor.TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION,
@@ -107,4 +109,26 @@ public class TryStatementValidator extends DefaultASTVisitor {
 		}
 		return false;
 	}
+	
+	private boolean isAnyException(ITypeBinding type) {
+		
+		if (!Binding.isValidBinding(type)) {
+			return false;
+		}
+		
+		if (type.getKind() != ITypeBinding.EXTERNALTYPE_BINDING) {
+			return false;
+		}
+		
+		if (type.getName() != InternUtil.intern("anyException")) {
+			return false;
+		}
+		
+		if (type.getPackageName() != InternUtil.intern(new String[] {"egl", "lang"})) {
+			return false;
+		}
+		
+		return true;
+	}
+
 }
