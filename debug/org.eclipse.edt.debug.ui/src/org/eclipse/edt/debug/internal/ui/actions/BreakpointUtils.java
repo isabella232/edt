@@ -14,7 +14,6 @@ package org.eclipse.edt.debug.internal.ui.actions;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -33,18 +32,12 @@ import org.eclipse.edt.compiler.core.ast.OtherwiseClause;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.WhenClause;
+import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
+import org.eclipse.edt.debug.core.breakpoints.EGLLineBreakpoint;
 import org.eclipse.edt.debug.internal.ui.EDTDebugUIPlugin;
-import org.eclipse.edt.gen.java.JavaAliaser;
 import org.eclipse.edt.ide.core.internal.model.document.EGLDocument;
-import org.eclipse.edt.ide.core.model.EGLCore;
-import org.eclipse.edt.ide.core.model.EGLModelException;
-import org.eclipse.edt.ide.core.model.IEGLFile;
-import org.eclipse.edt.ide.core.model.IPackageDeclaration;
 import org.eclipse.edt.ide.ui.editor.IEGLEditor;
-import org.eclipse.jdt.debug.core.IJavaStratumLineBreakpoint;
-import org.eclipse.jdt.debug.core.JDIDebugModel;
 import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -57,9 +50,6 @@ public class BreakpointUtils
 	{
 		// No instances.
 	}
-	
-	// Would be nice if JDT made this public so we didn't have to duplicate it.
-	public static final String STRATUM_BREAKPOINT = "org.eclipse.jdt.debug.javaStratumLineBreakpointMarker"; //$NON-NLS-1$
 	
 	/**
 	 * @return the text editor for the part, possibly null.
@@ -74,65 +64,28 @@ public class BreakpointUtils
 	}
 	
 	/**
-	 * @return the fully-qualified class name of the generated file.
-	 */
-	public static String getGeneratedClassName( ITextSelection selection, IFile file )
-	{
-		IEGLFile eglFile = (IEGLFile)EGLCore.create( file );
-		if ( eglFile != null && eglFile.exists() )
-		{
-			try
-			{
-				StringBuilder buf = new StringBuilder( 50 );
-				IPackageDeclaration[] pkg = eglFile.getPackageDeclarations();
-				if ( pkg != null && pkg.length > 0 )
-				{
-					buf.append( JavaAliaser.packageNameAlias( pkg[ 0 ].getElementName() ) );
-					buf.append( '.' );
-				}
-				
-				String name = eglFile.getElementName();
-				int idx = name.lastIndexOf( '.' );
-				if ( idx != -1 )
-				{
-					name = name.substring( 0, idx );
-				}
-				
-				buf.append( JavaAliaser.getAlias( name ) );
-				return buf.toString();
-			}
-			catch ( EGLModelException e )
-			{
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Returns true if a stratum breakpoint exists on the resource at the given line number.
+	 * Returns true if an EGL breakpoint exists on the resource at the given line number.
 	 * 
 	 * @param resource The resource.
 	 * @param lineNumber The line number.
-	 * @param stratum The stratum type (e.g. "egl").
-	 * @return true if a stratum breakpoint exists on the resource at the given line number.
+	 * @return true if an EGL breakpoint exists on the resource at the given line number.
 	 * @throws CoreException
 	 */
-	public static IJavaStratumLineBreakpoint stratumBreakpointExists( IResource resource, int lineNumber, String stratum ) throws CoreException
+	public static EGLLineBreakpoint eglLineBreakpointExists( IResource resource, int lineNumber ) throws CoreException
 	{
-		String modelId = JDIDebugModel.getPluginIdentifier();
 		IBreakpointManager manager = DebugPlugin.getDefault().getBreakpointManager();
-		IBreakpoint[] breakpoints = manager.getBreakpoints( modelId );
+		IBreakpoint[] breakpoints = manager.getBreakpoints( IEGLDebugCoreConstants.EGL_JAVA_MODEL_PRESENTATION_ID );
 		for ( int i = 0; i < breakpoints.length; i++ )
 		{
-			if ( !(breakpoints[ i ] instanceof IJavaStratumLineBreakpoint) )
+			if ( !(breakpoints[ i ] instanceof EGLLineBreakpoint) )
 			{
 				continue;
 			}
-			IJavaStratumLineBreakpoint breakpoint = (IJavaStratumLineBreakpoint)breakpoints[ i ];
+			EGLLineBreakpoint breakpoint = (EGLLineBreakpoint)breakpoints[ i ];
 			IMarker marker = breakpoint.getMarker();
-			if ( marker != null && marker.exists() && STRATUM_BREAKPOINT.equals( marker.getType() ) )
+			if ( marker != null && marker.exists() && IEGLDebugCoreConstants.EGL_LINE_BREAKPOINT_MARKER_ID.equals( marker.getType() ) )
 			{
-				if ( breakpoint.getLineNumber() == lineNumber && resource.equals( marker.getResource() ) && breakpoint.getStratum().equals( stratum ) )
+				if ( breakpoint.getLineNumber() == lineNumber && resource.equals( marker.getResource() ) )
 				{
 					return breakpoint;
 				}

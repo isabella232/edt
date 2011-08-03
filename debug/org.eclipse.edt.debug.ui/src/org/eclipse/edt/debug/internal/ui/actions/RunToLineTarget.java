@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.internal.ui.actions;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -21,7 +18,6 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDebugElement;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ISuspendResume;
@@ -29,9 +25,9 @@ import org.eclipse.debug.ui.actions.IRunToLineTarget;
 import org.eclipse.debug.ui.actions.RunToLineHandler;
 import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.edt.debug.core.IEGLDebugTarget;
+import org.eclipse.edt.debug.core.breakpoints.EGLLineBreakpoint;
 import org.eclipse.edt.debug.internal.ui.EDTDebugUIPlugin;
 import org.eclipse.edt.ide.ui.editor.IEGLEditor;
-import org.eclipse.jdt.debug.core.JDIDebugModel;
 import org.eclipse.jdt.debug.ui.IJavaDebugUIConstants;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
@@ -48,7 +44,6 @@ import org.eclipse.ui.texteditor.ITextEditor;
 public class RunToLineTarget implements IRunToLineTarget
 {
 	@Override
-	@SuppressWarnings("restriction")
 	public void runToLine( IWorkbenchPart part, ISelection selection, ISuspendResume target ) throws CoreException
 	{
 		String errorMessage = null;
@@ -65,35 +60,26 @@ public class RunToLineTarget implements IRunToLineTarget
 					IEditorInput input = editor.getEditorInput();
 					if ( input instanceof IFileEditorInput )
 					{
+						IFile file = ((IFileEditorInput)input).getFile();
 						IDocument document = provider.getDocument( input );
 						if ( document != null )
 						{
-							IFile file = ((IFileEditorInput)input).getFile();
-							String qualName = BreakpointUtils.getGeneratedClassName( textSelection, file );
-							if ( qualName != null )
+							errorMessage = "Could not locate debug target"; //$NON-NLS-1$
+							if ( target instanceof IAdaptable )
 							{
-								errorMessage = "Could not locate debug target"; //$NON-NLS-1$
-								if ( target instanceof IAdaptable )
+								IDebugTarget debugTarget = (IDebugTarget)((IAdaptable)target).getAdapter( IDebugTarget.class );
+								if ( debugTarget != null )
 								{
-									IDebugTarget debugTarget = (IDebugTarget)((IAdaptable)target).getAdapter( IDebugTarget.class );
-									if ( debugTarget != null )
-									{
-										int line = eglEditor.getLineAtOffset( BreakpointUtils.getStatementNode( eglEditor,
-												textSelection.getStartLine() ).getOffset() ) + 1;
-										Map attributes = new HashMap( 4 );
-										org.eclipse.jdt.internal.debug.ui.BreakpointUtils.addRunToLineAttributes( attributes );
-										IBreakpoint bp = JDIDebugModel.createStratumBreakpoint( ResourcesPlugin.getWorkspace().getRoot(),
-												IEGLDebugCoreConstants.EGL_STRATUM, file.getName(), null, qualName, line, -1, -1, 1, false, attributes );
-										
-										RunToLineHandler handler = new RunToLineHandler( debugTarget, target, bp );
-										handler.run( new NullProgressMonitor() );
-										return;
-									}
+									int line = eglEditor.getLineAtOffset( BreakpointUtils.getStatementNode( eglEditor,
+											textSelection.getStartLine() ).getOffset() ) + 1;
+									
+									// Use workspace root instead of the file so that the marker doesn't show up in the editor during the RTL
+									EGLLineBreakpoint bp = new EGLLineBreakpoint( ResourcesPlugin.getWorkspace().getRoot(), line, -1, -1, false, true );
+									bp.getMarker().setAttribute( IEGLDebugCoreConstants.RUN_TO_LINE_PATH, file.getFullPath().toString() );
+									RunToLineHandler handler = new RunToLineHandler( debugTarget, target, bp );
+									handler.run( new NullProgressMonitor() );
+									return;
 								}
-							}
-							else
-							{
-								errorMessage = "Could not get generated class name"; //$NON-NLS-1$
 							}
 						}
 						else

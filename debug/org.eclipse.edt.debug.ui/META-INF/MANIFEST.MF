@@ -17,9 +17,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.jface.text,
  org.eclipse.edt.ide.ui,
- org.eclipse.ui.editors,
- org.eclipse.jdt.ui,
- org.eclipse.edt.gen.java
+ org.eclipse.jdt.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin

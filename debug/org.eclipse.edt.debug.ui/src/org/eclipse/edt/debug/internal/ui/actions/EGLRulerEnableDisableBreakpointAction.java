@@ -15,7 +15,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.internal.ui.actions.breakpoints.RulerEnableDisableBreakpointAction;
 import org.eclipse.edt.compiler.core.ast.Statement;
-import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.edt.ide.ui.editor.IEGLEditor;
 import org.eclipse.jface.text.source.IVerticalRulerInfo;
 import org.eclipse.ui.IEditorInput;
@@ -56,7 +55,7 @@ public class EGLRulerEnableDisableBreakpointAction extends RulerEnableDisableBre
 						line = eglEditor.getLineAtOffset( stmt.getOffset() ) + 1;
 						try
 						{
-							bp = BreakpointUtils.stratumBreakpointExists( ((IFileEditorInput)input).getFile(), line, IEGLDebugCoreConstants.EGL_STRATUM );
+							bp = BreakpointUtils.eglLineBreakpointExists( ((IFileEditorInput)input).getFile(), line );
 						}
 						catch ( CoreException ce )
 						{

@@ -11,17 +11,30 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.internal.ui.java;
 
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IValue;
+import org.eclipse.debug.ui.DebugUITools;
+import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.debug.ui.IValueDetailListener;
+import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
+import org.eclipse.edt.debug.core.breakpoints.EGLBreakpoint;
+import org.eclipse.edt.debug.core.breakpoints.EGLLineBreakpoint;
 import org.eclipse.edt.debug.core.java.IEGLJavaDebugElement;
 import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
 import org.eclipse.edt.debug.internal.core.java.EGLJavaFunctionVariable;
+import org.eclipse.edt.debug.internal.ui.EDTDebugUIPlugin;
 import org.eclipse.jdt.internal.debug.ui.JDIModelPresentation;
+import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;
 import org.eclipse.jdt.ui.ISharedImages;
 import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IEditorInput;
 
 /**
  * Model presentation for handling labels, images, editors, etc.
@@ -32,6 +45,11 @@ public class EGLJavaModelPresentation extends JDIModelPresentation
 	@Override
 	public String getText( Object element )
 	{
+		if ( element instanceof EGLBreakpoint )
+		{
+			return getBreakpointText( (EGLBreakpoint)element );
+		}
+		
 		if ( element instanceof IEGLJavaDebugElement )
 		{
 			element = ((IEGLJavaDebugElement)element).getJavaDebugElement();
@@ -71,6 +89,20 @@ public class EGLJavaModelPresentation extends JDIModelPresentation
 			return getJavaElementImageRegistry().get( JavaUI.getSharedImages().getImageDescriptor( ISharedImages.IMG_OBJS_LOCAL_VARIABLE ) );
 		}
 		
+		if ( item instanceof EGLBreakpoint )
+		{
+			return getBreakpointImage( (EGLBreakpoint)item );
+		}
+		
+		if ( item instanceof IMarker )
+		{
+			IBreakpoint bp = DebugPlugin.getDefault().getBreakpointManager().getBreakpoint( (IMarker)item );
+			if ( bp instanceof EGLBreakpoint )
+			{
+				return getBreakpointImage( (EGLBreakpoint)bp );
+			}
+		}
+		
 		if ( item instanceof IAdaptable )
 		{
 			IEGLJavaVariable var = (IEGLJavaVariable)((IAdaptable)item).getAdapter( IEGLJavaVariable.class );
@@ -90,5 +122,72 @@ public class EGLJavaModelPresentation extends JDIModelPresentation
 		}
 		
 		return super.getImage( item );
+	}
+	
+	private Image getBreakpointImage( EGLBreakpoint bp )
+	{
+		try
+		{
+			if ( bp instanceof EGLLineBreakpoint && ((EGLLineBreakpoint)bp).isRunToLine() )
+			{
+				return null;
+			}
+		}
+		catch ( CoreException e )
+		{
+			EDTDebugUIPlugin.log( e );
+		}
+		
+		boolean enabled = true;
+		try
+		{
+			enabled = bp.isEnabled();
+		}
+		catch ( CoreException e )
+		{
+		}
+		
+		if ( enabled )
+		{
+			return DebugUITools.getImage( IDebugUIConstants.IMG_OBJS_BREAKPOINT );
+		}
+		else
+		{
+			return DebugUITools.getImage( IDebugUIConstants.IMG_OBJS_BREAKPOINT_DISABLED );
+		}
+	}
+	
+	private String getBreakpointText( EGLBreakpoint bp )
+	{
+		if ( bp instanceof EGLLineBreakpoint )
+		{
+			EGLLineBreakpoint lineBP = (EGLLineBreakpoint)bp;
+			try
+			{
+				return NLS.bind( EGLJavaMessages.LineBreakpointLabel,
+						new Object[] { bp.getMarker().getResource().getLocation().lastSegment(), lineBP.getLineNumber() } );
+			}
+			catch ( CoreException e )
+			{
+				EDTDebugCorePlugin.log( e );
+				return EGLJavaMessages.LineBreakpointUnkown;
+			}
+		}
+		return null;
+	}
+	
+	public IEditorInput getEditorInput( Object item )
+	{
+		if ( item instanceof IMarker )
+		{
+			return EditorUtility.getEditorInput( ((IMarker)item).getResource() );
+		}
+		
+		if ( item instanceof EGLBreakpoint )
+		{
+			return EditorUtility.getEditorInput( ((EGLBreakpoint)item).getMarker().getResource() );
+		}
+		
+		return super.getEditorInput( item );
 	}
 }

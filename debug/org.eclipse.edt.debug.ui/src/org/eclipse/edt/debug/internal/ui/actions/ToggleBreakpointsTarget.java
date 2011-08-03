@@ -19,10 +19,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.ui.actions.IToggleBreakpointsTargetExtension;
-import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
+import org.eclipse.edt.debug.core.breakpoints.EGLLineBreakpoint;
 import org.eclipse.edt.ide.ui.editor.IEGLEditor;
-import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
-import org.eclipse.jdt.debug.core.JDIDebugModel;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
@@ -70,15 +68,9 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 						{
 							ITextSelection textSelection = (ITextSelection)selection;
 							IFile file = ((IFileEditorInput)input).getFile();
-							String qualName = BreakpointUtils.getGeneratedClassName( textSelection, file );
-							if ( qualName == null )
-							{
-								return Status.CANCEL_STATUS;
-							}
 							
 							// First check if there's a breakpoint on the actual line selected.
-							IJavaLineBreakpoint breakpoint = BreakpointUtils.stratumBreakpointExists( file, textSelection.getStartLine() + 1,
-									IEGLDebugCoreConstants.EGL_STRATUM );
+							EGLLineBreakpoint breakpoint = BreakpointUtils.eglLineBreakpointExists( file, textSelection.getStartLine() + 1 );
 							if ( breakpoint != null )
 							{
 								DebugPlugin.getDefault().getBreakpointManager().removeBreakpoint( breakpoint, true );
@@ -101,7 +93,7 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 								// line contains a breakpoint already.
 								if ( line != textSelection.getStartLine() + 1 )
 								{
-									breakpoint = BreakpointUtils.stratumBreakpointExists( file, line, IEGLDebugCoreConstants.EGL_STRATUM );
+									breakpoint = BreakpointUtils.eglLineBreakpointExists( file, line );
 								}
 								if ( breakpoint != null )
 								{
@@ -109,8 +101,7 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 								}
 								else
 								{
-									JDIDebugModel.createStratumBreakpoint( file, IEGLDebugCoreConstants.EGL_STRATUM, file.getName(), null, qualName,
-											line, -1, -1, 0, true, null );
+									new EGLLineBreakpoint( file, line, -1, -1, true, false );
 								}
 							}
 						}
@@ -143,8 +134,8 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 			{
 				try
 				{
-					if ( BreakpointUtils.stratumBreakpointExists( ((IFileEditorInput)textEditor.getEditorInput()).getFile(),
-							textSelection.getStartLine() + 1, IEGLDebugCoreConstants.EGL_STRATUM ) != null )
+					if ( BreakpointUtils.eglLineBreakpointExists( ((IFileEditorInput)textEditor.getEditorInput()).getFile(),
+							textSelection.getStartLine() + 1 ) != null )
 					{
 						return true;
 					}
