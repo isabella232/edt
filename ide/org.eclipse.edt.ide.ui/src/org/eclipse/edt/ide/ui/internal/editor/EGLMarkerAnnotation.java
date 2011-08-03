@@ -14,6 +14,8 @@ package org.eclipse.edt.ide.ui.internal.editor;
 import java.util.Iterator;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.edt.ide.core.internal.builder.AbstractMarkerProblemRequestor;
 import org.eclipse.ui.texteditor.MarkerAnnotation;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
@@ -33,42 +35,13 @@ public class EGLMarkerAnnotation extends MarkerAnnotation implements IAnnotation
 		super(marker);
 	}
 
-	/**
-	 * @see MarkerAnnotation#initialize()
-	 */
-	protected void initialize() {
-		IMarker breakpoint = getMarker();
-//		if (MarkerUtilities.isMarkerType(getMarker(), IEGLCommonDebugConstants.EGL_LINE_BREAKPOINT)) {
-//			setLayer(2);
-//			// The next line should use the IDebugModelPresentation class 
-//			// supplied by your Debug Adapter.  This way the same breakpoint
-//			// icon is displayed in the editor as in the Breakpoints view.
-//			// Otherwise, just set the breakpoint icon here yourself.
-//			if( !EGLCommonModelPresentation.imageRegistryCreated() && Display.getCurrent() == null )
-//			{
-//				// Fix for KBC.  See RATLC01164016.
-//				setImage( DebugUITools.getImageDescriptor( IDebugUIConstants.IMG_OBJS_BREAKPOINT ).createImage() );
-//				return;
-//			}
-//			else
-//			{
-//				EGLCommonModelPresentation model = new EGLCommonModelPresentation();
-//				Image breakpointImage = model.getImage(breakpoint);
-//				setImage(breakpointImage);
-//				return;
-//			}			
-//		}
-
-		super.initialize();
-	}
-// TODO EDT Uncomment when AbstractMarkerProblemRequestor is ready
 	public Integer getProblemKind()	{
 		IMarker marker = getMarker();
-//		try {
-//			if (marker.getAttribute(AbstractMarkerProblemRequestor.EGL_PROBLEM) != null) {
-//				return ((Integer) marker.getAttribute(AbstractMarkerProblemRequestor.EGL_PROBLEM));
-//			}
-//		} catch (CoreException e) {}
+		try {
+			if (marker.getAttribute(AbstractMarkerProblemRequestor.EGL_PROBLEM) != null) {
+				return ((Integer) marker.getAttribute(AbstractMarkerProblemRequestor.EGL_PROBLEM));
+			}
+		} catch (CoreException e) {}
 		return Integer.valueOf(0);
 	}
 	

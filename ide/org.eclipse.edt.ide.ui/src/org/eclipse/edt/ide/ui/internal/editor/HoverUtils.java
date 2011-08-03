@@ -44,15 +44,25 @@ class HoverUtils {
 	
 	public static boolean isDuplicateAnnotation(Map messagesAtPosition, Position position, IAnnotation eglAnnotation){ //Integer problemKind) {
 		String txt = eglAnnotation.getText();
-		Integer problemKind = eglAnnotation.getProblemKind();
 		if (messagesAtPosition.containsKey(position)) {
 			List annots = (List)messagesAtPosition.get(position);
+			Integer problemKind = eglAnnotation.getProblemKind();
 			
 			for(Iterator it=annots.iterator(); it.hasNext();)
 			{
 				IAnnotation annot = (IAnnotation)it.next();
-				if(annot.getProblemKind().equals(problemKind) && annot.getText().equals(txt))			
-					return true;
+				if(annot.getProblemKind().equals(problemKind)) {
+					if (txt == null) {
+						if (annot.getText() == null) {
+							return true;
+						}
+					}
+					else {
+						if (txt.equals(annot.getText())) {
+							return true;
+						}
+					}
+				}
 			}			
 			annots.add(eglAnnotation);
 		}
