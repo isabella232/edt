@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.javascript.templates.eglx._service;
+package org.eclipse.edt.gen.javascript.templates.eglx.services;
 
 import java.util.List;
 import java.util.Locale;
