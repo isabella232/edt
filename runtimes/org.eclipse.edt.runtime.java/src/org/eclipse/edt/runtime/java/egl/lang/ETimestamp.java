@@ -581,15 +581,13 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	}
 
 	public static Calendar defaultValue() {
-		Calendar cal;
-		synchronized (ETimestamp.class) {
-			long now = java.lang.System.currentTimeMillis();
-			cal = DateTimeUtil.getBaseCalendar();
-			cal.setTimeInMillis(now);
-			cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE),
-				cal.get(Calendar.SECOND));
-			cal.set(Calendar.MILLISECOND, cal.get(Calendar.MILLISECOND));
-		}
+		long now = java.lang.System.currentTimeMillis();
+		Calendar cal = DateTimeUtil.getBaseCalendar();
+		cal.setTimeInMillis(now);
+		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE),
+			cal.get(Calendar.SECOND));
+		cal.set(Calendar.MILLISECOND, cal.get(Calendar.MILLISECOND));
+
 		return cal;
 	}
 
