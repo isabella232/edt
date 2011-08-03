@@ -41,10 +41,6 @@ public class MathLibTemplate extends JavaScriptTemplate {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void assign(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
 	public void atan(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
@@ -134,18 +130,6 @@ public class MathLibTemplate extends JavaScriptTemplate {
 	}
 
 	public void tanh(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void stringasfloat(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void stringasint(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void stringasdecimal(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 }

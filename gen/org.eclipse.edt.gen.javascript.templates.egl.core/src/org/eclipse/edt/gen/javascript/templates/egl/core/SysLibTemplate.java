@@ -30,59 +30,7 @@ public class SysLibTemplate extends JavaScriptTemplate {
 	}
 
 	// all system functions are defined below, with the method name as lowercase.
-	public void audit(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void bytes(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void calculatechkdigitmod10(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void calculatechkdigitmod11(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
 	public void callcmd(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void conditionasint(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void convert(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void convertbidi(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void convertencodedtexttostring(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void convertnumbertounicodenum(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void convertnumbertounsignedunicodenum(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void convertstringtoencodedtext(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void convertunicodenumtonumber(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void convertunsignedunicodenumtonumber(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
@@ -90,31 +38,7 @@ public class SysLibTemplate extends JavaScriptTemplate {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void errorlog(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void getcmdlineargcount(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void getcmdlinearg(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void getmessage(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
 	public void getproperty(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void maximumsize(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void purge(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
@@ -122,23 +46,7 @@ public class SysLibTemplate extends JavaScriptTemplate {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void seterror(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void seterrorforcomponentid(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
 	public void setlocale(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void setremoteuser(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void size(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
@@ -146,15 +54,7 @@ public class SysLibTemplate extends JavaScriptTemplate {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void startlog(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void verifychkdigitmod10(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void verifychkdigitmod11(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+	public void sort(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 

@@ -29,23 +29,7 @@ public class DateTimeLibTemplate extends JavaScriptTemplate {
 	}
 
 	// all system functions are defined below, with the method name as lowercase.
-	public void currentdate(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void currenttime(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void currenttimestamp(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
 	public void datefromint(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void datevalue(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
@@ -57,59 +41,7 @@ public class DateTimeLibTemplate extends JavaScriptTemplate {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void timevalue(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void intervalvalue(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void intervalvaluewithpattern(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void timestampvalue(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void timestampvaluewithpattern(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void timestampfrom(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void dayof(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void monthof(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void yearof(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void weekdayof(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
 	public void mdy(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void dateof(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void timeof(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void extend(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 }

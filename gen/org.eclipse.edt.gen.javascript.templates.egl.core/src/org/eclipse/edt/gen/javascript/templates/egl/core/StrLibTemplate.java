@@ -29,35 +29,7 @@ public class StrLibTemplate extends JavaScriptTemplate {
 	}
 
 	// all system functions are defined below, with the method name as lowercase.
-	public void booleanasstring(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void bytelen(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void characterlen(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void clip(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void formatdate(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void formatnumber(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void formattime(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void formattimestamp(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+	public void format(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
@@ -69,43 +41,11 @@ public class StrLibTemplate extends JavaScriptTemplate {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
-	public void indexof(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void intaschar(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void charasint(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void intasunicode(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void unicodeasint(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void setblankterminator(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void setnullterminator(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void lowercase(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+	public void fromcharcode(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
 	public void spaces(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
-		ctx.invoke(genInvocation, arg, ctx, out);
-	}
-
-	public void uppercase(Library type, Context ctx, TabbedWriter out, InvocationExpression arg) {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 }
