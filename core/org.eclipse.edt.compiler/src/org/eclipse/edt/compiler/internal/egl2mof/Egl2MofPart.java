@@ -702,7 +702,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 				}
 				superType = (StructPart)getMofSerializable(typeSignature);
 			}
-			if (superType != null)
+			if (superType != null && !superType.getMofSerializationKey().equalsIgnoreCase(part.getMofSerializationKey()))
 				part.getSuperTypes().add(superType);
 				
 		}

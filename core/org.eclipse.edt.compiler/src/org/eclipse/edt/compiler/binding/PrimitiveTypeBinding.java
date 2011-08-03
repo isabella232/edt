@@ -265,25 +265,117 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 		MATCHESPATTERN3.addNestedFunctionBinding(new NestedFunctionBinding(MATCHESPATTERN2.getCaseSensitiveName(), null, MATCHESPATTERN2));
 	}
 	
-	protected static final Map<String, IDataBinding> SYSTEM_FUNCTIONS = new HashMap();
+	protected static final Map<String, IDataBinding> STRING_FUNCTIONS = new HashMap();
 	static {		
-		SYSTEM_FUNCTIONS.put(LENGTH.getName(), new NestedFunctionBinding(LENGTH.getName(), null, LENGTH));
-		SYSTEM_FUNCTIONS.put(CLIP.getName(), new NestedFunctionBinding(CLIP.getName(), null, CLIP));
-		SYSTEM_FUNCTIONS.put(CLIPLEADING.getName(), new NestedFunctionBinding(CLIPLEADING.getName(), null, CLIPLEADING));
-		SYSTEM_FUNCTIONS.put(TRIM.getName(), new NestedFunctionBinding(TRIM.getName(), null, TRIM));
-		SYSTEM_FUNCTIONS.put(TOUPPERCASE.getName(), new NestedFunctionBinding(TOUPPERCASE.getName(), null, TOUPPERCASE));
-		SYSTEM_FUNCTIONS.put(TOLOWERCASE.getName(), new NestedFunctionBinding(TOLOWERCASE.getName(), null, TOLOWERCASE));
-		SYSTEM_FUNCTIONS.put(INDEXOF3.getName(), INDEXOF3);
-		SYSTEM_FUNCTIONS.put(LASTINDEXOF.getName(), new NestedFunctionBinding(LASTINDEXOF.getName(), null, LASTINDEXOF));
-		SYSTEM_FUNCTIONS.put(ENDSWITH.getName(), new NestedFunctionBinding(ENDSWITH.getName(), null, ENDSWITH));
-		SYSTEM_FUNCTIONS.put(STARTSWITH.getName(), new NestedFunctionBinding(STARTSWITH.getName(), null, STARTSWITH));
-		SYSTEM_FUNCTIONS.put(REPLACESTR.getName(), new NestedFunctionBinding(REPLACESTR.getName(), null, REPLACESTR));
-		SYSTEM_FUNCTIONS.put(CHARCODEAT.getName(), new NestedFunctionBinding(CHARCODEAT.getName(), null, CHARCODEAT));
-		SYSTEM_FUNCTIONS.put(ISLIKE3.getName(), ISLIKE3);
-		SYSTEM_FUNCTIONS.put(MATCHESPATTERN3.getName(), MATCHESPATTERN3);
+		STRING_FUNCTIONS.put(LENGTH.getName(), new NestedFunctionBinding(LENGTH.getName(), null, LENGTH));
+		STRING_FUNCTIONS.put(CLIP.getName(), new NestedFunctionBinding(CLIP.getName(), null, CLIP));
+		STRING_FUNCTIONS.put(CLIPLEADING.getName(), new NestedFunctionBinding(CLIPLEADING.getName(), null, CLIPLEADING));
+		STRING_FUNCTIONS.put(TRIM.getName(), new NestedFunctionBinding(TRIM.getName(), null, TRIM));
+		STRING_FUNCTIONS.put(TOUPPERCASE.getName(), new NestedFunctionBinding(TOUPPERCASE.getName(), null, TOUPPERCASE));
+		STRING_FUNCTIONS.put(TOLOWERCASE.getName(), new NestedFunctionBinding(TOLOWERCASE.getName(), null, TOLOWERCASE));
+		STRING_FUNCTIONS.put(INDEXOF3.getName(), INDEXOF3);
+		STRING_FUNCTIONS.put(LASTINDEXOF.getName(), new NestedFunctionBinding(LASTINDEXOF.getName(), null, LASTINDEXOF));
+		STRING_FUNCTIONS.put(ENDSWITH.getName(), new NestedFunctionBinding(ENDSWITH.getName(), null, ENDSWITH));
+		STRING_FUNCTIONS.put(STARTSWITH.getName(), new NestedFunctionBinding(STARTSWITH.getName(), null, STARTSWITH));
+		STRING_FUNCTIONS.put(REPLACESTR.getName(), new NestedFunctionBinding(REPLACESTR.getName(), null, REPLACESTR));
+		STRING_FUNCTIONS.put(CHARCODEAT.getName(), new NestedFunctionBinding(CHARCODEAT.getName(), null, CHARCODEAT));
+		STRING_FUNCTIONS.put(ISLIKE3.getName(), ISLIKE3);
+		STRING_FUNCTIONS.put(MATCHESPATTERN3.getName(), MATCHESPATTERN3);
 	}
 
+	
+	public static final SystemFunctionBinding DAYSDIFFERENT = SystemLibrary.createSystemFunction(
+			"daysDifferent",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.INT),
+			new String[]		{"other"},
+			new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.DATE)},
+			new UseType[]		{UseType.IN},
+			0
+		);
+
+	public static final SystemFunctionBinding ADDDAYS = SystemLibrary.createSystemFunction(
+			"addDays",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.DATE),
+			new String[]		{"days"},
+			new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.INT)},
+			new UseType[]		{UseType.IN},
+			0
+		);
+
+	public static final SystemFunctionBinding EXTEND = SystemLibrary.createSystemFunction(
+			"extend",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.TIMESTAMP),
+			new String[]		{"timeStampPattern"},
+			new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.STRING)},
+			new UseType[]		{UseType.IN},
+			0
+		);
     
+	protected static final Map<String, IDataBinding> DATE_FUNCTIONS = new HashMap();
+	static {		
+		DATE_FUNCTIONS.put(DAYSDIFFERENT.getName(), new NestedFunctionBinding(DAYSDIFFERENT.getName(), null, DAYSDIFFERENT));
+		DATE_FUNCTIONS.put(ADDDAYS.getName(), new NestedFunctionBinding(ADDDAYS.getName(), null, ADDDAYS));
+		DATE_FUNCTIONS.put(EXTEND.getName(), new NestedFunctionBinding(EXTEND.getName(), null, EXTEND));
+	}
+
+	
+	public static final SystemFunctionBinding DAYOF = SystemLibrary.createSystemFunction(
+			"dayOf",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.INT),
+			0
+		);
+	
+	public static final SystemFunctionBinding MONTHOF = SystemLibrary.createSystemFunction(
+			"monthOf",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.INT),
+			0
+		);
+	
+	public static final SystemFunctionBinding YEAROF = SystemLibrary.createSystemFunction(
+			"yearOf",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.INT),
+			0
+		);
+
+	public static final SystemFunctionBinding WEEKDAYOF = SystemLibrary.createSystemFunction(
+			"weekDayOf",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.INT),
+			0
+		);
+
+	public static final SystemFunctionBinding DATEOF = SystemLibrary.createSystemFunction(
+			"dateOf",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.DATE),
+			0
+		);
+
+	public static final SystemFunctionBinding TIMEOF = SystemLibrary.createSystemFunction(
+			"timeOf",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.TIMESTAMP),
+			0
+		);
+
+	
+	protected static final Map<String, IDataBinding> TIMESTAMP_FUNCTIONS = new HashMap();
+	static {		
+		TIMESTAMP_FUNCTIONS.put(DAYOF.getName(), new NestedFunctionBinding(DAYOF.getName(), null, DAYOF));
+		TIMESTAMP_FUNCTIONS.put(MONTHOF.getName(), new NestedFunctionBinding(MONTHOF.getName(), null, MONTHOF));
+		TIMESTAMP_FUNCTIONS.put(YEAROF.getName(), new NestedFunctionBinding(YEAROF.getName(), null, YEAROF));
+		TIMESTAMP_FUNCTIONS.put(WEEKDAYOF.getName(), new NestedFunctionBinding(WEEKDAYOF.getName(), null, WEEKDAYOF));
+		TIMESTAMP_FUNCTIONS.put(DATEOF.getName(), new NestedFunctionBinding(DATEOF.getName(), null, DATEOF));
+		TIMESTAMP_FUNCTIONS.put(TIMEOF.getName(), new NestedFunctionBinding(TIMEOF.getName(), null, TIMEOF));
+		TIMESTAMP_FUNCTIONS.put(EXTEND.getName(), new NestedFunctionBinding(EXTEND.getName(), null, EXTEND));
+	}
+	
 	protected PrimitiveTypeBinding(String caseSensitiveInternedName) {
 		super(caseSensitiveInternedName);
 	}
@@ -327,11 +419,25 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 	public IDataBinding findData(String simpleName) {
 		
 		if (getPrimitive() == Primitive.STRING) {
-			IDataBinding result = (IDataBinding) SYSTEM_FUNCTIONS.get(simpleName);
+			IDataBinding result = (IDataBinding) STRING_FUNCTIONS.get(simpleName);
 			if(result != null) return result;
+			return IBinding.NOT_FOUND_BINDING;
 			
 		}
+
+		if (getPrimitive() == Primitive.DATE) {
+			IDataBinding result = (IDataBinding) DATE_FUNCTIONS.get(simpleName);
+			if(result != null) return result;
+			return IBinding.NOT_FOUND_BINDING;
 			
+		}
+
+		if (getPrimitive() == Primitive.TIMESTAMP) {
+			IDataBinding result = (IDataBinding) TIMESTAMP_FUNCTIONS.get(simpleName);
+			if(result != null) return result;
+			return IBinding.NOT_FOUND_BINDING;			
+		}
+
 		return IBinding.NOT_FOUND_BINDING;
 	}
 
