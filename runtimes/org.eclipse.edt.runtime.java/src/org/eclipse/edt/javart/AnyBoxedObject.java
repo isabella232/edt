@@ -13,10 +13,10 @@ package org.eclipse.edt.javart;
 
 import org.eclipse.edt.runtime.java.egl.lang.DynamicAccessException;
 
-import egl.lang.AnyObject;
+import egl.lang.EglAny;
 import egl.lang.AnyValue;
 
-public class AnyBoxedObject<R> implements AnyObject, BoxedValue {
+public class AnyBoxedObject<R> implements EglAny, BoxedValue {
 
 	public R object;
 	
@@ -39,9 +39,9 @@ public class AnyBoxedObject<R> implements AnyObject, BoxedValue {
 	}
 
 	@Override
-	public AnyObject ezeGet(String name) throws JavartException {
-		if (object instanceof AnyObject) {
-			return ((AnyObject)object).ezeGet(name);
+	public EglAny ezeGet(String name) throws JavartException {
+		if (object instanceof EglAny) {
+			return ((EglAny)object).ezeGet(name);
 		}
 		else {
 			throw new DynamicAccessException();
@@ -61,8 +61,8 @@ public class AnyBoxedObject<R> implements AnyObject, BoxedValue {
 
 	@Override
 	public void ezeSet(String name, Object value) throws JavartException {
-		if (object instanceof AnyObject) {
-			((AnyObject)object).ezeSet(name, value);
+		if (object instanceof EglAny) {
+			((EglAny)object).ezeSet(name, value);
 		}
 		else {
 			throw new DynamicAccessException();

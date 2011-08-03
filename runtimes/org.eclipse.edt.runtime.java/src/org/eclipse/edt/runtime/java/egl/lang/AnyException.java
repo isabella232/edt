@@ -55,11 +55,11 @@ public class AnyException extends JavartException implements egl.lang.AnyExcepti
 	}
 
 	@Override
-	public egl.lang.AnyObject ezeGet(String name) throws JavartException {
+	public egl.lang.EglAny ezeGet(String name) throws JavartException {
 		try {
 			Field field = this.getClass().getField(name);
 			Object value = field.get(this);
-			return value instanceof egl.lang.AnyObject ? (egl.lang.AnyObject) value : AnyObject.ezeBox(value);
+			return value instanceof egl.lang.EglAny ? (egl.lang.EglAny) value : EglAny.ezeBox(value);
 		} catch (Exception e) {
 			throw new DynamicAccessException(e);
 		} 

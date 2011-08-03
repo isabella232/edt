@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2006, 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,220 +16,89 @@ import java.util.Calendar;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.RunUnit;
+import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.util.DateTimeUtil;
-import org.eclipse.edt.javart.util.TimestampIntervalMask;
+import org.eclipse.edt.javart.util.JavartUtil;
 
-/**
- * @author jvincens
- * 
- */
-public class DateTimeLib extends ExecutableBase
-{
+public class DateTimeLib extends ExecutableBase {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-	
-	public DateTimeLib( RunUnit ru ) throws JavartException
-	{
-		super( ru );
+
+	public DateTimeLib(RunUnit ru) throws JavartException {
+		super(ru);
 	}
 
 	/**
-	 * Returns a ETimestamp value reflects the current datetime
-	 * 
-	 * @param program
-	 * @return
+	 * Returns a Calendar that reflects an int.
 	 */
-	public Calendar currentTimeStamp( )
-	{
-		return DateTimeUtil.getNewCalendar();
+	public Calendar dateFromInt(Integer dateint) throws JavartException {
+		Calendar cal = DateTimeUtil.getBaseCalendar();
+		cal.setTimeInMillis(dateint * 1000 * DateTimeUtil.SECONDS_PER_DAY);
+		return cal;
 	}
 
 	/**
-	 * Returns a positive integer, corresponding to the day portion of the
-	 * timestamp. Returned IntValue.nullStatus=Value.SQL_NULL if
-	 * aTimestamp.nullStatus == Value.SQL_NULL
-	 * 
-	 * @param program
-	 * @param aTimestamp
-	 * @return
-	 * @throws JavartException
+	 * Returns a Calendar that represents a Gregorian date.
 	 */
-	public Integer dayOf( Calendar aTimestamp )
-			throws JavartException
-	{
-		if (aTimestamp == null) return 0;
-		
-		return aTimestamp.get( Calendar.DAY_OF_MONTH );
-	}
-
-	/**
-	 * Converts a DateValue into a longer or shorter timestamp value based on
-	 * the given mask. Returned TimestampValue.nullStatus=Value.SQL_NULL if
-	 * extensionField.nullStatus == Value.SQL_NULL If mask is null it returns
-	 * the same value as extend(DateValue)
-	 * 
-	 * @param program
-	 * @param extensionField
-	 * @param mask
-	 * @return
-	 * @throws JavartException
-	 * @see DateTimeLib.extend
-	 */
-	private Calendar extend( Calendar extensionField, String timespanPattern ) throws JavartException
-	{
-		if ( timespanPattern == null )
-		{
-			return extend( ETimestamp.asTimestamp(extensionField, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE) );
+	public Calendar dateValueFromGregorian(Integer gregorianIntDate) throws JavartException {
+		Calendar cal = DateTimeUtil.getBaseCalendar();
+		cal.set(Calendar.YEAR, gregorianIntDate / 10000);
+		cal.set(Calendar.MONTH, ((gregorianIntDate % 10000) / 100) - 1);
+		cal.set(Calendar.DATE, gregorianIntDate % 100);
+		try {
+			cal.get(Calendar.YEAR);
 		}
-		
-		if ( extensionField == null )
-		{
-			return null;
+		catch (IllegalArgumentException e) {
+			String message = JavartUtil.errorMessage(this, Message.SYSTEM_FUNCTION_ERROR,
+				new Object[] { "DateTimeLib.dateValueFromJulian", String.valueOf(gregorianIntDate) });
+			throw new TypeCastException(Message.DATA_FORMAT_ERROR, message);
 		}
-		else
-		{
-			// Default values in case the pattern doesn't specify things.
-			int startCode = ETimestamp.YEAR_CODE;
-			int endCode = ETimestamp.SECOND_CODE;
+		return cal;
+	}
 
-			TimestampIntervalMask mask = new TimestampIntervalMask( timespanPattern );
-			if ( mask.getStartCode() != -1 && mask.getStartCode() <= mask.getEndCode() )
-			{
-				startCode = mask.getStartCode();
-				endCode = mask.getEndCode();
-			}
-			
-			return ETimestamp.asTimestamp(extensionField, startCode, endCode);
+	/**
+	 * Returns a Calendar that represents a Julian date.
+	 */
+	public Calendar dateValueFromJulian(Integer julianIntDate) throws JavartException {
+		Calendar cal = DateTimeUtil.getBaseCalendar();
+		// This is a workaround for a problem seen in Java 1.5 but not in 1.4.
+		// It forces the Calendar to recompute its internal values. If we don't do it, the Calendar won't let us set
+		// DAY_OF_YEAR because the MONTH and DAY_OF_MONTH don't jive with the new DAY_OF_YEAR.
+		cal.add(Calendar.YEAR, 1);
+		// end of workaround
+		cal.set(Calendar.YEAR, julianIntDate / 1000);
+		cal.set(Calendar.DAY_OF_YEAR, julianIntDate % 1000);
+		try {
+			cal.get(Calendar.YEAR);
 		}
-	}
-
-	/**
-	 * Converts a TimestampValue into a longer or shorter timestamp value.
-	 * Returned TimestampValue.nullStatus=Value.SQL_NULL if
-	 * extensionField.nullStatus == Value.SQL_NULL
-	 * 
-	 * @param program
-	 * @param extensionField
-	 * @return
-	 * @throws JavartException
-	 * @see DateTimeLib.extend
-	 */
-	public Calendar extend( Calendar extensionField )
-			throws JavartException
-	{
-		return extend(extensionField, ETimestamp.DefaultPattern);
-	}
-
-	/**
-	 * Returns a positive whole number between 1 and 12, corresponding to the
-	 * month portion of the timestamp. If aTimestamp.nullStatus ==
-	 * Value.SQL_NULL it returns an intValue.nullStatus==Value.SQL_NULL
-	 * 
-	 * @param program
-	 * @param aTimestamp
-	 * @return
-	 * @throws JavartException
-	 */
-	public Integer monthOf( Calendar aTimestamp )
-			throws JavartException
-	{
-		return aTimestamp != null 
-			? aTimestamp.get( Calendar.MONTH ) + 1 
-			: null;
-	}
-
-	/**
-	 * Converts a string to a Calendar value If timestampAsString == null
-	 * null is returned
-	 * 
-	 * @param program
-	 * @param timestampAsString
-	 * @return
-	 * @throws JavartException
-	 */
-	public Calendar timeStampValue( String timestampAsString )
-			throws JavartException
-	{
-		return timeStampValueWithPattern(timestampAsString);
-	}
-
-
-	/**
-	 * Converts a string to a timestampValue If timestampAsString.nullStatus ==
-	 * Value.SQL_NULL it returns a TimeValue.nullStatus==Value.SQL_NULL
-	 * 
-	 * @param program
-	 * @param timestampAsString
-	 * @return
-	 * @throws JavartException
-	 */
-	public Calendar timeStampValueWithPattern( String timestampAsString ) throws JavartException
-	{
-		return timeStampValueWithPattern(timestampAsString, ETimestamp.DefaultPattern);
-	}
-
-	/**
-	 * Converts a string to a timestampValue based on the supplied pattern If
-	 * timestampAsString.nullStatus == Value.SQL_NULL it returns a
-	 * TimestampValue.nullStatus==Value.SQL_NULL If pattern.nullStatus ==
-	 * Value.SQL_NULL the returned value is the same as calling
-	 * timestampValue(StringValue)
-	 * 
-	 * @param program
-	 * @param timestampAsString
-	 * @param pattern
-	 * @return
-	 * @throws JavartException
-	 */
-	public Calendar timeStampValueWithPattern( String timestampAsString, String pattern ) throws JavartException
-	{
-		return ETimestamp.asTimestamp( timestampAsString, pattern); 
-	}
-
-	/**
-	 * Returns an IntValue that reflects a positive integer in the range 0
-	 * through 6, corresponding to the day of the week implied by aTimestamp. If
-	 * aTimestamp.nullStatus == Value.SQL_NULL it returns an
-	 * IntValue.nullStatus==Value.SQL_NULL
-	 * 
-	 * @param program
-	 * @param aTimestamp
-	 * @return
-	 * @throws JavartException
-	 */
-	public Integer weekdayOf( Calendar aTimestamp )
-			throws JavartException
-	{
-		if ( aTimestamp == null )
-		{
-			return null;
+		catch (IllegalArgumentException e) {
+			String message = JavartUtil.errorMessage(this, Message.SYSTEM_FUNCTION_ERROR,
+				new Object[] { "DateTimeLib.dateValueFromJulian", String.valueOf(julianIntDate) });
+			throw new TypeCastException(Message.DATA_FORMAT_ERROR, message);
 		}
-		else
-		{
-			return aTimestamp.get( Calendar.DAY_OF_WEEK ) - 1;
-		}
+		return cal;
 	}
 
 	/**
-	 * Returns an IntValue that reflects the year portion of aTimestamp. If
-	 * aTimestamp.nullStatus == Value.SQL_NULL it returns an
-	 * IntValue.nullStatus==Value.SQL_NULL
-	 * 
-	 * @param program
-	 * @param aTimestamp
-	 * @return
-	 * @throws JavartException
+	 * Returns a Calendar that reflects the month, the day of the month, and the year of a calendar date.
 	 */
-	public Integer yearOf( Calendar aTimestamp )
-			throws JavartException
-	{
-		if ( aTimestamp == null )
-		{
-			return null;
+	public Calendar mdy(Integer month, Integer day, Integer year) throws JavartException {
+		Calendar cal = DateTimeUtil.getBaseCalendar();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.MONTH, month - 1);
+		cal.set(Calendar.DATE, day);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		try {
+			cal.get(Calendar.YEAR);
 		}
-		else
-		{
-			return aTimestamp.get( Calendar.YEAR );
+		catch (IllegalArgumentException e) {
+			String message = JavartUtil.errorMessage(this, Message.SYSTEM_FUNCTION_ERROR,
+				new Object[] { "DateTimeLib.mdy", String.valueOf(month), String.valueOf(day), String.valueOf(year) });
+			throw new TypeCastException(Message.DATA_FORMAT_ERROR, message);
 		}
+		return cal;
 	}
 }

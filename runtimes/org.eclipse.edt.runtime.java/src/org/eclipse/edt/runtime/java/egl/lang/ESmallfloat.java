@@ -19,72 +19,85 @@ import org.eclipse.edt.javart.JavartException;
 
 import egl.lang.AnyNumber;
 
-public class EFloat32 extends AnyBoxedObject<Float> implements AnyNumber {
+public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 	/**
 	 * The version ID used in serialization.
 	 */
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-	
-	private EFloat32(Float value) { super(value); }
-	
-	public static EFloat32 ezeBox(Float value) {
-		return new EFloat32(value);
+
+	private ESmallfloat(Float value) {
+		super(value);
 	}
-	
+
+	public static ESmallfloat ezeBox(Float value) {
+		return new ESmallfloat(value);
+	}
+
 	public static Float ezeCast(Object value) throws JavartException {
-		return (Float)AnyObject.ezeCast(value, "asFloat32", EFloat32.class, null, null);
+		return (Float) EglAny.ezeCast(value, "asSmallfloat", ESmallfloat.class, null, null);
 	}
-	
+
 	public static boolean ezeIsa(Object value) {
-		return value instanceof EFloat32;
-	}
-	
-	public static Float asFloat32(Short value) {
-		if (value == null) return null;
-		return value.floatValue();
-	}
-	
-	public static Float asFloat32(Integer value) {
-		if (value == null) return null;
-		return value.floatValue();
-	}
-	
-	public static Float asFloat32(Long value) {
-		if (value == null) return null;
-		return value.floatValue();
-	}
-		
-	public static Float asFloat32(BigDecimal value) {
-		if (value == null) return null;
-		return value.floatValue();
-
+		return value instanceof ESmallfloat;
 	}
 
-	public static Float asFloat32(String value) throws JavartException {
-		if (value == null) return null;
-		return asFloat32(EDecimal.asDecimal(value));
-	}
-	
-	public static Float asFloat32(Double value) throws JavartException {
-		if (value == null) return null;
+	public static Float asSmallfloat(Short value) {
+		if (value == null)
+			return null;
 		return value.floatValue();
+	}
+
+	public static Float asSmallfloat(Integer value) {
+		if (value == null)
+			return null;
+		return value.floatValue();
+	}
+
+	public static Float asSmallfloat(Long value) {
+		if (value == null)
+			return null;
+		return value.floatValue();
+	}
+
+	public static Float asSmallfloat(Float value) throws JavartException {
+		if (value == null)
+			return null;
+		return value.floatValue();
+	}
+
+	public static Float asSmallfloat(Double value) throws JavartException {
+		if (value == null)
+			return null;
+		return value.floatValue();
+	}
+
+	public static Float asSmallfloat(BigDecimal value) {
+		if (value == null)
+			return null;
+		return value.floatValue();
+	}
+
+	public static Float asSmallfloat(String value, Integer... length) throws JavartException {
+		if (value == null)
+			return null;
+		return asSmallfloat(EDecimal.asDecimal(EString.asString(value, length)));
 	}
 
 	public static int compareTo(Float op1, Float op2) throws JavartException {
-		if (op1 == null || op2 == null) {
+		if (op1 == null || op2 == null)
 			throw new NullValueException();
-		}
 		return op1.compareTo(op2);
 	}
 
 	public static boolean equals(Float op1, Float op2) {
-		if (op1 == null && op2 == null) return true;
-		if ((op1 != null && op2 == null) || (op1 == null && op2 != null)) return false;
+		if (op1 == null && op2 == null)
+			return true;
+		if ((op1 != null && op2 == null) || (op1 == null && op2 != null))
+			return false;
 		return op1.equals(op2);
 	}
-	
+
 	public static boolean notEquals(Float op1, Float op2) {
 		return !equals(op1, op2);
 	}
-
 }

@@ -19,33 +19,25 @@ public class EBoolean extends AnyBoxedObject<Boolean> {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	public static final boolean DefaultValue = false;
 
-		
-	private EBoolean(Boolean value) { super(value); }
-	
+	private EBoolean(Boolean value) {
+		super(value);
+	}
+
 	public static EBoolean ezeBox(Boolean value) {
 		return new EBoolean(value);
 	}
 
 	public static Boolean ezeCast(Object value) throws JavartException {
-		return (Boolean)AnyObject.ezeCast(value, "asBoolean", EBoolean.class, null, null);
+		return (Boolean) EglAny.ezeCast(value, "asBoolean", EBoolean.class, null, null);
 	}
-	
+
 	public static boolean ezeIsa(Object value) {
 		return value instanceof EBoolean;
 	}
 
-	public static boolean asBoolean(Number number) throws JavartException {
-		if (number == null) {
+	public static Boolean asBoolean(Number number) throws JavartException {
+		if (number == null)
 			throw new NullValueException();
-		}
 		return number.floatValue() != 0;
 	}
-
-	public static String asString(Boolean bool) throws JavartException {
-		if (bool == null) {
-			throw new NullValueException();
-		}
-		return bool ? "true" : "false";
-	}
-	
 }

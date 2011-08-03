@@ -19,72 +19,85 @@ import org.eclipse.edt.javart.JavartException;
 
 import egl.lang.AnyNumber;
 
-public class EFloat64 extends AnyBoxedObject<Double> implements AnyNumber {
+public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 	/**
 	 * The version ID used in serialization.
 	 */
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-		
-	private EFloat64(Double value) { super(value); }
-	
-	public static EFloat64 ezeBox(Double value) {
-		return new EFloat64(value);
+
+	private EFloat(Double value) {
+		super(value);
+	}
+
+	public static EFloat ezeBox(Double value) {
+		return new EFloat(value);
 	}
 
 	public static Double ezeCast(Object value) throws JavartException {
-		return (Double)AnyObject.ezeCast(value, "asFloat64", EFloat64.class, null, null);
+		return (Double) EglAny.ezeCast(value, "asFloat", EFloat.class, null, null);
 	}
-	
+
 	public static boolean ezeIsa(Object value) {
-		return value instanceof EFloat64;
+		return value instanceof EFloat;
 	}
 
-	public static Double asFloat64(Short value) {
-		if (value == null) return null;
-		return Double.valueOf(value);
-	}
-	
-	public static Double asFloat64(Integer value) {
-		if (value == null) return null;
-		return Double.valueOf(value);
-	}
-	
-	public static Double asFloat64(Long value) {
-		if (value == null) return null;
-		return Double.valueOf(value);
-	}
-	
-	public static Double asFloat64(Float value) {
-		if (value == null) return null;
+	public static Double asFloat(Short value) {
+		if (value == null)
+			return null;
 		return Double.valueOf(value);
 	}
 
-	public static Double asFloat64(BigDecimal value) {
-		if (value == null) return null;
+	public static Double asFloat(Integer value) {
+		if (value == null)
+			return null;
+		return Double.valueOf(value);
+	}
+
+	public static Double asFloat(Long value) {
+		if (value == null)
+			return null;
+		return Double.valueOf(value);
+	}
+
+	public static Double asFloat(Float value) {
+		if (value == null)
+			return null;
+		return Double.valueOf(value);
+	}
+
+	public static Double asFloat(Double value) {
+		if (value == null)
+			return null;
+		return Double.valueOf(value);
+	}
+
+	public static Double asFloat(BigDecimal value) {
+		if (value == null)
+			return null;
 		return value.doubleValue();
-
 	}
 
-	public static Double asFloat64(String value) throws JavartException {
-		if (value == null) return null;
-		return asFloat64(EDecimal.asDecimal(value));
+	public static Double asFloat(String value, Integer... length) throws JavartException {
+		if (value == null)
+			return null;
+		return asFloat(EDecimal.asDecimal(EString.asString(value, length)));
 	}
-	
+
 	public static int compareTo(Double op1, Double op2) throws JavartException {
-		if (op1 == null || op2 == null) {
+		if (op1 == null || op2 == null)
 			throw new NullValueException();
-		}
 		return op1.compareTo(op2);
 	}
-	
+
 	public static boolean equals(Double op1, Double op2) {
-		if (op1 == null && op2 == null) return true;
-		if ((op1 != null && op2 == null) || (op1 == null && op2 != null)) return false;
+		if (op1 == null && op2 == null)
+			return true;
+		if ((op1 != null && op2 == null) || (op1 == null && op2 != null))
+			return false;
 		return op1.equals(op2);
 	}
-	
+
 	public static boolean notEquals(Double op1, Double op2) {
 		return !equals(op1, op2);
 	}
-
 }

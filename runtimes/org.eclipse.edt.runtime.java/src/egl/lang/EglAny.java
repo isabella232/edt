@@ -16,7 +16,7 @@ import java.io.Serializable;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.TypeConstraints;
 
-public interface AnyObject extends Serializable, Cloneable {
+public interface EglAny extends Serializable, Cloneable {
 	
 	public void ezeInitialize() throws JavartException;
 	
@@ -26,7 +26,7 @@ public interface AnyObject extends Serializable, Cloneable {
 
 	public Object clone() throws CloneNotSupportedException;
 
-	public AnyObject ezeGet(String name) throws JavartException; 
+	public EglAny ezeGet(String name) throws JavartException; 
 
 	public void ezeSet(String name, Object value) throws JavartException;
 	

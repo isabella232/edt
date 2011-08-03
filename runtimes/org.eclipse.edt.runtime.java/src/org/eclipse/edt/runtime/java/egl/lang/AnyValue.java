@@ -15,7 +15,7 @@ import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 
 
-public abstract class AnyValue extends AnyObject implements egl.lang.AnyValue { 	
+public abstract class AnyValue extends EglAny implements egl.lang.AnyValue { 	
 	/**
 	 * The version ID used in serialization.
 	 */

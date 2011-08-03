@@ -14,14 +14,14 @@ package org.eclipse.edt.javart;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import egl.lang.AnyObject;
+import egl.lang.EglAny;
 
 public class TypeConstraints {
 
-	private Class<? extends AnyObject> clazz;
+	private Class<? extends EglAny> clazz;
 	private Object[] constraints;
 	
-	public TypeConstraints(Class<? extends AnyObject> clazz, Object...constraints) {
+	public TypeConstraints(Class<? extends EglAny> clazz, Object...constraints) {
 		this.clazz = clazz;
 		this.constraints = constraints.length == 0 ? null : constraints;
 	}
@@ -37,7 +37,7 @@ public class TypeConstraints {
 				method = clazz.getMethod("ezeCast", Object.class);
 			} catch (Exception e) {
 				try { 
-					method = org.eclipse.edt.runtime.java.egl.lang.AnyObject.class.getMethod("ezeCast", Object.class, Class.class);
+					method = org.eclipse.edt.runtime.java.egl.lang.EglAny.class.getMethod("ezeCast", Object.class, Class.class);
 					useDefault = true;
 				}
 				catch (Exception ex1) {
@@ -65,7 +65,7 @@ public class TypeConstraints {
 		}
 	}
 	
-	public AnyObject box(Object value) {
+	public EglAny box(Object value) {
 		Method method = null;
 		try {
 			method = clazz.getMethod("ezeBox", Object.class, Object[].class);
@@ -75,7 +75,7 @@ public class TypeConstraints {
 				method = clazz.getMethod("ezeBox", Object.class);
 			} catch (NoSuchMethodException e) {
 				try { 
-					method = org.eclipse.edt.runtime.java.egl.lang.AnyObject.class.getMethod("ezeBox", Object.class);
+					method = org.eclipse.edt.runtime.java.egl.lang.EglAny.class.getMethod("ezeBox", Object.class);
 				}
 				catch (Exception ex1) {
 					// Will not get here
@@ -84,9 +84,9 @@ public class TypeConstraints {
 			} 
 		}
 		try {
-			AnyObject newValue = constraints == null
-				? (AnyObject)method.invoke(clazz, value)
-				: (AnyObject)method.invoke(clazz, value, constraints);
+			EglAny newValue = constraints == null
+				? (EglAny)method.invoke(clazz, value)
+				: (EglAny)method.invoke(clazz, value, constraints);
 			return newValue;
 		}
 		catch (Exception ex) {

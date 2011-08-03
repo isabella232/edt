@@ -18,47 +18,47 @@ import java.util.ListIterator;
 
 import org.eclipse.edt.javart.Constants;
 
-public class EList<T> extends AnyObject implements egl.lang.EList<T> {
+public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 	/**
 	 * The version ID used in serialization.
 	 */
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-	
+
 	private java.util.List<T> list;
 	private int maxSize;
-	
-	public EList() {
+
+	public EglList() {
 		list = new ArrayList<T>();
 	}
-	
-	public EList(int initialSize) {
+
+	public EglList(int initialSize) {
 		list = new ArrayList<T>(initialSize);
-		for(int i = 0; i<initialSize; i++) {
+		for (int i = 0; i < initialSize; i++) {
 			list.add(null);
 		}
 	}
-	
+
 	public int getMaxSize() {
 		return maxSize;
 	}
-	
+
 	public void setMaxSize(int max) {
 		maxSize = max;
 	}
-	
+
 	public void appendElement(T element) {
 		list.add(element);
 	}
-	
+
 	public void removeElement(T element) {
 		list.remove(element);
 	}
-	
+
 	@Override
 	public T get(int index) {
 		return list.get(index);
 	}
-	
+
 	@Override
 	public T set(int index, T element) {
 		return list.set(index, element);
@@ -169,20 +169,20 @@ public class EList<T> extends AnyObject implements egl.lang.EList<T> {
 	public <T> T[] toArray(T[] a) {
 		return list.toArray(a);
 	}
-	
+
 	@Override
 	public T getElement(int index) {
-		return get(index-1);
-	}
-	
-	@Override
-	public void setElement(T element, int index) {
-		set(index-1, element);
+		return get(index - 1);
 	}
 
-	public EList<T> ezeSet(int index, T element) {
+	@Override
+	public void setElement(T element, int index) {
+		set(index - 1, element);
+	}
+
+	public EglList<T> ezeSet(int index, T element) {
 		setElement(element, index);
 		return this;
 	}
-	
+
 }

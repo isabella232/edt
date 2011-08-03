@@ -20,13 +20,13 @@ import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.TypeConstraints;
 
-public abstract class AnyObject implements egl.lang.AnyObject {
+public abstract class EglAny implements egl.lang.EglAny {
 	/**
 	 * The version ID used in serialization.
 	 */
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
-	public static egl.lang.AnyObject box(egl.lang.AnyObject value) throws JavartException {
+	public static egl.lang.EglAny box(egl.lang.EglAny value) throws JavartException {
 		return ezeBox(value);
 	}
 		
@@ -46,7 +46,7 @@ public abstract class AnyObject implements egl.lang.AnyObject {
 
 	public static <T extends Object> T ezeCast(Object value, Class<T> clazz) throws JavartException {
 		try {
-			Object unboxed = value instanceof egl.lang.AnyObject ? ((egl.lang.AnyObject)value).ezeUnbox() : value;
+			Object unboxed = value instanceof egl.lang.EglAny ? ((egl.lang.EglAny)value).ezeUnbox() : value;
 			return clazz.cast(unboxed);
 		}
 		catch(ClassCastException ex) {
@@ -73,7 +73,7 @@ public abstract class AnyObject implements egl.lang.AnyObject {
 		try {
 			// Conversion operation needs to be invoked
 			Method method = null;
-			Object unboxed = value instanceof egl.lang.AnyObject ? ((egl.lang.AnyObject)value).ezeUnbox() : value;
+			Object unboxed = value instanceof egl.lang.EglAny ? ((egl.lang.EglAny)value).ezeUnbox() : value;
 			Class[] parmTypes = new Class[parameterTypes.length + 1];
 			parmTypes[0] = unboxed.getClass();
 			if (parameterTypes != null)
@@ -111,7 +111,7 @@ public abstract class AnyObject implements egl.lang.AnyObject {
 		return clazz.isInstance(object);
 	}
 	
-	public AnyObject() { super(); }
+	public EglAny() { super(); }
 	
 	public java.lang.String ezeTypeSignature() {
 		return getClass().getName();
@@ -127,7 +127,7 @@ public abstract class AnyObject implements egl.lang.AnyObject {
 		return super.clone();
 	}
 
-	public egl.lang.AnyObject ezeGet(String name) throws JavartException {
+	public egl.lang.EglAny ezeGet(String name) throws JavartException {
 		try {
 			Field field = this.getClass().getField(name);
 			if (ezeTypeConstraints(name) != null) {
@@ -136,7 +136,7 @@ public abstract class AnyObject implements egl.lang.AnyObject {
 				return constraints.box(value);
 			}
 			Object value = field.get(this);
-			return value instanceof egl.lang.AnyObject ? (egl.lang.AnyObject) value : ezeBox(value);
+			return value instanceof egl.lang.EglAny ? (egl.lang.EglAny) value : ezeBox(value);
 		} catch (Exception e) {
 			throw new DynamicAccessException(e);
 		} 
@@ -161,7 +161,7 @@ public abstract class AnyObject implements egl.lang.AnyObject {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public egl.lang.AnyObject ezeUnbox() {
+	public egl.lang.EglAny ezeUnbox() {
 		return this;
 	}
 

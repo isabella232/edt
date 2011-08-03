@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.services.servlet.proxy;
 
+import java.util.Dictionary;
 import java.util.Iterator;
 import java.util.Map;
 

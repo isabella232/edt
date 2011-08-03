@@ -23,7 +23,7 @@ import org.eclipse.edt.javart.Program;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.Transfer;
 
-import egl.lang.AnyObject;
+import egl.lang.EglAny;
 import egl.lang.AnyValue;
 
 /**
@@ -111,7 +111,7 @@ public abstract class ProgramBase extends ExecutableBase implements Program, Ser
 	 * 
 	 * @return list of the program's parameters
 	 */
-	public AnyObject[] _parameters() throws JavartException
+	public EglAny[] _parameters() throws JavartException
 	{
 		return null;
 	}

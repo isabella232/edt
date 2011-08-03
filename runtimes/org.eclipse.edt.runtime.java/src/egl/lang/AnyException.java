@@ -12,7 +12,7 @@
 package egl.lang;
 
 
-public interface AnyException extends AnyObject
+public interface AnyException extends EglAny
 {
 	String getMessageID();
 	

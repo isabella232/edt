@@ -12,7 +12,7 @@
 package egl.lang;
 
 
-public interface EList<T> extends AnyObject, java.util.List<T> {
+public interface EglList<T> extends EglAny, java.util.List<T> {
 
 	public int getMaxSize();
 	

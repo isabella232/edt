@@ -27,7 +27,7 @@ import org.eclipse.edt.javart.FatalException;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.messages.Message;
-import org.eclipse.edt.runtime.java.egl.lang.AnyObject;
+import org.eclipse.edt.runtime.java.egl.lang.EglAny;
 import org.eclipse.edt.runtime.java.egl.lang.IndexOutOfBoundsException;
 import org.eclipse.edt.runtime.java.egl.lang.JavaObjectException;
 import org.eclipse.edt.runtime.java.egl.lang.NullValueException;
@@ -120,9 +120,9 @@ public class JavartUtil
 	 */
 	public static String getEglType( Object object )
 	{
-		if ( object instanceof AnyObject )
+		if ( object instanceof EglAny )
 		{
-			return ((AnyObject)object).ezeTypeSignature();
+			return ((EglAny)object).ezeTypeSignature();
 		}
 		else 
 		{
