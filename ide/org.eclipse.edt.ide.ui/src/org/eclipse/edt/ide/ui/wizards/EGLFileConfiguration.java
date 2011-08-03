@@ -37,6 +37,12 @@ import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.edt.ide.core.internal.utils.Util;
+import org.eclipse.edt.ide.ui.internal.EGLUI;
+import org.eclipse.edt.ide.core.model.IBufferFactory;
+import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
+import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
+import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
 
 public class EGLFileConfiguration extends EGLPackageConfiguration {
 	
@@ -175,20 +181,18 @@ public class EGLFileConfiguration extends EGLPackageConfiguration {
 			String packageName = eglPkgFrag.getElementName();
 			
 			Path pkgPath = new Path(packageName.replace('.', IPath.SEPARATOR));
+					
+			String[] pkgName = Util.pathToStringArray(pkgPath);
 			
-// TODO EDT Uncomment when working copy compiler is ready			
-//			String[] pkgName = Util.pathToStringArray(pkgPath);
-			
-//			IBufferFactory UIBufferFactory = EGLUI.getBufferFactory();		
-//			WorkingCopyCompiler compiler = WorkingCopyCompiler.getInstance();
-//			compiler.compilePart(file.getProject(), pkgName, file, EGLCore.getSharedWorkingCopies(UIBufferFactory), partSimpleName, 
-//					new IWorkingCopyCompileRequestor(){
-//						public void acceptResult(WorkingCopyCompilationResult result) {
-//							boundPart[0] = (Part)result.getBoundPart();						
-//						}			
-//			});
+			IBufferFactory UIBufferFactory = EGLUI.getBufferFactory();		
+			WorkingCopyCompiler compiler = WorkingCopyCompiler.getInstance();
+			compiler.compilePart(file.getProject(), pkgName, file, EGLCore.getSharedWorkingCopies(UIBufferFactory), partSimpleName, 
+					new IWorkingCopyCompileRequestor(){
+						public void acceptResult(WorkingCopyCompilationResult result) {
+							boundPart[0] = (Part)result.getBoundPart();						
+						}			
+			});
 		}catch (EGLModelException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

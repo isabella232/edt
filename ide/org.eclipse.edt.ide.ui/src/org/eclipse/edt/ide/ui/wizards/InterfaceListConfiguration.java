@@ -18,40 +18,35 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
 
 public class InterfaceListConfiguration extends EGLPartConfiguration {
-
 	//list of super interfaces that this service implements, each element in
 	//the key is the fully qualified interface name, the value is partInfo
-	private Hashtable superInterfaces;
+	private Hashtable<String,IPart> superInterfaces;
 	
-	public InterfaceListConfiguration(){
+	public InterfaceListConfiguration() {
 		super();
 		setDefaultAttributes();
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		super.init(workbench, selection);
-
 		setDefaultAttributes();
 	}
 	
 	private void setDefaultAttributes() {
-	    superInterfaces = new Hashtable();
+	    superInterfaces = new Hashtable<String,IPart>();
 	}
 	
 	/*
 	 * get the Interface Part, IPart
 	 */
-	public IPart getInterface(String interfaceFullyQualifiedName)
-	{
-	    return (IPart)(superInterfaces.get(interfaceFullyQualifiedName));
+	public IPart getInterface(String interfaceFullyQualifiedName) {
+		return superInterfaces.get(interfaceFullyQualifiedName);
 	}
     	
 	/*
 	 * key is the fully qualifed interface name, the value is the IPart of this interface
 	 */
-	public void addInterface(String interfaceFullyQualifiedName, IPart interfacePart)
-	{
+	public void addInterface(String interfaceFullyQualifiedName, IPart interfacePart) {
 	    superInterfaces.put(interfaceFullyQualifiedName, interfacePart);
-	}
-			
+	}	
 }

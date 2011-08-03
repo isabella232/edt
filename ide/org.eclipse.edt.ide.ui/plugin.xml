@@ -644,6 +644,40 @@ Templates
 				</enablement>
 			</commonWizard>
 			<commonWizard
+				type="new"
+				menuGroupId="org.eclipse.edt.ide.ui.wizards.menuGroup"
+				wizardId="org.eclipse.edt.ide.ui.newInterfacewizard">
+				<enablement>
+ 		        	<or>
+	 					<adapt
+								type="org.eclipse.core.resources.IProject" >
+							<test
+								property="org.eclipse.core.resources.projectNature"
+								value="org.eclipse.edt.ide.core.EGLNature" />
+						</adapt>
+						<instanceof
+								value="org.eclipse.edt.ide.core.model.IEGLElement" />
+ 		        	</or>         					
+				</enablement>
+			</commonWizard>
+			<commonWizard
+				type="new"
+				menuGroupId="org.eclipse.edt.ide.ui.wizards.menuGroup"
+				wizardId="org.eclipse.edt.ide.ui.newServicewizard">
+				<enablement>
+ 		        	<or>
+	 					<adapt
+								type="org.eclipse.core.resources.IProject" >
+							<test
+								property="org.eclipse.core.resources.projectNature"
+								value="org.eclipse.edt.ide.core.EGLNature" />
+						</adapt>
+						<instanceof
+								value="org.eclipse.edt.ide.core.model.IEGLElement" />
+ 		        	</or>         					
+				</enablement>
+			</commonWizard>
+			<commonWizard
             	type="new"
             	menuGroupId="org.eclipse.edt.ide.ui.project.wizards.menuGroup"
             	wizardId="org.eclipse.edt.ide.ui.newProjectWizard">
@@ -815,6 +849,20 @@ Templates
             class="org.eclipse.edt.ide.ui.internal.wizards.ProgramWizard"
             id="org.eclipse.edt.ide.ui.newProgramWizard">
 		</wizard>
+		<wizard
+            name="%Interface"
+            icon="icons/etool16/nint_wiz.gif"
+            category="org.eclipse.edt.ide.ui.wizards.new.category"
+            class="org.eclipse.edt.ide.ui.internal.wizards.InterfaceWizard"
+            id="org.eclipse.edt.ide.ui.newInterfacewizard">
+       </wizard>
+       <wizard
+            name="%Service"
+            icon="icons/etool16/nsvc_wiz.gif" 
+            category="org.eclipse.edt.ide.ui.wizards.new.category"
+            class="org.eclipse.edt.ide.ui.internal.wizards.ServiceWizard"
+            id="org.eclipse.edt.ide.ui.newServicewizard">
+       </wizard>
 	   	<wizard
         	name="%EGLProject"
             icon="icons/ctool16/newegl_wiz.gif"

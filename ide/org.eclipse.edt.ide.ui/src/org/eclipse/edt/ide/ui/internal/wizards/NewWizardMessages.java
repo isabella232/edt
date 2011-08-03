@@ -210,22 +210,22 @@ public class NewWizardMessages extends NLS {
 	public static String NewPackageWizardPageDescription;
 	public static String NewPackageWizardPageInfo;
 
-//	public static String NewTypeWizardPageInterfacesAdd;
-//	public static String NewTypeWizardPageInterfacesRemove;
-//
-//	public static String NewTypeWizardPageInterfacesDialogClassTitle;
-//	public static String NewTypeWizardPageInterfacesDialogInterfaceTitle;
+	public static String NewTypeWizardPageInterfacesAdd;
+	public static String NewTypeWizardPageInterfacesRemove;
+
+	public static String NewTypeWizardPageInterfacesDialogClassTitle;
+	public static String NewTypeWizardPageInterfacesDialogInterfaceTitle;
 //	public static String NewTypeWizardPageLibraryDialogLibraryTitle;
 //	public static String NewTypeWizardPageServiceDialogTitle;
-//	public static String NewTypeWizardPageInterfacesClassLabel;
-//	public static String NewTypeWizardPageInterfacesDialogMessage;
+	public static String NewTypeWizardPageInterfacesClassLabel;
+	public static String NewTypeWizardPageInterfacesDialogMessage;
 //	public static String NewTypeWizardPageInterfacesSuperLabel;
 //	public static String NewTypeWizardPageLibraryDialogLibraryLabel;
 //	public static String NewTypeWizardPageServiceDialogLabel;
-//	public static String NewTypeWizardPageBasicPgmAdvanceMessage;
-//	public static String NewTypeWizardPageBasicPgmLabel;
-//	public static String NewTypeWizardPageBasicPgmDialogTitle;
-//	public static String NewTypeWizardPageBasicPgmDialogMessage;
+	public static String NewTypeWizardPageBasicPgmAdvanceMessage;
+	public static String NewTypeWizardPageBasicPgmLabel;
+	public static String NewTypeWizardPageBasicPgmDialogTitle;
+	public static String NewTypeWizardPageBasicPgmDialogMessage;
 	public static String NewTypeWizardPageInterfaceDialogTitle;
 	public static String NewTypeWizardPageInterfaceDialogLabel;
 
@@ -650,13 +650,13 @@ public class NewWizardMessages extends NLS {
 	public static String NewEGLRUIWidgetWizardPageDescription;
 	public static String NewEGLRUIWidgetWizardPagePartlabel;
 
-//	public static String NewEGLServiceWizardPageTitle;
-//	public static String NewEGLServiceWizardPageDescription;
-//	public static String NewEGLServiceWizardPagePartlabel;
+	public static String NewEGLServiceWizardPageTitle;
+	public static String NewEGLServiceWizardPageDescription;
+	public static String NewEGLServiceWizardPagePartlabel;
 //
-//	public static String NewEGLInterfaceWizardPageTitle;
-//	public static String NewEGLInterfaceWizardPageDescription;
-//	public static String NewEGLInterfaceWizardPagePartlabel;
+	public static String NewEGLInterfaceWizardPageTitle;
+	public static String NewEGLInterfaceWizardPageDescription;
+	public static String NewEGLInterfaceWizardPagePartlabel;
 //	public static String NewEGLInterfaceWizardPageInterfaceTypeLabel;
 //	public static String NewEGLInterfaceWizardPageInterfaceTypeJavaobj;
 //	public static String NewEGLInterfaceWizardPageInterfaceTypeBasic;
@@ -715,9 +715,9 @@ public class NewWizardMessages extends NLS {
 	public static String ModuleWebServiceBinding;
 	public static String ModuleTCPIPBinding;
 	public static String EntryPointName;
-//		
-//	public static String EGLInterfaceSelectionDialogAddButtonLabel;
-//	public static String EGLInterfaceSelectionDialogInterfaceaddedInfo;
+		
+	public static String EGLInterfaceSelectionDialogAddButtonLabel;
+	public static String EGLInterfaceSelectionDialogInterfaceaddedInfo;
 
 	public static String EGLElementLabels_concat_string;
 	public static String EGLElementLabels_comma_string;
