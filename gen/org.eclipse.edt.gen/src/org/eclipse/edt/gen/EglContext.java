@@ -412,6 +412,9 @@ public abstract class EglContext extends TemplateContext {
 			return invokeSuper(template, methodName, (EObject) type, args);
 		}
 		TemplateMethod tm = getTemplateMethod(methodName, superType, args);
+		// if the method points back at itself, we have a recursive loop. In that case type 1 more level of supertype
+		if (tm != null && tm.getTemplate().getClass().toString().equals(template.getClass().toString()))
+			tm = getTemplateMethod(methodName, ((StructPart) superType.getClassifier()).getSuperTypes().get(0), args);
 		if (tm != null) {
 			return doInvoke(tm.getMethod(), tm.getTemplate(), type, args);
 		} else {
