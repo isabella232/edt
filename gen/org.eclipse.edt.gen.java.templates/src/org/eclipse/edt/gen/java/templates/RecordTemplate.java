@@ -200,7 +200,7 @@ public class RecordTemplate extends JavaTemplate {
 	public void genSuperClass(Record part, Context ctx, TabbedWriter out) {
 		Stereotype stereotype = part.getStereotype();
 		if (stereotype == null || stereotype.getEClass().getName().equals("BasicRecord"))
-			out.print("AnyValue");
+			out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue");
 		else
 			ctx.invoke(genSuperClass, stereotype, ctx, out);
 	}
