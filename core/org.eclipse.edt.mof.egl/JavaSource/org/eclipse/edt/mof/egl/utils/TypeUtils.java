@@ -201,7 +201,7 @@ public class TypeUtils implements MofConversion {
 	
 	public static boolean isNumericType(Type type) {
 		if (type.getClassifier() instanceof EGLClass) {
-			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_AnyNumber));
+			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_EGLNumber));
 		}
 		else {
 			return false;
