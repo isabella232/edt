@@ -22,12 +22,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
+import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.LibraryBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
+import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeManager;
 import org.eclipse.edt.compiler.internal.EGLBaseNlsStrings;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.lookup.EnumerationManager;
@@ -49,6 +51,7 @@ public class SystemEnvironment implements ISystemEnvironment {
     private Map unqualifiedSystemParts = Collections.EMPTY_MAP;
     private EnumerationManager enumerationManager;
     private SystemLibraryManager sysLibManager;
+    private AnnotationTypeManager annTypeManger;
 
     private List<ISystemPackageBuildPathEntry> sysPackages = new ArrayList();
     
@@ -176,6 +179,9 @@ public class SystemEnvironment implements ISystemEnvironment {
         		getEnumerationManager().addResolvableDataBindings((EnumerationTypeBinding) part);
         	}
         }
+        else if(part.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING) {
+        	getAnnotationTypeManager().addSystemPackageRecord((FlexibleRecordBinding) part);
+        }
     }
     
     private boolean enumerationIsImplicitlyUsed(IPartBinding part) {
@@ -202,10 +208,12 @@ public class SystemEnvironment implements ISystemEnvironment {
         if (parentEnv != null) {
         	enumerationManager = new EnumerationManager(parentEnv.getEnumerationManager());
         	sysLibManager = new SystemLibraryManager(parentEnv.getSystemLibraryManager());
+        	annTypeManger = new AnnotationTypeManager(parentEnv.getAnnotationTypeManager());
         }
         else {
         	enumerationManager = new EnumerationManager(null);
         	sysLibManager = new SystemLibraryManager(null);
+        	annTypeManger = new AnnotationTypeManager(null);
         }
     }
 
@@ -354,6 +362,11 @@ public class SystemEnvironment implements ISystemEnvironment {
 	@Override
 	public SystemLibraryManager getSystemLibraryManager() {
 		return sysLibManager;
+	}
+
+	@Override
+	public AnnotationTypeManager getAnnotationTypeManager() {
+		return annTypeManger;
 	}
 
 }

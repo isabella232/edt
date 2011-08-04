@@ -26,7 +26,18 @@ public class AnnotationTypeManager {
 	
     private static Map annotationTypeMap = Collections.EMPTY_MAP;
     
-    public static IAnnotationTypeBinding getAnnotationType(String name) {
+    private Map systemPackageAnnotations = new HashMap();
+
+    
+    public AnnotationTypeManager(AnnotationTypeManager parent) {
+		super();
+		
+		if (parent != null) {
+			systemPackageAnnotations.putAll(parent.systemPackageAnnotations);
+		}
+	}
+
+	public static IAnnotationTypeBinding getAnnotationType(String name) {
         return (IAnnotationTypeBinding) getAnnotationTypeMap().get(name);
     }
     
@@ -68,4 +79,18 @@ public class AnnotationTypeManager {
         annotationTypeMap.put(EGLValidNumberOfArgumentsAnnotationTypeBinding.name, EGLValidNumberOfArgumentsAnnotationTypeBinding.getInstance());
         annotationTypeMap.put(EGLValueCanBeExpressionForOpenUIAnnotationTypeBinding.name, EGLValueCanBeExpressionForOpenUIAnnotationTypeBinding.getInstance());
     }
+    
+    public void addSystemPackageRecord(FlexibleRecordBinding binding) {
+    	systemPackageAnnotations.put(binding.getName(), binding);
+    }
+    
+    /**
+     * @deprecated This is part of a temporary solution to bypass the fact that the
+     *             search mechanism does not return system parts. It should only be
+     *             used by the class EGLPropertiesHandler or EGLNewPropertiesHandler. 
+     */
+    public Map getSystemPackageAnnotations() {
+    	return systemPackageAnnotations;
+    }
+
 }
