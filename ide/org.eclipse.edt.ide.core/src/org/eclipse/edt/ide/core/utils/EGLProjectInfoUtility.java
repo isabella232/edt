@@ -105,7 +105,7 @@ public final class EGLProjectInfoUtility {
 	
 	public static boolean isJavaScriptProject( IProject project ) throws CoreException {
 		if( isV8JavaScriptProject( project ) ||
-				EGLProject.hasRUINature(project) ||
+				EGLProject.hasEGLNature(project) ||
 				EGLProject.hasCENature(project) ) {
 			return true;
 		}

@@ -50,7 +50,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Preferences;
-import org.eclipse.edt.compiler.internal.eglar.FileInEglar;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.internal.model.util.EGLProjectFileUtilityLocator;
@@ -1206,11 +1205,11 @@ public class EGLProject extends Openable implements IEGLProject, IProjectNature 
 			return getPackageFragmentRoot(getProject());
 		}
 		
-		if ( path.toOSString().endsWith(FileInEglar.EGLAR_EXTENSION) ) {
-			return new EglarPackageFragmentRoot(path, this);
-		} else {
+//		if ( path.toOSString().endsWith(FileInEglar.EGLAR_EXTENSION) ) {
+//			return new EglarPackageFragmentRoot(path, this);
+//		} else {
 			return getPackageFragmentRoot(getProject().getWorkspace().getRoot().getFolder(path));
-		}
+//		}
 	}
 
 	/**

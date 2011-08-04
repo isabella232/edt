@@ -38,6 +38,7 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jst.j2ee.project.JavaEEProjectUtilities;
 import org.eclipse.osgi.util.NLS;
 
 /**
@@ -344,5 +345,42 @@ public class EclipseUtilities {
 		catch (CoreException e) {
 			EDTCoreIDEPlugin.log(e);
 		}
+	}
+	
+
+	/**
+	 * Returns true if this project is a J2EE web project. Returns false if this
+	 * is not a web project or is a static web project.
+	 * 
+	 * @param project
+	 *            Project
+	 * @return boolean
+	 */
+	public static boolean isWebProject(IProject project) {
+		return JavaEEProjectUtilities.isDynamicWebProject(project);
+	}
+
+	/**
+	 * Get the source folder name. For new Java projects, check the source
+	 * folder name in the Java Build Path preferences. For all types of Java
+	 * projects, use the first source folder from the classpath.
+	 * 
+	 * @param myProject
+	 *            The project where the folder for Java source resides.
+	 * @param isNewProject
+	 *            Should be set to true if <code>project</code> is a newly
+	 *            created Java Project.
+	 * 
+	 * @return String The folder name where the Java source will be generated.
+	 */
+	public static String getJavaSourceFolderName(IProject project) {
+		String folderName = "";
+
+		try {
+			folderName = EGLProjectInfoUtility.getGeneratedJavaFolder(project);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return folderName;
 	}
 }
