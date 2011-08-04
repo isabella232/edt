@@ -28,7 +28,7 @@ public class IntegerLiteralTemplate extends JavaScriptTemplate {
 			out.print(stripLeadingZeroes(expr.getUnsignedValue()));
 		} else {
 			out.print("new ");
-			out.print(ctx.getPrimitiveMapping("egl.lang.Int64"));
+			out.print(ctx.getPrimitiveMapping("eglx.lang.EBigint"));
 			out.print("(\"");
 			if (expr.isNegated()) {
 				out.print('-');
