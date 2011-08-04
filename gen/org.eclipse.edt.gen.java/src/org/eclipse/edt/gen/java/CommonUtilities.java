@@ -326,6 +326,8 @@ public class CommonUtilities {
 	public static String getNativeJavaAssignment(String op) {
 		if (op.equals("xor="))
 			return "^=";
+		if (op.equals("::="))
+			return "+=";
 		return op;
 	}
 
