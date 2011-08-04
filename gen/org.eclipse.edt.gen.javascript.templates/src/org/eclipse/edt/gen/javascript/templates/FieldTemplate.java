@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
@@ -26,6 +25,23 @@ public class FieldTemplate extends JavaScriptTemplate {
 
 	public void preGen(Field field, Context ctx) {
 		ctx.invoke(preGen, field.getType(), ctx);
+		if(field.getAnnotation("eglx.xml.binding.annotation.xmlAttribute") == null &&
+				field.getAnnotation("eglx.xml.binding.annotation.xmlElement") == null) {
+			//add an xmlElement
+			try {
+				Annotation annotation = CommonUtilities.getAnnotation(ctx, Constants.AnnotationXmlElement);
+				annotation.setValue("name", field.getId());
+				field.addAnnotation(annotation);
+			} catch (Exception e) {}
+		}	
+		if(field.getAnnotation("eglx.json.JsonName") == null) {
+			//add an xmlElement
+			try {
+				Annotation annotation = CommonUtilities.getAnnotation(ctx, Constants.AnnotationJsonName);
+				annotation.setValue(field.getId());
+				field.addAnnotation(annotation);
+			} catch (Exception e) {}
+		}	
 	}
 
 	public void genDeclaration(Field field, Context ctx, TabbedWriter out) {
@@ -104,57 +120,15 @@ public class FieldTemplate extends JavaScriptTemplate {
 		out.println("}");
 	}
 
-	public void genXmlField(Field field, Context ctx, TabbedWriter out, Integer arg) {
-		// create the XMLAnnotationMap
-		out.println("xmlAnnotations = {};");
-		// add attribute or element
-		String xmlNamespace = getNamespace(field);
-		String xmlName = getXMLName(field);
-		out.print("xmlAnnotations[\"XMLStyle\"] = ");
-		if (xmlName == null || xmlName.length() == 0) {
-			xmlName = field.getId();
+	public void genAnnotations(Field field, Context ctx, TabbedWriter out, Integer arg) {
+		out.println("annotations = {};");
+		
+		for(Annotation annot : field.getAnnotations()){
+			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field);
 		}
-		boolean isAttribute = isAttribute(field);
-		if (isAttribute) {
-			out.print("new egl.eglx.xml.binding.annotation.XMLAttribute(");
-		} else {
-			out.print("new egl.eglx.xml.binding.annotation.XMLElement(");
-		}
-		out.print("\"" + xmlName + "\", ");
-		out.print(xmlNamespace == null ? "null" : "\"" + xmlNamespace + "\"");
-		if (!isAttribute) {
-			out.print(", " + Boolean.toString(isXMLNillable(field)));
-		}
-		out.println(");");
-
-		// add xmlschema type
-		String xmlSchemaType = getXmlSchemaType(field);
-		if (xmlSchemaType != null) {
-			out.println("xmlAnnotations[\"XMLSchemaType\"] = new egl.eglx.xml.binding.annotation.XMLSchemaType(\"" + xmlSchemaType + "\");");
-		}
-
-		Annotation xmlArray = field.getAnnotation("eglx.xml.binding.annotation.XMLArray");
-		if (xmlArray != null) {
-			out.print("xmlAnnotations[\"XMLArray\"] = new egl.eglx.xml.binding.annotation.XMLArray(");
-			out.print(xmlArray.getValue("wrapped") == null ? "true, " : (((Boolean) xmlArray.getValue("wrapped")).toString() + ", "));
-			String[] elementNames = (String[]) xmlArray.getValue("names");
-			if (elementNames != null && elementNames.length > 0) {
-				out.print("[");
-				boolean addComma = false;
-				for (String elementName : elementNames) {
-					if (addComma) {
-						out.print(", ");
-					}
-					out.print(quoted(elementName));
-				}
-				out.print("]");
-			} else {
-				out.print("null");
-			}
-			out.println(");");
-		}
+		
 		out.print("fields[" + arg.toString() + "] =");
-		out.print("new egl.eglx.xml.binding.annotation.XMLFieldInfo(");
+		out.print("new egl.eglx.services.FieldInfo(");
 		Annotation annot = field.getAnnotation("egl.idl.java.JavaProperty");
 		if (annot != null) {
 			out.print(FieldTemplate.genGetterSetterFunctionName("get", field));
@@ -172,102 +146,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 		ctx.invoke(genSignature, field.getType(), ctx, out);
 		out.print("\", ");
 		ctx.invoke(genRuntimeTypeName, field.getType(), ctx, out, TypeNameKind.JavascriptImplementation);
-		out.println(", xmlAnnotations);");
-	}
-
-	public static String getXMLName(Field field) {
-		String name = field.getId();
-		Annotation annot;
-		if (isAttribute(field)) {
-			annot = field.getAnnotation("eglx.xml.binding.annotation.xmlAttribute");
-			if (annot != null) {
-				String xmlName = (String) annot.getValue("name");
-				if (xmlName != null && ((String) xmlName).length() > 0)
-					name = xmlName;
-			}
-		} else {
-			annot = field.getAnnotation("eglx.xml.binding.annotation.xmlElement");
-			if (annot != null) {
-				String xmlName = (String) annot.getValue("name");
-				if (xmlName != null && ((String) xmlName).length() > 0)
-					name = xmlName;
-			}
-		}
-
-		return name;
-	}
-
-	static boolean isAttribute(Field field) {
-		Annotation annot = field.getAnnotation("eglx.xml.binding.annotation.xmlAttribute");
-		if (annot != null)
-			return true;
-
-		return false;
-	}
-
-	static boolean isElement(Field field) {
-		if (isAttribute(field))
-			return false;
-
-		Annotation annot = field.getAnnotation("eglx.xml.binding.annotation.xmlElement");
-		if (annot != null)
-			return true;
-
-		// Fields in a record default to xmlElement unless the xmlStructure of the record
-		// is simpleContent. Then the field is either xmlAttribute (must have annotation)
-		// or it is a value node.
-		annot = field.getContainer().getAnnotation("eglx.xml.binding.annotation.xmlStructure");
-		if (annot != null) {
-			FieldAccess structure = (FieldAccess) annot.getValue();
-			if (structure != null && structure.getID().equalsIgnoreCase("simpleContent")) {
-				return false;
-			} else {
-				return true;
-			}
-		} else {
-			return true;
-		}
-	}
-
-	private boolean isXMLNillable(Field field) {
-		Annotation annot = field.getAnnotation("eglx.xml.binding.annotation.xmlElement");
-		if (annot != null) {
-			Boolean isNillable = CommonUtilities.convertBoolean(annot.getValue("nillable"));
-			return (isNillable != null && isNillable.booleanValue());
-		}
-
-		return false;
-	}
-
-	public static String getXmlSchemaType(Field field) {
-		String xmlSchemaType = null;
-		Annotation annot = field.getAnnotation("eglx.xml.binding.annotation.XMLSchemaType");
-		if (annot != null) {
-			if (annot.getValue("name") != null && ((String) annot.getValue("name")).length() > 0)
-
-			{
-				xmlSchemaType = (String) annot.getValue("name");
-			}
-		}
-		return xmlSchemaType;
-	}
-
-	public static String getNamespace(Field field) {
-		String namespace = null;
-		Annotation annot = field.getAnnotation("eglx.xml.binding.annotation.xmlAttribute");
-		if (annot != null) {
-			if (annot.getValue("namespace") != null && ((String) annot.getValue("namespace")).length() > 0)
-
-			{
-				namespace = (String) annot.getValue("namespace");
-			}
-		} else {
-			annot = field.getAnnotation("eglx.xml.binding.annotation.xmlElement");
-			if (annot != null && annot.getValue("namespace") != null && ((String) annot.getValue("namespace")).length() > 0) {
-				namespace = (String) annot.getValue("namespace");
-			}
-		}
-		return namespace;
+		out.println(", annotations);");
 	}
 
 }

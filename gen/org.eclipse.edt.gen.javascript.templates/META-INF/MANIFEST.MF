@@ -9,5 +9,6 @@ Require-Bundle: org.eclipse.edt.gen;bundle-version="0.7.0",
  org.eclipse.edt.gen.javascript;bundle-version="0.7.0",
  org.eclipse.edt.compiler;bundle-version="0.7.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: org.eclipse.edt.gen.javascript.templates
+Export-Package: org.eclipse.edt.gen.javascript.annotation.templates,
+ org.eclipse.edt.gen.javascript.templates
 Bundle-Vendor: Eclipse EGL Development Tools

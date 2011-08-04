@@ -106,16 +106,9 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		ctx.invoke(genCloneMethods, part, ctx, out);
 		// out.println(",");
 		// genGetFieldSignaturesMethod(part, ctx, out, args);
-		// out.println(",");
-		// genGetJSONNamesMethod(part, ctx, out, args);
-		// out.println(",");
-		// genFromJSONMethod(part, ctx, out, args);
-		// out.println(",");
-		// genToJSONMethod(part, ctx, out, args);
-		// out.println(",");
 		out.println(",");
-		ctx.invoke(genXmlAnnotations, part, ctx, out);
-		out.println(",");
+		ctx.invoke(genAnnotations, part, ctx, out);
+		ctx.invoke(genFieldAnnotations, part, ctx, out);
 		ctx.invoke(genNamespaceMap, part, ctx, out);
 		ctx.invoke(genFunctions, part, ctx, out);
 		ctx.invoke(genFields, part, ctx, out);
@@ -302,65 +295,32 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 
 	public void genSuperClass(EGLClass part, Context ctx, TabbedWriter out) {}
 
-	public void genXmlAnnotations(EGLClass part, Context ctx, TabbedWriter out) {
-		out.print(quoted("eze$$getXmlPartAnnotations"));
+	public void genAnnotations(EGLClass part, Context ctx, TabbedWriter out) {
+		out.print(quoted("eze$$getAnnotations"));
 		out.println(": function() {");
-		// create the XMLAnnotationMap
-		out.println("var xmlAnnotations = {};");
-		Annotation annot = part.getAnnotation("eglx.xml.binding.annotation.xmlRootElement");
-		String namespace = null;
-		if (annot != null && annot.getValue("namespace") != null && ((String) annot.getValue("namespace")).length() > 0) {
-			namespace = (String) annot.getValue("namespace");
+		out.println("var annotations;");
+		for(Annotation annot : part.getAnnotations()){
+			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, part);
 		}
-		String name = part.getName();
-		if (annot != null && annot.getValue("name") != null && ((String) annot.getValue("name")).length() > 0) {
-			name = (String) annot.getValue("name");
-		}
-		Boolean isNillable = Boolean.FALSE;
-		if (annot != null && annot.getValue("nillable") != null) {
-			isNillable = CommonUtilities.convertBoolean(annot.getValue("nillable"));
-		}
-		out.println("xmlAnnotations[\"XMLRootElement\"] = new egl.eglx.xml.binding.annotation.XMLRootElement(" + (name == null ? "null" : quoted(name)) + ", "
-			+ (namespace == null ? "null" : quoted(namespace)) + ", " + isNillable.toString() + ");");
-
-		annot = part.getAnnotation("eglx.xml.binding.annotation.XMLStructure");
-		if (annot != null && annot.getValue("value") != null) {
-			String value;
-			/*
-			 * choice = 1, sequence = 2, simpleContent = 3, unordered = 4
-			 */
-			switch ((Integer) annot.getValue("value")) {
-				case 1:
-					value = "choice";
-					break;
-				case 2:
-					value = "sequence";
-					break;
-				case 3:
-					value = "simpleContent";
-					break;
-				default:
-					value = "unordered";
-			}
-			out.println("xmlAnnotations[\"XMLStructure\"] = egl.eglx.xml.binding.annotation.XMLStructure(" + quoted(value) + ");");
-		}
-
-		out.println("return xmlAnnotations;");
+		out.println("return annotations;");
 		out.println("},");
-		out.print(quoted("eze$$getXmlFields"));
+	}
+
+	public void genFieldAnnotations(EGLClass part, Context ctx, TabbedWriter out) {
+		out.print(quoted("eze$$getFieldInfos"));
 		out.println(": function() {");
-		out.println("var xmlAnnotations;");
-		out.println("fields = new Array();");
+		out.println("var annotations;");
+		out.println("fieldInfos = new Array();");
 		int idx = 0;
 		for (Field field : part.getFields()) {
 			if (field instanceof ConstantField || field.isStatic()) {
 				continue;
 			}
-			ctx.invoke(genXmlField, field, ctx, out, Integer.valueOf(idx));
+			ctx.invoke(genAnnotations, field, ctx, out, Integer.valueOf(idx));
 			idx++;
 		}
-		out.println("return fields;");
-		out.println("}");
+		out.println("return fieldInfos;");
+		out.println("},");
 	}
 
 	public void genNamespaceMap(EGLClass part, Context ctx, TabbedWriter out) {

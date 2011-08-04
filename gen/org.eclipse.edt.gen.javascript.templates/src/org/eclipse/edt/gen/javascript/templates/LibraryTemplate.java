@@ -56,8 +56,8 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		ctx.invoke(genFields, library, ctx, out);
 		ctx.invoke(genGetterSetters, library, ctx, out);
 		out.println(",");
-		ctx.invoke(genXmlAnnotations, library, ctx, out);
-		out.println(",");
+		ctx.invoke(genAnnotations, library, ctx, out);
+		ctx.invoke(genFieldAnnotations, library, ctx, out);
 		ctx.invoke(genNamespaceMap, library, ctx, out);
 	}
 
