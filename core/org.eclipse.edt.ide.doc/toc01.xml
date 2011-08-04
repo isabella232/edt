@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+<toc label="Working with the EGL Development Tools IDE"
+     topic="topics/tedt00500.html">
+   <topic label="Setting EDT preferences, capabilities and templates"
+          href="topics/tedt00500.html"/>
+   <topic label="Creating and maintaining an EDT project" href="topics/tedt00501.html"/>
+   <topic label="Creating and maintaining files with EDT" href="topics/tedt00502.html">
+      <topic label="Editing EGL files with EDT" href="topics/tedt00503.html"/>
+   </topic>
+   <topic label="Debugging EGL source code with EDT" href="topics/tedt00504.html"/>
+   <topic label="Accessing a relational database with EDT" href="topics/tedt00505.html"/>
+   <topic label="Searching for and seeing relationships among EGL files and parts"
+          href="topics/tedt00506.html"/>
+</toc>
