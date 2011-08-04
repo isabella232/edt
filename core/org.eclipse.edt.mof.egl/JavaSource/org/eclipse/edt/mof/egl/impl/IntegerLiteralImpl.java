@@ -44,7 +44,7 @@ public class IntegerLiteralImpl extends NumericLiteralImpl implements IntegerLit
 				return type;
 			}
 			
-			type = IRUtils.getEGLPrimitiveType(Type_Num, value.length(), 0);
+			type = IRUtils.getEGLPrimitiveType(Type_Decimal, value.length(), 0);
 			return type;
 		}
 		return type;
