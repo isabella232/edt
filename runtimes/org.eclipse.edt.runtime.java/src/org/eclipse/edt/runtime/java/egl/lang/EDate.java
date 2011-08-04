@@ -20,6 +20,9 @@ import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.TimestampIntervalMask;
 
+
+//TODO need to add equals and notEquals and compareTo
+		
 /**
  * A class for Dates. The value is a Calendar.
  * @author mheitz

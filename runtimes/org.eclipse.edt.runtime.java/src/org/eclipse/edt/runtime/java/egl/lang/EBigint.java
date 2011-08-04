@@ -103,58 +103,58 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return EDecimal.asDecimal(value);
 	}
 
-	public static long plus(Long op1, Long op2) throws JavartException {
+	public static Long plus(Long op1, Long op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return BigDecimal.valueOf(op1).add(BigDecimal.valueOf(op2)).longValueExact();
 	}
 
-	public static long minus(Long op1, Long op2) throws JavartException {
+	public static Long minus(Long op1, Long op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return BigDecimal.valueOf(op1).subtract(BigDecimal.valueOf(op2)).longValueExact();
 	}
 
 	public static BigDecimal divide(Long op1, Long op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return BigDecimal.valueOf(op1).divide(BigDecimal.valueOf(op2), EDecimal.BIGDECIMAL_RESULT_SCALE, EDecimal.ROUND_BD);
 	}
 
-	public static long multiply(Long op1, Long op2) throws JavartException {
+	public static Long multiply(Long op1, Long op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return BigDecimal.valueOf(op1).multiply(BigDecimal.valueOf(op2)).longValueExact();
 	}
 
-	public static long remainder(Long op1, Long op2) throws JavartException {
+	public static Long remainder(Long op1, Long op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return op1 % op2;
 	}
 
-	public static double power(Long op1, Long op2) throws JavartException {
+	public static Double power(Long op1, Long op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return StrictMath.pow( op1, op2 );
 	}
 
 	public static int compareTo(Long op1, Long op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			throw new NullValueException(); 
 		return op1.compareTo(op2);
 	}
 
 	public static boolean equals(Long op1, Long op2) {
-		if (op1 == null && op2 == null)
-			return true;
-		if ((op1 != null && op2 == null) || (op1 == null && op2 != null))
+		if (op1 == null || op2 == null)
 			return false;
 		return op1.equals(op2);
 	}
 
 	public static boolean notEquals(Long op1, Long op2) {
-		return !equals(op1, op2);
+		if (op1 == null || op2 == null)
+			return false;
+		return !op1.equals(op2);
 	}
 
 	public static long defaultValue() {

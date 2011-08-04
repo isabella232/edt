@@ -428,9 +428,9 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 		return op1.remainder(op2);
 	}
 
-	public static double power(BigDecimal op1, BigDecimal op2) throws JavartException {
+	public static Double power(BigDecimal op1, BigDecimal op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return StrictMath.pow( op1.doubleValue(), op2.doubleValue() );
 	}
 
@@ -442,14 +442,14 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 	}
 
 	public static boolean equals(BigDecimal op1, BigDecimal op2) {
-		if (op1 == null && op2 == null)
-			return true;
-		if ((op1 != null && op2 == null) || (op1 == null && op2 != null))
+		if (op1 == null || op2 == null)
 			return false;
 		return op1.equals(op2);
 	}
 
 	public static boolean notEquals(BigDecimal op1, BigDecimal op2) {
-		return !equals(op1, op2);
+		if (op1 == null || op2 == null)
+			return false;
+		return !op1.equals(op2);
 	}
 }

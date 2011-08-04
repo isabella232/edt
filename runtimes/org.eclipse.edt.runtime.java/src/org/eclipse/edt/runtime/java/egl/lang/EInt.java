@@ -137,39 +137,39 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return Precision;
 	}
 
-	public static int plus(Integer op1, Integer op2) throws JavartException {
+	public static Integer plus(Integer op1, Integer op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return BigDecimal.valueOf((long) op1 + op2).intValueExact();
 	}
 
-	public static int minus(Integer op1, Integer op2) throws JavartException {
+	public static Integer minus(Integer op1, Integer op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return BigDecimal.valueOf((long) op1 - op2).intValueExact();
 	}
 
 	public static BigDecimal divide(Integer op1, Integer op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return BigDecimal.valueOf(op1).divide(BigDecimal.valueOf(op2), EDecimal.BIGDECIMAL_RESULT_SCALE, EDecimal.ROUND_BD);
 	}
 
-	public static int multiply(Integer op1, Integer op2) throws JavartException {
+	public static Integer multiply(Integer op1, Integer op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return BigDecimal.valueOf((long) op1 * op2).intValueExact();
 	}
 
-	public static int remainder(Integer op1, Integer op2) throws JavartException {
+	public static Integer remainder(Integer op1, Integer op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return op1 % op2;
 	}
 	
-	public static double power(Integer op1, Integer op2) throws JavartException {
+	public static Double power(Integer op1, Integer op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return StrictMath.pow( op1, op2 );
 	}
 
@@ -182,14 +182,14 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	}
 
 	public static boolean equals(Integer op1, Integer op2) {
-		if (op1 == null && op2 == null)
-			return true;
-		if ((op1 != null && op2 == null) || (op1 == null && op2 != null))
+		if (op1 == null || op2 == null)
 			return false;
 		return op1.equals(op2);
 	}
 
 	public static boolean notEquals(Integer op1, Integer op2) {
-		return !equals(op1, op2);
+		if (op1 == null || op2 == null)
+			return false;
+		return !op1.equals(op2);
 	}
 }

@@ -40,4 +40,16 @@ public class EBoolean extends AnyBoxedObject<Boolean> {
 			throw new NullValueException();
 		return number.floatValue() != 0;
 	}
+
+	public static boolean equals(Boolean op1, Boolean op2) {
+		if (op1 == null || op2 == null)
+			return false;
+		return op1.equals(op2);
+	}
+
+	public static boolean notEquals(Boolean op1, Boolean op2) {
+		if (op1 == null || op2 == null)
+			return false;
+		return !op1.equals(op2);
+	}
 }

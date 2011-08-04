@@ -23,6 +23,8 @@ import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
 import org.eclipse.edt.javart.util.TimestampIntervalMask;
 
+//TODO need to add equals and notEquals and compareTo
+
 /**
  * A class for Timestamps. The value is a Calendar and a number of microseconds (an int) which is encapsulated in a
  * TimestampData object. Timestamps store a varying set of fields, from years down to microseconds. The first and last fields

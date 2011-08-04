@@ -146,27 +146,27 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return EDecimal.asDecimal(value);
 	}
 
-	public static int plus(Short op1, Short op2) throws JavartException {
+	public static Integer plus(Short op1, Short op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return op1 + op2;
 	}
 
-	public static int minus(Short op1, Short op2) throws JavartException {
+	public static Integer minus(Short op1, Short op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return op1 - op2;
 	}
 
 	public static BigDecimal divide(Short op1, Short op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return BigDecimal.valueOf(op1).divide(BigDecimal.valueOf(op2), EDecimal.BIGDECIMAL_RESULT_SCALE, EDecimal.ROUND_BD);
 	}
 
-	public static int multiply(Short op1, Short op2) throws JavartException {
+	public static Integer multiply(Short op1, Short op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		try {
 			return BigDecimal.valueOf(op1 * op2).intValueExact();
 		}
@@ -175,15 +175,15 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		}
 	}
 
-	public static int remainder(Short op1, Short op2) throws JavartException {
+	public static Integer remainder(Short op1, Short op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return op1 % op2;
 	}
 
-	public static double power(Short op1, Short op2) throws JavartException {
+	public static Double power(Short op1, Short op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return StrictMath.pow( op1, op2 );
 	}
 
@@ -196,15 +196,15 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	}
 
 	public static boolean equals(Short op1, Short op2) {
-		if (op1 == null && op2 == null)
-			return true;
-		if ((op1 != null && op2 == null) || (op1 == null && op2 != null))
+		if (op1 == null || op2 == null)
 			return false;
 		return op1.equals(op2);
 	}
 
 	public static boolean notEquals(Short op1, Short op2) {
-		return !equals(op1, op2);
+		if (op1 == null || op2 == null)
+			return false;
+		return !op1.equals(op2);
 	}
 
 	public int precision() {

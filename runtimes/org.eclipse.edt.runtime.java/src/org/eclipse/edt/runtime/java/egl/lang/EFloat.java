@@ -83,39 +83,39 @@ public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 		return asFloat(EDecimal.asDecimal(EString.asString(value, length)));
 	}
 
-	public static double plus(Double op1, Double op2) throws JavartException {
+	public static Double plus(Double op1, Double op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return op1 + op2;
 	}
 
-	public static double minus(Double op1, Double op2) throws JavartException {
+	public static Double minus(Double op1, Double op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return op1 - op2;
 	}
 
-	public static double divide(Double op1, Double op2) throws JavartException {
+	public static Double divide(Double op1, Double op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return op1 / op2;
 	}
 
-	public static double multiply(Double op1, Double op2) throws JavartException {
+	public static Double multiply(Double op1, Double op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return op1 * op2;
 	}
 
-	public static double remainder(Double op1, Double op2) throws JavartException {
+	public static Double remainder(Double op1, Double op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return op1 % op2;
 	}
 	
-	public static double power(Double op1, Double op2) throws JavartException {
+	public static Double power(Double op1, Double op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return StrictMath.pow( op1, op2 );
 	}
 
@@ -126,14 +126,14 @@ public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 	}
 
 	public static boolean equals(Double op1, Double op2) {
-		if (op1 == null && op2 == null)
-			return true;
-		if ((op1 != null && op2 == null) || (op1 == null && op2 != null))
+		if (op1 == null || op2 == null)
 			return false;
 		return op1.equals(op2);
 	}
 
 	public static boolean notEquals(Double op1, Double op2) {
-		return !equals(op1, op2);
+		if (op1 == null || op2 == null)
+			return false;
+		return !op1.equals(op2);
 	}
 }

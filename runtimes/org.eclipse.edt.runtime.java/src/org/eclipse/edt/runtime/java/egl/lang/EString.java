@@ -153,14 +153,14 @@ public class EString extends AnyBoxedObject<String> {
 	}
 
 	public static String plus(String op1, String op2) throws JavartException {
-		if (op1 == null || op2 == null)
-			throw new NullValueException();
-		return op1 + op2;
+		return concat(op1, op2);
 	}
 
 	public static String concat(String op1, String op2) throws JavartException {
-		if (op1 == null || op2 == null)
-			throw new NullValueException();
+		if (op1 == null)
+			op1 = "";
+		if (op2 == null)
+			op2 = "";
 		return op1 + op2;
 	}
 
@@ -172,17 +172,19 @@ public class EString extends AnyBoxedObject<String> {
 
 	public static boolean equals(String op1, String op2) throws JavartException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return false;
 		return op1.equals(op2);
 	}
 
 	public static boolean notEquals(String op1, String op2) throws JavartException {
-		return !equals(op1, op2);
+		if (op1 == null || op2 == null)
+			return false;
+		return !op1.equals(op2);
 	}
 
 	public static String substring(String str, Integer startIndex, Integer endIndex) throws JavartException {
 		if (str == null || startIndex == null || endIndex == null)
-			throw new NullValueException();
+			return null;
 		int start = startIndex;
 		int end = endIndex;
 		int max = str.length();
