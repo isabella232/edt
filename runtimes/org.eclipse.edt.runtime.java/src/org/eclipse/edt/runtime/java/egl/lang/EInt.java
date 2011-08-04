@@ -166,6 +166,12 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 			throw new NullValueException();
 		return op1 % op2;
 	}
+	
+	public static double power(Integer op1, Integer op2) throws JavartException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return StrictMath.pow( op1, op2 );
+	}
 
 	public static int compareTo(Integer op1, Integer op2) throws JavartException {
 		if (op1 == null && op2 == null)

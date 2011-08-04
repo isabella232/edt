@@ -83,10 +83,40 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 		return asSmallfloat(EDecimal.asDecimal(EString.asString(value, length)));
 	}
 
-	public static Float divide(Float op1, Float op2) throws JavartException {
+	public static float plus(Float op1, Float op2) throws JavartException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return op1 + op2;
+	}
+
+	public static float minus(Float op1, Float op2) throws JavartException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return op1 - op2;
+	}
+
+	public static float divide(Float op1, Float op2) throws JavartException {
 		if (op1 == null || op2 == null)
 			throw new NullValueException();
 		return op1 / op2;
+	}
+
+	public static float multiply(Float op1, Float op2) throws JavartException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return op1 * op2;
+	}
+
+	public static float remainder(Float op1, Float op2) throws JavartException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return op1 % op2;
+	}
+	
+	public static float power(Float op1, Float op2) throws JavartException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return (float)StrictMath.pow( op1, op2 );
 	}
 
 	public static int compareTo(Float op1, Float op2) throws JavartException {

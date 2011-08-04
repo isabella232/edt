@@ -83,10 +83,40 @@ public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 		return asFloat(EDecimal.asDecimal(EString.asString(value, length)));
 	}
 
-	public static Double divide(Double op1, Double op2) throws JavartException {
+	public static double plus(Double op1, Double op2) throws JavartException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return op1 + op2;
+	}
+
+	public static double minus(Double op1, Double op2) throws JavartException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return op1 - op2;
+	}
+
+	public static double divide(Double op1, Double op2) throws JavartException {
 		if (op1 == null || op2 == null)
 			throw new NullValueException();
 		return op1 / op2;
+	}
+
+	public static double multiply(Double op1, Double op2) throws JavartException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return op1 * op2;
+	}
+
+	public static double remainder(Double op1, Double op2) throws JavartException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return op1 % op2;
+	}
+	
+	public static double power(Double op1, Double op2) throws JavartException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return StrictMath.pow( op1, op2 );
 	}
 
 	public static int compareTo(Double op1, Double op2) throws JavartException {

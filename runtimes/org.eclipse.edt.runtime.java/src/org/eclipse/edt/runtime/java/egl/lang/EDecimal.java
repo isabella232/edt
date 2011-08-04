@@ -428,6 +428,12 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 		return op1.remainder(op2);
 	}
 
+	public static double power(BigDecimal op1, BigDecimal op2) throws JavartException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return StrictMath.pow( op1.doubleValue(), op2.doubleValue() );
+	}
+
 	public static int compareTo(BigDecimal op1, BigDecimal op2) throws JavartException {
 		if (op1 == null || op2 == null) {
 			throw new NullValueException();

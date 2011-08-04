@@ -181,6 +181,12 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return op1 % op2;
 	}
 
+	public static double power(Short op1, Short op2) throws JavartException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return StrictMath.pow( op1, op2 );
+	}
+
 	public static int compareTo(Short op1, Short op2) throws JavartException {
 		if (op1 == null && op2 == null)
 			return 0;

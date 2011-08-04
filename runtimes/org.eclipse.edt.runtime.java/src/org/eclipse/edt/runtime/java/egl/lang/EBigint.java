@@ -133,6 +133,12 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return op1 % op2;
 	}
 
+	public static double power(Long op1, Long op2) throws JavartException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return StrictMath.pow( op1, op2 );
+	}
+
 	public static int compareTo(Long op1, Long op2) throws JavartException {
 		if (op1 == null || op2 == null)
 			throw new NullValueException();
