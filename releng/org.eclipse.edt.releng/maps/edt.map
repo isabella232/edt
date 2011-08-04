@@ -24,7 +24,7 @@ plugin@org.eclipse.edt.debug.core=v201108031606,:pserver:anonymous@dev.eclipse.o
 plugin@org.eclipse.edt.debug.ui=v201108031606,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/debug/org.eclipse.edt.debug.ui
 plugin@org.eclipse.edt.ide.compiler=v201107271431,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.compiler
 plugin@org.eclipse.edt.ide.core=v201108022318,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.core
-plugin@org.eclipse.edt.ide.ui=v201108031705,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.ui
+plugin@org.eclipse.edt.ide.ui=v201108040631,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.ui
 plugin@org.eclipse.edt.runtime.java=v201108031723,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.java
 
 feature@org.eclipse.edt.tests.feature=v201102251630,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/tests/org.eclipse.edt.tests.feature
