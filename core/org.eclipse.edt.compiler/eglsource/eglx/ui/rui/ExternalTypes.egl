@@ -11,8 +11,10 @@
  *******************************************************************************/
 package eglx.ui.rui;
 
-import eglx.javascript.*;
-import eglx.lang.*;
+import egl.lang.reflect.mof.Operation;
+import eglx.javascript.JavaScriptObject;
+import eglx.lang.EBoolean;
+import eglx.lang.Property;
 
 ExternalType Event type JavaScriptObject {
 		relativePath = "egl/ui/rui",
@@ -621,6 +623,11 @@ ExternalType Widget type JavaScriptObject{relativePath = "egl/ui/rui",
 	function setSymmetricSwap(value string in);
 	function getNumericSwap() returns (string);
 	function setNumericSwap(value string in);
+
+	static function $EQ(lvalue Widget in, rvalue Widget in) returns(EBoolean) {@Operation{"=="}};
+	static function $NEQ(lvalue Widget in, rvalue Widget in) returns(EBoolean) {@Operation{"!="}};
+
+	static function asWidget(value Widget in) returns(Widget) {@Operation{"widen"}};
 	
 end
 
@@ -634,6 +641,10 @@ ExternalType View type JavaScriptObject{relativePath = "egl/ui/rui",
 	private document Document;
 	private initialUI Widget[];
 	
+	static function $EQ(lvalue View in, rvalue View in) returns(EBoolean) {@Operation{"=="}};
+	static function $NEQ(lvalue View in, rvalue View in) returns(EBoolean) {@Operation{"!="}};
+	
+	static function asView(value View in) returns(View) {@Operation{"widen"}};
 	
 
 end
