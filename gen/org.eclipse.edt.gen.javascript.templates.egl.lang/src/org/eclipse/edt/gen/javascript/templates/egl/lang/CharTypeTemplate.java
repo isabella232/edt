@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.SequenceType;
 
-public class AnyCharTypeTemplate extends JavaScriptTemplate {
+public class CharTypeTemplate extends JavaScriptTemplate {
 
 	// this method gets invoked when there is a char with a length needed
 	public void genSignature(SequenceType type, Context ctx, TabbedWriter out) {

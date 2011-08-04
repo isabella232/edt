@@ -12,18 +12,21 @@
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
 import org.eclipse.edt.gen.javascript.CommonUtilities;
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
+import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public class AnyNumTypeTemplate extends JavaScriptTemplate {
+public class DecimalTypeTemplate extends JavaScriptTemplate {
 
 	// this method gets invoked when there is a specific fixed precision needed
 	public void genDefaultValue(FixedPrecisionType type, Context ctx, TabbedWriter out) {
@@ -36,47 +39,19 @@ public class AnyNumTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
-		out.print("egl.javascript.BigDecimal.prototype.ZERO");
+		out.print(Constants.JSRT_EGL_NAMESPACE + ctx.getNativeMapping("egl.lang.AnyDecimal") + ".ZERO");
 	}
 
 	// this method gets invoked when there is a specific fixed precision needed
 	public void genSignature(FixedPrecisionType type, Context ctx, TabbedWriter out) {
-		String signature = "N" + type.getLength() + ":" + type.getDecimals() + ";";
+		String signature = "d" + type.getLength() + ":" + type.getDecimals() + ";";
 		out.print(signature);
 	}
 
 	// this method gets invoked when there is a generic (unknown) fixed precision needed
 	public void genSignature(ParameterizableType type, Context ctx, TabbedWriter out) {
-		String signature = "N;";
+		String signature = "d;";
 		out.print(signature);
-	}
-
-	protected boolean needsConversion(Type fromType, Type toType) {
-		boolean result = true;
-		if (TypeUtils.isNumericType(fromType) && !CommonUtilities.needsConversion(fromType, toType))
-			result = CommonUtilities.isJavaScriptBigDecimal(toType);
-		return result;
-	}
-
-	public void genConversionOperation(FixedPrecisionType type, Context ctx, TabbedWriter out, AsExpression arg) {
-		Type toType = arg.getEType();
-		Type fromType = arg.getObjectExpr().getType();
-		if ((arg.getConversionOperation() == null) && TypeUtils.isNumericType(fromType)) {
-			if (needsConversion(fromType, toType)) {
-				out.print(ctx.getNativeImplementationMapping(toType) + '.');
-				out.print("from");
-				out.print(ctx.getNativeTypeName(fromType));
-				out.print("(");
-				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
-				ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
-				out.print(")");
-			} else {
-				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
-			}
-		} else {
-			// we need to invoke the logic in type template to call back to the other conversion situations
-			ctx.invokeSuper(this, genConversionOperation, type, ctx, out, arg);
-		}
 	}
 
 	public void genTypeDependentOptions(ParameterizableType type, Context ctx, TabbedWriter out, AsExpression arg) {
@@ -113,6 +88,55 @@ public class AnyNumTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
+	protected boolean needsConversion(Type fromType, Type toType) {
+		boolean result = true;
+		if (TypeUtils.isNumericType(fromType) && !CommonUtilities.needsConversion(fromType, toType))
+			result = !CommonUtilities.isJavaScriptBigDecimal(toType);
+		return result;
+	}
+
+	public void genConversionOperation(FixedPrecisionType type, Context ctx, TabbedWriter out, AsExpression arg) {
+		Type toType = arg.getEType();
+		Type fromType = arg.getObjectExpr().getType();
+		if ((arg.getConversionOperation() == null) && TypeUtils.isNumericType(fromType)) {
+			if (needsConversion(fromType, toType) && CommonUtilities.proceedWithConversion(ctx, arg.getConversionOperation())) {
+				out.print(ctx.getNativeImplementationMapping(toType) + '.');
+				out.print("from");
+				out.print(ctx.getNativeTypeName(fromType));
+				out.print("(");
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+				ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
+				out.print(")");
+			} else {
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			}
+		} else {
+			// we need to invoke the logic in type template to call back to the other conversion situations
+			ctx.invokeSuper(this, genConversionOperation, type, ctx, out, arg);
+		}
+	}
+
+	protected boolean needsConversion(Operation conOp) {
+		boolean result = true;
+		Type fromType = conOp.getParameters().get(0).getType();
+		Type toType = conOp.getReturnType();
+		// don't convert matching types
+		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
+			result = false;
+		if (TypeUtils.isNumericType(fromType) && (TypeUtils.Type_DECIMAL.equals(fromType) || TypeUtils.Type_MONEY.equals(fromType)))
+			result = conOp.isNarrowConversion();
+		return result;
+	}
+
+	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, AsExpression arg) {
+		if (arg.getConversionOperation() != null && !needsConversion(arg.getConversionOperation())) {
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+		} else {
+			// we need to invoke the logic in type template to call back to the other conversion situations
+			ctx.invokeSuper(this, genConversionOperation, type, ctx, out, arg);
+		}
+	}
+
 	@SuppressWarnings("static-access")
 	protected String getNativeStringPrefixOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
@@ -126,7 +150,13 @@ public class AnyNumTypeTemplate extends JavaScriptTemplate {
 		String op = expr.getOperator();
 		// these are the defaults for what can be handled by the java string class
 		if (op.equals(expr.Op_PLUS))
-			return " + ";
+			return ".add(";
+		if (op.equals(expr.Op_MINUS))
+			return " - ";
+		if (op.equals(expr.Op_MULTIPLY))
+			return ".multiply(";
+		if (op.equals(expr.Op_DIVIDE))
+			return ".divide(";
 		if (op.equals(expr.Op_EQ))
 			return ".compareTo(";
 		if (op.equals(expr.Op_NE))
@@ -151,6 +181,12 @@ public class AnyNumTypeTemplate extends JavaScriptTemplate {
 	@SuppressWarnings("static-access")
 	protected String getNativeStringComparisionOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
+		if (op.equals(expr.Op_PLUS))
+			return ")";
+		if (op.equals(expr.Op_MULTIPLY))
+			return ")";
+		if (op.equals(expr.Op_DIVIDE))
+			return ")";
 		if (op.equals(expr.Op_EQ))
 			return ") == 0";
 		if (op.equals(expr.Op_NE))

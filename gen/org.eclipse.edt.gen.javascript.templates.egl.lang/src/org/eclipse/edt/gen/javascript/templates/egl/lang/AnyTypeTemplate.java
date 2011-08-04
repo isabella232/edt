@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Type;
 
-public class AnyObjectTypeTemplate extends JavaScriptTemplate {
+public class AnyTypeTemplate extends JavaScriptTemplate {
 
 	public void genConversionOperation(Type type, Context ctx, TabbedWriter out, AsExpression arg) {
 		// check to see if a conversion is required
