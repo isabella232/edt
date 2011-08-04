@@ -9,14 +9,11 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package eglx.http;
+package eglx.xml.binding.annotation;
 
-record HttpRequest
-	uri string?;
-	method HttpMethod?;
-	encoding Encoding?;
-	charset string?;
-	contentType string?;
-	headers dictionary;
-	body string?;
+Record XMLArray type Annotation
+{ targets = [ ElementKind.fieldMbr ], eglIsSystemAnnotation = yes}
+  wrapped boolean;
+  names string[];
 end
+
