@@ -20,6 +20,8 @@ import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.SubstringAccess;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.UnaryExpression;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class ParameterizableTypeTemplate extends JavaTemplate {
 
@@ -27,9 +29,9 @@ public class ParameterizableTypeTemplate extends JavaTemplate {
 		out.print(ctx.getNativeImplementationMapping(arg.getType()) + ".substring(");
 		ctx.invoke(genExpression, arg.getStringExpression(), ctx, out);
 		out.print(", ");
-		ctx.invoke(genExpression, arg.getStart(), ctx, out);
+		ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(arg.getStart(), TypeUtils.Type_INT), ctx, out);
 		out.print(", ");
-		ctx.invoke(genExpression, arg.getEnd(), ctx, out);
+		ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(arg.getEnd(), TypeUtils.Type_INT), ctx, out);
 		out.print(")");
 	}
 

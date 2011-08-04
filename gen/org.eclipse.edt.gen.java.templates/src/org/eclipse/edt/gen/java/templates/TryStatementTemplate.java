@@ -25,6 +25,7 @@ public class TryStatementTemplate extends JavaTemplate {
 		for (ExceptionBlock exceptionBlock : stmt.getExceptionBlocks()) {
 			genException(exceptionBlock, ctx, out);
 		}
+		out.println("finally { }");
 	}
 
 	public void genException(ExceptionBlock exceptionBlock, Context ctx, TabbedWriter out) {

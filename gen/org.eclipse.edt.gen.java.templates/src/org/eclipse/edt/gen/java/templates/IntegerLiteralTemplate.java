@@ -20,12 +20,12 @@ import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class IntegerLiteralTemplate extends JavaTemplate {
-	
+
 	public void genExpression(IntegerLiteral expr, Context ctx, TabbedWriter out) {
 		Type type = expr.getType();
 		if (type.equals(TypeUtils.Type_SMALLINT)) {
 			// Generate a short.
-//			out.print("(short)");
+			out.print("(short) ");
 			if (expr.isNegated()) {
 				out.print('-');
 			}
