@@ -27,9 +27,9 @@ public class NameTemplate extends JavaScriptTemplate {
 				ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
 				out.print(".");
 				
-				Object propertyFn = property.getValue("setMethod");
+				String propertyFn = (String)property.getValue("setMethod");
 				
-				if (propertyFn != null) {
+				if (propertyFn != null && propertyFn.length() > 0) {
 					out.print(CommonUtilities.getPropertyFunction(propertyFn));
 				} else {
 					out.print("set");

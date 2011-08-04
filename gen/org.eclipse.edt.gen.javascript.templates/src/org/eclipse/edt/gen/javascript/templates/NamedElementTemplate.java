@@ -25,8 +25,8 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 		if (property != null) {
 			String functionName = null;
 			
-			Object propertyFn = property.getValue("getMethod");
-			if (propertyFn != null) {
+			String propertyFn = (String)property.getValue("getMethod");
+			if (propertyFn != null && propertyFn.length() > 0) {
 				functionName = CommonUtilities.getPropertyFunction(propertyFn);
 			}
 			if ((functionName == null) || (functionName.trim().length() == 0)) {
