@@ -22,7 +22,7 @@ import org.eclipse.edt.mof.egl.Type;
 public class BigintTypeTemplate extends JavaScriptTemplate {
 
 	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
-		out.print(Constants.JSRT_EGL_NAMESPACE + ctx.getNativeMapping("egl.lang.Int64") + ".ZERO");
+		out.print(Constants.JSRT_EGL_NAMESPACE + ctx.getNativeMapping("eglx.lang.EBigint") + ".ZERO");
 	}
 
 	public void genSignature(EGLClass type, Context ctx, TabbedWriter out) {
