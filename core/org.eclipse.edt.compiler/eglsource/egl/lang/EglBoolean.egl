@@ -36,4 +36,10 @@ externalType EglBoolean extends AnyValue type ClassType
 	 * and returns false if the operand is true. 
 	 */
 	static function $NOT(value EglBoolean in) returns (EglBoolean) {@Operation{"!"}};
+
+	/**
+	 * {@Operation widen} Performs conversion from any to any.
+	 */
+	static function asEglBoolean(value EglBoolean in) returns(EglBoolean) {@Operation{"widen"}};
+
 end
