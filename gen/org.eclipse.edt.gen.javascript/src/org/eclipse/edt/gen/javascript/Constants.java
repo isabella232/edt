@@ -23,6 +23,7 @@ public class Constants {
 	public static final String SubKey_partFormsUsed = "partFormsUsed";
 	public static final String SubKey_partLibrariesUsed = "partLibrariesUsed";
 	public static final String SubKey_partRecordsUsed = "partRecordsUsed";
+	public static final String SubKey_simpleContent = "simpleContent";
 
 	// these are annotations key values, related to the values in the IRs
 	public static final String Annotation_EGLProperty = "egl.core.eglproperty";
@@ -35,6 +36,10 @@ public class Constants {
 	public static final String JSRT_STRLIB_PKG = "egl.egl.core.StrLib['$inst'].";
 	public static final String JSRT_DTTMLIB_PKG = "egl.egl.core.DateTimeLib['$inst'].";
 	public static final String JSRT_XMLLIB_PKG = "egl.egl.core.XMLLib['$inst'].";
+
+	//Annotation names
+	public static final String AnnotationXmlElement  = "egl:eglx.xml._bind.annotation.xmlElement";
+	public static final String AnnotationJsonName  = "egl:eglx.json.JsonName";
 
 	// EGL message id's
 	public static final String EGLMESSAGE_UNSUPPORTED_ELEMENT = "1000";

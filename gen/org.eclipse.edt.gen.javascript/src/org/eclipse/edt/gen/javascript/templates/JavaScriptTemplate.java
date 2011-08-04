@@ -32,6 +32,8 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genAccessor = "genAccessor";
 	public static final String genAdditionalConstructorParams = "genAdditionalConstructorParams";
 	public static final String genAdditionalSuperConstructorArgs = "genAdditionalSuperConstructorArgs";
+	public static final String genAnnotations = "genAnnotations";
+	public static final String genAnnotation = "genAnnotation";
 	public static final String genArrayAccess = "genArrayAccess";
 	public static final String genAssignment = "genAssignment";
 	public static final String genBinaryExpression = "genBinaryExpression";
@@ -52,6 +54,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genDefaultValue = "genDefaultValue";
 	public static final String genExpression = "genExpression";
 	public static final String genField = "genField";
+	public static final String genFieldAnnotations = "genFieldAnnotations";
 	public static final String genFields = "genFields";
 	public static final String genFunction = "genFunction";
 	public static final String genFunctions = "genFunctions";
@@ -65,6 +68,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genInitializeMethods = "genInitializeMethods";
 	public static final String genInstantiation = "genInstantiation";
 	public static final String genInvocation = "genInvocation";
+	public static final String genJsonAnnotations = "genJsonAnnotations";
 	public static final String genLibrary = "genLibrary";
 	public static final String genLibraries = "genLibraries";
 	public static final String genMemberAccess = "genMemberAccess";
@@ -89,8 +93,6 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genSuperClass = "genSuperClass";
 	public static final String genTypeDependentOptions = "genTypeDependentOptions";
 	public static final String genToString = "genToString";
-	public static final String genXmlAnnotations = "genXmlAnnotations";
-	public static final String genXmlField = "genXmlField";
 	public static final String genUnaryExpression = "genUnaryExpression";
 	// constants that allow container based processing. each of these will attempt to find the user provided container based
 	// method, and if not found, will then end up back in type template and invoked the method name without "containerbased"
