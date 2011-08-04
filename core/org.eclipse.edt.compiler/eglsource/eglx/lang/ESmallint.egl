@@ -8,27 +8,27 @@ externalType ESmallint extends EglNumber type ClassType
 	/**
 	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */
-	static function $Plus(value ESmallint in) returns (ESmallint) {@Operation{"+"}};
+	static function $Plus(value ESmallint in) returns (EInt) {@Operation{"+"}};
 
 	/**
 	 * {@Operation +} Adds two numbers.
 	 */
-	static function $Plus(lvalue ESmallint in, rvalue ESmallint in) returns (ESmallint) {@Operation{"+"}};
+	static function $Plus(lvalue ESmallint in, rvalue ESmallint in) returns (EInt) {@Operation{"+"}};
 
 	/**
 	 * {@Operation -} Negates the value.
 	 */
-	static function $Minus(value ESmallint in) returns (ESmallint) {@Operation{"-"}};
+	static function $Minus(value ESmallint in) returns (EInt) {@Operation{"-"}};
 
 	/**
 	 * {@Operation -} Subtracts one number from another.
 	 */
-	static function $Minus(lvalue ESmallint in, rvalue ESmallint in) returns (ESmallint) {@Operation{"-"}};
+	static function $Minus(lvalue ESmallint in, rvalue ESmallint in) returns (EInt) {@Operation{"-"}};
 
 	/**
 	 * {@Operation *} Multiplies two numbers.
 	 */
-	static function $Multiply(lvalue ESmallint in, rvalue ESmallint in) returns (ESmallint) {@Operation{"*"}};
+	static function $Multiply(lvalue ESmallint in, rvalue ESmallint in) returns (EInt) {@Operation{"*"}};
 
 	/**
 	 * {@Operation /} Divides one number by another.
