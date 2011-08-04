@@ -29,7 +29,7 @@ public class InvocationExpressionTemplate extends JavaTemplate {
 		out.print(")");
 	}
 
-	public void genRununitInvocation(InvocationExpression expr, Context ctx, TabbedWriter out) {
+	public void genInvocation(InvocationExpression expr, Context ctx, TabbedWriter out, String firstArg) {
 		// then process the function invocation
 		if (expr.getQualifier() != null) {
 			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
@@ -37,7 +37,9 @@ public class InvocationExpressionTemplate extends JavaTemplate {
 		}
 		ctx.invoke(genName, expr.getTarget(), ctx, out);
 		out.print("(");
-		out.print("_runUnit(), ");
+		out.print(firstArg);
+		if (expr.getArguments().size() > 0)
+			out.print(", ");
 		ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out);
 		out.print(")");
 	}
