@@ -157,8 +157,7 @@ public class EGLWizardUtilities {
 		if (rule == null)
 			rule = ResourcesPlugin.getWorkspace().getRoot();
 		
-		List<WorkspaceModifyOperation> ops = ProjectFinishUtility.getCreateProjectFinishOperations(projConfig, eglFeatureMask, rule, 
-									false, projConfig.isCobolPlatform());
+		List<WorkspaceModifyOperation> ops = ProjectFinishUtility.getCreateProjectFinishOperations(projConfig, eglFeatureMask, rule);
 		for(Iterator<WorkspaceModifyOperation> it = ops.iterator(); it.hasNext();){
 			Object obj = it.next();
 			if (obj instanceof WorkspaceModifyOperation) {

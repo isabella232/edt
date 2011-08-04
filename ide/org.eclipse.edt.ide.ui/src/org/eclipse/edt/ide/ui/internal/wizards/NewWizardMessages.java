@@ -266,6 +266,11 @@ public class NewWizardMessages extends NLS {
 //
 //	public static String NewTypeWizardPageOperationdesc;
 //	public static String NewTypeWizardPageWSDLTypenameLabel;
+	
+	public static String RUILibraryPage;
+	public static String RUILibraryPageTitle;
+	public static String RUILibraryPageDescription;
+	public static String RUILibraryPage_widget_library;
 
 	public static String CapabilityConfigurationPageTitle;
 	public static String CapabilityConfigurationPageDescription;

@@ -28,13 +28,11 @@ public class AddProjectDependencyOperation extends WorkspaceModifyOperation {
 
 	private ProjectConfiguration projectConfiguration;
 	private String widgetProject;
-	private String dojoRuntimeProject;
 
 	public AddProjectDependencyOperation(ProjectConfiguration projectConfiguration, ISchedulingRule rule, 
-			String widgetProject, String dojoRuntimeProject) {
+			String widgetProject) {
 		super(rule);
 		this.widgetProject = widgetProject;
-		this.dojoRuntimeProject = dojoRuntimeProject;
 		this.projectConfiguration = projectConfiguration;
 	}
 	
@@ -42,12 +40,6 @@ public class AddProjectDependencyOperation extends WorkspaceModifyOperation {
 		IWorkspaceRoot fWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 		IEGLProject eglProject = EGLCore.create(fWorkspaceRoot.getProject(projectConfiguration.getProjectName()));
 		
-		if( this.dojoRuntimeProject != null ) {
-			final IProject dojoRuntimeProject = ResourcesPlugin.getWorkspace().getRoot().getProject(this.dojoRuntimeProject);
-			if (dojoRuntimeProject.exists()) {
-				addRequiredProject(eglProject, fWorkspaceRoot.getProject(this.dojoRuntimeProject), false);	
-			}
-		}
 		if( this.widgetProject != null ) {
 			final IProject widgetsProject = ResourcesPlugin.getWorkspace().getRoot().getProject(this.widgetProject);
 			if (widgetsProject.exists()) {

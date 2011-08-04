@@ -12,11 +12,9 @@
 package org.eclipse.edt.ide.ui.internal.project.wizards;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -28,13 +26,12 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
-import org.eclipse.edt.ide.ui.internal.project.features.operations.EGLFeatureOperationsUtilities;
+import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardRUILibraryPage;
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardTypePage;
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.SourceProjectWizardCapabilityPage;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
-import org.eclipse.edt.ide.ui.wizards.ProjectConfigurationOperation;
-import org.eclipse.edt.ide.ui.wizards.ProjectCreationOperation;
+import org.eclipse.edt.ide.ui.wizards.ProjectFinishUtility;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -49,6 +46,7 @@ public class NewEGLProjectWizard extends Wizard
 	implements IWorkbenchWizard, INewWizard {
 	
 	private ProjectWizardTypePage typePage;	
+	private ProjectWizardRUILibraryPage libraryPage;
 	private SourceProjectWizardCapabilityPage capabilityPage;
 	
 	private ProjectConfiguration model;	
@@ -67,7 +65,7 @@ public class NewEGLProjectWizard extends Wizard
 		try{
 			ISchedulingRule rule = getCurrentSchedulingRule();
 			model.setProjectName(typePage.getModel().getProjectName());
-			List ops = getCreateProjectFinishOperations(model, 0, rule);
+			List ops = ProjectFinishUtility.getCreateProjectFinishOperations(model, 0, rule);
 			for(Iterator it = ops.iterator(); it.hasNext();)
 			{
 				Object obj = it.next();
@@ -120,30 +118,6 @@ public class NewEGLProjectWizard extends Wizard
 		return ResourcesPlugin.getWorkspace().getRoot(); // look all by default
 	}
 	
-	public List getCreateProjectFinishOperations(ProjectConfiguration eglProjConfiguration, int eglFeatureMask, ISchedulingRule rule) {
-		IProject project = workspaceRoot.getProject(eglProjConfiguration.getProjectName());
-		List listOps = new ArrayList();
-		
-//		ImportRUIProjectsOperation importJavaScriptProjectOperation;
-		ProjectCreationOperation creationOperation;
-		ProjectConfigurationOperation configureOperation;
-
-//		importJavaScriptProjectOperation = new ImportRUIProjectsOperation(rule);
-//		listOps.add(importJavaScriptProjectOperation);
-		
-		creationOperation = new ProjectCreationOperation(eglProjConfiguration, rule);
-		listOps.add(creationOperation);
-		
-		configureOperation = new ProjectConfigurationOperation(eglProjConfiguration, rule);
-		listOps.add(configureOperation);
-		
-//		AddProjectDependencyOperation addProjectDependencyOperation = new AddProjectDependencyOperation(eglProjConfiguration, rule);
-//		listOps.add(addProjectDependencyOperation);		
-		EGLFeatureOperationsUtilities.getEGLFeatureOperations(eglProjConfiguration.getProjectName(), listOps, rule, 0, eglFeatureMask, false, false);		
-		
-		return listOps;
-	}
-	
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		setWindowTitle(NewWizardMessages.EGLNewProjectWizard_0);
 	}
@@ -151,6 +125,8 @@ public class NewEGLProjectWizard extends Wizard
 	public void addPages() {
 		this.typePage = new ProjectWizardTypePage(NewWizardMessages.EGLNewProjectWizard_1, model);
 		addPage(typePage);
+		this.libraryPage = new ProjectWizardRUILibraryPage(NewWizardMessages.RUILibraryPage);
+		addPage(libraryPage);
 		this.capabilityPage = new SourceProjectWizardCapabilityPage(NewWizardMessages.EGLCapabilityConfigurationPage);
 		addPage(capabilityPage);
 	}

@@ -5,6 +5,7 @@
 	<extension-point id="edtGeneratorTabs" name="EDT Generator Tabs" schema="schema/edtGeneratorTabs.exsd"/>
 	<extension-point id="projectType" name="New EGL Project Type" schema="schema/projectType.exsd"/>
     <extension-point id="eglProjectFeature" name="EGL Project Feature" schema="schema/eglProjectFeature.exsd"/>
+	<extension-point id="widgetLibraryProvider" name="Widget Library Provider" schema="schema/widgetLibraryProvider.exsd"/>
 	   
 	<extension 
 		point="org.eclipse.core.runtime.preferences">
@@ -1274,6 +1275,46 @@ Templates
 <!--                                                                                 -->
 <!-- =============================================================================== -->
    <extension-point id="eglprojectFileUtility" name="EglprojectFileUtility"/>
+   <!-- =============================================================================== -->
+<!--                                                                                 -->
+<!-- Define the widget library provider extension point                                   -->
+<!--                                                                                 -->
+<!-- =============================================================================== -->
+   <extension
+         point="org.eclipse.edt.ide.ui.widgetLibraryProvider">
+      <provider
+            importClass="org.eclipse.edt.ide.ui.wizards.DefaultWidgetLibraryImporter"
+            libname="Rich UI widgets v0.7.0"
+            projectName="org.eclipse.edt.rui.widgets_0.7.0"
+            resourceFolder="/org.eclipse.edt.ide.ui.rui/"
+            resourcePluginName="org.eclipse.edt.ide.ui.resources"
+            selected="true">
+      </provider>
+      <provider
+            importClass="org.eclipse.edt.ide.ui.wizards.DefaultWidgetLibraryImporter"
+            libname="Dojo widgets v0.7.0 (Dojo Toolkit v1.6.1)"
+            projectName="org.eclipse.edt.rui.dojo_0.7.0"
+            resourceFolder="/org.eclipse.edt.ide.ui.rui/"
+            resourcePluginName="org.eclipse.edt.ide.ui.resources"
+            selected="true">
+      </provider>
+      <provider
+            importClass="org.eclipse.edt.ide.ui.wizards.DefaultWidgetLibraryImporter"
+            libname="Dojo widgets remote v0.7.0 (Google CDN Dojo Toolkit v1.6.1)"
+            projectName="org.eclipse.edt.rui.dojo.remote_0.7.0"
+            resourceFolder="/org.eclipse.edt.ide.ui.rui/"
+            resourcePluginName="org.eclipse.edt.ide.ui.resources"
+            selected="false">
+      </provider>
+      <provider
+            importClass="org.eclipse.edt.ide.ui.wizards.DefaultWidgetLibraryImporter"
+            libname="Rich UI widgets minimum v0.7.0"
+            projectName="org.eclipse.edt.rui.widgets.minimum_0.7.0"
+            resourceFolder="/org.eclipse.edt.ide.ui.rui/"
+            resourcePluginName="org.eclipse.edt.ide.ui.resources"
+            selected="true">
+      </provider>
+   </extension>
    
 <!-- =========================================================================== -->
 <!-- Export wizard category                                                      -->

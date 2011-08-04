@@ -29,10 +29,8 @@ import org.eclipse.core.resources.IWorkspaceDescription;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
@@ -40,19 +38,21 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public class ImportRUIProjectsOperation extends WorkspaceModifyOperation {
 	
-	private static final String RUI_RESOURCES_FOLDER = "/org.eclipse.edt.ide.ui.rui/";
-	private static final String EGL_RESOURCES_FOLDER = "org.eclipse.edt.ide.ui.resources";
-	
-	private String widgetsProjectName;
-	private String dojoWidgetsProjectName;
-	private String dojoRuntimeProjectName;
+	private String resourcePluginName = "org.eclipse.edt.ide.ui.resources";
+	private String libraryResourceFolder = "/org.eclipse.edt.ide.ui.rui/";	
+	private String widgetsProjectName;	
 
-	public ImportRUIProjectsOperation(ISchedulingRule rule, String widgetProject, 
-						String dojoWidgetProject, String dojoRuntimeProjectName) {
+	public ImportRUIProjectsOperation(ISchedulingRule rule, String resourcePluginName,
+			String libraryResourceFolder, String widgetsProjectName) {
 		super(rule);
-		this.widgetsProjectName = widgetProject;
-		this.dojoWidgetsProjectName = dojoWidgetProject;
-		this.dojoRuntimeProjectName = dojoRuntimeProjectName;
+		this.resourcePluginName = resourcePluginName;
+		this.libraryResourceFolder = libraryResourceFolder;
+		this.widgetsProjectName = widgetsProjectName;
+	}
+	
+	public ImportRUIProjectsOperation(ISchedulingRule rule, String widgetsProjectName) {
+		super(rule);
+		this.widgetsProjectName = widgetsProjectName;
 	}
 
 	/* (non-Javadoc)
@@ -62,13 +62,7 @@ public class ImportRUIProjectsOperation extends WorkspaceModifyOperation {
 		throws CoreException, InvocationTargetException, InterruptedException {		
 		if( widgetsProjectName != null ) {
 			importWidgetsProject( monitor, widgetsProjectName );
-		}
-		if( dojoWidgetsProjectName != null ) {
-			importWidgetsProject( monitor, dojoWidgetsProjectName );
-		}
-		if( dojoRuntimeProjectName != null ) {
-			importWidgetsProject( monitor, dojoRuntimeProjectName );
-		}
+		}	
 	}
 	
 	private void importWidgetsProject( IProgressMonitor monitor, String projectName ) {
@@ -99,7 +93,7 @@ public class ImportRUIProjectsOperation extends WorkspaceModifyOperation {
 	}
 	
 	private void unzipWidgets( String projectName ) throws IOException{
-		URL url = FileLocator.resolve(Platform.getBundle(EGL_RESOURCES_FOLDER).getEntry(RUI_RESOURCES_FOLDER + projectName + ".zip"));
+		URL url = ProjectFinishUtility.getWidgetProjectURL(resourcePluginName, libraryResourceFolder, projectName);
 			
 		if(url != null) {
 			IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
