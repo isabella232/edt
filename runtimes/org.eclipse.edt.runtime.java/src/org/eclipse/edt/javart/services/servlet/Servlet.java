@@ -130,10 +130,6 @@ import eglx.services.ServiceUtilities;
 		HttpResponse outerResponse = null;
 		try
 		{
-			//TODO first check for a dedicated service because it is executed here
-			//TODO we are going to forward the request
-			//TODO then set the url
-			//TODO timeout???, authentication????, session????, token?????
 			trace( programName() + " sessionId:" + (session == null ? "null" : session.getId()) );
 			xmlRequest = RuiBrowserHttpRequest.createNewRequest( httpServletReq );
 			if(xmlRequest != null)
@@ -188,10 +184,10 @@ import eglx.services.ServiceUtilities;
 			jrte = ServiceUtilities.buildServiceInvocationException( program, Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, serviceKind );
 		}
 		HttpResponse innerResponse = new HttpResponse();
-		ServletUtilities.setBody(innerResponse, jrte);
+		ServletUtilities.setBody(program(), innerResponse, jrte);
 		innerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
 		innerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
-		ServletUtilities.setBody(outerResponse, innerResponse);
+		ServletUtilities.setBody(program(), outerResponse, innerResponse);
 		outerResponse.setStatus(HttpUtilities.HTTP_STATUS_OK);
 		outerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_OK);
 		return outerResponse;

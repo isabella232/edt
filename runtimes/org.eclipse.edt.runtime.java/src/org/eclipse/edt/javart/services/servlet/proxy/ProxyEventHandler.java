@@ -73,17 +73,17 @@ public class ProxyEventHandler //extends EglHttpConnection
 			{
 				outerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
 				outerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
-				ServletUtilities.setBody(outerResponse, sbe);
+				ServletUtilities.setBody(program(), outerResponse, sbe);
 			}
 			catch(ServiceInvocationException sie)
 			{
 				innerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
 				innerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
-				ServletUtilities.setBody(innerResponse, sie);
+				ServletUtilities.setBody(program(), innerResponse, sie);
 			}
 			catch(Throwable t)
 			{
-				ServletUtilities.setBody(innerResponse, ServiceUtilities.buildServiceInvocationException( program(), Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, invoker.getServiceKind(innerRequest) ));
+				ServletUtilities.setBody(program(), innerResponse, ServiceUtilities.buildServiceInvocationException( program(), Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, invoker.getServiceKind(innerRequest) ));
 				innerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
 				innerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
 			}
@@ -91,7 +91,7 @@ public class ProxyEventHandler //extends EglHttpConnection
 			{
 				outerResponse.setStatus(HttpUtilities.HTTP_STATUS_OK);
 				outerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_OK);
-				ServletUtilities.setBody(outerResponse, innerResponse);
+				ServletUtilities.setBody(program(), outerResponse, innerResponse);
 			}
 		}
 		if(trace()){

@@ -18,6 +18,7 @@ import org.eclipse.edt.javart.resources.ExecutableBase;
 
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
+import eglx.json.EGLToJSONConverter;
 import eglx.json.JSONToEGLConverter;
 import eglx.services.ServiceInvocationException;
 
@@ -43,14 +44,15 @@ public class ServletUtilities
 		return request;
     }
     
-    public static void setBody(HttpResponse response, JavartException jrte){
-    	
+    public static void setBody(ExecutableBase program, HttpResponse response, JavartException jrte){
+    	response.setBody(EGLToJSONConverter.convertToJson(program, jrte).toJson());
     }
     
-    public static void setBody(HttpResponse outerResponse, HttpResponse innerResponse){
+    public static void setBody(ExecutableBase program, HttpResponse outerResponse, HttpResponse innerResponse){
     	if(innerResponse == null){
     		innerResponse = new HttpResponse();
     	}
+    	outerResponse.setBody(EGLToJSONConverter.convertToJson(program, innerResponse).toJson());
     }
     
 }

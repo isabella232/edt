@@ -298,7 +298,7 @@ public class HttpServiceHandler
 				}
 				if ( !bodyIsSet )
 				{
-					ServletUtilities.setBody(response, ServiceUtilities.buildServiceInvocationException( program,
+					ServletUtilities.setBody(program, response, ServiceUtilities.buildServiceInvocationException( program,
 									Message.SOA_E_WS_PROXY_COMMUNICATION,
 									new String[] { restRequest.getUri() }, ioe,
 									ServiceKind.REST ) );
