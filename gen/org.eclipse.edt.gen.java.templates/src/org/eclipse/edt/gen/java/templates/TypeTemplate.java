@@ -164,7 +164,7 @@ public class TypeTemplate extends JavaTemplate {
 			// if this is a well-behaved assignment, we can avoid the temporary
 			if (IRUtils.hasSideEffects(arg2)) {
 				String temporary = ctx.nextTempName();
-				ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
+				ctx.invoke(genRuntimeTypeName, arg1.getType(), ctx, out, TypeNameKind.JavaObject);
 				out.print(" " + temporary + " = ");
 				ctx.invoke(genExpression, arg2, ctx, out);
 				out.println(";");
@@ -234,7 +234,7 @@ public class TypeTemplate extends JavaTemplate {
 	public void genContainerBasedMemberName(Type type, Context ctx, TabbedWriter out, MemberName arg1, Member arg2) {
 		ctx.invoke(genMemberName, arg1, ctx, out);
 	}
-	
-	public void genXmlTransient(Type type, TabbedWriter out){ }
-	
+
+	public void genXmlTransient(Type type, TabbedWriter out) {}
+
 }
