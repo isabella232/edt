@@ -13,6 +13,6 @@ package org.eclipse.edt.gen.java.templates.egl.lang;
 
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 
-public class AnyCharTypeTemplate extends JavaTemplate {
+public class CharTypeTemplate extends JavaTemplate {
 
 }

@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
 
-public class AnyDecimalTypeTemplate extends JavaTemplate {
+public class DecimalTypeTemplate extends JavaTemplate {
 
 	// this method gets invoked when there is a specific fixed precision needed
 	public void genDefaultValue(FixedPrecisionType type, Context ctx, TabbedWriter out) {

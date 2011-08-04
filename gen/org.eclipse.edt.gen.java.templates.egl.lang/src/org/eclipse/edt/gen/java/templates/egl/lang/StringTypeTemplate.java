@@ -22,7 +22,7 @@ import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.SequenceType;
 import org.eclipse.edt.mof.egl.Type;
 
-public class AnyStringTypeTemplate extends JavaTemplate {
+public class StringTypeTemplate extends JavaTemplate {
 
 	// this method gets invoked when there is a limited string needed
 	public void genDefaultValue(SequenceType type, Context ctx, TabbedWriter out) {

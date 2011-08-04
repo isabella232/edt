@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.egl.IntervalType;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
 
-public class AnySecondsIntervalTypeTemplate extends JavaTemplate {
+public class MonthsIntervalTypeTemplate extends JavaTemplate {
 
 	// this method gets invoked when there is a specific interval needed
 	public void genDefaultValue(IntervalType type, Context ctx, TabbedWriter out) {
