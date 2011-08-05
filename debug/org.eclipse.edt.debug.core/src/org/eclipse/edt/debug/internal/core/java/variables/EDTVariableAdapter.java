@@ -29,16 +29,16 @@ public class EDTVariableAdapter implements IVariableAdapter
 	{
 		try
 		{
-			String type = variable.getReferenceTypeName();
-			if ( type != null )
+			String signature = variable.getGenericSignature();
+			if ( signature != null )
 			{
-				if ( type.startsWith( "egl.lang.EList<" ) //$NON-NLS-1$
-						|| type.startsWith( "org.eclipse.edt.runtime.java.egl.lang.EList<" ) ) //$NON-NLS-1$
+				if ( signature.startsWith( "Legl/lang/EList<" ) //$NON-NLS-1$
+						|| signature.startsWith( "L/org/eclipse/edt/runtime/java/egl/lang/EList<" ) ) //$NON-NLS-1$
 				{
 					return new ListVariable( frame.getDebugTarget(), variable, info, frame, parent );
 				}
-				else if ( type.equals( "egl.lang.EDictionary" ) //$NON-NLS-1$
-						|| type.equals( "org.eclipse.edt.runtime.java.egl.lang.EDictionary" ) ) //$NON-NLS-1$
+				else if ( signature.equals( "Legl/lang/EDictionary;" ) //$NON-NLS-1$
+						|| signature.equals( "Lorg/eclipse/edt/runtime/java/egl/lang/EDictionary;" ) ) //$NON-NLS-1$
 				{
 					return new MapVariable( frame.getDebugTarget(), variable, info, frame, parent ) {
 						@Override
@@ -50,8 +50,7 @@ public class EDTVariableAdapter implements IVariableAdapter
 				}
 				else
 				{
-					String generic = variable.getGenericSignature();
-					if ( generic != null && generic.startsWith( "Lorg/eclipse/edt/javart/AnyBoxedObject<" ) ) //$NON-NLS-1$
+					if ( signature.startsWith( "Lorg/eclipse/edt/javart/AnyBoxedObject<" ) ) //$NON-NLS-1$
 					{
 						// Look for the "object" field and wrap that.
 						IVariable[] kids = variable.getValue().getVariables();
@@ -68,6 +67,7 @@ public class EDTVariableAdapter implements IVariableAdapter
 		}
 		catch ( DebugException e )
 		{
+			e.printStackTrace();
 		}
 		return null;
 	}
