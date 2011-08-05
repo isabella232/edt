@@ -37,17 +37,17 @@ public class FieldTemplate extends EglTemplate{
 			}
 			ctx.invoke(genType, (Object)field.getGenericType(), ctx, eField);
 			if(isJavaProperty){
-				org.eclipse.edt.mof.egl.Annotation annotation = CommonUtilities.getAnnotation(ctx, Constants.JavaProperty);
+				org.eclipse.edt.mof.egl.Annotation annotation = CommonUtilities.getAnnotation(ctx, Constants.Property);
 				if(annotation != null){
 					eField.addAnnotation(annotation);
 				}
 			}
 			if(!eField.getName().equals(field.getName())){
-				org.eclipse.edt.mof.egl.Annotation annotation = CommonUtilities.getAnnotation(ctx, Constants.JavaName);
+/*FIXME				org.eclipse.edt.mof.egl.Annotation annotation = CommonUtilities.getAnnotation(ctx, Constants.JavaName);
 				if(annotation != null){
 					annotation.setValue(field.getName());
 					eField.addAnnotation(annotation);
-				}
+				}*/
 			}
 			ctx.invoke(genAnnotations, (Object)field, ctx, eField);
 		}

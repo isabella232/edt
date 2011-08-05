@@ -47,11 +47,11 @@ public class MethodTemplate extends EglTemplate{
 			}
 
 			if(!eFunction.getName().equals(method.getName())){
-				org.eclipse.edt.mof.egl.Annotation annotation = CommonUtilities.getAnnotation(ctx, Constants.JavaName);
+/*FIXME				org.eclipse.edt.mof.egl.Annotation annotation = CommonUtilities.getAnnotation(ctx, Constants.JavaName);
 				if(annotation != null){
 					annotation.setValue(method.getName());
 					eFunction.addAnnotation(annotation);
-				}
+				}*/
 			}
 			ctx.invoke(genAnnotations, (Object)method, ctx, eFunction);
 		}

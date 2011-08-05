@@ -63,7 +63,7 @@ public class ClassTemplate extends EglTemplate{
 		part.setName(CommonUtilities.getValidEGLName(clazz.getSimpleName()));
 	}
 	public void genSubType(Class<?> clazz, Context ctx, LogicAndDataPart eType) throws MofObjectNotFoundException, DeserializationException {
-		org.eclipse.edt.mof.egl.Annotation javaObject = CommonUtilities.getAnnotation(ctx, Constants.JavaObject);
+		org.eclipse.edt.mof.egl.Annotation javaObject = CommonUtilities.getAnnotation(ctx, Constants.Property);
 		if(javaObject != null){
 			eType.addAnnotation(javaObject);
 			if(!clazz.getSimpleName().equals(eType.getName())){
