@@ -49,7 +49,7 @@ public class BooleanTypeTemplate extends JavaScriptTemplate {
 			out.print(")");
 		}
 	}
-
+	
 	@SuppressWarnings("static-access")
 	protected String getNativeStringPrefixOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
@@ -103,4 +103,7 @@ public class BooleanTypeTemplate extends JavaScriptTemplate {
 		return "";
 	}
 
+	public String getGetterPrefix(Type type, Context ctx){
+		return "is";
+	}
 }
