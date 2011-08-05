@@ -44,8 +44,7 @@ public class FunctionTemplate extends JavaTemplate {
 			out.print("java.util.List<String> ezeargs");
 		else
 			ctx.foreach(function.getParameters(), ',', genDeclaration, ctx, out);
-		out.println(") ");
-		out.println("{");
+		out.println(") {");
 		ctx.invoke(genStatementNoBraces, function.getStatementBlock(), ctx, out);
 		// we need to create a local variable for the return, if the user didn't specify one
 		if (function.getType() != null
