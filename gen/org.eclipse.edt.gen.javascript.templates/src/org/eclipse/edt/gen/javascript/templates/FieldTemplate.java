@@ -131,7 +131,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 		out.print("new egl.eglx.services.FieldInfo(");
 		Annotation property = CommonUtilities.getPropertyAnnotation(field);
 		if (property != null) {
-			out.print(FieldTemplate.genGetterSetterFunctionName((String)ctx.invoke(getGetterPrefix, field, ctx), field));
+			out.print(FieldTemplate.genGetterSetterFunctionName("get", field));
 			out.print(", ");
 			out.print(FieldTemplate.genGetterSetterFunctionName("set", field));
 			out.print(", \"");
@@ -149,7 +149,4 @@ public class FieldTemplate extends JavaScriptTemplate {
 		out.println(", annotations);");
 	}
 
-	public String getGetterPrefix(Field field, Context ctx){
-		return (String)ctx.invoke(getGetterPrefix, field.getType(), ctx);
-	}
 }

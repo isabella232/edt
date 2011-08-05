@@ -349,7 +349,4 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			}
 		}
 	}
-	public String getGetterPrefix(Type type, Context ctx){
-		return "get";
-	}
 }

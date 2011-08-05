@@ -30,7 +30,7 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 				functionName = CommonUtilities.getPropertyFunction(propertyFn);
 			}
 			if ((functionName == null) || (functionName.trim().length() == 0)) {
-				functionName = (String)ctx.invoke(getGetterPrefix, element, ctx) + element.getName().substring(0, 1).toUpperCase();
+				functionName = "get" + element.getName().substring(0, 1).toUpperCase();
 				if (element.getName().length() > 1)
 					functionName = functionName + element.getName().substring(1);
 			}
@@ -44,10 +44,6 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 			genName(element, ctx, out);
 	}
 
-	public String getGetterPrefix(NamedElement element, Context ctx){
-		return "";
-	}
-	
 	public void genName(NamedElement element, Context ctx, TabbedWriter out) {
 		out.print(JavaScriptAliaser.getAlias(element.getName()));
 	}
