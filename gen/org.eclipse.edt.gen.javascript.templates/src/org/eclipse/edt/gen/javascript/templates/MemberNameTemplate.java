@@ -32,6 +32,11 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 			out.print(".ezeCopy(");
 			ctx.invoke(genExpression, arg1, ctx, out);
+			// check to see if we are unboxing RHS temporary variables (inout and out types only)
+			if (arg1 instanceof MemberName
+				&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
+				&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN)
+				out.print(".ezeUnbox()");
 			out.print(")");
 			// check to see if we are copying LHS boxed temporary variables (inout and out types only)
 		} else if (ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
@@ -40,6 +45,11 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 			out.print(arg2);
 			out.print(Constants.JSRT_EGL_NAMESPACE + ctx.getNativeMapping("egl.lang.EglAny") + ".ezeWrap(");
 			ctx.invoke(genExpression, arg1, ctx, out);
+			// check to see if we are unboxing RHS temporary variables (inout and out types only)
+			if (arg1 instanceof MemberName
+				&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
+				&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN)
+				out.print(".ezeUnbox()");
 			out.print(")");
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
 		} else if (arg1 instanceof MemberName
