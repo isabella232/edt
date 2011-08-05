@@ -105,15 +105,15 @@ public class ListVariable extends EGLJavaVariable
 		}
 		
 		@Override
-		public String getValueString() throws DebugException
+		public String getValueString()
 		{
-			return ""; //$NON-NLS-1$
+			return javaValue.isNull() ? "null" : ""; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		
 		@Override
 		public String computeDetail()
 		{
-			return ""; //$NON-NLS-1$
+			return getValueString();
 		}
 	}
 }
