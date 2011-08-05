@@ -55,17 +55,14 @@ public class CommonUtilities {
 
 	/**
 	 * Returns the fully-qualified name for the Part's runtime class.
-	 * 
 	 * @param part
 	 * @return
 	 */
-	public static String fullClassAlias( Part part )
-	{
-		String alias = JavaAliaser.getAlias( part.getName() );
+	public static String fullClassAlias(Part part) {
+		String alias = JavaAliaser.getAlias(part.getName());
 		String pkg = part.getPackageName();
-		if ( pkg.length() > 0 )
-		{
-			pkg = packageName( pkg );
+		if (pkg.length() > 0) {
+			pkg = packageName(pkg);
 			return pkg + '.' + alias;
 		}
 		return alias;
@@ -73,15 +70,13 @@ public class CommonUtilities {
 
 	/**
 	 * Returns the unqualified name for the Part's runtime class.
-	 * 
 	 * @param part
 	 * @return
 	 */
-	public static String classAlias( Part part )
-	{
-		return JavaAliaser.getAlias( part.getName() );
+	public static String classAlias(Part part) {
+		return JavaAliaser.getAlias(part.getName());
 	}
-	
+
 	/**
 	 * Returns true if the type is an ExternalType, with subtype JavaObject or NativeType, and does not have {
 	 * eglIsSystemPart = yes }.
@@ -366,16 +361,18 @@ public class CommonUtilities {
 	}
 
 	private static int getJavaAllowedType(String value) {
-		if (value.equals("short"))
+		if (value.equals("boolean"))
 			return 0;
-		else if (value.equals("int"))
+		else if (value.equals("short"))
 			return 1;
-		else if (value.equals("long"))
+		else if (value.equals("int"))
 			return 2;
-		else if (value.equals("float"))
+		else if (value.equals("long"))
 			return 3;
-		else if (value.equals("double"))
+		else if (value.equals("float"))
 			return 4;
+		else if (value.equals("double"))
+			return 5;
 		else
 			return -1;
 	}
@@ -457,30 +454,32 @@ public class CommonUtilities {
 	}
 
 	public static void generateSmapExtension(DataTable dataTable, Context ctx) {
-		//TODO uncomment when tables are supported. this might also need to be updated
-//		ctx.getSmapExtension().append(Constants.smap_extensionDataTable + ";" + dataTable.getFullyQualifiedName()
-//				+ ";" + dataTable.getFullyQualifiedName().replace('.', '_')+ "\n");
+		// TODO uncomment when tables are supported. this might also need to be updated
+		// ctx.getSmapExtension().append(Constants.smap_extensionDataTable + ";" + dataTable.getFullyQualifiedName()
+		// + ";" + dataTable.getFullyQualifiedName().replace('.', '_')+ "\n");
 	}
 
 	public static void generateSmapExtension(Form form, Context ctx) {
-		//TODO uncomment when forms are supported. this might also need to be updated
-//		ctx.getSmapExtension().append(Constants.smap_extensionForm + ";" + form.getFullyQualifiedName()
-//				+ ";" + form.getFullyQualifiedName().replace('.', '_')+ "\n");
+		// TODO uncomment when forms are supported. this might also need to be updated
+		// ctx.getSmapExtension().append(Constants.smap_extensionForm + ";" + form.getFullyQualifiedName()
+		// + ";" + form.getFullyQualifiedName().replace('.', '_')+ "\n");
 	}
 
 	public static void generateSmapExtension(Library library, Context ctx) {
 		if (ctx.mapsToNativeType(library))
-			ctx.getSmapExtension().append(Constants.smap_extensionSystemLibrary + ";" + library.getFullyQualifiedName() + ";"
-					+ Constants.LIBRARY_PREFIX + library.getFullyQualifiedName().replace('.', '_') + "\n");
+			ctx.getSmapExtension().append(
+				Constants.smap_extensionSystemLibrary + ";" + library.getFullyQualifiedName() + ";" + Constants.LIBRARY_PREFIX
+					+ library.getFullyQualifiedName().replace('.', '_') + "\n");
 		else
-			ctx.getSmapExtension().append(Constants.smap_extensionUserLibrary + ";" + library.getFullyQualifiedName() + ";"
-					+ Constants.LIBRARY_PREFIX + library.getFullyQualifiedName().replace('.', '_') + "\n");
+			ctx.getSmapExtension().append(
+				Constants.smap_extensionUserLibrary + ";" + library.getFullyQualifiedName() + ";" + Constants.LIBRARY_PREFIX
+					+ library.getFullyQualifiedName().replace('.', '_') + "\n");
 	}
 
 	public static void generateSmapExtension(ProgramParameter programParameter, Context ctx) {
-		ctx.getSmapExtension().append(Constants.smap_extensionProgramParameter + ";" + programParameter.getName() + ";"
-				+ JavaAliaser.getAlias(programParameter.getName()) + ";");
-		ctx.getSmapExtension().append(programParameter.getType().getTypeSignature()+ "\n");
+		ctx.getSmapExtension().append(
+			Constants.smap_extensionProgramParameter + ";" + programParameter.getName() + ";" + JavaAliaser.getAlias(programParameter.getName()) + ";");
+		ctx.getSmapExtension().append(programParameter.getType().getTypeSignature() + "\n");
 	}
 
 	private static String generateJavaTypeSignature(Type type, Context ctx) {
@@ -519,15 +518,13 @@ public class CommonUtilities {
 		}
 		return signature;
 	}
-	public static Annotation getAnnotation(Context ctx, String key) throws MofObjectNotFoundException, DeserializationException{
+
+	public static Annotation getAnnotation(Context ctx, String key) throws MofObjectNotFoundException, DeserializationException {
 		EObject eObject = Environment.getCurrentEnv().find(key);
-		if(eObject instanceof StereotypeType && 
-				(eObject = ((StereotypeType)eObject).newInstance()) instanceof Annotation){
-			return (Annotation)eObject;
-		}
-		else if(eObject instanceof AnnotationType &&
-				(eObject = ((AnnotationType)eObject).newInstance()) instanceof Annotation){
-			return (Annotation)eObject;
+		if (eObject instanceof StereotypeType && (eObject = ((StereotypeType) eObject).newInstance()) instanceof Annotation) {
+			return (Annotation) eObject;
+		} else if (eObject instanceof AnnotationType && (eObject = ((AnnotationType) eObject).newInstance()) instanceof Annotation) {
+			return (Annotation) eObject;
 		}
 		return null;
 	}
