@@ -11,14 +11,28 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.egl.lang;
 
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 
 public class BooleanTypeTemplate extends JavaTemplate {
 
 	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
 		out.print("false");
+	}
+
+	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, AsExpression arg) {
+		if (CommonUtilities.isHandledByJavaWithoutCast(arg.getObjectExpr(), arg, ctx)) {
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+		} else if (CommonUtilities.isHandledByJavaWithCast(arg.getObjectExpr(), arg, ctx)) {
+			out.print("(" + ctx.getPrimitiveMapping(arg.getType()) + ")");
+			out.print("(");
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			out.print(")");
+		} else
+			ctx.invokeSuper(this, genConversionOperation, type, ctx, out, arg);
 	}
 }
