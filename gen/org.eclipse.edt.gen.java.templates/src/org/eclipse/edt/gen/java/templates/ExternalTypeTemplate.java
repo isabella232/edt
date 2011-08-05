@@ -11,13 +11,34 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.gen.java.CommonUtilities;
+import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ExternalType;
+import org.eclipse.edt.mof.egl.Part;
 
 public class ExternalTypeTemplate extends JavaTemplate {
 
 	public void preGenClassBody(ExternalType part, Context ctx) {}
+
+	public void preGen(ExternalType part, Context ctx) {
+		// ignore adding this entry to the list, if it is the part we are currently generating
+		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
+			part.getFullyQualifiedName()))
+			return;
+		// if this external type has an alias, then use it instead
+		Annotation annot = part.getAnnotation("eglx.java.JavaObject");
+		if (annot != null && annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) != null && annot.getValue(IEGLConstants.PROPERTY_JAVANAME) != null)
+			CommonUtilities.processImport(
+				(String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + "." + (String) annot.getValue(IEGLConstants.PROPERTY_JAVANAME), ctx);
+		else {
+			// process anything else the superclass needs to do
+			ctx.invokeSuper(this, preGen, part, ctx);
+		}
+	}
 
 	public void genPart(ExternalType part, Context ctx, TabbedWriter out) {}
 
@@ -30,6 +51,10 @@ public class ExternalTypeTemplate extends JavaTemplate {
 	}
 
 	public void genRuntimeTypeName(ExternalType part, Context ctx, TabbedWriter out, TypeNameKind arg) {
-		ctx.invoke(genPartName, part, ctx, out);
+		Annotation annot = part.getAnnotation("eglx.java.JavaObject");
+		if (annot != null && annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) != null && annot.getValue(IEGLConstants.PROPERTY_JAVANAME) != null)
+			out.print((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + "." + (String) annot.getValue(IEGLConstants.PROPERTY_JAVANAME));
+		else
+			ctx.invoke(genPartName, part, ctx, out);
 	}
 }

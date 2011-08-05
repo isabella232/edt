@@ -19,6 +19,11 @@ public class DelegateTemplate extends JavaTemplate {
 
 	public void preGenClassBody(Delegate part, Context ctx) {}
 
+	public void preGen(Delegate part, Context ctx) {
+		// All delegates use our runtime Delegate class. No import needed.
+		return;
+	}
+
 	public void genPart(Delegate part, Context ctx, TabbedWriter out) {}
 
 	public void genClassBody(Delegate part, Context ctx, TabbedWriter out) {}

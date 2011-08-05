@@ -18,7 +18,6 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
-import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.InvocationExpression;
@@ -38,10 +37,6 @@ public class TypeTemplate extends JavaTemplate {
 		// types used table if it doesn't already exist. The first thing we want to check for, is to make sure the
 		// unqualified type name (the last node in the name) is not already taken. If it is already taken, we can't do an
 		// import for it and when used throughout the program, will have to be fully qualified at all times.
-		if (type instanceof Delegate) {
-			// All delegates use our runtime Delegate class. No import needed.
-			return;
-		}
 		CommonUtilities.processImport(ctx.getNativeImplementationMapping(type.getClassifier()), ctx);
 		// in the case where the model name doesn't match the interface name, then we also need to process the interface
 		// name as it will exist
