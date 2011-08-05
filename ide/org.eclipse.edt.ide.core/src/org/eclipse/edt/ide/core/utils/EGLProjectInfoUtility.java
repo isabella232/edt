@@ -36,8 +36,10 @@ public final class EGLProjectInfoUtility {
 	public static final int JAVASCRIPT_PLATFORM = 2;
 	public static final int JAVA_JAVASCRIPT_PLATFORMS = 3;
 	
-	public static String getDebugJavaScriptFolder() {
-		return DEFAULT_DEBUG_JAVASCRIPT_FOLDER_NAME;
+	public static String getDebugJavaScriptFolder() {	
+//TODO EDT debug		
+//		return DEFAULT_DEBUG_JAVASCRIPT_FOLDER_NAME;
+		return "generatedJavaScript";
 	}
 	
 	public static String getDefaultGeneratedJavaFolder() {
