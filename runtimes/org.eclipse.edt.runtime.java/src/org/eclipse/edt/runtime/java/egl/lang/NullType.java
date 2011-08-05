@@ -22,11 +22,7 @@ public class NullType extends EglAny {
 	}
 
 	public static <R extends Object> Boolean equals(AnyBoxedObject<R> s1, AnyBoxedObject<R> s2) {
-		if (s1 == null && s2 == null)
-			return true;
-		if (s1 != null && s1.ezeUnbox() == null && s2 == null)
-			return true;
-		if (s1 == null && s2 != null && s2.ezeUnbox() == null)
+		if ((s1 == null || s1.ezeUnbox() == null) && (s2 == null || s2.ezeUnbox() == null))
 			return true;
 		if (s1 == null || s2 == null)
 			return false;
@@ -34,11 +30,7 @@ public class NullType extends EglAny {
 	}
 
 	public static <R extends Object> Boolean notEquals(AnyBoxedObject<R> s1, AnyBoxedObject<R> s2) {
-		if (s1 == null && s2 == null)
-			return false;
-		if (s1 != null && s1.ezeUnbox() == null && s2 == null)
-			return false;
-		if (s1 == null && s2 != null && s2.ezeUnbox() == null)
+		if ((s1 == null || s1.ezeUnbox() == null) && (s2 == null || s2.ezeUnbox() == null))
 			return false;
 		if (s1 == null || s2 == null)
 			return true;
