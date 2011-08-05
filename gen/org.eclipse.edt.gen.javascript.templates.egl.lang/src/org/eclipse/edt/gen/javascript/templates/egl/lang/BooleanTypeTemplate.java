@@ -102,8 +102,4 @@ public class BooleanTypeTemplate extends JavaScriptTemplate {
 			return ") >= 0";
 		return "";
 	}
-
-	public String getGetterPrefix(Type type, Context ctx){
-		return "is";
-	}
 }
