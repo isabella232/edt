@@ -180,7 +180,9 @@ public class Context extends EglContext {
 			}
 			// process the generation
 			super.invoke(genMethod, object, ctx, out);
-			lastJavaLineNumber = out.getLineNumber();
+			// if we had some statements as part of this expression, then we already have the corrected ending line number
+			if (lastJavaLineNumber == 0)
+				lastJavaLineNumber = out.getLineNumber();
 			smapIsProcessing = false;
 		} else {
 			if (smapIsProcessing && annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
@@ -225,6 +227,10 @@ public class Context extends EglContext {
 		}
 	}
 
+	public void setSmapLastJavaLineNumber(int number) {
+		lastJavaLineNumber = number;
+	}
+
 	public void writeSmapLine() {
 		if (smapHasOutstandingLine) {
 			smapData.append("" + firstEglLineNumber);
@@ -238,6 +244,8 @@ public class Context extends EglContext {
 			if (firstJavaLineNumber != lastJavaLineNumber)
 				smapData.append("," + (lastJavaLineNumber - firstJavaLineNumber + 1));
 			smapData.append("\n");
+			// we need to reset the last java line number
+			lastJavaLineNumber = 0;
 		}
 		smapHasOutstandingLine = false;
 	}
