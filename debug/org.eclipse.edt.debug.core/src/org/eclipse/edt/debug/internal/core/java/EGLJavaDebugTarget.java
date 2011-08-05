@@ -434,7 +434,7 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 					BreakpointUtils.addRunToLineAttributes( attributes );
 				}
 				
-				return JDIDebugModel.createStratumBreakpoint( marker.getResource(), IEGLDebugCoreConstants.EGL_STRATUM, resource.getName(), null, qualifiedName,
+				return JDIDebugModel.createStratumBreakpoint( ResourcesPlugin.getWorkspace().getRoot(), IEGLDebugCoreConstants.EGL_STRATUM, resource.getName(), null, qualifiedName,
 						bp.getLineNumber(), bp.getCharStart(), bp.getCharEnd(), hitcount, false, attributes );
 			}
 		}
