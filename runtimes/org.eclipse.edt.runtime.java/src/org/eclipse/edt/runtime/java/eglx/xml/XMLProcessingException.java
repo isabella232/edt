@@ -9,31 +9,32 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.runtime.java.egl.lang;
+package org.eclipse.edt.runtime.java.eglx.xml;
 
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
+import org.eclipse.edt.runtime.java.egl.lang.AnyException;
 
-public class DynamicAccessException extends AnyException {
+public class XMLProcessingException extends AnyException {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
-	public String key;
+	public String detail;
 
-	public DynamicAccessException() throws JavartException {
-		key = "";
+	public XMLProcessingException() throws JavartException {
+		detail = "";
 	}
 
-	public DynamicAccessException(Exception ex) {
+	public XMLProcessingException(Exception ex) {
 		super(ex);
 	}
 
-	public DynamicAccessException(String key) throws JavartException {
-		this.key = key;
+	public XMLProcessingException(String detail) throws JavartException {
+		this.detail = detail;
 	}
 
 	public Object clone() throws java.lang.CloneNotSupportedException {
-		DynamicAccessException ezeClone = (DynamicAccessException) super.clone();
-		ezeClone.key = key;
+		XMLProcessingException ezeClone = (XMLProcessingException) super.clone();
+		ezeClone.detail = detail;
 		return ezeClone;
 	}
 }

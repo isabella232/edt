@@ -14,26 +14,26 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 
-public class DynamicAccessException extends AnyException {
+public class InvalidIndexException extends AnyException {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
-	public String key;
+	public int indexValue;
 
-	public DynamicAccessException() throws JavartException {
-		key = "";
+	public InvalidIndexException() throws JavartException {
+		indexValue = 0;
 	}
 
-	public DynamicAccessException(Exception ex) {
+	public InvalidIndexException(Exception ex) {
 		super(ex);
 	}
 
-	public DynamicAccessException(String key) throws JavartException {
-		this.key = key;
+	public InvalidIndexException(int indexValue) {
+		this.indexValue = indexValue;
 	}
 
 	public Object clone() throws java.lang.CloneNotSupportedException {
-		DynamicAccessException ezeClone = (DynamicAccessException) super.clone();
-		ezeClone.key = key;
+		InvalidIndexException ezeClone = (InvalidIndexException) super.clone();
+		ezeClone.indexValue = indexValue;
 		return ezeClone;
 	}
 }

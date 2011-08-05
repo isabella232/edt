@@ -12,12 +12,19 @@
 package org.eclipse.edt.runtime.java.egl.lang;
 
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.JavartException;
 
-public class InvalidPatternException extends AnyException
-{
+public class InvalidPatternException extends AnyException {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-	
-	public InvalidPatternException() 
-	{
+
+	public InvalidPatternException() throws JavartException {}
+
+	public InvalidPatternException(Exception ex) {
+		super(ex);
+	}
+
+	public Object clone() throws java.lang.CloneNotSupportedException {
+		InvalidPatternException ezeClone = (InvalidPatternException) super.clone();
+		return ezeClone;
 	}
 }

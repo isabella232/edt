@@ -17,42 +17,37 @@ import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.TypeConstraints;
 
-public class AnyException extends JavartException implements egl.lang.AnyException
-{
+public class AnyException extends JavartException implements egl.lang.AnyException {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-	
+
 	public String message;
 
-	public AnyException() { super(); }
-	
-	public AnyException( String id )
-	{
+	public AnyException() {
+		super();
+	}
+
+	public AnyException(String id) {
 		super(id);
 	}
 
-	public AnyException( String id, String message )
-	{
+	public AnyException(String id, String message) {
 		super(id, message);
 		this.message = message;
 		ezeInitialize();
 	}
-	
-	public AnyException( Throwable ex )
-	{
+
+	public AnyException(Throwable ex) {
 		super(ex);
 		ezeInitialize();
 	}
 
-	
-	public Object clone() throws CloneNotSupportedException
-	{
-		AnyException ezeClone = (AnyException)super.clone();
+	public Object clone() throws CloneNotSupportedException {
+		AnyException ezeClone = (AnyException) super.clone();
 		return ezeClone;
 	}
 
 	@Override
-	public void ezeInitialize() {
-	}
+	public void ezeInitialize() {}
 
 	@Override
 	public egl.lang.EglAny ezeGet(String name) throws JavartException {
@@ -60,9 +55,10 @@ public class AnyException extends JavartException implements egl.lang.AnyExcepti
 			Field field = this.getClass().getField(name);
 			Object value = field.get(this);
 			return value instanceof egl.lang.EglAny ? (egl.lang.EglAny) value : EglAny.ezeBox(value);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new DynamicAccessException(e);
-		} 
+		}
 	}
 
 	@Override
@@ -75,9 +71,10 @@ public class AnyException extends JavartException implements egl.lang.AnyExcepti
 		try {
 			Field field = this.getClass().getField(name);
 			field.set(this, value);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new DynamicAccessException(e);
-		} 
+		}
 	}
 
 	@Override
@@ -89,33 +86,26 @@ public class AnyException extends JavartException implements egl.lang.AnyExcepti
 	public String ezeTypeSignature() {
 		return this.getClass().getName();
 	}
-	
-	public String toString() 
-	{
+
+	public String toString() {
 		String msg = getLocalizedMessage();
-		if ( msg == null )
-		{
+		if (msg == null) {
 			return ezeTypeSignature();
-		}
-		else
-		{
+		} else {
 			String typeSig = ezeTypeSignature();
-			return new StringBuilder( typeSig + 1 + msg.length() ).append( typeSig).append(' ')
-				.append( msg ).toString();
+			return new StringBuilder(typeSig + 1 + msg.length()).append(typeSig).append(' ').append(msg).toString();
 		}
 	}
 
 	@Override
 	public void setMessage(String message) {
 		this.message = message;
-		
+
 	}
-	
+
 	@Override
 	public String getMessage() {
-		return message == null 
-			? super.getMessage()
-			: message;
+		return message == null ? super.getMessage() : message;
 	}
 
 	@Override

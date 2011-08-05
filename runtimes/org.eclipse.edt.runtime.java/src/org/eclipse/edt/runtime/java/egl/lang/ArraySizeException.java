@@ -14,26 +14,17 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 
-public class DynamicAccessException extends AnyException {
+public class ArraySizeException extends AnyException {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
-	public String key;
+	public ArraySizeException() throws JavartException {}
 
-	public DynamicAccessException() throws JavartException {
-		key = "";
-	}
-
-	public DynamicAccessException(Exception ex) {
+	public ArraySizeException(Exception ex) {
 		super(ex);
 	}
 
-	public DynamicAccessException(String key) throws JavartException {
-		this.key = key;
-	}
-
 	public Object clone() throws java.lang.CloneNotSupportedException {
-		DynamicAccessException ezeClone = (DynamicAccessException) super.clone();
-		ezeClone.key = key;
+		ArraySizeException ezeClone = (ArraySizeException) super.clone();
 		return ezeClone;
 	}
 }

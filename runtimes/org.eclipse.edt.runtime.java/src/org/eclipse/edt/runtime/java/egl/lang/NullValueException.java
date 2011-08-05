@@ -14,23 +14,17 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 
-public class NullValueException extends AnyException
-{
+public class NullValueException extends AnyException {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-	
-	
-	public NullValueException( )
-		throws JavartException
-	{
-	}
-	
+
+	public NullValueException() throws JavartException {}
+
 	public NullValueException(Exception ex) {
 		super(ex);
 	}
-	
-	public Object clone() throws java.lang.CloneNotSupportedException
-	{
-		NullValueException ezeClone = (NullValueException)super.clone();
+
+	public Object clone() throws java.lang.CloneNotSupportedException {
+		NullValueException ezeClone = (NullValueException) super.clone();
 		return ezeClone;
 	}
 }
