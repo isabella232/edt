@@ -39,9 +39,9 @@ public class CommonUtilities {
 	}
 	private static String validateEGLName(String javaName){
 		//check for a valid EGL name
-		if(EGLNameValidator.isKeyword(javaName)){
+/*FIXME		if(EGLNameValidator.isKeyword(javaName)){
 			return "_" + javaName;
-		}
+		}*/
 		return javaName;
 	}
 	static Method getSetter(String fieldName, Type fieldType, Class<?> parent){
