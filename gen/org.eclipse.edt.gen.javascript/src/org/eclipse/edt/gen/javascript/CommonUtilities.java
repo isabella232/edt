@@ -293,7 +293,7 @@ public class CommonUtilities {
 
 	public static boolean isRUIHandler(Object obj) {
 		if (obj instanceof EGLClass) {
-			return ((EGLClass) obj).getAnnotation("RUIHandler") != null;
+			return ((EGLClass) obj).getAnnotation("eglx.ui.rui.RUIHandler") != null;
 		}
 
 		return false;
@@ -301,7 +301,7 @@ public class CommonUtilities {
 
 	public static boolean isRUIWidget(Object obj) {
 		if (obj instanceof EGLClass) {
-			return ((EGLClass) obj).getAnnotation("egl.ui.rui.RUIWidget") != null;
+			return ((EGLClass) obj).getAnnotation("eglx.ui.rui.RUIWidget") != null; //TODO sbg need constant
 		}
 
 		return false;
