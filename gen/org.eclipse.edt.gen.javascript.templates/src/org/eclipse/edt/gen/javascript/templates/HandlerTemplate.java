@@ -71,7 +71,7 @@ public class HandlerTemplate extends JavaScriptTemplate {
 
 	public void genClassFooter(Handler handler, Context ctx, TabbedWriter out) {
 		if (CommonUtilities.isRUIWidget(handler)) {
-			Annotation a = handler.getAnnotation("egl.ui.rui.RUIWidget"); // TODO sbg Need constant
+			Annotation a = handler.getAnnotation("eglx.ui.rui.RUIWidget"); // TODO sbg Need constant
 			String tagName = (String) a.getValue("tagName");// TODO sbg Need constant
 			if ((tagName != null) && (tagName.trim().length() > 0)) {
 				out.println(", '" + tagName + "'");
