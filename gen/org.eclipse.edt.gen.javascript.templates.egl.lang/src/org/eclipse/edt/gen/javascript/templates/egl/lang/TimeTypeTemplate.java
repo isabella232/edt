@@ -20,12 +20,30 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.Type;
 
 public class TimeTypeTemplate extends JavaScriptTemplate {
 
 	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
 		out.print(Constants.JSRT_DTTMLIB_PKG + "currentTime()");
+	}
+
+	public void genContainerBasedNewExpression(EGLClass type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
+		out.print("new ");
+		ctx.invoke(genRuntimeTypeName, arg.getType(), ctx, out, TypeNameKind.JavascriptImplementation);
+		out.print("(");
+		if (arg.getArguments() != null && arg.getArguments().size() > 0) {
+			String delim = "";
+			for (Expression argument : arg.getArguments()) {
+				out.print(delim);
+				ctx.invoke(genExpression, argument, ctx, out);
+				delim = ", ";
+			}
+		} else
+			ctx.invoke(genConstructorOptions, arg.getType(), ctx, out);
+		out.print(")");
 	}
 
 	public void genSignature(EGLClass type, Context ctx, TabbedWriter out) {

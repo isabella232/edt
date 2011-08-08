@@ -11,10 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
+import org.eclipse.edt.gen.GenerationException;
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.TimestampType;
 import org.eclipse.edt.mof.egl.Type;
@@ -35,6 +40,49 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 		out.print(Constants.JSRT_DTTMLIB_PKG + "currentTimeStamp(");
 		ctx.invoke(genTypeDependentOptions, type, ctx, out);
 		out.print(")");
+	}
+
+	public void genContainerBasedNewExpression(TimestampType type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
+		processNewExpression(type, ctx, out, arg);
+	}
+
+	public void genContainerBasedNewExpression(ParameterizableType type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
+		processNewExpression(type, ctx, out, arg);
+	}
+
+	public void processNewExpression(Type type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
+		out.print("new ");
+		ctx.invoke(genRuntimeTypeName, arg.getType(), ctx, out, TypeNameKind.JavascriptImplementation);
+		out.print("(");
+		if (arg.getArguments() != null && arg.getArguments().size() > 0) {
+			String delim = "";
+			for (Expression argument : arg.getArguments()) {
+				out.print(delim);
+				ctx.invoke(genExpression, argument, ctx, out);
+				delim = ", ";
+			}
+		} else
+			ctx.invoke(genConstructorOptions, arg.getType(), ctx, out);
+		out.print(")");
+	}
+
+	public void genBinaryExpression(TimestampType type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
+		processBinaryExpression(type, ctx, out, arg);
+	}
+
+	public void genBinaryExpression(ParameterizableType type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
+		processBinaryExpression(type, ctx, out, arg);
+	}
+
+	public void processBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
+		// for timestamp type, always use the runtime
+		out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
+		out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
+		out.print("(ezeProgram, ");
+		ctx.invoke(genExpression, arg.getLHS(), ctx, out);
+		out.print(", ");
+		ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+		out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
 	}
 
 	// this method gets invoked when there is a specific timestamp needed
