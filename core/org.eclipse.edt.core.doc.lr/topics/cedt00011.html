@@ -6,11 +6,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Run units"></meta>
-<meta name="abstract" content="EGL, yes!"></meta>
-<meta name="description" content="EGL, yes!"></meta>
+<meta name="abstract" content="The run unit is composed of a set of logical units that are derived from EGL parts, are located on the same system, and refer to each other through direct references, transfers to programs, and local calls."></meta>
+<meta name="description" content="The run unit is composed of a set of logical units that are derived from EGL parts, are located on the same system, and refer to each other through direct references, transfers to programs, and local calls."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00002.html"></meta>
-<meta name="copyright" content="(C) Copyright 2009" type="primary"></meta>
-<meta name="DC.Rights.Owner" content="(C) Copyright 2009" type="primary"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="cedt00011"></meta>
 <meta name="DC.Language" content="en-us"></meta>
@@ -21,6 +21,39 @@
 
 
 <h1 class="topictitle1">Run units</h1>
+
+
+
+<div><p>The <dfn class="term">run unit</dfn> is composed of a set of logical
+units that are derived from EGL parts, are located on the same system,
+and refer to each other through direct references, transfers to programs,
+and local calls.</p>
+
+<p>All of the logic in a run unit share resources such as files and
+database connections. Also, if a runtime exception occurs that is
+not handled by a member of the run unit, the run unit ends.  A member
+can handle the exception, as can the member's caller or the caller
+of that caller, to any level.</p>
+
+<p>In Java, a run unit also
+has a set of properties that help determine the runtime behavior.
+ The properties are loaded when the run unit starts and do not change
+during its lifetime.  The properties are loaded from properties files
+or a JEE deployment descriptor, depending on where the code is running.</p>
+
+<p>In JavaScript, a run
+unit is the runtime application, including all JavaScript that is downloaded to the browser
+and executed.</p>
+
+
+
+</div>
+
+
+<div>
+<div class="familylinks">
+</div>
+</div>
 
 </body>
 </html>

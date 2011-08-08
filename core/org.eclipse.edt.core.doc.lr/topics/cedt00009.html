@@ -6,11 +6,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Stereotypes"></meta>
-<meta name="abstract" content="EGL, yes!"></meta>
-<meta name="description" content="EGL, yes!"></meta>
+<meta name="abstract" content="A stereotype is an annotation that you set to communicate a major decision to the EGL compiler; in most cases, to the generator invoked by the compiler. In response to the annotation, the EGL system code creates output that acts stereotypically, that is, in accordance with a pattern. The pattern differs from one stereotype to another."></meta>
+<meta name="description" content="A stereotype is an annotation that you set to communicate a major decision to the EGL compiler; in most cases, to the generator invoked by the compiler. In response to the annotation, the EGL system code creates output that acts stereotypically, that is, in accordance with a pattern. The pattern differs from one stereotype to another."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00004.html"></meta>
-<meta name="copyright" content="(C) Copyright 2009" type="primary"></meta>
-<meta name="DC.Rights.Owner" content="(C) Copyright 2009" type="primary"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="cedt00009"></meta>
 <meta name="DC.Language" content="en-us"></meta>
@@ -21,6 +21,106 @@
 
 
 <h1 class="topictitle1">Stereotypes</h1>
+
+
+
+<div><p>A stereotype is an annotation that you set to communicate
+a major decision to the EGL compiler; in most cases, to the generator
+invoked by the compiler. In response to the annotation, the EGL system
+code creates output that acts <dfn class="term">stereotypically</dfn>, that is,
+in accordance with a pattern. The pattern differs from one stereotype
+to another. </p>
+
+<div class="p">The difference in generated output is often related to the statements
+you code. The following example clarifies the idea and includes reference
+to a stereotype (<span class="synph"><span class="kwd">CSVRecord</span></span>) that is available
+only in a commercial product: <ul>
+<li>You might define a Record part that is the basis of a record used
+during sequential-file access. In this case, statements such as <span class="synph"><span class="kwd">add</span></span> and <span class="synph"><span class="kwd">update</span></span> do
+file I/O.<div class="p">Here is the Record part, which is stereotyped by the <span class="synph"><span class="kwd">CSVRecord</span></span> stereotype: <pre class="codeblock">Record MyCSVRecordPart <strong>type CSVRecord
+                            {  fileName = "employ", delimiter = "," }</strong>
+   employeeID INT;
+   employeeName STRING;
+   salary DECIMAL(7,2);
+end</pre>
+</div>
+<p>The <span class="synph"><span class="kwd">fileName</span></span> field
+refers to a value that you make available used at generation time.
+That value identifies the file used at run time, and the <span class="synph"><span class="kwd">delimiter</span></span> field
+indicates how one value in the file is separated from the next.</p>
+</li>
+
+<li>Alternatively, you might define a Record part that is the basis
+of a record used during relational-database access. In this case,
+statements such as <span class="synph"><span class="kwd">add</span></span> and <span class="synph"><span class="kwd">update</span></span> access
+a database management system.<div class="p">Here is the Record part, which is
+stereotyped by the <span class="synph"><span class="kwd">SQLRecord</span></span> stereotype:<pre class="codeblock">Record EmployeeType <strong>type SQLRecord 
+                         { tableNames = [["employee"]], keyItems = [employeeID] }</strong>
+
+   employeeID INT      { Column     = "empid" };
+   employeeName STRING { Column     = "empname"};
+   salary DECIMAL(7,2) { Column     = "salary"};
+end</pre>
+</div>
+<p>The <span class="synph"><span class="kwd">tableNames</span></span> field
+references a database table, and the <span class="synph"><span class="kwd">keyItems</span></span> field
+indicates which fields are referencing a table key.</p>
+</li>
+
+</ul>
+</div>
+
+<p>In both the preceding examples, the word “type” is an abbreviation
+for “stereotype.”</p>
+
+<div class="p">To see that a stereotype is a kind of annotation, compare the earlier
+ of <samp class="codeph">MyCSVRecord</samp> with the following, equivalent one: <pre class="codeblock">Record MyCSVRecordPart <strong>{@CSVRecord {fileName = "employ", delimiter = ","}}</strong>
+   employeeID INT;
+   employeeName STRING;
+   salary DECIMAL(7,2);
+end</pre>
+</div>
+
+<div class="p">Although the second, longer form is rarely used, the at sign (@)
+again declares a value used by the EGL system code. In this case,
+the declaration is based on the <span class="synph"><span class="kwd">CSVRecord</span></span> Record
+part, which includes several fields:<pre class="codeblock">Record CSVRecord type Stereotype
+   fileName STRING;
+   delimiter CHAR(1);
+   ...
+end</pre>
+</div>
+
+<div class="p">You declare a stereotype only when you define a part. If the part
+can include fields, the stereotype identifies a set of <dfn class="term">member
+annotations</dfn>, which are annotations that apply to those fields.
+For example, consider the <samp class="codeph">EmployeeType</samp> Record part
+again:<pre class="codeblock">Record EmployeeType type SQLRecord 
+                         { TableNames = [["EMPLOYEE"]], KeyItems = [employeeID] }
+
+   employeeID INT      { <strong>Column     = "EMPID"</strong> };
+   employeeName STRING { <strong>Column     = "EMPNAME"</strong>};
+   salary DECIMAL(7,2) { <strong>Column     = "SALARY"</strong>};
+end</pre>
+</div>
+
+<p>The <span class="synph"><span class="kwd">Column</span></span> annotation relates the <samp class="codeph">employeeID</samp>, <samp class="codeph">employeeName</samp>,
+and <samp class="codeph">salary</samp> fields with relational-database table
+columns; specifically, with the <samp class="codeph">EMPID</samp>, <samp class="codeph">EMPNAME</samp>,
+and <samp class="codeph">SALARY</samp> columns. The <span class="synph"><span class="kwd">SQLRecord</span></span> stereotype
+causes the <span class="synph"><span class="kwd">Column</span></span> annotation to be available
+in any Record part that is defined with the stereotype.</p>
+
+<p>Each classifier such as Record or Program supports zero to many
+stereotypes. You select from the list when you define a custom part.</p>
+
+
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
 
 </body>
 </html>

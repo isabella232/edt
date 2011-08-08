@@ -6,11 +6,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="EGL packages"></meta>
-<meta name="abstract" content="EGL, yes!"></meta>
-<meta name="description" content="EGL, yes!"></meta>
+<meta name="abstract" content="An EGL package is a container of EGL parts, each of which has a name that is unique to the package. For example, a program and a data item of the same name cannot be in the same package. In general terms, the package is a namespace, which is a container in which the immediately subordinate names are unique."></meta>
+<meta name="description" content="An EGL package is a container of EGL parts, each of which has a name that is unique to the package. For example, a program and a data item of the same name cannot be in the same package. In general terms, the package is a namespace, which is a container in which the immediately subordinate names are unique."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00002.html"></meta>
-<meta name="copyright" content="(C) Copyright 2009" type="primary"></meta>
-<meta name="DC.Rights.Owner" content="(C) Copyright 2009" type="primary"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="cedt00014"></meta>
 <meta name="DC.Language" content="en-us"></meta>
@@ -21,6 +21,91 @@
 
 
 <h1 class="topictitle1">EGL packages</h1>
+
+
+
+<div><p>An <dfn class="term">EGL package</dfn> is a container of EGL parts,
+each of which has a name that is unique to the package. For example,
+a program and a data item of the same name cannot be in the same package.
+In general terms, the package is a <dfn class="term">namespace</dfn>, which is
+a container in which the immediately subordinate names are unique.</p>
+
+<p>The package corresponds to a set of subfolders in a directory.
+The subfolders correspond to the package name.</p>
+
+
+
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
+<div class="nested1" xml:lang="en-us" id="packagenames"><a name="packagenames"><!-- --></a>
+<h2 class="topictitle2">Package names</h2>
+
+<div>
+<div class="p">A package name is a sequence of names with intervening periods
+(.). Here is an example: <pre class="codeblock">com.myOrg.myPkg</pre>
+</div>
+
+<div class="p">Each name is that of a subfolder in a hierarchy. The hierarchy
+for the current example is expressed as follows on a Windows platform:<pre class="codeblock">com\myOrg\myPkg</pre>
+</div>
+
+<p>The EGL parts are in files in the bottommost subfolder; here, the <samp class="codeph">myPkg</samp> subfolder.</p>
+
+<p>You might invert the list of qualifiers in your company's
+Internet domain name and assign the resulting list to the start of
+your package names. For example, if the domain name is <span class="filepath">mycompany.mydivision.mydepartment.com</span>,
+you might start your package names with <span class="filepath">com.mydepartment.mydivision.mycompany</span>.
+This convention is often used, and a benefit is that your packages
+will be unique even if your company merges or collaborates with another. </p>
+
+<p>Package names are case sensitive; <samp class="codeph">myPkg</samp> is different
+from <samp class="codeph">MYpkg</samp>.</p>
+
+<p>Although a package corresponds to a set of subfolders, an EGL package
+is a collection of parts. The subfolders and related files represent
+only how those parts are stored.</p>
+
+</div>
+
+</div>
+
+<div class="nested1" xml:lang="en-us" id="namesinfiles"><a name="namesinfiles"><!-- --></a>
+<h2 class="topictitle2">Package statement</h2>
+
+<div>
+<div class="p">Each EGL source file in a named package must start with a statement
+that identifies the package. The statement provides a kind of documentation,
+as in the following example:<pre class="codeblock">package myPkg;</pre>
+</div>
+
+</div>
+
+</div>
+
+<div class="nested1" xml:lang="en-us" id="defaultpackage"><a name="defaultpackage"><!-- --></a>
+<h2 class="topictitle2">Default package</h2>
+
+<div>
+<p>An Eclipse project includes a <dfn class="term">default package</dfn>, which
+is a package that has no name. Other packages cannot access the parts
+that are defined in a default package. It is generally recommended
+that you not use a default package because doing so limits the future
+use of your code by other code.</p>
+
+<p>When you use a default package, the directory that contains the
+package includes all the EGL source files that are in that package.
+In this case, a source file does not start with a <span class="synph"><span class="kwd">package</span></span> statement.</p>
+
+</div>
+
+</div>
+
+
+
 
 </body>
 </html>

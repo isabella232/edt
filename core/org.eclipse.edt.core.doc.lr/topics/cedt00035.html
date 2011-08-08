@@ -6,11 +6,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Service classifier overview"></meta>
-<meta name="abstract" content="EGL, yes!"></meta>
-<meta name="description" content="EGL, yes!"></meta>
+<meta name="abstract" content="The capabilities of the Service classifier are made available when you code a service. The part is like a program that has multiple entry points."></meta>
+<meta name="description" content="The capabilities of the Service classifier are made available when you code a service. The part is like a program that has multiple entry points."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00027.html"></meta>
-<meta name="copyright" content="(C) Copyright 2009" type="primary"></meta>
-<meta name="DC.Rights.Owner" content="(C) Copyright 2009" type="primary"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="cedt00035"></meta>
 <meta name="DC.Language" content="en-us"></meta>
@@ -21,6 +21,53 @@
 
 
 <h1 class="topictitle1">Service classifier overview</h1>
+
+
+
+<div><p>The capabilities of the Service classifier are made available
+when you code a <dfn class="term">service</dfn>. The part is like a program that
+has multiple entry points.</p>
+
+<p>An EGL-generated service can be deployed as a REST service. The
+logic in an EGL-written service is <dfn class="term">stateless</dfn>, which means
+that the value of each variable is specific to the invocation.</p>
+
+<p>Any EGL logic part can request a service. When you code the requester,
+you declare a variable for service access, and that variable is based
+on a type. If the service was EGL generated, you can use the Service
+part as the type. For further details on service invocation, see details
+on the Interface classifier in “Classifiers for defining EGL prototype
+parts.”</p>
+
+<div class="p">Here is an example of a service:<pre class="codeblock">Service MyService{}
+
+   // variables and constants can be here
+
+   function calculate(myScore INT[]) returns (BIN (4,2)) 
+
+      numberOfScores, i, mySum INT;
+      numberOfScores = myScore.getSize();
+      	
+      for (i from 1 to numberOfScores by 1)
+         mySum = myScore[i] + mySum;	       
+      end
+    	      
+      return(mySum/numberOfScores);
+   end
+
+   // other functions are here
+
+end</pre>
+</div>
+
+<p>A Service part does not include a stereotype.</p>
+
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
 
 </body>
 </html>

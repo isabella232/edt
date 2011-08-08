@@ -6,11 +6,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="This keyword"></meta>
-<meta name="abstract" content="TEGL, yes!"></meta>
-<meta name="description" content="EGL, yes!"></meta>
+<meta name="abstract" content="The EGL this keyword is used primarily to access a program-global declaration even if a local declaration has the same name. A secondary use is in a set-values block, where the keyword allows access of a record field at run time even if the field name is also the name of a stereotype field or annotation."></meta>
+<meta name="description" content="The EGL this keyword is used primarily to access a program-global declaration even if a local declaration has the same name. A secondary use is in a set-values block, where the keyword allows access of a record field at run time even if the field name is also the name of a stereotype field or annotation."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00001.html"></meta>
-<meta name="copyright" content="(C) Copyright 2009" type="primary"></meta>
-<meta name="DC.Rights.Owner" content="(C) Copyright 2009" type="primary"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00002"></meta>
 <meta name="DC.Language" content="en-us"></meta>
@@ -21,6 +21,52 @@
 
 
 <h1 class="topictitle1">This keyword</h1>
+
+
+
+<div id="body"><a name="body"><!-- --></a><p>The EGL <span class="synph"><span class="kwd">this</span></span> keyword
+is used primarily to access a program-global declaration even if a
+local declaration has the same name. A secondary use is in a set-values
+block, where the keyword allows access of a record field at run time
+even if the field name is also the name of a stereotype field or annotation.</p>
+
+<anchor id="top_comments"></anchor>
+<div class="section" id="redt00002__use"><a name="redt00002__use"><!-- --></a><h2 class="sectiontitle">With program-global declarations</h2><p>If
+a local declaration has the same name as the program-global declaration,
+only the local declaration is visible to the expression; but you can
+override that rule. To access the program-global declaration, qualify
+the reference with the keyword <span class="synph"><span class="kwd">this</span></span>. </p>
+<div class="p">Here
+is an example: <pre class="codeblock">program myProgram
+   myString STRING = "From the program-global variable";
+
+   function main()
+      myString STRING = "In main";
+
+      myFunction();
+   end
+
+   function myFunction()
+      myString STRING = "In myFunction";
+      Syslib.writeStdErr(this.myString);
+   end
+end
+</pre>
+</div>
+<p>The program displays the phrase “From the program-global
+variable” at the standard output.</p>
+<anchor id="use_more"></anchor></div>
+
+<div class="section" id="redt00002__use02"><a name="redt00002__use02"><!-- --></a><h2 class="sectiontitle">With
+set-value blocks</h2><p></p>
+<anchor id="use02_more"></anchor></div>
+
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
 
 </body>
 </html>

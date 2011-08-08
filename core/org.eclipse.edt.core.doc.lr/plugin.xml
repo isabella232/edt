@@ -9,6 +9,6 @@
       <binding producerId="org.eclipse.help.dynamic" />
    </extension>   
    <!-- extension point="org.eclipse.help.index">
-      <index file="com.ibm.edt.core.docindex.lr.xml" />
+      <index file="index.xml" />
    </extension -->
 </plugin>

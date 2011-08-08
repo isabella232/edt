@@ -6,13 +6,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="EGL large-object types"></meta>
-<meta name="abstract" content="EGL, yes!"></meta>
-<meta name="description" content="EGL, yes!"></meta>
+<meta name="abstract" content="The next table lists the large-object types, all of which are reference types."></meta>
+<meta name="description" content="The next table lists the large-object types, all of which are reference types."></meta>
 <meta name="DC.subject" content="EGL types, large object, EGL"></meta>
 <meta name="keywords" content="EGL types, large object, EGL"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00018.html"></meta>
-<meta name="copyright" content="(C) Copyright 2009" type="primary"></meta>
-<meta name="DC.Rights.Owner" content="(C) Copyright 2009" type="primary"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="cedt00023"></meta>
 <meta name="DC.Language" content="en-us"></meta>
@@ -23,6 +23,91 @@
 
 
 <h1 class="topictitle1">EGL large-object types</h1>
+
+
+
+<div><p>The next table lists the large-object types, all of which
+are reference types.</p>
+
+<div class="p">
+<div class="tablenoborder"><a name="cedt00023__char_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="cedt00023__char_table" frame="border" border="1" rules="all">
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="27.142857142857142%" id="d6403e44">Type</th>
+
+<th class="cellrowborder" valign="bottom" width="19.428571428571427%" id="d6403e47">Limits</th>
+
+<th class="cellrowborder" valign="bottom" width="53.42857142857142%" id="d6403e50">Comments</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td class="cellrowborder" valign="top" width="27.142857142857142%" headers="d6403e44 ">BLOB</td>
+
+<td class="cellrowborder" valign="top" width="19.428571428571427%" headers="d6403e47 ">1 byte to 2 gigabytes</td>
+
+<td class="cellrowborder" valign="top" width="53.42857142857142%" headers="d6403e50 ">An instance of type BLOB is binary data.</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="27.142857142857142%" headers="d6403e44 ">CLOB</td>
+
+<td class="cellrowborder" valign="top" width="19.428571428571427%" headers="d6403e47 ">1 byte to 2 gigabytes</td>
+
+<td class="cellrowborder" valign="top" width="53.42857142857142%" headers="d6403e50 ">An instance of type CLOB is character data.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+<p>You can use a variable of a large-object type to read data to and
+write data from an equivalent kind of column in a relational database.
+And as described in “Loblib library,” you can use a variable of a
+large-object type to reference data in a file and to update that file.</p>
+
+<div class="section" id="cedt00023__compat_section"><a name="cedt00023__compat_section"><!-- --></a><h2 class="sectiontitle">Compatibility considerations</h2>
+<div class="tablenoborder"><a name="cedt00023__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="cedt00023__compat_table" frame="border" border="1" rules="all">
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="29.145728643216078%" id="d6403e100">Platform</th>
+
+<th class="cellrowborder" valign="bottom" width="70.85427135678391%" id="d6403e103">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="cedt00023__compat_javascript">
+<td class="cellrowborder" valign="top" width="29.145728643216078%" headers="d6403e100 ">JavaScript generation</td>
+
+<td class="cellrowborder" valign="top" width="70.85427135678391%" headers="d6403e103 ">The large-object types and the Loblib library
+are not supported.</td>
+
+</tr>
+
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+</div>
+
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
 
 </body>
 </html>

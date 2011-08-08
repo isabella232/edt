@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
-
-<!-- 
-	for file names, please use five-digit numbers with these prefixes: 
-	    cedt (concepts), tedt (for tasks), redt (reference)	
--->
-
-<toc label="EGL Language Reference for EDT" topic="topics/cedt00002.html">
-   <topic label="EGL overview" href="topics/cedt00002.html">     
+<toc label="EGL Language Reference" topic="topics/cedt00002.html">
+   <topic label="EGL overview" href="topics/cedt00002.html">
       <topic label="Types and instances of those types" href="topics/cedt00004.html">
-         <topic label="Built-in types" href="topics/cedt00005.html"/>
+         <topic label="EGL types" href="topics/cedt00005.html"/>
          <topic label="Value and reference types" href="topics/cedt00012.html"/>
          <topic label="Boxing and unboxing conversions" href="topics/cedt00025.html"/>
          <topic label="Data items" href="topics/cedt00006.html"/>
-         <topic label="Classifiers" href="topics/cedt00007.html"/>
+         <topic label="Classifiers, or part types" href="topics/cedt00007.html"/>
          <topic label="Annotations" href="topics/cedt00008.html"/>
          <topic label="Stereotypes" href="topics/cedt00009.html"/>
       </topic>
-      <topic label="Generatable parts" href="topics/cedt00010.html"/>
       <topic label="EGL packages" href="topics/cedt00014.html"/>
       <topic label="Part imports" href="topics/cedt00017.html"/>
       <topic label="Part-name resolution" href="topics/cedt00015.html"/>
@@ -28,9 +21,9 @@
          <topic label="EGL date-and-time types" href="topics/cedt00022.html"/>
          <topic label="EGL large-object types" href="topics/cedt00023.html"/>
          <topic label="EGL numeric types" href="topics/cedt00021.html"/>
-         <topic label="EGL miscellaneous types" href="topics/cedt00024.html"/>
+         <topic label="BOOLEAN" href="topics/cedt00024.html"/>
       </topic>
-      <topic label="Overview of the classifiers" href="topics/cedt00019.html">
+      <topic label="Overview of the part types" href="topics/cedt00019.html">
          <topic label="Classifiers for defining EGL data parts" href="topics/cedt00026.html">
             <topic label="DataItem classifier overview" href="topics/cedt00030.html"/>
             <topic label="Record classifier overview" href="topics/cedt00031.html"/>

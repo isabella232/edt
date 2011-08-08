@@ -6,11 +6,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Value and reference types"></meta>
-<meta name="abstract" content="EGL, yes!"></meta>
-<meta name="description" content="EGL, yes!"></meta>
+<meta name="abstract" content="Value types are the basis of memory areas that contain business values. Reference types are the basis of data areas that reference business values. When you are copying data to or from a variable, you sometimes need to know the low-level details."></meta>
+<meta name="description" content="Value types are the basis of memory areas that contain business values. Reference types are the basis of data areas that reference business values. When you are copying data to or from a variable, you sometimes need to know the low-level details."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00004.html"></meta>
-<meta name="copyright" content="(C) Copyright 2009" type="primary"></meta>
-<meta name="DC.Rights.Owner" content="(C) Copyright 2009" type="primary"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="cedt00012"></meta>
 <meta name="DC.Language" content="en-us"></meta>
@@ -21,6 +21,78 @@
 
 
 <h1 class="topictitle1">Value and reference types</h1>
+
+
+
+<div><p>Value types are the basis of memory areas that <em>contain</em> business
+values. Reference types are the basis of data areas that <em>reference</em> business
+values. When you are copying data to or from a variable, you sometimes
+need to know the low-level details.</p>
+
+<div class="p">Consider the following declarations:<pre class="codeblock">// variable declaration
+NumberOfCars INT;
+
+// constant declaration
+const MINIMUMNUMBER INT = 2;
+</pre>
+</div>
+
+<p>The type is each case is INT, which is a value type. The first
+statement declares a <dfn class="term">value variable</dfn>, the second declares
+a <dfn class="term">value constant</dfn>. In either case, the term <dfn class="term">instance</dfn> refers
+to the value in the memory area itself.</p>
+
+<div class="p">For a second example, you might declare a list of five integers
+by coding a statement like one of these:<pre class="codeblock">// variable declaration
+NumberOfVehicles INT[5];
+
+// constant declaration
+const MINIMUMNUMBERS INT[5] = [1,2,3,4,5];</pre>
+</div>
+
+<p>The type in this case is INT List or INT[], which is a reference
+type. The first statement declares a <dfn class="term">reference variable</dfn>,
+which means that you can assign a different list to <samp class="codeph">NumberOfVehicles</samp> in
+a later assignment. Incidentally, you can also change the values inside
+the list and can change the number of elements.</p>
+
+<p>The second statement declares a <dfn class="term">reference constant</dfn>,
+which means that you cannot assign a different list to <samp class="codeph">MINIMUMNUMBERS</samp> in
+a later assignment. However, even in this case, you can alter the
+values inside the list and can change the number of elements.</p>
+
+<div class="p">The behavior is consistent because each declaration in the second
+example identifies a memory area that contains an address of a second
+memory area. The constant is only constant in the sense that the area
+identified as <samp class="codeph">MINIMUMNUMBERS</samp> must always contain
+the same address, which refers to the same list. The following, subsequent
+assignment is not valid even though the values are the same: <pre class="codeblock">// An invalid assignment
+MINIMUMNUMBERS = [1,2,3,4,5];  </pre>
+</div>
+
+<p>In relation to a reference variable or constant, the term <dfn class="term">instance</dfn> refers
+to the value in the secondary memory area; that is, in the memory
+area to which the variable or constant refers.</p>
+
+<p>Some simple types are expressed with parameters. For example, DECIMAL
+is a numeric type and can be restricted by parameters that define
+a second type such as DECIMAL(4).</p>
+
+<p>With one exception, the following rule applies: If a simple type
+can be expressed with parameters, the non-parameterized type such
+as DECIMAL is a reference type, and the parameterized type such as
+DECIMAL(4) is a value type. The one exception is STRING and its parameterized
+equivalent: Both STRING and STRING(4) are reference types.</p>
+
+<p>A variation in the assignment rules described earlier is in effect
+for simple-type fields. For details, see “Boxing and unboxing conversions.”</p>
+
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
 
 </body>
 </html>

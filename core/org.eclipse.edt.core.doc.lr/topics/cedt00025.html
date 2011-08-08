@@ -6,11 +6,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Boxing and unboxing conversions"></meta>
-<meta name="abstract" content="EGL, yes!"></meta>
-<meta name="description" content="EGL, yes!"></meta>
+<meta name="abstract" content="Assignments to and from simple-type fields are straightforward even if you mix reference and value types. For example, if you declare a constant of a reference type such as STRING, the assigned value is protected:"></meta>
+<meta name="description" content="Assignments to and from simple-type fields are straightforward even if you mix reference and value types. For example, if you declare a constant of a reference type such as STRING, the assigned value is protected:"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00004.html"></meta>
-<meta name="copyright" content="(C) Copyright 2009" type="primary"></meta>
-<meta name="DC.Rights.Owner" content="(C) Copyright 2009" type="primary"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="cedt00025"></meta>
 <meta name="DC.Language" content="en-us"></meta>
@@ -21,6 +21,44 @@
 
 
 <h1 class="topictitle1">Boxing and unboxing conversions</h1>
+
+
+
+<div><p>Assignments to and from simple-type fields are straightforward
+even if you mix reference and value types. For example, if you declare
+a constant of a reference type such as STRING, the assigned value
+is protected: </p>
+
+<div class="p"><pre class="codeblock">const myString STRING = "Unchanging";
+myString = "Error!";   // not valid    </pre>
+</div>
+
+<div class="p">A constant of a reference type other than a simple type <em>can</em> be
+updated. For example, you can update the elements in a constant of
+type INT[] because INT[] is a reference type, and only the reference
+to the list is constant. However, the first of the following two rules
+indicates the difference between a constant of type STRING and a constant
+of type INT[]:<ul>
+<li>When a simple-type reference field receives a value from a value
+field or literal, a <dfn class="term">boxing conversion</dfn> occurs. The source
+value is assigned to a new memory area, and the address of that area
+is assigned to the reference field. The attempt to update a constant
+of type STRING is not valid because the constant cannot reference
+a different memory area.</li>
+
+<li>When a simple-type value field receives a value from a reference
+field, an <dfn class="term">unboxing conversion</dfn> occurs. The value field
+receives the business value to which the reference field refers.</li>
+
+</ul>
+</div>
+
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
 
 </body>
 </html>

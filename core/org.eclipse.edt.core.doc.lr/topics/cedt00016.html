@@ -6,11 +6,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Name resolution at run time"></meta>
-<meta name="abstract" content="EGL, yes!"></meta>
-<meta name="description" content="EGL, yes!"></meta>
+<meta name="abstract" content="The rules for name resolution at run time tell whether a given variable, constant, parameter, or function is visible to an expression. These rules concern scope, which is a definition of the code area from which a given memory area is accessible."></meta>
+<meta name="description" content="The rules for name resolution at run time tell whether a given variable, constant, parameter, or function is visible to an expression. These rules concern scope, which is a definition of the code area from which a given memory area is accessible."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00002.html"></meta>
-<meta name="copyright" content="(C) Copyright 2009" type="primary"></meta>
-<meta name="DC.Rights.Owner" content="(C) Copyright 2009" type="primary"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="cedt00016"></meta>
 <meta name="DC.Language" content="en-us"></meta>
@@ -23,6 +23,61 @@
 <h1 class="topictitle1">Name resolution at run time</h1>
 
 
+
+<div><p>The rules for name resolution at run time tell whether
+a given variable, constant, parameter, or function is visible to an
+expression. These rules concern <dfn class="term">scope</dfn>, which is a definition
+of the code area from which a given memory area is accessible.</p>
+
+<div class="p">The order of priority for resolving references at run time is as
+follows:<ol>
+<li>First in precedence are declarations that are local to the function
+where the expression resides. This category includes the local variable,
+constant, and function-parameter declarations.</li>
+
+<li>Second in precedence are declarations that are outside of a function
+but are inside the part where the expression resides. Each field is <dfn class="term">program
+global</dfn>, which means that it is accessible to all functions
+in the part. This category includes the global variable, constant,
+program-parameter, and function declarations.</li>
+
+<li>Third are declarations that are outside a function but are inside
+a library that is accessible to the expression. Each public field
+is <dfn class="term">run-unit global</dfn>, which means that it is accessible
+to all functions in the run unit. This category includes the variable,
+constant, and function declarations in the library. Those declarations
+are program global to other functions in the same library.</li>
+
+<li>Fourth are declarations that are in EGL system libraries.</li>
+
+</ol>
+</div>
+
+<div class="p">A reference in an expression can include a series of identifiers,
+with a period (.) separating one from the next. Here is an expression
+in which each operand is fully qualified: <pre class="codeblock">autoPkg.AutoLibrary.numberInFleet - autoPkg.CarLibrary.DebtRecord.carLimit</pre>
+</div>
+
+<p>As appropriate, the identifiers can include a package name, a part
+name, a declaration name (for example, for a record), and a member
+name such as the name of a record field.</p>
+
+<p>The package name and part name are especially useful for accessing
+values and functions in a library, as suggested in the example. However,
+you can code the <span class="synph"><span class="kwd">use</span></span> statement for the convenience
+of referring more directly to the declarations in a library. For details,
+see “Use statement.”</p>
+
+<p>If a local declaration has the same name as the program-global
+declaration, only the local declaration is visible to the expression;
+but you can override that rule. For details, see “This keyword.”</p>
+
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
 
 </body>
 </html>

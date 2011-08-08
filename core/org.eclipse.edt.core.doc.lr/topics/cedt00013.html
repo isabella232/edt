@@ -6,11 +6,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="EGL Syntax"></meta>
-<meta name="abstract" content="EGL, yes!"></meta>
-<meta name="description" content="EGL, yes!"></meta>
+<meta name="abstract" content="EGL source code is a sequence of tokens, which are the smallest units of meaning. At a more composite level, the language includes the following constructs: type definitions, expressions, statements, and set-values blocks."></meta>
+<meta name="description" content="EGL source code is a sequence of tokens, which are the smallest units of meaning. At a more composite level, the language includes the following constructs: type definitions, expressions, statements, and set-values blocks."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00002.html"></meta>
-<meta name="copyright" content="(C) Copyright 2009" type="primary"></meta>
-<meta name="DC.Rights.Owner" content="(C) Copyright 2009" type="primary"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="cedt00013"></meta>
 <meta name="DC.Language" content="en-us"></meta>
@@ -21,6 +21,117 @@
 
 
 <h1 class="topictitle1">EGL Syntax</h1>
+
+
+
+<div><p>EGL source code is a sequence of <dfn class="term">tokens</dfn>, which
+are the smallest units of meaning. At a more composite level, the
+language includes the following constructs: type definitions, expressions,
+statements, and set-values blocks.</p>
+
+<div class="p">The EGL tokens are as follows:<dl>
+<dt class="dlterm">Keywords</dt>
+
+<dd>The EGL reserved words; for example, <span class="synph"><span class="kwd">add</span></span>.
+For a list, see “EGL reserved words.” </dd>
+
+
+<dt class="dlterm">Identifiers</dt>
+
+<dd>The names of parts, functions, variables, and constants. An example
+is <samp class="codeph">myCarCount</samp>, which is a variable name.</dd>
+
+
+<dt class="dlterm">Literals</dt>
+
+<dd>Fixed values of a given type. Examples are the integer 5, the
+string “yes!”, and the Boolean value TRUE.</dd>
+
+
+<dt class="dlterm">Operators</dt>
+
+<dd>Symbols that affect <dfn class="term">operands</dfn>, which might be keywords,
+identifiers, or literals. An operand is on the left or right of an
+operator. For example, the <span class="synph"><span class="kwd">&lt;</span></span> operator
+is part of a condition that tests whether the operand on the left
+has a lesser value than the operand on the right. <p>For details,
+see “Operators and precedence.”</p>
+</dd>
+
+
+<dt class="dlterm">Special characters</dt>
+
+<dd>Punctuation marks that divide tokens, as necessary for the parsing
+done by the EGL compiler. For example, parentheses (<span class="synph"><span class="kwd">(
+)</span></span>) surround a condition such <samp class="codeph">(myVariable &lt;
+yourVariable)</samp>.<p>For details, see “Special characters.”</p>
+</dd>
+
+</dl>
+</div>
+
+<div class="p">At a more composite level, the language includes the following
+constructs:<dl>
+<dt class="dlterm">Type definitions</dt>
+
+<dd>Sequences of tokens that define a part. Here is an example:<pre class="codeblock">DataItem
+   NumberOfCars INT
+End</pre>
+<p>For an overview, see “Overview of the classifiers.”</p>
+</dd>
+
+
+<dt class="dlterm">Expressions</dt>
+
+<dd>Sequences of tokens that express unnamed instances. For example, <samp class="codeph">4
++ 5</samp> might be assigned to a variable, but is itself a value
+of type INT.<p>For details, see “Expressions.”</p>
+</dd>
+
+
+<dt class="dlterm">Statements</dt>
+
+<dd>An instruction that causes work to occur at run time or that organizes
+code at development and transformation time: <ul>
+<li>The runtime work might be variable declaration, data manipulation,
+logic invocation, input to (or output from) a user interface or persistent
+data storage, and so forth. </li>
+
+<li>The organization work might include assigning types to packages,
+importing types from other packages, and enabling a shortcut for referencing
+identifiers that are in libraries.</li>
+
+</ul>
+<div class="p">Most statements begin with an EGL keyword. For example, the
+following statement writes “yes!” to the standard output:<pre class="codeblock">SysLib.writeStdOut("yes!");</pre>
+</div>
+<p>For
+details, see “Statements.”</p>
+</dd>
+
+
+<dt class="dlterm">Set-values blocks</dt>
+
+<dd>Code areas that set annotations and field values and are delimited
+by curly brackets ({}), as shown in the following declaration:<pre class="codeblock">myCarCount NumberOfCars <strong>{ InputRequired = yes, DisplayName = "Number of cars:  " }</strong>;</pre>
+<p>The
+example set-values block assigns values to the <span class="synph"><span class="kwd">InputRequired</span></span> and <span class="synph"><span class="kwd">DisplayName</span></span> annotations
+for the <samp class="codeph">myCarCount</samp> variable.</p>
+<p>Set-values blocks
+are used in various ways in type definitions, statements, expressions,
+and other set-values blocks. For details, see “Set-values blocks.”</p>
+</dd>
+
+</dl>
+</div>
+
+</div>
+
+
+<div>
+<div class="familylinks">
+</div>
+</div>
 
 </body>
 </html>

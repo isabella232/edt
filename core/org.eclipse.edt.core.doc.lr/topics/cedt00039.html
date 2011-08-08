@@ -6,11 +6,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Delegate classifier overview"></meta>
-<meta name="abstract" content="EGL, yes!"></meta>
-<meta name="description" content="EGL, yes!"></meta>
+<meta name="abstract" content="The capabilities of the Delegate classifier are made available when you code a Delegate part, which is the basis of a variable that references an EGL function. A primary use of Delegate parts and the related variable is in the EGL system libraries."></meta>
+<meta name="description" content="The capabilities of the Delegate classifier are made available when you code a Delegate part, which is the basis of a variable that references an EGL function. A primary use of Delegate parts and the related variable is in the EGL system libraries."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00028.html"></meta>
-<meta name="copyright" content="(C) Copyright 2009" type="primary"></meta>
-<meta name="DC.Rights.Owner" content="(C) Copyright 2009" type="primary"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="cedt00039"></meta>
 <meta name="DC.Language" content="en-us"></meta>
@@ -22,6 +22,67 @@
 
 <h1 class="topictitle1">Delegate classifier overview</h1>
 
+
+
+<div><p>The capabilities of the Delegate classifier are made available
+when you code a <dfn class="term">Delegate part</dfn>, which is the basis of
+a variable that references an EGL function. A primary use of Delegate
+parts and the related variable is in the EGL system libraries.</p>
+
+<div class="p">For example, consider the following statement, which is in a Rich
+UI handler that you might code:<pre class="codeblock">call myService.myFunction()
+   returning to myCallbackFunction 
+             onException <strong>ServiceLib.serviceExceptionHandler</strong>;</pre>
+</div>
+
+<div class="p">The statement calls the function <samp class="codeph">myFunction</samp> in
+a remote service and ensures that an exception handler (a second function)
+is invoked if the call returns an error. However, <span class="synph"><span class="kwd">ServiceLib.serviceExceptionHandler</span> is
+not the name of a function. Rather, </span> <span class="synph"><span class="kwd">ServiceLib.serviceExceptionHandler</span></span> is
+the fully qualified name of a variable declared in the <span class="synph"><span class="kwd">ServiceLib</span></span> system
+library. The variable is based on a Delegate part that is essentially
+as follows: <pre class="codeblock">Delegate SystemDelegatePart
+    (exp AnyException in) 
+end</pre>
+</div>
+
+<div class="p">In short, a declaration similar to the following one is found in
+the <span class="synph"><span class="kwd">ServiceLib</span></span> system library: <pre class="codeblock">   serviceExceptionHandler SystemDelegatePart;</pre>
+</div>
+
+<div class="p">The mechanism provides flexibility: <ul>
+<li>EGL system code assigns a value to the <span class="synph"><span class="kwd">serviceExceptionHandler</span></span> variable.
+The value refers to an exception handler that is invoked by default
+if your call to a service returns an error.</li>
+
+<li>You can write code to assign your own function to the <span class="synph"><span class="kwd">serviceExceptionHandler</span></span> variable
+and in this way cause your function to be invoked instead. Here is
+an example assignment:<pre class="codeblock">ServiceLib.serviceExceptionHandler = myExceptionHandler;</pre>
+</li>
+
+</ul>
+</div>
+
+<div class="p">The function you might have written has the following outline:<pre class="codeblock">Function myExceptionHandler(exp AnyException in)
+   ;
+end</pre>
+</div>
+
+<p>Please note that the characteristics of the <samp class="codeph">myExceptionHandler</samp> function
+are the same as the characteristics of the <samp class="codeph">SystemDelegatePart</samp> part.
+That is, the <samp class="codeph">SystemDelegatePart</samp> part describes a
+function that accepts a single parameter of type <span class="synph"><span class="kwd">AnyException</span></span> and
+does not return a value. That sameness is what enables you to substitute
+your function for the one that is used by default.</p>
+
+<p>A Delegate part does not include a stereotype.</p>
+
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
 
 </body>
 </html>

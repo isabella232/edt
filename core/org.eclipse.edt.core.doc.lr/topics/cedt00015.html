@@ -6,11 +6,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Part-name resolution"></meta>
-<meta name="abstract" content="EGL, yes!"></meta>
-<meta name="description" content="EGL, yes!"></meta>
+<meta name="abstract" content="The rules for part-name resolution specify the search order that the compiler follows to resolve a part reference; for example, in a variable declaration. The compiler considers the current package directory, the repositories in the EGL build path, and the EGL system package. The compiler stops the search only when the same-named part is found or, if no part is found, only after all locations are searched."></meta>
+<meta name="description" content="The rules for part-name resolution specify the search order that the compiler follows to resolve a part reference; for example, in a variable declaration. The compiler considers the current package directory, the repositories in the EGL build path, and the EGL system package. The compiler stops the search only when the same-named part is found or, if no part is found, only after all locations are searched."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00002.html"></meta>
-<meta name="copyright" content="(C) Copyright 2009" type="primary"></meta>
-<meta name="DC.Rights.Owner" content="(C) Copyright 2009" type="primary"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="cedt00015"></meta>
 <meta name="DC.Language" content="en-us"></meta>
@@ -21,6 +21,67 @@
 
 
 <h1 class="topictitle1">Part-name resolution</h1>
+
+
+
+<div><p>The rules for part-name resolution specify the search order
+that the compiler follows to resolve a part reference; for example,
+in a variable declaration. The compiler considers the current package
+directory, the repositories in the EGL build path, and the EGL system
+package. The compiler stops the search only when the same-named part
+is found or, if no part is found, only after all locations are searched.</p>
+
+<p>The rest of this description assumes that the compiler is seeking
+the <samp class="codeph">myPart</samp> part in the <samp class="codeph">myPkg</samp> package.</p>
+
+<p>Here are the rules:</p>
+
+<div class="p"><ol>
+<li>If the reference is fully qualified, as in the case of <samp class="codeph">myPkg.myPart</samp>,
+the compiler seeks the part in the current directory and then in every
+repository in the EGL build path. The search through the repositories
+is in <dfn class="term">build-path order</dfn>, which is the order in which the
+repositories are listed in the <dfn class="term">eglpath</dfn> parameter. After
+reviewing every repository in that list, the search considers the
+EGL system package.</li>
+
+<li>If the reference is not fully qualified, as in the case of <samp class="codeph">myPart</samp>,
+the compiler gives priority to the following packages, in order:<ol type="a">
+<li>The package identified in a one-part <span class="synph"><span class="kwd">import</span></span> statement
+such as the following:<pre class="codeblock">import myPkg.myPart; </pre>
+<p>The
+compiler seeks the part in the current directory; then in every repository
+in the EGL build path, in build-path order; and then in the EGL system
+package.</p>
+</li>
+
+<li>The current package.<p>The compiler seeks the part in the current
+directory and then in every repository in the EGL build path, in build-path
+order. </p>
+</li>
+
+<li>The package identified in an on-demand <span class="synph"><span class="kwd">import</span></span> statement
+such as the following:<pre class="codeblock">import myPkg.*; </pre>
+<p>The
+compiler seeks the part in the current directory and then in every
+repository in the EGL build path, in build-path order, and then in
+the EGL system package. The search ends as soon as a part is found.
+However, if multiple on-demand <span class="synph"><span class="kwd">import</span></span> statements
+reference the same part, the search results in an error.</p>
+</li>
+
+</ol>
+</li>
+
+</ol>
+</div>
+
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
 
 </body>
 </html>

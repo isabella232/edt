@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Types and instances of those types"></meta>
-<meta name="abstract" content="EGL, yes!"></meta>
-<meta name="description" content="EGL, yes!"></meta>
+<meta name="abstract" content="Types are central to EGL technology and are meaningful at development time, transformation time, and run time."></meta>
+<meta name="description" content="Types are central to EGL technology and are meaningful at development time, transformation time, and run time."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00002.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00005.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00012.html"></meta>
@@ -16,8 +16,8 @@
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00007.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00008.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00009.html"></meta>
-<meta name="copyright" content="(C) Copyright 2009" type="primary"></meta>
-<meta name="DC.Rights.Owner" content="(C) Copyright 2009" type="primary"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="cedt00004"></meta>
 <meta name="DC.Language" content="en-us"></meta>
@@ -29,6 +29,63 @@
 
 <h1 class="topictitle1">Types and instances of those types</h1>
 
+
+
+<div><p>Types are central to EGL technology and are meaningful
+at development time, transformation time, and run time.</p>
+
+<p>In general usage, a type such as <em>integer</em> or <em>string</em> identifies
+a set of values and a set of operations that can be applied to those
+values. For example, integers are whole numbers that can be added,
+subtracted, and so forth; and strings are character sequences that
+can be shortened, lengthened, and so forth. The number 5 is a <dfn class="term">value</dfn> of
+an integer and is also said to be an <dfn class="term">instance</dfn> of an integer.
+Similarly, the phrase “yes!” is a value and an instance of a string.
+In the most general sense, the terms “value” and “instance” are interchangeable.</p>
+
+<p>In EGL, a <dfn class="term">field declaration</dfn> is a statement that identifies
+a memory area available to your code. The area either contains or
+references an instance of a given type. For details on the distinction
+between containing and referencing, see “Value and reference types.”</p>
+
+<div class="p">Here are example declarations:<pre class="codeblock">// variable declarations
+myString  STRING;                   // a string
+myInteger INT;                      // an INT, or integer 
+myNumber  DECIMAL(5,2) = 123.45;    // a number with decimal point
+
+// constant declarations
+const MYSTRING01  STRING = "Value";
+const MYINTEGER01 INT = 5;
+const MYNUMBER01  DECIMAL(5,2) = 123.45;
+</pre>
+</div>
+
+<p>Each of the first set of statements declares a <dfn class="term">variable</dfn>,
+which identifies a memory area that you can change in subsequent statements.
+Each of the second set of statements declares a <dfn class="term">constant</dfn>,
+which identifies a memory area that you cannot change in subsequent
+statements.</p>
+
+<p>For ease of coding, EGL is typically not case sensitive. Exceptions
+to this rule involve strings such as program names, which are in the
+source code and are also visible in the runtime system.</p>
+
+<div class="p">However, the following conventions are in use in this documentation
+and are often in use among EGL developers:<ul>
+<li>Lowercase the first letter in a variable name, and uppercase any
+letter than begins a new, human-language word.</li>
+
+<li>Uppercase all the letters in a constant.</li>
+
+</ul>
+</div>
+
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
 
 </body>
 </html>
