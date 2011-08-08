@@ -69,6 +69,7 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genMemberAccess = "genMemberAccess";
 	public static final String genMemberName = "genMemberName";
 	public static final String genName = "genName";
+	public static final String genNewExpression = "genNewExpression";
 	public static final String genPart = "genPart";
 	public static final String genPartName = "genPartName";
 	public static final String genRuntimeConstraint = "genRuntimeConstraint";
@@ -92,6 +93,8 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genContainerBasedAssignment = "genContainerBasedAssignment";
 	public static final String genContainerBasedMemberAccess = "genContainerBasedMemberAccess";
 	public static final String genContainerBasedMemberName = "genContainerBasedMemberName";
+	public static final String genContainerBasedNewExpression = "genContainerBasedNewExpression";
+	public static final String genContainerBasedInvocation = "genContainerBasedInvocation";
 	// these are used by the validation step. preGen is used to preGen individual items within the part being generated.
 	// preGenPart is invoked by the generator and should not be overridden or used by extending logic
 	public static final String preGen = "preGen";
