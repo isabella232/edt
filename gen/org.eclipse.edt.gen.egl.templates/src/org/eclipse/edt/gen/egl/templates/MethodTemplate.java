@@ -37,6 +37,7 @@ public class MethodTemplate extends EglTemplate{
 	public void genFunction(Method method, Context ctx, Class<?> clazz, LogicAndDataPart part) throws MofObjectNotFoundException, DeserializationException {
 		if(Modifier.isPublic(method.getModifiers()) && !isJavaProperty(method, clazz)){
 			Function eFunction = ctx.getFactory().createFunction();
+			eFunction.setContainer(part);
 			eFunction.setName(CommonUtilities.getValidEGLName(method.getName()));
 			part.getFunctions().add(eFunction);
 			eFunction.setIsStatic(Modifier.isStatic(method.getModifiers()));

@@ -30,6 +30,7 @@ public class FieldTemplate extends EglTemplate{
 		if( isJavaProperty ||
 				Modifier.isPublic(field.getModifiers())){
 			org.eclipse.edt.mof.egl.Field eField = ctx.getFactory().createField();
+			eField.setContainer(part);
 			part.getFields().add(eField);
 			ctx.invoke(genName, (Object)field, ctx, eField);
 			if(Modifier.isStatic((field.getModifiers()))){
