@@ -30,9 +30,13 @@ public class FunctionTemplate extends JavaScriptTemplate {
 		out.print(": function(");
 		ctx.foreach(function.getParameters(), ',', genDeclaration, ctx, out);
 		out.println(") {");
-		ctx.invoke(genStatementNoBraces, function.getStatementBlock(), ctx, out);
+		ctx.invoke(genFunctionBody, function, ctx, out);
 		out.println("}");
 		ctx.setCurrentFunction(null);
+	}
+	
+	public void genFunctionBody(Function function, Context ctx, TabbedWriter out) {
+		ctx.invoke(genStatementNoBraces, function.getStatementBlock(), ctx, out);
 	}
 
 	public void genAccessor(Function function, Context ctx, TabbedWriter out) {
