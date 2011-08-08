@@ -31,6 +31,8 @@ public class BinaryExpressionTemplate extends JavaScriptTemplate {
 		if (CommonUtilities.needsConversion(expr.getRHS().getType(), expr.getLHS().getType())) {
 			IRUtils.makeCompatible(binExpr, expr.getLHS().getType(), expr.getRHS().getType());
 		}
+		out.print("(");
 		ctx.invoke(genBinaryExpression, (Type) binExpr.getOperation().getContainer(), ctx, out, binExpr);
+		out.print(")");
 	}
 }
