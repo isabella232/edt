@@ -57,6 +57,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genFieldAnnotations = "genFieldAnnotations";
 	public static final String genFields = "genFields";
 	public static final String genFunction = "genFunction";
+	public static final String genFunctionBody = "genFunctionBody";
 	public static final String genFunctions = "genFunctions";
 	public static final String genGetter = "genGetter";
 	public static final String genGetterSetter = "genGetterSetter";
