@@ -54,6 +54,7 @@ public class AccessibleObjectTemplate extends EglTemplate{
 	}	
 	public void genFunctionParameter(AccessibleObject obj, Context ctx, FunctionMember functionMember, Integer argIdx, Type type) {
 		FunctionParameter parameter = ctx.getFactory().createFunctionParameter();
+		parameter.setContainer(functionMember);
 		functionMember.addParameter(parameter);
 		ctx.invoke(genName, (Object)obj, ctx, functionMember, parameter, argIdx);
 		ctx.invoke(genType, (Object)type, ctx, parameter);

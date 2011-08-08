@@ -24,6 +24,7 @@ public class ConstructorTemplate extends EglTemplate{
 	public void genConstructor(Constructor<?> constructor, Context ctx, Class<?> clazz, LogicAndDataPart eType) {
 		if(Modifier.isPublic(constructor.getModifiers())){
 			org.eclipse.edt.mof.egl.Constructor eConstructor = ctx.getFactory().createConstructor();
+			eConstructor.setContainer(eType);
 			eType.getConstructors().add(eConstructor);
 			ctx.invoke(genFunctionParameters, (Object)constructor, ctx, eConstructor);
 		}
