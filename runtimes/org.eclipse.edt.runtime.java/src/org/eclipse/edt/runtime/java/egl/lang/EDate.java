@@ -48,8 +48,8 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		return ezeCast(value, args);
 	}
 
-	public static BigDecimal ezeCast(Object value, Integer... args) throws JavartException {
-		return (BigDecimal) EglAny.ezeCast(value, "asDate", EDate.class, new Class[] { Integer[].class }, args);
+	public static Calendar ezeCast(Object value, Integer... args) throws JavartException {
+		return (Calendar) EglAny.ezeCast(value, "asDate", EDate.class, new Class[] { Integer[].class }, args);
 	}
 
 	public static boolean ezeIsa(Object value) {

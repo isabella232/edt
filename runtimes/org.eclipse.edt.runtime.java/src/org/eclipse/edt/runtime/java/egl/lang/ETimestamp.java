@@ -119,8 +119,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return ezeCast(value, args);
 	}
 
-	public static BigDecimal ezeCast(Object value, Integer... args) throws JavartException {
-		return (BigDecimal) EglAny.ezeCast(value, "asTimestamp", ETimestamp.class, new Class[] { Integer[].class }, args);
+	public static Calendar ezeCast(Object value, Integer... args) throws JavartException {
+		return (Calendar) EglAny.ezeCast(value, "asTimestamp", ETimestamp.class, new Class[] { Integer[].class }, args);
 	}
 
 	public static boolean ezeIsa(Object value, Integer... args) {
@@ -591,6 +591,17 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		cal.set(Calendar.MILLISECOND, cal.get(Calendar.MILLISECOND));
 
 		return cal;
+	}
+
+	public static Calendar defaultValue(int startCode, int endCode) {
+		long now = java.lang.System.currentTimeMillis();
+		Calendar cal = DateTimeUtil.getBaseCalendar();
+		cal.setTimeInMillis(now);
+		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE),
+			cal.get(Calendar.SECOND));
+		cal.set(Calendar.MILLISECOND, cal.get(Calendar.MILLISECOND));
+
+		return asTimestamp(cal, startCode, endCode);
 	}
 
 	/**
