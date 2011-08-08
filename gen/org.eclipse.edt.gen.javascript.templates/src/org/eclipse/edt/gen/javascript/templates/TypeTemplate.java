@@ -217,4 +217,12 @@ public class TypeTemplate extends JavaScriptTemplate {
 	public void genContainerBasedMemberName(Type type, Context ctx, TabbedWriter out, MemberName arg1, Member arg2) {
 		ctx.invoke(genMemberName, arg1, ctx, out);
 	}
+
+	public void genContainerBasedNewExpression(Type type, Context ctx, TabbedWriter out, Expression arg) {
+		ctx.invoke(genNewExpression, arg, ctx, out);
+	}
+
+	public void genContainerBasedInvocation(Type type, Context ctx, TabbedWriter out, Expression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
+	}
 }

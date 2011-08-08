@@ -22,9 +22,9 @@ public class FunctionInvocationTemplate extends JavaScriptTemplate {
 	public void genExpression(FunctionInvocation expr, Context ctx, TabbedWriter out) {
 		// first, make this expression's arguments compatible
 		IRUtils.makeCompatible(expr);
-		// if this is an egl system library, delegate to the template associated with the target function's container
-		if (expr.getTarget().getContainer() != null && ctx.mapsToNativeType((Type) expr.getTarget().getContainer()))
-			ctx.invoke(genInvocation, (Type) expr.getTarget().getContainer(), ctx, out, expr);
+		// delegate to the template associated with the target function's container
+		if (expr.getTarget().getContainer() instanceof Type)
+			ctx.invoke(genContainerBasedInvocation, (Type) expr.getTarget().getContainer(), ctx, out, expr);
 		else
 			ctx.invoke(genInvocation, expr, ctx, out);
 	}
