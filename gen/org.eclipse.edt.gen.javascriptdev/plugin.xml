@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension point="org.eclipse.edt.ide.core.generators">
+		<provider
+			id="org.eclipse.edt.ide.gen.JavaScriptDevGenProvider"
+			class="org.eclipse.edt.gen.javascriptdev.ide.JavaScriptDevGenerator"
+			name="%GeneratorName"
+			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
+			version="0.7.0"
+			provider="Eclipse.org"
+			parentGeneratorId="org.eclipse.edt.ide.gen.JavaScriptGenProvider"
+			description="%GeneratorDescription"
+		/>
+   	</extension>
+	<extension point="org.eclipse.edt.ide.ui.edtGeneratorTabs">
+		<generatorTab 
+			generatorId="org.eclipse.edt.ide.gen.JavaScriptDevGenProvider"
+			class="org.eclipse.edt.gen.javascriptdev.ide.JavaScriptDevGeneratorTabProvider">
+		</generatorTab>
+   	</extension>
+</plugin>
