@@ -11,9 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.egl.lang;
 
+import org.eclipse.edt.gen.GenerationException;
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.TimestampType;
 import org.eclipse.edt.mof.egl.Type;
@@ -33,5 +38,44 @@ public class TimestampTypeTemplate extends JavaTemplate {
 	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
 		out.print(".defaultValue()");
+	}
+
+	public void genContainerBasedNewExpression(TimestampType type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
+		processNewExpression(type, ctx, out, arg);
+	}
+
+	public void genContainerBasedNewExpression(ParameterizableType type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
+		processNewExpression(type, ctx, out, arg);
+	}
+
+	public void processNewExpression(Type type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
+		ctx.invoke(genRuntimeTypeName, arg.getType(), ctx, out, TypeNameKind.EGLImplementation);
+		out.print(".defaultValue(");
+		if (arg.getArguments() != null && arg.getArguments().size() > 0) {
+			for (Expression argument : arg.getArguments()) {
+				ctx.invoke(genExpression, argument, ctx, out);
+			}
+		} else
+			ctx.invoke(genConstructorOptions, arg.getType(), ctx, out);
+		out.print(")");
+	}
+
+	public void genBinaryExpression(TimestampType type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
+		processBinaryExpression(type, ctx, out, arg);
+	}
+
+	public void genBinaryExpression(ParameterizableType type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
+		processBinaryExpression(type, ctx, out, arg);
+	}
+
+	public void processBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
+		// for timestamp type, always use the runtime
+		out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
+		out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
+		out.print("(");
+		ctx.invoke(genExpression, arg.getLHS(), ctx, out);
+		out.print(", ");
+		ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+		out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
 	}
 }

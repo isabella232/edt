@@ -18,6 +18,8 @@ import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.Type;
 
 public class TimeTypeTemplate extends JavaTemplate {
@@ -25,6 +27,18 @@ public class TimeTypeTemplate extends JavaTemplate {
 	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
 		out.print(".defaultValue()");
+	}
+
+	public void genContainerBasedNewExpression(EGLClass type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
+		ctx.invoke(genRuntimeTypeName, arg.getType(), ctx, out, TypeNameKind.EGLImplementation);
+		out.print(".defaultValue(");
+		if (arg.getArguments() != null && arg.getArguments().size() > 0) {
+			for (Expression argument : arg.getArguments()) {
+				ctx.invoke(genExpression, argument, ctx, out);
+			}
+		} else
+			ctx.invoke(genConstructorOptions, arg.getType(), ctx, out);
+		out.print(")");
 	}
 
 	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
