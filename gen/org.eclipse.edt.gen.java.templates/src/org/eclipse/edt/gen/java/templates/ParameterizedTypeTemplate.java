@@ -32,9 +32,6 @@ public class ParameterizedTypeTemplate extends JavaTemplate {
 	}
 
 	public void genConstructorOptions(ParameterizedType type, Context ctx, TabbedWriter out) {
-		out.print("\"");
-		out.print(ctx.getNativeImplementationMapping(type));
-		out.print("\", ");
 		ctx.invoke(genTypeDependentOptions, type, ctx, out);
 	}
 

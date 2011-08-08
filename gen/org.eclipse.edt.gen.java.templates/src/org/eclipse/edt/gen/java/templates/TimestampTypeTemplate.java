@@ -17,7 +17,16 @@ import org.eclipse.edt.mof.egl.TimestampType;
 
 public class TimestampTypeTemplate extends JavaTemplate {
 
+	public void genConstructorOptions(TimestampType type, Context ctx, TabbedWriter out) {
+		// we need to skip over the 1st comma and space
+		generateOptions(type, ctx, out, false);
+	}
+
 	public void genTypeDependentOptions(TimestampType type, Context ctx, TabbedWriter out) {
+		generateOptions(type, ctx, out, true);
+	}
+
+	protected void generateOptions(TimestampType type, Context ctx, TabbedWriter out, boolean needSeparator) {
 		String pattern = "yyyyMMddhhmmss";
 		if (type.getPattern() != null && !type.getPattern().equalsIgnoreCase("null"))
 			pattern = type.getPattern();
@@ -37,7 +46,8 @@ public class TimestampTypeTemplate extends JavaTemplate {
 			start = ".SECOND_CODE";
 		else if (pattern.startsWith("f"))
 			start = ".FRACTION1_CODE";
-		out.print(", ");
+		if (needSeparator)
+			out.print(", ");
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
 		out.print(start);
 		if (pattern.endsWith("yyyy"))

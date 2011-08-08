@@ -19,15 +19,14 @@ public class IntervalTypeTemplate extends JavaTemplate {
 
 	public void genConstructorOptions(IntervalType type, Context ctx, TabbedWriter out) {
 		// we need to skip over the 1st comma and space
-		out.print(generateOptions(type).substring(2));
+		generateOptions(type, ctx, out, false);
 	}
 
 	public void genTypeDependentOptions(IntervalType type, Context ctx, TabbedWriter out) {
-		out.print(generateOptions(type));
+		generateOptions(type, ctx, out, true);
 	}
 
-	protected String generateOptions(IntervalType type) {
-		String value = "";
+	protected void generateOptions(IntervalType type, Context ctx, TabbedWriter out, boolean needSeparator) {
 		// default to month interval
 		String pattern = "yyyymm";
 		if (type.getPattern() != null && !type.getPattern().equalsIgnoreCase("null"))
@@ -55,9 +54,10 @@ public class IntervalTypeTemplate extends JavaTemplate {
 				count++;
 				patternIndex++;
 			}
-			value = value + ", " + count;
+			if (needSeparator)
+				out.print(", ");
+			needSeparator = true;
+			out.print("" + count);
 		}
-		// return the value to the caller
-		return value;
 	}
 }

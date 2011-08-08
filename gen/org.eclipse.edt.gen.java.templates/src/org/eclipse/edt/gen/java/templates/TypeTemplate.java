@@ -230,6 +230,13 @@ public class TypeTemplate extends JavaTemplate {
 		ctx.invoke(genMemberName, arg1, ctx, out);
 	}
 
-	public void genXmlTransient(Type type, TabbedWriter out) {}
+	public void genContainerBasedNewExpression(Type type, Context ctx, TabbedWriter out, Expression arg) {
+		ctx.invoke(genNewExpression, arg, ctx, out);
+	}
 
+	public void genContainerBasedInvocation(Type type, Context ctx, TabbedWriter out, Expression arg) {
+		ctx.invoke(genInvocation, arg, ctx, out);
+	}
+
+	public void genXmlTransient(Type type, TabbedWriter out) {}
 }

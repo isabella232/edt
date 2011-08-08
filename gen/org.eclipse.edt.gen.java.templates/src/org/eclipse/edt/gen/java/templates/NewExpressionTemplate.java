@@ -15,10 +15,15 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.NewExpression;
+import org.eclipse.edt.mof.egl.Type;
 
 public class NewExpressionTemplate extends JavaTemplate {
 
 	public void genExpression(NewExpression expr, Context ctx, TabbedWriter out) {
+		ctx.invoke(genContainerBasedNewExpression, (Type) expr.getType(), ctx, out, expr);
+	}
+
+	public void genNewExpression(NewExpression expr, Context ctx, TabbedWriter out) {
 		out.print("new ");
 		ctx.invoke(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavaImplementation);
 		out.print("(");
