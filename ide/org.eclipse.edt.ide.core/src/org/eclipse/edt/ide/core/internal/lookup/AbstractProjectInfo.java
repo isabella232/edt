@@ -291,7 +291,16 @@ public abstract class AbstractProjectInfo {
 		    		}
 		    	}
 			}
-			throw new UnsupportedOperationException();
+			
+			 IFolder packageLocation = ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).getOutputLocation().getFolder(org.eclipse.edt.ide.core.internal.utils.Util.stringArrayToPath(IRFileNameUtility.toIRFileName(packageName)));
+			 if (packageLocation.exists()) {
+				 if (packageLocation.findMember(IRFileNameUtility.toIRFileName(partName + ".eglxml")) != null) {
+					 return ITypeBinding.EXTERNALTYPE_BINDING;    //just return any type here
+				 }
+			 }
+
+		    return ITypeBinding.NOT_FOUND_BINDING;
+		    
 		}else{
 			ResourceInfo info = getPackageInfo(packageName);
 	    	if(info != null){
