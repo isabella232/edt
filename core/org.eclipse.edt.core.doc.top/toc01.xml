@@ -7,7 +7,7 @@
 -->    
 
 <toc label="EGL Development Tools (EDT)">
-   <topic label="Getting started" href="topics/cedt00000.html">      	
+   <topic label="Getting started" href="topics/t_getting_started.html">      	
    </topic>
    
    <topic label="Developing EGL applications with EDT">	     
@@ -27,29 +27,25 @@
       <link toc="../org.eclipse.edt.core.doc.pg/deploy_toc.xml"/>
    </topic>
    
-   <topic label="Analyzing EGL source with EDT">	     
-      <link toc="../org.eclipse.edt.core.doc.cr/analyze_toc.xml"/>         
+   <topic label="Extending an EDT generator">	     
+      <link toc="../org.eclipse.edt.core.doc.top/topics/c_extending.html"/>         
    </topic>      
-   
-   <topic label="Defining an EGL compiler with EDT">
-      <link toc="../org.eclipse.edt.core.doc.cr/define_compiler_toc.xml"/>
-   </topic>
-
+      
    <topic label="EGL language reference">
       <link toc="../org.eclipse.edt.core.doc.lr/toc01.xml"/>
    </topic>
   
    <topic label="EGL APIs for analysis and extension">
-      <link toc="../org.eclipse.edt.core.doc.cr/api_toc.xml"/>
+      <link toc="../org.eclipse.edt.core.doc.cr/toc01.xml"/>
    </topic>
     
    <!-- topic label="Samples">
        <link toc="../org.eclipse.edt.core.doc.samplel01/samples_toc.xml"/>
-   </topic>
+   </topic-->
    
    <topic label="Tutorials">
-       <link toc="../org.eclipse.edt.core.tutorial01.doc/samples_toc.xml"/>
-   </topic -->
+       <link toc="../org.eclipse.edt.core.doc.top/topics/c_tutorials.html"/>
+   </topic>
    
    <topic label="Legal" href = "../org.eclipse.edt.core.doc.top/topics/notices.html"/>
      
