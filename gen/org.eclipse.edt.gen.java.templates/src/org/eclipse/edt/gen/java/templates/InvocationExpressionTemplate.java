@@ -28,19 +28,4 @@ public class InvocationExpressionTemplate extends JavaTemplate {
 		ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out);
 		out.print(")");
 	}
-
-	public void genInvocation(InvocationExpression expr, Context ctx, TabbedWriter out, String firstArg) {
-		// then process the function invocation
-		if (expr.getQualifier() != null) {
-			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
-			out.print(".");
-		}
-		ctx.invoke(genName, expr.getTarget(), ctx, out);
-		out.print("(");
-		out.print(firstArg);
-		if (expr.getArguments().size() > 0)
-			out.print(", ");
-		ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out);
-		out.print(")");
-	}
 }

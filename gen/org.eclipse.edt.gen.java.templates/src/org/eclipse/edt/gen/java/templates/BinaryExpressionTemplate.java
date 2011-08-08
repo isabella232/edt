@@ -22,6 +22,8 @@ public class BinaryExpressionTemplate extends JavaTemplate {
 	public void genExpression(BinaryExpression expr, Context ctx, TabbedWriter out) {
 		BinaryExpression binExpr = (BinaryExpression) expr.clone();
 		IRUtils.makeCompatible(binExpr, expr.getLHS().getType(), expr.getRHS().getType());
+		out.print("(");
 		ctx.invoke(genBinaryExpression, (Type) binExpr.getOperation().getContainer(), ctx, out, binExpr);
+		out.print(")");
 	}
 }
