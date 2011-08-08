@@ -39,7 +39,7 @@ public class DecimalTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
-		out.print(Constants.JSRT_EGL_NAMESPACE + ctx.getNativeMapping("egl.lang.AnyDecimal") + ".ZERO");
+		out.print(Constants.JSRT_EGL_NAMESPACE + ctx.getNativeMapping("eglx.lang.EDecimal") + ".ZERO");
 	}
 
 	// this method gets invoked when there is a specific fixed precision needed
