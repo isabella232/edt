@@ -82,7 +82,7 @@
             <visibility>
                <and>
                   <systemProperty
-                        name="org.eclipse.jdt.debug.ui.debuggerActive"
+                        name="org.eclipse.edt.debug.ui.eglDebuggerActive"
                         value="true">
                   </systemProperty>
                   <objectClass

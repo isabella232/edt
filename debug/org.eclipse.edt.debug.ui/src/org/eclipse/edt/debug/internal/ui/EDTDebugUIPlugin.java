@@ -51,6 +51,7 @@ public class EDTDebugUIPlugin extends AbstractUIPlugin
 	{
 		super.start( context );
 		plugin = this;
+		EGLDebugContextListener.getInstance(); // Register the context listener
 	}
 	
 	/*
