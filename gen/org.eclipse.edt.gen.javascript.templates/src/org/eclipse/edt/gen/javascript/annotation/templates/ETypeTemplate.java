@@ -16,15 +16,10 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Field;
 
 public class ETypeTemplate extends JavaScriptTemplate {
 
-	public void genAnnotation(EType type, Context ctx, TabbedWriter out, Annotation annot, EGLClass part) {
-	}
-
-	public void genAnnotation(EType type, Context ctx, TabbedWriter out, Annotation annot, Field field) {
+	public void genAnnotation(EType type, Context ctx, TabbedWriter out, Annotation annot, Object obj) {
 	}
 
 }

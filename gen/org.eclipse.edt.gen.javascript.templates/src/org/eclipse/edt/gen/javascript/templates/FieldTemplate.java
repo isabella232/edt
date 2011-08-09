@@ -25,19 +25,19 @@ public class FieldTemplate extends JavaScriptTemplate {
 
 	public void preGen(Field field, Context ctx) {
 		ctx.invoke(preGen, field.getType(), ctx);
-		if(field.getAnnotation("eglx.xml.binding.annotation.xmlAttribute") == null &&
-				field.getAnnotation("eglx.xml.binding.annotation.xmlElement") == null) {
+		if(field.getAnnotation(Constants.AnnotationXmlAttribute) == null &&
+				field.getAnnotation(Constants.AnnotationXmlElement) == null) {
 			//add an xmlElement
 			try {
-				Annotation annotation = CommonUtilities.getAnnotation(ctx, Constants.AnnotationXmlElement);
+				Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXmlElement);
 				annotation.setValue("name", field.getId());
 				field.addAnnotation(annotation);
 			} catch (Exception e) {}
 		}	
-		if(field.getAnnotation("eglx.json.JsonName") == null) {
+		if(field.getAnnotation(Constants.AnnotationJsonName) == null) {
 			//add an xmlElement
 			try {
-				Annotation annotation = CommonUtilities.getAnnotation(ctx, Constants.AnnotationJsonName);
+				Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationJsonName);
 				annotation.setValue(field.getId());
 				field.addAnnotation(annotation);
 			} catch (Exception e) {}
@@ -127,7 +127,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field);
 		}
 		
-		out.print("fields[" + arg.toString() + "] =");
+		out.print("fieldInfos[" + arg.toString() + "] =");
 		out.print("new egl.eglx.services.FieldInfo(");
 		Annotation property = CommonUtilities.getPropertyAnnotation(field);
 		if (property != null) {

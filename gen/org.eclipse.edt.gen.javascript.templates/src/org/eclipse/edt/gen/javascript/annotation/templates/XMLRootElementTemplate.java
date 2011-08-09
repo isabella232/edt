@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.annotation.templates;
 
-import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -21,20 +20,28 @@ import org.eclipse.edt.mof.egl.EGLClass;
 
 public class XMLRootElementTemplate extends JavaScriptTemplate {
 
-	public void genAnnotation(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, EGLClass part) {
-		String namespace = null;
-		if (annot.getValue("namespace") != null && ((String) annot.getValue("namespace")).length() > 0) {
-			namespace = (String) annot.getValue("namespace");
-		}
-		String name = part.getName();
+	public void genConstructorOptions(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, EGLClass part) {
 		if (annot.getValue("name") != null && ((String) annot.getValue("name")).length() > 0) {
-			name = (String) annot.getValue("name");
+			out.println(quoted((String) annot.getValue("name")));
 		}
-		Boolean isNillable = Boolean.FALSE;
+		else{
+			out.println(quoted(part.getName()));
+			
+		}
+		out.println( ", ");
+		if (annot.getValue("namespace") != null && ((String) annot.getValue("namespace")).length() > 0) {
+			out.println(quoted((String) annot.getValue("namespace")));
+		}
+		else{
+			out.println("null");
+		}
+		out.println( ", ");
 		if (annot.getValue("nillable") != null) {
-			isNillable = CommonUtilities.convertBoolean(annot.getValue("nillable"));
+			out.println(((Boolean)annot.getValue("nillable")).toString());
 		}
-		out.println("annotations[\"XMLRootElement\"] = new egl.eglx.xml.binding.annotation.XMLRootElement(" + (name == null ? "null" : quoted(name)) + ", "
-			+ (namespace == null ? "null" : quoted(namespace)) + ", " + isNillable.toString() + ");");
+		else{
+			out.println("false");
+		}
 	}
+
 }

@@ -20,24 +20,22 @@ import org.eclipse.edt.mof.egl.EGLClass;
 
 public class XMLStructureTemplate extends JavaScriptTemplate {
 
-	public void genAnnotation(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, EGLClass part) {
-		String value;
+	public void genConstructorOptions(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, EGLClass part) {
 		/*
 		 * choice = 1, sequence = 2, simpleContent = 3, unordered = 4
 		 */
 		switch ((Integer) annot.getValue("value")) {
 			case 1:
-				value = "choice";
+				out.println(quoted("choice"));
 				break;
 			case 2:
-				value = "sequence";
+				out.println(quoted("sequence"));
 				break;
 			case 3:
-				value = "simpleContent";
+				out.println(quoted("simpleContent"));
 				break;
 			default:
-				value = "unordered";
-			out.println("annotations[\"XMLStructure\"] = egl.eglx.xml.binding.annotation.XMLStructure(" + quoted(value) + ");");
+				out.println(quoted("unordered"));
 		}
 	}
 }

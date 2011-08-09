@@ -20,18 +20,26 @@ import org.eclipse.edt.mof.egl.Field;
 
 public class XMLAttributeTemplate extends JavaScriptTemplate {
 
-	public void genAnnotation(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) {
-		String xmlNamespace = AnnotationUtilities.getNamespace(annot);
-		String xmlName = AnnotationUtilities.getName(annot);
-		// add attribute or element
-		out.print("annotations[\"XMLStyle\"] = ");
-		if (xmlName == null || xmlName.length() == 0) {
-			xmlName = field.getId();
+	public void genAnnotationKey(AnnotationType type, Context ctx, TabbedWriter out) {
+		out.print("XMLStyle");
+	}
+	
+	public void genConstructorOptions(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) {
+		if (annot.getValue("name") instanceof String && ((String) annot.getValue("name")).length() > 0)
+		{
+			out.print(quoted((String) annot.getValue("name")));
 		}
-		out.print("new egl.eglx.xml.binding.annotation.XMLAttribute(");
-		out.print("\"" + xmlName + "\", ");
-		out.print(xmlNamespace == null ? "null" : "\"" + xmlNamespace + "\"");
-		out.println(");");
+		else{
+			out.print(quoted(field.getId()));
+		}
+		out.print(", ");
+		if (annot.getValue("namespace") instanceof String && ((String) annot.getValue("namespace")).length() > 0)
+		{
+			out.print(quoted((String) annot.getValue("namespace")));
+		}
+		else{
+			out.print("null");
+		}
 	}
 
 }

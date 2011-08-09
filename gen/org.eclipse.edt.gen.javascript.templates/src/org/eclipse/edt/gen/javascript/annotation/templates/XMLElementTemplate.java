@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.annotation.templates;
 
-import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -21,19 +20,25 @@ import org.eclipse.edt.mof.egl.Field;
 
 public class XMLElementTemplate extends JavaScriptTemplate {
 
-	public void genAnnotation(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) {
-		String xmlNamespace = AnnotationUtilities.getNamespace(annot);
-		String xmlName = AnnotationUtilities.getName(annot);
-		// add attribute or element
-		out.print("annotations[\"XMLStyle\"] = ");
-		if (xmlName == null || xmlName.length() == 0) {
-			xmlName = field.getId();
-		}
-		out.print("new egl.eglx.xml.binding.annotation.XMLElement(");
-		out.print("\"" + xmlName + "\", ");
-		out.print(xmlNamespace == null ? "null" : "\"" + xmlNamespace + "\"");
-		Boolean isNillable = CommonUtilities.convertBoolean(annot.getValue("nillable"));
-		out.print(", " + Boolean.toString(isNillable != null && isNillable.booleanValue()));
-		out.println(");");
+	public void genAnnotationKey(AnnotationType type, Context ctx, TabbedWriter out) {
+		out.print("XMLStyle");
 	}
+	public void genConstructorOptions(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) {
+		if (annot.getValue("name") instanceof String && ((String) annot.getValue("name")).length() > 0)
+		{
+			out.print(quoted((String) annot.getValue("name")));
+		}
+		else{
+			out.print(quoted(field.getId()));
+		}
+		out.print(", ");
+		if (annot.getValue("namespace") instanceof String && ((String) annot.getValue("namespace")).length() > 0)
+		{
+			out.print(quoted((String) annot.getValue("namespace")));
+		}
+		else{
+			out.print("null");
+		}
+	}
+
 }

@@ -22,15 +22,23 @@ public class XMLSchemaTypeTemplate extends JavaScriptTemplate {
 
 	public void genAnnotation(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) {
 		// add xmlschema type
-		String xmlSchemaType = null;
-		if (annot.getValue("name") != null && ((String) annot.getValue("name")).length() > 0)
-
+		if (annot.getValue("name") instanceof String && ((String) annot.getValue("name")).length() > 0)
 		{
-			xmlSchemaType = (String) annot.getValue("name");
-			if (xmlSchemaType != null) {
-				out.println("annotations[\"XMLSchemaType\"] = new egl.eglx.xml.binding.annotation.XMLSchemaType(\"" + xmlSchemaType + "\");");
-			}
+			out.print("annotations[\"");
+			ctx.invoke(genAnnotationKey, annot.getEClass(), ctx, out);
+			out.print("\"] = new ");
+			ctx.invoke(genRuntimeTypeName, annot.getEClass(), ctx, out, TypeNameKind.JavascriptImplementation, annot);
+			out.print("(");
+			ctx.invoke(genConstructorOptions, annot.getEClass(), ctx, out, annot, field);
+			out.println(");");
 		}
 	}
 
+	public void genConstructorOptions(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) {
+		out.print(quoted((String) annot.getValue("name")));
+		if(annot.getValue("namespace") instanceof String && !"http://www.w3.org/2001/XMLSchema".equals(annot.getValue("namespace"))){
+			out.print(", ");
+			out.print(quoted((String)annot.getValue("namespace")));
+		}
+	}
 }

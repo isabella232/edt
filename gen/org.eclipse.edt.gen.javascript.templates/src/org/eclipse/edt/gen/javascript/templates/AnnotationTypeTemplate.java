@@ -13,7 +13,10 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.codegen.api.Template;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Type;
 
 public class AnnotationTypeTemplate extends JavaScriptTemplate {
 
@@ -24,4 +27,24 @@ public class AnnotationTypeTemplate extends JavaScriptTemplate {
 	public void genClassBody(AnnotationType part, Context ctx, TabbedWriter out) {}
 
 	public void genClassHeader(AnnotationType part, Context ctx, TabbedWriter out) {}
+
+	public void genRuntimeTypeName(AnnotationType type, Context ctx, TabbedWriter out, TypeNameKind typeKind, Annotation annot) {
+		out.print(ctx.getNativeImplementationMapping(type));
+	}
+	public void genAnnotationKey(AnnotationType type, Context ctx, TabbedWriter out) {
+		out.print(ctx.getNativeTypeName(type));
+	}
+	
+	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Object obj) {
+		Template template = ctx.getTemplateForEClassifier(aType);
+		if(template != null){
+			out.print("annotations[\"");//RATLC01814387
+			ctx.invoke(genAnnotationKey, (Type)aType, ctx, out);
+			out.print("\"] = new ");
+			ctx.invoke(genRuntimeTypeName, (Type)aType, ctx, out, TypeNameKind.JavascriptImplementation, annot);
+			out.print("(");
+			ctx.invoke(genConstructorOptions, (Type)aType, ctx, out, annot, obj);
+			out.println(");");
+		}
+	}
 }

@@ -20,18 +20,13 @@ import org.eclipse.edt.mof.egl.Field;
 
 public class JsonNameTemplate extends JavaScriptTemplate {
 
-	public void genAnnotation(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) {
-		// create the AnnotationMap
-		// add attribute or element
-		String jsonName = null;
-		if (annot != null ){
-			jsonName = (String)annot.getValue();
+	public void genConstructorOptions(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) {
+		if (annot.getValue() instanceof String && ((String)annot.getValue()).length() > 0){
+			out.print(quoted((String)annot.getValue()));
 		}
-		
-		out.print("annotations[\"JsonName\"] = ");
-		if (jsonName == null || jsonName.length() == 0) {
-			jsonName = field.getId();
+		else{
+			out.print(quoted(field.getId()));
 		}
-		out.println("new egl.eglx.json.JsonName(\"" + jsonName + "\");");
 	}
+
 }
