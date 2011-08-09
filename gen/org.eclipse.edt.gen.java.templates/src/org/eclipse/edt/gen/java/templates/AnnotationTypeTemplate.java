@@ -45,7 +45,8 @@ public class AnnotationTypeTemplate extends JavaTemplate {
 	}
 	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
 		Template template = ctx.getTemplateForEClassifier(aType);
-		if(template != null){
+		//have to use instanceof because a StereotypeType is an annotation, but it's not generatable as an annotation
+		if(template != null && !(aType instanceof org.eclipse.edt.mof.egl.StereotypeType)){
 			out.print("@");
 			ctx.invoke(genRuntimeTypeName, (Type)aType, ctx, out, TypeNameKind.JavaObject, annot);
 			out.print("(");
