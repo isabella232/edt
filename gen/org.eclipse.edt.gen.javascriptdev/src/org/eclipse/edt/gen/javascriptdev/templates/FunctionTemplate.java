@@ -30,7 +30,7 @@ public class FunctionTemplate extends org.eclipse.edt.gen.javascript.templates.F
 	public void genFunctionEntry(Function function, Context ctx, TabbedWriter out) {
 		out.print("try { egl.enter(\"");
 		genName(function, ctx, out);
-		out.println("\",this,arguments,eze$$updater);");
+		out.println("\",this,arguments);");
 	}
 	
 	
