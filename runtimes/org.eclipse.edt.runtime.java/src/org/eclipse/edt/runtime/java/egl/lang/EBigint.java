@@ -89,8 +89,8 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return result;
 	}
 
-	public static Long asBigint(String value, Integer... length) throws JavartException {
-		return asBigint(EDecimal.asDecimal(EString.asString(value, length)));
+	public static Long asBigint(String value) throws JavartException {
+		return asBigint(EDecimal.asDecimal(value));
 	}
 
 	/**

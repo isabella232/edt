@@ -77,10 +77,10 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 		return value.floatValue();
 	}
 
-	public static Float asSmallfloat(String value, Integer... length) throws JavartException {
+	public static Float asSmallfloat(String value) throws JavartException {
 		if (value == null)
 			return null;
-		return asSmallfloat(EDecimal.asDecimal(EString.asString(value, length)));
+		return asSmallfloat(EDecimal.asDecimal(value));
 	}
 
 	public static Float plus(Float op1, Float op2) throws JavartException {

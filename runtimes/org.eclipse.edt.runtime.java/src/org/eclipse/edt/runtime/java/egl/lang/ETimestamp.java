@@ -158,8 +158,11 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return asTimestamp(timestamp, startCode, endCode);
 	}
 
-	public static Calendar asTimestamp(String timestamp, Integer... length) throws JavartException {
-		return asTimestamp(EString.asString(timestamp, length), DefaultPattern);
+	public static Calendar asTimestamp(String timestamp, Integer... args) throws JavartException {
+		if (args != null && args.length == 2)
+			return convert(timestamp, args[0], args[1]);
+		else
+			return asTimestamp(timestamp, DefaultPattern);
 	}
 
 	public static Calendar asTimestamp(String timestamp, String timespanMask) throws JavartException {
@@ -172,10 +175,6 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			endCode = mask.getEndCode();
 		}
 		return convert(timestamp, startCode, endCode);
-	}
-
-	public static Calendar asTimestamp(String timestamp, Integer length, String timespanMask) throws JavartException {
-		return asTimestamp(EString.asString(timestamp, length), timespanMask);
 	}
 
 	public static Calendar asTimestamp(GregorianCalendar date, Integer... args) {
@@ -335,10 +334,6 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			result = convert(timestamp, startCode, endCode);
 		}
 		return result;
-	}
-
-	public static Calendar asTimestamp(String timestamp, Integer length, String format, int startCode, int endCode) throws JavartException {
-		return asTimestamp(EString.asString(timestamp, length), format, startCode, endCode);
 	}
 
 	public static Calendar convert(String timestamp, int startCode, int endCode) {

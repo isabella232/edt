@@ -130,10 +130,10 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return result;
 	}
 
-	public static Short asSmallint(String value, Integer... length) throws JavartException {
+	public static Short asSmallint(String value) throws JavartException {
 		if (value == null)
 			return null;
-		return asSmallint(EDecimal.asDecimal(EString.asString(value, length)));
+		return asSmallint(EDecimal.asDecimal(value));
 	}
 
 	/**

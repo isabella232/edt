@@ -77,10 +77,10 @@ public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 		return value.doubleValue();
 	}
 
-	public static Double asFloat(String value, Integer... length) throws JavartException {
+	public static Double asFloat(String value) throws JavartException {
 		if (value == null)
 			return null;
-		return asFloat(EDecimal.asDecimal(EString.asString(value, length)));
+		return asFloat(EDecimal.asDecimal(value));
 	}
 
 	public static Double plus(Double op1, Double op2) throws JavartException {

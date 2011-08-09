@@ -113,10 +113,10 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 
-	public static Integer asInt(String value, Integer... length) throws JavartException {
+	public static Integer asInt(String value) throws JavartException {
 		if (value == null)
 			return null;
-		return asInt(EDecimal.asDecimal(EString.asString(value, length)));
+		return asInt(EDecimal.asDecimal(value));
 	}
 
 	/**
