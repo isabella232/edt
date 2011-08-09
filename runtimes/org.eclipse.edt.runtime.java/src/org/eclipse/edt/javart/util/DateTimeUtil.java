@@ -51,6 +51,7 @@ public class DateTimeUtil
 	{
 		// Initialize baseCalendar.
 		baseCalendar = Calendar.getInstance();
+		baseCalendar.clear();
 		baseCalendar.setLenient( false );
 	}
 

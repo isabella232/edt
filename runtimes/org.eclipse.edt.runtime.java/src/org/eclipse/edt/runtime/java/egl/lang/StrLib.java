@@ -33,11 +33,14 @@ public class StrLib extends ExecutableBase {
 
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
+	private static RunUnit staticRu;
+	
 	/**
 	 * Constructor
 	 */
 	public StrLib(RunUnit ru) throws JavartException {
 		super(ru);
+		this.staticRu = ru;
 	}
 
 	/**
@@ -48,54 +51,54 @@ public class StrLib extends ExecutableBase {
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
-	public static String format(RunUnit ru, BigDecimal number, String format) {
-		return NumberFormatter.fmtNum(number, format, ru.getLocalizedText());
+	public static String format(BigDecimal number, String format) {
+		return NumberFormatter.fmtNum(number, format, staticRu.getLocalizedText());
 	}
 
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
-	public static String format(RunUnit ru, Short number, String format) {
-		return NumberFormatter.fmtNum(new BigDecimal(number), format, ru.getLocalizedText());
+	public static String format(Short number, String format) {
+		return NumberFormatter.fmtNum(new BigDecimal(number), format, staticRu.getLocalizedText());
 	}
 
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
-	public static String format(RunUnit ru, Integer number, String format) {
-		return NumberFormatter.fmtNum(new BigDecimal(number), format, ru.getLocalizedText());
+	public static String format(Integer number, String format) {
+		return NumberFormatter.fmtNum(new BigDecimal(number), format, staticRu.getLocalizedText());
 	}
 
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
-	public static String format(RunUnit ru, Long number, String format) {
-		return NumberFormatter.fmtNum(new BigDecimal(number), format, ru.getLocalizedText());
+	public static String format(Long number, String format) {
+		return NumberFormatter.fmtNum(new BigDecimal(number), format, staticRu.getLocalizedText());
 	}
 
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
-	public static String format(RunUnit ru, Float number, String format) {
-		return NumberFormatter.fmtNum(new BigDecimal(number), format, ru.getLocalizedText());
+	public static String format(Float number, String format) {
+		return NumberFormatter.fmtNum(new BigDecimal(number), format, staticRu.getLocalizedText());
 	}
 
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
-	public static String format(RunUnit ru, Double number, String format) {
-		return NumberFormatter.fmtNum(new BigDecimal(number), format, ru.getLocalizedText());
+	public static String format(Double number, String format) {
+		return NumberFormatter.fmtNum(new BigDecimal(number), format, staticRu.getLocalizedText());
 	}
 
 	/**
 	 * formats a parameter into a timestamp value and returns a value of type STRING. The DB2 format is the default format.
 	 */
-	public static String format(RunUnit ru, Calendar timestampValue, String timestampFormat) {
+	public static String format(Calendar timestampValue, String timestampFormat) {
 		if (timestampValue == null)
 			return null;
 
 		String format = timestampFormat;
-		if (format.length() == 0)
+		if (format == null || format.length() == 0)
 			format = defaultTimeStampFormat;
 		// if ( format.length() == 0 )
 		// format = timestampValue.ezeUnbox().get???();

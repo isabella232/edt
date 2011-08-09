@@ -23,6 +23,8 @@ import org.eclipse.edt.javart.resources.ExecutableBase;
 public class MathLib extends ExecutableBase {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
+	private static RunUnit staticRu;
+	
 	/**
 	 * A constant used by log10. The value is StrictMath.log(10).
 	 */
@@ -98,6 +100,7 @@ public class MathLib extends ExecutableBase {
 	 */
 	public MathLib(RunUnit ru) throws JavartException {
 		super(ru);
+		this.staticRu = ru;
 	}
 
 	/**

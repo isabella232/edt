@@ -148,8 +148,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		if (timespanMask == null || timespanMask.length() == 0)
 			timespanMask = DefaultPattern;
 		// Default values in case the pattern doesn't specify things.
-		int startCode = ETimestamp.YEAR_CODE;
-		int endCode = ETimestamp.SECOND_CODE;
+		int startCode = YEAR_CODE;
+		int endCode = SECOND_CODE;
 		TimestampIntervalMask mask = new TimestampIntervalMask(timespanMask);
 		if (mask.getStartCode() != -1 && mask.getStartCode() <= mask.getEndCode()) {
 			startCode = mask.getStartCode();
@@ -167,8 +167,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 
 	public static Calendar asTimestamp(String timestamp, String timespanMask) throws JavartException {
 		// Default values in case the pattern doesn't specify things.
-		int startCode = ETimestamp.YEAR_CODE;
-		int endCode = ETimestamp.SECOND_CODE;
+		int startCode = YEAR_CODE;
+		int endCode = SECOND_CODE;
 		TimestampIntervalMask mask = new TimestampIntervalMask(timespanMask);
 		if (mask.getStartCode() != -1 && mask.getStartCode() <= mask.getEndCode()) {
 			startCode = mask.getStartCode();
@@ -183,7 +183,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 
 	public static Calendar asTimestamp(Calendar date, Integer... args) {
 		if (args == null)
-			return asTimestamp((Calendar) date, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE);
+			return asTimestamp((Calendar) date, YEAR_CODE, SECOND_CODE);
 		else
 			return asTimestamp((Calendar) date, args[0], args[1]);
 	}
@@ -199,113 +199,69 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		// Get values for the full set of fields. Fields that we need will be
 		// set from the calendar. The others will be set to reasonable defaults.
 		Calendar forDefaults = null;
-		int year;
-		if (startCode == YEAR_CODE)
-			// Get the year.
-			year = date.get(Calendar.YEAR);
-		else {
-			// Use the current year.
-			forDefaults = DateTimeUtil.getNewCalendar();
-			year = forDefaults.get(Calendar.YEAR);
+		if (startCode <= YEAR_CODE && endCode >= YEAR_CODE) {
+			if (date.isSet(Calendar.YEAR))
+				result.set(Calendar.YEAR, date.get(Calendar.YEAR));
+			else {
+				if (forDefaults == null)
+					forDefaults = DateTimeUtil.getNewCalendar();
+				result.set(Calendar.YEAR, forDefaults.get(Calendar.YEAR));
+			}
 		}
-		int month;
-		if (startCode <= MONTH_CODE && endCode >= MONTH_CODE)
-			// Get the month.
-			month = date.get(Calendar.MONTH);
-		else if (startCode < MONTH_CODE)
-			// We don't care what month it is.
-			month = 0;
-		else {
-			// Use the current month.
-			if (forDefaults == null)
-				forDefaults = DateTimeUtil.getNewCalendar();
-			month = forDefaults.get(Calendar.MONTH);
+		if (startCode <= MONTH_CODE && endCode >= MONTH_CODE) {
+			if (date.isSet(Calendar.MONTH))
+				result.set(Calendar.MONTH, date.get(Calendar.MONTH));
+			else {
+				if (forDefaults == null)
+					forDefaults = DateTimeUtil.getNewCalendar();
+				result.set(Calendar.MONTH, forDefaults.get(Calendar.MONTH));
+			}
 		}
-		int day;
-		if (startCode <= DAY_CODE && endCode >= DAY_CODE)
-			// Get the day.
-			day = date.get(Calendar.DATE);
-		else if (startCode < DAY_CODE)
-			// We don't care what day it is.
-			day = 1;
-		else {
-			// Use the current day.
-			if (forDefaults == null)
-				forDefaults = DateTimeUtil.getNewCalendar();
-			day = forDefaults.get(Calendar.DATE);
+		if (startCode <= DAY_CODE && endCode >= DAY_CODE) {
+			if (date.isSet(Calendar.DATE))
+				result.set(Calendar.DATE, date.get(Calendar.DATE));
+			else {
+				if (forDefaults == null)
+					forDefaults = DateTimeUtil.getNewCalendar();
+				result.set(Calendar.DATE, forDefaults.get(Calendar.DATE));
+			}
 		}
-		int hour;
-		if (startCode <= HOUR_CODE && endCode >= HOUR_CODE)
-			// Get the hour.
-			hour = date.get(Calendar.HOUR_OF_DAY);
-		else if (startCode < HOUR_CODE)
-			// We don't care what hour it is.
-			hour = 0;
-		else {
-			// Use the current hour.
-			if (forDefaults == null)
-				forDefaults = DateTimeUtil.getNewCalendar();
-			hour = forDefaults.get(Calendar.HOUR_OF_DAY);
+		if (startCode <= HOUR_CODE && endCode >= HOUR_CODE) {
+			if (date.isSet(Calendar.HOUR_OF_DAY))
+				result.set(Calendar.HOUR_OF_DAY, date.get(Calendar.HOUR_OF_DAY));
+			else {
+				if (forDefaults == null)
+					forDefaults = DateTimeUtil.getNewCalendar();
+				result.set(Calendar.HOUR_OF_DAY, forDefaults.get(Calendar.HOUR_OF_DAY));
+			}
 		}
-		int minute;
-		if (startCode <= MINUTE_CODE && endCode >= MINUTE_CODE)
-			// Get the minute.
-			minute = date.get(Calendar.MINUTE);
-		else if (startCode < MINUTE_CODE)
-			// We don't care what minute it is.
-			minute = 0;
-		else {
-			// Use the current minute.
-			if (forDefaults == null)
-				forDefaults = DateTimeUtil.getNewCalendar();
-			minute = forDefaults.get(Calendar.MINUTE);
+		if (startCode <= MINUTE_CODE && endCode >= MINUTE_CODE) {
+			if (date.isSet(Calendar.MINUTE))
+				result.set(Calendar.MINUTE, date.get(Calendar.MINUTE));
+			else {
+				if (forDefaults == null)
+					forDefaults = DateTimeUtil.getNewCalendar();
+				result.set(Calendar.MINUTE, forDefaults.get(Calendar.MINUTE));
+			}
 		}
-		int second;
-		if (startCode <= SECOND_CODE && endCode >= SECOND_CODE)
-			// Get the second.
-			second = date.get(Calendar.SECOND);
-		else if (startCode < SECOND_CODE)
-			// We don't care what second it is.
-			second = 0;
-		else {
-			// Use the current second.
-			if (forDefaults == null)
-				forDefaults = DateTimeUtil.getNewCalendar();
-			second = forDefaults.get(Calendar.SECOND);
+		if (startCode <= SECOND_CODE && endCode >= SECOND_CODE) {
+			if (date.isSet(Calendar.SECOND))
+				result.set(Calendar.SECOND, date.get(Calendar.SECOND));
+			else {
+				if (forDefaults == null)
+					forDefaults = DateTimeUtil.getNewCalendar();
+				result.set(Calendar.SECOND, forDefaults.get(Calendar.SECOND));
+			}
 		}
-		int milliseconds;
-		if (startCode <= FRACTION1_CODE && endCode >= FRACTION1_CODE)
-			// Get the second.
-			milliseconds = date.get(Calendar.MILLISECOND);
-		else if (startCode < FRACTION1_CODE)
-			// We don't care what second it is.
-			milliseconds = 0;
-		else {
-			// Use the current second.
-			if (forDefaults == null)
-				forDefaults = DateTimeUtil.getNewCalendar();
-			milliseconds = forDefaults.get(Calendar.MILLISECOND);
+		if (startCode <= FRACTION1_CODE && endCode >= FRACTION1_CODE) {
+			if (date.isSet(Calendar.MILLISECOND))
+				result.set(Calendar.MILLISECOND, date.get(Calendar.MILLISECOND));
+			else {
+				if (forDefaults == null)
+					forDefaults = DateTimeUtil.getNewCalendar();
+				result.set(Calendar.MILLISECOND, forDefaults.get(Calendar.MILLISECOND));
+			}
 		}
-		// if ( endCode >= FRACTION1_CODE )
-		// {
-		// // Make sure we don't keep too many digits of the micros value.
-		// int fractionDigits = endCode - FRACTION1_CODE + 1;
-		// for ( int i = fractionDigits; i < 6; i++ )
-		// {
-		// microseconds /= 10;
-		// }
-		// for ( int i = fractionDigits; i < 6; i++ )
-		// {
-		// microseconds *= 10;
-		// }
-		// }
-		// else
-		// {
-		// microseconds = 0;
-		// }
-		// Update the values.
-		result.set(year, month, day, hour, minute, second);
-		result.set(Calendar.MILLISECOND, milliseconds);
 		return result;
 	}
 
@@ -532,8 +488,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			|| (minutes == -1 && startCode <= MINUTE_CODE && endCode >= MINUTE_CODE) || (seconds == -1 && startCode <= SECOND_CODE && endCode >= SECOND_CODE)
 			|| (microseconds == -1 && endCode >= FRACTION1_CODE))
 			throw new TypeCastException();
-		// The last thing to do is put the values into a calendar and
-		// TimestampData.
+		// The last thing to do is put the values into a calendar and TimestampData.
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		if (years != -1)
 			cal.set(Calendar.YEAR, years);
@@ -554,10 +509,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			cal.set(Calendar.MINUTE, minutes);
 		if (seconds != -1)
 			cal.set(Calendar.SECOND, seconds);
-		if (microseconds == -1)
-			microseconds = 0;
-		// Clear the milliseconds.
-		cal.set(Calendar.MILLISECOND, 0);
+		if (microseconds != -1)
+			cal.set(Calendar.MILLISECOND, 0);
 		// Verify that the values are valid.
 		try {
 			cal.getTimeInMillis();
@@ -604,10 +557,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		long now = java.lang.System.currentTimeMillis();
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		cal.setTimeInMillis(now);
-		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE),
+		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),
 			cal.get(Calendar.SECOND));
-		cal.set(Calendar.MILLISECOND, cal.get(Calendar.MILLISECOND));
-
 		return cal;
 	}
 
@@ -615,10 +566,22 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		long now = java.lang.System.currentTimeMillis();
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		cal.setTimeInMillis(now);
-		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE),
+		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),
 			cal.get(Calendar.SECOND));
-		cal.set(Calendar.MILLISECOND, cal.get(Calendar.MILLISECOND));
-
+		if (startCode <= YEAR_CODE && endCode >= YEAR_CODE)
+			cal.set(Calendar.YEAR, cal.get(Calendar.YEAR));
+		if (startCode <= MONTH_CODE && endCode >= MONTH_CODE)
+			cal.set(Calendar.MONTH, cal.get(Calendar.MONTH));
+		if (startCode <= DAY_CODE && endCode >= DAY_CODE)
+			cal.set(Calendar.DATE, cal.get(Calendar.DATE));
+		if (startCode <= HOUR_CODE && endCode >= HOUR_CODE)
+			cal.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY));
+		if (startCode <= MINUTE_CODE && endCode >= MINUTE_CODE)
+			cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE));
+		if (startCode <= SECOND_CODE && endCode >= SECOND_CODE)
+			cal.set(Calendar.SECOND, cal.get(Calendar.SECOND));
+		if (startCode <= FRACTION1_CODE && endCode >= FRACTION1_CODE)
+			cal.set(Calendar.MILLISECOND, cal.get(Calendar.MILLISECOND));
 		return asTimestamp(cal, startCode, endCode);
 	}
 
@@ -626,13 +589,17 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the day of a timestamp
 	 */
 	public static Integer dayOf(Calendar aTimestamp) throws JavartException {
-		return aTimestamp.get(Calendar.DAY_OF_MONTH);
+		if (!aTimestamp.isSet(Calendar.DATE))
+			throw new TypeCastException();
+		return aTimestamp.get(Calendar.DATE);
 	}
 
 	/**
 	 * Returns the month of a timestamp
 	 */
 	public static Integer monthOf(Calendar aTimestamp) throws JavartException {
+		if (!aTimestamp.isSet(Calendar.MONTH))
+			throw new TypeCastException();
 		return aTimestamp.get(Calendar.MONTH) + 1;
 	}
 
@@ -640,6 +607,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the year of a timestamp
 	 */
 	public static Integer yearOf(Calendar aTimestamp) throws JavartException {
+		if (!aTimestamp.isSet(Calendar.YEAR))
+			throw new TypeCastException();
 		return aTimestamp.get(Calendar.YEAR);
 	}
 
@@ -647,6 +616,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the weekday of a timestamp
 	 */
 	public static Integer weekdayOf(Calendar aTimestamp) throws JavartException {
+		if (!aTimestamp.isSet(DAY_CODE))
+			throw new TypeCastException();
 		return aTimestamp.get(Calendar.DAY_OF_WEEK) - 1;
 	}
 
@@ -654,14 +625,18 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the date of a timestamp
 	 */
 	public static Calendar dateOf(Calendar aTimestamp) throws JavartException {
-		return aTimestamp;
+		if (!aTimestamp.isSet(Calendar.YEAR) || !aTimestamp.isSet(Calendar.MONTH) || !aTimestamp.isSet(Calendar.DATE))
+			throw new TypeCastException();
+		return new ETimestamp((Calendar) aTimestamp.clone(), YEAR_CODE, DAY_CODE).ezeUnbox();
 	}
 
 	/**
 	 * Returns the time of a timestamp
 	 */
 	public static Calendar timeOf(Calendar aTimestamp) throws JavartException {
-		return aTimestamp;
+		if (!aTimestamp.isSet(Calendar.HOUR_OF_DAY) || !aTimestamp.isSet(Calendar.MINUTE) || !aTimestamp.isSet(Calendar.SECOND))
+			throw new TypeCastException();
+		return new ETimestamp((Calendar) aTimestamp.clone(), HOUR_CODE, SECOND_CODE).ezeUnbox();
 	}
 
 	/**
@@ -669,8 +644,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 */
 	public static Calendar extend(Calendar aTimestamp, String timeSpanPattern) throws JavartException {
 		// Default values in case the pattern doesn't specify things.
-		int startCode = ETimestamp.YEAR_CODE;
-		int endCode = ETimestamp.SECOND_CODE;
+		int startCode = YEAR_CODE;
+		int endCode = SECOND_CODE;
 		TimestampIntervalMask mask = new TimestampIntervalMask(timeSpanPattern);
 		if (mask.getStartCode() != -1 && mask.getStartCode() <= mask.getEndCode()) {
 			startCode = mask.getStartCode();

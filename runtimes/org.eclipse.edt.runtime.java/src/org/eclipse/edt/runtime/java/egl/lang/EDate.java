@@ -59,8 +59,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		long now = java.lang.System.currentTimeMillis();
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		cal.setTimeInMillis(now);
-		cal.set(Calendar.MILLISECOND, 0);
-		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
 		return cal;
 	}
 
@@ -87,6 +86,8 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	 * Returns the adds days to a date
 	 */
 	public static Calendar addDays(Calendar aDate, Integer amount) throws JavartException {
+		if (!aDate.isSet(Calendar.DATE))
+			throw new TypeCastException();
 		Calendar newDate = (Calendar) aDate.clone();
 		newDate.roll(Calendar.DAY_OF_YEAR, amount);
 		return newDate;

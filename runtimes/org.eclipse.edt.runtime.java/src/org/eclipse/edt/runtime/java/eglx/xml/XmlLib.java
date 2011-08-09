@@ -20,43 +20,45 @@ import egl.lang.AnyValue;
 public class XmlLib extends ExecutableBase {
 
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-	
-	public XmlLib( RunUnit ru ) {
-		super( ru );
+
+	private static RunUnit staticRu;
+
+	public XmlLib(RunUnit ru) {
+		super(ru);
+		this.staticRu = ru;
 	}
-	
-	public static String convertToXML(Object storage, boolean buildDocument) throws JavartException{
-		if(storage instanceof AnyBoxedObject){
-			storage = ((AnyBoxedObject)storage).ezeUnbox();
+
+	public static String convertToXML(Object storage, boolean buildDocument) throws JavartException {
+		if (storage instanceof AnyBoxedObject) {
+			storage = ((AnyBoxedObject) storage).ezeUnbox();
 		}
-		try{
+		try {
 			Writer writer = new StringWriter();
 			JAXBContext.newInstance(storage.getClass()).createMarshaller().marshal(storage, writer);
 			return writer.toString();
 		}
-		catch(Exception e){
+		catch (Exception e) {
 			throw new JavartException(e);
 		}
 	}
 
-	public static void convertFromXML(String xml, final Object storage) throws JavartException{
-		try{
+	public static void convertFromXML(String xml, final Object storage) throws JavartException {
+		try {
 			Object egl;
-			if(storage instanceof AnyBoxedObject){
-				egl = ((AnyBoxedObject)storage).ezeUnbox();
-			}
-			else{
+			if (storage instanceof AnyBoxedObject) {
+				egl = ((AnyBoxedObject) storage).ezeUnbox();
+			} else {
 				egl = storage;
 			}
-			
+
 			Reader reader = new StringReader(xml);
 			Object obj = JAXBContext.newInstance(egl.getClass()).createUnmarshaller().unmarshal(reader);
 			Method method;
-			if((method = egl.getClass().getMethod("ezeCopy", AnyValue.class)) != null){
+			if ((method = egl.getClass().getMethod("ezeCopy", AnyValue.class)) != null) {
 				method.invoke(egl, obj);
 			}
 		}
-		catch(Exception e){
+		catch (Exception e) {
 			throw new JavartException(e);
 		}
 	}

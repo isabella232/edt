@@ -36,6 +36,8 @@ public class SysLib extends ExecutableBase {
 
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
+	private static RunUnit staticRu;
+
 	/**
 	 * The stream for startLog and errorlog system functions
 	 */
@@ -53,13 +55,14 @@ public class SysLib extends ExecutableBase {
 	 */
 	public SysLib(RunUnit ru) throws JavartException {
 		super(ru);
+		this.staticRu = ru;
 	}
 
 	/**
 	 * Returns the value of the named property, or a null/empty string if there's no such property.
 	 */
-	public static String getProperty(RunUnit ru, String propertyName) {
-		String value = ru.getProperties().get(propertyName.trim());
+	public static String getProperty(String propertyName) {
+		String value = staticRu.getProperties().get(propertyName.trim());
 		if (value == null)
 			value = java.lang.System.getProperty(propertyName.trim());
 		return value;
@@ -101,11 +104,11 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * The errorLog() function adds a message to the current log file.
 	 */
-	public static void errorLog(RunUnit ru, String errorMsg) {
+	public static void errorLog(String errorMsg) {
 		if (outputStream == null)
 			return;
 		// DateFormatter is a com.ibm.icu class...fix this
-		outputStream.println(ru.getLocalizedText().getDateFormatter().format(new Date()));
+		outputStream.println(staticRu.getLocalizedText().getDateFormatter().format(new Date()));
 		outputStream.println(errorMsg);
 	}
 
@@ -174,14 +177,14 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * Returns a formatted message from the RunUnit's message bundle, or null if no message with the key is found.
 	 */
-	public static String getMessage(RunUnit ru, String key) {
-		return getMessage(ru, key, null);
+	public static String getMessage(String key) {
+		return getMessage(key, null);
 	}
 
 	/**
 	 * Returns a formatted message from the RunUnit's message bundle, or null if no message with the key is found.
 	 */
-	public static String getMessage(RunUnit ru, String key, egl.lang.EglList<String> inserts) {
+	public static String getMessage(String key, egl.lang.EglList<String> inserts) {
 		// Get the inserts as Strings.
 		String[] insertStrings = null;
 		if (inserts != null) {
@@ -192,16 +195,16 @@ public class SysLib extends ExecutableBase {
 		}
 		// Look up the message.
 		key = key.trim();
-		String message = ru.getLocalizedText().getMessage(key, insertStrings);
+		String message = staticRu.getLocalizedText().getMessage(key, insertStrings);
 		return message;
 	}
 
 	/**
 	 * Calls the Power Server to commit changes.
 	 */
-	public static void commit(RunUnit ru) throws JavartException {
+	public static void commit() throws JavartException {
 		RuntimeException errorException = null;
-		Trace trace = ru.getTrace();
+		Trace trace = staticRu.getTrace();
 		boolean tracing = trace.traceIsOn(Trace.GENERAL_TRACE);
 		try {
 			if (tracing) {
@@ -210,7 +213,7 @@ public class SysLib extends ExecutableBase {
 			}
 
 			/* Commit recoverable resource */
-			ru.commit();
+			staticRu.commit();
 		}
 		catch (JavartException jx) {
 			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.commit", jx.getMessage() });
@@ -233,9 +236,9 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * Calls the Power Server and resource manager to rollback changes.
 	 */
-	public static void rollback(RunUnit ru) throws JavartException {
+	public static void rollback() throws JavartException {
 		RuntimeException errorException = null;
-		Trace trace = ru.getTrace();
+		Trace trace = staticRu.getTrace();
 		boolean tracing = trace.traceIsOn(Trace.GENERAL_TRACE);
 		try {
 			if (tracing) {
@@ -243,7 +246,7 @@ public class SysLib extends ExecutableBase {
 				trace.put("    resetting Recoverable Resources ...");
 			}
 			/* Roll back recoverable resources */
-			ru.rollback();
+			staticRu.rollback();
 		}
 		catch (JavartException jx) {
 			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.rollBack", jx.getMessage() });
@@ -266,28 +269,28 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * Change the locale of the running program dynamically.
 	 */
-	public static void setLocale(RunUnit ru, String languageCode) {
+	public static void setLocale(String languageCode) {
 		Locale locale;
 		locale = new Locale(languageCode);
-		ru.switchLocale(locale);
+		staticRu.switchLocale(locale);
 	}
 
 	/**
 	 * Change the locale of the running program dynamically.
 	 */
-	public static void setLocale(RunUnit ru, String languageCode, String countryCode) {
+	public static void setLocale(String languageCode, String countryCode) {
 		Locale locale;
 		locale = new Locale(languageCode, countryCode);
-		ru.switchLocale(locale);
+		staticRu.switchLocale(locale);
 	}
 
 	/**
 	 * Change the locale of the running program dynamically.
 	 */
-	public static void setLocale(RunUnit ru, String languageCode, String countryCode, String variant) {
+	public static void setLocale(String languageCode, String countryCode, String variant) {
 		Locale locale;
 		locale = new Locale(languageCode, countryCode, variant);
-		ru.switchLocale(locale);
+		staticRu.switchLocale(locale);
 	}
 
 	/**

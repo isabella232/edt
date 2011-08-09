@@ -113,7 +113,7 @@ public class EString extends AnyBoxedObject<String> {
 		return asString((Calendar) value, length);
 	}
 
-	public static String asString(Calendar value, Integer... length) {
+	public static String asString(Calendar cal, Integer... length) {
 		// Get the format pattern to use.
 		// String format = program._runUnit().getDefaultTimestampFormat();
 		// if ( format.length() == 0 )
@@ -121,28 +121,47 @@ public class EString extends AnyBoxedObject<String> {
 		// // Use the one made specially for this item.
 		// format = DefaultFormatPattern;
 		// }
-		String format = ETimestamp.DefaultFormatPattern;
+		String format = "";
+		if (cal.isSet(Calendar.YEAR))
+			format += "yyyy";
+		if (cal.isSet(Calendar.MONTH))
+			format += "MM";
+		if (cal.isSet(Calendar.DATE))
+			format += "dd";
+		if (cal.isSet(Calendar.HOUR_OF_DAY))
+			format += "HH";
+		if (cal.isSet(Calendar.MINUTE))
+			format += "mm";
+		if (cal.isSet(Calendar.SECOND))
+			format += "ss";
+		if (cal.isSet(Calendar.MILLISECOND))
+			format += "SSSSSS";
 		// Get a formatter for the value, set it up, and run it.
 		boolean reset = false;
 		synchronized (DateTimeUtil.LOCK) {
 			JavartDateFormat formatter = DateTimeUtil.getDateFormat(format);
-			int micros = value.get(Calendar.MILLISECOND) * 1000;
-			if (micros < 0) {
-				reset = true;
-				value.add(Calendar.SECOND, -1);
-				micros += DateTimeUtil.MICROSECONDS_PER_SECOND;
+			if (cal.isSet(Calendar.SECOND) && cal.isSet(Calendar.MILLISECOND)) {
+				int micros = cal.get(Calendar.MILLISECOND) * 1000;
+				if (micros < 0) {
+					reset = true;
+					cal.add(Calendar.SECOND, -1);
+					micros += DateTimeUtil.MICROSECONDS_PER_SECOND;
+				}
+				formatter.setMicrosecond(micros);
 			}
-			formatter.setCentury(value.get(Calendar.YEAR) / 100 + 1);
-			formatter.setMicrosecond(micros);
+			if (cal.isSet(Calendar.YEAR))
+				formatter.setCentury(cal.get(Calendar.YEAR) / 100 + 1);
+			else
+				formatter.setCentury(1);
 			try {
-				return asString(formatter.format(value.getTime()), length);
+				return asString(formatter.format(cal.getTime()), length);
 			}
 			catch (IllegalArgumentException iax) {
 				throw new TimestampFormatException();
 			}
 			finally {
 				if (reset)
-					value.add(Calendar.SECOND, 1);
+					cal.add(Calendar.SECOND, 1);
 			}
 		}
 	}
