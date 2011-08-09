@@ -194,11 +194,11 @@ public class EString extends AnyBoxedObject<String> {
 		int end = endIndex;
 		int max = str.length();
 		if (start < 1 || start > max) {
-			IndexOutOfBoundsException ex = new IndexOutOfBoundsException();
+			InvalidIndexException ex = new InvalidIndexException();
 			ex.indexValue = start;
 			throw ex;
 		} else if (end < start || end < 1 || end > max) {
-			IndexOutOfBoundsException ex = new IndexOutOfBoundsException();
+			InvalidIndexException ex = new InvalidIndexException();
 			ex.indexValue = end;
 			throw ex;
 		}
@@ -511,7 +511,7 @@ public class EString extends AnyBoxedObject<String> {
 			int pos = regex.lastIndexOf("[");
 			regex.insert(pos, '\\');
 
-			// Avoid IndexOutOfBoundsException
+			// Avoid InvalidIndexException
 			if (pos + 2 < regex.length() && regex.charAt(pos + 2) == '^') {
 				regex.insert(pos + 2, '\\');
 			}

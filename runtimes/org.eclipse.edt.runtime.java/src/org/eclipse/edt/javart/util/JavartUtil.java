@@ -28,7 +28,7 @@ import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.runtime.java.egl.lang.EglAny;
-import org.eclipse.edt.runtime.java.egl.lang.IndexOutOfBoundsException;
+import org.eclipse.edt.runtime.java.egl.lang.InvalidIndexException;
 import org.eclipse.edt.runtime.java.egl.lang.JavaObjectException;
 import org.eclipse.edt.runtime.java.egl.lang.NullValueException;
 import org.eclipse.edt.runtime.java.egl.lang.TypeCastException;
@@ -340,8 +340,8 @@ public class JavartUtil
 						Integer.valueOf( endIndex )
 					} );
 			
-			IndexOutOfBoundsException ex = 
-				new IndexOutOfBoundsException();
+			InvalidIndexException ex = 
+				new InvalidIndexException();
 			ex.message = message;
 			ex.indexValue = startIndex;
 			ex.setMessageID(Message.INVALID_SUBSTRING_INDEX);
@@ -359,8 +359,8 @@ public class JavartUtil
 						Integer.valueOf( endIndex )
 					} );
 			
-			IndexOutOfBoundsException ex = 
-				new IndexOutOfBoundsException();
+			InvalidIndexException ex = 
+				new InvalidIndexException();
 			ex.message = message;
 			ex.indexValue = endIndex;
 			ex.setMessageID(Message.INVALID_SUBSTRING_INDEX);
@@ -595,7 +595,7 @@ public class JavartUtil
 	 * 
 	 * @throws JavartException
 	 */
-	public static void throwIndexOutOfBoundsException( int index, Executable program )
+	public static void throwInvalidIndexException( int index, Executable program )
 		throws JavartException
 	{
 		String message = errorMessage(
@@ -603,8 +603,8 @@ public class JavartUtil
 				Message.INDEX_OUT_OF_BOUNDS,
 				new Object[] { String.valueOf( index ) } );
 		
-		IndexOutOfBoundsException ex = 
-			new IndexOutOfBoundsException();
+		InvalidIndexException ex = 
+			new InvalidIndexException();
 		ex.message = message;
 		ex.indexValue = index;
 		ex.setMessageID(Message.INDEX_OUT_OF_BOUNDS);
@@ -617,7 +617,7 @@ public class JavartUtil
 	 * 
 	 * @throws JavartException
 	 */
-	public static void throwArrayIndexOutOfBoundsException( int index, String name, 
+	public static void throwArrayInvalidIndexException( int index, String name, 
 			int size, Executable program )
 		throws JavartException
 	{
@@ -626,8 +626,8 @@ public class JavartUtil
 				Message.ARRAY_INDEX_OUT_OF_BOUNDS,
 				new Object[] { String.valueOf( index ), name, String.valueOf( size ) } );
 		
-		IndexOutOfBoundsException ex = 
-			new IndexOutOfBoundsException();
+		InvalidIndexException ex = 
+			new InvalidIndexException();
 		ex.message = message;
 		ex.indexValue = index;
 		ex.setMessageID(Message.ARRAY_INDEX_OUT_OF_BOUNDS);
