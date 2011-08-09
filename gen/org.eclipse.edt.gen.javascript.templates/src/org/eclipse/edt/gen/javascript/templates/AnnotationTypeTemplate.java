@@ -37,7 +37,8 @@ public class AnnotationTypeTemplate extends JavaScriptTemplate {
 	
 	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Object obj) {
 		Template template = ctx.getTemplateForEClassifier(aType);
-		if(template != null){
+		//have to use instanceof because a StereotypeType is an annotation, but it's not generatable as an annotation
+		if(template != null && !(aType instanceof org.eclipse.edt.mof.egl.StereotypeType)){
 			out.print("annotations[\"");//RATLC01814387
 			ctx.invoke(genAnnotationKey, (Type)aType, ctx, out);
 			out.print("\"] = new ");
