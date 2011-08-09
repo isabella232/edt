@@ -38,8 +38,9 @@ public class Constants {
 	public static final String JSRT_XMLLIB_PKG = "egl.egl.core.XMLLib['$inst'].";
 
 	//Annotation names
-	public static final String AnnotationXmlElement  = "egl:eglx.xml._bind.annotation.xmlElement";
-	public static final String AnnotationJsonName  = "egl:eglx.json.JsonName";
+	public static final String AnnotationXmlAttribute  = "eglx.xml.binding.annotation.xmlAttribute";
+	public static final String AnnotationXmlElement  = "eglx.xml.binding.annotation.xmlElement";
+	public static final String AnnotationJsonName  = "eglx.json.JsonName";
 
 	// EGL message id's
 	public static final String EGLMESSAGE_UNSUPPORTED_ELEMENT = "1000";

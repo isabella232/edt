@@ -34,6 +34,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genAdditionalSuperConstructorArgs = "genAdditionalSuperConstructorArgs";
 	public static final String genAnnotations = "genAnnotations";
 	public static final String genAnnotation = "genAnnotation";
+	public static final String genAnnotationKey = "genAnnotationKey";
 	public static final String genArrayAccess = "genArrayAccess";
 	public static final String genAssignment = "genAssignment";
 	public static final String genBinaryExpression = "genBinaryExpression";
