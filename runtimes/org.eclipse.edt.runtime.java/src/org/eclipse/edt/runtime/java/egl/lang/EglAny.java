@@ -74,7 +74,7 @@ public abstract class EglAny implements egl.lang.EglAny {
 			// Conversion operation needs to be invoked
 			Method method = null;
 			Object unboxed = value instanceof egl.lang.EglAny ? ((egl.lang.EglAny)value).ezeUnbox() : value;
-			Class[] parmTypes = new Class[parameterTypes.length + 1];
+			Class[] parmTypes = new Class[parameterTypes == null ? 1 : parameterTypes.length + 1];
 			parmTypes[0] = unboxed.getClass();
 			if (parameterTypes != null)
 				java.lang.System.arraycopy(parameterTypes, 0, parmTypes, 1, parameterTypes.length);
@@ -90,9 +90,9 @@ public abstract class EglAny implements egl.lang.EglAny {
 				}
 			}
 			if (args == null) 
-				return method.invoke(null, null, unboxed);
+				return method.invoke(null, unboxed);
 			else 
-				return method.invoke(null, null, unboxed, args);
+				return method.invoke(null, unboxed, args);
 		}
 		catch(InvocationTargetException ex) {
 			if (ex.getTargetException() instanceof JavartException)

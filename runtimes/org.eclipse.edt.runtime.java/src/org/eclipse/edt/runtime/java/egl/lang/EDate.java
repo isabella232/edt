@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.runtime.java.egl.lang;
 
-import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
@@ -20,9 +20,8 @@ import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.TimestampIntervalMask;
 
-
 //TODO need to add equals and notEquals and compareTo
-		
+
 /**
  * A class for Dates. The value is a Calendar.
  * @author mheitz
@@ -48,8 +47,8 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		return ezeCast(value, args);
 	}
 
-	public static Calendar ezeCast(Object value, Integer... args) throws JavartException {
-		return (Calendar) EglAny.ezeCast(value, "asDate", EDate.class, new Class[] { Integer[].class }, args);
+	public static Calendar ezeCast(Object value) throws JavartException {
+		return (Calendar) EglAny.ezeCast(value, "asDate", EDate.class, null, null);
 	}
 
 	public static boolean ezeIsa(Object value) {
@@ -59,18 +58,22 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	public static Calendar defaultValue() {
 		long now = java.lang.System.currentTimeMillis();
 		Calendar cal = DateTimeUtil.getBaseCalendar();
-		cal.setTimeInMillis( now );
-		cal.set( Calendar.MILLISECOND, 0 );
-		cal.set( cal.get( Calendar.YEAR ), cal.get( Calendar.MONTH ), 
-				cal.get( Calendar.DAY_OF_MONTH ), 0, 0, 0 );
-
+		cal.setTimeInMillis(now);
+		cal.set(Calendar.MILLISECOND, 0);
+		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
 		return cal;
 	}
 
-	public static Calendar asDate(String date, Integer... length) throws JavartException {
-		int startCode = ETimestamp.YEAR_CODE;
-		int endCode = ETimestamp.DAY_CODE;
-		return ETimestamp.convert(EString.asString(date, length), startCode, endCode);
+	public static Calendar asDate(String date) throws JavartException {
+		return ETimestamp.convert(date, ETimestamp.YEAR_CODE, ETimestamp.DAY_CODE);
+	}
+
+	public static Calendar asDate(GregorianCalendar date) throws JavartException {
+		return asDate((Calendar) date);
+	}
+
+	public static Calendar asDate(Calendar date) throws JavartException {
+		return ETimestamp.convert(EString.asString(date), ETimestamp.YEAR_CODE, ETimestamp.DAY_CODE);
 	}
 
 	/**

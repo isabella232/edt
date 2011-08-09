@@ -13,6 +13,7 @@ package org.eclipse.edt.runtime.java.egl.lang;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.regex.PatternSyntaxException;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
@@ -106,6 +107,10 @@ public class EString extends AnyBoxedObject<String> {
 		if (length.length != 0 && value.length() > length[0])
 			value = value.substring(0, length[0]);
 		return value;
+	}
+
+	public static String asString(GregorianCalendar value, Integer... length) {
+		return asString((Calendar) value, length);
 	}
 
 	public static String asString(Calendar value, Integer... length) {
@@ -355,21 +360,20 @@ public class EString extends AnyBoxedObject<String> {
 	 * Returns whether the string is like another
 	 */
 	public static Boolean isLike(String source, String pattern) {
-		return isLike( source, pattern, "\\" );
+		return isLike(source, pattern, "\\");
 	}
-	
+
 	/**
 	 * Returns whether the string is like another
 	 */
 	public static Boolean isLike(String source, String pattern, String escape) {
-		if ( source == null || pattern == null || escape == null )
-		{
+		if (source == null || pattern == null || escape == null) {
 			return false;
 		}
-		
+
 		// Get the escape character.
-		char escapeChar = escape.length() > 0 ? escape.charAt( 0 ) : '\\';
-		
+		char escapeChar = escape.length() > 0 ? escape.charAt(0) : '\\';
+
 		// The strategy here is to convert the pattern to java regex, escaping
 		// special chars we want to treat as literals; and then evaluate with
 		// the regex class
@@ -377,79 +381,57 @@ public class EString extends AnyBoxedObject<String> {
 		StringBuilder regex = new StringBuilder();
 
 		// Ignore trailing blanks in both operands.
-		source = clip( source );
-		pattern = clip( pattern );
+		source = clip(source);
+		pattern = clip(pattern);
 
-		for ( int i = 0; i < pattern.length(); i++ )
-		{
-			char ch = pattern.charAt( i );
+		for (int i = 0; i < pattern.length(); i++) {
+			char ch = pattern.charAt(i);
 
-			if ( ch == '\\' && escapeChar != '\\' )
-			{
+			if (ch == '\\' && escapeChar != '\\') {
 				// If the character is '\\' and if that is not an escape char,
 				// escape it so that it is treated as a literal character
-				regex.append( "\\\\" );
-			}
-			else if ( ch == escapeChar )
-			{
-				char nch = pattern.charAt( i + 1 );
-				if ( nch == '_' || nch == '%' )
-				{
-					regex.append( nch );
-				}
-				else if ( nch == escapeChar )
-				{
-					if ( escapeChar == '\\' || escapeThese.indexOf( escapeChar ) != -1 )
-					{
-						regex.append( '\\' );
+				regex.append("\\\\");
+			} else if (ch == escapeChar) {
+				char nch = pattern.charAt(i + 1);
+				if (nch == '_' || nch == '%') {
+					regex.append(nch);
+				} else if (nch == escapeChar) {
+					if (escapeChar == '\\' || escapeThese.indexOf(escapeChar) != -1) {
+						regex.append('\\');
 					}
-					regex.append( escapeChar );
-				}
-				else if ( escapeChar == '\\' )
-				{
+					regex.append(escapeChar);
+				} else if (escapeChar == '\\') {
 					// Must be a special java character.
-					regex.append( "\\" + nch );
-				}
-				else
-				{
+					regex.append("\\" + nch);
+				} else {
 					// There was no need for use of the escape character, omit it.
-					regex.append( nch );
+					regex.append(nch);
 				}
 				i++;
-			}
-			else if ( ch == '%' )
-			{
-				regex.append( ".*" );
-			}
-			else if ( ch == '_' )
-			{
-				regex.append( '.' );
-			}
-			else if ( escapeThese.indexOf( ch ) != -1 )
-			{
+			} else if (ch == '%') {
+				regex.append(".*");
+			} else if (ch == '_') {
+				regex.append('.');
+			} else if (escapeThese.indexOf(ch) != -1) {
 				// Escape any characters which java-regex will interpret, that
 				// we want to be treated as normal.
-				regex.append( "\\" + ch );
-			}
-			else
-			{
-				regex.append( ch );
+				regex.append("\\" + ch);
+			} else {
+				regex.append(ch);
 			}
 		}
 
-		try
-		{
-			return source.matches( regex.toString() );
+		try {
+			return source.matches(regex.toString());
 		}
-		catch ( PatternSyntaxException e )
-		{
+		catch (PatternSyntaxException e) {
 			throw new InvalidPatternException();
 		}
 	}
 
-//	public static Boolean isLike(String source, Integer length, String value) {
-//		return isLike(asString(source, length), value);
-//	}
+	// public static Boolean isLike(String source, Integer length, String value) {
+	// return isLike(asString(source, length), value);
+	// }
 
 	/**
 	 * Returns whether the string matches another
@@ -462,13 +444,12 @@ public class EString extends AnyBoxedObject<String> {
 	 * Returns whether the string matches another
 	 */
 	public static Boolean matchesPattern(String source, String pattern, String escape) {
-		if ( source == null || pattern == null || escape == null )
-		{
+		if (source == null || pattern == null || escape == null) {
 			return false;
 		}
-		
+
 		// Get the escape character.
-		char escapeChar = escape.length() > 0 ? escape.charAt( 0 ) : '\\';
+		char escapeChar = escape.length() > 0 ? escape.charAt(0) : '\\';
 
 		// The strategy here is to convert the pattern to java regex, escaping
 		// special chars we want to treat as literals; and then evaluate with
@@ -477,104 +458,74 @@ public class EString extends AnyBoxedObject<String> {
 		StringBuilder regex = new StringBuilder();
 		boolean withinBrackets = false;
 
-		for ( int i = 0; i < pattern.length(); i++ )
-		{
-			char ch = pattern.charAt( i );
+		for (int i = 0; i < pattern.length(); i++) {
+			char ch = pattern.charAt(i);
 
-			if ( ch == '\\' && escapeChar != '\\' )
-			{
+			if (ch == '\\' && escapeChar != '\\') {
 				// If the character is '\\' and if that is not an escape char,
 				// escape it so that it is treated as a literal character
-				regex.append( "\\\\" );
-			}
-			else if ( ch == escapeChar )
-			{
-				char nch = pattern.charAt( i + 1 );
-				if ( nch == '*' || nch == '?' || nch == '[' || nch == ']' || nch == '^' )
-				{
-					regex.append( "\\" + nch );
-				}
-				else if ( nch == escapeChar )
-				{
-					if ( escapeChar == '\\' || escapeThese.indexOf( escapeChar ) != -1 )
-					{
-						regex.append( '\\' );
+				regex.append("\\\\");
+			} else if (ch == escapeChar) {
+				char nch = pattern.charAt(i + 1);
+				if (nch == '*' || nch == '?' || nch == '[' || nch == ']' || nch == '^') {
+					regex.append("\\" + nch);
+				} else if (nch == escapeChar) {
+					if (escapeChar == '\\' || escapeThese.indexOf(escapeChar) != -1) {
+						regex.append('\\');
 					}
-					regex.append( escapeChar );
-				}
-				else if ( escapeChar == '\\' )
-				{
+					regex.append(escapeChar);
+				} else if (escapeChar == '\\') {
 					// Must be a special java character.
-					regex.append( "\\" + nch );
-				}
-				else
-				{
+					regex.append("\\" + nch);
+				} else {
 					// There was no need for use of the escape character, omit
 					// it.
-					regex.append( nch );
+					regex.append(nch);
 				}
 				i++;
-			}
-			else if ( ch == '[' )
-			{
+			} else if (ch == '[') {
 				withinBrackets = true;
-				regex.append( ch );
-			}
-			else if ( ch == ']' )
-			{
+				regex.append(ch);
+			} else if (ch == ']') {
 				withinBrackets = false;
-				regex.append( ch );
-			}
-			else if ( ch == '*' && !withinBrackets )
-			{
-				regex.append( ".*" );
-			}
-			else if ( ch == '?' && !withinBrackets )
-			{
-				regex.append( '.' );
-			}
-			else if ( ch == '^' && !withinBrackets )
-			{
-				regex.append( "\\^" );
-			}
-			else if ( escapeThese.indexOf( ch ) != -1 )
-			{
+				regex.append(ch);
+			} else if (ch == '*' && !withinBrackets) {
+				regex.append(".*");
+			} else if (ch == '?' && !withinBrackets) {
+				regex.append('.');
+			} else if (ch == '^' && !withinBrackets) {
+				regex.append("\\^");
+			} else if (escapeThese.indexOf(ch) != -1) {
 				// Escape any characters which java-regex will interpret, that
 				// we want to be treated as normal.
-				regex.append( "\\" + ch );
-			}
-			else
-			{
-				regex.append( ch );
+				regex.append("\\" + ch);
+			} else {
+				regex.append(ch);
 			}
 		}
-		
+
 		// If within brackets, then we have an unclosed character class which
 		// is illegal syntax in java regex. Escape the last '[' and a '^' if it
 		// follows, to avoid a PatternSyntaxException
-		if ( withinBrackets )
-		{
-			int pos = regex.lastIndexOf( "[" );
-			regex.insert( pos, '\\' );
-			
+		if (withinBrackets) {
+			int pos = regex.lastIndexOf("[");
+			regex.insert(pos, '\\');
+
 			// Avoid IndexOutOfBoundsException
-			if ( pos + 2 < regex.length() && regex.charAt( pos + 2 ) == '^' )
-			{
-				regex.insert( pos + 2, '\\' );
+			if (pos + 2 < regex.length() && regex.charAt(pos + 2) == '^') {
+				regex.insert(pos + 2, '\\');
 			}
 		}
 
-		try
-		{
-			return source.matches( regex.toString() );
+		try {
+			return source.matches(regex.toString());
 		}
-		catch ( PatternSyntaxException e )
-		{
+		catch (PatternSyntaxException e) {
 			throw new InvalidPatternException();
 		}
 	}
 
-//	public static Boolean matchesPattern(String source, Integer length, String value) {
-//		return matchesPattern(asString(source, length), value);
-//	}
+	// public static Boolean matchesPattern(String source, Integer length, String value) {
+	// return matchesPattern(asString(source, length), value);
+	// }
 }
