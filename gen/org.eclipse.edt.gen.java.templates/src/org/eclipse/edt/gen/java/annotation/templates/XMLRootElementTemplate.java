@@ -19,21 +19,17 @@ import org.eclipse.edt.mof.egl.AnnotationType;
 
 public class XMLRootElementTemplate extends JavaTemplate {
 
-	public void genAnnotation(AnnotationType annotType, Context ctx, TabbedWriter out, Annotation annot) {
-		String name = (String)annot.getValue("name");
-		String namespace = (String)annot.getValue("namespace");
-		out.print("@javax.xml.bind.annotation.XmlRootElement(");
+	public void genConstructorOptions(AnnotationType annotType, Context ctx, TabbedWriter out, Annotation annot) {
 		boolean addComma = false;
-		if(name != null && !"##default".equals(name)){
-			out.print("name=\"" + name + "\"");
+		if(annot.getValue("name") instanceof String && !"##default".equals(annot.getValue("name"))){
+			out.print("name=\"" + (String)annot.getValue("name") + "\"");
 			addComma = true;
 		}
-		if(namespace != null && !"##default".equals(namespace)){
+		if(annot.getValue("namespace") instanceof String && !"##default".equals(annot.getValue("namespace"))){
 			if(addComma){
 				out.print(", ");
 			}
-			out.print("namespace=\"" + namespace + "\"");
+			out.print("namespace=\"" + (String)annot.getValue("namespace") + "\"");
 		}
-		out.println(")");
 	}
 }

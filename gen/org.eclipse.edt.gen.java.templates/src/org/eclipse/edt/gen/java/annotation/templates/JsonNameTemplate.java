@@ -20,10 +20,7 @@ import org.eclipse.edt.mof.egl.Field;
 
 public class JsonNameTemplate extends JavaTemplate {
 
-	public void genAnnotation(AnnotationType annotType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
-		String name = (String)annot.getValue();
-		out.print("@org.eclipse.edt.javart.json.Json(");
-		out.print("name=\"" + name + "\"");
-		out.println(")");
+	public void genConstructorOptions(AnnotationType annotType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
+		out.print("name=\"" + (String)annot.getValue() + "\"");
 	}
 }

@@ -13,7 +13,11 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.codegen.api.Template;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Type;
 
 public class AnnotationTypeTemplate extends JavaTemplate {
 
@@ -25,4 +29,28 @@ public class AnnotationTypeTemplate extends JavaTemplate {
 
 	public void genClassHeader(AnnotationType part, Context ctx, TabbedWriter out) {}
 
+	public void genRuntimeTypeName(AnnotationType type, Context ctx, TabbedWriter out, TypeNameKind typeKind, Annotation annot) {
+		out.print(ctx.getNativeImplementationMapping(type));
+	}
+	
+	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot) {
+		Template template = ctx.getTemplateForEClassifier(aType);
+		if(template != null){
+			out.print("@");
+			ctx.invoke(genRuntimeTypeName, (Type)aType, ctx, out, TypeNameKind.JavaObject, annot);
+			out.print("(");
+			ctx.invoke(genConstructorOptions, (Type)aType, ctx, out, annot);
+			out.println(")");
+		}
+	}
+	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
+		Template template = ctx.getTemplateForEClassifier(aType);
+		if(template != null){
+			out.print("@");
+			ctx.invoke(genRuntimeTypeName, (Type)aType, ctx, out, TypeNameKind.JavaObject, annot);
+			out.print("(");
+			ctx.invoke(genConstructorOptions, (Type)aType, ctx, out, annot, field);
+			out.println(")");
+		}
+	}
 }

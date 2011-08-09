@@ -18,26 +18,14 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Field;
 
-public class XMLAttributeTemplate extends JavaTemplate {
+public class XMLSchemaTypeTemplate extends JavaTemplate {
 
 	public void genConstructorOptions(AnnotationType annotType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
-		boolean addComma = false;
-		if(annot.getValue("name") instanceof String && !"##default".equals(annot.getValue("name"))){
-			out.print("name=\"" + (String)annot.getValue("name") + "\"");
-			addComma = true;
-		}
-		if(annot.getValue("namespace") instanceof String && !"##default".equals(annot.getValue("namespace"))){
-			if(addComma){
-				out.print(", ");
-			}
+		out.print("name=\"" + (String)annot.getValue() + "\"");
+		
+		if(annot.getValue("namespace") instanceof String && !"http://www.w3.org/2001/XMLSchema".equals(annot.getValue("namespace"))){
+			out.print(", ");
 			out.print("namespace=\"" + (String)annot.getValue("namespace") + "\"");
-			addComma = true;
-		}
-		if(annot.getValue("required") != null){
-			if(addComma){
-				out.print(", ");
-			}
-			out.print("required=" + annot.getValue("required").toString());
 		}
 	}
 }

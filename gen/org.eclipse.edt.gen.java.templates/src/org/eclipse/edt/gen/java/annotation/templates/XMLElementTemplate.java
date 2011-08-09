@@ -20,37 +20,31 @@ import org.eclipse.edt.mof.egl.Field;
 
 public class XMLElementTemplate extends JavaTemplate {
 
-	public void genAnnotation(AnnotationType annotType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
-		String name = (String)annot.getValue("name");
-		String namespace = (String)annot.getValue("namespace");
-		Boolean required = (Boolean)(annot.getValue("required"));
-		Boolean nillable =  (Boolean)(annot.getValue("nillable"));
-		out.print("@javax.xml.bind.annotation.XmlElement(");
+	public void genConstructorOptions(AnnotationType annotType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
 		boolean addComma = false;
-		if(name != null && !"##default".equals(name)){
-			out.print("name=\"" + name + "\"");
+		if(annot.getValue("name") instanceof String && !"##default".equals(annot.getValue("name"))){
+			out.print("name=\"" + (String)annot.getValue("name") + "\"");
 			addComma = true;
 		}
-		if(namespace != null && !"##default".equals(namespace)){
+		if(annot.getValue("namespace") instanceof String && !"##default".equals(annot.getValue("namespace"))){
 			if(addComma){
 				out.print(", ");
 			}
-			out.print("namespace=\"" + namespace + "\"");
+			out.print("namespace=\"" + (String)annot.getValue("namespace") + "\"");
 			addComma = true;
 		}
-		if(required != null){
+		if(annot.getValue("required") != null){
 			if(addComma){
 				out.print(", ");
 			}
-			out.print("required=" + required.toString());
+			out.print("required=" + annot.getValue("required").toString());
 			addComma = true;
 		}
-		if(nillable != null){
+		if(annot.getValue("nillable") != null){
 			if(addComma){
 				out.print(", ");
 			}
-			out.print("nillable=" + nillable.toString());
+			out.print("nillable=" + (annot.getValue("nillable").toString()));
 		}
-		out.println(")");
 	}
 }
