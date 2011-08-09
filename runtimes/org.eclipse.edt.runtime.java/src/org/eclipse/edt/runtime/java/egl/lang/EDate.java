@@ -20,8 +20,6 @@ import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.TimestampIntervalMask;
 
-//TODO need to add equals and notEquals and compareTo
-
 /**
  * A class for Dates. The value is a Calendar.
  * @author mheitz
@@ -73,6 +71,18 @@ public class EDate extends AnyBoxedObject<Calendar> {
 
 	public static Calendar asDate(Calendar date) throws JavartException {
 		return ETimestamp.convert(EString.asString(date), ETimestamp.YEAR_CODE, ETimestamp.DAY_CODE);
+	}
+
+	public static boolean equals(Calendar op1, Calendar op2) {
+		if (op1 == null || op2 == null)
+			return false;
+		return op1.equals(op2);
+	}
+
+	public static boolean notEquals(Calendar op1, Calendar op2) {
+		if (op1 == null || op2 == null)
+			return false;
+		return !op1.equals(op2);
 	}
 
 	/**

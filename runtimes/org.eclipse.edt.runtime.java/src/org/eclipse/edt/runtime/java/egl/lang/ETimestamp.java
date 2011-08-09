@@ -23,8 +23,6 @@ import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
 import org.eclipse.edt.javart.util.TimestampIntervalMask;
 
-//TODO need to add equals and notEquals and compareTo
-
 /**
  * A class for Timestamps. The value is a Calendar and a number of microseconds (an int) which is encapsulated in a
  * TimestampData object. Timestamps store a varying set of fields, from years down to microseconds. The first and last fields
@@ -290,6 +288,18 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			result = convert(timestamp, startCode, endCode);
 		}
 		return result;
+	}
+
+	public static boolean equals(Calendar op1, Calendar op2) {
+		if (op1 == null || op2 == null)
+			return false;
+		return op1.equals(op2);
+	}
+
+	public static boolean notEquals(Calendar op1, Calendar op2) {
+		if (op1 == null || op2 == null)
+			return false;
+		return !op1.equals(op2);
 	}
 
 	public static Calendar convert(String timestamp, int startCode, int endCode) {
