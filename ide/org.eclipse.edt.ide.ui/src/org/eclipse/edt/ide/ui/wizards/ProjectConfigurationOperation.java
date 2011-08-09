@@ -33,7 +33,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.compiler.internal.eglar.EglarFile;
 import org.eclipse.edt.compiler.internal.eglar.EglarManifest;
@@ -88,9 +87,9 @@ public class ProjectConfigurationOperation extends WorkspaceModifyOperation {
 			
 			// Add EGL nature to the .project file
 			EGLProjectUtility.addEGLNature( project, monitor );
-			if( configuration.isJavaScriptPlatform() ) {
-				EGLProjectUtility.addRUINature(project, new SubProgressMonitor(monitor, 1));
-			}
+//			if( configuration.isJavaScriptPlatform() ) {
+//				EGLProjectUtility.addRUINature(project, new SubProgressMonitor(monitor, 1));
+//			}
 			
 			monitor.setTaskName(NewWizardMessages.BuildPathsBlockOperationdesc_egl);
 			monitor.beginTask("", 10); //$NON-NLS-1$
