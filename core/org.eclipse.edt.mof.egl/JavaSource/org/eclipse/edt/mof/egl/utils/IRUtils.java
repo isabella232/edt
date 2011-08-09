@@ -591,7 +591,22 @@ public class IRUtils {
 		}
 		else if (direction == -1) {
 			conOp = getConversionOperation((StructPart)rhs, (StructPart)lhs);
-			if (conOp == null) return null;
+			if (conOp == null) {
+				// First check if there is an explicit operation 
+				// independent of conversion of either side to the other.
+				// Check only the lhs classifier for this operation.
+				// This is to handle the cases where binary operations are implemented
+				// that do not force a conversion of one type to the other
+				if (!lhs.equals(rhs)) {
+					List<Operation> ops = TypeUtils.getBestFitOperation((StructPart)lhs, opSymbol, (StructPart)lhs, (StructPart)rhs);
+					// Filter out an operation that has the same parameter types for each parameter
+					if (ops.size() == 1 
+							&& !(ops.get(0).getParameters().get(0).getType().equals(ops.get(0).getParameters().get(1).getType()))) {
+						return ops.get(0);
+					}
+				}
+				return null;
+			}
 			clazz = (StructPart)conOp.getType().getClassifier();
 		}
 		else if (direction == 1) {
