@@ -9,34 +9,6 @@
       </debugModelPresentation>
    </extension>
    
-   <!--<extension
-         point="org.eclipse.debug.core.launchConfigurationTypes">
-      <launchConfigurationType
-            delegate="org.eclipse.edt.debug.ui.launching.EGLJavaLaunchDelegate"
-            id="org.eclipse.edt.debug.ui.launching.EGLJavaMainApplication"
-            modes="run, debug"
-            name="%EGLJavaApplication"
-            sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
-            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
-      </launchConfigurationType>
-   </extension>
-   <extension
-         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
-      <launchConfigurationTypeImage
-            icon="icons/full/obj16/egl_launch_obj.gif"
-            configTypeID="org.eclipse.edt.debug.ui.launching.EGLJavaMainApplication"
-            id="org.eclipse.edt.debug.ui.launching.EGLJavaImage">
-      </launchConfigurationTypeImage>
-   </extension>
-   <extension
-         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
-      <launchConfigurationTabGroup
-            type="org.eclipse.edt.debug.ui.launching.EGLJavaMainApplication"
-            class="org.eclipse.jdt.internal.debug.ui.launcher.LocalJavaApplicationTabGroup"
-            id="org.eclipse.edt.debug.ui.launching.EGLJavaMainApplicationTabGroup">
-      </launchConfigurationTabGroup>
-   </extension>-->
-   
    <extension
          point="org.eclipse.ui.editorActions">
       <editorContribution
@@ -56,12 +28,6 @@
          <viewerContribution
             targetID="#EGLRulerContext"
             id="org.eclipse.edt.debug.ui.EGLEditorRulerPopupActions">
-            <action
-               label="%BreakpointProperties.label"
-               class="org.eclipse.jdt.debug.ui.actions.JavaBreakpointPropertiesRulerActionDelegate"
-               menubarPath="group.properties"
-               id="org.eclipse.jdt.debug.ui.actions.JavaBreakpointPropertiesRulerActionDelegate">
-            </action>
             <action
                label="%EnableBreakpoint.label"
                class="org.eclipse.edt.debug.internal.ui.actions.EGLRulerEnableDisableBreakpointActionDelegate"
@@ -110,47 +76,4 @@
             <adapter type="org.eclipse.debug.ui.actions.IRunToLineTarget"/>
          </factory>
    </extension>
-   
-   <!--<extension
-         point="org.eclipse.debug.ui.launchShortcuts">
-      <shortcut
-            class="org.eclipse.edt.debug.ui.launching.EGLJavaLaunchShortcut"
-            description="%EGLJavaLaunchShortcut.description"
-            icon="icons/full/obj16/egl_launch_obj.gif"
-            id="org.eclipse.edt.debug.ui.eglJavaShortcut"
-            label="%EGLJavaLaunchShortcut.label"
-            modes="run, debug">
-         <contextualLaunch>
-           <enablement>
-             <with variable="selection">
-               <count value="1"/>
-                <iterate>
-                 <and>
-                  <adapt type="org.eclipse.jdt.core.IJavaElement">
-                  	<test property="org.eclipse.jdt.core.isInJavaProject"/>
-                  </adapt>
-               	  <or>
-               	    <test property="org.eclipse.jdt.launching.hasMain"/>
-               	    <test property="org.eclipse.jdt.launching.isContainer"/>
-               	    <test property="org.eclipse.jdt.launching.isPackageFragment"/>
-               	    <test property="org.eclipse.jdt.launching.isPackageFragmentRoot"/>
-               	  </or>
-                 </and>
-                </iterate>
-               </with>
-           </enablement>
-  		 </contextualLaunch>
-         <configurationType
-               id="org.eclipse.edt.debug.ui.launching.EGLJavaMainApplication">
-         </configurationType>
-         <description
-               description="%RunEGLJavaLaunchShortcut.description"
-               mode="run">
-         </description>
-         <description
-               description="%DebugEGLJavaLaunchShortcut.description"
-               mode="debug">
-         </description>
-      </shortcut>
-   </extension>-->
 </plugin>
