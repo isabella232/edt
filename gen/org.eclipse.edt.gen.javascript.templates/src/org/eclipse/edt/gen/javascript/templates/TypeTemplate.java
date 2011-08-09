@@ -172,12 +172,12 @@ public class TypeTemplate extends JavaScriptTemplate {
 
 	public void genUnaryExpression(Type type, Context ctx, TabbedWriter out, UnaryExpression arg) {
 		// we only need to check for minus sign and if found, we need to change it to -()
-		if (arg.getOperator().equals("-"))
+		if (arg.getOperator().equals("-") || arg.getOperator().equals("!")) {
 			out.print(arg.getOperator() + "(");
-		ctx.invoke(genExpression, arg.getExpression(), ctx, out);
-		// we only need to check for minus sign and if found, we need to change it to -()
-		if (arg.getOperator().equals("-"))
+			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
 			out.print(")");
+		} else
+			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
 	}
 
 	public void genSignature(Type type, Context ctx, TabbedWriter out, TypedElement arg) {
