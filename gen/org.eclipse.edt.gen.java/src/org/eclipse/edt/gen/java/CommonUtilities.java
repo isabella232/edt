@@ -220,7 +220,7 @@ public class CommonUtilities {
 		if (op.equals(expr.Op_CONCAT))
 			return "concat";
 		if (op.equals(expr.Op_NULLCONCAT))
-			return "concat";
+			return "concatNull";
 		if (op.equals(expr.Op_BITAND))
 			return "bitand";
 		if (op.equals(expr.Op_BITOR))
