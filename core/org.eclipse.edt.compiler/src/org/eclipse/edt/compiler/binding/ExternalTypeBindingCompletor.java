@@ -24,6 +24,7 @@ import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
+import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
@@ -71,33 +72,41 @@ public class ExternalTypeBindingCompletor extends AbstractBinder {
         
         externalTypeBinding.setPrivate(externalType.isPrivate());
         
-        if(externalType.hasExtendedType()) {
-        		for(Iterator iter = externalType.getExtendedTypes().iterator(); iter.hasNext();) {
-                	try {
-	        			ITypeBinding typeBinding = bindTypeName((Name) iter.next());
-		    			//TODO should probably check to see if this is an interfaceBinding before adding it
-		    			externalTypeBinding.addExtendedType(typeBinding);
-                	}
-	        		catch (ResolutionException e) {
-	        			problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
-	        		}
-        		}
-    	}
-        else {
-        	IPartSubTypeAnnotationTypeBinding subType = externalTypeBinding.getSubType();
-        	if(subType != null) {
-        		IAnnotationBinding aBinding = subType.getAnnotation(EGLImplicitExtendedTypeAnnotationTypeBinding.getInstance());
-        		if(aBinding != null) {
-        			Object value = aBinding.getValue();
-        			if(value instanceof ExternalTypeBinding) {
-        				externalTypeBinding.addExtendedType((ExternalTypeBinding) value);
-        			}
-        		}
-        	}
-        }
+        processExtends(externalType);
     	
         return true;
     }
+    
+    private void processExtends(ExternalType externalType) {
+        if(externalType.hasExtendedType()) {
+    		for(Iterator iter = externalType.getExtendedTypes().iterator(); iter.hasNext();) {
+            	try {
+            		
+            		Name name = (Name) iter.next();
+        			ITypeBinding typeBinding = bindTypeName(name);
+        			
+        			if (Binding.isValidBinding(typeBinding) && typeBinding.getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
+        				
+        				ExternalTypeBinding extendedET = (ExternalTypeBinding) typeBinding;
+        				if (extendedET.containsExtendsFor(externalTypeBinding)) {
+                			problemRequestor.acceptProblem(
+                    				name,
+                    				IProblemRequestor.RECURSIVE_LOOP_IN_EXTENDS,
+                    				new String[] {externalTypeBinding.getCaseSensitiveName(), name.toString()});
+        					name.setBinding(Binding.NOT_FOUND_BINDING);
+        				}
+        				else {
+        					externalTypeBinding.addExtendedType(typeBinding);
+        				}
+        			}
+            	}
+        		catch (ResolutionException e) {
+        			problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
+        		}
+    		}
+        }
+    }
+    
     
 	public void endVisit(ExternalType externalType) {
 		if(externalTypeBinding.getConstructors().isEmpty()) {

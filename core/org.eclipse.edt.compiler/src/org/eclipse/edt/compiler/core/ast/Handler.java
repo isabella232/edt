@@ -26,14 +26,17 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 public class Handler extends Part {
 
 	private Name partSubTypeOpt;
+	private List implementsOpt;
 
-	public Handler(Boolean privateAccessModifierOpt, SimpleName name, Name partSubTypeOpt, List classContents, int startOffset, int endOffset) {
+
+	public Handler(Boolean privateAccessModifierOpt, SimpleName name, List implementsOpt, Name partSubTypeOpt, List classContents, int startOffset, int endOffset) {
 		super(privateAccessModifierOpt, name, classContents, startOffset, endOffset);
 		
 		if(partSubTypeOpt != null) {
 			this.partSubTypeOpt = partSubTypeOpt;
 			partSubTypeOpt.setParent(this);
 		}
+		this.implementsOpt = setParent(implementsOpt);
 	}
 	
 	public boolean hasSubType() {
@@ -52,6 +55,7 @@ public class Handler extends Part {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
 			name.accept(visitor);
+			acceptChildren(visitor, implementsOpt);
 			if(partSubTypeOpt != null) partSubTypeOpt.accept(visitor);
 			acceptChildren(visitor, contents);
 		}
@@ -61,7 +65,7 @@ public class Handler extends Part {
 	protected Object clone() throws CloneNotSupportedException {
 		Name newPartSubTypeOpt = partSubTypeOpt != null ? (Name)partSubTypeOpt.clone() : null;
 		
-		return new Handler(new Boolean(isPrivate), (SimpleName)name.clone(), newPartSubTypeOpt, cloneContents(), getOffset(), getOffset() + getLength());
+		return new Handler(new Boolean(isPrivate), (SimpleName)name.clone(), cloneList(implementsOpt), newPartSubTypeOpt, cloneContents(), getOffset(), getOffset() + getLength());
 	}
 
 	public String getPartTypeName() {
@@ -73,9 +77,9 @@ public class Handler extends Part {
 	}
 
 	/**
-	 * @deprecated There is no serviceReferences syntax in language anymore. This returns empty list
+	 * @return A List of Name objects
 	 */
-	public List getServiceReferences() {
-		return Collections.EMPTY_LIST;
+	public List getImplementedInterfaces() {
+		return implementsOpt;
 	}
 }

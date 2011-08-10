@@ -32,12 +32,14 @@ import org.eclipse.edt.compiler.binding.FixedStructureBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.FormBinding;
 import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
+import org.eclipse.edt.compiler.binding.HandlerBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.INullableTypeBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IPartSubTypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.binding.InterfaceBinding;
 import org.eclipse.edt.compiler.binding.NilBinding;
 import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
@@ -611,6 +613,11 @@ public class TypeCompatibilityUtil {
 		if(ITypeBinding.SERVICE_BINDING == tBinding.getKind()) {
 			return ((ServiceBinding) tBinding).getImplementedInterfaces();
 		}
+
+		if(ITypeBinding.HANDLER_BINDING == tBinding.getKind()) {
+			return ((HandlerBinding) tBinding).getImplementedInterfaces();
+		}
+
 		return Collections.EMPTY_LIST;
 	}
 	
@@ -799,6 +806,16 @@ public class TypeCompatibilityUtil {
 				}
 			}
 		}
+		
+		if(ITypeBinding.INTERFACE_BINDING == targetType.getKind()) {
+			if(ITypeBinding.INTERFACE_BINDING == sourceType.getKind()) {
+				if(((InterfaceBinding) sourceType).getExtendedTypes().contains(targetType) ||
+				   ((InterfaceBinding) targetType).getExtendedTypes().contains(sourceType)) {
+					return true;
+				}
+			}
+		}
+
 		if( (ITypeBinding.SERVICE_BINDING == sourceType.getKind() ||
 		     ITypeBinding.INTERFACE_BINDING == sourceType.getKind()) &&
 			 (ITypeBinding.INTERFACE_BINDING == targetType.getKind() ||
@@ -1360,11 +1377,24 @@ public class TypeCompatibilityUtil {
 			return indexOf == -1 ? -1 : indexOf + 1;
 		}
 	}
+
+	private static class SuperInterfaceTargetWidener implements IWidener {		
+		private InterfaceBinding sourceType;
+
+		public SuperInterfaceTargetWidener(InterfaceBinding sourceType) {
+			this.sourceType = sourceType;
+		}
+		
+		public int getDistance(ITypeBinding targetType) {
+			int indexOf = sourceType.getExtendedTypes().indexOf(targetType);
+			return indexOf == -1 ? -1 : indexOf + 1;
+		}
+	}
 	
-	private static class SuperInterfaceTypeTargetWidener implements IWidener {		
+	private static class SuperServiceInterfaceTypeTargetWidener implements IWidener {		
 		private ServiceBinding sourceType;
 
-		public SuperInterfaceTypeTargetWidener(ServiceBinding sourceType) {
+		public SuperServiceInterfaceTypeTargetWidener(ServiceBinding sourceType) {
 			this.sourceType = sourceType;
 		}
 		
@@ -1373,7 +1403,20 @@ public class TypeCompatibilityUtil {
 				1 : -1;
 		}
 	}
-	
+
+	private static class SuperHandlerInterfaceTypeTargetWidener implements IWidener {		
+		private HandlerBinding sourceType;
+
+		public SuperHandlerInterfaceTypeTargetWidener(HandlerBinding sourceType) {
+			this.sourceType = sourceType;
+		}
+		
+		public int getDistance(ITypeBinding targetType) {
+			return sourceType.getImplementedInterfaces().contains(targetType) ?
+				1 : -1;
+		}
+	}
+
 	private static class ArrayOfCompatibleReferenceTypesTargetWidener implements IWidener {		
 		private ArrayTypeBinding sourceType;
 		private ICompilerOptions compilerOptions;
@@ -1614,9 +1657,17 @@ public class TypeCompatibilityUtil {
 			case ITypeBinding.EXTERNALTYPE_BINDING:
 				result.add(new SuperExternalTypeTargetWidener((ExternalTypeBinding) sourceType));
 				break;
+
+			case ITypeBinding.INTERFACE_BINDING:
+				result.add(new SuperInterfaceTargetWidener((InterfaceBinding) sourceType));
+				break;
 				
 			case ITypeBinding.SERVICE_BINDING:
-				result.add(new SuperInterfaceTypeTargetWidener((ServiceBinding) sourceType));
+				result.add(new SuperServiceInterfaceTypeTargetWidener((ServiceBinding) sourceType));
+				break;
+
+			case ITypeBinding.HANDLER_BINDING:
+				result.add(new SuperHandlerInterfaceTypeTargetWidener((HandlerBinding) sourceType));
 				break;
 				
 			case ITypeBinding.ARRAY_TYPE_BINDING:

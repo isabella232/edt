@@ -11,10 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Dave Murray
@@ -22,6 +27,12 @@ import java.util.List;
 public class InterfaceBinding extends PartBinding {
 	
 	private List declaredFunctions = Collections.EMPTY_LIST;	
+	private List declaredAndInheritedFunctions = null;
+			
+	private boolean haveExpandedExtendedTypes = false;
+	private transient List allExtendedTypes = Collections.EMPTY_LIST;
+	
+	private transient List extendedTypes = Collections.EMPTY_LIST;;
 	
     public InterfaceBinding(String[] packageName, String caseSensitiveInternedName) {
         super(packageName, caseSensitiveInternedName);
@@ -30,6 +41,50 @@ public class InterfaceBinding extends PartBinding {
 	public boolean isReference() {
 		return true;
 	}
+	
+	
+    /**
+     * @return A list of InterfaceTypeBinding objects representing the types
+     *         that this type extends (and the types that those
+     *         types extend).
+     */
+    public List getExtendedTypes() {
+		if(!haveExpandedExtendedTypes) {
+			List newExtendedTypes = getExtendedTypes(new HashSet());
+			allExtendedTypes = newExtendedTypes;
+			haveExpandedExtendedTypes = true;
+		}
+    	return allExtendedTypes;
+    }
+    
+    List getExtendedTypes(Set typesAlreadyProcessed) {
+		List result = new ArrayList();
+		if( !typesAlreadyProcessed.contains( this ) ) {
+			typesAlreadyProcessed.add( this );
+			for(Iterator iter = extendedTypes.iterator(); iter.hasNext();) {
+				ITypeBinding typeBinding = realizeTypeBinding((ITypeBinding) iter.next(), getEnvironment());
+				
+				if(!typesAlreadyProcessed.contains(typeBinding)) {
+					if(typeBinding.getKind() == ITypeBinding.INTERFACE_BINDING) {					
+						result.add(typeBinding);
+						result.addAll(((InterfaceBinding) typeBinding).getExtendedTypes(typesAlreadyProcessed));
+					}
+				}
+			}
+		}
+		return result;
+    }
+    
+    public void addExtendedType(ITypeBinding typeBinding) {
+    	if(typeBinding != this) {
+	    	if(extendedTypes == Collections.EMPTY_LIST) {
+	    		extendedTypes = new ArrayList();
+	    	}
+	    	extendedTypes.add(typeBinding);
+	    	haveExpandedExtendedTypes = false;
+    	}
+    }
+
     
     /**
      * @return A list of IFunctionBinding objects representing the functions
@@ -46,6 +101,19 @@ public class InterfaceBinding extends PartBinding {
     	}
     	declaredFunctions.add(declaredFunctionBinding);
     }
+
+    public List getDeclaredAndInheritedFunctions() {
+    	if(declaredAndInheritedFunctions == null) {
+    		declaredAndInheritedFunctions = new ArrayList();
+    		declaredAndInheritedFunctions.addAll(getDeclaredFunctions());
+    		
+    		List extendedTypes = getExtendedTypes();
+    		for(Iterator iter = extendedTypes.iterator(); iter.hasNext();) {
+    			declaredAndInheritedFunctions.addAll(((InterfaceBinding) iter.next()).getDeclaredFunctions());
+    		}
+    	}
+    	return declaredAndInheritedFunctions;
+    }
     
 	public int getKind() {
 		return INTERFACE_BINDING;
@@ -54,6 +122,10 @@ public class InterfaceBinding extends PartBinding {
 	public void clear() {
 		super.clear();
 		declaredFunctions = Collections.EMPTY_LIST;	
+		declaredAndInheritedFunctions = null;		
+		haveExpandedExtendedTypes = false;
+		extendedTypes = Collections.EMPTY_LIST;
+		allExtendedTypes = Collections.EMPTY_LIST;
 	}
 
 	public boolean isStructurallyEqual(IPartBinding anotherPartBinding) {
@@ -63,7 +135,7 @@ public class InterfaceBinding extends PartBinding {
 	
 	protected IDataBinding primFindData(String simpleName) {
         OverloadedFunctionSet functionSet = new OverloadedFunctionSet();
-        for(Iterator iter = getDeclaredFunctions().iterator(); iter.hasNext();) {
+        for(Iterator iter = getDeclaredAndInheritedFunctions().iterator(); iter.hasNext();) {
         	IDataBinding binding = (IDataBinding) iter.next();
             if(binding.getName() == simpleName) {
             	functionSet.setName(binding.getCaseSensitiveName());
@@ -113,7 +185,7 @@ public class InterfaceBinding extends PartBinding {
 	}
 	
 	protected IFunctionBinding primFindFunction(String simpleName) {
-        for(Iterator iter = getDeclaredFunctions().iterator(); iter.hasNext();) {
+        for(Iterator iter = getDeclaredAndInheritedFunctions().iterator(); iter.hasNext();) {
             IFunctionBinding binding = (IFunctionBinding) ((NestedFunctionBinding) iter.next()).getType();
             if(binding.getName().equals(simpleName)) {
                 return binding;
@@ -130,7 +202,38 @@ public class InterfaceBinding extends PartBinding {
 		return result;
 	}
 	
+	private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeInt(extendedTypes.size());
+        for(int i = 0; i < extendedTypes.size(); i++) {
+        	writeTypeBindingReference(out, (ITypeBinding) extendedTypes.get(i));
+        }
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        int numExtendedTypes = in.readInt();
+        for(int i = 0; i < numExtendedTypes; i++) {
+        	addExtendedType(readTypeBindingReference(in));
+        }
+    }
+
+	
 	public boolean isDeclarablePart() {
 		return true;
+	}
+		
+	public boolean containsExtendsFor(InterfaceBinding iface) {
+		if (iface == this) {
+			return true;
+		}
+		
+		Iterator i = getExtendedTypes().iterator();
+		while (i.hasNext()) {
+			if (i.next() == iface) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

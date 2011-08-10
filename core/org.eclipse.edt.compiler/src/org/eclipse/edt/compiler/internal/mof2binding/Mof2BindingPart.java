@@ -201,7 +201,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 	}
 	
 	public boolean visit(Handler ir) {
-		IPartBinding binding = (IPartBinding)getBinding(ir);
+		HandlerBinding binding = (HandlerBinding)getBinding(ir);
 		if (binding == null) {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
@@ -209,6 +209,10 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			binding.setValid(true);
 			partStack.push(binding);
 			handleVisitLogicAndDataPart((LogicAndDataPart)ir, (FunctionContainerBinding)binding);
+			for (Interface iface : ir.getInterfaces()) {
+				iface.accept(this);
+				binding.getImplementedInterfaces().add((InterfaceBinding)stack.pop());
+			}
 			partStack.pop();
 		}
 		stack.push(binding);
@@ -251,7 +255,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 	
 
 	public boolean visit(Interface ir) {
-		IPartBinding binding = (IPartBinding)getBinding(ir);
+		InterfaceBinding binding = (InterfaceBinding)getBinding(ir);
 		if (binding == null) {
 			String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
 			String name = InternUtil.intern(ir.getName());
@@ -259,6 +263,12 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			binding.setValid(true);
 			partStack.push(binding);
 			handleVisitLogicAndDataPart(ir, (InterfaceBinding)binding);
+
+			for (Interface iface : ir.getInterfaces()) {
+				iface.accept(this);
+				binding.addExtendedType((InterfaceBinding)stack.pop());
+			}
+
 			partStack.pop();
 		}
 		stack.push(binding);

@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.part;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.binding.Binding;
@@ -32,6 +34,7 @@ import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.INullableTypeBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.binding.InterfaceBinding;
 import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.binding.StructureItemBinding;
@@ -53,6 +56,7 @@ import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibrary;
+import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
@@ -246,6 +250,8 @@ public class HandlerValidator extends FunctionContainerValidator {
 				}
 			}
 		}
+		
+		checkInterfaceFunctionsOverriden();
 		return true;
 	}
 	
@@ -885,4 +891,74 @@ public class HandlerValidator extends FunctionContainerValidator {
 		}
 		return null;
 	}
+	
+	
+	private void checkInterfaceFunctionsOverriden() {
+		for(Iterator iter = getInterfaceFunctionList().iterator(); iter.hasNext();) {
+			IFunctionBinding interfaceFunc = (IFunctionBinding) ((NestedFunctionBinding) iter.next()).getType();
+			boolean foundMatchingHandlerFunc = false;
+			for(Iterator iter2 = handlerBinding.getDeclaredFunctions().iterator(); !foundMatchingHandlerFunc && iter2.hasNext();) {
+				IFunctionBinding handlerFunc = (IFunctionBinding) ((NestedFunctionBinding) iter2.next()).getType();
+				if(TypeCompatibilityUtil.functionSignituresAreIdentical(handlerFunc, interfaceFunc, compilerOptions)) {
+					foundMatchingHandlerFunc = true;
+				}				   
+			}
+			if(!foundMatchingHandlerFunc) {
+				problemRequestor.acceptProblem(
+					handler.getName(),
+					IProblemRequestor.INTERFACE_FUNCTION_MISSING,
+					new String[] {
+						handler.getName().getCanonicalName(),
+						interfaceFunc.getCaseSensitiveName() + "(" + getTypeNamesList(interfaceFunc.getParameters()) + ")",
+						interfaceFunc.getDeclarer().getCaseSensitiveName()
+					});
+			}
+		}
+	}
+	
+	private List getInterfaceFunctionList() {
+		List retVal = new ArrayList();
+		List interfaceList = handlerBinding.getImplementedInterfaces();
+		for (int i = 0; i < interfaceList.size(); i++){
+			InterfaceBinding interfaceBinding = (InterfaceBinding)interfaceList.get(i);
+			for(Iterator iter = interfaceBinding.getDeclaredFunctions().iterator(); iter.hasNext();) {
+				NestedFunctionBinding fBinding = (NestedFunctionBinding) iter.next();
+				if(!fBinding.isPrivate()) {
+					retVal.add(fBinding);
+				}
+			}
+		}
+		return retVal;
+	}
+
+	private static String getTypeNamesList( List types ) {
+		StringBuffer sb = new StringBuffer();
+		if( !types.isEmpty() ) {
+			sb.append( " " );
+		}
+		for( Iterator iter = types.iterator(); iter.hasNext(); ) {
+			FunctionParameterBinding nextParm = (FunctionParameterBinding) iter.next();
+			ITypeBinding nextType = nextParm.getType();
+			if (StatementValidator.isValidBinding(nextType)){
+				sb.append( nextType.getCaseSensitiveName() );
+				if( nextParm.isInput() ) {
+					sb.append( " " + IEGLConstants.KEYWORD_IN );
+				}
+				else if( nextParm.isOutput() ) {
+					sb.append( " " + IEGLConstants.KEYWORD_OUT );
+				}
+				else {
+					sb.append( " " + IEGLConstants.KEYWORD_INOUT );
+				}
+				if( iter.hasNext() ) {
+					sb.append( ", " );
+				}
+				else {
+					sb.append( " " );
+				}
+			}
+		}
+		return sb.toString();
+	}
+
 }

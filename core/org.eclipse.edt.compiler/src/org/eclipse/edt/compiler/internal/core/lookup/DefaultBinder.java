@@ -49,6 +49,7 @@ import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IPartSubTypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.binding.InterfaceBinding;
 import org.eclipse.edt.compiler.binding.IsNotStateBinding;
 import org.eclipse.edt.compiler.binding.LocalVariableBinding;
 import org.eclipse.edt.compiler.binding.MultiplyOccuringItemTypeBinding;
@@ -3138,7 +3139,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 						}
 						if(nextType != null && IBinding.NOT_FOUND_BINDING != nextType) {
 							if(nextType != firstElementType) {
-								ITypeBinding commonExternalTypeSuperType = getCommonExternalTypeSupertype(firstElementType, nextType, compilerOptions);
+								ITypeBinding commonExternalTypeSuperType = getCommonExtendedTypeSupertype(firstElementType, nextType, compilerOptions);
 								if(commonExternalTypeSuperType != null) {
 									firstElementType = commonExternalTypeSuperType;
 								}
@@ -3174,7 +3175,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 		}
 	}
 
-	private ITypeBinding getCommonExternalTypeSupertype (ITypeBinding type1, ITypeBinding type2, ICompilerOptions compilerOptions) {
+	private ITypeBinding getCommonExtendedTypeSupertype (ITypeBinding type1, ITypeBinding type2, ICompilerOptions compilerOptions) {
 		if(ITypeBinding.EXTERNALTYPE_BINDING == type1.getKind() && ITypeBinding.EXTERNALTYPE_BINDING == type2.getKind()) {
 			List extendedTypes1 = ((ExternalTypeBinding) type1).getExtendedTypes();
 			List extendedTypes2 = ((ExternalTypeBinding) type2).getExtendedTypes();
@@ -3191,6 +3192,24 @@ public abstract class DefaultBinder extends AbstractBinder {
 				}
 			}
 		}
+
+		if(ITypeBinding.INTERFACE_BINDING == type1.getKind() && ITypeBinding.INTERFACE_BINDING == type2.getKind()) {
+			List extendedTypes1 = ((InterfaceBinding) type1).getExtendedTypes();
+			List extendedTypes2 = ((InterfaceBinding) type2).getExtendedTypes();
+			if(extendedTypes1.contains(type2)) {
+				return type2;
+			}
+			if(extendedTypes2.contains(type1)) {
+				return type1;
+			}
+			for(Iterator iter = extendedTypes1.iterator(); iter.hasNext();) {
+				ITypeBinding next = (ITypeBinding) iter.next();
+				if(extendedTypes2.contains(next)) {
+					return next;
+				}
+			}
+		}
+
 		return null;
 	}
 

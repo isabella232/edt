@@ -414,7 +414,7 @@ public interface IProblemRequestor {
    
    
     
-	public static final int INTERFACE_FUNCTION_MISSING_IN_SERVICE = 3400;
+	public static final int INTERFACE_FUNCTION_MISSING = 3400;
 	
 	public static final int XXXREST_ALL_PARMS_MUST_BE_IN = 3401;
 	public static final int XXXREST_ONLY_1_RESOURCE_PARM = 3402;
@@ -442,6 +442,7 @@ public interface IProblemRequestor {
 	public static final int CANNOT_READ_FROM_EXTERNALTYPE_FIELD_WITH_NO_GETTER = 3424;
 	public static final int TYPE_INVALID_IN_EXTERNALTYPE = 3425;
 	public static final int TYPE_INVALID_IN_EXTERNALTYPE_UNLESS_PROPERTY_SPECIFIED = 3426;
+	public static final int INTERFACE_MUST_EXTEND_INTERFACE = 3427;
 	
 	public static final int NULLABLE_TYPE_NOT_ALLOWED_IN_PART = 3430;
 	public static final int NULLABLE_TYPE_NOT_ALLOWED_IN_PROGRAM_PARAMETER = 3431;
@@ -895,6 +896,8 @@ public interface IProblemRequestor {
 //	public static final int WEBFORM_NOT_SUPPORTED_ON_TARGET_SYSTEM = 5051;
 //	public static final int WEBFORM_SUBMITVALUE_RECEIVER_ITEM_NOT_FOUND = 5052;
 	
+	public static final int RECURSIVE_LOOP_IN_EXTENDS = 5045;   		
+
 	public static final int SYSTEM_FUNCTION_ARG_CANNOT_BE_EXPRESSION = 5046;
 
     public static final int TYPE_INVALID_REF_TYPE_COMPARISON = 5048;
@@ -1726,7 +1729,7 @@ public interface IProblemRequestor {
 	public static final int VALUEREF_NOT_RESOLVED = 7799;
 	
 	public static final int INTERFACE_IS_AMBIGUOUS = 7800;
-	public static final int SERVICE_MUST_IMPLEMENT_AN_INTERFACE = 7801;
+	public static final int SERVICE_OR_HANDLER_MUST_IMPLEMENT_AN_INTERFACE = 7801;
 	public static final int SERVICE_CANNOT_BE_USED_BY_SERVICE = 7802;
 	public static final int LOOSE_TYPES_NOT_ALLOWED_IN_SERVICE_OR_INTERFACE_FUNC_PARM = 7803;
 	public static final int TYPE_NOT_ALLOWED_IN_SERVICE_OR_INTERFACE_FUNC_PARM = 7804;

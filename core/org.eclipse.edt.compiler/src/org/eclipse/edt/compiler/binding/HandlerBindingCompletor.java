@@ -11,11 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
+import java.util.Iterator;
+
 import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeBindingImpl;
 import org.eclipse.edt.compiler.core.ast.Handler;
+import org.eclipse.edt.compiler.core.ast.Name;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
@@ -46,6 +51,25 @@ public class HandlerBindingCompletor extends FunctionContainerBindingCompletor {
 //		}
 		
 		addImplicitFieldsFromAnnotations();
+		
+        for(Iterator iter = handler.getImplementedInterfaces().iterator(); iter.hasNext();) {
+    		Name nextName = (Name) iter.next();
+    		try {
+    			ITypeBinding typeBinding = bindTypeName(nextName);
+    			//TODO should probably check to see if this is an interfaceBinding before adding it
+    			handlerBinding.addExtenedInterface(typeBinding);
+    			
+    			if(ITypeBinding.INTERFACE_BINDING != typeBinding.getKind()) {
+    				problemRequestor.acceptProblem(
+    					nextName,
+						IProblemRequestor.SERVICE_OR_HANDLER_MUST_IMPLEMENT_AN_INTERFACE);
+    			}
+    		}
+    		catch (ResolutionException e) {
+    			problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
+    		}
+    	}
+		
 		
         return true;
     }

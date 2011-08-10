@@ -93,7 +93,7 @@ public class ServiceValidator extends FunctionContainerValidator {
 			if(!foundMatchingServiceFunc) {
 				problemRequestor.acceptProblem(
 					service.getName(),
-					IProblemRequestor.INTERFACE_FUNCTION_MISSING_IN_SERVICE,
+					IProblemRequestor.INTERFACE_FUNCTION_MISSING,
 					new String[] {
 						service.getName().getCanonicalName(),
 						interfaceFunc.getCaseSensitiveName() + "(" + getTypeNamesList(interfaceFunc.getParameters()) + ")",

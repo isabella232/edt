@@ -24,14 +24,29 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
  */
 public class Interface extends Part {
 
-	public Interface(Boolean privateAccessModifierOpt, SimpleName name, List interfaceContents, int startOffset, int endOffset) {
+	private List extendsOpt;
+
+	public Interface(Boolean privateAccessModifierOpt, SimpleName name, List extendsOpt, List interfaceContents, int startOffset, int endOffset) {
 		super(privateAccessModifierOpt, name, interfaceContents, startOffset, endOffset);
+
+		this.extendsOpt = setParent(extendsOpt);
 	}
 	
 	public boolean hasSubType() {
 		return false;
 	}
-	
+
+	public boolean hasExtendedType() {
+		return extendsOpt != null && !extendsOpt.isEmpty();
+	}
+
+	/**
+	 * @return A List of Name objects
+	 */
+	public List getExtendedTypes() {
+		return extendsOpt;
+	}
+
 	public Name getSubType() {
 		return null;
 	}
@@ -40,13 +55,14 @@ public class Interface extends Part {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
 			name.accept(visitor);
+			acceptChildren(visitor, extendsOpt);
 			acceptChildren(visitor, contents);
 		}
 		visitor.endVisit(this);
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {
-		return new Interface(new Boolean(isPrivate), (SimpleName)name.clone(), cloneContents(), getOffset(), getOffset() + getLength());
+		return new Interface(new Boolean(isPrivate), (SimpleName)name.clone(), cloneList(extendsOpt), cloneContents(), getOffset(), getOffset() + getLength());
 	}
 
 	public String getPartTypeName() {

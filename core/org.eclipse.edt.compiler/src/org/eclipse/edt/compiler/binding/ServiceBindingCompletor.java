@@ -54,7 +54,7 @@ public class ServiceBindingCompletor extends FunctionContainerBindingCompletor {
     			if(ITypeBinding.INTERFACE_BINDING != typeBinding.getKind()) {
     				problemRequestor.acceptProblem(
     					nextName,
-						IProblemRequestor.SERVICE_MUST_IMPLEMENT_AN_INTERFACE);
+						IProblemRequestor.SERVICE_OR_HANDLER_MUST_IMPLEMENT_AN_INTERFACE);
     			}
     		}
     		catch (ResolutionException e) {

@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.egl2mof;
 
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -59,7 +58,6 @@ import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DataItem;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Form;
 import org.eclipse.edt.mof.egl.FormField;
@@ -68,6 +66,7 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.FunctionPart;
+import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
 import org.eclipse.edt.mof.egl.Member;
@@ -137,7 +136,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		else {
 			for (Object name : node.getExtendedTypes()) {
 				IPartBinding superType = (IPartBinding)((Name)name).resolveBinding();
-				if (Binding.isValidBinding(superType)) {
+				if (Binding.isValidBinding(superType) && superType.getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
 					((EGLClass)part).getSuperTypes().add((EGLClass)mofTypeFor(superType));
 				}
 			}
@@ -171,15 +170,40 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	}
 
 	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.Interface node) {
-		MofSerializable part = defaultHandleVisitPart(node);
+	public boolean visit(org.eclipse.edt.compiler.core.ast.Interface interfaceNode) {
+		
+		MofSerializable part = handleVisitPart(interfaceNode);
+		handleContents(interfaceNode, part);
+		
+		for (Node node : (List<Node>)interfaceNode.getExtendedTypes()) {
+			
+			ITypeBinding tb = (ITypeBinding)((org.eclipse.edt.compiler.core.ast.Name)node).resolveBinding();
+			if (Binding.isValidBinding(tb) && tb.getKind() == ITypeBinding.INTERFACE_BINDING) {
+				EObject obj = mofTypeFor(tb);
+				if (obj instanceof StructPart) {
+					((EGLClass)part).getSuperTypes().add((StructPart)obj);
+				}
+			}
+		}
+
+		handleEndVisitPart(interfaceNode, part);
+
 		stack.push(part);
 		return false;
 	}
 
 	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.Handler node) {
-		MofSerializable part = defaultHandleVisitPart(node);
+	public boolean visit(org.eclipse.edt.compiler.core.ast.Handler handler) {
+		Handler part = (Handler)defaultHandleVisitPart(handler);
+		for (Node node : (List<Node>)handler.getImplementedInterfaces()) {
+			ITypeBinding tb = (ITypeBinding)((org.eclipse.edt.compiler.core.ast.Name)node).resolveBinding();
+			if (Binding.isValidBinding(tb) && tb.getKind() == ITypeBinding.INTERFACE_BINDING) {
+				EObject obj = mofTypeFor(tb);
+				if (obj instanceof StructPart) {
+					((EGLClass)part).getSuperTypes().add((StructPart)obj);
+				}
+			}
+		}
 		stack.push(part);
 		return false;
 	}
@@ -287,8 +311,14 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.Service service) {
 		Service part = (Service)defaultHandleVisitPart(service);
 		for (Node node : (List<Node>)service.getImplementedInterfaces()) {
-			Interface iface = (Interface)mofTypeFor((ITypeBinding)((org.eclipse.edt.compiler.core.ast.Name)node).resolveBinding());
-			part.getInterfaces().add(iface);
+			
+			ITypeBinding tb = (ITypeBinding)((org.eclipse.edt.compiler.core.ast.Name)node).resolveBinding();
+			if (Binding.isValidBinding(tb) && tb.getKind() == ITypeBinding.INTERFACE_BINDING) {
+				EObject obj = mofTypeFor(tb);
+				if (obj instanceof StructPart) {
+					((EGLClass)part).getSuperTypes().add((StructPart)obj);
+				}
+			}
 		}
 		stack.push(part);
 		return false;

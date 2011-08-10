@@ -87,6 +87,7 @@ public class ExternalTypeBinding extends PartBinding {
 	    		extendedTypes = new ArrayList();
 	    	}
 	    	extendedTypes.add(typeBinding);
+	    	haveExpandedExtendedTypes = false;
     	}
     }
     
@@ -281,6 +282,20 @@ public class ExternalTypeBinding extends PartBinding {
     
 	public StaticPartDataBinding getStaticPartDataBinding() {
 		return (StaticPartDataBinding)getStaticExternalTypeDataBinding();
+	}
+
+	public boolean containsExtendsFor(ExternalTypeBinding et) {
+		if (et == this) {
+			return true;
+		}
+		
+		Iterator i = getExtendedTypes().iterator();
+		while (i.hasNext()) {
+			if (i.next() == et) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

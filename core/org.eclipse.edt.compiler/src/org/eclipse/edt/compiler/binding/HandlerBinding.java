@@ -14,7 +14,12 @@ package org.eclipse.edt.compiler.binding;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
 
@@ -24,6 +29,9 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
  */
 public class HandlerBinding extends FunctionContainerBinding {
 
+	private boolean haveExpandedExtendedInterfaces = false;
+	private List extendedInterfaces = Collections.EMPTY_LIST;
+
 	private final String[] EGLUIJSF = new String[] {"egl", "ui", "jsf"};
     public HandlerBinding(String[] packageName, String caseSensitiveInternedName) {
         super(packageName, caseSensitiveInternedName);
@@ -31,7 +39,48 @@ public class HandlerBinding extends FunctionContainerBinding {
 
 	public void clear() {
 		super.clear();
+		haveExpandedExtendedInterfaces = false;
+		extendedInterfaces = Collections.EMPTY_LIST;
 	}
+	
+    /**
+     * @return A list of InterfaceBinding objects representing the interfaces
+     *         that this service implements (and the interfaces that those
+     *         interfaces extend).
+     */
+    public List getImplementedInterfaces() {
+    	if(!haveExpandedExtendedInterfaces) {
+			List newExtendedInterfaces = getExtendedInterfaces(new HashSet());
+			extendedInterfaces = newExtendedInterfaces;
+			haveExpandedExtendedInterfaces = true;
+		}
+    	return extendedInterfaces;
+    }
+    
+    private List getExtendedInterfaces(Set interfacesAlreadyProcessed) {
+		List result = new ArrayList();
+		for(Iterator iter = extendedInterfaces.iterator(); iter.hasNext();) {
+			ITypeBinding typeBinding = (ITypeBinding) iter.next();
+			
+			typeBinding = realizeTypeBinding(typeBinding, getEnvironment());
+			
+			if(!interfacesAlreadyProcessed.contains(typeBinding)) {
+				if(typeBinding.getKind() == ITypeBinding.INTERFACE_BINDING) {					
+					result.add(typeBinding);
+					result.addAll(((InterfaceBinding) typeBinding).getExtendedTypes(interfacesAlreadyProcessed));
+				}
+			}
+		}
+		return result;
+    }
+    
+    public void addExtenedInterface(ITypeBinding interfaceBinding) {
+    	if(extendedInterfaces == Collections.EMPTY_LIST) {
+    		extendedInterfaces = new ArrayList();
+    	}
+    	extendedInterfaces.add(interfaceBinding);
+    }
+
 
 	public boolean isStructurallyEqual(IPartBinding anotherPartBinding) {
 		// TODO Auto-generated method stub

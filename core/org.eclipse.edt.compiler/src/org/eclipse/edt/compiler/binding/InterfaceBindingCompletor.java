@@ -17,13 +17,16 @@ import java.util.Set;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Interface;
+import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 
@@ -57,8 +60,40 @@ public class InterfaceBindingCompletor extends AbstractBinder {
         processSettingsBlocks();
         
         interfaceBinding.setPrivate(interfaceAST.isPrivate());
-    	
+
+        processExtends(interfaceAST);
+        
     	return true;
+    }
+    
+    private void processExtends(Interface interfaceAST) {
+        if(interfaceAST.hasExtendedType()) {
+    		for(Iterator iter = interfaceAST.getExtendedTypes().iterator(); iter.hasNext();) {
+            	try {
+            		
+            		Name name = (Name) iter.next();
+        			ITypeBinding typeBinding = bindTypeName(name);
+        			
+        			if (Binding.isValidBinding(typeBinding) && typeBinding.getKind() == ITypeBinding.INTERFACE_BINDING) {
+        				
+        				InterfaceBinding extendedInterface = (InterfaceBinding) typeBinding;
+        				if (extendedInterface.containsExtendsFor(interfaceBinding)) {
+                			problemRequestor.acceptProblem(
+                    				name,
+                    				IProblemRequestor.RECURSIVE_LOOP_IN_EXTENDS,
+                    				new String[] {interfaceBinding.getCaseSensitiveName(), name.toString()});
+        					name.setBinding(Binding.NOT_FOUND_BINDING);
+        				}
+        				else {
+        					interfaceBinding.addExtendedType(typeBinding);
+        				}
+        			}
+            	}
+        		catch (ResolutionException e) {
+        			problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
+        		}
+    		}
+        }
     }
     
 	public void endVisit(Interface interfaceNode) {

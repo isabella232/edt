@@ -11,10 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.part;
 
+import java.util.Iterator;
+
+import org.eclipse.edt.compiler.binding.IBinding;
+import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.InterfaceBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
+import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.Interface;
+import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
@@ -45,6 +51,7 @@ public class InterfaceValidator extends AbstractASTVisitor {
 		iFaceNode = interfaceNode;
 		EGLNameValidator.validate(interfaceNode.getName(), EGLNameValidator.HANDLER, problemRequestor, compilerOptions);
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(interfaceNode);
+		checkExtendedTypes(interfaceNode);
 		return true;
 	}
 
@@ -66,6 +73,29 @@ public class InterfaceValidator extends AbstractASTVisitor {
 		}
 		
 		return false;
+	}
+	
+	private void checkExtendedTypes(Interface iface) {
+		for(Iterator iter = iface.getExtendedTypes().iterator(); iter.hasNext();) {
+			Name nameAST = (Name) iter.next();
+			ITypeBinding extendedType = (ITypeBinding) (nameAST).resolveBinding();
+			if(extendedType != null && IBinding.NOT_FOUND_BINDING != extendedType) {
+				boolean typeIsValid = false;
+				
+				if(ITypeBinding.INTERFACE_BINDING == extendedType.getKind()) {
+					typeIsValid = true;
+				}
+				
+				if(!typeIsValid) {
+					problemRequestor.acceptProblem(
+							nameAST,
+						IProblemRequestor.INTERFACE_MUST_EXTEND_INTERFACE,
+						new String[] {
+							extendedType.getCaseSensitiveName()
+						});
+				}
+			}
+		}
 	}
 	
 	public boolean visit(SettingsBlock settingsBlock) {

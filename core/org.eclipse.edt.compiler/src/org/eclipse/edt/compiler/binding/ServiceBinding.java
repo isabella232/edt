@@ -50,15 +50,15 @@ public class ServiceBinding extends FunctionContainerBinding {
     
     private List getExtendedInterfaces(Set interfacesAlreadyProcessed) {
 		List result = new ArrayList();
-		if( !interfacesAlreadyProcessed.contains( this ) ) {
-			interfacesAlreadyProcessed.add( this );
-			for(Iterator iter = extendedInterfaces.iterator(); iter.hasNext();) {
-				ITypeBinding typeBinding = (ITypeBinding) iter.next();
-				
-				typeBinding = realizeTypeBinding(typeBinding, getEnvironment());
-				
+		for(Iterator iter = extendedInterfaces.iterator(); iter.hasNext();) {
+			ITypeBinding typeBinding = (ITypeBinding) iter.next();
+			
+			typeBinding = realizeTypeBinding(typeBinding, getEnvironment());
+			
+			if(!interfacesAlreadyProcessed.contains(typeBinding)) {
 				if(typeBinding.getKind() == ITypeBinding.INTERFACE_BINDING) {					
 					result.add(typeBinding);
+					result.addAll(((InterfaceBinding) typeBinding).getExtendedTypes(interfacesAlreadyProcessed));
 				}
 			}
 		}
