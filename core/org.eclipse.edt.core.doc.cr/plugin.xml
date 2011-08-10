@@ -2,9 +2,8 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 <plugin>
    <extension point="org.eclipse.help.toc"> 
-      <toc file="analyze_toc.xml" primary="false"/>
-      <toc file="define_compiler_toc.xml" primary="false"/>
-      <toc file="api_toc.xml" primary="false"/>
+      <toc file="toc01.xml" primary="false"/>      
+      <!--toc file="api_toc.xml" primary="false"/-->
       <!-- index path="index/" /> -->
    </extension>
    <extension point="org.eclipse.help.contentProducer">

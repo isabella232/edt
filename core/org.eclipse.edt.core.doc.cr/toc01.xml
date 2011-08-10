@@ -6,6 +6,6 @@
 	    cedt (concepts), tedt (for tasks), redt (reference)	
 -->
  
-<toc label="Analyzing EGL source with EDT">
-   <topic label="Introduction to the EGL model" href="topics/cedt01000.html"></topic>   
+<toc label="EGL APIs for analysis and extension">
+   <topic label="Introduction to the EGL model" href="topics/cedt02000.html"></topic>   
 </toc>
