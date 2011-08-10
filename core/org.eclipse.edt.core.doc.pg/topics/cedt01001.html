@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="EGL process from development to run time"></meta>
+<meta name="abstract" content="The following figure outlines the process by which the EGL technology creates output from your source code."></meta>
+<meta name="description" content="The following figure outlines the process by which the EGL technology creates output from your source code."></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="cedt01001"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>EGL process from development to run time</title>
+</head>
+<body id="cedt01001"><a name="cedt01001"><!-- --></a>
+
+
+<h1 class="topictitle1">EGL process from development to run time</h1>
+
+
+
+<div><p>The following figure outlines the process by which the
+EGL technology creates output from your source code.</p>
+
+<div class="p"><div class="fignone">
+<br></br><div class="imagecenter"><img class="imagecenter" src="../images/egl_core_overview.gif" alt="EGL compilation"></img></div><br></br>
+</div>
+</div>
+
+<p>The developer's task is threefold: first, to write and test
+source code, which includes the build step illustrated in the figure,
+although that step is typically automatic; second, to generate and
+prepare the code for external deployment; and third, to install the
+code on one or another platform.</p>
+
+<div class="p">Here is an overview of the technological process: <ol>
+
+<li>The <dfn class="term">EGL compiler</dfn> acts as follows: <ol type="a">
+<li>Accepts the source code (file extension <samp class="codeph">.egl</samp>).</li>
+
+<li>Validates the code for general syntax errors.</li>
+
+<li>Compiles the code into an intermediate representation of the logic.</li>
+
+</ol>
+<p>The compiled output is serialized and written to an output
+file. The compilation and output is called an <dfn class="term">EGL build</dfn>,
+and the output files are called an <dfn class="term">intermediate representation
+(IR) file</dfn> (extension <samp class="codeph">.ir</samp>). In almost every
+case, the IR file is written even if it includes errors.</p>
+</li>
+
+<li>The EGL compiler invokes an <dfn class="term">EGL generator</dfn>, which
+acts as follows:<ol type="a">
+<li>Accepts the IR file, which must be error free.</li>
+
+<li>Scans the intermediate representation and determines whether a
+generation is possible and valid. <p>This scan is called <em>pre-generation</em>.
+It determines whether the IR fulfills the rules of the <dfn class="term">EGL target
+system</dfn>, which is the operating environment where the logic
+ultimately runs; for example, a Windows platform.</p>
+</li>
+
+<li>Generates output on the condition that no errors were found during
+the pre-generation.</li>
+
+</ol>
+<p>The generated output is JavaScript or  Java source code. COBOL generation of various
+kinds is available in commercial EGL extensions.</p>
+<div class="p">You control
+generation primarily by defining the <dfn class="term">build file</dfn>, which
+is an XML file identified by the extension <samp class="codeph">.eglbld</samp>.
+(This aspect of the technology is under review.) </div>
+</li>
+<br/>
+<li>If generation succeeds, the generated output can become an input
+to an <dfn class="term">EGL deployer</dfn>, which readies the generated output
+for deployment on an EGL target platform. <p>You invoke the deployer
+after configuring the <dfn class="term">EGL deployment descriptor</dfn>, which
+is an XML file identified by the extension <samp class="codeph">.egldd</samp>.
+The EGL deployment descriptor controls aspects of service deployment,
+JavaScript deployment, and access of external services. </p>
+<div class="note"><span class="notetitle">Note:</span> The
+EGL deployment descriptor is different from the Java Platform, Enterprise Edition (JEE) deployment
+descriptors, which are <samp class="codeph">web.xml</samp> (for WAR files) and <samp class="codeph">application.xml</samp> (for
+EAR files). </div>
+</li>
+
+</ol>
+</div>
+
+<div class="p">EGL documentation refers to several stages:<ul>
+<li>You write the EGL source code at <dfn class="term">development time</dfn>.</li>
+
+<li>The EGL compiler creates the output written to IR files at <dfn class="term">compilation
+time</dfn>. and an EGL generator creates the output that is specific
+to an EGL target platform at <dfn class="term">generation time</dfn>. The phrase <dfn class="term">transformation
+time</dfn> refers to compilation and generation time as a single
+duration. </li>
+
+<li>The EGL deployer configures the output for an EGL target platform
+at <dfn class="term">internal-deployment time</dfn>.</li>
+
+<li>The deployable output might be re-configured for the specific
+runtime environment at <dfn class="term">external-deployment time</dfn>.</li>
+
+<li>The business application runs on the target platform at <dfn class="term">run
+time</dfn>.</li>
+
+</ul>
+</div>
+
+</div>
+
+
+</body>
+</html>

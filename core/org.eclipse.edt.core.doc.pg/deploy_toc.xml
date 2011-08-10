@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
-
-<!-- 
-	for file names, please use five-digit numbers with these prefixes: 
-	    cedt (concepts), tedt (for tasks), redt (reference)	
--->
- 
-<toc label="Deploying applications to a target platform">
-   <topic id="tedt00811" label="Deploying to a Java EE environment" href="topics/tedt00811.html"></topic>
-   <topic id="tedt00812" label="Deploying to a non-Java EE environment" href="topics/tedt00812.html"></topic>
+<toc label="Deploying EGL-generated applications" topic="topics/tedt01800.html">
+   <topic label="Deploying EGL-generated Java code to Java EE"
+          href="topics/tedt01800.html"/>
+   <topic label="Deploying EGL-generated Java code outside of Java EE"
+          href="topics/tedt01801.html"/>
 </toc>
