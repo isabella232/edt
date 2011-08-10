@@ -148,7 +148,7 @@ public final class EGLProjectUtility {
 		IProject project= fWorkspaceRoot.getProject(configuration.getProjectName());
 		IEGLProject fCurrEProject = EGLCore.create(project);
 
-		List eglPathEntries = configuration.getRequiredProjects();		
+		List <PPListElement>eglPathEntries = configuration.getRequiredProjects();		
 		if(eglPathEntries.size()==0 && !configuration.getProjectName().equals("")) { //$NON-NLS-1$
 			eglPathEntries = initializeEGLPathEntries(project);
 		}
