@@ -251,7 +251,9 @@ public class ExternalTypeBindingCompletor extends AbstractBinder {
     	            funcParmBinding.setInput(true);
     	        } else if (useType == FunctionParameter.UseType.OUT) {
     	            funcParmBinding.setOutput(true);
-    	        }        
+    	        } else if (useType == null && Binding.isValidBinding(typeBinding) && typeBinding.isReference()) {
+    	            funcParmBinding.setInput(true);
+    	        }
 
     	        if (definedParameters.contains(parmName)) {
     	            problemRequestor.acceptProblem(functionParameter, IProblemRequestor.DUPLICATE_NAME_ACROSS_LISTS, new String[] { functionParameter.getName().getCanonicalName(), IEGLConstants.KEYWORD_CONSTRUCTOR });

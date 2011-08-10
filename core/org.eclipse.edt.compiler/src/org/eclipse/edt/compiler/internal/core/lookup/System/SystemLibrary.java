@@ -102,8 +102,6 @@ public abstract class SystemLibrary implements ISystemLibrary{
     		else if(parameterModifiers[i] == FunctionParameter.UseType.OUT) {
     			parm.setOutput(true);
     		}
-    		//Don't need to set inputOutput -- FunctionParameterBinding returns
-    		//true to isInputOutput if neither IN nor OUT is set
     		
     		result.addParameter(parm);
     	}    	

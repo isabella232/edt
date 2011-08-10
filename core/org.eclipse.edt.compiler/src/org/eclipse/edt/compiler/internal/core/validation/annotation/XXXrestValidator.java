@@ -20,6 +20,7 @@ import java.util.Map;
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
+import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
@@ -91,6 +92,15 @@ public abstract class XXXrestValidator implements IAnnotationValidationRule {
 		return type.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING;
 	}
 	
+	private boolean isIn(FunctionParameter parm) {
+		if (parm.getName().resolveBinding() instanceof FunctionParameterBinding) {
+			return ((FunctionParameterBinding)parm.getName().resolveBinding()).isInput();
+		}
+		
+		return parm.getUseType() == UseType.IN;
+	}
+	
+	
 	public void validate(Node errorNode, Node target, ITypeBinding targetTypeBinding, Map allAnnotations, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		
 		this.errorNode = errorNode;
@@ -145,7 +155,7 @@ public abstract class XXXrestValidator implements IAnnotationValidationRule {
 			FunctionParameter parm = (FunctionParameter)i.next();
 			parmNamesToNodes.put(parm.getName().getCanonicalName().toUpperCase().toLowerCase(), parm);
 			
-			if (parm.getUseType() == null || parm.getUseType() != UseType.IN) {
+			if (!isIn(parm)) {
 				problemRequestor.acceptProblem(parm, IProblemRequestor.XXXREST_ALL_PARMS_MUST_BE_IN, IMarker.SEVERITY_ERROR, new String[] { parm.getName().getCanonicalName(), funcName[0], getName()});
 			}
 		}

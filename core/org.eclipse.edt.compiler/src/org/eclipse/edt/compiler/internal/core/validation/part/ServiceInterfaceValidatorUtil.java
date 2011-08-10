@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.FunctionBinding;
+import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
@@ -26,6 +27,7 @@ import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.PrimitiveType;
+import org.eclipse.edt.compiler.core.ast.FunctionParameter.UseType;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -67,7 +69,7 @@ public class ServiceInterfaceValidatorUtil {
 	        				thisnestedFunction.getName().getCanonicalName()});
 				}
 				
-				if (isOneWay && functionParameter.getUseType() != FunctionParameter.UseType.IN) {
+				if (isOneWay && !isIn(functionParameter)) {
          			problemRequestor.acceptProblem(functionParameter,
 	    				IProblemRequestor.ONEWAY_FUNCTION_PARM_MUST_BE_IN, 
 			              new String[] {
@@ -114,6 +116,14 @@ public class ServiceInterfaceValidatorUtil {
 				return false;
 			}
 			
+			private boolean isIn(FunctionParameter parm) {
+				if (parm.getName().resolveBinding() instanceof FunctionParameterBinding) {
+					return ((FunctionParameterBinding)parm.getName().resolveBinding()).isInput();
+				}
+				
+				return parm.getUseType() == UseType.IN;
+			}
+
 			public void endVisit(NestedFunction nestedFunction){
 				if (nestedFunction.hasReturnType()){
 					ITypeBinding typeBinding = nestedFunction.getReturnType().resolveTypeBinding();
@@ -171,7 +181,7 @@ public class ServiceInterfaceValidatorUtil {
 	private static boolean isOneWay(NestedFunction functionAst) {
 		IBinding binding = functionAst.getName().resolveBinding();
 		if (StatementValidator.isValidBinding(binding)) {
-			IAnnotationBinding ann = binding.getAnnotation(new String[] {"egl", "core"}, "oneway");
+			IAnnotationBinding ann = binding.getAnnotation(new String[] {"eglx", "services"}, "oneway");
 			
 			if (ann != null) {
 				Object value = ann.getValue();

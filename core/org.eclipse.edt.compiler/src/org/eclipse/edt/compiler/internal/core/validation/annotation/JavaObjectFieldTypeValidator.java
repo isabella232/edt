@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.binding.Binding;
+import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
@@ -47,14 +48,14 @@ public class JavaObjectFieldTypeValidator extends DefaultFieldContentAnnotationV
 		checkDataDeclarationValidInExternalType(errorNode, containerBinding, problemRequestor);
 	}
 	
-	public void validateFunctionParameter(FunctionParameter fParameter, IDataBinding parameterBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	public void validateFunctionParameter(FunctionParameter fParameter, FunctionParameterBinding parameterBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		ITypeBinding parameterTypeBinding = parameterBinding.getType();
 		if(Binding.isValidBinding(parameterTypeBinding)) {			
 			checkTypeValidInExternalType(fParameter.getType().getBaseType(), parameterBinding.getDeclaringPart(), parameterTypeBinding.getBaseType(), true, problemRequestor);
 			
 			if(ITypeBinding.PRIMITIVE_TYPE_BINDING == parameterTypeBinding.getKind() &&
 			   !Primitive.isDateTimeType(((PrimitiveTypeBinding) parameterTypeBinding).getPrimitive()) &&
-			   fParameter.getUseType() != FunctionParameter.UseType.IN) {
+			   !parameterBinding.isInput()) {
 				problemRequestor.acceptProblem(
 					fParameter,
 					IProblemRequestor.IN_MODIFIER_REQUIRED_FOR_PRIMITIVE_JAVAOBJECT_FUNCTION_PARAMETERS);
