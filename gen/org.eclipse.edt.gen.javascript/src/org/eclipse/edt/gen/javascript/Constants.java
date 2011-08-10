@@ -39,6 +39,7 @@ public class Constants {
 
 	//Annotation names
 	public static final String AnnotationXmlAttribute  = "eglx.xml.binding.annotation.xmlAttribute";
+	public static final String AnnotationXMLRootElement  = "eglx.xml.binding.annotation.XMLRootElement";
 	public static final String AnnotationXmlElement  = "eglx.xml.binding.annotation.xmlElement";
 	public static final String AnnotationJsonName  = "eglx.json.JsonName";
 
