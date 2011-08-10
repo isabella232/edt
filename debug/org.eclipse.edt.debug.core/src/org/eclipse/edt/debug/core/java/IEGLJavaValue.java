@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.core.java;
 
+import org.eclipse.debug.core.DebugException;
 import org.eclipse.edt.debug.core.IEGLValue;
 import org.eclipse.jdt.debug.core.IJavaValue;
 
@@ -30,4 +31,13 @@ public interface IEGLJavaValue extends IEGLValue, IEGLJavaDebugElement
 	 * @return the variable to which this value belongs, possibly null.
 	 */
 	public IEGLJavaVariable getParentVariable();
+	
+	/**
+	 * Returns the variable information from the value's SMAP. It should never be null. If there is no SMAP information, or the Java type was not a
+	 * type that we recognize, then this will return an empty array.
+	 * 
+	 * @return the variable information
+	 * @throws DebugException
+	 */
+	public SMAPVariableInfo[] getSMAPVariableInfos() throws DebugException;
 }

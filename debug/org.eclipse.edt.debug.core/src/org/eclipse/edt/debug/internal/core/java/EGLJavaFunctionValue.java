@@ -19,6 +19,7 @@ import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.edt.debug.core.IEGLValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
+import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
 import org.eclipse.jdt.debug.core.IJavaValue;
 
 /**
@@ -134,5 +135,11 @@ public class EGLJavaFunctionValue extends EGLJavaDebugElement implements IEGLJav
 	public IEGLJavaVariable getParentVariable()
 	{
 		return parentVariable;
+	}
+
+	@Override
+	public SMAPVariableInfo[] getSMAPVariableInfos() throws DebugException
+	{
+		return frame.getSMAPVariableInfos();
 	}
 }

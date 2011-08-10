@@ -55,7 +55,7 @@ public class VariableUtil
 	{
 		List<IEGLJavaVariable> newEGLVariables = new ArrayList<IEGLJavaVariable>( javaVariables.length );
 		
-		SMAPVariableInfo[] infos = frame.getSMAPVariableInfos();
+		SMAPVariableInfo[] infos = parent == null ? frame.getSMAPVariableInfos() : parent.getSMAPVariableInfos();
 		String javaFrameSignature = frame.getJavaStackFrame().getMethodName() + ";" + frame.getJavaStackFrame().getSignature(); //$NON-NLS-1$
 		int currentLine = frame.getLineNumber();
 		int frameStartLine = frame.getSMAPFunctionInfo() == null
