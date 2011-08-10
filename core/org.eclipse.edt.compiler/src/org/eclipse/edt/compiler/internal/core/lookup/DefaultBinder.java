@@ -1303,6 +1303,12 @@ public abstract class DefaultBinder extends AbstractBinder {
 				PrimitiveTypeValidator.validate((PrimitiveType) baseType, problemRequestor, compilerOptions); 
 			}
 			
+			if (typeAST.isNullableType()) {				
+				problemRequestor.acceptProblem(
+						typeAST,
+						IProblemRequestor.NULLABLE_INVALID_IN_ISA_OR_AS);
+			}
+						
 			Type tempTypeAST = typeAST;
 			while(tempTypeAST.isArrayType()) {
 				if(((ArrayType) tempTypeAST).hasInitialSize()) {
@@ -1310,8 +1316,16 @@ public abstract class DefaultBinder extends AbstractBinder {
 						((ArrayType) tempTypeAST).getInitialSize(),
 						IProblemRequestor.ARRAY_SIZE_NOT_ALLOWED_IN_ISA_OR_AS);
 				}
+				
 				tempTypeAST = ((ArrayType) tempTypeAST).getElementType();
 			}
+			
+			if (tempTypeAST != typeAST && tempTypeAST.isNullableType()) {
+				problemRequestor.acceptProblem(
+						tempTypeAST,
+						IProblemRequestor.NULLABLE_INVALID_IN_ISA_OR_AS);
+			}
+
 		}
 	}
 	

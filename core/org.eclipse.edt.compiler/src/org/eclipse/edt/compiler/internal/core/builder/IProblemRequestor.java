@@ -344,6 +344,7 @@ public interface IProblemRequestor {
 	public static final int VALDATATABLE_TYPE_INVALID_FOR_TYPEAHEAD = 3272;
 	public static final int TYPE_INVALID_FOR_TYPEAHEAD = 3273;
 	public static final int TYPE_VALIDATOR_FUNCTION_NOT_VALID_FOR_VGUIRECORD = 3274;
+	public static final int NULLABLE_INVALID_IN_ISA_OR_AS = 3275;
 	
 	public static final int IMPORT_STATEMENT_PACKAGE_NAME_COULD_NOT_BE_RESOLVED = 3325;	
 	public static final int IMPORT_STATEMENT_PART_NAME_IS_AMBIGUOUS = 3326;	
