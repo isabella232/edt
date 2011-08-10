@@ -13,11 +13,9 @@ package org.eclipse.edt.runtime.java.egl.lang;
 
 import org.eclipse.edt.javart.Constants;
 
-
-public class RuntimeException extends AnyException
-{
+public class RuntimeException extends AnyException {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-	
+
 	public RuntimeException() {
 		super();
 	}
@@ -33,5 +31,4 @@ public class RuntimeException extends AnyException
 	public RuntimeException(Exception ex) {
 		super(ex);
 	}
-		
 }

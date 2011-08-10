@@ -14,20 +14,17 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 
-public class InvocationException extends AnyException
-{
+public class InvocationException extends AnyException {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-	
+
 	public String name;
 	public int returnValue;
-	
-	public InvocationException( ) 
-		throws JavartException
-	{
+
+	public InvocationException() throws JavartException {
 		returnValue = 0;
 		ezeInitialize();
 	}
-		
+
 	public InvocationException(Exception e) {
 		super(e);
 	}
@@ -35,13 +32,10 @@ public class InvocationException extends AnyException
 	/**
 	 * Returns a clone of this object.
 	 */
-	public Object clone() throws CloneNotSupportedException
-	{
-		InvocationException theClone = (InvocationException)super.clone();
-		
+	public Object clone() throws CloneNotSupportedException {
+		InvocationException theClone = (InvocationException) super.clone();
 		theClone.name = name;
 		theClone.returnValue = returnValue;
-		
 		return theClone;
 	}
 }

@@ -14,11 +14,9 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 
-
-public class JavaObjectException extends AnyException
-{
+public class JavaObjectException extends AnyException {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-	
+
 	public String exceptionType;
 
 	public String getExceptionType() {
@@ -29,29 +27,24 @@ public class JavaObjectException extends AnyException
 		this.exceptionType = exceptionType;
 	}
 
-	public JavaObjectException( ) 
-		throws JavartException
-	{
-		ezeInitialize( );
+	public JavaObjectException() throws JavartException {
+		ezeInitialize();
 	}
-	
+
 	public JavaObjectException(String id, String message) {
 		super(id, message);
 	}
-	
+
 	public JavaObjectException(Throwable ex) {
 		super(ex);
 	}
-		
+
 	/**
 	 * Returns a clone of this object.
 	 */
-	public Object clone() throws CloneNotSupportedException
-	{
-		JavaObjectException theClone = (JavaObjectException)super.clone();
-		
+	public Object clone() throws CloneNotSupportedException {
+		JavaObjectException theClone = (JavaObjectException) super.clone();
 		theClone.exceptionType = exceptionType;
-		
 		return theClone;
 	}
 }

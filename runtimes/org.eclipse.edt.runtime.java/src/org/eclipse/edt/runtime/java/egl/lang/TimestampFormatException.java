@@ -14,20 +14,17 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JavartException;
 
-public class TimestampFormatException extends AnyException
-{
+public class TimestampFormatException extends AnyException {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-	
+
 	public String name;
 	public int returnValue;
-	
-	public TimestampFormatException( ) 
-		throws JavartException
-	{
+
+	public TimestampFormatException() throws JavartException {
 		returnValue = 0;
 		ezeInitialize();
 	}
-		
+
 	public TimestampFormatException(Exception e) {
 		super(e);
 	}
@@ -35,13 +32,10 @@ public class TimestampFormatException extends AnyException
 	/**
 	 * Returns a clone of this object.
 	 */
-	public Object clone() throws CloneNotSupportedException
-	{
-		TimestampFormatException theClone = (TimestampFormatException)super.clone();
-		
+	public Object clone() throws CloneNotSupportedException {
+		TimestampFormatException theClone = (TimestampFormatException) super.clone();
 		theClone.name = name;
 		theClone.returnValue = returnValue;
-		
 		return theClone;
 	}
 }
