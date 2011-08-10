@@ -390,6 +390,9 @@ public class CommonUtilities {
 				return;
 			}
 		}
+		// ignore adding this entry to the list, if it is the part we are currently generating
+		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(qualifiedName))
+			return;
 		// if we get here, then we haven't processed this type before
 		String unqualifiedName = qualifiedName;
 		if (unqualifiedName.indexOf('.') >= 0)
