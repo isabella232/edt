@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
-<toc label="EGL Language Reference" topic="topics/cedt00002.html">
+<toc label="EGL Language Reference">
    <topic label="EGL overview" href="topics/cedt00002.html">
       <topic label="Types and instances of those types" href="topics/cedt00004.html">
          <topic label="EGL types" href="topics/cedt00005.html"/>
          <topic label="Value and reference types" href="topics/cedt00012.html"/>
          <topic label="Boxing and unboxing conversions" href="topics/cedt00025.html"/>
          <topic label="Data items" href="topics/cedt00006.html"/>
-         <topic label="Classifiers, or part types" href="topics/cedt00007.html"/>
+         <topic label="Classifiers (part types)" href="topics/cedt00007.html"/>
          <topic label="Annotations" href="topics/cedt00008.html"/>
          <topic label="Stereotypes" href="topics/cedt00009.html"/>
       </topic>
@@ -21,9 +21,8 @@
          <topic label="EGL date-and-time types" href="topics/cedt00022.html"/>
          <topic label="EGL large-object types" href="topics/cedt00023.html"/>
          <topic label="EGL numeric types" href="topics/cedt00021.html"/>
-         <topic label="BOOLEAN" href="topics/cedt00024.html"/>
       </topic>
-      <topic label="Overview of the part types" href="topics/cedt00019.html">
+      <topic label="Overview of classifiers" href="topics/cedt00019.html">
          <topic label="Classifiers for defining EGL data parts" href="topics/cedt00026.html">
             <topic label="DataItem classifier overview" href="topics/cedt00030.html"/>
             <topic label="Record classifier overview" href="topics/cedt00031.html"/>
@@ -44,7 +43,55 @@
       </topic>
       <topic label="EGL Syntax" href="topics/cedt00013.html"/>
    </topic>
+   <topic label="Cross-reference lists">
+      <topic label="List of annotations" href="topics/redt00031.html"/>
+      <topic label="List of classifiers and parts" href="topics/redt00033.html"/>
+      <topic label="List of system packages" href="topics/redt00034.html"/>
+      <topic label="List of statements" href="topics/redt00030.html"/>
+      <topic label="List of stereotypes" href="topics/redt00032.html"/>
+      <topic label="List of other constructs" href="topics/redt00035.html"/>
+   </topic>
    <topic label="EGL language-reference topics" href="topics/redt00001.html">
-      <topic label="This keyword" href="topics/redt00002.html"/>
+      <topic label="Add statement" href="topics/redt00021.html"/>
+      <topic label="Assignment statement" href="topics/redt00004.html"/>
+      <topic label="BOOLEAN native type" href="topics/cedt00024.html"/>
+      <topic label="call statement" href="topics/redt00003.html"/>
+      <topic label="Case statement" href="topics/redt00014.html"/>
+      <topic label="Close statement" href="topics/redt00022.html"/>
+      <topic label="Continue statement" href="topics/redt00020.html"/>
+      <topic label="Delegate classifier detail" href="topics/redt00038.html"/>
+      <topic label="Delete statement" href="topics/redt00023.html"/>
+      <topic label="Dictionary part" href="topics/redt00048.html"/>
+      <topic label="Enumeration classifier detail" href="topics/redt00046.html"/>
+      <topic label="Enumerations provided in EDT" href="topics/redt00037.html"/>
+      <topic label="Execute statement" href="topics/redt00026.html"/>
+      <topic label="Exit statement" href="topics/redt00019.html"/>
+      <topic label="ExternalType classifier detail" href="topics/redt00041.html"/>
+      <topic label="For statement" href="topics/redt00017.html"/>
+      <topic label="ForEach statement" href="topics/redt00018.html"/>
+      <topic label="FreeSQL statement" href="topics/redt00029.html"/>
+      <topic label="Function invocation statement" href="topics/redt00008.html"/>
+      <topic label="Function syntax" href="topics/redt00036.html"/>
+      <topic label="Get statement" href="topics/redt00024.html"/>
+      <topic label="Handler classifier detail" href="topics/redt00042.html"/>
+      <topic label="If statement" href="topics/redt00015.html"/>
+      <topic label="Interface classifier detail" href="topics/redt00045.html"/>
+      <topic label="Label statement" href="topics/redt00009.html"/>
+      <topic label="Library classifier detail" href="topics/redt00043.html"/>
+      <topic label="List part" href="topics/redt00049.html"/>
+      <topic label="Move statement" href="topics/redt00006.html"/>
+      <topic label="Open statement" href="topics/redt00028.html"/>
+      <topic label="Prepare statement" href="topics/redt00027.html"/>
+      <topic label="Program classifier detail" href="topics/redt00047.html"/>
+      <topic label="Record classifier detail" href="topics/redt00040.html"/>
+      <topic label="Replace statement" href="topics/redt00025.html"/>
+      <topic label="Return statement" href="topics/redt00007.html"/>
+      <topic label="Service classifier detail" href="topics/redt00044.html"/>
+      <topic label="this keyword" href="topics/redt00002.html"/>
+      <topic label="Throw statement" href="topics/redt00011.html"/>
+      <topic label="Try blocks" href="topics/redt00013.html"/>
+      <topic label="Transfer statement" href="topics/redt00010.html"/>
+      <topic label="Use statement" href="topics/redt00005.html"/>
+      <topic label="While statement" href="topics/redt00016.html"/>
    </topic>
 </toc>

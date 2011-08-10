@@ -5,9 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="Classifiers, or part types"></meta>
-<meta name="abstract" content="EGL provides a variety of classifiers, each of which is a category of types. The EGL documentation sometimes refers to a classifier as a part type, but the word “type” in that phrase means “kind” rather than “data type.”"></meta>
-<meta name="description" content="EGL provides a variety of classifiers, each of which is a category of types. The EGL documentation sometimes refers to a classifier as a part type, but the word “type” in that phrase means “kind” rather than “data type.”"></meta>
+<meta name="DC.Title" content="Classifiers (part types)"></meta>
+<meta name="abstract" content="EGL provides a variety of classifiers, each of which is a category of types. The EGL documentation sometimes refers to a classifier as a part type, but the word “type” in that phrase means “category” rather than “data type.”"></meta>
+<meta name="description" content="EGL provides a variety of classifiers, each of which is a category of types. The EGL documentation sometimes refers to a classifier as a part type, but the word “type” in that phrase means “category” rather than “data type.”"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00004.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -15,25 +15,26 @@
 <meta name="DC.Identifier" content="cedt00007"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>Classifiers, or part types</title>
+<title>Classifiers (part types)</title>
 </head>
 <body id="cedt00007"><a name="cedt00007"><!-- --></a>
 
 
-<h1 class="topictitle1">Classifiers, or part types</h1>
+<h1 class="topictitle1">Classifiers (part types)</h1>
 
 
 
 <div><p>EGL provides a variety of <dfn class="term">classifiers</dfn>, each
 of which is a category of types. The EGL documentation sometimes refers
 to a classifier as a <dfn class="term">part type</dfn>, but the word “type” in
-that phrase means “kind” rather than “data type.”</p>
+that phrase means “category” rather than “data type.”</p>
 
 <p>If you are interested in understanding how the EGL generator works,
-you can start by noting that each EGL part is an instance of a classifier.
-In any case, be aware that the capabilities of a given classifier
-are made available to your EGL code when you define or use a part
-that is based on that classifier:</p>
+note that each EGL part is an instance of a classifier. However, knowing
+that internal detail is not important for developing a business application. </p>
+
+<p>The capabilities of a given classifier are made available to your
+EGL code when you define or use a part that is based on the classifier:</p>
 
 <div class="p"><ul>
 <li>You might define a part. For example, the <samp class="codeph">EmployeeRecordType</samp> type
