@@ -64,7 +64,10 @@ public abstract class AbstractProjectBuildPath {
     public boolean isReadOnly(){  	
     	if (readOnly == null) {
     		IEGLProject eglProject = EGLCore.create(project);
-    		readOnly = new Boolean(eglProject.isReadOnly());
+    		
+    		IContainer[] srcLocations = getSourceLocations();
+    		boolean hasSource = (srcLocations == null) || (srcLocations.length == 0);
+    		readOnly = new Boolean(eglProject.isReadOnly() || !hasSource);
     	}
 		return readOnly.booleanValue();  
     }

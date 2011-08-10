@@ -159,8 +159,8 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"label"			 	{ return ErrorNodeTypes.LABEL; }
 	"last"				{ return ErrorNodeTypes.LAST; }
 	"library"			{ return ErrorNodeTypes.LIBRARY; }
-	"like"				{ return ErrorNodeTypes.LIKE; }
-	"matches"			{ return ErrorNodeTypes.MATCHES; }
+//	"like"				{ return ErrorNodeTypes.LIKE; }
+//	"matches"			{ return ErrorNodeTypes.MATCHES; }
 	"move"				{ return ErrorNodeTypes.MOVE; }
 	"next"				{ return ErrorNodeTypes.NEXT; }
 	"new"			 	{ return ErrorNodeTypes.NEW; }	
@@ -280,28 +280,28 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
         // Primitive Types
 		"any"			 	{ return ErrorNodeTypes.PRIMITIVE; }
 		"bigint"			{ return ErrorNodeTypes.PRIMITIVE; }
-		"bin"			 	{ return ErrorNodeTypes.NUMERICPRIMITIVE; }
+//		"bin"			 	{ return ErrorNodeTypes.NUMERICPRIMITIVE; }
 		"boolean"			{ return ErrorNodeTypes.PRIMITIVE; }
-		"char"				{ return ErrorNodeTypes.CHARPRIMITIVE; }
-		"dbchar"			{ return ErrorNodeTypes.CHARPRIMITIVE; }
+//		"char"				{ return ErrorNodeTypes.CHARPRIMITIVE; }
+//		"dbchar"			{ return ErrorNodeTypes.CHARPRIMITIVE; }
 		"decimal"			{ return ErrorNodeTypes.NUMERICPRIMITIVE; }
 		"float"			 	{ return ErrorNodeTypes.PRIMITIVE; }
-		"hex"			 	{ return ErrorNodeTypes.CHARPRIMITIVE; }
+//		"hex"			 	{ return ErrorNodeTypes.CHARPRIMITIVE; }
 		"int"			 	{ return ErrorNodeTypes.PRIMITIVE; }
-		"mbchar"			{ return ErrorNodeTypes.CHARPRIMITIVE; }
-		"money"			 	{ return ErrorNodeTypes.NUMERICPRIMITIVE; }
-		"num"			 	{ return ErrorNodeTypes.NUMERICPRIMITIVE; }
+//		"mbchar"			{ return ErrorNodeTypes.CHARPRIMITIVE; }
+//		"money"			 	{ return ErrorNodeTypes.NUMERICPRIMITIVE; }
+//		"num"			 	{ return ErrorNodeTypes.NUMERICPRIMITIVE; }
 		"number"			{ return ErrorNodeTypes.PRIMITIVE; }
-		"numc"				{ return ErrorNodeTypes.NUMERICPRIMITIVE; }
-		"pacf"				{ return ErrorNodeTypes.NUMERICPRIMITIVE; }
+//		"numc"				{ return ErrorNodeTypes.NUMERICPRIMITIVE; }
+//		"pacf"				{ return ErrorNodeTypes.NUMERICPRIMITIVE; }
 		"smallfloat"		{ return ErrorNodeTypes.PRIMITIVE; }
 		"smallint"		    { return ErrorNodeTypes.PRIMITIVE; }
 		"string"			{ return ErrorNodeTypes.CHARPRIMITIVE; }
-		"unicode"			{ return ErrorNodeTypes.CHARPRIMITIVE; }
+//		"unicode"			{ return ErrorNodeTypes.CHARPRIMITIVE; }
 
 		// Large Object Type Keywords
-        "blob"                          { return ErrorNodeTypes.PRIMITIVE ; }
-        "clob"                          { return ErrorNodeTypes.PRIMITIVE ; }
+//      "blob"                          { return ErrorNodeTypes.PRIMITIVE ; }
+//      "clob"                          { return ErrorNodeTypes.PRIMITIVE ; }
 
         // Macros
         {Identifier}                    { return ErrorNodeTypes.ID; }
