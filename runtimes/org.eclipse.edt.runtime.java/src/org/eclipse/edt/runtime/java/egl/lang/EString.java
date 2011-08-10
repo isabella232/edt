@@ -324,33 +324,33 @@ public class EString extends AnyBoxedObject<String> {
 	 * returns the position of a specific string within a string
 	 */
 	public static Integer indexOf(String source, String value) {
-		return source.indexOf(value);
+		return source.indexOf(value) + 1;
 	}
 
 	public static Integer indexOf(String source, Integer length, String value) {
-		return asString(source, length).indexOf(value);
+		return asString(source, length).indexOf(value) + 1;
 	}
 
 	/**
 	 * returns the position of a specific string within a string
 	 */
 	public static Integer indexOf(String source, String value, Integer start) {
-		return source.indexOf(value, start);
+		return source.indexOf(value, start - 1) + 1;
 	}
 
 	public static Integer indexOf(String source, Integer length, String value, Integer start) {
-		return asString(source, length).indexOf(value, start);
+		return asString(source, length).indexOf(value, start - 1) + 1;
 	}
 
 	/**
 	 * returns the last position of a specific string within a string
 	 */
 	public static Integer lastIndexOf(String source, String value) {
-		return source.lastIndexOf(value);
+		return source.lastIndexOf(value) + 1;
 	}
 
 	public static Integer lastIndexOf(String source, Integer length, String value) {
-		return asString(source, length).lastIndexOf(value);
+		return asString(source, length).lastIndexOf(value) + 1;
 	}
 
 	/**
@@ -368,11 +368,11 @@ public class EString extends AnyBoxedObject<String> {
 	 * Returns the integer value of a character code within a string
 	 */
 	public static Integer charCodeAt(String source, Integer index) {
-		return (int) source.charAt(index);
+		return (int) source.charAt(index - 1);
 	}
 
 	public static Integer charCodeAt(String source, Integer length, Integer index) {
-		return (int) asString(source, length).charAt(index);
+		return (int) asString(source, length).charAt(index - 1);
 	}
 
 	/**
