@@ -428,7 +428,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	{
 		// TODO make this dynamic/extensible. For now just include EDT runtime packages.
 		String type = frame.getDeclaringTypeName();
-		return type.startsWith( "org.eclipse.edt." ) || type.startsWith( "egl." ); //$NON-NLS-1$ //$NON-NLS-2$
+		return type.startsWith( "org.eclipse.edt." ) || type.startsWith( "egl." ) || type.startsWith( "eglx." ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
 	private boolean isMainMethod( IJavaStackFrame frame ) throws DebugException
