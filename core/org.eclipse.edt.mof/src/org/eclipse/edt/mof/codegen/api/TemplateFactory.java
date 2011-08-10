@@ -62,7 +62,6 @@ public class TemplateFactory {
 		// the template file path will be 1 or more locations for the templates.properties files involved with this
 		// implementation. If more than 1 location is in the list, then it will be separated by a semi-colon. We need to
 		// split these out into individual locations and process them in order.
-		int i = 0;
 		String[] templateFiles = templateFilePaths.split("[;]");
 		for (String templateFile : templateFiles) {
 			// process this property file
@@ -70,7 +69,7 @@ public class TemplateFactory {
 			Enumeration<String> keys = bundle.getKeys();
 			while (keys.hasMoreElements()) {
 				String key = keys.nextElement();
-				String className = bundle.getString(key);
+				String className = bundle.getString(key).trim();
 				try {
 					// if this entry is already in the template map, don't replace it. This keeps the list such that the 1st
 					// entry that we come across remains as the class to use. For example, if the list is this:
