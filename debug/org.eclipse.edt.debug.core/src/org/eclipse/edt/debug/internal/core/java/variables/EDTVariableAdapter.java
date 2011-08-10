@@ -32,8 +32,8 @@ public class EDTVariableAdapter implements IVariableAdapter
 			String signature = variable.getGenericSignature();
 			if ( signature != null )
 			{
-				if ( signature.startsWith( "Legl/lang/EList<" ) //$NON-NLS-1$
-						|| signature.startsWith( "L/org/eclipse/edt/runtime/java/egl/lang/EList<" ) ) //$NON-NLS-1$
+				if ( signature.startsWith( "Legl/lang/EglList<" ) //$NON-NLS-1$
+						|| signature.startsWith( "L/org/eclipse/edt/runtime/java/egl/lang/EglList<" ) ) //$NON-NLS-1$
 				{
 					return new ListVariable( frame.getDebugTarget(), variable, info, frame, parent );
 				}
@@ -44,7 +44,7 @@ public class EDTVariableAdapter implements IVariableAdapter
 						@Override
 						protected String getTypeNameForElement( IJavaValue value )
 						{
-							return "egl.lang.AnyObject"; //$NON-NLS-1$
+							return "egl.lang.EglAny"; //$NON-NLS-1$
 						}
 					};
 				}
