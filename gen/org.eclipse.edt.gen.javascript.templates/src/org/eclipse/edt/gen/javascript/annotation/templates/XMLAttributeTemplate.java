@@ -25,20 +25,25 @@ public class XMLAttributeTemplate extends JavaScriptTemplate {
 	}
 	
 	public void genConstructorOptions(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) {
-		if (annot.getValue("name") instanceof String && ((String) annot.getValue("name")).length() > 0)
-		{
+		if(annot.getValue("name") instanceof String && !"##default".equals(annot.getValue("name"))){
 			out.print(quoted((String) annot.getValue("name")));
 		}
 		else{
 			out.print(quoted(field.getId()));
 		}
 		out.print(", ");
-		if (annot.getValue("namespace") instanceof String && ((String) annot.getValue("namespace")).length() > 0)
-		{
+		if(annot.getValue("namespace") instanceof String && !"##default".equals(annot.getValue("namespace"))){
 			out.print(quoted((String) annot.getValue("namespace")));
 		}
 		else{
-			out.print("null");
+			out.print("false");
+		}
+		out.print(", ");
+		if(annot.getValue("required") != null){
+			out.print(quoted(annot.getValue("required").toString()));
+		}
+		else{
+			out.print("false");
 		}
 	}
 

@@ -36,6 +36,14 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		ctx.invoke(preGenUsedParts, part, ctx);
 		ctx.invoke(preGenFields, part, ctx);
 		ctx.invoke(preGenFunctions, part, ctx);
+		if(part.getAnnotation(Constants.AnnotationXMLRootElement) == null) {
+			//add an xmlRootElement
+			try {
+				Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXMLRootElement);
+				annotation.setValue("name", part.getId());
+				part.addAnnotation(annotation);
+			} catch (Exception e) {}
+		}	
 		addNamespaceMap(part, ctx);
 	}
 
@@ -298,19 +306,22 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	public void genAnnotations(EGLClass part, Context ctx, TabbedWriter out) {
 		out.print(quoted("eze$$getAnnotations"));
 		out.println(": function() {");
-		out.println("var annotations;");
+		out.println("if(this.annotations === undefined){");
+		out.println("this.annotations = {};");
 		for(Annotation annot : part.getAnnotations()){
 			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, part);
 		}
-		out.println("return annotations;");
+		out.println("}");
+		out.println("return this.annotations;");
 		out.println("},");
 	}
 
 	public void genFieldAnnotations(EGLClass part, Context ctx, TabbedWriter out) {
 		out.print(quoted("eze$$getFieldInfos"));
 		out.println(": function() {");
+		out.println("if(this.fieldInfos === undefined){");
 		out.println("var annotations;");
-		out.println("fieldInfos = new Array();");
+		out.println("this.fieldInfos = new Array();");
 		int idx = 0;
 		for (Field field : part.getFields()) {
 			if (field instanceof ConstantField || field.isStatic()) {
@@ -319,7 +330,8 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			ctx.invoke(genAnnotations, field, ctx, out, Integer.valueOf(idx));
 			idx++;
 		}
-		out.println("return fieldInfos;");
+		out.println("}");
+		out.println("return this.fieldInfos;");
 		out.println("},");
 	}
 

@@ -21,26 +21,25 @@ import org.eclipse.edt.mof.egl.EGLClass;
 public class XMLRootElementTemplate extends JavaScriptTemplate {
 
 	public void genConstructorOptions(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, EGLClass part) {
-		if (annot.getValue("name") != null && ((String) annot.getValue("name")).length() > 0) {
-			out.println(quoted((String) annot.getValue("name")));
+		if(annot.getValue("name") instanceof String && !"##default".equals(annot.getValue("name"))){
+			out.print(quoted((String) annot.getValue("name")));
 		}
 		else{
-			out.println(quoted(part.getName()));
-			
+			out.print(quoted(part.getName()));
 		}
-		out.println( ", ");
-		if (annot.getValue("namespace") != null && ((String) annot.getValue("namespace")).length() > 0) {
-			out.println(quoted((String) annot.getValue("namespace")));
+		out.print( ", ");
+		if(annot.getValue("namespace") instanceof String && !"##default".equals(annot.getValue("namespace"))){
+			out.print(quoted((String) annot.getValue("namespace")));
 		}
 		else{
-			out.println("null");
+			out.print("null");
 		}
-		out.println( ", ");
+		out.print( ", ");
 		if (annot.getValue("nillable") != null) {
-			out.println(((Boolean)annot.getValue("nillable")).toString());
+			out.print(((Boolean)annot.getValue("nillable")).toString());
 		}
 		else{
-			out.println("false");
+			out.print("false");
 		}
 	}
 

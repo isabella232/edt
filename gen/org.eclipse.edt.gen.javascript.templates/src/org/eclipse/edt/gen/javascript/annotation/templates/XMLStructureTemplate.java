@@ -26,16 +26,16 @@ public class XMLStructureTemplate extends JavaScriptTemplate {
 		 */
 		switch ((Integer) annot.getValue("value")) {
 			case 1:
-				out.println(quoted("choice"));
+				out.print(quoted("choice"));
 				break;
 			case 2:
-				out.println(quoted("sequence"));
+				out.print(quoted("sequence"));
 				break;
 			case 3:
-				out.println(quoted("simpleContent"));
+				out.print(quoted("simpleContent"));
 				break;
 			default:
-				out.println(quoted("unordered"));
+				out.print(quoted("unordered"));
 		}
 	}
 }

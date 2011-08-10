@@ -127,7 +127,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field);
 		}
 		
-		out.print("fieldInfos[" + arg.toString() + "] =");
+		out.print("this.fieldInfos[" + arg.toString() + "] =");
 		out.print("new egl.eglx.services.FieldInfo(");
 		Annotation property = CommonUtilities.getPropertyAnnotation(field);
 		if (property != null) {

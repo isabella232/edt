@@ -16,6 +16,8 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.Template;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Type;
 
 public class AnnotationTypeTemplate extends JavaScriptTemplate {
@@ -35,7 +37,20 @@ public class AnnotationTypeTemplate extends JavaScriptTemplate {
 		out.print(ctx.getNativeTypeName(type));
 	}
 	
-	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Object obj) {
+	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, EGLClass part) {
+		Template template = ctx.getTemplateForEClassifier(aType);
+		//have to use instanceof because a StereotypeType is an annotation, but it's not generatable as an annotation
+		if(template != null && !(aType instanceof org.eclipse.edt.mof.egl.StereotypeType)){
+			out.print("this.annotations[\"");//RATLC01814387
+			ctx.invoke(genAnnotationKey, (Type)aType, ctx, out);
+			out.print("\"] = new ");
+			ctx.invoke(genRuntimeTypeName, (Type)aType, ctx, out, TypeNameKind.JavascriptImplementation, annot);
+			out.print("(");
+			ctx.invoke(genConstructorOptions, (Type)aType, ctx, out, annot, part);
+			out.println(");");
+		}
+	}
+	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
 		Template template = ctx.getTemplateForEClassifier(aType);
 		//have to use instanceof because a StereotypeType is an annotation, but it's not generatable as an annotation
 		if(template != null && !(aType instanceof org.eclipse.edt.mof.egl.StereotypeType)){
@@ -44,7 +59,7 @@ public class AnnotationTypeTemplate extends JavaScriptTemplate {
 			out.print("\"] = new ");
 			ctx.invoke(genRuntimeTypeName, (Type)aType, ctx, out, TypeNameKind.JavascriptImplementation, annot);
 			out.print("(");
-			ctx.invoke(genConstructorOptions, (Type)aType, ctx, out, annot, obj);
+			ctx.invoke(genConstructorOptions, (Type)aType, ctx, out, annot, field);
 			out.println(");");
 		}
 	}
