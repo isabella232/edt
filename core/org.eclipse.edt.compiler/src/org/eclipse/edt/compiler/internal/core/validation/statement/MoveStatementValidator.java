@@ -74,6 +74,14 @@ public class MoveStatementValidator extends DefaultASTVisitor {
 		this.moveStmt = moveStatement;
 		Expression sourceExpr = moveStatement.getSource();
 		Expression targetExpr = moveStatement.getTarget();
+		
+		if (targetExpr instanceof SubstringAccess) {
+			problemRequestor.acceptProblem(targetExpr,
+					IProblemRequestor.SUBSTRING_IMMUTABLE,
+					new String[] {});
+		}
+
+		
 		ITypeBinding sourceType = sourceExpr.resolveTypeBinding();
 		ITypeBinding targetType = targetExpr.resolveTypeBinding();
 		

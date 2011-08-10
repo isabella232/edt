@@ -72,6 +72,12 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 	public boolean validateAssignment(final Assignment.Operator assignmentOperator, final Expression lhs,final Expression rhs , ITypeBinding lhsBinding,
 			ITypeBinding rhsBinding,final IDataBinding lhsDataBinding ,final IDataBinding rhsDataBinding,boolean bDeclaration, boolean isArithmetic, LValueValidator.ILValueValidationRules lvalueValidationRules){
 		
+		if (lhs instanceof SubstringAccess) {
+			problemRequestor.acceptProblem(lhs,
+					IProblemRequestor.SUBSTRING_IMMUTABLE,
+					new String[] {});
+		}
+		
 		if((Assignment.Operator.CONCAT == assignmentOperator ||
 			Assignment.Operator.NULLCONCAT == assignmentOperator ||
 			Assignment.Operator.PLUS == assignmentOperator) &&

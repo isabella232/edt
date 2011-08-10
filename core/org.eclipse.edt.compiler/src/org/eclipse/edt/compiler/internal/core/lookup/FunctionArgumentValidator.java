@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.eclipse.edt.compiler.binding.AnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.ForeignLanguageTypeBinding;
 import org.eclipse.edt.compiler.binding.FormFieldBinding;
@@ -310,7 +311,11 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		if(!checkPSBRecordNotUsedAsArgument(argType, argExpr)) {
 			return false;
 		}
-		
+
+		if(!checkSubstringNotUsedAsArgument(parameterBinding, argExpr)) {
+			return false;
+		}
+
 		if(!checkArgumentUsedCorrectlyWithInAndOut(argExpr, parameterBinding, parameterType)) {
 			return false;
 		}
@@ -429,7 +434,19 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		}
 		return true;
 	}
-	
+
+	private boolean checkSubstringNotUsedAsArgument(FunctionParameterBinding parm, Expression argExpr) {
+		
+		if (Binding.isValidBinding(parm) && parm.isInputOutput() && argExpr instanceof SubstringAccess) {
+			problemRequestor.acceptProblem(argExpr,
+					IProblemRequestor.SUBSTRING_IMMUTABLE,
+					new String[] {});
+			return false;
+		}
+		
+		return true;
+	}
+
     private abstract static class NonLiteralAndNonNameExpressionVisitor extends AbstractASTExpressionVisitor {
 		public void endVisit(ParenthesizedExpression parenthesizedExpression) {
 			parenthesizedExpression.getExpression().accept(this);

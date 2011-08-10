@@ -1407,6 +1407,7 @@ public interface IProblemRequestor {
 	public static final int CANNOT_MODIFY_CONSTANT = 6646;
 	public static final int STRINGCONCAT_EXPRESSION_INVALID_EXPR = 6647;
 	public static final int ASSIGNMENT_STATEMENT_INCOMPATIBLE_OPERANDS = 6648;
+	public static final int SUBSTRING_IMMUTABLE = 6649;
 	public static final int ASSIGNMENT_STATEMENT_RECORD_TARGET_SOURCE_CANNOT_BE = 6650;
 	public static final int ASSIGNMENT_STATEMENT_RECORD_SOURCE_TARGET_MUST_BE = 6651;
 	public static final int ASSIGNMENT_STATEMENT_MUST_BE_RECORD_OR_ITEM = 6652;
