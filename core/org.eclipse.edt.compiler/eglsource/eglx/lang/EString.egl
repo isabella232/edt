@@ -11,12 +11,50 @@ import org.eclipse.edt.mof.egl.SequenceType;
 externalType EString extends EglString type ParameterizableType {
 	parameterizedType = SequenceType
 }
+	/**
+	 * {@Operation +} Concatenates two strings.
+	 */
 	static function $Plus(lvalue EString in, rvalue EString in) returns(EString) {@Operation{"+"}};
+
+	/**
+	 * {@Operation +} Concatenates a string and an Any.
+	 */
 	static function $Plus(lvalue EString in, rvalue EglAny in) returns(EString) {@Operation{"+"}};
+
+	/**
+	 * {@Operation +} Concatenates an Any and a string.
+	 */
+	static function $Plus(lvalue EglAny in, rvalue EString in) returns(EString) {@Operation{"+"}};
+
+	/**
+	 * {@Operation ::} Concatenates two strings.
+	 */
 	static function $Concat(value EString in, rvalue EString in) returns (EString) {@Operation{"::"}};
+
+	/**
+	 * {@Operation ::} Concatenates a string and an Any.
+	 */
 	static function $Concat(value EString in, rvalue EglAny in) returns (EString) {@Operation{"::"}};
+
+	/**
+	 * {@Operation ::} Concatenates an Any and a string.
+	 */
+	static function $Concat(value EglAny in, rvalue EString in) returns (EString) {@Operation{"::"}};
+
+	/**
+	 * {@Operation ?:} Concatenates two strings.  If either is null then null is returned.
+	 */
 	static function $ConcatNull(value EString in, rvalue EString in) returns(EString) {@Operation{"?:"}};
+
+	/**
+	 * {@Operation ?:} Concatenates a string and an Any.  If either is null then null is returned.
+	 */
 	static function $ConcatNull(value EString in, rvalue EglAny in) returns(EString) {@Operation{"?:"}};
+
+	/**
+	 * {@Operation ?:} Concatenates an Any and a string.  If either is null then null is returned.
+	 */
+	static function $ConcatNull(value EglAny in, rvalue EString in) returns(EString) {@Operation{"?:"}};
 
 	/**
 	 * {@Operation <} Compares two strings.
@@ -72,7 +110,7 @@ externalType EString extends EglString type ParameterizableType {
 	static function asString(value ESmallint in) returns (EString) {@Operation{"widen"}};
 	
 	/**
-	 * {@Operation widen} Converts a timestamp to a string.  The 26-character string
+	 * {@Operation widen} Converts a timestamp to a string.  The 26-character result
 	 * will include all possible fields of a timestamp, from years down to fractions
 	 * of seconds, in the format "yyyy-MM-dd HH:mm:ss.SSSSSS".  Leading zeros are 
 	 * included in each field of the string when necessary, e.g. January is 

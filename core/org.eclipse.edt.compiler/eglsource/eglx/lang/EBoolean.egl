@@ -22,12 +22,22 @@ externalType EBoolean extends EglBoolean type ClassType
 	static function $NEQ(lvalue EBoolean in, rvalue EBoolean in) returns(EBoolean) {@Operation{"!="}};
 
 	/**
-	 * {@Operation &&} Returns true when both operands are true.
+	 * {@Operation ==} Compares two EglAnys.
+	 */
+	static function $EQ(lvalue EglAny in, rvalue EglAny in) returns(EBoolean) {@Operation{"=="}};
+
+	/**
+	 * {@Operation !=} Compares two EglAnys.
+	 */
+	static function $NEQ(lvalue EglAny in, rvalue EglAny in) returns(EBoolean) {@Operation{"!="}};
+
+	/**
+	 * {@Operation &&} Returns true if both operands are true.
 	 */
 	static function $AND(lvalue EBoolean in, rvalue EBoolean in) returns(EBoolean) {@Operation{"&&"}};
 
 	/**
-	 * {@Operation ||} Returns true when either operand is true.
+	 * {@Operation ||} Returns true if either operand is true.
 	 */
 	static function $OR(lvalue EBoolean in, rvalue EBoolean in) returns(EBoolean) {@Operation{"||"}};
 
