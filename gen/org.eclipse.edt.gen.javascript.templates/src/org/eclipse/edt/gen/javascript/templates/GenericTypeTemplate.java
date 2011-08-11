@@ -27,4 +27,7 @@ public class GenericTypeTemplate extends JavaScriptTemplate {
 			out.print(">");
 		}
 	}
+//	public void genFieldInfoTypeName(GenericType generic, Context ctx, TabbedWriter out, TypeNameKind arg) {
+//		ctx.invoke(genRuntimeTypeName, generic, ctx, out, arg);
+//	}
 }

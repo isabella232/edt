@@ -71,6 +71,10 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 		out.print("Array");
 	}
 
+	public void genFieldInfoTypeName(ArrayType generic, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genFieldInfoTypeName, generic.getElementType(), ctx, out, TypeNameKind.JavascriptImplementation);
+	}
+
 	public void genConversionOperation(ArrayType type, Context ctx, TabbedWriter out, AsExpression arg) {
 		ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 	}

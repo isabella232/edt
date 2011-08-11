@@ -65,4 +65,7 @@ public class PartTemplate extends JavaScriptTemplate {
 	public void genSuperClass(Part part, Context ctx, TabbedWriter out) {
 		ctx.invoke(genSuperClass, part, ctx, out);
 	}
+	public void genFieldInfoTypeName(Part part, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genRuntimeTypeName, part, ctx, out, arg);
+	}
 }

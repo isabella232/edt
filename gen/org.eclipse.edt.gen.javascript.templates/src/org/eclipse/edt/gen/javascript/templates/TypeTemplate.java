@@ -225,4 +225,8 @@ public class TypeTemplate extends JavaScriptTemplate {
 	public void genContainerBasedInvocation(Type type, Context ctx, TabbedWriter out, Expression arg) {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
+	
+	public void genFieldInfoTypeName(Type type, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genRuntimeTypeName, type, ctx, out, arg);
+	}
 }
