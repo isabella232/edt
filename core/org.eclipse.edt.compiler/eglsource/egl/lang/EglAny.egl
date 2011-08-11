@@ -8,6 +8,16 @@ import egl.lang.reflect.mof.Operation;
  * and as the name implies it can hold any kind of value.
  */
 externalType EglAny type ClassType
+	/**
+	 * {@Operation ==} Compares two EglAnys.
+	 */
+	static function $EQ(lvalue EglAny in, rvalue EglAny in) returns(EglBoolean) {@Operation{"=="}};
+
+	/**
+	 * {@Operation !=} Compares two EglAnys.
+	 */
+	static function $NEQ(lvalue EglAny in, rvalue EglAny in) returns(EglBoolean) {@Operation{"!="}};
+
 	// This is necessary because it results in boxing.
 	/**
 	 * {@Operation widen} Performs conversion from any to any.

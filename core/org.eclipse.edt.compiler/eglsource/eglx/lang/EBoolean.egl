@@ -1,6 +1,5 @@
 package eglx.lang;
 
-import egl.lang.EglAny;
 import egl.lang.EglBoolean;
 import egl.lang.EglNumber;
 import egl.lang.reflect.ClassType;
@@ -20,16 +19,6 @@ externalType EBoolean extends EglBoolean type ClassType
 	 * {@Operation !=} Compares two booleans.
 	 */
 	static function $NEQ(lvalue EBoolean in, rvalue EBoolean in) returns(EBoolean) {@Operation{"!="}};
-
-	/**
-	 * {@Operation ==} Compares two EglAnys.
-	 */
-	static function $EQ(lvalue EglAny in, rvalue EglAny in) returns(EBoolean) {@Operation{"=="}};
-
-	/**
-	 * {@Operation !=} Compares two EglAnys.
-	 */
-	static function $NEQ(lvalue EglAny in, rvalue EglAny in) returns(EBoolean) {@Operation{"!="}};
 
 	/**
 	 * {@Operation &&} Returns true if both operands are true.

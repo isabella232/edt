@@ -144,15 +144,15 @@ externalType EglList type ClassType {
 	 * @return the index of the value, or 0 if it was not found.
 	 * @throws InvalidIndexException  if the index isn't a valid subscript.
 	 */
-	function indexOf(value EglAny in, index EglInt in) returns(EglInt);
+	function indexOfElement(value EglAny in, index EglInt in) returns(EglInt);
 
 	/**
-	 * This is equivalent to indexOf(element, 1).
+	 * This is equivalent to indexOfElement(element, 1).
 	 * 
 	 * @param value the value to find.
 	 * @return the index of the value, or 0 if it was not found.
 	 */
-	function indexOf(value EglAny in) returns(EglInt);
+	function indexOfElement(value EglAny in) returns(EglInt);
 	
 	/**
 	 * Removes all elements from the array.
