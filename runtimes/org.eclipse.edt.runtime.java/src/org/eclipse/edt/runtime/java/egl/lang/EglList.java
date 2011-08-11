@@ -38,6 +38,14 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 		}
 	}
 
+	public int getSize() {
+		return list.size();
+	}
+
+	public void removeAll() {
+		list.clear();
+	}
+
 	public int getMaxSize() {
 		return maxSize;
 	}
