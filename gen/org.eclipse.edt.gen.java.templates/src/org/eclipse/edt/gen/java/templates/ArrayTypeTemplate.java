@@ -15,8 +15,11 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.AsExpression;
+import org.eclipse.edt.mof.egl.Assignment;
+import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Type;
 
 public class ArrayTypeTemplate extends JavaTemplate {
 
@@ -76,5 +79,24 @@ public class ArrayTypeTemplate extends JavaTemplate {
 			}
 			out.print(">");
 		}
+	}
+
+	public void genTypeBasedAssignment(Type type, Context ctx, TabbedWriter out, Assignment arg) {
+		String operator = "=";
+		if (arg.getOperator() != null && arg.getOperator().length() > 0)
+			operator = arg.getOperator();
+		if (operator.equals("::=")) {
+			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
+			if (arg.getRHS().getType() instanceof ArrayType)
+				out.print(".appendAll(");
+			else
+				out.print(".appendElement(");
+			if (arg.getRHS() instanceof BoxingExpression)
+				ctx.invoke(genExpression, ((BoxingExpression) arg.getRHS()).getExpr(), ctx, out);
+			else
+				ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+			out.print(")");
+		} else
+			ctx.invokeSuper(this, genTypeBasedAssignment, type, ctx, out, arg);
 	}
 }

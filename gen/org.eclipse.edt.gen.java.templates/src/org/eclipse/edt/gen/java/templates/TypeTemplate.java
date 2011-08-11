@@ -264,5 +264,12 @@ public class TypeTemplate extends JavaTemplate {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
 
+	public void genTypeBasedAssignment(Type type, Context ctx, TabbedWriter out, Assignment arg) {
+		String operator = "=";
+		if (arg.getOperator() != null && arg.getOperator().length() > 0)
+			operator = arg.getOperator();
+		ctx.invoke(genAssignment, arg.getLHS(), ctx, out, arg.getRHS(), " " + CommonUtilities.getNativeJavaAssignment(operator) + " ");
+	}
+
 	public void genXmlTransient(Type type, TabbedWriter out) {}
 }
