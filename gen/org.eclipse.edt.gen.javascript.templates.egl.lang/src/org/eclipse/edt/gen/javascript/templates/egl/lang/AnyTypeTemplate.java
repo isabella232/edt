@@ -16,6 +16,7 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 
 public class AnyTypeTemplate extends JavaScriptTemplate {
@@ -54,5 +55,8 @@ public class AnyTypeTemplate extends JavaScriptTemplate {
 		out.print("T");
 		out.print(type.getTypeSignature().replaceAll("\\.", "/"));
 		out.print(";");
+	}
+	public void genFieldInfoTypeName(Part part, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genRuntimeTypeName, part, ctx, out, arg);
 	}
 }
