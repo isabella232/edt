@@ -31,6 +31,12 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 			&& org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx)) {
 			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 			out.print(".ezeCopy(");
+			// if we are doing some type of complex assignment, we need to place that in the argument
+			if (arg2.length() > 1 && arg2.indexOf("=") > 0) {
+				ctx.invoke(genAccessor, expr.getMember(), ctx, out);
+				out.print(".ezeUnbox()");
+				out.print(arg2.substring(0, arg2.indexOf("=")));
+			}
 			ctx.invoke(genExpression, arg1, ctx, out);
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
 			if (arg1 instanceof MemberName
