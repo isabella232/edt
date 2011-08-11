@@ -11,18 +11,33 @@
  *******************************************************************************/
 package egl.lang;
 
+import java.util.Collection;
 
 public interface EglList<T> extends EglAny, java.util.List<T> {
 
-	public int getMaxSize();
-	
-	public void setMaxSize(int max); 
-	
+	public void appendAll(Collection<? extends T> collection);
+
 	public void appendElement(T element);
-	
-	public void removeElement(T element);
-	
+
 	public T getElement(int index);
+
+	public int getMaxSize();
+
+	public int getSize();
+
+	public int indexOfElement(T element);
+
+	public int indexOfElement(T element, int index);
+
+	public void insertElement(T element, int index);
+
+	public void removeAll();
+
+	public void removeElement(int index);
+
+	public void resize(int size);
+
 	public void setElement(T element, int index);
 
+	public void setMaxSize(int max);
 }

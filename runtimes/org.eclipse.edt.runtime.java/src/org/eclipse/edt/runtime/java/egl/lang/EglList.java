@@ -38,48 +38,103 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 		}
 	}
 
-	public int getSize() {
-		return list.size();
+	// the following group of methods implements the edt version, which means that the indexes are relative to 1
+	@Override
+	public void appendAll(Collection<? extends T> c) {
+		if (maxSize != 0 && c.size() + list.size() > maxSize)
+			throw new ArraySizeException();
+		list.addAll(c);
 	}
 
-	public void removeAll() {
-		list.clear();
-	}
-
-	public int getMaxSize() {
-		return maxSize;
-	}
-
-	public void setMaxSize(int max) {
-		maxSize = max;
-	}
-
+	@Override
 	public void appendElement(T element) {
 		list.add(element);
 	}
 
-	public void removeElement(T element) {
-		list.remove(element);
+	@Override
+	public T getElement(int index) {
+		if (index - 1 < 0 || index - 1 >= list.size())
+			throw new InvalidIndexException();
+		return get(index - 1);
 	}
 
 	@Override
-	public T get(int index) {
-		return list.get(index);
+	public int getMaxSize() {
+		return maxSize;
 	}
 
 	@Override
-	public T set(int index, T element) {
-		return list.set(index, element);
+	public int getSize() {
+		return list.size();
+	}
+
+	@Override
+	public int indexOfElement(Object o) {
+		return indexOfElement(o, 1);
+	}
+
+	@Override
+	public int indexOfElement(Object o, int index) {
+		if (index - 1 < 0 || index - 1 >= list.size())
+			throw new InvalidIndexException();
+		return list.subList(index - 1, list.size()).indexOf(o) + 1 + index - 1;
+	}
+
+	@Override
+	public void insertElement(T element, int index) {
+		if (maxSize != 0 && list.size() >= maxSize)
+			throw new ArraySizeException();
+		if (index == 0)
+			index = 1;
+		if (index - 1 < 0 || index - 1 > list.size())
+			throw new InvalidIndexException();
+		list.add(index - 1, element);
+	}
+
+	@Override
+	public void removeAll() {
+		list.clear();
+	}
+
+	@Override
+	public void removeElement(int index) {
+		if (index - 1 < 0 || index - 1 >= list.size())
+			throw new InvalidIndexException();
+		list.remove(index - 1);
+	}
+
+	@Override
+	public void resize(int max) {
+		if (maxSize != 0 && max > maxSize)
+			throw new ArraySizeException();
+		while (list.size() > max) {
+			list.remove(list.size());
+		}
+	}
+
+	@Override
+	public void setElement(T element, int index) {
+		if (index - 1 < 0 || index - 1 >= list.size())
+			throw new InvalidIndexException();
+		set(index - 1, element);
+	}
+
+	@Override
+	public void setMaxSize(int max) {
+		if (maxSize != 0 && max < maxSize)
+			throw new ArraySizeException();
+		maxSize = max;
+	}
+
+	// the following group of methods implements the java version, which means that the indexes are relative to 0
+	@Override
+	public void add(int index, T element) {
+		list.add(index, element);
 	}
 
 	@Override
 	public boolean add(T e) {
 		return list.add(e);
-	}
-
-	@Override
-	public void add(int index, T element) {
-		list.add(index, element);
 	}
 
 	@Override
@@ -105,6 +160,16 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 	@Override
 	public boolean containsAll(Collection<?> c) {
 		return list.containsAll(c);
+	}
+
+	public EglList<T> ezeSet(int index, T element) {
+		setElement(element, index);
+		return this;
+	}
+
+	@Override
+	public T get(int index) {
+		return list.get(index);
 	}
 
 	@Override
@@ -139,12 +204,12 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 
 	@Override
 	public T remove(int index) {
-		return remove(index);
+		return list.remove(index);
 	}
 
 	@Override
 	public boolean remove(Object o) {
-		return remove(o);
+		return list.remove(o);
 	}
 
 	@Override
@@ -154,7 +219,12 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
-		return retainAll(c);
+		return list.retainAll(c);
+	}
+
+	@Override
+	public T set(int index, T element) {
+		return list.set(index, element);
 	}
 
 	@Override
@@ -164,7 +234,7 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 
 	@Override
 	public java.util.List<T> subList(int fromIndex, int toIndex) {
-		return subList(fromIndex, toIndex);
+		return list.subList(fromIndex, toIndex);
 	}
 
 	@Override
@@ -172,25 +242,9 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 		return list.toArray();
 	}
 
-	@SuppressWarnings("hiding")
 	@Override
 	public <T> T[] toArray(T[] a) {
 		return list.toArray(a);
-	}
-
-	@Override
-	public T getElement(int index) {
-		return get(index - 1);
-	}
-
-	@Override
-	public void setElement(T element, int index) {
-		set(index - 1, element);
-	}
-
-	public EglList<T> ezeSet(int index, T element) {
-		setElement(element, index);
-		return this;
 	}
 
 }
