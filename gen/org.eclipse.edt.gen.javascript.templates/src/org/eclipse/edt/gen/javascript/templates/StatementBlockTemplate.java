@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.edt.gen.ReorganizeCode;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
 
@@ -44,6 +45,10 @@ public class StatementBlockTemplate extends JavaScriptTemplate {
 	protected void processStatements(StatementBlock block, Context ctx, TabbedWriter out) {
 //TODO sbg from Java gen, related to debug		ctx.setCurrentFile(IRUtils.getFileName(block));
 		for (Statement stmt : block.getStatements()) {
+			Annotation annot = stmt.getAnnotation("EGL_Location");
+			if(annot != null){
+				ctx.setLastStatementLocation(annot);
+			}
 			ReorganizeCode reorganizeCode = new ReorganizeCode();
 			List<StatementBlock> blockArray = reorganizeCode.reorgCode(stmt, ctx);
 			if (blockArray != null && blockArray.get(0) != null)
