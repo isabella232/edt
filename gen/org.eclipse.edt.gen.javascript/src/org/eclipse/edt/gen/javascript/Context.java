@@ -28,6 +28,15 @@ public class Context extends EglContext {
 
 	private String currentFunction;
 	private Map<String, String> namespaceMap = new HashMap<String, String>();
+	private Annotation lastStatementLocation;
+
+	public Annotation getLastStatementLocation() {
+		return lastStatementLocation;
+	}
+
+	public void setLastStatementLocation(Annotation lastStatementLocation) {
+		this.lastStatementLocation = lastStatementLocation;
+	}
 
 	public Context(AbstractGeneratorCommand processor) {
 		super(processor);
@@ -85,16 +94,38 @@ public class Context extends EglContext {
 	}
 
 	public void handleValidationError(Annotation obj) {
+		int startLine = 0;
+		int startOffset = 0;
+		int endLine = 0;
+		int endOffset = 0;
+		Annotation annotation = getLastStatementLocation();
+		if (annotation != null) {
+			if (annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
+				startLine = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
+			if (annotation.getValue(IEGLConstants.EGL_PARTOFFSET) != null)
+				startOffset = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTOFFSET)).intValue();
+		}
 		String[] details = new String[] { obj.getEClass().getETypeSignature() };
 		EGLMessage message = EGLMessage.createEGLMessage(getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-			Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_ANNOTATION, obj, details, 0, 0, 0, 0);
+			Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_ANNOTATION, obj, details, startLine, startOffset, endLine, endOffset);
 		getMessageRequestor().addMessage(message);
 	}
 
 	public void handleValidationError(Type obj) {
+		int startLine = 0;
+		int startOffset = 0;
+		int endLine = 0;
+		int endOffset = 0;
+		Annotation annotation = getLastStatementLocation();
+		if (annotation != null) {
+			if (annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
+				startLine = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
+			if (annotation.getValue(IEGLConstants.EGL_PARTOFFSET) != null)
+				startOffset = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTOFFSET)).intValue();
+		}
 		String[] details = new String[] { obj.getEClass().getETypeSignature() };
 		EGLMessage message = EGLMessage.createEGLMessage(getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_TYPE,
-			obj, details, 0, 0, 0, 0);
+			obj, details, startLine, startOffset, endLine, endOffset);
 		getMessageRequestor().addMessage(message);
 	}
 

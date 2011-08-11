@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.javascript;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
@@ -24,6 +25,7 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Part;
 
 public class JavaScriptGenerator extends Generator {
@@ -40,8 +42,9 @@ public class JavaScriptGenerator extends Generator {
 		super(processor, requestor);
 		generator = processor;
 
-		out = (Boolean.TRUE == (Boolean) context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)) ? new TabbedReportWriter(
-			"org.eclipse.edt.gen.javascript.templates.", new StringWriter()) : new TabbedWriter(new StringWriter());
+		out = (Boolean.TRUE
+				== (Boolean) context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)
+			) ? new TabbedReportWriter("org.eclipse.edt.gen.javascript.templates.", new StringWriter()) : new TabbedWriter(new StringWriter());
 	}
 
 	public String getResult() {
@@ -82,16 +85,28 @@ public class JavaScriptGenerator extends Generator {
 			throw new GenerationException(e);
 		}
 		catch (TemplateException e) {
+			int startLine = 0;
+			int startOffset = 0;
+			int endLine = 0;
+			int endOffset = 0;
+			Annotation annotation = context.getLastStatementLocation();
+			if (annotation != null) {
+				if (annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
+					startLine = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
+				if (annotation.getValue(IEGLConstants.EGL_PARTOFFSET) != null)
+					startOffset = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTOFFSET)).intValue();
+			}
 			String[] details1 = new String[] { e.getLocalizedMessage() };
 			EGLMessage message1 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-				Constants.EGLMESSAGE_EXCEPTION_OCCURED, e, details1, 0, 0, 0, 0);
+				Constants.EGLMESSAGE_EXCEPTION_OCCURED, e, details1, startLine, startOffset, endLine, endOffset);
 			context.getMessageRequestor().addMessage(message1);
 			if (e.getCause() != null) {
 				String[] details2 = new String[] { e.getCause().toString() };
 				EGLMessage message2 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_STACK_TRACE,
-					e, details2, 0, 0, 0, 0);
+					e, details2, startLine, startOffset, endLine, endOffset);
 				context.getMessageRequestor().addMessage(message2);
 			}
+			System.err.println("generating:" + part.getFullyQualifiedName() + "[" + part.getFileName() + "]:(" + startLine + ")" );
 			// print out the whole stack trace
 			e.printStackTrace();
 		}
