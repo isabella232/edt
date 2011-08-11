@@ -87,7 +87,31 @@ public class ListVariable extends EGLJavaVariable
 					{
 						if ( var instanceof IJavaVariable )
 						{
-							SMAPVariableInfo info = new SMAPVariableInfo( var.getName(), var.getName(), elementType, parentInfo.lineDeclared,
+							String eglName;
+							String javaName = var.getName();
+							if ( javaName.length() > 2 && javaName.charAt( 0 ) == '[' && javaName.charAt( javaName.length() - 1 ) == ']' )
+							{
+								// If the array entry name is the form [0] change it to [1] (egl has 1-based indices).
+								try
+								{
+									int index = Integer.parseInt( javaName.substring( 1, javaName.length() - 1 ) ) + 1;
+									StringBuilder buf = new StringBuilder( javaName.length() + 1 );
+									buf.append( '[' );
+									buf.append( index );
+									buf.append( ']' );
+									eglName = buf.toString();
+								}
+								catch ( NumberFormatException e )
+								{
+									eglName = javaName;
+								}
+							}
+							else
+							{
+								eglName = javaName;
+							}
+							
+							SMAPVariableInfo info = new SMAPVariableInfo( eglName, javaName, elementType, parentInfo.lineDeclared,
 									parentInfo.smapEntry );
 							list.add( VariableUtil.createEGLVariable( (IJavaVariable)var, info, parentVariable.getEGLStackFrame(), this ) );
 						}
@@ -107,7 +131,8 @@ public class ListVariable extends EGLJavaVariable
 		@Override
 		public String getValueString()
 		{
-			return javaValue.isNull() ? "null" : ""; //$NON-NLS-1$ //$NON-NLS-2$
+			return javaValue.isNull()
+					? "null" : ""; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		
 		@Override
