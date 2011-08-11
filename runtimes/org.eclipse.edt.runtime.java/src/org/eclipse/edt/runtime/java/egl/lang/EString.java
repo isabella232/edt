@@ -104,16 +104,22 @@ public class EString extends AnyBoxedObject<String> {
 	}
 
 	public static String asString(String value, Integer... length) {
+		if (value == null)
+			return null;
 		if (length.length != 0 && value.length() > length[0])
 			value = value.substring(0, length[0]);
 		return value;
 	}
 
 	public static String asString(GregorianCalendar value, Integer... length) {
+		if (value == null)
+			return null;
 		return asString((Calendar) value, length);
 	}
 
 	public static String asString(Calendar cal, Integer... length) {
+		if (cal == null)
+			return null;
 		// Get the format pattern to use.
 		// String format = program._runUnit().getDefaultTimestampFormat();
 		// if ( format.length() == 0 )
@@ -228,6 +234,8 @@ public class EString extends AnyBoxedObject<String> {
 	 * Returns the length of the string or limited string
 	 */
 	public static Integer length(String source, Integer... length) {
+		if (source == null)
+			throw new NullValueException();
 		return asString(source, length).length();
 	}
 
@@ -235,6 +243,8 @@ public class EString extends AnyBoxedObject<String> {
 	 * Deletes trailing blank spaces and nulls from the start and end of strings.
 	 */
 	public static String trim(String source, Integer... length) {
+		if (source == null)
+			throw new NullValueException();
 		return clip(clipLeading(asString(source, length)));
 	}
 
@@ -242,6 +252,8 @@ public class EString extends AnyBoxedObject<String> {
 	 * Deletes trailing blank spaces and nulls from the start of strings.
 	 */
 	public static String clipLeading(String source, Integer... length) {
+		if (source == null)
+			throw new NullValueException();
 		String value = asString(source, length);
 		int lth = value.length();
 		if (lth > 0) {
@@ -265,6 +277,8 @@ public class EString extends AnyBoxedObject<String> {
 	 * Deletes trailing blank spaces and nulls from the end of strings.
 	 */
 	public static String clip(String source, Integer... length) {
+		if (source == null)
+			throw new NullValueException();
 		String value = asString(source, length);
 		int lth = value.length();
 		if (lth > 0) {
@@ -288,6 +302,8 @@ public class EString extends AnyBoxedObject<String> {
 	 * returns the lowercase value of the string or limited string
 	 */
 	public static String toLowerCase(String source, Integer... length) {
+		if (source == null)
+			throw new NullValueException();
 		return asString(source, length).toLowerCase();
 	}
 
@@ -295,6 +311,8 @@ public class EString extends AnyBoxedObject<String> {
 	 * returns the uppercase value of the string or limited string
 	 */
 	public static String toUpperCase(String source, Integer... length) {
+		if (source == null)
+			throw new NullValueException();
 		return asString(source, length).toUpperCase();
 	}
 
@@ -302,10 +320,14 @@ public class EString extends AnyBoxedObject<String> {
 	 * returns whether the string starts with a specific string
 	 */
 	public static Boolean startsWith(String source, String value) {
+		if (source == null || value == null)
+			throw new NullValueException();
 		return source.startsWith(value);
 	}
 
 	public static Boolean startsWith(String source, Integer length, String value) {
+		if (source == null || value == null)
+			throw new NullValueException();
 		return asString(source, length).startsWith(value);
 	}
 
@@ -313,10 +335,14 @@ public class EString extends AnyBoxedObject<String> {
 	 * returns whether the string ends with a specific string
 	 */
 	public static Boolean endsWith(String source, String value) {
+		if (source == null || value == null)
+			throw new NullValueException();
 		return source.endsWith(value);
 	}
 
 	public static Boolean endsWith(String source, Integer length, String value) {
+		if (source == null || value == null)
+			throw new NullValueException();
 		return asString(source, length).endsWith(value);
 	}
 
@@ -324,10 +350,14 @@ public class EString extends AnyBoxedObject<String> {
 	 * returns the position of a specific string within a string
 	 */
 	public static Integer indexOf(String source, String value) {
+		if (source == null || value == null)
+			throw new NullValueException();
 		return source.indexOf(value) + 1;
 	}
 
 	public static Integer indexOf(String source, Integer length, String value) {
+		if (source == null || value == null)
+			throw new NullValueException();
 		return asString(source, length).indexOf(value) + 1;
 	}
 
@@ -335,10 +365,14 @@ public class EString extends AnyBoxedObject<String> {
 	 * returns the position of a specific string within a string
 	 */
 	public static Integer indexOf(String source, String value, Integer start) {
+		if (source == null || value == null || start == null)
+			throw new NullValueException();
 		return source.indexOf(value, start - 1) + 1;
 	}
 
 	public static Integer indexOf(String source, Integer length, String value, Integer start) {
+		if (source == null || value == null || start == null)
+			throw new NullValueException();
 		return asString(source, length).indexOf(value, start - 1) + 1;
 	}
 
@@ -346,10 +380,14 @@ public class EString extends AnyBoxedObject<String> {
 	 * returns the last position of a specific string within a string
 	 */
 	public static Integer lastIndexOf(String source, String value) {
+		if (source == null || value == null)
+			throw new NullValueException();
 		return source.lastIndexOf(value) + 1;
 	}
 
 	public static Integer lastIndexOf(String source, Integer length, String value) {
+		if (source == null || value == null)
+			throw new NullValueException();
 		return asString(source, length).lastIndexOf(value) + 1;
 	}
 
@@ -357,10 +395,14 @@ public class EString extends AnyBoxedObject<String> {
 	 * replaces the first occurrence of a string in another string
 	 */
 	public static String replaceStr(String source, String search, String replacement) {
+		if (source == null || search == null || replacement == null)
+			throw new NullValueException();
 		return source.replace(search, replacement);
 	}
 
 	public static String replaceStr(String source, Integer length, String search, String replacement) {
+		if (source == null || search == null || replacement == null)
+			throw new NullValueException();
 		return asString(source, length).replace(search, replacement);
 	}
 
@@ -368,10 +410,14 @@ public class EString extends AnyBoxedObject<String> {
 	 * Returns the integer value of a character code within a string
 	 */
 	public static Integer charCodeAt(String source, Integer index) {
+		if (source == null || index == null)
+			throw new NullValueException();
 		return (int) source.charAt(index - 1);
 	}
 
 	public static Integer charCodeAt(String source, Integer length, Integer index) {
+		if (source == null || index == null)
+			throw new NullValueException();
 		return (int) asString(source, length).charAt(index - 1);
 	}
 
@@ -386,26 +432,22 @@ public class EString extends AnyBoxedObject<String> {
 	 * Returns whether the string is like another
 	 */
 	public static Boolean isLike(String source, String pattern, String escape) {
-		if (source == null || pattern == null || escape == null) {
+		if (source == null)
+			throw new NullValueException();
+		if (pattern == null || escape == null)
 			return false;
-		}
-
 		// Get the escape character.
 		char escapeChar = escape.length() > 0 ? escape.charAt(0) : '\\';
-
 		// The strategy here is to convert the pattern to java regex, escaping
 		// special chars we want to treat as literals; and then evaluate with
 		// the regex class
 		String escapeThese = "$[]^{}+|?().*";
 		StringBuilder regex = new StringBuilder();
-
 		// Ignore trailing blanks in both operands.
 		source = clip(source);
 		pattern = clip(pattern);
-
 		for (int i = 0; i < pattern.length(); i++) {
 			char ch = pattern.charAt(i);
-
 			if (ch == '\\' && escapeChar != '\\') {
 				// If the character is '\\' and if that is not an escape char,
 				// escape it so that it is treated as a literal character
@@ -439,7 +481,6 @@ public class EString extends AnyBoxedObject<String> {
 				regex.append(ch);
 			}
 		}
-
 		try {
 			return source.matches(regex.toString());
 		}
@@ -448,9 +489,11 @@ public class EString extends AnyBoxedObject<String> {
 		}
 	}
 
-	// public static Boolean isLike(String source, Integer length, String value) {
-	// return isLike(asString(source, length), value);
-	// }
+	public static Boolean isLike(String source, Integer length, String value) {
+		if (source == null)
+			throw new NullValueException();
+		return isLike(asString(source, length), value);
+	}
 
 	/**
 	 * Returns whether the string matches another
@@ -463,23 +506,20 @@ public class EString extends AnyBoxedObject<String> {
 	 * Returns whether the string matches another
 	 */
 	public static Boolean matchesPattern(String source, String pattern, String escape) {
-		if (source == null || pattern == null || escape == null) {
+		if (source == null)
+			throw new NullValueException();
+		if (pattern == null || escape == null)
 			return false;
-		}
-
 		// Get the escape character.
 		char escapeChar = escape.length() > 0 ? escape.charAt(0) : '\\';
-
 		// The strategy here is to convert the pattern to java regex, escaping
 		// special chars we want to treat as literals; and then evaluate with
 		// the regex class
 		String escapeThese = "${}+|&().";
 		StringBuilder regex = new StringBuilder();
 		boolean withinBrackets = false;
-
 		for (int i = 0; i < pattern.length(); i++) {
 			char ch = pattern.charAt(i);
-
 			if (ch == '\\' && escapeChar != '\\') {
 				// If the character is '\\' and if that is not an escape char,
 				// escape it so that it is treated as a literal character
@@ -522,7 +562,6 @@ public class EString extends AnyBoxedObject<String> {
 				regex.append(ch);
 			}
 		}
-
 		// If within brackets, then we have an unclosed character class which
 		// is illegal syntax in java regex. Escape the last '[' and a '^' if it
 		// follows, to avoid a PatternSyntaxException
@@ -535,7 +574,6 @@ public class EString extends AnyBoxedObject<String> {
 				regex.insert(pos + 2, '\\');
 			}
 		}
-
 		try {
 			return source.matches(regex.toString());
 		}
@@ -544,7 +582,9 @@ public class EString extends AnyBoxedObject<String> {
 		}
 	}
 
-	// public static Boolean matchesPattern(String source, Integer length, String value) {
-	// return matchesPattern(asString(source, length), value);
-	// }
+	public static Boolean matchesPattern(String source, Integer length, String value) {
+		if (source == null)
+			throw new NullValueException();
+		return matchesPattern(asString(source, length), value);
+	}
 }

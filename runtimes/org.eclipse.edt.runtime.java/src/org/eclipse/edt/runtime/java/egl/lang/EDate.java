@@ -89,6 +89,8 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	 * Returns the difference between 2 dates
 	 */
 	public static Integer daysDifferent(Calendar aDate, Calendar bDate) throws JavartException {
+		if (aDate == null || bDate == null)
+			throw new NullValueException();
 		return (int) ((aDate.getTimeInMillis() - bDate.getTimeInMillis()) / (1000 * DateTimeUtil.SECONDS_PER_DAY));
 	}
 
@@ -96,6 +98,8 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	 * Returns the adds days to a date
 	 */
 	public static Calendar addDays(Calendar aDate, Integer amount) throws JavartException {
+		if (aDate == null || amount == null)
+			throw new NullValueException();
 		if (!aDate.isSet(Calendar.DATE))
 			throw new TypeCastException();
 		Calendar newDate = (Calendar) aDate.clone();
@@ -107,6 +111,8 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	 * Returns the extension of a date
 	 */
 	public static Calendar extend(Calendar aDate, String timeSpanPattern) throws JavartException {
+		if (aDate == null)
+			throw new NullValueException();
 		// Default values in case the pattern doesn't specify things.
 		int startCode = ETimestamp.YEAR_CODE;
 		int endCode = ETimestamp.SECOND_CODE;

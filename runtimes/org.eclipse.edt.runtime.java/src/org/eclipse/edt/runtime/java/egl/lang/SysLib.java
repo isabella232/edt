@@ -62,6 +62,8 @@ public class SysLib extends ExecutableBase {
 	 * Returns the value of the named property, or a null/empty string if there's no such property.
 	 */
 	public static String getProperty(String propertyName) {
+		if (propertyName == null)
+			throw new NullValueException();
 		String value = staticRu.getProperties().get(propertyName.trim());
 		if (value == null)
 			value = java.lang.System.getProperty(propertyName.trim());
@@ -73,6 +75,8 @@ public class SysLib extends ExecutableBase {
 	 * honored down to two decimal places.
 	 */
 	public static void wait(BigDecimal time) {
+		if (time == null)
+			throw new NullValueException();
 		// Truncate any extra digits by shifting the decimal point
 		// over two places and converting the value to a long.
 		time = time.movePointRight(2);
@@ -92,6 +96,8 @@ public class SysLib extends ExecutableBase {
 	 * The startLog function opens an error log file.
 	 */
 	public static void startLog(String filename) throws JavartException {
+		if (filename == null)
+			throw new NullValueException();
 		try {
 			outputStream = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)), true);
 		}
@@ -105,6 +111,8 @@ public class SysLib extends ExecutableBase {
 	 * The errorLog() function adds a message to the current log file.
 	 */
 	public static void errorLog(String errorMsg) {
+		if (errorMsg == null)
+			throw new NullValueException();
 		if (outputStream == null)
 			return;
 		// DateFormatter is a com.ibm.icu class...fix this
@@ -123,6 +131,8 @@ public class SysLib extends ExecutableBase {
 	 * Run an external command in the foreground, in LINE mode. This does not return until the command has completed.
 	 */
 	public static void callCmd(String commandString) throws JavartException {
+		if (commandString == null)
+			throw new NullValueException();
 		runCommand(commandString, true, true);
 	}
 
@@ -131,10 +141,14 @@ public class SysLib extends ExecutableBase {
 	 * complete.
 	 */
 	public static void startCmd(String commandString) throws JavartException {
+		if (commandString == null)
+			throw new NullValueException();
 		runCommand(commandString, true, true);
 	}
 
 	private static void runCommand(String commandString, boolean lineMode, boolean wait) throws JavartException {
+		if (commandString == null)
+			throw new NullValueException();
 		final Process proc;
 		try {
 			proc = Platform.SYSTEM_TYPE == Platform.WIN ? Runtime.getRuntime().exec(new String[] { "cmd", "/c", commandString }) : Runtime.getRuntime().exec(
@@ -178,6 +192,8 @@ public class SysLib extends ExecutableBase {
 	 * Returns a formatted message from the RunUnit's message bundle, or null if no message with the key is found.
 	 */
 	public static String getMessage(String key) {
+		if (key == null)
+			throw new NullValueException();
 		return getMessage(key, null);
 	}
 
@@ -185,6 +201,8 @@ public class SysLib extends ExecutableBase {
 	 * Returns a formatted message from the RunUnit's message bundle, or null if no message with the key is found.
 	 */
 	public static String getMessage(String key, egl.lang.EglList<String> inserts) {
+		if (key == null)
+			throw new NullValueException();
 		// Get the inserts as Strings.
 		String[] insertStrings = null;
 		if (inserts != null) {
@@ -270,8 +288,9 @@ public class SysLib extends ExecutableBase {
 	 * Change the locale of the running program dynamically.
 	 */
 	public static void setLocale(String languageCode) {
-		Locale locale;
-		locale = new Locale(languageCode);
+		if (languageCode == null)
+			throw new NullValueException();
+		Locale locale = new Locale(languageCode);
 		staticRu.switchLocale(locale);
 	}
 
@@ -279,8 +298,9 @@ public class SysLib extends ExecutableBase {
 	 * Change the locale of the running program dynamically.
 	 */
 	public static void setLocale(String languageCode, String countryCode) {
-		Locale locale;
-		locale = new Locale(languageCode, countryCode);
+		if (languageCode == null || countryCode == null)
+			throw new NullValueException();
+		Locale locale = new Locale(languageCode, countryCode);
 		staticRu.switchLocale(locale);
 	}
 
@@ -288,8 +308,9 @@ public class SysLib extends ExecutableBase {
 	 * Change the locale of the running program dynamically.
 	 */
 	public static void setLocale(String languageCode, String countryCode, String variant) {
-		Locale locale;
-		locale = new Locale(languageCode, countryCode, variant);
+		if (languageCode == null || countryCode == null || variant == null)
+			throw new NullValueException();
+		Locale locale = new Locale(languageCode, countryCode, variant);
 		staticRu.switchLocale(locale);
 	}
 

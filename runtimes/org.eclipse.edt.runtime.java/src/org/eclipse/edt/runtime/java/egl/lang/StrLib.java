@@ -18,15 +18,12 @@ import java.util.StringTokenizer;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.TimestampData;
-import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
-import org.eclipse.edt.javart.util.JavartUtil;
 import org.eclipse.edt.javart.util.NumberFormatter;
 
 public class StrLib extends ExecutableBase {
@@ -34,7 +31,7 @@ public class StrLib extends ExecutableBase {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	private static RunUnit staticRu;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -94,15 +91,11 @@ public class StrLib extends ExecutableBase {
 	 * formats a parameter into a timestamp value and returns a value of type STRING. The DB2 format is the default format.
 	 */
 	public static String format(Calendar timestampValue, String timestampFormat) {
-		if (timestampValue == null)
-			return null;
-
 		String format = timestampFormat;
 		if (format == null || format.length() == 0)
 			format = defaultTimeStampFormat;
 		// if ( format.length() == 0 )
 		// format = timestampValue.ezeUnbox().get???();
-
 		TimestampData data = new TimestampData(timestampValue, 0);
 		boolean reset = false;
 		int micros = data.microseconds;
@@ -133,12 +126,15 @@ public class StrLib extends ExecutableBase {
 	 * 1 or greater than the length of the source String.
 	 */
 	public static String getNextToken(String source, AnyBoxedObject<Integer> index, String delimiters) throws JavartException {
+		if (source == null || index == null)
+			throw new NullValueException();
 		int start = index.ezeUnbox();
 		byte[] sourceBytes = source.getBytes();
 		// Validate the substring index.
 		if (start < 1 || start > sourceBytes.length) {
-			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR, new Object[] { "StrLib.getNextToken", String.valueOf(start) });
-			throw new IndexOutOfBoundsException(/* Message.INDEX_OUT_OF_BOUNDS, message */);
+			InvalidIndexException ex = new InvalidIndexException();
+			ex.indexValue = start;
+			throw ex;
 		}
 		// Search the substring for tokens. We don't use a
 		// java.util.StringTokenizer because we need to know the index of
@@ -181,6 +177,8 @@ public class StrLib extends ExecutableBase {
 	 * Returns the number of tokens in the source string that are delimited by the characters of the input delimiters String.
 	 */
 	public static int getTokenCount(String source, String delimiters) {
+		if (source == null || delimiters == null)
+			throw new NullValueException();
 		StringTokenizer tokenizer = new StringTokenizer(source, delimiters);
 		return tokenizer.countTokens();
 	}
@@ -189,6 +187,8 @@ public class StrLib extends ExecutableBase {
 	 * Returns the string value of a character code
 	 */
 	public static String fromCharCode(Character character) {
+		if (character == null)
+			throw new NullValueException();
 		return Character.toString(character);
 	}
 
@@ -196,6 +196,8 @@ public class StrLib extends ExecutableBase {
 	 * returns a string of a specified length.
 	 */
 	public static String spaces(Integer characterCount) {
+		if (characterCount == null)
+			return null;
 		String retVal;
 		if (characterCount <= 0)
 			retVal = "";

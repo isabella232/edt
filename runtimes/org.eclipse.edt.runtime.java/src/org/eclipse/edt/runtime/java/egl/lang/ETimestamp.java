@@ -599,6 +599,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the day of a timestamp
 	 */
 	public static Integer dayOf(Calendar aTimestamp) throws JavartException {
+		if (aTimestamp == null)
+			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.DATE))
 			throw new TypeCastException();
 		return aTimestamp.get(Calendar.DATE);
@@ -608,6 +610,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the month of a timestamp
 	 */
 	public static Integer monthOf(Calendar aTimestamp) throws JavartException {
+		if (aTimestamp == null)
+			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.MONTH))
 			throw new TypeCastException();
 		return aTimestamp.get(Calendar.MONTH) + 1;
@@ -617,6 +621,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the year of a timestamp
 	 */
 	public static Integer yearOf(Calendar aTimestamp) throws JavartException {
+		if (aTimestamp == null)
+			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.YEAR))
 			throw new TypeCastException();
 		return aTimestamp.get(Calendar.YEAR);
@@ -626,6 +632,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the weekday of a timestamp
 	 */
 	public static Integer weekdayOf(Calendar aTimestamp) throws JavartException {
+		if (aTimestamp == null)
+			throw new NullValueException();
 		if (!aTimestamp.isSet(DAY_CODE))
 			throw new TypeCastException();
 		return aTimestamp.get(Calendar.DAY_OF_WEEK) - 1;
@@ -635,6 +643,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the date of a timestamp
 	 */
 	public static Calendar dateOf(Calendar aTimestamp) throws JavartException {
+		if (aTimestamp == null)
+			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.YEAR) || !aTimestamp.isSet(Calendar.MONTH) || !aTimestamp.isSet(Calendar.DATE))
 			throw new TypeCastException();
 		return new ETimestamp((Calendar) aTimestamp.clone(), YEAR_CODE, DAY_CODE).ezeUnbox();
@@ -644,6 +654,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the time of a timestamp
 	 */
 	public static Calendar timeOf(Calendar aTimestamp) throws JavartException {
+		if (aTimestamp == null)
+			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.HOUR_OF_DAY) || !aTimestamp.isSet(Calendar.MINUTE) || !aTimestamp.isSet(Calendar.SECOND))
 			throw new TypeCastException();
 		return new ETimestamp((Calendar) aTimestamp.clone(), HOUR_CODE, SECOND_CODE).ezeUnbox();
@@ -653,6 +665,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the extension of a timestamp
 	 */
 	public static Calendar extend(Calendar aTimestamp, String timeSpanPattern) throws JavartException {
+		if (aTimestamp == null)
+			throw new NullValueException();
 		// Default values in case the pattern doesn't specify things.
 		int startCode = YEAR_CODE;
 		int endCode = SECOND_CODE;
