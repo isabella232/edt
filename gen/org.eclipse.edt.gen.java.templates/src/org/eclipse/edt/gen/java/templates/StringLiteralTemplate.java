@@ -55,7 +55,7 @@ public class StringLiteralTemplate extends JavaTemplate {
 	}
 
 	/**
-	 * Returns a new String that has escapes for any \ and " characters, newlines, carriage returns, backspaces, form feeds,
+	 * Returns a new String that has escapes for any " characters, newlines, carriage returns, backspaces, form feeds,
 	 * tabs, plus Unicode escapes for non-ASCII characters.
 	 * @param str the string to add escapes to.
 	 * @return a new String that has escapes.
@@ -77,7 +77,7 @@ public class StringLiteralTemplate extends JavaTemplate {
 				buf.setCharAt(i, '\\');
 				buf.insert(i + 1, "u" + hexValue);
 				i += 5;
-			} else if ((c == '"') || (c == '\\')) {
+			} else if (c == '"') {
 				// Insert a slash before the character and increment
 				// the counter to account for the new character.
 				buf.insert(i, '\\');
