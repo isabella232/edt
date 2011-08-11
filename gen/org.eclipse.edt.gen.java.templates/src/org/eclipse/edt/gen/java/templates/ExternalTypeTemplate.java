@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import java.util.List;
+
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Constants;
@@ -29,12 +31,31 @@ public class ExternalTypeTemplate extends JavaTemplate {
 		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
 			part.getFullyQualifiedName()))
 			return;
+
 		// if this external type has an alias, then use it instead
 		Annotation annot = part.getAnnotation("eglx.java.JavaObject");
-		if (annot != null && annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) != null && annot.getValue(IEGLConstants.PROPERTY_JAVANAME) != null)
-			CommonUtilities.processImport(
-				(String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + "." + (String) annot.getValue(IEGLConstants.PROPERTY_JAVANAME), ctx);
-		else {
+		if ( annot != null )
+		{
+			String shortName = part.getName();
+			if ( ((String)annot.getValue(IEGLConstants.PROPERTY_JAVANAME)).length() > 0 )
+			{
+				shortName = (String)annot.getValue(IEGLConstants.PROPERTY_JAVANAME);
+			}
+			
+			String fullName = shortName;
+			if ( ((String)annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0 )
+			{
+				fullName = (String)annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + '.' + fullName;
+			}
+			else if ( part.getPackageName().length() > 0 )
+			{
+				fullName = part.getPackageName() + '.' + fullName;
+			}
+			
+			CommonUtilities.processImport(fullName, ctx);
+		}
+		else
+		{
 			// process anything else the superclass needs to do
 			ctx.invokeSuper(this, preGen, part, ctx);
 		}
@@ -51,10 +72,40 @@ public class ExternalTypeTemplate extends JavaTemplate {
 	}
 
 	public void genRuntimeTypeName(ExternalType part, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		// if this external type has an alias, then use it instead
 		Annotation annot = part.getAnnotation("eglx.java.JavaObject");
-		if (annot != null && annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) != null && annot.getValue(IEGLConstants.PROPERTY_JAVANAME) != null)
-			out.print((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + "." + (String) annot.getValue(IEGLConstants.PROPERTY_JAVANAME));
+		if ( annot != null )
+		{
+			String shortName = part.getName();
+			if ( ((String)annot.getValue(IEGLConstants.PROPERTY_JAVANAME)).length() > 0 )
+			{
+				shortName = (String)annot.getValue(IEGLConstants.PROPERTY_JAVANAME);
+			}
+			
+			String fullName = shortName;
+			if ( ((String)annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0 )
+			{
+				fullName = (String)annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + '.' + fullName;
+			}
+			else if ( part.getPackageName().length() > 0 )
+			{
+				fullName = part.getPackageName() + '.' + fullName;
+			}
+			
+			// check to see if this is in the list of imported types. If it is, then we can use the short name.
+			List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partTypesImported);
+			for (String imported : typesImported) {
+				if (fullName.equalsIgnoreCase(imported)) {
+					// it was in the table, so use the short name
+					out.print(shortName);
+					return;
+				}
+			}
+			out.print(fullName);
+		}
 		else
+		{
 			ctx.invoke(genPartName, part, ctx, out);
+		}
 	}
 }
