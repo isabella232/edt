@@ -18,6 +18,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.externaltools.internal.model.BuilderCoreUtils;
+import org.eclipse.core.externaltools.internal.model.ExternalToolBuilder;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -44,6 +46,7 @@ import org.eclipse.osgi.util.NLS;
 /**
  * Utility methods for working within Eclipse.
  */
+@SuppressWarnings("restriction")
 public class EclipseUtilities {
 	
 	private EclipseUtilities() {
@@ -326,6 +329,14 @@ public class EclipseUtilities {
 					if (command.getBuilderName().equals(builderID)) {
 						smapCommand = command;
 						break;
+					}
+					// Disabled builders become "external tool builders"
+					else if (ExternalToolBuilder.ID.equals(command.getBuilderName())) {
+						Object attr = command.getArguments().get(BuilderCoreUtils.LAUNCH_CONFIG_HANDLE);
+						if (attr instanceof String && ((String)attr).contains(builderID)) {
+							smapCommand = command;
+							break;
+						}
 					}
 				}
 				
