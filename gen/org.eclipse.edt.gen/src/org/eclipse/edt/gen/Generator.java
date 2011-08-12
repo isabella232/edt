@@ -84,13 +84,12 @@ public abstract class Generator {
 		}
 		catch (UnsupportedEncodingException e) {
 			String[] details = new String[] { encoding };
-			EGLMessage message = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, encodingError, null, details, 0, 0, 0,
-				0);
+			EGLMessage message = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, encodingError, null, details, context.getLastStatementLocation());
 			context.getMessageRequestor().addMessage(message);
 		}
 		catch (IOException e) {
 			String[] details = new String[] { outFile.getName() };
-			EGLMessage message = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, writeError, null, details, 0, 0, 0, 0);
+			EGLMessage message = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, writeError, null, details, context.getLastStatementLocation());
 			context.getMessageRequestor().addMessage(message);
 			return;
 		}

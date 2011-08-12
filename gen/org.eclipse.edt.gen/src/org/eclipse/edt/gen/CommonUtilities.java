@@ -1,5 +1,7 @@
 package org.eclipse.edt.gen;
 
+import org.eclipse.edt.gen.EGLMessages.EGLMessage;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.ParameterKind;
@@ -33,5 +35,10 @@ public class CommonUtilities {
 		} else if (parameter.getParameterKind() == ParameterKind.PARM_OUT)
 			return true;
 		return false;
+	}
+	
+	public static Annotation includeEndOffset(Annotation annotation, EglContext ctx){
+		annotation.addAnnotation(ctx.getFactory().createAnnotation(EGLMessage.IncludeEndOffset));
+		return annotation;
 	}
 }

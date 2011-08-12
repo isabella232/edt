@@ -63,6 +63,8 @@ public abstract class EglContext extends TemplateContext {
 	// This is used by nextTempName.
 	private int tempIndex;
 
+	private Annotation lastStatementLocation;
+
 	public EglContext(AbstractGeneratorCommand processor) {
 		factory = IrFactory.INSTANCE;
 		tryStack = new Stack<TryStatement>();
@@ -467,5 +469,13 @@ public abstract class EglContext extends TemplateContext {
 
 	public Template getTemplateForClassifier(Classifier clazz) {
 		return getTemplateRaw(clazz.getTypeSignature());
+	}
+	
+	public Annotation getLastStatementLocation() {
+		return lastStatementLocation;
+	}
+
+	public void setLastStatementLocation(Annotation lastStatementLocation) {
+		this.lastStatementLocation = lastStatementLocation;
 	}
 }

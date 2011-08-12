@@ -14,12 +14,15 @@ package org.eclipse.edt.gen.EGLMessages;
 import java.text.MessageFormat;
 import java.util.Map;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.interfaces.IEGLMessageContributor;
 import org.eclipse.edt.compiler.internal.interfaces.IEGLNestedMessageContributor;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
+import org.eclipse.edt.mof.egl.Annotation;
 
 public class EGLMessage extends Object implements IGenerationResultsMessage {
 
+	public static final String IncludeEndOffset = "IncludeEndOffsetInGenerationMessage";
 	protected int severity = 0;
 	private String id = null;
 	private String[] params = null;
@@ -150,9 +153,22 @@ public class EGLMessage extends Object implements IGenerationResultsMessage {
 		return newInserts;
 	}
 
-	public static EGLMessage createEGLMessage(Map<String, String> mapping, int aSeverity, String messageID, Object messageContributor, String[] inserts,
-		int aStartLine, int aStartOffset, int anEndLine, int anEndOffset) {
-		return new EGLMessage(mapping, aSeverity, messageID, messageContributor, inserts, aStartLine, aStartOffset, anEndLine, anEndOffset);
+	public static EGLMessage createEGLMessage(Map<String, String> mapping, int aSeverity, String messageID, Object messageContributor, String[] inserts, Annotation eglLocation) {
+		int startLine = 0;
+		int startOffset = 0;
+		int endOffset = 0;
+		if (eglLocation != null) {
+			if (eglLocation.getValue(IEGLConstants.EGL_PARTLINE) != null)
+				startLine = ((Integer) eglLocation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
+			if (eglLocation.getValue(IEGLConstants.EGL_PARTOFFSET) != null)
+				startOffset = ((Integer) eglLocation.getValue(IEGLConstants.EGL_PARTOFFSET)).intValue();
+			if (eglLocation.getAnnotation(IncludeEndOffset) != null &&
+					eglLocation.getValue(IEGLConstants.EGL_PARTLENGTH) != null) {
+				endOffset = startOffset + ((Integer) eglLocation.getValue(IEGLConstants.EGL_PARTLENGTH)).intValue();
+				eglLocation.removeAnnotation(eglLocation.getAnnotation(IncludeEndOffset));
+			}
+		}
+		return new EGLMessage(mapping, aSeverity, messageID, messageContributor, inserts, startLine, startOffset, 0, endOffset);
 	}
 
 	public String getBuiltMessage() {

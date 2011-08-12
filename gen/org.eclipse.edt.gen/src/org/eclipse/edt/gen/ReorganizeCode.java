@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.CallStatement;
@@ -51,6 +52,10 @@ public class ReorganizeCode extends AbstractVisitor {
 
 	@SuppressWarnings("unchecked")
 	public List<StatementBlock> reorgCode(Statement statement, EglContext ctx) {
+		Annotation annot = statement.getAnnotation("EGL_Location");
+		if(annot != null){
+			ctx.setLastStatementLocation(annot);
+		}
 		this.ctx = ctx;
 		currentStatementContainer = statement.getContainer();
 		disallowRevisit();
