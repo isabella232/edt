@@ -39,4 +39,8 @@ public class ArrayAccessTemplate extends org.eclipse.edt.gen.javascript.template
 			out.print(", \"" + StringLiteralTemplate.addStringEscapes(name) + "\"");
 		}
 	}
+	
+	public void genSetLocalFunctionVariable(ArrayAccess access, Context ctx, TabbedWriter out) {
+		// No need to update - it's still the same object
+	}
 }

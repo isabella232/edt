@@ -14,8 +14,8 @@ package org.eclipse.edt.gen.javascriptdev;
 import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.FunctionMember;
-import org.eclipse.edt.mof.egl.LogicAndDataPart;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.StatementBlock;
 
 public class CommonUtilities {
 	
@@ -29,6 +29,6 @@ public class CommonUtilities {
 		}
 		
 		Container container = member.getContainer();
-		return container == null || container instanceof FunctionMember || container instanceof LogicAndDataPart;
+		return container == null || container instanceof FunctionMember || container instanceof StatementBlock;
 	}
 }
