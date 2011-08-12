@@ -600,9 +600,12 @@ public class IRUtils {
 				if (!lhs.equals(rhs)) {
 					List<Operation> ops = TypeUtils.getBestFitOperation((StructPart)lhs, opSymbol, (StructPart)lhs, (StructPart)rhs);
 					// Filter out an operation that has the same parameter types for each parameter
-					if (ops.size() == 1 
-							&& !(ops.get(0).getParameters().get(0).getType().equals(ops.get(0).getParameters().get(1).getType()))) {
-						return ops.get(0);
+					if (ops.size() > 0) {
+						for (Operation operation : ops) {
+							if (!(operation.getParameters().get(0).getType().equals(operation.getParameters().get(1).getType()))) {
+								return operation;
+							}
+						}
 					}
 				}
 				return null;
@@ -626,11 +629,13 @@ public class IRUtils {
 		if (!lhs.equals(rhs)) {
 			List<Operation> ops = TypeUtils.getBestFitOperation(clazz, opSymbol, (StructPart)lhs, (StructPart)rhs);
 			// Filter out an operation that has the same parameter types for each parameter
-			if (ops.size() == 1 
-					&& !(ops.get(0).getParameters().get(0).getType().equals(ops.get(0).getParameters().get(1).getType()))) {
-				return ops.get(0);
+			if (ops.size() > 0) {
+				for (Operation operation : ops) {
+					if (!(operation.getParameters().get(0).getType().equals(operation.getParameters().get(1).getType()))) {
+						return operation;
+					}
+				}
 			}
-			if (ops.size() > 1) return null;
 		}
 		
 		Operation result = TypeUtils.getBinaryOperation(clazz, opSymbol);
