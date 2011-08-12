@@ -37,9 +37,9 @@ public class ExternalTypeTemplate extends JavaTemplate {
 		if ( annot != null )
 		{
 			String shortName = part.getName();
-			if ( ((String)annot.getValue(IEGLConstants.PROPERTY_JAVANAME)).length() > 0 )
+			if ( ((String)annot.getValue("externalName")).length() > 0 )
 			{
-				shortName = (String)annot.getValue(IEGLConstants.PROPERTY_JAVANAME);
+				shortName = (String)annot.getValue("externalName");
 			}
 			
 			String fullName = shortName;
@@ -77,9 +77,9 @@ public class ExternalTypeTemplate extends JavaTemplate {
 		if ( annot != null )
 		{
 			String shortName = part.getName();
-			if ( ((String)annot.getValue(IEGLConstants.PROPERTY_JAVANAME)).length() > 0 )
+			if ( ((String)annot.getValue("externalName")).length() > 0 )
 			{
-				shortName = (String)annot.getValue(IEGLConstants.PROPERTY_JAVANAME);
+				shortName = (String)annot.getValue("externalName");
 			}
 			
 			String fullName = shortName;
