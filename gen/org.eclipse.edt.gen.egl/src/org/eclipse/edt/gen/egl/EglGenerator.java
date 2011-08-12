@@ -57,15 +57,16 @@ public class EglGenerator extends Generator{
 		catch (TemplateException e) {
 			String[] details1 = new String[] { e.getLocalizedMessage() };
 			EGLMessage message1 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-				Constants.EGLMESSAGE_EXCEPTION_OCCURED, e, details1, 0, 0, 0, 0);
+				Constants.EGLMESSAGE_EXCEPTION_OCCURED, e, details1, null);
 			context.getMessageRequestor().addMessage(message1);
 			if (e.getCause() != null) {
 				String[] details2 = new String[] { e.getCause().toString() };
 				EGLMessage message2 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_STACK_TRACE,
-					e, details2, 0, 0, 0, 0);
+					e, details2, null);
 				context.getMessageRequestor().addMessage(message2);
 			}
 			// print out the whole stack trace
+			System.err.println("generating:" + part.getClass().getName());
 			e.printStackTrace();
 		}
 	}
