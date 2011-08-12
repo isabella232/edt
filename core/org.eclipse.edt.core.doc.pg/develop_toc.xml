@@ -1,15 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
-<toc label="Developing EGL applications with EDT" topic="topics/cedt01000.html">
-   <topic label="Introduction to EGL" href="topics/cedt01000.html"/>
+<toc label="Developing EGL applications with EDT" topic="topics/cedt01001.html">
    <topic label="EGL process from development to run time" href="topics/cedt01001.html"/>
-   <topic label="Developing a service or program" href="topics/tedt01000.html"/>
+   <topic label="EGL support for service-oriented architecture"
+          href="topics/cedt01003.html">
+      <topic label="Service access in Rich UI" href="topics/cedt01004.html"/>
+      <topic label="Service access outside of Rich UI" href="topics/cedt01005.html"/>
+      <topic label="Function prototypes for service access" href="topics/cedt01006.html"/>
+      <topic label="Service-location details for web service deployment"
+             href="topics/cedt01007.html"/>
+      <topic label="Service-location details for web service access"
+             href="topics/cedt01008.html"/>
+      <topic label="EGL support for accessing SOAP headers" href="topics/cedt01009.html"/>
+      <topic label="EGL REST-RPC message structure" href="topics/cedt01010.html"/>
+      <topic label="UI Program and the gateway service" href="topics/cedt01011.html"/>
+      <topic label="End-to-end processing with a UI program and a data grid"
+             href="topics/cedt01012.html"/>
+   </topic>
+   <topic label="EGL support for Rich Internet Applications" href="topics/cedt01002.html"/>
+   <topic label="Developing a service or program" href="topics/tedt01000.html">
+      <topic label="Accessing external data and reports" href="topics/tedt01010.html">
+         <topic label="Accessing a relational database" href="topics/tedt01012.html"/>
+         <topic label="Accessing a remote VSAM file" href="topics/tedt01013.html"/>
+         <topic label="Accessing a BIRT report" href="topics/tedt01014.html"/>
+      </topic>
+      <topic label="Creating an EGL text report" href="topics/tedt01011.html"/>
+   </topic>
    <topic label="Developing a Rich UI application" href="topics/tedt01001.html"/>
-   <topic label="Accessing services, programs, and transactions"
-          href="topics/tedt01002.html"/>
+   <topic label="Accessing a service" href="topics/tedt01002.html">
+      <topic label="Declaring a variable to access a dedicated or local EGL service"
+             href="topics/tedt01017.html"/>
+      <topic label="Declaring a variable to access a remote EGL or native service"
+             href="topics/tedt01018.html"/>
+      <topic label="Binding an access variable dynamically" href="topics/tedt01019.html"/>
+      <topic label="Creating an Interface part to access a REST service"
+             href="topics/tedt01020.html"/>
+      <topic label="Declaring a variable to access a REST service"
+             href="topics/tedt01021.html"/>
+      <topic label="Creating an Interface part to access a SOAP service"
+             href="topics/tedt01016.html"/>
+      <topic label="Declaring a variable to access a SOAP service"
+             href="topics/tedt01022.html"/>
+      <topic label="Invoking a service asynchronously from a Rich UI application"
+             href="topics/tedt01023.html"/>
+      <topic label="Invoking a service synchronously from outside of Rich UI"
+             href="topics/tedt01024.html"/>
+      <topic label="Using a provided Interface part for a 3rd-party REST service"
+             href="topics/tedt01025.html"/>
+      <topic label="Accessing a BIRT report" href="topics/tedt01014.html"/>
+   </topic>
+   <topic label="Accessing a program or transaction" href="topics/tedt01015.html"/>
    <topic label="Calling EGL-generated code from other logic"
           href="topics/tedt01003.html"/>
-   <topic label="Writing test cases" href="topics/tedt01006.html"/>
-   <topic label="Securing EGL-generated code" href="topics/tedt01004.html"/>
+   <topic label="Writing test cases with the EGLUnit test framework"
+          href="topics/tedt01006.html"/>
+   <topic label="Compiling EGL source and deploying the output internally"
+          href="topics/tedt01007.html">
+      <topic label="Compiling and deploying EGL in a headless Eclipse"
+             href="topics/tedt01008.html"/>
+      <topic label="Compiling EGL source outside of Eclipse" href="topics/tedt01009.html"/>
+   </topic>
+   <topic label="Securing generated code" href="topics/tedt01004.html"/>
    <topic label="Supporting users globally" href="topics/tedt01005.html"/>
 </toc>

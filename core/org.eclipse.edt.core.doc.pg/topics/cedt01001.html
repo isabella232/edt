@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="EGL process from development to run time"></meta>
-<meta name="abstract" content="The following figure outlines the process by which the EGL technology creates output from your source code."></meta>
-<meta name="description" content="The following figure outlines the process by which the EGL technology creates output from your source code."></meta>
+<meta name="abstract" content="The following figure illustrates EGL compilation, which is the process by which the EGL technology creates output from your source code."></meta>
+<meta name="description" content="The following figure illustrates EGL compilation, which is the process by which the EGL technology creates output from your source code."></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -23,8 +23,9 @@
 
 
 
-<div><p>The following figure outlines the process by which the
-EGL technology creates output from your source code.</p>
+<div><p>The following figure illustrates EGL compilation, which
+is the process by which the EGL technology creates output from your
+source code.</p>
 
 <div class="p"><div class="fignone">
 <br></br><div class="imagecenter"><img class="imagecenter" src="../images/egl_core_overview.gif" alt="EGL compilation"></img></div><br></br>
@@ -69,14 +70,15 @@ ultimately runs; for example, a Windows platform.</p>
 the pre-generation.</li>
 
 </ol>
-<p>The generated output is JavaScript or  Java source code. COBOL generation of various
+<p>The generated output is JavaScript or  Java (tm) source code. COBOL generation of various
 kinds is available in commercial EGL extensions.</p>
 <div class="p">You control
 generation primarily by defining the <dfn class="term">build file</dfn>, which
 is an XML file identified by the extension <samp class="codeph">.eglbld</samp>.
-(This aspect of the technology is under review.) </div>
+(This aspect of the technology is under review.). </div>
+<p></p>
 </li>
-<br/>
+
 <li>If generation succeeds, the generated output can become an input
 to an <dfn class="term">EGL deployer</dfn>, which readies the generated output
 for deployment on an EGL target platform. <p>You invoke the deployer
