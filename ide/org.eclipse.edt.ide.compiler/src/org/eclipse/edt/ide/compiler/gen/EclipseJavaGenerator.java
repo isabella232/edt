@@ -60,13 +60,13 @@ public class EclipseJavaGenerator extends JavaGenerator {
 			catch (UnsupportedEncodingException e) {
 				String[] details = new String[] { "UTF-8" };
 				EGLMessage message = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-					Constants.EGLMESSAGE_SMAPFILE_ENCODING_FAILED, null, details, 0, 0, 0, 0);
+					Constants.EGLMESSAGE_SMAPFILE_ENCODING_FAILED, null, details, null);
 				context.getMessageRequestor().addMessage(message);
 			}
 			catch (CoreException e) {
 				String[] details = new String[] { outSmapFile.getName() };
 				EGLMessage message = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-					Constants.EGLMESSAGE_SMAPFILE_WRITE_FAILED, null, details, 0, 0, 0, 0);
+					Constants.EGLMESSAGE_SMAPFILE_WRITE_FAILED, null, details, null);
 				context.getMessageRequestor().addMessage(message);
 			}
 			finally {
