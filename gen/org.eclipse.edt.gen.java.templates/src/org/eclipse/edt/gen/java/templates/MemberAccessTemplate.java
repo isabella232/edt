@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.Type;
@@ -28,8 +29,13 @@ public class MemberAccessTemplate extends JavaTemplate {
 	}
 
 	public void genMemberAccess(MemberAccess expr, Context ctx, TabbedWriter out) {
-		ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
-		out.print(".");
-		ctx.invoke(genAccessor, expr.getMember(), ctx, out);
+		// if this is a delegate, then the qualifier is one of the delegate's genAccessor arguments
+		if (expr.getMember() instanceof Function)
+			ctx.invoke(genAccessor, expr.getMember(), ctx, out, expr);
+		else {
+			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+			out.print(".");
+			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
+		}
 	}
 }

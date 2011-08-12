@@ -12,6 +12,7 @@
 package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.CommonUtilities;
+import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
@@ -19,7 +20,9 @@ import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
+import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.ReturnStatement;
 
 public class FunctionTemplate extends JavaTemplate {
@@ -48,8 +51,8 @@ public class FunctionTemplate extends JavaTemplate {
 		ctx.invoke(genStatementNoBraces, function.getStatementBlock(), ctx, out);
 		// we need to create a local variable for the return, if the user didn't specify one
 		if (function.getType() != null
-			&& (ctx.getAttribute(function, org.eclipse.edt.gen.Constants.SubKey_functionHasReturnStatement) == null || !((Boolean) ctx.getAttribute(
-				function, org.eclipse.edt.gen.Constants.SubKey_functionHasReturnStatement)).booleanValue())) {
+			&& (ctx.getAttribute(function, org.eclipse.edt.gen.Constants.SubKey_functionHasReturnStatement) == null || !((Boolean) ctx.getAttribute(function,
+				org.eclipse.edt.gen.Constants.SubKey_functionHasReturnStatement)).booleanValue())) {
 			String temporary = ctx.nextTempName();
 			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
 			localDeclaration.setContainer(function);
@@ -82,7 +85,28 @@ public class FunctionTemplate extends JavaTemplate {
 	public void genAccessor(Function function, Context ctx, TabbedWriter out) {
 		out.print("new org.eclipse.edt.javart.Delegate(\"");
 		ctx.invoke(genName, function, ctx, out);
-		out.print("\", this");
+		out.print("\", ");
+		out.print("this");
+		for (int i = 0; i < function.getParameters().size(); i++) {
+			FunctionParameter decl = function.getParameters().get(i);
+			out.print(", ");
+			if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx))
+				ctx.invoke(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
+			else
+				ctx.invoke(genRuntimeTypeName, decl, ctx, out, TypeNameKind.JavaObject);
+			out.print(".class");
+		}
+		out.print(")");
+	}
+
+	public void genAccessor(Function function, Context ctx, TabbedWriter out, MemberAccess arg) {
+		out.print("new org.eclipse.edt.javart.Delegate(\"");
+		ctx.invoke(genName, function, ctx, out);
+		out.print("\", ");
+		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated)).equals(arg.getQualifier()))
+			out.print("this");
+		else
+			ctx.invoke(genExpression, arg.getQualifier(), ctx, out);
 		for (int i = 0; i < function.getParameters().size(); i++) {
 			FunctionParameter decl = function.getParameters().get(i);
 			out.print(", ");
