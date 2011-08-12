@@ -11,29 +11,34 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascriptdev.templates;
 
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.javascript.Context;
+import org.eclipse.edt.gen.javascript.templates.StatementBlockTemplate;
+import org.eclipse.edt.gen.javascriptdev.CommonUtilities;
 import org.eclipse.edt.gen.javascriptdev.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ExceptionBlock;
 import org.eclipse.edt.mof.egl.Statement;
+import org.eclipse.edt.mof.egl.StatementBlock;
 
-public class StatementTemplate extends org.eclipse.edt.gen.javascript.templates.StatementTemplate {
+public class ExceptionBlockTemplate extends StatementBlockTemplate {
 	
 	@Override
-	public void genStatement(Statement stmt, Context ctx, TabbedWriter out) {
-		ctx.invoke(Constants.genAtLine, stmt, ctx, out);
-		super.genStatement(stmt, ctx, out);
+	protected void processStatements(StatementBlock block, Context ctx, TabbedWriter out) {
+		boolean needFinally = false;
+		if (block instanceof ExceptionBlock && CommonUtilities.shouldDebug(((ExceptionBlock)block).getException())) {
+			needFinally = true;
+			out.println("try{egl.enterBlock();");
+			ctx.invoke(Constants.genAddLocalFunctionVariable, ((ExceptionBlock)block).getException(), ctx, out);
+		}
+		
+		super.processStatements(block, ctx, out);
+		
+		if (needFinally) {
+			out.println("}finally{egl.exitBlock();}");
+		}
 	}
 	
 	public void genAtLine(Statement stmt, Context ctx, TabbedWriter out) {
-		Annotation annotation = stmt.getAnnotation(IEGLConstants.EGL_LOCATION);
-		if (annotation != null){
-			Integer line = (Integer)annotation.getValue(IEGLConstants.EGL_PARTLINE);
-			Integer offset = (Integer)annotation.getValue(IEGLConstants.EGL_PARTOFFSET);
-			Integer length = (Integer)annotation.getValue(IEGLConstants.EGL_PARTLENGTH);
-			out.println( "egl.atLine(this.eze$$fileName," + line + ","
-				+ offset + "," + length + ", this);" );
-		}
+		// Do not generate an atLine for blocks.
 	}
 }

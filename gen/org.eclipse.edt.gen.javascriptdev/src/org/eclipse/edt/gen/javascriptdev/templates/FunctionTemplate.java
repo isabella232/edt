@@ -11,15 +11,25 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascriptdev.templates;
 
+import java.util.List;
+
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascriptdev.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.ReturnStatement;
+import org.eclipse.edt.mof.egl.Statement;
 
 public class FunctionTemplate extends org.eclipse.edt.gen.javascript.templates.FunctionTemplate {
-
+	
+	@Override
 	public void genFunctionBody(Function function, Context ctx, TabbedWriter out) {
 		ctx.invoke(Constants.genFunctionEntry, function, ctx, out);
+		
+		for (FunctionParameter parm : function.getParameters()) {
+			ctx.invoke(Constants.genAddLocalFunctionVariable, parm, ctx, out);
+		}
 		
 		super.genFunctionBody(function, ctx, out);
 		
@@ -33,8 +43,13 @@ public class FunctionTemplate extends org.eclipse.edt.gen.javascript.templates.F
 		out.println("\",this,arguments);");
 	}
 	
-	
 	public void genFunctionExit(Function function, Context ctx, TabbedWriter out) {
+		// If there was no return statement then we need to gen egl.leave() - otherwise this was done right before the return statement.
+		List<Statement> stmts = function.getStatements();
+		if (stmts.size() > 0 && !(stmts.get(stmts.size() - 1) instanceof ReturnStatement)) {
+			out.println("if (!egl.debugg) egl.leave();");
+		}
+		
 		out.println("} finally { ");
 		
 		out.println("\t\t if (!egl.debugg){ ");

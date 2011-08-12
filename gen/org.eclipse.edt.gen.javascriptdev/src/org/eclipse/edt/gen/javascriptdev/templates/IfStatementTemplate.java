@@ -11,29 +11,36 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascriptdev.templates;
 
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascriptdev.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.IfStatement;
 import org.eclipse.edt.mof.egl.Statement;
 
-public class StatementTemplate extends org.eclipse.edt.gen.javascript.templates.StatementTemplate {
+public class IfStatementTemplate extends org.eclipse.edt.gen.javascript.templates.IfStatementTemplate {
 	
 	@Override
-	public void genStatement(Statement stmt, Context ctx, TabbedWriter out) {
-		ctx.invoke(Constants.genAtLine, stmt, ctx, out);
-		super.genStatement(stmt, ctx, out);
-	}
-	
-	public void genAtLine(Statement stmt, Context ctx, TabbedWriter out) {
-		Annotation annotation = stmt.getAnnotation(IEGLConstants.EGL_LOCATION);
-		if (annotation != null){
-			Integer line = (Integer)annotation.getValue(IEGLConstants.EGL_PARTLINE);
-			Integer offset = (Integer)annotation.getValue(IEGLConstants.EGL_PARTOFFSET);
-			Integer length = (Integer)annotation.getValue(IEGLConstants.EGL_PARTLENGTH);
-			out.println( "egl.atLine(this.eze$$fileName," + line + ","
-				+ offset + "," + length + ", this);" );
+	public void genStatementBody(IfStatement stmt, Context ctx, TabbedWriter out) {
+		Statement trueBranch = stmt.getTrueBranch();
+		Statement falseBranch = stmt.getFalseBranch();
+		
+		Annotation enterBlock = ctx.getFactory().createAnnotation(Constants.ENTER_BLOCK_ANNOTATION);
+		enterBlock.setValue(Boolean.TRUE);
+		if (trueBranch != null) {
+			trueBranch.addAnnotation(enterBlock);
+		}
+		if (falseBranch != null) {
+			falseBranch.addAnnotation(enterBlock);
+		}
+		
+		super.genStatementBody(stmt, ctx, out);
+		
+		if (trueBranch != null) {
+			trueBranch.removeAnnotation(enterBlock);
+		}
+		if (falseBranch != null) {
+			falseBranch.removeAnnotation(enterBlock);
 		}
 	}
 }
