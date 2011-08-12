@@ -6,6 +6,7 @@
 	<extension-point id="projectType" name="New EGL Project Type" schema="schema/projectType.exsd"/>
     <extension-point id="eglProjectFeature" name="EGL Project Feature" schema="schema/eglProjectFeature.exsd"/>
 	<extension-point id="widgetLibraryProvider" name="Widget Library Provider" schema="schema/widgetLibraryProvider.exsd"/>
+	<extension-point id="eglTemplates" name="EGL Record Templates" schema="schema/eglTemplates.exsd"/>
 	   
 	<extension 
 		point="org.eclipse.core.runtime.preferences">
@@ -766,6 +767,23 @@ Templates
  		        	</or>         					
 				</enablement>
 			</commonWizard>		
+			<commonWizard
+				type="new"
+				menuGroupId="org.eclipse.edt.ide.ui.wizards.menuGroup"
+				wizardId="org.eclipse.edt.ide.ui.NewRecordWizard">
+				<enablement>
+ 		        	<or>
+	 					<adapt
+								type="org.eclipse.core.resources.IProject" >
+							<test
+								property="org.eclipse.core.resources.projectNature"
+								value="org.eclipse.edt.ide.core.EGLNature" />
+						</adapt>
+						<instanceof
+								value="org.eclipse.edt.ide.core.model.IEGLElement" />
+ 		        	</or>         					
+				</enablement>
+			</commonWizard>
 	      </navigatorContent>
       <commonFilter
             class="org.eclipse.edt.ide.ui.internal.packageexplorer.EmptyEGLInnerPackageFilter"                  
@@ -893,6 +911,13 @@ Templates
             class="org.eclipse.edt.ide.ui.internal.wizards.EGLSourceFolderWizard"
             id="org.eclipse.edt.ide.ui.newSourceWizard">
    		</wizard>
+   		<wizard
+   		    name="%EGLRecord"
+   		    icon="icons/ctool16/newrec_wiz.gif"
+            category="org.eclipse.edt.ide.ui.wizards.new.category"
+            class="org.eclipse.edt.ide.ui.internal.record.NewRecordWizard"
+            id="org.eclipse.edt.ide.ui.NewRecordWizard">
+       </wizard>
 	</extension>
     	
 	<extension
@@ -1220,6 +1245,47 @@ Templates
 			<description>%eglCompareFontDefiniton.description</description>
 		</fontDefinition>
 	</extension>
+	
+	<extension point="org.eclipse.edt.ide.ui.eglTemplates">
+	
+	  <template
+     		default="true"
+     		name="%EGLBasicRecord"
+     		icon="icons/ctool16/newrec_wiz.gif"
+            category="org.eclipse.edt.ide.ui.records"
+            codeTemplateID="org.eclipse.edt.ide.ui.templates.flexible_basic_record"
+            id="org.eclipse.edt.ide.ui.records.basic"
+            description="%EGLBasicRecordDescription">
+      </template>
+      
+      <template
+            name="%EGLRecordFromJSON"
+            icon="icons/ctool16/record_template.gif"
+            category="org.eclipse.edt.ide.ui.records"
+            wizardClass="org.eclipse.edt.ide.ui.internal.record.wizards.RecordFromJsonWizard"
+            id="org.eclipse.edt.ide.ui.records.json"
+            description="%EGLRecordFromJSONDescription">
+      </template>
+      
+      <template
+            name="%EGLRecordFromXML"
+            icon="icons/ctool16/record_template.gif"
+            category="org.eclipse.edt.ide.ui.records"
+            wizardClass="org.eclipse.edt.ide.ui.internal.record.wizards.RecordFromXMLWizard"
+            id="org.eclipse.edt.ide.ui.records.xml"
+            description="%EGLRecordFromXMLDescription">
+      </template>
+      
+      <template
+            name="%EGLRecordFromXMLSchema"
+            icon="icons/ctool16/record_template.gif"
+            category="org.eclipse.edt.ide.ui.records"
+            wizardClass="org.eclipse.edt.ide.ui.internal.record.wizards.RecordFromXMLSchemaWizard"
+            id="org.eclipse.edt.ide.ui.records.xmlschema"
+            description="%EGLRecordFromXMLSchemaDescription">
+      </template>
+      
+    </extension>
    
  	<extension
          id="eglnature"

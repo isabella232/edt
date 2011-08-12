@@ -38,7 +38,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.edt.mof;bundle-version="0.7.0",
  org.eclipse.jst.j2ee.core;bundle-version="1.2.4",
  org.eclipse.wst.common.project.facet.ui;bundle-version="1.4.103",
- org.eclipse.wst.common.frameworks.ui;bundle-version="1.2.0"
+ org.eclipse.wst.common.frameworks.ui;bundle-version="1.2.0",
+ org.eclipse.edt.runtime.java;bundle-version="0.7.0",
+ org.apache.xerces;bundle-version="[2.9.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
@@ -50,13 +52,16 @@ Export-Package:
  org.eclipse.edt.ide.ui.internal.editor,
  org.eclipse.edt.ide.ui.internal.editor.util,
  org.eclipse.edt.ide.ui.internal.packageexplorer,
+ org.eclipse.edt.ide.ui.internal.preferences,
  org.eclipse.edt.ide.ui.internal.project.features,
  org.eclipse.edt.ide.ui.internal.project.features.operations,
  org.eclipse.edt.ide.ui.internal.util,
  org.eclipse.edt.ide.ui.internal.viewsupport,
  org.eclipse.edt.ide.ui.internal.wizards,
  org.eclipse.edt.ide.ui.internal.wizards.dialogfields,
- org.eclipse.edt.ide.ui.internal.preferences,
  org.eclipse.edt.ide.ui.preferences,
+ org.eclipse.edt.ide.ui.templates,
+ org.eclipse.edt.ide.ui.templates.parts,
+ org.eclipse.edt.ide.ui.templates.wizards,
  org.eclipse.edt.ide.ui.wizards
 Bundle-Vendor: Eclipse EGL Development Tools

@@ -304,6 +304,7 @@ public class PluginImages {
 	public static final ImageDescriptor DESC_WIZBAN_GENWSDL = create(T_WIZBAN, "wsdlfl_wiz.gif"); //$NON-NLS-1$
 	public static final ImageDescriptor DESC_WIZBAN_NEWEGLDD = create(T_WIZBAN, "newedd_wiz.gif");//$NON-NLS-1$
 	public static final ImageDescriptor DESC_WIZBAN_COPYEGLDD = create(T_WIZBAN, "cpydds_wiz.gif");//$NON-NLS-1$
+	public static final ImageDescriptor DESC_WIZBAN_NEWTEMPLATESELECTION = create(T_WIZBAN, "newxsltemplate_wiz.gif");//$NON-NLS-1$
 	
 	//Source Assistant banners
 	public static final ImageDescriptor DESC_WIZBAN_SA_DATAITEM= create(T_WIZBAN, "disa_wiz.gif"); //$NON-NLS-1$
