@@ -20,11 +20,8 @@ public class DeclarationExpressionTemplate extends JavaScriptTemplate {
 
 	public void genDeclarationExpression(DeclarationExpression expr, Context ctx, TabbedWriter out) {
 		for (Field field : expr.getFields()) {
-			out.print("var ");
-			ctx.invoke(genName, field, ctx, out);
-			out.print(" = ");
-			ctx.invoke(genInitialization, field, ctx, out);
-			out.println(";");
+			ctx.invoke(genDeclaration, field, ctx, out);
+			
 			if (field.getInitializerStatements() != null)
 				ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
 		}

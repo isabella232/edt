@@ -29,6 +29,11 @@ public class TryStatementTemplate extends JavaScriptTemplate {
 	public void genException(ExceptionBlock exceptionBlock, Context ctx, TabbedWriter out) {
 		String exceptionVar = ctx.nextTempName();
 		out.println("catch (" + exceptionVar + "){");
+		genCatchBody(exceptionBlock, ctx, out, exceptionVar);
+		out.println("}");
+	}
+	
+	protected void genCatchBody(ExceptionBlock exceptionBlock, Context ctx, TabbedWriter out, String exceptionVar) {
 		out.println("if ( " + exceptionVar + " instanceof " + ctx.getNativeImplementationMapping(exceptionBlock.getException().getType()) + " ) {");
 		out.print("var ");
 		ctx.invoke(genName, exceptionBlock.getException(), ctx, out);
@@ -37,7 +42,6 @@ public class TryStatementTemplate extends JavaScriptTemplate {
 		out.println("}");
 		out.println("else {");
 		out.println("throw " + exceptionVar + ";");
-		out.println("}");
 		out.println("}");
 	}
 

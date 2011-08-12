@@ -24,13 +24,17 @@ public class ArrayAccessTemplate extends JavaScriptTemplate {
 
 	public void genAssignment(ArrayAccess expr, Context ctx, TabbedWriter out, Expression arg1, String arg2) {
 		out.print("egl.checkNull(");
-		ctx.invoke(genExpression, expr.getArray(), ctx, out);
+		ctx.invoke(genCheckNullArgs, expr, ctx, out);
 		out.print(")");
 		out.print("[");
 		ctx.invoke(genExpression, expr.getArray(), ctx, out);
 		out.print(".checkIndex(");
 		ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 		out.print(" - 1)]");
+	}
+	
+	public void genCheckNullArgs(ArrayAccess expr, Context ctx, TabbedWriter out) {
+		ctx.invoke(genExpression, expr.getArray(), ctx, out);
 	}
 
 	public void genExpression(ArrayAccess expr, Context ctx, TabbedWriter out) {
@@ -52,7 +56,7 @@ public class ArrayAccessTemplate extends JavaScriptTemplate {
 			out.print(")");
 		} else {
 			out.print("egl.checkNull(");
-			ctx.invoke(genExpression, expr.getArray(), ctx, out);
+			ctx.invoke(genCheckNullArgs, expr, ctx, out);
 			out.print(")");
 			out.print("[");
 			ctx.invoke(genExpression, expr.getArray(), ctx, out);

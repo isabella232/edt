@@ -45,11 +45,10 @@ public class FieldTemplate extends JavaScriptTemplate {
 	}
 
 	public void genDeclaration(Field field, Context ctx, TabbedWriter out) {
-		// process the field
-		ctx.invokeSuper(this, genDeclaration, field, ctx, out);
-		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavascriptPrimitive);
-		out.print(" ");
+		out.print("var ");
 		ctx.invoke(genName, field, ctx, out);
+		out.print(" = ");
+		ctx.invoke(genInitialization, field, ctx, out);
 		out.println(";");
 	}
 

@@ -21,7 +21,7 @@ public class ForStatementTemplate extends JavaScriptTemplate {
 	public void genStatementBody(ForStatement stmt, Context ctx, TabbedWriter out) {
 		if (stmt.getDeclarationExpression() != null) {
 			out.println("{");
-			ctx.invoke(genDeclarationExpression, stmt.getDeclarationExpression(), ctx, out);
+			ctx.invoke(genDeclarationExpression, stmt, ctx, out);
 		}
 		Label label = new Label(ctx, Label.LABEL_TYPE_FOR);
 		ctx.pushLabelStack(label);
@@ -59,7 +59,11 @@ public class ForStatementTemplate extends JavaScriptTemplate {
 		// now remove the label from the stack
 		ctx.popLabelStack();
 	}
-
+	
+	public void genDeclarationExpression(ForStatement stmt, Context ctx, TabbedWriter out) {
+		ctx.invoke(genDeclarationExpression, stmt.getDeclarationExpression(), ctx, out);
+	}
+	
 	public void genStatementEnd(ForStatement stmt, Context ctx, TabbedWriter out) {
 		// we don't want a semi-colon
 	}
