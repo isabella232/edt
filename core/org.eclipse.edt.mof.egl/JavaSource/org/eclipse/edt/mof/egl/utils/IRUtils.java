@@ -577,6 +577,53 @@ public class IRUtils {
 		}  
 		return null;
 	}
+	
+	private static Operation getNoConversionBinaryOperation(Classifier lhs, Classifier rhs, StructPart clazz, String opSymbol) {
+		// First check if there is an explicit operation 
+		// independent of conversion of either side to the other.
+		// This is to handle the cases where binary operations are implemented
+		// that do not force a conversion of one type to the other
+
+		if (!lhs.equals(rhs)) {
+			
+			//first check in the clazz
+			Operation result = primGetNoConversionBinaryOperation(lhs, rhs, clazz, opSymbol);
+			if (result != null) {
+				return result;
+			}
+			
+			if (clazz != lhs && lhs instanceof StructPart) {
+				result = primGetNoConversionBinaryOperation(lhs, rhs, (StructPart)lhs, opSymbol);
+				if (result != null) {
+					return result;
+				}
+				
+			}
+
+			if (clazz != rhs && rhs instanceof StructPart) {
+				result = primGetNoConversionBinaryOperation(lhs, rhs, (StructPart)rhs, opSymbol);
+				if (result != null) {
+					return result;
+				}				
+			}
+		}
+		return null;
+	}
+
+	private static Operation primGetNoConversionBinaryOperation(Classifier lhs, Classifier rhs, StructPart clazz, String opSymbol) {
+
+		List<Operation> ops = TypeUtils.getBestFitOperation(clazz, opSymbol, (StructPart)lhs, (StructPart)rhs);
+		// Filter out an operation that has the same parameter types for each parameter
+		if (ops.size() > 0) {
+			for (Operation operation : ops) {
+				if (!(operation.getParameters().get(0).getType().equals(operation.getParameters().get(1).getType()))) {
+					return operation;
+				}
+			}
+		}
+		
+		return null;
+	}
 
 	public static Operation getBinaryOperation(Classifier lhs, Classifier rhs, String opSymbol) {
 		if (!(lhs instanceof StructPart)) return null;
@@ -591,24 +638,8 @@ public class IRUtils {
 		}
 		else if (direction == -1) {
 			conOp = getConversionOperation((StructPart)rhs, (StructPart)lhs);
-			if (conOp == null) {
-				// First check if there is an explicit operation 
-				// independent of conversion of either side to the other.
-				// Check only the lhs classifier for this operation.
-				// This is to handle the cases where binary operations are implemented
-				// that do not force a conversion of one type to the other
-				if (!lhs.equals(rhs)) {
-					List<Operation> ops = TypeUtils.getBestFitOperation((StructPart)lhs, opSymbol, (StructPart)lhs, (StructPart)rhs);
-					// Filter out an operation that has the same parameter types for each parameter
-					if (ops.size() > 0) {
-						for (Operation operation : ops) {
-							if (!(operation.getParameters().get(0).getType().equals(operation.getParameters().get(1).getType()))) {
-								return operation;
-							}
-						}
-					}
-				}
-				return null;
+			if (conOp == null) {				
+				return getNoConversionBinaryOperation(lhs, rhs, (StructPart)lhs, opSymbol);
 			}
 			clazz = (StructPart)conOp.getType().getClassifier();
 		}
@@ -620,25 +651,14 @@ public class IRUtils {
 		else if (direction == 2) {
 			clazz = (StructPart)TypeUtils.Type_DECIMAL;
 		}
-		// First check if there is an explicit operation 
-		// independent of conversion of either side to the other.
-		// Check only the lhs classifier for this operation.
-		// This is to handle the cases where binary operations are implemented
-		// that do not force a conversion of one type to the other, i.e
-		// they have the LHS and RHS being different types
-		if (!lhs.equals(rhs)) {
-			List<Operation> ops = TypeUtils.getBestFitOperation(clazz, opSymbol, (StructPart)lhs, (StructPart)rhs);
-			// Filter out an operation that has the same parameter types for each parameter
-			if (ops.size() > 0) {
-				for (Operation operation : ops) {
-					if (!(operation.getParameters().get(0).getType().equals(operation.getParameters().get(1).getType()))) {
-						return operation;
-					}
-				}
-			}
+		
+		//Check for explicit operation
+		Operation result = getNoConversionBinaryOperation(lhs, rhs, clazz, opSymbol);
+		if (result != null) {
+			return result;
 		}
 		
-		Operation result = TypeUtils.getBinaryOperation(clazz, opSymbol);
+		result = TypeUtils.getBinaryOperation(clazz, opSymbol);
 		if (result == null) {
 			// If there was no operation then reverse the lookup
 			if (direction == -1) {
