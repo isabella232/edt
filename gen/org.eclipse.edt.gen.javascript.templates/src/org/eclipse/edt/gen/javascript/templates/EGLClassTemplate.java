@@ -102,6 +102,10 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		ctx.invoke(genSuperClass, part, ctx, out);
 		out.print(", ");
 		out.println("{");
+		out.print(quoted("eze$$fileName"));
+		out.print(" : ");
+		out.print(quoted(part.getFileName()));
+		out.println(", ");
 	}
 
 	public void genClassBody(EGLClass part, Context ctx, TabbedWriter out) {
