@@ -29,10 +29,10 @@ public class MemberNameTemplate extends JavaTemplate {
 			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 			out.print(".ezeCopy(");
 			// if we are doing some type of complex assignment, we need to place that in the argument
-			if (arg2.length() > 1 && arg2.indexOf("=") > 0) {
+			if (arg2.length() > 3 && arg2.indexOf("=") > 1) {
 				ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 				out.print(".ezeUnbox()");
-				out.print(arg2.substring(0, arg2.indexOf("=")));
+				out.print(arg2.substring(0, arg2.indexOf("=")) + arg2.substring(arg2.indexOf("=") + 1));
 			}
 			ctx.invoke(genExpression, arg1, ctx, out);
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
@@ -70,12 +70,14 @@ public class MemberNameTemplate extends JavaTemplate {
 		Member member = expr.getMember();
 		if (member != null && member.getContainer() != null && member.getContainer() instanceof Type)
 			ctx.invoke(genContainerBasedMemberName, (Type) member.getContainer(), ctx, out, expr, member);
-		else
+		else {
 			genMemberName(expr, ctx, out);
+		}
 	}
 
 	public void genMemberName(MemberName expr, Context ctx, TabbedWriter out) {
 		ctx.invoke(genAccessor, expr.getMember(), ctx, out);
+		// check to see if we are copying boxed function parameters
 		if (expr.getMember() instanceof FunctionParameter
 			&& org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx))
 			out.print(".ezeUnbox()");
