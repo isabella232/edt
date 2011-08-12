@@ -26,6 +26,7 @@ import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.UnaryExpression;
@@ -186,6 +187,11 @@ public class TypeTemplate extends JavaTemplate {
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(arg3);
 			ctx.invoke(genExpression, arg2, ctx, out);
+			// check to see if we are unboxing RHS temporary variables (inout and out types only)
+			if (arg2 instanceof MemberName
+				&& ctx.getAttribute(((MemberName) arg2).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
+				&& ctx.getAttribute(((MemberName) arg2).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN)
+				out.print(".ezeUnbox()");
 		}
 	}
 
