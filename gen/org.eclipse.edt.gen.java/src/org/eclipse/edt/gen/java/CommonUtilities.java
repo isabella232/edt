@@ -127,55 +127,46 @@ public class CommonUtilities {
 	}
 
 	/**
-	 * @return true if the external type is serializable. To be serializable, it must extend the built-in
-	 * java.io.Serializable external type.
+	 * @return true if the external type is serializable. To be serializable, 
+	 * it must extend the java.io.Serializable external type.
 	 */
 	public static boolean isSerializable(ExternalType et) {
 		if (et == null) {
 			return false;
 		}
 
-		Annotation annot = et.getAnnotation(IEGLConstants.EXTERNALTYPE_SUBTYPE_JAVAOBJECT);
-		if (annot != null) {
-			List<StructPart> extndsAry = et.getSuperTypes();
-			if (extndsAry != null) {
-				for (StructPart part : extndsAry) {
-					if (part instanceof ExternalType && (annot = part.getAnnotation(IEGLConstants.EXTERNALTYPE_SUBTYPE_JAVAOBJECT)) != null) {
-						if ("java.io".equalsIgnoreCase((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME))
-							&& "Serializable".equalsIgnoreCase((String) annot.getValue(IEGLConstants.PROPERTY_JAVANAME))) {
-							return true;
-						}
-
-						// JavaObject parent is not Serializable. Check parent's parent.
-						// IRs are saying Object extends Object - prevent stack overflow.
-						if (!isObjectExternalType(part) && isSerializable((ExternalType) part)) {
-							return true;
-						}
-					}
+		// First see if we're looking at java.io.Serializable.
+		Annotation annot = et.getAnnotation("eglx.java.JavaObject");
+		if (annot != null) 
+		{
+			String name = et.getName();
+			if ( ((String)annot.getValue("externalName")).length() > 0 )
+			{
+				name = (String)annot.getValue("externalName");
+			}
+			
+			if ( "Serializable".equals( name ) )
+			{
+				String pkg = et.getPackageName();
+				if ( ((String)annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0 )
+				{
+					pkg = (String)annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME);
+				}
+				
+				if ( "java.io".equals( pkg ) )
+				{
+					return true;
 				}
 			}
 		}
-
-		return false;
-	}
-
-	/**
-	 * @return true if m represents the java.lang.Object system external type.
-	 */
-	private static boolean isObjectExternalType(Part m) {
-		if (m instanceof ExternalType) {
-			Annotation annot = m.getAnnotation(IEGLConstants.EXTERNALTYPE_SUBTYPE_JAVAOBJECT);
-			if (annot != null) {
-				String name = (String) annot.getValue(IEGLConstants.PROPERTY_JAVANAME);
-				if (name == null || name.length() == 0) {
-					name = m.getId();
+		
+		// Check the super types.
+		List<StructPart> extndsAry = et.getSuperTypes();
+		if (extndsAry != null) {
+			for (StructPart part : extndsAry) {
+				if (part instanceof ExternalType && isSerializable( (ExternalType)part) ) {
+					return true;
 				}
-
-				if (!"Object".equalsIgnoreCase(name) || !"java.lang".equalsIgnoreCase((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME))) {
-					return false;
-				}
-
-				return true;
 			}
 		}
 
