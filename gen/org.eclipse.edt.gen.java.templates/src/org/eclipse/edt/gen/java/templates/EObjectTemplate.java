@@ -21,7 +21,7 @@ public class EObjectTemplate extends JavaTemplate {
 	public void preGen(EObject object, Context ctx) {
 		String[] details = new String[] { object.getEClass().getETypeSignature() };
 		EGLMessage message = EGLMessage.createEGLMessage(ctx.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_UNSUPPORTED_ELEMENT,
-			object, details, 0, 0, 0, 0);
+			object, details, ctx.getLastStatementLocation());
 		ctx.getMessageRequestor().addMessage(message);
 	}
 }

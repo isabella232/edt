@@ -12,34 +12,19 @@
 package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.gen.CommonUtilities;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Expression;
 
 public class ExpressionTemplate extends JavaTemplate {
 
 	public void genExpression(Expression expr, Context ctx, TabbedWriter out) {
-		int startLine = 0;
-		int startOffset = 0;
-		int endLine = 0;
-		int endOffset = 0;
 		String[] details = new String[] { expr.getEClass().getETypeSignature() };
-		Annotation annotation = expr.getAnnotation(IEGLConstants.EGL_LOCATION);
-		if (annotation != null) {
-			if (annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
-				startLine = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
-			if (annotation.getValue(IEGLConstants.EGL_PARTOFFSET) != null) {
-				endOffset = startOffset = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTOFFSET)).intValue();
-				if (annotation.getValue(IEGLConstants.EGL_PARTLENGTH) != null) {
-					endOffset += ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLENGTH)).intValue();
-				}
-			}
-		}
 		EGLMessage message = EGLMessage.createEGLMessage(ctx.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-			Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_OBJECT, expr, details, startLine, startOffset, endLine, endOffset);
+			Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_OBJECT, expr, details, CommonUtilities.includeEndOffset(expr.getAnnotation(IEGLConstants.EGL_LOCATION), ctx));
 		ctx.getMessageRequestor().addMessage(message);
 	}
 }
