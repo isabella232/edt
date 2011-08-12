@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
@@ -27,6 +28,7 @@ import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Part;
 
 public class JavaGenerator extends Generator {
@@ -115,15 +117,22 @@ public class JavaGenerator extends Generator {
 		catch (TemplateException e) {
 			String[] details1 = new String[] { e.getLocalizedMessage() };
 			EGLMessage message1 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-				Constants.EGLMESSAGE_EXCEPTION_OCCURED, e, details1, 0, 0, 0, 0);
+				Constants.EGLMESSAGE_EXCEPTION_OCCURED, e, details1, context.getLastStatementLocation());
 			context.getMessageRequestor().addMessage(message1);
 			if (e.getCause() != null) {
 				String[] details2 = new String[] { e.getCause().toString() };
 				EGLMessage message2 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_STACK_TRACE,
-					e, details2, 0, 0, 0, 0);
+					e, details2, context.getLastStatementLocation());
 				context.getMessageRequestor().addMessage(message2);
 			}
 			// print out the whole stack trace
+			int startLine = 0;
+			Annotation annotation = context.getLastStatementLocation();
+			if (annotation != null) {
+				if (annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
+					startLine = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
+			}
+			System.err.println("generating:" + part.getFullyQualifiedName() + "[" + part.getFileName() + "]:(" + startLine + ")" );
 			e.printStackTrace();
 		}
 		// close the output
@@ -162,13 +171,13 @@ public class JavaGenerator extends Generator {
 			catch (UnsupportedEncodingException e) {
 				String[] details = new String[] { "UTF-8" };
 				EGLMessage message = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-					Constants.EGLMESSAGE_SMAPFILE_ENCODING_FAILED, null, details, 0, 0, 0, 0);
+					Constants.EGLMESSAGE_SMAPFILE_ENCODING_FAILED, null, details, context.getLastStatementLocation());
 				context.getMessageRequestor().addMessage(message);
 			}
 			catch (IOException e) {
 				String[] details = new String[] { outSmapFile.getName() };
 				EGLMessage message = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-					Constants.EGLMESSAGE_SMAPFILE_WRITE_FAILED, null, details, 0, 0, 0, 0);
+					Constants.EGLMESSAGE_SMAPFILE_WRITE_FAILED, null, details, context.getLastStatementLocation());
 				context.getMessageRequestor().addMessage(message);
 				return;
 			}

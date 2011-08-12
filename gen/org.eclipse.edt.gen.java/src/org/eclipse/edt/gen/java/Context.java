@@ -251,34 +251,23 @@ public class Context extends EglContext {
 	}
 
 	public void handleValidationError(Element obj) {
-		int startLine = 0;
-		int startOffset = 0;
-		int endLine = 0;
-		int endOffset = 0;
 		String[] details = new String[] { obj.getEClass().getETypeSignature() };
-		Annotation annotation = obj.getAnnotation(IEGLConstants.EGL_LOCATION);
-		if (annotation != null) {
-			if (annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
-				startLine = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
-			if (annotation.getValue(IEGLConstants.EGL_PARTOFFSET) != null)
-				startOffset = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTOFFSET)).intValue();
-		}
 		EGLMessage message = EGLMessage.createEGLMessage(getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_OBJECT,
-			obj, details, startLine, startOffset, endLine, endOffset);
+			obj, details, obj.getAnnotation(IEGLConstants.EGL_LOCATION));
 		getMessageRequestor().addMessage(message);
 	}
 
 	public void handleValidationError(Annotation obj) {
 		String[] details = new String[] { obj.getEClass().getETypeSignature() };
 		EGLMessage message = EGLMessage.createEGLMessage(getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-			Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_ANNOTATION, obj, details, 0, 0, 0, 0);
+			Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_ANNOTATION, obj, details, getLastStatementLocation());
 		getMessageRequestor().addMessage(message);
 	}
 
 	public void handleValidationError(Type obj) {
 		String[] details = new String[] { obj.getEClass().getETypeSignature() };
 		EGLMessage message = EGLMessage.createEGLMessage(getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_TYPE,
-			obj, details, 0, 0, 0, 0);
+			obj, details, getLastStatementLocation());
 		getMessageRequestor().addMessage(message);
 	}
 }
