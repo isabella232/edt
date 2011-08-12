@@ -12,6 +12,11 @@ externalType EString extends EglString type ParameterizableType {
 	parameterizedType = SequenceType
 }
 	/**
+	 * {@Operation +} Concatenates two strings.
+	 */
+	static function $Plus(lvalue EString in, rvalue EString in) returns(EString) {@Operation{"+"}};
+
+	/**
 	 * {@Operation +} Concatenates a string and an Any.
 	 *
 	 * @throws AnyException if the conversion from any to string fails.
@@ -26,6 +31,11 @@ externalType EString extends EglString type ParameterizableType {
 	static function $Plus(lvalue EglAny in, rvalue EString in) returns(EString) {@Operation{"+"}};
 
 	/**
+	 * {@Operation ::} Concatenates two strings.
+	 */
+	static function $Concat(value EString in, rvalue EString in) returns (EString) {@Operation{"::"}};
+
+	/**
 	 * {@Operation ::} Concatenates a string and an Any.
 	 *
 	 * @throws AnyException if the conversion from any to string fails.
@@ -38,6 +48,11 @@ externalType EString extends EglString type ParameterizableType {
 	 * @throws AnyException if the conversion from any to string fails.
 	 */
 	static function $Concat(value EglAny in, rvalue EString in) returns (EString) {@Operation{"::"}};
+
+	/**
+	 * {@Operation ?:} Concatenates two strings.  If either is null then null is returned.
+	 */
+	static function $ConcatNull(value EString in, rvalue EString in) returns(EString) {@Operation{"?:"}};
 
 	/**
 	 * {@Operation ?:} Concatenates a string and an Any.  If either is null then null is returned.

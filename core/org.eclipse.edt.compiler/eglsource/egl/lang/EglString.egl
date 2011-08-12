@@ -9,6 +9,11 @@ externalType EglString extends AnyText type ParameterizableType {
 	parameterizedType = SequenceType
 }
 	/**
+	 * {@Operation +} Concatenates two Srings
+	 */
+	static function $Plus(lvalue EglString in, rvalue EglString in) returns(EglString) {@Operation{"+"}};
+
+	/**
 	 * {@Operation +} Concatenates an any and a string, after converting the any
 	 * to a string.
 	 *
@@ -25,12 +30,9 @@ externalType EglString extends AnyText type ParameterizableType {
 	static function $Plus(lvalue EglString in, rvalue EglAny in) returns(EglString) {@Operation{"+"}};
 
 	/**
-	 * {@Operation ::} Concatenates an any and a string, after converting the any
-	 * to a string.
-	 *
-	 * @throws AnyException if the conversion from any to string fails.
+	 * {@Operation ::} Concatenates two strings
 	 */
-	static function $Concat(value EglAny in, rvalue EglString in) returns (EglString) {@Operation{"::"}};
+	static function $Concat(value EglString in, rvalue EglString in) returns (EglString) {@Operation{"::"}};
 
 	/**
 	 * {@Operation ::} Concatenates a string and an any, after converting the any
@@ -41,12 +43,17 @@ externalType EglString extends AnyText type ParameterizableType {
 	static function $Concat(value EglString in, rvalue EglAny in) returns (EglString) {@Operation{"::"}};
 
 	/**
-	 * {@Operation ?:} Concatenates an any and a string.  If either is null then null 
-	 * is returned.  If neither are null then the any is converted to a string.
+	 * {@Operation ::} Concatenates an any and a string, after converting the any
+	 * to a string.
 	 *
 	 * @throws AnyException if the conversion from any to string fails.
 	 */
-	static function $ConcatNull(value EglAny in, rvalue EglString in) returns(EglString) {@Operation{"?:"}};
+	static function $Concat(value EglAny in, rvalue EglString in) returns (EglString) {@Operation{"::"}};
+
+	/**
+	 * {@Operation ?:} Concatenates two strings.  If either is null then
+	 */
+	static function $ConcatNull(value EglString in, rvalue EglString in) returns(EglString) {@Operation{"?:"}};
 
 	/**
 	 * {@Operation ?:} Concatenates a string and an any.  If either is null then
@@ -55,6 +62,14 @@ externalType EglString extends AnyText type ParameterizableType {
 	 * @throws AnyException if the conversion from any to string fails.
 	 */
 	static function $ConcatNull(value EglString in, rvalue EglAny in) returns(EglString) {@Operation{"?:"}};
+
+	/**
+	 * {@Operation ?:} Concatenates an any and a string.  If either is null then null 
+	 * is returned.  If neither are null then the any is converted to a string.
+	 *
+	 * @throws AnyException if the conversion from any to string fails.
+	 */
+	static function $ConcatNull(value EglAny in, rvalue EglString in) returns(EglString) {@Operation{"?:"}};
 
 	/**
 	 * {@Operation <} Compares two strings.
