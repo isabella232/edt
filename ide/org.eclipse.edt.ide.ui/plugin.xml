@@ -833,13 +833,13 @@ Templates
             name="%EGLWizardCategoryName"
             id="org.eclipse.edt.ide.ui.wizards.new.category">
       	</category>
-   		<wizard
+   		<!--wizard
             name="%DataTable"
             icon="icons/ctool16/newdta_wiz.gif"
             category="org.eclipse.edt.ide.ui.wizards.new.category"
             class="org.eclipse.edt.ide.ui.internal.wizards.DataTableWizard"
             id="org.eclipse.edt.ide.ui.newTableWizard">
-        </wizard> 
+        </wizard--> 
       	<wizard
             name="%EGLFile"
             icon="icons/ctool16/newfle_wiz.gif"

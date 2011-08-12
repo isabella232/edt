@@ -56,7 +56,7 @@ public class ProgramWizardPage extends EGLPartWizardPage {
 	private Button fTextProgramButton;
 //	private Button fActionProgramButton;
 	private Button fVGWebTransProgramButton;
-	private Button fCalledProgramButton;
+	//private Button fCalledProgramButton;
 	private Button fUIProgramButton;
 
 	private ProgramFieldAdapter adapter = new ProgramFieldAdapter();
@@ -204,13 +204,14 @@ public class ProgramWizardPage extends EGLPartWizardPage {
 		fBasicProgramButton.setText(NewWizardMessages.NewEGLProgramWizardPageProgramTypeBasic);
 		fBasicProgramButton.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
-				if(!fCalledProgramButton.isEnabled())
+				/*if(!fCalledProgramButton.isEnabled())
 					fCalledProgramButton.setEnabled(true);
 				
 				if(fCalledProgramButton.getSelection())
 					getConfiguration().setProgramType(ProgramConfiguration.BASIC_CALLED_PROGRAM);
 				else
-					getConfiguration().setProgramType(ProgramConfiguration.BASIC_PROGRAM);		
+					getConfiguration().setProgramType(ProgramConfiguration.BASIC_PROGRAM);	*/	
+				getConfiguration().setProgramType(ProgramConfiguration.BASIC_PROGRAM);
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {}
 		});
@@ -231,13 +232,14 @@ public class ProgramWizardPage extends EGLPartWizardPage {
 			fTextProgramButton.setText(NewWizardMessages.NewEGLProgramWizardPageProgramTypeText);
 			fTextProgramButton.addSelectionListener(new SelectionListener() {
 				public void widgetSelected(SelectionEvent e) {
-					if(!fCalledProgramButton.isEnabled())
+					/*if(!fCalledProgramButton.isEnabled())
 						fCalledProgramButton.setEnabled(true);
 						
 					if(fCalledProgramButton.getSelection())
 						getConfiguration().setProgramType(ProgramConfiguration.TEXT_UI_CALLED_PROGRAM);
 					else
-						getConfiguration().setProgramType(ProgramConfiguration.TEXT_UI_PROGRAM);
+						getConfiguration().setProgramType(ProgramConfiguration.TEXT_UI_PROGRAM);*/
+					getConfiguration().setProgramType(ProgramConfiguration.TEXT_UI_PROGRAM);
 				}
 				public void widgetDefaultSelected(SelectionEvent e) {}
 			});
@@ -253,10 +255,10 @@ public class ProgramWizardPage extends EGLPartWizardPage {
 			fVGWebTransProgramButton.setText(NewWizardMessages.NewEGLProgramWizardPageProgramTypeVgwebtrans);
 			fVGWebTransProgramButton.addSelectionListener(new SelectionListener() {
 				public void widgetSelected(SelectionEvent e) {
-					if(fCalledProgramButton.getSelection())
+					/*if(fCalledProgramButton.getSelection())
 						fCalledProgramButton.setSelection(false);
 					if(fCalledProgramButton.isEnabled())
-						fCalledProgramButton.setEnabled(false);
+						fCalledProgramButton.setEnabled(false);*/
 										
 					getConfiguration().setProgramType(ProgramConfiguration.VGWEBTRANS_PROGRAM);
 				}
@@ -272,10 +274,10 @@ public class ProgramWizardPage extends EGLPartWizardPage {
 		fUIProgramButton.setText(NewWizardMessages.NewEGLProgramWizardPageProgramTypeUI);
 		fUIProgramButton.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
-				if(fCalledProgramButton.getSelection())
+				/*if(fCalledProgramButton.getSelection())
 					fCalledProgramButton.setSelection(false);
 				if(fCalledProgramButton.isEnabled())
-					fCalledProgramButton.setEnabled(false);
+					fCalledProgramButton.setEnabled(false);*/
 									
 				getConfiguration().setProgramType(ProgramConfiguration.UI_PROGRAM);
 			}
@@ -315,15 +317,15 @@ public class ProgramWizardPage extends EGLPartWizardPage {
 		
 		new Label(fProgramTypeGroup, SWT.NONE);
 			
-		fCalledProgramButton = new Button(programTypeComposite, SWT.CHECK);
+		/*fCalledProgramButton = new Button(programTypeComposite, SWT.CHECK);
 		fCalledProgramButton.setText(NewWizardMessages.NewEGLProgramWizardPageProgramTypeCalled);
 		fCalledProgramButton.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
 				boolean calledSelection = fCalledProgramButton.getSelection();
-/*				if(fActionProgramButton.getSelection() && calledSelection)
+				if(fActionProgramButton.getSelection() && calledSelection)
 					fActionProgramButton.setSelection(!calledSelection);
 				fActionProgramButton.setEnabled(!calledSelection);
-*/				
+				
 				if(fBasicProgramButton.getSelection() && calledSelection)
 					getConfiguration().setProgramType(ProgramConfiguration.BASIC_CALLED_PROGRAM);
 				else if(fBasicProgramButton.getSelection() && !calledSelection)
@@ -337,9 +339,9 @@ public class ProgramWizardPage extends EGLPartWizardPage {
 				progType = getConfiguration().getProgramType();
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {}
-		});
+		});*/
 		
-		if(progType==ProgramConfiguration.ACTION_PROGRAM || progType==ProgramConfiguration.VGWEBTRANS_PROGRAM)
+		/*if(progType==ProgramConfiguration.ACTION_PROGRAM || progType==ProgramConfiguration.VGWEBTRANS_PROGRAM)
 			fCalledProgramButton.setEnabled(false);
 		else
 			fCalledProgramButton.setEnabled(true);
@@ -347,7 +349,7 @@ public class ProgramWizardPage extends EGLPartWizardPage {
 		if(progType==ProgramConfiguration.TEXT_UI_CALLED_PROGRAM || progType==ProgramConfiguration.BASIC_CALLED_PROGRAM)
 			fCalledProgramButton.setSelection(true);
 		else
-			fCalledProgramButton.setSelection(false);
+			fCalledProgramButton.setSelection(false);*/
 	}
 	
 	private void handleProgramDialogFieldChanged() {

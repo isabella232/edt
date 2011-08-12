@@ -121,7 +121,7 @@ public class ServiceWizardPage extends InterfaceSelectionListWizardPage {
 		createEGLInterfacesControls(composite, nColumns, interfaceLabel);
 		//createGenAsWebServiceChkbox(composite, nColumns);
 		createGenAsRestServiceChkbox(composite, nColumns);
-		createAdvancedComposite(composite, nColumns);
+		//createAdvancedComposite(composite, nColumns);
 		
 		modifyFileListeners();		
 		
