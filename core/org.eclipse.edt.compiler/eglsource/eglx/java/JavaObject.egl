@@ -28,7 +28,7 @@ Record JavaObject type Annotation {
 	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.JavaObjectAnnotationTypeBinding"
 }
 	packageName String {@NoReflect};   //mark this as noReflect, so that setting this field does not change the EClass that specifies this stereotype
-	javaName String;
+	externalName String;
 end
 
 Record RootJavaObject type Annotation { 

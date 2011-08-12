@@ -16,6 +16,6 @@ Record JavaScriptObject type Annotation
 	}
 
 	relativePath String;
-	javaScriptName String;
+	externalName String;
 	includeFile String;
 end

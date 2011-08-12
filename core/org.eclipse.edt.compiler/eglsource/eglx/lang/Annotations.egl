@@ -29,3 +29,17 @@ Record Property type Annotation
 	setMethod String;
 end
 
+/**
+ * Use ExternalName on fields and functions of ExternalTypes when their names
+ * aren't valid EGL identifiers.
+ */
+Record ExternalName type Annotation
+{
+	targets = [
+		ElementKind.FieldMbr,
+		ElementKind.FunctionMbr
+	]
+}
+	value String;
+end
+

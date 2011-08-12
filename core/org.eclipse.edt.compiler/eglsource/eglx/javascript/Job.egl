@@ -3,8 +3,7 @@ package eglx.javascript;
 import eglx.lang.Property;
 
 ExternalType Job type JavaScriptObject {
-		relativePath = "egl/javascript",
-		javaScriptName = "Job"
+		relativePath = "egl/javascript"
 	}
 	
 	name String { @Property { getMethod = "getName", setMethod = "setName" } };
