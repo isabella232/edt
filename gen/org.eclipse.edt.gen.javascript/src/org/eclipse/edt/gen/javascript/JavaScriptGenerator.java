@@ -85,26 +85,21 @@ public class JavaScriptGenerator extends Generator {
 			throw new GenerationException(e);
 		}
 		catch (TemplateException e) {
-			int startLine = 0;
-			int startOffset = 0;
-			int endLine = 0;
-			int endOffset = 0;
-			Annotation annotation = context.getLastStatementLocation();
-			if (annotation != null) {
-				if (annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
-					startLine = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
-				if (annotation.getValue(IEGLConstants.EGL_PARTOFFSET) != null)
-					startOffset = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTOFFSET)).intValue();
-			}
 			String[] details1 = new String[] { e.getLocalizedMessage() };
 			EGLMessage message1 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-				Constants.EGLMESSAGE_EXCEPTION_OCCURED, e, details1, startLine, startOffset, endLine, endOffset);
+				Constants.EGLMESSAGE_EXCEPTION_OCCURED, e, details1, context.getLastStatementLocation());
 			context.getMessageRequestor().addMessage(message1);
 			if (e.getCause() != null) {
 				String[] details2 = new String[] { e.getCause().toString() };
 				EGLMessage message2 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_STACK_TRACE,
-					e, details2, startLine, startOffset, endLine, endOffset);
+					e, details2, context.getLastStatementLocation());
 				context.getMessageRequestor().addMessage(message2);
+			}
+			int startLine = 0;
+			Annotation annotation = context.getLastStatementLocation();
+			if (annotation != null) {
+				if (annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
+					startLine = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
 			}
 			System.err.println("generating:" + part.getFullyQualifiedName() + "[" + part.getFileName() + "]:(" + startLine + ")" );
 			// print out the whole stack trace
