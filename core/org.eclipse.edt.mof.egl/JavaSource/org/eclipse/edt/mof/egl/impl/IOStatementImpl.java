@@ -66,7 +66,6 @@ public abstract class IOStatementImpl extends StatementImpl implements IOStateme
 	
 	@Override
 	public Expression getTarget() {
-		// TODO: Default generated implementation
-		return null;
+		return getTargets().isEmpty() ? null : getTargets().get(0);
 	}
 }

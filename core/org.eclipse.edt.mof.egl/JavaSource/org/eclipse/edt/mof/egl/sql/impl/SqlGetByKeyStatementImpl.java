@@ -51,8 +51,8 @@ public class SqlGetByKeyStatementImpl extends SqlIOStatementImpl implements SqlG
 	@Override
 	public List<SqlClause> getSqlClauses() {
 		List<SqlClause> clauses = new ArrayList<SqlClause>();
-		clauses.add(getSelectClause());
-		clauses.add(getFromClause());
+		if (getSelectClause() != null) clauses.add(getSelectClause());
+		if (getFromClause() != null) clauses.add(getFromClause());
 		if (getWhereClause() != null) clauses.add(getWhereClause());
 		if (getOrderByClause() != null) clauses.add(getOrderByClause());
 		if (getGroupByClause() != null) clauses.add(getGroupByClause());
