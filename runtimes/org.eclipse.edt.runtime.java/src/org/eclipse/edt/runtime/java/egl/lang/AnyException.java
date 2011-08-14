@@ -38,6 +38,16 @@ public class AnyException extends JavartException implements egl.lang.AnyExcepti
 
 	public AnyException(Throwable ex) {
 		super(ex);
+		setMessageID( "" );
+		message = ex.getLocalizedMessage();
+		if ( message == null || message.length() == 0 )
+		{
+			message = ex.getMessage();
+		}
+		if ( message == null || message.length() == 0 )
+		{
+			message = ex.toString();
+		}
 		ezeInitialize();
 	}
 
