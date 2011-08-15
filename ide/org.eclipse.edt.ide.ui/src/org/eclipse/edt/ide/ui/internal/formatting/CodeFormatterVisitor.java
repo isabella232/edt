@@ -2727,10 +2727,10 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		return false;
 	}
 	
-	public boolean visit(FromResultSetClause fromResultSetClause) {
+	public boolean visit(FromOrToExpressionClause fromOrToClause) {
 //		|	FROM:from1 ID:resultSetID1
 //		{: RESULT = new FromResultSetClause(resultSetID1, from1left, resultSetID1right); :}
-		push2ContextPath(fromResultSetClause);
+		push2ContextPath(fromOrToClause);
 		
 		ICallBackFormatter callbackFormatter = new ICallBackFormatter(){
 
@@ -2743,7 +2743,7 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 			}
 			
 		};
-		formatNode(fromResultSetClause, callbackFormatter, fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
+		formatNode(fromOrToClause, callbackFormatter, fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
 				
 		popContextPath();
 		return false;
