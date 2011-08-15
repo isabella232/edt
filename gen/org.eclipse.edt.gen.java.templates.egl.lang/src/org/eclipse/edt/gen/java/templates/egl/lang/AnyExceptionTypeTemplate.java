@@ -18,10 +18,6 @@ import org.eclipse.edt.mof.egl.Type;
 
 public class AnyExceptionTypeTemplate extends JavaTemplate {
 
-	public void genDefaultValue(Type type, Context ctx, TabbedWriter out) {
-		// this type has no default value
-	}
-
 	public void genRuntimeTypeName(Type type, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genPartName, type, ctx, out);
 	}
