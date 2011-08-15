@@ -53,6 +53,10 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		return value instanceof EDate;
 	}
 
+	public String toString() {
+		return EString.asString(object);
+	}
+
 	public static Calendar defaultValue() {
 		long now = java.lang.System.currentTimeMillis();
 		Calendar cal = DateTimeUtil.getBaseCalendar();

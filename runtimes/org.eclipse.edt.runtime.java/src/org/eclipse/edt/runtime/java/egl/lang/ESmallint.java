@@ -39,6 +39,10 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return value instanceof ESmallint;
 	}
 
+	public String toString() {
+		return EString.asString(object);
+	}
+
 	public static Short asSmallint(Short value) {
 		if (value == null)
 			return null;
@@ -184,7 +188,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	public static Double power(Short op1, Short op2) throws JavartException {
 		if (op1 == null || op2 == null)
 			return null;
-		return StrictMath.pow( op1, op2 );
+		return StrictMath.pow(op1, op2);
 	}
 
 	public static int compareTo(Short op1, Short op2) throws JavartException {

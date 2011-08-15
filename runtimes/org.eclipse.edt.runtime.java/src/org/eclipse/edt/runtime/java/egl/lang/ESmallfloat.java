@@ -41,6 +41,10 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 		return value instanceof ESmallfloat;
 	}
 
+	public String toString() {
+		return EString.asString(object);
+	}
+
 	public static Float asSmallfloat(Short value) {
 		if (value == null)
 			return null;

@@ -41,6 +41,10 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return value instanceof EInt;
 	}
 
+	public String toString() {
+		return EString.asString(object);
+	}
+
 	public static Integer asInt(Short value) throws JavartException {
 		if (value == null)
 			return null;

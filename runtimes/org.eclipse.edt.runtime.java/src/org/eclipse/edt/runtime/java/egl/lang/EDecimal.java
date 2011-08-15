@@ -162,6 +162,10 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 		maxPrecision = precision;
 	}
 
+	public String toString() {
+		return EString.asString(object);
+	}
+
 	public static EDecimal ezeBox(BigDecimal value) {
 		return new EDecimal(value);
 	}

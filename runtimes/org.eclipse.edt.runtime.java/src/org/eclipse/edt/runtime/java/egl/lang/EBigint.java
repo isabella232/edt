@@ -49,6 +49,10 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return value instanceof EBigint;
 	}
 
+	public String toString() {
+		return EString.asString(object);
+	}
+
 	public static Long asBigint(Short value) {
 		if (value == null)
 			return null;

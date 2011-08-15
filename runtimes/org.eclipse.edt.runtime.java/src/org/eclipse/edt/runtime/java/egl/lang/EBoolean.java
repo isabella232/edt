@@ -35,6 +35,10 @@ public class EBoolean extends AnyBoxedObject<Boolean> {
 		return value instanceof EBoolean;
 	}
 
+	public String toString() {
+		return EString.asString(object);
+	}
+
 	public static Boolean asBoolean(Number number) throws JavartException {
 		if (number == null)
 			throw new NullValueException();

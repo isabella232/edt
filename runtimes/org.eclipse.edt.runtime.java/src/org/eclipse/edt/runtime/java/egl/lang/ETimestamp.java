@@ -128,6 +128,10 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return isa;
 	}
 
+	public String toString() {
+		return EString.asString(object);
+	}
+
 	public static Calendar asTimestamp(GregorianCalendar timestamp) throws JavartException {
 		return asTimestamp((Calendar) timestamp);
 	}

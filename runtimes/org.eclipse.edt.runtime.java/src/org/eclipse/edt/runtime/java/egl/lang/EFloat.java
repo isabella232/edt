@@ -37,6 +37,10 @@ public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 		return (Double) EglAny.ezeCast(value, "asFloat", EFloat.class, null, null);
 	}
 
+	public String toString() {
+		return EString.asString(object);
+	}
+
 	public static boolean ezeIsa(Object value) {
 		return value instanceof EFloat;
 	}
