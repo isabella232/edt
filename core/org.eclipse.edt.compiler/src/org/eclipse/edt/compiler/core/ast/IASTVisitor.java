@@ -154,8 +154,8 @@ public interface IASTVisitor {
 	boolean visit(FromExpressionClause fromExpressionClause);
 	void endVisit(FromExpressionClause fromExpressionClause);
 	
-	boolean visit(FromResultSetClause fromResultSetClause);
-	void endVisit(FromResultSetClause fromResultSetClause);
+	boolean visit(FromOrToExpressionClause fromOrToExpressionClause);
+	void endVisit(FromOrToExpressionClause fromOrToExpressionClause);
 	
 	boolean visit(FunctionDataDeclaration functionDataDeclaration);
 	void endVisit(FunctionDataDeclaration functionDataDeclaration);

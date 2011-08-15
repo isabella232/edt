@@ -17,7 +17,6 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
-import org.eclipse.edt.compiler.core.ast.FromResultSetClause;
 import org.eclipse.edt.compiler.core.ast.NoCursorClause;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
@@ -57,11 +56,11 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 				Node from = null;
 				UsingPCBClause pcbClause = null;
 				
-				public boolean visit(FromResultSetClause fromExpressionClause) {
-					from = fromExpressionClause;
-					EGLNameValidator.validate(fromExpressionClause.getResultSetID(), EGLNameValidator.RESULT_SET_ID, problemRequestor, fromExpressionClause, compilerOptions);
-					return false;
-				}
+//				public boolean visit(FromResultSetClause fromExpressionClause) {
+//					from = fromExpressionClause;
+//					EGLNameValidator.validate(fromExpressionClause.getResultSetID(), EGLNameValidator.RESULT_SET_ID, problemRequestor, fromExpressionClause, compilerOptions);
+//					return false;
+//				}
 				
 				public boolean visit(WithInlineSQLClause withInlineSQLClause) {
 					inlineSqlNode[0] = withInlineSQLClause;
@@ -120,25 +119,25 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 							typeBinding.getAnnotation(EGLIOFILE, "RelativeRecord") == null &&
 							typeBinding.getAnnotation(EGLIOFILE, "IndexedRecord") == null &&
 							typeBinding.getAnnotation(EGLIODLI, "DLISegment") == null){
-							problemRequestor.acceptProblem(expr,
-									IProblemRequestor.REPLACE_STATEMENT_TARGET_NOT_RECORD,
-									new String[] {expr.getCanonicalString()});
+//							problemRequestor.acceptProblem(expr,
+//									IProblemRequestor.REPLACE_STATEMENT_TARGET_NOT_RECORD,
+//									new String[] {expr.getCanonicalString()});
 						}
 						
 						if (typeBinding.getAnnotation(EGLIOFILE, "RelativeRecord") != null ||
 							typeBinding.getAnnotation(EGLIOFILE, "IndexedRecord") != null ||
 							typeBinding.getAnnotation(EGLIODLI, "DLISegment") != null){
-								if (inlinesql != null ){
-									problemRequestor.acceptProblem(inlinesql,
-										IProblemRequestor.SQL_CLAUSES_OR_OPTIONS_ON_REPLACE_WITH_NON_SQL_REC,
-										new String[] { IEGLConstants.KEYWORD_WITH + " " + IEGLConstants.SQLKEYWORD_SQL });
-								}
-								
-								if (from != null){
-									problemRequestor.acceptProblem(from,
-											IProblemRequestor.SQL_CLAUSES_OR_OPTIONS_ON_REPLACE_WITH_NON_SQL_REC,
-											new String[] { IEGLConstants.KEYWORD_FROM });
-								}
+//								if (inlinesql != null ){
+//									problemRequestor.acceptProblem(inlinesql,
+//										IProblemRequestor.SQL_CLAUSES_OR_OPTIONS_ON_REPLACE_WITH_NON_SQL_REC,
+//										new String[] { IEGLConstants.KEYWORD_WITH + " " + IEGLConstants.SQLKEYWORD_SQL });
+//								}
+//								
+//								if (from != null){
+//									problemRequestor.acceptProblem(from,
+//											IProblemRequestor.SQL_CLAUSES_OR_OPTIONS_ON_REPLACE_WITH_NON_SQL_REC,
+//											new String[] { IEGLConstants.KEYWORD_FROM });
+//								}
 						}
 					}
 					if (replaceStatement.getDliInfo() != null) {

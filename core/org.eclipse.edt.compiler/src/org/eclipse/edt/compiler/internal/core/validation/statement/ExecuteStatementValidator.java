@@ -86,9 +86,9 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 						ITypeBinding typeBinding = forExpressionClause.getExpression().resolveTypeBinding();
 						if (StatementValidator.isValidBinding(typeBinding)){
 							if (typeBinding.getAnnotation(EGLIOSQL, "SQLRecord") == null){
-								problemRequestor.acceptProblem(forExpressionClause.getExpression(),
-										IProblemRequestor.OPEN_FOR_TARGET_NOT_SQL_RECORD,
-										new String[] {forExpressionClause.getExpression().getCanonicalString()});								
+//								problemRequestor.acceptProblem(forExpressionClause.getExpression(),
+//										IProblemRequestor.OPEN_FOR_TARGET_NOT_SQL_RECORD,
+//										new String[] {forExpressionClause.getExpression().getCanonicalString()});								
 							}
 							
 

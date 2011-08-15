@@ -201,7 +201,7 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 		return true;
 	}
 	
-	public boolean visit(FromResultSetClause fromResultSetClause) {
+	public boolean visit( FromOrToExpressionClause clause) {
 		return true;
 	}
 	
@@ -623,7 +623,7 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 	
 	public void endVisit(FromExpressionClause fromExpressionClause) {}
 	
-	public void endVisit(FromResultSetClause fromResultSetClause) {}
+	public void endVisit( FromOrToExpressionClause clause) {}
 	
 	public void endVisit(FunctionDataDeclaration functionDataDeclaration) {}
 	

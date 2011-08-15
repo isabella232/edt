@@ -43,7 +43,7 @@ import org.eclipse.edt.compiler.internal.sql.SQLInfo;
  */
 public class OpenStatement extends Statement {
 
-	private String resultSetID;
+	private Expression resultSet;
 	private boolean isHold;
 	private boolean isScroll;
 	private List openTargets;	// List of Nodes
@@ -51,21 +51,22 @@ public class OpenStatement extends Statement {
 	
 	private List ioObjects;
 
-	public OpenStatement(String resultSetID, Boolean[] openModifierOpt, List openTargets, int startOffset, int endOffset) {
+	public OpenStatement(Expression resultSet, Boolean[] openModifierOpt, List openTargets, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
-		this.resultSetID = resultSetID;
+		this.resultSet = resultSet;
 		
 		// openModifierOpt is guaranteed by the action code in the parser
 		// to be a two-element array
 		isHold = openModifierOpt[0].booleanValue();
 		isScroll = openModifierOpt[1].booleanValue();
 		
+		this.resultSet.setParent(this);
 		this.openTargets = setParent(openTargets);
 	}
 	
-	public String getResultSetID() {
-		return resultSetID;
+	public Expression getResultSet() {
+		return resultSet;
 	}
 
 	public boolean hasHold() {
@@ -83,6 +84,7 @@ public class OpenStatement extends Statement {
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
+			resultSet.accept(visitor);
 			acceptChildren(visitor, openTargets);
 		}
 		visitor.endVisit(this);
@@ -105,7 +107,7 @@ public class OpenStatement extends Statement {
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {
-		return new OpenStatement(new String(resultSetID), new Boolean[]{new Boolean(isHold), new Boolean(isScroll)}, cloneList(openTargets), getOffset(), getOffset() + getLength());
+		return new OpenStatement((Expression)resultSet.clone(), new Boolean[]{new Boolean(isHold), new Boolean(isScroll)}, cloneList(openTargets), getOffset(), getOffset() + getLength());
 	}
     public SQLInfo getSqlInfo() {
         return sqlInfo;

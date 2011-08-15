@@ -698,48 +698,53 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	}
 	
 	private IOStatementGenerator primGetGeneratorFor(org.eclipse.edt.compiler.core.ast.Statement node) {
-		org.eclipse.edt.compiler.core.ast.Name nameExpr = null;
-		if (!node.getIOObjects().isEmpty()) {
-			nameExpr = (org.eclipse.edt.compiler.core.ast.Name)node.getIOObjects().get(0);
-		}
-		if (nameExpr == null) {
-			//For now, foreach, prepare and execute statements are always SQL
-			if (node instanceof ForEachStatement || node instanceof PrepareStatement || node instanceof ExecuteStatement) {
-				return IOStatementGenerator.Registry.get(Type_SqlRecord);
-			}
-			return IOStatementGenerator.Registry.get(EGL_lang_package);
-		}
-		else {
-			String generatorKey = null;
-			IDataBinding ioObjectBinding = nameExpr.resolveDataBinding();
-			if (ioObjectBinding.equals(IBinding.NOT_FOUND_BINDING)) {
-				if (isDliStatement(node)) generatorKey = Type_DliRecord;
-				else if (isSqlStatement(node)) generatorKey = Type_SqlRecord;
-				else generatorKey = EGL_lang_package;
-			}
-			else {
-				ITypeBinding typeBinding = nameExpr.resolveDataBinding().getType();
-				Part part;
-				if (typeBinding.getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
-					part = (Part)mofTypeFor(((ArrayTypeBinding)typeBinding).getElementType());
-				}
-				else {
-					part = (Part)mofTypeFor(typeBinding);
-				}
-				
-				if (part.getStereotype() == null) {
-					generatorKey = EGL_lang_package;
-				}
-				else {
-					generatorKey = part.getStereotype().getEClass().getETypeSignature();
-				}
-			}
-			IOStatementGenerator generator = IOStatementGenerator.Registry.get(generatorKey);
-			if (generator == null) {
-				generator = IOStatementGenerator.Registry.get(EGL_lang_package);
-			}
-			return generator;
-		}
+		
+		//for now, we only support SQL I/O statements;
+		return IOStatementGenerator.Registry.get(Type_SqlRecord);
+		
+		
+//		org.eclipse.edt.compiler.core.ast.Name nameExpr = null;
+//		if (!node.getIOObjects().isEmpty()) {
+//			nameExpr = (org.eclipse.edt.compiler.core.ast.Name)node.getIOObjects().get(0);
+//		}
+//		if (nameExpr == null) {
+//			//For now, foreach, prepare and execute statements are always SQL
+//			if (node instanceof ForEachStatement || node instanceof PrepareStatement || node instanceof ExecuteStatement) {
+//				return IOStatementGenerator.Registry.get(Type_SqlRecord);
+//			}
+//			return IOStatementGenerator.Registry.get(EGL_lang_package);
+//		}
+//		else {
+//			String generatorKey = null;
+//			IDataBinding ioObjectBinding = nameExpr.resolveDataBinding();
+//			if (ioObjectBinding.equals(IBinding.NOT_FOUND_BINDING)) {
+//				if (isDliStatement(node)) generatorKey = Type_DliRecord;
+//				else if (isSqlStatement(node)) generatorKey = Type_SqlRecord;
+//				else generatorKey = EGL_lang_package;
+//			}
+//			else {
+//				ITypeBinding typeBinding = nameExpr.resolveDataBinding().getType();
+//				Part part;
+//				if (typeBinding.getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
+//					part = (Part)mofTypeFor(((ArrayTypeBinding)typeBinding).getElementType());
+//				}
+//				else {
+//					part = (Part)mofTypeFor(typeBinding);
+//				}
+//				
+//				if (part.getStereotype() == null) {
+//					generatorKey = EGL_lang_package;
+//				}
+//				else {
+//					generatorKey = part.getStereotype().getEClass().getETypeSignature();
+//				}
+//			}
+//			IOStatementGenerator generator = IOStatementGenerator.Registry.get(generatorKey);
+//			if (generator == null) {
+//				generator = IOStatementGenerator.Registry.get(EGL_lang_package);
+//			}
+//			return generator;
+//		}
 	}
 	
 	private boolean isDliStatement(org.eclipse.edt.compiler.core.ast.Statement stmt) {

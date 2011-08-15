@@ -52,6 +52,10 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 					return false;
 				}
 				
+				public boolean visit(org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause clause) {
+					return false;
+				}
+				
 				public boolean visitExpression(Expression expression) {
 					ITypeBinding typeBinding = expression.resolveTypeBinding();
 					if (!StatementValidator.isValidBinding(typeBinding))
@@ -147,10 +151,10 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 						return false;
 					}
 					
-					if (typeBinding.getAnnotation(EGLIOSQL, "SQLRecord") == null){
-						problemRequestor.acceptProblem(withInlineSQLClause,
-								IProblemRequestor.ADD_STATEMENT_WITH_USED_WITHOUT_SQL_RECORD);
-					}
+//					if (typeBinding.getAnnotation(EGLIOSQL, "SQLRecord") == null){
+//						problemRequestor.acceptProblem(withInlineSQLClause,
+//								IProblemRequestor.ADD_STATEMENT_WITH_USED_WITHOUT_SQL_RECORD);
+//					}
 					
 					return false;
 				}
@@ -199,9 +203,9 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 				
 				if (!isValid){
 					
-					problemRequestor.acceptProblem(expression,
-							IProblemRequestor.ADD_STATEMENT_TARGET_NOT_RECORD,
-							new String[] {dataBinding.getCaseSensitiveName()});
+//					problemRequestor.acceptProblem(expression,
+//							IProblemRequestor.ADD_STATEMENT_TARGET_NOT_RECORD,
+//							new String[] {dataBinding.getCaseSensitiveName()});
 				}
 			}
 		}

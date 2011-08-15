@@ -74,9 +74,9 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 						}
 						
 						if (typeBinding.getAnnotation(EGLIOSQL, "SQLRecord") == null){
-							problemRequestor.acceptProblem(expr,
-									IProblemRequestor.OPEN_FOR_TARGET_NOT_SQL_RECORD,
-									new String[] {expr.getCanonicalString()});
+//							problemRequestor.acceptProblem(expr,
+//									IProblemRequestor.OPEN_FOR_TARGET_NOT_SQL_RECORD,
+//									new String[] {expr.getCanonicalString()});
 						}
 					}	
 					
@@ -285,7 +285,7 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 				}
 				});
 			
-			EGLNameValidator.validate(aopenStatement.getResultSetID(), EGLNameValidator.RESULT_SET_ID, problemRequestor, aopenStatement, compilerOptions);
+//			EGLNameValidator.validate(aopenStatement.getResultSetID(), EGLNameValidator.RESULT_SET_ID, problemRequestor, aopenStatement, compilerOptions);
 			
 			return false;
 		}

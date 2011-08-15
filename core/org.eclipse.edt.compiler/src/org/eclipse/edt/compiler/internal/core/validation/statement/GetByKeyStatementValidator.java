@@ -389,35 +389,35 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 													}
 												}
 												else {
-													if (bUSINGKEYS != null){
-														problemRequestor.acceptProblem(bUSINGKEYS,
-																IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
-																new String[]{IEGLConstants.KEYWORD_USINGKEYS});
-													}
-													
-													if (bINLINESQL != null){
-														problemRequestor.acceptProblem(bINLINESQL,
-																IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
-																new String[]{IEGLConstants.KEYWORD_WITH + " #" + IEGLConstants.SQLKEYWORD_SQL});
-													}
-
-													if (bUSING != null){
-														problemRequestor.acceptProblem(bUSING,
-																IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
-																new String[]{IEGLConstants.KEYWORD_USING });
-													}
-													
-													if (bSINGLEROW != null){
-														problemRequestor.acceptProblem(bSINGLEROW,
-																IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
-																new String[]{IEGLConstants.KEYWORD_SINGLEROW});
-													}
-													
-													if (bPREPAREID != null){
-														problemRequestor.acceptProblem(bPREPAREID,
-																IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
-																new String[]{IEGLConstants.KEYWORD_WITH });
-													}
+//													if (bUSINGKEYS != null){
+//														problemRequestor.acceptProblem(bUSINGKEYS,
+//																IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
+//																new String[]{IEGLConstants.KEYWORD_USINGKEYS});
+//													}
+//													
+//													if (bINLINESQL != null){
+//														problemRequestor.acceptProblem(bINLINESQL,
+//																IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
+//																new String[]{IEGLConstants.KEYWORD_WITH + " #" + IEGLConstants.SQLKEYWORD_SQL});
+//													}
+//
+//													if (bUSING != null){
+//														problemRequestor.acceptProblem(bUSING,
+//																IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
+//																new String[]{IEGLConstants.KEYWORD_USING });
+//													}
+//													
+//													if (bSINGLEROW != null){
+//														problemRequestor.acceptProblem(bSINGLEROW,
+//																IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
+//																new String[]{IEGLConstants.KEYWORD_SINGLEROW});
+//													}
+//													
+//													if (bPREPAREID != null){
+//														problemRequestor.acceptProblem(bPREPAREID,
+//																IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
+//																new String[]{IEGLConstants.KEYWORD_WITH });
+//													}
 												}
 										}
 											
@@ -426,50 +426,50 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 								}else if (typeBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING ||
 									typeBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING){
 									if (typeBinding.getAnnotation(EGLIOSQL, "SQLRecord")== null){
-											if (bSINGLEROW != null){
-												problemRequestor.acceptProblem(bSINGLEROW,
-														IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
-														new String[]{IEGLConstants.KEYWORD_SINGLEROW});
-											}
-											
-											if (bUSINGKEYS != null){
-												problemRequestor.acceptProblem(bUSINGKEYS,
-														IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
-														new String[]{IEGLConstants.KEYWORD_USINGKEYS});
-											}
-											
-											if (bINLINESQL != null){
-												problemRequestor.acceptProblem(bINLINESQL,
-														IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
-														new String[]{IEGLConstants.KEYWORD_WITH + " #" + IEGLConstants.SQLKEYWORD_SQL});
-											}
-											
-											if (bPREPAREID != null){
-												problemRequestor.acceptProblem(bPREPAREID,
-														IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
-														new String[]{IEGLConstants.KEYWORD_WITH });
-											}
-											
-											if (bINTO != null){
-												problemRequestor.acceptProblem(bINTO,
-														IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
-														new String[]{IEGLConstants.KEYWORD_INTO });
-											}
-											
-											if (bUSING != null){
-												problemRequestor.acceptProblem(bUSING,
-														IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
-														new String[]{IEGLConstants.KEYWORD_USING });
-											}
-											
-											if (bFORUPDATE != null &&
-												typeBinding.getAnnotation(EGLIOFILE, "IndexedRecord") == null &&
-												typeBinding.getAnnotation(EGLIOFILE, "RelativeRecord") == null &&
-												typeBinding.getAnnotation(EGLIODLI, "dliSegment")== null){
-												problemRequestor.acceptProblem(bFORUPDATE,
-														IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
-														new String[]{IEGLConstants.KEYWORD_FORUPDATE });
-											}
+//											if (bSINGLEROW != null){
+//												problemRequestor.acceptProblem(bSINGLEROW,
+//														IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
+//														new String[]{IEGLConstants.KEYWORD_SINGLEROW});
+//											}
+//											
+//											if (bUSINGKEYS != null){
+//												problemRequestor.acceptProblem(bUSINGKEYS,
+//														IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
+//														new String[]{IEGLConstants.KEYWORD_USINGKEYS});
+//											}
+//											
+//											if (bINLINESQL != null){
+//												problemRequestor.acceptProblem(bINLINESQL,
+//														IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
+//														new String[]{IEGLConstants.KEYWORD_WITH + " #" + IEGLConstants.SQLKEYWORD_SQL});
+//											}
+//											
+//											if (bPREPAREID != null){
+//												problemRequestor.acceptProblem(bPREPAREID,
+//														IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
+//														new String[]{IEGLConstants.KEYWORD_WITH });
+//											}
+//											
+//											if (bINTO != null){
+//												problemRequestor.acceptProblem(bINTO,
+//														IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
+//														new String[]{IEGLConstants.KEYWORD_INTO });
+//											}
+//											
+//											if (bUSING != null){
+//												problemRequestor.acceptProblem(bUSING,
+//														IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
+//														new String[]{IEGLConstants.KEYWORD_USING });
+//											}
+//											
+//											if (bFORUPDATE != null &&
+//												typeBinding.getAnnotation(EGLIOFILE, "IndexedRecord") == null &&
+//												typeBinding.getAnnotation(EGLIOFILE, "RelativeRecord") == null &&
+//												typeBinding.getAnnotation(EGLIODLI, "dliSegment")== null){
+//												problemRequestor.acceptProblem(bFORUPDATE,
+//														IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
+//														new String[]{IEGLConstants.KEYWORD_FORUPDATE });
+//											}
 										}
 								}
 							}
@@ -536,9 +536,9 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 				
 				if (!isValid){
 					
-					problemRequestor.acceptProblem(expression,
-							IProblemRequestor.GET_BY_KEY_STATEMENT_TARGET_NOT_RECORD,
-							new String[] {dataBinding.getCaseSensitiveName()});
+//					problemRequestor.acceptProblem(expression,
+//							IProblemRequestor.GET_BY_KEY_STATEMENT_TARGET_NOT_RECORD,
+//							new String[] {dataBinding.getCaseSensitiveName()});
 				}
 			}
 		}

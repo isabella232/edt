@@ -18,7 +18,6 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
-import org.eclipse.edt.compiler.core.ast.FromResultSetClause;
 import org.eclipse.edt.compiler.core.ast.NoCursorClause;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.UsingKeysClause;
@@ -54,11 +53,11 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 				Node inlinesql = null;
 				Node inlinedli = null;
 				
-				public boolean visit(FromResultSetClause fromResultSetClause) {
-					checkIsSQLTarget(IEGLConstants.KEYWORD_FROM, fromResultSetClause);
-					EGLNameValidator.validate(fromResultSetClause.getResultSetID(), EGLNameValidator.RESULT_SET_ID, problemRequestor, fromResultSetClause, compilerOptions);
-					return true;
-				}
+//				public boolean visit(FromResultSetClause fromResultSetClause) {
+//					checkIsSQLTarget(IEGLConstants.KEYWORD_FROM, fromResultSetClause);
+//					EGLNameValidator.validate(fromResultSetClause.getResultSetID(), EGLNameValidator.RESULT_SET_ID, problemRequestor, fromResultSetClause, compilerOptions);
+//					return true;
+//				}
 				
 				public boolean visit(WithInlineSQLClause withInlineSQLClause) {
 					inlineSqlNode[0] = withInlineSQLClause;
@@ -151,9 +150,9 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 				}
 				
 				if (!isValid){
-					problemRequestor.acceptProblem(expression,
-							IProblemRequestor.DELETE_STATEMENT_RECORD_IS_INVALID_TYPE,
-							new String[] {expression.getCanonicalString(),expression.getCanonicalString()});
+//					problemRequestor.acceptProblem(expression,
+//							IProblemRequestor.DELETE_STATEMENT_RECORD_IS_INVALID_TYPE,
+//							new String[] {expression.getCanonicalString(),expression.getCanonicalString()});
 				}
 			}
 		}

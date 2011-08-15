@@ -29,8 +29,8 @@ import org.eclipse.edt.compiler.internal.dli.DLIInfo;
  *  - getPosition()
  * 
  * For the get by position source, use:
- *  - hasFromResultSetID()
- *  - getFromResultSetID()
+ *  - hasFromExpr()
+ *  - getFromExpr()
  *  - hasTargetRecords()
  *  - getTargetRecords()
  * 
@@ -142,10 +142,10 @@ public class GetByPositionStatement extends Statement implements IDliIOStatement
 	
 	public static abstract class GetByPositionSource implements Cloneable {
 		boolean hasExpressions() { return false; }
-		boolean hasResultSetID() { return false; }
+		boolean hasFromExpr() { return false; }
 		
 		List getExpressions() { return null; }
-		String getResultSetID() { return null; }
+		Expression getFromExpr() { return null; }
 		
 		void setParent(Node parent) {}
 		void accept(IASTVisitor visitor) {};
@@ -191,11 +191,11 @@ public class GetByPositionStatement extends Statement implements IDliIOStatement
 	
 	public static class ExpressionFromResultSetSource extends GetByPositionSource {
 		Expression expr;
-		String resultSetID;
+		Expression fromExpr;
 		
-		public ExpressionFromResultSetSource( Expression expr, String resultSetID ) {
+		public ExpressionFromResultSetSource( Expression expr, Expression fromExpr ) {
 			this.expr = expr;
-			this.resultSetID = resultSetID;
+			this.fromExpr = fromExpr;
 		}
 		
 		boolean hasExpressions() {
@@ -206,44 +206,50 @@ public class GetByPositionStatement extends Statement implements IDliIOStatement
 			return Arrays.asList( new Expression[] { expr } );
 		}
 		
-		boolean hasResultSetID() {
+		boolean hasFromExpr() {
 			return true;
 		}
 		
-		String getResultSetID() {
-			return resultSetID;
+		Expression getFromExpr() {
+			return fromExpr;
 		}
 		
 		void setParent(Node parent) {
 			expr.setParent( parent );
+			fromExpr.setParent(parent);
 		}
 		
 		void accept(IASTVisitor visitor) {
 			expr.accept( visitor );
+			fromExpr.accept(visitor);
 		}
 		
 		protected Object clone() throws CloneNotSupportedException{
-			return new ExpressionFromResultSetSource((Expression)expr.clone(), new String(resultSetID));
+			return new ExpressionFromResultSetSource((Expression)expr.clone(), (Expression)fromExpr.clone());
 		}
 	}
 	
 	public static class FromResultSetSource extends GetByPositionSource {
-		String resultSetID;
+		Expression expression;
 		
-		public FromResultSetSource( String resultSetID ) {
-			this.resultSetID = resultSetID;
+		public FromResultSetSource( Expression expression ) {
+			this.expression = expression;
 		}
 		
-		boolean hasResultSetID() {
+		boolean hasFromExpr() {
 			return true;
 		}
 		
-		String getResultSetID() {
-			return resultSetID;
+		Expression getFromExpr() {
+			return expression;
 		}
 		
+		void accept(IASTVisitor visitor) {
+			expression.accept(visitor);
+		}
+
 		protected Object clone() throws CloneNotSupportedException{
-			return new FromResultSetSource(new String(resultSetID));
+			return new FromResultSetSource((Expression)expression.clone());
 		}
 	}
 
@@ -299,12 +305,12 @@ public class GetByPositionStatement extends Statement implements IDliIOStatement
 		return direction.getExpression();
 	}
 	
-	public boolean hasFromResultSetID() {
-		return getByPositionSource.hasResultSetID();
+	public boolean hasFromExpr() {
+		return getByPositionSource.hasFromExpr();
 	}
 	
-	public String getFromResultSetID() {
-		return getByPositionSource.getResultSetID();
+	public Expression getFromExpr() {
+		return getByPositionSource.getFromExpr();
 	}
 
 	public boolean hasTargetRecords() {

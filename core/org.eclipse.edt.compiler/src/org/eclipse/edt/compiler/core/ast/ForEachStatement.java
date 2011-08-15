@@ -27,7 +27,7 @@ public class ForEachStatement extends Statement {
 		Expression getExpression() { return null; }
 		
 		boolean isResultSetForEachTarget() { return false; }
-		String getResultSetID() { return null; }
+		Expression getResultSet() { return null; }
 		
 		void setParent( Node parent ) {}
 		void accept( IASTVisitor visitor ) {}
@@ -64,22 +64,30 @@ public class ForEachStatement extends Statement {
 	}
 	
 	public static class ResultSetForEachTarget extends ForEachTarget {
-		private String ID;
+		private Expression resultSet;
 
-		public ResultSetForEachTarget(String ID) {
-			this.ID = ID;
+		public ResultSetForEachTarget(Expression resultSet) {
+			this.resultSet = resultSet;
 		}
 		
 		boolean isResultSetForEachTarget() {
 			return true;
 		}
 		
-		String getResultSetID() {
-			return ID;
+		Expression getResultSet() {
+			return resultSet;
+		}
+		
+		void setParent( Node parent ) {
+			resultSet.setParent( parent );
+		}
+		
+		void accept( IASTVisitor visitor ) {
+			resultSet.accept( visitor );
 		}
 		
 		protected Object clone() throws CloneNotSupportedException {
-			return new ResultSetForEachTarget(new String(ID));
+			return new ResultSetForEachTarget((Expression) resultSet.clone());
 		}
 	}
 
@@ -103,8 +111,8 @@ public class ForEachStatement extends Statement {
 		return foreachTarget.isResultSetForEachTarget();
 	}
 	
-	public String getResultSetID() {
-		return foreachTarget.getResultSetID();
+	public Expression getResultSet() {
+		return foreachTarget.getResultSet();
 	}
 	
 	public boolean hasSQLRecord() {

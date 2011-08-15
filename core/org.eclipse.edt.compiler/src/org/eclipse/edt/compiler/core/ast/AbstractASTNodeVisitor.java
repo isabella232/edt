@@ -205,8 +205,8 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( fromExpressionClause );
 	}
 	
-	public boolean visit(FromResultSetClause fromResultSetClause) {
-		return visitNode( fromResultSetClause );
+	public boolean visit( FromOrToExpressionClause clause) {
+		return visitNode( clause );
 	}
 	
 	public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
@@ -717,8 +717,8 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( fromExpressionClause );
 	}
 	
-	public void endVisit(FromResultSetClause fromResultSetClause) {
-		 endVisitNode( fromResultSetClause );
+	public void endVisit( FromOrToExpressionClause clause) {
+		 endVisitNode( clause );
 	}
 	
 	public void endVisit(FunctionDataDeclaration functionDataDeclaration) {

@@ -59,10 +59,10 @@ public class IOStatementValidator extends DefaultASTVisitor implements IOStateme
 	
 	protected void checkIsSQLTarget(String clauseKeyword, Node errorNode) {
 		if(!isSQLTarget) {
-			problemRequestor.acceptProblem(
-				errorNode,
-				IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
-				new String[] {clauseKeyword.toUpperCase()});
+//			problemRequestor.acceptProblem(
+//				errorNode,
+//				IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
+//				new String[] {clauseKeyword.toUpperCase()});
 		}			
 	}
 }

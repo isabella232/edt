@@ -52,11 +52,11 @@ public class GetByPositionStatementValidator extends DefaultASTVisitor implement
 		validateTarget(agetByPositionStatement);
 		validateMultipleTargets(agetByPositionStatement);
 
-		String resultSetID = agetByPositionStatement.getFromResultSetID();
-		if (resultSetID != null) {
-			EGLNameValidator.validate(resultSetID, EGLNameValidator.RESULT_SET_ID, problemRequestor,
-					agetByPositionStatement, compilerOptions);
-		}
+//		String resultSetID = agetByPositionStatement.getFromResultSetID();
+//		if (resultSetID != null) {
+//			EGLNameValidator.validate(resultSetID, EGLNameValidator.RESULT_SET_ID, problemRequestor,
+//					agetByPositionStatement, compilerOptions);
+//		}
 
 		agetByPositionStatement.accept(new AbstractASTVisitor() {
 			WithInlineDLIClause inlinedli = null;
@@ -150,18 +150,18 @@ public class GetByPositionStatementValidator extends DefaultASTVisitor implement
 	}
 
 	protected void addINVALID_CLAUSE_FOR_NON_SQL_TARGETError(Node node, String clause) {
-		problemRequestor.acceptProblem(node, IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
-				new String[] { clause });
+//		problemRequestor.acceptProblem(node, IProblemRequestor.INVALID_CLAUSE_FOR_NON_SQL_TARGET,
+//				new String[] { clause });
 	}
 
 	protected void validateRecordOptions(final GetByPositionStatement getByPositionStatement,
 			final ITypeBinding typeBinding) {
 
-		if (getByPositionStatement.hasFromResultSetID()) {
-			if (typeBinding != null && typeBinding.getAnnotation(EGLIOSQL, "SQLRecord") == null) {
-				addINVALID_CLAUSE_FOR_NON_SQL_TARGETError(getByPositionStatement, IEGLConstants.KEYWORD_FROM);
-			}
-		}
+//		if (getByPositionStatement.hasFromResultSetID()) {
+//			if (typeBinding != null && typeBinding.getAnnotation(EGLIOSQL, "SQLRecord") == null) {
+//				addINVALID_CLAUSE_FOR_NON_SQL_TARGETError(getByPositionStatement, IEGLConstants.KEYWORD_FROM);
+//			}
+//		}
 
 		getByPositionStatement.accept(new AbstractASTVisitor() {
 
