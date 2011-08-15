@@ -112,7 +112,7 @@ public class FieldTemplate extends JavaTemplate {
 	}
 
 	protected void transientOption(Field field, TabbedWriter out) {
-		ExternalType et = CommonUtilities.getUserDefinedExternalType(field.getType());
+		ExternalType et = CommonUtilities.getJavaExternalType(field.getType());
 		if (et != null && !CommonUtilities.isSerializable(et))
 			out.print("transient ");
 	}
