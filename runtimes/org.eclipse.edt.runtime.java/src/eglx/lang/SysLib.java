@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.runtime.java.egl.lang;
+package eglx.lang;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -31,6 +31,7 @@ import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.resources.Platform;
 import org.eclipse.edt.javart.resources.Trace;
 import org.eclipse.edt.javart.util.JavartUtil;
+import org.eclipse.edt.runtime.java.egl.lang.NullValueException;
 
 public class SysLib extends ExecutableBase {
 
@@ -235,7 +236,7 @@ public class SysLib extends ExecutableBase {
 		}
 		catch (JavartException jx) {
 			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.commit", jx.getMessage() });
-			errorException = new RuntimeException(Message.SYSTEM_FUNCTION_ERROR, message);
+			errorException = new org.eclipse.edt.runtime.java.egl.lang.RuntimeException(Message.SYSTEM_FUNCTION_ERROR, message);
 		}
 		finally {
 			if (errorException == null) {
@@ -268,7 +269,7 @@ public class SysLib extends ExecutableBase {
 		}
 		catch (JavartException jx) {
 			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.rollBack", jx.getMessage() });
-			errorException = new RuntimeException(Message.SYSTEM_FUNCTION_ERROR, message);
+			errorException = new org.eclipse.edt.runtime.java.egl.lang.RuntimeException(Message.SYSTEM_FUNCTION_ERROR, message);
 		}
 		finally {
 			if (errorException == null) {

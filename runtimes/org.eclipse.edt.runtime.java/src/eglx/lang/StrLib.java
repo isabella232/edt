@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.runtime.java.egl.lang;
+package eglx.lang;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -25,6 +25,8 @@ import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
 import org.eclipse.edt.javart.util.NumberFormatter;
+import org.eclipse.edt.runtime.java.egl.lang.InvalidIndexException;
+import org.eclipse.edt.runtime.java.egl.lang.NullValueException;
 
 public class StrLib extends ExecutableBase {
 

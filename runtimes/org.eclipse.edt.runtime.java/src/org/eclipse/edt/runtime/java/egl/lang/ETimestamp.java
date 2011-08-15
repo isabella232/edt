@@ -280,10 +280,6 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			return null;
 		Calendar result;
 		timestamp = timestamp.trim();
-		if (format == null || format.length() == 0) {
-			// format = program._runUnit().getDefaultTimestampFormat();
-			format = DefaultFormatPattern;
-		}
 		try {
 			result = convert(timestamp, format);
 		}

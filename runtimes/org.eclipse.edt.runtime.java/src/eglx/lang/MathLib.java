@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.runtime.java.egl.lang;
+package eglx.lang;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
