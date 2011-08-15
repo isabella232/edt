@@ -22,15 +22,19 @@ public interface SqlIOStatement extends IOStatement {
 	
 	void setPreparedStatementId(String value);
 	
-	String getResultSetIdentifier();
+	Expression getResultSet();
 	
-	void setResultSetIdentifier(String value);
+	void setResultSet(Expression value);
 	
 	List<Expression> getIntoExpressions();
 	
 	Boolean hasExplicitSql();
 	
 	void setHasExplicitSql(Boolean value);
+	
+	String getSqlString();
+	
+	void setSqlString(String value);
 	
 	
 	public List<SqlClause> getSqlClauses();

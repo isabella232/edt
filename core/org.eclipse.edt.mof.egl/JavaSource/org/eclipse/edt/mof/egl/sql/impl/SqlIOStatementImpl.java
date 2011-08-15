@@ -22,10 +22,11 @@ import org.eclipse.edt.mof.egl.sql.SqlIOStatement;
 
 public abstract class SqlIOStatementImpl extends IOStatementImpl implements SqlIOStatement {
 	private static int Slot_preparedStatementId=0;
-	private static int Slot_resultSetIdentifier=1;
+	private static int Slot_resultSet=1;
 	private static int Slot_intoExpressions=2;
 	private static int Slot_hasExplicitSql=3;
-	private static int totalSlots = 4;
+	private static int Slot_sqlString=4;
+	private static int totalSlots = 5;
 	
 	public static int totalSlots() {
 		return totalSlots + IOStatementImpl.totalSlots();
@@ -34,9 +35,10 @@ public abstract class SqlIOStatementImpl extends IOStatementImpl implements SqlI
 	static {
 		int offset = IOStatementImpl.totalSlots();
 		Slot_preparedStatementId += offset;
-		Slot_resultSetIdentifier += offset;
+		Slot_resultSet += offset;
 		Slot_intoExpressions += offset;
 		Slot_hasExplicitSql += offset;
+		Slot_sqlString += offset;
 	}
 	
 	@Override
@@ -55,13 +57,13 @@ public abstract class SqlIOStatementImpl extends IOStatementImpl implements SqlI
 	}
 	
 	@Override
-	public String getResultSetIdentifier() {
-		return (String)slotGet(Slot_resultSetIdentifier);
+	public Expression getResultSet() {
+		return (Expression)slotGet(Slot_resultSet);
 	}
 	
 	@Override
-	public void setResultSetIdentifier(String value) {
-		slotSet(Slot_resultSetIdentifier, value);
+	public void setResultSet(Expression value) {
+		slotSet(Slot_resultSet, value);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -78,6 +80,16 @@ public abstract class SqlIOStatementImpl extends IOStatementImpl implements SqlI
 	@Override
 	public void setHasExplicitSql(Boolean value) {
 		slotSet(Slot_hasExplicitSql, value);
+	}
+	
+	@Override
+	public String getSqlString() {
+		return (String)slotGet(Slot_sqlString);
+	}
+	
+	@Override
+	public void setSqlString(String value) {
+		slotSet(Slot_sqlString, value);
 	}
 
 }
