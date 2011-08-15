@@ -16,6 +16,7 @@ public class Constants {
 	
 	public static final String FOR_LOOP_COUNTER_ANNOTATION = "FOR_LOOP_COUNTER_ANNOTATION";
 	public static final String ENTER_BLOCK_ANNOTATION = "ENTER_BLOCK_ANNOTATION";
+	public static final String LOOP_AT_LINE_ANNOTATION = "LOOP_AT_LINE_ANNOTATION";
 	
 	public static final String genAddLocalFunctionVariable = "genAddLocalFunctionVariable";
 	public static final String genAtLine = "genAtLine";

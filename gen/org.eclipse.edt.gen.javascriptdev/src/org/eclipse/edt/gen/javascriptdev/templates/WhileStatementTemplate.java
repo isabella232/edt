@@ -25,8 +25,13 @@ public class WhileStatementTemplate extends org.eclipse.edt.gen.javascript.templ
 		enterBlock.setValue(Boolean.TRUE);
 		stmt.getBody().addAnnotation(enterBlock);
 		
+		Annotation atLine = ctx.getFactory().createAnnotation(Constants.LOOP_AT_LINE_ANNOTATION);
+		atLine.setValue(stmt);
+		stmt.getBody().addAnnotation(atLine);
+		
 		super.genStatementBody(stmt, ctx, out);
 		
 		stmt.getBody().removeAnnotation(enterBlock);
+		stmt.getBody().removeAnnotation(atLine);
 	}
 }

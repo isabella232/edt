@@ -30,10 +30,15 @@ public class ForStatementTemplate extends org.eclipse.edt.gen.javascript.templat
 		enterBlock.setValue(Boolean.TRUE);
 		stmt.getBody().addAnnotation(enterBlock);
 		
+		Annotation atLine = ctx.getFactory().createAnnotation(Constants.LOOP_AT_LINE_ANNOTATION);
+		atLine.setValue(stmt);
+		stmt.getBody().addAnnotation(atLine);
+		
 		super.genStatementBody(stmt, ctx, out);
 		
 		stmt.getBody().removeAnnotation(counterVar);
 		stmt.getBody().removeAnnotation(enterBlock);
+		stmt.getBody().removeAnnotation(atLine);
 		
 		// Exit the block we added for the declared counter variable.
 		if (stmt.getDeclarationExpression() != null) {

@@ -39,6 +39,15 @@ public class StatementBlockTemplate extends org.eclipse.edt.gen.javascript.templ
 		if (enter != null) {
 			out.println("}finally{egl.exitBlock();}");
 		}
+		
+		// Generate an atLine() to step back to the top of the loop (e.g. the "while()" line)
+		Annotation atLine = block.getAnnotation( Constants.LOOP_AT_LINE_ANNOTATION );
+		if (atLine != null) {
+			Object stmt = atLine.getValue();
+			if (stmt != null) {
+				ctx.invoke(Constants.genAtLine, stmt, ctx, out);
+			}
+		}
 	}
 	
 	public void genAtLine(Statement stmt, Context ctx, TabbedWriter out) {
