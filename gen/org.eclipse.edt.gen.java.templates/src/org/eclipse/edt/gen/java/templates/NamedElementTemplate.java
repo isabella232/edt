@@ -11,12 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-import org.eclipse.edt.gen.java.Constants;
-import org.eclipse.edt.gen.java.Context;
-import org.eclipse.edt.gen.java.JavaAliaser;
+import org.eclipse.edt.gen.java.*;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.NamedElement;
+import org.eclipse.edt.mof.egl.*;
 
 public class NamedElementTemplate extends JavaTemplate {
 
@@ -47,6 +44,17 @@ public class NamedElementTemplate extends JavaTemplate {
 	}
 
 	public void genName(NamedElement element, Context ctx, TabbedWriter out) {
+		if ( element instanceof Member && ((Member)element).getContainer() instanceof ExternalType )
+		{
+			Member member = (Member)element;
+			if ( CommonUtilities.isJavaExternalType( (ExternalType)member.getContainer() ) 
+					&& member.getAnnotation( "eglx.lang.ExternalName" ) != null )
+			{
+				out.print( (String)member.getAnnotation( "eglx.lang.ExternalName" ).getValue() );
+				return;
+			}
+		}
+
 		out.print(JavaAliaser.getAlias(element.getName()));
 	}
 }
