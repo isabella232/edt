@@ -49,7 +49,7 @@ public class FunctionTemplate extends org.eclipse.edt.gen.javascript.templates.F
 		// If there was no return statement then we need to gen egl.leave() - otherwise this was done right before the return statement.
 		// Also generate an atLine() so that we step back to the function declaration line.
 		List<Statement> stmts = function.getStatements();
-		if (stmts.size() > 0 && !(stmts.get(stmts.size() - 1) instanceof ReturnStatement)) {
+		if (stmts.size() == 0 || !(stmts.get(stmts.size() - 1) instanceof ReturnStatement)) {
 			ctx.invoke(Constants.genAtLine, function, ctx, out);
 			out.println("if (!egl.debugg) egl.leave();");
 		}
