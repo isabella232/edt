@@ -29,7 +29,7 @@ plugin@org.eclipse.edt.ide.core=v201108111147,:pserver:anonymous@dev.eclipse.org
 plugin@org.eclipse.edt.ide.ui=v201108120551,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.ui
 plugin@org.eclipse.edt.runtime.java=v201108141144,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.java
 plugin@org.eclipse.edt.gen.egl=F08121524,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.egl
-plugin@org.eclipse.edt.gen.egl.templates=v201108121434,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.egl.templates
+plugin@org.eclipse.edt.gen.egl.templates=F08150722,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.egl.templates
 plugin@org.eclipse.edt.gen.generator.egl=v201108121434,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.generator.egl
 plugin@org.eclipse.edt.ide.generator.egl=v201108141055,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.generator.egl
 
