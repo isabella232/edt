@@ -65,7 +65,7 @@ end
 
 externalType SqlIOStatement extends IOStatement type MofClass {isAbstract=yes}
 	preparedStatementId string;
-	resultSetIdentifier string;
+	resultSet Expression;
 	intoExpressions Expression[]  {containment=true};
 	hasExplicitSql boolean;
 	
