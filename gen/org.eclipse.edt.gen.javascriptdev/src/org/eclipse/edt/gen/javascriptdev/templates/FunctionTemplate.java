@@ -13,9 +13,11 @@ package org.eclipse.edt.gen.javascriptdev.templates;
 
 import java.util.List;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascriptdev.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.ReturnStatement;
@@ -45,8 +47,10 @@ public class FunctionTemplate extends org.eclipse.edt.gen.javascript.templates.F
 	
 	public void genFunctionExit(Function function, Context ctx, TabbedWriter out) {
 		// If there was no return statement then we need to gen egl.leave() - otherwise this was done right before the return statement.
+		// Also generate an atLine() so that we step back to the function declaration line.
 		List<Statement> stmts = function.getStatements();
 		if (stmts.size() > 0 && !(stmts.get(stmts.size() - 1) instanceof ReturnStatement)) {
+			ctx.invoke(Constants.genAtLine, function, ctx, out);
 			out.println("if (!egl.debugg) egl.leave();");
 		}
 		
@@ -58,5 +62,16 @@ public class FunctionTemplate extends org.eclipse.edt.gen.javascript.templates.F
 		
 		out.println("\t\t  } else { egl.leave(); } ");
 		out.println("}");
+	}
+	
+	public void genAtLine(Function function, Context ctx, TabbedWriter out) {
+		Annotation annotation = function.getAnnotation(IEGLConstants.EGL_LOCATION);
+		if (annotation != null){
+			Integer line = (Integer)annotation.getValue(IEGLConstants.EGL_PARTLINE);
+			Integer offset = (Integer)annotation.getValue(IEGLConstants.EGL_PARTOFFSET);
+			Integer length = (Integer)annotation.getValue(IEGLConstants.EGL_PARTLENGTH);
+			out.println( "egl.atLine(this.eze$$fileName," + line + ","
+				+ offset + "," + length + ", this);" );
+		}
 	}
 }
