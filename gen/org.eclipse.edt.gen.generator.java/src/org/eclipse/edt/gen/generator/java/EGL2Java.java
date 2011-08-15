@@ -47,9 +47,7 @@ public class EGL2Java extends AbstractGeneratorCommand {
 
 	public String[] getTemplatePath() {
 		// this defined the locations of the templates.properties files to be loaded and used
-		return new String[] { "org.eclipse.edt.gen.java.templates.egl.lang.templates", "org.eclipse.edt.gen.java.templates.egl.core.templates",
-			"org.eclipse.edt.gen.java.templates.templates" };
+		return new String[] { "org.eclipse.edt.gen.java.templates.egl.lang.templates", "org.eclipse.edt.gen.java.templates.templates" };
 	}
-
 
 }
