@@ -612,8 +612,8 @@ stmt
 	|	GET:get1 direction:direction1 inparentOpt:inparent1 getByPositionSource:getByPositionSource1 getByPositionOption_star:getByPositionOptions1 SEMI:semi1
 	{: RESULT = new GetByPositionStatement(direction1, inparent1, getByPositionSource1, getByPositionOptions1, get1left, semi1right); :}
 	
-	|	OPEN:open1 ID:resultSetID openModifierOpt:openModifier1 openTarget_star:openTargets1 SEMI:semi1
-	{: RESULT = new OpenStatement(resultSetID, openModifier1, openTargets1, open1left, semi1right); :}
+	|	OPEN:open1 lvalue:lvalue1 openModifierOpt:openModifier1 openTarget_star:openTargets1 SEMI:semi1
+	{: RESULT = new OpenStatement(lvalue1, openModifier1, openTargets1, open1left, semi1right); :}
 
 	|	OPENUI:openui1 settingsBlockOpt:settingsBlock1 expr_plus:exprs1 bindOpt:bind1 eventBlock_star:eventBlocks1 END:end1
 	{: RESULT = new OpenUIStatement(settingsBlock1, exprs1, bind1, eventBlocks1, openui1left, end1right); :}
@@ -676,8 +676,8 @@ foreachTarget
 	::=	expr:expr1
 	{: RESULT = new ForEachStatement.ExpressionForEachTarget(expr1); :}
 
-	|	FROM ID:resultSetID
-	{: RESULT = new ForEachStatement.ResultSetForEachTarget(resultSetID); :}
+	|	FROM lvalue:lvalue1
+	{: RESULT = new ForEachStatement.ResultSetForEachTarget(lvalue1); :}
 	;
 
 intoClauseOpt
@@ -747,8 +747,8 @@ replaceOption
 	|	WITH:with1 INLINE_DLI:dliStatement
 	{: RESULT = new WithInlineDLIClause(dliStatement, with1left, dliStatementright); :}
 
-	|	FROM:from1 ID:resultSetID
-	{: RESULT = new FromResultSetClause(resultSetID, from1left, resultSetIDright); :}
+	|	TO:to1 lvalue:lvalue1
+	{: RESULT = new FromOrToExpressionClause(lvalue1, to1left, lvalue1right); :}
 
 	|	USINGPCB:usingpcb1 lvalue:lvalue1
 	{: RESULT = new UsingPCBClause(lvalue1, usingpcb1left, lvalue1right); :}
@@ -787,6 +787,9 @@ getByKeyOption
 	
 	|	USINGPCB:usingpcb1 lvalue:lvalue1
 	{: RESULT = new UsingPCBClause( lvalue1, usingpcb1left, lvalue1right); :}
+
+	|	FROM:from1 lvalue:lvalue1
+	{: RESULT = new FromOrToExpressionClause(lvalue1, from1left, lvalue1right); :}
 	;
 
 IDOpt
@@ -822,11 +825,11 @@ getByPositionSource
 	::=	expr_plus:exprs1
 	{: RESULT = new GetByPositionStatement.ExpressionListSource(exprs1); :}
 	
-	|	FROM ID:resultSetID
-	{: RESULT = new GetByPositionStatement.FromResultSetSource(resultSetID); :}
+	|	FROM lvalue:lvalue1
+	{: RESULT = new GetByPositionStatement.FromResultSetSource(lvalue1); :}
 	
-	|	expr:expr1 FROM ID:resultSetID
-	{: RESULT = new GetByPositionStatement.ExpressionFromResultSetSource(expr1, resultSetID); :}
+	|	expr:expr1 FROM lvalue:lvalue1
+	{: RESULT = new GetByPositionStatement.ExpressionFromResultSetSource(expr1, lvalue1); :}
 	;
 
 getByPositionOption
@@ -865,14 +868,17 @@ addOption
 
 	|	USINGPCB:usingpcb1 lvalue:lvalue1
 	{: RESULT = new UsingPCBClause(lvalue1, usingpcb1left, lvalue1right); :}
+
+	|	TO:to1 lvalue:lvalue1
+	{: RESULT = new FromOrToExpressionClause(lvalue1, to1left, lvalue1right); :}
 	;
 	
 deleteOption
 	::=	USINGPCB:usingpcb1 lvalue:lvalue1
 	{: RESULT = new UsingPCBClause(lvalue1, usingpcb1left, lvalue1right); :}
 
-	|	FROM:from1 ID:resultSetID1
-	{: RESULT = new FromResultSetClause(resultSetID1, from1left, resultSetID1right); :}
+	|	FROM:from1 lvalue:lvalue1
+	{: RESULT = new FromOrToExpressionClause(lvalue1, from1left, lvalue1right); :}
 
 	|	WITH:with1 inlineSQLStatement:inlineSQLStatement1
 	{: RESULT = new WithInlineSQLClause(inlineSQLStatement1, with1left, inlineSQLStatement1right); :}
