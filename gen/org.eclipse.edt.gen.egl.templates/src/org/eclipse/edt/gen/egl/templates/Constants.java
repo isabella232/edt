@@ -12,7 +12,7 @@ package org.eclipse.edt.gen.egl.templates;
 
 public class Constants {
 	public static final String Property  = "egl:eglx.lang.Property";
-//	public static final String JavaName  = "egl:egl.idl.java.JavaName";
+	public static final String ExternalName  = "egl:eglx.lang.ExternalName";
 	public static final String XML  = "egl:eglx.xml.binding.annotation.XMLType";
 	public static final String XMLRootElement  = "egl:eglx.xml.binding.annotation.XMLRootElement";
 	public static final String XMLElement  = "egl:eglx.xml.binding.annotation.XMLElement";

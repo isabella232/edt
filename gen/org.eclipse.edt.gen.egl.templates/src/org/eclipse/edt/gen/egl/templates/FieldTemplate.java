@@ -44,11 +44,11 @@ public class FieldTemplate extends EglTemplate{
 				}
 			}
 			if(!eField.getName().equals(field.getName())){
-/*FIXME				org.eclipse.edt.mof.egl.Annotation annotation = CommonUtilities.getAnnotation(ctx, Constants.JavaName);
+				org.eclipse.edt.mof.egl.Annotation annotation = CommonUtilities.getAnnotation(ctx, Constants.ExternalName);
 				if(annotation != null){
 					annotation.setValue(field.getName());
 					eField.addAnnotation(annotation);
-				}*/
+				}
 			}
 			ctx.invoke(genAnnotations, (Object)field, ctx, eField);
 		}
