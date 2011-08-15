@@ -79,10 +79,10 @@ public class LibraryTemplate extends JavaTemplate {
 		ctx.invoke(genSetter, arg, ctx, out);
 	}
 
-	public void genXmlTransient(Library part, TabbedWriter out){
+	public void genXmlTransient(Library part, TabbedWriter out) {
 		out.println("@javax.xml.bind.annotation.XmlTransient");
 	}
-	
+
 	public void genRuntimeTypeName(Library library, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genPartName, library, ctx, out);
 	}

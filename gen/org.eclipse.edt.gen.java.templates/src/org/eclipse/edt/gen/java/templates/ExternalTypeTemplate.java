@@ -34,28 +34,21 @@ public class ExternalTypeTemplate extends JavaTemplate {
 
 		// if this external type has an alias, then use it instead
 		Annotation annot = part.getAnnotation("eglx.java.JavaObject");
-		if ( annot != null )
-		{
+		if (annot != null) {
 			String shortName = part.getName();
-			if ( ((String)annot.getValue("externalName")).length() > 0 )
-			{
-				shortName = (String)annot.getValue("externalName");
+			if (((String) annot.getValue("externalName")).length() > 0) {
+				shortName = (String) annot.getValue("externalName");
 			}
-			
+
 			String fullName = shortName;
-			if ( ((String)annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0 )
-			{
-				fullName = (String)annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + '.' + fullName;
-			}
-			else if ( part.getPackageName().length() > 0 )
-			{
+			if (((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0) {
+				fullName = (String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + '.' + fullName;
+			} else if (part.getPackageName().length() > 0) {
 				fullName = part.getPackageName() + '.' + fullName;
 			}
-			
+
 			CommonUtilities.processImport(fullName, ctx);
-		}
-		else
-		{
+		} else {
 			// process anything else the superclass needs to do
 			ctx.invokeSuper(this, preGen, part, ctx);
 		}
@@ -71,27 +64,19 @@ public class ExternalTypeTemplate extends JavaTemplate {
 		ctx.invoke(genPartName, part, ctx, out);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void genRuntimeTypeName(ExternalType part, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		// if this external type has an alias, then use it instead
 		Annotation annot = part.getAnnotation("eglx.java.JavaObject");
-		if ( annot != null )
-		{
+		if (annot != null) {
 			String shortName = part.getName();
-			if ( ((String)annot.getValue("externalName")).length() > 0 )
-			{
-				shortName = (String)annot.getValue("externalName");
-			}
-			
+			if (((String) annot.getValue("externalName")).length() > 0)
+				shortName = (String) annot.getValue("externalName");
 			String fullName = shortName;
-			if ( ((String)annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0 )
-			{
-				fullName = (String)annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + '.' + fullName;
-			}
-			else if ( part.getPackageName().length() > 0 )
-			{
+			if (((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0)
+				fullName = (String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + '.' + fullName;
+			else if (part.getPackageName().length() > 0)
 				fullName = part.getPackageName() + '.' + fullName;
-			}
-			
 			// check to see if this is in the list of imported types. If it is, then we can use the short name.
 			List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partTypesImported);
 			for (String imported : typesImported) {
@@ -102,10 +87,7 @@ public class ExternalTypeTemplate extends JavaTemplate {
 				}
 			}
 			out.print(fullName);
-		}
-		else
-		{
+		} else
 			ctx.invoke(genPartName, part, ctx, out);
-		}
 	}
 }
