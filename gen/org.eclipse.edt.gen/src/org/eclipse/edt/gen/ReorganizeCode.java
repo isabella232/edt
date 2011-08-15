@@ -53,11 +53,10 @@ public class ReorganizeCode extends AbstractVisitor {
 	@SuppressWarnings("unchecked")
 	public List<StatementBlock> reorgCode(Statement statement, EglContext ctx) {
 		Annotation annot = statement.getAnnotation("EGL_Location");
-		if(annot != null){
+		if (annot != null)
 			ctx.setLastStatementLocation(annot);
-		}
 		this.ctx = ctx;
-		currentStatementContainer = statement.getContainer();
+		this.currentStatementContainer = statement.getContainer();
 		disallowRevisit();
 		allowParentTracking();
 		setReturnData(null);
@@ -90,16 +89,85 @@ public class ReorganizeCode extends AbstractVisitor {
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	public boolean visit(ReturnStatement object) {
 		ctx.putAttribute(object.getContainer(), Constants.SubKey_functionHasReturnStatement, new Boolean(true));
+		// if the return statement invokes a function that has inout or out parms, then we need to create a local variable
+		// for the return of the function invocation. This is because we need to unbox the inout/out args after the function
+		// is invoked and before the return statement
+		if (object.getExpression().getType() != null && IRUtils.hasSideEffects(object.getExpression())) {
+			// set up the new statement block if needed
+			List<StatementBlock> blockArray;
+			if (getReturnData() == null) {
+				blockArray = new ArrayList<StatementBlock>();
+				blockArray.add(null);
+				blockArray.add(null);
+				setReturnData(blockArray);
+			} else
+				blockArray = (List<StatementBlock>) getReturnData();
+			// handle the preprocessing
+			StatementBlock block;
+			// we need to add this to block list 0
+			if (blockArray.get(0) == null) {
+				block = factory.createStatementBlock();
+				block.setContainer(currentStatementContainer);
+				blockArray.set(0, block);
+			}
+			block = blockArray.get(0);
+			String temporary = ctx.nextTempName();
+			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			localDeclaration.setContainer(currentStatementContainer);
+			DeclarationExpression declarationExpression = factory.createDeclarationExpression();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			Field field = factory.createField();
+			field.setName(temporary);
+			field.setType(object.getExpression().getType());
+			field.setIsNullable(object.getExpression().isNullable());
+			// we need to create the member access
+			MemberName nameExpression = factory.createMemberName();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			nameExpression.setMember(field);
+			nameExpression.setId(field.getName());
+			// we need to create an assignment statement
+			AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			assignmentStatement.setContainer(currentStatementContainer);
+			Assignment assignment = factory.createAssignment();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			assignmentStatement.setAssignment(assignment);
+			assignment.setLHS(nameExpression);
+			assignment.setRHS(object.getExpression());
+			// add the assignment to the declaration statement block
+			StatementBlock declarationBlock = factory.createStatementBlock();
+			declarationBlock.setContainer(currentStatementContainer);
+			declarationBlock.getStatements().add(assignmentStatement);
+			// add the declaration statement block to the field
+			field.setInitializerStatements(declarationBlock);
+			field.setHasSetValuesBlock(true);
+			// add the field to the declaration expression
+			declarationExpression.getFields().add(field);
+			// connect the declaration expression to the local declaration
+			localDeclaration.setExpression(declarationExpression);
+			// we need to analyze the statement we moved
+			assignmentStatement.accept(this);
+			// add the local variable to the statement list
+			block.getStatements().add(localDeclaration);
+			// now replace the return expression with the temporary variable
+			object.setExpression(nameExpression);
+		}
 		return true;
 	}
 
 	public boolean visit(CallStatement object) {
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
-		if(object.getInvocationTarget() instanceof MemberAccess && 
-				((MemberAccess)object.getInvocationTarget()).getMember() instanceof Function){
-			Function serviceInterfaceFunction = (Function)((MemberAccess)object.getInvocationTarget()).getMember();
+		if (object.getInvocationTarget() instanceof MemberAccess && ((MemberAccess) object.getInvocationTarget()).getMember() instanceof Function) {
+			Function serviceInterfaceFunction = (Function) ((MemberAccess) object.getInvocationTarget()).getMember();
 			FunctionInvocation invocation = factory.createFunctionInvocation();
 			invocation.setTarget(serviceInterfaceFunction);
 			invocation.setId(serviceInterfaceFunction.getId());
@@ -150,43 +218,11 @@ public class ReorganizeCode extends AbstractVisitor {
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
 	public boolean visit(IfStatement object) {
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
 			ctx.putAttribute(object, Constants.SubKey_statementNeedsLabel, new Boolean(true));
-		// if the condition of the if statement has side effects, then we need to extract the functions in the condition
-		// and process them ahead of the if, utilizing a temporary variable instead. the reason for this is to allow the
-		// before and after logic from the function invocation to take place ahead of the if
-		ReorganizeIf reorganizeIf = new ReorganizeIf();
-		List<Statement> statementArray = reorganizeIf.reorgIf(object, ctx);
-		if (statementArray != null) {
-			// we have a list of statements that need to be inserted before this if statement
-			// set up the new statement block if needed
-			List<StatementBlock> blockArray;
-			if (getReturnData() == null) {
-				blockArray = new ArrayList<StatementBlock>();
-				blockArray.add(null);
-				blockArray.add(null);
-				setReturnData(blockArray);
-			} else
-				blockArray = (List<StatementBlock>) getReturnData();
-			// handle the preprocessing
-			StatementBlock block;
-			// we need to add this to block list 0
-			if (blockArray.get(0) == null) {
-				block = factory.createStatementBlock();
-				block.setContainer(currentStatementContainer);
-				blockArray.set(0, block);
-			}
-			block = blockArray.get(0);
-			// now loop through all of the statements, adding them to the statement block
-			for (int i = 0; i < statementArray.size(); i++) {
-				// add the local variable to the statement block
-				block.getStatements().add(statementArray.get(i));
-			}
-		}
 		// for if statements, we need to see if the false branch is another if statement and if that if statement has
 		// logic in it that has side effects. if it does, then we need to make sure that a statement block surrounds the
 		// false branch's logic
@@ -518,129 +554,6 @@ public class ReorganizeCode extends AbstractVisitor {
 			}
 		}
 		return;
-	}
-
-	// this reorganization logic for if statements will check the if statement's condition and determine if any function
-	// invocations are present that require temporary variables. if there are, then an assignment statement will be created
-	// and added to a statement list for each invocation of the function. the function's invocation in the if statement's
-	// condition will be replaced by the temporary variable. when we return back to the caller of this, the list will be
-	// inserted ahead of the if statement being processed
-	public class ReorganizeIf extends AbstractVisitor {
-		EglContext ctx;
-		Container currentStatementContainer;
-
-		@SuppressWarnings("unchecked")
-		public List<Statement> reorgIf(IfStatement statement, EglContext ctx) {
-			this.ctx = ctx;
-			this.currentStatementContainer = statement.getContainer();
-			disallowRevisit();
-			allowParentTracking();
-			setReturnData(null);
-			statement.getCondition().accept(this);
-			return (List<Statement>) getReturnData();
-		}
-
-		public boolean visit(EObject object) {
-			return true;
-		}
-
-		public boolean visit(Function object) {
-			return false;
-		}
-
-		public boolean visit(Type object) {
-			return false;
-		}
-
-		public boolean visit(Operation object) {
-			return false;
-		}
-
-		public boolean visit(QualifiedFunctionInvocation object) {
-			processInvocation(object);
-			return true;
-		}
-
-		public boolean visit(FunctionInvocation object) {
-			processInvocation(object);
-			return true;
-		}
-
-		public boolean visit(DelegateInvocation object) {
-			processInvocation(object);
-			return true;
-		}
-
-		@SuppressWarnings("unchecked")
-		private void processInvocation(InvocationExpression object) {
-			boolean altered = false;
-			// we need to scan the function arguments for any conditions that require temporary variables to be set
-			// up. Things like IN args, INOUT args with java primitives, OUT arg initialization, etc. We also need to
-			// remember when this statement has already been processed for function invocations, and ignore on
-			// subsequent attempts
-			for (int i = 0; i < object.getTarget().getParameters().size(); i++) {
-				if (CommonUtilities.isArgumentToBeAltered(object.getTarget().getParameters().get(i), object.getArguments().get(i), ctx))
-					altered = true;
-			}
-			// if no work needs to be done, continue with the visiting
-			if (!altered)
-				return;
-			// set up the new statement list if needed
-			List<Statement> statementArray;
-			if (getReturnData() == null) {
-				statementArray = new ArrayList<Statement>();
-				setReturnData(statementArray);
-			} else
-				statementArray = (List<Statement>) getReturnData();
-			// we need to create a local variable for the return of the function invocation
-			String temporary = ctx.nextTempName();
-			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
-			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
-				localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-			localDeclaration.setContainer(currentStatementContainer);
-			DeclarationExpression declarationExpression = factory.createDeclarationExpression();
-			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
-				declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-			Field field = factory.createField();
-			field.setName(temporary);
-			field.setType(object.getType());
-			field.setIsNullable(object.isNullable());
-			// we need to create the member access
-			MemberName nameExpression = factory.createMemberName();
-			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
-				nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-			nameExpression.setMember(field);
-			nameExpression.setId(field.getName());
-			// we need to create an assignment statement
-			AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
-			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
-				assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-			assignmentStatement.setContainer(currentStatementContainer);
-			Assignment assignment = factory.createAssignment();
-			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
-				assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-			assignmentStatement.setAssignment(assignment);
-			assignment.setLHS(nameExpression);
-			assignment.setRHS(object);
-			// add the assignment to the declaration statement block
-			StatementBlock declarationBlock = factory.createStatementBlock();
-			declarationBlock.setContainer(currentStatementContainer);
-			declarationBlock.getStatements().add(assignmentStatement);
-			// add the declaration statement block to the field
-			field.setInitializerStatements(declarationBlock);
-			field.setHasSetValuesBlock(true);
-			// add the field to the declaration expression
-			declarationExpression.getFields().add(field);
-			// connect the declaration expression to the local declaration
-			localDeclaration.setExpression(declarationExpression);
-			// add the local variable to the statement list
-			statementArray.add(localDeclaration);
-			// now replace the function invocation with the temporary variable
-			if (getParent() instanceof List)
-				((List<EObject>) getParent()).set(getParentSlotIndex(), nameExpression);
-			else
-				((EObjectImpl) getParent()).slotSet(getParentSlotIndex(), nameExpression);
-		}
 	}
 
 	// this reorganization logic for statements might need labels. We will check to see if any exit or continue statements

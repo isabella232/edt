@@ -46,6 +46,9 @@ public abstract class EglContext extends TemplateContext {
 	// The output stream for generators using this Context.
 	private TabbedWriter out;
 
+	// this is the nesting of expressionReorganizing in progress flags
+	private boolean expressionReorganizing;
+
 	// this is the nesting of exit/continue labels for various statements
 	private Stack<Label> labelStack;
 
@@ -101,6 +104,14 @@ public abstract class EglContext extends TemplateContext {
 		this.out = out;
 	}
 
+	public boolean isExpressionReorganizing() {
+		return expressionReorganizing;
+	}
+
+	public void setExpressionReorganizing(boolean expressionReorganizing) {
+		this.expressionReorganizing = expressionReorganizing;
+	}
+
 	/**
 	 * @param String The exit and continue statement labels we expect to be pushing on the stack
 	 */
@@ -108,9 +119,6 @@ public abstract class EglContext extends TemplateContext {
 		this.labelStack.push(label);
 	}
 
-	/**
-	 * @param String The exit and continue statement labels we expect to be popping off the stack
-	 */
 	public void popLabelStack() {
 		this.labelStack.pop();
 	}
@@ -470,7 +478,7 @@ public abstract class EglContext extends TemplateContext {
 	public Template getTemplateForClassifier(Classifier clazz) {
 		return getTemplateRaw(clazz.getTypeSignature());
 	}
-	
+
 	public Annotation getLastStatementLocation() {
 		return lastStatementLocation;
 	}
