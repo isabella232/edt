@@ -63,7 +63,7 @@ public class StringLiteralTemplate extends JavaScriptTemplate {
 				buf.setCharAt(i, '\\');
 				buf.insert(i + 1, "u" + hexValue);
 				i += 5;
-			} else if ((c == '"') || (c == '\\')) {
+			} else if (c == '"') {
 				// Insert a slash before the character and increment
 				// the counter to account for the new character.
 				buf.insert(i, '\\');
