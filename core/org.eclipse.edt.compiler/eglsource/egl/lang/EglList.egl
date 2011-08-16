@@ -199,4 +199,23 @@ externalType EglList type ClassType {
 	 * @throws ArraySizeException  if the specified size is greater than the maximum size.
 	 */
 	function resize(size EglInt in);
+
+	/**
+	 * Sorts the elements of the array in order from smallest to largest.
+	 *
+	 * @param sortFunction  a function capable of comparing two elements.
+	 * @throws InvocationException when the sort function can't be called.
+	 */
+	function sort(sortFunction SortFunction in);
+end
+
+/**
+ * The delegate used by EglList.sort() to compare elements.
+ *
+ * @param a  the first value.
+ * @param b  the second value.
+ * @return zero if a == b, a positive number if a > b, or a negative number if a < b.
+ */
+Delegate
+	SortFunction(a any in, b any in) returns (int)
 end
