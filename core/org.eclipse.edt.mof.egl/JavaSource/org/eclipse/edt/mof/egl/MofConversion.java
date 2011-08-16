@@ -189,6 +189,7 @@ public interface MofConversion {
 
 	String Type_Element = EGL_reflect_package+".Element";
 	String Type_EnumerationEntry = EGL_reflect_package+".EnumerationEntry";
+	String Type_ConstantField = EGL_reflect_package+".ConstantField";
 	String Type_Field = EGL_reflect_package+".Field";
 	String Type_StructuredField = EGL_reflect_package+".StructuredField";
 	String Type_Type = EGL_reflect_package+".Type";
