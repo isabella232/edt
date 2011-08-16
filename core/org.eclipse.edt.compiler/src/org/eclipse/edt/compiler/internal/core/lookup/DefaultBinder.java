@@ -4290,7 +4290,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 	
 	
 	private String getQualAnyExceptionString() {
-		return InternUtil.intern(IEGLConstants.EGL_CORE_PACKAGE + "." + IEGLConstants.EGL_ANYEXCEPTION);
+		return InternUtil.intern("egl.lang" + "." + IEGLConstants.EGL_ANYEXCEPTION);
 	}
 	
 	private boolean isAnyException(ITypeBinding type) {
@@ -4298,7 +4298,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 			return false;
 		}
 		
-		if (type.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING) {
+		if (type.getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
 			IPartBinding part =  (IPartBinding) type;
 			if (InternUtil.intern(part.getPackageQualifiedName()) == getQualAnyExceptionString()) {
 				return true;
