@@ -11,21 +11,13 @@
  *******************************************************************************/
 package eglx.lang;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Date;
 import java.util.Locale;
 
-import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.EglException;
-import org.eclipse.edt.javart.Executable;
-import org.eclipse.edt.javart.JavartException;
-import org.eclipse.edt.javart.RunUnit;
+import org.eclipse.edt.javart.*;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.resources.Platform;
@@ -38,16 +30,6 @@ public class SysLib extends ExecutableBase {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	private static RunUnit staticRu;
-
-	/**
-	 * The stream for startLog and errorlog system functions
-	 */
-	private static transient PrintWriter outputStream = null;
-
-	/**
-	 * Current Exception
-	 */
-	public EglException currentException = null;
 
 	/**
 	 * Constructor
@@ -67,7 +49,7 @@ public class SysLib extends ExecutableBase {
 			throw new NullValueException();
 		String value = staticRu.getProperties().get(propertyName.trim());
 		if (value == null)
-			value = java.lang.System.getProperty(propertyName.trim());
+			value = System.getProperty(propertyName.trim());
 		return value;
 	}
 
@@ -91,41 +73,6 @@ public class SysLib extends ExecutableBase {
 		catch (InterruptedException e) {
 			// no-op
 		}
-	}
-
-	/**
-	 * The startLog function opens an error log file.
-	 */
-	public static void startLog(String filename) throws JavartException {
-		if (filename == null)
-			throw new NullValueException();
-		try {
-			outputStream = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)), true);
-		}
-		catch (IOException e) {
-			JavartUtil.throwRuntimeException(Message.SYSTEM_FUNCTION_ERROR,
-				JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.startLog", e }), null);
-		}
-	}
-
-	/**
-	 * The errorLog() function adds a message to the current log file.
-	 */
-	public static void errorLog(String errorMsg) {
-		if (errorMsg == null)
-			throw new NullValueException();
-		if (outputStream == null)
-			return;
-		// DateFormatter is a com.ibm.icu class...fix this
-		outputStream.println(staticRu.getLocalizedText().getDateFormatter().format(new Date()));
-		outputStream.println(errorMsg);
-	}
-
-	/**
-	 * Returns true if startLog has been called successfully.
-	 */
-	public static boolean _errorLogIsOn() {
-		return outputStream != null;
 	}
 
 	/**
@@ -319,14 +266,13 @@ public class SysLib extends ExecutableBase {
 	 * Write to standard output
 	 */
 	public static void writeStdout(String output) {
-		java.lang.System.out.println(output);
+		System.out.println(output);
 	}
 
 	/**
 	 * Write to standard error
 	 */
 	public static void writeStderr(String output) {
-		java.lang.System.err.println(output);
+		System.err.println(output);
 	}
-
 }
