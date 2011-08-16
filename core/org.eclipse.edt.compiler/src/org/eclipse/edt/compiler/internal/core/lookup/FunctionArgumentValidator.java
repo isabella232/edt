@@ -183,6 +183,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		specialCaseArgumentCheckers.put(new ArgInfo(new FunctionIdentifier(null, null, ArrayTypeBinding.APPENDALL.getName()), 1), new AppendAllArgumentChecker());
 		specialCaseArgumentCheckers.put(new ArgInfo(new FunctionIdentifier(new String[] {"egl", "io", "dli"}, "DLILib", "EGLTDLI"), 2), new EGLTDLIArgumentChecker());
 		specialCaseArgumentCheckers.put(new ArgInfo(new FunctionIdentifier(null, null, ArrayTypeBinding.INSERTELEMENT.getName()), 1), new ArrayElementArgumentChecker());
+		specialCaseArgumentCheckers.put(new ArgInfo(new FunctionIdentifier(null, null, ArrayTypeBinding.INDEXOFELEMENT1.getName()), 1), new ArrayElementArgumentChecker());
 		specialCaseArgumentCheckers.put(new ArgInfo(new FunctionIdentifier(new String[] {"egl", "core"}, "SysLib", "BYTES"), 1), new BytesArgumentChecker());
 		specialCaseArgumentCheckers.put(new ArgInfo(new FunctionIdentifier(new String[] {"egl", "core"}, "SysLib", "CONVERT"), 1), new ConvertArgumentChecker());
 		specialCaseArgumentCheckers.put(new ArgInfo(new FunctionIdentifier(new String[] {"egl", "core"}, "SysLib", "CONVERTBIDI"), 1), new ConvertBidiArgumentChecker());

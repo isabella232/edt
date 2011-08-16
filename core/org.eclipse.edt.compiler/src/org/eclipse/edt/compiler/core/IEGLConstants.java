@@ -1107,6 +1107,7 @@ public interface IEGLConstants {
 	public static final String SYSTEM_WORD_SETCLOBFROMSTRINGATPOSITION = "setClobFromStringAtPosition";	//$NON-NLS-1$
 	public static final String SYSTEM_WORD_SETCURRENTARRAYCOUNT = "setCurrentArrayCount";	//$NON-NLS-1$
 	public static final String SYSTEM_WORD_SETCURRENTDATABASE = "setCurrentDatabase";	//$NON-NLS-1$
+	public static final String SYSTEM_WORD_SETELEMENT = "setElement";	//$NON-NLS-1$
 	public static final String SYSTEM_WORD_SETELEMENTSEMPTY = "setElementsEmpty";	//$NON-NLS-1$
 	public static final String SYSTEM_WORD_SETERROR = "setError";	//$NON-NLS-1$
 	public static final String SYSTEM_WORD_SETFIELD = "setField";	//$NON-NLS-1$
