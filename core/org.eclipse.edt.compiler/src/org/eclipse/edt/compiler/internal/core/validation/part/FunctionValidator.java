@@ -401,12 +401,12 @@ public class FunctionValidator extends AbstractASTVisitor {
 		checkForExternalTypeParm(functionParameter, parmType);
 		if(ITypeBinding.PRIMITIVE_TYPE_BINDING == parmType.getKind()) {
 			switch(((PrimitiveTypeBinding) parmType).getPrimitive().getType()) {
-			case Primitive.NUMBER_PRIMITIVE:
-				problemRequestor.acceptProblem(
-            		functionParameter,
-					IProblemRequestor.FUNCTION_PARAMETER_MODIFIER_NOT_ALLOWED_WITH_LOOSE_TYPE,
-					new String[] {IEGLConstants.KEYWORD_OUT.toUpperCase(), IEGLConstants.KEYWORD_NUMBER.toUpperCase()});
-				break;
+//			case Primitive.NUMBER_PRIMITIVE:
+//				problemRequestor.acceptProblem(
+//            		functionParameter,
+//					IProblemRequestor.FUNCTION_PARAMETER_MODIFIER_NOT_ALLOWED_WITH_LOOSE_TYPE,
+//					new String[] {IEGLConstants.KEYWORD_OUT.toUpperCase(), IEGLConstants.KEYWORD_NUMBER.toUpperCase()});
+//				break;
 			case Primitive.INTERVAL_PRIMITIVE:
 				if(((PrimitiveTypeBinding) parmType).getTimeStampOrIntervalPattern() == null) {
 					problemRequestor.acceptProblem(

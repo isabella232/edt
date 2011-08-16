@@ -179,9 +179,6 @@ public class BindingUtilities {
     	if(ITypeBinding.PRIMITIVE_TYPE_BINDING == typeBinding.getKind()) {
     		PrimitiveTypeBinding primTypeBinding = (PrimitiveTypeBinding) typeBinding;
     		Primitive prim = primTypeBinding.getPrimitive();
-    		if(Primitive.NUMBER == prim) {
-    			return true;
-    		}
     		if(Primitive.CHAR == prim   || Primitive.MBCHAR == prim ||
     		   Primitive.DBCHAR == prim ||	Primitive.HEX == prim ||
     		   Primitive.UNICODE == prim) {

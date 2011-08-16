@@ -113,13 +113,7 @@ public class PrimitiveTypeValidator {
 										// comapared to the primitive values length, is valid
 			}
 		}
-	 
-		
-	  //number should only be used as a paramter for a Function
-		if(primitiveInt == Primitive.NUMBER_PRIMITIVE){
-			passedPrimitiveType.getParent().accept(new NumberASTVisitor());	
-		}
-		
+	 		
 	  checkTimestampOrIntervalPattern();
 	  
 	  if( primitiveInt == Primitive.INTERVAL_PRIMITIVE) {
@@ -1241,46 +1235,4 @@ public class PrimitiveTypeValidator {
  			};	
 
  	 			
- 	private static class NumberASTVisitor extends AbstractASTVisitor{
-		public boolean visit(ClassDataDeclaration classDataDeclaration) {
-			doError();
-			return false;
-		}
-		
-		public boolean visit(ArrayType arrayType) {
-			arrayType.getParent().accept(new NumberASTVisitor());
-			return false;
-		}
-		
-		public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
-			doError();
-			return false;
-		}
-		
-		public boolean visit(ProgramParameter programParameter) {
-			doError();
-			return false;
-		}
-		
-		public boolean visit(StructureItem structureItem) {
-			doError();
-			return false;
-		}	
-		
-		public boolean visit(ReturnsDeclaration returnStatement) {
-			doError();
-			return false;
-		}
-		
-		public boolean visit(IsAExpression isAExpression) {
-			doError();
-			return false;
-		}
-		
-		protected void doError(){
-			problemRequestor.acceptProblem(passedPrimitiveType,
-					IProblemRequestor.NUMBER_USED_INCORRECTLY );
-		}
-
-	}
 }

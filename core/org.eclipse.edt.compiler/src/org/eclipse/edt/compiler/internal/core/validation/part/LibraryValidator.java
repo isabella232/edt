@@ -120,17 +120,7 @@ public class LibraryValidator extends FunctionContainerValidator {
 					
 					int primitiveLength = ((PrimitiveTypeBinding)binding).getLength();
 					
-	
-		        	if (primitiveInt == Primitive.NUMBER_PRIMITIVE ){
-		        		problemRequestor.acceptProblem(parmType,
-		        				IProblemRequestor.LIBRARY_PARAMETER_TYPES_NUMBER_IS_INVALID,
-			                       new String[] {
-	                            parmType.getCanonicalName(),
-	                            functionParameter.getName().getCanonicalName(),
-	                            nestedFunction.getName().getCanonicalName(),
-	                            libraryName});
-		        	}
-		        	
+			        	
 		        	if(primitiveInt == Primitive.BIN_PRIMITIVE || 
 		        			primitiveInt == Primitive.DECIMAL_PRIMITIVE || 
 		        			primitiveInt == Primitive.NUM_PRIMITIVE || 

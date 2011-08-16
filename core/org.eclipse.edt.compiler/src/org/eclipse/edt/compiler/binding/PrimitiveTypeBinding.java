@@ -86,6 +86,7 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 	private static final Set REFERENCE_PRIMITIVES = new HashSet();
 	static {
 		REFERENCE_PRIMITIVES.add(Primitive.ANY);
+		REFERENCE_PRIMITIVES.add(Primitive.NUMBER);
 		REFERENCE_PRIMITIVES.add(Primitive.BLOB);
 		REFERENCE_PRIMITIVES.add(Primitive.CLOB);
 	}
