@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-
-
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -33,7 +31,7 @@ public class FieldTemplate extends JavaTemplate {
 		// write out the debug extension data
 		CommonUtilities.generateSmapExtension(field, ctx);
 		// process the field
-		if(field.getContainer() instanceof Type){
+		if (field.getContainer() instanceof Type) {
 			ctx.invoke(genXmlTransient, field.getContainer(), out);
 		}
 		ctx.invokeSuper(this, genDeclaration, field, ctx, out);
@@ -45,7 +43,7 @@ public class FieldTemplate extends JavaTemplate {
 	}
 
 	public void genAnnotations(Field field, Context ctx, TabbedWriter out) {
-		for(Annotation annot : field.getAnnotations()){
+		for (Annotation annot : field.getAnnotations()) {
 			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field);
 		}
 	}
@@ -71,9 +69,14 @@ public class FieldTemplate extends JavaTemplate {
 			} else
 				out.print("null");
 		} else {
-			if (field.isNullable() || TypeUtils.isReferenceType(field.getType()))
+			if (field.isNullable())
 				ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
-			else if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
+			else if (TypeUtils.isReferenceType(field.getType())) {
+				if (field.hasSetValuesBlock())
+					ctx.invoke(genInstantiation, field.getType(), ctx, out, field);
+				else
+					ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
+			} else if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
 				ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
 			else
 				ctx.invoke(genInstantiation, field.getType(), ctx, out, field);

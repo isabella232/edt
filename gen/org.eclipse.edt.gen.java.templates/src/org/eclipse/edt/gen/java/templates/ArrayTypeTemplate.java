@@ -18,22 +18,9 @@ import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.Classifier;
-import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Type;
 
 public class ArrayTypeTemplate extends JavaTemplate {
-
-	public void genInstantiation(ArrayType type, Context ctx, TabbedWriter out) {
-		out.print("null");
-	}
-
-	public void genInstantiation(ArrayType type, Context ctx, TabbedWriter out, Field arg) {
-		if (arg.hasSetValuesBlock()) {
-			genRuntimeTypeName(type, ctx, out, TypeNameKind.JavaImplementation);
-			out.print("()");
-		} else
-			out.print("null");
-	}
 
 	public void genConversionOperation(ArrayType type, Context ctx, TabbedWriter out, AsExpression arg) {
 		// check to see if a conversion is required
