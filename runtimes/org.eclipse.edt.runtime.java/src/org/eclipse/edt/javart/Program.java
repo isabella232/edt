@@ -13,6 +13,7 @@ package org.eclipse.edt.javart;
 
 import java.util.List;
 
+import egl.lang.AnyException;
 import egl.lang.EglAny;
 import egl.lang.AnyValue;
 
@@ -24,7 +25,7 @@ public interface Program extends Executable {
 	void _transferToProgram(String name, AnyValue input) throws Transfer;
 	void _transferToTransaction(String name, AnyValue input, boolean doCommit) throws Transfer;
 	void _finishTransfer();
-	EglAny[] _parameters() throws JavartException;
-	boolean _retainOnExit(int action) throws JavartException;
+	EglAny[] _parameters() throws AnyException;
+	boolean _retainOnExit(int action) throws AnyException;
 	AnyValue _inputRecord();
 }

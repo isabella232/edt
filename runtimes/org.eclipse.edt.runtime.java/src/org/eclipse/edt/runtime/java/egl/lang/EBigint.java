@@ -15,9 +15,10 @@ import java.math.BigDecimal;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
 
+import egl.lang.AnyException;
 import egl.lang.AnyNumber;
+import egl.lang.NullValueException;
 
 public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -39,9 +40,9 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 	 * @param value
 	 * @param args
 	 * @return
-	 * @throws JavartException
+	 * @throws AnyException
 	 */
-	public static Long ezeCast(Object value) throws JavartException {
+	public static Long ezeCast(Object value) throws AnyException {
 		return (Long) EglAny.ezeCast(value, "asBigint", EBigint.class, null, null);
 	}
 
@@ -81,7 +82,7 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return value.longValue();
 	}
 
-	public static Long asBigint(BigDecimal value) throws JavartException {
+	public static Long asBigint(BigDecimal value) throws AnyException {
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
@@ -93,7 +94,7 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return result;
 	}
 
-	public static Long asBigint(String value) throws JavartException {
+	public static Long asBigint(String value) throws AnyException {
 		return asBigint(EDecimal.asDecimal(value));
 	}
 
@@ -101,49 +102,49 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static BigDecimal asNumber(Long value) throws JavartException {
+	public static BigDecimal asNumber(Long value) throws AnyException {
 		if (value == null)
 			return null;
 		return EDecimal.asDecimal(value);
 	}
 
-	public static Long plus(Long op1, Long op2) throws JavartException {
+	public static Long plus(Long op1, Long op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return BigDecimal.valueOf(op1).add(BigDecimal.valueOf(op2)).longValueExact();
 	}
 
-	public static Long minus(Long op1, Long op2) throws JavartException {
+	public static Long minus(Long op1, Long op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return BigDecimal.valueOf(op1).subtract(BigDecimal.valueOf(op2)).longValueExact();
 	}
 
-	public static BigDecimal divide(Long op1, Long op2) throws JavartException {
+	public static BigDecimal divide(Long op1, Long op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return BigDecimal.valueOf(op1).divide(BigDecimal.valueOf(op2), EDecimal.BIGDECIMAL_RESULT_SCALE, EDecimal.ROUND_BD);
 	}
 
-	public static Long multiply(Long op1, Long op2) throws JavartException {
+	public static Long multiply(Long op1, Long op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return BigDecimal.valueOf(op1).multiply(BigDecimal.valueOf(op2)).longValueExact();
 	}
 
-	public static Long remainder(Long op1, Long op2) throws JavartException {
+	public static Long remainder(Long op1, Long op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return op1 % op2;
 	}
 
-	public static Double power(Long op1, Long op2) throws JavartException {
+	public static Double power(Long op1, Long op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return StrictMath.pow( op1, op2 );
 	}
 
-	public static int compareTo(Long op1, Long op2) throws JavartException {
+	public static int compareTo(Long op1, Long op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			throw new NullValueException(); 
 		return op1.compareTo(op2);

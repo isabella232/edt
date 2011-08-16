@@ -13,7 +13,7 @@ package org.eclipse.edt.javart.util;
 
 import org.eclipse.edt.javart.ByteStorage;
 import org.eclipse.edt.javart.ConversionAttributeSet;
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 import org.eclipse.edt.javart.resources.Trace;
 
 /**
@@ -154,7 +154,7 @@ public class ByteFormatter
 		return ch;
 	}
 
-	public static void printBytes( byte[] bytes, String header, ConversionAttributeSet attrs ) throws JavartException
+	public static void printBytes( byte[] bytes, String header, ConversionAttributeSet attrs ) throws AnyException
 	{
 		if( bytes != null )
 		{
@@ -166,7 +166,7 @@ public class ByteFormatter
 		}
 	}
 
-	public static void traceBytes( byte[] bytes, int dumpSize, String header, ConversionAttributeSet attrs, Trace tracer ) throws JavartException
+	public static void traceBytes( byte[] bytes, int dumpSize, String header, ConversionAttributeSet attrs, Trace tracer ) throws AnyException
 	{
 		if( bytes != null )
 		{
@@ -179,12 +179,12 @@ public class ByteFormatter
 		}
 	}
 	
-	public static void traceBytes( byte[] bytes, String header, ConversionAttributeSet attrs, Trace tracer ) throws JavartException
+	public static void traceBytes( byte[] bytes, String header, ConversionAttributeSet attrs, Trace tracer ) throws AnyException
 	{
 		traceBytes( bytes, MAX_DISPLAY_LEN, header, attrs, tracer );
 	}
 	
-	public static void traceBytes( byte[] bytes, Trace tracer ) throws JavartException
+	public static void traceBytes( byte[] bytes, Trace tracer ) throws AnyException
 	{
 		if( bytes != null )
 		{

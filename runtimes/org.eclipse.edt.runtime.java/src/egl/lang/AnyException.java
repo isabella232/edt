@@ -11,14 +11,168 @@
  *******************************************************************************/
 package egl.lang;
 
+import java.lang.reflect.Field;
 
-public interface AnyException extends EglAny
-{
-	String getMessageID();
+import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.TypeConstraints;
+import org.eclipse.edt.runtime.java.egl.lang.EglAny;
+
+public class AnyException extends RuntimeException implements egl.lang.EglAny {
+	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
+
+	protected String message;
+
+	/**
+	 * The message ID.
+	 */
+	protected String id;
+
+	public AnyException() {
+		this( "", "" );
+	}
+
+	public AnyException(String id) {
+		this( id, "" );
+	}
+
+	public AnyException(String id, String message) {
+		super( message );
+		this.message = message;
+		this.id = id;
+		ezeInitialize();
+	}
+
+	public AnyException(Throwable ex) {
+		super(ex);
+		id = "";
+		message = ex.getLocalizedMessage();
+		if ( message == null || message.length() == 0 )
+		{
+			message = ex.getMessage();
+		}
+		if ( message == null || message.length() == 0 )
+		{
+			message = ex.toString();
+		}
+		ezeInitialize();
+	}
+
+	public Object clone() throws CloneNotSupportedException {
+		AnyException ezeClone = (AnyException) super.clone();
+		return ezeClone;
+	}
+
+	@Override
+	public void ezeInitialize() {}
+
+	@Override
+	public egl.lang.EglAny ezeGet(String name) throws AnyException {
+		try {
+			Field field = this.getClass().getField(name);
+			Object value = field.get(this);
+			return value instanceof egl.lang.EglAny ? (egl.lang.EglAny) value : EglAny.ezeBox(value);
+		}
+		catch (Exception e) {
+			DynamicAccessException dax = new DynamicAccessException();
+			dax.key = name;
+			throw dax;
+		}
+	}
+
+	@Override
+	public String ezeName() {
+		return this.getClass().getSimpleName();
+	}
+
+	@Override
+	public void ezeSet(String name, Object value) throws AnyException {
+		try {
+			Field field = this.getClass().getField(name);
+			field.set(this, value);
+		}
+		catch (Exception e) {
+			DynamicAccessException dax = new DynamicAccessException();
+			dax.key = name;
+			throw dax;
+		}
+	}
+
+	@Override
+	public TypeConstraints ezeTypeConstraints(String fieldName) {
+		return null;
+	}
+
+	@Override
+	public String ezeTypeSignature() {
+		return this.getClass().getName();
+	}
+
+	public String toString() {
+		String msg = getLocalizedMessage();
+		if (msg == null) {
+			return ezeTypeSignature();
+		} else {
+			String typeSig = ezeTypeSignature();
+			return new StringBuilder(typeSig + 1 + msg.length()).append(typeSig).append(' ').append(msg).toString();
+		}
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	@Override
+	public String getMessage() {
+		if ( message != null && message.length() > 0 )
+			return message;
+
+		String superMessage = super.getMessage();
+		if ( superMessage != null && superMessage.length() > 0 )
+			return superMessage;
+		
+		return "";
+	}
 	
-	String getMessage();
+	/**
+	 * @return The ID of the error message.
+	 */
+	public String getMessageID()
+	{
+		return id;
+	}
 	
-	void setMessageID(String id);
+	public void setMessageID(String id) {
+		this.id = id;
+	}
+
+	@Override
+	public AnyException ezeUnbox() {
+		return this;
+	}
+
+	/**
+	 * To improve performance, we override the usual implementation of this method,
+	 * which is VERY expensive.  But unfortunately this means a stack trace for this
+	 * exception will not be available.  That's OK since EGL users don't see them
+	 * anyway.
+	 * <P>
+	 * For debugging, you can get stack traces in your AnyExceptions (and loose
+	 * the performance improvement) by setting the system property 
+	 * org.eclipse.edt.javart.StackTraces to true.  
+	 *
+	 * @return this object.
+	 */
+	public Throwable fillInStackTrace()
+	{
+		if ( NO_STACK_TRACES )
+		{
+			return this;
+		}
+		return super.fillInStackTrace();
+	}
 	
-	void setMessage(String message);
+	/**
+	 * Determines if fillInStackTrace is optimized or not.
+	 */
+	public static final boolean NO_STACK_TRACES = !Boolean.getBoolean( "org.eclipse.edt.javart.StackTraces" );
 }

@@ -17,7 +17,7 @@ import egl.lang.AnyValue;
 /**
  * Exception to be thrown when one program transfers to another.
  */
-public class Transfer extends EglThrowable
+public class Transfer extends ControlFlow
 {
 	/**
 	 * The version ID used in serialization.

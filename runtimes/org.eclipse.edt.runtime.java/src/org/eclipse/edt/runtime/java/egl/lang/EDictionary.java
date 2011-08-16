@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 
 /**
  * 
@@ -68,7 +68,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	/**
 	 * Copy constructor
 	 */
-	public EDictionary(EDictionary other) throws JavartException {
+	public EDictionary(EDictionary other) throws AnyException {
 		this(other.caseSensitive, other.order);
 		insertAll((EDictionary) other);
 	}
@@ -274,7 +274,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	/**
 	 * Return a DynamicArray of the keys (StringItems) that exist in this dictionary in the preferred order.
 	 */
-	public EglList<java.lang.String> getKeys() throws JavartException {
+	public EglList<java.lang.String> getKeys() throws AnyException {
 		EglList<java.lang.String> keys = new EglList<java.lang.String>();
 		for (java.lang.String key : this.map.keySet()) {
 			keys.add(key);
@@ -286,7 +286,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	/**
 	 * Return a DynamicArray of the values that exist in this dictionary in the preferred order.
 	 */
-	public EglList<Object> getValues() throws JavartException {
+	public EglList<Object> getValues() throws AnyException {
 		EglList<Object> vals = new EglList<Object>();
 		for (Object value : this.map.values()) {
 			vals.add(value);
@@ -298,7 +298,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	/**
 	 * Insert all the entries another dictionary into this dictionary.
 	 */
-	public void insertAll(egl.lang.EDictionary d) throws JavartException {
+	public void insertAll(egl.lang.EDictionary d) throws AnyException {
 		// d.insertAll(d) is a NOOP
 		if (d == this) {
 			return;
@@ -316,7 +316,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	 * Remove the entry with a specified key from the dictionary
 	 */
 	@Override
-	public void removeElement(java.lang.String key) throws JavartException {
+	public void removeElement(java.lang.String key) throws AnyException {
 		if (!this.caseSensitive) {
 			key = key.toLowerCase();
 		}
@@ -404,7 +404,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 		return value;
 	}
 
-	public egl.lang.EglAny ezeGet(String name) throws JavartException {
+	public egl.lang.EglAny ezeGet(String name) throws AnyException {
 		Object value = get(name);
 		return value instanceof egl.lang.EglAny ? (egl.lang.EglAny) value : EglAny.ezeBox(value);
 	}

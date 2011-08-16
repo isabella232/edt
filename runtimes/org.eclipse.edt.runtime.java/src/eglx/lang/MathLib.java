@@ -16,7 +16,7 @@ import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 
@@ -98,7 +98,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * The constructor.
 	 */
-	public MathLib(RunUnit ru) throws JavartException {
+	public MathLib(RunUnit ru) throws AnyException {
 		super(ru);
 		this.staticRu = ru;
 	}
@@ -139,7 +139,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes the arc cos of <code>numericField</code>.
 	 */
-	public static Double acos(Double numericField) throws JavartException {
+	public static Double acos(Double numericField) throws AnyException {
 		if (numericField < -1 || numericField > 1)
 			return Double.NaN;
 		return StrictMath.acos(numericField);
@@ -148,7 +148,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes the arc sin of <code>numericField</code>.
 	 */
-	public static Double asin(Double numericField) throws JavartException {
+	public static Double asin(Double numericField) throws AnyException {
 		if (numericField < -1 || numericField > 1)
 			return Double.NaN;
 		return StrictMath.asin(numericField);
@@ -157,7 +157,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes the arc tan of <code>numericField</code>.
 	 */
-	public static Double atan(Double numericField) throws JavartException {
+	public static Double atan(Double numericField) throws AnyException {
 		return StrictMath.atan(numericField);
 	}
 
@@ -194,7 +194,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes the hyperbolic cosine of <code>numericField</code>.
 	 */
-	public static Double cosh(Double numericField) throws JavartException {
+	public static Double cosh(Double numericField) throws AnyException {
 		return StrictMath.cosh(numericField);
 	}
 
@@ -232,7 +232,7 @@ public class MathLib extends ExecutableBase {
 	 * Breaks <code>numericField</code> into its mantissa, which is stored in <code>result</code>, and its exponent, which is
 	 * stored in <code>exponent</code>.
 	 */
-	public static Double frexp(Double numericField, AnyBoxedObject<Integer> exponent) throws JavartException {
+	public static Double frexp(Double numericField, AnyBoxedObject<Integer> exponent) throws AnyException {
 		// Get the number to be split.
 		double value = numericField;
 		// Extract the exponent.
@@ -261,7 +261,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Multiplies <code>numericField</code> by 2<sup><code>power</code></sup> and stores the answer in <code>result</code>.
 	 */
-	public static Double ldexp(Double numericField, Integer pow) throws JavartException {
+	public static Double ldexp(Double numericField, Integer pow) throws AnyException {
 		// Convert the value of numericField to its bit pattern, get the current
 		// exponent, and remove it from the bit string.
 		double value = numericField;
@@ -281,7 +281,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes the log of <code>numericField</code>. the natural logarithm (base e) of <code>numericField</code>
 	 */
-	public static Double log(Double numericField) throws JavartException {
+	public static Double log(Double numericField) throws AnyException {
 		if (numericField <= 0)
 			return Double.NaN;
 		return StrictMath.log(numericField);
@@ -290,7 +290,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes the log of <code>numericField</code>. the logarithm (base 10) of <code>numericField</code>
 	 */
-	public static Double log10(Double numericField) throws JavartException {
+	public static Double log10(Double numericField) throws AnyException {
 		if (numericField <= 0)
 			return Double.NaN;
 		// Compute the log and return the result. Since Java has no
@@ -367,7 +367,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Stores the integral part of <code>op1</code> in <code>op2</code> and the fractional part in <code>result</code>
 	 */
-	public static Double modf(Double numericField1, AnyBoxedObject<Long> numericField2) throws JavartException {
+	public static Double modf(Double numericField1, AnyBoxedObject<Long> numericField2) throws AnyException {
 		// Get the number and split it.
 		BigDecimal bd = new BigDecimal(numericField1);
 		BigInteger intPart = bd.toBigInteger();
@@ -380,7 +380,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes <code>op1</code> to the power of <code>op2</code>.
 	 */
-	public static Double pow(Double op1, Double op2) throws JavartException {
+	public static Double pow(Double op1, Double op2) throws AnyException {
 		// Check the args. If op1 is 0, op2 must be > 0. If op1 is
 		// negative, op2 must be a whole number.
 		if (op1 == 0 && op2 <= 0)
@@ -509,14 +509,14 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes the hyperbolic sine of <code>numericField</code>.
 	 */
-	public static Double sinh(Double numericField) throws JavartException {
+	public static Double sinh(Double numericField) throws AnyException {
 		return StrictMath.sinh(numericField);
 	}
 
 	/**
 	 * Computes the squareroot of <code>numericField</code>.
 	 */
-	public static Double sqrt(Double numericField) throws JavartException {
+	public static Double sqrt(Double numericField) throws AnyException {
 		if (numericField < 0)
 			return Double.NaN;
 		return StrictMath.sqrt(numericField);
@@ -532,7 +532,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Computes the hyperbolic tangent of <code>numericField</code>.
 	 */
-	public static Double tanh(Double numericField) throws JavartException {
+	public static Double tanh(Double numericField) throws AnyException {
 		return StrictMath.tanh(numericField);
 	}
 }

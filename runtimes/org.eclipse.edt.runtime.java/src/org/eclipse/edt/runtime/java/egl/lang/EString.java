@@ -18,9 +18,10 @@ import java.util.regex.PatternSyntaxException;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
+
+import egl.lang.*;
 
 public class EString extends AnyBoxedObject<String> {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -50,7 +51,7 @@ public class EString extends AnyBoxedObject<String> {
 		return new EString(value, length);
 	}
 
-	public static String ezeCast(Object value, Integer... args) throws JavartException {
+	public static String ezeCast(Object value, Integer... args) throws AnyException {
 		return (String) EglAny.ezeCast(value, "asString", EString.class, new Class[] { Integer[].class }, args);
 	}
 
@@ -163,7 +164,7 @@ public class EString extends AnyBoxedObject<String> {
 				return asString(formatter.format(cal.getTime()), length);
 			}
 			catch (IllegalArgumentException iax) {
-				throw new TimestampFormatException();
+				throw new InvalidPatternException();
 			}
 			finally {
 				if (reset)
@@ -176,17 +177,17 @@ public class EString extends AnyBoxedObject<String> {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static BigDecimal asNumber(String value, Integer... length) throws JavartException {
+	public static BigDecimal asNumber(String value, Integer... length) throws AnyException {
 		if (value == null)
 			return null;
 		return EDecimal.asDecimal(asString(value, length));
 	}
 
-	public static String plus(String op1, String op2) throws JavartException {
+	public static String plus(String op1, String op2) throws AnyException {
 		return concat(op1, op2);
 	}
 
-	public static String concat(String op1, String op2) throws JavartException {
+	public static String concat(String op1, String op2) throws AnyException {
 		if (op1 == null)
 			op1 = "";
 		if (op2 == null)
@@ -200,19 +201,19 @@ public class EString extends AnyBoxedObject<String> {
 		return op1 + op2;
 	}
 
-	public static boolean equals(String op1, String op2) throws JavartException {
+	public static boolean equals(String op1, String op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return false;
 		return op1.equals(op2);
 	}
 
-	public static boolean notEquals(String op1, String op2) throws JavartException {
+	public static boolean notEquals(String op1, String op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return false;
 		return !op1.equals(op2);
 	}
 
-	public static String substring(String str, Integer startIndex, Integer endIndex) throws JavartException {
+	public static String substring(String str, Integer startIndex, Integer endIndex) throws AnyException {
 		if (str == null || startIndex == null || endIndex == null)
 			return null;
 		int start = startIndex;
@@ -220,11 +221,11 @@ public class EString extends AnyBoxedObject<String> {
 		int max = str.length();
 		if (start < 1 || start > max) {
 			InvalidIndexException ex = new InvalidIndexException();
-			ex.indexValue = start;
+			ex.index = start;
 			throw ex;
 		} else if (end < start || end < 1 || end > max) {
 			InvalidIndexException ex = new InvalidIndexException();
-			ex.indexValue = end;
+			ex.index = end;
 			throw ex;
 		}
 		return str.substring(start - 1, end);

@@ -18,11 +18,10 @@ import java.io.Writer;
 import java.lang.reflect.Method;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 
@@ -39,7 +38,7 @@ public class XmlLib extends ExecutableBase {
 		this.staticRu = ru;
 	}
 
-	public static String convertToXML(Object storage, boolean buildDocument) throws JavartException {
+	public static String convertToXML(Object storage, boolean buildDocument) throws AnyException {
 		if (storage instanceof AnyBoxedObject) {
 			storage = ((AnyBoxedObject) storage).ezeUnbox();
 		}
@@ -49,11 +48,11 @@ public class XmlLib extends ExecutableBase {
 			return writer.toString();
 		}
 		catch (Exception e) {
-			throw new JavartException(e);
+			throw new AnyException(e);
 		}
 	}
 
-	public static void convertFromXML(String xml, final Object storage) throws JavartException {
+	public static void convertFromXML(String xml, final Object storage) throws AnyException {
 		try {
 			Object egl;
 			if (storage instanceof AnyBoxedObject) {
@@ -70,7 +69,7 @@ public class XmlLib extends ExecutableBase {
 			}
 		}
 		catch (Exception e) {
-			throw new JavartException(e);
+			throw new AnyException(e);
 		}
 	}
 

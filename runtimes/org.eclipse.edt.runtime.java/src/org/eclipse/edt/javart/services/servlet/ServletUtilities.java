@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.services.servlet;
 
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 import org.eclipse.edt.javart.json.JsonParser;
 import org.eclipse.edt.javart.json.ParseException;
 import org.eclipse.edt.javart.resources.ExecutableBase;
@@ -36,7 +36,7 @@ public class ServletUtilities
     	try {
     		request = new HttpRequest();
 			JSONToEGLConverter.convertToEgl(program, request, JsonParser.parse(object));
-		} catch (JavartException e) {
+		} catch (AnyException e) {
 //FIXME
 		} catch (ParseException e) {
 //FIXME
@@ -44,7 +44,7 @@ public class ServletUtilities
 		return request;
     }
     
-    public static void setBody(ExecutableBase program, HttpResponse response, JavartException jrte){
+    public static void setBody(ExecutableBase program, HttpResponse response, AnyException jrte){
     	response.setBody(EGLToJSONConverter.convertToJson(program, jrte).toJson());
     }
     

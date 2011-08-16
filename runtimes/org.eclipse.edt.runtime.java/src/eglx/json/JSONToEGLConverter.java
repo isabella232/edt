@@ -11,7 +11,7 @@
  *******************************************************************************/
 package eglx.json;
 
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 import org.eclipse.edt.javart.json.ValueNode;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 
@@ -25,7 +25,7 @@ public class JSONToEGLConverter
     }
 
 
-	public static void convertToEgl(final ExecutableBase program, final Object eglType, ValueNode jsonValue) throws JavartException{
+	public static void convertToEgl(final ExecutableBase program, final Object eglType, ValueNode jsonValue) throws AnyException{
 		
 /*		if( jsonValue instanceof NullNode )
 		{
@@ -83,27 +83,27 @@ public class JSONToEGLConverter
 								new Object[] { ((Value)eglType).name() } ), program );
 			}
 			jsonValue.accept(new DefaultJsonVisitor(){
-				public boolean visit(BooleanNode bool) throws JavartException {
+				public boolean visit(BooleanNode bool) throws AnyException {
 					Assign.run(program, eglType, Boolean.valueOf(bool.toJava()));
 					return false;
 				}
 				
-				public boolean visit(DecimalNode dec) throws JavartException {
+				public boolean visit(DecimalNode dec) throws AnyException {
 					Assign.run(program, eglType, dec.getDecimalValue());
 					return false;
 				}
 				
-				public boolean visit(IntegerNode i) throws JavartException {
+				public boolean visit(IntegerNode i) throws AnyException {
 					Assign.run(program, eglType, i.getBigIntegerValue());
 					return false;
 				}
 				
-				public boolean visit(FloatingPointNode fp) throws JavartException {
+				public boolean visit(FloatingPointNode fp) throws AnyException {
 					Assign.run(program, eglType, fp.getDoubleValue());
 					return false;
 				}
 				
-				public boolean visit(StringNode string) throws JavartException {
+				public boolean visit(StringNode string) throws AnyException {
 					if( eglType instanceof DateValue )
 					{
 						try
@@ -157,7 +157,7 @@ public class JSONToEGLConverter
 		}
 	}
 
-	private static void convertToDictionary(ExecutableBase program, Dictionary dictionary, ValueNode jsonValue) throws JavartException
+	private static void convertToDictionary(ExecutableBase program, Dictionary dictionary, ValueNode jsonValue) throws AnyException
 	{
 		ObjectNode jsonObject = (ObjectNode)jsonValue;
 		List pairs = jsonObject.getPairs();
@@ -168,7 +168,7 @@ public class JSONToEGLConverter
 		}
 	}
 		
-	private static void convertToArrayDictionary(ExecutableBase program, ArrayDictionary dictionary, ValueNode jsonValue) throws JavartException
+	private static void convertToArrayDictionary(ExecutableBase program, ArrayDictionary dictionary, ValueNode jsonValue) throws AnyException
 	{
 		ObjectNode jsonObject = (ObjectNode)jsonValue;
 		List pairs = jsonObject.getPairs();
@@ -203,38 +203,38 @@ public class JSONToEGLConverter
 			return isArrayDict;
 	    }
 	    
-    private static void assignDictionaryField( final ExecutableBase program, final AnyRef field, final String valueName, final ValueNode value ) throws JavartException
+    private static void assignDictionaryField( final ExecutableBase program, final AnyRef field, final String valueName, final ValueNode value ) throws AnyException
     {
 		value.accept(new DefaultJsonVisitor(){
-			public boolean visit(NullNode nul) throws JavartException {
+			public boolean visit(NullNode nul) throws AnyException {
 				field.update( null );
 				return false;
 			}
 			
-			public boolean visit(BooleanNode bool) throws JavartException {
+			public boolean visit(BooleanNode bool) throws AnyException {
 				field.update( new BooleanItem( "", Value.SQL_NOT_NULLABLE, Constants.SIGNATURE_BOOLEAN ));
 		    	convertToEgl(program, field.valueObject(), value);
 				return false;
 			}
 			
-			public boolean visit(IntegerNode i) throws JavartException {
+			public boolean visit(IntegerNode i) throws AnyException {
 				field.update( new BigNumericItem( "", Value.SQL_NOT_NULLABLE, 32, Constants.EGL_TYPE_NUM, Type.NUM +  "32:0;" ));
 		    	convertToEgl(program, field.valueObject(), value);
 				return false;
 			}
 			
-			public boolean visit(StringNode string) throws JavartException {
+			public boolean visit(StringNode string) throws AnyException {
 				field.update( new StringItem( "", Value.SQL_NOT_NULLABLE, Constants.SIGNATURE_STRING ));
 		    	convertToEgl(program, field.valueObject(), value);
 				return false;
 			}
 			
-			public boolean visit(FloatingPointNode fp) throws JavartException {
+			public boolean visit(FloatingPointNode fp) throws AnyException {
 				field.update( new FloatItem( "", Value.SQL_NOT_NULLABLE, Constants.SIGNATURE_FLOAT ));
 		    	convertToEgl(program, field.valueObject(), value);
 				return false;
 			}					
-			public boolean visit(DecimalNode dec) throws JavartException {
+			public boolean visit(DecimalNode dec) throws AnyException {
 				BigDecimal bd = dec.getDecimalValue();
 				int decimals = bd.scale() < 0? 0: bd.scale();
 				field.update(  new NumericDecItem( "", Value.SQL_NOT_NULLABLE, 32, decimals, Constants.EGL_TYPE_DECIMAL, Type.DECIMAL + "32:" + String.valueOf( decimals ) + ';' ));
@@ -242,7 +242,7 @@ public class JSONToEGLConverter
 				return false;
 			}
 			
-			public boolean visit(ObjectNode obj) throws JavartException {
+			public boolean visit(ObjectNode obj) throws AnyException {
 	    		if (isArrayDictionary(obj))
 	    			field.update( new ArrayDictionary( valueName ));
 	    		else
@@ -251,7 +251,7 @@ public class JSONToEGLConverter
 				return false;
 			}
 			
-			public boolean visit(ArrayNode array) throws JavartException {
+			public boolean visit(ArrayNode array) throws AnyException {
 		    	ReferenceArrayRef ary = createArray(program, valueName, array);
 				field.update(ary);
 				if( ary.value() != null )
@@ -268,20 +268,20 @@ public class JSONToEGLConverter
 		});
      }
 
-    private static ReferenceArrayRef createArray(ExecutableBase program, final String name, ArrayNode array) throws JavartException
+    private static ReferenceArrayRef createArray(ExecutableBase program, final String name, ArrayNode array) throws AnyException
     {
     	if( array.getValues() == null )
     	{
     		return new ReferenceArrayRef( name, null, Constants.SIGNATURE_ANY_ARRAY ){
     			private static final long serialVersionUID = 70L;
     			
-    			public void createNewValue( ExecutableBase ezeProgram ) throws JavartException
+    			public void createNewValue( ExecutableBase ezeProgram ) throws AnyException
     			{
     				value = new ReferenceArray( name, ezeProgram, 0, 10, Integer.MAX_VALUE, Constants.SIGNATURE_ANY_ARRAY )
     				{
     					private static final long serialVersionUID = 70L;
     					
-    					public Reference makeNewElement( ExecutableBase ezeProgram ) throws JavartException
+    					public Reference makeNewElement( ExecutableBase ezeProgram ) throws AnyException
     					{
     						return new AnyRef( "eze$Temp1", null );
     					};
@@ -296,7 +296,7 @@ public class JSONToEGLConverter
     		{
     			private static final long serialVersionUID = 70L;
     			
-    			public Reference makeNewElement( ExecutableBase ezeProgram ) throws JavartException
+    			public Reference makeNewElement( ExecutableBase ezeProgram ) throws AnyException
     			{
     				return new AnyRef( "eze$" + name + "1", null );
     			};
@@ -304,13 +304,13 @@ public class JSONToEGLConverter
     		, Constants.SIGNATURE_ANY_ARRAY ){
     			private static final long serialVersionUID = 70L;
     			
-    			public void createNewValue( ExecutableBase ezeProgram ) throws JavartException
+    			public void createNewValue( ExecutableBase ezeProgram ) throws AnyException
     			{
     				value = new ReferenceArray( name, ezeProgram, 0, 10, Integer.MAX_VALUE, Constants.SIGNATURE_ANY_ARRAY )
     				{
     					private static final long serialVersionUID = 70L;
     					
-    					public Reference makeNewElement( ExecutableBase ezeProgram ) throws JavartException
+    					public Reference makeNewElement( ExecutableBase ezeProgram ) throws AnyException
     					{
     						return new AnyRef( "eze$" + name + "2", null );
     					};

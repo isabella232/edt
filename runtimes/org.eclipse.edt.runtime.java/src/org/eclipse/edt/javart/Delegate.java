@@ -13,7 +13,8 @@ package org.eclipse.edt.javart;
 
 import java.lang.reflect.Method;
 
-import org.eclipse.edt.runtime.java.egl.lang.InvocationException;
+import egl.lang.InvocationException;
+import egl.lang.AnyException;
 
 public class Delegate {
 	Object target;
@@ -25,15 +26,17 @@ public class Delegate {
 			this.method = target.getClass().getMethod(methodName, argTypes);
 		}
 		catch(Exception ex) {
-			throw new org.eclipse.edt.runtime.java.egl.lang.RuntimeException(ex);
+			throw new RuntimeException(ex); //TODO this should be one of our exceptions...something for an internal error
 		}
 	}
 	
-	public Object invoke(Object...args) throws JavartException {
+	public Object invoke(Object...args) throws AnyException {
 		try {
 			return method.invoke(target, args);
 		} catch (Exception e) {
-			throw new InvocationException(e);
+			InvocationException ix = new InvocationException();
+			ix.name = method.getName();
+			throw ix;
 		} 
 	}
 }

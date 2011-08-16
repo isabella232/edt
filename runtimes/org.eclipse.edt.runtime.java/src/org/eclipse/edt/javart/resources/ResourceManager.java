@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 
 /**
  * Keeps track of resources for a RunUnit.
@@ -51,7 +51,7 @@ public class ResourceManager implements Serializable
 	/**
 	 * Commit all changes.
 	 */
-	public void commit( RunUnitBase ru ) throws JavartException
+	public void commit( RunUnitBase ru ) throws AnyException
 	{
 		if ( resourceList.size() > 0 )
 		{
@@ -67,7 +67,7 @@ public class ResourceManager implements Serializable
 	/**
 	 * Rolls back changes.
 	 */
-	public void rollback( RunUnitBase ru ) throws JavartException
+	public void rollback( RunUnitBase ru ) throws AnyException
 	{
 		if ( resourceList.size() > 0 )
 		{
@@ -85,7 +85,7 @@ public class ResourceManager implements Serializable
 	 *
 	 * @param ru  the run unit.
 	 */
-	public void exit( RunUnitBase ru ) throws JavartException
+	public void exit( RunUnitBase ru ) throws AnyException
 	{
 		if ( resourceList.size() > 0 )
 		{
@@ -108,7 +108,7 @@ public class ResourceManager implements Serializable
 	 * @param toTransaction  true if it's a transfer to a transaction not a program.
 	 */
 	public void transferCleanup( RunUnitBase ru, boolean toTransaction ) 
-		throws JavartException
+		throws AnyException
 	{
 		if ( resourceList.size() > 0 )
 		{

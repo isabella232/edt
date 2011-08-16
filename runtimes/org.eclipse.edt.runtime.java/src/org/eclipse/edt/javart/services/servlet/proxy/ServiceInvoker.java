@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.services.servlet.proxy;
 
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.json.ArrayNode;
 import org.eclipse.edt.javart.json.JsonParser;
@@ -214,7 +214,7 @@ public abstract class ServiceInvoker extends Invoker
 		info.setBinding(binding);
    	}
 
-/*FIXME   	private static MethodParameter[] getEmptyParameters( ExecutableBase program, ServiceReference ref, FunctionInfo info, IntValue serviceKind ) throws JavartException
+/*FIXME   	private static MethodParameter[] getEmptyParameters( ExecutableBase program, ServiceReference ref, FunctionInfo info, IntValue serviceKind ) throws AnyException
    	{
    		if( ref instanceof LocalProxy && ((LocalProxy)ref).getServiceReference() instanceof ServiceCore2 )
    		{
@@ -300,7 +300,7 @@ public abstract class ServiceInvoker extends Invoker
 		}
 		catch (Throwable t)
 		{
-			JavartException sie;
+			AnyException sie;
 			if( info == null )
 			{
 				sie = ServiceUtilities.buildServiceInvocationException( program, Message.SOA_E_WS_PROXY_REST, new String[] {"unknown", "unknown"}, t, ServiceKind.REST );
@@ -315,7 +315,7 @@ public abstract class ServiceInvoker extends Invoker
 			}
 			else
 			{
-				returnVal = eglx.json.JsonUtilities.createJsonJavartException(program,sie);
+				returnVal = eglx.json.JsonUtilities.createJsonAnyException(program,sie);
 			}
 		}
 		finally
@@ -324,7 +324,7 @@ public abstract class ServiceInvoker extends Invoker
 			{
 //				removeSession( ((ExecutableBase)((LocalProxy)ref).getServiceReference())._runUnit() );
 			}
-			catch( JavartException j ){}
+			catch( AnyException j ){}
 		}
 		return returnVal;
 	}
@@ -359,7 +359,7 @@ public abstract class ServiceInvoker extends Invoker
 					parameters, outEncoding, serviceKind );
 	}
 
-	private static MethodParameter[] getEglParameters( ExecutableBase program, ServiceReference ref, FunctionInfo info, IntValue serviceKind ) throws JavartException
+	private static MethodParameter[] getEglParameters( ExecutableBase program, ServiceReference ref, FunctionInfo info, IntValue serviceKind ) throws AnyException
 	{
 		MethodParameter[] parameters = null;
 		parameters = getEmptyParameters(program, ref, info, serviceKind );
@@ -367,7 +367,7 @@ public abstract class ServiceInvoker extends Invoker
 		return parameters;
 	}*/
 
-/*FIXME	private static String convert2JSON( ExecutableBase program, Object eglFunctionReturn, MethodParameter[] parameters, int outEncoding, IntValue serviceKind ) throws JavartException
+/*FIXME	private static String convert2JSON( ExecutableBase program, Object eglFunctionReturn, MethodParameter[] parameters, int outEncoding, IntValue serviceKind ) throws AnyException
 	{
 		String returnVal = null;
 		if( parameters.length > 0 && parameters[parameters.length-1].parameterKind() == MethodParameter.RETURN )
@@ -417,7 +417,7 @@ public abstract class ServiceInvoker extends Invoker
 		return payload;
 	}
 /*FIXME	private static ObjectNode convert2JsonByPosition( ExecutableBase program, MethodParameter[] parameters, ServiceKind serviceKind)
-		throws JavartException
+		throws AnyException
 	{
 		//1 or less return parameters will only be returned as an object
 		ObjectNode result = new ObjectNode();
@@ -440,7 +440,7 @@ public abstract class ServiceInvoker extends Invoker
 					returnParams.addValue( EGLToJSONConverter.convertToJson(program, parameters[idx].parameter() ) );
 				}
 			}
-			catch( JavartException jrte )
+			catch( AnyException jrte )
 			{
 				throw ServiceUtilities.buildServiceInvocationException( program, Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, new String[]{((Storage)parameters[idx].parameter()).name(), ConvertToString.run( program, parameters[idx].parameter() ) }, jrte, serviceKind );
 			}
@@ -457,7 +457,7 @@ public abstract class ServiceInvoker extends Invoker
 		return result;
 	}
 
-	private static void assignByPosition( ExecutableBase program, Object jsParameters, MethodParameter[] parameters, ServiceKind serviceKind) throws JavartException
+	private static void assignByPosition( ExecutableBase program, Object jsParameters, MethodParameter[] parameters, ServiceKind serviceKind) throws AnyException
 	{
 		if( jsParameters instanceof ArrayNode )
 		{
@@ -481,7 +481,7 @@ public abstract class ServiceInvoker extends Invoker
 						}
 					}
 				}
-				catch( JavartException jrte )
+				catch( AnyException jrte )
 				{
 					throw ServiceUtilities.buildServiceInvocationException( program, Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, new String[]{((Storage)parameters[idx].parameter()).name(), jsonValue.toJava() }, jrte, serviceKind );
 				}

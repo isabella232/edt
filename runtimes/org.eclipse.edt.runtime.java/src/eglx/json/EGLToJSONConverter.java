@@ -11,7 +11,7 @@
  *******************************************************************************/
 package eglx.json;
 
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 import org.eclipse.edt.javart.json.ValueNode;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 
@@ -24,14 +24,14 @@ public class EGLToJSONConverter
     }
     
     public static ValueNode convertToJson(ExecutableBase program, Object storage)
-	    throws JavartException
+	    throws AnyException
 	{
 //FIXME   		return processStorage(program, storage); 
    		return null;
 	}
 
 /*    private static NameValuePairNode getPair(ExecutableBase program, Container container, Storage storage)
-        throws JavartException
+        throws AnyException
     {
     	String name;
     	if( container != null )
@@ -48,7 +48,7 @@ public class EGLToJSONConverter
     }
 
     private static ValueNode processStorage(ExecutableBase program, Object storage)
-        throws JavartException
+        throws AnyException
     {
         if(storage instanceof Value)
             return convertValue( program, (Value)storage);
@@ -85,7 +85,7 @@ public class EGLToJSONConverter
     }
 
     private static ValueNode convertArray(ExecutableBase program, DynamicArray array)
-        throws JavartException
+        throws AnyException
     {
         ArrayNode node = new ArrayNode();
         Storage storage;
@@ -99,7 +99,7 @@ public class EGLToJSONConverter
     }
     
     private static ValueNode convertDictionary(ExecutableBase program, Dictionary dictionary)
-	    throws JavartException
+	    throws AnyException
 	{
 	    ValueNode valueNode = null;
 	    valueNode = new ObjectNode();
@@ -111,7 +111,7 @@ public class EGLToJSONConverter
 	}
 
     private static ValueNode convertArrayDictionary(ExecutableBase program, ArrayDictionary dictionary)
-    	throws JavartException
+    	throws AnyException
     {
     	ObjectNode valueNode = new ObjectNode();
     	Iterator keys = dictionary.getMap().keySet().iterator();
@@ -125,7 +125,7 @@ public class EGLToJSONConverter
     }
     
     private static ValueNode convertContainer(ExecutableBase program, Container container)
-        throws JavartException
+        throws AnyException
     {
         ValueNode valueNode = null;
         if(container.nullStatus() == Value.SQL_NULL)
@@ -149,7 +149,7 @@ public class EGLToJSONConverter
     }
 
     private static ValueNode convertValue(ExecutableBase program, Value value)
-        throws JavartException
+        throws AnyException
     {
         ValueNode valueNode = null;
         if(value.getNullStatus() == Value.SQL_NULL)

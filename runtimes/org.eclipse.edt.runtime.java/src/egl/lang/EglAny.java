@@ -13,12 +13,11 @@ package egl.lang;
 
 import java.io.Serializable;
 
-import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.TypeConstraints;
 
 public interface EglAny extends Serializable, Cloneable {
 	
-	public void ezeInitialize() throws JavartException;
+	public void ezeInitialize() throws AnyException;
 	
 	public String ezeTypeSignature();
 	
@@ -26,9 +25,9 @@ public interface EglAny extends Serializable, Cloneable {
 
 	public Object clone() throws CloneNotSupportedException;
 
-	public EglAny ezeGet(String name) throws JavartException; 
+	public EglAny ezeGet(String name) throws AnyException; 
 
-	public void ezeSet(String name, Object value) throws JavartException;
+	public void ezeSet(String name, Object value) throws AnyException;
 	
 	public <T extends Object> T ezeUnbox();
 

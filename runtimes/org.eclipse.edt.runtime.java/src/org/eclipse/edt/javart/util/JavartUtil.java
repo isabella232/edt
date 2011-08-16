@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.util;
 
-import java.lang.reflect.Array;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -20,18 +19,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.EglException;
-import org.eclipse.edt.javart.EglThrowable;
+import org.eclipse.edt.javart.ControlFlow;
 import org.eclipse.edt.javart.Executable;
-import org.eclipse.edt.javart.FatalException;
-import org.eclipse.edt.javart.JavartException;
+import org.eclipse.edt.javart.FatalProblem;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.runtime.java.egl.lang.EglAny;
-import org.eclipse.edt.runtime.java.egl.lang.InvalidIndexException;
-import org.eclipse.edt.runtime.java.egl.lang.JavaObjectException;
-import org.eclipse.edt.runtime.java.egl.lang.NullValueException;
-import org.eclipse.edt.runtime.java.egl.lang.TypeCastException;
+
+import egl.lang.AnyException;
+import egl.lang.InvalidIndexException;
+import eglx.java.JavaObjectException;
 
 
 /**
@@ -113,8 +110,7 @@ public class JavartUtil
 	}
 	
 	/**
-	 * Returns a string containing the Object's type in EGL.  Uses 
-	 * getEglTypeFromSignature if the Object is a Storage.
+	 * Returns a string containing the Object's type in EGL.
 	 * 
 	 * @param object  the Object.
 	 */
@@ -169,150 +165,11 @@ public class JavartUtil
 	}
 	
 	/**
-	 * Truth
-	 * 
-	 * @return true
-	 */
-	public static final boolean alwaysTrue()
-	{
-		return true;
-	}
-	
-	/**
-	 * Falsehood
-	 * 
-	 * @return false
-	 */
-	public static final boolean alwaysFalse()
-	{
-		return false;
-	}
-	
-	/**
 	 * Does nothing.  We generate a call to this method at the beginning of a
-	 * try statement so the compiler will let us catch any kind of JavartException.
+	 * try statement so the compiler will let us catch any kind of exception.
 	 */
-	public static final void beginTry() throws JavartException
+	public static final void beginTry() throws AnyException
 	{
-	}
-	
-	/**
-	 * Returns true if the argument is a JavaObjectException, or an Exception
-	 * that we'd wrap in a JavaObjectException.
-	 * 
-	 * @param ex  the exception.
-	 * @return true if the exception should be treated as a JavaObjectException.
-	 */
-	public static boolean isJavaObjectException( Exception ex )
-	{
-		return ex instanceof JavaObjectException
-			|| (!(ex instanceof JavartException) && !(ex instanceof EglThrowable));
-	}
-	
-	/**
-	 * Returns a JavaObjectException for the given exception.  If the
-	 * exception is a JavaObjectException, its record is reused.  If the
-	 * exception isn't a JavaObjectException, a new record is created.
-	 */
-	public static JavaObjectException makeJavaObjectException( Executable p, 
-			String name, Exception ex )
-		throws JavartException
-	{
-		JavaObjectException jox;
-		if ( ex instanceof JavaObjectException )
-		{
-			return (JavaObjectException)ex;
-		}
-		else
-		{
-
-			String msg = ex.getMessage();
-			String className = ex.getClass().getName();
-			if ( msg == null || msg.trim().length() == 0 )
-			{
-				msg = className;
-			}
-			
-			jox = new JavaObjectException(Message.CAUGHT_JAVA_EXCEPTION, msg);
-			jox.setExceptionType(className);
-			
-			return jox;
-		}
-	}
-	
-	/**
-	 * Checks if the value to be assigned to a substring is the proper length.
-	 * If it is too long, it is truncated. If too short, it is padded. The
-	 * indices are assumed to be valid.
-	 * 
-	 * @param value        The value being assigned.
-	 * @param startIndex   The starting index.
-	 * @param endIndex     The ending index.
-	 * @param padding      The char to pad with.
-	 * @return the value to assign, possibly truncated or padded.
-	 */
-	public static String checkSubstringValue( String value, int startIndex,
-			int endIndex, char padding )
-	{
-		int valLength = value.length();
-		int subLength = endIndex - startIndex + 1;
-		
-		if ( valLength > subLength )
-		{
-			return value.substring( 0, subLength );
-		}
-		else if ( valLength < subLength )
-		{
-			StringBuilder buf = new StringBuilder( value );
-			for ( int i = valLength; i < subLength; i++ )
-			{
-				buf.append( padding );
-			}
-			return buf.toString();
-		}
-		else
-		{
-			return value;
-		}
-	}
-	
-	/**
-	 * Checks if the value to be assigned to a substring is the proper length.
-	 * If it is too long, it is truncated. If too short, it is padded with
-	 * the specified byte(s). The indices are assumed to be valid.
-	 * 
-	 * @param value          The value being assigned.
-	 * @param padding        The byte(s) to pad with.
-	 * @param lengthInBytes  The length of the substring in bytes.
-	 * @return the value to assign, possibly truncated or padded.
-	 */
-	public static byte[] checkSubstringValue( byte[] value, byte[] padding,
-			int lengthInBytes )
-	{
-		if ( value.length > lengthInBytes )
-		{
-			byte[] newValue = new byte[ lengthInBytes ];
-			System.arraycopy( value, 0, newValue, 0, newValue.length );
-			return newValue;
-		}
-		else if ( value.length < lengthInBytes )
-		{
-			byte[] newValue = new byte[ lengthInBytes ];
-			byte pad;
-			System.arraycopy( value, 0, newValue, 0, value.length );
-			for ( int i = value.length; i < lengthInBytes; i++ )
-			{
-				pad = padding.length == 1
-						? padding[ 0 ]
-						: padding[ i % 2 ];
-				newValue[ i ] = pad;
-			}
-			return newValue;
-		}
-		else
-		{
-			return value;
-		}
 	}
 	
 	/**
@@ -323,11 +180,11 @@ public class JavartUtil
 	 * @param startIndex  The start index.
 	 * @param endIndex    The end index.
 	 * @param maxlen      The maximum length of the item being substringed.
-	 * @throws JavartException
+	 * @throws AnyException
 	 */
 	public static void checkSubstringIndices( Executable program, int startIndex,
 			int endIndex, int maxlen )
-		throws JavartException
+		throws AnyException
 	{
 		if ( startIndex < 1 || startIndex > maxlen )
 		{
@@ -342,8 +199,8 @@ public class JavartUtil
 			
 			InvalidIndexException ex = 
 				new InvalidIndexException();
-			ex.message = message;
-			ex.indexValue = startIndex;
+			ex.setMessage( message );
+			ex.index = startIndex;
 			ex.setMessageID(Message.INVALID_SUBSTRING_INDEX);
 			
 			throw ex;
@@ -361,8 +218,8 @@ public class JavartUtil
 			
 			InvalidIndexException ex = 
 				new InvalidIndexException();
-			ex.message = message;
-			ex.indexValue = endIndex;
+			ex.setMessage( message );
+			ex.index = endIndex;
 			ex.setMessageID(Message.INVALID_SUBSTRING_INDEX);
 			
 			throw ex;
@@ -487,155 +344,6 @@ public class JavartUtil
 	}
 
 	/**
-	 * Throws an exception with ID = Message.DATA_FORMAT_ERROR.
-	 * 
-	 * @throws JavartException
-	 */
-	public static void throwDataFormatException( String name, Executable program )
-		throws JavartException
-	{
-		String message = errorMessage(
-				program,
-				Message.DATA_FORMAT_ERROR,
-				new Object[] { name } );
-		throwRuntimeException( Message.DATA_FORMAT_ERROR, message, program );
-	}
-	
-	/**
-	 * Throws an exception with ID = Message.NULL_REFERENCE_VARIABLE.
-	 * 
-	 * @throws NullValueException
-	 */
-	public static void throwNullReferenceVariableException( Executable program, String nullRef )
-		throws JavartException
-	{
-		String message = errorMessage( program, Message.NULL_REFERENCE_VARIABLE, new Object[] { nullRef } );
-		NullValueException nvx = 
-			new NullValueException();
-		
-		nvx.message = message;
-		nvx.setMessageID(Message.NULL_REFERENCE_VARIABLE);
-		throw nvx;
-	}
-	
-	/**
-	 * Use throwNullReferenceVariableException, not this method, if possible.
-	 * Throws an exception with ID = Message.NULL_REFERENCE.
-	 * 
-	 * @throws NullValueException
-	 */
-	public static void throwNullValueException( Executable program )
-		throws JavartException
-	{
-		String message = errorMessage( program, Message.NULL_REFERENCE );
-		NullValueException nvx = 
-			new NullValueException();
-		
-		nvx.message = message;
-		nvx.setMessageID(Message.NULL_REFERENCE);
-		throw nvx;
-	}
-
-	/**
-	 * Throws a RuntimeException.
-	 * 
-	 * @throws org.eclipse.edt.runtime.java.egl.lang.RuntimeException
-	 */
-	public static void throwRuntimeException( String id, String message, Executable program )
-		throws JavartException
-	{
-		org.eclipse.edt.runtime.java.egl.lang.RuntimeException rex = 
-			new org.eclipse.edt.runtime.java.egl.lang.RuntimeException();
-		
-		rex.setMessage(message);
-		rex.setMessageID(id);
-		throw rex;
-	}
-
-	/**
-	 * Throws an exception with ID = Message.CONVERSION_ERROR.
-	 * 
-	 * @throws TypeCastException
-	 */
-	public static void throwTypeCastException( String actualTypeName, 
-			String castToName, Executable program )
-		throws JavartException
-	{
-		String message = 
-			errorMessage( program, Message.CONVERSION_ERROR, 
-				new String[] { actualTypeName, castToName } );
-		TypeCastException tcx = 
-			new TypeCastException();
-		
-		tcx.message = message;
-		tcx.setMessageID(Message.CONVERSION_ERROR);
-		tcx.castToName = castToName;
-		tcx.actualTypeName = actualTypeName;
-		throw tcx;
-	}
-
-	/**
-	 * Throws an exception with ID = Message.UNSUPPORTED_OPERANDS.
-	 * 
-	 * @throws JavartException
-	 */
-	public static void throwUnsupportedOperandsException( String operator, 
-			String op1, String op2, Executable program )
-		throws JavartException
-	{
-		String message = errorMessage(
-				program,
-				Message.UNSUPPORTED_OPERANDS,
-				new Object[] { operator, op1, op2 } );
-		throwRuntimeException( Message.UNSUPPORTED_OPERANDS, message, program );
-	}
-
-	/**
-	 * Throws an exception with ID = Message.INDEX_OUT_OF_BOUNDS.
-	 * 
-	 * @throws JavartException
-	 */
-	public static void throwInvalidIndexException( int index, Executable program )
-		throws JavartException
-	{
-		String message = errorMessage(
-				program,
-				Message.INDEX_OUT_OF_BOUNDS,
-				new Object[] { String.valueOf( index ) } );
-		
-		InvalidIndexException ex = 
-			new InvalidIndexException();
-		ex.message = message;
-		ex.indexValue = index;
-		ex.setMessageID(Message.INDEX_OUT_OF_BOUNDS);
-		
-		throw ex;
-	}
-
-	/**
-	 * Throws an exception with ID = Message.ARRAY_INDEX_OUT_OF_BOUNDS.
-	 * 
-	 * @throws JavartException
-	 */
-	public static void throwArrayInvalidIndexException( int index, String name, 
-			int size, Executable program )
-		throws JavartException
-	{
-		String message = errorMessage(
-				program,
-				Message.ARRAY_INDEX_OUT_OF_BOUNDS,
-				new Object[] { String.valueOf( index ), name, String.valueOf( size ) } );
-		
-		InvalidIndexException ex = 
-			new InvalidIndexException();
-		ex.message = message;
-		ex.indexValue = index;
-		ex.setMessageID(Message.ARRAY_INDEX_OUT_OF_BOUNDS);
-		
-		throw ex;
-	}
-	
-	/**
 	 * Removes trailing blanks from the original string and returns the result.
 	 * 
 	 * @param s  The original string
@@ -694,107 +402,39 @@ public class JavartUtil
 	}
 	
 	/**
-	 * The specified length of a bin is the number of bytes, not the number of
-	 * integer digits. This returns the number of integer digits based on the
-	 * defined bin length and decimals.
-	 * 
-	 * @param length    The length.
-	 * @param decimals  The decimals.
-	 * @return
-	 */
-	public static int getTrueBinLength( int length, int decimals )
-	{
-		switch ( length )
-		{
-			case 4:
-				return Integer.toString( Short.MAX_VALUE - decimals ).length();
-				
-			case 9:
-				return Integer.toString( Integer.MAX_VALUE - decimals ).length();
-				
-			case 18:
-			default:
-				return Long.toString( Long.MAX_VALUE - decimals ).length();
-		}
-	}
-	
-	/**
-	 * This is called by generated code when a try statement has no onException
-	 * blocks.  If the Exception that was caught can't be ignored, it is
-	 * re-thrown.  Otherwise nothing happens.
+	 * This is called by generated code to ensure a try statement doesn't handle
+	 * an exception that can't be handled.  If the Exception that was caught 
+	 * can't be ignored, it is re-thrown.  Otherwise nothing happens.
 	 * 
 	 * @param caught  the Exception that was caught.
 	 * @throws the Exception, if it can't be ignored.
 	 */
-	public static void noExceptionHandlers( Exception caught ) throws Exception
+	public static void checkHandleable( Exception caught ) throws RuntimeException
 	{
-		if ( caught instanceof FatalException || caught instanceof EglThrowable )
+		if ( caught instanceof FatalProblem || caught instanceof ControlFlow )
 		{
-			throw caught;
-		}
-		else if ( caught instanceof EglException )
-		{
-		}
-		else if ( caught instanceof JavartException )
-		{
-			throw caught;
+			throw (RuntimeException)caught;
 		}
 	}
 	
 	/**
-	 * Compares the two objects to see if they have been modified by the user.
-	 * 
-	 * @param prevValue  The previous value displayed on the page.
-	 * @param newValue   The new value from the page.
-	 * @return true if the two values are not identical.
+	 * Returns a new JavaObjectException for the given Throwable.
 	 */
-	public static boolean javaObjectChanged( Object prevValue, Object newValue )
+	public static JavaObjectException makeJavaObjectException( Throwable ex )
 	{
-		if ( newValue == null || prevValue == null )
+		String msg = ex.getMessage();
+		String className = ex.getClass().getName();
+		if ( msg == null || msg.trim().length() == 0 )
 		{
-			return !(newValue == null && prevValue == null);
-		}
-		else if ( newValue.getClass().isArray() && prevValue.getClass().isArray() )
-		{
-			// check for changed size
-			int length = Array.getLength( newValue );
-			
-			if ( length != Array.getLength( prevValue ) )
-			{
-				return true;
-			}
-			
-			// check for any individual elements to have changed.
-			for ( int i = 0; i < length; i++ )
-			{
-				// support multidim arrays
-				if ( javaObjectChanged(
-						Array.get( prevValue, i ), Array.get( newValue, i ) ) )
-				{
-					return true;
-				}
-			}
-			
-			return false;
-		}
-		else
-		{
-			if ( prevValue instanceof String )
-			{
-				prevValue = ((String)prevValue).trim();
-			}
-			if ( newValue instanceof String )
-			{
-				newValue = ((String)newValue).trim();
-			}
-			
-			if ( newValue.equals( prevValue ) )
-			{
-				return false;
-			}
+			msg = className;
 		}
 		
-		return true;
+		JavaObjectException jox = new JavaObjectException();
+		jox.setMessageID( Message.CAUGHT_JAVA_EXCEPTION );
+		jox.setMessage( msg );
+		jox.exceptionType = className;
+		
+		return jox;
 	}
 	
 	/**

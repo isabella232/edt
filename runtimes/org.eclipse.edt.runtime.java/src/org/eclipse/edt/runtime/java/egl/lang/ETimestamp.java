@@ -18,10 +18,13 @@ import java.util.GregorianCalendar;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
 import org.eclipse.edt.javart.util.TimestampIntervalMask;
+
+import egl.lang.AnyException;
+import egl.lang.NullValueException;
+import egl.lang.TypeCastException;
 
 /**
  * A class for Timestamps. The value is a Calendar and a number of microseconds (an int) which is encapsulated in a
@@ -111,13 +114,13 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return new ETimestamp((Calendar) value.clone(), startCode, endCode);
 	}
 
-	public static Object ezeCast(Object value, Object[] constraints) throws JavartException {
+	public static Object ezeCast(Object value, Object[] constraints) throws AnyException {
 		Integer[] args = new Integer[constraints.length];
 		java.lang.System.arraycopy(constraints, 0, args, 0, args.length);
 		return ezeCast(value, args);
 	}
 
-	public static Calendar ezeCast(Object value, Integer... args) throws JavartException {
+	public static Calendar ezeCast(Object value, Integer... args) throws AnyException {
 		return (Calendar) EglAny.ezeCast(value, "asTimestamp", ETimestamp.class, new Class[] { Integer[].class }, args);
 	}
 
@@ -132,19 +135,19 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return EString.asString(object);
 	}
 
-	public static Calendar asTimestamp(GregorianCalendar timestamp) throws JavartException {
+	public static Calendar asTimestamp(GregorianCalendar timestamp) throws AnyException {
 		return asTimestamp((Calendar) timestamp);
 	}
 
-	public static Calendar asTimestamp(Calendar timestamp) throws JavartException {
+	public static Calendar asTimestamp(Calendar timestamp) throws AnyException {
 		return asTimestamp(timestamp, DefaultPattern);
 	}
 
-	public static Calendar asTimestamp(GregorianCalendar timestamp, String timespanMask) throws JavartException {
+	public static Calendar asTimestamp(GregorianCalendar timestamp, String timespanMask) throws AnyException {
 		return asTimestamp((Calendar) timestamp, timespanMask);
 	}
 
-	public static Calendar asTimestamp(Calendar timestamp, String timespanMask) throws JavartException {
+	public static Calendar asTimestamp(Calendar timestamp, String timespanMask) throws AnyException {
 		if (timestamp == null)
 			return null;
 		if (timespanMask == null || timespanMask.length() == 0)
@@ -160,14 +163,14 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return asTimestamp(timestamp, startCode, endCode);
 	}
 
-	public static Calendar asTimestamp(String timestamp, Integer... args) throws JavartException {
+	public static Calendar asTimestamp(String timestamp, Integer... args) throws AnyException {
 		if (args != null && args.length == 2)
 			return convert(timestamp, args[0], args[1]);
 		else
 			return asTimestamp(timestamp, DefaultPattern);
 	}
 
-	public static Calendar asTimestamp(String timestamp, String timespanMask) throws JavartException {
+	public static Calendar asTimestamp(String timestamp, String timespanMask) throws AnyException {
 		// Default values in case the pattern doesn't specify things.
 		int startCode = YEAR_CODE;
 		int endCode = SECOND_CODE;
@@ -275,7 +278,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * zeros so you get Jan 1 1970, etc. When we parse by hand, unspecified fields are set to the current time. This behavior
 	 * is OK for assignments, but it must be accounted for when comparing two timestamps.
 	 */
-	public static Calendar asTimestamp(String timestamp, String format, int startCode, int endCode) throws JavartException {
+	public static Calendar asTimestamp(String timestamp, String format, int startCode, int endCode) throws AnyException {
 		if (timestamp == null)
 			return null;
 		Calendar result;
@@ -598,7 +601,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the day of a timestamp
 	 */
-	public static Integer dayOf(Calendar aTimestamp) throws JavartException {
+	public static Integer dayOf(Calendar aTimestamp) throws AnyException {
 		if (aTimestamp == null)
 			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.DATE))
@@ -609,7 +612,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the month of a timestamp
 	 */
-	public static Integer monthOf(Calendar aTimestamp) throws JavartException {
+	public static Integer monthOf(Calendar aTimestamp) throws AnyException {
 		if (aTimestamp == null)
 			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.MONTH))
@@ -620,7 +623,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the year of a timestamp
 	 */
-	public static Integer yearOf(Calendar aTimestamp) throws JavartException {
+	public static Integer yearOf(Calendar aTimestamp) throws AnyException {
 		if (aTimestamp == null)
 			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.YEAR))
@@ -631,7 +634,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the weekday of a timestamp
 	 */
-	public static Integer weekdayOf(Calendar aTimestamp) throws JavartException {
+	public static Integer weekdayOf(Calendar aTimestamp) throws AnyException {
 		if (aTimestamp == null)
 			throw new NullValueException();
 		if (!aTimestamp.isSet(DAY_CODE))
@@ -642,7 +645,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the date of a timestamp
 	 */
-	public static Calendar dateOf(Calendar aTimestamp) throws JavartException {
+	public static Calendar dateOf(Calendar aTimestamp) throws AnyException {
 		if (aTimestamp == null)
 			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.YEAR) || !aTimestamp.isSet(Calendar.MONTH) || !aTimestamp.isSet(Calendar.DATE))
@@ -653,7 +656,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the time of a timestamp
 	 */
-	public static Calendar timeOf(Calendar aTimestamp) throws JavartException {
+	public static Calendar timeOf(Calendar aTimestamp) throws AnyException {
 		if (aTimestamp == null)
 			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.HOUR_OF_DAY) || !aTimestamp.isSet(Calendar.MINUTE) || !aTimestamp.isSet(Calendar.SECOND))
@@ -664,7 +667,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the extension of a timestamp
 	 */
-	public static Calendar extend(Calendar aTimestamp, String timeSpanPattern) throws JavartException {
+	public static Calendar extend(Calendar aTimestamp, String timeSpanPattern) throws AnyException {
 		if (aTimestamp == null)
 			throw new NullValueException();
 		// Default values in case the pattern doesn't specify things.

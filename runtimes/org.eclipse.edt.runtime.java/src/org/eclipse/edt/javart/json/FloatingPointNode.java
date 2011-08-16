@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.json;
 
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 
 public class FloatingPointNode extends NumberNode {
 
@@ -45,7 +45,7 @@ public class FloatingPointNode extends NumberNode {
 	}
 
 
-	public void accept(JsonVisitor visitor)  throws JavartException{
+	public void accept(JsonVisitor visitor)  throws AnyException{
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren) {
 			visitChildren(visitor);

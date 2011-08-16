@@ -11,33 +11,33 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.json;
 
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 
 public interface JsonVisitor {
-	boolean visit(ArrayNode array) throws JavartException;
+	boolean visit(ArrayNode array) throws AnyException;
 	void endVisit(ArrayNode array);
 	
-	boolean visit(NameValuePairNode pair) throws JavartException;
+	boolean visit(NameValuePairNode pair) throws AnyException;
 	void endVisit(NameValuePairNode pair);
 	
-	boolean visit(BooleanNode bool) throws JavartException;
+	boolean visit(BooleanNode bool) throws AnyException;
 	void endVisit(BooleanNode bool);
 	
-	boolean visit(DecimalNode dec) throws JavartException;
+	boolean visit(DecimalNode dec) throws AnyException;
 	void endVisit(DecimalNode dec);
 	
-	boolean visit(FloatingPointNode fp) throws JavartException;
+	boolean visit(FloatingPointNode fp) throws AnyException;
 	void endVisit(FloatingPointNode fp);
 	
-	boolean visit(IntegerNode i) throws JavartException;
+	boolean visit(IntegerNode i) throws AnyException;
 	void endVisit(IntegerNode i);
 	
-	boolean visit(NullNode n) throws JavartException;
+	boolean visit(NullNode n) throws AnyException;
 	void endVisit(NullNode n);
 	
-	boolean visit(ObjectNode object) throws JavartException;
+	boolean visit(ObjectNode object) throws AnyException;
 	void endVisit(ObjectNode object);
 	
-	boolean visit(StringNode string) throws JavartException;
+	boolean visit(StringNode string) throws AnyException;
 	void endVisit(StringNode string);
 }

@@ -11,12 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.json;
 
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 
 public abstract class Node {
 	
-	public abstract void accept(JsonVisitor visitor) throws JavartException;
-	public abstract void visitChildren(JsonVisitor visitor) throws JavartException;
+	public abstract void accept(JsonVisitor visitor) throws AnyException;
+	public abstract void visitChildren(JsonVisitor visitor) throws AnyException;
 	public abstract java.lang.String toJson();
 	public abstract java.lang.String toJava();
 	

@@ -14,10 +14,12 @@ package org.eclipse.edt.javart;
 import org.eclipse.edt.javart.resources.RunUnitBase;
 import org.eclipse.edt.javart.resources.StartupInfo;
 
+import egl.lang.AnyException;
+
 public class JSERunUnit extends RunUnitBase {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
-	public JSERunUnit(StartupInfo startInfo) throws JavartException {
+	public JSERunUnit(StartupInfo startInfo) throws AnyException {
 		super(startInfo);
 	}
 

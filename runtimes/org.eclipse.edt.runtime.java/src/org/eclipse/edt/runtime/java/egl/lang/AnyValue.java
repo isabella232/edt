@@ -12,7 +12,7 @@
 package org.eclipse.edt.runtime.java.egl.lang;
 
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 
 
 public abstract class AnyValue extends EglAny implements egl.lang.AnyValue { 	
@@ -26,9 +26,9 @@ public abstract class AnyValue extends EglAny implements egl.lang.AnyValue {
 	public abstract void ezeSetEmpty();
 	public abstract void ezeCopy(Object source);
 	public abstract void ezeCopy(egl.lang.AnyValue source);
-	public abstract <T extends egl.lang.AnyValue> T ezeNewValue(Object...args) throws JavartException;
+	public abstract <T extends egl.lang.AnyValue> T ezeNewValue(Object...args) throws AnyException;
 	
-	public static <V extends egl.lang.AnyValue> V ezeCopyTo(egl.lang.AnyValue source, V target) throws JavartException {
+	public static <V extends egl.lang.AnyValue> V ezeCopyTo(egl.lang.AnyValue source, V target) throws AnyException {
 		if (source == null) {
 			if (target != null) {
 				target.ezeSetEmpty();

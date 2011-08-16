@@ -11,13 +11,11 @@
  *******************************************************************************/
 package egl.lang;
 
-import org.eclipse.edt.javart.JavartException;
-
 public interface AnyValue extends EglAny { 	
 		
 	public abstract void ezeSetEmpty();
 	public abstract void ezeCopy(Object source);
 	public abstract void ezeCopy(AnyValue source);
-	public abstract <T extends AnyValue> T ezeNewValue(Object...args) throws JavartException;
+	public abstract <T extends AnyValue> T ezeNewValue(Object...args) throws AnyException;
 	
 }

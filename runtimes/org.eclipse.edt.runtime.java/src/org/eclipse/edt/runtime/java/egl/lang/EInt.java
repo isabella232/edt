@@ -16,9 +16,10 @@ import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
 
+import egl.lang.AnyException;
 import egl.lang.AnyNumber;
+import egl.lang.NullValueException;
 
 public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -33,7 +34,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return new EInt(value);
 	}
 
-	public static Integer ezeCast(Object value) throws JavartException {
+	public static Integer ezeCast(Object value) throws AnyException {
 		return (Integer) EglAny.ezeCast(value, "asInt", EInt.class, null, null);
 	}
 
@@ -45,19 +46,19 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return EString.asString(object);
 	}
 
-	public static Integer asInt(Short value) throws JavartException {
+	public static Integer asInt(Short value) throws AnyException {
 		if (value == null)
 			return null;
 		return value.intValue();
 	}
 
-	public static Integer asInt(Integer value) throws JavartException {
+	public static Integer asInt(Integer value) throws AnyException {
 		if (value == null)
 			return null;
 		return value.intValue();
 	}
 
-	public static Integer asInt(Long value) throws JavartException {
+	public static Integer asInt(Long value) throws AnyException {
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
@@ -69,7 +70,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 
-	public static Integer asInt(BigInteger value) throws JavartException {
+	public static Integer asInt(BigInteger value) throws AnyException {
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
@@ -81,7 +82,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 
-	public static Integer asInt(Float value) throws JavartException {
+	public static Integer asInt(Float value) throws AnyException {
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
@@ -93,7 +94,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 
-	public static Integer asInt(Double value) throws JavartException {
+	public static Integer asInt(Double value) throws AnyException {
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
@@ -105,7 +106,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 
-	public static Integer asInt(BigDecimal value) throws JavartException {
+	public static Integer asInt(BigDecimal value) throws AnyException {
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
@@ -117,7 +118,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 
-	public static Integer asInt(String value) throws JavartException {
+	public static Integer asInt(String value) throws AnyException {
 		if (value == null)
 			return null;
 		return asInt(EDecimal.asDecimal(value));
@@ -127,7 +128,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static BigDecimal asNumber(Integer value) throws JavartException {
+	public static BigDecimal asNumber(Integer value) throws AnyException {
 		if (value == null)
 			return null;
 		return EDecimal.asDecimal(value);
@@ -141,43 +142,43 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return Precision;
 	}
 
-	public static Integer plus(Integer op1, Integer op2) throws JavartException {
+	public static Integer plus(Integer op1, Integer op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return BigDecimal.valueOf((long) op1 + op2).intValueExact();
 	}
 
-	public static Integer minus(Integer op1, Integer op2) throws JavartException {
+	public static Integer minus(Integer op1, Integer op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return BigDecimal.valueOf((long) op1 - op2).intValueExact();
 	}
 
-	public static BigDecimal divide(Integer op1, Integer op2) throws JavartException {
+	public static BigDecimal divide(Integer op1, Integer op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return BigDecimal.valueOf(op1).divide(BigDecimal.valueOf(op2), EDecimal.BIGDECIMAL_RESULT_SCALE, EDecimal.ROUND_BD);
 	}
 
-	public static Integer multiply(Integer op1, Integer op2) throws JavartException {
+	public static Integer multiply(Integer op1, Integer op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return BigDecimal.valueOf((long) op1 * op2).intValueExact();
 	}
 
-	public static Integer remainder(Integer op1, Integer op2) throws JavartException {
+	public static Integer remainder(Integer op1, Integer op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return op1 % op2;
 	}
 	
-	public static Double power(Integer op1, Integer op2) throws JavartException {
+	public static Double power(Integer op1, Integer op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return StrictMath.pow( op1, op2 );
 	}
 
-	public static int compareTo(Integer op1, Integer op2) throws JavartException {
+	public static int compareTo(Integer op1, Integer op2) throws AnyException {
 		if (op1 == null && op2 == null)
 			return 0;
 		if ((op1 != null && op2 == null) || (op1 == null && op2 != null))

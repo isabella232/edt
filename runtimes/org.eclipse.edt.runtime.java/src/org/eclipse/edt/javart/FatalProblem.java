@@ -14,11 +14,13 @@ package org.eclipse.edt.javart;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.util.JavartUtil;
 
+import egl.lang.AnyException;
+
 /**
  * Exception for fatal program errors.  These can't be handled with an EGL try
  * statement.
  */
-public class FatalException extends JavartException
+public class FatalProblem extends AnyException
 {
 	/**
 	 * The version ID used in serialization.
@@ -26,20 +28,20 @@ public class FatalException extends JavartException
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	/**
-	 * Makes the FatalException.  Prepare to die!
+	 * Makes the FatalProblem.  Prepare to die!
 	 * 
 	 * @param id
 	 *            The message ID.
 	 * @param message
 	 *            The error message.
 	 */
-	public FatalException( String id, String message )
+	public FatalProblem( String id, String message )
 	{
 		super( id, message );
 	}
 
 	/**
-	 * Makes a FatalException for an Exception that was caught but can't be
+	 * Makes a FatalProblem for an Exception that was caught but can't be
 	 * handled.
 	 * 
 	 * @param program
@@ -47,21 +49,21 @@ public class FatalException extends JavartException
 	 * @param ex
 	 *            The exception that was caught.
 	 */
-	public FatalException( Executable program, Exception ex )
+	public FatalProblem( Executable program, Exception ex )
 	{
 		super( idFor( ex ), messageFor( program, ex ) );
 	}
 	
 	/**
 	 * Returns the message ID for the given exception.  If it's a 
-	 * JavartException, its message ID is returned.  Otherwise
+	 * AnyException, its message ID is returned.  Otherwise
 	 * Message.UNHANDLED_EXCEPTION is returned.
 	 */
 	private static String idFor( Exception ex )
 	{
-		if ( ex instanceof JavartException )
+		if ( ex instanceof AnyException )
 		{
-			return ((JavartException)ex).getMessageID();
+			return ((AnyException)ex).getMessageID();
 		}
 		else
 		{
@@ -71,14 +73,14 @@ public class FatalException extends JavartException
 	
 	/**
 	 * Returns the message text for the given exception.  If it's a 
-	 * JavartException, its message text is returned.  Otherwise the text for
+	 * AnyException, its message text is returned.  Otherwise the text for
 	 * Message.UNHANDLED_EXCEPTION is returned.
 	 */
 	private static String messageFor( Executable program, Exception ex )
 	{
-		if ( ex instanceof JavartException )
+		if ( ex instanceof AnyException )
 		{
-			return ((JavartException)ex).getMessage();
+			return ((AnyException)ex).getMessage();
 		}
 		else
 		{

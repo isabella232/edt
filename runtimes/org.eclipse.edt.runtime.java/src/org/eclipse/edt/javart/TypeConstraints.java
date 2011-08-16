@@ -14,6 +14,7 @@ package org.eclipse.edt.javart;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import egl.lang.AnyException;
 import egl.lang.EglAny;
 
 public class TypeConstraints {
@@ -26,7 +27,7 @@ public class TypeConstraints {
 		this.constraints = constraints.length == 0 ? null : constraints;
 	}
 	
-	public Object constrainValue(Object value) throws JavartException {
+	public Object constrainValue(Object value) throws AnyException {
 		Method method = null;
 		boolean useDefault = false;
 		try {
@@ -55,8 +56,8 @@ public class TypeConstraints {
 			return newValue;
 		}
 		catch (InvocationTargetException ex) {
-			if (ex.getTargetException() instanceof JavartException) 
-				throw (JavartException)ex.getTargetException();
+			if (ex.getTargetException() instanceof AnyException) 
+				throw (AnyException)ex.getTargetException();
 			else
 				throw new RuntimeException(ex.getTargetException());
 		}

@@ -13,11 +13,11 @@ package org.eclipse.edt.runtime.java.egl.lang;
 
 import org.eclipse.edt.javart.BoxedValue;
 import org.eclipse.edt.javart.Executable;
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 
 public interface SequenceType extends BoxedValue {
 
 	int getLength();
 	
-	<T extends SequenceType> T substring(Executable program, int start, int end) throws JavartException;
+	<T extends SequenceType> T substring(Executable program, int start, int end) throws AnyException;
 }

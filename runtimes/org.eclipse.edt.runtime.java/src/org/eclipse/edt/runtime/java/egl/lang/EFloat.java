@@ -15,9 +15,10 @@ import java.math.BigDecimal;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
 
+import egl.lang.AnyException;
 import egl.lang.AnyNumber;
+import egl.lang.NullValueException;
 
 public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 	/**
@@ -33,7 +34,7 @@ public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 		return new EFloat(value);
 	}
 
-	public static Double ezeCast(Object value) throws JavartException {
+	public static Double ezeCast(Object value) throws AnyException {
 		return (Double) EglAny.ezeCast(value, "asFloat", EFloat.class, null, null);
 	}
 
@@ -81,49 +82,49 @@ public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 		return value.doubleValue();
 	}
 
-	public static Double asFloat(String value) throws JavartException {
+	public static Double asFloat(String value) throws AnyException {
 		if (value == null)
 			return null;
 		return asFloat(EDecimal.asDecimal(value));
 	}
 
-	public static Double plus(Double op1, Double op2) throws JavartException {
+	public static Double plus(Double op1, Double op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return op1 + op2;
 	}
 
-	public static Double minus(Double op1, Double op2) throws JavartException {
+	public static Double minus(Double op1, Double op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return op1 - op2;
 	}
 
-	public static Double divide(Double op1, Double op2) throws JavartException {
+	public static Double divide(Double op1, Double op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return op1 / op2;
 	}
 
-	public static Double multiply(Double op1, Double op2) throws JavartException {
+	public static Double multiply(Double op1, Double op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return op1 * op2;
 	}
 
-	public static Double remainder(Double op1, Double op2) throws JavartException {
+	public static Double remainder(Double op1, Double op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return op1 % op2;
 	}
 	
-	public static Double power(Double op1, Double op2) throws JavartException {
+	public static Double power(Double op1, Double op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return StrictMath.pow( op1, op2 );
 	}
 
-	public static int compareTo(Double op1, Double op2) throws JavartException {
+	public static int compareTo(Double op1, Double op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			throw new NullValueException();
 		return op1.compareTo(op2);

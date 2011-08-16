@@ -16,9 +16,8 @@ import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
 
-import egl.lang.AnyNumber;
+import egl.lang.*;
 
 /**
  * Class to be used in processing Decimal operations
@@ -218,9 +217,9 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 	 * @param program
 	 * @param target
 	 * @param source
-	 * @throws JavartException
+	 * @throws AnyException
 	 */
-	private static BigDecimal handleNumericOverflow(BigDecimal value, int precision, int scale, boolean ignoreOverflow) throws JavartException {
+	private static BigDecimal handleNumericOverflow(BigDecimal value, int precision, int scale, boolean ignoreOverflow) throws AnyException {
 		BigDecimal result = value;
 		if (ignoreOverflow) {
 			// Don't throw an exception. Store as much of the source as possible.
@@ -245,13 +244,13 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 
 	}
 
-	public static Object ezeCast(Object value, Object[] constraints) throws JavartException {
+	public static Object ezeCast(Object value, Object[] constraints) throws AnyException {
 		Integer[] args = new Integer[constraints.length];
 		java.lang.System.arraycopy(constraints, 0, args, 0, args.length);
 		return ezeCast(value, args);
 	}
 
-	public static BigDecimal ezeCast(Object value, Integer... args) throws JavartException {
+	public static BigDecimal ezeCast(Object value, Integer... args) throws AnyException {
 		return (BigDecimal) EglAny.ezeCast(value, "asDecimal", EDecimal.class, new Class[] { Integer[].class }, args);
 	}
 
@@ -267,7 +266,7 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 		return isa;
 	}
 
-	public static BigDecimal asDecimal(Short value, Integer... args) throws JavartException {
+	public static BigDecimal asDecimal(Short value, Integer... args) throws AnyException {
 		if (value == null)
 			return null;
 		if (args.length == 2)
@@ -276,7 +275,7 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 			return BigDecimal.valueOf(value);
 	}
 
-	public static BigDecimal asDecimal(Integer value, Integer... args) throws JavartException {
+	public static BigDecimal asDecimal(Integer value, Integer... args) throws AnyException {
 		if (value == null)
 			return null;
 		if (args.length == 2)
@@ -285,7 +284,7 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 			return BigDecimal.valueOf(value);
 	}
 
-	public static BigDecimal asDecimal(Long value, Integer... args) throws JavartException {
+	public static BigDecimal asDecimal(Long value, Integer... args) throws AnyException {
 		if (value == null)
 			return null;
 		if (args.length == 2)
@@ -294,7 +293,7 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 			return BigDecimal.valueOf(value);
 	}
 
-	public static BigDecimal asDecimal(Float value, Integer... args) throws JavartException {
+	public static BigDecimal asDecimal(Float value, Integer... args) throws AnyException {
 		if (value == null)
 			return null;
 		if (args.length == 2)
@@ -303,7 +302,7 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 			return BigDecimal.valueOf(value);
 	}
 
-	public static BigDecimal asDecimal(Double value, Integer... args) throws JavartException {
+	public static BigDecimal asDecimal(Double value, Integer... args) throws AnyException {
 		if (value == null)
 			return null;
 		if (args.length == 2)
@@ -312,27 +311,27 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 			return BigDecimal.valueOf(value);
 	}
 
-	public static BigDecimal asDecimal(BigDecimal value, Integer... args) throws JavartException {
+	public static BigDecimal asDecimal(BigDecimal value, Integer... args) throws AnyException {
 		if (args.length == 2)
 			return asDecimal(value, args[0], args[1]);
 		else
 			return value;
 	}
 
-	public static BigDecimal asDecimal(BigDecimal value, int precision, int scale) throws JavartException {
+	public static BigDecimal asDecimal(BigDecimal value, int precision, int scale) throws AnyException {
 		return asDecimal(value, getMaxValue(precision, scale), getMinValue(precision, scale), precision, scale, false);
 	}
 
-	public static BigDecimal asDecimal(BigInteger value, int precision, int scale) throws JavartException {
+	public static BigDecimal asDecimal(BigInteger value, int precision, int scale) throws AnyException {
 		return asDecimal(new BigDecimal(value), getMaxValue(precision, scale), getMinValue(precision, scale), precision, scale, false);
 	}
 
-	public static BigDecimal asDecimal(BigDecimal value, BigDecimal max, BigDecimal min, int precision, int scale) throws JavartException {
+	public static BigDecimal asDecimal(BigDecimal value, BigDecimal max, BigDecimal min, int precision, int scale) throws AnyException {
 		return asDecimal(value, max, min, precision, scale, false);
 	}
 
 	public static BigDecimal asDecimal(BigDecimal value, BigDecimal max, BigDecimal min, int precision, int scale, boolean ignoreOverflow)
-		throws JavartException {
+		throws AnyException {
 		if (value == null)
 			return null;
 		BigDecimal result = value;
@@ -359,7 +358,7 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 		}
 	}
 
-	public static BigDecimal asDecimal(String value, Integer... args) throws JavartException {
+	public static BigDecimal asDecimal(String value, Integer... args) throws AnyException {
 		return asDecimal(asDecimal(value, false), args);
 	}
 
@@ -396,7 +395,7 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static BigDecimal asNumber(BigDecimal value) throws JavartException {
+	public static BigDecimal asNumber(BigDecimal value) throws AnyException {
 		if (value == null)
 			return null;
 		return EDecimal.asDecimal(value);
@@ -432,13 +431,13 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 		return op1.remainder(op2);
 	}
 
-	public static Double power(BigDecimal op1, BigDecimal op2) throws JavartException {
+	public static Double power(BigDecimal op1, BigDecimal op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return StrictMath.pow( op1.doubleValue(), op2.doubleValue() );
 	}
 
-	public static int compareTo(BigDecimal op1, BigDecimal op2) throws JavartException {
+	public static int compareTo(BigDecimal op1, BigDecimal op2) throws AnyException {
 		if (op1 == null || op2 == null) {
 			throw new NullValueException();
 		}

@@ -13,7 +13,6 @@ package egl.lang;
 
 import org.eclipse.edt.javart.ByteStorage;
 import org.eclipse.edt.javart.Executable;
-import org.eclipse.edt.javart.JavartException;
 
 /**
  * Abstract super class for all types that have to be able to represent their values
@@ -35,5 +34,5 @@ public interface AnyStruct extends AnyValue {
 	@Override
 	public void ezeSetEmpty();
 
-	public <T extends AnyStruct> T substring(Executable program, int start, int end) throws JavartException; 
+	public <T extends AnyStruct> T substring(Executable program, int start, int end) throws AnyException; 
 }

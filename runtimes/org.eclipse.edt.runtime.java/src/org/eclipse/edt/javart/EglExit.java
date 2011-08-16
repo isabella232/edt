@@ -15,7 +15,7 @@ package org.eclipse.edt.javart;
 /**
  * Exception to be thrown about for normal EGL termination (program, run unit)
  */
-public class EglExit extends EglThrowable
+public class EglExit extends ControlFlow
 {
 	/**
 	 * The version ID used in serialization.

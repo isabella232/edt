@@ -37,8 +37,8 @@ import org.eclipse.edt.javart.EglExit;
 import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.ExitProgram;
 import org.eclipse.edt.javart.ExitRunUnit;
-import org.eclipse.edt.javart.FatalException;
-import org.eclipse.edt.javart.JavartException;
+import org.eclipse.edt.javart.FatalProblem;
+import egl.lang.AnyException;
 import org.eclipse.edt.javart.Program;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.Transfer;
@@ -120,7 +120,7 @@ public class RunUnitBase implements RunUnit, Serializable
 	 *
 	 * @param startInfo  info about what kind of RunUnit is needed.
 	 */
-	public RunUnitBase( StartupInfo startInfo ) throws JavartException
+	public RunUnitBase( StartupInfo startInfo ) throws AnyException
 	{
 		startupInfo = startInfo;
 
@@ -220,7 +220,7 @@ public class RunUnitBase implements RunUnit, Serializable
 	/**
 	 * Commits changes made by programs in the RunUnit.
 	 */
-	public void commit() throws JavartException
+	public void commit() throws AnyException
 	{
 		resourceManager.commit( this );
 	}
@@ -228,7 +228,7 @@ public class RunUnitBase implements RunUnit, Serializable
 	/**
 	 * Rolls back changes made by programs in the RunUnit.
 	 */
-	public void rollback() throws JavartException
+	public void rollback() throws AnyException
 	{
 		resourceManager.rollback( this );
 	}
@@ -307,7 +307,7 @@ public class RunUnitBase implements RunUnit, Serializable
 	 *
 	 * @param program  the initial Program of this RunUnit.
 	 */
-	public void startWrapped( Program program, String...args ) throws JavartException
+	public void startWrapped( Program program, String...args ) throws AnyException
 	{
 		try
 		{
@@ -329,7 +329,7 @@ public class RunUnitBase implements RunUnit, Serializable
 		{
 			// This is not an error.
 		}
-		catch ( JavartException jx )
+		catch ( AnyException jx )
 		{
 			throw jx;
 		}
@@ -340,7 +340,7 @@ public class RunUnitBase implements RunUnit, Serializable
 			// point back to actual place in code without having to keep track of
 			// this at runtime.
 			Program programInError = null;  //program._runUnit().activeProgram();
-			throw new JavartException( Message.CAUGHT_JAVA_EXCEPTION,
+			throw new AnyException( Message.CAUGHT_JAVA_EXCEPTION,
 					JavartUtil.errorMessage(
 							programInError,
 							Message.CAUGHT_JAVA_EXCEPTION,
@@ -396,7 +396,7 @@ public class RunUnitBase implements RunUnit, Serializable
 
 		fatalError = ex;
 		String message;
-		if ( ex instanceof JavartException )
+		if ( ex instanceof AnyException )
 		{
 			message = ex.getMessage();
 			if ( message == null || message.length() == 0 )
@@ -457,9 +457,9 @@ public class RunUnitBase implements RunUnit, Serializable
 	 *
 	 * @param name  the fully-qualified class of the library.
 	 * @return the library instance to use.
-	 * @throws JavartException
+	 * @throws AnyException
 	 */
-	public Executable loadLibrary( String name ) throws JavartException
+	public Executable loadLibrary( String name ) throws AnyException
 	{
 		Executable library = libraries.get( name );
 		if ( library == null )
@@ -476,10 +476,10 @@ public class RunUnitBase implements RunUnit, Serializable
 	 *
 	 * @param name  the fully-qualified class name.
 	 * @return the new Program.
-	 * @throws JavartException if the load fails.
+	 * @throws AnyException if the load fails.
 	 */
 	@SuppressWarnings("unchecked")
-	public Executable loadProgramByName( String name ) throws JavartException
+	public Executable loadProgramByName( String name ) throws AnyException
 	{
 		try
 		{
@@ -502,7 +502,7 @@ public class RunUnitBase implements RunUnit, Serializable
 					this,
 					Message.CREATE_OBJECT_FAILED,
 					new Object[] { name, ex } );
-			throw new FatalException( Message.CREATE_OBJECT_FAILED, message );
+			throw new FatalProblem( Message.CREATE_OBJECT_FAILED, message );
 		}
 	}
 
@@ -512,10 +512,10 @@ public class RunUnitBase implements RunUnit, Serializable
 	 *
 	 * @param name  the fully-qualified class name.
 	 * @return the new Program.
-	 * @throws FatalException if the load fails.
+	 * @throws FatalProblem if the load fails.
 	 */
 	public static Program loadProgramByNameInNewRU( String name )
-		throws FatalException
+		throws FatalProblem
 	{
 		RunUnitBase ru = null;
 		try
@@ -559,7 +559,7 @@ public class RunUnitBase implements RunUnit, Serializable
 				message = formatMessageInDefaultLocale(
 						Message.CREATE_OBJECT_FAILED, new Object[] { name, ex } );
 			}
-			throw new FatalException( Message.CREATE_OBJECT_FAILED, message );
+			throw new FatalProblem( Message.CREATE_OBJECT_FAILED, message );
 		}
 	}
 
@@ -722,7 +722,7 @@ public class RunUnitBase implements RunUnit, Serializable
 	/**
 	 * Unloads all libraries.
 	 */
-	public void unloadLibraries() throws JavartException
+	public void unloadLibraries() throws AnyException
 	{
 		// We don't actually unload anything.  Instead, call _sqlCleanup and 
 		// _initUnsavedFields on all libraries.  This will reset them to their
@@ -745,9 +745,9 @@ public class RunUnitBase implements RunUnit, Serializable
 //			}
 //			catch ( Exception ex )
 //			{
-//				if ( ex instanceof JavartException )
+//				if ( ex instanceof AnyException )
 //				{
-//					throw (JavartException)ex;
+//					throw (AnyException)ex;
 //				}
 //				else
 //				{
@@ -797,7 +797,7 @@ public class RunUnitBase implements RunUnit, Serializable
 			{
 				resourceManager.rollback( this );
 			}
-			catch ( JavartException je )
+			catch ( AnyException je )
 			{
 				throw new IOException( je.getMessage() );
 			}
@@ -807,7 +807,7 @@ public class RunUnitBase implements RunUnit, Serializable
 				{
 					resourceManager.exit( this );
 				}
-				catch ( JavartException je )
+				catch ( AnyException je )
 				{
 					throw new IOException( je.getMessage() );
 				}
@@ -847,7 +847,7 @@ public class RunUnitBase implements RunUnit, Serializable
 	/**
 	 * Returns the top of the program stack, or the Dummy Program if the stack is empty.
 	 */
-	public Program activeProgram() throws JavartException
+	public Program activeProgram() throws AnyException
 	{
 		if ( programStack.isEmpty() )
 		{
@@ -886,7 +886,7 @@ public class RunUnitBase implements RunUnit, Serializable
 			{
 				retain = program._retainOnExit( 3 );
 			}
-			catch ( JavartException ex )
+			catch ( AnyException ex )
 			{
 				// Won't happen.
 			}
@@ -949,7 +949,7 @@ public class RunUnitBase implements RunUnit, Serializable
 //				{
 //					strlib = new egl.lang.StrLib( this );
 //				}
-//				catch ( JavartException jx )
+//				catch ( AnyException jx )
 //				{
 //					// This won't happen.
 //				}
@@ -978,7 +978,7 @@ public class RunUnitBase implements RunUnit, Serializable
 	}
 
 	@Override
-	public Executable getExecutable(String name) throws JavartException {
+	public Executable getExecutable(String name) throws AnyException {
 		return loadProgramByName(name);
 	}
 

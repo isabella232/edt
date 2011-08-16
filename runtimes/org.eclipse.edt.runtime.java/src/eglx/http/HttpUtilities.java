@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.services.servlet.proxy.ServiceInvoker;
@@ -80,7 +80,7 @@ public class HttpUtilities {
 	public static String getContentType(String key) {
 		return contentTypes.get(key);
 	}
-	public static void assignBody(HttpResponse response, JavartException jrte){
+	public static void assignBody(HttpResponse response, AnyException jrte){
 		
 	}
 	
@@ -141,16 +141,16 @@ public class HttpUtilities {
 			headers.put( HTTP_AUTHENTICATION_ID, new StringBuilder("Basic ").append(Base64.encode( authentication.toString() )).toString() );
 		}
 	}
-	public static void validateUrl( ExecutableBase program, HttpRequest restRequest ) throws IOException, JavartException
+	public static void validateUrl( ExecutableBase program, HttpRequest restRequest ) throws IOException, AnyException
 	{
 		String urlStr = restRequest.getUri().trim();
 		if( urlStr == null || urlStr.trim().length() == 0 )
 		{
-			throw new JavartException(Message.SOA_E_WS_PROXY_EMPTY_URL_EXCEPTION,JavartUtil.errorMessage(program, Message.SOA_E_WS_PROXY_EMPTY_URL_EXCEPTION, new Object[] {urlStr} ));
+			throw new AnyException(Message.SOA_E_WS_PROXY_EMPTY_URL_EXCEPTION,JavartUtil.errorMessage(program, Message.SOA_E_WS_PROXY_EMPTY_URL_EXCEPTION, new Object[] {urlStr} ));
 		}
 		if( urlStr != null && urlStr.trim().toLowerCase().indexOf("http") == -1 )
 		{
-			throw new JavartException(Message.SOA_E_WS_PROXY_INVALID_HTTP_EXCEPTION,JavartUtil.errorMessage(program, Message.SOA_E_WS_PROXY_INVALID_HTTP_EXCEPTION, new Object[] {urlStr} ));
+			throw new AnyException(Message.SOA_E_WS_PROXY_INVALID_HTTP_EXCEPTION,JavartUtil.errorMessage(program, Message.SOA_E_WS_PROXY_INVALID_HTTP_EXCEPTION, new Object[] {urlStr} ));
 		}
 		try
 		{
@@ -158,7 +158,7 @@ public class HttpUtilities {
 		}
 		catch( MalformedURLException mfue )
 		{
-			throw new JavartException(Message.SOA_E_WS_PROXY_INVALID_URL_EXCEPTION,JavartUtil.errorMessage(program, Message.SOA_E_WS_PROXY_INVALID_URL_EXCEPTION, new Object[] {urlStr, ServiceUtilities.getMessage( mfue ) } ));
+			throw new AnyException(Message.SOA_E_WS_PROXY_INVALID_URL_EXCEPTION,JavartUtil.errorMessage(program, Message.SOA_E_WS_PROXY_INVALID_URL_EXCEPTION, new Object[] {urlStr, ServiceUtilities.getMessage( mfue ) } ));
 		}
 	}
 	static String urlEncode( Map<String, String> parameters, boolean isQueryParameters ) throws UnsupportedEncodingException

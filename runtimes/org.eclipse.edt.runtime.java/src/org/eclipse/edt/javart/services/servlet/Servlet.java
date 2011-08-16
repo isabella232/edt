@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 import org.eclipse.edt.javart.json.ParseException;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
@@ -73,7 +73,7 @@ import eglx.services.ServiceUtilities;
 			{
 				program = new ExecutableBase(new RunUnitBase(new StartupInfo( programName(), "", true ))){private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;};
 			}
-			catch(JavartException e){}
+			catch(AnyException e){}
 		}
 		return program;
 	}
@@ -168,7 +168,7 @@ import eglx.services.ServiceUtilities;
 	{
 		HttpResponse outerResponse = new HttpResponse();
 		//handle as inner exception
-		JavartException jrte;
+		AnyException jrte;
 
 		if( t instanceof ParseException )
 		{

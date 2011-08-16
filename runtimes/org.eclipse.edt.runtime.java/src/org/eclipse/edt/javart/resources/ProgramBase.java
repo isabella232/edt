@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 import org.eclipse.edt.javart.Program;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.Transfer;
@@ -47,7 +47,7 @@ public abstract class ProgramBase extends ExecutableBase implements Program, Ser
 	public int ezeCurrentLine;
 					
 	public ProgramBase( RunUnit runUnit )
-		throws JavartException
+		throws AnyException
 	{
 		super(runUnit);
 	}
@@ -57,7 +57,7 @@ public abstract class ProgramBase extends ExecutableBase implements Program, Ser
 	 * segments.
 	 */
 	protected void _initUnsavedSysVars()
-		throws JavartException
+		throws AnyException
 	{
 	}
 
@@ -111,7 +111,7 @@ public abstract class ProgramBase extends ExecutableBase implements Program, Ser
 	 * 
 	 * @return list of the program's parameters
 	 */
-	public EglAny[] _parameters() throws JavartException
+	public EglAny[] _parameters() throws AnyException
 	{
 		return null;
 	}
@@ -157,10 +157,10 @@ public abstract class ProgramBase extends ExecutableBase implements Program, Ser
 	 * value is true when the field is equal to 2.
 	 * 
 	 * @return true if this Program has been called locally and should be cached.
-	 * @throws JavartException if SysVar, ConverseVar, and VGVar initialization 
+	 * @throws AnyException if SysVar, ConverseVar, and VGVar initialization 
 	 *   fails (only possible when the action is zero).
 	 */
-	public boolean _retainOnExit( int action ) throws JavartException
+	public boolean _retainOnExit( int action ) throws AnyException
 	{
 		return false;
 	}

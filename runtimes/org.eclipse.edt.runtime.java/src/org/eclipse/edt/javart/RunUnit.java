@@ -20,12 +20,14 @@ import org.eclipse.edt.javart.resources.ResourceManager;
 import org.eclipse.edt.javart.resources.StartupInfo;
 import org.eclipse.edt.javart.resources.Trace;
 
+import egl.lang.AnyException;
+
 public interface RunUnit {
 	
 	ResourceManager getResourceManager();
 	JavartProperties getProperties();
-	void commit() throws JavartException;
-	void rollback() throws JavartException;
+	void commit() throws AnyException;
+	void rollback() throws AnyException;
 	void registerResource(RecoverableResource rs);
 	void unregisterResource(RecoverableResource rs);
 	void start(Program exec, String...args) throws Exception;
@@ -37,7 +39,7 @@ public interface RunUnit {
 	void endRunUnit(Executable exec, Exception ex) throws Exception;
 	int getReturnCode();
 
-	Executable getExecutable(String name) throws JavartException;
+	Executable getExecutable(String name) throws AnyException;
 	void switchLocale(Locale loc);
 	LocalizedText getLocalizedText();
 	String getDefaultDateFormat();

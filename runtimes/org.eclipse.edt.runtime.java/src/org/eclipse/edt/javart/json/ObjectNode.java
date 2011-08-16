@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 
 public class ObjectNode extends ValueNode {
 	List pairs = new ArrayList();
@@ -31,7 +31,7 @@ public class ObjectNode extends ValueNode {
 		pairs.add(pair);
 	}
 	
-	public void accept(JsonVisitor visitor)  throws JavartException{
+	public void accept(JsonVisitor visitor)  throws AnyException{
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren) {
 			visitChildren(visitor);
@@ -39,7 +39,7 @@ public class ObjectNode extends ValueNode {
 		visitor.endVisit(this);
 	}
 	
-	public void visitChildren(JsonVisitor visitor)  throws JavartException{
+	public void visitChildren(JsonVisitor visitor)  throws AnyException{
 		Iterator i = getPairs().iterator();
 		while (i.hasNext()) {
 			((NameValuePairNode)i.next()).accept(visitor);

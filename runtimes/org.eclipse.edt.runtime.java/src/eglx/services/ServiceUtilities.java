@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.util.JavartUtil;
 
@@ -31,27 +31,18 @@ public class ServiceUtilities
 	}
 
 	
-	public static JavartException buildServiceInvocationException( ExecutableBase program, String id, Object[] params, Throwable t, ServiceKind serviceKind )
+	public static AnyException buildServiceInvocationException( ExecutableBase program, String id, Object[] params, Throwable t, ServiceKind serviceKind )
 	{
 		String message = JavartUtil.errorMessage( program, id, params );
-		JavartException jrte = null;
-		try
-		{
-			jrte = ServiceUtilities.buildInvocationException( program, id, message, "", "", "", t, serviceKind );
-		}
-		catch( JavartException jrte2 ) 
-		{
-			jrte = new ServiceInvocationException(t);
-		}
-		return jrte;
+		return ServiceUtilities.buildInvocationException( program, id, message, "", "", "", t, serviceKind );
 	}
-	private static JavartException buildInvocationException( ExecutableBase prog, String id, String message, String detail1, String detail2, String detail3, Throwable t, ServiceKind serviceKind ) 
+	private static AnyException buildInvocationException( ExecutableBase prog, String id, String message, String detail1, String detail2, String detail3, Throwable t, ServiceKind serviceKind ) 
 	{
 		while( t instanceof InvocationTargetException &&
 				((InvocationTargetException)t).getCause() != null ){
 			t = ((InvocationTargetException)t).getCause();
 		}
-		ServiceInvocationException sie = (t == null ? new ServiceInvocationException() : new ServiceInvocationException(t));
+		ServiceInvocationException sie = new ServiceInvocationException();
 		if(detail3 == null || detail3.length() == 0){
 			detail3 = getMessage(t);
 		}
@@ -60,7 +51,7 @@ public class ServiceUtilities
 		sie.setDetail1((detail1==null)?"":detail1);
 		sie.setDetail2((detail2==null)?"":detail2);
 		sie.setDetail3((detail3==null)?"":detail3);
-		sie.setServiceKind(serviceKind);
+		sie.setSource(serviceKind);
 		return sie;
 	}
 
@@ -70,7 +61,7 @@ public class ServiceUtilities
 				((InvocationTargetException)t).getCause() != null ){
 			t = ((InvocationTargetException)t).getCause();
 		}
-		if( t instanceof JavartException )
+		if( t instanceof AnyException )
 		{
 			return t.getMessage();
 		}

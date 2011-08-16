@@ -17,7 +17,7 @@ import java.io.Serializable;
 
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.Executable;
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 import org.eclipse.edt.javart.RunUnit;
 
 /**
@@ -67,7 +67,7 @@ public abstract class ExecutableBase implements Executable, Serializable
 	 *            bit flags used to indicate various behaviors.
 	 */
 	public ExecutableBase( RunUnit runUnit )
-		throws JavartException
+		throws AnyException
 	{
 		this.runUnit = runUnit;
 	}
@@ -77,9 +77,9 @@ public abstract class ExecutableBase implements Executable, Serializable
 	 * require system variables. They'll override this method to initialize any
 	 * variables they have, or do nothing at all.
 	 *
-	 * @throws JavartException
+	 * @throws AnyException
 	 */
-	protected void _constructSystemVariables( ) throws JavartException
+	protected void _constructSystemVariables( ) throws AnyException
 	{				
 	}
 
@@ -102,7 +102,7 @@ public abstract class ExecutableBase implements Executable, Serializable
 	/**
 	 * Commits changes made by programs in the RunUnit.
 	 */
-	public void _commit() throws JavartException
+	public void _commit() throws AnyException
 	{
 		runUnit.commit();
 	}
@@ -110,7 +110,7 @@ public abstract class ExecutableBase implements Executable, Serializable
 	/**
 	 * Discards changes made by programs in the RunUnit.
 	 */
-	public void _rollback() throws JavartException
+	public void _rollback() throws AnyException
 	{
 		runUnit.rollback();
 	}

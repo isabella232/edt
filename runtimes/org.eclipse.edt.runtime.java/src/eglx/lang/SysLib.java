@@ -23,7 +23,9 @@ import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.resources.Platform;
 import org.eclipse.edt.javart.resources.Trace;
 import org.eclipse.edt.javart.util.JavartUtil;
-import org.eclipse.edt.runtime.java.egl.lang.NullValueException;
+import egl.lang.NullValueException;
+
+import egl.lang.AnyException;
 
 public class SysLib extends ExecutableBase {
 
@@ -34,9 +36,9 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * Constructor
 	 * @param ru The rununit
-	 * @throws JavartException
+	 * @throws AnyException
 	 */
-	public SysLib(RunUnit ru) throws JavartException {
+	public SysLib(RunUnit ru) throws AnyException {
 		super(ru);
 		this.staticRu = ru;
 	}
@@ -78,7 +80,7 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * Run an external command in the foreground, in LINE mode. This does not return until the command has completed.
 	 */
-	public static void callCmd(String commandString) throws JavartException {
+	public static void callCmd(String commandString) throws AnyException {
 		if (commandString == null)
 			throw new NullValueException();
 		runCommand(commandString, true, true);
@@ -88,13 +90,13 @@ public class SysLib extends ExecutableBase {
 	 * Run an external command in the background, in LINE mode. This returns immediately, not waiting for the command to
 	 * complete.
 	 */
-	public static void startCmd(String commandString) throws JavartException {
+	public static void startCmd(String commandString) throws AnyException {
 		if (commandString == null)
 			throw new NullValueException();
 		runCommand(commandString, true, true);
 	}
 
-	private static void runCommand(String commandString, boolean lineMode, boolean wait) throws JavartException {
+	private static void runCommand(String commandString, boolean lineMode, boolean wait) throws AnyException {
 		if (commandString == null)
 			throw new NullValueException();
 		final Process proc;
@@ -168,7 +170,7 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * Calls the Power Server to commit changes.
 	 */
-	public static void commit() throws JavartException {
+	public static void commit() throws AnyException {
 		RuntimeException errorException = null;
 		Trace trace = staticRu.getTrace();
 		boolean tracing = trace.traceIsOn(Trace.GENERAL_TRACE);
@@ -181,9 +183,9 @@ public class SysLib extends ExecutableBase {
 			/* Commit recoverable resource */
 			staticRu.commit();
 		}
-		catch (JavartException jx) {
+		catch (AnyException jx) {
 			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.commit", jx.getMessage() });
-			errorException = new org.eclipse.edt.runtime.java.egl.lang.RuntimeException(Message.SYSTEM_FUNCTION_ERROR, message);
+			errorException = new RuntimeException(message); //TODO this should be one of our exceptions
 		}
 		finally {
 			if (errorException == null) {
@@ -202,7 +204,7 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * Calls the Power Server and resource manager to rollback changes.
 	 */
-	public static void rollback() throws JavartException {
+	public static void rollback() throws AnyException {
 		RuntimeException errorException = null;
 		Trace trace = staticRu.getTrace();
 		boolean tracing = trace.traceIsOn(Trace.GENERAL_TRACE);
@@ -214,9 +216,9 @@ public class SysLib extends ExecutableBase {
 			/* Roll back recoverable resources */
 			staticRu.rollback();
 		}
-		catch (JavartException jx) {
+		catch (AnyException jx) {
 			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.rollBack", jx.getMessage() });
-			errorException = new org.eclipse.edt.runtime.java.egl.lang.RuntimeException(Message.SYSTEM_FUNCTION_ERROR, message);
+			errorException = new RuntimeException(message); //TODO this should be one of our exceptions
 		}
 		finally {
 			if (errorException == null) {

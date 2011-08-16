@@ -11,12 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.javart;
 
-
+import egl.lang.AnyException;
 
 /**
- * Exception for program errors.
+ * This is the superclass of things we throw that don't indicate an error.
  */
-public class JavartException extends RuntimeException
+public class ControlFlow extends RuntimeException
 {
 	/**
 	 * The version ID used in serialization.
@@ -24,69 +24,23 @@ public class JavartException extends RuntimeException
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	
 	/**
-	 * The message ID.
-	 */
-	private String id;
-
-	public JavartException() { super(); }
-	
-	public JavartException(String id) {
-		this.id = id;
-	}
-	
-	public JavartException(Throwable ex) {
-		super(ex);
-	}
-	/**
-	 * Makes the JavartException.
-	 * 
-	 * @param id
-	 *            The message ID.
-	 * @param message
-	 *            The error message.
-	 */
-	public JavartException( String id, String message )
-	{
-		super( message );
-		this.id = id;
-	}
-	
-	/**
-	 * @return The ID of the error message.
-	 */
-	public String getMessageID()
-	{
-		return id;
-	}
-	
-	public void setMessageID(String id) {
-		this.id = id;
-	}
-	
-	/**
 	 * To improve performance, we override the usual implementation of this method,
 	 * which is VERY expensive.  But unfortunately this means a stack trace for this
 	 * exception will not be available.  That's OK since EGL users don't see them
 	 * anyway.
 	 * <P>
-	 * For debugging, you can get stack traces in your JavartExceptions (and loose
-	 * the performance improvement) by setting the system property 
+	 * For debugging, you can get stack traces in your ControlFlow (and lose the
+	 * performance improvement) by setting the system property 
 	 * org.eclipse.edt.javart.StackTraces to true.  
 	 *
 	 * @return this object.
 	 */
 	public Throwable fillInStackTrace()
 	{
-		if ( NO_STACK_TRACES )
+		if ( AnyException.NO_STACK_TRACES )
 		{
 			return this;
 		}
 		return super.fillInStackTrace();
 	}
-	
-	/**
-	 * Determines if fillInStackTrace is optimized or not.
-	 */
-	static final boolean NO_STACK_TRACES = !Boolean.getBoolean( "org.eclipse.edt.javart.StackTraces" );
-	
 }

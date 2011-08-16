@@ -15,9 +15,10 @@ import java.math.BigDecimal;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
 
+import egl.lang.AnyException;
 import egl.lang.AnyNumber;
+import egl.lang.NullValueException;
 
 public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 	/**
@@ -33,7 +34,7 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 		return new ESmallfloat(value);
 	}
 
-	public static Float ezeCast(Object value) throws JavartException {
+	public static Float ezeCast(Object value) throws AnyException {
 		return (Float) EglAny.ezeCast(value, "asSmallfloat", ESmallfloat.class, null, null);
 	}
 
@@ -63,13 +64,13 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 		return value.floatValue();
 	}
 
-	public static Float asSmallfloat(Float value) throws JavartException {
+	public static Float asSmallfloat(Float value) throws AnyException {
 		if (value == null)
 			return null;
 		return value.floatValue();
 	}
 
-	public static Float asSmallfloat(Double value) throws JavartException {
+	public static Float asSmallfloat(Double value) throws AnyException {
 		if (value == null)
 			return null;
 		return value.floatValue();
@@ -81,49 +82,49 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 		return value.floatValue();
 	}
 
-	public static Float asSmallfloat(String value) throws JavartException {
+	public static Float asSmallfloat(String value) throws AnyException {
 		if (value == null)
 			return null;
 		return asSmallfloat(EDecimal.asDecimal(value));
 	}
 
-	public static Float plus(Float op1, Float op2) throws JavartException {
+	public static Float plus(Float op1, Float op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return op1 + op2;
 	}
 
-	public static Float minus(Float op1, Float op2) throws JavartException {
+	public static Float minus(Float op1, Float op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return op1 - op2;
 	}
 
-	public static Float divide(Float op1, Float op2) throws JavartException {
+	public static Float divide(Float op1, Float op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return op1 / op2;
 	}
 
-	public static Float multiply(Float op1, Float op2) throws JavartException {
+	public static Float multiply(Float op1, Float op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return op1 * op2;
 	}
 
-	public static Float remainder(Float op1, Float op2) throws JavartException {
+	public static Float remainder(Float op1, Float op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return op1 % op2;
 	}
 	
-	public static Float power(Float op1, Float op2) throws JavartException {
+	public static Float power(Float op1, Float op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return (float)StrictMath.pow( op1, op2 );
 	}
 
-	public static int compareTo(Float op1, Float op2) throws JavartException {
+	public static int compareTo(Float op1, Float op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			throw new NullValueException();
 		return op1.compareTo(op2);

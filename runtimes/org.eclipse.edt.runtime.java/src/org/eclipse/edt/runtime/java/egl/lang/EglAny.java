@@ -17,8 +17,12 @@ import java.lang.reflect.Method;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.TypeConstraints;
+import org.eclipse.edt.javart.util.JavartUtil;
+
+import egl.lang.AnyException;
+import egl.lang.DynamicAccessException;
+import egl.lang.TypeCastException;
 
 public abstract class EglAny implements egl.lang.EglAny {
 	/**
@@ -26,12 +30,12 @@ public abstract class EglAny implements egl.lang.EglAny {
 	 */
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
-	public static egl.lang.EglAny box(egl.lang.EglAny value) throws JavartException {
+	public static egl.lang.EglAny box(egl.lang.EglAny value) throws AnyException {
 		return ezeBox(value);
 	}
 		
 	@SuppressWarnings("unchecked")
-	public static <R extends Object> AnyBoxedObject<R> ezeBox(R object) throws JavartException {
+	public static <R extends Object> AnyBoxedObject<R> ezeBox(R object) throws AnyException {
 		if (object instanceof AnyValue) {
 			AnyValue newValue = ((AnyValue)object).ezeNewValue();
 			newValue.ezeCopy((AnyValue)object);
@@ -44,13 +48,17 @@ public abstract class EglAny implements egl.lang.EglAny {
 		return new AnyBoxedObject<R>(object);
 	}
 
-	public static <T extends Object> T ezeCast(Object value, Class<T> clazz) throws JavartException {
+	public static <T extends Object> T ezeCast(Object value, Class<T> clazz) throws AnyException {
 		try {
 			Object unboxed = value instanceof egl.lang.EglAny ? ((egl.lang.EglAny)value).ezeUnbox() : value;
 			return clazz.cast(unboxed);
 		}
 		catch(ClassCastException ex) {
-			throw new TypeCastException(ex);
+			TypeCastException tcx = new TypeCastException();
+			tcx.castToName = clazz.getName();
+			Object unboxed = value instanceof egl.lang.EglAny ? ((egl.lang.EglAny)value).ezeUnbox() : value;
+			tcx.actualTypeName = unboxed.getClass().getName();
+			throw tcx;
 		}
 	}
 	
@@ -66,10 +74,10 @@ public abstract class EglAny implements egl.lang.EglAny {
 	 * @param parameterTypes
 	 * @param args
 	 * @return
-	 * @throws JavartException
+	 * @throws AnyException
 	 */
 	@SuppressWarnings("unchecked")
-	public static Object ezeCast(Object value, String conversionMethod, Class clazz, Class[] parameterTypes, Object[] args) throws JavartException {
+	public static Object ezeCast(Object value, String conversionMethod, Class clazz, Class[] parameterTypes, Object[] args) throws AnyException {
 		try {
 			// Conversion operation needs to be invoked
 			Method method = null;
@@ -86,7 +94,10 @@ public abstract class EglAny implements egl.lang.EglAny {
 					method = value.getClass().getMethod(conversionMethod, parmTypes);
 				} 
 				catch (NoSuchMethodException ex1) {
-					throw new TypeCastException(ex1);
+					TypeCastException tcx = new TypeCastException();
+					tcx.castToName = clazz.getName();
+					tcx.actualTypeName = unboxed.getClass().getName();
+					throw tcx;
 				}
 			}
 			if (args == null) 
@@ -95,14 +106,14 @@ public abstract class EglAny implements egl.lang.EglAny {
 				return method.invoke(null, unboxed, args);
 		}
 		catch(InvocationTargetException ex) {
-			if (ex.getTargetException() instanceof JavartException)
-				throw (JavartException)ex.getTargetException();
+			if (ex.getTargetException() instanceof AnyException)
+				throw (AnyException)ex.getTargetException();
 			else
-				throw new JavaObjectException(ex.getTargetException());
+				throw JavartUtil.makeJavaObjectException(ex.getTargetException());
 		}
 		catch (Exception ex1) {
 			// Should not ever get here
-			throw new JavaObjectException(ex1);
+			throw JavartUtil.makeJavaObjectException(ex1);
 		}
 	}
 
@@ -127,7 +138,7 @@ public abstract class EglAny implements egl.lang.EglAny {
 		return super.clone();
 	}
 
-	public egl.lang.EglAny ezeGet(String name) throws JavartException {
+	public egl.lang.EglAny ezeGet(String name) throws AnyException {
 		try {
 			Field field = this.getClass().getField(name);
 			if (ezeTypeConstraints(name) != null) {
@@ -138,12 +149,14 @@ public abstract class EglAny implements egl.lang.EglAny {
 			Object value = field.get(this);
 			return value instanceof egl.lang.EglAny ? (egl.lang.EglAny) value : ezeBox(value);
 		} catch (Exception e) {
-			throw new DynamicAccessException(e);
+			DynamicAccessException dax = new DynamicAccessException();
+			dax.key = name;
+			throw dax;
 		} 
 	}
 
 	@SuppressWarnings("unchecked")
-	public void ezeSet(String name, Object value) throws JavartException {
+	public void ezeSet(String name, Object value) throws AnyException {
 		try {
 			Field field = this.getClass().getField(name);
 			if (ezeTypeConstraints(name) != null){
@@ -155,7 +168,9 @@ public abstract class EglAny implements egl.lang.EglAny {
 			}
 			field.set(this, value);
 		} catch (Exception e) {
-			throw new DynamicAccessException(e);
+			DynamicAccessException dax = new DynamicAccessException();
+			dax.key = name;
+			throw dax;
 		} 
 	}
 
@@ -182,11 +197,11 @@ public abstract class EglAny implements egl.lang.EglAny {
 	/**
 	 * Default implementation does nothing
 	 */
-	public void ezeInitialize() throws JavartException {
+	public void ezeInitialize() throws AnyException {
 		
 	}
 	
-//	private void throwDynamicAccessException(String name) throws JavartException {
+//	private void throwDynamicAccessException(String name) throws AnyException {
 //		JavartUtil.throwRuntimeException( 
 //				Message.DYNAMIC_ACCESS_FAILED, 
 //				JavartUtil.errorMessage( 

@@ -16,6 +16,9 @@ import java.util.*;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.Delegate;
 
+import egl.lang.ArraySizeException;
+import egl.lang.InvalidIndexException;
+
 public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 	/**
 	 * The version ID used in serialization.

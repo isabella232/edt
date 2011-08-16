@@ -13,8 +13,6 @@ package egl.lang;
 
 import java.util.Map;
 
-import org.eclipse.edt.javart.JavartException;
-
 /**
  * 
  */
@@ -50,16 +48,16 @@ public interface EDictionary extends EglAny, Map<java.lang.String, Object> {
 	/**
 	 * Insert all the entries another dictionary into this dictionary.
 	 * @param d the source dictionary
-	 * @throws JavartException
+	 * @throws AnyException
 	 */
-	public void insertAll(EDictionary d) throws JavartException;
+	public void insertAll(EDictionary d) throws AnyException;
 
 	/**
 	 * Remove the entry with a specified key from the dictionary
 	 * @param key the key for the entry to remove
 	 * @throws AbnormalException if no element with specified key exists
 	 */
-	public void removeElement(String key) throws JavartException;
+	public void removeElement(String key) throws AnyException;
 
 	/**
 	 * Removes all the entries in the dictionary

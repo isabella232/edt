@@ -15,9 +15,8 @@ import java.math.BigDecimal;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
 
-import egl.lang.AnyNumber;
+import egl.lang.*;
 
 public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -31,7 +30,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return new ESmallint(value);
 	}
 
-	public static Short ezeCast(Object value) throws JavartException {
+	public static Short ezeCast(Object value) throws AnyException {
 		return (Short) EglAny.ezeCast(value, "asSmallint", ESmallint.class, null, null);
 	}
 
@@ -49,7 +48,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return value;
 	}
 
-	public static Short asSmallint(Integer value) throws JavartException {
+	public static Short asSmallint(Integer value) throws AnyException {
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
@@ -59,14 +58,14 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 				result = BigDecimal.valueOf(value).shortValueExact();
 			}
 			catch (ArithmeticException ex) {
-				throw new NumericOverflowException(ex.getLocalizedMessage());
+				throw new NumericOverflowException();
 			}
 		} else
 			result = Long.valueOf(value).shortValue();
 		return result;
 	}
 
-	public static Short asSmallint(Long value) throws JavartException {
+	public static Short asSmallint(Long value) throws AnyException {
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
@@ -76,14 +75,14 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 				result = BigDecimal.valueOf(value).shortValueExact();
 			}
 			catch (ArithmeticException ex) {
-				throw new NumericOverflowException(ex.getLocalizedMessage());
+				throw new NumericOverflowException();
 			}
 		} else
 			result = Long.valueOf(value).shortValue();
 		return result;
 	}
 
-	public static Short asSmallint(Float value) throws JavartException {
+	public static Short asSmallint(Float value) throws AnyException {
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
@@ -93,14 +92,14 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 				result = BigDecimal.valueOf(value).shortValueExact();
 			}
 			catch (ArithmeticException ex) {
-				throw new NumericOverflowException(ex.getLocalizedMessage());
+				throw new NumericOverflowException();
 			}
 		} else
 			result = value.shortValue();
 		return result;
 	}
 
-	public static Short asSmallint(Double value) throws JavartException {
+	public static Short asSmallint(Double value) throws AnyException {
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
@@ -110,14 +109,14 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 				result = BigDecimal.valueOf(value).shortValueExact();
 			}
 			catch (ArithmeticException ex) {
-				throw new NumericOverflowException(ex.getLocalizedMessage());
+				throw new NumericOverflowException();
 			}
 		} else
 			result = value.shortValue();
 		return result;
 	}
 
-	public static Short asSmallint(BigDecimal value) throws JavartException {
+	public static Short asSmallint(BigDecimal value) throws AnyException {
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
@@ -127,14 +126,14 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 				result = value.shortValueExact();
 			}
 			catch (ArithmeticException ex) {
-				throw new NumericOverflowException(ex.getLocalizedMessage());
+				throw new NumericOverflowException();
 			}
 		} else
 			result = value.shortValue();
 		return result;
 	}
 
-	public static Short asSmallint(String value) throws JavartException {
+	public static Short asSmallint(String value) throws AnyException {
 		if (value == null)
 			return null;
 		return asSmallint(EDecimal.asDecimal(value));
@@ -144,54 +143,54 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static BigDecimal asNumber(Short value) throws JavartException {
+	public static BigDecimal asNumber(Short value) throws AnyException {
 		if (value == null)
 			return null;
 		return EDecimal.asDecimal(value);
 	}
 
-	public static Integer plus(Short op1, Short op2) throws JavartException {
+	public static Integer plus(Short op1, Short op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return op1 + op2;
 	}
 
-	public static Integer minus(Short op1, Short op2) throws JavartException {
+	public static Integer minus(Short op1, Short op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return op1 - op2;
 	}
 
-	public static BigDecimal divide(Short op1, Short op2) throws JavartException {
+	public static BigDecimal divide(Short op1, Short op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return BigDecimal.valueOf(op1).divide(BigDecimal.valueOf(op2), EDecimal.BIGDECIMAL_RESULT_SCALE, EDecimal.ROUND_BD);
 	}
 
-	public static Integer multiply(Short op1, Short op2) throws JavartException {
+	public static Integer multiply(Short op1, Short op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		try {
 			return BigDecimal.valueOf(op1 * op2).intValueExact();
 		}
 		catch (ArithmeticException ex) {
-			throw new NumericOverflowException(ex.getLocalizedMessage());
+			throw new NumericOverflowException();
 		}
 	}
 
-	public static Integer remainder(Short op1, Short op2) throws JavartException {
+	public static Integer remainder(Short op1, Short op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return op1 % op2;
 	}
 
-	public static Double power(Short op1, Short op2) throws JavartException {
+	public static Double power(Short op1, Short op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
 		return StrictMath.pow(op1, op2);
 	}
 
-	public static int compareTo(Short op1, Short op2) throws JavartException {
+	public static int compareTo(Short op1, Short op2) throws AnyException {
 		if (op1 == null && op2 == null)
 			return 0;
 		if ((op1 != null && op2 == null) || (op1 == null && op2 != null))

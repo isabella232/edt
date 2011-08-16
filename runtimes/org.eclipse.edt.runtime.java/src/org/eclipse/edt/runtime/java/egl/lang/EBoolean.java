@@ -13,7 +13,9 @@ package org.eclipse.edt.runtime.java.egl.lang;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
+
+import egl.lang.AnyException;
+import egl.lang.NullValueException;
 
 public class EBoolean extends AnyBoxedObject<Boolean> {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -27,7 +29,7 @@ public class EBoolean extends AnyBoxedObject<Boolean> {
 		return new EBoolean(value);
 	}
 
-	public static Boolean ezeCast(Object value) throws JavartException {
+	public static Boolean ezeCast(Object value) throws AnyException {
 		return (Boolean) EglAny.ezeCast(value, "asBoolean", EBoolean.class, null, null);
 	}
 
@@ -39,7 +41,7 @@ public class EBoolean extends AnyBoxedObject<Boolean> {
 		return EString.asString(object);
 	}
 
-	public static Boolean asBoolean(Number number) throws JavartException {
+	public static Boolean asBoolean(Number number) throws AnyException {
 		if (number == null)
 			throw new NullValueException();
 		return number.floatValue() != 0;

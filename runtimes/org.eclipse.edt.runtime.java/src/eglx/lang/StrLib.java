@@ -18,15 +18,15 @@ import java.util.StringTokenizer;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
+import egl.lang.AnyException;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.TimestampData;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
 import org.eclipse.edt.javart.util.NumberFormatter;
-import org.eclipse.edt.runtime.java.egl.lang.InvalidIndexException;
-import org.eclipse.edt.runtime.java.egl.lang.NullValueException;
+import egl.lang.InvalidIndexException;
+import egl.lang.NullValueException;
 
 public class StrLib extends ExecutableBase {
 
@@ -37,7 +37,7 @@ public class StrLib extends ExecutableBase {
 	/**
 	 * Constructor
 	 */
-	public StrLib(RunUnit ru) throws JavartException {
+	public StrLib(RunUnit ru) throws AnyException {
 		super(ru);
 		this.staticRu = ru;
 	}
@@ -127,7 +127,7 @@ public class StrLib extends ExecutableBase {
 	 * updated with the token's ending position. The exception egl.core.IndexOutOfBounds is thrown if the index is less than
 	 * 1 or greater than the length of the source String.
 	 */
-	public static String getNextToken(String source, AnyBoxedObject<Integer> index, String delimiters) throws JavartException {
+	public static String getNextToken(String source, AnyBoxedObject<Integer> index, String delimiters) throws AnyException {
 		if (source == null || index == null)
 			throw new NullValueException();
 		int start = index.ezeUnbox();
@@ -135,7 +135,7 @@ public class StrLib extends ExecutableBase {
 		// Validate the substring index.
 		if (start < 1 || start > sourceBytes.length) {
 			InvalidIndexException ex = new InvalidIndexException();
-			ex.indexValue = start;
+			ex.index = start;
 			throw ex;
 		}
 		// Search the substring for tokens. We don't use a

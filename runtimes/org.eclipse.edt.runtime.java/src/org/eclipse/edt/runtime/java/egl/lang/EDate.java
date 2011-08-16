@@ -16,9 +16,12 @@ import java.util.GregorianCalendar;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.TimestampIntervalMask;
+
+import egl.lang.AnyException;
+import egl.lang.NullValueException;
+import egl.lang.TypeCastException;
 
 /**
  * A class for Dates. The value is a Calendar.
@@ -39,13 +42,13 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		return new EDate((Calendar) value.clone());
 	}
 
-	public static Object ezeCast(Object value, Object[] constraints) throws JavartException {
+	public static Object ezeCast(Object value, Object[] constraints) throws AnyException {
 		Integer[] args = new Integer[constraints.length];
 		java.lang.System.arraycopy(constraints, 0, args, 0, args.length);
 		return ezeCast(value, args);
 	}
 
-	public static Calendar ezeCast(Object value) throws JavartException {
+	public static Calendar ezeCast(Object value) throws AnyException {
 		return (Calendar) EglAny.ezeCast(value, "asDate", EDate.class, null, null);
 	}
 
@@ -65,15 +68,15 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		return cal;
 	}
 
-	public static Calendar asDate(String date) throws JavartException {
+	public static Calendar asDate(String date) throws AnyException {
 		return ETimestamp.convert(date, ETimestamp.YEAR_CODE, ETimestamp.DAY_CODE);
 	}
 
-	public static Calendar asDate(GregorianCalendar date) throws JavartException {
+	public static Calendar asDate(GregorianCalendar date) throws AnyException {
 		return asDate((Calendar) date);
 	}
 
-	public static Calendar asDate(Calendar date) throws JavartException {
+	public static Calendar asDate(Calendar date) throws AnyException {
 		return ETimestamp.convert(EString.asString(date), ETimestamp.YEAR_CODE, ETimestamp.DAY_CODE);
 	}
 
@@ -92,7 +95,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the difference between 2 dates
 	 */
-	public static Integer daysDifferent(Calendar aDate, Calendar bDate) throws JavartException {
+	public static Integer daysDifferent(Calendar aDate, Calendar bDate) throws AnyException {
 		if (aDate == null || bDate == null)
 			throw new NullValueException();
 		return (int) ((aDate.getTimeInMillis() - bDate.getTimeInMillis()) / (1000 * DateTimeUtil.SECONDS_PER_DAY));
@@ -101,7 +104,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the adds days to a date
 	 */
-	public static Calendar addDays(Calendar aDate, Integer amount) throws JavartException {
+	public static Calendar addDays(Calendar aDate, Integer amount) throws AnyException {
 		if (aDate == null || amount == null)
 			throw new NullValueException();
 		if (!aDate.isSet(Calendar.DATE))
@@ -114,7 +117,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the extension of a date
 	 */
-	public static Calendar extend(Calendar aDate, String timeSpanPattern) throws JavartException {
+	public static Calendar extend(Calendar aDate, String timeSpanPattern) throws AnyException {
 		if (aDate == null)
 			throw new NullValueException();
 		// Default values in case the pattern doesn't specify things.
