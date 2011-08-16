@@ -17,7 +17,7 @@ import egl.lang.NativeType;
 externalType ServiceLib type NativeType
 
 	//delegate
-	serviceExceptionHandler  serviceExceptionHandler;
+	static serviceExceptionHandler  serviceExceptionHandler;
 	
     static function bindService(http eglx.http.HttpREST inout, intrface any const in);
 
