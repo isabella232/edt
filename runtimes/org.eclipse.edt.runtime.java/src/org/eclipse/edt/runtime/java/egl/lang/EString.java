@@ -587,4 +587,11 @@ public class EString extends AnyBoxedObject<String> {
 			throw new NullValueException();
 		return matchesPattern(asString(source, length), value);
 	}
+
+	public String toString() {
+		if ( maxLength > 0 )
+			return asString(object, maxLength);
+		else
+			return object;
+	}
 }
