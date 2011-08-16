@@ -16,9 +16,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IStackFrame;
@@ -29,13 +34,15 @@ import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
 import org.eclipse.edt.debug.core.java.IEGLJavaThread;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaThread;
+import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 
 /**
  * Wraps an IJavaThread.
  */
 public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 {
-	private static final boolean FILTER_RUNTIMES = !System.getProperty( "edt.debug.filter.runtimes", "yes" ).equalsIgnoreCase( "false" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	private static final String FILTER_ATTR = "edt.debug.filter.runtimes"; //$NON-NLS-1$
+	private static final boolean FILTER_RUNTIMES = !System.getProperty( FILTER_ATTR, "yes" ).equalsIgnoreCase( "false" ); //$NON-NLS-1$ //$NON-NLS-2$
 	
 	private static final EGLJavaStackFrame[] EMPTY_FRAMES = new EGLJavaStackFrame[ 0 ];
 	
@@ -64,6 +71,8 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	 */
 	private Map<IStackFrame, EGLJavaStackFrame> previousStackFrames;
 	
+	private boolean filterRuntimes;
+	
 	/**
 	 * Constructor.
 	 * 
@@ -74,7 +83,54 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	{
 		super( target );
 		javaThread = thread;
+		initFilterSetting();
 		disposeStackFrames();
+	}
+	
+	/**
+	 * Initialize the filtering setting. If the launch configuration specifies the VM arg then we'll
+	 * honor it, otherwise we fall back on the system property setting within the Eclipse JVM.
+	 */
+	private void initFilterSetting()
+	{
+		boolean set = false;
+		ILaunch launch = getDebugTarget().getLaunch();
+		if ( launch != null )
+		{
+			ILaunchConfiguration config = launch.getLaunchConfiguration();
+			if ( config != null )
+			{
+				try
+				{
+					String vmArgs = config.getAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, (String)null );
+					if ( vmArgs != null && vmArgs.length() > 0 )
+					{
+						Pattern p = Pattern.compile( "-D" + FILTER_ATTR + "=([\\S]*)" ); //$NON-NLS-1$ //$NON-NLS-2$
+						Matcher m = p.matcher( vmArgs );
+						if ( m.matches() && m.groupCount() > 0 )
+						{
+							if ( "false".equalsIgnoreCase( m.group( 1 ) ) ) //$NON-NLS-1$
+							{
+								filterRuntimes = false;
+							}
+							else
+							{
+								filterRuntimes = true;
+							}
+							set = true;
+						}
+					}
+				}
+				catch ( CoreException e )
+				{
+				}
+			}
+		}
+		
+		if ( !set )
+		{
+			filterRuntimes = FILTER_RUNTIMES;
+		}
 	}
 	
 	protected void disposeStackFrames()
@@ -226,7 +282,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 					// 1. don't filter anything if the system property is set
 					// 2. don't filter the top frame
 					// 3. filter the initial main method (if there is one - there won't be if running on a server)
-					if ( !FILTER_RUNTIMES
+					if ( !filterRuntimes
 							|| (i == 0 || (!filterFrameType( (IJavaStackFrame)javaFrames[ i ] ) && (i + 1 < javaFrames.length || !isMainMethod( (IJavaStackFrame)javaFrames[ i ] )))) )
 					{
 						EGLJavaStackFrame frame = previousStackFrames == null
@@ -327,7 +383,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 						fireTerminateEvent();
 						break;
 					case DebugEvent.RESUME:
-						if ( FILTER_RUNTIMES && events[ i ].getDetail() == DebugEvent.STEP_INTO )
+						if ( filterRuntimes && events[ i ].getDetail() == DebugEvent.STEP_INTO )
 						{
 							IStackFrame topJavaFrame = previousJavaFrames == null || previousJavaFrames.length == 0
 									? null
@@ -351,7 +407,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 						savedEvents.add( events[ i ] );
 						break;
 					case DebugEvent.SUSPEND:
-						if ( FILTER_RUNTIMES && events[ i ].getDetail() == DebugEvent.STEP_END )
+						if ( filterRuntimes && events[ i ].getDetail() == DebugEvent.STEP_END )
 						{
 							try
 							{
