@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.sql;
 
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.OpenStatement;
 
 public interface SqlOpenStatement extends SqlGetByKeyStatement, OpenStatement {
@@ -22,4 +23,7 @@ public interface SqlOpenStatement extends SqlGetByKeyStatement, OpenStatement {
 	
 	void setIsScroll(Boolean value);
 	
+	Expression getResultSet();
+	
+	void setResultSet(Expression value);
 }

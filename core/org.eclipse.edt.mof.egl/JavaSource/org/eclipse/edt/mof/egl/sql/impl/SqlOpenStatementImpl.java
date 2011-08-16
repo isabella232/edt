@@ -11,12 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.sql.impl;
 
+import java.util.List;
+
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.sql.SqlOpenStatement;
 
 public class SqlOpenStatementImpl extends SqlGetByKeyStatementImpl implements SqlOpenStatement {
 	private static int Slot_isHold=0;
 	private static int Slot_isScroll=1;
-	private static int totalSlots = 2;
+	private static int Slot_resultSet=2;
+	private static int totalSlots = 3;
 	
 	public static int totalSlots() {
 		return totalSlots + SqlGetByKeyStatementImpl.totalSlots();
@@ -26,6 +30,7 @@ public class SqlOpenStatementImpl extends SqlGetByKeyStatementImpl implements Sq
 		int offset = SqlGetByKeyStatementImpl.totalSlots();
 		Slot_isHold += offset;
 		Slot_isScroll += offset;
+		Slot_resultSet += offset;
 	}
 	@Override
 	public Boolean isHold() {
@@ -47,4 +52,13 @@ public class SqlOpenStatementImpl extends SqlGetByKeyStatementImpl implements Sq
 		slotSet(Slot_isScroll, value);
 	}
 	
+	@Override
+	public Expression getResultSet() {
+		return (Expression)slotGet(Slot_resultSet);
+	}
+	
+	@Override
+	public void setResultSet(Expression value) {
+		slotSet(Slot_resultSet, value);
+	}
 }

@@ -22,7 +22,7 @@ import org.eclipse.edt.mof.egl.sql.SqlIOStatement;
 
 public abstract class SqlIOStatementImpl extends IOStatementImpl implements SqlIOStatement {
 	private static int Slot_preparedStatementId=0;
-	private static int Slot_resultSet=1;
+	private static int Slot_dataSource=1;
 	private static int Slot_intoExpressions=2;
 	private static int Slot_hasExplicitSql=3;
 	private static int Slot_sqlString=4;
@@ -35,7 +35,7 @@ public abstract class SqlIOStatementImpl extends IOStatementImpl implements SqlI
 	static {
 		int offset = IOStatementImpl.totalSlots();
 		Slot_preparedStatementId += offset;
-		Slot_resultSet += offset;
+		Slot_dataSource += offset;
 		Slot_intoExpressions += offset;
 		Slot_hasExplicitSql += offset;
 		Slot_sqlString += offset;
@@ -57,13 +57,13 @@ public abstract class SqlIOStatementImpl extends IOStatementImpl implements SqlI
 	}
 	
 	@Override
-	public Expression getResultSet() {
-		return (Expression)slotGet(Slot_resultSet);
+	public Expression getDataSource() {
+		return (Expression)slotGet(Slot_dataSource);
 	}
 	
 	@Override
-	public void setResultSet(Expression value) {
-		slotSet(Slot_resultSet, value);
+	public void setDataSource(Expression value) {
+		slotSet(Slot_dataSource, value);
 	}
 	
 	@SuppressWarnings("unchecked")

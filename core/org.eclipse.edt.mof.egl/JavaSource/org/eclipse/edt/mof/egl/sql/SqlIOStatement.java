@@ -22,9 +22,9 @@ public interface SqlIOStatement extends IOStatement {
 	
 	void setPreparedStatementId(String value);
 	
-	Expression getResultSet();
+	Expression getDataSource();
 	
-	void setResultSet(Expression value);
+	void setDataSource(Expression value);
 	
 	List<Expression> getIntoExpressions();
 	
