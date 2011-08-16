@@ -14,6 +14,10 @@ package org.eclipse.edt.gen.java.templates.egl.lang;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Assignment;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.Type;
 
 public class AnyExceptionTypeTemplate extends JavaTemplate {
@@ -24,5 +28,31 @@ public class AnyExceptionTypeTemplate extends JavaTemplate {
 
 	public void genSuperClass(Type type, Context ctx, TabbedWriter out) {
 		out.print("org.eclipse.edt.runtime.java.egl.lang.AnyException");
+	}
+
+	public void genContainerBasedAssignment(Type type, Context ctx, TabbedWriter out, Assignment arg1, Field arg2) {
+		if (arg2.getName().equalsIgnoreCase("message") || arg2.getName().equalsIgnoreCase("messageid")) {
+			ctx.invoke(genExpression, arg1.getLHS().getQualifier(), ctx, out);
+			out.print(".set");
+			out.print(arg2.getName().substring(0, 1).toUpperCase());
+			if (arg2.getName().length() > 1)
+				out.print(arg2.getName().substring(1));
+			out.print("(");
+			ctx.invoke(genExpression, arg1.getRHS(), ctx, out);
+			out.print(")");
+		} else
+			ctx.invoke(genAssignment, arg1, ctx, out);
+	}
+
+	public void genContainerBasedMemberAccess(Type type, Context ctx, TabbedWriter out, MemberAccess arg1, Member arg2) {
+		if (arg2.getName().equalsIgnoreCase("message") || arg2.getName().equalsIgnoreCase("messageid")) {
+			ctx.invoke(genExpression, arg1.getQualifier(), ctx, out);
+			out.print(".get");
+			out.print(arg2.getName().substring(0, 1).toUpperCase());
+			if (arg2.getName().length() > 1)
+				out.print(arg2.getName().substring(1));
+			out.print("()");
+		} else
+			ctx.invoke(genMemberAccess, arg1, ctx, out);
 	}
 }
