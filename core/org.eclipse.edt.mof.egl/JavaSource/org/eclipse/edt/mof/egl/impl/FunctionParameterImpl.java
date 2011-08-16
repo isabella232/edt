@@ -18,7 +18,8 @@ public class FunctionParameterImpl extends ParameterImpl implements FunctionPara
 	private static int Slot_parameterKind=0;
 	private static int Slot_isDefinedSqlNullable=1;
 	private static int Slot_isField=2;
-	private static int totalSlots = 3;
+	private static int Slot_isConst=3;
+	private static int totalSlots = 4;
 	
 	public static int totalSlots() {
 		return totalSlots + ParameterImpl.totalSlots();
@@ -29,6 +30,7 @@ public class FunctionParameterImpl extends ParameterImpl implements FunctionPara
 		Slot_parameterKind += offset;
 		Slot_isDefinedSqlNullable += offset;
 		Slot_isField += offset;
+		Slot_isConst += offset;
 	}
 	@Override
 	public ParameterKind getParameterKind() {
@@ -60,6 +62,16 @@ public class FunctionParameterImpl extends ParameterImpl implements FunctionPara
 		slotSet(Slot_isField, value);
 	}
 
+	@Override
+	public Boolean isConst() {
+		return (Boolean)slotGet(Slot_isConst);
+	}
+	
+	@Override
+	public void setIsConst(Boolean value) {
+		slotSet(Slot_isConst, value);
+	}
+	
 	@Override
 	public boolean isGenericTypeParameter() {
 		return getType().getClassifier() == null;
