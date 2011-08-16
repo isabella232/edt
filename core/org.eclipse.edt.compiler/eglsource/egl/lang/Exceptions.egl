@@ -5,6 +5,10 @@ package egl.lang;
  * size for an array, or an attempt to expand an array beyond its maximum size.
  */
 record ArraySizeException type Exception
+	/**
+	 * The invalid size.
+	 */
+	size int;
 end
 
 /**
@@ -12,6 +16,10 @@ end
  * out of bounds.
  */
 record InvalidIndexException type Exception
+	/**
+	 * The invalid index.
+	 */
+	index int;
 end
 
 /**
@@ -51,4 +59,30 @@ end
  * formatting, parsing, or pattern matching with a string.
  */
 record InvalidPatternException type Exception
+	/**
+	 * The invalid pattern.
+	 */
+	pattern string;
+end
+
+/**
+ * When a call of a program or delegate fails, an InvocationException is thrown.
+ */
+record InvocationException type Exception
+	/**
+	 * The name of the called program or delegated function.
+	 */
+	name string;
+
+	/**
+	 * The return code of the called program.  Zero if there was no return code.
+	 */
+	returnValue int;
+end
+
+/**
+ * This indicates a numeric overflow: a number is too large to be stored in the
+ * place where it was used.
+ */
+record NumericOverflowException type Exception
 end

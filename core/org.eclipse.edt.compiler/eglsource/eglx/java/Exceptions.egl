@@ -1,0 +1,7 @@
+package eglx.java;
+
+import egl.lang.Exception;
+
+Record JavaObjectException type Exception
+	exceptionType string;
+end
