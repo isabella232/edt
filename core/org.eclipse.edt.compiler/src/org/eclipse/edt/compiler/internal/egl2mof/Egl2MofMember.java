@@ -349,6 +349,11 @@ class Egl2MofMember extends Egl2MofPart {
 			else
 				parmKind=ParameterKind.PARM_INOUT;
 			parm.setParameterKind(parmKind);
+			
+			parm.setIsConst(parameter.isConst());
+			parm.setIsField(parameter.isField());
+			parm.setIsDefinedSqlNullable(parameter.isSQLNullable());
+			
 			setUpEglTypedElement(parm, parameter);
 			obj = parm;
 		}
