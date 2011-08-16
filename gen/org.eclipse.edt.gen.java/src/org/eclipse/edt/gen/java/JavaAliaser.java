@@ -21,6 +21,9 @@ public class JavaAliaser {
 
 	static {
 		// To prevent compilation errors, insert aliases for Java's keywords.
+		// This list of keywords is correct as of Java 7.  For completeness
+		// we include identifiers that are keywords in EGL too, plus the literals
+		// true, false, and null.
 		keywordCache.put("abstract", "eze_abstract");
 		keywordCache.put("assert", "eze_assert");
 		keywordCache.put("boolean", "eze_boolean");
@@ -36,6 +39,7 @@ public class JavaAliaser {
 		keywordCache.put("do", "eze_do");
 		keywordCache.put("double", "eze_double");
 		keywordCache.put("else", "eze_else");
+		keywordCache.put("enum", "eze_enum");
 		keywordCache.put("extends", "eze_extends");
 		keywordCache.put("false", "eze_false");
 		keywordCache.put("final", "eze_final");
