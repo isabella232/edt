@@ -11,12 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.runtime.java.egl.lang;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.ListIterator;
+import java.util.*;
 
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.Delegate;
 
 public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 	/**
@@ -105,11 +103,41 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 
 	@Override
 	public void resize(int max) {
-		if (maxSize != 0 && max > maxSize)
+		if (max > maxSize || max < 0)
 			throw new ArraySizeException();
 		while (list.size() > max) {
 			list.remove(list.size());
 		}
+	}
+
+	@Override
+	public void sort( final Delegate sortFunction )
+	{
+		Collections.sort(
+				list, 
+				new Comparator<T>()
+				{
+					public int compare( T obj1, T obj2 )
+					{
+						egl.lang.EglAny arg1 = obj1 instanceof egl.lang.EglAny ? (egl.lang.EglAny)obj1 : EglAny.ezeBox( obj1 );
+						egl.lang.EglAny arg2 = obj2 instanceof egl.lang.EglAny ? (egl.lang.EglAny)obj2 : EglAny.ezeBox( obj2 );
+						
+						Object result = sortFunction.invoke( arg1, arg2 );
+						if ( result instanceof Integer )
+						{
+							return (Integer)result;
+						}
+						else if ( result instanceof EInt )
+						{
+							return ((EInt)result).ezeUnbox();
+						}
+						else
+						{
+							return 0; //TODO throw something?
+						}
+					}
+				} 
+			);
 	}
 
 	@Override

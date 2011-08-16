@@ -13,6 +13,8 @@ package egl.lang;
 
 import java.util.Collection;
 
+import org.eclipse.edt.javart.Delegate;
+
 public interface EglList<T> extends EglAny, java.util.List<T> {
 
 	public void appendAll(Collection<? extends T> collection);
@@ -40,4 +42,6 @@ public interface EglList<T> extends EglAny, java.util.List<T> {
 	public void setElement(T element, int index);
 
 	public void setMaxSize(int max);
+
+	public void sort(Delegate sortFunction);
 }
