@@ -59,6 +59,7 @@ public class TryStatementTemplate extends JavaTemplate {
 			String exTemp = ctx.nextTempName();
 			out.println( "catch ( java.lang.Exception " + exTemp + " )" );
 			out.println( '{' );
+			out.println( "org.eclipse.edt.javart.util.JavartUtil.checkHandleable( " + exTemp + " );" );
 			out.print( exClass + ' ' );
 			ctx.invoke(genName, ex, ctx, out);
 			out.println( ';' );
@@ -70,7 +71,7 @@ public class TryStatementTemplate extends JavaTemplate {
 			out.println( "else" );
 			out.println( '{' );
 			ctx.invoke(genName, ex, ctx, out);
-			out.println( " = new " + exClass + '(' + exTemp + ");" );
+			out.println( " = org.eclipse.edt.javart.util.JavartUtil.makeJavaObjectException(" + exTemp + ");" );
 			out.println( '}' );			
 			ctx.invoke(genStatement, exceptionBlock, ctx, out);
 			out.println( '}' );
