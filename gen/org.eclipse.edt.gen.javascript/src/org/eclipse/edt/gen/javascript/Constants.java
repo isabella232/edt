@@ -26,7 +26,7 @@ public class Constants {
 	public static final String SubKey_simpleContent = "simpleContent";
 
 	// these are annotations key values, related to the values in the IRs
-	public static final String Annotation_EGLProperty = "egl.core.eglproperty";
+	public static final String Annotation_EGLProperty = "eglx.lang.EGLProperty";
 
 	// command parameter internal names
 	public static final String SERIAL_VERSION_UID = "10";
