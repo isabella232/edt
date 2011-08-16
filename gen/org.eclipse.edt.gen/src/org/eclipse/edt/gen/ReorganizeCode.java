@@ -223,19 +223,16 @@ public class ReorganizeCode extends AbstractVisitor {
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
 			ctx.putAttribute(object, Constants.SubKey_statementNeedsLabel, new Boolean(true));
-		// for if statements, we need to see if the false branch is another if statement and if that if statement has
-		// logic in it that has side effects. if it does, then we need to make sure that a statement block surrounds the
-		// false branch's logic
-		if (object.getFalseBranch() instanceof IfStatement) {
-			// if there are side effects, then we have to place this whole false branch within a statement block
-			if (IRUtils.hasSideEffects(((IfStatement) object.getFalseBranch()).getCondition())) {
-				// create the statement block
-				StatementBlock block = factory.createStatementBlock();
-				block.setContainer(currentStatementContainer);
-				block.getStatements().add(object.getFalseBranch());
-				// now replace the false branch with this statement block
-				object.setFalseBranch(block);
-			}
+		
+		// If the else branch isn't a statement block, put it inside one. This lets generator extensions insert extra
+		// code, as well as handle when there are side effects in a nested IF condition.
+		if (!(object.getFalseBranch() instanceof StatementBlock)) {
+			// create the statement block
+			StatementBlock block = factory.createStatementBlock();
+			block.setContainer(currentStatementContainer);
+			block.getStatements().add(object.getFalseBranch());
+			// now replace the false branch with this statement block
+			object.setFalseBranch(block);
 		}
 		return true;
 	}
