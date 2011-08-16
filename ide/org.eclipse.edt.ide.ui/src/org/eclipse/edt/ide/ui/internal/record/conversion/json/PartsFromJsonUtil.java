@@ -24,7 +24,6 @@ import org.eclipse.edt.ide.ui.templates.parts.Record;
 import org.eclipse.edt.ide.ui.templates.parts.RecordType;
 import org.eclipse.edt.ide.ui.templates.parts.SimpleType;
 import org.eclipse.edt.ide.ui.templates.parts.Type;
-import org.eclipse.edt.javart.JavartException;
 import org.eclipse.edt.javart.json.ArrayNode;
 import org.eclipse.edt.javart.json.BooleanNode;
 import org.eclipse.edt.javart.json.DecimalNode;
@@ -36,6 +35,8 @@ import org.eclipse.edt.javart.json.NullNode;
 import org.eclipse.edt.javart.json.ObjectNode;
 import org.eclipse.edt.javart.json.StringNode;
 import org.eclipse.edt.javart.json.ValueNode;
+
+import egl.lang.AnyException;
 
 public class PartsFromJsonUtil extends PartsUtil {
 	public PartsFromJsonUtil(IMessageHandler msgHandler) {
@@ -148,15 +149,15 @@ public class PartsFromJsonUtil extends PartsUtil {
 			public void endVisit(StringNode arg0) {
 			}
 
-			public boolean visit(ArrayNode arg0) throws JavartException {
+			public boolean visit(ArrayNode arg0) throws AnyException {
 				return true;
 			}
 
-			public boolean visit(NameValuePairNode arg0) throws JavartException {
+			public boolean visit(NameValuePairNode arg0) throws AnyException {
 				return false;
 			}
 
-			public boolean visit(BooleanNode arg0) throws JavartException {
+			public boolean visit(BooleanNode arg0) throws AnyException {
 
 				SimpleType t = new SimpleType();
 				t.setName("boolean");//$NON-NLS-1$
@@ -164,7 +165,7 @@ public class PartsFromJsonUtil extends PartsUtil {
 				return false;
 			}
 
-			public boolean visit(DecimalNode arg0) throws JavartException {
+			public boolean visit(DecimalNode arg0) throws AnyException {
 				String val = arg0.getStringValue();
 				int len = val.length();
 
@@ -182,21 +183,21 @@ public class PartsFromJsonUtil extends PartsUtil {
 				return false;
 			}
 
-			public boolean visit(FloatingPointNode arg0) throws JavartException {
+			public boolean visit(FloatingPointNode arg0) throws AnyException {
 				SimpleType t = new SimpleType();
 				t.setName("float");//$NON-NLS-1$
 				type[0] = t;
 				return false;
 			}
 
-			public boolean visit(IntegerNode arg0) throws JavartException {
+			public boolean visit(IntegerNode arg0) throws AnyException {
 				SimpleType t = new SimpleType();
 				t.setName("int");//$NON-NLS-1$
 				type[0] = t;
 				return false;
 			}
 
-			public boolean visit(NullNode arg0) throws JavartException {
+			public boolean visit(NullNode arg0) throws AnyException {
 				// dunno what to do with this one
 				SimpleType t = new SimpleType();
 				t.setName("string");//$NON-NLS-1$
@@ -204,7 +205,7 @@ public class PartsFromJsonUtil extends PartsUtil {
 				return false;
 			}
 
-			public boolean visit(ObjectNode arg0) throws JavartException {
+			public boolean visit(ObjectNode arg0) throws AnyException {
 
 				String typeName = getTypeName(fieldName);
 				RecordType t = new RecordType();
@@ -227,7 +228,7 @@ public class PartsFromJsonUtil extends PartsUtil {
 				return false;
 			}
 
-			public boolean visit(StringNode arg0) throws JavartException {
+			public boolean visit(StringNode arg0) throws AnyException {
 				SimpleType t = new SimpleType();
 				t.setName("string");//$NON-NLS-1$
 				type[0] = t;
@@ -235,12 +236,8 @@ public class PartsFromJsonUtil extends PartsUtil {
 			}
 		};
 
-		try {
-			valNode.accept(visitor);
-		} catch (JavartException e) {
-			RuntimeException ex = new RuntimeException(e.getMessage());
-			throw ex;
-		}
+		valNode.accept(visitor);
+
 		return type[0];
 	}
 }
