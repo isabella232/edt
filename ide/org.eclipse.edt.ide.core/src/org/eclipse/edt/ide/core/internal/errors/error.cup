@@ -1079,6 +1079,9 @@ openTarget
 
 	|	FOR:for1 expr:expr1
 	{: RESULT = new ForExpressionClause(expr1, for1left, expr1right); :}
+	
+	|	FROM:from1 lvalue:lvalue1
+	{: RESULT = new FromOrToExpressionClause(lvalue1, from1left, lvalue1right); :}	
 	;
 
 onException
