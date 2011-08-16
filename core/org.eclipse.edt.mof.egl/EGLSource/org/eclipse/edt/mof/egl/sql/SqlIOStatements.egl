@@ -65,7 +65,7 @@ end
 
 externalType SqlIOStatement extends IOStatement type MofClass {isAbstract=yes}
 	preparedStatementId string;
-	resultSet Expression {containment=true};
+	dataSource Expression {containment=true};
 	intoExpressions Expression[]  {containment=true};
 	hasExplicitSql boolean;
 	sqlString String;
@@ -122,6 +122,7 @@ end
 externalType SqlOpenStatement extends SqlGetByKeyStatement, OpenStatement type MofClass
 	isHold boolean;
 	isScroll boolean;
+	resultSet Expression {containment=true};
 end
 
 externalType SqlPrepareStatement extends SqlIOStatement, PrepareStatement type MofClass
