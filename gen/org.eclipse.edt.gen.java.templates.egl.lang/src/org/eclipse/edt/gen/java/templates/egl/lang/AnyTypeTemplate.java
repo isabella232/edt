@@ -11,6 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.egl.lang;
 
+import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Type;
 
-public class AnyTypeTemplate extends JavaTemplate {}
+public class AnyTypeTemplate extends JavaTemplate {
+	public void genInstantiation(Type type, Context ctx, TabbedWriter out) {
+		out.print("null");
+	}
+}
