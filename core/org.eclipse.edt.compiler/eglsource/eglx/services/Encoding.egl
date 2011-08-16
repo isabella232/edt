@@ -12,9 +12,9 @@
 package eglx.services;
 
 enumeration Encoding
-	NONE,
-	JSON,
-	XML,
-	_FORM,
-	USE_CONTENTTYPE
+	NONE = 1,
+	JSON = 2,
+	XML = 3,
+	_FORM = 4,
+	USE_CONTENTTYPE = 5
 end
