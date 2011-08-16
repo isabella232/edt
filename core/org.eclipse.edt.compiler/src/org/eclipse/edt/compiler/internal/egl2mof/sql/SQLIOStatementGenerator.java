@@ -82,7 +82,7 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 		node.accept(new AbstractASTExpressionVisitor() {
 			public boolean visit(FromOrToExpressionClause clause) {
 				clause.getExpression().accept(generator);
-				stmt.setResultSet((Expression) stack.pop());
+				stmt.setDataSource((Expression) stack.pop());
 				return false;
 			}
 			public boolean visit(InlineSQLStatement sqlStmt) {
@@ -109,7 +109,7 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 		node.accept(new AbstractASTExpressionVisitor() {
 			public boolean visit( FromOrToExpressionClause clause) {
 				clause.getExpression().accept(generator);
-				stmt.setResultSet((Expression) stack.pop());
+				stmt.setDataSource((Expression) stack.pop());
 				return false;
 			}
 			public boolean visit(org.eclipse.edt.compiler.core.ast.NoCursorClause noCursorClause) {
@@ -133,7 +133,7 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 //				if (tokens.size() > 0) {
 //					// Should only be one token in this list.
 //					SqlWhereCurrentOfToken whereToken = (SqlWhereCurrentOfToken) tokens.get(0);
-//					stmt.setResultSetIdentifier(whereToken.getResultSetIdentifier());
+//					stmt.setDataSourceIdentifier(whereToken.getResultSetIdentifier());
 //				}
 //			}
 		}
@@ -186,7 +186,7 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 			forEachStmt.getTargets().add((Expression)stack.pop());
 		} else if (forEachStatement.hasResultSetID()) {
 			forEachStatement.getResultSet().accept(this);
-			forEachStmt.setResultSet((Expression)stack.pop());
+			forEachStmt.setDataSource((Expression)stack.pop());
 		}
 
 		if (forEachStatement.hasIntoClause()) {
@@ -219,7 +219,7 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 		node.accept(new AbstractASTExpressionVisitor() {
 			public boolean visit(ForUpdateClause clause) {
 				stmt.setIsForUpdate(true);
-//				stmt.setResultSetIdentifier(clause.getID());
+//				stmt.setDataSourceIdentifier(clause.getID());
 				return false;
 			};
 
@@ -246,7 +246,7 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 			
 			public boolean visit(FromOrToExpressionClause clause) {
 				clause.getExpression().accept(generator);
-				stmt.setResultSet((Expression) stack.pop());
+				stmt.setDataSource((Expression) stack.pop());
 				return false;
 			}
 
@@ -290,7 +290,7 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 		
 		if (node.hasFromExpr()) {
 			node.getFromExpr().accept(this);
-			stmt.setResultSet((Expression)stack.pop());
+			stmt.setDataSource((Expression)stack.pop());
 		}
 		return false;
 	}
@@ -311,7 +311,7 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 
 			public boolean visit(FromOrToExpressionClause clause) {
 				clause.getExpression().accept(generator);
-				stmt.setResultSet((Expression) stack.pop());
+				stmt.setDataSource((Expression) stack.pop());
 				return false;
 			}
 
@@ -414,7 +414,7 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 		node.accept(new AbstractASTExpressionVisitor() {
 			public boolean visit(FromOrToExpressionClause clause) {
 				clause.getExpression().accept(generator);
-				stmt.setResultSet((Expression) stack.pop());
+				stmt.setDataSource((Expression) stack.pop());
 				return false;
 			}
 
@@ -440,7 +440,7 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 //				if (tokens.size() > 0) {
 //					// Should only be one token in this list.
 //					SqlWhereCurrentOfToken whereToken = (SqlWhereCurrentOfToken) tokens.get(0);
-//					stmt.setResultSetIdentifier(whereToken.getResultSetIdentifier());
+//					stmt.setDataSourceIdentifier(whereToken.getResultSetIdentifier());
 //				}
 //			}
 		}
