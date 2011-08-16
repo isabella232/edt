@@ -191,6 +191,12 @@ public class TypeUtils implements MofConversion {
 	
 	public static boolean isValueType(Type type) {
 		if (type.getClassifier() instanceof EGLClass) {
+			
+			String key = ((EGLClass)type.getClassifier()).getMofSerializationKey();
+			if (key.equalsIgnoreCase(Type_EGLNumber)) {
+				return false;
+			}
+			
 			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_AnyValue));
 		}
 		else {
