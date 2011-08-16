@@ -26,6 +26,7 @@ import org.eclipse.edt.compiler.binding.AnnotationFieldBinding;
 import org.eclipse.edt.compiler.binding.ArrayDictionaryBinding;
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
+import org.eclipse.edt.compiler.binding.ClassConstantBinding;
 import org.eclipse.edt.compiler.binding.ClassFieldBinding;
 import org.eclipse.edt.compiler.binding.ConstructorBinding;
 import org.eclipse.edt.compiler.binding.DataBinding;
@@ -858,6 +859,9 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		}
 		else if (binding instanceof ConstructorBinding) {
 			mbrType = (EClass)getMofSerializable(Type_Constructor);
+		}
+		else if (binding instanceof ClassConstantBinding) {
+			mbrType = (EClass)getMofSerializable(Type_ConstantField);
 		}
 		else if (binding instanceof ClassFieldBinding || binding instanceof FlexibleRecordFieldBinding) {
 			mbrType = (EClass)getMofSerializable(Type_Field);
