@@ -226,7 +226,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		
 		// If the else branch isn't a statement block, put it inside one. This lets generator extensions insert extra
 		// code, as well as handle when there are side effects in a nested IF condition.
-		if (!(object.getFalseBranch() instanceof StatementBlock)) {
+		if (object.getFalseBranch() != null && !(object.getFalseBranch() instanceof StatementBlock)) {
 			// create the statement block
 			StatementBlock block = factory.createStatementBlock();
 			block.setContainer(currentStatementContainer);
