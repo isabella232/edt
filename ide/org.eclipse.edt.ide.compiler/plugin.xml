@@ -8,13 +8,7 @@
     		name="%edtCompilerName"
     		preferencePageId="org.eclipse.edt.ide.compiler.edtCompilerPreferences"
     		version="0.7.0"/>
-   	   	<compiler
-    		id="org.eclipse.edt.ide.compiler.rbdCompiler"
-    		class="org.eclipse.edt.ide.compiler.IDERBDCompiler"
-    		name="%rbdCompilerName"
-    		preferencePageId="org.eclipse.edt.ide.compiler.rbdCompilerPreferences"
-    		version="0.7.0"/>
-    </extension>
+   	</extension>
     
     <extension point="org.eclipse.edt.ide.core.generators">
 		<provider
@@ -44,12 +38,6 @@
             class="org.eclipse.edt.ide.compiler.gen.ui.EDTCompilerPreferencePage"
             id="org.eclipse.edt.ide.compiler.edtCompilerPreferences">
 		</page>
-		<page
-            name="%RBDCompilerPageName"
-            category="org.eclipse.edt.ide.ui.compilerPreferences"
-            class="org.eclipse.edt.ide.compiler.gen.ui.RBDCompilerPreferencePage"
-            id="org.eclipse.edt.ide.compiler.rbdCompilerPreferences">
-		</page>
 	</extension>
 	
 	<extension point="org.eclipse.edt.ide.ui.edtGeneratorTabs">  
@@ -61,15 +49,11 @@
 			generatorId="org.eclipse.edt.ide.gen.JavaScriptGenProvider"
 			class="org.eclipse.edt.ide.compiler.gen.ui.JavaScriptGeneratorTabProvider">
 		</generatorTab>
-		<generalTab 
+		<!--generalTab 
 			compilerId="org.eclipse.edt.ide.compiler.edtCompiler"
 			tabName="Sample EDT Tab"
 			class="org.eclipse.edt.ide.compiler.gen.ui.SampleEDTTabProvider">
-		</generalTab>
-		<generalTab 
-			compilerId="org.eclipse.edt.ide.compiler.rbdCompiler"
-			tabName="Sample RBD Tab"
-			class="org.eclipse.edt.ide.compiler.gen.ui.SampleRBDTabProvider">
-		</generalTab>
+		</generalTab-->
+		
    	</extension>
 </plugin>
