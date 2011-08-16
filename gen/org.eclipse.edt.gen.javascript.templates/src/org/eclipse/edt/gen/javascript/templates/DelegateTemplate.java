@@ -25,5 +25,7 @@ public class DelegateTemplate extends JavaScriptTemplate {
 
 	public void genClassHeader(Delegate part, Context ctx, TabbedWriter out) {}
 
-	public void genRuntimeTypeName(Delegate part, Context ctx, TabbedWriter out, TypeNameKind arg) {}
+	public void genRuntimeTypeName(Delegate part, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		out.print("\"\"");
+	}
 }
