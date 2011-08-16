@@ -122,7 +122,7 @@ public class SMAPBuilder extends IncrementalProjectBuilder
 		@Override
 		public boolean visit( IResourceDelta delta ) throws CoreException
 		{
-			if ( delta.getKind() == IResourceDelta.CHANGED )
+			if ( delta.getKind() == IResourceDelta.CHANGED || delta.getKind() == IResourceDelta.ADDED )
 			{
 				IResource resource = delta.getResource();
 				if ( resource.getType() == IResource.FILE )
