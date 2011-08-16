@@ -11,23 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.egl.lang;
 
-import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Field;
 
 public class DictionaryTypeTemplate extends JavaTemplate {
 
-	public void genInstantiation(EGLClass type, Context ctx, TabbedWriter out) {
-		out.print("null");
-	}
-
-	public void genInstantiation(EGLClass type, Context ctx, TabbedWriter out, Field arg) {
-		if (arg.hasSetValuesBlock()) {
-			ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavaPrimitive);
-			out.print("()");
-		} else
-			out.print("null");
-	}
 }
