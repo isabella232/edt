@@ -86,9 +86,6 @@ public class FieldTemplate extends JavaTemplate {
 			if (field.isNullable())
 				ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
 			else if (TypeUtils.isReferenceType(field.getType())) {
-				if (field.hasSetValuesBlock())
-					ctx.invoke(genInstantiation, field.getType(), ctx, out, field);
-				else
 				ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
 			} else if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
 				ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
