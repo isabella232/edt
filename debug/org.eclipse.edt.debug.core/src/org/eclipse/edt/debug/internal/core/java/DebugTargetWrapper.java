@@ -56,7 +56,6 @@ public class DebugTargetWrapper implements IStartup
 							launch.removeDebugTarget( javaTarget );
 							launch.addDebugTarget( edtTarget );
 							edtTarget.handleDebugEvents( events );
-							return null;
 						}
 					}
 				}
