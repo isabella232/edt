@@ -34,7 +34,7 @@ public class HttpServiceInvoker extends EglHttpConnection {
 		{
 			innerResponse = new HttpResponse();
 			innerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
-			ServletUtilities.setBody(program(), innerResponse, ServiceUtilities.buildServiceInvocationException( program(), Message.SOA_E_WS_REST_NO_RESPONSE, new String[]{innerRequest.getUri()}, null, getServiceKind(innerRequest) ));
+			ServletUtilities.setBody(program()._runUnit(), innerResponse, ServiceUtilities.buildServiceInvocationException( program()._runUnit(), Message.SOA_E_WS_REST_NO_RESPONSE, new String[]{innerRequest.getUri()}, null, getServiceKind(innerRequest) ));
 		}
 		return innerResponse;
 	}

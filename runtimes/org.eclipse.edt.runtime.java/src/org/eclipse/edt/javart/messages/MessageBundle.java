@@ -444,7 +444,7 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.SOA_E_WS_PROXY_INVALID_URL_EXCEPTION, "The URL ''{0}'' used to invoke the service is invalid. {1}" },
 		{ Message.SOA_E_WS_PROXY_EMPTY_URL_EXCEPTION, "The URL used to invoke the service is blank. Specify a URL that points to the service." },
 		{ Message.SOA_E_WS_GATEWAY_EXCEPTION, "An exception occured in the gatewat service while calling program:{0}." },
-		{ Message.SOA_E_JSON_TYPE_EXCEPTION, "JSON conversion cannot be performed on {0}." },
+		{ Message.SOA_E_JSON_TYPE_EXCEPTION, "JSON conversion cannot be performed on field:{0} in {1}." },
 		{ Message.SOA_E_JSON_CONVERSION_EXCEPTION, "Service library JSON conversion functions operate on a Record or Dictionary. {0} is not a supported type." },
 		{ Message.SOA_E_NOT_JAXWS_WEB_SERVICE, "The service is not a JAX-WS web service." },
 		{ Message.SOA_E_JAXWS_SOAP_HEADER_EXCEPTION, "Service library SOAP header functions operate on a Record or Dictionary. {0} is not a supported type." },

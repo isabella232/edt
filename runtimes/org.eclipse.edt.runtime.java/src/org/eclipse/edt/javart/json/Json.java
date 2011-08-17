@@ -17,4 +17,6 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Json {
 	String name();
+	Class<?> clazz();
+	String[] asOptions() default {};
 }

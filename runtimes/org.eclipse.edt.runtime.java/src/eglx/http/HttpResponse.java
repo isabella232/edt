@@ -9,12 +9,16 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package eglx.http;
-import org.eclipse.edt.javart.ByteStorage;
-import org.eclipse.edt.javart.Program;
-import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
-
+import org.eclipse.edt.javart.resources.*;
+import org.eclipse.edt.javart.*;
+import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
 import eglx.services.Encoding;
-public class HttpResponse extends AnyValue {
+import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
+import org.eclipse.edt.runtime.java.egl.lang.EString;
+import java.lang.String;
+import org.eclipse.edt.runtime.java.egl.lang.EInt;
+import java.lang.Integer;
+public class HttpResponse extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
 	public Integer status;
@@ -77,42 +81,49 @@ public class HttpResponse extends AnyValue {
 		headers = null;
 		body = null;
 	}
+	@org.eclipse.edt.javart.json.Json(name="status", clazz=EInt.class, asOptions={})
 	public Integer getStatus() {
 		return (status);
 	}
 	public void setStatus( Integer ezeValue ) {
 		this.status = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="statusMessage", clazz=EString.class, asOptions={})
 	public String getStatusMessage() {
 		return (statusMessage);
 	}
 	public void setStatusMessage( String ezeValue ) {
 		this.statusMessage = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="encoding", clazz=Encoding.class, asOptions={})
 	public Encoding getEncoding() {
 		return (encoding);
 	}
 	public void setEncoding( Encoding ezeValue ) {
 		this.encoding = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="charset", clazz=EString.class, asOptions={})
 	public String getCharset() {
 		return (charset);
 	}
 	public void setCharset( String ezeValue ) {
 		this.charset = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="contentType", clazz=EString.class, asOptions={})
 	public String getContentType() {
 		return (contentType);
 	}
 	public void setContentType( String ezeValue ) {
 		this.contentType = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="headers", clazz=EDictionary.class, asOptions={})
 	public egl.lang.EDictionary getHeaders() {
 		return (headers);
 	}
 	public void setHeaders( egl.lang.EDictionary ezeValue ) {
 		this.headers = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="body", clazz=EString.class, asOptions={})
 	public String getBody() {
 		return (body);
 	}

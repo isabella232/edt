@@ -9,12 +9,16 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package eglx.http;
-import org.eclipse.edt.javart.ByteStorage;
-import org.eclipse.edt.javart.Program;
+import org.eclipse.edt.javart.resources.*;
+import org.eclipse.edt.javart.*;
 import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
-
+import eglx.http.HttpRequest;
 import eglx.services.Encoding;
-public class HttpREST extends AnyValue {
+import eglx.http.HttpMethod;
+import org.eclipse.edt.runtime.java.egl.lang.EBoolean;
+import java.lang.Boolean;
+import eglx.http.HttpResponse;
+public class HttpREST extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
 	public HttpRequest request;
@@ -61,18 +65,21 @@ public class HttpREST extends AnyValue {
 		response.encoding = Encoding.USE_CONTENTTYPE;
 		isEglRpc = false;
 	}
+	@org.eclipse.edt.javart.json.Json(name="request", clazz=HttpRequest.class, asOptions={})
 	public HttpRequest getRequest() {
 		return (request);
 	}
 	public void setRequest( HttpRequest ezeValue ) {
 		this.request = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="response", clazz=HttpResponse.class, asOptions={})
 	public HttpResponse getResponse() {
 		return (response);
 	}
 	public void setResponse( HttpResponse ezeValue ) {
 		this.response = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="isEglRpc", clazz=EBoolean.class, asOptions={})
 	public boolean getIsEglRpc() {
 		return (isEglRpc);
 	}

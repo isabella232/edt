@@ -1,7 +1,20 @@
+/*******************************************************************************
+ * Copyright (c) 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package eglx.services;
-import org.eclipse.edt.javart.ByteStorage;
-import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.Program;
+import org.eclipse.edt.javart.resources.*;
+import org.eclipse.edt.javart.*;
+import eglx.services.ServiceKind;
+import egl.lang.AnyException;
+import org.eclipse.edt.runtime.java.egl.lang.EString;
+import java.lang.String;
 public class ServiceInvocationException extends egl.lang.AnyException {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
@@ -50,24 +63,28 @@ public class ServiceInvocationException extends egl.lang.AnyException {
 		detail2 = Constants.EMPTY_STRING;
 		detail3 = Constants.EMPTY_STRING;
 	}
+	@org.eclipse.edt.javart.json.Json(name="source", clazz=ServiceKind.class, asOptions={})
 	public ServiceKind getSource() {
 		return (source);
 	}
 	public void setSource( ServiceKind ezeValue ) {
 		this.source = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="detail1", clazz=EString.class, asOptions={})
 	public String getDetail1() {
 		return (detail1);
 	}
 	public void setDetail1( String ezeValue ) {
 		this.detail1 = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="detail2", clazz=EString.class, asOptions={})
 	public String getDetail2() {
 		return (detail2);
 	}
 	public void setDetail2( String ezeValue ) {
 		this.detail2 = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="detail3", clazz=EString.class, asOptions={})
 	public String getDetail3() {
 		return (detail3);
 	}

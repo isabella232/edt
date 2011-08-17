@@ -1,7 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package eglx.xml;
-import org.eclipse.edt.javart.ByteStorage;
-import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.Program;
+import org.eclipse.edt.javart.resources.*;
+import org.eclipse.edt.javart.*;
+import egl.lang.AnyException;
+import org.eclipse.edt.runtime.java.egl.lang.EString;
+import java.lang.String;
 public class XMLProcessingException extends egl.lang.AnyException {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
@@ -35,6 +47,7 @@ public class XMLProcessingException extends egl.lang.AnyException {
 	public void ezeInitialize() {
 		detail = Constants.EMPTY_STRING;
 	}
+	@org.eclipse.edt.javart.json.Json(name="detail", clazz=EString.class, asOptions={})
 	public String getDetail() {
 		return (detail);
 	}

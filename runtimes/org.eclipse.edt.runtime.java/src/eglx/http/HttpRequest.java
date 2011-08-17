@@ -9,13 +9,15 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package eglx.http;
-import org.eclipse.edt.javart.ByteStorage;
-import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.Program;
+import org.eclipse.edt.javart.resources.*;
+import org.eclipse.edt.javart.*;
 import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
-
+import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
 import eglx.services.Encoding;
-public class HttpRequest extends AnyValue {
+import eglx.http.HttpMethod;
+import org.eclipse.edt.runtime.java.egl.lang.EString;
+import java.lang.String;
+public class HttpRequest extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
 	public String uri;
@@ -51,7 +53,7 @@ public class HttpRequest extends AnyValue {
 		return new HttpRequest();
 	}
 	public void ezeSetEmpty() {
-		uri = Constants.EMPTY_STRING;
+		uri = null;
 		method = null;
 		encoding = null;
 		charset = null;
@@ -70,7 +72,7 @@ public class HttpRequest extends AnyValue {
 	public void storeInBuffer(ByteStorage buffer) {
 	}
 	public void ezeInitialize() {
-		uri = Constants.EMPTY_STRING;
+		uri = null;
 		method = null;
 		encoding = null;
 		charset = null;
@@ -78,42 +80,49 @@ public class HttpRequest extends AnyValue {
 		headers = null;
 		body = null;
 	}
+	@org.eclipse.edt.javart.json.Json(name="uri", clazz=EString.class, asOptions={})
 	public String getUri() {
 		return (uri);
 	}
 	public void setUri( String ezeValue ) {
 		this.uri = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="method", clazz=HttpMethod.class, asOptions={})
 	public HttpMethod getMethod() {
 		return (method);
 	}
 	public void setMethod( HttpMethod ezeValue ) {
 		this.method = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="encoding", clazz=Encoding.class, asOptions={})
 	public Encoding getEncoding() {
 		return (encoding);
 	}
 	public void setEncoding( Encoding ezeValue ) {
 		this.encoding = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="charset", clazz=EString.class, asOptions={})
 	public String getCharset() {
 		return (charset);
 	}
 	public void setCharset( String ezeValue ) {
 		this.charset = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="contentType", clazz=EString.class, asOptions={})
 	public String getContentType() {
 		return (contentType);
 	}
 	public void setContentType( String ezeValue ) {
 		this.contentType = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="headers", clazz=EDictionary.class, asOptions={})
 	public egl.lang.EDictionary getHeaders() {
 		return (headers);
 	}
 	public void setHeaders( egl.lang.EDictionary ezeValue ) {
 		this.headers = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="body", clazz=EString.class, asOptions={})
 	public String getBody() {
 		return (body);
 	}

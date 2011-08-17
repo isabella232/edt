@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import egl.lang.AnyException;
-import org.eclipse.edt.javart.resources.ExecutableBase;
+import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.util.JavartUtil;
 
 
@@ -31,12 +31,12 @@ public class ServiceUtilities
 	}
 
 	
-	public static AnyException buildServiceInvocationException( ExecutableBase program, String id, Object[] params, Throwable t, ServiceKind serviceKind )
+	public static AnyException buildServiceInvocationException( RunUnit ru, String id, Object[] params, Throwable t, ServiceKind serviceKind )
 	{
-		String message = JavartUtil.errorMessage( program, id, params );
-		return ServiceUtilities.buildInvocationException( program, id, message, "", "", "", t, serviceKind );
+		String message = JavartUtil.errorMessage( ru, id, params );
+		return ServiceUtilities.buildInvocationException(id, message, "", "", "", t, serviceKind );
 	}
-	private static AnyException buildInvocationException( ExecutableBase prog, String id, String message, String detail1, String detail2, String detail3, Throwable t, ServiceKind serviceKind ) 
+	private static AnyException buildInvocationException(String id, String message, String detail1, String detail2, String detail3, Throwable t, ServiceKind serviceKind ) 
 	{
 		while( t instanceof InvocationTargetException &&
 				((InvocationTargetException)t).getCause() != null ){

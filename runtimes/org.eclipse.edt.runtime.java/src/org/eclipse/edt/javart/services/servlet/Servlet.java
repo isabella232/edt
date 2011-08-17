@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.eclipse.edt.javart.Constants;
-import egl.lang.AnyException;
 import org.eclipse.edt.javart.json.ParseException;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
@@ -31,6 +30,7 @@ import org.eclipse.edt.javart.resources.StartupInfo;
 import org.eclipse.edt.javart.resources.Trace;
 import org.eclipse.edt.javart.services.servlet.proxy.RuiBrowserHttpRequest;
 
+import egl.lang.AnyException;
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
 import eglx.http.HttpUtilities;
@@ -172,19 +172,19 @@ import eglx.services.ServiceUtilities;
 
 		if( t instanceof ParseException )
 		{
-			jrte = ServiceUtilities.buildServiceInvocationException( program, Message.SOA_E_WS_REST_BAD_CONTENT, new String[]{requestContent}, t, serviceKind );
+			jrte = ServiceUtilities.buildServiceInvocationException( program._runUnit(), Message.SOA_E_WS_REST_BAD_CONTENT, new String[]{requestContent}, t, serviceKind );
 		}
 		else if( t instanceof IOException )
 		{
 			//handle as outer exception
-			jrte = ServiceUtilities.buildServiceInvocationException( program, Message.SOA_E_WS_PROXY_COMMUNICATION, new String[]{url}, t, serviceKind );
+			jrte = ServiceUtilities.buildServiceInvocationException( program._runUnit(), Message.SOA_E_WS_PROXY_COMMUNICATION, new String[]{url}, t, serviceKind );
 		}
 		else
 		{
-			jrte = ServiceUtilities.buildServiceInvocationException( program, Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, serviceKind );
+			jrte = ServiceUtilities.buildServiceInvocationException( program._runUnit(), Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, serviceKind );
 		}
 		HttpResponse innerResponse = new HttpResponse();
-		ServletUtilities.setBody(program(), innerResponse, jrte);
+		ServletUtilities.setBody(program()._runUnit(), innerResponse, jrte);
 		innerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
 		innerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
 		ServletUtilities.setBody(program(), outerResponse, innerResponse);

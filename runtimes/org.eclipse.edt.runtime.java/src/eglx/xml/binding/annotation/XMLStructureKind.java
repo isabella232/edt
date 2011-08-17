@@ -1,4 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package eglx.xml.binding.annotation;
+import org.eclipse.edt.javart.resources.*;
+import org.eclipse.edt.javart.*;
 public enum XMLStructureKind {
 	choice(1),
 	sequence(2),
@@ -7,6 +19,9 @@ public enum XMLStructureKind {
 	private final int value;
 	XMLStructureKind(int value) {
 		this.value = value;
+	}
+	private XMLStructureKind() {
+		value = -1;
 	}
 	public int getValue() {
 		return value;

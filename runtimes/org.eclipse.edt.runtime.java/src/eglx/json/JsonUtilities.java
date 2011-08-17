@@ -10,12 +10,12 @@
  *******************************************************************************/
 package eglx.json;
 
-import egl.lang.AnyException;
+import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.json.NameValuePairNode;
 import org.eclipse.edt.javart.json.ObjectNode;
 import org.eclipse.edt.javart.json.StringNode;
-import org.eclipse.edt.javart.resources.ExecutableBase;
 
+import egl.lang.AnyException;
 import eglx.services.ServiceKind;
 import eglx.services.ServiceUtilities;
 
@@ -73,7 +73,7 @@ public class JsonUtilities {
 		}
 		return json;
 	}
-	public static String createJsonAnyException( ExecutableBase program, AnyException jrte )
+	public static String createJsonAnyException(RunUnit ru, AnyException jrte )
 	{
 		/*
 		{
@@ -107,7 +107,7 @@ public class JsonUtilities {
 			ObjectNode eglException;
 			try
 			{
-				eglException = (ObjectNode)EGLToJSONConverter.convertToJson( program, record );
+				eglException = (ObjectNode)JsonLib.convertToJsonNode(record);
 			}
 			catch( AnyException j )
 			{
@@ -119,8 +119,8 @@ public class JsonUtilities {
 		}
 		return wrapper.toJson();
 	}
-	static String buildJsonServiceInvocationException( ExecutableBase program, String id, Object[] params, Throwable t, ServiceKind serviceKind )
+	static String buildJsonServiceInvocationException( RunUnit ru, String id, Object[] params, Throwable t, ServiceKind serviceKind )
 	{
-		return createJsonAnyException( program, ServiceUtilities.buildServiceInvocationException( program, id, params, t, serviceKind ) );
+		return createJsonAnyException( ru, ServiceUtilities.buildServiceInvocationException( ru, id, params, t, serviceKind ) );
 	}
 }

@@ -11,15 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.services.servlet;
 
-import egl.lang.AnyException;
-import org.eclipse.edt.javart.json.JsonParser;
-import org.eclipse.edt.javart.json.ParseException;
+import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 
+import egl.lang.AnyException;
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
-import eglx.json.EGLToJSONConverter;
-import eglx.json.JSONToEGLConverter;
+import eglx.json.JsonLib;
 import eglx.services.ServiceInvocationException;
 
 
@@ -35,24 +33,22 @@ public class ServletUtilities
     	HttpRequest request = null;
     	try {
     		request = new HttpRequest();
-			JSONToEGLConverter.convertToEgl(program, request, JsonParser.parse(object));
+			JsonLib.convertFromJSON(object, request);
 		} catch (AnyException e) {
-//FIXME
-		} catch (ParseException e) {
 //FIXME
 		}
 		return request;
     }
     
-    public static void setBody(ExecutableBase program, HttpResponse response, AnyException jrte){
-    	response.setBody(EGLToJSONConverter.convertToJson(program, jrte).toJson());
+    public static void setBody(RunUnit ru, HttpResponse response, AnyException jrte){
+    	response.setBody(JsonLib.convertToJSON(jrte));
     }
     
     public static void setBody(ExecutableBase program, HttpResponse outerResponse, HttpResponse innerResponse){
     	if(innerResponse == null){
     		innerResponse = new HttpResponse();
     	}
-    	outerResponse.setBody(EGLToJSONConverter.convertToJson(program, innerResponse).toJson());
+    	outerResponse.setBody(JsonLib.convertToJSON(innerResponse));
     }
     
 }
