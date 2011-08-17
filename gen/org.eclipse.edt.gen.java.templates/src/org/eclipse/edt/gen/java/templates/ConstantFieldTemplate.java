@@ -26,11 +26,8 @@ public class ConstantFieldTemplate extends JavaTemplate {
 		out.print("private static final ");
 		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(" ezeConst_");
-		ctx.invoke(genName, field, ctx, out);
-		out.print(" = ");
-		ctx.invoke(genInstantiation, field.getType(), ctx, out, field);
-		out.println(";");
-		out.print("public ");
+		ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
+		out.print("public final ");
 		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(" ");
 		ctx.invoke(genName, field, ctx, out);
