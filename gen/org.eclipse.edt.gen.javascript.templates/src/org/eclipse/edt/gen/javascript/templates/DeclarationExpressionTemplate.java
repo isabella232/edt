@@ -17,13 +17,18 @@ import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.Field;
 
 public class DeclarationExpressionTemplate extends JavaScriptTemplate {
-
+	
 	public void genDeclarationExpression(DeclarationExpression expr, Context ctx, TabbedWriter out) {
 		for (Field field : expr.getFields()) {
 			ctx.invoke(genDeclaration, field, ctx, out);
 			
-			if (field.getInitializerStatements() != null)
-				ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
+			if (field.getInitializerStatements() != null){
+				genInitializerStatements(field, ctx, out);
+			}	
 		}
+	}
+	
+	public void genInitializerStatements(Field field, Context ctx, TabbedWriter out){
+		ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
 	}
 }

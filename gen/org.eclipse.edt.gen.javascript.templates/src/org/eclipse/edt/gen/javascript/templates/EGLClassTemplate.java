@@ -213,17 +213,22 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
-		if (arg.getInitializerStatements() != null)
-			ctx.invoke(genStatementNoBraces, arg.getInitializerStatements(), ctx, out);
+	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field field) {
+		if (field.getInitializerStatements() != null){
+			genInitializerStatements(field, ctx, out);
+		}
 		else {
-			if (arg.getContainer() != null && arg.getContainer() instanceof Type)
-				ctx.invoke(genQualifier, arg.getContainer(), ctx, out, arg);
-			ctx.invoke(genName, arg, ctx, out);
+			if (field.getContainer() != null && field.getContainer() instanceof Type)
+				ctx.invoke(genQualifier, field.getContainer(), ctx, out, field);
+			ctx.invoke(genName, field, ctx, out);
 			out.print(" = ");
-			ctx.invoke(genInitialization, arg, ctx, out);
+			ctx.invoke(genInitialization, field, ctx, out);
 			out.println(";");
 		}
+	}
+	
+	public void genInitializerStatements(Field field, Context ctx, TabbedWriter out) {
+		ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
 	}
 
 	public void genCloneMethods(EGLClass part, Context ctx, TabbedWriter out) {
