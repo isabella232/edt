@@ -33,6 +33,7 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.LibraryBinding;
 import org.eclipse.edt.compiler.binding.LibraryDataBinding;
+import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.binding.ProgramBinding;
 import org.eclipse.edt.compiler.binding.TopLevelFunctionBinding;
@@ -642,8 +643,15 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			setElementInformation(name, nameExpr);
 			stack.push(nameExpr);
 			nameExpr.setId(name.getIdentifier());
-			name.getQualifier().accept(this);
-			nameExpr.setQualifier((Expression)stack.pop());
+			
+			IBinding qualBinding = name.getQualifier().resolveBinding();
+			if (qualBinding instanceof PartBinding) {
+				nameExpr.setQualifier(createNameForPart((IPartBinding)qualBinding));
+			}
+			else {
+				name.getQualifier().accept(this);
+				nameExpr.setQualifier((Expression)stack.pop());
+			}
 		}
 		return false;
 	}
