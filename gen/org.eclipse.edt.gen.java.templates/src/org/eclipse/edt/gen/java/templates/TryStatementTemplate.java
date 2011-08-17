@@ -43,7 +43,13 @@ public class TryStatementTemplate extends JavaTemplate {
 		
 		if ( stmt.getExceptionBlocks().isEmpty() )
 		{
-			out.println("finally { }");
+			// Since there are no onException blocks, generate code to ignore all
+			// handleable exceptions.
+			String exTemp = ctx.nextTempName();
+			out.println( "catch ( java.lang.Exception " + exTemp + " )" );
+			out.println( '{' );
+			out.println( "org.eclipse.edt.javart.util.JavartUtil.checkHandleable( " + exTemp + " );" );
+			out.println( '}' );
 		}
 	}
 
