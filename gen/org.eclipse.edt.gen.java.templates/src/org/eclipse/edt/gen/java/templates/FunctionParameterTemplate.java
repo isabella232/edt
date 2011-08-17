@@ -21,7 +21,7 @@ public class FunctionParameterTemplate extends JavaTemplate {
 	public void genDeclaration(FunctionParameter decl, Context ctx, TabbedWriter out) {
 		// write out the debug extension data
 		CommonUtilities.generateSmapExtension(decl, ctx);
-		if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx)) {
+		if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx) && !decl.isConst()) {
 			out.print("AnyBoxedObject<");
 			ctx.invoke(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
 			out.print(">");
