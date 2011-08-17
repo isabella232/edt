@@ -15,7 +15,9 @@ import java.util.List;
 
 import org.eclipse.edt.mof.egl.ArrayLiteral;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.MofConversion;
+import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
@@ -47,6 +49,11 @@ public class ArrayLiteralImpl extends LiteralImpl implements ArrayLiteral, MofCo
 			Type elementType = getEntries().get(0).getType();
 			int i = 0;
 			for (Expression entry : getEntries()) {
+				
+				if ((entry instanceof Name) && (((Name)entry).getNamedElement() instanceof Function)) {
+					elementType = IRUtils.getEGLType(Type_EGLAny);
+					break;
+				}
 				if (i != 0) {
 					typesSame = entry.getType().equals(elementType);
 					if (!typesSame) {
