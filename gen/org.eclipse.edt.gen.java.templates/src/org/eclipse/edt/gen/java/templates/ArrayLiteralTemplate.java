@@ -11,28 +11,35 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import java.util.List;
+
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.ArrayLiteral;
-import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.*;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class ArrayLiteralTemplate extends JavaTemplate {
 
 	public void genExpression(ArrayLiteral expr, Context ctx, TabbedWriter out) {
+		List<Expression> entries = expr.getEntries();
 		out.print("new ");
 		ctx.invoke(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavaImplementation);
-		out.print("(");
-		if (expr.getEntries() != null)
-			out.print(expr.getEntries().size());
-		out.print(")");
-		// now loop through all of the array literals, adding them to the new expression
-		for (int i = 0; i < expr.getEntries().size(); i++) {
-			out.print(".ezeSet(");
-			out.print(i + 1);
-			out.print(", ");
-			ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(expr.getEntries().get(i), ((ArrayType) expr.getType()).getElementType()), ctx, out);
-			out.print(")");
+		out.print('(');
+		out.print(entries == null ? 0 : entries.size());
+		out.print(')');
+		// now loop through all of the entries, adding them to the new expression
+		if ( entries != null )
+		{
+			Type elementType = ((ArrayType) expr.getType()).getElementType();
+			int i = 1;
+			for ( Expression element : entries ) {
+				out.print(".ezeSet(");
+				out.print(i);
+				out.print(", ");
+				ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(element, elementType), ctx, out);
+				out.print(")");
+				i++;
+			}
 		}
 	}
 }
