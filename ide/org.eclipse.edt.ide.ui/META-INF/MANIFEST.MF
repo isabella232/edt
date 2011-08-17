@@ -61,6 +61,7 @@ Export-Package:
  org.eclipse.edt.ide.ui.internal.dialogs,
  org.eclipse.edt.ide.ui.internal.editor,
  org.eclipse.edt.ide.ui.internal.editor.util,
+ org.eclipse.edt.ide.ui.internal.outline,
  org.eclipse.edt.ide.ui.internal.packageexplorer,
  org.eclipse.edt.ide.ui.internal.preferences,
  org.eclipse.edt.ide.ui.internal.project.features,
