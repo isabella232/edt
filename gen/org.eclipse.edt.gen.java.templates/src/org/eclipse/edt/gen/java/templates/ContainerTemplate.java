@@ -9,23 +9,16 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.java.annotation.templates;
+package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
-import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.Field;
 
-public class JsonNameTemplate extends JavaTemplate {
+public class ContainerTemplate extends JavaTemplate {
 
-	public void genConstructorOptions(AnnotationType annotType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
-		out.print("name=\"" + (String)annot.getValue() + "\"");
-		out.print(", clazz=");
-		ctx.invoke(genJsonTypeName, field.getType(), ctx, out);
-		out.print(".class, asOptions={");
-		ctx.invoke(genJsonTypeDependentOptions, field.getType(), ctx, out);
-		out.print("}");
-	}
+	public void genAnnotations(Container object, Context ctx, TabbedWriter out, Field field) {}
+
+	public void genXmlTransient(Container object, TabbedWriter out) {}
 }

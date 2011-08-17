@@ -18,64 +18,81 @@ import org.eclipse.edt.mof.egl.TimestampType;
 public class TimestampTypeTemplate extends JavaTemplate {
 
 	public void genConstructorOptions(TimestampType type, Context ctx, TabbedWriter out) {
-		// we need to skip over the 1st comma and space
-		generateOptions(type, ctx, out, false);
+		generateOptions(type, ctx, out);
 	}
 
 	public void genTypeDependentOptions(TimestampType type, Context ctx, TabbedWriter out) {
-		generateOptions(type, ctx, out, true);
+		out.print(", ");
+		generateOptions(type, ctx, out);
 	}
 
-	protected void generateOptions(TimestampType type, Context ctx, TabbedWriter out, boolean needSeparator) {
+	public void genJsonTypeDependentOptions(TimestampType type, Context ctx, TabbedWriter out) {
 		String pattern = "yyyyMMddhhmmss";
 		if (type.getPattern() != null && !type.getPattern().equalsIgnoreCase("null"))
 			pattern = type.getPattern();
-		String start = "";
-		String end = "";
-		if (pattern.startsWith("yyyy"))
-			start = ".YEAR_CODE";
-		else if (pattern.startsWith("MM"))
-			start = ".MONTH_CODE";
-		else if (pattern.startsWith("dd"))
-			start = ".DAY_CODE";
-		else if (pattern.startsWith("hh"))
-			start = ".HOUR_CODE";
-		else if (pattern.startsWith("mm"))
-			start = ".MINUTE_CODE";
-		else if (pattern.startsWith("ss"))
-			start = ".SECOND_CODE";
-		else if (pattern.startsWith("f"))
-			start = ".FRACTION1_CODE";
-		if (needSeparator)
-			out.print(", ");
+		out.print("\"");
+		out.print(getStartPattern(pattern));
+		out.print("\", \"");
+		out.print(getEndPattern(pattern));
+		out.print("\"");
+	}
+	
+	protected void generateOptions(TimestampType type, Context ctx, TabbedWriter out) {
+		String pattern = "yyyyMMddhhmmss";
+		if (type.getPattern() != null && !type.getPattern().equalsIgnoreCase("null"))
+			pattern = type.getPattern();
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
-		out.print(start);
-		if (pattern.endsWith("yyyy"))
-			end = ".YEAR_CODE";
-		else if (pattern.endsWith("MM"))
-			end = ".MONTH_CODE";
-		else if (pattern.endsWith("dd"))
-			end = ".DAY_CODE";
-		else if (pattern.endsWith("hh"))
-			end = ".HOUR_CODE";
-		else if (pattern.endsWith("mm"))
-			end = ".MINUTE_CODE";
-		else if (pattern.endsWith("ss"))
-			end = ".SECOND_CODE";
-		else if (pattern.endsWith("ffffff"))
-			end = ".FRACTION6_CODE";
-		else if (pattern.endsWith("fffff"))
-			end = ".FRACTION5_CODE";
-		else if (pattern.endsWith("ffff"))
-			end = ".FRACTION4_CODE";
-		else if (pattern.endsWith("fff"))
-			end = ".FRACTION3_CODE";
-		else if (pattern.endsWith("ff"))
-			end = ".FRACTION2_CODE";
-		else if (pattern.endsWith("f"))
-			end = ".FRACTION1_CODE";
+		out.print(".");
+		out.print(getStartPattern(pattern));
 		out.print(", ");
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
-		out.print(end);
+		out.print(".");
+		out.print(getEndPattern(pattern));
+	}
+
+	private String getStartPattern(String pattern) {
+		if (pattern.startsWith("yyyy"))
+			return "YEAR_CODE";
+		else if (pattern.startsWith("MM"))
+			return "MONTH_CODE";
+		else if (pattern.startsWith("dd"))
+			return "DAY_CODE";
+		else if (pattern.startsWith("hh"))
+			return "HOUR_CODE";
+		else if (pattern.startsWith("mm"))
+			return "MINUTE_CODE";
+		else if (pattern.startsWith("ss"))
+			return "SECOND_CODE";
+		else if (pattern.startsWith("f"))
+			return "FRACTION1_CODE";
+		return "";
+	}
+
+	private String getEndPattern(String pattern) {
+		if (pattern.endsWith("yyyy"))
+			return "YEAR_CODE";
+		else if (pattern.endsWith("MM"))
+			return "MONTH_CODE";
+		else if (pattern.endsWith("dd"))
+			return "DAY_CODE";
+		else if (pattern.endsWith("hh"))
+			return "HOUR_CODE";
+		else if (pattern.endsWith("mm"))
+			return "MINUTE_CODE";
+		else if (pattern.endsWith("ss"))
+			return "SECOND_CODE";
+		else if (pattern.endsWith("ffffff"))
+			return "FRACTION6_CODE";
+		else if (pattern.endsWith("fffff"))
+			return "FRACTION5_CODE";
+		else if (pattern.endsWith("ffff"))
+			return "FRACTION4_CODE";
+		else if (pattern.endsWith("fff"))
+			return "FRACTION3_CODE";
+		else if (pattern.endsWith("ff"))
+			return "FRACTION2_CODE";
+		else if (pattern.endsWith("f"))
+			return "FRACTION1_CODE";
+		return "";
 	}
 }

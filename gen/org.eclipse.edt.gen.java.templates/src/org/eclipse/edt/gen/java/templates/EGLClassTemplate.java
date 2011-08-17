@@ -221,4 +221,9 @@ public class EGLClassTemplate extends JavaTemplate {
 	public void genDeclaration(EGLClass part, Context ctx, TabbedWriter out) {}
 
 	public void genSuperClass(EGLClass part, Context ctx, TabbedWriter out) {}
+	
+	public void genJsonTypeName(EGLClass part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genRuntimeTypeName, part, ctx, out, TypeNameKind.EGLImplementation);
+	}
+
 }

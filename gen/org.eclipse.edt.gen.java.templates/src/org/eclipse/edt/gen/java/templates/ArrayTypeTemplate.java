@@ -86,4 +86,12 @@ public class ArrayTypeTemplate extends JavaTemplate {
 		} else
 			ctx.invokeSuper(this, genTypeBasedAssignment, type, ctx, out, arg);
 	}
+	public void genJsonTypeDependentOptions(ArrayType type, Context ctx, TabbedWriter out) {
+		ctx.invoke(genJsonTypeDependentOptions, type.getElementType(), ctx, out);
+	}
+	
+	public void genJsonTypeName(ArrayType type, Context ctx, TabbedWriter out) {
+		ctx.invoke(genJsonTypeName, type.getElementType(), ctx, out);
+	}
+
 }

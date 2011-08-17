@@ -11,6 +11,18 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import org.eclipse.edt.gen.java.Context;
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.StructPart;
+
 public class StructPartTemplate extends JavaTemplate {
+
+	public void genAnnotations(StructPart part, Context ctx, TabbedWriter out, Field field) {
+		for(Annotation annot : field.getAnnotations()){
+			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field);
+		}
+	}
 
 }

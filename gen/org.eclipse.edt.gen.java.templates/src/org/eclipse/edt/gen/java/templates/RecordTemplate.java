@@ -224,4 +224,5 @@ public class RecordTemplate extends JavaTemplate {
 		out.println("@javax.xml.bind.annotation.XmlTransient");
 	}
 	
+	public void genAnnotations(Record part, Context ctx, TabbedWriter out, Field field) {}
 }

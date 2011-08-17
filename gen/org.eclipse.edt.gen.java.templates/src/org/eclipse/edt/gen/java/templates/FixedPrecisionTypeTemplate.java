@@ -12,9 +12,8 @@
 package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
-
-import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.FixedPrecisionType;
 
 public class FixedPrecisionTypeTemplate extends JavaTemplate {
 
@@ -24,4 +23,13 @@ public class FixedPrecisionTypeTemplate extends JavaTemplate {
 		out.print(", ");
 		out.print(type.getDecimals());
 	}
+	
+	public void genJsonTypeDependentOptions(FixedPrecisionType type, Context ctx, TabbedWriter out) {
+		out.print("\"");
+		out.print(type.getLength());
+		out.print("\", \"");
+		out.print(type.getDecimals());
+		out.print("\"");
+	}
+	
 }

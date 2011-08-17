@@ -156,6 +156,14 @@ public class TypeTemplate extends JavaTemplate {
 		// no default
 	}
 
+	public void genJsonTypeDependentOptions(Type type, Context ctx, TabbedWriter out) {
+		// no default
+	}
+
+	public void genJsonTypeName(Type type, Context ctx, TabbedWriter out) {
+		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
+	}
+
 	public void genAssignment(Type type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
 		// if the lhs is non-nullable but the rhs is nullable, we have a special case
 		if (!TypeUtils.isReferenceType(arg1.getType()) && !arg1.isNullable() && arg2.isNullable()) {
@@ -277,5 +285,4 @@ public class TypeTemplate extends JavaTemplate {
 		ctx.invoke(genAssignment, arg.getLHS(), ctx, out, arg.getRHS(), " " + CommonUtilities.getNativeJavaAssignment(operator) + " ");
 	}
 
-	public void genXmlTransient(Type type, TabbedWriter out) {}
 }

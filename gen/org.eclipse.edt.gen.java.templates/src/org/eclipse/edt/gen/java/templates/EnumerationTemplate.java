@@ -41,13 +41,27 @@ public class EnumerationTemplate extends JavaTemplate {
 			out.println(";");
 		}
 		out.println("private final int value;");
-		ctx.invoke(genClassName, (Type) part, ctx, out);
-		out.println("(int value) {");
-		out.println("\tthis.value = value;");
-		out.println("}");
+		ctx.invoke(genConstructors, (Type)part, ctx, out);
 		out.println("public int getValue() {");
 		out.println("\treturn value;");
 		out.println("}");
+	}
+
+	public void genConstructors(Enumeration part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genClassName, (Type) part, ctx, out);
+		out.println("(int value) {");
+//		out.print("super(");
+//		out.println(");");
+		out.println("\tthis.value = value;");
+		out.println("}");
+		//the runtime needs to use reflection so an enum must have a default constructor
+		out.print("private ");
+		ctx.invoke(genClassName, (Type) part, ctx, out);
+		out.println("() {");
+		out.println("value = -1;");
+		out.println("}");
+		
+		
 	}
 
 	public void genClassHeader(Enumeration part, Context ctx, TabbedWriter out) {

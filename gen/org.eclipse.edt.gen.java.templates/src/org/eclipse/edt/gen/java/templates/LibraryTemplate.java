@@ -86,4 +86,6 @@ public class LibraryTemplate extends JavaTemplate {
 	public void genRuntimeTypeName(Library library, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genPartName, library, ctx, out);
 	}
+	
+	public void genAnnotations(Library library, Context ctx, TabbedWriter out, Field field) {}
 }

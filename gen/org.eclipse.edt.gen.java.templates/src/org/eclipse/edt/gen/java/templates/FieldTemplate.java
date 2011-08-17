@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+
+
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
+import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ExternalType;
@@ -25,14 +28,25 @@ public class FieldTemplate extends JavaTemplate {
 
 	public void preGen(Field field, Context ctx) {
 		ctx.invoke(preGen, field.getType(), ctx);
+		if(field.getContainer() instanceof Type){
+			if(field.getAnnotation(Constants.AnnotationJsonName) == null) {
+				//add an xmlElement
+				try {
+					Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationJsonName);
+					annotation.setValue(field.getId());
+					field.addAnnotation(annotation);
+				} catch (Exception e) {}
+			}	
+		}
 	}
 
 	public void genDeclaration(Field field, Context ctx, TabbedWriter out) {
 		// write out the debug extension data
 		CommonUtilities.generateSmapExtension(field, ctx);
 		// process the field
-		if (field.getContainer() instanceof Type) {
+		if(field.getContainer() != null){
 			ctx.invoke(genXmlTransient, field.getContainer(), out);
+			ctx.invoke(genAnnotations, field.getContainer(), ctx, out, field);
 		}
 		ctx.invokeSuper(this, genDeclaration, field, ctx, out);
 		transientOption(field, out);
@@ -43,7 +57,7 @@ public class FieldTemplate extends JavaTemplate {
 	}
 
 	public void genAnnotations(Field field, Context ctx, TabbedWriter out) {
-		for (Annotation annot : field.getAnnotations()) {
+		for(Annotation annot : field.getAnnotations()){
 			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field);
 		}
 	}
@@ -75,7 +89,7 @@ public class FieldTemplate extends JavaTemplate {
 				if (field.hasSetValuesBlock())
 					ctx.invoke(genInstantiation, field.getType(), ctx, out, field);
 				else
-					ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
+				ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
 			} else if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
 				ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
 			else
