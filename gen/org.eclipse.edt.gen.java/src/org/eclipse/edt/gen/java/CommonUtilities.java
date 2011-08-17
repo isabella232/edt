@@ -377,15 +377,20 @@ public class CommonUtilities {
 			}
 		}
 		// ignore adding this entry to the list, if it is the part we are currently generating
-		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(qualifiedName))
+		Part partBeingGenerated = (Part) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated); 
+		if (partBeingGenerated.getFullyQualifiedName().equalsIgnoreCase(qualifiedName))
 			return;
-		// if we get here, then we haven't processed this type before
+		// don't import a type whose unqualified name matches the name of the part currently being generated
 		String unqualifiedName = qualifiedName;
 		if (unqualifiedName.indexOf('.') >= 0)
 			unqualifiedName = unqualifiedName.substring(unqualifiedName.lastIndexOf('.') + 1);
+		if (unqualifiedName.equalsIgnoreCase(partBeingGenerated.getName()))
+			return;
+		// if we get here, then we haven't processed this type before
 		for (String imported : typesImported) {
-			if (imported.indexOf('.') >= 0)
-				imported = imported.substring(imported.lastIndexOf('.') + 1);
+			int dotIndex = imported.lastIndexOf('.');
+			if (dotIndex >= 0)
+				imported = imported.substring(dotIndex + 1);
 			if (unqualifiedName.equalsIgnoreCase(imported)) {
 				// we have an unqualified name that we are importing that matches the last node, Simply return
 				return;
