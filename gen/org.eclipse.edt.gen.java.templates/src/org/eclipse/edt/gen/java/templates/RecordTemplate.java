@@ -204,15 +204,24 @@ public class RecordTemplate extends JavaTemplate {
 	}
 
 	public void genAssignment(Record type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
-		if (arg1.isNullable()) {
+		if ( TypeUtils.isValueType( type ) )
+		{
+			if (arg1.isNullable()) {
+				ctx.invoke(genExpression, arg1, ctx, out);
+				out.print(arg3);
+			}
+			out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
+			ctx.invoke(genExpression, arg2, ctx, out);
+			out.print(", ");
 			ctx.invoke(genExpression, arg1, ctx, out);
-			out.print(arg3);
+			out.print(")");
 		}
-		out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
-		ctx.invoke(genExpression, arg2, ctx, out);
-		out.print(", ");
-		ctx.invoke(genExpression, arg1, ctx, out);
-		out.print(")");
+		else
+		{
+			ctx.invoke(genExpression, arg1, ctx, out);
+			out.print(" = ");
+			ctx.invoke(genExpression, arg2, ctx, out);
+		}
 	}
 
 	public void genGetterSetter(Record part, Context ctx, TabbedWriter out, Field arg) {
