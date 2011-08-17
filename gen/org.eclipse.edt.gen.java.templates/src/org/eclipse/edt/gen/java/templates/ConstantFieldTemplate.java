@@ -38,4 +38,8 @@ public class ConstantFieldTemplate extends JavaTemplate {
 		ctx.invoke(genName, field, ctx, out);
 		out.println(";");
 	}
+
+	public void genSetter(ConstantField field, Context ctx, TabbedWriter out) {
+		// Don't generate a setter for consts.
+	}
 }
