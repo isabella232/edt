@@ -70,11 +70,12 @@ public class GenericTypeImpl extends TypeImpl implements GenericType {
 
 	@Override
 	public Boolean equals(Type eglType) {
-		boolean isValid = eglType instanceof GenericType
-			&& getTypeParameter() != null && getClassifier() == null || (
-				getClassifier().equals(eglType.getClassifier())
-				&& getTypeArguments().size() == ((GenericType)eglType).getTypeArguments().size()
-			);
+		boolean isValid = 
+				(eglType instanceof GenericType) && 
+				(
+					(getTypeParameter() != null && getClassifier() == null) || 
+					(getClassifier().equals(eglType.getClassifier()) && getTypeArguments().size() == ((GenericType)eglType).getTypeArguments().size())
+				);
 		if (isValid) {
 			if (getTypeParameter() != null && getClassifier() == null) {
 				isValid = getTypeParameter().getName().equalsIgnoreCase(((GenericType)eglType).getTypeParameter().getName());
