@@ -28,10 +28,12 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
+import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.edt.debug.core.IEGLStackFrame;
 import org.eclipse.edt.debug.core.IEGLThread;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
 import org.eclipse.edt.debug.core.java.IEGLJavaThread;
+import org.eclipse.jdt.debug.core.IJavaReferenceType;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaThread;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
@@ -71,7 +73,15 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	 */
 	private Map<IStackFrame, EGLJavaStackFrame> previousStackFrames;
 	
+	/**
+	 * A flag indicating if we should filter out certain Java class types that EGL programmers won't want to step through.
+	 */
 	private boolean filterRuntimes;
+	
+	/**
+	 * A flag indicating that the step request came from an EGL frame.
+	 */
+	private boolean steppingFromEGL;
 	
 	/**
 	 * Constructor.
@@ -88,8 +98,8 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	}
 	
 	/**
-	 * Initialize the filtering setting. If the launch configuration specifies the VM arg then we'll
-	 * honor it, otherwise we fall back on the system property setting within the Eclipse JVM.
+	 * Initialize the filtering setting. If the launch configuration specifies the VM arg then we'll honor it, otherwise we fall back on the system
+	 * property setting within the Eclipse JVM.
 	 */
 	private void initFilterSetting()
 	{
@@ -226,19 +236,59 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	@Override
 	public void stepInto() throws DebugException
 	{
+		updateSteppingFromEGL( null );
 		javaThread.stepInto();
 	}
 	
 	@Override
 	public void stepOver() throws DebugException
 	{
+		updateSteppingFromEGL( null );
 		javaThread.stepOver();
 	}
 	
 	@Override
 	public void stepReturn() throws DebugException
 	{
+		updateSteppingFromEGL( null );
 		javaThread.stepReturn();
+	}
+	
+	/**
+	 * Updates the steppingFromEGL flag based on the frame; null may be passed in to indicate the step is from the top frame.
+	 * 
+	 * @param frame the frame issuing the step request, or null for the top frame.
+	 */
+	public void updateSteppingFromEGL( IJavaStackFrame frame )
+	{
+		if ( frame == null )
+		{
+			frame = eglFrames == null || eglFrames.length == 0
+					? null
+					: eglFrames[ 0 ].getJavaStackFrame();
+		}
+		
+		if ( frame != null )
+		{
+			String stratum = null;
+			try
+			{
+				IJavaReferenceType type = frame.getReferenceType();
+				if ( type != null )
+				{
+					stratum = type.getDefaultStratum();
+				}
+			}
+			catch ( DebugException e )
+			{
+			}
+			
+			steppingFromEGL = IEGLDebugCoreConstants.EGL_STRATUM.equals( stratum );
+		}
+		else
+		{
+			steppingFromEGL = false;
+		}
 	}
 	
 	@Override
@@ -276,14 +326,43 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 				int size = 0;
 				EGLJavaStackFrame[] newEGLFrames = new EGLJavaStackFrame[ javaFrames.length ];
 				currentStackFrames = new HashMap<IStackFrame, EGLJavaStackFrame>( javaFrames.length );
+				
+				int indexOfTopEGLFrame = -1;
+				for ( int i = 0; i < javaFrames.length; i++ )
+				{
+					if ( javaFrames[ i ] instanceof IJavaStackFrame )
+					{
+						try
+						{
+							IJavaReferenceType type = ((IJavaStackFrame)javaFrames[ i ]).getReferenceType();
+							if ( type != null )
+							{
+								if ( IEGLDebugCoreConstants.EGL_STRATUM.equals( type.getDefaultStratum() ) )
+								{
+									indexOfTopEGLFrame = i;
+									break;
+								}
+							}
+						}
+						catch ( DebugException e )
+						{
+						}
+					}
+				}
+				
 				for ( int i = 0; i < javaFrames.length; i++ )
 				{
 					// Filtering rules:
 					// 1. don't filter anything if the system property is set
-					// 2. don't filter the top frame
-					// 3. filter the initial main method (if there is one - there won't be if running on a server)
+					// 2. don't filter if there are no frames with the EGL stratum
+					// 3. don't filter the top frame
+					// 4. filter the initial main method (if there is one - there won't be if running on a server)
+					// 5. if we're disabling filtering due to a breakpoint in the runtime, don't filter frames above the topmost frame w/EGL stratum
 					if ( !filterRuntimes
-							|| (i == 0 || (!filterFrameType( (IJavaStackFrame)javaFrames[ i ] ) && (i + 1 < javaFrames.length || !isMainMethod( (IJavaStackFrame)javaFrames[ i ] )))) )
+							|| indexOfTopEGLFrame == -1
+							|| (!steppingFromEGL && indexOfTopEGLFrame > i)
+							|| i == 0
+							|| (!filterFrameType( (IJavaStackFrame)javaFrames[ i ] ) && (i + 1 < javaFrames.length || !isMainMethod( (IJavaStackFrame)javaFrames[ i ] ))) )
 					{
 						EGLJavaStackFrame frame = previousStackFrames == null
 								? null
@@ -367,6 +446,19 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 		Object src = events[ 0 ].getSource();
 		if ( src == javaThread )
 		{
+			// While looping over the events, it's possible we have both a STEP_END and a BREAKPOINT details. If there's
+			// a BREAKPOINT suspend event then we do not want to do any filtering. Check it first since it usually (always?) is listed second.
+			boolean bpHit = false;
+			
+			for ( int i = 0; i < events.length; i++ )
+			{
+				if ( events[ i ].getDetail() == DebugEvent.BREAKPOINT && events[ i ].getKind() == DebugEvent.SUSPEND )
+				{
+					bpHit = true;
+					break;
+				}
+			}
+			
 			for ( int i = 0; i < events.length; i++ )
 			{
 				switch ( events[ i ].getKind() )
@@ -383,7 +475,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 						fireTerminateEvent();
 						break;
 					case DebugEvent.RESUME:
-						if ( filterRuntimes && events[ i ].getDetail() == DebugEvent.STEP_INTO )
+						if ( steppingFromEGL && filterRuntimes && events[ i ].getDetail() == DebugEvent.STEP_INTO )
 						{
 							IStackFrame topJavaFrame = previousJavaFrames == null || previousJavaFrames.length == 0
 									? null
@@ -407,7 +499,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 						savedEvents.add( events[ i ] );
 						break;
 					case DebugEvent.SUSPEND:
-						if ( filterRuntimes && events[ i ].getDetail() == DebugEvent.STEP_END )
+						if ( !bpHit && steppingFromEGL && filterRuntimes && events[ i ].getDetail() == DebugEvent.STEP_END )
 						{
 							try
 							{
