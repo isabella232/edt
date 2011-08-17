@@ -92,74 +92,78 @@ public class ReorganizeCode extends AbstractVisitor {
 	@SuppressWarnings("unchecked")
 	public boolean visit(ReturnStatement object) {
 		ctx.putAttribute(object.getContainer(), Constants.SubKey_functionHasReturnStatement, new Boolean(true));
-		// if the return statement invokes a function that has inout or out parms, then we need to create a local variable
-		// for the return of the function invocation. This is because we need to unbox the inout/out args after the function
-		// is invoked and before the return statement
-		if (object.getExpression().getType() != null && IRUtils.hasSideEffects(object.getExpression())) {
-			// set up the new statement block if needed
-			List<StatementBlock> blockArray;
-			if (getReturnData() == null) {
-				blockArray = new ArrayList<StatementBlock>();
-				blockArray.add(null);
-				blockArray.add(null);
-				setReturnData(blockArray);
-			} else
-				blockArray = (List<StatementBlock>) getReturnData();
-			// handle the preprocessing
-			StatementBlock block;
-			// we need to add this to block list 0
-			if (blockArray.get(0) == null) {
-				block = factory.createStatementBlock();
-				block.setContainer(currentStatementContainer);
-				blockArray.set(0, block);
+		
+		// There are cases where someone uses a return statement to break out of a function, even though the function does not return anything
+		if(object.getExpression() != null){
+			// if the return statement invokes a function that has inout or out parms, then we need to create a local variable
+			// for the return of the function invocation. This is because we need to unbox the inout/out args after the function
+			// is invoked and before the return statement
+			if (object.getExpression().getType() != null && IRUtils.hasSideEffects(object.getExpression())) {
+				// set up the new statement block if needed
+				List<StatementBlock> blockArray;
+				if (getReturnData() == null) {
+					blockArray = new ArrayList<StatementBlock>();
+					blockArray.add(null);
+					blockArray.add(null);
+					setReturnData(blockArray);
+				} else
+					blockArray = (List<StatementBlock>) getReturnData();
+				// handle the preprocessing
+				StatementBlock block;
+				// we need to add this to block list 0
+				if (blockArray.get(0) == null) {
+					block = factory.createStatementBlock();
+					block.setContainer(currentStatementContainer);
+					blockArray.set(0, block);
+				}
+				block = blockArray.get(0);
+				String temporary = ctx.nextTempName();
+				LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				localDeclaration.setContainer(currentStatementContainer);
+				DeclarationExpression declarationExpression = factory.createDeclarationExpression();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				Field field = factory.createField();
+				field.setName(temporary);
+				field.setType(object.getExpression().getType());
+				field.setIsNullable(object.getExpression().isNullable());
+				// we need to create the member access
+				MemberName nameExpression = factory.createMemberName();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				nameExpression.setMember(field);
+				nameExpression.setId(field.getName());
+				// we need to create an assignment statement
+				AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				assignmentStatement.setContainer(currentStatementContainer);
+				Assignment assignment = factory.createAssignment();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				assignmentStatement.setAssignment(assignment);
+				assignment.setLHS(nameExpression);
+				assignment.setRHS(object.getExpression());
+				// add the assignment to the declaration statement block
+				StatementBlock declarationBlock = factory.createStatementBlock();
+				declarationBlock.setContainer(currentStatementContainer);
+				declarationBlock.getStatements().add(assignmentStatement);
+				// add the declaration statement block to the field
+				field.setInitializerStatements(declarationBlock);
+				field.setHasSetValuesBlock(true);
+				// add the field to the declaration expression
+				declarationExpression.getFields().add(field);
+				// connect the declaration expression to the local declaration
+				localDeclaration.setExpression(declarationExpression);
+				// we need to analyze the statement we moved
+				assignmentStatement.accept(this);
+				// add the local variable to the statement list
+				block.getStatements().add(localDeclaration);
+				// now replace the return expression with the temporary variable
+				object.setExpression(nameExpression);
 			}
-			block = blockArray.get(0);
-			String temporary = ctx.nextTempName();
-			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
-			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
-				localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-			localDeclaration.setContainer(currentStatementContainer);
-			DeclarationExpression declarationExpression = factory.createDeclarationExpression();
-			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
-				declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-			Field field = factory.createField();
-			field.setName(temporary);
-			field.setType(object.getExpression().getType());
-			field.setIsNullable(object.getExpression().isNullable());
-			// we need to create the member access
-			MemberName nameExpression = factory.createMemberName();
-			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
-				nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-			nameExpression.setMember(field);
-			nameExpression.setId(field.getName());
-			// we need to create an assignment statement
-			AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
-			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
-				assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-			assignmentStatement.setContainer(currentStatementContainer);
-			Assignment assignment = factory.createAssignment();
-			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
-				assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-			assignmentStatement.setAssignment(assignment);
-			assignment.setLHS(nameExpression);
-			assignment.setRHS(object.getExpression());
-			// add the assignment to the declaration statement block
-			StatementBlock declarationBlock = factory.createStatementBlock();
-			declarationBlock.setContainer(currentStatementContainer);
-			declarationBlock.getStatements().add(assignmentStatement);
-			// add the declaration statement block to the field
-			field.setInitializerStatements(declarationBlock);
-			field.setHasSetValuesBlock(true);
-			// add the field to the declaration expression
-			declarationExpression.getFields().add(field);
-			// connect the declaration expression to the local declaration
-			localDeclaration.setExpression(declarationExpression);
-			// we need to analyze the statement we moved
-			assignmentStatement.accept(this);
-			// add the local variable to the statement list
-			block.getStatements().add(localDeclaration);
-			// now replace the return expression with the temporary variable
-			object.setExpression(nameExpression);
 		}
 		return true;
 	}
