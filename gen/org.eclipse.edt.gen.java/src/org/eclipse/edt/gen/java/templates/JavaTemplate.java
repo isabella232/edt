@@ -37,6 +37,7 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genArrayAccess = "genArrayAccess";
 	public static final String genAssignment = "genAssignment";
 	public static final String genBinaryExpression = "genBinaryExpression";
+	public static final String genBoxingFunctionName = "genBoxingFunctionName";
 	public static final String genClassBody = "genClassBody";
 	public static final String genClassHeader = "genClassHeader";
 	public static final String genClassName = "genClassName";
@@ -55,6 +56,8 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genGetter = "genGetter";
 	public static final String genGetterSetter = "genGetterSetter";
 	public static final String genGetterSetters = "genGetterSetters";
+	public static final String genJsonTypeDependentOptions = "genJsonTypeDependentOptions";
+	public static final String genJsonTypeName = "genJsonTypeName";
 	public static final String genInitialization = "genInitialization";
 	public static final String genInitialize = "genInitialize";
 	public static final String genInitializeMethod = "genInitializeMethod";
