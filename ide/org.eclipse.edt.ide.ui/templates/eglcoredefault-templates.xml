@@ -23,6 +23,7 @@ dataItem ${dataItemName} decimal(4, 2)
 end
 </template>
 
+<!-- DataTables aren't supported in EDT 0.7
 <template name="dataTable" description="%Templates.basic_table" id="org.eclipse.edt.ide.ui.templates.basic_table" context = "egl-core" enabled="true">// basic dataTable
 //
 dataTable ${dataTableName} type BasicTable {shared = no, resident = no}
@@ -97,6 +98,7 @@ dataTable ${dataTableName} type RangeChkTable {shared = yes, resident = yes}
 	
 end
 </template>
+-->
 
 <template name="function" description="%Templates.abstract_function" id="org.eclipse.edt.ide.ui.templates.abstract_function" context = "egl-core" enabled="true">// abstract function
 function ${functionName}(parameterName string) returns (int);
@@ -124,6 +126,7 @@ function ${functionName}(parameterName string inOut) returns(int)
 end
 </template>
 
+<!-- StructuredRecords aren't supported in EDT 0.7
 <template name="record" description="%Templates.fixed_basic_record" id="org.eclipse.edt.ide.ui.templates.fixed_basic_record" context = "egl-core" enabled="true">// structured basic record
 //
 record ${recordName} type BasicRecord
@@ -132,16 +135,18 @@ record ${recordName} type BasicRecord
 	
 end
 </template>
+-->
 
 <template name="record" description="%Templates.flexible_basic_record" id="org.eclipse.edt.ide.ui.templates.flexible_basic_record" context = "egl-core" enabled="true">// basic record
 //
-record ${recordName} type BasicRecord
+record ${recordName}
 	
 	itemName string;
 	
 end
 </template>
 
+<!-- File records aren't supported in EDT 0.7
 <template name="record" description="%Templates.fixed_serial_record" id="org.eclipse.edt.ide.ui.templates.fixed_serial_record" context = "egl-core" enabled="true">// structured serial record
 //
 record ${recordName} type SerialRecord  
@@ -180,15 +185,6 @@ record ${recordName} type RelativeRecord
 end
 </template>
 
-<template name="record" description="%Templates.exception_record" id="org.eclipse.edt.ide.ui.templates.exception_record" context = "egl-core" enabled="true">// exception record
-//
-record ${recordName} type Exception
-
-	${itemName} string;
-	
-end
-</template>
-
 <template name="record" description="%Templates.csv_record" id="org.eclipse.edt.ide.ui.templates.csv_record" context = "egl-core" enabled="true">// csv record
 //
 record ${recordName} type CSVRecord {fileName=&quot;${csvRecordName}&quot;, delimiter=",", style=CsvStyle.escaped, labels=["Name", "Age"]}
@@ -198,7 +194,18 @@ record ${recordName} type CSVRecord {fileName=&quot;${csvRecordName}&quot;, deli
 	
 end
 </template>
+-->
 
+<template name="record" description="%Templates.exception_record" id="org.eclipse.edt.ide.ui.templates.exception_record" context = "egl-core" enabled="true">// exception record
+//
+record ${recordName} type Exception
+
+	${itemName} string;
+	
+end
+</template>
+
+<!-- Called programs aren't supported in EDT 0.7
 <template name="program" description="%Templates.basic_called_program" id="org.eclipse.edt.ide.ui.templates.basic_called_program" context = "egl-core" enabled="true">// basic called program
 //
 program ${programName} type BasicProgram(parm1 int, parm2 string) {}
@@ -217,6 +224,7 @@ program ${programName} type BasicProgram(parm1 int, parm2 string) {}
 	
 end
 </template>
+-->
 
 <template name="program" description="%Templates.basic_program" id="org.eclipse.edt.ide.ui.templates.basic_program" context = "egl-core" enabled="true">// basic program
 //
@@ -237,6 +245,7 @@ program ${programName} type BasicProgram {}
 end
 </template>
 
+<!--  UIPrograms aren't supported in EDT 0.7
 <template name="program" description="%Templates.ui_program" id="org.eclipse.edt.ide.ui.templates.ui_program" context = "egl-core" enabled="true">// UIProgram
 //
 program ${programName} type UIProgram {
@@ -257,9 +266,10 @@ program ${programName} type UIProgram {
 	
 end
 </template>
+-->
 
 <template name="library" description="%Templates.basic_library" id="org.eclipse.edt.ide.ui.templates.basic_library" context = "egl-core" enabled="true">// basic library
-library ${libraryName} type BasicLibrary {}
+library ${libraryName}
 	
 	// Use Declarations
 	//use usePartReference;
@@ -277,6 +287,7 @@ library ${libraryName} type BasicLibrary {}
 end
 </template>
 
+<!--  Native libraries aren't supported in EDT 0.7
 <template name="library" description="%Templates.native_library" id="org.eclipse.edt.ide.ui.templates.native_library" context = "egl-core" enabled="true">// native library
 library ${libraryName} type NativeLibrary {callingConvention = I4GL, dllname = &quot;${dllname}&quot;}
 	
@@ -286,9 +297,10 @@ library ${libraryName} type NativeLibrary {callingConvention = I4GL, dllname = &
 	
 end
 </template>
+-->
 
 <template name="handler" description="%Templates.basic_handler" id="org.eclipse.edt.ide.ui.templates.basic_handler_part" context = "egl-core" enabled="true">// basic handler
-handler ${handlerName} type BasicHandler
+handler ${handlerName}
 	
 	// Use Declarations
 	//use usePartReference;
@@ -314,7 +326,7 @@ delegate ${delegateName}(parameterName string inOut) returns (int) end
 externalType ${externalTypeName} extends ${extendsName} type JavaObject {packageName = &quot;${packageName}&quot;}
 	
 	// Constructor Declarations
-	constructor(parameterName int);
+	constructor(parameterName int in);
 	
 	// Variable Declarations
 	variableName string;
@@ -378,7 +390,9 @@ end</template>
 
 <template name="exit" description="%Templates.exit_program" id="org.eclipse.edt.ide.ui.templates.exit_program" context = "egl-core" enabled="true">exit program;</template>
 
+<!--  Exit stack isn't supported in EDT 0.7
 <template name="exit" description="%Templates.exit_stack" id="org.eclipse.edt.ide.ui.templates.exit_stack" context = "egl-core" enabled="true">exit stack;</template>
+-->
 
 <template name="exit" description="%Templates.exit_if" id="org.eclipse.edt.ide.ui.templates.exit_if" context = "egl-core" enabled="true">exit if;</template>
 
@@ -392,7 +406,9 @@ end</template>
 
 <template name="exit" description="%Templates.exit_program_with_return_code" id="org.eclipse.edt.ide.ui.templates.exit_program_with_return_code" context = "egl-core" enabled="true">exit program (${returnCode});</template>
 
+<!--  Exit stack isn't supported in EDT 0.7
 <template name="exit" description="%Templates.exit_stack_to_location" id="org.eclipse.edt.ide.ui.templates.exit_stack_to_location" context = "egl-core" enabled="true">exit stack ${exitLabel};</template>
+-->
 
 <template name="for" description="%Templates.for_statement" id="org.eclipse.edt.ide.ui.templates.for_statement" context = "egl-core" enabled="true">for (${counter} from ${start} to ${end} by ${delta})
 	// EGL statements
@@ -416,7 +432,9 @@ end</template>
 
 <template name="function invocation" description="%Templates.qualified_function_invocation" id="org.eclipse.edt.ide.ui.templates.ualified_function_invocatio" context = "egl-core" enabled="true">${qualifier}.${functionName}();</template>
 
+<!--  Goto isn't supported in EDT 0.7
 <template name="goto" description="%Templates.goto_label_statement" id="org.eclipse.edt.ide.ui.templates.goto_label_statement" context = "egl-core" enabled="true">goto ${gotoLabel};</template>
+-->
 
 <template name="if" description="%Templates.if_statement" id="org.eclipse.edt.ide.ui.templates.if_statement" context = "egl-core" enabled="true">if (${condition})
 	// EGL statements
@@ -432,7 +450,9 @@ end</template>
 
 <template name="move" description="%Templates.move_statement" id="org.eclipse.edt.ide.ui.templates.move_statement" context = "egl-core" enabled="true">move ${source} to ${target};</template>
 
+<!--  Move by position isn't supported in EDT 0.7
 <template name="move" description="%Templates.move_by_position" id="org.eclipse.edt.ide.ui.templates.move_by_position" context = "egl-core" enabled="true">move ${source} to ${target} byPosition;</template>
+-->
 
 <template name="move" description="%Templates.move_by_name" id="org.eclipse.edt.ide.ui.templates.move_by_name" context = "egl-core" enabled="true">move ${source} to ${target} byName;</template>
 
@@ -444,12 +464,15 @@ end</template>
 
 <template name="return" description="%Templates.return_statement_with_return_code" id="org.eclipse.edt.ide.ui.templates.return_statement_with_return_code" context = "egl-core" enabled="true">return (${returnValue});</template>
 
+<!--  Set isn't supported in EDT 0.7
 <template name="set" description="%Templates.set_one_state" id="org.eclipse.edt.ide.ui.templates.set_one_state" context = "egl-core" enabled="true">set ${dataReference} ${state};</template>
 
 <template name="set" description="%Templates.set_multiple_states" id="org.eclipse.edt.ide.ui.templates.set_multiple_states" context = "egl-core" enabled="true">set ${dataReference} ${state1}, ${state2};</template>
+-->
 
 <template name="throw" description="%Templates.throw_statement" id="org.eclipse.edt.ide.ui.templates.throw_statement" context = "egl-core" enabled="true">throw ${exceptionDeclaration};</template>
 
+<!--  Transfer isn't supported in EDT 0.7
 <template name="transfer" description="%Templates.transfer_to_program" id="org.eclipse.edt.ide.ui.templates.transfer_to_program" context = "egl-core" enabled="true">transfer to program ${target};</template>
 
 <template name="transfer" description="%Templates.transfer_to_transaction" id="org.eclipse.edt.ide.ui.templates.transfer_to_transaction" context = "egl-core" enabled="true">transfer to transaction ${target};</template>
@@ -457,6 +480,7 @@ end</template>
 <template name="transfer" description="%Templates.transfer_to_program_passing_record" id="org.eclipse.edt.ide.ui.templates.transfer_to_program_passing_record" context = "egl-core" enabled="true">transfer to program ${target} passing ${recordName};</template>
 
 <template name="transfer" description="%Templates.transfer_to_transaction_passing_record" id="org.eclipse.edt.ide.ui.templates.transfer_to_transaction_passing_record" context = "egl-core" enabled="true">transfer to transaction ${target} passing ${recordName};</template>
+-->
 
 <template name="try onException" description="%Templates.try_on_exception_statement" id="org.eclipse.edt.ide.ui.templates.try_on_exception_statement" context = "egl-core" enabled="true">try
 	// EGL statements
@@ -517,7 +541,7 @@ end
 <template name="service declaration" description="%Templates.service_declaration" id="org.eclipse.edt.ide.ui.templates.service_declaration" context = "egl-core" enabled="true">${variableName} ${serviceName} {@bindService};</template>
 
 
-
+<!--  Structured records aren't supported in EDT 0.7
 <template name="record" description="%Templates.fixed_SQL_record_with_table_names" id="org.eclipse.edt.ide.ui.templates.fixed_SQL_record_with_table_names" context = "egl-core" enabled="true">// structured SQL record with table names
 //
 record ${recordName} type SQLRecord  
@@ -541,6 +565,7 @@ record ${recordName} type SQLRecord
 	
 end
 </template>
+-->
 
 <template name="record" description="%Templates.flexible_SQL_record_with_table_names" id="org.eclipse.edt.ide.ui.templates.flexible_SQL_record_with_table_names" context = "egl-core" enabled="true">// SQL record with table names
 //
