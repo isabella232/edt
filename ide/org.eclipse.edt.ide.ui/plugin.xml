@@ -895,7 +895,14 @@ Templates
             class="org.eclipse.edt.ide.ui.internal.wizards.InterfaceWizard"
             id="org.eclipse.edt.ide.ui.newInterfacewizard">
        </wizard>
-	   	<wizard
+       <wizard
+            name="%Service"
+            icon="icons/etool16/nsvc_wiz.gif" 
+            category="org.eclipse.edt.ide.ui.wizards.new.category"
+            class="org.eclipse.edt.ide.ui.internal.wizards.ServiceWizard"
+            id="org.eclipse.edt.ide.ui.newServicewizard">
+       </wizard>
+	   <wizard
         	name="%EGLProject"
             icon="icons/ctool16/newegl_wiz.gif"
             category="org.eclipse.edt.ide.ui.wizards.new.category"
@@ -1067,6 +1074,31 @@ Templates
                	value="org.eclipse.edt.ide.core.EGLNature">
          	</filter>
       	</objectContribution>
+      	<objectContribution
+            objectClass="org.eclipse.core.resources.IFile"
+            adaptable="true"
+            nameFilter="*.egl"
+            id="org.eclipse.edt.ide.ui.source.servicepopupmenu">
+            <menu
+               label="%ServiceMenu.label"
+               path="group.source"               
+               id="org.eclipse.edt.ide.ui.serviceMenu">
+               <separator
+                  name="group1">
+               </separator>
+           </menu>            
+           <action
+               label="%ExtractInterface.name"
+               class="org.eclipse.edt.ide.ui.internal.actions.OpenExtractInterfaceWizardAction"
+               menubarPath="org.eclipse.edt.ide.ui.serviceMenu/group1"
+               enablesFor="1"
+               id="org.eclipse.edt.ide.ui.serviceGroup.extractInterface">
+           </action>   
+           <filter
+            	name="projectNature"
+               	value="org.eclipse.edt.ide.core.EGLNature">
+          </filter>
+        </objectContribution>
       	<viewerContribution
              id="org.eclipse.edt.ide.ui.EGLEditorPopupActions"
              targetID="#EGLRulerContext">
