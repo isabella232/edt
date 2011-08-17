@@ -29,4 +29,5 @@ public class Constants {
 	public static final String genGetVariables = "genGetVariables";
 	public static final String genGetVariablesEntry = "genGetVariablesEntry";
 	public static final String genSetLocalFunctionVariable = "genSetLocalFunctionVariable";
+	public static final String genSetWidgetLocation = "genSetWidgetLocation";
 }

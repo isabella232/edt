@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascriptdev.templates;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascriptdev.Constants;
@@ -48,4 +49,30 @@ public class FieldTemplate extends org.eclipse.edt.gen.javascript.templates.Fiel
 		
 		ctx.invoke(Constants.genAddLocalFunctionVariable, field, ctx, out);
 	}
+	
+	public void genSetWidgetLocation(Field field, Boolean isLocalField, Context ctx, TabbedWriter out){
+		if(CommonUtilities.isRUIWidget(field.getType())){
+			Annotation annotation = field.getAnnotation(IEGLConstants.EGL_LOCATION);
+			if (annotation != null){
+				Integer offset = (Integer)annotation.getValue(IEGLConstants.EGL_PARTOFFSET);
+				Integer length = (Integer)annotation.getValue(IEGLConstants.EGL_PARTLENGTH);
+				
+				out.print("egl.setWidgetLocation(");
+				if(!isLocalField){
+					out.print("this.");
+				}
+				ctx.invoke(genName, field, ctx, out);
+				out.print(", '");
+				ctx.invoke(genName, field, ctx, out);
+				out.print("', ");
+				out.print(offset.toString());
+				out.print(", ");
+				out.print(length.toString());
+				out.print(", ");
+				out.print(true);
+				out.println(");");
+			}
+		}
+	}
+	
 }

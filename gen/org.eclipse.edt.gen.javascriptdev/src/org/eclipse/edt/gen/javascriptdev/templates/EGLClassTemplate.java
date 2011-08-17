@@ -91,4 +91,9 @@ public class EGLClassTemplate extends org.eclipse.edt.gen.javascript.templates.E
 		out.println("} else { egl.leave(); } ");
 		out.println("}");
 	}
+	
+	public void genInitializerStatements(Field field, Context ctx, TabbedWriter out) {
+		super.genInitializerStatements(field, ctx, out);
+		ctx.invoke(Constants.genSetWidgetLocation, field, Boolean.FALSE, ctx, out);
+	}
 }
