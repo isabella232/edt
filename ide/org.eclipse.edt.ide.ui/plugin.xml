@@ -33,6 +33,11 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             contextId="org.eclipse.edt.ide.ui.eglEditorScope"
             sequence="F3"/>
+        <key
+            commandId="org.eclipse.edt.ide.ui.navigate.openPart"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            contextId="org.eclipse.edt.ide.ui.eglEditorScope"
+            sequence="Ctrl+Shift+F3"/>
         <!-- Source comment -->
        	<key
             commandId="org.eclipse.edt.ide.ui.source.commentGroup.toggle"
@@ -114,6 +119,11 @@
 	  		name="%OpenOnSelection.name"
 			description="%OpenOnSelection.description"	  		
 			id="org.eclipse.edt.ide.ui.navigate.openOnSelection"/>
+		<command
+            name="%command.openPart.name"
+            description="%command.openPart.description"
+            id="org.eclipse.edt.ide.ui.navigate.openPart">
+     	</command>
 		<!-- Source edit -->
 		<command
 	  		name="%Format.name"
