@@ -337,8 +337,17 @@ public class ReorganizeCode extends AbstractVisitor {
 		return true;
 	}
 
+	private void processInvocationConstantParameters(InvocationExpression object) {
+		//for a const we should not copy the parameter before passing it to the function.
+		for (int i = 0; i < object.getTarget().getParameters().size(); i++) {
+			if (object.getTarget().getParameters().get(i).isConst()) {
+				ctx.putAttribute(object.getArguments().get(i), Constants.SubKey_FunctionParameterIsConst, Boolean.TRUE);
+			}
+		}
+	}
 	@SuppressWarnings("unchecked")
 	private void processInvocation(InvocationExpression object) {
+		processInvocationConstantParameters(object);
 		boolean altered = false;
 		boolean argumentToBeAltered[] = new boolean[object.getTarget().getParameters().size()];
 		// we need to scan the function arguments for any conditions that require temporary variables to be set

@@ -18,10 +18,15 @@ public class CommonUtilities {
 			// temporary
 			if (!parameter.getType().equals(expression.getType()) || parameter.isNullable() || expression.isNullable()
 				|| !ctx.mapsToPrimitiveType(parameter.getType()))
-				return true;
+				//if the parameter is a const then we should not make a copy
+				return !parameter.isConst();
 			return false;
-		} else
-			return isBoxedParameterType(parameter, ctx);
+		} else{
+			//if the parameter is a const we should not make a copy
+			return isBoxedParameterType(parameter, ctx) && 
+					parameter.getParameterKind() == ParameterKind.PARM_INOUT &&
+					!parameter.isConst();
+		}
 	}
 
 	public static boolean isBoxedParameterType(FunctionParameter parameter, EglContext ctx) {

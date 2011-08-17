@@ -31,4 +31,5 @@ public class Constants {
 	public static final String SubKey_functionHasReturnStatement = "functionHasReturnStatement";
 	public static final String SubKey_statementNeedsLabel = "statementNeedsLabel";
 	public static final String SubKey_callStatementTempVariables = "callStatementTempVariables";
+	public static final String SubKey_FunctionParameterIsConst = "functionParameterIsConst";
 }
