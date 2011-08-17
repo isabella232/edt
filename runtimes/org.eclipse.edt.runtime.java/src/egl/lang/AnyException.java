@@ -108,12 +108,12 @@ public class AnyException extends RuntimeException implements egl.lang.EglAny {
 	}
 
 	public String toString() {
-		String msg = getLocalizedMessage();
-		if (msg == null) {
+		String msg = getMessage();
+		if (msg.length() == 0) {
 			return ezeTypeSignature();
 		} else {
 			String typeSig = ezeTypeSignature();
-			return new StringBuilder(typeSig + 1 + msg.length()).append(typeSig).append(' ').append(msg).toString();
+			return new StringBuilder(typeSig.length() + 1 + msg.length()).append(typeSig).append(' ').append(msg).toString();
 		}
 	}
 
@@ -121,6 +121,10 @@ public class AnyException extends RuntimeException implements egl.lang.EglAny {
 		this.message = message;
 	}
 
+	/**
+	 * Because the message is a non-nullable field of AnyException, this method
+	 * never returns null.  If there's no message, it returns the empty string. 
+	 */
 	@Override
 	public String getMessage() {
 		if ( message != null && message.length() > 0 )
