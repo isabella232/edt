@@ -267,6 +267,16 @@ public class NewWizardMessages extends NLS {
 //	public static String NewTypeWizardPageOperationdesc;
 //	public static String NewTypeWizardPageWSDLTypenameLabel;
 	
+	public static String ProjectTemplateSelectionPage;
+	public static String ProjectTemplateSelectionPage_title;
+	public static String ProjectTemplateSelectionPage_description;
+	public static String ProjectTemplateSelectionPage_templatesLabel;
+	public static String ProjectTemplateSelectionPage_descriptionLabel;
+	
+	public static String GeneratorSelectionPage;
+	public static String GeneratorSelectionPageTitle;
+	public static String GeneratorSelectionPageDescription;
+	
 	public static String RUILibraryPage;
 	public static String RUILibraryPageTitle;
 	public static String RUILibraryPageDescription;
@@ -906,6 +916,7 @@ public class NewWizardMessages extends NLS {
 	public static String EGLNewProjectWizard_1;
 	public static String EGLProjectWizardTypePage_1;
 	public static String EGLProjectWizardTypePage_2;
+	public static String EGLProjectWizardTypePage_BasePackage;
 	public static String ProjectContentFragment_0;
 	public static String ProjectContentFragment_1;
 	public static String ProjectContentFragment_2;
@@ -914,6 +925,7 @@ public class NewWizardMessages extends NLS {
 	
 	public static String error_project_already_exists;
 	public static String error_project_exists_different_case;
+	public static String error_basepackage_spaces;
 	
 	public static String EGLSourceProjectWizardPage_projectLocationEmpty;
 	public static String EGLSourceProjectWizardPage_locationError;

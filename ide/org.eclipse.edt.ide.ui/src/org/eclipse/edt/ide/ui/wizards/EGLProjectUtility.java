@@ -11,9 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.wizards;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,12 +30,17 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.edt.compiler.internal.eglar.EglarFile;
 import org.eclipse.edt.compiler.internal.eglar.EglarFileCache;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
@@ -44,7 +52,6 @@ import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.PPListElement;
 import org.eclipse.edt.ide.core.utils.EGLProjectFileUtility;
-import org.eclipse.edt.ide.core.utils.EGLProjectInfoUtility;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -55,6 +62,20 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jdt.ui.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.templates.DocumentTemplateContext;
+import org.eclipse.jface.text.templates.Template;
+import org.eclipse.jface.text.templates.TemplateBuffer;
+import org.eclipse.jface.text.templates.TemplateContext;
+import org.eclipse.jface.text.templates.TemplateContextType;
+import org.eclipse.jface.text.templates.persistence.TemplateStore;
+import org.eclipse.wst.css.core.internal.CSSCorePlugin;
+import org.eclipse.wst.css.ui.internal.CSSUIPlugin;
+import org.eclipse.wst.css.ui.internal.preferences.CSSUIPreferenceNames;
+import org.eclipse.wst.css.ui.internal.templates.TemplateContextTypeIdsCSS;
+import org.eclipse.wst.sse.core.internal.encoding.CommonEncodingPreferenceNames;
+import org.eclipse.wst.sse.core.utils.StringUtils;
 
 public final class EGLProjectUtility {
 	public static final String JAVA_DEFAULT_BIN_FOLDER = "bin"; //$NON-NLS-1$
@@ -761,7 +782,148 @@ public final class EGLProjectUtility {
 			}
 		}		
 		javaProject.setRawClasspath(newEntries, null);
-	}		
+	}
+	
+	public static IPath getDefaultRUIWebContentPath(IEGLProject eproj) {
+		String outputLocationName= "WebContent"; //$NON-NLS-1$
+		return eproj.getProject().getFullPath().append(outputLocationName);
+	}
+	
+	public static IPath getDefaultRUICSSFolderPath(IEGLProject eproj) {
+		String outputLocationName= "WebContent/css"; //$NON-NLS-1$
+		return eproj.getProject().getFullPath().append(outputLocationName);
+	}
+	
+	public static IPath getDefaultRUIIconsFolderPath(IEGLProject eproj) {
+		String outputLocationName= "WebContent/icons"; //$NON-NLS-1$
+		return eproj.getProject().getFullPath().append(outputLocationName);
+	}
+	
+	/**
+	 * Returns the path to the RUI project properties folder. This is not a default, this
+	 * is specifically where users HAVE to place their properties files to be recognized
+	 * at deployment time 
+	 * 
+	 * @param eproj
+	 * @return
+	 */
+	public static IPath getPropertiesFolderPath(IEGLProject eproj) {
+		String outputLocationName= "WebContent/properties"; //$NON-NLS-1$
+		return eproj.getProject().getFullPath().append(outputLocationName);
+	}
+	
+	public static void createRUIWebContentAndSubFolders(IProject project) throws CoreException {
+		IWorkspaceRoot fWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+		IEGLProject eproj = EGLCore.create(project);
+
+		IPath eglRUIWebContentLocation = EGLProjectUtility.getDefaultRUIWebContentPath(eproj);
+		if (!fWorkspaceRoot.exists(eglRUIWebContentLocation)) {
+			IFolder folder = fWorkspaceRoot.getFolder(eglRUIWebContentLocation);
+			CoreUtility.createFolder(folder, true, true, null);
+		}
+
+		IPath cssFolder = EGLProjectUtility.getDefaultRUICSSFolderPath(eproj);
+		if (!fWorkspaceRoot.exists(cssFolder)) {
+			IFolder folder = fWorkspaceRoot.getFolder(cssFolder);
+			CoreUtility.createFolder(folder, true, true, null);
+			/**
+			 * create a default css file
+			 */
+			createDefaultCSSFile(folder);
+		}
+
+		IPath iconsFolder = EGLProjectUtility.getDefaultRUIIconsFolderPath(eproj);
+		/**
+		 * create and set the icons content path
+		 */
+		if (!fWorkspaceRoot.exists(iconsFolder)) {
+			IFolder folder = fWorkspaceRoot.getFolder(iconsFolder);
+			CoreUtility.createFolder(folder, true, true, null);
+		}
+
+		IPath propertiesFolder = EGLProjectUtility.getPropertiesFolderPath(eproj);
+		/**
+		 * create and set the properties content path
+		 */
+		if (!fWorkspaceRoot.exists(propertiesFolder)) {
+			IFolder folder = fWorkspaceRoot.getFolder(propertiesFolder);
+			CoreUtility.createFolder(folder, true, true, null);
+		}
+	}
+
+	private static String getTemplateString() {
+		Template template = null;
+		TemplateStore fTemplateStore = CSSUIPlugin.getDefault().getTemplateStore();
+		String templateName = CSSUIPlugin.getDefault().getPreferenceStore().getString(CSSUIPreferenceNames.NEW_FILE_TEMPLATE_NAME);
+		Template[] templates = fTemplateStore.getTemplates(TemplateContextTypeIdsCSS.NEW);
+		for (int i = 0; i < templates.length && template == null; i++) {
+			Template template2 = templates[i];
+			if (template2.getName().equals(templateName)) {
+				template = template2;
+			}
+		}
+		String templateString = ""; //$NON-NLS-1$
+		if (template != null) {
+			TemplateContextType contextType = CSSUIPlugin.getDefault().getTemplateContextRegistry().getContextType(TemplateContextTypeIdsCSS.NEW);
+			IDocument document = new Document();
+			TemplateContext context = new DocumentTemplateContext(contextType, document, 0, 0);
+			try {
+				TemplateBuffer buffer = context.evaluate(template);
+				templateString = buffer.getString();
+			}
+			catch (Exception e) {
+				//	Logger.log(Logger.WARNING_DEBUG, "Could not create template for new css", e); //$NON-NLS-1$
+			}
+		}
+
+		return templateString;
+	}
+	
+	private static String applyLineDelimiter(IFile file, String text) {
+		String lineDelimiter = Platform.getPreferencesService().getString(Platform.PI_RUNTIME, Platform.PREF_LINE_SEPARATOR, System.getProperty("line.separator"), new IScopeContext[] {new ProjectScope(file.getProject()), new InstanceScope() });//$NON-NLS-1$
+		String convertedText = StringUtils.replace(text, "\r\n", "\n");  //$NON-NLS-1$//$NON-NLS-2$
+		convertedText = StringUtils.replace(convertedText, "\r", "\n");  //$NON-NLS-1$//$NON-NLS-2$
+		convertedText = StringUtils.replace(convertedText, "\n", lineDelimiter); //$NON-NLS-1$
+		return convertedText;
+	}
+	
+	public static void createDefaultCSSFile(IFolder folder) {
+		IProject project = folder.getProject();
+		IFile file = folder.getFile(new Path(project.getName() + ".css")); //$NON-NLS-1$
+
+		// if there was problem with creating file, it will be null, so make
+		// sure to check
+		if (file != null && !file.exists()) {
+			// put template contents into file
+			String templateString = getTemplateString();
+			if (templateString != null) {
+				templateString = applyLineDelimiter(file, templateString);
+				// determine the encoding for the new file
+				Preferences preference = CSSCorePlugin.getDefault().getPluginPreferences();
+				String charSet = preference.getString(CommonEncodingPreferenceNames.OUTPUT_CODESET);
+
+				try {
+					ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+					OutputStreamWriter outputStreamWriter = null;
+					if (charSet == null || charSet.trim().equals("")) { //$NON-NLS-1$
+					// just use default encoding
+						outputStreamWriter = new OutputStreamWriter(outputStream);
+					} else {
+						outputStreamWriter = new OutputStreamWriter(outputStream, charSet);
+					}
+					outputStreamWriter.write(templateString);
+					outputStreamWriter.flush();
+					outputStreamWriter.close();
+					ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+
+					file.create(inputStream, true, null);
+					inputStream.close();
+				} catch (Exception e) {
+					//Logger.log(Logger.WARNING_DEBUG, "Could not create contents for new CSS file", e); //$NON-NLS-1$
+				}
+			}
+		}
+	}
 	
 	public static void modifyClasspathLibraryEntry(IProject project, IClasspathEntry[] modifiedEntries) throws CoreException{
 		IJavaProject javaProject; //The Java "view" of the project.

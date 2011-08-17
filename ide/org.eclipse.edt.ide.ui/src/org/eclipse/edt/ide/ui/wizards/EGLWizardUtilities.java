@@ -156,15 +156,15 @@ public class EGLWizardUtilities {
 
 		if (rule == null)
 			rule = ResourcesPlugin.getWorkspace().getRoot();
-		
-		List<WorkspaceModifyOperation> ops = ProjectFinishUtility.getCreateProjectFinishOperations(projConfig, eglFeatureMask, rule);
-		for(Iterator<WorkspaceModifyOperation> it = ops.iterator(); it.hasNext();){
-			Object obj = it.next();
-			if (obj instanceof WorkspaceModifyOperation) {
-				WorkspaceModifyOperation op = (WorkspaceModifyOperation) obj;
-				op.run(new NullProgressMonitor());
-			}
-		}
+		// TODO Create the new API here, just apply the template?
+//		List<WorkspaceModifyOperation> ops = ProjectFinishUtility.getCreateProjectFinishOperations(projConfig, eglFeatureMask, rule);
+//		for(Iterator<WorkspaceModifyOperation> it = ops.iterator(); it.hasNext();){
+//			Object obj = it.next();
+//			if (obj instanceof WorkspaceModifyOperation) {
+//				WorkspaceModifyOperation op = (WorkspaceModifyOperation) obj;
+//				op.run(new NullProgressMonitor());
+//			}
+//		}
 				
 		//If project is closed, open it
 		IProject myProject = ResourcesPlugin.getWorkspace().getRoot().getProject(name);

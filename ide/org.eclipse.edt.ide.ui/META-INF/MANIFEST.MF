@@ -42,14 +42,18 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.wst.common.frameworks.ui,
  org.eclipse.wst.common.project.facet.ui,
  org.eclipse.wst.web.ui,
+ org.eclipse.wst.css.ui;bundle-version="1.0.502",
+ org.eclipse.wst.sse.core;bundle-version="1.1.504",
+ org.eclipse.wst.css.core;bundle-version="1.1.402",
  org.eclipse.edt.runtime.java;bundle-version="0.7.0",
  org.apache.xerces;bundle-version="[2.9.0,3.0.0)",
- org.eclipse.edt.ide.deployment.core;bundle-version="0.7.0"
+ org.eclipse.edt.ide.deployment.core;bundle-version="0.7.0" 
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
 Export-Package: 
  org.eclipse.edt.ide.ui,
+ org.eclipse.edt.ide.ui.celleditors,
  org.eclipse.edt.ide.ui.editor,
  org.eclipse.edt.ide.ui.internal,
  org.eclipse.edt.ide.ui.internal.deployment.ui,
@@ -61,13 +65,16 @@ Export-Package:
  org.eclipse.edt.ide.ui.internal.preferences,
  org.eclipse.edt.ide.ui.internal.project.features,
  org.eclipse.edt.ide.ui.internal.project.features.operations,
+ org.eclipse.edt.ide.ui.internal.project.wizard.pages,
+ org.eclipse.edt.ide.ui.internal.project.wizards,
  org.eclipse.edt.ide.ui.internal.util,
  org.eclipse.edt.ide.ui.internal.viewsupport,
  org.eclipse.edt.ide.ui.internal.wizards,
  org.eclipse.edt.ide.ui.internal.wizards.dialogfields,
  org.eclipse.edt.ide.ui.preferences,
+ org.eclipse.edt.ide.ui.project.templates,
  org.eclipse.edt.ide.ui.templates,
- org.eclipse.edt.ide.ui.templates.parts,
+ org.eclipse.edt.ide.ui.templates.pages,
  org.eclipse.edt.ide.ui.templates.wizards,
  org.eclipse.edt.ide.ui.wizards
 Bundle-Vendor: Eclipse EGL Development Tools

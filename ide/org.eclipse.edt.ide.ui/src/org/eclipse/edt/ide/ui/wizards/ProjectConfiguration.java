@@ -21,6 +21,19 @@ import org.eclipse.edt.ide.core.utils.EGLProjectInfoUtility;
 
 public class ProjectConfiguration {
 	
+	public final static int JAVA_PLATFORM = 1;
+	public final static int JAVASCRIPT_PLATFORM = 2;
+	public final static int JAVA_JAVASCRIPT_PLATFORMS = 3;
+	public final static int COBOL_PLATFORM = 4;
+	public final static int JAVA_COBOL_PLATFORMS = 5;
+	public final static int JAVASCRIPT_COBOL_PLATFORMS = 6;
+	public final static int JAVA_JAVASCRIPT_COBOL_PLATFORMS = 7;	
+
+	public static final String EDT_COMPILER_ID = "org.eclipse.edt.ide.compiler.edtCompiler";
+	public static final String JAVA_GENERATOR_ID = "org.eclipse.edt.ide.gen.JavaGenProvider";
+	public static final String JAVASCRIPT_DEV_GENERATOR_ID = "org.eclipse.edt.ide.gen.JavaScriptDevGenProvider";
+	public static final String JAVASCRIPT_GENERATOR_ID = "org.eclipse.edt.ide.gen.JavaScriptGenProvider";
+	
 	/** The Project Name */
 	private String projectName;
 	
@@ -32,6 +45,9 @@ public class ProjectConfiguration {
 	
 	/** Custom Project location */
 	private String customProjectLocation;
+	
+	/** Custome base package name, optional */
+	private String basePackageName;
 	
 	/**
 	 * Possible values are:
@@ -51,8 +67,15 @@ public class ProjectConfiguration {
 	/** Required projects */
 	private List <PPListElement>requiredProjects;
 	
+	/** Selected widget libraries, only use for web client project **/
 	private List<String> selectedWidgetLibraries;
 	
+	/** Selected compiler id **/
+	private String selectedCompiler;	
+
+	/** Selected generators **/
+	private String[] selectedGenerators;	
+
 	private boolean configureEGLPathOnly;
 	
 	public void setDefaultAttributes() {
@@ -60,11 +83,30 @@ public class ProjectConfiguration {
 		projectName = ""; //$NON-NLS-1$
 		initialProjectLocation = Platform.getLocation().toOSString();
 		customProjectLocation = ""; //$NON-NLS-1$
+		basePackageName = "";
 		targetRuntimeValue = EGLProjectInfoUtility.JAVA_PLATFORM;
 		requiredProjects = new ArrayList<PPListElement>();
 		selectedWidgetLibraries = new ArrayList<String>();
+		selectedCompiler = EDT_COMPILER_ID;
+		selectedGenerators = new String[0];
+	}
+	
+	public String getSelectedCompiler() {
+		return selectedCompiler;
 	}
 
+	public void setSelectedCompiler(String selectedCompiler) {
+		this.selectedCompiler = selectedCompiler;
+	}
+	
+	public String[] getSelectedGenerators() {
+		return selectedGenerators;
+	}
+
+	public void setSelectedGenerators(String[] selectedGenerators) {
+		this.selectedGenerators = selectedGenerators;
+	}
+	
 	/**
 	 * @return
 	 */
@@ -205,5 +247,13 @@ public class ProjectConfiguration {
 	
 	public void setConfigureEGLPathOnly( boolean flag ) {
 		configureEGLPathOnly = flag;
+	}
+
+	public String getBasePackageName() {
+		return basePackageName;
+	}
+
+	public void setBasePackageName(String basePackageName) {
+		this.basePackageName = basePackageName;
 	}
 }

@@ -9,12 +9,18 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.ide.ui.wizards;
+package org.eclipse.edt.ide.ui.project.templates;
 
+import java.util.List;
+
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
+import org.eclipse.edt.ide.core.internal.model.EGLProject;
+import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
-public interface IWidgetLibraryImporter  {	
+public interface IProjectTemplateClass  {
 	
-	public ImportRUIProjectsOperation getImportRUIProjectsOperation( ISchedulingRule rule, String resourcePluginName, String resourceFolder,  String projectName  );	
-	public AddProjectDependencyOperation getAddProjectDependencyOperation( ProjectConfiguration projectConfiguration, ISchedulingRule rule,  String projectName ); 	
+	public List<WorkspaceModifyOperation> getOperations(ProjectConfiguration eglProjConfiguration, ISchedulingRule rule);
+	public void applyTemplate(IProject project);
 }

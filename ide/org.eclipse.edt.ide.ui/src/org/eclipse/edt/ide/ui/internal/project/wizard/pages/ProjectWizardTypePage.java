@@ -18,13 +18,19 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.edt.compiler.internal.EGLAliasJsfNamesSetting;
+import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
+import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
 import org.eclipse.edt.ide.ui.internal.project.wizard.fragments.SourceProjectContentFragment;
 import org.eclipse.edt.ide.ui.internal.project.wizards.NewEGLProjectWizard;
 import org.eclipse.edt.ide.ui.internal.project.wizards.ProjectWizardUtils;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
+import org.eclipse.edt.ide.ui.wizards.EGLWizardUtilities;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
+import org.eclipse.edt.ide.ui.wizards.EGLWizardUtilities.NameValidatorProblemRequestor;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -40,10 +46,14 @@ import org.eclipse.ui.PlatformUI;
 
 public class ProjectWizardTypePage extends ProjectWizardPage {
 	
+	private static final String EGLSOURCE = "eglsource";
+
 	public static IStatus OK_STATUS = new Status(IStatus.OK, "org.eclipse.edt.ide.ui", 0, "OK", null); //$NON-NLS-1$
 	
 	private Label projectNameLabel;
 	private Text projectName;
+	private Label basePackageLabel;
+	private Text basePackage;
 	private Composite contentSection;
 	private SourceProjectContentFragment contentFragment;
 	private ProjectConfiguration model;	
@@ -68,6 +78,7 @@ public class ProjectWizardTypePage extends ProjectWizardPage {
 		
 		createProjectNameEntry(parent);
 		createContentFragment(this.parent);
+		createBasePackageEntry(parent);
 		setControl(parent);
 		this.projectName.setFocus();
 
@@ -82,6 +93,33 @@ public class ProjectWizardTypePage extends ProjectWizardPage {
 		}
 	}
 
+	private void createBasePackageEntry(Composite parent) {
+		this.basePackageLabel = new Label(parent, SWT.NULL);
+		this.basePackageLabel.setText(NewWizardMessages.EGLProjectWizardTypePage_BasePackage);
+		this.basePackage = new Text(parent, SWT.BORDER);
+		this.basePackage.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				String name = ((Text)e.widget).getText();
+				model.setBasePackageName(name);				
+			}
+			
+		});
+		
+		FormData data = new FormData();
+		data.left = new FormAttachment(0, 10);
+		data.top = new FormAttachment(contentSection, 20);
+		this.basePackageLabel.setLayoutData(data);
+		
+		data = new FormData();
+		data.left = new FormAttachment(this.basePackageLabel, 10);
+		data.top = new FormAttachment(contentSection, 20);
+		data.right = new FormAttachment(100, -10);
+		this.basePackage.setLayoutData(data);
+		
+		hookListenerPackageName(basePackage);
+	}
+	
 	private void createProjectNameEntry(Composite parent) {
 		this.projectNameLabel = new Label(parent, SWT.NULL);
 		this.projectNameLabel.setText(NewWizardMessages.EGLProjectWizardTypePage_2);
@@ -91,7 +129,7 @@ public class ProjectWizardTypePage extends ProjectWizardPage {
 			public void modifyText(ModifyEvent e) {
 				String name = ((Text)e.widget).getText();
 				model.setProjectName(name);
-					getContainer( ).updateButtons();
+				getContainer( ).updateButtons();
 			}
 			
 		});
@@ -143,6 +181,22 @@ public class ProjectWizardTypePage extends ProjectWizardPage {
 		});
 	}
 	
+	private void hookListenerPackageName(Text text) {
+		text.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				IStatus status = validatePackageName(basePackage.getText());
+				// Check whether the project name is valid
+				if (status != OK_STATUS) {
+					setErrorMessage(status.getMessage());
+				} else {
+					setErrorMessage(null);
+				}
+			}	
+		});
+	}
+
+	
 	public boolean isPageComplete() {
 		return super.isPageComplete() && validatePage();
 	}
@@ -155,7 +209,10 @@ public class ProjectWizardTypePage extends ProjectWizardPage {
 			return false;
 		} else {
 			contentFragment.specifyProjectDirectory.setEnabled(true);
-			return true;
+			status = validatePackageName(basePackage.getText());
+			if(status != OK_STATUS)
+				return false;
+			else return true;
 		}
 	}
 	
@@ -180,6 +237,30 @@ public class ProjectWizardTypePage extends ProjectWizardPage {
 	public static IStatus validateProjectName(String projectName) {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		return workspace.validateName(projectName, IResource.PROJECT);
+	}
+	
+	public IStatus validatePackageName(String packageName) {		
+		if(packageName.length() > 0){
+			if(packageName.length() != packageName.trim().length()){
+				return ProjectWizardUtils.createErrorStatus(NewWizardMessages.error_basepackage_spaces);
+			}
+			StatusInfo pkgStatus= new StatusInfo();
+			ICompilerOptions compilerOption = new ICompilerOptions(){
+	            public boolean isVAGCompatible() {
+	            	//TODO EDT Remove isVAGCompatibility	            	
+	            	return false;
+	            }
+				public boolean isAliasJSFNames() {
+					return EGLAliasJsfNamesSetting.isAliasJsfNames();
+				}            
+	        };
+	        NameValidatorProblemRequestor nameValidaRequestor = new NameValidatorProblemRequestor(pkgStatus);
+			EGLNameValidator.validate(packageName, EGLNameValidator.PACKAGE, nameValidaRequestor, compilerOption);
+			if(!pkgStatus.isOK())
+				return ProjectWizardUtils.createErrorStatus(pkgStatus.getMessage());
+		}
+		
+		return OK_STATUS;
 	}
 	
 	public String getProjectName() {

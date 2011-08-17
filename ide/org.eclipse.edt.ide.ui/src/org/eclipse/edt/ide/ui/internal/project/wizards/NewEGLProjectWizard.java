@@ -26,14 +26,17 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
-import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardRUILibraryPage;
+import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectTemplateSelectionPage;
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardTypePage;
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.SourceProjectWizardCapabilityPage;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
+import org.eclipse.edt.ide.ui.project.templates.IProjectTemplate;
+import org.eclipse.edt.ide.ui.project.templates.ProjectTemplateWizardNode;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
 import org.eclipse.edt.ide.ui.wizards.ProjectFinishUtility;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizardNode;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -45,9 +48,9 @@ import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 public class NewEGLProjectWizard extends Wizard 
 	implements IWorkbenchWizard, INewWizard {
 	
-	private ProjectWizardTypePage typePage;	
-	private ProjectWizardRUILibraryPage libraryPage;
+	private ProjectWizardTypePage typePage;		
 	private SourceProjectWizardCapabilityPage capabilityPage;
+	private ProjectTemplateSelectionPage templatePage;
 	
 	private ProjectConfiguration model;	
 	private IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
@@ -65,7 +68,10 @@ public class NewEGLProjectWizard extends Wizard
 		try{
 			ISchedulingRule rule = getCurrentSchedulingRule();
 			model.setProjectName(typePage.getModel().getProjectName());
-			List ops = ProjectFinishUtility.getCreateProjectFinishOperations(model, 0, rule);
+			
+			IWizardNode node = templatePage.getSelectedNode();
+			ProjectTemplateWizardNode twn = (ProjectTemplateWizardNode) node;		
+			List ops = ProjectFinishUtility.getCreateProjectFinishOperations((IProjectTemplate) twn.getTemplate(), model, rule);
 			for(Iterator it = ops.iterator(); it.hasNext();)
 			{
 				Object obj = it.next();
@@ -125,8 +131,8 @@ public class NewEGLProjectWizard extends Wizard
 	public void addPages() {
 		this.typePage = new ProjectWizardTypePage(NewWizardMessages.EGLNewProjectWizard_1, model);
 		addPage(typePage);
-		this.libraryPage = new ProjectWizardRUILibraryPage(NewWizardMessages.RUILibraryPage);
-		addPage(libraryPage);
+		this.templatePage = new ProjectTemplateSelectionPage(NewWizardMessages.ProjectTemplateSelectionPage);
+		addPage(templatePage);
 		this.capabilityPage = new SourceProjectWizardCapabilityPage(NewWizardMessages.EGLCapabilityConfigurationPage);
 		addPage(capabilityPage);
 	}
