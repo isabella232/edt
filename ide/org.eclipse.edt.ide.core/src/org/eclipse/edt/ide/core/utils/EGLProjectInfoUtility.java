@@ -39,7 +39,7 @@ public final class EGLProjectInfoUtility {
 	public static String getDebugJavaScriptFolder() {	
 //TODO EDT debug		
 //		return DEFAULT_DEBUG_JAVASCRIPT_FOLDER_NAME;
-		return "generatedJavaScript";
+		return "javascriptDev";
 	}
 	
 	public static String getDefaultGeneratedJavaFolder() {
