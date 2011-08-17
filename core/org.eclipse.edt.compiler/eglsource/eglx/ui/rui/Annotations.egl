@@ -47,6 +47,8 @@ Record DataTemplate type Annotation
 	childNameLabelTemplate string;
 	childErrorLabelTemplate string;
 	childControllerTemplate string;
+	childControllerValidStateSetterTemplate string;
+	childControllerPublishMessageHelperTemplate string;
 	childFormFieldTemplate string;
 end
 
