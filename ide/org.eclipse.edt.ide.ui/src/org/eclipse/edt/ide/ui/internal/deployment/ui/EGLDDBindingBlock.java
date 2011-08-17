@@ -1,0 +1,422 @@
+/*******************************************************************************
+ * Copyright © 2008, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.ide.ui.internal.deployment.ui;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.edt.ide.ui.EDTUIPlugin;
+import org.eclipse.edt.ide.ui.internal.EGLElementImageDescriptor;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
+import org.eclipse.edt.ide.ui.internal.deployment.Bindings;
+import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
+import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
+import org.eclipse.edt.ide.ui.internal.deployment.EGLBinding;
+import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
+import org.eclipse.edt.ide.ui.internal.deployment.NativeBinding;
+import org.eclipse.edt.ide.ui.internal.deployment.Protocol;
+import org.eclipse.edt.ide.ui.internal.deployment.ReferenceProtocol;
+import org.eclipse.edt.ide.ui.internal.deployment.RestBinding;
+import org.eclipse.edt.ide.ui.internal.deployment.WebBinding;
+import org.eclipse.edt.ide.ui.internal.viewsupport.ImageDescriptorRegistry;
+import org.eclipse.edt.ide.ui.internal.wizards.EGLDDBindingWizard;
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.forms.DetailsPart;
+import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.SectionPart;
+import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.ui.forms.editor.FormPage;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
+
+public class EGLDDBindingBlock extends EGLDDBaseBlock {
+
+	private static final int COLINDEX_NAME = 0;
+	private static final int COLINDEX_PROTOCOLTYPE = 1;
+	protected Button fBtnRemove;
+	protected ISelection fCurrentSelection;
+	protected Button fBtnAdd;
+	
+	public static class ServiceBindingContentProvider implements IStructuredContentProvider{
+
+		public Object[] getElements(Object inputElement) {
+			List children = new ArrayList();
+			if(inputElement instanceof EGLDeploymentRoot){
+				EGLDeploymentRoot servicebindingRoot = (EGLDeploymentRoot)inputElement;
+				Deployment deployment = servicebindingRoot.getDeployment();
+				Bindings bindings = deployment.getBindings();
+				if(bindings != null){
+					children.addAll(bindings.getEglBinding());
+					children.addAll(bindings.getNativeBinding());					
+					children.addAll(bindings.getWebBinding());
+					children.addAll(bindings.getRestBinding());
+				}
+			}
+			return children.toArray();
+		}
+
+		public void dispose() {			
+		}
+
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		}		
+	}
+
+	public static class ServiceBindingLabelProvider extends LabelProvider implements ITableLabelProvider{
+
+		public Image getColumnImage(Object element, int columnIndex) {
+			if(columnIndex == COLINDEX_NAME){
+				EGLElementImageDescriptor overlayedDescriptor=null;
+				ImageDescriptorRegistry registry = EDTUIPlugin.getImageDescriptorRegistry();	
+				int overlayFlag = 0;
+				if(element instanceof WebBinding){
+					overlayFlag = EGLElementImageDescriptor.WEBSERVICE;
+				}
+				else if(element instanceof EGLBinding){
+					EGLBinding eglbinding = (EGLBinding)element;
+					Protocol protocol = eglbinding.getProtocol();
+					overlayFlag = getProtocolOverlayFlag(protocol) ;
+				}
+				overlayedDescriptor = new EGLElementImageDescriptor(PluginImages.DESC_OBJS_EXTERNALSERVICE,
+						overlayFlag, EGLDeploymentDescriptorEditor.SMALL_SIZE);				
+				
+				if(overlayedDescriptor != null)
+					return registry.get(overlayedDescriptor);		
+			}
+			return null;
+		}
+
+		private int getProtocolOverlayFlag(Protocol protocol) {
+			int overlayFlag = 0;
+			if(protocol instanceof ReferenceProtocol)
+				overlayFlag = EGLElementImageDescriptor.SERVICEREF;
+			else{					
+				CommTypes commtype = EGLDDRootHelper.getProtocolCommType(protocol);		
+
+				if(commtype == CommTypes.TCPIP_LITERAL)
+					overlayFlag =  EGLElementImageDescriptor.TCPIP;
+				else if(commtype == CommTypes.CICSECI_LITERAL ||
+						commtype == CommTypes.CICSJ2C_LITERAL ||
+						commtype == CommTypes.CICSSSL_LITERAL ||
+						commtype == CommTypes.JAVA400_LITERAL ||
+						commtype == CommTypes.JAVA400J2C_LITERAL ||
+						commtype == CommTypes.CICSWS_LITERAL )
+					overlayFlag = EGLElementImageDescriptor.CICS;
+			}
+			return overlayFlag ;
+		}
+				
+		public String getColumnText(Object element, int columnIndex) {
+			if (element instanceof WebBinding) {
+				WebBinding webbinding = (WebBinding) element;
+				if(columnIndex == COLINDEX_NAME)
+					return webbinding.getName();
+				else if(columnIndex == COLINDEX_PROTOCOLTYPE){
+					return "WSDL"; //$NON-NLS-1$
+				}
+			} 
+			else  if (element instanceof EGLBinding) {
+				EGLBinding eglbinding = (EGLBinding)element;
+				if(columnIndex == COLINDEX_NAME)
+					return eglbinding.getName();
+				else if(columnIndex == COLINDEX_PROTOCOLTYPE){
+					Protocol protocol = eglbinding.getProtocol();					
+					return EGLDDRootHelper.getProtocolCommTypeString(protocol);
+				}
+			}
+			else if(element instanceof NativeBinding){
+				NativeBinding nativeBinding = (NativeBinding)element;
+				if(columnIndex == COLINDEX_NAME)
+					return nativeBinding.getName();
+				else if(columnIndex == COLINDEX_PROTOCOLTYPE){
+					Protocol protocol1 = nativeBinding.getProtocol();
+					return EGLDDRootHelper.getProtocolCommTypeString(protocol1);
+				}
+			}
+			else if(element instanceof RestBinding){
+				RestBinding restBinding = (RestBinding)element;
+				if(columnIndex == COLINDEX_NAME)
+					return restBinding.getName();
+				else if(columnIndex == COLINDEX_PROTOCOLTYPE){
+					return "REST";  //$NON-NLS-1$
+				}
+			}
+			return ""; //$NON-NLS-1$
+		}
+		
+		public String getText(Object element) {
+			return getColumnText(element, COLINDEX_NAME);
+		}
+	}
+	
+	public EGLDDBindingBlock(FormPage page){
+		fPage = page;
+	}
+	
+	public void createContent(IManagedForm managedForm) {
+		super.createContent(managedForm);
+		//sashForm.setWeights(new int[] {1, 2});
+	}
+	
+	protected void createMasterPart(final IManagedForm managedForm, Composite parent) {
+		FormToolkit toolkit = managedForm.getToolkit();
+
+		Composite client1 = toolkit.createComposite(parent, SWT.WRAP);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		client1.setLayoutData(gd);
+		
+		createAliasLayout(toolkit, client1);
+		
+		Section section = toolkit.createSection(client1, Section.DESCRIPTION |Section.TITLE_BAR);
+		section.setText(getMasterSectionTitle());
+		section.setDescription(getMasterSectionDescription());
+		section.marginWidth = 10;
+		section.marginHeight = 5;
+		gd = new GridData(GridData.FILL_BOTH | GridData.HORIZONTAL_ALIGN_BEGINNING);
+		gd.horizontalSpan = 2;
+		section.setLayoutData(gd);
+		
+		Composite seprator = toolkit.createCompositeSeparator(section);
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.heightHint = 3;
+		seprator.setLayoutData(gd);
+		
+		Composite client2 = toolkit.createComposite(section, SWT.WRAP);
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		layout.marginWidth = 2;
+		layout.marginHeight = 2;
+		client2.setLayout(layout);
+		
+		Table t = createTableControl(toolkit, client2) ;
+
+		
+		Composite btnComposite = toolkit.createComposite(client2);
+		GridLayout g1 = new GridLayout(1, true);
+		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
+		btnComposite.setLayout(g1);
+		btnComposite.setLayoutData(gd);
+		
+		fBtnAdd = toolkit.createButton(btnComposite, SOAMessages.AddLabel, SWT.PUSH);
+		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_CENTER);
+		fBtnAdd.setLayoutData(gd);
+		fBtnAdd.addSelectionListener(new SelectionAdapter(){
+			public void widgetSelected(SelectionEvent e) {
+				HandleAddBtnPressed();
+			}
+		});
+				
+		
+		fBtnRemove = toolkit.createButton(btnComposite, SOAMessages.RemoveLabel, SWT.PUSH);
+		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_CENTER);
+		fBtnRemove.setLayoutData(gd);
+		fBtnRemove.setEnabled(false);		//only enable this button when there is a selection
+		fBtnRemove.addSelectionListener(new SelectionAdapter(){
+			public void widgetSelected(SelectionEvent e) {
+				HandleRemoveBtnPressed();
+			}
+		});
+		
+		section.setClient(client2);		
+		final SectionPart spart = new SectionPart(section);
+		managedForm.addPart(spart);
+		
+		fTableViewer = new TableViewer(t);
+		fTableViewer.addSelectionChangedListener(new ISelectionChangedListener(){
+			public void selectionChanged(SelectionChangedEvent event) {
+				fCurrentSelection = event.getSelection();
+				managedForm.fireSelectionChanged(spart, fCurrentSelection);						
+				HandleTableViewerSelectionChanged();		
+			}			
+		});
+		fTableViewer.setColumnProperties(new String[]{"COL_BINDNAME", "COL_PROTOCOL"}); //$NON-NLS-1$ //$NON-NLS-2$
+		fTableViewer.setSorter( new ViewerSorter() );
+		setTableViewerProviders(fTableViewer);
+		EGLDeploymentRoot serviceBindingRoot = getEGLDeploymentRootInput();
+		if(serviceBindingRoot != null)
+			fTableViewer.setInput(serviceBindingRoot);
+		else
+			fTableViewer.setInput(fPage.getEditor().getEditorInput());		
+	}
+
+	private void createAliasLayout(FormToolkit toolkit, Composite client) {
+		
+//		Composite client = toolkit.createComposite(parent, SWT.WRAP);		
+
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		client.setLayout(layout);
+		
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		client.setLayoutData(gd);
+		
+		//alias
+		toolkit.createLabel( client, SOAMessages.BindFileAliasLabel );
+		final Text fAliasText = toolkit.createText(client, getEGLDeploymentRootInput().getDeployment().getAlias(), SWT.BORDER|SWT.SINGLE); //$NON-NLS-1$
+		gd = new GridData();
+		gd.widthHint = 200;
+		fAliasText.setLayoutData( gd );
+		fAliasText.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e) {
+				getEGLDeploymentRootInput().getDeployment().setAlias(fAliasText.getText());
+			}
+
+			
+		});
+		//filler
+//		toolkit.createLabel( parent, "" );
+	}
+	public static Table createTableControl(FormToolkit toolkit, Composite client) {
+		GridData gd ;
+		Table t = toolkit.createTable(client, SWT.SINGLE|SWT.FULL_SELECTION| SWT.H_SCROLL | SWT.V_SCROLL);
+		t.setHeaderVisible(true);
+		t.setLinesVisible(true);
+		
+		TableLayout tableLayout = new TableLayout();
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.heightHint = 20;
+		gd.widthHint = 100;
+		t.setLayoutData(gd);
+		toolkit.paintBordersFor(client);
+		
+		int maxWidth = EGLDDBaseFormPage.DEFAULT_COLUMN_WIDTH;
+		TableColumn col = new TableColumn(t, SWT.LEFT, COLINDEX_NAME);
+		col.setText(SOAMessages.TableColName);		
+		col.pack();
+
+		int tableColWidth = Math.max(EGLDDBindingFormPage.DEFAULT_COLUMN_WIDTH, col.getWidth());
+		maxWidth = Math.max(maxWidth, tableColWidth);
+		ColumnWeightData colData = new ColumnWeightData(tableColWidth, tableColWidth, true);
+		tableLayout.addColumnData(colData);
+		
+		col = new TableColumn(t, SWT.LEFT, COLINDEX_PROTOCOLTYPE);
+		col.setText(SOAMessages.TableColProtocol);
+		col.pack();
+		tableColWidth = Math.max(EGLDDBindingFormPage.DEFAULT_COLUMN_WIDTH, col.getWidth());
+		maxWidth = Math.max(maxWidth, tableColWidth);
+		colData = new ColumnWeightData(tableColWidth, tableColWidth, true);
+		tableLayout.addColumnData(colData);		
+		
+		t.setLayout(tableLayout);
+		return t ;
+	}
+
+	protected IFile getServiceBindingFile(){
+		IFile fileInput = null;
+		FormEditor formEditor = fPage.getEditor();
+		IEditorInput input = formEditor.getEditorInput();
+		if(input instanceof IFileEditorInput)
+			fileInput = ((IFileEditorInput)input).getFile();
+		return fileInput;
+	}
+	
+	protected void HandleTableViewerSelectionChanged()
+	{
+		fBtnRemove.setEnabled(true);		//when there is selection, enable remove button, 
+											//child class can override this method to change default behavior
+	}
+	
+	protected void HandleAddBtnPressed(){
+		//TODO fix before checkin
+		EGLDDBindingWizard wizard = new EGLDDBindingWizard();
+		IWorkbench workbench = fPage.getSite().getWorkbenchWindow().getWorkbench();
+		IProject proj = ((EGLDeploymentDescriptorEditor)fPage.getEditor()).getProject();
+		EGLDDBindingFormPage formPage = (EGLDDBindingFormPage)fPage;		
+		wizard.init(workbench, proj, getEGLDeploymentRootInput());
+		formPage.openWizard(wizard);
+		
+		Object newBinding = wizard.getNewBinding();
+		if(newBinding != null)
+			EGLDDBaseFormPage.updateTableViewerAfterAdd(fTableViewer, newBinding);
+		
+	}
+	
+	protected void HandleRemoveBtnPressed(){
+		IStructuredSelection ssel = (IStructuredSelection)fTableViewer.getSelection(); 
+		if(ssel.size() == 1)
+		{			
+			Object obj= ssel.getFirstElement();
+			Deployment deployment = getEGLDeploymentRootInput().getDeployment();
+			Bindings bindings = deployment.getBindings();
+			if(bindings == null){
+				bindings = DeploymentFactory.eINSTANCE.createBindings();
+				deployment.setBindings(bindings);
+			}
+			int selectionIndex = fTableViewer.getTable().getSelectionIndex();
+			boolean removeSuccesful = false;
+			if(obj instanceof EGLBinding){
+				removeSuccesful = bindings.getEglBinding().remove(obj);
+			}
+			else if(obj instanceof NativeBinding)
+				removeSuccesful = bindings.getNativeBinding().remove(obj);
+			else if(obj instanceof WebBinding){
+				removeSuccesful = bindings.getWebBinding().remove(obj);
+			}
+			else if(obj instanceof RestBinding)
+				removeSuccesful = bindings.getRestBinding().remove(obj);
+			if(removeSuccesful)
+				EGLDDBaseFormPage.updateTableViewerAfterRemove(selectionIndex, fTableViewer, fBtnRemove);
+		}
+	}
+
+	protected String getMasterSectionDescription(){
+		return SOAMessages.BindingMainSectionDescription;
+	}
+	
+	protected String getMasterSectionTitle(){
+		return SOAMessages.BindingMainSectionTitle;
+	}
+	
+	protected void setTableViewerProviders(TableViewer tviewer)
+	{
+		tviewer.setContentProvider(new ServiceBindingContentProvider());
+		tviewer.setLabelProvider(new ServiceBindingLabelProvider());
+	}
+	
+	protected void createToolBarActions(IManagedForm managedForm) {
+
+	}
+
+	protected void registerPages(DetailsPart detailsPart) {
+		detailsPart.setPageProvider(new EGLDDBindingDetailPageProvider());
+	}
+		
+}

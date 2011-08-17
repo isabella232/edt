@@ -680,11 +680,11 @@ public class NewWizardMessages extends NLS {
 //	public static String ParentNodeBinding;
 //	public static String ParentNodeInterfacesSelect;
 //
-//	public static String NewEGLWSDLInterfaceWizardPageTitle;
-//	public static String NewEGLWSDLInterfaceWizardPageDescription;
-//	public static String NewEGLWSDLInterfaceWizardPagePartlabel;
-//	public static String NewEGLWSDLInterfaceWizardPageFunctionsLabel;
-//	public static String NewEGLWSDLInterfaceWizardPageIs4RUILabel;
+	public static String NewEGLWSDLInterfaceWizardPageTitle;
+	public static String NewEGLWSDLInterfaceWizardPageDescription;
+	public static String NewEGLWSDLInterfaceWizardPagePartlabel;
+	public static String NewEGLWSDLInterfaceWizardPageFunctionsLabel;
+	public static String NewEGLWSDLInterfaceWizardPageIs4RUILabel;
 //
 //	public static String NewEGLWSDLBindingWizardPageTitle;
 //	public static String NewEGLWSDLBindingWizardPageDescription;
@@ -692,8 +692,8 @@ public class NewWizardMessages extends NLS {
 //	public static String NewEGLWSDLBindingWizardPagePortstablePortsvariable;
 //	public static String NewEGLWSDLBindingWizardPagePortstablePortsvariabletype;
 //
-//	public static String NewEGLExtractInterfaceWizardPageTitle;
-//	public static String NewEGLExtractInterfaceWizardPageDescription;
+	public static String NewEGLExtractInterfaceWizardPageTitle;
+	public static String NewEGLExtractInterfaceWizardPageDescription;
 //
 //	public static String NewWSDLCreationWizardTitle;
 //	public static String NewWSDLCreationServiceWizardPageTitle;

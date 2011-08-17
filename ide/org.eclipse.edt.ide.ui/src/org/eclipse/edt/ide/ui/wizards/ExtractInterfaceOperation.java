@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.ui.wizards;
 
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.eclipse.edt.compiler.binding.DataBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
@@ -146,8 +147,7 @@ public class ExtractInterfaceOperation extends EGLFileOperation {
             //					   set the element name of the interface to be service name
             //TODO: add SOAP feature
             String servicePackage = configuration.getOriginalServicePackage();            
-            //strInterface.append(getXMLAnnotationString(UIModel.createNamespace(servicePackage), serviceSimpleName));
-            strInterface.append(getXMLAnnotationString("dummy.service.package", serviceSimpleName));
+            strInterface.append(getXMLAnnotationString(createNamespace(servicePackage), serviceSimpleName));
         }
 
 	    strInterface.append(newLine);
@@ -177,5 +177,21 @@ public class ExtractInterfaceOperation extends EGLFileOperation {
         StringBuffer buf = new StringBuffer();
         buf.append(getInterfaceString());
         return buf.toString();
+    }
+    
+    private String createNamespace(String ePackage) {
+        StringBuffer sbuffer;
+        if (ePackage == null || ePackage.length() < 1) {
+            sbuffer = new StringBuffer("http://default");
+        } else {
+            StringTokenizer tokenizer = new StringTokenizer(ePackage, ".", true);
+            sbuffer = new StringBuffer();
+            while (tokenizer.countTokens() > 0) {
+                sbuffer.insert(0, tokenizer.nextToken());
+            }
+            sbuffer.insert(0, "http://");
+        }
+
+        return sbuffer.toString();         
     }
 }

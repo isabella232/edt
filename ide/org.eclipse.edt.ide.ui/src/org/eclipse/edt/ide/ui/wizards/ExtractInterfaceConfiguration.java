@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.INullableTypeBinding;
@@ -30,9 +31,11 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.ide.core.internal.model.SourcePart;
+import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
+import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IFunction;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.model.Signature;
@@ -67,17 +70,15 @@ public class ExtractInterfaceConfiguration extends InterfaceConfiguration {
 	
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		super.init(workbench, selection);
-		org.eclipse.edt.ide.core.model.IEGLFile serviceFile = getSelectedIEGLFile(selection);
-		if(serviceFile != null)
-		{
+		IEGLFile serviceFile = getSelectedIEGLFile(selection);
+		if(serviceFile != null) {
 			
 			String fileName = initFile_Package(serviceFile);
 			
 			String partSimpleName = fileName;		//service is generatable part, so the part name and file name are the same
 			
             //try to get the service part name
-			if(serviceFile.exists() && fTheSourcePart == null)
-			{
+			if(serviceFile.exists() && fTheSourcePart == null) {
 	           IPart sourcepart = serviceFile.getPart(partSimpleName);
             	if(sourcepart instanceof SourcePart)
         			fTheSourcePart = (SourcePart)sourcepart;		           
@@ -89,8 +90,7 @@ public class ExtractInterfaceConfiguration extends InterfaceConfiguration {
 			setInterface(getFileName());
     		
             Part boundPart = getBoundPart(serviceFile, partSimpleName);
-            if(boundPart instanceof Service)
-            {
+            if(boundPart instanceof Service) {
             	initBoundPart_FunctionList(boundPart);
             	return;
             }
@@ -98,7 +98,7 @@ public class ExtractInterfaceConfiguration extends InterfaceConfiguration {
 	}
 
 	//return the eglFile name w/o extension
-	protected String initFile_Package(org.eclipse.edt.ide.core.model.IEGLFile eglFile) {
+	protected String initFile_Package(IEGLFile eglFile) {
 		//init the package name to be the same as the service package
 		IEGLElement parentElem = eglFile.getParent();
 		originalServicePackage = parentElem.getElementName();
@@ -113,7 +113,7 @@ public class ExtractInterfaceConfiguration extends InterfaceConfiguration {
 		return fileName;
 	}
 	
-	protected void initBoundPart_FunctionList(Part boundPart){
+	public void initBoundPart_FunctionList(Part boundPart){
     	fTheBoundPart = boundPart;
     	initFunctionList(fTheBoundPart);		
 	}
@@ -344,11 +344,11 @@ public class ExtractInterfaceConfiguration extends InterfaceConfiguration {
 				typeBinding = arrayTypeBinding.getElementType();
 			}
 	    	String[] pkgs = typeBinding.getPackageName();
-	    	if(pkgs != null)
-	    	{
-// TODO EDT Uncomment when ready	    		
-//		    	IPath pkgsPath = Util.stringArrayToPath(pkgs);
-//		    	qualifier = pkgsPath.toString().replace(IPath.SEPARATOR, '.');
+	    	if(pkgs != null) {
+	    		if(pkgs != null) {
+			    	IPath pkgsPath = Util.stringArrayToPath(pkgs);
+			    	qualifier = pkgsPath.toString().replace(IPath.SEPARATOR, '.');
+		    	}
 	    	}
 	    }
 	    	    
@@ -395,7 +395,7 @@ public class ExtractInterfaceConfiguration extends InterfaceConfiguration {
         return originalServicePackage;
     }
     
-    protected void setTheBoundPart(Part boundPart){
+    public void setTheBoundPart(Part boundPart){
     	fTheBoundPart = boundPart;
     }
 }

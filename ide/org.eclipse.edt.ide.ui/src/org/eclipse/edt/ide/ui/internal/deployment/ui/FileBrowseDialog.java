@@ -1,0 +1,172 @@
+/*******************************************************************************
+ * Copyright © 2008, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.ide.ui.internal.deployment.ui;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.edt.ide.core.model.EGLCore;
+import org.eclipse.edt.ide.core.model.EGLModelException;
+import org.eclipse.edt.ide.core.model.IEGLModel;
+import org.eclipse.edt.ide.core.model.IEGLProject;
+import org.eclipse.edt.ide.core.model.IPackageFragment;
+import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
+import org.eclipse.edt.ide.ui.internal.EGLLogger;
+import org.eclipse.edt.ide.ui.internal.StandardEGLElementContentProvider;
+import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
+import org.eclipse.edt.ide.ui.internal.packageexplorer.EGLElementLabelProvider;
+import org.eclipse.edt.ide.ui.internal.packageexplorer.EGLElementSorter;
+import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
+import org.eclipse.edt.ide.ui.internal.wizards.TypedViewerFilter;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
+import org.eclipse.ui.dialogs.ISelectionStatusValidator;
+import org.eclipse.ui.model.WorkbenchContentProvider;
+import org.eclipse.ui.model.WorkbenchLabelProvider;
+
+public class FileBrowseDialog {	
+
+	public static ElementTreeSelectionDialog openBrowseFileDialog(Shell shell, 
+			final IProject project, IFile initWSDLFile, 
+			final boolean isWorkspaceScope,
+			boolean showEGLProjectsOnly,
+			final String helpId, 
+			final String filterFileExtension, 
+			String dialogTitle,
+			String dialogDescription,
+			final String validationMsgInsert) {
+		
+		IEGLProject eglProject = EGLCore.create(project);
+		
+		ILabelProvider lp= new EGLElementLabelProvider(EGLElementLabelProvider.SHOW_DEFAULT);
+		ITreeContentProvider cp = new StandardEGLElementContentProvider();	
+		Object input = eglProject.getEGLModel();
+		if(!showEGLProjectsOnly){
+			cp = new WorkbenchContentProvider();
+			lp = new WorkbenchLabelProvider();
+			input = project.getWorkspace().getRoot();
+		}
+		ElementTreeSelectionDialog dialog= new ElementTreeSelectionDialog(shell, lp, cp){
+			protected Control createDialogArea(Composite parent) {
+				Control control = super.createDialogArea(parent);
+				if(helpId != null)
+					PlatformUI.getWorkbench().getHelpSystem().setHelp(control, helpId);
+				return control;
+			}
+		};
+		dialog.setSorter(new EGLElementSorter());
+		dialog.setTitle(dialogTitle);
+		dialog.setMessage(dialogDescription);
+		
+		dialog.setInput(input);
+		
+		//set up validator
+		ISelectionStatusValidator validator = new ISelectionStatusValidator(){
+			public IStatus validate(Object[] selection) {
+				if(selection.length == 1 && selection[0] instanceof IResource)
+				{
+					IResource resource = (IResource)selection[0];
+					if(resource.getType() == IResource.FILE)
+					{
+						resource.getFileExtension().equalsIgnoreCase(filterFileExtension);
+							return new StatusInfo();
+					}
+				}
+				return new StatusInfo(IStatus.ERROR, NewWizardMessages.bind(NewWizardMessages.WSDLFileSelectionError, validationMsgInsert));				
+			}
+			
+		};				
+		dialog.setValidator(validator);
+		
+		//set up filter, we only want the wsdl files under the EGLSource path
+		try
+		{
+			final String[] refProjNames = eglProject.getRequiredProjectNames();
+			
+			Class[] acceptedClasses= new Class[] { IEGLModel.class, IPackageFragmentRoot.class, IPackageFragment.class, IEGLProject.class, IResource.class };
+			ViewerFilter filter= new TypedViewerFilter(acceptedClasses, null) {
+				public boolean select(Viewer viewer, Object parent, Object element) {
+					if(isWorkspaceScope){
+						if(element instanceof IResource){
+							IResource resource = (IResource)element;
+							if(resource.getType() == IResource.FILE){
+								if(resource.getFileExtension().equalsIgnoreCase(filterFileExtension))
+									return true;
+								else
+									return false;
+							}
+							return true;
+						}						
+					}
+					else{
+						if (element instanceof IPackageFragmentRoot) {
+							try {
+								return (((IPackageFragmentRoot)element).getKind() == IPackageFragmentRoot.K_SOURCE);
+							} catch (EGLModelException e) {
+								EGLLogger.log(this, e);
+								return false;
+							}
+						}
+						else if(element instanceof IResource){
+							// 75518 - Show all folders, not just EGLSource
+							// if(parent instanceof IEGLProject)		//filter out the resource under the project
+							//	return false;
+							IResource resource = (IResource)element;
+							if(resource.getType() == IResource.FILE){
+								if(resource.getFileExtension().equalsIgnoreCase(filterFileExtension))
+									return true;
+								else 
+									return false;
+							}
+							return true;
+						}
+						else if(element instanceof IEGLProject){						
+							IEGLProject eglProj = (IEGLProject)element;
+							if(eglProj.getProject().equals(project) || isReferencedProject(eglProj)){
+								return true;
+							}
+							return false;
+						}
+					}
+					return super.select(viewer, parent, element);
+				}
+				
+				private boolean isReferencedProject(IEGLProject eglProj){
+					String projName = eglProj.getElementName();
+					for(int i=0; i<refProjNames.length; i++){
+						if(projName.equals(refProjNames[i]))
+							return true;
+					}
+					return false;
+				}
+			};
+			dialog.addFilter(filter);			
+		}catch(CoreException e){
+			e.printStackTrace();
+		}
+		
+		if (initWSDLFile != null)
+			dialog.setInitialSelection(initWSDLFile);
+		
+		return dialog;
+	}
+	
+}
