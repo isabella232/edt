@@ -506,7 +506,14 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 								IJavaStackFrame topJavaFrame = (IJavaStackFrame)javaThread.getTopStackFrame();
 								if ( topJavaFrame != null )
 								{
-									if ( shouldStepInto( topJavaFrame ) )
+									if ( javaThread.getFrameCount() == 1 && isMainMethod( topJavaFrame ) )
+									{
+										// Don't step into the initial main frame - there's no EGL source for it, users will be confused.
+										// Note: stepReturn isn't supported on a bottom frame in JDT so we must use resume.
+										topJavaFrame.resume();
+										break;
+									}
+									else if ( shouldStepInto( topJavaFrame ) )
 									{
 										topJavaFrame.stepInto();
 										break;
@@ -514,13 +521,6 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 									else if ( shouldStepReturn( topJavaFrame ) )
 									{
 										topJavaFrame.stepReturn();
-										break;
-									}
-									else if ( javaThread.getFrameCount() == 1 && isMainMethod( topJavaFrame ) )
-									{
-										// Don't step into the initial main frame - there's no EGL source for it, users will be confused.
-										// Note: stepReturn isn't supported on a bottom frame in JDT so we must use resume.
-										topJavaFrame.resume();
 										break;
 									}
 									else
@@ -576,7 +576,19 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	{
 		// TODO make this dynamic/extensible. For now just include EDT runtime packages.
 		String type = frame.getDeclaringTypeName();
-		return type.startsWith( "org.eclipse.edt." ) || type.startsWith( "egl." ) || type.startsWith( "eglx." ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		if ( type.startsWith( "org.eclipse.edt." ) || type.startsWith( "egl." ) || type.startsWith( "eglx." ) ) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		{
+			return true;
+		}
+		
+		// If we're in an EGL frame that has no corresponding line number, run a step into - it must be some internal method like ezeSetEmpty.
+		IJavaReferenceType refType = frame.getReferenceType();
+		if ( type != null && IEGLDebugCoreConstants.EGL_STRATUM.equals( refType.getDefaultStratum() ) && frame.getLineNumber() == -1 )
+		{
+			return true;
+		}
+		
+		return false;
 	}
 	
 	private boolean isMainMethod( IJavaStackFrame frame ) throws DebugException
