@@ -9,8 +9,6 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package eglx.services;
-import org.eclipse.edt.javart.resources.*;
-import org.eclipse.edt.javart.*;
 public enum Encoding {
 	NONE(1),
 	JSON(2),
@@ -18,7 +16,7 @@ public enum Encoding {
 	_FORM(4),
 	USE_CONTENTTYPE(5);
 	private final int value;
-	Encoding(int value) {
+	private Encoding(int value) {
 		this.value = value;
 	}
 	private Encoding() {

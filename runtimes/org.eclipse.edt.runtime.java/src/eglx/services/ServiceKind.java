@@ -9,15 +9,13 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package eglx.services;
-import org.eclipse.edt.javart.resources.*;
-import org.eclipse.edt.javart.*;
 public enum ServiceKind {
 	EGL(1),
 	WEB(2),
 	NATIVE(3),
 	REST(4);
 	private final int value;
-	ServiceKind(int value) {
+	private ServiceKind(int value) {
 		this.value = value;
 	}
 	private ServiceKind() {

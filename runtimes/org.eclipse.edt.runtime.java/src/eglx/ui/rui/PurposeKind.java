@@ -9,14 +9,12 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package eglx.ui.rui;
-import org.eclipse.edt.javart.resources.*;
-import org.eclipse.edt.javart.*;
 public enum PurposeKind {
 	FOR_DISPLAY(1),
 	FOR_CREATE(2),
 	FOR_UPDATE(3);
 	private final int value;
-	PurposeKind(int value) {
+	private PurposeKind(int value) {
 		this.value = value;
 	}
 	private PurposeKind() {

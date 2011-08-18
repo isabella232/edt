@@ -9,15 +9,13 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package eglx.xml.binding.annotation;
-import org.eclipse.edt.javart.resources.*;
-import org.eclipse.edt.javart.*;
 public enum XMLStructureKind {
 	choice(1),
 	sequence(2),
 	simpleContent(3),
 	unordered(4);
 	private final int value;
-	XMLStructureKind(int value) {
+	private XMLStructureKind(int value) {
 		this.value = value;
 	}
 	private XMLStructureKind() {

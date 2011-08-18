@@ -9,8 +9,6 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package eglx.ui.rui;
-import org.eclipse.edt.javart.resources.*;
-import org.eclipse.edt.javart.*;
 public enum MappingKind {
 	TYPE_PRIMITIVE_ALL(100),
 	TYPE_PRIMITIVE_STRING(101),
@@ -33,7 +31,7 @@ public enum MappingKind {
 	TYPE_RECORD_WITH_PRIMITIVE_ARRAY(203),
 	TYPE_RECORD_WITH_RECORD_ARRAY(204);
 	private final int value;
-	MappingKind(int value) {
+	private MappingKind(int value) {
 		this.value = value;
 	}
 	private MappingKind() {

@@ -9,14 +9,12 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package eglx.lang;
-import org.eclipse.edt.javart.resources.*;
-import org.eclipse.edt.javart.*;
 public enum OrderingKind {
 	byKey(1),
 	byInsertion(2),
 	none(3);
 	private final int value;
-	OrderingKind(int value) {
+	private OrderingKind(int value) {
 		this.value = value;
 	}
 	private OrderingKind() {
