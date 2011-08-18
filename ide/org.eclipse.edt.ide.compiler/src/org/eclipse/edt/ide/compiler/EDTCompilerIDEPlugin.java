@@ -44,10 +44,6 @@ public class EDTCompilerIDEPlugin extends AbstractUIPlugin {
 			EDTCompilerStrings.javaRuntimeDescription, new EDTRuntimeContainerEntry[] {
 					new EDTRuntimeContainerEntry("org.eclipse.edt.runtime.java", "bin", null, "org.eclipse.edt.runtime.java.source", "src", null) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			});
-	public static final EDTRuntimeContainer JAVASCRIPT_RUNTIME_CONTAINER = new EDTRuntimeContainer("javascriptgen", EDTCompilerStrings.javascriptRuntimeName, //$NON-NLS-1$
-		EDTCompilerStrings.javascriptRuntimeDescription, new EDTRuntimeContainerEntry[] {
-				new EDTRuntimeContainerEntry("org.eclipse.edt.runtime.javascript", "bin", null, "org.eclipse.edt.runtime.javascript.source", "src", null) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		});
 	
 	/**
 	 * The constructor

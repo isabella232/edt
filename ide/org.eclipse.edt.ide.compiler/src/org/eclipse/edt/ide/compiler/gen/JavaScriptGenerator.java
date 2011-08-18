@@ -19,7 +19,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin;
 import org.eclipse.edt.ide.core.AbstractGenerator;
-import org.eclipse.edt.ide.core.EDTRuntimeContainer;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.jdt.core.JavaCore;
@@ -29,10 +28,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
  * Provides know-how for hooking the Java Generator into the IDE.
  */
 public class JavaScriptGenerator extends AbstractGenerator {
-	
-	public JavaScriptGenerator() {
-		runtimeContainers = new EDTRuntimeContainer[] { EDTCompilerIDEPlugin.JAVASCRIPT_RUNTIME_CONTAINER };
-	}
 	
 	@Override
 	public void generate(String filePath, Part part, IEnvironment env, IGenerationMessageRequestor msgRequestor) throws Exception {
