@@ -11,13 +11,13 @@
 package eglx.http;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
 import eglx.http.HttpRequest;
 import eglx.services.Encoding;
 import eglx.http.HttpMethod;
+import eglx.http.HttpResponse;
 import org.eclipse.edt.runtime.java.egl.lang.EBoolean;
 import java.lang.Boolean;
-import eglx.http.HttpResponse;
+import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
 public class HttpREST extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
@@ -57,10 +57,12 @@ public class HttpREST extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	public void storeInBuffer(ByteStorage buffer) {
 	}
 	public void ezeInitialize() {
+		request = new HttpRequest();
 		org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(new HttpRequest(), request);
 		request.method = HttpMethod.POST;
 		request.encoding = Encoding.XML;
 		request.charset = "UTF-8";
+		response = new HttpResponse();
 		org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(new HttpResponse(), response);
 		response.encoding = Encoding.USE_CONTENTTYPE;
 		isEglRpc = false;
