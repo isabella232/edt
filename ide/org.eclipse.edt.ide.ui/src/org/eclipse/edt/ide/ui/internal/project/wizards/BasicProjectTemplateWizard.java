@@ -28,9 +28,9 @@ public class BasicProjectTemplateWizard extends ProjectTemplateWizard {
 		addPage(generatorPage);
 	}
 	
-	public boolean performFinish() {
+	public boolean performFinish() {		
 		((NewEGLProjectWizard) getParentWizard()).getModel().setSelectedGenerators(getGeneratorIds());
-		return true;
+		return generatorPage.performOK();
 	}
 
 	private String[] getGeneratorIds() {

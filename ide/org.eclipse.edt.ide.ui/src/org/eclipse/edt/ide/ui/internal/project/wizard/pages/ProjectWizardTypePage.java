@@ -46,7 +46,9 @@ import org.eclipse.ui.PlatformUI;
 
 public class ProjectWizardTypePage extends ProjectWizardPage {
 	
-	private static final String EGLSOURCE = "eglsource";
+	private static final String BASE_PACKAGE_HINT = "org.mycompany.myapp"; //$NON-NLS-1$
+
+	private static final String EGLSOURCE = "eglsource"; //$NON-NLS-1$
 
 	public static IStatus OK_STATUS = new Status(IStatus.OK, "org.eclipse.edt.ide.ui", 0, "OK", null); //$NON-NLS-1$
 	
@@ -116,7 +118,7 @@ public class ProjectWizardTypePage extends ProjectWizardPage {
 		data.top = new FormAttachment(contentSection, 20);
 		data.right = new FormAttachment(100, -10);
 		this.basePackage.setLayoutData(data);
-		
+		basePackage.setMessage(BASE_PACKAGE_HINT);
 		hookListenerPackageName(basePackage);
 	}
 	

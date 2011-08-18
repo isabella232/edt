@@ -59,4 +59,8 @@ public class BasicProjectGeneratorSelectionPage extends ProjectWizardPage {
 		return innerPage.getSelectedGenerators();
 	}
 
+	public boolean performOK() {
+		return innerPage.performOk();
+	}
+
 }
