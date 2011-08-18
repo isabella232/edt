@@ -128,8 +128,6 @@ public class StrLib extends ExecutableBase {
 	 * 1 or greater than the length of the source String.
 	 */
 	public static String getNextToken(String source, AnyBoxedObject<Integer> index, String delimiters) throws AnyException {
-		if (source == null || index == null)
-			throw new NullValueException();
 		int start = index.ezeUnbox();
 		byte[] sourceBytes = source.getBytes();
 		// Validate the substring index.
@@ -179,8 +177,6 @@ public class StrLib extends ExecutableBase {
 	 * Returns the number of tokens in the source string that are delimited by the characters of the input delimiters String.
 	 */
 	public static int getTokenCount(String source, String delimiters) {
-		if (source == null || delimiters == null)
-			throw new NullValueException();
 		StringTokenizer tokenizer = new StringTokenizer(source, delimiters);
 		return tokenizer.countTokens();
 	}
@@ -188,18 +184,14 @@ public class StrLib extends ExecutableBase {
 	/**
 	 * Returns the string value of a character code
 	 */
-	public static String fromCharCode(Character character) {
-		if (character == null)
-			throw new NullValueException();
-		return Character.toString(character);
+	public static String fromCharCode(int character) {
+		return String.valueOf((char)character);
 	}
 
 	/**
 	 * returns a string of a specified length.
 	 */
-	public static String spaces(Integer characterCount) {
-		if (characterCount == null)
-			return null;
+	public static String spaces(int characterCount) {
 		String retVal;
 		if (characterCount <= 0)
 			retVal = "";
