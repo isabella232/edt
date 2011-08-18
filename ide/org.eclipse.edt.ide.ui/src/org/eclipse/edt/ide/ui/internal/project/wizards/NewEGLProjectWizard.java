@@ -30,7 +30,7 @@ import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectTemplateSelec
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardTypePage;
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.SourceProjectWizardCapabilityPage;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
-import org.eclipse.edt.ide.ui.project.templates.IProjectTemplate;
+import org.eclipse.edt.ide.ui.project.templates.IProjectTemplateClass;
 import org.eclipse.edt.ide.ui.project.templates.ProjectTemplateWizardNode;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
 import org.eclipse.edt.ide.ui.wizards.ProjectFinishUtility;
@@ -71,7 +71,7 @@ public class NewEGLProjectWizard extends Wizard
 			
 			IWizardNode node = templatePage.getSelectedNode();
 			ProjectTemplateWizardNode twn = (ProjectTemplateWizardNode) node;		
-			List ops = ProjectFinishUtility.getCreateProjectFinishOperations((IProjectTemplate) twn.getTemplate(), model, rule);
+			List ops = ProjectFinishUtility.getCreateProjectFinishOperations((IProjectTemplateClass) twn.getTemplate().getProjectTemplateClass(), model, 0, rule);
 			for(Iterator it = ops.iterator(); it.hasNext();)
 			{
 				Object obj = it.next();

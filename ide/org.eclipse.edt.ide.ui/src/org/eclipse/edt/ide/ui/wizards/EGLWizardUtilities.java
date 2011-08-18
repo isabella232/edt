@@ -65,6 +65,8 @@ import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
 import org.eclipse.edt.ide.ui.internal.wizards.EGLFileWizardPage;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
+import org.eclipse.edt.ide.ui.project.templates.BasicProjectTemplate;
+import org.eclipse.edt.ide.ui.project.templates.IProjectTemplate;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public class EGLWizardUtilities {
@@ -157,14 +159,15 @@ public class EGLWizardUtilities {
 		if (rule == null)
 			rule = ResourcesPlugin.getWorkspace().getRoot();
 		// TODO Create the new API here, just apply the template?
-//		List<WorkspaceModifyOperation> ops = ProjectFinishUtility.getCreateProjectFinishOperations(projConfig, eglFeatureMask, rule);
-//		for(Iterator<WorkspaceModifyOperation> it = ops.iterator(); it.hasNext();){
-//			Object obj = it.next();
-//			if (obj instanceof WorkspaceModifyOperation) {
-//				WorkspaceModifyOperation op = (WorkspaceModifyOperation) obj;
-//				op.run(new NullProgressMonitor());
-//			}
-//		}
+		BasicProjectTemplate projectTemplate = new BasicProjectTemplate();
+		List<WorkspaceModifyOperation> ops = ProjectFinishUtility.getCreateProjectFinishOperations(projectTemplate, projConfig, eglFeatureMask, rule);
+		for(Iterator<WorkspaceModifyOperation> it = ops.iterator(); it.hasNext();){
+			Object obj = it.next();
+			if (obj instanceof WorkspaceModifyOperation) {
+				WorkspaceModifyOperation op = (WorkspaceModifyOperation) obj;
+				op.run(new NullProgressMonitor());
+			}
+		}
 				
 		//If project is closed, open it
 		IProject myProject = ResourcesPlugin.getWorkspace().getRoot().getProject(name);

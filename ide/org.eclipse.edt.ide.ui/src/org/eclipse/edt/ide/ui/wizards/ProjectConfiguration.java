@@ -88,7 +88,7 @@ public class ProjectConfiguration {
 		requiredProjects = new ArrayList<PPListElement>();
 		selectedWidgetLibraries = new ArrayList<String>();
 		selectedCompiler = EDT_COMPILER_ID;
-		selectedGenerators = new String[0];
+		selectedGenerators = new String[]{JAVA_GENERATOR_ID, JAVASCRIPT_GENERATOR_ID, JAVASCRIPT_DEV_GENERATOR_ID};
 	}
 	
 	public String getSelectedCompiler() {

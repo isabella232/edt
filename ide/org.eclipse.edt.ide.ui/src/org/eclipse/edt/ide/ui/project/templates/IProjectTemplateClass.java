@@ -21,6 +21,6 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public interface IProjectTemplateClass  {
 	
-	public List<WorkspaceModifyOperation> getOperations(ProjectConfiguration eglProjConfiguration, ISchedulingRule rule);
+	public List<WorkspaceModifyOperation> getOperations(ProjectConfiguration eglProjConfiguration, int eglFeatureMask, ISchedulingRule rule);
 	public void applyTemplate(IProject project);
 }

@@ -31,7 +31,7 @@ public abstract class AbstractProjectTemplateClass implements
 	protected static final String EGLSOURCE = "eglsource";
 	private String[] defaultPackages;	
 
-	public List<WorkspaceModifyOperation> getOperations(final ProjectConfiguration eglProjConfiguration, ISchedulingRule rule) {
+	public List<WorkspaceModifyOperation> getOperations(final ProjectConfiguration eglProjConfiguration, int eglFeatureMask, ISchedulingRule rule) {
 		List listOps = new ArrayList();				
 		
 		ProjectCreationOperation creationOperation;
@@ -64,7 +64,7 @@ public abstract class AbstractProjectTemplateClass implements
 			}			
 		}
 		//TODO add feature mask
-		EGLFeatureOperationsUtilities.getEGLFeatureOperations(eglProjConfiguration.getProjectName(), listOps, rule, 0, 0, false, false);		
+		EGLFeatureOperationsUtilities.getEGLFeatureOperations(eglProjConfiguration.getProjectName(), listOps, rule, 0, eglFeatureMask, false, false);		
 		
 		addMoreOperations(eglProjConfiguration, rule, listOps);
 		

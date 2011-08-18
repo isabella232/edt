@@ -14,7 +14,7 @@ package org.eclipse.edt.ide.ui.wizards;
 import java.util.List;
 
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
-import org.eclipse.edt.ide.ui.project.templates.IProjectTemplate;
+import org.eclipse.edt.ide.ui.project.templates.IProjectTemplateClass;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public class ProjectFinishUtility {
@@ -29,8 +29,8 @@ public class ProjectFinishUtility {
 	 * @param rule A workspace operation scheduling rule to apply
 	 * @return
 	 */
-	public static List<WorkspaceModifyOperation> getCreateProjectFinishOperations(IProjectTemplate template, ProjectConfiguration eglProjConfiguration, ISchedulingRule rule ) {
-		return template.getProjectTemplateClass().getOperations(eglProjConfiguration, rule);		
+	public static List<WorkspaceModifyOperation> getCreateProjectFinishOperations(IProjectTemplateClass templateClass, ProjectConfiguration eglProjConfiguration, int eglFeatureMask, ISchedulingRule rule ) {
+		return templateClass.getOperations(eglProjConfiguration, eglFeatureMask, rule);		
 	}
 
 }
