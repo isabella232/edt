@@ -13,6 +13,6 @@ package org.eclipse.edt.debug.core;
 
 import org.eclipse.debug.core.model.IDebugTarget;
 
-public interface IEGLDebugTarget extends IDebugTarget
+public interface IEGLDebugTarget extends IDebugTarget, IEGLDebugElement
 {
 }

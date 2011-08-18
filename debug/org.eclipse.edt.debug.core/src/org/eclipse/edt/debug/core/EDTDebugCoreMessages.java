@@ -25,4 +25,5 @@ public class EDTDebugCoreMessages extends NLS
 	public static String TransformerUnknownTag;
 	public static String TransformerUnsupportedEncoding;
 	public static String ErrorRetrievingValue;
+	public static String WatchExprsUnsupported;
 }

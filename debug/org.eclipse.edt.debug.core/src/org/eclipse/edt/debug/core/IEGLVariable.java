@@ -13,6 +13,6 @@ package org.eclipse.edt.debug.core;
 
 import org.eclipse.debug.core.model.IVariable;
 
-public interface IEGLVariable extends IVariable
+public interface IEGLVariable extends IVariable, IEGLDebugElement
 {
 }

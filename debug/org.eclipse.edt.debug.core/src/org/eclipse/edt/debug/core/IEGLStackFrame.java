@@ -13,6 +13,6 @@ package org.eclipse.edt.debug.core;
 
 import org.eclipse.debug.core.model.IStackFrame;
 
-public interface IEGLStackFrame extends IStackFrame
+public interface IEGLStackFrame extends IStackFrame, IEGLDebugElement
 {
 }

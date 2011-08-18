@@ -13,6 +13,6 @@ package org.eclipse.edt.debug.core;
 
 import org.eclipse.debug.core.model.IValue;
 
-public interface IEGLValue extends IValue
+public interface IEGLValue extends IValue, IEGLDebugElement
 {
 }

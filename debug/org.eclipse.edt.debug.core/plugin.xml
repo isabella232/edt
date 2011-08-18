@@ -49,4 +49,11 @@
           value="true">
     </persistent>
  </extension>
+ <extension
+       point="org.eclipse.debug.core.watchExpressionDelegates">
+    <watchExpressionDelegate
+          debugModel="org.eclipse.edt.debug.ui.presentation.java"
+          delegateClass="org.eclipse.edt.debug.core.EGLWatchExpressionDelegate">
+    </watchExpressionDelegate>
+ </extension>
 </plugin>

@@ -13,6 +13,6 @@ package org.eclipse.edt.debug.core;
 
 import org.eclipse.debug.core.model.IThread;
 
-public interface IEGLThread extends IThread
+public interface IEGLThread extends IThread, IEGLDebugElement
 {
 }

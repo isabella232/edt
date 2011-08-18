@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.core.java;
 
-public interface IEGLJavaDebugElement
+import org.eclipse.edt.debug.core.IEGLDebugElement;
+
+public interface IEGLJavaDebugElement extends IEGLDebugElement
 {
 	/**
 	 * @return the underlying Java debug element.
