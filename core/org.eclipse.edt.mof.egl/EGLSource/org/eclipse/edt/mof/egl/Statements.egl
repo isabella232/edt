@@ -53,7 +53,6 @@ end
 
 externalType ConditionalStatement extends Statement type MofClass {isAbstract=true}
 	condition Expression {containment=true};
-	eLabel string {mofName="label"};
 end
 
 externalType ContinueStatement extends LabelStatement type MofClass
