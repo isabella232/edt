@@ -17,7 +17,6 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Calendar;
-import java.util.Dictionary;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.RunUnit;
@@ -52,7 +51,9 @@ import org.eclipse.edt.runtime.java.egl.lang.ESmallfloat;
 import org.eclipse.edt.runtime.java.egl.lang.ESmallint;
 import org.eclipse.edt.runtime.java.egl.lang.EString;
 import org.eclipse.edt.runtime.java.egl.lang.ETimestamp;
+import org.eclipse.edt.runtime.java.egl.lang.EglAny;
 import org.eclipse.edt.runtime.java.egl.lang.EglList;
+import org.eclipse.edt.runtime.java.egl.lang.NullType;
 
 import com.ibm.icu.text.SimpleDateFormat;
 
@@ -109,7 +110,7 @@ public class JsonLib {
 	        return process((Calendar)object);
 	    if(object instanceof EglList<?>)
 	        return process((EglList<?>)object);
-	    if(object instanceof Dictionary)
+	    if(object instanceof EDictionary)
 	    	return process((EDictionary)object);
 	    if(object instanceof AnyValue)
 	    	return processObject(object);
@@ -220,6 +221,9 @@ public class JsonLib {
 			throw new AnyException(e);
 		}
 	}
+	public static Object convertToEgl(ValueNode jsonValue) throws AnyException{
+		return convertToEgl(null, jsonValue);
+	}
 	public static Object convertToEgl(Object object, ValueNode jsonValue) throws AnyException{
 		if(object instanceof AnyBoxedObject)
 		{
@@ -232,95 +236,107 @@ public class JsonLib {
 			convertObject(object, (ObjectNode)jsonValue);
 		}
 		else if(object instanceof EDictionary && jsonValue instanceof ObjectNode){
+			((EDictionary)object).removeAll();
 			convertObject((EDictionary)object, (ObjectNode)jsonValue);
+		}
+		else if(object == null && jsonValue instanceof ObjectNode){
+			convertObject(new EDictionary(), (ObjectNode)jsonValue);
 		}
 		else if(jsonValue instanceof NullNode){
 			object = null;
 		}
 		return object;
 	}
-	private static Object convertToEgl(final Json jsonAnnotation, final Object field, ValueNode jsonValue) throws AnyException{
+	private static Object convertToEgl(final Class<?> fieldType, final String[] fieldTypeOptions, final Object field, ValueNode jsonValue) throws AnyException{
 		try{
 	        if(jsonValue instanceof NullNode){
-	        	return null;
+	        	return NullType.ezeWrap(null);
 	        }
 	        if(jsonValue instanceof ArrayNode){
 	        	EglList<Object> list = new EglList<Object>();
 	        	for(Object node : ((ArrayNode)jsonValue).getValues()){
-	        		list.add(convertToEgl(jsonAnnotation, (ValueNode)node));
+	        		list.add(convertToEgl(fieldType, fieldTypeOptions, null, (ValueNode)node));
 	        	}
 	        	return list;
 	        }
-	        if(jsonAnnotation.clazz().equals(EBigint.class)){
-	        	return EBigint.asBigint(jsonValue.toJava());
+	        if(fieldType.equals(EBigint.class)){
+	        	return EBigint.ezeBox(EBigint.asBigint(jsonValue.toJava()));
 	        }
-	        if(jsonAnnotation.clazz().equals(EBoolean.class) && jsonValue instanceof BooleanNode){
-	       		return ((BooleanNode)jsonValue).getValue();
+	        if(fieldType.equals(EBoolean.class) && jsonValue instanceof BooleanNode){
+	       		return EBoolean.ezeBox(((BooleanNode)jsonValue).getValue());
 	        }
-	        if(jsonAnnotation.clazz().equals(EDate.class)){
+	        if(fieldType.equals(EDate.class)){
 	        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	    		Calendar cal = DateTimeUtil.getBaseCalendar();
 	    		cal.setTimeInMillis(sdf.parse(jsonValue.toJava()).getTime());
 	    		cal.get(Calendar.YEAR);
-	       		return EDate.asDate(cal);
+	       		return EDate.ezeBox(EDate.asDate(cal));
 	        }
-	        if(jsonAnnotation.clazz().equals(EDecimal.class)){
+	        if(fieldType.equals(EDecimal.class)){
 	        	///get options for the as statement
-	        	int length = Integer.parseInt(jsonAnnotation.asOptions()[0]);
-	        	int decimal = Integer.parseInt(jsonAnnotation.asOptions()[1]);
-	        	return EDecimal.asDecimal(jsonValue.toJava(), length, decimal);
+	        	if(fieldTypeOptions != null && fieldTypeOptions.length > 1){
+		        	int length = Integer.parseInt(fieldTypeOptions[0]);
+		        	int decimal = Integer.parseInt(fieldTypeOptions[1]);
+		        	return EDecimal.ezeBox(EDecimal.asDecimal(jsonValue.toJava(), length, decimal));
+	        	}
+	        	else{
+		        	return EDecimal.ezeBox(EDecimal.asDecimal(jsonValue.toJava()));
+	        	}
 	        }
-	        if(jsonAnnotation.clazz().equals(EFloat.class)){
-	        	return EFloat.asFloat(jsonValue.toJava());
+	        if(fieldType.equals(EFloat.class)){
+	        	return EFloat.ezeBox(EFloat.asFloat(jsonValue.toJava()));
 	        }
-	        if(jsonAnnotation.clazz().equals(EInt.class)){
-	        	return EInt.asInt(jsonValue.toJava());
+	        if(fieldType.equals(EInt.class)){
+	        	return EInt.ezeBox(EInt.asInt(jsonValue.toJava()));
 	        }
-	        if(jsonAnnotation.clazz().equals(ESmallfloat.class)){
-	        	return ESmallfloat.asSmallfloat(jsonValue.toJava());
+	        if(fieldType.equals(ESmallfloat.class)){
+	        	return ESmallfloat.ezeBox(ESmallfloat.asSmallfloat(jsonValue.toJava()));
 	        }
-	        if(jsonAnnotation.clazz().equals(ESmallint.class)){
-	        	return ESmallint.asSmallint(jsonValue.toJava());
+	        if(fieldType.equals(ESmallint.class)){
+	        	return ESmallint.ezeBox(ESmallint.asSmallint(jsonValue.toJava()));
 	        }
-	        if(jsonAnnotation.clazz().equals(ESmallint.class)){
-	        	return ESmallint.asSmallint(jsonValue.toJava());
+	        if(fieldType.equals(EString.class)){
+	        	return EString.ezeBox(jsonValue.toJava());
 	        }
-	        if(jsonAnnotation.clazz().equals(EString.class)){
-	        	return jsonValue.toJava();
-	        }
-	        if(jsonAnnotation.clazz().equals(ETimestamp.class)){
+	        if(fieldType.equals(ETimestamp.class)){
 	        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    		Calendar cal = DateTimeUtil.getBaseCalendar();
 	    		cal.setTimeInMillis(sdf.parse(jsonValue.toJava()).getTime());
 	    		cal.get(Calendar.YEAR);
-	       		return ETimestamp.asTimestamp(cal, getETimestampStaticField(jsonAnnotation.asOptions()[0]), getETimestampStaticField(jsonAnnotation.asOptions()[1]));
+        		int start = ETimestamp.YEAR_CODE;
+        		int end = ETimestamp.SECOND_CODE;
+	        	if(fieldTypeOptions != null && fieldTypeOptions.length > 1){
+	        		start = getETimestampStaticField(fieldTypeOptions[0]);
+	        		end = getETimestampStaticField(fieldTypeOptions[1]);
+	        	}
+        		return ETimestamp.ezeBox(ETimestamp.asTimestamp(cal, start, end), start, end);
 	        }
-	        if(AnyValue.class.isAssignableFrom(jsonAnnotation.clazz()) && jsonValue instanceof ObjectNode){
+	        if(AnyValue.class.isAssignableFrom(fieldType) && jsonValue instanceof ObjectNode){
 	        	AnyValue anyValue;
 	        	if(field instanceof AnyValue){
 	        		anyValue = (AnyValue)field;
 	        	}
 	        	else {
-	        		anyValue =  (AnyValue)jsonAnnotation.clazz().newInstance();
+	        		anyValue =  (AnyValue)fieldType.newInstance();
 	        	}
 	        	return convertObject(anyValue,(ObjectNode)jsonValue);
 	        }
-	        if(ExecutableBase.class.isAssignableFrom(jsonAnnotation.clazz()) && jsonValue instanceof ObjectNode){
+	        if(ExecutableBase.class.isAssignableFrom(fieldType) && jsonValue instanceof ObjectNode){
 	        	ExecutableBase base;
 	        	if(field instanceof ExecutableBase){
 	        		base = (ExecutableBase)field;
 	        	}
 	        	else {
-	        		base =  (ExecutableBase)jsonAnnotation.clazz().newInstance();
+	        		base =  (ExecutableBase)fieldType.newInstance();
 	        	}
 	        	return convertObject(base,(ObjectNode)jsonValue);
 	        }
-	        if(jsonAnnotation.clazz().isEnum() && jsonValue instanceof IntegerNode){
-	        	for(Object enumConstant : jsonAnnotation.clazz().getEnumConstants()){
+	        if(fieldType.isEnum() && jsonValue instanceof IntegerNode){
+	        	for(Object enumConstant : fieldType.getEnumConstants()){
 	        		if(enumConstant instanceof Enum){
 	        			int value;
 	        			try{
-	        				Method method = jsonAnnotation.clazz().getMethod("getValue", (Class[])null);
+	        				Method method = fieldType.getMethod("getValue", (Class[])null);
 	        				value = ((Integer)method.invoke(enumConstant, (Object[])null));
 	        			}
 	        			catch(NoSuchMethodException nsme){
@@ -361,13 +377,43 @@ public class JsonLib {
 	    throws AnyException
 	{
 		for(Object pair : objectNode.getPairs()){
-			dictionary.put(((NameValuePairNode)pair).getName().getJavaValue(), convertJsonNode(dictionary.get(((NameValuePairNode)pair).getName().getJavaValue()), ((NameValuePairNode)pair).getValue()));
+			dictionary.put(((NameValuePairNode)pair).getName().getJavaValue(), convertJsonNode(((NameValuePairNode)pair).getValue()));
 		}
 		return dictionary;
 	}
-    private static Object convertJsonNode(Object existingValue, ValueNode jsonValue){
-    	//FIXME
-    	return null;
+    private static Object convertJsonNode(ValueNode jsonValue){
+    	Object retVal = null;
+        if(jsonValue instanceof ArrayNode){
+        	retVal = new EglList<Object>();
+        	for(Object node : ((ArrayNode)jsonValue).getValues()){
+        		((EglList<Object>)retVal).add(convertJsonNode((ValueNode)node));
+        	}
+        }
+    	else if(jsonValue instanceof BooleanNode){
+    		retVal = convertToEgl(EBoolean.class, null, null, jsonValue);
+    	}
+    	else if(jsonValue instanceof DecimalNode){
+    		retVal = convertToEgl(EDecimal.class, null, null, jsonValue);
+    	}
+    	else if(jsonValue instanceof FloatingPointNode){
+    		retVal = convertToEgl(EFloat.class, null, null, jsonValue);
+    	}
+    	else if(jsonValue instanceof IntegerNode){
+    		retVal = convertToEgl(EBigint.class, null, null, jsonValue);
+    	}
+    	else if(jsonValue instanceof NullNode){
+        	return NullType.ezeWrap(null);
+    	}
+    	else if(jsonValue instanceof ObjectNode){
+    		retVal = convertToEgl(EDictionary.class, null, null, jsonValue);
+    	}
+    	else if(jsonValue instanceof StringNode){
+    		retVal = convertToEgl(EString.class, null, null, jsonValue);
+    	}
+    	if(!(retVal instanceof egl.lang.EglAny)){
+    		retVal = EglAny.ezeBox(retVal);
+    	}
+    	return retVal;
     }
     private static Object convertObject(Object object, ObjectNode objectNode)
 	    throws AnyException
@@ -419,7 +465,7 @@ public class JsonLib {
 				}
 				if(jsonAnnotation != null && (getMethod != null && Modifier.isPublic(getMethod.getModifiers()) ||
 						Modifier.isPublic(field.getModifiers()))){
-					Object newEglValue = convertToEgl(jsonAnnotation, existingFieldObject, JsonUtilities.getValueNode(objectNode, name));
+					Object newEglValue = convertToEgl(jsonAnnotation.getClass(), jsonAnnotation.asOptions(), existingFieldObject, JsonUtilities.getValueNode(objectNode, name));
 					if(setMethod != null && Modifier.isPublic(setMethod.getModifiers())){
 						setMethod.invoke(object, newEglValue);
 					}
