@@ -183,6 +183,24 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		return false;
 	}
 
+	private Expression addWhenCriterion(Expression criterion, Expression condition) {
+		if(condition instanceof BinaryExpression) {
+			BinaryExpression binExp = (BinaryExpression)condition;
+			Expression expr = addWhenCriterion(criterion, binExp.getLHS());
+			binExp.setLHS(expr);
+			expr = addWhenCriterion(criterion, binExp.getRHS());
+			binExp.setRHS(expr);
+			return condition;
+		}
+		else {
+			BinaryExpression binExp = factory.createBinaryExpression();
+			binExp.setLHS(criterion);
+			binExp.setRHS(condition);
+			binExp.setOperator(Operation.EQUALS);
+			return binExp;
+		}
+	}
+	
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CaseStatement caseStatement) {
 		IfStatement stmt = null;
@@ -196,11 +214,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			node.accept(this);
 			IfStatement when = (IfStatement)stack.pop();
 			if (criterion != null) {
-				BinaryExpression condition = factory.createBinaryExpression();
-				condition.setLHS(criterion);
-				condition.setRHS(when.getCondition());
-				condition.setOperator(Operation.EQUALS);
-				when.setCondition(condition);
+				when.setCondition(addWhenCriterion(criterion, when.getCondition()));
 			}
 			if (stmt == null) {
 				current = when;
@@ -237,9 +251,21 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.WhenClause whenClause) {
 		IfStatement clause = factory.createIfStatement();
+		
+		Expression prevCond = null;
 		for (Node node : (List<Node>)whenClause.getExpr_plus()) {
 			node.accept(this);
-			clause.setCondition((Expression)stack.pop());
+			
+			Expression expr = (Expression)stack.pop();
+			if (prevCond != null) {				
+				BinaryExpression binExp = factory.createBinaryExpression();
+				binExp.setLHS(prevCond);
+				binExp.setRHS(expr);
+				binExp.setOperator(Operation.OR);
+				expr = binExp;
+			}
+			prevCond = expr;
+			clause.setCondition(expr);
 		}
 		StatementBlock block = factory.createStatementBlock();
 		for (Node node : (List<Node>)whenClause.getStmts()) {
