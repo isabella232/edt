@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.java.templates;
 
 import java.util.List;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
@@ -152,7 +153,25 @@ public class EGLClassTemplate extends JavaTemplate {
 	}
 
 	public void genInitializeMethodBody(EGLClass part, Context ctx, TabbedWriter out) {
-		for (Field field : part.getFields()) {
+		List<Field> fields = part.getFields();
+		if (fields.size() > 0 && fields.get(0).getInitializerStatements() == null) {
+			// Work around JDT issue - if the first stmt in the initializer won't have an SMAP entry then add one anyway, mapped to the part declaration line.
+			// Otherwise for some reason the stepIntos skip right over the rest of the function.
+			Annotation annotation = part.getAnnotation(IEGLConstants.EGL_LOCATION);
+			if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
+				ctx.getSmapData().append("" + annotation.getValue(IEGLConstants.EGL_PARTLINE));
+				if (ctx.getCurrentFile() != null) {
+					if (ctx.getSmapFiles().indexOf(ctx.getCurrentFile()) < 0)
+						ctx.getSmapFiles().add(ctx.getCurrentFile());
+					ctx.getSmapData().append("#" + (ctx.getSmapFiles().indexOf(ctx.getCurrentFile()) + 1) + ":");
+				} else {
+					ctx.getSmapData().append("#1:");
+				}
+				ctx.getSmapData().append("" + out.getLineNumber() + "\n");
+			}
+		}
+		
+		for (Field field : fields) {
 			ctx.invoke(genInitializeMethod, part, ctx, out, field);
 		}
 	}
