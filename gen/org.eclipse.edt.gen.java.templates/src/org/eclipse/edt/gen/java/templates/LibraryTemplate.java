@@ -52,7 +52,11 @@ public class LibraryTemplate extends JavaTemplate {
 	}
 
 	public void genAccessor(Library library, Context ctx, TabbedWriter out) {
-		out.print(Constants.LIBRARY_PREFIX + library.getFullyQualifiedName().replace('.', '_') + "()");
+		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
+				library.getFullyQualifiedName()))
+			out.print("this");
+		else
+			out.print(Constants.LIBRARY_PREFIX + library.getFullyQualifiedName().replace('.', '_') + "()");
 	}
 
 	public void genConstructor(Library library, Context ctx, TabbedWriter out) {
@@ -65,12 +69,6 @@ public class LibraryTemplate extends JavaTemplate {
 		ctx.invoke(genAdditionalSuperConstructorArgs, library, ctx, out);
 		out.println(" );");
 		out.println("ezeInitialize();");
-		out.println("}");
-
-		out.print("public ");
-		genRuntimeTypeName(library, ctx, out, TypeNameKind.JavaPrimitive);
-		out.println(" " + Constants.LIBRARY_PREFIX + library.getFullyQualifiedName().replace('.', '_') + "() {");
-		out.println("return this;");
 		out.println("}");
 	}
 
