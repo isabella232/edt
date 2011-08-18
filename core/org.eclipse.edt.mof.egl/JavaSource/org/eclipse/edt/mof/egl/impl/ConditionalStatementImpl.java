@@ -16,8 +16,7 @@ import org.eclipse.edt.mof.egl.Expression;
 
 public abstract class ConditionalStatementImpl extends StatementImpl implements ConditionalStatement {
 	private static int Slot_condition=0;
-	private static int Slot_label=1;
-	private static int totalSlots = 2;
+	private static int totalSlots = 1;
 	
 	public static int totalSlots() {
 		return totalSlots + StatementImpl.totalSlots();
@@ -26,7 +25,6 @@ public abstract class ConditionalStatementImpl extends StatementImpl implements 
 	static {
 		int offset = StatementImpl.totalSlots();
 		Slot_condition += offset;
-		Slot_label += offset;
 	}
 	@Override
 	public Expression getCondition() {
@@ -37,15 +35,5 @@ public abstract class ConditionalStatementImpl extends StatementImpl implements 
 	public void setCondition(Expression value) {
 		slotSet(Slot_condition, value);
 	}
-	
-	@Override
-	public String getLabel() {
-		return (String)slotGet(Slot_label);
-	}
-	
-	@Override
-	public void setLabel(String value) {
-		slotSet(Slot_label, value);
-	}
-	
+		
 }

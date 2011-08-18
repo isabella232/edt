@@ -16,9 +16,5 @@ public interface ConditionalStatement extends Statement {
 	Expression getCondition();
 	
 	void setCondition(Expression value);
-	
-	String getLabel();
-	
-	void setLabel(String value);
-	
+		
 }
