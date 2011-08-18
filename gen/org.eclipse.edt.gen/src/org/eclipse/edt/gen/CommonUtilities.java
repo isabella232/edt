@@ -23,9 +23,7 @@ public class CommonUtilities {
 			return false;
 		} else{
 			//if the parameter is a const we should not make a copy
-			return isBoxedParameterType(parameter, ctx) && 
-					parameter.getParameterKind() == ParameterKind.PARM_INOUT &&
-					!parameter.isConst();
+			return isBoxedParameterType(parameter, ctx) && !parameter.isConst();
 		}
 	}
 
