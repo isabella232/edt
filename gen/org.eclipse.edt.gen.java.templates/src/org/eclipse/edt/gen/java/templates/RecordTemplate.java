@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Part;
@@ -234,4 +235,13 @@ public class RecordTemplate extends JavaTemplate {
 	}
 	
 	public void genAnnotations(Record part, Context ctx, TabbedWriter out, Field field) {}
+
+	public void genInitializeMethod(Record part, Context ctx, TabbedWriter out, Field arg, EGLClass parent) {
+		if(!arg.isNullable() || arg.getInitializerStatements() == null){
+			ctx.invoke(genName, arg, ctx, out);
+			out.print(" = ");
+			ctx.invoke(genInitialization, arg, ctx, out);
+			out.println(";");
+		}
+	}
 }

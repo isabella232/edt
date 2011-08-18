@@ -17,7 +17,15 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.*;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ConstantField;
+import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.ParameterizedType;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class EGLClassTemplate extends JavaTemplate {
@@ -152,13 +160,9 @@ public class EGLClassTemplate extends JavaTemplate {
 	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
 		if ( !(arg instanceof ConstantField) )
 		{
-			if (arg.getInitializerStatements() != null)
+			ctx.invoke(genInitializeMethod, arg.getType(), ctx, out, arg, part);
+			if (arg.getInitializerStatements() != null){
 				ctx.invoke(genStatementNoBraces, arg.getInitializerStatements(), ctx, out);
-			else {
-				ctx.invoke(genName, arg, ctx, out);
-				out.print(" = ");
-				ctx.invoke(genInitialization, arg, ctx, out);
-				out.println(";");
 			}
 		}
 	}

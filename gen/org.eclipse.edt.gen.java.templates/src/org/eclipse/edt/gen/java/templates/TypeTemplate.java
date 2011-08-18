@@ -20,6 +20,7 @@ import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.InvocationExpression;
@@ -283,6 +284,15 @@ public class TypeTemplate extends JavaTemplate {
 		if (arg.getOperator() != null && arg.getOperator().length() > 0)
 			operator = arg.getOperator();
 		ctx.invoke(genAssignment, arg.getLHS(), ctx, out, arg.getRHS(), " " + CommonUtilities.getNativeJavaAssignment(operator) + " ");
+	}
+	
+	public void genInitializeMethod(Type type, Context ctx, TabbedWriter out, Field arg, EGLClass parent) {
+		if (arg.getInitializerStatements() == null){
+			ctx.invoke(genName, arg, ctx, out);
+			out.print(" = ");
+			ctx.invoke(genInitialization, arg, ctx, out);
+			out.println(";");
+		}
 	}
 
 }
