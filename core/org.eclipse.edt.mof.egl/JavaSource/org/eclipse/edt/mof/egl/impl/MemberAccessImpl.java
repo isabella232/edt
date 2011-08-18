@@ -21,6 +21,7 @@ import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.NoSuchMemberError;
+import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
 
 public class MemberAccessImpl extends NameImpl implements MemberAccess {
@@ -67,6 +68,9 @@ public class MemberAccessImpl extends NameImpl implements MemberAccess {
 		}
 		else if (getQualifier() instanceof InvocationExpression) {
 			setQualifier(((InvocationExpression)getQualifier()).addQualifier(expr));
+		}
+		else if (getQualifier() instanceof ThisExpression) {
+			setQualifier(expr);
 		}
 		return this;
 	}
