@@ -827,6 +827,15 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 				}
 				return;
 			}
+			
+			if (EDTUIPreferenceConstants.CODEASSIST_AUTOACTIVATION_DELAY.equals(property)) {
+				IContentAssistant c = ((AdaptedSourceViewer)sourceViewer).getContentAssistant();
+				if (c instanceof ContentAssistant) {
+					ContentAssistPreference.changeConfiguration((ContentAssistant) c, getPreferenceStore(), event);
+				}
+				return;
+			}
+			
 		} finally {
 			super.handlePreferenceStoreChanged(event);
 		}

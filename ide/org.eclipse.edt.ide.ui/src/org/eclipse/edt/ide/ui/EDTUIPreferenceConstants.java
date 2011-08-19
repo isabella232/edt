@@ -11,11 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui;
 
+import java.util.StringTokenizer;
+
 import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.edt.ide.core.model.IEGLProject;
+import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposalComputerRegistry;
 import org.eclipse.edt.ide.ui.internal.preferences.IColorConstants;
-import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.swt.graphics.RGB;
@@ -42,6 +46,40 @@ public class EDTUIPreferenceConstants {
 	 * </p>
 	 */
 	public final static String CODEASSIST_AUTOACTIVATION = "content_assist_autoactivation"; //$NON-NLS-1$
+	
+	public final static String CODEASSIST_AUTOACTIVATION_DELAY= "content_assist_autoactivation_delay"; //$NON-NLS-1$
+	
+	/**
+	 * A named preference that controls which completion proposal categories
+	 * have been excluded from the default proposal list.
+	 * <p>
+	 * Value is of type <code>String</code>, a "\0"-separated list of identifiers.
+	 * </p>
+	 *
+	 * @see #getExcludedCompletionProposalCategories()
+	 * @see #setExcludedCompletionProposalCategories(String[])
+	 * 
+	 */
+	public final static String CODEASSIST_EXCLUDED_CATEGORIES = "content_assist_disabled_categories";//$NON-NLS-1$
+	
+	/**
+	 * A named preference that controls which the order of the specific code assist commands.
+	 * <p>
+	 * Value is of type <code>String</code>, a "\0"-separated list with categoryId:cycleState where
+	 * <ul>
+	 * <li>categoryId is the <code>String</code> holding the category ID</li>
+	 * <li>cycleState is an <code>int</code> which specifies the rank and the enablement:
+	 * <ul>
+	 *		<li>enabled= cycleState < 65535</li>
+	 *		<li>rank= enabled ? cycleState : cycleState - 65535)</li>
+	 * </ul></li>
+	 * </ul>
+	 * 
+	 * </p>
+	 * 
+	 * @since 3.2
+	 */
+	public static final String CODEASSIST_CATEGORY_ORDER= "content_assist_category_order"; //$NON-NLS-1$
 
 	/**
 	 * A named preference that holds the color used as the text background.
@@ -329,6 +367,7 @@ public class EDTUIPreferenceConstants {
 	public static void initializeDefaultValues(IPreferenceStore store) {
 		// Editor preference page
 		store.setDefault( CODEASSIST_AUTOACTIVATION, true );
+		store.setDefault(CODEASSIST_AUTOACTIVATION_DELAY, 500);
 		store.setDefault( EDITOR_ERROR_INDICATION, true );
 		store.setDefault( EDITOR_ERROR_INDICATION_IN_OVERVIEW_RULER, true );
 		store.setDefault( EDITOR_HANDLE_DYNAMIC_PROBLEMS,  true );
@@ -347,6 +386,10 @@ public class EDTUIPreferenceConstants {
 		// Organize imports preference page
 		store.setDefault( ORGIMPORTS_IMPORTORDER, "org;edt" ); //$NON-NLS-1$
 		store.setDefault( ORGIMPORTS_ONDEMANDTHRESHOLD, 99 );
+		
+		//Content Assist default setting
+		store.setDefault(EDTUIPreferenceConstants.CODEASSIST_EXCLUDED_CATEGORIES, ""); //$NON-NLS-1$
+		store.setDefault(EDTUIPreferenceConstants.CODEASSIST_CATEGORY_ORDER, "org.eclipse.edt.ide.ui.keywordProposalCategory:2\0org.eclipse.edt.ide.ui.TemplateProposalCategory:5\0org.eclipse.edt.ide.ui.ReferenceProposalCategory:4\0"); //$NON-NLS-1$	
 		
 		initializeDefaultEGLColorPreferences( store );
 	}
@@ -397,7 +440,7 @@ public class EDTUIPreferenceConstants {
 	 * @return Returns the current value for the string.
 	 * @since 3.1
 	 */
-	public static String getPreference(String key, IJavaProject project) {
+	public static String getPreference(String key, IEGLProject project) {
 		String val;
 		if (project != null) {
 			val= new ProjectScope(project.getProject()).getNode(EDTUIPlugin.PLUGIN_ID).get(key, null);
@@ -410,6 +453,42 @@ public class EDTUIPreferenceConstants {
 			return val;
 		}
 		return new DefaultScope().getNode(EDTUIPlugin.PLUGIN_ID).get(key, null);
+	}
+	
+	/**
+	 * Returns the completion proposal categories which
+	 * are excluded from the default proposal list.
+	 *
+	 * @return an array with the IDs of the excluded categories
+	 * @see #CODEASSIST_EXCLUDED_CATEGORIES
+	 * @since 3.4
+	 */
+	public static String[] getExcludedCompletionProposalCategories() {
+		String encodedPreference= getPreference(CODEASSIST_EXCLUDED_CATEGORIES, null);
+		StringTokenizer tokenizer= new StringTokenizer(encodedPreference, "\0"); //$NON-NLS-1$
+		String[] result= new String[tokenizer.countTokens()];
+		for (int i= 0; i < result.length; i++)
+			result[i]= tokenizer.nextToken();
+		return result;
+	}
+
+	/**
+	 * Sets the completion proposal categories which are excluded from the
+	 * default proposal list and reloads the registry.
+	 *
+	 * @param categories the array with the IDs of the excluded categories
+	 * @see #CODEASSIST_EXCLUDED_CATEGORIES
+	 * @since 3.4
+	 */
+	public static void setExcludedCompletionProposalCategories(String[] categories) {
+		Assert.isLegal(categories != null);
+		StringBuffer buf= new StringBuffer(50 * categories.length);
+		for (int i= 0; i < categories.length; i++) {
+			buf.append(categories[i]);
+			buf.append('\0');
+		}
+		getPreferenceStore().setValue(CODEASSIST_EXCLUDED_CATEGORIES, buf.toString());
+		EGLCompletionProposalComputerRegistry.getDefault().reload();
 	}
 }
 

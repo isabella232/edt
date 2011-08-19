@@ -35,7 +35,6 @@ public class EditorPreferencePage extends AbstractPreferencePage {
 	protected Button annotateErrorsButton = null;				// annotate errors in text
 	protected Button annotateErrorsInOverviewButton = null;		// annotate errors in overview ruler
 	protected Button annotateErrorsAsYouTypeButton = null;
-	protected Button autoActivationButton = null;
 
 	public EditorPreferencePage(){
 //		setDescription(UINlsStrings.EditorPreferencePageDescription);
@@ -51,11 +50,6 @@ public class EditorPreferencePage extends AbstractPreferencePage {
 		annotateErrorsInOverviewButton = createCheckBox(internalComposite, UINlsStrings.AnnotateErrorsInOverviewLabel);
 		annotateErrorsAsYouTypeButton = createCheckBox(internalComposite, UINlsStrings.AnnotateErrorsAsYouTypeLabel);
 		
-		Group contentAssistGroup = createGroup(composite, 1);
-		contentAssistGroup.setText(UINlsStrings.ContentAssistLabel);
-		Composite contentAssistComposite = createComposite(contentAssistGroup, 1);
-		autoActivationButton= createCheckBox(contentAssistComposite, UINlsStrings.AutoActivationLabel);
-
 		setSize(composite);
 		loadPreferences();
 
@@ -97,7 +91,6 @@ public class EditorPreferencePage extends AbstractPreferencePage {
 		annotateErrorsButton.setSelection(getPreferenceStore().getDefaultBoolean(EDTUIPreferenceConstants.EDITOR_ERROR_INDICATION));
 		annotateErrorsInOverviewButton.setSelection(getPreferenceStore().getDefaultBoolean(EDTUIPreferenceConstants.EDITOR_ERROR_INDICATION_IN_OVERVIEW_RULER));
 		annotateErrorsAsYouTypeButton.setSelection(getPreferenceStore().getDefaultBoolean(EDTUIPreferenceConstants.EDITOR_HANDLE_DYNAMIC_PROBLEMS));
-		autoActivationButton.setSelection(getPreferenceStore().getDefaultBoolean(EDTUIPreferenceConstants.CODEASSIST_AUTOACTIVATION));
 
 		super.performDefaults();
 	}
@@ -106,14 +99,12 @@ public class EditorPreferencePage extends AbstractPreferencePage {
 		annotateErrorsButton.setSelection(getPreferenceStore().getBoolean(EDTUIPreferenceConstants.EDITOR_ERROR_INDICATION));
 		annotateErrorsInOverviewButton.setSelection(getPreferenceStore().getBoolean(EDTUIPreferenceConstants.EDITOR_ERROR_INDICATION_IN_OVERVIEW_RULER));
 		annotateErrorsAsYouTypeButton.setSelection(getPreferenceStore().getBoolean(EDTUIPreferenceConstants.EDITOR_HANDLE_DYNAMIC_PROBLEMS));
-		autoActivationButton.setSelection(getPreferenceStore().getBoolean(EDTUIPreferenceConstants.CODEASSIST_AUTOACTIVATION));
 	}
 
 	protected void storeValues() {
 		getPreferenceStore().setValue(EDTUIPreferenceConstants.EDITOR_ERROR_INDICATION, annotateErrorsButton.getSelection());
 		getPreferenceStore().setValue(EDTUIPreferenceConstants.EDITOR_ERROR_INDICATION_IN_OVERVIEW_RULER, annotateErrorsInOverviewButton.getSelection());
 		getPreferenceStore().setValue(EDTUIPreferenceConstants.EDITOR_HANDLE_DYNAMIC_PROBLEMS, annotateErrorsAsYouTypeButton.getSelection());
-		getPreferenceStore().setValue(EDTUIPreferenceConstants.CODEASSIST_AUTOACTIVATION, autoActivationButton.getSelection());
 	}
 
 	public boolean performOk() {

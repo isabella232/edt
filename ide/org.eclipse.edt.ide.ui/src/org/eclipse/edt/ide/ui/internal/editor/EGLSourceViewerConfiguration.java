@@ -12,6 +12,10 @@
 package org.eclipse.edt.ide.ui.internal.editor;
 
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
+import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
+import org.eclipse.edt.ide.ui.internal.contentassist.EGLContentAssistProcessor;
+import org.eclipse.edt.ide.ui.internal.formatting.FormattingStrategy;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.DefaultInformationControl;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
@@ -21,6 +25,8 @@ import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.IUndoManager;
 import org.eclipse.jface.text.TextViewerUndoManager;
+import org.eclipse.jface.text.contentassist.ContentAssistant;
+import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.formatter.IContentFormatter;
 import org.eclipse.jface.text.formatter.MultiPassContentFormatter;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
@@ -34,9 +40,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.sse.ui.internal.derived.HTMLTextPresenter;
-
-//import org.eclipse.edt.ide.ui.internal.contentassist.EGLContentAssistProcessor;
-import org.eclipse.edt.ide.ui.internal.formatting.FormattingStrategy;
 
 /**
  * Example configuration for an <code>SourceViewer</code> which shows Java code.
@@ -93,44 +96,35 @@ public class EGLSourceViewerConfiguration extends TextSourceViewerConfiguration 
 	/* (non-Javadoc)
 	 * Method declared on SourceViewerConfiguration
 	 */
-// TODO EDT Uncomment when content assist is ready	
-//	public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
-//
-//		//TODO Adjust content assist tips & link to preferences (for colors, timings, etc.)
-//		ContentAssistant assistant = new ContentAssistant();
-//
-//		// Add completion processor for the default EGL partition 
-//		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor), IDocument.DEFAULT_CONTENT_TYPE);
-//		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor), IPartitions.EGL_MULTI_LINE_COMMENT);
-//		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor), IPartitions.EGL_SINGLE_LINE_COMMENT);
-//		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor), IPartitions.SQL_CONTENT_TYPE);
-//		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor), IPartitions.SQL_CONDITION_CONTENT_TYPE);
-//		//Jon - #dli{}???
-////		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor), IPartitions.DLI_CONTENT_TYPE);
-//		
-//		// Need more ContentAssistProcessors
-//		//		Need one for TemplateVariableProcessor OR EGL's Derivation
-//		// In next release, add completion processor for SQL partition
-//
-//		// This line of code allows templates to show the pattern as additional information off to the
-//		// right when a template is selected.
-//		assistant.setInformationControlCreator(getInformationControlCreator(sourceViewer));
-//
-//		// Set auto activation based on preference
-//		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-//		boolean enabled= store.getBoolean(EGLPreferenceConstants.CODEASSIST_AUTOACTIVATION);
-//		assistant.enableAutoActivation(enabled);
-//		
-//		assistant.setAutoActivationDelay(500);
-//		assistant.setProposalPopupOrientation(IContentAssistant.PROPOSAL_OVERLAY);
-//		
-//		assistant.enableAutoInsert(true);
-//
-//		//assistant.setContextInformationPopupOrientation(IContentAssistant.CONTEXT_INFO_ABOVE);
-//		//assistant.setContextInformationPopupBackground(JavaEditorEnvironment.getJavaColorProvider().getColor(new RGB(150, 150, 0)));
-//
-//		return assistant;
-//	}
+
+	public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
+		//TODO Adjust content assist tips & link to preferences (for colors, timings, etc.)
+		ContentAssistant assistant = new ContentAssistant();
+
+		// Add completion processor for the default EGL partition 
+		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IDocument.DEFAULT_CONTENT_TYPE), IDocument.DEFAULT_CONTENT_TYPE);
+		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IPartitions.EGL_MULTI_LINE_COMMENT), IPartitions.EGL_MULTI_LINE_COMMENT);
+		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IPartitions.EGL_SINGLE_LINE_COMMENT), IPartitions.EGL_SINGLE_LINE_COMMENT);
+		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IPartitions.SQL_CONTENT_TYPE), IPartitions.SQL_CONTENT_TYPE);
+		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IPartitions.SQL_CONDITION_CONTENT_TYPE), IPartitions.SQL_CONDITION_CONTENT_TYPE);
+		
+		assistant.setInformationControlCreator(getInformationControlCreator(sourceViewer));
+
+		// Set auto activation based on preference
+		IPreferenceStore store = EDTUIPlugin.getDefault().getPreferenceStore();
+		boolean enabled= store.getBoolean(EGLPreferenceConstants.CODEASSIST_AUTOACTIVATION);
+		assistant.enableAutoActivation(enabled);
+		
+		assistant.setAutoActivationDelay(500);
+		assistant.setProposalPopupOrientation(IContentAssistant.PROPOSAL_OVERLAY);
+		
+		assistant.enableAutoInsert(true);
+
+		//assistant.setContextInformationPopupOrientation(IContentAssistant.CONTEXT_INFO_ABOVE);
+		//assistant.setContextInformationPopupBackground(JavaEditorEnvironment.getJavaColorProvider().getColor(new RGB(150, 150, 0)));
+
+		return assistant;
+	}
 
 	public IContentFormatter getContentFormatter(ISourceViewer sourceViewer) {
 		final MultiPassContentFormatter formatter= new MultiPassContentFormatter(getConfiguredDocumentPartitioning(sourceViewer), IDocument.DEFAULT_CONTENT_TYPE);

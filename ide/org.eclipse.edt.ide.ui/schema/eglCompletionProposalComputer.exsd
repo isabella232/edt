@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipse.edt.ide.ui" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="org.eclipse.edt.ide.ui" id="eglCompletionProposalComputer" name="%eglCompletionProposalComputer"/>
+      </appinfo>
+      <documentation>
+         This extension point allows to contribute Egl completion proposal computers to participate in the content assist process of the Egl editor.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <choice>
+            <element ref="eglCompletionProposalComputer"/>
+            <element ref="proposalCategory"/>
+         </choice>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="partition">
+      <complexType>
+         <attribute name="type" use="required">
+            <annotation>
+               <documentation>
+                  a Egl partition type for which the specified computer can provide completion proposals. See &lt;code&gt;IDocument.DEFAULT_CONTENT_TYPE&lt;/code&gt; and &lt;code&gt;IEglPartitions&lt;/code&gt; for valid values.
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="__dftl_partition_content_type">
+                  </enumeration>
+                  <enumeration value="___egl_partitioning">
+                  </enumeration>
+                  <enumeration value="__egl_multiline_comment">
+                  </enumeration>
+                  <enumeration value="__egl_singleline_comment">
+                  </enumeration>
+                  <enumeration value="__egl_sql">
+                  </enumeration>
+                  <enumeration value="__egl_sqlCondition">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="eglCompletionProposalComputer">
+      <annotation>
+         <documentation>
+            A proposal computer contribution. If no partition types are specified, the computer is added to all partition types.
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence minOccurs="0" maxOccurs="6">
+            <element ref="partition"/>
+         </sequence>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  the name of the class that implements the contributed computer. The
+class must be public and implement
+&lt;code&gt;org.eclipse.edt.ide.ui.editor.IEglCompletionProposalComputer&lt;/code&gt;
+and must have a public 0-argument constructor.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.edt.ide.ui.editor.IEGLCompletionProposalComputer"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="activate" type="boolean" use="default" value="false">
+            <annotation>
+               <documentation>
+                  if the attribute is set to &quot;true&quot; it will force this plug-in to be loaded on content assist invocation
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="categoryId" type="string" use="default" value="org.eclipse.edt.ide.ui.defaultProposalCategory">
+            <annotation>
+               <documentation>
+                  the id of a &lt;tt&gt;proposalCategory&lt;/tt&gt;
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="org.eclipse.edt.ide.ui.eglCompletionProposalComputer/@id"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="proposalCategory">
+      <annotation>
+         <documentation>
+            A proposal category contribution defines categories of proposals used to group them in the UI.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="icon" type="string">
+            <annotation>
+               <documentation>
+                  an optional icon of the category, which can be displayed in the user preferences
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="resource"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         0.7
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         The following is an example of a Java completion proposal computer contribution:
+
+&lt;p&gt;
+&lt;pre&gt;
+ &lt;extension point=&quot;org.eclipse.edt.idt.ui.eglCompletionProposalComputer&quot;
+   id=&quot;textual_proposals&quot;
+   name=&quot;Text Proposals&quot;&gt;
+   &lt;proposalCategory icon=&quot;icons/wordcompletions.png&quot;/&gt;
+ &lt;/extension&gt;
+ &lt;extension point=&quot;org.eclipse.jdt.ui.eglCompletionProposalComputer&quot;
+   id=&quot;WordCompletionProposalComputer&quot;
+   name=&quot;Word Completion Proposal Computer&quot;&gt;
+   &lt;eglCompletionProposalComputer
+      class=&quot;class.xxx&quot;
+      categoryId=&quot;org.eclipse.ui.texteditor.textual_proposals&quot;&gt;
+      &lt;partition type=&quot;__egl_partitioning&quot;/&gt;
+   &lt;/eglCompletionProposalComputer&gt;
+ &lt;/extension&gt;
+&lt;/pre&gt;
+&lt;/p&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         The contributed class must extend &lt;code&gt;org.eclipse.edt.ide.ui.editor.IEglCompletionProposalComputer&lt;/code&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+
+</schema>

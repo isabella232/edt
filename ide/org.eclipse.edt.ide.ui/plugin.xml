@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
 	<extension-point id="eglFoldingStructureProviders" name="EGL Folding Structure Provider" schema="schema/eglFoldingStructureProviders.exsd"/>
+	<extension-point id="eglCompletionProposalComputer" name="%eglCompletionProposalComputer" schema="schema/eglCompletionProposalComputer.exsd"/>
 	<extension-point id="edtGeneratorTabs" name="EDT Generator Tabs" schema="schema/edtGeneratorTabs.exsd"/>
 	<extension-point id="projectType" name="New EGL Project Type" schema="schema/projectType.exsd"/>
     <extension-point id="eglProjectFeature" name="EGL Project Feature" schema="schema/eglProjectFeature.exsd"/>	
@@ -1149,6 +1150,18 @@ Templates
             id="org.eclipse.edt.ide.ui.editorPreferences">
 		</page>
 		<page
+      		name="%ContentAssistPreferencePageName"
+            category="org.eclipse.edt.ide.ui.editorPreferences"
+            class="org.eclipse.edt.ide.ui.internal.preferences.ContentAssistPreferencePage"
+            id="org.eclipse.edt.ide.ui.contentAssistPreferences">
+		</page>
+		<page
+      		name="%ContentAssistAdvancedPreferencePageName"
+            category="org.eclipse.edt.ide.ui.contentAssistPreferences"
+            class="org.eclipse.edt.ide.ui.internal.preferences.ContentAssistAdvancedPreferencePage"
+            id="org.eclipse.edt.ide.ui.ContentAssistAdvancedPreferences">
+		</page>
+		<page
       		name="%FoldingPreferencePageName"
             category="org.eclipse.edt.ide.ui.editorPreferences"
             class="org.eclipse.edt.ide.ui.internal.preferences.FoldingPreferencePage"
@@ -1376,6 +1389,109 @@ Templates
          </run>
       </builder>
    </extension>
+   
+  <!-- Content Assist -->
+   <!-- category-->
+   <extension
+         id="keywordProposalCategory"
+         name="%CompletionProposalCategory.KeywordCategory"
+         point="org.eclipse.edt.ide.ui.eglCompletionProposalComputer">
+      <proposalCategory
+            icon="icons/elcl16/hdlog_mode.gif"></proposalCategory>
+   </extension>
+   <extension
+         id="ReferenceProposalCategory"
+         name="%CompletionProposalCategory.ReferenceProposalCategory"
+         point="org.eclipse.edt.ide.ui.eglCompletionProposalComputer">
+      <proposalCategory
+            icon="icons/elcl16/svcpro_wiz.gif">
+      </proposalCategory>
+   </extension>
+      <extension
+         id="TemplateProposalCategory"
+         name="%CompletionProposalCategory.TemplateProposalCategory"
+         point="org.eclipse.edt.ide.ui.eglCompletionProposalComputer">
+      <proposalCategory
+            icon="icons/clcl16/refrsh_tsk.gif">
+      </proposalCategory>
+   </extension>
+   	<!-- computer-->
+   <extension
+         id="keywordProposalComputer"
+         point="org.eclipse.edt.ide.ui.eglCompletionProposalComputer">
+      <eglCompletionProposalComputer
+            categoryId="org.eclipse.edt.ide.ui.keywordProposalCategory"
+            class="org.eclipse.edt.ide.ui.internal.contentassist.proposalcomputers.KeywordProposalComputer">
+         <partition
+               type="__dftl_partition_content_type">
+         </partition>
+         <partition
+               type="___egl_partitioning">
+         </partition>
+         <partition
+               type="__egl_sql">
+         </partition>
+         <partition
+               type="__egl_sqlCondition">
+         </partition>
+      </eglCompletionProposalComputer>
+   </extension>
+   <extension
+         id="ReferenceProposalComputer"
+         point="org.eclipse.edt.ide.ui.eglCompletionProposalComputer">
+      <eglCompletionProposalComputer
+            categoryId="org.eclipse.edt.ide.ui.ReferenceProposalCategory"
+            class="org.eclipse.edt.ide.ui.internal.contentassist.proposalcomputers.ReferenceProposalComputer">
+         <partition
+               type="__dftl_partition_content_type">
+         </partition>
+         <partition
+               type="___egl_partitioning">
+         </partition>
+         <partition
+               type="__egl_sql">
+         </partition>
+         <partition
+               type="__egl_sqlCondition">
+         </partition>
+      </eglCompletionProposalComputer>
+   </extension>
+   <extension
+         id="TemplateProposalComputer"
+         point="org.eclipse.edt.ide.ui.eglCompletionProposalComputer">
+      <eglCompletionProposalComputer
+            categoryId="org.eclipse.edt.ide.ui.TemplateProposalCategory"
+            class="org.eclipse.edt.ide.ui.internal.contentassist.proposalcomputers.TemplateProposalComputer">
+         <partition
+               type="__dftl_partition_content_type">
+         </partition>
+         <partition
+               type="___egl_partitioning">
+         </partition>
+         <partition
+               type="__egl_sql">
+         </partition>
+         <partition
+               type="__egl_sqlCondition">
+         </partition>
+      </eglCompletionProposalComputer>
+   </extension>
+   	<!--TODO the parameterized content assist action and keybindings for our contributed computers  -->
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			categoryId="org.eclipse.ui.category.edit"
+			description="%SpecificContentAssist.desc"
+			id="org.eclipse.edt.ide.ui.specific_content_assist.command"
+			name="%SpecificContentAssist.name"
+			>
+			<commandParameter
+				id="org.eclipse.edt.ide.ui.specific_content_assist.category_id"
+				name="%SpecificContentAssist.param"
+				optional="false"
+			/>
+		</command>
+	</extension>
    
    <!-- EGL buildpath problems -->
 

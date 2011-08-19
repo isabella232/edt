@@ -31,6 +31,11 @@ public class ContentAssistPreference {
 		if (EDTUIPreferenceConstants.CODEASSIST_AUTOACTIVATION.equals(p)) {
 			boolean enabled= store.getBoolean(EDTUIPreferenceConstants.CODEASSIST_AUTOACTIVATION);
 			assistant.enableAutoActivation(enabled);
-		} 
+		}
+		
+		if(EDTUIPreferenceConstants.CODEASSIST_AUTOACTIVATION_DELAY.equals(p)){
+			int delayTime = store.getInt(EDTUIPreferenceConstants.CODEASSIST_AUTOACTIVATION_DELAY);
+			assistant.setAutoActivationDelay(delayTime);
+		}
 	}
 }

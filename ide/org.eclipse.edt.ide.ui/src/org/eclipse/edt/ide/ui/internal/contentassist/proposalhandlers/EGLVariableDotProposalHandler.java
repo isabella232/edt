@@ -1,0 +1,338 @@
+/*******************************************************************************
+ * Copyright Ã¦Â¼?2000, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.eclipse.edt.compiler.binding.AmbiguousDataBinding;
+import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
+import org.eclipse.edt.compiler.binding.Binding;
+import org.eclipse.edt.compiler.binding.ClassFieldBinding;
+import org.eclipse.edt.compiler.binding.DataTableBinding;
+import org.eclipse.edt.compiler.binding.DictionaryBinding;
+import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
+import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
+import org.eclipse.edt.compiler.binding.FixedRecordBinding;
+import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
+import org.eclipse.edt.compiler.binding.FormBinding;
+import org.eclipse.edt.compiler.binding.HandlerBinding;
+import org.eclipse.edt.compiler.binding.IBinding;
+import org.eclipse.edt.compiler.binding.IDataBinding;
+import org.eclipse.edt.compiler.binding.IFunctionBinding;
+import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.binding.InterfaceBinding;
+import org.eclipse.edt.compiler.binding.LibraryBinding;
+import org.eclipse.edt.compiler.binding.ServiceBinding;
+import org.eclipse.edt.compiler.binding.StructureItemBinding;
+import org.eclipse.edt.compiler.binding.SystemFunctionBinding;
+import org.eclipse.edt.compiler.binding.VariableBinding;
+import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.ThisExpression;
+import org.eclipse.edt.compiler.internal.IEGLConstants;
+import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
+import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
+import org.eclipse.edt.ide.ui.internal.UINlsStrings;
+import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.ui.IEditorPart;
+
+public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
+	private IDataBinding qualifierDataBinding;
+	private ITypeBinding qualifierTypeBinding;
+	private Expression qualifierExpression;
+
+	public EGLVariableDotProposalHandler(
+		ITextViewer viewer,
+		int documentOffset,
+		String prefix,
+		IEditorPart editor,
+		IDataBinding qualifierDataBinding,
+		ITypeBinding qualifierTypeBinding,
+		Expression qualifierExpression) {
+			
+			super(viewer, documentOffset, prefix, editor);
+			this.qualifierDataBinding = qualifierDataBinding;
+			this.qualifierTypeBinding = qualifierTypeBinding;
+			this.qualifierExpression = qualifierExpression;
+	}
+
+	public List getProposals(List propertyBlockList) {
+		return getProposals(true, propertyBlockList);
+	}
+
+	public List getProposals(boolean includeFunctions, List propertyBlockList) {
+		return getProposals(includeFunctions, false, false, propertyBlockList);
+	}
+	
+	public List getProposals(boolean includeFunctions, boolean addEquals, List propertyBlockList) {
+		return getProposals(includeFunctions, addEquals, false, propertyBlockList);
+	}
+	
+	public List getProposals(boolean includeFunctions, boolean addEquals, boolean includePrivateFields, List propertyBlockList) {
+		List result = new ArrayList();
+		if(qualifierDataBinding != null && IBinding.NOT_FOUND_BINDING != qualifierDataBinding) {
+			switch(qualifierDataBinding.getKind()) {
+				case IDataBinding.STRUCTURE_ITEM_BINDING:
+					result.addAll(getFieldProposals(((StructureItemBinding) qualifierDataBinding).getChildren(), addEquals, includePrivateFields, propertyBlockList));
+					return result;
+			}
+			
+			ITypeBinding dataBindingType = qualifierDataBinding.getType();
+			if(dataBindingType != null && IBinding.NOT_FOUND_BINDING != dataBindingType) {
+				if(Binding.isValidBinding(qualifierTypeBinding) &&
+				   ITypeBinding.EXTERNALTYPE_BINDING == qualifierTypeBinding.getKind() &&
+				   ITypeBinding.EXTERNALTYPE_BINDING == dataBindingType.getBaseType().getKind() &&
+				   IDataBinding.EXTERNALTYPE_BINDING != qualifierDataBinding.getKind()) {
+					result.addAll(getFieldProposals(((ExternalTypeBinding) dataBindingType.getBaseType()).getDeclaredAndInheritedData(), addEquals, includePrivateFields, propertyBlockList));
+					if(includeFunctions) {
+						result.addAll(getFunctionProposals(
+							((ExternalTypeBinding) dataBindingType.getBaseType()).getDeclaredAndInheritedFunctions(),
+							null,
+							EGLCompletionProposal.RELEVANCE_MEDIUM));
+					}
+					return result;
+				}
+				
+				switch(dataBindingType.getKind()) {
+					case ITypeBinding.ARRAYDICTIONARY_BINDING:
+						return result;
+						
+					case ITypeBinding.DICTIONARY_BINDING:
+						result.addAll(getSystemWordProposals(DictionaryBinding.getSYSTEM_FUNCTIONS(), UINlsStrings.CAProposal_FunctionSystemWord));
+						if(AbstractBinder.dataBindingIs(qualifierDataBinding, EGLCORE, IEGLConstants.KEYWORD_SYSLIB, IEGLConstants.SYSTEM_WORD_CURRENTEXCEPTION)) {
+						    Set dBindings = new HashSet();
+						    dBindings.addAll(((FlexibleRecordBinding) SystemPartManager.ANYEXCEPTION_BINDING).getDeclaredFields());
+						    result.addAll(getFieldProposals((Collection) dBindings, addEquals, includePrivateFields, propertyBlockList));
+						}
+						return result;
+				}
+			}
+		}
+		if(Binding.isValidBinding(qualifierTypeBinding)) {
+			switch(qualifierTypeBinding.getKind()) {
+				case ITypeBinding.ENUMERATION_BINDING:
+					return getFieldProposals(((EnumerationTypeBinding) qualifierTypeBinding).getEnumerations(), addEquals, includePrivateFields, propertyBlockList);					
+			
+				case ITypeBinding.EXTERNALTYPE_BINDING:
+					result.addAll(getFieldProposals(filterStaticDataBindings(((ExternalTypeBinding) qualifierTypeBinding).getDeclaredAndInheritedData()), addEquals, includePrivateFields, propertyBlockList));
+					if(includeFunctions) {
+						result.addAll(getFunctionProposals(
+							filterStaticDataBindings(((ExternalTypeBinding) qualifierTypeBinding).getDeclaredAndInheritedFunctions()),
+							null,
+							EGLCompletionProposal.RELEVANCE_MEDIUM));
+					}
+					return result;
+				
+				case ITypeBinding.FLEXIBLE_RECORD_BINDING:
+					if (isIORecordType())
+						result.addAll(getResourceAssociationSystemWordProposal());
+					result.addAll(getFieldProposals(((FlexibleRecordBinding) qualifierTypeBinding).getDeclaredFields(), addEquals, includePrivateFields, propertyBlockList));
+					return result;
+					
+				case ITypeBinding.FORM_BINDING:
+					result.addAll(getFieldProposals(((FormBinding) qualifierTypeBinding).getFields(), addEquals, includePrivateFields, propertyBlockList));
+					return result;
+
+				case ITypeBinding.FIXED_RECORD_BINDING:
+					if (isIORecordType())
+						result.addAll(getResourceAssociationSystemWordProposal());
+					Set dBindings = new HashSet();
+					dBindings.addAll(((FixedRecordBinding) qualifierTypeBinding).getSimpleNamesToDataBindingsMap().values());
+					dBindings.addAll(((FixedRecordBinding) qualifierTypeBinding).getStructureItems());
+					result.addAll(getFieldProposals(dBindings, addEquals, includePrivateFields, propertyBlockList));
+					return result;
+										
+				case ITypeBinding.LIBRARY_BINDING:
+					result.addAll(getFieldProposals(((LibraryBinding) qualifierTypeBinding).getDeclaredData(), addEquals, includePrivateFields, propertyBlockList));
+					if(includeFunctions) {
+						result.addAll(getFunctionProposals(
+							((LibraryBinding) qualifierTypeBinding).getDeclaredFunctions(),
+							UINlsStrings.bind(UINlsStrings.CAProposal_LibraryFunction, qualifierTypeBinding.getCaseSensitiveName()),
+							EGLCompletionProposal.RELEVANCE_LIBRARY_FUNCTION));
+					}
+					return result;
+
+				case ITypeBinding.DATATABLE_BINDING:
+					result.addAll(getFieldProposals(((DataTableBinding) qualifierTypeBinding).getStructureItems(), addEquals, includePrivateFields, propertyBlockList));
+					return result;
+
+				case ITypeBinding.SERVICE_BINDING:
+					if(qualifierExpression instanceof ThisExpression) {
+						result.addAll(getFieldProposals(((ServiceBinding) qualifierTypeBinding).getDeclaredData(), addEquals, includePrivateFields, propertyBlockList));
+					}
+					if(includeFunctions) {
+						result.addAll(getFunctionProposals(((ServiceBinding) qualifierTypeBinding).getDeclaredFunctions(),
+								UINlsStrings.bind(UINlsStrings.CAProposal_ServiceFunction, qualifierTypeBinding.getCaseSensitiveName()),
+								EGLCompletionProposal.RELEVANCE_LIBRARY_FUNCTION));
+					}
+					return result;
+
+				case ITypeBinding.INTERFACE_BINDING:
+					if(includeFunctions) {
+						result.addAll(getFunctionProposals(((InterfaceBinding) qualifierTypeBinding).getDeclaredFunctions(),
+								UINlsStrings.bind(UINlsStrings.CAProposal_InterfaceFunction, qualifierTypeBinding.getCaseSensitiveName()),
+								EGLCompletionProposal.RELEVANCE_LIBRARY_FUNCTION));
+					}
+					return result;
+				
+				case ITypeBinding.HANDLER_BINDING:
+					result.addAll(getFieldProposals(((HandlerBinding) qualifierTypeBinding).getDeclaredData(), addEquals, includePrivateFields, propertyBlockList));
+					if(includeFunctions) {
+						result.addAll(getFunctionProposals(((HandlerBinding) qualifierTypeBinding).getDeclaredFunctions(),
+								UINlsStrings.bind(UINlsStrings.CAProposal_HandlerFunction, qualifierTypeBinding.getCaseSensitiveName()),
+								EGLCompletionProposal.RELEVANCE_LIBRARY_FUNCTION));
+					}
+					return result;
+					
+				case ITypeBinding.ARRAY_TYPE_BINDING:
+					if(includeFunctions) {
+//						result.addAll(getSystemWordProposals(ArrayTypeBinding.getArrayFunctions(), UINlsStrings.CAProposal_ArrayFunctionSystemWord));
+					}
+					return result;					
+			}
+		}
+		return Collections.EMPTY_LIST;
+	}
+
+	private List filterStaticDataBindings(List dataBindings) {
+		List filteredList = new ArrayList();
+		for(Iterator iter = dataBindings.iterator(); iter.hasNext();) {
+			IDataBinding next = (IDataBinding) iter.next();
+			switch(next.getKind()) {
+				case IDataBinding.CLASS_FIELD_BINDING :
+					if(((ClassFieldBinding) next).isStatic()) {
+						filteredList.add(next);
+					}
+					break;
+				case IDataBinding.NESTED_FUNCTION_BINDING :
+					if(((IFunctionBinding) next.getType()).isStatic()) {
+						filteredList.add(next);
+					}
+					break;				
+			}
+		}
+		return filteredList;
+	}
+
+	private List getFieldProposals(Collection fieldDataBindings, boolean addEquals, boolean includePrivateFields, List propertyBlockList) {
+		List result = new ArrayList();
+		for(Iterator iter = fieldDataBindings.iterator(); iter.hasNext();) {
+			IDataBinding dataBinding = (IDataBinding) iter.next();
+			if(!includePrivateFields && dataBinding instanceof VariableBinding && ((VariableBinding) dataBinding).isPrivate() && !(qualifierExpression instanceof ThisExpression)) {
+				continue;
+			}
+			if(AmbiguousDataBinding.getInstance() != dataBinding) {
+				String proposalString = dataBinding.getCaseSensitiveName();
+				if (proposalString.toUpperCase().startsWith(getPrefix().toUpperCase())) {
+					if(!"*".equals(dataBinding.getName())) { //$NON-NLS-1$
+						String displayString = proposalString + " - " + dataBinding.getDeclaringPart().getName();	//$NON-NLS-1$;
+						if (!containsProperty(proposalString, propertyBlockList)) {
+							if (addEquals) {
+								if (dataBinding.getAnnotation(InternUtil.intern(new String[] {"egl", "ui", "rui"}), InternUtil.intern("VEEvent")) != null) {
+									proposalString = proposalString + " ::= "; //$NON-NLS-1$
+								}
+								else {
+									proposalString = proposalString + " = "; //$NON-NLS-1$
+								}
+							}
+							result.add(new EGLCompletionProposal(viewer,
+													displayString,
+													proposalString,
+													getAdditionalInfo(dataBinding),
+													getDocumentOffset() - getPrefix().length(),
+													getPrefix().length(),
+													proposalString.length(),
+													EGLCompletionProposal.RELEVANCE_MEDIUM-1));
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
+	private List getFunctionProposals(List functionBindings, String additionalInformation, int relevance) {
+		List result = new ArrayList();
+		for(Iterator iter = functionBindings.iterator(); iter.hasNext();) {
+			IDataBinding nestedFunctionBinding = (IDataBinding) iter.next();
+			IFunctionBinding functionBinding = (IFunctionBinding) nestedFunctionBinding.getType();
+			//Adding this check on 10/04/2006 for RATLC01129262.  From what I can tell private functions should never
+			//be returned.  If I am wrong, need to parameterize a boolean to determine whether or not to return private functions.
+			if (!functionBinding.isPrivate()) {
+				if (nestedFunctionBinding.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
+					result.addAll(createFunctionInvocationProposals(functionBinding, additionalInformation, relevance, false));
+				}
+			}
+		}
+		return result;
+	}
+
+	private List getSystemWordProposals(Map systemWords, String additionalInfo) {
+		List proposals = new ArrayList();
+		for (Iterator iter = systemWords.values().iterator(); iter.hasNext();) {
+			SystemFunctionBinding systemFunctionBinding = (SystemFunctionBinding) iter.next();
+			if (systemFunctionBinding.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
+				String displayString = systemFunctionBinding.getCaseSensitiveName();
+				String proposalString = displayString + "(" + getParmString(systemFunctionBinding) + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+				proposals.add(
+						new EGLCompletionProposal(viewer,
+							displayString,
+							proposalString,
+							additionalInfo,
+							getDocumentOffset() - getPrefix().length(),
+							getPrefix().length(),
+							displayString.length()+1,
+							EGLCompletionProposal.RELEVANCE_SYSTEM_WORD,
+							getFirstParmLength(systemFunctionBinding)));
+			}
+		}
+		return proposals;
+	}
+
+	private List getResourceAssociationSystemWordProposal() {
+		List proposals = new ArrayList();
+		if (IEGLConstants.SYSTEM_WORD_RESOURCEASSOCIATION.toUpperCase().startsWith(getPrefix().toUpperCase())) {
+			String displayString = IEGLConstants.SYSTEM_WORD_RESOURCEASSOCIATION;
+			String proposalString = IEGLConstants.SYSTEM_WORD_RESOURCEASSOCIATION + " = "; //$NON-NLS-1$
+			proposals.add(
+					new EGLCompletionProposal(viewer,
+						displayString,
+						proposalString,
+						UINlsStrings.CAProposal_VariableSystemWord,
+						getDocumentOffset() - getPrefix().length(),
+						getPrefix().length(),
+						proposalString.length(),
+						EGLCompletionProposal.RELEVANCE_SYSTEM_WORD));
+		}
+		return proposals;
+	}
+
+	private boolean isIORecordType() {
+		if (qualifierTypeBinding.getAnnotation(EGLIOFILE, IEGLConstants.RECORD_SUBTYPE_INDEXED) != null)
+			return true;
+		if (qualifierTypeBinding.getAnnotation(EGLIOFILE, IEGLConstants.RECORD_SUBTYPE_RELATIVE) != null)
+			return true;
+		if (qualifierTypeBinding.getAnnotation(EGLIOFILE, IEGLConstants.RECORD_SUBTYPE_SERIAL) != null)
+			return true;
+		if (qualifierTypeBinding.getAnnotation(EGLIOMQ, IEGLConstants.RECORD_SUBTYPE_MQ) != null)
+			return true;
+		return false;
+	}
+}
