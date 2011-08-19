@@ -28,6 +28,7 @@ import org.eclipse.edt.runtime.java.egl.lang.EglAny;
 
 import egl.lang.AnyException;
 import egl.lang.InvalidIndexException;
+import egl.lang.NullValueException;
 import eglx.java.JavaObjectException;
 
 
@@ -162,14 +163,6 @@ public class JavartUtil
 		}
 
 		return fullName.substring( 0, index );
-	}
-	
-	/**
-	 * Does nothing.  We generate a call to this method at the beginning of a
-	 * try statement so the compiler will let us catch any kind of exception.
-	 */
-	public static final void beginTry() throws AnyException
-	{
 	}
 	
 	/**
@@ -402,9 +395,9 @@ public class JavartUtil
 	}
 	
 	/**
-	 * This is called by generated code to ensure a try statement doesn't handle
-	 * an exception that can't be handled.  If the Exception that was caught 
-	 * can't be ignored, it is re-thrown.  Otherwise nothing happens.
+	 * This is called by generated code to ensure a try statement doesn't hide
+	 * an exception that can't be handled in EGL.  If the Exception that was 
+	 * caught can't be ignored, it is re-thrown.  Otherwise nothing happens.
 	 * 
 	 * @param caught  the Exception that was caught.
 	 * @throws the Exception, if it can't be ignored.
@@ -418,25 +411,62 @@ public class JavartUtil
 	}
 	
 	/**
-	 * Returns a new JavaObjectException for the given Throwable.
+	 * Returns a new AnyException for the given Throwable.  If the Throwable is
+	 * already an AnyException, it is returned.  If it's a NullPointerException,
+	 * a NullValueException will be returned.  In all other cases we'll return a
+	 * JavaObjectException. 
 	 */
-	public static JavaObjectException makeJavaObjectException( Throwable ex )
+	public static AnyException makeEglException( Throwable ex )
 	{
+		// This needs to be modified when we do https://bugs.eclipse.org/bugs/show_bug.cgi?id=355170
+		// because NullPointerExceptions that come from a JavaObject ET should be treated as
+		// JavaObjectExceptions, not NullValueExceptions.  Right now we assume
+		// every NullPointerException should become a NullValueException.
+		if ( ex instanceof AnyException )
+		{
+			return (AnyException)ex;
+		}
+		
 		String msg = ex.getMessage();
 		String className = ex.getClass().getName();
 		if ( msg == null || msg.trim().length() == 0 )
 		{
 			msg = className;
 		}
-		
-		JavaObjectException jox = new JavaObjectException();
-		jox.setMessageID( Message.CAUGHT_JAVA_EXCEPTION );
-		jox.setMessage( msg );
-		jox.exceptionType = className;
-		
-		return jox;
+
+		if ( ex instanceof NullPointerException )
+		{
+			NullValueException nvx = new NullValueException();
+			nvx.setMessageID( Message.NULL_REFERENCE );
+			nvx.setMessage( msg );
+			
+			return nvx;
+		}
+		else
+		{
+			JavaObjectException jox = new JavaObjectException();
+			jox.setMessageID( Message.CAUGHT_JAVA_EXCEPTION );
+			jox.setMessage( msg );
+			jox.exceptionType = className;
+			
+			return jox;
+		}
 	}
 	
+	/**
+	 * Returns true if the Exception is a JavaObjectException, or something that
+	 * should be represented as a JavaObjectException. 
+	 */
+	public static boolean isJavaObjectException( Exception ex )
+	{
+		// This needs to be modified when we do https://bugs.eclipse.org/bugs/show_bug.cgi?id=355170
+		// because NullPointerExceptions that come from a JavaObject ET should be treated as
+		// JavaObjectExceptions, not NullValueExceptions.  Right now we assume
+		// every NullPointerException should become a NullValueException.
+		return ex instanceof JavaObjectException 
+				|| (!(ex instanceof egl.lang.AnyException) && !(ex instanceof NullPointerException));
+	}
+
 	/**
 	 * Our ExecutorService (thread pool).
 	 */
