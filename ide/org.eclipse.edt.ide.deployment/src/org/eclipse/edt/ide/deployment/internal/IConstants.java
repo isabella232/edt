@@ -1,0 +1,25 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.ide.deployment.internal;
+
+public class IConstants {
+
+	public static final String HTML_FILE_EXTENSION = "html";
+	public static final String CONTEXT_ROOT_PARAMETER_NAME = "Context_Root_Parameter_Name";
+	public static final String RUI_PROXY_SERVLET_NAME = "RUI_PROXY_SERVLET_NAME";
+	public static final String RUI_REST_SERVLET_NAME = "RUI_REST_SERVLET_NAME";
+	public static final String PROPERTIES_FOLDER_NAME = "properties";
+	public static final String RUNTIME_MESSAGES_DEPLOYMENT_FOLDER_NAME = "properties";
+	public static final String HTML_FILE_LOCALE = "locale";
+	public static final String DEFAULT_LOCALE_PARAMETER_NAME = "default_locale";
+
+}

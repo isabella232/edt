@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipse.edt.deployment" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="org.eclipse.edt.deployment" id="deploymentSolution" name="EDT Deployment Solution"/>
+      </appinfo>
+      <documentation>
+         This extension point allows the contribution of an EDT deployment solution. Each contributed solution is visualized in the deployment wizard as a deployment option for the user to choose. The contribution must be able to visualize itself in the wizard and it must also perform the actual deployment logic given the artifact list to be deployed.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <sequence minOccurs="1" maxOccurs="unbounded">
+            <element ref="DeploymentSolution"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="DeploymentSolution">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  unique identifier for the contribution
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Provide visualization of this deployment solution to the deployment wizard and handles the deployment execution
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.edt.ide.deployment.rui.deploy.internal.wizard.IDeploymentSolution"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         EDT 0.7
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         The following is an example for the deployment solution extension point:
+&lt;p&gt;
+ &lt;pre&gt;
+   &lt;extension
+         point=&quot;org.eclipse.edt.ide.deployment.deploymentSolution&quot;&gt;
+      &lt;RIADeploymentSolution
+            class=&quot;org.eclipse.edt.ide.deployment.internal.solutions.SimpleDeploymentSolution&quot;
+            description=&quot;Deployment to a local directory&quot;
+            id=&quot;Simple.Local.Deployment&quot;
+            label=&quot;Simple Local Deployment&quot;&gt;
+      &lt;/RIADeploymentSolution&gt;
+   &lt;/extension&gt;
+   &lt;/fred&gt;
+ &lt;/pre&gt;
+&lt;/p&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         The value of the attribute class must represent a fully qualified name of the class that implements
+&lt;samp&gt;org.eclipse.edt.ide.deployment.internal.wizard.IDeploymentSolution&lt;/samp&gt;.
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         The RUI deploy plugin adds a single default deployment solution to the deploy wizard. All contributed deployment solutions will be added to the first page of the deployment wizard as a radio button entry. Page two of the deployment wizard will contain the visualization of the selected deployment solution.
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="copyright"/>
+      </appinfo>
+      <documentation>
+         Copyright (c) 2011 IBM Corporation and others.&lt;br&gt;
+All rights reserved. This program and the accompanying materials are made 
+available under the terms of the Eclipse Public License v1.0 which 
+accompanies this distribution, and is available at 
+&lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;
+      </documentation>
+   </annotation>
+
+</schema>
