@@ -11,3 +11,4 @@ Require-Bundle: org.eclipse.edt.gen;bundle-version="0.7.0",
  org.eclipse.edt.gen.egl.templates;bundle-version="0.7.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.eclipse.edt.gen.generator.egl
+Bundle-Vendor: Eclipse EGL Development Tools
