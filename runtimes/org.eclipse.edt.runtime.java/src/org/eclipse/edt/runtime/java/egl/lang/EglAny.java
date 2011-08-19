@@ -109,11 +109,11 @@ public abstract class EglAny implements egl.lang.EglAny {
 			if (ex.getTargetException() instanceof AnyException)
 				throw (AnyException)ex.getTargetException();
 			else
-				throw JavartUtil.makeJavaObjectException(ex.getTargetException());
+				throw JavartUtil.makeEglException(ex.getTargetException());
 		}
 		catch (Exception ex1) {
 			// Should not ever get here
-			throw JavartUtil.makeJavaObjectException(ex1);
+			throw JavartUtil.makeEglException(ex1);
 		}
 	}
 
