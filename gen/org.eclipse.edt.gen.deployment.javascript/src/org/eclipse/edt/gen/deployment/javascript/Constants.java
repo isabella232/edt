@@ -1,0 +1,138 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.gen.deployment.javascript;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Constants {
+
+	// EGL message id's
+	public static final String EGLMESSAGE_GENERATION_FAILED = "9990";
+	public static final String EGLMESSAGE_GENERATION_FAILED_HEADERMSG = "9991";
+	public static final String EGLMESSAGE_COMPILE_FAILED_HEADERMSG = "9992";
+	public static final String PROPERTIES_FOLDER_NAME = "properties"; //$NON-NLS-1$
+	public static final String RUNTIME_FOLDER_NAME = "runtime"; //$NON-NLS-1$
+	public static final String RUNTIME_MESSAGES_DEPLOYMENT_FOLDER_NAME = "egl/messages"; //$NON-NLS-1$
+	public static final String USES_SERVICELIB_BINDSERVICE_FUNCTION = "Uses ServiceLib.bindService function";
+	
+	/**
+	 * The following files are found in the org.eclipse.edt.runtime.javascript\runtime directory.
+	 * The files found in this list are automatically linked to an HTML file.
+	 * Do NOT add a file to this list if you do not want its contents to be added to EVERY HTML file.
+	 * Also note that files are linked in the order they appear here.  Be aware of dependencies!
+	 */
+	public static final List<String> RUI_RUNTIME_JAVASCRIPT_FILES = new ArrayList<String>();
+	static{
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl.js");  //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl_mathcontext.js");  //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl_bigdecimal.js");  //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("edt_runtime.js");  //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("webtoolkit.base64.js");  //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/jsrt/BaseTypesAndRuntimes.js");  //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/AnyException.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/ArraySizeException.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/DynamicAccessException.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/Enumeration.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/InvalidIndexException.js");  //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/InvalidPatternException.js");  //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/InvocationException.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/NullValueException.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/NumericOverflowException.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/ui/gateway/UIGatewayRecord.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/Http.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpMethod.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpRequest.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpResponse.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpREST.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpSOAP.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/java/JavaObjectException.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/javascript/JavaScriptObjectException.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/javascript/Job.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/json/Json.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/json/JSONParser.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/DateTimeLib.js"); 
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/MathLib.js");
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/StrLib.js");
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/SysLib.js");
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/rest/RestRuntime.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/Encoding.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceBinder.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceBindingException.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceInvocationException.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceKind.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceLib.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceRuntimes.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/ui/rui/RUILib.js");
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/ui/rui/Widget.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/ui/rui/Document.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/ui/rui/Event.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/ui/rui/View.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/xml/binding/annotation/Xml.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/xml/binding/annotation/XMLStructureKind.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/xml/Xml.js"); //$NON-NLS-1$
+	}
+	public static final String RUI_PROPERTIES_LIBRARY = "RUIPropertiesLibrary";
+	public final static String RUI_HANDLER = "eglx.ui.rui.RUIHandler";
+	public final static String RUI_WIDGET = "eglx.ui.rui.RUIWidget";	
+	
+	public static String Locale_Key_English = "en_US"; //$NON-NLS-1$
+	public static String Locale_Key_English_Runtime = "en_US"; //$NON-NLS-1$
+	
+	public static String Locale_Key_Arabic_Runtime = "ar"; //$NON-NLS-1$
+
+	public static String Locale_Key_Arabic_Egypt = "ar_EG"; //$NON-NLS-1$
+	
+	public static String Locale_Key_Arabic_Saudi_Arabia = "ar_SA"; //$NON-NLS-1$
+
+	public static String Locale_Key_Brazilian = "pt_BR"; //$NON-NLS-1$
+	public static String Locale_Key_Brazilian_Runtime = "pt_BR"; //$NON-NLS-1$
+	
+	public static String Locale_Key_Chinese_Simplified = "zh_CN"; //$NON-NLS-1$
+	public static String Locale_Key_Chinese_Simplified_Runtime = "zh"; //$NON-NLS-1$
+	public static String Locale_Key_Chinese_Taiwan = "zh_TW"; //$NON-NLS-1$
+	public static String Locale_Key_Chinese_Taiwan_Runtime = "zh_TW"; //$NON-NLS-1$
+	
+	public static String Locale_Key_Chinese_Hong_Kong = "zh_HK"; //$NON-NLS-1$
+	public static String Locale_Key_Chinese_Hong_Kong_Runtime = "zh_HK"; //$NON-NLS-1$
+	
+	public static String Locale_Key_Czech = "cs_CZ"; //$NON-NLS-1$
+	public static String Locale_Key_Czech_Runtime = "cs"; //$NON-NLS-1$
+	
+	public static String Locale_Key_French = "fr_FR"; //$NON-NLS-1$
+	public static String Locale_Key_French_Runtime = "fr"; //$NON-NLS-1$
+	
+	public static String Locale_Key_German = "de_DE"; //$NON-NLS-1$
+	public static String Locale_Key_German_Runtime = "de"; //$NON-NLS-1$
+	
+	public static String Locale_Key_Hungarian = "hu_HU"; //$NON-NLS-1$
+	public static String Locale_Key_Hungarian_Runtime = "hu"; //$NON-NLS-1$
+	
+	public static String Locale_Key_Italian = "it_IT"; //$NON-NLS-1$
+	public static String Locale_Key_Italian_Runtime = "it"; //$NON-NLS-1$
+	
+	public static String Locale_Key_Japanese = "ja_JP"; //$NON-NLS-1$
+	public static String Locale_Key_Japanese_Runtime = "ja"; //$NON-NLS-1$
+	
+	public static String Locale_Key_Korean = "ko_KR"; //$NON-NLS-1$
+	public static String Locale_Key_Korean_Runtime = "ko"; //$NON-NLS-1$
+	
+	public static String Locale_Key_Polish = "pl_PL"; //$NON-NLS-1$
+	public static String Locale_Key_Polish_Runtime = "pl"; //$NON-NLS-1$
+	
+	public static String Locale_Key_Russian = "ru_RU"; //$NON-NLS-1$
+	public static String Locale_Key_Russian_Runtime = "ru"; //$NON-NLS-1$
+	
+	public static String Locale_Key_Spanish = "es_ES"; //$NON-NLS-1$
+	public static String Locale_Key_Spanish_Runtime = "es"; //$NON-NLS-1$
+
+}

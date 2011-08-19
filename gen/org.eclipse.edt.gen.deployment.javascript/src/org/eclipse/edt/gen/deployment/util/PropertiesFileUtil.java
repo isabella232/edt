@@ -1,0 +1,71 @@
+/*******************************************************************************
+ * Copyright © 2008, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.gen.deployment.util;
+
+import com.ibm.icu.util.StringTokenizer;
+
+public class PropertiesFileUtil {
+
+	private static final String BUNDLE_SEPARATOR = "-";
+	
+	private String propertiesFileName;
+	private String userMessageLocale;
+	
+	public PropertiesFileUtil(String propertiesFileName, String userMessageLocale){
+		this.propertiesFileName = propertiesFileName;
+		this.userMessageLocale = userMessageLocale;		
+	}
+	
+	public String getBundleName(){
+		return propertiesFileName;
+	}
+	
+	public String getUserMessageLocale(){
+		return userMessageLocale;
+	}
+	
+	public String generateIncludeStatement(){
+		return propertiesFileName + BUNDLE_SEPARATOR + userMessageLocale + ".js";
+	}
+	
+	/**
+	 * Returns the names of files where we might find the properties.  They are ordered
+	 * from most specific to least specific.  For example, if the properties file name
+	 * is "foo" and the locale is "en_GB_variant1", this method will return an array
+	 * with the following elements:
+	 * <OL>
+	 * <LI>foo-en_GB_variant1.properties</LI>
+	 * <LI>foo-en_GB.properties</LI>
+	 * <LI>foo-en.properties</LI>
+	 * <LI>foo.properties</LI>
+	 * </OL>
+	 * 
+	 * @return the names of files where we might find the properties.
+	 */
+	public String[] generatePropertiesFileNames(){
+		StringTokenizer st = new StringTokenizer( userMessageLocale, "_" );
+		int count = st.countTokens();
+		String[] names = new String[ count + 1 ];
+		if ( count > 0 )
+		{
+			String prefix = propertiesFileName + BUNDLE_SEPARATOR + st.nextToken();
+			names[ count - 1 ] = prefix + ".properties";
+			for ( int i = count - 2; i >= 0; i-- )
+			{
+				prefix += '_' + st.nextToken();
+				names[ i ] = prefix + ".properties";
+			}
+		}
+		names[ count ] = propertiesFileName + ".properties";
+		return names;
+	}
+}

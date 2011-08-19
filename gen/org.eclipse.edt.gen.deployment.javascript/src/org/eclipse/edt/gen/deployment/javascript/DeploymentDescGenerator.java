@@ -1,0 +1,105 @@
+/*******************************************************************************
+ * Copyright © 2008, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.gen.deployment.javascript;
+
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Set;
+
+import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
+import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
+import org.eclipse.edt.ide.deployment.core.model.RestBinding;
+import org.eclipse.edt.ide.deployment.core.model.WebBinding;
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+
+public class DeploymentDescGenerator{
+
+
+	private TabbedWriter writer;
+	
+	public byte[] generateBindFile( DeploymentDesc deploymentDesc )
+	{
+		StringWriter stringWriter = new StringWriter();
+		writer = new TabbedWriter(stringWriter);
+		genBindJSFile(deploymentDesc);
+
+		byte[] result;
+		try {
+			result = stringWriter.toString().getBytes("UTF-8");
+		}
+		catch (UnsupportedEncodingException uee) {
+			result = stringWriter.toString().getBytes();
+		}
+		return result;
+	}
+	
+	private void genBindJSFile( DeploymentDesc deploymentDesc ) 
+	{
+		String eglddName = deploymentDesc.getName().toLowerCase();
+		writer.print("egl.eze$$BindFile_");
+		writer.print(JavaScriptAliaser.getJavascriptSafeAlias(eglddName));
+		writer.println(" = function() {");
+		writer.print("var bindFile = new egl.egl.jsrt.BindFile(\"");
+		writer.print(eglddName);
+		writer.println("\");");
+		writer.println("var binding;");
+		ArrayList webBindings = deploymentDesc.getWebBindings();
+		for (int i = 0; i < webBindings.size(); i++)
+		{
+			WebBinding webBinding = (WebBinding) webBindings.get(i);
+			if (webBinding.isEnableGeneration())
+			{
+				writer.println("binding = new egl.egl.jsrt.WebBinding(");
+				writer.pushIndent();
+				writer.println("/*name        */ \"" + webBinding.getName() + "\",");
+				writer.println("/*interface   */ \"" + webBinding.getInterface() + "\",");
+				writer.println("/*wsdlLocation*/ \"" + webBinding.getWsdlLocation() + "\",");
+				writer.println("/*wsdlService */ \"" + webBinding.getWsdlService() + "\",");
+				writer.println("/*wsdlPort    */ \"" + webBinding.getWsdlPort() + "\",");
+				writer.println("/*uri         */ \"" + webBinding.getUri() + "\"");
+				writer.popIndent();
+				writer.println(");");
+				writer.println("bindFile.bindings.push(binding);");
+			}
+		}
+		ArrayList restBindings = deploymentDesc.getRestBindings();
+		for (int i = 0; i < restBindings.size(); i++)
+		{
+			RestBinding restBinding = (RestBinding) restBindings.get(i);
+			if (restBinding.isEnableGeneration())
+			{
+				writer.println("binding = new egl.egl.jsrt.RestBinding(");
+				writer.pushIndent();
+				writer.println("/*name                   */ \"" + restBinding.getName().toLowerCase() + "\",");
+				writer.println("/*baseURI                */ \"" + restBinding.getBaseURI() + "\",");
+				writer.print("/*sessionCookieId        */ ");
+				if (restBinding.getSessionCookieId() != null)
+				{
+					writer.println("\"" + restBinding.getSessionCookieId() + "\"");
+				}
+				else
+				{
+					writer.println("null");
+				}			
+				writer.popIndent();
+				writer.println(");");
+				writer.println("bindFile.bindings.push(binding);");
+			}
+		}	
+		writer.println("return bindFile;");
+		writer.println("}");
+	}
+
+}
