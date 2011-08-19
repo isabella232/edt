@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import java.util.List;
+
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -23,25 +25,9 @@ public class TryStatementTemplate extends JavaTemplate {
 	public void genStatementBody(TryStatement stmt, Context ctx, TabbedWriter out) {
 		out.print("try ");
 		ctx.invoke(genStatement, stmt.getTryBlock(), ctx, out);
-		// If there's an onException block for AnyException, it must be generated
-		// last or the generated code may not compile due to an unreachable catch block.
-		ExceptionBlock anyExBlock = null;
-		for (ExceptionBlock exceptionBlock : stmt.getExceptionBlocks()) {
-			if ( exceptionBlock.getException().getType().getTypeSignature().equals( "egl.lang.AnyException" ) )
-			{
-				anyExBlock = exceptionBlock;
-			}
-			else
-			{
-				genException(exceptionBlock, ctx, out);
-			}
-		}
-		if ( anyExBlock != null )
-		{
-			genException(anyExBlock, ctx, out);
-		}
 		
-		if ( stmt.getExceptionBlocks().isEmpty() )
+		List<ExceptionBlock> blocks = stmt.getExceptionBlocks();
+		if ( blocks.isEmpty() )
 		{
 			// Since there are no onException blocks, generate code to ignore all
 			// handleable exceptions.
@@ -51,44 +37,168 @@ public class TryStatementTemplate extends JavaTemplate {
 			out.println( "org.eclipse.edt.javart.util.JavartUtil.checkHandleable( " + exTemp + " );" );
 			out.println( '}' );
 		}
+		else
+		{
+			// Three kinds of onException blocks require special generation: AnyException,
+			// NullValueException, and JavaObjectException.  They require us to catch
+			// all Exceptions, then check if we got the kind of exception we were
+			// looking for.  We generate them after the other onException blocks so
+			// they can't cause an "unreachable catch block" error.
+			ExceptionBlock anyExBlock = null;
+			ExceptionBlock nullValueExBlock = null;
+			ExceptionBlock javaOjbectExBlock = null;
+			int specialBlocksCount = 0;
+			for (ExceptionBlock exceptionBlock : blocks) {
+				String sig = exceptionBlock.getException().getType().getTypeSignature();
+				if ( sig.equals( "egl.lang.AnyException" ) )
+				{
+					anyExBlock = exceptionBlock;
+					specialBlocksCount++;
+				}
+				else if ( sig.equals( "egl.lang.NullValueException" ) )
+				{
+					nullValueExBlock = exceptionBlock;
+					specialBlocksCount++;
+				}
+				else if ( sig.equals( "eglx.java.JavaObjectException" ) )
+				{
+					javaOjbectExBlock = exceptionBlock;
+					specialBlocksCount++;
+				}
+				else
+				{
+					genOnException(exceptionBlock, ctx, out);
+				}
+			}
+			
+			if ( specialBlocksCount == 1 )
+			{
+				ExceptionBlock block = 
+					anyExBlock != null ? anyExBlock : (nullValueExBlock != null ? nullValueExBlock : javaOjbectExBlock);
+				genOneSpecialOnException(block, ctx, out);
+			}
+			else if ( specialBlocksCount > 1 )
+			{
+				genSpecialOnExceptions(anyExBlock, nullValueExBlock, javaOjbectExBlock, ctx, out);
+			}
+		}
 	}
 
-	public void genException(ExceptionBlock exceptionBlock, Context ctx, TabbedWriter out) {
+	public void genOnException(ExceptionBlock exceptionBlock, Context ctx, TabbedWriter out) {
 		Parameter ex = exceptionBlock.getException();
 		CommonUtilities.generateSmapExtension(ex, ctx);
-		String exClass = ctx.getNativeImplementationMapping(ex.getType());
-		if ( ex.getType().getTypeSignature().equals( "egl.lang.AnyException" ) )
+		out.print("catch (" + ctx.getNativeImplementationMapping(ex.getType()) + " ");
+		ctx.invoke(genName, ex, ctx, out);
+		out.print(") ");
+		ctx.invoke(genStatement, exceptionBlock, ctx, out);
+	}
+
+	public void genOneSpecialOnException( ExceptionBlock exceptionBlock, Context ctx, TabbedWriter out ) 
+	{
+		// When catching one of the special exceptions, we actually catch java.lang.Exception
+		// and then cast to one of our exceptions (or create a new one) before the 
+		// statements in the block.
+		Parameter ex = exceptionBlock.getException();
+		String exClass = ctx.getNativeImplementationMapping( ex.getType() );
+		String exTemp = ctx.nextTempName();
+		out.println( "catch ( java.lang.Exception " + exTemp + " )" );
+		out.println( '{' );
+		out.println( "org.eclipse.edt.javart.util.JavartUtil.checkHandleable( " + exTemp + " );" );
+		CommonUtilities.generateSmapExtension( ex, ctx );
+		out.print( exClass + ' ' );
+		ctx.invoke( genName, ex, ctx, out );
+		out.println( ';' );
+		out.println( "if ( " + exTemp + " instanceof " + exClass + " )" );
+		out.println( '{' );
+		ctx.invoke( genName, ex, ctx, out );
+		out.println( " = (" + exClass + ")" + exTemp + ';' );
+		out.println( '}' );
+		if ( !ex.getType().getTypeSignature().equals( "egl.lang.AnyException" ) )
 		{
-			// When catching AnyExceptions, we actually catch java.lang.Exception
-			// and then cast to AnyException, or create a new one, before the 
-			// statements in the block.
-			String exTemp = ctx.nextTempName();
-			out.println( "catch ( java.lang.Exception " + exTemp + " )" );
+			out.println( "else if ( " + exTemp + " instanceof egl.lang.AnyException )" );
 			out.println( '{' );
-			out.println( "org.eclipse.edt.javart.util.JavartUtil.checkHandleable( " + exTemp + " );" );
+			out.println( "throw (egl.lang.AnyException)" + exTemp + ';' );
+			out.println( '}' );
+		}
+		out.println( "else" );
+		out.println( '{' );
+		ctx.invoke( genName, ex, ctx, out );
+		out.print( " = " );
+		if ( !ex.getType().getTypeSignature().equals( "egl.lang.AnyException" ) )
+		{
+			out.print( "(" + exClass + ')' );
+		}
+		out.println( "org.eclipse.edt.javart.util.JavartUtil.makeEglException(" + exTemp + ");" );
+		out.println( '}' );			
+		ctx.invoke( genStatement, exceptionBlock, ctx, out );
+		out.println( '}' );
+	}
+	
+	/*
+	 * At most, one of the ExceptionBlocks may be null. 
+	 */
+	public void genSpecialOnExceptions( ExceptionBlock anyExBlock, ExceptionBlock nullValueExBlock, 
+			ExceptionBlock javaOjbectExBlock, Context ctx, TabbedWriter out )
+	{
+		// When catching one of the special exceptions, we actually catch java.lang.Exception
+		// and then cast to one of our exceptions (or create a new one) before the 
+		// statements in the block.
+		String exTemp = ctx.nextTempName();
+		out.println( "catch ( java.lang.Exception " + exTemp + " )" );
+		out.println( '{' );
+		out.println( "org.eclipse.edt.javart.util.JavartUtil.checkHandleable( " + exTemp + " );" );
+		
+		if ( nullValueExBlock != null )
+		{
+			Parameter ex = nullValueExBlock.getException();
+			String exClass = ctx.getNativeImplementationMapping( ex.getType() );
+			out.println( "if ( " + exTemp + " instanceof " + exClass + " || " + exTemp + " instanceof java.lang.NullPointerException )" );
+			out.println( '{' );
+			CommonUtilities.generateSmapExtension( ex, ctx );
 			out.print( exClass + ' ' );
-			ctx.invoke(genName, ex, ctx, out);
-			out.println( ';' );
-			out.println( "if ( " + exTemp + " instanceof " + exClass + " )" );
-			out.println( '{' );
-			ctx.invoke(genName, ex, ctx, out);
-			out.println( " = (" + exClass + ")" + exTemp + ';' );
+			ctx.invoke( genName, ex, ctx, out );
+			out.println( " = (" + exClass + ")org.eclipse.edt.javart.util.JavartUtil.makeEglException(" + exTemp + ");" );
+			ctx.invoke( genStatement, nullValueExBlock, ctx, out );
 			out.println( '}' );
-			out.println( "else" );
+		}
+		
+		if ( javaOjbectExBlock != null )
+		{
+			Parameter ex = javaOjbectExBlock.getException();
+			String exClass = ctx.getNativeImplementationMapping( ex.getType() );
+			if ( nullValueExBlock != null )
+			{
+				out.print( "else " );
+			}
+			out.println( "if ( org.eclipse.edt.javart.util.JavartUtil.isJavaObjectException(" + exTemp + ") )" );
 			out.println( '{' );
-			ctx.invoke(genName, ex, ctx, out);
-			out.println( " = org.eclipse.edt.javart.util.JavartUtil.makeJavaObjectException(" + exTemp + ");" );
-			out.println( '}' );			
-			ctx.invoke(genStatement, exceptionBlock, ctx, out);
+			CommonUtilities.generateSmapExtension( ex, ctx );
+			out.print( exClass + ' ' );
+			ctx.invoke( genName, ex, ctx, out );
+			out.println( " = (" + exClass + ")org.eclipse.edt.javart.util.JavartUtil.makeEglException(" + exTemp + ");" );
+			ctx.invoke( genStatement, javaOjbectExBlock, ctx, out );
 			out.println( '}' );
+		}
+
+		out.println( "else" );
+		out.println( '{' );
+		if ( anyExBlock != null )
+		{
+			Parameter ex = anyExBlock.getException();
+			String exClass = ctx.getNativeImplementationMapping( ex.getType() );
+			CommonUtilities.generateSmapExtension( ex, ctx );
+			out.print( exClass + ' ' );
+			ctx.invoke( genName, ex, ctx, out );
+			out.println( " = org.eclipse.edt.javart.util.JavartUtil.makeEglException(" + exTemp + ");" );
+			ctx.invoke( genStatement, anyExBlock, ctx, out );
 		}
 		else
 		{
-			out.print("catch (" + exClass + " ");
-			ctx.invoke(genName, ex, ctx, out);
-			out.print(") ");
-			ctx.invoke(genStatement, exceptionBlock, ctx, out);
+			out.println( "throw (egl.lang.AnyException)" + exTemp + ';' );
 		}
+		out.println( '}' );
+		
+		out.println( '}' );
 	}
 
 	public void genStatementEnd(TryStatement stmt, Context ctx, TabbedWriter out) {
