@@ -697,6 +697,10 @@ class Egl2MofMember extends Egl2MofPart {
 			setElementInformation(initializer, stmt);
 			field.getInitializerStatements().getStatements().add(stmt);
 			field.setHasSetValuesBlock(true);
+			//handle the annotations
+			if (settingsBlock != null) {
+				processSettings(field, settingsBlock);
+			}
 		}
 		else if (settingsBlock != null) {
 			processSettings(field, settingsBlock);
