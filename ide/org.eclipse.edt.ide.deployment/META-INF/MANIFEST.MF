@@ -49,3 +49,4 @@ Export-Package: org.eclipse.edt.ide.deployment,
  org.eclipse.edt.ide.deployment.results,
  org.eclipse.edt.ide.deployment.solution,
  org.eclipse.edt.ide.deployment.utilities
+Bundle-Vendor: Eclipse EGL Development Tools
