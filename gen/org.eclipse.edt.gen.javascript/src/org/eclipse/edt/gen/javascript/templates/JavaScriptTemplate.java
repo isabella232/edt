@@ -102,6 +102,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	// constants that allow container based processing. each of these will attempt to find the user provided container based
 	// method, and if not found, will then end up back in type template and invoked the method name without "containerbased"
 	public static final String genContainerBasedAccessor = "genContainerBasedAccessor";
+	public static final String genContainerBasedAccessorArgs = "genContainerBasedAccessorArgs";
 	public static final String genContainerBasedArrayAccess = "genContainerBasedArrayAccess";
 	public static final String genContainerBasedAssignment = "genContainerBasedAssignment";
 	public static final String genContainerBasedMemberAccess = "genContainerBasedMemberAccess";
