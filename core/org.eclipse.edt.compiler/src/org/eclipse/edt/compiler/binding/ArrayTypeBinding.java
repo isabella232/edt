@@ -220,6 +220,9 @@ public static final SystemFunctionBinding SORT = SystemLibrary.createSystemFunct
 		ARRAY_FUNCTIONS.put(SORT.getName(), new NestedFunctionBinding(SORT.getName(), null, SORT));
 	}
 	
+	public static Map getArrayFunctions(){
+		return ARRAY_FUNCTIONS;
+	}
 	public boolean isReference() {
 		return isReference;
 	}

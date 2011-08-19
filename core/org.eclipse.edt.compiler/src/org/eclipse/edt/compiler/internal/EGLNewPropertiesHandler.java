@@ -39,6 +39,26 @@ public class EGLNewPropertiesHandler {
 	
 	private static Set REPLACEME = Collections.EMPTY_SET;
 	
+	/*This is not thread safe
+	 *You need to pass a AnnotationTypeManager into the class when you want to use 
+	 *getPropertyRules, 
+	 *createRulesForSubtypes,
+	 *createRulesFor,
+	 *createRulesForElementKinds functions of this class*/
+	/*Different project may have different enviroment thus different AnnotationTypeManager.
+	 * If new AnnotationTypeManager provided everything need to be calculate again.
+	 */
+	private static AnnotationTypeManager oldAnnoTypeMgr = null;
+	private static AnnotationTypeManager annoTypeMgr = null;
+	public static void setAnnoTypeMgr(AnnotationTypeManager aAnnoTypeMgr){
+		oldAnnoTypeMgr = annoTypeMgr;
+		annoTypeMgr = aAnnoTypeMgr;
+	}
+	
+	private static boolean needRecalculateForNewAnno(Set annoSet){
+		return(oldAnnoTypeMgr != annoTypeMgr || annoSet == null);
+	}
+	
     // types expected for the property
     public static final int nameValue = 0;
     public static final int quotedValue = 1;
@@ -486,7 +506,7 @@ public class EGLNewPropertiesHandler {
 	
 	private static Set AllHandlerPropertyRules;
 	private static Set getAllHandlerPropertyRules() {
-		if (AllHandlerPropertyRules == null) {
+		if ( needRecalculateForNewAnno(AllHandlerPropertyRules) ) {
 			AllHandlerPropertyRules = new TreeSet();
 			AllHandlerPropertyRules.addAll(createRulesForElementKinds(ElementKind.HANDLERPART));
 		}
@@ -496,7 +516,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set PcbParmsPropertyRules;
 	private static Set getPcbParmsPropertyRules() {
-		if (PcbParmsPropertyRules == null) {
+		if ( needRecalculateForNewAnno(PcbParmsPropertyRules) ) {
 			PcbParmsPropertyRules = new TreeSet();
 			PcbParmsPropertyRules.addAll(createRulesForField(IEGLConstants.PROPERTY_DLI, IEGLConstants.PROPERTY_PCBPARMS));
 		}
@@ -506,7 +526,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set LinkParmsPropertyRules;
 	private static Set getLinkParmsPropertyRules() {
-		if (LinkParmsPropertyRules == null) {
+		if ( needRecalculateForNewAnno(LinkParmsPropertyRules) ) {
 			LinkParmsPropertyRules = new TreeSet();
 			LinkParmsPropertyRules.addAll(createRulesForField(IEGLConstants.PROPERTY_PROGRAMLINKDATA, IEGLConstants.PROPERTY_LINKPARMS));
 		}
@@ -516,7 +536,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set JavaOnlyAbstractFunctionPropertyRules;
 	private static Set getJavaOnlyAbstractFunctionPropertyRules() {
-		if (JavaOnlyAbstractFunctionPropertyRules == null) {
+		if ( needRecalculateForNewAnno(JavaOnlyAbstractFunctionPropertyRules) ) {
 			JavaOnlyAbstractFunctionPropertyRules = new TreeSet();
 			JavaOnlyAbstractFunctionPropertyRules.addAll(REPLACEME);
 		}
@@ -526,7 +546,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set ExternalTypeFunctionPropertyRules;
 	private static Set getExternalTypeFunctionPropertyRules() {
-		if (ExternalTypeFunctionPropertyRules == null) {
+		if ( needRecalculateForNewAnno(ExternalTypeFunctionPropertyRules) ) {
 			ExternalTypeFunctionPropertyRules = new TreeSet();
 			ExternalTypeFunctionPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_JAVANAME));
 			ExternalTypeFunctionPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_THROWSEXCEPTIONS));
@@ -537,7 +557,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set BasicAbstractFunctionPropertyRules;
 	private static Set getBasicAbstractFunctionPropertyRules() {
-		if (BasicAbstractFunctionPropertyRules == null) {
+		if ( needRecalculateForNewAnno(BasicAbstractFunctionPropertyRules) ) {
 			BasicAbstractFunctionPropertyRules = new TreeSet();
 			BasicAbstractFunctionPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_XML));
 		}
@@ -547,7 +567,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set InterfaceDeclarationPropertyRules;
 	private static Set getInterfaceDeclarationPropertyRules() {
-		if (InterfaceDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(InterfaceDeclarationPropertyRules) ) {
 			InterfaceDeclarationPropertyRules = new TreeSet();
 			InterfaceDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_BINDSERVICE));
 			InterfaceDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_RESTBINDING));
@@ -559,7 +579,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set JavaObjectPropertyRules;
 	private static Set getJavaObjectPropertyRules() {
-		if (JavaObjectPropertyRules == null) {
+		if ( needRecalculateForNewAnno(JavaObjectPropertyRules) ) {
 			JavaObjectPropertyRules = new TreeSet();
 			JavaObjectPropertyRules.addAll(createRulesForElementKinds(ElementKind.EXTERNALTYPEPART));
 			JavaObjectPropertyRules.addAll(createRulesForFields(IEGLConstants.EXTERNALTYPE_SUBTYPE_JAVAOBJECT));
@@ -570,7 +590,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set JavaScriptObjectPropertyRules;
 	private static Set getJavaScriptObjectPropertyRules() {
-		if (JavaScriptObjectPropertyRules == null) {
+		if ( needRecalculateForNewAnno(JavaScriptObjectPropertyRules) ) {
 			JavaScriptObjectPropertyRules = new TreeSet();
 			JavaScriptObjectPropertyRules.addAll(createRulesForElementKinds(ElementKind.EXTERNALTYPEPART));
 			JavaScriptObjectPropertyRules.addAll(createRulesForFields(IEGLConstants.EXTERNALTYPE_SUBTYPE_JAVASCRIPTOBJECT));
@@ -581,7 +601,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set HostProgramPropertyRules;
 	private static Set getHostProgramPropertyRules() {
-		if (HostProgramPropertyRules == null) {
+		if ( needRecalculateForNewAnno(HostProgramPropertyRules) ) {
 			HostProgramPropertyRules = new TreeSet();
 			HostProgramPropertyRules.addAll(createRulesForElementKinds(ElementKind.EXTERNALTYPEPART));
 			HostProgramPropertyRules.addAll(createRulesForFields(IEGLConstants.EXTERNALTYPE_SUBTYPE_HOSTPROGRAM));
@@ -592,7 +612,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set BasicInterfacePropertyRules;
 	private static Set getBasicInterfacePropertyRules() {
-		if (BasicInterfacePropertyRules == null) {
+		if ( needRecalculateForNewAnno(BasicInterfacePropertyRules) ) {
 			BasicInterfacePropertyRules = new TreeSet();
 			BasicInterfacePropertyRules.addAll(createRulesForElementKinds(ElementKind.INTERFACEPART));
 		}
@@ -602,7 +622,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set ServiceFunctionPropertyRules;
 	private static Set getServiceFunctionPropertyRules() {
-		if (ServiceFunctionPropertyRules == null) {
+		if ( needRecalculateForNewAnno(ServiceFunctionPropertyRules) ) {
 			ServiceFunctionPropertyRules = new TreeSet();
 			ServiceFunctionPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_XML));
 		}
@@ -612,7 +632,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set ServiceDeclarationPropertyRules;
 	private static Set getServiceDeclarationPropertyRules() {
-		if (ServiceDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(ServiceDeclarationPropertyRules) ) {
 			ServiceDeclarationPropertyRules = new TreeSet();
 			ServiceDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_BINDSERVICE));
 			ServiceDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_DEDICATEDSERVICE));
@@ -625,7 +645,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set ServicePropertyRules;
 	private static Set getServicePropertyRules() {
-		if (ServicePropertyRules == null) {
+		if ( needRecalculateForNewAnno(ServicePropertyRules) ) {
 			ServicePropertyRules = new TreeSet();
 			ServicePropertyRules.addAll(createRulesForElementKinds(ElementKind.SERVICEPART));
 		}
@@ -635,7 +655,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DLISegmentPropertyRules;
 	private static Set getDLISegmentPropertyRules() {
-		if (DLISegmentPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DLISegmentPropertyRules) ) {
 			DLISegmentPropertyRules = new TreeSet();
 			DLISegmentPropertyRules.addAll(createRulesForElementKinds(ElementKind.RECORDPART));
 			DLISegmentPropertyRules.addAll(createRulesForFields(IEGLConstants.RECORD_SUBTYPE_DLI_SEGMENT));
@@ -646,7 +666,7 @@ public class EGLNewPropertiesHandler {
 	
 	private static Set DynamicDLISegmentPropertyRules;
 	private static Set getDynamicDLISegmentPropertyRules() {
-		if (DynamicDLISegmentPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DynamicDLISegmentPropertyRules) ) {
 			DynamicDLISegmentPropertyRules = new TreeSet();
 			DynamicDLISegmentPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_MAXSIZE));
 			DynamicDLISegmentPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -659,7 +679,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set PSBRecordPropertyRules;
 	private static Set getPSBRecordPropertyRules() {
-		if (PSBRecordPropertyRules == null) {
+		if ( needRecalculateForNewAnno(PSBRecordPropertyRules) ) {
 			PSBRecordPropertyRules = new TreeSet();
 			PSBRecordPropertyRules.addAll(createRulesForElementKinds(ElementKind.RECORDPART));
 			PSBRecordPropertyRules.addAll(createRulesForFields(IEGLConstants.RECORD_SUBTYPE_PSB_RECORD));
@@ -670,7 +690,7 @@ public class EGLNewPropertiesHandler {
 	
 	private static Set DynamicPSBRecordPropertyRules;
 	private static Set getDynamicPSBRecordPropertyRules() {
-		if (DynamicPSBRecordPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DynamicPSBRecordPropertyRules) ) {
 			DynamicPSBRecordPropertyRules = new TreeSet();
 			DynamicPSBRecordPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_MAXSIZE));
 			DynamicPSBRecordPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -683,7 +703,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set TuiArrayElementFormFieldPropertyRules;
 	private static Set getTuiArrayElementFormFieldPropertyRules() {
-		if (TuiArrayElementFormFieldPropertyRules == null) {
+		if ( needRecalculateForNewAnno(TuiArrayElementFormFieldPropertyRules) ) {
 			TuiArrayElementFormFieldPropertyRules = new TreeSet();
 			TuiArrayElementFormFieldPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_VALUE));
 			TuiArrayElementFormFieldPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_CURSOR));
@@ -698,7 +718,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set FormFieldPropertyRules;
 	private static Set getFormFieldPropertyRules() {
-		if (FormFieldPropertyRules == null) {
+		if ( needRecalculateForNewAnno(FormFieldPropertyRules) ) {
 			FormFieldPropertyRules = new TreeSet();
 			FormFieldPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_FIELDLEN));
 			FormFieldPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_POSITION));
@@ -710,7 +730,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set CommonVariableFormFieldPropertyRules;
 	private static Set getCommonVariableFormFieldPropertyRules() {
-		if (CommonVariableFormFieldPropertyRules == null) {
+		if ( needRecalculateForNewAnno(CommonVariableFormFieldPropertyRules) ) {
 			CommonVariableFormFieldPropertyRules = new TreeSet();
 			CommonVariableFormFieldPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_COLUMNS));
 			CommonVariableFormFieldPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_LINESBETWEENROWS));
@@ -723,7 +743,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set OpenUIPropertyRules;
 	private static Set getOpenUIPropertyRules() {
-		if (OpenUIPropertyRules == null) {
+		if ( needRecalculateForNewAnno(OpenUIPropertyRules) ) {
 			OpenUIPropertyRules = new TreeSet();
 			OpenUIPropertyRules.addAll(createRulesForElementKinds(ElementKind.OPENUISTATEMENT));
 		}
@@ -733,7 +753,7 @@ public class EGLNewPropertiesHandler {
 	
 	private static Set CallPropertyRules;
 	private static Set getCallPropertyRules() {
-		if (CallPropertyRules == null) {
+		if ( needRecalculateForNewAnno(CallPropertyRules) ) {
 			CallPropertyRules = new TreeSet();
 			CallPropertyRules.addAll(createRulesForElementKinds(ElementKind.CALLSTATEMENT));
 		}
@@ -743,7 +763,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set ExitPropertyRules;
 	private static Set getExitPropertyRules() {
-		if (ExitPropertyRules == null) {
+		if ( needRecalculateForNewAnno(ExitPropertyRules) ) {
 			ExitPropertyRules = new TreeSet();
 			ExitPropertyRules.addAll(createRulesForElementKinds(ElementKind.EXITSTATEMENT));
 		}
@@ -754,7 +774,7 @@ public class EGLNewPropertiesHandler {
 	
 	private static Set TransferPropertyRules;
 	private static Set getTransferPropertyRules() {
-		if (TransferPropertyRules == null) {
+		if ( needRecalculateForNewAnno(TransferPropertyRules) ) {
 			TransferPropertyRules = new TreeSet();
 			TransferPropertyRules.addAll(createRulesForElementKinds(ElementKind.TRANSFERSTATEMENT));
 		}
@@ -764,7 +784,7 @@ public class EGLNewPropertiesHandler {
 	
 	private static Set ShowPropertyRules;
 	private static Set getShowPropertyRules() {
-		if (ShowPropertyRules == null) {
+		if ( needRecalculateForNewAnno(ShowPropertyRules) ) {
 			ShowPropertyRules = new TreeSet();
 			ShowPropertyRules.addAll(createRulesForElementKinds(ElementKind.SHOWSTATEMENT));
 		}
@@ -774,7 +794,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set PromptPropertyRules;
 	private static Set getPromptPropertyRules() {
-		if (PromptPropertyRules == null) {
+		if ( needRecalculateForNewAnno(PromptPropertyRules) ) {
 			PromptPropertyRules = new TreeSet();
 			PromptPropertyRules.addAll(REPLACEME);
 		}
@@ -784,7 +804,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set MenuItemPropertyRules;
 	private static Set getMenuItemPropertyRules() {
-		if (MenuItemPropertyRules == null) {
+		if ( needRecalculateForNewAnno(MenuItemPropertyRules) ) {
 			MenuItemPropertyRules = new TreeSet();
 			MenuItemPropertyRules.addAll(REPLACEME);
 		}
@@ -794,7 +814,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set MenuPropertyRules;
 	private static Set getMenuPropertyRules() {
-		if (MenuPropertyRules == null) {
+		if ( needRecalculateForNewAnno(MenuPropertyRules) ) {
 			MenuPropertyRules = new TreeSet();
 			MenuPropertyRules.addAll(REPLACEME);
 		}
@@ -804,7 +824,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set PresentationAttributesPropertyRules;
 	private static Set getPresentationAttributesPropertyRules() {
-		if (PresentationAttributesPropertyRules == null) {
+		if ( needRecalculateForNewAnno(PresentationAttributesPropertyRules) ) {
 			PresentationAttributesPropertyRules = new TreeSet();
 			PresentationAttributesPropertyRules.addAll(REPLACEME);
 		}
@@ -814,7 +834,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set WindowPropertyRules;
 	private static Set getWindowPropertyRules() {
-		if (WindowPropertyRules == null) {
+		if ( needRecalculateForNewAnno(WindowPropertyRules) ) {
 			WindowPropertyRules = new TreeSet();
 			WindowPropertyRules.addAll(REPLACEME);
 		}
@@ -824,7 +844,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set ConsoleArrayFieldPropertyRules;
 	private static Set getConsoleArrayFieldPropertyRules() {
-		if (ConsoleArrayFieldPropertyRules == null) {
+		if ( needRecalculateForNewAnno(ConsoleArrayFieldPropertyRules) ) {
 			ConsoleArrayFieldPropertyRules = new TreeSet();
 			ConsoleArrayFieldPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.RECORD_SUBTYPE_CONSOLE_FORM));
 			ConsoleArrayFieldPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_COLUMNS));
@@ -838,7 +858,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set ConsoleFieldPropertyRules;
 	private static Set getConsoleFieldPropertyRules() {
-		if (ConsoleFieldPropertyRules == null) {
+		if ( needRecalculateForNewAnno(ConsoleFieldPropertyRules) ) {
 			ConsoleFieldPropertyRules = new TreeSet();
 			ConsoleFieldPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.RECORD_SUBTYPE_CONSOLE_FORM));
 		}
@@ -848,7 +868,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set ConsoleFormPropertyRules;
 	private static Set getConsoleFormPropertyRules() {
-		if (ConsoleFormPropertyRules == null) {
+		if ( needRecalculateForNewAnno(ConsoleFormPropertyRules) ) {
 			ConsoleFormPropertyRules = new TreeSet();
 			ConsoleFormPropertyRules.addAll(createRulesForElementKinds(ElementKind.RECORDPART));
 			ConsoleFormPropertyRules.addAll(createRulesForFields(IEGLConstants.RECORD_SUBTYPE_CONSOLE_FORM));
@@ -860,7 +880,7 @@ public class EGLNewPropertiesHandler {
 	
 	private static Set DynamicConsoleFormPropertyRules;
 	private static Set getDynamicConsoleFormPropertyRules() {
-		if (DynamicConsoleFormPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DynamicConsoleFormPropertyRules) ) {
 			DynamicConsoleFormPropertyRules = new TreeSet();
 			DynamicConsoleFormPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_MAXSIZE));
 			DynamicConsoleFormPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -874,7 +894,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DictionaryPropertyRules;
 	private static Set getDictionaryPropertyRules() {
-		if (DictionaryPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DictionaryPropertyRules) ) {
 			DictionaryPropertyRules = new TreeSet();
 			DictionaryPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_CASESENSITIVE));
 			DictionaryPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_ORDERING));
@@ -885,7 +905,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DataItemItemFormFieldPropertyRules;
 	private static Set getDataItemItemFormFieldPropertyRules() {
-		if (DataItemItemFormFieldPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DataItemItemFormFieldPropertyRules) ) {
 			DataItemItemFormFieldPropertyRules = new TreeSet();
 			DataItemItemFormFieldPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_FIELDLEN));
 		}
@@ -895,7 +915,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DataItemVariableFieldPropertyRules;
 	private static Set getDataItemVariableFieldPropertyRules() {
-		if (DataItemVariableFieldPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DataItemVariableFieldPropertyRules) ) {
 			DataItemVariableFieldPropertyRules = new TreeSet();
 			DataItemVariableFieldPropertyRules.addAll(createRulesForGroup("variableField"));
 		}
@@ -905,7 +925,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DataItemDoubleByteDevicePresentationPropertyRules;
 	private static Set getDataItemDoubleByteDevicePresentationPropertyRules() {
-		if (DataItemDoubleByteDevicePresentationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DataItemDoubleByteDevicePresentationPropertyRules) ) {
 			DataItemDoubleByteDevicePresentationPropertyRules = new TreeSet();
 			DataItemDoubleByteDevicePresentationPropertyRules.addAll(createRulesForGroup("doubleByteDevicePresentation"));
 		}
@@ -915,7 +935,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set TuiFieldPresentationPropertyRules;
 	private static Set getTuiFieldPresentationPropertyRules() {
-		if (TuiFieldPresentationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(TuiFieldPresentationPropertyRules) ) {
 			TuiFieldPresentationPropertyRules = new TreeSet();
 			TuiFieldPresentationPropertyRules.addAll(createRulesForGroup("fieldPresentation"));
 			TuiFieldPresentationPropertyRules.addAll(createRulesForGroup("doubleByteDevicePresentation"));
@@ -926,7 +946,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DataItemFieldPresentationPropertyRules;
 	private static Set getDataItemFieldPresentationPropertyRules() {
-		if (DataItemFieldPresentationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DataItemFieldPresentationPropertyRules) ) {
 			DataItemFieldPresentationPropertyRules = new TreeSet();
 			DataItemFieldPresentationPropertyRules.addAll(createRulesForGroup("fieldPresentation"));
 			DataItemFieldPresentationPropertyRules.addAll(createRulesForGroup("doubleByteDevicePresentation"));
@@ -938,7 +958,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DataItemValidationPropertyRules;
 	private static Set getDataItemValidationPropertyRules() {
-		if (DataItemValidationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DataItemValidationPropertyRules) ) {
 			DataItemValidationPropertyRules = new TreeSet();
 			DataItemValidationPropertyRules.addAll(createRulesForGroup("validation"));
 		}
@@ -948,7 +968,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set PsbRecordItemPropertyRules;
 	private static Set getPsbRecordItemPropertyRules() {
-		if (PsbRecordItemPropertyRules == null) {
+		if ( needRecalculateForNewAnno(PsbRecordItemPropertyRules)) {
 			PsbRecordItemPropertyRules = new TreeSet();
 			PsbRecordItemPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_INITIALIZED));
 			PsbRecordItemPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -960,7 +980,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DataItemDL1ItemPropertyRules;
 	private static Set getDataItemDL1ItemPropertyRules() {
-		if (DataItemDL1ItemPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DataItemDL1ItemPropertyRules) ) {
 			DataItemDL1ItemPropertyRules = new TreeSet();
 			DataItemDL1ItemPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.RECORD_SUBTYPE_DLI_SEGMENT));
 		}
@@ -970,7 +990,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DataItemTUISAPropertyRules;
 	private static Set getDataItemTUISAPropertyRules() {
-		if (DataItemTUISAPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DataItemTUISAPropertyRules) ) {
 			DataItemTUISAPropertyRules = new TreeSet();
 			DataItemTUISAPropertyRules.addAll(createRulesForGroup("variableField"));
 			DataItemTUISAPropertyRules.addAll(createRulesForGroup("fieldPresentation"));
@@ -983,7 +1003,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DataItemUIItemSAPropertyRules;
 	private static Set getDataItemUIItemSAPropertyRules() {
-		if (DataItemUIItemSAPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DataItemUIItemSAPropertyRules) ) {
 			DataItemUIItemSAPropertyRules = new TreeSet();
 			DataItemUIItemSAPropertyRules.addAll(createRulesForGroup("ui"));
 		}
@@ -993,7 +1013,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DataItemUIItemPropertyRules;
 	private static Set getDataItemUIItemPropertyRules() {
-		if (DataItemUIItemPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DataItemUIItemPropertyRules) ) {
 			DataItemUIItemPropertyRules = new TreeSet();
 			DataItemUIItemPropertyRules.addAll(createRulesForGroup("formatting"));
 			DataItemUIItemPropertyRules.addAll(createRulesForGroup("validation"));
@@ -1005,7 +1025,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DataItemPageItemPropertyRules;
 	private static Set getDataItemPageItemPropertyRules() {
-		if (DataItemPageItemPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DataItemPageItemPropertyRules) ) {
 			DataItemPageItemPropertyRules = new TreeSet();
 			DataItemPageItemPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.HANDLER_SUBTYPE_JSF));
 		}
@@ -1015,7 +1035,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DataItemSQLItemPropertyRules;
 	private static Set getDataItemSQLItemPropertyRules() {
-		if (DataItemSQLItemPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DataItemSQLItemPropertyRules) ) {
 			DataItemSQLItemPropertyRules = new TreeSet();
 			DataItemSQLItemPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.RECORD_SUBTYPE_SQl));
 		}
@@ -1025,7 +1045,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DataItemFormattingPropertyRules;
 	private static Set getDataItemFormattingPropertyRules() {
-		if (DataItemFormattingPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DataItemFormattingPropertyRules) ) {
 			DataItemFormattingPropertyRules = new TreeSet();
 			DataItemFormattingPropertyRules.addAll(createRulesForGroup("formatting"));
 		}
@@ -1035,7 +1055,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DynamicPageItemDataDeclarationPropertyRules;
 	private static Set getDynamicPageItemDataDeclarationPropertyRules() {
-		if (DynamicPageItemDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DynamicPageItemDataDeclarationPropertyRules) ) {
 			DynamicPageItemDataDeclarationPropertyRules = new TreeSet();
 			DynamicPageItemDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_MAXSIZE));
 			DynamicPageItemDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_SELECTEDROWITEM));
@@ -1052,7 +1072,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set StaticPageItemDataDeclarationPropertyRules;
 	private static Set getStaticPageItemDataDeclarationPropertyRules() {
-		if (StaticPageItemDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(StaticPageItemDataDeclarationPropertyRules) ) {
 			StaticPageItemDataDeclarationPropertyRules = new TreeSet();
 			StaticPageItemDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_INITIALIZED));
 			StaticPageItemDataDeclarationPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.HANDLER_SUBTYPE_JSF));
@@ -1066,7 +1086,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set FormUseDeclarationPropertyRules;
 	private static Set getFormUseDeclarationPropertyRules() {
-		if (FormUseDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(FormUseDeclarationPropertyRules) ) {
 			FormUseDeclarationPropertyRules = new TreeSet();
 			FormUseDeclarationPropertyRules.addAll(createRulesFor(new TargetTypesHasAnnotationRecordFilter(ElementKind.FORMUSE)));
 		}
@@ -1075,7 +1095,7 @@ public class EGLNewPropertiesHandler {
 	
 	private static Set LibraryUseDeclarationPropertyRules;
 	private static Set getLibraryUseDeclarationPropertyRules() {
-		if (LibraryUseDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(LibraryUseDeclarationPropertyRules) ) {
 			LibraryUseDeclarationPropertyRules = new TreeSet();
 			LibraryUseDeclarationPropertyRules.addAll(REPLACEME);
 		}
@@ -1085,7 +1105,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set FormGroupUseDeclarationPropertyRules;
 	private static Set getFormGroupUseDeclarationPropertyRules() {
-		if (FormGroupUseDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(FormGroupUseDeclarationPropertyRules)  ) {
 			FormGroupUseDeclarationPropertyRules = new TreeSet();
 			FormGroupUseDeclarationPropertyRules.addAll(createRulesFor(new TargetTypesHasAnnotationRecordFilter(ElementKind.FORMGROUPUSE)));
 		}
@@ -1095,7 +1115,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DataTableUseDeclarationPropertyRules;
 	private static Set getDataTableUseDeclarationPropertyRules() {
-		if (DataTableUseDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DataTableUseDeclarationPropertyRules) ) {
 			DataTableUseDeclarationPropertyRules = new TreeSet();
 			DataTableUseDeclarationPropertyRules.addAll(createRulesFor(new TargetTypesHasAnnotationRecordFilter(ElementKind.DATATABLEUSE)));
 		}
@@ -1105,7 +1125,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set UseDeclarationPropertyRules;
 	private static Set getUseDeclarationPropertyRules() {
-		if (UseDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(UseDeclarationPropertyRules) ) {
 			UseDeclarationPropertyRules = new TreeSet();
 			UseDeclarationPropertyRules.addAll(getDataTableUseDeclarationPropertyRules());
 			UseDeclarationPropertyRules.addAll(getFormGroupUseDeclarationPropertyRules());
@@ -1116,7 +1136,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DynamicItemDataDeclarationPropertyRules;
 	private static Set getDynamicItemDataDeclarationPropertyRules() {
-		if (DynamicItemDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DynamicItemDataDeclarationPropertyRules) ) {
 			DynamicItemDataDeclarationPropertyRules = new TreeSet();
 			DynamicItemDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_MAXSIZE));
 			DynamicItemDataDeclarationPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.HANDLER_SUBTYPE_JSF));
@@ -1128,7 +1148,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set StaticItemDataDeclarationPropertyRules;
 	private static Set getStaticItemDataDeclarationPropertyRules() {
-		if (StaticItemDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(StaticItemDataDeclarationPropertyRules )) {
 			StaticItemDataDeclarationPropertyRules = new TreeSet();
 			StaticItemDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_INITIALIZED));
 			StaticItemDataDeclarationPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.HANDLER_SUBTYPE_JSF));
@@ -1139,7 +1159,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set StaticServiceItemDataDeclarationPropertyRules;
 	private static Set getServiceStaticItemDataDeclarationPropertyRules() {
-		if (StaticServiceItemDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(StaticServiceItemDataDeclarationPropertyRules) ) {
 			StaticServiceItemDataDeclarationPropertyRules = new TreeSet();
 			StaticServiceItemDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_BINDSERVICE));
 			StaticServiceItemDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_INITIALIZED));
@@ -1151,7 +1171,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set ExternalTypeClassDeclarationPropertyRules;
 	private static Set getExternalTypeClassDeclartionPropertyRules() {
-		if (ExternalTypeClassDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(ExternalTypeClassDeclarationPropertyRules) ) {
 			ExternalTypeClassDeclarationPropertyRules = new TreeSet();
 			ExternalTypeClassDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_JAVAPROPERTY));
 		}
@@ -1160,7 +1180,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set ExternalTypeArrayHandlerClassDeclarationPropertyRules;
 	private static Set getExternalTypeArrayHandlerClassDeclartionPropertyRules() {
-		if (ExternalTypeArrayHandlerClassDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(ExternalTypeArrayHandlerClassDeclarationPropertyRules )) {
 			ExternalTypeArrayHandlerClassDeclarationPropertyRules = new TreeSet();
 			ExternalTypeArrayHandlerClassDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_JAVAPROPERTY));
 			ExternalTypeArrayHandlerClassDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_EVENTLISTENER));
@@ -1178,7 +1198,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DynamicAnyRecordDataDeclarationPropertyRules;
 	private static Set getDynamicAnyRecordDataDeclarationPropertyRules() {
-		if (DynamicAnyRecordDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DynamicAnyRecordDataDeclarationPropertyRules) ) {
 			DynamicAnyRecordDataDeclarationPropertyRules = new TreeSet();
 			DynamicAnyRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_MAXSIZE));
 			DynamicAnyRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -1196,7 +1216,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DynamicVGUIRecordDataDeclarationPropertyRules;
 	private static Set getDynamicVGUIRecordDataDeclarationPropertyRules() {
-		if (DynamicVGUIRecordDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DynamicVGUIRecordDataDeclarationPropertyRules) ) {
 			DynamicVGUIRecordDataDeclarationPropertyRules = new TreeSet();
 			DynamicVGUIRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_MAXSIZE));
 			DynamicVGUIRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -1208,7 +1228,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DynamicSQLRecordDataDeclarationPropertyRules;
 	private static Set getDynamicSQLRecordDataDeclarationPropertyRules() {
-		if (DynamicSQLRecordDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DynamicSQLRecordDataDeclarationPropertyRules) ) {
 			DynamicSQLRecordDataDeclarationPropertyRules = new TreeSet();
 			DynamicSQLRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_MAXSIZE));
 			DynamicSQLRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -1220,7 +1240,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DynamicMQRecordDataDeclarationPropertyRules;
 	private static Set getDynamicMQRecordDataDeclarationPropertyRules() {
-		if (DynamicMQRecordDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DynamicMQRecordDataDeclarationPropertyRules) ) {
 			DynamicMQRecordDataDeclarationPropertyRules = new TreeSet();
 			DynamicMQRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_MAXSIZE));
 			DynamicMQRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -1232,7 +1252,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DynamicSerialRecordDataDeclarationPropertyRules;
 	private static Set getDynamicSerialRecordDataDeclarationPropertyRules() {
-		if (DynamicSerialRecordDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DynamicSerialRecordDataDeclarationPropertyRules) ) {
 			DynamicSerialRecordDataDeclarationPropertyRules = new TreeSet();
 			DynamicSerialRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_MAXSIZE));
 			DynamicSerialRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -1244,7 +1264,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DynamicRelativeRecordDataDeclarationPropertyRules;
 	private static Set getDynamicRelativeRecordDataDeclarationPropertyRules() {
-		if (DynamicRelativeRecordDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DynamicRelativeRecordDataDeclarationPropertyRules) ) {
 			DynamicRelativeRecordDataDeclarationPropertyRules = new TreeSet();
 			DynamicRelativeRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_MAXSIZE));
 			DynamicRelativeRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -1256,7 +1276,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DynamicIndexedRecordDataDeclarationPropertyRules;
 	private static Set getDynamicIndexedRecordDataDeclarationPropertyRules() {
-		if (DynamicIndexedRecordDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DynamicIndexedRecordDataDeclarationPropertyRules) ) {
 			DynamicIndexedRecordDataDeclarationPropertyRules = new TreeSet();
 			DynamicIndexedRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_MAXSIZE));
 			DynamicIndexedRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -1268,7 +1288,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DynamicBasicRecordDataDeclarationPropertyRules;
 	private static Set getDynamicBasicRecordDataDeclarationPropertyRules() {
-		if (DynamicBasicRecordDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(DynamicBasicRecordDataDeclarationPropertyRules) ) {
 			DynamicBasicRecordDataDeclarationPropertyRules = new TreeSet();
 			DynamicBasicRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_MAXSIZE));
 			DynamicBasicRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -1282,7 +1302,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set StaticAnyRecordDataDeclarationPropertyRules;
 	private static Set getStaticAnyRecordDataDeclarationPropertyRules() {
-		if (StaticAnyRecordDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(StaticAnyRecordDataDeclarationPropertyRules) ) {
 			StaticAnyRecordDataDeclarationPropertyRules = new TreeSet();
 			StaticAnyRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_INITIALIZED));
 			StaticAnyRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -1300,7 +1320,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set StaticVGUIRecordDataDeclarationPropertyRules;
 	private static Set getStaticVGUIRecordDataDeclarationPropertyRules() {
-		if (StaticVGUIRecordDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(StaticVGUIRecordDataDeclarationPropertyRules) ) {
 			StaticVGUIRecordDataDeclarationPropertyRules = new TreeSet();
 			StaticVGUIRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_INITIALIZED));
 			StaticVGUIRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -1312,7 +1332,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set StaticSQLRecordDataDeclarationPropertyRules;
 	private static Set getStaticSQLRecordDataDeclarationPropertyRules() {
-		if (StaticSQLRecordDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(StaticSQLRecordDataDeclarationPropertyRules) ) {
 			StaticSQLRecordDataDeclarationPropertyRules = new TreeSet();
 			StaticSQLRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_INITIALIZED));
 			StaticSQLRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -1324,7 +1344,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set StaticMQRecordDataDeclarationPropertyRules;
 	private static Set getStaticMQRecordDataDeclarationPropertyRules() {
-		if (StaticMQRecordDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(StaticMQRecordDataDeclarationPropertyRules) ) {
 			StaticMQRecordDataDeclarationPropertyRules = new TreeSet();
 			StaticMQRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_INITIALIZED));
 			StaticMQRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -1336,7 +1356,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set StaticSerialRecordDataDeclarationPropertyRules;
 	private static Set getStaticSerialRecordDataDeclarationPropertyRules() {
-		if (StaticSerialRecordDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(StaticSerialRecordDataDeclarationPropertyRules) ) {
 			StaticSerialRecordDataDeclarationPropertyRules = new TreeSet();
 			StaticSerialRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_INITIALIZED));
 			StaticSerialRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -1348,7 +1368,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set StaticRelativeRecordDataDeclarationPropertyRules;
 	private static Set getStaticRelativeRecordDataDeclarationPropertyRules() {
-		if (StaticRelativeRecordDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(StaticRelativeRecordDataDeclarationPropertyRules) ) {
 			StaticRelativeRecordDataDeclarationPropertyRules = new TreeSet();
 			StaticRelativeRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_INITIALIZED));
 			StaticRelativeRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -1360,7 +1380,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set StaticIndexedRecordDataDeclarationPropertyRules;
 	private static Set getStaticIndexedRecordDataDeclarationPropertyRules() {
-		if (StaticIndexedRecordDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(StaticIndexedRecordDataDeclarationPropertyRules) ) {
 			StaticIndexedRecordDataDeclarationPropertyRules = new TreeSet();
 			StaticIndexedRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_INITIALIZED));
 			StaticIndexedRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -1372,7 +1392,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set StaticBasicRecordDataDeclarationPropertyRules;
 	private static Set getStaticBasicRecordDataDeclarationPropertyRules() {
-		if (StaticBasicRecordDataDeclarationPropertyRules == null) {
+		if ( needRecalculateForNewAnno(StaticBasicRecordDataDeclarationPropertyRules) ) {
 			StaticBasicRecordDataDeclarationPropertyRules = new TreeSet();
 			StaticBasicRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_INITIALIZED));
 			StaticBasicRecordDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_REDEFINES));
@@ -1384,7 +1404,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set NativeLibraryPropertyRules;
 	private static Set getNativeLibraryPropertyRules() {
-		if (NativeLibraryPropertyRules == null) {
+		if ( needRecalculateForNewAnno(NativeLibraryPropertyRules) ) {
 			NativeLibraryPropertyRules = new TreeSet();
 			NativeLibraryPropertyRules.addAll(createRulesFor(new TargetTypesHasAnnotationRecordFilter(ElementKind.LIBRARYPART)));
 			NativeLibraryPropertyRules.addAll(createRulesForFields(IEGLConstants.LIBRARY_SUBTYPE_NATIVE));
@@ -1395,7 +1415,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set libraryPropertyRules;
 	private static Set getlibraryPropertyRules() {
-		if (libraryPropertyRules == null) {
+		if ( needRecalculateForNewAnno(libraryPropertyRules) ) {
 			libraryPropertyRules = new TreeSet();
 			libraryPropertyRules.addAll(createRulesFor(new TargetTypesHasAnnotationRecordFilter(ElementKind.LIBRARYPART)));
 			libraryPropertyRules.addAll(createRulesForFields(IEGLConstants.LIBRARY_SUBTYPE_BASIC));
@@ -1406,7 +1426,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set CalledTextUIProgramPropertyRules;
 	private static Set getCalledTextUIProgramPropertyRules() {
-		if (CalledTextUIProgramPropertyRules == null) {
+		if ( needRecalculateForNewAnno(CalledTextUIProgramPropertyRules) ) {
 			CalledTextUIProgramPropertyRules = new TreeSet();
 			CalledTextUIProgramPropertyRules.addAll(createRulesForElementKinds(ElementKind.PROGRAMPART));
 			CalledTextUIProgramPropertyRules.addAll(createRulesForFields(IEGLConstants.PROGRAM_SUBTYPE_TEXT_UI));
@@ -1417,7 +1437,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set TextUIProgramPropertyRules;
 	private static Set getTextUIProgramPropertyRules() {
-		if (TextUIProgramPropertyRules == null) {
+		if ( needRecalculateForNewAnno(TextUIProgramPropertyRules) ) {
 			TextUIProgramPropertyRules = new TreeSet();
 			TextUIProgramPropertyRules.addAll(createRulesForElementKinds(ElementKind.PROGRAMPART));
 			TextUIProgramPropertyRules.addAll(createRulesForFields(IEGLConstants.PROGRAM_SUBTYPE_TEXT_UI));
@@ -1428,7 +1448,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set CalledBasicProgramPropertyRules;
 	private static Set getCalledBasicProgramPropertyRules() {
-		if (CalledBasicProgramPropertyRules == null) {
+		if ( needRecalculateForNewAnno(CalledBasicProgramPropertyRules) ) {
 			CalledBasicProgramPropertyRules = new TreeSet();
 			CalledBasicProgramPropertyRules.addAll(createRulesForElementKinds(ElementKind.PROGRAMPART));
 			CalledBasicProgramPropertyRules.addAll(createRulesForFields(IEGLConstants.PROGRAM_SUBTYPE_BASIC));
@@ -1439,7 +1459,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set BasicProgramPropertyRules;
 	private static Set getBasicProgramPropertyRules() {
-		if (BasicProgramPropertyRules == null) {
+		if ( needRecalculateForNewAnno(BasicProgramPropertyRules) ) {
 			BasicProgramPropertyRules = new TreeSet();
 			BasicProgramPropertyRules.addAll(createRulesForElementKinds(ElementKind.PROGRAMPART));
 			BasicProgramPropertyRules.addAll(createRulesForFields(IEGLConstants.PROGRAM_SUBTYPE_BASIC));
@@ -1450,7 +1470,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set VGWebTransactionPropertyRules;
 	private static Set getVGWebTransactionPropertyRules() {
-		if (VGWebTransactionPropertyRules == null) {
+		if ( needRecalculateForNewAnno(VGWebTransactionPropertyRules) ) {
 			VGWebTransactionPropertyRules = new TreeSet();
 			VGWebTransactionPropertyRules.addAll(createRulesForElementKinds(ElementKind.PROGRAMPART));
 			VGWebTransactionPropertyRules.addAll(createRulesForFields(IEGLConstants.PROGRAM_SUBTYPE_VG_WEB_TRANSACTION));
@@ -1461,7 +1481,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set AllProgramPropertyRules;
 	private static Set getAllProgramPropertyRules() {
-		if (AllProgramPropertyRules == null) {
+		if ( needRecalculateForNewAnno(AllProgramPropertyRules) ) {
 			AllProgramPropertyRules = new TreeSet();
 			AllProgramPropertyRules.addAll(createRulesFor(new TargetTypesHasAnnotationRecordFilter(ElementKind.PROGRAMPART)));
 			AllProgramPropertyRules.addAll(createRulesForFields(IEGLConstants.PROGRAM_SUBTYPE_BASIC));
@@ -1472,7 +1492,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set NativeLibraryFunctionPropertyRules;
 	private static Set getNativeLibraryFunctionPropertyRules() {
-		if (NativeLibraryFunctionPropertyRules == null) {
+		if ( needRecalculateForNewAnno(NativeLibraryFunctionPropertyRules) ) {
 			NativeLibraryFunctionPropertyRules = new TreeSet();
 			NativeLibraryFunctionPropertyRules.addAll(createRulesFor(new TargetTypesHasAnnotationRecordFilter(ElementKind.FUNCTIONMBR)));
 		}
@@ -1481,7 +1501,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set FunctionPropertyRules;
 	private static Set getFunctionPropertyRules() {
-		if (FunctionPropertyRules == null) {
+		if ( needRecalculateForNewAnno(FunctionPropertyRules) ) {
 			FunctionPropertyRules = new TreeSet();
 			FunctionPropertyRules.addAll(createRulesFor(new TargetTypesHasAnnotationRecordFilter(ElementKind.FUNCTIONPART)));
 		}
@@ -1491,7 +1511,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set DataTablePropertyRules;
 	private static Set getDataTablePropertyRules() {
-		if (DataTablePropertyRules == null) {
+		if ( needRecalculateForNewAnno(DataTablePropertyRules) ) {
 			DataTablePropertyRules = new TreeSet();
 			DataTablePropertyRules.addAll(createRulesFor(new TargetTypesHasAnnotationRecordFilter(ElementKind.DATATABLEPART)));
 			DataTablePropertyRules.addAll(createRulesForFields(IEGLConstants.DATATABLE_SUBTYPE_BASIC));
@@ -1502,7 +1522,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set PageHandlerPropertyRules;
 	private static Set getPageHandlerPropertyRules() {
-		if (PageHandlerPropertyRules == null) {
+		if ( needRecalculateForNewAnno(PageHandlerPropertyRules) ) {
 			PageHandlerPropertyRules = new TreeSet();
 			PageHandlerPropertyRules.addAll(createRulesFor(new TargetTypesHasAnnotationRecordFilter(ElementKind.HANDLERPART)));
 			PageHandlerPropertyRules.addAll(createRulesForFields(IEGLConstants.HANDLER_SUBTYPE_JSF));
@@ -1513,7 +1533,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set PrintFormPropertyRules;
 	private static Set getPrintFormPropertyRules() {
-		if (PrintFormPropertyRules == null) {
+		if ( needRecalculateForNewAnno(PrintFormPropertyRules) ) {
 			PrintFormPropertyRules = new TreeSet();
 			PrintFormPropertyRules.addAll(createRulesForElementKinds(ElementKind.FORMPART));
 			PrintFormPropertyRules.addAll(createRulesForFields(IEGLConstants.FORM_SUBTYPE_PRINT));
@@ -1524,7 +1544,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set TextFormPropertyRules;
 	private static Set getTextFormPropertyRules() {
-		if (TextFormPropertyRules == null) {
+		if ( needRecalculateForNewAnno(TextFormPropertyRules) ) {
 			TextFormPropertyRules = new TreeSet();
 			TextFormPropertyRules.addAll(createRulesForElementKinds(ElementKind.FORMPART));
 			TextFormPropertyRules.addAll(createRulesForFields(IEGLConstants.FORM_SUBTYPE_TEXT));
@@ -1535,7 +1555,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set PrintVariableFormFieldPropertyRules;
 	private static Set getPrintVariableFormFieldPropertyRules() {
-		if (PrintVariableFormFieldPropertyRules == null) {
+		if ( needRecalculateForNewAnno(PrintVariableFormFieldPropertyRules) ) {
 			PrintVariableFormFieldPropertyRules = new TreeSet();
 			PrintVariableFormFieldPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.FORM_SUBTYPE_PRINT));
 		}
@@ -1545,7 +1565,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set TuiPrintVariableFormFieldPropertyRules;
 	private static Set getTuiPrintVariableFormFieldPropertyRules() {
-		if (TuiPrintVariableFormFieldPropertyRules == null) {
+		if ( needRecalculateForNewAnno(TuiPrintVariableFormFieldPropertyRules) ) {
 			TuiPrintVariableFormFieldPropertyRules = new TreeSet();
 			TuiPrintVariableFormFieldPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_HIGHLIGHT));
 		}
@@ -1555,7 +1575,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set TuiTextVariableFormFieldPropertyRules;
 	private static Set getTuiTextVariableFormFieldPropertyRules() {
-		if (TuiTextVariableFormFieldPropertyRules == null) {
+		if ( needRecalculateForNewAnno(TuiTextVariableFormFieldPropertyRules) ) {
 			TuiTextVariableFormFieldPropertyRules = new TreeSet();
 			TuiTextVariableFormFieldPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_CURSOR));
 			TuiTextVariableFormFieldPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_DETECTABLE));
@@ -1569,7 +1589,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set TextVariableFormFieldPropertyRules;
 	private static Set getTextVariableFormFieldPropertyRules() {
-		if (TextVariableFormFieldPropertyRules == null) {
+		if ( needRecalculateForNewAnno(TextVariableFormFieldPropertyRules) ) {
 			TextVariableFormFieldPropertyRules = new TreeSet();
 			TextVariableFormFieldPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.FORM_SUBTYPE_TEXT));
 		}
@@ -1579,7 +1599,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set PrintConstantFormFieldPropertyRules;
 	private static Set getPrintConstantFormFieldPropertyRules() {
-		if (PrintConstantFormFieldPropertyRules == null) {
+		if ( needRecalculateForNewAnno(PrintConstantFormFieldPropertyRules) ) {
 			PrintConstantFormFieldPropertyRules = new TreeSet();
 			PrintConstantFormFieldPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_COLOR));
 			PrintConstantFormFieldPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_CURSOR));
@@ -1598,7 +1618,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set TextConstantFormFieldPropertyRules;
 	private static Set getTextConstantFormFieldPropertyRules() {
-		if (TextConstantFormFieldPropertyRules == null) {
+		if ( needRecalculateForNewAnno(TextConstantFormFieldPropertyRules) ) {
 			TextConstantFormFieldPropertyRules = new TreeSet();
 			TextConstantFormFieldPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_COLOR));
 			TextConstantFormFieldPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_CURSOR));
@@ -1616,7 +1636,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set PrintFloatingAreaPropertyRules;
 	private static Set getPrintFloatingAreaPropertyRules() {
-		if (PrintFloatingAreaPropertyRules == null) {
+		if ( needRecalculateForNewAnno(PrintFloatingAreaPropertyRules) ) {
 			PrintFloatingAreaPropertyRules = new TreeSet();
 			PrintFloatingAreaPropertyRules.addAll(createRulesForFields(IEGLConstants.PROPERTY_PRINTFLOATINGAREA));
 		}
@@ -1626,7 +1646,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set ScreenFloatingAreaPropertyRules;
 	private static Set getScreenFloatingAreaPropertyRules() {
-		if (ScreenFloatingAreaPropertyRules == null) {
+		if ( needRecalculateForNewAnno(ScreenFloatingAreaPropertyRules) ) {
 			ScreenFloatingAreaPropertyRules = new TreeSet();
 			ScreenFloatingAreaPropertyRules.addAll(createRulesForFields(IEGLConstants.PROPERTY_SCREENFLOATINGAREA));
 		}
@@ -1636,7 +1656,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set FormGroupPropertyRules;
 	private static Set getFormGroupPropertyRules() {
-		if (FormGroupPropertyRules == null) {
+		if ( needRecalculateForNewAnno(FormGroupPropertyRules) ) {
 			FormGroupPropertyRules = new TreeSet();
 			FormGroupPropertyRules.addAll(createRulesForElementKinds(ElementKind.FORMGROUPPART));
 		}
@@ -1646,7 +1666,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set AnyRecordPropertyRules;
 	private static Set getAnyRecordPropertyRules() {
-		if (AnyRecordPropertyRules == null) {
+		if ( needRecalculateForNewAnno(AnyRecordPropertyRules) ) {
 			AnyRecordPropertyRules = new TreeSet();
 			AnyRecordPropertyRules.addAll(createRulesForElementKinds(new EnumerationDataBinding[] {ElementKind.RECORDPART, ElementKind.STRUCTUREDRECORDPART}));
 			AnyRecordPropertyRules.addAll(createRulesForFields(IEGLConstants.RECORD_SUBTYPE_BASIC));
@@ -1667,7 +1687,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set VGUIRecordPropertyRules;
 	private static Set getVGUIRecordPropertyRules() {
-		if (VGUIRecordPropertyRules == null) {
+		if ( needRecalculateForNewAnno(VGUIRecordPropertyRules) ) {
 			VGUIRecordPropertyRules = new TreeSet();
 			VGUIRecordPropertyRules.addAll(createRulesForElementKinds(new EnumerationDataBinding[] {ElementKind.VGUIRECORDPART, ElementKind.STRUCTUREDRECORDPART}));
 			VGUIRecordPropertyRules.addAll(createRulesForFields(IEGLConstants.RECORD_SUBTYPE_VGUI));
@@ -1678,7 +1698,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set SQLRecordPropertyRules;
 	private static Set getSQLRecordPropertyRules() {
-		if (SQLRecordPropertyRules == null) {
+		if ( needRecalculateForNewAnno(SQLRecordPropertyRules) ) {
 			SQLRecordPropertyRules = new TreeSet();
 			SQLRecordPropertyRules.addAll(createRulesForElementKinds(new EnumerationDataBinding[] {ElementKind.RECORDPART, ElementKind.STRUCTUREDRECORDPART}));
 			SQLRecordPropertyRules.addAll(createRulesForFields(IEGLConstants.RECORD_SUBTYPE_SQl));
@@ -1689,7 +1709,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set MQRecordPropertyRules;
 	private static Set getMQRecordPropertyRules() {
-		if (MQRecordPropertyRules == null) {
+		if ( needRecalculateForNewAnno(MQRecordPropertyRules) ) {
 			MQRecordPropertyRules = new TreeSet();
 			MQRecordPropertyRules.addAll(createRulesForElementKinds(ElementKind.STRUCTUREDRECORDPART));
 			MQRecordPropertyRules.addAll(createRulesForFields(IEGLConstants.RECORD_SUBTYPE_MQ));
@@ -1700,7 +1720,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set SerialRecordPropertyRules;
 	private static Set getSerialRecordPropertyRules() {
-		if (SerialRecordPropertyRules == null) {
+		if ( needRecalculateForNewAnno(SerialRecordPropertyRules) ) {
 			SerialRecordPropertyRules = new TreeSet();
 			SerialRecordPropertyRules.addAll(createRulesForElementKinds(ElementKind.STRUCTUREDRECORDPART));
 			SerialRecordPropertyRules.addAll(createRulesForFields(IEGLConstants.RECORD_SUBTYPE_SERIAL));
@@ -1711,7 +1731,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set RelativeRecordPropertyRules;
 	private static Set getRelativeRecordPropertyRules() {
-		if (RelativeRecordPropertyRules == null) {
+		if ( needRecalculateForNewAnno(RelativeRecordPropertyRules) ) {
 			RelativeRecordPropertyRules = new TreeSet();
 			RelativeRecordPropertyRules.addAll(createRulesForElementKinds(ElementKind.STRUCTUREDRECORDPART));
 			RelativeRecordPropertyRules.addAll(createRulesForFields(IEGLConstants.RECORD_SUBTYPE_RELATIVE));
@@ -1722,7 +1742,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set IndexedRecordPropertyRules;
 	private static Set getIndexedRecordPropertyRules() {
-		if (IndexedRecordPropertyRules == null) {
+		if ( needRecalculateForNewAnno(IndexedRecordPropertyRules) ) {
 			IndexedRecordPropertyRules = new TreeSet();
 			IndexedRecordPropertyRules.addAll(createRulesForElementKinds(ElementKind.STRUCTUREDRECORDPART));
 			IndexedRecordPropertyRules.addAll(createRulesForFields(IEGLConstants.RECORD_SUBTYPE_INDEXED));
@@ -1733,7 +1753,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set CSVRecordPropertyRules;
 	private static Set getCSVRecordPropertyRules() {
-		if (CSVRecordPropertyRules == null) {
+		if ( needRecalculateForNewAnno(CSVRecordPropertyRules) ) {
 			CSVRecordPropertyRules = new TreeSet();
 			CSVRecordPropertyRules.addAll(createRulesForElementKinds(ElementKind.RECORDPART));
 			CSVRecordPropertyRules.addAll(createRulesForFields(IEGLConstants.RECORD_SUBTYPE_CSV));
@@ -1744,7 +1764,7 @@ public class EGLNewPropertiesHandler {
 	
 	private static Set BasicRecordPropertyRules;
 	private static Set getBasicRecordPropertyRules() {
-		if (BasicRecordPropertyRules == null) {
+		if ( needRecalculateForNewAnno(BasicRecordPropertyRules) ) {
 			BasicRecordPropertyRules = new TreeSet();
 			BasicRecordPropertyRules.addAll(createRulesForElementKinds(new EnumerationDataBinding[] {ElementKind.RECORDPART, ElementKind.STRUCTUREDRECORDPART}));
 			BasicRecordPropertyRules.addAll(createRulesForFields(IEGLConstants.RECORD_SUBTYPE_BASIC));
@@ -1755,7 +1775,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set FillerStructureItemPropertyRules;
 	private static Set getFillerStructureItemPropertyRules() {
-		if (FillerStructureItemPropertyRules == null) {
+		if ( needRecalculateForNewAnno(FillerStructureItemPropertyRules) ) {
 			FillerStructureItemPropertyRules = new TreeSet();
 			FillerStructureItemPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_UITYPE));
 		}
@@ -1765,7 +1785,7 @@ public class EGLNewPropertiesHandler {
 
 	private static Set StructureItemPropertyRules;
 	private static Set getStructureItemPropertyRules() {
-		if (StructureItemPropertyRules == null) {
+		if ( needRecalculateForNewAnno(StructureItemPropertyRules) ) {
 			StructureItemPropertyRules = new TreeSet();
 			StructureItemPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.RECORD_SUBTYPE_SQl));
 			StructureItemPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.HANDLER_SUBTYPE_JSF));
@@ -1780,7 +1800,7 @@ public class EGLNewPropertiesHandler {
 	
 	private static Set dataItemPropertyRules;
 	private static Set getDataItemPropertyRules() {
-		if(dataItemPropertyRules == null) {
+		if( needRecalculateForNewAnno(dataItemPropertyRules) ) {
 			dataItemPropertyRules = new TreeSet();
 			dataItemPropertyRules.addAll(createRulesFor(new TargetTypesHasAnnotationRecordFilter(ElementKind.DATAITEMPART)));
 		}
@@ -1953,20 +1973,24 @@ public class EGLNewPropertiesHandler {
 	
 	private static Collection createRulesFor(AnnotationRecordFilter filter, boolean subtypes) {
 		Set result = new TreeSet(new EGLCaseInsensitiveComparator());
-//		for(Iterator iter = AnnotationTypeManager.getInstance().getSystemPackageAnnotations().values().iterator(); iter.hasNext();) {
-//			FlexibleRecordBinding rec = (FlexibleRecordBinding) iter.next();
-//			if(rec.getAnnotation(AnnotationAnnotationTypeBinding.getInstance()) != null) {
-//				AnnotationTypeBindingImpl aTypeBindingImpl = new AnnotationTypeBindingImpl(rec, null);
-//				if(AnnotationAnnotationTypeBinding.getInstance() == aTypeBindingImpl.getAnnotationRecord().getSubType()) {
-//					if(subtypes && aTypeBindingImpl.isPartSubType() ||
-//					   !subtypes && !aTypeBindingImpl.isPartSubType()) {
-//						if(filter.passes(aTypeBindingImpl)) {
-//							result.add(new EGLPropertyRule(aTypeBindingImpl));
-//						}
-//					}
-//				}
-//			}
-//		}
+		if(null == annoTypeMgr){ 
+			return result;
+		}
+		
+		for(Iterator iter = annoTypeMgr.getSystemPackageAnnotations().values().iterator(); iter.hasNext();) {
+			FlexibleRecordBinding rec = (FlexibleRecordBinding) iter.next();
+			if(rec.getAnnotation(AnnotationAnnotationTypeBinding.getInstance()) != null) {
+				AnnotationTypeBindingImpl aTypeBindingImpl = new AnnotationTypeBindingImpl(rec, null);
+				if(AnnotationAnnotationTypeBinding.getInstance() == aTypeBindingImpl.getAnnotationRecord().getSubType()) {
+					if(subtypes && aTypeBindingImpl.isPartSubType() ||
+					   !subtypes && !aTypeBindingImpl.isPartSubType()) {
+						if(filter.passes(aTypeBindingImpl)) {
+							result.add(new EGLPropertyRule(aTypeBindingImpl));
+						}
+					}
+				}
+			}
+		}
 		return result;
 	}
 	
@@ -1977,8 +2001,10 @@ public class EGLNewPropertiesHandler {
 	private static Collection createRulesForField(String complexPropertyName, String fieldName) {
 		Set result = new TreeSet(new EGLCaseInsensitiveComparator());
 		
-		FlexibleRecordBinding rec = null;
-//		FlexibleRecordBinding rec = (FlexibleRecordBinding) AnnotationTypeManager.getInstance().getSystemPackageAnnotations().get(InternUtil.intern(complexPropertyName));
+		if(null == annoTypeMgr){ 
+			return result;
+		}
+		FlexibleRecordBinding rec = (FlexibleRecordBinding) annoTypeMgr.getSystemPackageAnnotations().get(InternUtil.intern(complexPropertyName));
 		if(rec != null) {
 			IDataBinding[] fields = rec.getFields();
 			for(int i = 0; i < fields.length; i++) {
@@ -1994,8 +2020,11 @@ public class EGLNewPropertiesHandler {
 	}
 	
 	public static Collection createRulesFor(String propertyName) {
-		FlexibleRecordBinding rec = null;
-//		FlexibleRecordBinding rec = (FlexibleRecordBinding) AnnotationTypeManager.getInstance().getSystemPackageAnnotations().get(InternUtil.intern(propertyName));
+
+		if(null == annoTypeMgr){
+			return(Collections.EMPTY_LIST);
+		}
+		FlexibleRecordBinding rec = (FlexibleRecordBinding)annoTypeMgr.getSystemPackageAnnotations().get(InternUtil.intern(propertyName));
 		if(rec != null) {
 			AnnotationTypeBindingImpl aTypeBindingImpl = new AnnotationTypeBindingImpl(rec, null);
 			return Arrays.asList(new EGLPropertyRule[] {new EGLPropertyRule(aTypeBindingImpl)});
@@ -2005,8 +2034,10 @@ public class EGLNewPropertiesHandler {
 	
 	public static Collection createRulesForMemberAnnotations(String stereotypeName) {
 		Set result = new TreeSet();
-		FlexibleRecordBinding rec = null;
-//		FlexibleRecordBinding rec = (FlexibleRecordBinding) AnnotationTypeManager.getInstance().getSystemPackageAnnotations().get(InternUtil.intern(stereotypeName));
+		if(null == annoTypeMgr){
+			return(result);
+		}
+		FlexibleRecordBinding rec = (FlexibleRecordBinding) annoTypeMgr.getSystemPackageAnnotations().get(InternUtil.intern(stereotypeName));
 		if(rec != null) {
 			IAnnotationBinding aBinding = rec.getAnnotation(StereotypeAnnotationTypeBinding.getInstance());
 			if(aBinding != null) {
