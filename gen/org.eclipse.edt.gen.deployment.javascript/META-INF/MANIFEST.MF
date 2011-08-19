@@ -13,3 +13,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.eclipse.edt.gen.deployment.javascript,
  org.eclipse.edt.gen.deployment.javascript.templates,
  org.eclipse.edt.gen.deployment.util
+Bundle-Vendor: Eclipse EGL Development Tools
