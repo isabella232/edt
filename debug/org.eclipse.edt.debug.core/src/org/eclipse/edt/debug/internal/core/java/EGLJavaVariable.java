@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.internal.core.java;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
+import org.eclipse.debug.ui.actions.IWatchExpressionFactoryAdapter;
+import org.eclipse.debug.ui.actions.IWatchExpressionFactoryAdapterExtension;
 import org.eclipse.edt.debug.core.IEGLStackFrame;
 import org.eclipse.edt.debug.core.IEGLVariable;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
@@ -106,6 +109,23 @@ public class EGLJavaVariable extends EGLJavaDebugElement implements IEGLJavaVari
 		if ( adapter == IJavaStackFrame.class )
 		{
 			return frame.getJavaStackFrame();
+		}
+		if ( adapter == IWatchExpressionFactoryAdapter.class )
+		{
+			// This is to prevent the 'Watch' context menu item from appearing on variables.
+			return new IWatchExpressionFactoryAdapterExtension() {
+				@Override
+				public String createWatchExpression( IVariable variable ) throws CoreException
+				{
+					return variable.getName();
+				}
+				
+				@Override
+				public boolean canCreateWatchExpression( IVariable variable )
+				{
+					return false;
+				}
+			};
 		}
 		return super.getAdapter( adapter );
 	}
