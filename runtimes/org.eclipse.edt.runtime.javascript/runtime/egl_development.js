@@ -1155,12 +1155,11 @@ egl.getDebugVariablesString = function(response) {
 	
 	// Array elements should retain type and name info from the parent.
 	var type = frame.variableInfos[variableIndex].type;
-	var idx;
-	if (type && (idx=type.lastIndexOf("[]")) == type.length-2) {
-		type = type.substr(0,idx);
+	if (type && type.indexOf("egl.lang.EglList<") == 0 && type.charAt(type.length-1) == ">") {
+		type = type.substring(17, type.length-1);
 		for (var i=0; i<children.length; i++) {
 			children[i].type = type;
-			children[i].name = frame.variableInfos[variableIndex].name + "[" + (i+1) + "]";
+			children[i].name = "[" + (i+1) + "]";
 			
 			var jsName = frame.variableInfos[variableIndex].jsName;
 			if (jsName == null) {
