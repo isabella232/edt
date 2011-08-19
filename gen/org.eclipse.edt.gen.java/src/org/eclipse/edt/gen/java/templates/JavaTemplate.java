@@ -58,6 +58,7 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genGetterSetters = "genGetterSetters";
 	public static final String genJsonTypeDependentOptions = "genJsonTypeDependentOptions";
 	public static final String genJsonTypeName = "genJsonTypeName";
+	public static final String genImports = "genImports";
 	public static final String genInitialization = "genInitialization";
 	public static final String genInitialize = "genInitialize";
 	public static final String genInitializeMethod = "genInitializeMethod";
@@ -73,6 +74,7 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genMemberName = "genMemberName";
 	public static final String genName = "genName";
 	public static final String genNewExpression = "genNewExpression";
+	public static final String genPackageStatement = "genPackageStatement";
 	public static final String genPart = "genPart";
 	public static final String genPartName = "genPartName";
 	public static final String genRuntimeConstraint = "genRuntimeConstraint";
