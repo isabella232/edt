@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?><!--
+    Copyright (c) 2005, 2011 IBM Corporation and others.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+   
+    Contributors:
+        IBM Corporation - initial API and implementation
+ -->
+<plugin>
+	<extension
+         point="org.eclipse.edt.ide.deployment.deploymentSolution">
+      <DeploymentSolution 
+            class="org.eclipse.edt.ide.deployment.rui.solution.J2EEDeploymentSolution"
+            id="j2ee">
+      </DeploymentSolution>
+   </extension>
+   
+ <!--extension
+       point="com.ibm.etools.edt.core.ide.partsDeployer">
+       <EGLPartsDeployer 
+       		id="J2EEJava" 
+       		class = "com.ibm.etools.egl.deploy.j2ee.internal.solution.J2EEJavaDeploymentOperation" />
+ </extension-->
+ <extension
+       point="org.eclipse.edt.ide.deployment.deploymentOperation">
+    <DeploymentOperation
+          class="org.eclipse.edt.ide.deployment.rui.operation.GenerateHTMLFileOperation"
+          deploymentSolutionName="j2ee"
+          id="org.eclipse.edt.ide.deployment.rui.GenerateHTMLFileOperation">
+    </DeploymentOperation>
+    <DeploymentOperation
+          class="org.eclipse.edt.ide.deployment.rui.operation.CopyJSRuntimeResourcesOperation"
+          deploymentSolutionName="j2ee"
+          id="org.eclipse.edt.ide.deployment.rui.CopyJSRuntimeResourcesOperation">
+    </DeploymentOperation>
+    <DeploymentOperation
+          class="org.eclipse.edt.ide.deployment.rui.operation.CopyJavaRuntimeResourcesOperation"
+          deploymentSolutionName="j2ee"
+          id="org.eclipse.edt.ide.deployment.rui.CopyJavaRuntimeResourcesOperation">
+    </DeploymentOperation>
+    <DeploymentOperation
+          class="org.eclipse.edt.ide.deployment.rui.operation.CopyResourcesOperation"
+          deploymentSolutionName="j2ee"
+          id="org.eclipse.edt.ide.deployment.rui.CopyResourcesOperation">
+    </DeploymentOperation>
+    <DeploymentOperation
+          class="org.eclipse.edt.ide.deployment.rui.operation.UpdateWebXMLProxyOperation"
+          deploymentSolutionName="j2ee"
+          id="org.eclipse.edt.ide.deployment.rui.UpdateWebXMLProxyOperation">
+    </DeploymentOperation>
+ </extension>
+ 
+ 
+<!-- =============================================================================== -->
+<!-- Preference Pages									                            	     -->
+<!-- =============================================================================== -->
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+      		name="%PrefPageName"
+      		category="org.eclipse.edt.ide.rui.ruiPreferences"
+      		class="org.eclipse.edt.ide.deployment.rui.internal.preferences.RUIDeployPreferencePage"
+      		id="org.eclipse.edt.ide.deployment.rui.internal.preferences.RUIDeployPreferencePage">
+      </page>
+   </extension>
+   
+<!-- =============================================================================== -->
+<!-- DD Editor Contributions								                            	     -->
+<!-- =============================================================================== -->
+   <extension point="org.eclipse.edt.ide.ui.eglDDEditorPageContributions">
+      <provider class="org.eclipse.edt.ide.deployment.rui.internal.editor.RUIFormPageProvider"/>
+   </extension >
+   <extension point="org.eclipse.edt.ide.ui.eglDDEditorToolbarContributions">
+      <provider class="org.eclipse.edt.ide.deployment.rui.internal.editor.RUIDDToolbarProvider"/>
+   </extension>
+   
+ <!--extension
+    point="com.ibm.etools.egl.ui.runtimeDataSourceChangeParticipant">
+    <contribution class="com.ibm.etools.egl.deploy.j2ee.internal.solution.generators.TomcatDataSourceChangeParticipant"/>
+ </extension-->
+
+</plugin>
