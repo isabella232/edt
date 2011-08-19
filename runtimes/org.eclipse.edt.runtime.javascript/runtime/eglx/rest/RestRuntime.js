@@ -1,0 +1,211 @@
+/*******************************************************************************
+ * Copyright (c) 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
+egl.defineClass(
+    'eglx.rest', 'RESTServiceRefWrapper',
+    'eglx.services', 'ServiceRefWrapper',
+{        
+    //String f_baseURI;   
+    //String f_statefulSessionIdName;
+    //String f_uriTemplate;
+    
+    "constructor" : function(/*String*/ name, /*String*/ baseURI, /*String*/ eglStatefulSessionIdName) {
+    	this.f_bindingName = name || "";
+        this.f_baseURI = baseURI || "";
+        this.f_statefulSessionIdName = eglStatefulSessionIdName || "JSESSIONID";
+        this.f_uriTemplate="";    
+        this.f_type = "rest";
+        this.f_setSessionCookie = false;		//only used for EGL JSON-RPC service call
+    },    
+        
+    "invokeService" : function(/*RUIHandler*/ handler,
+					            /*func*/ httpCallback, 
+					            /*func*/ errorCallback, 
+					            /*int*/ serviceTimeout,
+					            /*String*/ functionName,						            
+					            /*Array of Objects*/ inParamVals,
+					            /*Array of signature strings*/ inParamSignatures,
+					            /*String*/ paramOrders,
+					            /*Array of Functions or Array*/ callbackArgs, 
+					            
+			//the following parameters are only used for Rest service call
+					            /*boolean*/ hasXXXRestAnnotation,
+					            /*String*/ resolvedUriTemplate,
+					            /*int*/ requestFormat,
+					            /*int*/ responseFormat,
+					            /*String*/ restMethod,                        
+					            /*String, Dictionary, Record or XMLElement*/ resourceParamIn){
+    	
+    	this.setServiceTimeoutInHeader(serviceTimeout);
+    	if(hasXXXRestAnnotation == true){
+    		this.invokeRESTService(handler, 
+				    				httpCallback, 
+				    				errorCallback,
+				    				resolvedUriTemplate,
+				    				requestFormat, responseFormat, restMethod,
+				    				resourceParamIn, 
+				    				callbackArgs);
+    	}
+    	else{
+    	    this.invokeEGLService(handler, 
+    	    						httpCallback, 
+    	    						errorCallback, 
+    	    						functionName,
+    	    						inParamVals,
+    	    						inParamSignatures,
+    	    						callbackArgs);    		
+    	}
+    },
+    /**
+     * handler is the RUIHandler, is used as context for the callback function 
+     * inParamVals is a array of ordered in and inout parameter values
+     * the request and response uses json-rpc
+     */
+    "invokeEGLService" : function(
+                        /*RUIHandler*/ handler,
+                        /*func*/ httpCallback, 
+                        /*func*/ errorCallback, 
+                        /*String*/ functionName,  
+                        /*Array of Objects*/ inParamVals,
+                        /*Array of signature strings*/ inParamSignatures,
+                        /*Array of Functions or Array*/ callbackArgs){
+
+        egl.valueByKey( this.getRESTRequestHeader(), egl.HEADER_EGLREST, "TRUE", "S;" );  
+        
+        //set the session id for stateful calls
+        egl.valueByKey( this.getRESTRequestHeader(), egl.STATEFULSESSIONID, this.f_statefulSessionIdName, "S;" );                
+        var sessionIdObj = egl.findByKey(egl.statefulSessionMap, this.f_baseURI);
+        if(sessionIdObj != null && sessionIdObj != undefined){
+        	var sessionIdValue = sessionIdObj.sidVal;
+        	
+        	var cookieValue = egl.findByKey(this.getRESTRequestHeader(), "Cookie");
+        	if(cookieValue != null && cookieValue != undefined){	
+	        	cookieValue = cookieValue.eze$$value;
+        	}
+        	else
+        		cookieValue = "";
+        	
+        	if(!this.f_setSessionCookie){        		
+        		if(cookieValue != ""){
+               		//if there already exists a cookie, append to it
+            		cookieValue += "; ";
+        		}        			        			
+            	var newCookieValue = cookieValue + sessionIdValue;        		
+         		
+            	egl.valueByKey( this.getRESTRequestHeader(), "Cookie", newCookieValue, "S;");
+            	this.f_setSessionCookie = true;        		
+        	}
+        	else{
+        		if(sessionIdObj.oldVal != null && sessionIdObj.oldVal != undefined){
+        			//need to parse the existing cookieValue, replace with the new value        			
+        			var toBeReplaced = new RegExp(sessionIdObj.oldVal, "i");        			
+        			cookieValue = cookieValue.replace(toBeReplaced, sessionIdValue);
+        			
+                	egl.valueByKey( this.getRESTRequestHeader(), "Cookie", cookieValue, "S;");
+                	this.f_setSessionCookie = true;        		        			
+        		}
+        		//else if sessionIdObj.oldVal == null && this.f_setSessionCookie == true, 
+        		//the session cookie is already set in the header, do nothing 
+        	}
+        	if( sessionIdObj.httpSessionId != null ){
+            	egl.valueByKey( this.getRESTRequestHeader(), egl.HTTP_SESSION_ID_KEY, sessionIdObj.httpSessionId, "S;");
+        	}
+        }        
+        
+        //uses json-rpc     
+        this.f_RESTmethod = 'POST';
+        this.f_requestFormat = egl.formatJSON;
+        this.f_responseFormat = egl.formatJSON;                     
+                        
+        this.f_httpCallback = httpCallback;
+        this.f_errCallback = errorCallback;
+        this.f_callbackArgs = callbackArgs;
+        var url = this.f_baseURI;
+        
+        //let's build the payload body using json-rpc
+        var payloadbodyObj = {
+            bindingName: this.f_bindingName,
+            method: functionName || "",
+            params: inParamVals || [],
+            eze$$InParamSignatures: inParamSignatures || []
+        };
+        
+        var body = egl.eglx.json.toJSONString(payloadbodyObj);        
+        egl.eglx.services.$ServiceRT.internalInvokeService(
+                    handler,
+                    url,                     //no uri
+                    this, 
+                    {},                     //pass null for query parameters 
+                    body);        
+    }    
+    
+});
+egl.eglx.rest.invokeService = function(httpRest, 
+											inData, 
+											inDatatypes,
+											inFunctionParameterNames,
+											returnTypes,
+											interfaceHttpMethod,
+											interfaceUrl,
+											interfaceRequestEncoding, interfaceRequestCharset, interfaceRequestContentType,
+											interfaceResponseEncoding, interfaceResponseCharset, interfaceResponseContentType,
+											firstInDataNotInURL,
+											callbackFunction,
+											errorCallbackFunction){
+	/*
+					[str1, str2, eze$Temp1, eze$Temp2],
+					["egl.egl.lang.EString", "egl.egl.lang.EInt32", "egl.egl.lang.EInt16", "egl.egl.lang.EFloat64"],
+					["myarg1", "myArg2", "myArg3", "myArg4"],
+					["egl.egl.lang.EInt16", "egl.egl.lang.EString"],
+					"GET",
+					//http://www.ibm.com/{myarg1}/{myArg2}?item={myArg4}
+					"http://www.ibm.com/" + egl.eglx.http.HttpLib.convertToURLEncoded(egl.egl.lang.EString.fromEString(str1)) + "/" + egl.eglx.http.HttpLib.convertToURLEncoded(egl.egl.lang.EString.fromEInt32(str2)) + "?item=" + egl.eglx.http.HttpLib.convertToURLEncoded(egl.egl.lang.EString.ezeCast(eze$Temp2)),
+					egl.formatNONE, "requst charset", " request content types", egl.formatNONE, "response Charset", "response Content Type",
+					eze$Temp1, handleF2Resonse, egl.eglx.services.ServiceLib['$inst'].serviceExceptionHandler);
+
+	 */
+	if(httpRest === undefined || httpRest === null){
+		httpRest = new egl.eglx.rest.HttpREST;
+	}
+	httpRest.eze$$request = new egl.eglx.http.HttpRequest();
+	httpRest.response.status = null;
+	httpRest.response.statusMessage = null;
+	httpRest.response.body = null;
+	httpRest.eze$$response = new egl.eglx.http.HttpResponse();
+	if(httpRest.request.uri != undefined && httpRest.request.uri != null){
+		firstInDataNotInURL = null; 
+		httpRest.eze$$request.uri = httpRest.request.uri;
+		for(idx = 0; idx < inFunctionParameterNames.length; idx++){
+			if(idx == 0 && 
+					egl.toString(inFunctionParameterNames[idx].indexOf("http://")) &&
+					httpRest.eze$$request.uri.indexOf(httpRest.eze$$request.uri.indexOf("{" + inFunctionParameterNames[idx] + "}") > -1)){
+				httpRest.eze$$request.uri.replace("{" + inFunctionParameterNames[idx] + "}", egl.toString(inData[idx]));
+			}
+			else if(httpRest.eze$$request.uri.indexOf(httpRest.eze$$request.uri.indexOf("{" + inFunctionParameterNames[idx] + "}") > -1)){
+				httpRest.eze$$request.uri.replace("{" + inFunctionParameterNames[idx] + "}", egl.eglx.http.HttpLib.convertToURLEncoded(egl.toString(inData[idx])));
+			}
+			else{
+				firstInDataNotInURL = inData[idx];
+			}
+		}
+	}
+	else{
+		httpRest.eze$$request.uri = interfaceUrl;
+	}
+	httpRest.eze$$request.method = httpRest.request.method === null ? interfaceHttpMethod : httpRest.request.method;
+	httpRest.eze$$request.encoding = httpRest.request.encoding === null ?interfaceRequestEncoding : httpRest.request.encoding;
+	httpRest.eze$$request.charset = httpRest.request.charset === null ? interfaceRequestCharset : httpRest.request.charset;
+	httpRest.eze$$request.contentType = httpRest.request.contentType === null ? interfaceRequestContentType : httpRest.request.contentType;
+	httpRest.eze$$responseencoding = httpRest.response.encoding === null ?interfaceResponseEncoding : httpRest.response.encoding;
+	httpRest.eze$$responsecharset = httpRest.response.charset === null ? interfaceResponseCharset : httpRest.response.charset;
+	httpRest.eze$$responsecontentType = httpRest.response.contentType === null ? interfaceResponseContentType : httpRest.response.contentType;
+	egl.eglx.services.$ServiceRT.encodeResquestBody(httpRest, firstInDataNotInURL);
+	egl.eglx.services.$ServiceRT.internalInvokeService(httpRest, returnTypes, callbackFunction, errorCallbackFunction, egl.eglx.services.ServiceKind.REST, null);
+};

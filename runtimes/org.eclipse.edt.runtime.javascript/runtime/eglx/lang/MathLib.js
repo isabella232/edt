@@ -1,0 +1,218 @@
+/*******************************************************************************
+ * Copyright (c) 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
+/****************************************************************************
+ * MathLib
+ ****************************************************************************/
+egl.defineClass(
+		'eglx.lang', 'MathLib',
+	{
+		"constructor" : function() {
+		}
+	}
+);	
+
+egl.eglx.lang.MathLib["random"] = function() {
+};
+		
+egl.eglx.lang.MathLib["abs"] = function(/* float */value) {
+	return Math.abs(value);
+};
+egl.eglx.lang.MathLib["acos"] = function(/* float */value) {
+	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+};
+egl.eglx.lang.MathLib["asin"] = function(/*float*/value) {
+	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+};
+egl.eglx.lang.MathLib["atan"] = function(/*float*/value) {
+	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+};
+egl.eglx.lang.MathLib["atan2"] = function(/*float*/value) {
+	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+};
+egl.eglx.lang.MathLib["ceiling"] = function(/*float*/value) {
+	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+};
+egl.eglx.lang.MathLib["cos"] = function(/*float*/value) {
+	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+};
+egl.eglx.lang.MathLib["cosh"] = function(/*float*/x) {
+	return ((Math.exp(x) + Math.exp(-x)) / 2);
+};
+egl.eglx.lang.MathLib["decimals"] = function(/*decimal*/x) {
+	if (x.eze$$value === null) {
+		return 0;
+	}
+
+	var kind;
+
+	var firstChar = x.eze$$signature.charAt(0);
+	if (firstChar !== '?') {
+		kind = firstChar;
+	} else {
+		kind = x.eze$$signature.charAt(1);
+	}
+
+	var result = 0;
+	switch (kind) {
+	case 'b':
+	case 'N':
+	case 'n':
+	case 'd':
+	case '9':
+	case 'p':
+		var colon = x.eze$$signature.indexOf(':');
+		result = x.eze$$signature.substring(colon + 1, x.eze$$signature
+				.indexOf(';'));
+	}
+
+	return result;
+};
+
+egl.eglx.lang.MathLib["exp"] = function(/*float*/value) {
+	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+};
+egl.eglx.lang.MathLib["floor"] = function(/*float*/value) {
+	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+};
+
+//TODO sbg need frexp()
+
+//TODO sbg need ldexp()
+
+egl.eglx.lang.MathLib["log"] = function(/*float*/x) {
+	if (x > 0) {
+		return Math.log(x);
+	} else {
+		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2038E", [ "MathLib.log" ]);
+	}
+};
+
+egl.eglx.lang.MathLib["log10"] = function(/*float*/x) {
+	if (x > 0) {
+		return Math.LOG10E * Math.log(x);
+	} else {
+		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2038E", [ "MathLib.log10" ]);
+	}
+};
+
+//TODO sbg need max()
+
+//TODO sbg need min()
+
+//TODO sbg need modf()
+
+egl.eglx.lang.MathLib["pow"] = function(/*float*/base, /*float*/exponent) {
+	if (base == 0 && exp <= 0) {
+		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2040E", [ "MathLib.pow" ]);
+	} else if (base < 0 && parseInt(exp) != parseFloat(exp)) {
+		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2041E", [ "MathLib.pow" ]);
+	} else {
+		return Math.pow(base, exp);
+	}
+};
+
+egl.eglx.lang.MathLib["precision"] = function(x) {
+	if (x.eze$$value === null) {
+		return 0;
+	}
+
+	var kind;
+
+	var firstChar = x.eze$$signature.charAt(0);
+	var firstCharIdx = 0;
+	if (firstChar !== '?') {
+		kind = firstChar;
+	} else {
+		kind = x.eze$$signature.charAt(1);
+		firstCharIdx = 1;
+	}
+
+	switch (kind) {
+	case 'I':
+		return 9;
+	case 'i':
+		return 4;
+	case 'B':
+		return 18;
+	case 'F':
+		return 15;
+	case 'f':
+		return 6;
+	case 'b':
+	case 'N':
+	case 'n':
+	case 'd':
+	case '9':
+	case 'p':
+		return x.eze$$signature.substring(firstCharIdx + 1, x.eze$$signature
+				.indexOf(':'));
+	case 'X':
+		var length = x.eze$$signature.substring(firstCharIdx + 1,
+				x.eze$$signature.indexOf(';'));
+		if (length === '8') {
+			return 6;
+		} else if (length === '16') {
+			return 15;
+		}
+	}
+	return 0;
+};
+
+egl.eglx.lang.MathLib["round"] = function( /* value */v, /* exp */e) {
+	var rounder;
+	if (e > 0) {
+		rounder = 5.0 * Math.pow(10, e - 1);
+	} else {
+		rounder = 5.0 / Math.pow(10, -e + 1);
+	}
+
+	if (v >= 0) {
+		v = v + rounder;
+	} else {
+		v = v - rounder;
+	}
+
+	if (e > 0) {
+		v = v / Math.pow(10, e);
+		v = parseInt(v);
+		v = v * Math.pow(10, e);
+	} else {
+		v = v * Math.pow(10, -e);
+		v = parseInt(v);
+		v = v / Math.pow(10, -e);
+	}
+
+	return v;
+};
+
+egl.eglx.lang.MathLib["sin"] = function(/*float*/x) {
+	return ((Math.exp(x) - Math.exp(-x)) / 2);
+};
+
+egl.eglx.lang.MathLib["sinh"] = function(/*float*/value) {
+	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+};
+
+egl.eglx.lang.MathLib["sqrt"] = function(/*float*/x) {
+	if (x >= 0) {
+		return Math.sqrt(x);
+	} else {
+		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2039E", [ "MathLib.sqrt" ]);
+	}
+};
+
+egl.eglx.lang.MathLib["tan"] = function(/*float*/value) {
+	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+};
+
+egl.eglx.lang.MathLib["tanh"] = function(/*float*/x) {
+	return ((Math.exp(2 * x) - 1) / (Math.exp(2 * x) + 1));
+};

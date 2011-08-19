@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Javascript
+Bundle-SymbolicName: org.eclipse.edt.runtime.javascript
+Bundle-Version: 1.0.0.qualifier
