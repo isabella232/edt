@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.edt.ide.deployment.deploymentOperation">
+      <DeploymentOperation
+            class="org.eclipse.edt.ide.deployment.services.operation.GenerateServiceBindXMLFileOperation"
+            deploymentSolutionName="j2ee"
+            id="org.eclipse.edt.ide.deployment.services.operation.GenerateServiceBindFileOperation">
+      </DeploymentOperation>
+      <DeploymentOperation
+            class="org.eclipse.edt.ide.deployment.services.operation.GenerateServiceUriMappingFileOperation"
+            deploymentSolutionName="j2ee"
+            id="org.eclipse.edt.ide.deployment.services.operation.GenerateServiceUriMappingFileOperation">
+      </DeploymentOperation>
+      <DeploymentOperation
+            class="org.eclipse.edt.ide.deployment.services.operation.GenerateServiceBindJSFileOperation"
+            deploymentSolutionName="j2ee"
+            id="org.eclipse.edt.ide.deployment.services.operation.GenerateServiceBindJSFileOperation">
+      </DeploymentOperation>
+      <DeploymentOperation
+            class="org.eclipse.edt.ide.deployment.services.operation.UpdateWebXMLServiceOperation"
+            deploymentSolutionName="j2ee"
+            id="org.eclipse.edt.ide.deployment.services.operation.UpdateWebXMLServiceOperation">
+      </DeploymentOperation>
+   </extension>
+
+</plugin>
