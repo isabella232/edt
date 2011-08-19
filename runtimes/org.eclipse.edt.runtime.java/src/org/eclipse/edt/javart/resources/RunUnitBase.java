@@ -417,6 +417,7 @@ public class RunUnitBase implements RunUnit, Serializable
 					new String[] { ex.toString() } );
 		}
 		System.out.println( message );
+		ex.printStackTrace( System.out );
 
 		try
 		{
