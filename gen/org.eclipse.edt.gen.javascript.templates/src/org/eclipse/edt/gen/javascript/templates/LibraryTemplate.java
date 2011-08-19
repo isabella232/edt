@@ -134,11 +134,15 @@ public class LibraryTemplate extends JavaScriptTemplate {
 
 	public void genContainerBasedAccessor(Library library, Context ctx, TabbedWriter out, Function arg) {
 		out.print("new egl.egl.jsrt.Delegate(");
+		ctx.invoke(genContainerBasedAccessorArgs, library, ctx, out, arg);
+		out.print(")");
+	}
+	
+	public void genContainerBasedAccessorArgs(Library library, Context ctx, TabbedWriter out, Function arg) {
 		ctx.invoke(genAccessor, library, ctx, out);
 		out.print(",");
 		ctx.invoke(genName, library, ctx, out);
 		out.print(".prototype.");
 		ctx.invoke(genName, arg, ctx, out);
-		out.print(")");
 	}
 }
