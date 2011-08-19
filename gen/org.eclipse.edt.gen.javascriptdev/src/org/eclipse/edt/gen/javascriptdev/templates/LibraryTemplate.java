@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.javascriptdev.templates;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascriptdev.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Library;
 
 public class LibraryTemplate extends org.eclipse.edt.gen.javascript.templates.LibraryTemplate {
@@ -30,5 +31,13 @@ public class LibraryTemplate extends org.eclipse.edt.gen.javascript.templates.Li
 		out.print(", type : " + quoted(lib.getFullyQualifiedName()) + ", jsName : \"");
 		ctx.invoke(genAccessor, lib, ctx, out);
 		out.print( "\"}" );
+	}
+	
+	@Override
+	public void genContainerBasedAccessorArgs(Library library, Context ctx, TabbedWriter out, Function arg) {
+		super.genContainerBasedAccessorArgs(library, ctx, out, arg);
+		out.print(", \"");
+		ctx.invoke(genName, arg, ctx, out);
+		out.print("\"");
 	}
 }
