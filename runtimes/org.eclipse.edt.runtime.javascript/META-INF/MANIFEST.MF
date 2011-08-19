@@ -4,3 +4,4 @@ Bundle-Name: EDT Javascript Runtime
 Bundle-SymbolicName: org.eclipse.edt.runtime.javascript
 Bundle-Version: 0.7.0.qualifier
 Bundle-Vendor: Eclipse EGL Development Tools
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
