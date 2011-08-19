@@ -73,10 +73,10 @@ public class Constants {
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceLib.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceRuntimes.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/ui/rui/RUILib.js");
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/ui/rui/Widget.js"); //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/ui/rui/Document.js"); //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/ui/rui/Event.js"); //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/ui/rui/View.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/ui/rui/Widget.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/ui/rui/Document.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/ui/rui/Event.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/ui/rui/View.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/xml/binding/annotation/Xml.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/xml/binding/annotation/XMLStructureKind.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/xml/Xml.js"); //$NON-NLS-1$
