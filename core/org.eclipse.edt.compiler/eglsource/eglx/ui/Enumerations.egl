@@ -1,0 +1,8 @@
+package eglx.ui;
+
+Enumeration SignKind
+	leading = 1,
+	none = 2,
+	parens = 3,
+	trailing = 4
+end
