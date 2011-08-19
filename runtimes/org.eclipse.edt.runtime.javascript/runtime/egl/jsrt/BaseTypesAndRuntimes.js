@@ -2206,7 +2206,6 @@ egl.convertAnyToBigint = function( any, nullable, creatx )
 			case 'd':
 			case '9':
 			case 'p':
-			case 'B':
 				return egl.convertDecimalToBigint(any.eze$$value,creatx);
 			
 			case 'S':
