@@ -12,3 +12,4 @@ Export-Package: org.eclipse.edt.ide.deployment.core,
 Require-Bundle: org.eclipse.emf.edit;bundle-version="2.6.0",
  org.eclipse.emf.ecore.xmi;bundle-version="2.5.0",
  org.eclipse.core.runtime;bundle-version="3.6.0"
+Bundle-Vendor: Eclipse EGL Development Tools
