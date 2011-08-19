@@ -17,12 +17,15 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Enumeration;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 
 public class EnumerationTemplate extends JavaTemplate {
 
 	public void preGenClassBody(Enumeration part, Context ctx) {}
 
+	public void genImports(Part part, Context ctx, TabbedWriter out) {}
+	
 	public void genClassBody(Enumeration part, Context ctx, TabbedWriter out) {
 		// generate enumerated fields
 		List<EEnumLiteral> enums = part.getEntries();
@@ -48,6 +51,7 @@ public class EnumerationTemplate extends JavaTemplate {
 	}
 
 	public void genConstructors(Enumeration part, Context ctx, TabbedWriter out) {
+		out.print("private ");
 		ctx.invoke(genClassName, (Type) part, ctx, out);
 		out.println("(int value) {");
 //		out.print("super(");

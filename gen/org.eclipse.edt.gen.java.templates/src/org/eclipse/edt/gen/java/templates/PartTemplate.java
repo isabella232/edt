@@ -40,7 +40,8 @@ public class PartTemplate extends JavaTemplate {
 	}
 
 	public void genPart(Part part, Context ctx, TabbedWriter out) {
-		genPackageStatement(part, ctx, out);
+		ctx.invoke(genPackageStatement, part, ctx, out);
+		ctx.invoke(genImports, part, ctx, out);
 		ctx.invoke(genClassHeader, part, ctx, out);
 		ctx.invoke(genClassBody, part, ctx, out);
 		out.println("}");
@@ -54,6 +55,8 @@ public class PartTemplate extends JavaTemplate {
 			out.print(packageName);
 			out.println(";");
 		}
+	}
+	public void genImports(Part part, Context ctx, TabbedWriter out) {
 		out.println("import org.eclipse.edt.javart.resources.*;");
 		out.println("import org.eclipse.edt.javart.*;");
 		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partTypesImported);
