@@ -1,0 +1,87 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.ide.rui.internal.project;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
+import org.eclipse.edt.ide.ui.project.templates.AbstractProjectTemplateClass;
+import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
+import org.eclipse.edt.ide.widgetLibProvider.IWidgetLibProvider;
+import org.eclipse.edt.ide.widgetLibProvider.WidgetLibProviderManager;
+
+public class WebClientProjectTemplate extends AbstractProjectTemplateClass {
+	
+	protected void setTargetRuntime(
+			final ProjectConfiguration eglProjConfiguration) {
+		eglProjConfiguration.setTargetRuntimeValue(ProjectConfiguration.JAVASCRIPT_PLATFORM);
+	}
+
+	public void applyTemplate(IProject project) {
+		// TODO Auto-generated method stub, remember to deal with the basePackage validation
+//		for(Iterator it = ops.iterator(); it.hasNext();)
+//		{
+//			Object obj = it.next();
+//			if(obj instanceof WorkspaceModifyOperation)
+//			{
+//				WorkspaceModifyOperation op = (WorkspaceModifyOperation)obj;
+//				getContainer().run(true, true, op);
+//			}
+//		}			
+	}
+	
+	private URL getWidgetProjectURL(String resourcePluginName, String libraryResourceFolder, String projectName ) throws IOException {
+		URL url = FileLocator.resolve(Platform.getBundle(resourcePluginName).getEntry(libraryResourceFolder + projectName + ".zip"));
+		return url;
+	}
+	
+	protected void addMoreOperations(final ProjectConfiguration eglProjConfiguration,ISchedulingRule rule, List listOps) {
+		List dependencyOps = new ArrayList();
+		IWidgetLibProvider[] providers = WidgetLibProviderManager.getInstance().getProviders();
+		
+		if (providers != null) {
+			String libName, projectName, resourcePluginName, resourceFolder;
+			for (int i = 0; i < providers.length; i++) {
+				libName = providers[i].getLibName();
+				projectName = providers[i].getProjectName();
+				resourcePluginName = providers[i].getResourcePluginName();
+				resourceFolder = providers[i].getResourceFolder();
+				if( eglProjConfiguration.getSelectedWidgetLibraries().contains( libName ) ) {
+					IWidgetLibraryImporter importer = providers[i].getImporter();
+					listOps.add(importer.getImportRUIProjectsOperation(  rule, resourcePluginName, resourceFolder, projectName));
+					dependencyOps.add(importer.getAddProjectDependencyOperation(  eglProjConfiguration, rule, projectName ));
+				}
+			}
+		}
+		listOps.addAll(dependencyOps);
+	}
+
+	@Override
+	protected void setCompilerAndGenerator(
+			ProjectConfiguration eglProjConfiguration) {
+		eglProjConfiguration.setSelectedCompiler(ProjectConfiguration.EDT_COMPILER_ID);
+		String[] generatorIds = new String[]{ProjectConfiguration.JAVASCRIPT_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_DEV_GENERATOR_ID};
+		eglProjConfiguration.setSelectedGenerators(generatorIds);		
+	}
+
+	@Override
+	protected void setDefaultPackages() {
+		this.setDefaultPackages(new String[]{"client", "common"});
+	}
+
+}

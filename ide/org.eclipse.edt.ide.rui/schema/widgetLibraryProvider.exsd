@@ -1,0 +1,211 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipse.edt.ide.rui" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="org.eclipse.edt.ide.rui" id="widgetLibraryProvider" name="Widget Library Provider"/>
+      </appInfo>
+      <documentation>
+         This extension point allows you to contribute a widget library project to the new EGL project wizard.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appInfo>
+            <meta.element />
+         </appInfo>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="provider" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="provider">
+      <complexType>
+         <attribute name="libname" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="provider" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Who contribute to this library
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="version" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="version_desc" type="string">
+            <annotation>
+               <documentation>
+                  Additional message for version. For example the widget library is in version 0.7.0 which based in Dojo 1.6.1. Set Dojo 1.6.1 as version description will show as 0.7.0 (Dojo 1.6.1) at version column.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="logo" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="resource"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="detail" type="string">
+            <annotation>
+               <documentation>
+                  The widget library detail description
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="selected" type="boolean" use="default" value="false">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="resourcePluginName" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="resourceFolder" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="projectName" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="importClass" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipase.edt.ide.rui.internal.project.IWidgetLibraryImporter"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         0.7.0
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         &lt;pre&gt;
+ &lt;extension
+         point=&quot;org.eclipse.edt.ide.ui.widgetLibraryProvider&quot;&gt;
+      &lt;provider
+            importClass=&quot;org.eclipse.edt.ide.ui.wizards.DefaultWidgetLibraryImporter&quot;
+            libname=&quot;Rich UI widgets v0.7.0&quot;
+            projectName=&quot;org.eclipse.edt.rui.widgets_0.7.0&quot;
+            resourceFolder=&quot;/org.eclipse.edt.ide.ui.rui/&quot;
+            resourcePluginName=&quot;org.eclipse.edt.ide.ui.resources&quot;
+            selected=&quot;true&quot;&gt;
+      &lt;/provider&gt;
+      &lt;provider
+            importClass=&quot;org.eclipse.edt.ide.ui.wizards.DefaultWidgetLibraryImporter&quot;
+            libname=&quot;Dojo widgets v0.7.0 (Dojo Toolkit v1.6.1)&quot;
+            projectName=&quot;org.eclipse.edt.rui.dojo_0.7.0&quot;
+            resourceFolder=&quot;/org.eclipse.edt.ide.ui.rui/&quot;
+            resourcePluginName=&quot;org.eclipse.edt.ide.ui.resources&quot;
+            selected=&quot;true&quot;&gt;
+      &lt;/provider&gt;
+      &lt;provider
+            importClass=&quot;org.eclipse.edt.ide.ui.wizards.DefaultWidgetLibraryImporter&quot;
+            libname=&quot;Dojo widgets remote v0.7.0 (Google CDN Dojo Toolkit v1.6.1)&quot;
+            projectName=&quot;org.eclipse.edt.rui.dojo.remote_0.7.0&quot;
+            resourceFolder=&quot;/org.eclipse.edt.ide.ui.rui/&quot;
+            resourcePluginName=&quot;org.eclipse.edt.ide.ui.resources&quot;
+            selected=&quot;false&quot;&gt;
+      &lt;/provider&gt;
+      &lt;provider
+            importClass=&quot;org.eclipse.edt.ide.ui.wizards.DefaultWidgetLibraryImporter&quot;
+            libname=&quot;Rich UI widgets minimum v0.7.0&quot;
+            projectName=&quot;org.eclipse.edt.rui.widgets.minimum_0.7.0&quot;
+            resourceFolder=&quot;/org.eclipse.edt.ide.ui.rui/&quot;
+            resourcePluginName=&quot;org.eclipse.edt.ide.ui.resources&quot;
+            selected=&quot;true&quot;&gt;
+      &lt;/provider&gt;
+   &lt;/extension&gt;
+&lt;/pre&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiinfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+
+</schema>

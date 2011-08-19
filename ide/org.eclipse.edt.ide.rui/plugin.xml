@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+	<extension-point id="widgetLibraryProvider" name="Widget Library Provider" schema="schema/widgetLibraryProvider.exsd"/>
+<!--
+***********************************************************************
+Register the Preference Pages
+***********************************************************************
+-->
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+      		name="%RUI_Preference_Page_Name"
+      		category="org.eclipse.edt.ide.ui.preferences"
+      		class="org.eclipse.edt.ide.rui.internal.preferences.RUIPreferencePage"
+      		id="org.eclipse.edt.ide.rui.ruiPreferences">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="org.eclipse.edt.ide.rui.internal.RUIPReferenceInitializer"/>
+   </extension>
+   <extension
+         point="org.eclipse.edt.ide.ui.projectTemplates">
+      <template
+            category="org.eclipse.edt.ide.ui.projects"
+            default="false"
+            description="%EGLWebClientProjectDescription"
+            icon="icons/browser.gif"
+            id="org.eclipse.edt.ide.ui.projects.webClient"
+            name="%EGLWebClientProject"
+            templateClass="org.eclipse.edt.ide.rui.internal.project.WebClientProjectTemplate"
+            wizardClass="org.eclipse.edt.ide.rui.wizards.WebClientProjectTemplateWizard">
+      </template>
+      <template
+            category="org.eclipse.edt.ide.ui.projects"
+            default="false"
+            description="%EGLWebClientWithServicesProjectDescription"
+            icon="icons/web.gif"
+            id="org.eclipse.edt.ide.ui.projects.webClientWithServices"
+            name="%EGLWebClientWithServicesProject"
+            templateClass="org.eclipse.edt.ide.rui.internal.project.WebClientWithServicesProjectTemplate"
+            wizardClass="org.eclipse.edt.ide.rui.wizards.WebClientWithServicesProjectTemplateWizard">
+      </template>
+   </extension>
+<!--                                                                                 -->
+<!-- Define the widget library provider extension point                              -->
+<!--                                                                                 -->
+<!-- =============================================================================== -->
+   <extension
+         point="org.eclipse.edt.ide.rui.widgetLibraryProvider">
+      <provider
+            detail="Port from RBD 8.0.1.2"
+            importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
+            libname="Rich UI widgets"
+            projectName="org.eclipse.edt.rui.widgets_0.7.0"
+            provider="ibm.com"
+            resourceFolder="/org.eclipse.edt.ide.ui.rui/"
+            resourcePluginName="org.eclipse.edt.ide.ui.resources"
+            selected="true"
+            version="0.7.0">
+      </provider>
+      <provider
+            detail="Based on Dojo local"
+            importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
+            libname="Dojo widgets"
+            logo="icons/full/obj16/egl_launch_obj.gif"
+            projectName="org.eclipse.edt.rui.dojo_0.7.0"
+            provider="dojotoolkit.org"
+            resourceFolder="/org.eclipse.edt.ide.ui.rui/"
+            resourcePluginName="org.eclipse.edt.ide.ui.resources"
+            selected="true"
+            version="0.7.0"
+            version_desc="Dojo 1.6.1">
+      </provider>
+      <provider
+            detail="Based on google runtime"
+            importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
+            libname="Dojo widgets"
+            projectName="org.eclipse.edt.rui.dojo.remote_0.7.0"
+            provider="google.com"
+            resourceFolder="/org.eclipse.edt.ide.ui.rui/"
+            resourcePluginName="org.eclipse.edt.ide.ui.resources"
+            selected="false"
+            version="0.7.0"
+            version_desc="Dojo 1.6.1">
+      </provider>
+      <provider
+            detail="This project is only used for test. It includes only the available widgets in EDT 0.7.0 M2"
+            importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
+            libname="Rich UI widgets"
+            logo="icons/synced.gif"
+            projectName="org.eclipse.edt.rui.widgets_0.7.0_M2"
+            provider="ibm.com"
+            resourceFolder="/org.eclipse.edt.ide.ui.rui/"
+            resourcePluginName="org.eclipse.edt.ide.ui.resources"
+            selected="true"
+            version="0.7.0 M2">
+      </provider>
+   </extension>   
+</plugin>
