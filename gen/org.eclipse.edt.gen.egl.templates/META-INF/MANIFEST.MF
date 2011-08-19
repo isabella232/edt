@@ -14,3 +14,4 @@ Export-Package: org.eclipse.edt.gen.egl.templates,
  org.eclipse.edt.gen.egl.templates.annotations,
  org.eclipse.edt.gen.egl.templates.annotations.jws,
  org.eclipse.edt.gen.egl.templates.annotations.xml
+Bundle-Vendor: Eclipse EGL Development Tools
