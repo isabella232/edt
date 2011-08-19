@@ -100,7 +100,7 @@ externalType EString extends EglString type ParameterizableType {
 
 	/**
 	 * {@Operation [:} Returns the substring starting at fromIndex and ending at toIndex.
-	 * @throws InvalidIndexException  if either index is out of range, or fromIndex is >= toIndex.
+	 * @throws InvalidIndexException  if either index is out of range, or fromIndex is > toIndex.
 	 */
 	static function $Substr(value EString in, fromIndex EInt in, toIndex EInt in) returns(EString) {@Operation{"[:"}};
 	
