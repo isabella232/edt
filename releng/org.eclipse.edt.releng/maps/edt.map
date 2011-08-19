@@ -32,6 +32,14 @@ plugin@org.eclipse.edt.gen.egl=v201108171011,:pserver:anonymous@dev.eclipse.org:
 plugin@org.eclipse.edt.gen.egl.templates=v201108171011,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.egl.templates
 plugin@org.eclipse.edt.gen.generator.egl=v201108171011,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.generator.egl
 plugin@org.eclipse.edt.ide.generator.egl=v201108141055,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.generator.egl
+plugin@org.eclipse.edt.ide.deployment=x,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.deployment
+plugin@org.eclipse.edt.ide.deployment.rui=x,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.deployment.rui
+plugin@org.eclipse.edt.ide.deployment.services=x,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.deployment.services
+plugin@org.eclipse.edt.ide.rui=x,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.rui
+plugin@org.eclipse.edt.ide.rui.visualeditor=x,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.rui.visualeditor
+plugin@org.eclipse.edt.gen.deployment.javascript=x,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.deployment.javascript
+plugin@org.eclipse.edt.gen.deployment.javascript.templates=x,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.deployment.javascript.templates
+plugin@org.eclipse.edt.gen.generator.deployment.javascript=x,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.generator.deployment.javascript
 
 feature@org.eclipse.edt.tests.feature=v201102251630,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/tests/org.eclipse.edt.tests.feature
 plugin@org.eclipse.edt.compiler.tests plugin=v201102251630,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/tests/org.eclipse.edt.compiler.tests
