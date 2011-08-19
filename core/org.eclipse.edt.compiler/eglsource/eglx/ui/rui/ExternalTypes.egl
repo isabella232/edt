@@ -17,7 +17,7 @@ import eglx.lang.EBoolean;
 import eglx.lang.Property;
 
 ExternalType Event type JavaScriptObject {
-		relativePath = "egl/ui/rui"
+		relativePath = "eglx/ui/rui"
 	}	
 	x Int { @Property { getMethod="getX", setMethod="setX" } };
 	y Int { @Property { getMethod="getY", setMethod="setY" } };
@@ -41,7 +41,7 @@ Delegate EventHandler( e Event in )
 end
 
 ExternalType Document type JavaScriptObject {
-		relativePath = "egl/ui/rui"
+		relativePath = "eglx/ui/rui"
 	}
 	
 	onKeyDown EventHandler  { @Property { setMethod="setOnKeyDown" } };
@@ -65,7 +65,7 @@ ExternalType Document type JavaScriptObject {
 end
 
 ExternalType Widget type JavaScriptObject { 
-		relativePath = "egl/ui/rui" 
+		relativePath = "eglx/ui/rui" 
 	}
 	
 	private document Document;
@@ -631,7 +631,7 @@ ExternalType Widget type JavaScriptObject {
 end
 
 
-ExternalType View type JavaScriptObject { relativePath = "egl/ui/rui"	}
+ExternalType View type JavaScriptObject { relativePath = "eglx/ui/rui"	}
 		
 	function getProperty(property String in) returns (String);
 	function appendChildToParent(p1 Widget in, p2 Widget in);
