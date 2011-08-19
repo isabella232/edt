@@ -40,6 +40,7 @@ plugin@org.eclipse.edt.ide.rui.visualeditor=v201108190522,:pserver:anonymous@dev
 plugin@org.eclipse.edt.gen.deployment.javascript=v201108190952,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.deployment.javascript
 plugin@org.eclipse.edt.gen.deployment.javascript.templates=v201108190522,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.deployment.javascript.templates
 plugin@org.eclipse.edt.gen.generator.deployment.javascript=v201108190522,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.generator.deployment.javascript
+plugin@org.eclipse.edt.runtime.javascript=new,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.javascript
 
 feature@org.eclipse.edt.tests.feature=v201102251630,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/tests/org.eclipse.edt.tests.feature
 plugin@org.eclipse.edt.compiler.tests plugin=v201102251630,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/tests/org.eclipse.edt.compiler.tests
