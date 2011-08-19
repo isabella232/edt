@@ -48,3 +48,4 @@ Export-Package: org.eclipse.edt.ide.rui.actions,
  org.eclipse.edt.ide.rui.server,
  org.eclipse.edt.ide.rui.utils
 Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
