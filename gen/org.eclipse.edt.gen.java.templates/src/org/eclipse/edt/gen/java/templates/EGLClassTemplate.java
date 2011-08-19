@@ -83,6 +83,13 @@ public class EGLClassTemplate extends JavaTemplate {
 		}
 	}
 	public void genClassBody(EGLClass part, Context ctx, TabbedWriter out) {
+		// Add this part's file to the smap files list, so that this part is always the first file listed.
+		String file = IRUtils.getQualifiedFileName(part);
+		ctx.setCurrentFile(file);
+		if (ctx.getSmapFiles().indexOf(file) < 0) {
+			ctx.getSmapFiles().add(file);
+		}
+		
 		ctx.invoke(genFields, part, ctx, out);
 		ctx.invoke(genLibraries, part, ctx, out);
 		ctx.invoke(genConstructors, part, ctx, out);
@@ -156,18 +163,28 @@ public class EGLClassTemplate extends JavaTemplate {
 		List<Field> fields = part.getFields();
 		if (fields.size() > 0 && fields.get(0).getInitializerStatements() == null) {
 			// Work around JDT issue - if the first stmt in the initializer won't have an SMAP entry then add one anyway, mapped to the part declaration line.
-			// Otherwise for some reason the stepIntos skip right over the rest of the function.
-			Annotation annotation = part.getAnnotation(IEGLConstants.EGL_LOCATION);
-			if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
-				ctx.getSmapData().append("" + annotation.getValue(IEGLConstants.EGL_PARTLINE));
-				if (ctx.getCurrentFile() != null) {
-					if (ctx.getSmapFiles().indexOf(ctx.getCurrentFile()) < 0)
-						ctx.getSmapFiles().add(ctx.getCurrentFile());
-					ctx.getSmapData().append("#" + (ctx.getSmapFiles().indexOf(ctx.getCurrentFile()) + 1) + ":");
-				} else {
-					ctx.getSmapData().append("#1:");
+			// Otherwise for some reason the stepIntos skip right over the rest of the function. Only do this if there is at least one initializer statement.
+			boolean hasInit = false;
+			for (Field field : fields) {
+				if (field.getInitializerStatements() != null) {
+					hasInit = true;
+					break;
 				}
-				ctx.getSmapData().append("" + out.getLineNumber() + "\n");
+			}
+			
+			if (hasInit) {
+				Annotation annotation = part.getAnnotation(IEGLConstants.EGL_LOCATION);
+				if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
+					ctx.getSmapData().append("" + annotation.getValue(IEGLConstants.EGL_PARTLINE));
+					if (ctx.getCurrentFile() != null) {
+						if (ctx.getSmapFiles().indexOf(ctx.getCurrentFile()) < 0)
+							ctx.getSmapFiles().add(ctx.getCurrentFile());
+						ctx.getSmapData().append("#" + (ctx.getSmapFiles().indexOf(ctx.getCurrentFile()) + 1) + ":");
+					} else {
+						ctx.getSmapData().append("#1:");
+					}
+					ctx.getSmapData().append("" + out.getLineNumber() + "\n");
+				}
 			}
 		}
 		
