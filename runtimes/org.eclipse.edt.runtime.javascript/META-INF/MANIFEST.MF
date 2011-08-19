@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Javascript
+Bundle-Name: EDT Javascript Runtime
 Bundle-SymbolicName: org.eclipse.edt.runtime.javascript
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 0.7.0.qualifier
+Bundle-Vendor: Eclipse EGL Development Tools
