@@ -14,7 +14,7 @@ package org.eclipse.edt.ide.deployment.rui.internal;
 public class IConstants {
 
 	public static final String HTML_FILE_EXTENSION = "html";
-	public static final String CONTEXT_ROOT_PARAMETER_NAME = "Context_Root_Parameter_Name";
+	public static final String CONTEXT_ROOT_PARAMETER_NAME = "egl__contextRoot";
 	public static final String PROPERTIES_FOLDER_NAME = "properties";
 	public static final String RUNTIME_MESSAGES_DEPLOYMENT_FOLDER_NAME = "properties";
 	public static final String HTML_FILE_LOCALE = "locale";
