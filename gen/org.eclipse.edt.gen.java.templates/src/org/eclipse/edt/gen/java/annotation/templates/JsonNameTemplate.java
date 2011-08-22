@@ -23,7 +23,7 @@ public class JsonNameTemplate extends JavaTemplate {
 	public void genConstructorOptions(AnnotationType annotType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
 		out.print("name=\"" + (String)annot.getValue() + "\"");
 		out.print(", clazz=");
-		ctx.invoke(genJsonTypeName, field.getType(), ctx, out);
+		ctx.invoke(genFieldTypeClassName, field.getType(), ctx, out, new Integer(0));
 		out.print(".class, asOptions={");
 		ctx.invoke(genJsonTypeDependentOptions, field.getType(), ctx, out);
 		out.print("}");

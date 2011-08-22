@@ -90,8 +90,8 @@ public class ArrayTypeTemplate extends JavaTemplate {
 		ctx.invoke(genJsonTypeDependentOptions, type.getElementType(), ctx, out);
 	}
 	
-	public void genJsonTypeName(ArrayType type, Context ctx, TabbedWriter out) {
-		ctx.invoke(genJsonTypeName, type.getElementType(), ctx, out);
+	public Integer genFieldTypeClassName(ArrayType type, Context ctx, TabbedWriter out, Integer arrayDimension) {
+		return (Integer)ctx.invoke(genFieldTypeClassName, type.getElementType(), ctx, out, new Integer(arrayDimension + 1));
 	}
 
 }

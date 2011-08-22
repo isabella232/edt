@@ -161,8 +161,9 @@ public class TypeTemplate extends JavaTemplate {
 		// no default
 	}
 
-	public void genJsonTypeName(Type type, Context ctx, TabbedWriter out) {
+	public Integer genFieldTypeClassName(Type type, Context ctx, TabbedWriter out, Integer arrayDimensions) {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
+		return arrayDimensions;
 	}
 
 	public void genAssignment(Type type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {

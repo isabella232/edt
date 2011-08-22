@@ -15,6 +15,7 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.ParameterKind;
 
 public class FunctionParameterTemplate extends JavaTemplate {
 
@@ -29,5 +30,32 @@ public class FunctionParameterTemplate extends JavaTemplate {
 			ctx.invoke(genRuntimeTypeName, decl, ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(" ");
 		ctx.invoke(genName, decl, ctx, out);
+	}
+	public void genFunctionParametersSignature(FunctionParameter parameter, Context ctx, TabbedWriter out) {
+		out.print("@FunctionParameter(name=\"");
+		ctx.invoke(genName, parameter, ctx, out);
+		out.print("\", kind=FunctionParameterKind.");
+		out.print(convert(parameter.getParameterKind()));
+		out.print(", parameterType=");
+		Integer arrayDimension = (Integer)ctx.invoke(genFieldTypeClassName, parameter.getType(), ctx, out, new Integer(0));
+		out.print(".class, asOptions={");
+		ctx.invoke(genJsonTypeDependentOptions, parameter.getType(), ctx, out);
+		out.print("}");
+		if(arrayDimension > 0 ){
+			out.print("arrayDimensions=");
+			out.print(arrayDimension.toString());
+		}
+		out.print(")");
+	}
+	private String convert(ParameterKind parameterKind){
+		if(ParameterKind.PARM_IN.equals(parameterKind)){
+			return "IN";
+		}
+		else if(ParameterKind.PARM_OUT.equals(parameterKind)){
+			return "OUT";
+		}
+		else{
+			return "INOUT";
+		}
 	}
 }

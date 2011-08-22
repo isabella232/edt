@@ -13,13 +13,13 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Service;
 
 public class ServiceTemplate extends JavaTemplate {
 
 	public void genSuperClass(Service service, Context ctx, TabbedWriter out) {
-		// TODO handle more generally when stereotypes are involved
-		out.print("ExecutableBase");
+		out.print("ServiceBase");
 	}
 
 	public void genConstructor(Service service, Context ctx, TabbedWriter out) {
@@ -39,4 +39,15 @@ public class ServiceTemplate extends JavaTemplate {
 	public void genRuntimeTypeName(Service service, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genPartName, service, ctx, out);
 	}
+	
+	public void genImports(Service service, Context ctx, TabbedWriter out) {
+		ctx.invokeSuper(this, genImports, service, ctx, out);
+		out.println("import org.eclipse.edt.javart.services.*;");
+	}
+
+	public void genFunction(Service service, Context ctx, TabbedWriter out, Function arg) {
+		ctx.invoke(genFunctionParametersSignature, arg, ctx, out);
+		ctx.invoke(genDeclaration, arg, ctx, out);
+	}
+
 }

@@ -118,4 +118,11 @@ public class FunctionTemplate extends JavaTemplate {
 		}
 		out.print(")");
 	}
+	public void genFunctionParametersSignature(Function function, Context ctx, TabbedWriter out) {
+		out.print("@FunctionSignature(name=\"");
+		ctx.invoke(genName, function, ctx, out);
+		out.print("\", parameters={");
+		ctx.foreach(function.getParameters(), ',', genFunctionParametersSignature, ctx, out);
+		out.println("})");
+	}	
 }
