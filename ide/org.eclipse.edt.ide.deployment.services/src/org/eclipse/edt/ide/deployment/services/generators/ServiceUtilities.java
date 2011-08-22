@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2009, 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2009, 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.deployment.services.generators;
 
 import org.eclipse.edt.ide.deployment.core.model.Constants;
+import org.eclipse.edt.ide.deployment.core.model.Restservice;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
 import org.eclipse.edt.mof.egl.Part;
@@ -37,24 +38,9 @@ public class ServiceUtilities {
 		return isStateful;
 	}
 	
-	static String getUri( LogicAndDataPart part )
+	static String getUri( LogicAndDataPart part, Restservice restService )
 	{
-		String uri = "";
-		Annotation uriAnnotation = part.getAnnotation(Constants.SERVICE_URI_ANNOTATION);
-		if( uriAnnotation != null )
-		{
-			uri = (String)uriAnnotation.getValue();
-		}
-		if( uri == null || uri.length() == 0 )
-		{
-			StringBuffer defaultValue = new StringBuffer();
-			String path = part.getPackageName();
-			if ( path != null ) {
-				defaultValue.append( path.replaceAll( "\\\\.", "_" ) );
-			}
-			defaultValue.append( part.getId() );
-			uri = defaultValue.toString();
-		}
+		String uri = restService.getUri();
 		if( uri.charAt(0) != '/' )
 		{
 			uri = '/' + uri;

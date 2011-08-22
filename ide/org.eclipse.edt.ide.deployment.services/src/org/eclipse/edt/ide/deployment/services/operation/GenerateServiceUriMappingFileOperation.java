@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -55,7 +55,7 @@ public class GenerateServiceUriMappingFileOperation  implements IDeploymentOpera
 				Part service = context.findPart( partName );
 				if ( service instanceof Service ) {
 					ServiceUriMappingGenerator generator = new ServiceUriMappingGenerator( context );
-					generator.visit( (Service)service );
+					generator.visit( (Service)service, restService );
 				}
 			} catch (PartNotFoundException e) {
 				// TODO Auto-generated catch block

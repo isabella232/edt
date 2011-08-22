@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.gen.java.JavaAliaser;
 import org.eclipse.edt.ide.core.utils.EGLProjectInfoUtility;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
+import org.eclipse.edt.ide.deployment.core.model.Restservice;
 import org.eclipse.edt.ide.deployment.rui.internal.util.Utils;
 import org.eclipse.edt.ide.deployment.rui.internal.util.WebUtilities;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
@@ -64,9 +65,9 @@ public class ServiceUriMappingGenerator
 	private LogicAndDataPart logicPart;
 //	private String contextRoot;
 	private boolean isHostProgramService;
+	private Restservice restService;
 	
 	private static String gatewayServiceName = "UIGatewayService";
-	private static String[] gatewayServicePackage = {"com", "ibm", "javart", "ui", "gateway"};
 
 /**	
     <servicemappings>
@@ -82,27 +83,28 @@ public class ServiceUriMappingGenerator
 		this.context = context;
 	}
 
-	public boolean visit( Service service )
+	public boolean visit( Service service, Restservice restService )
 	{
 		isHostProgramService = false;
-		gen( service );
+		gen( service, restService );
 		
 		return false;
 	}
 
-	public boolean visit( ExternalType externalType )
+	public boolean visit( ExternalType externalType, Restservice restService )
 	{
 		isHostProgramService = true;
-		gen( externalType );
+		gen( externalType, restService );
 		return false;
 	}
 
-	private void gen( LogicAndDataPart part )
+	private void gen( LogicAndDataPart part, Restservice restService )
 	{
 		logicPart = part;
 		project = context.getTargetProject();
 		projectName = project.getName();
 		uriMappingFileName = ServiceUtilities.getUriMappingFileName( projectName );
+		this.restService = restService;
 		
 		genUriMapping();
 	}
@@ -212,7 +214,7 @@ public class ServiceUriMappingGenerator
 		uriNode.setAttribute(RestServiceUtilities.HTTP_FUNCTION_ATTR, RestServiceUtilities.HTTP_POST_METHOD);
 //		uriNode.setAttribute(RestServiceUtilities.IN_ENCODING_ATTR, org.eclipse.edt.javart.services.servlet.rest.rpc.RestServiceProjectInfo.ENCODING_STR_JSON);
 //		uriNode.setAttribute(RestServiceUtilities.OUT_ENCODING_ATTR, RestServiceProjectInfo.ENCODING_STR_JSON);
-		String nodeValue = ServiceUtilities.getUri( logicPart );
+		String nodeValue = ServiceUtilities.getUri( logicPart, restService );
 		uriNode.appendChild( document.createTextNode( nodeValue ) );
 		serviceMappingNode.appendChild( uriNode );
 	}
