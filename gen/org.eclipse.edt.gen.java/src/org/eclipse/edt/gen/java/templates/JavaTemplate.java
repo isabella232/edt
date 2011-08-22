@@ -51,13 +51,14 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genExpression = "genExpression";
 	public static final String genField = "genField";
 	public static final String genFields = "genFields";
+	public static final String genFieldTypeClassName = "genFieldTypeClassName";
 	public static final String genFunction = "genFunction";
 	public static final String genFunctions = "genFunctions";
+	public static final String genFunctionParametersSignature = "genFunctionParametersSignature";
 	public static final String genGetter = "genGetter";
 	public static final String genGetterSetter = "genGetterSetter";
 	public static final String genGetterSetters = "genGetterSetters";
 	public static final String genJsonTypeDependentOptions = "genJsonTypeDependentOptions";
-	public static final String genJsonTypeName = "genJsonTypeName";
 	public static final String genImports = "genImports";
 	public static final String genInitialization = "genInitialization";
 	public static final String genInitialize = "genInitialize";
