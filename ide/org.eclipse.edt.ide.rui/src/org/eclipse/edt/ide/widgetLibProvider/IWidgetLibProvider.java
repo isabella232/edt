@@ -17,6 +17,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 public interface IWidgetLibProvider {
 	public static final String PROVIDER = "provider"; //$NON-NLS-1$
+	public static final String PROVIDER_ID = "id"; //$NON-NLS-1$
 	public static final String PROVIDER_LIBRARY_NAME = "libname"; //$NON-NLS-1$
 	public static final String PROVIDER_PROVIDER = "provider"; //$NON-NLS-1$
 	public static final String PROVIDER_VERSION = "version"; //$NON-NLS-1$
@@ -29,6 +30,7 @@ public interface IWidgetLibProvider {
 	public static final String PROVIDER_PROJECT_NAME = "projectName"; //$NON-NLS-1$
 	public static final String PROVIDER_IMPORT_CLASS = "importClass"; //$NON-NLS-1$	
 	
+	public String getId();
 	/**
 	 * Returns the display name of the library.
 	 *  

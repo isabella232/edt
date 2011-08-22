@@ -55,13 +55,13 @@ public class WebClientProjectTemplate extends AbstractProjectTemplateClass {
 		IWidgetLibProvider[] providers = WidgetLibProviderManager.getInstance().getProviders();
 		
 		if (providers != null) {
-			String libName, projectName, resourcePluginName, resourceFolder;
+			String id, projectName, resourcePluginName, resourceFolder;
 			for (int i = 0; i < providers.length; i++) {
-				libName = providers[i].getLibName();
+				id = providers[i].getId();
 				projectName = providers[i].getProjectName();
 				resourcePluginName = providers[i].getResourcePluginName();
 				resourceFolder = providers[i].getResourceFolder();
-				if( eglProjConfiguration.getSelectedWidgetLibraries().contains( libName ) ) {
+				if( eglProjConfiguration.getSelectedWidgetLibraries().contains( id ) ) {
 					IWidgetLibraryImporter importer = providers[i].getImporter();
 					listOps.add(importer.getImportRUIProjectsOperation(  rule, resourcePluginName, resourceFolder, projectName));
 					dependencyOps.add(importer.getAddProjectDependencyOperation(  eglProjConfiguration, rule, projectName ));

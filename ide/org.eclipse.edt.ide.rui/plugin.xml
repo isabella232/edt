@@ -51,6 +51,7 @@ Register the Preference Pages
          point="org.eclipse.edt.ide.rui.widgetLibraryProvider">
       <provider
             detail="Port from RBD 8.0.1.2"
+            id="org.eclipse.edt.rui.widgets_0.7.0"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
             libname="Rich UI widgets"
             projectName="org.eclipse.edt.rui.widgets_0.7.0"
@@ -62,6 +63,7 @@ Register the Preference Pages
       </provider>
       <provider
             detail="Based on Dojo local"
+            id="org.eclipse.edt.rui.dojo_0.7.0"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
             libname="Dojo widgets"
             logo="icons/full/obj16/egl_launch_obj.gif"
@@ -75,6 +77,7 @@ Register the Preference Pages
       </provider>
       <provider
             detail="Based on google runtime"
+            id="org.eclipse.edt.rui.dojo.remote_0.7.0"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
             libname="Dojo widgets"
             projectName="org.eclipse.edt.rui.dojo.remote_0.7.0"
@@ -87,6 +90,7 @@ Register the Preference Pages
       </provider>
       <provider
             detail="This project is only used for test. It includes only the available widgets in EDT 0.7.0 M2"
+            id="org.eclipse.edt.rui.widgets_0.7.0_M2"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
             libname="Rich UI widgets"
             logo="icons/synced.gif"

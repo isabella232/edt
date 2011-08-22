@@ -15,12 +15,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.edt.ide.rui.internal.project.IWidgetLibraryImporter;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.templates.wizards.ITemplateWizard;
-import org.eclipse.edt.ide.ui.templates.wizards.TemplateWizardNode;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.wizard.IWizard;
 
 public class WidgetLibProvider implements IWidgetLibProvider {
+	protected String id;
 	protected String libName;
 	protected String provider;
 	protected String version;
@@ -32,6 +30,15 @@ public class WidgetLibProvider implements IWidgetLibProvider {
 	protected String resourceFolder;
 	protected String projectName;	
 	protected IWidgetLibraryImporter importer;
+
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getLibName() {
 		return libName;
@@ -66,7 +73,10 @@ public class WidgetLibProvider implements IWidgetLibProvider {
 	}
 
 	public String getFullVersion() {
-		return this.version + "( " + this.version_desc + " )";
+		if(this.version_desc != null && !this.version_desc.isEmpty())
+			return this.version + "( " + this.version_desc + " )";
+		else
+			return this.version;
 	}
 
 	public ImageDescriptor getLogo() {
@@ -126,6 +136,7 @@ public class WidgetLibProvider implements IWidgetLibProvider {
 	}
 	
 	public void init(IConfigurationElement element) {
+		id = element.getAttribute(PROVIDER_ID);
 		libName = element.getAttribute(PROVIDER_LIBRARY_NAME);
 		provider = element.getAttribute(PROVIDER_PROVIDER);
 		version = element.getAttribute(PROVIDER_VERSION);
