@@ -281,6 +281,9 @@ public class NewWizardMessages extends NLS {
 	public static String RUILibraryPageTitle;
 	public static String RUILibraryPageDescription;
 	public static String RUILibraryPage_widget_library;
+	public static String RUILibraryPage_libname_label;
+	public static String RUILibraryPage_version_label;
+	public static String RUILibraryPage_provider_label;
 
 	public static String CapabilityConfigurationPageTitle;
 	public static String CapabilityConfigurationPageDescription;
