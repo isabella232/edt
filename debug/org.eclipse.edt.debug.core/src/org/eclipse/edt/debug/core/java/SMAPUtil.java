@@ -220,6 +220,9 @@ public class SMAPUtil
 				catch ( AbsentInformationException e )
 				{
 				}
+				catch ( UnsupportedOperationException e )
+				{
+				}
 			}
 		}
 		
