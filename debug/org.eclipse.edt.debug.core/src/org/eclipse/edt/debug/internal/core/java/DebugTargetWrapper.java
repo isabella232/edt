@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.internal.core.java;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventFilter;
@@ -55,6 +56,18 @@ public class DebugTargetWrapper implements IStartup
 							EGLJavaDebugTarget edtTarget = new EGLJavaDebugTarget( (IJavaDebugTarget)javaTarget );
 							launch.removeDebugTarget( javaTarget );
 							launch.addDebugTarget( edtTarget );
+							
+							// Set up a source lookup director that is capable of finding .egl files from the EGL build path.
+							try
+							{
+								EGLJavaSourceLookupDirector director = new EGLJavaSourceLookupDirector();
+								director.initializeDefaults( launch.getLaunchConfiguration() );
+								launch.setSourceLocator( director );
+							}
+							catch ( CoreException e )
+							{
+							}
+							
 							edtTarget.handleDebugEvents( events );
 						}
 					}

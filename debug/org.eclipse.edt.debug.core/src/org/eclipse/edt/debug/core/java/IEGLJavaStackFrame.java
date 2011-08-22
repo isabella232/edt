@@ -68,4 +68,12 @@ public interface IEGLJavaStackFrame extends IEGLStackFrame, IEGLJavaDebugElement
 	 * @throws DebugException
 	 */
 	public IEGLJavaVariable getCorrespondingVariable( IEGLJavaVariable newVariable, IEGLJavaValue parent ) throws DebugException;
+	
+	/**
+	 * Returns the path of the frame's source file, relative to the source directory.
+	 * 
+	 * @return the path of the frame's source file, relative to the source directory.
+	 * @throws DebugException
+	 */
+	public String getSourcePath() throws DebugException;
 }

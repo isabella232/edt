@@ -423,4 +423,10 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 		
 		return eglVar;
 	}
+
+	@Override
+	public String getSourcePath() throws DebugException
+	{
+		return javaFrame.getSourcePath();
+	}
 }

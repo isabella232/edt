@@ -56,4 +56,12 @@
           delegateClass="org.eclipse.edt.debug.core.EGLWatchExpressionDelegate">
     </watchExpressionDelegate>
  </extension>
+ <extension point="org.eclipse.debug.core.sourceContainerTypes">
+	<sourceContainerType
+		id="org.eclipse.edt.debug.core.sourceContainer.packageFragmentRoot"
+		name="%PackageFragmentRootSourceContainerType.name"
+		description="%PackageFragmentRootSourceContainerType.description"
+		class="org.eclipse.edt.debug.core.EGLPackageFragmentRootSourceContainer">
+	</sourceContainerType>
+ </extension>
 </plugin>
