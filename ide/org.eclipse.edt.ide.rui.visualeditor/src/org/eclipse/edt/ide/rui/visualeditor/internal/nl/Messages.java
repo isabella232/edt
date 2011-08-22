@@ -29,7 +29,8 @@ public class Messages {
 	public static String	NL_Design;
 	public static String	NL_Preview;
 	public static String	NL_Source;
-	public static String	NL_Out_of_resources_message;
+	public static String	NL_IE_Out_of_resources_message;
+	public static String	NL_XULRunner_Out_of_resources_message;
 	
 	// Overlay
 	//--------

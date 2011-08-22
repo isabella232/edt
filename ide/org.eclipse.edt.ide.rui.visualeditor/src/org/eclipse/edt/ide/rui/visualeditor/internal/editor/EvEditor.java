@@ -26,6 +26,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.internal.EGLBasePlugin;
@@ -132,7 +133,7 @@ public class EvEditor extends MultiPageEditorPart implements IEGLModelChangeList
 	protected EvEditorUndoManager	_undoManager				= null;
 	
 	protected String				_widgetId					= null;
-	public static int				_iRenderEngine				= EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER;
+	public static int				_iRenderEngine				= EvConstants.PREFERENCE_DEFAULT_RENDERENGINE;
 	/**
 	 * Closes the editor
 	 */
@@ -194,19 +195,22 @@ public class EvEditor extends MultiPageEditorPart implements IEGLModelChangeList
 		// Optimize for speed
 		//----------------------------------------------------------
 		if( browser == null ) {
-			try {
-//TODO EDT browser				
-//				if ( _iRenderEngine == EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER && Platform.getOS().equals(Platform.OS_WIN32) ) {
-//					browser = new Browser( compositeParent, SWT.MOZILLA);
-//					initializeBrowser(compositeParent.getDisplay(), browser, SWT.MOZILLA);
-//				}else {
+			if ( _iRenderEngine == EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER && Platform.getOS().equals(Platform.OS_WIN32) ) {
+				try {
+					browser = new Browser( compositeParent, SWT.MOZILLA);
+					initializeBrowser(compositeParent.getDisplay(), browser, SWT.MOZILLA);
+				} catch( SWTError ex ) {
+					showOutOfResourcesMessage(Messages.NL_XULRunner_Out_of_resources_message);
+					browser = null;
+				}
+			}else {
+				try {
 					browser = new Browser( compositeParent, SWT.NONE);
 					initializeBrowser(compositeParent.getDisplay(), browser, SWT.NONE);
-//				}
-			}
-			catch( SWTError ex ) {
-				showOutOfResourcesMessage();
-				browser = null;
+				} catch( SWTError ex ) {
+					showOutOfResourcesMessage(Messages.NL_IE_Out_of_resources_message);
+					browser = null;
+				}
 			}
 		}
 
@@ -1604,9 +1608,9 @@ public class EvEditor extends MultiPageEditorPart implements IEGLModelChangeList
 	/**
 	 * Displays a messages box with an ok button recommending that the editor be closed. 
 	 */
-	public void showOutOfResourcesMessage() {
+	public void showOutOfResourcesMessage(String message) {
 		String[] straButtons = new String[] { IDialogConstants.OK_LABEL };
-		MessageDialog dialog = new MessageDialog( Display.getDefault().getActiveShell(), Messages.NL_EGL_Rich_UI_Editor, null, Messages.NL_Out_of_resources_message, MessageDialog.WARNING, straButtons, 0 );
+		MessageDialog dialog = new MessageDialog( Display.getDefault().getActiveShell(), Messages.NL_EGL_Rich_UI_Editor, null, message, MessageDialog.WARNING, straButtons, 0 );
 		dialog.open();
 	}
 

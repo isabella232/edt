@@ -132,7 +132,7 @@ public interface EvConstants {
 	public static final int		PREFERENCE_RENDERENGINE_XULRUNNER					= 0;
 	public static final int		PREFERENCE_RENDERENGINE_IE							= 1;
 	
-	public static final int		PREFERENCE_DEFAULT_RENDERENGINE						= PREFERENCE_RENDERENGINE_XULRUNNER;
+	public static final int		PREFERENCE_DEFAULT_RENDERENGINE						= PREFERENCE_RENDERENGINE_IE;
 
 	// Widget creation
 	//----------------
