@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
+import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.project.features.operations.EGLFeatureOperationsUtilities;
 import org.eclipse.edt.ide.ui.wizards.EGLPackageConfiguration;
 import org.eclipse.edt.ide.ui.wizards.EGLPackageOperation;
@@ -28,7 +29,6 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 public abstract class AbstractProjectTemplateClass implements
 		IProjectTemplateClass {	
 	
-	protected static final String EGLSOURCE = "eglsource";
 	private String[] defaultPackages;	
 
 	public List<WorkspaceModifyOperation> getOperations(final ProjectConfiguration eglProjConfiguration, int eglFeatureMask, ISchedulingRule rule) {
@@ -75,7 +75,7 @@ public abstract class AbstractProjectTemplateClass implements
 			List listOps, String basePackage, String packageName) {
 		EGLPackageConfiguration packageConfiguration = new EGLPackageConfiguration();
 		packageConfiguration.setProjectName(eglProjConfiguration.getProjectName());
-		packageConfiguration.setSourceFolderName(EGLSOURCE);
+		packageConfiguration.setSourceFolderName(EDTCorePreferenceConstants.EGL_SOURCE_FOLDER_VALUE);
 		if(packageName != null && packageName.length()>0)
 			packageConfiguration.setFPackage(basePackage + "." + packageName);
 		else

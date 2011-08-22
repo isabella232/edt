@@ -28,9 +28,8 @@ import org.eclipse.edt.ide.ui.internal.project.wizard.fragments.SourceProjectCon
 import org.eclipse.edt.ide.ui.internal.project.wizards.NewEGLProjectWizard;
 import org.eclipse.edt.ide.ui.internal.project.wizards.ProjectWizardUtils;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
-import org.eclipse.edt.ide.ui.wizards.EGLWizardUtilities;
-import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
 import org.eclipse.edt.ide.ui.wizards.EGLWizardUtilities.NameValidatorProblemRequestor;
+import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -47,8 +46,6 @@ import org.eclipse.ui.PlatformUI;
 public class ProjectWizardTypePage extends ProjectWizardPage {
 	
 	private static final String BASE_PACKAGE_HINT = "org.mycompany.myapp"; //$NON-NLS-1$
-
-	private static final String EGLSOURCE = "eglsource"; //$NON-NLS-1$
 
 	public static IStatus OK_STATUS = new Status(IStatus.OK, "org.eclipse.edt.ide.ui", 0, "OK", null); //$NON-NLS-1$
 	
