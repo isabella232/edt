@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.editor;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,7 +24,17 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.edt.compiler.core.ast.ISyntaxErrorRequestor;
+import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.core.builder.NullProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.Problem;
+import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IProblemRequestorFactory;
+import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
+import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
+import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
+import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLFile;
@@ -211,65 +223,64 @@ public class ProblemReconciler implements IReconciler {
 		}
 	}
 	
-// TODO EDT Uncomment when problem requestor is ready
-//	private class ReconcilerProblemRequestorFactory implements IProblemRequestorFactory {
-//
-//		private AccumulatingSyntaxProblemRequestor syntaxErrorRequestor;
-//		private AccumulatingDynamicProblemRequestor problemRequestor;
-//		private AccumulatingTopLevelProblemRequestor topLevelProblemRequestor;
-//		private IFile file;
-//
-//		private ReconcilerProblemRequestorFactory(IFile file) {
-//			this.file = file;
-//			try {
-//				syntaxErrorRequestor = new AccumulatingSyntaxProblemRequestor(Util.getFileContents(file));
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			} catch (CoreException e) {
-//				e.printStackTrace();
-//			}
-//			problemRequestor = new AccumulatingDynamicProblemRequestor();
-//			topLevelProblemRequestor = new AccumulatingTopLevelProblemRequestor(problemRequestor);
-//		}
-//
-//		public IProblemRequestor getContainerContextTopLevelProblemRequestor(IFile file, String functionPartName,
-//				String containerContextName, IPath containerContextPath, boolean containerContextDependent) {
-//			if (!this.file.equals(file)) {
-//				return NullProblemRequestor.getInstance();
-//			}
-//			topLevelProblemRequestor.setContainerContextDependent(containerContextDependent);
-//			topLevelProblemRequestor.setReportContextErrors(true);
-//			((AccumulatingDynamicProblemRequestor) topLevelProblemRequestor.getRequestor()).setContainerContextName(containerContextName);
-//			return topLevelProblemRequestor;
-//		}
-//
-//		public IProblemRequestor getGenericTopLevelFunctionProblemRequestor(IFile file, String partName, boolean containerContextDependent) {
-//			topLevelProblemRequestor.setContainerContextDependent(containerContextDependent);
-//			topLevelProblemRequestor.setReportContextErrors(false);
-//			return topLevelProblemRequestor;
-//		}
-//
-//		public IProblemRequestor getProblemRequestor(IFile file, String partName) {
-//			problemRequestor.setContainerContextName(partName);
-//			return problemRequestor;
-//		}
-//
-//		public ISyntaxErrorRequestor getSyntaxErrorRequestor(IFile file) {
-//			if (this.file.equals(file)) {
-//				return syntaxErrorRequestor;
-//			}
-//			return new org.eclipse.edt.compiler.core.ast.NullProblemRequestor();
-//		}
-//
-//		public IProblemRequestor getFileProblemRequestor(IFile file) {
-//			if (this.file.equals(file)) {
-//				return problemRequestor;
-//			}
-//			return NullProblemRequestor.getInstance();
-//		}
-//
-//	}
-//	
+	private class ReconcilerProblemRequestorFactory implements IProblemRequestorFactory {
+
+		private AccumulatingSyntaxProblemRequestor syntaxErrorRequestor;
+		private AccumulatingDynamicProblemRequestor problemRequestor;
+		private AccumulatingTopLevelProblemRequestor topLevelProblemRequestor;
+		private IFile file;
+
+		private ReconcilerProblemRequestorFactory(IFile file) {
+			this.file = file;
+			try {
+				syntaxErrorRequestor = new AccumulatingSyntaxProblemRequestor(Util.getFileContents(file));
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+			problemRequestor = new AccumulatingDynamicProblemRequestor();
+			topLevelProblemRequestor = new AccumulatingTopLevelProblemRequestor(problemRequestor);
+		}
+
+		public IProblemRequestor getContainerContextTopLevelProblemRequestor(IFile file, String functionPartName,
+				String containerContextName, IPath containerContextPath, boolean containerContextDependent) {
+			if (!this.file.equals(file)) {
+				return NullProblemRequestor.getInstance();
+			}
+			topLevelProblemRequestor.setContainerContextDependent(containerContextDependent);
+			topLevelProblemRequestor.setReportContextErrors(true);
+			((AccumulatingDynamicProblemRequestor) topLevelProblemRequestor.getRequestor()).setContainerContextName(containerContextName);
+			return topLevelProblemRequestor;
+		}
+
+		public IProblemRequestor getGenericTopLevelFunctionProblemRequestor(IFile file, String partName, boolean containerContextDependent) {
+			topLevelProblemRequestor.setContainerContextDependent(containerContextDependent);
+			topLevelProblemRequestor.setReportContextErrors(false);
+			return topLevelProblemRequestor;
+		}
+
+		public IProblemRequestor getProblemRequestor(IFile file, String partName) {
+			problemRequestor.setContainerContextName(partName);
+			return problemRequestor;
+		}
+
+		public ISyntaxErrorRequestor getSyntaxErrorRequestor(IFile file) {
+			if (this.file.equals(file)) {
+				return syntaxErrorRequestor;
+			}
+			return new org.eclipse.edt.compiler.core.ast.NullProblemRequestor();
+		}
+
+		public IProblemRequestor getFileProblemRequestor(IFile file) {
+			if (this.file.equals(file)) {
+				return problemRequestor;
+			}
+			return NullProblemRequestor.getInstance();
+		}
+
+	}
+	
 	private class EGLReconcilingStrategy  {
 
 		protected void reconcile() {
@@ -286,31 +297,30 @@ public class ProblemReconciler implements IReconciler {
 					} else {
 						pkgName = packageFragment.getElementName().split("\\.");
 					}
-//					ReconcilerProblemRequestorFactory problemFactory = new ReconcilerProblemRequestorFactory(file);
+					ReconcilerProblemRequestorFactory problemFactory = new ReconcilerProblemRequestorFactory(file);
 					
 					IDocument document = fProvider.getDocument(fEditor.getEditorInput());
 					if(document != null){
-						// TODO EDT Uncomment when egl.model is no longer tied in							
-//						WorkingCopyCompiler.getInstance().compileAllParts(proj, pkgName, file, currRegedWCs,
-//								new IWorkingCopyCompileRequestor() {
-//									public void acceptResult(WorkingCopyCompilationResult result) {}
-//								}, 
-//								problemFactory);
-//						
-//						List reportedProblems = new ArrayList();
-//						List errors = problemFactory.problemRequestor.getProblems();
-//						List syntaxErrors = problemFactory.syntaxErrorRequestor.getProblems();
-//						
-//						//create EGLProblemMarker objects from errors
-//						String filePath = file.getFullPath().toOSString();
-//						IEditorInput editorInput = fEditor.getEditorInput();
-//						if(editorInput == null){
-//							System.out.println("Null editor input");
-//						}
-//						buildProblemList(document, filePath, reportedProblems, syntaxErrors, "SYN");
-//						buildProblemList(document, filePath, reportedProblems, errors, "VAL");
-//												
-//						fModel.reportProblems(reportedProblems);
+						WorkingCopyCompiler.getInstance().compileAllParts(proj, pkgName, file, currRegedWCs,
+								new IWorkingCopyCompileRequestor() {
+									public void acceptResult(WorkingCopyCompilationResult result) {}
+								}, 
+								problemFactory);
+						
+						List reportedProblems = new ArrayList();
+						List errors = problemFactory.problemRequestor.getProblems();
+						List syntaxErrors = problemFactory.syntaxErrorRequestor.getProblems();
+						
+						//create EGLProblemMarker objects from errors
+						String filePath = file.getFullPath().toOSString();
+						IEditorInput editorInput = fEditor.getEditorInput();
+						if(editorInput == null){
+							System.out.println("Null editor input");
+						}
+						buildProblemList(document, filePath, reportedProblems, syntaxErrors, "SYN");
+						buildProblemList(document, filePath, reportedProblems, errors, "VAL");
+												
+						fModel.reportProblems(reportedProblems);
 					}
 				}
 			}
