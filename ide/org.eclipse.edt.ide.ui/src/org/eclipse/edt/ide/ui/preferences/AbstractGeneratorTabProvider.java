@@ -204,6 +204,12 @@ public abstract class AbstractGeneratorTabProvider implements IGeneratorTabProvi
 		return true;
 	}	
 	
+	public void performRemoval() {
+	}
+	
+	public void performAddition(){
+	}
+	
 	public void dispose() {
 	}
 	

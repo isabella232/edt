@@ -398,5 +398,20 @@ public class GenerationSettingsComposite extends Composite {
 			}
 		}
 	}
+	
+	public void performRemoval() {
+		String text = genInsideDirectory.getText().trim();
+		if (text.length() == 0) {
+			latestStatus.setOK();
+			statusListener.statusChanged(latestStatus);
+		}
+	}
 
+	public void performAddition(){
+		String text = genInsideDirectory.getText().trim();
+		if (text.length() == 0) {
+			latestStatus.setError(UINlsStrings.genSettingsValidationBlank);
+			statusListener.statusChanged(latestStatus);
+		}
+	}
 }

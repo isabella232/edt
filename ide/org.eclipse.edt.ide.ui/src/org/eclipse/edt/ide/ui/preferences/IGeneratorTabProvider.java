@@ -42,6 +42,8 @@ public interface IGeneratorTabProvider {
 	public void performDefaults();
 	public boolean performOk();
 	public boolean performCancel();
+	public void performRemoval();
+	public void performAddition();
 	
 	public void dispose();
 	public IEclipsePreferences getProjectPreferenceStore();

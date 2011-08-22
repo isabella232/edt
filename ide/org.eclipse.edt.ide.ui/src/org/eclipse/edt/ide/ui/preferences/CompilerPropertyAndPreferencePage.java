@@ -598,6 +598,7 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 		item.setControl( provider.getTabContent( this.tabFolder ) );
 		this.currTabItems.add( item );
 		this.currTabProviders.add( provider );
+		provider.performAddition();
 		this.tabFolder.setSelection( item );
 	}
 
@@ -707,9 +708,14 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 			if( currItem.getText().equalsIgnoreCase( genName )) {
 				currItem.dispose();
 				this.currTabItems.remove(i);
+				this.currTabProviders.get(i).performRemoval();
 				this.currTabProviders.remove(i);
 				break;
 			}									
+		}
+		
+		for(int i=0; i < currTabProviders.size(); i++) {
+			this.currTabProviders.get(i).performAddition();
 		}
 	}
 
@@ -1206,6 +1212,7 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	protected void removeSelectedGenerator( String genId ) {
 		if( this.selectedGenerators.contains( genId ) ) {
 			this.selectedGenerators.remove( genId );
+			validateGenerators();
 		}
 	}	
 	
