@@ -13,11 +13,15 @@ package org.eclipse.edt.ide.deployment.rui.internal.util;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jst.j2ee.common.EnvEntry;
+import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
+import org.eclipse.jst.j2ee.model.IModelProvider;
+import org.eclipse.jst.j2ee.model.ModelProviderManager;
 import org.eclipse.jst.j2ee.web.componentcore.util.WebArtifactEdit;
 import org.eclipse.jst.j2ee.webapplication.WebApp;
 import org.eclipse.wst.common.componentcore.ComponentCore;
@@ -137,116 +141,6 @@ public class WebUtilities
     }
     
 	/**
-	 * If the project is a Web project, update the faces-config.xml file, if
-	 * necessary.
-	 * 
-	 * @param part     The part being generated.
-	 * @param context  The context.
-	 */
-    
-    /*TODO - EDT
-	public static void updateFacesConfig( Handler part, Context context )
-	{
-		// Set the viewName for page handlers;
-		// ViewName is not needed for Web programs.
-		String viewName = null;
-		String scopeSpec = null;
-
-		Annotation annot = part.getAnnotation( IEGLConstants.PROPERTY_JSFHANDLER );
-			
-		if ( annot != null )
-		{
-			Object propval;
-			
-			propval = annot.getValue( IEGLConstants.PROPERTY_VIEW );
-			if ( propval != null )
-			{
-				viewName = (String)propval;
-			}
-			
-			propval = annot.getValue( IEGLConstants.PROPERTY_SCOPE );
-			if ( propval != null )
-			{
-				scopeSpec = ((FieldAccess)propval).getId().toLowerCase();
-			}
-		}
-
-		if ( scopeSpec == null )
-		{
-			scopeSpec = "session";
-		}
-	
-		if ( viewName != null )
-		{
-			viewName = viewName.replace( '\\', '/' );
-
-			if ( !viewName.startsWith( "/" ) )
-			{
-				viewName = '/' + viewName;
-			}
-		}
-
-		// Set the bean class name to the bean name qualified by the package, if
-		// needed.
-		// For Web programs, the bean name should be the name of the proxy.
-		String pkgName = CommonUtilities.packageNameQualifier( part, null );
-
-		if ( pkgName.trim().length() > 0 && !pkgName.endsWith( "." ) )
-		{
-			pkgName += '.';
-		}
-
-		// The managed bean name is aliased, but the nav rule's outcome is not.
-		String outcome = part.getId();
-		String beanName = Aliaser.getAlias( outcome );
-		String beanClass = pkgName + beanName;
-
-		FacesConfigUpdater updater = new FacesConfigUpdater( beanName, beanClass,
-				scopeSpec, outcome, viewName, context.getBuildDescriptor() );
-
-		// Run the updater. If something goes wrong, an exception will be
-		// thrown.
-		runUpdater( updater );
-	}
-	*/
-
-	/**
-	 * If the project is a Web project, update the faces-config.xml file, if
-	 * necessary.
-	 * 
-	 * @param beanName   The name of the managed bean.
-	 * @param beanClass  The name of the managed bean class.
-	 * @param scope      The scope of the managed bean.
-	 * @param options    The compiler options.
-	 * @throws Exception
-	 */
-    /* TODO - EDT
-	public static void updateFacesConfig( String beanName, String beanClass,
-			String scope, BuildDescriptor options )
-			throws Exception
-	{
-		FacesConfigUpdater updater = new FacesConfigUpdater( beanName, beanClass,
-				scope, null, null, options );
-
-		// Run the updater. If something goes wrong, an exception will be
-		// thrown.
-		runUpdater( updater );
-	}
-	*/
-
-	/**
-	 * Adds the EGL Session Listener to the project's web.xml.
-	 * 
-	 * @param projectName  which project?
-	 */
-	/* TODO - EDT
-	public static void addSessionListener( String projectName )
-	{
-		runUpdater( new SessionListenerUpdater( projectName ) );
-	}
-	*/
-
-	/**
 	 * Returns the path for the Web module folder for the specified project.
 	 * Returns null if it can't.
 	 * 
@@ -259,6 +153,67 @@ public class WebUtilities
 	}
 	
 	public static String getContextRoot( IProject project ) {
-		return "ABC";
+		String contextRoot = null;
+		if( project != null )
+		{
+			String warFileName = project.getName() + ".war";
+			IProject[] projects = J2EEProjectUtilities.getReferencingEARProjects(project);
+			if( projects != null )
+			{
+				int i = 0;
+				for( int idx = 0; idx < projects.length; idx++ )
+				{
+					IModelProvider model = ModelProviderManager.getModelProvider( projects[idx] );
+					Object obj = model.getModelObject();
+					List ears = null;
+					Object module;
+					if( obj instanceof org.eclipse.jst.javaee.application.Application )
+					{
+						ears = ((org.eclipse.jst.javaee.application.Application)obj).getModules();
+						if( ears != null )
+						{
+							org.eclipse.jst.javaee.application.Web war;
+							for( Iterator itr = ears.iterator(); itr.hasNext(); )
+							{
+								module = itr.next();
+								if( module instanceof org.eclipse.jst.javaee.application.Module )
+								{
+									war = ((org.eclipse.jst.javaee.application.Module)module).getWeb();
+									if(war != null && warFileName.equalsIgnoreCase(war.getWebUri()))
+									{
+										contextRoot = war.getContextRoot();
+										break;
+									}
+								}
+							}
+						}
+					}
+					else if( obj instanceof org.eclipse.jst.j2ee.application.Application )
+					{
+						ears = ((org.eclipse.jst.j2ee.application.Application)obj).getModules();
+						if( ears != null )
+						{
+							for( Iterator itr = ears.iterator(); itr.hasNext(); )
+							{
+								module = itr.next();
+								if( module instanceof org.eclipse.jst.j2ee.application.WebModule )
+								{
+									if(warFileName.equalsIgnoreCase(((org.eclipse.jst.j2ee.application.WebModule)module).getUri()))
+									{
+										contextRoot = ((org.eclipse.jst.j2ee.application.WebModule)module).getContextRoot();
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		if( contextRoot == null || contextRoot.length() == 0)
+		{
+			contextRoot = J2EEProjectUtilities.getServerContextRoot(project);
+		}
+		return contextRoot;
 	}
 }
