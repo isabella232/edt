@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectTemplateSelectionPage;
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardTypePage;
@@ -35,6 +36,7 @@ import org.eclipse.edt.ide.ui.project.templates.ProjectTemplateWizardNode;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
 import org.eclipse.edt.ide.ui.wizards.ProjectFinishUtility;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardNode;
 import org.eclipse.jface.wizard.Wizard;
@@ -59,6 +61,8 @@ public class NewEGLProjectWizard extends Wizard
 	public NewEGLProjectWizard() {
 		model = new ProjectConfiguration();
 		model.setDefaultAttributes();
+		IPreferenceStore store = EDTUIPlugin.getDefault().getPreferenceStore();
+		model.setBasePackageName(store.getString(EDTUIPreferenceConstants.NEWPROJECTWIZARD_BASEPACKAGE));
 		setDefaultPageImageDescriptor(PluginImages.DESC_WIZBAN_NEWEGLPROJECT);
 		setDialogSettings(EDTUIPlugin.getDefault().getDialogSettings());
 		setWindowTitle(NewWizardMessages.EGLNewProjectWizard_0);
@@ -80,7 +84,10 @@ public class NewEGLProjectWizard extends Wizard
 					WorkspaceModifyOperation op = (WorkspaceModifyOperation)obj;
 					getContainer().run(true, true, op);
 				}
-			}			
+			}
+			// Remember base package name
+			IPreferenceStore store = EDTUIPlugin.getDefault().getPreferenceStore();
+			store.putValue(EDTUIPreferenceConstants.NEWPROJECTWIZARD_BASEPACKAGE, model.getBasePackageName());
 		}
 		catch (InterruptedException e) {
 			e.printStackTrace();

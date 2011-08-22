@@ -76,8 +76,8 @@ public class ProjectWizardTypePage extends ProjectWizardPage {
 		parent.setLayout(new FormLayout());
 		
 		createProjectNameEntry(parent);
-		createContentFragment(this.parent);
 		createBasePackageEntry(parent);
+		createContentFragment(this.parent);		
 		setControl(parent);
 		this.projectName.setFocus();
 
@@ -107,15 +107,21 @@ public class ProjectWizardTypePage extends ProjectWizardPage {
 		
 		FormData data = new FormData();
 		data.left = new FormAttachment(0, 10);
-		data.top = new FormAttachment(contentSection, 20);
+		data.top = new FormAttachment(projectName, 20);
 		this.basePackageLabel.setLayoutData(data);
 		
 		data = new FormData();
 		data.left = new FormAttachment(this.basePackageLabel, 10);
-		data.top = new FormAttachment(contentSection, 20);
+		data.top = new FormAttachment(projectName, 20);
 		data.right = new FormAttachment(100, -10);
 		this.basePackage.setLayoutData(data);
-		basePackage.setMessage(BASE_PACKAGE_HINT);
+		String defaultBasePackageName = model.getBasePackageName();
+		if(defaultBasePackageName != null && !defaultBasePackageName.isEmpty()){
+			basePackage.setText(defaultBasePackageName);
+		}else{
+			basePackage.setMessage(BASE_PACKAGE_HINT);
+		}		
+		
 		hookListenerPackageName(basePackage);
 	}
 	
@@ -156,7 +162,7 @@ public class ProjectWizardTypePage extends ProjectWizardPage {
 		
 		FormData data = new FormData();
 		data.left = new FormAttachment(0, 10);
-		data.top = new FormAttachment(projectName, 20);
+		data.top = new FormAttachment(basePackage, 20);
 		data.right = new FormAttachment(100, -10);
 		contentSection.setLayoutData(data);		
 	}

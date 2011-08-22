@@ -357,6 +357,13 @@ public class EDTUIPreferenceConstants {
 	 * Value is of type <code>Int</code>: positive value specifing the number of non star-import is used
 	 */
 	public static final String ORGIMPORTS_ONDEMANDTHRESHOLD = "org.eclipse.egl.ui.ondemandthreshold"; //$NON-NLS-1$
+	
+	/**
+	 * A named preference that specifies the base package name in the egl project wizard
+	 * <p>
+	 * Value is of type <code>String</code>
+	 */
+	public static final String NEWPROJECTWIZARD_BASEPACKAGE = ""; //$NON-NLS-1$
 
 
 	/**

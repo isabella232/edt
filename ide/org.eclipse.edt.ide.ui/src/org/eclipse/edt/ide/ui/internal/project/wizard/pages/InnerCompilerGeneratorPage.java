@@ -14,9 +14,7 @@ package org.eclipse.edt.ide.ui.internal.project.wizard.pages;
 import java.util.List;
 
 import org.eclipse.edt.ide.ui.preferences.CompilerPropertyAndPreferencePage;
-import org.eclipse.edt.ide.ui.preferences.IGeneratorTabProvider;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 
 public class InnerCompilerGeneratorPage extends
 		CompilerPropertyAndPreferencePage {
@@ -30,7 +28,7 @@ public class InnerCompilerGeneratorPage extends
 	}
 	
 	protected boolean isValidWorkspaceExtensions() {
-		// TODO if resource is null (new create project) alwarys return true
+		// TODO if resource is null (new create project) always return true
 		return true;
 	}
 	public Composite createContents(Composite parent) {
