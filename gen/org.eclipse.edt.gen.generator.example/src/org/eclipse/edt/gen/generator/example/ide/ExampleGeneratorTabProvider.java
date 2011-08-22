@@ -69,6 +69,16 @@ public class ExampleGeneratorTabProvider extends AbstractGeneratorTabProvider {
 	public void performDefaults() {
 		genSettings.performDefaults();
 	}
+	
+	@Override
+	public void performRemoval() {
+		genSettings.performRemoval();
+	}
+	
+	@Override
+	public void performAddition() {
+		genSettings.performAddition();
+	}
 
 	@Override
 	public IEclipsePreferences getProjectPreferenceStore() {
