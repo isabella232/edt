@@ -27,8 +27,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
-import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
-import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.internal.model.EGLProject;
 import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot;
 import org.eclipse.edt.ide.core.model.EGLCore;
@@ -91,13 +89,12 @@ public abstract class AbstractProjectBuildPath {
 	public IContainer getOutputLocation() {
 		IContainer outputContainer = null;
 		IEGLProject eglProject = EGLCore.create(project);
-		IPath outputLocation = eglProject.getPath().append(
-				EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( 
-				EDTCorePreferenceConstants.EGL_OUTPUT_FOLDER ));
-		if(outputLocation.segmentCount() == 1){
-			outputContainer = eglProject.getProject();
-		}else{
+		try {
+			IPath outputLocation = eglProject.getOutputLocation();
 			outputContainer = ResourcesPlugin.getWorkspace().getRoot().getFolder(outputLocation);
+		}
+		catch (EGLModelException e) {
+			outputContainer = eglProject.getProject();
 		}
     	
 		return outputContainer;	
