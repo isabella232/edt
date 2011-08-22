@@ -81,6 +81,16 @@ public class JavaGeneratorTabProvider extends AbstractGeneratorTabProvider
 	}
 	
 	@Override
+	public void performRemoval() {
+		genSettings.performRemoval();
+	}
+	
+	@Override
+	public void performAddition() {
+		genSettings.performAddition();
+	}
+	
+	@Override
 	public void removePreferencesForAResource() {
 		if ( genSettings != null ) {
 			genSettings.removePreferencesForAResource();
