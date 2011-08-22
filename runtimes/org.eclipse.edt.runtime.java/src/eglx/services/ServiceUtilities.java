@@ -15,9 +15,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.Map;
 
-import egl.lang.AnyException;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.util.JavartUtil;
+
+import egl.lang.AnyException;
 
 
 
@@ -31,12 +32,12 @@ public class ServiceUtilities
 	}
 
 	
-	public static AnyException buildServiceInvocationException( RunUnit ru, String id, Object[] params, Throwable t, ServiceKind serviceKind )
+	public static ServiceInvocationException buildServiceInvocationException( RunUnit ru, String id, Object[] params, Throwable t, ServiceKind serviceKind )
 	{
 		String message = JavartUtil.errorMessage( ru, id, params );
 		return ServiceUtilities.buildInvocationException(id, message, "", "", "", t, serviceKind );
 	}
-	private static AnyException buildInvocationException(String id, String message, String detail1, String detail2, String detail3, Throwable t, ServiceKind serviceKind ) 
+	private static ServiceInvocationException buildInvocationException(String id, String message, String detail1, String detail2, String detail3, Throwable t, ServiceKind serviceKind ) 
 	{
 		while( t instanceof InvocationTargetException &&
 				((InvocationTargetException)t).getCause() != null ){
@@ -105,4 +106,21 @@ public class ServiceUtilities
     	return buffer.toString();
     }
 	
+    public static String convert(ServiceKind serviceKind){
+    	if(ServiceKind.EGL.equals(serviceKind)){
+    		return "EGL";
+    	}
+    	else if(ServiceKind.NATIVE.equals(serviceKind)){
+    		return "NATIVE";
+    	}
+    	else if(ServiceKind.REST.equals(serviceKind)){
+    		return "REST";
+    	}
+    	else if(ServiceKind.WEB.equals(serviceKind)){
+    		return "WEB";
+    	}
+    	else{
+    		return "";
+    	}
+    }
 }

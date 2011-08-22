@@ -20,15 +20,16 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
-import org.eclipse.edt.javart.resources.ExecutableBase;
+import org.eclipse.edt.javart.RunUnit;
+import org.eclipse.edt.javart.services.servlet.Invoker;
 
 import eglx.http.HttpRequest;
 
 
 abstract class EglHttpConnection extends Invoker{
 	
-	protected EglHttpConnection(ExecutableBase program) {
-		super(program);
+	protected EglHttpConnection(RunUnit runUnit) {
+		super(runUnit);
 	}
 	protected HttpURLConnection getHttpProxyConnection( HttpRequest restRequest ) throws IOException
 	{
@@ -51,7 +52,7 @@ abstract class EglHttpConnection extends Invoker{
 
 	private boolean useProxy()
 	{
-		return"true".equals( program()._runUnit().getProperties().get(("com.ibm.egl.service.invocation.useProxy") ) );
+		return"true".equals( getRunUnit().getProperties().get(("com.ibm.egl.service.invocation.useProxy") ) );
 	}
 	
 	private static HttpURLConnection getProxyConnection( HttpRequest restRequest ) throws IOException
@@ -60,7 +61,6 @@ abstract class EglHttpConnection extends Invoker{
 		Proxy proxy = getProxy( urlString );
 		if( proxy != null )
 		{
-//FIXME			restRequest.setProxy("Using Proxy(" + proxy.toString() + "):::" );
 			return (HttpURLConnection)new URL(urlString).openConnection( proxy );
 		}
 		return null;

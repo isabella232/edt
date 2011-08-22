@@ -26,16 +26,16 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.Future;
 
+import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.messages.Message;
-import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.resources.Trace;
-import org.eclipse.edt.javart.services.servlet.ServletUtilities;
 import org.eclipse.edt.javart.util.JavartUtil;
 
 import egl.lang.EDictionary;
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
 import eglx.http.HttpUtilities;
+import eglx.json.JsonLib;
 import eglx.json.JsonUtilities;
 import eglx.services.ServiceKind;
 import eglx.services.ServiceUtilities;
@@ -43,12 +43,10 @@ import eglx.services.ServiceUtilities;
 
 public class HttpServiceHandler
 {
-	private ExecutableBase program;
-	private static final String USE_CONTENT_TYPE_CHARSET = "useContentTypeCharset";
-	private static final String RESPONSE_CHARSET_PROPERTY_KEY = "com.ibm.egl.service.rest.invocation.response.charset";
-	HttpServiceHandler( ExecutableBase program )
+	private RunUnit runUnit;
+	HttpServiceHandler( RunUnit runUnit )
 	{
-		this.program = program;
+		this.runUnit = runUnit;
 	}
 	private static final String SESSION_ID = "JSESSIONID";
 	private static final String EGL_SESSION_ID = "egl_statefulsessionid";
@@ -60,13 +58,15 @@ public class HttpServiceHandler
 		private boolean doneReading;
 		private String value;
 		private Exception e;
-		BufferedReader reader;
+		private BufferedReader reader;
+		private String responseCharset;
 
 
-		public HttpStreamReader( URLConnection connection )
+		private HttpStreamReader( URLConnection connection, String responseCharset )
 		{
 			this.connection = connection;
 			doneReading = false;
+			this.responseCharset = responseCharset;
 		}
 
 		public void run()
@@ -77,21 +77,13 @@ public class HttpServiceHandler
 			try
 			{
 				is = connection.getInputStream();
-				String responseCharset = getResponseCharset(program);
-				if(responseCharset != null && responseCharset.length() > 0){
-					try{
-						if(USE_CONTENT_TYPE_CHARSET.equalsIgnoreCase(responseCharset)){
-							String contentType = connection.getContentType();
-							int idx;
-							if(contentType != null && 
-									(idx = contentType.toLowerCase().indexOf("charset=")) != -1){
-								responseCharset = contentType.substring(idx + 8);
-							}
-						}
-						reader = new BufferedReader(new InputStreamReader(is, responseCharset));
+				try{
+					if(responseCharset == null){
+						responseCharset = getCharSet(connection.getContentType());
 					}
-					catch(Throwable t){}
+					reader = new BufferedReader(new InputStreamReader(is, responseCharset));
 				}
+				catch(Throwable t){}
 				if(reader == null){
 					reader = new BufferedReader(new InputStreamReader(is, ServiceUtilities.UTF8));
 				}
@@ -162,20 +154,20 @@ public class HttpServiceHandler
 		}
 
 	}
-	HttpResponse invokeRestService( HttpRequest restRequest, HttpURLConnection connection ) throws InterruptedException, Exception
+	HttpResponse invokeRestService( HttpRequest request, HttpURLConnection connection ) throws InterruptedException, Exception
 	{
-		EDictionary headers = restRequest.getHeaders();
+		EDictionary headers = request.getHeaders();
 		HttpResponse response;
 		try
 		{
 			response = new HttpResponse();
 			try
 			{
-				connection.setRequestMethod( HttpUtilities.httpMethodToString(restRequest.getMethod()) );
-				Trace tracer = program._runUnit().getTrace();
+				connection.setRequestMethod( HttpUtilities.httpMethodToString(request.getMethod()) );
+				Trace tracer = runUnit.getTrace();
 				if ( tracer.traceIsOn( Trace.GENERAL_TRACE ) ) 
 				{
-					tracer.put("REST request URL:" + restRequest.getUri());
+					tracer.put("REST request URL:" + request.getUri());
 				}
 
 				for ( Iterator<Map.Entry<String, Object>> iter = headers.entrySet().iterator(); iter.hasNext(); )
@@ -184,8 +176,9 @@ public class HttpServiceHandler
 					connection.setRequestProperty( entry.getKey(), entry.getValue().toString() );
 				}
 
-				// writes the request out in utf-8
-				byte[] resource = restRequest.getBody().getBytes( ServiceUtilities.UTF8 );
+				//FIXME get content type from request and use that as the expected response
+				String charset = getCharSet(null);
+				byte[] resource = request.getBody().getBytes( charset == null ? ServiceUtilities.UTF8 : charset );
 				connection.setDoInput( true );
 				connection.setUseCaches( false );
 
@@ -199,7 +192,7 @@ public class HttpServiceHandler
 					os.close();
 				}
 
-				HttpStreamReader httpsr = new HttpStreamReader( connection );
+				HttpStreamReader httpsr = new HttpStreamReader( connection, charset == null ? ServiceUtilities.UTF8 : charset );
 				Future<?> threadResult = JavartUtil.getThreadPool().submit( httpsr );
 				Thread.yield();
 				if ( !httpsr.isDoneReading() )
@@ -226,9 +219,9 @@ public class HttpServiceHandler
 						httpsr.close();
 						connection.disconnect();
 						connection = null;
-						String message = JavartUtil.errorMessage( program,
+						String message = JavartUtil.errorMessage( runUnit,
 								Message.SOA_E_WS_PROXY_SERVICE_TIMEOUT,
-								new String[] { restRequest.getUri() } );
+								new String[] { request.getUri() } );
 						throw new IOException( message );
 					}
 					else if ( httpsr.exception() )
@@ -274,8 +267,7 @@ public class HttpServiceHandler
 						{
 							try
 							{
-								eglException = URLDecoder.decode( eglException,
-										ServiceUtilities.UTF8 );
+								eglException = URLDecoder.decode( eglException, ServiceUtilities.UTF8 );
 								response.setBody( eglException );
 								bodyIsSet = true;
 							}
@@ -298,10 +290,10 @@ public class HttpServiceHandler
 				}
 				if ( !bodyIsSet )
 				{
-					ServletUtilities.setBody(program._runUnit(), response, ServiceUtilities.buildServiceInvocationException( program._runUnit(),
-									Message.SOA_E_WS_PROXY_COMMUNICATION,
-									new String[] { restRequest.getUri() }, ioe,
-									ServiceKind.REST ) );
+			    	response.setBody(JsonLib.convertToJSON(ServiceUtilities.buildServiceInvocationException(runUnit,
+							Message.SOA_E_WS_PROXY_COMMUNICATION,
+							new String[] { request.getUri() }, ioe,
+							ServiceKind.REST )));
 				}
 			}
 		}
@@ -381,11 +373,14 @@ public class HttpServiceHandler
 		}
 		return str;
 	}
-	
-	private String getResponseCharset(ExecutableBase program)
-	{
-		return program._runUnit().getProperties().get((RESPONSE_CHARSET_PROPERTY_KEY) );
+	private String getCharSet(String contentType) {
+		int idx;
+		if(contentType != null && 
+				(idx = contentType.toLowerCase().indexOf("charset=")) != -1){
+			return contentType.substring(idx + 8);
+		}
+		return null;
 	}
-	
 
+	
 }

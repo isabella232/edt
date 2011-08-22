@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.services.servlet.proxy;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.services.servlet.Servlet;
+import org.eclipse.edt.javart.services.servlet.ServletUtilities;
 
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
@@ -41,8 +44,8 @@ import eglx.http.HttpResponse;
 	}
 
 	@Override
-	protected HttpResponse processRequest(String url, RuiBrowserHttpRequest xmlRequest, HttpRequest createHttpRequest) throws Exception {
-		ProxyEventHandler proxy = new ProxyEventHandler(program());
-		return proxy.runProxy(url, xmlRequest, createHttpRequest);
+	protected HttpResponse processRequest(String url, HttpRequest ruiRequest, HttpServletRequest httpServletReq) throws Exception {
+		ProxyEventHandler proxy = new ProxyEventHandler(getRunUnit());
+		return proxy.runProxy(url, ruiRequest, ServletUtilities.createHttpRequest(ruiRequest.getBody()));
 	}
 }

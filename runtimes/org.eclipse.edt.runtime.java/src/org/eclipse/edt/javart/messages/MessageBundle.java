@@ -387,7 +387,7 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.SOA_E_WS_CREATE_CALL_OBJECT, "An error occurred creating a connection to Web service operation ''{0}''.  {1}." },
 		{ Message.SOA_E_WS_GET_OPERATION, "An error occurred getting the operation:''{0}'' from the wsdl file:''{1}''." },
 		{ Message.SOA_E_WS_MALFORMED_URL, "The target URL for the {1} Web service operation is not valid. URL: {0}" },
-		{ Message.SOA_E_LOAD_LOCAL_SERVICE, "An error occurred while loading the {0} service. Error: {1}." },
+		{ Message.SOA_E_LOAD_LOCAL_SERVICE, "An error occurred while loading the {0} service." },
 		{ Message.SOA_E_LOAD_WEB_PROXY, "An error occurred when trying to load a Web service. Could not resolve the WSDL port for external service {0}." },
 		{ Message.SOA_E_MISSING_REQUIRED_PROPERTY, "The {0} component is missing the {1} property which is required by the service implementation." },
 		{ Message.SOA_E_MISSING_REFERENCE_TARGET, "Service reference ''{0}'' is either missing or does not have a target value." },
@@ -451,6 +451,8 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.SOA_E_WS_PROXY_XML_PARSE_ELEMENT_EXCEPTION, "unexpected element <{0}>. Expected elements are <{1}>." },
 		{ Message.SOA_E_WS_PROXY_UNSUPPORTED_OPERATION, "The service being invoked: {0} is a system service. System services have no source code and can not be previewed and can only be debugged when they are deployed as a SOAP or EGL REST service."  },
 		{ Message.SOA_E_WS_PROXY_NO_J2EE_OPERATION, "The service being invoked is accessing the J2EE context, J2EE context may only be used in the J2EE environment."  },
+		{ Message.SOA_E_WS_REST_WRONG_HTTP_FUNCTION, "An HTTP {0} was recieved. EGL REST RPC service only operate with an HTTP.POST."},
+		{ Message.SOA_E_FUNCTION_NOT_FOUND, "The function {0} was not found on service {1}"},
 		
 		//Reporting errors.
 		{ Message.REPORT_E_FILL_WITH_CONNECTION_ERROR, "Could not fill report using connection {0}"},

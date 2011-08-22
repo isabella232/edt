@@ -10,10 +10,19 @@
  *******************************************************************************/
 package eglx.json;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.edt.javart.RunUnit;
+import org.eclipse.edt.javart.json.ArrayNode;
 import org.eclipse.edt.javart.json.NameValuePairNode;
 import org.eclipse.edt.javart.json.ObjectNode;
 import org.eclipse.edt.javart.json.StringNode;
+import org.eclipse.edt.javart.json.ValueNode;
+import org.eclipse.edt.javart.services.FunctionParameter;
+import org.eclipse.edt.javart.services.FunctionParameterKind;
+import org.eclipse.edt.javart.services.FunctionSignature;
 
 import egl.lang.AnyException;
 import eglx.services.ServiceKind;
@@ -122,5 +131,20 @@ public class JsonUtilities {
 	static String buildJsonServiceInvocationException( RunUnit ru, String id, Object[] params, Throwable t, ServiceKind serviceKind )
 	{
 		return createJsonAnyException( ru, ServiceUtilities.buildServiceInvocationException( ru, id, params, t, serviceKind ) );
+	}
+	
+	public static Object[] getParameters(Method method, ArrayNode jsonParameters){
+		FunctionSignature signature = method.getAnnotation(FunctionSignature.class);
+		List<Object> parameters = new ArrayList<Object>();
+		int idx = 0;
+		for(FunctionParameter functionParameter : signature.parameters()){
+			if(functionParameter.kind().equals(FunctionParameterKind.OUT)){
+				parameters.add(null);
+			}
+			else{
+				parameters.add(JsonLib.convertToEgl(functionParameter.parameterType(), functionParameter.asOptions(), null, (ValueNode)jsonParameters.getValues().get(idx++)));
+			}
+		}
+		return parameters.toArray(new Object[parameters.size()]);
 	}
 }

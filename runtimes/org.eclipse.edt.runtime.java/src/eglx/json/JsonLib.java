@@ -247,10 +247,10 @@ public class JsonLib {
 		}
 		return object;
 	}
-	private static Object convertToEgl(final Class<?> fieldType, final String[] fieldTypeOptions, final Object field, ValueNode jsonValue) throws AnyException{
+	static Object convertToEgl(final Class<?> fieldType, final String[] fieldTypeOptions, final Object field, ValueNode jsonValue) throws AnyException{
 		try{
 	        if(jsonValue instanceof NullNode){
-	        	return NullType.ezeWrap(null);
+	        	return null;
 	        }
 	        if(jsonValue instanceof ArrayNode){
 	        	EglList<Object> list = new EglList<Object>();
@@ -260,43 +260,43 @@ public class JsonLib {
 	        	return list;
 	        }
 	        if(fieldType.equals(EBigint.class)){
-	        	return EBigint.ezeBox(EBigint.asBigint(jsonValue.toJava()));
+	        	return EBigint.asBigint(jsonValue.toJava());
 	        }
 	        if(fieldType.equals(EBoolean.class) && jsonValue instanceof BooleanNode){
-	       		return EBoolean.ezeBox(((BooleanNode)jsonValue).getValue());
+	       		return ((BooleanNode)jsonValue).getValue();
 	        }
 	        if(fieldType.equals(EDate.class)){
 	        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	    		Calendar cal = DateTimeUtil.getBaseCalendar();
 	    		cal.setTimeInMillis(sdf.parse(jsonValue.toJava()).getTime());
 	    		cal.get(Calendar.YEAR);
-	       		return EDate.ezeBox(EDate.asDate(cal));
+	       		return EDate.asDate(cal);
 	        }
 	        if(fieldType.equals(EDecimal.class)){
 	        	///get options for the as statement
 	        	if(fieldTypeOptions != null && fieldTypeOptions.length > 1){
 		        	int length = Integer.parseInt(fieldTypeOptions[0]);
 		        	int decimal = Integer.parseInt(fieldTypeOptions[1]);
-		        	return EDecimal.ezeBox(EDecimal.asDecimal(jsonValue.toJava(), length, decimal));
+		        	return EDecimal.asDecimal(jsonValue.toJava(), length, decimal);
 	        	}
 	        	else{
-		        	return EDecimal.ezeBox(EDecimal.asDecimal(jsonValue.toJava()));
+		        	return EDecimal.asDecimal(jsonValue.toJava());
 	        	}
 	        }
 	        if(fieldType.equals(EFloat.class)){
-	        	return EFloat.ezeBox(EFloat.asFloat(jsonValue.toJava()));
+	        	return EFloat.asFloat(jsonValue.toJava());
 	        }
 	        if(fieldType.equals(EInt.class)){
-	        	return EInt.ezeBox(EInt.asInt(jsonValue.toJava()));
+	        	return EInt.asInt(jsonValue.toJava());
 	        }
 	        if(fieldType.equals(ESmallfloat.class)){
-	        	return ESmallfloat.ezeBox(ESmallfloat.asSmallfloat(jsonValue.toJava()));
+	        	return ESmallfloat.asSmallfloat(jsonValue.toJava());
 	        }
 	        if(fieldType.equals(ESmallint.class)){
-	        	return ESmallint.ezeBox(ESmallint.asSmallint(jsonValue.toJava()));
+	        	return ESmallint.asSmallint(jsonValue.toJava());
 	        }
 	        if(fieldType.equals(EString.class)){
-	        	return EString.ezeBox(jsonValue.toJava());
+	        	return jsonValue.toJava();
 	        }
 	        if(fieldType.equals(ETimestamp.class)){
 	        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -309,7 +309,7 @@ public class JsonLib {
 	        		start = getETimestampStaticField(fieldTypeOptions[0]);
 	        		end = getETimestampStaticField(fieldTypeOptions[1]);
 	        	}
-        		return ETimestamp.ezeBox(ETimestamp.asTimestamp(cal, start, end), start, end);
+        		return ETimestamp.asTimestamp(cal, start, end);
 	        }
 	        if(AnyValue.class.isAssignableFrom(fieldType) && jsonValue instanceof ObjectNode){
 	        	AnyValue anyValue;

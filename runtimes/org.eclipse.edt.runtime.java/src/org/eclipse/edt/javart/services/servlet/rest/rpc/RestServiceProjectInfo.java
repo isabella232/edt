@@ -20,6 +20,8 @@ import java.util.StringTokenizer;
 
 import org.eclipse.edt.javart.Constants;
 
+import eglx.http.HttpMethod;
+import eglx.http.HttpUtilities;
 import eglx.services.Encoding;
 
 class RestServiceProjectInfo	implements Serializable
@@ -182,10 +184,10 @@ class RestServiceProjectInfo	implements Serializable
 		}
 		return retEncoding;
 	}
-	ServiceFunctionInfo getServiceFunctionInfo( String uri, String httpMethodName ) 
+	ServiceFunctionInfo getServiceFunctionInfo( String uri, HttpMethod httpMethod ) 
 	{
 		ServiceFunctionInfo serviceFunctionInfo = null;
-		Map<Integer, Map<String, ServiceFunctionInfo>> httpMethodMap = httpMethods.get( httpMethodName.toLowerCase() );
+		Map<Integer, Map<String, ServiceFunctionInfo>> httpMethodMap = httpMethods.get( HttpUtilities.httpMethodToString(httpMethod).toLowerCase() );
 		if( httpMethodMap != null )
 		{
 			StringTokenizer tokens = new StringTokenizer( uri, "/" );

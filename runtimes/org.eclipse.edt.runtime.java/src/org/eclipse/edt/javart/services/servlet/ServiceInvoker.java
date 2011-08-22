@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.javart.services.servlet.proxy;
+package org.eclipse.edt.javart.services.servlet;
 
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.json.ArrayNode;
@@ -18,20 +18,12 @@ import org.eclipse.edt.javart.json.JsonUtilities;
 import org.eclipse.edt.javart.json.ObjectNode;
 import org.eclipse.edt.javart.json.ParseException;
 import org.eclipse.edt.javart.json.StringNode;
-import org.eclipse.edt.javart.messages.Message;
-import org.eclipse.edt.javart.resources.ExecutableBase;
-import org.eclipse.edt.javart.services.ServiceReference;
 import org.eclipse.edt.javart.services.bindings.Binding;
 import org.eclipse.edt.javart.services.bindings.EGLBinding;
 import org.eclipse.edt.javart.services.bindings.ProtocolLOCAL;
 import org.eclipse.edt.javart.services.bindings.WebBinding;
 
-import egl.lang.AnyException;
-import eglx.http.HttpResponse;
 import eglx.services.Encoding;
-import eglx.services.ServiceInvocationException;
-import eglx.services.ServiceKind;
-import eglx.services.ServiceUtilities;
 
 
 
@@ -65,9 +57,9 @@ public abstract class ServiceInvoker extends Invoker
 	private static String WEB_BINDING_WSDL_SERVICE_ID = "wsdlService";
 	private static String WEB_BINDING_URI_ID = "uri";
 
-    ServiceInvoker( ExecutableBase program )
+    ServiceInvoker( RunUnit ru )
     {
-    	super(program);
+    	super(ru);
     }
 
     private class JsonFunctionInfo extends FunctionInfo
@@ -262,32 +254,14 @@ public abstract class ServiceInvoker extends Invoker
    		}
    		return new MethodParameter[0];
    	}*/
-	public String invokeEglService( final FunctionInfo info ) throws ServiceInvocationException
+/*	public String invokeEglService( final FunctionInfo info ) throws ServiceInvocationException
 	{
 		String returnVal = null;
 		ServiceReference ref = null;
 		ExecutableBase program = program();
 		try
 		{
-			/*
-			 * First parse the body into JSON objects
-			 * the json object include all the information needed to create a WebBindiing
-			 * Use the ServiceBinder to instantiate a service reference
-			 * populate the parameters
-			 * invoke the service
-			 * convert the parameters back to JSON
-			 */
-
-			ref = getServiceReference( info );
-
-			if( "eze_endStatefulServiceSession".equalsIgnoreCase( info.getFunctionName() ) )
-			{
-				endSession( program()._runUnit() );
-				returnVal = "{}";
-			}
-			else
-			{
-/*				setSession( ((ExecutableBase)((LocalProxy)ref).getServiceReference())._runUnit() );
+				setSession(program()._runUnit());
 	
 				if( ref instanceof ExecutableBase )
 				{
@@ -295,19 +269,9 @@ public abstract class ServiceInvoker extends Invoker
 				}
 	
 				MethodParameter[] parameters = getEglParameters( program, ref, info, ServiceKind.REST );
-		   		if( ref instanceof LocalProxy && ((LocalProxy)ref).getServiceReference() instanceof ServiceCore2 )
-		   		{
-					returnVal = convert2JSON( program,
-							((ServiceCore2)((LocalProxy)ref).getServiceReference()).ezeInvokeByOperationName(info.getOperationName(), info.getFunctionName(), parameters),
-							parameters, info.outEncoding, ServiceKind.REST );
-		   		}
-		   		else
-		   		{
-					returnVal = convert2JSON( program,
-							ref.ezeInvoke(info.getOperationName(), info.getFunctionName(), parameters),
-							parameters, info.outEncoding, ServiceKind.REST );
-		   		}*/
-			}
+				returnVal = convert2JSON( program,
+						((ServiceCore2)((LocalProxy)ref).getServiceReference()).ezeInvokeByOperationName(info.getOperationName(), info.getFunctionName(), parameters),
+						parameters, info.outEncoding, ServiceKind.REST );
 			
 //			((ExecutableBase)((LocalProxy)ref).getServiceReference())._runUnit().endRunUnit((ExecutableBase)((LocalProxy)ref).getServiceReference());
 		}
@@ -320,7 +284,7 @@ public abstract class ServiceInvoker extends Invoker
 			AnyException sie;
 			if( info == null )
 			{
-				sie = ServiceUtilities.buildServiceInvocationException( program._runUnit(), Message.SOA_E_WS_PROXY_REST, new String[] {"unknown", "unknown"}, t, ServiceKind.REST );
+				sie = ServiceUtilities.buildServiceInvocationException( program._runUnit(), Message.SOA_E_WS_PROXY_REST, new String[] {"unknown", "unknown"}, t, servicek );
 			}
 			else
 			{
@@ -347,11 +311,6 @@ public abstract class ServiceInvoker extends Invoker
 	}
 
 
-	protected ServiceReference getServiceReference( FunctionInfo info ) throws Exception
-	{
-		return null;
-//FIXME		return program()._runUnit().getServiceBinder().bindService(program(), info.getBinding() );
-	}
 	protected void setSession( RunUnit runUnit )
 	{
 	}
@@ -401,24 +360,6 @@ public abstract class ServiceInvoker extends Invoker
 		}
 		return returnVal;
 	}*/
-
-	public String invokeRestService( final String className, final String functionName, final int inEncoding, final int outEncoding, final String body )
-	{
-		String returnVal = null;
-		try
-		{
-			HttpResponse response = null;
-			if( response != null )
-			{
-				returnVal = "{}";
-			}
-		}
-		catch (Throwable e)
-		{
-			e.printStackTrace();
-		}
-		return returnVal;
-	}
 
 	private ObjectNode getJsonParameters( String body )
 	{

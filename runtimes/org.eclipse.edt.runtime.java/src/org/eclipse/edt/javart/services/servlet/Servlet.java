@@ -22,18 +22,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.json.ParseException;
 import org.eclipse.edt.javart.messages.Message;
-import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.resources.RunUnitBase;
 import org.eclipse.edt.javart.resources.StartupInfo;
 import org.eclipse.edt.javart.resources.Trace;
-import org.eclipse.edt.javart.services.servlet.proxy.RuiBrowserHttpRequest;
 
 import egl.lang.AnyException;
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
 import eglx.http.HttpUtilities;
+import eglx.json.JsonLib;
 import eglx.json.JsonUtilities;
 import eglx.services.ServiceKind;
 import eglx.services.ServiceUtilities;
@@ -47,7 +47,7 @@ import eglx.services.ServiceUtilities;
  public abstract class Servlet extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	private static final String EGL_HTTP_SESSION_ID_KEY = "egl.gateway.session.id";
-	private ExecutableBase program;
+	private RunUnit runUnit;
 	private Trace tracer;
 	
 	public void init(ServletConfig config) throws ServletException 
@@ -59,23 +59,23 @@ import eglx.services.ServiceUtilities;
 	{
 		if( tracer == null )
 		{
-			tracer = program()._runUnit().getTrace();
+			tracer = getRunUnit().getTrace();
 		}
 		return tracer;
 	}
 	
 	protected abstract String programName();
-	protected ExecutableBase program()
+	protected RunUnit getRunUnit()
 	{
-		if( program == null )
+		if( runUnit == null )
 		{
 			try
 			{
-				program = new ExecutableBase(new RunUnitBase(new StartupInfo( programName(), "", true ))){private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;};
+				runUnit = new RunUnitBase(new StartupInfo( programName(), "", true )){private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;};
 			}
 			catch(AnyException e){}
 		}
-		return program;
+		return runUnit;
 	}
     /* (non-Java-doc)
 	 * @see javax.servlet.http.HttpServlet#HttpServlet()
@@ -122,49 +122,47 @@ import eglx.services.ServiceUtilities;
 	private void doHttp(HttpServletRequest httpServletReq, HttpServletResponse httpServletRes)
 	{
 		HttpSession session = httpServletReq.getSession();
-		trace("HttpServletRequest.getContextPath():" + httpServletReq.getContextPath());
-		trace("HttpServletRequest.getPathInfo():" + httpServletReq.getPathInfo());
+		if ( tracer().traceIsOn( Trace.GENERAL_TRACE ) ){
+			trace("HttpServletRequest.getContextPath():" + httpServletReq.getContextPath());
+			trace("HttpServletRequest.getPathInfo():" + httpServletReq.getPathInfo());
+		}
 		String url = null;
 		ServiceKind serviceKind = null;
-		RuiBrowserHttpRequest xmlRequest = null;
-		HttpResponse outerResponse = null;
+		HttpRequest request = null;
+		HttpResponse response = null;
 		try
 		{
-			trace( programName() + " sessionId:" + (session == null ? "null" : session.getId()) );
-			xmlRequest = RuiBrowserHttpRequest.createNewRequest( httpServletReq );
-			if(xmlRequest != null)
+			if ( tracer().traceIsOn( Trace.GENERAL_TRACE ) ){
+				trace( programName() + " sessionId:" + (session == null ? "null" : session.getId()) );
+			}
+			request = ServletUtilities.createNewRequest( httpServletReq );
+			if(request != null)
 			{
-				url = xmlRequest.getURL(); 
+				url = request.getUri(); 
 				//debug("server@"+portNumber+": url="+url);
 				if ( tracer().traceIsOn( Trace.GENERAL_TRACE ) ) 
 				{
 					tracer().put( "REQUEST:" );
 					tracer().put( "    URL:" + url != null ? url : "null");
-					tracer().put( "    content:" + xmlRequest.getContent() != null ? xmlRequest.getContent() : "null");
-					tracer().put( "    httpMethod:" + xmlRequest.getMethod() != null ? xmlRequest.getMethod() : "null" );
+					tracer().put( "    content:" + request.getBody() != null ? request.getBody() : "null");
+					tracer().put( "    httpMethod:" + request.getMethod() != null ? HttpUtilities.httpMethodToString(request.getMethod()) : "null" );
 				}
-				outerResponse = processRequest( url, xmlRequest, ServletUtilities.createHttpRequest(program(), xmlRequest.getContent()) );
+				response = processRequest( url, request, httpServletReq );
 			}
 		}
 		catch(Throwable t)
 		{
-			outerResponse = buildResponse( program(), httpServletReq.getRequestURL().toString(), t, 
-								xmlRequest != null && xmlRequest.getContent() != null ? xmlRequest.getContent() : "", 
-								serviceKind);
+			response = buildResponse( getRunUnit(), httpServletReq.getRequestURL().toString(), t, 
+					request != null && request.getBody() != null ? request.getBody() : "", serviceKind);
 		}
-		String content = outerResponse.getBody();
-		log(content, outerResponse);
-		String sessionId = (String)outerResponse.getHeaders().get(EGL_HTTP_SESSION_ID_KEY);
-		if( sessionId != null )
-		{
-			httpServletRes.setHeader(EGL_HTTP_SESSION_ID_KEY, sessionId);
-		}
-		write( httpServletRes, content, outerResponse.getStatus() );
+		String content = response.getBody();
+		log(content, response);
+		write( httpServletRes, content, response.getStatus() );
 	}   	
 	
-	protected abstract HttpResponse processRequest(String url, RuiBrowserHttpRequest xmlRequest, HttpRequest createHttpRequest) throws Exception;
+	protected abstract HttpResponse processRequest(String url, HttpRequest request, HttpServletRequest httpServletReq) throws Exception;
 
-	private HttpResponse buildResponse( ExecutableBase program, String url,  Throwable t, String requestContent, ServiceKind serviceKind )
+	private HttpResponse buildResponse( RunUnit runUnit, String url,  Throwable t, String requestContent, ServiceKind serviceKind )
 	{
 		HttpResponse outerResponse = new HttpResponse();
 		//handle as inner exception
@@ -172,22 +170,22 @@ import eglx.services.ServiceUtilities;
 
 		if( t instanceof ParseException )
 		{
-			jrte = ServiceUtilities.buildServiceInvocationException( program._runUnit(), Message.SOA_E_WS_REST_BAD_CONTENT, new String[]{requestContent}, t, serviceKind );
+			jrte = ServiceUtilities.buildServiceInvocationException( runUnit, Message.SOA_E_WS_REST_BAD_CONTENT, new String[]{requestContent}, t, serviceKind );
 		}
 		else if( t instanceof IOException )
 		{
 			//handle as outer exception
-			jrte = ServiceUtilities.buildServiceInvocationException( program._runUnit(), Message.SOA_E_WS_PROXY_COMMUNICATION, new String[]{url}, t, serviceKind );
+			jrte = ServiceUtilities.buildServiceInvocationException( runUnit, Message.SOA_E_WS_PROXY_COMMUNICATION, new String[]{url}, t, serviceKind );
 		}
 		else
 		{
-			jrte = ServiceUtilities.buildServiceInvocationException( program._runUnit(), Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, serviceKind );
+			jrte = ServiceUtilities.buildServiceInvocationException( runUnit, Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, serviceKind );
 		}
 		HttpResponse innerResponse = new HttpResponse();
-		ServletUtilities.setBody(program()._runUnit(), innerResponse, jrte);
+		innerResponse.setBody(JsonLib.convertToJSON(jrte));
 		innerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
 		innerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
-		ServletUtilities.setBody(program(), outerResponse, innerResponse);
+		ServletUtilities.setBody(outerResponse, innerResponse);
 		outerResponse.setStatus(HttpUtilities.HTTP_STATUS_OK);
 		outerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_OK);
 		return outerResponse;

@@ -449,6 +449,8 @@ public class Message
 	public static final String SOA_E_WS_PROXY_XML_PARSE_ELEMENT_EXCEPTION = "EGL1565E";
 	public static final String SOA_E_WS_PROXY_UNSUPPORTED_OPERATION = "EGL1566E";
 	public static final String SOA_E_WS_PROXY_NO_J2EE_OPERATION = "EGL1567E";
+	public static final String SOA_E_WS_REST_WRONG_HTTP_FUNCTION = "EGL1568E";
+	public static final String SOA_E_FUNCTION_NOT_FOUND = "EGL1569E";
 	
 	public static final String REPORT_E_FILL_WITH_CONNECTION_ERROR = "EGL1700E";
 	public static final String REPORT_E_FILL_WITH_SQL_ERROR = "EGL1702E";
