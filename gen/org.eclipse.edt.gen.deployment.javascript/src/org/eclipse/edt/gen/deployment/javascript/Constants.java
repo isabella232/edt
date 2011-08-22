@@ -58,11 +58,11 @@ public class Constants {
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/java/JavaObjectException.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/javascript/JavaScriptObjectException.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/javascript/Job.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/StrLib.js");
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/json/Json.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/json/JSONParser.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/DateTimeLib.js"); 
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/MathLib.js");
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/StrLib.js");
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/SysLib.js");
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/rest/RestRuntime.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/Encoding.js"); //$NON-NLS-1$
