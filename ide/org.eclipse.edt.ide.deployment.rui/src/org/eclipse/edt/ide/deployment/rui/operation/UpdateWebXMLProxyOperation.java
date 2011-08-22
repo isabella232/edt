@@ -21,11 +21,11 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
-import org.eclipse.edt.ide.deployment.internal.IConstants;
 import org.eclipse.edt.ide.deployment.internal.web.WebXML;
 import org.eclipse.edt.ide.deployment.internal.web.WebXMLManager;
 import org.eclipse.edt.ide.deployment.operation.IDeploymentOperation;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
+import org.eclipse.edt.ide.deployment.rui.internal.IConstants;
 import org.eclipse.edt.ide.deployment.rui.internal.nls.Messages;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
 import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
@@ -60,8 +60,8 @@ public class UpdateWebXMLProxyOperation implements IDeploymentOperation {
 		 * register the servlet
 		 */
 		String servletName = IConstants.RUI_PROXY_SERVLET_NAME;
-		String servletClassName = "org.eclipse.edt.javart.services.servlet.proxy.AjaxProxyServlet"; //$NON-NLS-1$
-		String mapping = "/___proxy"; //$NON-NLS-1$
+		String servletClassName = IConstants.RUI_PROXY_SERVLET; //$NON-NLS-1$
+		String mapping = IConstants.RUI_PROXY_MAPPING; //$NON-NLS-1$
 		Map<String, String> parameterList = new HashMap<String, String>();
 		boolean isWebsphere = false; //ServiceUtilities.isWebsphereRuntime(ServiceUtilities.getRuntime(project)); TODO - EDT
 		if( isWebsphere )
