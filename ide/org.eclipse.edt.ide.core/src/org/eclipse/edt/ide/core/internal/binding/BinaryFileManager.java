@@ -239,7 +239,7 @@ public class BinaryFileManager {
     public void removePackage(String[] packages,IProject project){
     	IContainer container = ProjectBuildPathManager.getInstance().getProjectBuildPath(project).getOutputLocation();
     	container = container.getFolder(Util.stringArrayToPath(IRFileNameUtility.toIRFileName(packages)));
-    	if (container.exists()){
+    	if (container.exists() && container.getType() != IResource.PROJECT){ // if somehow using the project root, don't delete it
     		try {
     			container.delete(true,null);
 			} catch (CoreException e) {

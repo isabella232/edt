@@ -393,14 +393,16 @@ public class Builder extends IncrementalProjectBuilder {
     	 //RMERUI - Do not clean the output dir if this project is 'read only'
     	 if(!WorkingCopyProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).isReadOnly()){
 	      	IContainer container = ProjectBuildPathManager.getInstance().getProjectBuildPath(project).getOutputLocation();
-	      	try{
-	      	IResource[] children = container.members();
-	      	for (int i = 0; i < children.length;i++){
-	      		IResource child = children[i];
-	      		child.delete(true,null);
-	      	}
-	      	}catch(CoreException e){
-	      		throw new BuildException(e);
+	      	if (container.getType() != IResource.PROJECT) {
+		      	try{
+			      	IResource[] children = container.members();
+			      	for (int i = 0; i < children.length;i++){
+			      		IResource child = children[i];
+			      		child.delete(true,null);
+			      	}
+		      	}catch(CoreException e){
+		      		throw new BuildException(e);
+		      	}
 	      	}
     	 }
       }
