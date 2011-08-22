@@ -39,7 +39,8 @@ public class EDTCorePreferenceConstants {
 	 * Value is of type <code>String</code>
 	 * </p>
 	 */
-	public static final String EGL_SOURCE_FOLDER = "eglSourceFolder";
+	public static final String EGL_SOURCE_FOLDER = "eglSourceFolder"; //$NON-NLS-1$
+	public static final String EGL_SOURCE_FOLDER_VALUE = "EGLSource"; //$NON-NLS-1$
 	
 	/**
 	 * A named preference that specifies the name of the EGL output folder
@@ -48,7 +49,8 @@ public class EDTCorePreferenceConstants {
 	 * Value is of type <code>String</code>
 	 * </p>
 	 */
-	public static final String EGL_OUTPUT_FOLDER = "eglOutputFolder";
+	public static final String EGL_OUTPUT_FOLDER = "eglOutputFolder"; //$NON-NLS-1$
+	public static final String EGL_OUTPUT_FOLDER_VALUE = "EGLBin"; //$NON-NLS-1$
 	
 	/**
 	 * A named preference that specifies the default compiler.
@@ -74,8 +76,8 @@ public class EDTCorePreferenceConstants {
 	 */
 	public static void initializeDefaultValues(IPreferenceStore store) {		
 		// BasePreferencePage
-		store.setDefault( EGL_SOURCE_FOLDER, "eglsource" );
-		store.setDefault( EGL_OUTPUT_FOLDER, "eglbin" );
+		store.setDefault( EGL_SOURCE_FOLDER, EGL_SOURCE_FOLDER_VALUE );
+		store.setDefault( EGL_OUTPUT_FOLDER, EGL_OUTPUT_FOLDER_VALUE );
 		
 		// CompilerPreferencePage
 		store.setDefault( COMPILER_ID, "org.eclipse.edt.ide.compiler.edtCompiler" ); 
