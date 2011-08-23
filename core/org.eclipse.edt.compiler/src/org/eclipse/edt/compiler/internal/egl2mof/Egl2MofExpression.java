@@ -366,13 +366,22 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				}
 				else {
 					if (isStatic && node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.Name) {
-						fi = factory.createQualifiedFunctionInvocation();
-						fi.setId(functionBinding.getCaseSensitiveName());
-						PartName partName = factory.createPartName();
-						partName.setId(declarer.getCaseSensitiveName());
-						partName.setPackageName(concatWithSeparator(declarer.getPackageName(), "."));
-						setElementInformation(node.getTarget(), partName);
-						((QualifiedFunctionInvocation)fi).setQualifier(partName);
+						
+						if (mofTypeFor(declarer) == currentPart) {
+							FunctionMember irFunc = (FunctionMember)getEObjectFor(functionBinding);
+							fi = factory.createFunctionInvocation();
+							fi.setId(irFunc.getName());
+							((FunctionInvocation)fi).setTarget(irFunc);
+						}
+						else {
+							fi = factory.createQualifiedFunctionInvocation();
+							fi.setId(functionBinding.getCaseSensitiveName());
+							PartName partName = factory.createPartName();
+							partName.setId(declarer.getCaseSensitiveName());
+							partName.setPackageName(concatWithSeparator(declarer.getPackageName(), "."));
+							setElementInformation(node.getTarget(), partName);
+							((QualifiedFunctionInvocation)fi).setQualifier(partName);
+						}
 					}
 					else {
 						if (node.getTarget() instanceof FieldAccess) {
