@@ -46,7 +46,7 @@ import eglx.services.ServiceUtilities;
 	private String contextRoot;
 
 	private RestServiceProjectInfo restServiceProjectInfo;
-	
+
 	public void init(ServletConfig config) throws ServletException 
 	{
 		super.init(config);
@@ -54,7 +54,6 @@ import eglx.services.ServiceUtilities;
 		while(contextRoot.charAt(0) == '/'){
 			contextRoot = contextRoot.substring(1);
 		}
-		restServiceProjectInfo = RestRpcUtilities.getRestServiceInfo( contextRoot + "-uri.xml" );
 		traceInfos();
 	}
     /* (non-Java-doc)
@@ -68,6 +67,13 @@ import eglx.services.ServiceUtilities;
 	@Override
 	protected String programName() {
 		return SERVICE_SERVLET;
+	}
+
+	protected RestServiceProjectInfo restServiceProjectInfo(){
+		if(restServiceProjectInfo == null){
+			restServiceProjectInfo = RestRpcUtilities.getRestServiceInfo( contextRoot + "-uri.xml" );
+		}
+		return restServiceProjectInfo;
 	}
 
 	@Override
@@ -111,9 +117,9 @@ import eglx.services.ServiceUtilities;
 					pathInfo = path.substring(serviceIdx);
 				}
 				
-				if( restServiceProjectInfo != null )
+				if( restServiceProjectInfo() != null )
 				{
-					RestServiceProjectInfo.ServiceFunctionInfo serviceFunctionInfo = restServiceProjectInfo.getServiceFunctionInfo(pathInfo, httpMethod );
+					RestServiceProjectInfo.ServiceFunctionInfo serviceFunctionInfo = restServiceProjectInfo().getServiceFunctionInfo(pathInfo, httpMethod );
 					if ( tracer().traceIsOn( Trace.GENERAL_TRACE ) && serviceFunctionInfo != null ){
 						tracer().put( "invoking service " + serviceFunctionInfo.getClassName() );
 						tracer().put( "    request encoding:" + String.valueOf(serviceFunctionInfo.getInEncoding()) );
@@ -165,7 +171,7 @@ import eglx.services.ServiceUtilities;
 		{
 			StringBuilder buf = new StringBuilder();
 			buf.append( "EGL REST service servlet " + contextRoot + " starting" + '\n' );
-			buf.append( restServiceProjectInfo.toString() );
+			buf.append( restServiceProjectInfo().toString() );
 			trace( buf.toString() );
 		}
 	}
