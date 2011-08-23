@@ -483,7 +483,6 @@ public class EGLDDOverviewFormPage extends EGLDDBaseFormPage {
 		projectDeselected();
 
 
-		EGLDDRootHelper.removeTarget(getModelRoot());
 		initTargets();
 	}
 
