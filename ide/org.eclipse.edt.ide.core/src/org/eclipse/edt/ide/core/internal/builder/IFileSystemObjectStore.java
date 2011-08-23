@@ -202,6 +202,12 @@ public class IFileSystemObjectStore extends AbstractObjectStore implements Cachi
 		String normKey = removeSchemeFromKey(key).toUpperCase().toLowerCase();
 		return cache.get(normKey);
 	}
+	
+	@Override
+	public void addToCache(String key, EObject object) {
+		String normKey = removeSchemeFromKey(key).toUpperCase().toLowerCase();
+		cache.put(normKey, object);
+	}
 
 	@Override
 	public void clearCache() {

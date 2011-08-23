@@ -353,16 +353,16 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 	}
 	
 	private EObject readPart(String[] packageName, String name) throws DeserializationException {
-		String key;
+		StringBuilder keyBuf = new StringBuilder( 100 );
+		keyBuf.append(":");
     	if (packageName != null && packageName.length > 0) {
-    		key = IRUtils.concatWithSeparator(packageName, ".") + "." + name;
+    		keyBuf.append(IRUtils.concatWithSeparator(packageName, "."));
+    		keyBuf.append('.');
     	}
-    	else {
-    		key = name;
-    	}
+   		keyBuf.append(name);
     	
     	for (int i = 0; i < stores.length; i++) {
-    		EObject ir = stores[i].get(key);
+    		EObject ir = stores[i].get(stores[i].getKeyScheme() + keyBuf.toString());
     		if (ir != null) {
     			return ir;
     		}
