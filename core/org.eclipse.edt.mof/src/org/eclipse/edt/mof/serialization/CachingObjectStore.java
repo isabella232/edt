@@ -18,9 +18,14 @@ import org.eclipse.edt.mof.EObject;
  */
 public interface CachingObjectStore extends ObjectStore {
 	/**
-	 * @return the part from the cache, or null if it's not in the cache.
+	 * @return the object from the cache, or null if it's not in the cache.
 	 */
 	public EObject getFromCache(String key);
+	
+	/**
+	 * Adds the object to the cache with the given key.
+	 */
+	public void addToCache(String key, EObject object);
 	
 	/**
 	 * Resets the cache to its initial state.

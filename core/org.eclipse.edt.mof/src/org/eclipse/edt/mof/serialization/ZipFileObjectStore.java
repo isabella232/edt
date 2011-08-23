@@ -147,6 +147,13 @@ public class ZipFileObjectStore extends AbstractObjectStore implements CachingOb
 		String normKey = removeSchemeFromKey(key).toUpperCase().toLowerCase();
 		return cache.get(normKey);
 	}
+	
+	@Override
+	public void addToCache(String key, EObject object) {
+		String normKey = removeSchemeFromKey(key).toUpperCase().toLowerCase();
+		cache.put(normKey, object);
+	}
+
 
 	@Override
 	public void clearCache() {

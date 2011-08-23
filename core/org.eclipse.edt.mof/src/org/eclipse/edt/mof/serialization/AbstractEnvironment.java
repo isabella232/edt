@@ -23,7 +23,7 @@ import org.eclipse.edt.mof.MofSerializable;
 
 public abstract class AbstractEnvironment implements IEnvironment {
 	
-	private Map<Object, EObject> objectCache;
+	protected Map<Object, EObject> objectCache;
 	protected Map<String, List<ObjectStore>> objectStores;
 	private Map<String, LookupDelegate> lookupDelegates;
 	private Map<String, ObjectStore> defaultSerializeStores;
@@ -201,8 +201,16 @@ public abstract class AbstractEnvironment implements IEnvironment {
 	protected void save(String key, EObject object, ObjectStore store) throws SerializationException {
 		LookupDelegate delegate = getDelegateForKey(key);
 		String storeKey = delegate.normalizeKey(key);
+		updateProxyReferences(storeKey, object);
 		objectCache.put(storeKey, object);
 		if (store != null) store.put(storeKey, object);
+	}
+	
+	protected void updateProxyReferences(String storeKey, EObject object){
+		EObject cachedObject = objectCache.get(storeKey);
+		if (cachedObject != null && cachedObject instanceof ProxyEObject) {
+			((ProxyEObject)cachedObject).updateReferences(object);
+		}
 	}
 	
 	protected LookupDelegate getDelegateForKey(String key) {
