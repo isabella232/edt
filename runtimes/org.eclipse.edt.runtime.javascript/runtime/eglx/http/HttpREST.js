@@ -17,13 +17,13 @@ egl.defineClass('eglx.http', "HttpREST", "egl.jsrt", "Record", {
 		"ezeCopy": function(source) {
 			this.request.ezeCopy(source.request);
 			this.response.ezeCopy(source.response);
-			this.isEglRpc = source.isEglRpc;
+			this.invocationType = source.invocationType;
 		}
 		,
 		"eze$$setEmpty": function() {
 			this.request = new egl.eglx.http.HttpRequest();
 			this.response = new egl.eglx.http.HttpResponse();
-			this.isEglRpc = false;
+			this.invocationType = null;
 		}
 		,
 		"eze$$setInitial": function() {
@@ -34,7 +34,7 @@ egl.defineClass('eglx.http', "HttpREST", "egl.jsrt", "Record", {
 			this.request.charset = "UTF-8";
 			this.response.ezeCopy(new egl.eglx.http.HttpResponse());
 			this.response.encoding = egl.eglx.services.Encoding.USE_CONTENTTYPE;
-			this.isEglRpc = false;
+			this.invocationType = egl.eglx.rest.RestType.TrueRest;
 		}
 		,
 		"eze$$clone": function() {
@@ -44,7 +44,7 @@ egl.defineClass('eglx.http', "HttpREST", "egl.jsrt", "Record", {
 			ezert$$2.eze$$isNullable = this.eze$$isNullable;
 			ezert$$2.request = ezert$$1.request;
 			ezert$$2.response = ezert$$1.response;
-			ezert$$2.isEglRpc = ezert$$1.isEglRpc;
+			ezert$$2.invocationType = ezert$$1.invocationType;
 			ezert$$2.setNull(ezert$$1eze$$isNull);
 			return ezert$$2;
 		}
@@ -69,9 +69,9 @@ egl.defineClass('eglx.http', "HttpREST", "egl.jsrt", "Record", {
 				annotations["JsonName"] = new egl.eglx.json.JsonName("response");
 				this.fieldInfos[1] =new egl.eglx.services.FieldInfo("response", "response", "A;", egl.eglx.http.HttpResponse, annotations);
 				annotations = {};
-				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("isEglRpc", null, false, false);
-				annotations["JsonName"] = new egl.eglx.json.JsonName("isEglRpc");
-				this.fieldInfos[2] =new egl.eglx.services.FieldInfo("isEglRpc", "isEglRpc", "0;", Boolean, annotations);
+				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("invocationType", null, false, false);
+				annotations["JsonName"] = new egl.eglx.json.JsonName("invocationType");
+				this.fieldInfos[2] =new egl.eglx.services.FieldInfo("invocationType", "invocationType", "eglx.rest.RestType", egl.eglx.rest.RestType, annotations);
 			}
 			return this.fieldInfos;
 		},
