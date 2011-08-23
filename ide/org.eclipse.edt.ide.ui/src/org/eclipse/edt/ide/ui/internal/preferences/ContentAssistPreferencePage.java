@@ -65,8 +65,10 @@ public class ContentAssistPreferencePage extends AbstractPreferencePage implemen
 		GridData data = new GridData();
 		data.verticalAlignment = GridData.CENTER;
 		data.horizontalAlignment = GridData.FILL;
+		data.widthHint = 20;
 		delayTimeTextBox.setLayoutData(data);
 		delayTimeTextBox.setText(String.valueOf(EDTUIPreferenceConstants.getPreferenceStore().getInt(EDTUIPreferenceConstants.CODEASSIST_AUTOACTIVATION_DELAY)));
+		delayTimeTextBox.setTextLimit(3);
 		delayTimeTextBox.addModifyListener( modifyListener );
 		setSize(composite);
 		return parent;
@@ -119,7 +121,7 @@ public class ContentAssistPreferencePage extends AbstractPreferencePage implemen
 		} else {
 			try {
 				final int value = Integer.parseInt(number);
-				if (value < 0) {
+				if (value <= 0) {
 					setErrorMessage(Messages
 							.format(PreferencesMessages.SpellingPreferencePage_invalid_threshold,
 									number));
