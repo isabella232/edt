@@ -12,12 +12,12 @@ package eglx.http;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
 import eglx.http.HttpRequest;
-import eglx.services.Encoding;
-import eglx.http.HttpMethod;
-import eglx.http.HttpResponse;
-import org.eclipse.edt.runtime.java.egl.lang.EBoolean;
-import java.lang.Boolean;
 import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
+import eglx.rest.RestType;
+import eglx.services.Encoding;
+import eglx.http.HttpResponse;
+import eglx.http.HttpMethod;
+@javax.xml.bind.annotation.XmlRootElement(name="HttpREST")
 public class HttpREST extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
@@ -25,7 +25,7 @@ public class HttpREST extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	@javax.xml.bind.annotation.XmlTransient
 	public HttpResponse response;
 	@javax.xml.bind.annotation.XmlTransient
-	public boolean isEglRpc;
+	public RestType invocationType;
 	public HttpREST() {
 		super();
 		ezeInitialize();
@@ -36,7 +36,7 @@ public class HttpREST extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	public void ezeCopy(egl.lang.AnyValue source) {
 		this.request.ezeCopy(((HttpREST) source).request);
 		this.response.ezeCopy(((HttpREST) source).response);
-		this.isEglRpc = ((HttpREST) source).isEglRpc;
+		this.invocationType = ((HttpREST) source).invocationType;
 	}
 	public HttpREST ezeNewValue(Object... args) {
 		return new HttpREST();
@@ -44,7 +44,7 @@ public class HttpREST extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	public void ezeSetEmpty() {
 		this.request.ezeSetEmpty();
 		this.response.ezeSetEmpty();
-		isEglRpc = false;
+		invocationType = null;
 	}
 	public boolean isVariableDataLength() {
 		return false;
@@ -65,7 +65,7 @@ public class HttpREST extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 		response = new HttpResponse();
 		org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(new HttpResponse(), response);
 		response.encoding = Encoding.USE_CONTENTTYPE;
-		isEglRpc = false;
+		invocationType = RestType.TrueRest;
 	}
 	@org.eclipse.edt.javart.json.Json(name="request", clazz=HttpRequest.class, asOptions={})
 	public HttpRequest getRequest() {
@@ -81,11 +81,11 @@ public class HttpREST extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	public void setResponse( HttpResponse ezeValue ) {
 		this.response = ezeValue;
 	}
-	@org.eclipse.edt.javart.json.Json(name="isEglRpc", clazz=EBoolean.class, asOptions={})
-	public boolean getIsEglRpc() {
-		return (isEglRpc);
+	@org.eclipse.edt.javart.json.Json(name="invocationType", clazz=RestType.class, asOptions={})
+	public RestType getInvocationType() {
+		return (invocationType);
 	}
-	public void setIsEglRpc( boolean ezeValue ) {
-		this.isEglRpc = ezeValue;
+	public void setInvocationType( RestType ezeValue ) {
+		this.invocationType = ezeValue;
 	}
 }
