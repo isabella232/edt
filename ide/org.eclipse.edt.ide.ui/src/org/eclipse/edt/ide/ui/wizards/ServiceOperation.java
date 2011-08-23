@@ -57,6 +57,7 @@ import org.eclipse.edt.ide.ui.internal.deployment.Webservices;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 import org.eclipse.edt.ide.ui.internal.editor.util.EGLModelUtility;
 import org.eclipse.edt.ide.ui.internal.templates.TemplateEngine;
+import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 
 public class ServiceOperation extends EGLFileOperation {
 	
@@ -522,7 +523,7 @@ public class ServiceOperation extends EGLFileOperation {
 	private IFile getEGLDDFileHandle() {
 		IPath sourcePath = new Path(configuration.getContainerName());
 		
-		String fileName = getValidProjectName(configuration.getProjectName());
+		String fileName = CoreUtility.getValidProjectName(configuration.getProjectName());
 		if(fileName != null && fileName.trim().length()>0){
 			sourcePath = sourcePath.append(fileName);	
 			sourcePath = sourcePath.addFileExtension(EGLDDRootHelper.EXTENSION_EGLDD);
@@ -592,22 +593,4 @@ public class ServiceOperation extends EGLFileOperation {
         return insertposition[0];
 
     }
-    
-    public static String getValidProjectName(String toValidate) {
-		String validatedString = toValidate;
-		char replacementChar = '_';
-		char invalidCharacters[] = {'.',' ',',','\'',';','!','@','#','%','^','&','(',')','+','=','[',']','{','}'};
-	
-		for(int i=0; i<invalidCharacters.length;i++) {
-			if(validatedString.indexOf(invalidCharacters[i])!=-1){
-				validatedString = validatedString.replace(invalidCharacters[i],replacementChar);
-			}
-		}
-		
-		//can't start with number either, will prepend letter 'a'
-		if(validatedString.charAt(0) >= '0' && validatedString.charAt(0) <='9') {
-			validatedString = 'a' + validatedString;
-		}
-		return validatedString;
-	}
 }

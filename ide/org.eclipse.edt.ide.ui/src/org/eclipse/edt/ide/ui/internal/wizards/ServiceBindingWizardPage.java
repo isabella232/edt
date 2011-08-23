@@ -23,11 +23,11 @@ import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.FileBrowseDialog;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
+import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.eclipse.edt.ide.ui.wizards.BindingBaseConfiguration;
 import org.eclipse.edt.ide.ui.wizards.BindingEGLConfiguration;
 import org.eclipse.edt.ide.ui.wizards.EGLDDBindingConfiguration;
 import org.eclipse.edt.ide.ui.wizards.EGLWizardUtilities;
-import org.eclipse.edt.ide.ui.wizards.ServiceOperation;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -81,7 +81,7 @@ public class ServiceBindingWizardPage extends EGLBindingWizardPage {
 		if(visible){
 			String eglddfileName = fEGLFileDialogField.getText();
 			if(eglddfileName == null || eglddfileName.trim().length()==0)	
-				fEGLFileDialogField.setText(ServiceOperation.getValidProjectName(getBindingEGLConfiguration().getProjectName()));
+				fEGLFileDialogField.setText(CoreUtility.getValidProjectName(getBindingEGLConfiguration().getProjectName()));
 		}
 	}
 

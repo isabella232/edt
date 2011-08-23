@@ -17,19 +17,30 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLFile;
+import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
+import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
+import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
+import org.eclipse.edt.ide.ui.internal.deployment.Restservice;
+import org.eclipse.edt.ide.ui.internal.deployment.Restservices;
+import org.eclipse.edt.ide.ui.internal.deployment.Webservice;
+import org.eclipse.edt.ide.ui.internal.deployment.Webservices;
+import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 import org.eclipse.edt.ide.ui.internal.refactoring.rename.RenameEGLFileProcessor;
 import org.eclipse.edt.ide.ui.internal.refactoring.rename.RenameEGLFileWizard;
 import org.eclipse.edt.ide.ui.internal.refactoring.rename.RenamePartProcessor;
@@ -63,7 +74,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-
 /**
  * Helper class to run refactorings from action code.
  * <p>
@@ -83,6 +93,8 @@ public final class RefactoringExecutionStarter {
 			DeleteRefactoringWizard wizard = new DeleteRefactoringWizard(ref, elements);
 			RefactoringWizardOpenOperation op = new RefactoringWizardOpenOperation(wizard);
 			try {
+				handleFileRemoval(elements);
+				
 				String titleForFailedChecks = ""; //$NON-NLS-1$
 				op.run(shell, titleForFailedChecks);
 			} catch (final InterruptedException irex) {
@@ -99,6 +111,88 @@ public final class RefactoringExecutionStarter {
 
 		}
 
+	}
+	
+	private static void handleFileRemoval(Object[] removedFiles) throws EGLModelException {
+		IFile eglddFile = getEGLDDFileHandle(removedFiles);
+		
+		if(removedFiles != null && eglddFile != null) {
+			String fullyQualifiedServiceName = "";
+			EGLDeploymentRoot deploymentRoot = null;
+			try {
+				deploymentRoot = EGLDDRootHelper.getEGLDDFileSharedWorkingModel(eglddFile, false);
+				Deployment deployment = deploymentRoot.getDeployment();
+				Webservices wss = deployment.getWebservices();
+				Restservices rss = deployment.getRestservices();
+				
+				for(int i=0; i< removedFiles.length; i++) {
+					if(removedFiles[i] instanceof IEGLFile) {
+						IEGLFile eglFile = (IEGLFile)removedFiles[i];
+						String packageName = eglFile.getParent().getElementName();
+						String fileName = eglFile.getElementName();
+						if(org.eclipse.edt.ide.core.internal.model.Util.isEGLFileName(fileName)) {
+							fileName = fileName.substring(0, fileName.length() - org.eclipse.edt.ide.core.internal.model.Util.SUFFIX_EGL.length);
+							fullyQualifiedServiceName = packageName + '.' + fileName;
+							
+							//Remove service binding
+							if(rss != null) {
+								Restservice removedService = null;
+								for(Restservice restService : rss.getRestservice()) {
+									if(fullyQualifiedServiceName.equals(restService.getImplementation())) {
+										removedService = restService;
+										break;
+									}
+								}
+								if(removedService != null) {
+									rss.getRestservice().remove(removedService);
+								}
+							}
+							
+							if(wss != null) {
+								Webservice removedSoap = null;
+								for(Webservice soapService : wss.getWebservice()) {
+									if(fullyQualifiedServiceName.equals(soapService.getImplementation())) {
+										removedSoap = soapService;
+										break;
+									}
+								}
+								if(removedSoap != null) {
+									wss.getWebservice().remove(removedSoap);
+								}
+							}
+							
+							//persist the file if we're the only client 
+							if(!EGLDDRootHelper.isWorkingModelSharedByUserClients(eglddFile))
+								EGLDDRootHelper.saveEGLDDFile(eglddFile, deploymentRoot);
+						}
+					}
+				}//end for loop
+			} finally{
+				if(deploymentRoot != null)
+					EGLDDRootHelper.releaseSharedWorkingModel(eglddFile, false);
+			}
+		}
+	}
+	
+	private static IFile getEGLDDFileHandle(Object[] removedFiles) throws EGLModelException {
+		IFile eglddFile = null;
+		for(int i=0; i< removedFiles.length; i++) {
+			if(removedFiles[i] instanceof IEGLFile) {
+				IEGLFile eglFile = (IEGLFile)removedFiles[i];
+				IEGLPathEntry[] entries = eglFile.getEGLProject().getRawEGLPath();
+				for(IEGLPathEntry entry : entries) {
+					IPath sourcePath =  entry.getPath();
+					if(sourcePath.toOSString().contains(EDTCorePreferenceConstants.EGL_SOURCE_FOLDER_VALUE)) {
+						sourcePath = sourcePath.append(eglFile.getEGLProject().getElementName());	
+						sourcePath = sourcePath.addFileExtension(EGLDDRootHelper.EXTENSION_EGLDD);
+						eglddFile = ResourcesPlugin.getWorkspace().getRoot().getFile(sourcePath);
+						return eglddFile;
+					}
+				}
+			}
+		}
+		
+		return eglddFile;
 	}
 
 	public static void startRenameRefactoring(final IPart part, final Shell shell) throws CoreException {

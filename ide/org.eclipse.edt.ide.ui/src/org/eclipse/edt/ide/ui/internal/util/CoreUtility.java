@@ -35,6 +35,23 @@ public class CoreUtility {
 		}
 	}
 		
+	public static String getValidProjectName(String toValidate) {
+		String validatedString = toValidate;
+		char replacementChar = '_';
+		char invalidCharacters[] = { '.', ' ', ',', '\'', ';', '!', '@', '#',
+				'%', '^', '&', '(', ')', '+', '=', '[', ']', '{', '}' };
 
+		for (int i = 0; i < invalidCharacters.length; i++) {
+			if (validatedString.indexOf(invalidCharacters[i]) != -1) {
+				validatedString = validatedString.replace(invalidCharacters[i],replacementChar);
+			}
+		}
+
+		// can't start with number either, will prepend letter 'a'
+		if (validatedString.charAt(0) >= '0' && validatedString.charAt(0) <= '9') {
+			validatedString = 'a' + validatedString;
+		}
+		return validatedString;
+	}
 }
 
