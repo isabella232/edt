@@ -318,7 +318,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.println("if(this.annotations === undefined){");
 		out.println("this.annotations = {};");
 		for(Annotation annot : part.getAnnotations()){
-			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, part);
+			ctx.invoke(genConversionControlAnnotation, annot.getEClass(), ctx, out, annot, part);
 		}
 		out.println("}");
 		out.println("return this.annotations;");

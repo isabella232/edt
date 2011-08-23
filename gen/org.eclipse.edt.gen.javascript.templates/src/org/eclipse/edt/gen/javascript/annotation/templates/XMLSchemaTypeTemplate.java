@@ -20,7 +20,7 @@ import org.eclipse.edt.mof.egl.Field;
 
 public class XMLSchemaTypeTemplate extends JavaScriptTemplate {
 
-	public void genAnnotation(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) {
+	public void genConversionControlAnnotation(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) {
 		// add xmlschema type
 		if (annot.getValue("name") instanceof String && ((String) annot.getValue("name")).length() > 0)
 		{

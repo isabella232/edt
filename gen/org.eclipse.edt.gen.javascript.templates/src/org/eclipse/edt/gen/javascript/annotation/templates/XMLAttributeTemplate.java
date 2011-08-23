@@ -17,9 +17,13 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Type;
 
 public class XMLAttributeTemplate extends JavaScriptTemplate {
 
+	public void genConversionControlAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
+		ctx.invokeSuper(this, genConversionControlAnnotation, (Type)aType, ctx, out, Boolean.TRUE, annot, field);
+	}
 	public void genAnnotationKey(AnnotationType type, Context ctx, TabbedWriter out) {
 		out.print("XMLStyle");
 	}

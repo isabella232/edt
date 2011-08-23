@@ -123,7 +123,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 		out.println("annotations = {};");
 		
 		for(Annotation annot : field.getAnnotations()){
-			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field);
+			ctx.invoke(genConversionControlAnnotation, annot.getEClass(), ctx, out, annot, field);
 		}
 		
 		out.print("this.fieldInfos[" + arg.toString() + "] =");

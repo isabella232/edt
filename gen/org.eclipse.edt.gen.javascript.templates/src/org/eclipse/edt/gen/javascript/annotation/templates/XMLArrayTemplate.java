@@ -17,10 +17,14 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.utils.EList;
 
 public class XMLArrayTemplate extends JavaScriptTemplate {
 
+	public void genConversionControlAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
+		ctx.invokeSuper(this, genConversionControlAnnotation, (Type)aType, ctx, out, Boolean.TRUE, annot, field);
+	}
 	public void genConstructorOptions(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) {
 		out.print(annot.getValue("wrapped") == null ? "true, " : (((Boolean) annot.getValue("wrapped")).toString() + ", "));
 		EList<String> elementNames = (EList<String>) annot.getValue("names");
