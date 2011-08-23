@@ -19,7 +19,9 @@ externalType ServiceLib type NativeType
 	//delegate
 	static serviceExceptionHandler  serviceExceptionHandler;
 	
-    static function bindService(http eglx.http.HttpREST inout, intrface any const in);
+    static function bindService(http eglx.http.HttpREST in)returns(any);
+    static function bindService(bindingkey string const in)returns(any);
+    static function bindService(bindingkey string const in, deploymentDescriptorName string const in)returns(any);
 
 end
 

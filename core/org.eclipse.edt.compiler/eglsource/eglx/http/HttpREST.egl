@@ -9,10 +9,12 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package eglx.http; 
+package eglx.http;
+
+import eglx.rest.RestType; 
 
 record HttpREST
 	request HttpRequest{method=HttpMethod.POST, encoding=Encoding.XML, charset = "UTF-8"};
 	response HttpResponse{encoding=Encoding.USE_CONTENTTYPE};
-	isEglRpc boolean = false;
+	invocationType RestType = RestType.TrueRest;
 end

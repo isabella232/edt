@@ -6,5 +6,6 @@ Record BindService type Annotation
 //	targetTypes = [InterfacePart, ServicePart]
 }
   	bindingKey string;
+  	deploymentDescriptorName string?;
 end
 

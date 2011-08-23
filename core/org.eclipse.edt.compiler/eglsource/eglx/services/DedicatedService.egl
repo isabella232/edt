@@ -6,5 +6,6 @@ Record DedicatedService type Annotation
 	targetTypes = [ServiceRef, InterfaceRef]*/,
 	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.DedicatedServiceAnnotationTypeBinding"
 }
+	serviceName String?;
 end
 
