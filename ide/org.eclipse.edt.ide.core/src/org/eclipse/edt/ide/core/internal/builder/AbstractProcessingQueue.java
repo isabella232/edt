@@ -47,7 +47,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.egl2mof.Egl2Mof;
 import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
-import org.eclipse.edt.ide.core.internal.binding.BinaryFileManager;
 import org.eclipse.edt.ide.core.internal.compiler.Compiler;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraph;
@@ -217,10 +216,6 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 		catch (Exception e) {
 			// if we couldn't load the part, just assume it's structurally different
 			previousPart = null;
-		}
-		finally {
-			// Remove from the cache.
-			BinaryFileManager.getInstance().removePart(packageName, caseInsensitiveInternedString, project, false);
 		}
 		
 		MofSerializable part = createIRFromBoundAST(partAST, declaringFile, functionInfos, fileAST.getImportDeclarations(), cappedProblemRequestor);
