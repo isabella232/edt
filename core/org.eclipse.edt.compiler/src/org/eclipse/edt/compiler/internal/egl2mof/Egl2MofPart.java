@@ -221,7 +221,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		part.setName(dataItem.getName().getCaseSensitiveIdentifier());
 		DataItemBinding type = (DataItemBinding)dataItem.getName().resolveBinding();
 		part.setBaseType((Type)mofTypeFor(type.getPrimitiveTypeBinding()));
-		part.setPackageName(concatWithSeparator(type.getPackageName(), "."));
+		part.setPackageName(concatWithSeparator(type.getPackageName(), ".").toUpperCase().toLowerCase());
 		createAnnotations(type, part);
 		stack.push(part);
 		return false;
@@ -239,7 +239,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		Delegate part = factory.createDelegate();
 		DelegateBinding binding = (DelegateBinding)delegate.getName().resolveBinding();
 		part.setName(binding.getCaseSensitiveName());
-		part.setPackageName(concatWithSeparator(binding.getPackageName(), "."));
+		part.setPackageName(concatWithSeparator(binding.getPackageName(), ".").toUpperCase().toLowerCase());
 		
 		if (binding.getReturnType() != null) {
 			part.setReturnType((Type)mofTypeFor(binding.getReturnType()));		
@@ -266,7 +266,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		FormGroup group = factory.createFormGroup();
 		group.setName(formGroup.getName().getCaseSensitiveIdentifier());
 		FormGroupBinding groupBinding = (FormGroupBinding)formGroup.getName().resolveBinding();
-		group.setPackageName(concatWithSeparator(groupBinding.getPackageName(), "."));
+		group.setPackageName(concatWithSeparator(groupBinding.getPackageName(), ".").toUpperCase().toLowerCase());
 		stack.push(group);
 		for (Node node : (List<Node>)formGroup.getContents()) {
 			//TODO handle USE statment for top level forms
@@ -412,7 +412,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		partProcessingStack.push(eObj);
 		// Use dynamic interface to handle both MOF or EGL types
 		eObj.eSet("name", partBinding.getCaseSensitiveName());
-		eObj.eSet("packageName", concatWithSeparator(partBinding.getPackageName(), "."));
+		eObj.eSet("packageName", concatWithSeparator(partBinding.getPackageName(), ".").toUpperCase().toLowerCase());
 		IAnnotationBinding subtype = partBinding.getSubTypeAnnotationBinding();
 		if (!inMofProxyContext) setReflectTypeValues(eObj, subtype);
 		
