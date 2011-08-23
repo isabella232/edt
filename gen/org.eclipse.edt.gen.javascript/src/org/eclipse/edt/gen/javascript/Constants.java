@@ -37,11 +37,15 @@ public class Constants {
 	public static final String JSRT_DTTMLIB_PKG = "egl.egl.core.DateTimeLib['$inst'].";
 	public static final String JSRT_XMLLIB_PKG = "egl.egl.core.XMLLib['$inst'].";
 
-	//Annotation names
+	//part names
 	public static final String AnnotationXmlAttribute  = "eglx.xml.binding.annotation.xmlAttribute";
 	public static final String AnnotationXMLRootElement  = "eglx.xml.binding.annotation.XMLRootElement";
 	public static final String AnnotationXmlElement  = "eglx.xml.binding.annotation.xmlElement";
 	public static final String AnnotationJsonName  = "eglx.json.JsonName";
+	public static final String AnnotationDedicatedService  = "eglx.services.DedicatedService";
+	public static final String AnnotationBindService  = "eglx.services.BindService";
+	public static final String PartHttpREST  = "eglx.http.HttpREST";
+	public static final String LibraryService  = "eglx.services.ServiceLib";
 
 	// EGL message id's
 	public static final String EGLMESSAGE_UNSUPPORTED_ELEMENT = "1000";

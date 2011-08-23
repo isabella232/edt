@@ -33,7 +33,6 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genAdditionalConstructorParams = "genAdditionalConstructorParams";
 	public static final String genAdditionalSuperConstructorArgs = "genAdditionalSuperConstructorArgs";
 	public static final String genAnnotations = "genAnnotations";
-	public static final String genAnnotation = "genAnnotation";
 	public static final String genAnnotationKey = "genAnnotationKey";
 	public static final String genArrayAccess = "genArrayAccess";
 	public static final String genAssignment = "genAssignment";
@@ -50,8 +49,10 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genConstructor = "genConstructor";
 	public static final String genConstructors = "genConstructors";
 	public static final String genConstructorOptions = "genConstructorOptions";
+	public static final String genConversionControlAnnotation = "genConversionControlAnnotation";
 	public static final String genConversionOperation = "genConversionOperation";
 	public static final String genDeclaration = "genDeclaration";
+	public static final String genDeclarationAnnotation = "genDeclarationAnnotation";
 	public static final String genDeclarationExpression = "genDeclarationExpression";
 	public static final String genDefaultValue = "genDefaultValue";
 	public static final String genExpression = "genExpression";
