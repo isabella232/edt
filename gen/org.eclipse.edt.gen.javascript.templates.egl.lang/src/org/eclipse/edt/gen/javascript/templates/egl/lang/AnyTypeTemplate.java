@@ -16,14 +16,19 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
 
 public class AnyTypeTemplate extends JavaScriptTemplate {
 
 	public void genConversionOperation(Type type, Context ctx, TabbedWriter out, AsExpression arg) {
 		// check to see if a conversion is required
-		if (arg.getConversionOperation() != null) {
+		if(arg.getEType() instanceof Interface || arg.getEType() instanceof Service){
+			ctx.invokeSuper(this, genConversionOperation, type, ctx, out, arg);
+		}
+		else if (arg.getConversionOperation() != null) {
 			out.print(ctx.getNativeImplementationMapping((Classifier) arg.getConversionOperation().getContainer()) + '.');
 			out.print("from");
 			out.print(ctx.getNativeTypeName(arg.getConversionOperation().getParameters().get(0).getType()));
