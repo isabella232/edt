@@ -25,6 +25,8 @@ ExternalType Event type JavaScriptObject {
 	screenY Int;
 	clientX Int;
 	clientY Int;
+	pageX Int;
+	pageY Int;
 	ch int;
 	widget Widget;
 	mouseButton int;
