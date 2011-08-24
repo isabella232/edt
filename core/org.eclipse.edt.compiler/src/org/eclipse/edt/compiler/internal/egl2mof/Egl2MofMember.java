@@ -437,7 +437,7 @@ class Egl2MofMember extends Egl2MofPart {
 		StatementBlock block = null;
 		int arrayIndex = 0;
 		for (Node expr : (List<Node>)settings.getSettings()) {
-			if (expr instanceof AnnotationExpression) {
+			if (expr instanceof AnnotationExpression && ((AnnotationExpression)expr).getName().resolveDataBinding() instanceof AnnotationBinding) {
 				Annotation value = (Annotation)mofValueFrom(((AnnotationExpression)expr).getName().resolveDataBinding());
 				context.getAnnotations().add(value);
 			}
