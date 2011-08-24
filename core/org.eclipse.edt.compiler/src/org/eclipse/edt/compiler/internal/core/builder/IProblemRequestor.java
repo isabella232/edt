@@ -1547,6 +1547,10 @@ public interface IProblemRequestor {
 	
 	public static final int FUNCTION_ARG_CANNOT_BE_THIS = 6754;
 	public static final int UNLOADONEXIT_NOT_VALID_IN_MAIN = 6755;
+	
+	public static final int MOVE_MODIFIER_INVALID = 6760;
+	public static final int MOVE_MUST_BE_REFERENCE = 6761;
+	
 
 	//7500-7599: Used for VAGCompatability messages		
 	public static final int CALL_OPTIONS_ONLY_VALID_IF_VAGCOMPATIBLE = 7501;
