@@ -1,0 +1,35 @@
+package org.eclipse.edt.eunit.runtime;
+//
+//
+//this is rui/javascript implementation, need to call dedicated service to do the file persistent 
+handler CreateResultFile
+		
+	/**
+	* @parm fileDirectory String - the full path of the directory name,  
+	* @parm fullFileName String - the full path of the file name, including directory, file name and its extention
+	* @parm fileContent String - the String content of the file 
+	**/ 
+	function createFile(fileDirectory String in, fullFileName String in, fileContent String in)
+		myfile File  = new File(fileDirectory);
+		//if(!etrFile.exists())
+			createdDirs boolean = myfile.mkdirs();
+			if(createdDirs)
+				SysLib.writeStdOut("directories created");			
+			end					
+		//end
+		
+		outWriter FileWriter;  
+		try
+			SysLib.writeStdOut (myfile.getAbsolutePath());
+			
+			outWriter = new FileWriter(fullFileName);
+			outWriter.write(fileContent);
+			outWriter.close_();
+//		onException (ioExp IOException)
+//			SysLib.writeStdOut("IOException occrred!");
+		onException (exp AnyException)
+			SysLib.writeStdOut(exp.message);
+			SysLib.writeStdOut("Exception occurred!");
+		end
+	end	
+end

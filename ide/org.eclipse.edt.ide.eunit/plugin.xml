@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="EGL"
+            id="org.eclipse.edt.ide.eck">
+      </category>
+      <view
+            name="EGL Test Result View"
+            icon="icons/sample.gif"
+            category="org.eclipse.edt.ide.eck"
+            class="org.eclipse.edt.ide.eck.views.EGLTestResultView"
+            id="org.eclipse.edt.ide.eck.views.EGLTestResultView">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+         <objectContribution
+        	adaptable="true"
+           	id="org.eclipse.edt.eck.gentestdriver"
+           	objectClass="org.eclipse.core.resources.IProject">
+           	<visibility>
+      			<objectState
+                		name="projectNature"
+                  		value="org.eclipse.edt.ide.core.EGLNature"/>
+       	 	</visibility>
+       	 	<menu
+       	 		label="%GenECKTestDriver"
+       	 		path="additions"
+       	 		id="org.eclipse.edt.eck.gentestdriver.menu1">
+       	 		<separator name="group1"/>       	 		
+       	 	</menu>
+       	 	<action
+				class="org.eclipse.edt.ide.eck.internal.actions.GenTestDriverActionJavascript"
+				enablesFor="1"
+				menubarPath="org.eclipse.edt.eck.gentestdriver.menu1/group1"				
+				id="org.eclipse.edt.eck.gentestdriver.javascript"
+				label="%GenECKTestDriver.JavaScript">
+			</action> 
+			<action
+				class="org.eclipse.edt.ide.eck.internal.actions.GenTestDriverActionJava"
+				enablesFor="1"
+				menubarPath="org.eclipse.edt.eck.gentestdriver.menu1/group1"				
+				id="org.eclipse.edt.eck.gentestdriver.java"
+				label="%GenECKTestDriver.Java">
+			</action> 
+		</objectContribution>
+		         <objectContribution
+        	adaptable="true"
+           	id="org.eclipse.edt.eck.gentestdriver"
+           	objectClass="org.eclipse.core.resources.IFolder">
+           	<visibility>
+      			<objectState
+                		name="projectNature"
+                  		value="org.eclipse.edt.ide.core.EGLNature"/>
+       	 	</visibility>
+       	 	<menu
+       	 		label="%GenECKTestDriver"
+       	 		path="additions"
+       	 		id="org.eclipse.edt.eck.gentestdriver.menu1">
+       	 		<separator name="group1"/>       	 		
+       	 	</menu>
+       	 	<action
+				class="org.eclipse.edt.ide.eck.internal.actions.GenTestDriverActionJavascript"
+				enablesFor="*"
+				menubarPath="org.eclipse.edt.eck.gentestdriver.menu1/group1"				
+				id="org.eclipse.edt.eck.gentestdriver.javascript"
+				label="%GenECKTestDriver.JavaScript">
+			</action> 
+			<action
+				class="org.eclipse.edt.ide.eck.internal.actions.GenTestDriverActionJava"
+				enablesFor="*"
+				menubarPath="org.eclipse.edt.eck.gentestdriver.menu1/group1"				
+				id="org.eclipse.edt.eck.gentestdriver.java"
+				label="%GenECKTestDriver.Java">
+			</action> 
+		</objectContribution>
+		<objectContribution
+        	adaptable="true"
+        	nameFilter="*.egl"
+           	id="org.eclipse.edt.eck.gentestdriver"
+           	objectClass="org.eclipse.core.resources.IFile">
+           	<visibility>
+      			<objectState
+                		name="projectNature"
+                  		value="org.eclipse.edt.ide.core.EGLNature"/>
+       	 	</visibility>
+       	 	<menu
+       	 		label="%GenECKTestDriver"
+       	 		path="additions"
+       	 		id="org.eclipse.edt.eck.gentestdriver.menu1">
+       	 		<separator name="group1"/>       	 		
+       	 	</menu>
+       	 	<action
+				class="org.eclipse.edt.ide.eck.internal.actions.GenTestDriverActionJavascript"
+				enablesFor="*"
+				menubarPath="org.eclipse.edt.eck.gentestdriver.menu1/group1"				
+				id="org.eclipse.edt.eck.gentestdriver.javascript"
+				label="%GenECKTestDriver.JavaScript">
+			</action> 
+			<action
+				class="org.eclipse.edt.ide.eck.internal.actions.GenTestDriverActionJava"
+				enablesFor="*"
+				menubarPath="org.eclipse.edt.eck.gentestdriver.menu1/group1"				
+				id="org.eclipse.edt.eck.gentestdriver.java"
+				label="%GenECKTestDriver.Java">
+			</action> 
+		</objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+	  <editor
+	        id = "org.eclipse.edt.eck.editor.testresultview"
+	        default = "true"
+	        name = "Test Result Viewer"
+	        icon = "icons/obj16/sample.gif"
+	        extensions = "trs"
+	        class = "org.eclipse.edt.ide.eck.ui.testresult.TestResultViewer" /> 
+         
+   </extension>
+
+</plugin>

@@ -1,0 +1,191 @@
+package org.eclipse.edt.eunit.runtime;
+
+// basic library
+library TestExecutionLib
+	
+	private resultRootSum ResultSummaryRoot;
+		
+	const STEXTS String[] = ["Passed.", "Failed.", "Error.", "Not run."];
+			
+	/**
+	* driver program or handler can call this to start the test
+	*/
+	function testMain(exeLibTestMtd executeLibTestMethod, td TestDescription, bwriteStdOut boolean)
+		//clear the status and log record to hold result in LogResult Library
+		LogResult.clearResults();	
+		
+		//run the test case		
+		ms MultiStatus = exeLibTestMtd(td.name);
+		
+		//convert multiStatus to status		
+		s Status = calculateStatus(ms);				
+		
+		stdOutLog Log = LogResult.getLog();
+		xml2 String = XMLLib.convertToXML(stdOutLog, false);
+		
+		if(bwriteStdOut)
+			SysLib.writeStdOut("Status code: " + s.code + " - " + STEXTS[s.code + 1]);
+			SysLib.writeStdOut("Status reason: " + s.reason);
+			SysLib.writeStdOut("");
+			SysLib.writeStdOut("Out record: \r\n" + xml2);
+		end
+		
+		//need working directory or testRoot dir, need full package name
+		//to construct the location and name of the result file
+		path String = "This is the path where the output file should be";
+		WriteResultLib.writeResult(s, ms, stdOutLog, td, this.resultRootSum); 				 						
+	end
+	
+	function writeResultSummary(expectedTestCnt int in)
+		this.resultRootSum.expCnt = expectedTestCnt;
+		WriteResultLib.persistResultRootSummary(this.resultRootSum);
+	end
+	
+	/**
+	* helper function to run test that has mulitple test case methods
+	*/
+	function runMultiTest(testMethods String[], runTestMtd runTestMethod[], testName String in) returns (MultiStatus)
+		ms MultiStatus;		
+		testId String;
+
+		testName1 String =  testName + "::";				
+		testVariationCnt int = testMethods.getSize();
+		ms.expectedCnt = testVariationCnt;
+				
+		for (i int from 1 to testVariationCnt by 1)
+			testId = testName1 + testMethods[i];
+			try
+				runTestMtd[i]();
+			onException (assertion AssertionFailedException)
+				//prepend the assertion failure error message to Status
+				assertMsg String = "Assertion failed for: " + testId; 
+				s Status = LogResult.getStatus();				
+				s.reason = assertMsg + s.reason;
+			onException (testException AnyException)
+				//caught the exception from the test
+				expMsg String = "uncaught exception for: " + testId; 
+				//StatusLib.error(expMsg, s);
+				LogResult.error(expMsg);
+			end
+			addStatus(ms, testId);
+		end
+						
+		return (ms);
+								
+	end	
+		
+	/**
+	* get the status from the MultiStatus
+	*/
+	private function calculateStatus(ms MultiStatus) returns (Status)		
+		retStat Status;
+		summary String;
+		if(ms.testCnt == 0)
+			summary = "No tests cases found ";
+		else
+			summary = "test case: " + ms.testCnt;
+			if(ms.passedCnt > 0)
+				if(ms.passedCnt == ms.testCnt)
+					summary += "; all passed";
+				else
+					summary += "; passed: " + ms.passedCnt;
+				end
+			end
+			
+			if(ms.failedCnt > 0 )
+				if(ms.failedCnt == ms.testCnt)
+					summary += "; all failed";
+				else
+					summary += "; failed: " + ms.failedCnt;
+				end
+			end
+			
+			if(ms.errCnt > 0)
+				if(ms.errCnt == ms.testCnt)
+					summary += "; all have error ";
+				else
+					summary += "; error: " + ms.errCnt;
+				end
+			end
+			
+			if(ms.notRunCnt > 0)
+				if(ms.notRunCnt == ms.testCnt)
+					summary += "; all tests are skipped";
+				else
+					summary += "; skipped: " + ms.notRunCnt;
+				end
+			end
+			
+			if(ms.badCnt > 0 )
+				if(ms.badCnt == ms.testCnt)
+					summary += "; all have bad status";
+				else
+					summary += "; bad status: " + ms.badCnt;
+				end
+			end
+		end
+		
+		
+		if(ms.badCnt > 0)
+			summary += "; first bad test case result found: " + ms.firstFailedTestName;
+			setStatusRecordHelper(retStat, ConstantsLib.SERROR, summary);
+			return (retStat);
+		end
+		
+		if(ms.notRunCnt > 0)
+			summary += "; first test case skipped: " + ms.firstFailedTestName;
+			setStatusRecordHelper(retStat, ConstantsLib.SNOT_RUN, summary);	
+			return (retStat);
+		end
+			
+		if(ms.errCnt > 0 )
+			summary += "; first test case with error: " + ms.firstFailedTestName;
+			setStatusRecordHelper(retStat, ConstantsLib.SERROR, summary);	
+			return (retStat);
+		end	
+		
+		if(ms.failedCnt > 0)
+			summary += "; first test case failure: " + ms.firstFailedTestName;
+			setStatusRecordHelper(retStat, ConstantsLib.SFAILED, summary);	
+			return (retStat);
+		else
+			setStatusRecordHelper(retStat, ConstantsLib.SPASSED, summary);	
+			return (retStat);			
+		end
+	end
+	
+	private function setStatusRecordHelper(s Status out, c int in, r String in)
+		s.code = c;
+		s.reason = r;
+	end
+
+	/**
+	* add status to MultiStatus
+	*/
+	private function addStatus(ms MultiStatus,  testId String)
+		s Status = LogResult.getStatus();
+		msg String = testId + ": " + s.reason;
+		LogResult.logStdOut(msg);
+				
+		ms.testCnt += 1;
+		
+		case(s.code)
+			when (ConstantsLib.SPASSED)
+				ms.passedCnt += 1;
+			when (ConstantsLib.SFAILED)
+				ms.failedCnt += 1;
+			when (ConstantsLib.SERROR)
+				ms.errCnt += 1;
+			when (ConstantsLib.SNOT_RUN)
+				ms.notRunCnt += 1;	
+			otherwise	
+				ms.badCnt += 1;				
+		end
+		
+		if(s.code != ConstantsLib.SPASSED && strLib.characterLen(ms.firstFailedTestName) == 0)
+			ms.firstFailedTestName = testId;
+		end
+		
+	end
+			
+end

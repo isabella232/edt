@@ -1,0 +1,58 @@
+package org.eclipse.edt.eunit.runtime;
+
+
+Record MultiStatus
+	//these values accumulate the aggregate outcome, without 
+	//requiring the individual outcomes be stored
+	testCnt int;
+	expectedCnt int;
+	passedCnt int;
+	failedCnt int;
+	errCnt int;
+	badCnt int;
+	notRunCnt int;
+	firstFailedTestName String;
+end
+
+Record TestDescription
+	rootDir String;		//source root directory 
+	pkgName String;		//package name
+	name String;		//test library part name
+	title String;
+	description String;
+	testcases String;
+	expCnt int;			//expected test variation count
+	sources String;  //list of the runTestMethod names, delimted by whitespace. 
+	keywords String; //list of tag names, delimited by ,	
+end
+
+Record TestResult {@xmlrootelement {}}
+	td TestDescription;
+	stat Status;
+	log Log;
+end
+
+Record ResultSummary
+	pkgName String {@XMLAttribute{}};	//package name
+	name String{@XMLAttribute{}};		//test library part name
+	code int{@XMLAttribute{}};			//test result code value
+	tCnt int{@XMLAttribute{}};			//test variation count, one runTestMethod is one variation
+	expCnt int{@XMLAttribute{}};		//expected test variation count for one test library
+	passCnt int{@XMLAttribute{}};
+	failCnt int{@XMLAttribute{}};
+	errCnt int{@XMLAttribute{}};
+	badCnt int{@XMLAttribute{}};
+	skipCnt int{@XMLAttribute{}};	
+end
+
+
+Record ResultSummaryRoot {@xmlrootelement {}}
+	expCnt int{@XMLAttribute{}};					//expected total number of test variation count
+	trSum ResultSummary[]{};
+end
+
+delegate runTestMethod()	
+end
+
+delegate executeLibTestMethod(testName String in) returns (MultiStatus)
+end

@@ -1,0 +1,105 @@
+package org.eclipse.edt.eunit.runtime;
+
+/**
+  * this library is responsible to persist the test result
+  * 
+ **/
+Library WriteResultLib
+	//persist the test result
+	trHandler CreateResultFile = new CreateResultFile;
+	
+	private currentTime String = null;
+	
+	function writeResult(s Status, ms MultiStatus, outR Log, td TestDescription, resultRootSum ResultSummaryRoot)
+		tr TestResult;
+		tr.stat = s;
+		tr.log = outR;
+		tr.td = td; 
+				
+		persistResult(tr, ms, resultRootSum);
+	end
+
+	function persistResultRootSummary(resultRootSum ResultSummaryRoot)
+		xmlStr String = XMLLib.convertToXML(resultRootSum);
+		SysLib.writeStdOut(xmlStr);
+		
+		fileSeparator String = SysLib.getProperty("file.separator");
+		if(fileSeparator == "")
+			fileSeparator = "/";
+		end
+		etrRoot String = getResultRootDirectory(fileSeparator);
+		
+		trsFilePath String = etrRoot;
+		
+		trsFileName String = trsFilePath + fileSeparator;
+		trsFileName += "ResultSummary.trs";
+		
+		trHandler.createFile(trsFilePath, trsFileName, xmlStr);		
+	end
+
+	function persistResult(tr TestResult, ms MultiStatus, resultRootSum ResultSummaryRoot)
+		//append the test case summary to result root summary 
+		resultSum ResultSummary;
+		resultSum.name = tr.td.name;
+		resultSum.pkgName = tr.td.pkgName;
+		resultSum.code = tr.stat.code;
+		resultSum.tCnt = ms.testCnt;
+		resultSum.expCnt = ms.expectedCnt;
+		resultSum.passCnt = ms.passedCnt;
+		resultSum.failCnt = ms.failedCnt;
+		resultSum.errCnt = ms.errCnt;
+		resultSum.badCnt = ms.badCnt;
+		resultSum.skipCnt = ms.notRunCnt;		
+		resultRootSum.trSum ::= resultSum;
+				
+		xmlStr String = XMLLib.convertToXML(tr);
+		SysLib.writeStdOut(xmlStr);
+		
+		//get the result output root from properties file
+		fileSeparator String = SysLib.getProperty("file.separator");
+		if(fileSeparator == "")
+			fileSeparator = "/";
+		end		
+		etrRoot String = getResultRootDirectory(fileSeparator);
+		
+		// partPkgName String = tr.td.pkgName.replaceStr(".", fileSeparator);
+		partPkgName String = tr.td.pkgName;
+	    index int = StrLib.indexOf( tr.td.pkgName, "." );
+		while ( index > 0 ) 		    
+		 	partPkgName[index : index] = fileSeparator; 
+		 	index = indexOf( tr.td.pkgName, ".", index+1); 
+		 end
+		
+		//build the file path name
+		etrFilePath String = etrRoot + fileSeparator;
+		etrFilePath += partPkgName;
+				
+		etrFileName String = etrFilePath;
+		etrFileName += fileSeparator;
+		etrFileName += tr.td.name;
+		etrFileName += ".etr";
+
+		trHandler.createFile(etrFilePath, etrFileName, xmlStr);		
+
+	end
+
+	private function getResultRootDirectory(fileSeparator String in) returns (String)
+		//get the result output root from properties file
+		etrRoot String = SysLib.getProperty("EGLTestResultRoot");	
+		SysLib.writeStdOut("custom properties EGLTestResultRoot is: " + etrRoot);
+		etrRoot += fileSeparator;
+		etrRoot += getTimeStamp();
+		return (etrRoot);
+	end
+	
+	private function getTimeStamp() returns (String)
+		if(currentTime == null || currentTime == "")
+			format String = "yyyyMMdd_HHmmss";
+			myTime TimeStamp;
+			currentTime = strLib.formatTimestamp(myTime, format);				
+		end
+		
+		//SysLib.writeStdOut ("c: "+ currentTime);
+		return (currentTime);
+	end
+end

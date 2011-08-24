@@ -1,0 +1,20 @@
+package org.eclipse.edt.eunit.runtime;
+
+//Put EGL Source File Contents Here
+ExternalType File type JavaObject {packageName = "java.io"}
+	 constructor (pathname String In);
+	 function getAbsolutePath() returns (String);
+	 function createNewFile() returns (boolean);
+	 function mkdirs() returns (boolean);
+	 function exists() returns (boolean);
+end
+
+ExternalType FileWriter type JavaObject { packageName = "java.io"}
+	constructor (file File In);
+	constructor (filename String In);
+	function write(str String In);
+	function close_() {javaName ="close"};
+end
+
+ExternalType IOException type JavaObject { packageName = "java.io"}
+end
