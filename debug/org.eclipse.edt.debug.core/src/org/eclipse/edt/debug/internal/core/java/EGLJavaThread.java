@@ -115,7 +115,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 					String vmArgs = config.getAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, (String)null );
 					if ( vmArgs != null && vmArgs.length() > 0 )
 					{
-						Pattern p = Pattern.compile( "-D" + FILTER_ATTR + "=([\\S]*)" ); //$NON-NLS-1$ //$NON-NLS-2$
+						Pattern p = Pattern.compile( ".*-D" + FILTER_ATTR + "=([\\S]*)" ); //$NON-NLS-1$ //$NON-NLS-2$
 						Matcher m = p.matcher( vmArgs );
 						if ( m.matches() && m.groupCount() > 0 )
 						{
