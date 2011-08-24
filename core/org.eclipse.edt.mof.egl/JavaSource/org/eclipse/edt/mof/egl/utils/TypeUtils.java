@@ -38,6 +38,7 @@ import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.StructuredField;
+import org.eclipse.edt.mof.egl.SubType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
 import org.eclipse.edt.mof.serialization.DeserializationException;
@@ -248,8 +249,14 @@ public class TypeUtils implements MofConversion {
 	public static boolean areCompatible(Classifier lhsType, Classifier rhsType) {
 		if (lhsType.equals(rhsType)) return true;
 		
+		if (lhsType instanceof StructPart && rhsType instanceof SubType) {
+			if (((SubType)rhsType).isSubtypeOf((StructPart)lhsType)) {
+				return true;
+			}
+		}
+		
 		if (lhsType instanceof StructPart && rhsType instanceof StructPart) {
-			return IRUtils.getConversionOperation((StructPart)rhsType, (StructPart)lhsType) != null || ((StructPart)rhsType).isSubtypeOf((StructPart)lhsType);
+			return IRUtils.getConversionOperation((StructPart)rhsType, (StructPart)lhsType) != null;
 		}
 		else {
 			return false;
@@ -654,7 +661,7 @@ public class TypeUtils implements MofConversion {
 		return op;
 	}
 
-	public static List<Operation> getBestFitOperation(StructPart container, String opSymbol, StructPart...argumentTypes) {
+	public static List<Operation> getBestFitOperation(StructPart container, String opSymbol, Classifier...argumentTypes) {
 		List<Operation> ops = new ArrayList<Operation>();
 		for (Operation op : container.getOperations()) {
 			if (op.getOpSymbol().equals(opSymbol)) {

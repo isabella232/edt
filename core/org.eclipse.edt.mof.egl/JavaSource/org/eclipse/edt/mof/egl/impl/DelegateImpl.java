@@ -18,14 +18,19 @@ import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.MofConversion;
+import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 
-public class DelegateImpl extends PartImpl implements Delegate {
+public class DelegateImpl extends PartImpl implements Delegate, MofConversion {
 	private static int Slot_parameters=0;
 	private static int Slot_isNullable=1;
 	private static int Slot_returnType=2;
 	private static int totalSlots = 3;
+	
+	private List<StructPart> superTypes;
 	
 	public static int totalSlots() {
 		return totalSlots + PartImpl.totalSlots();
@@ -85,5 +90,30 @@ public class DelegateImpl extends PartImpl implements Delegate {
 		return getMembers();
 	}
 
+	@Override
+	public List<StructPart> getSuperTypes() {
+		if (superTypes == null) {
+			superTypes = new ArrayList<StructPart>();
+			superTypes.add((StructPart)IRUtils.getEGLType(Type_EGLAny));
+		}
+		return superTypes;
+	}
 	
+	@Override
+	public boolean isSubtypeOf(StructPart part) {
+		if (!getSuperTypes().isEmpty()) {
+			for (StructPart superType : getSuperTypes()) {
+				if (superType == part) {
+					return true;
+				}
+			}
+			for (StructPart superType : getSuperTypes()) {
+				if (superType.isSubtypeOf(part)) return true;
+			}
+			return false;
+		}
+		else {
+			return false;
+		}
+	}
 }

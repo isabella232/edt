@@ -13,7 +13,7 @@ package org.eclipse.edt.mof.egl;
 
 import java.util.List;
 
-public interface StructPart extends Part, Container {
+public interface StructPart extends Part, SubType, Container {
 	List<StructPart> getSuperTypes();
 	
 	boolean isSubtypeOf(StructPart part);

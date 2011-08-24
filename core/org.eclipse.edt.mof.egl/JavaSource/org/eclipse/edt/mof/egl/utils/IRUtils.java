@@ -63,6 +63,7 @@ import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.StructuredContainer;
 import org.eclipse.edt.mof.egl.StructuredField;
+import org.eclipse.edt.mof.egl.SubType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeName;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
@@ -612,7 +613,7 @@ public class IRUtils {
 
 	private static Operation primGetNoConversionBinaryOperation(Classifier lhs, Classifier rhs, StructPart clazz, String opSymbol) {
 
-		List<Operation> ops = TypeUtils.getBestFitOperation(clazz, opSymbol, (StructPart)lhs, (StructPart)rhs);
+		List<Operation> ops = TypeUtils.getBestFitOperation(clazz, opSymbol, lhs, rhs);
 		// Filter out an operation that has the same parameter types for each parameter
 		if (ops.size() > 0) {
 			for (Operation operation : ops) {
@@ -626,7 +627,27 @@ public class IRUtils {
 	}
 
 	public static Operation getBinaryOperation(Classifier lhs, Classifier rhs, String opSymbol) {
-		if (!(lhs instanceof StructPart)) return null;
+		if (!(lhs instanceof StructPart)) {
+			
+			if (rhs instanceof StructPart) {
+				return getNoConversionBinaryOperation(lhs, rhs, (StructPart)rhs, opSymbol);
+			}
+			else {
+				//neither lhs or rhs is struct. Check if their supertypes are struct
+				if (lhs instanceof SubType && rhs instanceof SubType) {
+					SubType lSubType = (SubType)lhs;
+					SubType rSubType = (SubType)rhs;
+					
+					if (lSubType.getSuperTypes().size() > 0 && rSubType.getSuperTypes().size() > 0) {
+						return getBinaryOperation(lSubType.getSuperTypes().get(0), rSubType.getSuperTypes().get(0), opSymbol);
+					}
+				}
+			}
+			
+			return null;
+		}
+		
+		
 		StructPart clazz = null;
 		Integer direction = conversionDirection(lhs, rhs, opSymbol);
 		

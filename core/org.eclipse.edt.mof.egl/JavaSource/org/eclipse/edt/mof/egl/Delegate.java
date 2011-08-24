@@ -13,7 +13,7 @@ package org.eclipse.edt.mof.egl;
 
 import java.util.List;
 
-public interface Delegate extends Part, Container, InvocableElement {
+public interface Delegate extends Part, SubType, Container, InvocableElement {
 	List<FunctionParameter> getParameters();
 	
 	Boolean isNullable();
@@ -23,5 +23,5 @@ public interface Delegate extends Part, Container, InvocableElement {
 	Type getReturnType();
 	
 	void setReturnType(Type value);
-	
+		
 }
