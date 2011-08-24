@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
+import org.eclipse.edt.compiler.tools.IRUtils;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IClassFile;
 import org.eclipse.edt.ide.core.model.IEGLElement;
@@ -372,7 +373,7 @@ protected void toStringInfo(int tab, StringBuffer buffer, Object info) {
 		return fEmptyPartList;
 	}
 	public IClassFile getClassFile(String name) {
-		if (!Util.isEGLIRFileName(name)) {
+		if (!IRUtils.isEGLIRFileName(name)) {
 			throw new IllegalArgumentException();
 		}
 		// don't hold on the .ir file extension to save memory

@@ -42,6 +42,8 @@ import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.Signature;
 
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
+import org.eclipse.edt.compiler.tools.IRUtils;
+
 import com.ibm.icu.util.StringTokenizer;
 
 /**
@@ -93,15 +95,6 @@ public class Util {
 	public final static char[] SUFFIX_EGLAR = ".EGLAR".toCharArray(); //$NON-NLS-1$
 	public final static char[] SUFFIX_mofar = ".mofar".toCharArray(); //$NON-NLS-1$
 	public final static char[] SUFFIX_MOFAR = ".MOFAR".toCharArray(); //$NON-NLS-1$
-	public final static char[] SUFFIX_eglxml = ".eglxml".toCharArray(); //$NON-NLS-1$
-	public final static char[] SUFFIX_EGLXML = ".EGLXML".toCharArray(); //$NON-NLS-1$
-	public final static char[] SUFFIX_eglbin = ".eglbin".toCharArray(); //$NON-NLS-1$
-	public final static char[] SUFFIX_EGLBIN = ".EGLBIN".toCharArray(); //$NON-NLS-1$
-	public final static char[] SUFFIX_mofxml = ".mofxml".toCharArray(); //$NON-NLS-1$
-	public final static char[] SUFFIX_MOFXML = ".MOFXML".toCharArray(); //$NON-NLS-1$
-	public final static char[] SUFFIX_mofbin = ".mofbin".toCharArray(); //$NON-NLS-1$
-	public final static char[] SUFFIX_MOFBIN = ".MOFBIN".toCharArray(); //$NON-NLS-1$
-
 	static {
 		relocalize();
 	}
@@ -512,21 +505,8 @@ public class Util {
 			return false;
 		}
 		
-		return matchesFileName(name, SUFFIX_eglar, SUFFIX_EGLAR)
-				|| matchesFileName(name, SUFFIX_mofar, SUFFIX_MOFAR);
-	}
-	
-	private final static boolean matchesFileName(String name, char[] lowercaseExtension, char[] uppercaseExtension) {
-		int nameLength = name.length();
-		int suffixLength = lowercaseExtension.length;
-		if (nameLength < suffixLength)
-			return false;
-		for (int i = 0, offset = nameLength - suffixLength; i < suffixLength; i++) {
-			char c = name.charAt(offset + i);
-			if (c != lowercaseExtension[i] && c != uppercaseExtension[i])
-				return false;
-		}
-		return true;
+		return IRUtils.matchesFileName(name, SUFFIX_eglar, SUFFIX_EGLAR)
+				|| IRUtils.matchesFileName(name, SUFFIX_mofar, SUFFIX_MOFAR);
 	}
 	
 	public static boolean isValidMofPackage(String fullPath) {
@@ -535,20 +515,6 @@ public class Util {
 		} else {
 			return false;
 		}
-	}
-	
-	/**
-	 * Returns true iff str.toLowerCase().endsWith(".eglxml" or ".eglbin" or ".mofxml" or ".mofbin")
-	 * implementation is not creating extra strings.
-	 */	
-	public static boolean isEGLIRFileName(String name) {
-		if (name == null) {
-			return false;
-		}
-		return matchesFileName(name, SUFFIX_eglxml, SUFFIX_EGLXML)
-				|| matchesFileName(name, SUFFIX_eglbin, SUFFIX_EGLBIN)
-				|| matchesFileName(name, SUFFIX_mofxml, SUFFIX_MOFXML)
-				|| matchesFileName(name, SUFFIX_mofbin, SUFFIX_MOFBIN);
 	}
 	
 	/**

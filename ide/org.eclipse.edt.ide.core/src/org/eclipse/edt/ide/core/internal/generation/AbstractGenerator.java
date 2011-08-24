@@ -104,7 +104,7 @@ public abstract class AbstractGenerator {
 			case IResource.FILE:
 				String resourceName = resource.getName();
 				processedFiles.add(resource);
-				if (org.eclipse.edt.ide.core.internal.model.Util.isEGLIRFileName(resourceName)) {
+				if (org.eclipse.edt.compiler.tools.IRUtils.isEGLIRFileName(resourceName)) {
 					switch (sourceDelta.getKind()) {
 						case IResourceDelta.CHANGED: // generate even if the content hasn't changed; could be the generator for a file changed
 						case IResourceDelta.ADDED:

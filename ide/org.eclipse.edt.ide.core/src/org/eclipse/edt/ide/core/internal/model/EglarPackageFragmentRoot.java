@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.edt.compiler.tools.IRUtils;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLProject;
@@ -222,9 +223,9 @@ public class EglarPackageFragmentRoot extends PackageFragmentRoot {
 
 		// add classfile info amongst children
 		ArrayList[] children = (ArrayList[]) rawPackageInfo.get(pkgName);
-		if (Util.isEGLIRFileName(entryName)) {
+		if (IRUtils.isEGLIRFileName(entryName)) {
 			if (children[0/*JAVA*/] == EMPTY_LIST) children[0/*JAVA*/] = new ArrayList();
-			String nameWithoutExtension = entryName.substring(lastSeparator + 1, entryName.length() - Util.SUFFIX_eglxml.length);
+			String nameWithoutExtension = entryName.substring(lastSeparator + 1, entryName.length() - IRUtils.SUFFIX_eglxml.length);
 			children[0/*JAVA*/].add(nameWithoutExtension);
 		} else {
 			if (children[1/*NON_JAVA*/] == EMPTY_LIST) children[1/*NON_JAVA*/] = new ArrayList();

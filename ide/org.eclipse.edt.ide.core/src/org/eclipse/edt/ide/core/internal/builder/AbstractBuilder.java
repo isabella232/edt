@@ -592,7 +592,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 	
 	protected boolean isOKToCopy(String name){
 		return !org.eclipse.edt.ide.core.internal.model.Util.isEGLBLDFileName(name)
-				&& !org.eclipse.edt.ide.core.internal.model.Util.isEGLIRFileName(name)
+				&& !org.eclipse.edt.compiler.tools.IRUtils.isEGLIRFileName(name)
 				&& !org.eclipse.edt.ide.core.internal.model.Util.isEGLFileName(name);
 	}
 	

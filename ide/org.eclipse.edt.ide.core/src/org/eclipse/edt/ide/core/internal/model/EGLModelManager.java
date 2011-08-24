@@ -45,6 +45,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.edt.compiler.tools.IRUtils;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.model.EGLConventions;
 import org.eclipse.edt.ide.core.model.EGLCore;
@@ -313,7 +314,7 @@ public class EGLModelManager {
 			String name = file.getName();
 			if (Util.isValidEGLFileName(name))
 				return createEGLFileFrom(file, project);
-			else if(Util.isEGLIRFileName(name)) {
+			else if(IRUtils.isEGLIRFileName(name)) {
 				return createClassFileFrom(file, project);
 			}
 			return createJarPackageFragmentRootFrom(file, project);

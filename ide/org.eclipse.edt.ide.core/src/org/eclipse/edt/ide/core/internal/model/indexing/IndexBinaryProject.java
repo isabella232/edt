@@ -22,7 +22,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.edt.ide.core.internal.model.Util;
+import org.eclipse.edt.compiler.tools.IRUtils;
 import org.eclipse.edt.ide.core.internal.model.index.IIndex;
 import org.eclipse.edt.ide.core.internal.model.index.IQueryResult;
 import org.eclipse.edt.ide.core.internal.model.index.impl.IFileDocument;
@@ -83,7 +83,7 @@ public class IndexBinaryProject extends IndexRequest{
 							if (isCancelled) return false;
 							switch(proxy.getType()) {
 								case IResource.FILE :
-									if (Util.isEGLIRFileName(proxy.getName())) {
+									if (IRUtils.isEGLIRFileName(proxy.getName())) {
 										IResource resource = proxy.requestResource();
 										String name = new IFileDocument((IFile) resource).getName();
 										indexedFileNames.put(name, resource);
@@ -104,7 +104,7 @@ public class IndexBinaryProject extends IndexRequest{
 							if (isCancelled) return false;
 							switch(proxy.getType()) {
 								case IResource.FILE :
-									if (Util.isEGLIRFileName(proxy.getName())) {
+									if (IRUtils.isEGLIRFileName(proxy.getName())) {
 										IResource resource = proxy.requestResource();
 										IPath path = resource.getLocation();
 										String name = new IFileDocument((IFile) resource).getName();

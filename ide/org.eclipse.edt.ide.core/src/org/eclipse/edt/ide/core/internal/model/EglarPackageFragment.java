@@ -14,6 +14,7 @@ package org.eclipse.edt.ide.core.internal.model;
 import java.util.ArrayList;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.edt.compiler.tools.IRUtils;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IClassFile;
 import org.eclipse.edt.ide.core.model.IEGLElement;
@@ -108,7 +109,7 @@ public class EglarPackageFragment extends PackageFragment {
 	}
 	
 	public IClassFile getClassFile(String name) {
-		if (!Util.isEGLIRFileName(name)) {
+		if (!IRUtils.isEGLIRFileName(name)) {
 			throw new IllegalArgumentException();
 		}
 		try {

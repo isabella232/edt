@@ -141,7 +141,7 @@ public class AddEglarFileToIndex extends IndexRequest {
 						// iterate each entry to index it
 						ZipEntry ze = (ZipEntry) e.nextElement();
 						String zipEntryName = ze.getName();
-						if (org.eclipse.edt.ide.core.internal.model.Util.isEGLIRFileName(zipEntryName) && isValidPackageNameForIR(zipEntryName))
+						if (org.eclipse.edt.compiler.tools.IRUtils.isEGLIRFileName(zipEntryName) && isValidPackageNameForIR(zipEntryName))
 								// the class file may not be there if the package name is not valid
 							indexedFileNames.put(zipEntryName, EXISTS);
 					}
@@ -177,7 +177,7 @@ public class AddEglarFileToIndex extends IndexRequest {
 					// iterate each entry to index it
 					ZipEntry ze = (ZipEntry) e.nextElement();
 					String zipEntryName = ze.getName();
-					if (org.eclipse.edt.ide.core.internal.model.Util.isEGLIRFileName(zipEntryName) && 
+					if (org.eclipse.edt.compiler.tools.IRUtils.isEGLIRFileName(zipEntryName) && 
 							isValidPackageNameForIR(zipEntryName)) {
 						// index only classes coming from valid packages - https://bugs.eclipse.org/bugs/show_bug.cgi?id=293861
 						final byte[] classFileBytes = Util.getZipEntryByteContent(ze, zip);
