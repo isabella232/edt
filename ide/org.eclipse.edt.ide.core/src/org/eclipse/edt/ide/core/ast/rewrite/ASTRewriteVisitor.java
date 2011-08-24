@@ -92,7 +92,7 @@ public class ASTRewriteVisitor extends AbstractASTNodeVisitor {
 				}
 			}
 			
-			if(astEdits.containsKey(node)) {
+			if(astEdits.containsKey(node) && null != currentEdit.getParent()) {
 				currentEdit = currentEdit.getParent();
 			}
 		}
