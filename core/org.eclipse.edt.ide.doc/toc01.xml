@@ -1,15 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 <toc label="Working with the EGL Development Tools IDE"
-     topic="topics/tedt00500.html">
-   <topic label="Setting EDT preferences, capabilities and templates"
-          href="topics/tedt00500.html"/>
-   <topic label="Creating and maintaining an EDT project" href="topics/tedt00501.html"/>
-   <topic label="Creating and maintaining files with EDT" href="topics/tedt00502.html">
-      <topic label="Editing EGL files with EDT" href="topics/tedt00503.html"/>
+     topic="topics/tedt00507.html">
+   <topic label="Setting EDT preferences">
+      <topic label="Setting EGL general preferences" href="topics/tedt00507.html"/>
+      <topic label="Setting EGL compiler preferences" href="topics/tedt00508.html"/>
+      <topic label="Setting EGL general editor preferences" href="topics/tedt00509.html"/>
+      <topic label="Setting EGL preferences for content assist" href="topics/tedt00510.html"/>
+      <topic label="Setting EGL folding preferences" href="topics/tedt00511.html"/>
+      <topic label="Setting EGL formatter preferences" href="topics/tedt00512.html"/>
+      <topic label="Setting EGL preferences for organizing imports"
+             href="topics/tedt00513.html"/>
+      <topic label="Setting EGL preferences for coloring syntax"
+             href="topics/tedt00514.html"/>
+      <topic label="Setting EGL template preferences" href="topics/tedt00515.html"/>
+      <topic label="Setting EGL preferences for Rich UI" href="topics/tedt00516.html"/>
    </topic>
-   <topic label="Debugging EGL source code with EDT" href="topics/tedt00504.html"/>
-   <topic label="Accessing a relational database with EDT" href="topics/tedt00505.html"/>
-   <topic label="Searching for and seeing relationships among EGL files and parts"
-          href="topics/tedt00506.html"/>
+   <topic label="Creating and maintaining an EGL project">
+      <topic label="Creating an EGL project" href="topics/tedt00517.html"/>
+      <topic label="Editing the EGL build path for a project" href="topics/tedt00523.html"/>
+      <topic label="Creating an EGL source folder" href="topics/tedt00501.html"/>
+      <topic label="Creating an EGL package" href="topics/tedt00521.html"/>
+      <topic label="Creating an EGL source file" href="topics/tedt00500.html"/>
+      <topic label="Creating an EGL deployment descriptor" href="topics/tedt00502.html"/>
+      <topic label="Creating a linkage properties file for Java run time"
+             href="topics/tedt00525.html"/>
+      <topic label="Creating a bidirectional format configuration file"
+             href="topics/tedt00526.html"/>
+      <topic label="Creating a bidirectional conversion table" href="topics/tedt00527.html"/>
+      <topic label="Renaming a file in the EDT IDE" href="topics/tedt00503.html"/>
+      <topic label="Deleting a file in the EDT IDE" href="topics/tedt00522.html"/>
+      <topic label="Copying or moving a file in the EDT IDE" href="topics/tedt00524.html"/>
+   </topic>
+   <topic label="Importing and exporting EGL content">
+      <topic label="Importing EGL projects and files" href="topics/tedt00520.html"/>
+      <topic label="Exporting EGL code to a stand-alone EGLAR file"
+             href="topics/tedt00518.html"/>
+      <topic label="Exporting EGL code to a binary project" href="topics/tedt00519.html"/>
+   </topic>
+   <topic label="Editing a source file in the EGL editor">
+      <topic label="Using content assist" href="topics/tedt00528.html"/>
+      <topic label="Using keystroke shortcuts" href="topics/tedt00529.html"/>
+      <topic label="Organizing import statements" href="topics/tedt00530.html"/>
+      <topic label="Folding blocks of text" href="topics/tedt00531.html"/>
+      <topic label="Commenting and uncommenting source code" href="topics/tedt00532.html"/>
+      <topic label="Editing DataItem parts with the source assistant"
+             href="topics/tedt00533.html"/>
+      <topic label="Creating callback functions at a keystroke" href="topics/tedt00534.html"/>
+   </topic>
+   <topic label="Editing an EGL deployment descriptor" href="topics/tedt00535.html">
+      <topic label="Adding web service deployment details to the EGL deployment descriptor"
+             href="topics/tedt00536.html"/>
+      <topic label="Adding Rich UI deployment details to the EGL deployment descriptor"
+             href="topics/tedt00537.html"/>
+      <topic label="Adding a sharable protocol" href="topics/tedt00542.html"/>
+      <topic label="Adding a SOAP binding to the EGL deployment descriptor"
+             href="topics/tedt00538.html"/>
+      <topic label="Adding a REST binding to the EGL deployment descriptor"
+             href="topics/tedt00539.html"/>
+      <topic label="Adding an EGL binding to the EGL deployment descriptor"
+             href="topics/tedt00540.html"/>
+      <topic label="Adding a native binding to the EGL deployment descriptor"
+             href="topics/tedt00541.html"/>
+   </topic>
+   <topic label="Debugging EGL source code in the EDT IDE" href="topics/tedt00504.html">
+      <topic label="Preparing to run code in the EGL debugger" href="topics/tedt00543.html"/>
+      <topic label="Running code in the EGL debugger" href="topics/tedt00544.html"/>
+      <topic label="Viewing variables in the EGL debugger" href="topics/tedt00545.html"/>
+      <topic label="Updating code while the EGL debugger runs" href="topics/tedt00546.html"/>
+      <topic label="Invoking the EGL debugger from generated Java code"
+             href="topics/tedt00547.html"/>
+   </topic>
+   <topic label="Accessing a relational database in the EDT IDE"
+          href="topics/tedt00505.html">
+      <topic label="Creating an SQL database connection for development and run time"
+             href="topics/tedt00548.html"/>
+      <topic label="Editing an SQL database connection" href="topics/tedt00549.html"/>
+      <topic label="Deleting an SQL database connection" href="topics/tedt00550.html"/>
+      <topic label="Retrieving SQL table data into a Record part"
+             href="topics/tedt00551.html"/>
+      <topic label="Viewing implicit SQL statements at development time"
+             href="topics/tedt00552.html"/>
+      <topic label="Developing a simple data-access application"
+             href="topics/tedt00553.html"/>
+   </topic>
+   <topic label="Showing the relationships among EGL files and parts">
+      <topic label="Searching for EGL files or source parts" href="topics/tedt00554.html"/>
+      <topic label="Showing an EGL source file in one or another view"
+             href="topics/tedt00555.html"/>
+      <topic label="Viewing lists of parts" href="topics/tedt00556.html"/>
+      <topic label="Viewing part references" href="topics/tedt00557.html"/>
+   </topic>
 </toc>
