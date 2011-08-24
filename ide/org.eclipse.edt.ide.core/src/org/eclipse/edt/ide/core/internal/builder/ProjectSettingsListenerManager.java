@@ -28,6 +28,7 @@ import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
+import org.eclipse.edt.mof.serialization.ZipFileObjectStore;
 import org.osgi.service.prefs.Preferences;
 
 /**
@@ -168,19 +169,19 @@ public class ProjectSettingsListenerManager {
 										if (resource.getType() == IResource.FILE) {
 											// We really don't know which extension the IR will have, so check for all known extensions.
 											String relativePath = IRFileNameUtility.toIRFileName(resource.getFullPath().removeFirstSegments(sourceDirSegments).removeFileExtension().toString());
-											IResource file = outputFolder.findMember(relativePath + EGL2IR.EGLXML); //$NON-NLS-1$
+											IResource file = outputFolder.findMember(relativePath + EGL2IR.EGLXML);
 											if (file != null) {
 												file.touch(null);
 											}
-											file = outputFolder.findMember(relativePath + ".eglbin"); //$NON-NLS-1$
+											file = outputFolder.findMember(relativePath + EGL2IR.EGLBIN);
 											if (file != null) {
 												file.touch(null);
 											}
-											file = outputFolder.findMember(relativePath + ".mofxml"); //$NON-NLS-1$
+											file = outputFolder.findMember(relativePath + ZipFileObjectStore.MOFXML);
 											if (file != null) {
 												file.touch(null);
 											}
-											file = outputFolder.findMember(relativePath + ".mofbin"); //$NON-NLS-1$
+											file = outputFolder.findMember(relativePath + ZipFileObjectStore.MOFBIN);
 											if (file != null) {
 												file.touch(null);
 											}
