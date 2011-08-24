@@ -31,6 +31,7 @@ import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Operation;
+import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.SequenceType;
@@ -195,6 +196,9 @@ public class TypeUtils implements MofConversion {
 			
 			String key = ((EGLClass)type.getClassifier()).getMofSerializationKey();
 			if (key.equalsIgnoreCase(Type_EGLNumber)) {
+				return false;
+			}
+			if (key.equalsIgnoreCase(Type_EGLDecimal) && type instanceof ParameterizableType) {
 				return false;
 			}
 			
