@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<project name="eck" default="buildIR">
+	<property name="testprojectRoot" value="C:/DEV/Test/org.eclipse.edt.eck.test"/>
+	<property name="eglSrcRoot" value="EGLSource"/>
+	<property name="eglIRRoot" value="EGLBin"/>
+	<property name="javaGenRoot" value="EGLGen/JavaSource"/>
+	<property name="pluginRoot" value="C:/eclipse_JEE362/plugins"/>
+	 
+    <target name="buildIR">
+        <java classname="org.eclipse.edt.mof.egl.compiler.EGL2IR">
+        	<arg value="-eglpath"/>
+        	<arg value="${testprojectRoot}/${eglSrcRoot}"/>
+        	<arg value="-irDestination"/>
+        	<arg value="${testprojectRoot}/${eglIRRoot}"/>
+        	<arg value="-xmlOut"/>
+        	<arg value="-isVAGCompatible"/>
+			<arg value="${testprojectRoot}/${eglSrcRoot}"/>
+			<classpath>
+				<pathelement path="${pluginRoot}/com.ibm.icu_4.2.1.v20100412.jar"/>
+				<pathelement path="${pluginRoot}/org.eclipse.edt.compiler_0.7.0.v201104142102.jar"/>
+				<pathelement path="${pluginRoot}/org.eclipse.edt.mof_0.7.0.v201104142102.jar"/>				
+				<pathelement path="${pluginRoot}/org.eclipse.edt.mof.egl_0.7.0.v201104142102.jar"/>
+			</classpath>
+        </java>
+    	<antcall target="genLibDriver"/>
+    </target>
+
+    <target name="genLibDriver">
+    	<java classname="org.eclipse.edt.gen.eck.EGL2PGM">
+    		<arg value="-output" />
+    		<arg value="${testprojectRoot}/${eglSrcRoot}"/>
+    		<arg value="-root" />
+    		<arg value= "${testprojectRoot}/${eglIRRoot}"/>
+    		<arg value="-p *"/>
+    	</java>
+    	
+    	<antcall target="genEGL"/>
+    </target>
+
+    <target name="genEGL">
+        <java classname="org.eclipse.edt.gen.generator.java.EGL2Java">
+        	<arg value="-output"/>
+        	<arg value="${testprojectRoot}/${javaGenRoot}"/>
+    		<arg value="-root" />
+    		<arg value="${testprojectRoot}/${eglIRRoot}"/>
+    		<arg value="-p *"/>        	
+        </java>
+    </target>
+    
+    <target name="compileJava">
+    </target>
+	
+	<target name="runJava">
+	</target>
+
+</project>

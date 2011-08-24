@@ -1,0 +1,22 @@
+1. create project 
+	<projName>.eckgen.java
+	<projName>.eckgen.javascript
+
+2. configure the generator to be java/js
+
+3. set the eglbuild path to depends on <projName>
+4. add common test framework eglar to egl build path
+	add java test framework eglar to egl build path
+	add javascript test framework eglar to egl build path
+
+5. if java, set java build path to depends on <projName> 
+
+5. if javascript, set java only generator for test framework services 
+
+
+6. write to rununit.properties   ==> open bugzilla enhancement
+ 
+	EGLTestResultRoot=C:/SVT_WS/8012/edtTest/org.eclipse.edt.eck.test.eckgen.java/ResultRoot
+
+	for java, copy to EGLgen/java
+	for javascript, copy to EGLGen/javascript/Debug and EGLGen/javascript/Target

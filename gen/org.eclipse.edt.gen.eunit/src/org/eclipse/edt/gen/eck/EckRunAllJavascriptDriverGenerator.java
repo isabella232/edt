@@ -1,0 +1,37 @@
+package org.eclipse.edt.gen.eck;
+
+import java.util.List;
+
+import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
+import org.eclipse.edt.gen.AbstractGeneratorCommand;
+
+public class EckRunAllJavascriptDriverGenerator extends
+		EckRunAllDriverGenerator {
+
+	public EckRunAllJavascriptDriverGenerator(
+			AbstractGeneratorCommand processor,
+			IGenerationMessageRequestor msgReq, String driverPartNameAppend, IEckGenerationNotifier eckGenerationNotifier) {
+		super(processor, msgReq, driverPartNameAppend, eckGenerationNotifier);
+	}
+
+	public void generateRunAllDriver(List<String> listOfGenedLibs, TestCounter totalCnts){	
+		genPackageDeclaration();
+		
+		genImports();
+		
+		String genedPartName = RunAllTest + fDriverPartNameAppend;		
+		out.println("Handler " + genedPartName + " type RUIhandler {initialUI = [],onConstructionFunction = start, title=\"" + genedPartName + "\"} ");
+		out.pushIndent();
+		out.println("function start()");
+		out.pushIndent();
+		for(String genLibName : listOfGenedLibs){
+			out.println(genLibName + "." + CommonUtilities.exeTestMethodName + "();");				
+		}
+		out.println("TestExecutionLib.writeResultSummary(" + totalCnts.getCount() + ");");
+		out.popIndent();
+		out.println("end");
+		out.popIndent();
+		out.println("end");		
+		out.close();
+	}	
+}
