@@ -11,10 +11,10 @@
       <binding producerId="org.eclipse.help.dynamic" />
    </extension>
       
-   <extension
+   <!--extension
       point="org.eclipse.help.contentExtension">
       <contentExtension file="wiring.xml"/>
-   </extension>  
+   </extension-->  
    
    <!-- extension point="org.eclipse.help.index">
       <index file="index.xml" /-->   
