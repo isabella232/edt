@@ -20,6 +20,7 @@ import java.util.Map;
 import org.eclipse.edt.compiler.binding.AmbiguousDataBinding;
 import org.eclipse.edt.compiler.binding.ArrayDictionaryBinding;
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.DictionaryBinding;
 import org.eclipse.edt.compiler.binding.FixedRecordBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
@@ -85,7 +86,7 @@ public class MoveStatementValidator extends DefaultASTVisitor {
 		ITypeBinding sourceType = sourceExpr.resolveTypeBinding();
 		ITypeBinding targetType = targetExpr.resolveTypeBinding();
 		
-		if(sourceType == null || targetType == null) {
+		if(!Binding.isValidBinding(sourceType)|| !Binding.isValidBinding(targetType)) {
 			return false;
 		}
 		
@@ -119,6 +120,10 @@ public class MoveStatementValidator extends DefaultASTVisitor {
 			checkExpressionsForByName(sourceExpr, targetExpr, sourceType, targetType);
 		}
 		else if(modifier.isByPosition()) {
+			problemRequestor.acceptProblem(
+					moveStatement,
+					IProblemRequestor.MOVE_MODIFIER_INVALID,
+					new String[] {"ByPosition"});
 			checkExpressionsForByPosition(sourceExpr, targetExpr, sourceType, targetType);
 		}
 		else if(modifier.isFor()) {
@@ -128,6 +133,10 @@ public class MoveStatementValidator extends DefaultASTVisitor {
 			checkExpressionsForForAll(sourceExpr, targetExpr, sourceType, targetType);
 		}
 		else if(modifier.isWithV60Compat()) {
+			problemRequestor.acceptProblem(
+					moveStatement,
+					IProblemRequestor.MOVE_MODIFIER_INVALID,
+					new String[] {"WithV60Compat"});
 			if(isContainer(sourceExpr) && isContainer(targetExpr) && !isStructureItem(sourceExpr) && !isStructureItem(targetExpr)) {
 				checkExpressionsForByName(sourceExpr, targetExpr, sourceType, targetType);
 			}
@@ -265,6 +274,22 @@ public class MoveStatementValidator extends DefaultASTVisitor {
 		if(sourceDBinding != null) {
 			new RValueValidator(problemRequestor, compilerOptions, sourceDBinding, sourceExpr).validate();
 		}
+		
+		if (!sourceType.isReference()) {
+			problemRequestor.acceptProblem(
+					sourceExpr,
+					IProblemRequestor.MOVE_MUST_BE_REFERENCE,
+					new String[] {});
+		}
+		else {
+			if (!targetType.isReference()) {
+				problemRequestor.acceptProblem(
+						targetExpr,
+						IProblemRequestor.MOVE_MUST_BE_REFERENCE,
+						new String[] {});
+			}
+		}
+
 	}
 	
 	private boolean checkExpressionsForByNameOrByPosition(Expression sourceExpr, Expression targetExpr, ITypeBinding sourceType, ITypeBinding targetType) {
