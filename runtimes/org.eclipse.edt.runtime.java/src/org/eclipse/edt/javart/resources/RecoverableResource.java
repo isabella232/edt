@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.resources;
 
+import org.eclipse.edt.javart.RunUnit;
+
 import egl.lang.AnyException;
 
 public interface RecoverableResource 
@@ -20,21 +22,21 @@ public interface RecoverableResource
 	 *
 	 * @param ru  the run unit.
 	 */
-	public void commit( RunUnitBase ru ) throws AnyException;
+	public void commit( RunUnit ru ) throws AnyException;
 
 	/**
 	 * Rolls back changes.
 	 *
 	 * @param ru  the run unit.
 	 */
-	public void rollback( RunUnitBase ru ) throws AnyException;
+	public void rollback( RunUnit ru ) throws AnyException;
 
 	/**
 	 * Do any cleanup required.  The RunUnit is coming to an end.
 	 *
 	 * @param ru  the run unit.
 	 */
-	public void exit( RunUnitBase ru ) throws AnyException;
+	public void exit( RunUnit ru ) throws AnyException;
 
 	/**
 	 * If this RecoverableResource is a File, close the file.
@@ -45,6 +47,6 @@ public interface RecoverableResource
 	 * @param ru  the run unit.
 	 * @param toTransaction  true if it's a transfer to a transaction not a program.
 	 */
-	public void transferCleanup( RunUnitBase ru, boolean toTransaction ) 
+	public void transferCleanup( RunUnit ru, boolean toTransaction ) 
 		throws AnyException;
 }
