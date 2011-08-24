@@ -31,6 +31,7 @@ import org.eclipse.jface.text.formatter.IContentFormatter;
 import org.eclipse.jface.text.formatter.MultiPassContentFormatter;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
+import org.eclipse.jface.text.quickassist.IQuickAssistAssistant;
 import org.eclipse.jface.text.reconciler.IReconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.source.IAnnotationHover;
@@ -41,6 +42,7 @@ import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.sse.ui.internal.derived.HTMLTextPresenter;
 
+import org.eclipse.edt.ide.ui.internal.quickfix.EGLCorrectionAssistant;
 /**
  * Example configuration for an <code>SourceViewer</code> which shows Java code.
  */
@@ -267,6 +269,16 @@ public class EGLSourceViewerConfiguration extends TextSourceViewerConfiguration 
 	
 	public ITextEditor getEditor() {
 		return editor;
+	}
+	
+	/*
+	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getQuickAssistAssistant(org.eclipse.jface.text.source.ISourceViewer)
+	 * @since 3.2
+	 */
+	public IQuickAssistAssistant getQuickAssistAssistant(ISourceViewer sourceViewer) {
+		if (getEditor() != null)
+			return new EGLCorrectionAssistant(getEditor());
+		return null;
 	}
 
 	/*

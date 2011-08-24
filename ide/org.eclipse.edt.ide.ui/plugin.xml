@@ -9,6 +9,7 @@
 	<extension-point id="eglTemplates" name="EGL Record Templates" schema="schema/eglTemplates.exsd"/>
     <extension-point id="eglDDEditorPageContributions" name="EGL Deployment Descriptor Editor Page Contributions" schema="schema/eglDDEditorPageProviders.exsd"/>
     <extension-point id="eglDDEditorToolbarContributions" name="EGL Deployment Descriptor Editor Toolbar Contributions" schema="schema/eglDDEditorToolbarProviders.exsd"/>
+	<extension-point id="quickFixProcessors" name="%QuickFixProcessor" schema="schema/quickFixProcessor.exsd"/>
 	   
 	<extension 
 		point="org.eclipse.core.runtime.preferences">
@@ -25,6 +26,29 @@
 			preferencesClass="org.eclipse.edt.ide.ui.internal.editor.folding.FoldingPreferenceBlock">
 		</provider>
 	</extension>
+	
+	<!--EGL Editor quick fix-->
+	<extension
+         point="org.eclipse.edt.ide.ui.quickFixProcessors">
+      <quickFixProcessor
+            name="%defaultQuickFixProcessor"
+            class="org.eclipse.edt.ide.ui.internal.quickfix.QuickFixProcessor"
+            id="org.eclipse.edt.ide.ui.QuickFixProcessor">
+      </quickFixProcessor>
+    </extension>
+    <extension
+         point="org.eclipse.ui.editorActions">
+      <editorContribution
+            targetID="org.eclipse.edt.ide.ui.EGLEditor"
+            id="org.eclipse.edt.internal.ui.EGLEditor.ruler.actions">
+         <action
+               label="%EGLSelectRulerAction.label"
+               class="org.eclipse.edt.ide.ui.internal.editor.EGLSelectRulerAction"
+               actionID="RulerClick"
+               id="org.eclipse.edt.ide.ui.egleditor.EGLSelectRulerAction">
+         </action>
+      </editorContribution>
+   	</extension>
     
 	<extension point="org.eclipse.ui.bindings">
 		<!-- Navigate -->

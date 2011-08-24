@@ -96,7 +96,7 @@ public class Strings {
 	 * 
 	 * @see java.lang.Character#isWhitespace(char)
 	 */
-	private static boolean containsOnlyWhitespaces(String s) {
+	public static boolean containsOnlyWhitespaces(String s) {
 		int size= s.length();
 		for (int i= 0; i < size; i++) {
 			if (!Character.isWhitespace(s.charAt(i)))

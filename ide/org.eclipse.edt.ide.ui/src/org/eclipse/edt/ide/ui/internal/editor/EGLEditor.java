@@ -895,8 +895,8 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 	
 	private void createFoldingSupport(ProjectionViewer projectionViewer) {
 		fProjectionSupport= new ProjectionSupport(projectionViewer, getAnnotationAccess(), getSharedColors());
-		fProjectionSupport.addSummarizableAnnotationType("org.eclipse.ui.workbench.texteditor.error"); //$NON-NLS-1$
-		fProjectionSupport.addSummarizableAnnotationType("org.eclipse.ui.workbench.texteditor.warning"); //$NON-NLS-1$		
+		fProjectionSupport.addSummarizableAnnotationType(EGLMarkerAnnotation.ERROR_ANNOTATION_TYPE); //$NON-NLS-1$
+		fProjectionSupport.addSummarizableAnnotationType(EGLMarkerAnnotation.WARNING_ANNOTATION_TYPE); //$NON-NLS-1$		
     	fProjectionSupport.setHoverControlCreator(new IInformationControlCreator() {
 			public IInformationControl createInformationControl(Shell shell) {
 				return new SourceViewerInformationControl(shell);
