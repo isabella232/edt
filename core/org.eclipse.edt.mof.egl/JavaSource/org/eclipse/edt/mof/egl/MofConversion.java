@@ -19,7 +19,7 @@ public interface MofConversion {
 	String EGL_reflect_package = "org.eclipse.edt.mof.egl";
 	String EGL_lang_package = "egl.lang";
 	String EGL_lang_reflect_package = "egl.lang.reflect";
-	String EGL_lang_reflect_refTypes_package = "egl.lang.reflect.refTypes";
+	String EGL_lang_reflect_refTypes_package = "egl.lang.reflect.reftypes";
 	String EGLX_lang_package = "eglx.lang";
 	String EGL_KeyScheme = Type.EGL_KeyScheme + Type.KeySchemeDelimiter;
 	String EGL_SerializationKeyPrefix = EGL_KeyScheme + EGL_lang_package;
