@@ -100,4 +100,16 @@ public interface IGenerator {
 	 * @return the ID of a parent generator, or null if this generator is not extending another generator.
 	 */
 	public String getParentGeneratorId();
+	
+	/**
+	 * Sets the target language of this generator.
+	 * 
+	 * @param language  The generator target language.
+	 */
+	public void setLanguage(String language);
+	
+	/**
+	 * @return the target language of this generator.
+	 */
+	public String getLanguage();
 }

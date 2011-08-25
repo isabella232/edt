@@ -51,6 +51,8 @@ public abstract class AbstractGenerator implements IGenerator {
 	 */
 	protected String parentGenId;
 	
+	protected String language;
+	
 	@Override
 	public void setId(String id) {
 		this.id = id;
@@ -124,5 +126,15 @@ public abstract class AbstractGenerator implements IGenerator {
 	@Override
 	public String getParentGeneratorId() {
 		return parentGenId;
+	}
+	
+	@Override
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+	
+	@Override
+	public String getLanguage() {
+		return this.language;
 	}
 }
