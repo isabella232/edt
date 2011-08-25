@@ -11,12 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.project.templates;
 
+import org.eclipse.edt.ide.ui.internal.project.wizard.pages.SourceProjectWizardCapabilityPage;
+import org.eclipse.edt.ide.ui.internal.project.wizards.NewEGLProjectWizard;
+import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.Wizard;
 
 public abstract class ProjectTemplateWizard extends Wizard implements IProjectTemplateWizard {
 	protected IProjectTemplate template;
 	protected IWizard parentWizard;
+	private SourceProjectWizardCapabilityPage capabilityPage;
 	
 	public boolean performFinish() {
 		return false;
@@ -39,7 +43,10 @@ public abstract class ProjectTemplateWizard extends Wizard implements IProjectTe
 	public IProjectTemplate getTemplate() {
 		return template;
 	}
-
 	
+	public void addPages() {
+		this.capabilityPage = new SourceProjectWizardCapabilityPage(NewWizardMessages.EGLCapabilityConfigurationPage);
+		addPage(capabilityPage);
+	}
 
 }

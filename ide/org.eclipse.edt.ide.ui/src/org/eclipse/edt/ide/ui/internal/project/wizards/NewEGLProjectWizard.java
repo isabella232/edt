@@ -51,7 +51,6 @@ public class NewEGLProjectWizard extends Wizard
 	implements IWorkbenchWizard, INewWizard {
 	
 	private ProjectWizardTypePage typePage;		
-	private SourceProjectWizardCapabilityPage capabilityPage;
 	private ProjectTemplateSelectionPage templatePage;
 	
 	private ProjectConfiguration model;	
@@ -65,7 +64,7 @@ public class NewEGLProjectWizard extends Wizard
 		model.setBasePackageName(store.getString(EDTUIPreferenceConstants.NEWPROJECTWIZARD_BASEPACKAGE));
 		setDefaultPageImageDescriptor(PluginImages.DESC_WIZBAN_NEWEGLPROJECT);
 		setDialogSettings(EDTUIPlugin.getDefault().getDialogSettings());
-		setWindowTitle(NewWizardMessages.EGLNewProjectWizard_0);
+		setWindowTitle(NewWizardMessages.EGLNewProjectWizard_0);		
 	}
 
 	public boolean performFinish() {
@@ -140,8 +139,6 @@ public class NewEGLProjectWizard extends Wizard
 		addPage(typePage);
 		this.templatePage = new ProjectTemplateSelectionPage(NewWizardMessages.ProjectTemplateSelectionPage);
 		addPage(templatePage);
-		this.capabilityPage = new SourceProjectWizardCapabilityPage(NewWizardMessages.EGLCapabilityConfigurationPage);
-		addPage(capabilityPage);
 	}
 	
 	public boolean needsPreviousAndNextButtons() {

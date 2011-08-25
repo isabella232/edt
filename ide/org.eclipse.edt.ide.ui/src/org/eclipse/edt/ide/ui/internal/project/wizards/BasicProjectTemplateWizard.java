@@ -26,6 +26,7 @@ public class BasicProjectTemplateWizard extends ProjectTemplateWizard {
 	public void addPages() {
 		this.generatorPage = new BasicProjectGeneratorSelectionPage(NewWizardMessages.GeneratorSelectionPage);
 		addPage(generatorPage);
+		super.addPages();
 	}
 	
 	public boolean performFinish() {		

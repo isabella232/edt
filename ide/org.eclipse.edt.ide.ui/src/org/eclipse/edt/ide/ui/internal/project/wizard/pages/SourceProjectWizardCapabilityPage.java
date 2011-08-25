@@ -44,6 +44,7 @@ import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.DialogField;
 import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.IDialogFieldListener;
 import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.IStringButtonAdapter;
 import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.StringButtonDialogField;
+import org.eclipse.edt.ide.ui.project.templates.ProjectTemplateWizard;
 import org.eclipse.edt.ide.ui.wizards.EGLProjectUtility;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
 import org.eclipse.jface.dialogs.Dialog;
@@ -102,7 +103,8 @@ public class SourceProjectWizardCapabilityPage extends ContainerWizardPage {
 	}
 	
 	private ProjectConfiguration getConfiguration() {
-		return ((NewEGLProjectWizard) getWizard()).getModel();
+		ProjectTemplateWizard wizard = (ProjectTemplateWizard) getWizard();
+		return ((NewEGLProjectWizard)wizard.getParentWizard()).getModel();
 	}
 
 	/* (non-Javadoc)
