@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.eck;
+package org.eclipse.edt.gen.eunit;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -22,7 +22,7 @@ import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
-import org.eclipse.edt.gen.eck.templates.EckTemplate;
+import org.eclipse.edt.gen.eunit.templates.EckTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.Library;

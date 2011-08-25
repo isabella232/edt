@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.eck;
+package org.eclipse.edt.gen.eunit;
 
 public class Constants {
 	private Constants() {}

@@ -26,7 +26,7 @@
     </target>
 
     <target name="genLibDriver">
-    	<java classname="org.eclipse.edt.gen.eck.EGL2PGM">
+    	<java classname="org.eclipse.edt.gen.eunit.EGL2PGM">
     		<arg value="-output" />
     		<arg value="${testprojectRoot}/${eglSrcRoot}"/>
     		<arg value="-root" />

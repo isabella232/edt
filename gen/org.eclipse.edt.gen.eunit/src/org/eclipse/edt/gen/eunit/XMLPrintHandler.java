@@ -1,4 +1,4 @@
-package org.eclipse.edt.gen.eck;
+package org.eclipse.edt.gen.eunit;
 
 
 import java.io.File;

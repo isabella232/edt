@@ -9,12 +9,14 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.eck.templates.javascript;
+package org.eclipse.edt.gen.eunit.templates.java;
 
-import org.eclipse.edt.gen.eck.CommonUtilities;
-import org.eclipse.edt.gen.eck.Context;
-import org.eclipse.edt.gen.eck.TestCounter;
-import org.eclipse.edt.gen.eck.templates.EckTemplate;
+
+import org.eclipse.edt.gen.eunit.CommonUtilities;
+import org.eclipse.edt.gen.eunit.Context;
+import org.eclipse.edt.gen.eunit.EckDriverGenerator;
+import org.eclipse.edt.gen.eunit.TestCounter;
+import org.eclipse.edt.gen.eunit.templates.EckTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Library;
 
@@ -31,14 +33,12 @@ public class LibraryTemplate extends EckTemplate {
 	public void genClassBody(Library part, Context ctx, TabbedWriter out, TestCounter counter) {
 		generateDriverLibraryBody(part, ctx, out, counter);
 	}
-	
+
 	public void genLibDriverClassBody(Library part, Context ctx, TabbedWriter out, String driverPartNameAppend, TestCounter counter){
-		String genedHandlerName = part.getName() + driverPartNameAppend;
-		out.println("Handler " + genedHandlerName + " type RUIhandler {initialUI = [],onConstructionFunction = start, title=\"" +genedHandlerName + "\"} ");
-		
+		out.println("program " + part.getName() + driverPartNameAppend + " type BasicProgram {} ");
 		out.pushIndent();
 		//out.println("use " + part.getFullyQualifiedName() + ";");		
-		out.println("function start()");
+		out.println("function main()");
 		out.pushIndent();
 		out.print(part.getName() + "." + CommonUtilities.exeTestMethodName + "()");
 		out.println(";");

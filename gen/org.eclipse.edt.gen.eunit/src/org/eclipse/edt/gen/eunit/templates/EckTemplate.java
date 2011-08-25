@@ -9,17 +9,17 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.eck.templates;
+package org.eclipse.edt.gen.eunit.templates;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
-import org.eclipse.edt.gen.eck.CommonUtilities;
-import org.eclipse.edt.gen.eck.Constants;
-import org.eclipse.edt.gen.eck.Context;
-import org.eclipse.edt.gen.eck.TestCounter;
+import org.eclipse.edt.gen.eunit.CommonUtilities;
+import org.eclipse.edt.gen.eunit.Constants;
+import org.eclipse.edt.gen.eunit.Context;
+import org.eclipse.edt.gen.eunit.TestCounter;
 import org.eclipse.edt.mof.codegen.api.AbstractTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Function;

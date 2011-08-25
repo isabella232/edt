@@ -1,4 +1,4 @@
-package org.eclipse.edt.gen.eck;
+package org.eclipse.edt.gen.eunit;
 
 /**
  * This notifier update nothing, and user can use this class if doesn't want to 
@@ -8,20 +8,20 @@ package org.eclipse.edt.gen.eck;
 public class NullEckGenerationNotifier implements IEckGenerationNotifier{
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eck.IEckGenerationNotifier#isAborted()
+	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#isAborted()
 	 */
 	public boolean isAborted() {
 		return false;
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eck.IEckGenerationNotifier#setAborted(boolean)
+	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#setAborted(boolean)
 	 */
 	public void setAborted(boolean aborted) {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eck.IEckGenerationNotifier#begin()
+	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#begin()
 	 */
 	public void begin() {
 	}
@@ -33,19 +33,19 @@ public class NullEckGenerationNotifier implements IEckGenerationNotifier{
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eck.IEckGenerationNotifier#done()
+	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#done()
 	 */
 	public void done() {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eck.IEckGenerationNotifier#setTaskName(java.lang.String)
+	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#setTaskName(java.lang.String)
 	 */
 	public void setTaskName(String message) {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eck.IEckGenerationNotifier#updateProgress(int)
+	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#updateProgress(int)
 	 */
 	public void updateProgress(int percentComplete) {
 	}
@@ -57,7 +57,7 @@ public class NullEckGenerationNotifier implements IEckGenerationNotifier{
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eck.IEckGenerationNotifier#begin(int)
+	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#begin(int)
 	 */
 	public void begin(int totalWork) {
 	}

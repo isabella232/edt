@@ -9,9 +9,9 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.eck.templates;
+package org.eclipse.edt.gen.eunit.templates;
 
-import org.eclipse.edt.gen.eck.Context;
+import org.eclipse.edt.gen.eunit.Context;
 import org.eclipse.edt.mof.egl.Type;
 
 public class TypeTemplate extends EckTemplate {

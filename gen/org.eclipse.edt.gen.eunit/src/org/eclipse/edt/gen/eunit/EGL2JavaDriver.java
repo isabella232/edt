@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.eck;
+package org.eclipse.edt.gen.eunit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ public class EGL2JavaDriver extends EGL2Base {
 
 	public String[] getTemplatePath() {
 		List<String> templates = new ArrayList<String>();
-		templates.add("org.eclipse.edt.gen.eck.templates.java.templates");
+		templates.add("org.eclipse.edt.gen.eunit.templates.java.templates");
 		String[] others = super.getTemplatePath();
 		for (String other : others) {
 			templates.add(other);

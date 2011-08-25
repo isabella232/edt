@@ -1,4 +1,4 @@
-package org.eclipse.edt.gen.eck;
+package org.eclipse.edt.gen.eunit;
 
 /**
  * This interface is used for updating the progress while generating the test drivers.

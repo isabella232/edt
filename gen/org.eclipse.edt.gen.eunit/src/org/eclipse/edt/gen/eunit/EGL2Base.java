@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.eck;
+package org.eclipse.edt.gen.eunit;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -214,21 +214,21 @@ public abstract class EGL2Base extends AbstractGeneratorCommand {
 
 	public String[] getNativeTypePath() {
 		// this defined the locations of the nativeTypes.properties files to be loaded and used
-		return new String[] { "org.eclipse.edt.gen.eck.nativeTypes" };
+		return new String[] { "org.eclipse.edt.gen.eunit.nativeTypes" };
 	}
 
 	public String[] getPrimitiveTypePath() {
 		// this defined the locations of the primitiveTypes.properties files to be loaded and used
-		return new String[] { "org.eclipse.edt.gen.eck.primitiveTypes" };
+		return new String[] { "org.eclipse.edt.gen.eunit.primitiveTypes" };
 	}
 
 	public String[] getEGLMessagePath() {
 		// this defined the locations of the EGLMessages.properties files to be loaded and used
-		return new String[] { "org.eclipse.edt.gen.eck.EGLMessages" };
+		return new String[] { "org.eclipse.edt.gen.eunit.EGLMessages" };
 	}
 
 	public String[] getTemplatePath() {
 		// this defined the locations of the template.properties files to be loaded and used
-		return new String[] { "org.eclipse.edt.gen.eck.templates.templates" };
+		return new String[] { "org.eclipse.edt.gen.eunit.templates.templates" };
 	}
 }

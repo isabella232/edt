@@ -1,8 +1,8 @@
-package org.eclipse.edt.gen.eck;
+package org.eclipse.edt.gen.eunit;
 
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
-import org.eclipse.edt.gen.eck.templates.EckTemplate;
+import org.eclipse.edt.gen.eunit.templates.EckTemplate;
 import org.eclipse.edt.mof.egl.Part;
 
 public class EckDriverGenerator extends EckGenerator {
