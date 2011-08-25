@@ -43,7 +43,7 @@ public class DateTimeLib extends ExecutableBase {
 	/**
 	 * Returns a Calendar that represents a Gregorian date.
 	 */
-	public static Calendar dateValueFromGregorian(Integer gregorianIntDate) throws AnyException {
+	public static Calendar dateFromGregorian(Integer gregorianIntDate) throws AnyException {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		cal.set(Calendar.YEAR, gregorianIntDate / 10000);
 		cal.set(Calendar.MONTH, ((gregorianIntDate % 10000) / 100) - 1);
@@ -53,7 +53,7 @@ public class DateTimeLib extends ExecutableBase {
 		}
 		catch (IllegalArgumentException e) {
 			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR,
-				new Object[] { "DateTimeLib.dateValueFromJulian", String.valueOf(gregorianIntDate) });
+				new Object[] { "DateTimeLib.dateFromJulian", String.valueOf(gregorianIntDate) });
 			TypeCastException tcx = new TypeCastException();
 			tcx.setMessage( message );
 			tcx.setMessageID( Message.DATA_FORMAT_ERROR );
@@ -67,7 +67,7 @@ public class DateTimeLib extends ExecutableBase {
 	/**
 	 * Returns a Calendar that represents a Julian date.
 	 */
-	public static Calendar dateValueFromJulian(Integer julianIntDate) throws AnyException {
+	public static Calendar dateFromJulian(Integer julianIntDate) throws AnyException {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		// This is a workaround for a problem seen in Java 1.5 but not in 1.4.
 		// It forces the Calendar to recompute its internal values. If we don't do it, the Calendar won't let us set
@@ -81,7 +81,7 @@ public class DateTimeLib extends ExecutableBase {
 		}
 		catch (IllegalArgumentException e) {
 			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR,
-				new Object[] { "DateTimeLib.dateValueFromJulian", String.valueOf(julianIntDate) });
+				new Object[] { "DateTimeLib.dateFromJulian", String.valueOf(julianIntDate) });
 			TypeCastException tcx = new TypeCastException();
 			tcx.setMessage( message );
 			tcx.setMessageID( Message.DATA_FORMAT_ERROR );
