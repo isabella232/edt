@@ -25,7 +25,6 @@ import egl.lang.*;
  */
 public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-	private static final BigDecimal ZERO = BigDecimal.ZERO;
 
 	/**
 	 * An array used for the upper limits of digit-oriented items that have values with decimals.
@@ -62,11 +61,11 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 		// hold the number of decimal digits that the items might have.
 		MAX_DIGIT_ORIENTED_BD_VALUES = new BigDecimal[34][];
 		MAX_DIGIT_ORIENTED_BD_VALUES[0] = new BigDecimal[1];
-		MAX_DIGIT_ORIENTED_BD_VALUES[0][0] = ZERO;
+		MAX_DIGIT_ORIENTED_BD_VALUES[0][0] = BigDecimal.ZERO;
 
 		MIN_DIGIT_ORIENTED_BD_VALUES = new BigDecimal[34][];
 		MIN_DIGIT_ORIENTED_BD_VALUES[0] = new BigDecimal[1];
-		MIN_DIGIT_ORIENTED_BD_VALUES[0][0] = ZERO;
+		MIN_DIGIT_ORIENTED_BD_VALUES[0][0] = BigDecimal.ZERO;
 
 		for (int i = 1; i < 34; i++) {
 			MAX_DIGIT_ORIENTED_BD_VALUES[i] = new BigDecimal[i + 1];
@@ -79,19 +78,19 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 		// might have.
 		MAX_BYTE_ORIENTED_BD_VALUES = new BigDecimal[3][];
 		MAX_BYTE_ORIENTED_BD_VALUES[0] = new BigDecimal[5];
-		MAX_BYTE_ORIENTED_BD_VALUES[0][0] = ZERO;
+		MAX_BYTE_ORIENTED_BD_VALUES[0][0] = BigDecimal.ZERO;
 		MAX_BYTE_ORIENTED_BD_VALUES[1] = new BigDecimal[10];
-		MAX_BYTE_ORIENTED_BD_VALUES[1][0] = ZERO;
+		MAX_BYTE_ORIENTED_BD_VALUES[1][0] = BigDecimal.ZERO;
 		MAX_BYTE_ORIENTED_BD_VALUES[2] = new BigDecimal[19];
-		MAX_BYTE_ORIENTED_BD_VALUES[2][0] = ZERO;
+		MAX_BYTE_ORIENTED_BD_VALUES[2][0] = BigDecimal.ZERO;
 
 		MIN_BYTE_ORIENTED_BD_VALUES = new BigDecimal[3][];
 		MIN_BYTE_ORIENTED_BD_VALUES[0] = new BigDecimal[5];
-		MIN_BYTE_ORIENTED_BD_VALUES[0][0] = ZERO;
+		MIN_BYTE_ORIENTED_BD_VALUES[0][0] = BigDecimal.ZERO;
 		MIN_BYTE_ORIENTED_BD_VALUES[1] = new BigDecimal[10];
-		MIN_BYTE_ORIENTED_BD_VALUES[1][0] = ZERO;
+		MIN_BYTE_ORIENTED_BD_VALUES[1][0] = BigDecimal.ZERO;
 		MIN_BYTE_ORIENTED_BD_VALUES[2] = new BigDecimal[19];
-		MIN_BYTE_ORIENTED_BD_VALUES[2][0] = ZERO;
+		MIN_BYTE_ORIENTED_BD_VALUES[2][0] = BigDecimal.ZERO;
 	}
 
 	/**
