@@ -721,7 +721,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
             if (primitive == Primitive.CHAR		|| primitive == Primitive.DBCHAR ||
 				primitive == Primitive.MBCHAR	|| primitive == Primitive.STRING ||
 				primitive == Primitive.HEX 		|| primitive == Primitive.UNICODE ||
-				primitive == Primitive.NUM) {
+				primitive == Primitive.DECIMAL || primitive == Primitive.NUM) {
             	return primTypeBinding.getLength() == 0;
             }
             if (primitive == Primitive.INTERVAL) {
@@ -745,7 +745,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
             if (primitive == Primitive.CHAR		|| primitive == Primitive.DBCHAR ||
 				primitive == Primitive.MBCHAR	||
 				primitive == Primitive.HEX 		|| primitive == Primitive.UNICODE ||
-				primitive == Primitive.NUM) {
+				primitive == Primitive.DECIMAL  || primitive == Primitive.NUM) {
             	return primTypeBinding.getLength() != 0;
             }
     	}
