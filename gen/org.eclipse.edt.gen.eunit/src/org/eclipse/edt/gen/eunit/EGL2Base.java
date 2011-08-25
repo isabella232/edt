@@ -43,10 +43,10 @@ public abstract class EGL2Base extends AbstractGeneratorCommand {
 		totalCnts = new TestCounter();
 	}
 
-	abstract protected EckDriverGenerator getEckDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req, IEUnitGenerationNotifier eckGenerationNotifier);
-	abstract protected EckRunAllDriverGenerator getEckRunAllDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req, IEUnitGenerationNotifier eckGenerationNotifier);	
+	abstract protected EUnitDriverGenerator getEckDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req, IEUnitGenerationNotifier eckGenerationNotifier);
+	abstract protected EUnitRunAllDriverGenerator getEckRunAllDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req, IEUnitGenerationNotifier eckGenerationNotifier);	
 	
-	public void generateRunAllDriver(String[] args, EckRunAllDriverGenerator allDriverGenerator, List<String> genedLibs, TestCounter totalCnts){		
+	public void generateRunAllDriver(String[] args, EUnitRunAllDriverGenerator allDriverGenerator, List<String> genedLibs, TestCounter totalCnts){		
 		try{
 			installOverrides(args);
 			allDriverGenerator.generateRunAllDriver(genedLibs, totalCnts);
@@ -81,7 +81,7 @@ public abstract class EGL2Base extends AbstractGeneratorCommand {
 	protected void startGeneration(String[] args, ICompiler compiler, IEUnitGenerationNotifier eckGenerationNotifier){		
 		try {			
 			installOverrides(args);			
-			generate(args, new EckGenerator(this, generatedLibs, totalCnts, new AccumulatingGenerationMessageRequestor(), eckGenerationNotifier), null, compiler);
+			generate(args, new EUnitGenerator(this, generatedLibs, totalCnts, new AccumulatingGenerationMessageRequestor(), eckGenerationNotifier), null, compiler);
 			generate(args, getEckDriverGenerator(this, new AccumulatingGenerationMessageRequestor(), eckGenerationNotifier), null, compiler);
 			generateRunAllDriver(args, getEckRunAllDriverGenerator(this, new AccumulatingGenerationMessageRequestor(), eckGenerationNotifier), generatedLibs, totalCnts);
 			eckGenerationNotifier.updateProgress(1);
@@ -144,7 +144,7 @@ public abstract class EGL2Base extends AbstractGeneratorCommand {
 			argList.add(part);	
 			String[] argArray = argList.toArray(new String[argList.size()]);  
 			//generate one part at a time
-			generate(argArray, new EckGenerator(this, generatedLibs, totalCnts, new AccumulatingGenerationMessageRequestor(), eckGenerationNotifier), env, compiler);
+			generate(argArray, new EUnitGenerator(this, generatedLibs, totalCnts, new AccumulatingGenerationMessageRequestor(), eckGenerationNotifier), env, compiler);
 			generate(argArray, getEckDriverGenerator(this, new AccumulatingGenerationMessageRequestor(), eckGenerationNotifier), env, compiler);			
 		}		
 		generateRunAllDriver(args, getEckRunAllDriverGenerator(this, new AccumulatingGenerationMessageRequestor(), eckGenerationNotifier), generatedLibs, totalCnts);
@@ -167,7 +167,7 @@ public abstract class EGL2Base extends AbstractGeneratorCommand {
 	
 	
 	protected List<String> getPartsFromGenFile(String genFileName){
-		TestDriverXMLFile driverXMLFile = new TestDriverXMLFile(genFileName);
+		GenPartsXMLFile driverXMLFile = new GenPartsXMLFile(genFileName);
 		return driverXMLFile.getGenerationEntries();		
 	}
 	

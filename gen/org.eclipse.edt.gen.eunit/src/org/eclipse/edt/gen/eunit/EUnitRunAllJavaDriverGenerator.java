@@ -5,9 +5,9 @@ import java.util.List;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 
-public class EckRunAllJavaDriverGenerator extends EckRunAllDriverGenerator {
+public class EUnitRunAllJavaDriverGenerator extends EUnitRunAllDriverGenerator {
 
-	public EckRunAllJavaDriverGenerator(AbstractGeneratorCommand processor,
+	public EUnitRunAllJavaDriverGenerator(AbstractGeneratorCommand processor,
 			IGenerationMessageRequestor msgReq, String driverPartNameAppend, IEUnitGenerationNotifier eckGenerationNotifier) {
 		super(processor, msgReq, driverPartNameAppend, eckGenerationNotifier);
 	}

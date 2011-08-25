@@ -18,7 +18,7 @@ import org.eclipse.edt.gen.eunit.TestCounter;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Part;
 
-public class PartTemplate extends EckTemplate {
+public class PartTemplate extends EUnitTemplate {
 
 	public void preGenPart(Part part, Context ctx, TestCounter counter) {
 		ctx.invoke(preGenClassBody, part, ctx, counter);

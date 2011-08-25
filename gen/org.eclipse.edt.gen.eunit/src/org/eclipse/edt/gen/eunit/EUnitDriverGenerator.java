@@ -2,19 +2,19 @@ package org.eclipse.edt.gen.eunit;
 
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
-import org.eclipse.edt.gen.eunit.templates.EckTemplate;
+import org.eclipse.edt.gen.eunit.templates.EUnitTemplate;
 import org.eclipse.edt.mof.egl.Part;
 
-public class EckDriverGenerator extends EckGenerator {
+public class EUnitDriverGenerator extends EUnitGenerator {
 	
-	public EckDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req, String driverPartNameAppend, IEUnitGenerationNotifier eckGenerationNotifier){
+	public EUnitDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req, String driverPartNameAppend, IEUnitGenerationNotifier eckGenerationNotifier){
 		super(processor, req, eckGenerationNotifier);
 		fDriverPartNameAppend = driverPartNameAppend;
 	}	
 	
 	@Override
 	protected void ContextInvoke(Part part, TestCounter counter){
-		context.invoke(EckTemplate.genLibDriver, part, context, out, fDriverPartNameAppend, counter);
+		context.invoke(EUnitTemplate.genLibDriver, part, context, out, fDriverPartNameAppend, counter);
 	}
 	
 	public String getRelativeFileName(Part part){		

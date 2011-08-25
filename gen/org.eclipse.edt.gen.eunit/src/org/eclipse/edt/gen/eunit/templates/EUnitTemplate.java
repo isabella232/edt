@@ -25,7 +25,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Library;
 
-public abstract class EckTemplate extends AbstractTemplate {
+public abstract class EUnitTemplate extends AbstractTemplate {
 	// Constants that represent all the method names invoked using the dynamic Template.gen() methods
 	// This allows one to find all references to invocations of the methods being invoked dynamically
 	public static final String genPart = "genPart";

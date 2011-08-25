@@ -15,7 +15,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class TestDriverXMLFile {
+public class GenPartsXMLFile {
 	/**
 	 * example xml file
 		<?xml version="1.0" encoding="UTF-8"?>
@@ -34,7 +34,7 @@ public class TestDriverXMLFile {
 	private static String ELEMENT_PART = "part";
 	private static String ATTR_PART_NAME = "name";
 	
-	public TestDriverXMLFile(String fullPath) {
+	public GenPartsXMLFile(String fullPath) {
 		setPath(fullPath);
 		initialize();
 	}
@@ -49,7 +49,7 @@ public class TestDriverXMLFile {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
-				System.out.println("TestDriverXMLFile::setPath(), IOException");
+				System.out.println("GenPartsXMLFile::setPath(), IOException");
 				e.printStackTrace();
 			}
 		}
@@ -64,7 +64,7 @@ public class TestDriverXMLFile {
 		try {
 			doc = factory.newDocumentBuilder().newDocument();
 		} catch (ParserConfigurationException e) {
-			System.out.println("TestDriverXMLFile::initialize(), ParserConfigurationException");
+			System.out.println("GenPartsXMLFile::initialize(), ParserConfigurationException");
 			e.printStackTrace();
 		}
 	}

@@ -14,7 +14,7 @@ package org.eclipse.edt.gen.eunit.templates;
 import org.eclipse.edt.gen.eunit.Context;
 import org.eclipse.edt.mof.egl.Type;
 
-public class TypeTemplate extends EckTemplate {
+public class TypeTemplate extends EUnitTemplate {
 
 	public void preGen(Type type, Context ctx) {}
 

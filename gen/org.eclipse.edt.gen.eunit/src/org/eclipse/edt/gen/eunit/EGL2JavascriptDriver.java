@@ -47,15 +47,15 @@ public class EGL2JavascriptDriver extends EGL2Base {
 
 
 	@Override
-	protected EckDriverGenerator getEckDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req
+	protected EUnitDriverGenerator getEckDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req
 			, IEUnitGenerationNotifier eckGenerationNotifier) {
-		return new EckDriverGenerator(processor, req, javascriptDriverPartNameAppend, eckGenerationNotifier);
+		return new EUnitDriverGenerator(processor, req, javascriptDriverPartNameAppend, eckGenerationNotifier);
 	}
 
 	@Override
-	protected EckRunAllDriverGenerator getEckRunAllDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req
+	protected EUnitRunAllDriverGenerator getEckRunAllDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req
 			, IEUnitGenerationNotifier eckGenerationNotifier) {
-		return new EckRunAllJavascriptDriverGenerator(processor, req, javascriptDriverPartNameAppend, eckGenerationNotifier);				   
+		return new EUnitRunAllJavascriptDriverGenerator(processor, req, javascriptDriverPartNameAppend, eckGenerationNotifier);				   
 	}
 	
 }

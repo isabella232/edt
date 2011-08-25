@@ -22,13 +22,13 @@ import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
-import org.eclipse.edt.gen.eunit.templates.EckTemplate;
+import org.eclipse.edt.gen.eunit.templates.EUnitTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
 
-public class EckGenerator extends Generator {
+public class EUnitGenerator extends Generator {
 
 	protected Context context;
 	protected TabbedWriter out;
@@ -41,13 +41,13 @@ public class EckGenerator extends Generator {
 
 	protected String fDriverPartNameAppend = "";
 
-	public EckGenerator(AbstractGeneratorCommand processor, List<String> genedLibs, TestCounter totalCnts, IGenerationMessageRequestor msgReq, IEUnitGenerationNotifier eckGenerationNotifier) {
+	public EUnitGenerator(AbstractGeneratorCommand processor, List<String> genedLibs, TestCounter totalCnts, IGenerationMessageRequestor msgReq, IEUnitGenerationNotifier eckGenerationNotifier) {
 		this(processor, msgReq, eckGenerationNotifier);
 		this.genedLibs = genedLibs;
 		this.totalCnts = totalCnts;
 	}
 
-	public EckGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor msgReq, IEUnitGenerationNotifier eckGenerationNotifier) {
+	public EUnitGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor msgReq, IEUnitGenerationNotifier eckGenerationNotifier) {
 		super(processor, msgReq);
 		generator = processor;
 		this.msgReq = msgReq;
@@ -66,7 +66,7 @@ public class EckGenerator extends Generator {
 
 	public boolean visit(Part part) {
 		try {
-			context.invoke(EckTemplate.genPart, part, context, out);
+			context.invoke(EUnitTemplate.genPart, part, context, out);
 		}
 		catch (TemplateException e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class EckGenerator extends Generator {
 	}
 
 	protected void ContextInvoke(Part part, TestCounter counter) {
-		context.invoke(EckTemplate.genPart, part, context, out, counter);
+		context.invoke(EUnitTemplate.genPart, part, context, out, counter);
 	}
 
 	public void generate(Part part) throws GenerationException {
@@ -89,7 +89,7 @@ public class EckGenerator extends Generator {
 			if (part instanceof Library) {
 				TestCounter counter = new TestCounter();
 				// preGenPart will figure out the test variation count
-				context.invoke(EckTemplate.preGenPart, part, context, counter);
+				context.invoke(EUnitTemplate.preGenPart, part, context, counter);
 				if (!context.getMessageRequestor().isError()) {
 					out.getWriter().flush();
 					// pass the test variation count to driver generator

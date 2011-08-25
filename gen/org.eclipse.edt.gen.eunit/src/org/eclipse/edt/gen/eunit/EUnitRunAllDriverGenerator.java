@@ -6,11 +6,11 @@ import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.mof.egl.Part;
 
-public abstract class EckRunAllDriverGenerator extends EckGenerator {
+public abstract class EUnitRunAllDriverGenerator extends EUnitGenerator {
 
 	protected static final String RunAllTest = "RunAllTests";
 	
-	public EckRunAllDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor msgReq, String driverPartNameAppend, IEUnitGenerationNotifier eckGenerationNotifier) {
+	public EUnitRunAllDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor msgReq, String driverPartNameAppend, IEUnitGenerationNotifier eckGenerationNotifier) {
 		super(processor, msgReq, eckGenerationNotifier);
 		fDriverPartNameAppend = driverPartNameAppend;
 	}

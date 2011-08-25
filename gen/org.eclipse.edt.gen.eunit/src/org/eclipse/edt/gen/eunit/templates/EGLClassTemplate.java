@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.eunit.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
 
-public class EGLClassTemplate extends EckTemplate {
+public class EGLClassTemplate extends EUnitTemplate {
 
 	public void genClassBody(EGLClass part, Context ctx, TabbedWriter out) {}
 

@@ -25,7 +25,7 @@ import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Type;
 
-public class FunctionTemplate extends EckTemplate {
+public class FunctionTemplate extends EUnitTemplate {
 
 //	private static final String FQ_LOGRECORD = CommonUtilities.ECKRUNTIME_PACKAGENAME + ".Log";
 //	private static final String FQ_STATUSRECORD = CommonUtilities.ECKRUNTIME_PACKAGENAME + ".Status";
