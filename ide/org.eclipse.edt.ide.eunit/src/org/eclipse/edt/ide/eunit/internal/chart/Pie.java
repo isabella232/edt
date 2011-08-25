@@ -1,4 +1,4 @@
-package org.eclipse.edt.chart;
+package org.eclipse.edt.ide.eunit.internal.chart;
 
 import org.eclipse.birt.chart.model.Chart;
 import org.eclipse.birt.chart.model.ChartWithoutAxes;

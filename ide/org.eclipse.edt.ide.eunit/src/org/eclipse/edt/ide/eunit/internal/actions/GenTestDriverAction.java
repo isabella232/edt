@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.gen.eunit.CommonUtilities;
 import org.eclipse.edt.gen.eunit.EGL2Base;
 import org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier;
-import org.eclipse.edt.gen.eunit.TestDriverXMLFile;
+import org.eclipse.edt.gen.eunit.GenPartsXMLFile;
 import org.eclipse.edt.ide.core.IIDECompiler;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPath;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
@@ -237,7 +237,7 @@ public abstract class GenTestDriverAction implements	IObjectActionDelegate{
 	 * @param entry
 	 */
 	protected void writePart2ConfigurationFile(String fileName, List<String> entries) {
-		TestDriverXMLFile driverXMLFile = new TestDriverXMLFile(fileName);
+		GenPartsXMLFile driverXMLFile = new GenPartsXMLFile(fileName);
 		try {
 			driverXMLFile.saveGenerationEntries("", entries);
 		} catch (IOException e) {
