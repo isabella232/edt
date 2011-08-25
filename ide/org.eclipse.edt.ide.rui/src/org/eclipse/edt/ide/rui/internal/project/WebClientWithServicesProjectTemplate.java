@@ -33,4 +33,9 @@ public class WebClientWithServicesProjectTemplate extends
 		String[] generatorIds = new String[]{ProjectConfiguration.JAVA_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_DEV_GENERATOR_ID};
 		eglProjConfiguration.setSelectedGenerators(generatorIds);
 	}
+	
+	@Override
+	protected void setDefaultPackages() {
+		this.setDefaultPackages(new String[]{"client", "server", "common"});
+	}
 }

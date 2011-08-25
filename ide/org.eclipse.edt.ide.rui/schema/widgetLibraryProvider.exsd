@@ -49,6 +49,13 @@
 
    <element name="provider">
       <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
          <attribute name="libname" type="string" use="required">
             <annotation>
                <documentation>
@@ -129,6 +136,16 @@
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn=":org.eclipase.edt.ide.rui.internal.project.IWidgetLibraryImporter"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="conflictClass" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.edt.ide.rui.internal.project.IWidgetLibraryConflict"/>
                </appInfo>
             </annotation>
          </attribute>

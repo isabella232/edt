@@ -54,6 +54,7 @@ Register the Preference Pages
             id="org.eclipse.edt.rui.widgets_0.7.0"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
             libname="Rich UI widgets"
+            logo="icons/style.gif"
             projectName="org.eclipse.edt.rui.widgets_0.7.0"
             provider="ibm.com"
             resourceFolder="/org.eclipse.edt.ide.ui.rui/"
@@ -62,6 +63,7 @@ Register the Preference Pages
             version="0.7.0">
       </provider>
       <provider
+            conflictClass="org.eclipse.edt.ide.rui.internal.project.DojoConflictClass"
             detail="Based on Dojo local"
             id="org.eclipse.edt.rui.dojo_0.7.0"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
@@ -76,17 +78,19 @@ Register the Preference Pages
             version_desc="Dojo 1.6.1">
       </provider>
       <provider
+            conflictClass="org.eclipse.edt.ide.rui.internal.project.DojoConflictClass"
             detail="Based on google runtime"
             id="org.eclipse.edt.rui.dojo.remote_0.7.0"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
             libname="Dojo widgets"
+            logo="icons/highlight.gif"
             projectName="org.eclipse.edt.rui.dojo.remote_0.7.0"
             provider="google.com"
             resourceFolder="/org.eclipse.edt.ide.ui.rui/"
             resourcePluginName="org.eclipse.edt.ide.ui.resources"
             selected="false"
             version="0.7.0"
-            version_desc="Dojo 1.6.1">
+            version_desc="Dojo 1.6.1 Remote">
       </provider>
       <provider
             detail="This project is only used for test. It includes only the available widgets in EDT 0.7.0 M2"
@@ -98,7 +102,7 @@ Register the Preference Pages
             provider="ibm.com"
             resourceFolder="/org.eclipse.edt.ide.ui.rui/"
             resourcePluginName="org.eclipse.edt.ide.ui.resources"
-            selected="true"
+            selected="false"
             version="0.7.0 M2">
       </provider>
    </extension>   

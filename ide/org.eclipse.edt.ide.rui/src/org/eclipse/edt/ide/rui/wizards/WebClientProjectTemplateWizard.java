@@ -22,6 +22,7 @@ public class WebClientProjectTemplateWizard extends ProjectTemplateWizard {
 	public void addPages() {
 		this.libraryPage = new ProjectWizardRUILibraryPage(NewWizardMessages.RUILibraryPage);
 		addPage(libraryPage);
+		super.addPages();
 	}
 	
 	public boolean performFinish() {

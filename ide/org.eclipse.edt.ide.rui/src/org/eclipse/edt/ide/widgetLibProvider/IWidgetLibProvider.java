@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.widgetLibProvider;
 
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.edt.ide.rui.internal.project.IWidgetLibraryConflict;
 import org.eclipse.edt.ide.rui.internal.project.IWidgetLibraryImporter;
 import org.eclipse.jface.resource.ImageDescriptor;
 
@@ -29,6 +30,7 @@ public interface IWidgetLibProvider {
 	public static final String PROVIDER_RESOURCE_FOLDER = "resourceFolder"; //$NON-NLS-1$
 	public static final String PROVIDER_PROJECT_NAME = "projectName"; //$NON-NLS-1$
 	public static final String PROVIDER_IMPORT_CLASS = "importClass"; //$NON-NLS-1$	
+	public static final String PROVIDER_CONFLICT_CLASS = "conflictClass"; //$NON-NLS-1$	
 	
 	public String getId();
 	/**
@@ -91,6 +93,8 @@ public interface IWidgetLibProvider {
 	
 	
 	public IWidgetLibraryImporter getImporter();
+	
+	public IWidgetLibraryConflict getConflictClass();
 	
 	/**
 	 * Initializes the template using the supplied IConfigurationElement. 
