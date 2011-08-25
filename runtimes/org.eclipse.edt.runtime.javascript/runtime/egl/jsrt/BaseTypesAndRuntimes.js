@@ -3030,22 +3030,6 @@ egl.timeStampEquals = function(/*timestamp*/ a, /*timestamp*/ b, falseAnswer) {
 	};
 })();
 
-egl.createDictionary = function( c, o ) {
-	return new egl.egl.Dictionary( c, o );
-}
-
-egl.defineClass("egl", "Dictionary", {
-	"constructor" : function() {
-		this.eze$$caseSensitive = arguments[0] || false;
-		this.eze$$byKeyOrdering = arguments[1] || false;
-		this.eze$$typename = "Dictionary";
-		this.eze$$signature = "y;";
-		this.toString = function() {
-			return this.$text || "[Dictionary]";
-		}
-	}
-});
-
 egl.valueByKey = function egl_valueByKey( object, key, value, signature ) 
 {
 	if (object == null) {
@@ -3059,7 +3043,7 @@ egl.valueByKey = function egl_valueByKey( object, key, value, signature )
 		return null;
 	}
 	var objectIsRecord = object instanceof egl.egl.jsrt.Record;
-	var objectIsDictionary = object instanceof egl.egl.Dictionary;
+	var objectIsDictionary = object instanceof egl.eglx.lang.EDictionary;
 	if (!(objectIsRecord || objectIsDictionary)) {
 		throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2024E", [key,egl.inferSignature(object)] );
 	}
@@ -3088,21 +3072,11 @@ egl.valueByKey = function egl_valueByKey( object, key, value, signature )
 	}
 	if (value !== undefined) 
 	{
-		if ( signature.charAt(0) === 'A' )
+		if (value instanceof egl.egl.jsrt.Record)
 		{
-			if (value.eze$$value instanceof egl.egl.jsrt.Record)
-			{
-				value = egl.boxAny(value.eze$$value.eze$$clone(), value.eze$$signature);
-			}
+			value = value.eze$$clone();
 		}
-		else
-		{
-			if (value instanceof egl.egl.jsrt.Record)
-			{
-				value = value.eze$$clone();
-			}
-			value = egl.boxAny( value, signature );
-		}
+		value = egl.boxAny( value, signature );
 		if (objectIsRecord)
 		{
 			var sig;

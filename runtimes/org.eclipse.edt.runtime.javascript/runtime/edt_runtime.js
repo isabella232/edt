@@ -452,12 +452,3 @@ egl.egl.lang.NullType.fromAnyObject = function(obj, sig) {
 	return {eze$$value : obj, eze$$signature : sig};
 };
 
-/****************************************************************************
- * EDictionary
- ****************************************************************************/
-egl.defineClass( "egl.lang", "EDictionary",
-		"", "Dictionary",	// TODO kludge -- note the "egl." prefix will be assumed
-{
-	//TODO sbg Need to move / port / re-implement;  for now it's faster just to derive from the original 
-}
-);

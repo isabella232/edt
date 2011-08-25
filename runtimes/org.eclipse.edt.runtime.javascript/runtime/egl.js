@@ -465,7 +465,7 @@ egl.setDateSignatures = function(object) {
 		}
 		return;
     }
-	if (object instanceof egl.egl.Dictionary) {
+	if (object instanceof egl.eglx.lang.EDictionary) {
 		for (f in object) {
 			if (!f.match(/^eze\$\$/) && (typeof object[f] != "function") && object[f]!=null) {
 			   var sig = object[f].eze$$signature;

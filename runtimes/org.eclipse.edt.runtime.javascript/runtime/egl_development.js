@@ -1492,7 +1492,7 @@ if (egl.egl.ui) {
 	egl.instrumentFunctions("DateTimeLib", egl.eglx.lang.DateTimeLib.prototype);
 	egl.instrumentFunctions("SysVar", egl.egl.core.SysVar.prototype);
 	egl.instrumentFunctions("RUILib", egl.eglx.ui.rui.RUILib.prototype);
-	egl.instrumentFunctions("Dictionary", egl.egl.Dictionary.prototype);
+	egl.instrumentFunctions("Dictionary", egl.eglx.lang.EDictionary.prototype);
 	egl.instrumentFunctions("RUIPropertiesLibrary", egl.egl.ui.rui.RUIPropertiesLibrary.prototype);
 	egl.instrumentFunctions("Document", egl.eglx.ui.rui.Document.prototype);
 	egl.instrumentFunctions("Job", egl.eglx.javascript.Job.prototype);
