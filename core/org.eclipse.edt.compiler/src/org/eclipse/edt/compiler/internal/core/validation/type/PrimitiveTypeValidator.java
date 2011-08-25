@@ -624,10 +624,16 @@ public class PrimitiveTypeValidator {
 				}
 			break;
 			
-			//NUMand DECIMAL must be between 1 and 32
+			//NUM must be between 1 and 32
 			case Primitive.NUM_PRIMITIVE:
-			case Primitive.DECIMAL_PRIMITIVE:
 				if(primitiveLength < 1 || primitiveLength > DECIMAL_MAX) {
+					//NUM/DECIMAL length error
+					issueWrongOrMissingLengthError(primitiveLength, primitiveName, DECIMAL_RANGE, lengthDefined);
+				}
+			break;
+			//DECIMAL must be between 0 and 32
+			case Primitive.DECIMAL_PRIMITIVE:
+				if(primitiveLength < 0 || primitiveLength > DECIMAL_MAX) {
 					//NUM/DECIMAL length error
 					issueWrongOrMissingLengthError(primitiveLength, primitiveName, DECIMAL_RANGE, lengthDefined);
 				}
