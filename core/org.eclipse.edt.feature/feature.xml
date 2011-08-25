@@ -113,7 +113,7 @@
          version="0.0.0"
          unpack="false"/>
 
- <plugin
+   <plugin
          id="org.eclipse.edt.ide.doc"
          download-size="0"
          install-size="0"
@@ -231,13 +231,12 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.eclipse.edt.runtime.javascript"
          download-size="0"
          install-size="0"
-         version="0.0.0"
-         unpack="true"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.edt.ide.compiler"
@@ -290,6 +289,13 @@
 
    <plugin
          id="org.eclipse.edt.gen.javascriptdev"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.edt.gen.generator.eglsource"
          download-size="0"
          install-size="0"
          version="0.0.0"
