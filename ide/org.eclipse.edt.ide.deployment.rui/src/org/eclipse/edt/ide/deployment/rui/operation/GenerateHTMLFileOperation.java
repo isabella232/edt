@@ -104,7 +104,7 @@ public class GenerateHTMLFileOperation implements IDeploymentOperation {
 					}
 				}
 			}
-			RUIDeploymentModel ruiModel = new RUIDeploymentModel(model.getRUIApplication(), context.getSourceProject(), targetProjectName, contextRoot, resultsCollector);
+			RUIDeploymentModel ruiModel = new RUIDeploymentModel(model.getRUIApplication(), context.getSourceProject(), targetProjectName, model.getName(), contextRoot, resultsCollector);
 			
 			if(ruiModel.getHandlerLocales().size() > 0){
 				if(ruiModel.getSourceRUIHandlers().size() > 0){

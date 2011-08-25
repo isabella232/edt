@@ -190,7 +190,7 @@ public class RUIDeploymentModel {
 	 * @param contextRoot2 
 	 * @param project 
 	 */
-	public RUIDeploymentModel(RUIApplication ruiApplication, IProject sourceProject, String target, String contextRoot, IDeploymentResultsCollector resultsCollector) throws CoreException{
+	public RUIDeploymentModel(RUIApplication ruiApplication, IProject sourceProject, String target, String eglddName, String contextRoot, IDeploymentResultsCollector resultsCollector) throws CoreException{
 		this.sourceProject = sourceProject;
 		this.target = target;
 		this.contextRoot = contextRoot;
@@ -647,6 +647,9 @@ public class RUIDeploymentModel {
 		return contextRoot;
 	}
 	
+	public String getEglddName() {
+		return eglddName;
+	}
 	public void setContextRoot(String contextRoot) {
 		this.contextRoot = contextRoot;	
 	}

@@ -15,6 +15,7 @@ public class IConstants {
 
 	public static final String HTML_FILE_EXTENSION = "html";
 	public static final String CONTEXT_ROOT_PARAMETER_NAME = "egl__contextRoot";
+	public static final String DEFAULT_DD_PARAMETER_NAME = "egl__defaultDeploymentDescriptor";
 	public static final String PROPERTIES_FOLDER_NAME = "properties";
 	public static final String RUNTIME_MESSAGES_DEPLOYMENT_FOLDER_NAME = "properties";
 	public static final String HTML_FILE_LOCALE = "locale";

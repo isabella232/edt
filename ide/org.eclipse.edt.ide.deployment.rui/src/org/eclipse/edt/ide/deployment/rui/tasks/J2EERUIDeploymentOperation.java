@@ -14,10 +14,8 @@ package org.eclipse.edt.ide.deployment.rui.tasks;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -39,8 +37,6 @@ import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.utils.EGLProjectFileUtility;
 import org.eclipse.edt.ide.core.utils.EGLProjectInfoUtility;
 import org.eclipse.edt.ide.deployment.internal.EGLMessage;
-import org.eclipse.edt.ide.deployment.internal.web.WebXML;
-import org.eclipse.edt.ide.deployment.internal.web.WebXMLManager;
 import org.eclipse.edt.ide.deployment.results.DeploymentResultMessageRequestor;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.rui.internal.IConstants;
@@ -171,6 +167,7 @@ public class J2EERUIDeploymentOperation {
 				 */
 				HashMap<String, String> eglProperties = new HashMap<String, String>();
 				eglProperties.put(IConstants.CONTEXT_ROOT_PARAMETER_NAME, model.getContextRoot());
+				eglProperties.put(IConstants.DEFAULT_DD_PARAMETER_NAME, model.getEglddName().toLowerCase());
 				if( !monitor.isCanceled() ){
 					monitor.subTask(Messages.J2EEDeploymentOperation_2);
 					model.generateHandler(ruiHandler, 
