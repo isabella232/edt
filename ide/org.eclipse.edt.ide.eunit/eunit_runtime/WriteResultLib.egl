@@ -62,17 +62,21 @@ Library WriteResultLib
 		end		
 		etrRoot String = getResultRootDirectory(fileSeparator);
 		
-		// partPkgName String = tr.td.pkgName.replaceStr(".", fileSeparator);
+		// partPkgName String = tr.td.pkgName.replaceStr(".", fileSeparator);		
 		partPkgName String = tr.td.pkgName;
-	    index int = StrLib.indexOf( tr.td.pkgName, "." );
-		while ( index > 0 ) 		    
-		 	partPkgName[index : index] = fileSeparator; 
-		 	index = indexOf( tr.td.pkgName, ".", index+1); 
-		 end
+		partPkgDirName String = "";
+		charLen int = strLib.characterLen(partPkgName);
+		for (i int from 1 to charLen by 1)
+			if(partPkgName[i:i] == ".")
+				partPkgDirName += fileSeparator;
+			else
+				partPkgDirName += partPkgName[i:i];
+			end
+		end
 		
 		//build the file path name
 		etrFilePath String = etrRoot + fileSeparator;
-		etrFilePath += partPkgName;
+		etrFilePath += partPkgDirName;
 				
 		etrFileName String = etrFilePath;
 		etrFileName += fileSeparator;
