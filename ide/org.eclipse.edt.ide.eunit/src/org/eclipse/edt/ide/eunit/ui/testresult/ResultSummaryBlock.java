@@ -1,4 +1,4 @@
-package org.eclipse.edt.ide.eck.ui.testresult;
+package org.eclipse.edt.ide.eunit.ui.testresult;
 
 import java.util.ArrayList;
 

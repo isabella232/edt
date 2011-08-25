@@ -1,4 +1,4 @@
-package org.eclipse.edt.ide.eck;
+package org.eclipse.edt.ide.eunit;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;

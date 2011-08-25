@@ -1,4 +1,4 @@
-package org.eclipse.edt.ide.eck.internal.actions;
+package org.eclipse.edt.ide.eunit.internal.actions;
 
 import java.util.ArrayList;
 import java.util.List;

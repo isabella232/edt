@@ -1,4 +1,4 @@
-package org.eclipse.edt.ide.eck.ui.testresult;
+package org.eclipse.edt.ide.eunit.ui.testresult;
 
 import org.eclipse.birt.chart.model.data.NumberDataSet;
 import org.eclipse.birt.chart.model.data.TextDataSet;
@@ -7,7 +7,7 @@ import org.eclipse.birt.chart.model.data.impl.TextDataSetImpl;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.chart.ChartPreview;
 import org.eclipse.edt.chart.Pie;
-import org.eclipse.edt.ide.eck.ui.testresult.ResultSummaryBlock.ResultStatisticCnts;
+import org.eclipse.edt.ide.eunit.ui.testresult.ResultSummaryBlock.ResultStatisticCnts;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.osgi.service.resolver.BundleDescription;

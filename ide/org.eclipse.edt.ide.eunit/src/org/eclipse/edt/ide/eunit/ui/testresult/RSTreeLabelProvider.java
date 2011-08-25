@@ -1,11 +1,11 @@
-package org.eclipse.edt.ide.eck.ui.testresult;
+package org.eclipse.edt.ide.eunit.ui.testresult;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.ide.eck.ui.testresult.ResultSummaryBlock.Record_ResultSummary;
-import org.eclipse.edt.ide.eck.ui.testresult.ResultSummaryBlock.TestResultPkgNode;
-import org.eclipse.edt.ide.eck.ui.testresult.ResultSummaryBlock.TestResultRootNode;
+import org.eclipse.edt.ide.eunit.ui.testresult.ResultSummaryBlock.Record_ResultSummary;
+import org.eclipse.edt.ide.eunit.ui.testresult.ResultSummaryBlock.TestResultPkgNode;
+import org.eclipse.edt.ide.eunit.ui.testresult.ResultSummaryBlock.TestResultRootNode;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;

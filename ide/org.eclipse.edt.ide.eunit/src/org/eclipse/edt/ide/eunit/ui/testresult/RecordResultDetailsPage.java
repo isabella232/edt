@@ -1,4 +1,4 @@
-package org.eclipse.edt.ide.eck.ui.testresult;
+package org.eclipse.edt.ide.eunit.ui.testresult;
 
 import java.io.IOException;
 
@@ -12,8 +12,8 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.edt.ide.eck.Activator;
-import org.eclipse.edt.ide.eck.ui.testresult.ResultSummaryBlock.Record_ResultSummary;
+import org.eclipse.edt.ide.eunit.Activator;
+import org.eclipse.edt.ide.eunit.ui.testresult.ResultSummaryBlock.Record_ResultSummary;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;

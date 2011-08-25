@@ -1,8 +1,8 @@
-package org.eclipse.edt.ide.eck.ui.testresult;
+package org.eclipse.edt.ide.eunit.ui.testresult;
 
-import org.eclipse.edt.ide.eck.ui.testresult.ResultSummaryBlock.Record_ResultSummary;
-import org.eclipse.edt.ide.eck.ui.testresult.ResultSummaryBlock.TestResultPkgNode;
-import org.eclipse.edt.ide.eck.ui.testresult.ResultSummaryBlock.TestResultRootNode;
+import org.eclipse.edt.ide.eunit.ui.testresult.ResultSummaryBlock.Record_ResultSummary;
+import org.eclipse.edt.ide.eunit.ui.testresult.ResultSummaryBlock.TestResultPkgNode;
+import org.eclipse.edt.ide.eunit.ui.testresult.ResultSummaryBlock.TestResultRootNode;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IDetailsPageProvider;
 

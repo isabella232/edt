@@ -3,20 +3,6 @@
 <plugin>
 
    <extension
-         point="org.eclipse.ui.views">
-      <category
-            name="EGL"
-            id="org.eclipse.edt.ide.eck">
-      </category>
-      <view
-            name="EGL Test Result View"
-            icon="icons/sample.gif"
-            category="org.eclipse.edt.ide.eck"
-            class="org.eclipse.edt.ide.eck.views.EGLTestResultView"
-            id="org.eclipse.edt.ide.eck.views.EGLTestResultView">
-      </view>
-   </extension>
-   <extension
          point="org.eclipse.ui.popupMenus">
          <objectContribution
         	adaptable="true"
@@ -34,14 +20,14 @@
        	 		<separator name="group1"/>       	 		
        	 	</menu>
        	 	<action
-				class="org.eclipse.edt.ide.eck.internal.actions.GenTestDriverActionJavascript"
+				class="org.eclipse.edt.ide.eunit.internal.actions.GenTestDriverActionJavascript"
 				enablesFor="1"
 				menubarPath="org.eclipse.edt.eck.gentestdriver.menu1/group1"				
 				id="org.eclipse.edt.eck.gentestdriver.javascript"
 				label="%GenECKTestDriver.JavaScript">
 			</action> 
 			<action
-				class="org.eclipse.edt.ide.eck.internal.actions.GenTestDriverActionJava"
+				class="org.eclipse.edt.ide.eunit.internal.actions.GenTestDriverActionJava"
 				enablesFor="1"
 				menubarPath="org.eclipse.edt.eck.gentestdriver.menu1/group1"				
 				id="org.eclipse.edt.eck.gentestdriver.java"
@@ -64,14 +50,14 @@
        	 		<separator name="group1"/>       	 		
        	 	</menu>
        	 	<action
-				class="org.eclipse.edt.ide.eck.internal.actions.GenTestDriverActionJavascript"
+				class="org.eclipse.edt.ide.eunit.internal.actions.GenTestDriverActionJavascript"
 				enablesFor="*"
 				menubarPath="org.eclipse.edt.eck.gentestdriver.menu1/group1"				
 				id="org.eclipse.edt.eck.gentestdriver.javascript"
 				label="%GenECKTestDriver.JavaScript">
 			</action> 
 			<action
-				class="org.eclipse.edt.ide.eck.internal.actions.GenTestDriverActionJava"
+				class="org.eclipse.edt.ide.eunit.internal.actions.GenTestDriverActionJava"
 				enablesFor="*"
 				menubarPath="org.eclipse.edt.eck.gentestdriver.menu1/group1"				
 				id="org.eclipse.edt.eck.gentestdriver.java"
@@ -95,14 +81,14 @@
        	 		<separator name="group1"/>       	 		
        	 	</menu>
        	 	<action
-				class="org.eclipse.edt.ide.eck.internal.actions.GenTestDriverActionJavascript"
+				class="org.eclipse.edt.ide.eunit.internal.actions.GenTestDriverActionJavascript"
 				enablesFor="*"
 				menubarPath="org.eclipse.edt.eck.gentestdriver.menu1/group1"				
 				id="org.eclipse.edt.eck.gentestdriver.javascript"
 				label="%GenECKTestDriver.JavaScript">
 			</action> 
 			<action
-				class="org.eclipse.edt.ide.eck.internal.actions.GenTestDriverActionJava"
+				class="org.eclipse.edt.ide.eunit.internal.actions.GenTestDriverActionJava"
 				enablesFor="*"
 				menubarPath="org.eclipse.edt.eck.gentestdriver.menu1/group1"				
 				id="org.eclipse.edt.eck.gentestdriver.java"
@@ -118,7 +104,7 @@
 	        name = "Test Result Viewer"
 	        icon = "icons/obj16/sample.gif"
 	        extensions = "trs"
-	        class = "org.eclipse.edt.ide.eck.ui.testresult.TestResultViewer" /> 
+	        class = "org.eclipse.edt.ide.eunit.ui.testresult.TestResultViewer" /> 
          
    </extension>
 

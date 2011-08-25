@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Eck IDE
 Bundle-SymbolicName: org.eclipse.edt.ide.eunit;singleton:=true
 Bundle-Version: 0.7.0.qualifier
-Bundle-Activator: org.eclipse.edt.ide.eck.Activator
+Bundle-Activator: org.eclipse.edt.ide.eunit.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources;bundle-version="3.6.1",

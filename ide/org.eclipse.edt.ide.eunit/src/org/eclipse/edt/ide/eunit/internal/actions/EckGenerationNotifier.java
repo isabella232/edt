@@ -1,4 +1,4 @@
-package org.eclipse.edt.ide.eck.internal.actions;
+package org.eclipse.edt.ide.eunit.internal.actions;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.edt.gen.eck.IEckGenerationNotifier;

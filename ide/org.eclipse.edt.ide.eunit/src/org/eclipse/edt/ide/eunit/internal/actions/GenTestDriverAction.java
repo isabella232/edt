@@ -1,4 +1,4 @@
-package org.eclipse.edt.ide.eck.internal.actions;
+package org.eclipse.edt.ide.eunit.internal.actions;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -41,7 +41,7 @@ import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.model.PPListElement;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
-import org.eclipse.edt.ide.eck.Activator;
+import org.eclipse.edt.ide.eunit.Activator;
 import org.eclipse.edt.ide.ui.wizards.EGLProjectUtility;
 import org.eclipse.edt.ide.ui.wizards.EGLWizardUtilities;
 import org.eclipse.jdt.core.IClasspathEntry;
