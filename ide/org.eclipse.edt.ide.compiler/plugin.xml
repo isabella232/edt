@@ -19,6 +19,7 @@
 			version="0.7.0"
 			provider="Eclipse.org"
 			description="%JavaGeneratorDescription"
+			language="Java"
 		/>
 		<provider
 			id="org.eclipse.edt.ide.gen.JavaScriptGenProvider"
@@ -28,6 +29,7 @@
 			version="0.7.0"
 			provider="Eclipse.org"
 			description="%JavaScriptGeneratorDescription"
+			language="JavaScript"
 		/>
 	</extension>
 	
