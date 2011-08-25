@@ -43,8 +43,8 @@ public abstract class EGL2Base extends AbstractGeneratorCommand {
 		totalCnts = new TestCounter();
 	}
 
-	abstract protected EckDriverGenerator getEckDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req, IEckGenerationNotifier eckGenerationNotifier);
-	abstract protected EckRunAllDriverGenerator getEckRunAllDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req, IEckGenerationNotifier eckGenerationNotifier);	
+	abstract protected EckDriverGenerator getEckDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req, IEUnitGenerationNotifier eckGenerationNotifier);
+	abstract protected EckRunAllDriverGenerator getEckRunAllDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req, IEUnitGenerationNotifier eckGenerationNotifier);	
 	
 	public void generateRunAllDriver(String[] args, EckRunAllDriverGenerator allDriverGenerator, List<String> genedLibs, TestCounter totalCnts){		
 		try{
@@ -78,7 +78,7 @@ public abstract class EGL2Base extends AbstractGeneratorCommand {
 		}	
 	}
 	
-	protected void startGeneration(String[] args, ICompiler compiler, IEckGenerationNotifier eckGenerationNotifier){		
+	protected void startGeneration(String[] args, ICompiler compiler, IEUnitGenerationNotifier eckGenerationNotifier){		
 		try {			
 			installOverrides(args);			
 			generate(args, new EckGenerator(this, generatedLibs, totalCnts, new AccumulatingGenerationMessageRequestor(), eckGenerationNotifier), null, compiler);
@@ -123,7 +123,7 @@ public abstract class EGL2Base extends AbstractGeneratorCommand {
 		return partEnv;
 	}
 	
-	protected void startGeneration4AllPartsUnderIRRootDir(String[] args, ICompiler compiler, IEckGenerationNotifier eckGenerationNotifier){
+	protected void startGeneration4AllPartsUnderIRRootDir(String[] args, ICompiler compiler, IEUnitGenerationNotifier eckGenerationNotifier){
 		
 		//get the parts either from genFile or calculate all from the irRootfolder
 		List<String> parts = getParts2Gen();

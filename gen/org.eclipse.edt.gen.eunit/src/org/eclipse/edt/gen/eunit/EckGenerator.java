@@ -37,17 +37,17 @@ public class EckGenerator extends Generator {
 	protected TestCounter totalCnts;
 
 	private IGenerationMessageRequestor msgReq;
-	protected IEckGenerationNotifier generationNotifier;
+	protected IEUnitGenerationNotifier generationNotifier;
 
 	protected String fDriverPartNameAppend = "";
 
-	public EckGenerator(AbstractGeneratorCommand processor, List<String> genedLibs, TestCounter totalCnts, IGenerationMessageRequestor msgReq, IEckGenerationNotifier eckGenerationNotifier) {
+	public EckGenerator(AbstractGeneratorCommand processor, List<String> genedLibs, TestCounter totalCnts, IGenerationMessageRequestor msgReq, IEUnitGenerationNotifier eckGenerationNotifier) {
 		this(processor, msgReq, eckGenerationNotifier);
 		this.genedLibs = genedLibs;
 		this.totalCnts = totalCnts;
 	}
 
-	public EckGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor msgReq, IEckGenerationNotifier eckGenerationNotifier) {
+	public EckGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor msgReq, IEUnitGenerationNotifier eckGenerationNotifier) {
 		super(processor, msgReq);
 		generator = processor;
 		this.msgReq = msgReq;

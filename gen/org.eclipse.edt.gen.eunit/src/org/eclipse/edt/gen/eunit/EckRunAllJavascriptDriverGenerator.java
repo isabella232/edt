@@ -10,7 +10,7 @@ public class EckRunAllJavascriptDriverGenerator extends
 
 	public EckRunAllJavascriptDriverGenerator(
 			AbstractGeneratorCommand processor,
-			IGenerationMessageRequestor msgReq, String driverPartNameAppend, IEckGenerationNotifier eckGenerationNotifier) {
+			IGenerationMessageRequestor msgReq, String driverPartNameAppend, IEUnitGenerationNotifier eckGenerationNotifier) {
 		super(processor, msgReq, driverPartNameAppend, eckGenerationNotifier);
 	}
 

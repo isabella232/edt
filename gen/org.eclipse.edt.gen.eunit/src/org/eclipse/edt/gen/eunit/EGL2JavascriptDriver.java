@@ -27,10 +27,10 @@ public class EGL2JavascriptDriver extends EGL2Base {
 	}
 
 	public static void main(String[] args) {
-		start(args, null, new NullEckGenerationNotifier());
+		start(args, null, new NullEUnitGenerationNotifier());
 	}
 
-	public static void start(String[] args, ICompiler compiler, IEckGenerationNotifier eckGenerationNotifier) {
+	public static void start(String[] args, ICompiler compiler, IEUnitGenerationNotifier eckGenerationNotifier) {
 		EGL2JavascriptDriver genPart = new EGL2JavascriptDriver();
 		genPart.startGeneration(args, compiler, eckGenerationNotifier);
 	}	
@@ -48,13 +48,13 @@ public class EGL2JavascriptDriver extends EGL2Base {
 
 	@Override
 	protected EckDriverGenerator getEckDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req
-			, IEckGenerationNotifier eckGenerationNotifier) {
+			, IEUnitGenerationNotifier eckGenerationNotifier) {
 		return new EckDriverGenerator(processor, req, javascriptDriverPartNameAppend, eckGenerationNotifier);
 	}
 
 	@Override
 	protected EckRunAllDriverGenerator getEckRunAllDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req
-			, IEckGenerationNotifier eckGenerationNotifier) {
+			, IEUnitGenerationNotifier eckGenerationNotifier) {
 		return new EckRunAllJavascriptDriverGenerator(processor, req, javascriptDriverPartNameAppend, eckGenerationNotifier);				   
 	}
 	

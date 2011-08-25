@@ -10,7 +10,7 @@ public abstract class EckRunAllDriverGenerator extends EckGenerator {
 
 	protected static final String RunAllTest = "RunAllTests";
 	
-	public EckRunAllDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor msgReq, String driverPartNameAppend, IEckGenerationNotifier eckGenerationNotifier) {
+	public EckRunAllDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor msgReq, String driverPartNameAppend, IEUnitGenerationNotifier eckGenerationNotifier) {
 		super(processor, msgReq, eckGenerationNotifier);
 		fDriverPartNameAppend = driverPartNameAppend;
 	}

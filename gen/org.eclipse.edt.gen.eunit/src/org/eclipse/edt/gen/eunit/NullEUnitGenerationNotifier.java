@@ -5,23 +5,23 @@ package org.eclipse.edt.gen.eunit;
  * print the progress.
  *
  */
-public class NullEckGenerationNotifier implements IEckGenerationNotifier{
+public class NullEUnitGenerationNotifier implements IEUnitGenerationNotifier{
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#isAborted()
+	 * @see org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier#isAborted()
 	 */
 	public boolean isAborted() {
 		return false;
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#setAborted(boolean)
+	 * @see org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier#setAborted(boolean)
 	 */
 	public void setAborted(boolean aborted) {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#begin()
+	 * @see org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier#begin()
 	 */
 	public void begin() {
 	}
@@ -33,19 +33,19 @@ public class NullEckGenerationNotifier implements IEckGenerationNotifier{
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#done()
+	 * @see org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier#done()
 	 */
 	public void done() {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#setTaskName(java.lang.String)
+	 * @see org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier#setTaskName(java.lang.String)
 	 */
 	public void setTaskName(String message) {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#updateProgress(int)
+	 * @see org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier#updateProgress(int)
 	 */
 	public void updateProgress(int percentComplete) {
 	}
@@ -57,7 +57,7 @@ public class NullEckGenerationNotifier implements IEckGenerationNotifier{
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#begin(int)
+	 * @see org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier#begin(int)
 	 */
 	public void begin(int totalWork) {
 	}

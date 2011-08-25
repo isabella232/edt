@@ -6,7 +6,7 @@ package org.eclipse.edt.gen.eunit;
  * generation progress.
  * 
  */
-public interface IEckGenerationNotifier {
+public interface IEUnitGenerationNotifier {
 	
 	/**
 	 * Check if user has aborted the test driver generation process or not.

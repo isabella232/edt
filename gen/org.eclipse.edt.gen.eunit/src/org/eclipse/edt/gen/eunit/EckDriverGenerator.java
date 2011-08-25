@@ -7,7 +7,7 @@ import org.eclipse.edt.mof.egl.Part;
 
 public class EckDriverGenerator extends EckGenerator {
 	
-	public EckDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req, String driverPartNameAppend, IEckGenerationNotifier eckGenerationNotifier){
+	public EckDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req, String driverPartNameAppend, IEUnitGenerationNotifier eckGenerationNotifier){
 		super(processor, req, eckGenerationNotifier);
 		fDriverPartNameAppend = driverPartNameAppend;
 	}	

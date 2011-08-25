@@ -8,7 +8,7 @@ import org.eclipse.edt.gen.AbstractGeneratorCommand;
 public class EckRunAllJavaDriverGenerator extends EckRunAllDriverGenerator {
 
 	public EckRunAllJavaDriverGenerator(AbstractGeneratorCommand processor,
-			IGenerationMessageRequestor msgReq, String driverPartNameAppend, IEckGenerationNotifier eckGenerationNotifier) {
+			IGenerationMessageRequestor msgReq, String driverPartNameAppend, IEUnitGenerationNotifier eckGenerationNotifier) {
 		super(processor, msgReq, driverPartNameAppend, eckGenerationNotifier);
 	}
 
