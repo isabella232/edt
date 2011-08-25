@@ -87,6 +87,13 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="language" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The target language of the generator
+               </documentation>
+            </annotation>
+         </attribute>
          <attribute name="description" type="string">
             <annotation>
                <documentation>
