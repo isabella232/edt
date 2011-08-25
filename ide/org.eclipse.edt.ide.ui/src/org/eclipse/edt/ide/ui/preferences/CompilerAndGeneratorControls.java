@@ -139,8 +139,10 @@ public class CompilerAndGeneratorControls {
 			case 0: 
 				return ((OptionTreeNode)element).getDisplay();
 			case 1:
-				return ((OptionTreeNode)element).getVersion();
+				return ((OptionTreeNode)element).getLanguage();
 			case 2:
+				return ((OptionTreeNode)element).getVersion();
+			case 3:
 				return ((OptionTreeNode)element).getProvider();
 			}
 			return "";
@@ -182,11 +184,14 @@ public class CompilerAndGeneratorControls {
 			tree.setHeaderVisible(true);
 			tree.setLinesVisible(true);
 			TreeColumn nameColumn = new TreeColumn(tree, SWT.LEFT);
+			TreeColumn languageColumn = new TreeColumn(tree, SWT.LEFT);
 			TreeColumn versionColumn = new TreeColumn(tree, SWT.LEFT); 
 			TreeColumn providerColumn = new TreeColumn(tree, SWT.LEFT); 
 			nameColumn.setWidth(200);
 			nameColumn.setText( UINlsStrings.CompilerPreferencePage_nameLabel );
-			versionColumn.setWidth(50);
+			languageColumn.setWidth(150);
+			languageColumn.setText( UINlsStrings.CompilerPreferencePage_languageLabel );
+			versionColumn.setWidth(100);
 			versionColumn.setText( UINlsStrings.CompilerPreferencePage_versionLabel );
 			providerColumn.setWidth(200);
 			providerColumn.setText( UINlsStrings.CompilerPreferencePage_ProviderLabel );
@@ -204,7 +209,8 @@ public class CompilerAndGeneratorControls {
 						wsnode = new OptionTreeNode( genMapKey.getName(), 
 														null, 
 														genMapKey.getVersion(),
-														genMapKey.getProvider());				
+														genMapKey.getProvider(),
+														genMapKey.getLanguage());				
 						fOptionNodePreferenceTreeMap.put( genMapKey.getName(), wsnode );
 					}
 					else {
@@ -222,13 +228,14 @@ public class CompilerAndGeneratorControls {
 			if( genMap.keySet().contains( child ) ) {
 				wsnode = wsnode.addChild(child.getName(), 
 											child.getVersion(),
-											child.getProvider());
+											child.getProvider(),
+											child.getLanguage());
 				List<IGenerator> genList = (List<IGenerator>)genMap.get( child );
 				for( int i = 0; i < genList.size(); i++ ) {
 					processChild( genMap, wsnode, genList.get(i) );
 				}
 			} else {
-				wsnode.addChild(child.getName(), child.getVersion(), child.getProvider());
+				wsnode.addChild(child.getName(), child.getVersion(), child.getProvider(), child.getLanguage());
 			}			
 		}
 	}
@@ -314,6 +321,7 @@ public class CompilerAndGeneratorControls {
 		private String fDisplay;
 		private String fVersion;
 		private String fProvider;
+		private String fLanguage;
 	
 		/**
 		 * key is String, the display name
@@ -325,11 +333,13 @@ public class CompilerAndGeneratorControls {
 		public OptionTreeNode(String display, 
 								OptionTreeNode parent,
 								String version,
-								String provider){
+								String provider,
+								String language){
 			fDisplay = display;
 			fParent = parent;
 			fVersion = version;
 			fProvider = provider;
+			fLanguage = language;
 		}
 		
 		public String getDisplay(){
@@ -348,6 +358,10 @@ public class CompilerAndGeneratorControls {
 			return fProvider;
 		}
 		
+		public String getLanguage(){
+			return fLanguage;
+		}
+		
 		public Map<String, OptionTreeNode> getChildren(){
 			return fChildren;
 		}
@@ -356,13 +370,13 @@ public class CompilerAndGeneratorControls {
 			return !fChildren.isEmpty();
 		}
 		
-		public OptionTreeNode addChild(String display, String version, String provider){
+		public OptionTreeNode addChild(String display, String version, String provider, String language){
 			OptionTreeNode addedChild = null;
 			//try to find it, see if it's already a child
 			Object obj = fChildren.get(display);
 			
 			if(obj == null){
-				OptionTreeNode newWSNode = new OptionTreeNode(display, this, version, provider);
+				OptionTreeNode newWSNode = new OptionTreeNode(display, this, version, provider, language);
 				fChildren.put(display, newWSNode);
 				addedChild = newWSNode;
 			}

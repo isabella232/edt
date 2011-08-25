@@ -48,6 +48,7 @@ public class UINlsStrings extends NLS {
 	public static String CompilerPreferencePage_selectedGeneratorsLabel;
 	public static String CompilerPreferencePage_defaultGeneratorsLabel;
 	public static String CompilerPreferencePage_nameLabel;
+	public static String CompilerPreferencePage_languageLabel;
 	public static String CompilerPreferencePage_versionLabel;
 	public static String CompilerPreferencePage_ProviderLabel;
 	public static String CompilerPropertyPage_errorCleaningUpPrefStore;
