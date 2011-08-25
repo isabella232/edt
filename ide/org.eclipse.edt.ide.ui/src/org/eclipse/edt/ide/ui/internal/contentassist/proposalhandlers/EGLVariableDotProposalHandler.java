@@ -203,7 +203,7 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 					
 				case ITypeBinding.ARRAY_TYPE_BINDING:
 					if(includeFunctions) {
-//						result.addAll(getSystemWordProposals(ArrayTypeBinding.getArrayFunctions(), UINlsStrings.CAProposal_ArrayFunctionSystemWord));
+						result.addAll(getSystemWordProposals(ArrayTypeBinding.getSYSTEM_FUNCTIONS(), UINlsStrings.CAProposal_ArrayFunctionSystemWord));
 					}
 					return result;					
 			}
