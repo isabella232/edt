@@ -1,7 +1,7 @@
 package org.eclipse.edt.ide.eunit.internal.actions;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.edt.gen.eck.IEckGenerationNotifier;
+import org.eclipse.edt.gen.eunit.IEckGenerationNotifier;
 /**
  * The adapter for updating the test driver progress with Eclipse progress view. 
  *
@@ -32,7 +32,7 @@ public class EckGenerationNotifier implements IEckGenerationNotifier {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eck.IEckGenerationNotifier#isAborted()
+	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#isAborted()
 	 */
 	public boolean isAborted() {
 		if(this.monitor != null) {
@@ -43,7 +43,7 @@ public class EckGenerationNotifier implements IEckGenerationNotifier {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eck.IEckGenerationNotifier#setAborted(boolean)
+	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#setAborted(boolean)
 	 */
 	public void setAborted(boolean aborted) {
 		if(this.monitor != null)
@@ -51,7 +51,7 @@ public class EckGenerationNotifier implements IEckGenerationNotifier {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eck.IEckGenerationNotifier#begin()
+	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#begin()
 	 */
 	public void begin() {
 		if (monitor != null)
@@ -60,7 +60,7 @@ public class EckGenerationNotifier implements IEckGenerationNotifier {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eck.IEckGenerationNotifier#begin(int)
+	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#begin(int)
 	 */
 	public void begin(int totalWork) {
 		this.totalWork = totalWork;
@@ -68,7 +68,7 @@ public class EckGenerationNotifier implements IEckGenerationNotifier {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eck.IEckGenerationNotifier#done()
+	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#done()
 	 */
 	public void done() {
 		if (monitor != null)
@@ -76,14 +76,14 @@ public class EckGenerationNotifier implements IEckGenerationNotifier {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eck.IEckGenerationNotifier#setTaskName(java.lang.String)
+	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#setTaskName(java.lang.String)
 	 */
 	public void setTaskName(String message) {
 		this.monitor.setTaskName(message);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eck.IEckGenerationNotifier#updateProgress(int)
+	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#updateProgress(int)
 	 */
 	public void updateProgress(int workCount) {
 		monitor.worked(workCount);

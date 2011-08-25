@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.edt.gen.eck.EGL2JavascriptDriver;
-import org.eclipse.edt.gen.eck.IEckGenerationNotifier;
+import org.eclipse.edt.gen.eunit.EGL2JavascriptDriver;
+import org.eclipse.edt.gen.eunit.IEckGenerationNotifier;
 import org.eclipse.edt.ide.core.IIDECompiler;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLProject;
