@@ -21,7 +21,7 @@ import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 
 public class AbstractDeploymentSolution implements IDeploymentSolution {
 
-	private DeploymentContext context;
+	protected DeploymentContext context;
 	
 	private List<IDeploymentOperation> operations = new ArrayList<IDeploymentOperation>();
 

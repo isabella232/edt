@@ -311,29 +311,6 @@ public class DeploymentUtilities {
 		return null;
 	}
 	
-	public static String getLocalesString( Object[] o )
-	{
-		StringBuffer buf = new StringBuffer( 100 );
-		//TODO - Jimmy
-//		for ( int i = 0; i < o.length; i++ )
-//		{
-//			if ( o[ i ] instanceof DeployLocale )
-//			{
-//				DeployLocale next = (DeployLocale)o[ i ];
-//				if ( buf.length() != 0 )
-//				{
-//					buf.append( "," );
-//				}
-//				buf.append( next.getCode() );
-//				buf.append( ',' );
-//				buf.append( next.getDescription() );
-//				buf.append( ',' );
-//				buf.append( next.getRuntimeLocaleCode() );
-//			}
-//		}
-		return buf.toString();
-	}
-	
 	public static String[] convertPackage( String pkg )
 	{
 		StringTokenizer toks = new StringTokenizer(pkg,".");
