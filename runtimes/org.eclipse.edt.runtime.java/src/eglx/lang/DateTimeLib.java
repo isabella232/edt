@@ -34,7 +34,7 @@ public class DateTimeLib extends ExecutableBase {
 	/**
 	 * Returns a Calendar that reflects an int.
 	 */
-	public static Calendar dateFromInt(Integer dateint) throws AnyException {
+	public static Calendar dateFromInt(int dateint) throws AnyException {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		cal.setTimeInMillis(dateint * 1000 * DateTimeUtil.SECONDS_PER_DAY);
 		return cal;
@@ -43,7 +43,7 @@ public class DateTimeLib extends ExecutableBase {
 	/**
 	 * Returns a Calendar that represents a Gregorian date.
 	 */
-	public static Calendar dateFromGregorian(Integer gregorianIntDate) throws AnyException {
+	public static Calendar dateFromGregorian(int gregorianIntDate) throws AnyException {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		cal.set(Calendar.YEAR, gregorianIntDate / 10000);
 		cal.set(Calendar.MONTH, ((gregorianIntDate % 10000) / 100) - 1);
@@ -67,7 +67,7 @@ public class DateTimeLib extends ExecutableBase {
 	/**
 	 * Returns a Calendar that represents a Julian date.
 	 */
-	public static Calendar dateFromJulian(Integer julianIntDate) throws AnyException {
+	public static Calendar dateFromJulian(int julianIntDate) throws AnyException {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		// This is a workaround for a problem seen in Java 1.5 but not in 1.4.
 		// It forces the Calendar to recompute its internal values. If we don't do it, the Calendar won't let us set
@@ -95,7 +95,7 @@ public class DateTimeLib extends ExecutableBase {
 	/**
 	 * Returns a Calendar that reflects the month, the day of the month, and the year of a calendar date.
 	 */
-	public static Calendar mdy(Integer month, Integer day, Integer year) throws AnyException {
+	public static Calendar mdy(int month, int day, int year) throws AnyException {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month - 1);

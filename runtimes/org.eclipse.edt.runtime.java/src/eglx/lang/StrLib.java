@@ -26,7 +26,6 @@ import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
 import org.eclipse.edt.javart.util.NumberFormatter;
 import egl.lang.InvalidIndexException;
-import egl.lang.NullValueException;
 
 public class StrLib extends ExecutableBase {
 
@@ -57,35 +56,35 @@ public class StrLib extends ExecutableBase {
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
-	public static String format(Short number, String format) {
+	public static String format(short number, String format) {
 		return NumberFormatter.fmtNum(new BigDecimal(number), format, staticRu.getLocalizedText());
 	}
 
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
-	public static String format(Integer number, String format) {
+	public static String format(int number, String format) {
 		return NumberFormatter.fmtNum(new BigDecimal(number), format, staticRu.getLocalizedText());
 	}
 
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
-	public static String format(Long number, String format) {
+	public static String format(long number, String format) {
 		return NumberFormatter.fmtNum(new BigDecimal(number), format, staticRu.getLocalizedText());
 	}
 
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
-	public static String format(Float number, String format) {
+	public static String format(float number, String format) {
 		return NumberFormatter.fmtNum(new BigDecimal(number), format, staticRu.getLocalizedText());
 	}
 
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
-	public static String format(Double number, String format) {
+	public static String format(double number, String format) {
 		return NumberFormatter.fmtNum(new BigDecimal(number), format, staticRu.getLocalizedText());
 	}
 
