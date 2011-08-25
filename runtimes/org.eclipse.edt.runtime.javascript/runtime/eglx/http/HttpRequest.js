@@ -88,7 +88,7 @@ egl.defineClass('eglx.http', "HttpRequest", "egl.jsrt", "Record", {
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("headers", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("headers");
-				this.fieldInfos[5] =new egl.eglx.services.FieldInfo("headers", "headers", "y;", egl.egl.lang.EDictionary, annotations);
+				this.fieldInfos[5] =new egl.eglx.services.FieldInfo("headers", "headers", "y;", egl.eglx.lang.EDictionary, annotations);
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("body", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("body");
