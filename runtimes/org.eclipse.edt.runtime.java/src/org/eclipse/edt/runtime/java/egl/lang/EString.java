@@ -13,7 +13,6 @@ package org.eclipse.edt.runtime.java.egl.lang;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.regex.PatternSyntaxException;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
@@ -112,37 +111,87 @@ public class EString extends AnyBoxedObject<String> {
 		return value;
 	}
 
-	public static String asString(GregorianCalendar value, Integer... length) {
-		if (value == null)
-			return null;
-		return asString((Calendar) value, length);
-	}
-
+	/**
+	 * TODO This method gets called for two reasons: converting date to string
+	 * and converting timestamp to string.  But it can't do both properly, based
+	 * on the specs below.  The Calendar object from a date will look exactly
+	 * like the Calendar object from a timestamp("yyyyMMdd").  Right now this
+	 * method does the conversion from timestamp.
+	 * 
+	 * 
+	 * 
+	 * {@Operation widen} Converts a date to a string in the format "MM/dd/yyyy".
+	 * Leading zeros are included in the string, so April 1st in the year 9 A.D. is
+	 * converted to "04/01/0009".
+	 * 
+	 * {@Operation widen} Converts a timestamp to a string.  The 26-character result
+	 * will include all possible fields of a timestamp, from years down to fractions
+	 * of seconds, in the format "yyyy-MM-dd HH:mm:ss.SSSSSS".  Leading zeros are 
+	 * included in each field of the string when necessary, e.g. January is 
+	 * represented as "01" not "1". 
+	 */
 	public static String asString(Calendar cal, Integer... length) {
-		if (cal == null)
-			return null;
 		// Get the format pattern to use.
-		// String format = program._runUnit().getDefaultTimestampFormat();
-		// if ( format.length() == 0 )
-		// {
-		// // Use the one made specially for this item.
-		// format = DefaultFormatPattern;
-		// }
 		String format = "";
+		String separator = null;
 		if (cal.isSet(Calendar.YEAR))
+		{
 			format += "yyyy";
+			separator = "-";
+		}
 		if (cal.isSet(Calendar.MONTH))
+		{
+			if ( separator != null )
+			{
+				format += separator;
+			}
 			format += "MM";
+			separator = "-";
+		}
 		if (cal.isSet(Calendar.DATE))
+		{
+			if ( separator != null )
+			{
+				format += separator;
+			}
 			format += "dd";
+			separator = " ";
+		}
 		if (cal.isSet(Calendar.HOUR_OF_DAY))
+		{
+			if ( separator != null )
+			{
+				format += separator;
+			}
 			format += "HH";
+			separator = ":";
+		}
 		if (cal.isSet(Calendar.MINUTE))
+		{
+			if ( separator != null )
+			{
+				format += separator;
+			}
 			format += "mm";
+			separator = ":";
+		}
 		if (cal.isSet(Calendar.SECOND))
+		{
+			if ( separator != null )
+			{
+				format += separator;
+			}
 			format += "ss";
+			separator = ".";
+		}
 		if (cal.isSet(Calendar.MILLISECOND))
+		{
+			if ( separator != null )
+			{
+				format += separator;
+			}
 			format += "SSSSSS";
+		}
 		// Get a formatter for the value, set it up, and run it.
 		boolean reset = false;
 		synchronized (DateTimeUtil.LOCK) {
