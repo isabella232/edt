@@ -29,12 +29,7 @@ egl.defineClass('eglx.http', "HttpREST", "egl.jsrt", "Record", {
 		"eze$$setInitial": function() {
 			this.eze$$setEmpty();
 			this.request.ezeCopy(new egl.eglx.http.HttpRequest());
-			this.request.method = egl.eglx.http.HttpMethod.POST;
-			this.request.encoding = egl.eglx.services.Encoding.XML;
-			this.request.charset = "UTF-8";
 			this.response.ezeCopy(new egl.eglx.http.HttpResponse());
-			this.response.encoding = egl.eglx.services.Encoding.USE_CONTENTTYPE;
-			this.invocationType = egl.eglx.rest.RestType.TrueRest;
 		}
 		,
 		"eze$$clone": function() {
@@ -42,10 +37,10 @@ egl.defineClass('eglx.http', "HttpREST", "egl.jsrt", "Record", {
 			var ezert$$2 = new egl.eglx.http.HttpREST();
 			ezert$$2.eze$$isNull = this.eze$$isNull;
 			ezert$$2.eze$$isNullable = this.eze$$isNullable;
-			ezert$$2.request = ezert$$1.request;
-			ezert$$2.response = ezert$$1.response;
+			ezert$$2.request = ezert$$1.request.eze$$clone();
+			ezert$$2.response = ezert$$1.response.eze$$clone();
 			ezert$$2.invocationType = ezert$$1.invocationType;
-			ezert$$2.setNull(ezert$$1eze$$isNull);
+			ezert$$2.setNull(ezert$$1.eze$$isNull);
 			return ezert$$2;
 		}
 		,

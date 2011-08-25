@@ -36,6 +36,7 @@ egl.defineClass( 'eglx.services', 'ServiceBinder', {
 	    this.bindFiles.push(bindFile);
 	},
 	"getBinding" : function(/*String*/ eglddName, /*String*/ bindingKey) {
+		this.addBindFile(eglddName);
 	    var bindFile = null;
 	    for (var n = 0; n < this.bindFiles.length && bindFile == null; n++) {
 	        if (this.bindFiles[n].name == eglddName) {

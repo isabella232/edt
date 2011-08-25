@@ -23,10 +23,18 @@ egl.eglx.services.ServiceLib["throwExceptionIfNecessary"] = function(/*Object*/o
 		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2106E", [ fieldName ]);
 	}
 };
-egl.eglx.services.ServiceLib["bindService"] = function(/*String*/eglddName, /*String*/bindingKeyName) {
-	var binding = egl.egl.jsrt.$ServiceBinder.getBinding(eglddName,
-			bindingKeyName);
-	return binding.createServiceWrapper();
+egl.eglx.services.ServiceLib["bindService"] = function(/*String*/bindingKeyName, /*String*/eglddName) {
+	if(eglddName === undefined || eglddName === null){
+		eglddName = egl__defaultDeploymentDescriptor;
+	}
+	var binding = egl.eglx.services.$ServiceBinder.getBinding(eglddName.toLowerCase(), bindingKeyName);
+	var ret = undefined;
+	if(binding instanceof egl.eglx.services.RestBinding){
+		ret = new egl.eglx.http.HttpREST();
+		ret.request.uri = binding.baseURI;
+		ret.invocationType = egl.eglx.rest.RestType.EglRpc;
+	}
+	return ret;
 };
 egl.eglx.services.ServiceLib["serviceExceptionCallback"] = function(/*Tegl/lang/AnyException;*/exp, http) {
 	var headerMsg = "";
@@ -34,9 +42,9 @@ egl.eglx.services.ServiceLib["serviceExceptionCallback"] = function(/*Tegl/lang/
 	try {
 		var isJSONRPC = egl.eglx.services.$ServiceRT.isJsonRPCFormat(http);
 
-		if (http.eze$$request) {
-			headerMsg = http.eze$$request.uri;
-			bodyMsg = http.eze$$request.body;
+		if (http.request) {
+			headerMsg = http.request.uri;
+			bodyMsg = http.request.body;
 			if (isJSONRPC == true) {
 				//the body is in json format
 				var d = egl.createDictionary(false, false);

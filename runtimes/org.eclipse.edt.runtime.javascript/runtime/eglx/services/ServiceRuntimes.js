@@ -88,7 +88,7 @@ egl.defineClass(
     	//the values used in the callbacks are accurate 
         var requestExp = null;
         try {
-            this.setRequestContentTypeHeaderIfNotSet(http.eze$$request);           
+            this.setRequestContentTypeHeaderIfNotSet(http.request);           
         }
         catch (e) {
     		requestExp = egl.createAnyException("CRRUI3654E", [e]);    		
@@ -113,7 +113,7 @@ egl.defineClass(
 		                    		httpSessionIdValue = null;
 		                    	}
 	                    		//try to get the current value
-	                    		var currVal = egl.statefulSessionMap[http.eze$$request.uri];
+	                    		var currVal = egl.statefulSessionMap[http.request.uri];
 	                    		if(currVal != null && currVal != undefined){
 	                    			//compare to see if it's the same as the new one
 	                    			if(sessionIdValue != currVal.sidVal){
@@ -129,7 +129,7 @@ egl.defineClass(
 	                    			sessionIdObj.sidVal = sessionIdValue;
 	                    			sessionIdObj.oldVal = sessionIdValue;
 		                    		sessionIdObj.httpSessionId = httpSessionIdValue;
-	                    			egl.statefulSessionMap[http.eze$$request.uri] = sessionIdObj;
+	                    			egl.statefulSessionMap[http.request.uri] = sessionIdObj;
 	                    		}
 	                    	}
 	                    	
@@ -138,7 +138,7 @@ egl.defineClass(
 	                    		egl.valueByKey(serviceWrapper.getRESTRequestHeader(), egl.CUSTOM_RESPONSE_HEADER_EGLSOAP, customSOAPResponseHeaders,"S;");
 	                    	}
 */	                    	
-	                    	var encoding = http.eze$$response.encoding;
+	                    	var encoding = http.response.encoding;
 	                    	if(encoding === null){
 	                    		//FIXME use encoding based on the content type
 	                    	}
@@ -203,7 +203,7 @@ egl.defineClass(
 		                		//error parsing JSONRPCError
 		                		anyExp = egl.eglx.services.createServiceInvocationException(
 		                				"CRRUI3653E", 
-		                				[eze$$request.uri], 
+		                				[request.uri], 
 		                				egl.eglx.services.$ServiceRT.getServiceKind(http),
 		                				response.status,
 		                				response.statusMessage,
@@ -312,13 +312,18 @@ egl.defineClass(
                                    /*boolean*/ asynchronous) {
     	if(http instanceof egl.eglx.http.HttpREST){
     		if(http.invocationType === egl.eglx.rest.RestType.EglDedicated){
-                egl.valueByKey( http.eze$$request.headers, egl.HEADER_EGLDEDICATED, "true");                    
+                egl.valueByKey( http.request.headers, egl.HEADER_EGLDEDICATED, "true");                    
     		}
     	}
     	else{
-            egl.valueByKey( http.eze$$request.headers, egl.egl.HEADER_EGLSOAP, "true");                    
+            egl.valueByKey( http.request.headers, egl.egl.HEADER_EGLSOAP, "true");                    
     	}
-        var requestString = egl.eglx.json.JsonLib.convertToJSON(http.eze$$request);
+    	var request = new egl.eglx.lang.EDictionary();
+    	request.uri = http.request.uri;
+    	request.headers = http.request.headers;
+    	request.body = http.request.body;
+    	request.method = http.request.method;
+        var requestString = egl.eglx.json.JsonLib.convertToJSON(request);
 //        egl.eglx.services.$ServiceLib.callBackResponse.originalRequest = requestString;
         var xhr = egl.newXMLHttpRequest();
         var beginTime = new Date().getTime();
@@ -329,18 +334,23 @@ egl.defineClass(
             if (xhr.readyState == 4) {
             	var eglExp = null;
                 try {                    
-                	egl.enter("Response for " + http.eze$$request.uri, { eze$$typename: "RUI Runtime" });
+                	egl.enter("Response for " + http.request.uri, { eze$$typename: "RUI Runtime" });
                     if (xhr.status >= 200 && xhr.status <= 299){
                         try {
-                        	egl.enter("Parse JSON ("+xhr.responseText.length+" bytes) from "+ http.eze$$request.uri, { eze$$typename: "RUI Runtime" });
-                        	egl.eglx.json.JsonLib.convertFromJSON(xhr.responseText, http.response);
+                        	egl.enter("Parse JSON ("+xhr.responseText.length+" bytes) from "+ http.request.uri, { eze$$typename: "RUI Runtime" });
+                        	var response = new egl.eglx.http.HttpResponse();
+                        	egl.eglx.json.JsonLib.convertFromJSON(xhr.responseText, response);
+                        	http.response.body = response.body;
+                        	http.response.status = response.status;
+                        	http.response.statusMessage = response.statusMessage;
+                        	http.response.headers = response.headers;
                         }
                         finally {
                         	egl.leave();
                         }
                         if (http.response != null) {
                             try {
-                            	egl.enter("Handling callback for " + http.eze$$request.uri, { eze$$typename: "RUI Runtime" });
+                            	egl.enter("Handling callback for " + http.request.uri, { eze$$typename: "RUI Runtime" });
                             	egl.eglx.services.$ServiceRT.runCallback(callback, http, beginTime);
                             }
                             finally {
@@ -382,7 +392,7 @@ egl.defineClass(
 	                		else{	
 	                			eglExp = egl.eglx.services.createServiceInvocationException(
 		                				"CRRUI3658E", 
-		                				[proxyURL, http.eze$$request.uri],
+		                				[proxyURL, http.request.uri],
 		                				egl.eglx.services.$ServiceRT.getServiceKind(http),
 		                				http.response.status,
 		                				http.response.statusMessage,
@@ -394,7 +404,7 @@ egl.defineClass(
                 catch(e) {
                 	eglExp = egl.eglx.services.createServiceInvocationException(
                 			"CRRUI3660E",
-                			[http.eze$$request.uri, e.message],
+                			[http.request.uri, e.message],
             				egl.eglx.services.$ServiceRT.getServiceKind(http),
                 			xhr.status,
                 			xhr.statusMessage,
@@ -410,13 +420,13 @@ egl.defineClass(
             }
         };
         var method = "GET";
-    	if(http.eze$$request.method === egl.eglx.http.HttpMethod.POST){
+    	if(http.request.method === egl.eglx.http.HttpMethod.POST){
     		method = "POST";
     	}
-    	else if(http.eze$$request.method === egl.eglx.http.HttpMethod._DELETE){
+    	else if(http.request.method === egl.eglx.http.HttpMethod._DELETE){
     		method = "DELETE";
     	}
-    	else if(http.eze$$request.method === egl.eglx.http.HttpMethod.PUT){
+    	else if(http.request.method === egl.eglx.http.HttpMethod.PUT){
     		method = "PUT";
     	}
         if(egl.eze$$SetProxyAuth == true){
@@ -459,7 +469,7 @@ egl.defineClass(
     },
     "encodeResquestBody": function(httpResquest, resourceParamIn){
         if(httpResquest.body === null){
-	    	if(httpResquest.method == "GET" || httpResquest.method == "DELETE"){
+	    	if(httpResquest.method === egl.eglx.http.HttpMethod._Get || httpResquest.method === egl.eglx.http.HttpMethod._DELETE){
 	        	httpResquest.body = egl.toString(resourceParamIn);
 	        }
 	        else{

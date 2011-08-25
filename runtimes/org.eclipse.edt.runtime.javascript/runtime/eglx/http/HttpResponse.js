@@ -50,7 +50,7 @@ egl.defineClass('eglx.http', "HttpResponse", "egl.jsrt", "Record", {
 			ezert$$2.contentType = ezert$$1.contentType;
 			ezert$$2.headers = ezert$$1.headers;
 			ezert$$2.body = ezert$$1.body;
-			ezert$$2.setNull(ezert$$1eze$$isNull);
+			ezert$$2.setNull(ezert$$1.eze$$isNull);
 			return ezert$$2;
 		}
 		,
