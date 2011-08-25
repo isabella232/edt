@@ -14,7 +14,6 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
@@ -135,16 +134,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return EString.asString(object);
 	}
 
-	public static Calendar asTimestamp(GregorianCalendar timestamp) throws AnyException {
-		return asTimestamp((Calendar) timestamp);
-	}
-
 	public static Calendar asTimestamp(Calendar timestamp) throws AnyException {
 		return asTimestamp(timestamp, DefaultPattern);
-	}
-
-	public static Calendar asTimestamp(GregorianCalendar timestamp, String timespanMask) throws AnyException {
-		return asTimestamp((Calendar) timestamp, timespanMask);
 	}
 
 	public static Calendar asTimestamp(Calendar timestamp, String timespanMask) throws AnyException {
@@ -182,19 +173,11 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return convert(timestamp, startCode, endCode);
 	}
 
-	public static Calendar asTimestamp(GregorianCalendar date, Integer... args) {
-		return asTimestamp((Calendar) date, args);
-	}
-
 	public static Calendar asTimestamp(Calendar date, Integer... args) {
 		if (args == null)
 			return asTimestamp((Calendar) date, YEAR_CODE, SECOND_CODE);
 		else
 			return asTimestamp((Calendar) date, args[0], args[1]);
-	}
-
-	public static Calendar asTimestamp(GregorianCalendar date, int startCode, int endCode) {
-		return asTimestamp((Calendar) date, startCode, endCode);
 	}
 
 	public static Calendar asTimestamp(Calendar date, int startCode, int endCode) {
