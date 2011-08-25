@@ -119,9 +119,6 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
             case Type.NULLABLETYPE:
             	NullableType nullableType = (NullableType) type;
             	ITypeBinding baseType = bindType(nullableType.getBaseType());
-            	if(baseType.isReference()) {
-            		throw new ResolutionException(type, IProblemRequestor.NULLABLE_TYPE_BASE_MUST_BE_VALUE_TYPE, new String[] {type.getCanonicalName()});
-            	}
             	return baseType.getNullableInstance();            	
 
             default: throw new RuntimeException("Shouldn't come into here");            
