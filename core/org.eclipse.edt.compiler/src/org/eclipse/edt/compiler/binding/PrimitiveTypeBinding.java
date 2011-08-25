@@ -414,7 +414,7 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 	}
 	
 	public boolean isReference() {
-		return REFERENCE_PRIMITIVES.contains(getPrimitive());
+		return REFERENCE_PRIMITIVES.contains(getPrimitive()) || (getPrimitive() == Primitive.DECIMAL && getLength() == 0);
 	}
 	
 	public IDataBinding findData(String simpleName) {
