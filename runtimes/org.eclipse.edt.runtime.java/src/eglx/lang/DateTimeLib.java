@@ -34,7 +34,7 @@ public class DateTimeLib extends ExecutableBase {
 	/**
 	 * Returns a Calendar that reflects an int.
 	 */
-	public static Calendar dateFromInt(int dateint) throws AnyException {
+	public static Calendar dateFromInt(int dateint) {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		cal.setTimeInMillis(dateint * 1000 * DateTimeUtil.SECONDS_PER_DAY);
 		return cal;
