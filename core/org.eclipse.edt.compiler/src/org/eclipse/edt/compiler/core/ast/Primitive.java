@@ -270,6 +270,7 @@ public class Primitive implements Serializable {
         if ((prim == Primitive.CHAR ||
         	 prim == Primitive.DBCHAR ||
         	 prim == Primitive.HEX ||
+			 prim == Primitive.DECIMAL ||
 			 prim == Primitive.UNICODE ||
 			 prim == Primitive.MBCHAR )
                 && length == 0) {
