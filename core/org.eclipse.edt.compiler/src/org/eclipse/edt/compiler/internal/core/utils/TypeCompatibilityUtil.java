@@ -791,6 +791,19 @@ public class TypeCompatibilityUtil {
 			return ITypeBinding.PRIMITIVE_TYPE_BINDING == targetType.getKind() &&
 			       ((PrimitiveTypeBinding) targetType).getPrimitive() == ((PrimitiveTypeBinding) sourceType).getPrimitive();
 		}
+		
+		if (ITypeBinding.PRIMITIVE_TYPE_BINDING == sourceType.getKind() && ITypeBinding.PRIMITIVE_TYPE_BINDING == targetType.getKind()) {
+			Primitive srcPrim = ((PrimitiveTypeBinding)sourceType).getPrimitive();
+			Primitive tgtPrim = ((PrimitiveTypeBinding)targetType).getPrimitive();
+			
+			if (srcPrim == Primitive.DECIMAL && tgtPrim == Primitive.NUMBER) {
+				return true;
+			}
+			if (srcPrim == Primitive.NUMBER && tgtPrim == Primitive.DECIMAL) {
+				return true;
+			}
+		}
+		
 		if(compilerOptions.isVAGCompatible()) {
 			//even-length decimal source items can match decimal target items
 			//whose length is one greater
