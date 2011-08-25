@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.gen.eunit.CommonUtilities;
 import org.eclipse.edt.gen.eunit.EGL2Base;
-import org.eclipse.edt.gen.eunit.IEckGenerationNotifier;
+import org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier;
 import org.eclipse.edt.gen.eunit.TestDriverXMLFile;
 import org.eclipse.edt.ide.core.IIDECompiler;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPath;
@@ -154,7 +154,7 @@ public abstract class GenTestDriverAction implements	IObjectActionDelegate{
 			protected void execute(IProgressMonitor monitor) throws CoreException,
 					InvocationTargetException, InterruptedException {
 				try{
-					IEckGenerationNotifier eckGenerationNotifier = new EckGenerationNotifier(monitor);
+					IEUnitGenerationNotifier eckGenerationNotifier = new EUnitGenerationNotifier(monitor);
 					
 					IPath irRootPath = baseEGLProject.getOutputLocation(); 
 					
@@ -322,7 +322,7 @@ public abstract class GenTestDriverAction implements	IObjectActionDelegate{
 		}
 	}	
 	
-	protected abstract void invokeDriverGenerator(String[] args, IIDECompiler compiler, IEckGenerationNotifier eckGenerationNotifier);
+	protected abstract void invokeDriverGenerator(String[] args, IIDECompiler compiler, IEUnitGenerationNotifier eckGenerationNotifier);
 	
 	/**
 	 * add dependedProjName as a depended project for projname, 

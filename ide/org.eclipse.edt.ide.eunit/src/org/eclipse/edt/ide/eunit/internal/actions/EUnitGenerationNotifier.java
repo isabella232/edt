@@ -1,12 +1,12 @@
 package org.eclipse.edt.ide.eunit.internal.actions;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.edt.gen.eunit.IEckGenerationNotifier;
+import org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier;
 /**
  * The adapter for updating the test driver progress with Eclipse progress view. 
  *
  */
-public class EckGenerationNotifier implements IEckGenerationNotifier {
+public class EUnitGenerationNotifier implements IEUnitGenerationNotifier {
 
 	private IProgressMonitor monitor;
 	protected int workDone;
@@ -17,7 +17,7 @@ public class EckGenerationNotifier implements IEckGenerationNotifier {
 	/**
 	 * @param monitor
 	 */
-	public EckGenerationNotifier(IProgressMonitor monitor) {
+	public EUnitGenerationNotifier(IProgressMonitor monitor) {
 		this(monitor, 1000000);
 	}
 	
@@ -25,14 +25,14 @@ public class EckGenerationNotifier implements IEckGenerationNotifier {
 	 * @param monitor
 	 * @param totalWork
 	 */
-	public EckGenerationNotifier(IProgressMonitor monitor, int totalWork) {
+	public EUnitGenerationNotifier(IProgressMonitor monitor, int totalWork) {
 		this.monitor = monitor;
 		this.workDone = 0;
 		this.totalWork = totalWork;
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#isAborted()
+	 * @see org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier#isAborted()
 	 */
 	public boolean isAborted() {
 		if(this.monitor != null) {
@@ -43,7 +43,7 @@ public class EckGenerationNotifier implements IEckGenerationNotifier {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#setAborted(boolean)
+	 * @see org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier#setAborted(boolean)
 	 */
 	public void setAborted(boolean aborted) {
 		if(this.monitor != null)
@@ -51,7 +51,7 @@ public class EckGenerationNotifier implements IEckGenerationNotifier {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#begin()
+	 * @see org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier#begin()
 	 */
 	public void begin() {
 		if (monitor != null)
@@ -60,7 +60,7 @@ public class EckGenerationNotifier implements IEckGenerationNotifier {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#begin(int)
+	 * @see org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier#begin(int)
 	 */
 	public void begin(int totalWork) {
 		this.totalWork = totalWork;
@@ -68,7 +68,7 @@ public class EckGenerationNotifier implements IEckGenerationNotifier {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#done()
+	 * @see org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier#done()
 	 */
 	public void done() {
 		if (monitor != null)
@@ -76,14 +76,14 @@ public class EckGenerationNotifier implements IEckGenerationNotifier {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#setTaskName(java.lang.String)
+	 * @see org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier#setTaskName(java.lang.String)
 	 */
 	public void setTaskName(String message) {
 		this.monitor.setTaskName(message);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.edt.gen.eunit.IEckGenerationNotifier#updateProgress(int)
+	 * @see org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier#updateProgress(int)
 	 */
 	public void updateProgress(int workCount) {
 		monitor.worked(workCount);

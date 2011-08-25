@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.edt.gen.eunit.EGL2JavaDriver;
-import org.eclipse.edt.gen.eunit.IEckGenerationNotifier;
+import org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier;
 import org.eclipse.edt.ide.core.IIDECompiler;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLProject;
@@ -63,7 +63,7 @@ public class GenTestDriverActionJava extends GenTestDriverAction {
 	}
 
 	@Override
-	protected void invokeDriverGenerator(String[] args, IIDECompiler compiler, IEckGenerationNotifier eckGenerationNotifier) {
+	protected void invokeDriverGenerator(String[] args, IIDECompiler compiler, IEUnitGenerationNotifier eckGenerationNotifier) {
 		EGL2JavaDriver.start(args, compiler, eckGenerationNotifier);  			
 	}
 
