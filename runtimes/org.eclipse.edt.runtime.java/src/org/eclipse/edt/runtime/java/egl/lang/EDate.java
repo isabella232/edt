@@ -193,7 +193,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the difference between 2 dates
 	 */
-	public static Integer daysDifferent(Calendar aDate, Calendar bDate) throws AnyException {
+	public static int daysDifferent(Calendar aDate, Calendar bDate) throws AnyException {
 		if (aDate == null || bDate == null)
 			throw new NullValueException();
 		return (int) ((aDate.getTimeInMillis() - bDate.getTimeInMillis()) / (1000 * DateTimeUtil.SECONDS_PER_DAY));

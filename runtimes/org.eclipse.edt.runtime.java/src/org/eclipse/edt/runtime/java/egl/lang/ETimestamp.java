@@ -584,7 +584,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the day of a timestamp
 	 */
-	public static Integer dayOf(Calendar aTimestamp) throws AnyException {
+	public static int dayOf(Calendar aTimestamp) throws AnyException {
 		if (aTimestamp == null)
 			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.DATE))
@@ -595,7 +595,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the month of a timestamp
 	 */
-	public static Integer monthOf(Calendar aTimestamp) throws AnyException {
+	public static int monthOf(Calendar aTimestamp) throws AnyException {
 		if (aTimestamp == null)
 			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.MONTH))
@@ -606,7 +606,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the year of a timestamp
 	 */
-	public static Integer yearOf(Calendar aTimestamp) throws AnyException {
+	public static int yearOf(Calendar aTimestamp) throws AnyException {
 		if (aTimestamp == null)
 			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.YEAR))
@@ -617,7 +617,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the weekday of a timestamp
 	 */
-	public static Integer weekdayOf(Calendar aTimestamp) throws AnyException {
+	public static int weekdayOf(Calendar aTimestamp) throws AnyException {
 		if (aTimestamp == null)
 			throw new NullValueException();
 		if (!aTimestamp.isSet(DAY_CODE))

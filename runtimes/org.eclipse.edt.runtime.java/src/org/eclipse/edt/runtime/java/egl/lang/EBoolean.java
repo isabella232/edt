@@ -41,7 +41,7 @@ public class EBoolean extends AnyBoxedObject<Boolean> {
 		return EString.asString(object);
 	}
 
-	public static Boolean asBoolean(Number number) throws AnyException {
+	public static boolean asBoolean(Number number) throws AnyException {
 		if (number == null)
 			throw new NullValueException();
 		return number.floatValue() != 0;
