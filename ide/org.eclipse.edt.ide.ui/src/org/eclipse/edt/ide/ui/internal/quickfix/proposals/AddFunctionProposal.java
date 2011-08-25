@@ -154,9 +154,9 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 						errCallbackExpr = errCallbackTgt.getExpression();
 					}
 					
-					if(callbackExpr != null && !callbackExpr.resolveDataBinding().isValidBinding() && errorOffset == callbackExpr.getOffset()){
+					if(callbackExpr != null && !callbackExpr.resolveDataBinding().isValidBinding() && errorOffset >= callbackExpr.getOffset() && errorOffset <= callbackExpr.getOffset() + callbackExpr.getLength()){
 						 createCallbackFunction( serviceFunctionExpr, callbackExpr, currImports, currPkg[0], functionTextBuffer, needImports, newLineDelimiter, functionName);	
-					}else if(errCallbackExpr != null && !errCallbackExpr.resolveDataBinding().isValidBinding() && errorOffset == errCallbackExpr.getOffset()){
+					}else if(errCallbackExpr != null && !errCallbackExpr.resolveDataBinding().isValidBinding() && errorOffset >= errCallbackExpr.getOffset() && errorOffset <= errCallbackExpr.getOffset() + errCallbackExpr.getLength()){
 						createErrCallbackFunction(serviceFunctionExpr, errCallbackExpr, newLineDelimiter, functionTextBuffer, functionName);
 					}
 				}
