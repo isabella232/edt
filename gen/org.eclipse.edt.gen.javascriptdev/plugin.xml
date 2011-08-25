@@ -19,8 +19,8 @@
 			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
 			version="0.7.0"
 			provider="Eclipse.org"
-			parentGeneratorId="org.eclipse.edt.ide.gen.JavaScriptGenProvider"
 			description="%GeneratorDescription"
+			language="JavaScript"
 		/>
    	</extension>
 	<extension point="org.eclipse.edt.ide.ui.edtGeneratorTabs">
