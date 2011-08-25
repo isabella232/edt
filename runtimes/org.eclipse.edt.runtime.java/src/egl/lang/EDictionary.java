@@ -13,10 +13,12 @@ package egl.lang;
 
 import java.util.Map;
 
+import org.eclipse.edt.runtime.java.egl.lang.EglList;
+
 /**
  * 
  */
-public interface EDictionary extends EglAny, Map<java.lang.String, Object> {
+public interface EDictionary extends EglAny, Map<String, Object> {
 	/**
 	 * Return whether the dictionary key comparison is case sensitive
 	 * @return True if so
@@ -70,5 +72,29 @@ public interface EDictionary extends EglAny, Map<java.lang.String, Object> {
 	 * @param key
 	 * @return The AnyRef entry, or a DictionaryEntryMaker proxy object
 	 */
-	public Object lookup(java.lang.String key);
+	public Object lookup(String key);
+
+	/**
+	 * Tells if there's a value stored with the given key.
+	 *
+	 * @param key  the key.
+	 * @return true if the key is in this dictionary.
+	 */
+	public boolean containsKey(String key);
+	
+	/**
+	 * Returns an array containing all of the keys, in the order specified by
+	 * the ordering annotation.
+	 *
+	 * @return the keys.
+	 */
+	public EglList<String> getKeys();
+	
+	/**
+	 * Returns an array containing all of the values, in the order specified by
+	 * the ordering annotation.
+	 *
+	 * @return the values.
+	 */
+	public EglList<Object> getValues();
 }
