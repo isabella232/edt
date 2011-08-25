@@ -152,7 +152,7 @@ import eglx.services.ServiceUtilities;
 			if( response == null ){
 				response = new HttpResponse();
 			}
-			response.setBody( JsonUtilities.createJsonAnyException(getRunUnit(), sie) );
+			response.setBody( JsonUtilities.createJsonAnyException(sie) );
 			response.setStatus( HttpUtilities.HTTP_STATUS_FAILED );
 			response.setStatusMessage( "FAILED" );
 		}

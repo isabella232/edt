@@ -16,9 +16,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
+import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.json.ArrayNode;
 import org.eclipse.edt.javart.json.BooleanNode;
@@ -116,6 +120,8 @@ public class JsonLib {
 	    	return processObject(object);
 	    if(object instanceof ExecutableBase)
 	    	return processObject(object);
+	    if(object instanceof AnyException)
+	    	return processObject(object);
 		throw new AnyException(Message.SOA_E_JSON_TYPE_EXCEPTION,
 				JavartUtil.errorMessage( runtUnit(), Message.SOA_E_JSON_TYPE_EXCEPTION, 
 						new Object[] { object.getClass().getName() } ));
@@ -167,7 +173,7 @@ public class JsonLib {
 		//	else if method is public
 		ObjectNode objectNode = new ObjectNode();
 		String name;
-		for(Field field : object.getClass().getDeclaredFields()){
+		for(Field field : getFields(object.getClass())){
 			name = field.getName();
 			try {
 				Annotation annot = field.getAnnotation(Json.class);
@@ -178,13 +184,13 @@ public class JsonLib {
 				getterName.append(field.getName().substring(1));
 				Method method = null;
 				try{
-					method = object.getClass().getDeclaredMethod(new StringBuilder("get").append(getterName).toString(), (Class<?>[])null);
+					method = object.getClass().getMethod(new StringBuilder("get").append(getterName).toString(), (Class<?>[])null);
 				}
 				catch(NoSuchMethodException nsme){
 				}
 				if(method == null){
 					try{
-						method = object.getClass().getDeclaredMethod(new StringBuilder("is").append(getterName).toString(), (Class<?>[])null);
+						method = object.getClass().getMethod(new StringBuilder("is").append(getterName).toString(), (Class<?>[])null);
 					}
 					catch(NoSuchMethodException nsme){
 					}
@@ -424,7 +430,7 @@ public class JsonLib {
 		//		use the json name 
 		//	else if method is public
 		String name;
-		for(Field field : object.getClass().getDeclaredFields()){
+		for(Field field : getFields(object.getClass())){
 			name = field.getName();
 			try {
 				Json jsonAnnotation = field.getAnnotation(Json.class);
@@ -435,19 +441,19 @@ public class JsonLib {
 				setterName.append(field.getName().substring(1));
 				Method setMethod = null;
 				try{
-					setMethod = object.getClass().getDeclaredMethod(new StringBuilder("set").append(setterName).toString(), field.getType());
+					setMethod = object.getClass().getMethod(new StringBuilder("set").append(setterName).toString(), field.getType());
 				}
 				catch(NoSuchMethodException nsme){
 				}
 				Method getMethod = null;
 				try{
-					getMethod = object.getClass().getDeclaredMethod(new StringBuilder("get").append(setterName).toString(), (Class<?>[])null);
+					getMethod = object.getClass().getMethod(new StringBuilder("get").append(setterName).toString(), (Class<?>[])null);
 				}
 				catch(NoSuchMethodException nsme){
 				}
 				if(getMethod == null){
 					try{
-						getMethod = object.getClass().getDeclaredMethod(new StringBuilder("is").append(setterName).toString(), (Class<?>[])null);
+						getMethod = object.getClass().getMethod(new StringBuilder("is").append(setterName).toString(), (Class<?>[])null);
 					}
 					catch(NoSuchMethodException nsme){
 					}
@@ -465,7 +471,7 @@ public class JsonLib {
 				}
 				if(jsonAnnotation != null && (getMethod != null && Modifier.isPublic(getMethod.getModifiers()) ||
 						Modifier.isPublic(field.getModifiers()))){
-					Object newEglValue = convertToEgl(jsonAnnotation.getClass(), jsonAnnotation.asOptions(), existingFieldObject, JsonUtilities.getValueNode(objectNode, name));
+					Object newEglValue = convertToEgl(jsonAnnotation.clazz(), jsonAnnotation.asOptions(), existingFieldObject, JsonUtilities.getValueNode(objectNode, name));
 					if(setMethod != null && Modifier.isPublic(setMethod.getModifiers())){
 						setMethod.invoke(object, newEglValue);
 					}
@@ -483,4 +489,13 @@ public class JsonLib {
 		}
 	    return object;
 	}
+    
+    private static List<Field> getFields(Class<?> clazz){
+    	List<Field> fields = new ArrayList<Field>();
+    	do{
+    		fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+    		clazz = clazz.getSuperclass();
+    	}while(egl.lang.EglAny.class.isAssignableFrom(clazz) || Executable.class.isAssignableFrom(clazz));
+    	return fields;
+    }
 }

@@ -16,7 +16,6 @@ import org.eclipse.edt.javart.messages.Message;
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
 import eglx.http.HttpUtilities;
-import eglx.json.JsonLib;
 import eglx.services.ServiceKind;
 import eglx.services.ServiceUtilities;
 
@@ -35,7 +34,7 @@ public class HttpServiceInvoker extends EglHttpConnection {
 		{
 			innerResponse = new HttpResponse();
 			innerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
-			innerResponse.setBody(JsonLib.convertToJSON(ServiceUtilities.buildServiceInvocationException( getRunUnit(), Message.SOA_E_WS_REST_NO_RESPONSE, new String[]{innerRequest.getUri()}, null, getServiceKind(innerRequest) )));
+			innerResponse.setBody(eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException( getRunUnit(), Message.SOA_E_WS_REST_NO_RESPONSE, new String[]{innerRequest.getUri()}, null, getServiceKind(innerRequest) )));
 		}
 		return innerResponse;
 	}

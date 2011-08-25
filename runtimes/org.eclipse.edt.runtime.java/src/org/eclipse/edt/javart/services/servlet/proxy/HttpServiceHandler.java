@@ -35,7 +35,6 @@ import egl.lang.EDictionary;
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
 import eglx.http.HttpUtilities;
-import eglx.json.JsonLib;
 import eglx.json.JsonUtilities;
 import eglx.services.ServiceKind;
 import eglx.services.ServiceUtilities;
@@ -290,7 +289,7 @@ public class HttpServiceHandler
 				}
 				if ( !bodyIsSet )
 				{
-			    	response.setBody(JsonLib.convertToJSON(ServiceUtilities.buildServiceInvocationException(runUnit,
+			    	response.setBody(eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException(runUnit,
 							Message.SOA_E_WS_PROXY_COMMUNICATION,
 							new String[] { request.getUri() }, ioe,
 							ServiceKind.REST )));

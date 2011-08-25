@@ -32,31 +32,33 @@ class ProxyUtilities
 	static boolean isEGLDedicatedCall( HttpRequest innerRequest )	
 	{
 		EDictionary headers = innerRequest.getHeaders();
-		return headers != null && headers.containsKey( EGL_DEDICATED_CALL );
+		return headers != null && headers.containsKey( EGL_DEDICATED_CALL.toLowerCase() );//FIXME gets to the wrong method
 	}
 	
     static String convert( Map<?, ?> map )
     {
     	StringBuilder buffer = new StringBuilder();
-    	Map.Entry<?, ?> entry;
-    	for( Iterator<?> itr = map.entrySet().iterator(); itr.hasNext(); buffer.append( ' ' ) )
-    	{
-    		entry = (Map.Entry<?, ?>)itr.next();
-    		if( entry.getKey() != null )
-    		{
-    			buffer.append( entry.getKey().toString() );
-    			buffer.append( ':' );
-    		}
-    		if( entry.getValue() instanceof Map<?, ?> )
-    		{
-    			buffer.append( '(' );
-    			buffer.append( convert( (Map<?, ?>)entry.getValue() ) );
-    			buffer.append( ')' );
-    		}
-    		else if(  entry.getValue() != null )
-    		{
-       			buffer.append( entry.getValue().toString() );
-    		}
+    	if(map != null){
+	    	Map.Entry<?, ?> entry;
+	    	for( Iterator<?> itr = map.entrySet().iterator(); itr.hasNext(); buffer.append( ' ' ) )
+	    	{
+	    		entry = (Map.Entry<?, ?>)itr.next();
+	    		if( entry.getKey() != null )
+	    		{
+	    			buffer.append( entry.getKey().toString() );
+	    			buffer.append( ':' );
+	    		}
+	    		if( entry.getValue() instanceof Map<?, ?> )
+	    		{
+	    			buffer.append( '(' );
+	    			buffer.append( convert( (Map<?, ?>)entry.getValue() ) );
+	    			buffer.append( ')' );
+	    		}
+	    		else if(  entry.getValue() != null )
+	    		{
+	       			buffer.append( entry.getValue().toString() );
+	    		}
+	    	}
     	}
     	return buffer.toString();
     }

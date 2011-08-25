@@ -13,7 +13,6 @@ package org.eclipse.edt.javart.services.servlet.proxy;
 
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.messages.Message;
-import org.eclipse.edt.javart.resources.Trace;
 import org.eclipse.edt.javart.services.servlet.JsonRpcInvoker;
 import org.eclipse.edt.javart.services.servlet.ServletUtilities;
 import org.eclipse.edt.javart.services.servlet.TracerBase;
@@ -21,7 +20,6 @@ import org.eclipse.edt.javart.services.servlet.TracerBase;
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
 import eglx.http.HttpUtilities;
-import eglx.json.JsonLib;
 import eglx.services.ServiceBindingException;
 import eglx.services.ServiceInvocationException;
 import eglx.services.ServiceKind;
@@ -30,7 +28,6 @@ import eglx.services.ServiceUtilities;
 
 public class ProxyEventHandler extends TracerBase
 {
-	private Trace tracer;
 	
 	public ProxyEventHandler(RunUnit runUnit)
 	{
@@ -40,7 +37,7 @@ public class ProxyEventHandler extends TracerBase
 	public HttpResponse runProxy(String urlString, HttpRequest ruiRequest, HttpRequest serviceRequest )
 	{
 		if(trace()){
-			tracer.put( new StringBuilder(" Request URL:")
+			tracer().put( new StringBuilder(" Request URL:")
     				.append(ruiRequest.getUri())
     				.append(" method:")
     				.append(HttpUtilities.httpMethodToString(ruiRequest.getMethod()))
@@ -60,7 +57,7 @@ public class ProxyEventHandler extends TracerBase
 			{
 				serviceKind = ServiceKind.EGL;
 				//FIXME parse the body to get the service name
-				innerResponse = new JsonRpcInvoker(getRunUnit(), "", serviceKind).invoke(serviceRequest);
+				innerResponse = new JsonRpcInvoker(getRunUnit(), serviceRequest.getUri(), serviceKind).invoke(serviceRequest);
 			}
 			else if( urlString.indexOf("___proxy") != -1 )
 			{
@@ -71,19 +68,28 @@ public class ProxyEventHandler extends TracerBase
 		}
 		catch(ServiceBindingException sbe )
 		{
-			outerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
-			outerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
-			innerResponse.setBody(JsonLib.convertToJSON(sbe));
+			if(innerResponse == null){
+				innerResponse = new HttpResponse();
+			}
+			innerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
+			innerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
+			innerResponse.setBody(eglx.json.JsonUtilities.createJsonAnyException(sbe));
 		}
 		catch(ServiceInvocationException sie)
 		{
+			if(innerResponse == null){
+				innerResponse = new HttpResponse();
+			}
 			innerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
 			innerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
-			innerResponse.setBody(JsonLib.convertToJSON(sie));
+			innerResponse.setBody(eglx.json.JsonUtilities.createJsonAnyException(sie));
 		}
 		catch(Throwable t)
 		{
-			innerResponse.setBody(JsonLib.convertToJSON(ServiceUtilities.buildServiceInvocationException( getRunUnit(), Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, serviceKind )));
+			if(innerResponse == null){
+				innerResponse = new HttpResponse();
+			}
+			innerResponse.setBody(eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException( getRunUnit(), Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, serviceKind )));
 			innerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
 			innerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
 		}
@@ -94,7 +100,7 @@ public class ProxyEventHandler extends TracerBase
 			ServletUtilities.setBody(outerResponse, innerResponse);
 		}
 		if(trace()){
-			tracer.put( new StringBuilder(" Response Status:")
+			tracer().put( new StringBuilder(" Response Status:")
 						.append(String.valueOf( outerResponse.getStatus() ))
 						.append(" status msg:")
 						.append(outerResponse.getStatusMessage())

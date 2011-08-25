@@ -14,7 +14,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.json.ArrayNode;
 import org.eclipse.edt.javart.json.NameValuePairNode;
 import org.eclipse.edt.javart.json.ObjectNode;
@@ -25,7 +24,6 @@ import org.eclipse.edt.javart.services.FunctionParameterKind;
 import org.eclipse.edt.javart.services.FunctionSignature;
 
 import egl.lang.AnyException;
-import eglx.services.ServiceKind;
 import eglx.services.ServiceUtilities;
 
 
@@ -82,7 +80,7 @@ public class JsonUtilities {
 		}
 		return json;
 	}
-	public static String createJsonAnyException(RunUnit ru, AnyException jrte )
+	public static String createJsonAnyException(AnyException jrte )
 	{
 		/*
 		{
@@ -127,10 +125,6 @@ public class JsonUtilities {
 			eglException.addPair( new NameValuePairNode( new StringNode( JSON_RPC_ERROR_NAME_ID, true ), new StringNode( record.getClass().getName(), false ) ) );
 		}
 		return wrapper.toJson();
-	}
-	static String buildJsonServiceInvocationException( RunUnit ru, String id, Object[] params, Throwable t, ServiceKind serviceKind )
-	{
-		return createJsonAnyException( ru, ServiceUtilities.buildServiceInvocationException( ru, id, params, t, serviceKind ) );
 	}
 	
 	public static Object[] getParameters(Method method, ArrayNode jsonParameters){

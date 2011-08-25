@@ -33,7 +33,6 @@ import egl.lang.AnyException;
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
 import eglx.http.HttpUtilities;
-import eglx.json.JsonLib;
 import eglx.json.JsonUtilities;
 import eglx.services.ServiceKind;
 import eglx.services.ServiceUtilities;
@@ -46,7 +45,6 @@ import eglx.services.ServiceUtilities;
  */
  public abstract class Servlet extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-	private static final String EGL_HTTP_SESSION_ID_KEY = "egl.gateway.session.id";
 	private RunUnit runUnit;
 	private Trace tracer;
 	
@@ -182,7 +180,7 @@ import eglx.services.ServiceUtilities;
 			jrte = ServiceUtilities.buildServiceInvocationException( runUnit, Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, serviceKind );
 		}
 		HttpResponse innerResponse = new HttpResponse();
-		innerResponse.setBody(JsonLib.convertToJSON(jrte));
+		innerResponse.setBody(eglx.json.JsonUtilities.createJsonAnyException(jrte));
 		innerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
 		innerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
 		ServletUtilities.setBody(outerResponse, innerResponse);

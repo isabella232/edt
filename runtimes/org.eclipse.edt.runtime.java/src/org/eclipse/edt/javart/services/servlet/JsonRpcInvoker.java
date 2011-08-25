@@ -65,12 +65,12 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 			response.setStatusMessage(failed ? HttpUtilities.HTTP_STATUS_MSG_FAILED : HttpUtilities.HTTP_STATUS_MSG_OK);
 		}
 		catch(ServiceInvocationException sie){
-			response.setBody(JsonLib.convertToJSON(sie));
+			response.setBody(eglx.json.JsonUtilities.createJsonAnyException(sie));
 			response.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
 			response.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
 		} catch (Throwable t) {
-			response.setBody(JsonLib.convertToJSON(
-				ServiceUtilities.buildServiceInvocationException(getRunUnit(), Message.SOA_E_EGL_SERVICE_INVOCATION, new String[]{request.getBody(), getServiceClassName()}, t, getServiceKind())));
+			response.setBody(eglx.json.JsonUtilities.createJsonAnyException( 
+					ServiceUtilities.buildServiceInvocationException(getRunUnit(), Message.SOA_E_EGL_SERVICE_INVOCATION, new String[]{request.getBody(), getServiceClassName()}, t, getServiceKind())));
 			response.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
 			response.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
 		}
