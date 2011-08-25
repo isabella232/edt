@@ -22,252 +22,6 @@ egl.CUSTOM_RESPONSE_HEADER_EGLSOAP = "CUSTOMEGLSOAPRESPONSEHEADER";
 egl.CUSTOM_DICT_HEADERS = "DictHeaders";
 egl.SERVICE_TIMEOUT = "EGL_TIMEOUT";
     
-egl.defineClass(
-    'eglx.services', 'ServiceRefWrapper',
-{
-    //these could be in the base class
-    //String f_type;			//type of service, "web" or "rest"
-    //String f_bindingName
-    //String f_RESTmethod;
-    //int f_requestFormat;
-    //int f_responseFormat;
-    //function f_httpCallback;
-    //function f_errCallback;    
-    //Dictionary f_RESTRequestHeader;
-    
-    //Array of Object f_callbackArgs;
-
-    "constructor" : function(/*String*/ name) {     
-    	this.f_type;     
-    	this.f_bindingName = name || "";
-        this.f_RESTmethod;
-        this.f_requestFormat;
-        this.f_responseFormat;  
-        this.f_httpCallback = function(){};
-        this.f_errCallback = function(){};
-        this.f_RESTRequestHeader = null;
-        this.f_callbackArgs = {};
-    },   
-    "getRESTRequestHeader" : function(){
-        if(!this.f_RESTRequestHeader || this.f_RESTRequestHeader == null)           
-            this.f_RESTRequestHeader = egl.createDictionary(true, false);
-        return  this.f_RESTRequestHeader;
-    },
-    "setServiceTimeoutInHeader" : function(/*int*/ serviceTimeout){
-        if( serviceTimeout > -1 )
-        	egl.valueByKey( this.getRESTRequestHeader(), egl.SERVICE_TIMEOUT, serviceTimeout, "I;");
-        else
-        	egl.removeElement(this.getRESTRequestHeader(), egl.SERVICE_TIMEOUT);
-    },
-    "invokeService" : function(/*RUIHandler*/ handler,
-					            /*func*/ httpCallback, 
-					            /*func*/ errorCallback, 
-					            /*int*/ serviceTimeout,			            
-					            /*String*/ functionName,						            
-					            /*Array of Objects*/ inParamVals,
-					            /*Array of signature strings*/ inParamSignatures,
-					            /*String*/ paramOrders,
-					            /*Array of Functions or Array*/ callbackArgs){
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI3661E", [this.f_bindingName,functionName] );
-    }
-});
-  
-
-egl.defineClass(
-	    'eglx.services', 'EGLDedicatedServiceRefWrapper',
-	    'eglx.services', 'ServiceRefWrapper',
-{        
-	    //String fservicesName;   
-	    //String f_alias;   
-    
-    "constructor" : function(/*String*/ variableName, /*String*/ serviceName, /*String*/ alias) {
-	        	this.f_bindingName = variableName || "";
-	        	this.fservicesName = serviceName || "";
-	        	this.f_alias = alias || "";
-	        	this.f_type = "egl";
-    },    
-        
-    "invokeService" : function(/*RUIHandler*/ handler,
-					            /*func*/ httpCallback, 
-					            /*func*/ errorCallback, 
-					            /*int*/ serviceTimeout,
-					            /*String*/ functionName,						            
-					            /*Array of Objects*/ inParamVals,
-					            /*Array of signature strings*/ inParamSignatures,
-					            /*String*/ paramOrders,
-					            /*Array of Functions or Array*/ callbackArgs){
-    	
-    	this.setServiceTimeoutInHeader(serviceTimeout);
-	    this.invokeEGLService(handler, 
-	    						httpCallback, 
-	    						errorCallback, 
-	    						functionName,
-	    						inParamVals,
-	    						inParamSignatures,
-	    						callbackArgs);    		
-    },
-    /**
-     * handler is the RUIHandler, is used as context for the callback function 
-     * inParamVals is a array of ordered in and inout parameter values
-     * the request and response uses json-rpc
-     */
-    "invokeEGLService" : function(
-                        /*RUIHandler*/ handler,
-                        /*func*/ httpCallback, 
-                        /*func*/ errorCallback, 
-                        /*String*/ functionName,  
-                        /*Array of Objects*/ inParamVals,
-                        /*Array of signature strings*/ inParamSignatures,
-                        /*Array of Functions or Array*/ callbackArgs){
-
-        egl.valueByKey( this.getRESTRequestHeader(), egl.HEADER_EGLDEDICATED, "TRUE", "S;" );  
-        
-        
-        //uses json-rpc     
-        this.f_RESTmethod = 'POST';
-        this.f_requestFormat = egl.formatJSON;
-        this.f_responseFormat = egl.formatJSON;                     
-                        
-        this.f_httpCallback = httpCallback;
-        this.f_errCallback = errorCallback;
-        this.f_callbackArgs = callbackArgs;
-        var url = "";
-        
-        //let's build the payload body using json-rpc
-        var payloadbodyObj = {
-            bindingName: this.f_bindingName,
-            method: functionName || "",
-            params: inParamVals || [],
-            eze$$InParamSignatures: inParamSignatures || [],
-            binding:{
-        		name: this.f_bindingName,
-                type: "EGLBinding",
-                serviceName: this.fservicesName,
-                alias: this.f_alias,
-                protocol: "local"
-           }
-        };
-        
-        var body = egl.eglx.json.toJSONString(payloadbodyObj);        
-        egl.eglx.services.$ServiceRT.internalInvokeService(
-                    handler,
-                    url,                     //no uri
-                    this, 
-                    {},                     //pass null for query parameters 
-                    body);        
-    }    
-    
-});
-
-egl.defineClass(
-    'eglx.services', 'SOAPServiceRefWrapper',
-    'eglx.services', 'ServiceRefWrapper',
-{
-    //String f_fqInterface;    
-    //String f_wsdlLocation;
-    //String f_wsdlService;
-    //String f_wsdlPort;
-    //String f_wsdlUri;
-    
-    "constructor" : function(/*String*/ FQInterfaceName,
-    						 /*String*/ simpleInterfaceName,
-                             /*String*/ wsdlLocation, 
-                             /*String*/ wsdlService,
-                             /*String*/ wsdlPort,
-                             /*String*/ uri) {        
-        this.f_fqInterface = FQInterfaceName || "";
-        this.f_bindingName = simpleInterfaceName || "";
-        this.f_wsdlLocation = wsdlLocation || "";
-        this.f_wsdlService = wsdlService || "";
-        this.f_wsdlPort = wsdlPort || "";
-        this.f_wsdlUri = uri || "";
-        this.f_type = "web";                 	
-        
-        this.initOtherMemebers();
-    },
-        
-    "initOtherMemebers" : function(){
-        this.f_RESTmethod = 'POST';
-        this.f_requestFormat = egl.formatJSON;
-        this.f_responseFormat = egl.formatJSON;                    	
-    },
-        
-    "invokeService" : function(/*RUIHandler*/ handler,
-					            /*func*/ httpCallback, 
-					            /*func*/ errorCallback, 
-					            /*int*/ serviceTimeout,			            
-					            /*String*/ functionName,						            
-					            /*Array of Objects*/ inParamVals,
-					            /*Array of signature strings*/ inParamSignatures,
-					            /*String*/ paramOrders,
-					            /*Array of Functions or Array*/ callbackArgs){
-					            
-//============================ the following parameters are not used for soap  ============================    	
-//					            /*boolean*/ hasXXXRestAnnotation,
-//					            /*String*/ resolvedUriTemplate,
-//					            /*int*/ requestFormat,
-//					            /*int*/ responseFormat,
-//					            /*String*/ restMethod,                        
-//					            /*String, Dictionary, Record or XMLElement*/ resourceParamIn
-//=========================================================================================================    	
-    	this.setServiceTimeoutInHeader(serviceTimeout);
-    	this.invokeSOAPService(handler, 
-	    						httpCallback, 
-	    						errorCallback, 
-	    						functionName,
-	    						inParamVals,
-	    						inParamSignatures,
-	    						paramOrders,
-	    						callbackArgs);    		
-    },    
-    
-    /**
-     * handler is the RUIHandler, is used as context for the callback function
-     * inParamVals is a array of ordered in and inout parameter values 
-     */    
-    "invokeSOAPService" : function(
-                        /*RUIHandler*/ handler,
-                        /*func*/ httpCallback, 
-                        /*func*/ errorCallback, 
-                        /*String*/ operationName,                        
-                        /*Array of Objects*/ inParamVals,
-                        /*Array of signature strings*/ inParamSignatures,
-                        /*String*/ paramOrders,
-                        /*Array of Functions or Array*/ callbackArgs){
-        this.f_httpCallback = httpCallback;
-        this.f_errCallback = errorCallback;    
-        this.f_callbackArgs = callbackArgs;
-        
-        egl.valueByKey( this.getRESTRequestHeader(), egl.HEADER_EGLSOAP, egl.contextRoot, "S;" );        
-        
-        //let's build the payload body using json-rpc
-        var payloadbodyObj = {
-            bindingName: this.f_bindingName,
-            method: operationName || "",
-            params: inParamVals || [],
-            eze$$InParamSignatures: inParamSignatures || [], 
-            EGL_PARAMETER_ORDER: paramOrders || "",
-            binding:{
-                type: "WebBinding",
-                interfacename: this.f_fqInterface,
-                name: this.f_bindingName,
-                wsdlLocation: this.f_wsdlLocation,
-                wsdlService: this.f_wsdlService,
-                wsdlPort: this.f_wsdlPort,
-                uri: this.f_wsdlUri
-                }
-        };
-        
-        var body = egl.eglx.json.toJSONString(payloadbodyObj);
-        egl.eglx.services.$ServiceRT.internalInvokeService(
-                    handler,
-                    "",                     //no uri
-                    this, 
-                    {},                     //pass null for query parameters 
-                    body);
-        
-    }    
-});  
 
 egl.defineClass(
     'eglx.services', 'ServiceRT',
@@ -277,20 +31,20 @@ egl.defineClass(
             return egl.eglx.services.$ServiceRT;         
         egl.eglx.services.$ServiceRT=this;
         
-        this.eze$$proxyURL = 'proxy';        
+        this.eze$$proxyURL = '___proxy';        
     },
     
-    "setRequestContentTypeHeaderIfNotSet" : function(/*HTTPRequest*/ request){
+    "setRequestContentTypeHeaderIfNotSet" : function(/*HTTPRequest*/ httpResquest){
         //if it already has content-type in the header, then do not do anything
         //otherwise, set the content type based on the request format
         var hasReqContentType = false;
-        if(request.headers != null){
-        	hasReqContentType = egl.containsKey(request.headers, "Content-Type");
+        if(httpResquest.headers != null){
+        	hasReqContentType = egl.containsKey(httpResquest.headers, "Content-Type");
         }
         else{
-        	request.headers = {};
+        	httpResquest.headers = {};
         }
-        if(hasReqContentType == false && request.contentType === null){
+        if(hasReqContentType == false && httpResquest.contentType === null){
         	var contentType = "text/html";
         	if(httpResquest.encoding === egl.eglx.services.Encoding.JSON){
         		contentType = "application/json";
@@ -301,31 +55,22 @@ egl.defineClass(
         	else if(httpResquest.encoding === egl.eglx.services.Encoding.FORM){
         		contentType = "application/x-www-form-urlencoded";                    
         	}
-        	if(request.charset === null){
+        	if(httpResquest.charset === null){
         		contentType += "; charset=UTF-8";
         	}
         	else{
-        		request.contentType += "; charset=";
-        		contentType += request.charset;
+        		contentType += "; charset=";
+        		contentType += httpResquest.charset;
         	}
             
-            egl.valueByKey( serviceWrapper.headers, "Content-Type", contentType);                    
+            egl.valueByKey( httpResquest.headers, "Content-Type", contentType);                    
         }
     },
 
-    "isJsonRPCFormat" : function(/*HttpRequest*/ request){
-    	var isJSONRPC = false;
-    	if(request.headers){
-            //let's check the header of the request to see if it's soap or low egl call
-    		//if so, it uses json-rpc as response
-    		var isSOAP = egl.containsKey(request.headers, egl.HEADER_EGLSOAP);
-    		var isEGLREST = egl.containsKey(request.headers, egl.HEADER_EGLREST);
-    		var isEGLDedicated = egl.containsKey(request.headers, egl.HEADER_EGLDEDICATED);
-    		if(isSOAP || isEGLREST || isEGLDedicated ){
-    			isJSONRPC = true;
-    		}
-    	}
-    	return isJSONRPC;
+    "isJsonRPCFormat" : function(/*HttpRequest*/ http){
+    	return http instanceof egl.eglx.http.HttpREST &&
+    		(http.invocationType === egl.eglx.rest.RestType.EglDedicated ||
+    				http.invocationType === egl.eglx.rest.RestType.EglRpc);
     },
     
     /**
@@ -337,7 +82,6 @@ egl.defineClass(
     									callbackArgs,
 							    		callbackFunction,
 										errorCallbackFunction,
-										serviceKind,
 										/*RUIHandler*/ handler) {
     	//make a shallow copy of some of the properties on the serviceWrapper, 
     	//these copies will be used in the callback function, this way, even if serviceWrapper object got changed by other event
@@ -351,21 +95,18 @@ egl.defineClass(
         }       
         
         if(requestExp != null){
-        	egl.eglx.services.$ServiceRT.callErrorCallback(errCallbackFunc, uriString, handler, requestExp);
+        	egl.eglx.services.$ServiceRT.callErrorCallback(errorCallbackFunction, handler, requestExp, http);
         }
         else{
 	        this.doInvokeAsync( 
 	            http,
-	            serviceKind,
-	            function(response) {
+	            function(http) {
 	            	var isJSONRPC = egl.eglx.services.$ServiceRT.isJsonRPCFormat(http);
-	            	http.response.status = response.status;//FIXME
-	            	http.response.body = response.body;
 	            	
 	            	var anyExp = null;
 	                try {                	
 	                    if(http.response.status >= 200 && http.response.status <= 299){
-	                    	var sessionIdValue = egl.findByKey(http.response.headers, egl.STATEFULSESSIONID);
+	                    	var sessionIdValue = http.response.headers === null ? undefined : egl.findByKey(http.response.headers, egl.STATEFULSESSIONID);
 	                    	if(sessionIdValue != null &&  sessionIdValue != undefined){
 		                    	var httpSessionIdValue = egl.findByKey(http.response.headers, egl.HTTP_SESSION_ID_KEY);
 		                    	if(httpSessionIdValue == undefined){
@@ -392,11 +133,11 @@ egl.defineClass(
 	                    		}
 	                    	}
 	                    	
-	                    	var customSOAPResponseHeaders = egl.findByKey(http.response.headers, egl.CUSTOM_RESPONSE_HEADER_EGLSOAP);
+/*	                    	var customSOAPResponseHeaders = egl.findByKey(http.response.headers, egl.CUSTOM_RESPONSE_HEADER_EGLSOAP);
 	                    	if(customSOAPResponseHeaders != null &&  customSOAPResponseHeaders != undefined){
 	                    		egl.valueByKey(serviceWrapper.getRESTRequestHeader(), egl.CUSTOM_RESPONSE_HEADER_EGLSOAP, customSOAPResponseHeaders,"S;");
 	                    	}
-	                    	
+*/	                    	
 	                    	var encoding = http.eze$$response.encoding;
 	                    	if(encoding === null){
 	                    		//FIXME use encoding based on the content type
@@ -407,21 +148,18 @@ egl.defineClass(
 		                        }
 		                    }
 		                    else if(encoding === egl.eglx.services.Encoding.JSON){
-		                        var jsonObj = egl.eglx.json.JsonLib.convertFromJSON( http.response.body );
-		                        for(var i=0; i<callbackArgs.length; i++){
-		                        	//replace each of element in the callbackArgs with the object each of the function returns		                        	
-	                            	if(isJSONRPC == true){ //the response body is in json-rpc object, get the result property                            		
-	                            		//if there is only one return/out 
-	                            		if(callbackArgs.length == 1){
-	                            			callbackArgs[i] = egl.eglx.services.$ServiceRT.processCallbackArg(callbackArgs[i], jsonObj.result);
-	                            		}
-	                            		else{ //if(jsonObj.result instanceof Array)  //result must be an array 
-	                            			callbackArgs[i] = egl.eglx.services.$ServiceRT.processCallbackArg(callbackArgs[i], jsonObj.result[i]);
-	                            		}
-	                            	}
-	                            	else
-	                            		callbackArgs[i] = egl.eglx.services.$ServiceRT.processCallbackArg(callbackArgs[i], jsonObj);	                        		                        	
-		                        }	                        
+		                    	var expectedResult = new egl.eglx.lang.EDictionary();
+                            	if(isJSONRPC == true && callbackArgs.length > 1){ 
+                        			expectedResult.result = callbackArgs;
+    		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, expectedResult, false );
+    		                    	callbackArgs = expectedResult.result;
+                            	}
+                            	else if(callbackArgs.length == 1){
+                            		//if there is only one return/out 
+                           			expectedResult.result = callbackArgs[0];
+       		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, expectedResult, false );
+       		                    	callbackArgs[0] = expectedResult.result;
+                            	}
 		                    }
 		                    else if(encoding === egl.eglx.services.Encoding.XML){
 		                        if(callbackArgs.length > 0){ //the last parameter is the return record
@@ -437,14 +175,14 @@ egl.defineClass(
 		                    	anyExp = egl.createAnyException("CRRUI3656E", []);	                    	
 		                    }
 		                    
-		                    if (anyExp == null && callbackFunc != null){
+		                    if (anyExp == null && callbackFunction != null){
 		                        //if there is a call back function
 		                    	if (egl.debugg) {
-		                    		egl.debugCallback(handler, callbackFunc, callbackArgs);
+		                    		egl.debugCallback(handler, callbackFunction, callbackArgs);
 		                    	}
 		                    	else {
 		                    		try {
-		                    			callbackFunc.apply(handler, callbackArgs);
+		                    			callbackFunction.apply(handler, callbackArgs);
 		                    		}
 		                    		catch (e) {
 		                    			var msg = egl.getRuntimeMessage( "CRRUI1070E", [e.message] );
@@ -457,7 +195,7 @@ egl.defineClass(
 	                    }
 	                    else{ //inner response is not 2xx, need to call errorcallback
 	                    	try{
-	                    		anyExp = egl.eglx.services.$ServiceRT.createExceptionFromJsonRPCError(response.body, serviceKind);                    		
+	                    		anyExp = egl.eglx.services.$ServiceRT.createExceptionFromJsonRPCError(http);                    		
 		                	}
 		                	catch(jsonError){
 		                		//the response.body is either not in a json format 
@@ -466,7 +204,7 @@ egl.defineClass(
 		                		anyExp = egl.eglx.services.createServiceInvocationException(
 		                				"CRRUI3653E", 
 		                				[eze$$request.uri], 
-		                				serviceKind,
+		                				egl.eglx.services.$ServiceRT.getServiceKind(http),
 		                				response.status,
 		                				response.statusMessage,
 		                				response.body);
@@ -477,29 +215,30 @@ egl.defineClass(
 	                	anyExp = egl.eglx.services.createServiceInvocationException(
 	                			"CRRUI3655E",
 	                			[e2.message],
-	                			serviceKind,
+                				egl.eglx.services.$ServiceRT.getServiceKind(http),
 	                			response.status ? response.status : "",
 	                			response.statusMessage ? response.statusMessage : "",
 	                			response.body ? response.body : "");	                	                	
 	                }
 	                
                 	if(anyExp != null)
-                		egl.eglx.services.$ServiceRT.callErrorCallback(errCallbackFunc, uriString, handler, anyExp, response);                	
+                		egl.eglx.services.$ServiceRT.callErrorCallback(errorCallbackFunction, handler, anyExp, http);                	
 	            }, 
 	            function(exception, response){
-	            	egl.eglx.services.$ServiceRT.callErrorCallback(errCallbackFunc, uriString, handler, exception, response);
+	            	egl.eglx.services.$ServiceRT.callErrorCallback(errorCallbackFunction, handler, exception, http);
 	            },
 	            this
 	        );
         }
     },
     
-    "createExceptionFromJsonRPCError" : function (jsonRpcErroString, /*String*/ serviceKind){
+    "createExceptionFromJsonRPCError" : function (http){
 		//try to parse the response.body to json
-        var exp = null;		
-        var jsonObjE = egl.eglx.json.JsonLib.convertFromJSON(jsonRpcErroString);                    	
-        if(jsonObjE != null && jsonObjE.error != undefined){
-    		var eglExpObj = jsonObjE.error.error;
+        var exp = null;	
+    	var response = new egl.eglx.lang.EDictionary();
+        egl.eglx.json.JsonLib.convertFromJSON(http.response.body, response);                    	
+        if(response != null && response.error != undefined){
+    		var eglExpObj = response.error.error;
     		
     		var expType = eglExpObj.name;
     		//create exception based on jsonErrObj
@@ -507,7 +246,7 @@ egl.defineClass(
         		exp = egl.eglx.services.createServiceInvocationException(
         				eglExpObj.messageID,
         				eglExpObj.message,
-        				eglExpObj.source,
+        				egl.eglx.services.$ServiceRT.convertToEnum(eglExpObj.source, egl.eglx.services.ServiceKind),
         				eglExpObj.detail1,
         				eglExpObj.detail2,
         				eglExpObj.detail3);
@@ -519,7 +258,7 @@ egl.defineClass(
         		exp = egl.eglx.services.createServiceInvocationException(
         				eglExpObj.messageID,
         				eglExpObj.message,
-        				serviceKind,
+        				egl.eglx.services.$ServiceRT.getServiceKind(http),
         				expType);		//put the exception type name in detail1	                    			
     		}                    			
         }
@@ -528,17 +267,14 @@ egl.defineClass(
     	}
     	return exp;
     },    
-    "callErrorCallback" : function (errCallbackFunc, uri, handler, exception, http){
+    "callErrorCallback" : function (errCallbackFunc, handler, exception, http){
     	try {
-    		if(response)
-	    		egl.eglx.services.$ServiceRT.setStaticRESTResponse(response);      	
-	    	
 	    	if(errCallbackFunc){
 	    		if (egl.debugg) {
-	    			egl.debugCallback(handler, errCallbackFunc, exception);
+	    			egl.debugCallback(handler, errCallbackFunc, exception, http);
 	    		}
 	    		else {
-	    			errCallbackFunc.call(handler, exception);
+	    			errCallbackFunc.call(handler, exception, http);
 	    		}
 	    	}
     	}
@@ -554,43 +290,12 @@ egl.defineClass(
     	}
     },
     
-    "processCallbackArg" : function(/*Function or Array*/ callbackArg, /*Object*/ resultObj){
-    	if(callbackArg instanceof Array){
-    		//then the resultObj should also be an array
-    		var arrayVal = new Array();
-    		if(resultObj){
-	    		for(var i=0; i<resultObj.length; i++){
-	    			arrayVal.push(egl.eglx.services.$ServiceRT.processCallbackArg(callbackArg[0], resultObj[i]));
-	    		}
-    		}
-    		else{	//array itself could be null
-    			arrayVal = null;
-    		}
-    		return arrayVal;
-    	}
-    	else if(callbackArg instanceof Function){		
-    		//it is a function that returns a new java script object
-    		//invoke the function to get the new java script object
-			var ret = callbackArg(resultObj);
-			
-			//ret should be an egl type corresponding java script object (i.e. egl record, egl.javascript.BigDecimal, Date)
-			//check to see if it's an egl record
-			if(ret != null && (ret instanceof egl.egl.jsrt.Record))  	
-				ret.eze$$fromJson(resultObj, true);
-			
-			//it could be null type is nullable
-			return ret;
-    	}
-    },
-    
     "doInvokeAsync" : function( /*HttpRest/HttpSOAP*/ http, 
-    							/*String */ serviceKind,
     							/*HttpCallback*/ callback, 
     							/*HttpCallback*/ errCallback, 
     							/*handler*/ handler ) {
         this.doInvokeInternal(
         		http, 
-        		serviceKind,
         		function(response){
         			egl.startNewWork();
                     callback.call( handler, http );
@@ -602,16 +307,22 @@ egl.defineClass(
                 true);
     },
     "doInvokeInternal" : function( /*HttpRest/HttpSOAP*/ http, 
-    							   /*String*/ serviceCallTypeIn,
                                    /*function*/ callback, 
                                    /*function*/ errCallback,                     
                                    /*boolean*/ asynchronous) {
-    	var serviceKind = serviceCallTypeIn;     //copy the value
-        var requestString = http.request.body;
+    	if(http instanceof egl.eglx.http.HttpREST){
+    		if(http.invocationType === egl.eglx.rest.RestType.EglDedicated){
+                egl.valueByKey( http.eze$$request.headers, egl.HEADER_EGLDEDICATED, "true");                    
+    		}
+    	}
+    	else{
+            egl.valueByKey( http.eze$$request.headers, egl.egl.HEADER_EGLSOAP, "true");                    
+    	}
+        var requestString = egl.eglx.json.JsonLib.convertToJSON(http.eze$$request);
 //        egl.eglx.services.$ServiceLib.callBackResponse.originalRequest = requestString;
         var xhr = egl.newXMLHttpRequest();
         var beginTime = new Date().getTime();
-        var proxyURL = '/' + egl.contextRoot + '/' + this.eze$$proxyURL + '/' + http.eze$$request.uri;
+        var proxyURL = '/' + egl.contextRoot + '/' + this.eze$$proxyURL;
         
         xhr.onreadystatechange = function(){
             //4 - the response is complete; you can get the server's response and use it
@@ -620,17 +331,14 @@ egl.defineClass(
                 try {                    
                 	egl.enter("Response for " + http.eze$$request.uri, { eze$$typename: "RUI Runtime" });
                     if (xhr.status >= 200 && xhr.status <= 299){
-                        var json;
                         try {
                         	egl.enter("Parse JSON ("+xhr.responseText.length+" bytes) from "+ http.eze$$request.uri, { eze$$typename: "RUI Runtime" });
-                        	json = egl.eglx.json.JsonLib.convertFromJSON(xhr.responseText);
+                        	egl.eglx.json.JsonLib.convertFromJSON(xhr.responseText, http.response);
                         }
                         finally {
                         	egl.leave();
                         }
-                        if (json != null) {
-                            http.response = json;
-                            http.response.body = response.body.replace(/&quot;/g, '"');
+                        if (http.response != null) {
                             try {
                             	egl.enter("Handling callback for " + http.eze$$request.uri, { eze$$typename: "RUI Runtime" });
                             	egl.eglx.services.$ServiceRT.runCallback(callback, http, beginTime);
@@ -640,12 +348,10 @@ egl.defineClass(
                             }
                         }
                         else {
-                        	http.response.status = xhr.status;
-                        	http.response.statusMessage = xhr.statusMessage;
                         	eglExp = egl.eglx.services.createServiceInvocationException(
                             		"CRRUI3659E",
                             		[xhr.responseText],
-                            		serviceKind,
+	                				egl.eglx.services.$ServiceRT.getServiceKind(http),
                             		xhr.status,
                             		xhr.statusMessage);
                         }
@@ -654,10 +360,11 @@ egl.defineClass(
 	                	//things failed on the proxy, need to report error to errorCallback                    	
                         http.response.status = xhr.status || 404;
                         http.response.statusMessage = xhr.statusText;     
+                        http.response.body = xhr.responseText;     
                         
                     	//var exp = null;
                     	try{
-                    		eglExp = egl.eglx.services.$ServiceRT.createExceptionFromJsonRPCError(xhr.responseText, serviceKind);                    		
+                    		eglExp = egl.eglx.services.$ServiceRT.createExceptionFromJsonRPCError(http);                    		
 	                	}
 	                	catch(jsonError){
 	                		//the xhr.responseText is either not in a json format 
@@ -667,7 +374,7 @@ egl.defineClass(
 	                			eglExp = egl.eglx.services.createServiceInvocationException(
 	                					"CRRUI3657E",
 	                					[proxyURL],
-	                					serviceKind,
+		                				egl.eglx.services.$ServiceRT.getServiceKind(http),
 		                				http.response.status,
 		                				http.response.statusMessage,
 		                				xhr.responseText);
@@ -676,7 +383,7 @@ egl.defineClass(
 	                			eglExp = egl.eglx.services.createServiceInvocationException(
 		                				"CRRUI3658E", 
 		                				[proxyURL, http.eze$$request.uri],
-		                				serviceKind,
+		                				egl.eglx.services.$ServiceRT.getServiceKind(http),
 		                				http.response.status,
 		                				http.response.statusMessage,
 		                				xhr.responseText);
@@ -688,7 +395,7 @@ egl.defineClass(
                 	eglExp = egl.eglx.services.createServiceInvocationException(
                 			"CRRUI3660E",
                 			[http.eze$$request.uri, e.message],
-                			serviceKind,
+            				egl.eglx.services.$ServiceRT.getServiceKind(http),
                 			xhr.status,
                 			xhr.statusMessage,
                 			xhr.responseText);
@@ -752,29 +459,68 @@ egl.defineClass(
     },
     "encodeResquestBody": function(httpResquest, resourceParamIn){
         if(httpResquest.body === null){
-	    	if(httpResquest.ezemethod == "GET" || httpResquest.ezemethod == "DELETE"){
+	    	if(httpResquest.method == "GET" || httpResquest.method == "DELETE"){
 	        	httpResquest.body = egl.toString(resourceParamIn);
 	        }
 	        else{
 	            //need to build the body using resourceParamIn            
 	            if(resourceParamIn){
 	                //check for the requestFormat
-	            	if(httpResquest.ezeencoding === egl.eglx.services.Encoding.JSON){
+	            	if(httpResquest.encoding === egl.eglx.services.Encoding.JSON){
 	                	httpResquest.body = egl.eglx.json.toJSONString(resourceParamIn);
 	            	}
-	            	else if(httpResquest.ezeencoding === egl.eglx.services.Encoding.XML){
+	            	else if(httpResquest.encoding === egl.eglx.services.Encoding.XML){
 	                	httpResquest.body = egl.eglx.xml.$XmlLib.convertToXML(resourceParamIn);
 	            	}
-	            	else if(httpResquest.ezeencoding === egl.eglx.services.Encoding.FORM){
+	            	else if(httpResquest.encoding === egl.eglx.services.Encoding.FORM){
 	                	httpResquest.body = egl.eglx.http.HttpLib.convertToFormData(resourceParamIn);                    
 	            	}
-	            	else if(httpResquest.ezeencoding === egl.eglx.services.Encoding.NONE){
+	            	else if(httpResquest.encoding === egl.eglx.services.Encoding.NONE){
 	                	httpResquest.body = resourceParamIn;
 	            	}
 	            }
 	        }
         }
     	
+    },
+    "getServiceKind": function(http){
+    	if(http instanceof egl.eglx.http.HttpREST){
+    		if(http.invocationType === egl.eglx.rest.RestType.EglDedicated){
+                return egl.eglx.services.ServiceKind.EGL;                    
+    		}
+    		else{
+                return egl.eglx.services.ServiceKind.REST;                    
+    		}
+    	}
+    	else{
+            return egl.eglx.services.ServiceKind.WEB;                    
+    	}
+    },
+    "serviceKind" : function(/*Teglx/services/ServiceInvocationException;*/sie) {
+    	switch (sie.source) {
+    	case egl.eglx.services.ServiceKind.WEB:
+    		return "WEB";
+    	case egl.eglx.services.ServiceKind.NATIVE:
+    		return "NATIVE";
+    	case egl.eglx.services.ServiceKind.EGL:
+    		return "EGL";
+    	case egl.eglx.services.ServiceKind.REST:
+    		return "REST";
+    	default:
+    		return "unknown";
+    	}
+    },
+    "convertToEnum" : function( value, type) {
+    	if(typeof value === "string"){
+    		value = value = egl.egl.lang.EInt32.fromEString(value);
+    	}
+    	for ( var field in type) {
+    		if (type[field] instanceof egl.egl.lang.Enumeration
+    				&& type[field].value == value) {
+    			return type[field];
+    		}
+    	}
+    	return undefined;
     }
 });
 
@@ -783,3 +529,37 @@ egl.emptyStateChangeFunction = function() {};
 new egl.eglx.services.ServiceRT();
 egl.statefulSessionMap = new Object();
 egl.eze$$SetProxyAuth=null;
+
+egl.eglx.services.createServiceInvocationException = function( /*string*/ messageID, /*string or array*/ inserts )
+{
+	if (typeof(inserts) != "string") {
+		inserts = egl.getRuntimeMessage( messageID, inserts );
+	}
+	egl.exceptionThrown = true;
+	var args = new Array();
+	args.push( [ "messageID", messageID || "" ] );
+	args.push( [ "message", inserts || "" ] );
+	var exp = {};
+	if(arguments[2] instanceof egl.eglx.services.ServiceKind){
+		exp["source"] = arguments[2];                    
+	}
+	else{
+		exp["source"] = undefined;                    
+	}
+	var detail1 = "";	
+	if(arguments[ 3 ])
+		detail1 = arguments[ 3 ]+''; //make sure it's String
+	var detail2= "";
+	if(arguments[ 4 ])
+		detail2 = arguments[ 4 ]+''; //make sure it's String
+	var detail3= "";
+	if(arguments[ 5 ])
+		detail3 = arguments[ 5 ]+''; //make sure it's String
+	exp["detail1"] = detail1;		
+	exp["detail2"] = detail2;		
+	exp["detail3"] = detail3;	
+	var eglExp = new egl.eglx.services.ServiceInvocationException(args);
+	eglExp.ezeCopy(exp);
+	return eglExp;
+};
+

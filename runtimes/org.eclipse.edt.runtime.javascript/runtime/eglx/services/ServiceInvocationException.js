@@ -10,7 +10,7 @@
  *******************************************************************************/
 egl.defineClass('eglx.services', "ServiceInvocationException", "egl.jsrt", "Record", {
 	"eze$$fileName" : "eglx/services/ServiceInvocationException.egl",
-		"constructor": function() {
+		"constructor": function(args) {
 			this.eze$$setInitial();
 		}
 		,

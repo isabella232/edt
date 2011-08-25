@@ -25,7 +25,7 @@ egl.eglx.json.JsonLib["validateJSONObject"] = function(/* recordOrDictionary */o
 	if (object !== null && typeof object === "object" && "eze$$value" in object && "eze$$signature" in object) {
 		object = object.eze$$value;
 	}
-	if (object !== null && typeof object != "object" || !("eze$$getFieldInfos" in object)) {
+	if (object !== null && typeof object != "object" || !("eze$$getFieldInfos" in object || object instanceof egl.eglx.lang.EDictionary)) {
 		var field = object;
 		if (object == undefined || object == null) {
 			field = "undefined";
@@ -127,7 +127,7 @@ egl.eglx.json.toJSONString = function(object, depth, maxDepth, /*boolean*/ valid
 			s.push("}");
 			return s.join('');
 		}
-		if(typeof object === "object" && object instanceof egl.egl.Dictionary){
+		if(typeof object === "object" && object instanceof egl.eglx.lang.EDictionary){
 			var s = [];
 			s.push("{");
 			var needComma = false;
@@ -168,7 +168,7 @@ egl.eglx.json.convertStringToJson = function(value) {
 	str = str.replace(/\n/g, "\\n");	  // escape all <newline>
 	return str;	
 };
-egl.eglx.json.JsonLib["convertFromJSON"] = function( /* String */str, /* egl object */eglObject, /* boolean */ordered) {
+egl.eglx.json.JsonLib["convertFromJSON"] = function( /* String */str, /* egl object */eglObject, /* boolean */cleanDictionary) {
 	this.validateJSONObject(eglObject);
 	if (!/^(\[|{)/.test(str)) {
 		str = str.replace( /^(\s)*/, "" );
@@ -177,7 +177,7 @@ egl.eglx.json.JsonLib["convertFromJSON"] = function( /* String */str, /* egl obj
 		try {
 			var jsonObject = egl.eglx.json.$JSONParser.parse(str);
 			if (eglObject !== null && typeof eglObject === "object" && typeof jsonObject === "object") {
-				this.populateObjectFromJsonObject(jsonObject, eglObject);
+				this.populateObjectFromJsonObject(jsonObject, eglObject, undefined, cleanDictionary);
 			} else {
 				//throw exception;
 			}
@@ -189,7 +189,7 @@ egl.eglx.json.JsonLib["convertFromJSON"] = function( /* String */str, /* egl obj
 	}
 	return null;
 };
-egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */jsonObject, /* recordOrDictionary */eglObject, /*FieldInfo*/ fieldInfo) {
+egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */jsonObject, /* recordOrDictionary */eglObject, /*FieldInfo*/ fieldInfo, /* boolean */cleanDictionary) {
 	if (jsonObject === undefined || jsonObject === null) {
 		return null;
 	}
@@ -256,13 +256,7 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 		eglObject = new fieldInfo.eglType();
 	}
 	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.egl.lang.Enumeration){
-		for ( var field in fieldInfo.eglType) {
-			if (fieldInfo.eglType[field] instanceof egl.egl.lang.Enumeration
-					&& fieldInfo.eglType[field].value === jsonObject) {
-				return fieldInfo.eglType[field];
-			}
-		}
-		return eglObject;//could find the enumeration value
+		return egl.eglx.services.$ServiceRT.convertToEnum(jsonObject, fieldInfo.eglType);
 	}
 	if (typeof(jsonObject) == "string") {
 		return jsonObject;
@@ -279,12 +273,12 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 		for ( var idx = 0; idx < jsonObject.length; idx++) {
 			var newFieldInfo = egl.clone(fieldInfo);
 			newFieldInfo.eglSignature = newFieldInfo.eglSignature.slice(1);
-			ary[idx] = this.populateObjectFromJsonObject(jsonObject[idx], null, newFieldInfo);
+			ary[idx] = this.populateObjectFromJsonObject(jsonObject[idx], null, newFieldInfo, cleanDictionary);
 		}
 		return ary;
 	}
 	if(eglObject !== null && typeof jsonObject === "object" && "eze$$value" in eglObject && "eze$$signature" in eglObject){
-		this.populateObjectFromJsonObject(jsonObject, egl.unboxAny( eglObject ));
+		this.populateObjectFromJsonObject(jsonObject, egl.unboxAny( eglObject ), undefined, cleanDictionary);
 		return eglObject;
 	}
 	if (eglObject !== null && typeof jsonObject === "object" && "eze$$getFieldInfos" in eglObject){
@@ -292,7 +286,7 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 		if (fieldInfos) {
 			for ( var idx = 0; idx < fieldInfos.length; idx++) {
 				var key = fieldInfos[idx].annotations["JsonName"].name;
-				var value = this.populateObjectFromJsonObject(jsonObject[key], null, fieldInfos[idx]);
+				var value = this.populateObjectFromJsonObject(jsonObject[key], null, fieldInfos[idx], cleanDictionary);
 				if (fieldInfos[idx].setterFunction instanceof Function) {
 					fieldInfos[idx].setterFunction.apply(value);
 				} else {
@@ -302,10 +296,19 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 		}
 		return eglObject;
 	}
+	if(typeof jsonObject === "object" && eglObject === undefined || eglObject === null){
+		eglObject = new egl.eglx.lang.EDictionary();
+	}
+	else if(eglObject !== undefined && eglObject !== null && 
+			eglObject instanceof egl.eglx.lang.EDictionary &&
+			(cleanDictionary === undefined || cleanDictionary === true)){
+		eglObject.removeAll();
+	}
 	if(typeof jsonObject === "object"){
-		eglObject = new egl.egl.EDictionary();
 		for (f in jsonObject) {
-			eglObject[f] = this.populateObjectFromJsonObject(jsonObject, null, null);
+			if(typeof jsonObject[f] !== "function"){
+				eglObject[f] = this.populateObjectFromJsonObject(jsonObject[f], null, null, cleanDictionary);
+			}
 		}
 		return eglObject;
 	}

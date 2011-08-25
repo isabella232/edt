@@ -36,7 +36,7 @@ egl.eglx.xml.XmlLib["toXML"] = function( /*value*/value, /*map*/namespaces, /*Fi
 	}
 	else if (value !== null && typeof value === "object" && "eze$$getFieldInfos" in value) {
 		s.push(this.eglClassToXML(value, namespaces, fieldInfo));
-	} else if (value !== null && typeof value === "object" && value instanceof egl.egl.Dictionary) {
+	} else if (value !== null && typeof value === "object" && value instanceof egl.eglx.lang.EDictionary) {
 		s.push(this.dictionaryToXML(value, namespaces, fieldInfo));
 	} else if (value !== null && typeof value === "object" && value instanceof Array) {
 		s.push(this.arrayToXML(value, namespaces, fieldInfo));
@@ -319,7 +319,7 @@ egl.eglx.xml.XmlLib["fromXML"] = function( /*node*/element, /*FieldInfo*/fieldIn
 		return this.arrayFromXML(element, eglObj, fieldInfo);
 	} else if (eglObj !== null && typeof eglObj === "object" && "eze$$getFieldInfos" in eglObj) {
 		return this.eglClassFromXML(element, eglObj, fieldInfo);
-	} else if (eglObj !== null && typeof eglObj === "object" && eglObj instanceof egl.egl.Dictionary) {
+	} else if (eglObj !== null && typeof eglObj === "object" && eglObj instanceof egl.eglx.lang.EDictionary) {
 		return this.dictionaryFromXML(element, eglObj, fieldInfo);
 	} else if (eglObj !== null && typeof eglObj === "object" && eglObj instanceof egl.egl.lang.Enumeration) {
 		return this.enumerationFromXML(element, eglObj, fieldInfo);
@@ -425,18 +425,11 @@ egl.eglx.xml.XmlLib["newPrimitiveFromXml"] = function( /*node*/value, /*FieldInf
 	return value;
 };
 egl.eglx.xml.XmlLib["enumerationFromXML"] = function( /*node*/element, /*egl rt object*/eglObj, /*FieldInfo*/fieldInfo) {
-	var value = value = egl.egl.lang.EInt32.fromEString(this.getElementText(element));
-	for ( var field in fieldInfo.eglType) {
-		if (fieldInfo.eglType[field] instanceof egl.egl.lang.Enumeration
-				&& fieldInfo.eglType[field].value === value) {
-			return fieldInfo.eglType[field];
-		}
-	}
-	return eglObj;
+	return egl.eglx.services.$ServiceRT.convertToEnum(this.getElementText(element), fieldInfo.eglType);
 };
 egl.eglx.xml.XmlLib["dictionaryFromXML"] = function( /*node*/parentElement, /*egl rt object*/eglObj, /*FieldInfo*/fieldInfo) {
 	if (eglObj == null) {
-		eglObj = new egl.egl.Dictionary(true, true);
+		eglObj = new egl.eglx.lang.EDictionary(true, true);
 	}
 	var element = this.getChildElements(parentElement);
 	for (elementField in element) {
