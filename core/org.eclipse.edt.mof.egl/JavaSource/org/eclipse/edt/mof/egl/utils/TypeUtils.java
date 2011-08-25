@@ -198,9 +198,10 @@ public class TypeUtils implements MofConversion {
 			if (key.equalsIgnoreCase(Type_EGLNumber)) {
 				return false;
 			}
-			if (key.equalsIgnoreCase(Type_EGLDecimal) && type instanceof ParameterizableType) {
-				return false;
-			}
+// The following should be uncommented when bug 353902 is resolved			
+//			if (key.equalsIgnoreCase(Type_EGLDecimal) && type instanceof ParameterizableType) {
+//				return false;
+//			}
 			
 			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_AnyValue));
 		}
