@@ -301,4 +301,18 @@
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="org.eclipse.edt.gen.eunit"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.edt.ide.eunit"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
