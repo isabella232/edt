@@ -90,11 +90,14 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 
 	private void genEglRestInvocation(CallStatement stmt, Function serviceInterfaceFunction, Context ctx, TabbedWriter out) {
 		
-		out.print("egl.eglx.rest.invokeEglService(");  //handler parameter
+		out.print("egl.eglx.rest.invokeEglService(egl.eglx.rest.configHttp(");  //handler parameter
 		ctx.invoke(genExpression, stmt.getInvocationTarget().getQualifier(), ctx, out);
-		out.println(", ");
+		out.println(",");
 		out.pushIndent();
 		out.pushIndent();
+		genRequestConfig(out);
+		genResponseConfig(out);
+		out.println("),");
 //		genTimeoutParams(serviceTimeout);
 		out.println("\"" + operationName(serviceInterfaceFunction) + "\", ");
 		@SuppressWarnings("unchecked")
@@ -108,8 +111,6 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 		genInParamSignature(serviceInterfaceFunction, stmt.getArguments(), ctx, out);
 		genParamOrders(serviceInterfaceFunction, ctx, out);
 		genCallbackArgs(callbackFunction, ctx, out);			
-		
-//		genRestParameters(serviceInterfaceFunction, tempArgs, getRest, putRest, postRest, deleteRest, ctx, out);
 		
 		if(stmt.getCallback() != null){
 			ctx.invoke(genCallbackAccesor, stmt.getCallback(), ctx, out);
@@ -127,17 +128,13 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 		}
 		out.popIndent();
 		out.popIndent();
-//		if (context.getGenerationMode() == EGLGenerationModeSetting.DEVELOPMENT_GENERATION_MODE) {
-//			out.popIndent();
-//			out.println("}");
-//		}	*/	
 	}
 	private void genTrueRestInvocation(CallStatement stmt, Function serviceInterfaceFunction,
 			Annotation getRest, Annotation putRest, Annotation postRest,
 			Annotation deleteRest, Context ctx, TabbedWriter out) {
-		out.print("egl.eglx.rest.invokeService(");  //handler parameter
+		out.print("egl.eglx.rest.invokeService(egl.eglx.rest.configHttp(");  //handler parameter
 		ctx.invoke(genExpression, stmt.getInvocationTarget().getQualifier(), ctx, out);
-		out.println(", ");
+		out.println(",");
 		out.pushIndent();
 		out.pushIndent();
 //		genTimeoutParams(serviceTimeout);
@@ -148,15 +145,16 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 		if(stmt.getCallback() != null){
 			callbackFunction = (Function)ctx.invoke(getCallbackFunction, stmt.getCallback(), ctx);
 		}
+
+		genRestParameters(serviceInterfaceFunction, tempArgs, getRest, putRest, postRest, deleteRest, ctx, out);
+		out.println("),");
 		
 		genInParamVals(serviceInterfaceFunction, tempArgs, ctx, out);
 		genInParamSignature(serviceInterfaceFunction, stmt.getArguments(), ctx, out);
 		genParamOrders(serviceInterfaceFunction, ctx, out);
 		genCallbackArgs(callbackFunction, ctx, out);			
 		
-		genRestParameters(serviceInterfaceFunction, tempArgs, getRest, putRest, postRest, deleteRest, ctx, out);
 		
-		out.print(", ");
 		if(stmt.getCallback() != null){
 			ctx.invoke(genCallbackAccesor, stmt.getCallback(), ctx, out);
 			out.print(", ");
@@ -192,31 +190,29 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 		//              /*int*/ requestFormat,
 		//              /*int*/ responseFormat,				
 
+		out.print("{");
 		int resourceParamIndex = -1;
-		String restMethod = "";
+		out.print(", method : ");
 		Annotation restOperation = null;
 		if(getRest != null){
-			restMethod = "GET";
+			out.print("egl.eglx.http.HttpMethod._GET");
 			restOperation = getRest;
 		}
 		else if(putRest != null){
-			restMethod = "PUT";
+			out.print("egl.eglx.http.HttpMethod.PUT");
 			restOperation = putRest;						
 		}
 		else if(postRest != null){
-			restMethod = "POST";
+			out.print("egl.eglx.http.HttpMethod.POST");
 			restOperation = postRest;				
 		}
-		else if(deleteRest != null){
-			restMethod = "DELETE";
+		else{
+			out.print("egl.eglx.http.HttpMethod._DELETE");
 			restOperation = deleteRest;											
 		}						
 		
-		//need to set the method, rest method parameter		
-		//              /*String*/ restMethod,				
-		out.println(" \"" + restMethod + "\", ");							
-		
 		resourceParamIndex = genRESTParameters(restOperation, mapFuncParams, serviceInterfaceFunction.getReturnType(), ctx, out);					
+		out.println("},");
 		//generate resource parameter or query parameter for 'GET'
 		//                /*String, Dictionary, Record or XMLElement*/ parameters){				
 		if(resourceParamIndex != -1){
@@ -235,9 +231,10 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 	private int genRESTParameters(Annotation methodRestAnnotation, Map<String, RestArgument> funcParams, Type returnType, Context ctx, TabbedWriter out){
 		String uriTemplate = (String)methodRestAnnotation.getValue("uriTemplate");
 		
-		out.println("//" + uriTemplate);
+		out.print("{uri : \"\"");
+		out.println(uriTemplate);
 		genURITemplate(uriTemplate, false, funcParams, ctx, out);
-		out.println(", ");
+		out.println("\"");
 		
 		//generate the requestFormat parameter
 		//find the resource parameter, there should only be one
@@ -249,20 +246,22 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 			}
 		}
 		
+		out.print(", encoding : ");
 		genFormatKind(methodRestAnnotation.getValue("requestFormat"), resourceRestArg != null ? resourceRestArg.getParam().getType() : null, ctx, out);
-		out.print(", ");
+		out.print(", charset : ");
 		printQuotedString((String)methodRestAnnotation.getValue("requestCharset"), out);;
-		out.print(", ");
+		out.print(", contentType : ");
 		printQuotedString((String)methodRestAnnotation.getValue("requestContentType"), out);;
-		out.print(", ");
+		out.println("},");
 		
+		out.print("{encoding : ");
 		genFormatKind(methodRestAnnotation.getValue("responseFormat"), returnType, ctx, out);
-		out.print(", ");
+		out.print(", charset : ");
 		printQuotedString((String)methodRestAnnotation.getValue("responseCharset"), out);;
-		out.print(", ");
+		out.print(", contentType : ");
 		printQuotedString((String)methodRestAnnotation.getValue("responseContentType"), out);;
 		
-		out.println(", ");
+		out.println("},");
 		return resourceRestArg != null ? resourceRestArg.getParamIndex() : -1;			
 	}
 	
@@ -367,6 +366,25 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 		}
 	}
 	
+	private void genRequestConfig(TabbedWriter out)
+	{
+		out.print("{");
+		out.print("uri : \"\"");
+		out.print(", method : egl.eglx.http.HttpMethod.POST");
+		out.print(", encoding : egl.eglx.services.Encoding.JSON");
+		out.print(", charset : \"UTF-8\"");
+		out.print(", contentType : null");
+		out.println("},");
+	}
+
+	private void genResponseConfig(TabbedWriter out)
+	{
+		out.print("{");
+		out.print("encoding : egl.eglx.services.Encoding.JSON");
+		out.print(", charset : \"UTF-8\"");
+		out.print(", contentType : null");
+		out.print("}");
+	}
 	private void genInParamVals(Function serviceInterfaceFunction, List<Expression> args, Context ctx, TabbedWriter out)
 	{
 		out.print("[");		

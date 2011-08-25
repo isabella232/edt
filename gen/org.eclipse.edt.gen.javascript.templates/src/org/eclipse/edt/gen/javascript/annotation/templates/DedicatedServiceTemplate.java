@@ -86,23 +86,6 @@ public class DedicatedServiceTemplate extends JavaScriptTemplate {
 				stringLiteral, 
 				eglLocation));		
 
-		//<field>.request.encoding = egl.eglx.services.Encoding.JSON;
-		Field httpRESTRecordRequestEncodingField = getField((Record)httpRESTRecordRequestField.getType(), "encoding", eglLocation);
-		stmtBlock.getStatements().add(createAssignment(container, 
-				createFieldMemberAccess( httpRESTRecordRequestFieldMemberAccess, httpRESTRecordRequestEncodingField, eglLocation),
-				createEnumerationEntry(httpRESTRecordRequestEncodingField.getType(), "json"), 
-				eglLocation));		
-
-		//<field>.response.encoding = egl.eglx.services.Encoding.JSON;
-		Field httpRESTRecordResponseField = getField(httpRESTRecordType, "response", eglLocation);
-		MemberAccess httpRESTRecordResponseFieldMemberAccess = createFieldMemberAccess(httpRecordMemberName, httpRESTRecordResponseField, eglLocation);
-
-		Field httpRESTRecordResponseEncodingField = getField((Record)httpRESTRecordResponseField.getType(), "encoding", eglLocation);
-		stmtBlock.getStatements().add(createAssignment(container, 
-				createFieldMemberAccess( httpRESTRecordResponseFieldMemberAccess, httpRESTRecordResponseEncodingField, eglLocation),
-				createEnumerationEntry(httpRESTRecordResponseEncodingField.getType(), "json"), 
-				eglLocation));		
-
 		ctx.invoke(genStatementBodyNoBraces, stmtBlock, ctx, out);
 	}
 
