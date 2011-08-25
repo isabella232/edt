@@ -235,5 +235,22 @@ public class HttpUtilities {
 			return null;
 		}
 	}
+	public static HttpMethod convert(int method){
+		if(HttpMethod._DELETE.getValue() == method){
+			return HttpMethod._DELETE;
+		}
+		else if(HttpMethod._GET.getValue() == method){
+			return HttpMethod._GET;
+		}
+		else if(HttpMethod.POST.getValue() == method){
+			return HttpMethod.POST;
+		}
+		else if(HttpMethod.PUT.getValue() == method){
+			return HttpMethod.PUT;
+		}
+		else{
+			return null;
+		}
+	}
 
 }

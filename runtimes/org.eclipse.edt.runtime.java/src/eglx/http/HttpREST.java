@@ -11,12 +11,10 @@
 package eglx.http;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import eglx.http.HttpRequest;
 import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
-import eglx.rest.RestType;
-import eglx.services.Encoding;
 import eglx.http.HttpResponse;
-import eglx.http.HttpMethod;
+import eglx.http.HttpRequest;
+import eglx.rest.RestType;
 @javax.xml.bind.annotation.XmlRootElement(name="HttpREST")
 public class HttpREST extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	private static final long serialVersionUID = 10L;
@@ -59,13 +57,9 @@ public class HttpREST extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	public void ezeInitialize() {
 		request = new HttpRequest();
 		org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(new HttpRequest(), request);
-		request.method = HttpMethod.POST;
-		request.encoding = Encoding.XML;
-		request.charset = "UTF-8";
 		response = new HttpResponse();
 		org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(new HttpResponse(), response);
-		response.encoding = Encoding.USE_CONTENTTYPE;
-		invocationType = RestType.TrueRest;
+		invocationType = null;
 	}
 	@org.eclipse.edt.javart.json.Json(name="request", clazz=HttpRequest.class, asOptions={})
 	public HttpRequest getRequest() {

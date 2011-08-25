@@ -274,7 +274,7 @@ public class Trace implements Serializable
 	{
 		checkReopen();
 		
-		out.println( '(' + JavartUtil.getCurrentTime() + "> " + text );
+		out.println( '(' + JavartUtil.getCurrentTime() + "> [" + Thread.currentThread().getName() + "]" + text );
 		out.flush();
 	}
 

@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Enumeration;
 
+import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
 
 import egl.lang.AnyException;
@@ -36,14 +37,25 @@ public class ServletUtilities
     public static HttpRequest createHttpRequest(String object)throws ServiceInvocationException{
     	HttpRequest request = null;
     	try {
-    		request = new HttpRequest();
-			JsonLib.convertFromJSON(object, request);
+    		EDictionary localRequest = new EDictionary();
+			JsonLib.convertFromJSON(object, localRequest);
+			request = new HttpRequest();
+			request.setBody(unBox(localRequest.get("body")).toString());
+			request.setHeaders((EDictionary)unBox(localRequest.get("headers")));
+			request.setMethod(HttpUtilities.convert(((Long)unBox(localRequest.get("method"))).intValue()));
+			request.setUri(unBox(localRequest.get("uri")).toString());
 		} catch (AnyException e) {
 //FIXME
 		}
 		return request;
     }
     
+    private static Object unBox(Object obj){
+    	while(obj instanceof AnyBoxedObject<?>){
+    		obj = ((AnyBoxedObject<?>)obj).ezeUnbox();
+    	}
+    	return obj;
+    }
     public static void setBody(HttpResponse outerResponse, HttpResponse innerResponse){
     	if(innerResponse == null){
     		innerResponse = new HttpResponse();

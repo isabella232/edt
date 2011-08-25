@@ -238,6 +238,9 @@ public class HttpServiceHandler
 				Map<String,List<String>> header = connection.getHeaderFields();
 				if ( header != null )
 				{
+					if(response.getHeaders() == null){
+						response.setHeaders(new org.eclipse.edt.runtime.java.egl.lang.EDictionary());
+					}
 					populate( response, header );
 					setServiceSessionId( response, header, headers.get( EGL_SESSION_ID ) );
 				}
@@ -311,7 +314,9 @@ public class HttpServiceHandler
 		for( Iterator<Map.Entry<String,List<String>>> itr = header.entrySet().iterator(); itr.hasNext(); )
 		{
 			entry = itr.next();
-			response.getHeaders().put(entry.getKey() == null ? null : entry.getKey(), entry.getValue() == null ? null :  entry.getValue().toString() );
+			if(entry.getKey() != null){
+				response.getHeaders().put(entry.getKey(), entry.getValue() == null ? null :  entry.getValue().toString() );
+			}
 		}
 	}
 
