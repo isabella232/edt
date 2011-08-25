@@ -11,22 +11,27 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.deployment.rui.solution;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.edt.ide.deployment.core.IDeploymentConstants;
-import org.eclipse.edt.ide.deployment.core.model.DeploymentTarget;
+import org.eclipse.edt.ide.core.model.EGLCore;
+import org.eclipse.edt.ide.core.model.EGLModelException;
+import org.eclipse.edt.ide.core.model.IEGLProject;
+import org.eclipse.edt.ide.core.model.IPart;
+import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.core.model.Parameter;
 import org.eclipse.edt.ide.deployment.core.model.RUIApplication;
+import org.eclipse.edt.ide.deployment.core.model.RUIHandler;
+import org.eclipse.edt.ide.deployment.internal.nls.Messages;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
-import org.eclipse.edt.ide.deployment.rui.DeploymentModel;
-import org.eclipse.edt.ide.deployment.rui.DeploymentModel.DeploymentSolution;
-import org.eclipse.edt.ide.deployment.rui.internal.model.RUIDeploymentModel;
+import org.eclipse.edt.ide.deployment.rui.internal.preferences.HandlerLocalesList;
+import org.eclipse.edt.ide.deployment.rui.internal.util.DeployLocale;
 import org.eclipse.edt.ide.deployment.rui.internal.util.Utils;
-import org.eclipse.edt.ide.deployment.rui.tasks.J2EERUIDeploymentOperation;
 import org.eclipse.edt.ide.deployment.solution.AbstractDeploymentSolution;
 import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
@@ -42,13 +47,6 @@ import org.eclipse.wst.jsdt.core.JavaScriptCore;
  *
  */
 public class J2EEDeploymentSolution extends AbstractDeploymentSolution {
-
-	private DeploymentModel model;
-	private String targetProjectName;
-	
-	public void setModel(DeploymentModel model) {
-		this.model = model;		
-	}
 
 	public void execute(IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor) throws CoreException {
 //		targetProjectName = DeploymentUtilities.getDeploymentTargetId(model.getDeploymentTarget(), null, model.getName());
@@ -70,8 +68,91 @@ public class J2EEDeploymentSolution extends AbstractDeploymentSolution {
 //		IFile bdFile = null;
 //		// End
 //		executeWeb(bd, bdFile, resultsCollector, monitor);
+
+		processRUISolutions( this.context.getDeploymentDesc(), monitor );
 		super.execute(resultsCollector, monitor);
 	}
+	
+	
+	private void processRUISolutions(DeploymentDesc desc, IProgressMonitor pm) throws CoreException{
+		
+		pm.subTask(Messages.process_rich_ui_handlers);
+		
+		RUIApplication application = (RUIApplication) desc.getRUIApplication();
+		if( application == null )
+		{
+			application = new RUIApplication("ezedefault", "true");
+			HandlerLocalesList localesList = new HandlerLocalesList();
+			localesList.buildLocalesList();
+			List locales = localesList.getLocales();
+			List defaultLocales = new ArrayList();
+			for( Iterator itr = locales.iterator(); itr.hasNext();)
+			{
+				Object locale = itr.next();
+				if( locale instanceof DeployLocale &&
+						((DeployLocale)locale).isDefault())
+				{
+					defaultLocales.add(locale);
+				}
+			}
+			application.addParameter(new Parameter("locales", Utils.getLocalesString(defaultLocales.toArray())));
+		}
+		if (application.deployAllHandlers()) {
+			if( context.getSourceProject() != null )
+			{
+				try
+				{
+					Collection ruiHandlerList = DeploymentUtilities.getAllRUIHandlersInProject( EGLCore.create( context.getSourceProject() )).keySet();
+		  		  	if( ruiHandlerList != null )
+		  		  	{
+						for( Iterator itr = ruiHandlerList.iterator(); itr.hasNext();)
+						{
+							String handleName = (String)itr.next();
+							boolean isConfigured = false;
+							//If a handler is already configured in EGLDD, used the configured information 
+							//including HTML file name and dynamic loading handler names
+							for(Iterator<RUIHandler> ite = application.getRUIHandlers().iterator();ite.hasNext();){
+								RUIHandler configuredHandler = ite.next();
+								if(configuredHandler.getImplementation().equals(handleName)){
+									isConfigured = true;
+									configuredHandler.setEnableGeneration(true);
+									break;
+								}
+							}
+							if(!isConfigured){
+								application.addRUIHandler(new RUIHandler(handleName, "true"));
+							}
+						}
+		  		  	} 
+				}
+				catch ( EGLModelException e )
+				{
+//					IDeploymentResultsCollector resultsCollector = DeploymentResultsCollectorManager.getInstance().getCollector(RUIDeployUtilities.getDeploymentTargetId(model.getDeploymentTarget(), null, model.getName()), model.getName(), false, model.isCMDMode());
+//					resultsCollector.addMessage(e.getStatus());
+				}
+			}
+		}
+		else
+		{
+			for (Iterator iterator = application.getRUIHandlers().iterator(); iterator.hasNext();) {
+				RUIHandler handler = (RUIHandler) iterator.next();
+				if(!handler.isEnableGeneration()){
+					iterator.remove();
+				}else{
+					IEGLProject project = EGLCore.create( context.getSourceProject());
+					if(project != null && project.exists()){
+						IPart element = project.findPart(handler.getImplementation());
+						if(element != null && element.exists()){
+							//continue
+						}else{
+							iterator.remove();
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	
 	/* TODO - EDT	
 	private void executeWeb(BuildDescriptor bd, IFile bdFile, IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor) {

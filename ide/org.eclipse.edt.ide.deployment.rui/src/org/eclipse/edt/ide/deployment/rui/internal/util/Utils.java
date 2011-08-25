@@ -205,5 +205,29 @@ public class Utils
 //		}
 //		return result;
 //	}
+	
+	
+	public static String getLocalesString( Object[] o )
+	{
+		StringBuffer buf = new StringBuffer( 100 );
+
+		for ( int i = 0; i < o.length; i++ )
+		{
+			if ( o[ i ] instanceof DeployLocale )
+			{
+				DeployLocale next = (DeployLocale)o[ i ];
+				if ( buf.length() != 0 )
+				{
+					buf.append( "," );
+				}
+				buf.append( next.getCode() );
+				buf.append( ',' );
+				buf.append( next.getDescription() );
+				buf.append( ',' );
+				buf.append( next.getRuntimeLocaleCode() );
+			}
+		}
+		return buf.toString();
+	}
 
 }

@@ -29,6 +29,7 @@ import org.eclipse.edt.ide.deployment.rui.internal.HelpContextIDs;
 import org.eclipse.edt.ide.deployment.rui.internal.nls.Messages;
 import org.eclipse.edt.ide.deployment.rui.internal.preferences.HandlerLocalesList;
 import org.eclipse.edt.ide.deployment.rui.internal.util.DeployLocale;
+import org.eclipse.edt.ide.deployment.rui.internal.util.Utils;
 import org.eclipse.edt.ide.rui.internal.nls.ILocalesListViewer;
 import org.eclipse.edt.ide.rui.internal.nls.Locale;
 import org.eclipse.edt.ide.rui.internal.nls.LocaleUtility;
@@ -147,7 +148,7 @@ public class RUIFormPage extends EGLDDBaseFormPage implements ILocalesListViewer
 			Object[] elements = fLocalesTableViewer.getCheckedElements();
 			if ( elements.length != 0 )
 			{
-				String localesString = org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities.getLocalesString( elements );
+				String localesString = Utils.getLocalesString( elements );
 				if ( localesString.length() > 0 )
 				{
 					Parameters parms = DeploymentFactory.eINSTANCE.createParameters();
