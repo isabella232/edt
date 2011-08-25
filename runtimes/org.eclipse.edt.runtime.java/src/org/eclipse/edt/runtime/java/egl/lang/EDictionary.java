@@ -41,7 +41,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	 * The map containing the dictionary values. It maps String keys to AnyRef objects, and iterates the values in the
 	 * specified order (insertion, key or unspecified order).
 	 */
-	private Map<java.lang.String, Object> map;
+	private Map<String, Object> map;
 
 	/** Whether the keys are case sensitive or not. */
 	private boolean caseSensitive;
@@ -103,15 +103,15 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	private void createMap() {
 		switch (this.order) {
 			case INSERTION_ORDER:
-				this.map = new LinkedHashMap<java.lang.String, Object>();
+				this.map = new LinkedHashMap<String, Object>();
 				break;
 
 			case KEY_ORDER:
-				this.map = new TreeMap<java.lang.String, Object>();
+				this.map = new TreeMap<String, Object>();
 				break;
 
 			default:
-				this.map = new HashMap<java.lang.String, Object>();
+				this.map = new HashMap<String, Object>();
 				break;
 		}
 	}
@@ -129,8 +129,8 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	 * @return True if so
 	 */
 	public boolean containsKey(Object key) {
-		if (!this.caseSensitive && key instanceof EString) {
-			key = ((java.lang.String) key).toLowerCase();
+		if (key instanceof String) {
+			return containsKey( (String)key );
 		}
 
 		return this.map.containsKey(key);
@@ -173,7 +173,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	 */
 	public Object get(Object key) {
 		if (!this.caseSensitive) {
-			key = ((java.lang.String) key).toLowerCase();
+			key = ((String) key).toLowerCase();
 		}
 
 		return this.map.get(key);
@@ -225,12 +225,12 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	/**
 	 * Return the keys for the contents of the dictionary, in the preferred order.
 	 */
-	public java.lang.String[] getKeyArray() {
-		java.lang.String[] keyArray = new java.lang.String[this.map.size()];
+	public String[] getKeyArray() {
+		String[] keyArray = new String[this.map.size()];
 
 		int ii = 0;
 		for (Iterator iter = this.map.keySet().iterator(); iter.hasNext(); ++ii) {
-			keyArray[ii] = (java.lang.String) iter.next();
+			keyArray[ii] = (String) iter.next();
 		}
 
 		return keyArray;
@@ -253,7 +253,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	/**
 	 * Add an entry to the dictionary
 	 */
-	public void insert(java.lang.String key, Object value) {
+	public void insert(String key, Object value) {
 		if (!this.caseSensitive) {
 			key = key.toLowerCase();
 		}
@@ -263,7 +263,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	/**
 	 * Return whether a given key exists in the dictionary.
 	 */
-	public boolean containsKey(java.lang.String key) {
+	public boolean containsKey(String key) {
 		if (!this.caseSensitive) {
 			key = key.toLowerCase();
 		}
@@ -274,9 +274,9 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	/**
 	 * Return a DynamicArray of the keys (StringItems) that exist in this dictionary in the preferred order.
 	 */
-	public EglList<java.lang.String> getKeys() throws AnyException {
-		EglList<java.lang.String> keys = new EglList<java.lang.String>();
-		for (java.lang.String key : this.map.keySet()) {
+	public EglList<String> getKeys() throws AnyException {
+		EglList<String> keys = new EglList<String>();
+		for (String key : this.map.keySet()) {
 			keys.add(key);
 		}
 
@@ -304,7 +304,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 			return;
 		}
 
-		java.lang.String[] newKeys = d.getKeyArray();
+		String[] newKeys = d.getKeyArray();
 		Object[] newValues = d.getValueArray();
 
 		for (int ii = 0; ii < newKeys.length; ++ii) {
@@ -316,7 +316,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	 * Remove the entry with a specified key from the dictionary
 	 */
 	@Override
-	public void removeElement(java.lang.String key) throws AnyException {
+	public void removeElement(String key) throws AnyException {
 		if (!this.caseSensitive) {
 			key = key.toLowerCase();
 		}
@@ -352,19 +352,19 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 		// clone the map
 		switch (this.order) {
 			case INSERTION_ORDER:
-				theClone.map = new LinkedHashMap<java.lang.String, Object>(this.map.size());
+				theClone.map = new LinkedHashMap<String, Object>(this.map.size());
 				break;
 
 			case KEY_ORDER:
-				theClone.map = new TreeMap<java.lang.String, Object>();
+				theClone.map = new TreeMap<String, Object>();
 				break;
 
 			default:
-				theClone.map = new HashMap<java.lang.String, Object>(this.map.size());
+				theClone.map = new HashMap<String, Object>(this.map.size());
 				break;
 		}
-		for (Iterator<Map.Entry<java.lang.String, Object>> iter = this.map.entrySet().iterator(); iter.hasNext();) {
-			Map.Entry<java.lang.String, Object> entry = (Map.Entry<java.lang.String, Object>) iter.next();
+		for (Iterator<Map.Entry<String, Object>> iter = this.map.entrySet().iterator(); iter.hasNext();) {
+			Map.Entry<String, Object> entry = (Map.Entry<String, Object>) iter.next();
 			Object value = entry.getValue();
 			if (value instanceof AnyValue) {
 				value = ((AnyValue) value).clone();
@@ -379,7 +379,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	 * Fetch a value from the dictionary. If it does not exist, a proxy is returned that will create the new entry if and
 	 * when its value is updated.
 	 */
-	public Object lookup(java.lang.String key) {
+	public Object lookup(String key) {
 		if (!this.caseSensitive) {
 			key = key.toLowerCase();
 		}
@@ -396,7 +396,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	}
 
 	@Override
-	public Object put(java.lang.String key, Object value) {
+	public Object put(String key, Object value) {
 		if (!this.caseSensitive) {
 			key = key.toLowerCase();
 		}
