@@ -21,7 +21,7 @@ import org.eclipse.edt.mof.egl.EGLClass;
 public class FloatTypeTemplate extends JavaTemplate {
 
 	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
-		out.print("0.0f");
+		out.print("0.0");
 	}
 
 	public void genConstructorOptions(EGLClass type, Context ctx, TabbedWriter out) {
