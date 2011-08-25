@@ -79,6 +79,10 @@ public class StringDialogField extends DialogField {
 	}
 		
 	// ------- ui creation			
+	
+	public Text getTextControl() {
+		return getTextControl(null);
+	}
 
 	/**
 	 * Creates or returns the created text control.

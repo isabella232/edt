@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.record;
 
+import org.eclipse.edt.ide.ui.editor.EGLCodeFormatterUtil;
 import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
@@ -35,6 +36,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.SharedImages;
@@ -111,6 +113,13 @@ public class NewRecordSummaryPage extends WizardPage {
 
 	public void setContent(String str) {
 		document.set(str != null ? str : "");
+		
+		try {
+			TextEdit edit = EGLCodeFormatterUtil.format(document, null);
+			edit.apply(document);
+		} catch (Exception e) {
+			
+		}
 	}
 
 	public void setMessages(java.util.List<String> messages) {

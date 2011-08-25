@@ -13,26 +13,30 @@ package org.eclipse.edt.ide.ui.internal.record;
 
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.wizards.EGLPartWizardPage;
+import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.LayoutUtil;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
 public class NewRecordWizardPage extends EGLPartWizardPage {
 
-	private Text containerText;
-
-	private ISelection selection;
+	protected TableViewer templateViewer;
+	protected Text descriptionText;
 
 	public NewRecordWizardPage(ISelection selection, String pageName) {
 		super(pageName);
 
 		setTitle(NewRecordWizardMessages.NewRecordWizardPage_title);
 		setDescription(NewRecordWizardMessages.NewRecordWizardPage_description);
-		this.selection = selection;
 	}
 
 	/**
@@ -69,12 +73,6 @@ public class NewRecordWizardPage extends EGLPartWizardPage {
 	private void dialogChanged() {
 		// / updateStatus(null);
 	}
-
-	public String getContainerName() {
-		return containerText.getText();
-	}
-
-	public String getFileName() {
-		return null;
-	}
+			
+	
 }

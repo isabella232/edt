@@ -133,6 +133,10 @@ public class DialogField {
 	}
 	
 	// ------- ui creation
+	
+	public Label getLabelControl() {
+		return getLabelControl(null);
+	}
 
 	/**
 	 * Creates or returns the created label widget.

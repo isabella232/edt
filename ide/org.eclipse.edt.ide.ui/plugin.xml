@@ -1376,6 +1376,15 @@ Templates
             description="%EGLRecordFromXMLSchemaDescription">
       </template>
       
+      <template
+            name="Records from SQL Database"
+            icon="icons/ctool16/record_template.gif"
+            category="org.eclipse.edt.ide.ui.records"
+            wizardClass="org.eclipse.edt.ide.ui.internal.record.wizards.sqldb.RecordFromSqlDatabaseWizard"
+            id="org.eclipse.edt.ide.ui.records.sqldb"
+            description="Create entity records for fields defined in tables or views in a relational database.">
+      </template>      
+      
     </extension>
     
     <extension point="org.eclipse.edt.ide.ui.projectTemplates">

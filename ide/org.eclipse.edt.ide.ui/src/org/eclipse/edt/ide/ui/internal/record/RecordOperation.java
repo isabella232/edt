@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.record;
 
+import org.eclipse.edt.ide.ui.editor.EGLCodeFormatterUtil;
 import org.eclipse.edt.ide.ui.wizards.PartOperation;
 import org.eclipse.edt.ide.ui.wizards.PartTemplateException;
+import org.eclipse.jface.text.Document;
+import org.eclipse.text.edits.TextEdit;
 
 public class RecordOperation extends PartOperation {
 	protected String codeTemplateId;
@@ -25,27 +28,37 @@ public class RecordOperation extends PartOperation {
 	}
 
 	public String getFileContents() throws PartTemplateException {
+		String contents = null;
 
 		if (contentObj != null) {
-			return contentObj.toString();
-		}
-
-		RecordConfiguration configuration = (RecordConfiguration) super.configuration;
-		if (codeTemplateId == null) {
-			if (configuration.getRecordType() == RecordConfiguration.BASIC_RECORD) {
-				codeTemplateId = "org.eclipse.edt.ide.ui.templates.flexible_basic_record"; //$NON-NLS-1$
-			} else if (configuration.getRecordType() == RecordConfiguration.SQL_RECORD) {
-				codeTemplateId = "org.eclipse.edt.ide.ui.templates.flexible_SQL_record_with_table_names"; //$NON-NLS-1$
-			} else {
-				codeTemplateId = "org.eclipse.edt.ide.ui.templates.flexible_basic_record"; //$NON-NLS-1$		
+			contents = contentObj.toString();
+		} else {
+	
+			RecordConfiguration configuration = (RecordConfiguration) super.configuration;
+			if (codeTemplateId == null) {
+				if (configuration.getRecordType() == RecordConfiguration.BASIC_RECORD) {
+					codeTemplateId = "org.eclipse.edt.ide.ui.templates.flexible_basic_record"; //$NON-NLS-1$
+				}
 			}
+	
+			String partName = configuration.getRecordName();
+			
+			contents = getFileContents("record", //$NON-NLS-1$
+					codeTemplateId, new String[] { "${recordName}" //$NON-NLS-1$
+					}, new String[] { partName });
 		}
 
-		String partName = configuration.getRecordName();
-
-		return getFileContents("record", //$NON-NLS-1$
-				codeTemplateId, new String[] { "${recordName}" //$NON-NLS-1$
-				}, new String[] { partName });
+		try {
+			Document doc = new Document();
+			doc.set(contents);
+			TextEdit edit = EGLCodeFormatterUtil.format(doc, null);
+			edit.apply(doc);
+			contents = doc.get();
+		} catch (Exception ex) {
+			
+		}
+		
+		return contents;
 	}
 
 }

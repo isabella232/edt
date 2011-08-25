@@ -16,6 +16,8 @@ import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.templates.ITemplate;
 import org.eclipse.edt.ide.ui.templates.TemplateManager;
 import org.eclipse.edt.ide.ui.templates.wizards.TemplateWizardNode;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -25,6 +27,9 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.IWizardContainer2;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardSelectionPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -36,7 +41,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
-public class TemplateSelectionPage extends WizardSelectionPage implements ISelectionChangedListener {
+public class TemplateSelectionPage extends WizardSelectionPage implements ISelectionChangedListener, IDoubleClickListener {
+
 	protected TableViewer templateViewer;
 	protected Text descriptionText;
 
@@ -75,7 +81,8 @@ public class TemplateSelectionPage extends WizardSelectionPage implements ISelec
 		templateViewer.setLabelProvider(new TreeLabelProvider());
 		templateViewer.addSelectionChangedListener(this);
 		templateViewer.setInput(templates);
-
+		templateViewer.addDoubleClickListener(this);
+		
 		descriptionText = new Text(container, SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.READ_ONLY);
 		descriptionText.setLayoutData(new GridData(GridData.FILL_BOTH));
 		descriptionText.setBackground(control.getBackground());
@@ -142,6 +149,8 @@ public class TemplateSelectionPage extends WizardSelectionPage implements ISelec
 
 		if (visible) {
 			validatePage();
+			
+			templateViewer.getTable().setFocus();
 		}
 	}
 
@@ -197,5 +206,21 @@ public class TemplateSelectionPage extends WizardSelectionPage implements ISelec
 		public void removeListener(ILabelProviderListener listener) {
 		}
 
+	}
+
+	@Override
+	public void doubleClick(DoubleClickEvent event) {
+		if (event.getSource() == templateViewer) {
+			if (getSelectedNode() != null) {
+				IWizard wiz = getWizard();
+				IWizardContainer2 con =(IWizardContainer2) wiz.getContainer();
+				WizardDialog d =(WizardDialog)wiz.getContainer();
+				d.showPage(getNextPage());
+			} else if (getWizard().canFinish()) {
+				if (getWizard().performFinish()) {
+					getWizard().getContainer().getShell().close();
+				}
+			}
+		}		
 	}
 }
