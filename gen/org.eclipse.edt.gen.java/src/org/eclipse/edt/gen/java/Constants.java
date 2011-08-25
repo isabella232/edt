@@ -43,6 +43,7 @@ public class Constants {
 	// these are annotations key values, related to the values in the IRs
 	public static final String Annotation_EGLProperty = "eglx.lang.eglproperty";
 	public static final String AnnotationJsonName  = "eglx.json.JsonName";
+	public static final String AnnotationXMLRootElement  = "eglx.xml.binding.annotation.XMLRootElement";
 
 	// Library generation constants
 	public static final String LIBRARY_PREFIX = "eze_Lib_";
