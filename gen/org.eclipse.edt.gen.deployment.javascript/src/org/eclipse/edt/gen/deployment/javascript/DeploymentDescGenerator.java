@@ -51,7 +51,7 @@ public class DeploymentDescGenerator{
 		writer.print("egl.eze$$BindFile_");
 		writer.print(JavaScriptAliaser.getJavascriptSafeAlias(eglddName));
 		writer.println(" = function() {");
-		writer.print("var bindFile = new egl.egl.jsrt.BindFile(\"");
+		writer.print("var bindFile = new egl.eglx.services.BindFile(\"");
 		writer.print(eglddName);
 		writer.println("\");");
 		writer.println("var binding;");
@@ -61,7 +61,7 @@ public class DeploymentDescGenerator{
 			WebBinding webBinding = (WebBinding) webBindings.get(i);
 			if (webBinding.isEnableGeneration())
 			{
-				writer.println("binding = new egl.egl.jsrt.WebBinding(");
+				writer.println("binding = new egl.eglx.services.WebBinding(");
 				writer.pushIndent();
 				writer.println("/*name        */ \"" + webBinding.getName() + "\",");
 				writer.println("/*interface   */ \"" + webBinding.getInterface() + "\",");
@@ -80,7 +80,7 @@ public class DeploymentDescGenerator{
 			RestBinding restBinding = (RestBinding) restBindings.get(i);
 			if (restBinding.isEnableGeneration())
 			{
-				writer.println("binding = new egl.egl.jsrt.RestBinding(");
+				writer.println("binding = new egl.eglx.services.RestBinding(");
 				writer.pushIndent();
 				writer.println("/*name                   */ \"" + restBinding.getName().toLowerCase() + "\",");
 				writer.println("/*baseURI                */ \"" + restBinding.getBaseURI() + "\",");
