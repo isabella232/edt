@@ -31,6 +31,7 @@ public class MemberAccessTemplate extends JavaScriptTemplate {
 	}
 
 	public void genCallbackAccesor(MemberAccess expr, Context ctx, TabbedWriter out) {
+		ctx.invoke(genQualifier, expr.getMember(), ctx, out);
 		ctx.invoke(genExpression, expr, ctx, out);
 	}
 	

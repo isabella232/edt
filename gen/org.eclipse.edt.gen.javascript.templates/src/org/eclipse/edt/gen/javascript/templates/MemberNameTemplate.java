@@ -82,6 +82,7 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 	}
 
 	public void genCallbackAccesor(MemberName expr, Context ctx, TabbedWriter out) {
+		ctx.invoke(genQualifier, expr.getMember(), ctx, out);
 		ctx.invoke(genName, expr.getMember(), ctx, out);
 	}
 

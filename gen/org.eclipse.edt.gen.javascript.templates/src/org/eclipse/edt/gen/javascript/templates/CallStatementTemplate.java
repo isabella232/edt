@@ -111,7 +111,6 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 		
 //		genRestParameters(serviceInterfaceFunction, tempArgs, getRest, putRest, postRest, deleteRest, ctx, out);
 		
-		out.print(", ");
 		if(stmt.getCallback() != null){
 			ctx.invoke(genCallbackAccesor, stmt.getCallback(), ctx, out);
 			out.print(", ");
