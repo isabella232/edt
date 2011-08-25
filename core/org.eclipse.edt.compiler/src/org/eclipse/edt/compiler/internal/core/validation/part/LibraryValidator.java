@@ -122,7 +122,6 @@ public class LibraryValidator extends FunctionContainerValidator {
 					
 			        	
 		        	if(primitiveInt == Primitive.BIN_PRIMITIVE || 
-		        			primitiveInt == Primitive.DECIMAL_PRIMITIVE || 
 		        			primitiveInt == Primitive.NUM_PRIMITIVE || 
 		        			primitiveInt == Primitive.NUMC_PRIMITIVE || 
 		        			primitiveInt == Primitive.PACF_PRIMITIVE ||
