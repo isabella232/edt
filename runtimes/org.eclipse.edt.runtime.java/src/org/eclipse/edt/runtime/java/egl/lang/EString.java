@@ -283,28 +283,27 @@ public class EString extends AnyBoxedObject<String> {
 	/**
 	 * Returns the length of the string or limited string
 	 */
-	public static Integer length(String source, Integer... length) {
+	public static int length(String source) {
 		if (source == null)
 			throw new NullValueException();
-		return asString(source, length).length();
+		return source.length();
 	}
 
 	/**
 	 * Deletes trailing blank spaces and nulls from the start and end of strings.
 	 */
-	public static String trim(String source, Integer... length) {
+	public static String trim(String source) {
 		if (source == null)
 			throw new NullValueException();
-		return clip(clipLeading(asString(source, length)));
+		return clip(clipLeading(source));
 	}
 
 	/**
 	 * Deletes trailing blank spaces and nulls from the start of strings.
 	 */
-	public static String clipLeading(String source, Integer... length) {
-		if (source == null)
+	public static String clipLeading(String value) {
+		if (value == null)
 			throw new NullValueException();
-		String value = asString(source, length);
 		int lth = value.length();
 		if (lth > 0) {
 			int startingIdx = 0;
@@ -326,16 +325,15 @@ public class EString extends AnyBoxedObject<String> {
 	/**
 	 * Deletes trailing blank spaces and nulls from the end of strings.
 	 */
-	public static String clip(String source, Integer... length) {
+	public static String clip(String source) {
 		if (source == null)
 			throw new NullValueException();
-		String value = asString(source, length);
-		int lth = value.length();
+		int lth = source.length();
 		if (lth > 0) {
 			int startingIdx = lth - 1;
 			boolean charsDeleted = false;
 			while (startingIdx >= 0) {
-				char c = value.charAt(startingIdx);
+				char c = source.charAt(startingIdx);
 				if (c <= ' ' || c == '\u3000') {
 					charsDeleted = true;
 					startingIdx--;
@@ -343,102 +341,72 @@ public class EString extends AnyBoxedObject<String> {
 					break;
 			}
 			if (charsDeleted)
-				return value.substring(0, startingIdx + 1);
+				return source.substring(0, startingIdx + 1);
 		}
-		return value;
+		return source;
 	}
 
 	/**
 	 * returns the lowercase value of the string or limited string
 	 */
-	public static String toLowerCase(String source, Integer... length) {
+	public static String toLowerCase(String source) {
 		if (source == null)
 			throw new NullValueException();
-		return asString(source, length).toLowerCase();
+		return source.toLowerCase();
 	}
 
 	/**
 	 * returns the uppercase value of the string or limited string
 	 */
-	public static String toUpperCase(String source, Integer... length) {
+	public static String toUpperCase(String source) {
 		if (source == null)
 			throw new NullValueException();
-		return asString(source, length).toUpperCase();
+		return source.toUpperCase();
 	}
 
 	/**
 	 * returns whether the string starts with a specific string
 	 */
-	public static Boolean startsWith(String source, String value) {
+	public static boolean startsWith(String source, String value) {
 		if (source == null || value == null)
 			throw new NullValueException();
 		return source.startsWith(value);
 	}
 
-	public static Boolean startsWith(String source, Integer length, String value) {
-		if (source == null || value == null)
-			throw new NullValueException();
-		return asString(source, length).startsWith(value);
-	}
-
 	/**
 	 * returns whether the string ends with a specific string
 	 */
-	public static Boolean endsWith(String source, String value) {
+	public static boolean endsWith(String source, String value) {
 		if (source == null || value == null)
 			throw new NullValueException();
 		return source.endsWith(value);
 	}
 
-	public static Boolean endsWith(String source, Integer length, String value) {
-		if (source == null || value == null)
-			throw new NullValueException();
-		return asString(source, length).endsWith(value);
-	}
-
 	/**
 	 * returns the position of a specific string within a string
 	 */
-	public static Integer indexOf(String source, String value) {
+	public static int indexOf(String source, String value) {
 		if (source == null || value == null)
 			throw new NullValueException();
 		return source.indexOf(value) + 1;
 	}
 
-	public static Integer indexOf(String source, Integer length, String value) {
-		if (source == null || value == null)
-			throw new NullValueException();
-		return asString(source, length).indexOf(value) + 1;
-	}
-
 	/**
 	 * returns the position of a specific string within a string
 	 */
-	public static Integer indexOf(String source, String value, Integer start) {
+	public static int indexOf(String source, String value, Integer start) {
 		if (source == null || value == null || start == null)
 			throw new NullValueException();
 		return source.indexOf(value, start - 1) + 1;
 	}
 
-	public static Integer indexOf(String source, Integer length, String value, Integer start) {
-		if (source == null || value == null || start == null)
-			throw new NullValueException();
-		return asString(source, length).indexOf(value, start - 1) + 1;
-	}
-
 	/**
 	 * returns the last position of a specific string within a string
 	 */
-	public static Integer lastIndexOf(String source, String value) {
+	public static int lastIndexOf(String source, String value) {
 		if (source == null || value == null)
 			throw new NullValueException();
 		return source.lastIndexOf(value) + 1;
-	}
-
-	public static Integer lastIndexOf(String source, Integer length, String value) {
-		if (source == null || value == null)
-			throw new NullValueException();
-		return asString(source, length).lastIndexOf(value) + 1;
 	}
 
 	/**
@@ -450,38 +418,26 @@ public class EString extends AnyBoxedObject<String> {
 		return source.replace(search, replacement);
 	}
 
-	public static String replaceStr(String source, Integer length, String search, String replacement) {
-		if (source == null || search == null || replacement == null)
-			throw new NullValueException();
-		return asString(source, length).replace(search, replacement);
-	}
-
 	/**
 	 * Returns the integer value of a character code within a string
 	 */
-	public static Integer charCodeAt(String source, Integer index) {
+	public static int charCodeAt(String source, Integer index) {
 		if (source == null || index == null)
 			throw new NullValueException();
-		return (int) source.charAt(index - 1);
-	}
-
-	public static Integer charCodeAt(String source, Integer length, Integer index) {
-		if (source == null || index == null)
-			throw new NullValueException();
-		return (int) asString(source, length).charAt(index - 1);
+		return source.charAt(index - 1);
 	}
 
 	/**
 	 * Returns whether the string is like another
 	 */
-	public static Boolean isLike(String source, String pattern) {
+	public static boolean isLike(String source, String pattern) {
 		return isLike(source, pattern, "\\");
 	}
 
 	/**
 	 * Returns whether the string is like another
 	 */
-	public static Boolean isLike(String source, String pattern, String escape) {
+	public static boolean isLike(String source, String pattern, String escape) {
 		if (source == null)
 			throw new NullValueException();
 		if (pattern == null || escape == null)
@@ -539,23 +495,17 @@ public class EString extends AnyBoxedObject<String> {
 		}
 	}
 
-	public static Boolean isLike(String source, Integer length, String value) {
-		if (source == null)
-			throw new NullValueException();
-		return isLike(asString(source, length), value);
-	}
-
 	/**
 	 * Returns whether the string matches another
 	 */
-	public static Boolean matchesPattern(String source, String pattern) {
+	public static boolean matchesPattern(String source, String pattern) {
 		return matchesPattern(source, pattern, "\\");
 	}
 
 	/**
 	 * Returns whether the string matches another
 	 */
-	public static Boolean matchesPattern(String source, String pattern, String escape) {
+	public static boolean matchesPattern(String source, String pattern, String escape) {
 		if (source == null)
 			throw new NullValueException();
 		if (pattern == null || escape == null)
@@ -630,12 +580,6 @@ public class EString extends AnyBoxedObject<String> {
 		catch (PatternSyntaxException e) {
 			throw new InvalidPatternException();
 		}
-	}
-
-	public static Boolean matchesPattern(String source, Integer length, String value) {
-		if (source == null)
-			throw new NullValueException();
-		return matchesPattern(asString(source, length), value);
 	}
 
 	public String toString() {
