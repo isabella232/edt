@@ -6,11 +6,11 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
-import org.eclipse.core.internal.resources.WorkspaceRoot;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -25,8 +25,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.gen.eunit.CommonUtilities;
 import org.eclipse.edt.gen.eunit.EGL2Base;
-import org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier;
 import org.eclipse.edt.gen.eunit.GenPartsXMLFile;
+import org.eclipse.edt.gen.eunit.IEUnitGenerationNotifier;
 import org.eclipse.edt.ide.core.IIDECompiler;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPath;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
@@ -57,6 +57,8 @@ import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.osgi.framework.Bundle;
 import org.osgi.service.prefs.BackingStoreException;
+
+import com.ibm.icu.text.SimpleDateFormat;
 
 
 public abstract class GenTestDriverAction implements	IObjectActionDelegate{
@@ -226,8 +228,10 @@ public abstract class GenTestDriverAction implements	IObjectActionDelegate{
 	 */
 	protected String getGenFileFullLocation(IWorkspaceRoot wsRoot, IProject baseProject) {
 		
+		Date now = new Date(System.currentTimeMillis());
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMddHHmmssZ");		
 		IPath path = baseProject.getFullPath();
-		path = path.append(EGL2Base.ARG_PARM_GENPARTS + String.valueOf(System.currentTimeMillis()));
+		path = path.append(EGL2Base.ARG_PARM_GENPARTS + String.valueOf(dateFormat.format(now)));
 		path = path.addFileExtension("xml");
 		return wsRoot.getFolder(path).getLocation().toOSString();
 	}	
