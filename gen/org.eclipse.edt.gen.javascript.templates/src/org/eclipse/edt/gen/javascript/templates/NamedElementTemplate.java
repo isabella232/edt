@@ -12,36 +12,41 @@
 package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.CommonUtilities;
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.MemberAccess;
+import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.NamedElement;
 
 public class NamedElementTemplate extends JavaScriptTemplate {
 
 	public void genAccessor(NamedElement element, Context ctx, TabbedWriter out) {
 		Annotation property = CommonUtilities.getPropertyAnnotation(element);
-		if (property != null) {
-			String functionName = null;
-			
-			String propertyFn = (String)property.getValue("getMethod");
-			if (propertyFn != null && propertyFn.length() > 0) {
-				functionName = CommonUtilities.getPropertyFunction(propertyFn);
+		Object propertyFunction = CommonUtilities.getPropertyFunction(property, element.getName(), Constants.Annotation_PropertyGetter,
+			ctx.getCurrentFunction());
+
+		if (((ctx.getAttribute(element, Constants.EXPR_LHS) == null) || (ctx.getAttribute(element, Constants.EXPR_LHS) == Boolean.FALSE))
+			&& (propertyFunction != null)) {
+			if (propertyFunction instanceof String) {
+				out.print(propertyFunction.toString());
+				out.print("()");
+			} else if (propertyFunction instanceof MemberName) {
+				ctx.invoke(genMemberName, (MemberName) propertyFunction, ctx, out);
+				out.print("()");
+			} else if (propertyFunction instanceof MemberAccess) {
+				ctx.invoke(genMemberAccess, (MemberAccess) propertyFunction, ctx, out);
+				out.print("()");
+			} else {
+				ctx.invoke(genAccessor, (Expression) propertyFunction, ctx, out);
+				out.print("()");
 			}
-			if ((functionName == null) || (functionName.trim().length() == 0)) {
-				functionName = "get" + element.getName().substring(0, 1).toUpperCase();
-				if (element.getName().length() > 1)
-					functionName = functionName + element.getName().substring(1);
-			}
-			// if the function name matches the name of the current function, then this is the getter and we simply output
-			// the name of the variable, instead of creating an infinite loop of calls to the same function
-			if (functionName.equals(ctx.getCurrentFunction()))
-				genName(element, ctx, out);
-			else
-				out.print(functionName + "()");
-		} else
+		} else {
 			genName(element, ctx, out);
+		}
 	}
 
 	public void genName(NamedElement element, Context ctx, TabbedWriter out) {

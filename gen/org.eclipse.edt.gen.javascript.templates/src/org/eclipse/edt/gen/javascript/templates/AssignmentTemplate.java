@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-import org.eclipse.edt.gen.javascript.CommonUtilities;
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayAccess;
@@ -26,22 +26,27 @@ public class AssignmentTemplate extends JavaScriptTemplate {
 	public void genExpression(Assignment expr, Context ctx, TabbedWriter out) {
 		// first, make this expression compatible
 		IRUtils.makeCompatible(expr);
+
+		boolean isLHS = true;
+		ctx.putAttribute(expr.getLHS(), Constants.EXPR_LHS, isLHS); // TODO sbg do we need to clear / remove this?
+
 		// generate the assignment based on the lhs, but pass along the rhs
 		Field field = null;
 		if (expr.getLHS() instanceof ArrayAccess && ((Name) ((ArrayAccess) expr.getLHS()).getArray()).getNamedElement() instanceof Field)
 			field = (Field) ((Name) ((ArrayAccess) expr.getLHS()).getArray()).getNamedElement();
 		else if (expr.getLHS() instanceof Name && ((Name) expr.getLHS()).getNamedElement() instanceof Field)
 			field = (Field) ((Name) expr.getLHS()).getNamedElement();
-		if (field != null && field.getContainer() != null && field.getContainer() instanceof Type)
+		if (field != null && field.getContainer() != null && field.getContainer() instanceof Type) {
+			ctx.putAttribute(field, Constants.EXPR_LHS, isLHS); // TODO sbg do we need to clear / remove this?
 			ctx.invoke(genContainerBasedAssignment, (Type) field.getContainer(), ctx, out, expr, field);
-		else
+			ctx.putAttribute(field, Constants.EXPR_LHS, false); // TODO sbg do we need to clear / remove this?
+		} else
 			genAssignment(expr, ctx, out);
+
+		ctx.putAttribute(expr.getLHS(), Constants.EXPR_LHS, false); // TODO sbg do we need to clear / remove this?
 	}
 
 	public void genAssignment(Assignment expr, Context ctx, TabbedWriter out) {
-		String operator = "=";
-		if (expr.getOperator() != null && expr.getOperator().length() > 0)
-			operator = expr.getOperator();
-		ctx.invoke(genAssignment, expr.getLHS(), ctx, out, expr.getRHS(), " " + CommonUtilities.getNativeJavaScriptAssignment(operator) + " ");
+		ctx.invoke(genTypeBasedAssignment, expr.getLHS().getType(), ctx, out, expr);
 	}
 }
