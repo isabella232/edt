@@ -17,56 +17,14 @@ externalType EString extends EglString type ParameterizableType {
 	static function $Plus(lvalue EString in, rvalue EString in) returns(EString) {@Operation{"+"}};
 
 	/**
-	 * {@Operation +} Concatenates a string and an Any.
-	 *
-	 * @throws AnyException if the conversion from any to string fails.
-	 */
-	static function $Plus(lvalue EString in, rvalue EglAny in) returns(EString) {@Operation{"+"}};
-
-	/**
-	 * {@Operation +} Concatenates an Any and a string.
-	 *
-	 * @throws AnyException if the conversion from any to string fails.
-	 */
-	static function $Plus(lvalue EglAny in, rvalue EString in) returns(EString) {@Operation{"+"}};
-
-	/**
 	 * {@Operation ::} Concatenates two strings.
 	 */
 	static function $Concat(value EString in, rvalue EString in) returns (EString) {@Operation{"::"}};
 
 	/**
-	 * {@Operation ::} Concatenates a string and an Any.
-	 *
-	 * @throws AnyException if the conversion from any to string fails.
-	 */
-	static function $Concat(value EString in, rvalue EglAny in) returns (EString) {@Operation{"::"}};
-
-	/**
-	 * {@Operation ::} Concatenates an Any and a string.
-	 *
-	 * @throws AnyException if the conversion from any to string fails.
-	 */
-	static function $Concat(value EglAny in, rvalue EString in) returns (EString) {@Operation{"::"}};
-
-	/**
 	 * {@Operation ?:} Concatenates two strings.  If either is null then null is returned.
 	 */
 	static function $ConcatNull(value EString in, rvalue EString in) returns(EString) {@Operation{"?:"}};
-
-	/**
-	 * {@Operation ?:} Concatenates a string and an Any.  If either is null then null is returned.
-	 *
-	 * @throws AnyException if the conversion from any to string fails.
-	 */
-	static function $ConcatNull(value EString in, rvalue EglAny in) returns(EString) {@Operation{"?:"}};
-
-	/**
-	 * {@Operation ?:} Concatenates an Any and a string.  If either is null then null is returned.
-	 *
-	 * @throws AnyException if the conversion from any to string fails.
-	 */
-	static function $ConcatNull(value EglAny in, rvalue EString in) returns(EString) {@Operation{"?:"}};
 
 	/**
 	 * {@Operation <} Compares two strings.
