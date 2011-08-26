@@ -184,7 +184,7 @@ public class CommonUtilities {
 		if (op.equals(expr.Op_MULTIPLY))
 			return "multiply";
 		if (op.equals(expr.Op_MODULO))
-			return "modulo";
+			return "remainder";
 		if (op.equals(expr.Op_EQ))
 			return "equals";
 		if (op.equals(expr.Op_NE))
