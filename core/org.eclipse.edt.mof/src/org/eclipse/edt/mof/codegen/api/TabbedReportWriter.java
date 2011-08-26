@@ -99,8 +99,8 @@ public class TabbedReportWriter extends TabbedWriter {
 							first = false;
 						}
 
-						templateStack.append("<span>" + cname.substring(cname.lastIndexOf('.') + 1) + "." + element.getMethodName() + ":" + element.getLineNumber()
-							+ "</span><br>");
+						templateStack.append("<span>" + cname.substring(cname.lastIndexOf('.') + 1) + "." + element.getMethodName() + ":"
+							+ element.getLineNumber() + "</span><br>");
 						// TODO sbg revisit support for line numbers in EGL source....
 						// if ((first) && (location != null)){
 						// result.append("line = "+location.getValue("line")+"<br>");
@@ -114,11 +114,11 @@ public class TabbedReportWriter extends TabbedWriter {
 			result[1] = templateStack.length() == 0 ? null : templateStack.toString();
 		}
 		catch (Exception e) {
-			/* Firewall any problems in the collection of data for the 
-			 * generation report to ensure that normal src generation
+			/*
+			 * Firewall any problems in the collection of data for the generation report to ensure that normal src generation
 			 * always occurs as-expected....
 			 */
-			result = new String[]{ null, null }; 
+			result = new String[] { null, null };
 		}
 		return result;
 	}
@@ -131,7 +131,7 @@ public class TabbedReportWriter extends TabbedWriter {
 		if (stackLoc != null) {
 			rpt.print("<a  class=info href=\"" + stackLoc + "\">");
 		}
-		rpt.print(c);
+		rpt.print(escHTML(new char[] { c }));
 		if (stackLoc != null) {
 			rpt.print(stack[1]);
 		}
@@ -145,10 +145,34 @@ public class TabbedReportWriter extends TabbedWriter {
 		if (stackLoc != null) {
 			rpt.print("<a  class=info href=\"" + stackLoc + "\">");
 		}
-		rpt.print(chars);
+		rpt.print(escHTML(chars));
 		if (stackLoc != null) {
 			rpt.print(stack[1]);
 		}
+	}
+
+	// TODO sbg Replace this trivial, incomplete implementation with something more robust
+	private static String escHTML(char[] chars) {
+		StringBuilder b = new StringBuilder();
+		for (char c : chars) {
+			switch (c) {
+				case '<':
+					b.append("&lt;");
+					break;
+				case '>':
+					b.append("&gt;");
+					break;
+				case '&':
+					b.append("&amp;");
+					break;
+				case '\"':
+					b.append("&quot;");
+					break;
+				default:
+					b.append(c);
+			}
+		}
+		return b.toString();
 	}
 
 	public void close() {
