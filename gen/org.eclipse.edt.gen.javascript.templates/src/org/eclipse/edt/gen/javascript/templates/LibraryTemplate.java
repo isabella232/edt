@@ -50,17 +50,6 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		out.print("ExecutableBase");
 	}
 
-	public void genClassBody(Library library, Context ctx, TabbedWriter out) {
-		ctx.invoke(genConstructors, library, ctx, out);
-		ctx.invoke(genFunctions, library, ctx, out);
-		ctx.invoke(genFields, library, ctx, out);
-		ctx.invoke(genGetterSetters, library, ctx, out);
-		out.println(",");
-		ctx.invoke(genAnnotations, library, ctx, out);
-		ctx.invoke(genFieldAnnotations, library, ctx, out);
-		ctx.invoke(genNamespaceMap, library, ctx, out);
-	}
-
 	public void genClassHeader(Library library, Context ctx, TabbedWriter out) {
 		// TODO sbg consider refactoring into a separate extension
 		out.print("egl.defineRUILibrary(");
@@ -97,25 +86,25 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		out.println(";");
 		ctx.invoke(genAccessor, library, ctx, out);
 		out.println("=this;");
-		ctx.invoke(genInitializeMethodBody, library, ctx, out);
 
 		out.println("this.jsrt$SysVar = new egl.egl.core.SysVar();");
-		// instantiate each user part
-		List<Part> usedParts = library.getUsedParts();
-		for (Part part : usedParts) {
-			ctx.invoke(genInstantiation, part, ctx, out);
-			out.println(";");
-		}
+
 		// instantiate each library
 		ctx.invoke(genLibraries, library, ctx, out);
+
+		out.println("this.eze$$setInitial();");
 		out.println("}");
 	}
 
-	public void genSetEmptyMethods(Library library, Context ctx, TabbedWriter out) {}
+	public void genSetEmptyMethods(Library library, Context ctx, TabbedWriter out) {
+		// Not applicable to libraries
+	}
+
+	public void genCloneMethods(Library library, Context ctx, TabbedWriter out) {
+		// Not applicable to libraries
+	}
 
 	public void genSetEmptyMethod(Library library, Context ctx, TabbedWriter out) {}
-
-	public void genInitializeMethods(Library library, Context ctx, TabbedWriter out) {}
 
 	public void genInstantiation(Type type, Context ctx, TabbedWriter out) {
 		out.print("new ");
@@ -137,7 +126,7 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		ctx.invoke(genContainerBasedAccessorArgs, library, ctx, out, arg);
 		out.print(")");
 	}
-	
+
 	public void genContainerBasedAccessorArgs(Library library, Context ctx, TabbedWriter out, Function arg) {
 		ctx.invoke(genAccessor, library, ctx, out);
 		out.print(",");

@@ -36,14 +36,15 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		ctx.invoke(preGenUsedParts, part, ctx);
 		ctx.invoke(preGenFields, part, ctx);
 		ctx.invoke(preGenFunctions, part, ctx);
-		if(part.getAnnotation(Constants.AnnotationXMLRootElement) == null) {
-			//add an xmlRootElement
+		if (part.getAnnotation(Constants.AnnotationXMLRootElement) == null) {
+			// add an xmlRootElement
 			try {
 				Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXMLRootElement);
 				annotation.setValue("name", part.getId());
 				part.addAnnotation(annotation);
-			} catch (Exception e) {}
-		}	
+			}
+			catch (Exception e) {}
+		}
 		addNamespaceMap(part, ctx);
 	}
 
@@ -110,15 +111,10 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 
 	public void genClassBody(EGLClass part, Context ctx, TabbedWriter out) {
 		ctx.invoke(genConstructors, part, ctx, out);
-		out.println(",");
 		ctx.invoke(genSetEmptyMethods, part, ctx, out);
-		out.println(",");
 		ctx.invoke(genInitializeMethods, part, ctx, out);
-		out.println(",");
 		ctx.invoke(genCloneMethods, part, ctx, out);
-		// out.println(",");
 		// genGetFieldSignaturesMethod(part, ctx, out, args);
-		out.println(",");
 		ctx.invoke(genAnnotations, part, ctx, out);
 		ctx.invoke(genFieldAnnotations, part, ctx, out);
 		ctx.invoke(genNamespaceMap, part, ctx, out);
@@ -171,6 +167,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	}
 
 	public void genSetEmptyMethods(EGLClass part, Context ctx, TabbedWriter out) {
+		out.println(",");
 		out.print(quoted("eze$$setEmpty"));
 		out.println(": function() {");
 		ctx.invoke(genSetEmptyMethodBody, part, ctx, out);
@@ -192,6 +189,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	}
 
 	public void genInitializeMethods(EGLClass part, Context ctx, TabbedWriter out) {
+		out.println(",");
 		out.print(quoted("eze$$setInitial"));
 		out.println(": function() {");
 		ctx.invoke(genInitializeMethodBody, part, ctx, out);
@@ -214,10 +212,9 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	}
 
 	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field field) {
-		if (field.getInitializerStatements() != null){
+		if (field.getInitializerStatements() != null) {
 			genInitializerStatements(field, ctx, out);
-		}
-		else {
+		} else {
 			if (field.getContainer() != null && field.getContainer() instanceof Type)
 				ctx.invoke(genQualifier, field.getContainer(), ctx, out, field);
 			ctx.invoke(genName, field, ctx, out);
@@ -226,12 +223,13 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			out.println(";");
 		}
 	}
-	
+
 	public void genInitializerStatements(Field field, Context ctx, TabbedWriter out) {
 		ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
 	}
 
 	public void genCloneMethods(EGLClass part, Context ctx, TabbedWriter out) {
+		out.println(",");
 		out.print(quoted("eze$$clone"));
 		out.println(": function() {");
 		ctx.invoke(genCloneMethodBody, part, ctx, out);
@@ -313,19 +311,21 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	public void genSuperClass(EGLClass part, Context ctx, TabbedWriter out) {}
 
 	public void genAnnotations(EGLClass part, Context ctx, TabbedWriter out) {
+		out.println(",");
 		out.print(quoted("eze$$getAnnotations"));
 		out.println(": function() {");
 		out.println("if(this.annotations === undefined){");
 		out.println("this.annotations = {};");
-		for(Annotation annot : part.getAnnotations()){
+		for (Annotation annot : part.getAnnotations()) {
 			ctx.invoke(genConversionControlAnnotation, annot.getEClass(), ctx, out, annot, part);
 		}
 		out.println("}");
 		out.println("return this.annotations;");
-		out.println("},");
+		out.println("}");
 	}
 
 	public void genFieldAnnotations(EGLClass part, Context ctx, TabbedWriter out) {
+		out.println(",");
 		out.print(quoted("eze$$getFieldInfos"));
 		out.println(": function() {");
 		out.println("if(this.fieldInfos === undefined){");
@@ -341,10 +341,11 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		}
 		out.println("}");
 		out.println("return this.fieldInfos;");
-		out.println("},");
+		out.println("}");
 	}
 
 	public void genNamespaceMap(EGLClass part, Context ctx, TabbedWriter out) {
+		out.println(",");
 		out.print(quoted("eze$$resolvePart"));
 		out.println(": function(/*string*/ namespace, /*string*/ localName) {");
 		out.println("if(this.namespaceMap == undefined){");
