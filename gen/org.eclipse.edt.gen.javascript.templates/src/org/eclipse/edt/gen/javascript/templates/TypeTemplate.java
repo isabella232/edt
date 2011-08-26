@@ -153,6 +153,13 @@ public class TypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
+	public void genTypeBasedAssignment(Type type, Context ctx, TabbedWriter out, Assignment arg) {
+		String operator = "=";
+		if (arg.getOperator() != null && arg.getOperator().length() > 0)
+			operator = arg.getOperator();
+		ctx.invoke(genAssignment, arg.getLHS(), ctx, out, arg.getRHS(), " " + CommonUtilities.getNativeJavaScriptAssignment(operator) + " ");
+	}
+
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
 		// if either side of this expression is nullable, or if there is no direct java operation, we need to use the runtime
 		if ((arg.getLHS().isNullable() || arg.getRHS().isNullable()) || CommonUtilities.getNativeJavaScriptOperation(arg, ctx).length() == 0) {
@@ -225,7 +232,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 	public void genContainerBasedInvocation(Type type, Context ctx, TabbedWriter out, Expression arg) {
 		ctx.invoke(genInvocation, arg, ctx, out);
 	}
-	
+
 	public void genFieldInfoTypeName(Type type, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, arg);
 	}
