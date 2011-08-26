@@ -26,18 +26,14 @@ public class HandlerTemplate extends JavaTemplate {
 		// Generate RunUnit constructor
 		out.print("public ");
 		ctx.invoke(genClassName, type, ctx, out);
-		out.print("( RunUnit ru");
+		out.print("(");
 		ctx.invoke(genAdditionalConstructorParams, type, ctx, out);
-		out.println(" ) {");
-		out.print("super( ru");
+		out.println(") {");
+		out.print("super(");
 		ctx.invoke(genAdditionalSuperConstructorArgs, type, ctx, out);
-		out.println(" );");
+		out.println(");");
 		out.println("ezeInitialize();");
 		out.println("}");
-	}
-
-	public void genConstructorOptions(Handler type, Context ctx, TabbedWriter out) {
-		out.print("_runUnit()");
 	}
 
 	public void genRuntimeTypeName(Handler type, Context ctx, TabbedWriter out, TypeNameKind arg) {

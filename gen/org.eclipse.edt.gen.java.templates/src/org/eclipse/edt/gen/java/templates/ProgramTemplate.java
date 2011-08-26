@@ -37,32 +37,29 @@ public class ProgramTemplate extends JavaTemplate {
 		if (CommonUtilities.packageName(program) != null && CommonUtilities.packageName(program).length() > 0)
 			packageName = CommonUtilities.packageName(program).replace(".", "/") + "/";
 		out.println("");
-		out.println("public static StartupInfo _startupInfo() {");
-		out.print("\treturn new StartupInfo( \"");
+		out.println("public static void main(String... ezeargs) throws Exception {");
+		out.print("StartupInfo info = new StartupInfo( \"");
 		ctx.invoke(genClassName, program, ctx, out);
 		out.print("\", \"" + packageName);
 		ctx.invoke(genClassName, program, ctx, out);
-		out.println(".properties\", false );");
-		out.println("}");
-		out.println("public static void main(String... ezeargs) throws Exception {");
-		out.println("\t\tStartupInfo info = _startupInfo();");
-		out.println("\t\tinfo.setArgs( ezeargs );");
-		out.println("\t\tRunUnit ru = new RunUnitBase( info );");
-		out.print("\t\tru.start( new ");
+		out.println(".properties\", ezeargs );");
+		out.println("RunUnit ru = new JSERunUnit( info );");
+		out.println("org.eclipse.edt.javart.Runtime.setStaticRunUnit( ru );");
+		out.print("ru.start( new ");
 		ctx.invoke(genClassName, program, ctx, out);
-		out.println("( ru ), ezeargs );");
-		out.println("\t\tru.exit();");
+		out.println("() );");
+		out.println("ru.exit();");
 		out.println("}");
 
 		// Generate RunUnit constructor
 		out.print("public ");
 		ctx.invoke(genClassName, program, ctx, out);
-		out.print("( RunUnit ru");
+		out.print("(");
 		ctx.invoke(genAdditionalConstructorParams, program, ctx, out);
-		out.println(" ) {");
-		out.print("super( ru");
+		out.println(") {");
+		out.print("super(");
 		ctx.invoke(genAdditionalSuperConstructorArgs, program, ctx, out);
-		out.println(" );");
+		out.println(");");
 		out.println("ezeInitialize();");
 		out.println("}");
 	}

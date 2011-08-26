@@ -62,12 +62,12 @@ public class LibraryTemplate extends JavaTemplate {
 	public void genConstructor(Library library, Context ctx, TabbedWriter out) {
 		out.print("public ");
 		ctx.invoke(genClassName, library, ctx, out);
-		out.print("( RunUnit ru");
+		out.print("(");
 		ctx.invoke(genAdditionalConstructorParams, library, ctx, out);
-		out.println(" ) {");
-		out.print("super( ru");
+		out.println(") {");
+		out.print("super(");
 		ctx.invoke(genAdditionalSuperConstructorArgs, library, ctx, out);
-		out.println(" );");
+		out.println(");");
 		out.println("ezeInitialize();");
 		out.println("}");
 	}

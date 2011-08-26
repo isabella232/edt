@@ -26,12 +26,12 @@ public class ServiceTemplate extends JavaTemplate {
 		// Generate RunUnit constructor
 		out.print("public ");
 		ctx.invoke(genClassName, service, ctx, out);
-		out.print("( RunUnit ru");
+		out.print("(");
 		ctx.invoke(genAdditionalConstructorParams, service, ctx, out);
-		out.println(" ) {");
-		out.print("super( ru");
+		out.println(") {");
+		out.print("super(");
 		ctx.invoke(genAdditionalSuperConstructorArgs, service, ctx, out);
-		out.println(" );");
+		out.println(");");
 		out.println("ezeInitialize();");
 		out.println("}");
 	}

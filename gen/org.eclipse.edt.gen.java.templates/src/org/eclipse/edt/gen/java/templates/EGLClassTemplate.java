@@ -235,7 +235,7 @@ public class EGLClassTemplate extends JavaTemplate {
 		out.println("if (" + Constants.LIBRARY_PREFIX + arg.getFullyQualifiedName().replace('.', '_') + " == null) {");
 		out.print(Constants.LIBRARY_PREFIX + arg.getFullyQualifiedName().replace('.', '_') + " = (");
 		ctx.invoke(genRuntimeTypeName, (Type) arg, ctx, out, TypeNameKind.EGLImplementation);
-		out.print(") _runUnit().getExecutable(\"");
+		out.print(")org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary(\"");
 		if(ctx.mapsToNativeType(arg)){
 			out.print(ctx.getNativeMapping(arg.getFullyQualifiedName()));
 		}
