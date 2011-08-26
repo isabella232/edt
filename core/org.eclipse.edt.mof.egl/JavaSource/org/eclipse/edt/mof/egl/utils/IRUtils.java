@@ -45,6 +45,7 @@ import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.NewExpression;
@@ -627,6 +628,37 @@ public class IRUtils {
 	}
 
 	public static Operation getBinaryOperation(Classifier lhs, Classifier rhs, String opSymbol) {
+		
+		Operation result = checkForTextConcatenation(lhs, opSymbol);
+		if (result != null) {
+			return result;
+		}
+		
+		result = primGetBinaryOperation(lhs, rhs, opSymbol);
+		if (result != null) {
+			return result;
+		}
+		
+		result = checkForTextConcatenation(rhs, opSymbol);
+		if (result != null) {
+			return result;
+		}
+		
+		return null;		
+	}
+	
+	private static Operation checkForTextConcatenation(Classifier clazz, String opSymbol) {
+		if (opSymbol.equals("+") || opSymbol.equals("::") || opSymbol.equals("?:")) {
+			String key = clazz.getMofSerializationKey();
+			if (key.equalsIgnoreCase(MofConversion.Type_EGLString) || key.equalsIgnoreCase(MofConversion.Type_EGL_EGLString) ) {
+				return TypeUtils.getBinaryOperation((StructPart)clazz, opSymbol);
+			}
+		}
+		return null;
+	}
+
+	private static Operation primGetBinaryOperation(Classifier lhs, Classifier rhs, String opSymbol) {
+				
 		if (!(lhs instanceof StructPart)) {
 			
 			if (rhs instanceof StructPart) {
@@ -680,7 +712,7 @@ public class IRUtils {
 		}
 		
 		result = TypeUtils.getBinaryOperation(clazz, opSymbol);
-		if (result == null) {
+		if (result == null && direction != null) {
 			// If there was no operation then reverse the lookup
 			if (direction == -1) {
 				conOp = getConversionOperation((StructPart)lhs, (StructPart)rhs);
