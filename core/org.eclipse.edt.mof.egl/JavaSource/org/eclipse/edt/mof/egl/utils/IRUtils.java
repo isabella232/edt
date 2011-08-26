@@ -651,7 +651,7 @@ public class IRUtils {
 		if (opSymbol.equals("+") || opSymbol.equals("::") || opSymbol.equals("?:")) {
 			String key = clazz.getMofSerializationKey();
 			if (key.equalsIgnoreCase(MofConversion.Type_EGLString) || key.equalsIgnoreCase(MofConversion.Type_EGL_EGLString) ) {
-				return TypeUtils.getBinaryOperation((StructPart)clazz, opSymbol);
+				return TypeUtils.getBinaryOperation((StructPart)clazz, opSymbol, false);
 			}
 		}
 		return null;
@@ -711,7 +711,7 @@ public class IRUtils {
 			return result;
 		}
 		
-		result = TypeUtils.getBinaryOperation(clazz, opSymbol);
+		result = TypeUtils.getBinaryOperation(clazz, opSymbol, (direction != null && direction == 0) );
 		if (result == null && direction != null) {
 			// If there was no operation then reverse the lookup
 			if (direction == -1) {
@@ -724,7 +724,7 @@ public class IRUtils {
 				if (conOp == null) return null;
 				clazz = (StructPart)conOp.getType().getClassifier(); 
 			}		
-			result = TypeUtils.getBinaryOperation(clazz, opSymbol);
+			result = TypeUtils.getBinaryOperation(clazz, opSymbol, false);
 		}
 		return result;	
 	}

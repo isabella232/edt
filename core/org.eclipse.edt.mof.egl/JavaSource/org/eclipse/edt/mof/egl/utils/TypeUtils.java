@@ -583,7 +583,7 @@ public class TypeUtils implements MofConversion {
 		return -1;
 	}
 	
-	public static Operation getBinaryOperation(StructPart clazz, String opSymbol ) {
+	public static Operation getBinaryOperation(StructPart clazz, String opSymbol, boolean searchSuperTypes ) {
 		for (Operation op : clazz.getOperations()) {
 			if (op.getOpSymbol().equals(opSymbol) 
 					&& op.getParameters().size() == 2
@@ -592,6 +592,11 @@ public class TypeUtils implements MofConversion {
 				return op;
 			}
 		}
+		
+		if (searchSuperTypes && !clazz.getSuperTypes().isEmpty()) {
+			return getBinaryOperation(clazz.getSuperTypes().get(0), opSymbol, searchSuperTypes);
+		}
+		
 		return null;
 
 	}
