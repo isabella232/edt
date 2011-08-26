@@ -67,10 +67,7 @@ public class StringTypeTemplate extends JavaScriptTemplate {
 			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
 			out.print(")");
 			out.print(getNativeStringOperation(arg));
-			if (arg.getRHS() instanceof BoxingExpression) //TODO sbg temporary workaround
-				ctx.invoke(genExpression, ((BoxingExpression) arg.getRHS()).getExpr(), ctx, out);
-			else
-				ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
 			out.print(getNativeStringComparisionOperation(arg));
 		}
 	}
