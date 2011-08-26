@@ -108,7 +108,6 @@ public class EvServer implements IClientProxy {
 		private PrintStream ps;
 		
 		public ___ProxyHandler( RuiBrowserHttpRequest ruiRequest, final PrintStream ps ) {
-			super(null);
 			this.ruiRequest = ruiRequest;
 			this.ps = ps;
 		}
