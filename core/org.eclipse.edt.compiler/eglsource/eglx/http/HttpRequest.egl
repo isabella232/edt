@@ -10,11 +10,12 @@
  *
  *******************************************************************************/
 package eglx.http;
+import eglx.services.Encoding;
 
 record HttpRequest
 	uri string?;
 	method HttpMethod?;
-	encoding Encoding?;
+	encoding Encoding?;  
 	charset string?;
 	contentType string?;
 	headers dictionary;

@@ -12,9 +12,10 @@
 package eglx.http;
 
 import eglx.rest.RestType; 
+import eglx.services.Encoding;
 
 record HttpREST
 	request HttpRequest{method=HttpMethod.POST, encoding=Encoding.XML, charset = "UTF-8"};
-	response HttpResponse{encoding=Encoding.USE_CONTENTTYPE};
+	response HttpResponse{encoding=Encoding.USE_CONTENTTYPE};  
 	invocationType RestType = RestType.TrueRest;
 end
