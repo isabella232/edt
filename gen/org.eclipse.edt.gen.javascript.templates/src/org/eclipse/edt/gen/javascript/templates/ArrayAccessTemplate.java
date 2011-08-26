@@ -39,10 +39,12 @@ public class ArrayAccessTemplate extends JavaScriptTemplate {
 
 	public void genExpression(ArrayAccess expr, Context ctx, TabbedWriter out) {
 		Field field = null;
-		if (((Name) expr.getArray()).getNamedElement() instanceof Field)
-			field = (Field) ((Name) expr.getArray()).getNamedElement();
+		if(expr.getArray() instanceof Name){
+			if (((Name) expr.getArray()).getNamedElement() instanceof Field)
+				field = (Field) ((Name) expr.getArray()).getNamedElement();
+		}
 		if (field != null && field.getContainer() != null && field.getContainer() instanceof Type)
-			ctx.invoke(genContainerBasedArrayAccess, (Type) field.getContainer(), ctx, out, expr, field);
+				ctx.invoke(genContainerBasedArrayAccess, (Type) field.getContainer(), ctx, out, expr, field);
 		else
 			genArrayAccess(expr, ctx, out);
 	}
