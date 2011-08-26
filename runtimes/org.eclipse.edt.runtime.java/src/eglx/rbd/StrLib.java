@@ -41,8 +41,7 @@ public class StrLib extends ExecutableBase {
 	public String defaultMoneyFormat;
 	@javax.xml.bind.annotation.XmlTransient
 	public String defaultNumericFormat;
-	public StrLib( RunUnit ru ) {
-		super( ru );
+	public StrLib() {
 		ezeInitialize();
 	}
 	public void ezeInitialize() {

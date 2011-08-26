@@ -15,7 +15,6 @@ import java.util.Calendar;
 
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.Executable;
-import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.util.DateTimeUtil;
@@ -27,8 +26,7 @@ import egl.lang.TypeCastException;
 public class DateTimeLib extends ExecutableBase {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
-	public DateTimeLib(RunUnit ru) throws AnyException {
-		super(ru);
+	public DateTimeLib() throws AnyException {
 	}
 
 	/**

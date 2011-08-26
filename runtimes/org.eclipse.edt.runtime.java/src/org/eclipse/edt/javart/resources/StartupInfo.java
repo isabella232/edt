@@ -21,11 +21,6 @@ import org.eclipse.edt.javart.Constants;
 public class StartupInfo implements Serializable
 {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-
-	/**
-	 * The JEE flag, defaults to false.
-	 */
-	private boolean isJEE;
 	
 	/**
 	 * The name for the run unit, defaults to null.
@@ -50,21 +45,11 @@ public class StartupInfo implements Serializable
 	/**
 	 * Creates a StartupInfo.
 	 */
-	public StartupInfo( String ruName, String propertyFilePath, boolean isJEE )
+	public StartupInfo( String ruName, String propertyFilePath, String[] commandLineArgs )
 	{
 		this.ruName = ruName;
 		this.propertyFilePath = propertyFilePath;
-		this.isJEE = isJEE;
-	}
-
-	/**
-	 * Returns the isJEE flag.
-	 * 
-	 * @return the isJEE flag.
-	 */
-	public boolean isJEE()
-	{
-		return isJEE;
+		this.commandLineArgs = commandLineArgs;
 	}
 
 	/**
@@ -115,15 +100,5 @@ public class StartupInfo implements Serializable
 	public String[] getArgs()
 	{
 		return commandLineArgs;
-	}
-	
-	/**
-	 * Sets the command line arguments for main programs.
-	 * 
-	 * @param commandLineArgs the commandLineArgs to set.
-	 */
-	public void setArgs(String[] commandLineArgs)
-	{
-		this.commandLineArgs = commandLineArgs;
 	}
 }

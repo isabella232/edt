@@ -12,7 +12,6 @@ package org.eclipse.edt.javart.services.servlet;
 
 import java.lang.reflect.Method;
 
-import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.json.ArrayNode;
 import org.eclipse.edt.javart.json.JsonParser;
 import org.eclipse.edt.javart.json.JsonUtilities;
@@ -37,8 +36,8 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 	private static String JSON_RPC_PARAMETER_ID = "params";
 	private static String JSON_RPC_RESULT_ID = "result";
 
-	public JsonRpcInvoker(RunUnit rununit, String serviceClassName, ServiceKind serviceKind) {
-		super(rununit, serviceClassName, serviceKind);
+	public JsonRpcInvoker(String serviceClassName, ServiceKind serviceKind) {
+		super(serviceClassName, serviceKind);
 	}
 
 	public HttpResponse invoke(HttpRequest request)throws AnyException

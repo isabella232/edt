@@ -30,21 +30,17 @@ public interface RunUnit {
 	void rollback() throws AnyException;
 	void registerResource(RecoverableResource rs);
 	void unregisterResource(RecoverableResource rs);
-	void start(Program exec, String...args) throws Exception;
-	void debugStart(Program exec, String...args) throws Exception;
+	void start(Program exec) throws Exception;
 	void exit();
 	void transferCleanup(boolean isTransaction);
 	StartupInfo getStartupInfo();
 	void endRunUnit(Executable exec) throws Exception;
 	void endRunUnit(Executable exec, Exception ex) throws Exception;
 	int getReturnCode();
-
-	Executable getExecutable(String name) throws AnyException;
+	void setReturnCode(int code);
+	Executable loadExecutable(String name) throws AnyException;
+	Executable loadLibrary(String name) throws AnyException;
 	void switchLocale(Locale loc);
 	LocalizedText getLocalizedText();
-	String getDefaultDateFormat();
-	String getDefaultTimestampFormat();
-	String getDefaultTimeFormat();
-	String getDefaultNumericFormat();
 	Trace getTrace();
 }

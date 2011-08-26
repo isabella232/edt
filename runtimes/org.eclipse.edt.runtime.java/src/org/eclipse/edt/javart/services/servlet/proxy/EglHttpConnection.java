@@ -20,7 +20,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
-import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.services.servlet.Invoker;
 
 import eglx.http.HttpRequest;
@@ -28,8 +27,7 @@ import eglx.http.HttpRequest;
 
 abstract class EglHttpConnection extends Invoker{
 	
-	protected EglHttpConnection(RunUnit runUnit) {
-		super(runUnit);
+	protected EglHttpConnection() {
 	}
 	protected HttpURLConnection getHttpProxyConnection( HttpRequest restRequest ) throws IOException
 	{

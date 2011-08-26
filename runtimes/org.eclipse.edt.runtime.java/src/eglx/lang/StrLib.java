@@ -18,8 +18,9 @@ import java.util.StringTokenizer;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.Runtime;
+
 import egl.lang.AnyException;
-import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.TimestampData;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.util.DateTimeUtil;
@@ -31,72 +32,58 @@ public class StrLib extends ExecutableBase {
 
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
-	private static RunUnit staticRu;
-
 	/**
 	 * Constructor
 	 */
-	public StrLib(RunUnit ru) throws AnyException {
-		super(ru);
-		this.staticRu = ru;
+	public StrLib() throws AnyException {
 	}
-
-	/**
-	 * default timestamp format
-	 */
-	public static String defaultTimeStampFormat;
 
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
 	public static String format(BigDecimal number, String format) {
-		return NumberFormatter.fmtNum(number, format, staticRu.getLocalizedText());
+		return NumberFormatter.fmtNum(number, format, Runtime.getRunUnit().getLocalizedText());
 	}
 
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
 	public static String format(short number, String format) {
-		return NumberFormatter.fmtNum(new BigDecimal(number), format, staticRu.getLocalizedText());
+		return NumberFormatter.fmtNum(new BigDecimal(number), format, Runtime.getRunUnit().getLocalizedText());
 	}
 
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
 	public static String format(int number, String format) {
-		return NumberFormatter.fmtNum(new BigDecimal(number), format, staticRu.getLocalizedText());
+		return NumberFormatter.fmtNum(new BigDecimal(number), format, Runtime.getRunUnit().getLocalizedText());
 	}
 
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
 	public static String format(long number, String format) {
-		return NumberFormatter.fmtNum(new BigDecimal(number), format, staticRu.getLocalizedText());
+		return NumberFormatter.fmtNum(new BigDecimal(number), format, Runtime.getRunUnit().getLocalizedText());
 	}
 
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
 	public static String format(float number, String format) {
-		return NumberFormatter.fmtNum(new BigDecimal(number), format, staticRu.getLocalizedText());
+		return NumberFormatter.fmtNum(new BigDecimal(number), format, Runtime.getRunUnit().getLocalizedText());
 	}
 
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
 	public static String format(double number, String format) {
-		return NumberFormatter.fmtNum(new BigDecimal(number), format, staticRu.getLocalizedText());
+		return NumberFormatter.fmtNum(new BigDecimal(number), format, Runtime.getRunUnit().getLocalizedText());
 	}
 
 	/**
-	 * formats a parameter into a timestamp value and returns a value of type STRING. The DB2 format is the default format.
+	 * formats a parameter into a timestamp value and returns a value of type STRING.
 	 */
 	public static String format(Calendar timestampValue, String timestampFormat) {
-		String format = timestampFormat;
-		if (format == null || format.length() == 0)
-			format = defaultTimeStampFormat;
-		// if ( format.length() == 0 )
-		// format = timestampValue.ezeUnbox().get???();
 		TimestampData data = new TimestampData(timestampValue, 0);
 		boolean reset = false;
 		int micros = data.microseconds;
@@ -109,7 +96,7 @@ public class StrLib extends ExecutableBase {
 			int century = data.calendar.get(Calendar.YEAR) / 100 + 1;
 			Date date = data.calendar.getTime();
 			synchronized (DateTimeUtil.LOCK) {
-				JavartDateFormat formatter = DateTimeUtil.getDateFormat(format);
+				JavartDateFormat formatter = DateTimeUtil.getDateFormat(timestampFormat);
 				formatter.setCentury(century);
 				formatter.setMicrosecond(micros);
 				return formatter.format(date);

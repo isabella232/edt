@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.services.servlet.proxy;
 
-import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.services.servlet.JsonRpcInvoker;
 import org.eclipse.edt.javart.services.servlet.ServletUtilities;
@@ -29,9 +28,8 @@ import eglx.services.ServiceUtilities;
 public class ProxyEventHandler extends TracerBase
 {
 	
-	public ProxyEventHandler(RunUnit runUnit)
+	public ProxyEventHandler()
 	{
-		super(runUnit);
 	}
 
 	public HttpResponse runProxy(String urlString, HttpRequest ruiRequest, HttpRequest serviceRequest )
@@ -57,11 +55,11 @@ public class ProxyEventHandler extends TracerBase
 			{
 				serviceKind = ServiceKind.EGL;
 				//FIXME parse the body to get the service name
-				innerResponse = new JsonRpcInvoker(getRunUnit(), serviceRequest.getUri(), serviceKind).invoke(serviceRequest);
+				innerResponse = new JsonRpcInvoker(serviceRequest.getUri(), serviceKind).invoke(serviceRequest);
 			}
 			else if( urlString.indexOf("___proxy") != -1 )
 			{
-				HttpServiceInvoker invoker = new HttpServiceInvoker(getRunUnit());
+				HttpServiceInvoker invoker = new HttpServiceInvoker();
 				serviceKind = invoker.getServiceKind(serviceRequest);
 				innerResponse = invoker.invoke(serviceRequest);
 			}

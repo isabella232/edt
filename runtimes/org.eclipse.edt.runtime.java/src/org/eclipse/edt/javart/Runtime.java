@@ -1,0 +1,80 @@
+package org.eclipse.edt.javart;
+
+/**
+ * Runtime provides access to the proper RunUnit for an EGL application.  It
+ * operates in two ways: either storing one RunUnit in a static variable, or
+ * many RunUnits, one per thread.  Use one RunUnit for stand-alone programs, and
+ * one RunUnit per thread in an application server.
+ * <P>
+ * A setter is provided for each mode of operation.  In order to prevent errors, 
+ * once one of the setters has been used, the other setter will throw an 
+ * IllegalStateException.
+ * <P>
+ * The creator of a RunUnit is responsible for calling one of the Runtime
+ * setter methods. 
+ */
+public class Runtime
+{
+	/**
+	 * The static RunUnit, used for stand-alone programs.
+	 */
+	private static RunUnit staticRU;
+	
+	/**
+	 * The per-thread RunUnits, used in application servers.
+	 */
+	private static ThreadLocal<RunUnit> threadRUs;
+	
+	/**
+	 * Sets the RunUnit to be used by stand-alone programs.
+	 * 
+	 * @param ru  the RunUnit to use.
+	 * @throws IllegalStateException if a per-thread RunUnit has been set.
+	 */
+	public static void setStaticRunUnit( RunUnit ru )
+	{
+		if ( threadRUs != null )
+		{
+			throw new IllegalStateException();
+		}
+		
+		staticRU = ru;
+	}
+	
+	/**
+	 * Sets the RunUnit to be used by programs in an application server.
+	 * 
+	 * @param ru  the RunUnit to use in the current thread.
+	 * @throws IllegalStateException if a static RunUnit has been set.
+	 */
+	public static void setThreadRunUnit( RunUnit ru )
+	{
+		if ( staticRU != null )
+		{
+			throw new IllegalStateException();
+		}
+		
+		if ( threadRUs == null )
+		{
+			threadRUs = new ThreadLocal<RunUnit>();
+		}
+		
+		threadRUs.set( ru );
+	}
+	
+	/**
+	 * Returns the appropriate RunUnit, either the static one for stand-alone
+	 * programs, or the RunUnit for this thread for programs running in an
+	 * application server.
+	 * 
+	 * @return the RunUnit to use.
+	 */
+	public static RunUnit getRunUnit()
+	{
+		if ( staticRU != null )
+		{
+			return staticRU;
+		}
+		return threadRUs.get();
+	}
+}

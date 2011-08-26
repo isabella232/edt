@@ -10,10 +10,8 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.services.servlet;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.services.ServiceBase;
 
@@ -28,8 +26,7 @@ public abstract class LocalServiceInvoker extends Invoker{
 	private ServiceKind serviceKind;
 	private ServiceBase service;
 	private Class<ServiceBase> serviceClass;
-	public LocalServiceInvoker(RunUnit rununt, String serviceClassName, ServiceKind serviceKind) {
-		super(rununt);
+	public LocalServiceInvoker(String serviceClassName, ServiceKind serviceKind) {
 		this.serviceClassName = serviceClassName;
 		this.serviceKind = serviceKind;
 	}
@@ -60,7 +57,7 @@ public abstract class LocalServiceInvoker extends Invoker{
 	{
 		if(serviceClass == null){
 			try {
-				serviceClass = (Class<ServiceBase>) getRunUnit().getClass().forName(serviceClassName);
+				serviceClass = (Class<ServiceBase>)Class.forName( serviceClassName, true, getRunUnit().getClass().getClassLoader() );
 			} 
 			catch(Exception e)
 			{
@@ -78,11 +75,7 @@ public abstract class LocalServiceInvoker extends Invoker{
 			// create a constructor object
 			try 
 			{
-				Class<?>[] argTypes = new Class<?>[] { RunUnit.class };
-				Object[] args = new Object[] { getRunUnit() };
-				Constructor<ServiceBase> constructor = getServiceClass().getConstructor(argTypes);
-				
-				service = (ServiceBase)constructor.newInstance(args);
+				service = getServiceClass().newInstance();
 			}
 			catch(AnyException ae){
 				throw ae;

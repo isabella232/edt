@@ -18,11 +18,11 @@ import org.eclipse.edt.javart.resources.StartupInfo;
 
 import egl.lang.AnyException;
 
-public class JSERunUnit extends RunUnitBase 
+public class JEERunUnit extends RunUnitBase 
 {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
-	public JSERunUnit( StartupInfo startInfo ) throws AnyException 
+	public JEERunUnit( StartupInfo startInfo ) throws AnyException 
 	{
 		super( startInfo );
 	}
@@ -39,13 +39,12 @@ public class JSERunUnit extends RunUnitBase
 			trace.put( "Change Locale to <" + loc.getDisplayName() + ">" );
 		}
 
-		Locale.setDefault( loc );
 		localizedText.switchLocale( loc );
 	}
 
 	@Override
 	public void exit() 
 	{
-		System.exit( getReturnCode() );
+		// Nothing to do here.
 	}
 }

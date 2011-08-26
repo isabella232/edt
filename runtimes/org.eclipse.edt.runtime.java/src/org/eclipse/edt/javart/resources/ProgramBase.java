@@ -14,23 +14,21 @@ package org.eclipse.edt.javart.resources;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.edt.javart.Constants;
-import egl.lang.AnyException;
-import org.eclipse.edt.javart.Program;
-import org.eclipse.edt.javart.RunUnit;
-import org.eclipse.edt.javart.Transfer;
+import org.eclipse.edt.javart.Runtime;
 
-import egl.lang.EglAny;
+import egl.lang.AnyException;
+
+import org.eclipse.edt.javart.*;
+
 import egl.lang.AnyValue;
 
 /**
  * This class represents anything in EGL that contains functions: programs,
  * libraries, page handlers, etc.
  * <P>
- * In order to allow Programs to be used as JSFHandler beans, all method names 
+ * In order to allow Executables to be used as Java Beans, all method names 
  * must begin _ or $.
  * 
  * @author mheitz
@@ -38,59 +36,9 @@ import egl.lang.AnyValue;
 public abstract class ProgramBase extends ExecutableBase implements Program, Serializable
 {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-
-				
-	/**
-	 * The line of the EGL statement whose generated code is currently executing.
-	 * Not used and will remain -1 unless includeLineNumbers is YES. 
-	 */
-	public int ezeCurrentLine;
 					
-	public ProgramBase( RunUnit runUnit )
+	public ProgramBase()
 		throws AnyException
-	{
-		super(runUnit);
-	}
-
-	/**
-	 * Gives initial values to the system variables which are not saved across
-	 * segments.
-	 */
-	protected void _initUnsavedSysVars()
-		throws AnyException
-	{
-	}
-
-	/**
-	 * This is used to reinitialize fields of a library at the start of a new segment.
-	 * The generator will override it if necessary.
-	 */
-	protected void _initUnsavedFields() throws Exception
-	{
-		_initUnsavedSysVars();
-	}
-	
-	/**
-	 * Starts running the program. This version of the method does nothing
-	 * (suitable for libraries).
-	 */
-	public void _start(String...args) throws Exception
-	{
-		List<String> list = new ArrayList<String>();
-		for (String arg : args){ list.add(arg); }
-		main(list);
-	}
-
-	/**
-	 * Completes the process of transferring to this Program from some other Program.
-	 * This method should be called before <code>start</code>.
-	 *
-	 * <P> This method does nothing.  Programs that need to do some work before
-	 * being started will override it.
-	 *
-	 * @exception Exception if an error occurs.
-	 */
-	public void _finishTransfer()
 	{
 	}
 
@@ -102,67 +50,6 @@ public abstract class ProgramBase extends ExecutableBase implements Program, Ser
 	public AnyValue _inputRecord()
 	{
 		return null;
-	}
-	
-
-	/**
-	 * Return null for the program's parameters. Called programs can override
-	 * this.
-	 * 
-	 * @return list of the program's parameters
-	 */
-	public EglAny[] _parameters() throws AnyException
-	{
-		return null;
-	}
-	
-	/**
-	 * Returns true if _passParamLocal is overridden, to enable faster passing
-	 * of parameters to called program on local calls.
-	 * 
-	 * @return false by default.
-	 * @see #_passParamLocal
-	 */
-	public boolean _canPassParamsLocal()
-	{
-		return false;
-	}
-	
-	/**
-	 * Override this method and _canPassParamsLocal to support faster passing 
-	 * of parameters to called programs on local calls.  When a LocalJavaCaller
-	 * determines that the argument and parameters are the same type, it will
-	 * use this method to replace the parameter with the argument.  That avoids
-	 * passing data back and forth via a ByteStorage, which is slow. 
-	 * 
-	 * @param index  which param to update (0-based).
-	 * @param o      the Object to use for the param.
-	 */
-	public void _passParamLocal( int index, Object o )
-	{
-	}
-
-	/**
-	 * _retainOnLocalExit returns true when this program has been called locally,
-	 * and should be cached after it returns.  This version of the method always
-	 * returns false.  It is overridden in called programs as follows: When the
-	 * action is 0, the program has been called locally, and a field generated 
-	 * into the program is initialized to indicate the value of the unloadOnExit 
-	 * annotation (1 means yes, 2 means no).  The SysVar, ConverseVar, and VGVar
-	 * variables are also reset.  When the action is 1, the program has done an 
-	 * exit program with unloadOnExit = yes, so the field will be set to 1 if it's 
-	 * currently 2.  When the action is 2, the program has done an exit program 
-	 * with unloadOnExit = no, so the field will be set to 2 if it's currently 1.
-	 * When the action is any other value, the field is unchanged.  The returned 
-	 * value is true when the field is equal to 2.
-	 * 
-	 * @return true if this Program has been called locally and should be cached.
-	 * @throws AnyException if SysVar, ConverseVar, and VGVar initialization 
-	 *   fails (only possible when the action is zero).
-	 */
-	public boolean _retainOnExit( int action ) throws AnyException
-	{
-		return false;
 	}
 	
 	/**
@@ -187,7 +74,8 @@ public abstract class ProgramBase extends ExecutableBase implements Program, Ser
 			}
 		}
 	
-		// Trace the transfer.	
+		// Trace the transfer.
+		RunUnit runUnit = Runtime.getRunUnit();
 		if ( runUnit.getTrace().traceIsOn() )
 		{
 			String str = "TRANSFER TO PROGRAM " + name + ", with record ";
@@ -231,6 +119,7 @@ public abstract class ProgramBase extends ExecutableBase implements Program, Ser
 		}
 	
 		// Trace the transfer.	
+		RunUnit runUnit = Runtime.getRunUnit();
 		if ( runUnit.getTrace().traceIsOn() )
 		{
 			String str = "TRANSFER TO TRANSACTION " + name + ", with record ";
@@ -276,7 +165,8 @@ public abstract class ProgramBase extends ExecutableBase implements Program, Ser
 			}
 		}
 	
-		// Trace the transfer.	
+		// Trace the transfer.
+		RunUnit runUnit = Runtime.getRunUnit();
 		if ( runUnit.getTrace().traceIsOn() )
 		{
 			String str = "SHOW ";

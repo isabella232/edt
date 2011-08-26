@@ -10,16 +10,13 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.services.servlet;
 
-import org.eclipse.edt.javart.RunUnit;
-
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
 import eglx.services.ServiceKind;
 
 public abstract class Invoker extends TracerBase{
 
-	protected Invoker(RunUnit runUnit) {
-		super(runUnit);
+	protected Invoker() {
 	}
 	public abstract HttpResponse invoke( HttpRequest request ) throws Exception;
 	public abstract ServiceKind getServiceKind(HttpRequest innerRequest);

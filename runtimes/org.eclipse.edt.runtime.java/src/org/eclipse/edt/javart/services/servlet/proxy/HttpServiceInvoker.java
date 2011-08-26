@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.services.servlet.proxy;
 
-import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.messages.Message;
 
 import eglx.http.HttpRequest;
@@ -21,8 +20,7 @@ import eglx.services.ServiceUtilities;
 
 public class HttpServiceInvoker extends EglHttpConnection {
 	
-	protected HttpServiceInvoker(RunUnit runUnit) {
-		super(runUnit);
+	protected HttpServiceInvoker() {
 	}
 	public HttpResponse invoke(HttpRequest innerRequest)throws Exception
 	{

@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.services.servlet;
 
-import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.json.ArrayNode;
 import org.eclipse.edt.javart.json.JsonParser;
 import org.eclipse.edt.javart.json.JsonUtilities;
@@ -57,9 +56,8 @@ public abstract class ServiceInvoker extends Invoker
 	private static String WEB_BINDING_WSDL_SERVICE_ID = "wsdlService";
 	private static String WEB_BINDING_URI_ID = "uri";
 
-    ServiceInvoker( RunUnit ru )
+    ServiceInvoker()
     {
-    	super(ru);
     }
 
     private class JsonFunctionInfo extends FunctionInfo

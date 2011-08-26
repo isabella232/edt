@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Executable;
-import org.eclipse.edt.javart.RunUnit;
+import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.json.ArrayNode;
 import org.eclipse.edt.javart.json.BooleanNode;
 import org.eclipse.edt.javart.json.DecimalNode;
@@ -39,8 +39,6 @@ import org.eclipse.edt.javart.json.StringNode;
 import org.eclipse.edt.javart.json.ValueNode;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
-import org.eclipse.edt.javart.resources.RunUnitBase;
-import org.eclipse.edt.javart.resources.StartupInfo;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartUtil;
 import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
@@ -66,14 +64,6 @@ import eglx.http.HttpResponse;
 import eglx.lang.StrLib;
 
 public class JsonLib {
-
-	private static RunUnit rununit;
-	private static RunUnit runtUnit(){
-		if(rununit == null){
-			rununit = new RunUnitBase(new StartupInfo("", "", false));
-		}
-		return rununit;
-	}
 
 	public static String convertToJSON(Object obj){
 		return process(obj).toJson(); 
@@ -133,7 +123,7 @@ public class JsonLib {
 	    if(object instanceof AnyException)
 	    	return processObject(object);
 		throw new AnyException(Message.SOA_E_JSON_TYPE_EXCEPTION,
-				JavartUtil.errorMessage( runtUnit(), Message.SOA_E_JSON_TYPE_EXCEPTION, 
+				JavartUtil.errorMessage( Runtime.getRunUnit(), Message.SOA_E_JSON_TYPE_EXCEPTION, 
 						new Object[] { object.getClass().getName() } ));
 	}
 	
@@ -218,7 +208,7 @@ public class JsonLib {
 				}
 			} catch (Throwable t) {
 				AnyException exc = new AnyException(Message.SOA_E_JSON_TYPE_EXCEPTION,
-						JavartUtil.errorMessage( runtUnit(), Message.SOA_E_JSON_TYPE_EXCEPTION, 
+						JavartUtil.errorMessage( Runtime.getRunUnit(), Message.SOA_E_JSON_TYPE_EXCEPTION, 
 								new Object[] { name, object.getClass().getName() } ));
 				exc.initCause(t);
 				throw exc;
@@ -491,7 +481,7 @@ public class JsonLib {
 				}
 			} catch (Throwable t) {
 				AnyException exc = new AnyException(Message.SOA_E_JSON_TYPE_EXCEPTION,
-						JavartUtil.errorMessage( runtUnit(), Message.SOA_E_JSON_TYPE_EXCEPTION, 
+						JavartUtil.errorMessage( Runtime.getRunUnit(), Message.SOA_E_JSON_TYPE_EXCEPTION, 
 								new Object[] { name, object.getClass().getName() } ));
 				exc.initCause(t);
 				throw exc;

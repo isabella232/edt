@@ -17,13 +17,10 @@ import java.math.BigInteger;
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 import egl.lang.AnyException;
-import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 
 public class MathLib extends ExecutableBase {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-
-	private static RunUnit staticRu;
 	
 	/**
 	 * A constant used by log10. The value is StrictMath.log(10).
@@ -98,9 +95,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * The constructor.
 	 */
-	public MathLib(RunUnit ru) throws AnyException {
-		super(ru);
-		this.staticRu = ru;
+	public MathLib() throws AnyException {
 	}
 
 	/**

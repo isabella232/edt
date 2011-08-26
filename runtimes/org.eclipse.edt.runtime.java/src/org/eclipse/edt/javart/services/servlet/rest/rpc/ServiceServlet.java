@@ -130,7 +130,7 @@ import eglx.services.ServiceUtilities;
 					response = new HttpResponse();
 					if( serviceFunctionInfo != null )
 					{
-						JsonRpcInvoker invoker = new JsonRpcInvoker(getRunUnit(), serviceFunctionInfo.getClassName(), ServiceKind.REST);
+						JsonRpcInvoker invoker = new JsonRpcInvoker(serviceFunctionInfo.getClassName(), ServiceKind.REST);
 						response = invoker.invoke(request);
 						if ( tracer().traceIsOn( Trace.GENERAL_TRACE ) ){
 							tracer().put( "returned from service" + response == null ? "null" : JsonLib.convertToJSON(response) );

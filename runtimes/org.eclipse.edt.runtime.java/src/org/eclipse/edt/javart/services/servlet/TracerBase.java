@@ -11,15 +11,17 @@
 package org.eclipse.edt.javart.services.servlet;
 
 import org.eclipse.edt.javart.RunUnit;
+import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.resources.Trace;
 
-public class TracerBase {
+public class TracerBase
+{
 	private Trace tracer;
-	final private RunUnit runUnit;
 	
-	protected TracerBase(RunUnit runUnit) {
-		this.runUnit = runUnit;
+	protected TracerBase() 
+	{
 	}
+	
 	protected Trace tracer()
 	{
 		if( tracer == null )
@@ -33,8 +35,9 @@ public class TracerBase {
     {
 		return tracer().traceIsOn( Trace.GENERAL_TRACE ); 
     }
+	
 	protected RunUnit getRunUnit() {
-		return runUnit;
+		return Runtime.getRunUnit();
 	}
 
 }

@@ -45,7 +45,7 @@ import eglx.http.HttpResponse;
 
 	@Override
 	protected HttpResponse processRequest(String url, HttpRequest ruiRequest, HttpServletRequest httpServletReq) throws Exception {
-		ProxyEventHandler proxy = new ProxyEventHandler(getRunUnit());
+		ProxyEventHandler proxy = new ProxyEventHandler();
 		return proxy.runProxy(url, ruiRequest, ServletUtilities.createHttpRequest(ruiRequest.getBody()));
 	}
 }

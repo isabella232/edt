@@ -12,8 +12,6 @@
 package org.eclipse.edt.javart;
 
 public interface Executable {
-
-	RunUnit _runUnit();
+	String _name();
 	void _cleanup();
-	String _alias();
 }

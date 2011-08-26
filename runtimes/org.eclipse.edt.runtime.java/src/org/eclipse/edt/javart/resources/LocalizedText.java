@@ -306,7 +306,7 @@ public class LocalizedText implements Serializable
 	 * 
 	 * @param loc  the Locale to use.
 	 */
-	void switchLocale( Locale loc )
+	public void switchLocale( Locale loc )
 	{
 		inputNlsCode = null;
 		inputLocale = loc;

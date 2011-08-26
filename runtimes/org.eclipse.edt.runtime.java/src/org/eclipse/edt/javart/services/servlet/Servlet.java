@@ -21,11 +21,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.RunUnit;
+import org.eclipse.edt.javart.*;
+import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.json.ParseException;
 import org.eclipse.edt.javart.messages.Message;
-import org.eclipse.edt.javart.resources.RunUnitBase;
 import org.eclipse.edt.javart.resources.StartupInfo;
 import org.eclipse.edt.javart.resources.Trace;
 
@@ -45,7 +44,7 @@ import eglx.services.ServiceUtilities;
  */
  public abstract class Servlet extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-	private RunUnit runUnit;
+
 	private Trace tracer;
 	
 	public void init(ServletConfig config) throws ServletException 
@@ -63,17 +62,16 @@ import eglx.services.ServiceUtilities;
 	}
 	
 	protected abstract String programName();
+	
 	protected RunUnit getRunUnit()
 	{
-		if( runUnit == null )
+		RunUnit ru = Runtime.getRunUnit();
+		if ( ru == null )
 		{
-			try
-			{
-				runUnit = new RunUnitBase(new StartupInfo( programName(), "", true )){private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;};
-			}
-			catch(AnyException e){}
+			ru = new JEERunUnit( new StartupInfo( programName(), "", null ) );
+			Runtime.setStaticRunUnit( ru );
 		}
-		return runUnit;
+		return ru;
 	}
     /* (non-Java-doc)
 	 * @see javax.servlet.http.HttpServlet#HttpServlet()

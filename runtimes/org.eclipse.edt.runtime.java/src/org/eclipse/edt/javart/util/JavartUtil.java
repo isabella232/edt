@@ -23,6 +23,7 @@ import org.eclipse.edt.javart.ControlFlow;
 import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.FatalProblem;
 import org.eclipse.edt.javart.RunUnit;
+import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.runtime.java.egl.lang.EglAny;
 
@@ -229,7 +230,7 @@ public class JavartUtil
 	 */
 	public static String errorMessage( Executable p, String id )
 	{
-		String message = p._runUnit().getLocalizedText().getMessage( id );
+		String message = Runtime.getRunUnit().getLocalizedText().getMessage( id );
 		return errorMessage( id, message, p );
 	}
 	
@@ -244,7 +245,7 @@ public class JavartUtil
 	 */
 	public static String errorMessage( Executable p, String id, Object[] inserts )
 	{
-		String message = p._runUnit().getLocalizedText().getMessage( id, inserts );
+		String message = Runtime.getRunUnit().getLocalizedText().getMessage( id, inserts );
 		return errorMessage( id, message, p );
 	}
 	
@@ -252,13 +253,13 @@ public class JavartUtil
 	{
 		String locationMessage; 
 		String locationMessageId;
-		RunUnit ru = p._runUnit();
+		RunUnit ru = Runtime.getRunUnit();
 		// TODO handle stack tracing from mapping of EGL to Java directly(as in JSR 045)
 
 		locationMessageId = Message.PROGRAM_ERROR_INFO;
 		locationMessage = ru.getLocalizedText().getMessage( 
 				Message.PROGRAM_ERROR_INFO,
-				new String[] { p._alias() } );
+				new String[] { p._name() } );
 
 		message = id + ' ' + message;
 		locationMessage = locationMessageId + ' ' + locationMessage;

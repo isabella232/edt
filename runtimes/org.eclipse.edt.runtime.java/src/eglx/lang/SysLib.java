@@ -18,6 +18,7 @@ import java.math.BigInteger;
 import java.util.Locale;
 
 import org.eclipse.edt.javart.*;
+import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.resources.Platform;
@@ -30,23 +31,19 @@ public class SysLib extends ExecutableBase {
 
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
-	private static RunUnit staticRu;
-
 	/**
 	 * Constructor
 	 * @param ru The rununit
 	 * @throws AnyException
 	 */
-	public SysLib(RunUnit ru) throws AnyException {
-		super(ru);
-		this.staticRu = ru;
+	public SysLib() throws AnyException {
 	}
 
 	/**
 	 * Returns the value of the named property, or a null/empty string if there's no such property.
 	 */
 	public static String getProperty(String propertyName) {
-		String value = staticRu.getProperties().get(propertyName.trim());
+		String value = Runtime.getRunUnit().getProperties().get(propertyName.trim());
 		if (value == null)
 			value = System.getProperty(propertyName.trim());
 		return value;
@@ -90,8 +87,10 @@ public class SysLib extends ExecutableBase {
 	private static void runCommand(String commandString, boolean lineMode, boolean wait) throws AnyException {
 		final Process proc;
 		try {
-			proc = Platform.SYSTEM_TYPE == Platform.WIN ? Runtime.getRuntime().exec(new String[] { "cmd", "/c", commandString }) : Runtime.getRuntime().exec(
-				new String[] { "/bin/sh", "-c", commandString });
+			proc = java.lang.Runtime.getRuntime().exec(
+					Platform.SYSTEM_TYPE == Platform.WIN ? 
+							new String[] { "cmd", "/c", commandString } 
+							: new String[] { "/bin/sh", "-c", commandString } );
 		}
 		catch (IOException ex) {
 			throw new RuntimeException(ex);
@@ -148,7 +147,7 @@ public class SysLib extends ExecutableBase {
 		}
 		// Look up the message.
 		key = key.trim();
-		String message = staticRu.getLocalizedText().getMessage(key, insertStrings);
+		String message = Runtime.getRunUnit().getLocalizedText().getMessage(key, insertStrings);
 		return message;
 	}
 
@@ -157,7 +156,7 @@ public class SysLib extends ExecutableBase {
 	 */
 	public static void commit() throws AnyException {
 		RuntimeException errorException = null;
-		Trace trace = staticRu.getTrace();
+		Trace trace = Runtime.getRunUnit().getTrace();
 		boolean tracing = trace.traceIsOn(Trace.GENERAL_TRACE);
 		try {
 			if (tracing) {
@@ -166,7 +165,7 @@ public class SysLib extends ExecutableBase {
 			}
 
 			/* Commit recoverable resource */
-			staticRu.commit();
+			Runtime.getRunUnit().commit();
 		}
 		catch (AnyException jx) {
 			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.commit", jx.getMessage() });
@@ -191,7 +190,7 @@ public class SysLib extends ExecutableBase {
 	 */
 	public static void rollback() throws AnyException {
 		RuntimeException errorException = null;
-		Trace trace = staticRu.getTrace();
+		Trace trace = Runtime.getRunUnit().getTrace();
 		boolean tracing = trace.traceIsOn(Trace.GENERAL_TRACE);
 		try {
 			if (tracing) {
@@ -199,7 +198,7 @@ public class SysLib extends ExecutableBase {
 				trace.put("    resetting Recoverable Resources ...");
 			}
 			/* Roll back recoverable resources */
-			staticRu.rollback();
+			Runtime.getRunUnit().rollback();
 		}
 		catch (AnyException jx) {
 			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.rollBack", jx.getMessage() });
@@ -224,7 +223,7 @@ public class SysLib extends ExecutableBase {
 	 */
 	public static void setLocale(String languageCode) {
 		Locale locale = new Locale(languageCode);
-		staticRu.switchLocale(locale);
+		Runtime.getRunUnit().switchLocale(locale);
 	}
 
 	/**
@@ -232,7 +231,7 @@ public class SysLib extends ExecutableBase {
 	 */
 	public static void setLocale(String languageCode, String countryCode) {
 		Locale locale = new Locale(languageCode, countryCode);
-		staticRu.switchLocale(locale);
+		Runtime.getRunUnit().switchLocale(locale);
 	}
 
 	/**
@@ -240,7 +239,7 @@ public class SysLib extends ExecutableBase {
 	 */
 	public static void setLocale(String languageCode, String countryCode, String variant) {
 		Locale locale = new Locale(languageCode, countryCode, variant);
-		staticRu.switchLocale(locale);
+		Runtime.getRunUnit().switchLocale(locale);
 	}
 
 	/**

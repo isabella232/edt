@@ -22,7 +22,6 @@ import javax.xml.bind.JAXBContext;
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 import egl.lang.AnyException;
-import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 
 import egl.lang.AnyValue;
@@ -31,11 +30,7 @@ public class XmlLib extends ExecutableBase {
 
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
-	private static RunUnit staticRu;
-
-	public XmlLib(RunUnit ru) {
-		super(ru);
-		this.staticRu = ru;
+	public XmlLib() {
 	}
 
 	public static String convertToXML(Object storage, boolean buildDocument) throws AnyException {
