@@ -19,6 +19,7 @@ import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
+import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterizableType;
@@ -211,6 +212,8 @@ public class CommonUtilities {
 	public static String getNativeJavaScriptAssignment(String op) {
 		if (op.equals("xor="))
 			return "^=";
+		if (op.equals("::="))
+			return "+=";
 		return op;
 	}
 
@@ -291,7 +294,7 @@ public class CommonUtilities {
 
 	public static boolean isRUIWidget(Object obj) {
 		if (obj instanceof EGLClass) {
-			return ((EGLClass) obj).getAnnotation("eglx.ui.rui.RUIWidget") != null; //TODO sbg need constant
+			return ((EGLClass) obj).getAnnotation("eglx.ui.rui.RUIWidget") != null; // TODO sbg need constant
 		}
 
 		return false;
@@ -326,35 +329,79 @@ public class CommonUtilities {
 		 * Note that EGLProperty cannot be used on fields of external types, whereas Property can only be used on fields of
 		 * external types; so we can only encounter one of these two annotations on a given field.
 		 */
-		Annotation result = element.getAnnotation("eglx.lang.Property"); // TODO need constant
-		if (result == null) {
-			result = element.getAnnotation("egl.javascript.JavaScriptProperty"); // TODO sbg Delete; this isn't in EDT
-		}
+		Annotation result = element.getAnnotation(Constants.Annotation_Property);
 		if (result == null) {
 			result = element.getAnnotation(Constants.Annotation_EGLProperty);
 		}
 		return result;
 	}
-	
-	
-	public static String getPropertyFunction(Object property){
+
+	public static String getPropertyFunction(Object property) {
 		String result = null;
 		if (property != null) {
 			result = property instanceof MemberName ? ((MemberName) property).getNamedElement().getName() : (String) property;
 		}
 		return result;
 	}
-	public static Annotation getAnnotation(Context ctx, String key) throws MofObjectNotFoundException, DeserializationException{
-		EObject eObject = Environment.getCurrentEnv().find(key);
-		if(eObject instanceof StereotypeType && 
-				(eObject = ((StereotypeType)eObject).newInstance()) instanceof Annotation){
-			return (Annotation)eObject;
+
+	/**
+	 * Returns null if the desired propertyFunction isn't specified or shouldn't be used; otherwise, returns either the
+	 * explicit name of the function (if specified) or implicit name if it should be inferred. According to the docs for both
+	 * EGLProperty and Property, function names should be inferred if and only if the annotation is present but BOTH
+	 * properties are missing. Return values are as follows: <ul> <li>null if there is no property function (or one shouldn't
+	 * be inferred); a getter or setter shouldn't be used; also, returns null if the function that should be used is the same
+	 * as the current function being generated (to avoid infinite loops) <li>string if the function name is specified via
+	 * Property, or if the function was inferred <li>MemberName || MemberAccess if the function is specified via EGLProperty
+	 * </ul>
+	 * @param annotation
+	 * @param fieldName
+	 * @param propertyFunction
+	 * @return
+	 */
+	public static Object getPropertyFunction(Annotation annotation, String fieldName, String propertyFunction, String currentFunction) {
+		Object result = null;
+
+		if (annotation != null) {
+			Object propFn = annotation.getValue(propertyFunction);
+			String otherPropertyFunction = Constants.Annotation_PropertyGetter.equals(propertyFunction) ? Constants.Annotation_PropertySetter
+				: Constants.Annotation_PropertyGetter;
+			Object otherPropFn = annotation.getValue(otherPropertyFunction);
+
+			// If both are null (but the annotation isn't), then we are supposed to infer the function names....
+			if ((propFn == null) && (otherPropFn == null)) {
+				result = (Constants.Annotation_PropertyGetter.equals(propertyFunction) ? Constants.GetterPrefix : Constants.SetterPrefix)
+					+ fieldName.substring(0, 1).toUpperCase();
+				if (fieldName.length() > 1) {
+					result = result + fieldName.substring(1);
+				}
+			} else {
+				result = propFn;
+			}
+
+			if ((result != null) && (currentFunction != null)) {
+				String fn = result.toString();
+				if (result instanceof MemberName) {
+					fn = ((MemberName) result).getId();
+				} else if (result instanceof MemberAccess) {
+					fn = ((MemberAccess) result).getId();
+				}
+				if (fn.equals(currentFunction)) {
+					result = null;
+				}
+			}
 		}
-		else if(eObject instanceof AnnotationType &&
-				(eObject = ((AnnotationType)eObject).newInstance()) instanceof Annotation){
-			return (Annotation)eObject;
+
+		return result;
+	}
+
+	public static Annotation getAnnotation(Context ctx, String key) throws MofObjectNotFoundException, DeserializationException {
+		EObject eObject = Environment.getCurrentEnv().find(key);
+		if (eObject instanceof StereotypeType && (eObject = ((StereotypeType) eObject).newInstance()) instanceof Annotation) {
+			return (Annotation) eObject;
+		} else if (eObject instanceof AnnotationType && (eObject = ((AnnotationType) eObject).newInstance()) instanceof Annotation) {
+			return (Annotation) eObject;
 		}
 		return null;
 	}
-	
+
 }

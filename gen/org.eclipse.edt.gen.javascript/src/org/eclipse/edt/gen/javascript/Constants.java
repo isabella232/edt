@@ -24,18 +24,18 @@ public class Constants {
 	public static final String SubKey_partLibrariesUsed = "partLibrariesUsed";
 	public static final String SubKey_partRecordsUsed = "partRecordsUsed";
 	public static final String SubKey_simpleContent = "simpleContent";
+	
+	public static final String EXPR_LHS = "EXPR_LHS";
 
-	// these are annotations key values, related to the values in the IRs
-	public static final String Annotation_EGLProperty = "eglx.lang.EGLProperty";
 
 	// command parameter internal names
 	public static final String SERIAL_VERSION_UID = "10";
 
 	// Commonly used package names
 	public static final String JSRT_EGL_NAMESPACE = "egl.";
-	public static final String JSRT_STRLIB_PKG = "egl.egl.core.StrLib['$inst'].";
-	public static final String JSRT_DTTMLIB_PKG = "egl.egl.core.DateTimeLib['$inst'].";
-	public static final String JSRT_XMLLIB_PKG = "egl.egl.core.XMLLib['$inst'].";
+	public static final String JSRT_STRLIB_PKG = "egl.eglx.lang.StrLib['$inst'].";
+	public static final String JSRT_DTTMLIB_PKG = "egl.eglx.lang.DateTimeLib['$inst'].";
+	public static final String JSRT_XMLLIB_PKG = "egl.eglx.xml.XMLLib['$inst'].";
 
 	//part names
 	public static final String AnnotationXmlAttribute  = "eglx.xml.binding.annotation.xmlAttribute";
@@ -46,6 +46,16 @@ public class Constants {
 	public static final String AnnotationBindService  = "eglx.services.BindService";
 	public static final String PartHttpREST  = "eglx.http.HttpREST";
 	public static final String LibraryService  = "eglx.services.ServiceLib";
+
+	
+	// these are annotations key values, related to the values in the IRs
+	public static final String Annotation_EGLProperty = "eglx.lang.EGLProperty";
+	public static final String Annotation_Property = "eglx.lang.Property";
+	public static final String Annotation_PropertyGetter = "getMethod";
+	public static final String Annotation_PropertySetter = "setMethod";
+	
+	public static final String GetterPrefix = "get";
+	public static final String SetterPrefix = "set";
 
 	// EGL message id's
 	public static final String EGLMESSAGE_UNSUPPORTED_ELEMENT = "1000";
