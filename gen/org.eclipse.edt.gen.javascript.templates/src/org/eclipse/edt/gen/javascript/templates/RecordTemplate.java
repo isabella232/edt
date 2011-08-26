@@ -77,6 +77,7 @@ public class RecordTemplate extends JavaScriptTemplate {
 	}
 
 	public void genInitializeMethods(EGLClass part, Context ctx, TabbedWriter out) {
+		out.println(",");
 		out.print(quoted("eze$$setInitial"));
 		out.println(": function() {");
 		out.println("this.eze$$setEmpty();");
@@ -111,14 +112,17 @@ public class RecordTemplate extends JavaScriptTemplate {
 	}
 
 	public void genAssignment(Record type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
-		if (arg1.isNullable()) {
+		/*
+		 * TODO sbg Java has all of this, but I'm not sure whether it -- or some form of it -- is necessary.... if (
+		 * TypeUtils.isValueType( type ) ) { if (arg1.isNullable()) { ctx.invoke(genExpression, arg1, ctx, out);
+		 * out.print(arg3); } out.print("egl.egl.lang.AnyValue.ezeCopyTo("); ctx.invoke(genExpression, arg2, ctx, out);
+		 * out.print(", "); ctx.invoke(genExpression, arg1, ctx, out); out.print(")"); } else
+		 */
+		{
 			ctx.invoke(genExpression, arg1, ctx, out);
-			out.print(arg3);
+			out.print(" = ");
+			ctx.invoke(genExpression, arg2, ctx, out);
 		}
-		ctx.invoke(genExpression, arg1, ctx, out);
-		out.print(".ezeCopy(");
-		ctx.invoke(genExpression, arg2, ctx, out);
-		out.print(")");
 	}
 
 	public void genGetterSetters(Record part, Context ctx, TabbedWriter out) {}
