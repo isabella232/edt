@@ -17,6 +17,7 @@ import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Part;
 
@@ -61,6 +62,10 @@ public class HandlerTemplate extends JavaScriptTemplate {
 		ctx.invoke(genLibraries, handler, ctx, out);
 		out.println("this.eze$$setInitial();");
 		out.println("}");
+	}
+
+	public void genContainerBasedAccessor(Handler type, Context ctx, TabbedWriter out, Function arg) {
+		ctx.invoke(genName, arg, ctx, out);
 	}
 
 	public void genConstructorOptions(Handler type, Context ctx, TabbedWriter out) {}
