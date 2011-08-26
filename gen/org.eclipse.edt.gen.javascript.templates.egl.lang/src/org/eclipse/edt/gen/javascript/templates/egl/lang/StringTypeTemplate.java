@@ -17,6 +17,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.SequenceType;
@@ -52,8 +53,7 @@ public class StringTypeTemplate extends JavaScriptTemplate {
 
 	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
 		// if either side of this expression is nullable, or if there is no direct java operation, we need to use the runtime
-		if ((arg.getLHS().isNullable() || arg.getRHS().isNullable())
-			|| getNativeStringOperation(arg).length() == 0) {
+		if ((arg.getLHS().isNullable() || arg.getRHS().isNullable()) || getNativeStringOperation(arg).length() == 0) {
 			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
 			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
 			out.print("(ezeProgram, ");
@@ -67,7 +67,10 @@ public class StringTypeTemplate extends JavaScriptTemplate {
 			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
 			out.print(")");
 			out.print(getNativeStringOperation(arg));
-			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+			if (arg.getRHS() instanceof BoxingExpression) //TODO sbg temporary workaround
+				ctx.invoke(genExpression, ((BoxingExpression) arg.getRHS()).getExpr(), ctx, out);
+			else
+				ctx.invoke(genExpression, arg.getRHS(), ctx, out);
 			out.print(getNativeStringComparisionOperation(arg));
 		}
 	}

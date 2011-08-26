@@ -25,16 +25,15 @@ public class AnyTypeTemplate extends JavaScriptTemplate {
 
 	public void genConversionOperation(Type type, Context ctx, TabbedWriter out, AsExpression arg) {
 		// check to see if a conversion is required
-		if(arg.getEType() instanceof Interface || arg.getEType() instanceof Service){
+		if (arg.getEType() instanceof Interface || arg.getEType() instanceof Service) {
 			ctx.invokeSuper(this, genConversionOperation, type, ctx, out, arg);
-		}
-		else if (arg.getConversionOperation() != null) {
+		} else if (arg.getConversionOperation() != null) {
 			out.print(ctx.getNativeImplementationMapping((Classifier) arg.getConversionOperation().getContainer()) + '.');
 			out.print("from");
 			out.print(ctx.getNativeTypeName(arg.getConversionOperation().getParameters().get(0).getType()));
 			out.print("(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
-			if (ctx.getPrimitiveMapping(arg.getObjectExpr().getType()) == null) {
+			if (ctx.getPrimitiveMapping(arg.getObjectExpr().getType().getClassifier().getTypeSignature()) == null) {
 				out.print(",\"");
 				ctx.invoke(genSignature, arg.getObjectExpr().getType(), ctx, out, arg);
 				out.print("\"");
@@ -61,6 +60,7 @@ public class AnyTypeTemplate extends JavaScriptTemplate {
 		out.print(type.getTypeSignature().replaceAll("\\.", "/"));
 		out.print(";");
 	}
+
 	public void genFieldInfoTypeName(Part part, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genRuntimeTypeName, part, ctx, out, arg);
 	}

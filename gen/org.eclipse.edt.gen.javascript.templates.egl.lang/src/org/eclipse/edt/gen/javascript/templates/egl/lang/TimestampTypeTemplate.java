@@ -13,7 +13,6 @@ package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
-import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -37,7 +36,8 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
-		out.print(Constants.JSRT_DTTMLIB_PKG + "currentTimeStamp(");
+		// out.print(Constants.JSRT_DTTMLIB_PKG + "currentTimeStamp(");
+		out.print("egl.egl.lang.ETimestamp.currentTimeStamp(");
 		ctx.invoke(genTypeDependentOptions, type, ctx, out);
 		out.print(")");
 	}

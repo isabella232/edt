@@ -28,7 +28,7 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 public class FloatTypeTemplate extends JavaScriptTemplate {
 
 	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
-		out.print("0"); 
+		out.print("0");
 	}
 
 	public void genSignature(EGLClass type, Context ctx, TabbedWriter out) {
@@ -136,7 +136,7 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_MINUS))
 			return " - ";
 		if (op.equals(expr.Op_MULTIPLY))
-			return ".multiply(";
+			return " * ";
 		if (op.equals(expr.Op_DIVIDE))
 			return ".divide(";
 		if (op.equals(expr.Op_EQ))
@@ -166,7 +166,7 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_PLUS))
 			return ")";
 		if (op.equals(expr.Op_MULTIPLY))
-			return ")";
+			return "";
 		if (op.equals(expr.Op_DIVIDE))
 			return ")";
 		if (op.equals(expr.Op_NE))

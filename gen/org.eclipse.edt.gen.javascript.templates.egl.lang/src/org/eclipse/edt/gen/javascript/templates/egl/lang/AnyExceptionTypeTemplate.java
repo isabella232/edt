@@ -19,7 +19,7 @@ import org.eclipse.edt.mof.egl.Type;
 public class AnyExceptionTypeTemplate extends JavaScriptTemplate {
 
 	public void genDefaultValue(Type type, Context ctx, TabbedWriter out) {
-		// this type has no default value
+		out.print("null");
 	}
 
 	public void genRuntimeTypeName(Type type, Context ctx, TabbedWriter out, TypeNameKind arg) {
