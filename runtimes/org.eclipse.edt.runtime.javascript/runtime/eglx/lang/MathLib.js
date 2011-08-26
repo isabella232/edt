@@ -80,7 +80,7 @@ egl.eglx.lang.MathLib["exp"] = function(/*float*/value) {
 	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
 };
 egl.eglx.lang.MathLib["floor"] = function(/*float*/value) {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	return Math.floor(value); //throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
 };
 
 //TODO sbg need frexp()

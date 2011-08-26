@@ -538,7 +538,7 @@ egl.makePackage = function( /*String*/ pkgname ) {
 	if (pkgname === "") {
 		return egl;
 	}	
-	var elems = pkgname.split( '.' );
+	var elems = pkgname.toLowerCase().split( '.' );
 	if (elems.length < 1) return;
 	var pkg = egl;
 	for ( var n=0; n < elems.length; n++ ) {

@@ -179,6 +179,12 @@ egl.egl.lang.EDecimal.fromEInt32 = function (x, decimals, limit) {
 	else
 		return new egl.javascript.BigDecimal(x);
 };
+egl.egl.lang.EDecimal.fromEInt64 = function (x, decimals, limit) {   
+	if (limit)
+		return egl.convertIntegerToDecimal(x, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	else
+		return new egl.javascript.BigDecimal(x);
+};
 egl.egl.lang.EDecimal.fromEDecimal = function (x, decimals, limit) { 
 	return egl.convertDecimalToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
@@ -188,8 +194,11 @@ egl.egl.lang.EDecimal.fromAnyNum = function (x, decimals, limit) {
 	else
 		return egl.convertDecimalToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/); 
 };
-egl.egl.lang.EDecimal.fromEFloat64 = function (x, decimals, limit) { 
-	return egl.convertFloatToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+egl.egl.lang.EDecimal.fromEFloat64 = function (x, decimals, limit) {
+	if (limit)
+		return egl.convertFloatToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	else
+		return egl.convertFloatToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
 
 
@@ -261,6 +270,10 @@ egl.egl.lang.EBoolean.fromEString = function (x) {
 egl.egl.lang.EBoolean.ezeCast = function (x) {   
 	return x; 
 };
+egl.egl.lang.EBoolean.fromEBoolean = function (x) {  //TODO sbg likely a gen bug   
+	return x; 
+};
+
 
 /****************************************************************************
  * EString
@@ -407,6 +420,95 @@ egl.defineClass( "egl.lang", "ETime"
 //};
 
 
+/****************************************************************************
+ * ETimestamp
+ ****************************************************************************/
+egl.defineClass( "egl.lang", "ETimestamp"
+		,"egl.lang", "AnyBoxedObject",
+{
+	"constructor" : function(i){
+		egl.egl.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
+	}
+}
+);
+egl.egl.lang.ETimestamp["currentTimeStamp"] = function (pattern) {
+	// returns a new Date object
+	// timestamp keeps every field
+	return egl.egl.lang.ETimestamp.extend("timestamp", new Date(), pattern);
+};
+
+egl.egl.lang.ETimestamp["extend"] = function (/*type of date*/ type, /*extension*/ date, /*optional mask*/pattern ) {
+	//Converts a timestamp, time, or date into a longer or shorter timestamp value.
+	if ( !date ) {
+		return null;
+	}
+	
+	//copy is returned if the pattern is invalid
+	var dateCopy = new Date( date );
+	var now = new Date();
+	type = type.toLowerCase();
+	
+	if ( type == "date" ) {
+		date.setHours( 0 );
+		date.setMinutes( 0 );
+		date.setSeconds( 0 );
+		date.setMilliseconds( 0 );
+		if (!pattern || pattern == "" )
+			pattern = "yyyyMMddHHmmss";
+	}
+	else if ( type == "time" ) {
+		date.setFullYear( now.getFullYear() );
+		date.setMonth( now.getMonth() );
+		date.setDate( now.getDate() );
+		if (!pattern || pattern == "" )
+			pattern = "yyyyMMddHHmmss";
+	}
+	else { // ( type == "timestamp" )
+		if (!pattern || pattern == "" )
+			pattern = "yyyyMMddHHmmssffffff";
+	}
+	
+	//enforce the pattern mask
+	//first function is for pattern missing chars on the left side (current)
+	//second function is for pattern missing chars on the right side (zeros)
+	var chars = 
+		[
+		  [ "y", function(d){ d.setFullYear( now.getFullYear() ); }, function(d){ d.setFullYear( 0 ); } ],
+	      [ "M", function(d){ d.setMonth( now.getMonth() ); }, function(d){ d.setMonth( 0 ); } ], 
+	      [ "d", function(d){ d.setDate( now.getDate() ); }, function(d){ d.setDate( 1 ); } ],
+	      [ "H", function(d){ d.setHours( now.getHours() ); }, function(d){ d.setHours( 0 ); } ],
+	      [ "m", function(d){ d.setMinutes( now.getMinutes() ); }, function(d){ d.setMinutes( 0 ); } ],
+	      [ "s", function(d){ d.setSeconds( now.getSeconds() ); }, function(d){ d.setSeconds( 0 ); } ], 
+	      [ "f", function(d){ d.setMilliseconds( now.getMilliseconds() ); }, function(d){ d.setMilliseconds( 0 ); } ]
+	    ];
+	
+	//set the new date values to the current time until the first
+	//char in the formatting string appears
+	var leadChar = pattern.charAt( 0 );
+	var i = 0;
+	while ( i < chars.length && leadChar != chars[ i ][ 0 ] ) {
+		(chars[ i ][ 1 ])( dateCopy );
+		i++;
+	}
+	//if the pattern has bad characters, just return the original date
+	if ( i >= chars.length ) {
+		return date;
+	}
+	
+	//find the last character and set everything after it to zeros
+	var lastChar = pattern.charAt( pattern.length - 1 );
+	i = chars.length - 1;
+	while ( i >= 0 && lastChar != chars[ i ][ 0 ] ) {
+		(chars[ i ][ 2 ])( dateCopy );
+		i--;
+	}
+	//if the pattern has bad characters, just return the date
+	if ( i < 0 ) {
+		return date;
+	}
+	
+	return dateCopy;
+};
 
 /****************************************************************************
  * AnyNum
