@@ -753,6 +753,39 @@ public class TypeUtils implements MofConversion {
 		}
 		if (result.isEmpty())
 			result = candidates;
+		
+		if (result.size() > 1) {
+			//eliminate functions from supertypes
+			
+			//First find the lowest level container that implements the function 
+			StructPart lowestContainer = null;
+			for (T op : result) {
+				if (op.getContainer() instanceof StructPart) {
+					StructPart current = (StructPart)op.getContainer();
+					if (lowestContainer == null) {
+						lowestContainer = current;
+					}
+					else {
+						if (!lowestContainer.isSubtypeOf(current)) {
+							if (current.isSubtypeOf(lowestContainer)) {
+								lowestContainer = current;
+							}
+						}
+					}
+				}
+			}
+
+			//Now, only keep functions from the lowest level
+			if (lowestContainer != null) {
+				List<T> lowestFuncs = new ArrayList<T>();
+				for (T op : result) {
+					if(op.getContainer() == lowestContainer) {
+						lowestFuncs.add(op);
+					}
+				}
+				result = lowestFuncs;
+			}
+		}
 		return result;
 	}
 
