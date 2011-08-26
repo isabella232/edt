@@ -863,8 +863,8 @@ public interface IProblemRequestor {
 	public static final int SHARED_MUST_BE_YES = 5007;
 	public static final int RESIDENT_MUST_BE_NO = 5008;
 	
+	public static final int IS_NOT_UNSUPPORTED = 5009;
 	
-//	public static final int MQRECORD_QUEUE_DESCRIPTOR_OPTIONS_UNKNOWN = 5009;
 //
 //	public static final int MQRECORD_GET_OPTIONS_WRONG_TYPE = 5010;
 //	public static final int MQRECORD_OPEN_OPTIONS_WRONG_TYPE = 5011;
