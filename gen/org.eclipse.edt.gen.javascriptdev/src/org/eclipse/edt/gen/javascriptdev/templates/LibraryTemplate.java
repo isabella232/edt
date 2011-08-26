@@ -12,27 +12,20 @@
 package org.eclipse.edt.gen.javascriptdev.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
-import org.eclipse.edt.gen.javascriptdev.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Library;
 
 public class LibraryTemplate extends org.eclipse.edt.gen.javascript.templates.LibraryTemplate {
-	
-	@Override
-	public void genClassBody(Library lib, Context ctx, TabbedWriter out) {
-		super.genClassBody(lib, ctx, out);
-		ctx.invoke(Constants.genDebugFunctions, lib, ctx, out);
-	}
-	
+
 	public void genGetVariablesEntry(Library lib, Context ctx, TabbedWriter out) {
 		out.print("{name: " + quoted(lib.getId()) + ", value : ");
 		ctx.invoke(genAccessor, lib, ctx, out);
 		out.print(", type : " + quoted(lib.getFullyQualifiedName()) + ", jsName : \"");
 		ctx.invoke(genAccessor, lib, ctx, out);
-		out.print( "\"}" );
+		out.print("\"}");
 	}
-	
+
 	@Override
 	public void genContainerBasedAccessorArgs(Library library, Context ctx, TabbedWriter out, Function arg) {
 		super.genContainerBasedAccessorArgs(library, ctx, out, arg);
