@@ -41,7 +41,7 @@ plugin@org.eclipse.edt.ide.rui.visualeditor=v201108220707,:pserver:anonymous@dev
 plugin@org.eclipse.edt.gen.deployment.javascript=I08251959,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.deployment.javascript
 plugin@org.eclipse.edt.gen.deployment.javascript.templates=v201108191522,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.deployment.javascript.templates
 plugin@org.eclipse.edt.gen.generator.deployment.javascript=v201108191522,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.generator.deployment.javascript
-plugin@org.eclipse.edt.runtime.javascript=v201108252151,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.javascript
+plugin@org.eclipse.edt.runtime.javascript=v201108261401,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.javascript
 plugin@org.eclipse.edt.gen.eunit=v201108251429,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.eunit
 plugin@org.eclipse.edt.ide.eunit=v201108251545,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.eunit
 
