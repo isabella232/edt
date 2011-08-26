@@ -327,6 +327,9 @@ egl.egl.lang.EString.fromEInt32 = function (x) {
 egl.egl.lang.EString.fromEInt64 = function (x) {
 	return (x).toString();
 };
+egl.egl.lang.EString.fromEFloat64 = function (x) {
+	return (x).toString();
+};
 egl.egl.lang.EString.fromAnyObject = function (x) {
 	return egl.convertAnyToString(x, false);  //TODO sbg avoid hardcoding the boolean flag
 };
