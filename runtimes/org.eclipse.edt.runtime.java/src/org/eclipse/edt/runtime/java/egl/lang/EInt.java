@@ -177,6 +177,24 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 			return null;
 		return StrictMath.pow( op1, op2 );
 	}
+	
+	public static Integer bitand(Integer op1, Integer op2) throws AnyException {
+		if (op1 == null || op2 == null)
+			return null;
+		return op1 & op2;
+	}
+	
+	public static Integer bitor(Integer op1, Integer op2) throws AnyException {
+		if (op1 == null || op2 == null)
+			return null;
+		return op1 | op2;
+	}
+	
+	public static Integer xor(Integer op1, Integer op2) throws AnyException {
+		if (op1 == null || op2 == null)
+			return null;
+		return op1 ^ op2;
+	}
 
 	public static int compareTo(Integer op1, Integer op2) throws AnyException {
 		if (op1 == null && op2 == null)
