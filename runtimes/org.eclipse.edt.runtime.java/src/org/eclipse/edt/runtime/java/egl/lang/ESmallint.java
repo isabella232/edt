@@ -170,12 +170,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	public static Integer multiply(Short op1, Short op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
-		try {
-			return BigDecimal.valueOf(op1 * op2).intValueExact();
-		}
-		catch (ArithmeticException ex) {
-			throw new NumericOverflowException();
-		}
+		return op1 * op2;
 	}
 
 	public static Integer remainder(Short op1, Short op2) throws AnyException {

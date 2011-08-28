@@ -145,13 +145,13 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	public static Integer plus(Integer op1, Integer op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
-		return BigDecimal.valueOf((long) op1 + op2).intValueExact();
+		return op1 + op2;
 	}
 
 	public static Integer minus(Integer op1, Integer op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
-		return BigDecimal.valueOf((long) op1 - op2).intValueExact();
+		return op1 - op2;
 	}
 
 	public static BigDecimal divide(Integer op1, Integer op2) throws AnyException {
@@ -163,7 +163,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	public static Integer multiply(Integer op1, Integer op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
-		return BigDecimal.valueOf((long) op1 * op2).intValueExact();
+		return op1 * op2;
 	}
 
 	public static Integer remainder(Integer op1, Integer op2) throws AnyException {

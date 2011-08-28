@@ -111,13 +111,13 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 	public static Long plus(Long op1, Long op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
-		return BigDecimal.valueOf(op1).add(BigDecimal.valueOf(op2)).longValueExact();
+		return op1 + op2;
 	}
 
 	public static Long minus(Long op1, Long op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
-		return BigDecimal.valueOf(op1).subtract(BigDecimal.valueOf(op2)).longValueExact();
+		return op1 - op2;
 	}
 
 	public static BigDecimal divide(Long op1, Long op2) throws AnyException {
@@ -129,7 +129,7 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 	public static Long multiply(Long op1, Long op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			return null;
-		return BigDecimal.valueOf(op1).multiply(BigDecimal.valueOf(op2)).longValueExact();
+		return op1 * op2;
 	}
 
 	public static Long remainder(Long op1, Long op2) throws AnyException {
