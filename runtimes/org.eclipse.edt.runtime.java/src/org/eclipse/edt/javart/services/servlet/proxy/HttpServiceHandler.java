@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.Future;
 
-import org.eclipse.edt.javart.RunUnit;
+import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.Trace;
 import org.eclipse.edt.javart.util.JavartUtil;
@@ -42,10 +42,8 @@ import eglx.services.ServiceUtilities;
 
 public class HttpServiceHandler
 {
-	private RunUnit runUnit;
-	HttpServiceHandler( RunUnit runUnit )
+	HttpServiceHandler()
 	{
-		this.runUnit = runUnit;
 	}
 	private static final String SESSION_ID = "JSESSIONID";
 	private static final String EGL_SESSION_ID = "egl_statefulsessionid";
@@ -163,7 +161,7 @@ public class HttpServiceHandler
 			try
 			{
 				connection.setRequestMethod( HttpUtilities.httpMethodToString(request.getMethod()) );
-				Trace tracer = runUnit.getTrace();
+				Trace tracer = Runtime.getRunUnit().getTrace();
 				if ( tracer.traceIsOn( Trace.GENERAL_TRACE ) ) 
 				{
 					tracer.put("REST request URL:" + request.getUri());
@@ -218,7 +216,7 @@ public class HttpServiceHandler
 						httpsr.close();
 						connection.disconnect();
 						connection = null;
-						String message = JavartUtil.errorMessage( runUnit,
+						String message = JavartUtil.errorMessage( Runtime.getRunUnit(),
 								Message.SOA_E_WS_PROXY_SERVICE_TIMEOUT,
 								new String[] { request.getUri() } );
 						throw new IOException( message );
@@ -292,7 +290,7 @@ public class HttpServiceHandler
 				}
 				if ( !bodyIsSet )
 				{
-			    	response.setBody(eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException(runUnit,
+			    	response.setBody(eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException(
 							Message.SOA_E_WS_PROXY_COMMUNICATION,
 							new String[] { request.getUri() }, ioe,
 							ServiceKind.REST )));

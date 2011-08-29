@@ -39,7 +39,7 @@ import eglx.http.HttpResponse;
 	}   	 	
 	
 	@Override
-	protected String programName() {
+	protected String servletName() {
 		return PROXY_SERVLET;
 	}
 

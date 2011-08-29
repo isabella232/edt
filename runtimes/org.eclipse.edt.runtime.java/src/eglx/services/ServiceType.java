@@ -8,16 +8,17 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package eglx.rest;
-public enum RestType {
+package eglx.services;
+public enum ServiceType {
 	TrueRest(1),
 	EglRpc(2),
-	EglDedicated(3);
+	EglDedicated(3),
+	SOAP(4);
 	private final int value;
-	private RestType(int value) {
+	private ServiceType(int value) {
 		this.value = value;
 	}
-	private RestType() {
+	private ServiceType() {
 		value = -1;
 	}
 	public int getValue() {

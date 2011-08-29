@@ -21,8 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.eclipse.edt.javart.*;
-import org.eclipse.edt.javart.Runtime;
+import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.JEERunUnit;
+import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.json.ParseException;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.StartupInfo;
@@ -61,15 +62,15 @@ import eglx.services.ServiceUtilities;
 		return tracer;
 	}
 	
-	protected abstract String programName();
+	protected abstract String servletName();
 	
 	protected RunUnit getRunUnit()
 	{
-		RunUnit ru = Runtime.getRunUnit();
+		RunUnit ru = org.eclipse.edt.javart.Runtime.getRunUnit();
 		if ( ru == null )
 		{
-			ru = new JEERunUnit( new StartupInfo( programName(), "", null ) );
-			Runtime.setThreadRunUnit( ru );
+			ru = new JEERunUnit( new StartupInfo( servletName(), "", null ) );
+			org.eclipse.edt.javart.Runtime.setThreadRunUnit(ru);
 		}
 		return ru;
 	}
@@ -117,6 +118,7 @@ import eglx.services.ServiceUtilities;
 
 	private void doHttp(HttpServletRequest httpServletReq, HttpServletResponse httpServletRes)
 	{
+		getRunUnit();
 		HttpSession session = httpServletReq.getSession();
 		if ( tracer().traceIsOn( Trace.GENERAL_TRACE ) ){
 			trace("HttpServletRequest.getContextPath():" + httpServletReq.getContextPath());
@@ -129,7 +131,7 @@ import eglx.services.ServiceUtilities;
 		try
 		{
 			if ( tracer().traceIsOn( Trace.GENERAL_TRACE ) ){
-				trace( programName() + " sessionId:" + (session == null ? "null" : session.getId()) );
+				trace( servletName() + " sessionId:" + (session == null ? "null" : session.getId()) );
 			}
 			request = ServletUtilities.createNewRequest( httpServletReq );
 			if(request != null)
@@ -160,22 +162,23 @@ import eglx.services.ServiceUtilities;
 
 	private HttpResponse buildResponse( RunUnit runUnit, String url,  Throwable t, String requestContent, ServiceKind serviceKind )
 	{
+		
 		HttpResponse outerResponse = new HttpResponse();
 		//handle as inner exception
 		AnyException jrte;
 
 		if( t instanceof ParseException )
 		{
-			jrte = ServiceUtilities.buildServiceInvocationException( runUnit, Message.SOA_E_WS_REST_BAD_CONTENT, new String[]{requestContent}, t, serviceKind );
+			jrte = ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_REST_BAD_CONTENT, new String[]{requestContent}, t, serviceKind );
 		}
 		else if( t instanceof IOException )
 		{
 			//handle as outer exception
-			jrte = ServiceUtilities.buildServiceInvocationException( runUnit, Message.SOA_E_WS_PROXY_COMMUNICATION, new String[]{url}, t, serviceKind );
+			jrte = ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_PROXY_COMMUNICATION, new String[]{url}, t, serviceKind );
 		}
 		else
 		{
-			jrte = ServiceUtilities.buildServiceInvocationException( runUnit, Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, serviceKind );
+			jrte = ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, serviceKind );
 		}
 		HttpResponse innerResponse = new HttpResponse();
 		innerResponse.setBody(eglx.json.JsonUtilities.createJsonAnyException(jrte));

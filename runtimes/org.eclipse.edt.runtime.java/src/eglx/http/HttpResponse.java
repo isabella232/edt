@@ -11,13 +11,14 @@
 package eglx.http;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
-import eglx.services.Encoding;
-import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
 import org.eclipse.edt.runtime.java.egl.lang.EString;
 import java.lang.String;
+import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
 import org.eclipse.edt.runtime.java.egl.lang.EInt;
 import java.lang.Integer;
+import eglx.services.Encoding;
+import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
+@javax.xml.bind.annotation.XmlRootElement(name="HttpResponse")
 public class HttpResponse extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient

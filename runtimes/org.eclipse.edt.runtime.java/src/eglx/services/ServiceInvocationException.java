@@ -11,10 +11,11 @@
 package eglx.services;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import eglx.services.ServiceKind;
 import egl.lang.AnyException;
+import eglx.services.ServiceKind;
 import org.eclipse.edt.runtime.java.egl.lang.EString;
 import java.lang.String;
+@javax.xml.bind.annotation.XmlRootElement(name="ServiceInvocationException")
 public class ServiceInvocationException extends egl.lang.AnyException {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient

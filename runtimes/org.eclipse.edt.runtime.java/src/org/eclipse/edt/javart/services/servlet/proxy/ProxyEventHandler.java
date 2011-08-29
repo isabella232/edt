@@ -87,7 +87,7 @@ public class ProxyEventHandler extends TracerBase
 			if(innerResponse == null){
 				innerResponse = new HttpResponse();
 			}
-			innerResponse.setBody(eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException( getRunUnit(), Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, serviceKind )));
+			innerResponse.setBody(eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, serviceKind )));
 			innerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
 			innerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
 		}

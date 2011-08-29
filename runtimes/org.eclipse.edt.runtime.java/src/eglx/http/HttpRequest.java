@@ -12,11 +12,12 @@ package eglx.http;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
 import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
-import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
-import eglx.services.Encoding;
-import eglx.http.HttpMethod;
 import org.eclipse.edt.runtime.java.egl.lang.EString;
 import java.lang.String;
+import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
+import eglx.http.HttpMethod;
+import eglx.services.Encoding;
+@javax.xml.bind.annotation.XmlRootElement(name="HttpRequest")
 public class HttpRequest extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient

@@ -65,7 +65,7 @@ import eglx.services.ServiceUtilities;
 	}   	 	
 	
 	@Override
-	protected String programName() {
+	protected String servletName() {
 		return SERVICE_SERVLET;
 	}
 
@@ -138,13 +138,13 @@ import eglx.services.ServiceUtilities;
 					}
 					else
 					{
-						throw ServiceUtilities.buildServiceInvocationException(getRunUnit(), Message.SOA_E_WS_REST_NO_SERVICE, new String[] {urlString}, null, ServiceKind.WEB );
+						throw ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_REST_NO_SERVICE, new String[] {urlString}, null, ServiceKind.WEB );
 					}
 				}
 			}
 			else
 			{
-				throw ServiceUtilities.buildServiceInvocationException(getRunUnit(), Message.SOA_E_WS_REST_WRONG_HTTP_FUNCTION, new String[] {HttpUtilities.httpMethodToString(httpMethod)}, null, ServiceKind.WEB );
+				throw ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_REST_WRONG_HTTP_FUNCTION, new String[] {HttpUtilities.httpMethodToString(httpMethod)}, null, ServiceKind.WEB );
 			}
 		}
 		catch(ServiceInvocationException sie )

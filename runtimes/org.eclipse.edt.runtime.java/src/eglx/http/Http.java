@@ -11,33 +11,33 @@
 package eglx.http;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
-import eglx.http.HttpResponse;
 import eglx.http.HttpRequest;
-import eglx.rest.RestType;
-@javax.xml.bind.annotation.XmlRootElement(name="HttpREST")
-public class HttpREST extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
+import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
+import eglx.services.ServiceType;
+import eglx.http.HttpResponse;
+@javax.xml.bind.annotation.XmlRootElement(name="Http")
+public class Http extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
 	public HttpRequest request;
 	@javax.xml.bind.annotation.XmlTransient
 	public HttpResponse response;
 	@javax.xml.bind.annotation.XmlTransient
-	public RestType invocationType;
-	public HttpREST() {
+	public ServiceType invocationType;
+	public Http() {
 		super();
 		ezeInitialize();
 	}
 	public void ezeCopy(Object source) {
-		ezeCopy((HttpREST) source);
+		ezeCopy((Http) source);
 	}
 	public void ezeCopy(egl.lang.AnyValue source) {
-		this.request.ezeCopy(((HttpREST) source).request);
-		this.response.ezeCopy(((HttpREST) source).response);
-		this.invocationType = ((HttpREST) source).invocationType;
+		this.request.ezeCopy(((Http) source).request);
+		this.response.ezeCopy(((Http) source).response);
+		this.invocationType = ((Http) source).invocationType;
 	}
-	public HttpREST ezeNewValue(Object... args) {
-		return new HttpREST();
+	public Http ezeNewValue(Object... args) {
+		return new Http();
 	}
 	public void ezeSetEmpty() {
 		this.request.ezeSetEmpty();
@@ -75,11 +75,11 @@ public class HttpREST extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	public void setResponse( HttpResponse ezeValue ) {
 		this.response = ezeValue;
 	}
-	@org.eclipse.edt.javart.json.Json(name="invocationType", clazz=RestType.class, asOptions={})
-	public RestType getInvocationType() {
+	@org.eclipse.edt.javart.json.Json(name="invocationType", clazz=ServiceType.class, asOptions={})
+	public ServiceType getInvocationType() {
 		return (invocationType);
 	}
-	public void setInvocationType( RestType ezeValue ) {
+	public void setInvocationType( ServiceType ezeValue ) {
 		this.invocationType = ezeValue;
 	}
 }

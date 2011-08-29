@@ -25,14 +25,14 @@ public class HttpServiceInvoker extends EglHttpConnection {
 	public HttpResponse invoke(HttpRequest innerRequest)throws Exception
 	{
 		//debug("proxy: url="+xmlRequest.URL);
-		HttpServiceHandler rest = new HttpServiceHandler(getRunUnit());
-		HttpUtilities.validateUrl(getRunUnit(), innerRequest);
+		HttpServiceHandler rest = new HttpServiceHandler();
+		HttpUtilities.validateUrl(innerRequest);
 		HttpResponse innerResponse = rest.invokeRestService( innerRequest, openConnection(innerRequest) );
 		if( innerResponse == null )
 		{
 			innerResponse = new HttpResponse();
 			innerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
-			innerResponse.setBody(eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException( getRunUnit(), Message.SOA_E_WS_REST_NO_RESPONSE, new String[]{innerRequest.getUri()}, null, getServiceKind(innerRequest) )));
+			innerResponse.setBody(eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_REST_NO_RESPONSE, new String[]{innerRequest.getUri()}, null, getServiceKind(innerRequest) )));
 		}
 		return innerResponse;
 	}

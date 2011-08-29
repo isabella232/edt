@@ -12,6 +12,7 @@ package org.eclipse.edt.javart.services.servlet;
 
 import java.lang.reflect.Method;
 
+import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.services.ServiceBase;
 
@@ -51,18 +52,17 @@ public abstract class LocalServiceInvoker extends Invoker{
 				return method;
 			}
 		}
-		throw ServiceUtilities.buildServiceInvocationException(getRunUnit(), Message.SOA_E_FUNCTION_NOT_FOUND, new String[]{functionName, this.getClass().getName()}, null, ServiceKind.EGL);
+		throw ServiceUtilities.buildServiceInvocationException(Message.SOA_E_FUNCTION_NOT_FOUND, new String[]{functionName, this.getClass().getName()}, null, ServiceKind.EGL);
 	}
 	protected Class<ServiceBase> getServiceClass() throws AnyException
 	{
 		if(serviceClass == null){
 			try {
-				serviceClass = (Class<ServiceBase>)Class.forName( serviceClassName, true, getRunUnit().getClass().getClassLoader() );
+				serviceClass = (Class<ServiceBase>)Class.forName( serviceClassName, true, Runtime.getRunUnit().getClass().getClassLoader() );
 			} 
 			catch(Exception e)
 			{
 				ServiceUtilities.buildServiceInvocationException( 
-						getRunUnit(),
 						Message.SOA_E_LOAD_LOCAL_SERVICE,
 						new Object[] { serviceClassName }, e, serviceKind);
 			}
@@ -82,7 +82,6 @@ public abstract class LocalServiceInvoker extends Invoker{
 			}
 			catch(Exception e){
 				ServiceUtilities.buildServiceInvocationException( 
-						getRunUnit(),
 						Message.SOA_E_LOAD_LOCAL_SERVICE,
 						new Object[] { serviceClassName }, e, serviceKind);
 			}

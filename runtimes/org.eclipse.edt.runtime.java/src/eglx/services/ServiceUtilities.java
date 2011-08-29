@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.eclipse.edt.javart.RunUnit;
+import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.util.JavartUtil;
 
 import egl.lang.AnyException;
@@ -32,10 +32,11 @@ public class ServiceUtilities
 	}
 
 	
-	public static ServiceInvocationException buildServiceInvocationException( RunUnit ru, String id, Object[] params, Throwable t, ServiceKind serviceKind )
+	public static ServiceInvocationException buildServiceInvocationException(String id, Object[] params, Throwable t, ServiceKind serviceKind )
 	{
-		String message = JavartUtil.errorMessage( ru, id, params );
-		return ServiceUtilities.buildInvocationException(id, message, "", "", "", t, serviceKind );
+		return ServiceUtilities.buildInvocationException(id, 
+				JavartUtil.errorMessage(Runtime.getRunUnit(), id, params), 
+				"", "", "", t, serviceKind );
 	}
 	private static ServiceInvocationException buildInvocationException(String id, String message, String detail1, String detail2, String detail3, Throwable t, ServiceKind serviceKind ) 
 	{

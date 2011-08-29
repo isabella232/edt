@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.services.servlet;
 
-import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.resources.Trace;
 
@@ -26,7 +25,7 @@ public class TracerBase
 	{
 		if( tracer == null )
 		{
-			tracer = getRunUnit().getTrace();
+			tracer = Runtime.getRunUnit().getTrace();
 		}
 		return tracer;
 	}
@@ -35,9 +34,4 @@ public class TracerBase
     {
 		return tracer().traceIsOn( Trace.GENERAL_TRACE ); 
     }
-	
-	protected RunUnit getRunUnit() {
-		return Runtime.getRunUnit();
-	}
-
 }

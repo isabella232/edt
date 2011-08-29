@@ -12,6 +12,7 @@ package org.eclipse.edt.javart.services.servlet;
 
 import java.lang.reflect.Method;
 
+import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.json.ArrayNode;
 import org.eclipse.edt.javart.json.JsonParser;
 import org.eclipse.edt.javart.json.JsonUtilities;
@@ -69,7 +70,7 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 			response.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
 		} catch (Throwable t) {
 			response.setBody(eglx.json.JsonUtilities.createJsonAnyException( 
-					ServiceUtilities.buildServiceInvocationException(getRunUnit(), Message.SOA_E_EGL_SERVICE_INVOCATION, new String[]{request.getBody(), getServiceClassName()}, t, getServiceKind())));
+					ServiceUtilities.buildServiceInvocationException(Message.SOA_E_EGL_SERVICE_INVOCATION, new String[]{request.getBody(), getServiceClassName()}, t, getServiceKind())));
 			response.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
 			response.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
 		}
@@ -85,7 +86,7 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 			Object[] parameters = eglx.json.JsonUtilities.getParameters(method, (ArrayNode)JsonUtilities.getValueNode(jsonRequest, JSON_RPC_PARAMETER_ID));
 			Object ret = method.invoke(getService(), parameters);
 			returnVal = convertToJson(method, parameters, ret);
-			getRunUnit().endRunUnit(getService());
+			Runtime.getRunUnit().endRunUnit(getService());
 		}
 		catch (ServiceInvocationException sie)
 		{
@@ -93,7 +94,7 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 		}
 		catch (Throwable t)
 		{
-			throw ServiceUtilities.buildServiceInvocationException( getRunUnit(), Message.SOA_E_WS_PROXY_REST, new String[] {getServiceClassName(), methodName}, t, getServiceKind() );
+			throw ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_PROXY_REST, new String[] {getServiceClassName(), methodName}, t, getServiceKind() );
 		}
 		finally
 		{
