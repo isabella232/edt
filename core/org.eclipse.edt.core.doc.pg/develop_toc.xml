@@ -2,8 +2,7 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 <toc label="Developing EGL applications with EDT" topic="topics/cedt01001.html">
    <topic label="EGL process from development to run time" href="topics/cedt01001.html"/>
-   <topic label="EGL support for service-oriented architecture"
-          href="topics/cedt01003.html">
+   <topic label="EGL support for SOA" href="topics/cedt01003.html">
       <topic label="Service access in Rich UI" href="topics/cedt01004.html"/>
       <topic label="Service access outside of Rich UI" href="topics/cedt01005.html"/>
       <topic label="Function prototypes for service access" href="topics/cedt01006.html"/>
@@ -17,7 +16,36 @@
       <topic label="End-to-end processing with a UI program and a data grid"
              href="topics/cedt01012.html"/>
    </topic>
-   <topic label="EGL support for Rich Internet Applications" href="topics/cedt01002.html"/>
+   <topic label="EGL support for Rich Internet Applications" href="topics/cedt01002.html">
+      <topic label="Rich UI widgets" href="topics/cedt01013.html">
+         <topic label="Rich UI widget fields" href="topics/cedt01014.html"/>
+         <topic label="Rich UI widget functions" href="topics/cedt01015.html"/>
+         <topic label="Rich UI widget styles" href="topics/cedt01016.html"/>
+         <topic label="Themes" href="topics/cedt01017.html"/>
+         <topic label="Extending the Rich UI widget set" href="topics/tedt01039.html"/>
+         <topic label="Writing widgets based on Microsoft Silverlight"
+                href="topics/tedt01040.html"/>
+      </topic>
+      <topic label="Creating a Rich UI application with multiple handlers"
+             href="topics/tedt01038.html">
+         <topic label="Dynamic loading in Rich UI" href="topics/cedt01018.html"/>
+         <topic label="Rich UI Infobus" href="topics/cedt01022.html"/>
+         <topic label="Drag and drop in EGL Rich UI applications" href="topics/cedt01026.html"/>
+      </topic>
+      <topic label="Event handling in Rich UI" href="topics/cedt01019.html"/>
+      <topic label="Rich UI validation and formatting" href="topics/cedt01020.html">
+         <topic label="Form processing with Rich UI" href="topics/cedt01021.html"/>
+      </topic>
+      <topic label="Using properties files for displayable text in Rich UI"
+             href="topics/tedt01041.html"/>
+      <topic label="Additional features in Rich UI">
+         <topic label="Drag and drop in EGL Rich UI applications" href="topics/cedt01026.html"/>
+         <topic label="Browser history" href="topics/cedt01023.html"/>
+         <topic label="Rich UI job scheduler" href="topics/cedt01024.html"/>
+         <topic label="Rich UI memory management for Microsoft Internet Explorer"
+                href="topics/cedt01025.html"/>
+      </topic>
+   </topic>
    <topic label="Developing a service or program" href="topics/tedt01000.html">
       <topic label="Accessing external data and reports" href="topics/tedt01010.html">
          <topic label="Accessing a relational database" href="topics/tedt01012.html"/>
@@ -26,7 +54,9 @@
       </topic>
       <topic label="Creating an EGL text report" href="topics/tedt01011.html"/>
    </topic>
-   <topic label="Developing a Rich UI application" href="topics/tedt01001.html"/>
+   <topic label="Developing a Rich UI application" href="topics/tedt01001.html">
+      <topic label="Preparing to use the EGL Dojo widgets" href="topics/tedt01037.html"/>
+   </topic>
    <topic label="Accessing a service" href="topics/tedt01002.html">
       <topic label="Declaring a variable to access a dedicated or local EGL service"
              href="topics/tedt01017.html"/>
@@ -47,7 +77,8 @@
              href="topics/tedt01024.html"/>
       <topic label="Using a provided Interface part for a 3rd-party REST service"
              href="topics/tedt01025.html"/>
-      <topic label="Accessing a BIRT report" href="topics/tedt01014.html"/>
+      <topic label="Accessing an IBM i program as a web service"
+             href="topics/tedt01042.html"/>
    </topic>
    <topic label="Accessing a program or transaction from generated code">
       <topic label="Calling from generated Java code to generated Java code"
