@@ -1,0 +1,13 @@
+package eglx.rest;
+
+Record EglRestRpc type Annotation
+{ 
+	targets = [ ElementKind.functionMbr]
+}
+//	requestFormat eglx.services.Encoding?;
+	requestCharset string = "UTF-8";
+	requestContentType string?;//default based on encoding
+//	responseFormat eglx.services.Encoding?;
+	responseCharset string?;
+	responseContentType string?;//default based on encoding
+end

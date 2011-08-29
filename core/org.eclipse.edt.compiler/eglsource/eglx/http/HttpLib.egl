@@ -19,10 +19,8 @@ externaltype HttpLib type NativeType
 
     static function convertToURLEncoded(eglType string in) returns(string);
     
-    static function setHTTPBasicAuthentication(http eglx.http.HttpREST in, userID string in, userPassword string in);
+    static function setHTTPBasicAuthentication(http eglx.http.Http in, userID string in, userPassword string in);
     
-    static function setHTTPBasicAuthentication(http eglx.http.HttpSOAP in, userID string in, userPassword string in);
-        
     static function setProxyBasicAuthentication( userID string in, userPassword string in );        
 end
 
