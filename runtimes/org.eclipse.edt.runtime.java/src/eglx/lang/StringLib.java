@@ -28,14 +28,14 @@ import org.eclipse.edt.javart.util.JavartDateFormat;
 import org.eclipse.edt.javart.util.NumberFormatter;
 import egl.lang.InvalidIndexException;
 
-public class StrLib extends ExecutableBase {
+public class StringLib extends ExecutableBase {
 
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	/**
 	 * Constructor
 	 */
-	public StrLib() throws AnyException {
+	public StringLib() throws AnyException {
 	}
 
 	/**
@@ -110,14 +110,14 @@ public class StrLib extends ExecutableBase {
 
 	/**
 	 * Returns the next token from the source string, or NULL if there is none. If a token is found, the index argument is
-	 * updated with the token's ending position. The exception egl.core.IndexOutOfBounds is thrown if the index is less than
+	 * updated with the token's ending position. The exception egl.lang.InvalidIndexException is thrown if the index is less than
 	 * 1 or greater than the length of the source String.
 	 */
 	public static String getNextToken(String source, AnyBoxedObject<Integer> index, String delimiters) throws AnyException {
 		int start = index.ezeUnbox();
-		byte[] sourceBytes = source.getBytes();
+		int searchEnd = source.length();
 		// Validate the substring index.
-		if (start < 1 || start > sourceBytes.length) {
+		if (start < 1 || start > searchEnd) {
 			InvalidIndexException ex = new InvalidIndexException();
 			ex.index = start;
 			throw ex;
@@ -126,11 +126,9 @@ public class StrLib extends ExecutableBase {
 		// java.util.StringTokenizer because we need to know the index of
 		// the match in addition to the token.
 		int tokenStart = start - 1;
-		int searchEnd = sourceBytes.length;
-		byte[] delimiterBytes = delimiters.getBytes();
 		// Skip delimiters at the beginning of the token.
-		// Check each byte to see if it's the start of a one-byte delimiter.
-		while (tokenStart != searchEnd && indexOf(sourceBytes[tokenStart], delimiterBytes) != -1) {
+		// Check each char to see if it's a delimiter.
+		while (tokenStart != searchEnd && delimiters.indexOf(source.charAt(tokenStart)) != -1) {
 			tokenStart++;
 		}
 		// If we're at the end of the substring, the search failed.
@@ -138,25 +136,14 @@ public class StrLib extends ExecutableBase {
 			return null;
 		// Now we know we've found the beginning of a token. Find its end.
 		int tokenEnd = tokenStart + 1;
-		// Check each byte to see if it's the start of a one-byte delimiter.
-		while (tokenEnd != searchEnd && indexOf(sourceBytes[tokenEnd], delimiterBytes) == -1) {
+		// Check each char to see if it's the start of a delimiter.
+		while (tokenEnd != searchEnd && delimiters.indexOf(source.charAt(tokenStart)) == -1) {
 			tokenEnd++;
 		}
 		// Store the end of the token in index.
 		index.ezeCopy(tokenEnd + 1);
-		// Return the token's bytes.
-		int tokenLength = tokenEnd - tokenStart;
-		byte[] tokenData = new byte[tokenLength];
-		System.arraycopy(sourceBytes, tokenStart, tokenData, 0, tokenLength);
-		return tokenData.toString();
-	}
-
-	private static int indexOf(byte b, byte[] data) {
-		for (int i = 0; i < data.length; i++) {
-			if (data[i] == b)
-				return i;
-		}
-		return -1;
+		// Return the token.
+		return source.substring(tokenStart, tokenEnd);
 	}
 
 	/**
