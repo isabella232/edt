@@ -80,5 +80,9 @@ public class JavaScriptDevGenerator extends AbstractGenerator {
 	protected IPreferenceStore getPreferenceStore() {
 		return Activator.getDefault().getPreferenceStore();
 	}
-
+	
+	@Override
+	protected String getRelativeFilePath(IFile eglFile, Part part) {
+		return new EclipseJavaScriptGenerator(new EclipseJavaScriptDevGenerator(eglFile, part, this), null).getRelativeFileName(part);
+	}
 }
