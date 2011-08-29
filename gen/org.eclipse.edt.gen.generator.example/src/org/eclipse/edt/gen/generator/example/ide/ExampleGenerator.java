@@ -81,4 +81,8 @@ public class ExampleGenerator extends AbstractGenerator {
 		return Activator.getDefault().getPreferenceStore();
 	}
 
+	@Override
+	protected String getRelativeFilePath(IFile eglFile, Part part) {
+		return new EclipseJavaGenerator(new EclipseExampleGenerator(eglFile, part, this), null).getRelativeFileName(part);
+	}
 }
