@@ -51,11 +51,10 @@ public class Constants {
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/NumericOverflowException.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/ui/gateway/UIGatewayRecord.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/Http.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpLib.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpMethod.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpRequest.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpResponse.js"); //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpREST.js"); //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpSOAP.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/java/JavaObjectException.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/javascript/JavaScriptObjectException.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/javascript/Job.js"); //$NON-NLS-1$
@@ -67,7 +66,6 @@ public class Constants {
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/MathLib.js");
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/SysLib.js");
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/rest/RestRuntime.js"); //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/rest/RestType.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/Encoding.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/FieldInfo.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceBinder.js"); //$NON-NLS-1$
@@ -76,6 +74,7 @@ public class Constants {
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceKind.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceLib.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceRuntimes.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceType.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/ui/rui/RUILib.js");
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/ui/rui/Widget.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/ui/rui/Document.js"); //$NON-NLS-1$
