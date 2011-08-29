@@ -160,6 +160,9 @@ public class LibraryWizardPage extends EGLPartWizardPage {
 		if(EGLBasePlugin.isRUI()){
 			createLibraryChoiceButton(fLibraryTypeGroup, NewWizardMessages.NewEGLLibraryWizardPageLibraryTypeRUIProp, LibraryConfiguration.RUIPROP_LIBRARY);
 		}
+
+		//Remove this line when NativeLibrary and RUIpropertiesLibrary are supported 
+		libraryTypeComposite.setVisible(false);
 	}
 	
 	private Button createLibraryChoiceButton(Composite grp, String btnLabel, final int libType){
