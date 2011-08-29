@@ -17,6 +17,15 @@ import org.eclipse.edt.mof.egl.Handler;
 
 public class HandlerTemplate extends JavaTemplate {
 
+	public void genPart(Handler part, Context ctx, TabbedWriter out) {
+		// Avoid generating RUI stuff.
+		if ( part.getAnnotation( "eglx.ui.rui.RUIWidget" ) == null
+				&& part.getAnnotation( "eglx.ui.rui.RUIHandler" ) == null )
+		{
+			ctx.invokeSuper( this, genPart, part, ctx, out );
+		}
+	}
+	
 	public void genSuperClass(Handler type, Context ctx, TabbedWriter out) {
 		out.print("ExecutableBase");
 	}
