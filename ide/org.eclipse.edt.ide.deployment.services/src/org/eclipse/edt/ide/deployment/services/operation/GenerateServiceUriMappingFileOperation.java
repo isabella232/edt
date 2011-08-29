@@ -22,13 +22,16 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.internal.util.EGLMessage;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.core.model.Restservice;
 import org.eclipse.edt.ide.deployment.operation.IDeploymentOperation;
+import org.eclipse.edt.ide.deployment.results.DeploymentResultMessageRequestor;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.services.generators.ServiceUriMappingGenerator;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
+import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.Service;
@@ -48,6 +51,8 @@ public class GenerateServiceUriMappingFileOperation  implements IDeploymentOpera
 		
 		List restServices = ddModel.getRestservices();
 		
+		DeploymentResultMessageRequestor messageRequestor = new DeploymentResultMessageRequestor(resultsCollector);
+
 		for ( int i = 0; i < restServices.size(); i ++ ) {
 			Restservice restService = (Restservice)restServices.get( i );
 			String partName = restService.getImplementation();
@@ -57,19 +62,22 @@ public class GenerateServiceUriMappingFileOperation  implements IDeploymentOpera
 					ServiceUriMappingGenerator generator = new ServiceUriMappingGenerator( context );
 					generator.visit( (Service)service, restService );
 				}
-			} catch (PartNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentInformationalMessage(
+						EGLMessage.EGL_DEPLOYMENT_COMPLETE,
+						null,
+						new String[] { service.getFullyQualifiedName() }));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentInformationalMessage(
+						EGLMessage.EGL_DEPLOYMENT_FAILED,
+						null,
+						new String[] { DeploymentUtilities.createExceptionMessage(e) }));
 			}
 		}
 		
 		
 		
 		
-		String javaSourceFolder = EclipseUtilities.getJavaSourceFolderName( context.getTargetProject() );
+//		String javaSourceFolder = EclipseUtilities.getJavaSourceFolderName( context.getTargetProject() );
 
 //		try {
 //			InputStream is = new ByteArrayInputStream(ddModel.toBindXML().getBytes("UTF-8"));

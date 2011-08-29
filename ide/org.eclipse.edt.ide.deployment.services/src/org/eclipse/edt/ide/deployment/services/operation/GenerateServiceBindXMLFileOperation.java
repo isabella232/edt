@@ -21,11 +21,14 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.internal.util.EGLMessage;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.operation.IDeploymentOperation;
+import org.eclipse.edt.ide.deployment.results.DeploymentResultMessageRequestor;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
+import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
 
 public class GenerateServiceBindXMLFileOperation implements IDeploymentOperation {
 	
@@ -40,6 +43,8 @@ public class GenerateServiceBindXMLFileOperation implements IDeploymentOperation
 		this.context = context;
 		ddModel = context.getDeploymentDesc();
 		
+		DeploymentResultMessageRequestor messageRequestor = new DeploymentResultMessageRequestor(resultsCollector);
+
 		String javaSourceFolder = EclipseUtilities.getJavaSourceFolderName( context.getTargetProject() );
 
 		try {
@@ -57,12 +62,16 @@ public class GenerateServiceBindXMLFileOperation implements IDeploymentOperation
 			}
 	
 			is.close();
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+			messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentInformationalMessage(
+					EGLMessage.EGL_DEPLOYMENT_DEPLOYED_BIND_FILE,
+					null,
+					new String[] { targetFile.getProjectRelativePath().toPortableString() }));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentInformationalMessage(
+					EGLMessage.EGL_DEPLOYMENT_EXCEPTION,
+					null,
+					new String[] { DeploymentUtilities.createExceptionMessage(e) }));
 		}
 
 	}
