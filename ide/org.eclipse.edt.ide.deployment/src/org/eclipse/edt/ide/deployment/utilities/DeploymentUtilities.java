@@ -37,6 +37,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.edt.compiler.internal.util.EGLMessage;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
+import org.eclipse.edt.ide.core.internal.generation.GenerationResultsMessage;
 import org.eclipse.edt.ide.core.internal.model.BinaryPart;
 import org.eclipse.edt.ide.core.internal.model.SourcePart;
 import org.eclipse.edt.ide.core.internal.search.AllPartsCache;
@@ -130,19 +131,19 @@ public class DeploymentUtilities {
 	 * @return
 	 * @throws CoreException
 	 */
-	public static String deriveHTMLFilePath(String targetDirectory, String fileName, String localeCode, String fileExtension) 
+	public static String deriveHTMLFilePath(String targetDirectory, String fileName, String localeCode, boolean filenameWithLocale, String fileExtension) 
 			throws CoreException{
 		/**
          * deploy the HTML file directly into the context root and do not honor
          * its path within the source project.
          */
-		String filename = buildFileNameWithLocale(fileName, localeCode, fileExtension);
+		String filename = buildFileNameWithLocale(fileName, localeCode, filenameWithLocale, fileExtension);
 		
 		return targetDirectory + "/" + filename; //$NON-NLS-1$
 	}
 	
-	public static String buildFileNameWithLocale(String fileName, String localeCode, String fileExtension) {
-		return fileName + "-" + localeCode + "." + fileExtension; //$NON-NLS-1$ //$NON-NLS-2$
+	public static String buildFileNameWithLocale(String fileName, String localeCode, boolean filenameWithLocale, String fileExtension) {
+		return fileName + (filenameWithLocale ?  "-" + localeCode : "" ) + "." + fileExtension; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	/**
@@ -428,4 +429,12 @@ public class DeploymentUtilities {
 		
 		return ruiMap;
 	}
+	
+	public static IGenerationResultsMessage createEGLDeploymentErrorMessage(String messageID, Object messageContributor, String[] inserts) {
+		return new GenerationResultsMessage(new EGLMessage());
+	}
+	public static IGenerationResultsMessage createEGLDeploymentInformationalMessage(String messageID, Object messageContributor, String[] inserts) {
+		return new GenerationResultsMessage(new EGLMessage());
+	}
+
 }
