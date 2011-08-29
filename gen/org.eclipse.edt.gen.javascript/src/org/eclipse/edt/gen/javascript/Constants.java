@@ -44,7 +44,7 @@ public class Constants {
 	public static final String AnnotationJsonName  = "eglx.json.JsonName";
 	public static final String AnnotationDedicatedService  = "eglx.services.DedicatedService";
 	public static final String AnnotationBindService  = "eglx.services.BindService";
-	public static final String PartHttpREST  = "eglx.http.HttpREST";
+	public static final String PartHttp  = "eglx.http.Http";
 	public static final String LibraryService  = "eglx.services.ServiceLib";
 
 	
