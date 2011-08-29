@@ -1369,6 +1369,8 @@ public interface IEGLConstants {
 	public static final String PROPERTY_PROTECT = "protect";  //$NON-NLS-1$
 	public static final String PROPERTY_PSB = "psb";  //$NON-NLS-1$
 	public static final String PROPERTY_PSBPARM = "psbParm";  //$NON-NLS-1$
+	public static final String PROPERTY_PUBLISHHELPER = "publishHelper";  //$NON-NLS-1$
+	public static final String PROPERTY_PUBLISHMESSAGEHELPER = "publishMessageHelper";  //$NON-NLS-1$
 	public static final String PROPERTY_PUTOPTIONSRECORD = "putOptionsRecord";  //$NON-NLS-1$
 	public static final String PROPERTY_QUEUEDESCRIPTORRECORD = "queueDescriptorRecord";  //$NON-NLS-1$
 	public static final String PROPERTY_QUEUENAME = "queueName";  //$NON-NLS-1$
@@ -1381,6 +1383,8 @@ public interface IEGLConstants {
 	public static final String PROPERTY_REPORTDATA = "reportData";  //$NON-NLS-1$
 	public static final String PROPERTY_REQUIRED = "required";  //$NON-NLS-1$
 	public static final String PROPERTY_RESIDENT = "resident";  //$NON-NLS-1$
+	public static final String PROPERTY_RETRIEVEVALIDSTATEHELPER = "retrieveValidStateHelper";  //$NON-NLS-1$
+	public static final String PROPERTY_RETRIEVEVIEWHELPER = "retrieveViewHelper";  //$NON-NLS-1$
 	public static final String PROPERTY_RIGHTMARGIN = "rightMargin";  //$NON-NLS-1$
 	public static final String PROPERTY_RUNVALIDATORFROMPROGRAM = "runValidatorFromProgram";  //$NON-NLS-1$
 	public static final String PROPERTY_SCOPE = "scope";  //$NON-NLS-1$
