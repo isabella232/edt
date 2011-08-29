@@ -346,6 +346,12 @@ public interface IProblemRequestor {
 	public static final int TYPE_VALIDATOR_FUNCTION_NOT_VALID_FOR_VGUIRECORD = 3274;
 	public static final int NULLABLE_INVALID_IN_ISA_OR_AS = 3275;
 	
+	public static final int PUBLISHHELPER_FUNCTION_INVALID = 3320;	
+	public static final int RETRIEVEVEVIEWHELPER_FUNCTION_INVALID = 3321;	
+	public static final int RUI_ONCONSTRUCTOR_FUNCTION_INVALID = 3322;	
+	public static final int PUBLISHMESSAGEHELPER_FUNCTION_INVALID = 3323;	
+	public static final int RETRIEVEVALIDSTATEHELPER_FUNCTION_INVALID = 3324;	
+	
 	public static final int IMPORT_STATEMENT_PACKAGE_NAME_COULD_NOT_BE_RESOLVED = 3325;	
 	public static final int IMPORT_STATEMENT_PART_NAME_IS_AMBIGUOUS = 3326;	
 	public static final int IMPORT_STATEMENT_PART_NAME_COULD_NOT_BE_LOCATED = 3327;	
