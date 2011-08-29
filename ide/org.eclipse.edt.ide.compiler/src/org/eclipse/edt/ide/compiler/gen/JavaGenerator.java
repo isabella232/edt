@@ -88,4 +88,9 @@ public class JavaGenerator extends AbstractGenerator {
 	protected IPreferenceStore getPreferenceStore() {
 		return EDTCompilerIDEPlugin.getDefault().getPreferenceStore();
 	}
+
+	@Override
+	protected String getRelativeFilePath(IFile eglFile, Part part) {
+		return new EclipseJavaGenerator(new EclipseEGL2Java(eglFile, part, this), null).getRelativeFileName(part);
+	}
 }
