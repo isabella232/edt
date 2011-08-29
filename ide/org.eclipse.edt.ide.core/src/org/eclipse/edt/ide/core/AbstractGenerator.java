@@ -11,10 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
@@ -36,7 +41,17 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 	public EDTRuntimeContainer[] getRuntimeContainers() {
 		return runtimeContainers;
 	}
+	
+	@Override
+	public IFile[] getOutputFiles(IFile eglFile, Part part) throws CoreException {
+		String relativeFilePath = getRelativeFilePath(eglFile, part);
+		String outputDirectory = getOutputDirectory(eglFile);
 		
+		IContainer container = EclipseUtilities.getOutputContainer(outputDirectory, eglFile, relativeFilePath);
+		IPath filePath = EclipseUtilities.getOutputFilePath(outputDirectory, eglFile, relativeFilePath);
+		return new IFile[]{container.getFile(filePath)};
+	}
+	
 	/**
 	 * Returns the output directory to use for writing a file in Eclipse.
 	 * The default implementation will use {@link #getGenerationDirectoryPropertyKey()},
@@ -51,6 +66,15 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 				getGenerationDirectoryPropertyKey(),
 				getGenerationDirectoryPreferenceKey());
 	}
+	
+	/**
+	 * Returns the relative path for the output file.
+	 * 
+	 * @param eglFile  The source .egl file
+	 * @param part     The IR
+	 * @return the relative path for the output file.
+	 */
+	protected abstract String getRelativeFilePath(IFile eglFile, Part part);
 	
 	/**
 	 * @return the key for the project settings generation directory.

@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.edt.mof.egl.Part;
 
 /**
  * Enables clients to run a generation request for a particular generator. The implementation
@@ -29,5 +32,10 @@ public interface IGenerator extends org.eclipse.edt.compiler.IGenerator {
 	 * @return an array of runtime containers provided by this generator; this may return null.
 	 */
 	public EDTRuntimeContainer[] getRuntimeContainers();
-			
+	
+	/**
+	 * @return the files that would be created by this generator for the given source file and part; the files might not exist yet.
+	 * @throws CoreException
+	 */
+	public IFile[] getOutputFiles(IFile eglFile, Part part) throws CoreException;
 }
