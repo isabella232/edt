@@ -24,7 +24,7 @@ end
 
 <template name="handler" description="%Templates.ruiHandler" id="org.eclipse.edt.ide.ui.templates.rui_handler" context = "egl-rui" enabled="true">// RUI Handler
 
-import com.ibm.egl.rui.widgets.GridLayout;
+import org.eclipse.edt.rui.widgets.GridLayout;
 
 //
 //
@@ -39,7 +39,7 @@ end
 
 <template name="widget" description="%Templates.ruiWidget" id="org.eclipse.edt.ide.ui.templates.rui_widget" context = "egl-rui" enabled="true">// RUI Widget
 
-import com.ibm.egl.rui.widgets.GridLayout;
+import org.eclipse.edt.rui.widgets.GridLayout;
 
 //
 //
