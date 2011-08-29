@@ -14,9 +14,12 @@ package org.eclipse.edt.gen.java.templates;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Interface;
+import org.eclipse.edt.mof.egl.Type;
 
 public class InterfaceTemplate extends JavaTemplate {
 
+	public void preGen(Type type, Context ctx) {}
+	
 	public void preGenClassBody(Interface part, Context ctx) {}
 
 	public void genPart(Interface part, Context ctx, TabbedWriter out) {}
