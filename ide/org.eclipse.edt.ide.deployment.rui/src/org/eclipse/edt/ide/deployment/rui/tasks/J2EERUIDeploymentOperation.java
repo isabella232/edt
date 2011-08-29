@@ -283,7 +283,7 @@ public class J2EERUIDeploymentOperation {
 				String htmlFileName = (String)model.getHTMLFileNames().get(ruiHandler);
 				
 				try {
-					String fullTargetPath = DeploymentUtilities.deriveHTMLFilePath(folder.getFullPath().toOSString(), htmlFileName, localeCode, IConstants.HTML_FILE_EXTENSION);
+					String fullTargetPath = DeploymentUtilities.deriveHTMLFilePath(folder.getFullPath().toOSString(), htmlFileName, localeCode, entry.getValue().isFilenameWithLocal(), IConstants.HTML_FILE_EXTENSION);
 					
 					IFile outputLocation = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(fullTargetPath));
 					InputStream inputStream = new ByteArrayInputStream(entry.getValue().getFile());

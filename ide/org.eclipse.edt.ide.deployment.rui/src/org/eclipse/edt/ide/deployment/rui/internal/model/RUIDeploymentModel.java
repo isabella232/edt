@@ -110,12 +110,21 @@ public class RUIDeploymentModel {
 	public class DeployableFile{
 		private byte[] file;
 		private boolean deployed;
+		private boolean filenameWithLocale = true;
 		public DeployableFile(byte[] file) {
 			this.file = file;
 			deployed = false;
 		}
+		public DeployableFile(byte[] file, boolean filenameWithLocale ) {
+			this.file = file;
+			this.deployed = false;
+			this.filenameWithLocale = filenameWithLocale;
+		}
 		public boolean isDeployed() {
 			return deployed;
+		}
+		public boolean isFilenameWithLocal() {
+			return filenameWithLocale;
 		}
 		public void setDeployed(boolean generated) {
 			this.deployed = generated;
@@ -465,7 +474,7 @@ public class RUIDeploymentModel {
 						/**
 						 * store the html file bytes into a map for retrieval
 						 */
-						htmlFileContents.put(userLocaleCode, new DeployableFile(htmlFile));
+						htmlFileContents.put(userLocaleCode, new DeployableFile(htmlFile, handlerLocales.size() > 1));
 					} catch (Exception e) {
 						messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage( 
 								EGLMessage.EGL_DEPLOYMENT_FAILED_CREATE_HTML_FILE, null, null ));

@@ -101,7 +101,6 @@ public class RUIFormPage extends EGLDDBaseFormPage implements ILocalesListViewer
 	private RUIApplication fApplication;
 	private List cachedModelLocales;
 	private HandlerLocalesList localesList;
-	private Button fNotAppendLocalCheckBox;
 
 	private static final int COLINDEX_HANDLER = 0;
 	private static final int COLINDEX_HTML = 1;
@@ -188,26 +187,17 @@ public class RUIFormPage extends EGLDDBaseFormPage implements ILocalesListViewer
 	private void init()
 	{
 		boolean selection;
-		boolean notAppendLocal = true;
 		if (fApplication == null) {
 			selection = true;
 		} else {
 			selection = fApplication.isDeployAllHandlers();
-			Parameters parms = getApplication().getParameters();
-			String appendLocalValue = EGLDDRootHelper.getParameterValue( parms, IDeploymentConstants.PARAMETER_APPEND_LOCAL );
-			if(appendLocalValue == null || appendLocalValue.equals("")) {
-				notAppendLocal = true;
-			} else {
-				notAppendLocal = Boolean.parseBoolean(appendLocalValue);
-			}
 		}
 		fCheckbox.setSelection(selection);
-		fNotAppendLocalCheckBox.setSelection(notAppendLocal);
 		fHandlerTableViewer.getTable().setEnabled(!selection);
 		updateButtons();
-
+		
 		validateLocales();
-
+		
 		// On smaller displays, the locales section will not be visible. This
 		// will cause the form to display a vertical scrollbar if needed.
 		getManagedForm().reflow( true );
@@ -447,18 +437,6 @@ public class RUIFormPage extends EGLDDBaseFormPage implements ILocalesListViewer
 		gd = new GridData();
 		gd.horizontalSpan = layoutColumn;
 		fLocalesLink.setLayoutData( gd );
-		
-		fNotAppendLocalCheckBox = toolkit.createButton( fieldComposite, Messages.append_locale_desc, SWT.CHECK );
-		fNotAppendLocalCheckBox.addSelectionListener( new SelectionAdapter() {
-			public void widgetSelected( SelectionEvent event ) {
-				updateAppendLocaleParameterInModel();
-				updateLocalesParameterInModel();
-			}
-		} );
-		gd = new GridData();
-		gd.verticalIndent = 10;
-		gd.horizontalSpan = layoutColumn;
-		fNotAppendLocalCheckBox.setLayoutData( gd );
 		
 		Table t = createLocalesTable( toolkit, fieldComposite, layoutColumn );
 		fLocalesTableViewer = new CheckboxTableViewer( t ) {
@@ -803,28 +781,6 @@ public class RUIFormPage extends EGLDDBaseFormPage implements ILocalesListViewer
 			{
 				application.setParameters( null );
 			}
-		}
-	}
-	
-	private void updateAppendLocaleParameterInModel() {
-		RUIApplication application = getApplication();
-		boolean checked = fNotAppendLocalCheckBox.getSelection();
-		
-		String value;
-		Parameters parms = application.getParameters();
-		if ( parms == null ) {
-			parms = DeploymentFactory.eINSTANCE.createParameters();
-			application.setParameters( parms );
-		}
-		
-		if(checked) {
-			value = Boolean.TRUE.toString();
-		} else {
-			value = Boolean.FALSE.toString();
-	    }
-		
-		if ( parms != null ) {
-			EGLDDRootHelper.addOrUpdateParameter( parms, IDeploymentConstants.PARAMETER_APPEND_LOCAL, value );
 		}
 	}
 	

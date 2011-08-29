@@ -169,7 +169,6 @@ public class Messages extends NLS {
 	public static String target_detail_page_rui_section_title;
 	public static String target_detail_page_rui_section_desc;
 	public static String no_locale_selected_error;
-	public static String append_locale_desc;
 
 	public static String deploy_job_name;
 	public static String deploy_operation_task_name;
