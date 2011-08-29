@@ -10,7 +10,7 @@
  *******************************************************************************/
 egl.defineClass('eglx.services', "ServiceInvocationException", "egl.jsrt", "Record", {
 	"eze$$fileName" : "eglx/services/ServiceInvocationException.egl",
-		"constructor": function(args) {
+		"constructor": function() {
 			this.eze$$setInitial();
 		}
 		,
@@ -51,7 +51,8 @@ egl.defineClass('eglx.services', "ServiceInvocationException", "egl.jsrt", "Reco
 				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("ServiceInvocationException", null, false);
 			}
 			return this.annotations;
-		},
+		}
+		,
 		"eze$$getFieldInfos": function() {
 			if(this.fieldInfos === undefined){
 				var annotations;
@@ -74,7 +75,8 @@ egl.defineClass('eglx.services', "ServiceInvocationException", "egl.jsrt", "Reco
 				this.fieldInfos[3] =new egl.eglx.services.FieldInfo("detail3", "detail3", "S;", String, annotations);
 			}
 			return this.fieldInfos;
-		},
+		}
+		,
 		"eze$$resolvePart": function(/*string*/ namespace, /*string*/ localName) {
 			if(this.namespaceMap == undefined){
 				this.namespaceMap = {};

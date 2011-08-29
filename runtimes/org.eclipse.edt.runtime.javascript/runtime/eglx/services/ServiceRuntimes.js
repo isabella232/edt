@@ -68,9 +68,9 @@ egl.defineClass(
     },
 
     "isJsonRPCFormat" : function(/*HttpRequest*/ http){
-    	return http instanceof egl.eglx.http.HttpREST &&
-    		(http.invocationType === egl.eglx.rest.RestType.EglDedicated ||
-    				http.invocationType === egl.eglx.rest.RestType.EglRpc);
+    	return http instanceof egl.eglx.http.Http &&
+    		(http.invocationType === egl.eglx.services.ServiceType.EglDedicated ||
+    				http.invocationType === egl.eglx.services.ServiceType.EglRpc);
     },
     
     /**
@@ -78,7 +78,7 @@ egl.defineClass(
             Function internalInvokeService( handler RUIHandler, uri String, serviceWrapper, parameters Dictionary) end 
             Function internalInvokeService( handler RUIHandler, uri String, serviceWrapper, parameters Dictionary, body String) end        
      */              
-    "internalInvokeService" : function(/*HttpRest or HttpSOAP*/ http, 
+    "internalInvokeService" : function(/*Http or HttpSOAP*/ http, 
     									callbackArgs,
 							    		callbackFunction,
 										errorCallbackFunction,
@@ -290,7 +290,7 @@ egl.defineClass(
     	}
     },
     
-    "doInvokeAsync" : function( /*HttpRest/HttpSOAP*/ http, 
+    "doInvokeAsync" : function( /*Http/HttpSOAP*/ http, 
     							/*HttpCallback*/ callback, 
     							/*HttpCallback*/ errCallback, 
     							/*handler*/ handler ) {
@@ -306,17 +306,17 @@ egl.defineClass(
                 },
                 true);
     },
-    "doInvokeInternal" : function( /*HttpRest/HttpSOAP*/ http, 
+    "doInvokeInternal" : function( /*Http/HttpSOAP*/ http, 
                                    /*function*/ callback, 
                                    /*function*/ errCallback,                     
                                    /*boolean*/ asynchronous) {
-    	if(http instanceof egl.eglx.http.HttpREST){
-    		if(http.invocationType === egl.eglx.rest.RestType.EglDedicated){
+    	if(http instanceof egl.eglx.http.Http){
+    		if(http.invocationType === egl.eglx.services.ServiceType.EglDedicated){
                 egl.valueByKey( http.request.headers, egl.HEADER_EGLDEDICATED, "true");                    
     		}
-    	}
-    	else{
-            egl.valueByKey( http.request.headers, egl.egl.HEADER_EGLSOAP, "true");                    
+    		else if(http.invocationType === egl.eglx.services.ServiceType.SOAP){
+                egl.valueByKey( http.request.headers, egl.egl.HEADER_EGLSOAP, "true");                    
+    		}
     	}
     	var request = new egl.eglx.lang.EDictionary();
     	request.uri = http.request.uri;
@@ -494,16 +494,16 @@ egl.defineClass(
     	
     },
     "getServiceKind": function(http){
-    	if(http instanceof egl.eglx.http.HttpREST){
-    		if(http.invocationType === egl.eglx.rest.RestType.EglDedicated){
+    	if(http instanceof egl.eglx.http.Http){
+    		if(http.invocationType === egl.eglx.services.ServiceType.EglDedicated){
                 return egl.eglx.services.ServiceKind.EGL;                    
+    		}
+    		else if(http.invocationType === egl.eglx.services.ServiceType.SOAP){
+                return egl.eglx.services.ServiceKind.WEB;                    
     		}
     		else{
                 return egl.eglx.services.ServiceKind.REST;                    
     		}
-    	}
-    	else{
-            return egl.eglx.services.ServiceKind.WEB;                    
     	}
     },
     "serviceKind" : function(/*Teglx/services/ServiceInvocationException;*/sie) {

@@ -147,7 +147,7 @@ egl.defineClass(
     }    
     
 });
-egl.eglx.rest.invokeEglService = function(httpRest,
+egl.eglx.rest.invokeEglService = function(http,
 										methodName,
 										inData, 
 										inDatatypes,
@@ -158,15 +158,15 @@ egl.eglx.rest.invokeEglService = function(httpRest,
 	var eglRpcRestRequest = new egl.eglx.lang.EDictionary();
 	eglRpcRestRequest.method = methodName;
 	eglRpcRestRequest.params = inData;
-	egl.eglx.services.$ServiceRT.encodeResquestBody(httpRest.request, eglRpcRestRequest);
-	egl.eglx.services.$ServiceRT.internalInvokeService(httpRest, returnTypes, callbackFunction, errorCallbackFunction, null);
+	egl.eglx.services.$ServiceRT.encodeResquestBody(http.request, eglRpcRestRequest);
+	egl.eglx.services.$ServiceRT.internalInvokeService(http, returnTypes, callbackFunction, errorCallbackFunction, null);
 };
-egl.eglx.rest.invokeService = function(httpRest, 
+egl.eglx.rest.invokeService = function(http, 
+											firstInDataNotInURL,
 											inData, 
 											inDatatypes,
 											inFunctionParameterNames,
 											returnTypes,
-											firstInDataNotInURL,
 											callbackFunction,
 											errorCallbackFunction){
 	/*
@@ -181,54 +181,58 @@ egl.eglx.rest.invokeService = function(httpRest,
 					eze$Temp1, handleF2Resonse, egl.eglx.services.ServiceLib['$inst'].serviceExceptionHandler);
 
 	 */
-	httpRest.invocationType = egl.eglx.rest.RestType.TrueRest;
-	if(httpRest.request.uri != undefined && httpRest.request.uri != null){
-		firstInDataNotInURL = null; 
-		for(idx = 0; idx < inFunctionParameterNames.length; idx++){
-			if(idx == 0 && 
-					egl.toString(inFunctionParameterNames[idx].indexOf("http://")) &&
-					httpRest.request.uri.indexOf(httpRest.request.uri.indexOf("{" + inFunctionParameterNames[idx] + "}") > -1)){
-				httpRest.request.uri.replace("{" + inFunctionParameterNames[idx] + "}", egl.toString(inData[idx]));
-			}
-			else if(httpRest.request.uri.indexOf(httpRest.request.uri.indexOf("{" + inFunctionParameterNames[idx] + "}") > -1)){
-				httpRest.request.uri.replace("{" + inFunctionParameterNames[idx] + "}", egl.eglx.http.HttpLib.convertToURLEncoded(egl.toString(inData[idx])));
-			}
-			else{
-				firstInDataNotInURL = inData[idx];
+	http.invocationType = egl.eglx.services.ServiceType.TrueRest;
+	if(firstInDataNotInURL == null){
+		if(http.request.uri != undefined && http.request.uri != null){
+			for(idx = 0; idx < inFunctionParameterNames.length; idx++){
+				var indexOf = http.request.uri.indexOf(http.request.uri.indexOf("{" + inFunctionParameterNames[idx] + "}"));
+				if(idx == 0 && 
+						egl.toString(inFunctionParameterNames[idx].indexOf("http://")) &&
+						http.request.uri.indexOf("{" + inFunctionParameterNames[idx] + "}") > -1){
+					http.request.uri.replace("{" + inFunctionParameterNames[idx] + "}", egl.toString(inData[idx]));
+				}
+				else if(http.request.uri.indexOf("{" + inFunctionParameterNames[idx] + "}") > -1){
+					http.request.uri.replace("{" + inFunctionParameterNames[idx] + "}", egl.eglx.http.HttpLib.convertToURLEncoded(egl.toString(inData[idx])));
+				}
+				else{
+					firstInDataNotInURL = inData[idx];
+				}
 			}
 		}
 	}
-	egl.eglx.services.$ServiceRT.encodeResquestBody(httpRest, firstInDataNotInURL);
-	egl.eglx.services.$ServiceRT.internalInvokeService(httpRest, returnTypes, callbackFunction, errorCallbackFunction, null);
+	egl.eglx.services.$ServiceRT.encodeResquestBody(http.request, firstInDataNotInURL);
+	egl.eglx.services.$ServiceRT.internalInvokeService(http, returnTypes, callbackFunction, errorCallbackFunction, null);
 };
-egl.eglx.rest.configHttp = function(httpRest, 
+egl.eglx.rest.configHttp = function(http, 
 									requestConfig,
 									responseConfig){
 	
-	if(httpRest === undefined || httpRest === null){
-		httpRest = new egl.eglx.rest.HttpREST;
+	if(http === undefined || http === null){
+		http = new egl.eglx.rest.Http;
 	}
 	else{
-		httpRest = httpRest.eze$$clone();
+		http = http.eze$$clone();
 	}
-	httpRest.response.status = null;
-	httpRest.response.statusMessage = null;
-	httpRest.response.body = null;
-	if(httpRest.request.method === null)
-		httpRest.request.method = requestConfig.method;
-	if(httpRest.request.encoding === null)
-		httpRest.request.encoding = requestConfig.encoding;
-	if(httpRest.request.charset === null) 
-		httpRest.request.charset = requestConfig.charset;
-	if(httpRest.request.contentType === null) 
-		httpRest.request.contentType = requestConfig.contentType;
-	if(httpRest.response.encoding === null)
-		httpRest.response.encoding = responseConfig.encoding;
-	if(httpRest.response.charset === null)
-		httpRest.response.charset = responseConfig.charset;
-	if(httpRest.response.contentType === null)
-		httpRest.response.contentType = responseConfig.contentType;
-	if(httpRest.request.headers === null)
-		httpRest.request.headers = new egl.eglx.lang.EDictionary();
-	return httpRest;
+	http.response.status = null;
+	http.response.statusMessage = null;
+	http.response.body = null;
+	if(http.request.uri === null || http.request.uri.length == 0)
+		http.request.uri = requestConfig.uri;
+	if(http.request.method === null)
+		http.request.method = requestConfig.method;
+	if(http.request.encoding === null)
+		http.request.encoding = requestConfig.encoding;
+	if(http.request.charset === null) 
+		http.request.charset = requestConfig.charset;
+	if(http.request.contentType === null) 
+		http.request.contentType = requestConfig.contentType;
+	if(http.response.encoding === null)
+		http.response.encoding = responseConfig.encoding;
+	if(http.response.charset === null)
+		http.response.charset = responseConfig.charset;
+	if(http.response.contentType === null)
+		http.response.contentType = responseConfig.contentType;
+	if(http.request.headers === null)
+		http.request.headers = new egl.eglx.lang.EDictionary();
+	return http;
 };

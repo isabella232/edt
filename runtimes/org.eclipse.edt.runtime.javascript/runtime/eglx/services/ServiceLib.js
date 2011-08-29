@@ -30,9 +30,9 @@ egl.eglx.services.ServiceLib["bindService"] = function(/*String*/bindingKeyName,
 	var binding = egl.eglx.services.$ServiceBinder.getBinding(eglddName.toLowerCase(), bindingKeyName);
 	var ret = undefined;
 	if(binding instanceof egl.eglx.services.RestBinding){
-		ret = new egl.eglx.http.HttpREST();
+		ret = new egl.eglx.http.Http();
 		ret.request.uri = binding.baseURI;
-		ret.invocationType = egl.eglx.rest.RestType.EglRpc;
+		ret.invocationType = egl.eglx.services.ServiceType.EglRpc;
 	}
 	return ret;
 };

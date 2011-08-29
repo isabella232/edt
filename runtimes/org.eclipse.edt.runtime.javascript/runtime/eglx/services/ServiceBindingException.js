@@ -39,14 +39,16 @@ egl.defineClass('eglx.services', "ServiceBindingException", "egl.jsrt", "Record"
 				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("ServiceBindingException", null, false);
 			}
 			return this.annotations;
-		},
+		}
+		,
 		"eze$$getFieldInfos": function() {
 			if(this.fieldInfos === undefined){
 				var annotations;
 				this.fieldInfos = new Array();
 			}
 			return this.fieldInfos;
-		},
+		}
+		,
 		"eze$$resolvePart": function(/*string*/ namespace, /*string*/ localName) {
 			if(this.namespaceMap == undefined){
 				this.namespaceMap = {};

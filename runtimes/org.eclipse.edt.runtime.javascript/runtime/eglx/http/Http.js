@@ -8,74 +8,85 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-/**
- * HttpLib
- */
-egl.defineClass(
-    'eglx.http', 'HttpLib',
-{
-	"constructor" : function() {
-	}
-});
-egl.eglx.http.HttpLib["checkURLEncode"] = function(/*String*/stringIn) {
-	if (stringIn.length > 0) {
-		var lowercaseStr = stringIn.toLowerCase();
-		//if starts with http, do not url encode it
-		if (lowercaseStr.indexOf("http") != 0) {
-			return egl.eglx.http.HttpLib.convertToURLEncoded(stringIn);
+egl.defineClass('eglx.http', "Http", "egl.jsrt", "Record", {
+	"eze$$fileName" : "eglx/http/Http.egl",
+		"constructor": function() {
+			this.eze$$setInitial();
+		}
+		,
+		"ezeCopy": function(source) {
+			this.request.ezeCopy(source.request);
+			this.response.ezeCopy(source.response);
+			this.invocationType = source.invocationType;
+		}
+		,
+		"eze$$setEmpty": function() {
+			this.request = new egl.eglx.http.HttpRequest();
+			this.response = new egl.eglx.http.HttpResponse();
+			this.invocationType = null;
+		}
+		,
+		"eze$$setInitial": function() {
+			this.eze$$setEmpty();
+			this.request = new egl.eglx.http.HttpRequest();
+			this.response = new egl.eglx.http.HttpResponse();
+		}
+		,
+		"eze$$clone": function() {
+			var ezert$$1 = this;
+			var ezert$$2 = new egl.eglx.http.Http();
+			ezert$$2.eze$$isNull = this.eze$$isNull;
+			ezert$$2.eze$$isNullable = this.eze$$isNullable;
+			ezert$$2.request = ezert$$1.request.eze$$clone();
+			ezert$$2.response = ezert$$1.response.eze$$clone();
+			ezert$$2.invocationType = ezert$$1.invocationType;
+			ezert$$2.setNull(ezert$$1.eze$$isNull);
+			return ezert$$2;
+		}
+		,
+		"eze$$getAnnotations": function() {
+			if(this.annotations === undefined){
+				this.annotations = {};
+				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("Http", null, false);
+			}
+			return this.annotations;
+		}
+		,
+		"eze$$getFieldInfos": function() {
+			if(this.fieldInfos === undefined){
+				var annotations;
+				this.fieldInfos = new Array();
+				annotations = {};
+				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("request", null, false, false);
+				annotations["JsonName"] = new egl.eglx.json.JsonName("request");
+				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("request", "request", "A;", egl.eglx.http.HttpRequest, annotations);
+				annotations = {};
+				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("response", null, false, false);
+				annotations["JsonName"] = new egl.eglx.json.JsonName("response");
+				this.fieldInfos[1] =new egl.eglx.services.FieldInfo("response", "response", "A;", egl.eglx.http.HttpResponse, annotations);
+				annotations = {};
+				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("invocationType", null, false, false);
+				annotations["JsonName"] = new egl.eglx.json.JsonName("invocationType");
+				this.fieldInfos[2] =new egl.eglx.services.FieldInfo("invocationType", "invocationType", "eglx.services.ServiceType", egl.eglx.services.ServiceType, annotations);
+			}
+			return this.fieldInfos;
+		}
+		,
+		"eze$$resolvePart": function(/*string*/ namespace, /*string*/ localName) {
+			if(this.namespaceMap == undefined){
+				this.namespaceMap = {};
+				this.namespaceMap["##default{Http}"] = "eglx.http.Http";
+			}
+			var newObject = null;
+			var className = this.namespaceMap[namespace + "{" + localName + "}"];
+			if(className != undefined && className != null){
+				newObject = instantiate(className, []);
+			};
+			return newObject;
+		}
+		,
+		"toString": function() {
+			return "[Http]";
 		}
 	}
-	return stringIn;
-};
-egl.eglx.http.HttpLib["convertFromURLEncoded"] = function(/*String*/urlEncoded) {
-	return decodeURIComponent(urlEncoded);
-};
-egl.eglx.http.HttpLib["convertToURLEncoded"] = function(/*String*/eglType) {
-	return encodeURIComponent(eglType);
-};
-egl.eglx.http.HttpLib["setHTTPBasicAuthentication"] = function(/*ServiceRefWrapper*/serviceWrapper, /*String*/usr, /*String*/pwd) {
-	var reqHeaders = this.getRestRequestHeaders(serviceWrapper);
-	if (serviceWrapper.f_type == "web") {
-		egl.valueByKey(reqHeaders, "egl_user", egl.Base64.encode(usr), "S;");
-		egl.valueByKey(reqHeaders, "egl_pwd", egl.Base64.encode(pwd), "S;");
-	} else if (serviceWrapper.f_type == "rest") {
-		var usrNpwd = usr + ":" + pwd;
-		var base64encodedVal = egl.Base64.encode(usrNpwd);
-		var value = "Basic " + base64encodedVal;
-		egl.valueByKey(reqHeaders, "Authorization", value, "S;");
-	}
-};
-egl.eglx.http.HttpLib["setProxyBasicAuthentication"] = function(/*String*/usr, /*String*/pwd) {
-	this.eze$$proxyUser = usr;
-	this.eze$$proxyPwd = pwd;
-	egl.eze$$SetProxyAuth = true;
-};
-egl.eglx.http.HttpLib["convertFromFormData"] = function(/*String*/str) {
-	var formdataObj = null;
-	var pairsArray = str.split('&');
-	for ( var i = 0; i < pairsArray.length; i++) {
-		var pair = parisArray[i].split('=');
-		var key = this.convertFromURLEncoded(pair[0]);
-		var val = this.convertFromURLEncoded(pair[1]);
-		formdataObj.key = val;
-	}
-	return formdataObj;
-};
-egl.eglx.http.HttpLib["convertToFormData"] = function(/*Object*/obj) {
-	var formdata = "";
-	var needAnd = false;
-	for (f in obj) {
-		if (!f.match(/^eze\$\$/) && (typeof obj[f] != "function")) {
-			if (needAnd)
-				formdata += '&';
-			var key = this.convertToURLEncoded(obj.eze$$getFORMName(f)); //encode key
-			var value = this.convertToURLEncoded(obj[f]); //encode value
-			formdata += key;
-			formdata += '=';
-			formdata += value;
-			needAnd = true;
-		}
-	}
-	return formdata;
-};
-
+);
