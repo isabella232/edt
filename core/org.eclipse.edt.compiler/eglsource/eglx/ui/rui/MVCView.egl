@@ -1,0 +1,16 @@
+package eglx.ui.rui;
+
+Record MVCView type Annotation
+{
+	targets = [
+		ElementKind.HandlerPart, ElementKind.ExternalTypePart
+	],
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.MVCViewAnnotationTypeBinding",
+	eglIsSystemAnnotation = yes
+} 
+	retrieveViewHelper FunctionMemberRef;
+	publishHelper FunctionMemberRef;
+	retrieveValidStateHelper FunctionMemberRef;
+	publishMessageHelper FunctionMemberRef;
+	showErrorState FunctionMemberRef;
+end
