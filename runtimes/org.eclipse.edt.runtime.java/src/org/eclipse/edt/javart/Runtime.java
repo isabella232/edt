@@ -66,8 +66,12 @@ public class Runtime
 	 * Returns the appropriate RunUnit, either the static one for stand-alone
 	 * programs, or the RunUnit for this thread for programs running in an
 	 * application server.
+	 * <P>
+	 * Returns null in two cases: 1) neither setter has been called 2) there's
+	 * one RunUnit per thread, but setThreadRunUnit hasn't been called in this
+	 * thread yet. 
 	 * 
-	 * @return the RunUnit to use.
+	 * @return the RunUnit to use, or null.
 	 */
 	public static RunUnit getRunUnit()
 	{
@@ -75,6 +79,13 @@ public class Runtime
 		{
 			return staticRU;
 		}
-		return threadRUs.get();
+		else if ( threadRUs != null )
+		{
+			return threadRUs.get();
+		}
+		else
+		{
+			return null;
+		}
 	}
 }

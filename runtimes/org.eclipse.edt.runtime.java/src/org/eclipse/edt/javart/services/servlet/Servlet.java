@@ -69,7 +69,7 @@ import eglx.services.ServiceUtilities;
 		if ( ru == null )
 		{
 			ru = new JEERunUnit( new StartupInfo( programName(), "", null ) );
-			Runtime.setStaticRunUnit( ru );
+			Runtime.setThreadRunUnit( ru );
 		}
 		return ru;
 	}
