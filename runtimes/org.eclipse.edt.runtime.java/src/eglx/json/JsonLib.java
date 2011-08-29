@@ -61,7 +61,7 @@ import com.ibm.icu.text.SimpleDateFormat;
 
 import egl.lang.AnyException;
 import eglx.http.HttpResponse;
-import eglx.lang.StrLib;
+import eglx.lang.StringLib;
 
 public class JsonLib {
 
@@ -151,7 +151,7 @@ public class JsonLib {
 	    	//date
 	    	format = "yyyy-MM-dd";
 	    }
-	    return new StringNode(StrLib.format(calendar, format), false);
+	    return new StringNode(StringLib.format(calendar, format), false);
 	}
 
 	private static ValueNode process(EDictionary dictionary)throws AnyException
