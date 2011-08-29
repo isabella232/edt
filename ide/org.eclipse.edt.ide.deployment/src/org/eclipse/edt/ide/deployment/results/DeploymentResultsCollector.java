@@ -22,7 +22,7 @@ import org.eclipse.ui.PlatformUI;
 
 public class DeploymentResultsCollector implements IDeploymentResultsCollector {
 	
-	public static final String EGL_DEPLOY_RESULTS_VIEW = "com.ibm.etools.egl.core.view.EGLDeployResultsView";
+	public static final String EGL_DEPLOY_RESULTS_VIEW = "org.eclipse.edt.ide.deployment.results.EGLDeployResultsView";
 	String name;
 	boolean hasError;
 	boolean hasWarning;
@@ -51,11 +51,10 @@ public class DeploymentResultsCollector implements IDeploymentResultsCollector {
 					{
 						public void run()
 						{
-							// TODO - EDT
-//							EGLDeployResultsView view = getView();
-//							if (view != null) {
-//								view.resultsUpdate(me, status);
-//							}
+							EGLDeployResultsView view = getView();
+							if (view != null) {
+								view.resultsUpdate(me, status);
+							}
 						}
 					}
 			);
@@ -92,11 +91,10 @@ public class DeploymentResultsCollector implements IDeploymentResultsCollector {
 					{
 						public void run()
 						{
-							// TODO - EDT
-//							EGLDeployResultsView view = getView();
-//							if (view != null) {
-//								view.done(me);
-//							}
+							EGLDeployResultsView view = getView();
+							if (view != null) {
+								view.done(me);
+							}
 						}
 					}
 			);

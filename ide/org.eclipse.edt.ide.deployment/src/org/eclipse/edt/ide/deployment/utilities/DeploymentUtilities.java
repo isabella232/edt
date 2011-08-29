@@ -35,6 +35,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.edt.compiler.internal.IEGLBaseConstants;
 import org.eclipse.edt.compiler.internal.util.EGLMessage;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.ide.core.internal.generation.GenerationResultsMessage;
@@ -431,10 +432,35 @@ public class DeploymentUtilities {
 	}
 	
 	public static IGenerationResultsMessage createEGLDeploymentErrorMessage(String messageID, Object messageContributor, String[] inserts) {
-		return new GenerationResultsMessage(new EGLMessage());
+		return new GenerationResultsMessage( new EGLMessage(
+				getValidationResourceBundleName(),
+				EGLMessage.EGL_ERROR_MESSAGE,
+				messageID,
+				EGLMessage.EGLMESSAGE_GROUP_VALIDATION,
+				messageContributor,
+				inserts,
+				-1,
+				-1,
+				-1,
+				-1) );
 	}
 	public static IGenerationResultsMessage createEGLDeploymentInformationalMessage(String messageID, Object messageContributor, String[] inserts) {
-		return new GenerationResultsMessage(new EGLMessage());
+		return new GenerationResultsMessage( new EGLMessage(
+				getValidationResourceBundleName(),
+				EGLMessage.EGL_INFORMATIONAL_MESSAGE,
+				messageID,
+				EGLMessage.EGLMESSAGE_GROUP_DEPLOYMENT,
+				messageContributor,
+				inserts,
+				-1,
+				-1,
+				-1,
+				-1) );
+	}
+	
+	public static String getValidationResourceBundleName() {
+
+		return IEGLBaseConstants.EGL_VALIDATION_RESOURCE_BUNDLE_NAME;
 	}
 
 }

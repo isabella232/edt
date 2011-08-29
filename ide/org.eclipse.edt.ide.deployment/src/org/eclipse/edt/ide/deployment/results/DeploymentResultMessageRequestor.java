@@ -31,13 +31,12 @@ public class DeploymentResultMessageRequestor implements IGenerationMessageReque
 	}
 	public void addMessage(IGenerationResultsMessage message) 
 	{
-		//TODO - EDT
-//		messages.add(message);
-//		if( !hasError && message.getSeverity() == EGLMessage.EGL_ERROR_MESSAGE )
-//		{
-//			hasError = true;
-//		}
-//		resultsCollector.addMessage(DeploymentUtilities.convert(message));
+		messages.add(message);
+		if( !hasError && message.getSeverity() == EGLMessage.EGL_ERROR_MESSAGE )
+		{
+			hasError = true;
+		}
+		resultsCollector.addMessage(DeploymentUtilities.convert(message));
 	}
 	public void addMessages(List<IGenerationResultsMessage> list) 
 	{

@@ -14,7 +14,10 @@ package org.eclipse.edt.ide.deployment.internal.actions;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.edt.ide.deployment.Activator;
+import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
+import org.eclipse.edt.ide.deployment.internal.nls.Messages;
 import org.eclipse.edt.ide.deployment.internal.registry.ContributionsRegistry;
 import org.eclipse.edt.ide.deployment.results.DeploymentResultsCollectorManager;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
@@ -28,7 +31,13 @@ public class DeployOperation {
 	public void deploy(DeploymentContext[] models, IProgressMonitor pm) throws Exception{
 		for (int i = 0; i < models.length; i++) {
 			DeploymentContext deploymentContext = models[i];
+			
 			try{
+				if( !hasParts(deploymentContext.getDeploymentDesc() ) ) {
+					DeploymentResultsCollectorManager.getInstance().getCollector(DeploymentUtilities.getDeploymentTargetId(deploymentContext.getDeploymentDesc().getDeploymentTarget(), null, models[i].getDeploymentDesc().getName()), models[i].getDeploymentDesc().getName(), false, false).addMessage(
+							DeploymentUtilities.createDeployMessage(IStatus.WARNING, Messages.bind(Messages.deployment_no_parts_found, models[i].getDeploymentDesc().getName())));
+					return;
+				}
 				ContributionsRegistry registry = ContributionsRegistry.singleton;
 				IConfigurationElement contribution = registry.getContributionForId(DeploymentUtilities.getDeploymentTargetType(deploymentContext.getDeploymentDesc().getDeploymentTarget()));
 				if (contribution != null){
@@ -43,24 +52,16 @@ public class DeployOperation {
 						Activator.getDefault().log("Error processing EGL Deployment Models", e);
 					}
 				}
-				else
-				{
-					// TODO - EDT
-//					if( models[i].hasParts() )
-//					{
-//						DeploymentResultsCollectorManager.getInstance().getCollector(DeploymentUtilities.getDeploymentTargetId(models[i].getDeploymentTarget(), null, models[i].getName()), models[i].getName(), false, models[i].isCMDMode()).addMessage(
-//																				DeploymentUtilities.createErrorStatus(Messages.deployment_no_target_found));
-//					}
-//					else
-//					{
-//						DeploymentResultsCollectorManager.getInstance().getCollector(DeploymentUtilities.getDeploymentTargetId(models[i].getDeploymentTarget(), null, models[i].getName()), models[i].getName(), false, models[i].isCMDMode()).addMessage(
-//																				DeploymentUtilities.createDeployMessage(IStatus.WARNING, Messages.bind(Messages.deployment_no_parts_found, models[i].getName())));
-//					}
-				}
 			}finally{
 				DeploymentUtilities.finalize(
 						DeploymentResultsCollectorManager.getInstance().getCollector(DeploymentUtilities.getDeploymentTargetId(models[i].getDeploymentDesc().getDeploymentTarget(), null, models[i].getDeploymentDesc().getName()), models[i].getDeploymentDesc().getName(), false, false /*models[i].isCMDMode() TODO - EDT*/), true, models[i].getDeploymentDesc().getName());
 			}
 		}
+	}
+	
+	private boolean hasParts(DeploymentDesc desc)
+	{
+		return desc.getRestBindings().size() > 0 || desc.getRestservices().size() > 0 || 
+				desc.getRUIApplication() !=  null || desc.getRUIApplication().getRUIHandlers().size() > 0 ;
 	}
 }
