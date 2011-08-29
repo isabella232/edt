@@ -323,12 +323,6 @@ public class RUIDeploymentModel {
 	public List<IFile> getSourceRUIHandlers() {
 		return sourceRUIHandlers;
 	}
-	
-	public Set<IFile> getSourceRUIHandlersAndDynamicLoadingHandlers() {
-		Set<IFile> set = new HashSet<IFile>();
-		set.addAll(sourceRUIHandlers);
-		return set;
-	}
 
 	public void setSourceRUIHandlers(List<IFile> sourceRUIHandlers) {
 		this.sourceRUIHandlers = sourceRUIHandlers;
@@ -377,7 +371,7 @@ public class RUIDeploymentModel {
 //		 * generate an HTML file and .js properties files for each handler locale selected by the user
 //		 */
 		for (Iterator<DeployLocale> localeIterator = handlerLocales.iterator(); localeIterator.hasNext() && !monitor.isCanceled();) {
-			boolean errorLocaleProcessing = false;
+//			boolean errorLocaleProcessing = false;
 			DeployLocale locale = localeIterator.next();
 			String userLocaleCode = locale.getCode();
 //			/**
@@ -508,7 +502,7 @@ public class RUIDeploymentModel {
 	 * @throws CoreException
 	 */
 	public static final byte[] generateHandlerHTML(IFile input, HashMap eglParameters, 
-			String userMsgLocale, String runtimeMsgLocale, String eglddName, IGenerationMessageRequestor messageRequestor) throws CoreException  {
+			String userMsgLocale, String runtimeMsgLocale, String eglddName, IGenerationMessageRequestor messageRequestor) throws Exception  {
 		GenerateHTMLFile op = new GenerateHTMLFile(input, eglParameters, userMsgLocale, runtimeMsgLocale, eglddName);
 		return op.execute(messageRequestor);
 	}

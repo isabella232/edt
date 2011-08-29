@@ -58,7 +58,7 @@ public class GenerateHTMLFile{
 		this.eglddName = eglddName;
 	}
 
-	public byte[] execute(final IGenerationMessageRequestor messageRequestor) throws CoreException {
+	public byte[] execute(final IGenerationMessageRequestor messageRequestor) throws Exception {
 		IEGLElement element = EGLCore.create(eglFile);
 		if(element instanceof EGLFile ){
 			String[] packageName = ((EGLFile)element).getPackageName();
@@ -68,11 +68,7 @@ public class GenerateHTMLFile{
 			}
 			resourceName = resourceName.append(((EGLFile)element).getElementName()).removeFileExtension();
 			byte[] bytes = null;
-			try {
-				bytes = generateHTMLFileContents( resourceName.toString(), eglFile.getProject() );
-			} catch ( Exception e ) {
-				
-			}
+			bytes = generateHTMLFileContents( resourceName.toString(), eglFile.getProject() );
 //			DeploymentHTMLGenerator generator = new DeploymentHTMLGenerator(new DeployFileLocator(eglFile.getProject()), 
 //					resourceName.toOSString(), eglParameters, userMsgLocale, runtimeMsgLocale, deployFile); // Always deploy as single file
 //			bytes = generator.generate();

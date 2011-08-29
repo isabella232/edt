@@ -31,12 +31,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.edt.compiler.internal.util.EGLMessage;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.utils.EGLProjectFileUtility;
 import org.eclipse.edt.ide.core.utils.EGLProjectInfoUtility;
-import org.eclipse.edt.ide.deployment.internal.EGLMessage;
 import org.eclipse.edt.ide.deployment.results.DeploymentResultMessageRequestor;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.rui.internal.IConstants;
@@ -129,18 +129,18 @@ public class J2EERUIDeploymentOperation {
 			
 
 			/**
-			 * copy the appropriate runtime message bundle 
+			 * copy the appropriate runtime message bundle TODO - EDT
 			 */
-			DeploymentResultMessageRequestor messageRequestorRuntimeMessageBundles = new DeploymentResultMessageRequestor(resultsCollector);
-			monitor.subTask(Messages.J2EEDeploymentOperation_8);
-			deployRuntimeMessageBundles(deploymentProject, projectRootFolder, messageRequestorRuntimeMessageBundles, monitor);
-			monitor.worked(1);
+//			DeploymentResultMessageRequestor messageRequestorRuntimeMessageBundles = new DeploymentResultMessageRequestor(resultsCollector);
+//			monitor.subTask(Messages.J2EEDeploymentOperation_8);
+//			deployRuntimeMessageBundles(deploymentProject, projectRootFolder, messageRequestorRuntimeMessageBundles, monitor);
+//			monitor.worked(1);
 			
 			IFileLocator iFileLocator = new DeployIFileLocator(model.getSourceProject());
 			FileLocator fileLocator = new DeployFileLocator(model.getSourceProject());
 			model.startAllHandlerGeneration();
 			
-			for( Iterator<IFile> itr = model.getSourceRUIHandlersAndDynamicLoadingHandlers().iterator(); itr.hasNext() && !monitor.isCanceled(); )
+			for( Iterator<IFile> itr = model.getSourceRUIHandlers().iterator(); itr.hasNext() && !monitor.isCanceled(); )
 			{
 				IFile ruiHandler = itr.next();
 				String fullName = "";
@@ -158,7 +158,7 @@ public class J2EERUIDeploymentOperation {
 					}
 //				}
 				DeploymentResultMessageRequestor messageRequestor = new DeploymentResultMessageRequestor(resultsCollector);
-				messageRequestor.addMessage(EGLMessage.createEGLDeploymentInformationalMessage(
+				messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentInformationalMessage(
 								EGLMessage.EGL_DEPLOYMENT_DEPLOYING_RUIHANDLER, 
 								null,
 								new String[] { fullName, deploymentProject.getName() }));
@@ -202,13 +202,13 @@ public class J2EERUIDeploymentOperation {
 				
 				if( !monitor.isCanceled() ){
 					if (messageRequestor.isError()) {
-						messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+						messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 								EGLMessage.EGL_DEPLOYMENT_FAILED, 
 								null,
 								new String[] { fullName }));
 					} 
 					else {
-						messageRequestor.addMessage(EGLMessage.createEGLDeploymentInformationalMessage(
+						messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentInformationalMessage(
 										EGLMessage.EGL_DEPLOYMENT_COMPLETE, 
 										null,
 										new String[] { fullName }));
@@ -256,16 +256,8 @@ public class J2EERUIDeploymentOperation {
 					targetFile.setLocalTimeStamp(sourceFile.getLocalTimeStamp());
 				}
 				
-				messageRequestor.addMessage(EGLMessage.createEGLDeploymentInformationalMessage(
-						EGLMessage.EGL_DEPLOYMENT_DEPLOYED_DYNAMIC_LOADING_FILE,
-						null,
-						new String[] { sourceFile.getProjectRelativePath().toPortableString() }));
 			}catch(Exception e){
-				messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
-						EGLMessage.EGL_DEPLOYMENT_FAILED_CREATE_DYNAMIC_LOADING_FILE, 
-						null,
-						new String[] { sourceFile.getProjectRelativePath().toOSString() }));
-				messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+				messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 					EGLMessage.EGL_DEPLOYMENT_EXCEPTION, 
 					null,
 					new String[] { DeploymentUtilities.createExceptionMessage(e) }));
@@ -297,16 +289,16 @@ public class J2EERUIDeploymentOperation {
 					}finally{
 						inputStream.close();
 					}
-					messageRequestor.addMessage(EGLMessage.createEGLDeploymentInformationalMessage(
+					messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentInformationalMessage(
 								EGLMessage.EGL_DEPLOYMENT_DEPLOYED_HTML_FILE,
 								null,
 								new String[] { outputLocation.getProjectRelativePath().toPortableString() }));
 				}catch(Exception e){
-					messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+					messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 									EGLMessage.EGL_DEPLOYMENT_FAILED_CREATE_HTML_FILE, 
 									null,
 									new String[] { htmlFileName, localeCode }));
-					messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+					messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 								EGLMessage.EGL_DEPLOYMENT_EXCEPTION, 
 								null,
 								new String[] { DeploymentUtilities.createExceptionMessage(e) }));
@@ -346,16 +338,16 @@ public class J2EERUIDeploymentOperation {
 						}finally{
 							inputStream.close();
 						}
-						messageRequestor.addMessage(EGLMessage.createEGLDeploymentInformationalMessage(
+						messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentInformationalMessage(
 										EGLMessage.EGL_DEPLOYMENT_DEPLOYED_PROPERTY_FILE,
 										null,
 										new String[] { outputLocation.getProjectRelativePath().toPortableString() }));
 					}catch(Exception e){
-						messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+						messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 										EGLMessage.EGL_DEPLOYMENT_FAILED_DEPLOY_PROPERTY_FILE,
 										null,
 										new String[] { outputLocation.getProjectRelativePath().toPortableString() }));
-						messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+						messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 										EGLMessage.EGL_DEPLOYMENT_EXCEPTION,
 										null,
 										new String[] { DeploymentUtilities.createExceptionMessage(e) }));
@@ -408,16 +400,16 @@ public class J2EERUIDeploymentOperation {
 						}finally{
 							inputStream.close();
 						}
-						messageRequestor.addMessage(EGLMessage.createEGLDeploymentInformationalMessage(
+						messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentInformationalMessage(
 										EGLMessage.EGL_DEPLOYMENT_DEPLOYED_RT_PROPERTY_FILE,
 										null, 
 										new String[] { outputLocation.getProjectRelativePath().toPortableString() }));
 					}catch(Exception e){
-						messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+						messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 										EGLMessage.EGL_DEPLOYMENT_FAILED_DEPLOY_RT_PROPERTY_FILE,
 										null, 
 										new String[] { outputLocation.getProjectRelativePath().toPortableString() }));
-						messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+						messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 										EGLMessage.EGL_DEPLOYMENT_EXCEPTION, 
 										null,
 										new String[] { DeploymentUtilities.createExceptionMessage(e) }));
@@ -426,11 +418,11 @@ public class J2EERUIDeploymentOperation {
 				}
 			}
 		}catch(Exception e){
-			messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+			messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 							EGLMessage.EGL_DEPLOYMENT_FAILED_CREATE_PROPERTIES_FOLDER,
 							null, 
 							new String[] { targetDirectory }));
-			messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+			messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 							EGLMessage.EGL_DEPLOYMENT_EXCEPTION, 
 							null,
 							new String[] { DeploymentUtilities.createExceptionMessage(e) }));
@@ -438,6 +430,7 @@ public class J2EERUIDeploymentOperation {
 		monitor.done();	
 	}
 	
+	/* TODO - EDT
 	private void deployRuntimeMessageBundles(IProject project, IFolder folder, DeploymentResultMessageRequestor messageRequestor, IProgressMonitor monitor) {
 		monitor = SubMonitor.convert(monitor, IProgressMonitor.UNKNOWN);
 		String targetDirectory = folder.getFullPath().toString() + File.separator + IConstants.RUNTIME_MESSAGES_DEPLOYMENT_FOLDER_NAME;
@@ -469,34 +462,35 @@ public class J2EERUIDeploymentOperation {
 								sourceStream.close();
 							}
 					}
-					messageRequestor.addMessage(EGLMessage.createEGLDeploymentInformationalMessage(
+					messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentInformationalMessage(
 									EGLMessage.EGL_DEPLOYMENT_DEPLOYED_RT_MSG_BUNDLE,
 									null, 
 									new String[] { outputLocation.getProjectRelativePath().toPortableString() }));
 				}catch(Exception e){
-					messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+					messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 									EGLMessage.EGL_DEPLOYMENT_FAILED_DEPLOY_RT_MSG_BUNDLE, 
 									null,
 									new String[] { outputLocation.getProjectRelativePath().toPortableString() }));
-					messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+					messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 									EGLMessage.EGL_DEPLOYMENT_EXCEPTION,
 									null, 
 									new String[] { DeploymentUtilities.createExceptionMessage(e) }));
 				}
 			}
 		}catch(Exception e){
-			messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+			messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 							EGLMessage.EGL_DEPLOYMENT_FAILED_CREATE_RT_MSG_BUNDLE_FOLDER,
 							null, 
 							new String[] { targetDirectory }));
-			messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+			messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 							EGLMessage.EGL_DEPLOYMENT_EXCEPTION,
 							null, 
 							new String[] { DeploymentUtilities.createExceptionMessage(e) }));
 		}
 		monitor.done();
 	}
-
+	*/
+	
 	private void deployBindFiles (IProject project, IFolder targetRootFolder, DeploymentResultMessageRequestor messageRequestor, IProgressMonitor monitor) {
 		monitor = SubMonitor.convert(monitor, IProgressMonitor.UNKNOWN);
 		for( Iterator<Entry<String, DeployableFile>> itr = model.getBindFileByteArrays().entrySet().iterator(); itr.hasNext() && !monitor.isCanceled(); ) {
@@ -512,16 +506,16 @@ public class J2EERUIDeploymentOperation {
 						f.create(new ByteArrayInputStream(entry.getValue().getFile()), true, monitor);
 					}
 					entry.getValue().setDeployed(true);
-					messageRequestor.addMessage(EGLMessage.createEGLDeploymentInformationalMessage(
+					messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentInformationalMessage(
 									EGLMessage.EGL_DEPLOYMENT_DEPLOYED_BIND_FILE,
 									null, 
 									new String[] { f.getProjectRelativePath().toPortableString() }));
 				} catch (Exception e) {
-					messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+					messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 									EGLMessage.EGL_DEPLOYMENT_FAILED_LOCATE_EGLDD_FILE,
 									null, 
 									new String[] { f.getProjectRelativePath().toPortableString() }));
-					messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+					messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 									EGLMessage.EGL_DEPLOYMENT_EXCEPTION, 
 									null,
 									new String[] { DeploymentUtilities.createExceptionMessage(e) }));

@@ -96,6 +96,7 @@ public class J2EEDeploymentSolution extends AbstractDeploymentSolution {
 				}
 			}
 			application.addParameter(new Parameter("locales", Utils.getLocalesString(defaultLocales.toArray())));
+			desc.setRUIApplication( application );
 		}
 		if (application.deployAllHandlers()) {
 			if( context.getSourceProject() != null )
