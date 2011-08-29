@@ -15,7 +15,6 @@ public interface IDeploymentConstants
 {
 	public static final String PARAMETER_CONTEXT_ROOT = "context_root";
 	public static final String PARAMETER_HTML_FILE_NAME = "html_file_name";
-	public static final String PARAMETER_DYNAMIC_LOADING_LIST = "dynamic_loading_list";
 	public static final String PARAMETER_LOCALES = "locales";
 	
 	public static final String TARGET_PROJECT = "j2ee";
