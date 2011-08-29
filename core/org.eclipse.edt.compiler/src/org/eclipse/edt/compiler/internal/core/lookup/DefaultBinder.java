@@ -1928,10 +1928,13 @@ public abstract class DefaultBinder extends AbstractBinder {
 					   type2 != null && (type2.isReference() && !type2.isDynamic() || NilBinding.INSTANCE == type2)) {
 						if(operator != BinaryExpression.Operator.EQUALS &&
 						   operator != BinaryExpression.Operator.NOT_EQUALS) {
-							problemRequestor.acceptProblem(
-								binaryExpression,
-								IProblemRequestor.TYPE_INVALID_REF_TYPE_COMPARISON);
-							return;
+							//do not show error for number or decimal
+							if (!isNumberOrDecimal(type1) || !isNumberOrDecimal(type2)) {
+								problemRequestor.acceptProblem(
+									binaryExpression,
+									IProblemRequestor.TYPE_INVALID_REF_TYPE_COMPARISON);
+								return;
+							}
 						}
 					}
 					
@@ -1999,6 +2002,16 @@ public abstract class DefaultBinder extends AbstractBinder {
 		}
 	}
 	
+	private boolean isNumberOrDecimal(ITypeBinding type) {
+		if (Binding.isValidBinding(type)) {
+			return 
+				type.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING && 
+				(((PrimitiveTypeBinding)type).getPrimitive() == Primitive.NUMBER || 
+						((PrimitiveTypeBinding)type).getPrimitive() == Primitive.DECIMAL);
+		}
+		return false;
+		
+	}
 	
 	private ITypeBinding validateArithmeticOperation(Expression operand1, Expression operand2, BinaryExpression.Operator operator, Node node) {	
 		//Numeric expression				
