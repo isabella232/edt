@@ -38,7 +38,7 @@
              href="topics/tedt00518.html"/>
       <topic label="Exporting EGL code to a binary project" href="topics/tedt00519.html"/>
    </topic>
-   <topic label="Editing a source file in the EGL editor">
+   <topic label="Editing a source file in the EGL editor" href="topics/tedt00558.html">
       <topic label="Using content assist" href="topics/tedt00528.html"/>
       <topic label="Using keystroke shortcuts" href="topics/tedt00529.html"/>
       <topic label="Organizing import statements" href="topics/tedt00530.html"/>
@@ -47,6 +47,27 @@
       <topic label="Editing DataItem parts with the source assistant"
              href="topics/tedt00533.html"/>
       <topic label="Creating callback functions at a keystroke" href="topics/tedt00534.html"/>
+   </topic>
+   <topic label="Starting to work with EGL Rich UI" href="topics/tedt00559.html">
+      <topic label="Starting to work with EGL Rich UI" href="topics/tedt00559.html"/>
+      <topic label="Opening the EGL Rich UI editor" href="topics/tedt00564.html"/>
+      <topic label="Using the Rich UI editor" href="topics/tedt00560.html">
+         <topic label="Opening the EGL Rich UI editor" href="topics/tedt00564.html">
+            <topic label="Using the tools on the Design surface" href="topics/tedt00567.html"/>
+            <topic label="Selecting a palette" href="topics/tedt00568.html"/>
+            <topic label="Setting widget properties and events" href="topics/tedt00569.html"/>
+            <topic label="Creating widgets by dragging data onto the EGL Rich UI editor"
+                   href="topics/tedt00566.html"/>
+         </topic>
+         <topic label="Running a web application in the EGL Rich UI editor"
+                href="topics/tedt00565.html"/>
+         <topic label="Creating a widget type with the EGL Rich UI editor"
+                href="topics/tedt00570.html"/>
+      </topic>
+      <topic label="Loading the local Dojo Toolkit into your workspace"
+             href="topics/tedt00561.html"/>
+      <topic label="Accessing a remote Dojo Toolkit" href="topics/tedt00562.html"/>
+      <topic label="Accessing an updated remote Dojo Toolkit" href="topics/tedt00563.html"/>
    </topic>
    <topic label="Editing an EGL deployment descriptor" href="topics/tedt00535.html">
       <topic label="Adding web service deployment details to the EGL deployment descriptor"
@@ -66,6 +87,7 @@
    <topic label="Debugging EGL source code in the EDT IDE" href="topics/tedt00504.html">
       <topic label="Preparing to run code in the EGL debugger" href="topics/tedt00543.html"/>
       <topic label="Running code in the EGL debugger" href="topics/tedt00544.html"/>
+      <topic label="Debugging in EGL Rich UI" href="topics/tedt00571.html"/>
       <topic label="Viewing variables in the EGL debugger" href="topics/tedt00545.html"/>
       <topic label="Updating code while the EGL debugger runs" href="topics/tedt00546.html"/>
       <topic label="Invoking the EGL debugger from generated Java code"
