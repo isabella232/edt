@@ -76,4 +76,61 @@
             <adapter type="org.eclipse.debug.ui.actions.IRunToLineTarget"/>
          </factory>
    </extension>
+   
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="org.eclipse.edt.debug.ui.launching.EGLJavaLaunchShortcut"
+            description="%EGLJavaLaunchShortcut.description"
+            icon="icons/full/obj16/egl_launch_obj.gif"
+            id="org.eclipse.edt.debug.ui.eglJavaShortcut"
+            label="%EGLJavaLaunchShortcut.label"
+            modes="run, debug">
+         <contextualLaunch>
+           <enablement>
+             <with variable="selection">
+               <count value="1"/>
+               <iterate>
+	             <and>
+	               <test property="org.eclipse.edt.debug.ui.hasJavaMainProgram" forcePluginActivation="true"/>
+                   <test property="org.eclipse.edt.debug.ui.hasProjectNatures" args="org.eclipse.edt.ide.core.EGLNature" forcePluginActivation="true"/>
+	             </and>
+               </iterate>
+             </with>
+           </enablement>
+  		 </contextualLaunch>
+         <description
+               description="%RunEGLJavaLaunchShortcut.description"
+               mode="run">
+         </description>
+         <description
+               description="%DebugEGLJavaLaunchShortcut.description"
+               mode="debug">
+         </description>
+      </shortcut>
+   </extension>
+   
+   <!-- Enable contextual launch -->
+   <extension point="org.eclipse.core.runtime.adapters">
+      <factory
+         class="" 
+         adaptableType="org.eclipse.edt.ide.core.model.IEGLElement">
+            <adapter type="org.eclipse.debug.ui.actions.ILaunchable"/>
+      </factory>
+      <factory
+         class="" 
+         adaptableType="org.eclipse.core.resources.IResource">
+            <adapter type="org.eclipse.debug.ui.actions.ILaunchable"/>
+      </factory>
+   </extension>
+   
+   <!-- Property testers -->
+   <extension point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+         class="org.eclipse.edt.debug.ui.launching.EGLLaunchableTester"
+         id="org.eclipse.edt.debug.ui.eglLaunchableTester"
+         namespace="org.eclipse.edt.debug.ui"
+         properties="hasJavaMainProgram,hasProjectNatures"
+         type="java.lang.Object"/>            
+   </extension>
 </plugin>
