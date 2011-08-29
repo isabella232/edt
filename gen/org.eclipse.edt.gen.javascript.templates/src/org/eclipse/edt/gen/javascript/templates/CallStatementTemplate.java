@@ -132,11 +132,6 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 	private void genTrueRestInvocation(CallStatement stmt, Function serviceInterfaceFunction,
 			Annotation getRest, Annotation putRest, Annotation postRest,
 			Annotation deleteRest, Context ctx, TabbedWriter out) {
-		out.print("egl.eglx.rest.invokeService(egl.eglx.rest.configHttp(");  //handler parameter
-		ctx.invoke(genExpression, stmt.getInvocationTarget().getQualifier(), ctx, out);
-		out.println(",");
-		out.pushIndent();
-		out.pushIndent();
 //		genTimeoutParams(serviceTimeout);
 //		out.println("\"" + operationName(serviceInterfaceFunction) + "\", ");
 		@SuppressWarnings("unchecked")
@@ -146,8 +141,8 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 			callbackFunction = (Function)ctx.invoke(getCallbackFunction, stmt.getCallback(), ctx);
 		}
 
-		genRestParameters(serviceInterfaceFunction, tempArgs, getRest, putRest, postRest, deleteRest, ctx, out);
-		out.println("),");
+		genRestParameters(stmt, serviceInterfaceFunction, tempArgs, getRest, putRest, postRest, deleteRest, ctx, out);
+		out.println(",");
 		
 		genInParamVals(serviceInterfaceFunction, tempArgs, ctx, out);
 		genInParamSignature(serviceInterfaceFunction, stmt.getArguments(), ctx, out);
@@ -177,7 +172,7 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 //		}	*/	
 	}
 
-	private void genRestParameters(Function serviceInterfaceFunction, List<Expression> tempArgs, Annotation getRest,
+	private void genRestParameters(CallStatement stmt, Function serviceInterfaceFunction, List<Expression> tempArgs, Annotation getRest,
 			Annotation putRest, Annotation postRest, Annotation deleteRest, Context ctx, TabbedWriter out) {
 		Map<String, RestArgument> mapFuncParams = new Hashtable<String, RestArgument>();	//key is String(parameter variable name in lower case), value is the RestArugment
 		for (int idx=0; idx<serviceInterfaceFunction.getParameters().size(); idx++){
@@ -185,6 +180,11 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 			mapFuncParams.put(param.getId().toLowerCase(), new RestArgument(param, tempArgs.get(idx), idx));
 		}
 		
+		out.print("egl.eglx.rest.invokeService(egl.eglx.rest.configHttp(");  //handler parameter
+		ctx.invoke(genExpression, stmt.getInvocationTarget().getQualifier(), ctx, out);
+		out.println(",");
+		out.pushIndent();
+		out.pushIndent();
 		//generate the following 3 arguments
 		//              /*String*/ resolvedUriTemplate,
 		//              /*int*/ requestFormat,
@@ -192,7 +192,7 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 
 		out.print("{");
 		int resourceParamIndex = -1;
-		out.print(", method : ");
+		out.print(" method : ");
 		Annotation restOperation = null;
 		if(getRest != null){
 			out.print("egl.eglx.http.HttpMethod._GET");
@@ -212,7 +212,7 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 		}						
 		
 		resourceParamIndex = genRESTParameters(restOperation, mapFuncParams, serviceInterfaceFunction.getReturnType(), ctx, out);					
-		out.println("},");
+		out.println("),");
 		//generate resource parameter or query parameter for 'GET'
 		//                /*String, Dictionary, Record or XMLElement*/ parameters){				
 		if(resourceParamIndex != -1){
@@ -224,17 +224,17 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 			else	; //should NEVER be in else, since the resource param is IN, all IN param has a temp var generated
 		}
 		else{
-			out.print("{}");
+			out.print("null");
 		}
 	}
 
 	private int genRESTParameters(Annotation methodRestAnnotation, Map<String, RestArgument> funcParams, Type returnType, Context ctx, TabbedWriter out){
 		String uriTemplate = (String)methodRestAnnotation.getValue("uriTemplate");
 		
-		out.print("{uri : \"\"");
-		out.println(uriTemplate);
+		out.print(", uri : ");
+//		out.println(uriTemplate);
 		genURITemplate(uriTemplate, false, funcParams, ctx, out);
-		out.println("\"");
+		out.println("");
 		
 		//generate the requestFormat parameter
 		//find the resource parameter, there should only be one
@@ -261,7 +261,7 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 		out.print(", contentType : ");
 		printQuotedString((String)methodRestAnnotation.getValue("responseContentType"), out);;
 		
-		out.println("},");
+		out.println("}");
 		return resourceRestArg != null ? resourceRestArg.getParamIndex() : -1;			
 	}
 	
@@ -324,9 +324,9 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 							
 							//need to url encode the argument
 							if(needs2PrintPlus)
-								out.print("egl.eglx.http.$HttpLib.convertToURLEncoded(");
+								out.print("egl.eglx.http.HttpLib.convertToURLEncoded(");
 							else
-								out.print("egl.eglx.http.$HttpLib.checkURLEncode(");      		//if starts with http, do not url encode it
+								out.print("egl.eglx.http.HttpLib.checkURLEncode(");      		//if starts with http, do not url encode it
 							
 							Expression arg = restArg.getArg();
 							if(arg != null){

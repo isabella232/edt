@@ -46,12 +46,12 @@ public class DedicatedServiceTemplate extends JavaScriptTemplate {
 		Annotation eglLocation = field.getAnnotation(IEGLConstants.EGL_LOCATION);
 		Container container = field.getContainer();
 
-		Record httpRESTRecordType = (Record)TypeUtils.getType(TypeUtils.EGL_KeyScheme + Constants.PartHttpREST).clone();
+		Record httpRecordType = (Record)TypeUtils.getType(TypeUtils.EGL_KeyScheme + Constants.PartHttp).clone();
 		
 		NewExpression newExpr = ctx.getFactory().createNewExpression();
 		if (eglLocation != null)
 			newExpr.addAnnotation(eglLocation);
-		newExpr.setId(Constants.PartHttpREST);
+		newExpr.setId(Constants.PartHttp);
 		ctx.invoke(genNewExpression, newExpr, ctx, out);
 		out.println(";");
 		
@@ -67,22 +67,22 @@ public class DedicatedServiceTemplate extends JavaScriptTemplate {
 		httpRecordMemberName.setMember(field);
 		httpRecordMemberName.setId(field.getId());
 
-		//<field>.invocationType = RestType.EglDedicated;
-		Field httpRESTRecordField = getField(httpRESTRecordType, "invocationType", eglLocation);
+		//<field>.invocationType = ServiceType.EglDedicated;
+		Field httpRecordField = getField(httpRecordType, "invocationType", eglLocation);
 		stmtBlock.getStatements().add(createAssignment(container, 
-				createFieldMemberAccess( httpRecordMemberName, httpRESTRecordField, eglLocation),
-				createEnumerationEntry(httpRESTRecordField.getType(), "egldedicated"), 
+				createFieldMemberAccess( httpRecordMemberName, httpRecordField, eglLocation),
+				createEnumerationEntry(httpRecordField.getType(), "egldedicated"), 
 				eglLocation));		
 
 		//<field>.request.uri = "services.HelloWorld";
-		Field httpRESTRecordRequestField = getField(httpRESTRecordType, "request", eglLocation);
-		MemberAccess httpRESTRecordRequestFieldMemberAccess = createFieldMemberAccess(httpRecordMemberName, httpRESTRecordRequestField, eglLocation);
+		Field httpRecordRequestField = getField(httpRecordType, "request", eglLocation);
+		MemberAccess httpRecordRequestFieldMemberAccess = createFieldMemberAccess(httpRecordMemberName, httpRecordRequestField, eglLocation);
 		
-		Field httpRESTRecordRequestUriField = getField((Record)httpRESTRecordRequestField.getType(), "uri", eglLocation);
+		Field httpRecordRequestUriField = getField((Record)httpRecordRequestField.getType(), "uri", eglLocation);
 		StringLiteral stringLiteral = ctx.getFactory().createStringLiteral();
 		stringLiteral.setValue(serviceName);
 		stmtBlock.getStatements().add(createAssignment(container, 
-				createFieldMemberAccess(httpRESTRecordRequestFieldMemberAccess, httpRESTRecordRequestUriField, eglLocation),
+				createFieldMemberAccess(httpRecordRequestFieldMemberAccess, httpRecordRequestUriField, eglLocation),
 				stringLiteral, 
 				eglLocation));		
 
