@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.compiler;
 
+import java.io.File;
+
 import org.eclipse.edt.ide.core.IDEBaseCompiler;
 
 public class IDEEDTCompiler extends IDEBaseCompiler {
@@ -22,7 +24,10 @@ public class IDEEDTCompiler extends IDEBaseCompiler {
 	}
 	
 	protected String getSystemEnvironmentPathEntry() {
-		return getPathToPluginDirectory("org.eclipse.edt.compiler", "lib");
+		String path = getPathToPluginDirectory("org.eclipse.edt.compiler", "lib");
+		path += File.pathSeparator;
+		path += getPathToPluginDirectory("org.eclipse.edt.mof.eglx.persistence.sql", "egllib");
+		return path;
 	}
 
 
