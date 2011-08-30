@@ -6,12 +6,12 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.sql.SqlAddStatement;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlAddStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
 
-public class SqlAddStatementTemplate extends SqlIOStatementTemplate {
+public class SqlAddStatementTemplate extends SqlActionStatementTemplate {
 
 	public void genStatementBody(SqlAddStatement addStmt, Context ctx, TabbedWriter out) {
 		if (addStmt.getSqlString() != null) {
@@ -46,7 +46,7 @@ public class SqlAddStatementTemplate extends SqlIOStatementTemplate {
 	public void genAddSingleValue(EGLClass type, String varName, Context ctx, TabbedWriter out) {		
 		int i = 1;
 		for (Field f : type.getFields()) {
-			if (isPersistable(f, ctx)) {
+			if (SQL.isPersistable(f)) {
 				out.print(var_statement);
 				out.print(".setObject(" + i + ", ");
 				out.print(varName);

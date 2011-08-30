@@ -4,8 +4,7 @@ Bundle-Name: Persistence
 Bundle-SymbolicName: org.eclipse.edt.gen.java.templates.eglx.persistence
 Bundle-Version: 0.7.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.eclipse.edt.mof;bundle-version="0.7.0",
- org.eclipse.edt.mof.egl;bundle-version="0.7.0",
+Require-Bundle: org.eclipse.edt.mof.eglx.persistence.sql;bundle-version="0.7.0",
  org.eclipse.edt.gen;bundle-version="0.7.0",
  org.eclipse.edt.gen.java.templates;bundle-version="0.7.0",
  org.eclipse.edt.gen.java;bundle-version="0.7.0"
