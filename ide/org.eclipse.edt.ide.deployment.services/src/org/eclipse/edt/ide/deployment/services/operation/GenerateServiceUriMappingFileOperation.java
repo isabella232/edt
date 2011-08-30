@@ -11,38 +11,41 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.deployment.services.operation;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.util.EGLMessage;
-import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.core.model.Restservice;
-import org.eclipse.edt.ide.deployment.operation.IDeploymentOperation;
+import org.eclipse.edt.ide.deployment.operation.AbstractDeploymentOperation;
 import org.eclipse.edt.ide.deployment.results.DeploymentResultMessageRequestor;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.services.generators.ServiceUriMappingGenerator;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
 import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.Service;
 
-public class GenerateServiceUriMappingFileOperation  implements IDeploymentOperation {
+public class GenerateServiceUriMappingFileOperation extends AbstractDeploymentOperation {
 	
 	public static final String BIND_XML_FILE_SUFFIX = "-uri.xml";
 	
 	private String targetProjectName;
 	private DeploymentDesc ddModel;
 	private DeploymentContext context;
+	
+	@Override
+	public void preCheck(DeploymentContext context,
+			IDeploymentResultsCollector resultsCollector,
+			IProgressMonitor monitor) throws CoreException {
+		if ( !context.isMustRun() ) {
+			DeploymentDesc desc = context.getDeploymentDesc();
+			if ( desc.getRestservices() != null && desc.getRestservices().size() > 0 ) {
+				context.setMustRun( true );
+			}
+		}
+	}
 	
 	public void execute(DeploymentContext context, IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor)
 			throws CoreException {

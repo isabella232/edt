@@ -25,6 +25,7 @@ import org.eclipse.edt.compiler.internal.util.EGLMessage;
 import org.eclipse.edt.gen.deployment.javascript.DeploymentDescGenerator;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
+import org.eclipse.edt.ide.deployment.operation.AbstractDeploymentOperation;
 import org.eclipse.edt.ide.deployment.operation.IDeploymentOperation;
 import org.eclipse.edt.ide.deployment.results.DeploymentResultMessageRequestor;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
@@ -32,13 +33,25 @@ import org.eclipse.edt.ide.deployment.rui.internal.util.Utils;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
 import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
 
-public class GenerateServiceBindJSFileOperation  implements IDeploymentOperation {
+public class GenerateServiceBindJSFileOperation extends AbstractDeploymentOperation {
 	
 	public static final String BIND_JS_FILE_SUFFIX = "-bnd.js";
 	
 	private String targetProjectName;
 	private DeploymentDesc ddModel;
 	private DeploymentContext context;
+	
+	@Override
+	public void preCheck(DeploymentContext context,
+			IDeploymentResultsCollector resultsCollector,
+			IProgressMonitor monitor) throws CoreException {
+		if ( !context.isMustRun() ) {
+			DeploymentDesc desc = context.getDeploymentDesc();
+			if ( desc.getRestBindings() != null && desc.getRestBindings().size() > 0 ) {
+				context.setMustRun( true );
+			}
+		}
+	}
 	
 	public void execute(DeploymentContext context, IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor)
 			throws CoreException {

@@ -13,7 +13,6 @@ package org.eclipse.edt.ide.deployment.services.operation;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -24,19 +23,31 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.util.EGLMessage;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
-import org.eclipse.edt.ide.deployment.operation.IDeploymentOperation;
+import org.eclipse.edt.ide.deployment.operation.AbstractDeploymentOperation;
 import org.eclipse.edt.ide.deployment.results.DeploymentResultMessageRequestor;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
 import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
 
-public class GenerateServiceBindXMLFileOperation implements IDeploymentOperation {
+public class GenerateServiceBindXMLFileOperation extends AbstractDeploymentOperation {
 	
 	public static final String BIND_XML_FILE_SUFFIX = "-bnd.xml";
 	
 	private String targetProjectName;
 	private DeploymentDesc ddModel;
 	private DeploymentContext context;
+	
+	@Override
+	public void preCheck(DeploymentContext context,
+			IDeploymentResultsCollector resultsCollector,
+			IProgressMonitor monitor) throws CoreException {
+		if ( !context.isMustRun() ) {
+			DeploymentDesc desc = context.getDeploymentDesc();
+			if ( desc.getRestBindings() != null && desc.getRestBindings().size() > 0 ) {
+				context.setMustRun( true );
+			}
+		}
+	}
 	
 	public void execute(DeploymentContext context, IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor)
 			throws CoreException {
