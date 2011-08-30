@@ -99,7 +99,7 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 	/**
 	 * If the RunUnit ends with an error it is stored in this field.
 	 */
-	private Exception fatalError;
+	private AnyException fatalError;
 	
 	/**
 	 * The returnCode of the RunUnit, determined by the returnCode field of the
@@ -307,30 +307,17 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 						+ " (error termination) with returnCode=" + returnCode );
 		}
 
-		fatalError = ex;
-		String message;
-		if ( ex instanceof AnyException )
+		fatalError = JavartUtil.makeEglException( ex );
+		String message = fatalError.getMessage();
+		if ( message.length() == 0 )
 		{
-			message = ex.getMessage();
-			if ( message == null || message.length() == 0 )
-			{
-				message = ex.toString();
-			}
-		}
-		else if ( program != null )
-		{
-			message =
-				JavartUtil.errorMessage( program, Message.UNHANDLED_EXCEPTION,
-					new String[] { ex.toString() } );
-		}
-		else
-		{
-			message =
-				JavartUtil.errorMessage( program, Message.UNHANDLED_EXCEPTION,
-					new String[] { ex.toString() } );
+			message = fatalError.toString();
 		}
 		System.out.println( message );
-		ex.printStackTrace( System.out );
+		if ( !AnyException.NO_STACK_TRACES )
+		{
+			ex.printStackTrace( System.out );
+		}
 
 		try
 		{
@@ -477,7 +464,7 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 	 * If the RunUnit has ended due to an error, it will be returned.  Otherwise
 	 * null is returned.
 	 */
-	public Exception getFatalError()
+	public AnyException getFatalError()
 	{
 		return fatalError;
 	}
