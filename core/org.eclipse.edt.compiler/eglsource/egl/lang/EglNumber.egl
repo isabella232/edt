@@ -37,7 +37,7 @@ externalType EglNumber extends AnyValue type ClassType
 	/**
 	 * {@Operation %} Computes the remainder of dividing one number by another.
 	 */
-	static function $Modulus(lvalue EglNumber in, rvalue EglNumber in) returns (EglNumber) {@Operation{"%"}};
+	static function $Modulo(lvalue EglNumber in, rvalue EglNumber in) returns (EglNumber) {@Operation{"%"}};
 
 	/**
 	 * {@Operation **} Computes lvalue to the power of rvalue.

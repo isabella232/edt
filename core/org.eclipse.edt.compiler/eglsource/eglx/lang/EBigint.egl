@@ -41,7 +41,7 @@ externalType EBigint extends EglNumber type ClassType
 	/**
 	 * {@Operation %} Computes the remainder of dividing one number by another.
 	 */
-	static function $Modulus(lvalue EBigint in, rvalue EBigint in) returns (EDecimal) {@Operation{"%"}};
+	static function $Modulo(lvalue EBigint in, rvalue EBigint in) returns (EBigint) {@Operation{"%"}};
 
 	/**
 	 * {@Operation **} Computes lvalue to the power of rvalue.

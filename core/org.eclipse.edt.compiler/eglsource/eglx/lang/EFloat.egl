@@ -38,7 +38,7 @@ externalType EFloat extends EglNumber type ClassType
 	/**
 	 * {@Operation %} Computes the remainder of dividing one number by another.
 	 */
-	static function $Modulus(lvalue EFloat in, rvalue EFloat in) returns (EFloat) {@Operation{"%"}};
+	static function $Modulo(lvalue EFloat in, rvalue EFloat in) returns (EFloat) {@Operation{"%"}};
 
 	/**
 	 * {@Operation **} Computes lvalue to the power of rvalue.

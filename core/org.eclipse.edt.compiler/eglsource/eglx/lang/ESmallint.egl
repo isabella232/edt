@@ -38,7 +38,7 @@ externalType ESmallint extends EglNumber type ClassType
 	/**
 	 * {@Operation %} Computes the remainder of dividing one number by another.
 	 */
-	static function $Modulus(lvalue ESmallint in, rvalue ESmallint in) returns (EDecimal) {@Operation{"%"}};
+	static function $Modulo(lvalue ESmallint in, rvalue ESmallint in) returns (EInt) {@Operation{"%"}};
 
 	/**
 	 * {@Operation **} Computes lvalue to the power of rvalue.

@@ -46,7 +46,7 @@ externalType EDecimal extends EglNumber type ParameterizableType {
 	/**
 	 * {@Operation %} Computes the remainder of dividing one number by another.
 	 */
-	static function $Modulus(lvalue EDecimal in, rvalue EDecimal in) returns (EDecimal) {@Operation{"%"}};
+	static function $Modulo(lvalue EDecimal in, rvalue EDecimal in) returns (EDecimal) {@Operation{"%"}};
 
 	/**
 	 * {@Operation **} Computes lvalue to the power of rvalue.
