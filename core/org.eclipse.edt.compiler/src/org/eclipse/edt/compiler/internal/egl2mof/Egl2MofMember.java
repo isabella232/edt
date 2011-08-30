@@ -51,6 +51,7 @@ import org.eclipse.edt.mof.EMetadataObject;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.EParameter;
 import org.eclipse.edt.mof.EType;
+import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
@@ -301,6 +302,10 @@ class Egl2MofMember extends Egl2MofPart {
 			
 			EClass constClass = mofMemberTypeFor(constructor);
 			Constructor cons = (Constructor)constClass.newInstance();
+			
+			if (node.isPrivate()) {
+				cons.setAccessKind(AccessKind.ACC_PRIVATE);
+			}
 
 			setUpEglTypedElement(cons, constructor);
 			

@@ -213,6 +213,12 @@ public class Mof2BindingPart extends Mof2BindingBase {
 				iface.accept(this);
 				binding.getImplementedInterfaces().add((InterfaceBinding)stack.pop());
 			}
+			
+			for (Constructor constructor : ir.getConstructors()) {
+				constructor.accept(this);
+				binding.addConstructor((ConstructorBinding)stack.pop());
+			}
+
 			partStack.pop();
 		}
 		stack.push(binding);

@@ -43,6 +43,7 @@ import org.eclipse.edt.mof.EParameter;
 import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.ETypedElement;
 import org.eclipse.edt.mof.MofFactory;
+import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.ConstantFormField;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Delegate;
@@ -145,6 +146,11 @@ public abstract class Mof2BindingMember extends Mof2BindingPart {
 				type = (IPartBinding)stack.pop();
 			}
 			binding = new ConstructorBinding((IPartBinding)type);
+			
+			if (constructor.getAccessKind() == AccessKind.ACC_PRIVATE) {
+				((ConstructorBinding)binding).setPrivate(true);
+			}			
+			
 			putBinding(constructor, ((ConstructorBinding)binding).getType());
 			for (FunctionParameter parm : constructor.getParameters()) {
 				parm.accept(this);

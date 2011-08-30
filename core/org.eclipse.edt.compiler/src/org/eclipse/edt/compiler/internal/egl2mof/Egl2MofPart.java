@@ -17,6 +17,7 @@ import java.util.Map.Entry;
 
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.ClassFieldBinding;
+import org.eclipse.edt.compiler.binding.ConstructorBinding;
 import org.eclipse.edt.compiler.binding.DataItemBinding;
 import org.eclipse.edt.compiler.binding.DelegateBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
@@ -54,6 +55,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
+import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DataItem;
 import org.eclipse.edt.mof.egl.Delegate;
@@ -67,7 +69,6 @@ import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.Handler;
-import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.ParameterKind;
@@ -140,6 +141,18 @@ abstract class Egl2MofPart extends Egl2MofBase {
 					((EGLClass)part).getSuperTypes().add((EGLClass)mofTypeFor(superType));
 				}
 			}
+			
+			if (((EGLClass)part).getConstructors().isEmpty()) {
+				//Add default constructor is no constructors are defined
+				if (((EGLClass)part).getConstructors().isEmpty()) {
+					ConstructorBinding constructor = new ConstructorBinding((IPartBinding)node.getName().resolveBinding());
+					EClass constClass = mofMemberTypeFor(constructor);
+					Constructor cons = (Constructor)constClass.newInstance();
+					setUpEglTypedElement(cons, constructor);
+					setElementInformation(node, cons);
+					((EGLClass)part).addMember(cons);
+				}
+			}
 		}
 		handleEndVisitPart(node, part);
 		stack.push(part);
@@ -204,6 +217,17 @@ abstract class Egl2MofPart extends Egl2MofBase {
 				}
 			}
 		}
+		
+		//Add default constructor is no constructors are defined
+		if (part.getConstructors().isEmpty()) {
+			ConstructorBinding constructor = new ConstructorBinding((IPartBinding)handler.getName().resolveBinding());
+			EClass constClass = mofMemberTypeFor(constructor);
+			Constructor cons = (Constructor)constClass.newInstance();
+			setUpEglTypedElement(cons, constructor);
+			setElementInformation(handler, cons);
+			part.addMember(cons);
+		}
+		
 		stack.push(part);
 		return false;
 	}
