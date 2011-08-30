@@ -20,7 +20,7 @@ import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
-import org.eclipse.edt.ide.ui.internal.dialogs.PartSelectionDialog;
+import org.eclipse.edt.ide.ui.internal.dialogs.EGLPartSelectionDialog;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
 import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.DialogField;
 import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.IDialogFieldListener;
@@ -227,7 +227,7 @@ public class EGLDDBindingWizardPage extends EGLFileWizardPage {
 	 */
 	protected IPart browsedEGLPartFQValue(IProject project, int eglPartType, boolean isWorkspaceScope, String helpId) {
 		IPart newPart = null;
-		PartSelectionDialog dialog = getEGLPartSelectionDialog(eglPartType,
+		EGLPartSelectionDialog dialog = getEGLPartSelectionDialog(eglPartType,
 																NewWizardMessages.NewTypeWizardPageInterfaceDialogTitle, 
 																NewWizardMessages.NewTypeWizardPageInterfaceDialogLabel, project,isWorkspaceScope, helpId);
 		if(dialog.open() == IDialogConstants.OK_ID)
@@ -246,11 +246,11 @@ public class EGLDDBindingWizardPage extends EGLFileWizardPage {
 	 * @param elemKind type of egl Part, i.e. IEGLSearchConstants.SERVICE
 	 * @return
 	 */
-	protected PartSelectionDialog getEGLPartSelectionDialog(int elemKind, String title, String message, IProject project, boolean isWorkspaceScope) {
+	protected EGLPartSelectionDialog getEGLPartSelectionDialog(int elemKind, String title, String message, IProject project, boolean isWorkspaceScope) {
 		return getEGLPartSelectionDialog(elemKind, title, message, project, isWorkspaceScope, null);
 	}
 
-	protected PartSelectionDialog getEGLPartSelectionDialog(int elemKind, String title, String message, IProject project, boolean isWorkspaceScope, final String helpId) {
+	protected EGLPartSelectionDialog getEGLPartSelectionDialog(int elemKind, String title, String message, IProject project, boolean isWorkspaceScope, final String helpId) {
 		Shell shell = getShell();
 		EGLFileConfiguration fileConfig = new EGLFileConfiguration();
 		
@@ -265,8 +265,7 @@ public class EGLDDBindingWizardPage extends EGLFileWizardPage {
 			searchScope = SearchEngine.createEGLSearchScope(new IEGLElement[]{eglProj}, true);
 		}
 		
-		
-	    PartSelectionDialog dialog = new PartSelectionDialog(shell, new ProgressMonitorDialog(shell),elemKind, "", searchScope) { //$NON-NLS-1$
+	    EGLPartSelectionDialog dialog = new EGLPartSelectionDialog(shell, context, elemKind, "", null, searchScope, fileConfig) { //$NON-NLS-1$
 	    	public Control createDialogArea(Composite parent) {
 				Control control = super.createDialogArea(parent);
 				if(helpId != null)

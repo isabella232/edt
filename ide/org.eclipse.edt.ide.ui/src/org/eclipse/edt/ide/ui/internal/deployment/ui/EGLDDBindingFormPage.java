@@ -15,17 +15,12 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLProject;
-import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
-import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
-import org.eclipse.edt.ide.ui.internal.dialogs.OpenPartSelectionDialog;
-import org.eclipse.edt.ide.ui.internal.dialogs.PartSelectionDialog;
+import org.eclipse.edt.ide.ui.internal.dialogs.EGLPartSelectionDialog;
 import org.eclipse.edt.ide.ui.wizards.EGLFileConfiguration;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -70,7 +65,7 @@ public class EGLDDBindingFormPage extends EGLDDBaseFormPage {
 	 * @param elemKind type of egl Part, i.e. IEGLSearchConstants.SERVICE
 	 * @return
 	 */
-	public PartSelectionDialog getEGLPartSelectionDialog(int elemKind, String title, String message, final String helpId)
+	public EGLPartSelectionDialog getEGLPartSelectionDialog(int elemKind, String title, String message, final String helpId)
 	{
 		Shell shell = getSite().getShell();
 		EGLFileConfiguration fileConfig = new EGLFileConfiguration();
@@ -81,8 +76,8 @@ public class EGLDDBindingFormPage extends EGLDDBaseFormPage {
 		IProject project = eglddEditor.getProject();
 		IEGLProject eglProj = EGLCore.create(project);
 		IEGLSearchScope projSearchScope = SearchEngine.createEGLSearchScope(new IEGLElement[]{eglProj}, true);
-		
-        PartSelectionDialog dialog = new PartSelectionDialog(shell, new ProgressMonitorDialog(shell), elemKind, "",projSearchScope){ //$NON-NLS-1$
+
+        EGLPartSelectionDialog dialog = new EGLPartSelectionDialog(shell, workbenchwin, elemKind, "", null, projSearchScope, fileConfig){ //$NON-NLS-1$
         	        	public Control createDialogArea(Composite parent) {
         		Control control = super.createDialogArea(parent);
         		if(helpId != null)
