@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2009, 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2009, 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -21,8 +21,6 @@ public class RestServiceUtilities
 	static final String HTTP_RESPONSE_TIMEOUT = "EGL_TIMEOUT";
 	static final String PROXY_SERVLET = "EGL Rich UI Proxy";
 	static final String SERVICE_SERVLET = "EGL REST Service servlet";
-	public static final String EGL_SOAP_CALL = "EGLSOAP";
-	public static final String EGL_PRIVATE_CALL = "EGLDEDICATED";
 	public static String JSON_RPC_POST_METHOD_ID = RestServiceUtilities.HTTP_POST_METHOD;
 	static final String CONTENT_TYPE_KEY = "Content-Type";
 	static final String CONTENT_TYPE_VALUE_TEXT_HTML = "text/html";
@@ -32,7 +30,6 @@ public class RestServiceUtilities
 	static final String CONTENT_TYPE_VALUE_CHARSET_UTF8 = "; charset=UTF-8";
 	public static int HTTP_STATUS_FAILED = 500;
 	public static String HTTP_STATUS_MSG_FAILED = "FAILED";
-	public static final String EGL_SERVICE_CALL = "EGLREST";
 	public static int HTTP_STATUS_OK = 200;
 	public static String HTTP_STATUS_MSG_OK = "OK";
 	public static final String URI_MAPPING_FILE_SUFFIX = "-uri.xml";
