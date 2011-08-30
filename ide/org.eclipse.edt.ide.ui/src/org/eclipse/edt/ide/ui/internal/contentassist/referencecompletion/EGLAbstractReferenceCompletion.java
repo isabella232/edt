@@ -78,7 +78,7 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 	
 	static final String[] EGLCORE = new String[] {"egl", "core"}; //$NON-NLS-1$ //$NON-NLS-2$
 	static final String[] EGLJAVA = new String[] {"egl", "java"}; //$NON-NLS-1$ //$NON-NLS-2$
-	static final String[] EGLIDLJAVA = new String[] {"egl", "idl", "java"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	static final String[] EGLIDLJAVA = new String[] {"eglx", "java"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	static final String[] EGLJAVASCRIPT = new String[] {"egl", "javascript"}; //$NON-NLS-1$ //$NON-NLS-2$
 	static final String[] EGLPLATFORM = new String[] {"egl", "platform"}; //$NON-NLS-1$ //$NON-NLS-2$
 	static final String[] EGLUIJASPER = new String[] {"egl", "ui", "jasper"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
