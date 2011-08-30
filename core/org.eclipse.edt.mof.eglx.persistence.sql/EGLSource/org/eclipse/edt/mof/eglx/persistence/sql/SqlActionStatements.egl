@@ -1,0 +1,43 @@
+package org.eclipse.edt.mof.eglx.persistence.sql;
+
+import org.eclipse.edt.mof.egl.IOStatement;
+
+externalType SqlActionStatement extends IOStatement type MofClass {isAbstract=yes}
+	preparedStatement Expression {containment=true};
+	dataSource Expression {containment=true};
+	hasExplicitSql boolean;
+	sqlString String;
+	
+end
+
+externalType SqlAddStatement extends SqlActionStatement, AddStatement type MofClass
+end
+
+externalType SqlCloseStatement extends SqlActionStatement, CloseStatement type MofClass
+end
+
+externalType SqlDeleteStatement extends SqlActionStatement, DeleteStatement type MofClass
+end
+
+externalType SqlExecuteStatement extends SqlActionStatement, ExecuteStatement type MofClass
+end
+
+externalType SqlForEachStatement extends SqlActionStatement, ForEachStatement type MofClass
+	_label string {mofName="label"};
+	
+end
+
+externalType SqlGetByKeyStatement extends SqlActionStatement, GetByKeyStatement type MofClass
+end
+
+externalType SqlOpenStatement extends SqlActionStatement, OpenStatement type MofClass
+end
+
+externalType SqlPrepareStatement extends SqlActionStatement, PrepareStatement type MofClass
+end
+
+externalType SqlReplaceStatement extends SqlActionStatement, ReplaceStatement type MofClass
+end
+
+externalType SqlUpdateStatement extends SqlReplaceStatement type MofClass
+end
