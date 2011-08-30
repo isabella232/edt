@@ -21,6 +21,7 @@ import java.util.TreeMap;
 
 import org.eclipse.edt.javart.Constants;
 import egl.lang.AnyException;
+import egl.lang.DynamicAccessException;
 import eglx.lang.OrderingKind;
 
 /**
@@ -306,19 +307,15 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 			key = key.toLowerCase();
 		}
 
-		// TODO: Why do we need this exception?
-		// if ( !map.containsKey( key ) )
-		// {
-		// JavartUtil.throwRuntimeException(
-		// Message.DYNAMIC_ACCESS_FAILED,
-		// JavartUtil.errorMessage(
-		// program,
-		// Message.DYNAMIC_ACCESS_FAILED,
-		// new Object[] { key, name() } ),
-		// program );
-		// }
-
+		int originalSize = map.size();
 		this.map.remove(key);
+		if ( originalSize == map.size() )
+		{
+			// Since the size is unchanged, there was no value with that key.
+			DynamicAccessException dax = new DynamicAccessException();
+			dax.key = key;
+			throw dax;
+		}
 	}
 
 	/**
@@ -360,17 +357,6 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 		return theClone;
 	}
 
-	/**
-	 * Fetch a value from the dictionary.
-	 */
-	public Object lookup(String key) {
-		if (!this.caseSensitive) {
-			key = key.toLowerCase();
-		}
-
-		return this.map.get(key);
-	}
-
 	@Override
 	public Object put(String key, Object value) {
 		if (!this.caseSensitive) {
@@ -381,7 +367,17 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	}
 
 	public egl.lang.EglAny ezeGet(String name) throws AnyException {
-		Object value = lookup(name);
+		if (!this.caseSensitive) {
+			name = name.toLowerCase();
+		}
+
+		Object value = map.get( name );
+		if ( value == null && !map.containsKey( name ) )
+		{
+			DynamicAccessException dax = new DynamicAccessException();
+			dax.key = name;
+			throw dax;
+		}
 		return value instanceof egl.lang.EglAny ? (egl.lang.EglAny) value : EglAny.ezeBox(value);
 	}
 
