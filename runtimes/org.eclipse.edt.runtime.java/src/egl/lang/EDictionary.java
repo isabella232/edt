@@ -15,6 +15,8 @@ import java.util.Map;
 
 import org.eclipse.edt.runtime.java.egl.lang.EglList;
 
+import eglx.lang.OrderingKind;
+
 /**
  * 
  */
@@ -29,11 +31,11 @@ public interface EDictionary extends EglAny, Map<String, Object> {
 
 	/**
 	 * Return the enumeration order for the dictionary
-	 * @return INSERTION_ORDER, KEY_ORDER, UNSPECIFIED_ORDER
+	 * @return byKey, byInsertion, or none
 	 */
-	public int order();
+	public OrderingKind order();
 
-	public void setOrder(int orderConstant);
+	public void setOrder(OrderingKind orderConstant);
 
 	/**
 	 * Return the keys for the contents of the dictionary, in the preferred order.
