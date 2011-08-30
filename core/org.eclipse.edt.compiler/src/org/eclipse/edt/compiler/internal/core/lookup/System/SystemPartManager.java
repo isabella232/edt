@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.edt.compiler.binding.ArrayDictionaryBinding;
 import org.eclipse.edt.compiler.binding.DictionaryBinding;
+import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.FixedRecordBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBindingImpl;
@@ -99,7 +100,7 @@ public class SystemPartManager {
     }
     
     private static IPartBinding createEGLCoreReflectBinding(String name) {
-    	InterfaceBinding result = new InterfaceBinding(SystemEnvironmentPackageNames.EGL_CORE_REFLECT, InternUtil.internCaseSensitive(name));
+    	ExternalTypeBinding result = new ExternalTypeBinding(SystemEnvironmentPackageNames.EGL_CORE_REFLECT, InternUtil.internCaseSensitive(name));
     	result.setValid(true);
     	return result;
     }
