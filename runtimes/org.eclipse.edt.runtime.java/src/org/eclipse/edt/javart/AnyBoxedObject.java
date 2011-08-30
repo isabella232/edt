@@ -44,7 +44,9 @@ public class AnyBoxedObject<R> implements EglAny, BoxedValue {
 			return ((EglAny)object).ezeGet(name);
 		}
 		else {
-			throw new DynamicAccessException();
+			DynamicAccessException dax = new DynamicAccessException();
+			dax.key = name;
+			throw dax;
 		}
 
 	}
