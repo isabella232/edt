@@ -28,6 +28,7 @@ import org.eclipse.edt.compiler.binding.AnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ArrayDictionaryBinding;
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
+import org.eclipse.edt.compiler.binding.ConstructorBinding;
 import org.eclipse.edt.compiler.binding.DataItemBinding;
 import org.eclipse.edt.compiler.binding.DelegateBinding;
 import org.eclipse.edt.compiler.binding.DictionaryBinding;
@@ -41,6 +42,7 @@ import org.eclipse.edt.compiler.binding.ForeignLanguageTypeBinding;
 import org.eclipse.edt.compiler.binding.FormFieldBinding;
 import org.eclipse.edt.compiler.binding.FunctionBinding;
 import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
+import org.eclipse.edt.compiler.binding.HandlerBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
@@ -1566,6 +1568,22 @@ public abstract class DefaultBinder extends AbstractBinder {
 				}
 				else {
 					newExpression.setConstructorBinding(matchingConstructor);
+					
+					if (Binding.isValidBinding(matchingConstructor) && ((ConstructorBinding)matchingConstructor).isPrivate()) {
+						if (currentScope.getPartBinding() != ((ConstructorBinding)matchingConstructor).getDeclaringPart()) {
+							problemRequestor.acceptProblem(type,
+									IProblemRequestor.PRIVATE_CONSTRUCTOR,
+								new String[] {type.getCanonicalName()});
+						}
+					}					
+				}
+			}
+			else {
+				ITypeBinding tBinding = newExpression.getType().resolveTypeBinding();
+				if (Binding.isValidBinding(tBinding) && tBinding.isReference() && !tBinding.isInstantiable() && currentScope.getPartBinding() != tBinding) {
+					problemRequestor.acceptProblem(newExpression.getType(),
+							IProblemRequestor.PRIVATE_CONSTRUCTOR,
+						new String[] {newExpression.getType().getCanonicalName()});
 				}
 			}
 		}
@@ -1631,6 +1649,13 @@ public abstract class DefaultBinder extends AbstractBinder {
 		if(ITypeBinding.EXTERNALTYPE_BINDING == targetType.getKind()) {
 			for(Iterator iter = ((ExternalTypeBinding) targetType).getConstructors().iterator(); iter.hasNext();) {
 				constructors.addNestedFunctionBinding((IDataBinding) iter.next());
+			}
+		}
+		else {
+			if(ITypeBinding.HANDLER_BINDING == targetType.getKind()) {
+				for(Iterator iter = ((HandlerBinding) targetType).getConstructors().iterator(); iter.hasNext();) {
+					constructors.addNestedFunctionBinding((IDataBinding) iter.next());
+				}
 			}
 		}
 		return constructors;		
@@ -4013,12 +4038,12 @@ public abstract class DefaultBinder extends AbstractBinder {
 		}
 		
 		if (!classDataDeclaration.hasInitializer()) {
-			ITypeBinding tBinding = classDataDeclaration.getType().resolveTypeBinding();
+			ITypeBinding tBinding = type.resolveTypeBinding();
 			//Non-nullable reference types must be instantiable, because they are initialized with the default constructor
 			if (Binding.isValidBinding(tBinding) && !tBinding.isNullable() && tBinding.isReference() && !tBinding.isInstantiable() && currentScope.getPartBinding() != tBinding) {
-				problemRequestor.acceptProblem(classDataDeclaration,
+				problemRequestor.acceptProblem(type,
 						IProblemRequestor.TYPE_NOT_INSTANTIABLE,
-					new String[] {classDataDeclaration.getType().getCanonicalName()});
+					new String[] {type.getCanonicalName()});
 			}
 		}
 		
@@ -4095,6 +4120,17 @@ public abstract class DefaultBinder extends AbstractBinder {
 			if (type.isPrimitiveType()){
 				PrimitiveTypeValidator.validate((PrimitiveType)type,problemRequestor,compilerOptions);
 			}
+			
+			if (!functionDataDeclaration.hasInitializer()) {
+				ITypeBinding tBinding = type.resolveTypeBinding();
+				//Non-nullable reference types must be instantiable, because they are initialized with the default constructor
+				if (Binding.isValidBinding(tBinding) && !tBinding.isNullable() && tBinding.isReference() && !tBinding.isInstantiable() && currentScope.getPartBinding() != tBinding) {
+					problemRequestor.acceptProblem(type,
+							IProblemRequestor.TYPE_NOT_INSTANTIABLE,
+						new String[] {type.getCanonicalName()});
+				}
+			}
+
 		}
 	}
 	
@@ -4142,6 +4178,16 @@ public abstract class DefaultBinder extends AbstractBinder {
 			Type baseType = type.getBaseType();
 			if (baseType.isPrimitiveType()){
 				PrimitiveTypeValidator.validate((PrimitiveType)baseType,problemRequestor,compilerOptions);
+			}
+
+			if (!structureItem.hasInitializer()) {
+				ITypeBinding tBinding = type.resolveTypeBinding();
+				//Non-nullable reference types must be instantiable, because they are initialized with the default constructor
+				if (Binding.isValidBinding(tBinding) && !tBinding.isNullable() && tBinding.isReference() && !tBinding.isInstantiable() && currentScope.getPartBinding() != tBinding) {
+					problemRequestor.acceptProblem(type,
+							IProblemRequestor.TYPE_NOT_INSTANTIABLE,
+						new String[] {type.getCanonicalName()});
+				}
 			}
 		}
 	}	
