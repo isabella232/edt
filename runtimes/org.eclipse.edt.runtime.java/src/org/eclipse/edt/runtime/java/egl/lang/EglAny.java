@@ -80,8 +80,12 @@ public abstract class EglAny implements egl.lang.EglAny {
 	public static Object ezeCast(Object value, String conversionMethod, Class clazz, Class[] parameterTypes, Object[] args) throws AnyException {
 		try {
 			// Conversion operation needs to be invoked
-			Method method = null;
 			Object unboxed = value instanceof egl.lang.EglAny ? ((egl.lang.EglAny)value).ezeUnbox() : value;
+			if ( unboxed == null )
+			{
+				return null;
+			}
+			Method method;
 			Class[] parmTypes = new Class[parameterTypes == null ? 1 : parameterTypes.length + 1];
 			parmTypes[0] = unboxed.getClass();
 			if (parameterTypes != null)
