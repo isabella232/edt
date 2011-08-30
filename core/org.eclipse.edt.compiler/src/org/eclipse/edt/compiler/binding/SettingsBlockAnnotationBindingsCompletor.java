@@ -1419,7 +1419,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 			}
 		}
 
-		if (annotationIs(enclosingAnnotationType, new String[] { "egl", "core" }, "EGLProperty")) {
+		if (annotationIs(enclosingAnnotationType, new String[] { "eglx", "lang" }, "EGLProperty")) {
 			
 			if (shouldResolveEGLPropertyValues()) {
 				if (InternUtil.intern(IEGLConstants.PROPERTY_GETMETHOD) == annotationName) {

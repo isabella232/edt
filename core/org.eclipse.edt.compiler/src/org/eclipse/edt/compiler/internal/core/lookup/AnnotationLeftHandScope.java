@@ -253,8 +253,8 @@ public class AnnotationLeftHandScope extends Scope {
 					switch(type.getKind()) {
 						case ITypeBinding.DICTIONARY_BINDING:
 							return annotationType == EGLSystemConstantAnnotationTypeBinding.getInstance() ||
-								   AbstractBinder.annotationIs(annotationType, new String[] {"egl", "core"}, IEGLConstants.PROPERTY_ORDERING) ||
-								   AbstractBinder.annotationIs(annotationType, new String[] {"egl", "core"}, IEGLConstants.PROPERTY_CASESENSITIVE);
+								   AbstractBinder.annotationIs(annotationType, new String[] {"eglx", "lang"}, IEGLConstants.PROPERTY_ORDERING) ||
+								   AbstractBinder.annotationIs(annotationType, new String[] {"eglx", "lang"}, IEGLConstants.PROPERTY_CASESENSITIVE);
 						case ITypeBinding.ARRAYDICTIONARY_BINDING:
 							return false;
 					}
