@@ -40,8 +40,12 @@ public class RUITemplate extends JavaScriptTemplate {
 		}
 	}
 	
-	public void genDependentCSSs(Handler part, Context ctx, TabbedWriter out, LinkedHashSet cssFiles) {		
+	public void genDependentCSSs(Handler part, Context ctx, TabbedWriter out, LinkedHashSet cssFiles, LinkedHashSet handledParts){
+		if ( handledParts.contains( part ) ) {
+			return;
+		}
 		try {
+			handledParts.add( part );
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			// BFS traverse
 			for(Part refPart:refParts){
@@ -53,7 +57,7 @@ public class RUITemplate extends JavaScriptTemplate {
 			for(Part refPart:refParts){
 				if(!refPart.getFullyQualifiedName().startsWith("egl") && 
 						!refPart.getFullyQualifiedName().startsWith("eglx")){
-					ctx.invoke(genDependentCSSs, refPart, ctx, out, cssFiles);
+					ctx.invoke(genDependentCSSs, refPart, ctx, out, cssFiles, handledParts);
 				}				
 			}
 		} catch (Exception e) {

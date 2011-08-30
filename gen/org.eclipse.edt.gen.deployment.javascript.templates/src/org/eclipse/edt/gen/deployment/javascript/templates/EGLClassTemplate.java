@@ -51,11 +51,15 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	}
 	
 	public void genCSSFiles(EGLClass part, TabbedWriter out, LinkedHashSet cssFiles){}
-	public void genDependentCSSs(EGLClass part, Context ctx, TabbedWriter out, LinkedHashSet cssFiles) {}
+	public void genDependentCSSs(EGLClass part, Context ctx, TabbedWriter out, LinkedHashSet cssFiles, LinkedHashSet handledParts) {}
 	
 	public void genPropFiles(EGLClass part, TabbedWriter out, LinkedHashSet propFiles){}
-	public void genDependentProps(EGLClass part, Context ctx, TabbedWriter out, LinkedHashSet propFiles){
+	public void genDependentProps(EGLClass part, Context ctx, TabbedWriter out, LinkedHashSet propFiles, LinkedHashSet handledParts){
+		if ( handledParts.contains( part ) ) {
+			return;
+		}
 		try {
+			handledParts.add( part );
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			// BFS traverse
 			for(Part refPart:refParts){
@@ -67,7 +71,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			for(Part refPart:refParts){
 				if(!refPart.getFullyQualifiedName().startsWith("egl") && 
 						!refPart.getFullyQualifiedName().startsWith("eglx")){
-					ctx.invoke(genDependentProps, refPart, ctx, out, propFiles);
+					ctx.invoke(genDependentProps, refPart, ctx, out, propFiles, handledParts);
 				}
 			}
 		} catch (Exception e) {

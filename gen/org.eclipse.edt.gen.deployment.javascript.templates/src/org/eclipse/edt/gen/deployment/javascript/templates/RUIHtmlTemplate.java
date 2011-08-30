@@ -39,7 +39,9 @@ import org.eclipse.edt.javart.resources.LocalizedText;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Handler;
+import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
@@ -117,7 +119,7 @@ public class RUIHtmlTemplate extends RUITemplate {
 		generatePropertiesFiles(handler, ctx, runtimeMsgLocale, userMsgLocale, out);	
 		
 //		generateRuntimePropertiesFiles(out);			
-//		generateBindingFileImports(handler, ctx, out, egldd);
+		generateBindingFileImports(handler, ctx, out, egldd);
 		
 		
 		generateRuntimeFilePath(out);
@@ -175,9 +177,9 @@ public class RUIHtmlTemplate extends RUITemplate {
 					processedParts.add(refPart);
 					if(!refPart.getFullyQualifiedName().startsWith("egl") && 
 							!refPart.getFullyQualifiedName().startsWith("eglx")){
-						Annotation annot = refPart.getAnnotation(Constants.USES_SERVICELIB_BINDSERVICE_FUNCTION);
-						if(annot!=null){
-							out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(\"" + egldd + "-bnd.js" + "\");");
+//						Annotation annot = refPart.getAnnotation(Constants.USES_SERVICELIB_BINDSERVICE_FUNCTION);
+						if(refPart instanceof Service || refPart instanceof Interface ){
+							out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(\"" + egldd.toLowerCase() + "-bnd.js" + "\");");
 							return;
 						}
 					}
@@ -200,8 +202,9 @@ public class RUIHtmlTemplate extends RUITemplate {
 		out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(\"" + Constants.RUNTIME_FOLDER_NAME + "/" + Constants.RUNTIME_MESSAGES_DEPLOYMENT_FOLDER_NAME + "/"  + ruiPropFile.generateIncludeStatement() + "\");");
 		// Add support for RUI Property file
 		
-		LinkedHashSet propFiles = new LinkedHashSet();		
-		ctx.invoke(genDependentProps, handler, ctx, out, propFiles);
+		LinkedHashSet propFiles = new LinkedHashSet();
+		LinkedHashSet handledParts = new LinkedHashSet();
+		ctx.invoke(genDependentProps, handler, ctx, out, propFiles, handledParts);
 		ArrayList propFileList = new ArrayList(propFiles);
 		Collections.reverse(propFileList);
 		for (Iterator iter = propFileList.iterator(); iter.hasNext();) {
@@ -214,7 +217,8 @@ public class RUIHtmlTemplate extends RUITemplate {
 	private void generateCSSFiles(Handler handler, Context ctx, TabbedWriter out) {
 		LinkedHashSet cssFiles = new LinkedHashSet();
 		ctx.invoke(genCSSFiles, handler, out, cssFiles);
-		ctx.invoke(genDependentCSSs, handler, ctx, out, cssFiles);
+		LinkedHashSet handledParts = new LinkedHashSet();
+		ctx.invoke(genDependentCSSs, handler, ctx, out, cssFiles, handledParts);
 		ArrayList cssFileList = new ArrayList(cssFiles);
 		Collections.reverse(cssFileList);
 		for (Iterator iter = cssFileList.iterator(); iter.hasNext();) {
