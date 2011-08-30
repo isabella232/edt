@@ -389,7 +389,21 @@ public class IRUtils {
 			i++;
 		}
 	}
-	
+		
+	private static boolean isString(Classifier clazz) {
+		if (clazz != null) {
+			return (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGL_EGLString)) || (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGLString));
+		}
+		return false;
+	}
+
+	private static boolean isBoolean(Classifier clazz) {
+		if (clazz != null) {
+			return (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGL_EGLBoolean)) || (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGLBoolean));
+		}
+		return false;
+	}
+
 	public static Expression makeExprCompatibleToType(Expression expr, Type type) {
 		Type exprType = expr.getType();
 		if (expr instanceof Name) {
@@ -404,6 +418,15 @@ public class IRUtils {
 		if (exprType.equals(type) || exprType.getClassifier().equals(type)) {
 			return expr;
 		}
+		
+		if (isString(exprType.getClassifier()) && isString(type.getClassifier())) {
+			return expr;
+		}
+
+		if (isBoolean(exprType.getClassifier()) && isBoolean(type.getClassifier())) {
+			return expr;
+		}
+
 		if (exprType.getClassifier().equals(type.getClassifier())) {
 			if (exprType instanceof SequenceType) {
 				if (((SequenceType)exprType).getLength() < ((SequenceType)type).getLength()) {
@@ -649,8 +672,7 @@ public class IRUtils {
 	
 	private static Operation checkForTextConcatenation(Classifier clazz, String opSymbol) {
 		if (opSymbol.equals("+") || opSymbol.equals("::") || opSymbol.equals("?:")) {
-			String key = clazz.getMofSerializationKey();
-			if (key.equalsIgnoreCase(MofConversion.Type_EGLString) || key.equalsIgnoreCase(MofConversion.Type_EGL_EGLString) ) {
+			if (isString(clazz)) {
 				return TypeUtils.getBinaryOperation((StructPart)clazz, opSymbol, false);
 			}
 		}
