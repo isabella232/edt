@@ -137,7 +137,7 @@ public class StringLib extends ExecutableBase {
 		// Now we know we've found the beginning of a token. Find its end.
 		int tokenEnd = tokenStart + 1;
 		// Check each char to see if it's the start of a delimiter.
-		while (tokenEnd != searchEnd && delimiters.indexOf(source.charAt(tokenStart)) == -1) {
+		while (tokenEnd != searchEnd && delimiters.indexOf(source.charAt(tokenEnd)) == -1) {
 			tokenEnd++;
 		}
 		// Store the end of the token in index.
