@@ -11,25 +11,25 @@
 package eglx.rbd;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.egl.lang.ESmallint;
-import java.lang.Short;
 import org.eclipse.edt.runtime.java.egl.lang.EBigint;
 import java.lang.Long;
-import org.eclipse.edt.runtime.java.egl.lang.ESmallfloat;
-import java.lang.Float;
-import org.eclipse.edt.runtime.java.egl.lang.EDate;
-import java.util.Calendar;
+import org.eclipse.edt.runtime.java.egl.lang.EDecimal;
+import java.math.BigDecimal;
+import org.eclipse.edt.runtime.java.egl.lang.ESmallint;
+import java.lang.Short;
 import org.eclipse.edt.runtime.java.egl.lang.EglAny;
 import org.eclipse.edt.runtime.java.egl.lang.EInt;
 import java.lang.Integer;
-import eglx.lang.StringLib;
-import org.eclipse.edt.runtime.java.egl.lang.EDecimal;
-import java.math.BigDecimal;
-import org.eclipse.edt.runtime.java.egl.lang.ETimestamp;
 import org.eclipse.edt.runtime.java.egl.lang.EString;
 import java.lang.String;
+import org.eclipse.edt.runtime.java.egl.lang.ESmallfloat;
+import java.lang.Float;
 import org.eclipse.edt.runtime.java.egl.lang.EFloat;
 import java.lang.Double;
+import eglx.lang.StringLib;
+import org.eclipse.edt.runtime.java.egl.lang.ETimestamp;
+import java.util.Calendar;
+import org.eclipse.edt.runtime.java.egl.lang.EDate;
 @javax.xml.bind.annotation.XmlRootElement(name="StrLib")
 public class StrLib extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
@@ -341,14 +341,14 @@ public class StrLib extends ExecutableBase {
 	}
 	public String getNextToken(AnyBoxedObject<String> source, AnyBoxedObject<Integer> index, String delimiters) {
 		int charIndex = 0;
-		charIndex = EInt.asInt((EInt.divide(index.ezeUnbox(), (int)((short) 2))));
+		charIndex = EInt.asInt((EDecimal.plus((EInt.divide(index.ezeUnbox(), (int)((short) 2))), EDecimal.asDecimal((short) 1))));
 		String token = null;
 		AnyBoxedObject<Integer> eze$Temp64 = null;
 		eze$Temp64 = EglAny.ezeWrap(charIndex);
 		token = StringLib.getNextToken(source.ezeUnbox(), eze$Temp64, delimiters);
 		charIndex = eze$Temp64.ezeUnbox();
 		if ((org.eclipse.edt.runtime.java.egl.lang.NullType.notEquals(EString.ezeBox(token), null))) {
-			index.ezeCopy((charIndex * (int)((short) 2)));
+			index.ezeCopy((((charIndex - (int)((short) 1)) * (int)((short) 2)) + (int)((short) 1)));
 		}
 		return token;
 	}
