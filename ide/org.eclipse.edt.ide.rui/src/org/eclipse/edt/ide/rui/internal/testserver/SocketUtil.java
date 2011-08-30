@@ -21,11 +21,12 @@ public class SocketUtil {
 	}
 	
 	/**
-	 * Finds an open port, starting at the given port and incrementing by 1 up to <code>maxAttempts</code> times.
+	 * Finds an open port, starting at the given port and incrementing by 1 up to <code>maxPortsToTry</code> times.
+	 * Each port is checked <code>maxAttempts</code> times.
 	 */
-	public static int findOpenPort(int port, int maxAttempts) throws IOException {
+	public static int findOpenPort(int port, int maxAttempts, int maxPortsToTry) throws IOException {
 		IOException lastEx = null;
-		for (int portToTry = port; portToTry < (port + maxAttempts); portToTry++) {
+		for (int portToTry = port; portToTry < (port + maxPortsToTry); portToTry++) {
 			for (int attemptsOnThisSocket = 0; attemptsOnThisSocket < maxAttempts; attemptsOnThisSocket++) {
 				try {
 					new ServerSocket(portToTry).close();

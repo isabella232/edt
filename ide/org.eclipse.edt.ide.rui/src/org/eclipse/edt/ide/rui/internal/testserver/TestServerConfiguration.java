@@ -85,7 +85,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		try {
 			started = true;
 			if (port < 0) {
-				port = SocketUtil.findOpenPort(DEFAULT_PORT, 10);
+				port = SocketUtil.findOpenPort(DEFAULT_PORT, 5, 100);
 			}
 			
 			// Create a temporary launch configuration, set the project and claspath entries, then run it in either RUN or DEBUG mode.
@@ -110,11 +110,6 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 //			args.append(" -d"); // uncomment this line to enable debug messages in the console
 			
 			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, args.toString());
-			
-			//TODO remove this
-			String vmargs = copy.getAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "");
-			vmargs += " -Dedt.debug.filter.runtimes=true";
-			copy.setAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, vmargs );
 			
 			// register a listener for the launch to detect when the process is terminated
 			DebugPlugin.getDefault().addDebugEventListener(this);
