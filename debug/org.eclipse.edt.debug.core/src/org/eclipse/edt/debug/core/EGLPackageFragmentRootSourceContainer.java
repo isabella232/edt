@@ -42,6 +42,11 @@ public class EGLPackageFragmentRootSourceContainer extends AbstractSourceContain
 	
 	public Object[] findSourceElements( String name ) throws CoreException
 	{
+		if ( !DebugUtil.isEGLFileName( name ) )
+		{
+			return EMPTY;
+		}
+		
 		String type = IRFileNameUtility.toIRFileName( name );
 		
 		// Remove a file extension if it exists, convert separators to dots, then split out the package.
