@@ -188,7 +188,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	public static int compareTo(Short op1, Short op2) throws AnyException {
 		if (op1 == null && op2 == null)
 			return 0;
-		if ((op1 != null && op2 == null) || (op1 == null && op2 != null))
+		if (op1 == null || op2 == null)
 			throw new NullValueException();
 		return op1.compareTo(op2);
 	}
