@@ -1767,7 +1767,7 @@ egl.getWidgetInfo = function() {
 		result[1] = "empty";
 	}
 	// covert the result object into a JSON string
-	var jsonStr = egl.eglx.json.toJSONString(result,100);
+	var jsonStr = egl.toJSONString(result);
 	return jsonStr;
 }	
 
@@ -1880,4 +1880,70 @@ egl.terminateSession = function(){
 		}
 	}
 	egl.defaultTerminateSession();
+};
+
+egl.toJSONString = function(object, depth, maxDepth) {
+	try {
+		if (depth == undefined) {
+			depth = 0;
+			maxDepth = 13;
+		}
+		if (maxDepth && depth > maxDepth) {
+			return '" Max Recursion '+maxDepth+' reached"';
+		}
+
+		if (typeof(object) == "string") {
+			return '"' + object + '"';
+		}
+		if (typeof(object) == "number") {
+			return String(object);
+		}
+		if (typeof(object) == "boolean") {
+			return Boolean(object);
+		}
+		if (!object) {
+			return "null";
+		}
+		if (object.length || object.maxSize == 2147483647) {
+			try {
+				var s = [];
+				s.push("[");
+				var needComma = false;
+				for (var n=0; n<object.length; n++) {
+					if (typeof(object[n]) != 'function') {
+						if (needComma) s.push(",");
+						s.push(egl.toJSONString(object[n], depth+1, maxDepth));
+						needComma = true;
+					}
+				}
+				s.push("]");
+				return s.join('');
+			}
+			catch (e) {
+			}
+		}
+
+			var s = [];
+			s.push("{");
+			var needComma = false;
+			for (f in object) {
+				try {
+					if (!f.match(/^eze\$\$/) && (typeof object[f] != "function")) {
+						if (needComma) s.push(",");
+						s.push('"');
+						var key = f;
+						s.push(key);
+						s.push('":');
+						s.push(egl.toJSONString(object[f], depth+1, maxDepth));
+						needComma = true;
+					}
+				} catch (e) {
+				}
+			}
+			s.push("}");
+			return s.join('');
+	}
+	catch (e) {
+		return '"Cannot toJSONString '+object+' due to '+e+'"';
+	}
 };
