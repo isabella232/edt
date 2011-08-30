@@ -167,10 +167,10 @@ library StrLib
 	end
 	
 	function getNextToken(source string inout, index int inout, delimiters string in) returns (string?)
-		charIndex int = index / 2;
+		charIndex int = index / 2 + 1;
 		token string? = eglx.lang.StringLib.getNextToken( source, charIndex, delimiters );
 		if ( token != null )
-			index = charIndex * 2;
+			index = (charIndex - 1) * 2 + 1;
 		end
 		return( token );
 	end
