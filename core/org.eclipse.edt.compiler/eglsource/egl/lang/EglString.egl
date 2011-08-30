@@ -71,4 +71,10 @@ externalType EglString extends AnyText type ParameterizableType {
 	 * "true" or "false".
 	 */
 	static function asString(value EglBoolean in) returns (EglString) {@Operation{"widen"}};
+
+
+	/**
+	 * {@Operation widen} Performs conversion from EglString to EglString.
+	 */
+	static function asString(value EglString in) returns(EglString) {@Operation{"widen"}};
 end
