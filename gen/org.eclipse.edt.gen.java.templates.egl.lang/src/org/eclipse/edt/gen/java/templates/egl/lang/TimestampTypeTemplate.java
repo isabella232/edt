@@ -16,12 +16,7 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.BinaryExpression;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.NewExpression;
-import org.eclipse.edt.mof.egl.ParameterizableType;
-import org.eclipse.edt.mof.egl.TimestampType;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.*;
 
 public class TimestampTypeTemplate extends JavaTemplate {
 
@@ -77,5 +72,17 @@ public class TimestampTypeTemplate extends JavaTemplate {
 		out.print(", ");
 		ctx.invoke(genExpression, arg.getRHS(), ctx, out);
 		out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
+	}
+
+	public void genContainerBasedInvocation(EGLClass type, Context ctx, TabbedWriter out, InvocationExpression expr) {
+		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
+		out.print(".");
+		ctx.invoke(genName, expr.getTarget(), ctx, out);
+		out.print("(");
+		ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+		if (expr.getArguments() != null && expr.getArguments().size() > 0)
+			out.print(", ");
+		ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out);
+		out.print(")");
 	}
 }
