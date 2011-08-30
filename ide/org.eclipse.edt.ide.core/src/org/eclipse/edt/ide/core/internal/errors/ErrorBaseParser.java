@@ -11564,7 +11564,7 @@ class CUP$ErrorBaseParser$actions {
 		int semi1left = ((java_cup.runtime.Symbol)CUP$ErrorBaseParser$stack.elementAt(CUP$ErrorBaseParser$top-0)).left;
 		int semi1right = ((java_cup.runtime.Symbol)CUP$ErrorBaseParser$stack.elementAt(CUP$ErrorBaseParser$top-0)).right;
 		Object semi1 = (Object)((java_cup.runtime.Symbol) CUP$ErrorBaseParser$stack.elementAt(CUP$ErrorBaseParser$top-0)).value;
-		 RESULT = new Constructor(functionParameters1, settingsBlock1, constructor1left, semi1right); 
+		 RESULT = new Constructor(Boolean.FALSE, functionParameters1, settingsBlock1, constructor1left, semi1right); 
               CUP$ErrorBaseParser$result = new java_cup.runtime.Symbol(48/*externalTypeContent*/, ((java_cup.runtime.Symbol)CUP$ErrorBaseParser$stack.elementAt(CUP$ErrorBaseParser$top-5)).left, ((java_cup.runtime.Symbol)CUP$ErrorBaseParser$stack.elementAt(CUP$ErrorBaseParser$top-0)).right, RESULT);
             }
           return CUP$ErrorBaseParser$result;
