@@ -51,6 +51,10 @@ public class EString extends AnyBoxedObject<String> {
 	}
 
 	public static String ezeCast(Object value, Integer... args) throws AnyException {
+		if ( value == null )
+		{
+			return "";
+		}
 		return (String) EglAny.ezeCast(value, "asString", EString.class, new Class[] { Integer[].class }, args);
 	}
 
