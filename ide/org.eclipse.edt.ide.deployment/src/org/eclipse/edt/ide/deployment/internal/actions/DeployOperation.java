@@ -33,11 +33,6 @@ public class DeployOperation {
 			DeploymentContext deploymentContext = models[i];
 			
 			try{
-				if( !hasParts(deploymentContext.getDeploymentDesc() ) ) {
-					DeploymentResultsCollectorManager.getInstance().getCollector(DeploymentUtilities.getDeploymentTargetId(deploymentContext.getDeploymentDesc().getDeploymentTarget(), null, models[i].getDeploymentDesc().getName()), models[i].getDeploymentDesc().getName(), false, false).addMessage(
-							DeploymentUtilities.createDeployMessage(IStatus.WARNING, Messages.bind(Messages.deployment_no_parts_found, models[i].getDeploymentDesc().getName())));
-					return;
-				}
 				ContributionsRegistry registry = ContributionsRegistry.singleton;
 				IConfigurationElement contribution = registry.getContributionForId(DeploymentUtilities.getDeploymentTargetType(deploymentContext.getDeploymentDesc().getDeploymentTarget()));
 				if (contribution != null){
@@ -58,10 +53,5 @@ public class DeployOperation {
 			}
 		}
 	}
-	
-	private boolean hasParts(DeploymentDesc desc)
-	{
-		return desc.getRestBindings().size() > 0 || desc.getRestservices().size() > 0 || 
-				desc.getRUIApplication() !=  null || desc.getRUIApplication().getRUIHandlers().size() > 0 ;
-	}
+
 }

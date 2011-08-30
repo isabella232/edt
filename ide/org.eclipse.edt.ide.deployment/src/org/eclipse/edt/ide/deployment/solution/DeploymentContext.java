@@ -29,6 +29,16 @@ public class DeploymentContext {
 	private IProject targetProject;
 	private ProjectEnvironment environment;
 	private IProgressMonitor monitor;
+	
+	private boolean mustRun = false;
+
+	public boolean isMustRun() {
+		return mustRun;
+	}
+
+	public void setMustRun(boolean mustRun) {
+		this.mustRun = mustRun;
+	}
 
 	public IProgressMonitor getMonitor() {
 		return monitor;

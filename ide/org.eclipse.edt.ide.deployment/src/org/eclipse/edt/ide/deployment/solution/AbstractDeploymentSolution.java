@@ -16,8 +16,12 @@ import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.edt.ide.deployment.internal.nls.Messages;
 import org.eclipse.edt.ide.deployment.operation.IDeploymentOperation;
+import org.eclipse.edt.ide.deployment.results.DeploymentResultsCollectorManager;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
+import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
 
 public class AbstractDeploymentSolution implements IDeploymentSolution {
 
@@ -34,6 +38,17 @@ public class AbstractDeploymentSolution implements IDeploymentSolution {
 	@Override
 	public void execute(IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor) throws CoreException {
 
+		for ( int i = 0; i < operations.size(); i ++ ) {
+			IDeploymentOperation operation = operations.get( i );
+			operation.preCheck( context, resultsCollector, monitor );
+		}
+		
+		if ( !context.isMustRun() ) {
+			DeploymentResultsCollectorManager.getInstance().getCollector(DeploymentUtilities.getDeploymentTargetId(context.getDeploymentDesc().getDeploymentTarget(), null, context.getDeploymentDesc().getName()), context.getDeploymentDesc().getName(), false, false).addMessage(
+					DeploymentUtilities.createDeployMessage(IStatus.WARNING, Messages.bind(Messages.deployment_no_parts_found, context.getDeploymentDesc().getName())));
+			return;
+		}
+		
 		for ( int i = 0; i < operations.size(); i ++ ) {
 			IDeploymentOperation operation = operations.get( i );
 			operation.execute( context, resultsCollector, monitor );
