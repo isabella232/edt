@@ -456,6 +456,7 @@ public interface IProblemRequestor {
 	public static final int NULLABLE_TYPE_BASE_MUST_BE_VALUE_TYPE = 3432;
 	public static final int TYPE_NOT_INSTANTIABLE = 3433;
 	public static final int PRIVATE_CONSTRUCTOR = 3434;
+	public static final int TYPE_NOT_INSTANTIABLE_2 = 3435;
 	
 	public static final int TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION = 3440;
 	public static final int DUPLICATE_ONEXCEPTION_EXCEPTION = 3441;

@@ -254,4 +254,8 @@ public class InterfaceBinding extends PartBinding {
 		return nullable;
 	}
 
+	@Override
+	public boolean isInstantiable() {
+		return false;
+	}
 }

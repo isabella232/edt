@@ -1582,7 +1582,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 				ITypeBinding tBinding = newExpression.getType().resolveTypeBinding();
 				if (Binding.isValidBinding(tBinding) && tBinding.isReference() && !tBinding.isInstantiable() && currentScope.getPartBinding() != tBinding) {
 					problemRequestor.acceptProblem(newExpression.getType(),
-							IProblemRequestor.PRIVATE_CONSTRUCTOR,
+							IProblemRequestor.TYPE_NOT_INSTANTIABLE_2,
 						new String[] {newExpression.getType().getCanonicalName()});
 				}
 			}
