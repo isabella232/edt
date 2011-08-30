@@ -24,13 +24,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
+import org.eclipse.edt.ide.deployment.operation.AbstractDeploymentOperation;
 import org.eclipse.edt.ide.deployment.operation.IDeploymentOperation;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.rui.internal.util.Utils;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
 import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 
-public class CopyJavaRuntimeResourcesOperation implements IDeploymentOperation {
+public class CopyJavaRuntimeResourcesOperation extends AbstractDeploymentOperation {
 
 	private static final String WEBLIB_FOLDER = "WEB-INF/lib/";
 	private static final String JAVARUNTIME_NAME = "org.eclipse.edt.runtime.java.jar";

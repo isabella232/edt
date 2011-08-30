@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.gen.deployment.javascript.Constants;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
-import org.eclipse.edt.ide.deployment.operation.IDeploymentOperation;
+import org.eclipse.edt.ide.deployment.operation.AbstractDeploymentOperation;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.rui.internal.util.Utils;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
@@ -34,7 +34,7 @@ import org.eclipse.edt.ide.rui.utils.EGLResource;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
 import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 
-public class CopyJSRuntimeResourcesOperation implements IDeploymentOperation {
+public class CopyJSRuntimeResourcesOperation extends AbstractDeploymentOperation {
 
 	private static final String RUNTIME_FOLDER = "runtime/";
 	

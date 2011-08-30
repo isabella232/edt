@@ -23,6 +23,7 @@ import org.eclipse.edt.ide.deployment.core.IDeploymentConstants;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentTarget;
 import org.eclipse.edt.ide.deployment.core.model.Parameter;
+import org.eclipse.edt.ide.deployment.operation.AbstractDeploymentOperation;
 import org.eclipse.edt.ide.deployment.operation.IDeploymentOperation;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.rui.internal.model.RUIDeploymentModel;
@@ -38,11 +39,23 @@ import org.eclipse.wst.jsdt.core.IIncludePathEntry;
 import org.eclipse.wst.jsdt.core.IJavaScriptProject;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
 
-public class GenerateHTMLFileOperation implements IDeploymentOperation {
+public class GenerateHTMLFileOperation extends AbstractDeploymentOperation {
 
 	private String targetProjectName;
 	private DeploymentDesc model;
 	private DeploymentContext context;
+	
+	@Override
+	public void preCheck(DeploymentContext context,
+			IDeploymentResultsCollector resultsCollector,
+			IProgressMonitor monitor) throws CoreException {
+		if ( !context.isMustRun() ) {
+			DeploymentDesc desc = context.getDeploymentDesc();
+			if ( desc.getRUIApplication() !=  null && desc.getRUIApplication().getRUIHandlers() != null && desc.getRUIApplication().getRUIHandlers().size() > 0 ) {
+				context.setMustRun( true );
+			}
+		}
+	}
 	
 	public void execute(DeploymentContext context, IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor)
 			throws CoreException {

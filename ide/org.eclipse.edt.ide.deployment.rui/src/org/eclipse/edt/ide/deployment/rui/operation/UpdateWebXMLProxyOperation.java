@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.internal.web.WebXML;
 import org.eclipse.edt.ide.deployment.internal.web.WebXMLManager;
+import org.eclipse.edt.ide.deployment.operation.AbstractDeploymentOperation;
 import org.eclipse.edt.ide.deployment.operation.IDeploymentOperation;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.rui.internal.IConstants;
@@ -30,7 +31,7 @@ import org.eclipse.edt.ide.deployment.rui.internal.nls.Messages;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
 import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
 
-public class UpdateWebXMLProxyOperation implements IDeploymentOperation {
+public class UpdateWebXMLProxyOperation extends AbstractDeploymentOperation {
 
 	private String targetProjectName;
 	private DeploymentDesc model;
