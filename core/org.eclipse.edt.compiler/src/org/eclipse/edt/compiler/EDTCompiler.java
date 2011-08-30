@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 
 public class EDTCompiler extends BaseCompiler {
 		
@@ -26,8 +27,10 @@ public class EDTCompiler extends BaseCompiler {
 		if (systemEnvironmentRootPath == null) {
 
 			String path = SystemEnvironmentUtil.getSystemLibraryPath(BindingCreator.class, "lib");
-			
-			systemEnvironmentRootPath = path + File.pathSeparator + super.getSystemEnvironmentPath();
+			path += File.pathSeparator;
+			path += SystemEnvironmentUtil.getSystemLibraryPath(SqlActionStatement.class, "egllib");
+			path += File.pathSeparator;
+			systemEnvironmentRootPath = path + super.getSystemEnvironmentPath();
 		}
 		
 		return systemEnvironmentRootPath;

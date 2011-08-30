@@ -25,6 +25,7 @@ import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlAddStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlCloseStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlDeleteStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlExecuteStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlFactory;
@@ -49,6 +50,7 @@ public class SQLActionStatementGenerator extends AbstractIOStatementGenerator {
 		super(env);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void doCommonVisit(org.eclipse.edt.compiler.core.ast.Statement node, final SqlActionStatement stmt) {
 		for (Node expr : (List<Node>)node.getIOObjects()) {
 			expr.accept(this);
@@ -61,7 +63,8 @@ public class SQLActionStatementGenerator extends AbstractIOStatementGenerator {
 				return false;
 			}
 			public boolean visit(InlineSQLStatement sqlStmt) {
-				stmt.setSqlString(sqlStmt.getValue());
+				String sql = sqlStmt.getValue().replaceAll("[\\n\\r]", " ");
+				stmt.setSqlString(sql);
 				return false;
 			}
 			public boolean visit(org.eclipse.edt.compiler.core.ast.UsingClause clause) {
@@ -88,7 +91,6 @@ public class SQLActionStatementGenerator extends AbstractIOStatementGenerator {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public boolean visit(org.eclipse.edt.compiler.core.ast.AddStatement node) {
 		SqlAddStatement stmt = factory.createSqlAddStatement();
 		stack.push(stmt);
@@ -97,7 +99,14 @@ public class SQLActionStatementGenerator extends AbstractIOStatementGenerator {
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
+	public boolean visit(org.eclipse.edt.compiler.core.ast.CloseStatement node) {
+		SqlCloseStatement stmt = factory.createSqlCloseStatement();
+		stack.push(stmt);
+		doCommonVisit(node, stmt);
+		return false;
+	}
+
+	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.DeleteStatement node) {
 		SqlDeleteStatement stmt = factory.createSqlDeleteStatement();
 		stack.push(stmt);
@@ -113,6 +122,7 @@ public class SQLActionStatementGenerator extends AbstractIOStatementGenerator {
 		return false;		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ForEachStatement forEachStatement) {
 		SqlForEachStatement forEachStmt = factory.createSqlForEachStatement();

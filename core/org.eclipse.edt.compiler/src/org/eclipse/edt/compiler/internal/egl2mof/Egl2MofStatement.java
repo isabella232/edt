@@ -14,18 +14,14 @@ package org.eclipse.edt.compiler.internal.egl2mof;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.LocalVariableBinding;
-import org.eclipse.edt.compiler.core.ast.ExecuteStatement;
-import org.eclipse.edt.compiler.core.ast.ForEachStatement;
+import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
 import org.eclipse.edt.compiler.core.ast.OtherwiseClause;
-import org.eclipse.edt.compiler.core.ast.PrepareStatement;
+import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.SQLActionStatementGenerator;
 import org.eclipse.edt.compiler.internal.egl2mof.sql.SQLIOStatementGenerator;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
@@ -49,7 +45,6 @@ import org.eclipse.edt.mof.egl.MoveStatement;
 import org.eclipse.edt.mof.egl.OpenUIStatement;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Parameter;
-import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PrintStatement;
 import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.SetStatement;
@@ -61,6 +56,7 @@ import org.eclipse.edt.mof.egl.TransferStatement;
 import org.eclipse.edt.mof.egl.TryStatement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.WhileStatement;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
@@ -69,6 +65,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	static {
 		IOStatementGenerator.Registry.put(Type_SqlRecord, new SQLIOStatementGenerator());
 		IOStatementGenerator.Registry.put(EGL_lang_package, new DefaultIOStatementGenerator());
+		IOStatementGenerator.Registry.put("eglx.persistence.sql", new SQLActionStatementGenerator());
 	}
 	
 	Egl2MofStatement(IEnvironment env) {
@@ -725,10 +722,29 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	
 	private IOStatementGenerator primGetGeneratorFor(org.eclipse.edt.compiler.core.ast.Statement node) {
 		
-		//for now, we only support SQL I/O statements;
-		return IOStatementGenerator.Registry.get(Type_SqlRecord);
+		// Lookup statement generator based on DataSource operand in FROM/TO clause
+		// TODO this is not properly generalized yet
+		final IOStatementGenerator[] generator = new IOStatementGenerator[1];
+		node.accept(new AbstractASTExpressionVisitor() {	
+			public boolean visit(org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause clause) {
+				if (generator[0] == null && clause.getExpression() != null) {
+					ITypeBinding type = clause.getExpression().resolveTypeBinding();
+					if (type != null) {
+						String key = IRUtils.concatWithSeparator(type.getPackageName(), ".");
+						generator[0] = IOStatementGenerator.Registry.get(key);
+					}
+				}
+				return false;
+			}
+		});
 		
-		
+		if (generator[0] == null) {
+			return IOStatementGenerator.Registry.get("eglx.persistence.sql");
+		}
+		else {
+			return generator[0];
+		}
+
 //		org.eclipse.edt.compiler.core.ast.Name nameExpr = null;
 //		if (!node.getIOObjects().isEmpty()) {
 //			nameExpr = (org.eclipse.edt.compiler.core.ast.Name)node.getIOObjects().get(0);
