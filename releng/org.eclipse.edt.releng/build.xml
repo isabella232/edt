@@ -36,18 +36,12 @@
 		<condition property="isNightlyBuild">
 			<equals arg1="${buildType}" arg2="N" />
 		</condition>
-<!-- *** FOR DEBUGGING *** ...why aren't we deleting anything?!? -->
-<echo>isNightlyBuild is [ ${isNightlyBuild} ]</echo>
-<!-- end of stuff for debugging -->
 		<antcall target="deleteOldNightlies" inheritall="true" />
 
 		<ant antfile="promote.xml" />
 	</target>
 	 
 	<target name="cleanUp">
-<!-- *** FOR DEBUGGING *** ...why aren't we deleting anything?!? -->
-<echo>in cleanUp</echo>
-<!-- end of stuff for debugging -->
 		<delete dir="${buildDir}/eclipse" failonerror="false" />
 		<delete dir="${buildDir}/testing" failonerror="false" />
 		<delete dir="${buildDir}/compilelogs" failonerror="false"/>
@@ -62,32 +56,9 @@
 	</target>	
 
 	<target name="deleteOldNightlies" if="isNightlyBuild">
-
-<!-- *** FOR DEBUGGING *** ...why aren't we deleting anything?!? -->
-<path id="nightlies.path">
-	<fileset dir="${writableBuildRoot}">
-		<include name="N20*" />
-		<exclude name="N${buildTimestamp}" />
-	</fileset>
-</path>
-<pathconvert pathsep="${line.separator}|   |-- "
-	property="nightlies.path.compile"             
-	refid="nightlies.path">
-</pathconvert>
-<echo>nightlies.path.compile is [ ${nightlies.path.compile} ]</echo>
-
-<path id="nightlies.path2">
-	<dirset dir="${writableBuildRoot}" includes="N20*" excludes="N${buildTimestamp}" />
-</path>
-<pathconvert pathsep="${line.separator}|   |-- "
-	property="nightlies.path.compile2"             
-	refid="nightlies.path2">
-</pathconvert>
-<echo>nightlies.path.compile2 is [ ${nightlies.path.compile2} ]</echo>
-<!-- end of stuff for debugging -->
-
-		<delete failonerror="false" includeemptydirs="true">
-			<dirset dir="${writableBuildRoot}" includes="N20*" excludes="N${buildTimestamp}" />
+		<delete dir="${writableBuildRoot}" failonerror="false" includeemptydirs="true">
+		    <include name="N20*"/>
+		    <exclude name="N${buildTimestamp}"/>
 		</delete>
 	</target>
 </project>
