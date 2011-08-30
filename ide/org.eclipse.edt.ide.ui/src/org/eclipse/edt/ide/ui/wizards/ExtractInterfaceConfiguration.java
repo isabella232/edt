@@ -19,7 +19,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.INullableTypeBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -312,8 +311,7 @@ public class ExtractInterfaceConfiguration extends InterfaceConfiguration {
     static public void getSimpleTypeString(ITypeBinding elemTypeBinding, StringBuffer simpleTypeString){
     	int bindingtypeKind = elemTypeBinding.getKind();
     	if(elemTypeBinding.isNullable()){
-    		INullableTypeBinding nullableTypeBinding = (INullableTypeBinding)elemTypeBinding;
-    		getSimpleTypeString(nullableTypeBinding.getValueType(), simpleTypeString);
+     		getSimpleTypeString(elemTypeBinding.getNonNullableInstance(), simpleTypeString);
     		
     		simpleTypeString.append('?');
     	}
