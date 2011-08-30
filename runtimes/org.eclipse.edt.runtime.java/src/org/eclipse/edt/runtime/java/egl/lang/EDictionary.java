@@ -21,21 +21,13 @@ import java.util.TreeMap;
 
 import org.eclipse.edt.javart.Constants;
 import egl.lang.AnyException;
+import eglx.lang.OrderingKind;
 
 /**
  * 
  */
 public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-
-	/** Value for Dictionary.order */
-	public static final int NONE = 0;
-
-	/** Value for Dictionary.order */
-	public static final int INSERTION_ORDER = 1;
-
-	/** Value for Dictionary.order */
-	public static final int KEY_ORDER = 2;
 
 	/**
 	 * The map containing the dictionary values. It maps String keys to AnyRef objects, and iterates the values in the
@@ -47,19 +39,19 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	private boolean caseSensitive;
 
 	/** The order that the dictionary will iterate its values in. */
-	private int order;
+	private OrderingKind order;
 
 	/**
 	 * Constructor
 	 */
 	public EDictionary() {
-		this(false, 0);
+		this(false, OrderingKind.none);
 	}
 
 	/**
 	 * Constructor
 	 */
-	public EDictionary(boolean caseSensitive, int order) {
+	public EDictionary(boolean caseSensitive, OrderingKind order) {
 		this.caseSensitive = caseSensitive;
 		this.order = order;
 		createMap();
@@ -86,14 +78,14 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	}
 
 	@Override
-	public void setOrder(int orderConstant) {
+	public void setOrder(OrderingKind orderConstant) {
 		this.order = orderConstant;
 	}
 
 	/**
 	 * Return the enumeration order for the dictionary
 	 */
-	public int order() {
+	public OrderingKind order() {
 		return this.order;
 	}
 
@@ -102,11 +94,11 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	 */
 	private void createMap() {
 		switch (this.order) {
-			case INSERTION_ORDER:
+			case byInsertion:
 				this.map = new LinkedHashMap<String, Object>();
 				break;
 
-			case KEY_ORDER:
+			case byKey:
 				this.map = new TreeMap<String, Object>();
 				break;
 
@@ -172,7 +164,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	 * Retrieve a value for the specified key.
 	 */
 	public Object get(Object key) {
-		if (!this.caseSensitive) {
+		if (!this.caseSensitive && key instanceof String) {
 			key = ((String) key).toLowerCase();
 		}
 
@@ -191,13 +183,6 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	 */
 	public Set keySet() {
 		return this.map.keySet();
-	}
-
-	/**
-	 * Insert a key/value in the dictionary. Not supported, use insert() instead.
-	 */
-	public Object put(EString key, Object value) {
-		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -257,7 +242,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 		if (!this.caseSensitive) {
 			key = key.toLowerCase();
 		}
-		put(key, value);
+		map.put(key, value);
 	}
 
 	/**
@@ -351,11 +336,11 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 
 		// clone the map
 		switch (this.order) {
-			case INSERTION_ORDER:
+			case byInsertion:
 				theClone.map = new LinkedHashMap<String, Object>(this.map.size());
 				break;
 
-			case KEY_ORDER:
+			case byKey:
 				theClone.map = new TreeMap<String, Object>();
 				break;
 
@@ -376,8 +361,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	}
 
 	/**
-	 * Fetch a value from the dictionary. If it does not exist, a proxy is returned that will create the new entry if and
-	 * when its value is updated.
+	 * Fetch a value from the dictionary.
 	 */
 	public Object lookup(String key) {
 		if (!this.caseSensitive) {
@@ -385,14 +369,6 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 		}
 
 		return this.map.get(key);
-
-		// TODO Proxy reference object should not be necessary
-		// if ( val != null )
-		// {
-		// return (AnyRef)val;
-		// }
-		//
-		// return new DictionaryEntryMaker( this, key, program );
 	}
 
 	@Override
@@ -405,22 +381,17 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	}
 
 	public egl.lang.EglAny ezeGet(String name) throws AnyException {
-		Object value = get(name);
+		Object value = lookup(name);
 		return value instanceof egl.lang.EglAny ? (egl.lang.EglAny) value : EglAny.ezeBox(value);
 	}
 
 	@Override
 	public void ezeSet(String name, Object value) {
-		// if (value instanceof egl.lang.EglAny) {
-		// value = ((EglAny)value).ezeUnbox();
-		// }
 		put(name, value);
-
 	}
 
 	@Override
 	public void putAll(Map<? extends String, ? extends Object> map) {
 		this.map.putAll(map);
-
 	}
 }
