@@ -209,15 +209,18 @@ public class EString extends AnyBoxedObject<String> {
 				}
 				formatter.setMicrosecond(micros);
 			}
-			if (cal.isSet(Calendar.YEAR))
-				formatter.setCentury(cal.get(Calendar.YEAR) / 100 + 1);
-			else
-				formatter.setCentury(1);
 			try {
+				if (cal.isSet(Calendar.YEAR))
+					formatter.setCentury(cal.get(Calendar.YEAR) / 100 + 1);
+				else
+					formatter.setCentury(1);
 				return asString(formatter.format(cal.getTime()), length);
 			}
 			catch (IllegalArgumentException iax) {
-				throw new InvalidPatternException();
+				TypeCastException tcx = new TypeCastException();
+				tcx.castToName = "string";
+				tcx.actualTypeName = "date or timestamp"; // TODO see the TODO in the method comment: need to know if the Calendar is a date or timestamp  
+				throw tcx;
 			}
 			finally {
 				if (reset)
