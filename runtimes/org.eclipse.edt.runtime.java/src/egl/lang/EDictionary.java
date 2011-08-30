@@ -69,14 +69,6 @@ public interface EDictionary extends EglAny, Map<String, Object> {
 	public void removeAll();
 
 	/**
-	 * Fetch a value from the dictionary. If it does not exist, a proxy is returned that will create the new entry if and
-	 * when its value is updated.
-	 * @param key
-	 * @return The AnyRef entry, or a DictionaryEntryMaker proxy object
-	 */
-	public Object lookup(String key);
-
-	/**
 	 * Tells if there's a value stored with the given key.
 	 *
 	 * @param key  the key.
