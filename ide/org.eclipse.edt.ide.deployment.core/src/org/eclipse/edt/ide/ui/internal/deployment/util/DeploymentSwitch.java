@@ -302,6 +302,12 @@ public class DeploymentSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case DeploymentPackage.SQL_DATABASE_BINDING: {
+				SQLDatabaseBinding sqlDatabaseBinding = (SQLDatabaseBinding)theEObject;
+				T result = caseSQLDatabaseBinding(sqlDatabaseBinding);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case DeploymentPackage.SYSTEM_IPROTOCOL: {
 				SystemIProtocol systemIProtocol = (SystemIProtocol)theEObject;
 				T result = caseSystemIProtocol(systemIProtocol);
@@ -830,6 +836,21 @@ public class DeploymentSwitch<T> {
 	 * @generated
 	 */
 	public T caseRUIResourceOmissions(RUIResourceOmissions object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>SQL Database Binding</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>SQL Database Binding</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSQLDatabaseBinding(SQLDatabaseBinding object) {
 		return null;
 	}
 

@@ -18,6 +18,7 @@ import org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLBinding;
 import org.eclipse.edt.ide.ui.internal.deployment.NativeBinding;
 import org.eclipse.edt.ide.ui.internal.deployment.RestBinding;
+import org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding;
 import org.eclipse.edt.ide.ui.internal.deployment.WebBinding;
 
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -43,6 +44,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.BindingsImpl#getWebBinding <em>Web Binding</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.BindingsImpl#getNativeBinding <em>Native Binding</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.BindingsImpl#getRestBinding <em>Rest Binding</em>}</li>
+ *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.BindingsImpl#getSqlDatabaseBinding <em>Sql Database Binding</em>}</li>
  * </ul>
  * </p>
  *
@@ -88,6 +90,16 @@ public class BindingsImpl extends EObjectImpl implements Bindings {
 	 * @ordered
 	 */
 	protected EList<RestBinding> restBinding;
+
+	/**
+	 * The cached value of the '{@link #getSqlDatabaseBinding() <em>Sql Database Binding</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSqlDatabaseBinding()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<SQLDatabaseBinding> sqlDatabaseBinding;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -161,6 +173,18 @@ public class BindingsImpl extends EObjectImpl implements Bindings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<SQLDatabaseBinding> getSqlDatabaseBinding() {
+		if (sqlDatabaseBinding == null) {
+			sqlDatabaseBinding = new EObjectContainmentEList<SQLDatabaseBinding>(SQLDatabaseBinding.class, this, DeploymentPackage.BINDINGS__SQL_DATABASE_BINDING);
+		}
+		return sqlDatabaseBinding;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -172,6 +196,8 @@ public class BindingsImpl extends EObjectImpl implements Bindings {
 				return ((InternalEList<?>)getNativeBinding()).basicRemove(otherEnd, msgs);
 			case DeploymentPackage.BINDINGS__REST_BINDING:
 				return ((InternalEList<?>)getRestBinding()).basicRemove(otherEnd, msgs);
+			case DeploymentPackage.BINDINGS__SQL_DATABASE_BINDING:
+				return ((InternalEList<?>)getSqlDatabaseBinding()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -192,6 +218,8 @@ public class BindingsImpl extends EObjectImpl implements Bindings {
 				return getNativeBinding();
 			case DeploymentPackage.BINDINGS__REST_BINDING:
 				return getRestBinding();
+			case DeploymentPackage.BINDINGS__SQL_DATABASE_BINDING:
+				return getSqlDatabaseBinding();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -221,6 +249,10 @@ public class BindingsImpl extends EObjectImpl implements Bindings {
 				getRestBinding().clear();
 				getRestBinding().addAll((Collection<? extends RestBinding>)newValue);
 				return;
+			case DeploymentPackage.BINDINGS__SQL_DATABASE_BINDING:
+				getSqlDatabaseBinding().clear();
+				getSqlDatabaseBinding().addAll((Collection<? extends SQLDatabaseBinding>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -245,6 +277,9 @@ public class BindingsImpl extends EObjectImpl implements Bindings {
 			case DeploymentPackage.BINDINGS__REST_BINDING:
 				getRestBinding().clear();
 				return;
+			case DeploymentPackage.BINDINGS__SQL_DATABASE_BINDING:
+				getSqlDatabaseBinding().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -265,6 +300,8 @@ public class BindingsImpl extends EObjectImpl implements Bindings {
 				return nativeBinding != null && !nativeBinding.isEmpty();
 			case DeploymentPackage.BINDINGS__REST_BINDING:
 				return restBinding != null && !restBinding.isEmpty();
+			case DeploymentPackage.BINDINGS__SQL_DATABASE_BINDING:
+				return sqlDatabaseBinding != null && !sqlDatabaseBinding.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

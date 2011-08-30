@@ -328,6 +328,15 @@ public interface DeploymentFactory extends EFactory {
 	RUIResourceOmissions createRUIResourceOmissions();
 
 	/**
+	 * Returns a new object of class '<em>SQL Database Binding</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>SQL Database Binding</em>'.
+	 * @generated
+	 */
+	SQLDatabaseBinding createSQLDatabaseBinding();
+
+	/**
 	 * Returns a new object of class '<em>System IProtocol</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

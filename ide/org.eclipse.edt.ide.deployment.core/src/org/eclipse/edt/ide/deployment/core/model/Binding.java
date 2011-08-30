@@ -17,6 +17,8 @@ public class Binding {
 	public static int WEBBINDING = 2;
 	public static int NATIVEBINDING = 3;
 	public static int RESTBINDING = 4;
+	public static int SQLDATABASEBINDING = 5;
+	
 	public static String SOAP11VERSION = "SOAP-1.1";
 	public static String SOAP12VERSION = "SOAP-1.2";
 	

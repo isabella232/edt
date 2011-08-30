@@ -209,6 +209,10 @@ public class DeploymentAdapterFactory extends AdapterFactoryImpl {
 				return createRUIResourceOmissionsAdapter();
 			}
 			@Override
+			public Adapter caseSQLDatabaseBinding(SQLDatabaseBinding object) {
+				return createSQLDatabaseBindingAdapter();
+			}
+			@Override
 			public Adapter caseSystemIProtocol(SystemIProtocol object) {
 				return createSystemIProtocolAdapter();
 			}
@@ -707,6 +711,20 @@ public class DeploymentAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createRUIResourceOmissionsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding <em>SQL Database Binding</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding
+	 * @generated
+	 */
+	public Adapter createSQLDatabaseBindingAdapter() {
 		return null;
 	}
 

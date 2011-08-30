@@ -26,6 +26,7 @@ import org.eclipse.edt.ide.deployment.core.model.RUIApplication;
 import org.eclipse.edt.ide.deployment.core.model.RUIHandler;
 import org.eclipse.edt.ide.deployment.core.model.RestBinding;
 import org.eclipse.edt.ide.deployment.core.model.Restservice;
+import org.eclipse.edt.ide.deployment.core.model.SQLDatabaseBinding;
 import org.eclipse.edt.ide.deployment.core.model.WebBinding;
 import org.eclipse.edt.ide.deployment.core.model.Webservice;
 import org.xml.sax.Attributes;
@@ -104,6 +105,17 @@ public class DeploymentDescParser extends DefaultHandler {
 											    attributes.getValue("sessionCookieId"),
 											    attributes.getValue("preserveRequestHeaders"),
 											    attributes.getValue("enableGeneration")));
+		}
+		else if (localName.equals("sqlDatabaseBinding")) {
+			desc.addSqlDatabaseBindings(new SQLDatabaseBinding(attributes.getValue("name"),
+												attributes.getValue("dbms"),
+											    attributes.getValue("sqlJDBCDriverClass"),
+											    attributes.getValue("sqlDB"),
+											    attributes.getValue("sqlID"),
+											    attributes.getValue("sqlPassword"),
+											    attributes.getValue("sqlJNDIName"),
+											    attributes.getValue("sqlSchema"),
+											    attributes.getValue("sqlValidationConnectionURL")));
 		}
 		else if (localName.equals("webservice")) {
 			currentWebService = new Webservice(attributes.getValue("implementation"),

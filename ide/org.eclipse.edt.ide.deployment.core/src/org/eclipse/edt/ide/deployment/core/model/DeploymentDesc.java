@@ -41,7 +41,9 @@ public class DeploymentDesc {
 	private ArrayList webservices;
 	
 	private ArrayList restservices;
-	
+
+	private ArrayList sqlDatabaseBindings;
+
 	private RUIApplication ruiApplication;
 	
 	private ArrayList includes;
@@ -133,10 +135,29 @@ public class DeploymentDesc {
 		nativeBindings = new ArrayList();
 		webservices = new ArrayList();
 		restservices = new ArrayList();
+		sqlDatabaseBindings = new ArrayList();
 		includes = new ArrayList();
 		resourceOmissions = new ArrayList<String>();
 	}
 	
+	public ArrayList getSqlDatabaseBindings() {
+		return sqlDatabaseBindings;
+	}
+
+	public void setSqlDatabaseBindings(ArrayList sqlDatabaseBindings) {
+		this.sqlDatabaseBindings = sqlDatabaseBindings;
+	}
+	
+	public void addSqlDatabaseBindingsAll(ArrayList bindings)
+	{
+		sqlDatabaseBindings.addAll(bindings);
+	}
+	
+	public void addSqlDatabaseBindings(SQLDatabaseBinding binding)
+	{
+		sqlDatabaseBindings.add(binding);
+	}
+
 	public String getAlias() {
 		return alias;
 	}

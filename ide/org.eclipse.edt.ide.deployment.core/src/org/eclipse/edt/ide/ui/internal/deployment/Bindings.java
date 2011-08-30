@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Bindings#getWebBinding <em>Web Binding</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Bindings#getNativeBinding <em>Native Binding</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Bindings#getRestBinding <em>Rest Binding</em>}</li>
+ *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Bindings#getSqlDatabaseBinding <em>Sql Database Binding</em>}</li>
  * </ul>
  * </p>
  *
@@ -102,5 +103,22 @@ public interface Bindings extends EObject {
 	 * @generated
 	 */
 	EList<RestBinding> getRestBinding();
+
+	/**
+	 * Returns the value of the '<em><b>Sql Database Binding</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Sql Database Binding</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Sql Database Binding</em>' containment reference list.
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getBindings_SqlDatabaseBinding()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='sqlDatabaseBinding'"
+	 * @generated
+	 */
+	EList<SQLDatabaseBinding> getSqlDatabaseBinding();
 
 } // Bindings

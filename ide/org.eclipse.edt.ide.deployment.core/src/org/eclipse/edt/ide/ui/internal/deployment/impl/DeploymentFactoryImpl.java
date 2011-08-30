@@ -37,7 +37,7 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	 */
 	public static DeploymentFactory init() {
 		try {
-			DeploymentFactory theDeploymentFactory = (DeploymentFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.ibm.com/xmlns/egl/deployment/7.0"); 
+			DeploymentFactory theDeploymentFactory = (DeploymentFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.eclipse.org/xmlns/edt/deployment/1.0"); 
 			if (theDeploymentFactory != null) {
 				return theDeploymentFactory;
 			}
@@ -99,6 +99,7 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 			case DeploymentPackage.RUI_HANDLER: return createRUIHandler();
 			case DeploymentPackage.RUI_RESOURCE: return createRUIResource();
 			case DeploymentPackage.RUI_RESOURCE_OMISSIONS: return createRUIResourceOmissions();
+			case DeploymentPackage.SQL_DATABASE_BINDING: return createSQLDatabaseBinding();
 			case DeploymentPackage.SYSTEM_IPROTOCOL: return createSystemIProtocol();
 			case DeploymentPackage.TCPIP_PROTOCOL: return createTCPIPProtocol();
 			case DeploymentPackage.WEB_BINDING: return createWebBinding();
@@ -487,6 +488,16 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	public RUIResourceOmissions createRUIResourceOmissions() {
 		RUIResourceOmissionsImpl ruiResourceOmissions = new RUIResourceOmissionsImpl();
 		return ruiResourceOmissions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SQLDatabaseBinding createSQLDatabaseBinding() {
+		SQLDatabaseBindingImpl sqlDatabaseBinding = new SQLDatabaseBindingImpl();
+		return sqlDatabaseBinding;
 	}
 
 	/**

@@ -47,6 +47,7 @@ import org.eclipse.edt.ide.ui.internal.deployment.RestBinding;
 import org.eclipse.edt.ide.ui.internal.deployment.Restservice;
 import org.eclipse.edt.ide.ui.internal.deployment.Restservices;
 import org.eclipse.edt.ide.ui.internal.deployment.SOAPVersionType;
+import org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding;
 import org.eclipse.edt.ide.ui.internal.deployment.StyleTypes;
 import org.eclipse.edt.ide.ui.internal.deployment.SystemIProtocol;
 import org.eclipse.edt.ide.ui.internal.deployment.TCPIPProtocol;
@@ -309,6 +310,13 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass sqlDatabaseBindingEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass systemIProtocolEClass = null;
 
 	/**
@@ -488,6 +496,15 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 */
 	public EReference getBindings_RestBinding() {
 		return (EReference)bindingsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBindings_SqlDatabaseBinding() {
+		return (EReference)bindingsEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -1746,6 +1763,96 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getSQLDatabaseBinding() {
+		return sqlDatabaseBindingEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSQLDatabaseBinding_Dbms() {
+		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSQLDatabaseBinding_Name() {
+		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSQLDatabaseBinding_SqlDB() {
+		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSQLDatabaseBinding_SqlID() {
+		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSQLDatabaseBinding_SqlJDBCDriverClass() {
+		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSQLDatabaseBinding_SqlJNDIName() {
+		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSQLDatabaseBinding_SqlPassword() {
+		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSQLDatabaseBinding_SqlSchema() {
+		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSQLDatabaseBinding_SqlValidationConnectionURL() {
+		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getSystemIProtocol() {
 		return systemIProtocolEClass;
 	}
@@ -2116,6 +2223,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		createEReference(bindingsEClass, BINDINGS__WEB_BINDING);
 		createEReference(bindingsEClass, BINDINGS__NATIVE_BINDING);
 		createEReference(bindingsEClass, BINDINGS__REST_BINDING);
+		createEReference(bindingsEClass, BINDINGS__SQL_DATABASE_BINDING);
 
 		cicseciProtocolEClass = createEClass(CICSECI_PROTOCOL);
 		createEAttribute(cicseciProtocolEClass, CICSECI_PROTOCOL__CONVERSION_TABLE);
@@ -2288,6 +2396,17 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		ruiResourceOmissionsEClass = createEClass(RUI_RESOURCE_OMISSIONS);
 		createEReference(ruiResourceOmissionsEClass, RUI_RESOURCE_OMISSIONS__RESOURCE);
 
+		sqlDatabaseBindingEClass = createEClass(SQL_DATABASE_BINDING);
+		createEAttribute(sqlDatabaseBindingEClass, SQL_DATABASE_BINDING__DBMS);
+		createEAttribute(sqlDatabaseBindingEClass, SQL_DATABASE_BINDING__NAME);
+		createEAttribute(sqlDatabaseBindingEClass, SQL_DATABASE_BINDING__SQL_DB);
+		createEAttribute(sqlDatabaseBindingEClass, SQL_DATABASE_BINDING__SQL_ID);
+		createEAttribute(sqlDatabaseBindingEClass, SQL_DATABASE_BINDING__SQL_JDBC_DRIVER_CLASS);
+		createEAttribute(sqlDatabaseBindingEClass, SQL_DATABASE_BINDING__SQL_JNDI_NAME);
+		createEAttribute(sqlDatabaseBindingEClass, SQL_DATABASE_BINDING__SQL_PASSWORD);
+		createEAttribute(sqlDatabaseBindingEClass, SQL_DATABASE_BINDING__SQL_SCHEMA);
+		createEAttribute(sqlDatabaseBindingEClass, SQL_DATABASE_BINDING__SQL_VALIDATION_CONNECTION_URL);
+
 		systemIProtocolEClass = createEClass(SYSTEM_IPROTOCOL);
 		createEAttribute(systemIProtocolEClass, SYSTEM_IPROTOCOL__BINDDIR);
 		createEAttribute(systemIProtocolEClass, SYSTEM_IPROTOCOL__LIBRARY);
@@ -2388,6 +2507,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEReference(getBindings_WebBinding(), this.getWebBinding(), null, "webBinding", null, 0, -1, Bindings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBindings_NativeBinding(), this.getNativeBinding(), null, "nativeBinding", null, 0, -1, Bindings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBindings_RestBinding(), this.getRestBinding(), null, "restBinding", null, 0, -1, Bindings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBindings_SqlDatabaseBinding(), this.getSQLDatabaseBinding(), null, "sqlDatabaseBinding", null, 0, -1, Bindings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cicseciProtocolEClass, CICSECIProtocol.class, "CICSECIProtocol", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCICSECIProtocol_ConversionTable(), theXMLTypePackage.getString(), "conversionTable", null, 0, 1, CICSECIProtocol.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2560,6 +2680,17 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEClass(ruiResourceOmissionsEClass, RUIResourceOmissions.class, "RUIResourceOmissions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRUIResourceOmissions_Resource(), this.getRUIResource(), null, "resource", null, 0, -1, RUIResourceOmissions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(sqlDatabaseBindingEClass, SQLDatabaseBinding.class, "SQLDatabaseBinding", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSQLDatabaseBinding_Dbms(), theXMLTypePackage.getString(), "dbms", null, 1, 1, SQLDatabaseBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSQLDatabaseBinding_Name(), theXMLTypePackage.getNCName(), "name", null, 1, 1, SQLDatabaseBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSQLDatabaseBinding_SqlDB(), theXMLTypePackage.getString(), "sqlDB", null, 0, 1, SQLDatabaseBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSQLDatabaseBinding_SqlID(), theXMLTypePackage.getString(), "sqlID", null, 0, 1, SQLDatabaseBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSQLDatabaseBinding_SqlJDBCDriverClass(), theXMLTypePackage.getString(), "sqlJDBCDriverClass", null, 1, 1, SQLDatabaseBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSQLDatabaseBinding_SqlJNDIName(), theXMLTypePackage.getString(), "sqlJNDIName", null, 0, 1, SQLDatabaseBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSQLDatabaseBinding_SqlPassword(), theXMLTypePackage.getString(), "sqlPassword", null, 0, 1, SQLDatabaseBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSQLDatabaseBinding_SqlSchema(), theXMLTypePackage.getString(), "sqlSchema", null, 0, 1, SQLDatabaseBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSQLDatabaseBinding_SqlValidationConnectionURL(), theXMLTypePackage.getString(), "sqlValidationConnectionURL", null, 0, 1, SQLDatabaseBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(systemIProtocolEClass, SystemIProtocol.class, "SystemIProtocol", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSystemIProtocol_Binddir(), theXMLTypePackage.getString(), "binddir", null, 0, 1, SystemIProtocol.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSystemIProtocol_Library(), theXMLTypePackage.getString(), "library", null, 0, 1, SystemIProtocol.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2665,6 +2796,13 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		   new String[] {
 			 "kind", "element",
 			 "name", "restBinding"
+		   });		
+		addAnnotation
+		  (getBindings_SqlDatabaseBinding(), 
+		   source, 
+		   new String[] {
+			 "kind", "element",
+			 "name", "sqlDatabaseBinding"
 		   });		
 		addAnnotation
 		  (cicseciProtocolEClass, 
@@ -3698,6 +3836,76 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		   new String[] {
 			 "name", "SOAPVersionType:Object",
 			 "baseType", "SOAPVersionType"
+		   });		
+		addAnnotation
+		  (sqlDatabaseBindingEClass, 
+		   source, 
+		   new String[] {
+			 "name", "SQLDatabaseBinding",
+			 "kind", "empty"
+		   });		
+		addAnnotation
+		  (getSQLDatabaseBinding_Dbms(), 
+		   source, 
+		   new String[] {
+			 "kind", "attribute",
+			 "name", "dbms"
+		   });		
+		addAnnotation
+		  (getSQLDatabaseBinding_Name(), 
+		   source, 
+		   new String[] {
+			 "kind", "attribute",
+			 "name", "name"
+		   });		
+		addAnnotation
+		  (getSQLDatabaseBinding_SqlDB(), 
+		   source, 
+		   new String[] {
+			 "kind", "attribute",
+			 "name", "sqlDB"
+		   });		
+		addAnnotation
+		  (getSQLDatabaseBinding_SqlID(), 
+		   source, 
+		   new String[] {
+			 "kind", "attribute",
+			 "name", "sqlID"
+		   });		
+		addAnnotation
+		  (getSQLDatabaseBinding_SqlJDBCDriverClass(), 
+		   source, 
+		   new String[] {
+			 "kind", "attribute",
+			 "name", "sqlJDBCDriverClass"
+		   });		
+		addAnnotation
+		  (getSQLDatabaseBinding_SqlJNDIName(), 
+		   source, 
+		   new String[] {
+			 "kind", "attribute",
+			 "name", "sqlJNDIName"
+		   });		
+		addAnnotation
+		  (getSQLDatabaseBinding_SqlPassword(), 
+		   source, 
+		   new String[] {
+			 "kind", "attribute",
+			 "name", "sqlPassword"
+		   });		
+		addAnnotation
+		  (getSQLDatabaseBinding_SqlSchema(), 
+		   source, 
+		   new String[] {
+			 "kind", "attribute",
+			 "name", "sqlSchema"
+		   });		
+		addAnnotation
+		  (getSQLDatabaseBinding_SqlValidationConnectionURL(), 
+		   source, 
+		   new String[] {
+			 "kind", "attribute",
+			 "name", "sqlValidationConnectionURL"
 		   });		
 		addAnnotation
 		  (styleTypesEEnum, 

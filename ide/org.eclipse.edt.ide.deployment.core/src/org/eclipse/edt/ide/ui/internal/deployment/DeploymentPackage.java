@@ -113,13 +113,22 @@ public interface DeploymentPackage extends EPackage {
 	int BINDINGS__REST_BINDING = 3;
 
 	/**
+	 * The feature id for the '<em><b>Sql Database Binding</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BINDINGS__SQL_DATABASE_BINDING = 4;
+
+	/**
 	 * The number of structural features of the '<em>Bindings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BINDINGS_FEATURE_COUNT = 4;
+	int BINDINGS_FEATURE_COUNT = 5;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.edt.ide.ui.internal.deployment.impl.ProtocolImpl <em>Protocol</em>}' class.
@@ -1819,6 +1828,106 @@ public interface DeploymentPackage extends EPackage {
 	int RUI_RESOURCE_OMISSIONS_FEATURE_COUNT = 1;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.edt.ide.ui.internal.deployment.impl.SQLDatabaseBindingImpl <em>SQL Database Binding</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.impl.SQLDatabaseBindingImpl
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentPackageImpl#getSQLDatabaseBinding()
+	 * @generated
+	 */
+	int SQL_DATABASE_BINDING = 33;
+
+	/**
+	 * The feature id for the '<em><b>Dbms</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SQL_DATABASE_BINDING__DBMS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SQL_DATABASE_BINDING__NAME = 1;
+
+	/**
+	 * The feature id for the '<em><b>Sql DB</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SQL_DATABASE_BINDING__SQL_DB = 2;
+
+	/**
+	 * The feature id for the '<em><b>Sql ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SQL_DATABASE_BINDING__SQL_ID = 3;
+
+	/**
+	 * The feature id for the '<em><b>Sql JDBC Driver Class</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SQL_DATABASE_BINDING__SQL_JDBC_DRIVER_CLASS = 4;
+
+	/**
+	 * The feature id for the '<em><b>Sql JNDI Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SQL_DATABASE_BINDING__SQL_JNDI_NAME = 5;
+
+	/**
+	 * The feature id for the '<em><b>Sql Password</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SQL_DATABASE_BINDING__SQL_PASSWORD = 6;
+
+	/**
+	 * The feature id for the '<em><b>Sql Schema</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SQL_DATABASE_BINDING__SQL_SCHEMA = 7;
+
+	/**
+	 * The feature id for the '<em><b>Sql Validation Connection URL</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SQL_DATABASE_BINDING__SQL_VALIDATION_CONNECTION_URL = 8;
+
+	/**
+	 * The number of structural features of the '<em>SQL Database Binding</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SQL_DATABASE_BINDING_FEATURE_COUNT = 9;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.edt.ide.ui.internal.deployment.impl.SystemIProtocolImpl <em>System IProtocol</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1826,7 +1935,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @see org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentPackageImpl#getSystemIProtocol()
 	 * @generated
 	 */
-	int SYSTEM_IPROTOCOL = 33;
+	int SYSTEM_IPROTOCOL = 34;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1872,7 +1981,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @see org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentPackageImpl#getTCPIPProtocol()
 	 * @generated
 	 */
-	int TCPIP_PROTOCOL = 34;
+	int TCPIP_PROTOCOL = 35;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1918,7 +2027,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @see org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentPackageImpl#getWebBinding()
 	 * @generated
 	 */
-	int WEB_BINDING = 35;
+	int WEB_BINDING = 36;
 
 	/**
 	 * The feature id for the '<em><b>Enable Generation</b></em>' attribute.
@@ -2009,7 +2118,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @see org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentPackageImpl#getWebservice()
 	 * @generated
 	 */
-	int WEBSERVICE = 36;
+	int WEBSERVICE = 37;
 
 	/**
 	 * The feature id for the '<em><b>Parameters</b></em>' containment reference.
@@ -2154,7 +2263,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @see org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentPackageImpl#getWebservices()
 	 * @generated
 	 */
-	int WEBSERVICES = 37;
+	int WEBSERVICES = 38;
 
 	/**
 	 * The feature id for the '<em><b>Webservice</b></em>' containment reference list.
@@ -2182,7 +2291,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @see org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentPackageImpl#getSOAPVersionType()
 	 * @generated
 	 */
-	int SOAP_VERSION_TYPE = 38;
+	int SOAP_VERSION_TYPE = 39;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.edt.ide.ui.internal.deployment.StyleTypes <em>Style Types</em>}' enum.
@@ -2192,7 +2301,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @see org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentPackageImpl#getStyleTypes()
 	 * @generated
 	 */
-	int STYLE_TYPES = 39;
+	int STYLE_TYPES = 40;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.edt.ide.ui.internal.deployment.WebserviceRuntimeType <em>Webservice Runtime Type</em>}' enum.
@@ -2202,7 +2311,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @see org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentPackageImpl#getWebserviceRuntimeType()
 	 * @generated
 	 */
-	int WEBSERVICE_RUNTIME_TYPE = 40;
+	int WEBSERVICE_RUNTIME_TYPE = 41;
 
 	/**
 	 * The meta object id for the '<em>SOAP Version Type Object</em>' data type.
@@ -2212,7 +2321,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @see org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentPackageImpl#getSOAPVersionTypeObject()
 	 * @generated
 	 */
-	int SOAP_VERSION_TYPE_OBJECT = 41;
+	int SOAP_VERSION_TYPE_OBJECT = 42;
 
 	/**
 	 * The meta object id for the '<em>Style Types Object</em>' data type.
@@ -2222,7 +2331,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @see org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentPackageImpl#getStyleTypesObject()
 	 * @generated
 	 */
-	int STYLE_TYPES_OBJECT = 42;
+	int STYLE_TYPES_OBJECT = 43;
 
 	/**
 	 * The meta object id for the '<em>Webservice Runtime Type Object</em>' data type.
@@ -2232,7 +2341,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @see org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentPackageImpl#getWebserviceRuntimeTypeObject()
 	 * @generated
 	 */
-	int WEBSERVICE_RUNTIME_TYPE_OBJECT = 43;
+	int WEBSERVICE_RUNTIME_TYPE_OBJECT = 44;
 
 
 	/**
@@ -2288,6 +2397,17 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getBindings_RestBinding();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.edt.ide.ui.internal.deployment.Bindings#getSqlDatabaseBinding <em>Sql Database Binding</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Sql Database Binding</em>'.
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.Bindings#getSqlDatabaseBinding()
+	 * @see #getBindings()
+	 * @generated
+	 */
+	EReference getBindings_SqlDatabaseBinding();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.edt.ide.ui.internal.deployment.CICSECIProtocol <em>CICSECI Protocol</em>}'.
@@ -3787,6 +3907,115 @@ public interface DeploymentPackage extends EPackage {
 	EReference getRUIResourceOmissions_Resource();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding <em>SQL Database Binding</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>SQL Database Binding</em>'.
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding
+	 * @generated
+	 */
+	EClass getSQLDatabaseBinding();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getDbms <em>Dbms</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Dbms</em>'.
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getDbms()
+	 * @see #getSQLDatabaseBinding()
+	 * @generated
+	 */
+	EAttribute getSQLDatabaseBinding_Dbms();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getName()
+	 * @see #getSQLDatabaseBinding()
+	 * @generated
+	 */
+	EAttribute getSQLDatabaseBinding_Name();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getSqlDB <em>Sql DB</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sql DB</em>'.
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getSqlDB()
+	 * @see #getSQLDatabaseBinding()
+	 * @generated
+	 */
+	EAttribute getSQLDatabaseBinding_SqlDB();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getSqlID <em>Sql ID</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sql ID</em>'.
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getSqlID()
+	 * @see #getSQLDatabaseBinding()
+	 * @generated
+	 */
+	EAttribute getSQLDatabaseBinding_SqlID();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getSqlJDBCDriverClass <em>Sql JDBC Driver Class</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sql JDBC Driver Class</em>'.
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getSqlJDBCDriverClass()
+	 * @see #getSQLDatabaseBinding()
+	 * @generated
+	 */
+	EAttribute getSQLDatabaseBinding_SqlJDBCDriverClass();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getSqlJNDIName <em>Sql JNDI Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sql JNDI Name</em>'.
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getSqlJNDIName()
+	 * @see #getSQLDatabaseBinding()
+	 * @generated
+	 */
+	EAttribute getSQLDatabaseBinding_SqlJNDIName();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getSqlPassword <em>Sql Password</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sql Password</em>'.
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getSqlPassword()
+	 * @see #getSQLDatabaseBinding()
+	 * @generated
+	 */
+	EAttribute getSQLDatabaseBinding_SqlPassword();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getSqlSchema <em>Sql Schema</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sql Schema</em>'.
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getSqlSchema()
+	 * @see #getSQLDatabaseBinding()
+	 * @generated
+	 */
+	EAttribute getSQLDatabaseBinding_SqlSchema();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getSqlValidationConnectionURL <em>Sql Validation Connection URL</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sql Validation Connection URL</em>'.
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getSqlValidationConnectionURL()
+	 * @see #getSQLDatabaseBinding()
+	 * @generated
+	 */
+	EAttribute getSQLDatabaseBinding_SqlValidationConnectionURL();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.edt.ide.ui.internal.deployment.SystemIProtocol <em>System IProtocol</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4169,7 +4398,7 @@ public interface DeploymentPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @return the meta object for data type '<em>SOAP Version Type Object</em>'.
 	 * @see org.eclipse.edt.ide.ui.internal.deployment.SOAPVersionType
-	 * @model instanceClass="org.eclipse.edt.ide.core.internal.deployment.SOAPVersionType"
+	 * @model instanceClass="org.eclipse.edt.ide.ui.internal.deployment.SOAPVersionType"
 	 *        extendedMetaData="name='SOAPVersionType:Object' baseType='SOAPVersionType'"
 	 * @generated
 	 */
@@ -4181,7 +4410,7 @@ public interface DeploymentPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @return the meta object for data type '<em>Style Types Object</em>'.
 	 * @see org.eclipse.edt.ide.ui.internal.deployment.StyleTypes
-	 * @model instanceClass="org.eclipse.edt.ide.core.internal.deployment.StyleTypes"
+	 * @model instanceClass="org.eclipse.edt.ide.ui.internal.deployment.StyleTypes"
 	 *        extendedMetaData="name='StyleTypes:Object' baseType='StyleTypes'"
 	 * @generated
 	 */
@@ -4193,7 +4422,7 @@ public interface DeploymentPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @return the meta object for data type '<em>Webservice Runtime Type Object</em>'.
 	 * @see org.eclipse.edt.ide.ui.internal.deployment.WebserviceRuntimeType
-	 * @model instanceClass="org.eclipse.edt.ide.core.internal.deployment.WebserviceRuntimeType"
+	 * @model instanceClass="org.eclipse.edt.ide.ui.internal.deployment.WebserviceRuntimeType"
 	 *        extendedMetaData="name='WebserviceRuntimeType:Object' baseType='WebserviceRuntimeType'"
 	 * @generated
 	 */
@@ -4262,6 +4491,14 @@ public interface DeploymentPackage extends EPackage {
 		 * @generated
 		 */
 		EReference BINDINGS__REST_BINDING = eINSTANCE.getBindings_RestBinding();
+
+		/**
+		 * The meta object literal for the '<em><b>Sql Database Binding</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BINDINGS__SQL_DATABASE_BINDING = eINSTANCE.getBindings_SqlDatabaseBinding();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.edt.ide.ui.internal.deployment.impl.CICSECIProtocolImpl <em>CICSECI Protocol</em>}' class.
@@ -5438,6 +5675,88 @@ public interface DeploymentPackage extends EPackage {
 		 * @generated
 		 */
 		EReference RUI_RESOURCE_OMISSIONS__RESOURCE = eINSTANCE.getRUIResourceOmissions_Resource();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.edt.ide.ui.internal.deployment.impl.SQLDatabaseBindingImpl <em>SQL Database Binding</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.edt.ide.ui.internal.deployment.impl.SQLDatabaseBindingImpl
+		 * @see org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentPackageImpl#getSQLDatabaseBinding()
+		 * @generated
+		 */
+		EClass SQL_DATABASE_BINDING = eINSTANCE.getSQLDatabaseBinding();
+
+		/**
+		 * The meta object literal for the '<em><b>Dbms</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SQL_DATABASE_BINDING__DBMS = eINSTANCE.getSQLDatabaseBinding_Dbms();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SQL_DATABASE_BINDING__NAME = eINSTANCE.getSQLDatabaseBinding_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Sql DB</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SQL_DATABASE_BINDING__SQL_DB = eINSTANCE.getSQLDatabaseBinding_SqlDB();
+
+		/**
+		 * The meta object literal for the '<em><b>Sql ID</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SQL_DATABASE_BINDING__SQL_ID = eINSTANCE.getSQLDatabaseBinding_SqlID();
+
+		/**
+		 * The meta object literal for the '<em><b>Sql JDBC Driver Class</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SQL_DATABASE_BINDING__SQL_JDBC_DRIVER_CLASS = eINSTANCE.getSQLDatabaseBinding_SqlJDBCDriverClass();
+
+		/**
+		 * The meta object literal for the '<em><b>Sql JNDI Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SQL_DATABASE_BINDING__SQL_JNDI_NAME = eINSTANCE.getSQLDatabaseBinding_SqlJNDIName();
+
+		/**
+		 * The meta object literal for the '<em><b>Sql Password</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SQL_DATABASE_BINDING__SQL_PASSWORD = eINSTANCE.getSQLDatabaseBinding_SqlPassword();
+
+		/**
+		 * The meta object literal for the '<em><b>Sql Schema</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SQL_DATABASE_BINDING__SQL_SCHEMA = eINSTANCE.getSQLDatabaseBinding_SqlSchema();
+
+		/**
+		 * The meta object literal for the '<em><b>Sql Validation Connection URL</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SQL_DATABASE_BINDING__SQL_VALIDATION_CONNECTION_URL = eINSTANCE.getSQLDatabaseBinding_SqlValidationConnectionURL();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.edt.ide.ui.internal.deployment.impl.SystemIProtocolImpl <em>System IProtocol</em>}' class.
