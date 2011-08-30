@@ -22,8 +22,9 @@ public class Constructor extends Node {
 
 	private List parameters;
 	private SettingsBlock settingsBlockOpt;
+	private boolean isPrivate;
 
-	public Constructor(List parameters, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
+	public Constructor(Boolean privateAccessModifierOpt, List parameters, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.parameters = setParent(parameters);
@@ -31,8 +32,13 @@ public class Constructor extends Node {
 			this.settingsBlockOpt = settingsBlockOpt;
 			settingsBlockOpt.setParent(this);
 		}
+		isPrivate = privateAccessModifierOpt.booleanValue();
 	}
 	
+	public boolean isPrivate() {
+		return isPrivate;
+	}
+
 	public SettingsBlock getSettingsBlock() {
 		return settingsBlockOpt;
 	}
@@ -56,6 +62,6 @@ public class Constructor extends Node {
 	
 	protected Object clone() throws CloneNotSupportedException {
 		SettingsBlock newSettingsBlockOpt = settingsBlockOpt != null ? (SettingsBlock)settingsBlockOpt.clone() : null;
-		return new Constructor(cloneList(parameters), newSettingsBlockOpt, getOffset(), getOffset() + getLength());
+		return new Constructor(new Boolean(isPrivate), cloneList(parameters), newSettingsBlockOpt, getOffset(), getOffset() + getLength());
 	}
 }

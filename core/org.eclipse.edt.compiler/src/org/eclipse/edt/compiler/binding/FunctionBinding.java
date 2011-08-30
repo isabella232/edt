@@ -298,4 +298,14 @@ public class FunctionBinding extends Binding implements IFunctionBinding {
 	public void setImplicit(boolean implicit) {
 		this.implicit = implicit;
 	}
+
+	@Override
+	public ITypeBinding getNonNullableInstance() {
+		return this;
+	}
+
+	@Override
+	public boolean isInstantiable() {
+		return false;
+	}
 }

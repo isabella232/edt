@@ -76,4 +76,9 @@ public class FileBinding extends PartBinding {
     public boolean isDeclarablePart() {
 		return false;
 	}
+
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		return this;
+	}
 }

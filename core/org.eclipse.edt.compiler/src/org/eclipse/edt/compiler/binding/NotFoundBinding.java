@@ -445,4 +445,14 @@ public class NotFoundBinding implements IDataBinding, IFunctionBinding, IPackage
 	public boolean isImplicit() {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public ITypeBinding getNonNullableInstance() {
+		return this;
+	}
+
+	@Override
+	public boolean isInstantiable() {
+		return false;
+	}
 }

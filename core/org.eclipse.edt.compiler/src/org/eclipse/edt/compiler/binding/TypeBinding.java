@@ -21,6 +21,10 @@ public abstract class TypeBinding extends Binding implements ITypeBinding {
 	
 	private String[] packageName;
 	private boolean isReference;
+	private boolean isNullable;
+	private transient ITypeBinding nonNullableInstance;
+	
+	private transient ITypeBinding nullableType;	
 	
 	public TypeBinding( String caseSensitiveInternedName, String[] packageName ) {
 		super(caseSensitiveInternedName);
@@ -105,13 +109,28 @@ public abstract class TypeBinding extends Binding implements ITypeBinding {
 	}
     
     public boolean isNullable() {
-    	return false;
+    	return isNullable;
+    }
+    
+    public void setNullable(boolean value) {
+    	isNullable = value;
     }
     
     public ITypeBinding getNullableInstance() {
-    	return this;
+    	if (isNullable()) {
+    		return this;
+    	}
+    	
+    	if (nullableType == null) {
+    		nullableType = primGetNullableInstance();
+    		((TypeBinding)nullableType).nonNullableInstance = this;
+    	}
+    	
+    	return nullableType;
     }
-    
+
+    public abstract ITypeBinding primGetNullableInstance();
+
     public String getPackageQualifiedName() {
     	StringBuffer result = new StringBuffer();
     	String[] packageName = getPackageName();
@@ -123,5 +142,18 @@ public abstract class TypeBinding extends Binding implements ITypeBinding {
     	}
     	result.append(getCaseSensitiveName());
     	return result.toString();
+    }
+    
+    @Override
+    public ITypeBinding getNonNullableInstance() {
+    	if (isNullable()) {
+    		return nonNullableInstance;
+    	}
+    	return this;
+    }
+    
+    @Override
+    public boolean isInstantiable() {
+    	return isReference();
     }
 }

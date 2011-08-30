@@ -454,6 +454,7 @@ public interface IProblemRequestor {
 	public static final int NULLABLE_TYPE_NOT_ALLOWED_IN_PART = 3430;
 	public static final int NULLABLE_TYPE_NOT_ALLOWED_IN_PROGRAM_PARAMETER = 3431;
 	public static final int NULLABLE_TYPE_BASE_MUST_BE_VALUE_TYPE = 3432;
+	public static final int TYPE_NOT_INSTANTIABLE = 3433;
 	
 	public static final int TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION = 3440;
 	public static final int DUPLICATE_ONEXCEPTION_EXCEPTION = 3441;
@@ -1553,7 +1554,9 @@ public interface IProblemRequestor {
 	
 	public static final int FUNCTION_ARG_CANNOT_BE_THIS = 6754;
 	public static final int UNLOADONEXIT_NOT_VALID_IN_MAIN = 6755;
-	
+
+	public static final int CANNOT_ASSIGN_NULL = 6757;
+
 	public static final int MOVE_MODIFIER_INVALID = 6760;
 	public static final int MOVE_MUST_BE_REFERENCE = 6761;
 	

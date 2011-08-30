@@ -240,15 +240,10 @@ public static final SystemFunctionBinding SORT = SystemLibrary.createSystemFunct
 	public static Map getSYSTEM_FUNCTIONS(){
 		return(SYSTEM_FUNCTIONS);
 	}
-	
 	public boolean isReference() {
 		return isReference;
 	}
-	
-    public ITypeBinding getNullableInstance() {
-    	return getInstance(elementType.getNullableInstance());
-    }
-    
+	    
 	public ITypeBinding getElementType() {
 		return elementType;
 	}
@@ -304,4 +299,11 @@ public static final SystemFunctionBinding SORT = SystemLibrary.createSystemFunct
     public boolean isValid() {
     	return elementType.isValid();
     }
+
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		ArrayTypeBinding nullable = new ArrayTypeBinding(elementType);
+		nullable.setNullable(true);
+		return nullable;
+	}
 }

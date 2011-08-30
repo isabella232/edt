@@ -12,6 +12,7 @@
 package org.eclipse.edt.compiler.internal.core.validation.statement;
 
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
@@ -244,6 +245,15 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 		
 		if(StatementValidator.isValidBinding(rhsDataBinding)) {
 			new RValueValidator(problemRequestor, compilerOptions, rhsDataBinding, rhs).validate();
+		}
+		
+		if (Binding.isValidBinding(lhsBinding) && Binding.isValidBinding(rhsBinding)) {
+			
+			if (rhsBinding.getKind() == ITypeBinding.NIL_BINDING && lhsBinding.isReference() && !lhsBinding.isNullable()) {
+				problemRequestor.acceptProblem(lhs,
+						IProblemRequestor.CANNOT_ASSIGN_NULL,
+						new String[] {lhs.getCanonicalString()});
+			}
 		}
 		
 		return false;

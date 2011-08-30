@@ -31,7 +31,6 @@ import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
-import org.eclipse.edt.compiler.binding.INullableTypeBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.InterfaceBinding;
@@ -866,8 +865,7 @@ public class HandlerValidator extends FunctionContainerValidator {
 			}
 
 			private ITypeBinding getNonNullable(ITypeBinding type) {
-				return type.isNullable() ? ((INullableTypeBinding) type)
-						.getValueType() : type;
+				return type.isNullable() ? type.getNonNullableInstance() : type;
 			}
 		});
 	}

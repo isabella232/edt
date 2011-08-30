@@ -30,7 +30,7 @@ public abstract class FixedStructureBinding extends PartBinding {
 	protected transient Map unqualifiedNamesToDataBindings;	
 	
 	//Used to detect circularity in embeds and typedefs
-    private transient List referencedStructures = Collections.EMPTY_LIST;
+    protected transient List referencedStructures = Collections.EMPTY_LIST;
 	
 	
     public FixedStructureBinding(String[] packageName, String caseSensitiveInternedName) {

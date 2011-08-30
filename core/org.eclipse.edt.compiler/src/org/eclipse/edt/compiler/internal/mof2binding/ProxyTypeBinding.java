@@ -49,5 +49,9 @@ public class ProxyTypeBinding extends PartBinding {
 		return 0;
 	}
 
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		return this;
+	}
 
 }

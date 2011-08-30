@@ -274,4 +274,14 @@ public class FunctionBindingWithImplicitQualifier implements IFunctionBinding {
 		return false;
 	}
 
+	@Override
+	public ITypeBinding getNonNullableInstance() {
+		return this;
+	}
+
+	@Override
+	public boolean isInstantiable() {
+		return false;
+	}
+
 }

@@ -98,4 +98,9 @@ public class SystemFunctionParameterSpecialTypeBinding extends TypeBinding {
 	public ITypeBinding getBaseType() {
 		return this;
 	}
+
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		return this;
+	}
 }

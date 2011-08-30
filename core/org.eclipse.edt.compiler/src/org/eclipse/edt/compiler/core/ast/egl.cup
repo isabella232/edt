@@ -97,6 +97,7 @@ nonterminal List callParametersOpt;
 nonterminal CallbackTarget callReturnToOpt, callOnExceptionOpt;
 nonterminal String charPrimitiveSpecOpt;
 nonterminal classContent;
+nonterminal handlerContent;
 nonterminal ContinueStatement.ContinueModifier continueModifierOpt;
 nonterminal OtherwiseClause defaultClauseOpt;
 nonterminal deleteOption;
@@ -180,6 +181,7 @@ nonterminal Name withNameOpt;
 // Sequence Nonterminals
 nonterminal List addOption_star, addOption_plus;
 nonterminal List classContent_star, classContent_plus;
+nonterminal List handlerContent_star, handlerContent_plus;
 nonterminal List deleteOption_star, deleteOption_plus;
 nonterminal List enumerationField_star, enumerationField_plus;
 nonterminal List eventBlock_star, eventBlock_plus;
@@ -276,8 +278,8 @@ part
 	|	privateAccessModifierOpt:privateAccessModifier1 FORM:form1 ID:id1 partSubTypeOpt:partSubType1 formContent_star:formContents1 END:end1
 	{: RESULT = new TopLevelForm(privateAccessModifier1, new SimpleName(id1, id1left, id1right), partSubType1, formContents1, privateAccessModifier1 == Boolean.FALSE ? form1left : privateAccessModifier1left, end1right); :}
 
-	|	privateAccessModifierOpt:privateAccessModifier1 HANDLER:handler1 ID:id1 implementsOpt:implements1 partSubTypeOpt:partSubType1 classContent_star:classContents1 END:end1
-	{: RESULT = new Handler(privateAccessModifier1, new SimpleName(id1, id1left, id1right), implements1, partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? handler1left : privateAccessModifier1left, end1right); :}
+	|	privateAccessModifierOpt:privateAccessModifier1 HANDLER:handler1 ID:id1 implementsOpt:implements1 partSubTypeOpt:partSubType1 handlerContent_star:handlerContents1 END:end1
+	{: RESULT = new Handler(privateAccessModifier1, new SimpleName(id1, id1left, id1right), implements1, partSubType1, handlerContents1, privateAccessModifier1 == Boolean.FALSE ? handler1left : privateAccessModifier1left, end1right); :}
 
 	|	privateAccessModifierOpt:privateAccessModifier1 PROGRAM:program1 ID:id1 partSubTypeOpt:partSubType1 programParametersOpt:programParameters1 classContent_star:classContents1 END:end1
 	{: RESULT = new Program(privateAccessModifier1, new SimpleName(id1, id1left, id1right), partSubType1, programParameters1, classContents1, privateAccessModifier1 == Boolean.FALSE ? program1left : privateAccessModifier1left, end1right); :}
@@ -441,6 +443,14 @@ sqlNullableOpt
 	{: RESULT = Boolean.TRUE; :}
 	;
 
+handlerContent
+	::=	classContent:classContent
+	{: RESULT = classContent; :}
+
+	|	privateAccessModifierOpt:privateAccessModifier1 CONSTRUCTOR:constructor1 LPAREN functionParameter_star:functionParameters1 RPAREN settingsBlockOpt:settingsBlock1 SEMI:semi1
+	{: RESULT = new Constructor(privateAccessModifier1, functionParameters1, settingsBlock1, privateAccessModifier1 == Boolean.FALSE ? constructor1left : privateAccessModifier1left, semi1right); :}
+	;
+
 classContent
 	::=	USE:use1 name_plus:names1 settingsBlockOpt:settingsBlock1 SEMI:semi1
 	{: RESULT = new UseStatement(names1, settingsBlock1, use1left, semi1right); :}
@@ -462,8 +472,8 @@ externalTypeContent
 	::=	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:functionParameters1 RPAREN returnsOpt:returns1 settingsBlockOpt:settingsBlock1 SEMI:semi1
 	{: RESULT = new NestedFunction(privateAccessModifier1, staticAccessModifier1, new SimpleName(id1,id1left,id1right), functionParameters1, returns1, settingsBlock1 == null ? Collections.EMPTY_LIST : Arrays.asList(new Object[] {settingsBlock1}), true, (privateAccessModifier1 == Boolean.FALSE && staticAccessModifier1 == Boolean.FALSE ? function1left : (privateAccessModifier1 == Boolean.FALSE ? staticAccessModifier1left : privateAccessModifier1left)), semi1right); :}
 	
-	|	CONSTRUCTOR:constructor1 LPAREN functionParameter_star:functionParameters1 RPAREN settingsBlockOpt:settingsBlock1 SEMI:semi1
-	{: RESULT = new Constructor(functionParameters1, settingsBlock1, constructor1left, semi1right); :}
+	|	privateAccessModifierOpt:privateAccessModifier1 CONSTRUCTOR:constructor1 LPAREN functionParameter_star:functionParameters1 RPAREN settingsBlockOpt:settingsBlock1 SEMI:semi1
+	{: RESULT = new Constructor(privateAccessModifier1, functionParameters1, settingsBlock1, privateAccessModifier1 == Boolean.FALSE ? constructor1left : privateAccessModifier1left, semi1right); :}
 	
 	|	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 ID_plus:IDs1 type:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable Declaration
 	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, staticAccessModifier1, IDs1, type1, settingsBlock1, initializer1, false, (privateAccessModifier1 == Boolean.FALSE && staticAccessModifier1 == Boolean.FALSE ? IDs1left : (privateAccessModifier1 == Boolean.FALSE ? staticAccessModifier1left : privateAccessModifier1left)), semi1right); :}
@@ -1547,6 +1557,20 @@ classContent_plus
 	{: RESULT = new ArrayList(); RESULT.add(classContent); :}
 	|	classContent_plus:classContents classContent:classContent
 	{: if(classContent != null) classContents.add(classContent); RESULT = classContents; :}
+	;
+
+handlerContent_star
+	::=
+	{: RESULT = Collections.EMPTY_LIST; :}
+	|	handlerContent_plus:handlerContents
+	{: RESULT = handlerContents; :}
+	;
+
+handlerContent_plus
+	::=	handlerContent:handlerContent
+	{: RESULT = new ArrayList(); RESULT.add(handlerContent); :}
+	|	handlerContent_plus:handlerContents handlerContent:handlerContent
+	{: if(handlerContent != null) handlerContents.add(handlerContent); RESULT = handlerContents; :}
 	;
 
 deleteOption_star

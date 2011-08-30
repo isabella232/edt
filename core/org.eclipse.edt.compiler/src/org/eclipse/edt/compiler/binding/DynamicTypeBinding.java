@@ -50,5 +50,11 @@ public class DynamicTypeBinding extends TypeBinding {
         return this;
     }
 
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		DynamicTypeBinding nullable = new DynamicTypeBinding(getCaseSensitiveName());
+		nullable.setNullable(true);
+		return nullable;
+	}
 
 }

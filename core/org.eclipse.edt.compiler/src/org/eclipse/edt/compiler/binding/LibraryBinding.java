@@ -49,4 +49,10 @@ public class LibraryBinding extends FunctionContainerBinding {
 	public StaticPartDataBinding getStaticPartDataBinding() {
 		return (StaticPartDataBinding)getStaticLibraryDataBinding();
 	}
+	
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		return this;
+	}
+	
 }

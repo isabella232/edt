@@ -35,7 +35,6 @@ import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
 import org.eclipse.edt.compiler.binding.HandlerBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
-import org.eclipse.edt.compiler.binding.INullableTypeBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IPartSubTypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
@@ -293,11 +292,11 @@ public class TypeCompatibilityUtil {
 		}
 		
 		if(targetType.isNullable()) {
-			targetType = ((INullableTypeBinding) targetType).getValueType();
+			targetType = targetType.getNonNullableInstance();
 		}
 		
 		if(sourceType.isNullable()) {
-			sourceType = ((INullableTypeBinding) sourceType).getValueType();
+			sourceType = sourceType.getNonNullableInstance();
 		}
 		
 		if(targetType == sourceType) {
@@ -903,7 +902,7 @@ public class TypeCompatibilityUtil {
 			return ArrayTypeBinding.getInstance(getEquivalentType(((ArrayTypeBinding) tBinding).getElementType(), compilerOptions));
 		}
 		if(tBinding.isNullable()) {
-			return getEquivalentType(((INullableTypeBinding) tBinding).getValueType(), compilerOptions).getNullableInstance(); 
+			return getEquivalentType(tBinding.getNonNullableInstance(), compilerOptions).getNullableInstance(); 
 		}
 		if(tBinding == PrimitiveTypeBinding.getInstance(Primitive.BIN, 4)) {
 			return PrimitiveTypeBinding.getInstance(Primitive.SMALLINT);
@@ -1173,7 +1172,7 @@ public class TypeCompatibilityUtil {
 		
 		public int getDistance(ITypeBinding targetType) {
 			if(targetType.isNullable()) {
-				int baseWideningDistance = valueWideningDistance(sourceType, ((INullableTypeBinding) targetType).getValueType(), compilerOptions);
+				int baseWideningDistance = valueWideningDistance(sourceType, targetType.getNonNullableInstance(), compilerOptions);
 				if(baseWideningDistance != -1) {
 					return 1 + baseWideningDistance;
 				}
@@ -1193,7 +1192,7 @@ public class TypeCompatibilityUtil {
 		
 		public int getDistance(ITypeBinding targetType) {
 			if(!targetType.isNullable()) {
-				int baseWideningDistance = valueWideningDistance(((INullableTypeBinding) sourceType).getValueType(), targetType, compilerOptions);
+				int baseWideningDistance = valueWideningDistance( sourceType.getNonNullableInstance(), targetType, compilerOptions);
 				if(baseWideningDistance != -1) {
 					return 1 + baseWideningDistance;
 				}

@@ -178,5 +178,9 @@ public class FormBinding extends PartBinding {
 		return list;
 	}
 	
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		return this;
+	}
 	
 }

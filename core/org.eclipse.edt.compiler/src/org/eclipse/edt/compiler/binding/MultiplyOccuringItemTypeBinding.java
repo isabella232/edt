@@ -31,4 +31,12 @@ public class MultiplyOccuringItemTypeBinding extends TypeBinding {
 	public ITypeBinding getBaseType() {
 		return elementType;
 	}
+	
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		MultiplyOccuringItemTypeBinding nullable = new MultiplyOccuringItemTypeBinding(elementType);
+		nullable.setNullable(true);
+		return nullable;
+	}
+
 }

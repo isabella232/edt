@@ -29,6 +29,14 @@ public class DelegateBinding extends PartBinding {
         super(packageName, caseSensitiveInternedName);
     }
     
+    private DelegateBinding(DelegateBinding old) {
+        super(old.packageName, old.caseSensitiveInternedName);
+        this.parameters = old.parameters;
+        this.returnType = old.returnType;
+        this.returnTypeIsSqlNullable = old.returnTypeIsSqlNullable;
+    	
+    }
+    
     public int getKind() {
 		return DELEGATE_BINDING;
 	}
@@ -79,4 +87,12 @@ public class DelegateBinding extends PartBinding {
 	public boolean isReference() {
 		return true;
 	}
+	
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		DelegateBinding nullable = new DelegateBinding(this);
+		nullable.setNullable(true);
+		return nullable;
+	}
+
 }

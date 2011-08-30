@@ -29,7 +29,14 @@ public class ServiceBinding extends FunctionContainerBinding {
     public ServiceBinding(String[] packageName, String caseSensitiveInternedName) {
         super(packageName, caseSensitiveInternedName);
     }
-    
+
+    private ServiceBinding(ServiceBinding old) {
+        super(old);
+        
+    	haveExpandedExtendedInterfaces = old.haveExpandedExtendedInterfaces;
+    	extendedInterfaces = old.extendedInterfaces;
+    }
+
     public boolean isReference() {
 		return true;
 	}
@@ -90,4 +97,11 @@ public class ServiceBinding extends FunctionContainerBinding {
 	public IDataBinding findPublicData(String simpleName) {
 		return IBinding.NOT_FOUND_BINDING;
 	}
+	
+	public ITypeBinding primGetNullableInstance() {
+		ServiceBinding nullable = new ServiceBinding(this);
+		nullable.setNullable(true);
+		return nullable;
+	}
+	
 }

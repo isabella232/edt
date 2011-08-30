@@ -140,4 +140,11 @@ public class DictionaryBinding extends PartBinding {
 	public boolean isSystemPart() {
 		return true;
 	}
+	
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		DictionaryBinding nullable = new DictionaryBinding();
+		nullable.setNullable(true);
+		return nullable;
+	}
 }

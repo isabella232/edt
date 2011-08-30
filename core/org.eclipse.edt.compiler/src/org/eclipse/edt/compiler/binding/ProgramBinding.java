@@ -202,4 +202,9 @@ public class ProgramBinding extends FunctionContainerBinding {
 		return (StaticPartDataBinding)getStaticProgramDataBinding();
 	}
 
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		return this;
+	}
+
 }

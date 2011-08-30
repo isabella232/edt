@@ -246,5 +246,10 @@ public class FixedRecordBinder extends DefaultBinder {
 			}
 			return recordBinding.getAnnotation(packageName, annotationName);
 		}
+
+		@Override
+		public ITypeBinding primGetNullableInstance() {
+			return this;
+		}
     }
 }

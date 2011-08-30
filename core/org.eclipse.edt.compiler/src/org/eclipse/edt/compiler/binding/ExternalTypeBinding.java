@@ -39,10 +39,24 @@ public class ExternalTypeBinding extends PartBinding {
 	private boolean haveExpandedExtendedTypes = false;
 	private transient List allExtendedTypes = Collections.EMPTY_LIST;
 	
-	private transient List extendedTypes = Collections.EMPTY_LIST;;
+	private transient List extendedTypes = Collections.EMPTY_LIST;
 
     public ExternalTypeBinding(String[] packageName, String caseSensitiveInternedName) {
         super(packageName, caseSensitiveInternedName);
+    }
+    
+    private ExternalTypeBinding(ExternalTypeBinding old) {
+    	super(old.packageName, old.caseSensitiveInternedName);
+    	
+    	declaredFunctions = old.declaredFunctions;	
+    	declaredAndInheritedFunctions = old.declaredAndInheritedData;   	
+    	declaredData = old.declaredData;
+    	declaredAndInheritedData = old.declaredAndInheritedData;
+    	constructors = old.constructors;
+    	haveExpandedExtendedTypes = old.haveExpandedExtendedTypes;
+    	allExtendedTypes = old.allExtendedTypes;
+    	List extendedTypes = old.extendedTypes;
+    	
     }
     
 	public boolean isReference() {
@@ -297,5 +311,24 @@ public class ExternalTypeBinding extends PartBinding {
 		}
 		return false;
 	}
+	
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		ExternalTypeBinding nullable = new ExternalTypeBinding(this);
+		nullable.setNullable(true);
+		return nullable;
+	}
 
+	@Override
+	public boolean isInstantiable() {
+		
+		Iterator i = getConstructors().iterator();
+		while (i.hasNext()) {
+			ConstructorBinding binding = (ConstructorBinding) i.next();
+			if (binding.getParameters().size() == 0 && binding.isPrivate()) {
+				return false;
+			}
+		}
+		return super.isInstantiable();
+	}
 }

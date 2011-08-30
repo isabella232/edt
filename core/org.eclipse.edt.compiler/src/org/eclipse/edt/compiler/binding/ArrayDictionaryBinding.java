@@ -63,4 +63,11 @@ public class ArrayDictionaryBinding extends PartBinding {
 	public boolean isSystemPart() {
 		return true;
 	}
+
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		ArrayDictionaryBinding nullable = new ArrayDictionaryBinding();
+		nullable.setNullable(true);
+		return nullable;
+	}
 }

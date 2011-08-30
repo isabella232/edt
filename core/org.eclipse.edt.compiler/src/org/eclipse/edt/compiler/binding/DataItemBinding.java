@@ -26,6 +26,9 @@ public class DataItemBinding extends PartBinding {
     }
     
     public PrimitiveTypeBinding getPrimitiveTypeBinding() {
+    	if (isNullable() && primitiveTypeBinding != null) {
+    		return (PrimitiveTypeBinding)primitiveTypeBinding.getNullableInstance();
+    	}
     	return primitiveTypeBinding;
     }
     
@@ -51,10 +54,11 @@ public class DataItemBinding extends PartBinding {
 		return true;
 	}
 	
-	public ITypeBinding getNullableInstance() {
-    	if(nullableInstance == null) {
-    		nullableInstance = new NullableDataItemBinding(this);
-    	}
-    	return nullableInstance;
-    }
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		DataItemBinding nullable = new DataItemBinding(packageName, caseSensitiveInternedName);
+		nullable.setPrimitiveTypeBinding(primitiveTypeBinding);
+		nullable.setNullable(true);
+		return nullable;
+	}
 }

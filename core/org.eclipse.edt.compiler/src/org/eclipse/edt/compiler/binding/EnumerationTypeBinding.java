@@ -37,6 +37,12 @@ public class EnumerationTypeBinding extends PartBinding {
     public EnumerationTypeBinding(String[] packageName, String caseSensitiveInternedName) {
         super(packageName, caseSensitiveInternedName);
     }
+    
+    protected EnumerationTypeBinding(EnumerationTypeBinding old) {
+        super(old.packageName, old.caseSensitiveInternedName);
+        this.enumerations = old.enumerations;
+        this.commaListComparator = old.commaListComparator;
+    }
 
     /* (non-Javadoc)
      * @see org.eclipse.edt.compiler.binding.ITypeBinding#getKind()
@@ -125,4 +131,12 @@ public class EnumerationTypeBinding extends PartBinding {
 	public StaticPartDataBinding getStaticPartDataBinding() {
 		return (StaticPartDataBinding)getStaticEnumerationTypeDataBinding();
 	}
+	
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		EnumerationTypeBinding nullable = new EnumerationTypeBinding(this);
+		nullable.setNullable(true);
+		return nullable;
+	}
+
 }

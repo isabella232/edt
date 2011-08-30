@@ -32,15 +32,27 @@ public class HandlerBinding extends FunctionContainerBinding {
 	private boolean haveExpandedExtendedInterfaces = false;
 	private List extendedInterfaces = Collections.EMPTY_LIST;
 
-	private final String[] EGLUIJSF = new String[] {"egl", "ui", "jsf"};
+	private List constructors = Collections.EMPTY_LIST;
+
+	private final static String[] EGLUIJSF = new String[] {"egl", "ui", "jsf"};
+	
     public HandlerBinding(String[] packageName, String caseSensitiveInternedName) {
         super(packageName, caseSensitiveInternedName);
     }
-
+    
+    private HandlerBinding(HandlerBinding old) {
+        super(old);
+    	haveExpandedExtendedInterfaces = old.haveExpandedExtendedInterfaces;
+    	extendedInterfaces = old.extendedInterfaces;
+    	constructors = old.constructors;
+    }
+    
+    
 	public void clear() {
 		super.clear();
 		haveExpandedExtendedInterfaces = false;
 		extendedInterfaces = Collections.EMPTY_LIST;
+		constructors = Collections.EMPTY_LIST;
 	}
 	
     /**
@@ -87,7 +99,18 @@ public class HandlerBinding extends FunctionContainerBinding {
 		return false;
 	}
 
-	public int getKind() {
+    public List getConstructors() {
+    	return constructors;
+    }
+    
+    public void addConstructor(ConstructorBinding constructor) {
+        if (constructors == Collections.EMPTY_LIST) {
+        	constructors = new ArrayList();
+        }
+        constructors.add(constructor);
+    }
+
+    public int getKind() {
 		return HANDLER_BINDING;
 	}
 	
@@ -149,5 +172,22 @@ public class HandlerBinding extends FunctionContainerBinding {
 		return true;
 	}
 
+	public ITypeBinding primGetNullableInstance() {
+		HandlerBinding nullable = new HandlerBinding(this);
+		nullable.setNullable(true);
+		return nullable;
+	}
 
+	@Override
+	public boolean isInstantiable() {
+		
+		Iterator i = getConstructors().iterator();
+		while (i.hasNext()) {
+			ConstructorBinding binding = (ConstructorBinding) i.next();
+			if (binding.getParameters().size() == 0 && binding.isPrivate()) {
+				return false;
+			}
+		}
+		return super.isInstantiable();
+	}
 }

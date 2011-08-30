@@ -28,10 +28,16 @@ public class FlexibleRecordBindingImpl extends FlexibleRecordBinding {
 
     private transient List referencedRecords = Collections.EMPTY_LIST;
 
-	private transient ITypeBinding nullableInstance;
-
     public FlexibleRecordBindingImpl(String[] packageName, String caseSensitiveInternedName) {
         super(packageName, caseSensitiveInternedName);
+    }
+    
+    private FlexibleRecordBindingImpl(FlexibleRecordBindingImpl old) {
+        super(old.packageName, old.caseSensitiveInternedName);
+
+        fields = old.fields;
+       referencedRecords = old.referencedRecords;
+
     }
 
     /**
@@ -148,11 +154,11 @@ public class FlexibleRecordBindingImpl extends FlexibleRecordBinding {
     public IDataBinding[] getFields() {
         return (IDataBinding[])getDeclaredFields().toArray(new IDataBinding[getDeclaredFields().size()]);
     }
-    
-    public ITypeBinding getNullableInstance() {
-    	if(nullableInstance == null) {
-    		nullableInstance = new NullableFlexibleRecordBinding(this);
-    	}
-    	return nullableInstance;
-    }
+
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		FlexibleRecordBindingImpl nullable = new FlexibleRecordBindingImpl(this);
+		nullable.setNullable(true);
+		return nullable;
+	}
 }

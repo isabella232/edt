@@ -20,7 +20,6 @@ public class PrimitiveTypeBindingImpl extends PrimitiveTypeBinding {
     int decimals;
     String pattern;
     transient int bytes = -1;
-    transient ITypeBinding nullableInstance;
     
     protected PrimitiveTypeBindingImpl(PrimitiveSpec primSpec) {
 		super(primSpec.toString());
@@ -29,6 +28,16 @@ public class PrimitiveTypeBindingImpl extends PrimitiveTypeBinding {
 		this.decimals = primSpec.decimals;
 		this.pattern = primSpec.pattern;
 	}
+    
+    private PrimitiveTypeBindingImpl(PrimitiveTypeBindingImpl old) {
+    	super(old.caseSensitiveInternedName);
+
+    	prim = old.prim;
+        length = old.length;
+        decimals = old.decimals;
+        pattern = old.pattern;
+        bytes = old.bytes;
+}
     
     private Object readResolve() {
         if(pattern == null) {
@@ -449,12 +458,13 @@ public class PrimitiveTypeBindingImpl extends PrimitiveTypeBinding {
 			result.intervalPrecision = length;
 			return result;
 		}
-    }
+    }    
     
-    public ITypeBinding getNullableInstance() {
-    	if(nullableInstance == null) {
-    		nullableInstance = isReference() ? (ITypeBinding) this : new NullablePrimitiveTypeBinding(this);
-    	}
-    	return nullableInstance;
-    }
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		PrimitiveTypeBindingImpl nullable = new PrimitiveTypeBindingImpl(this);
+		nullable.setNullable(true);
+		return nullable;
+	}
+    
 }

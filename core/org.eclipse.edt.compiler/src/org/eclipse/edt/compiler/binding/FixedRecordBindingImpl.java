@@ -16,16 +16,23 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 public class FixedRecordBindingImpl extends FixedRecordBinding {
 
-	private transient ITypeBinding nullableInstance;			
-    
     public FixedRecordBindingImpl(String[] packageName, String caseSensitiveInternedName) {
         super(packageName, caseSensitiveInternedName);
+    }
+    
+    private FixedRecordBindingImpl(FixedRecordBindingImpl old) {
+        super(old.packageName, old.caseSensitiveInternedName);
+ 
+    	structureItems = old.structureItems;
+    	unqualifiedNamesToDataBindings = old.unqualifiedNamesToDataBindings;	
+    	referencedStructures = old.referencedStructures;
     }
 
 	private String getResourceAssociationName() {
@@ -65,6 +72,8 @@ public class FixedRecordBindingImpl extends FixedRecordBinding {
 				copyResolvedAnnotationValues((StructureItemBinding) i.next(), itemMapping);
 			}
 		}
+		
+		newRecord.setNullable(isNullable());
 		return newRecord;
 	}
 	
@@ -136,12 +145,13 @@ public class FixedRecordBindingImpl extends FixedRecordBinding {
      */
     public IDataBinding[] getFields() {
         return (IDataBinding[])getStructureItems().toArray(new IDataBinding[getStructureItems().size()]);
-    }
+    }   
     
-    public ITypeBinding getNullableInstance() {
-    	if(nullableInstance == null) {
-    		nullableInstance = new NullableFixedRecordBinding(this);
-    	}
-    	return nullableInstance;
-    }
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		FixedRecordBindingImpl nullable = new FixedRecordBindingImpl(this);
+		nullable.setNullable(true);
+		return nullable;
+	}
+
 }

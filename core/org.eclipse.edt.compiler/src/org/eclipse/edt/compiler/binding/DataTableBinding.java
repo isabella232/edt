@@ -50,4 +50,10 @@ public class DataTableBinding extends FixedStructureBinding {
 	public StaticPartDataBinding getStaticPartDataBinding() {
 		return (StaticPartDataBinding)getStaticDataTableDataBinding();
 	}
+	
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		return this;
+	}
+
 }

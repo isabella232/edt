@@ -148,5 +148,9 @@ public class FormGroupBinding extends PartBinding {
 		return usedForms;
 	}
 
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		return this;
+	}
 
 }

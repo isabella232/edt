@@ -54,6 +54,10 @@ public abstract class PartBinding extends TypeBinding implements IPartBinding {
     }
     
     public IPartBinding realize() {
+    	
+    	if (isNullable()) {
+    		return (IPartBinding)environment.getPartBinding(packageName, getName()).getNullableInstance();
+    	}
         return environment.getPartBinding(packageName, getName());
     }
     

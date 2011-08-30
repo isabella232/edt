@@ -32,12 +32,22 @@ public class InterfaceBinding extends PartBinding {
 	private boolean haveExpandedExtendedTypes = false;
 	private transient List allExtendedTypes = Collections.EMPTY_LIST;
 	
-	private transient List extendedTypes = Collections.EMPTY_LIST;;
+	private transient List extendedTypes = Collections.EMPTY_LIST;
 	
     public InterfaceBinding(String[] packageName, String caseSensitiveInternedName) {
         super(packageName, caseSensitiveInternedName);
     }
-    
+
+    private InterfaceBinding(InterfaceBinding old) {
+        super(old.packageName, old.caseSensitiveInternedName);
+ 
+    	declaredFunctions = old.declaredFunctions;	
+    	declaredAndInheritedFunctions = old.declaredAndInheritedFunctions;   			
+    	haveExpandedExtendedTypes = old.haveExpandedExtendedTypes;
+    	allExtendedTypes = old.allExtendedTypes;   	
+    	extendedTypes = old.extendedTypes;    
+    }
+
 	public boolean isReference() {
 		return true;
 	}
@@ -236,4 +246,12 @@ public class InterfaceBinding extends PartBinding {
 		}
 		return false;
 	}
+	
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		InterfaceBinding nullable = new InterfaceBinding(this);
+		nullable.setNullable(true);
+		return nullable;
+	}
+
 }

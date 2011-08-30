@@ -4012,6 +4012,16 @@ public abstract class DefaultBinder extends AbstractBinder {
 			}
 		}
 		
+		if (!classDataDeclaration.hasInitializer()) {
+			ITypeBinding tBinding = classDataDeclaration.getType().resolveTypeBinding();
+			//Non-nullable reference types must be instantiable, because they are initialized with the default constructor
+			if (Binding.isValidBinding(tBinding) && !tBinding.isNullable() && tBinding.isReference() && !tBinding.isInstantiable() && currentScope.getPartBinding() != tBinding) {
+				problemRequestor.acceptProblem(classDataDeclaration,
+						IProblemRequestor.TYPE_NOT_INSTANTIABLE,
+					new String[] {classDataDeclaration.getType().getCanonicalName()});
+			}
+		}
+		
 		IPartBinding partBinding = currentScope.getPartBinding();
 		if (StatementValidator.isValidBinding(partBinding) && partBinding.getKind() == ITypeBinding.LIBRARY_BINDING){
 			if (partBinding.getAnnotation(new String[] {"egl", "core"}, "NativeLibrary") != null){

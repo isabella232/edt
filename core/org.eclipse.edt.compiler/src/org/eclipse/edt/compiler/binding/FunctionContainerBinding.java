@@ -23,11 +23,17 @@ public abstract class FunctionContainerBinding extends PartBinding {
 
     private List classFields = Collections.EMPTY_LIST;
     private List declaredFunctions = Collections.EMPTY_LIST;
-    private List serviceReferences = Collections.EMPTY_LIST;
     
     public FunctionContainerBinding(String[] packageName, String caseSensitiveInternedName) {
         super(packageName, caseSensitiveInternedName);
     }
+
+	public FunctionContainerBinding(FunctionContainerBinding old) {
+		super(old.packageName, old.caseSensitiveInternedName);
+
+		classFields = old.classFields;
+		declaredFunctions = old.declaredFunctions;
+	}
 
     /**
      * @return A list of ClassFieldBinding objects representing the fields
@@ -81,13 +87,7 @@ public abstract class FunctionContainerBinding extends PartBinding {
     }
     
     protected IDataBinding primFindData(String simpleName) {
-    	for(Iterator iter = serviceReferences.iterator(); iter.hasNext();) {
-            IDataBinding binding = (IDataBinding) iter.next();
-            if(binding.getName().equals(simpleName)) {
-                return binding;
-            }
-        }
-        for(Iterator iter = classFields.iterator(); iter.hasNext();) {
+         for(Iterator iter = classFields.iterator(); iter.hasNext();) {
             IDataBinding binding = (IDataBinding) iter.next();
             if(binding.getName() == simpleName) {
                 return binding;
@@ -135,7 +135,6 @@ public abstract class FunctionContainerBinding extends PartBinding {
     	super.clear();
         classFields = Collections.EMPTY_LIST;
         declaredFunctions = Collections.EMPTY_LIST;
-        serviceReferences = Collections.EMPTY_LIST;
     }
     
 	public boolean isDeclarablePart() {

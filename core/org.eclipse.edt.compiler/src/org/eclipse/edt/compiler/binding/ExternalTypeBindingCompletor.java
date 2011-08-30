@@ -216,6 +216,8 @@ public class ExternalTypeBindingCompletor extends AbstractBinder {
     	final ConstructorBinding constructorBinding = new ConstructorBinding(externalTypeBinding);
     	final Set definedParameters = new HashSet();
     	
+    	constructorBinding.setPrivate(constructor.isPrivate());
+    	
     	constructor.accept(new AbstractASTVisitor() {
     		public boolean visit(FunctionParameter functionParameter) {
     			String parmName = functionParameter.getName().getIdentifier();

@@ -239,4 +239,14 @@ public class AmbiguousTypeBinding implements IPartBinding {
 		return null;
 	}
 
+	@Override
+	public ITypeBinding getNonNullableInstance() {
+		return this;
+	}
+
+	@Override
+	public boolean isInstantiable() {
+		return false;
+	}
+
 }

@@ -37,4 +37,11 @@ public class NilBinding extends TypeBinding {
 	public boolean isReference() {
 		return true;
 	}
+
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		NilBinding nullable = new NilBinding();
+		nullable.setNullable(true);
+		return nullable;
+	}
 }

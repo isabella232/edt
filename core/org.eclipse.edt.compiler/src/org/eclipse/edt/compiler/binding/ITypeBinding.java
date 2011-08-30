@@ -98,6 +98,9 @@ public interface ITypeBinding extends IBinding {
     
     boolean isNullable();
     ITypeBinding getNullableInstance();
+    ITypeBinding getNonNullableInstance();
     
     String getPackageQualifiedName();
+    
+    boolean isInstantiable();
 }

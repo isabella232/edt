@@ -558,4 +558,9 @@ public abstract class AnnotationTypeBinding extends TypeBinding implements IAnno
 	public boolean isBIDIEnabled() {
 		return false;
 	}
+	
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		return this;
+	}
 }

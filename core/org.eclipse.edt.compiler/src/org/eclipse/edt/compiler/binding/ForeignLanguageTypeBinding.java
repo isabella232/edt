@@ -91,4 +91,12 @@ public class ForeignLanguageTypeBinding extends TypeBinding {
 		}
 		return result;
 	}
+	
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		ForeignLanguageTypeBinding nullable = new ForeignLanguageTypeBinding(getCaseSensitiveName(), kind);
+		nullable.setNullable(true);
+		return nullable;
+	}
+
 }

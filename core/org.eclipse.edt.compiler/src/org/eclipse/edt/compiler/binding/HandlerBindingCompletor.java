@@ -11,11 +11,18 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeBindingImpl;
+import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
+import org.eclipse.edt.compiler.core.ast.Constructor;
+import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Name;
+import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
@@ -74,8 +81,74 @@ public class HandlerBindingCompletor extends FunctionContainerBindingCompletor {
         return true;
     }
     
+    public boolean visit(Constructor constructor) {
+    	final ConstructorBinding constructorBinding = new ConstructorBinding(handlerBinding);
+    	final Set definedParameters = new HashSet();
+    	
+    	constructorBinding.setPrivate(constructor.isPrivate());
+    	
+    	constructor.accept(new AbstractASTVisitor() {
+    		public boolean visit(FunctionParameter functionParameter) {
+    			String parmName = functionParameter.getName().getIdentifier();
+    	        Type parmType = functionParameter.getType();        
+    	        ITypeBinding typeBinding = null;
+    	        try {
+    	            typeBinding = bindType(parmType);
+    	        } catch (ResolutionException e) {
+    	        	functionParameter.getName().setBinding(new FunctionParameterBinding(functionParameter.getName().getCaseSensitiveIdentifier(), handlerBinding, IBinding.NOT_FOUND_BINDING, (IFunctionBinding) constructorBinding.getType()));
+    	            problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
+    	            return false;
+    	        }
+    	        
+    	        FunctionParameterBinding funcParmBinding = new FunctionParameterBinding(functionParameter.getName().getCaseSensitiveIdentifier(), handlerBinding, typeBinding, (IFunctionBinding) constructorBinding.getType());
+    	        functionParameter.getName().setBinding(funcParmBinding);
+    	        
+    	        if(!BindingUtilities.isValidDeclarationType(typeBinding)) {
+    	        	problemRequestor.acceptProblem(
+    	        		parmType,
+    	        		IProblemRequestor.FUNCTION_PARAMETER_HAS_INCORRECT_TYPE,
+    					new String[] {functionParameter.getName().getCanonicalName(), IEGLConstants.KEYWORD_CONSTRUCTOR});
+    	        	return false;				
+    	        }
+    	        
+    	        FunctionParameter.AttrType attrType = functionParameter.getAttrType();
+    	        if (attrType == FunctionParameter.AttrType.FIELD) {
+    	            funcParmBinding.setField(true);
+    	        } else if (attrType == FunctionParameter.AttrType.SQLNULLABLE) {
+    	            funcParmBinding.setSqlNullable(true);
+    	        }
+    	        FunctionParameter.UseType useType = functionParameter.getUseType();
+    	        if (useType == FunctionParameter.UseType.IN) {
+    	            funcParmBinding.setInput(true);
+    	        } else if (useType == FunctionParameter.UseType.OUT) {
+    	            funcParmBinding.setOutput(true);
+    	        } else if (useType == null && Binding.isValidBinding(typeBinding) && typeBinding.isReference()) {
+    	            funcParmBinding.setInput(true);
+    	        }
+
+    	        if (definedParameters.contains(parmName)) {
+    	            problemRequestor.acceptProblem(functionParameter, IProblemRequestor.DUPLICATE_NAME_ACROSS_LISTS, new String[] { functionParameter.getName().getCanonicalName(), IEGLConstants.KEYWORD_CONSTRUCTOR });
+    	        } else {
+    	            constructorBinding.addParameter(funcParmBinding);
+    	            definedParameters.add(parmName);
+    	        }
+    	        
+    	        return false;
+    		}
+    	});
+    	
+    	handlerBinding.addConstructor(constructorBinding);
+    	
+    	return false;
+    }
+
+    
     public void endVisit(Handler handler) {
         processSettingsBlocks();
+		if(handlerBinding.getConstructors().isEmpty()) {
+			//Add default constructor
+			handlerBinding.addConstructor(new ConstructorBinding(handlerBinding));
+		}
         endVisitFunctionContainer(handler);
     }
     

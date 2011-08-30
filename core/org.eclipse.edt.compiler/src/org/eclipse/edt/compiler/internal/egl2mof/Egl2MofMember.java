@@ -83,6 +83,7 @@ import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.VariableFormField;
 import org.eclipse.edt.mof.egl.lookup.ProxyPart;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.utils.EList;
 
@@ -702,28 +703,33 @@ class Egl2MofMember extends Egl2MofPart {
 				processSettings(field, settingsBlock);
 			}
 		}
-		else if (settingsBlock != null) {
-			processSettings(field, settingsBlock);
-			// Add implicit new expression as first statement of the initialization
-			StatementBlock block = field.getInitializerStatements();
-			if (!(field.getType() instanceof ProxyPart) && field.getType().getClassifier().isInstantiable()) {
-				if (block == null) {
-					block = factory.createStatementBlock();
-					field.setInitializerStatements(block);
-					setElementInformation(settingsBlock, block);
+		else {
+			if (settingsBlock != null) {
+				processSettings(field, settingsBlock);
+			}
+			
+			if (settingsBlock != null || (!field.isNullable() && TypeUtils.isReferenceType(field.getType()))) {
+				// Add implicit new expression as first statement of the initialization
+				StatementBlock block = field.getInitializerStatements();
+				if (!(field.getType() instanceof ProxyPart) && field.getType().getClassifier().isInstantiable()) {
+					if (block == null) {
+						block = factory.createStatementBlock();
+						field.setInitializerStatements(block);
+						setElementInformation(type, block);
+					}
+					NewExpression newexpr = factory.createNewExpression();
+					newexpr.setId(field.getType().getTypeSignature());
+					if (type.getKind() == Type.ARRAYTYPE && ((ArrayType)type).getInitialSize() != null) {
+						((ArrayType)type).getInitialSize().accept(this);
+						newexpr.getArguments().add((Expression)stack.pop());
+					}
+					AssignmentStatement newStmt = createAssignmentStatement(field, newexpr);
+					setElementInformation(type, newStmt.getAssignment().getLHS());
+					setElementInformation(type, newStmt.getAssignment().getRHS());
+					setElementInformation(type, newStmt);
+					block.getStatements().add(0, newStmt);
+					field.setHasSetValuesBlock(true);
 				}
-				NewExpression newexpr = factory.createNewExpression();
-				newexpr.setId(field.getType().getTypeSignature());
-				if (type.getKind() == Type.ARRAYTYPE && ((ArrayType)type).getInitialSize() != null) {
-					((ArrayType)type).getInitialSize().accept(this);
-					newexpr.getArguments().add((Expression)stack.pop());
-				}
-				AssignmentStatement newStmt = createAssignmentStatement(field, newexpr);
-				setElementInformation(settingsBlock, newStmt.getAssignment().getLHS());
-				setElementInformation(settingsBlock, newStmt.getAssignment().getRHS());
-				setElementInformation(settingsBlock, newStmt);
-				block.getStatements().add(0, newStmt);
-				field.setHasSetValuesBlock(true);
 			}
 		}
 		

@@ -26,6 +26,11 @@ public class SystemEnumerationTypeBinding extends EnumerationTypeBinding {
         this.constantValue = constantValue;
     }
     
+    private SystemEnumerationTypeBinding(SystemEnumerationTypeBinding old) {
+    	super(old);
+    	this.constantValue = old.constantValue;  	
+    }
+    
     public boolean isSystemEnumerationType() {
         return true;
     }
@@ -37,4 +42,12 @@ public class SystemEnumerationTypeBinding extends EnumerationTypeBinding {
     public boolean isSystemPart() {
     	return true;
     }
+    
+	@Override
+	public ITypeBinding primGetNullableInstance() {
+		SystemEnumerationTypeBinding nullable = new SystemEnumerationTypeBinding(this);
+		nullable.setNullable(true);
+		return nullable;
+	}
+
 }
