@@ -329,6 +329,10 @@ egl.defineClass(
         var beginTime = new Date().getTime();
         var proxyURL = '/' + egl.contextRoot + '/' + this.eze$$proxyURL;
         
+        if (egl.contextAware) {
+        	proxyURL += (proxyURL.indexOf("?") == -1 ? "?" : "&") + "contextKey=" + egl.getContextKey();
+        }
+        
         xhr.onreadystatechange = function(){
             //4 - the response is complete; you can get the server's response and use it
             if (xhr.readyState == 4) {
@@ -522,7 +526,7 @@ egl.defineClass(
     },
     "convertToEnum" : function( value, type) {
     	if(typeof value === "string"){
-    		value = value = egl.egl.lang.EInt32.fromEString(value);
+    		value = egl.egl.lang.EInt32.fromEString(value);
     	}
     	for ( var field in type) {
     		if (type[field] instanceof egl.egl.lang.Enumeration
