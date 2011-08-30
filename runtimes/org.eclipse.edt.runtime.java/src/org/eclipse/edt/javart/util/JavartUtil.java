@@ -412,7 +412,7 @@ public class JavartUtil
 	}
 	
 	/**
-	 * Returns a new AnyException for the given Throwable.  If the Throwable is
+	 * Returns an AnyException for the given Throwable.  If the Throwable is
 	 * already an AnyException, it is returned.  If it's a NullPointerException,
 	 * a NullValueException will be returned.  In all other cases we'll return a
 	 * JavaObjectException. 
