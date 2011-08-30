@@ -15,4 +15,9 @@ import org.eclipse.edt.ide.rui.server.EvServer.Event;
 
 public interface IContext2 extends IContext {
 	public void handleEvent(Event event);
+	
+	/**
+	 * @return true if this context wants the test server used for service invocations.
+	 */
+	public boolean useTestServer();
 }

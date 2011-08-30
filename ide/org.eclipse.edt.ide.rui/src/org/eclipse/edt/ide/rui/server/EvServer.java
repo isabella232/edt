@@ -51,14 +51,22 @@ import org.eclipse.edt.ide.core.internal.lookup.ProjectInfoManager;
 import org.eclipse.edt.ide.rui.editor.IEditorSelectAndRevealer;
 import org.eclipse.edt.ide.rui.internal.Activator;
 import org.eclipse.edt.ide.rui.internal.nls.RUINlsStrings;
+import org.eclipse.edt.ide.rui.internal.testserver.TestServerConfiguration;
+import org.eclipse.edt.ide.rui.internal.testserver.TestServerManager;
 import org.eclipse.edt.ide.rui.utils.DebugFileLocator;
 import org.eclipse.edt.ide.rui.utils.EGLResource;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
 import org.eclipse.edt.ide.rui.utils.Util;
+import org.eclipse.edt.javart.JSERunUnit;
+import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.json.TokenMgrError;
+import org.eclipse.edt.javart.resources.StartupInfo;
+import org.eclipse.edt.javart.services.servlet.ServletUtilities;
 import org.eclipse.edt.javart.services.servlet.proxy.ProxyEventHandler;
+import org.eclipse.edt.javart.services.servlet.proxy.ProxyUtilities;
 import org.eclipse.edt.javart.services.servlet.proxy.RuiBrowserHttpRequest;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorDescriptor;
@@ -72,6 +80,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 
 import eglx.http.HttpRequest;
+import eglx.http.HttpResponse;
+import eglx.http.HttpUtilities;
 
 
 
@@ -93,6 +103,7 @@ public class EvServer implements IClientProxy {
 	private static int START_PORT_NUMBER = 5590;
 	private static int portNumber = START_PORT_NUMBER;
 	private int contextKeyInc = 1;
+	private TestServerManager testServerMgr;
 	
 	public static class Event {
 		public PrintStream ps = null;
@@ -106,6 +117,7 @@ public class EvServer implements IClientProxy {
 	private class ___ProxyHandler extends ProxyEventHandler implements Runnable {
 		private RuiBrowserHttpRequest ruiRequest;
 		private PrintStream ps;
+		private boolean isDedicated;
 		
 		public ___ProxyHandler( RuiBrowserHttpRequest ruiRequest, final PrintStream ps ) {
 			this.ruiRequest = ruiRequest;
@@ -179,15 +191,14 @@ public class EvServer implements IClientProxy {
 			String urlString = ruiRequest.getURL();
 			try{
 				HttpRequest innerRequest = null;
-//TODO EDT service?				
-//				if( ruiRequest.getHeaders() != null && ruiRequest.getHeaders().containsKey(RestServiceUtilities.EGL_SERVICE_CALL) ){
-//					eglRestService(urlString, ruiRequest, ps, innerRequest);
-//				}
-//				else
-//				{
-//					innerRequest = HttpRequest.create(ruiRequest.getContent());
-//					eglRestService(urlString, ruiRequest, ps, innerRequest);
-//				}
+				if( ruiRequest.getHeaders() != null && ruiRequest.getHeaders().containsKey(ProxyUtilities.EGL_REST_CALL) ){
+					eglRestService(urlString, ruiRequest, ps, innerRequest);
+				}
+				else
+				{
+					innerRequest = ServletUtilities.createHttpRequest(ruiRequest.getContent());
+					eglRestService(urlString, ruiRequest, ps, innerRequest);
+				}
 			} catch (Throwable e) {
 				System.err.println(urlString);
 				e.printStackTrace();
@@ -260,374 +271,167 @@ public class EvServer implements IClientProxy {
 //			return body;
 //		}
 		
-//TODO EDT service		
-//		private void eglRestService(String urlString, RuiBrowserHttpRequest ruiRequest, final PrintStream ps, HttpRequest innerRequest) {
-//			IntValue serviceKind = innerRequest != null && RestServiceUtilities.isSoapCall( innerRequest ) ? ServiceKind.WEB : ServiceKind.REST;
-//			try
-//			{
-//				Integer intContextKey = null;
-//				if (ruiRequest.getArguments().containsKey("contextKey")) {
-//					intContextKey = new Integer((String)ruiRequest.getArguments().get("contextKey"));
-//				}
-//				else {
-//					int idx = ruiRequest.getContent().indexOf( "contextKey=" );
-//					if (idx != -1) {
-//						try {
-//							intContextKey = new Integer( ruiRequest.getContent().substring( idx + 11 /* "contextKey".length() */ ) );
-//						}
-//						catch ( Exception e ) {
-//							// Perhaps the body contains the string "contextKey=<stuff>".
-//						}
-//					}
-//				}
-//				
-//				HttpResponse response = null;
-//				RUIDebugTarget debugTarget = findDebugTarget(intContextKey);
-//				boolean isPreviewPane = isPreviewPane(intContextKey);
-//				boolean isDedeicatedService = RestServiceUtilities.isEGLDedicatedCall(innerRequest);
-//				if( debugTarget != null || isPreviewPane || (!isDesignPane(intContextKey) && isDedeicatedService ) ) {
-//					if (innerRequest.getBody().length() != 0) {
-//						ObjectNode node = null;
-//						try {
-//							node = JsonParser.parse(innerRequest.getBody());
-//						}
-//						catch (Throwable t) {
-//							// Body for non-EGL REST services might not be sent as JSON.
-//						}
-//						
-//						if (node != null) {
-//							String bindingName = getBindingName(node);
-//							if( bindingName != null )
-//							{
-//								final String servName = getServiceNameFromBindingName(getBindingName(node));
-//								if (servName != null) {
-//									
-//									Service service = getService(servName, getProjectName(urlString));
-//									if(service == null)
-//									{
-//										final String errMsg = JavartUtil.errorMessage( program(), Message.SOA_E_WS_PROXY_MISSING_SERVICE_SOURCE, new Object[] {servName});
-//										CommonUtils.getDisplay().syncExec(new Runnable() {
-//											public void run() {
-//												ErrorDialog.openError( CommonUtils.getDisplay().getActiveShell(), 
-//														RUIDebugMessages.DEBUG_SYSTEM_SERVICE_TITLE, 
-//														NLS.bind(RUIDebugMessages.DEBUG_MISSING_SERVICE_SOURCE_MSG, servName),
-//														new Status( IStatus.ERROR, Activator.PLUGIN_ID, errMsg ) );
-//											}
-//										});
-//
-//										response = new HttpResponse();
-//
-//										response.setStatus(RestServiceUtilities.HTTP_STATUS_FAILED);
-//										response.setStatusMessage(RestServiceUtilities.HTTP_STATUS_MSG_FAILED);
-//										JavartException jrte = RestServiceUtilities.buildServiceInvocationException( program(), Message.SOA_E_WS_PROXY_MISSING_SERVICE_SOURCE, new Object[] {servName}, null, ServiceKind.EGL );
-//										response.setBody(jrte);
-//									}
-//									else if(service.isSystemPart() && isDedeicatedService )
-//									{
-//										final String errMsg = JavartUtil.errorMessage( program(), Message.SOA_E_WS_PROXY_UNSUPPORTED_OPERATION, new Object[] {service.getFullyQualifiedName()});
-//										CommonUtils.getDisplay().syncExec(new Runnable() {
-//											public void run() {
-//												ErrorDialog.openError( CommonUtils.getDisplay().getActiveShell(), 
-//														RUIDebugMessages.DEBUG_SYSTEM_SERVICE_TITLE, 
-//														RUIDebugMessages.DEBUG_SYSTEM_SERVICE_MSG, 
-//														new Status( IStatus.ERROR, Activator.PLUGIN_ID, errMsg ) );
-//											}
-//										});
-//
-//										response = new HttpResponse();
-//
-//										response.setStatus(RestServiceUtilities.HTTP_STATUS_FAILED);
-//										response.setStatusMessage(RestServiceUtilities.HTTP_STATUS_MSG_FAILED);
-//										JavartException jrte = RestServiceUtilities.buildServiceInvocationException( program(), Message.SOA_E_WS_PROXY_UNSUPPORTED_OPERATION, new Object[] {service.getFullyQualifiedName()}, null, ServiceKind.EGL );
-//										response.setBody(jrte);
-//									}
-//									else if (service != null && !service.isSystemPart()) {
-//										String projectName = ((IProject)((GenerateEnvironment)service.getEnv()).getProject()).getName();
-//										String fileName = getFileNameFromPath(service);
-//										response = invokeEGLDebugger(servName, projectName, fileName, getFunctionName(node), innerRequest.getBody(), debugTarget, RestServiceUtilities.isSoapCall(innerRequest));
-//									}
-//								}
-//							}
-//						}
-//					}
-//				}
-//				
-//				if (response == null) {
-//					response = super.runProxy(urlString, ruiRequest, innerRequest );
-//				}
-//				if( response != null )
-//				{
-//					ps.print( getResponseHeader( urlString, getContentType( urlString ), !urlString.endsWith(".egl"), response.getStatus(), response.getStatusMessage()  ) );
-//					String content = response.getBody( program() );
-//					ps.write( content.getBytes("utf-8") );
-//				}
-//			}
-//			catch( IOException ioe )
-//			{
+		private void eglRestService(String urlString, RuiBrowserHttpRequest ruiRequest, final PrintStream ps, HttpRequest innerRequest) {
+			try
+			{
+				Integer intContextKey = null;
+				if (ruiRequest.getArguments().containsKey("contextKey")) {
+					intContextKey = new Integer((String)ruiRequest.getArguments().get("contextKey"));
+				}
+				else {
+					int idx = ruiRequest.getContent().indexOf( "contextKey=" );
+					if (idx != -1) {
+						try {
+							intContextKey = new Integer( ruiRequest.getContent().substring( idx + 11 /* "contextKey".length() */ ) );
+						}
+						catch ( Exception e ) {
+							// Perhaps the body contains the string "contextKey=<stuff>".
+						}
+					}
+				}
+				
+				HttpRequest request = null;
+				HttpResponse response = null;
+				isDedicated = innerRequest != null && ProxyUtilities.isEGLDedicatedCall(innerRequest);
+				boolean useTestServer = (isDedicated && !isDesignPane(intContextKey)) || isPreviewPane(intContextKey);
+				if (!useTestServer) {
+					IContext context = findContext(intContextKey);
+					if (context instanceof IContext2) {
+						useTestServer = ((IContext2)context).useTestServer();
+					}
+				}
+				
+				if (useTestServer) {
+					IProject project = null;
+					if (isDedicated) {
+						project = ResourcesPlugin.getWorkspace().getRoot().getProject( getProjectName( urlString ) );
+					}
+					else {
+						//TODO use project from inner URI and expect the user's binding is for the test project?
+						String innerURI = innerRequest.getUri();
+						String path = new URL(innerURI).getPath();
+						int start = path.startsWith( "/" ) ? 1 : 0;
+						int end = path.indexOf( '/', start );
+						
+						if (end != -1) {
+							project = ResourcesPlugin.getWorkspace().getRoot().getProject( path.substring( start, end ) );
+						}
+					}
+					
+					if (project != null && project.isAccessible()) {
+						TestServerConfiguration config;
+						synchronized(testServerMgr) {
+							config = testServerMgr.getServerConfiguration( project, true );
+							config.start(null, true); // Will no-op if already running
+						}
+						
+						String testServerURI = "http://localhost:" + config.getPort();
+						request = new HttpRequest();
+						request.setBody( ruiRequest.getContent() );
+						request.setMethod( HttpUtilities.convert( ruiRequest.getMethod() ) );
+						
+						EDictionary headers = new EDictionary();
+						Map<String,String> headerMap = ruiRequest.getHeaders();
+						for(Map.Entry<String, String> entry : headerMap.entrySet()) {
+							headers.put(entry.getKey(), entry.getValue());
+						}
+						request.setHeaders(headers);
+					
+						if (isDedicated) {
+							testServerURI += ruiRequest.getURL().trim();
+							request.setUri( testServerURI );
+							
+							// Need to use the outer request as the inner so that we can get to the proxy to do the actual invocation.
+							innerRequest = request;
+						}
+						else {
+							// Modify the inner request to point to the test server
+							testServerURI += "/" + project.getName() + "/restservices/";
+							String innerURI = innerRequest.getUri();
+							int index = innerURI.indexOf( "/restservices/" );//TODO is the servlet guaranteed to be /restservices/?
+							if (index != -1) {
+								testServerURI += innerURI.substring(index + 14);
+								innerRequest.setUri(testServerURI);
+							}
+						}
+					}
+				}
+				
+				if (request == null) {
+					//TODO need to actually test invoking deployed services
+					request = new HttpRequest();
+					request.setUri( ruiRequest.getURL() );//TODO correct?
+					request.setBody( ruiRequest.getContent() );
+					request.setMethod( HttpUtilities.convert( ruiRequest.getMethod() ) );
+					
+					EDictionary headers = new EDictionary();
+					Map<String,String> headerMap = ruiRequest.getHeaders();
+					for(Map.Entry<String, String> entry : headerMap.entrySet()) {
+						headers.put(entry.getKey(), entry.getValue());
+					}
+					request.setHeaders(headers);
+				}
+				
+				if (response == null) {
+					response = super.runProxy( urlString, request, innerRequest );
+				}
+				
+				if( response != null )
+				{
+					ps.print( getResponseHeader( urlString, getContentType( urlString ), !urlString.endsWith(".egl"), response.getStatus(), response.getStatusMessage()  ) );
+					String content = response.getBody();
+					ps.write( content.getBytes("utf-8") );
+				}
+			}
+			catch( IOException ioe )
+			{
+				//TODO JsonUtilities.createJsonAnyException?
 //				String errorMsg = RestServiceUtilities.buildJsonServiceInvocationException( program(), Message.SOA_E_WS_PROXY_COMMUNICATION, new String[]{urlString}, ioe, serviceKind );
-//				ps.print( getBadResponseHeader() );
-//				ps.print( errorMsg );
-//			}
-//			catch(Throwable t)
-//			{
+				String errorMsg = ioe.getMessage();
+				ps.print( getBadResponseHeader() );
+				ps.print( errorMsg );
+			}
+			catch(Throwable t)
+			{
+				//TODO JsonUtilities.createJsonAnyException?
 //				String errorMsg = RestServiceUtilities.buildJsonServiceInvocationException( program(), Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, serviceKind );
-//				ps.print( getBadResponseHeader() );
-//				ps.print( errorMsg );
-//			}
-//		}
+				String errorMsg = t.getMessage();
+				ps.print( getBadResponseHeader() );
+				ps.print( errorMsg );
+			}
+		}
+		
+		@Override
+		protected boolean isEGLDedicatedCall(HttpRequest request) {
+			// We always run dedicated services in a remote test server. Return false so we don't try to run it locally.
+			return false;
+		}
+		
+		@Override
+		protected void setBody(HttpResponse outerResponse, HttpResponse innerResponse) {
+			if (isDedicated) {
+				outerResponse.setBody(innerResponse.getBody());
+			}
+			else {
+				super.setBody(outerResponse, innerResponse);
+			}
+		}
 	
-//TODO EDT service		
-//		private String getProjectName(String url) {
-//			int indx = url.indexOf("___proxy");
-//			if (indx > 0) {
-//				String name = url.substring(0, indx);
-//				name = name.replace("/", "");
-//				name = name.replace("\\", "");
-//				name = name.trim();
-//				if (name.length() == 0) {
-//					return null;
-//				}
-//				return name;
-//				
-//			}
-//			return null;
-//		}
-	
-//TODO EDT service
-//		private String getServiceNameFromBindingName(String binding) {
-//
-//			try{
-//				HttpRequest innerRequest = HttpRequest.create(ruiRequest.getContent());
-//				if( innerRequest.getHeaders().containsKey(RestServiceUtilities.EGL_PRIVATE_CALL))
-//				{
-//					ObjectNode node = JsonParser.parse(innerRequest.getBody());
-//					ValueNode bindingNode = JsonUtilities.getValueNode(node, "binding", new ObjectNode());
-//					if( bindingNode instanceof ObjectNode )
-//					{
-//						String type = JsonUtilities.getValueNode((ObjectNode)bindingNode, "type", new StringNode("",false)).toJava();
-//						String serviceName = JsonUtilities.getValueNode((ObjectNode)bindingNode, "serviceName", new StringNode("",false)).toJava();
-//						String protocol = JsonUtilities.getValueNode((ObjectNode)bindingNode, "protocol", new StringNode("",false)).toJava();
-//						if( type.equalsIgnoreCase("EGLBinding") && 
-//								protocol.equalsIgnoreCase("local") &&
-//								serviceName.length() > 0 )
-//						{
-//							return serviceName;
-//						}
-//							
-//					}
-//				}
-//			}
-//			catch(Throwable e){}
-//			
-//			// Check the prefs for an entry
-//			ServiceReferencePanel panel = new ServiceReferencePanel(EGLUIPlugin.getDefault().getPreferenceStore().getString(
-//					IEGLPreferenceConstants.DEBUG_MAPPING_SERVICEREF));
-//			PartPanelEntry entry = panel.findEntry(binding);
-//			if (entry != null) {
-//				if (entry.bypassSource()) {
-//					return null;
-//				}
-//				return entry.getPartMapping();
-//			}
-//			
-//			// If no entry, throw up a dialog
-//			
-//			final InterfaceMappingDialog dialog = new InterfaceMappingDialog( CommonUtils.getShell(), binding );
-//			CommonUtils.getDisplay().syncExec( new Runnable() { public void run() { dialog.open(); } } );
-//		
-//
-//			String[] info =  dialog.getInterfaceMappingInfo();
-//
-//			// If cancel pressed, then return null
-//			if (info == null) {
-//				return null;
-//			}
-//
-//			// Make sure to save the changes
-//			if (dialog.isSaveValueButtonChecked()) {
-//				EGLDebugEngine.addPartPanelLine( info[ 0 ], info[ 1 ], info[ 2 ], IEGLPreferenceConstants.DEBUG_MAPPING_SERVICEREF );
-//			}
-//			
-//			if (info[ 0 ] != null && !info[ 0 ].equalsIgnoreCase( "source" )) {
-//				return null;
-//			}
-//			
-//			return info[2];
-//		}
-//		
-//		private Service getService(String qualName, String projectName) {
-//			
-//			if (qualName == null || projectName == null) {
-//				return null;
-//			}
-//			
-//			String name; 
-//			String[] pkgName;
-//			
-//			String[] nameArr = NameUtil.toStringArray(qualName);
-//			name = nameArr[nameArr.length - 1];
-//			
-//			if (nameArr.length > 1) {
-//				pkgName = new String[nameArr.length - 1];
-//				System.arraycopy(nameArr,0,pkgName,0,pkgName.length);
-//			}
-//			else {
-//				pkgName = new String[0];
-//			}
-//						
-//			HashSet searchedProjects = new HashSet();
-//			
-//			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-//			
-//			IProject project = root.getProject(projectName);
-//			
-//			Service service = getService(name, pkgName, project, searchedProjects, root);
-//			
-//			if (service != null) {
-//				return service;				
-//			}
-//			
-//			service = searchForService(qualName, name, pkgName, searchedProjects, root);
-//			
-//			return service;
-//		}
-//		
-//		private Service searchForService(String qualName, String name, String[] pkgName, HashSet searchedProjects, IWorkspaceRoot root) {
-//			final List projects = new ArrayList();
-//	        IEGLSearchResultCollector collector = new IEGLSearchResultCollector()
-//	        {
-//				public IProgressMonitor getProgressMonitor() { return null; }
-//				public void aboutToStart() { /* do nothing */ }
-//				public void done() { /* do nothing */ }
-//				public void accept( IResource resource, int start, int end, IEGLElement enclosingElement, int accuracy )
-//				{
-//					projects.add( resource.getProject() );
-//				}
-//				public void accept(IEGLElement element, int start, int end,
-//						IResource resource, int accuracy) throws CoreException {
-//					projects.add( resource.getProject() );
-//				}
-//			};
-//			
-//	        try {
-//				(new SearchEngine()).search(
-//						EGLUIPlugin.getWorkspace(),
-//						SearchEngine.createSearchPattern( qualName, IEGLSearchConstants.SERVICE_PART, IEGLSearchConstants.DECLARATIONS, false ),
-//						SearchEngine.createWorkspaceScope(),
-//						false,
-//						true,
-//						collector );
-//			} catch (EGLModelException e) {
-//				return null;
-//			}
-//			
-//			if (projects.size() > 0) {
-//				return getService(name, pkgName, (IProject)projects.get(0), searchedProjects, root);
-//			}
-//
-//
-//			
-//			return null;
-//		}
-//		
-//		private Service getService(String name, String[] pkgName, IProject project, HashSet searchedProjects, IWorkspaceRoot root) {
-//			if ( project == null || !EGLProject.hasEGLNature( project ) || searchedProjects.contains(project)) {
-//				return null;
-//			}
-//			
-//			searchedProjects.add(project);
-//			GenerateEnvironment environment = GenerateEnvironmentManager.getInstance().getGenerateEnvironment(project, true);
-//			try {
-//				Part part = environment.findPart(InternUtil.intern(pkgName), InternUtil.intern(name));
-//				if (part.getPartType() == Part.PART_SERVICE) {
-//					return (Service) part;
-//				}
-//			} catch (PartNotFoundException e) {
-//			}
-//			
-//			//Part was not found...must search the EGL projects that this project requires
-//			
-//			try
-//			{
-//				EGLProject eglProject = (EGLProject)EGLCore.create( project );
-//				IEGLPathEntry[] entries = eglProject.getResolvedEGLPath( true );
-//				for ( int i = 0; i < entries.length; i++ )
-//				{
-//					IEGLPathEntry entry = entries[ i ];
-//					if ( entry.getEntryKind() == IEGLPathEntry.CPE_PROJECT )
-//					{
-//						IResource member = root.findMember( entry.getPath() ); 
-//						if ( member != null && member.getType() == IResource.PROJECT )
-//						{
-//							Service service = getService(name, pkgName, (IProject)member, searchedProjects, root);
-//							if (service != null) {
-//								return service;
-//							}
-//						}
-//					}
-//				}
-//			}
-//			catch ( EGLModelException emx )
-//			{
-//			}
-//			return null;
-//		}		
-//		
-//		private String getBindingName(ObjectNode node) {
-//			List list = node.getPairs();
-//			Iterator i = list.iterator();
-//			while (i.hasNext()) {
-//				NameValuePairNode pair = (NameValuePairNode)i.next();
-//				if (RestServiceDelegate.JSON_RPC_BINDINGNAME_ID.equals(pair.getName().getJavaValue())) {
-//					return pair.getValue().toJava();
-//				}
-//			}
-//			return null;
-//		}
-//
-//		private String getProjectNameFromPath(String pathString) {
-//			IPath path = new Path(pathString);
-//			path = path.removeLastSegments(path.segmentCount() - 1);
-//			String str = path.toString();
-//			if (str.startsWith("/")) {
-//				return str.replaceFirst("/", "");
-//			}
-//			else {
-//				return str;
-//			}
-//		}
-//		
-//		private String getFileNameFromPath(Part part) {	
-//			if ( part.getAnnotation(  IEGLConstants.EGL_EGLAR ) != null ) {
-//				String eglarFileName = (String)part.getAnnotation(  IEGLConstants.EGL_EGLAR ).getValue();
-//				String entryName = part.getFullyQualifiedName().replaceAll( "\\.", "/" ) + ".ir";
-//				return FileInEglar.EGLAR_PREFIX + eglarFileName + FileInEglar.EGLAR_SEPARATOR + entryName;
-//			} else {
-//				String  pathString = part.getFileName();
-//				IPath path = new Path(pathString);
-//				path = path.removeFirstSegments(1);
-//				String str = path.toString();
-//				if (str.startsWith("/")) {
-//					return str.replaceFirst("/", "");
-//				}
-//				else {
-//					return str;
-//				}
-//			}
-//		}
-
-//TODO EDT service 
-//		private String getFunctionName(ObjectNode node) {
-//			List list = node.getPairs();
-//			Iterator i = list.iterator();
-//			while (i.hasNext()) {
-//				NameValuePairNode pair = (NameValuePairNode)i.next();
-//				if (RestServiceDelegate.JSON_RPC_METHOD_ID.equals(pair.getName().getJavaValue())) {
-//					return pair.getValue().toJava();
-//				}
-//			}
-//			return null;
-//		}
+		private String getProjectName(String url) {
+			int indx = url.indexOf("___proxy");
+			if (indx > 0) {
+				String name = url.substring(0, indx);
+				name = name.replace("/", "");
+				name = name.replace("\\", "");
+				name = name.trim();
+				if (name.length() == 0) {
+					return null;
+				}
+				return name;
+				
+			}
+			return null;
+		}
 	}
 	
 	/**
@@ -1566,6 +1370,13 @@ public class EvServer implements IClientProxy {
 			// run with
 			// http://localhost:5498/someURL?arg1=value1&arg2=value2&arg3=value3
 			//
+			if (testServerMgr == null) {
+				testServerMgr = new TestServerManager();
+			}
+			if (Runtime.getRunUnit() == null) {
+				Runtime.setStaticRunUnit( new JSERunUnit( new StartupInfo( "IDERunUnit", "", null ) ) );
+			}
+			
 			while (running) {
 				final Socket client = serverSocket.accept();
 				debug("serverSocket accept");
@@ -1584,6 +1395,9 @@ public class EvServer implements IClientProxy {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		testServerMgr.dispose();
+		testServerMgr = null;
 	}
 
 	private synchronized void widgetPositions(String url, Integer intKey, String positionInfo) {
