@@ -50,8 +50,8 @@ public class ProxyEventHandler extends TracerBase
 		ServiceKind serviceKind = ServiceKind.REST;
 		try
 		{
-			if( urlString.indexOf("___proxy") != -1 && 
-					ProxyUtilities.isEGLDedicatedCall(serviceRequest))
+			if( urlString.indexOf("___proxy") != -1 &&
+					isEGLDedicatedCall(serviceRequest))
 			{
 				serviceKind = ServiceKind.EGL;
 				//FIXME parse the body to get the service name
@@ -95,7 +95,7 @@ public class ProxyEventHandler extends TracerBase
 		{
 			outerResponse.setStatus(HttpUtilities.HTTP_STATUS_OK);
 			outerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_OK);
-			ServletUtilities.setBody(outerResponse, innerResponse);
+			setBody(outerResponse, innerResponse);
 		}
 		if(trace()){
 			tracer().put( new StringBuilder(" Response Status:")
@@ -110,4 +110,11 @@ public class ProxyEventHandler extends TracerBase
 		return outerResponse;
 	}
 	
+	protected boolean isEGLDedicatedCall(HttpRequest request) {
+		return ProxyUtilities.isEGLDedicatedCall(request);
+	}
+	
+	protected void setBody(HttpResponse outerResponse, HttpResponse innerResponse) {
+		ServletUtilities.setBody(outerResponse, innerResponse);
+	}
 }

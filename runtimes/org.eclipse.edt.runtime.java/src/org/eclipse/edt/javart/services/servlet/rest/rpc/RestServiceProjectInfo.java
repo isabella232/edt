@@ -24,7 +24,7 @@ import eglx.http.HttpMethod;
 import eglx.http.HttpUtilities;
 import eglx.services.Encoding;
 
-class RestServiceProjectInfo	implements Serializable
+public class RestServiceProjectInfo	implements Serializable
 {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	class ServiceFunctionInfo implements Serializable
@@ -151,13 +151,32 @@ class RestServiceProjectInfo	implements Serializable
 		}
 		uris.put(uri.toLowerCase(), serviceFunction );
 	}
+	
+	private static void removeURI( String uri, Map<Integer, Map<String, ServiceFunctionInfo>> httpMethodMap )
+	{
+		StringTokenizer tokens = new StringTokenizer( uri, "/" );
+		Integer tokenCount = Integer.valueOf( tokens.countTokens() );
+		Map<String, ServiceFunctionInfo> uris = httpMethodMap.get( tokenCount );
+		if( uris == null )
+		{
+			uris = new HashMap<String, ServiceFunctionInfo>();
+			httpMethodMap.put( tokenCount, uris );
+			
+		}
+		uris.remove(uri.toLowerCase() );
+	}
+	
 	void addURI( String uri, String httpMethodName, String className, boolean isStatefulService, boolean isHostProgramService, String eglFunction, String inEncoding, String outEncoding )
 	{
-		
 		ServiceFunctionInfo serviceFunctionInfo = this.new ServiceFunctionInfo( uri, className, isStatefulService, isHostProgramService, eglFunction, convertEncoding( inEncoding ), convertEncoding( outEncoding ) );
 		
 		Map<Integer, Map<String, ServiceFunctionInfo>> httpMethodMap = httpMethod( this, httpMethodName );
 		addURI( uri, httpMethodMap, serviceFunctionInfo );
+	}
+	
+	void removeURI( String uri, String httpMethodName ) {
+		Map<Integer, Map<String, ServiceFunctionInfo>> httpMethodMap = httpMethod( this, httpMethodName );
+		removeURI( uri, httpMethodMap );
 	}
 	
 	private Encoding convertEncoding( String encoding )

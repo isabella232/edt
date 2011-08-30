@@ -43,9 +43,9 @@ import eglx.services.ServiceUtilities;
  public class ServiceServlet extends Servlet {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	static final String SERVICE_SERVLET = "EGL REST Service servlet";
-	private String contextRoot;
+	protected String contextRoot;
 
-	private RestServiceProjectInfo restServiceProjectInfo;
+	protected RestServiceProjectInfo restServiceProjectInfo;
 
 	public void init(ServletConfig config) throws ServletException 
 	{

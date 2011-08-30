@@ -19,17 +19,18 @@ import eglx.http.HttpRequest;
 
 
 
-class ProxyUtilities 
+public class ProxyUtilities 
 {
 	private static final String EGL_DEDICATED_CALL = "EGLDEDICATED";
 	public static final String EGL_SOAP_CALL = "EGLSOAP";
+	public static final String EGL_REST_CALL = "EGLREST";
 
 	
 	private ProxyUtilities() 
 	{
 	}
 
-	static boolean isEGLDedicatedCall( HttpRequest innerRequest )	
+	public static boolean isEGLDedicatedCall( HttpRequest innerRequest )	
 	{
 		EDictionary headers = innerRequest.getHeaders();
 		return headers != null && headers.containsKey( EGL_DEDICATED_CALL.toLowerCase() );//FIXME gets to the wrong method
