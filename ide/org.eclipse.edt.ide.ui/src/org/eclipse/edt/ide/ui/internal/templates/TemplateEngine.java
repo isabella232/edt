@@ -18,12 +18,13 @@ import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.core.internal.errors.TokenStream;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLTemplateProposal;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.templates.Template;
-import org.eclipse.jface.text.templates.TemplateProposal;
 import org.eclipse.jface.text.templates.persistence.TemplatePersistenceData;
 import org.eclipse.swt.graphics.Point;
 
@@ -52,12 +53,18 @@ public class TemplateEngine {
 	/**
 	 * Returns the array of matching templates.
 	 */
-	public TemplateProposal[] getResults() {
-		return (TemplateProposal[]) fProposals.toArray(new TemplateProposal[fProposals.size()]);
+	public EGLTemplateProposal[] getResults() {
+		return (EGLTemplateProposal[]) fProposals.toArray(new EGLTemplateProposal[fProposals.size()]);
 	}
 
 	public void complete(TokenStream tokenStream, ITextViewer viewer, int completionPosition, ParseStack parseStack, String prefix) {
 		IDocument document = viewer.getDocument();
+		String lineDelimiter = "\n";
+		try {
+			lineDelimiter =document.getLineDelimiter(0);
+		} catch (BadLocationException e) {
+		}
+		
 		Point selection = viewer.getSelectedRange();
 		EGLTemplateContext context = fContextType.createContext(document, completionPosition - prefix.length(), selection.y + prefix.length(), parseStack, prefix);
 		int start = context.getStart();
@@ -68,11 +75,11 @@ public class TemplateEngine {
 			// If the template matches the prefix, then set up the necessary info and add to list of completions.
 			if (context.canEvaluate(templates[i])) {
 				fProposals.add(
-					new TemplateProposal(
+					new EGLTemplateProposal(
 						templates[i],
 						context,
 						region,
-						PluginImages.get(PluginImages.IMG_OBJS_TEMPLATE)));
+						PluginImages.get(PluginImages.IMG_OBJS_TEMPLATE),lineDelimiter));
 			}
 		}
 	}

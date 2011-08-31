@@ -20,7 +20,7 @@ import org.eclipse.edt.ide.core.internal.errors.IErrorLexer;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.CodeFormatterUtil;
-import org.eclipse.jdt.internal.corext.util.Strings;
+import org.eclipse.edt.ide.ui.internal.Strings;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
