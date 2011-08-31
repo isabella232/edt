@@ -26,6 +26,4 @@ public class EDTCompilerStrings {
 	
 	public static String javaRuntimeName;
 	public static String javaRuntimeDescription;
-	public static String javascriptRuntimeName;
-	public static String javascriptRuntimeDescription;
 }
