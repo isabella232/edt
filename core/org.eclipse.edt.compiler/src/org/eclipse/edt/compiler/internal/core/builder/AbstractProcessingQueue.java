@@ -239,8 +239,9 @@ public abstract class AbstractProcessingQueue {
 	            }
 		        else {
 		        	try{
+		        		// Try to get the part from the cache, in case it has been compiled at a level 2 already
 		        		IPartBinding partBindingFromCache = getPartBindingFromCache(packageName, caseInsensitiveInternedPartName);
-		        		if(Binding.isValidBinding(partBindingFromCache)){
+		        		if(Binding.isValidBinding(partBindingFromCache) && partBindingFromCache.isValid()){
 			        		//System.out.println("Found part from cache: " + caseInsensitiveInternedPartName);
 			        		return partBindingFromCache;
 			        	}else{
