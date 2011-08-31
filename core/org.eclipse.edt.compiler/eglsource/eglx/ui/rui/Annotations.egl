@@ -21,10 +21,10 @@ Record VEWidget type Annotation
 	largeIcon string;
 	template string;
 	description string;
-	propertyFilterType int;
+	propertyFilterType FilterKind;
 	propertyFilter string[];
 	provider string;
-	eventFilterType int;
+	eventFilterType FilterKind;
 	eventFilter string[];
 	container VEContainer;
 end
@@ -114,4 +114,11 @@ Enumeration MappingKind
 	TYPE_RECORD_EMBED_RECORD = 202,
 	TYPE_RECORD_WITH_PRIMITIVE_ARRAY = 203,
 	TYPE_RECORD_WITH_RECORD_ARRAY = 204
+end
+
+Enumeration FilterKind	
+	excludeAll 			= 1,
+	excludeAllExcept 	= 2,
+	includeAll			= 3,
+	includeAllExcept	= 4		
 end
