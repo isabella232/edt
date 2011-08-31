@@ -36,6 +36,13 @@ public abstract class FixedStructureBinding extends PartBinding {
     public FixedStructureBinding(String[] packageName, String caseSensitiveInternedName) {
         super(packageName, caseSensitiveInternedName);
     }
+    
+    protected FixedStructureBinding(FixedRecordBinding old) {
+    	super(old);
+    	structureItems = old.structureItems;
+    	unqualifiedNamesToDataBindings = old.unqualifiedNamesToDataBindings;	
+    	referencedStructures = old.referencedStructures;
+    }
 	
     /**
      * @return A list of StructureItemBinding objects for the top-level items

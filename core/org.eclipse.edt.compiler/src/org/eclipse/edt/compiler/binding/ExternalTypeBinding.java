@@ -46,7 +46,7 @@ public class ExternalTypeBinding extends PartBinding {
     }
     
     private ExternalTypeBinding(ExternalTypeBinding old) {
-    	super(old.packageName, old.caseSensitiveInternedName);
+    	super(old);
     	
     	declaredFunctions = old.declaredFunctions;	
     	declaredAndInheritedFunctions = old.declaredAndInheritedFunctions;   	

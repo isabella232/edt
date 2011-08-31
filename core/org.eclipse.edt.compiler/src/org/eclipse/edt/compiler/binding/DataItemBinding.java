@@ -18,11 +18,14 @@ package org.eclipse.edt.compiler.binding;
 public class DataItemBinding extends PartBinding {
 	
 	PrimitiveTypeBinding primitiveTypeBinding;
-	
-	private transient ITypeBinding nullableInstance;
-	
+		
     public DataItemBinding(String[] packageName, String caseSensitiveInternedName) {
         super(packageName, caseSensitiveInternedName);
+    }
+    
+    private DataItemBinding(DataItemBinding old) {
+    	super(old);
+    	primitiveTypeBinding = old.primitiveTypeBinding;
     }
     
     public PrimitiveTypeBinding getPrimitiveTypeBinding() {
@@ -56,8 +59,7 @@ public class DataItemBinding extends PartBinding {
 	
 	@Override
 	public ITypeBinding primGetNullableInstance() {
-		DataItemBinding nullable = new DataItemBinding(packageName, caseSensitiveInternedName);
-		nullable.setPrimitiveTypeBinding(primitiveTypeBinding);
+		DataItemBinding nullable = new DataItemBinding(this);
 		nullable.setNullable(true);
 		return nullable;
 	}

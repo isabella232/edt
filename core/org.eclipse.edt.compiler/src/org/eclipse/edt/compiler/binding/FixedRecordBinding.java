@@ -21,6 +21,10 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
  */
 public abstract class FixedRecordBinding extends FixedStructureBinding implements IRecordBinding {
 	
+	protected FixedRecordBinding(FixedRecordBinding old) {
+		super(old);
+	}
+	
 	public static final SystemVariableBinding RESOURCEASSOCIATION =
 		new SystemVariableBinding(
 			InternUtil.internCaseSensitive("resourceAssociation"),

@@ -21,7 +21,7 @@ public class UsedTypeBinding extends Binding {
     java.lang.Boolean helpGroup;
 
     public UsedTypeBinding(ITypeBinding type) {
-        super(null);
+        super((String)null);
         this.type = type;
     }
     

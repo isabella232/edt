@@ -41,6 +41,15 @@ public abstract class PartBinding extends TypeBinding implements IPartBinding {
         this.packageName = packageName;
     }
     
+    protected PartBinding(PartBinding old) {
+    	super(old);
+        packageName = old.packageName;
+        environment = old.environment;
+        isValid = old.isValid;        
+        isPrivate = old.isPrivate;
+   	
+    }
+    
     public boolean isPartBinding(){
     	return true;
     }

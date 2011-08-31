@@ -33,7 +33,7 @@ public class FlexibleRecordBindingImpl extends FlexibleRecordBinding {
     }
     
     private FlexibleRecordBindingImpl(FlexibleRecordBindingImpl old) {
-        super(old.packageName, old.caseSensitiveInternedName);
+        super(old);
 
         fields = old.fields;
        referencedRecords = old.referencedRecords;

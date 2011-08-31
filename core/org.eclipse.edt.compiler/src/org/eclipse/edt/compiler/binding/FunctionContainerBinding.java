@@ -29,7 +29,7 @@ public abstract class FunctionContainerBinding extends PartBinding {
     }
 
 	public FunctionContainerBinding(FunctionContainerBinding old) {
-		super(old.packageName, old.caseSensitiveInternedName);
+		super(old);
 
 		classFields = old.classFields;
 		declaredFunctions = old.declaredFunctions;

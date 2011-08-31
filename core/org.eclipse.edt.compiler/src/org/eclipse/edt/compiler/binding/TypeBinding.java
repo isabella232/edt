@@ -31,6 +31,15 @@ public abstract class TypeBinding extends Binding implements ITypeBinding {
 		this.packageName = packageName;
 	}
 	
+	protected TypeBinding(TypeBinding old) {
+		super(old);
+		packageName = old.packageName;
+		isReference = old.isReference;
+		isNullable = old.isNullable;
+		nonNullableInstance = old.nonNullableInstance;		
+		nullableType = old.nullableType;	
+	}
+	
 	public TypeBinding( String caseSensitiveInternedName ) {
 		super(caseSensitiveInternedName);
 	}

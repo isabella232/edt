@@ -39,7 +39,7 @@ public class EnumerationTypeBinding extends PartBinding {
     }
     
     protected EnumerationTypeBinding(EnumerationTypeBinding old) {
-        super(old.packageName, old.caseSensitiveInternedName);
+        super(old);
         this.enumerations = old.enumerations;
         this.commaListComparator = old.commaListComparator;
     }

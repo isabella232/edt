@@ -92,6 +92,10 @@ public class DictionaryBinding extends PartBinding {
 	private DictionaryBinding() {
 		super(InternUtil.intern(SystemEnvironmentPackageNames.EGLX_LANG), InternUtil.internCaseSensitive(IEGLConstants.MIXED_DICTIONARY_STRING));
 	}
+	
+	private DictionaryBinding(DictionaryBinding old) {
+		super(old);
+	}
 
 	public int getKind() {
 		return DICTIONARY_BINDING;
@@ -143,7 +147,7 @@ public class DictionaryBinding extends PartBinding {
 	
 	@Override
 	public ITypeBinding primGetNullableInstance() {
-		DictionaryBinding nullable = new DictionaryBinding();
+		DictionaryBinding nullable = new DictionaryBinding(this);
 		nullable.setNullable(true);
 		return nullable;
 	}

@@ -26,6 +26,10 @@ public class ArrayDictionaryBinding extends PartBinding {
 	private ArrayDictionaryBinding() {
 		super(InternUtil.intern(SystemEnvironmentPackageNames.EGLX_LANG), InternUtil.internCaseSensitive(IEGLConstants.MIXED_ARRAYDICTIONARY_STRING));
 	}
+	
+	private ArrayDictionaryBinding(ArrayDictionaryBinding old) {
+		super(old);
+	}
 
 	public int getKind() {
 		return ARRAYDICTIONARY_BINDING;
@@ -66,7 +70,7 @@ public class ArrayDictionaryBinding extends PartBinding {
 
 	@Override
 	public ITypeBinding primGetNullableInstance() {
-		ArrayDictionaryBinding nullable = new ArrayDictionaryBinding();
+		ArrayDictionaryBinding nullable = new ArrayDictionaryBinding(this);
 		nullable.setNullable(true);
 		return nullable;
 	}

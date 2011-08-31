@@ -28,11 +28,7 @@ public class FixedRecordBindingImpl extends FixedRecordBinding {
     }
     
     private FixedRecordBindingImpl(FixedRecordBindingImpl old) {
-        super(old.packageName, old.caseSensitiveInternedName);
- 
-    	structureItems = old.structureItems;
-    	unqualifiedNamesToDataBindings = old.unqualifiedNamesToDataBindings;	
-    	referencedStructures = old.referencedStructures;
+        super(old);
     }
 
 	private String getResourceAssociationName() {

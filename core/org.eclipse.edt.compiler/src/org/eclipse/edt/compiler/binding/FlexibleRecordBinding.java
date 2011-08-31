@@ -30,6 +30,10 @@ public abstract class FlexibleRecordBinding extends PartBinding implements IReco
         super(packageName, caseSensitiveInternedName);
     }
 	
+	protected FlexibleRecordBinding(FlexibleRecordBinding old) {
+		super(old);
+	}
+	
 	protected abstract List getReferencedRecords();
 	
 	private boolean primContainsReferenceTo(FlexibleRecordBinding record, List processedRecords, FlexibleRecordBinding currentRecord) {

@@ -42,6 +42,12 @@ public abstract class Binding implements IBinding {
     public Binding(String caseSensitiveInternedName) {
     	this.caseSensitiveInternedName = caseSensitiveInternedName;
     }
+    
+    protected Binding(Binding old) {
+        annotations = old.annotations;
+        caseSensitiveInternedName = old.caseSensitiveInternedName;
+        caseInsensitiveInternedName = old.caseInsensitiveInternedName;
+   }
 
     /**
      * Get an interned version of the Binding's name

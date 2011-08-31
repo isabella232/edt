@@ -30,7 +30,7 @@ public class DelegateBinding extends PartBinding {
     }
     
     private DelegateBinding(DelegateBinding old) {
-        super(old.packageName, old.caseSensitiveInternedName);
+        super(old);
         this.parameters = old.parameters;
         this.returnType = old.returnType;
         this.returnTypeIsSqlNullable = old.returnTypeIsSqlNullable;
