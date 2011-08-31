@@ -28,12 +28,11 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
-import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.edt.debug.core.IEGLStackFrame;
 import org.eclipse.edt.debug.core.IEGLThread;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
 import org.eclipse.edt.debug.core.java.IEGLJavaThread;
-import org.eclipse.jdt.debug.core.IJavaReferenceType;
+import org.eclipse.edt.debug.core.java.SMAPUtil;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaThread;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
@@ -270,20 +269,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 		
 		if ( frame != null )
 		{
-			String stratum = null;
-			try
-			{
-				IJavaReferenceType type = frame.getReferenceType();
-				if ( type != null )
-				{
-					stratum = type.getDefaultStratum();
-				}
-			}
-			catch ( DebugException e )
-			{
-			}
-			
-			steppingFromEGL = IEGLDebugCoreConstants.EGL_STRATUM.equals( stratum );
+			steppingFromEGL = SMAPUtil.isEGLStratum( frame );
 		}
 		else
 		{
@@ -330,23 +316,10 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 				int indexOfTopEGLFrame = -1;
 				for ( int i = 0; i < javaFrames.length; i++ )
 				{
-					if ( javaFrames[ i ] instanceof IJavaStackFrame )
+					if ( SMAPUtil.isEGLStratum( (IJavaStackFrame)javaFrames[ i ] ) )
 					{
-						try
-						{
-							IJavaReferenceType type = ((IJavaStackFrame)javaFrames[ i ]).getReferenceType();
-							if ( type != null )
-							{
-								if ( IEGLDebugCoreConstants.EGL_STRATUM.equals( type.getDefaultStratum() ) )
-								{
-									indexOfTopEGLFrame = i;
-									break;
-								}
-							}
-						}
-						catch ( DebugException e )
-						{
-						}
+						indexOfTopEGLFrame = i;
+						break;
 					}
 				}
 				
@@ -506,7 +479,8 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 								IJavaStackFrame topJavaFrame = (IJavaStackFrame)javaThread.getTopStackFrame();
 								if ( topJavaFrame != null )
 								{
-									if ( javaThread.getFrameCount() == 1 && isMainMethod( topJavaFrame ) )
+									int frameCount = javaThread.getFrameCount();
+									if ( frameCount == 1 && isMainMethod( topJavaFrame ) )
 									{
 										// Don't step into the initial main frame - there's no EGL source for it, users will be confused.
 										// Note: stepReturn isn't supported on a bottom frame in JDT so we must use resume.
@@ -520,7 +494,38 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 									}
 									else if ( shouldStepReturn( topJavaFrame ) )
 									{
-										topJavaFrame.stepReturn();
+										if ( frameCount == 1 )
+										{
+											// Can't stepReturn on bottom frame - do a resume.
+											topJavaFrame.resume();
+										}
+										
+										// Resume if the user stepped out of the last EGL frame. If we don't do this, then when there's a thread with
+										// a loop that waits for requests (like a servlet thread) it will continually run stepReturns, making the
+										// debug view flicker. An example of this is the service test server - change it below to do a stepReturn
+										// instead of resume and you'll see the flicker after stepping out of an egl service.
+										int indexOfTopEGLFrame = -1;
+										IStackFrame[] javaFrames = javaThread.getStackFrames();
+										for ( int j = 0; j < javaFrames.length; j++ )
+										{
+											if ( SMAPUtil.isEGLStratum( (IJavaStackFrame)javaFrames[ j ] ) )
+											{
+												indexOfTopEGLFrame = j;
+												break;
+											}
+										}
+										
+										// TODO what if the user originally stepped into the first EGL frame, and now they want to step out of it back
+										// into the code that invoked it? Would need to keep track of the EGL entrypoint, and if the user had stepped
+										// into the EGL then keep track of the frame right below it so we know not to force a stepReturn or resume.
+										if ( indexOfTopEGLFrame == -1 )
+										{
+											topJavaFrame.resume();
+										}
+										else
+										{
+											topJavaFrame.stepReturn();
+										}
 										break;
 									}
 									else
@@ -569,7 +574,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 		// TODO make this dynamic/extensible. For now just include JRE packages.
 		String type = frame.getDeclaringTypeName();
 		return type.startsWith( "java." ) || type.startsWith( "javax." ) || type.startsWith( "com.ibm." ) || type.startsWith( "com.sun." ) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-				|| type.startsWith( "sun." ) || type.startsWith( "org.apache." ); //$NON-NLS-1$ //$NON-NLS-2$
+				|| type.startsWith( "sun." ) || type.startsWith( "org.apache." ) || type.startsWith( "org.mortbay." ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
 	private boolean shouldStepInto( IJavaStackFrame frame ) throws DebugException
@@ -582,8 +587,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 		}
 		
 		// If we're in an EGL frame that has no corresponding line number, run a step into - it must be some internal method like ezeSetEmpty.
-		IJavaReferenceType refType = frame.getReferenceType();
-		if ( type != null && IEGLDebugCoreConstants.EGL_STRATUM.equals( refType.getDefaultStratum() ) && frame.getLineNumber() == -1 )
+		if ( frame.getLineNumber() == -1 && SMAPUtil.isEGLStratum( frame ) )
 		{
 			return true;
 		}

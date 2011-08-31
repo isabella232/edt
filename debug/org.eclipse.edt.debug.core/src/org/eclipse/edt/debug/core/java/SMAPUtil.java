@@ -17,6 +17,9 @@ import java.util.StringTokenizer;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
+import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
+import org.eclipse.jdt.debug.core.IJavaReferenceType;
+import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.internal.debug.core.model.JDIReferenceType;
 
@@ -228,5 +231,25 @@ public class SMAPUtil
 		
 		return smap == null
 				? "" : smap.trim(); //$NON-NLS-1$
+	}
+	
+	/**
+	 * @return true if the given frame's default stratum equals {@link IEGLDebugCoreConstants#EGL_STRATUM}
+	 */
+	public static boolean isEGLStratum( IJavaStackFrame frame )
+	{
+		try
+		{
+			IJavaReferenceType refType = frame.getReferenceType();
+			if ( refType != null && IEGLDebugCoreConstants.EGL_STRATUM.equals( refType.getDefaultStratum() ) )
+			{
+				return true;
+			}
+		}
+		catch ( DebugException e )
+		{
+		}
+		
+		return false;
 	}
 }
