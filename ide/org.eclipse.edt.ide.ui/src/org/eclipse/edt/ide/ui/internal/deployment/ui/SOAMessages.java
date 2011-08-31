@@ -365,8 +365,20 @@ public class SOAMessages extends NLS {
 	public static String SQLDatabaseBindingDetailSecTitle;
 
 	public static String LabelDbms;
-	
-	public static String DbmsTooltip;
+
+	public static String LabelSqlDB;
+
+	public static String LabelSqlID;
+
+	public static String LabelSqlJDBCDriverClass;
+
+	public static String LabelSqlJNDIName;
+
+	public static String LabelSqlPassword;
+
+	public static String LabelSqlSchema;
+
+	public static String LabelSqlValidationConnectionURL;
 
 	public static String DefaultDeploymentDescription;
 }

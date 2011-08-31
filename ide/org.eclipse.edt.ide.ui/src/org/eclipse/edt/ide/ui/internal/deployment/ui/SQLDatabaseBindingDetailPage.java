@@ -11,14 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.deployment.ui;
 
-import org.eclipse.edt.ide.ui.internal.deployment.RestBinding;
 import org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
@@ -28,10 +25,14 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 
 	private SQLDatabaseBinding fSQLDatabaseBinding;
 	
-//    <sqlDatabaseBinding dbms="Derby" name="tony" sqlDB="localhost" sqlID="Tony" sqlJDBCDriverClass="derby.class" sqlJNDIName="jdbc/google" sqlPassword="password" sqlSchema="APP" sqlValidationConnectionURL="no"/>
-
 	private Text fDbms;
 	private Text fSqlDB;
+	private Text fSqlID;
+	private Text fSqlJDBCDriverClass;
+	private Text fSqlJNDIName;
+	private Text fSqlPassword;
+	private Text fSqlSchema;
+	private Text fSqlValidationConnectionURL;
 	
 	public SQLDatabaseBindingDetailPage(){
 		super();
@@ -45,19 +46,73 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 	}
 	
 	protected void createDetailControls(FormToolkit toolkit, Composite parent) {
-		createDbmsControl(toolkit, parent);
-//		createBaseUriExample(toolkit, parent);
-//		createSessionCookieIdControl(toolkit, parent);
-//		createEnableGenerateControl(toolkit, parent);
+		createSQLControls(toolkit, parent);
 	}
 	
 
-	private void createDbmsControl(FormToolkit toolkit, Composite parent) {
+	private void createSQLControls(FormToolkit toolkit, Composite parent) {
 		toolkit.createLabel(parent, SOAMessages.LabelDbms);
 		fDbms = createTextControl(toolkit, parent);
 		fDbms.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
 				fSQLDatabaseBinding.setDbms(fDbms.getText());		
+			}			
+		});
+		
+		toolkit.createLabel(parent, SOAMessages.LabelSqlDB);
+		fSqlDB = createTextControl(toolkit, parent);
+		fSqlDB.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e) {
+				fSQLDatabaseBinding.setSqlDB(fSqlDB.getText());		
+			}			
+		});
+
+		toolkit.createLabel(parent, SOAMessages.LabelSqlID);
+		fSqlID = createTextControl(toolkit, parent);
+		fSqlID.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e) {
+				fSQLDatabaseBinding.setSqlID(fSqlID.getText());		
+			}			
+		});
+
+		toolkit.createLabel(parent, SOAMessages.LabelSqlJDBCDriverClass);
+		fSqlJDBCDriverClass = createTextControl(toolkit, parent);
+		fSqlJDBCDriverClass.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e) {
+				fSQLDatabaseBinding.setSqlJDBCDriverClass(fSqlJDBCDriverClass.getText());		
+			}			
+		});
+
+		toolkit.createLabel(parent, SOAMessages.LabelSqlPassword);
+		fSqlPassword = createTextControl(toolkit, parent);
+		fSqlPassword.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e) {
+				fSQLDatabaseBinding.setSqlPassword(fSqlPassword.getText());		
+			}			
+		});
+
+		toolkit.createLabel(parent, SOAMessages.LabelSqlSchema);
+		fSqlSchema = createTextControl(toolkit, parent);
+		fSqlSchema.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e) {
+				fSQLDatabaseBinding.setSqlSchema(fSqlSchema.getText());		
+			}			
+		});
+
+		toolkit.createLabel(parent, SOAMessages.LabelSqlJNDIName);
+		fSqlJNDIName = createTextControl(toolkit, parent);
+		fSqlJNDIName.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e) {
+				fSQLDatabaseBinding.setSqlJNDIName(fSqlJNDIName.getText());		
+			}			
+		});
+
+		
+		toolkit.createLabel(parent, SOAMessages.LabelSqlValidationConnectionURL);
+		fSqlValidationConnectionURL = createTextControl(toolkit, parent);
+		fSqlValidationConnectionURL.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e) {
+				fSQLDatabaseBinding.setSqlValidationConnectionURL(fSqlValidationConnectionURL.getText());		
 			}			
 		});
 	}
@@ -76,6 +131,27 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		String dbms = fSQLDatabaseBinding.getDbms();
 		if (dbms != null)
 			fDbms.setText(dbms);
+		String sqldb = fSQLDatabaseBinding.getSqlDB();
+		if (sqldb != null)
+			fSqlDB.setText(sqldb);
+		String sqlid = fSQLDatabaseBinding.getSqlID();
+		if (sqlid != null)
+			fSqlID.setText(sqlid);
+		String sqljdbcdriver = fSQLDatabaseBinding.getSqlJDBCDriverClass();
+		if (sqljdbcdriver != null)
+			fSqlJDBCDriverClass.setText(sqljdbcdriver);
+		String sqljndiname = fSQLDatabaseBinding.getSqlJNDIName();
+		if (sqljndiname != null)
+			fSqlJNDIName.setText(sqljndiname);
+		String sqlpassword = fSQLDatabaseBinding.getSqlPassword();
+		if (sqlpassword != null)
+			fSqlPassword.setText(sqlpassword);
+		String sqlschema = fSQLDatabaseBinding.getSqlSchema();
+		if (sqlschema != null)
+			fSqlSchema.setText(sqlschema);
+		String sqlvalidation = fSQLDatabaseBinding.getSqlValidationConnectionURL();
+		if (sqlvalidation != null)
+			fSqlValidationConnectionURL.setText(sqlvalidation);
 	}	
 	
 	protected void HandleNameChanged() {
