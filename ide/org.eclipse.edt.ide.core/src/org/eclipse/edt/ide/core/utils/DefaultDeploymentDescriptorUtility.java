@@ -13,6 +13,7 @@ package org.eclipse.edt.ide.core.utils;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.edt.compiler.internal.PartWrapper;
 import org.eclipse.edt.ide.core.Logger;
@@ -26,6 +27,9 @@ public class DefaultDeploymentDescriptorUtility {
 		try {
 			String partPath = ResourceValueStoreUtility.getInstance().getValue(resource, new QualifiedName(null, getPathKey()));
 			String partName = "";
+			if (partPath != null && partPath.length() > 0) {
+				partName = new Path(partPath).removeFileExtension().lastSegment();
+			}
 			
 			partWrapper = new PartWrapper();
 			partWrapper.setPartPath(partPath);
