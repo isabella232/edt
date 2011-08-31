@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceProxy;
@@ -28,10 +29,13 @@ import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.internal.PartWrapper;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
+import org.eclipse.edt.ide.core.utils.DefaultDeploymentDescriptorUtility;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.core.model.Restservice;
 
@@ -77,12 +81,29 @@ public class ServiceFinder {
 		}
 		seenProjects.add(project);
 		
+		// First add the project's default DD if it has one.
+		PartWrapper defaultDD = DefaultDeploymentDescriptorUtility.getDefaultDeploymentDescriptor(project);
+		if (defaultDD != null) {
+			IFile ddFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(defaultDD.getPartPath()));
+			if (ddFile.exists()) {
+				List<RestServiceMapping> parsed = parseDD(ddFile);
+				if (parsed != null) {
+					for (RestServiceMapping mapping : parsed) {
+						if (!services.containsKey(mapping.uri)) { // First found wins
+							services.put(mapping.uri, mapping);
+						}
+					}
+				}
+			}
+		}
+		
 		try {
 			IEGLProject eglProject = EGLCore.create(project);
 			if (eglProject == null) {
 				return;
 			}
 			
+			// Next check the DDs inside its package fragment roots.
 			for (IPackageFragmentRoot root : eglProject.getPackageFragmentRoots()) {
 				root.getResource().accept(new IResourceProxyVisitor() {
 					@Override
@@ -105,6 +126,7 @@ public class ServiceFinder {
 				}, IResource.NONE);
 			}
 			
+			// Finally do the same for any projects in its EGL path.
 			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 			for (IEGLPathEntry entry : eglProject.getResolvedEGLPath(true)) {
 				if (entry.getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
