@@ -29,7 +29,6 @@ import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectTemplateSelectionPage;
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardTypePage;
-import org.eclipse.edt.ide.ui.internal.project.wizard.pages.SourceProjectWizardCapabilityPage;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.edt.ide.ui.project.templates.IProjectTemplateClass;
 import org.eclipse.edt.ide.ui.project.templates.ProjectTemplateWizardNode;
@@ -87,6 +86,7 @@ public class NewEGLProjectWizard extends Wizard
 			// Remember base package name
 			IPreferenceStore store = EDTUIPlugin.getDefault().getPreferenceStore();
 			store.putValue(EDTUIPreferenceConstants.NEWPROJECTWIZARD_BASEPACKAGE, model.getBasePackageName());
+			store.putValue(EDTUIPreferenceConstants.NEWPROJECTWIZARD_SELECTEDTEMPLATE, twn.getTemplate().getId());
 		}
 		catch (InterruptedException e) {
 			e.printStackTrace();

@@ -33,7 +33,7 @@ public class BasicProjectTemplate extends AbstractProjectTemplateClass {
 	}
 	
 	@Override
-	protected void setCompilerAndGenerator(ProjectConfiguration eglProjConfiguration) {
+	protected void setProjectCompilerAndGenerator(ProjectConfiguration eglProjConfiguration) {
 		// Intend to leave blank, has been set in the wizard page
 	}
 

@@ -11,10 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.project.wizard.pages;
 
+import org.eclipse.edt.ide.ui.EDTUIPlugin;
+import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.edt.ide.ui.project.templates.IProjectTemplate;
 import org.eclipse.edt.ide.ui.project.templates.ProjectTemplateManager;
 import org.eclipse.edt.ide.ui.project.templates.ProjectTemplateWizardNode;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -24,6 +29,9 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.IWizardContainer2;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardSelectionPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -34,7 +42,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
-public class ProjectTemplateSelectionPage extends WizardSelectionPage implements ISelectionChangedListener {
+public class ProjectTemplateSelectionPage extends WizardSelectionPage implements ISelectionChangedListener, IDoubleClickListener {
 	
 	protected TableViewer templateViewer;
 	protected Text descriptionText;
@@ -89,6 +97,7 @@ public class ProjectTemplateSelectionPage extends WizardSelectionPage implements
 		templateViewer.setLabelProvider(new TreeLabelProvider());
 		templateViewer.addSelectionChangedListener(this);
 		templateViewer.setInput(templates);
+		templateViewer.addDoubleClickListener(this);
 
 		descriptionText = new Text(container, SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.READ_ONLY);
 		descriptionText.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -96,11 +105,20 @@ public class ProjectTemplateSelectionPage extends WizardSelectionPage implements
 		descriptionText.setForeground(control.getForeground());
 
 		if (templates != null) {
+			IPreferenceStore store = EDTUIPlugin.getDefault().getPreferenceStore();
+			String selectedId = store.getString(EDTUIPreferenceConstants.NEWPROJECTWIZARD_SELECTEDTEMPLATE);
+			int selectedIndex = -1, defaultIndex = -1;
 			for (int i = 0; i < templates.length; i++) {
+				if(templates[i].getId().equals(selectedId)){
+					selectedIndex = i;
+				}
 				if (templates[i].isDefault()) {
-					templateViewer.setSelection(new StructuredSelection(new Object[] { templates[i] }), true);
+					defaultIndex = i;
 				}
 			}
+			if(selectedIndex < 0) selectedIndex = defaultIndex;
+			if(selectedIndex < 0) selectedIndex = 0;
+			templateViewer.setSelection(new StructuredSelection(new Object[] { templates[selectedIndex] }), true);
 		}
 
 		setControl(container);
@@ -110,7 +128,6 @@ public class ProjectTemplateSelectionPage extends WizardSelectionPage implements
 		Object o = ((IStructuredSelection) event.getSelection()).getFirstElement();
 		if (o instanceof IProjectTemplate) {
 			handleSelectedTemplate();
-
 			setTemplateDescription(((IProjectTemplate) o).getDescription());
 		}
 
@@ -210,6 +227,22 @@ public class ProjectTemplateSelectionPage extends WizardSelectionPage implements
 		public void removeListener(ILabelProviderListener listener) {
 		}
 
+	}
+	
+	@Override
+	public void doubleClick(DoubleClickEvent event) {
+		if (event.getSource() == templateViewer) {
+			if (getSelectedNode() != null) {
+				IWizard wiz = getWizard();
+				IWizardContainer2 con =(IWizardContainer2) wiz.getContainer();
+				WizardDialog d =(WizardDialog)wiz.getContainer();
+				d.showPage(getNextPage());
+			} else if (getWizard().canFinish()) {
+				if (getWizard().performFinish()) {
+					getWizard().getContainer().getShell().close();
+				}
+			}
+		}		
 	}
 
 }

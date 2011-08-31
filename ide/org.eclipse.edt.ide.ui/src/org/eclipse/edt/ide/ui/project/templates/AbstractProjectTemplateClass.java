@@ -46,24 +46,22 @@ public abstract class AbstractProjectTemplateClass implements
 		configureOperation = new ProjectConfigurationOperation(eglProjConfiguration, rule);
 		listOps.add(configureOperation);		
 		
-		// Use a WorkspaceModifyOperation to prevent builds from running before we've finished updating settings.
-		setCompilerAndGenerator(eglProjConfiguration);
-		ProjectGeneratorOperation op = new ProjectGeneratorOperation(eglProjConfiguration, rule);
-		listOps.add(op);	
-		
 		//add base package
 		setDefaultPackages();
 		String basePackage = eglProjConfiguration.getBasePackageName();
-		if( basePackage!= null && !basePackage.isEmpty()){
-			if(defaultPackages.length>0){
-				for(String packageName : defaultPackages){
-					createPackage(eglProjConfiguration, listOps, basePackage,packageName);
-				}
-			}else{
-				createPackage(eglProjConfiguration, listOps, basePackage,null);
-			}			
+		
+		if(defaultPackages.length>0){
+			for(String packageName : defaultPackages){
+				createPackage(eglProjConfiguration, listOps, basePackage,packageName);
+			}
+		}else{
+			createPackage(eglProjConfiguration, listOps, basePackage,null);
 		}
-		//TODO add feature mask
+		
+		// Set Compiler and Generator
+		addGeneratorOperation(eglProjConfiguration, rule, listOps);	
+
+		//TODO <jiyong> add appropriate feature mask
 		EGLFeatureOperationsUtilities.getEGLFeatureOperations(eglProjConfiguration.getProjectName(), listOps, rule, 0, eglFeatureMask, false, false);		
 		
 		addMoreOperations(eglProjConfiguration, rule, listOps);
@@ -71,15 +69,31 @@ public abstract class AbstractProjectTemplateClass implements
 		return listOps;
 	}
 
+	protected void addGeneratorOperation(
+			final ProjectConfiguration eglProjConfiguration,
+			ISchedulingRule rule, List listOps) {
+		setProjectCompilerAndGenerator(eglProjConfiguration);
+		ProjectGeneratorOperation op = new ProjectGeneratorOperation(eglProjConfiguration, rule);
+		listOps.add(op);
+	}
+
 	private void createPackage(final ProjectConfiguration eglProjConfiguration,
 			List listOps, String basePackage, String packageName) {
 		EGLPackageConfiguration packageConfiguration = new EGLPackageConfiguration();
 		packageConfiguration.setProjectName(eglProjConfiguration.getProjectName());
 		packageConfiguration.setSourceFolderName(EDTCorePreferenceConstants.EGL_SOURCE_FOLDER_VALUE);
-		if(packageName != null && packageName.length()>0)
-			packageConfiguration.setFPackage(basePackage + "." + packageName);
-		else
+		
+		if(packageName != null && packageName.length()>0){
+			if(basePackage !=null && basePackage.length()>0){
+				packageConfiguration.setFPackage(basePackage + "." + packageName);
+			}else{
+				packageConfiguration.setFPackage(packageName);
+			}
+		}else if(basePackage !=null && basePackage.length()>0){
 			packageConfiguration.setFPackage(basePackage);
+		}else{
+			return;
+		}
 		listOps.add(new EGLPackageOperation(packageConfiguration));
 	}
 	
@@ -91,7 +105,7 @@ public abstract class AbstractProjectTemplateClass implements
 
 	protected abstract void setTargetRuntime(ProjectConfiguration eglProjConfiguration);
 	
-	protected abstract void setCompilerAndGenerator(ProjectConfiguration eglProjConfiguration);
+	protected abstract void setProjectCompilerAndGenerator(ProjectConfiguration eglProjConfiguration);
 
 	protected abstract void addMoreOperations(final ProjectConfiguration eglProjConfiguration,ISchedulingRule rule, List listOps);	
 

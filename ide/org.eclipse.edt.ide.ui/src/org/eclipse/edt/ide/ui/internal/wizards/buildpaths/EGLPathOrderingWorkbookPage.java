@@ -37,7 +37,7 @@ public class EGLPathOrderingWorkbookPage extends BuildPathBasePage {
 		
 		Composite composite= new Composite(parent, SWT.NONE);
 		
-		LayoutUtil.doDefaultLayout(composite, new DialogField[] { fClassPathList }, true);
+		LayoutUtil.doDefaultLayout(composite, new DialogField[] { fClassPathList }, true, 0, 0, 5, 5);
 		LayoutUtil.setHorizontalGrabbing(fClassPathList.getListControl(null));
 
 		int buttonBarWidth= converter.convertWidthInCharsToPixels(24);

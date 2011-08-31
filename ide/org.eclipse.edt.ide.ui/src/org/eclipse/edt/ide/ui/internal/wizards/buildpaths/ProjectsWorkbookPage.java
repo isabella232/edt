@@ -128,7 +128,7 @@ public class ProjectsWorkbookPage extends BuildPathBasePage {
 		
 		Composite composite= new Composite(parent, SWT.NONE);
 			
-		LayoutUtil.doDefaultLayout(composite, new DialogField[] { fProjectsList }, true);
+		LayoutUtil.doDefaultLayout(composite, new DialogField[] { fProjectsList }, true, 0, 0, 5, 5);
 		LayoutUtil.setHorizontalGrabbing(fProjectsList.getListControl(null));
 		
 		int buttonBarWidth= converter.convertWidthInCharsToPixels(24);

@@ -363,7 +363,8 @@ public class EDTUIPreferenceConstants {
 	 * <p>
 	 * Value is of type <code>String</code>
 	 */
-	public static final String NEWPROJECTWIZARD_BASEPACKAGE = ""; //$NON-NLS-1$
+	public static final String NEWPROJECTWIZARD_BASEPACKAGE = "newProjectWizard_BasePackage"; //$NON-NLS-1$
+	public static final String NEWPROJECTWIZARD_SELECTEDTEMPLATE = "newProjectWizard_SelectedTemplate"; //$NON-NLS-1$
 
 
 	/**
