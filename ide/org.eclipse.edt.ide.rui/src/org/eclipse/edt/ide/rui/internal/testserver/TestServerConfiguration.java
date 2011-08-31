@@ -83,7 +83,6 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		}
 		
 		try {
-			started = true;
 			if (port < 0) {
 				port = SocketUtil.findOpenPort(DEFAULT_PORT, 5, 100);
 			}
@@ -124,6 +123,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 				for (int i = 0; i < 40; i++) {
 					try {
 						if (invokeConfigServlet("") == 200) {
+							started = true;
 							break;
 						}
 					}
@@ -139,7 +139,6 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			}
 		}
 		catch (IOException e) {
-			started = false;
 			throw new CoreException(new Status(IStatus.ERROR, EDTRUIPlugin.PLUGIN_ID, e.getMessage(), e));
 		}
 	}
