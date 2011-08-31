@@ -22,7 +22,7 @@ import org.eclipse.edt.ide.rui.internal.project.IWidgetLibraryConflict;
 import org.eclipse.edt.ide.rui.wizards.WebClientProjectTemplateWizard;
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardPage;
 import org.eclipse.edt.ide.ui.internal.project.wizards.NewEGLProjectWizard;
-import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
+import org.eclipse.edt.ide.rui.internal.wizards.NewWizardMessages;
 import org.eclipse.edt.ide.widgetLibProvider.IWidgetLibProvider;
 import org.eclipse.edt.ide.widgetLibProvider.WidgetLibProviderManager;
 import org.eclipse.jface.resource.ImageDescriptor;

@@ -1,0 +1,38 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.ide.rui.internal.wizards;
+
+import org.eclipse.osgi.util.NLS;
+
+public class NewWizardMessages extends NLS {
+
+	private static final String BUNDLE_NAME = "org.eclipse.edt.ide.rui.internal.wizards.NewWizardMessages"; //$NON-NLS-1$
+
+	private NewWizardMessages() {
+		// Do not instantiate
+	}
+
+	static {
+		NLS.initializeMessages(BUNDLE_NAME, NewWizardMessages.class);
+	}	
+	
+	public static String RUILibraryPage;
+	public static String RUILibraryPageTitle;
+	public static String RUILibraryPageDescription;
+	public static String RUILibraryPage_widget_library;
+	public static String RUILibraryPage_libname_label;
+	public static String RUILibraryPage_version_label;
+	public static String RUILibraryPage_provider_label;
+	public static String RUILibraryPage_details_label;
+	public static String RUILibraryPage_version_tooltip;
+
+}

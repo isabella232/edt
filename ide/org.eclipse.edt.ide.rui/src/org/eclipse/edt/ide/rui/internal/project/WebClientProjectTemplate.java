@@ -27,6 +27,9 @@ import org.eclipse.edt.ide.widgetLibProvider.WidgetLibProviderManager;
 
 public class WebClientProjectTemplate extends AbstractProjectTemplateClass {
 	
+	protected static final String COMMON = "common";
+	protected static final String CLIENT = "client";
+
 	protected void setTargetRuntime(
 			final ProjectConfiguration eglProjConfiguration) {
 		eglProjConfiguration.setTargetRuntimeValue(ProjectConfiguration.JAVASCRIPT_PLATFORM);
@@ -72,7 +75,7 @@ public class WebClientProjectTemplate extends AbstractProjectTemplateClass {
 	}
 
 	@Override
-	protected void setCompilerAndGenerator(
+	protected void setProjectCompilerAndGenerator(
 			ProjectConfiguration eglProjConfiguration) {
 		eglProjConfiguration.setSelectedCompiler(ProjectConfiguration.EDT_COMPILER_ID);
 		String[] generatorIds = new String[]{ProjectConfiguration.JAVASCRIPT_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_DEV_GENERATOR_ID};
@@ -81,7 +84,7 @@ public class WebClientProjectTemplate extends AbstractProjectTemplateClass {
 
 	@Override
 	protected void setDefaultPackages() {
-		this.setDefaultPackages(new String[]{"client", "common"});
+		this.setDefaultPackages(new String[]{CLIENT, COMMON});
 	}
 
 }

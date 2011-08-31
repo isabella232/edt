@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.internal.project;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
@@ -20,22 +20,38 @@ import org.eclipse.edt.ide.ui.wizards.ProjectGeneratorOperation;
 public class WebClientWithServicesProjectTemplate extends
 		WebClientProjectTemplate {
 
+	protected static final String SERVER = "server";
+
 	protected void setTargetRuntime(
 			final ProjectConfiguration eglProjConfiguration) {
 		//JavaScript Platform
 		eglProjConfiguration.setTargetRuntimeValue(ProjectConfiguration.JAVA_JAVASCRIPT_PLATFORMS);
 	}
 	
-	@Override
-	protected void setCompilerAndGenerator(
-			ProjectConfiguration eglProjConfiguration) {
-		eglProjConfiguration.setSelectedCompiler(ProjectConfiguration.EDT_COMPILER_ID);
-		String[] generatorIds = new String[]{ProjectConfiguration.JAVA_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_DEV_GENERATOR_ID};
-		eglProjConfiguration.setSelectedGenerators(generatorIds);
+	protected void addGeneratorOperation(
+			final ProjectConfiguration eglProjConfiguration,
+			ISchedulingRule rule, List listOps) {
+		super.addGeneratorOperation(eglProjConfiguration, rule, listOps);
+		ProjectGeneratorOperation op = new ProjectGeneratorOperation(eglProjConfiguration, 
+				getDefaultFolderName(eglProjConfiguration, SERVER), new String[]{ProjectConfiguration.JAVA_GENERATOR_ID}, rule);
+		listOps.add(op);
+		op = new ProjectGeneratorOperation(eglProjConfiguration, getDefaultFolderName(eglProjConfiguration, COMMON), 
+			new String[]{ProjectConfiguration.JAVA_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_GENERATOR_ID, 
+			ProjectConfiguration.JAVASCRIPT_DEV_GENERATOR_ID}, rule);
+		listOps.add(op);
+	}	
+
+	private String getDefaultFolderName(ProjectConfiguration eglProjConfiguration, String name){
+		String basePackage = eglProjConfiguration.getBasePackageName();
+		if(basePackage==null || basePackage.isEmpty()){
+			return name;
+		}else{
+			return basePackage + "." + name;
+		}
 	}
 	
 	@Override
 	protected void setDefaultPackages() {
-		this.setDefaultPackages(new String[]{"client", "server", "common"});
+		this.setDefaultPackages(new String[]{CLIENT, SERVER, COMMON});
 	}
 }

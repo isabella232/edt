@@ -12,7 +12,7 @@
 package org.eclipse.edt.ide.rui.wizards;
 
 import org.eclipse.edt.ide.rui.wizard.pages.ProjectWizardRUILibraryPage;
-import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
+import org.eclipse.edt.ide.rui.internal.wizards.NewWizardMessages;
 import org.eclipse.edt.ide.ui.project.templates.ProjectTemplateWizard;
 
 public class WebClientProjectTemplateWizard extends ProjectTemplateWizard {
