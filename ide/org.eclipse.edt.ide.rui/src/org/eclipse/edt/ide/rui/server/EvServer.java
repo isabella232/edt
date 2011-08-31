@@ -60,6 +60,7 @@ import org.eclipse.edt.ide.rui.utils.Util;
 import org.eclipse.edt.javart.JSERunUnit;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.json.TokenMgrError;
+import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.StartupInfo;
 import org.eclipse.edt.javart.services.servlet.ServletUtilities;
 import org.eclipse.edt.javart.services.servlet.proxy.ProxyEventHandler;
@@ -82,6 +83,9 @@ import org.osgi.framework.ServiceReference;
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
 import eglx.http.HttpUtilities;
+import eglx.json.JsonUtilities;
+import eglx.services.ServiceKind;
+import eglx.services.ServiceUtilities;
 
 
 
@@ -217,61 +221,8 @@ public class EvServer implements IClientProxy {
 			}
 		}
 		
-//TODO EDT service	
-//		protected String getWsdlFileName4Ide( String body, String projectName )
-//		{
-//			try
-//			{
-//				ObjectNode objNode = JsonParser.parse(body);
-//				ObjectNode bindingNode = (ObjectNode)JsonUtilities.getValueNode( objNode, JsonUtilities.BINDING_ID, new ObjectNode() );
-//				if( bindingNode != null )
-//				{
-//					String wsdlLocation= JsonUtilities.getValueNode(bindingNode, JsonUtilities.WEB_BINDING_WSDL_LOCATION_ID, new StringNode("",false) ).toJava();
-//					File file = new File( wsdlLocation );
-//					if( wsdlLocation != null && wsdlLocation.length() > 0 && !file.isAbsolute() )
-//					{
-//						if( wsdlLocation.charAt(0) != '/' );
-//						{
-//							wsdlLocation = '/' + wsdlLocation;
-//						}
-//						IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-//						if( project.isOpen() )
-//						{
-//							//first try to get the file from the project root
-//							//if it's not found try to find it in the source folder
-//							EglPathRootLocator pLocator = new EglPathRootLocator( project );
-//							IFile ifile = pLocator.findFile( wsdlLocation );
-//							if( ifile == null || !ifile.exists() ){
-//								SourceLocator sLocator = new SourceLocator( project );
-//								ifile = sLocator.findFile( wsdlLocation );
-//							}
-//							if( ifile != null && ifile.exists() )
-//							{
-//								String val = null;
-//								if(!(ifile instanceof EglarResource)){
-//									val = ifile.getLocation().toOSString();
-//								}
-//								else{
-//									val = ((EglarFileResource)ifile).getFilePath();
-//								}
-//								bindingNode.remove( JsonUtilities.WEB_BINDING_WSDL_LOCATION_ID );
-//								bindingNode.addPair( new NameValuePairNode( new StringNode(JsonUtilities.WEB_BINDING_WSDL_LOCATION_ID, false),  new StringNode( val, false) ) );
-//								body = objNode.toJson();
-//								//force the ide to reload the file
-//								purgeWsdlCache();
-//							}
-//						}
-//					}
-//				}
-//			}
-//			catch( Exception e )
-//			{
-//				e.printStackTrace();
-//			}
-//			return body;
-//		}
-		
 		private void eglRestService(String urlString, RuiBrowserHttpRequest ruiRequest, final PrintStream ps, HttpRequest innerRequest) {
+			ServiceKind serviceKind = innerRequest != null && ProxyUtilities.isSoapCall( innerRequest ) ? ServiceKind.WEB : ServiceKind.REST;
 			try
 			{
 				Integer intContextKey = null;
@@ -338,6 +289,7 @@ public class EvServer implements IClientProxy {
 						request.setHeaders(headers);
 					
 						if (isDedicated) {
+							serviceKind = ServiceKind.EGL;
 							testServerURI += ruiRequest.getURL().trim();
 							request.setUri( testServerURI );
 							
@@ -385,17 +337,13 @@ public class EvServer implements IClientProxy {
 			}
 			catch( IOException ioe )
 			{
-				//TODO JsonUtilities.createJsonAnyException?
-//				String errorMsg = RestServiceUtilities.buildJsonServiceInvocationException( program(), Message.SOA_E_WS_PROXY_COMMUNICATION, new String[]{urlString}, ioe, serviceKind );
-				String errorMsg = ioe.getMessage();
+				String errorMsg = JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_PROXY_COMMUNICATION, new String[]{urlString}, ioe, serviceKind));
 				ps.print( getBadResponseHeader() );
 				ps.print( errorMsg );
 			}
 			catch(Throwable t)
 			{
-				//TODO JsonUtilities.createJsonAnyException?
-//				String errorMsg = RestServiceUtilities.buildJsonServiceInvocationException( program(), Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, serviceKind );
-				String errorMsg = t.getMessage();
+				String errorMsg = JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, serviceKind));
 				ps.print( getBadResponseHeader() );
 				ps.print( errorMsg );
 			}
@@ -715,11 +663,10 @@ public class EvServer implements IClientProxy {
 	}
 
 	public String getContentType(String url) {
-//TODO EDT service		
-//		String result = (String) RestServiceUtilities.contentTypes.get(getExtension(url));
-//		if (result == null) {
-			String result = "text/html;charset=utf-8";
-//		}
+		String result = (String) HttpUtilities.getContentType(getExtension(url));
+		if (result == null) {
+			result = "text/html;charset=utf-8";
+		}
 		return result;
 	}
 
@@ -728,9 +675,7 @@ public class EvServer implements IClientProxy {
 	}
 
 	public String getGoodResponseHeader(String url, String contentType, boolean cache) {
-//TODO EDT service		
-//		return getResponseHeader( url, contentType, cache, RestServiceUtilities.HTTP_STATUS_OK, RestServiceUtilities.HTTP_STATUS_MSG_OK );
-		return getResponseHeader( url, contentType, cache, 200, "OK" );
+		return getResponseHeader( url, contentType, cache, HttpUtilities.HTTP_STATUS_OK, HttpUtilities.HTTP_STATUS_MSG_OK );
 	}
 
 	private String getResponseHeader(String url, String contentType, boolean cache, int status, String statusMsg ) 
@@ -793,10 +738,7 @@ public class EvServer implements IClientProxy {
 					url = xmlRequest.getURL();
 					
 					// Proxy must be checked first since the context key is passed along for debug.
-
-//TODO EDT service
-//					if (url.indexOf("__proxy") != -1 || xmlRequest.getHeaders() != null && xmlRequest.getHeaders().containsKey(RestServiceUtilities.EGL_SERVICE_CALL) ){
-					if (url.indexOf("__proxy") != -1 || xmlRequest.getHeaders() != null && xmlRequest.getHeaders().containsKey("EGLREST") ){
+					if (url.indexOf("__proxy") != -1 || xmlRequest.getHeaders() != null && xmlRequest.getHeaders().containsKey(ProxyUtilities.EGL_REST_CALL) ){
 						Event event = new Event();
 						event.ps = ps;
 						event.socket = socket;
