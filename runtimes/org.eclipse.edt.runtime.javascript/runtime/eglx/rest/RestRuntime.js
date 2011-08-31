@@ -182,7 +182,7 @@ egl.eglx.rest.invokeService = function(http,
 
 	 */
 	http.invocationType = egl.eglx.services.ServiceType.TrueRest;
-	if(firstInDataNotInURL == null){
+	if(firstInDataNotInURL == null && http.request.userUri != undefined && http.request.userUri){
 		if(http.request.uri != undefined && http.request.uri != null){
 			for(idx = 0; idx < inFunctionParameterNames.length; idx++){
 				var indexOf = http.request.uri.indexOf(http.request.uri.indexOf("{" + inFunctionParameterNames[idx] + "}"));
@@ -208,7 +208,7 @@ egl.eglx.rest.configHttp = function(http,
 									responseConfig){
 	
 	if(http === undefined || http === null){
-		http = new egl.eglx.rest.Http;
+		http = new egl.eglx.http.Http;
 	}
 	else{
 		http = http.eze$$clone();
@@ -216,8 +216,12 @@ egl.eglx.rest.configHttp = function(http,
 	http.response.status = null;
 	http.response.statusMessage = null;
 	http.response.body = null;
-	if(http.request.uri === null || http.request.uri.length == 0)
+	if(http.request.uri === null || http.request.uri.length == 0){
 		http.request.uri = requestConfig.uri;
+	}
+	else{
+		http.request.userUri = true;
+	}
 	if(http.request.method === null)
 		http.request.method = requestConfig.method;
 	if(http.request.encoding === null)

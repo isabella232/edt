@@ -148,17 +148,31 @@ egl.defineClass(
 		                        }
 		                    }
 		                    else if(encoding === egl.eglx.services.Encoding.JSON){
-		                    	var expectedResult = new egl.eglx.lang.EDictionary();
-                            	if(isJSONRPC == true && callbackArgs.length > 1){ 
-                        			expectedResult.result = callbackArgs;
-    		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, expectedResult, false );
-    		                    	callbackArgs = expectedResult.result;
+                            	if(isJSONRPC){
+    		                    	var expectedResult = new egl.eglx.lang.EDictionary();
+                            		if(callbackArgs.length > 1){ 
+                            			var argInstances = new Array();
+                            			for ( var idx = 0; idx < callbackArgs.length; idx++) {
+                            				argInstances[idx] = new callbackArgs[idx];
+                            			}
+	                        			expectedResult.result = argInstances;
+	    		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, expectedResult, false );
+	    		                    	callbackArgs = expectedResult.result;
+                            		}
+                                	else if(callbackArgs.length == 1){
+                                		//if there is only one return/out 
+                               			expectedResult.result = new callbackArgs[0];
+           		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, expectedResult, false );
+           		                    	callbackArgs[0] = expectedResult.result;
+                                	}
                             	}
-                            	else if(callbackArgs.length == 1){
-                            		//if there is only one return/out 
-                           			expectedResult.result = callbackArgs[0];
-       		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, expectedResult, false );
-       		                    	callbackArgs[0] = expectedResult.result;
+                            	else{
+                            		if(callbackArgs.length == 1){
+	                            		//if there is only one return/out 
+                            			var eglObject = new callbackArgs[0];
+	       		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, eglObject, false );
+	       		                    	callbackArgs[0] = eglObject;
+	                            	}
                             	}
 		                    }
 		                    else if(encoding === egl.eglx.services.Encoding.XML){
@@ -167,8 +181,10 @@ egl.defineClass(
 		                        	//we're assuming it's never null in xml
 		                        	//then return the record
 		                        	//replace the element in the callbackArgs with the record it returned
-		                        	callbackArgs[callbackArgs.length-1] = callbackArgs[callbackArgs.length-1](1);
-		                        	egl.eglx.xml.$XmlLib.convertFromXML(http.response.body, callbackArgs[0]);
+//		                        	callbackArgs[callbackArgs.length-1] = callbackArgs[callbackArgs.length-1](1);
+                        			var eglObject = new callbackArgs[callbackArgs.length-1];
+		                        	egl.eglx.xml.XmlLib.convertFromXML(http.response.body, eglObject);
+       		                    	callbackArgs[callbackArgs.length-1] = eglObject;
 		                        }
 		                    }
 		                    else if(encoding === egl.eglx.services.Encoding.FORM){
@@ -423,22 +439,12 @@ egl.defineClass(
                 	egl.eglx.services.$ServiceRT.runErrorCallback(errCallback, eglExp, http);
             }
         };
-        var method = "GET";
-    	if(http.request.method === egl.eglx.http.HttpMethod.POST){
-    		method = "POST";
-    	}
-    	else if(http.request.method === egl.eglx.http.HttpMethod._DELETE){
-    		method = "DELETE";
-    	}
-    	else if(http.request.method === egl.eglx.http.HttpMethod.PUT){
-    		method = "PUT";
-    	}
         if(egl.eze$$SetProxyAuth == true){
-         	xhr.open(method, proxyURL, asynchronous, egl.eglx.services.$ServiceLib.eze$$proxyUser,  egl.eglx.services.$ServiceLib.eze$$proxyPwd);
+         	xhr.open("POST", proxyURL, asynchronous, egl.eglx.services.$ServiceLib.eze$$proxyUser,  egl.eglx.services.$ServiceLib.eze$$proxyPwd);
          	egl.eze$$SetProxyAuth = false;		//reset it
         }
         else
-        	xhr.open(method, proxyURL, asynchronous );
+        	xhr.open("POST", proxyURL, asynchronous );
         
         //to use php
         //xhr.open( 'POST', '___proxy.php?url='+encodeURIComponent(request.uri), asynchronous );
@@ -484,7 +490,7 @@ egl.defineClass(
 	                	httpResquest.body = egl.eglx.json.toJSONString(resourceParamIn);
 	            	}
 	            	else if(httpResquest.encoding === egl.eglx.services.Encoding.XML){
-	                	httpResquest.body = egl.eglx.xml.$XmlLib.convertToXML(resourceParamIn);
+	                	httpResquest.body = egl.eglx.xml.XmlLib.convertToXML(resourceParamIn);
 	            	}
 	            	else if(httpResquest.encoding === egl.eglx.services.Encoding.FORM){
 	                	httpResquest.body = egl.eglx.http.HttpLib.convertToFormData(resourceParamIn);                    
