@@ -152,7 +152,11 @@
 		<command
 	  		name="%Format.name"
 			description="%Format.description"	  		
-			id="org.eclipse.edt.ide.ui.source.editGroup.format"/>			
+			id="org.eclipse.edt.ide.ui.source.editGroup.format"/>	
+		<command
+	  		name="%ContentAssistant.name"
+			description="%ContentAssistant.description"	  		
+			id="org.eclipse.edt.ide.ui.source.editGroup.contentassist"/>			
  		<!-- Source import -->
 		<command
 	  		name="%AddImport.name"
@@ -242,6 +246,7 @@
      			<command commandId="org.eclipse.edt.ide.ui.source.commentGroup.toggle"/>
      			<separator name="editGroup" visible="true"/>
        	 		<command commandId="org.eclipse.edt.ide.ui.source.editGroup.format"/>
+       	 		<command commandId="org.eclipse.edt.ide.ui.source.editGroup.contentassist"/>
        	 		<separator name="importGroup" visible="true"/>
        	 		<command commandId="org.eclipse.edt.ide.ui.source.importGroup.addImport"/>
    	 			<command commandId="org.eclipse.edt.ide.ui.source.importGroup.organizeImports"/>
@@ -276,6 +281,7 @@
      			<command commandId="org.eclipse.edt.ide.ui.source.commentGroup.toggle"/>
      			<separator name="editGroup" visible="true"/>
        	 		<command commandId="org.eclipse.edt.ide.ui.source.editGroup.format"/>
+       	 		<command commandId="org.eclipse.edt.ide.ui.source.editGroup.contentassist"/>
        	 		<separator name="importGroup" visible="true"/>
        	 		<command commandId="org.eclipse.edt.ide.ui.source.importGroup.addImport"/>
        	 		<command commandId="org.eclipse.edt.ide.ui.source.importGroup.organizeImports"/>
@@ -361,6 +367,10 @@
   		<handler
         	class="org.eclipse.edt.ide.ui.internal.handlers.FormattingHandler"
         	commandId="org.eclipse.edt.ide.ui.source.editGroup.format">
+   		</handler>
+   		<handler
+        	class="org.eclipse.edt.ide.ui.internal.handlers.ContentAssistHandler"
+        	commandId="org.eclipse.edt.ide.ui.source.editGroup.contentassist">
    		</handler>
    		<handler
         	class="org.eclipse.edt.ide.ui.internal.handlers.AddImportHandler"
