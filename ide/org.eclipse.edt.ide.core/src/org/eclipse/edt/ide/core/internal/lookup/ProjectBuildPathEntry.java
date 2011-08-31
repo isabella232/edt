@@ -24,6 +24,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.EGLAliasJsfNamesSetting;
 import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
 import org.eclipse.edt.compiler.internal.core.builder.AbstractProcessingQueue;
+import org.eclipse.edt.compiler.internal.core.builder.CircularBuildRequestException;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.compiler.BindingCompletor;
 import org.eclipse.edt.compiler.internal.core.dependency.NullDependencyRequestor;
@@ -171,7 +172,13 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 	            		IFile declaringFile = projectInfo.getPartOrigin(packageName, partName).getEGLFile();
 	            		if(Util.getFilePartName(declaringFile) == partName || projectInfo.hasPart(packageName,partName) == ITypeBinding.FUNCTION_BINDING){
 	            			// File and function parts are not stored on disk, create a new one
-	            			return compileLevel2Binding(packageName, projectInfo.getCaseSensitivePartName(packageName, partName));
+	            			try{
+	            				return compileLevel2Binding(packageName, projectInfo.getCaseSensitivePartName(packageName, partName));
+	            			}catch(CircularBuildRequestException e){
+            					// Remove this part from the cache, so that it is not used incorrectly at a different time
+	            				removePartBindingInvalid(packageName, partName);
+            					throw e;
+            				}
 	            		}
 		                else{
 		                	return readPartBinding(packageName, partName);
@@ -196,6 +203,7 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
         }
         else {
         	partBinding.clear();
+        	partBinding.setValid(false);
         }
         return partBinding;
     }

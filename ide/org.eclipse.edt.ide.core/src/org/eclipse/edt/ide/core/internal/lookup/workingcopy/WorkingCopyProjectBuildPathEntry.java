@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.EGLAliasJsfNamesSetting;
 import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
+import org.eclipse.edt.compiler.internal.core.builder.CircularBuildRequestException;
 import org.eclipse.edt.compiler.internal.core.compiler.BindingCompletor;
 import org.eclipse.edt.compiler.internal.core.dependency.NullDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
@@ -128,7 +129,13 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
         			if (origin != null && origin.getEGLFile() != null) {
         				// We are in a binary project with source. If the request is for the file binding, do not try to read it from disk (it wont be there)
         				if (Util.getFilePartName(origin.getEGLFile())== partName) {
-                    		return compileLevel2Binding(packageName, projectInfo.getCaseSensitivePartName(packageName, partName));
+        					try{
+        						return compileLevel2Binding(packageName, projectInfo.getCaseSensitivePartName(packageName, partName));
+        					}catch(CircularBuildRequestException e){
+                    			// Remove this part from the cache, so that it is not used incorrectly in the future
+                    			removePartBindingInvalid(packageName, partName);
+                    			throw e;
+                    		}
         				}
         			}
         			return null;
@@ -141,7 +148,13 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
             	}else{
             		// This project has source, compile from the source
             		if(projectInfo.hasPart(packageName, partName) != ITypeBinding.NOT_FOUND_BINDING) {
-                		return compileLevel2Binding(packageName, projectInfo.getCaseSensitivePartName(packageName, partName));
+            			try{
+            				return compileLevel2Binding(packageName, projectInfo.getCaseSensitivePartName(packageName, partName));
+            			}catch(CircularBuildRequestException e){
+                			// Remove this part from the cache, so that it is not used incorrectly in the future
+                			removePartBindingInvalid(packageName, partName);
+                			throw e;
+                		}
                     }
                     else {
                         return null;
@@ -162,6 +175,7 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
         }
         else {
         	partBinding.clear();
+        	partBinding.setValid(false);
         }
         return partBinding;
     }
@@ -425,5 +439,12 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 		}
 		return null;
 	}		
+	
+	/**
+	 * Remove this part binding from the cache since it has been removed from the workspace
+	 */
+	public void removePartBindingInvalid(String[] packageName, String partName) {
+		bindingCache.remove(packageName, partName);		
+	}
 	
 }
