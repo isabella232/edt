@@ -571,23 +571,29 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	
 	private boolean shouldStepReturn( IJavaStackFrame frame ) throws DebugException
 	{
-		// TODO make this dynamic/extensible. For now just include JRE packages.
-		String type = frame.getDeclaringTypeName();
-		return type.startsWith( "java." ) || type.startsWith( "javax." ) || type.startsWith( "com.ibm." ) || type.startsWith( "com.sun." ) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-				|| type.startsWith( "sun." ) || type.startsWith( "org.apache." ) || type.startsWith( "org.mortbay." ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		// Do not force a step return for EGL stratum frames.
+		if ( !SMAPUtil.isEGLStratum( frame ) )
+		{
+			// TODO make this dynamic/extensible. For now just include JRE packages.
+			String type = frame.getDeclaringTypeName();
+			return type.startsWith( "java." ) || type.startsWith( "javax." ) || type.startsWith( "com.ibm." ) || type.startsWith( "com.sun." ) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+					|| type.startsWith( "sun." ) || type.startsWith( "org.apache." ) || type.startsWith( "org.mortbay." ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		}
+		return false;
 	}
 	
 	private boolean shouldStepInto( IJavaStackFrame frame ) throws DebugException
 	{
+		if ( SMAPUtil.isEGLStratum( frame ) )
+		{
+			// If we're in an EGL stratum frame that has no corresponding line number, run a step into - it must be some internal method like
+			// ezeSetEmpty. Otherwise do not force a step into.
+			return frame.getLineNumber() == -1;
+		}
+		
 		// TODO make this dynamic/extensible. For now just include EDT runtime packages.
 		String type = frame.getDeclaringTypeName();
 		if ( type.startsWith( "org.eclipse.edt." ) || type.startsWith( "egl." ) || type.startsWith( "eglx." ) ) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		{
-			return true;
-		}
-		
-		// If we're in an EGL frame that has no corresponding line number, run a step into - it must be some internal method like ezeSetEmpty.
-		if ( frame.getLineNumber() == -1 && SMAPUtil.isEGLStratum( frame ) )
 		{
 			return true;
 		}
