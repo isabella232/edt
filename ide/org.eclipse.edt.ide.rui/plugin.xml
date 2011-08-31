@@ -57,8 +57,8 @@ Register the Preference Pages
             logo="icons/style.gif"
             projectName="org.eclipse.edt.rui.widgets_0.7.0"
             provider="ibm.com"
-            resourceFolder="/org.eclipse.edt.ide.ui.rui/"
-            resourcePluginName="org.eclipse.edt.ide.ui.resources"
+            resourceFolder="/resources/"
+            resourcePluginName="org.eclipse.edt.ide.rui"
             selected="true"
             version="0.7.0">
       </provider>
@@ -71,8 +71,8 @@ Register the Preference Pages
             logo="icons/full/obj16/egl_launch_obj.gif"
             projectName="org.eclipse.edt.rui.dojo_0.7.0"
             provider="dojotoolkit.org"
-            resourceFolder="/org.eclipse.edt.ide.ui.rui/"
-            resourcePluginName="org.eclipse.edt.ide.ui.resources"
+            resourceFolder="/resources/"
+            resourcePluginName="org.eclipse.edt.ide.rui"
             selected="true"
             version="0.7.0"
             version_desc="Dojo 1.6.1">
@@ -86,24 +86,11 @@ Register the Preference Pages
             logo="icons/highlight.gif"
             projectName="org.eclipse.edt.rui.dojo.remote_0.7.0"
             provider="google.com"
-            resourceFolder="/org.eclipse.edt.ide.ui.rui/"
-            resourcePluginName="org.eclipse.edt.ide.ui.resources"
+            resourceFolder="/resources/"
+            resourcePluginName="org.eclipse.edt.ide.rui"
             selected="false"
             version="0.7.0"
             version_desc="Dojo 1.6.1 Remote">
-      </provider>
-      <provider
-            detail="This project is only used for test. It includes only the available widgets in EDT 0.7.0 M2"
-            id="org.eclipse.edt.rui.widgets_0.7.0_M2"
-            importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
-            libname="Rich UI widgets"
-            logo="icons/synced.gif"
-            projectName="org.eclipse.edt.rui.widgets_0.7.0_M2"
-            provider="ibm.com"
-            resourceFolder="/org.eclipse.edt.ide.ui.rui/"
-            resourcePluginName="org.eclipse.edt.ide.ui.resources"
-            selected="false"
-            version="0.7.0 M2">
       </provider>
    </extension>   
 </plugin>
