@@ -56,9 +56,11 @@
 	</target>	
 
 	<target name="deleteOldNightlies" if="isNightlyBuild">
-		<delete dir="${writableBuildRoot}" failonerror="false" includeemptydirs="true" verbose="true">
-		    <include name="N20*"/>
-		    <exclude name="N${buildTimestamp}"/>
+		<delete failonerror="false" includeemptydirs="true" verbose="true">
+			<dirset dir="${writableBuildRoot}">
+			    <include name="N20*/**"/>
+			    <exclude name="N${buildTimestamp}/**"/>
+			</dirset>
 		</delete>
 	</target>
 </project>
