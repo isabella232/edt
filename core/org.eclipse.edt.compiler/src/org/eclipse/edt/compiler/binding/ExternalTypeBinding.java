@@ -49,7 +49,7 @@ public class ExternalTypeBinding extends PartBinding {
     	super(old.packageName, old.caseSensitiveInternedName);
     	
     	declaredFunctions = old.declaredFunctions;	
-    	declaredAndInheritedFunctions = old.declaredAndInheritedData;   	
+    	declaredAndInheritedFunctions = old.declaredAndInheritedFunctions;   	
     	declaredData = old.declaredData;
     	declaredAndInheritedData = old.declaredAndInheritedData;
     	constructors = old.constructors;
