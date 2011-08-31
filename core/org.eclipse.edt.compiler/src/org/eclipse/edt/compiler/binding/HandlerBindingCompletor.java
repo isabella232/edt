@@ -85,6 +85,8 @@ public class HandlerBindingCompletor extends FunctionContainerBindingCompletor {
     	final ConstructorBinding constructorBinding = new ConstructorBinding(handlerBinding);
     	final Set definedParameters = new HashSet();
     	
+    	constructor.setBinding(constructorBinding);
+    	
     	constructorBinding.setPrivate(constructor.isPrivate());
     	
     	constructor.accept(new AbstractASTVisitor() {

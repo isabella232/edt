@@ -13,6 +13,8 @@ package org.eclipse.edt.compiler.core.ast;
 
 import java.util.List;
 
+import org.eclipse.edt.compiler.binding.ConstructorBinding;
+
 /**
  * Constructor AST node type.
  *
@@ -23,8 +25,18 @@ public class Constructor extends Node {
 	private List parameters;
 	private SettingsBlock settingsBlockOpt;
 	private boolean isPrivate;
+	private List stmts;	
+	private ConstructorBinding binding;
 
-	public Constructor(Boolean privateAccessModifierOpt, List parameters, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
+	public ConstructorBinding getBinding() {
+		return binding;
+	}
+
+	public void setBinding(ConstructorBinding binding) {
+		this.binding = binding;
+	}
+
+	public Constructor(Boolean privateAccessModifierOpt, List parameters, SettingsBlock settingsBlockOpt, List stmts, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.parameters = setParent(parameters);
@@ -33,10 +45,15 @@ public class Constructor extends Node {
 			settingsBlockOpt.setParent(this);
 		}
 		isPrivate = privateAccessModifierOpt.booleanValue();
+		this.stmts = setParent(stmts);
 	}
 	
 	public boolean isPrivate() {
 		return isPrivate;
+	}
+
+	public List getStmts() {
+		return stmts;
 	}
 
 	public SettingsBlock getSettingsBlock() {
@@ -56,12 +73,16 @@ public class Constructor extends Node {
 		if(visitChildren) {
 			acceptChildren(visitor, parameters);
 			if(settingsBlockOpt != null) settingsBlockOpt.accept(visitor);
+			
+			if (stmts != null) {
+				acceptChildren(visitor, stmts);
+			}
 		}
 		visitor.endVisit(this);
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {
 		SettingsBlock newSettingsBlockOpt = settingsBlockOpt != null ? (SettingsBlock)settingsBlockOpt.clone() : null;
-		return new Constructor(new Boolean(isPrivate), cloneList(parameters), newSettingsBlockOpt, getOffset(), getOffset() + getLength());
+		return new Constructor(new Boolean(isPrivate), cloneList(parameters), newSettingsBlockOpt, cloneList(stmts), getOffset(), getOffset() + getLength());
 	}
 }

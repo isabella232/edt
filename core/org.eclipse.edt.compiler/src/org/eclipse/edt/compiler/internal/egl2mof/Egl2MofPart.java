@@ -91,7 +91,7 @@ import org.eclipse.edt.mof.serialization.ProxyEObject;
 abstract class Egl2MofPart extends Egl2MofBase {
 	public MofSerializable currentPart;
 	protected FunctionMember currentFunction;
-	public List<NestedFunction> functionsToProcess = new ArrayList<NestedFunction>();
+	public List<Node> functionsToProcess = new ArrayList<Node>();
 	 
 
  	Egl2MofPart(IEnvironment env) {
@@ -521,11 +521,23 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		// Process statements of function members now since
 		// All members that expressions may reference have been
 		// created and resolved
-		for (NestedFunction astFunc : functionsToProcess) {
-			IBinding binding = astFunc.getName().resolveDataBinding().getType();
+		for (Node processNode : functionsToProcess) {
+			
+			IBinding binding;
+			List<org.eclipse.edt.compiler.core.ast.Node> stmts;
+			if (processNode instanceof NestedFunction) {
+				binding = ((NestedFunction)processNode).getName().resolveDataBinding().getType();
+				stmts = ((NestedFunction)processNode).getStmts();
+			}
+			else {
+				//must be a constructor
+				binding = ((org.eclipse.edt.compiler.core.ast.Constructor)processNode).getBinding().getType();
+				stmts = ((org.eclipse.edt.compiler.core.ast.Constructor)processNode).getStmts();
+			}
+			
 			FunctionMember irFunc = (FunctionMember)getEObjectFor(binding);
 			setCurrentFunctionMember(irFunc);
-			for (org.eclipse.edt.compiler.core.ast.Node node : (List<org.eclipse.edt.compiler.core.ast.Node>)astFunc.getStmts()) {
+			for (org.eclipse.edt.compiler.core.ast.Node node : stmts) {
 				if (node instanceof org.eclipse.edt.compiler.core.ast.Statement) {
 					node.accept(this);
 					Statement irStmt = (Statement)stack.pop();

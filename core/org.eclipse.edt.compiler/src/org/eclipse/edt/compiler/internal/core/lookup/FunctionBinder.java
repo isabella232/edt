@@ -42,6 +42,7 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AddStatement;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.CaseStatement;
+import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
 import org.eclipse.edt.compiler.core.ast.ExecuteStatement;
@@ -163,6 +164,27 @@ public class FunctionBinder extends DefaultBinder {
 
         return true;
     }
+    
+    public boolean visit(Constructor constructor) {
+    	canonicalFunctionName = IEGLConstants.KEYWORD_CONSTRUCTOR;
+    	
+        FunctionScope functionScope = new FunctionScope((FunctionContainerScope) currentScope, functionBinding);
+        currentScope = functionScope;
+        
+        // For nested functions, the functionBinding passed in should already
+        // have been completed by the FunctionContainerBinder
+        for (Iterator iter = functionBinding.getParameters().iterator(); iter.hasNext();) {
+        	((ILocalVariableScope) currentScope).addDeclaredDataName(((IDataBinding) iter.next()).getName());
+        }
+
+        LocalVariableAndIOObjectBinder localVariableAndIOObjectBinder = new LocalVariableAndIOObjectBinder(functionScope, problemRequestor, this, partBinding);
+		constructor.accept(localVariableAndIOObjectBinder);
+		functionIOObjects = localVariableAndIOObjectBinder.getIOObjects();
+		addNonLocalVariableIOObjectsToScope();		
+
+        return true;
+    }
+
 
     public boolean visit(TopLevelFunction function) {
     	canonicalFunctionName = function.getName().getCanonicalName();

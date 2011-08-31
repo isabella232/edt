@@ -292,8 +292,8 @@ class Egl2MofMember extends Egl2MofPart {
 			return false;
 		}
 
-		ConstructorBinding constructor = new ConstructorBinding(constBinding);
-		
+		ConstructorBinding constructor = node.getBinding();
+				
 		EObject obj = null;
 		if (inMofContext) {  //not possible
 			obj = null;
@@ -303,6 +303,13 @@ class Egl2MofMember extends Egl2MofPart {
 			EClass constClass = mofMemberTypeFor(constructor);
 			Constructor cons = (Constructor)constClass.newInstance();
 			
+			if (node.getStmts() != null) {
+				StatementBlock stmts = factory.createStatementBlock();
+				stmts.setContainer(cons);
+				cons.setStatementBlock(stmts);
+				functionsToProcess.add(node);
+			}
+
 			if (node.isPrivate()) {
 				cons.setAccessKind(AccessKind.ACC_PRIVATE);
 			}

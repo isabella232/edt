@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.edt.compiler.binding.ConstructorBinding;
 import org.eclipse.edt.compiler.binding.FixedRecordBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordFieldBinding;
@@ -26,9 +27,12 @@ import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
 import org.eclipse.edt.compiler.binding.StructureItemBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.Handler;
+import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 
@@ -178,4 +182,15 @@ public class HandlerBinder extends FunctionContainerBinder {
 			}
 		}
 	}
+    
+    public boolean visit(Constructor constructor) {    	
+    	IFunctionBinding functionBinding = (IFunctionBinding) ((ConstructorBinding) constructor.getBinding()).getType();
+        if (functionBinding != null) {
+            FunctionBinder functionBinder = new FunctionBinder(handlerBinding, functionBinding, currentScope,
+                    dependencyRequestor, problemRequestor, compilerOptions);
+            constructor.accept(functionBinder);
+        }
+        return false;
+    }
+
 }
