@@ -370,6 +370,11 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
     protected boolean isEditorInputIncludedInContextMenu() {
     	return false;
     }
+    
+    @Override
+    protected void createActions() {
+    	
+    }
 
 	protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
 		fAnnotationAccess= getAnnotationAccess();

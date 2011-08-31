@@ -27,10 +27,13 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironment;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragment;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.ide.core.internal.search.matching.MatchLocator2;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
+import org.eclipse.edt.ide.core.model.IClassFile;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
@@ -91,6 +94,11 @@ public class RenameAction extends SelectionDispatchAction {
 
 	public void selectionChanged(IStructuredSelection selection) {
 		if (selection.size() == 1) {
+			Object firstElem = selection.getFirstElement();
+			if ( firstElem instanceof EglarPackageFragment || firstElem instanceof EglarPackageFragmentRoot  || firstElem instanceof IClassFile ) {
+				setEnabled(false);
+				return;
+			}
 			oldAction.selectionChanged(selection);
 			setEnabled(canRun(selection) || oldAction.isEnabled());
 			return;

@@ -82,7 +82,22 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		example.setLayoutData(gd);
 	}
 
+	public void selectionChanged(IFormPart part, ISelection selection) {
+		IStructuredSelection ssel = (IStructuredSelection) selection;
+		if (ssel.size() == 1)
+			fSQLDatabaseBinding = (SQLDatabaseBinding) ssel.getFirstElement();
+		else
+			fSQLDatabaseBinding = null;
+		update();
+	}
 
+	protected void update() {
+		fNameText.setText(fSQLDatabaseBinding.getName() == null ? "" : fSQLDatabaseBinding.getName()); //$NON-NLS-1$
+		String dbms = fSQLDatabaseBinding.getDbms();
+		if (dbms != null)
+			fDbms.setText(dbms);
+	}	
+	
 //
 //	private void createSessionCookieIdControl(FormToolkit toolkit,
 //			Composite parent) {
@@ -100,30 +115,9 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 //		fRestBinding.setSessionCookieId(fSessionCookieId.getText());		
 //	}
 //
-//	public void selectionChanged(IFormPart part, ISelection selection) {
-//		IStructuredSelection ssel = (IStructuredSelection)selection;
-//		if(ssel.size() == 1)
-//			fRestBinding = (RestBinding)ssel.getFirstElement();
-//		else
-//			fRestBinding = null;
-//		update();
-//	}
+
 //	
-//	protected void update(){
-//		fNameText.setText(fRestBinding.getName()==null?"":fRestBinding.getName()); //$NON-NLS-1$
-//		String baseUri = fRestBinding.getBaseURI();
-//		if(baseUri != null)
-//			fBaseUri.setText(baseUri);
-//		
-//		String sessionCookieId = fRestBinding.getSessionCookieId();
-//		if(sessionCookieId != null)
-//			fSessionCookieId.setText(sessionCookieId);
-//				
-//		if(fRestBinding.isSetEnableGeneration())
-//			fGenBtn.setSelection(fRestBinding.isEnableGeneration());
-//			
-//	}
-//	
+
 //	protected void HandleNameChanged() {
 //		fRestBinding.setName(fNameText.getText());
 //		refreshMainTableViewer();

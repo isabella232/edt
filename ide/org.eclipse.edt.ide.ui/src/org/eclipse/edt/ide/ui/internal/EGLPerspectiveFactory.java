@@ -36,7 +36,7 @@ public class EGLPerspectiveFactory implements IPerspectiveFactory {
 	public static String ID_EGL_DATA_VIEW 			= "org.eclipse.edt.ide.ui.rui.visualeditor.views.PageDataView"; //$NON-NLS-1$
 	public static String ID_PARTS_REFERENCE_VIEW 	= "org.eclipse.edt.ide.ui.views.partsReference.EGLPartsReference"; //$NON-NLS-1$
 	public static String ID_PARTS_BROWSER_VIEW 		= "org.eclipse.edt.ide.ui.views.partsbrowser.EGLPartsBrowser"; //$NON-NLS-1$
-	public static String ID_SQL_RESULTS_VIEW 		= "org.eclipse.edt.ide.ui.sql.view.EGLSQLResultsViewPart"; //$NON-NLS-1$
+	public static String ID_SQL_RESULTS_VIEW 		= "org.eclipse.edit.ide.ui.sql.view.SQLResultsViewPart"; //$NON-NLS-1$
 
 	public static String ID_DATABASE_DEV_PERSPECTIVE = "org.eclipse.datatools.sqltools.sqleditor.perspectives.EditorPerspective";
 	public static String ID_WEB_PERSPECTIVE 		= "org.eclipse.wst.web.ui.webDevPerspective";

@@ -21,17 +21,26 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
+import org.eclipse.edt.ide.core.internal.search.PartInfo;
+import org.eclipse.edt.ide.core.internal.search.PartInfoRequestor;
 import org.eclipse.edt.ide.core.model.EGLCore;
+import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IPackageFragment;
+import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
+import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
+import org.eclipse.edt.ide.core.search.IEGLSearchScope;
+import org.eclipse.edt.ide.core.search.SearchEngine;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.EGLElementImageDescriptor;
+import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.dialogs.SaveDirtyEditorsDialog;
 import org.eclipse.edt.ide.ui.internal.outline.OutlineAdapterFactory;
@@ -42,6 +51,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -215,65 +225,64 @@ public class EditorUtility {
 		return false;
 	}
 
-//	public static IEGLSearchScope createFileSearchScope(TextEditor editor) {
-//		IFileEditorInput editorInput = (IFileEditorInput) editor.getEditorInput();
-//		return createSearchScope(editorInput.getFile().getProject());
-//	}
-//
-//	public static IEGLSearchScope createProjectSearchScope(TextEditor editor) {
-//		IFileEditorInput editorInput = (IFileEditorInput) editor.getEditorInput();
-//		return createSearchScope(editorInput.getFile().getProject());
-//	}
+	public static IEGLSearchScope createFileSearchScope(TextEditor editor) {
+		IFileEditorInput editorInput = (IFileEditorInput) editor.getEditorInput();
+		return createSearchScope(editorInput.getFile().getProject());
+	}
 
-//	public static IEGLSearchScope createSearchScope(IResource resource) {
-//		IEGLElement[] elements = new IEGLElement[1];
-//		elements[0] = EGLCore.create(resource);
-//		return SearchEngine.createEGLSearchScope(elements);
-//	}
-//
-//	public static List searchIndex(int types, TextEditor editor, String name, int matchMode, IEGLSearchScope scope) {
-//		List parts = new ArrayList();
-//		try {
-//			new SearchEngine().searchAllPartNames(
-//				ResourcesPlugin.getWorkspace(),
-//				null,
-//				name.toCharArray(),
-//				matchMode,
-//				IEGLSearchConstants.CASE_INSENSITIVE,
-//				types,
-//				scope,
-//				new PartInfoRequestor(parts),
-//				IEGLSearchConstants.WAIT_UNTIL_READY_TO_SEARCH,
-//				null);
-//		} catch (EGLModelException e) {
-//			EGLLogger.log(EditorUtility.class, e);
-//		}
-//		return parts;
-//	}
+	public static IEGLSearchScope createProjectSearchScope(TextEditor editor) {
+		IFileEditorInput editorInput = (IFileEditorInput) editor.getEditorInput();
+		return createSearchScope(editorInput.getFile().getProject());
+	}
 
-//	public static IEGLSearchScope createScope(TextEditor editor) {
-//		return createProjectSearchScope(editor);
-//	}
+	public static IEGLSearchScope createSearchScope(IResource resource) {
+		IEGLElement[] elements = new IEGLElement[1];
+		elements[0] = EGLCore.create(resource);
+		return SearchEngine.createEGLSearchScope(elements);
+	}
 
-//	public static IPart resolvePart(PartInfo partInfo, IEGLSearchScope scope) {
-//		IPart part = null;
-//		if (partInfo == null || scope == null) {
-//			return null;
-//		}
-//		try {
-// TODO EDT Fix later			
-//			part = partInfo.resolvePart(scope);
-//		} catch (EGLModelException e) {
-//			EGLLogger.log(EditorUtility.class, e);
-//			part = null;
-//		}
-//		return part;
-//	}
+	public static List searchIndex(int types, TextEditor editor, String name, int matchMode, IEGLSearchScope scope) {
+		List parts = new ArrayList();
+		try {
+			new SearchEngine().searchAllPartNames(
+				ResourcesPlugin.getWorkspace(),
+				null,
+				name.toCharArray(),
+				matchMode,
+				IEGLSearchConstants.CASE_INSENSITIVE,
+				types,
+				scope,
+				new PartInfoRequestor(parts),
+				IEGLSearchConstants.WAIT_UNTIL_READY_TO_SEARCH,
+				null);
+		} catch (EGLModelException e) {
+			EGLLogger.log(EditorUtility.class, e);
+		}
+		return parts;
+	}
 
-//	protected static List getRecordParts(TextEditor editor, String name, int matchMode, IEGLSearchScope scope) {
-//		// Returns a list of PartDeclarationInfo that are records.
-//		return EditorUtility.searchIndex(IEGLSearchConstants.RECORD, editor, name, matchMode, scope);
-//	}
+	public static IEGLSearchScope createScope(TextEditor editor) {
+		return createProjectSearchScope(editor);
+	}
+
+	public static IPart resolvePart(PartInfo partInfo, IEGLSearchScope scope) {
+		IPart part;
+		if (partInfo == null || scope == null) {
+			return null;
+		}
+		try {
+			part = partInfo.resolvePart(scope);
+		} catch (EGLModelException e) {
+			EGLLogger.log(EditorUtility.class, e);
+			part = null;
+		}
+		return part;
+	}
+
+	protected static List getRecordParts(TextEditor editor, String name, int matchMode, IEGLSearchScope scope) {
+		// Returns a list of PartDeclarationInfo that are records.
+		return EditorUtility.searchIndex(IEGLSearchConstants.RECORD, editor, name, matchMode, scope);
+	}
 	
 	public static String[] getPackageName(IFile file) {
     	IEGLFile eglFile = (IEGLFile) EGLCore.create(file);

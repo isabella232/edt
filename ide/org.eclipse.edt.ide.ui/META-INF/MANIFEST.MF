@@ -47,7 +47,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.wst.css.core;bundle-version="1.1.402",
  org.eclipse.edt.runtime.java;bundle-version="0.7.0",
  org.apache.xerces;bundle-version="[2.9.0,3.0.0)",
- org.eclipse.edt.ide.deployment.core;bundle-version="0.7.0", 
+ org.eclipse.edt.ide.deployment.core;bundle-version="0.7.0",
  org.eclipse.datatools.modelbase.sql,
  org.eclipse.datatools.connectivity,
  org.eclipse.datatools.connectivity.sqm.core,
@@ -56,7 +56,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.edt.gen,
  org.eclipse.edt.gen.generator.eglsource,
  org.eclipse.edt.gen.egl,
- org.eclipse.datatools.modelbase.dbdefinition 
+ org.eclipse.datatools.modelbase.dbdefinition,
+ org.eclipse.edt.ide.sql
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin

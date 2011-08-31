@@ -127,26 +127,26 @@ public class UINlsStrings extends NLS {
 	public static String PropertyNoSelection;
 
 	// EGL Default Build Descriptor properties page
-	public static String DefaultBDPropertiesPageLabelText;
-	public static String DefaultBDPropertiesPageResourceLabelText;
+	public static String DefaultDDPropertiesPageLabelText;
+	public static String DefaultDDPropertiesPageResourceLabelText;
 	public static String DefaultBDPropertiesPageDebugLabelText;
-	public static String DefaultBDPropertiesPageRuntimeLabelText;
+	public static String DefaultDDPropertiesPageRuntimeLabelText;
 	public static String DefaultBDPropertiesPageNoValueSetText;
-	public static String DefaultBDPropertiesPageJavaLabel;
+	public static String DefaultDDPropertiesPageJavaLabel;
 	public static String DefaultBDPropertiesPageJavaScriptLabel;
 	public static String DefaultBDPropertiesPageCobolLabel;
 	public static String DefaultBDPropertiesPageNonJavaScriptDebugLabel;
-	public static String DefaultBDPropertiesPageBrowseButtonLabel;
+	public static String DefaultDDPropertiesPageBrowseButtonLabel;
 	public static String DefaultBDPropertiesPageBrowseDialogTitle;
 	public static String DefaultBDPropertiesPageBrowseDialogDebugInterpretiveDesc;
 	public static String DefaultBDPropertiesPageBrowseDialogDebugJavaScriptDesc;
 	public static String DefaultBDPropertiesPageBrowseDialogRuntimeJavaDesc;
-	public static String DefaultBDPropertiesPageBrowseDialogRuntimeJavaScriptDesc;
+	public static String DefaultDDPropertiesPageBrowseDialogRuntimeJavaScriptDesc;
 	public static String DefaultBDPropertiesPageBrowseDialogRuntimeCobolDesc;
-	public static String DefaultBDPropertiesPageClearButtonLabel;
+	public static String DefaultDDPropertiesPageClearButtonLabel;
 	public static String DefaultBDPropertiesPageNoTargetBuildDescriptorErrorMessage;
 	public static String DefaultBDPropertiesPageNoDebugBuildDescriptorErrorMessage;
-	public static String DefaultBDPropertiesPageSpecifyValuesLabel;
+	public static String DefaultDDPropertiesPageSpecifyValuesLabel;
 	public static String DefaultBDPropertiesPageInheritedValuesLabel;
 	public static String DefualtBDPropertiesPageInheritedFromPreferenceText;
 

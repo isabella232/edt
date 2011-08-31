@@ -20,6 +20,7 @@ public interface IUIHelpConstants {
 	//Properties pages
 	public static final String BUILD_PATH_CONTEXT = PREFIX + "bldp0001"; //$NON-NLS-1$
 	public static final String DEFAULT_BUILD_DESCRIPTOR_CONTEXT = PREFIX + "dbdc0001"; //$NON-NLS-1$
+	public static final String DEFAULT_DEPLOYMENT_DESCRIPTOR_CONTEXT = PREFIX + "dbdc0001"; //$NON-NLS-1$
 	public static final String EGLPROJECT_FEATURE_CONTEXT = PREFIX + "prfe0001";	//$NON-NLS-1$
 	public static final String RUNTIME_DATA_SOURCE_DESCRIPTOR_CONTEXT = PREFIX + "prds0001"; //$NON-NLS-1$
 

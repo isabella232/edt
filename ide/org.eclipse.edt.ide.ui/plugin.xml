@@ -991,6 +991,7 @@ Templates
 	      		id="org.eclipse.ui.navigator.ProjectExplorer">
       		</showInPart>
       	</perspectiveExtension>
+      	
 	</extension>
 	
 	<extension 
@@ -1215,6 +1216,12 @@ Templates
             class="org.eclipse.edt.ide.ui.internal.preferences.TemplatePreferencePage"
             id="org.eclipse.edt.ide.ui.templatePreferences">
       	</page>      
+      	<page
+            name="%SQLPreferencePageName"
+            category="org.eclipse.edt.ide.ui.preferences"
+            class="org.eclipse.edt.ide.ui.internal.preferences.SQLRetrievePreferencePage"
+            id="org.eclipse.edt.ide.ui.sqlRetrievePreferences">
+      </page>
 	</extension>
 	
 	<extension point="org.eclipse.ui.propertyPages">
@@ -1277,6 +1284,31 @@ Templates
          </adapt>
       </or>
    </enabledWhen>
+   		</page>
+   		<page
+            name="%eglDefaultDeploymentDescriptorPropertyPage"
+            class="org.eclipse.edt.ide.ui.internal.property.pages.DefaultDeploymentDescriptorPropertyPage"
+           	id="org.eclipse.edt.ide.ui.defaultDeploymentDescriptorPropertyPage">
+			<filter
+        		name="projectNature"
+        		value="org.eclipse.edt.ide.core.EGLNature">
+      		</filter>
+            <enabledWhen>
+              <or>
+                <adapt
+                    type="org.eclipse.edt.ide.core.model.IEGLFile">
+                </adapt>
+                <adapt
+                   type="org.eclipse.core.resources.IProject">
+                </adapt>
+                <adapt
+                  type="org.eclipse.edt.ide.core.model.IPackageFragment">
+                </adapt>
+                <adapt
+                      type="org.eclipse.edt.ide.core.model.IPackageFragmentRoot">
+                </adapt>
+              </or>
+          </enabledWhen>
    		</page>
  	</extension>
  	
@@ -1590,4 +1622,11 @@ Templates
          </selection>
       </wizard>
    </extension>
+
+<!--   
+***********************************************************************
+Register the SQL Results View
+***********************************************************************
+-->
+  
 </plugin>

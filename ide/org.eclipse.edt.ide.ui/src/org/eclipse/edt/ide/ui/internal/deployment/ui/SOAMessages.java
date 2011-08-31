@@ -368,5 +368,5 @@ public class SOAMessages extends NLS {
 	
 	public static String DbmsTooltip;
 
-
+	public static String DefaultDeploymentDescription;
 }
