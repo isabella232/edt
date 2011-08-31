@@ -65,7 +65,7 @@ egl.eglx.xml.XmlLib["nullToXML"] = function( /*value*/value, /*map*/namespaces, 
 	if (xmlStyle.nillable) {
 		//skip field if fieldInfo.xmlStyle is XMLAttribute or  fieldInfo.xmlStyle is XMLElement.nillable == true
 		s.push("<" + xmlName + " xsi:nil=\"true\"/>");
-		egl.eglx.xml.$XmlLib.addXSINamespace(namespaces);
+		egl.eglx.xml.XmlLib.addXSINamespace(namespaces);
 	}
 	return s.join('');
 };
@@ -127,24 +127,24 @@ egl.eglx.xml.XmlLib["dictionaryToXML"] = function( /*value*/value, /*map*/namesp
 };
 egl.eglx.xml.XmlLib["arrayToXML"] = function( /*value*/value, /*map*/namespaces, /*FieldInfo*/fieldInfo) {
 	var xmlStyle = fieldInfo != undefined && fieldInfo != null ? fieldInfo.annotations["XMLStyle"] : null;
-	var arrayElementNames = fieldInfo.annotations["XMLArray"];
+	var xmlArray = fieldInfo.annotations["XMLArray"];
 	//get the node name from the array[0]
-	//if the arrayElementNames.length > 1 create new arrayElementNames[arrayElementNames.length -1] = arrayElementNames[1]
+	//if the xmlArray.length > 1 create new xmlArray[xmlArray.length -1] = xmlArray[1]
 	//create new fieldInfo
 	var xmlName;
 	var arrayName = xmlStyle.name;
 	var wrapped = true;
 	var names = null;
-	if (arrayElementNames != undefined && arrayElementNames != null) {
-		if (arrayElementNames.names != undefined
-				&& arrayElementNames.names != null
-				&& arrayElementNames.names.length > 0) {
-			names = arrayElementNames.names.slice(0);
-			xmlName = arrayElementNames.names[0];
+	if (xmlArray != undefined && xmlArray != null) {
+		if (xmlArray.names != undefined
+				&& xmlArray.names != null
+				&& xmlArray.names.length > 0) {
+			names = xmlArray.names.slice(0);
+			xmlName = xmlArray.names[0];
 		}
-		if (arrayElementNames.wrapped != undefined
-				&& arrayElementNames.wrapped != null) {
-			wrapped = arrayElementNames.wrapped;
+		if (xmlArray.wrapped != undefined
+				&& xmlArray.wrapped != null) {
+			wrapped = xmlArray.wrapped;
 		}
 	}
 	if (xmlName == null) {
@@ -293,13 +293,13 @@ egl.eglx.xml.XmlLib["eglFromXML"] = function( /*node*/parentElement, /*egl rt ob
 		return this.eglClassFromXML(parentElement, eglObj, null);
 	}
 };
-egl.eglx.xml.XmlLib["fromXML"] = function( /*node*/element, /*FieldInfo*/fieldInfo) {
+egl.eglx.xml.XmlLib["fromXML"] = function( /*node*/elements, /*FieldInfo*/fieldInfo) {
 	//FIXME how do I handle boxing
 	var eglObj;
 	//TODO look up type
 	var type = null;
-	if (element != undefined && element != null) {
-		type = this.getAttributeNS(element, "type", null);
+	if (elements != undefined && elements != null) {
+		type = this.getAttributeNS(elements, "type", null);
 		if (type != null) {
 			//TODO look up the type call from XML
 			//create the type from the xml?
@@ -311,23 +311,23 @@ egl.eglx.xml.XmlLib["fromXML"] = function( /*node*/element, /*FieldInfo*/fieldIn
 		eglObj = new fieldInfo.eglType();
 	}
 	if (fieldInfo != null && (eglObj == undefined || eglObj == null)
-			&& (element.children == null || element.children.length == 0)) {
-		eglObj = this.primitiveFromXML(element, fieldInfo);
+			&& (elements[0].children == null || elements[0].children.length == 0)) {
+		eglObj = this.primitiveFromXML(elements[0], fieldInfo);
 	}
 	//first check for array
 	if (eglObj !== null && typeof eglObj === "object" && this.isEglArray(fieldInfo)) {
-		return this.arrayFromXML(element, eglObj, fieldInfo);
+		return this.arrayFromXML(elements, eglObj, fieldInfo);
 	} else if (eglObj !== null && typeof eglObj === "object" && "eze$$getFieldInfos" in eglObj) {
-		return this.eglClassFromXML(element, eglObj, fieldInfo);
+		return this.eglClassFromXML(elements[0], eglObj, fieldInfo);
 	} else if (eglObj !== null && typeof eglObj === "object" && eglObj instanceof egl.eglx.lang.EDictionary) {
-		return this.dictionaryFromXML(element, eglObj, fieldInfo);
+		return this.dictionaryFromXML(elements[0], eglObj, fieldInfo);
 	} else if (eglObj !== null && typeof eglObj === "object" && eglObj instanceof egl.egl.lang.Enumeration) {
-		return this.enumerationFromXML(element, eglObj, fieldInfo);
+		return this.enumerationFromXML(elements[0], eglObj, fieldInfo);
 	} else if ((eglObj == undefined || eglObj == null)
-			&& (element.children != null && element.children.length > 1)) {
-		return this.dictionaryFromXML(element, new egl.egl.lang.EDictionary(), fieldInfo);
+			&& (elements[0].children != null && elements[0].children.length > 1)) {
+		return this.dictionaryFromXML(elements[0], new egl.egl.lang.EDictionary(), fieldInfo);
 	} else {
-		return this.primitiveFromXML(element, fieldInfo);
+		return this.primitiveFromXML(elements[0], fieldInfo);
 	}
 };
 egl.eglx.xml.XmlLib["isEglArray"] = function(fieldInfo) {
@@ -335,7 +335,7 @@ egl.eglx.xml.XmlLib["isEglArray"] = function(fieldInfo) {
 };
 egl.eglx.xml.XmlLib["isArray"] = function(/*nodes*/children) {
 	return children != undefined && children instanceof Array
-			&& children.length() > 1 && children[0].localName
+			&& children.length > 1 && children[0].localName
 			&& children[1].localName;
 };
 egl.eglx.xml.XmlLib["primitiveFromXML"] = function( /*node*/element, /*FieldInfo*/fieldInfo) {
@@ -435,7 +435,7 @@ egl.eglx.xml.XmlLib["dictionaryFromXML"] = function( /*node*/parentElement, /*eg
 	for (elementField in element) {
 		//TODO
 		//create an fieldInfo for each field, the name is the element name
-		this.fromXML(elementField, null);
+		this.fromXML([elementField], null);
 	}
 	return eglObj;
 };
@@ -445,22 +445,22 @@ egl.eglx.xml.XmlLib["arrayFromXML"] = function( /*node*/parentElement, /*egl rt 
 	if (eglObj == null && fieldInfo != null) {
 		//TODO create a new array;
 	}
-	var arrayElementNames = fieldInfo != undefined && fieldInfo != null ? fieldInfo.annotations["XMLArray"]
+	var xmlArray = fieldInfo != undefined && fieldInfo != null ? fieldInfo.annotations["XMLArray"]
 			: null;
 	var xmlName;
 	var arrayName = xmlStyle.name;
 	var wrapped = true;
 	var names = null;
-	if (arrayElementNames != undefined && arrayElementNames != null) {
-		if (arrayElementNames.names != undefined
-				&& arrayElementNames.names != null
-				&& arrayElementNames.names.length > 0) {
-			names = arrayElementNames.names.slice(0);
-			xmlName = arrayElementNames.names[0];
+	if (xmlArray != undefined && xmlArray != null) {
+		if (xmlArray.names != undefined
+				&& xmlArray.names != null
+				&& xmlArray.names.length > 0) {
+			names = xmlArray.names.slice(0);
+			xmlName = xmlArray.names[0];
 		}
-		if (arrayElementNames.wrapped != undefined
-				&& arrayElementNames.wrapped != null) {
-			wrapped = arrayElementNames.wrapped;
+		if (xmlArray.wrapped != undefined
+				&& xmlArray.wrapped != null) {
+			wrapped = xmlArray.wrapped;
 		}
 	}
 	if (names == null) {
@@ -469,7 +469,7 @@ egl.eglx.xml.XmlLib["arrayFromXML"] = function( /*node*/parentElement, /*egl rt 
 	}
 	var arrayElements = parentElement;
 	if (wrapped) {//FIXME I don't care what the child element names are
-		arrayElements = this.getChildElementNS(parentElement, names[0], xmlStyle.namespace);
+		arrayElements = this.getChildElementNS(parentElement[0], names[0], xmlStyle.namespace);
 	}
 	fieldInfo = egl.clone(fieldInfo);
 	fieldInfo.eglSignature = fieldInfo.eglSignature.slice(1);
@@ -479,7 +479,7 @@ egl.eglx.xml.XmlLib["arrayFromXML"] = function( /*node*/parentElement, /*egl rt 
 		if (this.isEglArray(fieldInfo)) {
 			fieldInfo.annotations["XMLArray"] = new egl.eglx.xmlXMLArray( true, names.slice(1));
 		}
-		array[idx] = this.fromXML(arrayElements[idx], fieldInfo);
+		array[idx] = this.fromXML([arrayElements[idx]], fieldInfo);
 	}
 	return array;
 };
@@ -512,7 +512,7 @@ egl.eglx.xml.XmlLib["eglClassFromXML"] = function(/*node*/recElement, /*egl rt o
 			if (xmlStyle instanceof egl.eglx.xml.binding.annotation.XMLAttribute) {
 				value = newPrimitiveFromXml(this.getAttributeNS(recElement, xmlStyle.name, xmlStyle.namespace), fieldInfos[idx]);
 			} else {
-				value = this.fromXML(this.getChildElementNS(recElement, xmlStyle.name, xmlStyle.namespace)[0], fieldInfos[idx]);
+				value = this.fromXML(this.getChildElementNS(recElement, xmlStyle.name, xmlStyle.namespace), fieldInfos[idx]);
 			}
 			if (fieldInfos[idx].setterFunction instanceof Function) {
 				fieldInfos[idx].setterFunction.apply(value);
