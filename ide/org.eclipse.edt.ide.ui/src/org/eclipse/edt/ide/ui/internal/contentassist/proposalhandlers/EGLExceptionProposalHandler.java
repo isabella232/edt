@@ -46,8 +46,26 @@ public class EGLExceptionProposalHandler extends EGLAbstractProposalHandler {
 			if (binding.getName().toUpperCase().startsWith(getPrefix().toUpperCase()))
 				proposals.add(createProposal(binding));
 		}
+		
+		//add anyexception
+		addAnyException(proposals);
 		return proposals;
 
+	}
+	
+	/*
+	 * The edt anyexception is not a IEGLConstants.RECORD_SUBTYPE_EXCEPTION(all exceptions are this kind before) kind,  in order to reduce the impact, the anyexception was added to the proposals directly,
+	 * if the system package was changed, the function should be changed. 
+	 */
+	private  void addAnyException(List proposals){
+		proposals.add(new EGLCompletionProposal(viewer,
+				"anyexception - egl.lang (record)",
+				"anyexception",
+				UINlsStrings.CAProposal_Exception,
+				getDocumentOffset() - getPrefix().length(),
+				getPrefix().length(),
+				"anyexception".length(),
+				EGLCompletionProposal.RELEVANCE_EXCEPTION));
 	}
 
 	private EGLCompletionProposal createProposal(Binding binding) {
