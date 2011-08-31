@@ -33,7 +33,7 @@ public class ProxyUtilities
 	public static boolean isEGLDedicatedCall( HttpRequest innerRequest )	
 	{
 		EDictionary headers = innerRequest.getHeaders();
-		return headers != null && headers.containsKey( EGL_DEDICATED_CALL.toLowerCase() );//FIXME gets to the wrong method
+		return headers != null && headers.containsKey( EGL_DEDICATED_CALL );
 	}
 	
     static String convert( Map<?, ?> map )

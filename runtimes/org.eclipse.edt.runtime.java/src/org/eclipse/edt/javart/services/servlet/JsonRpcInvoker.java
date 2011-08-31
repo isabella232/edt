@@ -50,7 +50,7 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 		traceElapsedTime( true );
 
 		try{
-			ObjectNode jsonRequest = JsonParser.parse(request.getBody());
+			ObjectNode jsonRequest = request.getBody() == null ? new ObjectNode() : JsonParser.parse(request.getBody());
 			if (trace()){
 				tracer().put( "  invoking function " + JsonUtilities.getValueNode(jsonRequest, JSON_RPC_METHOD_ID).toJava() );
 			}
@@ -70,7 +70,7 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 			response.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
 		} catch (Throwable t) {
 			response.setBody(eglx.json.JsonUtilities.createJsonAnyException( 
-					ServiceUtilities.buildServiceInvocationException(Message.SOA_E_EGL_SERVICE_INVOCATION, new String[]{request.getBody(), getServiceClassName()}, t, getServiceKind())));
+					ServiceUtilities.buildServiceInvocationException(Message.SOA_E_EGL_SERVICE_INVOCATION, new String[]{request.getBody() == null ? "null" : request.getBody(), getServiceClassName()}, t, getServiceKind())));
 			response.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
 			response.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
 		}
@@ -102,39 +102,6 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 		return returnVal;
 	}
 	
-/*	private Object[] populateRequestParameters(ServiceParameter[] serviceParameters, ArrayNode jsonParameters){
-		final EglList<Object> inParameterArray = new EglList<Object>();
-		for(ServiceParameter serviceParameter : serviceParameters){
-			if(ServiceParameter.Kind.IN.equals(serviceParameter.getParameterKind()) ||
-					ServiceParameter.Kind.INOUT.equals(serviceParameter.getParameterKind())){
-				inParameterArray.add(serviceParameter.getParameter());
-			}
-		}
-		AnyValue eglObject = new AnyValue() {
-			EglList<Object> params = inParameterArray;
-			public void ezeSetEmpty() {}
-			public <T extends egl.lang.AnyValue> T ezeNewValue(Object... args)throws AnyException {
-				return null;
-			}
-			public void ezeCopy(egl.lang.AnyValue source) {}
-			public void ezeCopy(Object source) {}
-		};
-		ObjectNode inParameterObject = new ObjectNode();
-		inParameterObject.addPair(new NameValuePairNode(new StringNode(JSON_RPC_PARAMETER_ID, false), jsonParameters));
-		JsonLib.convertToEgl(eglObject, inParameterObject);
-		List<Object> parameters = new ArrayList<Object>();
-		int inParameterArrayIdx = 0;
-		for(ServiceParameter serviceParameter : serviceParameters){
-			if(ServiceParameter.Kind.IN.equals(serviceParameter.getParameterKind()) ||
-					ServiceParameter.Kind.INOUT.equals(serviceParameter.getParameterKind())){
-				parameters.add(inParameterArray.get(inParameterArrayIdx++));
-			}
-			else if(ServiceParameter.Kind.OUT.equals(serviceParameter.getParameterKind())){
-				parameters.add(serviceParameter.getParameter());
-			}
-		}
-		return parameters.toArray(new  Object[parameters.size()]);
-	}*/
 	private String convertToJson(Method method, Object[] parameters, Object ret){
 		FunctionSignature signature = method.getAnnotation(FunctionSignature.class);
 		final EglList<Object> responseParameters = new EglList<Object>();
@@ -160,16 +127,7 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 		responseObject.put(JSON_RPC_RESULT_ID, response);
 		return JsonLib.convertToJSON(responseObject);
 	}
-/*	private Class<?>[] getMethodSignature(ServiceParameter[] serviceParameters){
-		List<Class<?>> classes = new ArrayList<Class<?>>();
-		for(ServiceParameter serviceParameter : serviceParameters){
-			if(!ServiceParameter.Kind.RETURN.equals(serviceParameter.getParameterKind()) &&
-					!ServiceParameter.Kind.OUT.equals(serviceParameter.getParameterKind())){
-				classes.add(serviceParameter.getParameter().getClass());
-			}
-		}
-		return classes.toArray(new  Class<?>[classes.size()]);
-	}*/
+
 	private String wrapperProxyReturn( Object returnVal )
 	{
 		return returnVal == null ? "{}" : returnVal.toString();

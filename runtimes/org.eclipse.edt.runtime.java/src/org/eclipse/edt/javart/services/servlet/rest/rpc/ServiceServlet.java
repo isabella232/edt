@@ -78,21 +78,16 @@ import eglx.services.ServiceUtilities;
 
 	@Override
 	protected HttpResponse processRequest(String urlString, HttpRequest request, HttpServletRequest httpServletReq) throws Exception {
-		HttpMethod httpMethod = request.getMethod(); 
-		String body = request.getBody(); 
 		HttpResponse response = null;
 		try
 		{
-			if( HttpMethod.POST.equals(httpMethod))
+			if( HttpMethod.POST.equals(request.getMethod()))
 			{
 				if ( tracer().traceIsOn( Trace.GENERAL_TRACE ) ){
 					tracer().put( "this is an EGL REST RPC service" );
 				}
 				String pathInfo = null;
-				if( httpMethod != null )
-				{
-					pathInfo = httpServletReq.getPathInfo();
-				}
+				pathInfo = httpServletReq.getPathInfo();
 				
 				if( pathInfo == null || pathInfo.length() == 0)
 				{
@@ -119,13 +114,13 @@ import eglx.services.ServiceUtilities;
 				
 				if( restServiceProjectInfo() != null )
 				{
-					RestServiceProjectInfo.ServiceFunctionInfo serviceFunctionInfo = restServiceProjectInfo().getServiceFunctionInfo(pathInfo, httpMethod );
+					RestServiceProjectInfo.ServiceFunctionInfo serviceFunctionInfo = restServiceProjectInfo().getServiceFunctionInfo(pathInfo, request.getMethod() );
 					if ( tracer().traceIsOn( Trace.GENERAL_TRACE ) && serviceFunctionInfo != null ){
 						tracer().put( "invoking service " + serviceFunctionInfo.getClassName() );
 						tracer().put( "    request encoding:" + String.valueOf(serviceFunctionInfo.getInEncoding()) );
 						tracer().put( "    response encoding:" + String.valueOf(serviceFunctionInfo.getOutEncoding()) );
 						tracer().put( "    hostProgramService?:" + String.valueOf(serviceFunctionInfo.isHostProgramService()) );
-						tracer().put( "    body:" + body );
+						tracer().put( "    body:" + request.getBody() == null ? "null" : request.getBody() );
 					}
 					response = new HttpResponse();
 					if( serviceFunctionInfo != null )
@@ -144,7 +139,7 @@ import eglx.services.ServiceUtilities;
 			}
 			else
 			{
-				throw ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_REST_WRONG_HTTP_FUNCTION, new String[] {HttpUtilities.httpMethodToString(httpMethod)}, null, ServiceKind.WEB );
+				throw ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_REST_WRONG_HTTP_FUNCTION, new String[] {HttpUtilities.httpMethodToString(request.getMethod())}, null, ServiceKind.WEB );
 			}
 		}
 		catch(ServiceInvocationException sie )

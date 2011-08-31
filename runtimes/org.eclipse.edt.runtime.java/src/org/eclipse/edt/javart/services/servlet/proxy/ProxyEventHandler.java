@@ -42,7 +42,7 @@ public class ProxyEventHandler extends TracerBase
     				.append(" header:")
     				.append(ProxyUtilities.convert( ruiRequest.getHeaders() ))
     				.append(" content:")
-    				.append(ruiRequest.getBody()).toString());
+    				.append(ruiRequest.getBody() == null ? "null" :ruiRequest.getBody()).toString());
 		}
 
 		HttpResponse outerResponse = new HttpResponse();

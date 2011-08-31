@@ -175,7 +175,7 @@ public class HttpServiceHandler
 
 				//FIXME get content type from request and use that as the expected response
 				String charset = getCharSet(null);
-				byte[] resource = request.getBody().getBytes( charset == null ? ServiceUtilities.UTF8 : charset );
+				byte[] resource = request.getBody() == null ? new byte[0] : request.getBody().getBytes( charset == null ? ServiceUtilities.UTF8 : charset );
 				connection.setDoInput( true );
 				connection.setUseCaches( false );
 

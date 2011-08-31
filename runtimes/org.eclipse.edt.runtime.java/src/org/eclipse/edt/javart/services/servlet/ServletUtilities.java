@@ -36,17 +36,25 @@ public class ServletUtilities
 
     public static HttpRequest createHttpRequest(String object)throws ServiceInvocationException{
     	HttpRequest request = null;
-    	try {
-    		EDictionary localRequest = new EDictionary();
-			JsonLib.convertFromJSON(object, localRequest);
+    	if(object == null){
 			request = new HttpRequest();
-			request.setBody(unBox(localRequest.get("body")).toString());
-			request.setHeaders((EDictionary)unBox(localRequest.get("headers")));
-			request.setMethod(HttpUtilities.convert(((Long)unBox(localRequest.get("method"))).intValue()));
-			request.setUri(unBox(localRequest.get("uri")).toString());
-		} catch (AnyException e) {
-//FIXME
-		}
+    	}
+    	else{
+	    	try {
+	    		EDictionary localRequest = new EDictionary();
+				JsonLib.convertFromJSON(object, localRequest);
+				request = new HttpRequest();
+				Object obj = unBox(localRequest.get("body"));
+				request.setBody(obj == null ? null : obj.toString());
+				request.setHeaders((EDictionary)unBox(localRequest.get("headers")));
+				obj = unBox(localRequest.get("method"));
+				request.setMethod(HttpUtilities.convert(obj instanceof Number ? ((Number)obj).intValue(): -1));
+				obj = unBox(localRequest.get("uri"));
+				request.setUri(obj == null ? null : obj.toString());
+			} catch (AnyException e) {
+				//FIXME throw exception
+			}
+    	}
 		return request;
     }
     
