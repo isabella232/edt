@@ -34,6 +34,7 @@ public interface IConstants {
 	
 	public static final String CONTEXT_ROOT_PARAMETER_NAME = "egl__contextRoot"; //$NON-NLS-1$
 	public static final String DEFAULT_LOCALE_PARAMETER_NAME = "egl__defaultRuntimeMessagesLocale"; //$NON-NLS-1$
+	public static final String DEFAULT_DD_PARAMETER_NAME = "egl__defaultDeploymentDescriptor"; //$NON-NLS-1$
 	public static final String HTML_FILE_LOCALE = "egl__htmlLocale"; //$NON-NLS-1$
 	public static final String DYNAMIC_LOAD_HANDLERS = "egl__dynamicLoadHandlers"; //$NON-NLS-1$
 	

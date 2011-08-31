@@ -29,17 +29,22 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.internal.PartWrapper;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.Generator;
-import org.eclipse.edt.gen.deployment.javascript.DeploymentHTMLGenerator;
+import org.eclipse.edt.gen.deployment.javascript.DeploymentDescGenerator;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
+import org.eclipse.edt.ide.core.utils.DefaultDeploymentDescriptorUtility;
+import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.rui.internal.deployment.javascript.EGL2HTML4VE;
 import org.eclipse.edt.ide.rui.internal.nls.LocaleUtility;
 import org.eclipse.edt.ide.rui.preferences.IRUIPreferenceConstants;
@@ -97,15 +102,23 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 //					}
 //				}
 //TODO EDT deployment		
-//				else if (uri.endsWith(DeploymentDescriptorFileUtil.JS_SUFFIX)) {
-//					DeploymentDescriptor ir = null;
-//					try {
-//						ir = DeploymentDescriptorFileUtil.getDeploymentDescriptorIR(DeploymentDescriptorFileUtil.convertToEglddFile(uri).toLowerCase(), ResourcesPlugin.getWorkspace().getRoot().getProject(projectName));
-//					} catch (Exception e) {}
-//					if (ir != null) {
-//						bytes = new DeploymentDescGenerator().generateBindFile(ir);
-//					}
-//				}
+//				else
+				//FIXME using default specified on the project for now. also need a constant for -bnd.js
+				if (uri.endsWith("-bnd.js")) {
+					PartWrapper defaultDD = DefaultDeploymentDescriptorUtility.getDefaultDeploymentDescriptor(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName));
+					if (defaultDD != null) {
+						DeploymentDesc dd = null;
+						try {
+							IFile ddFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(defaultDD.getPartPath()));
+							if (ddFile.exists()) {
+								dd = DeploymentDesc.createDeploymentDescriptor(defaultDD.getPartName(), ddFile.getContents());
+							}
+						} catch (Exception e) {}
+						if (dd != null) {
+							bytes = new DeploymentDescGenerator().generateBindFile(dd);
+						}
+					}
+				}
 //TODO EDT NLS				
 //				else if(uri.endsWith(".js")){
 //					// Attempt to load this file as a properties file for NLS
@@ -212,7 +225,15 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 				eglProperties.put(IConstants.CONTEXT_ROOT_PARAMETER_NAME, projectName);		
 				eglProperties.put(IConstants.HTML_FILE_LOCALE, getHandlerMessageLocale());
 				eglProperties.put(IConstants.DEFAULT_LOCALE_PARAMETER_NAME, getRuntimeMessageLocale());
-				Generator generator = getDevelopmentGenerator(cmd, null, eglProperties, getHandlerMessageLocale(), getRuntimeMessageLocale());
+				
+				//FIXME using default specified on the project for now
+				String egldd = "";
+				PartWrapper defaultDD = DefaultDeploymentDescriptorUtility.getDefaultDeploymentDescriptor(project);
+				if (defaultDD != null) {
+					egldd = defaultDD.getPartName();
+				}
+				eglProperties.put(IConstants.DEFAULT_DD_PARAMETER_NAME, egldd);
+				Generator generator = getDevelopmentGenerator(cmd, egldd, eglProperties, getHandlerMessageLocale(), getRuntimeMessageLocale());
 				String result = cmd.generate(part, generator, environment.getIREnvironment());
 				return result.getBytes();
 			}
