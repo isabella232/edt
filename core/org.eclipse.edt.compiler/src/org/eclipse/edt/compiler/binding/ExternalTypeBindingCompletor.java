@@ -17,14 +17,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.edt.compiler.binding.annotationType.EGLImplicitExtendedTypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
-import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
@@ -34,6 +32,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
+import org.eclipse.edt.compiler.internal.core.lookup.ExternalTypeScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
@@ -162,8 +161,8 @@ public class ExternalTypeBindingCompletor extends AbstractBinder {
                 	scope = new AnnotationLeftHandScope(scope, getPartSubTypeAndAnnotationCollector().getSubTypeAnnotationBinding(), getPartSubTypeAndAnnotationCollector().getSubTypeAnnotationBinding().getType(), getPartSubTypeAndAnnotationCollector().getSubTypeAnnotationBinding(), -1, externalTypeBinding);
                 }
             }
-	        SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, externalTypeBinding, scope, dependencyRequestor, problemRequestor, compilerOptions);
-	        Iterator i = getPartSubTypeAndAnnotationCollector().getSettingsBlocks().iterator();
+	        SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(new ExternalTypeScope(currentScope, externalTypeBinding), externalTypeBinding, scope, dependencyRequestor, problemRequestor, compilerOptions);
+            Iterator i = getPartSubTypeAndAnnotationCollector().getSettingsBlocks().iterator();
 	        while (i.hasNext()) {
 	            SettingsBlock block = (SettingsBlock)i.next();
 	            block.accept(blockCompletor);
