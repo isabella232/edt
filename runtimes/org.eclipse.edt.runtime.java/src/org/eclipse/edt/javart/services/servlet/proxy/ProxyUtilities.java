@@ -64,7 +64,7 @@ public class ProxyUtilities
     	return buffer.toString();
     }
 	    
-	static boolean isSoapCall( HttpRequest innerRequest )	
+	public static boolean isSoapCall( HttpRequest innerRequest )	
 	{
 		EDictionary headers = innerRequest.getHeaders();
 		return headers != null && headers.containsKey( EGL_SOAP_CALL );
