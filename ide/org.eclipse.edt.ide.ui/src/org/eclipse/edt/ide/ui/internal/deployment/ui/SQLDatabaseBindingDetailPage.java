@@ -40,8 +40,8 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 	
 	protected Composite createDetailSection(Composite parent,
 			FormToolkit toolkit, int sectionStyle, int columnSpan) {
-		return createSection(parent, toolkit, SOAMessages.SQLDatabaseDetailSecTitle, 
-				SOAMessages.SQLDatabaseDetailSecDescp, sectionStyle, columnSpan);
+		return createSection(parent, toolkit, SOAMessages.SQLDatabaseBindingDetailSecTitle, 
+				SOAMessages.SQLDatabaseBindingDetailSecDescp, sectionStyle, columnSpan);
 	}
 	
 	protected void createDetailControls(FormToolkit toolkit, Composite parent) {
@@ -57,31 +57,11 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		fDbms = createTextControl(toolkit, parent);
 		fDbms.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
-				HandleDbmsChanged();				
+				fSQLDatabaseBinding.setDbms(fDbms.getText());		
 			}			
 		});
 	}
 	
-	protected void HandleDbmsChanged() {
-		fSQLDatabaseBinding.setDbms(fDbms.getText());		
-	}
-	
-	private void createBaseUriExample(FormToolkit toolkit, Composite parent) {
-		createSpacer( toolkit, parent, 1 );
-		boolean toggleBorder = toolkit.getBorderStyle() == SWT.BORDER;
-		if (toggleBorder) {
-			toolkit.setBorderStyle(SWT.NONE);
-		}
-		Text example = toolkit.createText(parent, SOAMessages.BaseURITooltip, SWT.SINGLE|SWT.READ_ONLY); //$NON-NLS-1$;
-		if (toggleBorder) {
-			toolkit.setBorderStyle(SWT.BORDER);
-		}
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL|GridData.VERTICAL_ALIGN_BEGINNING);
-		gd.widthHint = 10;
-		gd.horizontalSpan = nColumnSpan-1;
-		example.setLayoutData(gd);
-	}
-
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		IStructuredSelection ssel = (IStructuredSelection) selection;
 		if (ssel.size() == 1)
@@ -98,33 +78,8 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 			fDbms.setText(dbms);
 	}	
 	
-//
-//	private void createSessionCookieIdControl(FormToolkit toolkit,
-//			Composite parent) {
-//		toolkit.createLabel(parent, SOAMessages.LabelSessionCookieId);
-//		fSessionCookieId = createTextControl(toolkit, parent);
-//		fSessionCookieId.addModifyListener(new ModifyListener(){
-//			public void modifyText(ModifyEvent e) {
-//				HandleSessionCookieIdChanged();				
-//			}			
-//		});
-//		
-//	}
-//
-//	protected void HandleSessionCookieIdChanged() {
-//		fRestBinding.setSessionCookieId(fSessionCookieId.getText());		
-//	}
-//
-
-//	
-
-//	protected void HandleNameChanged() {
-//		fRestBinding.setName(fNameText.getText());
-//		refreshMainTableViewer();
-//	}
-//	
-//	protected void HandleGenCheckChanged() {
-//		fRestBinding.setEnableGeneration(fGenBtn.getSelection());		
-//	}
-
+	protected void HandleNameChanged() {
+		fSQLDatabaseBinding.setName(fNameText.getText());
+		refreshMainTableViewer();
+	}
 }
