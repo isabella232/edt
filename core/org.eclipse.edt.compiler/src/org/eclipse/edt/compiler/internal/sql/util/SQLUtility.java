@@ -246,4 +246,9 @@ public class SQLUtility {
     	IDataBinding fieldBinding = aBinding.findData(fieldName);
 		return IBinding.NOT_FOUND_BINDING == fieldBinding ? null : (IAnnotationBinding) fieldBinding;
 	}
+    
+    public static boolean isTerraDataSupported() {
+        String temp = System.getProperty("EGL_TERADATA", "false"); //$NON-NLS-1$ //$NON-NLS-2$
+        return ("true".equals(temp));
+	}
 }
