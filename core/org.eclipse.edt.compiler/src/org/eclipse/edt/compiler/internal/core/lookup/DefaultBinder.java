@@ -114,6 +114,7 @@ import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.NullLiteral;
+import org.eclipse.edt.compiler.core.ast.NullableType;
 import org.eclipse.edt.compiler.core.ast.OpenStatement;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
 import org.eclipse.edt.compiler.core.ast.Primitive;
@@ -1308,7 +1309,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 			if (typeAST.isNullableType()) {				
 				problemRequestor.acceptProblem(
 						typeAST,
-						IProblemRequestor.NULLABLE_INVALID_IN_ISA_OR_AS);
+						IProblemRequestor.NULLABLE_INVALID_IN_ISA_AS_OR_NEW);
 			}
 						
 			Type tempTypeAST = typeAST;
@@ -1320,14 +1321,10 @@ public abstract class DefaultBinder extends AbstractBinder {
 				}
 				
 				tempTypeAST = ((ArrayType) tempTypeAST).getElementType();
+				if (tempTypeAST.isNullableType()) {
+					tempTypeAST = ((NullableType)tempTypeAST).getBaseType();
+				}
 			}
-			
-			if (tempTypeAST != typeAST && tempTypeAST.isNullableType()) {
-				problemRequestor.acceptProblem(
-						tempTypeAST,
-						IProblemRequestor.NULLABLE_INVALID_IN_ISA_OR_AS);
-			}
-
 		}
 	}
 	
@@ -1408,6 +1405,13 @@ public abstract class DefaultBinder extends AbstractBinder {
 			problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
 			newExpression.setTypeBinding(IBinding.NOT_FOUND_BINDING);
 		}
+		
+		if (newExpression.getType().isNullableType()) {
+			problemRequestor.acceptProblem(
+					newExpression.getType(),
+					IProblemRequestor.NULLABLE_INVALID_IN_ISA_AS_OR_NEW);
+		}
+		
 		if(newExpression.hasSettingsBlock()) {
 		    type = newExpression.resolveTypeBinding();
 		    if (type != IBinding.NOT_FOUND_BINDING) {
