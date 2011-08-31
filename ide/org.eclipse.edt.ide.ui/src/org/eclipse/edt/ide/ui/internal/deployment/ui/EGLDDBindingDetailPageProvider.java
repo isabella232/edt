@@ -14,6 +14,7 @@ package org.eclipse.edt.ide.ui.internal.deployment.ui;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLBinding;
 import org.eclipse.edt.ide.ui.internal.deployment.NativeBinding;
 import org.eclipse.edt.ide.ui.internal.deployment.RestBinding;
+import org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding;
 import org.eclipse.edt.ide.ui.internal.deployment.WebBinding;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IDetailsPageProvider;
@@ -33,6 +34,8 @@ public class EGLDDBindingDetailPageProvider implements IDetailsPageProvider {
 			return new WebBindingDetailPage();
 		else if(key instanceof RestBinding)
 			return new RestBindingDetailPage();
+		else if(key instanceof SQLDatabaseBinding)
+			return new SQLDatabaseBindingDetailPage();
 		return null;
 	}
 	

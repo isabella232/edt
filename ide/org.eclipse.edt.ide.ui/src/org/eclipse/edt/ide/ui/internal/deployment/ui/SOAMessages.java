@@ -359,5 +359,14 @@ public class SOAMessages extends NLS {
 	public static String WebserviceRuntimeSectionTitle;
 	
 	public static String WebserviceRuntimeSectionDesc;
+
+	public static String SQLDatabaseDetailSecDescp;
+
+	public static String SQLDatabaseDetailSecTitle;
+
+	public static String LabelDbms;
 	
+	public static String DbmsTooltip;
+
+
 }

@@ -28,6 +28,7 @@ import org.eclipse.edt.ide.ui.internal.deployment.NativeBinding;
 import org.eclipse.edt.ide.ui.internal.deployment.Protocol;
 import org.eclipse.edt.ide.ui.internal.deployment.ReferenceProtocol;
 import org.eclipse.edt.ide.ui.internal.deployment.RestBinding;
+import org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding;
 import org.eclipse.edt.ide.ui.internal.deployment.WebBinding;
 import org.eclipse.edt.ide.ui.internal.viewsupport.ImageDescriptorRegistry;
 import org.eclipse.edt.ide.ui.internal.wizards.EGLDDBindingWizard;
@@ -88,6 +89,7 @@ public class EGLDDBindingBlock extends EGLDDBaseBlock {
 					children.addAll(bindings.getNativeBinding());					
 					children.addAll(bindings.getWebBinding());
 					children.addAll(bindings.getRestBinding());
+					children.addAll(bindings.getSqlDatabaseBinding());
 				}
 			}
 			return children.toArray();
@@ -177,6 +179,14 @@ public class EGLDDBindingBlock extends EGLDDBaseBlock {
 					return restBinding.getName();
 				else if(columnIndex == COLINDEX_PROTOCOLTYPE){
 					return "REST";  //$NON-NLS-1$
+				}
+			}
+			else if(element instanceof SQLDatabaseBinding){
+				SQLDatabaseBinding sqlDatabaseBinding = (SQLDatabaseBinding)element;
+				if(columnIndex == COLINDEX_NAME)
+					return sqlDatabaseBinding.getName();
+				else if(columnIndex == COLINDEX_PROTOCOLTYPE){
+					return "SQL";  //$NON-NLS-1$
 				}
 			}
 			return ""; //$NON-NLS-1$
@@ -355,7 +365,6 @@ public class EGLDDBindingBlock extends EGLDDBaseBlock {
 	}
 	
 	protected void HandleAddBtnPressed(){
-		//TODO fix before checkin
 		EGLDDBindingWizard wizard = new EGLDDBindingWizard();
 		IWorkbench workbench = fPage.getSite().getWorkbenchWindow().getWorkbench();
 		IProject proj = ((EGLDeploymentDescriptorEditor)fPage.getEditor()).getProject();

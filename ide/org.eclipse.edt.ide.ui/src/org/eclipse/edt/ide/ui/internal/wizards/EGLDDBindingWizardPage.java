@@ -56,6 +56,7 @@ public class EGLDDBindingWizardPage extends EGLFileWizardPage {
 	private Button fEGLBindingButton;
 	private Button fNativeBindingButton;
 	private Button fRestBindingButton;
+	private Button fSQLDatabaseBindingButton;
 	
 	protected StringDialogField fNameField;	
 	protected StatusInfo fNameStatus;
@@ -106,6 +107,7 @@ public class EGLDDBindingWizardPage extends EGLFileWizardPage {
 		fRestBindingButton = createBindingRadioButton(grp, NewWizardMessages.RestBindingBtnLabel, EGLDDBindingConfiguration.BINDINGTYPE_REST);		
 //		fEGLBindingButton = createBindingRadioButton(grp, NewWizardMessages.EGLBindingBtnLabel, EGLDDBindingConfiguration.BINDINGTYPE_EGL);
 //		fNativeBindingButton = createBindingRadioButton(grp, NewWizardMessages.NativeBindingBtnLabel, EGLDDBindingConfiguration.BINDINGTYPE_NATIVE);
+		fSQLDatabaseBindingButton = createBindingRadioButton(grp, NewWizardMessages.SQLDatabaseBindingBtnLabel, EGLDDBindingConfiguration.BINDINGTYPE_SQL);		
 		selectBindingTypeButton(getConfiguration().getBindingType());
 	}
 	
@@ -123,6 +125,9 @@ public class EGLDDBindingWizardPage extends EGLFileWizardPage {
 			break;
 		case EGLDDBindingConfiguration.BINDINGTYPE_NATIVE:
 			fNativeBindingButton.setSelection(true);
+			break;
+		case EGLDDBindingConfiguration.BINDINGTYPE_SQL:
+			fSQLDatabaseBindingButton.setSelection(true);
 			break;
 		}
 	}

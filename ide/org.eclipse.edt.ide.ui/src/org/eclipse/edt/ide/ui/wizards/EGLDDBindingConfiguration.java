@@ -28,6 +28,7 @@ public class EGLDDBindingConfiguration extends EGLPartConfiguration {
 	public static final int BINDINGTYPE_REST = 1;	
 	public static final int BINDINGTYPE_EGL = 2;
 	public static final int BINDINGTYPE_NATIVE = 3;
+	public static final int BINDINGTYPE_SQL = 4;
 	
 	private int fBindingType=BINDINGTYPE_REST;
 

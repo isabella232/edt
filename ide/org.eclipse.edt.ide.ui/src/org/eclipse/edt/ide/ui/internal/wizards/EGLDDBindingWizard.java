@@ -31,6 +31,7 @@ public class EGLDDBindingWizard extends EGLPartWizard {
 	protected final int PATH_EGL = 3;
 	protected final int PATH_NATIVE = 4;
 	protected final int PATH_REST = 5;
+	protected final int PATH_SQL = 6;
 	
 	protected int fPagePath = PATH_WS_GEN;
 	
@@ -39,6 +40,7 @@ public class EGLDDBindingWizard extends EGLPartWizard {
 	protected IWizardPage[] PAGES_EGL;
 	protected IWizardPage[] PAGES_NATIVE;
 	protected IWizardPage[] PAGES_REST;
+	protected IWizardPage[] PAGES_SQL;
 	
 	private Object fNewBinding;
 	
@@ -93,32 +95,37 @@ public class EGLDDBindingWizard extends EGLPartWizard {
     		return canPagePathFinish(PAGES_NATIVE);
     	case(PATH_REST):
     		return canPagePathFinish(PAGES_REST);
+    	case(PATH_SQL):
+    		return canPagePathFinish(PAGES_SQL);
     	}
     	return super.canFinish();
     }
 	
     public void addPages() {
-//		IWizardPage page1 = new EGLDDBindingWizardPage(EGLDDBindingWizardPage.WIZPAGENAME_EGLDDBindingWizardPage);
+		IWizardPage page1 = new EGLDDBindingWizardPage(EGLDDBindingWizardPage.WIZPAGENAME_EGLDDBindingWizardPage);
 //		IWizardPage page2 = new WebBindingWizardPage(WebBindingWizardPage.WIZPAGENAME_WebBindingWizardPage);
 //		IWizardPage page3 = new WSDL2EGLBindingWizardPage(WSDL2EGLBindingWizardPage.WIZPAGENAME_WSDL2EGLBindingWizardPage);
 //		IWizardPage page4 = new WSDLInterfaceWizardPage(WSDLInterfaceWizardPage.WIZPAGENAME_WSDLInterfaceWizardPage);
 //		IWizardPage page5 = new EGLBindingWizardPage(EGLBindingWizardPage.WIZPAGENAME_EGLBindingWizardPage);
 //		IWizardPage page6 = new NativeBindingWizardPage(NativeBindingWizardPage.WIZPAGENAME_NativeBindingWizardPage);
 		IWizardPage page7 = new RestBindingWizardPage(RestBindingWizardPage.WIZPAGENAME_RestBindingWizardPage);
+		IWizardPage page8 = new SQLDatabaseBindingWizardPage(SQLDatabaseBindingWizardPage.WIZPAGENAME_SQLDatabaseBindingWizardPage);
 		
 //		PAGES_WS_GEN = new IWizardPage[]{page1, page2, page3, page4};
 //		PAGES_WS_USE = new IWizardPage[]{page1, page2};
 //		PAGES_EGL = new IWizardPage[]{page1, page5};
 //		PAGES_NATIVE = new IWizardPage[]{page1, page6};
-//		PAGES_REST = new IWizardPage[]{page1, page7};
+		PAGES_REST = new IWizardPage[]{page1, page7};
+		PAGES_SQL = new IWizardPage[]{page1, page8};
 
-//		addPage(page1);
+		addPage(page1);
 //		addPage(page2);
 //		addPage(page3);		
 //		addPage(page4);
 //		addPage(page5);		
 //		addPage(page6);
 		addPage(page7);
+		addPage(page8);
 	}
 	
 	public IWizardPage getNextPage(IWizardPage page) {
@@ -149,6 +156,10 @@ public class EGLDDBindingWizard extends EGLPartWizard {
 			else if(bindingType == EGLDDBindingConfiguration.BINDINGTYPE_REST){
 				nextPage = getPage(RestBindingWizardPage.WIZPAGENAME_RestBindingWizardPage);
 				fPagePath = PATH_REST;
+			}
+			else if(bindingType == EGLDDBindingConfiguration.BINDINGTYPE_SQL){
+				nextPage = getPage(SQLDatabaseBindingWizardPage.WIZPAGENAME_SQLDatabaseBindingWizardPage);
+				fPagePath = PATH_SQL;
 			}
 		}
 //		else if(currPageName.equals(WebBindingWizardPage.WIZPAGENAME_WebBindingWizardPage))

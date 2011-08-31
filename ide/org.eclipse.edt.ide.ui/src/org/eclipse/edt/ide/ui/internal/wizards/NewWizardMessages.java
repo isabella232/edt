@@ -77,6 +77,7 @@ public class NewWizardMessages extends NLS {
 	public static String CreateAsWebService ;
 	public static String CreateWSClientBindingLabel;
 	public static String DescAddRestBinding;
+	public static String DescAddSQLDatabaseBinding;
 	public static String DuplicateImportedFormatProfile ;
 	public static String Edit ;
 	public static String EditProfile ;
@@ -167,6 +168,7 @@ public class NewWizardMessages extends NLS {
 	public static String NewEGLService ;
 	public static String RestBindingBtnLabel ;
 	public static String RestService;
+	public static String SQLDatabaseBindingBtnLabel ;
 
 
 	public static String NewElementWizardOp_errorTitle;
@@ -763,6 +765,7 @@ public class NewWizardMessages extends NLS {
 	public static String WebServicesWizPageDescription;
 	public static String WebServicesWizPageTitle;
 	public static String WebServicesWizTitle;
+	public static String TitleAddSQLDatabaseBinding;
 
 	public static String WizardNewProjectCreationPage_directoryLabel;
 
