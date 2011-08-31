@@ -261,7 +261,7 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 		out.print(", contentType : ");
 		printQuotedString((String)methodRestAnnotation.getValue("responseContentType"), out);;
 		
-		out.println("}");
+		out.print("}");
 		return resourceRestArg != null ? resourceRestArg.getParamIndex() : -1;			
 	}
 	
@@ -475,9 +475,7 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 						out.print(", ");
 					
 					//get the temp var name
-					out.print("\"");				
 					ctx.invoke(genRuntimeTypeName, param.getType(), ctx, out, TypeNameKind.EGLImplementation);
-					out.print("\"");				
 					isFirst = false;				
 				}
 			}
