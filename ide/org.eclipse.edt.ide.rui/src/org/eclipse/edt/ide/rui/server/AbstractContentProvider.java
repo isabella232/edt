@@ -106,7 +106,7 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 				//FIXME using default specified on the project for now. also need a constant for -bnd.js
 				if (uri.endsWith("-bnd.js")) {
 					PartWrapper defaultDD = DefaultDeploymentDescriptorUtility.getDefaultDeploymentDescriptor(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName));
-					if (defaultDD != null) {
+					if (defaultDD.getPartPath() != null && defaultDD.getPartPath().length() > 0) {
 						DeploymentDesc dd = null;
 						try {
 							IFile ddFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(defaultDD.getPartPath()));
@@ -227,11 +227,7 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 				eglProperties.put(IConstants.DEFAULT_LOCALE_PARAMETER_NAME, getRuntimeMessageLocale());
 				
 				//FIXME using default specified on the project for now
-				String egldd = "";
-				PartWrapper defaultDD = DefaultDeploymentDescriptorUtility.getDefaultDeploymentDescriptor(project);
-				if (defaultDD != null) {
-					egldd = defaultDD.getPartName();
-				}
+				String egldd = DefaultDeploymentDescriptorUtility.getDefaultDeploymentDescriptor(project).getPartName();
 				eglProperties.put(IConstants.DEFAULT_DD_PARAMETER_NAME, egldd);
 				Generator generator = getDevelopmentGenerator(cmd, egldd, eglProperties, getHandlerMessageLocale(), getRuntimeMessageLocale());
 				String result = cmd.generate(part, generator, environment.getIREnvironment());

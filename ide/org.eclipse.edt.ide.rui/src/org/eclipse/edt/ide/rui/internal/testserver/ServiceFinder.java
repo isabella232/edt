@@ -83,7 +83,7 @@ public class ServiceFinder {
 		
 		// First add the project's default DD if it has one.
 		PartWrapper defaultDD = DefaultDeploymentDescriptorUtility.getDefaultDeploymentDescriptor(project);
-		if (defaultDD != null) {
+		if (defaultDD.getPartPath() != null && defaultDD.getPartPath().length() > 0) {
 			IFile ddFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(defaultDD.getPartPath()));
 			if (ddFile.exists()) {
 				List<RestServiceMapping> parsed = parseDD(ddFile);
