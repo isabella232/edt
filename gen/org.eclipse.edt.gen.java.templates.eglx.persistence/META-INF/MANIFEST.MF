@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Persistence
+Bundle-Name: EDT Java Persistence Generation
 Bundle-SymbolicName: org.eclipse.edt.gen.java.templates.eglx.persistence
 Bundle-Version: 0.7.0.qualifier
 Require-Bundle: org.eclipse.edt.mof.eglx.persistence.sql;bundle-version="0.7.0",
@@ -9,3 +9,5 @@ Require-Bundle: org.eclipse.edt.mof.eglx.persistence.sql;bundle-version="0.7.0",
  org.eclipse.edt.gen.java;bundle-version="0.7.0"
 Export-Package: org.eclipse.edt.gen.java.templates.eglx.persistence,
  org.eclipse.edt.gen.java.templates.eglx.persistence.sql
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: Eclipse EGL Development Tools
