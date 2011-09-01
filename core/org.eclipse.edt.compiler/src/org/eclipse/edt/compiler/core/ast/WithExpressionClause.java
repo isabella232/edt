@@ -25,4 +25,9 @@ public class WithExpressionClause extends WithClause {
 	protected Object clone() throws CloneNotSupportedException {
 		return new WithExpressionClause((Expression)expr.clone(), getOffset(), getOffset() + getLength());
 	}
+	
+	@Override
+	public boolean isWithExpression() {
+		return true;
+	}
 }

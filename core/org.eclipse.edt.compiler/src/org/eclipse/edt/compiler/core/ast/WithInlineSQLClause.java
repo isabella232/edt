@@ -68,4 +68,9 @@ public class WithInlineSQLClause extends WithInlineClause {
 	public boolean isWithInlineSQL() {
 		return true;
 	}
+
+	@Override
+	public String getStatement() {
+		return getSqlStmt().getValue();
+	}
 }

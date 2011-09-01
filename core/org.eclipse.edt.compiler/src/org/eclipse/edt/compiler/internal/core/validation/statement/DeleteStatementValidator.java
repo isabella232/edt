@@ -117,11 +117,13 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 				}
 			});
 			
-			ITypeBinding typeBinding = expr.resolveTypeBinding();
-			if(isSQLTarget && typeBinding.getAnnotation(((IPartBinding) typeBinding).getSubType()).findData(IEGLConstants.PROPERTY_KEYITEMS) == IBinding.NOT_FOUND_BINDING) {
-				//It is not valid to have a sql record with no keys on the statement if the nocursor is specified, and the user does not code his own sql statement
-				if (nocursorNode[0] != null && inlineSqlNode[0] == null) {
-					problemRequestor.acceptProblem(nocursorNode[0], IProblemRequestor.NOCURSOR_REQUIRES_KEY_ITEM, new String[] {typeBinding.getCaseSensitiveName()});
+			if (expr != null) {
+				ITypeBinding typeBinding = expr.resolveTypeBinding();
+				if(isSQLTarget && typeBinding.getAnnotation(((IPartBinding) typeBinding).getSubType()).findData(IEGLConstants.PROPERTY_KEYITEMS) == IBinding.NOT_FOUND_BINDING) {
+					//It is not valid to have a sql record with no keys on the statement if the nocursor is specified, and the user does not code his own sql statement
+					if (nocursorNode[0] != null && inlineSqlNode[0] == null) {
+						problemRequestor.acceptProblem(nocursorNode[0], IProblemRequestor.NOCURSOR_REQUIRES_KEY_ITEM, new String[] {typeBinding.getCaseSensitiveName()});
+					}
 				}
 			}
 
@@ -131,6 +133,10 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 
 		protected void validateTargetType(Expression expression){
 			boolean isValid = false;
+			if (expression == null) {
+				return;
+			}
+			
 			ITypeBinding typeBinding = expression.resolveTypeBinding();
 			
 			if (StatementValidator.isValidBinding(typeBinding) ){

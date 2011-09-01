@@ -13,6 +13,7 @@ package org.eclipse.edt.compiler.core.ast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.edt.compiler.internal.dli.DLIInfo;
@@ -28,15 +29,22 @@ import org.eclipse.edt.compiler.internal.sql.SQLInfo;
 public class DeleteStatement extends Statement implements IDliIOStatement {
 
 	private Expression expr;
+	private Expression dataSource;
 	private List deleteOptions;
 	private SQLInfo sqlInfo;
 	private DLIInfo dliInfo;
 
-	public DeleteStatement(Expression expr, List deleteOptions, int startOffset, int endOffset) {
+	public DeleteStatement(Expression expr, Expression dataSource, List deleteOptions, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.expr = expr;
-		expr.setParent(this);
+		if (expr != null) {
+			expr.setParent(this);
+		}
+		
+		this.dataSource = dataSource;
+		dataSource.setParent(this);
+		
 		this.deleteOptions = setParent(deleteOptions);
 	}
 	
@@ -44,6 +52,10 @@ public class DeleteStatement extends Statement implements IDliIOStatement {
 		return expr;
 	}
 	
+	public Expression getDataSource() {
+		return dataSource;
+	}
+
 	public List getOptions() {
 		return deleteOptions;
 	}
@@ -51,18 +63,29 @@ public class DeleteStatement extends Statement implements IDliIOStatement {
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
-			expr.accept(visitor);
+			
+			if (expr != null) {
+				expr.accept(visitor);
+			}
+			dataSource.accept(visitor);
 			acceptChildren(visitor, deleteOptions);
 		}
 		visitor.endVisit(this);
 	}
 	
 	public List getIOObjects() {
+		if (expr == null) {
+			return Collections.EMPTY_LIST;
+		}
 		return Arrays.asList(new Expression[] {expr});
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {
-		return new DeleteStatement((Expression)expr.clone(), cloneList(deleteOptions), getOffset(), getOffset() + getLength());
+		Expression exprClone = null;
+		if (expr != null) {
+			exprClone = (Expression)expr.clone();
+		}
+		return new DeleteStatement(exprClone, (Expression)dataSource.clone(), cloneList(deleteOptions), getOffset(), getOffset() + getLength());
 	}
     public DLIInfo getDliInfo() {
         return dliInfo;
@@ -83,7 +106,9 @@ public class DeleteStatement extends Statement implements IDliIOStatement {
      */
     public List getTargets() {
         List list = new ArrayList();
-        list.add(getTarget());
+        if (getTarget() != null) {
+        	list.add(getTarget());
+        }
         return list;
     }
 }

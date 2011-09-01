@@ -21,5 +21,7 @@ public abstract class WithInlineClause extends WithClause {
 	public boolean isWithInline() {
 		return true;
 	}
+	
+	public abstract String getStatement();
 
 }

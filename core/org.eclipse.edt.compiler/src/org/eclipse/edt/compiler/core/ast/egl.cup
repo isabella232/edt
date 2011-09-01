@@ -599,8 +599,11 @@ stmt
 	|	CONVERSE:converse1 expr:expr1 withNameOpt:withName1 SEMI:semi1
 	{: RESULT = new ConverseStatement(expr1, withName1, converse1left, semi1right); :}
 
-	|	DELETE:delete1 expr:expr1 deleteOption_star:deleteOptions1 SEMI:semi1
-	{: RESULT = new DeleteStatement(expr1, deleteOptions1, delete1left, semi1right); :}
+	|	DELETE:delete1 expr:expr1 FROM:from1 expr:fromexpr1 deleteOption_star:deleteOptions1 SEMI:semi1
+	{: RESULT = new DeleteStatement(expr1, fromexpr1,deleteOptions1, delete1left, semi1right); :}
+
+	|	DELETE:delete1 FROM:from1 expr:fromexpr1 deleteOption_star:deleteOptions1 SEMI:semi1
+	{: RESULT = new DeleteStatement(null, fromexpr1, deleteOptions1, delete1left, semi1right); :}
 
 	|	DISPLAY:display1 expr:expr1 SEMI:semi1
 	{: RESULT = new DisplayStatement(expr1, display1left, semi1right); :}
@@ -888,9 +891,6 @@ deleteOption
 	::=	USINGPCB:usingpcb1 lvalue:lvalue1
 	{: RESULT = new UsingPCBClause(lvalue1, usingpcb1left, lvalue1right); :}
 
-	|	FROM:from1 expr:expr1
-	{: RESULT = new FromOrToExpressionClause(expr1, from1left, expr1right); :}
-
 	|	WITH:with1 inlineSQLStatement:inlineSQLStatement1
 	{: RESULT = new WithInlineSQLClause(inlineSQLStatement1, with1left, inlineSQLStatement1right); :}
 
@@ -900,8 +900,11 @@ deleteOption
 	|	NOCURSOR:nocursor
 	{: RESULT = new NoCursorClause(nocursorleft, nocursorright); :}
 	
-	|	USINGKEYS:usingkeys1 expr_plus:exprs1
-	{: RESULT = new UsingKeysClause(exprs1, usingkeys1left, exprs1right); :}
+	|	USING:using1 expr_plus:exprs1
+	{: RESULT = new UsingClause(exprs1, using1left, exprs1right); :}
+	
+	|	FOR:for1 expr:expr1
+	{: RESULT = new ForExpressionClause(expr1, for1left, expr1right); :}
 	;
 
 whenClause

@@ -69,4 +69,9 @@ public class WithInlineDLIClause extends WithInlineClause {
 	public boolean isWithInlineDLI() {
 		return true;
 	}
+
+	@Override
+	public String getStatement() {
+		return getDliStmt().getValue();
+	}
 }
