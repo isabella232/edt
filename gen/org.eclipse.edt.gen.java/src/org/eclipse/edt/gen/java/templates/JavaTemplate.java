@@ -58,6 +58,7 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genGetter = "genGetter";
 	public static final String genGetterSetter = "genGetterSetter";
 	public static final String genGetterSetters = "genGetterSetters";
+	public static final String genJavaAnnotation = "genJavaAnnotation";
 	public static final String genJsonTypeDependentOptions = "genJsonTypeDependentOptions";
 	public static final String genImports = "genImports";
 	public static final String genInitialization = "genInitialization";
