@@ -26,6 +26,7 @@ public class Constants {
 	public static final String genFunctionEntry = "genFunctionEntry";
 	public static final String genFunctionExit = "genFunctionExit";
 	public static final String genGetName = "genGetName";
+	public static final String genGetterFunctionName = "genGetterFunctionName";
 	public static final String genGetVariables = "genGetVariables";
 	public static final String genGetVariablesEntry = "genGetVariablesEntry";
 	public static final String genSetLocalFunctionVariable = "genSetLocalFunctionVariable";

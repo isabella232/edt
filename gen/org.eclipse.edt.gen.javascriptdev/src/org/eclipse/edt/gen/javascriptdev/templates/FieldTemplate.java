@@ -28,7 +28,7 @@ public class FieldTemplate extends org.eclipse.edt.gen.javascript.templates.Fiel
 		if (property != null && property.getValue("getMethod") != null) {
 			// Catch errors so that we don't throw an exception when we're just trying to display values
 			out.print("function(){try{return eze$$parent.");
-			ctx.invoke(genGetter, field, ctx, out);
+			ctx.invoke(Constants.genGetterFunctionName, field, ctx, out);
 			out.print( ";}catch(e){return e;}}()" );
 		}
 		else {
@@ -41,6 +41,11 @@ public class FieldTemplate extends org.eclipse.edt.gen.javascript.templates.Fiel
 		out.print("\", jsName : \"");
 		ctx.invoke(Constants.genDebugJSName, field, ctx, out);
 		out.print( "\"}" );
+	}
+	
+	public void genGetterFunctionName(Field field, Context ctx, TabbedWriter out) {
+		out.print(genGetterSetterFunctionName("get", field));
+		out.println("()");
 	}
 	
 	@Override
