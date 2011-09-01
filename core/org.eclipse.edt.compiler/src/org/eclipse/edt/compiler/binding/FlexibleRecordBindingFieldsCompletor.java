@@ -257,24 +257,6 @@ public class FlexibleRecordBindingFieldsCompletor extends AbstractBinder {
 
         String fieldName = structureItem.isFiller() ? InternUtil.internCaseSensitive("*") : structureItem.getName().getCaseSensitiveIdentifier();
 
-        if (typeBinding != null) {
-            ITypeBinding baseType = typeBinding.getBaseType();
-            if (baseType.getKind() != ITypeBinding.PRIMITIVE_TYPE_BINDING && baseType.getKind() != ITypeBinding.DATAITEM_BINDING
-                    && baseType.getKind() != ITypeBinding.FLEXIBLE_RECORD_BINDING
-                    && baseType.getKind() != ITypeBinding.FIXED_RECORD_BINDING && baseType.getKind() != ITypeBinding.DICTIONARY_BINDING
-                    && baseType.getKind() != ITypeBinding.ARRAYDICTIONARY_BINDING && baseType.getKind() != ITypeBinding.SERVICE_BINDING
-                    && baseType.getKind() != ITypeBinding.HANDLER_BINDING
-                    && baseType.getKind() != ITypeBinding.INTERFACE_BINDING
-                    && baseType.getKind() != ITypeBinding.DELEGATE_BINDING
-                    && baseType.getKind() != ITypeBinding.EXTERNALTYPE_BINDING
-                    && baseType.getKind() != ITypeBinding.ENUMERATION_BINDING){
-                problemRequestor.acceptProblem(structureItem.getType(), IProblemRequestor.DATA_DECLARATION_HAS_INCORRECT_TYPE,
-                        new String[] { baseType.getPackageQualifiedName() });
-                structureItem.getName().setBinding(IBinding.NOT_FOUND_BINDING);
-                return null;
-            }
-        }
-
         FlexibleRecordFieldBinding field = new FlexibleRecordFieldBinding(fieldName, recordBinding, typeBinding);
         if (!structureItem.isFiller()) {
             structureItem.getName().setBinding(field);
