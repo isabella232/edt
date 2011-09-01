@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.services.servlet.rest.rpc.PreviewServiceServlet;
+import org.eclipse.osgi.util.NLS;
 
 public class ConfigServlet extends HttpServlet {
 	
@@ -31,27 +32,27 @@ public class ConfigServlet extends HttpServlet {
 	/**
 	 * The path of the servlet running inside the context root.
 	 */
-	public static final String SERVLET_PATH = "/config";
+	public static final String SERVLET_PATH = "/config"; //$NON-NLS-1$
 	
 	/**
 	 * The name of the argument for passing mapping additions.
 	 */
-	public static final String ARG_ADDED = "added";
+	public static final String ARG_ADDED = "added"; //$NON-NLS-1$
 	
 	/**
 	 * The name of the argument for passing mapping removals.
 	 */
-	public static final String ARG_REMOVED = "removed";
+	public static final String ARG_REMOVED = "removed"; //$NON-NLS-1$
 	
 	/**
 	 * The delimeter used between mappings.
 	 */
-	public static final String MAPPING_ARG_DELIMETER = "|";
+	public static final String MAPPING_ARG_DELIMETER = "|"; //$NON-NLS-1$
 	
 	/**
 	 * The delimeter used between components of a mapping.
 	 */
-	public static final String MAPPING_DELIMETER = ";";
+	public static final String MAPPING_DELIMETER = ";"; //$NON-NLS-1$
 	
 	/**
 	 * The servlet which is being updated.
@@ -88,18 +89,18 @@ public class ConfigServlet extends HttpServlet {
 				
 				// uri and className will be encoded
 				try {
-					uri = URLDecoder.decode(uri, "UTF-8");
-					className = URLDecoder.decode(className, "UTF-8");
+					uri = URLDecoder.decode(uri, "UTF-8"); //$NON-NLS-1$
+					className = URLDecoder.decode(className, "UTF-8"); //$NON-NLS-1$
 				}
 				catch (UnsupportedEncodingException e) {
 					// Shouldn't happen.
-					uri = uri.replaceAll("%7C", "|").replaceAll("%3B", ";").replaceAll("%25", "%");
+					uri = uri.replaceAll("%7C", "|").replaceAll("%3B", ";").replaceAll("%25", "%"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 				}
 				
 				previewServlet.addServiceMapping(uri, className, stateful);
 			}
 			else {
-				log("Invalid number of tokens in service mapping addition: " + token);
+				log(NLS.bind(TestServerMessages.ServiceMappingAdditionsInvalidTokens, token));
 			}
 		}
 	}
@@ -115,17 +116,17 @@ public class ConfigServlet extends HttpServlet {
 				
 				// uri will be encoded
 				try {
-					uri = URLDecoder.decode(uri, "UTF-8");
+					uri = URLDecoder.decode(uri, "UTF-8"); //$NON-NLS-1$
 				}
 				catch (UnsupportedEncodingException e) {
 					// Shouldn't happen.
-					uri = uri.replaceAll("%7C", "|").replaceAll("%3B", ";").replaceAll("%25", "%");
+					uri = uri.replaceAll("%7C", "|").replaceAll("%3B", ";").replaceAll("%25", "%"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 				}
 				
 				previewServlet.removeServiceMapping(uri);
 			}
 			else {
-				log("Invalid number of tokens in service mapping removal: " + token);
+				log(NLS.bind(TestServerMessages.ServiceMappingRemovalsInvalidTokens, token));
 			}
 		}
 	}

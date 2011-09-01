@@ -33,6 +33,7 @@ import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
+import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.Bundle;
 
 public class ClasspathUtil {
@@ -41,35 +42,45 @@ public class ClasspathUtil {
 		// No instances.
 	}
 	
+	/**
+	 * Creates a classpath to be added to a a launch configuration for running the Jetty server. The appropriate Jetty,
+	 * servlet, and EDT plug-ins will be added to the classpath, as well as ensuring any Java projects on the EGL build path
+	 * are included in the classpath if they aren't already.
+	 * 
+	 * @param project  The project that "owns" the launch.
+	 * @param config   The launch configuration.
+	 * @return the classpath for running Jetty
+	 * @throws CoreException
+	 */
 	public static List<String> buildClasspath(IProject project, ILaunchConfiguration config) throws CoreException {
 		List<String> list = config.getAttribute( IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, new ArrayList<String>(10) );
 		
-		String entry = getClasspathEntry("org.mortbay.jetty.server");
+		String entry = getClasspathEntry("org.mortbay.jetty.server"); //$NON-NLS-1$
 		if (entry != null) {
 			list.add(entry);
 		}
 		
-		entry = getClasspathEntry("org.mortbay.jetty.util");
+		entry = getClasspathEntry("org.mortbay.jetty.util"); //$NON-NLS-1$
 		if (entry != null) {
 			list.add(entry);
 		}
 		
-		entry = getClasspathEntry("org.eclipse.equinox.http.jetty");
+		entry = getClasspathEntry("org.eclipse.equinox.http.jetty"); //$NON-NLS-1$
 		if (entry != null) {
 			list.add(entry);
 		}
 		
-		entry = getClasspathEntry("javax.servlet");
+		entry = getClasspathEntry("javax.servlet"); //$NON-NLS-1$
 		if (entry != null) {
 			list.add(entry);
 		}
 		
-		entry = getClasspathEntry("org.eclipse.edt.ide.rui");
+		entry = getClasspathEntry("org.eclipse.edt.ide.rui"); //$NON-NLS-1$
 		if (entry != null) {
 			list.add(entry);
 		}
 		
-		entry = getClasspathEntry("org.eclipse.edt.runtime.java");
+		entry = getClasspathEntry("org.eclipse.edt.runtime.java"); //$NON-NLS-1$
 		if (entry != null) {
 			list.add(entry);
 		}
@@ -77,8 +88,8 @@ public class ClasspathUtil {
 		// For each project on the EGL path, add it to the classpath if it's a Java project and not already on the Java path of the launching project.
 		addEGLPathToJavaPathIfNecessary(JavaCore.create(project), project, new HashSet<IProject>(), list);
 		
-		list.add("<?xml version=\"1.0\" encoding=\"UTF-8\"?><runtimeClasspathEntry id=\"org.eclipse.jdt.launching.classpathentry.defaultClasspath\">\n" + 
-				"<memento exportedEntriesOnly=\"false\" project=\"" + project.getName() + "\"/>\n" + "</runtimeClasspathEntry>");
+		list.add("<?xml version=\"1.0\" encoding=\"UTF-8\"?><runtimeClasspathEntry id=\"org.eclipse.jdt.launching.classpathentry.defaultClasspath\">\n" +  //$NON-NLS-1$
+				"<memento exportedEntriesOnly=\"false\" project=\"" + project.getName() + "\"/>\n" + "</runtimeClasspathEntry>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return list;
 	}
 	
@@ -97,7 +108,7 @@ public class ClasspathUtil {
 					try {
 						if (resource != null && resource.getType() == IResource.PROJECT && !seen.contains(resource)
 								&& ((IProject)resource).hasNature(JavaCore.NATURE_ID) && !javaProject.isOnClasspath(resource)) {
-							entries.add("<?xml version=\"1.0\" encoding=\"UTF-8\"?><runtimeClasspathEntry path=\"3\" projectName=\"" + resource.getName() + "\" type=\"1\"/>");
+							entries.add("<?xml version=\"1.0\" encoding=\"UTF-8\"?><runtimeClasspathEntry path=\"3\" projectName=\"" + resource.getName() + "\" type=\"1\"/>"); //$NON-NLS-1$ //$NON-NLS-2$
 							addEGLPathToJavaPathIfNecessary(javaProject, (IProject)resource, seen, entries);
 						}
 					}
@@ -120,17 +131,17 @@ public class ClasspathUtil {
 					if (!path.endsWith( File.separator)) {
 						path += File.separator;
 					}
-					path += "bin";
+					path += "bin"; //$NON-NLS-1$
 				}
 				
-				return "<?xml version=\"1.0\" encoding=\"UTF-8\"?><runtimeClasspathEntry externalArchive=\"" + path + "\" path=\"3\" type=\"2\"/>";
+				return "<?xml version=\"1.0\" encoding=\"UTF-8\"?><runtimeClasspathEntry externalArchive=\"" + path + "\" path=\"3\" type=\"2\"/>"; //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		
-		System.err.println("Could not retrieve path for " + pluginName + ". This may prevent the server from starting correctly!");
+		System.err.println(NLS.bind(TestServerMessages.CouldNotGetPluginPath, pluginName ));
 		return null;
 	}
 }

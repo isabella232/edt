@@ -33,7 +33,9 @@ public class TestServer {
 	 * <li>-p &lt;port number&gt; (the server's port number)</li>
 	 * <li>-c &lt;context root&gt; (the server's context root)</li>
 	 * <li>-d (enables debug output)</li>
-	 * <li>-s &lt;service mappings&gt; (a string in the format: TODO)</li>
+	 * <li>-s &lt;service mappings&gt; (a string in the format: <i>mapping</i> [|<i>mapping</i>...]) where <i>mapping</i> is the format
+	 *     <i>uri</i>;<i>className</i>;<i>stateful</i>, where <i>uri</i> is the URI of the service, <i>className</i> is the qualified class name of
+	 *     the service implementation, and <i>stateful</i> is a boolean indicator "true" or "false" whether the service is stateful or not stateful</li>
 	 * </ul>
 	 */
 	public static void main(String[] args) throws Exception {

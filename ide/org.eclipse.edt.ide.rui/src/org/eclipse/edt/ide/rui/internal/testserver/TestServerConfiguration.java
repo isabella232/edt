@@ -53,10 +53,15 @@ import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.rui.EDTRUIPlugin;
 import org.eclipse.edt.ide.rui.internal.testserver.ServiceFinder.RestServiceMapping;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
+import org.eclipse.osgi.util.NLS;
 
+/**
+ * Manages a Jetty test server. This class is capable of starting and stopping the server, and handles changes to
+ * the server configuration automatically.
+ */
 public class TestServerConfiguration implements IDebugEventSetListener, IResourceChangeListener {
 	
-	public static final int DEFAULT_PORT = 6200;
+	public static final int DEFAULT_PORT = 9701;
 	
 	private IProject project;
 	private boolean debugMode;
@@ -90,22 +95,22 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			// Create a temporary launch configuration, set the project and claspath entries, then run it in either RUN or DEBUG mode.
 			ILaunchConfigurationType type = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurationType(
 					IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
-			ILaunchConfigurationWorkingCopy copy = type.newInstance(null, "EDT service test server for project " + project.getName() + " on port " + port);
+			ILaunchConfigurationWorkingCopy copy = type.newInstance(null, NLS.bind(TestServerMessages.TestServerProcessName, new Object[]{project.getName(), port}));
 			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, project.getName());
 			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, TestServer.class.getCanonicalName());
 			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, false);
 			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, ClasspathUtil.buildClasspath(project, copy));
 			
 			StringBuilder args = new StringBuilder( 100 );
-			args.append(copy.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, ""));
-			args.append(" -p ");
+			args.append(copy.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, "")); //$NON-NLS-1$
+			args.append(" -p "); //$NON-NLS-1$
 			args.append(port);
-			args.append(" -c \"/");
+			args.append(" -c \"/"); //$NON-NLS-1$
 			args.append(project.getName());
-			args.append("\" -s \"");
+			args.append("\" -s \""); //$NON-NLS-1$
 			currentServiceMappings = ServiceFinder.findRestServices(project);
 			args.append(ServiceFinder.toArgumentString(currentServiceMappings.values()));
-			args.append("\"");
+			args.append("\""); //$NON-NLS-1$
 //			args.append(" -d"); // uncomment this line to enable debug messages in the console
 			
 			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, args.toString());
@@ -122,7 +127,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 				// Wait up to 10 seconds for the server to start.
 				for (int i = 0; i < 40; i++) {
 					try {
-						if (invokeConfigServlet("") == 200) {
+						if (invokeConfigServlet("") == 200) { //$NON-NLS-1$
 							started = true;
 							break;
 						}
@@ -229,7 +234,6 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		if (!started) {
 			return;
 		}
-		
 		// We need to recalculate all the bindings if even 1 DD file in the EGL path changed. It could be that there
 		// were duplicate URIs among the files, and a URI that was included before has now been changed/removed, so
 		// the duplicate that was previously skipped needs to be used (replacing the mapping on the server).
@@ -252,7 +256,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 							// Fall through.
 						case IResourceDelta.ADDED:
 						case IResourceDelta.REMOVED:
-							if ("egldd".equals(delta.getResource().getFileExtension())
+							if ("egldd".equals(delta.getResource().getFileExtension()) //$NON-NLS-1$
 									&& isOnEGLPath(project, delta.getResource().getProject(), new HashSet<IProject>())) {
 								recompute[0] = true;
 								return false;
@@ -305,7 +309,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 				try {
 					int status = invokeConfigServlet(args.toString());
 					if (status != 200) {
-						System.err.println("Received status code " + status + " while trying to send service mapping updates to test server");
+						System.err.println(NLS.bind(TestServerMessages.ConfigServletBadStatus, status));
 					}
 				}
 				catch (IOException e) {
@@ -318,15 +322,15 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 	}
 	
 	private int invokeConfigServlet(String args) throws IOException {
-		URLConnection conn = new URL("http://localhost:" + port + "/" + project.getName() + ConfigServlet.SERVLET_PATH).openConnection();
+		URLConnection conn = new URL("http://localhost:" + port + "/" + project.getName() + ConfigServlet.SERVLET_PATH).openConnection(); //$NON-NLS-1$ //$NON-NLS-2$
 		conn.setDoOutput(true);
-		conn.setRequestProperty("Accept-Charset", "UTF-8");
-		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+		conn.setRequestProperty("Accept-Charset", "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
+		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		OutputStream output = null;
 		try {
 		     output = conn.getOutputStream();
-		     output.write(args.getBytes("UTF-8"));
+		     output.write(args.getBytes("UTF-8")); //$NON-NLS-1$
 		}
 		finally {
 			if (output != null) {
@@ -372,6 +376,9 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		return false;
 	}
 	
+	/**
+	 * Allows clients to be notified when this server configuration terminates.
+	 */
 	public static interface TerminationListener {
 		public void terminated(TestServerConfiguration config);
 	}

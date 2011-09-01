@@ -53,6 +53,9 @@ public class TestServerManager implements TerminationListener, IResourceChangeLi
 		}
 	}
 	
+	/**
+	 * @return a test server configuration for the given project. If the configuration didn't yet exist, it will be created.
+	 */
 	public TestServerConfiguration getServerConfiguration(IProject project, boolean debugMode) {
 		TestServerConfiguration config;
 		synchronized(syncObj) {
@@ -71,6 +74,9 @@ public class TestServerManager implements TerminationListener, IResourceChangeLi
 		return config;
 	}
 	
+	/**
+	 * Removes the configuration for the given project from this manager, if it exists.
+	 */
 	public void removeServerConfiguration(IProject project) {
 		synchronized(syncObj) {
 			if (serverConfigMap != null) {

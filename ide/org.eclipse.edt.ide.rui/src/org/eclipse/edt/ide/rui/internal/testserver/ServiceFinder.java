@@ -45,9 +45,12 @@ public class ServiceFinder {
 		// No instances.
 	}
 	
+	/**
+	 * @return the service mappings in the string format expected by the Jetty server.
+	 */
 	public static String toArgumentString(Collection<RestServiceMapping> mappings) {
 		if (mappings.size() == 0) {
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		
 		StringBuilder buf = new StringBuilder();
@@ -66,6 +69,9 @@ public class ServiceFinder {
 		return buf.toString();
 	}
 	
+	/**
+	 * @return the service mappings found in the EGL path of the project. The mappings come from deployment descriptors. The map key is the URI for the service mapping.
+	 */
 	public static Map<String,RestServiceMapping> findRestServices(IProject project) {
 		Map<String,RestServiceMapping> services = new HashMap<String,RestServiceMapping>();
 		
@@ -109,7 +115,7 @@ public class ServiceFinder {
 					@Override
 					public boolean visit(IResourceProxy proxy) throws CoreException {
 						if (proxy.getType() == IResource.FILE) {
-							if (proxy.getName().endsWith(".egldd")) {
+							if (proxy.getName().endsWith(".egldd")) { //$NON-NLS-1$
 								List<RestServiceMapping> parsed = parseDD(proxy.requestResource());
 								if (parsed != null) {
 									for (RestServiceMapping mapping : parsed) {
@@ -194,13 +200,13 @@ public class ServiceFinder {
 		@Override
 		public String toString() {
 			try {
-				return URLEncoder.encode(uri, "UTF-8") + ConfigServlet.MAPPING_DELIMETER
-						+ URLEncoder.encode(className, "UTF-8") + ConfigServlet.MAPPING_DELIMETER
+				return URLEncoder.encode(uri, "UTF-8") + ConfigServlet.MAPPING_DELIMETER //$NON-NLS-1$
+						+ URLEncoder.encode(className, "UTF-8") + ConfigServlet.MAPPING_DELIMETER //$NON-NLS-1$
 						+ String.valueOf(stateful);
 			}
 			catch (UnsupportedEncodingException e) {
 				// Shouldn't happen.
-				return uri.replaceAll("%", "%25").replace(";", "%3B").replaceAll("|", "%7C")
+				return uri.replaceAll("%", "%25").replace(";", "%3B").replaceAll("|", "%7C") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 						+ ConfigServlet.MAPPING_DELIMETER + className + ConfigServlet.MAPPING_DELIMETER + stateful;
 			}
 		}
