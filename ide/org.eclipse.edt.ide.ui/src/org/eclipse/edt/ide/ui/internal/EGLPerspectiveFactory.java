@@ -33,7 +33,7 @@ public class EGLPerspectiveFactory implements IPerspectiveFactory {
 
 	public static String ID_SERVERS_VIEW 			= "org.eclipse.wst.server.ui.ServersView"; //$NON-NLS-1$
 
-	public static String ID_EGL_DATA_VIEW 			= "org.eclipse.edt.ide.ui.rui.visualeditor.views.PageDataView"; //$NON-NLS-1$
+	public static String ID_EGL_DATA_VIEW 			= "org.eclipse.edt.ide.rui.visualeditor.views.PageDataView"; //$NON-NLS-1$
 	public static String ID_PARTS_REFERENCE_VIEW 	= "org.eclipse.edt.ide.ui.views.partsReference.EGLPartsReference"; //$NON-NLS-1$
 	public static String ID_PARTS_BROWSER_VIEW 		= "org.eclipse.edt.ide.ui.views.partsbrowser.EGLPartsBrowser"; //$NON-NLS-1$
 	public static String ID_SQL_RESULTS_VIEW 		= "org.eclipse.edit.ide.ui.sql.view.SQLResultsViewPart"; //$NON-NLS-1$
@@ -73,7 +73,7 @@ public class EGLPerspectiveFactory implements IPerspectiveFactory {
 		// Bottom left.
 		IFolderLayout bottomLeft = layout.createFolder("bottomLeft", IPageLayout.BOTTOM, (float)0.50, "topLeft");//$NON-NLS-1$
 		bottomLeft.addView(IPageLayout.ID_OUTLINE);
-//		bottomLeft.addView(ID_EGL_DATA_VIEW);
+		bottomLeft.addView(ID_EGL_DATA_VIEW);
 
 		// Bottom right.
 		IFolderLayout bottomRight = layout.createFolder("bottomRight", IPageLayout.BOTTOM, (float)0.66, editorArea); //$NON-NLS-1$
