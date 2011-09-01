@@ -83,28 +83,28 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 				catch (Exception e) {
 					arraySize = 0;
 				}
-				ArrayType generic = (ArrayType)type;
-				String temporary = ctx.nextTempName();
-				ctx.invoke(genExpression, arg.getLHS(), ctx, out);
-				out.print(" "+operator+" ");
-				out.print("(function() { var ");
-				out.print(temporary);
-				out.print(" = []; ");
-				out.print(temporary);
-				out.print(".setType(");
-				out.print("\"");
-				genSignature(generic, ctx, out);
-				out.print("\"");
-				out.println(");");
-				out.println("for (var i = 0; i < " + arraySize + "; i++) {");
-				out.print(temporary);
-				out.print("[i] = ");
-				ctx.invoke(genDefaultValue, generic.getElementType(), ctx, out);
-				out.println(";}");
-				out.print("return ");
-				out.print(temporary);
-				out.print(";})()");
 			}
+			ArrayType generic = (ArrayType)type;
+			String temporary = ctx.nextTempName();
+			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
+			out.print(" "+operator+" ");
+			out.print("(function() { var ");
+			out.print(temporary);
+			out.print(" = []; ");
+			out.print(temporary);
+			out.print(".setType(");
+			out.print("\"");
+			genSignature(generic, ctx, out);
+			out.print("\"");
+			out.println(");");
+			out.println("for (var i = 0; i < " + arraySize + "; i++) {");
+			out.print(temporary);
+			out.print("[i] = ");
+			ctx.invoke(genDefaultValue, generic.getElementType(), ctx, out);
+			out.println(";}");
+			out.print("return ");
+			out.print(temporary);
+			out.print(";})()");
 		}
 		else
 			ctx.invokeSuper(this, genTypeBasedAssignment, type, ctx, out, arg);
