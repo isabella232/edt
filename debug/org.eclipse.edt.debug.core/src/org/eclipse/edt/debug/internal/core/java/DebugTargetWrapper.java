@@ -60,7 +60,7 @@ public class DebugTargetWrapper implements IStartup
 							// Set up a source lookup director that is capable of finding .egl files from the EGL build path.
 							try
 							{
-								EGLJavaSourceLookupDirector director = new EGLJavaSourceLookupDirector();
+								EGLJavaSourceLookupDirector director = new EGLJavaSourceLookupDirector( launch.getSourceLocator() );
 								director.initializeDefaults( launch.getLaunchConfiguration() );
 								launch.setSourceLocator( director );
 							}
