@@ -7,6 +7,7 @@ import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class SQL {
 	
@@ -79,5 +80,54 @@ public class SQL {
 	}
 	public static boolean isSQLResultSet(Type datasource) {
 		return datasource.getTypeSignature().equals("eglx.persistence.sql.SQLResultSet");
+	}
+	
+	public static boolean isSQLDateTimeType(EGLClass type) {
+		return type.equals(TypeUtils.Type_DATE) 
+				|| type.equals(TypeUtils.Type_TIME)
+				|| type.equals(TypeUtils.Type_TIMESTAMP);		
+	}
+	
+	public static boolean isWrappedSQLType(EGLClass type) {
+		return isSQLDateTimeType(type)
+				|| type.equals(TypeUtils.Type_BLOB)
+				|| type.equals(TypeUtils.Type_CLOB);
+	}
+	
+	public static String getSQLTypeName(EGLClass type) {
+		String name = getSqlSimpleTypeName(type);
+		
+		if (name != null) {
+			if (isWrappedSQLType(type)) {
+				name = "java.sql." + name;
+			}
+		}
+		return name;
+	}
+	
+	public static String getSqlSimpleTypeName(EGLClass type) {
+		String name = null;
+		if (type.equals(TypeUtils.Type_DATE)) name = "Date"; 
+		else if (type.equals(TypeUtils.Type_TIME)) name = "Time";
+		else if (type.equals(TypeUtils.Type_TIMESTAMP)) name = "Timestamp";
+		else if (type.equals(TypeUtils.Type_BLOB)) name = "Blob";
+		else if (type.equals(TypeUtils.Type_CLOB)) name = "Clob";
+		else if (type.equals(TypeUtils.Type_BOOLEAN)) name = "Boolean";
+		else if (type.equals(TypeUtils.Type_FLOAT)) name = "Double";
+		else if (type.equals(TypeUtils.Type_SMALLFLOAT)) name = "Float";
+		else if (type.equals(TypeUtils.Type_BIGINT)) name = "Long";
+		else if (type.equals(TypeUtils.Type_INT)) name = "Int";
+		else if (type.equals(TypeUtils.Type_DECIMAL)) name = "BigDecimal";
+		else if (type.equals(TypeUtils.Type_STRING)) name = "String";
+		return name;
+	}
+	
+	public static String getConvertToSQLConstructorOptions(EGLClass type) {
+		if (type.equals(TypeUtils.Type_DATE) 
+				|| type.equals(TypeUtils.Type_TIME)
+				|| type.equals(TypeUtils.Type_TIMESTAMP)) {
+			return "getTimeInMillis()";
+		}
+		return "unsupportedConversion()";
 	}
 }
