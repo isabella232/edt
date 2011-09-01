@@ -529,6 +529,10 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( withIDClause );
 	}
 	
+	public boolean visit(WithExpressionClause withExprClause) {
+		return visitNode( withExprClause );
+	}
+
 	public boolean visit(WithInlineDLIClause withInlineDLIClause) {
 		return visitNode( withInlineDLIClause );
 	}
@@ -1037,6 +1041,10 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( whileStatement );
 	}
 	
+	public void endVisit(WithExpressionClause withExprClause) {
+		 endVisitNode( withExprClause );
+	}
+
 	public void endVisit(WithIDClause withIDClause) {
 		 endVisitNode( withIDClause );
 	}

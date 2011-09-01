@@ -394,6 +394,9 @@ public interface IASTVisitor {
 	boolean visit(WhileStatement whileStatement);
 	void endVisit(WhileStatement whileStatement);
 	
+	boolean visit(WithExpressionClause withIDClause);
+	void endVisit(WithExpressionClause withIDClause);
+
 	boolean visit(WithIDClause withIDClause);
 	void endVisit(WithIDClause withIDClause);
 	

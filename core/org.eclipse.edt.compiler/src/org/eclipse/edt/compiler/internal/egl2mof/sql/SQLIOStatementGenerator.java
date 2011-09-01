@@ -388,7 +388,7 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.PrepareStatement node) {
 		final SqlPrepareStatement stmt = factory.createSqlPrepareStatement();
 		stack.push(stmt);
-		stmt.setPreparedStatementId(node.getPreparedStatementID());
+//		stmt.setPreparedStatementId(node.getPreparedStatementID());
 
 		node.accept(new AbstractASTExpressionVisitor() {
 			public boolean visit(FromExpressionClause clause) {

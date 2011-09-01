@@ -20,7 +20,7 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
  * @author Albert Ho
  * @author David Murray
  */
-public class WithInlineDLIClause extends Node {
+public class WithInlineDLIClause extends WithInlineClause {
 	
 	public static IOStatementClauseInfo INFO = new IOStatementClauseInfo() {
 		public String getClauseKeyword() {
@@ -63,5 +63,10 @@ public class WithInlineDLIClause extends Node {
 	
 	protected Object clone() throws CloneNotSupportedException {
 		return new WithInlineDLIClause((InlineDLIStatement) dliStmt.clone(), getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public boolean isWithInlineDLI() {
+		return true;
 	}
 }

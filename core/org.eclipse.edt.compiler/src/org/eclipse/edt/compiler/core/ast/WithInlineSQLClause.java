@@ -19,7 +19,7 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
  * @author Albert Ho
  * @author David Murray
  */
-public class WithInlineSQLClause extends Node {
+public class WithInlineSQLClause extends WithInlineClause {
 	
 	public static IOStatementClauseInfo INFO = new IOStatementClauseInfo() {
 		public String getClauseKeyword() {
@@ -63,4 +63,9 @@ public class WithInlineSQLClause extends Node {
 	protected Object clone() throws CloneNotSupportedException {
 		return new WithInlineSQLClause((InlineSQLStatement) sqlStmt.clone(), getOffset(), getOffset() + getLength());
 	} 
+	
+	@Override
+	public boolean isWithInlineSQL() {
+		return true;
+	}
 }

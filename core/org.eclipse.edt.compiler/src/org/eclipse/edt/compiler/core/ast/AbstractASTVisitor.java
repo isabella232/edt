@@ -524,7 +524,11 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 	public boolean visit(WithIDClause withIDClause) {
 		return true;
 	}
-	
+
+	public boolean visit(WithExpressionClause withExpressionClause) {
+		return true;
+	}
+
 	public boolean visit(WithInlineDLIClause withInlineDLIClause) {
 		return true;
 	}
@@ -784,6 +788,8 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 	public void endVisit(WhileStatement whileStatement) {}
 	
 	public void endVisit(WithIDClause withIDClause) {}
+
+	public void endVisit(WithExpressionClause withExprClause) {}
 	
 	public void endVisit(WithInlineDLIClause withInlineDLIClause) {}
 	

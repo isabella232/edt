@@ -151,7 +151,7 @@ nonterminal PackageDeclaration packageDeclarationOpt;
 nonterminal Part part;
 nonterminal Name partSubTypeOpt;
 nonterminal Expression passingRecordOpt;
-nonterminal prepareOption;
+nonterminal WithClause withClause;
 nonterminal Expression primary;
 nonterminal Expression primaryNoNew;
 nonterminal Boolean privateAccessModifierOpt;
@@ -203,7 +203,6 @@ nonterminal List name_plus;
 nonterminal List onException_star, onException_plus;
 nonterminal List openTarget_star, openTarget_plus;
 nonterminal List part_star, part_plus;
-nonterminal List prepareOption_star, prepareOption_plus;
 nonterminal List programParameter_star, programParameter_plus;
 nonterminal List replaceOption_star, replaceOption_plus;
 nonterminal List setting_star, setting_plus;
@@ -627,8 +626,8 @@ stmt
 	|	OPENUI:openui1 settingsBlockOpt:settingsBlock1 expr_plus:exprs1 bindOpt:bind1 eventBlock_star:eventBlocks1 END:end1
 	{: RESULT = new OpenUIStatement(settingsBlock1, exprs1, bind1, eventBlocks1, openui1left, end1right); :}
 	
-	|	PREPARE:prepare1 ID:preparedStmtID prepareOption_star:prepareOptions1 SEMI:semi1
-	{: RESULT = new PrepareStatement(preparedStmtID, prepareOptions1, prepare1left, semi1right); :}
+	|	PREPARE:prepare1 lvalue:lvalue1 FROM:from1 expr:expr1 withClause:withClause1 SEMI:semi1
+	{: RESULT = new PrepareStatement(lvalue1, expr1, withClause1, prepare1left, semi1right); :}
 	
 	|	PRINT:print1 expr:expr1 SEMI:semi1
 	{: RESULT = new PrintStatement(expr1, print1left, semi1right); :}
@@ -741,12 +740,15 @@ showOption
 	{: RESULT = new PassingClause(expr1, passing1left, expr1right); :}
 	;
 
-prepareOption
-	::=	FROM:from1 expr:expr1
-	{: RESULT = new FromExpressionClause(expr1, from1left, expr1right); :}
+withClause
+	::=	WITH:with1 inlineSQLStatement:inlineSQLStatement1
+	{: RESULT = new WithInlineSQLClause(inlineSQLStatement1, with1left, inlineSQLStatement1right); :}
 
-	|	FOR:for1 expr:expr1
-	{: RESULT = new ForExpressionClause(expr1, for1left, expr1right); :}
+	|	WITH:with1 INLINE_DLI:dliStatement
+	{: RESULT = new WithInlineDLIClause(dliStatement, with1left, dliStatementright); :}
+
+	|	WITH:with1 expr:expr1
+	{: RESULT = new WithExpressionClause(expr1, with1left, expr1right); :}
 	;
 
 replaceOption
@@ -1837,20 +1839,6 @@ part_plus
 	{: RESULT = new ArrayList(); RESULT.add(part); :}
 	|	part_plus:parts part:part
 	{: if(part != null) parts.add(part); RESULT = parts; :}
-	;
-
-prepareOption_star
-	::=
-	{: RESULT = Collections.EMPTY_LIST; :}
-	|	prepareOption_plus:prepareOptions
-	{: RESULT = prepareOptions; :}
-	;
-
-prepareOption_plus
-	::=	prepareOption:prepareOption
-	{: RESULT = new ArrayList(); RESULT.add(prepareOption); :}
-	|	prepareOption_plus:prepareOptions prepareOption:prepareOption
-	{: if(prepareOption != null) prepareOptions.add(prepareOption); RESULT = prepareOptions; :}
 	;
 
 programParameter_star

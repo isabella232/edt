@@ -30,51 +30,54 @@ import java.util.List;
  */
 public class PrepareStatement extends Statement {
 
-	private String ID;
-	private List prepareOptions;	// List of Nodes
-	
-	private List ioObjects;
+	private Expression sqlStmt;
+	private Expression dataSource;	
+	private WithClause withClause;
 
-	public PrepareStatement(String ID, List prepareOptions, int startOffset, int endOffset) {
+	public PrepareStatement(Expression sqlStmt, Expression dataSource, WithClause withClause, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
-		this.ID = ID;
-		this.prepareOptions = setParent(prepareOptions);
+		
+		this.sqlStmt = sqlStmt;
+		sqlStmt.setParent(this);
+		
+		this.dataSource = dataSource;
+		dataSource.setParent(this);
+		
+		this.withClause = withClause;
+		withClause.setParent(this);
 	}
-	
-	public String getPreparedStatementID() {
-		return ID;
+		
+	public Expression getSqlStmt() {
+		return sqlStmt;
 	}
-	
-	public List getPrepareOptions() {
-		return prepareOptions;
+
+
+	public Expression getDataSource() {
+		return dataSource;
 	}
-	
+
+
+	public WithClause getWithClause() {
+		return withClause;
+	}
+
+
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
-			acceptChildren(visitor, prepareOptions);
+			sqlStmt.accept(visitor);
+			dataSource.accept(visitor);
+			withClause.accept(visitor);
 		}
 		visitor.endVisit(this);
 	}
 	
 	public List getIOObjects() {
-		if(ioObjects == null) {
-			ioObjects = Collections.EMPTY_LIST;
-			acceptChildren(new DefaultASTVisitor() {
-				public boolean visit(ForExpressionClause forExpressionClause) {
-					if(ioObjects == Collections.EMPTY_LIST) {
-						ioObjects = new ArrayList();
-					}
-					ioObjects.add(forExpressionClause.getExpression());
-					return false;
-				}
-			}, prepareOptions);
-		}
-		return ioObjects;
+		return Collections.EMPTY_LIST;
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {
-		return new PrepareStatement(new String(ID), cloneList(prepareOptions), getOffset(), getOffset() + getLength());
+		return new PrepareStatement((Expression)sqlStmt.clone(), (Expression)dataSource.clone(), (WithClause)withClause.clone(), getOffset(), getOffset() + getLength());
 	}
 }

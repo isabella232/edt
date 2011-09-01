@@ -67,13 +67,13 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 				
 				public void endVisit(PrepareStatement prepareStatement) {
 					if (!hasFrom){
-						problemRequestor.acceptProblem(prepareStatement,
-								IProblemRequestor.PREPARE_STATEMENT_NO_FROM_CLAUSE);
+//						problemRequestor.acceptProblem(prepareStatement,
+//								IProblemRequestor.PREPARE_STATEMENT_NO_FROM_CLAUSE);
 					}
 				}
 				});
 			
-			EGLNameValidator.validate(aprepareStatement.getPreparedStatementID(), EGLNameValidator.IDENTIFIER, problemRequestor, aprepareStatement, compilerOptions);
+//			EGLNameValidator.validate(aprepareStatement.getPreparedStatementID(), EGLNameValidator.IDENTIFIER, problemRequestor, aprepareStatement, compilerOptions);
 			
 			return false;
 		}

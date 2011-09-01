@@ -10,28 +10,28 @@ package org.eclipse.edt.compiler.core.ast;
 
 public class FromOrToExpressionClause extends Node {
 	
-	private Expression lvalue;
+	private Expression expr;
 
-	public FromOrToExpressionClause(Expression lvalue, int startOffset, int endOffset) {
+	public FromOrToExpressionClause(Expression expr, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
-		this.lvalue = lvalue;
-		lvalue.setParent(this);
+		this.expr = expr;
+		expr.setParent(this);
 	}
 	
 	public Expression getExpression() {
-		return lvalue;
+		return expr;
 	}
 	
 	public void accept(IASTVisitor visitor) {		
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
-			lvalue.accept(visitor);
+			expr.accept(visitor);
 		}
 		visitor.endVisit(this);
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {
-		return new FromOrToExpressionClause((Expression)lvalue.clone(), getOffset(), getOffset() + getLength());
+		return new FromOrToExpressionClause((Expression)expr.clone(), getOffset(), getOffset() + getLength());
 	}
 }
