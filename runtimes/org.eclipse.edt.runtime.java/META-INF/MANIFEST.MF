@@ -4,8 +4,7 @@ Bundle-Name: EDT Java Runtime
 Bundle-SymbolicName: org.eclipse.edt.runtime.java
 Bundle-Version: 0.7.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: com.ibm.icu;bundle-version="3.8.1",
- javax.servlet;bundle-version="2.5.0";resolution:=optional
+Require-Bundle: javax.servlet;bundle-version="2.5.0";resolution:=optional
 Export-Package: egl.lang,
  eglx.http,
  eglx.java,
@@ -16,11 +15,16 @@ Export-Package: egl.lang,
  eglx.persistence.sql,
  eglx.rbd,
  eglx.services,
+ eglx.ui,
+ eglx.ui.rui,
+ eglx.xml,
+ eglx.xml.binding.annotation,
  org.eclipse.edt.javart,
  org.eclipse.edt.javart.json,
  org.eclipse.edt.javart.messages,
  org.eclipse.edt.javart.resources,
  org.eclipse.edt.javart.services,
+ org.eclipse.edt.javart.services.bindings,
  org.eclipse.edt.javart.services.servlet,
  org.eclipse.edt.javart.services.servlet.proxy,
  org.eclipse.edt.javart.services.servlet.rest.rpc,
