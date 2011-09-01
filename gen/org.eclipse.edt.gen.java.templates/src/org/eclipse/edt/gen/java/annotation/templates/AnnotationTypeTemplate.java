@@ -13,7 +13,6 @@ package org.eclipse.edt.gen.java.annotation.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
-import org.eclipse.edt.gen.java.templates.JavaTemplate.TypeNameKind;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.Template;
 import org.eclipse.edt.mof.egl.Annotation;
