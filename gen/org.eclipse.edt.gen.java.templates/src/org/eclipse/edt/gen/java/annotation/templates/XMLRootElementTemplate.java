@@ -21,7 +21,7 @@ import org.eclipse.edt.mof.egl.Type;
 public class XMLRootElementTemplate extends JavaTemplate {
 
 	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot) {
-		ctx.invokeSuper(this, genAnnotation, (Type)aType, ctx, out, Boolean.TRUE, annot);
+		ctx.invokeSuper(this, genJavaAnnotation, (Type)aType, ctx, out, annot);
 	}
 	
 	public void genConstructorOptions(AnnotationType annotType, Context ctx, TabbedWriter out, Annotation annot) {

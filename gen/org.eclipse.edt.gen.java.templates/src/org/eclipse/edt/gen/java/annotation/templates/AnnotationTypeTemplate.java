@@ -14,7 +14,6 @@ package org.eclipse.edt.gen.java.annotation.templates;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.codegen.api.Template;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Field;
@@ -34,27 +33,20 @@ public class AnnotationTypeTemplate extends JavaTemplate {
 		out.print(ctx.getNativeImplementationMapping(type));
 	}
 	
-	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot) {}
-	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Boolean isSuper, Annotation annot) {
-		Template template = ctx.getTemplateForEClassifier(aType);
-		if(template != null){
-			out.print("@");
-			ctx.invoke(genRuntimeTypeName, (Type)aType, ctx, out, TypeNameKind.JavaObject, annot);
-			out.print("(");
-			ctx.invoke(genConstructorOptions, (Type)aType, ctx, out, annot);
-			out.println(")");
-		}
-	}
 	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Field field) {}
-	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Boolean isSuper, Annotation annot, Field field) {
-		Template template = ctx.getTemplateForEClassifier(aType);
-		//have to use instanceof because a StereotypeType is an annotation, but it's not generatable as an annotation
-		if(template != null && !(aType instanceof org.eclipse.edt.mof.egl.StereotypeType)){
-			out.print("@");
-			ctx.invoke(genRuntimeTypeName, (Type)aType, ctx, out, TypeNameKind.JavaObject, annot);
-			out.print("(");
-			ctx.invoke(genConstructorOptions, (Type)aType, ctx, out, annot, field);
-			out.println(")");
-		}
+	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot) {}
+	public void genJavaAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot) {
+		out.print("@");
+		ctx.invoke(genRuntimeTypeName, (Type)aType, ctx, out, TypeNameKind.JavaObject, annot);
+		out.print("(");
+		ctx.invoke(genConstructorOptions, (Type)aType, ctx, out, annot);
+		out.println(")");
+	}
+	public void genJavaAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
+		out.print("@");
+		ctx.invoke(genRuntimeTypeName, (Type)aType, ctx, out, TypeNameKind.JavaObject, annot);
+		out.print("(");
+		ctx.invoke(genConstructorOptions, (Type)aType, ctx, out, annot, field);
+		out.println(")");
 	}
 }

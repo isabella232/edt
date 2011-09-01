@@ -22,7 +22,7 @@ import org.eclipse.edt.mof.egl.Type;
 public class JsonNameTemplate extends JavaTemplate {
 
 	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
-		ctx.invokeSuper(this, genAnnotation, (Type)aType, ctx, out, Boolean.TRUE, annot, field);
+		ctx.invokeSuper(this, genJavaAnnotation, (Type)aType, ctx, out, annot, field);
 	}
 	public void genConstructorOptions(AnnotationType annotType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
 		out.print("name=\"" + (String)annot.getValue() + "\"");
