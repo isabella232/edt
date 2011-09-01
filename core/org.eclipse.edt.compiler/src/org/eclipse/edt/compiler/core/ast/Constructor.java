@@ -45,7 +45,11 @@ public class Constructor extends Node {
 			settingsBlockOpt.setParent(this);
 		}
 		isPrivate = privateAccessModifierOpt.booleanValue();
-		this.stmts = setParent(stmts);
+		
+		//abstract constructors will not have stmts
+		if (stmts != null) {
+			this.stmts = setParent(stmts);
+		}
 	}
 	
 	public boolean isPrivate() {
