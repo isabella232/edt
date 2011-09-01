@@ -16,6 +16,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
+import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
@@ -53,4 +54,80 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
+	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, BinaryExpression arg) {
+		if (false) { // TODO sbg other impls of genBinaryExpression consider nullables
+		} else {
+			out.print(getNativeStringPrefixOperation(arg));
+			out.print("(");
+			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
+			out.print(getNativeStringOperation(arg));
+			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+			out.print(getNativeStringComparisionOperation(arg));
+			out.print(")");
+		}
+	}
+
+	@SuppressWarnings("static-access")
+	protected String getNativeStringPrefixOperation(BinaryExpression expr) {
+		String op = expr.getOperator();
+		if (op.equals(expr.Op_NE))
+			return "";
+		if (op.equals(expr.Op_MODULO))
+			return "egl.remainder(";
+		return "";
+	}
+
+	@SuppressWarnings("static-access")
+	protected String getNativeStringOperation(BinaryExpression expr) {
+		String op = expr.getOperator();
+		// these are the defaults for what can be handled by the java string class
+		if (op.equals(expr.Op_PLUS))
+			return " + ";
+		if (op.equals(expr.Op_MINUS))
+			return " - ";
+		if (op.equals(expr.Op_MULTIPLY))
+			return " * ";
+		if (op.equals(expr.Op_EQ))
+			return " == ";
+		if (op.equals(expr.Op_NE))
+			return " != ";
+		if (op.equals(expr.Op_LT))
+			return " < ";
+		if (op.equals(expr.Op_GT))
+			return " > ";
+		if (op.equals(expr.Op_LE))
+			return " <= ";
+		if (op.equals(expr.Op_GE))
+			return " >= ";
+		if (op.equals(expr.Op_AND))
+			return " && ";
+		if (op.equals(expr.Op_OR))
+			return " || ";
+		if (op.equals(expr.Op_CONCAT))
+			return " + ";
+		if (op.equals(expr.Op_MODULO))
+			return ",";
+		return "";
+	}
+
+	@SuppressWarnings("static-access")
+	protected String getNativeStringComparisionOperation(BinaryExpression expr) {
+		String op = expr.getOperator();
+		if (op.equals(expr.Op_EQ))
+			return "";
+		if (op.equals(expr.Op_NE))
+			return "";
+		if (op.equals(expr.Op_LT))
+			return "";
+		if (op.equals(expr.Op_GT))
+			return "";
+		if (op.equals(expr.Op_LE))
+			return "";
+		if (op.equals(expr.Op_GE))
+			return "";
+		if (op.equals(expr.Op_MODULO))
+			return ")";
+		return "";
+	}
+	
 }
