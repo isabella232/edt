@@ -66,7 +66,7 @@ public class EGLContextBoundaryUtility {
 		boundaryStatesSet.set(NodeTypes.classContent);
 		boundaryStatesSet.set(NodeTypes.stmt);
 		boundaryStatesSet.set(NodeTypes.showOption);
-		boundaryStatesSet.set(NodeTypes.prepareOption);
+//		boundaryStatesSet.set(NodeTypes.prepareOption);
 		boundaryStatesSet.set(NodeTypes.replaceOption);
 		boundaryStatesSet.set(NodeTypes.getByKeyOption);
 		boundaryStatesSet.set(NodeTypes.direction);

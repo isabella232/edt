@@ -3353,22 +3353,22 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		final int numOfIndents4Wrapping = getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_NUMINDENTS);			
 		final int wrappingPolicy = getEnumPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_IOSTMT);		
 		
-		final List prepareOpts = prepareStatement.getPrepareOptions();
-		final Node firstPrepareOpt = (prepareOpts != null && !prepareOpts.isEmpty()) ? (Node)prepareOpts.get(0) : null;
+//		final List prepareOpts = prepareStatement.getPrepareOptions();
+//		final Node firstPrepareOpt = (prepareOpts != null && !prepareOpts.isEmpty()) ? (Node)prepareOpts.get(0) : null;
 		
 		ICallBackFormatter callbackFormatter = new ICallBackFormatter(){
 			public void format(Symbol prevToken, Symbol currToken) {
-				if(firstPrepareOpt != null && currToken.left == firstPrepareOpt.getOffset()){
-					indent(numOfIndents4Wrapping);
-					for(Iterator it = prepareOpts.iterator(); it.hasNext();){
-						Node prepareOpt = (Node)it.next();
-						setGlobalFormattingSettings(-1, true, wrappingPolicy);
-						prepareOpt.accept(thisVisitor);						
-					}
-					unindent(numOfIndents4Wrapping);
-				}
-				else
-				{
+//				if(firstPrepareOpt != null && currToken.left == firstPrepareOpt.getOffset()){
+//					indent(numOfIndents4Wrapping);
+//					for(Iterator it = prepareOpts.iterator(); it.hasNext();){
+//						Node prepareOpt = (Node)it.next();
+//						setGlobalFormattingSettings(-1, true, wrappingPolicy);
+//						prepareOpt.accept(thisVisitor);						
+//					}
+//					unindent(numOfIndents4Wrapping);
+//				}
+//				else
+//				{
 					int numOfBlankLines = -1;
 					boolean addSpace = false;
 					
@@ -3380,7 +3380,7 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 					printToken(prevToken, currToken, numOfBlankLines, addSpace);
 				}
 				
-			}
+//			}
 		};
 		formatNode(prepareStatement, callbackFormatter, fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
 		
