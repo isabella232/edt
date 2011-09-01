@@ -1622,7 +1622,7 @@ egl.getWidgetInfo = function() {
 		 */
 		setExtraInfo: function(ele) {
 			this.extrainfo = "";
-			if ( this.package == "com.ibm.egl.rui.widgets" && this.type == "GridLayout" ) {
+			if ( this.package == "org.eclipse.edt.rui.widgets" && this.type == "GridLayout" ) {
 				if( ele.eze$$DOMElement.childNodes.length <=0 ){
 					return;
 				}
