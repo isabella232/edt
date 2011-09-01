@@ -16,9 +16,14 @@ import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Type;
 
 public class XMLRootElementTemplate extends JavaTemplate {
 
+	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot) {
+		ctx.invokeSuper(this, genAnnotation, (Type)aType, ctx, out, Boolean.TRUE, annot);
+	}
+	
 	public void genConstructorOptions(AnnotationType annotType, Context ctx, TabbedWriter out, Annotation annot) {
 		boolean addComma = false;
 		if(annot.getValue("name") instanceof String && !"##default".equals(annot.getValue("name"))){
