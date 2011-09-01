@@ -26,7 +26,7 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	private java.util.List<T> list;
-	private int maxSize;
+	private int maxSize = Integer.MAX_VALUE;
 
 	public EglList() {
 		list = new ArrayList<T>();
@@ -42,13 +42,15 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 	// the following group of methods implements the edt version, which means that the indexes are relative to 1
 	@Override
 	public void appendAll(Collection<? extends T> c) {
-		if (maxSize != 0 && c.size() + list.size() > maxSize)
+		if (c.size() + list.size() > maxSize)
 			throw new ArraySizeException();
 		list.addAll(c);
 	}
 
 	@Override
 	public void appendElement(T element) {
+		if (list.size() == maxSize)
+			throw new ArraySizeException();
 		list.add(element);
 	}
 
@@ -83,7 +85,7 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 
 	@Override
 	public void insertElement(T element, int index) {
-		if (maxSize != 0 && list.size() >= maxSize)
+		if (list.size() == maxSize)
 			throw new ArraySizeException();
 		if (index == 0)
 			index = 1;
@@ -105,11 +107,26 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 	}
 
 	@Override
-	public void resize(int max) {
-		if (max > maxSize || max < 0)
+	public void resize( int size ) 
+	{
+		if ( size == 0 )
+		{
+			list.clear();
+		}
+		else if ( size > maxSize || size < 0 )
+		{
 			throw new ArraySizeException();
-		while (list.size() > max) {
-			list.remove(list.size());
+		}
+		else if ( size > list.size() )
+		{
+			//TODO need to add elements!
+		}
+		else
+		{
+			for ( int index = list.size() - 1; index >= size; index-- )
+			{
+				list.remove( index );
+			}
 		}
 	}
 
@@ -152,7 +169,7 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 
 	@Override
 	public void setMaxSize(int max) {
-		if (maxSize != 0 && max < maxSize)
+		if (max < 0 || list.size() > max)
 			throw new ArraySizeException();
 		maxSize = max;
 	}
