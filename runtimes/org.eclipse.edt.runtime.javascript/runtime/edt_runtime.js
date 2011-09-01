@@ -556,6 +556,9 @@ egl.defineClass( "egl.lang", "NullType",
 egl.egl.lang.NullType.equals = function(x, y) {
 	return x == y;  //TODO sbg Should this be generated as a simple comparison, rather than all this overhead?
 };
+egl.egl.lang.NullType.notEquals = function(x, y) {
+	return x != y;  //TODO sbg Should this be generated as a simple comparison, rather than all this overhead?
+};
 egl.egl.lang.NullType.fromEList = function(list) {
 	return list; //TODO sbg Should this be generated as a simple comparison, rather than all this overhead?
 };
