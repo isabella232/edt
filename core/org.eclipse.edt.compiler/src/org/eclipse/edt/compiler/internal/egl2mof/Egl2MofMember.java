@@ -718,9 +718,7 @@ class Egl2MofMember extends Egl2MofPart {
 		else {
 			if (settingsBlock != null) {
 				processSettings(field, settingsBlock);
-			}
-			
-			if (settingsBlock != null || (!field.isNullable() && TypeUtils.isReferenceType(field.getType()))) {
+
 				// Add implicit new expression as first statement of the initialization
 				StatementBlock block = field.getInitializerStatements();
 				if (!(field.getType() instanceof ProxyPart) && field.getType().getClassifier().isInstantiable()) {
