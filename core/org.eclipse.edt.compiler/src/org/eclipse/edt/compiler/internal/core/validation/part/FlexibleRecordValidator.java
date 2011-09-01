@@ -780,6 +780,10 @@ public class FlexibleRecordValidator extends AbstractASTVisitor {
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(structureItem);
 		structureItem.accept(new FieldValidator(problemRequestor, compilerOptions));
 		
+		if (structureItem.hasType()) {
+			StatementValidator.validateDataDeclarationType(structureItem.getType(), problemRequestor);
+		}
+		
 		return false;
 	}
 	
