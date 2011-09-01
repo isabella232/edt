@@ -317,6 +317,7 @@ public interface IProblemRequestor {
 
     public static final int FORWARD_NOT_ALLOWED = 3245;
 
+	public static final int ARRAY_DIMENSION_NOT_ALLOWED = 3248;
 	public static final int SETTINGS_BLOCK_NOT_ALLOWED = 3249;
 	public static final int INTEGER_LITERAL_OUT_OF_RANGE = 3250;
 	public static final int DECIMAL_LITERAL_OUT_OF_RANGE = 3251;
