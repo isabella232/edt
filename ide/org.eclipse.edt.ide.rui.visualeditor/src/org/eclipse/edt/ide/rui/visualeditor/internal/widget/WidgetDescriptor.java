@@ -137,7 +137,7 @@ public class WidgetDescriptor implements VEPropertyContainer {
 	/**
 	 * The ID is a combined widget project name, separator, package, separator, and widget type, such as:
 	 * <ul>
-	 * <li>com.ibm.egl.rui_1.0.0@@com.ibm.egl.rui.widgets@@Image</li>
+	 * <li>com.ibm.egl.rui_1.0.0@@org.eclipse.edt.rui.widgets@@Image</li>
 	 * </ul>
 	 */
 	public String getID(){

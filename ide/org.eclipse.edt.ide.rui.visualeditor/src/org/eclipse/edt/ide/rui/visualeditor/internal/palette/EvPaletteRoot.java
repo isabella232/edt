@@ -155,7 +155,7 @@ public class EvPaletteRoot extends PaletteRoot implements IWidgetDescriptorRegis
 		ImageDescriptor largeIcon = descriptor.getIconLarge();
 
 		String strID      	  = descriptor.getID();
-		String strLabel       = descriptor.getProvider() != null ? descriptor.getLabel() + " (" + descriptor.getProvider() + ")" : descriptor.getLabel();
+		String strLabel       = (descriptor.getProvider() != null && descriptor.getProvider().length() != 0) ? descriptor.getLabel() + " (" + descriptor.getProvider() + ")" : descriptor.getLabel();
 		String strDescription = descriptor.getDescription();
 
 		entry = new EvPaletteCreationEntry( strLabel, strDescription, strID, WidgetCreationFactory.getInstance(), smallIcon, largeIcon, false );

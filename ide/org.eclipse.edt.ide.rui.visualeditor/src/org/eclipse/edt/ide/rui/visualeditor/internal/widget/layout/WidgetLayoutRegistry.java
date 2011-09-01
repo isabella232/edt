@@ -53,7 +53,7 @@ public class WidgetLayoutRegistry {
 	private void init() {
 		addWidgetLayout(VE_HANDLER, HandlerWidgetLayout.class );
 		addWidgetLayout(ROOT, RootWidgetLayout.class );
-		addWidgetLayout("com.ibm.egl.rui.widgets.GridLayout", GridLayoutWidgetLayout.class );
+		addWidgetLayout("org.eclipse.edt.rui.widgets.GridLayout", GridLayoutWidgetLayout.class );
 		
 		EvWidgetContextMenuProviderRegister.getInstance().addEvWidgetContextMenuProvider(new GridLayoutWidgetContextMenuProvider() );
 	}

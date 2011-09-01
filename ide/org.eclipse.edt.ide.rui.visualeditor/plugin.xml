@@ -39,14 +39,14 @@
 		</page>
 		-->
 	</extension>
- <extension
-       point="org.eclipse.ui.views">
-    <view
-          category="org.eclipse.edt.ide.views"
-          class="org.eclipse.edt.ide.rui.visualeditor.internal.views.dataview.PageDataView"
-          icon="icons/obj16/pageDataView.gif"
-          id="org.eclipse.edt.ide.rui.visualeditor.views.PageDataView"
-          name="%NL_Page_Data_View">
-    </view>
- </extension>
+	<extension point="org.eclipse.ui.views">
+		<view
+		      category="org.eclipse.edt.views"
+		      class="org.eclipse.edt.ide.rui.visualeditor.internal.views.dataview.PageDataView"
+		      icon="icons/obj16/pageDataView.gif"
+		      id="org.eclipse.edt.ide.rui.visualeditor.views.PageDataView"
+		      name="%NL_Page_Data_View">
+		</view>
+	</extension>
+ 
 </plugin>

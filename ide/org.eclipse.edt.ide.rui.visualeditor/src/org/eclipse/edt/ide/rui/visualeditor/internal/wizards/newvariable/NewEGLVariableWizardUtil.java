@@ -64,10 +64,10 @@ public class NewEGLVariableWizardUtil {
 	private static List<PartDeclarationInfo> getFilterPartInfos(List<PartDeclarationInfo> partInfos){
 		List<PartDeclarationInfo> results = new ArrayList<PartDeclarationInfo>();
 		for(PartDeclarationInfo partInfo : partInfos){
-			if(!"com.ibm.egl.rui.widgets".equals(partInfo.getPackageName()) 
-				&& !"com.ibm.egl.rui.mvc".equals(partInfo.getPackageName())
-				&& !"com.ibm.egl.rui.infobus".equals(partInfo.getPackageName())
-				&& !"com.ibm.egl.rui.history".equals(partInfo.getPackageName())
+			if(!"org.eclipse.edt.rui.widgets".equals(partInfo.getPackageName()) 
+				&& !"org.eclipse.edt.rui.mvc".equals(partInfo.getPackageName())
+				&& !"org.eclipse.edt.rui.infobus".equals(partInfo.getPackageName())
+				&& !"org.eclipse.edt.rui.history".equals(partInfo.getPackageName())
 				&& !"dojo.widgets".equals(partInfo.getPackageName())){
 				results.add(partInfo);
 			}

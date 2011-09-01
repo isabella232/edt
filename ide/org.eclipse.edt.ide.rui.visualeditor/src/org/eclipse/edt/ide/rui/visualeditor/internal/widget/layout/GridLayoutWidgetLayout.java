@@ -31,8 +31,8 @@ import org.eclipse.swt.graphics.Rectangle;
 public class GridLayoutWidgetLayout extends AbstractWidgetLayout {
 	
 	private int[] cellInfo;
-	private final static String[] LAYOUTDATA_NAME = {"com.ibm.egl.rui.widgets", "GridLayoutData"};
-	private final static String[] GRIDLAYOUT = {"com.ibm.egl.rui.widgets", "GridLayout"}; 
+	private final static String[] LAYOUTDATA_NAME = {"org.eclipse.edt.rui.widgets", "GridLayoutData"};
+	private final static String[] GRIDLAYOUT = {"org.eclipse.edt.rui.widgets", "GridLayout"}; 
 	private final static String LayoutInnerRectanglesInfoCackeKey = "GridLayout-InnerRectangles-LayoutInfoCackeKey";
 	private final static String LayoutCellsInfoCackeKey = "GridLayout-Cells-LayoutInfoCackeKey";
 	private final static String LayoutLocaionsInfoCackeKey = "GridLayout-Locaions-LayoutInfoCackeKey";

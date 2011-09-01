@@ -355,7 +355,7 @@ public class PropertyPage extends ScrolledComposite implements MouseListener, Se
 			// Create a composite for the category if one doesn't exist
 			//---------------------------------------------------------
 			String strCategory = properties[ i ].getCategory();
-			if( strCategory == null ) {
+			if( strCategory == null || strCategory.length() == 0 ) {
 				strCategory = "General";
 			}
 			

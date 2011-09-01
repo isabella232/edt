@@ -273,7 +273,7 @@ public class EvDesignOverlay extends Composite implements DisposeListener, DropT
 	}
 	
 	private boolean isCellInGridLayout(WidgetPart _widgetSelected){
-		if ( _widgetSelected == null || !( "com.ibm.egl.rui.widgets".equals( _widgetSelected.getPackageName() ) && "GridLayout".equals( _widgetSelected.getTypeName() )) ) {
+		if ( _widgetSelected == null || !( "org.eclipse.edt.rui.widgets".equals( _widgetSelected.getPackageName() ) && "GridLayout".equals( _widgetSelected.getTypeName() )) ) {
 			return false;
 		}
 		

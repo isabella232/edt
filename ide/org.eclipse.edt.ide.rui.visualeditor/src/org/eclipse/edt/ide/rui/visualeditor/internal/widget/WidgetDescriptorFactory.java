@@ -98,7 +98,7 @@ public class WidgetDescriptorFactory {
 	private static final String		PROPERTY_FILTER 			= InternUtil.intern( "propertyFilter" );
 	private static final String		EVENT_FILTER				= InternUtil.intern( "eventFilter" );
 
-	private static final boolean	DEBUG						= true;
+	private static final boolean	DEBUG						= false;
 
 	private IProject				project;
 	private ProjectEnvironment		environment;
@@ -210,8 +210,7 @@ public class WidgetDescriptorFactory {
 			processWidgetExcludedFields( widgetAnnotation, widgetDescriptor );
 			
 			// Container
-//TODO EDT container			
-//			processWidgetContainer( widgetAnnotation, widgetDescriptor );
+			processWidgetContainer( widgetAnnotation, widgetDescriptor );
 
 			// Provider
 			processWidgetProvider( widgetAnnotation, widgetDescriptor );
@@ -242,10 +241,10 @@ public class WidgetDescriptorFactory {
 	}
 
 	private void processWidgetGroup( Annotation widgetAnnotation, WidgetDescriptor widgetDescriptor ) {
-		String widgetValue = (String)widgetAnnotation.getValue( WIDGET_CATEGORY );
+		String group = (String)widgetAnnotation.getValue( WIDGET_CATEGORY );
 
-		if( widgetValue != null ) {
-			widgetDescriptor._strGroup = widgetValue;
+		if(!isEmpty(group)) {
+			widgetDescriptor._strGroup = group;
 		}
 
 		if( DEBUG ) {
@@ -254,24 +253,35 @@ public class WidgetDescriptorFactory {
 	}
 
 	private void processWidgetDescription( Annotation widgetAnnotation, WidgetDescriptor widgetDescriptor ) {
-		widgetDescriptor._strDescription = (String)widgetAnnotation.getValue( WIDGET_DESCRIPTION );
-
+		String description = (String)widgetAnnotation.getValue( WIDGET_DESCRIPTION );
+		
+		if(!isEmpty(description)){
+			widgetDescriptor._strDescription = description;
+		}
+		
 		if( DEBUG ) {
 			System.out.println( "Widget Description: " + widgetDescriptor.getDescription() );
 		}
 	}
 	
 	private void processWidgetProvider( Annotation widgetAnnotation, WidgetDescriptor widgetDescriptor ) {
-		widgetDescriptor._strProvider = (String)widgetAnnotation.getValue( WIDGET_PROVIDER );
+		String provider = (String)widgetAnnotation.getValue( WIDGET_PROVIDER );
 
+		if(!isEmpty(provider)){
+			widgetDescriptor._strProvider = provider;
+		}
+		
 		if( DEBUG ) {
 			System.out.println( "Widget Provider: " + widgetDescriptor.getProvider() );
 		}
 	}
 	
 	private void processWidgetTemplate( Annotation widgetAnnotation, WidgetDescriptor widgetDescriptor ) {
-		widgetDescriptor._strTemplate = (String)widgetAnnotation.getValue( WIDGET_TEMPLATE);
-		if(widgetDescriptor._strTemplate == null){
+		String template = (String)widgetAnnotation.getValue( WIDGET_TEMPLATE);
+		
+		if(!isEmpty(template)){
+			widgetDescriptor._strTemplate = template;
+		}else{
 			widgetDescriptor._strTemplate = defaultTemplate;
 		}
 		
@@ -289,90 +299,74 @@ public class WidgetDescriptorFactory {
 				DataTemplate dataTemplate = new DataTemplate(widgetDescriptor);
 				widgetDescriptor._DataTemplates.add(dataTemplate);
 				// name
-				Object oName = dataTemplateAnnotation.getValue(DATA_TEMPLATE_NAME);
-				if(oName != null){
-					String name = (String)oName;
+				String name = (String)dataTemplateAnnotation.getValue(DATA_TEMPLATE_NAME);
+				if(!isEmpty(name)){
 					dataTemplate.setName(name);
 				}
 				
 				// purposes
-				Object oPurposes = dataTemplateAnnotation.getValue(DATA_TEMPLATE_PURPOSES);
-				if(oPurposes != null){
-					EList obPurposes = (EList)oPurposes;
-					EnumerationEntry[] purposes = new EnumerationEntry[obPurposes.size()];
-					for(int j=0; j<obPurposes.size(); j++){
-						purposes[j] = (EnumerationEntry)obPurposes.get(j);
-					}
-					dataTemplate.setPurposes(purposes);
+				EList oPurposes = (EList)dataTemplateAnnotation.getValue(DATA_TEMPLATE_PURPOSES);
+				EnumerationEntry[] purposes = new EnumerationEntry[oPurposes.size()];
+				for(int j=0; j<oPurposes.size(); j++){
+					purposes[j] = (EnumerationEntry)oPurposes.get(j);
 				}
+				dataTemplate.setPurposes(purposes);
 				
 				// genController
-				Object oGenController = dataTemplateAnnotation.getValue(DATA_TEMPLATE_GEN_CONTROLLER);
-				if(oGenController != null){
-					Boolean genController = (Boolean)oGenController;
-					dataTemplate.setGenController(genController);
-				}
+				Boolean genController = (Boolean)dataTemplateAnnotation.getValue(DATA_TEMPLATE_GEN_CONTROLLER);
+				dataTemplate.setGenController(genController);
 				
 				// template
-				Object oTemplate = dataTemplateAnnotation.getValue(DATA_TEMPLATE_TEMPLATE);
-				if(oTemplate != null){
-					String template = (String)oTemplate;
+				String template = (String)dataTemplateAnnotation.getValue(DATA_TEMPLATE_TEMPLATE);
+				if(!isEmpty(template)){
 					dataTemplate.setTemplate(template);
 				}
 				
 				// form manager template
-				Object oFormManagerTemplate = dataTemplateAnnotation.getValue(DATA_TEMPLATE_FORM_MANAGER_TEMPLATE);
-				if(oFormManagerTemplate != null){
-					String formManagerTemplate = (String)oFormManagerTemplate;
+				String formManagerTemplate = (String)dataTemplateAnnotation.getValue(DATA_TEMPLATE_FORM_MANAGER_TEMPLATE);
+				if(!isEmpty(formManagerTemplate)){
 					dataTemplate.setFormManagerTemplate(formManagerTemplate);
 				}
 				
 				// layout data template
-				Object oChildLayoutDataTemplate = dataTemplateAnnotation.getValue(DATA_TEMPLATE_CHILD_LAYOUT_DATA_TEMPLATE);
-				if(oChildLayoutDataTemplate != null){
-					String childLayoutDataTemplate = (String)oChildLayoutDataTemplate;
+				String childLayoutDataTemplate = (String)dataTemplateAnnotation.getValue(DATA_TEMPLATE_CHILD_LAYOUT_DATA_TEMPLATE);
+				if(!isEmpty(childLayoutDataTemplate)){
 					dataTemplate.setChildLayoutDataTemplate(childLayoutDataTemplate);
 				}
 				
 				// name label template
-				Object oChildNameLabelTemplate = dataTemplateAnnotation.getValue(DATA_TEMPLATE_CHILD_NAME_LABEL_TEMPLATE);
-				if(oChildNameLabelTemplate != null){
-					String childNameLabelTemplate = (String)oChildNameLabelTemplate;
+				String childNameLabelTemplate = (String)dataTemplateAnnotation.getValue(DATA_TEMPLATE_CHILD_NAME_LABEL_TEMPLATE);
+				if(!isEmpty(childNameLabelTemplate)){
 					dataTemplate.setChildNameLabelTemplate(childNameLabelTemplate);
 				}
 				
 				// error label template
-				Object oChildErrorLabelTemplate = dataTemplateAnnotation.getValue(DATA_TEMPLATE_CHILD_ERROR_LABEL_TEMPLATE);
-				if(oChildErrorLabelTemplate != null){
-					String childErrorLabelTemplate = (String)oChildErrorLabelTemplate;
+				String childErrorLabelTemplate = (String)dataTemplateAnnotation.getValue(DATA_TEMPLATE_CHILD_ERROR_LABEL_TEMPLATE);
+				if(!isEmpty(childErrorLabelTemplate)){
 					dataTemplate.setChildErrorLabelTemplate(childErrorLabelTemplate);
 				}
 				
 				// controller template
-				Object oChildControllerTemplate = dataTemplateAnnotation.getValue(DATA_TEMPLATE_CHILD_CONTROLLER_TEMPLATE);
-				if(oChildControllerTemplate != null){
-					String childControllerTemplate = (String)oChildControllerTemplate;
+				String childControllerTemplate = (String)dataTemplateAnnotation.getValue(DATA_TEMPLATE_CHILD_CONTROLLER_TEMPLATE);
+				if(!isEmpty(childControllerTemplate)){
 					dataTemplate.setChildControllerTemplate(childControllerTemplate);
 				}
 
 				// controller valid state setter template
-				Object oChildControllerValidStateSetterTemplate = dataTemplateAnnotation.getValue(DATA_TEMPLATE_CHILD_CONTROLLER_VALID_STATE_SETTER_TEMPLATE);
-				if(oChildControllerTemplate != null){
-					String childControllerValidStateSetterTemplate = (String)oChildControllerValidStateSetterTemplate;
+				String childControllerValidStateSetterTemplate = (String)dataTemplateAnnotation.getValue(DATA_TEMPLATE_CHILD_CONTROLLER_VALID_STATE_SETTER_TEMPLATE);
+				if(!isEmpty(childControllerValidStateSetterTemplate)){
 					dataTemplate.setChildControllerValidStateSetterTemplate(childControllerValidStateSetterTemplate);
 				}
 				
 				// controller publish message helper template
-				Object oChildControllerPublishMessageHelperTemplate = dataTemplateAnnotation.getValue(DATA_TEMPLATE_CHILD_CONTROLLER_PUBLISH_MESSAGE_HELPER_TEMPLATE);
-				if(oChildControllerTemplate != null){
-					String childControllerPublishMessageHelperTemplate = (String)oChildControllerPublishMessageHelperTemplate;
+				String childControllerPublishMessageHelperTemplate = (String)dataTemplateAnnotation.getValue(DATA_TEMPLATE_CHILD_CONTROLLER_PUBLISH_MESSAGE_HELPER_TEMPLATE);
+				if(!isEmpty(childControllerPublishMessageHelperTemplate)){
 					dataTemplate.setChildControllerPublishMessageHelperTemplate(childControllerPublishMessageHelperTemplate);
 				}
 				
 				// form field template
-				Object oChildFormFieldTemplate = dataTemplateAnnotation.getValue(DATA_TEMPLATE_CHILD_FORM_FIELD_TEMPLATE);
-				if(oChildFormFieldTemplate != null){
-					String childFormFieldTemplate = (String)oChildFormFieldTemplate;
+				String childFormFieldTemplate = (String)dataTemplateAnnotation.getValue(DATA_TEMPLATE_CHILD_FORM_FIELD_TEMPLATE);
+				if(!isEmpty(childFormFieldTemplate)){
 					dataTemplate.setChildFormFieldTemplate(childFormFieldTemplate);
 				}				
 				
@@ -380,43 +374,28 @@ public class WidgetDescriptorFactory {
 				Annotation dataMappingAnnotation = (Annotation)dataTemplateAnnotation.getValue(DATA_TEMPLATE_DATA_MAPPING);
 				if(dataMappingAnnotation != null){
 					// forArray
-					Object oForArray = dataMappingAnnotation.getValue(DATA_MAPPING_FOR_ARRAY);
-					if(oForArray != null){
-						boolean forArray = (Boolean)oForArray;
-						dataTemplate.getDataMapping().setForArray(forArray);
-					}
+					Boolean forArray = (Boolean)dataMappingAnnotation.getValue(DATA_MAPPING_FOR_ARRAY);
+					dataTemplate.getDataMapping().setForArray(forArray);
 					
 					// isContainer
-					Object oIsContainer = dataMappingAnnotation.getValue(DATA_MAPPING_IS_CONTAINER);
-					if(oIsContainer != null){
-						boolean isContainer = (Boolean)oIsContainer;
-						dataTemplate.getDataMapping().setContainer(isContainer);
-					}
+					Boolean isContainer = (Boolean)dataMappingAnnotation.getValue(DATA_MAPPING_IS_CONTAINER);
+					dataTemplate.getDataMapping().setContainer(isContainer);
 					
 					// isContainer
-					Object oIsDefault = dataMappingAnnotation.getValue(DATA_MAPPING_IS_DEFAULT);
-					if(oIsDefault != null){
-						boolean isDefault = (Boolean)oIsDefault;
-						dataTemplate.getDataMapping().setDefault(isDefault);
-					}
+					Boolean isDefault = (Boolean)dataMappingAnnotation.getValue(DATA_MAPPING_IS_DEFAULT);
+					dataTemplate.getDataMapping().setDefault(isDefault);
 					
 					// genChildWidget
-					Object oGenChildWidget = dataMappingAnnotation.getValue(DATA_MAPPING_GEN_CHILD_WIDGET);
-					if(oGenChildWidget != null){
-						boolean genChildWidget = (Boolean)oGenChildWidget;
-						dataTemplate.getDataMapping().setGenChildWidget(genChildWidget);
-					}
+					Boolean genChildWidget = (Boolean)dataMappingAnnotation.getValue(DATA_MAPPING_GEN_CHILD_WIDGET);
+					dataTemplate.getDataMapping().setGenChildWidget(genChildWidget);
 					
 					// mappings
-					Object oMappings = dataMappingAnnotation.getValue(DATA_MAPPING_MAPPINGS);
-					if(oMappings != null){
-						EList obMappings = (EList)oMappings;
-						EnumerationEntry[] mappings = new EnumerationEntry[obMappings.size()];
-						for(int j=0; j<obMappings.size(); j++){
-							mappings[j] = (EnumerationEntry)obMappings.get(j);
-						}
-						dataTemplate.getDataMapping().setMappings(mappings);
+					EList oMappings = (EList)dataMappingAnnotation.getValue(DATA_MAPPING_MAPPINGS);
+					EnumerationEntry[] mappings = new EnumerationEntry[oMappings.size()];
+					for(int j=0; j<oMappings.size(); j++){
+						mappings[j] = (EnumerationEntry)oMappings.get(j);
 					}
+					dataTemplate.getDataMapping().setMappings(mappings);
 				}
 			}
 		}
@@ -428,7 +407,7 @@ public class WidgetDescriptorFactory {
 	private void processWidgetDisplayName( Annotation widgetAnnotation, WidgetDescriptor widgetDescriptor ) {
 		String widgetValue = (String)widgetAnnotation.getValue( WIDGET_DISPLAYNAME );
 
-		if( widgetValue != null ) {
+		if( !isEmpty( widgetValue ) ) {
 			widgetDescriptor._strLabel = widgetValue;
 		}
 		else {
@@ -443,7 +422,7 @@ public class WidgetDescriptorFactory {
 	private void processWidgetSmallIcon( Annotation widgetAnnotation, WidgetDescriptor widgetDescriptor ) {
 		String widgetValue = (String)widgetAnnotation.getValue( WIDGET_SMALLICON );
 
-		if( widgetValue != null ) {
+		if( !isEmpty( widgetValue ) ) {
 			try {
 				IResource member = project.findMember( widgetValue );
 				if(member != null && member.getType() == IResource.FILE){
@@ -472,7 +451,7 @@ public class WidgetDescriptorFactory {
 	private void processWidgetLargeIcon( Annotation widgetAnnotation, WidgetDescriptor widgetDescriptor ) {
 		String widgetValue = (String)widgetAnnotation.getValue( WIDGET_LARGEICON );
 
-		if( widgetValue != null ) {
+		if( !isEmpty( widgetValue ) ) {
 			try{
 				IResource member = project.findMember( widgetValue );
 				if(member != null && member.getType() == IResource.FILE){
@@ -592,26 +571,12 @@ public class WidgetDescriptorFactory {
 	private List<Field> getAllFields( LogicAndDataPart part ){
 		List<Field> fields = new ArrayList<Field>();
 		
-		if(part instanceof ExternalType){		
-			getAllFieldsFromExternalType((ExternalType)part, fields);
-		}else{
-			fields = part.getFields();
+		if(part.getSuperTypes().get(0) instanceof ExternalType){
+			fields.addAll( ((ExternalType)part.getSuperTypes().get(0)).getFields() );
 		}
+		
+		fields.addAll( part.getFields() );
 		return fields;
-	}
-	
-	private void getAllFieldsFromExternalType(ExternalType part, List<Field> fields) {
-		List<Field> extendedPartNames = part.getFields();
-//TODO EDT extraltype		
-//		for (int i = 0; i < extendedPartNames.size(); i++) {
-//			Field extendedPartName = extendedPartNames.get(i);
-//			Part extendedPart = extendedPartName.getAccessKind();
-//			if(extendedPart instanceof ExternalType){
-//				ExternalType nextExternalType = (ExternalType) extendedPart;
-//				getAllFieldsFromExternalType( nextExternalType, fields );
-//			}
-//		}
-		fields.addAll(part.getFields());
 	}
 
 	private void processEvent( Annotation annotation, Field field, WidgetDescriptor widgetDescriptor ) {
@@ -648,7 +613,7 @@ public class WidgetDescriptorFactory {
 	private void processEventDisplayName( Annotation propertyAnnotation, WidgetEventDescriptor eventDescriptor ) {
 		String eventValue = (String)propertyAnnotation.getValue( EVENT_DISPLAYNAME );
 
-		if( eventValue != null ) {
+		if( !isEmpty(eventValue ) ) {
 			eventDescriptor._strLabel = eventValue;
 		}
 		else {
@@ -786,6 +751,10 @@ public class WidgetDescriptorFactory {
 	private void processPropertyCategory( Annotation propertyAnnotation, WidgetPropertyDescriptor propertyDescriptor ) {
 		propertyDescriptor._strCategory = (String)propertyAnnotation.getValue( PROPERTY_CATEGORY );
 
+		if(propertyDescriptor._strCategory.equals("")){
+			propertyDescriptor._strCategory = null;
+		}
+		
 		if( DEBUG ) {
 			System.out.println( "Property Category: " + propertyDescriptor.getCategory() );
 		}
@@ -802,6 +771,10 @@ public class WidgetDescriptorFactory {
 	private void processPropertyDefault( Annotation propertyAnnotation, WidgetPropertyDescriptor propertyDescriptor ) {
 		propertyDescriptor._strDefault = (String)propertyAnnotation.getValue( PROPERTY_DEFAULT );
 
+		if(propertyDescriptor._strDefault.equals("")){
+			propertyDescriptor._strDefault = null;
+		}
+		
 		if( DEBUG ) {
 			System.out.println( "Field Default: " + propertyDescriptor.getDefault() );
 		}
@@ -810,7 +783,7 @@ public class WidgetDescriptorFactory {
 	private void processPropertyDisplayName( Annotation propertyAnnotation, Field field, WidgetPropertyDescriptor propertyDescriptor ) {
 		String propertyValue = (String)propertyAnnotation.getValue( PROPERTY_DISPLAYNAME );
 
-		if( propertyValue != null ) {
+		if(!isEmpty( propertyValue)) {
 			propertyDescriptor._strLabel = propertyValue;
 		}
 		else {
@@ -824,11 +797,11 @@ public class WidgetDescriptorFactory {
 	private void processPropertyType( Annotation propertyAnnotation, Field field, WidgetPropertyDescriptor propertyDescriptor ) {
 		String propertyValue = (String)propertyAnnotation.getValue( PROPERTY_PROPERTYTYPE );
 
-		if( propertyValue != null ) {
+
+		if( !isEmpty(propertyValue) ) {
 			propertyDescriptor._strType = propertyValue;
 		}
 		else {
-		
 			propertyDescriptor._strType = convertEGLTypeToPropertyType( field.getType() );
 		}
 		if( DEBUG ) {
@@ -880,5 +853,9 @@ public class WidgetDescriptorFactory {
 		}
 		LogicAndDataPart part = (LogicAndDataPart)field.getContainer();
 		return !(widgetDescriptor.getPackage() == null ? widgetDescriptor.getType() : widgetDescriptor.getPackage() + "." + widgetDescriptor.getType() ).equalsIgnoreCase( part.getTypeSignature()) ;
+	}
+	
+	private boolean isEmpty( String s ) {
+		return (s == null || s.length() == 0);
 	}
 }

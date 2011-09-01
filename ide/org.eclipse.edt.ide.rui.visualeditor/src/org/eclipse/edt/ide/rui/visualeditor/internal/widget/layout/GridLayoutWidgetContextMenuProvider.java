@@ -50,7 +50,7 @@ public class GridLayoutWidgetContextMenuProvider implements EvWidgetContextMenuP
 			manager.remove( GRIDLAYOUT_CONTEXTMENU_PREFIX + DELETE );
 		}
 		
-		if ( !(selectedWidget != null && "com.ibm.egl.rui.widgets".equals( selectedWidget.getPackageName() ) && "GridLayout".equals( selectedWidget.getTypeName() )) ) {
+		if ( !(selectedWidget != null && "org.eclipse.edt.rui.widgets".equals( selectedWidget.getPackageName() ) && "GridLayout".equals( selectedWidget.getTypeName() )) ) {
 			return;
 		}
 		

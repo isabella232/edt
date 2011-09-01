@@ -376,7 +376,7 @@ public class WidgetDescriptorRegistry implements IWidgetDescriptorRegistry {
 	 * @param s
 	 */
 	private void debug(String s) {
-		System.out.println(s);
+//		System.out.println(s);
 	}
 
 	public List<DataTemplate> getMappingDescriptorDataTemplates(String purpose, String eglDataType, Set<String> eglDataTypeDetails, boolean forArray, boolean isContainer) {
