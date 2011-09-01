@@ -32,10 +32,10 @@ egl.eze$$runtimeProperties = {};
 load("messages", "", ["RuiMessages-en_US"]);
 load("runtime", "",  ["egl", "egl_development", "egl_mathcontext", "egl_bigdecimal"]);
 load("runtime", "egl.jsrt", ["BaseTypesAndRuntimes"]);
-load("runtime", "egl.lang", ["AnyException", /*, "HttpRequest", "HttpResponse" */
-                             , "InvalidIndexException", "InvocationException", "JavaObjectException"
-                             , "DynamicAccessException", "NullValueException", "TypeCastException"
-                             , "InvalidPatternException", "NumericOverflowException"]);
+load("runtime", "egl.lang", ["AnyException", "ArraySizeException", "DynamicAccessException",
+                             "Enumeration", "InvalidIndexException", "InvalidPatternException", 
+                             "InvocationException", "JavaObjectException", "NullValueException", 
+                             "NumericOverflowException", "TypeCastException"]);
 load("runtime", "eglx.lang", ["DateTimeLib", "MathLib", "StrLib", "SysLib"]);
 load("runtime", "eglx.ui.rui", ["Widget", "Document", "Event", "View"]);
 load("runtime", "egl.ui.gateway", ["UIGatewayRecord"]);
@@ -44,7 +44,7 @@ load("runtime", "", ["edt_runtime", "edt_runtime_fixups"]);
 load("runtime", "eglx.javascript", ["Job", "JavaScriptObjectException"]);
 load("runtime", "eglx.java", ["JavaObjectException"]);
 load("runtime", "eglx.rbd", ["StrLib"]);
-load("runtime", "eglx.services", ["ServiceBinder","ServiceBindingException","ServiceInvocationException", "ServiceLib", "ServiceRuntimes"]);
+load("runtime", "eglx.services", ["ServiceKind", "ServiceBinder","ServiceBindingException","ServiceInvocationException", "ServiceLib", "ServiceRuntimes"]);
 load("runtime", "eglx.json", ["Json", "JSONParser"]);
 load("runtime", "eglx.xml.binding.annotation", ["Xml"]);
 load("runtime", "eglx.xml", ["Xml"]);

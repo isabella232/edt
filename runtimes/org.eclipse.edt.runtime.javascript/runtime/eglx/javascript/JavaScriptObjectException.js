@@ -20,8 +20,8 @@ egl.createJavaScriptObjectException = function( /*string*/ messageID, /*string o
 	args.push( [ "messageID", messageID || "" ] );
 	args.push( [ "message", inserts || "" ] );
 	args.push( [ "name", arguments[ 2 ] || "" ] );
-	return new egl.egl.javascript.JavaScriptObjectException( args );
-}
+	return new egl.eglx.javascript.JavaScriptObjectException( args );
+};
 
 egl.defineClass( "eglx.javascript", "JavaScriptObjectException", "egl.lang", "AnyException", {
 	

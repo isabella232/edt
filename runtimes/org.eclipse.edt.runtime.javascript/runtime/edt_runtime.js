@@ -152,7 +152,10 @@ egl.egl.lang.EFloat32.ZERO = egl.javascript.BigDecimal.prototype.ZERO;
 egl.egl.lang.EFloat32.fromEFloat64 = function (x) {
 	return egl.convertFloatToSmallfloat(x,"TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
+egl.egl.lang.EFloat32.fromEInt64  = function (x) {
+	return egl.convertFloatToSmallfloat(Number( (new egl.javascript.BigDecimal(x)).toString()));
 
+};
 
 
 /****************************************************************************
@@ -233,6 +236,9 @@ egl.egl.lang.EInt64.fromEFloat64 = function (x) {
 egl.egl.lang.EInt64.fromAnyNum = function (x) {  
 	return egl.convertDecimalToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
+egl.egl.lang.EInt64.fromEFloat32 = function (x) {  
+	return egl.convertDecimalToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+}; 
 
 
 
