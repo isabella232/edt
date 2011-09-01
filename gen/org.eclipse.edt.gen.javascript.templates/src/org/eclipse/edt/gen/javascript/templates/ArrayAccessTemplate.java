@@ -31,6 +31,8 @@ public class ArrayAccessTemplate extends JavaScriptTemplate {
 		out.print(".checkIndex(");
 		ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 		out.print(" - 1)]");
+		out.print( " = " );
+		ctx.invoke(genExpression, arg1, ctx, out);
 	}
 	
 	public void genCheckNullArgs(ArrayAccess expr, Context ctx, TabbedWriter out) {

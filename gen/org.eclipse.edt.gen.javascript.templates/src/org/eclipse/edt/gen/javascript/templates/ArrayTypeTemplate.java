@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import java.util.List;
+
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -18,8 +20,11 @@ import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BoxingExpression;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.MemberAccess;
+import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.Type;
 
 public class ArrayTypeTemplate extends JavaScriptTemplate {
@@ -33,25 +38,7 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void processDefaultValue(ArrayType generic, Context ctx, TabbedWriter out) {
-		String temporary = ctx.nextTempName();
-		out.print("(function() { var ");
-		out.print(temporary);
-		out.print(" = []; ");
-		out.print(temporary);
-		out.print(".setType(");
-		out.print("\"");
-		genSignature(generic, ctx, out);
-		out.print("\"");
-		out.println(");");
-		String arraySize = (generic.getInitialSize() == null) ? "0" : generic.getInitialSize().toString();
-		out.println("for (var i = 0; i < " + arraySize + "; i++) {");
-		out.print(temporary);
-		out.print("[i] = ");
-		ctx.invoke(genDefaultValue, generic.getElementType(), ctx, out);
-		out.println(";}");
-		out.print("return ");
-		out.print(temporary);
-		out.print(";})()");
+		out.print(" []"); // TODO sbg Nullable support
 	}
 
 	public void genSignature(ArrayType generic, Context ctx, TabbedWriter out) {
@@ -68,7 +55,7 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 		String operator = "=";
 		if (arg.getOperator() != null && arg.getOperator().length() > 0)
 			operator = arg.getOperator();
-		if (operator.equals("::=")) {
+		if ("::=".equals(operator)) {
 			ctx.putAttribute(arg.getLHS(), Constants.EXPR_LHS, Boolean.FALSE); // Ensure we don't use a getter for the
 																				// accessor
 			if (arg.getLHS() instanceof MemberAccess) {
@@ -85,7 +72,41 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 			else
 				ctx.invoke(genExpression, arg.getRHS(), ctx, out);
 			out.print(")");
-		} else
+		} 
+		else if ("=".equals(operator) && arg.getRHS() instanceof NewExpression){
+			int arraySize = 0;
+			List<Expression> arguments = ((NewExpression)arg.getRHS()).getArguments();
+			if ((arguments != null) && (arguments.size() == 1)) {
+				try {
+					arraySize = Integer.valueOf(((IntegerLiteral)arguments.get(0)).getValue()); 
+				}
+				catch (Exception e) {
+					arraySize = 0;
+				}
+				ArrayType generic = (ArrayType)type;
+				String temporary = ctx.nextTempName();
+				ctx.invoke(genExpression, arg.getLHS(), ctx, out);
+				out.print(" "+operator+" ");
+				out.print("(function() { var ");
+				out.print(temporary);
+				out.print(" = []; ");
+				out.print(temporary);
+				out.print(".setType(");
+				out.print("\"");
+				genSignature(generic, ctx, out);
+				out.print("\"");
+				out.println(");");
+				out.println("for (var i = 0; i < " + arraySize + "; i++) {");
+				out.print(temporary);
+				out.print("[i] = ");
+				ctx.invoke(genDefaultValue, generic.getElementType(), ctx, out);
+				out.println(";}");
+				out.print("return ");
+				out.print(temporary);
+				out.print(";})()");
+			}
+		}
+		else
 			ctx.invokeSuper(this, genTypeBasedAssignment, type, ctx, out, arg);
 	}
 
