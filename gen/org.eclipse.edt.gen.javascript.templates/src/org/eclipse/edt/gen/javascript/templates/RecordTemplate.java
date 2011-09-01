@@ -50,6 +50,7 @@ public class RecordTemplate extends JavaScriptTemplate {
 	public void genConstructor(Record part, Context ctx, TabbedWriter out) {
 		out.print(quoted("constructor"));
 		out.println(": function() {");
+		ctx.invoke(genLibraries, part, ctx, out);
 		out.println("this.eze$$setInitial();");
 		out.println("}");
 		out.println(",");
