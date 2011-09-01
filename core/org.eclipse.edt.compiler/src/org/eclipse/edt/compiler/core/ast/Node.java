@@ -89,6 +89,11 @@ public class Node implements Cloneable{
 	}
     
     protected ArrayList cloneList(List oldList) throws CloneNotSupportedException {
+    	
+    	if (oldList == null) {
+    		return null;
+    	}
+    	
 		ArrayList newList = new ArrayList();
 		for (Iterator iter = oldList.iterator(); iter.hasNext();) {
 			newList.add(((Node)iter.next()).clone());
