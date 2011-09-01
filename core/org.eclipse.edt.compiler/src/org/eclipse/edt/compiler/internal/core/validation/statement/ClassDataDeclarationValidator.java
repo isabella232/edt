@@ -49,7 +49,7 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 				StatementValidator.validatePrimitiveConstant(classDataDeclaration.getType(),problemRequestor);
 			}
 			
-			StatementValidator.validateDataDeclarationType(classDataDeclaration.getType(),((Part)classDataDeclaration.getParent()).getName().getCanonicalName(),((Expression)classDataDeclaration.getNames().get(0)).getCanonicalString(),  problemRequestor);
+			StatementValidator.validateDataDeclarationType(classDataDeclaration.getType(), problemRequestor);
 			
 			new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(classDataDeclaration);
 			

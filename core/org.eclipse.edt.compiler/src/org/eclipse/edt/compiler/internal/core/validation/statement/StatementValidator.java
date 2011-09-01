@@ -760,78 +760,51 @@ public class StatementValidator implements IOStatementValidatorConstants{
 		}
 	}
 	
-	public static void validateDataDeclarationType(Type type,String containerName,String varName,final IProblemRequestor problemRequestor){
+	public static void validateDataDeclarationType(Type type, final IProblemRequestor problemRequestor){
 		if (type.isArrayType()){
 			ITypeBinding typeBinding = ((ArrayType)type).resolveTypeBinding();
-			boolean haveSpecifiedDimension = false;	
 			Type thistype = type;
 			while (isValidBinding(typeBinding) && typeBinding.getKind() == ITypeBinding.ARRAY_TYPE_BINDING){
-				ArrayType atype = (ArrayType)thistype;
-				if (atype.hasInitialSize()){
-					haveSpecifiedDimension = true;
+				if (thistype.isNullableType()) {
+					NullableType nullType = (NullableType)thistype;
+					thistype = nullType.getBaseType();
+					typeBinding = thistype.resolveTypeBinding();				
 				}
-				else {
-					if(haveSpecifiedDimension) {
+				else {				
+					ArrayType atype = (ArrayType)thistype;
+					if (atype.hasInitialSize()){
 						problemRequestor.acceptProblem(
-							type,
-							IProblemRequestor.ARRAY_DIMENSION_SPECIFIED_AFTER_DYNAMIC_DIMENSION);
-					}
+								type,
+								IProblemRequestor.ARRAY_DIMENSION_NOT_ALLOWED);
+					}				
+					thistype = atype.getElementType();
+					typeBinding = ((ArrayTypeBinding)typeBinding).getElementType();
 				}
-				
-				thistype = atype.getElementType();
-				typeBinding = ((ArrayTypeBinding)typeBinding).getElementType();
 			}
 		}	
 		
-		if (type.isArrayType()){
-			ArrayType atype = (ArrayType)type;
-			ITypeBinding arrayBinding = atype.resolveTypeBinding();
-			if (isValidBinding(arrayBinding)){
-				ITypeBinding typeBinding = arrayBinding.getBaseType(); 
-				if (isValidBinding(typeBinding) ) {
-					if(typeBinding.getAnnotation(EGLUIWEBTRANSACTION, "VGUIRecord") != null){
-	
-						problemRequestor.acceptProblem(type,
-								IProblemRequestor.ARRAY_OF_UIRECORDS_NOT_ALLOWED);
-					}
-				
-					if(ITypeBinding.SERVICE_BINDING == typeBinding.getKind() ||
-					   (ITypeBinding.INTERFACE_BINDING == typeBinding.getKind() &&
-					   	SystemPartManager.findType(typeBinding.getName()) != typeBinding)) {
-						problemRequestor.acceptProblem(
-							type,
-							IProblemRequestor.SERVICE_OR_INTERFACE_ARRAYS_NOT_SUPPORTED);
-					}
+		ITypeBinding tbinding = type.resolveTypeBinding();
+		if (Binding.isValidBinding(tbinding) && tbinding.getKind() == ITypeBinding.ARRAY_TYPE_BINDING){
+			ITypeBinding typeBinding = tbinding.getBaseType(); 
+			if (isValidBinding(typeBinding) ) {
+				if(typeBinding.getAnnotation(EGLUIWEBTRANSACTION, "VGUIRecord") != null){
+
+					problemRequestor.acceptProblem(type,
+							IProblemRequestor.ARRAY_OF_UIRECORDS_NOT_ALLOWED);
 				}
-			}
 			
-			if (atype.hasInitialSize()){
-				final Expression expr = atype.getInitialSize();
-				expr.accept(new AbstractASTExpressionVisitor(){
-					Node error = expr;
-	
-					public void endVisitExpression(Expression expression) {
-						if (error != null){
-							problemRequestor.acceptProblem(error,
-									IProblemRequestor.ARRAY_SIZE_LESS_THAN_ZERO,
-									new String[] {expression.getCanonicalString()});
-						}
-					    return;
-					}
-					
-				    public boolean visit(IntegerLiteral integerLiteral) {
-				    	if (Integer.parseInt(integerLiteral.getValue()) >= 0){
-				    		error = null;
-				    	}
-				        return false;
-				    }
-				});
-				
-			}
-			
-			type = atype.getBaseType();
+				if(ITypeBinding.SERVICE_BINDING == typeBinding.getKind() ||
+				   (ITypeBinding.INTERFACE_BINDING == typeBinding.getKind() &&
+				   	SystemPartManager.findType(typeBinding.getName()) != typeBinding)) {
+					problemRequestor.acceptProblem(
+						type,
+						IProblemRequestor.SERVICE_OR_INTERFACE_ARRAYS_NOT_SUPPORTED);
+				}
+			}						
 		}
-		
+
+		type = type.getBaseType();
+
 		if (type.isPrimitiveType())
 			return;
 		

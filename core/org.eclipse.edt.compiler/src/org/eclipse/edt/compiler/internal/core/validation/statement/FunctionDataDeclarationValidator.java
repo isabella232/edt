@@ -82,7 +82,7 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 				
 				protected void validate(String name){
 					String varname = ((Expression)functionDataDeclaration.getNames().get(0)).getCanonicalString();
-					StatementValidator.validateDataDeclarationType(functionDataDeclaration.getType(),name,varname,problemRequestor);
+					StatementValidator.validateDataDeclarationType(functionDataDeclaration.getType(),problemRequestor);
 				}
 				
 			});
