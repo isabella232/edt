@@ -101,7 +101,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 		out.println("}");
 	}
 
-	static String genGetterSetterFunctionName(String prefix, Field field) {
+	protected static String genGetterSetterFunctionName(String prefix, Field field) {
 		StringBuilder name = new StringBuilder(prefix);
 		name.append(field.getName().substring(0, 1).toUpperCase());
 		if (field.getName().length() > 1)
