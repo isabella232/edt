@@ -74,6 +74,8 @@ public class EGLDDBindingWizard extends EGLPartWizard {
 //			return eglddConfig.getBindingNativeConfiguration();
 		else if(pageName.equals(RestBindingWizardPage.WIZPAGENAME_RestBindingWizardPage))
 			return eglddConfig.getBindingRestConfiguration();
+		else if(pageName.equals(SQLDatabaseBindingWizardPage.WIZPAGENAME_SQLDatabaseBindingWizardPage))
+			return eglddConfig.getBindingSQLConfiguration();
 		
 		return super.getConfiguration(pageName);
 	}

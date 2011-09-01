@@ -15,16 +15,16 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.ide.ui.internal.deployment.Bindings;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
-import org.eclipse.edt.ide.ui.internal.deployment.RestBinding;
+import org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding;
 
 public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
+	
+	private String dbms="";
+	private String driverClass="";
+	private String connUrl="";
+	private String userName="";
 
-//	private String fBaseUri="";
-//	private String fSessionCookieId="";
-//	private boolean fPreserveRequestHeader = false;
-		
-	public BindingSQLDatabaseConfiguration()
-	{
+	public BindingSQLDatabaseConfiguration() {
 		super();
 	}
 		
@@ -33,28 +33,53 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 	}
 
 	protected void setDefaultAttributes() {
-//		fBaseUri = "";
-//		fSessionCookieId = "";
-//		fPreserveRequestHeader = false;
 	}
 
 	protected int getBindingType() {
 		return EGLDDBindingConfiguration.BINDINGTYPE_SQL;	
 	}
 	
+	public String getDbms(){
+		return dbms;
+	}
+	
+	public void setDbms(String dbms){
+		this.dbms = dbms;
+	}
+	
+	public String getDriverClass(){
+		return driverClass;
+	}
+	
+	public void setDriverClass(String driverClass){
+		this.driverClass = driverClass;
+	}
+	
+	public String getConnUrl(){
+		return connUrl;
+	}
+	
+	public void setConnUrl(String connUrl){
+		this.connUrl = connUrl;
+	}
+	
+	public String getUserName(){
+		return userName;
+	}
+	
+	public void setUserName(String userName){
+		this.userName = userName;
+	}
+	
 	public Object executeAddSQLDatabaseBinding(Bindings bindings){
-//		RestBinding restBinding = DeploymentFactory.eINSTANCE.createRestBinding();
-//		bindings.getRestBinding().add(restBinding);
-//		
-//		restBinding.setName(getBindingName());
-//		restBinding.setBaseURI(getBaseUri());
-//		
-//		String sessionCookieId = getSessionCookieId();
-//		if(sessionCookieId != null && sessionCookieId.trim().length()>0)
-//			restBinding.setSessionCookieId(sessionCookieId);
-//		restBinding.setPreserveRequestHeaders(isPreserveRequestHeader());
-//		restBinding.setEnableGeneration(true);
-//		return restBinding;
-		return null;
+		SQLDatabaseBinding sqlBinding = DeploymentFactory.eINSTANCE.createSQLDatabaseBinding();
+		bindings.getSqlDatabaseBinding().add(sqlBinding);
+
+		sqlBinding.setDbms(getDbms());
+		sqlBinding.setName(getUserName());
+		sqlBinding.setSqlValidationConnectionURL(getConnUrl());
+		sqlBinding.setSqlJDBCDriverClass(getDriverClass());
+		
+		return sqlBinding;
 	}
 }

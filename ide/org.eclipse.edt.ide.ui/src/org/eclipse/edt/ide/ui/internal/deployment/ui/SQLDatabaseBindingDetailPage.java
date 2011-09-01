@@ -59,6 +59,14 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 			}			
 		});
 		
+		toolkit.createLabel(parent, SOAMessages.LabelSqlJDBCDriverClass);
+		fSqlJDBCDriverClass = createTextControl(toolkit, parent);
+		fSqlJDBCDriverClass.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e) {
+				fSQLDatabaseBinding.setSqlJDBCDriverClass(fSqlJDBCDriverClass.getText());		
+			}			
+		});
+
 		toolkit.createLabel(parent, SOAMessages.LabelSqlDB);
 		fSqlDB = createTextControl(toolkit, parent);
 		fSqlDB.addModifyListener(new ModifyListener(){
@@ -72,14 +80,6 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		fSqlID.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
 				fSQLDatabaseBinding.setSqlID(fSqlID.getText());		
-			}			
-		});
-
-		toolkit.createLabel(parent, SOAMessages.LabelSqlJDBCDriverClass);
-		fSqlJDBCDriverClass = createTextControl(toolkit, parent);
-		fSqlJDBCDriverClass.addModifyListener(new ModifyListener(){
-			public void modifyText(ModifyEvent e) {
-				fSQLDatabaseBinding.setSqlJDBCDriverClass(fSqlJDBCDriverClass.getText());		
 			}			
 		});
 

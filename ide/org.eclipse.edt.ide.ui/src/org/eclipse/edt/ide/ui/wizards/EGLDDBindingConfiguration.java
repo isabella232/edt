@@ -36,6 +36,7 @@ public class EGLDDBindingConfiguration extends EGLPartConfiguration {
 	private BindingEGLConfiguration fBindingEGLConfig;
 	private BindingNativeConfiguration fBindingNativeConfig;
 	private BindingRestConfiguration fBindingRestConfig;
+	private BindingSQLDatabaseConfiguration fBindingSQLConfig;
 	private IWorkbench fWorkbench;
 	private IProject fProj;
 	private EGLDeploymentRoot fDeploymentRoot;
@@ -81,6 +82,12 @@ public class EGLDDBindingConfiguration extends EGLPartConfiguration {
 			fBindingRestConfig = new BindingRestConfiguration(fDeploymentRoot, fProj);
 		return fBindingRestConfig;
 	}
+	
+	public BindingSQLDatabaseConfiguration getBindingSQLConfiguration(){
+		if(fBindingSQLConfig == null)
+			fBindingSQLConfig = new BindingSQLDatabaseConfiguration(fDeploymentRoot, fProj);
+		return fBindingSQLConfig;
+	}
 
 	private Bindings getBindings(){
 		Deployment deployment = fDeploymentRoot.getDeployment();
@@ -107,6 +114,9 @@ public class EGLDDBindingConfiguration extends EGLPartConfiguration {
 		}
 		else if(fBindingType == BINDINGTYPE_REST){
 			newBinding = fBindingRestConfig.executeAddRestBinding(bindings);
+		}
+		else if(fBindingType == BINDINGTYPE_SQL){
+			newBinding = fBindingSQLConfig.executeAddSQLDatabaseBinding(bindings);
 		}
 		return newBinding;
 	}
