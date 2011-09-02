@@ -109,6 +109,10 @@ public class ForEachStatement extends Statement {
 		this.closingParenOffset = closingParenOffset;
 	}
 	
+	public Expression getTarget() {
+		return target;
+	}
+	
 	public boolean hasResultSet() {
 		return true;
 	}
