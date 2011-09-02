@@ -412,6 +412,15 @@ public class JavartUtil
 	}
 	
 	/**
+	 * utility to check to see if an object is null and if it is, then throw 
+	 * a NullValueException, otherwise return true
+	 */
+	public static Object checkNullable(Object o) throws NullValueException {
+		if (o == null)
+			throw new NullValueException();
+		return o;
+	}
+	/**
 	 * Returns an AnyException for the given Throwable.  If the Throwable is
 	 * already an AnyException, it is returned.  If it's a NullPointerException,
 	 * a NullValueException will be returned.  In all other cases we'll return a
