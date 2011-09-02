@@ -38,6 +38,7 @@ import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.utils.DefaultDeploymentDescriptorUtility;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.core.model.Restservice;
+import org.eclipse.edt.ide.rui.internal.Activator;
 
 public class ServiceFinder {
 	
@@ -144,7 +145,7 @@ public class ServiceFinder {
 			}
 		}
 		catch (CoreException e) {
-			e.printStackTrace();
+			Activator.getDefault().log(e.getMessage(), e);
 		}
 	}
 	
@@ -161,7 +162,7 @@ public class ServiceFinder {
 			}
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			Activator.getDefault().log(e.getMessage(), e);
 		}
 		return parsed;
 	}

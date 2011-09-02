@@ -268,7 +268,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			});
 		}
 		catch (CoreException e) {
-			e.printStackTrace();
+			Activator.getDefault().log(e.getMessage(), e);
 		}
 		
 		if (recompute[0]) {
@@ -313,7 +313,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 					}
 				}
 				catch (IOException e) {
-					e.printStackTrace();
+					Activator.getDefault().log(e.getMessage(), e);
 				}
 			}
 			
@@ -370,7 +370,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			}
 		}
 		catch (EGLModelException e) {
-			e.printStackTrace();
+			Activator.getDefault().log(e.getMessage(), e);
 		}
 		
 		return false;

@@ -30,6 +30,7 @@ import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
+import org.eclipse.edt.ide.rui.internal.Activator;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
@@ -137,7 +138,7 @@ public class ClasspathUtil {
 				return "<?xml version=\"1.0\" encoding=\"UTF-8\"?><runtimeClasspathEntry externalArchive=\"" + path + "\" path=\"3\" type=\"2\"/>"; //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				Activator.getDefault().log(e.getMessage(), e);
 			}
 		}
 		
