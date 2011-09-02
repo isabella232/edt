@@ -20,6 +20,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.compiler.BaseCompiler;
 import org.eclipse.edt.compiler.IGenerator;
 import org.eclipse.edt.compiler.ISystemEnvironment;
+import org.eclipse.edt.compiler.StatementValidator;
+import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.osgi.framework.Bundle;
@@ -144,7 +146,7 @@ public class IDEBaseCompiler implements IIDECompiler {
 		if (parentCompiler != null) {
 			parentEnv = parentCompiler.getSystemEnvironment(notifier);
 		}
-		return SystemEnvironmentManager.getSystemEnvironment(getSystemEnvironmentPathEntry(), parentEnv, getImplicitlyUsedEnumerations(), notifier);
+		return SystemEnvironmentManager.getSystemEnvironment(getSystemEnvironmentPathEntry(), parentEnv, getImplicitlyUsedEnumerations(), notifier, this);
 	}
 
 	@Override
@@ -154,5 +156,12 @@ public class IDEBaseCompiler implements IIDECompiler {
 		}
 		return systemEnvironment;
 	}
+
+	@Override
+	public StatementValidator getValidatorFor(Statement stmt) {
+		return baseCompiler.getValidatorFor(stmt);
+	}
+	
+	
 	
 }

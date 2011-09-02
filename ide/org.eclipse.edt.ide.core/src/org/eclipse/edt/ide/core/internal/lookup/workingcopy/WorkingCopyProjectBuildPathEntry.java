@@ -13,6 +13,7 @@ package org.eclipse.edt.ide.core.internal.lookup.workingcopy;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
@@ -43,6 +44,7 @@ import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.ide.core.internal.utils.Util;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
@@ -82,6 +84,11 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 		@Override
 		public ISystemEnvironment getSystemEnvironment() {
 			return WorkingCopyProjectBuildPathEntry.this.getSystemEnvironment();
+		}		
+
+		@Override
+		public ICompiler getCompiler() {
+			return WorkingCopyProjectBuildPathEntry.this.getCompiler();
 		}		
 	}	
 	
@@ -403,7 +410,11 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 	private ISystemEnvironment getSystemEnvironment() {
 		return SystemEnvironmentManager.findSystemEnvironment(getProject(), null);
 	}
-
+	
+	private ICompiler getCompiler() {
+		return ProjectSettingsUtility.getCompiler(getProject());
+	}
+	
 	@Override
 	public void addPartBindingToCache(IPartBinding partBinding) {
 		bindingCache.put(InternUtil.intern(partBinding.getPackageName()), InternUtil.intern(partBinding.getCaseSensitiveName()), partBinding );

@@ -13,6 +13,7 @@ package org.eclipse.edt.ide.core.internal.lookup;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
@@ -42,6 +43,7 @@ import org.eclipse.edt.ide.core.internal.binding.PartRestoreFailedException;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.utils.Util;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
@@ -77,6 +79,11 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 		@Override
 		public ISystemEnvironment getSystemEnvironment() {
 			return ProjectBuildPathEntry.this.getSystemEnvironment();
+		}
+		
+		@Override
+		public ICompiler getCompiler() {
+			return ProjectBuildPathEntry.this.getCompiler();
 		}
 	}
 	
@@ -397,6 +404,10 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 	
 	protected ISystemEnvironment getSystemEnvironment() {
 		return SystemEnvironmentManager.findSystemEnvironment(getProject(), getNotifier());
+	}
+	
+	protected ICompiler getCompiler() {
+		return ProjectSettingsUtility.getCompiler(getProject());
 	}
 	
 	public IBuildNotifier getNotifier() {

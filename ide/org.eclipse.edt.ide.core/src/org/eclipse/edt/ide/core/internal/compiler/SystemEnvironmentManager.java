@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.SystemIREnvironment;
@@ -33,12 +34,12 @@ public class SystemEnvironmentManager {
 	
 	private static Map<String, ISystemEnvironment> systemMap = new HashMap();
 	
-	public static ISystemEnvironment getSystemEnvironment(String path, ISystemEnvironment parentEnv, List<String> implicitEnums, IBuildNotifier notifier) {
+	public static ISystemEnvironment getSystemEnvironment(String path, ISystemEnvironment parentEnv, List<String> implicitEnums, IBuildNotifier notifier, ICompiler compiler) {
 		if (systemMap.containsKey(path)) {
 			return systemMap.get(path);
 		}
 				
-		SystemEnvironment sysEnv = new SystemEnvironment(new SystemIREnvironment(), parentEnv, implicitEnums);
+		SystemEnvironment sysEnv = new SystemEnvironment(new SystemIREnvironment(), parentEnv, implicitEnums, compiler);
 		sysEnv.initializeSystemPackages(path,  new SystemPackageBuildPathEntryFactory(new Mof2Binding(sysEnv)), notifier);
 		
 		systemMap.put(path, sysEnv);
@@ -58,7 +59,7 @@ public class SystemEnvironmentManager {
     		}
         	return compiler.getSystemEnvironment(notifier);
         }
-        return new SystemEnvironment(new SystemIREnvironment(), null, new ArrayList());
+        return new SystemEnvironment(new SystemIREnvironment(), null, new ArrayList(), compiler);
 
 	}
 }

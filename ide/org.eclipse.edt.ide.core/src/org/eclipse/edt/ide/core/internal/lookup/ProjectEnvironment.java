@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.core.internal.lookup;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -23,6 +24,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -196,6 +198,11 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
 	@Override
 	public ISystemEnvironment getSystemEnvironment() {
 		return SystemEnvironmentManager.findSystemEnvironment(project, declaringProjectBuildPathEntry == null ? null : declaringProjectBuildPathEntry.getNotifier());
+	}
+	
+	@Override
+	public ICompiler getCompiler() {
+		return ProjectSettingsUtility.getCompiler(project);
 	}
 	
 	public Part findPart(String[] packageName, String partName) throws PartNotFoundException {
