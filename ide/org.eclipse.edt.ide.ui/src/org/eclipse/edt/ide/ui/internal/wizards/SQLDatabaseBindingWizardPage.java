@@ -41,7 +41,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
@@ -50,7 +49,7 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
     implements Listener {
 	public static final String WIZPAGENAME_SQLDatabaseBindingWizardPage = "WIZPAGENAME_SQLDatabaseBindingWizardPage"; //$NON-NLS-1$
 	
-	private Text connectionSecondaryID;
+	//private Text connectionSecondaryID;
 	private Button newButton;
 	private Button editButton;
 	private TreeViewer existingConnectionsList;
@@ -78,7 +77,6 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 		getEGLDDBindingConfiguration().getBindingSQLConfiguration();
 		
 		createConnectionGroup(composite);
-	    createAdditionalInfo(composite);
 		initializeValues();
 
 		setControl(composite);
@@ -119,19 +117,6 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 		buttonComp.setLayoutData(gd3);
 
 		createButtons(buttonComp);
-	}
-	
-	/**
-	 * Creates UI portions to collect general information for the connection.
-	 */
-	private void createAdditionalInfo(Composite parent) {
-		// Secondary authentication ID
-		new Label(parent, SWT.NONE)
-				.setText(SQLNlsStrings.SQL_CONNECTION_LABEL_AUTH_ID);
-		connectionSecondaryID = new Text(parent, SWT.BORDER);
-		connectionSecondaryID.addListener(SWT.Modify, this);
-		connectionSecondaryID.setLayoutData(new GridData(
-				GridData.FILL_HORIZONTAL));
 	}
 	
 	/**
@@ -305,8 +290,6 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 					}
 				}
 
-				connectionSecondaryID.setText(EGLSQLUtility
-						.getSecondaryID(profile));
 			}
 		}
 	}
@@ -317,12 +300,11 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 		connectionPropertiesTable.setEnabled(isEnabled);
 		editButton.setEnabled(isEnabled);
 		//connectionPassword.setEnabled(isEnabled);
-		connectionSecondaryID.setEnabled(isEnabled);
 	}
 	
 	private ConnectionDisplayProperty[] getConnectionDisplayProperties(
 			IConnectionProfile profile) {
-		ConnectionDisplayProperty[] properties = new ConnectionDisplayProperty[5];
+		ConnectionDisplayProperty[] properties = new ConnectionDisplayProperty[7];
 
 		properties[0] = new ConnectionDisplayProperty(
 				SQLNlsStrings.SQL_CONNECTION_DATABASE_PROPERTY,
@@ -331,23 +313,33 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 		getConfiguration().setDbms(properties[0].getValue());
 		
 		properties[1] = new ConnectionDisplayProperty(
-				SQLNlsStrings.SQL_CONNECTION_JDBC_PROPERTY, EGLSQLUtility
-						.getSQLJDBCDriverClassPreference(profile));
-		getConfiguration().setDriverClass(properties[1].getValue());
+				SQLNlsStrings.SQL_CONNECTION_DBNAME_PROPERTY,
+				EGLSQLUtility.getDBNameProperty(profile));
+		getConfiguration().setDbName(properties[1].getValue());
 		
 		properties[2] = new ConnectionDisplayProperty(
+				SQLNlsStrings.SQL_CONNECTION_JDBC_PROPERTY, EGLSQLUtility
+						.getSQLJDBCDriverClassPreference(profile));
+		getConfiguration().setDriverClass(properties[2].getValue());
+		
+		properties[3] = new ConnectionDisplayProperty(
 				SQLNlsStrings.SQL_CONNECTION_LOCATION_PROPERTY,
 				EGLSQLUtility.getLoadingPath(profile));
 		
-		properties[3] = new ConnectionDisplayProperty(
+		properties[4] = new ConnectionDisplayProperty(
 				SQLNlsStrings.SQL_CONNECTION_URL_PROPERTY, EGLSQLUtility
 						.getSQLConnectionURLPreference(profile));
-		getConfiguration().setConnUrl(properties[3].getValue());
+		getConfiguration().setConnUrl(properties[4].getValue());
 		
-		properties[4] = new ConnectionDisplayProperty(
+		properties[5] = new ConnectionDisplayProperty(
 				SQLNlsStrings.SQL_CONNECTION_USER_ID_PROPERTY, EGLSQLUtility
 						.getSQLUserId(profile));
-		getConfiguration().setUserName(properties[4].getValue());
+		getConfiguration().setUserName(properties[5].getValue());
+		
+		properties[6] = new ConnectionDisplayProperty(
+				SQLNlsStrings.SQL_CONNECTION_USER_PASSWORD_PROPERTY, EGLSQLUtility
+						.getSQLPassword(profile));
+		getConfiguration().setPassword(properties[6].getValue());
 
 		return properties;
 	}

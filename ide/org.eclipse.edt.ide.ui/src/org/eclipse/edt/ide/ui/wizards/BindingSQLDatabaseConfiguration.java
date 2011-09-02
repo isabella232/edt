@@ -23,6 +23,9 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 	private String driverClass="";
 	private String connUrl="";
 	private String userName="";
+	private String password="";
+	
+	private String dbName="";
 
 	public BindingSQLDatabaseConfiguration() {
 		super();
@@ -71,14 +74,34 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 		this.userName = userName;
 	}
 	
+	public String getPassword(){
+		return password;
+	}
+	
+	public void setPassword(String password){
+		this.password = password;
+	}
+	
+	public String getDbName(){
+		return dbName;
+	}
+	
+	public void setDbName(String dbName){
+		this.dbName = dbName;
+	}
+	
 	public Object executeAddSQLDatabaseBinding(Bindings bindings){
 		SQLDatabaseBinding sqlBinding = DeploymentFactory.eINSTANCE.createSQLDatabaseBinding();
 		bindings.getSqlDatabaseBinding().add(sqlBinding);
 
 		sqlBinding.setDbms(getDbms());
-		sqlBinding.setName(getUserName());
+		sqlBinding.setName(getDbms());
+		sqlBinding.setSqlID(getUserName());
+		sqlBinding.setSqlPassword(getPassword());
 		sqlBinding.setSqlValidationConnectionURL(getConnUrl());
 		sqlBinding.setSqlJDBCDriverClass(getDriverClass());
+		
+		sqlBinding.setSqlDB(getDbName());
 		
 		return sqlBinding;
 	}

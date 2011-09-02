@@ -1306,17 +1306,17 @@ Templates
             <enabledWhen>
               <or>
                 <adapt
-                    type="org.eclipse.edt.ide.core.model.IEGLFile">
-                </adapt>
-                <adapt
                    type="org.eclipse.core.resources.IProject">
                 </adapt>
-                <adapt
+                <!--adapt
                   type="org.eclipse.edt.ide.core.model.IPackageFragment">
                 </adapt>
                 <adapt
                       type="org.eclipse.edt.ide.core.model.IPackageFragmentRoot">
                 </adapt>
+                <adapt
+                    type="org.eclipse.edt.ide.core.model.IEGLFile">
+                </adapt -->
               </or>
           </enabledWhen>
    		</page>
