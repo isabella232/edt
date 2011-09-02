@@ -458,20 +458,7 @@ public class ScriptDoubleClickVisitor extends AbstractASTVisitor {
 	
 	public boolean visit(ForEachStatement forEachStatement)
 	{
-		int startSearchRParen = forEachStatement.getOffset();
-		if(forEachStatement.hasIntoClause())
-		{
-			Node intoClause = forEachStatement.getIntoClause();
-			startSearchRParen = intoClause.getOffset() + intoClause.getLength();
-		}
-		else
-		{
-			if(forEachStatement.hasSQLRecord())
-			{
-				Node forEachTargetExpr = forEachStatement.getSQLRecord();
-				startSearchRParen = forEachTargetExpr.getOffset() + forEachTargetExpr.getLength();
-			}
-		}
+		int startSearchRParen = forEachStatement.getClosingParenOffset();
 		int blockStartingPos = searchForClosingBracket(startSearchRParen, ')', fDoc);
 		calculateStartingEndingPosition(blockStartingPos, forEachStatement);
 		return false;

@@ -2342,7 +2342,7 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		
 		final CodeFormatterVisitor thisVisitor = this;		
 		final Expression sqlRerdExpr = forEachStatement.hasSQLRecord() ? forEachStatement.getSQLRecord() : null;
-		final IntoClause intoClause = forEachStatement.hasIntoClause() ? forEachStatement.getIntoClause() : null;
+//		final IntoClause intoClause = forEachStatement.hasIntoClause() ? forEachStatement.getIntoClause() : null;
 		final List stmts = forEachStatement.getStmts();
 		final Node firstStmt = (stmts != null && !stmts.isEmpty()) ? (Node)stmts.get(0) : null;
 		
@@ -2353,10 +2353,10 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 							CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);					
 					sqlRerdExpr.accept(thisVisitor);					
 				}
-				else if(intoClause != null && currToken.left == intoClause.getOffset()){
-					setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-					intoClause.accept(thisVisitor);
-				}
+//				else if(intoClause != null && currToken.left == intoClause.getOffset()){
+//					setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+//					intoClause.accept(thisVisitor);
+//				}
 				else if(firstStmt != null && currToken.left == firstStmt.getOffset()){
 					indent();
 					formatStatements(stmts);
