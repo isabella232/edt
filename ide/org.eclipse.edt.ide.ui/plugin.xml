@@ -862,7 +862,14 @@ Templates
             id="org.eclipse.edt.ide.ui.packageexplorer.filter.EmptyEGLInnerParentPackageFilter"            
             name="%EmptyEGLParentPackages"            
             activeByDefault="true">
-      </commonFilter>					
+      </commonFilter>
+      <commonFilter
+            class="org.eclipse.edt.ide.ui.internal.packageexplorer.DevJavascriptGenFolderFilter"                  
+            description="%DevJavascriptGenFolder.description"
+            id="org.eclipse.edt.ide.ui.packageexplorer.filter.DevJavascriptGenFolderFilter"            
+            name="%DevJavascriptGenFolder"            
+            activeByDefault="true">
+      </commonFilter>
 	</extension>
 	
 	<extension
