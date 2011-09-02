@@ -210,7 +210,7 @@ if ( !egl.javascript )
    }
   else if (arguments.length != 1)
    {
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2111E", [arguments.length] );
+    throw egl.createRuntimeException( "CRRUI2111E", [arguments.length] );
    }
   var setdigits = arguments[0];
   
@@ -219,9 +219,9 @@ if ( !egl.javascript )
   if (setdigits!=this.DEFAULT_DIGITS) 
    {
     if (setdigits<this.MIN_DIGITS) 
-     throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2112E", [ setdigits ]);
+     throw egl.createRuntimeException( "CRRUI2112E", [ setdigits ]);
     if (setdigits>this.MAX_DIGITS) 
-     throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2113E", [ setdigits ]);
+     throw egl.createRuntimeException( "CRRUI2113E", [ setdigits ]);
    }
   {/*select*/
   if (setform==this.SCIENTIFIC)
@@ -231,11 +231,11 @@ if ( !egl.javascript )
   else if (setform==this.PLAIN)
    ;
   else{
-   throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2114E", [ setform ]);
+   throw egl.createRuntimeException( "CRRUI2114E", [ setform ]);
   }
   }
   if ((!(this.isValidRound(setroundingmode)))) 
-     throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2115E", [ setroundingmode ]);
+     throw egl.createRuntimeException( "CRRUI2115E", [ setroundingmode ]);
   this.digits=setdigits;
   this.form=setform;
   this.lostDigits=setlostdigits; // [no bad value possible]

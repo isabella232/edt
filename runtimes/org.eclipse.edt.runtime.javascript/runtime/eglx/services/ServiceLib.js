@@ -16,11 +16,11 @@ egl.defineClass(
 });
 egl.eglx.services.ServiceLib["throwExceptionIfNecessary"] = function(/*Object*/object, /*String*/fieldName, /*boolean*/isNullable) {
 	if (object === undefined) {
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2105E", [ fieldName ]);
+		throw egl.createRuntimeException("CRRUI2105E", [ fieldName ]);
 	}
 
 	if (isNullable == false && object === null) {
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2106E", [ fieldName ]);
+		throw egl.createRuntimeException("CRRUI2106E", [ fieldName ]);
 	}
 };
 egl.eglx.services.ServiceLib["bindService"] = function(/*String*/bindingKeyName, /*String*/eglddName) {

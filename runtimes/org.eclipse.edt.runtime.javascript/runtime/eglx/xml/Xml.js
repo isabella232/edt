@@ -238,7 +238,7 @@ egl.eglx.xml.XmlLib["validateXMLObject"] = function(/*any*/object) {
 		else{
 			field = typeof object;
 		}
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2108E", [ field ]);
+		throw egl.createRuntimeException("CRRUI2108E", [ field ]);
 	}
 };
 egl.eglx.xml.XmlLib["addNamespace"] = function(namespaces, namespace) {
@@ -264,7 +264,7 @@ egl.eglx.xml.XmlLib["addNamespacesToXML"] = function(namespaces, xml) {
 };
 egl.eglx.xml.XmlLib["convertFromXML"] = function(/*String*/xml, /*any*/eglObj) {
 	if (typeof (xml) != "string") {
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2030E", typeof (xml));
+		throw egl.createRuntimeException("CRRUI2030E", typeof (xml));
 	}
 	eglObj = egl.unboxAny(eglObj);
 	this.validateXMLObject(eglObj);
@@ -280,7 +280,7 @@ egl.eglx.xml.XmlLib["convertFromXML"] = function(/*String*/xml, /*any*/eglObj) {
 			}
 		}
 	} catch (e) {
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2031E", e);
+		throw egl.createRuntimeException("CRRUI2031E", e);
 	}
 	eglObj = this.eglFromXML(dom.documentElement, eglObj);
 	return eglObj;

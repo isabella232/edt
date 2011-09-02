@@ -204,7 +204,7 @@ egl.defineClass(
 		                    			var msg = egl.getRuntimeMessage( "CRRUI1070E", [e.message] );
 		                    			egl.printError( msg, e);
 		                    			//continue throw e
-		                    			throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI1070E", [e.message]);
+		                    			throw egl.createRuntimeException("CRRUI1070E", [e.message]);
 		                    		}
 		                    	}
 		                    }	                    	                    
@@ -296,13 +296,13 @@ egl.defineClass(
     	}
 	    catch (e){
 	    	egl.printError( egl.getRuntimeMessage("CRRUI1072E", [e.message] ), e);
-	    	throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI1072E", [e.message] );
+	    	throw egl.createRuntimeException("CRRUI1072E", [e.message] );
 	    }
 	    
 	    if(!errCallbackFunc || errCallbackFunc == null || errCallbackFunc == undefined)
 	    {	//if no error call back function defined, just throw the exception
 	    	egl.printError( egl.getRuntimeMessage("CRRUI1071E", [exception.message] ), exception);
-	    	throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1071E", [exception.message] ); 	    
+	    	throw egl.createRuntimeException( "CRRUI1071E", [exception.message] ); 	    
     	}
     },
     
@@ -474,7 +474,7 @@ egl.defineClass(
     		errCallback(exception, http);
     	}
     	else {
-    		throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1071E", [http.request.uri] );
+    		throw egl.createRuntimeException( "CRRUI1071E", [http.request.uri] );
     	}
     },
     "encodeResquestBody": function(httpResquest, resourceParamIn){

@@ -36,7 +36,7 @@ egl.eglx.json.JsonLib["validateJSONObject"] = function(/* recordOrDictionary */o
 		else{
 			field = typeof object;
 		}
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2107E", [ field ]);
+		throw egl.createRuntimeException("CRRUI2107E", [ field ]);
 	}
 };
 egl.eglx.json.toJSONString = function(object, depth, maxDepth, /*boolean*/ validateUnspportedTypes) {
@@ -184,7 +184,7 @@ egl.eglx.json.JsonLib["convertFromJSON"] = function( /* String */str, /* egl obj
 			return eglObject;
 		} catch (e) {
 			str = str.replace(/&/g, "&amp;").replace(/</g, "&lt;");
-			throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2089E", [ str, e.message ]);
+			throw egl.createRuntimeException("CRRUI2089E", [ str, e.message ]);
 		}
 	}
 	return null;

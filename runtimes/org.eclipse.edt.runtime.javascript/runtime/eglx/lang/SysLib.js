@@ -18,19 +18,19 @@ egl.defineClass(
 egl.eglx.lang.SysLib.errorsMap = [];
 
 egl.eglx.lang.SysLib["callCmd"] = function(/*string*/ cmdString) {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null);  // TODO sbg Implement
+	throw egl.createRuntimeException("NOIMPL", null);  // TODO sbg Implement
 };
 
 egl.eglx.lang.SysLib["startCmd"] = function(/*string*/ cmdString) {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null);  // TODO sbg Implement
+	throw egl.createRuntimeException("NOIMPL", null);  // TODO sbg Implement
 };
 
 egl.eglx.lang.SysLib["commit"] = function() {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null);  // TODO sbg Implement
+	throw egl.createRuntimeException("NOIMPL", null);  // TODO sbg Implement
 };
 
 egl.eglx.lang.SysLib["rollback"] = function() {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null);  // TODO sbg Implement
+	throw egl.createRuntimeException("NOIMPL", null);  // TODO sbg Implement
 };
 
 egl.eglx.lang.SysLib['getProperty'] = function(property, propertyFile) {
@@ -50,15 +50,15 @@ egl.eglx.lang.SysLib['getProperty'] = function(property, propertyFile) {
 };
 
 egl.eglx.lang.SysLib["setLocale"] = function(/*string*/ languageCode, /*string*/countryCode, /*string */ variant) {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null);  // TODO sbg Implement
+	throw egl.createRuntimeException("NOIMPL", null);  // TODO sbg Implement
 };
 
 egl.eglx.lang.SysLib["sort"] = function(/*array any*/anArray, /*sortFunction delegate*/sortFunction) {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null);  // TODO sbg Implement
+	throw egl.createRuntimeException("NOIMPL", null);  // TODO sbg Implement
 };
 
 egl.eglx.lang.SysLib["wait"] = function(/*decimal(9,2)*/ seconds) {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null);  // TODO sbg Implement
+	throw egl.createRuntimeException("NOIMPL", null);  // TODO sbg Implement
 };
 
 egl.eglx.lang.SysLib["writeStderr"] = function(/*string*/ text) {

@@ -33,7 +33,7 @@ egl.defineClass(
 			for (var n= 0; n< this.initialUI.length; n++) {
 				var child = egl.unboxAny(this.initialUI[n]);
 				if (!child) {
-					throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI0001E", [n+1]);
+					throw egl.createRuntimeException( "CRRUI0001E", [n+1]);
 				}
 				else {
 					if (child.eze$$DOMElement)

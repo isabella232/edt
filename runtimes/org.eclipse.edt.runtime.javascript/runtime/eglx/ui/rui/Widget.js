@@ -45,7 +45,7 @@ egl.defineClass(
 			}
 			else
 			{
-				throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2007E", ["Widget.SetAttribute("+attribute+","+value+")"]);
+				throw egl.createRuntimeException( "CRRUI2007E", ["Widget.SetAttribute("+attribute+","+value+")"]);
 			}
 		}
 		this.eze$$DOMElement[attribute] = value;
@@ -69,7 +69,7 @@ egl.defineClass(
 					needComma = true;
 				}
 			}
-			throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1080E", [s.join('')]);
+			throw egl.createRuntimeException( "CRRUI1080E", [s.join('')]);
 		}
 		return this.eze$$DOMElement;
 	},
@@ -123,18 +123,18 @@ egl.defineClass(
 		try {
 			var thisNode = this.eze$$DOMElement;
 			if (!child)
-				throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1050E", [thisNode.tagName]);
+				throw egl.createRuntimeException( "CRRUI1050E", [thisNode.tagName]);
 			child = egl.unboxAny(child);
 			if (child == this)
-				throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1057E", [thisNode.tagName]);
+				throw egl.createRuntimeException( "CRRUI1057E", [thisNode.tagName]);
 			var childNode = child.eze$$DOMElement;
 			if (!childNode)
-				throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1051E", [thisNode.tagName]);
+				throw egl.createRuntimeException( "CRRUI1051E", [thisNode.tagName]);
 			try {
 				child.eze$$parent = this;
 			}
 			catch (e) {
-				throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1060E", [child.getTagName(), egl.inferSignature(this), this]);
+				throw egl.createRuntimeException( "CRRUI1060E", [child.getTagName(), egl.inferSignature(this), this]);
 			}
 			thisNode.appendChild(childNode);
 			if (egl.IE && egl.IEVersion < 9 && thisNode.lastChild != childNode)
@@ -153,13 +153,14 @@ egl.defineClass(
 						parentNode = parentNode.parentNode;
 					}
 					document.body.appendChild(childNode);
-					throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1058E", [thisNode.tagName, childNode.tagName, route]);
+					throw egl.createRuntimeException( "CRRUI1058E", [thisNode.tagName, childNode.tagName, route]);
 				}
 				route = parentNode.tagName + " >> " + route;
 				parentNode = parentNode.parentNode;
 			}
-			throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1055E", [this.getTagName(),
-			      //(child&&childNode)?childNode.tagName:egl.toString(child),e.message]);
+			throw egl.createRuntimeException( "CRRUI1055E", [this.getTagName(),
+			      (child&&childNode)?childNode.tagName:egl.toString(child),e.message
+			                                                 ]);
 		}
 	},
 	"appendChildren" : function (/*any[]*/ childList)
@@ -193,10 +194,10 @@ egl.defineClass(
 		try {
 			var thisNode = this.eze$$DOMElement;
 			if (!child)
-				throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1150E", [thisNode.tagName]);
+				throw egl.createRuntimeException( "CRRUI1150E", [thisNode.tagName]);
 			child = egl.unboxAny(child);
 			if (child == this)
-				throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1157E", [thisNode.tagName]);
+				throw egl.createRuntimeException( "CRRUI1157E", [thisNode.tagName]);
 			if (!childNode && child.initialUI) {
 				var ruiHandlerChildren = child.initialUI;  // child is a RUIHandler
 				for (var n=0; n<ruiHandlerChildren.length; n++) {
@@ -206,13 +207,13 @@ egl.defineClass(
 			}
 			var childNode = child.eze$$DOMElement;
 			if (!childNode)
-				throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1151E", [thisNode.tagName]);
+				throw egl.createRuntimeException( "CRRUI1151E", [thisNode.tagName]);
 			thisNode.removeChild(childNode);
 			this.childrenChanged();
 		}
 		catch (e) {
-			throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1155E", [this.getTagName(),
-			                      //(child&&childNode)?childNode.tagName:"null",e.message]);
+			throw egl.createRuntimeException( "CRRUI1155E", [this.getTagName(),
+			                      (child&&childNode)?childNode.tagName:"null",e.message]);
 		}
 	},
 	"childrenChanged" : function ()
@@ -407,7 +408,7 @@ egl.defineClass(
 					clearTimeout(timer);
 			}
 			catch (e) {
-				throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1092E", []);
+				throw egl.createRuntimeException( "CRRUI1092E", []);
 			}	
 		}, 1);
 	},
@@ -796,7 +797,7 @@ egl.defineClass(
 			egl.unboxAny(parent).appendChild(this);
 		}
 		catch (e) {
-			throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1060E", [this.getTagName(), egl.inferSignature(parent), parent]);
+			throw egl.createRuntimeException( "CRRUI1060E", [this.getTagName(), egl.inferSignature(parent), parent]);
 		}
 	},
 	"getTargetWidget" : function(){
@@ -874,12 +875,12 @@ egl.defineClass(
 	},
 	"getOnStartDrag" : function() {
 		if (!this.startDrag)
-			throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1010E", ["onStartDrag"]); 
+			throw egl.createRuntimeException( "CRRUI1010E", ["onStartDrag"]); 
 		return this.startDrag;
 	},
 	"getOnDrag" : function() {
 		if (!this.drag)
-			throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1010E", ["onDrag"]); 
+			throw egl.createRuntimeException( "CRRUI1010E", ["onDrag"]); 
 		return this.drag;
 	}, 
 	"setOnDrag" : function(callback) {
@@ -887,7 +888,7 @@ egl.defineClass(
 	},
 	"getOnDropOnTarget" : function() {
 		if (!this.dropOnTarget)
-			throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1010E", ["onDropOnTarget"]); 
+			throw egl.createRuntimeException( "CRRUI1010E", ["onDropOnTarget"]); 
 		return this.dropOnTarget;
 	},
 	"setOnDropOnTarget" : function(callback) {

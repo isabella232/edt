@@ -324,7 +324,7 @@ egl.setX = function(element, x) {
     		if (document.layers) element.left = egl.toPX(x); else element.style.left = egl.toPX(x);
     	}
     	catch (e) {
-    		throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1001E", [ e.message, element.tagName+".x", x ] );
+    		throw egl.createRuntimeException( "CRRUI1001E", [ e.message, element.tagName+".x", x ] );
     	}
 	}
 };
@@ -336,7 +336,7 @@ egl.setY = function(element, y) {
 			if (document.layers) element.top = egl.toPX(y); else element.style.top = egl.toPX(y);
     	}
     	catch (e) {
-    		throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1001E", [ e.message, element.tagName+".y", y ] );
+    		throw egl.createRuntimeException( "CRRUI1001E", [ e.message, element.tagName+".y", y ] );
     	}
 	}
 };
@@ -409,7 +409,7 @@ egl.setWidth = function(element, w) {
 		}
 	}
 	catch (e) {
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1001E", [ e.message, element.tagName+".width", w ] );
+		throw egl.createRuntimeException( "CRRUI1001E", [ e.message, element.tagName+".width", w ] );
 	}
 
 };
@@ -428,7 +428,7 @@ egl.setHeight = function(element, h) {
 	    }
 	}
 	catch (e) {
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1001E", [ e.message, element.tagName+".height", h ] );
+		throw egl.createRuntimeException( "CRRUI1001E", [ e.message, element.tagName+".height", h ] );
 	}
 
 };
@@ -847,7 +847,7 @@ egl.defineRUIWidget = function (/*String*/   packageName,
 		if ( pkg[className] ) {	return; }
 		var spkg = egl.makePackage('eglx.ui.rui');
 		if (!spkg || !spkg.Widget ) {
-			throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI1030E", ['eglx.ui.rui', 'Widget'] );
+			throw egl.createRuntimeException( "CRRUI1030E", ['eglx.ui.rui', 'Widget'] );
 		}
 		var superclazz = spkg.Widget;
 		

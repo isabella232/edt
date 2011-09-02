@@ -24,7 +24,7 @@ egl.eglx.ui.rui.RUILib["sort"] = function(array, sortFunction) {
 	try {
 		array.sort(sortFunction);
 	} catch (e) {
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2102E", []);
+		throw egl.createRuntimeException("CRRUI2102E", []);
 	}
 	if (egl.debug)
 		egl.leave("");

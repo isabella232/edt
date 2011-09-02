@@ -26,22 +26,22 @@ egl.eglx.lang.MathLib["abs"] = function(/* float */value) {
 	return Math.abs(value);
 };
 egl.eglx.lang.MathLib["acos"] = function(/* float */value) {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
 };
 egl.eglx.lang.MathLib["asin"] = function(/*float*/value) {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
 };
 egl.eglx.lang.MathLib["atan"] = function(/*float*/value) {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
 };
 egl.eglx.lang.MathLib["atan2"] = function(/*float*/value) {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
 };
 egl.eglx.lang.MathLib["ceiling"] = function(/*float*/value) {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
 };
 egl.eglx.lang.MathLib["cos"] = function(/*float*/value) {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
 };
 egl.eglx.lang.MathLib["cosh"] = function(/*float*/x) {
 	return ((Math.exp(x) + Math.exp(-x)) / 2);
@@ -77,10 +77,10 @@ egl.eglx.lang.MathLib["decimals"] = function(/*decimal*/x) {
 };
 
 egl.eglx.lang.MathLib["exp"] = function(/*float*/value) {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
 };
 egl.eglx.lang.MathLib["floor"] = function(/*float*/value) {
-	return Math.floor(value); //throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	return Math.floor(value); //throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
 };
 
 //TODO sbg need frexp()
@@ -91,7 +91,7 @@ egl.eglx.lang.MathLib["log"] = function(/*float*/x) {
 	if (x > 0) {
 		return Math.log(x);
 	} else {
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2038E", [ "MathLib.log" ]);
+		throw egl.createRuntimeException("CRRUI2038E", [ "MathLib.log" ]);
 	}
 };
 
@@ -99,7 +99,7 @@ egl.eglx.lang.MathLib["log10"] = function(/*float*/x) {
 	if (x > 0) {
 		return Math.LOG10E * Math.log(x);
 	} else {
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2038E", [ "MathLib.log10" ]);
+		throw egl.createRuntimeException("CRRUI2038E", [ "MathLib.log10" ]);
 	}
 };
 
@@ -111,9 +111,9 @@ egl.eglx.lang.MathLib["log10"] = function(/*float*/x) {
 
 egl.eglx.lang.MathLib["pow"] = function(/*float*/base, /*float*/exponent) {
 	if (base == 0 && exp <= 0) {
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2040E", [ "MathLib.pow" ]);
+		throw egl.createRuntimeException("CRRUI2040E", [ "MathLib.pow" ]);
 	} else if (base < 0 && parseInt(exp) != parseFloat(exp)) {
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2041E", [ "MathLib.pow" ]);
+		throw egl.createRuntimeException("CRRUI2041E", [ "MathLib.pow" ]);
 	} else {
 		return Math.pow(base, exp);
 	}
@@ -198,19 +198,19 @@ egl.eglx.lang.MathLib["sin"] = function(/*float*/x) {
 };
 
 egl.eglx.lang.MathLib["sinh"] = function(/*float*/value) {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
 };
 
 egl.eglx.lang.MathLib["sqrt"] = function(/*float*/x) {
 	if (x >= 0) {
 		return Math.sqrt(x);
 	} else {
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2039E", [ "MathLib.sqrt" ]);
+		throw egl.createRuntimeException("CRRUI2039E", [ "MathLib.sqrt" ]);
 	}
 };
 
 egl.eglx.lang.MathLib["tan"] = function(/*float*/value) {
-	throw "TODO: make an exception for this";//throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
 };
 
 egl.eglx.lang.MathLib["tanh"] = function(/*float*/x) {

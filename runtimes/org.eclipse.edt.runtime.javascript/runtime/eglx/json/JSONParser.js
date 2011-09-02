@@ -239,7 +239,7 @@ egl.defineClass( 'eglx.json', 'JSONParser', {
         	egl.leave();
         }
         // The text is not JSON parsable
-       throw "TODO: make an exception for this";// throw egl.createRuntimeException( "CRRUI2104E", [s] );
+        throw egl.createRuntimeException( "CRRUI2104E", [s] );
     },
 
 

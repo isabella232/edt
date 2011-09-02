@@ -1231,7 +1231,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else
    {
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2050E", [ arguments.length ] );
+    throw egl.createRuntimeException( "CRRUI2050E", [ arguments.length ] );
    }
   if (this.ind==this.isneg) 
    return this.negate(set);
@@ -1289,7 +1289,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else
    {
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2051E", [arguments.length]);
+    throw egl.createRuntimeException( "CRRUI2051E", [arguments.length]);
    }
   var rhs = arguments[0];
   //--com.ibm.icu.math.egl.javascript.BigDecimal lhs;
@@ -1591,7 +1591,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else
    {
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2052E", [ arguments.length ]);
+    throw egl.createRuntimeException( "CRRUI2052E", [ arguments.length ]);
    }
   var rhs = arguments[0];
   //--int thislength=0;
@@ -1780,7 +1780,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    {
     scale = arguments[1];
     if (scale<0) 
-       throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2053E", [ scale ] );
+       throw egl.createRuntimeException( "CRRUI2053E", [ scale ] );
     set=new egl.javascript.MathContext(0,egl.javascript.MathContext.prototype.PLAIN,false,arguments[2]); // [checks round]
    }
   else if (arguments.length == 1)
@@ -1789,7 +1789,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else
    {
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2054E", [ arguments.length ]);
+    throw egl.createRuntimeException( "CRRUI2054E", [ arguments.length ]);
    }
   var rhs = arguments[0];
   return this.dodivide('D',rhs,set,scale);
@@ -1849,7 +1849,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else
    {
-    throw "TODO: make an exception for this";//throw createRuntimeException( "CRRUI2055E", [ arguments.length] );
+    throw createRuntimeException( "CRRUI2055E", [ arguments.length] );
    }
   var rhs = arguments[0];
   // scale 0 to drop .000 when plain
@@ -1911,7 +1911,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else
    {
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2056E", [arguments.length]);
+    throw egl.createRuntimeException( "CRRUI2056E", [arguments.length]);
    }
   var rhs = arguments[0];
   if ((this.compareTo(rhs,set))>=0) 
@@ -1975,7 +1975,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else
    {
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2057E", [arguments.length]);
+    throw egl.createRuntimeException( "CRRUI2057E", [arguments.length]);
    }
   var rhs = arguments[0];
   if ((this.compareTo(rhs,set))<=0) 
@@ -2036,7 +2036,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else
    {
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2058E", [arguments.length] );
+    throw egl.createRuntimeException( "CRRUI2058E", [arguments.length] );
    }
   var rhs = arguments[0];
   //--com.ibm.icu.math.egl.javascript.BigDecimal lhs;
@@ -2187,7 +2187,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else
    {
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2059E", [arguments.length]);
+    throw egl.createRuntimeException( "CRRUI2059E", [arguments.length]);
    }
   //--com.ibm.icu.math.egl.javascript.BigDecimal res;
   var res;
@@ -2252,7 +2252,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else
    {
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2060E", [arguments.length]);
+    throw egl.createRuntimeException( "CRRUI2060E", [arguments.length]);
    }
   // This clones and forces the result to the new settings
   // May return same object
@@ -2343,7 +2343,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else
    {
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2061E", [arguments.length]);
+    throw egl.createRuntimeException( "CRRUI2061E", [arguments.length]);
    }
   var rhs = arguments[0];
   //--int n;
@@ -2381,14 +2381,14 @@ egl.javascript.BigDecimal.prototype.NINES =
    {
     if (rhs.ind==this.isneg) 
      //--throw new java.lang.ArithmeticException("Negative power:"+" "+rhs.toString());
-     throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2062E", [rhs.toString()]);
+     throw egl.createRuntimeException( "CRRUI2062E", [rhs.toString()]);
     workdigits=0;
    }
   else 
    {/* non-0 digits */
     if ((rhs.mant.length+rhs.exp)>reqdig) 
      //--throw new java.lang.ArithmeticException("Too many digits:"+" "+rhs.toString());
-     throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2063E", [rhs.toString()]);
+     throw egl.createRuntimeException("CRRUI2063E", [rhs.toString()]);
     
     /* Round the lhs to DIGITS if need be */
     if (lhs.mant.length>reqdig) 
@@ -2492,7 +2492,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else
    {
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2064E", [arguments.length]);
+    throw egl.createRuntimeException( "CRRUI2064E", [arguments.length]);
    }
   var rhs = arguments[0];
   return this.dodivide('R',rhs,set,-1);
@@ -2549,7 +2549,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else
    {
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2065E", [arguments.length]);
+    throw egl.createRuntimeException("CRRUI2065E", [arguments.length]);
    }
   var rhs = arguments[0];
   //--com.ibm.icu.math.egl.javascript.BigDecimal newrhs;
@@ -2927,7 +2927,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else
    {
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2066E", [arguments.length]);
+    throw egl.createRuntimeException( "CRRUI2066E", [arguments.length]);
    }
   var before = arguments[0];
   var after = arguments[1];
@@ -3057,7 +3057,7 @@ egl.javascript.BigDecimal.prototype.NINES =
       num.mant=newmant;
       num.exp=num.exp-((after-thisafter)); // adjust exponent
       if (num.exp<this.MinExp) 
-       throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2067E", [num.exp]);
+       throw egl.createRuntimeException( "CRRUI2067E", [num.exp]);
       break setafter;
      }
     // We have too many digits after the decimal point; this could
@@ -3237,7 +3237,7 @@ egl.javascript.BigDecimal.prototype.NINES =
     lodigit=lodigit+this.exp; // reduces by -(-exp)
     /* all decimal places must be 0 */
     if ((!(this.allzero(this.mant,lodigit+1)))) 
-     throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2068E", [this.toString()]);
+     throw egl.createRuntimeException( "CRRUI2068E", [this.toString()]);
     if (lodigit<0) 
      return 0; // -1<this<1
     useexp=0;
@@ -3245,7 +3245,7 @@ egl.javascript.BigDecimal.prototype.NINES =
   else 
    {/* >=0 */
     if ((this.exp+lodigit)>9)  // early exit
-     throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2069E", [this.toString()]);
+     throw egl.createRuntimeException( "CRRUI2069E", [this.toString()]);
     useexp=this.exp;
    }
   /* convert the mantissa to binary, inline for speed */
@@ -3270,7 +3270,7 @@ egl.javascript.BigDecimal.prototype.NINES =
        if (this.ind==this.isneg)  // really was negative
         if (this.mant[0]==2) 
          return result; // really had top digit 2
-      throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2069E", [this.toString()]);
+      throw egl.createRuntimeException( "CRRUI2069E", [this.toString()]);
      }
    }
   
@@ -3536,7 +3536,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else
    {
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2070E", [arguments.length]);
+    throw egl.createRuntimeException( "CRRUI2070E", [arguments.length]);
    }
   var scale = arguments[0];
   //--int ourscale;
@@ -3568,7 +3568,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    {/* ourscale>scale: shortening, probably */
     if (scale<0) 
      //--throw new java.lang.ArithmeticException("Negative scale:"+" "+scale);
-     throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2071E", [scale]);
+     throw egl.createRuntimeException( "CRRUI2071E", [scale]);
     // [round() will raise exception if invalid round]
     newlen=res.mant.length-((ourscale-scale)); // [<=0 is OK]
     res=res.round(newlen,round); // round to required length
@@ -4054,7 +4054,7 @@ egl.javascript.BigDecimal.prototype.NINES =
   i=this.intValueExact(); // [checks for non-0 decimal part]
   // Use same message as though intValueExact failed due to size
   if ((i<min)||(i>max)) 
-   throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2072E", [i]);
+   throw egl.createRuntimeException( "CRRUI2072E", [i]);
   return i;
   }
  
@@ -4162,7 +4162,7 @@ egl.javascript.BigDecimal.prototype.NINES =
   
   // [note we must have checked lostDigits before the following checks]
   if (rhs.ind==0) 
-   throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2037E", null ); // includes 0/0
+   throw egl.createRuntimeException( "CRRUI2037E", null ); // includes 0/0
   if (lhs.ind==0) 
    { // 0/x => 0 [possibly with .0s]
     if (set.form!=egl.javascript.MathContext.prototype.PLAIN) 
@@ -4332,7 +4332,7 @@ egl.javascript.BigDecimal.prototype.NINES =
   if ((code=='I')||(code=='R')) 
    {/* check for integer overflow needed */
     if ((have+res.exp)>reqdig) 
-     throw "TODO: make an exception for this";//throw createRuntimeException( "CRRUI2073E", null );
+     throw createRuntimeException( "CRRUI2073E", null );
     
     if (code=='R') 
      {remainder:do{
@@ -4429,7 +4429,7 @@ egl.javascript.BigDecimal.prototype.NINES =
  
  //--private void bad(char s[]){
  egl.javascript.BigDecimal.prototype.bad = function bad(prefix, s) {
-  throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2074E", [prefix, s]);
+  throw egl.createRuntimeException( "CRRUI2074E", [prefix, s]);
   }
  
  /* <sgml> Report a bad argument to a method. </sgml>
@@ -4439,7 +4439,7 @@ egl.javascript.BigDecimal.prototype.NINES =
  
  //--private void badarg(java.lang.String name,int pos,java.lang.String value){
  egl.javascript.BigDecimal.prototype.badarg = function badarg(name, pos, value) {
-  throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2075E", [ pos, name, value ]);
+  throw egl.createRuntimeException( "CRRUI2075E", [ pos, name, value ]);
   }
 
  /* <sgml> Extend byte array to given length, padding with 0s.  If no
@@ -4674,12 +4674,12 @@ egl.javascript.BigDecimal.prototype.NINES =
   // first check lhs...
   if (this.mant.length>dig) 
    if ((!(this.allzero(this.mant,dig)))) 
-  	throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2076E", [this.toString()]);
+  	throw egl.createRuntimeException( "CRRUI2076E", [this.toString()]);
   if (rhs==null) 
    return; // monadic
   if (rhs.mant.length>dig) 
    if ((!(this.allzero(rhs.mant,dig)))) 
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2076E", [this.toString()]);
+    throw egl.createRuntimeException( "CRRUI2076E", [this.toString()]);
   return;
   }
 
@@ -4721,7 +4721,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else
    {
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2077E", [arguments.length]);
+    throw egl.createRuntimeException( "CRRUI2077E", [arguments.length]);
    }
   //int adjust;
   var adjust;
@@ -4776,7 +4776,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    { // default for setScale()
     // discarding any non-zero digits is an error
     if ((!(this.allzero(oldmant,len)))) 
-     throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2078E", null);
+     throw egl.createRuntimeException( "CRRUI2078E", null);
    }
   else if (mode==this.ROUND_HALF_DOWN)
    { // 0.5000 goes down
@@ -4822,7 +4822,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }
   else{
    throw "round(): Bad round value: "+mode;
-   throw "TODO: make an exception for this";//throw createRuntimeException( "CRRUI2079E", [mode]);
+   throw createRuntimeException( "CRRUI2079E", [mode]);
   }
   }while(false);}/*modes*/
   
@@ -4854,7 +4854,7 @@ egl.javascript.BigDecimal.prototype.NINES =
    }while(false);}/*bump*/
   // rounding can increase exponent significantly
   if (this.exp>this.MaxExp) 
-   throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2080E", [this.exp]);
+   throw egl.createRuntimeException( "CRRUI2080E", [this.exp]);
   return this;
   }
 
@@ -4982,7 +4982,7 @@ egl.javascript.BigDecimal.prototype.NINES =
           if (mag<=this.MaxExp) 
            break overflow;
         }
-       throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2081E", [mag]);
+       throw egl.createRuntimeException( "CRRUI2081E", [mag]);
       }while(false);}/*overflow*/
      return this;
     }
@@ -4999,7 +4999,7 @@ egl.javascript.BigDecimal.prototype.NINES =
   else{
    // a plain number with -ve exponent; preserve and check exponent
    if (this.exp<this.MinExp) 
-    throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2081E", [this.exp]);
+    throw egl.createRuntimeException( "CRRUI2081E", [this.exp]);
   }
   }
   this.mant=this.ZERO.mant; // canonical mantissa

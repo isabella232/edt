@@ -1118,7 +1118,7 @@ egl.nullablemultiply = function(var1, var2) {
 
 egl.divide = function(var1, var2) {
 	if (var2 == 0)
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2037E", null);
+		throw egl.createRuntimeException("CRRUI2037E", null);
 	return var1 / var2;
 };
 
@@ -1131,7 +1131,7 @@ egl.nullabledivide = function(var1, var2) {
 	{
 		var rhs = Number(var2.toString());
 		if (rhs == 0)
-			throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2037E", null);
+			throw egl.createRuntimeException("CRRUI2037E", null);
 		return Number(var1.toString()) / rhs;
 	}
 	
@@ -1142,7 +1142,7 @@ egl.nullabledivide = function(var1, var2) {
 
 egl.remainder = function(var1, var2) {
 	if (var2 == 0)
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2037E", null);
+		throw egl.createRuntimeException("CRRUI2037E", null);
 	return var1 % var2;
 };
 
@@ -1156,7 +1156,7 @@ egl.nullableremainder = function(var1, var2) {
 	}
 	var rhs = Number(var2);
 	if (rhs == 0)
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException("CRRUI2037E", null);
+		throw egl.createRuntimeException("CRRUI2037E", null);
 	return Number(var1) % rhs;
 };
 
@@ -2651,7 +2651,7 @@ Array.prototype.contains = function Array_contains() {
 Array.prototype.insertElement = function Array_insertElement(val, index) {
 	//Remember EGL is 1-based, JS 0-based
 	if ( index < 1 || index > this.length + 1 ) 
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2022E", [ index, this.length ] );
+		throw egl.createRuntimeException( "CRRUI2022E", [ index, this.length ] );
 	if ( this.length < index ) {
 		this.push( val );
 		return this;
@@ -2702,14 +2702,14 @@ egl.initialValueForType = function ( elementType )
 		case 'J':
 			return egl.egl.core.$DateTimeLib.currentTime();//FIXME function doesn't exist
 		default:
-			throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2034E", [ elementType ] );
+			throw egl.createRuntimeException( "CRRUI2034E", [ elementType ] );
 	}
 };
 
 Array.prototype.resize = function Array_resize(val) {
 	if ( val > this.maxSize )
 	{
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2033E", [ val, this.maxSize ] );
+		throw egl.createRuntimeException( "CRRUI2033E", [ val, this.maxSize ] );
 	}
 	if (val <= this.length) {
 		this.length = val;
@@ -2774,7 +2774,7 @@ egl.resizeAll = function egl_resizeAll(array, sizes) {
 	}
 	else
 	{
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2035E", null );
+		throw egl.createRuntimeException( "CRRUI2035E", null );
 	}
 }
 
@@ -2800,7 +2800,7 @@ Array.prototype.setMaxSize = function Array_setMaxSize(val)
 {
 	if ( val < 0 || this.length > val )
 	{
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException( 'CRRUI2020E', [ val ] );
+		throw egl.createRuntimeException( 'CRRUI2020E', [ val ] );
 	}
 	this.maxSize = val;
 };
@@ -3004,7 +3004,7 @@ egl.timeStampEquals = function(/*timestamp*/ a, /*timestamp*/ b, falseAnswer) {
 				{
 					throw e;
 				}
-				throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2002E", [ context.eze$$typename, egl.lastFunctionEntered, e.message || e ] );				
+				throw egl.createRuntimeException( "CRRUI2002E", [ context.eze$$typename, egl.lastFunctionEntered, e.message || e ] );				
 			}
 		};
 		
@@ -3045,7 +3045,7 @@ egl.valueByKey = function egl_valueByKey( object, key, value, signature )
 	var objectIsRecord = object instanceof egl.egl.jsrt.Record;
 	var objectIsDictionary = object instanceof egl.eglx.lang.EDictionary;
 	if (!(objectIsRecord || objectIsDictionary)) {
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2024E", [key,egl.inferSignature(object)] );
+		throw egl.createRuntimeException( "CRRUI2024E", [key,egl.inferSignature(object)] );
 	}
 	
 	var result = egl.findByKey(object, key);
@@ -3067,7 +3067,7 @@ egl.valueByKey = function egl_valueByKey( object, key, value, signature )
 	}
 	if (result === undefined) {
 		if ((objectIsRecord && !egl.findKey(object, key))|| (objectIsDictionary && value === undefined)) {
-			throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2025E", [key, egl.inferSignature(object)] );
+			throw egl.createRuntimeException( "CRRUI2025E", [key, egl.inferSignature(object)] );
 		}
 	}
 	if (value !== undefined) 
@@ -3141,7 +3141,7 @@ egl.findByKey = function egl_findByKey( object, key ) {
 		}
 	}
 	catch (e) {
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2103E", [ key, typeof(object), object, e.message] );
+		throw egl.createRuntimeException( "CRRUI2103E", [ key, typeof(object), object, e.message] );
 	}
 	return undefined;
 };
@@ -3163,7 +3163,7 @@ egl.findKey = function egl_findKey( object, key ) {
 		}
 	}
 	catch (e) {
-		throw "TODO: make an exception for this";//throw egl.createRuntimeException( "CRRUI2103E", [ key, typeof(object), object, e.message] );
+		throw egl.createRuntimeException( "CRRUI2103E", [ key, typeof(object), object, e.message] );
 	}
 	return false;
 };
@@ -3630,7 +3630,7 @@ egl.defineClass(
 			if(bundle == null){
 				// Missing bundle
 				var path = 'properties/' + propertiesFile + '-' + egl__htmlLocale + '.properties';
-				throw "TODO: make an exception for this";//throw egl.createRuntimeException( 'CRRUI2015E', [ path, propertiesFile ] );
+				throw egl.createRuntimeException( 'CRRUI2015E', [ path, propertiesFile ] );
 			}
 			// Every RUIPropertiesFile has a getProperties function, which returns an array of the fields
 			// defined in the library
