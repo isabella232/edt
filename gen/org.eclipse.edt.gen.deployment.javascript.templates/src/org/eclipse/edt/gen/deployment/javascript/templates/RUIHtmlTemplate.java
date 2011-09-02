@@ -164,6 +164,10 @@ public class RUIHtmlTemplate extends RUITemplate {
 	}
 	
 	private void generateBindingFileImports(Handler part, Context ctx, TabbedWriter out, String egldd){
+		if (egldd == null || egldd.length() == 0) {
+			return;
+		}
+		
 		List<Type> processedParts = (List<Type>)ctx.get(genBindFiles);
 		if(processedParts == null){
 			processedParts = new ArrayList<Type>();
