@@ -24,8 +24,8 @@
 <topic href="topics/cedt00031.html#cedt00031" title="Record classifier overview"/>
 <topic href="topics/cedt00004.html#cedt00004" title="Types and instances of those types"/>
 <topic href="topics/cedt00002.html#cedt00002" title="EGL language overview"/>
-<topic href="topics/cedt00026.html#cedt00026" title="Classifiers for defining EGL data parts"/>
 <topic href="topics/cedt00037.html#cedt00037" title="Interface classifier overview"/>
+<topic href="topics/cedt00026.html#cedt00026" title="Classifiers for defining EGL data parts"/>
 <topic href="topics/cedt00016.html#cedt00016" title="Name resolution at run time"/>
 <topic href="topics/cedt00013.html#cedt00013" title="EGL Syntax"/>
 <topic href="topics/cedt00008.html#cedt00008" title="Annotations"/>
@@ -58,6 +58,7 @@
 <topic href="topics/cedt00023.html#cedt00023" title="EGL large-object types"/>
 </entry>
 <entry keyword="miscellaneous">
+<topic href="topics/redt00176.html#redt00176" title="BOOLEAN type"/>
 <topic href="topics/cedt00024.html#cedt00024" title="BOOLEAN type"/>
 </entry>
 <entry keyword="numeric">
@@ -71,6 +72,7 @@
 </entry>
 <entry keyword="miscellaneous types">
 <entry keyword="EGL">
+<topic href="topics/redt00176.html#redt00176" title="BOOLEAN type"/>
 <topic href="topics/cedt00024.html#cedt00024" title="BOOLEAN type"/>
 </entry>
 </entry>
