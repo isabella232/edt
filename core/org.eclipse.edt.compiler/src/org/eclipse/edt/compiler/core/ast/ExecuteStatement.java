@@ -56,6 +56,16 @@ public class ExecuteStatement extends Statement {
 		public int getLength() {
 			return endOffset - startOffset;
 		}
+		
+	    public void setParent(Node parent) {
+	    	//default is to do nothing
+	    }
+	    
+		public void acceptChildren(IASTVisitor visitor) {
+	    	//default is to do nothing
+		}
+
+
 	}
 	
 	public static class SQLStatementExecuteTarget extends ExecuteTarget {
@@ -76,6 +86,22 @@ public class ExecuteStatement extends Statement {
 		
 		protected Object clone() throws CloneNotSupportedException {
 			throw new CloneNotSupportedException();
+		}
+		
+		@Override
+		public void setParent(Node parent) {
+			if (hasSQLStatement()) {
+				getSQLStatement().setParent(parent);
+			}
+			super.setParent(parent);
+		}
+		
+		@Override
+		public void acceptChildren(IASTVisitor visitor) {
+			if (hasSQLStatement()) {
+				getSQLStatement().accept(visitor);
+			}
+			super.acceptChildren(visitor);
 		}
 	}
 	
@@ -132,23 +158,35 @@ public class ExecuteStatement extends Statement {
 	}
 	
 	public static class PreparedStatementExecuteTarget extends ExecuteTarget {
-		String preparedStmtID = null;
+		Expression sqlStmt = null;
 		
-		public PreparedStatementExecuteTarget(String preparedStmtID, int startOffset, int endOffset) {
+		public PreparedStatementExecuteTarget(Expression expr, int startOffset, int endOffset) {
 			super(startOffset, endOffset);
-			this.preparedStmtID = preparedStmtID;
+			this.sqlStmt = expr;
 		}
 		
 		boolean hasPreparedStatementID() {
 			return true;
 		}
 		
-		String getPreparedStatementID() {
-			return preparedStmtID;
+		Expression getSqlStmt() {
+			return sqlStmt;
 		}
 		
 		protected Object clone() throws CloneNotSupportedException {
-			return new PreparedStatementExecuteTarget(new String(preparedStmtID), startOffset, endOffset);
+			return new PreparedStatementExecuteTarget((Expression)sqlStmt.clone(), startOffset, endOffset);
+		}
+		
+		@Override
+		public void setParent(Node parent) {
+			sqlStmt.setParent(parent);
+			super.setParent(parent);
+		}
+		
+		@Override
+		public void acceptChildren(IASTVisitor visitor) {
+			sqlStmt.accept(visitor);
+			super.acceptChildren(visitor);
 		}
 	}
 
@@ -162,9 +200,7 @@ public class ExecuteStatement extends Statement {
 		super(startOffset, endOffset);
 		
 		this.executeTarget = executeTarget;
-		if(executeTarget.hasSQLStatement()) {
-			executeTarget.getSQLStatement().setParent(this);
-		}
+		executeTarget.setParent(this);
 		
 		this.executeOptions = setParent(executeOptions);
 	}
@@ -241,4 +277,5 @@ public class ExecuteStatement extends Statement {
     public void setSqlInfo(SQLInfo sqlInfo) {
         this.sqlInfo = sqlInfo;
     }
+    
 }

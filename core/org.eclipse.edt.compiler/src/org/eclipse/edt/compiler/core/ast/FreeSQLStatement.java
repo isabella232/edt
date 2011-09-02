@@ -19,24 +19,28 @@ package org.eclipse.edt.compiler.core.ast;
  */
 public class FreeSQLStatement extends Statement {
 
-	private String ID;
+	private Expression sqlStmt;
 
-	public FreeSQLStatement(String ID, int startOffset, int endOffset) {
+	public FreeSQLStatement(Expression sqlStmt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
-		this.ID = ID;
+		this.sqlStmt = sqlStmt;
+		sqlStmt.setParent(this);
 	}
 	
-	public String getID() {
-		return ID;
+	public Expression getSqlStmt() {
+		return sqlStmt;
 	}
 	
 	public void accept(IASTVisitor visitor) {
-		visitor.visit(this);
+		boolean visitChildren = visitor.visit(this);
+		if(visitChildren) {
+			sqlStmt.accept(visitor);
+		}
 		visitor.endVisit(this);
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {
-		return new FreeSQLStatement(new String(ID), getOffset(), getOffset() + getLength());
+		return new FreeSQLStatement((Expression)sqlStmt.clone(), getOffset(), getOffset() + getLength());
 	}
 }

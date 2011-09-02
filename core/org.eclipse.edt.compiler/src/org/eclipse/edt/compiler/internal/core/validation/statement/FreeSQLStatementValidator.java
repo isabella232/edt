@@ -34,8 +34,8 @@ public class FreeSQLStatementValidator extends DefaultASTVisitor {
 	public boolean visit(final FreeSQLStatement freeSQLStatement) {
 		StatementValidator.validateIOTargetsContainer(freeSQLStatement.getIOObjects(),
 				problemRequestor);
-		EGLNameValidator.validate(freeSQLStatement.getID(), EGLNameValidator.RESULT_SET_ID,
-				problemRequestor, freeSQLStatement, compilerOptions);
+//		EGLNameValidator.validate(freeSQLStatement.getID(), EGLNameValidator.RESULT_SET_ID,
+//				problemRequestor, freeSQLStatement, compilerOptions);
 		return false;
 	}
 }

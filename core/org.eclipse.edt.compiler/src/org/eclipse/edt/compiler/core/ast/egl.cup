@@ -611,8 +611,8 @@ stmt
 	|	FORWARD:forward1 expr_star:exprs1 forwardTargetOpt:forwardTarget1 forwardOption_star:forwardOptions1 SEMI:semi1
 	{: RESULT = new ForwardStatement(exprs1, forwardTarget1, forwardOptions1, forward1left, semi1right); :}
 
-	|	FREESQL:freesql1 ID:preparedStatementReference SEMI:semi1
-	{: RESULT = new FreeSQLStatement(preparedStatementReference, freesql1left, semi1right); :}
+	|	FREESQL:freesql1 expr:expr1 SEMI:semi1
+	{: RESULT = new FreeSQLStatement(expr1, freesql1left, semi1right); :}
 
 	|	EXECUTE:execute1 executeTarget:executeTarget1 executeOption_star:executeOptions1 SEMI:semi1
 	{: RESULT = new ExecuteStatement(executeTarget1, executeOptions1, execute1left, semi1right); :}
@@ -781,8 +781,8 @@ getByKeyOption
 	|	SINGLEROW:singlerow1
 	{: RESULT = new SingleRowClause(singlerow1left, singlerow1right); :}
 	
-	|	WITH:with1 ID:preparedStmtID
-	{: RESULT = new WithIDClause(preparedStmtID, with1left, preparedStmtIDright); :}
+	|	WITH:with1 expr:expr1
+	{: RESULT = new WithExpressionClause(expr1, with1left, expr1right); :}
 	
 	|	WITH:with1 inlineSQLStatement:inlineSQLStatement1
 	{: RESULT = new WithInlineSQLClause(inlineSQLStatement1, with1left, inlineSQLStatement1right); :}
@@ -1033,8 +1033,8 @@ executeTarget
 	|	INSERT:insert1 inlineSQLStatementOpt:inlineSQLStatement1
 	{: RESULT = new ExecuteStatement.InsertExecuteTarget(inlineSQLStatement1, insert1left, inlineSQLStatement1 == null ? insert1right : inlineSQLStatement1right); :}
 	
-	|	ID:preparedStmtID
-	{: RESULT = new ExecuteStatement.PreparedStatementExecuteTarget(preparedStmtID, preparedStmtIDleft, preparedStmtIDright); :}
+	|	expr:expr1
+	{: RESULT = new ExecuteStatement.PreparedStatementExecuteTarget(expr1, expr1left, expr1right); :}
 
 	|	inlineSQLStatement:inlineSQLStatement1
 	{: RESULT = new ExecuteStatement.DefaultSQLStatementExecuteTarget(inlineSQLStatement1, inlineSQLStatement1left, inlineSQLStatement1right); :}
@@ -1082,8 +1082,8 @@ openTarget
 	|	WITH:with1 inlineSQLStatement:inlineSQLStatement1
 	{: RESULT = new WithInlineSQLClause(inlineSQLStatement1, with1left, inlineSQLStatement1right); :}
 
-	|	WITH:with1 ID:preparedStmtID
-	{: RESULT = new WithIDClause(preparedStmtID, with1left, preparedStmtIDright); :}
+	|	WITH:with1 expr:expr1
+	{: RESULT = new WithExpressionClause(expr1, with1left, expr1right); :}
 
 	|	USING:using1 expr_plus:exprs1
 	{: RESULT = new UsingClause(exprs1, using1left, exprs1right); :}

@@ -456,7 +456,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.FreeSQLStatement freeSQLStatement) {
 		FreeSqlStatement stmt = factory.createFreeSqlStatement();	
-		stmt.setPreparedStatementID(freeSQLStatement.getID());
+//		stmt.setPreparedStatementID(freeSQLStatement.getID());
 		
 		stack.push(stmt);
 		setElementInformation(freeSQLStatement, stmt);
