@@ -25,11 +25,14 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.compiler.internal.EGLBasePlugin;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
+import org.eclipse.edt.ide.core.Logger;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 import org.eclipse.edt.ide.ui.internal.project.features.operations.EGLProjectFeatureOperation;
+import org.osgi.service.prefs.BackingStoreException;
 
 
 public class EGLProjectEGLDDGenerationOperation extends EGLProjectFeatureOperation {
@@ -73,6 +76,11 @@ public class EGLProjectEGLDDGenerationOperation extends EGLProjectFeatureOperati
 		
 		String encodingName = EGLBasePlugin.getPlugin().getPreferenceStore().getString(EGLBasePlugin.OUTPUT_CODESET);
 		EGLDDRootHelper.createNewEGLDDFile(eglddFile, encodingName);		
+		try {
+			ProjectSettingsUtility.setDefaultDeploymentDescriptor(project, eglddFile.getFullPath().toPortableString().toString());
+		} catch (BackingStoreException e) {
+			Logger.log(EGLProjectEGLDDGenerationOperation.class, "EGLProjectEGLDDGenerationOperation.executeOperation() - BackingStoreException", e); //$NON-NLS-1$
+		}
 		
 	}
 }
