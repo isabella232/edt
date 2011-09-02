@@ -19,6 +19,8 @@ import org.eclipse.debug.core.sourcelookup.ISourceContainerType;
 import org.eclipse.debug.core.sourcelookup.ISourceLookupDirector;
 import org.eclipse.debug.core.sourcelookup.ISourceLookupParticipant;
 import org.eclipse.edt.debug.core.EGLPackageFragmentRootSourceContainer;
+import org.eclipse.edt.debug.core.java.IEGLJavaDebugElement;
+import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
 
 public class EGLJavaSourceLookupDirector extends AbstractSourceLookupDirector
 {
@@ -54,6 +56,12 @@ public class EGLJavaSourceLookupDirector extends AbstractSourceLookupDirector
 		
 		if ( originalLocator != null )
 		{
+			// Some source directors, like PDE, don't use IAdaptable to resolve what they support. They expect a specific
+			// type like IJavaStackFrame. To support this, pass in the underlying JDT object.
+			if ( stackFrame instanceof IEGLJavaStackFrame )
+			{
+				stackFrame = ((IEGLJavaStackFrame)stackFrame).getJavaStackFrame();
+			}
 			return originalLocator.getSourceElement( stackFrame );
 		}
 		return null;
@@ -70,6 +78,12 @@ public class EGLJavaSourceLookupDirector extends AbstractSourceLookupDirector
 		
 		if ( originalDirector != null )
 		{
+			// Some source directors, like PDE, don't use IAdaptable to resolve what they support. They expect a specific
+			// type like IJavaStackFrame. To support this, pass in the underlying JDT object.
+			if ( element instanceof IEGLJavaDebugElement )
+			{
+				element = ((IEGLJavaDebugElement)element).getJavaDebugElement();
+			}
 			return originalDirector.getSourceElement( element );
 		}
 		return null;
@@ -86,6 +100,12 @@ public class EGLJavaSourceLookupDirector extends AbstractSourceLookupDirector
 		
 		if ( originalDirector != null )
 		{
+			// Some source directors, like PDE, don't use IAdaptable to resolve what they support. They expect a specific
+			// type like IJavaStackFrame. To support this, pass in the underlying JDT object.
+			if ( object instanceof IEGLJavaDebugElement )
+			{
+				object = ((IEGLJavaDebugElement)object).getJavaDebugElement();
+			}
 			return originalDirector.findSourceElements( object );
 		}
 		return new Object[ 0 ];
