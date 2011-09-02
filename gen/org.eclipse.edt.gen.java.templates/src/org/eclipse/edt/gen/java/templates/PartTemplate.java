@@ -47,7 +47,6 @@ public class PartTemplate extends JavaTemplate {
 		out.println("}");
 	}
 
-	@SuppressWarnings("unchecked")
 	public void genPackageStatement(Part part, Context ctx, TabbedWriter out) {
 		String packageName = CommonUtilities.packageName(part);
 		if (packageName != null && packageName.length() > 0) {
@@ -56,6 +55,8 @@ public class PartTemplate extends JavaTemplate {
 			out.println(";");
 		}
 	}
+
+	@SuppressWarnings("unchecked")
 	public void genImports(Part part, Context ctx, TabbedWriter out) {
 		out.println("import org.eclipse.edt.javart.resources.*;");
 		out.println("import org.eclipse.edt.javart.*;");

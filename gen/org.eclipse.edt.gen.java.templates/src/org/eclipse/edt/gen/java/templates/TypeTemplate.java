@@ -178,7 +178,7 @@ public class TypeTemplate extends JavaTemplate {
 				out.println(";");
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(arg3 + temporary + " == null ? ");
-				ctx.invoke(genDefaultValue, type, ctx, out, arg1);
+				out.print("throw new egl.lang.NullValueException()");
 				out.print(" : " + temporary);
 			} else if (TypeUtils.isReferenceType(arg2.getType())) {
 				ctx.invoke(genExpression, arg1, ctx, out);
@@ -189,7 +189,7 @@ public class TypeTemplate extends JavaTemplate {
 				out.print(arg3);
 				ctx.invoke(genExpression, arg2, ctx, out);
 				out.print(" == null ? ");
-				ctx.invoke(genDefaultValue, type, ctx, out, arg1);
+				out.print("throw new egl.lang.NullValueException()");
 				out.print(" : ");
 				ctx.invoke(genExpression, arg2, ctx, out);
 			}
@@ -286,9 +286,9 @@ public class TypeTemplate extends JavaTemplate {
 			operator = arg.getOperator();
 		ctx.invoke(genAssignment, arg.getLHS(), ctx, out, arg.getRHS(), " " + CommonUtilities.getNativeJavaAssignment(operator) + " ");
 	}
-	
+
 	public void genInitializeMethod(Type type, Context ctx, TabbedWriter out, Field arg, EGLClass parent) {
-		if (arg.getInitializerStatements() == null){
+		if (arg.getInitializerStatements() == null) {
 			ctx.invoke(genName, arg, ctx, out);
 			out.print(" = ");
 			ctx.invoke(genInitialization, arg, ctx, out);
