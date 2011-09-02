@@ -50,7 +50,7 @@ import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
-import org.eclipse.edt.ide.rui.EDTRUIPlugin;
+import org.eclipse.edt.ide.rui.internal.Activator;
 import org.eclipse.edt.ide.rui.internal.testserver.ServiceFinder.RestServiceMapping;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.osgi.util.NLS;
@@ -144,7 +144,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			}
 		}
 		catch (IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR, EDTRUIPlugin.PLUGIN_ID, e.getMessage(), e));
+			throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 		}
 	}
 	
