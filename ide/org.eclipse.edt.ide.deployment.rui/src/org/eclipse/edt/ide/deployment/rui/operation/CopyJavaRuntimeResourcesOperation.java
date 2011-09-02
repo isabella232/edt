@@ -19,13 +19,13 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.operation.AbstractDeploymentOperation;
-import org.eclipse.edt.ide.deployment.operation.IDeploymentOperation;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.rui.internal.util.Utils;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
@@ -39,25 +39,23 @@ public class CopyJavaRuntimeResourcesOperation extends AbstractDeploymentOperati
 	private String targetProjectName;
 	private DeploymentDesc model;
 	private DeploymentContext context;
-	
+
 	public void execute(DeploymentContext context, IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor)
 			throws CoreException {
 		this.context = context;
 		model = context.getDeploymentDesc();
 		IFolder projectRootFolder = Utils.getContextDirectory( context.getTargetProject() );
 		
-		String javaRuntimeLoc = Platform.getBundle("org.eclipse.edt.runtime.java").getLocation();
-		if ( !javaRuntimeLoc.endsWith( ".jar" ) ) {
-			return;
-		}
-		int index = javaRuntimeLoc.indexOf( ":/" );
-		javaRuntimeLoc = javaRuntimeLoc.substring( index + 2 );
-		IPath path = new Path( WEBLIB_FOLDER + JAVARUNTIME_NAME );
-		IPath targetFilePath = projectRootFolder.getFullPath().append( path );
-		CoreUtility.createFolder( ResourcesPlugin.getWorkspace().getRoot().getFolder( targetFilePath.removeLastSegments( 1 ) ), true, true, monitor );
 		try {
+			File javaRuntimeLoc = FileLocator.getBundleFile(Platform.getBundle("org.eclipse.edt.runtime.java"));
+			if ( !javaRuntimeLoc.isFile() || !javaRuntimeLoc.exists() ) {
+				return;
+			}
+			IPath path = new Path( WEBLIB_FOLDER + JAVARUNTIME_NAME );
+			IPath targetFilePath = projectRootFolder.getFullPath().append( path );
+			CoreUtility.createFolder( ResourcesPlugin.getWorkspace().getRoot().getFolder( targetFilePath.removeLastSegments( 1 ) ), true, true, monitor );
 
-			FileInputStream fis = new FileInputStream( new File( javaRuntimeLoc ) ) ;
+			FileInputStream fis = new FileInputStream( javaRuntimeLoc ) ;
 			
 			IFile targetFile = ResourcesPlugin.getWorkspace().getRoot().getFile(targetFilePath);
 			if( targetFile.exists() ) {
