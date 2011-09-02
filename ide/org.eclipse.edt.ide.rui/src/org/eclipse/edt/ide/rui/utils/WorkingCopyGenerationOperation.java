@@ -40,7 +40,7 @@ import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.egl2mof.Egl2Mof;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
-import org.eclipse.edt.compiler.tools.EGLG;
+import org.eclipse.edt.compiler.tools.EGLC;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.deployment.javascript.DeploymentHTMLGenerator;
 import org.eclipse.edt.gen.javascript.JavaScriptGenerator;
