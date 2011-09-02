@@ -31,10 +31,10 @@ import java.util.List;
 public class PrepareStatement extends Statement {
 
 	private Expression sqlStmt;
-	private Expression dataSource;	
+	private FromOrToExpressionClause dataSource;	
 	private WithClause withClause;
 
-	public PrepareStatement(Expression sqlStmt, Expression dataSource, WithClause withClause, int startOffset, int endOffset) {
+	public PrepareStatement(Expression sqlStmt, FromOrToExpressionClause dataSource, WithClause withClause, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		
@@ -53,7 +53,7 @@ public class PrepareStatement extends Statement {
 	}
 
 
-	public Expression getDataSource() {
+	public FromOrToExpressionClause getDataSource() {
 		return dataSource;
 	}
 
@@ -78,6 +78,6 @@ public class PrepareStatement extends Statement {
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {
-		return new PrepareStatement((Expression)sqlStmt.clone(), (Expression)dataSource.clone(), (WithClause)withClause.clone(), getOffset(), getOffset() + getLength());
+		return new PrepareStatement((Expression)sqlStmt.clone(), (FromOrToExpressionClause)dataSource.clone(), (WithClause)withClause.clone(), getOffset(), getOffset() + getLength());
 	}
 }

@@ -681,25 +681,25 @@ public class FunctionBinder extends DefaultBinder {
     }
 
     public void endVisit(OpenStatement statement) {
-        processSQLStatement(statement);
+ //       processSQLStatement(statement);
         super.endVisit(statement);
     }
 
     public void endVisit(AddStatement statement) {
         processDLIStatement(statement);
-        processSQLStatement(statement);
+//       processSQLStatement(statement);
         super.endVisit(statement);
     }
 
     public void endVisit(DeleteStatement statement) {
         processDLIStatement(statement);
-        processSQLStatement(statement);
+//        processSQLStatement(statement);
         super.endVisit(statement);
     }
 
     public void endVisit(final GetByKeyStatement statement) {
         processDLIStatement(statement);
-        processSQLStatement(statement);
+//        processSQLStatement(statement);
         super.endVisit(statement);
     }
 
@@ -710,7 +710,7 @@ public class FunctionBinder extends DefaultBinder {
 
     public void endVisit(final ReplaceStatement statement) {
         processDLIStatement(statement);
-        processSQLStatement(statement);
+ //       processSQLStatement(statement);
         super.endVisit(statement);
     }
 
@@ -776,7 +776,7 @@ public class FunctionBinder extends DefaultBinder {
     }
 
     public void endVisit(final ExecuteStatement statement) {
-        processSQLStatement(statement);
+ //       processSQLStatement(statement);
         super.endVisit(statement);
     }
 

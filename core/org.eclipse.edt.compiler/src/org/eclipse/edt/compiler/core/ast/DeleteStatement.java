@@ -29,12 +29,12 @@ import org.eclipse.edt.compiler.internal.sql.SQLInfo;
 public class DeleteStatement extends Statement implements IDliIOStatement {
 
 	private Expression expr;
-	private Expression dataSource;
+	private FromOrToExpressionClause dataSource;
 	private List deleteOptions;
 	private SQLInfo sqlInfo;
 	private DLIInfo dliInfo;
 
-	public DeleteStatement(Expression expr, Expression dataSource, List deleteOptions, int startOffset, int endOffset) {
+	public DeleteStatement(Expression expr, FromOrToExpressionClause dataSource, List deleteOptions, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.expr = expr;
@@ -52,7 +52,7 @@ public class DeleteStatement extends Statement implements IDliIOStatement {
 		return expr;
 	}
 	
-	public Expression getDataSource() {
+	public FromOrToExpressionClause getDataSource() {
 		return dataSource;
 	}
 
@@ -85,7 +85,7 @@ public class DeleteStatement extends Statement implements IDliIOStatement {
 		if (expr != null) {
 			exprClone = (Expression)expr.clone();
 		}
-		return new DeleteStatement(exprClone, (Expression)dataSource.clone(), cloneList(deleteOptions), getOffset(), getOffset() + getLength());
+		return new DeleteStatement(exprClone, (FromOrToExpressionClause)dataSource.clone(), cloneList(deleteOptions), getOffset(), getOffset() + getLength());
 	}
     public DLIInfo getDliInfo() {
         return dliInfo;

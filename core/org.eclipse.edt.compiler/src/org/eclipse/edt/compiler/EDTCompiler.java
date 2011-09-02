@@ -15,12 +15,26 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
+import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
+import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
+import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.SQLActionStatementValidator;
+import org.eclipse.edt.mof.egl.MofConversion;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 
 public class EDTCompiler extends BaseCompiler {
 		
+	
+	static {
+		StatementValidator.Registry.put(MofConversion.Type_SqlRecord, new DefaultStatementValidator());
+		StatementValidator.Registry.put(MofConversion.EGL_lang_package, new DefaultStatementValidator());
+		StatementValidator.Registry.put("eglx.persistence.sql", new SQLActionStatementValidator());
+	}
+
 	@Override
 	public String getSystemEnvironmentPath() {
 		
@@ -69,5 +83,31 @@ public class EDTCompiler extends BaseCompiler {
 		all.addAll(super.getAllImplicitlyUsedEnumerations());
 		all.addAll(getImplicitlyUsedEnumerations());
 		return all;
+	}
+	
+	@Override
+	public StatementValidator getValidatorFor(Statement stmt) {
+		// Lookup statement validator based on DataSource operand in FROM/TO clause
+		// TODO this is not properly generalized yet
+		final StatementValidator[] validator = new StatementValidator[1];
+		stmt.accept(new AbstractASTExpressionVisitor() {	
+			public boolean visit(org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause clause) {
+				if (validator[0] == null && clause.getExpression() != null) {
+					ITypeBinding type = clause.getExpression().resolveTypeBinding();
+					if (type != null) {
+						String key = IRUtils.concatWithSeparator(type.getPackageName(), ".");
+						validator[0] = StatementValidator.Registry.get(key);
+					}
+				}
+				return false;
+			}
+		});
+		
+		if (validator[0] == null) {
+			return StatementValidator.Registry.get("eglx.persistence.sql");
+		}
+		else {
+			return validator[0];
+		}
 	}
 }

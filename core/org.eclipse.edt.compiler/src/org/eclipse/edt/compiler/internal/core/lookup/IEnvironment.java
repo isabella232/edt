@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
+import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -26,6 +27,7 @@ public interface IEnvironment {
     boolean hasPackage(String[] packageName);
     IPackageBinding getRootPackage();
     ISystemEnvironment getSystemEnvironment();
+    ICompiler getCompiler();
         
     
 

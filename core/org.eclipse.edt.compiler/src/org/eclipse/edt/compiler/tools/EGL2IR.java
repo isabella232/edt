@@ -86,7 +86,7 @@ public class EGL2IR {
 		if (compiler == null){
 			compiler = new EDTCompiler();
 		}
-		EGLG.compile(processedArgs, compiler, problemRequestorFactory, partRequestor);
+		EGLC.compile(processedArgs, compiler, problemRequestorFactory, partRequestor);
 	}
 
 }

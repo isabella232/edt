@@ -27,7 +27,7 @@ public class ForEachStatement extends Statement {
 		Expression getExpression() { return null; }
 		
 		boolean isResultSetForEachTarget() { return false; }
-		Expression getResultSet() { return null; }
+		FromOrToExpressionClause getResultSet() { return null; }
 		
 		void setParent( Node parent ) {}
 		void accept( IASTVisitor visitor ) {}
@@ -64,9 +64,9 @@ public class ForEachStatement extends Statement {
 	}
 	
 	public static class ResultSetForEachTarget extends ForEachTarget {
-		private Expression resultSet;
+		private FromOrToExpressionClause resultSet;
 
-		public ResultSetForEachTarget(Expression resultSet) {
+		public ResultSetForEachTarget(FromOrToExpressionClause resultSet) {
 			this.resultSet = resultSet;
 		}
 		
@@ -74,7 +74,7 @@ public class ForEachStatement extends Statement {
 			return true;
 		}
 		
-		Expression getResultSet() {
+		FromOrToExpressionClause getResultSet() {
 			return resultSet;
 		}
 		
@@ -87,19 +87,22 @@ public class ForEachStatement extends Statement {
 		}
 		
 		protected Object clone() throws CloneNotSupportedException {
-			return new ResultSetForEachTarget((Expression) resultSet.clone());
+			return new ResultSetForEachTarget((FromOrToExpressionClause) resultSet.clone());
 		}
 	}
 
-	private ForEachTarget foreachTarget;
+	private Expression target;
+	private FromOrToExpressionClause resultSet;
 	private IntoClause intoClauseOpt;
 	private List stmts;	// List of Statements
 
-	public ForEachStatement(ForEachTarget foreachTarget, IntoClause intoClauseOpt, List stmts, int startOffset, int endOffset) {
+	public ForEachStatement(Expression target, FromOrToExpressionClause resultSet, IntoClause intoClauseOpt, List stmts, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
-		this.foreachTarget = foreachTarget;
-		foreachTarget.setParent(this);
+		this.target = target;
+		target.setParent(this);
+		this.resultSet = resultSet;
+		resultSet.setParent(this);
 		if(intoClauseOpt != null) {
 			this.intoClauseOpt = intoClauseOpt;
 			intoClauseOpt.setParent(this);
@@ -107,20 +110,20 @@ public class ForEachStatement extends Statement {
 		this.stmts = setParent(stmts);
 	}
 	
-	public boolean hasResultSetID() {
-		return foreachTarget.isResultSetForEachTarget();
+	public boolean hasResultSet() {
+		return true;
 	}
 	
-	public Expression getResultSet() {
-		return foreachTarget.getResultSet();
+	public FromOrToExpressionClause getResultSet() {
+		return resultSet;
 	}
 	
 	public boolean hasSQLRecord() {
-		return foreachTarget.isExpressionForEachTarget();
+		return true;
 	}
 	
 	public Expression getSQLRecord() {
-		return foreachTarget.getExpression();
+		return target;
 	}
 	
 	public boolean hasIntoClause() {
@@ -142,7 +145,8 @@ public class ForEachStatement extends Statement {
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
-			foreachTarget.accept(visitor);
+			target.accept(visitor);
+			resultSet.accept(visitor);
 			if(intoClauseOpt != null) intoClauseOpt.accept(visitor);
 			acceptChildren(visitor, stmts);
 		}
@@ -160,6 +164,6 @@ public class ForEachStatement extends Statement {
 	protected Object clone() throws CloneNotSupportedException {
 		IntoClause newIntoClauseOpt = intoClauseOpt != null ? (IntoClause)intoClauseOpt.clone() : null;
 		
-		return new ForEachStatement((ForEachTarget)foreachTarget.clone(), newIntoClauseOpt, cloneList(stmts), getOffset(), getOffset() + getLength());
+		return new ForEachStatement((Expression)target.clone(), (FromOrToExpressionClause) resultSet.clone(), newIntoClauseOpt, cloneList(stmts), getOffset(), getOffset() + getLength());
 	}
 }

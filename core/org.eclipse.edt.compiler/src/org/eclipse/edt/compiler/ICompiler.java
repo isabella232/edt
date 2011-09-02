@@ -2,6 +2,7 @@ package org.eclipse.edt.compiler;
 
 import java.util.List;
 
+import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 
 public interface ICompiler {
@@ -74,6 +75,8 @@ public interface ICompiler {
 	
 	public List<String> getImplicitlyUsedEnumerations();
 	public List<String> getAllImplicitlyUsedEnumerations();
+	
+	public StatementValidator getValidatorFor(Statement stmt);
 
 	
 }

@@ -52,6 +52,7 @@ public class SystemEnvironment implements ISystemEnvironment {
     private EnumerationManager enumerationManager;
     private SystemLibraryManager sysLibManager;
     private AnnotationTypeManager annTypeManger;
+    private ICompiler compiler;
 
     private List<ISystemPackageBuildPathEntry> sysPackages = new ArrayList();
     
@@ -200,11 +201,12 @@ public class SystemEnvironment implements ISystemEnvironment {
     /**
      * 
      */
-    public SystemEnvironment(org.eclipse.edt.mof.serialization.IEnvironment irEnv, ISystemEnvironment parentEnv, List<String> implicitlyUsedEnumerations) {
+    public SystemEnvironment(org.eclipse.edt.mof.serialization.IEnvironment irEnv, ISystemEnvironment parentEnv, List<String> implicitlyUsedEnumerations, ICompiler compiler) {
         super();
         this.irEnv = irEnv;
         this.parentSystemEnvironment = parentEnv;
         this.implicitlyUsedEnumerationNames = implicitlyUsedEnumerations;
+        this.compiler = compiler;
         if (parentEnv != null) {
         	enumerationManager = new EnumerationManager(parentEnv.getEnumerationManager());
         	sysLibManager = new SystemLibraryManager(parentEnv.getSystemLibraryManager());
@@ -323,6 +325,11 @@ public class SystemEnvironment implements ISystemEnvironment {
 
 	public ISystemEnvironment getSystemEnvironment() {
 		return this;
+	}
+	
+	@Override
+	public ICompiler getCompiler() {
+		return compiler;
 	}
 	
 	private void appendStoresToIREnvironment(ISystemEnvironment env) {

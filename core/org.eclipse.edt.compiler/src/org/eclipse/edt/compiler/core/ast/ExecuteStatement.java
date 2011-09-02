@@ -61,7 +61,7 @@ public class ExecuteStatement extends Statement {
 	    	//default is to do nothing
 	    }
 	    
-		public void acceptChildren(IASTVisitor visitor) {
+		public void accept(IASTVisitor visitor) {
 	    	//default is to do nothing
 		}
 
@@ -97,11 +97,11 @@ public class ExecuteStatement extends Statement {
 		}
 		
 		@Override
-		public void acceptChildren(IASTVisitor visitor) {
+		public void accept(IASTVisitor visitor) {
 			if (hasSQLStatement()) {
 				getSQLStatement().accept(visitor);
 			}
-			super.acceptChildren(visitor);
+			super.accept(visitor);
 		}
 	}
 	
@@ -184,9 +184,9 @@ public class ExecuteStatement extends Statement {
 		}
 		
 		@Override
-		public void acceptChildren(IASTVisitor visitor) {
+		public void accept(IASTVisitor visitor) {
 			sqlStmt.accept(visitor);
-			super.acceptChildren(visitor);
+			super.accept(visitor);
 		}
 	}
 
@@ -243,10 +243,8 @@ public class ExecuteStatement extends Statement {
 	
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
-		if(visitChildren) {
-			if(executeTarget.hasSQLStatement()) {
-				executeTarget.getSQLStatement().accept(visitor);
-			}
+		if(visitChildren) {			
+			executeTarget.accept(visitor);
 			acceptChildren(visitor, executeOptions);			
 		}
 		visitor.endVisit(this);

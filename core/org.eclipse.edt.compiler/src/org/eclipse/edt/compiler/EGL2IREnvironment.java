@@ -51,7 +51,7 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
 	private Mof2Binding converter = new Mof2Binding(this);
 	private PartBindingCache bindingCache = new PartBindingCache();
 	private PackageBinding rootPackageBinding = new PackageBinding(defaultPackage, null, this);
-	private ISystemEnvironment systemEnvironment;
+	private ICompiler compiler;
 
 	public EGL2IREnvironment() {
 		irEnv = Environment.INSTANCE;
@@ -63,8 +63,8 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
 		this.irEnv = irEnv;
 	}
 	
-	public void setSystemEnvironment(ISystemEnvironment sysEnv) {
-		this.systemEnvironment = sysEnv;
+	public void setCompiler(ICompiler compiler) {
+		this.compiler = compiler;
 	}
 
 	protected boolean rootsContainPackage(String[] packageName) {
@@ -281,7 +281,12 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
 
 	@Override
 	public ISystemEnvironment getSystemEnvironment() {
-		return systemEnvironment;
+		return getCompiler().getSystemEnvironment(null);
+	}
+	
+	@Override
+	public ICompiler getCompiler() {
+		return compiler;
 	}
 	
 	public MofSerializable findType(String mofSignature) throws TypeNotFoundException, DeserializationException {

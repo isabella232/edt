@@ -63,7 +63,7 @@ import org.eclipse.edt.mof.serialization.ObjectStore;
  *  - a top level function will be compiled generically once for each time it is called
  * 	- error handling for source and classpath entries
  */
-public class EGLG {
+public class EGLC {
 	public static final String EGLBIN = ".eglbin";
 	public static final String EGLXML = ".eglxml";
 	
@@ -89,7 +89,7 @@ public class EGLG {
 	        	
 	            
 	            ISystemEnvironment sysEnv = compiler.getSystemEnvironment(null);
-            	eglcEnv.setSystemEnvironment(sysEnv);
+            	eglcEnv.setCompiler(compiler);
 
 			    
 			    Processor processor = new Processor(NullBuildNotifier.getInstance(), new ICompilerOptions(){

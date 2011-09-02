@@ -579,8 +579,8 @@ stmt
 	|	FOR:for1 LPAREN ID:id1 type:type1 fromExprOpt:fromExpr1 TO expr:expr1 stepOpt:step1 RPAREN stmt_star:stmts1 END:end1
 	{: RESULT = new ForStatement(null, new SimpleName(id1, id1left, id1right), type1, fromExpr1, expr1, step1, stmts1, for1left, end1right); :}
 
-	|	FOREACH:foreach1 LPAREN foreachTarget:foreachTarget1 intoClauseOpt:intoClause1 RPAREN stmt_star:stmts1 END:end1
-	{: RESULT = new ForEachStatement(foreachTarget1, intoClause1, stmts1, foreach1left, end1right); :}
+	|	FOREACH:foreach1 LPAREN expr:expr1 FROM:from1 expr:fromexpr1 intoClauseOpt:intoClause1 RPAREN stmt_star:stmts1 END:end1
+	{: RESULT = new ForEachStatement(expr1, new FromOrToExpressionClause(fromexpr1, from1left, fromexpr1right), intoClause1, stmts1, foreach1left, end1right); :}
 	
 	|	CONTINUE:continue1 continueModifierOpt:continueModifier1 SEMI:semi1
 	{: RESULT = new ContinueStatement(continueModifier1, continue1left, semi1right); :}
@@ -600,10 +600,10 @@ stmt
 	{: RESULT = new ConverseStatement(expr1, withName1, converse1left, semi1right); :}
 
 	|	DELETE:delete1 expr:expr1 FROM:from1 expr:fromexpr1 deleteOption_star:deleteOptions1 SEMI:semi1
-	{: RESULT = new DeleteStatement(expr1, fromexpr1,deleteOptions1, delete1left, semi1right); :}
+	{: RESULT = new DeleteStatement(expr1, new FromOrToExpressionClause(fromexpr1, from1left, fromexpr1right),deleteOptions1, delete1left, semi1right); :}
 
 	|	DELETE:delete1 FROM:from1 expr:fromexpr1 deleteOption_star:deleteOptions1 SEMI:semi1
-	{: RESULT = new DeleteStatement(null, fromexpr1, deleteOptions1, delete1left, semi1right); :}
+	{: RESULT = new DeleteStatement(null, new FromOrToExpressionClause(fromexpr1, from1left, fromexpr1right), deleteOptions1, delete1left, semi1right); :}
 
 	|	DISPLAY:display1 expr:expr1 SEMI:semi1
 	{: RESULT = new DisplayStatement(expr1, display1left, semi1right); :}
@@ -630,7 +630,7 @@ stmt
 	{: RESULT = new OpenUIStatement(settingsBlock1, exprs1, bind1, eventBlocks1, openui1left, end1right); :}
 	
 	|	PREPARE:prepare1 lvalue:lvalue1 FROM:from1 expr:expr1 withClause:withClause1 SEMI:semi1
-	{: RESULT = new PrepareStatement(lvalue1, expr1, withClause1, prepare1left, semi1right); :}
+	{: RESULT = new PrepareStatement(lvalue1, new FromOrToExpressionClause(expr1, from1left, expr1right), withClause1, prepare1left, semi1right); :}
 	
 	|	PRINT:print1 expr:expr1 SEMI:semi1
 	{: RESULT = new PrintStatement(expr1, print1left, semi1right); :}
@@ -687,8 +687,8 @@ foreachTarget
 	::=	expr:expr1
 	{: RESULT = new ForEachStatement.ExpressionForEachTarget(expr1); :}
 
-	|	FROM expr:expr1
-	{: RESULT = new ForEachStatement.ResultSetForEachTarget(expr1); :}
+	|	FROM:from1 expr:expr1
+	{: RESULT = new ForEachStatement.ResultSetForEachTarget(new FromOrToExpressionClause(expr1, from1left, expr1right)); :}
 	;
 
 intoClauseOpt

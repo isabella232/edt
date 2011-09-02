@@ -184,7 +184,7 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 		if (forEachStatement.hasSQLRecord()) {
 			forEachStatement.getSQLRecord().accept(this);
 			forEachStmt.getTargets().add((Expression)stack.pop());
-		} else if (forEachStatement.hasResultSetID()) {
+		} else if (forEachStatement.hasResultSet()) {
 			forEachStatement.getResultSet().accept(this);
 			forEachStmt.setDataSource((Expression)stack.pop());
 		}
