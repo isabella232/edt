@@ -62,10 +62,12 @@ public class SQLNlsStrings extends NLS {
 	public static String SQL_CONNECTION_COLUMN_PROPERTY;
 	public static String SQL_CONNECTION_COLUMN_VALUE;
 	public static String SQL_CONNECTION_DATABASE_PROPERTY;
+	public static String SQL_CONNECTION_DBNAME_PROPERTY;
 	public static String SQL_CONNECTION_JDBC_PROPERTY;
 	public static String SQL_CONNECTION_LOCATION_PROPERTY;
 	public static String SQL_CONNECTION_URL_PROPERTY;
 	public static String SQL_CONNECTION_USER_ID_PROPERTY;
+	public static String SQL_CONNECTION_USER_PASSWORD_PROPERTY;
 	public static String SQL_CONNECTION_TEST_BUTTON;
 	public static String SQL_CONNECTION_EDIT_BUTTON;
 	public static String SQL_CONNECTION_LABEL_PASSWORD;

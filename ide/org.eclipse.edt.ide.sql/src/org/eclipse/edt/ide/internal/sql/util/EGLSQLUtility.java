@@ -285,6 +285,10 @@ public class EGLSQLUtility {
 		 return profile.getBaseProperties().getProperty(IJDBCDriverDefinitionConstants.DATABASE_VERSION_PROP_ID);
 	 }
 	 
+	 public static String getDBNameProperty(IConnectionProfile profile) {
+		 return profile.getBaseProperties().getProperty(IJDBCDriverDefinitionConstants.DATABASE_NAME_PROP_ID);
+	 }
+	 
 	 public static String getDecodedConnectionPassword(IConnectionProfile connection) {
 		 String password = "";
 		 if (connection != null) {
