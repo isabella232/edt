@@ -62,6 +62,11 @@ public class ProjectSettingsUtility {
 	public static final String PROJECT_KEY = "<project>"; //$NON-NLS-1$
 	
 	/**
+	 * Constant for the project-level property indicating the default deployment descriptor.
+	 */
+	public static final String PROJECT_DEFAULT_DEPLOYMENT_DESCRIPTOR = "DefaultDeploymentDescriptorPath"; //$NON-NLS-1$
+	
+	/**
 	 * Returns the ICompiler registered for the given project. This returns null if there is no compiler.
 	 * 
 	 * @param project  The project.
@@ -348,5 +353,41 @@ public class ProjectSettingsUtility {
 		}
 		
 		propertyPrefs.flush();
+	}
+	
+	/**
+	 * Sets the default deployment descriptor for a project. 
+	 * If the default deployment descriptor is null or blank, the default 
+	 * deployment descriptor setting is removed from the project.
+	 * 
+	 * @param project  The project.
+	 * @param pathValue  The path of the default deployment descriptor.
+	 * @throws BackingStoreException
+	 */
+	public static void setDefaultDeploymentDescriptor(IProject project, String pathValue) throws BackingStoreException {
+		Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROJECT_DEFAULT_DEPLOYMENT_DESCRIPTOR);
+		
+		if (pathValue == null || pathValue.length() == 0) {
+			// Remove the setting
+			prefs.remove(keyFor(project.getFullPath()));
+		}
+		else {
+			prefs.put(keyFor(project.getFullPath()), pathValue);
+		}
+		prefs.flush();
+	}
+	
+	public static String getDefaultDeploymentDescriptor(IResource resource) {
+		IProject project = resource.getProject();
+		Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROJECT_DEFAULT_DEPLOYMENT_DESCRIPTOR);
+		
+		// First check for the resource. If it doesn't exist, check its parent, then its grandparent, and so on, until at the project level.
+		String setting = findSetting(resource.getFullPath(), prefs, true);
+		if (setting != null) {
+			setting = setting.trim();
+			return setting;
+		}
+		
+		return null;
 	}
 }
