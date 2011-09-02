@@ -14,6 +14,7 @@ package org.eclipse.edt.ide.core;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -63,6 +64,22 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 	protected String getOutputDirectory(IFile eglFile) {
 		return ProjectSettingsUtility.getGenerationDirectory(eglFile, getPreferenceStore(),
 				new ProjectScope(eglFile.getProject()).getNode(getProjectSettingsPluginId()),
+				getGenerationDirectoryPropertyKey(),
+				getGenerationDirectoryPreferenceKey());
+	}
+	
+	/**
+	 * Returns the output directory to use for writing a file in Eclipse.
+	 * The default implementation will use {@link #getGenerationDirectoryPropertyKey()},
+	 * {@link #getProjectSettingsPluginId()}, {@link #getGenerationDirectoryPreferenceKey()},
+	 * and {@link #getPreferenceStore()} to determine the value, but sub-classes may override this.
+	 * 
+	 * @param eglFile  The source .egl file
+	 */
+	public String getOutputDirectory(IResource resource) {	
+		IProject project = resource.getProject();
+		return ProjectSettingsUtility.getGenerationDirectory(resource, getPreferenceStore(),
+				new ProjectScope(project).getNode(getProjectSettingsPluginId()),
 				getGenerationDirectoryPropertyKey(),
 				getGenerationDirectoryPreferenceKey());
 	}
