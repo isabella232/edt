@@ -179,7 +179,7 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ForEachStatement forEachStatement) {
 
 		super.visit(forEachStatement);
-		SqlForEachStatement forEachStmt = (SqlForEachStatement) stack.peek();
+		final SqlForEachStatement forEachStmt = (SqlForEachStatement) stack.peek();
 		stack.push(forEachStmt);
 		if (forEachStatement.hasSQLRecord()) {
 			forEachStatement.getSQLRecord().accept(this);
@@ -189,14 +189,19 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 			forEachStmt.setDataSource((Expression)stack.pop());
 		}
 
-		if (forEachStatement.hasIntoClause()) {
-			Iterator itr = forEachStatement.getIntoItems().iterator();
-			while (itr.hasNext()) {
-				org.eclipse.edt.compiler.core.ast.Expression expr = (org.eclipse.edt.compiler.core.ast.Expression) itr.next();
-				expr.accept(this);
-				forEachStmt.getIntoExpressions().add((Expression)stack.pop());
-			}
-		}
+		forEachStatement.accept(new AbstractASTExpressionVisitor() {
+			public boolean visit(IntoClause clause) {
+				Iterator i = clause.getExpressions().iterator();
+				while (i.hasNext()) {
+					org.eclipse.edt.compiler.core.ast.Expression expr = (org.eclipse.edt.compiler.core.ast.Expression) i.next();
+					expr.accept(generator);
+					forEachStmt.getIntoExpressions().add((Expression)stack.pop());
+				}
+				return false;
+			};
+
+		});
+
 
 		StatementBlock block = irFactory.createStatementBlock();
 		// TODO: set source info

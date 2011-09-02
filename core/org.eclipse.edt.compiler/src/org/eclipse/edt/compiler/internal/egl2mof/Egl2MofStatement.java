@@ -729,7 +729,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			public boolean visit(org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause clause) {
 				if (generator[0] == null && clause.getExpression() != null) {
 					ITypeBinding type = clause.getExpression().resolveTypeBinding();
-					if (type != null) {
+					if (type != null && type.getPackageName() != null) {
 						String key = IRUtils.concatWithSeparator(type.getPackageName(), ".");
 						generator[0] = IOStatementGenerator.Registry.get(key);
 					}

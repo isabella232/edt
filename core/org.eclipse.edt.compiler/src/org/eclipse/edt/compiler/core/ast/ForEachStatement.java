@@ -93,27 +93,30 @@ public class ForEachStatement extends Statement {
 
 	private Expression target;
 	private FromOrToExpressionClause resultSet;
-	private IntoClause intoClauseOpt;
+	private List foreachOptions;	// List of Nodes
 	private List stmts;	// List of Statements
+	private int closingParenOffset;
 
-	public ForEachStatement(Expression target, FromOrToExpressionClause resultSet, IntoClause intoClauseOpt, List stmts, int startOffset, int endOffset) {
+	public ForEachStatement(Expression target, FromOrToExpressionClause resultSet, List options, List stmts, int closingParenOffset, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.target = target;
 		target.setParent(this);
 		this.resultSet = resultSet;
 		resultSet.setParent(this);
-		if(intoClauseOpt != null) {
-			this.intoClauseOpt = intoClauseOpt;
-			intoClauseOpt.setParent(this);
-		}
+		this.foreachOptions = setParent(options);
 		this.stmts = setParent(stmts);
+		this.closingParenOffset = closingParenOffset;
 	}
 	
 	public boolean hasResultSet() {
 		return true;
 	}
 	
+	public int getClosingParenOffset() {
+		return closingParenOffset;
+	}
+
 	public FromOrToExpressionClause getResultSet() {
 		return resultSet;
 	}
@@ -125,29 +128,21 @@ public class ForEachStatement extends Statement {
 	public Expression getSQLRecord() {
 		return target;
 	}
-	
-	public boolean hasIntoClause() {
-		return intoClauseOpt != null;
-	}
-	
-	public IntoClause getIntoClause() {
-		return intoClauseOpt;
-	}
-	
-	public List getIntoItems() {
-		return intoClauseOpt.getExpressions();
-	}
-	
+		
 	public List getStmts() {
 		return stmts;
 	}
 	
+	public List getForeachOptions() {
+		return foreachOptions;
+	}
+
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
 			target.accept(visitor);
 			resultSet.accept(visitor);
-			if(intoClauseOpt != null) intoClauseOpt.accept(visitor);
+			acceptChildren(visitor, foreachOptions);			
 			acceptChildren(visitor, stmts);
 		}
 		visitor.endVisit(this);
@@ -161,9 +156,7 @@ public class ForEachStatement extends Statement {
 		return Arrays.asList(new List[] {stmts});
 	}
 	
-	protected Object clone() throws CloneNotSupportedException {
-		IntoClause newIntoClauseOpt = intoClauseOpt != null ? (IntoClause)intoClauseOpt.clone() : null;
-		
-		return new ForEachStatement((Expression)target.clone(), (FromOrToExpressionClause) resultSet.clone(), newIntoClauseOpt, cloneList(stmts), getOffset(), getOffset() + getLength());
+	protected Object clone() throws CloneNotSupportedException {		
+		return new ForEachStatement((Expression)target.clone(), (FromOrToExpressionClause) resultSet.clone(), cloneList(foreachOptions), cloneList(stmts), closingParenOffset, getOffset(), getOffset() + getLength());
 	}
 }
