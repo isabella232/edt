@@ -22,6 +22,9 @@ public class ForStatementTemplate extends JavaTemplate {
 		if (stmt.getDeclarationExpression() != null) {
 			out.println("{");
 			ctx.invoke(genDeclarationExpression, stmt.getDeclarationExpression(), ctx, out);
+			// if we have temporary variables, the smap data will not include the for statement, so we need to manually set
+			// the smap processing flag to on
+			ctx.setSmapIsProcessing(true);
 		}
 		Label label = new Label(ctx, Label.LABEL_TYPE_FOR);
 		ctx.pushLabelStack(label);
@@ -53,6 +56,9 @@ public class ForStatementTemplate extends JavaTemplate {
 		else
 			out.print("1");
 		out.print(") ");
+		// we need to make sure the smap processing flag is now off, in case we set it on above
+		ctx.setSmapIsProcessing(false);
+		// now process the statement block
 		ctx.invoke(genStatement, stmt.getBody(), ctx, out);
 		if (stmt.getDeclarationExpression() != null)
 			out.println("}");
