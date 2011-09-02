@@ -177,21 +177,20 @@ public class TypeTemplate extends JavaTemplate {
 				ctx.invoke(genExpression, arg2, ctx, out);
 				out.println(";");
 				ctx.invoke(genExpression, arg1, ctx, out);
-				out.print(arg3 + temporary + " == null ? ");
-				out.print("throw new egl.lang.NullValueException()");
-				out.print(" : " + temporary);
+				out.print(arg3 + " (");
+				ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
+				out.print(") org.eclipse.edt.javart.util.JavartUtil.checkNullable(" + temporary + ")");
 			} else if (TypeUtils.isReferenceType(arg2.getType())) {
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(arg3);
 				ctx.invoke(genExpression, arg2, ctx, out);
 			} else {
 				ctx.invoke(genExpression, arg1, ctx, out);
-				out.print(arg3);
+				out.print(arg3 + " (");
+				ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
+				out.print(") org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
 				ctx.invoke(genExpression, arg2, ctx, out);
-				out.print(" == null ? ");
-				out.print("throw new egl.lang.NullValueException()");
-				out.print(" : ");
-				ctx.invoke(genExpression, arg2, ctx, out);
+				out.print(")");
 			}
 		} else {
 			ctx.invoke(genExpression, arg1, ctx, out);
