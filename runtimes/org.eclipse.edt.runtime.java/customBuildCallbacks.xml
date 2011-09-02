@@ -72,10 +72,7 @@
 	</target>
 
 	<target name="post.compile.@dot">
-		<jar destfile="${target.folder}/egljavart.jar">
-			<zipfileset src="icu4j-4_4_2_2.jar" excludes="**/*.html"/>
-			<fileset dir="." includes="**/*.class"/>
-		</jar>
+		<unzip src="icu4j-4_4_2_2.jar" dest="${target.folder}"/>
 	</target>
 	
 	<!-- ===================================================================== -->
