@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.edt.ide.rui.internal.Activator;
 import org.eclipse.edt.ide.rui.internal.nls.RUINlsStrings;
+import org.eclipse.edt.ide.rui.utils.Util;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -47,7 +48,7 @@ public class ActionLaunchExternalBrowser extends Action {
 				throw new RuntimeException(RUINlsStrings.NoPreviewContent_Msg);
 			}
 			else {
-				MessageDialog.openInformation( Display.getDefault().getActiveShell(), RUINlsStrings.NoPreviewContent_Title, RUINlsStrings.NoPreviewContent_Msg );
+				MessageDialog.openInformation( Util.getShell(), RUINlsStrings.NoPreviewContent_Title, RUINlsStrings.NoPreviewContent_Msg );
 			}
 			return;
 		}

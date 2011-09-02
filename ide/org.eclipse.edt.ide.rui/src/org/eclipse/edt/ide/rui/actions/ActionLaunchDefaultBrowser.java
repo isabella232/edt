@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.edt.ide.rui.internal.Activator;
 import org.eclipse.edt.ide.rui.internal.nls.RUINlsStrings;
+import org.eclipse.edt.ide.rui.utils.Util;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -44,7 +45,7 @@ public class ActionLaunchDefaultBrowser extends Action
 	{
 		if ( _strUrl == null || _strUrl.length() == 0 )
 		{
-			MessageDialog.openInformation( Display.getDefault().getActiveShell(), RUINlsStrings.NoWebContent_Title, RUINlsStrings.NoPreviewContent_Msg );
+			MessageDialog.openInformation( Util.getShell(), RUINlsStrings.NoWebContent_Title, RUINlsStrings.NoPreviewContent_Msg );
 			return;
 		}
 
