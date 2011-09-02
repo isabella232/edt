@@ -17,11 +17,11 @@ import java.util.List;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.edt.ide.rui.EDTRUIPlugin;
+import org.eclipse.edt.ide.rui.internal.Activator;
 
 
 public class WidgetLibProviderManager {
-	public static final String EXTENSIONPOINT_WIDGET_LIBRARY_PROVIDER = EDTRUIPlugin.PLUGIN_ID + ".widgetLibraryProvider"; //$NON-NLS-1$
+	public static final String EXTENSIONPOINT_WIDGET_LIBRARY_PROVIDER = Activator.PLUGIN_ID + ".widgetLibraryProvider"; //$NON-NLS-1$
 	public static final String PROVIDER = "provider"; //$NON-NLS-1$
 	
 	private static WidgetLibProviderManager manager;
