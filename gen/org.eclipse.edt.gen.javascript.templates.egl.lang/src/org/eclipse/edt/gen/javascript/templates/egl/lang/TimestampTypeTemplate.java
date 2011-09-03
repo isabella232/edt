@@ -17,7 +17,9 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.TimestampType;
@@ -49,6 +51,19 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 	public void genContainerBasedNewExpression(ParameterizableType type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
 		processNewExpression(type, ctx, out, arg);
 	}
+	
+	public void genContainerBasedInvocation(EGLClass type, Context ctx, TabbedWriter out, InvocationExpression expr) {
+		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
+		out.print(".");
+		ctx.invoke(genName, expr.getTarget(), ctx, out);
+		out.print("(");
+		ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+		if (expr.getArguments() != null && expr.getArguments().size() > 0)
+			out.print(", ");
+		ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out);
+		out.print(")");
+	}
+
 
 	public void processNewExpression(Type type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
 		out.print("new ");

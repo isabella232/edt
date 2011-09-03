@@ -20,6 +20,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.Type;
 
@@ -45,6 +46,19 @@ public class DateTypeTemplate extends JavaScriptTemplate {
 		out.print(")");
 	}
 
+	public void genContainerBasedInvocation(EGLClass type, Context ctx, TabbedWriter out, InvocationExpression expr) {
+		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
+		out.print(".");
+		ctx.invoke(genName, expr.getTarget(), ctx, out);
+		out.print("(");
+		ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+		if (expr.getArguments() != null && expr.getArguments().size() > 0)
+			out.print(", ");
+		ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out);
+		out.print(")");
+	}
+
+	
 	public void genSignature(EGLClass type, Context ctx, TabbedWriter out) {
 		String signature = "K;";
 		out.print(signature);
