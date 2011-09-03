@@ -305,6 +305,12 @@ egl.defineClass( "egl.lang", "EString"
 	}
 }
 );
+egl.egl.lang.EString.textLen = function (s) {
+	//Returns the number of bytes in a text expression, excluding any trailing spaces or null values.
+	if ( s === null )
+		return 0;
+	return s.replace( /(\s)*$/, "" ).length;
+};
 egl.egl.lang.EString.ezeCast = function (x) {
 	return egl.convertAnyToString(x, false);    // TODO need nullable support
 };
@@ -334,6 +340,9 @@ egl.egl.lang.EString.fromEInt64 = function (x) {
 	return (x).toString();
 };
 egl.egl.lang.EString.fromEFloat64 = function (x) {
+	return (x).toString();
+};
+egl.egl.lang.EString.fromEBoolean = function (x) {
 	return (x).toString();
 };
 egl.egl.lang.EString.fromAnyObject = function (x) {
