@@ -31,6 +31,15 @@ egl.defineClass(
 });
 
 egl.defineClass(
+	    'eglx.xml.binding.annotation', 'XMLValue',
+{
+		"constructor" : function( /*string*/ kind, /*string*/ simpleContentFieldName) {
+			this.kind = kind;
+			this.simpleContentFieldName = simpleContentFieldName;
+		}
+});
+
+egl.defineClass(
 	    'eglx.xml.binding.annotation', 'XMLElement',
 {
 		"constructor" : function( /*string*/ name, /*string*/ namespace, /*boolean*/ required, /*boolean*/ nillable) {

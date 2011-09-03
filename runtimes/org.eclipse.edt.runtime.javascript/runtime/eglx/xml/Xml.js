@@ -192,6 +192,9 @@ egl.eglx.xml.XmlLib["eglClassToXML"] = function(/*value*/value, /*map*/namespace
 			xmlName = partAnntations["XMLRootElement"].name;
 		}
 	}
+	var isSimpleContent = partAnntations["XMLValue"] != undefined &&
+							partAnntations["XMLValue"] != null &&
+							partAnntations["XMLValue"].kind == egl.eglx.xml.binding.annotation.XMLStructureKind.simpleContent;
 	xmlName = prefix + xmlName;
 	var fieldInfos = value.eze$$getFieldInfos();
 	var s = [ "<" + xmlName ];
@@ -210,12 +213,15 @@ egl.eglx.xml.XmlLib["eglClassToXML"] = function(/*value*/value, /*map*/namespace
 		s.push(">");
 		for ( var idx = 0; idx < fieldInfos.length; idx++) {
 			if (!(fieldInfos[idx].xmlStyle instanceof egl.eglx.xml.binding.annotation.XMLAttribute)) {
-				if (fieldInfos[idx].getterFunction instanceof Function) {
-					fieldValue = value[fieldInfos[idx].getterFunction].apply();
-				} else {
-					fieldValue = value[fieldInfos[idx].getterFunction];
+				if(!isSimpleContent || 
+						partAnntations["XMLValue"].simpleContentFieldName == xmlStyle.name){
+					if (fieldInfos[idx].getterFunction instanceof Function) {
+						fieldValue = value[fieldInfos[idx].getterFunction].apply();
+					} else {
+						fieldValue = value[fieldInfos[idx].getterFunction];
+					}
+					s.push(this.toXML(fieldValue, namespaces, fieldInfos[idx]));
 				}
-				s.push(this.toXML(fieldValue, namespaces, fieldInfos[idx]));
 			}
 		}
 
@@ -339,7 +345,12 @@ egl.eglx.xml.XmlLib["isArray"] = function(/*nodes*/children) {
 			&& children[1].localName;
 };
 egl.eglx.xml.XmlLib["primitiveFromXML"] = function( /*node*/element, /*FieldInfo*/fieldInfo) {
-	return this.newPrimitiveFromXml(this.getElementText(element), fieldInfo);
+	if(element === undefined || element === null){
+		return null;
+	}
+	else{
+		return this.newPrimitiveFromXml(this.getElementText(element), fieldInfo);
+	}
 };
 egl.eglx.xml.XmlLib["newPrimitiveFromXml"] = function( /*node*/value, /*FieldInfo*/fieldInfo) {
 	if (value == null) {
@@ -449,7 +460,7 @@ egl.eglx.xml.XmlLib["arrayFromXML"] = function( /*node*/parentElement, /*egl rt 
 			: null;
 	var xmlName;
 	var arrayName = xmlStyle.name;
-	var wrapped = true;
+	var wrapped = false;
 	var names = null;
 	if (xmlArray != undefined && xmlArray != null) {
 		if (xmlArray.names != undefined
@@ -496,7 +507,7 @@ egl.eglx.xml.XmlLib["eglClassFromXML"] = function(/*node*/recElement, /*egl rt o
 		if (namespace == null
 				&& partAnntations["XMLRootElement"].namespace != undefined
 				&& partAnntations["XMLRootElement"].namespace != null) {
-			namespace = addNamespace(partAnntations["XMLRootElement"].namespace);
+			namespace = partAnntations["XMLRootElement"].namespace;
 		}
 		if (xmlName == null
 				&& partAnntations["XMLRootElement"].name != undefined
@@ -504,20 +515,31 @@ egl.eglx.xml.XmlLib["eglClassFromXML"] = function(/*node*/recElement, /*egl rt o
 			xmlName = partAnntations["XMLRootElement"].name;
 		}
 	}
+	var isSimpleContent = partAnntations["XMLValue"] != undefined &&
+							partAnntations["XMLValue"] != null &&
+							partAnntations["XMLValue"].kind == egl.eglx.xml.binding.annotation.XMLStructureKind.simpleContent;
 	var fieldInfos = eglObj.eze$$getFieldInfos();
 	if (fieldInfos) {
 		var value;
 		for ( var idx = 0; idx < fieldInfos.length; idx++) {
 			xmlStyle = fieldInfos[idx].annotations["XMLStyle"];
+			var setValue = true;
 			if (xmlStyle instanceof egl.eglx.xml.binding.annotation.XMLAttribute) {
-				value = newPrimitiveFromXml(this.getAttributeNS(recElement, xmlStyle.name, xmlStyle.namespace), fieldInfos[idx]);
-			} else {
+				value = this.newPrimitiveFromXml(this.getAttributeNS(recElement, xmlStyle.name, xmlStyle.namespace), fieldInfos[idx]);
+			} else if(!isSimpleContent){
 				value = this.fromXML(this.getChildElementNS(recElement, xmlStyle.name, xmlStyle.namespace), fieldInfos[idx]);
+			} else if(partAnntations["XMLValue"].simpleContentFieldName == xmlStyle.name){
+				value = this.newPrimitiveFromXml(this.getElementText(recElement), fieldInfos[idx]);
 			}
-			if (fieldInfos[idx].setterFunction instanceof Function) {
-				fieldInfos[idx].setterFunction.apply(value);
-			} else {
-				eglObj[fieldInfos[idx].setterFunction] = value;
+			else{
+				setValue = false;
+			}
+			if(setValue){
+				if (fieldInfos[idx].setterFunction instanceof Function) {
+					fieldInfos[idx].setterFunction.apply(value);
+				} else {
+					eglObj[fieldInfos[idx].setterFunction] = value;
+				}
 			}
 		}
 	}
@@ -565,14 +587,6 @@ egl.eglx.xml.XmlLib["getChildElementNS"] = function(/*DOM Element*/element, /*st
 		}
 	}
 	return elements;
-};
-egl.eglx.xml.XmlLib["getSimpleElementField"] = function(/*DOM Element*/element, /*string*/name, /*string*/namespace) {
-	var nodelist = this.getChildElementNS(element, name, namespace);
-	if (nodelist.length > 0)
-		return this.getElementText(nodelist[0]);
-	else
-		return null;
-
 };
 egl.eglx.xml.XmlLib["getAttributeNS"] = function(/*DOM Element*/element, /*string*/name, /*string*/namespace) {
 	namespace = (!namespace) ? this.defaultNamespace() : namespace;
