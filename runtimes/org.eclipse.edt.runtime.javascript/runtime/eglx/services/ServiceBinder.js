@@ -85,18 +85,8 @@ egl.defineClass( "eglx.services", "WebBinding", {
         this.wsdlService = _wsdlService;
         this.wsdlPort = _wsdlPort;
         this.uri = _uri;
-    },
-    
-    "createServiceWrapper" : function(){
-    	return new egl.eglx.services.SOAPServiceRefWrapper(
-    			this._interface,
-    			this.name,
-    			this.wsdlLocation,
-    			this.wsdlService,
-    			this.wsdlPort,
-    			this.uri);
     }
-
+    
 });
 
 egl.defineClass( "eglx.services", "RestBinding", {
@@ -107,13 +97,7 @@ egl.defineClass( "eglx.services", "RestBinding", {
         this.name = _name;
         this.baseURI = _baseURI;
         this.sessionCookieId = _sessionCookieId;
-    },
-    
-    "createServiceWrapper" : function(){
-    	return new egl.eglx.services.RESTServiceRefWrapper(
-    			this.name,
-    			this.baseURI,
-    			this.sessionCookieId);
     }
+    
 });
 new egl.eglx.services.ServiceBinder();
