@@ -368,7 +368,8 @@ public class CommonUtilities {
 			Object otherPropFn = annotation.getValue(otherPropertyFunction);
 
 			// If both are null (but the annotation isn't), then we are supposed to infer the function names....
-			if ((propFn == null) && (otherPropFn == null)) {
+			if (((propFn == null) || ((propFn instanceof String) && ((String)propFn).length() == 0)) 
+			 && ((otherPropFn == null) || ((otherPropFn instanceof String) && ((String)otherPropFn).length() == 0))) {
 				result = (Constants.Annotation_PropertyGetter.equals(propertyFunction) ? Constants.GetterPrefix : Constants.SetterPrefix)
 					+ fieldName.substring(0, 1).toUpperCase();
 				if (fieldName.length() > 1) {
