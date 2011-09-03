@@ -71,10 +71,13 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 
 	public void genExpression(MemberName expr, Context ctx, TabbedWriter out) {
 		Member member = expr.getMember();
-		if (member != null && member.getContainer() != null && member.getContainer() instanceof Type)
+		if (member != null && member instanceof Function) {
+			ctx.invoke(genCallbackAccesor, expr, ctx, out);
+		} else if (member != null && member.getContainer() != null && member.getContainer() instanceof Type) {
 			ctx.invoke(genContainerBasedMemberName, (Type) member.getContainer(), ctx, out, expr, member);
-		else
+		} else  {
 			genMemberName(expr, ctx, out);
+		}
 	}
 
 	public Function getCallbackFunction(MemberName expr, Context ctx) {
@@ -82,8 +85,11 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 	}
 
 	public void genCallbackAccesor(MemberName expr, Context ctx, TabbedWriter out) {
-		ctx.invoke(genQualifier, expr.getMember(), ctx, out);
+		out.print("new egl.egl.jsrt.Delegate(this, ");
+		ctx.invoke(genPartName, expr.getMember().getContainer(), ctx, out);
+		out.print(".prototype.");
 		ctx.invoke(genName, expr.getMember(), ctx, out);
+		out.print(")");
 	}
 
 	public void genMemberName(MemberName expr, Context ctx, TabbedWriter out) {
