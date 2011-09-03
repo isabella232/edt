@@ -12,6 +12,7 @@
 package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
+import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Type;
@@ -47,7 +48,7 @@ public class FunctionTemplate extends JavaScriptTemplate {
 	}
 
 	public void genName(Function function, Context ctx, TabbedWriter out) {
-		ctx.invokeSuper(this, genName, function, ctx, out);
+		ctx.invokeSuper(this, genName, JavaScriptAliaser.getAlias(function), ctx, out);
 	}
 
 	public Function getCallbackFunction(Function function, Context ctx) {
