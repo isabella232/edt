@@ -36,17 +36,6 @@ public class Constants {
 	public static final String JSRT_STRLIB_PKG = "egl.eglx.lang.StrLib['$inst'].";
 	public static final String JSRT_DTTMLIB_PKG = "egl.eglx.lang.DateTimeLib['$inst'].";
 	public static final String JSRT_XMLLIB_PKG = "egl.eglx.xml.XMLLib['$inst'].";
-
-	//part names
-	public static final String AnnotationXmlAttribute  = "eglx.xml.binding.annotation.xmlAttribute";
-	public static final String AnnotationXMLRootElement  = "eglx.xml.binding.annotation.XMLRootElement";
-	public static final String AnnotationXmlElement  = "eglx.xml.binding.annotation.xmlElement";
-	public static final String AnnotationJsonName  = "eglx.json.JsonName";
-	public static final String AnnotationDedicatedService  = "eglx.services.DedicatedService";
-	public static final String AnnotationBindService  = "eglx.services.BindService";
-	public static final String PartHttp  = "eglx.http.Http";
-	public static final String LibraryService  = "eglx.services.ServiceLib";
-
 	
 	// these are annotations key values, related to the values in the IRs
 	public static final String Annotation_EGLProperty = "eglx.lang.EGLProperty";
