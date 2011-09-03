@@ -19,6 +19,8 @@ public class Constants {
 	public static final String parameter_part = "part";
 	public static final String parameter_root = "root";
 	public static final String parameter_report = "report";
+	public static final String parameter_report_dir = "reportDir";
+	public static final String parameter_report_dir_default = "genReports/";
 
 	// Extension to use for generation reports
 	public static final String report_fileExtension = ".html";
