@@ -40,11 +40,6 @@ public class Constants {
 	public static final String SubKey_partRecordsUsed = "partRecordsUsed";
 	public static final String SubKey_partTypesImported = "partTypesImported";
 
-	// these are annotations key values, related to the values in the IRs
-	public static final String Annotation_EGLProperty = "eglx.lang.eglproperty";
-	public static final String AnnotationJsonName  = "eglx.json.JsonName";
-	public static final String AnnotationXMLRootElement  = "eglx.xml.binding.annotation.XMLRootElement";
-
 	// Library generation constants
 	public static final String LIBRARY_PREFIX = "eze_Lib_";
 	public static final String _HELPER = "_Helper";

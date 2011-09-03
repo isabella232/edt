@@ -108,6 +108,7 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	// preGenPart is invoked by the generator and should not be overridden or used by extending logic
 	public static final String preGen = "preGen";
 	public static final String preGenClassBody = "preGenClassBody";
+	public static final String preGenAnnotations = "preGenAnnotations";
 	public static final String preGenPart = "preGenPart";
 	public static final String preGenField = "preGenField";
 	public static final String preGenFields = "preGenFields";
