@@ -23,16 +23,24 @@ egl.eglx.services.ServiceLib["throwExceptionIfNecessary"] = function(/*Object*/o
 		throw egl.createRuntimeException("CRRUI2106E", [ fieldName ]);
 	}
 };
-egl.eglx.services.ServiceLib["bindService"] = function(/*String*/bindingKeyName, /*String*/eglddName) {
-	if(eglddName === undefined || eglddName === null){
-		eglddName = egl__defaultDeploymentDescriptor;
-	}
-	var binding = egl.eglx.services.$ServiceBinder.getBinding(eglddName.toLowerCase(), bindingKeyName);
+egl.eglx.services.ServiceLib["bindService"] = function(bindingKeyNameOrHttp, /*String*/eglddName) {
 	var ret = undefined;
-	if(binding instanceof egl.eglx.services.RestBinding){
-		ret = new egl.eglx.http.Http();
-		ret.request.uri = binding.baseURI;
-		ret.invocationType = egl.eglx.services.ServiceType.EglRpc;
+	if(typeof bindingKeyNameOrHttp == "string"){
+		if(eglddName === undefined || eglddName === null){
+			eglddName = egl__defaultDeploymentDescriptor;
+		}
+		var binding = egl.eglx.services.$ServiceBinder.getBinding(eglddName.toLowerCase(), bindingKeyNameOrHttp);
+		if(binding instanceof egl.eglx.services.RestBinding){
+			ret = new egl.eglx.http.Http();
+			ret.request.uri = binding.baseURI;
+			ret.invocationType = egl.eglx.services.ServiceType.EglRpc;
+		}
+	}
+	else if(typeof bindingKeyNameOrHttp == "object" && bindingKeyNameOrHttp instanceof egl.eglx.http.Http){
+		ret = bindingKeyNameOrHttp;
+	}
+	if(ret === undefined || ret === null){
+		//FIXME throw SBE exception
 	}
 	return ret;
 };
