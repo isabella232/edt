@@ -32,4 +32,17 @@ public class Constants {
 	public static final String SubKey_statementNeedsLabel = "statementNeedsLabel";
 	public static final String SubKey_callStatementTempVariables = "callStatementTempVariables";
 	public static final String SubKey_FunctionParameterIsConst = "functionParameterIsConst";
+
+	//part names
+	public static final String AnnotationXmlAttribute  = "eglx.xml.binding.annotation.xmlAttribute";
+	public static final String AnnotationXMLRootElement  = "eglx.xml.binding.annotation.XMLRootElement";
+	public static final String AnnotationXmlElement  = "eglx.xml.binding.annotation.xmlElement";
+	public static final String AnnotationJsonName  = "eglx.json.JsonName";
+	public static final String AnnotationDedicatedService  = "eglx.services.DedicatedService";
+	public static final String AnnotationBindService  = "eglx.services.BindService";
+	public static final String PartHttp  = "eglx.http.Http";
+	public static final String LibraryService  = "eglx.services.ServiceLib";
+	public static final String Annotation_EGLProperty = "eglx.lang.eglproperty";
+	public static final String AnnotationXMLStructureKind  = "eglx.xml.binding.annotation.XMLStructureKind";
+	public static final String AnnotationXMLValue  = "eglx.xml.binding.annotation.XMLValue";
 }
