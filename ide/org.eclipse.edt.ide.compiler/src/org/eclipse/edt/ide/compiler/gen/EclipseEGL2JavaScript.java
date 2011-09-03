@@ -53,16 +53,8 @@ public class EclipseEGL2JavaScript extends EGL2JavaScript {
 			IFile outputFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, generator.getResult().toString(), generator.getRelativeFileName(part));
 
 			// write out generation report if there is one
-			TabbedReportWriter report = generator.getReport();
-			if (report != null) {
-				{
-					String fn = generator.getRelativeFileName(part);
-					fn = fn.substring(0, fn.lastIndexOf('.')) + Constants.report_fileExtension;
-					String rpt = report.rpt.getWriter().toString();
-					IFile reportFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, rpt, fn);
-				}
-			}
-
+			GenerationReport.writeFile(part, eglFile, generator);
+			
 			// call back to the generator, to see if it wants to do any supplementary tasks
 			generator.processFile(outputFile.getFullPath().toString());
 		} else {
