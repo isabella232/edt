@@ -13,6 +13,10 @@ package org.eclipse.edt.gen.javascript;
 
 import java.util.Properties;
 
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
+
 
 /**
  * JavaScriptAliaser 
@@ -160,6 +164,38 @@ public class JavaScriptAliaser
 
 		buffer.append( hex );
 	}
+	
+	/**
+	 * Certain function names defined in EGL types (such as String.length) cannot be implemented as-is because they
+	 * conflict with the runtime language's existing (and un-overridable) definitions.   This will check for these
+	 * special cases and return a Function object as appropriate.
+	 * 
+	 * @param f
+	 * @return
+	 */
+	public static Function getAlias(Function f){
+		Function result = f;
+		
+		try {
+			if ((f.getContainer() instanceof Type)) {
+				Type type = ((Type)f.getContainer()).getClassifier();
+				
+				if (TypeUtils.isTextType(type)) {
+					if (f.getName().equals("length")) {
+						result = (Function) f.clone();
+						result.setName("textLen");
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			result = f;
+		}
+		
+		return result;
+	}
+	
+	
 
 	/**
 	 * Returns an alias for a part name, using '_' as the escape character.
