@@ -1,0 +1,15 @@
+package eglx.xml.binding.annotation;
+
+Record XMLValue type Annotation
+{
+	targets = [
+		ElementKind.libraryPart,
+		ElementKind.programPart,
+		ElementKind.handlerPart,
+		ElementKind.recordPart,
+		ElementKind.servicePart,
+		ElementKind.interfacePart
+	]
+}
+	kind XMLStructureKind = XMLStructureKind.simpleContent;
+end
