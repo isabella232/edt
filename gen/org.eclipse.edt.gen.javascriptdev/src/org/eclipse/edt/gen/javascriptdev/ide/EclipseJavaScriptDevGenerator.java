@@ -19,14 +19,15 @@ import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.javascriptdev.JavaScriptDevGenerator;
+import org.eclipse.edt.ide.compiler.gen.GenerationReport;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
-import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.LoadPartException;
 
 public class EclipseJavaScriptDevGenerator extends JavaScriptDevGenerator {
 
+	private static final String DEV_MODE_SUFFIX = "_devMode";
 	private final IFile eglFile;
 	private final Part part;
 	private final IGenerator generatorProvider;
@@ -46,19 +47,13 @@ public class EclipseJavaScriptDevGenerator extends JavaScriptDevGenerator {
 
 	protected void writeFile(Part part, Generator generator) throws Exception {
 		String outputFolder = (String) parameterMapping.get(Constants.parameter_output).getValue();
+
 		if (EclipseUtilities.shouldWriteFileInEclipse(outputFolder)) {
-			IFile outputFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, generator.getResult().toString(), generator.getRelativeFileName(part));
-			
+			IFile outputFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, generator.getResult().toString(),
+				generator.getRelativeFileName(part));
+
 			// write out generation report if there is one
-			TabbedReportWriter report = generator.getReport();
-			if (report != null) {
-				{
-					String fn = generator.getRelativeFileName(part);
-					fn = fn.substring(0, fn.lastIndexOf('.')) + Constants.report_fileExtension;
-					String rpt = report.rpt.getWriter().toString();
-					IFile reportFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, rpt, fn);
-				}
-			}
+			GenerationReport.writeFile(part, eglFile, generator, DEV_MODE_SUFFIX);
 
 			// call back to the generator, to see if it wants to do any supplementary tasks
 			generator.processFile(outputFile.getFullPath().toString());
