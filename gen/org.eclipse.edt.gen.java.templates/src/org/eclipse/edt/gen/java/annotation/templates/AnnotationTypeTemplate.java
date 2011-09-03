@@ -16,11 +16,13 @@ import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Type;
 
 public class AnnotationTypeTemplate extends JavaTemplate {
 
+	public void preGen(AnnotationType aType, Context ctx, Annotation annot, EGLClass part) {}
 	public void preGenClassBody(AnnotationType part, Context ctx) {}
 
 	public void genPart(AnnotationType part, Context ctx, TabbedWriter out) {}

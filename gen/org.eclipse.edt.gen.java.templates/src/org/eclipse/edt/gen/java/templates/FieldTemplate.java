@@ -13,9 +13,9 @@ package org.eclipse.edt.gen.java.templates;
 
 
 
+import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
-import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ExternalType;

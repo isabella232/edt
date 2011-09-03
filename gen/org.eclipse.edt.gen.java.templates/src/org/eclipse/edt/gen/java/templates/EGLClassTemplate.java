@@ -35,14 +35,21 @@ public class EGLClassTemplate extends JavaTemplate {
 		ctx.invoke(preGenUsedParts, part, ctx);
 		ctx.invoke(preGenFields, part, ctx);
 		ctx.invoke(preGenFunctions, part, ctx);
-		if(part.getAnnotation(Constants.AnnotationXMLRootElement) == null) {
+		ctx.invoke(preGenAnnotations, part, ctx);
+		if(part.getAnnotation(org.eclipse.edt.gen.Constants.AnnotationXMLRootElement) == null) {
 			//add an xmlRootElement
 			try {
-				Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXMLRootElement);
+				Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + org.eclipse.edt.gen.Constants.AnnotationXMLRootElement);
 				annotation.setValue("name", part.getId());
 				part.addAnnotation(annotation);
 			} catch (Exception e) {}
 		}	
+	}
+	
+	public void preGenAnnotations(EGLClass part, Context ctx) {
+		for(Annotation annot : part.getAnnotations()){
+			ctx.invoke(preGen, annot.getEClass(), ctx, annot, part);
+		}
 	}
 
 	public void preGenUsedParts(EGLClass part, Context ctx) {
