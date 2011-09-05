@@ -275,6 +275,15 @@
      			</visibleWhen>
      		</command>
   		</menuContribution>
+  		<menuContribution locationURI="menu:navigate">
+  			<command commandId="org.eclipse.ui.edit.text.goto.line" label="%GoToLine.Name">
+       	 		<visibleWhen>
+       				<with variable="activePartId">
+       					<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+       				</with>
+     			</visibleWhen>
+     		</command>
+  		</menuContribution>
    		<menuContribution locationURI="popup:#EGLEditorContext">
 			<menu id="org.eclipse.edt.ide.ui.popup.source.menu" 
      			label="%SourceMenu.name">
@@ -285,14 +294,6 @@
        	 		<separator name="importGroup" visible="true"/>
        	 		<command commandId="org.eclipse.edt.ide.ui.source.importGroup.addImport"/>
        	 		<command commandId="org.eclipse.edt.ide.ui.source.importGroup.organizeImports"/>
-<!-- Uncomment when callback function is ready       	 		
-       	 		<separator name="createGroup" visible="true"/>
-   	 			<command commandId="org.eclipse.edt.ide.ui.source.createGroup.callbackFunction"/>
--->   	 			
-<!-- Uncomment when SQL support is ready
-       	 		<separator name="sqlGroup" visible="true"/>
-   	 			<command commandId="org.eclipse.edt.ide.ui.source.sqlGroup.addSQLStatement"/>
--->
        	 		<separator name="additions" visible="false"/>
        	 		<visibleWhen>
        				<with variable="activePartId">
@@ -337,6 +338,15 @@
            			</with>
      			</visibleWhen>
     	 	</menu>
+  		</menuContribution>
+  		<menuContribution locationURI="popup:#EGLEditorContext?after=org.eclipse.edt.ide.ui.popup.declarations.menu">
+       	 	<command commandId="org.eclipse.ui.edit.text.goto.line" label="%GoToLine.Name">
+       	 		<visibleWhen>
+       				<with variable="activePartId">
+           				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+           			</with>
+     			</visibleWhen>
+     		</command>
   		</menuContribution>
  		<menuContribution locationURI="popup:#EGLRulerContext">
  			<menu label="%Command.folding.name" tooltip="%Command.folding.description">

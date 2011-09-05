@@ -51,6 +51,7 @@ import org.eclipse.edt.ide.ui.internal.results.views.AbstractResultsViewPart;
 import org.eclipse.help.IContextProvider;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.PreferenceConstants;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPositionCategoryException;
@@ -115,6 +116,7 @@ import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.part.ShowInContext;
 import org.eclipse.ui.texteditor.ChainedPreferenceStore;
 import org.eclipse.ui.texteditor.DefaultRangeIndicator;
+import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.ui.texteditor.link.EditorLinkedModeUI;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
@@ -1371,6 +1373,12 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 	
 	public IVerticalRuler getEditorVerticalRuler() {
 		return super.getVerticalRuler();
+	}
+	
+	protected void editorContextMenuAboutToShow(IMenuManager menu) {
+		super.editorContextMenuAboutToShow(menu);
+		addAction(menu, ITextEditorActionConstants.GROUP_COPY, ITextEditorActionConstants.SELECT_ALL);
+		addAction(menu, ITextEditorActionConstants.GROUP_FIND, ITextEditorActionConstants.FIND);
 	}
 
 }
