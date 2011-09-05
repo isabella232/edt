@@ -556,8 +556,10 @@
 			extensions="egl"
 			class="org.eclipse.edt.ide.ui.internal.editor.EGLEditor"
 			symbolicFontName="org.eclipse.edt.ide.ui.editors.textfont"
-			id="org.eclipse.edt.ide.ui.EGLEditor"
-			default="true">
+			id="org.eclipse.edt.ide.ui.EGLEditor">
+     <contentTypeBinding
+           contentTypeId="org.eclipse.edt.ide.ui.commonfile">
+     </contentTypeBinding>
          </editor>
    		<editor
 			id="org.eclipse.edt.ide.ui.BinaryFileEditor"
@@ -1649,6 +1651,16 @@ Templates
          </selection>
       </wizard>
    </extension>
+ <extension
+       point="org.eclipse.core.contenttype.contentTypes">
+    <content-type
+          describer="org.eclipse.edt.ide.ui.editor.CommonFileDescriber"
+          file-extensions="egl"
+          id="org.eclipse.edt.ide.ui.commonfile"
+          name="Common EGL file"
+          priority="high">
+    </content-type>
+ </extension>
 
 <!--   
 ***********************************************************************
