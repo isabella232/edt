@@ -15,12 +15,16 @@
 <plugin>
 	<!-- Editor -->
 	<extension point = "org.eclipse.ui.editors">
-		<editor id               = "org.eclipse.edt.ide.rui.visualeditor.EvEditor"
-			    name             = "%NL_EGL_Rich_UI_Editor" 
-			    icon             = "icons/obj16/eglfile_obj.gif"
-			    contributorClass = "org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvEditorActionBarContributor"
-				extensions       = "egl"
-			    class            = "org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvEditor" >
+		<editor
+        class="org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvEditor"
+        contributorClass="org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvEditorActionBarContributor"
+        extensions="egl"
+        icon="icons/obj16/eglfile_obj.gif"
+        id="org.eclipse.edt.ide.rui.visualeditor.EvEditor"
+        name="%NL_EGL_Rich_UI_Editor">
+     <contentTypeBinding
+           contentTypeId="org.eclipse.edt.ide.rui.visualeditor.ruifile">
+     </contentTypeBinding>
 		</editor>
 	</extension>
 	
@@ -48,5 +52,15 @@
 		      name="%NL_Page_Data_View">
 		</view>
 	</extension>
+ <extension
+       point="org.eclipse.core.contenttype.contentTypes">
+    <content-type
+          describer="org.eclipse.edt.ide.rui.visualeditor.internal.editor.RUIFileDescriber"
+          file-extensions="egl"
+          id="org.eclipse.edt.ide.rui.visualeditor.ruifile"
+          name="Rich UI File"
+          priority="normal">
+    </content-type>
+ </extension>
  
 </plugin>
