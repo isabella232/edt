@@ -42,7 +42,7 @@ public class FunctionParameterTemplate extends JavaTemplate {
 		ctx.invoke(genJsonTypeDependentOptions, parameter.getType(), ctx, out);
 		out.print("}");
 		if(arrayDimension > 0 ){
-			out.print("arrayDimensions=");
+			out.print(", arrayDimensions=");
 			out.print(arrayDimension.toString());
 		}
 		out.print(")");
