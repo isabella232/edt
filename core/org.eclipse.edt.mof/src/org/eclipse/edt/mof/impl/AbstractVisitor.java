@@ -131,17 +131,26 @@ public class AbstractVisitor implements EVisitor {
 		return visitChildren;
 
 	}
+	
 	private Method primGetMethod(String methodName, Class<?> clazz) {
-		Method method = null;
-		try {
-			method = this.getClass().getMethod(methodName, clazz);
-		} catch (SecurityException e) {
-			throw new RuntimeException(e);
-		} catch (NoSuchMethodException e) {
-			// Do nothing to allow search to continue
-		}
-		return method;
-	}
+        Method method = null;
+        try {
+            Method[] methods = this.getClass().getMethods();
+            for (Method nextMethod : methods) {
+                if(nextMethod.getName().equals(methodName)){
+                    if(nextMethod.getParameterTypes().length == 1){
+                        if(nextMethod.getParameterTypes()[0].equals(clazz)){
+                            method = nextMethod;
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
+        } 
+        return method;
+    }
 	
 	private Method getMethod(String methodName, Class<?> ifaceClass, boolean doGet) {
 		Method method = null;
