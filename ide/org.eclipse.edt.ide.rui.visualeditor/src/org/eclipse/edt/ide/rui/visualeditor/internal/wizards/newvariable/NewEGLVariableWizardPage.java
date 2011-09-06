@@ -15,6 +15,13 @@ package org.eclipse.edt.ide.rui.visualeditor.internal.wizards.newvariable;
 import java.util.List;
 import java.util.Locale;
 
+import org.eclipse.edt.ide.core.internal.search.PartDeclarationInfo;
+import org.eclipse.edt.ide.core.model.EGLCore;
+import org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvEditor;
+import org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvHelp;
+import org.eclipse.edt.ide.rui.visualeditor.internal.nl.Messages;
+import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.newvariable.NewEGLVariableWizardUtil.DataType;
+import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.util.NameFinder;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -33,15 +40,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-
-import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
-import org.eclipse.edt.ide.core.internal.search.PartDeclarationInfo;
-import org.eclipse.edt.ide.core.model.EGLCore;
-import org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvEditor;
-import org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvHelp;
-import org.eclipse.edt.ide.rui.visualeditor.internal.nl.Messages;
-import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.newvariable.NewEGLVariableWizardUtil.DataType;
-import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.util.NameFinder;
 
 
 public class NewEGLVariableWizardPage extends WizardPage {
@@ -189,22 +187,22 @@ public class NewEGLVariableWizardPage extends WizardPage {
 			public void widgetDefaultSelected(SelectionEvent e) {}
 			
 		});
-		
-		final Button dataItemButton = new Button(typeSelectionGroup, SWT.RADIO);
-		dataItemButton.setText(Messages.NL_NEVWP_DataItem_Button);
-		dataItemButton.addSelectionListener(new SelectionListener(){
-
-			public void widgetSelected(SelectionEvent e) {
-				if(dataItemButton.getSelection()){
-					clean();
-					((StackLayout)typeAreaComposite.getLayout()).topControl = dataItemComposite;
-					typeAreaComposite.layout();
-				}
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {}
-			
-		});
+//TODO EDT 0.7 does not support dataitem		
+//		final Button dataItemButton = new Button(typeSelectionGroup, SWT.RADIO);
+//		dataItemButton.setText(Messages.NL_NEVWP_DataItem_Button);
+//		dataItemButton.addSelectionListener(new SelectionListener(){
+//
+//			public void widgetSelected(SelectionEvent e) {
+//				if(dataItemButton.getSelection()){
+//					clean();
+//					((StackLayout)typeAreaComposite.getLayout()).topControl = dataItemComposite;
+//					typeAreaComposite.layout();
+//				}
+//			}
+//
+//			public void widgetDefaultSelected(SelectionEvent e) {}
+//			
+//		});
 		
 		final Button primitiveTypeButton = new Button(typeSelectionGroup, SWT.RADIO);
 		primitiveTypeButton.setText(Messages.NL_NEVWP_Primitive_Type_Button);
@@ -235,7 +233,7 @@ public class NewEGLVariableWizardPage extends WizardPage {
 		typeAreaComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		typeAreaComposite.setLayout(new StackLayout());
 		
-		createPrimitiveTypeArea();
+		createPrimitiveTypeArea();		
 		createDataItemArea();
 		createRecordArea();
 		
