@@ -92,11 +92,14 @@ public class ReorganizeCode extends AbstractVisitor {
 	@SuppressWarnings("unchecked")
 	public boolean visit(ReturnStatement object) {
 		ctx.putAttribute(object.getContainer(), Constants.SubKey_functionHasReturnStatement, new Boolean(true));
-		
-		// There are cases where someone uses a return statement to break out of a function, even though the function does not return anything
-		if(object.getExpression() != null){
-			// if the return statement invokes a function that has inout or out parms, then we need to create a local variable
-			// for the return of the function invocation. This is because we need to unbox the inout/out args after the function
+
+		// There are cases where someone uses a return statement to break out of a function, even though the function does
+		// not return anything
+		if (object.getExpression() != null) {
+			// if the return statement invokes a function that has inout or out parms, then we need to create a local
+			// variable
+			// for the return of the function invocation. This is because we need to unbox the inout/out args after the
+			// function
 			// is invoked and before the return statement
 			if (object.getExpression().getType() != null && IRUtils.hasSideEffects(object.getExpression())) {
 				// set up the new statement block if needed
@@ -183,6 +186,10 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	public boolean visit(CaseStatement object) {
+		// for statements that contain other statements, we only want to process this statement. the contained ones will
+		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
+		if (processedStatement)
+			return false;
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
@@ -191,6 +198,10 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	public boolean visit(ForStatement object) {
+		// for statements that contain other statements, we only want to process this statement. the contained ones will
+		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
+		if (processedStatement)
+			return false;
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
@@ -199,6 +210,10 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	public boolean visit(ForEachStatement object) {
+		// for statements that contain other statements, we only want to process this statement. the contained ones will
+		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
+		if (processedStatement)
+			return false;
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
@@ -207,6 +222,10 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	public boolean visit(OpenUIStatement object) {
+		// for statements that contain other statements, we only want to process this statement. the contained ones will
+		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
+		if (processedStatement)
+			return false;
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
@@ -215,6 +234,10 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	public boolean visit(WhileStatement object) {
+		// for statements that contain other statements, we only want to process this statement. the contained ones will
+		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
+		if (processedStatement)
+			return false;
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
@@ -223,11 +246,15 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	public boolean visit(IfStatement object) {
+		// for statements that contain other statements, we only want to process this statement. the contained ones will
+		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
+		if (processedStatement)
+			return false;
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
 			ctx.putAttribute(object, Constants.SubKey_statementNeedsLabel, new Boolean(true));
-		
+
 		// If the else branch isn't a statement block, put it inside one. This lets generator extensions insert extra
 		// code, as well as handle when there are side effects in a nested IF condition.
 		if (object.getFalseBranch() != null && !(object.getFalseBranch() instanceof StatementBlock)) {
@@ -342,13 +369,14 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	private void processInvocationConstantParameters(InvocationExpression object) {
-		//for a const we should not copy the parameter before passing it to the function.
+		// for a const we should not copy the parameter before passing it to the function.
 		for (int i = 0; i < object.getTarget().getParameters().size(); i++) {
 			if (object.getTarget().getParameters().get(i).isConst()) {
 				ctx.putAttribute(object.getArguments().get(i), Constants.SubKey_FunctionParameterIsConst, Boolean.TRUE);
 			}
 		}
 	}
+
 	@SuppressWarnings("unchecked")
 	private void processInvocation(InvocationExpression object) {
 		processInvocationConstantParameters(object);
