@@ -42,6 +42,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
@@ -73,32 +75,38 @@ public class ImportRUIProjectsOperation extends WorkspaceModifyOperation {
 		throws CoreException, InvocationTargetException, InterruptedException {		
 		if( widgetsProjectName != null ) {
 			importWidgetsProject( monitor, widgetsProjectName );
-		}	
+		}
 	}
 	
 	private void importWidgetsProject( IProgressMonitor monitor, String projectName ) {
 		final IProject widgetsProject = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-		
+		if (monitor == null) {
+			monitor= new NullProgressMonitor();
+		}
+		monitor.beginTask("Import widget project " + projectName, 10);
 		// Only import the widgets project if it doesn't exist
 		if(!widgetsProject.exists()){
-			try{				
+			try{
+				monitor.subTask("unzip widgets");
 				unzipWidgets( projectName );
+				monitor.worked(6);
 				if(!widgetsProject.exists()){
-					widgetsProject.create(monitor);
+					widgetsProject.create(new SubProgressMonitor(monitor, 1));
 				}
 				if(!widgetsProject.isOpen()){
-					widgetsProject.open(monitor);
+					widgetsProject.open(new SubProgressMonitor(monitor, 1));
 				}
 				EGLCore.create(widgetsProject);				
 				
-				widgetsProject.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-				
+				widgetsProject.refreshLocal(IResource.DEPTH_INFINITE, new SubProgressMonitor(monitor, 1));
 				IWorkspaceDescription description = ResourcesPlugin.getWorkspace().getDescription();
 				if(!description.isAutoBuilding()){
-					widgetsProject.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
+					widgetsProject.build(IncrementalProjectBuilder.FULL_BUILD, new SubProgressMonitor(monitor, 1));
 				}
 			} catch (Exception e) {
 				EGLLogger.log(this, e);
+			} finally{
+				monitor.done();
 			}
 		}
 	}
