@@ -22,6 +22,7 @@ import org.eclipse.edt.javart.json.ValueNode;
 import org.eclipse.edt.javart.services.FunctionParameter;
 import org.eclipse.edt.javart.services.FunctionParameterKind;
 import org.eclipse.edt.javart.services.FunctionSignature;
+import org.eclipse.edt.runtime.java.egl.lang.EglAny;
 
 import egl.lang.AnyException;
 import eglx.services.ServiceUtilities;
@@ -133,12 +134,16 @@ public class JsonUtilities {
 		int idx = 0;
 		for(FunctionParameter functionParameter : signature.parameters()){
 			if(functionParameter.kind().equals(FunctionParameterKind.OUT)){
-				parameters.add(null);
+				parameters.add(EglAny.ezeWrap(null));
+			}
+			else if(functionParameter.kind().equals(FunctionParameterKind.INOUT)){
+				parameters.add(EglAny.ezeWrap(JsonLib.convertToEgl(functionParameter.parameterType(), functionParameter.asOptions(), null, (ValueNode)jsonParameters.getValues().get(idx++))));
 			}
 			else{
 				parameters.add(JsonLib.convertToEgl(functionParameter.parameterType(), functionParameter.asOptions(), null, (ValueNode)jsonParameters.getValues().get(idx++)));
 			}
 		}
+
 		return parameters.toArray(new Object[parameters.size()]);
 	}
 }

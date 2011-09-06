@@ -107,7 +107,7 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 		final EglList<Object> responseParameters = new EglList<Object>();
 		for(int idx = 0; idx < signature.parameters().length; idx++){
 			if(!FunctionParameterKind.IN.equals(signature.parameters()[idx].kind())){
-				responseParameters.add(parameters);
+				responseParameters.add(parameters[idx]);
 			}
 		}
 		if(ret != null){
