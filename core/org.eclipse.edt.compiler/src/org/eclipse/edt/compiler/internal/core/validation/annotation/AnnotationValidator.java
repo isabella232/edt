@@ -513,12 +513,12 @@ public class AnnotationValidator {
 							}		
 						}
 						else {
-							problemRequestor.acceptProblem(
-								expression,
-								IProblemRequestor.POSITIONAL_PROPERTY_NOT_VALID_FOR,
-								new String[] {
-									arrayType.getCanonicalName()	
-								});
+//							problemRequestor.acceptProblem(
+//								expression,
+//								IProblemRequestor.POSITIONAL_PROPERTY_NOT_VALID_FOR,
+//								new String[] {
+//									arrayType.getCanonicalName()	
+//								});
 						}
 						return false;
 					}
