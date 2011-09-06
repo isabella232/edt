@@ -22,12 +22,12 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.internal;
 
+import org.eclipse.edt.compiler.internal.EGLBasePlugin;
+
 
 public interface HelpContextIDs {
 
-//TODO EDT help	
-//	public static final String PREFIX = EDTCoreIDEPlugin.getHelpIDPrefix() + "."; //$NON-NLS-1$
-	public static final String PREFIX = "";
+	public static final String PREFIX = EGLBasePlugin.getHelpIDPrefix() + "."; //$NON-NLS-1$
 	
 	public static final String RUI_BASE_PREFERENCE_PAGE = PREFIX + "rui0001"; //$NON-NLS-1$
 	
