@@ -17,12 +17,32 @@
 	<!--   build.result.folder - folder to contain the build results           -->
 	<!-- ===================================================================== -->
 	<target name="pre.build.jars">
-		<echo message="Before CVS tag"/>
-		<cvs cvsRoot=":pserver:anonymous@dev.eclipse.org:/cvsroot/tools">
-			<module name="org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo_0.7.0"/>
-			<module name="org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.remote_0.7.0"/>
-		</cvs>
-		<echo message="After CVS tag"/>
+		<!-- Create the three widget projects from the latest code in CVS. -->
+		<!-- remove me --> <echo message="Before CVS tag"/>
+		<cvs cvsRoot=":pserver:anonymous@dev.eclipse.org:/cvsroot/tools"
+			package="org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo_0.7.0 org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.remote_0.7.0 org.eclipse.edt.rui.dojo.runtime.local_1.6.1 org.eclipse.edt.rui.dojo.runtime.remote_1.6.1 org.eclipse.edt.rui.dojo.widgets_0.7.0 org.eclipse.edt.rui.widgets_0.7.0"/>
+		<!-- remove me --> <echo message="After CVS tag"/>
+		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.widgets_0.7.0.zip"
+			includes="org.eclipse.edt.rui.widgets_0.7.0/**"/>
+		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo_0.7.0.zip"
+			basedir="org.eclipse.edt.rui.dojo.widgets_0.7.0" 
+			includes="EGLSource/**" excludes="**/*.egldd" update="true"/>
+		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo.remote_0.7.0.zip"
+			basedir="org.eclipse.edt.rui.dojo.widgets_0.7.0" 
+			includes="EGLSource/**" excludes="**/*.egldd" update="true"/>
+		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo_0.7.0.zip"
+			basedir="org.eclipse.edt.rui.dojo.widgets_0.7.0" 
+			includes="icons/** WebContent/**" update="true"/>
+		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo.remote_0.7.0.zip"
+			basedir="org.eclipse.edt.rui.dojo.widgets_0.7.0" 
+			includes="icons/** WebContent/**" update="true"/>
+		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo_0.7.0.zip"
+			basedir="org.eclipse.edt.rui.dojo.runtime.local_1.6.1" 
+			includes="WebContent/**" update="true"/>
+		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo.remote_0.7.0.zip"
+			basedir="org.eclipse.edt.rui.dojo.runtime.remote_1.6.1" 
+			includes="WebContent/**" update="true"/>
+
 		<!-- 
 		
 		Check out
