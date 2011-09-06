@@ -74,7 +74,7 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 	 * {@link #getProjectSettingsPluginId()}, {@link #getGenerationDirectoryPreferenceKey()},
 	 * and {@link #getPreferenceStore()} to determine the value, but sub-classes may override this.
 	 * 
-	 * @param eglFile  The source .egl file
+	 * @param resource  The egl resource, could be a project, a package or a file. 
 	 */
 	public String getOutputDirectory(IResource resource) {	
 		IProject project = resource.getProject();
