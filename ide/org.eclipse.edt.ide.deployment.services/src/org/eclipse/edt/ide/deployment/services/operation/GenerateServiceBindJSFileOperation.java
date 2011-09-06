@@ -55,6 +55,10 @@ public class GenerateServiceBindJSFileOperation extends AbstractDeploymentOperat
 	
 	public void execute(DeploymentContext context, IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor)
 			throws CoreException {
+		if ( context.getDeploymentDesc().getRUIApplication() == null || context.getDeploymentDesc().getRUIApplication().getRUIHandlers().size() == 0 ) {
+			return;
+		}
+		
 		this.context = context;
 		ddModel = context.getDeploymentDesc();
 		

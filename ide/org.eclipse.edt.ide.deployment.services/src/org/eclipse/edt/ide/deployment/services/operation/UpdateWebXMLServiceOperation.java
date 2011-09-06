@@ -37,7 +37,7 @@ public class UpdateWebXMLServiceOperation extends AbstractDeploymentOperation {
 	public void execute(DeploymentContext context, IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor)
 			throws CoreException {
 		/**
-		 * deploy fda7.jar and configure the __proxy
+		 * configure the restservices
 		 */
 		monitor.subTask(Messages.J2EEDeploymentOperation_1);
 
