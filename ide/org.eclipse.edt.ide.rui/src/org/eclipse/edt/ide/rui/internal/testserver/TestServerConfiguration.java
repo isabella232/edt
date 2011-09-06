@@ -281,53 +281,60 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		}
 		
 		if (recompute[0]) {
-			// Iterate through, keep track of those that are no longer in the list, those that were already in the list but have
-			// changed, and those that are new to the list. Updates are treated as additions, and the server will handle it appropriately.
-			
-			Map<String,RestServiceMapping> newMappings = ServiceFinder.findRestServices(project);
-			List<RestServiceMapping> addedOrChanged = new ArrayList<RestServiceMapping>();
-			Map<String,RestServiceMapping> copyOfCurrent = new HashMap<String,RestServiceMapping>(currentServiceMappings);
-			
-			for (Iterator<RestServiceMapping> it = newMappings.values().iterator(); it.hasNext();) {
-				RestServiceMapping next = it.next();
-				RestServiceMapping old = copyOfCurrent.remove(next.uri);
-				if (old == null || !old.equals(next)) {
-					addedOrChanged.add(next);
-				}
-			}
-			
-			if (addedOrChanged.size() > 0 || copyOfCurrent.size() > 0) {
-				String addedArg = ServiceFinder.toArgumentString(addedOrChanged);
-				String removedArg = ServiceFinder.toArgumentString(copyOfCurrent.values()); // leftovers get removed
-				
-				StringBuilder args = new StringBuilder(addedArg.length() + removedArg.length() + 30);
-				if (addedArg.length() > 0) {
-					args.append(ConfigServlet.ARG_ADDED);
-					args.append('=');
-					args.append(addedArg);
-				}
-				if (removedArg.length() > 0) {
-					if (args.length() > 0) {
-						args.append('&');
-					}
-					args.append(ConfigServlet.ARG_REMOVED);
-					args.append('=');
-					args.append(removedArg);
-				}
-				
-				try {
-					int status = invokeConfigServlet(args.toString());
-					if (status != 200) {
-						System.err.println(NLS.bind(TestServerMessages.ConfigServletBadStatus, status));
-					}
-				}
-				catch (IOException e) {
-					Activator.getDefault().log(e.getMessage(), e);
-				}
-			}
-			
-			currentServiceMappings = newMappings;
+			updateServiceMappingsOnServer();
 		}
+	}
+	
+	public void updateServiceMappingsOnServer() {
+		if (!started) {
+			return;
+		}
+		
+		// Iterate through, keep track of those that are no longer in the list, those that were already in the list but have
+		// changed, and those that are new to the list. Updates are treated as additions, and the server will handle it appropriately.
+		Map<String,RestServiceMapping> newMappings = ServiceFinder.findRestServices(project);
+		List<RestServiceMapping> addedOrChanged = new ArrayList<RestServiceMapping>();
+		Map<String,RestServiceMapping> copyOfCurrent = new HashMap<String,RestServiceMapping>(currentServiceMappings);
+		
+		for (Iterator<RestServiceMapping> it = newMappings.values().iterator(); it.hasNext();) {
+			RestServiceMapping next = it.next();
+			RestServiceMapping old = copyOfCurrent.remove(next.uri);
+			if (old == null || !old.equals(next)) {
+				addedOrChanged.add(next);
+			}
+		}
+		
+		if (addedOrChanged.size() > 0 || copyOfCurrent.size() > 0) {
+			String addedArg = ServiceFinder.toArgumentString(addedOrChanged);
+			String removedArg = ServiceFinder.toArgumentString(copyOfCurrent.values()); // leftovers get removed
+			
+			StringBuilder args = new StringBuilder(addedArg.length() + removedArg.length() + 30);
+			if (addedArg.length() > 0) {
+				args.append(ConfigServlet.ARG_ADDED);
+				args.append('=');
+				args.append(addedArg);
+			}
+			if (removedArg.length() > 0) {
+				if (args.length() > 0) {
+					args.append('&');
+				}
+				args.append(ConfigServlet.ARG_REMOVED);
+				args.append('=');
+				args.append(removedArg);
+			}
+			
+			try {
+				int status = invokeConfigServlet(args.toString());
+				if (status != 200) {
+					System.err.println(NLS.bind(TestServerMessages.ConfigServletBadStatus, status));
+				}
+			}
+			catch (IOException e) {
+				Activator.getDefault().log(e.getMessage(), e);
+			}
+		}
+		
+		currentServiceMappings = newMappings;
 	}
 	
 	private int invokeConfigServlet(String args) throws IOException {
@@ -351,6 +358,13 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			}
 		}
 		return ((HttpURLConnection)conn).getResponseCode();
+	}
+	
+	/**
+	 * @return true if the given project is on the EGL path of this test server.
+	 */
+	public boolean isOnEGLPath(IProject project) {
+		return isOnEGLPath(this.project, project, new HashSet<IProject>());
 	}
 	
 	private boolean isOnEGLPath(IProject currProject, IProject deltaProject, Set<IProject> seen) {
