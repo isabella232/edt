@@ -18,6 +18,7 @@ import java.io.Writer;
 import java.lang.reflect.Method;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
@@ -35,11 +36,13 @@ public class XmlLib extends ExecutableBase {
 
 	public static String convertToXML(Object storage, boolean buildDocument) throws AnyException {
 		if (storage instanceof AnyBoxedObject) {
-			storage = ((AnyBoxedObject) storage).ezeUnbox();
+			storage = ((AnyBoxedObject<?>) storage).ezeUnbox();
 		}
 		try {
 			Writer writer = new StringWriter();
-			JAXBContext.newInstance(storage.getClass()).createMarshaller().marshal(storage, writer);
+			Marshaller marshaller = JAXBContext.newInstance(storage.getClass()).createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FRAGMENT, !buildDocument);
+			marshaller.marshal(storage, writer);
 			return writer.toString();
 		}
 		catch (Exception e) {
