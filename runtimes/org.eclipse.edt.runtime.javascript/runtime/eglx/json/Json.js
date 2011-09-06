@@ -304,7 +304,15 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 			(cleanDictionary === undefined || cleanDictionary === true)){
 		eglObject.removeAll();
 	}
-	if(typeof jsonObject === "object"){
+	if (typeof jsonObject === "object" && jsonObject instanceof Array){
+		//for each array element create a new element
+		var ary = new Array();
+		for ( var idx = 0; idx < jsonObject.length; idx++) {
+			ary[idx] = this.populateObjectFromJsonObject(jsonObject[idx], null, null, cleanDictionary);
+		}
+		return ary;
+	}
+	else if(typeof jsonObject === "object"){
 		for (f in jsonObject) {
 			if(typeof jsonObject[f] !== "function"){
 				eglObject[f] = this.populateObjectFromJsonObject(jsonObject[f], null, null, cleanDictionary);
