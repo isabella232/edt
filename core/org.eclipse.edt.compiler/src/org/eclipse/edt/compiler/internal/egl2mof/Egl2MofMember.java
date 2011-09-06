@@ -525,9 +525,8 @@ class Egl2MofMember extends Egl2MofPart {
 					QualifiedFunctionInvocation func = factory.createQualifiedFunctionInvocation();
 					setElementInformation(expr, func);
 					func.setQualifier(qualifier);
-					func.setId("setElement");
+					func.setId("appendElement");
 					func.getArguments().add((Expression)result);
-					func.getArguments().add(indexExpr);
 					FunctionStatement stmt = factory.createFunctionStatement();
 					stmt.setExpr(func);
 					block.getStatements().add(stmt);

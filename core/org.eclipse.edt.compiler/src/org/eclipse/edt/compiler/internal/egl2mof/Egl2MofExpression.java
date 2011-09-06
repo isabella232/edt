@@ -841,9 +841,8 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				QualifiedFunctionInvocation func = factory.createQualifiedFunctionInvocation();
 				setElementInformation(setting, func);
 				func.setQualifier(ref);
-				func.setId("setElement");
+				func.setId("appendElement");
 				func.getArguments().add(setexpr);
-				func.getArguments().add(indexExpr);
 				FunctionStatement stmt = factory.createFunctionStatement();
 				stmt.setExpr(func);
 				setElementInformation(setting, stmt);
