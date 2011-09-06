@@ -604,15 +604,6 @@ Templates
       		file="templates/eglcoredefault-templates.xml"
       		translations="templates/eglcoredefault-templates.properties">
       	</include>
-      	<contextType
-            name="%RUITemplates"
-            class="org.eclipse.edt.ide.ui.internal.templates.RUIContextType"
-            id="egl-rui">
-      	</contextType>
-      	<include
-      		file="templates/eglruidefault-templates.xml"
-      		translations="templates/eglruidefault-templates.properties">
-      	</include>
 	</extension>
 
 	<extension point="org.eclipse.ui.ide.projectNatureImages">

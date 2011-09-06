@@ -35,7 +35,6 @@ import org.eclipse.edt.ide.ui.internal.editor.ProblemMarkerManager;
 import org.eclipse.edt.ide.ui.internal.editor.folding.FoldingStructureProviderRegistry;
 import org.eclipse.edt.ide.ui.internal.templates.CoreContextType;
 import org.eclipse.edt.ide.ui.internal.templates.EGLTemplateStore;
-import org.eclipse.edt.ide.ui.internal.templates.RUIContextType;
 import org.eclipse.edt.ide.ui.internal.viewsupport.ImageDescriptorRegistry;
 import org.eclipse.jface.text.templates.ContextTypeRegistry;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
@@ -271,7 +270,7 @@ public class EDTUIPlugin extends AbstractUIPlugin {
 			
 			//EGLComponent
 			fContextTypeRegistry.addContextType(new CoreContextType());
-			fContextTypeRegistry.addContextType(new RUIContextType());
+//			fContextTypeRegistry.addContextType(new RUIContextType());
 		}
 
 		return fContextTypeRegistry;

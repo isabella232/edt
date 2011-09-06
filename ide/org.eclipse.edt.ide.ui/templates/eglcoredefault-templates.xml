@@ -845,4 +845,44 @@ end
 	into ${item4}, ${item5}, ${item6};
 </template>
 
+<!--  RUIPropertiesLibrary isn't supported in EDT 0.7
+<template name="library" description="%Templates.ruiProp_library" id="org.eclipse.edt.ide.ui.templates.ruiProp_library" context = "egl-rui" enabled="true">// RUI Properties library
+library ${libraryName} type RUIPropertiesLibrary {}
+	//NLS keys
+	nlsKey String;	
+end
+</template>
+-->
+
+<template name="call" description="%Templates.call_statement_in_rui_app" id="org.eclipse.edt.ide.ui.templates.call_statement_rui" context = "egl-core" enabled="true">call ${serviceOrInterfaceReferance}.${functionName} returning to ${callbackFunctionName} onException ServiceLib.serviceExceptionHandler;</template>
+
+<template name="handler" description="%Templates.ruiHandler" id="org.eclipse.edt.ide.ui.templates.rui_handler" context = "egl-core" enabled="true">// RUI Handler
+
+import org.eclipse.edt.rui.widgets.GridLayout;
+
+//
+//
+handler ${handlerName} type RUIhandler {initialUI = [ ui ],onConstructionFunction = start, cssFile="${cssFile}", title="${handlerTitle}"}
+	
+	ui GridLayout{ columns = 3, rows = 4, cellPadding = 4, children = [] };
+	
+	function start()
+	end	
+end
+</template>
+
+<template name="widget" description="%Templates.ruiWidget" id="org.eclipse.edt.ide.ui.templates.rui_widget" context = "egl-core" enabled="true">// RUI Widget
+
+import org.eclipse.edt.rui.widgets.GridLayout;
+
+//
+//
+handler ${widgetName} type RUIWidget {targetWidget = ui, onConstructionFunction = start, cssFile="${cssFile}", @VEWidget{ category = "Custom" }}
+	ui GridLayout{ columns = 3, rows = 4, cellPadding = 4, children = [] };
+	
+	function start()
+	end	
+end
+</template>
+
 </templates>
