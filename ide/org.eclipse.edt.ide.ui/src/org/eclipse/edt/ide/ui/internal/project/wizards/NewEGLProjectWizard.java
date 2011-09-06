@@ -63,7 +63,8 @@ public class NewEGLProjectWizard extends Wizard
 		model.setBasePackageName(store.getString(EDTUIPreferenceConstants.NEWPROJECTWIZARD_BASEPACKAGE));
 		setDefaultPageImageDescriptor(PluginImages.DESC_WIZBAN_NEWEGLPROJECT);
 		setDialogSettings(EDTUIPlugin.getDefault().getDialogSettings());
-		setWindowTitle(NewWizardMessages.EGLNewProjectWizard_0);		
+		setWindowTitle(NewWizardMessages.EGLNewProjectWizard_0);
+		setNeedsProgressMonitor(true);
 	}
 
 	public boolean performFinish() {

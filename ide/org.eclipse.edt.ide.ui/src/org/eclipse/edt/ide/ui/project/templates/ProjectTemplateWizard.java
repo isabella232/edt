@@ -18,6 +18,11 @@ import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.Wizard;
 
 public abstract class ProjectTemplateWizard extends Wizard implements IProjectTemplateWizard {
+	public ProjectTemplateWizard() {
+		super();
+		setNeedsProgressMonitor(true);
+	}
+
 	protected IProjectTemplate template;
 	protected IWizard parentWizard;
 	private SourceProjectWizardCapabilityPage capabilityPage;
