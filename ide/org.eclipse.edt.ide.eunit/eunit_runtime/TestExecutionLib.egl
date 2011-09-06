@@ -21,10 +21,13 @@ library TestExecutionLib
 		s Status = calculateStatus(ms);				
 		
 		stdOutLog Log = LogResult.getLog();
-		xml2 String = XMLLib.convertToXML(stdOutLog, false);
+		xml2 String = XMLLib.convertToXML(stdOutLog, true);
 		
 		if(bwriteStdOut)
-			SysLib.writeStdOut("Status code: " + s.code + " - " + STEXTS[s.code + 1]);
+			delta int = 1;
+			keyCode int = s.code + delta;
+			description string = STEXTS[keyCode];
+			SysLib.writeStdOut("Status code: " + s.code + " - " + description);
 			SysLib.writeStdOut("Status reason: " + s.reason);
 			SysLib.writeStdOut("");
 			SysLib.writeStdOut("Out record: \r\n" + xml2);

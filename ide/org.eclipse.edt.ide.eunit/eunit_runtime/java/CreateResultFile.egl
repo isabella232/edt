@@ -18,7 +18,7 @@ handler CreateResultFile
 			end					
 		//end
 		
-		outWriter FileWriter;  
+		outWriter FileWriter?;  
 		try
 			SysLib.writeStdOut (myfile.getAbsolutePath());
 			

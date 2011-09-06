@@ -13,7 +13,7 @@ ExternalType FileWriter type JavaObject { packageName = "java.io"}
 	constructor (file File In);
 	constructor (filename String In);
 	function write(str String In);
-	function close_() {javaName ="close"};
+	function close_() {externalName ="close"};
 end
 
 ExternalType IOException type JavaObject { packageName = "java.io"}

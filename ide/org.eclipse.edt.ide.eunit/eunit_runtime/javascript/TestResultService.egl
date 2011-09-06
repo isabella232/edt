@@ -16,7 +16,7 @@ service TestResultService
 			SysLib.writeStdOut("directories created");			
 		end					
 		
-		outWriter FileWriter;  
+		outWriter FileWriter?;  
 		try
 			absoluteFilePath = myfile.getAbsolutePath();
 			SysLib.writeStdOut (fullFileName);

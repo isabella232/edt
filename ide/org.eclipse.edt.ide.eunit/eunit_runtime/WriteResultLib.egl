@@ -20,7 +20,7 @@ Library WriteResultLib
 	end
 
 	function persistResultRootSummary(resultRootSum ResultSummaryRoot)
-		xmlStr String = XMLLib.convertToXML(resultRootSum);
+		xmlStr String = XMLLib.convertToXML(resultRootSum, true);
 		SysLib.writeStdOut(xmlStr);
 		
 		fileSeparator String = SysLib.getProperty("file.separator");
@@ -52,7 +52,7 @@ Library WriteResultLib
 		resultSum.skipCnt = ms.notRunCnt;		
 		resultRootSum.trSum ::= resultSum;
 				
-		xmlStr String = XMLLib.convertToXML(tr);
+		xmlStr String = XMLLib.convertToXML(tr, true);
 		SysLib.writeStdOut(xmlStr);
 		
 		//get the result output root from properties file
