@@ -23,9 +23,15 @@
 package org.eclipse.edt.ide.rui.internal;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
+import org.eclipse.edt.ide.rui.preferences.IRUIPreferenceConstants;
+import org.eclipse.jface.preference.IPreferenceStore;
 
 public class RUIPReferenceInitializer extends AbstractPreferenceInitializer {
 
 	public void initializeDefaultPreferences() {
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.setDefault(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_HCR_FAILED, IRUIPreferenceConstants.TESTSERVER_PROMPT);
+		store.setDefault(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_HCR_UNSUPPORTED, IRUIPreferenceConstants.TESTSERVER_PROMPT);
+		store.setDefault(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_OBSOLETE_METHODS, IRUIPreferenceConstants.TESTSERVER_PROMPT);
 	}
 }

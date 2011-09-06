@@ -42,7 +42,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.equinox.http.jetty;bundle-version="2.0.0",
  org.mortbay.jetty.server;bundle-version="6.1.0",
  org.mortbay.jetty.util;bundle-version="6.1.0",
- org.eclipse.edt.ide.deployment.core;bundle-version="0.7.0"
+ org.eclipse.edt.ide.deployment.core;bundle-version="0.7.0",
+ org.eclipse.jdt.debug;bundle-version="[3.6.0,4.0.0)"
 Export-Package: org.eclipse.edt.ide.rui.actions,
  org.eclipse.edt.ide.rui.document.utils,
  org.eclipse.edt.ide.rui.editor,

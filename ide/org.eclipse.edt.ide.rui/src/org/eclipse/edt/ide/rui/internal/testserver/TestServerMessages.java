@@ -30,4 +30,25 @@ public class TestServerMessages extends NLS {
 	public static String ServiceMappingRemovalsInvalidTokens;
 	public static String CouldNotGetPluginPath;
 	public static String ConfigServletBadStatus;
+	
+	public static String HotCodeReplaceFailureContinueButton;
+	public static String HotCodeReplaceFailureTerminateButton;
+	public static String HotCodeReplaceFailureRememberDecision;
+	public static String HotCodeReplaceFailureChangeLater;
+	public static String HotCodeReplaceFailureObsoleteMethodsTitle;
+	public static String HotCodeReplaceFailureObsoleteMethodsMsg;
+	public static String HotCodeReplaceFailureHCRFailedTitle;
+	public static String HotCodeReplaceFailureHCRFailedMsg;
+	public static String HotCodeReplaceFailureHCRUnsupportedMsg;
+	public static String HotCodeReplaceFailureTerminateMsg;
+	public static String HotCodeReplaceTerminateFailedTitle;
+	public static String HotCodeReplaceTerminateFailedMsg;
+	
+	public static String PreferenceHCRGroupLabel;
+	public static String PreferenceHCRFailedLabel;
+	public static String PreferenceHCRUnsupportedLabel;
+	public static String PreferenceObsoleteMethodsLabel;
+	public static String PreferencePromptLabel;
+	public static String PreferenceDoNothingLabel;
+	public static String PreferenceTerminateLabel;
 }

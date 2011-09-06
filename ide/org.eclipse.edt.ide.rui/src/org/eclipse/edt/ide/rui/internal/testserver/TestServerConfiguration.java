@@ -45,6 +45,7 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
@@ -52,6 +53,7 @@ import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.rui.internal.Activator;
 import org.eclipse.edt.ide.rui.internal.testserver.ServiceFinder.RestServiceMapping;
+import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.osgi.util.NLS;
 
@@ -82,7 +84,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		this.port = port;
 	}
 	
-	public void start(IProgressMonitor monitor, boolean waitForServerToStart) throws CoreException {
+	public synchronized void start(IProgressMonitor monitor, boolean waitForServerToStart) throws CoreException {
 		if (started) {
 			return;
 		}
@@ -140,6 +142,13 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 					}
 					catch (InterruptedException e) {
 					}
+				}
+			}
+			
+			for (IDebugTarget target : launch.getDebugTargets()) {
+				IJavaDebugTarget javaTarget = (IJavaDebugTarget)target.getAdapter(IJavaDebugTarget.class);
+				if (javaTarget != null) {
+					javaTarget.addHotCodeReplaceListener(new TestServerHotCodeReplaceListener(this));
 				}
 			}
 		}

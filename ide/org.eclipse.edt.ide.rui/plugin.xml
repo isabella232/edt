@@ -15,6 +15,12 @@ Register the Preference Pages
       		class="org.eclipse.edt.ide.rui.internal.preferences.RUIPreferencePage"
       		id="org.eclipse.edt.ide.rui.ruiPreferences">
       </page>
+      <page
+            category="org.eclipse.edt.ide.rui.ruiPreferences"
+            class="org.eclipse.edt.ide.rui.internal.testserver.TestServerPreferencePage"
+            id="org.eclipse.edt.ide.rui.testServerPreferences"
+            name="%TestServerPreferencePageName">
+      </page>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
