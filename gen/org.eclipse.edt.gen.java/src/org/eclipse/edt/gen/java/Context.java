@@ -174,7 +174,7 @@ public class Context extends EglContext {
 	public void invoke(String genMethod, Expression object, TemplateContext ctx, TabbedWriter out) {
 		// is this the first time into an expression group
 		Annotation annotation = object.getAnnotation(IEGLConstants.EGL_LOCATION);
-		if (!smapIsProcessing && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
+		if (!smapIsProcessing && annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
 			smapIsProcessing = true;
 			int thisEglLineNumber = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
 			// if we are continuing the same egl line, then skip writing out debug data
