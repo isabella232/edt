@@ -29,4 +29,14 @@
 			class="org.eclipse.edt.gen.javascriptdev.ide.JavaScriptDevGeneratorTabProvider">
 		</generatorTab>
    	</extension>
+ <extension point="org.eclipse.ui.navigator.navigatorContent">
+       <commonFilter
+            class="org.eclipse.edt.gen.javascriptdev.ide.DevJavascriptGenFolderFilter"                  
+            description="%DevJavascriptGenFolder.description"
+            id="org.eclipse.edt.ide.ui.packageexplorer.filter.DevJavascriptGenFolderFilter"            
+            name="%DevJavascriptGenFolder"            
+            activeByDefault="true">
+      </commonFilter>
+       
+ </extension>
 </plugin>
