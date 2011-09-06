@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.json.ArrayNode;
 import org.eclipse.edt.javart.json.NameValuePairNode;
 import org.eclipse.edt.javart.json.ObjectNode;
@@ -131,16 +132,18 @@ public class JsonUtilities {
 	public static Object[] getParameters(Method method, ArrayNode jsonParameters){
 		FunctionSignature signature = method.getAnnotation(FunctionSignature.class);
 		List<Object> parameters = new ArrayList<Object>();
-		int idx = 0;
-		for(FunctionParameter functionParameter : signature.parameters()){
+		int jsonIdx = 0;
+		for(int idx = 0; idx < signature.parameters().length; idx++ ){
+			FunctionParameter functionParameter = signature.parameters()[idx];
 			if(functionParameter.kind().equals(FunctionParameterKind.OUT)){
 				parameters.add(EglAny.ezeWrap(null));
 			}
-			else if(functionParameter.kind().equals(FunctionParameterKind.INOUT)){
-				parameters.add(EglAny.ezeWrap(JsonLib.convertToEgl(functionParameter.parameterType(), functionParameter.asOptions(), null, (ValueNode)jsonParameters.getValues().get(idx++))));
-			}
 			else{
-				parameters.add(JsonLib.convertToEgl(functionParameter.parameterType(), functionParameter.asOptions(), null, (ValueNode)jsonParameters.getValues().get(idx++)));
+				Object obj = JsonLib.convertToEgl(functionParameter.parameterType(), functionParameter.asOptions(), null, (ValueNode)jsonParameters.getValues().get(jsonIdx++));
+				if(method.getParameterTypes()[idx].equals(AnyBoxedObject.class)){
+					obj = EglAny.ezeWrap(obj);
+				}
+				parameters.add(obj);
 			}
 		}
 
