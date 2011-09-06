@@ -39,8 +39,13 @@ public class UpdateWebXMLProxyOperation extends AbstractDeploymentOperation {
 	
 	public void execute(DeploymentContext context, IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor)
 			throws CoreException {
+		
+		if ( context.getDeploymentDesc().getRUIApplication() == null || context.getDeploymentDesc().getRUIApplication().getRUIHandlers().size() == 0 ) {
+			return;
+		}
+		
 		/**
-		 * deploy fda7.jar and configure the __proxy
+		 * configure the __proxy
 		 */
 		monitor.subTask(Messages.J2EEDeploymentOperation_1);
 

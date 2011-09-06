@@ -44,6 +44,10 @@ public class CopyJSRuntimeResourcesOperation extends AbstractDeploymentOperation
 	
 	public void execute(DeploymentContext context, IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor)
 			throws CoreException {
+		if ( context.getDeploymentDesc().getRUIApplication() == null || context.getDeploymentDesc().getRUIApplication().getRUIHandlers().size() == 0 ) {
+			return;
+		}
+		
 		this.context = context;
 		model = context.getDeploymentDesc();
 		targetProjectName = DeploymentUtilities.getDeploymentTargetId(model.getDeploymentTarget(), null, model.getName());
