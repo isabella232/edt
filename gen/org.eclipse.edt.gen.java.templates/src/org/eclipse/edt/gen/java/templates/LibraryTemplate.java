@@ -18,6 +18,7 @@ import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
 
@@ -53,7 +54,7 @@ public class LibraryTemplate extends JavaTemplate {
 
 	public void genAccessor(Library library, Context ctx, TabbedWriter out) {
 		if (((Part) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated)).getFullyQualifiedName().equalsIgnoreCase(
-				library.getFullyQualifiedName()))
+			library.getFullyQualifiedName()))
 			out.print("this");
 		else
 			out.print(Constants.LIBRARY_PREFIX + library.getFullyQualifiedName().replace('.', '_') + "()");
@@ -73,8 +74,26 @@ public class LibraryTemplate extends JavaTemplate {
 	}
 
 	public void genGetterSetter(Library library, Context ctx, TabbedWriter out, Field arg) {
-		ctx.invoke(genGetter, arg, ctx, out);
-		ctx.invoke(genSetter, arg, ctx, out);
+		boolean found;
+		String name = arg.getName().substring(0, 1).toUpperCase();
+		if (arg.getName().length() > 1)
+			name = name + arg.getName().substring(1);
+		found = false;
+		for (int i = 0; i < library.getFunctions("get" + name).size(); i++) {
+			Function function = library.getFunctions("get" + name).get(i);
+			if (function.getParameters().size() == 0)
+				found = true;
+		}
+		if (!found)
+			ctx.invoke(genGetter, arg, ctx, out);
+		found = false;
+		for (int i = 0; i < library.getFunctions("set" + name).size(); i++) {
+			Function function = library.getFunctions("set" + name).get(i);
+			if (function.getParameters().size() == 1 && arg.getType() == function.getParameters().get(i).getType())
+				found = true;
+		}
+		if (!found)
+			ctx.invoke(genSetter, arg, ctx, out);
 	}
 
 	public void genXmlTransient(Library part, TabbedWriter out) {
@@ -84,6 +103,6 @@ public class LibraryTemplate extends JavaTemplate {
 	public void genRuntimeTypeName(Library library, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genPartName, library, ctx, out);
 	}
-	
+
 	public void genAnnotations(Library library, Context ctx, TabbedWriter out, Field field) {}
 }
