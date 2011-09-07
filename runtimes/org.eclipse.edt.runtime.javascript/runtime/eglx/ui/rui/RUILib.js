@@ -9,7 +9,7 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
  egl.defineClass(
-	'eglx.ui.rui', 'RUILib',
+	'eglx.ui.rui', 'RuiLib',
 {
 	"constructor" : function() {
 		if(this.initialized === undefined || !this.initialized){
@@ -18,7 +18,7 @@
 		}
 	}
 });
-egl.eglx.ui.rui.RUILib["sort"] = function(array, sortFunction) {
+egl.eglx.ui.rui.RuiLib["sort"] = function(array, sortFunction) {
 	if (egl.debug)
 		egl.enter("Runtime.sort");
 	try {
@@ -29,25 +29,25 @@ egl.eglx.ui.rui.RUILib["sort"] = function(array, sortFunction) {
 	if (egl.debug)
 		egl.leave("");
 };
-egl.eglx.ui.rui.RUILib["setTextSelectionEnabled"] = function(value) {
+egl.eglx.ui.rui.RuiLib["setTextSelectionEnabled"] = function(value) {
 	egl.setEnableTextSelection(value);
 };
-egl.eglx.ui.rui.RUILib["getTextSelectionEnabled"] = function() {
+egl.eglx.ui.rui.RuiLib["getTextSelectionEnabled"] = function() {
 	return egl.enableSelection;
 };
-egl.eglx.ui.rui.RUILib["getUserAgent"] = function() {
+egl.eglx.ui.rui.RuiLib["getUserAgent"] = function() {
 	return window.navigator.userAgent;
 };
-egl.eglx.ui.rui.RUILib["setTitle"] = function(value) {
+egl.eglx.ui.rui.RuiLib["setTitle"] = function(value) {
 	document.title = value;
 };
-egl.eglx.ui.rui.RUILib["getTitle"] = function() {
+egl.eglx.ui.rui.RuiLib["getTitle"] = function() {
 	return document.title;
 };
-egl.eglx.ui.rui.RUILib["setTheme"] = function(value) {
+egl.eglx.ui.rui.RuiLib["setTheme"] = function(value) {
 	egl.Document.body.setClass(value);
 };
-egl.eglx.ui.rui.RUILib["getTheme"] = function(value) {
+egl.eglx.ui.rui.RuiLib["getTheme"] = function(value) {
 	return egl.Document.body.getClass();
 };
-egl.eglx.ui.rui.RUILib["initialized"] = true;
+egl.eglx.ui.rui.RuiLib["initialized"] = true;
