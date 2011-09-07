@@ -26,10 +26,16 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 			// process the field
 			ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
 			out.print(" ");
-			ctx.invoke(genInitializeStatement, field.getType(), ctx, out, field);
+			ctx.invoke(genName, field, ctx, out);
+			out.print(" = ");
+			ctx.invoke(genInitialization, field, ctx, out);
+			out.println(";");
 			// as this is an expression that also creates a new line with the above println method, it throws off the smap
 			// ending line number by 1. We need to issue a call to correct this
 			ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
+			// now check for any statements to be processed
+			if (field.getInitializerStatements() != null)
+				ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
 		}
 	}
 }
