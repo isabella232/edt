@@ -105,6 +105,10 @@ public class ServiceFinder {
 		}
 		
 		try {
+			if (!project.hasNature(EGLCore.NATURE_ID)) {
+				return;
+			}
+			
 			IEGLProject eglProject = EGLCore.create(project);
 			if (eglProject == null) {
 				return;
