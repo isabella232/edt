@@ -22,63 +22,28 @@
 		<cvs cvsRoot=":pserver:anonymous@dev.eclipse.org:/cvsroot/tools"
 			dest="${build.result.folder}/widgetzips"
 			package="org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo_0.7.0 org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.remote_0.7.0 org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.local_1.6.1 org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.remote_1.6.1 org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.widgets_0.7.0 org.eclipse.edt/widgets/org.eclipse.edt.rui.widgets_0.7.0"/>
+		<property name="widgetsBaseDir" value="${build.result.folder}/widgetzips/org.eclipse.edt/widgets/"/>
 		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.widgets_0.7.0.zip"
-			basedir="${build.result.folder}/widgetzips/org.eclipse.edt.rui.widgets_0.7.0"/>
+			basedir="${widgetsBaseDir}/org.eclipse.edt.rui.widgets_0.7.0"/>
 		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo_0.7.0.zip"
-			basedir="${build.result.folder}/widgetzips/org.eclipse.edt.rui.dojo.widgets_0.7.0" 
+			basedir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_0.7.0" 
 			includes="EGLSource/**" excludes="**/*.egldd" update="true"/>
 		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo.remote_0.7.0.zip"
-			basedir="${build.result.folder}/widgetzips/org.eclipse.edt.rui.dojo.widgets_0.7.0" 
+			basedir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_0.7.0" 
 			includes="EGLSource/**" excludes="**/*.egldd" update="true"/>
 		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo_0.7.0.zip"
-			basedir="${build.result.folder}/widgetzips/org.eclipse.edt.rui.dojo.widgets_0.7.0" 
+			basedir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_0.7.0" 
 			includes="icons/** WebContent/**" update="true"/>
 		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo.remote_0.7.0.zip"
-			basedir="${build.result.folder}/widgetzips/org.eclipse.edt.rui.dojo.widgets_0.7.0" 
+			basedir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_0.7.0" 
 			includes="icons/** WebContent/**" update="true"/>
 		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo_0.7.0.zip"
-			basedir="${build.result.folder}/widgetzips/org.eclipse.edt.rui.dojo.runtime.local_1.6.1" 
+			basedir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.runtime.local_1.6.1" 
 			includes="WebContent/**" update="true"/>
 		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo.remote_0.7.0.zip"
-			basedir="${build.result.folder}/widgetzips/org.eclipse.edt.rui.dojo.runtime.remote_1.6.1" 
+			basedir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.runtime.remote_1.6.1" 
 			includes="WebContent/**" update="true"/>
 		<delete dir="${build.result.folder}/widgetzips"/>
-
-		<!-- 
-		
-		Check out
-			org.eclipse.edt.rui.dojo_0.7.0
-			org.eclipse.edt.rui.dojo.remote_0.7.0
-			org.eclipse.edt.rui.dojo.runtime.local_1.6.1
-			org.eclipse.edt.rui.dojo.runtime.remote_1.6.1
-			org.eclipse.edt.rui.dojo.widgets_0.7.0
-			org.eclipse.edt.rui.widgets_0.7.0		
-		
-		Copy org.eclipse.edt.rui.dojo.widgets_0.7.0/EGLSource except its DD file
-		     to org.eclipse.edt.rui.dojo.remote_0.7.0/EGLSource
-		     and org.eclipse.edt.rui.dojo_0.7.0/EGLSource
-		
-	    Copy org.eclipse.edt.rui.dojo.widgets_0.7.0/icons 
-	         to org.eclipse.edt.rui.dojo_0.7.0
-	         and org.eclipse.edt.rui.dojo.remote_0.7.0
-		
-	    Copy org.eclipse.edt.rui.dojo.widgets_0.7.0/WebContent 
-	         to org.eclipse.edt.rui.dojo_0.7.0
-	         and org.eclipse.edt.rui.dojo.remote_0.7.0
-	    
-	    Copy org.eclipse.edt.rui.dojo.runtime.local_1.6.1/WebContent
-	    	 to org.eclipse.edt.rui.dojo_0.7.0
-
-	    Copy org.eclipse.edt.rui.dojo.runtime.remote_1.6.1/WebContent
-	    	 to org.eclipse.edt.rui.dojo.remote_0.7.0
-	    	 
-	    Create a zip from org.eclipse.edt.rui.widgets_0.7.0
-	    Create a zip from org.eclipse.edt.rui.dojo_0.7.0
-	    Create a zip from org.eclipse.edt.rui.dojo.remote_0.7.0
-
-	    Copy the three zip files
-	    	 to org.eclipse.edt.ide.ui.resources/org.eclipse.edt.ide.ui.rui
-		-->
 	</target>
 
 	<!-- ===================================================================== -->
