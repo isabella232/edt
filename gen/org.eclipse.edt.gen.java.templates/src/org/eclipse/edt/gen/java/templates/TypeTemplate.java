@@ -20,7 +20,6 @@ import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.Classifier;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.InvocationExpression;
@@ -90,7 +89,7 @@ public class TypeTemplate extends JavaTemplate {
 
 	public void genDefaultValue(Type type, Context ctx, TabbedWriter out) {
 		if (TypeUtils.isReferenceType(type))
-			out.print("null");
+			ctx.invoke(genInstantiation, type, ctx, out);
 		else
 			out.print("\"Invalid default value\"");
 	}
@@ -286,13 +285,13 @@ public class TypeTemplate extends JavaTemplate {
 		ctx.invoke(genAssignment, arg.getLHS(), ctx, out, arg.getRHS(), " " + CommonUtilities.getNativeJavaAssignment(operator) + " ");
 	}
 
-	public void genInitializeMethod(Type type, Context ctx, TabbedWriter out, Field arg, EGLClass parent) {
+	public void genInitializeStatement(Type type, Context ctx, TabbedWriter out, Field arg) {
 		if (arg.getInitializerStatements() == null) {
 			ctx.invoke(genName, arg, ctx, out);
 			out.print(" = ");
 			ctx.invoke(genInitialization, arg, ctx, out);
 			out.println(";");
-		}
+		} else
+			ctx.invoke(genStatementNoBraces, arg.getInitializerStatements(), ctx, out);
 	}
-
 }

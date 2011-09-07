@@ -16,7 +16,6 @@ import java.util.List;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Part;
@@ -205,8 +204,7 @@ public class RecordTemplate extends JavaTemplate {
 	}
 
 	public void genAssignment(Record type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
-		if ( TypeUtils.isValueType( type ) )
-		{
+		if (TypeUtils.isValueType(type)) {
 			if (arg1.isNullable()) {
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(arg3);
@@ -216,9 +214,7 @@ public class RecordTemplate extends JavaTemplate {
 			out.print(", ");
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(")");
-		}
-		else
-		{
+		} else {
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(" = ");
 			ctx.invoke(genExpression, arg2, ctx, out);
@@ -229,15 +225,15 @@ public class RecordTemplate extends JavaTemplate {
 		ctx.invoke(genGetter, arg, ctx, out);
 		ctx.invoke(genSetter, arg, ctx, out);
 	}
-	
-	public void genXmlTransient(Record part, TabbedWriter out){
+
+	public void genXmlTransient(Record part, TabbedWriter out) {
 		out.println("@javax.xml.bind.annotation.XmlTransient");
 	}
-	
+
 	public void genAnnotations(Record part, Context ctx, TabbedWriter out, Field field) {}
 
-	public void genInitializeMethod(Record part, Context ctx, TabbedWriter out, Field arg, EGLClass parent) {
-		if(!arg.isNullable() || arg.getInitializerStatements() == null){
+	public void genInitializeStatement(Record part, Context ctx, TabbedWriter out, Field arg) {
+		if (!arg.isNullable() || arg.getInitializerStatements() == null) {
 			ctx.invoke(genName, arg, ctx, out);
 			out.print(" = ");
 			ctx.invoke(genInitialization, arg, ctx, out);

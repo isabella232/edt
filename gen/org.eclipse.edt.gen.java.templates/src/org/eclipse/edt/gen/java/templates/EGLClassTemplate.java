@@ -36,18 +36,20 @@ public class EGLClassTemplate extends JavaTemplate {
 		ctx.invoke(preGenFields, part, ctx);
 		ctx.invoke(preGenFunctions, part, ctx);
 		ctx.invoke(preGenAnnotations, part, ctx);
-		if(part.getAnnotation(org.eclipse.edt.gen.Constants.AnnotationXMLRootElement) == null) {
-			//add an xmlRootElement
+		if (part.getAnnotation(org.eclipse.edt.gen.Constants.AnnotationXMLRootElement) == null) {
+			// add an xmlRootElement
 			try {
-				Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + org.eclipse.edt.gen.Constants.AnnotationXMLRootElement);
+				Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter
+					+ org.eclipse.edt.gen.Constants.AnnotationXMLRootElement);
 				annotation.setValue("name", part.getId());
 				part.addAnnotation(annotation);
-			} catch (Exception e) {}
-		}	
+			}
+			catch (Exception e) {}
+		}
 	}
-	
+
 	public void preGenAnnotations(EGLClass part, Context ctx) {
-		for(Annotation annot : part.getAnnotations()){
+		for (Annotation annot : part.getAnnotations()) {
 			ctx.invoke(preGen, annot.getEClass(), ctx, annot, part);
 		}
 	}
@@ -93,10 +95,11 @@ public class EGLClassTemplate extends JavaTemplate {
 	}
 
 	public void genAnnotations(EGLClass part, Context ctx, TabbedWriter out) {
-		for(Annotation annot : part.getAnnotations()){
+		for (Annotation annot : part.getAnnotations()) {
 			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot);
 		}
 	}
+
 	public void genClassBody(EGLClass part, Context ctx, TabbedWriter out) {
 		// Add this part's file to the smap files list, so that this part is always the first file listed.
 		String file = IRUtils.getQualifiedFileName(part);
@@ -104,7 +107,7 @@ public class EGLClassTemplate extends JavaTemplate {
 		if (ctx.getSmapFiles().indexOf(file) < 0) {
 			ctx.getSmapFiles().add(file);
 		}
-		
+
 		ctx.invoke(genFields, part, ctx, out);
 		ctx.invoke(genLibraries, part, ctx, out);
 		ctx.invoke(genConstructors, part, ctx, out);
@@ -177,8 +180,10 @@ public class EGLClassTemplate extends JavaTemplate {
 	public void genInitializeMethodBody(EGLClass part, Context ctx, TabbedWriter out) {
 		List<Field> fields = part.getFields();
 		if (fields.size() > 0 && fields.get(0).getInitializerStatements() == null) {
-			// Work around JDT issue - if the first stmt in the initializer won't have an SMAP entry then add one anyway, mapped to the part declaration line.
-			// Otherwise for some reason the stepIntos skip right over the rest of the function. Only do this if there is at least one initializer statement.
+			// Work around JDT issue - if the first stmt in the initializer won't have an SMAP entry then add one anyway,
+			// mapped to the part declaration line.
+			// Otherwise for some reason the stepIntos skip right over the rest of the function. Only do this if there is at
+			// least one initializer statement.
 			boolean hasInit = false;
 			for (Field field : fields) {
 				if (field.getInitializerStatements() != null) {
@@ -186,7 +191,7 @@ public class EGLClassTemplate extends JavaTemplate {
 					break;
 				}
 			}
-			
+
 			if (hasInit) {
 				Annotation annotation = part.getAnnotation(IEGLConstants.EGL_LOCATION);
 				if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
@@ -202,19 +207,15 @@ public class EGLClassTemplate extends JavaTemplate {
 				}
 			}
 		}
-		
+
 		for (Field field : fields) {
 			ctx.invoke(genInitializeMethod, part, ctx, out, field);
 		}
 	}
 
 	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
-		if ( !(arg instanceof ConstantField) )
-		{
-			ctx.invoke(genInitializeMethod, arg.getType(), ctx, out, arg, part);
-			if (arg.getInitializerStatements() != null){
-				ctx.invoke(genStatementNoBraces, arg.getInitializerStatements(), ctx, out);
-			}
+		if (!(arg instanceof ConstantField)) {
+			ctx.invoke(genInitializeStatement, arg.getType(), ctx, out, arg);
 		}
 	}
 
@@ -243,10 +244,9 @@ public class EGLClassTemplate extends JavaTemplate {
 		out.print(Constants.LIBRARY_PREFIX + arg.getFullyQualifiedName().replace('.', '_') + " = (");
 		ctx.invoke(genRuntimeTypeName, (Type) arg, ctx, out, TypeNameKind.EGLImplementation);
 		out.print(")org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary(\"");
-		if(ctx.mapsToNativeType(arg)){
+		if (ctx.mapsToNativeType(arg)) {
 			out.print(ctx.getNativeMapping(arg.getFullyQualifiedName()));
-		}
-		else{
+		} else {
 			out.print(CommonUtilities.fullClassAlias(arg));
 		}
 		out.println("\");");
@@ -272,7 +272,7 @@ public class EGLClassTemplate extends JavaTemplate {
 	public void genDeclaration(EGLClass part, Context ctx, TabbedWriter out) {}
 
 	public void genSuperClass(EGLClass part, Context ctx, TabbedWriter out) {}
-	
+
 	public Integer genFieldTypeClassName(EGLClass part, Context ctx, TabbedWriter out, Integer arrayDimensions) {
 		ctx.invoke(genRuntimeTypeName, part, ctx, out, TypeNameKind.EGLImplementation);
 		return arrayDimensions;
