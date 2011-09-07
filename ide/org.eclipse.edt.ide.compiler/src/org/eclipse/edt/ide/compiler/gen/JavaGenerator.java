@@ -93,4 +93,9 @@ public class JavaGenerator extends AbstractGenerator {
 	protected String getRelativeFilePath(IFile eglFile, Part part) {
 		return new EclipseJavaGenerator(new EclipseEGL2Java(eglFile, part, this), null).getRelativeFileName(part);
 	}
+
+	@Override
+	protected String getGenerationArgumentsPropertyKey() {
+		return EDTCompilerIDEPlugin.PROPERTY_JAVAGEN_ARGUMENTS;
+	}
 }

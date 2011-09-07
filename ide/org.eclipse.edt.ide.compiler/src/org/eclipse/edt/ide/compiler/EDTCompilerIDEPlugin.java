@@ -35,7 +35,9 @@ public class EDTCompilerIDEPlugin extends AbstractUIPlugin {
 	 * Project-level property key indicating the directory to use for the Java generator.
 	 */
 	public static final String PROPERTY_JAVAGEN_DIR = "javaGenDirectory"; //$NON-NLS-1$
+	public static final String PROPERTY_JAVAGEN_ARGUMENTS = "javaGenArguments"; //$NON-NLS-1$
 	public static final String PROPERTY_JAVASCRIPTGEN_DIR = "jsGenDirectory"; //$NON-NLS-1$
+	public static final String PROPERTY_JAVASCRIPTGEN_ARGUMENTS = "jsGenArguments"; //$NON-NLS-1$
 
 	// The shared instance
 	private static EDTCompilerIDEPlugin plugin;

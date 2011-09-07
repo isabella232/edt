@@ -88,5 +88,10 @@ public class JavaScriptGenerator extends AbstractGenerator {
 	protected String getRelativeFilePath(IFile eglFile, Part part) {
 		return new EclipseJavaScriptGenerator(new EclipseEGL2JavaScript(eglFile, part, this), null).getRelativeFileName(part);
 	}
+
+	@Override
+	protected String getGenerationArgumentsPropertyKey() {
+		return EDTCompilerIDEPlugin.PROPERTY_JAVASCRIPTGEN_ARGUMENTS;
+	}
 }
 
