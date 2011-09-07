@@ -17,32 +17,62 @@
 	<!--   build.result.folder - folder to contain the build results           -->
 	<!-- ===================================================================== -->
 	<target name="pre.build.jars">
-		<!-- Create the three widget projects from the latest code in CVS. -->
+		
+		<!-- These tasks create zips containing the three widget projects from the latest code in CVS. -->
+
+		<!-- Update these properties when the version numbers change. -->
+		<property name="edtVersion" value="0.7.0"/>
+		<property name="dojoVersion" value="1.6.1"/>
+		
+		<!-- Check out the projects into a temporary directory. -->
 		<mkdir dir="${build.result.folder}/widgetzips"/>
 		<cvs cvsRoot=":pserver:anonymous@dev.eclipse.org:/cvsroot/tools"
 			dest="${build.result.folder}/widgetzips"
-			package="org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo_0.7.0 org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.remote_0.7.0 org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.local_1.6.1 org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.remote_1.6.1 org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.widgets_0.7.0 org.eclipse.edt/widgets/org.eclipse.edt.rui.widgets_0.7.0"/>
+			package="org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo_${edtVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.remote_${edtVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.local_${dojoVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.remote_${dojoVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.widgets_${edtVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.widgets_${edtVersion}"/>
+
+		<!-- Store the root of the extracted projects in a property. -->
 		<property name="widgetsBaseDir" value="${build.result.folder}/widgetzips/org.eclipse.edt/widgets"/>
-		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.widgets_0.7.0.zip"
-			basedir="${widgetsBaseDir}/org.eclipse.edt.rui.widgets_0.7.0"/>
-		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo_0.7.0.zip"
-			basedir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_0.7.0" 
-			includes="EGLSource/**" excludes="**/*.egldd" update="true"/>
-		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo.remote_0.7.0.zip"
-			basedir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_0.7.0" 
-			includes="EGLSource/**" excludes="**/*.egldd" update="true"/>
-		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo_0.7.0.zip"
-			basedir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_0.7.0" 
-			includes="icons/** WebContent/**" update="true"/>
-		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo.remote_0.7.0.zip"
-			basedir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_0.7.0" 
-			includes="icons/** WebContent/**" update="true"/>
-		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo_0.7.0.zip"
-			basedir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.runtime.local_1.6.1" 
-			includes="WebContent/**" update="true"/>
-		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo.remote_0.7.0.zip"
-			basedir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.runtime.remote_1.6.1" 
-			includes="WebContent/**" update="true"/>
+
+		<!-- Make org.eclipse.edt.rui.widgets_${edtVersion}.zip -->
+		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.widgets_${edtVersion}.zip"
+			basedir="${widgetsBaseDir}" 
+			includes="org.eclipse.edt.rui.widgets_${edtVersion}"/>
+		
+		<!-- To create the other two zips, we copy files into their directories then zip them up. -->
+		<property name="dojoDir" value="${widgetsBaseDir}/org.eclipse.edt.rui.dojo_${edtVersion}"/>
+		<property name="dojoRemoteDir" value="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.remote_${edtVersion}"/>
+		<copy todir="${dojoDir}/EGLSource" overwrite="true">
+			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_${edtVersion}/EGLSource" excludes="**/*.egldd"/>
+		</copy>
+		<copy todir="${dojoRemoteDir}/EGLSource" overwrite="true">
+			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_${edtVersion}/EGLSource" excludes="**/*.egldd"/>
+		</copy>
+		<copy todir="${dojoDir}/icons" overwrite="true">
+			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_${edtVersion}/icons"/>
+		</copy>
+		<copy todir="${dojoRemoteDir}/icons" overwrite="true">
+			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_${edtVersion}/icons"/>
+		</copy>
+		<copy todir="${dojoDir}/WebContent" overwrite="true">
+			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_${edtVersion}/WebContent"/>
+		</copy>
+		<copy todir="${dojoRemoteDir}/WebContent" overwrite="true">
+			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_${edtVersion}/WebContent"/>
+		</copy>
+		<copy todir="${dojoDir}/WebContent" overwrite="true">
+			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.runtime.local_${dojoVersion}/WebContent"/>
+		</copy>
+		<copy todir="${dojoRemoteDir}/WebContent" overwrite="true">
+			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.runtime.remote_${dojoVersion}/WebContent"/>
+		</copy>
+		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo_${edtVersion}.zip"
+			basedir="${widgetsBaseDir}"
+			includes="org.eclipse.edt.rui.dojo_${edtVersion}"/>
+		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo.remote_${edtVersion}.zip"
+			basedir="${widgetsBaseDir}"
+			includes="org.eclipse.edt.rui.dojo.remote_${edtVersion}"/>
+
+		<!-- Delete the temporary directory. -->
 		<delete dir="${build.result.folder}/widgetzips"/>
 	</target>
 
