@@ -51,7 +51,8 @@ public class GenerationSettingsComposite extends Composite {
 	protected final IResource resource;
 	protected final IPreferenceStore prefStore;
 	protected final IEclipsePreferences projectPrefs;
-	protected final String propertyID;
+	protected final String dirPropertyID;
+	protected final String argPropertyID;
 	protected final String preferenceID;
 	protected final IStatusChangeListener statusListener;
 	
@@ -61,11 +62,13 @@ public class GenerationSettingsComposite extends Composite {
 	protected Button browseOutside;
 	protected Text genInsideDirectory;
 	protected Text genOutsideDirectory;
+	protected Text genArguments;
+	
 	
 	private StatusInfo latestStatus = new StatusInfo();
 	
 	public GenerationSettingsComposite(Composite parent, int style, IResource resource, IPreferenceStore prefStore,
-			IEclipsePreferences projectPrefs, String propertyID, String preferenceID, IStatusChangeListener statusListener) {
+			IEclipsePreferences projectPrefs, String dirPropertyID, String argPropertyID, String preferenceID, IStatusChangeListener statusListener) {
 		super(parent, style);
 		
 		GridLayout layout = new GridLayout();
@@ -76,7 +79,8 @@ public class GenerationSettingsComposite extends Composite {
 		this.resource = resource;
 		this.prefStore = prefStore;
 		this.projectPrefs = projectPrefs;
-		this.propertyID = propertyID;
+		this.dirPropertyID = dirPropertyID;
+		this.argPropertyID = argPropertyID;
 		this.preferenceID = preferenceID;
 		this.statusListener = statusListener;
 		
@@ -85,7 +89,7 @@ public class GenerationSettingsComposite extends Composite {
 	}
 	
 	private void createContents() {
-		Group group = new Group(this, SWT.BORDER);
+		Group group = new Group(this, SWT.NONE);
 		group.setText(UINlsStrings.genSettingsGroupLabel);
 
 		GridLayout layout = new GridLayout();
@@ -285,6 +289,27 @@ public class GenerationSettingsComposite extends Composite {
 					}
 				});
 			}
+			
+			
+			
+			
+			Group argGroup = new Group(this, SWT.NONE);
+			argGroup.setText(UINlsStrings.genArguments);
+
+			GridLayout argLayout = new GridLayout();
+			argLayout.numColumns = 1;
+			argGroup.setLayout(argLayout);
+			argGroup.setFont(getFont());
+
+			GridData argData = new GridData(GridData.FILL_BOTH);
+			argData.horizontalIndent = 0;
+			argGroup.setLayoutData(argData);
+
+			genArguments = new Text(argGroup, SWT.BORDER);
+			data = new GridData(GridData.FILL_HORIZONTAL);
+			genArguments.setLayoutData(data);
+
+			
 		}
 	}
 	
@@ -293,7 +318,7 @@ public class GenerationSettingsComposite extends Composite {
 			genInsideDirectory.setText(prefStore.getString(preferenceID));
 		}
 		else {
-			String genDir = ProjectSettingsUtility.getGenerationDirectory(resource, prefStore, projectPrefs, propertyID, preferenceID);
+			String genDir = ProjectSettingsUtility.getGenerationDirectory(resource, prefStore, projectPrefs, dirPropertyID, preferenceID);
 			if (new Path(genDir).isAbsolute()) {
 				radioOutside.setSelection(true);
 				radioInside.setSelection(false);
@@ -311,6 +336,10 @@ public class GenerationSettingsComposite extends Composite {
 				genOutsideDirectory.setText(""); //$NON-NLS-1$
 				genInsideDirectory.setText(genDir);
 			}
+
+			String genArgument = ProjectSettingsUtility.getGenerationArgument(resource, prefStore, projectPrefs, argPropertyID);
+			genArguments.setText(genArgument);
+			
 			enableDisableControls();
 		}
 	}
@@ -357,7 +386,11 @@ public class GenerationSettingsComposite extends Composite {
 					value = EclipseUtilities.convertToInternalPath(value);
 				}
 				
-				ProjectSettingsUtility.setGenerationDirectory(resource, value, projectPrefs, propertyID);
+				ProjectSettingsUtility.setGenerationDirectory(resource, value, projectPrefs, dirPropertyID);
+
+				String argValue = genArguments.getText().trim();
+				ProjectSettingsUtility.setGenerationArgument(resource, argValue, projectPrefs, argPropertyID);
+
 			}
 			catch (BackingStoreException e) {
 				Logger.log("GenerationSettingsComposite.performOk", NLS.bind(UINlsStrings.genSettingsSaveError, resource.getFullPath().toString()), e); //$NON-NLS-1$
@@ -375,7 +408,8 @@ public class GenerationSettingsComposite extends Composite {
 	public void removePreferencesForAResource() {
 		if (projectPrefs != null) {
 			try {
-				ProjectSettingsUtility.setGenerationDirectory(resource, null, projectPrefs, propertyID);
+				ProjectSettingsUtility.setGenerationDirectory(resource, null, projectPrefs, dirPropertyID);
+				ProjectSettingsUtility.setGenerationArgument(resource, null, projectPrefs, argPropertyID);
 			}
 			catch (BackingStoreException e) {
 				Logger.log("GenerationSettingsComposite.removePreferencesForAResource", NLS.bind(UINlsStrings.CompilerPropertyPage_errorCleaningUpPrefStore, resource.getFullPath().toString()), e); //$NON-NLS-1$
@@ -390,9 +424,14 @@ public class GenerationSettingsComposite extends Composite {
 	public void removePreferencesForAllResources() {
 		if (projectPrefs != null) {
 			try {
-				Preferences propertyPrefs = projectPrefs.node( propertyID );
+				Preferences propertyPrefs = projectPrefs.node( dirPropertyID );
 				propertyPrefs.clear();
 				propertyPrefs.flush();
+
+				propertyPrefs = projectPrefs.node( argPropertyID );
+				propertyPrefs.clear();
+				propertyPrefs.flush();
+
 			} catch( BackingStoreException e ) {
 				Logger.log("GenerationSettingsComposite.removePreferencesForAllResources", NLS.bind(UINlsStrings.CompilerPropertyPage_errorCleaningUpPrefStore, resource.getFullPath().toString()), e); //$NON-NLS-1$
 			}
@@ -400,18 +439,16 @@ public class GenerationSettingsComposite extends Composite {
 	}
 	
 	public void performRemoval() {
-		String text = genInsideDirectory.getText().trim();
-		if (text.length() == 0) {
+		if(statusListener!=null){
 			latestStatus.setOK();
 			statusListener.statusChanged(latestStatus);
 		}
 	}
 
 	public void performAddition(){
-		String text = genInsideDirectory.getText().trim();
-		if (text.length() == 0) {
-			latestStatus.setError(UINlsStrings.genSettingsValidationBlank);
-			statusListener.statusChanged(latestStatus);
+		genInsideDirectory.setText(genInsideDirectory.getText());
+		if(resource!=null){
+			genOutsideDirectory.setText(genOutsideDirectory.getText());
 		}
 	}
 }

@@ -1140,4 +1140,5 @@ public class UINlsStrings extends NLS {
 	public static String genSettingsValidationDefaultBlank;
 	public static String genSettingsValidationDefaultRetlative;
 	public static String genSettingsValidationDefaultInvalid;
+	public static String genArguments;
 }
