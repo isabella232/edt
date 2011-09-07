@@ -36,7 +36,7 @@
 		<!-- Make org.eclipse.edt.rui.widgets_${edtVersion}.zip -->
 		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.widgets_${edtVersion}.zip"
 			basedir="${widgetsBaseDir}" 
-			includes="org.eclipse.edt.rui.widgets_${edtVersion}"/>
+			includes="org.eclipse.edt.rui.widgets_${edtVersion}/**"/>
 		
 		<!-- To create the other two zips, we copy files into their directories then zip them up. -->
 		<property name="dojoDir" value="${widgetsBaseDir}/org.eclipse.edt.rui.dojo_${edtVersion}"/>
@@ -67,10 +67,10 @@
 		</copy>
 		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo_${edtVersion}.zip"
 			basedir="${widgetsBaseDir}"
-			includes="org.eclipse.edt.rui.dojo_${edtVersion}"/>
+			includes="org.eclipse.edt.rui.dojo_${edtVersion}/**"/>
 		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo.remote_${edtVersion}.zip"
 			basedir="${widgetsBaseDir}"
-			includes="org.eclipse.edt.rui.dojo.remote_${edtVersion}"/>
+			includes="org.eclipse.edt.rui.dojo.remote_${edtVersion}/**"/>
 
 		<!-- Delete the temporary directory. -->
 		<delete dir="${build.result.folder}/widgetzips"/>
