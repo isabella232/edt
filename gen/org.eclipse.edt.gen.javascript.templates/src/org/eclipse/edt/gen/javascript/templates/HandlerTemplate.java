@@ -28,10 +28,11 @@ public class HandlerTemplate extends JavaScriptTemplate {
 	}
 
 	public void genClassHeader(Handler handler, Context ctx, TabbedWriter out) {
-		if (CommonUtilities.isBasicHandler(handler)) {
-			out.print("egl.defineClass(");
-		} else if (CommonUtilities.isRUIWidget(handler)) {
+		if (CommonUtilities.isRUIWidget(handler)) {
 			out.print("egl.defineRUIWidget(");
+		}
+		else{
+			out.print("egl.defineClass(");
 		}
 
 		out.print(singleQuoted(handler.getPackageName().toLowerCase()));
