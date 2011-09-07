@@ -63,7 +63,7 @@ public class JavaScriptDevGenerator extends AbstractGenerator {
 
 	@Override
 	protected String getGenerationDirectoryPropertyKey() {
-		return Activator.PROPERTY_EXAMPLEGEN_DIR;
+		return Activator.PROPERTY_JSDEVGEN_DIR;
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class JavaScriptDevGenerator extends AbstractGenerator {
 
 	@Override
 	protected String getGenerationDirectoryPreferenceKey() {
-		return Activator.PREFERENCE_DEFAULT_EXAMPLEGEN_DIRECTORY;
+		return Activator.PREFERENCE_DEFAULT_JSDEVGEN_DIRECTORY;
 	}
 
 	@Override
@@ -84,5 +84,10 @@ public class JavaScriptDevGenerator extends AbstractGenerator {
 	@Override
 	protected String getRelativeFilePath(IFile eglFile, Part part) {
 		return new EclipseJavaScriptGenerator(new EclipseJavaScriptDevGenerator(eglFile, part, this), null).getRelativeFileName(part);
+	}
+
+	@Override
+	protected String getGenerationArgumentsPropertyKey() {
+		return Activator.PROPERTY_JSDEVGEN_ARGUMENTS;
 	}
 }

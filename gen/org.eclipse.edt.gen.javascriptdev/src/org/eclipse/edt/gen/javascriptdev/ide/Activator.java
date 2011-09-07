@@ -20,11 +20,12 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractUIPlugin {
 
-	public static final String PROPERTY_EXAMPLEGEN_DIR = "exampleGenDirectory"; //$NON-NLS-1$
+	public static final String PROPERTY_JSDEVGEN_DIR = "jsDevGenDirectory"; //$NON-NLS-1$
+	public static final String PROPERTY_JSDEVGEN_ARGUMENTS = "jsDevGenArguments"; //$NON-NLS-1$
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.eclipse.edt.gen.javascriptdev"; //$NON-NLS-1$
 
-	public static final String PREFERENCE_DEFAULT_EXAMPLEGEN_DIRECTORY = PLUGIN_ID + ".defaultExampleGenDirectory"; //$NON-NLS-1$
+	public static final String PREFERENCE_DEFAULT_JSDEVGEN_DIRECTORY = PLUGIN_ID + ".defaultJSDevGenDirectory"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;
@@ -61,6 +62,6 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	protected void initializeDefaultPreferences(IPreferenceStore store) {
-		store.setDefault(PREFERENCE_DEFAULT_EXAMPLEGEN_DIRECTORY, "javascriptDev"); //$NON-NLS-1$
+		store.setDefault(PREFERENCE_DEFAULT_JSDEVGEN_DIRECTORY, "javascriptDev"); //$NON-NLS-1$
 	}
 }

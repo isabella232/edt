@@ -49,7 +49,7 @@ public class JavaScriptDevGeneratorTabProvider extends AbstractGeneratorTabProvi
 				this.projectPreferenceStore = new ProjectScope(getResource().getProject()).getNode(Activator.PLUGIN_ID);
 			}
 			genSettings = new GenerationSettingsComposite(getComposite(), SWT.NULL, getResource(), Activator.getDefault().getPreferenceStore(),
-				this.projectPreferenceStore, Activator.PROPERTY_EXAMPLEGEN_DIR, Activator.PREFERENCE_DEFAULT_EXAMPLEGEN_DIRECTORY, getStatusChangeListener());
+				this.projectPreferenceStore, Activator.PROPERTY_JSDEVGEN_DIR, Activator.PROPERTY_JSDEVGEN_ARGUMENTS, Activator.PREFERENCE_DEFAULT_JSDEVGEN_DIRECTORY, getStatusChangeListener());
 			genSettings.setLayoutData(new GridData(GridData.FILL_BOTH));
 		}
 		return this.getComposite();
