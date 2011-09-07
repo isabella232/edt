@@ -46,6 +46,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.core.model.EGLCore;
+import org.eclipse.edt.ide.rui.internal.wizards.NewWizardMessages;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
@@ -83,11 +84,11 @@ public class ImportRUIProjectsOperation extends WorkspaceModifyOperation {
 		if (monitor == null) {
 			monitor= new NullProgressMonitor();
 		}
-		monitor.beginTask("Import widget project " + projectName, 10);
+		monitor.beginTask(NewWizardMessages.ImportTask + projectName, 10);
 		// Only import the widgets project if it doesn't exist
 		if(!widgetsProject.exists()){
 			try{
-				monitor.subTask("unzip widgets");
+				monitor.subTask(NewWizardMessages.ImportTask_Unzip);
 				unzipWidgets( projectName );
 				monitor.worked(6);
 				if(!widgetsProject.exists()){

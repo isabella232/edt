@@ -35,4 +35,6 @@ public class NewWizardMessages extends NLS {
 	public static String RUILibraryPage_details_label;
 	public static String RUILibraryPage_version_tooltip;
 
+	public static String ImportTask;
+	public static String ImportTask_Unzip;
 }
