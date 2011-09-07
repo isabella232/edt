@@ -29,6 +29,7 @@ import org.eclipse.datatools.connectivity.drivers.jdbc.IJDBCDriverDefinitionCons
 import org.eclipse.datatools.connectivity.internal.ui.wizards.CPWizardNode;
 import org.eclipse.datatools.connectivity.internal.ui.wizards.ProfileWizardProvider;
 import org.eclipse.datatools.connectivity.ui.actions.AddProfileViewAction;
+import org.eclipse.datatools.connectivity.ui.dse.dialogs.ConnectionDisplayProperty;
 import org.eclipse.datatools.modelbase.sql.schema.Database;
 import org.eclipse.datatools.modelbase.sql.schema.Schema;
 import org.eclipse.datatools.modelbase.sql.schema.helper.DatabaseHelper;
@@ -37,6 +38,7 @@ import org.eclipse.datatools.modelbase.sql.tables.Table;
 import org.eclipse.edt.compiler.internal.sql.util.SQLUtility;
 import org.eclipse.edt.compiler.internal.util.Encoder;
 import org.eclipse.edt.ide.sql.SQLConstants;
+import org.eclipse.edt.ide.sql.SQLNlsStrings;
 import org.eclipse.edt.ide.sql.SQLPlugin;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -58,10 +60,11 @@ public class EGLSQLUtility {
 	static {
 		ArrayList<String> profiles = new ArrayList<String>();
 		profiles.add("org.eclipse.datatools.connectivity.db.derby.embedded.connectionProfile");
-		profiles.add("org.eclipse.datatools.enablement.ibm.db2.iseries.connectionProfile");
 		profiles.add("org.eclipse.datatools.enablement.ibm.db2.luw.connectionProfile");
+		profiles.add("org.eclipse.datatools.enablement.ibm.db2.iseries.connectionProfile");
 		profiles.add("org.eclipse.datatools.enablement.ibm.db2.zseries.connectionProfile");
 		profiles.add("org.eclipse.datatools.enablement.ibm.informix.connectionProfile");
+		profiles.add("org.eclipse.datatools.enablement.mysql.connectionProfile");
 		profiles.add("org.eclipse.datatools.enablement.msft.sqlserver.connectionProfile");
 		profiles.add("org.eclipse.datatools.enablement.oracle.connectionProfile");
 		profiles.add("com.ibm.etools.egl.db2.zvse.ui.names.connectionProfile");
@@ -358,6 +361,37 @@ public class EGLSQLUtility {
 		return action.getAddedProfile();
 	}
 	
+	public static ConnectionDisplayProperty[] getConnectionDisplayProperties(IConnectionProfile profile) {
+		ConnectionDisplayProperty[] properties = new ConnectionDisplayProperty[8];
+
+		properties[0] = new ConnectionDisplayProperty(
+				SQLNlsStrings.SQL_CONNECTION_DATABASE_PROPERTY,
+				EGLSQLUtility.getSQLVendorProperty(profile) + " "
+						+ EGLSQLUtility.getSQLProductVersion(profile));
+		properties[1] = new ConnectionDisplayProperty(
+				SQLNlsStrings.SQL_CONNECTION_DBNAME_PROPERTY,
+				EGLSQLUtility.getDBNameProperty(profile));
+		properties[2] = new ConnectionDisplayProperty(
+				SQLNlsStrings.SQL_CONNECTION_JDBC_PROPERTY, EGLSQLUtility
+						.getSQLJDBCDriverClassPreference(profile));
+		properties[3] = new ConnectionDisplayProperty(
+				SQLNlsStrings.SQL_CONNECTION_LOCATION_PROPERTY,
+				EGLSQLUtility.getLoadingPath(profile));
+		properties[4] = new ConnectionDisplayProperty(
+				SQLNlsStrings.SQL_CONNECTION_URL_PROPERTY, EGLSQLUtility
+						.getSQLConnectionURLPreference(profile));
+		properties[5] = new ConnectionDisplayProperty(
+				SQLNlsStrings.SQL_CONNECTION_USER_ID_PROPERTY, EGLSQLUtility
+						.getSQLUserId(profile));
+		properties[6] = new ConnectionDisplayProperty(
+				SQLNlsStrings.SQL_CONNECTION_USER_PASSWORD_PROPERTY, EGLSQLUtility
+						.getSQLPassword(profile));
+		properties[7] = new ConnectionDisplayProperty(
+				SQLNlsStrings.SQL_CONNECTION_JNDI_PROPERTY,"jdbc/" + EGLSQLUtility.getDBNameProperty(profile));
+
+		return properties;
+	}
+	
 	private static IEGLEDTSQLUtil createEDTSQLUtil() {
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(SQLPlugin.PLUGIN_ID, EDT_SQL_UTIL_EXTENSION_ID);
 		if ( extensionPoint != null ) {
@@ -376,6 +410,16 @@ public class EGLSQLUtility {
 				}
 			}
     	}
+		return null;
+	}
+	
+	public static String getDBProviderID(String productName) {
+		for(int i=0; i< profileIds.length; i++) {
+			if(profileIds[i].contains(productName.toLowerCase())) {
+				return profileIds[i];
+			}
+		}
+		
 		return null;
 	}
 }

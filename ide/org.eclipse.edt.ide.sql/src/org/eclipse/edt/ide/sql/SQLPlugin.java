@@ -146,18 +146,13 @@ public class SQLPlugin extends AbstractUIPlugin {
 		// Version 7.5.1.4 had a boolean preference, but in 7.5.1.5 there are 4 possible
 		// values so it's now a string.  To migrate smoothly from the old preference to
 		// the new, check for the old one first.
-		if ( getPreferenceStore().getBoolean( ISQLPreferenceConstants.SQL_RETRIEVE_USE_CHAR_FOR_DATE_OPTION ) )
-		{
+		if ( getPreferenceStore().getBoolean( ISQLPreferenceConstants.SQL_RETRIEVE_USE_CHAR_FOR_DATE_OPTION ) ) {
 			// The old preference is set to true so return CHAR.
 			return IEGLConstants.KEYWORD_CHAR;
-		}
-		else if ( getPreferenceStore().contains( ISQLPreferenceConstants.SQL_RETRIEVE_USE_CHAR_FOR_DATE_OPTION ) )
-		{
+		} else if ( getPreferenceStore().contains( ISQLPreferenceConstants.SQL_RETRIEVE_USE_CHAR_FOR_DATE_OPTION ) ) {
 			// The old preference is set to false so return "".
 			return "";
-		}
-		else
-		{
+		} else {
 			// Use the new preference.
 			return getPreferenceStore().getString( ISQLPreferenceConstants.SQL_RETRIEVE_USE_TEXT_TYPE_FOR_DATE_OPTION );
 		}
