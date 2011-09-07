@@ -142,7 +142,7 @@ public class ProjectTemplateSelectionPage extends WizardSelectionPage implements
 
 			handleSelectedTemplate();
 
-			boolean b = (wizNode != null && wizNode.isContentCreated() && wizNode.getWizard() != null && wizNode.getWizard().canFinish());
+			boolean b = (wizNode != null && wizNode.getWizard() != null && wizNode.getWizard().canFinish());
 			setPageComplete(b);
 		} else {
 			setPageComplete(false);
