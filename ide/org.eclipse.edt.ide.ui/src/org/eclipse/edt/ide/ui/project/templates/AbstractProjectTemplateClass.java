@@ -97,6 +97,10 @@ public abstract class AbstractProjectTemplateClass implements
 		listOps.add(new EGLPackageOperation(packageConfiguration));
 	}
 	
+	public boolean canFinish(){
+		return false;
+	}
+	
 	public void setDefaultPackages(String[] defaultPackages) {
 		this.defaultPackages = defaultPackages;
 	}

@@ -23,4 +23,5 @@ public interface IProjectTemplateClass  {
 	
 	public List<WorkspaceModifyOperation> getOperations(ProjectConfiguration eglProjConfiguration, int eglFeatureMask, ISchedulingRule rule);
 	public void applyTemplate(IProject project);
+	public boolean canFinish();
 }

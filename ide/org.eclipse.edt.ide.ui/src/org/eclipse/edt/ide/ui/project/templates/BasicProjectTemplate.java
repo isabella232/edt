@@ -27,6 +27,10 @@ public class BasicProjectTemplate extends AbstractProjectTemplateClass {
 		
 	}
 	
+	public boolean canFinish(){
+		return true;
+	}
+	
 	@Override
 	protected void setTargetRuntime(ProjectConfiguration eglProjConfiguration) {
 		eglProjConfiguration.setTargetRuntimeValue(ProjectConfiguration.JAVA_PLATFORM);

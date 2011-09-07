@@ -117,4 +117,9 @@ public class ProjectTemplate implements IProjectTemplate {
 		}
 	}
 
+	@Override
+	public boolean canFinish() {
+		return templateClass.canFinish();
+	}
+
 }

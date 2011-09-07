@@ -83,6 +83,13 @@ public interface IProjectTemplate {
 	public boolean hasWizard();
 	
 	/**
+	 * Returns true if this template can be finished without configuration.
+	 * 
+	 * @return
+	 */
+	public boolean canFinish();
+	
+	/**
 	 * Initializes the template using the supplied IConfigurationElement. 
 	 * 
 	 * (Templates are typically contributed via an extension point)
@@ -90,4 +97,5 @@ public interface IProjectTemplate {
 	 * @param configElement
 	 */
 	public void init(IConfigurationElement configElement);
+	
 }
