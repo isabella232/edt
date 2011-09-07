@@ -393,14 +393,15 @@ public class EGLDDBindingBlock extends EGLDDBaseBlock {
 			boolean removeSuccesful = false;
 			if(obj instanceof EGLBinding){
 				removeSuccesful = bindings.getEglBinding().remove(obj);
-			}
-			else if(obj instanceof NativeBinding)
+			} else if(obj instanceof NativeBinding) {
 				removeSuccesful = bindings.getNativeBinding().remove(obj);
-			else if(obj instanceof WebBinding){
+			} else if(obj instanceof WebBinding) {
 				removeSuccesful = bindings.getWebBinding().remove(obj);
-			}
-			else if(obj instanceof RestBinding)
+			} else if(obj instanceof RestBinding) {
 				removeSuccesful = bindings.getRestBinding().remove(obj);
+			} else if (obj instanceof SQLDatabaseBinding) {
+				removeSuccesful = bindings.getSqlDatabaseBinding().remove(obj);
+			}
 			if(removeSuccesful)
 				EGLDDBaseFormPage.updateTableViewerAfterRemove(selectionIndex, fTableViewer, fBtnRemove);
 		}

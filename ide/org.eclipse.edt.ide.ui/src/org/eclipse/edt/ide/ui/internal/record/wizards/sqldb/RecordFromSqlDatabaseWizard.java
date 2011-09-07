@@ -14,17 +14,34 @@ package org.eclipse.edt.ide.ui.internal.record.wizards.sqldb;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.datatools.connectivity.IConnectionProfile;
 import org.eclipse.datatools.connectivity.IManagedConnection;
 import org.eclipse.datatools.connectivity.sqm.core.connection.ConnectionInfo;
 import org.eclipse.datatools.connectivity.sqm.internal.core.util.ConnectionUtil;
+import org.eclipse.datatools.connectivity.ui.dse.dialogs.ConnectionDisplayProperty;
 import org.eclipse.edt.compiler.internal.EGLBasePlugin;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceGenerator;
+import org.eclipse.edt.ide.internal.sql.util.EGLSQLUtility;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
+import org.eclipse.edt.ide.ui.internal.deployment.Bindings;
+import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
+import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
+import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
+import org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding;
+import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 import org.eclipse.edt.ide.ui.internal.record.NewRecordSummaryPage;
 import org.eclipse.edt.ide.ui.internal.record.NewRecordWizard;
 import org.eclipse.edt.ide.ui.internal.record.conversion.sqldb.DataToolsObjectsToEglSource;
+import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
+import org.eclipse.edt.ide.ui.internal.util.UISQLUtility;
 import org.eclipse.edt.ide.ui.templates.wizards.TemplateWizard;
+import org.eclipse.edt.ide.ui.wizards.BindingSQLDatabaseConfiguration;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangingEvent;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -107,7 +124,7 @@ public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWork
 		return new IRunnableWithProgress() {
 
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-				final String results = generateRecords(monitor);
+				final String results = generateRecords(monitor,false);
 
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
@@ -123,14 +140,14 @@ public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWork
 		return new IRunnableWithProgress() {
 
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-				final String results = generateRecords(monitor);
+				final String results = generateRecords(monitor,true);
 				((NewRecordWizard) getParentWizard()).setContentObj(results);
 			}
 		};
 
 	}
 
-	protected String generateRecords(IProgressMonitor monitor) throws InterruptedException {
+	protected String generateRecords(IProgressMonitor monitor,boolean isFinished) throws InterruptedException {
 		List tables = config.getSelectedTables();
 		monitor.beginTask("Generating record parts", tables.size());
 
@@ -152,12 +169,58 @@ public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWork
 
 						EglSourceGenerator generator = new EglSourceGenerator(d);
 						generator.getContext().put(DataToolsObjectsToEglSource.DATA_DEFINITION_OBJECT, connection.getDatabaseDefinition());
+						generator.getContext().put(DataToolsObjectsToEglSource.TABLE_NAME_QUALIFIED, config.isQualifiedTableNames());
 						generator.generate(table);
 						buffer.append(generator.getResult());
 						
 						monitor.worked(1);
 					} catch (Exception ex) {
 						ex.printStackTrace();
+					}
+				}
+			}
+			
+			if(isFinished) {
+				BindingSQLDatabaseConfiguration sqlConfig = new BindingSQLDatabaseConfiguration();
+				IFile eglddFile = getEGLDDFileHandle(sqlConfig);
+				
+				if(eglddFile != null) {
+					EGLDeploymentRoot deploymentRoot = null;
+					try {
+						deploymentRoot = EGLDDRootHelper.getEGLDDFileSharedWorkingModel(eglddFile, false);
+						
+						IConnectionProfile profile = connection.getConnectionProfile();
+						ConnectionDisplayProperty[] properties = EGLSQLUtility.getConnectionDisplayProperties(profile);
+						UISQLUtility.setBindingSQLDatabaseConfiguration(sqlConfig, properties);
+						
+						Deployment deployment = deploymentRoot.getDeployment();
+						DeploymentFactory factory = DeploymentFactory.eINSTANCE;
+						
+						Bindings bindings = deployment.getBindings();
+						if(bindings == null) {
+							bindings = factory.createBindings();
+							deployment.setBindings(bindings);
+						}
+						EList<SQLDatabaseBinding> existedSqlBindings = bindings.getSqlDatabaseBinding();
+						
+						boolean existed = false;
+						for(SQLDatabaseBinding dbBinding : existedSqlBindings) {
+							if(sqlConfig.getDbms().equals(dbBinding.getDbms())) {
+								existed = true;
+								break;
+							}
+						}
+						
+						if(!existed) {
+							sqlConfig.executeAddSQLDatabaseBinding(bindings);
+						}
+						
+						//persist the file if we're the only client 
+						if(!EGLDDRootHelper.isWorkingModelSharedByUserClients(eglddFile))
+							EGLDDRootHelper.saveEGLDDFile(eglddFile, deploymentRoot);
+					}finally{
+						if(deploymentRoot != null)
+							EGLDDRootHelper.releaseSharedWorkingModel(eglddFile, false);
 					}
 				}
 			}
@@ -168,5 +231,27 @@ public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWork
 		}
 
 		return buffer.toString();
+	}
+	
+	
+	private IFile getEGLDDFileHandle(BindingSQLDatabaseConfiguration sqlConfig) {
+		sqlConfig = new BindingSQLDatabaseConfiguration();
+		
+        IPath sourcePath = new Path(sqlConfig.getContainerName());
+		String fileName = CoreUtility.getValidProjectName(sqlConfig.getProjectName());
+		if(fileName != null && fileName.trim().length()>0) {
+			sourcePath = sourcePath.append(fileName);	
+			sourcePath = sourcePath.addFileExtension(EGLDDRootHelper.EXTENSION_EGLDD);
+			IFile eglddFile = ResourcesPlugin.getWorkspace().getRoot().getFile(sourcePath);
+			
+			//if this egldd does not exist, we should create one 
+			if(eglddFile == null || !eglddFile.exists()) {
+				String encodingName = EGLBasePlugin.getPlugin().getPreferenceStore().getString(EGLBasePlugin.OUTPUT_CODESET);
+				EGLDDRootHelper.createNewEGLDDFile(eglddFile, encodingName);						
+			}
+			return eglddFile;
+		}
+		
+		return null;
 	}
 }

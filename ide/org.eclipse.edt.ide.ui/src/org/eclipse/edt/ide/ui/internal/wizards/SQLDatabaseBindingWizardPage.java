@@ -25,6 +25,7 @@ import org.eclipse.edt.ide.sql.ISQLPreferenceConstants;
 import org.eclipse.edt.ide.sql.SQLNlsStrings;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
+import org.eclipse.edt.ide.ui.internal.util.UISQLUtility;
 import org.eclipse.edt.ide.ui.wizards.BindingSQLDatabaseConfiguration;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -278,7 +279,7 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 			enableConnectionsControls(true, true);
 			IConnectionProfile profile = getSelectedConnection();
 			if (profile != null) {
-				ConnectionDisplayProperty[] properties = getConnectionDisplayProperties(profile);
+				ConnectionDisplayProperty[] properties = EGLSQLUtility.getConnectionDisplayProperties(profile);
 				if (properties != null) {
 					int propertyCount = properties.length;
 					for (int index = 0; index < propertyCount; index++) {
@@ -288,6 +289,8 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 								properties[index].getPropertyName(),
 								properties[index].getValue() });
 					}
+					
+					UISQLUtility.setBindingSQLDatabaseConfiguration(getConfiguration(), properties);
 				}
 
 			}
@@ -302,48 +305,6 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 		//connectionPassword.setEnabled(isEnabled);
 	}
 	
-	private ConnectionDisplayProperty[] getConnectionDisplayProperties(
-			IConnectionProfile profile) {
-		ConnectionDisplayProperty[] properties = new ConnectionDisplayProperty[7];
-
-		properties[0] = new ConnectionDisplayProperty(
-				SQLNlsStrings.SQL_CONNECTION_DATABASE_PROPERTY,
-				EGLSQLUtility.getSQLVendorProperty(profile) + " "
-						+ EGLSQLUtility.getSQLProductVersion(profile));
-		getConfiguration().setDbms(properties[0].getValue());
-		
-		properties[1] = new ConnectionDisplayProperty(
-				SQLNlsStrings.SQL_CONNECTION_DBNAME_PROPERTY,
-				EGLSQLUtility.getDBNameProperty(profile));
-		getConfiguration().setDbName(properties[1].getValue());
-		
-		properties[2] = new ConnectionDisplayProperty(
-				SQLNlsStrings.SQL_CONNECTION_JDBC_PROPERTY, EGLSQLUtility
-						.getSQLJDBCDriverClassPreference(profile));
-		getConfiguration().setDriverClass(properties[2].getValue());
-		
-		properties[3] = new ConnectionDisplayProperty(
-				SQLNlsStrings.SQL_CONNECTION_LOCATION_PROPERTY,
-				EGLSQLUtility.getLoadingPath(profile));
-		
-		properties[4] = new ConnectionDisplayProperty(
-				SQLNlsStrings.SQL_CONNECTION_URL_PROPERTY, EGLSQLUtility
-						.getSQLConnectionURLPreference(profile));
-		getConfiguration().setConnUrl(properties[4].getValue());
-		
-		properties[5] = new ConnectionDisplayProperty(
-				SQLNlsStrings.SQL_CONNECTION_USER_ID_PROPERTY, EGLSQLUtility
-						.getSQLUserId(profile));
-		getConfiguration().setUserName(properties[5].getValue());
-		
-		properties[6] = new ConnectionDisplayProperty(
-				SQLNlsStrings.SQL_CONNECTION_USER_PASSWORD_PROPERTY, EGLSQLUtility
-						.getSQLPassword(profile));
-		getConfiguration().setPassword(properties[6].getValue());
-
-		return properties;
-	}
-	
 	private void createPropertySection(Composite parent) {
 
 		propertiesLabel = new Label(parent, SWT.NONE);
@@ -356,6 +317,7 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 		connectionPropertiesTable = new Table(parent, SWT.BORDER);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
+		gd.heightHint = 150;
 		connectionPropertiesTable.setLayoutData(gd);
 		connectionPropertiesTable.setLinesVisible(true);
 		connectionPropertiesTable.setHeaderVisible(true);

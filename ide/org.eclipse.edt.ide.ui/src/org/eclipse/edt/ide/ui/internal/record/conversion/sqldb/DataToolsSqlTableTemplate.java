@@ -18,8 +18,15 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 public class DataToolsSqlTableTemplate extends DataToolsSqlTemplate {
 
 	public void genTable(org.eclipse.datatools.modelbase.sql.tables.Table table, EglSourceContext ctx, TabbedWriter out){
+		boolean isTableQualified = (Boolean)ctx.get(DataToolsObjectsToEglSource.TABLE_NAME_QUALIFIED);
+		
 		out.print("record " + table.getName() + " type Entity ");
-		out.println("{ @table { \"" + table.getName() + "\" } }");		
+		if(isTableQualified) {
+			out.println("{ @table { \"" + table.getSchema().getName() + "." +table.getName() + "\" } }");		
+		} else {
+			out.println("{ @table { \"" + table.getName() + "\" } }");		
+		}
+		
 		Object[] columns = table.getColumns().toArray();
 		for (Object column : columns) {
 			ctx.invoke(genColumn, (Object)column, ctx, out);	

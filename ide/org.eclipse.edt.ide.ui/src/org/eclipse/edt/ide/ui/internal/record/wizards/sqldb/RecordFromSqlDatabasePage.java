@@ -15,7 +15,6 @@ package org.eclipse.edt.ide.ui.internal.record.wizards.sqldb;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
@@ -26,12 +25,9 @@ import java.util.Map;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.datatools.connectivity.IConnectionProfile;
-import org.eclipse.datatools.connectivity.IConnectionProfileProvider;
 import org.eclipse.datatools.connectivity.IManagedConnection;
-import org.eclipse.datatools.connectivity.IPropertiesPersistenceHook;
 import org.eclipse.datatools.connectivity.ProfileManager;
 import org.eclipse.datatools.connectivity.drivers.jdbc.IJDBCDriverDefinitionConstants;
-import org.eclipse.datatools.connectivity.internal.ConnectionProfileProvider;
 import org.eclipse.datatools.connectivity.sqm.core.connection.ConnectionInfo;
 import org.eclipse.datatools.connectivity.sqm.core.internal.ui.util.resources.ImagePath;
 import org.eclipse.datatools.connectivity.sqm.internal.core.util.ConnectionUtil;
@@ -40,31 +36,28 @@ import org.eclipse.datatools.modelbase.sql.schema.Catalog;
 import org.eclipse.datatools.modelbase.sql.schema.Database;
 import org.eclipse.datatools.modelbase.sql.schema.Schema;
 import org.eclipse.datatools.modelbase.sql.tables.Table;
+import org.eclipse.edt.ide.internal.sql.util.RDBConnectionUtility;
+import org.eclipse.edt.ide.sql.SQLPlugin;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusUtil;
+import org.eclipse.edt.ide.ui.internal.record.NewRecordWizardMessages;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.window.SameShellProvider;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -73,12 +66,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.dialogs.PropertyDialogAction;
-import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 
 public class RecordFromSqlDatabasePage extends WizardPage implements SelectionListener, ICheckStateListener {
 
@@ -119,8 +108,8 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 	 */
 	public RecordFromSqlDatabasePage(RecordFromSqlDatabaseWizardConfiguration config) {
 		super(RecordFromSqlDatabasePage.class.getName());
-		setTitle("Database Tables");
-		setDescription("Select the tables to create record parts for.");
+		setTitle(NewRecordWizardMessages.RecordFromSqlDatabasePage_Title);
+		setDescription(NewRecordWizardMessages.RecordFromSqlDatabasePage_Description);
 
 		this.configuration = config;
 
@@ -156,16 +145,28 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 		// createTableButtons(composite);
 
 		qualifyTableNamesCheckbox = new Button(composite, SWT.CHECK);
-		qualifyTableNamesCheckbox.setText("&Qualify table names with schema");
+		qualifyTableNamesCheckbox.setText(NewRecordWizardMessages.RecordFromSqlDatabasePage_QualifyTableNames);
 		GridData data = new GridData();
 		data.horizontalSpan = 2;
 		qualifyTableNamesCheckbox.setLayoutData(data);
+		qualifyTableNamesCheckbox.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				boolean isSelected = ((Button)e.widget).getSelection();
+				configuration.setQualifiedTableNames(isSelected);
+			}
+		});
 
 		saveConnectionToDDCheckbox = new Button(composite, SWT.CHECK);
-		saveConnectionToDDCheckbox.setText("&Save data source configuration to deployment descriptor");
+		saveConnectionToDDCheckbox.setText(NewRecordWizardMessages.RecordFromSqlDatabasePage_SaveConnectionToDD);
 		data = new GridData();
 		data.horizontalSpan = 2;
 		saveConnectionToDDCheckbox.setLayoutData(data);
+		saveConnectionToDDCheckbox.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				boolean isSelected = ((Button)e.widget).getSelection();
+				configuration.setSaveConnectionToDeploymentDescriptor(isSelected);
+			}
+		});
 
 		setErrorMessage(null);
 		setMessage(null);
@@ -287,7 +288,7 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 
 		// Create the database controls
 		Label dbLabel = new Label(dbComposite, SWT.NONE);
-		dbLabel.setText("Database connection:"); // TODO: NLS
+		dbLabel.setText(NewRecordWizardMessages.RecordFromSqlDatabasePage_DBConnectionlabel);
 
 		dbConnectionCombo = new Combo(dbComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -297,8 +298,8 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 		new Label(dbComposite, SWT.NONE);
 
 		newDatabaseConnectionLink = new Link(dbComposite, SWT.PUSH);
-		newDatabaseConnectionLink.setText("<a>Create new connection...</a>"); // TODO:
-																				// NLS
+		newDatabaseConnectionLink.setText(NewRecordWizardMessages.RecordFromSqlDatabasePage_CreateDBLink);
+																				
 		newDatabaseConnectionLink.addSelectionListener(this);
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		newDatabaseConnectionLink.setLayoutData(gd);
@@ -320,7 +321,7 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 		tableComposite.setLayoutData(tableData);
 
 		Label tableLabel = new Label(tableComposite, SWT.NONE);
-		tableLabel.setText("&Tables:");
+		tableLabel.setText(NewRecordWizardMessages.RecordFromSqlDatabasePage_TablesLabel);
 
 		dbTableViewer = new CheckboxTreeViewer(tableComposite);
 		dbTableViewer.setContentProvider(new DatabaseTableContentProvider());
@@ -418,7 +419,7 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 		if (e.getSource() == dbConnectionCombo) {
 			String connectionName = dbConnectionCombo.getText();
 
-			refreshDatabaseTable(connectionName);
+			updateDatabaseCombo(connectionName);
 
 			if (confirmOverwrite)
 				confirmOverwrite = false;
@@ -429,72 +430,12 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 				dbConnectionCombo.add(profile.getName());
 				existingConnections.put(profile.getName(), profile);
 				dbConnectionCombo.select(dbConnectionCombo.indexOf(profile.getName()));
-				refreshDatabaseTable(dbConnectionCombo.getText());
+				updateDatabaseCombo(dbConnectionCombo.getText());
 			}
 
 		}
 
-		// @bd1a start
-		// else if (isBidi && (e.getSource() == bidiSettingsButton)) {
-		//
-		// bidiSettings.setBidiSettingsButtonSelected(bidiSettingsButton.getSelection());
-		// bidiSettings.setEnablement();
-		// //@bd2a Start
-		// dbBidiSettings.setBidiSettingsButtonSelected(bidiSettingsButton.getSelection());
-		// dbBidiSettings.setEnablement();
-		// //@bd2a End
-		//
-		// String connectionName = databaseConnectionCombo.getText();
-		// final IConnectionProfile selectedConnection =
-		// ((IConnectionProfile)existingConnections.get(connectionName));
-		// configuration.setDatabaseConnection(selectedConnection); //This step
-		// must be done before inputChanged() is called
-		// if(selectedConnection!=null)
-		// tableViewer.setInput(selectedConnection);
-		//
-		// bidiSettings.currentConnection = selectedConnection;
-		// bidiSettings.currentTableViewer = tableViewer;
-		// if (null != configuration &&
-		// dbBidiSettings.isBidiSettingsButtonSelected()) { //@bd2c
-		// RecordFromSqlDatabaseWizardConfiguration.BidiSettingSelected = true;
-		// //@bd3a
-		// configuration.setBidiAttributes(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// bidiSettings.getOptions());
-		// //@bd2a Start
-		// if(dbBidiSettings.getBidiContentHashMap()!=null &&
-		// dbBidiSettings.getBidiContentHashMap().size()>0)
-		// configuration.setBidiContentHashMap(dbBidiSettings.getBidiContentHashMap());
-		// if (dbBidiSettings.isClientVisual()){
-		// configuration.setClientVisual(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// true);
-		// configuration.setDBVisual(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// dbBidiSettings.isDBVisual());
-		// configuration.setDBRTL(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// dbBidiSettings.isDBRTLDirection());
-		// configuration.setDBSymSwap(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// dbBidiSettings.isDBSymSwap());
-		// configuration.setDBNumSwap(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// dbBidiSettings.isDBNumSwap());
-		// configuration.setClientRTL(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// dbBidiSettings.isClientRTLDirection());
-		// }
-		// else if(dbBidiSettings.getBct()!=null)
-		// configuration.setBct(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// dbBidiSettings.getBct());
-		// //@bd2a End
-		// }
-		// //@bd2a Start
-		// else{
-		// RecordFromSqlDatabaseWizardConfiguration.BidiSettingSelected = false;
-		// //@bd3a
-		// configuration.setClientVisual(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// false);
-		// configuration.removeBct(RecordFromSqlDatabaseWizardConfiguration.DB_KEY);
-		// }
-		// //@bd2a End
-		// setBidiAttributesForSelectedTables();
-		// }
-		// @bd1a end
+		//EGLDataPartsPagesMainPage
 
 		validatePage();
 
@@ -509,100 +450,31 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 
 		return action.getAddedProfile();
 	}
-
-	private void refreshDatabaseTable(String connectionName) {
-		final IConnectionProfile selectedConnection = ((IConnectionProfile) existingConnections.get(connectionName));
-		configuration.setDatabaseConnection(selectedConnection); // This step
-																	// must be
-																	// done
-																	// before
-																	// inputChanged()
-																	// is called
-
-		dbTableViewer.setInput(null);
-		handleTablesSelected();
+	
+	private void updateDatabaseCombo(String connectionName) {
+		final IConnectionProfile selectedConnection = ((IConnectionProfile)existingConnections.get(connectionName));
+		configuration.setDatabaseConnection(selectedConnection); //This step must be done before inputChanged() is called
 		
-		if (selectedConnection != null) {
+		if(selectedConnection != null) {
 			IRunnableWithProgress runnable = new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException {
-					monitor.beginTask("Searching for tables", IProgressMonitor.UNKNOWN);
-
-					if (ensureConnection()) {
-						if (!monitor.isCanceled()) {
-							IManagedConnection managedConnection = selectedConnection.getManagedConnection(ConnectionUtil.CONNECTION_TYPE);
-							if (managedConnection != null) {
-								ConnectionInfo info = (ConnectionInfo) managedConnection.getConnection().getRawConnection();
-								Database database = info.getSharedDatabase();
-
-								final EList allSchemas = new BasicEList();
-								EList catalogs = database.getCatalogs();
-								if (catalogs != null && catalogs.size() > 0) {
-									Iterator itCatalogs = catalogs.iterator();
-									while (itCatalogs.hasNext()) {
-										Catalog catalog = (Catalog) itCatalogs.next();
-										if (catalog.getSchemas() != null && catalog.getSchemas().size() > 0) {
-											for (Iterator it = catalog.getSchemas().iterator(); it.hasNext();) {
-												allSchemas.add(it.next());
-											}
-										}
-
-									}
-								} else {
-									EList schemas = database.getSchemas();
-									if (schemas != null && schemas.size() > 0) {
-										allSchemas.addAll(schemas);
-									}
-								}
-
-								// We are doing this here since these operations can be slow and we want this to happen in this runnable vs. hanging up the UI thread in the viewer content provider
-								Iterator schemaInterator = allSchemas.listIterator();
-								while (schemaInterator.hasNext() && !monitor.isCanceled()) {
-									Schema schema = (Schema) schemaInterator.next();
-									if (schema.getTables().size() == 0) {
-										schemaInterator.remove();
-									} else {
-										Iterator tableIterator = ((EList) schema.getTables()).iterator();
-										while (tableIterator.hasNext() && !monitor.isCanceled()) {
-											// may be a view
-											Object potentialTable = tableIterator.next();
-											if (potentialTable instanceof org.eclipse.datatools.modelbase.sql.tables.Table)
-												monitor.subTask(((org.eclipse.datatools.modelbase.sql.tables.Table) potentialTable).getName());
-										}
-									}
-								}
-
-								if (monitor.isCanceled()) {
-									allSchemas.clear();									
-								}
-								
-								Display.getDefault().asyncExec(new Runnable() {
-									public void run() {
-										dbTableViewer.setInput(allSchemas);
-									}
-								});
-								
-								monitor.done();
-							}
-						}
+					monitor.beginTask(NewRecordWizardMessages.RecordFromSqlDatabasePage_RetrievingTablesTask, 1);
+					
+					if(selectedConnection!=null) {
+						dbTableViewer.setInput(selectedConnection);
 					}
+						
+					monitor.worked(1);
 				}
-
 			};
-			
 			try {
-				// new
-				// ProgressMonitorDialog(getControl().getShell()).run(false,
-				// false, runnable);
-				getWizard().getContainer().run(true, true, runnable);
-			} catch (InterruptedException exp) {
-				exp.printStackTrace();
-			} catch (InvocationTargetException exp) {
-				exp.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
+				new ProgressMonitorDialog(getControl().getShell()).run(false, false, runnable);
+			} catch(InterruptedException exp) {
+				
+			} catch(InvocationTargetException exp) {
+				
 			}
 		}
-
 	}
 
 	public void checkStateChanged(CheckStateChangedEvent event) {
@@ -630,7 +502,9 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 		
 		configuration.setSelectedTables(selectedTables);
 		
-		numSelectedLabel.setText(selectedTables.size() + " table(s) selected.");
+		Integer tableSelected = new Integer(selectedTables.size());
+		numSelectedLabel.setText(NewRecordWizardMessages.bind(NewRecordWizardMessages.RecordFromSqlDatabasePage_TablesSelected,new String[] {tableSelected.toString()}));
+		//numSelectedLabel.setText(selectedTables.size() + " table(s) selected.");
 		numSelectedLabel.getParent().layout();
 	}
 
@@ -711,15 +585,13 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 
 	protected void validateDatabaseConnection(IConnectionProfile dbConnection, StatusInfo status) {
 		if (dbConnection == null) {
-			// status.setError(WizardMessages.EGLDataPartsPagesTypePage_Validation_NoConnection);
-			status.setError("Not connected.");
+			status.setError(NewRecordWizardMessages.RecordFromSqlDatabasePage_Validation_NoConnection);
 		}
 	}
 
 	protected void validateTables(List selectedTables, StatusInfo status) {
 		if (selectedTables == null || selectedTables.isEmpty()) {
-			// status.setError(WizardMessages.EGLDataPartsPagesTypePage_Validation_NoTable);
-			status.setError("No tables selected.");
+			status.setError(NewRecordWizardMessages.RecordFromSqlDatabasePage_Validation_NoTable);
 		}
 	}
 
@@ -816,14 +688,15 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 	}
 
 	public class DatabaseTableContentProvider implements ITreeContentProvider {
+		IConnectionProfile model = null;
+		EList allSchemas;
 
-		public Object[] getElements(Object inputElement) {
-			if (inputElement instanceof EList) {
-				EList schemas = (EList) inputElement;
-				return schemas.toArray(new Object[schemas.size()]);
-			} else {
-				return null;
+		public Object[] getElements(Object inputElement) { //inputElement should be a ConnectionInfo (may be null)
+			if (allSchemas != null) {
+				return allSchemas.toArray();
 			}
+			
+			return null;
 		}
 
 		@Override
@@ -867,104 +740,70 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 		}
 
 		public void dispose() {
-
 		}
 
+		@Override
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-			// if (newInput instanceof EList) {
-			// model = ((IConnectionProfile) newInput);
-			// }
-
+			if(newInput instanceof IConnectionProfile) {
+				model = ((IConnectionProfile)newInput);
+				
+				updateTableModel();
+			}
 		}
+		
+		private void updateTableModel() {
+			Database database = null;
 
-		/**
-		 * Attempts to ensure that the current ConnectionInfo has an active
-		 * Connection
-		 * 
-		 * @return true if connection is active
-		 */
-
-		private boolean validatePassword(String password) {
-			return (password != null && !password.equals(""));
-		}
-
-	}
-
-	public static IStatus connectWithPromptIfNeeded(IConnectionProfile profile, boolean reprompt) {
-		String profileName = profile.getName();
-
-		Shell shell = null;// Display.getCurrent().getActiveShell();
-		IStatus connectionStatus = null;
-		ConnectionInfo info = null;
-		if (profile != null) {
-			if (shell == null) {
-				connectionStatus = profile.connect();
-			} else {
-				connectionStatus = profile.connectWithoutJob();
-				if (reprompt && profile.getConnectionState() != IConnectionProfile.CONNECTED_STATE && connectionStatus.getCode() != IStatus.OK) {
-					String title = "Connection Failed: " + profile.getName();// TODO:
-																				// NLS.bind(EGLSQLNlsStrings.SQL_CONNECTION_FAILURE_MSG,
-																				// profile.getName());
-					MessageDialog.openInformation(shell, title, connectionStatus.getChildren()[0].getException().getLocalizedMessage());
-
-					// Prompt to fix properties
-					PropertyDialogAction propertyDialogAction = new PropertyDialogAction(new SameShellProvider(shell), new ConnectionPropertiesWizardSelectionProvider(profile));
-
-					StructuredSelection selection = new StructuredSelection(profile);
-					propertyDialogAction.selectionChanged(selection);
-					if (!profile.arePropertiesComplete() && propertyDialogAction.isApplicableForSelection()) {
-						// something in createDialog is failing to initialize
-						// the properties correctly the first time
-						// around. I can't debug it because it crashes the
-						// debugger when I set a breakpoint, so I'll
-						// call twice for now to get the initialization to
-						// happen until I figure it out.
-						PreferenceDialog dialog = propertyDialogAction.createDialog();
-						dialog = propertyDialogAction.createDialog();
-						String shellText = "Connection Properties for " + profile.getName();// TODO:
-																							// NLS.bind(EGLSQLNlsStrings.SQL_CONNECTION_PROPERTIES_FOR,
-																							// profile.getName());
-						dialog.getShell().setText(shellText);
-						IConnectionProfileProvider provider = profile.getProvider();
-						IPropertiesPersistenceHook hook = ((ConnectionProfileProvider) provider).getPropertiesPersistenceHook();
-						String initialPage = hook.getConnectionPropertiesPageID();
-						if (initialPage != null) {
-							((IWorkbenchPreferenceContainer) dialog).openPage(initialPage, null);
-						}
-						if (dialog.open() == Dialog.CANCEL) {
-							reprompt = false;
+			if (model != null) {
+				try {
+					if (ensureConnection()) {
+						if (model.getConnectionState() == IConnectionProfile.CONNECTED_STATE) {
+							IManagedConnection managedConnection = model.getManagedConnection(ConnectionUtil.CONNECTION_TYPE);
+							if (managedConnection != null) {
+								ConnectionInfo info = (ConnectionInfo) managedConnection.getConnection().getRawConnection();
+								database = info.getSharedDatabase();
+								// retrieve schemas, tables, and columns.
+								EList schemas = getSchemas(database);
+								allSchemas = new BasicEList();
+								
+								Iterator schemaInterator = schemas.listIterator();
+								while (schemaInterator.hasNext()) {
+									Schema schema = (Schema) schemaInterator.next();
+									if (schema.getTables().size() > 0) {
+										allSchemas.add(schema);
+									}
+								}		
+							}
 						}
 					}
-					if (reprompt) {
-						connectionStatus = profile.connectWithoutJob();
-					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}
-
-		return connectionStatus;
-		// return RSCConnectionsHelper.connectWithPromptIfNeeded(profile1,
-		// reprompt, Display.getCurrent().getActiveShell());
-	}
-
-	private static final class ConnectionPropertiesWizardSelectionProvider implements ISelectionProvider {
-		private IStructuredSelection selection;
-
-		public ConnectionPropertiesWizardSelectionProvider(IConnectionProfile connectionProfile) {
-			selection = new StructuredSelection(connectionProfile);
-		}
-
-		public void addSelectionChangedListener(ISelectionChangedListener listener) {
-		}
-
-		public ISelection getSelection() {
-			return selection;
-		}
-
-		public void removeSelectionChangedListener(ISelectionChangedListener listener) {
-		}
-
-		public void setSelection(ISelection selection) {
+		
+		private EList getSchemas(Database database) {
+			EList allSchemas = new BasicEList();
+			EList catalogs = database.getCatalogs();
+			if (catalogs != null && catalogs.size() > 0) {
+				Iterator itCatalogs = catalogs.iterator();
+	            while (itCatalogs.hasNext()){
+	            	Catalog catalog = (Catalog) itCatalogs.next();
+	                if (catalog.getSchemas() != null && catalog.getSchemas().size() > 0){
+	                	for (Iterator it = catalog.getSchemas().iterator(); it.hasNext();)
+	                    {
+	                		allSchemas.add(it.next());
+	                    }
+	                }
+				
+	            }
+			} else {
+				EList schemas = database.getSchemas();
+				if (schemas != null && schemas.size() > 0) {
+					allSchemas.addAll(schemas);
+				}
+			}
+			return allSchemas;
 		}
 	}
 
@@ -1005,21 +844,15 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 		IConnectionProfile profile = configuration.getDatabaseConnection();
 
 		if (profile == null) {
-			connectionStatus.setError("Unable to connect");
-			// TODO:
-			// .setError(WizardMessages.EGLDataPartsPagesTypePage_Validation_UnableToConnect);
+			connectionStatus.setError(NewRecordWizardMessages.RecordFromSqlDatabasePage_Validation_UnableToConnect);
 			isConnected = false;
 		} else {
 			if (profile.getConnectionState() == IConnectionProfile.CONNECTED_STATE) {
 				isConnected = true;
 			} else {
-				IStatus status = connectWithPromptIfNeeded(profile, true);
-				// .getPlugin().getSQLPromptDialogOption());
+				IStatus status = RDBConnectionUtility.connectWithPromptIfNeeded(profile, SQLPlugin.getPlugin().getSQLPromptDialogOption());
 				if (!status.isOK()) {
-					connectionStatus
-					// TODO:
-					// //.setError(WizardMessages.EGLDataPartsPagesTypePage_Validation_UnableToConnect);
-							.setError("Unable to connect.");
+					connectionStatus.setError(NewRecordWizardMessages.RecordFromSqlDatabasePage_Validation_UnableToConnect);
 				} else {
 					isConnected = true;
 				}

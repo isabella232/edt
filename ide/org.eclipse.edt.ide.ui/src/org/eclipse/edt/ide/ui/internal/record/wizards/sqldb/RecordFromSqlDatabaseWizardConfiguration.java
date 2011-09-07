@@ -211,4 +211,12 @@ public class RecordFromSqlDatabaseWizardConfiguration {
 	public void setUseDelimitedIdentifiers(boolean useDelimitedIdentifiers) {
 		this.useDelimitedIdentifiers = useDelimitedIdentifiers;
 	}
+	
+	public boolean isSaveConnectionToDeploymentDescriptor() {
+		return saveConnectionToDeploymentDescriptor;
+	}
+
+	public void setSaveConnectionToDeploymentDescriptor(boolean saveConnectionToDeploymentDescriptor) {
+		this.saveConnectionToDeploymentDescriptor = saveConnectionToDeploymentDescriptor;
+	}
 }

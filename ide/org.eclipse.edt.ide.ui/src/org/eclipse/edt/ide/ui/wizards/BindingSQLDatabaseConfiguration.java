@@ -26,6 +26,8 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 	private String password="";
 	
 	private String dbName="";
+	private String jndiName="";
+	private String connLocation;
 
 	public BindingSQLDatabaseConfiguration() {
 		super();
@@ -90,6 +92,22 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 		this.dbName = dbName;
 	}
 	
+	public String getJndiName(){
+		return jndiName;
+	}
+	
+	public void setJndiName(String jndiName){
+		this.jndiName = jndiName;
+	}
+	
+	public String getConnLocation(){
+		return connLocation;
+	}
+	
+	public void setConnLocation(String connLocation){
+		this.connLocation = connLocation;
+	}
+	
 	public Object executeAddSQLDatabaseBinding(Bindings bindings){
 		SQLDatabaseBinding sqlBinding = DeploymentFactory.eINSTANCE.createSQLDatabaseBinding();
 		bindings.getSqlDatabaseBinding().add(sqlBinding);
@@ -102,6 +120,8 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 		sqlBinding.setSqlJDBCDriverClass(getDriverClass());
 		
 		sqlBinding.setSqlDB(getDbName());
+		sqlBinding.setSqlJNDIName(getJndiName());
+		sqlBinding.setSqlSchema(getConnLocation());
 		
 		return sqlBinding;
 	}

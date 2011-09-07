@@ -11,15 +11,29 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.deployment.ui;
 
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.datatools.connectivity.IConnectionProfile;
+import org.eclipse.datatools.connectivity.internal.ConnectionProfile;
+import org.eclipse.datatools.connectivity.ui.PingJob;
+import org.eclipse.edt.ide.internal.sql.util.EGLSQLUtility;
 import org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import java.util.Properties;
+import org.eclipse.edt.compiler.internal.util.Encoder;
 
 public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 
@@ -33,6 +47,8 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 	private Text fSqlPassword;
 	private Text fSqlSchema;
 	private Text fSqlValidationConnectionURL;
+	
+	protected Button btnPing;
 	
 	public SQLDatabaseBindingDetailPage(){
 		super();
@@ -85,9 +101,10 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 
 		toolkit.createLabel(parent, SOAMessages.LabelSqlPassword);
 		fSqlPassword = createTextControl(toolkit, parent);
+		fSqlPassword.setEchoChar('*'); //$NON-NLS-1$
 		fSqlPassword.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
-				fSQLDatabaseBinding.setSqlPassword(fSqlPassword.getText());		
+				fSQLDatabaseBinding.setSqlPassword(Encoder.encode(fSqlPassword.getText()));		
 			}			
 		});
 
@@ -115,6 +132,74 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 				fSQLDatabaseBinding.setSqlValidationConnectionURL(fSqlValidationConnectionURL.getText());		
 			}			
 		});
+		
+		btnPing = new Button(parent, SWT.NONE);
+		btnPing.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+				testConnection();
+			}
+		});
+
+		GridData pingGD = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.FILL_HORIZONTAL);
+		pingGD.horizontalSpan = 3;
+		btnPing.setLayoutData(pingGD);
+		btnPing.setText(SOAMessages.SQLDatabaseBindingDetailPageTestConnection); //$NON-NLS-1$
+	}
+	
+	protected void testConnection() {
+		String profileName = fDbms.getText();
+		
+		//String profileProviderID = "org.eclipse.datatools.connectivity.db.derby.embedded.connectionProfile";
+		if(profileName != null) {
+			 String[] profiles = profileName.split(" ");
+			 String profileProviderID = EGLSQLUtility.getDBProviderID(profiles[0]);
+			 String profileDescription = "";
+			 String parentProfile = "";
+			 boolean isAutoConnect = false;
+			 ConnectionProfile profile = new ConnectionProfile(profileName, profileDescription,
+						profileProviderID, parentProfile, isAutoConnect);
+				
+				profile.setBaseProperties(getProfileProperties(profiles));
+
+				//getShell().getDisplay()
+				BusyIndicator.showWhile( Display.getCurrent(), 
+				        createTestConnectionRunnable( profile ) );	
+		}
+	}
+	
+	private Properties getProfileProperties(String[] profiles) {
+		Properties copy = new Properties();
+		
+		copy.put("org.eclipse.datatools.connectivity.db.connectionProperties", "");
+		copy.put("org.eclipse.datatools.connectivity.db.savePWD", false);
+		if(fSqlSchema.getText() != null) {
+			copy.put("jarList", fSqlSchema.getText().trim());
+		} else {
+			copy.put("jarList", null);
+		}
+		
+		copy.put("org.eclipse.datatools.connectivity.db.username", fSqlID.getText());
+		copy.put("org.eclipse.datatools.connectivity.db.password", fSqlPassword.getText());
+		copy.put("org.eclipse.datatools.connectivity.db.driverClass", fSqlJDBCDriverClass.getText());
+		
+		copy.put("org.eclipse.datatools.connectivity.db.databaseName", fSqlDB.getText());
+		copy.put("org.eclipse.datatools.connectivity.db.URL", fSqlValidationConnectionURL.getText());
+		
+		return copy;
+	}
+	protected Runnable createTestConnectionRunnable( final IConnectionProfile profile ) {
+        final Job pingJob = new PingJob( Display.getCurrent().getActiveShell(), profile );
+        pingJob.schedule();
+        return new Runnable() {
+            public void run() {
+                try {
+                    pingJob.join();
+                }
+                catch (InterruptedException e) {
+                }
+            }
+        };
 	}
 	
 	public void selectionChanged(IFormPart part, ISelection selection) {
@@ -144,8 +229,11 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		if (sqljndiname != null)
 			fSqlJNDIName.setText(sqljndiname);
 		String sqlpassword = fSQLDatabaseBinding.getSqlPassword();
-		if (sqlpassword != null)
+		if (sqlpassword != null && sqlpassword.trim().length() > 0 && Encoder.isEncoded(sqlpassword)) {
+			fSqlPassword.setText(Encoder.decode(sqlpassword));
+		} else if (sqlpassword != null) {
 			fSqlPassword.setText(sqlpassword);
+		}
 		String sqlschema = fSQLDatabaseBinding.getSqlSchema();
 		if (sqlschema != null)
 			fSqlSchema.setText(sqlschema);

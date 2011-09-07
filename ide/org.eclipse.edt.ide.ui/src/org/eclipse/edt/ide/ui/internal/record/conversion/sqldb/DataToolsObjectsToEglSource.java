@@ -17,6 +17,7 @@ import org.eclipse.edt.ide.ui.internal.record.conversion.AbstractObjectToEglSour
 public class DataToolsObjectsToEglSource extends AbstractObjectToEglSource {
 	
 	public static final String DATA_DEFINITION_OBJECT = "dataDefinition";
+	public static final String TABLE_NAME_QUALIFIED = "tableNameQualified";
 
 	@Override
 	public String[] getTemplatePath() {
