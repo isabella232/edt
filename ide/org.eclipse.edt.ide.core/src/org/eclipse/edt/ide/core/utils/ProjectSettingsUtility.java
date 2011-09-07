@@ -333,6 +333,25 @@ public class ProjectSettingsUtility {
 	}
 	
 	/**
+	 * Returns the argument for the generator. 
+	 * 
+	 * @param resource      The resource
+	 * @param store         The workspace-level preference store
+	 * @param prefs         The project-level preference store
+	 * @param propertyID    The project-level property ID
+	 * @return the directory in which to generate the resource
+	 */
+	public static String getGenerationArgument(IResource resource, IPreferenceStore store, IEclipsePreferences prefs,
+			String propertyID) {
+		Preferences propertyPrefs = prefs.node(propertyID);
+		String setting = ProjectSettingsUtility.findSetting(resource.getFullPath(), propertyPrefs, true);
+		if (setting != null && setting.length() > 0) {
+			return setting;
+		}else{
+			return "";
+		}
+	}
+	/**
 	 * Sets the directory in which to generate the resource. If a null or blank value is passed in, we remove the project-level
 	 * setting, causing the resource to inherit parent settings.
 	 * 
@@ -389,5 +408,26 @@ public class ProjectSettingsUtility {
 		}
 		
 		return null;
-	}
+	}	
+	/**
+	 * Sets the generator argument used to generate the resource. 
+	 * 
+	 * @param resource    The resource
+	 * @param value       The directory string; may be null or blank
+	 * @param prefs       The preference store
+	 * @param propertyID  The property ID
+	 * @throws BackingStoreException
+	 */
+	public static void setGenerationArgument(IResource resource, String value, IEclipsePreferences prefs, String propertyID) throws BackingStoreException {
+		Preferences propertyPrefs = prefs.node(propertyID);
+		if (value == null || value.length() == 0) {
+			// Remove setting
+			propertyPrefs.remove(keyFor(resource.getFullPath()));
+		}
+		else {
+			propertyPrefs.put(keyFor(resource.getFullPath()), value);
+		}
+		
+		propertyPrefs.flush();
+	}	
 }

@@ -84,6 +84,27 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 				getGenerationDirectoryPreferenceKey());
 	}
 	
+	
+	/**
+	 * Returns the generation argument.
+	 * The default implementation will use {@link #getGenerationDirectoryPropertyKey()},
+	 * {@link #getProjectSettingsPluginId()}, {@link #getGenerationDirectoryPreferenceKey()},
+	 * and {@link #getPreferenceStore()} to determine the value, but sub-classes may override this.
+	 * 
+	 * @param eglFile  The source .egl file
+	 */
+	public String getGenerationArgument(IResource resource) {	
+		IProject project = resource.getProject();
+		return ProjectSettingsUtility.getGenerationArgument(resource, getPreferenceStore(),
+				new ProjectScope(project).getNode(getProjectSettingsPluginId()),
+				getGenerationArgumentsPropertyKey());
+	}	
+	
+	protected String getGenerationArgument(IFile eglFile) {
+		return ProjectSettingsUtility.getGenerationArgument(eglFile, getPreferenceStore(),
+				new ProjectScope(eglFile.getProject()).getNode(getProjectSettingsPluginId()),
+				getGenerationArgumentsPropertyKey());
+	}	
 	/**
 	 * Returns the relative path for the output file.
 	 * 
@@ -97,6 +118,11 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 	 * @return the key for the project settings generation directory.
 	 */
 	protected abstract String getGenerationDirectoryPropertyKey();
+	
+	/**
+	 * @return the key for the project settings generation arguments.
+	 */
+	protected abstract String getGenerationArgumentsPropertyKey();
 	
 	/**
 	 * @return the plug-in ID used to read and write project-level preferences for
