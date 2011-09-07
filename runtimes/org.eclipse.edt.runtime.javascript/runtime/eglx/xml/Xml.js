@@ -316,6 +316,10 @@ egl.eglx.xml.XmlLib["fromXML"] = function( /*node*/elements, /*FieldInfo*/fieldI
 	if ((eglObj == undefined || eglObj == null) && fieldInfo != null) {
 		eglObj = new fieldInfo.eglType();
 	}
+	if(elements === undefined || elements === null ||
+			(elements instanceof Array && elements.length === 0)){
+		return null;
+	}
 	if (fieldInfo != null && (eglObj == undefined || eglObj == null)
 			&& (elements[0].children == null || elements[0].children.length == 0)) {
 		eglObj = this.primitiveFromXML(elements[0], fieldInfo);

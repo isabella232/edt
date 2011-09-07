@@ -52,7 +52,7 @@ egl.defineClass(
         	else if(httpResquest.encoding === egl.eglx.services.Encoding.XML){
         		contentType = "application/xml";   
         	}
-        	else if(httpResquest.encoding === egl.eglx.services.Encoding.FORM){
+        	else if(httpResquest.encoding === egl.eglx.services.Encoding._FORM){
         		contentType = "application/x-www-form-urlencoded";                    
         	}
         	if(httpResquest.charset === null){
@@ -187,7 +187,7 @@ egl.defineClass(
        		                    	callbackArgs[callbackArgs.length-1] = eglObject;
 		                        }
 		                    }
-		                    else if(encoding === egl.eglx.services.Encoding.FORM){
+		                    else if(encoding === egl.eglx.services.Encoding._FORM){
 		                    	anyExp = egl.createAnyException("CRRUI3656E", []);	                    	
 		                    }
 		                    
@@ -492,7 +492,7 @@ egl.defineClass(
 	            	else if(httpResquest.encoding === egl.eglx.services.Encoding.XML){
 	                	httpResquest.body = egl.eglx.xml.XmlLib.convertToXML(resourceParamIn);
 	            	}
-	            	else if(httpResquest.encoding === egl.eglx.services.Encoding.FORM){
+	            	else if(httpResquest.encoding === egl.eglx.services.Encoding._FORM){
 	                	httpResquest.body = egl.eglx.http.HttpLib.convertToFormData(resourceParamIn);                    
 	            	}
 	            	else if(httpResquest.encoding === egl.eglx.services.Encoding.NONE){
