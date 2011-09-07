@@ -191,6 +191,12 @@ egl.egl.lang.EDecimal.fromEInt64 = function (x, decimals, limit) {
 egl.egl.lang.EDecimal.fromEDecimal = function (x, decimals, limit) { 
 	return egl.convertDecimalToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
+egl.egl.lang.EDecimal.fromEString = function (x, decimals, limit) { 
+	if (limit)
+		return egl.convertStringToDecimal(x, decimals, limit);
+	else
+		return egl.convertStringToDecimal(x, 0, decimals);
+};
 egl.egl.lang.EDecimal.fromAnyNum = function (x, decimals, limit) {
 	if (limit)
 		return egl.convertDecimalToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
@@ -352,9 +358,12 @@ egl.egl.lang.EString.matches = function (str1, str2, esc) {
 	esc = esc || "\\";
 	return egl.matches(str1, str2, esc);
 };
-egl.egl.lang.EString.like = function (str1, str2, esc) {
+egl.egl.lang.EString.isLike = function (str1, str2, esc) {
 	esc = esc || "\\";
 	return egl.like(str1, str2, esc);
+};
+egl.egl.lang.EString.indexOf = function (str, pattern) {
+	return str.indexOf(pattern);
 };
 
 
