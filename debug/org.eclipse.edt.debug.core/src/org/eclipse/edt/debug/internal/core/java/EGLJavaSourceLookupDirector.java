@@ -12,6 +12,7 @@
 package org.eclipse.edt.debug.internal.core.java;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ISourceLocator;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.sourcelookup.AbstractSourceLookupDirector;
@@ -41,7 +42,7 @@ public class EGLJavaSourceLookupDirector extends AbstractSourceLookupDirector
 		addParticipants( new ISourceLookupParticipant[] { new EGLJavaSourceLookupParticipant() } );
 		if ( originalDirector != null )
 		{
-			addParticipants( ((ISourceLookupDirector)originalLocator).getParticipants() );
+			originalDirector.initializeParticipants();
 		}
 	}
 	
@@ -124,6 +125,52 @@ public class EGLJavaSourceLookupDirector extends AbstractSourceLookupDirector
 				? super.supportsSourceContainerType( type )
 				: originalDirector.supportsSourceContainerType( type ));
 	}
+	
+	@Override
+	public void initializeDefaults( ILaunchConfiguration configuration ) throws CoreException
+	{
+		super.initializeDefaults( configuration );
+		if ( originalDirector != null )
+		{
+			originalDirector.initializeDefaults( configuration );
+		}
+	}
+	
+	@Override
+	public void initializeFromMemento( String memento ) throws CoreException
+	{
+		super.initializeFromMemento( memento );
+		if ( originalDirector != null )
+		{
+			originalDirector.initializeFromMemento( memento );
+		}
+	}
+	
+	@Override
+	public void initializeFromMemento( String memento, ILaunchConfiguration configuration ) throws CoreException
+	{
+		super.initializeFromMemento( memento, configuration );
+		if ( originalDirector != null )
+		{
+			originalDirector.initializeFromMemento( memento, configuration );
+		}
+	}
+	
+	@Override
+	public void clearSourceElements( Object element )
+	{
+		super.clearSourceElements( element );
+		if ( originalDirector != null )
+		{
+			// Some source directors, like PDE, don't use IAdaptable to resolve what they support. They expect a specific
+			// type like IJavaStackFrame. To support this, pass in the underlying JDT object.
+			if ( element instanceof IEGLJavaDebugElement )
+			{
+				element = ((IEGLJavaDebugElement)element).getJavaDebugElement();
+			}
+			originalDirector.clearSourceElements( element );
+		}
+	};
 	
 	@Override
 	public synchronized void dispose()
