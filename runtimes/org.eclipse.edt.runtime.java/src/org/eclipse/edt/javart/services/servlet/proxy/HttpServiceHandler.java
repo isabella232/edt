@@ -16,6 +16,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLConnection;
 import java.net.URLDecoder;
@@ -26,6 +27,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.Future;
 
+import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.Trace;
@@ -51,11 +53,9 @@ public class HttpServiceHandler
 	private class HttpStreamReader implements Runnable
 	{
 		private URLConnection connection;
-		private InputStream is;
 		private boolean doneReading;
 		private String value;
-		private Exception e;
-		private BufferedReader reader;
+		private Throwable t;
 		private String responseCharset;
 
 
@@ -68,12 +68,51 @@ public class HttpServiceHandler
 
 		public void run()
 		{
-			e = null;
-			StringBuilder body = new StringBuilder();
-			reader = null;
+			t = null;
+			InputStream is = null;
 			try
 			{
 				is = connection.getInputStream();
+				value = readStream(is);
+			}
+			catch( Throwable t )
+			{
+				if( is != null )
+				{
+					try
+					{
+						is.close();
+					}
+					catch( IOException ioe ){}
+					is = null;
+				}
+				this.t = t;
+				if(connection instanceof HttpURLConnection){
+					try{
+						is = ((HttpURLConnection)connection).getErrorStream();
+						value = readStream(is);
+					}
+					catch( Throwable t1 ){}
+				}
+			}
+			finally{
+				if( is != null )
+				{
+					try
+					{
+						is.close();
+					}
+					catch( IOException ioe ){}
+					is = null;
+				}
+			}
+			doneReading = true;
+		}
+
+		private String readStream(InputStream is) throws IOException, UnsupportedEncodingException {
+			StringBuilder body = new StringBuilder();
+			BufferedReader reader = null;
+			try{
 				try{
 					if(responseCharset == null){
 						responseCharset = getCharSet(connection.getContentType());
@@ -89,11 +128,6 @@ public class HttpServiceHandler
 				{
 					body.append((char)nRead);
 				}
-				value = body.toString();
-			}
-			catch( Exception e )
-			{
-				this.e = e;
 			}
 			finally
 			{
@@ -107,33 +141,12 @@ public class HttpServiceHandler
 					reader = null;
 				}
 			}
-			doneReading = true;
+			return body.toString();
 		}
 
-		public void close()
-		{
-			if( reader != null )
-			{
-				try
-				{
-					reader.close();
-				}
-				catch( IOException ioe ){}
-				reader = null;
-			}
-			if( is != null )
-			{
-				try
-				{
-					is.close();
-				}
-				catch( IOException ioe ){}
-				is = null;
-			}
-		}
 		public boolean exception()
 		{
-			return e != null;
+			return t != null;
 		}
 		public boolean isDoneReading()
 		{
@@ -145,19 +158,20 @@ public class HttpServiceHandler
 			return value;
 		}
 
-		public Exception getException()
+		public Throwable getException()
 		{
-			return e;
+			return t;
 		}
 
 	}
-	HttpResponse invokeRestService( HttpRequest request, HttpURLConnection connection ) throws InterruptedException, Exception
+	HttpResponse invokeRestService( HttpRequest request, HttpURLConnection connection ) throws Throwable
 	{
 		EDictionary headers = request.getHeaders();
 		HttpResponse response;
 		try
 		{
 			response = new HttpResponse();
+			HttpStreamReader httpsr = null;
 			try
 			{
 				connection.setRequestMethod( HttpUtilities.httpMethodToString(request.getMethod()) );
@@ -170,7 +184,13 @@ public class HttpServiceHandler
 				for ( Iterator<Map.Entry<String, Object>> iter = headers.entrySet().iterator(); iter.hasNext(); )
 				{
 					Map.Entry<String, Object> entry = iter.next();
-					connection.setRequestProperty( entry.getKey(), entry.getValue().toString() );
+					Object entryValue = entry.getValue();
+					if(entryValue instanceof AnyBoxedObject<?>){
+						entryValue = ((AnyBoxedObject<?>)entryValue).ezeUnbox();
+					}
+					if(entryValue != null){
+						connection.setRequestProperty( entry.getKey(), entryValue.toString() );
+					}
 				}
 
 				//FIXME get content type from request and use that as the expected response
@@ -189,7 +209,7 @@ public class HttpServiceHandler
 					os.close();
 				}
 
-				HttpStreamReader httpsr = new HttpStreamReader( connection, charset == null ? ServiceUtilities.UTF8 : charset );
+				httpsr = new HttpStreamReader( connection, charset == null ? ServiceUtilities.UTF8 : charset );
 				Future<?> threadResult = JavartUtil.getThreadPool().submit( httpsr );
 				Thread.yield();
 				if ( !httpsr.isDoneReading() )
@@ -213,7 +233,6 @@ public class HttpServiceHandler
 					if ( !httpsr.isDoneReading() )
 					{
 						threadResult.cancel( true );
-						httpsr.close();
 						connection.disconnect();
 						connection = null;
 						String message = JavartUtil.errorMessage( Runtime.getRunUnit(),
@@ -255,7 +274,6 @@ public class HttpServiceHandler
 				catch ( Throwable t )
 				{
 				}
-				boolean bodyIsSet = false;
 				if ( useConnection )
 				{
 					try
@@ -269,7 +287,6 @@ public class HttpServiceHandler
 							{
 								eglException = URLDecoder.decode( eglException, ServiceUtilities.UTF8 );
 								response.setBody( eglException );
-								bodyIsSet = true;
 							}
 							catch ( Exception e )
 							{
@@ -288,7 +305,11 @@ public class HttpServiceHandler
 					response.setStatus( HttpUtilities.HTTP_STATUS_FAILED );
 					response.setStatusMessage( HttpUtilities.HTTP_STATUS_MSG_FAILED );
 				}
-				if ( !bodyIsSet )
+				if ( (response.getBody() == null || response.getBody().isEmpty())&&
+						httpsr != null && httpsr.getReadValue() != null && !httpsr.getReadValue().isEmpty()){
+					response.setBody( httpsr.getReadValue() );
+				}
+				if((response.getBody() == null || response.getBody().isEmpty()))
 				{
 			    	response.setBody(eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException(
 							Message.SOA_E_WS_PROXY_COMMUNICATION,

@@ -22,7 +22,7 @@ public class HttpServiceInvoker extends EglHttpConnection {
 	
 	protected HttpServiceInvoker() {
 	}
-	public HttpResponse invoke(HttpRequest innerRequest)throws Exception
+	public HttpResponse invoke(HttpRequest innerRequest)throws Throwable
 	{
 		//debug("proxy: url="+xmlRequest.URL);
 		HttpServiceHandler rest = new HttpServiceHandler();

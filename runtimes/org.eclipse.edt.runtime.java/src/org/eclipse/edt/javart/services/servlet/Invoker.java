@@ -18,6 +18,6 @@ public abstract class Invoker extends TracerBase{
 
 	protected Invoker() {
 	}
-	public abstract HttpResponse invoke( HttpRequest request ) throws Exception;
+	public abstract HttpResponse invoke( HttpRequest request ) throws Throwable;
 	public abstract ServiceKind getServiceKind(HttpRequest innerRequest);
 }
