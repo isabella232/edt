@@ -39,6 +39,6 @@ public class JavaDeployFileLocator extends FileLocator {
 	}
 	
 	protected String[] initResourceLocationsInEglar(IProject project)throws CoreException{
-		return new String[] {EGLProjectInfoUtility.getDefaultGeneratedJavaFolder()};
+		return new String[] {EGLProjectInfoUtility.getGeneratedJavaFolder(project)};
 	}
 }

@@ -34,10 +34,10 @@ public class DebugFileLocator extends FileLocator {
 	}
 	
 	protected String[] initResourceLocations(IProject project)throws CoreException{
-		return new String[] {EGLProjectInfoUtility.getDebugJavaScriptFolder(), WEB_CONTENT};
+		return new String[] {EGLProjectInfoUtility.getGeneratedJavaScriptDevFolder(project), WEB_CONTENT};
 	}
 	
 	protected String[] initResourceLocationsInEglar(IProject project)throws CoreException{
-		return new String[] {EGLProjectInfoUtility.getDebugJavaScriptFolder(), WEB_CONTENT};
+		return new String[] {EGLProjectInfoUtility.getGeneratedJavaScriptDevFolder(project), WEB_CONTENT};
 	}
 }

@@ -41,6 +41,6 @@ public class DebugIFileLocator extends IFileLocator {
 	}
 
 	protected String[] initResourceLocations(IProject project) throws CoreException{
-		return new String[] {EGLProjectInfoUtility.getDebugJavaScriptFolder(), WEB_CONTENT};
+		return new String[] {EGLProjectInfoUtility.getGeneratedJavaScriptDevFolder(project), WEB_CONTENT};
 	}	
 }

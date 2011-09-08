@@ -32,6 +32,6 @@ public class DeployIFileLocator extends IFileLocator{
 	}
 	
 	protected String[] initResourceLocations(IProject project) throws CoreException{
-		return new String[] {EGLProjectInfoUtility.getTargetJavaScriptFolder(), WEB_CONTENT};
+		return new String[] {EGLProjectInfoUtility.getGeneratedJavaScriptFolder(project), WEB_CONTENT};
 	}
 }
