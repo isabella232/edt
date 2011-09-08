@@ -300,22 +300,6 @@ public class CommonUtilities {
 		return false;
 	}
 
-	public static boolean isBasicHandler(Object obj) {
-		if (obj instanceof EGLClass) {
-			return ((EGLClass) obj).getAnnotation("BasicHandler") != null; // TODO sbg need correct annotation name
-		}
-
-		return false;
-	}
-
-	public static boolean isBasicLibrary(Object obj) {
-		if (obj instanceof EGLClass) {
-			return ((EGLClass) obj).getAnnotation("BasicLibrary") != null;// TODO sbg need correct annotation name
-		}
-
-		return false;
-	}
-
 	public static boolean isRUIPropertiesLibrary(Object obj) {
 		if (obj instanceof EGLClass) {
 			return ((EGLClass) obj).getAnnotation("RUIPropertiesLibrary") != null;// TODO sbg need correct annotation name
