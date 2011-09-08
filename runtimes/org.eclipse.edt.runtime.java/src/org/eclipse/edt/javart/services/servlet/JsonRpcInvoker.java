@@ -94,7 +94,7 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 		}
 		catch (Throwable t)
 		{
-			throw ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_PROXY_REST, new String[] {getServiceClassName(), methodName}, t, getServiceKind() );
+			throw ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_SERVICE, new String[] {getServiceClassName(), methodName}, t, getServiceKind() );
 		}
 		finally
 		{

@@ -421,7 +421,7 @@ public class MessageBundle_cs extends ListResourceBundle
 		{ Message.SOA_E_USER_ID_NOT_SET, "ID a heslo vzd\u00e1len\u00e9ho u\u017eivatele je t\u0159eba nastavit p\u0159ed vyvol\u00e1n\u00edm webov\u00e9 slu\u017eby:{0} funkce:{1}." },
 		{ Message.SOA_E_WS_PROXY_UNIDENTIFIED, "Do\u0161lo k v\u00fdjimce p\u0159i vol\u00e1n\u00ed slu\u017eby." },
 		{ Message.SOA_E_WS_PROXY_COMMUNICATION, "Do\u0161lo k v\u00fdjimce p\u0159i komunikaci se slu\u017ebou. URL: {0}" },
-		{ Message.SOA_E_WS_PROXY_REST, "Do\u0161lo k v\u00fdjimce p\u0159i vol\u00e1n\u00ed slu\u017eby REST. Vazba:{0}, operace:{0}" },
+		{ Message.SOA_E_WS_SERVICE, "Do\u0161lo k v\u00fdjimce p\u0159i vol\u00e1n\u00ed slu\u017eby REST. Vazba:{0}, operace:{0}" },
 		{ Message.SOA_E_WS_PROXY_SOAP, "Do\u0161lo k v\u00fdjimce p\u0159i vol\u00e1n\u00ed slu\u017eby protokolu SOAP. Vazba:{0}, slu\u017eba:{1}, port:{2}, um\u00edst\u011bn\u00ed WSDL:{3}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, "Do\u0161lo k v\u00fdjimce p\u0159i p\u0159evodu z JSON. parametr:{0}, json:{1}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_EGL2JSON, "Do\u0161lo k v\u00fdjimce p\u0159i p\u0159evodu na JSON. parametr:{0}, hodnota:{1}" },

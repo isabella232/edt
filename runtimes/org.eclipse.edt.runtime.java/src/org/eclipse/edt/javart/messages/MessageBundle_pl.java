@@ -421,7 +421,7 @@ public class MessageBundle_pl extends ListResourceBundle
 		{ Message.SOA_E_USER_ID_NOT_SET, "Przed wywo\u0142aniem us\u0142ugi WebService:{0} (funkcja:{1}) nale\u017cy ustawi\u0107 identyfikator i has\u0142o zdalnego u\u017cytkownika." },
 		{ Message.SOA_E_WS_PROXY_UNIDENTIFIED, "Wyst\u0105pi\u0142 wyj\u0105tek podczas wywo\u0142ywania us\u0142ugi." },
 		{ Message.SOA_E_WS_PROXY_COMMUNICATION, "Wyst\u0105pi\u0142 wyj\u0105tek podczas komunikowania si\u0119 z us\u0142ug\u0105. Adres URL: {0}" },
-		{ Message.SOA_E_WS_PROXY_REST, "Wyst\u0105pi\u0142 wyj\u0105tek w wywo\u0142aniu REST us\u0142ugi. Powi\u0105zanie: {0}, Operacja: {0}" },
+		{ Message.SOA_E_WS_SERVICE, "Wyst\u0105pi\u0142 wyj\u0105tek w wywo\u0142aniu REST us\u0142ugi. Powi\u0105zanie: {0}, Operacja: {0}" },
 		{ Message.SOA_E_WS_PROXY_SOAP, "Wyst\u0105pi\u0142 wyj\u0105tek w wywo\u0142aniu SOAP us\u0142ugi. Powi\u0105zanie: {0}, Us\u0142uga: {1}, Port:{2}, Po\u0142o\u017cenie WSDL: {3}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, "Wyst\u0105pi\u0142 wyj\u0105tek podczas przekszta\u0142cania z formatu JSON. Parametr: {0}, JSON: {1}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_EGL2JSON, "Wyst\u0105pi\u0142 wyj\u0105tek podczas przekszta\u0142cania w format JSON. Parametr: {0}, Warto\u015b\u0107: {1}" },

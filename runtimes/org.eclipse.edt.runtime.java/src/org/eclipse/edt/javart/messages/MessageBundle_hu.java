@@ -421,7 +421,7 @@ public class MessageBundle_hu extends ListResourceBundle
 		{ Message.SOA_E_USER_ID_NOT_SET, "A t\u00e1voli felhaszn\u00e1l\u00f3i azonos\u00edt\u00f3t \u00e9s jelsz\u00f3t a(z) {0} webszolg\u00e1ltat\u00e1s \u00e9s a(z) {1} f\u00fcggv\u00e9ny megh\u00edv\u00e1sa el\u0151tt be kell \u00e1ll\u00edtani." },
 		{ Message.SOA_E_WS_PROXY_UNIDENTIFIED, "Kiv\u00e9tel t\u00f6rt\u00e9nt egy szolg\u00e1ltat\u00e1s h\u00edv\u00e1sa sor\u00e1n." },
 		{ Message.SOA_E_WS_PROXY_COMMUNICATION, "Kiv\u00e9tel t\u00f6rt\u00e9nt a szolg\u00e1ltat\u00e1ssal folytatott kommunik\u00e1ci\u00f3 k\u00f6zben. URL: {0}" },
-		{ Message.SOA_E_WS_PROXY_REST, "Kiv\u00e9tel t\u00f6rt\u00e9nt egy REST szolg\u00e1ltat\u00e1sh\u00edv\u00e1s sor\u00e1n. K\u00f6t\u00e9s:{0}, M\u0171velet:{0}" },
+		{ Message.SOA_E_WS_SERVICE, "Kiv\u00e9tel t\u00f6rt\u00e9nt egy REST szolg\u00e1ltat\u00e1sh\u00edv\u00e1s sor\u00e1n. K\u00f6t\u00e9s:{0}, M\u0171velet:{0}" },
 		{ Message.SOA_E_WS_PROXY_SOAP, "Kiv\u00e9tel t\u00f6rt\u00e9nt egy SOAP szolg\u00e1ltat\u00e1sh\u00edv\u00e1s sor\u00e1n. K\u00f6t\u00e9s:{0}, Szolg\u00e1ltat\u00e1s:{1}, Port:{2}, WSDL hely:{3}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, "Kiv\u00e9tel t\u00f6rt\u00e9nt a JSON-b\u0151l t\u00f6rt\u00e9n\u0151 \u00e1talak\u00edt\u00e1s sor\u00e1n. param\u00e9ter:{0}, json:{1}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_EGL2JSON, "Kiv\u00e9tel t\u00f6rt\u00e9nt JSON-re t\u00f6rt\u00e9n\u0151 \u00e1talak\u00edt\u00e1s sor\u00e1n. param\u00e9ter:{0}, \u00e9rt\u00e9k:{1}" },

@@ -421,7 +421,7 @@ public class MessageBundle_it extends ListResourceBundle
 		{ Message.SOA_E_USER_ID_NOT_SET, "L''ID utente remoto ID e la password devono essere impostati prima di richiamare WebService:{0} function:{1}." },
 		{ Message.SOA_E_WS_PROXY_UNIDENTIFIED, "Si \u00e8 verificata un''eccezione durante la chiamata a un servizio." },
 		{ Message.SOA_E_WS_PROXY_COMMUNICATION, "Si \u00e8 verificata un''eccezione durante la comunicazione con il servizio. URL: {0}" },
-		{ Message.SOA_E_WS_PROXY_REST, "Si \u00e8 verificata un''eccezione durante la chiamata di servizio REST. Binding: {0}, Operazione :{0}" },
+		{ Message.SOA_E_WS_SERVICE, "Si \u00e8 verificata un''eccezione durante la chiamata di servizio REST. Binding: {0}, Operazione :{0}" },
 		{ Message.SOA_E_WS_PROXY_SOAP, "Si \u00e8 verificata un''eccezione durante una chiamata al servizio SOAP. Binding: {0}, Servizio: {1}, Porta: {2}, Percorso WSDL: {3}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, "Si \u00e8 verificata un''eccezione durante la conversione da JSON. Parametro: {0}, json: {1}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_EGL2JSON, "Si \u00e8 verificata un''eccezione durante la conversione a JSON. Parametro: {0}, Valore: {1}" },

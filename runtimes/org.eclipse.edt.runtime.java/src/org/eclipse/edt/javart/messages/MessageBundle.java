@@ -423,7 +423,7 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.SOA_E_USER_ID_NOT_SET, "The remote user ID and password must be set before invoking WebService:{0} function:{1}." },
 		{ Message.SOA_E_WS_PROXY_UNIDENTIFIED, "An exception occurred while calling a service." },
 		{ Message.SOA_E_WS_PROXY_COMMUNICATION, "An exception occurred while communicating with the service. URL:{0}" },
-		{ Message.SOA_E_WS_PROXY_REST, "An exception occurred during a REST service call. Binding:{0}, Operation:{0}" },
+		{ Message.SOA_E_WS_SERVICE, "An exception occurred during a service call. Service:{0}, Function:{0}" },
 		{ Message.SOA_E_WS_PROXY_SOAP, "An exception occurred during a SOAP service call. Binding:{0}, Service:{1}, Port:{2}, WSDL location:{3}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, "An exception occurred while converting from JSON. parameter:{0}, json:{1}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_EGL2JSON, "An exception occurred while converting to JSON. parameter:{0}, value:{1}" },
@@ -451,7 +451,7 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.SOA_E_WS_PROXY_XML_PARSE_ELEMENT_EXCEPTION, "unexpected element <{0}>. Expected elements are <{1}>." },
 		{ Message.SOA_E_WS_PROXY_UNSUPPORTED_OPERATION, "The service being invoked: {0} is a system service. System services have no source code and can not be previewed and can only be debugged when they are deployed as a SOAP or EGL REST service."  },
 		{ Message.SOA_E_WS_PROXY_NO_J2EE_OPERATION, "The service being invoked is accessing the J2EE context, J2EE context may only be used in the J2EE environment."  },
-		{ Message.SOA_E_WS_REST_WRONG_HTTP_FUNCTION, "An HTTP {0} was recieved. EGL REST RPC service only operate with an HTTP.POST."},
+		{ Message.SOA_E_WS_REST_WRONG_HTTP_FUNCTION, "An HTTP {0} was recieved. EGL RPC service only operate with an HTTP.POST."},
 		{ Message.SOA_E_FUNCTION_NOT_FOUND, "The function {0} was not found on service {1}"},
 		
 		//Reporting errors.

@@ -421,7 +421,7 @@ public class MessageBundle_es extends ListResourceBundle
 		{ Message.SOA_E_USER_ID_NOT_SET, "Hay que establecer el ID de usuario y la contrase\u00f1a remotos para poder invocar WebService:{0} function:{1}." },
 		{ Message.SOA_E_WS_PROXY_UNIDENTIFIED, "Se ha producido una excepci\u00f3n al llamar a un servicio. " },
 		{ Message.SOA_E_WS_PROXY_COMMUNICATION, "Se ha producido una excepci\u00f3n al comunicar con el servicio. URL: {0}" },
-		{ Message.SOA_E_WS_PROXY_REST, "Se ha producido una excepci\u00f3n durante una llamada al servicio REST. Enlace{0}, Operaci\u00f3n:{0}" },
+		{ Message.SOA_E_WS_SERVICE, "Se ha producido una excepci\u00f3n durante una llamada al servicio REST. Enlace{0}, Operaci\u00f3n:{0}" },
 		{ Message.SOA_E_WS_PROXY_SOAP, "Se ha producido una excepci\u00f3n durante una llamada al servicio SOAP. Enlace:{0}, Servicio:{1}, Puerto:{2}, Ubicaci\u00f3n WSDL:{3}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, "Se ha producido una excepci\u00f3n al convertir desde JSON. par\u00e1metro:{0}, json:{1}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_EGL2JSON, "Se ha producido una excepci\u00f3n al convertir a JSON. par\u00e1metro:{0}, valor:{1}" },

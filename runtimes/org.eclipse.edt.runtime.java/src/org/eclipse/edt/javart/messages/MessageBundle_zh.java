@@ -421,7 +421,7 @@ public class MessageBundle_zh extends ListResourceBundle
 		{ Message.SOA_E_USER_ID_NOT_SET, "\u5728\u8c03\u7528 WebService:{0} function:{1} \u4e4b\u524d\uff0c\u5fc5\u987b\u8bbe\u7f6e\u8fdc\u7a0b\u7528\u6237\u6807\u8bc6\u548c\u5bc6\u7801\u3002" },
 		{ Message.SOA_E_WS_PROXY_UNIDENTIFIED, "\u8c03\u7528\u670d\u52a1\u65f6\u53d1\u751f\u5f02\u5e38\u3002" },
 		{ Message.SOA_E_WS_PROXY_COMMUNICATION, "\u4e0e\u670d\u52a1\u8fdb\u884c\u901a\u4fe1\u65f6\u53d1\u751f\u5f02\u5e38\u3002URL\uff1a{0}" },
-		{ Message.SOA_E_WS_PROXY_REST, "\u8c03\u7528 REST \u670d\u52a1\u65f6\u53d1\u751f\u5f02\u5e38\u3002\u7ed1\u5b9a\uff1a{0}\uff0c\u64cd\u4f5c\uff1a{0}" },
+		{ Message.SOA_E_WS_SERVICE, "\u8c03\u7528 REST \u670d\u52a1\u65f6\u53d1\u751f\u5f02\u5e38\u3002\u7ed1\u5b9a\uff1a{0}\uff0c\u64cd\u4f5c\uff1a{0}" },
 		{ Message.SOA_E_WS_PROXY_SOAP, "\u8c03\u7528 SOAP \u670d\u52a1\u65f6\u53d1\u751f\u5f02\u5e38\u3002\u7ed1\u5b9a\uff1a{0}\uff0c\u670d\u52a1\uff1a{1}\uff0c\u7aef\u53e3\uff1a{2}\uff0cWSDL \u4f4d\u7f6e\uff1a{3}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, "\u4ece JSON \u8fdb\u884c\u8f6c\u6362\u65f6\u53d1\u751f\u4e86\u5f02\u5e38\u3002\u53c2\u6570\uff1a{0}\uff0cjson\uff1a{1}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_EGL2JSON, "\u8f6c\u6362\u4e3a JSON \u65f6\u53d1\u751f\u4e86\u5f02\u5e38\u3002\u53c2\u6570\uff1a{0}\uff0c\u503c\uff1a{1}" },

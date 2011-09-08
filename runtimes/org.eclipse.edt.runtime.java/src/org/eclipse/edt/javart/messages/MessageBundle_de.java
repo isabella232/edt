@@ -421,7 +421,7 @@ public class MessageBundle_de extends ListResourceBundle
 		{ Message.SOA_E_USER_ID_NOT_SET, "Die ID und das Kennwort des fernen Benutzers m\u00fcssen vor dem Aufruf von WebService: {0}, Funktion: {1} festgelegt werden." },
 		{ Message.SOA_E_WS_PROXY_UNIDENTIFIED, "Beim Aufruf eines Services trat eine Ausnahmebedingung auf." },
 		{ Message.SOA_E_WS_PROXY_COMMUNICATION, "Bei der Kommunikation mit dem Service trat eine Ausnahmebedingung auf. URL: {0}" },
-		{ Message.SOA_E_WS_PROXY_REST, "Beim REST-Serviceaufruf trat eine Ausnahmebedingung auf. Binding: {0}, Operation: {0}" },
+		{ Message.SOA_E_WS_SERVICE, "Beim REST-Serviceaufruf trat eine Ausnahmebedingung auf. Binding: {0}, Operation: {0}" },
 		{ Message.SOA_E_WS_PROXY_SOAP, "Beim SOAP-Serviceaufruf trat eine Ausnahmebedingung auf. Binding: {0}, Service: {1}, Port: {2}, WSDL-Position: {3}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, "Bei der Konvertierung aus JSON trat eine Ausnahmebedingung auf. Parameter: {0}, JSON: {1}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_EGL2JSON, "Bei der Konvertierung in JSON trat eine Ausnahmebedingung auf. Parameter: {0}, Wert: {1}" },

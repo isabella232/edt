@@ -421,7 +421,7 @@ public class Message
 	public static final String SOA_E_USER_ID_NOT_SET = "EGL1537E";
 	public static final String SOA_E_WS_PROXY_UNIDENTIFIED = "EGL1538E";
 	public static final String SOA_E_WS_PROXY_COMMUNICATION = "EGL1539E";
-	public static final String SOA_E_WS_PROXY_REST = "EGL1540E";
+	public static final String SOA_E_WS_SERVICE = "EGL1540E";
 	public static final String SOA_E_WS_PROXY_SOAP = "EGL1541E";
 	public static final String SOA_E_WS_PROXY_PARMETERS_JSON2EGL = "EGL1542E";
 	public static final String SOA_E_WS_PROXY_PARMETERS_EGL2JSON = "EGL1544E";

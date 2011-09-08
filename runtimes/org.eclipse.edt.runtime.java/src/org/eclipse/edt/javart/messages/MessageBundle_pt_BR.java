@@ -421,7 +421,7 @@ public class MessageBundle_pt_BR extends ListResourceBundle
 		{ Message.SOA_E_USER_ID_NOT_SET, "O ID de usu\u00e1rio e a senha remotos devem ser configurados antes de chamar o WebService:{0} fun\u00e7\u00e3o:{1}." },
 		{ Message.SOA_E_WS_PROXY_UNIDENTIFIED, "Ocorreu uma exce\u00e7\u00e3o ao chamar um servi\u00e7o." },
 		{ Message.SOA_E_WS_PROXY_COMMUNICATION, "Ocorreu uma exce\u00e7\u00e3o ao comunicar-se com o servi\u00e7o. URL: {0}" },
-		{ Message.SOA_E_WS_PROXY_REST, "Ocorreu uma exce\u00e7\u00e3o durante uma chamada de servi\u00e7o REST. Liga\u00e7\u00e3o:{0}, Opera\u00e7\u00e3o:{0}" },
+		{ Message.SOA_E_WS_SERVICE, "Ocorreu uma exce\u00e7\u00e3o durante uma chamada de servi\u00e7o REST. Liga\u00e7\u00e3o:{0}, Opera\u00e7\u00e3o:{0}" },
 		{ Message.SOA_E_WS_PROXY_SOAP, "Ocorreu uma exce\u00e7\u00e3o durante uma chamada de servi\u00e7o SOAP. Liga\u00e7\u00e3o:{0}, Servi\u00e7o:{1}, Porta:{2}, Local do WSDL:{3}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, "Ocorreu uma exce\u00e7\u00e3o ao converter a partir de JSON. par\u00e2metro:{0}, json:{1}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_EGL2JSON, "Ocorreu uma exce\u00e7\u00e3o ao converter em JSON. par\u00e2metro:{0}, valor:{1}" },

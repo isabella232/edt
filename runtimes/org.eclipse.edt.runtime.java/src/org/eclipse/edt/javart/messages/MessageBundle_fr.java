@@ -421,7 +421,7 @@ public class MessageBundle_fr extends ListResourceBundle
 		{ Message.SOA_E_USER_ID_NOT_SET, "L''ID utilisateur et le mot de passe distants doivent \u00eatre d\u00e9finis avant l''appel au service web : {0} fonction :{1}." },
 		{ Message.SOA_E_WS_PROXY_UNIDENTIFIED, "Une exception s''est produite lors de l''appel d''un service." },
 		{ Message.SOA_E_WS_PROXY_COMMUNICATION, "Une exception s''est produite lors de la communication avec le service. URL : {0}" },
-		{ Message.SOA_E_WS_PROXY_REST, "Une exception s''est produite lors de l''appel d''un service REST. Liaison :{0}, Op\u00e9ration :{0}" },
+		{ Message.SOA_E_WS_SERVICE, "Une exception s''est produite lors de l''appel d''un service REST. Liaison :{0}, Op\u00e9ration :{0}" },
 		{ Message.SOA_E_WS_PROXY_SOAP, "Une exception s''est produite lors de l''appel d''un service SOAP. Liaison :{0}, Service :{1}, Port :{2}, Emplacement WSDL :{3}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, "Une exception s''est produite lors de la conversion \u00e0 partir de JSON. param\u00e8tre :{0}, json :{1}" },
 		{ Message.SOA_E_WS_PROXY_PARMETERS_EGL2JSON, "Une exception s''est produite lors de la conversion vers JSON. param\u00e8tre :{0}, valeur :{1}" },
