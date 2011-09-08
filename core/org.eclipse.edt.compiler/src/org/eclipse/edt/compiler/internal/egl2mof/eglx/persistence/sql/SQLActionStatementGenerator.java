@@ -18,6 +18,8 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause;
 import org.eclipse.edt.compiler.core.ast.InlineSQLStatement;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.WithExpressionClause;
+import org.eclipse.edt.compiler.core.ast.WithInlineSQLClause;
 import org.eclipse.edt.compiler.internal.egl2mof.AbstractIOStatementGenerator;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.egl.Expression;
@@ -57,9 +59,26 @@ public class SQLActionStatementGenerator extends AbstractIOStatementGenerator {
 			stmt.getTargets().add((Expression)stack.pop());
 		}
 		node.accept(new AbstractASTExpressionVisitor() {
+			public boolean visit(org.eclipse.edt.compiler.core.ast.IntoClause clause) {
+				for (Node expr : (List<Node>)clause.getExpressions()) {
+					expr.accept(generator);
+					stmt.getTargets().add((Expression)stack.pop());
+				}
+				return false;
+			}
 			public boolean visit(FromOrToExpressionClause clause) {
 				clause.getExpression().accept(generator);
 				stmt.setDataSource((Expression) stack.pop());
+				return false;
+			}
+			public boolean visit(WithInlineSQLClause sqlStmt) {
+				String sql = sqlStmt.getSqlStmt().getValue().replaceAll("[\\n\\r]", " ");
+				stmt.setSqlString(sql);
+				return false;
+			}
+			public boolean visit(WithExpressionClause sqlStmt) {
+				sqlStmt.getExpression().accept(generator);
+				stmt.setPreparedStatement((Expression)stack.pop());
 				return false;
 			}
 			public boolean visit(InlineSQLStatement sqlStmt) {
@@ -128,6 +147,10 @@ public class SQLActionStatementGenerator extends AbstractIOStatementGenerator {
 		SqlForEachStatement forEachStmt = factory.createSqlForEachStatement();
 		stack.push(forEachStmt);
 		doCommonVisit(forEachStatement, forEachStmt);
+		if (forEachStatement.hasSQLRecord()) {
+			forEachStatement.getSQLRecord().accept(this);
+			forEachStmt.getTargets().add((Expression)stack.pop());
+		}
 		StatementBlock block = irFactory.createStatementBlock();
 		// TODO: set source info
 //		setSourceInfoOn(block, forEachStatement);
@@ -164,10 +187,31 @@ public class SQLActionStatementGenerator extends AbstractIOStatementGenerator {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.PrepareStatement node) {
-		SqlPrepareStatement stmt = factory.createSqlPrepareStatement();
+		final SqlPrepareStatement stmt = factory.createSqlPrepareStatement();
 		stack.push(stmt);
-//		stmt.setPreparedStatementId(node.getPreparedStatementID());
-
+		if (node.getSqlStmt() != null) {
+			node.getSqlStmt().accept(this);
+			stmt.setPreparedStatement((Expression)stack.pop());
+			stmt.getTargets().add(stmt.getPreparedStatement());
+		}
+		
+		if (node.getDataSource() != null) {
+			node.getDataSource().accept(this);
+			stmt.setDataSource((Expression)stack.pop());
+		}
+		
+		if (node.getWithClause() != null) {
+			node.getWithClause().accept(this);
+			if (node.getWithClause().isWithExpression()) {
+				stmt.setSqlStringExpr((Expression)stack.pop());
+			}
+			if (node.getWithClause().isWithInlineSQL()) {
+				InlineSQLStatement inline = ((WithInlineSQLClause)node.getWithClause()).getSqlStmt();
+				String sql = inline.getValue().replaceAll("[\\n\\r]", " ");
+				stmt.setSqlString(sql);
+			}
+		}
+		
 		return false;
 	}
 
