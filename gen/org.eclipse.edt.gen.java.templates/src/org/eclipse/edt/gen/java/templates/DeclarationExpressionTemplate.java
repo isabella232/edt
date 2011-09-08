@@ -93,8 +93,6 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 
 		public boolean visit(FunctionInvocation expr) {
 			processInvocation(expr);
-			has = true;
-			setReturnData(has);
 			return false;
 		}
 
@@ -110,10 +108,7 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 
 		private void processInvocation(InvocationExpression object) {
 			// we need to scan the function arguments for any conditions that require temporary variables to be set
-			// up. Things like IN args, INOUT args with java primitives, OUT arg initialization, etc. We also need to
-			// remember when this statement has already been processed for function invocations, and ignore on
-			// subsequent attempts
-			// first determine whether we are going to modify the argument and set up pre/post assignments
+			// up. Things like IN args, INOUT args with java primitives, OUT arg initialization, etc.
 			for (int i = 0; i < object.getTarget().getParameters().size(); i++) {
 				if (org.eclipse.edt.gen.CommonUtilities.isArgumentToBeAltered(object.getTarget().getParameters().get(i), object.getArguments().get(i), ctx)) {
 					has = true;
