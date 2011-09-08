@@ -145,6 +145,7 @@ public class FunctionBindingCompletor extends AbstractBinder {
            ITypeBinding.PRIMITIVE_TYPE_BINDING != typeBinding.getKind() &&
            ITypeBinding.FLEXIBLE_RECORD_BINDING != typeBinding.getKind() &&
            ITypeBinding.FIXED_RECORD_BINDING != typeBinding.getKind() &&
+           ITypeBinding.ENUMERATION_BINDING != typeBinding.getKind() &&
 		   typeBinding != DictionaryBinding.INSTANCE &&
 		   typeBinding != ArrayDictionaryBinding.INSTANCE) {
         	problemRequestor.acceptProblem(
