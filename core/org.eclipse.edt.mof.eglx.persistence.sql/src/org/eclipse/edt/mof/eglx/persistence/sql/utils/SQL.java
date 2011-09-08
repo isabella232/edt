@@ -117,9 +117,14 @@ public class SQL {
 		else if (type.equals(TypeUtils.Type_SMALLFLOAT)) name = "Float";
 		else if (type.equals(TypeUtils.Type_BIGINT)) name = "Long";
 		else if (type.equals(TypeUtils.Type_INT)) name = "Int";
+		else if (type.equals(TypeUtils.Type_SMALLINT)) name = "Short";
 		else if (type.equals(TypeUtils.Type_DECIMAL)) name = "BigDecimal";
 		else if (type.equals(TypeUtils.Type_STRING)) name = "String";
 		return name;
+	}
+	
+	public static boolean isMappedSQLType(EGLClass type) {
+		return getSqlSimpleTypeName(type) != null;
 	}
 	
 	public static String getConvertToSQLConstructorOptions(EGLClass type) {

@@ -35,7 +35,7 @@ public class SqlGetByKeyStatementImpl extends SqlIOStatementImpl implements SqlG
 	
 	// TODO This is a simplified mapping of one type to one table only - handle multiple tables
 	private String generateDefaultSqlString() {
-		if (SQL.isSQLResultSet(getDataSource().getType())) return null;
+		if (getPreparedStatement() != null || SQL.isSQLResultSet(getDataSource().getType())) return null;
 		
 		String sql = null;
 		if (getTargets().size() == 1) {

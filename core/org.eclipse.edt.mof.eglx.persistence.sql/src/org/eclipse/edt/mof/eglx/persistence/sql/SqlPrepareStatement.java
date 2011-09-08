@@ -16,8 +16,6 @@ import org.eclipse.edt.mof.egl.PrepareStatement;
 
 public interface SqlPrepareStatement extends SqlActionStatement, PrepareStatement {
 	
-	Expression getFromExpression();
-	
-	void setFromExpression(Expression value);
-	
+	Expression getSqlStringExpr();
+	void setSqlStringExpr(Expression expr);
 }

@@ -20,10 +20,6 @@ public interface SqlActionStatement extends IOStatement {
 	
 	void setPreparedStatement(Expression expr);
 	
-	Expression getDataSource();
-	
-	void setDataSource(Expression value);
-		
 	Boolean hasExplicitSql();
 	
 	void setHasExplicitSql(Boolean value);

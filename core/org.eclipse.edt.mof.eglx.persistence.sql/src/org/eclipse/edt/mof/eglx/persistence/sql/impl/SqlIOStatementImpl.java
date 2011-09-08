@@ -18,10 +18,9 @@ import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 
 public abstract class SqlIOStatementImpl extends IOStatementImpl implements SqlActionStatement {
 	private static int Slot_preparedStatement=0;
-	private static int Slot_dataSource=1;
-	private static int Slot_hasExplicitSql=2;
-	private static int Slot_sqlString=3;
-	private static int totalSlots = 4;
+	private static int Slot_hasExplicitSql=1;
+	private static int Slot_sqlString=2;
+	private static int totalSlots = 3;
 	
 	public static int totalSlots() {
 		return totalSlots + IOStatementImpl.totalSlots();
@@ -30,7 +29,6 @@ public abstract class SqlIOStatementImpl extends IOStatementImpl implements SqlA
 	static {
 		int offset = IOStatementImpl.totalSlots();
 		Slot_preparedStatement += offset;
-		Slot_dataSource += offset;
 		Slot_hasExplicitSql += offset;
 		Slot_sqlString += offset;
 	}
@@ -44,17 +42,7 @@ public abstract class SqlIOStatementImpl extends IOStatementImpl implements SqlA
 	public void setPreparedStatement(Expression value) {
 		slotSet(Slot_preparedStatement, value);
 	}
-	
-	@Override
-	public Expression getDataSource() {
-		return (Expression)slotGet(Slot_dataSource);
-	}
-	
-	@Override
-	public void setDataSource(Expression value) {
-		slotSet(Slot_dataSource, value);
-	}
-		
+			
 	@Override
 	public Boolean hasExplicitSql() {
 		return (Boolean)slotGet(Slot_hasExplicitSql);

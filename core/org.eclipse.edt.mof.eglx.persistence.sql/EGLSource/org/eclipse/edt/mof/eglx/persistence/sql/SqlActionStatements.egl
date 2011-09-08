@@ -4,7 +4,6 @@ import org.eclipse.edt.mof.egl.IOStatement;
 
 externalType SqlActionStatement extends IOStatement type MofClass {isAbstract=yes}
 	preparedStatement Expression {containment=true};
-	dataSource Expression {containment=true};
 	hasExplicitSql boolean;
 	sqlString String;
 	
@@ -34,6 +33,7 @@ externalType SqlOpenStatement extends SqlActionStatement, OpenStatement type Mof
 end
 
 externalType SqlPrepareStatement extends SqlActionStatement, PrepareStatement type MofClass
+	sqlStringExpr Expression {containment=true};
 end
 
 externalType SqlReplaceStatement extends SqlActionStatement, ReplaceStatement type MofClass

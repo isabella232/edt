@@ -16,7 +16,7 @@ import org.eclipse.edt.mof.eglx.persistence.sql.SqlPrepareStatement;
 
 
 public class SqlPrepareStatementImpl extends SqlIOStatementImpl implements SqlPrepareStatement {
-	private static int Slot_fromExpression=0;
+	private static int Slot_sqlStringExpr=0;
 	private static int totalSlots = 1;
 	
 	public static int totalSlots() {
@@ -25,17 +25,17 @@ public class SqlPrepareStatementImpl extends SqlIOStatementImpl implements SqlPr
 	
 	static {
 		int offset = SqlIOStatementImpl.totalSlots();
-		Slot_fromExpression += offset;
+		Slot_sqlStringExpr += offset;
 	}
 	
 	@Override
-	public Expression getFromExpression() {
-		return (Expression)slotGet(Slot_fromExpression);
+	public Expression getSqlStringExpr() {
+		return (Expression)slotGet(Slot_sqlStringExpr);
 	}
 	
 	@Override
-	public void setFromExpression(Expression value) {
-		slotSet(Slot_fromExpression, value);
+	public void setSqlStringExpr(Expression value) {
+		slotSet(Slot_sqlStringExpr, value);
 	}
 	
 }
