@@ -101,24 +101,28 @@ public class ClasspathUtil {
 		seen.add(currProject);
 		
 		try {
-			IEGLProject eglProject = EGLCore.create(currProject);
-			for (IEGLPathEntry pathEntry : eglProject.getResolvedEGLPath(true)) {
-				if (pathEntry.getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
-					IPath path = pathEntry.getPath();
-					IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
-					try {
-						if (resource != null && resource.getType() == IResource.PROJECT && !seen.contains(resource)
-								&& ((IProject)resource).hasNature(JavaCore.NATURE_ID) && !javaProject.isOnClasspath(resource)) {
-							entries.add("<?xml version=\"1.0\" encoding=\"UTF-8\"?><runtimeClasspathEntry path=\"3\" projectName=\"" + resource.getName() + "\" type=\"1\"/>"); //$NON-NLS-1$ //$NON-NLS-2$
-							addEGLPathToJavaPathIfNecessary(javaProject, (IProject)resource, seen, entries);
+			if (currProject.hasNature(EGLCore.NATURE_ID)) {
+				IEGLProject eglProject = EGLCore.create(currProject);
+				for (IEGLPathEntry pathEntry : eglProject.getResolvedEGLPath(true)) {
+					if (pathEntry.getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
+						IPath path = pathEntry.getPath();
+						IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+						try {
+							if (resource != null && resource.getType() == IResource.PROJECT && !seen.contains(resource)
+									&& ((IProject)resource).hasNature(JavaCore.NATURE_ID) && !javaProject.isOnClasspath(resource)) {
+								entries.add("<?xml version=\"1.0\" encoding=\"UTF-8\"?><runtimeClasspathEntry path=\"3\" projectName=\"" + resource.getName() + "\" type=\"1\"/>"); //$NON-NLS-1$ //$NON-NLS-2$
+								addEGLPathToJavaPathIfNecessary(javaProject, (IProject)resource, seen, entries);
+							}
 						}
-					}
-					catch (CoreException ce) {
+						catch (CoreException ce) {
+						}
 					}
 				}
 			}
 		}
 		catch (EGLModelException e) {
+		}
+		catch (CoreException e) {
 		}
 	}
 	
