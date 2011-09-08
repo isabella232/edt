@@ -36,8 +36,8 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 			ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
 			out.print(" ");
 			// check to see if it is safe to combine a declaration with an assignment. to do this, we need to check to see if
-			// there is a set of initializer statements and if the 1st one is an assignment that uses the same field and the
-			// assignment doesn't have side effects, then we are okay to combine
+			// there is a set of initializer statements and if the 1st one is an assignment and the assignment doesn't have
+			// side effects, then we are okay to combine
 			if (field.getInitializerStatements() != null
 				&& field.getInitializerStatements() instanceof StatementBlock
 				&& ((StatementBlock) field.getInitializerStatements()).getStatements().size() > 0
