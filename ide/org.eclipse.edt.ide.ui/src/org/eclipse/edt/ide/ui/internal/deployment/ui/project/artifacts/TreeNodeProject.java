@@ -39,11 +39,6 @@ import org.eclipse.edt.ide.ui.internal.deployment.ui.SOAMessages;
 public class TreeNodeProject extends TreeNodeFolder {
 
 	private static final String WEB_CONTENT = "WebContent";
-//	private static final String GEN_Folder = "EGLGen";
-//	private static final String GEN_JavaScriptFolder = "JavaScript";
-	private static final String GEN_Folder = "";
-	private static final String GEN_JavaScriptFolder = "generatedJavaScript";
-	private static final String GEN_Target = "Target";
 	
 	/**
 	 * 
@@ -74,7 +69,7 @@ public class TreeNodeProject extends TreeNodeFolder {
 		
 		try {
 			DeploymentUtilities.findFolder((IProject)this.resource, results, WEB_CONTENT);
-			DeploymentUtilities.findFolder((IProject)this.resource, results, GEN_JavaScriptFolder);
+			DeploymentUtilities.findFolder((IProject)this.resource, results,  EGLProjectInfoUtility.getGeneratedJavaScriptFolder((IProject)this.resource));
 		} catch (CoreException e) {
 			DeploymentUtilities.displayErrorDialog(SOAMessages.TreeNode_0, SOAMessages.TreeNode_1);
 			EDTUIPlugin.log(e);
