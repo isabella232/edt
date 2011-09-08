@@ -39,10 +39,10 @@ public class GenerateServiceUriMappingFileOperation extends AbstractDeploymentOp
 	public void preCheck(DeploymentContext context,
 			IDeploymentResultsCollector resultsCollector,
 			IProgressMonitor monitor) throws CoreException {
-		if ( !context.isMustRun() ) {
+		if ( context.getStatus() != DeploymentContext.STATUS_SHOULD_RUN ) {
 			DeploymentDesc desc = context.getDeploymentDesc();
 			if ( desc.getRestservices() != null && desc.getRestservices().size() > 0 ) {
-				context.setMustRun( true );
+				context.setStatus( DeploymentContext.STATUS_SHOULD_RUN );
 			}
 		}
 	}

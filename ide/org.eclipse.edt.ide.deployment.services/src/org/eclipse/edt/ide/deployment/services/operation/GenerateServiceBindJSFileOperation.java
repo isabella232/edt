@@ -45,10 +45,10 @@ public class GenerateServiceBindJSFileOperation extends AbstractDeploymentOperat
 	public void preCheck(DeploymentContext context,
 			IDeploymentResultsCollector resultsCollector,
 			IProgressMonitor monitor) throws CoreException {
-		if ( !context.isMustRun() ) {
+		if ( context.getStatus() != DeploymentContext.STATUS_SHOULD_RUN ) {
 			DeploymentDesc desc = context.getDeploymentDesc();
 			if ( desc.getRestBindings() != null && desc.getRestBindings().size() > 0 ) {
-				context.setMustRun( true );
+				context.setStatus( DeploymentContext.STATUS_SHOULD_RUN );
 			}
 		}
 	}
