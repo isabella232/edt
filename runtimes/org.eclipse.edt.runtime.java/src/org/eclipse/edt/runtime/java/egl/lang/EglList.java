@@ -78,7 +78,7 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 
 	@Override
 	public int indexOfElement(Object o, int index) {
-		if (index - 1 < 0 || index - 1 >= list.size())
+		if (index - 1 < 0 || index - 1 > list.size())
 			throw new InvalidIndexException();
 		return list.subList(index - 1, list.size()).indexOf(o) + 1 + index - 1;
 	}
