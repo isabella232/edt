@@ -18,14 +18,15 @@ egl.defineClass(
 	"constructor" : function() {
 	}
 });
-egl.eglx.xml.XmlLib["convertToXML"] = function( /*value*/value) {
+egl.eglx.xml.XmlLib["convertToXML"] = function( /*value*/value, /*boolean*/ doc) {
 	value = egl.unboxAny(value);
 	this.validateXMLObject(value);
 	var namespaces = {};
 	namespaces.xmlns_map = {};
 	namespaces.count = 0;
 	var xml = this.toXML(value, namespaces, null); // top level records
-	return this.addNamespacesToXML(namespaces, xml);
+	xml = this.addNamespacesToXML(namespaces, xml);
+	return typeof doc == "boolean" && doc ? "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + xml : xml;
 };
 egl.eglx.xml.XmlLib["toXML"] = function( /*value*/value, /*map*/namespaces, /*FieldInfo*/fieldInfo) {
 	var s = [];
@@ -51,18 +52,18 @@ egl.eglx.xml.XmlLib["toXML"] = function( /*value*/value, /*map*/namespaces, /*Fi
 };
 egl.eglx.xml.XmlLib["nullToXML"] = function( /*value*/value, /*map*/namespaces, /*FieldInfo*/fieldInfo) {
 	var xmlStyle = fieldInfo.annotations["XMLStyle"];
-	var xmlName = xmlStyle.name;
-	var xmlNamespace = xmlStyle.namespace;
-	var prefix = "";
-	if (xmlNamespace != null) {
-		prefix = this.addNamespace(namespaces, xmlNamespace);
-	}
-	if (xmlName == null) {
-		xmlName = value;
-	}
-	xmlName = prefix + xmlName;
 	var s = [];
 	if (xmlStyle.nillable) {
+		var xmlName = xmlStyle.name;
+		var xmlNamespace = xmlStyle.namespace;
+		var prefix = "";
+		if (xmlNamespace != null) {
+			prefix = this.addNamespace(namespaces, xmlNamespace);
+		}
+		if (xmlName == null) {
+			xmlName = value;
+		}
+		xmlName = prefix + xmlName;
 		//skip field if fieldInfo.xmlStyle is XMLAttribute or  fieldInfo.xmlStyle is XMLElement.nillable == true
 		s.push("<" + xmlName + " xsi:nil=\"true\"/>");
 		egl.eglx.xml.XmlLib.addXSINamespace(namespaces);
@@ -178,8 +179,9 @@ egl.eglx.xml.XmlLib["eglClassToXML"] = function(/*value*/value, /*map*/namespace
 	var xmlStyle = fieldInfo != undefined && fieldInfo != null ? fieldInfo.annotations["XMLStyle"] : null;
 	var partAnntations = value.eze$$getAnnotations();
 	var xmlName = xmlStyle != null ? xmlStyle.name : null;
-	var prefix = "";
-	if (partAnntations != undefined
+	var prefix = xmlStyle != null && xmlStyle.namespace != null ? 
+					this.addNamespace(namespaces, xmlStyle.namespace) : null;
+	if (xmlStyle === null && partAnntations != undefined
 			&& partAnntations["XMLRootElement"] != undefined
 			&& partAnntations["XMLRootElement"] != null) {
 		if (partAnntations["XMLRootElement"].namespace != undefined
@@ -200,7 +202,7 @@ egl.eglx.xml.XmlLib["eglClassToXML"] = function(/*value*/value, /*map*/namespace
 	var s = [ "<" + xmlName ];
 	if (fieldInfos) {
 		for ( var idx = 0; idx < fieldInfos.length; idx++) {
-			if (fieldInfos[idx].xmlStyle instanceof egl.eglx.xml.binding.annotation.XMLAttribute) {
+			if (fieldInfos[idx].annotations["XMLStyle"] instanceof egl.eglx.xml.binding.annotation.XMLAttribute) {
 				var fieldValue;
 				if (fieldInfos[idx].getterFunction instanceof Function) {
 					fieldValue = value[fieldInfos[idx].getterFunction].apply();
@@ -212,7 +214,7 @@ egl.eglx.xml.XmlLib["eglClassToXML"] = function(/*value*/value, /*map*/namespace
 		}
 		s.push(">");
 		for ( var idx = 0; idx < fieldInfos.length; idx++) {
-			if (!(fieldInfos[idx].xmlStyle instanceof egl.eglx.xml.binding.annotation.XMLAttribute)) {
+			if (!(fieldInfos[idx].annotations["XMLStyle"] instanceof egl.eglx.xml.binding.annotation.XMLAttribute)) {
 				if(!isSimpleContent || 
 						partAnntations["XMLValue"].simpleContentFieldName == xmlStyle.name){
 					if (fieldInfos[idx].getterFunction instanceof Function) {
@@ -499,13 +501,12 @@ egl.eglx.xml.XmlLib["arrayFromXML"] = function( /*node*/parentElement, /*egl rt 
 	return array;
 };
 egl.eglx.xml.XmlLib["eglClassFromXML"] = function(/*node*/recElement, /*egl rt object*/eglObj, /*FieldInfo*/fieldInfo) {
-	var xmlStyle = fieldInfo != undefined && fieldInfo != null ? fieldInfo.annotations["XMLStyle"]
-			: null;
+	var xmlStyle = fieldInfo != undefined && fieldInfo != null ? fieldInfo.annotations["XMLStyle"] : null;
 	var partAnntations = eglObj.eze$$getAnnotations();
 	var xmlName = xmlStyle != null ? xmlStyle.name : null;
 	var namespace = xmlStyle != null ? xmlStyle.namespace : null;
 	var prefix = "";
-	if (partAnntations != undefined
+	if (xmlStyle === null && partAnntations != undefined
 			&& partAnntations["XMLRootElement"] != undefined
 			&& partAnntations["XMLRootElement"] != null) {
 		if (namespace == null
