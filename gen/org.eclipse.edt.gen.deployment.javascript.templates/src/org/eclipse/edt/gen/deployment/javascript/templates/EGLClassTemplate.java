@@ -28,17 +28,16 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 public class EGLClassTemplate extends JavaScriptTemplate {
 	public void genDependentPart(EGLClass part, Context ctx, TabbedWriter out, Boolean addComma) {}
 	public void genDependentParts(EGLClass part, Context ctx, TabbedWriter out, Boolean addComma) {		
-		List<Type> processedParts = (List<Type>)ctx.get(genDependentParts);
+		LinkedHashSet processedParts = (LinkedHashSet)ctx.get(genDependentParts);
 		if(processedParts == null){
-			processedParts = new ArrayList<Type>();
+			processedParts = new LinkedHashSet();
 			ctx.put(genDependentParts, processedParts);
 		}
-		processedParts.add(part);
 		try {
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			for(Part refPart:refParts){
-				if(!processedParts.contains(refPart)){
-					processedParts.add(refPart);
+				if(!processedParts.contains(refPart.getFullyQualifiedName()) && refPart instanceof EGLClass){
+					processedParts.add(refPart.getFullyQualifiedName());
 					if(!refPart.getFullyQualifiedName().startsWith("egl") && 
 							!refPart.getFullyQualifiedName().startsWith("eglx")){
 						ctx.invoke(genDependentPart, refPart, ctx, out, addComma);
@@ -55,22 +54,22 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	
 	public void genPropFiles(EGLClass part, TabbedWriter out, LinkedHashSet propFiles){}
 	public void genDependentProps(EGLClass part, Context ctx, TabbedWriter out, LinkedHashSet propFiles, LinkedHashSet handledParts){
-		if ( handledParts.contains( part ) ) {
+		if ( handledParts.contains( part.getFullyQualifiedName() ) ) {
 			return;
 		}
 		try {
-			handledParts.add( part );
+			handledParts.add( part.getFullyQualifiedName() );
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			// BFS traverse
 			for(Part refPart:refParts){
 				if(!refPart.getFullyQualifiedName().startsWith("egl") && 
-						!refPart.getFullyQualifiedName().startsWith("eglx")){
+						!refPart.getFullyQualifiedName().startsWith("eglx") && refPart instanceof EGLClass){
 					ctx.invoke(genPropFiles, refPart, out, propFiles);
 				}
 			}
 			for(Part refPart:refParts){
 				if(!refPart.getFullyQualifiedName().startsWith("egl") && 
-						!refPart.getFullyQualifiedName().startsWith("eglx")){
+						!refPart.getFullyQualifiedName().startsWith("eglx") && refPart instanceof EGLClass){
 					ctx.invoke(genDependentProps, refPart, ctx, out, propFiles, handledParts);
 				}
 			}

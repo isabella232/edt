@@ -19,6 +19,7 @@ import org.eclipse.edt.gen.deployment.javascript.Context;
 import org.eclipse.edt.gen.deployment.util.CommonUtilities;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
@@ -41,22 +42,22 @@ public class RUITemplate extends JavaScriptTemplate {
 	}
 	
 	public void genDependentCSSs(Handler part, Context ctx, TabbedWriter out, LinkedHashSet cssFiles, LinkedHashSet handledParts){
-		if ( handledParts.contains( part ) ) {
+		if ( handledParts.contains( part.getFullyQualifiedName() ) ) {
 			return;
 		}
 		try {
-			handledParts.add( part );
+			handledParts.add( part.getFullyQualifiedName() );
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			// BFS traverse
 			for(Part refPart:refParts){
 				if(!refPart.getFullyQualifiedName().startsWith("egl") && 
-						!refPart.getFullyQualifiedName().startsWith("eglx")){
+						!refPart.getFullyQualifiedName().startsWith("eglx") && refPart instanceof EGLClass){
 					ctx.invoke(genCSSFiles, refPart, out, cssFiles);
 				}				
 			}
 			for(Part refPart:refParts){
 				if(!refPart.getFullyQualifiedName().startsWith("egl") && 
-						!refPart.getFullyQualifiedName().startsWith("eglx")){
+						!refPart.getFullyQualifiedName().startsWith("eglx") && refPart instanceof EGLClass){
 					ctx.invoke(genDependentCSSs, refPart, ctx, out, cssFiles, handledParts);
 				}				
 			}
