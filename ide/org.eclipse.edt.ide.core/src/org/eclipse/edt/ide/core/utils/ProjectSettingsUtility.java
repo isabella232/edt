@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.core.utils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -19,10 +20,11 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.edt.ide.core.AbstractGenerator;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
-import org.eclipse.edt.ide.core.IIDECompiler;
 import org.eclipse.edt.ide.core.IGenerator;
+import org.eclipse.edt.ide.core.IIDECompiler;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
@@ -65,6 +67,22 @@ public class ProjectSettingsUtility {
 	 * Constant for the project-level property indicating the default deployment descriptor.
 	 */
 	public static final String PROJECT_DEFAULT_DEPLOYMENT_DESCRIPTOR = "DefaultDeploymentDescriptorPath"; //$NON-NLS-1$
+	
+	/**
+	 * Constant for the Java language
+	 */
+	public static final String LANGUAGE_JAVA = "Java"; //$NON-NLS-1$
+	
+	/**
+	 * Constant for the JavaScript language
+	 */
+	public static final String LANGUAGE_JAVASCRIPT = "JavaScript"; //$NON-NLS-1$
+
+	/**
+	 * Constant for the JavaScript Development Mode generator ID
+	 */
+	public static final String GENERATOR_ID_JAVASCRIPT_DEV = "org.eclipse.edt.ide.gen.JavaScriptDevGenProvider"; //$NON-NLS-1$
+	
 	
 	/**
 	 * Returns the ICompiler registered for the given project. This returns null if there is no compiler.
@@ -430,4 +448,49 @@ public class ProjectSettingsUtility {
 		
 		propertyPrefs.flush();
 	}	
+	
+	
+	public static String[] getJavaGenerationDirectory(IProject project) {
+		return getGenerationDirectoryForLanguage(project, LANGUAGE_JAVA);
+	}
+
+	public static String[] getJavaScriptGenerationDirectory(IProject project) {
+		return getGenerationDirectoryForLanguage(project, LANGUAGE_JAVASCRIPT);
+	}
+
+	public static String getJavaScriptDevGenerationDirectory(IProject project) {
+		IGenerator[] generators = getGenerators(project);
+		for (int i = 0; i < generators.length; i++) {
+			IGenerator generator = generators[i];
+			if(generator.getId().equalsIgnoreCase(GENERATOR_ID_JAVASCRIPT_DEV)){
+				if(generator instanceof AbstractGenerator){
+					AbstractGenerator ideGenerator = (AbstractGenerator)generator;
+					return ideGenerator.getOutputDirectory(project);
+				}
+			}
+		}
+		return null;
+	}
+	
+	protected static String[] getGenerationDirectoryForLanguage(IProject project, String language) {
+		
+		if(language==null) 
+			return new String[0];
+
+		HashSet<String> retValue = new HashSet<String>();
+		IGenerator[] generators = getGenerators(project);
+		
+		for (int i = 0; i < generators.length; i++) {
+			IGenerator generator = generators[i];
+			if(language.equalsIgnoreCase(generator.getLanguage()) &&
+					!generator.getId().equalsIgnoreCase(GENERATOR_ID_JAVASCRIPT_DEV)){
+				if(generator instanceof AbstractGenerator){
+					AbstractGenerator ideGenerator = (AbstractGenerator)generator;
+					retValue.add(ideGenerator.getOutputDirectory(project));
+				}
+			}
+		}
+		return retValue.toArray(new String[0]);
+	}
+	
 }
