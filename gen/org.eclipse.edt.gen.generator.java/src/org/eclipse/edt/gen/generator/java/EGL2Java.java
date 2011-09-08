@@ -32,7 +32,7 @@ public class EGL2Java extends AbstractGeneratorCommand {
 
 	public String[] getNativeTypePath() {
 		// this defined the locations of the nativeTypes.properties files to be loaded and used
-		return new String[] { "org.eclipse.edt.gen.java.nativeTypes" };
+		return new String[] { "org.eclipse.edt.gen.java.nativeTypes", "org.eclipse.edt.gen.java.templates.eglx.persistence.sql.nativeTypes" };
 	}
 
 	public String[] getPrimitiveTypePath() {
