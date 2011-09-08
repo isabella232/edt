@@ -21,6 +21,7 @@ public class SQLDatabaseBinding extends Binding {
 	protected String sqlPassword;
 	protected String sqlSchema;
 	protected String sqlValidationConnectionURL;
+	protected String jarList;
 	
 	public SQLDatabaseBinding(String name,
 			String dbms,
@@ -30,7 +31,8 @@ public class SQLDatabaseBinding extends Binding {
 			String sqlJNDIName,
 			String sqlPassword,
 			String sqlSchema,
-			String sqlValidationConnectionURL
+			String sqlValidationConnectionURL,
+			String jarList
 			) {
 		super(name);
 		this.name = name;
@@ -42,6 +44,7 @@ public class SQLDatabaseBinding extends Binding {
 		this.sqlPassword = sqlPassword;
 		this.sqlSchema = sqlSchema;
 		this.sqlValidationConnectionURL = sqlValidationConnectionURL;
+		this.jarList = jarList;
 	}
 	
 	public int getBindingType()
@@ -83,6 +86,10 @@ public class SQLDatabaseBinding extends Binding {
 		if (sqlValidationConnectionURL != null)
 		{
 			buf.append(" sqlValidationConnectionURL=\"" + sqlValidationConnectionURL + "\"");
+		}
+		if (jarList != null)
+		{
+			buf.append(" jarList=\"" + jarList + "\"");
 		}
 		buf.append("/>\n");
 
@@ -151,6 +158,14 @@ public class SQLDatabaseBinding extends Binding {
 
 	public void setSqlValidationConnectionURL(String sqlValidationConnectionURL) {
 		this.sqlValidationConnectionURL = sqlValidationConnectionURL;
+	}
+
+	public String getJarList() {
+		return jarList;
+	}
+
+	public void setJarList(String jarList) {
+		this.jarList = jarList;
 	}
 
 	

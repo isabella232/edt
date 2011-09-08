@@ -115,7 +115,8 @@ public class DeploymentDescParser extends DefaultHandler {
 											    attributes.getValue("sqlPassword"),
 											    attributes.getValue("sqlJNDIName"),
 											    attributes.getValue("sqlSchema"),
-											    attributes.getValue("sqlValidationConnectionURL")));
+											    attributes.getValue("sqlValidationConnectionURL"),
+											    attributes.getValue("jarList")));
 		}
 		else if (localName.equals("webservice")) {
 			currentWebService = new Webservice(attributes.getValue("implementation"),
