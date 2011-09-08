@@ -25,17 +25,13 @@ public interface EDictionary extends EglAny, Map<String, Object> {
 	 * Return whether the dictionary key comparison is case sensitive
 	 * @return True if so
 	 */
-	public boolean caseSensitive();
-
-	public void setCaseSensitive(boolean isCaseSensitive);
+	public boolean getCaseSensitive();
 
 	/**
 	 * Return the enumeration order for the dictionary
 	 * @return byKey, byInsertion, or none
 	 */
-	public OrderingKind order();
-
-	public void setOrder(OrderingKind orderConstant);
+	public OrderingKind getOrdering();
 
 	/**
 	 * Return the keys for the contents of the dictionary, in the preferred order.
@@ -91,4 +87,11 @@ public interface EDictionary extends EglAny, Map<String, Object> {
 	 * @return the values.
 	 */
 	public EglList<Object> getValues();
+	
+	/**
+	 * Returns the number of key-value pairs in this dictionary.
+	 *
+	 * @return the size.
+	 */
+	public int size();
 }

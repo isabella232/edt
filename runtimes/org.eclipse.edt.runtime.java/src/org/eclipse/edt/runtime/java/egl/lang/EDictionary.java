@@ -69,24 +69,14 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 	/**
 	 * Return whether the dictionary key comparison is case sensitive
 	 */
-	public boolean caseSensitive() {
+	public boolean getCaseSensitive() {
 		return this.caseSensitive;
-	}
-
-	@Override
-	public void setCaseSensitive(boolean isCaseSensitive) {
-		this.caseSensitive = isCaseSensitive;
-	}
-
-	@Override
-	public void setOrder(OrderingKind orderConstant) {
-		this.order = orderConstant;
 	}
 
 	/**
 	 * Return the enumeration order for the dictionary
 	 */
-	public OrderingKind order() {
+	public OrderingKind getOrdering() {
 		return this.order;
 	}
 
