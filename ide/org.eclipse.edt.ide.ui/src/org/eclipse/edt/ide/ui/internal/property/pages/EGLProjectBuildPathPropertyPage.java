@@ -208,16 +208,8 @@ public class EGLProjectBuildPathPropertyPage extends PropertyPage {
 		configuration.setProjectName(project.getName());
 		configuration.setConfigureEGLPathOnly( true );
 		
-		try {
-			if( EGLProjectInfoUtility.isJavaProject( project ) ) {
-				configuration.addJavaPlatform();
-			} 
-			if( EGLProjectInfoUtility.isJavaScriptProject( project ) ) {
-				configuration.addJavaScriptPlatform();
-			}
-		} catch(CoreException e) {
-			EGLLogger.log(this, e.toString());
-		}
+		configuration.addJavaPlatform();
+		configuration.addJavaScriptPlatform();
 		
 		//Construct the list from existing entries
 		try{

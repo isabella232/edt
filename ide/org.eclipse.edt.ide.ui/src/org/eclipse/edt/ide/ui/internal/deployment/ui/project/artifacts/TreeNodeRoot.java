@@ -53,19 +53,12 @@ public class TreeNodeRoot extends TreeNodeFolder {
 		for (Iterator iterator = projects.iterator(); iterator.hasNext();) {
 			EGLProject eglProject = (EGLProject) iterator.next();
 			IProject project = eglProject.getProject();
-			try{
-				if(EGLProjectInfoUtility.isJavaScriptProject(project) || EGLProjectInfoUtility.isJavaProject(project)){
-					if (!addedProjects.contains(eglProject)) {
-						addedProjects.add(eglProject);
-						TreeNodeProject node = new TreeNodeProject(this, project);
-						node.setSupportDynamicLoading(isSupportDynamicLoading());
-						node.setDeployable(false);
-						results.add(node);
-					}
-				}
-			} catch (CoreException e) {
-				DeploymentUtilities.displayErrorDialog(SOAMessages.TreeNode_0, SOAMessages.TreeNode_1);
-				EDTUIPlugin.log(e);
+			if (!addedProjects.contains(eglProject)) {
+				addedProjects.add(eglProject);
+				TreeNodeProject node = new TreeNodeProject(this, project);
+				node.setSupportDynamicLoading(isSupportDynamicLoading());
+				node.setDeployable(false);
+				results.add(node);
 			}
 		}
 		this.children = results;

@@ -17,7 +17,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
-import org.eclipse.edt.ide.core.utils.EGLProjectInfoUtility;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public class ProjectConversionOperation extends WorkspaceModifyOperation {
@@ -44,7 +43,7 @@ public class ProjectConversionOperation extends WorkspaceModifyOperation {
 		
 		ProjectConfiguration config = new ProjectConfiguration();
 		config.setProjectName( project.getName() );
-		config.setTargetRuntimeValue( EGLProjectInfoUtility.JAVA_PLATFORM );
+		config.setTargetRuntimeValue( ProjectConfiguration.JAVA_PLATFORM );
 		config.setRequiredProjects( new ArrayList() );
 		
 		// add EGL nature to the .project file

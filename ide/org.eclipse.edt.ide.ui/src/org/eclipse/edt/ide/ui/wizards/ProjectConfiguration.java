@@ -84,7 +84,7 @@ public class ProjectConfiguration {
 		initialProjectLocation = Platform.getLocation().toOSString();
 		customProjectLocation = ""; //$NON-NLS-1$
 		basePackageName = "";
-		targetRuntimeValue = EGLProjectInfoUtility.JAVA_PLATFORM;
+		targetRuntimeValue = JAVA_PLATFORM;
 		requiredProjects = new ArrayList<PPListElement>();
 		selectedWidgetLibraries = new ArrayList<String>();
 		selectedCompiler = EDT_COMPILER_ID;

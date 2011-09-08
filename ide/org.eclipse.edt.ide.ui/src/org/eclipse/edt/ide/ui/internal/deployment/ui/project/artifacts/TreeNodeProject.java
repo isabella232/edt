@@ -72,30 +72,18 @@ public class TreeNodeProject extends TreeNodeFolder {
 		List<IResource> results = new ArrayList<IResource>();
 		List<TreeNodeFolder> children = new ArrayList<TreeNodeFolder>();
 		
-		try{
-			if(EGLProjectInfoUtility.isJavaScriptProject((IProject)this.resource)){
-				try {
-					DeploymentUtilities.findFolder((IProject)this.resource, results, WEB_CONTENT);
-					
-//					if(isSupportDynamicLoading()){
-//						String folderPath = Path.SEPARATOR + GEN_Folder + Path.SEPARATOR + GEN_JavaScriptFolder + Path.SEPARATOR + GEN_Target;
-//						String folderPath = Path.SEPARATOR  + GEN_JavaScriptFolder;
-						DeploymentUtilities.findFolder((IProject)this.resource, results, GEN_JavaScriptFolder);
-//					}
-				} catch (CoreException e) {
-					DeploymentUtilities.displayErrorDialog(SOAMessages.TreeNode_0, SOAMessages.TreeNode_1);
-					EDTUIPlugin.log(e);
-				}
-				for (Iterator iterator = results.iterator(); iterator.hasNext();) {
-					IFolder folder = (IFolder) iterator.next();
-					TreeNodeFolder node = new TreeNodeJavaScriptFolder(this, folder);
-					node.setDeployable(false);
-					children.add(node);			
-				}
-			}
-		}catch (CoreException e) {
+		try {
+			DeploymentUtilities.findFolder((IProject)this.resource, results, WEB_CONTENT);
+			DeploymentUtilities.findFolder((IProject)this.resource, results, GEN_JavaScriptFolder);
+		} catch (CoreException e) {
 			DeploymentUtilities.displayErrorDialog(SOAMessages.TreeNode_0, SOAMessages.TreeNode_1);
 			EDTUIPlugin.log(e);
+		}
+		for (Iterator iterator = results.iterator(); iterator.hasNext();) {
+			IFolder folder = (IFolder) iterator.next();
+			TreeNodeFolder node = new TreeNodeJavaScriptFolder(this, folder);
+			node.setDeployable(false);
+			children.add(node);			
 		}
 		
 		return children;
