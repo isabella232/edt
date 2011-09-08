@@ -4,84 +4,58 @@ import egl.lang.reflect.ClassType;
 import egl.lang.reflect.mof.Operation;
 
 /**
- * EglList defines the API of arrays in EGL.  Arrays have a size, which is the number
- * of element they contain.  The size may be zero.  Arrays also have a maximum
- * size, beyond which they cannot grow.
+ * EglList defines the API of lists (dynamically-sized arrays) in EGL.  Lists have
+ * a size, which is the number of elements they contain.  The size may be zero.
  */
 externalType EglList type ClassType {  
 	typeParameters = ["E"]
 }
-	/**
-	 * Creates a new array.  It has the default maximum size of 2147483647.
-	 *
-	 * @param initialSize  the initial size of the array.
-	 * @throws ArraySizeException  if initialSize is negative.
-	 */
-	constructor(initialSize EglInt in);
 
 	/**
-	 * {@Operation +} Creates a new array consisting of the first operand's elements
+	 * {@Operation +} Creates a new list consisting of the first operand's elements
 	 * followed by the second operand.  The assigning form of the operator (+=) does 
-	 * not create a new array: the appendElement function is used to add the second 
+	 * not create a new list: the appendElement function is used to add the second 
 	 * operand to the end of the first operand.
-	 *
-	 * @throws ArraySizeException  if the array's size is 2147483647, or the
-	 * assigning form of the operator was used and the array is at its maximum size.
 	 */
 	static function $Plus(lvalue EglList in, rvalue EglAny in) returns (EglList) {@Operation{"+"}};
 
 	/**
-	 * {@Operation ::} Creates a new array consisting of the first operand's elements
+	 * {@Operation ::} Creates a new list consisting of the first operand's elements
 	 * followed by the second operand.  The assigning form of the operator (::=) does 
-	 * not create a new array: the appendElement function is used to add the second 
+	 * not create a new list: the appendElement function is used to add the second 
 	 * operand to the end of the first operand.
-	 *
-	 * @throws ArraySizeException  if the array's size is 2147483647, or the
-	 * assigning form of the operator was used and the array is at its maximum size.
 	 */
 	static function $Concat(value EglList in, rvalue EglAny in) returns (EglList) {@Operation{"::"}};
 
 	/**
-	 * {@Operation +} Creates a new array consisting of the first operand followed 
+	 * {@Operation +} Creates a new list consisting of the first operand followed 
 	 * by the second operand's elements.  The assigning form of the operator (+=) does
-	 * not create a new array: the insertElement function is used to add the second
+	 * not create a new list: the insertElement function is used to add the second
 	 * operand to the front of the first operand.
-	 *
-	 * @throws ArraySizeException  if the array's size is 2147483647, or the
-	 * assigning form of the operator was used and the array is at its maximum size.
 	 */
 	static function $Plus(lvalue EglAny in, rvalue EglList in) returns (EglList) {@Operation{"+"}};
 
 	/**
-	 * {@Operation ::} Creates a new array consisting of the first operand followed 
+	 * {@Operation ::} Creates a new list consisting of the first operand followed 
 	 * by the second operand's elements.  The assigning form of the operator (::=) does
-	 * not create a new array: the insertElement function is used to add the second
+	 * not create a new list: the insertElement function is used to add the second
 	 * operand to the front of the first operand.
-	 *
-	 * @throws ArraySizeException  if the array's size is 2147483647, or the
-	 * assigning form of the operator was used and the array is at its maximum size.
 	 */
 	static function $Concat(value EglAny in, rvalue EglList in) returns (EglList) {@Operation{"::"}};
 
 	/**
-	 * {@Operation +} Creates a new array consisting of the first operand's elements
+	 * {@Operation +} Creates a new list consisting of the first operand's elements
 	 * followed by the second operand's elements.  The assigning form of the operator
-	 * (+=) does not create a new array: the appendAll function is used to add the 
+	 * (+=) does not create a new list: the appendAll function is used to add the 
 	 * second operand's elements to the end of the first operand.
-	 *
-	 * @throws ArraySizeException  if the combined array's size would be greater
-	 * than 2147483647.
 	 */
 	static function $Plus(lvalue EglList in, rvalue EglList in) returns (EglList) {@Operation{"+"}};
 
 	/**
-	 * {@Operation ::} Creates a new array consisting of the first operand's elements
+	 * {@Operation ::} Creates a new list consisting of the first operand's elements
 	 * followed by the second operand's elements.  The assigning form of the operator
-	 * (::=) does not create a new array: the appendAll function is used to add the 
+	 * (::=) does not create a new list: the appendAll function is used to add the 
 	 * second operand's elements to the end of the first operand.
-	 *
-	 * @throws ArraySizeException  if the combined array's size would be greater
-	 * than 2147483647.
 	 */
 	static function $Concat(value EglList in, rvalue EglList in) returns (EglList) {@Operation{"::"}};
 
@@ -92,41 +66,36 @@ externalType EglList type ClassType {
 	static function $Get(value EglList in, index EglInt in) returns(EglAny) {@Operation{"[]"}};
 	
 	/**
-	 * Adds an element to the end of this array.
+	 * Adds an element to the end of this list.
 	 *
 	 * @param element  the new element.
-	 * @throws ArraySizeException  if this array is already at its maximum size.
 	 */
 	function appendElement(element EglAny in);
 	
 	/**
-	 * Adds the elements of the specified array to the end of this array.
+	 * Adds the elements of the specified list to the end of this list.
 	 *
-	 * @param other  the other array.
-	 * @throws ArraySizeException  if this array's maximum size would be exceeded.  The
-	 * exception will be thrown before any elements are added, so this function
-	 * will either add all elements or none of them.
+	 * @param other  the other list.
 	 */
 	function appendAll(other EglList in);
 	
 	/**
-	 * Inserts an element into this array at a specified position.  Any elements
+	 * Inserts an element into this list at a specified position.  Any elements
 	 * at or beyond the specified index are shifted toward the end.
 	 *
-	 * The index may be any valid position within this array.  It may also be 
+	 * The index may be any valid position within this list.  It may also be 
 	 * zero, indicating that the new element goes at the front, or it may be one
 	 * more than the current size, indicating that the new element goes at the 
 	 * end (as if appendElement had been called). 
 	 *
 	 * @param element  the new element.
 	 * @param index  where the element should be added.
-	 * @throws ArraySizeException  if this array is already at its maximum size.
 	 * @throws InvalidIndexException  if the index is negative or greater than 1 plus the size.
 	 */
 	function insertElement(element EglAny in, index EglInt in);
 	
 	/**
-	 * Removes the element at a specified position from this array.  Any elements
+	 * Removes the element at a specified position from this list.  Any elements
 	 * at or beyond the specified index are shifted toward the front.
 	 *
 	 * @param index  where the element should be removed.
@@ -136,8 +105,8 @@ externalType EglList type ClassType {
 
 	/**
 	 * Returns the index of the first ocurrance of the specified value within 
-	 * the array.  The search begins at the specified index and stops at the
-	 * end of the array.
+	 * the list.  The search begins at the specified index and stops at the
+	 * end of the list.
 	 * 
 	 * @param value  the value to find.
 	 * @param index  the index of the element to examine first. 
@@ -155,7 +124,7 @@ externalType EglList type ClassType {
 	function indexOfElement(value EglAny in) returns(EglInt);
 	
 	/**
-	 * Removes all elements from the array.
+	 * Removes all elements from the list.
 	 */
 	function removeAll();
 	
@@ -169,24 +138,24 @@ externalType EglList type ClassType {
 	function setElement(value EglAny in, index EglInt in);
 
 	/**
-	 * Returns the current size of the array.
+	 * Returns the current size of the list.
 	 *
-	 * @return the current size of the array.
+	 * @return the current size of the list.
 	 */
 	function getSize() returns(EglInt);
 
 	/**
-	 * Changes the size of the array.  If the new size is greater than the current
-	 * size, new elements are added at the end of the array.  If the new size is
+	 * Changes the size of the list.  If the new size is greater than the current
+	 * size, new elements are added at the end of the list.  If the new size is
 	 * smaller than the current size, elements at the end are removed. 
 	 *
 	 * @param size  the new size.
-	 * @throws ArraySizeException  if the specified size is greater than the maximum size.
+	 * @throws InvalidSizeException  if the specified size is negative.
 	 */
 	function resize(size EglInt in);
 
 	/**
-	 * Sorts the elements of the array in order from smallest to largest.
+	 * Sorts the elements of the list in order from smallest to largest.
 	 *
 	 * @param sortFunction  a function capable of comparing two elements.
 	 * @throws InvocationException when the sort function can't be called.

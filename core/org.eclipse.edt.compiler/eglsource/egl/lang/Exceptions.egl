@@ -1,14 +1,10 @@
 package egl.lang;
 
 /**
- * ArraySizeExceptions are thrown to indicate errors such as a negative initial
- * size for an array, or an attempt to expand an array beyond its maximum size.
+ * InvalidArgumentExceptions are thrown to indicate that an argument to a function
+ * or constructor is invalid for some reason.
  */
-record ArraySizeException type Exception
-	/**
-	 * The invalid size.
-	 */
-	size int;
+record InvalidArgumentException type Exception
 end
 
 /**

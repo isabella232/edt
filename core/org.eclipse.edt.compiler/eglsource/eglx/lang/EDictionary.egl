@@ -11,11 +11,11 @@ import egl.lang.reflect.mof.Operation;
  *
  * Two annotations are commonly used on dictionaries.  CaseSensitive tells the
  * dictionary if its keys are case-sensitive.  The default is false.  Ordering
- * determines how the getKeys and getValues functions populate the arrays they 
+ * determines how the getKeys and getValues functions populate the lists they 
  * return.  Its value comes from the OrderingKind enumeration.  byKey means the 
- * elements of those arrays are in alphabetical order of the keys.  byInsertion
- * means the elements of those arrays are in the order that keys were added to
- * the dictionary.  And none (the default) means the elements of those arrays 
+ * elements of those lists are in alphabetical order of the keys.  byInsertion
+ * means the elements of those lists are in the order that keys were added to
+ * the dictionary.  And none (the default) means the elements of those lists 
  * may be in any order whatsoever.
  *
  */
@@ -49,7 +49,7 @@ externalType EDictionary extends EglAny type ClassType
 	function containsKey(key EString in) returns(EBoolean);
 	
 	/**
-	 * Returns an array containing all of the keys, in the order specified by
+	 * Returns a list containing all of the keys, in the order specified by
 	 * the ordering annotation.
 	 *
 	 * @return the keys.
@@ -57,7 +57,7 @@ externalType EDictionary extends EglAny type ClassType
 	function getKeys() returns(EString[]);
 	
 	/**
-	 * Returns an array containing all of the values, in the order specified by
+	 * Returns a list containing all of the values, in the order specified by
 	 * the ordering annotation.
 	 *
 	 * @return the values.
