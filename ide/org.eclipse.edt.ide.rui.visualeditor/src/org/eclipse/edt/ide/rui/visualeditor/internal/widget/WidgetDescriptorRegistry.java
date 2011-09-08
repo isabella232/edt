@@ -100,30 +100,28 @@ public class WidgetDescriptorRegistry implements IWidgetDescriptorRegistry {
 				for (Iterator iterator = projects.iterator(); iterator.hasNext();) {
 					EGLProject eglProject = (EGLProject) iterator.next();
 					IProject project = eglProject.getProject();
-//TODO EDT project nature					
-//					if( project.isOpen() && (Util.isRUIProject( project ) || Util.isCEProject(project))) {
-						WidgetDescriptorFactory factory = new WidgetDescriptorFactory( project );
-						// Find all RUIWidgets in project
-						IPart[] ruiWidgets = org.eclipse.edt.ide.rui.utils.Util.searchForRUIWidgets( project );
-						for( int j = 0; j < ruiWidgets.length; j++ ) {
-							if(ruiWidgets[j] instanceof SourcePart) {
-								EGLFile file = (EGLFile)EGLCore.create( ruiWidgets[ j ].getResource() );
-								createWidgetDescriptor(factory, file.getPackageName(), file.getElementName(), ruiWidgets[j] );
-							} else if(ruiWidgets[j] instanceof BinaryPart) {
-								ClassFile file = (ClassFile) ((BinaryPart)ruiWidgets[j]).getClassFile();
-								IEGLElement parent = file.getParent();
-								File eglarFile = null;
-								while( ! (parent instanceof EGLProject) ) {
-									if ( parent instanceof EglarPackageFragmentRoot ) {
-										eglarFile = eglProject.getEGLPathEntryFor( parent.getPath() ).getPath().toFile();
-										break;
-									}
-									parent = parent.getParent();
+					
+					WidgetDescriptorFactory factory = new WidgetDescriptorFactory( project );
+					// Find all RUIWidgets in project
+					IPart[] ruiWidgets = org.eclipse.edt.ide.rui.utils.Util.searchForRUIWidgets( project );
+					for( int j = 0; j < ruiWidgets.length; j++ ) {
+						if(ruiWidgets[j] instanceof SourcePart) {
+							EGLFile file = (EGLFile)EGLCore.create( ruiWidgets[ j ].getResource() );
+							createWidgetDescriptor(factory, file.getPackageName(), file.getElementName(), ruiWidgets[j] );
+						} else if(ruiWidgets[j] instanceof BinaryPart) {
+							ClassFile file = (ClassFile) ((BinaryPart)ruiWidgets[j]).getClassFile();
+							IEGLElement parent = file.getParent();
+							File eglarFile = null;
+							while( ! (parent instanceof EGLProject) ) {
+								if ( parent instanceof EglarPackageFragmentRoot ) {
+									eglarFile = eglProject.getEGLPathEntryFor( parent.getPath() ).getPath().toFile();
+									break;
 								}
-								createWidgetDescriptorFromEglar(factory, file.getPackageName(), file.getElementName(), ruiWidgets[j], eglarFile );
+								parent = parent.getParent();
 							}
+							createWidgetDescriptorFromEglar(factory, file.getPackageName(), file.getElementName(), ruiWidgets[j], eglarFile );
 						}
-//					}	
+					}
 				}
 				
 				//sort the widgets in the widget groups.

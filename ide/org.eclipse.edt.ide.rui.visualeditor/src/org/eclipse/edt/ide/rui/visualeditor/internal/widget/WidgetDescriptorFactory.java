@@ -478,10 +478,10 @@ public class WidgetDescriptorFactory {
 	}
 	
 	private void processWidgetExcludedFields( Annotation widgetAnnotation, WidgetDescriptor widgetDescriptor ) {
-		Integer propertyFilterType = (Integer)widgetAnnotation.getValue( PROPERTY_FILTER_TYPE );
+		EnumerationEntry propertyFilterType = (EnumerationEntry)widgetAnnotation.getValue( PROPERTY_FILTER_TYPE );
 		EList excludedProperties = (EList)widgetAnnotation.getValue( PROPERTY_FILTER );
 		if ( propertyFilterType != null ) {
-			widgetDescriptor._propertyFilterType = propertyFilterType.intValue();
+			widgetDescriptor._propertyFilterType = propertyFilterType.getValue();
 		}
 		if( excludedProperties != null && excludedProperties.size() > 0 ) {
 			for ( int i = 0; i < excludedProperties.size(); i ++ ) {
@@ -489,10 +489,10 @@ public class WidgetDescriptorFactory {
 			}
 		}
 		
-		Integer eventFilterType = (Integer)widgetAnnotation.getValue( EVENT_FILTER_TYPE );
+		EnumerationEntry eventFilterType = (EnumerationEntry)widgetAnnotation.getValue( EVENT_FILTER_TYPE );
 		EList excludedEvents = (EList)widgetAnnotation.getValue( EVENT_FILTER );
 		if ( eventFilterType != null ) {
-			widgetDescriptor._eventFilterType = eventFilterType.intValue();
+			widgetDescriptor._eventFilterType = eventFilterType.getValue();
 		}
 		if( excludedEvents != null && excludedEvents.size() > 0 ) {
 			for ( int i = 0; i < excludedEvents.size(); i ++ ) {
