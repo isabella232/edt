@@ -27,6 +27,13 @@ public class SQLDataSource implements RecoverableResource {
 		ru.registerResource(this);
 		statements = new HashMap<String, List<Statement>>();
 	}
+	
+	public SQLDataSource(String connectionUrl) {
+		this.connectionUrl = connectionUrl;
+		org.eclipse.edt.javart.Runtime.getRunUnit().registerResource(this);
+		statements = new HashMap<String, List<Statement>>();
+	}
+
 
 	public Connection getConnection() throws SQLException {
 		if (conn == null) {
@@ -90,13 +97,19 @@ public class SQLDataSource implements RecoverableResource {
 		
 	}
 	
-	public void registerStatement(String typeSignature, Statement stmt) {
+	public void registerStatement(String typeSignature, int index, Statement stmt) {
 		List<Statement> stmts = statements.get(typeSignature);
 		if (stmts == null) {
 			stmts = new ArrayList<Statement>();
 			statements.put(typeSignature, stmts);
 		}
-		stmts.add(stmt);
+		if (index >= stmts.size()) {
+			int z = index - stmts.size();
+			for (int i=0; i<=z; i++) {
+				stmts.add(null);
+			}
+		}
+		stmts.set(index, stmt);
 	}
 	
 	public Statement getStatement(String typeSignature, Integer index) {

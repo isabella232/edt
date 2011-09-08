@@ -9,7 +9,7 @@ public class SQLResultSet {
 	private ResultSet resultSet;
 	private String[] updateFieldNames;
 	
-	public SQLResultSet(ResultSet rs, RunUnit ru) {
+	public SQLResultSet(ResultSet rs) {
 		this.resultSet = rs;
 	}
 	
