@@ -365,6 +365,11 @@ egl.egl.lang.EString.isLike = function (str1, str2, esc) {
 egl.egl.lang.EString.indexOf = function (str, pattern) {
 	return str.indexOf(pattern);
 };
+egl.egl.lang.EString.replaceStr = function(str, target, replacement) {
+	return str.replace(new RegExp(target, "g"), replacement);   // TODO should we simply alias replaceStr as replace?
+};
+
+
 
 
 //Returns the number of bytes in a text expression, excluding any trailing spaces or null values.
