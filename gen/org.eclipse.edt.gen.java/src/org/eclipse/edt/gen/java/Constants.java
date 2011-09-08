@@ -32,6 +32,14 @@ public class Constants {
 	// command parameter internal names
 	public static final String parameter_checkOverflow = "checkOverflow";
 
+	// these are used for generating fields with @Property and @EGLProperty
+	public static final String Annotation_EGLProperty = "eglx.lang.EGLProperty";
+	public static final String Annotation_Property = "eglx.lang.Property";
+	public static final String Annotation_PropertyGetter = "getMethod";
+	public static final String Annotation_PropertySetter = "setMethod";	
+	public static final String GetterPrefix = "get";
+	public static final String SetterPrefix = "set";
+
 	// these are sub key values used as context hashmap keys
 	public static final String SubKey_partBeingGenerated = "partBeingGenerated";
 	public static final String SubKey_partDataTablesUsed = "partDataTablesUsed";
