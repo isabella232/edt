@@ -21,4 +21,8 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin
 Bundle-Vendor: Eclipse EGL Development Tools
+Export-Package: org.eclipse.edt.ide.eunit,
+ org.eclipse.edt.ide.eunit.internal.actions;x-internal:=true,
+ org.eclipse.edt.ide.eunit.internal.chart;x-internal:=true,
+ org.eclipse.edt.ide.eunit.ui.testresult
 
