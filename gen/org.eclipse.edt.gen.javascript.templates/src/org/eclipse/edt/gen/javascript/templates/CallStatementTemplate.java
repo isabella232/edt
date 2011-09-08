@@ -112,20 +112,10 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 		genParamOrders(serviceInterfaceFunction, ctx, out);
 		genCallbackArgs(callbackFunction, ctx, out);			
 		
-		if(stmt.getCallback() != null){
-			ctx.invoke(genCallbackAccesor, stmt.getCallback(), ctx, out);
-			out.print(", ");
-		}
-		else{
-			out.print("null, ");
-		}
-		if(stmt.getErrorCallback() != null){
-			ctx.invoke(genCallbackAccesor, stmt.getErrorCallback(), ctx, out);
-			out.println(");");
-		}
-		else{
-			out.println("null);");
-		}
+		genCallbackAccesor(stmt.getCallback(), ctx, out);
+		out.print(", ");
+		genCallbackAccesor(stmt.getErrorCallback(), ctx, out);
+		out.println(");");
 		out.popIndent();
 		out.popIndent();
 	}
@@ -148,22 +138,11 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 		genInParamSignature(serviceInterfaceFunction, stmt.getArguments(), ctx, out);
 		genParamOrders(serviceInterfaceFunction, ctx, out);
 		genCallbackArgs(callbackFunction, ctx, out);			
-		
-		
-		if(stmt.getCallback() != null){
-			ctx.invoke(genCallbackAccesor, stmt.getCallback(), ctx, out);
-			out.print(", ");
-		}
-		else{
-			out.print("null, ");
-		}
-		if(stmt.getErrorCallback() != null){
-			ctx.invoke(genCallbackAccesor, stmt.getErrorCallback(), ctx, out);
-			out.println(");");
-		}
-		else{
-			out.println("null);");
-		}
+
+		genCallbackAccesor(stmt.getCallback(), ctx, out);
+		out.print(", ");
+		genCallbackAccesor(stmt.getErrorCallback(), ctx, out);
+		out.println(");");
 		out.popIndent();
 		out.popIndent();
 //		if (context.getGenerationMode() == EGLGenerationModeSetting.DEVELOPMENT_GENERATION_MODE) {
@@ -172,6 +151,14 @@ public class CallStatementTemplate extends JavaScriptTemplate {
 //		}	*/	
 	}
 
+	private void genCallbackAccesor(Expression callBack, Context ctx, TabbedWriter out){
+		if(callBack != null){
+			ctx.invoke(genCallbackAccesor, callBack, ctx, out);
+		}
+		else{
+			out.println("null");
+		}
+	}
 	private void genRestParameters(CallStatement stmt, Function serviceInterfaceFunction, List<Expression> tempArgs, Annotation getRest,
 			Annotation putRest, Annotation postRest, Annotation deleteRest, Context ctx, TabbedWriter out) {
 		Map<String, RestArgument> mapFuncParams = new Hashtable<String, RestArgument>();	//key is String(parameter variable name in lower case), value is the RestArugment
