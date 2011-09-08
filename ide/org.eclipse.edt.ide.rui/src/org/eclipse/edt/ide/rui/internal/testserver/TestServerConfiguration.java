@@ -378,21 +378,26 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		}
 		
 		try {
-			IEGLProject eglProject = EGLCore.create(currProject);
-			
-			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-			for (IEGLPathEntry entry : eglProject.getResolvedEGLPath(true)) {
-				if (entry.getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
-					IResource resource = root.findMember(entry.getPath());
-					if (resource != null && resource.getType() == IResource.PROJECT && resource.isAccessible()) {
-						if (isOnEGLPath((IProject)resource, deltaProject, seen)) {
-							return true;
+			if (currProject.hasNature(EGLCore.NATURE_ID)) {
+				IEGLProject eglProject = EGLCore.create(currProject);
+				
+				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+				for (IEGLPathEntry entry : eglProject.getResolvedEGLPath(true)) {
+					if (entry.getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
+						IResource resource = root.findMember(entry.getPath());
+						if (resource != null && resource.getType() == IResource.PROJECT && resource.isAccessible()) {
+							if (isOnEGLPath((IProject)resource, deltaProject, seen)) {
+								return true;
+							}
 						}
 					}
 				}
 			}
 		}
 		catch (EGLModelException e) {
+			Activator.getDefault().log(e.getMessage(), e);
+		}
+		catch (CoreException e ) {
 			Activator.getDefault().log(e.getMessage(), e);
 		}
 		
