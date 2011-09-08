@@ -8,7 +8,7 @@ public class SqlPrepareStatementTemplate extends SqlActionStatementTemplate {
 	
 	public void genStatementBody(SqlPrepareStatement stmt, Context ctx, TabbedWriter out) {
 		String varName = getExprString(stmt.getPreparedStatement(), ctx);
-		genSqlStatementSetup(stmt, ctx, out, varName);
+		genSqlStatementSetup(stmt, ctx, out, varName, true);
 		genSqlStatementEnd(stmt, ctx, out);
 	}
 

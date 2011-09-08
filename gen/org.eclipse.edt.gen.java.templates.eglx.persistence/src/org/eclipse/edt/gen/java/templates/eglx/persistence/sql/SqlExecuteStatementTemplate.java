@@ -7,7 +7,7 @@ import org.eclipse.edt.mof.eglx.persistence.sql.SqlExecuteStatement;
 public class SqlExecuteStatementTemplate extends SqlActionStatementTemplate {
 
 	public void genStatementBody(SqlExecuteStatement stmt, Context ctx, TabbedWriter out) {
-		if (stmt.getSqlString() != null) {
+		if (stmt.getPreparedStatement() == null && stmt.getSqlString() != null) {
 			genSqlStatementSetup(stmt, ctx, out);
 			out.println(var_statement + ".execute();");
 		}

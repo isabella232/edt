@@ -6,6 +6,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlAddStatement;
@@ -47,12 +48,8 @@ public class SqlAddStatementTemplate extends SqlActionStatementTemplate {
 		int i = 1;
 		for (Field f : type.getFields()) {
 			if (SQL.isPersistable(f)) {
-				out.print(var_statement);
-				out.print(".setObject(" + i + ", ");
-				out.print(varName);
-				out.print('.');
-				ctx.invoke(genName, f, ctx, out);
-				out.println(");");
+				genSetColumnValue(f, var_statement, varName, i, ctx, out);
+				out.println(";");
 				i++;
 			}
 		}

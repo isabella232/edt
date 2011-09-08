@@ -18,9 +18,11 @@ public class SqlReplaceStatementTemplate extends SqlActionStatementTemplate {
 				if (!SQL.isAssociationField(f) && !SQL.isKeyField(f)) {
 					out.print(var_statement);
 					out.print(".setObject(" + i + ", ");
+					genConvertValueStart(targetType, ctx, out);
 					ctx.invoke(genExpression, stmt.getTarget(), ctx, out);
 					out.print('.');
 					ctx.invoke(genName, f, ctx, out);
+					genConvertValueEnd(targetType, ctx, out);
 					out.println(");");
 					i++;
 				}
@@ -34,14 +36,17 @@ public class SqlReplaceStatementTemplate extends SqlActionStatementTemplate {
 			if (stmt.getTarget() != null) {
 				for (Field f : ((EGLClass)stmt.getTarget()).getFields()) {
 					if (SQL.isPersistable(f)) {
+						EGLClass type = (EGLClass)f.getType().getClassifier();
 						ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
 						out.println(".getResultSet();");
 						out.print(".setObject(");
 						out.print(quoted(SQL.getColumnName(f)));
 						out.println(", ");
+						genConvertValueStart(type, ctx, out);
 						ctx.invoke(genExpression, stmt.getTarget(), ctx, out);
 						out.print('.');
 						ctx.invoke(genName, f, ctx, out);
+						genConvertValueStart(type, ctx, out);
 						out.println(");");
 					}
 				}

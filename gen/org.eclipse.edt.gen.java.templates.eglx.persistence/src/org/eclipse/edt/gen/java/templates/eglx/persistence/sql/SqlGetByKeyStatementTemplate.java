@@ -1,14 +1,12 @@
 package org.eclipse.edt.gen.java.templates.eglx.persistence.sql;
 
-import java.io.StringWriter;
-
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlGetByKeyStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
@@ -16,21 +14,43 @@ import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
 public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 
 	public void genStatementBody(SqlGetByKeyStatement stmt, Context ctx, TabbedWriter out) {
-		if (stmt.getSqlString() != null) {
-			genSqlStatementSetup(stmt, ctx, out);
-			if (stmt.getUsingExpressions()!= null) {
-				int i = 1;
-				for (Expression uexpr : stmt.getUsingExpressions()) {
-					out.print(var_statement + ".setObject(" + i + ", ");
-					ctx.invoke(genExpression, uexpr, ctx, out);
-					out.println(");");
-					i++;
+		boolean hasPreparedStmt = stmt.getPreparedStatement() != null;
+		boolean hasDataSource = stmt.getDataSource() != null;
+		boolean isResultSet = hasDataSource && !SQL.isSQLResultSet(stmt.getDataSource().getType());
+		
+		if (!hasPreparedStmt || !isResultSet) {
+			if (stmt.getSqlString() != null || !"".equals(stmt.getSqlString())) {
+				genSqlStatementSetup(stmt, ctx, out);
+			}
+			out.print(class_ResultSet + " " + var_resultSet + " = ");
+			if (hasPreparedStmt) {
+				ctx.invoke(genExpression, stmt.getPreparedStatement(), ctx, out);
+			}
+			else {
+				out.print(var_statement);
+			}
+			out.println(".executeQuery();");
+			// Handle the default case of no USING clause on default SQL with
+			// the values of the target default key fields
+			if (!hasPreparedStmt && stmt.getUsingExpressions().isEmpty() && !stmt.hasExplicitSql()) {
+				Type type = stmt.getTarget().getType();
+				if (type instanceof EGLClass && !SQL.isWrappedSQLType((EGLClass)type)) {
+					// The assumption here is that the order of the SQL compare expressions
+					// in the default WHERE clause derived by the order of the key fields in the type
+					int i = 1;
+					for (Field f : ((EGLClass)type).getFields()) {
+						if (SQL.isKeyField(f)) {
+							// TODO need a generalized way to generate the appropriate
+							// accessor without assuming the field value to accessed is public
+							// and is not an EGLProperty or Property field
+							String varName = getExprString(stmt.getTarget(), ctx);
+							genSetColumnValue(f, var_statement, varName, i, ctx, out);
+							out.println(";");
+							i++;
+						}
+					}
 				}
 			}
-			out.println(class_ResultSet + " " + var_resultSet + " = " + var_statement + ".executeQuery();");
-			out.println("java.sql.ResultSetMetaData ezeMetaData = " + var_resultSet + ".getMetaData();");
-			genPopulateFromResultSet(stmt, ctx, out, true);
-			genSqlStatementEnd(stmt, ctx, out);
 		}
 		else {
 			out.println("try {");
@@ -39,10 +59,10 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 			out.print(" = ");
 			ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
 			out.println(".getResultSet();");
-			out.println("java.sql.ResultSetMetaData ezeMetaData = " + var_resultSet + ".getMetaData();");
-			genPopulateFromResultSet(stmt, ctx, out, false);
-			genSqlStatementEnd(stmt, ctx, out);
 		}
+
+		genPopulateFromResultSet(stmt, ctx, out, true);
+		genSqlStatementEnd(stmt, ctx, out);
 	}
 	
 	public void genPopulateFromResultSet(SqlGetByKeyStatement stmt, Context ctx, TabbedWriter out, boolean doClose ) {
@@ -57,14 +77,19 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 				// Assume target type is an EGLClass as other Classifiers would be filtered out by front end validation
 				targetType = (EGLClass)((ArrayType)target.getType()).getElementType().getClassifier();
 				out.println("while(" + var_resultSet + ".next()) {");
-				ctx.invoke(genRuntimeTypeName, targetType, ctx, out, TypeNameKind.EGLImplementation);
+				ctx.invoke(genRuntimeTypeName, targetType, ctx, out);
 				out.print(' ');
 				String targetVarName = ctx.nextTempName();
-				out.print(targetVarName);
-				out.print(" = ");
-				ctx.invoke(genInstantiation, targetType, ctx, out);
-				out.println(";");
-				genPopulateSingleResult(targetType, targetVarName, var_resultSet, ctx, out);
+				out.print(targetVarName + " = ");
+				// Create a new instance for value types
+				if (TypeUtils.isValueType(targetType)) {
+					ctx.invoke(genInstantiation, targetType, ctx, out);
+				}
+				else {
+					out.print("null");
+				}
+				out.println(';');
+				genGetSingleRowFromResultSet(targetType, targetVarName, -1, stmt.getDataSource(), var_resultSet, ctx, out);
 				out.print("ezeList.add(");
 				out.print(targetVarName);
 				out.println(");");
@@ -76,16 +101,8 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 			else {
 				targetType = (EGLClass)target.getType().getClassifier();
 				out.println("if(" + var_resultSet + ".next()) {");
-				TabbedWriter temp = new TabbedWriter(new StringWriter());
-				ctx.invoke(genExpression, target, ctx, temp);
-				String targetVarName = temp.getCurrentLine();
-				out.println("if (" + targetVarName + " == null) {");
-				out.print(targetVarName);
-				out.print(" = ");
-				ctx.invoke(genInstantiation, targetType, ctx, out);
+				genGetSingleRowFromResultSet(stmt.getTargets(), stmt.getDataSource(), var_resultSet, ctx, out);
 				out.println(";");
-				out.println("}");
-				genPopulateSingleResult(targetType, targetVarName, var_resultSet, ctx, out);
 				if (doClose)
 					out.println(var_resultSet + ".close();");
 				out.println('}');
@@ -106,52 +123,8 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 	public void genSetTargetFromResultSet(Expression target, String var_resultSet, int columnIndex, Context ctx, TabbedWriter out) {
 		ctx.invoke(genExpression, target, ctx, out);
 		out.print(" = ");
-		genGetColumnValue(target, columnIndex, ctx, out);
-	}
-	
-	public void genGetColumnValue(Expression target, int columnIndex, Context ctx, TabbedWriter out) {
-		out.print('(');
-		ctx.invoke(genRuntimeTypeName, target.getType(), ctx, out, TypeNameKind.JavaImplementation);
-		out.print(')');
-		out.println(var_resultSet + ".getObject(" + columnIndex + ");");
-	}
-
-	public void genGetColumnValue(Expression target, String columnName, Context ctx, TabbedWriter out) {
-		out.print('(');
-		ctx.invoke(genRuntimeTypeName, target.getType(), ctx, out, TypeNameKind.JavaImplementation);
-		out.print(')');
-		out.println(var_resultSet + ".getObject(" + quoted(columnName) + ");");
-	}
-
-	public void genPopulateSingleResult(EGLClass targetType, String targetVarName, String resultSetName, Context ctx, TabbedWriter out) {
-		out.println("for (int i=1; i<=ezeMetaData.getColumnCount(); i++) {");
-		if (TypeUtils.isDynamicType(targetType)) {
-			out.print(targetVarName + ".put(");
-			out.print("ezeMetaData.getColumnName(i), ");
-			out.println(var_resultSet + ".getObject(i));");
-		}
-		else {
-			boolean doElse = false;
-			for (Field field : targetType.getFields()) {
-				if (!field.isStatic() && field.getAccessKind()!= AccessKind.ACC_PRIVATE && SQL.isPersistable(field)) {
-					String columnName = SQL.getColumnName(field);
-					if (doElse) out.print("else ");
-					out.print("if (ezeMetaData.getColumnName(i).equalsIgnoreCase(");
-					if (!doElse) doElse = true;
-					out.print(quoted(columnName));
-					out.println(")) {");					
-					out.print(targetVarName + ".");
-					ctx.invoke(genName, field, ctx, out);
-					out.print(" = ");
-					out.print('(');
-					ctx.invoke(genRuntimeTypeName, field.getType(), ctx, out, TypeNameKind.JavaImplementation);
-					out.print(')');
-					out.println(var_resultSet + ".getObject(i);");
-					out.println('}');
-				}
-			}
-		}
-		out.println("}");
+		genGetColumnValueByIndex((EGLClass)target.getType().getClassifier(), var_resultSet, columnIndex, ctx, out);
+		out.println(";");
 	}
 	
 }

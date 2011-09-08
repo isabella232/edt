@@ -9,11 +9,6 @@ import org.eclipse.edt.mof.egl.NewExpression;
 
 public class SQLDataSourceTemplate extends JavaTemplate {
 
-	public void genConstructorOptions(EGLClass dataSourceType, Context ctx, TabbedWriter out) {
-		// TODO use standardized constant for accessing generated runtime variable names
-		out.print(", org.eclipse.edt.javart.Runtime.getRunUnit()");
-	}
-	
 	public void genContainerBasedNewExpression(EGLClass datasource, Context ctx, TabbedWriter out, NewExpression expr) {
 		out.print("new ");
 		ctx.invoke(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavaImplementation);
@@ -23,7 +18,6 @@ public class SQLDataSourceTemplate extends JavaTemplate {
 				ctx.invoke(genExpression, argument, ctx, out);
 			}
 		}
-		genConstructorOptions(datasource, ctx, out);
 		out.print(")");
 	}
 }

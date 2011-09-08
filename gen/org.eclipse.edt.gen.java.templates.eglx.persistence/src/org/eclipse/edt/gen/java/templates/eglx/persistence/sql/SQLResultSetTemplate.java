@@ -13,7 +13,7 @@ public class SQLResultSetTemplate extends JavaTemplate {
 	public void genInstantiation(EGLClass dataSourceType, Context ctx, TabbedWriter out, String resultSet) {
 		out.print("new ");
 		ctx.invoke(genRuntimeTypeName, dataSourceType, ctx, out);
-		out.print("(" + resultSet + ", _runUnit())");
+		out.print("(" + resultSet + ")");
 	}
 	
 	public void genUpdateExpression(EGLClass resultSet, Context ctx, TabbedWriter out, SqlReplaceStatement stmt) {
