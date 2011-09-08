@@ -717,28 +717,6 @@ class Egl2MofMember extends Egl2MofPart {
 		else {
 			if (settingsBlock != null) {
 				processSettings(field, settingsBlock);
-
-				// Add implicit new expression as first statement of the initialization
-				StatementBlock block = field.getInitializerStatements();
-				if (!(field.getType() instanceof ProxyPart) && field.getType().getClassifier().isInstantiable()) {
-					if (block == null) {
-						block = factory.createStatementBlock();
-						field.setInitializerStatements(block);
-						setElementInformation(type, block);
-					}
-					NewExpression newexpr = factory.createNewExpression();
-					newexpr.setId(field.getType().getTypeSignature());
-					if (type.getKind() == Type.ARRAYTYPE && ((ArrayType)type).getInitialSize() != null) {
-						((ArrayType)type).getInitialSize().accept(this);
-						newexpr.getArguments().add((Expression)stack.pop());
-					}
-					AssignmentStatement newStmt = createAssignmentStatement(field, newexpr);
-					setElementInformation(type, newStmt.getAssignment().getLHS());
-					setElementInformation(type, newStmt.getAssignment().getRHS());
-					setElementInformation(type, newStmt);
-					block.getStatements().add(0, newStmt);
-					field.setHasSetValuesBlock(true);
-				}
 			}
 		}
 		
