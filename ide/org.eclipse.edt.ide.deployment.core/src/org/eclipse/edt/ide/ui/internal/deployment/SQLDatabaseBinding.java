@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getDbms <em>Dbms</em>}</li>
+ *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getJarList <em>Jar List</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getSqlDB <em>Sql DB</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getSqlID <em>Sql ID</em>}</li>
@@ -64,6 +65,33 @@ public interface SQLDatabaseBinding extends EObject {
 	 * @generated
 	 */
 	void setDbms(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Jar List</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Jar List</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Jar List</em>' attribute.
+	 * @see #setJarList(String)
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getSQLDatabaseBinding_JarList()
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        extendedMetaData="kind='attribute' name='jarList'"
+	 * @generated
+	 */
+	String getJarList();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getJarList <em>Jar List</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Jar List</em>' attribute.
+	 * @see #getJarList()
+	 * @generated
+	 */
+	void setJarList(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.

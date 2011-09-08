@@ -1781,7 +1781,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSQLDatabaseBinding_Name() {
+	public EAttribute getSQLDatabaseBinding_JarList() {
 		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -1790,7 +1790,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSQLDatabaseBinding_SqlDB() {
+	public EAttribute getSQLDatabaseBinding_Name() {
 		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -1799,7 +1799,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSQLDatabaseBinding_SqlID() {
+	public EAttribute getSQLDatabaseBinding_SqlDB() {
 		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -1808,7 +1808,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSQLDatabaseBinding_SqlJDBCDriverClass() {
+	public EAttribute getSQLDatabaseBinding_SqlID() {
 		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -1817,7 +1817,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSQLDatabaseBinding_SqlJNDIName() {
+	public EAttribute getSQLDatabaseBinding_SqlJDBCDriverClass() {
 		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -1826,7 +1826,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSQLDatabaseBinding_SqlPassword() {
+	public EAttribute getSQLDatabaseBinding_SqlJNDIName() {
 		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -1835,7 +1835,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSQLDatabaseBinding_SqlSchema() {
+	public EAttribute getSQLDatabaseBinding_SqlPassword() {
 		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -1844,8 +1844,17 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSQLDatabaseBinding_SqlValidationConnectionURL() {
+	public EAttribute getSQLDatabaseBinding_SqlSchema() {
 		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSQLDatabaseBinding_SqlValidationConnectionURL() {
+		return (EAttribute)sqlDatabaseBindingEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -2398,6 +2407,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 
 		sqlDatabaseBindingEClass = createEClass(SQL_DATABASE_BINDING);
 		createEAttribute(sqlDatabaseBindingEClass, SQL_DATABASE_BINDING__DBMS);
+		createEAttribute(sqlDatabaseBindingEClass, SQL_DATABASE_BINDING__JAR_LIST);
 		createEAttribute(sqlDatabaseBindingEClass, SQL_DATABASE_BINDING__NAME);
 		createEAttribute(sqlDatabaseBindingEClass, SQL_DATABASE_BINDING__SQL_DB);
 		createEAttribute(sqlDatabaseBindingEClass, SQL_DATABASE_BINDING__SQL_ID);
@@ -2682,6 +2692,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 
 		initEClass(sqlDatabaseBindingEClass, SQLDatabaseBinding.class, "SQLDatabaseBinding", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSQLDatabaseBinding_Dbms(), theXMLTypePackage.getString(), "dbms", null, 1, 1, SQLDatabaseBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSQLDatabaseBinding_JarList(), theXMLTypePackage.getString(), "jarList", null, 0, 1, SQLDatabaseBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSQLDatabaseBinding_Name(), theXMLTypePackage.getNCName(), "name", null, 1, 1, SQLDatabaseBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSQLDatabaseBinding_SqlDB(), theXMLTypePackage.getString(), "sqlDB", null, 0, 1, SQLDatabaseBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSQLDatabaseBinding_SqlID(), theXMLTypePackage.getString(), "sqlID", null, 0, 1, SQLDatabaseBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3850,6 +3861,13 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		   new String[] {
 			 "kind", "attribute",
 			 "name", "dbms"
+		   });		
+		addAnnotation
+		  (getSQLDatabaseBinding_JarList(), 
+		   source, 
+		   new String[] {
+			 "kind", "attribute",
+			 "name", "jarList"
 		   });		
 		addAnnotation
 		  (getSQLDatabaseBinding_Name(), 

@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.SQLDatabaseBindingImpl#getDbms <em>Dbms</em>}</li>
+ *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.SQLDatabaseBindingImpl#getJarList <em>Jar List</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.SQLDatabaseBindingImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.SQLDatabaseBindingImpl#getSqlDB <em>Sql DB</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.SQLDatabaseBindingImpl#getSqlID <em>Sql ID</em>}</li>
@@ -62,6 +63,26 @@ public class SQLDatabaseBindingImpl extends EObjectImpl implements SQLDatabaseBi
 	 * @ordered
 	 */
 	protected String dbms = DBMS_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getJarList() <em>Jar List</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getJarList()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String JAR_LIST_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getJarList() <em>Jar List</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getJarList()
+	 * @generated
+	 * @ordered
+	 */
+	protected String jarList = JAR_LIST_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -268,6 +289,27 @@ public class SQLDatabaseBindingImpl extends EObjectImpl implements SQLDatabaseBi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getJarList() {
+		return jarList;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setJarList(String newJarList) {
+		String oldJarList = jarList;
+		jarList = newJarList;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.SQL_DATABASE_BINDING__JAR_LIST, oldJarList, jarList));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public String getName() {
 		return name;
 	}
@@ -441,6 +483,8 @@ public class SQLDatabaseBindingImpl extends EObjectImpl implements SQLDatabaseBi
 		switch (featureID) {
 			case DeploymentPackage.SQL_DATABASE_BINDING__DBMS:
 				return getDbms();
+			case DeploymentPackage.SQL_DATABASE_BINDING__JAR_LIST:
+				return getJarList();
 			case DeploymentPackage.SQL_DATABASE_BINDING__NAME:
 				return getName();
 			case DeploymentPackage.SQL_DATABASE_BINDING__SQL_DB:
@@ -471,6 +515,9 @@ public class SQLDatabaseBindingImpl extends EObjectImpl implements SQLDatabaseBi
 		switch (featureID) {
 			case DeploymentPackage.SQL_DATABASE_BINDING__DBMS:
 				setDbms((String)newValue);
+				return;
+			case DeploymentPackage.SQL_DATABASE_BINDING__JAR_LIST:
+				setJarList((String)newValue);
 				return;
 			case DeploymentPackage.SQL_DATABASE_BINDING__NAME:
 				setName((String)newValue);
@@ -511,6 +558,9 @@ public class SQLDatabaseBindingImpl extends EObjectImpl implements SQLDatabaseBi
 			case DeploymentPackage.SQL_DATABASE_BINDING__DBMS:
 				setDbms(DBMS_EDEFAULT);
 				return;
+			case DeploymentPackage.SQL_DATABASE_BINDING__JAR_LIST:
+				setJarList(JAR_LIST_EDEFAULT);
+				return;
 			case DeploymentPackage.SQL_DATABASE_BINDING__NAME:
 				setName(NAME_EDEFAULT);
 				return;
@@ -549,6 +599,8 @@ public class SQLDatabaseBindingImpl extends EObjectImpl implements SQLDatabaseBi
 		switch (featureID) {
 			case DeploymentPackage.SQL_DATABASE_BINDING__DBMS:
 				return DBMS_EDEFAULT == null ? dbms != null : !DBMS_EDEFAULT.equals(dbms);
+			case DeploymentPackage.SQL_DATABASE_BINDING__JAR_LIST:
+				return JAR_LIST_EDEFAULT == null ? jarList != null : !JAR_LIST_EDEFAULT.equals(jarList);
 			case DeploymentPackage.SQL_DATABASE_BINDING__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case DeploymentPackage.SQL_DATABASE_BINDING__SQL_DB:
@@ -581,6 +633,8 @@ public class SQLDatabaseBindingImpl extends EObjectImpl implements SQLDatabaseBi
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (dbms: ");
 		result.append(dbms);
+		result.append(", jarList: ");
+		result.append(jarList);
 		result.append(", name: ");
 		result.append(name);
 		result.append(", sqlDB: ");

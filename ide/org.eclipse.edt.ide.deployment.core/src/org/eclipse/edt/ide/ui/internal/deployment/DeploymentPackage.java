@@ -1847,13 +1847,22 @@ public interface DeploymentPackage extends EPackage {
 	int SQL_DATABASE_BINDING__DBMS = 0;
 
 	/**
+	 * The feature id for the '<em><b>Jar List</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SQL_DATABASE_BINDING__JAR_LIST = 1;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SQL_DATABASE_BINDING__NAME = 1;
+	int SQL_DATABASE_BINDING__NAME = 2;
 
 	/**
 	 * The feature id for the '<em><b>Sql DB</b></em>' attribute.
@@ -1862,7 +1871,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SQL_DATABASE_BINDING__SQL_DB = 2;
+	int SQL_DATABASE_BINDING__SQL_DB = 3;
 
 	/**
 	 * The feature id for the '<em><b>Sql ID</b></em>' attribute.
@@ -1871,7 +1880,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SQL_DATABASE_BINDING__SQL_ID = 3;
+	int SQL_DATABASE_BINDING__SQL_ID = 4;
 
 	/**
 	 * The feature id for the '<em><b>Sql JDBC Driver Class</b></em>' attribute.
@@ -1880,7 +1889,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SQL_DATABASE_BINDING__SQL_JDBC_DRIVER_CLASS = 4;
+	int SQL_DATABASE_BINDING__SQL_JDBC_DRIVER_CLASS = 5;
 
 	/**
 	 * The feature id for the '<em><b>Sql JNDI Name</b></em>' attribute.
@@ -1889,7 +1898,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SQL_DATABASE_BINDING__SQL_JNDI_NAME = 5;
+	int SQL_DATABASE_BINDING__SQL_JNDI_NAME = 6;
 
 	/**
 	 * The feature id for the '<em><b>Sql Password</b></em>' attribute.
@@ -1898,7 +1907,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SQL_DATABASE_BINDING__SQL_PASSWORD = 6;
+	int SQL_DATABASE_BINDING__SQL_PASSWORD = 7;
 
 	/**
 	 * The feature id for the '<em><b>Sql Schema</b></em>' attribute.
@@ -1907,7 +1916,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SQL_DATABASE_BINDING__SQL_SCHEMA = 7;
+	int SQL_DATABASE_BINDING__SQL_SCHEMA = 8;
 
 	/**
 	 * The feature id for the '<em><b>Sql Validation Connection URL</b></em>' attribute.
@@ -1916,7 +1925,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SQL_DATABASE_BINDING__SQL_VALIDATION_CONNECTION_URL = 8;
+	int SQL_DATABASE_BINDING__SQL_VALIDATION_CONNECTION_URL = 9;
 
 	/**
 	 * The number of structural features of the '<em>SQL Database Binding</em>' class.
@@ -1925,7 +1934,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SQL_DATABASE_BINDING_FEATURE_COUNT = 9;
+	int SQL_DATABASE_BINDING_FEATURE_COUNT = 10;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.edt.ide.ui.internal.deployment.impl.SystemIProtocolImpl <em>System IProtocol</em>}' class.
@@ -3928,6 +3937,17 @@ public interface DeploymentPackage extends EPackage {
 	EAttribute getSQLDatabaseBinding_Dbms();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getJarList <em>Jar List</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Jar List</em>'.
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getJarList()
+	 * @see #getSQLDatabaseBinding()
+	 * @generated
+	 */
+	EAttribute getSQLDatabaseBinding_JarList();
+
+	/**
 	 * Returns the meta object for the attribute '{@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5693,6 +5713,14 @@ public interface DeploymentPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SQL_DATABASE_BINDING__DBMS = eINSTANCE.getSQLDatabaseBinding_Dbms();
+
+		/**
+		 * The meta object literal for the '<em><b>Jar List</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SQL_DATABASE_BINDING__JAR_LIST = eINSTANCE.getSQLDatabaseBinding_JarList();
 
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
