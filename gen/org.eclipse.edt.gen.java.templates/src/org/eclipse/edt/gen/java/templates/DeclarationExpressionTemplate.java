@@ -24,6 +24,7 @@ import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.StatementBlock;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
 
 public class DeclarationExpressionTemplate extends JavaTemplate {
@@ -44,6 +45,19 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 				&& ((StatementBlock) field.getInitializerStatements()).getStatements().get(0) instanceof AssignmentStatement
 				&& !hasSideEffects(((AssignmentStatement) ((StatementBlock) field.getInitializerStatements()).getStatements().get(0)).getAssignment().getRHS(),
 					ctx)) {
+				// if this is a value type, we need to define the field and then process the combined initialize statements
+				if (TypeUtils.isValueType(field.getType())) {
+					ctx.invoke(genName, field, ctx, out);
+					out.print(" = ");
+					if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null)
+						out.print("null");
+					else
+						ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
+					out.println(";");
+					// as this is an expression that also creates a new line with the above println method, it throws off the
+					// smap ending line number by 1. We need to issue a call to correct this
+					ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
+				}
 				// this logic will combine
 				ctx.invoke(genInitializeStatement, field.getType(), ctx, out, field);
 				// as this is an expression that also creates a new line with the above println method, it throws off the

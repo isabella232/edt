@@ -231,13 +231,4 @@ public class RecordTemplate extends JavaTemplate {
 	}
 
 	public void genAnnotations(Record part, Context ctx, TabbedWriter out, Field field) {}
-
-	public void genInitializeStatement(Record part, Context ctx, TabbedWriter out, Field arg) {
-		if (!arg.isNullable() || arg.getInitializerStatements() == null) {
-			ctx.invoke(genName, arg, ctx, out);
-			out.print(" = ");
-			ctx.invoke(genInitialization, arg, ctx, out);
-			out.println(";");
-		}
-	}
 }
