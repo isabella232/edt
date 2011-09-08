@@ -9,27 +9,23 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package egl.lang;
-import org.eclipse.edt.javart.ByteStorage;
-import org.eclipse.edt.javart.Program;
-public class ArraySizeException extends egl.lang.AnyException {
+import org.eclipse.edt.javart.*;
+@javax.xml.bind.annotation.XmlRootElement(name="InvalidArgumentException")
+public class InvalidArgumentException extends egl.lang.AnyException {
 	private static final long serialVersionUID = 10L;
-	@javax.xml.bind.annotation.XmlTransient
-	public int size;
-	public ArraySizeException() {
+	public InvalidArgumentException() {
 		super();
 		ezeInitialize();
 	}
 	public void ezeCopy(Object source) {
-		ezeCopy((ArraySizeException) source);
+		ezeCopy((InvalidArgumentException) source);
 	}
 	public void ezeCopy(egl.lang.AnyValue source) {
-		this.size = ((ArraySizeException) source).size;
 	}
-	public ArraySizeException ezeNewValue(Object... args) {
-		return new ArraySizeException();
+	public InvalidArgumentException ezeNewValue(Object... args) {
+		return new InvalidArgumentException();
 	}
 	public void ezeSetEmpty() {
-		size = 0;
 	}
 	public boolean isVariableDataLength() {
 		return false;
@@ -42,12 +38,5 @@ public class ArraySizeException extends egl.lang.AnyException {
 	public void storeInBuffer(ByteStorage buffer) {
 	}
 	public void ezeInitialize() {
-		size = 0;
-	}
-	public int getSize() {
-		return (size);
-	}
-	public void setSize( int ezeValue ) {
-		this.size = ezeValue;
 	}
 }

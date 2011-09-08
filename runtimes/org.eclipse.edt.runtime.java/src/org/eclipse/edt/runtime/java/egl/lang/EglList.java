@@ -16,7 +16,7 @@ import java.util.*;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.Delegate;
 
-import egl.lang.ArraySizeException;
+import egl.lang.InvalidArgumentException;
 import egl.lang.InvalidIndexException;
 
 public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
@@ -26,7 +26,6 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	private java.util.List<T> list;
-	private int maxSize = Integer.MAX_VALUE;
 
 	public EglList() {
 		list = new ArrayList<T>();
@@ -42,15 +41,11 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 	// the following group of methods implements the edt version, which means that the indexes are relative to 1
 	@Override
 	public void appendAll(Collection<? extends T> c) {
-		if (c.size() + list.size() > maxSize)
-			throw new ArraySizeException();
 		list.addAll(c);
 	}
 
 	@Override
 	public void appendElement(T element) {
-		if (list.size() == maxSize)
-			throw new ArraySizeException();
 		list.add(element);
 	}
 
@@ -59,11 +54,6 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 		if (index - 1 < 0 || index - 1 >= list.size())
 			throw new InvalidIndexException();
 		return get(index - 1);
-	}
-
-	@Override
-	public int getMaxSize() {
-		return maxSize;
 	}
 
 	@Override
@@ -85,8 +75,6 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 
 	@Override
 	public void insertElement(T element, int index) {
-		if (list.size() == maxSize)
-			throw new ArraySizeException();
 		if (index == 0)
 			index = 1;
 		if (index - 1 < 0 || index - 1 > list.size())
@@ -113,9 +101,9 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 		{
 			list.clear();
 		}
-		else if ( size > maxSize || size < 0 )
+		else if ( size < 0 )
 		{
-			throw new ArraySizeException();
+			throw new InvalidArgumentException();
 		}
 		else if ( size > list.size() )
 		{
@@ -165,13 +153,6 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 		if (index - 1 < 0 || index - 1 >= list.size())
 			throw new InvalidIndexException();
 		set(index - 1, element);
-	}
-
-	@Override
-	public void setMaxSize(int max) {
-		if (max < 0 || list.size() > max)
-			throw new ArraySizeException();
-		maxSize = max;
 	}
 
 	// the following group of methods implements the java version, which means that the indexes are relative to 0

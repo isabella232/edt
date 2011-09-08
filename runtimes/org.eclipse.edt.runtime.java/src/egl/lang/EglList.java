@@ -23,8 +23,6 @@ public interface EglList<T> extends EglAny, java.util.List<T> {
 
 	public T getElement(int index);
 
-	public int getMaxSize();
-
 	public int getSize();
 
 	public int indexOfElement(T element);
@@ -40,8 +38,6 @@ public interface EglList<T> extends EglAny, java.util.List<T> {
 	public void resize(int size);
 
 	public void setElement(T element, int index);
-
-	public void setMaxSize(int max);
 
 	public void sort(Delegate sortFunction);
 }
