@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.util;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import com.ibm.icu.text.DateFormat;
@@ -69,6 +72,31 @@ public class DateTimeUtil
 		cal.setTimeInMillis( System.currentTimeMillis() );
 		return cal;
 	}
+	
+	public static Calendar getNewCalendar(Date date) {
+		Calendar cal = getNewCalendar();
+		cal.setTime(date);
+		return cal;
+	}
+	
+	public static Calendar getNewCalendar(java.sql.Date date) {
+		Calendar cal = getNewCalendar();
+		cal.setTime(date);
+		return cal;
+	}
+
+	public static Calendar getNewCalendar(Time time) {
+		Calendar cal = getNewCalendar();
+		cal.setTime(time);
+		return cal;
+	}
+	
+	public static Calendar getNewCalendar(Timestamp time) {
+		Calendar cal = getNewCalendar();
+		cal.setTime(time);
+		return cal;
+	}
+
 	
 	/**
 	 * This is like getNewCalendar but the calendar isn't set to the current time.
