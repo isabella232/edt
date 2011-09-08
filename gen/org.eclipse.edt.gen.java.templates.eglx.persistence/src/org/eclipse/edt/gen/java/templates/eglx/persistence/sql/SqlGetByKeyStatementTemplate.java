@@ -16,20 +16,18 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 	public void genStatementBody(SqlGetByKeyStatement stmt, Context ctx, TabbedWriter out) {
 		boolean hasPreparedStmt = stmt.getPreparedStatement() != null;
 		boolean hasDataSource = stmt.getDataSource() != null;
-		boolean isResultSet = hasDataSource && !SQL.isSQLResultSet(stmt.getDataSource().getType());
+		boolean isResultSet = hasDataSource && SQL.isSQLResultSet(stmt.getDataSource().getType());
 		
-		if (!hasPreparedStmt || !isResultSet) {
+		if (hasPreparedStmt) {
+			out.println("try {");
+			out.print(class_ResultSet + " " + var_resultSet + " = ");
+			ctx.invoke(genExpression, stmt.getPreparedStatement(), ctx, out);
+			out.println(".executeQuery();");
+		}
+		else if (!isResultSet) {
 			if (stmt.getSqlString() != null || !"".equals(stmt.getSqlString())) {
 				genSqlStatementSetup(stmt, ctx, out);
 			}
-			out.print(class_ResultSet + " " + var_resultSet + " = ");
-			if (hasPreparedStmt) {
-				ctx.invoke(genExpression, stmt.getPreparedStatement(), ctx, out);
-			}
-			else {
-				out.print(var_statement);
-			}
-			out.println(".executeQuery();");
 			// Handle the default case of no USING clause on default SQL with
 			// the values of the target default key fields
 			if (!hasPreparedStmt && stmt.getUsingExpressions().isEmpty() && !stmt.hasExplicitSql()) {
@@ -51,6 +49,10 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 					}
 				}
 			}
+			out.print(class_ResultSet + " " + var_resultSet + " = ");
+			out.print(var_statement);
+			out.println(".executeQuery();");
+
 		}
 		else {
 			out.println("try {");
