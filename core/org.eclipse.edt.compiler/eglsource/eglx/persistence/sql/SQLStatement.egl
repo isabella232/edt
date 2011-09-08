@@ -1,0 +1,4 @@
+package eglx.persistence.sql;
+
+externalType SQLStatement type NativeType
+end

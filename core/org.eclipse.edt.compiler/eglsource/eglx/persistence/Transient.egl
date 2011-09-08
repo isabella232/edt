@@ -1,0 +1,6 @@
+package eglx.persistence;
+
+record Transient type Annotation {
+	targets=[FieldMbr]
+}
+end

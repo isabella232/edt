@@ -1,0 +1,6 @@
+package eglx.persistence.sql;
+
+record GeneratedValue type Annotation {
+	targets=[FieldMbr]
+}
+end

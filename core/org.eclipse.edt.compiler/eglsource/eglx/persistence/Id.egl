@@ -1,0 +1,6 @@
+package eglx.persistence;
+
+record Id type Annotation {
+	targets=[FieldMbr]
+}
+end

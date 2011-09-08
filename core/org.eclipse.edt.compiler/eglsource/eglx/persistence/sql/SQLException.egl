@@ -1,0 +1,4 @@
+package eglx.persistence.sql;
+
+record SQLException type Exception
+end

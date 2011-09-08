@@ -1,0 +1,10 @@
+package eglx.persistence.sql;
+
+record Table type Annotation {
+	targets=[RecordPart, HandlerPart, ExternalTypePart]
+}
+	name string;
+	shortName string;
+	catalog string;
+	schema string;
+end

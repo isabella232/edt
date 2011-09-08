@@ -1,0 +1,8 @@
+package eglx.persistence;
+
+record ManyToMany type Annotation {
+	targets=[FieldMbr]
+}
+	mappedBy FieldRef?;
+	joinTable TypeRef[]?;
+end

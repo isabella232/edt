@@ -1,0 +1,11 @@
+package eglx.persistence.sql;
+
+import egl.lang.nativetype;
+import eglx.persistence.DataSource;
+
+externalType SQLDataSource extends DataSource type NativeType 
+	constructor(connectionUrl string);
+	
+	function setCurrentSchema(schemaName string in);
+	
+end

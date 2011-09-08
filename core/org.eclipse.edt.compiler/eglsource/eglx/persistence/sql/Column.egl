@@ -1,0 +1,10 @@
+package eglx.persistence.sql;
+
+record Column type Annotation {
+	targets=[FieldMbr]
+}
+	name string;
+	insertable boolean = true;
+	updateable boolean = true;
+	table string;
+end

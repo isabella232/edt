@@ -1,0 +1,14 @@
+package eglx.persistence;
+
+externalType ScrollableDataSource extends DataSource type NativeType
+	function setAbsolute(row int) returns (boolean);
+	function setRelative(rows int) returns (boolean);
+	function setNext() returns (boolean);
+	function setPrevious() returns (boolean);
+	function setFirst() returns (boolean);
+	function setLast() returns (boolean);
+	function getPosition() returns (int);
+	
+	function isFirst() returns (boolean);
+	function isLast() returns (boolean); 
+end

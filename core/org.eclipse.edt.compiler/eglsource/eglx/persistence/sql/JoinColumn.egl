@@ -1,0 +1,11 @@
+package eglx.persistence.sql;
+
+record JoinColumn type Annotation {
+	targets=[FieldMbr]
+}
+	name string;
+	referencedColumnName string;
+	unique boolean = false;
+	insertable boolean = true;
+	table string;
+end
