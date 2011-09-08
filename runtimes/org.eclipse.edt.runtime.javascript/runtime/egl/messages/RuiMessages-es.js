@@ -141,7 +141,7 @@ egl.eze$$rscBundles["RuiMessages"] =
 		'CRRUI2097E' : 'No ha podido analizar correctamente el estilo CSS {0}. Compruebe la sintaxis o utilice una hora de estilo externa.',
 		'CRRUI2098E' : 'Se ha producido un error al soportar la opci\u00f3n Arrastrar y soltar: {0}',
 		'CRRUI2099E' : 'En una interfaz de usuario enriquecida, no est\u00e1 soportada la operaci\u00f3n "set" EGL en el tipo {0}',
-		'CRRUI2100E' : 'Argumento no v\u00e1lido para RUILib.convertFromXML. Se esperaba una serie. Objeto recibido del tipo {0}',
+		'CRRUI2100E' : 'Argumento no v\u00e1lido para RuiLib.convertFromXML. Se esperaba una serie. Objeto recibido del tipo {0}',
 		'CRRUI2101E' : 'No se puede ubicar indexOf "{1}" dentro de "{0}" debido a {2}',
 		'CRRUI2102E' : 'No se ha podido ordenar la matriz',
 		'CRRUI2103E' : 'Acceso a "{0}" no permitido en un objeto del tipo "{1}" debido a {2}',

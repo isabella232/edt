@@ -141,7 +141,7 @@ egl.eze$$rscBundles["RuiMessages"] =
 		'CRRUI2097E' : 'Die CSS-Darstellung {0} konnte nicht ordnungsgem\u00e4\u00df analysiert werden. \u00dcberpr\u00fcfen Sie die Syntax oder verwenden Sie ein externes Style-Sheet.',
 		'CRRUI2098E' : 'Fehler bei Drag-and-drop-Unterst\u00fctzung: {0}',
 		'CRRUI2099E' : 'Bei Rich-UI wird die EGL-Operation "set" f\u00fcr den Typ {0} nicht unterst\u00fctzt.',
-		'CRRUI2100E' : 'Ung\u00fcltiges Argument f\u00fcr RUILib.convertFromXML. Erwartet wurde eine Zeichenfolge. Empfangen wurde ein Objekt des Typs {0}.',
+		'CRRUI2100E' : 'Ung\u00fcltiges Argument f\u00fcr RuiLib.convertFromXML. Erwartet wurde eine Zeichenfolge. Empfangen wurde ein Objekt des Typs {0}.',
 		'CRRUI2101E' : 'indexOf-Wert "{1}" wurde in "{0}" aufgrund von {2} nicht gefunden.',
 		'CRRUI2102E' : 'Feldgruppe konnte nicht sortiert werden.',
 		'CRRUI2103E' : 'Ung\u00fcltiger Zugriff auf "{0}" im Objekt des Typs "{1}" aufgrund von {2}.',

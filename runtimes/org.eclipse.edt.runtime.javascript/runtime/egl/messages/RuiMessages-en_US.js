@@ -141,7 +141,7 @@ egl.eze$$rscBundles["RuiMessages"] =
 		'CRRUI2097E' : 'Could not correctly parse CSS style {0}. Check the syntax, or use an external style sheet.',
 		'CRRUI2098E' : 'Error happened during Drag and Drop support: {0}',
 		'CRRUI2099E' : 'In Rich UI, the EGL "set" operation is not supported on type {0}',
-		'CRRUI2100E' : 'Invalid argument to RUILib.convertFromXML. String expected. Received object of type {0}',
+		'CRRUI2100E' : 'Invalid argument to RuiLib.convertFromXML. String expected. Received object of type {0}',
 		'CRRUI2101E' : 'Cannot locate indexOf "{1}" inside "{0}" due to {2}',
 		'CRRUI2102E' : 'Could not sort Array',
 		'CRRUI2103E' : 'Illegal access to "{0}" in object of type "{1}" due to {2}',

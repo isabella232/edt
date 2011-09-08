@@ -141,7 +141,7 @@ egl.eze$$rscBundles["RuiMessages"] =
 		'CRRUI2097E' : 'Impossible d\'interpr\u00e9ter correctement le style CSS {0}. V\u00e9rifiez la syntaxe ou utilisez une feuille de style externe.',
 		'CRRUI2098E' : 'Une erreur s\'est produite durant la prise en charge du glisser-d\u00e9poser : {0}',
 		'CRRUI2099E' : 'Dans une interface utilisateur riche (Rich UI), l\'op\u00e9ration EGL "set" n\'est pas prise en charge sur le type {0}',
-		'CRRUI2100E' : 'Argument non valide pass\u00e9 \u00e0 RUILib.convertFromXML. Une cha\u00eene (String) \u00e9tait attendue, mais un objet du type {0} a \u00e9t\u00e9 re\u00e7u.',
+		'CRRUI2100E' : 'Argument non valide pass\u00e9 \u00e0 RuiLib.convertFromXML. Une cha\u00eene (String) \u00e9tait attendue, mais un objet du type {0} a \u00e9t\u00e9 re\u00e7u.',
 		'CRRUI2101E' : 'Impossible de localiser indexOf "{1}" \u00e0 l\'int\u00e9rieur de "{0}" en raison de {2}',
 		'CRRUI2102E' : 'Le tableau n\'a pas pu \u00eatre tri\u00e9',
 		'CRRUI2103E' : 'Acc\u00e8s ill\u00e9gal \u00e0 "{0}" dans un objet du type "{1}" en raison de {2}',

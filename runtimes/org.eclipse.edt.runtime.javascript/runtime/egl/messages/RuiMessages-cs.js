@@ -141,7 +141,7 @@ egl.eze$$rscBundles["RuiMessages"] =
 		'CRRUI2097E' : 'Styl CSS {0} nebyl spr\u00e1vn\u011b analyzov\u00e1n. Zkontrolujte syntaxi nebo pou\u017eijte extern\u00ed seznam styl\u016f.',
 		'CRRUI2098E' : 'Do\u0161lo k chyb\u011b b\u011bhem podpory p\u0159eta\u017een\u00ed: {0}',
 		'CRRUI2099E' : 'V rozhran\u00ed Rich UI nen\u00ed operace "set" jazyka EGL podporov\u00e1na na typu {0}.',
-		'CRRUI2100E' : 'Neplatn\u00fd argument pro RUILib.convertFromXML. O\u010dek\u00e1v\u00e1n \u0159et\u011bzec. P\u0159ijat\u00fd objekt typu \"{0}\".',
+		'CRRUI2100E' : 'Neplatn\u00fd argument pro RuiLib.convertFromXML. O\u010dek\u00e1v\u00e1n \u0159et\u011bzec. P\u0159ijat\u00fd objekt typu \"{0}\".',
 		'CRRUI2101E' : 'Nelze vyhledat indexOf "{1}" v "{0}" kv\u016fli {2}.',
 		'CRRUI2102E' : 'Nelze se\u0159adit pole.',
 		'CRRUI2103E' : 'Neplatn\u00fd p\u0159\u00edstup k "{0}" v objektu typu "{1}" kv\u016fli {2}.',

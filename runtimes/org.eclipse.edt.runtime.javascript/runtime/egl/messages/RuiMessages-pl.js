@@ -141,7 +141,7 @@ egl.eze$$rscBundles["RuiMessages"] =
 		'CRRUI2097E' : 'Nie mo\u017cna poprawnie przeanalizowa\u0107 stylu CSS {0}. Sprawd\u017a sk\u0142adni\u0119 lub u\u017cyj zewn\u0119trznego arkusza styl\u00f3w.',
 		'CRRUI2098E' : 'Wyst\u0105pi\u0142 b\u0142\u0105d podczas obs\u0142ugi metody przeci\u0105gania i upuszczania: {0}',
 		'CRRUI2099E' : 'W technologii Rich UI operacja kodu EGL "set" nie jest obs\u0142ugiwana dla typu {0}',
-		'CRRUI2100E' : 'Niepoprawny argument metody RUILib.convertFromXML. Oczekiwano \u0142a\u0144cucha. Otrzymano obiekt typu {0}',
+		'CRRUI2100E' : 'Niepoprawny argument metody RuiLib.convertFromXML. Oczekiwano \u0142a\u0144cucha. Otrzymano obiekt typu {0}',
 		'CRRUI2101E' : 'Nie mo\u017cna znale\u017a\u0107 instrukcji indexOf "{1}" w "{0}" z powodu {2}',
 		'CRRUI2102E' : 'Nie mo\u017cna sortowa\u0107 tablicy',
 		'CRRUI2103E' : 'Niedozwolony dost\u0119p do "{0}" w obiekcie typu "{1}" z powodu {2}',

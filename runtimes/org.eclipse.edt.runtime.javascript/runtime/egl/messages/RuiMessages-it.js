@@ -141,7 +141,7 @@ egl.eze$$rscBundles["RuiMessages"] =
 		'CRRUI2097E' : 'Impossibile analizzare correttamente lo stile CSS {0}. Verificare la sintassi o utilizzare un foglio di stile esterno.',
 		'CRRUI2098E' : 'Si \u00e8 verificato un errore durante il supporto di trascinamento e rilascio: {0}',
 		'CRRUI2099E' : 'Nella Rich UI, operazione "set" di EGL non \u00e8 supportata per il tipo {0}',
-		'CRRUI2100E' : 'Argomento non valido per RUILib.convertFromXML. Era prevista una stringa. \u00c8 stato ricevuto un oggetto di tipo {0}',
+		'CRRUI2100E' : 'Argomento non valido per RuiLib.convertFromXML. Era prevista una stringa. \u00c8 stato ricevuto un oggetto di tipo {0}',
 		'CRRUI2101E' : 'Impossibile individuare indexOf "{1}" in "{0}" a causa di {2}',
 		'CRRUI2102E' : 'Impossibile ordinare array',
 		'CRRUI2103E' : 'Accesso non valido a "{0}" in oggetto di tipo "{1}" a causa di {2}',

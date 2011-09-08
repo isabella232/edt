@@ -141,7 +141,7 @@ egl.eze$$rscBundles["RuiMessages"] =
 		'CRRUI2097E' : 'A(z) {0} CSS st\u00edlus nem \u00e9rtelmezhet\u0151 helyesen. Ellen\u0151rizze a szintaxist, vagy haszn\u00e1ljon k\u00fcls\u0151 st\u00edluslapot.',
 		'CRRUI2098E' : 'Hiba t\u00f6rt\u00e9nt a fogd \u00e9s vidd t\u00e1mogat\u00e1s sor\u00e1n: {0}',
 		'CRRUI2099E' : 'A gazdag UI-ban az EGL "set" m\u0171velet {0} t\u00edpuson nem t\u00e1mogatott',
-		'CRRUI2100E' : '\u00c9rv\u00e9nytelen RUILib.convertFromXML argumentum. A rendszer karaktersorozatot v\u00e1rt. {0} t\u00edpus\u00fa objektum \u00e9rkezett',
+		'CRRUI2100E' : '\u00c9rv\u00e9nytelen RuiLib.convertFromXML argumentum. A rendszer karaktersorozatot v\u00e1rt. {0} t\u00edpus\u00fa objektum \u00e9rkezett',
 		'CRRUI2101E' : 'Az indexOf "{1}" {2} miatt nem tal\u00e1lhat\u00f3 a k\u00f6vetkez\u0151n bel\u00fcl: "{0}"',
 		'CRRUI2102E' : 'A t\u00f6mb nem rendezhet\u0151',
 		'CRRUI2103E' : '"{0}" illeg\u00e1lis el\u00e9r\u00e9se a(z) "{1}" t\u00edpus\u00fa objektumban, a k\u00f6vetkez\u0151 miatt: {2}',
