@@ -1380,5 +1380,20 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 		addAction(menu, ITextEditorActionConstants.GROUP_COPY, ITextEditorActionConstants.SELECT_ALL);
 		addAction(menu, ITextEditorActionConstants.GROUP_FIND, ITextEditorActionConstants.FIND);
 	}
-
+	
+	@Override
+	protected String[] collectContextMenuPreferencePages() {
+		return new String[] {
+			"org.eclipse.edt.ide.ui.editorPreferences", //$NON-NLS-1$
+			"org.eclipse.edt.ide.ui.contentAssistPreferences", //$NON-NLS-1$
+			"org.eclipse.edt.ide.ui.foldingPreferences", //$NON-NLS-1$
+			"org.eclipse.edt.ide.ui.formatterPreferences", //$NON-NLS-1$
+			"org.eclipse.ui.editors.preferencePages.Spelling", //$NON-NLS-1$
+			"org.eclipse.edt.ide.ui.organizeImportsPreferencePage", //$NON-NLS-1$
+			"org.eclipse.edt.ide.ui.sourceStylesPreferences", //$NON-NLS-1$
+			"org.eclipse.edt.ide.ui.templatePreferences", //$NON-NLS-1$
+			"org.eclipse.edt.ide.ui.ContentAssistAdvancedPreferences", //$NON-NLS-1$
+		};
+	}
+	
 }

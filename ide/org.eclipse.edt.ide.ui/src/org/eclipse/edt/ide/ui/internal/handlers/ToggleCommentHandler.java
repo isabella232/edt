@@ -26,17 +26,12 @@ import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.swt.custom.BusyIndicator;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorExtension;
 import org.eclipse.ui.texteditor.ITextEditorExtension2;
 
 public class ToggleCommentHandler extends EGLHandler {
 	
-	/** The text operation target */
-	private ITextOperationTarget fOperationTarget;
 	/** The document partitioning */
 	private String fDocumentPartitioning;
 	/** The comment prefixes */
@@ -47,50 +42,29 @@ public class ToggleCommentHandler extends EGLHandler {
 	 * uncomments/comments them respectively.
 	 */
 	public void run() {
+		
 		if (fEditor == null) {
 			return;
 		}
 		
 		ISourceViewer sourceViewer = fEditor.getViewer();
 		SourceViewerConfiguration configuration = fEditor.getSourceViewerConfig();
-		configure(sourceViewer, configuration);		
-		if (fOperationTarget == null && fEditor != null) {
-			fOperationTarget= (ITextOperationTarget) fEditor.getAdapter(ITextOperationTarget.class);
-		}
-		
-		if (!canModifyEditor()) {
-			return;
-		}
-		if (fOperationTarget == null || 
-				!fOperationTarget.canDoOperation(ITextOperationTarget.PREFIX) || 
-				!fOperationTarget.canDoOperation(ITextOperationTarget.STRIP_PREFIX)) {
-			return;
-		}	
-		if (fDocumentPartitioning == null || fPrefixesMap == null) {
-			return;
-		}
-		if (!validateEditorInputState()) {
-			return;
-		}
-		final int operationCode;
-		if (isSelectionCommented(fEditor.getSelectionProvider().getSelection()))
-			operationCode= ITextOperationTarget.STRIP_PREFIX;
-		else
-			operationCode= ITextOperationTarget.PREFIX;
 
-		Shell shell= fEditor.getSite().getShell();
-		Display display= null;
-		if (shell != null && !shell.isDisposed()) {
-			display= shell.getDisplay();
+		if (!configure(sourceViewer, configuration) || !canModifyEditor() || !validateEditorInputState()) {
+			return;
 		}
-		BusyIndicator.showWhile(display, new Runnable() {
-			public void run() {
-				fOperationTarget.doOperation(operationCode);
-			}
-		});
+
+		final int operationCode;
+		if (isSelectionCommented(fEditor.getSelectionProvider().getSelection())){
+			operationCode= ITextOperationTarget.STRIP_PREFIX;
+		}else{
+			operationCode= ITextOperationTarget.PREFIX;
+		}
+			
+		doTextOperation(operationCode);
 	}
 	
-	public void configure(ISourceViewer sourceViewer, SourceViewerConfiguration configuration) {
+	public boolean configure(ISourceViewer sourceViewer, SourceViewerConfiguration configuration) {
 		fPrefixesMap= null;
 
 		String[] types= configuration.getConfiguredContentTypes(sourceViewer);
@@ -121,6 +95,12 @@ public class ToggleCommentHandler extends EGLHandler {
 		}
 		fDocumentPartitioning= configuration.getConfiguredDocumentPartitioning(sourceViewer);
 		fPrefixesMap= prefixesMap;
+		
+		if(null == fDocumentPartitioning || null == fPrefixesMap){
+			return false;
+		}
+		
+		return true;
 	}
 	
 	/**
