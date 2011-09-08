@@ -251,7 +251,7 @@ public class DeploymentUtilities {
 			*/
 		}
 		
-		return "";
+		return null;
 	}
 	
 	public static String getDeploymentTargetType(DeploymentTarget target)

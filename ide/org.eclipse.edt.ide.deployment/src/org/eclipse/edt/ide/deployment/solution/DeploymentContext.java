@@ -11,18 +11,34 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.deployment.solution;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
+import org.eclipse.edt.ide.deployment.Activator;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
+import org.eclipse.edt.ide.deployment.internal.nls.Messages;
 import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.FileEditorInput;
 
 public class DeploymentContext {
+	
+	public static final int STATUS_INIT = 0;
+	public static final int STATUS_SHOULD_RUN = 1;
+	public static final int STATUS_STOP = 2;
 
 	private DeploymentDesc model;
 	private IProject sourceProject;
@@ -30,14 +46,16 @@ public class DeploymentContext {
 	private ProjectEnvironment environment;
 	private IProgressMonitor monitor;
 	
-	private boolean mustRun = false;
+	private Shell shell;
+	
+	private int status = 0; // 0 - initial status; 1 - should continue; 2 - stop
 
-	public boolean isMustRun() {
-		return mustRun;
+	public int getStatus() {
+		return status;
 	}
 
-	public void setMustRun(boolean mustRun) {
-		this.mustRun = mustRun;
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 	public IProgressMonitor getMonitor() {
@@ -58,7 +76,15 @@ public class DeploymentContext {
 
 	public DeploymentContext( DeploymentDesc model ) {
 		this.model = model;
+	}
+
+	public void init() {
 		String targetProjectName = DeploymentUtilities.getDeploymentTargetId(model.getDeploymentTarget(), null, model.getName());
+		if ( targetProjectName == null ) {
+			showMessage( Messages.deployment_action_no_target_found );
+			this.status = STATUS_STOP;
+			return;
+		}
 		targetProject = ResourcesPlugin.getWorkspace().getRoot().getProject(targetProjectName);
 	}
 	
@@ -89,5 +115,35 @@ public class DeploymentContext {
 		String partName = splits[splits.length-1];
 
 		return environment.findPart(InternUtil.intern(packageName), InternUtil.intern(partName));
+	}
+	
+	public void setShell(Shell shell) {
+		this.shell = shell;
+	}
+	
+	public void showMessage( String messageID ) {
+		  DeploymentDesc model = getDeploymentDesc();
+		  IProject project = getSourceProject();
+		  IFile tempFile = (IFile)project.findMember("EGLSource"+ IPath.SEPARATOR + model.getName() + ".egldd");
+	      String tempMessage = Messages.bind(messageID, new String[]{tempFile.getFullPath().makeRelative().toOSString()});
+			
+	      final String message = tempMessage;
+		  final IFile file = tempFile;
+		  DeploymentUtilities.getDisplay().asyncExec(new Runnable() {
+
+			public void run() {
+				boolean openEditor = MessageDialog.openQuestion(shell, Messages.deployment_action_information_msg_title, message);
+				if (openEditor && file != null ) {
+					IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+					IWorkbenchPage page = workbenchWindow.getActivePage();
+					IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+					try {
+						page.openEditor(new FileEditorInput(file), desc.getId());
+					} catch (PartInitException e) {
+						Activator.getDefault().log("Error attempting to open DD file: " + file.getName(), e);
+					}
+				}
+			}			    			  
+		  });
 	}
 }

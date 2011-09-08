@@ -198,6 +198,7 @@ public class DeployAction implements IObjectActionDelegate {
 				            		model.resolveIncludes( fileLocator );
 			            			DeploymentContext context = new DeploymentContext( model );
 			            			context.setSourceProject( ddFile.getProject() );
+			            			context.init();
 		            				deploymentModels.add(context);
 			            		}
 							} catch (Exception e) {
@@ -206,60 +207,14 @@ public class DeployAction implements IObjectActionDelegate {
 				    	  }
 				    	  monitor.done();
 				    	  
-				    	  if( deploymentModels.size() > 0 && (deploymentModels.size() > 1 || sendToDeployment(((DeploymentContext)deploymentModels.get(0)).getDeploymentDesc())) ){
+				    	  if( deploymentModels.size() > 0 ){
 				    		  DeploymentContext[] models = (DeploymentContext[])deploymentModels.toArray(new DeploymentContext[deploymentModels.size()]);
-				    		  try
-				    		  {
-//					    		  startServer(models, monitor);
-					    		  DeployJob deployJob = new DeployJob();
-					    		  deployJob.setModels(models);
-					    		  deployJob.schedule();
-				    		  }
-				    		  catch(Exception e)
-				    		  {
-				    		  }
-				    	  }else{
-				    		  // message
-				    		  String tempMessage;
-							  IProject project = ((IResource) result.get(0)).getProject();
-							  IFile tempFile;
-				    		  if( deploymentModels.size() == 1 )
-				    		  {
-				    			  	DeploymentDesc model = (DeploymentDesc)deploymentModels.get(0);
-				    				tempFile = (IFile)project.findMember("EGLSource"+ IPath.SEPARATOR + model.getName());
-				    				if( sendToDeployment(model) )
-				    				{
-				    					tempMessage = Messages.bind(Messages.deployment_action_no_target_found, new String[]{tempFile.getFullPath().makeRelative().toOSString()});
-				    				}
-				    				else
-				    				{
-				    					tempMessage = Messages.bind(Messages.deployment_action_no_parts_found, new String[]{tempFile.getFullPath().makeRelative().toOSString()});
-				    				}
-				    		  }
-				    		  else
-				    		  {
-				    				tempFile = null;
-				    				tempMessage = Messages.deployment_action_no_model_found;
-				    		  }
-				    		  final String message = tempMessage;
-				    		  final IFile file = tempFile;
-				    		  DeploymentUtilities.getDisplay().asyncExec(new Runnable() {
-	
-								public void run() {
-									boolean openEditor = MessageDialog.openQuestion(shell, Messages.deployment_action_information_msg_title, message);
-									if (openEditor && file != null ) {
-										IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-										IWorkbenchPage page = workbenchWindow.getActivePage();
-										IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
-										try {
-											page.openEditor(new FileEditorInput(file), desc.getId());
-										} catch (PartInitException e) {
-											Activator.getDefault().log("Error attempting to open DD file: " + file.getName(), e);
-										}
-									}
-								}			    			  
-				    		  });
+
+				    		  DeployJob deployJob = new DeployJob();
+				    		  deployJob.setModels(models);
+				    		  deployJob.schedule();
 				    	  }
+
 			    	  }
 			      }
 			    });

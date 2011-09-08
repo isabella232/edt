@@ -43,7 +43,12 @@ public class AbstractDeploymentSolution implements IDeploymentSolution {
 			operation.preCheck( context, resultsCollector, monitor );
 		}
 		
-		if ( !context.isMustRun() ) {
+		if ( context.getStatus() == DeploymentContext.STATUS_STOP ) {
+			return;
+		}
+		
+		if ( context.getStatus() != DeploymentContext.STATUS_SHOULD_RUN ) {
+			context.showMessage( Messages.deployment_action_no_parts_found );
 			DeploymentResultsCollectorManager.getInstance().getCollector(DeploymentUtilities.getDeploymentTargetId(context.getDeploymentDesc().getDeploymentTarget(), null, context.getDeploymentDesc().getName()), context.getDeploymentDesc().getName(), false, false).addMessage(
 					DeploymentUtilities.createDeployMessage(IStatus.WARNING, Messages.bind(Messages.deployment_no_parts_found, context.getDeploymentDesc().getName())));
 			return;
