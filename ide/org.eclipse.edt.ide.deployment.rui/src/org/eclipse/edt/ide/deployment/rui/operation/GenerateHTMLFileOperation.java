@@ -49,10 +49,10 @@ public class GenerateHTMLFileOperation extends AbstractDeploymentOperation {
 	public void preCheck(DeploymentContext context,
 			IDeploymentResultsCollector resultsCollector,
 			IProgressMonitor monitor) throws CoreException {
-		if ( !context.isMustRun() ) {
+		if ( context.getStatus() != DeploymentContext.STATUS_SHOULD_RUN ) {
 			DeploymentDesc desc = context.getDeploymentDesc();
 			if ( desc.getRUIApplication() !=  null && desc.getRUIApplication().getRUIHandlers() != null && desc.getRUIApplication().getRUIHandlers().size() > 0 ) {
-				context.setMustRun( true );
+				context.setStatus( DeploymentContext.STATUS_SHOULD_RUN );
 			}
 		}
 	}

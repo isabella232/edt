@@ -40,10 +40,6 @@ public class CopyResourcesOperation extends AbstractDeploymentOperation {
 		targetProjectName = DeploymentUtilities.getDeploymentTargetId(model.getDeploymentTarget(), null, model.getName());
 		IProject targetProject = ResourcesPlugin.getWorkspace().getRoot().getProject(targetProjectName);
 		
-		IFolder projectRootFolder = Utils.getContextDirectory(targetProject);
-		
-		DeployFileLocator jsFileLocator = new DeployFileLocator( context.getSourceProject() );
-		
 		ResourceCopyOperation resourceCopyOperation = new ResourceCopyOperation(targetProject);
 //		if( !monitor.isCanceled() ){
 //			resourceCopyOperation.updateFda7Jar(monitor);

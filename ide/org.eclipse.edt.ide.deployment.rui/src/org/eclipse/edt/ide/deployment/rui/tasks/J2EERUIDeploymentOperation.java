@@ -241,7 +241,7 @@ public class J2EERUIDeploymentOperation {
 		}
 		
 		IPath sourceRelativePath = sourceFile.getProjectRelativePath();
-		if((sourceFile.getFileExtension().equalsIgnoreCase("js") || sourceFile.getFileExtension().equalsIgnoreCase("deploy")) && jsTargetPath.isPrefixOf(sourceRelativePath)){
+		if(sourceFile.getFileExtension().equalsIgnoreCase("js") && jsTargetPath.isPrefixOf(sourceRelativePath)){
 			sourceRelativePath = sourceRelativePath.removeFirstSegments(jsTargetPath.segmentCount());
 			IFile targetFile = folder.getFile(sourceRelativePath);
 
