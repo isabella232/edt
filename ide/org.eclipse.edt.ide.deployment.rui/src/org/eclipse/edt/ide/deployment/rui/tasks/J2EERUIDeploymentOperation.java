@@ -29,7 +29,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.edt.compiler.internal.util.EGLMessage;
 import org.eclipse.edt.ide.core.model.EGLCore;
@@ -43,7 +42,6 @@ import org.eclipse.edt.ide.deployment.rui.internal.IConstants;
 import org.eclipse.edt.ide.deployment.rui.internal.model.RUIDeploymentModel;
 import org.eclipse.edt.ide.deployment.rui.internal.model.RUIDeploymentModel.DeployableFile;
 import org.eclipse.edt.ide.deployment.rui.internal.nls.Messages;
-import org.eclipse.edt.ide.deployment.rui.internal.util.DeployLocale;
 import org.eclipse.edt.ide.deployment.rui.internal.util.Utils;
 import org.eclipse.edt.ide.deployment.rui.internal.util.WebUtilities;
 import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
@@ -51,7 +49,7 @@ import org.eclipse.edt.ide.rui.utils.DeployFileLocator;
 import org.eclipse.edt.ide.rui.utils.DeployIFileLocator;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
 import org.eclipse.edt.ide.rui.utils.IFileLocator;
-import org.osgi.framework.Bundle;
+import org.eclipse.jdt.core.JavaModelException;
 
 /**
  * The abstract deployment operation for a J2EE based web project target. <br>
@@ -70,7 +68,7 @@ public class J2EERUIDeploymentOperation {
 	
 	protected RUIDeploymentModel model;
 	
-	protected IPath jsTargetPath = new Path(EGLProjectInfoUtility.getTargetJavaScriptFolder());
+	protected IPath jsTargetPath = null;
 
 	
 	/**
@@ -229,6 +227,19 @@ public class J2EERUIDeploymentOperation {
 	
 	private void copyFile(IFile sourceFile, IFolder folder, DeploymentResultMessageRequestor messageRequestor, IProgressMonitor monitor )
 	{
+		
+		String jsGenDir=null;
+		try {
+			jsGenDir = EGLProjectInfoUtility.getGeneratedJavaScriptFolder(sourceFile.getProject());
+		} catch (JavaModelException e1) {
+		} catch (CoreException e1) {
+		}
+		if(jsGenDir == null){
+			jsTargetPath = new Path("");
+		}else{
+			jsTargetPath = new Path(jsGenDir);
+		}
+		
 		IPath sourceRelativePath = sourceFile.getProjectRelativePath();
 		if((sourceFile.getFileExtension().equalsIgnoreCase("js") || sourceFile.getFileExtension().equalsIgnoreCase("deploy")) && jsTargetPath.isPrefixOf(sourceRelativePath)){
 			sourceRelativePath = sourceRelativePath.removeFirstSegments(jsTargetPath.segmentCount());
