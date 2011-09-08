@@ -287,7 +287,7 @@ public class EvServer implements IClientProxy {
 							headers.put(entry.getKey(), entry.getValue());
 						}
 						request.setHeaders(headers);
-					
+						
 						if (isDedicated) {
 							serviceKind = ServiceKind.EGL;
 							testServerURI += ruiRequest.getURL().trim();
@@ -310,9 +310,8 @@ public class EvServer implements IClientProxy {
 				}
 				
 				if (request == null) {
-					//TODO need to actually test invoking deployed services
 					request = new HttpRequest();
-					request.setUri( ruiRequest.getURL() );//TODO correct?
+					request.setUri( ruiRequest.getURL() );
 					request.setBody( ruiRequest.getContent() );
 					request.setMethod( HttpUtilities.convert( ruiRequest.getMethod() ) );
 					
