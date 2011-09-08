@@ -92,15 +92,12 @@ public class ReorganizeCode extends AbstractVisitor {
 	@SuppressWarnings("unchecked")
 	public boolean visit(ReturnStatement object) {
 		ctx.putAttribute(object.getContainer(), Constants.SubKey_functionHasReturnStatement, new Boolean(true));
-
 		// There are cases where someone uses a return statement to break out of a function, even though the function does
 		// not return anything
 		if (object.getExpression() != null) {
 			// if the return statement invokes a function that has inout or out parms, then we need to create a local
-			// variable
-			// for the return of the function invocation. This is because we need to unbox the inout/out args after the
-			// function
-			// is invoked and before the return statement
+			// variable for the return of the function invocation. This is because we need to unbox the inout/out args after
+			// the function is invoked and before the return statement
 			if (object.getExpression().getType() != null && IRUtils.hasSideEffects(object.getExpression())) {
 				// set up the new statement block if needed
 				List<StatementBlock> blockArray;
