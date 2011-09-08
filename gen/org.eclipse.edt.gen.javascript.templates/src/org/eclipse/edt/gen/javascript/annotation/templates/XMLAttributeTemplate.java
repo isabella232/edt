@@ -40,11 +40,11 @@ public class XMLAttributeTemplate extends JavaScriptTemplate {
 			out.print(quoted((String) annot.getValue("namespace")));
 		}
 		else{
-			out.print("false");
+			out.print("null");
 		}
 		out.print(", ");
 		if(annot.getValue("required") != null){
-			out.print(quoted(annot.getValue("required").toString()));
+			out.print(annot.getValue("required").toString());
 		}
 		else{
 			out.print("false");
