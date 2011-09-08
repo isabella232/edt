@@ -176,21 +176,6 @@ externalType EglList type ClassType {
 	function getSize() returns(EglInt);
 
 	/**
-	 * Returns the maximum size of the array.
-	 *
-	 * @return the maximum size of the array.
-	 */
-	function getMaxSize() returns(EglInt);
-
-	/**
-	 * Changes the maximum size of the array.
-	 *
-	 * @param max  the new maximum size.
-	 * @throws ArraySizeException  if the array is currently larger than the specified size.
-	 */
-	function setMaxSize(max EglInt in);
-
-	/**
 	 * Changes the size of the array.  If the new size is greater than the current
 	 * size, new elements are added at the end of the array.  If the new size is
 	 * smaller than the current size, elements at the end are removed. 

@@ -20,12 +20,3 @@ Record EventListener type Annotation
 	listenerType String;
 	method String;
 end
-
-Record MaxSize type Annotation
-{
-	targets = [
-		ElementKind.FieldMbr
-	]
-} 
-	value int;
-end

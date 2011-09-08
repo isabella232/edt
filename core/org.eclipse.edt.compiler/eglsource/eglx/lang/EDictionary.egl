@@ -20,11 +20,25 @@ import egl.lang.reflect.mof.Operation;
  *
  */
 externalType EDictionary extends EglAny type ClassType
+
 	/**
 	 * {@Operation ['} Returns the value with the given key.
 	 * @throws DynamicAccessException  if there's no key with the given name.
 	 */
 	static function $Lookup(dict EDictionary in, key EString in) returns(EglAny) {@Operation{"['"}};
+
+	/**
+	 * Default constructor
+	 */
+	constructor();
+
+	/**
+	 * Constructor used to set the value of case sensitivity and ordering
+	 *
+	 * @param caseSensitive  set if the dictionary is case sensitive
+	 * @param ordering  set the order maintained in the dictionary.
+	 */
+	constructor(caseSensitive boolean, ordering OrderingKind);
 
 	/**
 	 * Tells if there's a value stored with the given key.
@@ -76,28 +90,22 @@ externalType EDictionary extends EglAny type ClassType
 	 * @return the size.
 	 */
 	function size() returns( EInt );
+
+	/**
+	 * Returns true if the dictionary is case sensitive.
+	 *
+	 * @return the case sensitivity.
+	 */
+	function getCaseSensitive() returns( EBoolean );
+
+	/**
+	 * Returns the order maintained in the dictionry.
+	 *
+	 * @return OrderingKind.
+	 */
+	function getOrdering() returns( OrderingKind );
 end
 
-/**
- * This is used to tell a dictionary if its keys are case-sensitive or not.
- */
-Record CaseSensitive type Annotation
-{
-	targets = [ElementKind.fieldMbr]
-}
-	value boolean = yes;
-end
-
-/**
- * This determines how a dictionary's getKeys and getValues functions populate 
- * the arrays they return.  See the documentation of EDictionary for more information.
- */
-Record Ordering type Annotation
-{
-	targets = [ElementKind.fieldMbr]
-}
-	value OrderingKind;
-end
 
 /**
  * OrderingKind provides values for the Ordering annotation.  See the
