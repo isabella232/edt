@@ -32,6 +32,9 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class EGLClassTemplate extends JavaScriptTemplate {
 
+	private static final String INITIALIZER_FUNCTION = "eze$$setInitial";
+	private static final String DEFAULTS_FUNCTION = "eze$$setEmpty";
+
 	public void preGenClassBody(EGLClass part, Context ctx) {
 		ctx.invoke(preGenUsedParts, part, ctx);
 		ctx.invoke(preGenFields, part, ctx);
@@ -149,7 +152,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.print(quoted("constructor"));
 		out.println(": function() {");
 		ctx.invoke(genLibraries, part, ctx, out);
-		out.println("this.eze$$setInitial();");
+		out.println("this."+ INITIALIZER_FUNCTION + "();");
 		out.println("}");
 	}
 
@@ -168,7 +171,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 
 	public void genSetEmptyMethods(EGLClass part, Context ctx, TabbedWriter out) {
 		out.println(",");
-		out.print(quoted("eze$$setEmpty"));
+		out.print(quoted(DEFAULTS_FUNCTION));
 		out.println(": function() {");
 		ctx.invoke(genSetEmptyMethodBody, part, ctx, out);
 		out.println("}");
@@ -190,14 +193,14 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 
 	public void genInitializeMethods(EGLClass part, Context ctx, TabbedWriter out) {
 		out.println(",");
-		out.print(quoted("eze$$setInitial"));
+		out.print(quoted(INITIALIZER_FUNCTION));
 		out.println(": function() {");
 		ctx.invoke(genInitializeMethodBody, part, ctx, out);
 		out.println("}");
 	}
 
 	public void genInitializeMethodBody(EGLClass part, Context ctx, TabbedWriter out) {
-		// TODO sbg Not sure whether we need this out.println("eze$setEmpty();");
+		out.println("this."+DEFAULTS_FUNCTION + "();");
 		for (Field field : part.getFields()) {
 			ctx.invoke(genInitializeMethod, part, ctx, out, field);
 		}
@@ -210,17 +213,10 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			ctx.invoke(genStatementNoBraces, part.getInitializerStatements(), ctx, out);
 		}
 	}
-
-	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field field) {
-		if (field.getInitializerStatements() != null) {
-			genInitializerStatements(field, ctx, out);
-		} else {
-			if (field.getContainer() != null && field.getContainer() instanceof Type)
-				ctx.invoke(genQualifier, field.getContainer(), ctx, out, field);
-			ctx.invoke(genName, field, ctx, out);
-			out.print(" = ");
-			ctx.invoke(genInitialization, field, ctx, out);
-			out.println(";");
+	
+	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
+		if (!(arg instanceof ConstantField)) {
+			ctx.invoke(genInitializeStatement, arg.getType(), ctx, out, arg);
 		}
 	}
 

@@ -96,15 +96,9 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		out.println("}");
 	}
 
-	public void genSetEmptyMethods(Library library, Context ctx, TabbedWriter out) {
-		// Not applicable to libraries
-	}
-
 	public void genCloneMethods(Library library, Context ctx, TabbedWriter out) {
 		// Not applicable to libraries
 	}
-
-	public void genSetEmptyMethod(Library library, Context ctx, TabbedWriter out) {}
 
 	public void genInstantiation(Type type, Context ctx, TabbedWriter out) {
 		out.print("new ");

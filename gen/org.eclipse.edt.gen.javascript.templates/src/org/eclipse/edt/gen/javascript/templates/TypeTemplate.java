@@ -69,7 +69,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 
 	public void genDefaultValue(Type type, Context ctx, TabbedWriter out) {
 		if (TypeUtils.isReferenceType(type))
-			out.print("null");
+			ctx.invoke(genInstantiation, type, ctx, out); //out.print("null");
 		else
 			out.print("\"Invalid default value\"");
 	}
@@ -134,6 +134,13 @@ public class TypeTemplate extends JavaScriptTemplate {
 	public void genTypeDependentOptions(Type type, Context ctx, TabbedWriter out) {
 		// no default
 	}
+	
+	public void genInitializeStatement(Type type, Context ctx, TabbedWriter out, Field arg) {
+		if (arg.getInitializerStatements() != null) {
+			ctx.invoke(genStatementNoBraces, arg.getInitializerStatements(), ctx, out);
+		}
+	}
+
 
 	public void genAssignment(Type type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
 		// if the lhs is non-nullable but the rhs is nullable, we have a special case

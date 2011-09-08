@@ -28,4 +28,8 @@ public class DelegateTemplate extends JavaScriptTemplate {
 	public void genRuntimeTypeName(Delegate part, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		out.print("\"\"");
 	}
+	
+	public void genDefaultValue(Delegate part, Context ctx, TabbedWriter out) {
+		out.print("null");
+	}
 }
