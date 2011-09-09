@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.edt.compiler.binding.DictionaryBinding;
 import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
@@ -157,6 +158,9 @@ public class SystemEnvironment implements ISystemEnvironment {
 				systemPackagesInitialized = true;
 			} finally {
 				Environment.popEnv();
+				
+				//The following is needed until we get rid of the binding hierarchy and replace it with IRs
+				DictionaryBinding.INSTANCE.setEnvironment(this);
 				
 				if (notifier != null) {
 					notifier.done();
