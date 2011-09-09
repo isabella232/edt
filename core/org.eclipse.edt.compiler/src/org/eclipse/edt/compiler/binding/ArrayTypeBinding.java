@@ -155,23 +155,6 @@ public static final SystemFunctionBinding GETSIZE = SystemLibrary.createSystemFu
 		ISystemLibrary.GetSize_func
 	);
     
-public static final SystemFunctionBinding GETMAXSIZE = SystemLibrary.createSystemFunction(
-		IEGLConstants.SYSTEM_WORD_GETMAXSIZE,
-		null,
-		PrimitiveTypeBinding.getInstance(Primitive.INT),
-		ISystemLibrary.GetMaxSize_func
-	);
-    
-public static final SystemFunctionBinding SETMAXSIZE = SystemLibrary.createSystemFunction(
-		IEGLConstants.SYSTEM_WORD_SETMAXSIZE,
-		null,
-		new String[]		{"maxSize"},
-		new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.INT)},
-		new UseType[]		{UseType.IN},
-		ISystemLibrary.SetMaxSize_func
-	);
-    
-    
 public static final SystemFunctionBinding RESIZE = SystemLibrary.createSystemFunction(
 		IEGLConstants.SYSTEM_WORD_RESIZE,
 		null,
@@ -214,8 +197,6 @@ public static final SystemFunctionBinding SORT = SystemLibrary.createSystemFunct
 		ARRAY_FUNCTIONS.put(REMOVEALL.getName(), new NestedFunctionBinding(REMOVEALL.getName(), null, REMOVEALL));
 		ARRAY_FUNCTIONS.put(SETELEMENT.getName(), new NestedFunctionBinding(SETELEMENT.getName(), null, SETELEMENT));
 		ARRAY_FUNCTIONS.put(GETSIZE.getName(), new NestedFunctionBinding(GETSIZE.getName(), null, GETSIZE));
-		ARRAY_FUNCTIONS.put(GETMAXSIZE.getName(), new NestedFunctionBinding(GETMAXSIZE.getName(), null, GETMAXSIZE));
-		ARRAY_FUNCTIONS.put(SETMAXSIZE.getName(), new NestedFunctionBinding(SETMAXSIZE.getName(), null, SETMAXSIZE));
 		ARRAY_FUNCTIONS.put(RESIZE.getName(), new NestedFunctionBinding(RESIZE.getName(), null, RESIZE));
 		ARRAY_FUNCTIONS.put(SORT.getName(), new NestedFunctionBinding(SORT.getName(), null, SORT));
 	}
@@ -229,8 +210,6 @@ public static final SystemFunctionBinding SORT = SystemLibrary.createSystemFunct
 		SYSTEM_FUNCTIONS.put(REMOVEALL.getName(), REMOVEALL);
 		SYSTEM_FUNCTIONS.put(SETELEMENT.getName(), SETELEMENT);
 		SYSTEM_FUNCTIONS.put(GETSIZE.getName(), GETSIZE);
-		SYSTEM_FUNCTIONS.put(GETMAXSIZE.getName(), GETMAXSIZE);
-		SYSTEM_FUNCTIONS.put(SETMAXSIZE.getName(), SETMAXSIZE);
 		SYSTEM_FUNCTIONS.put(RESIZE.getName(), RESIZE);
 		SYSTEM_FUNCTIONS.put(SORT.getName(), SORT);
 		SYSTEM_FUNCTIONS.put(INDEXOFELEMENT1.getName(), INDEXOFELEMENT1);
