@@ -22,6 +22,7 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -49,7 +50,8 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 				if (TypeUtils.isValueType(field.getType())) {
 					ctx.invoke(genName, field, ctx, out);
 					out.print(" = ");
-					if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null)
+					if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
+						&& ctx.getAttribute(field, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN)
 						out.print("null");
 					else
 						ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
