@@ -19,6 +19,7 @@ import java.util.Stack;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.DataTableBinding;
 import org.eclipse.edt.compiler.binding.DelegateBinding;
+import org.eclipse.edt.compiler.binding.EnumerationDataBinding;
 import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
@@ -605,9 +606,14 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		}
 		
 		IDataBinding qualifier = (IDataBinding) node.getAttribute(org.eclipse.edt.compiler.core.ast.Name.IMPLICIT_QUALIFIER_DATA_BINDING);
+		
+		if (qualifier == null && binding instanceof EnumerationDataBinding) {
+			name = (Name)addQualifier(createNameForPart((IPartBinding)((EnumerationDataBinding)binding).getDeclaringPart()), name);
+		}
+		
 		if (qualifier != null) {
 			
-			if (qualifier instanceof LibraryDataBinding) {
+			if (qualifier instanceof LibraryDataBinding ) {
 				name = (Name)addQualifier(createNameForPart((IPartBinding)qualifier.getType()), name);
 			}
 			else {
@@ -615,6 +621,8 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				name = (Name)addQualifier(context, name);
 			}
 		}
+		
+		
 		if (name instanceof MemberName) {
 			if (isSuperTypeMember(binding)) {
 				ThisExpression thisExpr = factory.createThisExpression();

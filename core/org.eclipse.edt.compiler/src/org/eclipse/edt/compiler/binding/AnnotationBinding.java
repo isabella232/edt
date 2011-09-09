@@ -48,6 +48,8 @@ import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
+import com.ibm.xylem.instructions.GetNonNullValueInstruction;
+
 
 
 /**
@@ -298,6 +300,11 @@ public class AnnotationBinding extends DataBinding implements IAnnotationBinding
 		default:
 			if (TypeCompatibilityUtil.compatibilityAnnotationMatches(valueType, singleValueType)) {
 				return true;
+			}
+			
+			if (Binding.isValidBinding(valueType) && Binding.isValidBinding(singleValueType)) {
+				valueType = valueType.getNonNullableInstance();
+				singleValueType = singleValueType.getNonNullableInstance();
 			}
 			return valueType == singleValueType;
 		}
