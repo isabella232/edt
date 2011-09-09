@@ -57,9 +57,13 @@ public class TypeTemplate extends JavaTemplate {
 		}
 	}
 
-	public Boolean isAssignmentBreakupWanted(Type type, Context ctx) {
-		// types can override this to cause an compound assignment expression to be broken up 
-		return false;
+	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, String arg) {
+		// types can override this to cause an compound assignment expression to be broken up
+		// the arg contains the operation being asked about. we always want compound power of broken up
+		if (arg.equals("**="))
+			return true;
+		else
+			return false;
 	}
 
 	public void genInstantiation(Type type, Context ctx, TabbedWriter out) {
