@@ -20,13 +20,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.services.servlet.ServiceInvoker;
 import org.eclipse.edt.javart.util.JavartUtil;
 
 import egl.lang.AnyException;
+import egl.lang.EDictionary;
+import eglx.services.Encoding;
 import eglx.services.ServiceUtilities;
 
 public class HttpUtilities {
@@ -47,12 +48,34 @@ public class HttpUtilities {
 	private static final String EGL_PRIVATE_CALL = "EGLDEDICATED";
 	private static final String CONTENT_TYPE_VALUE_TEXT_PLAIN = "text/plain";
 	public static final String CONTENT_TEXT_KEY = "text";
-	private static final String CONTENT_TYPE_KEY = "Content-Type";
+	public static final String CONTENT_TYPE_KEY = "Content-Type";
 	private static final String CONTENT_TYPE_VALUE_APPLICATION_JSON = "application/json";
 	private static final String CONTENT_TYPE_VALUE_APPLICATION_XML = "application/xml";
 	private static final String CONTENT_TYPE_VALUE_APPLICATION_FORMDATA = "application/x-www-form-urlencoded";
 
 	private HttpUtilities() {
+	}
+	
+	public static void addContentType(EDictionary headers, Encoding encoding, String charset){
+		StringBuilder contentType = new StringBuilder();
+		if(Encoding._FORM == encoding){
+			contentType.append(CONTENT_TYPE_VALUE_APPLICATION_FORMDATA);
+		}
+		else if(Encoding.XML == encoding){
+			contentType.append(CONTENT_TYPE_VALUE_APPLICATION_XML);
+		}
+		else if(Encoding.JSON == encoding){
+			contentType.append(CONTENT_TYPE_VALUE_APPLICATION_JSON);
+		}
+		else{
+			contentType.append(CONTENT_TYPE_VALUE_TEXT_HTML);
+		}
+		contentType.append("; charset=");
+    	if(charset == null || charset.isEmpty()){
+    		charset = "UTF-8";
+    	}
+   		contentType.append(charset);
+   		headers.put(CONTENT_TYPE_KEY, contentType.toString());
 	}
 	
 	static Map<String, String> contentTypes = new HashMap<String, String>();

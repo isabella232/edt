@@ -23,6 +23,7 @@ import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.Trace;
 import org.eclipse.edt.javart.services.servlet.JsonRpcInvoker;
 import org.eclipse.edt.javart.services.servlet.Servlet;
+import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
 
 import eglx.http.HttpMethod;
 import eglx.http.HttpRequest;
@@ -30,6 +31,7 @@ import eglx.http.HttpResponse;
 import eglx.http.HttpUtilities;
 import eglx.json.JsonLib;
 import eglx.json.JsonUtilities;
+import eglx.services.Encoding;
 import eglx.services.ServiceInvocationException;
 import eglx.services.ServiceKind;
 import eglx.services.ServiceUtilities;
@@ -77,7 +79,7 @@ import eglx.services.ServiceUtilities;
 	}
 
 	@Override
-	protected HttpResponse processRequest(String urlString, HttpRequest request, HttpServletRequest httpServletReq) throws Exception {
+	protected HttpResponse processRequest(String urlString, HttpRequest request, HttpServletRequest httpServletReq) {
 		HttpResponse response = null;
 		try
 		{
@@ -151,8 +153,23 @@ import eglx.services.ServiceUtilities;
 			response.setStatus( HttpUtilities.HTTP_STATUS_FAILED );
 			response.setStatusMessage( "FAILED" );
 		}
+		catch(Throwable t)
+		{
+			if( response == null ){
+				response = new HttpResponse();
+			}
+			response.setBody(JsonUtilities.createJsonAnyException(
+						ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_SERVICE, new String[] {urlString, "POST"}, null, ServiceKind.REST )
+					));
+			response.setStatus( HttpUtilities.HTTP_STATUS_FAILED );
+			response.setStatusMessage( "FAILED" );
+		}
 		finally
 		{
+			if(response.headers == null){
+				response.headers = new EDictionary();
+			}
+			HttpUtilities.addContentType(response.headers, Encoding.JSON, (String)null);
 		}
 		return response;
 	}

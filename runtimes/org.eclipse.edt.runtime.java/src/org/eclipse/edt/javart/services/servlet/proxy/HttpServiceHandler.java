@@ -49,6 +49,7 @@ public class HttpServiceHandler
 	}
 	private static final String SESSION_ID = "JSESSIONID";
 	private static final String EGL_SESSION_ID = "egl_statefulsessionid";
+	private static final String RESPONSE_CHARSET = "edt.service.response.charset";
 	private static final String COOKIE_ID = "SET-COOKIE";
 	private class HttpStreamReader implements Runnable
 	{
@@ -181,6 +182,8 @@ public class HttpServiceHandler
 					tracer.put("REST request URL:" + request.getUri());
 				}
 
+				String contentType = null;
+				String responseCharset = null;
 				for ( Iterator<Map.Entry<String, Object>> iter = headers.entrySet().iterator(); iter.hasNext(); )
 				{
 					Map.Entry<String, Object> entry = iter.next();
@@ -188,13 +191,19 @@ public class HttpServiceHandler
 					if(entryValue instanceof AnyBoxedObject<?>){
 						entryValue = ((AnyBoxedObject<?>)entryValue).ezeUnbox();
 					}
+					if(entry.getKey().equalsIgnoreCase(HttpUtilities.CONTENT_TYPE_KEY)){
+						contentType = entryValue.toString();
+					}
+					else if(entry.getKey().equalsIgnoreCase(RESPONSE_CHARSET)){
+						responseCharset = entryValue.toString();
+						entryValue = null;//don't pass this to the remote service
+					}
 					if(entryValue != null){
 						connection.setRequestProperty( entry.getKey(), entryValue.toString() );
 					}
 				}
 
-				//FIXME get content type from request and use that as the expected response
-				String charset = getCharSet(null);
+				String charset = getCharSet(contentType);
 				byte[] resource = request.getBody() == null ? new byte[0] : request.getBody().getBytes( charset == null ? ServiceUtilities.UTF8 : charset );
 				connection.setDoInput( true );
 				connection.setUseCaches( false );
@@ -209,7 +218,7 @@ public class HttpServiceHandler
 					os.close();
 				}
 
-				httpsr = new HttpStreamReader( connection, charset == null ? ServiceUtilities.UTF8 : charset );
+				httpsr = new HttpStreamReader( connection, responseCharset == null ? ServiceUtilities.UTF8 : responseCharset );
 				Future<?> threadResult = JavartUtil.getThreadPool().submit( httpsr );
 				Thread.yield();
 				if ( !httpsr.isDoneReading() )
@@ -292,6 +301,17 @@ public class HttpServiceHandler
 							{
 							}
 						}
+						else if (httpsr != null && httpsr.exception() && 
+								httpsr.getReadValue() != null && !httpsr.getReadValue().isEmpty()){
+					    	response.setBody(eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildInvocationException(
+									Message.SOA_E_WS_PROXY_COMMUNICATION,
+									new String[] { request.getUri() }, 
+									response.getStatus().toString(), 
+									response.getStatusMessage(),
+									ServiceUtilities.getMessage(ioe) + ":\n" + httpsr.getReadValue(),
+									null,
+									ServiceKind.REST )));
+						}
 					}
 					catch ( IOException ie )
 					{
@@ -304,10 +324,6 @@ public class HttpServiceHandler
 				{
 					response.setStatus( HttpUtilities.HTTP_STATUS_FAILED );
 					response.setStatusMessage( HttpUtilities.HTTP_STATUS_MSG_FAILED );
-				}
-				if ( (response.getBody() == null || response.getBody().isEmpty())&&
-						httpsr != null && httpsr.getReadValue() != null && !httpsr.getReadValue().isEmpty()){
-					response.setBody( httpsr.getReadValue() );
 				}
 				if((response.getBody() == null || response.getBody().isEmpty()))
 				{
@@ -327,6 +343,7 @@ public class HttpServiceHandler
 		}
 		return response;
 	}
+	
 	private void populate( HttpResponse response, Map<String,List<String>> header )
 	{
 		Map.Entry<String,List<String>> entry;

@@ -14,6 +14,8 @@ package org.eclipse.edt.javart.services.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JEERunUnit;
 import org.eclipse.edt.javart.RunUnit;
@@ -30,6 +33,7 @@ import org.eclipse.edt.javart.resources.StartupInfo;
 import org.eclipse.edt.javart.resources.Trace;
 
 import egl.lang.AnyException;
+import egl.lang.EDictionary;
 import eglx.http.HttpRequest;
 import eglx.http.HttpResponse;
 import eglx.http.HttpUtilities;
@@ -155,7 +159,7 @@ import eglx.services.ServiceUtilities;
 		}
 		String content = response.getBody();
 		log(content, response);
-		write( httpServletRes, content, response.getStatus() );
+		write( httpServletRes, content, response.headers, response.getStatus() );
 	}   	
 	
 	protected abstract HttpResponse processRequest(String url, HttpRequest request, HttpServletRequest httpServletReq) throws Exception;
@@ -203,11 +207,30 @@ import eglx.services.ServiceUtilities;
 		System.out.println( str + "\n      " + content );
 		*/
 	}
-	private void write( HttpServletResponse httpServletRes, String content, int status )
+	private void write( HttpServletResponse httpServletRes, String content, EDictionary headers, int status )
 	{
 		try
 		{
-			httpServletRes.setContentType( HttpUtilities.getContentType(HttpUtilities.CONTENT_TEXT_KEY) );
+			boolean addContentType = true;
+			if(headers != null){
+				for ( Iterator<Map.Entry<String, Object>> iter = headers.entrySet().iterator(); iter.hasNext(); )
+				{
+					Map.Entry<String, Object> entry = iter.next();
+					Object entryValue = entry.getValue();
+					if(entryValue instanceof AnyBoxedObject<?>){
+						entryValue = ((AnyBoxedObject<?>)entryValue).ezeUnbox();
+					}
+					if(entry.getKey().equalsIgnoreCase(HttpUtilities.CONTENT_TYPE_KEY)){
+						addContentType = false;
+					}
+					if(entryValue != null){
+						httpServletRes.setHeader( entry.getKey(), entryValue.toString() );
+					}
+				}
+			}
+			if(addContentType){
+				httpServletRes.setContentType( HttpUtilities.getContentType(HttpUtilities.CONTENT_TEXT_KEY) );
+			}
 			if( status == HttpUtilities.HTTP_STATUS_OK )
 			{
 				PrintWriter pw = httpServletRes.getWriter();

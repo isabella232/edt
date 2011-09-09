@@ -34,12 +34,12 @@ public class ServiceUtilities
 	
 	public static ServiceInvocationException buildServiceInvocationException(String id, Object[] params, Throwable t, ServiceKind serviceKind )
 	{
-		return ServiceUtilities.buildInvocationException(id, 
-				JavartUtil.errorMessage(Runtime.getRunUnit(), id, params), 
+		return ServiceUtilities.buildInvocationException(id, params, 
 				"", "", "", t, serviceKind );
 	}
-	private static ServiceInvocationException buildInvocationException(String id, String message, String detail1, String detail2, String detail3, Throwable t, ServiceKind serviceKind ) 
+	public static ServiceInvocationException buildInvocationException(String id, Object[] params, String detail1, String detail2, String detail3, Throwable t, ServiceKind serviceKind ) 
 	{
+		String message = JavartUtil.errorMessage(Runtime.getRunUnit(), id, params);
 		while( t instanceof InvocationTargetException &&
 				((InvocationTargetException)t).getCause() != null ){
 			t = ((InvocationTargetException)t).getCause();
