@@ -13,25 +13,31 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.MoveStatement;
+import org.eclipse.edt.mof.egl.*;
 
-public class MoveStatementTemplate extends JavaTemplate {
-
-	public void genStatementBody(MoveStatement stmt, Context ctx, TabbedWriter out) {
-//		for (int i = 0; i < stmt.getTargets().size(); i++) {
-//			Expression expression = stmt.getTargets().get(i);
-//			for (int j = 0; j < stmt.getStates().size(); j++) {
-//				String state = stmt.getStates().get(j);
-//				if (state.equalsIgnoreCase("empty")) {
-//					ctx.invoke(genExpression, expression, ctx, out);
-//					out.print(".ezeSetEmpty()");
-//				} else if (state.equalsIgnoreCase("initial")) {
-//					ctx.invoke(genExpression, expression, ctx, out);
-//					out.print(".ezeInitialize()");
-//				}
-//				if (j < stmt.getStates().size() - 1)
-					out.println(";");
-//			}
-//		}
+public class MoveStatementTemplate extends JavaTemplate 
+{
+	public void genStatementBody( MoveStatement stmt, Context ctx, TabbedWriter out )
+	{
+		Expression source = stmt.getSourceExpr();
+		LHSExpr target = stmt.getTargetExpr();
+		Expression modifier = stmt.getModifierExpr();
+		
+		if ( modifier == null )
+		{
+			String tempName = ctx.nextTempName();
+			ctx.invoke( genRuntimeTypeName, source.getType(), ctx, out );
+			out.print( ' ' );
+			out.print( tempName );
+			out.print( " = (" );
+			ctx.invoke( genRuntimeTypeName, source.getType(), ctx, out );
+			out.print( ')' );
+			ctx.invoke( genExpression, source, ctx, out );
+			out.println( ".clone();" );
+			ctx.invoke( genExpression, target, ctx, out );
+			out.print( " = " );
+			out.print( tempName );
+		}
+		//TODO else...moveByName, moveFor, moveForAll
 	}
 }
