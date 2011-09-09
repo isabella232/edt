@@ -90,16 +90,7 @@ public class MoveStatementValidator extends DefaultASTVisitor {
 			return false;
 		}
 		
-		Iterator moveModifiersIter = moveStatement.getMoveModifiers().iterator();
-		MoveModifier modifier = moveModifiersIter.hasNext() ?
-			(MoveModifier) moveModifiersIter.next() : null;
-		if(moveModifiersIter.hasNext()) {
-			problemRequestor.acceptProblem(
-				moveStatement,
-				IProblemRequestor.MOVE_STATEMENT_MAY_ONLY_HAVE_ONE_MODIFIER);
-			return false;
-		}
-		
+		MoveModifier modifier = moveStatement.getMoveModifierOpt();
 		if(modifier != null && modifier.isFor()) {
 			checkForCount(((ForMoveModifier) modifier).getExpression());
 		}

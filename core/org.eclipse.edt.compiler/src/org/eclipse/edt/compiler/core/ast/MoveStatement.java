@@ -61,16 +61,16 @@ public class MoveStatement extends Statement {
 
 	private Expression expr;
 	private Expression lvalue;
-	private List moveModifiers;	// List of MoveModifiers
+	private MoveModifier moveModifierOpt;
 
-	public MoveStatement(Expression expr, Expression lvalue, List moveModifiers, int startOffset, int endOffset) {
+	public MoveStatement(Expression expr, Expression lvalue, MoveModifier moveModifierOpt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.expr = expr;
 		expr.setParent(this);
 		this.lvalue = lvalue;
 		lvalue.setParent(this);
-		this.moveModifiers = setMoveModifierParent(moveModifiers);
+		this.moveModifierOpt = setMoveModifierParent(moveModifierOpt);
 	}
 	
 	public Expression getSource() {
@@ -81,8 +81,8 @@ public class MoveStatement extends Statement {
 		return lvalue;
 	}
 	
-	public List getMoveModifiers() {
-		return moveModifiers;
+	public MoveModifier getMoveModifierOpt() {
+		return moveModifierOpt;
 	}
 	
 	public void accept(IASTVisitor visitor) {
@@ -90,30 +90,29 @@ public class MoveStatement extends Statement {
 		if(visitChildren) {
 			expr.accept(visitor);
 			lvalue.accept(visitor);
-			acceptMoveModifierChildren(visitor, moveModifiers);
+			if (moveModifierOpt != null) {
+				moveModifierOpt.accept(visitor);
+			}
 		}
 		visitor.endVisit(this);
 	}
 	
-	private List setMoveModifierParent( List children ) {
-        for(Iterator iter = children.iterator(); iter.hasNext();) {
-            MoveModifier next = (MoveModifier) iter.next();
-            next.setParent(this);
-        }
-        return children;
-    }
-	
-	protected static void acceptMoveModifierChildren(IASTVisitor visitor, List children) {
-        for(Iterator iter = children.iterator(); iter.hasNext();) {
-            ((MoveModifier) iter.next()).accept(visitor);
-        }
+	private MoveModifier setMoveModifierParent( MoveModifier mod ) {
+		if (mod != null) {
+			mod.setParent(this);
+		}
+        return mod;
     }
 	
 	protected Object clone() throws CloneNotSupportedException{
+		
+		
 		ArrayList newMoveModifiers = new ArrayList();
-		for (Iterator iter = moveModifiers.iterator(); iter.hasNext();) {
-			newMoveModifiers.add(((MoveModifier)iter.next()).clone());
+		
+		MoveModifier newMod = null;
+		if (moveModifierOpt != null) {
+			newMod = (MoveModifier)moveModifierOpt.clone();
 		}
-		return new MoveStatement((Expression)expr.clone(), (Expression)lvalue.clone(), newMoveModifiers, getOffset(), getOffset() + getLength());
+		return new MoveStatement((Expression)expr.clone(), (Expression)lvalue.clone(), newMod, getOffset(), getOffset() + getLength());
 	}
 }

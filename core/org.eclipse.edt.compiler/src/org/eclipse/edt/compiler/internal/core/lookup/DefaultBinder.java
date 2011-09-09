@@ -3561,9 +3561,8 @@ public abstract class DefaultBinder extends AbstractBinder {
 		//normal array access, in other words. If these conditions are met,
 		//the following code sets the type binding for the array access to
 		//the 'array' part of the array access.
-		List modifiers = moveStatement.getMoveModifiers();
-		if(!modifiers.isEmpty()) {
-			MoveModifier modifier = (MoveModifier) modifiers.get(0);
+		MoveModifier modifier = moveStatement.getMoveModifierOpt();
+		if(modifier != null) {
 			if(modifier.isFor() || modifier.isForAll()) {
 				moveStatement.getTarget().accept(new DefaultASTVisitor() {
 					public boolean visit(ParenthesizedExpression parenthesizedExpression) {
