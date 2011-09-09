@@ -324,7 +324,7 @@ public class CommonUtilities {
 		int srcIndex = getJavaAllowedType(srcString);
 		int tgtIndex = getJavaAllowedType(tgtString);
 		if (srcIndex >= 0 && tgtIndex >= 0 && srcIndex != tgtIndex)
-			return true;
+			return !isBoxedOutputTemp( src, ctx );
 		else
 			return false;
 	}
@@ -344,6 +344,13 @@ public class CommonUtilities {
 			return 5;
 		else
 			return -1;
+	}
+	
+	public static boolean isBoxedOutputTemp( Expression expr, Context ctx )
+	{
+		return expr instanceof MemberName
+			&& ctx.getAttribute( ((MemberName)expr).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable ) != null
+			&& ctx.getAttribute( ((MemberName)expr).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable ) != ParameterKind.PARM_IN;
 	}
 
 	@SuppressWarnings("unchecked")
