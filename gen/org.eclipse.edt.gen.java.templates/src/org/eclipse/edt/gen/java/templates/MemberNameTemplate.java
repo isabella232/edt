@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
-import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Type;
 
 public class MemberNameTemplate extends JavaTemplate {
@@ -36,28 +36,25 @@ public class MemberNameTemplate extends JavaTemplate {
 			}
 			ctx.invoke(genExpression, arg1, ctx, out);
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
-			if (arg1 instanceof MemberName
-				&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
-				&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN)
+			if ( CommonUtilities.isBoxedOutputTemp( arg1, ctx ) )
+			{
 				out.print(".ezeUnbox()");
+			}
 			out.print(")");
 			// check to see if we are copying LHS boxed temporary variables (inout and out types only)
-		} else if (ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
-			&& ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
+		} else if ( CommonUtilities.isBoxedOutputTemp( expr, ctx ) ) {
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
 			out.print(arg2);
 			out.print("EglAny.ezeWrap(");
 			ctx.invoke(genExpression, arg1, ctx, out);
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
-			if (arg1 instanceof MemberName
-				&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
-				&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN)
+			if ( CommonUtilities.isBoxedOutputTemp( arg1, ctx ) )
+			{
 				out.print(".ezeUnbox()");
+			}
 			out.print(")");
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
-		} else if (arg1 instanceof MemberName
-			&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
-			&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
+		} else if ( CommonUtilities.isBoxedOutputTemp( arg1, ctx ) ) {
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
 			out.print(arg2);
 			ctx.invoke(genExpression, arg1, ctx, out);
@@ -78,8 +75,10 @@ public class MemberNameTemplate extends JavaTemplate {
 	public void genMemberName(MemberName expr, Context ctx, TabbedWriter out) {
 		ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 		// check to see if we are copying boxed function parameters
-		if (expr.getMember() instanceof FunctionParameter
-			&& org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx))
+		if ( expr.getMember() instanceof FunctionParameter
+				&& org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType( (FunctionParameter)expr.getMember(), ctx ) )
+		{
 			out.print(".ezeUnbox()");
+		}
 	}
 }
