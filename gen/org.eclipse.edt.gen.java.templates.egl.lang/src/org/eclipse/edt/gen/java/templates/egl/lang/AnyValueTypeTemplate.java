@@ -11,12 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.egl.lang;
 
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.AsExpression;
-import org.eclipse.edt.mof.egl.Classifier;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.*;
 
 public class AnyValueTypeTemplate extends JavaTemplate {
 
@@ -27,20 +26,31 @@ public class AnyValueTypeTemplate extends JavaTemplate {
 			out.print(arg.getConversionOperation().getName());
 			out.print("(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			unboxCheck( arg.getObjectExpr(), ctx, out );
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
 		} else if (ctx.mapsToPrimitiveType(arg.getEType())) {
 			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".ezeCast(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			unboxCheck( arg.getObjectExpr(), ctx, out );
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
 		} else {
 			out.print("EglAny.ezeCast(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			unboxCheck( arg.getObjectExpr(), ctx, out );
 			out.print(", ");
 			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.JavaImplementation);
 			out.print(".class)");
+		}
+	}
+
+	private void unboxCheck( Expression expr, Context ctx, TabbedWriter out )
+	{
+		if ( CommonUtilities.isBoxedOutputTemp( expr, ctx ) )
+		{
+			out.print(".ezeUnbox()");
 		}
 	}
 }
