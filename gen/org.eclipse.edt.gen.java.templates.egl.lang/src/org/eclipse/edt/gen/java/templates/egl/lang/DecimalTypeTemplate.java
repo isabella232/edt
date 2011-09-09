@@ -15,10 +15,12 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
+import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
 
 public class DecimalTypeTemplate extends JavaTemplate {
+	public static final IrFactory factory = IrFactory.INSTANCE;
 
 	// this method gets invoked when there is a specific fixed precision needed
 	public void genDefaultValue(FixedPrecisionType type, Context ctx, TabbedWriter out) {
@@ -33,5 +35,9 @@ public class DecimalTypeTemplate extends JavaTemplate {
 	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavaImplementation);
 		out.print(".ZERO");
+	}
+
+	public Boolean isAssignmentBreakupWanted(Type type, Context ctx) {
+		return true;
 	}
 }
