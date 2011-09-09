@@ -191,7 +191,6 @@ public class EGLClassTemplate extends JavaTemplate {
 					break;
 				}
 			}
-
 			if (hasInit) {
 				Annotation annotation = part.getAnnotation(IEGLConstants.EGL_LOCATION);
 				if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
@@ -207,7 +206,7 @@ public class EGLClassTemplate extends JavaTemplate {
 				}
 			}
 		}
-
+		// now process the fields
 		for (Field field : fields) {
 			ctx.invoke(genInitializeMethod, part, ctx, out, field);
 		}
