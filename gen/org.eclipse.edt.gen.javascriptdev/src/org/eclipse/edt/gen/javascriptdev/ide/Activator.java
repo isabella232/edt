@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascriptdev.ide;
 
+import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -20,12 +21,13 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractUIPlugin {
 
-	public static final String PROPERTY_JSDEVGEN_DIR = "jsDevGenDirectory"; //$NON-NLS-1$
-	public static final String PROPERTY_JSDEVGEN_ARGUMENTS = "jsDevGenArguments"; //$NON-NLS-1$
-	// The plug-in ID
 	public static final String PLUGIN_ID = "org.eclipse.edt.gen.javascriptdev"; //$NON-NLS-1$
 
 	public static final String PREFERENCE_DEFAULT_JSDEVGEN_DIRECTORY = PLUGIN_ID + ".defaultJSDevGenDirectory"; //$NON-NLS-1$
+	
+	public static final String OUTPUT_DIRECTORY = "javascriptDev"; //$NON-NLS-1$
+	
+	public static final String OUTPUT_DIRECTORY_INTERNAL_PATH = EclipseUtilities.convertToInternalPath(OUTPUT_DIRECTORY);
 
 	// The shared instance
 	private static Activator plugin;
@@ -62,6 +64,6 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	protected void initializeDefaultPreferences(IPreferenceStore store) {
-		store.setDefault(PREFERENCE_DEFAULT_JSDEVGEN_DIRECTORY, "javascriptDev"); //$NON-NLS-1$
+		store.setDefault(PREFERENCE_DEFAULT_JSDEVGEN_DIRECTORY, OUTPUT_DIRECTORY);
 	}
 }
