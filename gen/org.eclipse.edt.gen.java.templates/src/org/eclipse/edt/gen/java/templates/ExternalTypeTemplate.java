@@ -18,11 +18,11 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.ExternalType;
-import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.*;
 
 public class ExternalTypeTemplate extends JavaTemplate {
+	
+	static final String DELEGATE_IN_INNER_CLASS = "org.eclipse.edt.gen.java.templates.ExternalTypeTemplate.DELEGATE_IN_INNER_CLASS";
 
 	public void preGenClassBody(ExternalType part, Context ctx) {}
 
@@ -89,5 +89,36 @@ public class ExternalTypeTemplate extends JavaTemplate {
 			out.print(fullName);
 		} else
 			ctx.invoke(genPartName, part, ctx, out);
+	}
+
+	public void genContainerBasedAssignment( ExternalType part, Context ctx,
+			TabbedWriter out, Assignment assignment, Field field )
+	{
+		Annotation annot = part.getAnnotation( "eglx.java.JavaObject" );
+		if ( annot != null )
+		{
+			Annotation eventListener = field.getAnnotation( "egl.lang.EventListener" );
+			if ( eventListener != null )
+			{
+				ctx.invoke( genExpression, assignment.getLHS().getQualifier(), ctx, out );
+				out.print( '.' );
+				out.print( eventListener.getValue( "addMethod" ).toString() );
+				out.print( "( new " );
+				out.print( eventListener.getValue( "listenerType" ).toString() );
+				out.print( "() { public void " );
+				out.print( eventListener.getValue( "method" ).toString() );
+				out.print( "( " );
+				ctx.invoke( genRuntimeTypeName, ((Delegate)field.getType()).getParameters().get( 0 ).getType(), ctx, out );
+				out.print( " ezeEvent ) { " );
+				ctx.put( DELEGATE_IN_INNER_CLASS, true );
+				ctx.invoke( genExpression, assignment.getRHS(), ctx, out );
+				ctx.remove( DELEGATE_IN_INNER_CLASS );
+				out.print( ".invoke( ezeEvent );" );
+				out.print( " } } )" );
+				return;
+			}
+		}
+		
+		ctx.invokeSuper( this, genContainerBasedAssignment, part, ctx, out, assignment, field );
 	}
 }

@@ -82,6 +82,11 @@ public class FunctionTemplate extends JavaTemplate {
 		out.print("new org.eclipse.edt.javart.Delegate(\"");
 		ctx.invoke(genName, function, ctx, out);
 		out.print("\", ");
+		if ( Boolean.TRUE.equals( ctx.get( ExternalTypeTemplate.DELEGATE_IN_INNER_CLASS ) ) )
+		{
+			ctx.invoke(genRuntimeTypeName, ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated), ctx, out);
+			out.print('.');
+		}
 		out.print("this");
 		for (int i = 0; i < function.getParameters().size(); i++) {
 			FunctionParameter decl = function.getParameters().get(i);
