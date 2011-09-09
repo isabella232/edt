@@ -234,10 +234,12 @@ public class RecordTemplate extends JavaTemplate {
 
 	public void genInitializeStatement(Record part, Context ctx, TabbedWriter out, Field arg) {
 		// for a record, we always need to instantiate, and then apply any assignments to contained fields
-		ctx.invoke(genName, arg, ctx, out);
-		out.print(" = ");
-		ctx.invoke(genInitialization, arg, ctx, out);
-		out.println(";");
+		if (ctx.getAttribute(arg, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) == null) {
+			ctx.invoke(genName, arg, ctx, out);
+			out.print(" = ");
+			ctx.invoke(genInitialization, arg, ctx, out);
+			out.println(";");
+		}
 		if (arg.getInitializerStatements() != null)
 			ctx.invoke(genStatementNoBraces, arg.getInitializerStatements(), ctx, out);
 	}
