@@ -58,6 +58,9 @@ public class EnumerationTemplate extends JavaScriptTemplate {
 		out.println("}");
 	}
 
+	public void genDefaultValue(Enumeration part, Context ctx, TabbedWriter out) {
+		out.print("null");
+	}
 	public void genClassBody(Enumeration part, Context ctx, TabbedWriter out) {
 		ctx.invoke(genConstructors, (Type)part, ctx, out);
 	}
