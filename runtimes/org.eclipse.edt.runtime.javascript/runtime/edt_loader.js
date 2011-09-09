@@ -32,10 +32,10 @@ egl.eze$$runtimeProperties = {};
 load("messages", "", ["RuiMessages-en_US"]);
 load("runtime", "",  ["egl", "egl_development", "egl_mathcontext", "egl_bigdecimal"]);
 load("runtime", "egl.jsrt", ["BaseTypesAndRuntimes"]);
-load("runtime", "egl.lang", ["AnyException", "ArraySizeException", "DynamicAccessException",
-                             "Enumeration", "InvalidIndexException", "InvalidPatternException", 
-                             "InvocationException", "JavaObjectException", "NullValueException", 
-                             "NumericOverflowException", "TypeCastException"]);
+load("runtime", "egl.lang", ["AnyException", "DynamicAccessException", "Enumeration",
+                             "InvalidArgumentException", "InvalidIndexException", "InvalidPatternException",
+                             "InvocationException", "JavaObjectException", "NullValueException",
+                             "NumericOverflowException", "TypeCastException", ]);
 load("runtime", "eglx.lang", ["DateTimeLib", "MathLib", "StrLib", "SysLib"]);
 load("runtime", "eglx.ui.rui", ["Widget", "Document", "Event", "View"]);
 load("runtime", "egl.ui.gateway", ["UIGatewayRecord"]);

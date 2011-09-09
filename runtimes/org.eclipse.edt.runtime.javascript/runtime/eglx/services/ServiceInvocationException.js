@@ -93,5 +93,14 @@ egl.defineClass('eglx.services', "ServiceInvocationException", "egl.jsrt", "Reco
 		"toString": function() {
 			return "[ServiceInvocationException]";
 		}
+		
+		,"eze$$getChildVariables" : function() {
+		var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call( this );
+		childVars.push({name : "detail1", value : this.detail1, type : "eglx.lang.EInt"});
+		childVars.push({name : "detail2", value : this.detail2, type : "eglx.lang.EInt"});
+		childVars.push({name : "detail3", value : this.detail3, type : "eglx.lang.EInt"});
+		childVars.push({name : "source", value : this.source, type : "eglx.lang.EInt"});
+		return childVars;
+	}
 	}
 );

@@ -10,7 +10,7 @@
  *
  *******************************************************************************/
 
-egl.createArraySizeException = function( /*string*/ messageID, /*string or array*/ inserts )
+egl.createInvalidArgumentException = function( /*string*/ messageID, /*string or array*/ inserts )
 {
 	if (typeof(inserts) != "string") {
 		inserts = egl.getRuntimeMessage( messageID, inserts );
@@ -19,19 +19,7 @@ egl.createArraySizeException = function( /*string*/ messageID, /*string or array
 	var args = new Array();
 	args.push( [ "messageID", messageID || "" ] );
 	args.push( [ "message", inserts || "" ] );
-	args.push( [ "size", arguments[ 2 ] || 0 ] );
-	return new egl.egl.lang.ArraySizeException( args );
+	return new egl.egl.lang.InvalidArgumentException( args );
 }
 
-egl.defineClass( "egl.lang", "ArraySizeException", "egl.lang", "AnyException", {
-	
-	//ArraySizeException requires the following additional data:
-	//size
-	
-	"eze$$getChildVariables" : function() {
-		var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call( this );
-		childVars.push({name : "size", value : this.size, type : "eglx.lang.EInt"});
-		return childVars;
-	}
-	
-});
+egl.defineClass( "egl.lang", "InvalidArgumentException", "egl.lang", "AnyException", {});

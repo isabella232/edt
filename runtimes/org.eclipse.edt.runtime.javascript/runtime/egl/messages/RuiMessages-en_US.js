@@ -82,7 +82,7 @@ egl.eze$$rscBundles["RuiMessages"] =
 		'CRRUI2030E' : 'Invalid argument to XMLLib.convertFromXML. String expected. Received \"{0}\"',
 		'CRRUI2031E' : 'An error occurred while parsing XML: {0}',
 		'CRRUI2032E' : 'The timestamp pattern {0} is invalid',
-		'CRRUI2033E' : 'The value {0} specified for the array function, resize(), is greater than the maximum size of the array, {1}',
+		'CRRUI2033E' : 'The value {0} specified for the array function, resize(), is not a valid size for the array',
 		'CRRUI2034E' : 'The type, {0}, for the array element is not valid',
 		'CRRUI2035E' : 'The number of dimensions resized is greater than the number of dimensions of the array',
 		'CRRUI2036E' : 'Domain error in call to {0}: the argument must be between {1} and {2}',

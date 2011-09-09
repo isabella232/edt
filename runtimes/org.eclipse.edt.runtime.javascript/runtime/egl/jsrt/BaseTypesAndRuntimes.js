@@ -2707,9 +2707,8 @@ egl.initialValueForType = function ( elementType )
 };
 
 Array.prototype.resize = function Array_resize(val) {
-	if ( val > this.maxSize )
-	{
-		throw egl.createRuntimeException( "CRRUI2033E", [ val, this.maxSize ] );
+	if (val < 0) {
+		throw egl.createInvalidArgumentException("CRRUI2033E", [val]);
 	}
 	if (val <= this.length) {
 		this.length = val;
