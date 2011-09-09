@@ -356,9 +356,9 @@ public class SQLStatementAction extends ResourceAction {
 				new EGLSQLExecuteStatementFactory(
 					sqlRecordBinding,
 					info.getIOObjectName(),
-					executeStatement.isUpdate(),
-					executeStatement.isDelete(),
-					executeStatement.isInsert(), 
+					false,
+					false,
+					false, 
 					compileOptions);
 			isExecuteStatement = true;
 		} else if (info.getStatement() instanceof GetByKeyStatement) {

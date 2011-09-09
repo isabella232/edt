@@ -82,7 +82,6 @@ public class EGLContextBoundaryUtility {
 		boundaryStatesSet.set(NodeTypes.transferTargetOpt);
 		boundaryStatesSet.set(NodeTypes.passingRecordOpt);
 		boundaryStatesSet.set(NodeTypes.forwardTargetOpt);
-		boundaryStatesSet.set(NodeTypes.executeTarget);
 		boundaryStatesSet.set(NodeTypes.executeOption);
 		boundaryStatesSet.set(NodeTypes.inlineSQLStatement);
 		boundaryStatesSet.set(NodeTypes.elseOpt);
