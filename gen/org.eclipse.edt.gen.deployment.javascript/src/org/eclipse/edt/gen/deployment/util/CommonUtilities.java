@@ -13,8 +13,10 @@ package org.eclipse.edt.gen.deployment.util;
 
 import org.eclipse.edt.gen.deployment.javascript.Constants;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 public class CommonUtilities {
@@ -64,6 +66,11 @@ public class CommonUtilities {
 			result = ruiPropertiesLibrary.getId();
 		}
 		return result;
+	}
+	
+	public static boolean isUserPart(Part refPart) {
+		return !refPart.getFullyQualifiedName().startsWith("egl") && 
+				!refPart.getFullyQualifiedName().startsWith("eglx") && refPart instanceof EGLClass;
 	}
 
 }

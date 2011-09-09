@@ -41,4 +41,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genPropFiles = "genPropFiles";
 	
 	public static final String genBindFiles = "genBindFiles";
+	
+	public static final String genDependentIncludeFiles = "genDependentIncludeFiles";
+	public static final String genIncludeFiles = "genIncludeFiles";
 }
