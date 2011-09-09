@@ -15,6 +15,8 @@
 egl.STATEFULSESSIONID = "egl_statefulsessionid";
 egl.HTTP_SESSION_ID_KEY = "egl.gateway.session.id";
 egl.HEADER_EGLDEDICATED = "EGLDEDICATED";
+egl.HEADER_RESPONSE_CHARSET = "edt.service.response.charset";
+egl.HEADER_CONTENT_TYPE = "Content-Type";
 egl.HEADER_EGLREST = "EGLREST";
 egl.HEADER_EGLSOAP = "EGLSOAP";
 egl.CUSTOM_HEADER_EGLSOAP = "CUSTOMEGLSOAPREQUESTHEADER";
@@ -39,7 +41,7 @@ egl.defineClass(
         //otherwise, set the content type based on the request format
         var hasReqContentType = false;
         if(httpResquest.headers != null){
-        	hasReqContentType = egl.containsKey(httpResquest.headers, "Content-Type");
+        	hasReqContentType = egl.containsKey(httpResquest.headers, egl.HEADER_CONTENT_TYPE);
         }
         else{
         	httpResquest.headers = {};
@@ -63,7 +65,7 @@ egl.defineClass(
         		contentType += httpResquest.charset;
         	}
             
-            egl.valueByKey( httpResquest.headers, "Content-Type", contentType);                    
+            egl.valueByKey( httpResquest.headers, egl.HEADER_CONTENT_TYPE, contentType);                    
         }
     },
 
@@ -94,6 +96,9 @@ egl.defineClass(
     		requestExp = egl.createAnyException("CRRUI3654E", [e]);    		
         }       
         
+        if(http.response.charset !== undefined && http.response.charset !== null){
+            egl.valueByKey( http.request.headers, egl.HEADER_RESPONSE_CHARSET, http.response.charset);                    
+        }
         if(requestExp != null){
         	egl.eglx.services.$ServiceRT.callErrorCallback(errorCallbackFunction, handler, requestExp, http);
         }
@@ -139,8 +144,33 @@ egl.defineClass(
 	                    	}
 */	                    	
 	                    	var encoding = http.response.encoding;
-	                    	if(encoding === null){
-	                    		//FIXME use encoding based on the content type
+	                    	if(encoding === null || encoding === egl.eglx.services.Encoding.USE_CONTENTTYPE){
+	                    		encoding = null;
+	                        	var responseContentType;
+	                        	if(http.response.headers != null){
+	                        		responseContentType = egl.findByKey(http.response.headers, egl.HEADER_CONTENT_TYPE);
+	                        	}
+	                        	if(responseContentType !== undefined && responseContentType !== null){
+	                        		responseContentType = responseContentType.toLowerCase();
+	                        		if(responseContentType.indexOf("application/json") != -1){
+	                        			encoding = egl.eglx.services.Encoding.JSON;
+	                        		}
+	                        		else if(responseContentType.indexOf("application/xml") != -1){
+	                        			encoding = egl.eglx.services.Encoding.XML;
+	                        		}
+	                        		else if(responseContentType.indexOf("application/form-urlencoded") != -1){
+	                        			encoding = egl.eglx.services.Encoding._FORM;
+	                        		}
+	                        	}
+	                        	if(encoding === null){
+	                        		if(responseContentType === undefined){
+	                        			responseContentType = "undefined";
+	                        		}
+	                        		else if(responseContentType === null){
+	                        			responseContentType = "null";
+	                        		}
+	                    			throw egl.createRuntimeException("CRRUI3662E", [responseContentType]);
+	                        	}
 	                    	}
 		                    if(encoding === egl.eglx.services.Encoding.NONE){
 		                        if(callbackArgs.length > 0){
@@ -221,9 +251,9 @@ egl.defineClass(
 		                				"CRRUI3653E", 
 		                				[request.uri], 
 		                				egl.eglx.services.$ServiceRT.getServiceKind(http),
-		                				response.status,
-		                				response.statusMessage,
-		                				response.body);
+		                				http.response.status,
+		                				http.response.statusMessage,
+		                				http.response.body);
 		                	}
 	                    }
 	                }
@@ -232,15 +262,15 @@ egl.defineClass(
 	                			"CRRUI3655E",
 	                			[e2.message],
                 				egl.eglx.services.$ServiceRT.getServiceKind(http),
-	                			response.status ? response.status : "",
-	                			response.statusMessage ? response.statusMessage : "",
-	                			response.body ? response.body : "");	                	                	
+	                			http.response.status ? http.response.status : "",
+	                			http.response.statusMessage ? http.response.statusMessage : "",
+	                			http.response.body ? http.response.body : "");	                	                	
 	                }
 	                
                 	if(anyExp != null)
                 		egl.eglx.services.$ServiceRT.callErrorCallback(errorCallbackFunction, handler, anyExp, http);                	
 	            }, 
-	            function(exception, response){
+	            function(exception, http){
 	            	egl.eglx.services.$ServiceRT.callErrorCallback(errorCallbackFunction, handler, exception, http);
 	            },
 	            this
@@ -449,7 +479,7 @@ egl.defineClass(
         //to use php
         //xhr.open( 'POST', '___proxy.php?url='+encodeURIComponent(request.uri), asynchronous );
         xhr.setRequestHeader('Content-Length', requestString.length);
-        xhr.setRequestHeader('Content-Type', 'application/jsonrequest;charset=UTF-8');
+        xhr.setRequestHeader(egl.HEADER_CONTENT_TYPE, 'application/jsonrequest;charset=UTF-8');
 
         xhr.send( requestString );
     },
