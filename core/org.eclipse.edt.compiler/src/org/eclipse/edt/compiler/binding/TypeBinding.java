@@ -165,4 +165,12 @@ public abstract class TypeBinding extends Binding implements ITypeBinding {
     public boolean isInstantiable() {
     	return isReference();
     }
+    
+	public void clear() {
+		super.clear();
+		isNullable = false;
+		nonNullableInstance = null;		
+		nullableType = null;			
+	}
+
 }

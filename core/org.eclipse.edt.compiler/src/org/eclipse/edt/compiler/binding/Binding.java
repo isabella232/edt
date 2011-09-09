@@ -389,4 +389,8 @@ public abstract class Binding implements IBinding {
 	public void resetAnnotations() {
 		annotations = Collections.EMPTY_LIST;
 	}
+
+	public void clear() {
+		annotations = Collections.EMPTY_LIST;
+	}
 }

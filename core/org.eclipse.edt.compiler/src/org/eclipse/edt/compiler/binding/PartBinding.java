@@ -189,11 +189,7 @@ public abstract class PartBinding extends TypeBinding implements IPartBinding {
         }
         return result;
     }
-    
-	public void clear() {
-		annotations = Collections.EMPTY_LIST;
-	}
-	
+    	
 	public boolean isPrivate() {
 		return isPrivate;
 	}
