@@ -51,7 +51,15 @@ public abstract class AbstractGenerator implements IGenerator {
 	 */
 	protected String parentGenId;
 	
+	/**
+	 * The target language of this generator.
+	 */
 	protected String language;
+	
+	/**
+	 * The ID of the generator with which this generator is enabled, or null if this generator determines its own enablement.
+	 */
+	protected String enabledWith;
 	
 	@Override
 	public void setId(String id) {
@@ -136,5 +144,15 @@ public abstract class AbstractGenerator implements IGenerator {
 	@Override
 	public String getLanguage() {
 		return this.language;
+	}
+	
+	@Override
+	public void setEnabledWith(String id) {
+		this.enabledWith = id;
+	}
+	
+	@Override
+	public String getEnabledWith() {
+		return this.enabledWith;
 	}
 }

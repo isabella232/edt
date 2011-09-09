@@ -112,4 +112,14 @@ public interface IGenerator {
 	 * @return the target language of this generator.
 	 */
 	public String getLanguage();
+	
+	/**
+	 * Sets the ID of the generator with which this generator is enabled.
+	 */
+	public void setEnabledWith(String id);
+	
+	/**
+	 * @return the ID of the generator with which this generator is enabled, or null if this generator determines its own enablement.
+	 */
+	public String getEnabledWith();
 }
