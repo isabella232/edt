@@ -38,7 +38,7 @@ externalType EDictionary extends EglAny type ClassType
 	 * @param caseSensitive  set if the dictionary is case sensitive
 	 * @param ordering  set the order maintained in the dictionary.
 	 */
-	constructor(caseSensitive boolean, ordering OrderingKind);
+	constructor(caseSensitive boolean in, ordering OrderingKind in);
 
 	/**
 	 * Tells if there's a value stored with the given key.
