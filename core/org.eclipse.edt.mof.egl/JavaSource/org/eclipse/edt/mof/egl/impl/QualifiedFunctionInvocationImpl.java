@@ -22,6 +22,8 @@ import org.eclipse.edt.mof.egl.GenericType;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.Name;
+import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.NoSuchFunctionError;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.StructPart;
@@ -104,10 +106,16 @@ public class QualifiedFunctionInvocationImpl extends InvocationExpressionImpl im
 	
 	private Function resolveFunction() {
 		StructPart container = (StructPart)getQualifier().getType().getClassifier();
-		Classifier[] argTypes = new Classifier[getArguments().size()];
+		NamedElement[] argTypes = new NamedElement[getArguments().size()];
 		int i = 0;
 		for (Expression expr : getArguments()) {
-			argTypes[i] = (Classifier)expr.getType().getClassifier();
+			
+			if (expr instanceof Name && ((Name)expr).getNamedElement() instanceof Function) {
+				argTypes[i] = (Function) ((Name)expr).getNamedElement();
+			}
+			else {			
+				argTypes[i] = (Classifier)expr.getType().getClassifier();
+			}			
 			i++;
 		}
 		List<Function> result = null;

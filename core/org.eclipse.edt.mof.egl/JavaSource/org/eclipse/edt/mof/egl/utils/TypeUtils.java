@@ -12,6 +12,7 @@
 package org.eclipse.edt.mof.egl.utils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.edt.mof.EObject;
@@ -30,8 +31,8 @@ import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MofConversion;
+import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Operation;
-import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.SequenceType;
@@ -247,11 +248,13 @@ public class TypeUtils implements MofConversion {
 	 * explicit conversion operations defined between them or the rhsType being
 	 * a subtype of the lhsType.
 	 * 
+	 * For a function to be compatible with a delegate, the parameters and return type must match exactly
+	 * 
 	 * @param lhsType
 	 * @param rhsType
 	 * @return
 	 */
-	public static boolean areCompatible(Classifier lhsType, Classifier rhsType) {
+	public static boolean areCompatible(Classifier lhsType, NamedElement rhsType) {
 		if (lhsType.equals(rhsType)) return true;
 		
 		if (lhsType instanceof StructPart && rhsType instanceof SubType) {
@@ -263,9 +266,67 @@ public class TypeUtils implements MofConversion {
 		if (lhsType instanceof StructPart && rhsType instanceof StructPart) {
 			return IRUtils.getConversionOperation((StructPart)rhsType, (StructPart)lhsType) != null;
 		}
+		
+		if (lhsType instanceof Delegate && rhsType instanceof Function) {
+			return TypeUtils.areCompatible((Delegate) lhsType, (Function)rhsType);
+		}
+		
 		else {
 			return false;
 		}
+	}
+	
+	/**
+	 * Compatibility is defined between a delegate and a function as both having the same parameter types and return types
+	 * 
+	 * @param lhsType
+	 * @param rhsType
+	 * @return
+	 */
+	public static boolean areCompatible(Delegate lhsType, Function rhsType) {
+
+		if (lhsType.getParameters().size() != rhsType.getParameters().size()) {
+			return false;
+		}
+		
+		if (lhsType.getReturnType() != rhsType.getReturnType()) {
+			return false;
+		}
+		
+		if (rhsType.getReturnField() != null && rhsType.getReturnField().isNullable() != lhsType.isNullable().booleanValue()) {
+			return false;
+		}
+		
+		for (int i = 0; i < lhsType.getParameters().size(); i++) {
+			FunctionParameter lhsParm = lhsType.getParameters().get(i);
+			FunctionParameter rhsParm = rhsType.getParameters().get(i);
+			
+			if (lhsParm.isNullable() != rhsParm.isNullable()) {
+				return false;
+			}
+			
+			if (lhsParm.getType() != rhsParm.getType()) {
+				return false;
+			}
+			
+			if (lhsParm.getParameterKind() != rhsParm.getParameterKind()) {
+				return false;
+			}
+			
+			if (lhsParm.isConst().booleanValue() != rhsParm.isConst().booleanValue()) {
+				return false;
+			}
+
+			if (lhsParm.isField().booleanValue() != rhsParm.isField().booleanValue()) {
+				return false;
+			}
+			
+			if (lhsParm.isDefinedSqlNullable().booleanValue() != rhsParm.isDefinedSqlNullable().booleanValue()) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 	
 	/**
@@ -512,7 +573,7 @@ public class TypeUtils implements MofConversion {
 		return 0;  // neither is least wide
 	}
 	
-	public static int getBestFitType(Classifier srcType, List<Classifier> types) {
+	public static int getBestFitType(NamedElement srcType, List<Classifier> types) {
 		List<Classifier> classifierCandidates = new ArrayList<Classifier>();
 		for (Classifier type : types) {
 			// a value of null for a type indicates it is a generic type parameter
@@ -684,7 +745,7 @@ public class TypeUtils implements MofConversion {
 		return getBestFitFunctionMember(ops, argumentTypes);
 	}
 	
-	public static List<Function> getBestFitFunction(StructPart container, String name, Classifier...argumentTypes) {
+	public static List<Function> getBestFitFunction(StructPart container, String name, NamedElement...argumentTypes) {
 		List<Function> ops = new ArrayList<Function>();
 		for (Member mbr : container.getAllMembers()) {
 			Function op = mbr instanceof Function ? (Function)mbr : null;
@@ -698,7 +759,7 @@ public class TypeUtils implements MofConversion {
 		return getBestFitFunctionMember(ops, argumentTypes);
 	}
 
-	public static <T extends FunctionMember> List<T> getBestFitFunctionMember(List<T> functionMembers, Classifier...argumentTypes) {
+	public static <T extends FunctionMember> List<T> getBestFitFunctionMember(List<T> functionMembers, NamedElement...argumentTypes) {
 		List<T> candidates = new ArrayList<T>();
 		// First check for exact parameter type matches
 		for (T op : functionMembers) {

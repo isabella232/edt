@@ -959,13 +959,17 @@ public class IRUtils {
 	}
 	
 	public static boolean isCompatibleWith(Expression expr, Type type) {
-		if (expr.getType().equals(type)) {
-			return true;
+		
+		NamedElement exprKind;
+		if (expr instanceof Name && ((Name)expr).getNamedElement() instanceof Function) {
+			exprKind = (Function) ((Name)expr).getNamedElement();
 		}
-		if (getConversionOperation(expr, type) != null) {
-			return true;
+		else {			
+			exprKind = (Classifier)expr.getType().getClassifier();
 		}
-		return false;
+		
+		return TypeUtils.areCompatible(type.getClassifier(), exprKind);
+		
 	}
 
 
