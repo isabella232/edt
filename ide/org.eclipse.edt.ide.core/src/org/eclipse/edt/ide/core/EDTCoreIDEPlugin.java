@@ -122,6 +122,7 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	public static final String PROVIDER = "provider"; //$NON-NLS-1$
 	public static final String PARENT_GEN_ID = "parentGeneratorId"; //$NON-NLS-1$
 	public static final String LANGUAGE = "language"; //$NON-NLS-1$
+	public static final String ENABLED_WITH = "enabledWith"; //$NON-NLS-1$
 
 
 	/**
@@ -550,6 +551,7 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 								gen.setParentGeneratorId(elements[i].getAttribute(PARENT_GEN_ID));
 								gen.setLanguage(elements[i].getAttribute(LANGUAGE));
 								gen.setProvider(elements[i].getAttribute(PROVIDER));
+								gen.setEnabledWith(elements[i].getAttribute(ENABLED_WITH));
 								gens.add(gen);
 								compiler.addGenerator(gen);
 							}

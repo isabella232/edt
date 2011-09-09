@@ -115,6 +115,15 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="enabledWith" type="string">
+            <annotation>
+               <documentation>
+                  Specifies the ID of the generator that, when enabled, causes this generator to also be enabled. When this value is set, this generator will not appear in the configuration dialogs.
+
+Implementation note: This is just a hint to the UI to automatically enable/disable this generator based on the enablement of another. If the enabledWith generator is programmatically enabled elsewhere, this generator will not be enabled with it unless the code that enabled the one generator also enables this one.
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
