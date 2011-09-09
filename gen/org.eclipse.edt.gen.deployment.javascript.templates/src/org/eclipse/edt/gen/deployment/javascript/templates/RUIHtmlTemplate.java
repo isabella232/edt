@@ -416,7 +416,9 @@ public class RUIHtmlTemplate extends RUITemplate {
 				out.println("		xmlhttp.send( null );");
 			}		
 			out.println("}");
-		}		
+		}else{
+			out.println("egl.load(RUI_RUNTIME_JAVASCRIPT_FILES, function(){egl.startupInit();})");
+		}
 	}
 	
 	private void generateRootHandler( Handler part, TabbedWriter out ) {

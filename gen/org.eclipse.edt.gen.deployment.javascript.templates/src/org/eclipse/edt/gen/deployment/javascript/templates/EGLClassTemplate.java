@@ -11,9 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.deployment.javascript.templates;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.edt.gen.deployment.javascript.Context;
@@ -21,9 +19,7 @@ import org.eclipse.edt.gen.deployment.util.CommonUtilities;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 
@@ -38,10 +34,9 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		try {
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart)){
+				if(!processedParts.contains(refPart.getFullyQualifiedName()) && refPart instanceof EGLClass){
 					processedParts.add(refPart.getFullyQualifiedName());
-					if(!refPart.getFullyQualifiedName().startsWith("egl") && 
-							!refPart.getFullyQualifiedName().startsWith("eglx")){
+					if(CommonUtilities.isRUIWidget(refPart)){
 						ctx.invoke(genDependentPart, refPart, ctx, dependentFiles);
 					}
 				}
