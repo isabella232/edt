@@ -11,3 +11,4 @@ Require-Bundle: org.eclipse.edt.mof.eglx.persistence.sql;bundle-version="0.7.0",
 Export-Package: org.eclipse.edt.gen.java.templates.eglx.persistence,
  org.eclipse.edt.gen.java.templates.eglx.persistence.sql
 Bundle-Vendor: Eclipse EGL Development Tools
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
