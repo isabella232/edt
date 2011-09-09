@@ -1,7 +1,7 @@
 feature@org.eclipse.edt.sdk.feature=v201106091321,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.sdk.feature
 
 feature@org.eclipse.edt.feature=v201109071211,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.feature
-plugin@org.eclipse.edt.compiler=v201109081528,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.compiler
+plugin@org.eclipse.edt.compiler=v201109090920,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.compiler
 plugin@org.eclipse.edt.core.doc.cr=v201108251003,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.core.doc.cr
 plugin@org.eclipse.edt.core.doc.lr=v201109012222,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.core.doc.lr
 plugin@org.eclipse.edt.core.doc.pg=v201109012222,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.core.doc.pg
@@ -20,8 +20,8 @@ plugin@org.eclipse.edt.gen.generator.eglsource=v201108251024,:pserver:anonymous@
 plugin@org.eclipse.edt.gen.generator.example=v201109070231,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.generator.example
 plugin@org.eclipse.edt.gen.generator.java=v201109081305,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.generator.java
 plugin@org.eclipse.edt.gen.generator.javascript=v201108081547,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.generator.javascript
-plugin@org.eclipse.edt.gen.java=v201109022249,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.java
-plugin@org.eclipse.edt.gen.java.templates=v201109061426,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.java.templates
+plugin@org.eclipse.edt.gen.java=v201109090920,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.java
+plugin@org.eclipse.edt.gen.java.templates=v201109090920,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.java.templates
 plugin@org.eclipse.edt.gen.java.templates.egl.lang=v201109081528,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.java.templates.egl.lang
 plugin@org.eclipse.edt.gen.java.templates.eglx.persistence=v201109090740,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.java.templates.eglx.persistence
 plugin@org.eclipse.edt.gen.javascript=v201109081601,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.javascript
