@@ -783,53 +783,53 @@ public class FunctionBinder extends DefaultBinder {
 
     public void processSQLStatement(ExecuteStatement statement) {
 
-        IDataBinding sqlRecordData = null;
-        IDataBinding[] dataArr = new IDataBinding[1];
-        getSQLRecordData(statement.getIOObjects(), dataArr);
-        if (dataArr[0] != null) {
-            sqlRecordData = dataArr[0];
-        }
-
-        EGLSQLParser sqlParser = null;
-        if (statement.hasInlineSQLStatement()) {
-            SQLInfo info = new SQLInfo();
-            info.setInlineValueStart(statement.getInlineSQLStatement().getValueOffset());
-            sqlParser = new EGLSQLParser(statement.getInlineSQLStatement().getValue(), "ANY", compilerOptions);
-            info.setParser(sqlParser); //$NON-NLS-1$
-            statement.setSqlInfo(info);
-        } else {
-            if (sqlRecordData != null && !statement.isPreparedStatement()) {
-                EGLSQLExecuteStatementFactory sqlStatementFactory = new EGLSQLExecuteStatementFactory(sqlRecordData, ((Expression)statement.getIOObjects().get(0)).getCanonicalString(), statement.isUpdate(), statement.isDelete(), statement.isInsert(), compilerOptions);
-        		String sqlStatement = sqlStatementFactory.buildDefaultSQLStatement();
-        		reportErrorsForDefaultSQL(sqlStatementFactory, statement);
-        		if (sqlStatement != null) {
-                    SQLInfo info = new SQLInfo();
-                    info.setDefaultStatment(true);
-                    sqlParser = new EGLSQLParser(sqlStatement, "ANY", compilerOptions);
-                    info.setParser(sqlParser); //$NON-NLS-1$
-                    statement.setSqlInfo(info);
-        		}
-
-             }
-        }
-
-        if (sqlParser != null && sqlParser.hasErrors()) {
-        	Iterator i = sqlParser.getErrors().iterator();
-        	while (i.hasNext()) {
-                Problem msg = (Problem) i.next();
-                problemRequestor.acceptProblem(statement, msg.getProblemKind(), msg.getInserts());
-        	}
-        }
-        
-        if (statement.getSqlInfo() != null) {
-            if (sqlRecordData == null) {
-                statement.getSqlInfo().setGenTokens(new EGLSQLGenerationTokens(statement.getSqlInfo().getParser()));
-            } else {
-                statement.getSqlInfo().setGenTokens(new EGLSQLGenerationTokens(statement.getSqlInfo().getParser(), sqlRecordData, true));
-            }
-            statement.getSqlInfo().getClauseMap().put(SQLConstants.EXECUTE, statement.getSqlInfo().getGenTokens().getAllTokens());
-            bindSqlHostVariables(statement, statement.getSqlInfo());
-        }
+//        IDataBinding sqlRecordData = null;
+//        IDataBinding[] dataArr = new IDataBinding[1];
+//        getSQLRecordData(statement.getIOObjects(), dataArr);
+//        if (dataArr[0] != null) {
+//            sqlRecordData = dataArr[0];
+//        }
+//
+//        EGLSQLParser sqlParser = null;
+//        if (statement.hasInlineSQLStatement()) {
+//            SQLInfo info = new SQLInfo();
+//            info.setInlineValueStart(statement.getInlineSQLStatement().getValueOffset());
+//            sqlParser = new EGLSQLParser(statement.getInlineSQLStatement().getValue(), "ANY", compilerOptions);
+//            info.setParser(sqlParser); //$NON-NLS-1$
+//            statement.setSqlInfo(info);
+//        } else {
+//            if (sqlRecordData != null && !statement.isPreparedStatement()) {
+//                EGLSQLExecuteStatementFactory sqlStatementFactory = new EGLSQLExecuteStatementFactory(sqlRecordData, ((Expression)statement.getIOObjects().get(0)).getCanonicalString(), statement.isUpdate(), statement.isDelete(), statement.isInsert(), compilerOptions);
+//        		String sqlStatement = sqlStatementFactory.buildDefaultSQLStatement();
+//        		reportErrorsForDefaultSQL(sqlStatementFactory, statement);
+//        		if (sqlStatement != null) {
+//                    SQLInfo info = new SQLInfo();
+//                    info.setDefaultStatment(true);
+//                    sqlParser = new EGLSQLParser(sqlStatement, "ANY", compilerOptions);
+//                    info.setParser(sqlParser); //$NON-NLS-1$
+//                    statement.setSqlInfo(info);
+//        		}
+//
+//             }
+//        }
+//
+//        if (sqlParser != null && sqlParser.hasErrors()) {
+//        	Iterator i = sqlParser.getErrors().iterator();
+//        	while (i.hasNext()) {
+//                Problem msg = (Problem) i.next();
+//                problemRequestor.acceptProblem(statement, msg.getProblemKind(), msg.getInserts());
+//        	}
+//        }
+//        
+//        if (statement.getSqlInfo() != null) {
+//            if (sqlRecordData == null) {
+//                statement.getSqlInfo().setGenTokens(new EGLSQLGenerationTokens(statement.getSqlInfo().getParser()));
+//            } else {
+//                statement.getSqlInfo().setGenTokens(new EGLSQLGenerationTokens(statement.getSqlInfo().getParser(), sqlRecordData, true));
+//            }
+//            statement.getSqlInfo().getClauseMap().put(SQLConstants.EXECUTE, statement.getSqlInfo().getGenTokens().getAllTokens());
+//            bindSqlHostVariables(statement, statement.getSqlInfo());
+//        }
 
      }
     

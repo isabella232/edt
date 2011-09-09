@@ -144,10 +144,10 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ExecuteStatement node) {
 		final SqlExecuteStatement stmt = factory.createSqlExecuteStatement();
 		stack.push(stmt);
-		stmt.setIsUpdate(node.isUpdate());
-		stmt.setIsDelete(node.isDelete());
-		stmt.setIsInsert(node.isInsert());
-		stmt.setPreparedStatementId(node.getPreparedStatementID());
+//		stmt.setIsUpdate(node.isUpdate());
+//		stmt.setIsDelete(node.isDelete());
+//		stmt.setIsInsert(node.isInsert());
+//		stmt.setPreparedStatementId(node.getPreparedStatementID());
 		
 		final IASTVisitor stmtGenerator =  this;
 		node.accept(new AbstractASTExpressionVisitor() {

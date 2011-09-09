@@ -43,18 +43,18 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 			checkUsingList(executeStatement);
 			checkIOObjects(executeStatement);
 			
-			if (executeStatement.hasInlineSQLStatement()){
-				if (executeStatement.getInlineSQLStatement() != null && StatementValidator.isClauseEmpty(((InlineSQLStatement)executeStatement.getInlineSQLStatement()).getValue())){
-					problemRequestor.acceptProblem(executeStatement,
-							IProblemRequestor.EMPTY_SQL_STRING,
-							new String[] {IEGLConstants.KEYWORD_EXECUTE.toUpperCase()});
-				}
-			}
+//			if (executeStatement.hasInlineSQLStatement()){
+//				if (executeStatement.getInlineSQLStatement() != null && StatementValidator.isClauseEmpty(((InlineSQLStatement)executeStatement.getInlineSQLStatement()).getValue())){
+//					problemRequestor.acceptProblem(executeStatement,
+//							IProblemRequestor.EMPTY_SQL_STRING,
+//							new String[] {IEGLConstants.KEYWORD_EXECUTE.toUpperCase()});
+//				}
+//			}
 			
-			String preparedStmtID = executeStatement.getPreparedStatementID();
-			if(preparedStmtID != null) {
-				EGLNameValidator.validate(preparedStmtID, EGLNameValidator.RESULT_SET_ID, problemRequestor, executeStatement, compilerOptions);
-			}
+//			String preparedStmtID = executeStatement.getPreparedStatementID();
+//			if(preparedStmtID != null) {
+//				EGLNameValidator.validate(preparedStmtID, EGLNameValidator.RESULT_SET_ID, problemRequestor, executeStatement, compilerOptions);
+//			}
 			
 			return false;
 		}
@@ -66,11 +66,11 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 					if (visitedUsing){
 						return false;
 					}
-					if (!executeStatement.isPreparedStatement()){
-						problemRequestor.acceptProblem(usingClause,
-								IProblemRequestor.CANT_HAVE_USING_WITHOUT_PREPARED_STMT_REF,
-								new String[] { IEGLConstants.KEYWORD_EXECUTE.toUpperCase()});
-					}
+//					if (!executeStatement.isPreparedStatement()){
+//						problemRequestor.acceptProblem(usingClause,
+//								IProblemRequestor.CANT_HAVE_USING_WITHOUT_PREPARED_STMT_REF,
+//								new String[] { IEGLConstants.KEYWORD_EXECUTE.toUpperCase()});
+//					}
 					//check types of children
 					StatementValidator.validateNodesInUsingClause(usingClause.getExpressions(),problemRequestor);
 					visitedUsing  = true;
