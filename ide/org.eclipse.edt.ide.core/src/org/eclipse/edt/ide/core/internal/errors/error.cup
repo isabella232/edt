@@ -107,7 +107,6 @@ nonterminal ElseBlock elseOpt;
 nonterminal EnumerationField enumerationField;
 nonterminal OnEventBlock eventBlock;
 nonterminal executeOption;
-nonterminal ExecuteStatement.ExecuteTarget executeTarget;
 nonterminal ExitStatement.ExitModifier exitModifierOpt;
 nonterminal Expression expr;
 nonterminal List extendsOpt;
@@ -617,8 +616,8 @@ stmt
 	|	FREESQL:freesql1 expr:expr1 SEMI:semi1
 	{: RESULT = new FreeSQLStatement(expr1, freesql1left, semi1right); :}
 
-	|	EXECUTE:execute1 executeTarget:executeTarget1 executeOption_star:executeOptions1 SEMI:semi1
-	{: RESULT = new ExecuteStatement(executeTarget1, executeOptions1, execute1left, semi1right); :}
+	|	EXECUTE:execute1 executeOption_star:executeOptions1 SEMI:semi1
+	{: RESULT = new ExecuteStatement(executeOptions1, execute1left, semi1right); :}
 
 	|	GET:get1 expr_star:exprs1 getByKeyOption_star:getByKeyOptions1 SEMI:semi1
 	{: RESULT = new GetByKeyStatement(exprs1, getByKeyOptions1, get1left, semi1right); :}
@@ -1039,23 +1038,6 @@ inlineSQLStatementOpt
 	::=
 	|	inlineSQLStatement:sqlStatement
 	{: RESULT = sqlStatement; :}
-	;
-
-executeTarget
-	::=	UPDATE:update1 inlineSQLStatementOpt:inlineSQLStatement1
-	{: RESULT = new ExecuteStatement.UpdateExecuteTarget(inlineSQLStatement1, update1left, inlineSQLStatement1 == null ? update1right : inlineSQLStatement1right); :}
-
-	|	DELETE:delete1 inlineSQLStatementOpt:inlineSQLStatement1
-	{: RESULT = new ExecuteStatement.DeleteExecuteTarget(inlineSQLStatement1, delete1left, inlineSQLStatement1 == null ? delete1right : inlineSQLStatement1right); :}
-	
-	|	INSERT:insert1 inlineSQLStatementOpt:inlineSQLStatement1
-	{: RESULT = new ExecuteStatement.InsertExecuteTarget(inlineSQLStatement1, insert1left, inlineSQLStatement1 == null ? insert1right : inlineSQLStatement1right); :}
-	
-	|	expr:expr1
-	{: RESULT = new ExecuteStatement.PreparedStatementExecuteTarget(expr1, expr1left, expr1right); :}
-
-	|	inlineSQLStatement:inlineSQLStatement1
-	{: RESULT = new ExecuteStatement.DefaultSQLStatementExecuteTarget(inlineSQLStatement1, inlineSQLStatement1left, inlineSQLStatement1right); :}
 	;
 
 executeOption
