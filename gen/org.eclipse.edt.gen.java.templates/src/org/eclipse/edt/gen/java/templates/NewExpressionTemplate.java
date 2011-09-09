@@ -28,7 +28,16 @@ public class NewExpressionTemplate extends JavaTemplate {
 		ctx.invoke(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavaImplementation);
 		out.print("(");
 		if (expr.getArguments() != null && expr.getArguments().size() > 0) {
+			boolean notFirst = false;
 			for (Expression argument : expr.getArguments()) {
+				if ( notFirst )
+				{
+					out.print(", ");
+				}
+				else
+				{
+					notFirst = true;
+				}
 				ctx.invoke(genExpression, argument, ctx, out);
 			}
 		} else
