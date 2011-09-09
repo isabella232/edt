@@ -80,7 +80,6 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genMemberAccess = "genMemberAccess";
 	public static final String genMemberName = "genMemberName";
 	public static final String genName = "genName";
-	public static final String genNamespaceMap = "genNamespaceMap";
 	public static final String genNewExpression = "genNewExpression";
 	public static final String genPart = "genPart";
 	public static final String genPartName = "genPartName";
