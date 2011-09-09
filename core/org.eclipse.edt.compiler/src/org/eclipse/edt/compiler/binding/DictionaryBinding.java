@@ -11,12 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.Primitive;
+import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemEnvironmentPackageNames;
 import org.eclipse.edt.compiler.internal.core.lookup.System.ISystemLibrary;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibrary;
@@ -27,6 +30,8 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
  * @author Dave Murray
  */
 public class DictionaryBinding extends PartBinding {
+	
+	private static boolean EnumTypesFound = false;
 	
 	public static DictionaryBinding INSTANCE = new DictionaryBinding();
 	
@@ -75,9 +80,21 @@ public class DictionaryBinding extends PartBinding {
 	public static final SystemFunctionBinding SIZE = SystemLibrary.createSystemFunction(
 	    IEGLConstants.SYSTEM_WORD_SIZE,
 	    null,
-		PrimitiveTypeBinding.getInstance(Primitive.BIN, 9),
+		PrimitiveTypeBinding.getInstance(Primitive.INT),
 		ISystemLibrary.Dictionary_Size_func);
 	
+	public static final SystemFunctionBinding GETCASESENSIVE = SystemLibrary.createSystemFunction(
+		    "getCaseSensitive",
+		    null,
+			PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN),
+			0);
+	
+	public static final SystemFunctionBinding GETORDERING = SystemLibrary.createSystemFunction(
+		    "getOrdering",
+		    null,
+			PrimitiveTypeBinding.getInstance(Primitive.INT),
+			0);
+
 	private static final Map SYSTEM_FUNCTIONS = new HashMap();
 	static {
 		SYSTEM_FUNCTIONS.put(CONTAINSKEY.getName(), CONTAINSKEY);
@@ -87,6 +104,25 @@ public class DictionaryBinding extends PartBinding {
 		SYSTEM_FUNCTIONS.put(REMOVEALL.getName(), REMOVEALL);
 		SYSTEM_FUNCTIONS.put(REMOVEELEMENT.getName(), REMOVEELEMENT);
 		SYSTEM_FUNCTIONS.put(SIZE.getName(), SIZE);
+		SYSTEM_FUNCTIONS.put(GETCASESENSIVE.getName(), GETCASESENSIVE);
+		SYSTEM_FUNCTIONS.put(GETORDERING.getName(), GETORDERING);
+	}
+	
+	
+	public static final ConstructorBinding CONSTRUCTOR1 = new ConstructorBinding(DictionaryBinding.INSTANCE);
+	public static final FunctionParameterBinding C1P1 = new FunctionParameterBinding(InternUtil.intern("caseSensitive"), DictionaryBinding.INSTANCE, PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN), (IFunctionBinding)CONSTRUCTOR1.getType());
+	public static final FunctionParameterBinding C1P2 = new FunctionParameterBinding(InternUtil.intern("ordering"), DictionaryBinding.INSTANCE, PrimitiveTypeBinding.getInstance(Primitive.INT), (IFunctionBinding)CONSTRUCTOR1.getType());
+	static {
+		C1P1.setInput(true);
+		C1P2.setInput(true);
+		CONSTRUCTOR1.addParameter(C1P1);		
+		CONSTRUCTOR1.addParameter(C1P2);
+	}
+
+	private static final List CONSTRUCTORS = new ArrayList();
+	static {
+		CONSTRUCTORS.add(new ConstructorBinding(DictionaryBinding.INSTANCE));
+		CONSTRUCTORS.add(CONSTRUCTOR1);
 	}
 	
 	private DictionaryBinding() {
@@ -151,4 +187,31 @@ public class DictionaryBinding extends PartBinding {
 		nullable.setNullable(true);
 		return nullable;
 	}
+
+    public List getConstructors() {
+    	return CONSTRUCTORS;
+    }
+    
+    @Override
+    public void setEnvironment(IEnvironment environment) {
+    	
+    	//update the types!
+    	resolveEnumType(environment);
+    	
+    	super.setEnvironment(environment);
+    }
+    
+    private static void resolveEnumType(IEnvironment environment) {
+    	if (EnumTypesFound) {
+    		return;
+    	}
+    	
+    	IPartBinding enumBinding = environment.getPartBinding(InternUtil.intern(new String[] {"eglx", "lang"}), InternUtil.intern("OrderingKind"));
+    	if (Binding.isValidBinding(enumBinding)) {
+    		C1P2.setType(enumBinding);
+    		GETORDERING.setReturnType(enumBinding);
+    		EnumTypesFound = true;
+    	}
+    }
+	
 }
