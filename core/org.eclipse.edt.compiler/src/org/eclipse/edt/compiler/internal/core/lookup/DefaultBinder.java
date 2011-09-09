@@ -1661,6 +1661,13 @@ public abstract class DefaultBinder extends AbstractBinder {
 					constructors.addNestedFunctionBinding((IDataBinding) iter.next());
 				}
 			}
+			else {
+				if(ITypeBinding.DICTIONARY_BINDING == targetType.getKind()) {
+					for(Iterator iter = ((DictionaryBinding) targetType).getConstructors().iterator(); iter.hasNext();) {
+						constructors.addNestedFunctionBinding((IDataBinding) iter.next());   
+					}
+				}
+			}
 		}
 		return constructors;		
 	}
