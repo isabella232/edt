@@ -28,8 +28,6 @@ egl.defineClass('eglx.http', "Http", "egl.jsrt", "Record", {
 		,
 		"eze$$setInitial": function() {
 			this.eze$$setEmpty();
-			this.request = new egl.eglx.http.HttpRequest();
-			this.response = new egl.eglx.http.HttpResponse();
 		}
 		,
 		"eze$$clone": function() {
@@ -70,19 +68,6 @@ egl.defineClass('eglx.http', "Http", "egl.jsrt", "Record", {
 				this.fieldInfos[2] =new egl.eglx.services.FieldInfo("invocationType", "invocationType", "eglx.services.ServiceType", egl.eglx.services.ServiceType, annotations);
 			}
 			return this.fieldInfos;
-		}
-		,
-		"eze$$resolvePart": function(/*string*/ namespace, /*string*/ localName) {
-			if(this.namespaceMap == undefined){
-				this.namespaceMap = {};
-				this.namespaceMap["##default{Http}"] = "eglx.http.Http";
-			}
-			var newObject = null;
-			var className = this.namespaceMap[namespace + "{" + localName + "}"];
-			if(className != undefined && className != null){
-				newObject = instantiate(className, []);
-			};
-			return newObject;
 		}
 		,
 		"toString": function() {

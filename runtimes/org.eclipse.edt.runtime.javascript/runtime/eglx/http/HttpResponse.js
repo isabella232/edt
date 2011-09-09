@@ -98,19 +98,6 @@ egl.defineClass('eglx.http', "HttpResponse", "egl.jsrt", "Record", {
 			return this.fieldInfos;
 		}
 		,
-		"eze$$resolvePart": function(/*string*/ namespace, /*string*/ localName) {
-			if(this.namespaceMap == undefined){
-				this.namespaceMap = {};
-				this.namespaceMap["##default{HttpResponse}"] = "eglx.http.HttpResponse";
-			}
-			var newObject = null;
-			var className = this.namespaceMap[namespace + "{" + localName + "}"];
-			if(className != undefined && className != null){
-				newObject = instantiate(className, []);
-			};
-			return newObject;
-		}
-		,
 		"toString": function() {
 			return "[HttpResponse]";
 		}

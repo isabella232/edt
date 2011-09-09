@@ -1,37 +1,63 @@
 /*******************************************************************************
- * Copyright © 2008, 2011 IBM Corporation and others.
+ * Copyright (c) 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * IBM Corporation - initial API and implementation
- *
+ *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-
-egl.createDynamicAccessException = function( /*string*/ messageID, /*string or array*/ inserts )
-{
-	if (typeof(inserts) != "string") {
-		inserts = egl.getRuntimeMessage( messageID, inserts );
+egl.defineClass('egl.lang', "DynamicAccessException", "egl.jsrt", "Record", {
+	"eze$$fileName" : "egl/lang/Exceptions.egl",
+		"constructor": function() {
+			this.eze$$setInitial();
+		}
+		,
+		"ezeCopy": function(source) {
+			this.key = source.key;
+		}
+		,
+		"eze$$setEmpty": function() {
+			this.key = "";
+		}
+		,
+		"eze$$setInitial": function() {
+			this.eze$$setEmpty();
+		}
+		,
+		"eze$$clone": function() {
+			var ezert$$1 = this;
+			var ezert$$2 = new egl.egl.lang.DynamicAccessException();
+			ezert$$2.eze$$isNull = this.eze$$isNull;
+			ezert$$2.eze$$isNullable = this.eze$$isNullable;
+			ezert$$2.key = ezert$$1.key;
+			ezert$$2.setNull(ezert$$1eze$$isNull);
+			return ezert$$2;
+		}
+		,
+		"eze$$getAnnotations": function() {
+			if(this.annotations === undefined){
+				this.annotations = {};
+				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("DynamicAccessException", null, false);
+			}
+			return this.annotations;
+		}
+		,
+		"eze$$getFieldInfos": function() {
+			if(this.fieldInfos === undefined){
+				var annotations;
+				this.fieldInfos = new Array();
+				annotations = {};
+				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("key", null, false, false);
+				annotations["JsonName"] = new egl.eglx.json.JsonName("key");
+				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("key", "key", "S;", String, annotations);
+			}
+			return this.fieldInfos;
+		}
+		,
+		"toString": function() {
+			return "[DynamicAccessException]";
+		}
 	}
-	egl.exceptionThrown = true;
-	var args = new Array();
-	args.push( [ "messageID", messageID || "" ] );
-	args.push( [ "message", inserts || "" ] );
-	args.push( [ "key", arguments[ 2 ] || "" ] );
-	return new egl.egl.lang.DynamicAccessException( args );
-}
-
-egl.defineClass( "egl.lang", "DynamicAccessException", "egl.lang", "AnyException", {
-	
-	//DynamicAccessException requires the following additional data:
-	//key
-	
-	"eze$$getChildVariables" : function() {
-		var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call( this );
-		childVars.push({name : "key", value : this.key, type : "eglx.lang.EString"});
-		return childVars;
-	}
-	
-});
+);

@@ -42,7 +42,8 @@ egl.defineClass('eglx.xml', "XMLProcessingException", "egl.jsrt", "Record", {
 				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("XMLProcessingException", null, false);
 			}
 			return this.annotations;
-		},
+		}
+		,
 		"eze$$getFieldInfos": function() {
 			if(this.fieldInfos === undefined){
 				var annotations;
@@ -53,18 +54,6 @@ egl.defineClass('eglx.xml', "XMLProcessingException", "egl.jsrt", "Record", {
 				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("detail", "detail", "S;", String, annotations);
 			}
 			return this.fieldInfos;
-		},
-		"eze$$resolvePart": function(/*string*/ namespace, /*string*/ localName) {
-			if(this.namespaceMap == undefined){
-				this.namespaceMap = {};
-				this.namespaceMap["##default{XMLProcessingException}"] = "eglx.xml.XMLProcessingException";
-			}
-			var newObject = null;
-			var className = this.namespaceMap[namespace + "{" + localName + "}"];
-			if(className != undefined && className != null){
-				newObject = instantiate(className, []);
-			};
-			return newObject;
 		}
 		,
 		"toString": function() {

@@ -77,19 +77,6 @@ egl.defineClass('eglx.services', "ServiceInvocationException", "egl.jsrt", "Reco
 			return this.fieldInfos;
 		}
 		,
-		"eze$$resolvePart": function(/*string*/ namespace, /*string*/ localName) {
-			if(this.namespaceMap == undefined){
-				this.namespaceMap = {};
-				this.namespaceMap["##default{ServiceInvocationException}"] = "eglx.services.ServiceInvocationException";
-			}
-			var newObject = null;
-			var className = this.namespaceMap[namespace + "{" + localName + "}"];
-			if(className != undefined && className != null){
-				newObject = instantiate(className, []);
-			};
-			return newObject;
-		}
-		,
 		"toString": function() {
 			return "[ServiceInvocationException]";
 		}
