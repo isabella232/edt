@@ -78,7 +78,6 @@ public class EGLContextBoundaryUtility {
 		boundaryStatesSet.set(NodeTypes.exitModifierOpt);
 		boundaryStatesSet.set(NodeTypes.deleteOption);
 		boundaryStatesSet.set(NodeTypes.functionInvocation);
-		boundaryStatesSet.set(NodeTypes.moveModifier);
 		boundaryStatesSet.set(NodeTypes.transferTargetOpt);
 		boundaryStatesSet.set(NodeTypes.passingRecordOpt);
 		boundaryStatesSet.set(NodeTypes.forwardTargetOpt);

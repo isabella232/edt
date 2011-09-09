@@ -1795,8 +1795,8 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
 		targetExpr.accept(this);
 		
-		List moveModifiers = moveStatement.getMoveModifiers();
-		if(moveModifiers != null && !moveModifiers.isEmpty()){
+		MoveModifier moveModifier = moveStatement.getMoveModifierOpt();
+		if(moveModifier != null){
 //			moveModifier
 //			::=	BYNAME
 //			{: RESULT = MoveStatement.DefaultMoveModifier.BYNAME; :}
@@ -1810,25 +1810,22 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 //			{: RESULT = MoveStatement.DefaultMoveModifier.WITHV60COMPAT; :}			
 			indent(numOfIndents4Wrapping);		//indentB
 			
-			for(Iterator it= moveModifiers.iterator(); it.hasNext();){
-				MoveModifier moveModifier = (MoveModifier)it.next();
-				if(moveModifier.isByName())
-					printStuffBeforeToken(NodeTypes.BYNAME, -1, true, moveWrappingPolicy);
-				else if(moveModifier.isByPosition())
-					printStuffBeforeToken(NodeTypes.BYPOSITION, -1, true, moveWrappingPolicy);
-				else if(moveModifier.isForAll()){
-					printStuffBeforeToken(NodeTypes.FOR, -1, true, moveWrappingPolicy);
-					printStuffBeforeToken(NodeTypes.ALL, -1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-				}
-				else if(moveModifier.isFor()){
-					printStuffBeforeToken(NodeTypes.FOR, -1, true, moveWrappingPolicy);
-					Expression forMoveExpr = moveModifier.getExpression();
-					setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-					forMoveExpr.accept(this);
-				}
-				else if(moveModifier.isWithV60Compat())
-					printStuffBeforeToken(NodeTypes.WITHV60COMPAT, -1, true, moveWrappingPolicy);				
+			if(moveModifier.isByName())
+				printStuffBeforeToken(NodeTypes.BYNAME, -1, true, moveWrappingPolicy);
+			else if(moveModifier.isByPosition())
+				printStuffBeforeToken(NodeTypes.BYPOSITION, -1, true, moveWrappingPolicy);
+			else if(moveModifier.isForAll()){
+				printStuffBeforeToken(NodeTypes.FOR, -1, true, moveWrappingPolicy);
+				printStuffBeforeToken(NodeTypes.ALL, -1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
 			}
+			else if(moveModifier.isFor()){
+				printStuffBeforeToken(NodeTypes.FOR, -1, true, moveWrappingPolicy);
+				Expression forMoveExpr = moveModifier.getExpression();
+				setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+				forMoveExpr.accept(this);
+			}
+			else if(moveModifier.isWithV60Compat())
+				printStuffBeforeToken(NodeTypes.WITHV60COMPAT, -1, true, moveWrappingPolicy);				
 			
 			unindent(numOfIndents4Wrapping);	//match indentB
 		}
