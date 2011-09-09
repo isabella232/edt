@@ -490,7 +490,8 @@ public class CompilerAndGeneratorControls {
     	private void createParentGeneratorMap( WSOptionNodeComponent node ) {
     		List<IGenerator> availableGens = node.fCompiler.getGenerators();
    			for( IGenerator gen : availableGens ) {
-   				if( ( gen.getParentGeneratorId() == null ) || ( gen.getParentGeneratorId().length() == 0 ) ) { // root generator
+   				if( (gen.getParentGeneratorId() == null || gen.getParentGeneratorId().length() == 0) // root generator
+   						&& (gen.getEnabledWith() == null || gen.getEnabledWith().length() == 0)) { // not implicitly enabled
    					addGeneratorToMap( gen );
    				}
      		}

@@ -468,13 +468,19 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 			if( genString.length() != 0 ) {
 				String[] gens = genString.split( "," );					
 				// trim each value
+				List<String> explicitGens = new ArrayList<String>(gens.length);
 				for( int i = 0; i < gens.length; i++ ) {
-					gens[i] = convertGeneratorIdToName( gens[i].trim() );
+					String id = gens[i].trim();
+					IGenerator gen = getGeneratorFromId(id);
+					if (gen != null && gen.getEnabledWith() != null && gen.getEnabledWith().length() > 0) {
+						continue;
+					}
+					explicitGens.add( convertGeneratorIdToName(id) );
 				}
-				return new ArrayList<String>( Arrays.asList( gens ) );
+				return explicitGens;
 			}
 		}
-		return new ArrayList<String>();
+		return new ArrayList<String>(0);
 	}
 
 	protected void createTabProviders() {
@@ -927,14 +933,33 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 				}
 			} else {
 				String[] genIds = new String[this.selectedGenerators.size()];
+				String compilerId = selectedGenerators.size() == 0 ? "" : getGeneratorFromId(convertGeneratorNameToId(selectedGenerators.get(0))).getCompiler().getId();
 				int index = 0;
 				StringBuilder buffer = new StringBuilder(100);
+				List<String> addedIDs = new ArrayList(this.selectedGenerators.size() + 10);
 				for( String genName : this.selectedGenerators ) {
-					genIds[index] = convertGeneratorNameToId( genName );				
-					if (index != 0) {
-						buffer.append(',');
+					genIds[index] = convertGeneratorNameToId( genName );
+					
+					if (!addedIDs.contains(genIds[index])) {
+						if (index != 0) {
+							buffer.append(',');
+						}
+						buffer.append( genIds[index] );
+						addedIDs.add(genIds[index]);
 					}
-					buffer.append( genIds[index] );
+					
+					// If there's a generator depending on this one, add it
+					for (IGenerator gen : EDTCoreIDEPlugin.getPlugin().getGenerators()) {
+						if (gen.getCompiler().getId().equals(compilerId)) {
+							String enabledWith = gen.getEnabledWith();
+							if (enabledWith != null && enabledWith.equals(genIds[index]) && !addedIDs.contains(gen.getId())) {
+								buffer.append(',');
+								buffer.append( gen.getId() );
+								addedIDs.add(gen.getId());
+							}
+						}
+					}
+					
 					index++;
 				}
 				replaceGeneratorsInPrefStoreForCompiler( getPreferencePageCompilerId(), buffer.toString() );
@@ -977,7 +1002,21 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 								continue;
 							}
 						}
-						genIds.add( convertGeneratorNameToId( genName ) );
+						
+						if (!genIds.contains(id)){
+							genIds.add( id );
+						}
+						
+						// If there's a generator depending on this one, add it
+						for (IGenerator next : EDTCoreIDEPlugin.getPlugin().getGenerators()) {
+							if (next.getCompiler().getId().equals(compilerId)) {
+								String enabledWith = next.getEnabledWith();
+								if (enabledWith != null && enabledWith.equals(id) && !genIds.contains(next.getId())) {
+									genIds.add(next.getId());
+								}
+							}
+						}
+						
 						newSelectedGens.add( genName );
 					}
 					ProjectSettingsUtility.setGeneratorIds( this.resource, genIds.toArray( new String[genIds.size()] ) );
@@ -1116,8 +1155,8 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 		return "";
 	}
 
-	protected String[] convertGeneratorIdsToNames( String[] ids ) {
-		List<String> names = new ArrayList<String>();
+	protected String[] convertGeneratorIdsToNames( List<String> ids ) {
+		List<String> names = new ArrayList<String>(ids.size());
 		for( String id : ids ) {
 			names.add( convertGeneratorIdToName( id ) );
 		}
@@ -1248,7 +1287,16 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 		String[] genIds = ProjectSettingsUtility.getGeneratorIds( resource );
 		String[] genNames;
 		if( genIds != null ) {
-			genNames = convertGeneratorIdsToNames( genIds );
+			List<String> displayIDs = new ArrayList<String>(genIds.length);
+			for (String id : genIds) {
+				IGenerator gen = getGeneratorFromId(id);
+				String enabledWith = gen == null ? null : gen.getEnabledWith();
+				if (enabledWith == null || enabledWith.length() == 0) {
+					displayIDs.add(id);
+				}
+			}
+			
+			genNames = convertGeneratorIdsToNames( displayIDs );
 		} else {
 			List<String> genList = getWorkspaceSelectedGenerators();
 			genNames = genList.toArray( new String[genList.size()]);
