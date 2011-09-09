@@ -206,9 +206,15 @@ public class EGLClassTemplate extends JavaTemplate {
 				}
 			}
 		}
-		// now process the fields
+		// now process the fields that don't have initializer statements
 		for (Field field : fields) {
-			ctx.invoke(genInitializeMethod, part, ctx, out, field);
+			if (field.getInitializerStatements() == null)
+				ctx.invoke(genInitializeMethod, part, ctx, out, field);
+		}
+		// now process the fields that do have initializer statements
+		for (Field field : fields) {
+			if (field.getInitializerStatements() != null)
+				ctx.invoke(genInitializeMethod, part, ctx, out, field);
 		}
 	}
 
