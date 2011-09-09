@@ -208,11 +208,6 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	}
 	
 	@Override
-	public EClass getDeepCopyStatementEClass() {
-		return (EClass)getTypeNamed(DeepCopyStatement);
-	}
-	
-	@Override
 	public EClass getDelegateEClass() {
 		return (EClass)getTypeNamed(Delegate);
 	}
@@ -1025,11 +1020,6 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	@Override
 	public DeclarationExpression createDeclarationExpression() {
 		return (DeclarationExpression)getDeclarationExpressionEClass().newInstance();
-	}
-	
-	@Override
-	public DeepCopyStatement createDeepCopyStatement() {
-		return (DeepCopyStatement)getDeepCopyStatementEClass().newInstance();
 	}
 	
 	@Override

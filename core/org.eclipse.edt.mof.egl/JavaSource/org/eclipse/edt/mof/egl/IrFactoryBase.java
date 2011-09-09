@@ -56,7 +56,6 @@ public interface IrFactoryBase extends EFactory  {
 	String DBCharLiteral = packageName+".DBCharLiteral";
 	String DecimalLiteral = packageName+".DecimalLiteral";
 	String DeclarationExpression = packageName+".DeclarationExpression";
-	String DeepCopyStatement = packageName+".DeepCopyStatement";
 	String Delegate = packageName+".Delegate";
 	String DelegateInvocation = packageName+".DelegateInvocation";
 	String DeleteStatement = packageName+".DeleteStatement";
@@ -225,7 +224,6 @@ public interface IrFactoryBase extends EFactory  {
 	EClass getDBCharLiteralEClass();
 	EClass getDecimalLiteralEClass();
 	EClass getDeclarationExpressionEClass();
-	EClass getDeepCopyStatementEClass();
 	EClass getDelegateEClass();
 	EClass getDelegateInvocationEClass();
 	EClass getDeleteStatementEClass();
@@ -389,7 +387,6 @@ public interface IrFactoryBase extends EFactory  {
 	public DBCharLiteral createDBCharLiteral();
 	public DecimalLiteral createDecimalLiteral();
 	public DeclarationExpression createDeclarationExpression();
-	public DeepCopyStatement createDeepCopyStatement();
 	public Delegate createDelegate();
 	public DeleteStatement createDeleteStatement();
 	public DisplayStatement createDisplayStatement();
