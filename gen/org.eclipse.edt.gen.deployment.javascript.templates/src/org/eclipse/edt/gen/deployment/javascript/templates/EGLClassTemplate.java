@@ -36,7 +36,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			for(Part refPart:refParts){
 				if(!processedParts.contains(refPart.getFullyQualifiedName()) && refPart instanceof EGLClass){
 					processedParts.add(refPart.getFullyQualifiedName());
-					if(CommonUtilities.isRUIWidget(refPart)){
+					if(CommonUtilities.isUserPart(refPart)){
 						ctx.invoke(genDependentPart, refPart, ctx, dependentFiles);
 					}
 				}
