@@ -12,16 +12,13 @@
 package org.eclipse.edt.ide.compiler.gen;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin;
 import org.eclipse.edt.ide.core.AbstractGenerator;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.serialization.IEnvironment;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
@@ -52,16 +49,6 @@ public class JavaScriptGenerator extends AbstractGenerator {
 		args[5] = file.getFullPath().toOSString();
 		
 		return args;
-	}
-	
-	@Override
-	public boolean supportsProject(IProject project) {
-		try {
-			return project.hasNature(JavaCore.NATURE_ID);
-		}
-		catch (CoreException ce) {
-			return false;
-		}
 	}
 	
 	@Override
