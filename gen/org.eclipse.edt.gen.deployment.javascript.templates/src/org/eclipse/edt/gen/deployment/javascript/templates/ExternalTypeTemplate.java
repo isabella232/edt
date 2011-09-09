@@ -11,19 +11,26 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.deployment.javascript.templates;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.eclipse.edt.gen.deployment.javascript.Context;
+import org.eclipse.edt.gen.deployment.util.CommonUtilities;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ExternalType;
+import org.eclipse.edt.mof.egl.Handler;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class ExternalTypeTemplate extends JavaScriptTemplate {
 	
-	public void genDependentPart(ExternalType et, Context ctx, TabbedWriter out, Boolean addComma) {
-		ctx.invoke(genOutputFileName, et, ctx, out, addComma);
-		ctx.invoke(genDependentParts, et, ctx, out, Boolean.TRUE);
+	public void genDependentPart(ExternalType et, Context ctx, LinkedHashSet dependentFiles) {
+		ctx.invoke(genOutputFileName, et, ctx, dependentFiles);
+		ctx.invoke(genDependentParts, et, ctx, dependentFiles);
 	}
 	
-	public void genOutputFileName(ExternalType et, Context ctx, TabbedWriter out, Boolean addComma) {
+	public void genOutputFileName(ExternalType et, Context ctx, LinkedHashSet dependentFiles) {
 		Annotation annot = et.getAnnotation( "eglx.javascript.JavaScriptObject" );
 		if (annot != null) {
 			String pkg = (String)annot.getValue( "relativePath" );
@@ -35,21 +42,51 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 			if (name == null) {
 				name = et.getName();
 			}
-			
-			if(addComma){
-				out.print(", ");
-			}
-			
-			out.print("\"");
+			String output = "";
+			output += "\"";
 			if (pkg.length() > 0) {
-				out.print( pkg );
+				output += pkg ;
 				if (pkg.charAt(pkg.length() - 1) != '/') {
-					out.print( '/' );
+					output += '/' ;
 				}
 			}
-			out.print( name );
+			output += name ;
 			
-			out.print(".js\"");
+			output += ".js\"";
+			dependentFiles.add(output);
+		}
+	}
+	
+	public void genIncludeFiles(ExternalType et, TabbedWriter out, LinkedHashSet includeFiles){
+		Annotation a = et.getAnnotation( "eglx.javascript.JavaScriptObject" );
+		if ( a != null && a.getValue( "includeFile" ) != null ){
+			String fileName = a.getValue( "includeFile" ).toString();
+			if ( fileName != null && fileName.length() > 0 ){
+				includeFiles.add(fileName);
+			}
+		}
+	}
+	
+	public void genDependentIncludeFiles(ExternalType et, Context ctx, TabbedWriter out, LinkedHashSet includeFiles, LinkedHashSet handledParts){
+		if ( handledParts.contains( et ) ) {
+			return;
+		}
+		try {
+			handledParts.add( et );
+			Set<Part> refParts = IRUtils.getReferencedPartsFor(et);
+			// BFS traverse
+			for(Part refPart:refParts){
+				if(CommonUtilities.isUserPart(refPart)){
+					ctx.invoke(genIncludeFiles, refPart, out, includeFiles);
+				}				
+			}
+			for(Part refPart:refParts){
+				if(CommonUtilities.isUserPart(refPart)){
+					ctx.invoke(genDependentIncludeFiles, refPart, ctx, out, includeFiles, handledParts);
+				}				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

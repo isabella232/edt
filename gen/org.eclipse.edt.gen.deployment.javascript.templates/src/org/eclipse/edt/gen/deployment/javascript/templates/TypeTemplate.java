@@ -12,18 +12,18 @@
 package org.eclipse.edt.gen.deployment.javascript.templates;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.eclipse.edt.gen.deployment.javascript.Context;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Type;
 
 
 public class TypeTemplate extends JavaScriptTemplate {
-	public void genDependentPart(EGLClass part, Context ctx, TabbedWriter out, Boolean addComma) {}
+	public void genDependentPart(EGLClass part, Context ctx, LinkedHashSet dependentFiles) {}
 	
-	public void genDependentParts(Type type, Context ctx, TabbedWriter out, Boolean addComma) {		
+	public void genDependentParts(Type type, Context ctx, LinkedHashSet dependentFiles) {		
 		List<Type> processedParts = (List<Type>)ctx.get(genDependentParts);
 		if(processedParts == null){
 			processedParts = new ArrayList<Type>();

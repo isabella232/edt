@@ -22,15 +22,16 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.deployment.javascript.templates;
 
+import java.util.LinkedHashSet;
+
 import org.eclipse.edt.gen.deployment.javascript.Context;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Record;
 
 
 public class RecordTemplate extends JavaScriptTemplate {
-	public void genDependentPart(Record record, Context ctx, TabbedWriter out, Boolean addComma) {
-		ctx.invoke(genOutputFileName, record, ctx, out, addComma);
-		ctx.invoke(genDependentParts, record, ctx, out, Boolean.TRUE);
+	public void genDependentPart(Record record, Context ctx, LinkedHashSet dependentFiles) {
+		ctx.invoke(genOutputFileName, record, ctx, dependentFiles);
+		ctx.invoke(genDependentParts, record, ctx, dependentFiles);
 	}
 	
 }

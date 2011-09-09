@@ -17,17 +17,19 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.edt.gen.deployment.javascript.Context;
+import org.eclipse.edt.gen.deployment.util.CommonUtilities;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 
 public class EGLClassTemplate extends JavaScriptTemplate {
-	public void genDependentPart(EGLClass part, Context ctx, TabbedWriter out, Boolean addComma) {}
-	public void genDependentParts(EGLClass part, Context ctx, TabbedWriter out, Boolean addComma) {		
+	public void genDependentPart(EGLClass part, Context ctx, LinkedHashSet dependentFiles) {}
+	public void genDependentParts(EGLClass part, Context ctx, LinkedHashSet dependentFiles) {		
 		LinkedHashSet processedParts = (LinkedHashSet)ctx.get(genDependentParts);
 		if(processedParts == null){
 			processedParts = new LinkedHashSet();
@@ -36,17 +38,30 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		try {
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			for(Part refPart:refParts){
-				if(!processedParts.contains(refPart.getFullyQualifiedName()) && refPart instanceof EGLClass){
+				if(CommonUtilities.isUserPart(refPart)){
 					processedParts.add(refPart.getFullyQualifiedName());
 					if(!refPart.getFullyQualifiedName().startsWith("egl") && 
 							!refPart.getFullyQualifiedName().startsWith("eglx")){
-						ctx.invoke(genDependentPart, refPart, ctx, out, addComma);
+						ctx.invoke(genDependentPart, refPart, ctx, dependentFiles);
 					}
 				}
 			}		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	public void genOutputFileName(Part part, Context ctx, LinkedHashSet dependentFiles) {
+		StringBuilder buf = new StringBuilder(50);
+		
+		buf.append("\"");
+		String pkg = part.getPackageName();
+		if (pkg.length() > 0) {
+			buf.append(JavaScriptAliaser.packageNameAlias(pkg.split("[.]"), '/'));
+			buf.append('/');
+		}
+		buf.append(JavaScriptAliaser.getAlias(part.getId()));
+		buf.append(".js\"");
+		dependentFiles.add(buf.toString());
 	}
 	
 	public void genCSSFiles(EGLClass part, TabbedWriter out, LinkedHashSet cssFiles){}
@@ -62,37 +77,20 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			// BFS traverse
 			for(Part refPart:refParts){
-				if(!refPart.getFullyQualifiedName().startsWith("egl") && 
-						!refPart.getFullyQualifiedName().startsWith("eglx") && refPart instanceof EGLClass){
+				if(CommonUtilities.isUserPart(refPart)){
 					ctx.invoke(genPropFiles, refPart, out, propFiles);
 				}
 			}
 			for(Part refPart:refParts){
-				if(!refPart.getFullyQualifiedName().startsWith("egl") && 
-						!refPart.getFullyQualifiedName().startsWith("eglx") && refPart instanceof EGLClass){
+				if(CommonUtilities.isUserPart(refPart)){
 					ctx.invoke(genDependentProps, refPart, ctx, out, propFiles, handledParts);
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}	
 	
-	public void genOutputFileName(Part part, Context ctx, TabbedWriter out, Boolean addComma) {
-		StringBuilder buf = new StringBuilder(50);
-		if(addComma){
-			buf.append(", ");
-		}
-		
-		buf.append("\"");
-		String pkg = part.getPackageName();
-		if (pkg.length() > 0) {
-			buf.append(JavaScriptAliaser.packageNameAlias(pkg.split("[.]"), '/'));
-			buf.append('/');
-		}
-		buf.append(JavaScriptAliaser.getAlias(part.getId()));
-		buf.append(".js\"");
-		
-		out.print(buf.toString());
-	}		
+	public void genIncludeFiles(Part part, TabbedWriter out, LinkedHashSet includeFiles){}
+	public void genDependentIncludeFiles(Part part, Context ctx, TabbedWriter out, LinkedHashSet includeFiles, LinkedHashSet handledParts){}
 }
