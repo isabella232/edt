@@ -37,8 +37,9 @@ public class TypeTemplate extends JavaScriptTemplate {
 		// types may override this validation for specific checking
 	}
 
-	public Boolean isAssignmentBreakupWanted(Type type, Context ctx) {
+	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, String arg) {
 		// types can override this to cause an compound assignment expression to be broken up 
+		// the arg contains the operation being asked about
 		return false;
 	}
 
