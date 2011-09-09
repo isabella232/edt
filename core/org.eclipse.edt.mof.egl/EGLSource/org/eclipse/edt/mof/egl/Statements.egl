@@ -69,11 +69,6 @@ externalType ConvertStatement extends ExpressionStatement type MofClass
 	function setConvertExpression(expr ConvertExpression in);
 end
 
-externalType DeepCopyStatement extends Statement type MofClass
-	source Expression {containment=true};
-	target LHSExpr {containment=true};
-end
-
 externalType EmptyStatement extends Statement type MofClass
 end
 
