@@ -57,6 +57,11 @@ public class TypeTemplate extends JavaTemplate {
 		}
 	}
 
+	public Boolean isAssignmentBreakupWanted(Type type, Context ctx) {
+		// types can override this to cause an compound assignment expression to be broken up 
+		return false;
+	}
+
 	public void genInstantiation(Type type, Context ctx, TabbedWriter out) {
 		out.print("new ");
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavaImplementation);
