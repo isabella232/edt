@@ -137,7 +137,7 @@ nonterminal IntoClause intoClauseOpt;
 nonterminal String levelOpt;
 nonterminal Expression literal;
 nonterminal Expression lvalue;
-nonterminal MoveModifier moveModifier;
+nonterminal MoveModifier moveModifierOpt;
 nonterminal Name name;
 nonterminal Type namedType;
 nonterminal Boolean sqlNullableOpt;
@@ -199,7 +199,6 @@ nonterminal List ID_plus;
 nonterminal List importDecl_star, importDecl_plus;
 nonterminal List interfaceContent_star, interfaceContent_plus;
 nonterminal List setTarget_plus;
-nonterminal List moveModifier_star, moveModifier_plus;
 nonterminal List name_plus;
 nonterminal List onException_star, onException_plus;
 nonterminal List openTarget_star, openTarget_plus;
@@ -536,8 +535,8 @@ stmt
 	|	ID:id1 COLON:colon1 // label statement
 	{: RESULT = new LabelStatement(id1, id1left, colon1right); :}
 
-	|	MOVE:move1 expr:expr1 TO lvalue:lvalue1 moveModifier_star:moveModifiers1 SEMI:semi1
-	{: RESULT = new MoveStatement(expr1, lvalue1, moveModifiers1, move1left, semi1right); :}
+	|	MOVE:move1 expr:expr1 TO lvalue:lvalue1 moveModifierOpt:moveModifierOpt1 SEMI:semi1
+	{: RESULT = new MoveStatement(expr1, lvalue1, moveModifierOpt1, move1left, semi1right); :}
 
 	|	RETURN:return1 SEMI:semi1
 	{: RESULT = new ReturnStatement(null, return1left, semi1right); :}
@@ -980,23 +979,6 @@ simpleNameOpt
 	{: RESULT = simpleName; :}
 	;
 
-moveModifier
-	::=	BYNAME
-	{: RESULT = MoveStatement.DefaultMoveModifier.BYNAME; :}
-
-	|	BYPOSITION
-	{: RESULT = MoveStatement.DefaultMoveModifier.BYPOSITION; :}
-
-	|	FOR ALL
-	{: RESULT = MoveStatement.DefaultMoveModifier.FORALL; :}
-
-	|	FOR expr:expr1
-	{: RESULT = new ForMoveModifier(expr1); :}
-	
-	|	WITHV60COMPAT
-	{: RESULT = MoveStatement.DefaultMoveModifier.WITHV60COMPAT; :}
-	;
-
 transferTargetOpt
 	::=	
 	|	PROGRAM
@@ -1066,6 +1048,24 @@ elseOpt
 	::=
 	|	ELSE:else1 stmt_star:stmts1
 	{: RESULT = new ElseBlock(stmts1, else1left, stmts1right); :}
+	;
+
+moveModifierOpt
+	::=
+	|	BYNAME
+	{: RESULT = MoveStatement.DefaultMoveModifier.BYNAME; :}
+
+	|	BYPOSITION
+	{: RESULT = MoveStatement.DefaultMoveModifier.BYPOSITION; :}
+
+	|	FOR ALL
+	{: RESULT = MoveStatement.DefaultMoveModifier.FORALL; :}
+
+	|	FOR expr:expr1
+	{: RESULT = new ForMoveModifier(expr1); :}
+	
+	|	WITHV60COMPAT
+	{: RESULT = MoveStatement.DefaultMoveModifier.WITHV60COMPAT; :}
 	;
 
 openModifierOpt
@@ -1788,20 +1788,6 @@ setTarget_plus
 	{: RESULT = new ArrayList(); RESULT.add(setTarget); :}
 	|	setTarget_plus:setTargets COMMA setTarget:setTarget
 	{: if(setTarget != null) setTargets.add(setTarget); RESULT = setTargets; :}
-	;
-
-moveModifier_star
-	::=
-	{: RESULT = Collections.EMPTY_LIST; :}
-	|	moveModifier_plus:moveModifiers
-	{: RESULT = moveModifiers; :}
-	;
-
-moveModifier_plus
-	::=	moveModifier:moveModifier
-	{: RESULT = new ArrayList(); RESULT.add(moveModifier); :}
-	|	moveModifier_plus:moveModifiers moveModifier:moveModifier
-	{: if(moveModifier != null) moveModifiers.add(moveModifier); RESULT = moveModifiers; :}
 	;
 
 name_plus
