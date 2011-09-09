@@ -41,9 +41,9 @@ public class Constants {
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/jsrt/BaseTypesAndRuntimes.js");  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/Dictionary.js");  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/AnyException.js"); //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/ArraySizeException.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/DynamicAccessException.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/Enumeration.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/InvalidArgumentException.js");  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/InvalidIndexException.js");  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/InvalidPatternException.js");  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/InvocationException.js"); //$NON-NLS-1$
