@@ -12,7 +12,6 @@
 package org.eclipse.edt.gen.javascript.templates;
 
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
@@ -120,7 +119,6 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		// genGetFieldSignaturesMethod(part, ctx, out, args);
 		ctx.invoke(genAnnotations, part, ctx, out);
 		ctx.invoke(genFieldAnnotations, part, ctx, out);
-		ctx.invoke(genNamespaceMap, part, ctx, out);
 		ctx.invoke(genFunctions, part, ctx, out);
 		ctx.invoke(genFields, part, ctx, out);
 		ctx.invoke(genGetterSetters, part, ctx, out);
@@ -337,25 +335,6 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		}
 		out.println("}");
 		out.println("return this.fieldInfos;");
-		out.println("}");
-	}
-
-	public void genNamespaceMap(EGLClass part, Context ctx, TabbedWriter out) {
-		out.println(",");
-		out.print(quoted("eze$$resolvePart"));
-		out.println(": function(/*string*/ namespace, /*string*/ localName) {");
-		out.println("if(this.namespaceMap == undefined){");
-		out.println("this.namespaceMap = {};");
-		for (Map.Entry<String, String> entry : ctx.getNamespaceMap().entrySet()) {
-			out.println("this.namespaceMap[" + quoted(entry.getKey()) + "] = " + quoted(entry.getValue()) + ";");
-		}
-		out.println("}");
-		out.println("var newObject = null;");
-		out.println("var className = this.namespaceMap[namespace + \"{\" + localName + \"}\"];");
-		out.println("if(className != undefined && className != null){");
-		out.println("newObject = instantiate(className, []);");
-		out.println("};");
-		out.println("return newObject;");
 		out.println("}");
 	}
 
