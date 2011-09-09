@@ -8,6 +8,7 @@ import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
+import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.CaseStatement;
 import org.eclipse.edt.mof.egl.Container;
@@ -86,6 +87,23 @@ public class ReorganizeCode extends AbstractVisitor {
 		if (processedStatement)
 			return false;
 		processedStatement = true;
+		return true;
+	}
+
+	public boolean visit(Assignment object) {
+		// check to see if this is a compound assignment (something like += or *=, etc). if it is, then call out to the type
+		// to see if it wants it broken apart
+		if (!object.getOperator().equals("=") && object.getOperator().indexOf("=") >= 0) {
+			// call out to the type to see if wants this broken up
+			if ((Boolean) ctx.invoke(Constants.isAssignmentBreakupWanted, object.getType(), ctx)) {
+				BinaryExpression binExp = factory.createBinaryExpression();
+				binExp.setLHS(object.getLHS());
+				binExp.setRHS(object.getRHS());
+				binExp.setOperator(object.getOperator().substring(0, object.getOperator().indexOf("=")));
+				object.setRHS(binExp);
+				object.setOperator("=");
+			}
+		}
 		return true;
 	}
 
