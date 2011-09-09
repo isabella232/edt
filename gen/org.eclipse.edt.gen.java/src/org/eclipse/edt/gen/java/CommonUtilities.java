@@ -500,89 +500,109 @@ public class CommonUtilities {
 		}
 		return null;
 	}
-
-	/**
-	 * Returns the Property or EGLProperty annotation, whichever is used on the
-	 * given element, or null if neither annotation is present.
-	 * @param element
-	 * @return
-	 */
-	public static Annotation getPropertyAnnotation(Element element) {
-		/*
-		 * Note that EGLProperty cannot be used on fields of external types, whereas Property can only be used on fields of
-		 * external types; so we can only encounter one of these two annotations on a given field.
-		 */
-		Annotation result = element.getAnnotation(Constants.Annotation_Property);
-		if (result == null) {
-			result = element.getAnnotation(Constants.Annotation_EGLProperty);
-		}
-		return result;
-	}
 	
 	/**
 	 * Returns null if the desired propertyFunction isn't specified or shouldn't be used; otherwise, returns either the
 	 * explicit name of the function (if specified) or implicit name if it should be inferred. According to the docs for both
 	 * EGLProperty and Property, function names should be inferred if and only if the annotation is present but BOTH
-	 * properties are missing. Return values are as follows: 
-	 * <ul> 
-	 * <li>null if there is no property function (or one shouldn't be inferred); a getter or setter shouldn't be used; 
-	 * also, returns null if the function that should be used is the same as the current function being generated (to avoid 
-	 * infinite loops) 
-	 * <li>string if the function name is specified via Property, or if the function was inferred 
-	 * <li>MemberName or MemberAccess if the function is specified via EGLProperty
-	 * </ul>
-	 * @param annotation
-	 * @param fieldName
-	 * @param propertyFunction
-	 * @return
+	 * properties are missing.
 	 */
-	public static Object getPropertyFunction( Annotation annotation, String fieldName,
-			String propertyFunction, String currentFunction )
+	public static String getPropertyFunction( NamedElement field, boolean setter, Context context )
 	{
-		Object result = null;
+		String result = null;
+		
+		boolean isEGLProperty = true;
+		Annotation annotation = field.getAnnotation(Constants.Annotation_EGLProperty);
+		if (annotation == null) {
+			annotation = field.getAnnotation(Constants.Annotation_Property);
+			isEGLProperty = false;
+		}
 
 		if ( annotation != null )
 		{
+			String propertyFunction = setter ? Constants.Annotation_PropertySetter : Constants.Annotation_PropertyGetter;
+			String otherPropertyFunction = setter ? Constants.Annotation_PropertyGetter : Constants.Annotation_PropertySetter;
+
 			Object propFn = annotation.getValue( propertyFunction );
-			String otherPropertyFunction = Constants.Annotation_PropertyGetter.equals( propertyFunction ) 
-					? Constants.Annotation_PropertySetter
-					: Constants.Annotation_PropertyGetter;
 			Object otherPropFn = annotation.getValue( otherPropertyFunction );
 
-			// If both are null (but the annotation isn't), then we are supposed
-			// to infer the function names....
-			if ( ( propFn == null || ( propFn instanceof String && ((String)propFn).length() == 0 ) )
-					&& ( otherPropFn == null || ( otherPropFn instanceof String && ((String)otherPropFn).length() == 0 ) ) )
+			// If neither function is specified then we are supposed to infer the function
+			// names for @Property and look up the functions for @EGLProperty.
+			boolean bothUnspecified = 
+					( propFn == null || ( propFn instanceof String && ((String)propFn).length() == 0 ) )
+					&& ( otherPropFn == null || ( otherPropFn instanceof String && ((String)otherPropFn).length() == 0 ) );
+			if ( bothUnspecified )
 			{
-				result = (Constants.Annotation_PropertyGetter.equals( propertyFunction ) ? Constants.GetterPrefix
-						: Constants.SetterPrefix)
-						+ fieldName.substring( 0, 1 ).toUpperCase();
+				String fieldName = field.getName();
+				result = (setter ? Constants.SetterPrefix : Constants.GetterPrefix)
+								+ fieldName.substring( 0, 1 ).toUpperCase();
 				if ( fieldName.length() > 1 )
 				{
-					result = result + fieldName.substring( 1 );
+					result += fieldName.substring( 1 );
+				}
+
+				if ( isEGLProperty )
+				{
+					// For @EGLProperty we have to take EGL's case-insensitivity into account.
+					// We can't simply assume the function for getting field XYZ is named getXYZ.
+					// It might be named getxyz.  We'll get the function by making a 
+					// QualifiedFunctionInvocation and using its ability to resolve the function being called.
+					QualifiedFunctionInvocation qfi = context.getFactory().createQualifiedFunctionInvocation();
+					qfi.setId( (String)result );
+					qfi.setQualifier( expressionForContainer( ((Field)field).getContainer(), context ) );
+					if ( setter )
+					{
+						MemberName argName = context.getFactory().createMemberName();
+						argName.setId( field.getName() );
+						argName.setMember( (Member)field );
+						qfi.getArguments().add( argName );
+					}	
+					
+					result = qfi.getTarget().getName();
 				}
 			}
 			else
 			{
-				result = propFn;
+				if ( propFn instanceof Name )
+				{
+					result = ((Name)propFn).getId();
+				}
+				else
+				{
+					result = (String)propFn;
+				}
 			}
 
+			String currentFunction = context.getCurrentFunction();
 			if ( result != null && currentFunction != null )
 			{
-				String fn = result.toString();
-				if ( result instanceof MemberName )
-				{
-					fn = ((MemberName)result).getId();
-				}
-				else if ( result instanceof MemberAccess )
-				{
-					fn = ((MemberAccess)result).getId();
-				}
-				if ( fn.equals( currentFunction ) )
+				if ( result.equals( currentFunction ) )
 				{
 					result = null;
 				}
 			}
+		}
+
+		return result;
+	}
+	
+	private static Expression expressionForContainer( Container container, Context ctx )
+	{
+		Expression result = null;
+		Object pbg = ctx.getAttribute( ctx.getClass(), Constants.SubKey_partBeingGenerated );
+		if ( container instanceof Function 
+				|| ( container instanceof Part && pbg instanceof Part 
+						&& ((Part)container).getFullyQualifiedName().equalsIgnoreCase( ((Part)pbg).getFullyQualifiedName() ) ) )
+		{
+			ThisExpression thisExpr = ctx.getFactory().createThisExpression();
+			thisExpr.setThisObject( container );
+			result = thisExpr;
+		}
+		else
+		{
+			TypeName typeExpr = ctx.getFactory().createTypeName();
+			typeExpr.setType( (Type)container );
+			result = typeExpr;
 		}
 
 		return result;
