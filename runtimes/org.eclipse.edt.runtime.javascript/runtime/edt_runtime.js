@@ -345,8 +345,22 @@ egl.egl.lang.EString.ezeBox = function(str, len){
 egl.egl.lang.EString.equals = function(s, start, end) {
 	return s.substring(start-1, end);
 };
-egl.egl.lang.EString.substring = function(s, start, end) {
-	return s.substring(start-1, end);
+egl.egl.lang.EString.substring = function(str, startIndex, endIndex) {
+	if (str == null || startIndex == null || endIndex == null)
+		return null;
+	start = startIndex;
+	end = endIndex;
+	max = str.length;
+	if (start < 1 || start > max) {
+		ex = new egl.egl.lang.InvalidIndexException();
+		ex.index = start;
+		throw ex;
+	} else if (end < start || end < 1 || end > max) {
+		ex = new egl.egl.lang.InvalidIndexException();
+		ex.index = end;
+		throw ex;
+	}
+	return str.substring(start-1, end);
 };
 egl.egl.lang.EString.substringAssign = function(tgt, src, start, end){
 	return tgt.splice(start, end, src);
