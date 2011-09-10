@@ -15,11 +15,14 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
+import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Interface;
+import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class AnyTypeTemplate extends JavaScriptTemplate {
 
@@ -43,7 +46,14 @@ public class AnyTypeTemplate extends JavaScriptTemplate {
 		} else if (ctx.mapsToPrimitiveType(arg.getEType())) {
 			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".ezeCast(");
-			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			if (arg.getObjectExpr().getType() != TypeUtils.Type_ANY) {
+				BoxingExpression boxingExpr = IrFactory.INSTANCE.createBoxingExpression();
+				boxingExpr.setExpr(arg.getObjectExpr());
+				ctx.invoke(genExpression, boxingExpr, ctx, out);
+			}
+			else {
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			}
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
 			out.print(")");
 		} else {
