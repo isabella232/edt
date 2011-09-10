@@ -377,11 +377,29 @@ egl.egl.lang.EString.isLike = function (str1, str2, esc) {
 	esc = esc || "\\";
 	return egl.like(str1, str2, esc);
 };
-egl.egl.lang.EString.indexOf = function (str, pattern) {
-	return str.indexOf(pattern);
+egl.egl.lang.EString.indexOf = function (str, pattern, start) {
+	if ((str == null) || (pattern == null)) {
+		throw new egl.egl.lang.NullValueException();
+	}
+	if (!start) {
+		start = 1;
+	}
+	return str.indexOf(pattern, start - 1) + 1;
+};
+egl.egl.lang.EString.lastIndexOf = function (str, pattern) {
+	if ((str == null) || (pattern == null)) {
+		throw new egl.egl.lang.NullValueException();
+	}
+	return str.lastIndexOf(pattern) + 1;
 };
 egl.egl.lang.EString.replaceStr = function(str, target, replacement) {
 	return str.replace(new RegExp(target, "g"), replacement);   // TODO should we simply alias replaceStr as replace?
+};
+egl.egl.lang.EString.charCodeAt = function (str, index) {
+	if ((str == null) || (index == null)) {
+		throw new egl.egl.lang.NullValueException();
+	}
+	return str.charAt(index - 1);
 };
 
 
