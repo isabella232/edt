@@ -77,15 +77,6 @@ public class RecordTemplate extends JavaScriptTemplate {
 		out.println("}");
 	}
 
-	public void genInitializeMethods(EGLClass part, Context ctx, TabbedWriter out) {
-		out.println(",");
-		out.print(quoted("eze$$setInitial"));
-		out.println(": function() {");
-		out.println("this.eze$$setEmpty();");
-		ctx.invoke(genInitializeMethodBody, part, ctx, out);
-		out.println("}");
-	}
-
 	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
 		if (arg.getInitializerStatements() != null) {
 			ctx.invoke(genStatementNoBraces, arg.getInitializerStatements(), ctx, out);
