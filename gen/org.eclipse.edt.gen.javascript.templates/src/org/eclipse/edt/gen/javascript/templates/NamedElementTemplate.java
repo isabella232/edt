@@ -16,35 +16,19 @@ import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.MemberAccess;
-import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.NamedElement;
 
 public class NamedElementTemplate extends JavaScriptTemplate {
 
 	public void genAccessor(NamedElement element, Context ctx, TabbedWriter out) {
-		Annotation property = CommonUtilities.getPropertyAnnotation(element);
-		Object propertyFunction = CommonUtilities.getPropertyFunction(property, element.getName(), Constants.Annotation_PropertyGetter,
-			ctx.getCurrentFunction());
+		String propertyFunction = CommonUtilities.getPropertyFunction( element, false, ctx );
 
 		if (((ctx.getAttribute(element, Constants.EXPR_LHS) == null) || (ctx.getAttribute(element, Constants.EXPR_LHS) == Boolean.FALSE))
 			&& (propertyFunction != null)) {
-			if (propertyFunction instanceof String) {
-				out.print(propertyFunction.toString());
-				out.print("()");
-			} else if (propertyFunction instanceof MemberName) {
-				ctx.invoke(genMemberName, (MemberName) propertyFunction, ctx, out);
-				out.print("()");
-			} else if (propertyFunction instanceof MemberAccess) {
-				ctx.invoke(genMemberAccess, (MemberAccess) propertyFunction, ctx, out);
-				out.print("()");
-			} else {
-				ctx.invoke(genAccessor, (Expression) propertyFunction, ctx, out);
-				out.print("()");
-			}
-		} else {
+			out.print( propertyFunction );
+			out.print( "()" );
+		}
+		else {
 			genName(element, ctx, out);
 		}
 	}
