@@ -56,7 +56,13 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 		String op = expr.getOperator();
 		// these are the defaults for what can be handled by the java string class
 		if (op.equals(expr.Op_PLUS))
-			return " + ";
+			return ".add(";
+		if (op.equals(expr.Op_MINUS))
+			return ".subtract(";
+		if (op.equals(expr.Op_MULTIPLY))
+			return ".multiply(";
+		if (op.equals(expr.Op_DIVIDE))
+			return ".divide(";
 		if (op.equals(expr.Op_EQ))
 			return ".compareTo(";
 		if (op.equals(expr.Op_NE))
@@ -81,6 +87,14 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 	@SuppressWarnings("static-access")
 	protected String getNativeStringComparisionOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
+		if (op.equals(expr.Op_PLUS))
+			return ")";
+		if (op.equals(expr.Op_MINUS))
+			return ")";
+		if (op.equals(expr.Op_MULTIPLY))
+			return ")";
+		if (op.equals(expr.Op_DIVIDE))
+			return ")";
 		if (op.equals(expr.Op_EQ))
 			return ") == 0";
 		if (op.equals(expr.Op_NE))
