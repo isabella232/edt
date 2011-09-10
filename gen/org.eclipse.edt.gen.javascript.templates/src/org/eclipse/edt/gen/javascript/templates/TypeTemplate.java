@@ -23,6 +23,7 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
@@ -165,12 +166,24 @@ public class TypeTemplate extends JavaScriptTemplate {
 			ctx.invoke(genExpression, arg2, ctx, out);
 		}
 	}
-
+	
 	public void genTypeBasedAssignment(Type type, Context ctx, TabbedWriter out, Assignment arg) {
 		String operator = "=";
-		if (arg.getOperator() != null && arg.getOperator().length() > 0)
+		if (arg.getOperator() != null && arg.getOperator().length() > 0) {
 			operator = arg.getOperator();
-		ctx.invoke(genAssignment, arg.getLHS(), ctx, out, arg.getRHS(), " " + CommonUtilities.getNativeJavaScriptAssignment(operator) + " ");
+		}
+		// For compound assignments like lhs += rhs, we unravel them into lhs = lhs + rhs in JavaScript
+		if ((operator != null) && (operator.length() == 2) && ("=".equals(operator.substring(1, 2)))) { 
+			String op = operator.substring(0,1);
+			BinaryExpression binExpr = IrFactory.INSTANCE.createBinaryExpression();
+			binExpr.setLHS(arg.getLHS());
+			binExpr.setOperator(op);
+			binExpr.setRHS(arg.getRHS());
+			ctx.invoke(genAssignment, arg.getLHS(), ctx, out, binExpr, " = ");
+		}
+		else {
+			ctx.invoke(genAssignment, arg.getLHS(), ctx, out, arg.getRHS(), " " + CommonUtilities.getNativeJavaScriptAssignment(operator) + " ");
+		}
 	}
 
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
