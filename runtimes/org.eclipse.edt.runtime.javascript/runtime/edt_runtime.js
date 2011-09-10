@@ -415,7 +415,12 @@ egl.egl.lang.EString.charCodeAt = function (str, index) {
 	}
 	return str.charAt(index - 1);
 };
-
+egl.egl.lang.EString.trim = function (str) {
+	if (str == null) {
+		throw new egl.egl.lang.NullValueException();
+	}
+	return str.clip();
+};
 
 
 
@@ -426,8 +431,7 @@ String.prototype.length = function() {  //TODO Don't override JavaScript field o
 };
 
 String.prototype.clip = function() {
-	return ( str === null || option === null ) ?  null
-											   :  this.clipLeading().clipTrailing();
+	return this.clipLeading().clipTrailing();
 };
 
 String.prototype.clipLeading = function() {
