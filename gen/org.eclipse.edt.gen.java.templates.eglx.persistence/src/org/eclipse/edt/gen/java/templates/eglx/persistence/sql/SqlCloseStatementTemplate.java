@@ -9,7 +9,7 @@ public class SqlCloseStatementTemplate extends SqlActionStatementTemplate {
 	public void genStatementBody(SqlCloseStatement stmt, Context ctx, TabbedWriter out) {
 		out.println("try {");
 		ctx.invoke(genExpression, stmt.getTarget(), ctx, out);
-		out.print(".getResultSet().close()");
+		out.println(".getResultSet().close();");
 		genSqlStatementEnd(stmt, ctx, out);
 	}
 

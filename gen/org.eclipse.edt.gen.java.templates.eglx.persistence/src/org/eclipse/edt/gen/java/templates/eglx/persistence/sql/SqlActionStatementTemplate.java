@@ -8,9 +8,11 @@ import org.eclipse.edt.gen.java.templates.StatementTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Name;
@@ -31,7 +33,8 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	public static final String var_statement = "ezeStatement";
 	public static final String var_listElement = "ezeElement";
 	public static final String expr_getConnection = "getConnection()";
-	public static final String class_Statement = "java.sql.PreparedStatement";
+	public static final String class_PreparedStatement = "java.sql.PreparedStatement";
+	public static final String class_CallableStatement = "java.sql.CallableStatement";
 	public static final String class_ResultSet = "java.sql.ResultSet";
 	public static final String err_noSqlGenerated = "<no SQL generated>";
 	
@@ -131,18 +134,25 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 		}
 	}
 	
-	public void genSqlStatementSetup(SqlActionStatement stmt, Context ctx, TabbedWriter out, String var_stmt, boolean stmtDeclared) {
+	public boolean genSqlStatementSetup(SqlActionStatement stmt, Context ctx, TabbedWriter out, String var_stmt, boolean stmtDeclared) {
+		boolean isCall = SQL.isCallStatement(stmt.getSqlString());
 		out.println("try {");
 		if (stmt.getPreparedStatement() == null || stmt instanceof SqlPrepareStatement) {
 			Integer stmtNumber = getNextStatementKey(ctx);
 			String typeSignature = quoted(((Type)((Function)stmt.getContainer()).getContainer()).getTypeSignature());
 			if (!stmtDeclared)
-				out.print(class_Statement + " ");
-			out.print(var_stmt + " = (java.sql.PreparedStatement)");
+				if (isCall) {
+					out.print(class_CallableStatement + " ");
+					out.print(var_stmt + " = (" + class_CallableStatement + ")");
+				}
+				else {
+					out.print(class_PreparedStatement + " ");
+					out.print(var_stmt + " = (" + class_PreparedStatement + ")");
+				}
 			ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
 			out.println(".getStatement(" + typeSignature + ", " + stmtNumber + ");");
 			out.println("if (" + var_stmt + "== null) {");
-			out.print("String queryStr = ");
+			out.print("String stmtStr = ");
 			if (stmt instanceof SqlPrepareStatement) {
 				ctx.invoke(genExpression, ((SqlPrepareStatement)stmt).getSqlStringExpr(), ctx, out);
 			}
@@ -150,20 +160,48 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 				out.print(quoted(stmt.getSqlString()));
 			}
 			out.println(';');
-			out.println(var_stmt + " = " + var_datasource + '.' + expr_getConnection + ".prepareStatement(queryStr);");
+			out.println(var_stmt + " = " + var_datasource + '.' + expr_getConnection);
+			if (isCall) {
+				out.print(".prepareCall(stmtStr);");
+			}
+			else {
+				out.print(".prepareStatement(stmtStr);");
+			}
 			ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
 			out.println(".registerStatement(" + typeSignature + ", " + stmtNumber + ", " + var_stmt + ");");
 			out.println("}");
 		}
 		if (stmt.getUsingExpressions()!= null) {
+			if (isCall) {
+				out.print("java.sql.ParameterMetaData ezeParmData = ");
+				out.println(var_stmt + ".getParameterMetaData();");
+				int i = 1;
+				for (Expression uexpr : stmt.getUsingExpressions()) {
+					// For each parameter find out if it is an OUT parameter.
+					// If so register the type of the parameter based on the
+					// mapping of the input argument expression type to SQL types
+					out.println("if (ezeParmData.getParameterMode(" + i + ") == java.sql.ParameterMetaData.parameterModeOut) {");
+					out.print(var_stmt + ".registerOutParameter(");
+					out.print(i);
+					out.print(", ");
+					out.print(SQL.getSQLTypeConstant(uexpr.getType().getClassifier()));
+					if (uexpr.getType() instanceof FixedPrecisionType) {
+						out.print(", ");
+						out.print(((FixedPrecisionType)uexpr.getType()).getDecimals());
+					}
+					out.println(");");
+					out.println("}");
+					i++;
+				}
+			}
 			int i = 1;
 			for (Expression uexpr : stmt.getUsingExpressions()) {
-				genSetColumnValue(uexpr, var_statement, i, ctx, out);
+				genSetColumnValue(uexpr, var_stmt, i, ctx, out);
 				out.println(";");
 				i++;
 			}
 		}
-
+		return isCall;
 	}
 	
 	public void genSqlStatementSetup(SqlActionStatement stmt, Context ctx, TabbedWriter out) {
@@ -218,13 +256,13 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 		}
 	}
 	
-	public void genGetColumnValueEnd(EGLClass type, TabbedWriter out) {
+	public void genGetColumnValueEnd(Classifier type, TabbedWriter out) {
 		if (SQL.isSQLDateTimeType(type)) {
 			out.print(')');
 		}
 	}
 	
-	public void genGetColumnValueByIndex(EGLClass type, String resultSetName, int columnIndex, Context ctx, TabbedWriter out) {
+	public void genGetColumnValueByIndex(Classifier type, String resultSetName, int columnIndex, Context ctx, TabbedWriter out) {
 		genGetColumnValue(type, resultSetName, ctx, out);
 		out.print("(" + columnIndex + ")");
 		genGetColumnValueEnd(type, out);
@@ -239,7 +277,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	// Handles conversion of EGL values from SQL values in places where the default mapping
 	// is not sufficient, i.e. dates and timestamps need to become SQL dates and timestamps
 	// TODO only handles date and time SQL types so far
-	public void genGetColumnValue(EGLClass type, String resultSetName, Context ctx, TabbedWriter out) {
+	public void genGetColumnValue(Classifier type, String resultSetName, Context ctx, TabbedWriter out) {
 		if (SQL.isSQLDateTimeType(type)) {
 			out.print("org.eclipse.edt.javart.util.DateTimeUtil.getNewCalendar(");
 			out.print(resultSetName);
@@ -284,13 +322,13 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	}
 
 	
-	public void genSqlGetValueMethodName(EGLClass type, Context ctx, TabbedWriter out) {
+	public void genSqlGetValueMethodName(Classifier type, Context ctx, TabbedWriter out) {
 		String name = "get";
 		name += SQL.getSqlSimpleTypeName(type);
 		out.print(name);
 	}
 	
-	public void genSqlSetValueMethodName(EGLClass type, Context ctx, TabbedWriter out) {
+	public void genSqlSetValueMethodName(Classifier type, Context ctx, TabbedWriter out) {
 		String name = "set";
 		name += SQL.getSqlSimpleTypeName(type);
 		out.print(name);
