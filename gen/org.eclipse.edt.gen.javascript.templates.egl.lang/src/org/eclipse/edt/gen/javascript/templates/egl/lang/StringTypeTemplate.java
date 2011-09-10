@@ -56,7 +56,7 @@ public class StringTypeTemplate extends JavaScriptTemplate {
 		if ((arg.getLHS().isNullable() || arg.getRHS().isNullable()) || getNativeStringOperation(arg).length() == 0) {
 			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
 			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
-			out.print("(ezeProgram, ");
+			out.print("(");
 			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
 			out.print(", ");
 			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
