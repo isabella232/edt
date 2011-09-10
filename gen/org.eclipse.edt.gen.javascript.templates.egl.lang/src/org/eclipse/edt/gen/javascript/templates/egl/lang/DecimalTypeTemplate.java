@@ -152,7 +152,7 @@ public class DecimalTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_PLUS))
 			return ".add(";
 		if (op.equals(expr.Op_MINUS))
-			return " - ";
+			return ".subtract(";
 		if (op.equals(expr.Op_MULTIPLY))
 			return ".multiply(";
 		if (op.equals(expr.Op_DIVIDE))
@@ -175,6 +175,10 @@ public class DecimalTypeTemplate extends JavaScriptTemplate {
 			return " || ";
 		if (op.equals(expr.Op_CONCAT))
 			return " + ";
+		if (op.equals(expr.Op_MODULO))
+			return ".remainder(";
+		if (op.equals(expr.Op_POWER))
+			return ".pow(";
 		return "";
 	}
 
@@ -182,6 +186,8 @@ public class DecimalTypeTemplate extends JavaScriptTemplate {
 	protected String getNativeStringComparisionOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_PLUS))
+			return ")";
+		if (op.equals(expr.Op_MINUS))
 			return ")";
 		if (op.equals(expr.Op_MULTIPLY))
 			return ")";
@@ -199,6 +205,10 @@ public class DecimalTypeTemplate extends JavaScriptTemplate {
 			return ") <= 0";
 		if (op.equals(expr.Op_GE))
 			return ") >= 0";
+		if (op.equals(expr.Op_MODULO))
+			return ")";
+		if (op.equals(expr.Op_POWER))
+			return ")";
 		return "";
 	}
 }

@@ -124,6 +124,8 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_NE))
 			return "!";
+		if (op.equals(expr.Op_DIVIDE))
+			return "egl.divide";
 		return "";
 	}
 
@@ -132,13 +134,13 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 		String op = expr.getOperator();
 		// these are the defaults for what can be handled by the java string class
 		if (op.equals(expr.Op_PLUS))
-			return ".add(";
+			return " + ";
 		if (op.equals(expr.Op_MINUS))
 			return " - ";
 		if (op.equals(expr.Op_MULTIPLY))
 			return " * ";
 		if (op.equals(expr.Op_DIVIDE))
-			return ".divide(";
+			return ",";
 		if (op.equals(expr.Op_EQ))
 			return " == ";
 		if (op.equals(expr.Op_NE))
@@ -163,12 +165,8 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 	@SuppressWarnings("static-access")
 	protected String getNativeStringComparisionOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
-		if (op.equals(expr.Op_PLUS))
-			return ")";
 		if (op.equals(expr.Op_MULTIPLY))
 			return "";
-		if (op.equals(expr.Op_DIVIDE))
-			return ")";
 		if (op.equals(expr.Op_NE))
 			return ")";
 		if (op.equals(expr.Op_LT))

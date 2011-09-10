@@ -118,6 +118,8 @@ public class NumTypeTemplate extends JavaScriptTemplate {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_NE))
 			return "!";
+		if (op.equals(expr.Op_MODULO))
+			return "egl.remainder";
 		return "";
 	}
 
@@ -127,6 +129,12 @@ public class NumTypeTemplate extends JavaScriptTemplate {
 		// these are the defaults for what can be handled by the java string class
 		if (op.equals(expr.Op_PLUS))
 			return " + ";
+		if (op.equals(expr.Op_MINUS))
+			return " - ";
+		if (op.equals(expr.Op_MULTIPLY))
+			return " * ";
+		if (op.equals(expr.Op_DIVIDE))
+			return " / ";
 		if (op.equals(expr.Op_EQ))
 			return ".compareTo(";
 		if (op.equals(expr.Op_NE))
@@ -145,6 +153,8 @@ public class NumTypeTemplate extends JavaScriptTemplate {
 			return " || ";
 		if (op.equals(expr.Op_CONCAT))
 			return " + ";
+		if (op.equals(expr.Op_MODULO))
+			return ",";
 		return "";
 	}
 

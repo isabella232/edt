@@ -72,6 +72,10 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_NE))
 			return "";
+		if (op.equals(expr.Op_MODULO))
+			return "egl.remainder";
+		if (op.equals(expr.Op_DIVIDE))
+			return "new egl.javascript.BigDecimal(egl.divide";
 		return "";
 	}
 
@@ -85,6 +89,8 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 			return " - ";
 		if (op.equals(expr.Op_MULTIPLY))
 			return " * ";
+		if (op.equals(expr.Op_DIVIDE))
+			return ",";
 		if (op.equals(expr.Op_EQ))
 			return " == ";
 		if (op.equals(expr.Op_NE))
@@ -103,6 +109,8 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 			return " || ";
 		if (op.equals(expr.Op_CONCAT))
 			return " + ";
+		if (op.equals(expr.Op_MODULO))
+			return ",";
 		return "";
 	}
 
@@ -121,6 +129,8 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 			return "";
 		if (op.equals(expr.Op_GE))
 			return "";
+		if (op.equals(expr.Op_DIVIDE))
+			return ")";
 		return "";
 	}
 
