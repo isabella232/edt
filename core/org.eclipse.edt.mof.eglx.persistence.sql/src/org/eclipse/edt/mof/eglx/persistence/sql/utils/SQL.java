@@ -1,9 +1,12 @@
 package org.eclipse.edt.mof.eglx.persistence.sql.utils;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Type;
@@ -82,19 +85,19 @@ public class SQL {
 		return datasource.getTypeSignature().equals("eglx.persistence.sql.SQLResultSet");
 	}
 	
-	public static boolean isSQLDateTimeType(EGLClass type) {
+	public static boolean isSQLDateTimeType(Classifier type) {
 		return type.equals(TypeUtils.Type_DATE) 
 				|| type.equals(TypeUtils.Type_TIME)
 				|| type.equals(TypeUtils.Type_TIMESTAMP);		
 	}
 	
-	public static boolean isWrappedSQLType(EGLClass type) {
+	public static boolean isWrappedSQLType(Classifier type) {
 		return isSQLDateTimeType(type)
 				|| type.equals(TypeUtils.Type_BLOB)
 				|| type.equals(TypeUtils.Type_CLOB);
 	}
 	
-	public static String getSQLTypeName(EGLClass type) {
+	public static String getSQLTypeName(Classifier type) {
 		String name = getSqlSimpleTypeName(type);
 		
 		if (name != null) {
@@ -105,7 +108,7 @@ public class SQL {
 		return name;
 	}
 	
-	public static String getSqlSimpleTypeName(EGLClass type) {
+	public static String getSqlSimpleTypeName(Classifier type) {
 		String name = null;
 		if (type.equals(TypeUtils.Type_DATE)) name = "Date"; 
 		else if (type.equals(TypeUtils.Type_TIME)) name = "Time";
@@ -123,6 +126,24 @@ public class SQL {
 		return name;
 	}
 	
+	public static String getSQLTypeConstant(Classifier type) {
+		String constant = "java.sql.Types.";
+		if (type.equals(TypeUtils.Type_DATE)) constant += "DATE"; 
+		else if (type.equals(TypeUtils.Type_TIME)) constant += "TIME";
+		else if (type.equals(TypeUtils.Type_TIMESTAMP)) constant += "TIMESTAMP";
+		else if (type.equals(TypeUtils.Type_BLOB)) constant += "BLOB";
+		else if (type.equals(TypeUtils.Type_CLOB)) constant += "CLOB";
+		else if (type.equals(TypeUtils.Type_BOOLEAN)) constant += "BOOLEAN";
+		else if (type.equals(TypeUtils.Type_FLOAT)) constant += "DOUBLE";
+		else if (type.equals(TypeUtils.Type_SMALLFLOAT)) constant += "FLOAT";
+		else if (type.equals(TypeUtils.Type_BIGINT)) constant += "BIGINT";
+		else if (type.equals(TypeUtils.Type_INT)) constant += "INTEGER";
+		else if (type.equals(TypeUtils.Type_SMALLINT)) constant += "SHORT";
+		else if (type.equals(TypeUtils.Type_DECIMAL)) constant += "DECIMAL";
+		else if (type.equals(TypeUtils.Type_STRING)) constant += "VARCHAR";
+		return constant;		
+	}
+	
 	public static boolean isMappedSQLType(EGLClass type) {
 		return getSqlSimpleTypeName(type) != null;
 	}
@@ -134,5 +155,15 @@ public class SQL {
 			return "getTimeInMillis()";
 		}
 		return "unsupportedConversion()";
+	}
+	
+	public static boolean isCallStatement(String sqlStmt) {
+		try {
+			StringTokenizer parser = new StringTokenizer(sqlStmt);
+			String stmtKind = parser.nextToken();
+			return (stmtKind.equalsIgnoreCase("call"));
+		} catch (NoSuchElementException e) {
+			return false;
+		}
 	}
 }
