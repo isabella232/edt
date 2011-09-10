@@ -125,6 +125,9 @@ egl.egl.lang.EInt32.fromAnyObject = function (x) {
 egl.egl.lang.EInt32.fromEInt64 = function (x) {
 	return egl.convertDecimalToInt(x);
 };
+egl.egl.lang.EInt32.fromEFloat32 = function (x) {
+	return egl.convertFloatToInt(x);
+};
 egl.egl.lang.EInt32.fromEFloat64 = function (x) {
 	return egl.convertFloatToInt(x);
 };
@@ -152,7 +155,13 @@ egl.egl.lang.EFloat32.ZERO = egl.javascript.BigDecimal.prototype.ZERO;
 egl.egl.lang.EFloat32.fromEFloat64 = function (x) {
 	return egl.convertFloatToSmallfloat(x,"TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
+egl.egl.lang.EFloat32.fromEInt32  = function (x) {
+	return egl.convertFloatToSmallfloat(Number( (new egl.javascript.BigDecimal(x)).toString()));
+};
 egl.egl.lang.EFloat32.fromEInt64  = function (x) {
+	return egl.convertFloatToSmallfloat(Number( (new egl.javascript.BigDecimal(x)).toString()));
+};
+egl.egl.lang.EFloat32.fromEDecimal  = function (x) {
 	return egl.convertFloatToSmallfloat(Number( (new egl.javascript.BigDecimal(x)).toString()));
 
 };
@@ -202,6 +211,12 @@ egl.egl.lang.EDecimal.fromAnyNum = function (x, decimals, limit) {
 		return egl.convertDecimalToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 	else
 		return egl.convertDecimalToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/); 
+};
+egl.egl.lang.EDecimal.fromEFloat32 = function (x, decimals, limit) {
+	if (limit)
+		return egl.convertFloatToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	else
+		return egl.convertFloatToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
 egl.egl.lang.EDecimal.fromEFloat64 = function (x, decimals, limit) {
 	if (limit)
