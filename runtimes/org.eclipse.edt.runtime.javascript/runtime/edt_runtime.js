@@ -342,8 +342,8 @@ egl.egl.lang.EString.ezeBox = function(str){
 egl.egl.lang.EString.ezeBox = function(str, len){
 	return new egl.egl.lang.EString(str, len);
 };
-egl.egl.lang.EString.equals = function(s, start, end) {
-	return s.substring(start-1, end);
+egl.egl.lang.EString.equals = function(str1, str2) {
+	return (str1 == str2);
 };
 egl.egl.lang.EString.substring = function(str, startIndex, endIndex) {
 	if (str == null || startIndex == null || endIndex == null)
