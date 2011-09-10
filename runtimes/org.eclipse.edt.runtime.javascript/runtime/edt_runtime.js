@@ -421,6 +421,11 @@ egl.egl.lang.EString.trim = function (str) {
 	}
 	return str.clip();
 };
+egl.egl.lang.EString.plus = function (op1, op2) {
+	a = (op1) ? op1 : "";
+	b = (op2) ? op2 : "";
+	return a + b;
+};
 
 
 
