@@ -40,13 +40,18 @@ public class MemberAccessTemplate extends JavaScriptTemplate {
 	}
 	
 	public void genMemberAccess(MemberAccess expr, Context ctx, TabbedWriter out) {
-		if (TypeUtils.isReferenceType(expr.getQualifier().getType()) || expr.getQualifier().isNullable()) {
-			// TODO sbg doesn't seem to be quite the right place out.print("egl.checkNull(");
-			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
-			// TODO sbg doesn't seem to be quite the right place out.print(")");
-		} else
-			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
-		out.print(".");
-		ctx.invoke(genAccessor, expr.getMember(), ctx, out);
+		// if this is a delegate...
+		if (expr.getMember() instanceof Function)
+			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
+		else {
+			if (TypeUtils.isReferenceType(expr.getQualifier().getType()) || expr.getQualifier().isNullable()) {
+				// TODO sbg doesn't seem to be quite the right place out.print("egl.checkNull(");
+				ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+				// TODO sbg doesn't seem to be quite the right place out.print(")");
+			} else
+				ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+			out.print(".");
+			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
+		}
 	}
 }
