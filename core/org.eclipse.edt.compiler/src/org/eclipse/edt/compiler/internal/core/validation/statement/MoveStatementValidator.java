@@ -266,23 +266,44 @@ public class MoveStatementValidator extends DefaultASTVisitor {
 			new RValueValidator(problemRequestor, compilerOptions, sourceDBinding, sourceExpr).validate();
 		}
 		
-		if (!sourceType.isReference()) {
-			problemRequestor.acceptProblem(
-					sourceExpr,
-					IProblemRequestor.MOVE_MUST_BE_REFERENCE,
-					new String[] {});
-		}
-		else {
-			if (!targetType.isReference()) {
+		
+		if (Binding.isValidBinding(sourceType)) {			
+			if (!sourceType.isReference()) {
 				problemRequestor.acceptProblem(
-						targetExpr,
+						sourceExpr,
 						IProblemRequestor.MOVE_MUST_BE_REFERENCE,
 						new String[] {});
 			}
+			
+			if (Binding.isValidBinding(sourceType.getBaseType()) && sourceType.getBaseType().getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
+				problemRequestor.acceptProblem(
+						sourceExpr,
+						IProblemRequestor.MOVE_EXTERNALTYPE,
+						new String[] {});
+			}
 		}
+		else {
+			if (Binding.isValidBinding(targetType)) {
+				if (!targetType.isReference()) {
+					problemRequestor.acceptProblem(
+							targetExpr,
+							IProblemRequestor.MOVE_MUST_BE_REFERENCE,
+							new String[] {});
+				}
+				
+				if (Binding.isValidBinding(targetType.getBaseType()) && targetType.getBaseType().getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
+					problemRequestor.acceptProblem(
+							targetExpr,
+							IProblemRequestor.MOVE_EXTERNALTYPE,
+							new String[] {});
+				}
+			}
+		}
+		
+		
 
 	}
-	
+		
 	private boolean checkExpressionsForByNameOrByPosition(Expression sourceExpr, Expression targetExpr, ITypeBinding sourceType, ITypeBinding targetType) {
 		if(ITypeBinding.ARRAY_TYPE_BINDING == sourceType.getKind() && ITypeBinding.FLEXIBLE_RECORD_BINDING == ((ArrayTypeBinding) sourceType).getElementType().getKind() &&
 		   ITypeBinding.ARRAY_TYPE_BINDING == targetType.getKind() && ITypeBinding.FLEXIBLE_RECORD_BINDING == ((ArrayTypeBinding) targetType).getElementType().getKind()) {
