@@ -142,17 +142,6 @@ abstract class Egl2MofPart extends Egl2MofBase {
 				}
 			}
 			
-			if (((EGLClass)part).getConstructors().isEmpty()) {
-				//Add default constructor is no constructors are defined
-				if (((EGLClass)part).getConstructors().isEmpty()) {
-					ConstructorBinding constructor = new ConstructorBinding((IPartBinding)node.getName().resolveBinding());
-					EClass constClass = mofMemberTypeFor(constructor);
-					Constructor cons = (Constructor)constClass.newInstance();
-					setUpEglTypedElement(cons, constructor);
-					setElementInformation(node, cons);
-					((EGLClass)part).addMember(cons);
-				}
-			}
 		}
 		handleEndVisitPart(node, part);
 		stack.push(part);
@@ -216,16 +205,6 @@ abstract class Egl2MofPart extends Egl2MofBase {
 					((EGLClass)part).getSuperTypes().add((StructPart)obj);
 				}
 			}
-		}
-		
-		//Add default constructor is no constructors are defined
-		if (part.getConstructors().isEmpty()) {
-			ConstructorBinding constructor = new ConstructorBinding((IPartBinding)handler.getName().resolveBinding());
-			EClass constClass = mofMemberTypeFor(constructor);
-			Constructor cons = (Constructor)constClass.newInstance();
-			setUpEglTypedElement(cons, constructor);
-			setElementInformation(handler, cons);
-			part.addMember(cons);
 		}
 		
 		stack.push(part);
