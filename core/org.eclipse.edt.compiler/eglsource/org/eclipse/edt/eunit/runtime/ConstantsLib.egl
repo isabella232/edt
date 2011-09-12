@@ -1,0 +1,15 @@
+package org.eclipse.edt.eunit.runtime;
+
+// basic library
+library ConstantsLib
+	
+  	// Constant Declarations
+	const NEWLINE string = "\r\n";
+	const EXIT_PREFIX string = "STATUS: ";
+	
+	const SPASSED int = 0;
+	const SFAILED int = 1;
+	const SERROR int = 2;
+	const SNOT_RUN int = 3;
+	
+end
