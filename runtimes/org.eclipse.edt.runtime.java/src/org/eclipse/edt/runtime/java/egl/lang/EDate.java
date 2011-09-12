@@ -52,7 +52,9 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	}
 
 	public static boolean ezeIsa(Object value) {
-		return value instanceof EDate;
+		return value instanceof EDate
+			|| (value instanceof Calendar && !((Calendar) value).isSet(Calendar.HOUR) && !((Calendar) value).isSet(Calendar.MINUTE)
+				&& !((Calendar) value).isSet(Calendar.SECOND) && !((Calendar) value).isSet(Calendar.MILLISECOND));
 	}
 
 	public String toString() {

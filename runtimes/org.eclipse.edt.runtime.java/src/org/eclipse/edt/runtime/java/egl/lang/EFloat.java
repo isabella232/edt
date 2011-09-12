@@ -43,7 +43,7 @@ public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 	}
 
 	public static boolean ezeIsa(Object value) {
-		return value instanceof EFloat;
+		return value instanceof EFloat || value instanceof Double;
 	}
 
 	public static double asFloat(short value) {

@@ -40,7 +40,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	}
 
 	public static boolean ezeIsa(Object value) {
-		return value instanceof EInt;
+		return value instanceof EInt || value instanceof Integer;
 	}
 
 	public String toString() {

@@ -39,7 +39,7 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 	}
 
 	public static boolean ezeIsa(Object value) {
-		return value instanceof ESmallfloat;
+		return value instanceof ESmallfloat || value instanceof Float;
 	}
 
 	public String toString() {

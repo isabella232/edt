@@ -34,7 +34,7 @@ public class EBoolean extends AnyBoxedObject<Boolean> {
 	}
 
 	public static boolean ezeIsa(Object value) {
-		return value instanceof EBoolean;
+		return value instanceof EBoolean || value instanceof Boolean;
 	}
 
 	public String toString() {

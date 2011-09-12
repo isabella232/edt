@@ -48,7 +48,7 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 	}
 
 	public static boolean ezeIsa(Object value) {
-		return value instanceof EBigint;
+		return value instanceof EBigint || value instanceof Long;
 	}
 
 	public String toString() {

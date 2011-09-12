@@ -35,7 +35,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	}
 
 	public static boolean ezeIsa(Object value) {
-		return value instanceof ESmallint;
+		return value instanceof ESmallint || value instanceof Short;
 	}
 
 	public String toString() {

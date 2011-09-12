@@ -255,12 +255,23 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 
 	public static boolean ezeIsa(Object value, Integer... args) {
 		boolean isa = value instanceof EDecimal;
-		if (isa && args.length != 0) {
-			isa = ((EDecimal) value).getPrecision() == args[0];
-			if (isa && args.length == 1)
-				isa = ((EDecimal) value).getDecimals() == 0;
-			else if (isa && args.length == 2)
-				isa = ((EDecimal) value).getDecimals() == args[1];
+		if (isa) {
+			if (args.length != 0) {
+				isa = ((EDecimal) value).getPrecision() == args[0];
+				if (isa && args.length == 1)
+					isa = ((EDecimal) value).getDecimals() == 0;
+				else if (isa && args.length == 2)
+					isa = ((EDecimal) value).getDecimals() == args[1];
+			}
+		} else {
+			isa = value instanceof BigDecimal;
+			if (isa && args.length != 0) {
+				isa = ((BigDecimal) value).precision() == args[0];
+				if (isa && args.length == 1)
+					isa = ((BigDecimal) value).scale() == 0;
+				else if (isa && args.length == 2)
+					isa = ((BigDecimal) value).scale() == args[1];
+			}
 		}
 		return isa;
 	}
