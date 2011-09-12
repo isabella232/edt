@@ -19,7 +19,6 @@ import java.util.Map;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
-import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ForExpressionClause;
 import org.eclipse.edt.compiler.core.ast.ForUpdateClause;
 import org.eclipse.edt.compiler.core.ast.FromExpressionClause;
@@ -386,6 +385,8 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 			// TODO: What is different from FOR_UPDATE_OF
 //			stmt.setForUpdateClause(clause);	
 		}
+		
+		setElementInformation(node, stmt);
 		return false;
 	}
 
@@ -408,6 +409,8 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 				return false;
 			}
 		});
+		
+		setElementInformation(node, stmt);
 		return false;
 	}
 
