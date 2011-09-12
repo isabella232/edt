@@ -449,6 +449,7 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(UNLOADONEXIT_NOT_VALID_IN_MAIN),
 		new Integer(CANNOT_ASSIGN_NULL),
 		new Integer(MOVE_MUST_BE_REFERENCE),
+		new Integer(MOVE_EXTERNALTYPE),
 		new Integer(CANNOT_ASSIGN_TO_ARRAY_DICTIONARY_ELEMENTS),
 		new Integer(DLI_SYSTEM_FUNCTION_NOT_ALLOWED_WITH_AIBTDLI_INTERFACE),
 		new Integer(INVALID_CLAUSE_FOR_NON_DLI_TARGET),

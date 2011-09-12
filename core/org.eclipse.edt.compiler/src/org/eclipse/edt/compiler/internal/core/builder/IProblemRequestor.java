@@ -1562,6 +1562,7 @@ public interface IProblemRequestor {
 
 	public static final int MOVE_MODIFIER_INVALID = 6760;
 	public static final int MOVE_MUST_BE_REFERENCE = 6761;
+	public static final int MOVE_EXTERNALTYPE = 6762;
 	
 
 	//7500-7599: Used for VAGCompatability messages		
