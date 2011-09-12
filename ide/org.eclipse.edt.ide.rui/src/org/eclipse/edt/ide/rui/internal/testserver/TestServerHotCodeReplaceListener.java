@@ -38,24 +38,24 @@ public class TestServerHotCodeReplaceListener implements IJavaHotCodeReplaceList
 	@Override
 	public void hotCodeReplaceFailed(IJavaDebugTarget target, DebugException exception) {
 		if (exception == null) {
-			displayDialog(TestServerMessages.HotCodeReplaceFailureHCRFailedTitle,
-					new Status(IStatus.WARNING, Activator.PLUGIN_ID, NLS.bind(TestServerMessages.HotCodeReplaceFailureHCRUnsupportedMsg, config.getProject().getName())
-							+ "\n\n" + TestServerMessages.HotCodeReplaceFailureTerminateMsg), //$NON-NLS-1$
+			displayDialog(TestServerMessages.HCRFailedTitle,
+					new Status(IStatus.WARNING, Activator.PLUGIN_ID, NLS.bind(TestServerMessages.HCRUnsupportedMsg, config.getProject().getName())
+							+ "\n\n" + TestServerMessages.ErrorDialogTerminateMsg), //$NON-NLS-1$
 					Activator.getDefault().getPreferenceStore(), IRUIPreferenceConstants.PREFERENCE_TESTSERVER_HCR_UNSUPPORTED);
 		}
 		else {
-			displayDialog(TestServerMessages.HotCodeReplaceFailureHCRFailedTitle,
-					new Status(IStatus.WARNING, Activator.PLUGIN_ID, NLS.bind(TestServerMessages.HotCodeReplaceFailureHCRFailedMsg, config.getProject().getName())
-							+ "\n\n" + TestServerMessages.HotCodeReplaceFailureTerminateMsg, exception), //$NON-NLS-1$
+			displayDialog(TestServerMessages.HCRFailedTitle,
+					new Status(IStatus.WARNING, Activator.PLUGIN_ID, NLS.bind(TestServerMessages.HCRFailedMsg, config.getProject().getName())
+							+ "\n\n" + TestServerMessages.ErrorDialogTerminateMsg, exception), //$NON-NLS-1$
 					Activator.getDefault().getPreferenceStore(), IRUIPreferenceConstants.PREFERENCE_TESTSERVER_HCR_FAILED);
 		}
 	}
 	
 	@Override
 	public void obsoleteMethods(IJavaDebugTarget target) {
-		displayDialog(TestServerMessages.HotCodeReplaceFailureObsoleteMethodsTitle,
-				new Status(IStatus.WARNING, Activator.PLUGIN_ID, NLS.bind(TestServerMessages.HotCodeReplaceFailureObsoleteMethodsMsg, config.getProject().getName())
-						+ "\n\n" + TestServerMessages.HotCodeReplaceFailureTerminateMsg), //$NON-NLS-1$
+		displayDialog(TestServerMessages.ObsoleteMethodsTitle,
+				new Status(IStatus.WARNING, Activator.PLUGIN_ID, NLS.bind(TestServerMessages.ObsoleteMethodsMsg, config.getProject().getName())
+						+ "\n\n" + TestServerMessages.ErrorDialogTerminateMsg), //$NON-NLS-1$
 				Activator.getDefault().getPreferenceStore(), IRUIPreferenceConstants.PREFERENCE_TESTSERVER_OBSOLETE_METHODS);
 	}
 	
@@ -72,8 +72,8 @@ public class TestServerHotCodeReplaceListener implements IJavaHotCodeReplaceList
 					display.asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							ErrorDialog.openError(Util.getShell(), TestServerMessages.HotCodeReplaceTerminateFailedTitle, 
-									NLS.bind(TestServerMessages.HotCodeReplaceTerminateFailedMsg, config.getProject().getName()),
+							ErrorDialog.openError(Util.getShell(), TestServerMessages.TerminateFailedTitle, 
+									NLS.bind(TestServerMessages.TerminateFailedMsg, config.getProject().getName()),
 									e.getStatus());
 						}
 					});
@@ -88,7 +88,7 @@ public class TestServerHotCodeReplaceListener implements IJavaHotCodeReplaceList
 						if (display.isDisposed()) {
 							return;
 						}
-						HotCodeReplaceFailureDialog dialog = new HotCodeReplaceFailureDialog(Util.getShell(), title, null, status, store, prefKey, config);
+						TestServerUpdateErrorDialog dialog = new TestServerUpdateErrorDialog(Util.getShell(), title, null, status, store, prefKey, config);
 						dialog.setBlockOnOpen(false);
 						dialog.open();
 					}

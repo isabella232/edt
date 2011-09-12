@@ -33,5 +33,6 @@ public class RUIPReferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_HCR_FAILED, IRUIPreferenceConstants.TESTSERVER_PROMPT);
 		store.setDefault(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_HCR_UNSUPPORTED, IRUIPreferenceConstants.TESTSERVER_PROMPT);
 		store.setDefault(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_OBSOLETE_METHODS, IRUIPreferenceConstants.TESTSERVER_PROMPT);
+		store.setDefault(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_CLASSPATH_CHANGED, IRUIPreferenceConstants.TESTSERVER_PROMPT);
 	}
 }

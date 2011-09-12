@@ -31,6 +31,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.PartWrapper;
+import org.eclipse.edt.compiler.tools.IRUtils;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
@@ -120,7 +121,7 @@ public class ServiceFinder {
 					@Override
 					public boolean visit(IResourceProxy proxy) throws CoreException {
 						if (proxy.getType() == IResource.FILE) {
-							if (proxy.getName().endsWith(".egldd")) { //$NON-NLS-1$
+							if (IRUtils.matchesFileName( proxy.getName(), ClasspathUtil.SUFFIX_egldd, ClasspathUtil.SUFFIX_EGLDD)) {
 								List<RestServiceMapping> parsed = parseDD(proxy.requestResource());
 								if (parsed != null) {
 									for (RestServiceMapping mapping : parsed) {

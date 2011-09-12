@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
 package org.eclipse.edt.ide.rui.internal.testserver;
 
 import org.eclipse.edt.ide.rui.internal.Activator;
@@ -30,11 +41,16 @@ public class TestServerPreferencePage extends AbstractPreferencePage {
 	private Button obsoleteIgnore;
 	private Button obsoleteTerminate;
 	
+	private Button cpChangedPrompt;
+	private Button cpChangedIgnore;
+	private Button cpChangedTerminate;
+	
 	@Override
 	protected Control createContents(Composite parent) {
 		Composite composite = createComposite(parent, 1);
 		
-		createTestServerComposite(composite);
+		createCPChangedComposite(composite);
+		createHCRComposite(composite);
 		
 		loadPreferences();
 		
@@ -44,7 +60,7 @@ public class TestServerPreferencePage extends AbstractPreferencePage {
 		return composite;
 	}	
 	
-	private void createTestServerComposite(Composite parent) {
+	private void createHCRComposite(Composite parent) {
 		Group group = createGroup(parent, 1);
 		group.setText(TestServerMessages.PreferenceHCRGroupLabel);
 		
@@ -118,6 +134,36 @@ public class TestServerPreferencePage extends AbstractPreferencePage {
 		obsoleteTerminate.setLayoutData(gd);
 	}
 	
+	private void createCPChangedComposite(Composite parent) {
+		Group group = createGroup(parent, 1);
+		group.setText(TestServerMessages.PreferenceCPGroupLabel);
+		
+		GridData gd;
+		int indentAmount = 10;
+		
+		// HCR Failed
+		Composite failedComposite = new Composite(group, SWT.NULL);
+		failedComposite.setLayout(new GridLayout(1, false));
+		new Label(failedComposite, SWT.NULL).setText(TestServerMessages.PreferenceCPChangedLabel);
+		cpChangedPrompt = new Button(failedComposite, SWT.RADIO);
+		cpChangedPrompt.setText(TestServerMessages.PreferencePromptLabel);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalIndent = indentAmount;
+		cpChangedPrompt.setLayoutData(gd);
+		
+		cpChangedIgnore = new Button(failedComposite, SWT.RADIO);
+		cpChangedIgnore.setText(TestServerMessages.PreferenceDoNothingLabel);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalIndent = indentAmount;
+		cpChangedIgnore.setLayoutData(gd);
+		
+		cpChangedTerminate = new Button(failedComposite, SWT.RADIO);
+		cpChangedTerminate.setText(TestServerMessages.PreferenceTerminateLabel);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalIndent = indentAmount;
+		cpChangedTerminate.setLayoutData(gd);
+	}
+	
 	@Override
 	protected void initializeValues() {
 		super.initializeValues();
@@ -126,6 +172,7 @@ public class TestServerPreferencePage extends AbstractPreferencePage {
 		updateHCRFailed(store.getInt(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_HCR_FAILED));
 		updateHCRUnsupported(store.getInt(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_HCR_UNSUPPORTED));
 		updateObsoleteMethods(store.getInt(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_OBSOLETE_METHODS));
+		updateCPChanged(store.getInt(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_CLASSPATH_CHANGED));
 	}
 	
 	@Override
@@ -136,6 +183,7 @@ public class TestServerPreferencePage extends AbstractPreferencePage {
 		updateHCRFailed(store.getDefaultInt(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_HCR_FAILED));
 		updateHCRUnsupported(store.getDefaultInt(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_HCR_UNSUPPORTED));
 		updateObsoleteMethods(store.getDefaultInt(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_OBSOLETE_METHODS));
+		updateCPChanged(store.getDefaultInt(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_CLASSPATH_CHANGED));
 	}
 	
 	@Override
@@ -175,6 +223,18 @@ public class TestServerPreferencePage extends AbstractPreferencePage {
 			obsoleteValue = IRUIPreferenceConstants.TESTSERVER_PROMPT;
 		}
 		doGetPreferenceStore().setValue(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_OBSOLETE_METHODS, obsoleteValue);
+		
+		int cpChangedValue;
+		if (cpChangedIgnore.getSelection()) {
+			cpChangedValue = IRUIPreferenceConstants.TESTSERVER_IGNORE;
+		}
+		else if (cpChangedTerminate.getSelection()) {
+			cpChangedValue = IRUIPreferenceConstants.TESTSERVER_TERMINATE;
+		}
+		else {
+			cpChangedValue = IRUIPreferenceConstants.TESTSERVER_PROMPT;
+		}
+		doGetPreferenceStore().setValue(IRUIPreferenceConstants.PREFERENCE_TESTSERVER_CLASSPATH_CHANGED, cpChangedValue);
 	}
 	
 	@Override
@@ -198,5 +258,11 @@ public class TestServerPreferencePage extends AbstractPreferencePage {
 		obsoleteIgnore.setSelection(selection == IRUIPreferenceConstants.TESTSERVER_IGNORE);
 		obsoleteTerminate.setSelection(selection == IRUIPreferenceConstants.TESTSERVER_TERMINATE);
 		obsoletePrompt.setSelection(selection == IRUIPreferenceConstants.TESTSERVER_PROMPT);
+	}
+	
+	private void updateCPChanged(int selection) {
+		cpChangedIgnore.setSelection(selection == IRUIPreferenceConstants.TESTSERVER_IGNORE);
+		cpChangedTerminate.setSelection(selection == IRUIPreferenceConstants.TESTSERVER_TERMINATE);
+		cpChangedPrompt.setSelection(selection == IRUIPreferenceConstants.TESTSERVER_PROMPT);
 	}
 }

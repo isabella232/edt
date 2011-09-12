@@ -17,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -55,6 +56,7 @@ import org.eclipse.edt.ide.rui.internal.Activator;
 import org.eclipse.edt.ide.rui.internal.testserver.ServiceFinder.RestServiceMapping;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
+import org.eclipse.jdt.launching.JavaLaunchDelegate;
 import org.eclipse.osgi.util.NLS;
 
 /**
@@ -65,12 +67,15 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 	
 	public static final int DEFAULT_PORT = 9701;
 	
+	private static final JavaLaunchDelegate delegate = new JavaLaunchDelegate(); // Used for calculating a resolved classpath
+	
 	private IProject project;
 	private boolean debugMode;
 	private int port;
 	private boolean started;
 	private ILaunch launch;
 	private List<TerminationListener> terminationListeners;
+	private String[] resolvedClasspath; // Used to determine when a classpath has changed.
 	
 	private Map<String,RestServiceMapping> currentServiceMappings;
 	
@@ -101,7 +106,10 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, project.getName());
 			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, TestServer.class.getCanonicalName());
 			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, false);
-			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, ClasspathUtil.buildClasspath(project, copy));
+			
+			List<String> classpath = copy.getAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, new ArrayList<String>(10));
+			ClasspathUtil.buildClasspath(project, classpath);
+			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, classpath);
 			
 			StringBuilder args = new StringBuilder( 100 );
 			args.append(copy.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, "")); //$NON-NLS-1$
@@ -124,6 +132,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
 			
 			launch = copy.launch(debugMode ? ILaunchManager.DEBUG_MODE : ILaunchManager.RUN_MODE, monitor);
+			resolvedClasspath = delegate.getClasspath(launch.getLaunchConfiguration());
 			
 			if (waitForServerToStart) {
 				// Wait up to 10 seconds for the server to start.
@@ -246,42 +255,43 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		// We need to recalculate all the bindings if even 1 DD file in the EGL path changed. It could be that there
 		// were duplicate URIs among the files, and a URI that was included before has now been changed/removed, so
 		// the duplicate that was previously skipped needs to be used (replacing the mapping on the server).
-		final boolean[] recompute = {false};
-		
 		try {
-			event.getDelta().accept(new IResourceDeltaVisitor() {
-				@Override
-				public boolean visit(IResourceDelta delta) throws CoreException {
-					if (recompute[0]) {
-						return false;
-					}
-					switch (delta.getKind()) {
-						case IResourceDelta.CHANGED:
-							if ((delta.getFlags() & IResourceDelta.CONTENT) == 0 &&
-									(delta.getFlags() & IResourceDelta.ENCODING) == 0) {
-								// No actual change, skip it.
-								return true;
-							}
-							// Fall through.
-						case IResourceDelta.ADDED:
-						case IResourceDelta.REMOVED:
-							if ("egldd".equals(delta.getFullPath().getFileExtension()) //$NON-NLS-1$
-									&& isOnEGLPath(project, delta.getResource().getProject(), new HashSet<IProject>())) {
-								recompute[0] = true;
+			class RecomputeMappings extends RuntimeException {private static final long serialVersionUID = 1L;}; // For fast exit of delta visitor
+			try {
+				if (event.getDelta() != null) {
+					event.getDelta().accept(new IResourceDeltaVisitor() {
+						@Override
+						public boolean visit(IResourceDelta delta) throws CoreException {
+							if (delta == null) {
 								return false;
 							}
-							break;
-					}
-					return true;
+							switch (delta.getKind()) {
+								case IResourceDelta.CHANGED:
+									if ((delta.getFlags() & IResourceDelta.CONTENT) == 0 &&
+											(delta.getFlags() & IResourceDelta.ENCODING) == 0) {
+										// No actual change, skip it.
+										return true;
+									}
+									// Fall through.
+								case IResourceDelta.ADDED:
+								case IResourceDelta.REMOVED:
+									if ("egldd".equalsIgnoreCase(delta.getFullPath().getFileExtension()) //$NON-NLS-1$
+											&& isOnEGLPath(project, delta.getResource().getProject(), new HashSet<IProject>())) {
+										throw new RecomputeMappings();
+									}
+									break;
+							}
+							return true;
+						}
+					});
 				}
-			});
+			}
+			catch (RecomputeMappings e) {
+				updateServiceMappingsOnServer();
+			}
 		}
 		catch (CoreException e) {
 			Activator.getDefault().log(e.getMessage(), e);
-		}
-		
-		if (recompute[0]) {
-			updateServiceMappingsOnServer();
 		}
 	}
 	
@@ -399,6 +409,40 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		}
 		catch (CoreException e ) {
 			Activator.getDefault().log(e.getMessage(), e);
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Causes this config to recompute its classpath and see if it's different from what's currently being used. If the server hasn't
+	 * been started yet, this will return false.
+	 * 
+	 * @return true if the classpath has changed since the server launch.
+	 */
+	public boolean hasClasspathChanged() {
+		if (!started || this.launch == null || this.launch.getLaunchConfiguration() == null) {
+			return false;
+		}
+		
+		try {
+			// Create a launch configuration in the same way as when launching the server, but only set the attributes that would affect the classpath.
+			ILaunchConfigurationType type = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurationType(
+					IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
+			ILaunchConfigurationWorkingCopy copy = type.newInstance(null, "ezeTemp"); //$NON-NLS-1$
+			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, project.getName());
+			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, false);
+			
+			List<String> newClasspath = copy.getAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, new ArrayList<String>(10));
+			ClasspathUtil.buildClasspath(project, newClasspath);
+			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, newClasspath);
+			
+			String[] newResolvedClasspath = delegate.getClasspath(copy);
+			
+			// Order DOES matter in a classpath, in the case of duplicate qualified class names. The arrays must be exactly equal to be considered unchanged.
+			return !Arrays.equals(resolvedClasspath, newResolvedClasspath);
+		}
+		catch (CoreException ce) {
 		}
 		
 		return false;

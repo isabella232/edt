@@ -31,19 +31,25 @@ public class TestServerMessages extends NLS {
 	public static String CouldNotGetPluginPath;
 	public static String ConfigServletBadStatus;
 	
-	public static String HotCodeReplaceFailureContinueButton;
-	public static String HotCodeReplaceFailureTerminateButton;
-	public static String HotCodeReplaceFailureRememberDecision;
-	public static String HotCodeReplaceFailureChangeLater;
-	public static String HotCodeReplaceFailureObsoleteMethodsTitle;
-	public static String HotCodeReplaceFailureObsoleteMethodsMsg;
-	public static String HotCodeReplaceFailureHCRFailedTitle;
-	public static String HotCodeReplaceFailureHCRFailedMsg;
-	public static String HotCodeReplaceFailureHCRUnsupportedMsg;
-	public static String HotCodeReplaceFailureTerminateMsg;
-	public static String HotCodeReplaceTerminateFailedTitle;
-	public static String HotCodeReplaceTerminateFailedMsg;
+	public static String ErrorDialogContinueButton;
+	public static String ErrorDialogTerminateButton;
+	public static String ErrorDialogTerminatePluralButton;
+	public static String ErrorDialogRememberDecision;
+	public static String ErrorDialogChangeLater;
+	public static String ErrorDialogTerminateMsg;
+	public static String ErrorDialogTerminatePluralMsg;
+	public static String TerminateFailedTitle;
+	public static String TerminateFailedMsg;
+	public static String ObsoleteMethodsTitle;
+	public static String ObsoleteMethodsMsg;
+	public static String HCRFailedTitle;
+	public static String HCRFailedMsg;
+	public static String HCRUnsupportedMsg;
+	public static String ClasspathChangedTitle;
+	public static String ClasspathChangedMsg;
 	
+	public static String PreferenceCPGroupLabel;
+	public static String PreferenceCPChangedLabel;
 	public static String PreferenceHCRGroupLabel;
 	public static String PreferenceHCRFailedLabel;
 	public static String PreferenceHCRUnsupportedLabel;
