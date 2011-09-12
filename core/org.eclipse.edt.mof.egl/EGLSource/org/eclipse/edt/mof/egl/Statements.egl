@@ -116,6 +116,7 @@ externalType MoveStatement extends Statement type MofClass
 	sourceExpr Expression {containment=true};
 	targetExpr LHSExpr {containment=true};
 	modifierExpr Expression {containment=true};
+	modifier int;	
 end
 
 externalType PrintStatement extends Statement type MofClass
