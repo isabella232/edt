@@ -55,6 +55,7 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 			stmt.getTargets().add((Expression)stack.pop());
 		}
 		stack.push(stmt);
+		setElementInformation(node, stmt);
 		return false;
 	}
 	
@@ -65,6 +66,7 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 		node.getExpr().accept(this);
 		stmt.getTargets().add((Expression)stack.pop());
 		stack.push(stmt);
+		setElementInformation(node, stmt);
 		return false;
 	}
 
@@ -76,6 +78,7 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 		node.getTarget().accept(this);
 		stmt.getTargets().add((Expression)stack.pop());
 		stack.push(stmt);
+		setElementInformation(node, stmt);
 		return false;
 	}
 
@@ -86,6 +89,7 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 		node.getExpr().accept(this);
 		stmt.getTargets().add((Expression)stack.pop());
 		stack.push(stmt);
+		setElementInformation(node, stmt);
 		return false;
 	}
 	
@@ -109,6 +113,7 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 			}
 
 		});
+		setElementInformation(node, stmt);
 		return false;
 	}
 	
@@ -123,6 +128,7 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 			nodeStmt.accept(this);
 			block.getStatements().add((Statement)stack.pop());
 		}
+		setElementInformation(node, stmt);
 		return false;
 	}
 
@@ -159,6 +165,7 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 				return false;
 			};
 		});
+		setElementInformation(node, stmt);
 		return false;
 	}
 
@@ -181,6 +188,7 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 				stmt.getTargets().add((Expression)stack.pop());
 			}
 		}
+		setElementInformation(node, stmt);
 		return false;
 	}
 
@@ -216,7 +224,8 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 				return false;
 			}
 		});
-
+		
+		setElementInformation(node, stmt);
 		return false;
 	}
 
@@ -238,7 +247,8 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 				return false;
 			}
 		});
-
+		
+		setElementInformation(node, stmt);
 		return false;
 	}
 	
@@ -266,6 +276,7 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 		});
 
 		stack.push(stmt);
+		setElementInformation(node, stmt);
 		return false;
 	}
 

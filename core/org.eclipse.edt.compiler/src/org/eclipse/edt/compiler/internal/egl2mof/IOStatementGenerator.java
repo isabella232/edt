@@ -14,6 +14,7 @@ package org.eclipse.edt.compiler.internal.egl2mof;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.edt.compiler.Context;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.mof.EObject;
@@ -38,6 +39,7 @@ public interface IOStatementGenerator {
 	Map<String, IOStatementGenerator> Registry = new HashMap<String, IOStatementGenerator>();
 
 	void setEnvironment(IEnvironment env);
+	void setContext(Context context);
 	
 	AddStatement genAddStatement(org.eclipse.edt.compiler.core.ast.AddStatement stmt, Map<IBinding, EObject> bindingToElementMap );
 	CloseStatement genCloseStatement(org.eclipse.edt.compiler.core.ast.CloseStatement stmt, Map<IBinding, EObject> bindingToElementMap );

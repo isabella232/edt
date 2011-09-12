@@ -13,6 +13,7 @@ package org.eclipse.edt.compiler.internal.egl2mof;
 
 import java.util.Map;
 
+import org.eclipse.edt.compiler.Context;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.mof.EObject;
@@ -206,6 +207,11 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 	@Override
 	public void setCurrentPart(MofSerializable currentPart) {
 		this.currentPart = currentPart;
+	}
+
+	@Override
+	public void setContext(Context context) {
+		this.context = context;
 	}
 
 }

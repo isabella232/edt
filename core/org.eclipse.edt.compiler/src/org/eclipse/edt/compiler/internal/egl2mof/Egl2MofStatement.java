@@ -745,6 +745,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		IOStatementGenerator generator = primGetGeneratorFor(node);
 		if (generator != null) {
 			generator.setCurrentPart(currentPart);
+			generator.setContext(context);
 		}
 		return generator;
 	}

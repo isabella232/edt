@@ -106,7 +106,8 @@ public class SQLActionStatementGenerator extends AbstractIOStatementGenerator {
 				return false;
 			};
 		});
-
+		
+		setElementInformation(node, stmt);
 	}
 
 	@Override
