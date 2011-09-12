@@ -1,0 +1,62 @@
+package org.eclipse.edt.eunit.runtime;
+import org.eclipse.edt.javart.resources.*;
+import org.eclipse.edt.javart.*;
+import org.eclipse.edt.runtime.java.egl.lang.EString;
+import java.lang.String;
+import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
+import org.eclipse.edt.runtime.java.egl.lang.EInt;
+import java.lang.Integer;
+@javax.xml.bind.annotation.XmlRootElement(name="Status")
+public class Status extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
+	private static final long serialVersionUID = 10L;
+	@javax.xml.bind.annotation.XmlTransient
+	public int code;
+	@javax.xml.bind.annotation.XmlTransient
+	public String reason;
+	public Status() {
+		super();
+		ezeInitialize();
+	}
+	public void ezeCopy(Object source) {
+		ezeCopy((Status) source);
+	}
+	public void ezeCopy(egl.lang.AnyValue source) {
+		this.code = ((Status) source).code;
+		this.reason = ((Status) source).reason;
+	}
+	public Status ezeNewValue(Object... args) {
+		return new Status();
+	}
+	public void ezeSetEmpty() {
+		code = 0;
+		reason = Constants.EMPTY_STRING;
+	}
+	public boolean isVariableDataLength() {
+		return false;
+	}
+	public void loadFromBuffer(ByteStorage buffer, Program program) {
+	}
+	public int sizeInBytes() {
+		return 0;
+	}
+	public void storeInBuffer(ByteStorage buffer) {
+	}
+	public void ezeInitialize() {
+		code = 0;
+		reason = Constants.EMPTY_STRING;
+	}
+	@org.eclipse.edt.javart.json.Json(name="code", clazz=EInt.class, asOptions={})
+	public int getCode() {
+		return (code);
+	}
+	public void setCode( int ezeValue ) {
+		this.code = ezeValue;
+	}
+	@org.eclipse.edt.javart.json.Json(name="reason", clazz=EString.class, asOptions={})
+	public String getReason() {
+		return (reason);
+	}
+	public void setReason( String ezeValue ) {
+		this.reason = ezeValue;
+	}
+}
