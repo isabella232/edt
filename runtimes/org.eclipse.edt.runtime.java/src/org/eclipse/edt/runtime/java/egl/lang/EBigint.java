@@ -19,6 +19,7 @@ import org.eclipse.edt.javart.Constants;
 import egl.lang.AnyException;
 import egl.lang.AnyNumber;
 import egl.lang.NullValueException;
+import egl.lang.NumericOverflowException;
 
 public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -54,47 +55,68 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return EString.asString(object);
 	}
 
-	public static Long asBigint(Short value) {
-		if (value == null)
-			return null;
-		return value.longValue();
-	}
-
-	public static Long asBigint(Integer value) {
-		if (value == null)
-			return null;
-		return value.longValue();
-	}
-
-	public static Long asBigint(Long value) {
+	public static long asBigint(short value) {
 		return value;
 	}
 
-	public static Long asBigint(Float value) {
-		if (value == null)
-			return null;
-		return value.longValue();
+	public static long asBigint(int value) {
+		return value;
 	}
 
-	public static Long asBigint(Double value) {
-		if (value == null)
-			return null;
-		return value.longValue();
+	public static long asBigint(long value) {
+		return value;
 	}
 
-	public static Long asBigint(BigDecimal value) throws AnyException {
-		if (value == null)
-			return null;
-		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
+	public static long asBigint(float value) {
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		long result = 0;
 		if (throwOverflowExceptions)
-			result = value.intValueExact();
+			try {
+				result = BigDecimal.valueOf(value).longValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
 		else
-			result = value.intValue();
+			result = Float.valueOf(value).longValue();
 		return result;
 	}
 
-	public static Long asBigint(String value) throws AnyException {
+	public static long asBigint(double value) {
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		long result = 0;
+		if (throwOverflowExceptions)
+			try {
+				result = BigDecimal.valueOf(value).longValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		else
+			result = Double.valueOf(value).longValue();
+		return result;
+	}
+
+	public static long asBigint(BigDecimal value) throws AnyException {
+		if (value == null)
+			throw new NullValueException();
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
+		long result = 0;
+		if (throwOverflowExceptions)
+			try {
+				result = value.longValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		else
+			result = value.longValue();
+		return result;
+	}
+
+	public static long asBigint(String value) throws AnyException {
+		if (value == null)
+			throw new NullValueException();
 		return asBigint(EDecimal.asDecimal(value));
 	}
 
@@ -102,64 +124,44 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static BigDecimal asNumber(Long value) throws AnyException {
-		if (value == null)
-			return null;
+	public static BigDecimal asNumber(long value) throws AnyException {
 		return EDecimal.asDecimal(value);
 	}
 
-	public static Long plus(Long op1, Long op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static long plus(long op1, long op2) throws AnyException {
 		return op1 + op2;
 	}
 
-	public static Long minus(Long op1, Long op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static long minus(long op1, long op2) throws AnyException {
 		return op1 - op2;
 	}
 
-	public static BigDecimal divide(Long op1, Long op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static BigDecimal divide(long op1, long op2) throws AnyException {
 		return BigDecimal.valueOf(op1).divide(BigDecimal.valueOf(op2), EDecimal.BIGDECIMAL_RESULT_SCALE, EDecimal.ROUND_BD);
 	}
 
-	public static Long multiply(Long op1, Long op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static long multiply(long op1, long op2) throws AnyException {
 		return op1 * op2;
 	}
 
-	public static Long remainder(Long op1, Long op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static long remainder(long op1, long op2) throws AnyException {
 		return op1 % op2;
 	}
 
-	public static Double power(Long op1, Long op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
-		return StrictMath.pow( op1, op2 );
+	public static Double power(long op1, long op2) throws AnyException {
+		return StrictMath.pow(op1, op2);
 	}
 
-	public static int compareTo(Long op1, Long op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			throw new NullValueException(); 
-		return op1.compareTo(op2);
+	public static int compareTo(long op1, long op2) throws AnyException {
+		return (int) (op1 - op2);
 	}
 
-	public static boolean equals(Long op1, Long op2) {
-		if (op1 == null || op2 == null)
-			return false;
-		return op1.equals(op2);
+	public static boolean equals(long op1, long op2) {
+		return op1 == op2;
 	}
 
-	public static boolean notEquals(Long op1, Long op2) {
-		if (op1 == null || op2 == null)
-			return false;
-		return !op1.equals(op2);
+	public static boolean notEquals(long op1, long op2) {
+		return op1 != op2;
 	}
 
 	public static long defaultValue() {

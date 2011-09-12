@@ -46,99 +46,71 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 		return EString.asString(object);
 	}
 
-	public static Float asSmallfloat(Short value) {
+	public static float asSmallfloat(short value) {
+		return Float.valueOf(value);
+	}
+
+	public static float asSmallfloat(int value) {
+		return Float.valueOf(value);
+	}
+
+	public static float asSmallfloat(long value) {
+		return Float.valueOf(value);
+	}
+
+	public static float asSmallfloat(float value) throws AnyException {
+		return value;
+	}
+
+	public static float asSmallfloat(double value) throws AnyException {
+		return (float) value;
+	}
+
+	public static float asSmallfloat(BigDecimal value) {
 		if (value == null)
-			return null;
+			throw new NullValueException();
 		return value.floatValue();
 	}
 
-	public static Float asSmallfloat(Integer value) {
+	public static float asSmallfloat(String value) throws AnyException {
 		if (value == null)
-			return null;
-		return value.floatValue();
-	}
-
-	public static Float asSmallfloat(Long value) {
-		if (value == null)
-			return null;
-		return value.floatValue();
-	}
-
-	public static Float asSmallfloat(Float value) throws AnyException {
-		if (value == null)
-			return null;
-		return value.floatValue();
-	}
-
-	public static Float asSmallfloat(Double value) throws AnyException {
-		if (value == null)
-			return null;
-		return value.floatValue();
-	}
-
-	public static Float asSmallfloat(BigDecimal value) {
-		if (value == null)
-			return null;
-		return value.floatValue();
-	}
-
-	public static Float asSmallfloat(String value) throws AnyException {
-		if (value == null)
-			return null;
+			throw new NullValueException();
 		return asSmallfloat(EDecimal.asDecimal(value));
 	}
 
-	public static Float plus(Float op1, Float op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static float plus(float op1, float op2) throws AnyException {
 		return op1 + op2;
 	}
 
-	public static Float minus(Float op1, Float op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static float minus(float op1, float op2) throws AnyException {
 		return op1 - op2;
 	}
 
-	public static Float divide(Float op1, Float op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static float divide(float op1, float op2) throws AnyException {
 		return op1 / op2;
 	}
 
-	public static Float multiply(Float op1, Float op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static float multiply(float op1, float op2) throws AnyException {
 		return op1 * op2;
 	}
 
-	public static Float remainder(Float op1, Float op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static float remainder(float op1, float op2) throws AnyException {
 		return op1 % op2;
 	}
-	
-	public static Float power(Float op1, Float op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
-		return (float)StrictMath.pow( op1, op2 );
+
+	public static float power(float op1, float op2) throws AnyException {
+		return (float) StrictMath.pow(op1, op2);
 	}
 
-	public static int compareTo(Float op1, Float op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			throw new NullValueException();
-		return op1.compareTo(op2);
+	public static int compareTo(float op1, float op2) throws AnyException {
+		return (int) (op1 - op2);
 	}
 
-	public static boolean equals(Float op1, Float op2) {
-		if (op1 == null || op2 == null)
-			return false;
-		return op1.equals(op2);
+	public static boolean equals(float op1, float op2) {
+		return op1 == op2;
 	}
 
-	public static boolean notEquals(Float op1, Float op2) {
-		if (op1 == null || op2 == null)
-			return false;
-		return !op1.equals(op2);
+	public static boolean notEquals(float op1, float op2) {
+		return op1 != op2;
 	}
 }

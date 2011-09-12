@@ -17,6 +17,8 @@ import java.math.BigInteger;
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 import egl.lang.AnyException;
+import egl.lang.NullValueException;
+
 import org.eclipse.edt.javart.resources.ExecutableBase;
 
 public class MathLib extends ExecutableBase {
@@ -128,6 +130,8 @@ public class MathLib extends ExecutableBase {
 	}
 
 	public static BigDecimal abs(BigDecimal numericField) {
+		if (numericField == null)
+			throw new NullValueException();
 		return numericField.abs();
 	}
 
@@ -176,6 +180,8 @@ public class MathLib extends ExecutableBase {
 	 * floating-point value that is not less than the argument and is equal to a mathematical integer.
 	 */
 	public static BigDecimal ceiling(BigDecimal numericField) {
+		if (numericField == null)
+			throw new NullValueException();
 		return numericField.setScale(0, BigDecimal.ROUND_CEILING);
 	}
 
@@ -197,6 +203,8 @@ public class MathLib extends ExecutableBase {
 	 * Returns the number of digits to the right of the decimal point that the value can store.
 	 */
 	public static int decimals(BigDecimal numericField) {
+		if (numericField == null)
+			throw new NullValueException();
 		return numericField.scale();
 	}
 
@@ -220,6 +228,8 @@ public class MathLib extends ExecutableBase {
 	 * is not greater than the argument and is equal to a mathematical integer.
 	 */
 	public static BigDecimal floor(BigDecimal numericField) {
+		if (numericField == null)
+			throw new NullValueException();
 		return numericField.setScale(0, BigDecimal.ROUND_FLOOR);
 	}
 
@@ -323,6 +333,8 @@ public class MathLib extends ExecutableBase {
 	}
 
 	public static BigDecimal max(BigDecimal numericField1, BigDecimal numericField2) {
+		if (numericField1 == null || numericField2 == null)
+			throw new NullValueException();
 		return numericField1.max(numericField2);
 	}
 
@@ -356,6 +368,8 @@ public class MathLib extends ExecutableBase {
 	}
 
 	public static BigDecimal min(BigDecimal numericField1, BigDecimal numericField2) {
+		if (numericField1 == null || numericField2 == null)
+			throw new NullValueException();
 		return numericField1.min(numericField2);
 	}
 
@@ -412,6 +426,8 @@ public class MathLib extends ExecutableBase {
 	}
 
 	public static int precision(BigDecimal numericField) {
+		if (numericField == null)
+			throw new NullValueException();
 		return numericField.precision() - numericField.scale();
 	}
 
@@ -434,6 +450,8 @@ public class MathLib extends ExecutableBase {
 	}
 
 	public static BigDecimal round(BigDecimal value, int exp) {
+		if (value == null)
+			throw new NullValueException();
 		// Round it.
 		BigDecimal rounder;
 		if (exp > 0) {

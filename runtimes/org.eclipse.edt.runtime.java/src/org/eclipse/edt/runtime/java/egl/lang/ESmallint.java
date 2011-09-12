@@ -42,15 +42,26 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return EString.asString(object);
 	}
 
-	public static Short asSmallint(Short value) {
-		if (value == null)
-			return null;
+	public static short asSmallint(short value) {
 		return value;
 	}
 
-	public static Short asSmallint(Integer value) throws AnyException {
-		if (value == null)
-			return null;
+	public static short asSmallint(int value) throws AnyException {
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
+		short result = 0;
+		if (throwOverflowExceptions) {
+			try {
+				result = BigDecimal.valueOf(value).shortValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		} else
+			result = Integer.valueOf(value).shortValue();
+		return result;
+	}
+
+	public static short asSmallint(long value) throws AnyException {
 		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;
 		if (throwOverflowExceptions) {
@@ -65,26 +76,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return result;
 	}
 
-	public static Short asSmallint(Long value) throws AnyException {
-		if (value == null)
-			return null;
-		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
-		short result = 0;
-		if (throwOverflowExceptions) {
-			try {
-				result = BigDecimal.valueOf(value).shortValueExact();
-			}
-			catch (ArithmeticException ex) {
-				throw new NumericOverflowException();
-			}
-		} else
-			result = Long.valueOf(value).shortValue();
-		return result;
-	}
-
-	public static Short asSmallint(Float value) throws AnyException {
-		if (value == null)
-			return null;
+	public static short asSmallint(float value) throws AnyException {
 		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;;
 		if (throwOverflowExceptions) {
@@ -95,13 +87,11 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 				throw new NumericOverflowException();
 			}
 		} else
-			result = value.shortValue();
+			result = Float.valueOf(value).shortValue();
 		return result;
 	}
 
-	public static Short asSmallint(Double value) throws AnyException {
-		if (value == null)
-			return null;
+	public static short asSmallint(double value) throws AnyException {
 		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;;
 		if (throwOverflowExceptions) {
@@ -112,13 +102,13 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 				throw new NumericOverflowException();
 			}
 		} else
-			result = value.shortValue();
+			result = Double.valueOf(value).shortValue();
 		return result;
 	}
 
-	public static Short asSmallint(BigDecimal value) throws AnyException {
+	public static short asSmallint(BigDecimal value) throws AnyException {
 		if (value == null)
-			return null;
+			throw new NullValueException();
 		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;;
 		if (throwOverflowExceptions) {
@@ -133,9 +123,9 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return result;
 	}
 
-	public static Short asSmallint(String value) throws AnyException {
+	public static short asSmallint(String value) throws AnyException {
 		if (value == null)
-			return null;
+			throw new NullValueException();
 		return asSmallint(EDecimal.asDecimal(value));
 	}
 
@@ -143,66 +133,44 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static BigDecimal asNumber(Short value) throws AnyException {
-		if (value == null)
-			return null;
+	public static BigDecimal asNumber(short value) throws AnyException {
 		return EDecimal.asDecimal(value);
 	}
 
-	public static Integer plus(Short op1, Short op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static int plus(short op1, short op2) throws AnyException {
 		return op1 + op2;
 	}
 
-	public static Integer minus(Short op1, Short op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static int minus(short op1, short op2) throws AnyException {
 		return op1 - op2;
 	}
 
-	public static BigDecimal divide(Short op1, Short op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static BigDecimal divide(short op1, short op2) throws AnyException {
 		return BigDecimal.valueOf(op1).divide(BigDecimal.valueOf(op2), EDecimal.BIGDECIMAL_RESULT_SCALE, EDecimal.ROUND_BD);
 	}
 
-	public static Integer multiply(Short op1, Short op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static int multiply(short op1, short op2) throws AnyException {
 		return op1 * op2;
 	}
 
-	public static Integer remainder(Short op1, Short op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static int remainder(short op1, short op2) throws AnyException {
 		return op1 % op2;
 	}
 
-	public static Double power(Short op1, Short op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static double power(short op1, short op2) throws AnyException {
 		return StrictMath.pow(op1, op2);
 	}
 
-	public static int compareTo(Short op1, Short op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
-		if (op1 == null || op2 == null)
-			throw new NullValueException();
-		return op1.compareTo(op2);
+	public static int compareTo(short op1, short op2) throws AnyException {
+		return (int) (op1 - op2);
 	}
 
-	public static boolean equals(Short op1, Short op2) {
-		if (op1 == null || op2 == null)
-			return false;
-		return op1.equals(op2);
+	public static boolean equals(short op1, short op2) {
+		return op1 == op2;
 	}
 
-	public static boolean notEquals(Short op1, Short op2) {
-		if (op1 == null || op2 == null)
-			return false;
-		return !op1.equals(op2);
+	public static boolean notEquals(short op1, short op2) {
+		return op1 != op2;
 	}
 
 	public int precision() {

@@ -265,45 +265,35 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 		return isa;
 	}
 
-	public static BigDecimal asDecimal(Short value, Integer... args) throws AnyException {
-		if (value == null)
-			return null;
+	public static BigDecimal asDecimal(short value, Integer... args) throws AnyException {
 		if (args.length == 2)
 			return asDecimal(BigDecimal.valueOf(value), args[0], args[1]);
 		else
 			return BigDecimal.valueOf(value);
 	}
 
-	public static BigDecimal asDecimal(Integer value, Integer... args) throws AnyException {
-		if (value == null)
-			return null;
+	public static BigDecimal asDecimal(int value, Integer... args) throws AnyException {
 		if (args.length == 2)
 			return asDecimal(BigDecimal.valueOf(value), args[0], args[1]);
 		else
 			return BigDecimal.valueOf(value);
 	}
 
-	public static BigDecimal asDecimal(Long value, Integer... args) throws AnyException {
-		if (value == null)
-			return null;
+	public static BigDecimal asDecimal(long value, Integer... args) throws AnyException {
 		if (args.length == 2)
 			return asDecimal(BigDecimal.valueOf(value), args[0], args[1]);
 		else
 			return BigDecimal.valueOf(value);
 	}
 
-	public static BigDecimal asDecimal(Float value, Integer... args) throws AnyException {
-		if (value == null)
-			return null;
+	public static BigDecimal asDecimal(float value, Integer... args) throws AnyException {
 		if (args.length == 2)
 			return asDecimal(BigDecimal.valueOf(value), args[0], args[1]);
 		else
 			return BigDecimal.valueOf(value);
 	}
 
-	public static BigDecimal asDecimal(Double value, Integer... args) throws AnyException {
-		if (value == null)
-			return null;
+	public static BigDecimal asDecimal(double value, Integer... args) throws AnyException {
 		if (args.length == 2)
 			return asDecimal(BigDecimal.valueOf(value), args[0], args[1]);
 		else
@@ -311,6 +301,8 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 	}
 
 	public static BigDecimal asDecimal(BigDecimal value, Integer... args) throws AnyException {
+		if (value == null)
+			throw new NullValueException();
 		if (args.length == 2)
 			return asDecimal(value, args[0], args[1]);
 		else
@@ -318,21 +310,26 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 	}
 
 	public static BigDecimal asDecimal(BigDecimal value, int precision, int scale) throws AnyException {
+		if (value == null)
+			throw new NullValueException();
 		return asDecimal(value, getMaxValue(precision, scale), getMinValue(precision, scale), precision, scale, false);
 	}
 
 	public static BigDecimal asDecimal(BigInteger value, int precision, int scale) throws AnyException {
+		if (value == null)
+			throw new NullValueException();
 		return asDecimal(new BigDecimal(value), getMaxValue(precision, scale), getMinValue(precision, scale), precision, scale, false);
 	}
 
 	public static BigDecimal asDecimal(BigDecimal value, BigDecimal max, BigDecimal min, int precision, int scale) throws AnyException {
+		if (value == null || max == null || min == null)
+			throw new NullValueException();
 		return asDecimal(value, max, min, precision, scale, false);
 	}
 
-	public static BigDecimal asDecimal(BigDecimal value, BigDecimal max, BigDecimal min, int precision, int scale, boolean ignoreOverflow)
-		throws AnyException {
-		if (value == null)
-			return null;
+	public static BigDecimal asDecimal(BigDecimal value, BigDecimal max, BigDecimal min, int precision, int scale, boolean ignoreOverflow) throws AnyException {
+		if (value == null || max == null || min == null)
+			throw new NullValueException();
 		BigDecimal result = value;
 		if (scale < value.scale()) {
 			// truncate or round the value based on the program setting
@@ -358,10 +355,14 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 	}
 
 	public static BigDecimal asDecimal(String value, Integer... args) throws AnyException {
+		if (value == null)
+			throw new NullValueException();
 		return asDecimal(asDecimal(value, false), args);
 	}
 
 	public static BigDecimal asDecimal(String value, boolean blanksAsZero) {
+		if (value == null)
+			throw new NullValueException();
 		// Check for zero length string and remove extra blanks.
 		value = value.trim();
 		if (value.length() == 0) {
@@ -396,62 +397,61 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 	 */
 	public static BigDecimal asNumber(BigDecimal value) throws AnyException {
 		if (value == null)
-			return null;
+			throw new NullValueException();
 		return EDecimal.asDecimal(value);
 	}
 
 	public static BigDecimal plus(BigDecimal op1, BigDecimal op2) {
 		if (op1 == null || op2 == null)
-			return null;
+			throw new NullValueException();
 		return op1.add(op2);
 	}
 
 	public static BigDecimal minus(BigDecimal op1, BigDecimal op2) {
 		if (op1 == null || op2 == null)
-			return null;
+			throw new NullValueException();
 		return op1.subtract(op2);
 	}
 
 	public static BigDecimal divide(BigDecimal op1, BigDecimal op2) {
 		if (op1 == null || op2 == null)
-			return null;
+			throw new NullValueException();
 		return op1.divide(op2, BIGDECIMAL_RESULT_SCALE, ROUND_BD);
 	}
 
 	public static BigDecimal multiply(BigDecimal op1, BigDecimal op2) {
 		if (op1 == null || op2 == null)
-			return null;
+			throw new NullValueException();
 		return op1.multiply(op2);
 	}
 
 	public static BigDecimal remainder(BigDecimal op1, BigDecimal op2) {
 		if (op1 == null || op2 == null)
-			return null;
+			throw new NullValueException();
 		return op1.remainder(op2);
 	}
 
 	public static Double power(BigDecimal op1, BigDecimal op2) throws AnyException {
 		if (op1 == null || op2 == null)
-			return null;
-		return StrictMath.pow( op1.doubleValue(), op2.doubleValue() );
+			throw new NullValueException();
+		return StrictMath.pow(op1.doubleValue(), op2.doubleValue());
 	}
 
 	public static int compareTo(BigDecimal op1, BigDecimal op2) throws AnyException {
-		if (op1 == null || op2 == null) {
+		if (op1 == null || op2 == null)
 			throw new NullValueException();
-		}
 		return op1.compareTo(op2);
 	}
 
 	public static boolean equals(BigDecimal op1, BigDecimal op2) {
 		if (op1 == null || op2 == null)
-			return false;
+			throw new NullValueException();
 		return op1.equals(op2);
 	}
 
 	public static boolean notEquals(BigDecimal op1, BigDecimal op2) {
 		if (op1 == null || op2 == null)
-			return false;
+			throw new NullValueException();
 		return !op1.equals(op2);
 	}
 }

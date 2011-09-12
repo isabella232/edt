@@ -15,6 +15,7 @@ import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 
 import egl.lang.AnyException;
+import egl.lang.NullValueException;
 
 public class EBoolean extends AnyBoxedObject<Boolean> {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -42,19 +43,15 @@ public class EBoolean extends AnyBoxedObject<Boolean> {
 
 	public static boolean asBoolean(Number number) throws AnyException {
 		if (number == null)
-			return false;
+			throw new NullValueException();
 		return number.floatValue() != 0;
 	}
 
-	public static boolean equals(Boolean op1, Boolean op2) {
-		if (op1 == null || op2 == null)
-			return false;
-		return op1.equals(op2);
+	public static boolean equals(boolean op1, boolean op2) {
+		return op1 == op2;
 	}
 
-	public static boolean notEquals(Boolean op1, Boolean op2) {
-		if (op1 == null || op2 == null)
-			return false;
-		return !op1.equals(op2);
+	public static boolean notEquals(boolean op1, boolean op2) {
+		return op1 != op2;
 	}
 }

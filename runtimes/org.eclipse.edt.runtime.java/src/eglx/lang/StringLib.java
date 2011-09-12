@@ -21,6 +21,8 @@ import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.Runtime;
 
 import egl.lang.AnyException;
+import egl.lang.NullValueException;
+
 import org.eclipse.edt.javart.TimestampData;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.util.DateTimeUtil;
@@ -42,6 +44,8 @@ public class StringLib extends ExecutableBase {
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
 	public static String format(BigDecimal number, String format) {
+		if (number == null)
+			throw new NullValueException();
 		return NumberFormatter.fmtNum(number, format, Runtime.getRunUnit().getLocalizedText());
 	}
 
@@ -84,6 +88,8 @@ public class StringLib extends ExecutableBase {
 	 * formats a parameter into a timestamp value and returns a value of type STRING.
 	 */
 	public static String format(Calendar timestampValue, String timestampFormat) {
+		if (timestampValue == null)
+			throw new NullValueException();
 		TimestampData data = new TimestampData(timestampValue, 0);
 		boolean reset = false;
 		int micros = data.microseconds;
@@ -114,6 +120,8 @@ public class StringLib extends ExecutableBase {
 	 * 1 or greater than the length of the source String.
 	 */
 	public static String getNextToken(String source, AnyBoxedObject<Integer> index, String delimiters) throws AnyException {
+		if (source == null || delimiters == null)
+			throw new NullValueException();
 		int start = index.ezeUnbox();
 		int searchEnd = source.length();
 		// Validate the substring index.
@@ -150,6 +158,8 @@ public class StringLib extends ExecutableBase {
 	 * Returns the number of tokens in the source string that are delimited by the characters of the input delimiters String.
 	 */
 	public static int getTokenCount(String source, String delimiters) {
+		if (source == null || delimiters == null)
+			throw new NullValueException();
 		StringTokenizer tokenizer = new StringTokenizer(source, delimiters);
 		return tokenizer.countTokens();
 	}

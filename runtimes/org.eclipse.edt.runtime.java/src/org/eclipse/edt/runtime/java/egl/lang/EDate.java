@@ -68,125 +68,110 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	}
 
 	/**
-	 * {@Operation narrow} Converts a string to a date.  The string is parsed
-	 * by searching for the month, then the day, then the year.  One or two digits
-	 * can be specified for the month and day.  The year requires a minimum of one
-	 * digit and a maximum of at least four digits (in other words, some implementations
-	 * can support years beyond 9999).  One separator character is required between
-	 * the month and day, and another between the day and year.  The separator 
-	 * character can be anything, even a digit (though that's probably a bad idea)
-	 * and the two separator characters don't have to be identical.  
-	 *
+	 * {@Operation narrow} Converts a string to a date. The string is parsed by searching for the month, then the day, then
+	 * the year. One or two digits can be specified for the month and day. The year requires a minimum of one digit and a
+	 * maximum of at least four digits (in other words, some implementations can support years beyond 9999). One separator
+	 * character is required between the month and day, and another between the day and year. The separator character can be
+	 * anything, even a digit (though that's probably a bad idea) and the two separator characters don't have to be
+	 * identical.
 	 * @throws TypeCastException if the string can't be parsed into a date.
 	 */
-	public static Calendar asDate( String date ) throws TypeCastException 
-	{
+	public static Calendar asDate(String date) throws TypeCastException {
+		if (date == null)
+			throw new NullValueException();
 		// Quick check for strings that are too long or too short.
 		int length = date.length();
-		if ( length < 5 || length > 10 )
-		{
+		if (length < 5 || length > 10) {
 			// Minimum is 5 characters: 1/1/1
 			// Maximum is 10 characters: 11/11/1111
 			throw new TypeCastException();
 		}
-		
+
 		int months = -1;
 		int days = -1;
 		int years = -1;
-		
-		PARSE:
-		{
-			char ch = date.charAt( 0 );
-			if ( ch < '0' || ch > '9' )
-			{
+
+		PARSE: {
+			char ch = date.charAt(0);
+			if (ch < '0' || ch > '9') {
 				break PARSE;
 			}
 			months = ch - '0';
-			ch = date.charAt( 1 );
+			ch = date.charAt(1);
 			int i;
-			if ( ch < '0' || ch > '9' )
-			{
+			if (ch < '0' || ch > '9') {
 				// There's one digit for the month.
 				i = 2;
-			}
-			else
-			{
+			} else {
 				// Two digits for the month.
 				months = months * 10 + ch - '0';
 				i = 3;
 			}
-			
-			ch = date.charAt( i );
-			if ( ch < '0' || ch > '9' )
-			{
+
+			ch = date.charAt(i);
+			if (ch < '0' || ch > '9') {
 				break PARSE;
 			}
 			days = ch - '0';
 			i++;
-			ch = date.charAt( i );
-			if ( ch < '0' || ch > '9' )
-			{
+			ch = date.charAt(i);
+			if (ch < '0' || ch > '9') {
 				// There's one digit for the day.
 				i++;
-			}
-			else
-			{
+			} else {
 				// Two digits for the day.
 				days = days * 10 + ch - '0';
 				i += 2;
 			}
-			
-			ch = date.charAt( i );
-			if ( ch < '0' || ch > '9' )
-			{
+
+			ch = date.charAt(i);
+			if (ch < '0' || ch > '9') {
 				break PARSE;
 			}
 			years = ch - '0';
 			i++;
-			for ( int digits = 0; i < length && digits < 5; digits++, i++ )
-			{
-				ch = date.charAt( i );
-				if ( ch < '0' || ch > '9' )
-				{
+			for (int digits = 0; i < length && digits < 5; digits++, i++) {
+				ch = date.charAt(i);
+				if (ch < '0' || ch > '9') {
 					break PARSE;
 				}
 				years = years * 10 + ch - '0';
 			}
-			
+
 			// Make sure we didn't get too many digits for the year.
-			if ( i < length )
-			{
+			if (i < length) {
 				years = -1;
 			}
 		}
-		
+
 		// Make sure all required fields were found.
-		if ( months == -1 || days == -1 || years == -1 )
-		{
+		if (months == -1 || days == -1 || years == -1) {
 			throw new TypeCastException();
 		}
-		
+
 		// The last thing to do is put the values into a Calendar.
 		Calendar cal = DateTimeUtil.getBaseCalendar();
-		cal.set( Calendar.YEAR, years );
-		cal.set( Calendar.MONTH, months - 1 );
-		cal.set( Calendar.DATE, days );
+		cal.set(Calendar.YEAR, years);
+		cal.set(Calendar.MONTH, months - 1);
+		cal.set(Calendar.DATE, days);
 		return cal;
 	}
 
 	public static Calendar asDate(Calendar date) throws AnyException {
+		if (date == null)
+			throw new NullValueException();
 		return ETimestamp.convert(EString.asString(date), ETimestamp.YEAR_CODE, ETimestamp.DAY_CODE);
 	}
 
 	public static boolean equals(Calendar op1, Calendar op2) {
 		if (op1 == null || op2 == null)
-			return false;
+			throw new NullValueException();
 		return op1.equals(op2);
 	}
 
 	public static boolean notEquals(Calendar op1, Calendar op2) {
 		if (op1 == null || op2 == null)
-			return false;
+			throw new NullValueException();
 		return !op1.equals(op2);
 	}
 
@@ -202,8 +187,8 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the adds days to a date
 	 */
-	public static Calendar addDays(Calendar aDate, Integer amount) throws AnyException {
-		if (aDate == null || amount == null)
+	public static Calendar addDays(Calendar aDate, int amount) throws AnyException {
+		if (aDate == null)
 			throw new NullValueException();
 		if (!aDate.isSet(Calendar.DATE))
 			throw new TypeCastException();
@@ -216,7 +201,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	 * Returns the extension of a date
 	 */
 	public static Calendar extend(Calendar aDate, String timeSpanPattern) throws AnyException {
-		if (aDate == null)
+		if (aDate == null || timeSpanPattern == null)
 			throw new NullValueException();
 		// Default values in case the pattern doesn't specify things.
 		int startCode = ETimestamp.YEAR_CODE;

@@ -20,6 +20,7 @@ import org.eclipse.edt.javart.Constants;
 import egl.lang.AnyException;
 import egl.lang.AnyNumber;
 import egl.lang.NullValueException;
+import egl.lang.NumericOverflowException;
 
 public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -46,81 +47,96 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return EString.asString(object);
 	}
 
-	public static Integer asInt(Short value) throws AnyException {
-		if (value == null)
-			return null;
-		return value.intValue();
+	public static int asInt(short value) throws AnyException {
+		return value;
 	}
 
-	public static Integer asInt(Integer value) throws AnyException {
-		if (value == null)
-			return null;
-		return value.intValue();
+	public static int asInt(int value) throws AnyException {
+		return value;
 	}
 
-	public static Integer asInt(Long value) throws AnyException {
-		if (value == null)
-			return null;
+	public static int asInt(long value) throws AnyException {
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
-			result = BigDecimal.valueOf(value).intValueExact();
+			try {
+				result = BigDecimal.valueOf(value).intValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
 		else
 			result = Long.valueOf(value).intValue();
 		return result;
 	}
 
-	public static Integer asInt(BigInteger value) throws AnyException {
+	public static int asInt(BigInteger value) throws AnyException {
 		if (value == null)
-			return null;
+			throw new NullValueException();
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
-			result = new BigDecimal(value).intValueExact();
+			try {
+				result = new BigDecimal(value).intValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
 		else
 			result = value.intValue();
 		return result;
 	}
 
-	public static Integer asInt(Float value) throws AnyException {
-		if (value == null)
-			return null;
-		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
-		int result = 0;;
-		if (throwOverflowExceptions)
-			result = BigDecimal.valueOf(value).intValueExact();
-		else
-			result = value.intValue();
-		return result;
-	}
-
-	public static Integer asInt(Double value) throws AnyException {
-		if (value == null)
-			return null;
-		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
-		int result = 0;;
-		if (throwOverflowExceptions)
-			result = BigDecimal.valueOf(value).intValueExact();
-		else
-			result = value.intValue();
-		return result;
-	}
-
-	public static Integer asInt(BigDecimal value) throws AnyException {
-		if (value == null)
-			return null;
+	public static int asInt(float value) throws AnyException {
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
-			result = value.intValueExact();
+			try {
+				result = BigDecimal.valueOf(value).intValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		else
+			result = Float.valueOf(value).intValue();
+		return result;
+	}
+
+	public static int asInt(double value) throws AnyException {
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		int result = 0;
+		if (throwOverflowExceptions)
+			try {
+				result = BigDecimal.valueOf(value).intValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		else
+			result = Double.valueOf(value).intValue();
+		return result;
+	}
+
+	public static int asInt(BigDecimal value) throws AnyException {
+		if (value == null)
+			throw new NullValueException();
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		int result = 0;
+		if (throwOverflowExceptions)
+			try {
+				result = value.intValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
 		else
 			result = value.intValue();
 		return result;
 	}
 
-	public static Integer asInt(String value) throws AnyException {
+	public static int asInt(String value) throws AnyException {
 		if (value == null)
-			return null;
+			throw new NullValueException();
 		return asInt(EDecimal.asDecimal(value));
 	}
 
@@ -128,9 +144,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static BigDecimal asNumber(Integer value) throws AnyException {
-		if (value == null)
-			return null;
+	public static BigDecimal asNumber(int value) throws AnyException {
 		return EDecimal.asDecimal(value);
 	}
 
@@ -142,77 +156,51 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return Precision;
 	}
 
-	public static Integer plus(Integer op1, Integer op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static int plus(int op1, int op2) throws AnyException {
 		return op1 + op2;
 	}
 
-	public static Integer minus(Integer op1, Integer op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static int minus(int op1, int op2) throws AnyException {
 		return op1 - op2;
 	}
 
-	public static BigDecimal divide(Integer op1, Integer op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static BigDecimal divide(int op1, int op2) throws AnyException {
 		return BigDecimal.valueOf(op1).divide(BigDecimal.valueOf(op2), EDecimal.BIGDECIMAL_RESULT_SCALE, EDecimal.ROUND_BD);
 	}
 
-	public static Integer multiply(Integer op1, Integer op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static int multiply(int op1, int op2) throws AnyException {
 		return op1 * op2;
 	}
 
-	public static Integer remainder(Integer op1, Integer op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static int remainder(int op1, int op2) throws AnyException {
 		return op1 % op2;
 	}
-	
-	public static Double power(Integer op1, Integer op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
-		return StrictMath.pow( op1, op2 );
+
+	public static double power(int op1, int op2) throws AnyException {
+		return StrictMath.pow(op1, op2);
 	}
-	
-	public static Integer bitand(Integer op1, Integer op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+
+	public static int bitand(int op1, int op2) throws AnyException {
 		return op1 & op2;
 	}
-	
-	public static Integer bitor(Integer op1, Integer op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+
+	public static int bitor(int op1, int op2) throws AnyException {
 		return op1 | op2;
 	}
-	
-	public static Integer xor(Integer op1, Integer op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+
+	public static int xor(int op1, int op2) throws AnyException {
 		return op1 ^ op2;
 	}
 
-	public static int compareTo(Integer op1, Integer op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
-		if ((op1 != null && op2 == null) || (op1 == null && op2 != null))
-			throw new NullValueException();
-		return op1.compareTo(op2);
+	public static int compareTo(int op1, int op2) throws AnyException {
+		return op1 - op2;
 	}
 
-	public static boolean equals(Integer op1, Integer op2) {
-		if (op1 == null || op2 == null)
-			return false;
-		return op1.equals(op2);
+	public static boolean equals(int op1, int op2) {
+		return op1 == op2;
 	}
 
-	public static boolean notEquals(Integer op1, Integer op2) {
-		if (op1 == null || op2 == null)
-			return false;
-		return !op1.equals(op2);
+	public static boolean notEquals(int op1, int op2) {
+		return op1 != op2;
 	}
 }

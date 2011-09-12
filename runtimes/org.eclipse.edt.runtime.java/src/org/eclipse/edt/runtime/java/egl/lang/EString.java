@@ -51,8 +51,7 @@ public class EString extends AnyBoxedObject<String> {
 	}
 
 	public static String ezeCast(Object value, Integer... args) throws AnyException {
-		if ( value == null )
-		{
+		if (value == null) {
 			return "";
 		}
 		return (String) EglAny.ezeCast(value, "asString", EString.class, new Class[] { Integer[].class }, args);
@@ -65,133 +64,101 @@ public class EString extends AnyBoxedObject<String> {
 		return isa;
 	}
 
-	public static String asString(Boolean value, Integer... length) {
-		if (value == null)
-			return null;
+	public static String asString(boolean value, Integer... length) {
 		return asString(String.valueOf(value), length);
 	}
 
-	public static String asString(Short value, Integer... length) {
-		if (value == null)
-			return null;
+	public static String asString(short value, Integer... length) {
 		return asString(String.valueOf(value), length);
 	}
 
-	public static String asString(Integer value, Integer... length) {
-		if (value == null)
-			return null;
+	public static String asString(int value, Integer... length) {
 		return asString(String.valueOf(value), length);
 	}
 
-	public static String asString(Long value, Integer... length) {
-		if (value == null)
-			return null;
+	public static String asString(long value, Integer... length) {
 		return asString(String.valueOf(value), length);
 	}
 
-	public static String asString(Float value, Integer... length) {
-		if (value == null)
-			return null;
+	public static String asString(float value, Integer... length) {
 		return asString(String.valueOf(value), length);
 	}
 
-	public static String asString(Double value, Integer... length) {
-		if (value == null)
-			return null;
+	public static String asString(double value, Integer... length) {
 		return asString(String.valueOf(value), length);
 	}
 
 	public static String asString(BigDecimal value, Integer... length) {
 		if (value == null)
-			return null;
+			throw new NullValueException();
 		return asString(String.valueOf(value), length);
 	}
 
 	public static String asString(String value, Integer... length) {
 		if (value == null)
-			return null;
+			throw new NullValueException();
 		if (length.length != 0 && value.length() > length[0])
 			value = value.substring(0, length[0]);
 		return value;
 	}
 
 	/**
-	 * TODO This method gets called for two reasons: converting date to string
-	 * and converting timestamp to string.  But it can't do both properly, based
-	 * on the specs below.  The Calendar object from a date will look exactly
-	 * like the Calendar object from a timestamp("yyyyMMdd").  Right now this
-	 * method does the conversion from timestamp.
-	 * 
-	 * 
-	 * 
-	 * {@Operation widen} Converts a date to a string in the format "MM/dd/yyyy".
-	 * Leading zeros are included in the string, so April 1st in the year 9 A.D. is
-	 * converted to "04/01/0009".
-	 * 
-	 * {@Operation widen} Converts a timestamp to a string.  The 26-character result
-	 * will include all possible fields of a timestamp, from years down to fractions
-	 * of seconds, in the format "yyyy-MM-dd HH:mm:ss.SSSSSS".  Leading zeros are 
-	 * included in each field of the string when necessary, e.g. January is 
-	 * represented as "01" not "1". 
+	 * TODO This method gets called for two reasons: converting date to string and converting timestamp to string. But it
+	 * can't do both properly, based on the specs below. The Calendar object from a date will look exactly like the Calendar
+	 * object from a timestamp("yyyyMMdd"). Right now this method does the conversion from timestamp. {@Operation
+	 *  widen} Converts a date to a string in the format "MM/dd/yyyy". Leading zeros are included in the string,
+	 * so April 1st in the year 9 A.D. is converted to "04/01/0009". {@Operation widen} Converts a timestamp to a
+	 * string. The 26-character result will include all possible fields of a timestamp, from years down to fractions of
+	 * seconds, in the format "yyyy-MM-dd HH:mm:ss.SSSSSS". Leading zeros are included in each field of the string when
+	 * necessary, e.g. January is represented as "01" not "1".
 	 */
 	public static String asString(Calendar cal, Integer... length) {
+		if (cal == null)
+			throw new NullValueException();
 		// Get the format pattern to use.
 		String format = "";
 		String separator = null;
-		if (cal.isSet(Calendar.YEAR))
-		{
+		if (cal.isSet(Calendar.YEAR)) {
 			format += "yyyy";
 			separator = "-";
 		}
-		if (cal.isSet(Calendar.MONTH))
-		{
-			if ( separator != null )
-			{
+		if (cal.isSet(Calendar.MONTH)) {
+			if (separator != null) {
 				format += separator;
 			}
 			format += "MM";
 			separator = "-";
 		}
-		if (cal.isSet(Calendar.DATE))
-		{
-			if ( separator != null )
-			{
+		if (cal.isSet(Calendar.DATE)) {
+			if (separator != null) {
 				format += separator;
 			}
 			format += "dd";
 			separator = " ";
 		}
-		if (cal.isSet(Calendar.HOUR_OF_DAY))
-		{
-			if ( separator != null )
-			{
+		if (cal.isSet(Calendar.HOUR_OF_DAY)) {
+			if (separator != null) {
 				format += separator;
 			}
 			format += "HH";
 			separator = ":";
 		}
-		if (cal.isSet(Calendar.MINUTE))
-		{
-			if ( separator != null )
-			{
+		if (cal.isSet(Calendar.MINUTE)) {
+			if (separator != null) {
 				format += separator;
 			}
 			format += "mm";
 			separator = ":";
 		}
-		if (cal.isSet(Calendar.SECOND))
-		{
-			if ( separator != null )
-			{
+		if (cal.isSet(Calendar.SECOND)) {
+			if (separator != null) {
 				format += separator;
 			}
 			format += "ss";
 			separator = ".";
 		}
-		if (cal.isSet(Calendar.MILLISECOND))
-		{
-			if ( separator != null )
-			{
+		if (cal.isSet(Calendar.MILLISECOND)) {
+			if (separator != null) {
 				format += separator;
 			}
 			format += "SSSSSS";
@@ -219,7 +186,8 @@ public class EString extends AnyBoxedObject<String> {
 			catch (IllegalArgumentException iax) {
 				TypeCastException tcx = new TypeCastException();
 				tcx.castToName = "string";
-				tcx.actualTypeName = "date or timestamp"; // TODO see the TODO in the method comment: need to know if the Calendar is a date or timestamp  
+				tcx.actualTypeName = "date or timestamp"; // TODO see the TODO in the method comment: need to know if the
+															// Calendar is a date or timestamp
 				throw tcx;
 			}
 			finally {
@@ -235,45 +203,43 @@ public class EString extends AnyBoxedObject<String> {
 	 */
 	public static BigDecimal asNumber(String value, Integer... length) throws AnyException {
 		if (value == null)
-			return null;
+			throw new NullValueException();
 		return EDecimal.asDecimal(asString(value, length));
 	}
 
 	public static String plus(String op1, String op2) throws AnyException {
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
 		return concat(op1, op2);
 	}
 
 	public static String concat(String op1, String op2) throws AnyException {
-		if (op1 == null)
-			op1 = "";
-		if (op2 == null)
-			op2 = "";
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
 		return op1 + op2;
 	}
 
 	public static String concatNull(String op1, String op2) {
 		if (op1 == null || op2 == null)
-			return null;
+			throw new NullValueException();
 		return op1 + op2;
 	}
 
 	public static boolean equals(String op1, String op2) throws AnyException {
 		if (op1 == null || op2 == null)
-			return false;
+			throw new NullValueException();
 		return op1.equals(op2);
 	}
 
 	public static boolean notEquals(String op1, String op2) throws AnyException {
 		if (op1 == null || op2 == null)
-			return false;
+			throw new NullValueException();
 		return !op1.equals(op2);
 	}
 
-	public static String substring(String str, Integer startIndex, Integer endIndex) throws AnyException {
-		if (str == null || startIndex == null || endIndex == null)
+	public static String substring(String str, int start, int end) throws AnyException {
+		if (str == null)
 			return null;
-		int start = startIndex;
-		int end = endIndex;
 		int max = str.length();
 		if (start < 1 || start > max) {
 			InvalidIndexException ex = new InvalidIndexException();
@@ -401,8 +367,8 @@ public class EString extends AnyBoxedObject<String> {
 	/**
 	 * returns the position of a specific string within a string
 	 */
-	public static int indexOf(String source, String value, Integer start) {
-		if (source == null || value == null || start == null)
+	public static int indexOf(String source, String value, int start) {
+		if (source == null || value == null)
 			throw new NullValueException();
 		return source.indexOf(value, start - 1) + 1;
 	}
@@ -428,8 +394,8 @@ public class EString extends AnyBoxedObject<String> {
 	/**
 	 * Returns the integer value of a character code within a string
 	 */
-	public static int charCodeAt(String source, Integer index) {
-		if (source == null || index == null)
+	public static int charCodeAt(String source, int index) {
+		if (source == null)
 			throw new NullValueException();
 		return source.charAt(index - 1);
 	}
@@ -590,7 +556,7 @@ public class EString extends AnyBoxedObject<String> {
 	}
 
 	public String toString() {
-		if ( maxLength > 0 )
+		if (maxLength > 0)
 			return asString(object, maxLength);
 		else
 			return object;

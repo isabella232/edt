@@ -46,99 +46,71 @@ public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 		return value instanceof EFloat;
 	}
 
-	public static Double asFloat(Short value) {
-		if (value == null)
-			return null;
+	public static double asFloat(short value) {
 		return Double.valueOf(value);
 	}
 
-	public static Double asFloat(Integer value) {
-		if (value == null)
-			return null;
+	public static double asFloat(int value) {
 		return Double.valueOf(value);
 	}
 
-	public static Double asFloat(Long value) {
-		if (value == null)
-			return null;
+	public static double asFloat(long value) {
 		return Double.valueOf(value);
 	}
 
-	public static Double asFloat(Float value) {
-		if (value == null)
-			return null;
+	public static double asFloat(float value) {
 		return Double.valueOf(value);
 	}
 
-	public static Double asFloat(Double value) {
-		if (value == null)
-			return null;
-		return Double.valueOf(value);
+	public static double asFloat(double value) {
+		return value;
 	}
 
-	public static Double asFloat(BigDecimal value) {
+	public static double asFloat(BigDecimal value) {
 		if (value == null)
-			return null;
+			throw new NullValueException();
 		return value.doubleValue();
 	}
 
-	public static Double asFloat(String value) throws AnyException {
+	public static double asFloat(String value) throws AnyException {
 		if (value == null)
-			return null;
+			throw new NullValueException();
 		return asFloat(EDecimal.asDecimal(value));
 	}
 
-	public static Double plus(Double op1, Double op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static double plus(double op1, double op2) throws AnyException {
 		return op1 + op2;
 	}
 
-	public static Double minus(Double op1, Double op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static double minus(double op1, double op2) throws AnyException {
 		return op1 - op2;
 	}
 
-	public static Double divide(Double op1, Double op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static double divide(double op1, double op2) throws AnyException {
 		return op1 / op2;
 	}
 
-	public static Double multiply(Double op1, Double op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static double multiply(double op1, double op2) throws AnyException {
 		return op1 * op2;
 	}
 
-	public static Double remainder(Double op1, Double op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
+	public static double remainder(double op1, double op2) throws AnyException {
 		return op1 % op2;
 	}
-	
-	public static Double power(Double op1, Double op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			return null;
-		return StrictMath.pow( op1, op2 );
+
+	public static double power(double op1, double op2) throws AnyException {
+		return StrictMath.pow(op1, op2);
 	}
 
-	public static int compareTo(Double op1, Double op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			throw new NullValueException();
-		return op1.compareTo(op2);
+	public static int compareTo(double op1, double op2) throws AnyException {
+		return (int) (op1 - op2);
 	}
 
-	public static boolean equals(Double op1, Double op2) {
-		if (op1 == null || op2 == null)
-			return false;
-		return op1.equals(op2);
+	public static boolean equals(double op1, double op2) {
+		return op1 == op2;
 	}
 
-	public static boolean notEquals(Double op1, Double op2) {
-		if (op1 == null || op2 == null)
-			return false;
-		return !op1.equals(op2);
+	public static boolean notEquals(double op1, double op2) {
+		return op1 != op2;
 	}
 }
