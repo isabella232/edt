@@ -48,8 +48,6 @@ import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
-import com.ibm.xylem.instructions.GetNonNullValueInstruction;
-
 
 
 /**
