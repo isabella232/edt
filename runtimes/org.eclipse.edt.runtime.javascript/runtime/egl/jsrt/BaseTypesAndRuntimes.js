@@ -1550,10 +1550,10 @@ egl.inferSignature = function( x )
 	{
 		switch ( typeof x )
 		{
-			case "string": return "?S;";
+			case "string": return "S;";
 			case "number": 
-				return ((""+x).indexOf('.')<0)?"?I;":"?F;";
-			case "boolean": return "?0;";
+				return ((""+x).indexOf('.')<0) ? "I;":"F;";
+			case "boolean": return "0;";
 			case "object":
 				if ( "eze$$signature" in x && typeof x.eze$$signature == "string" )
 				{
@@ -1569,11 +1569,11 @@ egl.inferSignature = function( x )
 					var scale = x.scale();
 					if ( x.signum() < 0 ) len--;
 					if ( scale > 0 ) len--;
-					return "?d" + len + ":" + scale + ";";
+					return "d" + len + ":" + scale + ";";
 				}
 				else if ( x instanceof Date )
 				{
-					return "?J'yyyyMMddHHmmssSSSSSS';";
+					return "J'yyyyMMddHHmmssSSSSSS';";
 				}
 				else if ( x instanceof Array )
 				{

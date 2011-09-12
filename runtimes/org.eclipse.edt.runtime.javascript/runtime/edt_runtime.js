@@ -39,7 +39,9 @@ egl.egl.lang.EglAny.ezeWrap = function(obj){
 egl.egl.lang.EglAny.ezeCast = function(obj, cons){
 	return egl.convertAnyToRefType(obj, obj.eze$$signature, cons);
 };
-
+egl.egl.lang.EglAny.unbox = function(obj){
+	return egl.unboxAny(obj);
+};
 egl.egl.lang.EglAny.fromEglAny = function(obj, sig){
 	return {eze$$value : obj, eze$$signature : sig};
 };
@@ -223,6 +225,12 @@ egl.egl.lang.EDecimal.fromEFloat64 = function (x, decimals, limit) {
 		return egl.convertFloatToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 	else
 		return egl.convertFloatToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+};
+egl.egl.lang.EDecimal.ezeCast = function (x, decimals, limit) {
+	if (limit)
+		return egl.convertAnyToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	else
+		return egl.convertAnyToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/); 
 };
 
 
