@@ -947,9 +947,6 @@ exitModifierOpt
 	|	RUNUNIT LPAREN:lparen expr:expr1 RPAREN:rparen
 	{: RESULT = new ExitStatement.RunUnitExitModifier(new ParenthesizedExpression(expr1, lparenleft, rparenright)); :}
 
-	|	STACK simpleNameOpt:simpleName1
-	{: RESULT = new ExitStatement.StackExitModifier(simpleName1); :}
-
 	|	CASE
 	{: RESULT = ExitStatement.DefaultExitModifier.CASE; :}
 
