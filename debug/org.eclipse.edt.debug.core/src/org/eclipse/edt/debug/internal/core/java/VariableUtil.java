@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
@@ -22,6 +23,10 @@ import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
 import org.eclipse.edt.debug.core.java.IVariableAdapter;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
+import org.eclipse.jdt.debug.core.IJavaClassType;
+import org.eclipse.jdt.debug.core.IJavaInterfaceType;
+import org.eclipse.jdt.debug.core.IJavaType;
+import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 
 /**
@@ -184,5 +189,53 @@ public class VariableUtil
 		buf.append( '|' );
 		buf.append( var.getName() );
 		return buf.toString();
+	}
+	
+	/**
+	 * @return true if the variable is an instance of <code>typeName</code>
+	 * @throws DebugException
+	 */
+	public static boolean isInstanceOf( IJavaVariable variable, String typeName ) throws DebugException
+	{
+		IValue value = variable.getValue();
+		if ( value instanceof IJavaValue )
+		{
+			IJavaType javaType = ((IJavaValue)value).getJavaType();
+			if ( javaType instanceof IJavaClassType )
+			{
+				return isInstanceOf( (IJavaClassType)javaType, typeName, false );
+			}
+		}
+		return false;
+	}
+	
+	private static boolean isInstanceOf( IJavaClassType type, String typeName, boolean skipInterfaces ) throws DebugException
+	{
+		if ( typeName.equals( type.getName() ) )
+		{
+			return true;
+		}
+		
+		if ( !skipInterfaces )
+		{
+			for ( IJavaInterfaceType iface : type.getAllInterfaces() )
+			{
+				if ( typeName.equals( iface.getName() ) )
+				{
+					return true;
+				}
+			}
+		}
+		
+		IJavaClassType superType = type.getSuperclass();
+		if ( superType != null )
+		{
+			if ( isInstanceOf( superType, typeName, true ) )
+			{
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

@@ -22,7 +22,10 @@ import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
 import org.eclipse.edt.debug.core.java.IVariableAdapter;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
 import org.eclipse.edt.debug.internal.core.java.EGLJavaVariable;
+import org.eclipse.edt.debug.internal.core.java.VariableUtil;
 import org.eclipse.jdt.debug.core.IJavaClassType;
+import org.eclipse.jdt.debug.core.IJavaInterfaceType;
+import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 
 /**
@@ -30,18 +33,20 @@ import org.eclipse.jdt.debug.core.IJavaVariable;
  */
 public class DefaultVariableAdapter implements IVariableAdapter
 {
-	private HashMap<String, Object> supportedTypes;
+	private HashMap<String, Object> simpleTypes;
 	
 	@Override
 	public IEGLJavaVariable adapt( IJavaVariable variable, IEGLJavaStackFrame frame, SMAPVariableInfo info, IEGLJavaValue parent )
 	{
 		try
 		{
-			if ( variable.getJavaType() instanceof IJavaClassType )
+			IJavaType javaType = variable.getJavaType();
+			if ( javaType instanceof IJavaClassType || javaType instanceof IJavaInterfaceType )
 			{
 				IValue value = variable.getValue();
-				String type = value.getReferenceTypeName(); // Use the value's type which will be the actual type. The variable would report the declared type.
-				if ( getSupportedTypeMap().containsKey( type ) )
+				String type = value.getReferenceTypeName(); // Use the value's type which will be the actual type. The variable would report the
+															// declared type.
+				if ( getSimpleTypeMap().containsKey( type ) )
 				{
 					if ( "java.lang.String".equals( type ) ) //$NON-NLS-1$
 					{
@@ -53,6 +58,7 @@ public class DefaultVariableAdapter implements IVariableAdapter
 						return new ToStringVariable( frame.getDebugTarget(), variable, info, frame, parent );
 					}
 					
+					// The other types have the value inside a 'value' field.
 					IVariable[] vars = value.getVariables();
 					for ( IVariable var : vars )
 					{
@@ -62,6 +68,14 @@ public class DefaultVariableAdapter implements IVariableAdapter
 						}
 					}
 				}
+				else if ( VariableUtil.isInstanceOf( variable, "java.util.List" ) )
+				{
+					return new ListVariable( frame.getDebugTarget(), variable, info, frame, parent );
+				}
+				else if ( VariableUtil.isInstanceOf( variable, "java.util.Map" ) )
+				{
+					return new MapVariable( frame.getDebugTarget(), variable, info, frame, parent );
+				}
 			}
 		}
 		catch ( DebugException e )
@@ -70,23 +84,23 @@ public class DefaultVariableAdapter implements IVariableAdapter
 		return null;
 	}
 	
-	private HashMap<String, Object> getSupportedTypeMap()
+	private HashMap<String, Object> getSimpleTypeMap()
 	{
-		if ( supportedTypes == null )
+		if ( simpleTypes == null )
 		{
-			supportedTypes = new HashMap<String, Object>( 11 );
-			supportedTypes.put( "java.lang.Integer", null ); //$NON-NLS-1$
-			supportedTypes.put( "java.lang.Long", null ); //$NON-NLS-1$
-			supportedTypes.put( "java.lang.Short", null ); //$NON-NLS-1$
-			supportedTypes.put( "java.lang.Boolean", null ); //$NON-NLS-1$
-			supportedTypes.put( "java.lang.String", null ); //$NON-NLS-1$
-			supportedTypes.put( "java.lang.Float", null ); //$NON-NLS-1$
-			supportedTypes.put( "java.lang.Double", null ); //$NON-NLS-1$
-			supportedTypes.put( "java.lang.Byte", null ); //$NON-NLS-1$
-			supportedTypes.put( "java.lang.Character", null ); //$NON-NLS-1$
-			supportedTypes.put( "java.math.BigDecimal", null ); //$NON-NLS-1$
-			supportedTypes.put( "java.math.BigInteger", null ); //$NON-NLS-1$
+			simpleTypes = new HashMap<String, Object>( 11 );
+			simpleTypes.put( "java.lang.Integer", null ); //$NON-NLS-1$
+			simpleTypes.put( "java.lang.Long", null ); //$NON-NLS-1$
+			simpleTypes.put( "java.lang.Short", null ); //$NON-NLS-1$
+			simpleTypes.put( "java.lang.Boolean", null ); //$NON-NLS-1$
+			simpleTypes.put( "java.lang.String", null ); //$NON-NLS-1$
+			simpleTypes.put( "java.lang.Float", null ); //$NON-NLS-1$
+			simpleTypes.put( "java.lang.Double", null ); //$NON-NLS-1$
+			simpleTypes.put( "java.lang.Byte", null ); //$NON-NLS-1$
+			simpleTypes.put( "java.lang.Character", null ); //$NON-NLS-1$
+			simpleTypes.put( "java.math.BigDecimal", null ); //$NON-NLS-1$
+			simpleTypes.put( "java.math.BigInteger", null ); //$NON-NLS-1$
 		}
-		return supportedTypes;
+		return simpleTypes;
 	}
 }

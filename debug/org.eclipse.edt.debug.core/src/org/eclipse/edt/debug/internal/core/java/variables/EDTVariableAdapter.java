@@ -29,38 +29,26 @@ public class EDTVariableAdapter implements IVariableAdapter
 	{
 		try
 		{
-			String signature = variable.getGenericSignature();
-			if ( signature != null )
+			if ( VariableUtil.isInstanceOf( variable, "egl.lang.EDictionary" ) ) //$NON-NLS-1$
 			{
-				if ( signature.startsWith( "Legl/lang/EglList<" ) //$NON-NLS-1$
-						|| signature.startsWith( "L/org/eclipse/edt/runtime/java/egl/lang/EglList<" ) ) //$NON-NLS-1$
-				{
-					return new ListVariable( frame.getDebugTarget(), variable, info, frame, parent );
-				}
-				else if ( signature.equals( "Legl/lang/EDictionary;" ) //$NON-NLS-1$
-						|| signature.equals( "Lorg/eclipse/edt/runtime/java/egl/lang/EDictionary;" ) ) //$NON-NLS-1$
-				{
-					return new MapVariable( frame.getDebugTarget(), variable, info, frame, parent ) {
-						@Override
-						protected String getTypeNameForElement( IJavaValue value )
-						{
-							return "egl.lang.EglAny"; //$NON-NLS-1$
-						}
-					};
-				}
-				else
-				{
-					if ( signature.startsWith( "Lorg/eclipse/edt/javart/AnyBoxedObject<" ) ) //$NON-NLS-1$
+				// Rather than the default map implementation, dictionary values are always of type 'any'
+				return new MapVariable( frame.getDebugTarget(), variable, info, frame, parent ) {
+					@Override
+					protected String getTypeNameForElement( IJavaValue value )
 					{
-						// Look for the "object" field and wrap that.
-						IVariable[] kids = variable.getValue().getVariables();
-						for ( IVariable kid : kids )
-						{
-							if ( kid instanceof IJavaVariable && "object".equals( kid.getName() ) ) //$NON-NLS-1$
-							{
-								return VariableUtil.createEGLVariable( (IJavaVariable)kid, info, frame, parent );
-							}
-						}
+						return "egl.lang.EglAny"; //$NON-NLS-1$
+					}
+				};
+			}
+			else if ( VariableUtil.isInstanceOf( variable, "org.eclipse.edt.javart.AnyBoxedObject" ) ) //$NON-NLS-1$
+			{
+				// Look for the "object" field and wrap that.
+				IVariable[] kids = variable.getValue().getVariables();
+				for ( IVariable kid : kids )
+				{
+					if ( kid instanceof IJavaVariable && "object".equals( kid.getName() ) ) //$NON-NLS-1$
+					{
+						return VariableUtil.createEGLVariable( (IJavaVariable)kid, info, frame, parent );
 					}
 				}
 			}

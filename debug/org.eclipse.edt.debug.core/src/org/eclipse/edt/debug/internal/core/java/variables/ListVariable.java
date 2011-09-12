@@ -73,13 +73,13 @@ public class ListVariable extends EGLJavaVariable
 					SMAPVariableInfo parentInfo = parentVariable.getVariableInfo();
 					
 					String elementType = parentInfo.type;
-					int idx = parentInfo.type.indexOf( '<' );
+					int idx = elementType.indexOf( '<' );
 					if ( idx != -1 )
 					{
-						int idx2 = parentInfo.type.indexOf( '>', idx );
+						int idx2 = elementType.lastIndexOf( '>' );
 						if ( idx2 != -1 )
 						{
-							elementType = parentInfo.type.substring( idx + 1, idx2 );
+							elementType = elementType.substring( idx + 1, idx2 );
 						}
 					}
 					
