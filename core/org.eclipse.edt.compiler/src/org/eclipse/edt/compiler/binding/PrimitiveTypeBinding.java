@@ -417,6 +417,11 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 		return REFERENCE_PRIMITIVES.contains(getPrimitive()) || (getPrimitive() == Primitive.DECIMAL && getLength() == 0);
 	}
 	
+	@Override
+	public boolean isInstantiable() {
+		return false;
+	}
+	
 	public IDataBinding findData(String simpleName) {
 		
 		if (getPrimitive() == Primitive.STRING) {
