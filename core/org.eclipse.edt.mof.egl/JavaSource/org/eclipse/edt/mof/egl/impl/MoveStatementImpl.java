@@ -19,7 +19,8 @@ public class MoveStatementImpl extends StatementImpl implements MoveStatement {
 	private static int Slot_sourceExpr=0;
 	private static int Slot_targetExpr=1;
 	private static int Slot_modifierExpr=2;
-	private static int totalSlots = 3;
+	private static int Slot_modifier=3;
+	private static int totalSlots = 4;
 	
 	public static int totalSlots() {
 		return totalSlots + StatementImpl.totalSlots();
@@ -30,6 +31,7 @@ public class MoveStatementImpl extends StatementImpl implements MoveStatement {
 		Slot_sourceExpr += offset;
 		Slot_targetExpr += offset;
 		Slot_modifierExpr += offset;
+		Slot_modifier += offset;
 	}
 	@Override
 	public Expression getSourceExpr() {
@@ -61,4 +63,14 @@ public class MoveStatementImpl extends StatementImpl implements MoveStatement {
 		slotSet(Slot_modifierExpr, value);
 	}
 	
+	@Override
+	public int getModifier() {
+		return (Integer)slotGet(Slot_modifier);
+	}
+	
+	@Override
+	public void setModifier(int value) {
+		slotSet(Slot_modifier, value);
+	}
+
 }
