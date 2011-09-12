@@ -95,7 +95,7 @@ ExternalType Widget type JavaScriptObject {
 	function getBackground() returns (String);
 	function setBackground(value String in);
 	
-	layoutData any { @Property { getMethod = "getLayoutData", setMethod = "setLayoutData" } };
+	layoutData any? { @Property { getMethod = "getLayoutData", setMethod = "setLayoutData" } };
 	function getLayoutData() returns (any);
 	function setLayoutData(value any in);
 
