@@ -68,11 +68,11 @@ public class DefaultVariableAdapter implements IVariableAdapter
 						}
 					}
 				}
-				else if ( VariableUtil.isInstanceOf( variable, "java.util.List" ) )
+				else if ( VariableUtil.isInstanceOf( variable, "java.util.List" ) ) //$NON-NLS-1$
 				{
 					return new ListVariable( frame.getDebugTarget(), variable, info, frame, parent );
 				}
-				else if ( VariableUtil.isInstanceOf( variable, "java.util.Map" ) )
+				else if ( VariableUtil.isInstanceOf( variable, "java.util.Map" ) ) //$NON-NLS-1$
 				{
 					return new MapVariable( frame.getDebugTarget(), variable, info, frame, parent );
 				}
