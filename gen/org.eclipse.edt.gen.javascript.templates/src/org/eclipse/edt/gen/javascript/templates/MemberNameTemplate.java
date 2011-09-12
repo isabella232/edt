@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import org.eclipse.edt.gen.CommonUtilities;
+import org.eclipse.edt.gen.EglContext;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -22,13 +24,14 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class MemberNameTemplate extends JavaScriptTemplate {
 
 	public void genAssignment(MemberName expr, Context ctx, TabbedWriter out, Expression arg1, String arg2) {
 		// check to see if we are copying boxed function parameters
 		if (expr.getMember() instanceof FunctionParameter
-			&& org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx)) {
+			&& isBoxedParameterType((FunctionParameter) expr.getMember(), ctx)) {
 			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 			out.print(".ezeCopy(");
 			// if we are doing some type of complex assignment, we need to place that in the argument
@@ -101,10 +104,18 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 			ctx.invoke(genQualifier, (Field) expr.getMember(), ctx, out);
 		}
 
+		boolean unbox = (expr.getMember() instanceof FunctionParameter
+			&& isBoxedParameterType((FunctionParameter) expr.getMember(), ctx));
+		unboxStart(ctx.getAttribute(expr, Constants.DONT_UNBOX), unbox, out);
 		ctx.invoke(genAccessor, expr.getMember(), ctx, out);
-		if (expr.getMember() instanceof FunctionParameter
-			&& org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx)) {
-			out.print(".ezeUnbox()");
-		}
+		unboxEnd(ctx.getAttribute(expr, Constants.DONT_UNBOX), unbox, out);
+	}
+	
+	private static boolean isBoxedParameterType(FunctionParameter parameter, EglContext ctx)
+	{
+		/* TODO sbg If the parm type is ANY, then we want to also treat as boxed; this check may get moved
+		 * to CommonUtilities.isBoxedParameterType if it makes sense for all generators....
+		 */
+		return (CommonUtilities.isBoxedParameterType(parameter, ctx) || (parameter.getType() == TypeUtils.Type_ANY));
 	}
 }

@@ -11,17 +11,28 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.IsAExpression;
 
 public class IsAExpressionTemplate extends JavaScriptTemplate {
 
 	public void genExpression(IsAExpression expr, Context ctx, TabbedWriter out) {
 		out.print("egl.isa(");
-		ctx.invoke(genExpression, expr.getObjectExpr(), ctx, out);
+		Expression objectExpr = expr.getObjectExpr();
+		ctx.putAttribute(objectExpr, Constants.DONT_UNBOX, Boolean.TRUE);
+		ctx.invoke(genExpression, objectExpr, ctx, out);
+		ctx.putAttribute(objectExpr, Constants.DONT_UNBOX, Boolean.FALSE);  //TODO sbg Can we just remove DONT_UNBOX?
 		out.print(", ");
-		out.print(quoted(expr.getEType().getTypeSignature()));
+		if (ctx.mapsToPrimitiveType(expr.getEType())) {
+			out.print("\"");
+			ctx.invoke(genSignature, expr.getEType(), ctx, out); // out.print(quoted(expr.getEType().getTypeSignature()));
+			out.print("\"");
+		}
+		else
+			ctx.invoke(genRuntimeTypeName, expr.getEType(), ctx, out, TypeNameKind.JavascriptObject);
 		out.print(")");
 	}
 }

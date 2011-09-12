@@ -13,12 +13,15 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.BoxingExpression;
+import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
@@ -167,6 +170,55 @@ public class TypeTemplate extends JavaScriptTemplate {
 		}
 	}
 	
+	public void genConversionOperation(Type type, Context ctx, TabbedWriter out, AsExpression arg) {
+		//NOGO sbg Copied from AnyTypeTemplate
+		if (arg.getConversionOperation() != null) {
+			out.print(ctx.getNativeImplementationMapping((Classifier) arg.getConversionOperation().getContainer()) + '.');
+			out.print("from");
+			out.print(ctx.getNativeTypeName(arg.getConversionOperation().getParameters().get(0).getType()));
+			out.print("(");
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			if (ctx.getPrimitiveMapping(arg.getObjectExpr().getType().getClassifier().getTypeSignature()) == null) {
+				out.print(",\"");
+				ctx.invoke(genSignature, arg.getObjectExpr().getType(), ctx, out, arg);
+				out.print("\"");
+			}
+			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
+			out.print(")");
+		} else if (ctx.mapsToPrimitiveType(arg.getEType())) {
+			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
+			out.print(".ezeCast(");
+			if (arg.getObjectExpr().getType() != TypeUtils.Type_ANY) {
+				BoxingExpression boxingExpr = IrFactory.INSTANCE.createBoxingExpression();
+				boxingExpr.setExpr(arg.getObjectExpr());
+				ctx.invoke(genExpression, boxingExpr, ctx, out);
+			}
+			else {
+				ctx.putAttribute(arg.getObjectExpr(), Constants.DONT_UNBOX, Boolean.TRUE);
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+				ctx.putAttribute(arg.getObjectExpr(), Constants.DONT_UNBOX, Boolean.FALSE);
+			}
+			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
+			out.print(")");
+		} else {
+			out.print(eglnamespace + "egl.lang.EglAny.ezeCast("); // TODO sbg need to dynamically get class name
+			if (arg.getObjectExpr().getType() != TypeUtils.Type_ANY) {
+				BoxingExpression boxingExpr = IrFactory.INSTANCE.createBoxingExpression();
+				boxingExpr.setExpr(arg.getObjectExpr());
+				ctx.invoke(genExpression, boxingExpr, ctx, out);
+			}
+			else {
+				ctx.putAttribute(arg.getObjectExpr(), Constants.DONT_UNBOX, Boolean.TRUE);
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+				ctx.putAttribute(arg.getObjectExpr(), Constants.DONT_UNBOX, Boolean.FALSE);
+			}
+			out.print(", ");
+			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.JavascriptImplementation);
+			out.print(")");
+		}
+	}
+
+	
 	public void genTypeBasedAssignment(Type type, Context ctx, TabbedWriter out, Assignment arg) {
 		String operator = "=";
 		if (arg.getOperator() != null && arg.getOperator().length() > 0) {
@@ -214,14 +266,20 @@ public class TypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genSignature(Type type, Context ctx, TabbedWriter out, TypedElement arg) {
-		if (arg.isNullable())
+		/* In EDT, nullable is a characteristic of the field, not the type, so this is no
+		 * longer appropriate.....
+		  if (arg.isNullable())
 			out.print("?");
+		 */
 		ctx.invoke(genSignature, type, ctx, out);
 	}
 
 	public void genSignature(Type type, Context ctx, TabbedWriter out, Expression arg) {
-		if (arg.isNullable())
+		/* In EDT, nullable is a characteristic of the field, not the type, so this is no
+		 * longer appropriate.....
+		  if (arg.isNullable())
 			out.print("?");
+		 */
 		ctx.invoke(genSignature, type, ctx, out);
 	}
 
