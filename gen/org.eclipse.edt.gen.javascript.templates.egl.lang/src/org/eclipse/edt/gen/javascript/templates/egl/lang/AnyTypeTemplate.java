@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.egl.lang;
 
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -52,13 +53,24 @@ public class AnyTypeTemplate extends JavaScriptTemplate {
 				ctx.invoke(genExpression, boxingExpr, ctx, out);
 			}
 			else {
+				ctx.putAttribute(arg.getObjectExpr(), Constants.DONT_UNBOX, Boolean.TRUE);
 				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+				ctx.putAttribute(arg.getObjectExpr(), Constants.DONT_UNBOX, Boolean.FALSE);
 			}
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
 			out.print(")");
 		} else {
 			out.print(eglnamespace + "egl.lang.EglAny.ezeCast("); // TODO sbg need to dynamically get class name
-			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			if (arg.getObjectExpr().getType() != TypeUtils.Type_ANY) {
+				BoxingExpression boxingExpr = IrFactory.INSTANCE.createBoxingExpression();
+				boxingExpr.setExpr(arg.getObjectExpr());
+				ctx.invoke(genExpression, boxingExpr, ctx, out);
+			}
+			else {
+				ctx.putAttribute(arg.getObjectExpr(), Constants.DONT_UNBOX, Boolean.TRUE);
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+				ctx.putAttribute(arg.getObjectExpr(), Constants.DONT_UNBOX, Boolean.FALSE);
+			}
 			out.print(", ");
 			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.JavascriptImplementation);
 			out.print(")");
