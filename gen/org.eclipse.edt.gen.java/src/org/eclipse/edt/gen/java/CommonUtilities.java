@@ -425,6 +425,8 @@ public class CommonUtilities {
 				FunctionParameter decl = function.getParameters().get(i);
 				if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx))
 					ctx.getSmapExtension().append("Lorg/eclipse/edt/javart/AnyBoxedObject;");
+				else if (decl.getType() instanceof Delegate)
+					ctx.getSmapExtension().append("Lorg/eclipse/edt/javart/Delegate;");
 				else
 					ctx.getSmapExtension().append(generateJavaTypeSignature(function.getParameters().get(i).getType(), ctx));
 			}
