@@ -27,14 +27,38 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 
 	private java.util.List<T> list;
 
+	/**
+	 * Creates an empty list.
+	 */
 	public EglList() {
 		list = new ArrayList<T>();
 	}
 
+	/**
+	 * Creates a list of the specified size, with null elements.
+	 */
 	public EglList(int initialSize) {
 		list = new ArrayList<T>(initialSize);
 		for (int i = 0; i < initialSize; i++) {
 			list.add(null);
+		}
+	}
+
+	/**
+	 * Creates a list of the specified size, with elements initialized by using
+	 * the default constructor of the specified Class.
+	 */
+	public EglList(int initialSize, Class<T> elementClass) {
+		list = new ArrayList<T>(initialSize);
+		for (int i = 0; i < initialSize; i++) {
+			try
+			{
+				list.add( elementClass.newInstance() );
+			}
+			catch ( Exception ex )
+			{
+				throw new InvalidArgumentException();
+			}
 		}
 	}
 
@@ -95,26 +119,51 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 	}
 
 	@Override
-	public void resize( int size ) 
+	public void resize( int size, Class<T> elementClass ) 
 	{
 		if ( size == 0 )
 		{
 			list.clear();
 		}
-		else if ( size < 0 )
-		{
-			throw new InvalidArgumentException();
-		}
 		else if ( size > list.size() )
 		{
-			//TODO need to add elements!
+			// Add elements to the end of the list.
+			if ( elementClass == null )
+			{
+				// The elements are nullable, so add nulls.
+				for ( int needed = size - list.size(); needed > 0; needed-- )
+				{
+					list.add( null );
+				}
+			}
+			else
+			{
+				// The elements aren't nullable, so add new instances using the
+				// class's default constructor.
+				for ( int needed = size - list.size(); needed > 0; needed-- )
+				{
+					try
+					{
+						list.add( elementClass.newInstance() );
+					}
+					catch ( Exception ex )
+					{
+						throw new InvalidArgumentException();
+					}
+				}
+			}
 		}
-		else
+		else if ( size > 0 )
 		{
+			// Remove elements from the end of the list.
 			for ( int index = list.size() - 1; index >= size; index-- )
 			{
 				list.remove( index );
 			}
+		}
+		else
+		{
+			throw new InvalidArgumentException();
 		}
 	}
 
@@ -141,7 +190,7 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 						}
 						else
 						{
-							return 0; //TODO throw something?
+							return 0; // This shouldn't happen.
 						}
 					}
 				} 

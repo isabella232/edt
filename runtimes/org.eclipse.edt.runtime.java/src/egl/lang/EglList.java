@@ -35,7 +35,7 @@ public interface EglList<T> extends EglAny, java.util.List<T> {
 
 	public void removeElement(int index);
 
-	public void resize(int size);
+	public void resize(int size, Class<T> elementClass);
 
 	public void setElement(T element, int index);
 
