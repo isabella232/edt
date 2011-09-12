@@ -12,6 +12,7 @@
 package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.mof.codegen.api.AbstractTemplate;
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.IrFactory;
 
 public abstract class JavaScriptTemplate extends AbstractTemplate {
@@ -156,4 +157,12 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 		return minus + value;
 	}
 
+    public static void unboxStart(Object dontunbox, boolean unbox, TabbedWriter out){
+    	if ((unbox) && ((dontunbox == null) || (Boolean.FALSE.equals(dontunbox))))
+			out.print("egl.egl.lang.EglAny.unbox(");
+    }
+    public static void unboxEnd(Object dontunbox, boolean unbox, TabbedWriter out){
+    	if ((unbox) && ((dontunbox == null) || (Boolean.FALSE.equals(dontunbox))))
+			out.print(")");
+    }
 }

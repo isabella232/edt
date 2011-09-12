@@ -26,6 +26,8 @@ public class Constants {
 	public static final String SubKey_simpleContent = "simpleContent";
 	
 	public static final String EXPR_LHS = "EXPR_LHS";
+	
+	public static final String DONT_UNBOX = "DONT_UNBOX";
 
 
 	// command parameter internal names
