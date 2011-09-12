@@ -545,6 +545,35 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		stmt.setSourceExpr((Expression)stack.pop());
 		moveStatement.getTarget().accept(this);
 		stmt.setTargetExpr((LHSExpr)stack.pop());
+		
+		if (moveStatement.getMoveModifierOpt() != null) {
+			if (moveStatement.getMoveModifierOpt().isByName()) {
+				stmt.setModifier(MoveStatement.MOVE_BYNAME);
+			}
+			else {
+				if (moveStatement.getMoveModifierOpt().isByPosition()) {
+					stmt.setModifier(MoveStatement.MOVE_BYPOSITION);
+				}
+				else {
+					if (moveStatement.getMoveModifierOpt().isFor()) {
+						stmt.setModifier(MoveStatement.MOVE_FOR);
+						moveStatement.getMoveModifierOpt().getExpression().accept(this);
+						stmt.setModifierExpr((Expression) stack.pop());
+					}
+					else {
+						if (moveStatement.getMoveModifierOpt().isForAll()) {
+							stmt.setModifier(MoveStatement.MOVE_FORALL);
+						}
+						else {
+							if (moveStatement.getMoveModifierOpt().isWithV60Compat()) {
+								stmt.setModifier(MoveStatement.MOVE_WITHV60COMPAT);
+							}
+						}
+					}					
+				}				
+			}
+		}
+		
 		// TODO: Handle MOVE statement options
 		stack.push(stmt);
 		setElementInformation(moveStatement, stmt);
