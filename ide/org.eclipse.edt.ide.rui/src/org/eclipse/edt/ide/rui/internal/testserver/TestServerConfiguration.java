@@ -265,7 +265,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 							// Fall through.
 						case IResourceDelta.ADDED:
 						case IResourceDelta.REMOVED:
-							if ("egldd".equals(delta.getResource().getFileExtension()) //$NON-NLS-1$
+							if ("egldd".equals(delta.getFullPath().getFileExtension()) //$NON-NLS-1$
 									&& isOnEGLPath(project, delta.getResource().getProject(), new HashSet<IProject>())) {
 								recompute[0] = true;
 								return false;
