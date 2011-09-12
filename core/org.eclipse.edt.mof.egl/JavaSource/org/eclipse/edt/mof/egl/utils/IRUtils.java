@@ -404,6 +404,13 @@ public class IRUtils {
 		return false;
 	}
 
+	private static boolean isInt(Classifier clazz) {
+		if (clazz != null) {
+			return (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGL_EGLInt)) || (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGLInt));
+		}
+		return false;
+	}
+
 	public static Expression makeExprCompatibleToType(Expression expr, Type type) {
 		Type exprType = expr.getType();
 		if (expr instanceof Name) {
@@ -427,6 +434,10 @@ public class IRUtils {
 			return expr;
 		}
 
+		if (isInt(exprType.getClassifier()) && isInt(type.getClassifier())) {
+			return expr;
+		}
+		
 		if (exprType.getClassifier().equals(type.getClassifier())) {
 			if (exprType instanceof SequenceType) {
 				if (((SequenceType)exprType).getLength() < ((SequenceType)type).getLength()) {

@@ -12,7 +12,6 @@
 package org.eclipse.edt.mof.egl.utils;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.edt.mof.EObject;
@@ -33,6 +32,7 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Operation;
+import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.SequenceType;
@@ -199,10 +199,10 @@ public class TypeUtils implements MofConversion {
 			if (key.equalsIgnoreCase(Type_EGLNumber)) {
 				return false;
 			}
-// The following should be uncommented when bug 353902 is resolved			
-//			if (key.equalsIgnoreCase(Type_EGLDecimal) && type instanceof ParameterizableType) {
-//				return false;
-//			}
+
+			if (key.equalsIgnoreCase(Type_EGLDecimal) && type instanceof ParameterizableType) {
+				return false;
+			}
 			
 			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_AnyValue));
 		}
