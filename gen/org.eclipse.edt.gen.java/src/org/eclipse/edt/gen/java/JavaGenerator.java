@@ -21,6 +21,7 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
+import org.eclipse.edt.gen.CommonUtilities;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
@@ -117,12 +118,12 @@ public class JavaGenerator extends Generator {
 		catch (TemplateException e) {
 			String[] details1 = new String[] { e.getLocalizedMessage() };
 			EGLMessage message1 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-				Constants.EGLMESSAGE_EXCEPTION_OCCURED, e, details1, context.getLastStatementLocation());
+				Constants.EGLMESSAGE_EXCEPTION_OCCURED, e, details1, CommonUtilities.includeEndOffset(context.getLastStatementLocation(), context));
 			context.getMessageRequestor().addMessage(message1);
 			if (e.getCause() != null) {
 				String[] details2 = new String[] { e.getCause().toString() };
 				EGLMessage message2 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_STACK_TRACE,
-					e, details2, context.getLastStatementLocation());
+					e, details2, CommonUtilities.includeEndOffset(context.getLastStatementLocation(), context));
 				context.getMessageRequestor().addMessage(message2);
 			}
 			// print out the whole stack trace
@@ -171,13 +172,13 @@ public class JavaGenerator extends Generator {
 			catch (UnsupportedEncodingException e) {
 				String[] details = new String[] { "UTF-8" };
 				EGLMessage message = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-					Constants.EGLMESSAGE_SMAPFILE_ENCODING_FAILED, null, details, context.getLastStatementLocation());
+					Constants.EGLMESSAGE_SMAPFILE_ENCODING_FAILED, null, details, CommonUtilities.includeEndOffset(context.getLastStatementLocation(), context));
 				context.getMessageRequestor().addMessage(message);
 			}
 			catch (IOException e) {
 				String[] details = new String[] { outSmapFile.getName() };
 				EGLMessage message = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-					Constants.EGLMESSAGE_SMAPFILE_WRITE_FAILED, null, details, context.getLastStatementLocation());
+					Constants.EGLMESSAGE_SMAPFILE_WRITE_FAILED, null, details, CommonUtilities.includeEndOffset(context.getLastStatementLocation(), context));
 				context.getMessageRequestor().addMessage(message);
 				return;
 			}
