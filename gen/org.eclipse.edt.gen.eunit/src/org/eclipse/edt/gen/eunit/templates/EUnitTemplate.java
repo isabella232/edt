@@ -103,7 +103,7 @@ public abstract class EUnitTemplate extends AbstractTemplate {
 			functionCnt++;
 		}
 		out.println("];");
-		out.println("runTestMtds runTestMethod[] = new runTestMethod[" + functionCnt + "];");
+		out.println("runTestMtds runTestMethod?[] = new runTestMethod?[" + functionCnt + "];");
 		int funcIndex = 1;
 		for(String function : functions){
 			out.print("runTestMtds["+ funcIndex+ "] = ");
