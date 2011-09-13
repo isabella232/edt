@@ -18,12 +18,19 @@ import org.eclipse.jdt.core.JavaModelException;
 
 public final class EGLProjectInfoUtility {
 	
+	private static String JAVASCRIPT_DEV_OUTPUT_DIRECTORY = "javascriptDev";
+	
 	public static String getGeneratedJavaScriptDevFolder( IProject project )	throws CoreException, JavaModelException {
-		String javaGenDir = ProjectSettingsUtility.getJavaScriptDevGenerationDirectory(project);
-		if(javaGenDir!=null)
-			return EclipseUtilities.convertFromInternalPath(javaGenDir);
-		else
-			return null;
+//		String javaGenDir = ProjectSettingsUtility.getJavaScriptDevGenerationDirectory(project);
+//		if(javaGenDir!=null)
+//			return EclipseUtilities.convertFromInternalPath(javaGenDir);
+//		else
+//			return null;
+
+		//JavaScriptDev generator is hidden from Compiler setting UI
+		//Since user can not change the output folder, hard code it here to improve performance
+		return JAVASCRIPT_DEV_OUTPUT_DIRECTORY;
+		
 	}
 
 	
