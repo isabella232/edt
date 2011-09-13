@@ -41,6 +41,18 @@ public class EBoolean extends AnyBoxedObject<Boolean> {
 		return EString.asString(object);
 	}
 
+	public static Boolean asBoolean(Boolean value) throws AnyException {
+		if (value == null)
+			return null;
+		return value;
+	}
+
+	public static Boolean asBoolean(EBoolean value) throws AnyException {
+		if (value == null)
+			return null;
+		return value.ezeUnbox();
+	}
+
 	public static Boolean asBoolean(Number number) throws AnyException {
 		if (number == null)
 			return null;

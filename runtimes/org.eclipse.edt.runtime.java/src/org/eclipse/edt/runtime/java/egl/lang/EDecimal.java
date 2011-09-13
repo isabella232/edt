@@ -285,6 +285,15 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 			return BigDecimal.valueOf(value);
 	}
 
+	public static BigDecimal asDecimal(ESmallint value, Integer... args) throws AnyException {
+		if (value == null)
+			return null;
+		if (args.length == 2)
+			return asDecimal(BigDecimal.valueOf(value.ezeUnbox()), args[0], args[1]);
+		else
+			return BigDecimal.valueOf(value.ezeUnbox());
+	}
+
 	public static BigDecimal asDecimal(Integer value, Integer... args) throws AnyException {
 		if (value == null)
 			return null;
@@ -292,6 +301,15 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 			return asDecimal(BigDecimal.valueOf(value), args[0], args[1]);
 		else
 			return BigDecimal.valueOf(value);
+	}
+
+	public static BigDecimal asDecimal(EInt value, Integer... args) throws AnyException {
+		if (value == null)
+			return null;
+		if (args.length == 2)
+			return asDecimal(BigDecimal.valueOf(value.ezeUnbox()), args[0], args[1]);
+		else
+			return BigDecimal.valueOf(value.ezeUnbox());
 	}
 
 	public static BigDecimal asDecimal(Long value, Integer... args) throws AnyException {
@@ -303,6 +321,15 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 			return BigDecimal.valueOf(value);
 	}
 
+	public static BigDecimal asDecimal(EBigint value, Integer... args) throws AnyException {
+		if (value == null)
+			return null;
+		if (args.length == 2)
+			return asDecimal(BigDecimal.valueOf(value.ezeUnbox()), args[0], args[1]);
+		else
+			return BigDecimal.valueOf(value.ezeUnbox());
+	}
+
 	public static BigDecimal asDecimal(Float value, Integer... args) throws AnyException {
 		if (value == null)
 			return null;
@@ -310,6 +337,15 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 			return asDecimal(BigDecimal.valueOf(value), args[0], args[1]);
 		else
 			return BigDecimal.valueOf(value);
+	}
+
+	public static BigDecimal asDecimal(ESmallfloat value, Integer... args) throws AnyException {
+		if (value == null)
+			return null;
+		if (args.length == 2)
+			return asDecimal(BigDecimal.valueOf(value.ezeUnbox()), args[0], args[1]);
+		else
+			return BigDecimal.valueOf(value.ezeUnbox());
 	}
 
 	public static BigDecimal asDecimal(Double value, Integer... args) throws AnyException {
@@ -321,6 +357,15 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 			return BigDecimal.valueOf(value);
 	}
 
+	public static BigDecimal asDecimal(EFloat value, Integer... args) throws AnyException {
+		if (value == null)
+			return null;
+		if (args.length == 2)
+			return asDecimal(BigDecimal.valueOf(value.ezeUnbox()), args[0], args[1]);
+		else
+			return BigDecimal.valueOf(value.ezeUnbox());
+	}
+
 	public static BigDecimal asDecimal(BigDecimal value, Integer... args) throws AnyException {
 		if (value == null)
 			return null;
@@ -330,16 +375,25 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 			return value;
 	}
 
+	public static BigDecimal asDecimal(EDecimal value, Integer... args) throws AnyException {
+		if (value == null)
+			return null;
+		if (args.length == 2)
+			return asDecimal(value.ezeUnbox(), args[0], args[1]);
+		else
+			return value.ezeUnbox();
+	}
+
 	public static BigDecimal asDecimal(BigDecimal value, int precision, int scale) throws AnyException {
 		if (value == null)
 			return null;
 		return asDecimal(value, getMaxValue(precision, scale), getMinValue(precision, scale), precision, scale, false);
 	}
 
-	public static BigDecimal asDecimal(BigInteger value, int precision, int scale) throws AnyException {
+	public static BigDecimal asDecimal(EDecimal value, int precision, int scale) throws AnyException {
 		if (value == null)
 			return null;
-		return asDecimal(new BigDecimal(value), getMaxValue(precision, scale), getMinValue(precision, scale), precision, scale, false);
+		return asDecimal(value.ezeUnbox(), getMaxValue(precision, scale), getMinValue(precision, scale), precision, scale, false);
 	}
 
 	public static BigDecimal asDecimal(BigDecimal value, BigDecimal max, BigDecimal min, int precision, int scale) throws AnyException {
@@ -375,10 +429,22 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 		}
 	}
 
+	public static BigDecimal asDecimal(BigInteger value, int precision, int scale) throws AnyException {
+		if (value == null)
+			return null;
+		return asDecimal(new BigDecimal(value), getMaxValue(precision, scale), getMinValue(precision, scale), precision, scale, false);
+	}
+
 	public static BigDecimal asDecimal(String value, Integer... args) throws AnyException {
 		if (value == null)
 			return null;
 		return asDecimal(asDecimal(value, false), args);
+	}
+
+	public static BigDecimal asDecimal(EString value, Integer... args) throws AnyException {
+		if (value == null)
+			return null;
+		return asDecimal(asDecimal(value.ezeUnbox(), false), args);
 	}
 
 	public static BigDecimal asDecimal(String value, boolean blanksAsZero) {

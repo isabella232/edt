@@ -12,6 +12,7 @@
 package org.eclipse.edt.runtime.java.egl.lang;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.regex.PatternSyntaxException;
 
@@ -20,7 +21,11 @@ import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
 
-import egl.lang.*;
+import egl.lang.AnyException;
+import egl.lang.InvalidIndexException;
+import egl.lang.InvalidPatternException;
+import egl.lang.NullValueException;
+import egl.lang.TypeCastException;
 
 public class EString extends AnyBoxedObject<String> {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -74,10 +79,22 @@ public class EString extends AnyBoxedObject<String> {
 		return asString(String.valueOf(value), length);
 	}
 
+	public static String asString(EBoolean value, Integer... length) {
+		if (value == null)
+			return null;
+		return asString(String.valueOf(value.ezeUnbox()), length);
+	}
+
 	public static String asString(Short value, Integer... length) {
 		if (value == null)
 			return null;
 		return asString(String.valueOf(value), length);
+	}
+
+	public static String asString(ESmallint value, Integer... length) {
+		if (value == null)
+			return null;
+		return asString(String.valueOf(value.ezeUnbox()), length);
 	}
 
 	public static String asString(Integer value, Integer... length) {
@@ -86,10 +103,22 @@ public class EString extends AnyBoxedObject<String> {
 		return asString(String.valueOf(value), length);
 	}
 
+	public static String asString(EInt value, Integer... length) {
+		if (value == null)
+			return null;
+		return asString(String.valueOf(value.ezeUnbox()), length);
+	}
+
 	public static String asString(Long value, Integer... length) {
 		if (value == null)
 			return null;
 		return asString(String.valueOf(value), length);
+	}
+
+	public static String asString(EBigint value, Integer... length) {
+		if (value == null)
+			return null;
+		return asString(String.valueOf(value.ezeUnbox()), length);
 	}
 
 	public static String asString(Float value, Integer... length) {
@@ -98,13 +127,37 @@ public class EString extends AnyBoxedObject<String> {
 		return asString(String.valueOf(value), length);
 	}
 
+	public static String asString(ESmallfloat value, Integer... length) {
+		if (value == null)
+			return null;
+		return asString(String.valueOf(value.ezeUnbox()), length);
+	}
+
 	public static String asString(Double value, Integer... length) {
 		if (value == null)
 			return null;
 		return asString(String.valueOf(value), length);
 	}
 
+	public static String asString(EFloat value, Integer... length) {
+		if (value == null)
+			return null;
+		return asString(String.valueOf(value.ezeUnbox()), length);
+	}
+
 	public static String asString(BigDecimal value, Integer... length) {
+		if (value == null)
+			return null;
+		return asString(String.valueOf(value), length);
+	}
+
+	public static String asString(EDecimal value, Integer... length) {
+		if (value == null)
+			return null;
+		return asString(String.valueOf(value.ezeUnbox()), length);
+	}
+
+	public static String asString(BigInteger value, Integer... length) {
 		if (value == null)
 			return null;
 		return asString(String.valueOf(value), length);
@@ -118,6 +171,16 @@ public class EString extends AnyBoxedObject<String> {
 		return value;
 	}
 
+	public static String asString(EString value, Integer... length) {
+		if (value == null)
+			return null;
+		String val;
+		if (length.length != 0 && value.ezeUnbox().length() > length[0])
+			return value.ezeUnbox().substring(0, length[0]);
+		else
+			return value.ezeUnbox();
+	}
+
 	/**
 	 * TODO This method gets called for two reasons: converting date to string and converting timestamp to string. But it
 	 * can't do both properly, based on the specs below. The Calendar object from a date will look exactly like the Calendar
@@ -128,6 +191,18 @@ public class EString extends AnyBoxedObject<String> {
 	 * seconds, in the format "yyyy-MM-dd HH:mm:ss.SSSSSS". Leading zeros are included in each field of the string when
 	 * necessary, e.g. January is represented as "01" not "1".
 	 */
+	public static String asString(EDate value, Integer... length) {
+		if (value == null)
+			return null;
+		return asString(value.ezeUnbox(), length);
+	}
+
+	public static String asString(ETimestamp value, Integer... length) {
+		if (value == null)
+			return null;
+		return asString(value.ezeUnbox(), length);
+	}
+
 	public static String asString(Calendar cal, Integer... length) {
 		if (cal == null)
 			return null;

@@ -138,10 +138,34 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return EString.asString(object);
 	}
 
+	public static Calendar asTimestamp(EDate timestamp) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp(timestamp.ezeUnbox());
+	}
+
+	public static Calendar asTimestamp(ETimestamp timestamp) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp(timestamp.ezeUnbox());
+	}
+
 	public static Calendar asTimestamp(Calendar timestamp) throws AnyException {
 		if (timestamp == null)
 			return null;
 		return asTimestamp(timestamp, DefaultPattern);
+	}
+
+	public static Calendar asTimestamp(EDate timestamp, String timespanMask) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp(timestamp.ezeUnbox(), timespanMask);
+	}
+
+	public static Calendar asTimestamp(ETimestamp timestamp, String timespanMask) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp(timestamp.ezeUnbox(), timespanMask);
 	}
 
 	public static Calendar asTimestamp(Calendar timestamp, String timespanMask) throws AnyException {
@@ -160,6 +184,12 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return asTimestamp(timestamp, startCode, endCode);
 	}
 
+	public static Calendar asTimestamp(EString timestamp, Integer... args) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp(timestamp.ezeUnbox(), args);
+	}
+
 	public static Calendar asTimestamp(String timestamp, Integer... args) throws AnyException {
 		if (timestamp == null)
 			return null;
@@ -167,6 +197,12 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			return convert(timestamp, args[0], args[1]);
 		else
 			return asTimestamp(timestamp, DefaultPattern);
+	}
+
+	public static Calendar asTimestamp(EString timestamp, String timespanMask) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp(timestamp.ezeUnbox(), timespanMask);
 	}
 
 	public static Calendar asTimestamp(String timestamp, String timespanMask) throws AnyException {
@@ -183,6 +219,18 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return convert(timestamp, startCode, endCode);
 	}
 
+	public static Calendar asTimestamp(EDate timestamp, Integer... args) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp(timestamp.ezeUnbox(), args);
+	}
+
+	public static Calendar asTimestamp(ETimestamp timestamp, Integer... args) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp(timestamp.ezeUnbox(), args);
+	}
+
 	public static Calendar asTimestamp(Calendar date, Integer... args) {
 		if (date == null)
 			return null;
@@ -190,6 +238,18 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			return asTimestamp((Calendar) date, YEAR_CODE, SECOND_CODE);
 		else
 			return asTimestamp((Calendar) date, args[0], args[1]);
+	}
+
+	public static Calendar asTimestamp(EDate timestamp, int startCode, int endCode) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp(timestamp.ezeUnbox(), startCode, endCode);
+	}
+
+	public static Calendar asTimestamp(ETimestamp timestamp, int startCode, int endCode) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp(timestamp.ezeUnbox(), startCode, endCode);
 	}
 
 	public static Calendar asTimestamp(Calendar date, int startCode, int endCode) {
@@ -273,6 +333,12 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * zeros so you get Jan 1 1970, etc. When we parse by hand, unspecified fields are set to the current time. This behavior
 	 * is OK for assignments, but it must be accounted for when comparing two timestamps.
 	 */
+	public static Calendar asTimestamp(EString timestamp, String format, int startCode, int endCode) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp(timestamp.ezeUnbox(), format, startCode, endCode);
+	}
+
 	public static Calendar asTimestamp(String timestamp, String format, int startCode, int endCode) throws AnyException {
 		if (timestamp == null)
 			return null;

@@ -53,10 +53,22 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return value.intValue();
 	}
 
+	public static Integer asInt(ESmallint value) throws AnyException {
+		if (value == null)
+			return null;
+		return value.ezeUnbox().intValue();
+	}
+
 	public static Integer asInt(Integer value) throws AnyException {
 		if (value == null)
 			return null;
 		return value.intValue();
+	}
+
+	public static Integer asInt(EInt value) throws AnyException {
+		if (value == null)
+			return null;
+		return value.ezeUnbox().intValue();
 	}
 
 	public static Integer asInt(Long value) throws AnyException {
@@ -76,20 +88,20 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 
-	public static Integer asInt(BigInteger value) throws AnyException {
+	public static Integer asInt(EBigint value) throws AnyException {
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
 			try {
-				result = new BigDecimal(value).intValueExact();
+				result = BigDecimal.valueOf(value.ezeUnbox()).intValueExact();
 			}
 			catch (ArithmeticException ex) {
 				throw new NumericOverflowException();
 			}
 		else
-			result = value.intValue();
+			result = Long.valueOf(value.ezeUnbox()).intValue();
 		return result;
 	}
 
@@ -110,6 +122,23 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 
+	public static Integer asInt(ESmallfloat value) throws AnyException {
+		if (value == null)
+			return null;
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		int result = 0;
+		if (throwOverflowExceptions)
+			try {
+				result = BigDecimal.valueOf(value.ezeUnbox()).intValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		else
+			result = Float.valueOf(value.ezeUnbox()).intValue();
+		return result;
+	}
+
 	public static Integer asInt(Double value) throws AnyException {
 		if (value == null)
 			return null;
@@ -124,6 +153,23 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 			}
 		else
 			result = Double.valueOf(value).intValue();
+		return result;
+	}
+
+	public static Integer asInt(EFloat value) throws AnyException {
+		if (value == null)
+			return null;
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		int result = 0;
+		if (throwOverflowExceptions)
+			try {
+				result = BigDecimal.valueOf(value.ezeUnbox()).intValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		else
+			result = Double.valueOf(value.ezeUnbox()).intValue();
 		return result;
 	}
 
@@ -144,10 +190,50 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 
+	public static Integer asInt(EDecimal value) throws AnyException {
+		if (value == null)
+			return null;
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		int result = 0;
+		if (throwOverflowExceptions)
+			try {
+				result = value.ezeUnbox().intValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		else
+			result = value.ezeUnbox().intValue();
+		return result;
+	}
+
+	public static Integer asInt(BigInteger value) throws AnyException {
+		if (value == null)
+			return null;
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		int result = 0;
+		if (throwOverflowExceptions)
+			try {
+				result = new BigDecimal(value).intValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		else
+			result = value.intValue();
+		return result;
+	}
+
 	public static Integer asInt(String value) throws AnyException {
 		if (value == null)
 			return null;
 		return asInt(EDecimal.asDecimal(value));
+	}
+
+	public static Integer asInt(EString value) throws AnyException {
+		if (value == null)
+			return null;
+		return asInt(EDecimal.asDecimal(value.ezeUnbox()));
 	}
 
 	/**

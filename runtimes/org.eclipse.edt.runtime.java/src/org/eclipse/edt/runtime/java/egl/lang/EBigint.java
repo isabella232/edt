@@ -12,6 +12,7 @@
 package org.eclipse.edt.runtime.java.egl.lang;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
@@ -61,14 +62,32 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return value.longValue();
 	}
 
+	public static Long asBigint(ESmallint value) {
+		if (value == null)
+			return null;
+		return value.ezeUnbox().longValue();
+	}
+
 	public static Long asBigint(Integer value) {
 		if (value == null)
 			return null;
 		return value.longValue();
 	}
 
+	public static Long asBigint(EInt value) {
+		if (value == null)
+			return null;
+		return value.ezeUnbox().longValue();
+	}
+
 	public static Long asBigint(Long value) {
 		return value;
+	}
+
+	public static Long asBigint(EBigint value) {
+		if (value == null)
+			return null;
+		return value.ezeUnbox();
 	}
 
 	public static Long asBigint(Float value) {
@@ -85,6 +104,23 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 			}
 		else
 			result = Float.valueOf(value).longValue();
+		return result;
+	}
+
+	public static Long asBigint(ESmallfloat value) {
+		if (value == null)
+			return null;
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		long result = 0;
+		if (throwOverflowExceptions)
+			try {
+				result = BigDecimal.valueOf(value.ezeUnbox()).longValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		else
+			result = Float.valueOf(value.ezeUnbox()).longValue();
 		return result;
 	}
 
@@ -105,6 +141,23 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return result;
 	}
 
+	public static Long asBigint(EFloat value) {
+		if (value == null)
+			return null;
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		long result = 0;
+		if (throwOverflowExceptions)
+			try {
+				result = BigDecimal.valueOf(value.ezeUnbox()).longValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		else
+			result = Double.valueOf(value.ezeUnbox()).longValue();
+		return result;
+	}
+
 	public static Long asBigint(BigDecimal value) throws AnyException {
 		if (value == null)
 			return null;
@@ -122,8 +175,48 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return result;
 	}
 
+	public static Long asBigint(EDecimal value) throws AnyException {
+		if (value == null)
+			return null;
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
+		long result = 0;
+		if (throwOverflowExceptions)
+			try {
+				result = value.ezeUnbox().longValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		else
+			result = value.ezeUnbox().longValue();
+		return result;
+	}
+
+	public static Long asBigint(BigInteger value) throws AnyException {
+		if (value == null)
+			return null;
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
+		long result = 0;
+		if (throwOverflowExceptions)
+			try {
+				result = new BigDecimal(value).longValueExact();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		else
+			result = value.longValue();
+		return result;
+	}
+
 	public static Long asBigint(String value) throws AnyException {
 		return asBigint(EDecimal.asDecimal(value));
+	}
+
+	public static Long asBigint(EString value) throws AnyException {
+		if (value == null)
+			return null;
+		return asBigint(EDecimal.asDecimal(value.ezeUnbox()));
 	}
 
 	/**

@@ -78,6 +78,10 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	 * identical.
 	 * @throws TypeCastException if the string can't be parsed into a date.
 	 */
+	public static Calendar asDate(EString date) throws TypeCastException {
+		return asDate(date.ezeUnbox());
+	}
+
 	public static Calendar asDate(String date) throws TypeCastException {
 		if (date == null)
 			return null;
@@ -157,6 +161,18 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		cal.set(Calendar.MONTH, months - 1);
 		cal.set(Calendar.DATE, days);
 		return cal;
+	}
+
+	public static Calendar asDate(EDate date) throws AnyException {
+		if (date == null)
+			return null;
+		return asDate(date.ezeUnbox());
+	}
+
+	public static Calendar asDate(ETimestamp date) throws AnyException {
+		if (date == null)
+			return null;
+		return asDate(date.ezeUnbox());
 	}
 
 	public static Calendar asDate(Calendar date) throws AnyException {

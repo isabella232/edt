@@ -12,6 +12,7 @@
 package org.eclipse.edt.runtime.java.egl.lang;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
@@ -52,10 +53,22 @@ public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 		return Double.valueOf(value);
 	}
 
+	public static Double asFloat(ESmallint value) {
+		if (value == null)
+			return null;
+		return Double.valueOf(value.ezeUnbox());
+	}
+
 	public static Double asFloat(Integer value) {
 		if (value == null)
 			return null;
 		return Double.valueOf(value);
+	}
+
+	public static Double asFloat(EInt value) {
+		if (value == null)
+			return null;
+		return Double.valueOf(value.ezeUnbox());
 	}
 
 	public static Double asFloat(Long value) {
@@ -64,10 +77,22 @@ public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 		return Double.valueOf(value);
 	}
 
+	public static Double asFloat(EBigint value) {
+		if (value == null)
+			return null;
+		return Double.valueOf(value.ezeUnbox());
+	}
+
 	public static Double asFloat(Float value) {
 		if (value == null)
 			return null;
 		return Double.valueOf(value);
+	}
+
+	public static Double asFloat(ESmallfloat value) {
+		if (value == null)
+			return null;
+		return Double.valueOf(value.ezeUnbox());
 	}
 
 	public static Double asFloat(Double value) {
@@ -76,7 +101,25 @@ public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 		return Double.valueOf(value);
 	}
 
+	public static Double asFloat(EFloat value) {
+		if (value == null)
+			return null;
+		return Double.valueOf(value.ezeUnbox());
+	}
+
 	public static Double asFloat(BigDecimal value) {
+		if (value == null)
+			return null;
+		return value.doubleValue();
+	}
+
+	public static Double asFloat(EDecimal value) {
+		if (value == null)
+			return null;
+		return value.ezeUnbox().doubleValue();
+	}
+
+	public static Double asFloat(BigInteger value) {
 		if (value == null)
 			return null;
 		return value.doubleValue();
@@ -86,6 +129,12 @@ public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 		if (value == null)
 			return null;
 		return asFloat(EDecimal.asDecimal(value));
+	}
+
+	public static Double asFloat(EString value) throws AnyException {
+		if (value == null)
+			return null;
+		return asFloat(EDecimal.asDecimal(value.ezeUnbox()));
 	}
 
 	public static double plus(double op1, double op2) throws AnyException {

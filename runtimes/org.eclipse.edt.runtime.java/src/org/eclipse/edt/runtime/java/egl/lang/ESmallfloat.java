@@ -12,6 +12,7 @@
 package org.eclipse.edt.runtime.java.egl.lang;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
@@ -52,10 +53,22 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 		return value.floatValue();
 	}
 
+	public static Float asSmallfloat(ESmallint value) {
+		if (value == null)
+			return null;
+		return value.ezeUnbox().floatValue();
+	}
+
 	public static Float asSmallfloat(Integer value) {
 		if (value == null)
 			return null;
 		return value.floatValue();
+	}
+
+	public static Float asSmallfloat(EInt value) {
+		if (value == null)
+			return null;
+		return value.ezeUnbox().floatValue();
 	}
 
 	public static Float asSmallfloat(Long value) {
@@ -64,10 +77,22 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 		return value.floatValue();
 	}
 
+	public static Float asSmallfloat(EBigint value) {
+		if (value == null)
+			return null;
+		return value.ezeUnbox().floatValue();
+	}
+
 	public static Float asSmallfloat(Float value) throws AnyException {
 		if (value == null)
 			return null;
 		return value.floatValue();
+	}
+
+	public static Float asSmallfloat(ESmallfloat value) throws AnyException {
+		if (value == null)
+			return null;
+		return value.ezeUnbox().floatValue();
 	}
 
 	public static Float asSmallfloat(Double value) throws AnyException {
@@ -76,7 +101,25 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 		return value.floatValue();
 	}
 
+	public static Float asSmallfloat(EFloat value) throws AnyException {
+		if (value == null)
+			return null;
+		return value.ezeUnbox().floatValue();
+	}
+
 	public static Float asSmallfloat(BigDecimal value) {
+		if (value == null)
+			return null;
+		return value.floatValue();
+	}
+
+	public static Float asSmallfloat(EDecimal value) {
+		if (value == null)
+			return null;
+		return value.ezeUnbox().floatValue();
+	}
+
+	public static Float asSmallfloat(BigInteger value) {
 		if (value == null)
 			return null;
 		return value.floatValue();
@@ -86,6 +129,12 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 		if (value == null)
 			return null;
 		return asSmallfloat(EDecimal.asDecimal(value));
+	}
+
+	public static Float asSmallfloat(EString value) throws AnyException {
+		if (value == null)
+			return null;
+		return asSmallfloat(EDecimal.asDecimal(value.ezeUnbox()));
 	}
 
 	public static float plus(float op1, float op2) throws AnyException {
