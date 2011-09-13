@@ -10,7 +10,7 @@ Library WriteResultLib
 	
 	private currentTime String = null;
 	
-	function writeResult(s Status, ms MultiStatus, outR Log, td TestDescription, resultRootSum ResultSummaryRoot)
+	function writeResult(s Status in, ms MultiStatus in, outR Log in, td TestDescription in, resultRootSum ResultSummaryRoot)
 		tr TestResult;
 		tr.stat = s;
 		tr.log = outR;
@@ -37,7 +37,7 @@ Library WriteResultLib
 		trHandler.createFile(trsFilePath, trsFileName, xmlStr);		
 	end
 
-	function persistResult(tr TestResult, ms MultiStatus, resultRootSum ResultSummaryRoot)
+	function persistResult(tr TestResult in, ms MultiStatus in, resultRootSum ResultSummaryRoot)
 		//append the test case summary to result root summary 
 		resultSum ResultSummary;
 		resultSum.name = tr.td.name;

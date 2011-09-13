@@ -10,7 +10,7 @@ library TestExecutionLib
 	/**
 	* driver program or handler can call this to start the test
 	*/
-	function testMain(exeLibTestMtd executeLibTestMethod, td TestDescription, bwriteStdOut boolean)
+	function testMain(exeLibTestMtd executeLibTestMethod in, td TestDescription in, bwriteStdOut boolean in)
 		//clear the status and log record to hold result in LogResult Library
 		LogResult.clearResults();	
 		
@@ -47,7 +47,7 @@ library TestExecutionLib
 	/**
 	* helper function to run test that has mulitple test case methods
 	*/
-	function runMultiTest(testMethods String[], runTestMtd runTestMethod?[], testName String in) returns (MultiStatus)
+	function runMultiTest(testMethods String[] in, runTestMtd runTestMethod?[] in, testName String in) returns (MultiStatus)
 		ms MultiStatus;		
 		testId String;
 
@@ -80,7 +80,7 @@ library TestExecutionLib
 	/**
 	* get the status from the MultiStatus
 	*/
-	private function calculateStatus(ms MultiStatus) returns (Status)		
+	private function calculateStatus(ms MultiStatus in) returns (Status)		
 		retStat Status;
 		summary String;
 		if(ms.testCnt == 0)
@@ -165,7 +165,7 @@ library TestExecutionLib
 	/**
 	* add status to MultiStatus
 	*/
-	private function addStatus(ms MultiStatus,  testId String)
+	private function addStatus(ms MultiStatus,  testId String in)
 		s Status = LogResult.getStatus();
 		msg String = testId + ": " + s.reason;
 		LogResult.logStdOut(msg);
