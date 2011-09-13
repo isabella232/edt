@@ -145,7 +145,7 @@ public class ClasspathUtil {
 			}
 		}
 		
-		System.err.println(NLS.bind(TestServerMessages.CouldNotGetPluginPath, pluginName ));
+		Activator.getDefault().log(NLS.bind(TestServerMessages.CouldNotGetPluginPath, pluginName), null);
 		return null;
 	}
 	
@@ -157,7 +157,7 @@ public class ClasspathUtil {
 			return false;
 		}
 		
-		return IJavaProject.CLASSPATH_FILE_NAME.equals(fileName) || EGLProject.EGLPATH_FILENAME.equals(fileName)
+		return ".classpath".equals(fileName) || EGLProject.EGLPATH_FILENAME.equals(fileName) //$NON-NLS-1$
 				|| IRUtils.matchesFileName(fileName, SUFFIX_egldd, SUFFIX_EGLDD);
 	}
 }
