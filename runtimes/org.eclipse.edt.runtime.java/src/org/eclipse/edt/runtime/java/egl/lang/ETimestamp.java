@@ -14,6 +14,7 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
@@ -150,6 +151,12 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return asTimestamp(timestamp.ezeUnbox());
 	}
 
+	public static Calendar asTimestamp(GregorianCalendar timestamp) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp((Calendar) timestamp);
+	}
+
 	public static Calendar asTimestamp(Calendar timestamp) throws AnyException {
 		if (timestamp == null)
 			return null;
@@ -166,6 +173,12 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		if (timestamp == null)
 			return null;
 		return asTimestamp(timestamp.ezeUnbox(), timespanMask);
+	}
+
+	public static Calendar asTimestamp(GregorianCalendar timestamp, String timespanMask) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp((Calendar) timestamp, timespanMask);
 	}
 
 	public static Calendar asTimestamp(Calendar timestamp, String timespanMask) throws AnyException {
@@ -231,6 +244,12 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return asTimestamp(timestamp.ezeUnbox(), args);
 	}
 
+	public static Calendar asTimestamp(GregorianCalendar timestamp, Integer... args) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp((Calendar) timestamp, args);
+	}
+
 	public static Calendar asTimestamp(Calendar date, Integer... args) {
 		if (date == null)
 			return null;
@@ -250,6 +269,12 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		if (timestamp == null)
 			return null;
 		return asTimestamp(timestamp.ezeUnbox(), startCode, endCode);
+	}
+
+	public static Calendar asTimestamp(GregorianCalendar timestamp, int startCode, int endCode) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp((Calendar) timestamp, startCode, endCode);
 	}
 
 	public static Calendar asTimestamp(Calendar date, int startCode, int endCode) {

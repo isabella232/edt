@@ -12,6 +12,7 @@
 package org.eclipse.edt.runtime.java.egl.lang;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
@@ -173,6 +174,12 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		if (date == null)
 			return null;
 		return asDate(date.ezeUnbox());
+	}
+
+	public static Calendar asDate(GregorianCalendar date) throws AnyException {
+		if (date == null)
+			return null;
+		return asDate((Calendar) date);
 	}
 
 	public static Calendar asDate(Calendar date) throws AnyException {

@@ -14,6 +14,7 @@ package org.eclipse.edt.runtime.java.egl.lang;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.regex.PatternSyntaxException;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
@@ -201,6 +202,12 @@ public class EString extends AnyBoxedObject<String> {
 		if (value == null)
 			return null;
 		return asString(value.ezeUnbox(), length);
+	}
+
+	public static String asString(GregorianCalendar value, Integer... length) {
+		if (value == null)
+			return null;
+		return asString((Calendar) value, length);
 	}
 
 	public static String asString(Calendar cal, Integer... length) {
