@@ -72,7 +72,8 @@ public class SQLActionStatementGenerator extends AbstractIOStatementGenerator {
 				return false;
 			}
 			public boolean visit(WithInlineSQLClause sqlStmt) {
-				String sql = sqlStmt.getSqlStmt().getValue().replaceAll("[\\n\\r]", " ");
+				String sql = sqlStmt.getSqlStmt().getValue();
+				stmt.setHasExplicitSql(true);
 				stmt.setSqlString(sql);
 				return false;
 			}
@@ -82,7 +83,8 @@ public class SQLActionStatementGenerator extends AbstractIOStatementGenerator {
 				return false;
 			}
 			public boolean visit(InlineSQLStatement sqlStmt) {
-				String sql = sqlStmt.getValue().replaceAll("[\\n\\r]", " ");
+				String sql = sqlStmt.getValue();
+				stmt.setHasExplicitSql(true);
 				stmt.setSqlString(sql);
 				return false;
 			}
