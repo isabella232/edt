@@ -46,7 +46,7 @@ plugin@org.eclipse.edt.ide.ui.resources=v201109071140,:pserver:anonymous@dev.ecl
 plugin@org.eclipse.edt.mof=v201109131618,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.mof
 plugin@org.eclipse.edt.mof.egl=v201109131437,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.mof.egl
 plugin@org.eclipse.edt.mof.eglx.persistence.sql=v201109121410,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.mof.eglx.persistence.sql
-plugin@org.eclipse.edt.runtime.java=v201109131710,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.java
+plugin@org.eclipse.edt.runtime.java=v201109131750,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.java
 plugin@org.eclipse.edt.runtime.javascript=v201109121643,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.javascript
 
 feature@org.eclipse.edt.tests.feature=v201102251630,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/tests/org.eclipse.edt.tests.feature
