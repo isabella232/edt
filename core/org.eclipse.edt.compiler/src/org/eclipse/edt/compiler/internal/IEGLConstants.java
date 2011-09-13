@@ -194,23 +194,28 @@ public interface IEGLConstants {
 	
 	//V6001VALIDATION
 	public static final String KEYWORD_MATHLIB = "mathLib";  //$NON-NLS-1$	
-	public static final String KEYWORD_STRLIB = "strLib";  //$NON-NLS-1$	
+	public static final String KEYWORD_STRLIB = "strLib";  //$NON-NLS-1$
+	public static final String KEYWORD_STRINGLIB = "stringLib";  //$NON-NLS-1$
 	public static final String KEYWORD_SQLLIB = "sqlLib";  //$NON-NLS-1$	
 	public static final String KEYWORD_SYSLIB = "sysLib";  //$NON-NLS-1$	
 	public static final String KEYWORD_SYSVAR = "sysVar";  //$NON-NLS-1$	
-	public static final String KEYWORD_CONSOLELIB = "consoleLib";  //$NON-NLS-1$	
-	public static final String KEYWORD_REPORTLIB = "reportLib";  //$NON-NLS-1$	
-	public static final String KEYWORD_LOBLIB = "lobLib";  //$NON-NLS-1$
-	public static final String KEYWORD_VGVAR = "vgVar";  //$NON-NLS-1$	
-	public static final String KEYWORD_VGLIB = "vgLib";  //$NON-NLS-1$
+//	public static final String KEYWORD_CONSOLELIB = "consoleLib";  //$NON-NLS-1$	
+//	public static final String KEYWORD_REPORTLIB = "reportLib";  //$NON-NLS-1$	
+//	public static final String KEYWORD_LOBLIB = "lobLib";  //$NON-NLS-1$
+//	public static final String KEYWORD_VGVAR = "vgVar";  //$NON-NLS-1$	
+//	public static final String KEYWORD_VGLIB = "vgLib";  //$NON-NLS-1$
 	public static final String KEYWORD_CONVERSEVAR = "converseVar";  //$NON-NLS-1$
-	public static final String KEYWORD_JAVALIB = "javaLib";  //$NON-NLS-1$
+//	public static final String KEYWORD_JAVALIB = "javaLib";  //$NON-NLS-1$
 	public static final String KEYWORD_DATETIMELIB = "dateTimeLib";  //$NON-NLS-1$
-	public static final String KEYWORD_J2EELIB = "j2eeLib";  //$NON-NLS-1$
-	public static final String KEYWORD_CONVERSELIB = "converseLib";  //$NON-NLS-1$
-	public static final String KEYWORD_DLIVAR = "dliVar";  //$NON-NLS-1$
+//	public static final String KEYWORD_J2EELIB = "j2eeLib";  //$NON-NLS-1$
+//	public static final String KEYWORD_CONVERSELIB = "converseLib";  //$NON-NLS-1$
+//	public static final String KEYWORD_DLIVAR = "dliVar";  //$NON-NLS-1$
 	public static final String KEYWORD_SERVICELIB = "serviceLib";  //$NON-NLS-1$
-	public static final String KEYWORD_DLILIB = "dliLib";  //$NON-NLS-1$
+	public static final String KEYWORD_HTTPLIB = "httpLib";  //$NON-NLS-1$
+	public static final String KEYWORD_JSONLIB = "jsonLib";  //$NON-NLS-1$
+	public static final String KEYWORD_RUILIB = "ruiLib";  //$NON-NLS-1$
+	public static final String KEYWORD_XMLLib = "xmlLib";  //$NON-NLS-1$
+//	public static final String KEYWORD_DLILIB = "dliLib";  //$NON-NLS-1$
 	
 	// need to rename these constants
 	// These do not belong here.  Only official keywords should be prefixed with
