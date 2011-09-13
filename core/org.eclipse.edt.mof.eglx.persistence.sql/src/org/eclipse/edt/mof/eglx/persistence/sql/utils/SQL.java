@@ -1,5 +1,7 @@
 package org.eclipse.edt.mof.eglx.persistence.sql.utils;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
@@ -158,6 +160,7 @@ public class SQL {
 	}
 	
 	public static boolean isCallStatement(String sqlStmt) {
+		if (sqlStmt == null) return false;
 		try {
 			StringTokenizer parser = new StringTokenizer(sqlStmt);
 			String stmtKind = parser.nextToken();
@@ -166,4 +169,55 @@ public class SQL {
 			return false;
 		}
 	}
+	
+	public static boolean isComment(String sqlStmt) {
+		try {
+			StringTokenizer parser = new StringTokenizer(sqlStmt);
+			String stmtKind = parser.nextToken();
+			return (stmtKind.startsWith("--"));
+		} catch (NoSuchElementException e) {
+			return false;
+		}
+	}
+
+	public static String removeCRLFs(String sqlString) {
+		return sqlString.replaceAll("[\n\r\t]", " ");
+	}
+	
+	public static String removeCommentsCRLFs(String sqlString) {
+		StringBuilder out = new StringBuilder();
+		StringReader in = new StringReader(sqlString);
+		char c;
+		try {
+			boolean isComment = false;
+			boolean couldBeComment = false;
+			while ((c = (char)in.read()) != (char)-1) {
+				if (couldBeComment && c != '-') {
+					out.append('-');
+					couldBeComment = false;
+				}
+				if (c == '-') {
+					if (couldBeComment) {
+						isComment = true;
+						couldBeComment = false;
+					}
+					else {
+						couldBeComment = true;
+					}
+				}
+				if (isComment) {
+					while ((c = (char)in.read()) != '\n' && c != (char)-1) {}
+					isComment = false;
+				}
+				else if (!couldBeComment) {
+					if (c != '\n' && c != '\r' && c != '\t')
+						out.append(c);
+				}
+			}
+			return out.toString();
+		} catch (IOException e) {
+			return sqlString;
+		}
+	}
+
 }
