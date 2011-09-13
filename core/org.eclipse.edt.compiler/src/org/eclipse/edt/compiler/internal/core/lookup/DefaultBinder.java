@@ -4048,7 +4048,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 		}
 		
 		if (!classDataDeclaration.hasInitializer()) {
-			ITypeBinding tBinding = type.resolveTypeBinding();
+			ITypeBinding tBinding = classDataDeclaration.getType().resolveTypeBinding();
 			//Non-nullable reference types must be instantiable, because they are initialized with the default constructor
 			if (Binding.isValidBinding(tBinding) && !tBinding.isNullable() && tBinding.isReference() && !tBinding.isInstantiable() && currentScope.getPartBinding() != tBinding) {
 				problemRequestor.acceptProblem(type,
@@ -4132,7 +4132,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 			}
 			
 			if (!functionDataDeclaration.hasInitializer()) {
-				ITypeBinding tBinding = type.resolveTypeBinding();
+				ITypeBinding tBinding = functionDataDeclaration.getType().resolveTypeBinding();
 				//Non-nullable reference types must be instantiable, because they are initialized with the default constructor
 				if (Binding.isValidBinding(tBinding) && !tBinding.isNullable() && tBinding.isReference() && !tBinding.isInstantiable() && currentScope.getPartBinding() != tBinding) {
 					problemRequestor.acceptProblem(type,
