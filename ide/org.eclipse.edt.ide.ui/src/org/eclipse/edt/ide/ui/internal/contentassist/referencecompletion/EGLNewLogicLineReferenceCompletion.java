@@ -53,7 +53,6 @@ public class EGLNewLogicLineReferenceCompletion extends EGLAbstractReferenceComp
 		addContext("package a; function a() for(a to 2)"); //$NON-NLS-1$
 		addContext("package a; function a() for(a int to 2)"); //$NON-NLS-1$
 		addContext("package a; function a() foreach (a)"); //$NON-NLS-1$
-		addContext("package a; function a() openui consoleForm onEvent(AFTER_FIELD)"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

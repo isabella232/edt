@@ -57,8 +57,7 @@ public class EGLCaseStatementReferenceCompletion extends EGLAbstractReferenceCom
 			public void processBoundNode(Node boundNode) {
 				IDataBinding statementTargetBinding = getStatementTargetBinding(boundNode);
 				if(statementTargetBinding != null && IBinding.NOT_FOUND_BINDING != statementTargetBinding) {
-					if(AbstractBinder.dataBindingIs(statementTargetBinding, EGLCORE, IEGLConstants.KEYWORD_SYSVAR, IEGLConstants.SYSTEM_WORD_SYSTEMTYPE) ||
-					   AbstractBinder.dataBindingIs(statementTargetBinding, EGLUITEXT, IEGLConstants.KEYWORD_CONVERSEVAR, IEGLConstants.SYSTEM_WORD_EVENTKEY)) {
+					if(AbstractBinder.dataBindingIs(statementTargetBinding, EGLCORE, IEGLConstants.KEYWORD_SYSVAR, IEGLConstants.SYSTEM_WORD_SYSTEMTYPE)) {
 						proposals.addAll(new EGLConditionalStateProposalHandler(viewer, documentOffset, prefix, statementTargetBinding).getProposals());
 						return;
 					}

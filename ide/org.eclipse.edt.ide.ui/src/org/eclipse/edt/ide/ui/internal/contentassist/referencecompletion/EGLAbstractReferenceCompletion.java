@@ -23,7 +23,6 @@ import org.eclipse.edt.compiler.binding.FlexibleRecordBindingImpl;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.StructureItemBinding;
-import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeManager;
 import org.eclipse.edt.compiler.core.ast.AbstractASTPartVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
@@ -79,17 +78,10 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 	static final String[] EGLCORE = new String[] {"egl", "core"}; //$NON-NLS-1$ //$NON-NLS-2$
 	static final String[] EGLJAVA = new String[] {"egl", "java"}; //$NON-NLS-1$ //$NON-NLS-2$
 	static final String[] EGLIDLJAVA = new String[] {"eglx", "java"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLJAVASCRIPT = new String[] {"egl", "javascript"}; //$NON-NLS-1$ //$NON-NLS-2$
+	static final String[] EGLJAVASCRIPT = new String[] {"eglx", "javascript"}; //$NON-NLS-1$ //$NON-NLS-2$
 	static final String[] EGLPLATFORM = new String[] {"egl", "platform"}; //$NON-NLS-1$ //$NON-NLS-2$
-	static final String[] EGLUIJASPER = new String[] {"egl", "ui", "jasper"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLUIJSF = new String[] {"egl", "ui", "jsf"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLUITEXT = new String[] {"egl", "ui", "text"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLUICONSOLE = new String[] {"egl", "ui", "console"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLUIWEBTRANSACTION = new String[] {"egl", "ui", "webTransaction"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	static final String[] EGLIOSQL = new String[] {"egl", "io", "sql"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	static final String[] EGLIOFILE = new String[] {"egl", "io", "file"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLIOMQ = new String[] {"egl", "io", "mq"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLIODLI = new String[] {"egl", "io", "dli"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	protected ArrayList validStates = new ArrayList();
 	protected IEditorPart editor;

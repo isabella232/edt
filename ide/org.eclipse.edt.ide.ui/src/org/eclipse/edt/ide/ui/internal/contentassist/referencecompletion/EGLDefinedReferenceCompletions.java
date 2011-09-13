@@ -28,7 +28,6 @@ public class EGLDefinedReferenceCompletions {
 		if (DEFINED_COMPLETIONS == null) {
 			List completionList = new ArrayList();
 			completionList.add(new EGLAddStatementReferenceCompletion());
-			completionList.add(new EGLAddUsingPCBStatementReferenceCompletion());
 			completionList.add(new EGLAnnotationNameReferenceCompletion());
 			completionList.add(new EGLAsIsaOperatorReferenceCompletion());
 			completionList.add(new EGLArrayIndexReferenceCompletion());

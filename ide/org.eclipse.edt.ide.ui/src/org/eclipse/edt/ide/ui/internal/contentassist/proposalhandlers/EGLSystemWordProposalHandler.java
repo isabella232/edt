@@ -71,8 +71,6 @@ public class EGLSystemWordProposalHandler extends EGLAbstractProposalHandler {
 			new CapabilityFilterUtility.IPartBindingFilter[] {
 				new CapabilityFilterUtility.IPartBindingFilter() {
 					public boolean partBindingPasses(IPartBinding partBinding) {
-						if(AbstractBinder.typeIs(partBinding, EGLJAVA, IEGLConstants.KEYWORD_J2EELIB))
-							return isWithinPageHandler;
 						return true;
 					}
 				}

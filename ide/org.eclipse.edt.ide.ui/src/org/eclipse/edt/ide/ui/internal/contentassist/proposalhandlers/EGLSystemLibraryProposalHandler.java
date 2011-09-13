@@ -75,23 +75,12 @@ public class EGLSystemLibraryProposalHandler extends EGLAbstractProposalHandler 
 		if (libraryNamesToStringConstants == null) {
 			libraryNamesToStringConstants = new HashMap();
 			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_DATETIMELIB.toLowerCase(), UINlsStrings.CAProposal_DataTimeLibrary);
-			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_JAVALIB.toLowerCase(), UINlsStrings.CAProposal_JavaLibrary);
-			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_LOBLIB.toLowerCase(), UINlsStrings.CAProposal_LOBLibrary);
 			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_MATHLIB.toLowerCase(), UINlsStrings.CAProposal_MathLibrary);
 			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_SQLLIB.toLowerCase(), UINlsStrings.CAProposal_SQLLibrary);
 			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_STRLIB.toLowerCase(), UINlsStrings.CAProposal_StringLibrary);
 			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_SYSLIB.toLowerCase(), UINlsStrings.CAProposal_SystemLibrary);
 			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_SYSVAR.toLowerCase(), UINlsStrings.CAProposal_SystemVarLibrary);
 			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_SERVICELIB.toLowerCase(), UINlsStrings.CAProposal_ServiceLibrary);
-			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_VGLIB.toLowerCase(), UINlsStrings.CAProposal_VGLibrary);
-			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_VGVAR.toLowerCase(), UINlsStrings.CAProposal_VGVarLibrary);
-			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_J2EELIB.toLowerCase(), UINlsStrings.CAProposal_J2EELibrary);
-			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_DLILIB.toLowerCase(), UINlsStrings.CAProposal_DLILibrary);
-			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_DLIVAR.toLowerCase(), UINlsStrings.CAProposal_DLIVarLibrary);
-			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_CONSOLELIB.toLowerCase(), UINlsStrings.CAProposal_ConsoleLibrary);
-			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_CONVERSELIB.toLowerCase(), UINlsStrings.CAProposal_ConverseLibrary);
-			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_CONVERSEVAR.toLowerCase(), UINlsStrings.CAProposal_ConverseVarLibrary);
-			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_REPORTLIB.toLowerCase(), UINlsStrings.CAProposal_ReportLibrary);
 		}
 		return libraryNamesToStringConstants;
 	}

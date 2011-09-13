@@ -52,13 +52,6 @@ public class EGLStructureItemTypeRefereceCompletion extends EGLAbstractReference
 				
 				while(!(boundNode instanceof File)) {
 					if(boundNode instanceof org.eclipse.edt.compiler.core.ast.Part) {
-						if (((Part) boundNode).getName().resolveBinding().getAnnotation(EGLUICONSOLE, IEGLConstants.RECORD_SUBTYPE_CONSOLE_FORM) != null) {
-							proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).
-								getProposals(IEGLSearchConstants.RECORD, ((Part) boundNode).getName().getCanonicalName(), 
-									IEGLConstants.RECORD_SUBTYPE_BASIC));
-							return;
-						}
-						
 						proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).
 							getProposals(IEGLSearchConstants.RECORD | IEGLSearchConstants.ITEM, ((Part) boundNode).getName().getCanonicalName()));
 					}
