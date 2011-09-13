@@ -48,6 +48,7 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IPartSubTypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.LibraryBinding;
+import org.eclipse.edt.compiler.binding.MultiplyOccuringItemTypeBinding;
 import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
 import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
@@ -910,6 +911,8 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		if (type == null) return null;
 		EObject eType;
 		switch (type.getKind()) {
+		case ITypeBinding.MULTIPLY_OCCURING_ITEM:
+			return mofTypeFor(((MultiplyOccuringItemTypeBinding)type).getBaseType());
 		case ITypeBinding.ARRAY_TYPE_BINDING: {
 			ITypeBinding elementType = ((ArrayTypeBinding)type).getElementType();
 			EObject mofType = mofTypeFor(elementType);
