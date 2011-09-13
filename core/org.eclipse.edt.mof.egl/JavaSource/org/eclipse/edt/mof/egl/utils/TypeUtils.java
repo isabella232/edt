@@ -573,6 +573,17 @@ public class TypeUtils implements MofConversion {
 		return 0;  // neither is least wide
 	}
 	
+	private static boolean requiresNarrow(NamedElement srcType, Classifier type) {
+		if (srcType == type) {
+			return false;
+		}
+		
+		if (srcType instanceof StructPart && type instanceof StructPart) {
+			return getNarrowConversionOp((StructPart) srcType, (StructPart)type) != null;
+		}
+		return false;
+	}
+	
 	public static int getBestFitType(NamedElement srcType, List<Classifier> types) {
 		List<Classifier> classifierCandidates = new ArrayList<Classifier>();
 		for (Classifier type : types) {
@@ -665,7 +676,7 @@ public class TypeUtils implements MofConversion {
 	public static Operation getWidenConversionOp(StructPart src, StructPart target) {
 		Operation result = null;
 		for (Operation op : src.getOperations()) {
-			if (op.isWidenConversion() && op.getParameters().get(0) != null) {
+			if (op.isWidenConversion() && op.getParameters().size() == 1 && op.getParameters().get(0) != null) {
 				Type parmType = (Type)op.getParameters().get(0).getType(); 
 				if ( parmType.equals(src) && op.getType().equals(target) ) {
 					return op;
@@ -674,7 +685,7 @@ public class TypeUtils implements MofConversion {
 		}
 		if (result == null) {
 			for (Operation op : target.getOperations()) {
-				if (op.isWidenConversion() && op.getParameters().get(0) != null) {
+				if (op.isWidenConversion() && op.getParameters().size() == 1 && op.getParameters().get(0) != null) {
 					Type parmType = (Type)op.getParameters().get(0).getType(); 
 					if ( parmType.equals(src) && op.getType().equals(target) ) {
 						return op;
@@ -688,7 +699,7 @@ public class TypeUtils implements MofConversion {
 	public static Operation getNarrowConversionOp(StructPart src, StructPart target) {
 		Operation result = null;
 		for (Operation op : src.getOperations()) {
-			if (op.isNarrowConversion() && op.getParameters().get(0) != null) {
+			if (op.isNarrowConversion() && op.getParameters().size() == 1 && op.getParameters().get(0) != null) {
 				Type parmType = (Type)op.getParameters().get(0).getType(); 
 				if (parmType.equals(src) && op.getType().equals(target)) {
 					return op;
@@ -697,7 +708,7 @@ public class TypeUtils implements MofConversion {
 		}
 		if (result == null) {
 			for (Operation op : target.getOperations()) {
-				if (op.isNarrowConversion() && op.getParameters().get(0) != null) {
+				if (op.isNarrowConversion() && op.getParameters().size() == 1 && op.getParameters().get(0) != null) {
 					Type parmType = (Type)op.getParameters().get(0).getType(); 
 					if ( parmType.equals(src) && op.getType().equals(target) ) {
 						return op;
@@ -811,9 +822,33 @@ public class TypeUtils implements MofConversion {
 				if (idx != -1)  // More than one fits so bail on this parameter
 					result.add(candidates.get(idx));
 			}
-		}
+		} 
 		if (result.isEmpty())
 			result = candidates;
+		
+		
+		if (result.size() > 1) {
+			//check for functions that will not require a narrowing
+			List<T> noNarrow = new ArrayList<T>();
+			boolean hasNarrow = false;
+			for (T op : result) {
+				for (int i=0; (i<argumentTypes.length) && !hasNarrow; i++) {
+					Classifier type = op.getParameters().get(i).getType().getClassifier();
+					if (requiresNarrow(argumentTypes[i], type)) {
+						hasNarrow = true;
+					}
+				}
+				if (!hasNarrow) {
+					noNarrow.add(op);
+				}
+				else {
+					hasNarrow = false;
+				}
+			}
+			if (!noNarrow.isEmpty()) {
+				result = noNarrow;
+			}
+		}
 		
 		if (result.size() > 1) {
 			//eliminate functions from supertypes
