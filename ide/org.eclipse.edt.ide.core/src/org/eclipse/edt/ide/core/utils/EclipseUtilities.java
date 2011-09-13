@@ -402,19 +402,30 @@ public class EclipseUtilities {
 	 * 
 	 * @param myProject
 	 *            The project where the folder for Java source resides.
-	 * @param isNewProject
-	 *            Should be set to true if <code>project</code> is a newly
-	 *            created Java Project.
 	 * 
-	 * @return String The folder name where the Java source will be generated.
+	 * @return String The Java source folder name.
 	 */
 	public static String getJavaSourceFolderName(IProject project) {
-		String folderName = "";
+		String folderName = null;
 
 		try {
-			folderName = EGLProjectInfoUtility.getGeneratedJavaFolder(project);
+			if ( project.hasNature( JavaCore.NATURE_ID ) ) {
+				// Use the first folder from the project's classpath. 
+				IJavaProject javaProject = JavaCore.create( project );
+				IClasspathEntry[] entries = javaProject.getRawClasspath();
+				for ( int i = 0; i < entries.length; i++ )
+				{
+					IClasspathEntry entry = entries[ i ];
+					if ( entry.getEntryKind() == IClasspathEntry.CPE_SOURCE )
+					{
+						// Get the folder from the entry's path.  The project name
+						// needs to be removed from the path before this will work.
+						IPath path = entry.getPath().removeFirstSegments( 1 );
+						return path.toString();
+					}
+				}
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return folderName;
 	}
