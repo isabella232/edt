@@ -179,6 +179,9 @@ public class EGLSourceFolderWizardPage extends EGLContainerWizardPage {
 			//Validate
 			validatePage();
 			
+			// update error information
+			updateStatus(new IStatus[] { fProjectStatus, fRootStatus });
+			
 		}		
 	}
 	
@@ -203,6 +206,9 @@ public class EGLSourceFolderWizardPage extends EGLContainerWizardPage {
 			
 			//Validate
 			validatePage();
+			
+			//update error information
+			updateStatus(new IStatus[] { fProjectStatus, fRootStatus });
 		}
 	}
 	
@@ -212,6 +218,10 @@ public class EGLSourceFolderWizardPage extends EGLContainerWizardPage {
 		
 		//Validate
 		validatePage();		
+		
+		//update those error information
+		updateStatus(new IStatus[] { fProjectStatus, fRootStatus });
+		
 	}
 	
 	private ElementTreeSelectionDialog openSourceFolderDialog() {
@@ -405,6 +415,5 @@ public class EGLSourceFolderWizardPage extends EGLContainerWizardPage {
 				}
 			}
 		}
-		updateStatus(new IStatus[] { fProjectStatus, fRootStatus });
 	}	
 }
