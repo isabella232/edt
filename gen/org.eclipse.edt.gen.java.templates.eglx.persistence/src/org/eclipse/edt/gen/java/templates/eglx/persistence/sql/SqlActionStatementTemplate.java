@@ -1,5 +1,7 @@
 package org.eclipse.edt.gen.java.templates.eglx.persistence.sql;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
 
@@ -160,12 +162,12 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 				out.print(quoted(stmt.getSqlString()));
 			}
 			out.println(';');
-			out.println(var_stmt + " = " + var_datasource + '.' + expr_getConnection);
+			out.print(var_stmt + " = " + var_datasource + '.' + expr_getConnection);
 			if (isCall) {
-				out.print(".prepareCall(stmtStr);");
+				out.println(".prepareCall(stmtStr);");
 			}
 			else {
-				out.print(".prepareStatement(stmtStr);");
+				out.println(".prepareStatement(stmtStr);");
 			}
 			ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
 			out.println(".registerStatement(" + typeSignature + ", " + stmtNumber + ", " + var_stmt + ");");
@@ -233,8 +235,8 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	
 	public void genSqlStatementEnd(SqlActionStatement stmt, Context ctx, TabbedWriter out) {
 		out.println("}");
-		out.println("catch(java.sql.SQLException ex) {");
-		out.println("throw new eglx.persistence.sql.SQLException(ex);");
+		out.println("catch(java.sql.SQLException ezeEx) {");
+		out.println("throw new eglx.persistence.sql.SQLException(ezeEx);");
 		out.println('}');
 	}
 	

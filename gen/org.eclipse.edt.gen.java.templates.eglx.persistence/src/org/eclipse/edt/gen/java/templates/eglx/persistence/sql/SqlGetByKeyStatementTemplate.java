@@ -105,8 +105,6 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 				out.println("if(" + var_resultSet + ".next()) {");
 				genGetSingleRowFromResultSet(stmt.getTargets(), stmt.getDataSource(), var_resultSet, ctx, out);
 				out.println(";");
-				if (doClose)
-					out.println(var_resultSet + ".close();");
 				out.println('}');
 				
 			}
@@ -120,6 +118,8 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 			}
 			out.println('}');
 		}
+		if (doClose)
+			out.println(var_resultSet + ".close();");
 	}
 	
 	public void genSetTargetFromResultSet(Expression target, String var_resultSet, int columnIndex, Context ctx, TabbedWriter out) {

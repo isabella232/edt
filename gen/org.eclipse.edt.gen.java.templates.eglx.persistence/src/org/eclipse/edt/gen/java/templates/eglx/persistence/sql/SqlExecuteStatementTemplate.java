@@ -3,16 +3,33 @@ package org.eclipse.edt.gen.java.templates.eglx.persistence.sql;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlExecuteStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
 
 public class SqlExecuteStatementTemplate extends SqlActionStatementTemplate {
 
 	public void genStatementBody(SqlExecuteStatement stmt, Context ctx, TabbedWriter out) {
-		String stmtVar;
+		String stmtVar = var_statement;
 		if (stmt.getPreparedStatement() == null && stmt.getSqlString() != null) {
-			genSqlStatementSetup(stmt, ctx, out);
-			out.println(var_statement + ".execute();");
-			stmtVar = var_statement;
+			String[] stmts = stmt.getSqlString().split("[;]");
+			if (stmts.length == 1) {
+				genSqlStatementSetup(stmt, ctx, out);
+				out.println(stmtVar + ".execute();");
+			}
+			else {
+				out.println("try {");
+				out.println("java.sql.Statement ezeStmt = ");
+				ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
+				out.println(".getConnection().createStatement();");
+				for (String sql : stmts) {
+					if (!SQL.isComment(sql)) {
+						out.print("ezeStmt.execute(");
+						out.print(quoted(SQL.removeCommentsCRLFs(sql)));
+						out.println(");");
+					}
+				}
+			}
 		}
 		else {
 			stmtVar = getExprString(stmt.getPreparedStatement(), ctx);
@@ -21,7 +38,7 @@ public class SqlExecuteStatementTemplate extends SqlActionStatementTemplate {
 			out.println(".execute();");
 		}
 		if (stmt.getUsingExpressions() != null && !stmt.getUsingExpressions().isEmpty()) {
-			out.println("if (" + var_statement + " instanceof java.sql.CallableStatement) {");
+			out.println("if (" + stmtVar + " instanceof java.sql.CallableStatement) {");
 			out.print("ezeParmData = ");
 			out.println(stmtVar + ".getParameterMetaData();");
 			int i = 1;
@@ -41,4 +58,28 @@ public class SqlExecuteStatementTemplate extends SqlActionStatementTemplate {
 		
 		genSqlStatementEnd(stmt, ctx, out);
 	}
+
+	@Override
+	public void genSqlStatementSetup(SqlActionStatement stmt, Context ctx,
+			TabbedWriter out) {
+		String[] stmts = stmt.getSqlString().split("[;]");
+		if (stmts.length == 1) {
+			super.genSqlStatementSetup(stmt, ctx, out);
+		}
+		else {
+			out.println("try {");
+			out.println("java.sql.Statement ezeStmt = ");
+			ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
+			out.println(".getConnection().createStatement();");
+			for (String sql : stmts) {
+				if (!SQL.isComment(sql)) {
+					out.print("ezeStmt.execute(");
+					out.print(quoted(sql));
+					out.println(");");
+				}
+			}
+		}
+	}
+	
+	
 }
