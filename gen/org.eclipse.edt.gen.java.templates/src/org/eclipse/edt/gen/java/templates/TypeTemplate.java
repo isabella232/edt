@@ -293,14 +293,4 @@ public class TypeTemplate extends JavaTemplate {
 			operator = arg.getOperator();
 		ctx.invoke(genAssignment, arg.getLHS(), ctx, out, arg.getRHS(), " " + CommonUtilities.getNativeJavaAssignment(operator) + " ");
 	}
-
-	public void genInitializeStatement(Type type, Context ctx, TabbedWriter out, Field arg) {
-		if (arg.getInitializerStatements() == null) {
-			ctx.invoke(genName, arg, ctx, out);
-			out.print(" = ");
-			ctx.invoke(genInitialization, arg, ctx, out);
-			out.println(";");
-		} else
-			ctx.invoke(genStatementNoBraces, arg.getInitializerStatements(), ctx, out);
-	}
 }

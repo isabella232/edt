@@ -220,7 +220,7 @@ public class EGLClassTemplate extends JavaTemplate {
 
 	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
 		if (!(arg instanceof ConstantField)) {
-			ctx.invoke(genInitializeStatement, arg.getType(), ctx, out, arg);
+			ctx.invoke(genInitializeStatement, arg, ctx, out);
 		}
 	}
 
