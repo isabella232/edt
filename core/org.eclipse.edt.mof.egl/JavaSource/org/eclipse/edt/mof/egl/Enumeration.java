@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.EEnum;
 import org.eclipse.edt.mof.EEnumLiteral;
 
 
-public interface Enumeration extends EEnum, Part, Container {
+public interface Enumeration extends EEnum, SubType, Part, Container {
 	List<Annotation> getAnnotations();
 	
 	List<TypeParameter> getTypeParameters();

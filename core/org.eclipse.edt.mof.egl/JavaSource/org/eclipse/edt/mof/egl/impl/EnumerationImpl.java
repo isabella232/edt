@@ -22,9 +22,12 @@ import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Stereotype;
+import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeParameter;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.impl.EEnumImpl;
 
@@ -38,6 +41,9 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 	private static int Slot_typeParameters=5;
 	private static int Slot_accessKind=6;
 	private static int totalSlots = 7;
+	
+	private List<StructPart> superTypes;
+
 	
 	public static int totalSlots() {
 		return totalSlots + EEnumImpl.totalSlots();
@@ -260,4 +266,30 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 		return false;
 	}
 
+	@Override
+	public List<StructPart> getSuperTypes() {
+		if (superTypes == null) {
+			superTypes = new ArrayList<StructPart>();
+			superTypes.add((StructPart)IRUtils.getEGLType(MofConversion.Type_EGLAny));
+		}
+		return superTypes;
+	}
+
+	@Override
+	public boolean isSubtypeOf(StructPart part) {
+		if (!getSuperTypes().isEmpty()) {
+			for (StructPart superType : getSuperTypes()) {
+				if (superType == part) {
+					return true;
+				}
+			}
+			for (StructPart superType : getSuperTypes()) {
+				if (superType.isSubtypeOf(part)) return true;
+			}
+			return false;
+		}
+		else {
+			return false;
+		}
+	}
 }
