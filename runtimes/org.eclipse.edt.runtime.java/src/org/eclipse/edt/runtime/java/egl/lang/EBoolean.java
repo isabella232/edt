@@ -41,17 +41,21 @@ public class EBoolean extends AnyBoxedObject<Boolean> {
 		return EString.asString(object);
 	}
 
-	public static boolean asBoolean(Number number) throws AnyException {
+	public static Boolean asBoolean(Number number) throws AnyException {
 		if (number == null)
-			throw new NullValueException();
+			return null;
 		return number.floatValue() != 0;
 	}
 
-	public static boolean equals(boolean op1, boolean op2) {
-		return op1 == op2;
+	public static boolean equals(Boolean op1, Boolean op2) {
+		if (op1 == null || op2 == null)
+			return false;
+		return op1.equals(op2);
 	}
 
-	public static boolean notEquals(boolean op1, boolean op2) {
-		return op1 != op2;
+	public static boolean notEquals(Boolean op1, Boolean op2) {
+		if (op1 == null || op2 == null)
+			return false;
+		return !op1.equals(op2);
 	}
 }

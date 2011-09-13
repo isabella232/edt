@@ -55,19 +55,25 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return EString.asString(object);
 	}
 
-	public static long asBigint(short value) {
+	public static Long asBigint(Short value) {
+		if (value == null)
+			return null;
+		return value.longValue();
+	}
+
+	public static Long asBigint(Integer value) {
+		if (value == null)
+			return null;
+		return value.longValue();
+	}
+
+	public static Long asBigint(Long value) {
 		return value;
 	}
 
-	public static long asBigint(int value) {
-		return value;
-	}
-
-	public static long asBigint(long value) {
-		return value;
-	}
-
-	public static long asBigint(float value) {
+	public static Long asBigint(Float value) {
+		if (value == null)
+			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		long result = 0;
 		if (throwOverflowExceptions)
@@ -82,7 +88,9 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return result;
 	}
 
-	public static long asBigint(double value) {
+	public static Long asBigint(Double value) {
+		if (value == null)
+			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		long result = 0;
 		if (throwOverflowExceptions)
@@ -97,9 +105,9 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return result;
 	}
 
-	public static long asBigint(BigDecimal value) throws AnyException {
+	public static Long asBigint(BigDecimal value) throws AnyException {
 		if (value == null)
-			throw new NullValueException();
+			return null;
 		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		long result = 0;
 		if (throwOverflowExceptions)
@@ -114,9 +122,7 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return result;
 	}
 
-	public static long asBigint(String value) throws AnyException {
-		if (value == null)
-			throw new NullValueException();
+	public static Long asBigint(String value) throws AnyException {
 		return asBigint(EDecimal.asDecimal(value));
 	}
 
@@ -124,7 +130,9 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static BigDecimal asNumber(long value) throws AnyException {
+	public static BigDecimal asNumber(Long value) throws AnyException {
+		if (value == null)
+			return null;
 		return EDecimal.asDecimal(value);
 	}
 
@@ -152,16 +160,24 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return StrictMath.pow(op1, op2);
 	}
 
-	public static int compareTo(long op1, long op2) throws AnyException {
-		return (int) (op1 - op2);
+	public static int compareTo(Long op1, Long op2) throws AnyException {
+		if (op1 == null && op2 == null)
+			return 0;
+		if ((op1 != null && op2 == null) || (op1 == null && op2 != null))
+			throw new NullValueException();
+		return op1.compareTo(op2);
 	}
 
-	public static boolean equals(long op1, long op2) {
-		return op1 == op2;
+	public static boolean equals(Long op1, Long op2) {
+		if (op1 == null || op2 == null)
+			return false;
+		return op1.equals(op2);
 	}
 
-	public static boolean notEquals(long op1, long op2) {
-		return op1 != op2;
+	public static boolean notEquals(Long op1, Long op2) {
+		if (op1 == null || op2 == null)
+			return false;
+		return !op1.equals(op2);
 	}
 
 	public static long defaultValue() {

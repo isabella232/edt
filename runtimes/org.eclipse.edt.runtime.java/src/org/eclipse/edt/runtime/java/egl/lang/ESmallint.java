@@ -42,11 +42,15 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return EString.asString(object);
 	}
 
-	public static short asSmallint(short value) {
+	public static Short asSmallint(Short value) {
+		if (value == null)
+			return null;
 		return value;
 	}
 
-	public static short asSmallint(int value) throws AnyException {
+	public static Short asSmallint(Integer value) throws AnyException {
+		if (value == null)
+			return null;
 		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;
 		if (throwOverflowExceptions) {
@@ -61,7 +65,9 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return result;
 	}
 
-	public static short asSmallint(long value) throws AnyException {
+	public static Short asSmallint(Long value) throws AnyException {
+		if (value == null)
+			return null;
 		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;
 		if (throwOverflowExceptions) {
@@ -76,7 +82,9 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return result;
 	}
 
-	public static short asSmallint(float value) throws AnyException {
+	public static Short asSmallint(Float value) throws AnyException {
+		if (value == null)
+			return null;
 		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;;
 		if (throwOverflowExceptions) {
@@ -91,7 +99,9 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return result;
 	}
 
-	public static short asSmallint(double value) throws AnyException {
+	public static Short asSmallint(Double value) throws AnyException {
+		if (value == null)
+			return null;
 		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;;
 		if (throwOverflowExceptions) {
@@ -106,9 +116,9 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return result;
 	}
 
-	public static short asSmallint(BigDecimal value) throws AnyException {
+	public static Short asSmallint(BigDecimal value) throws AnyException {
 		if (value == null)
-			throw new NullValueException();
+			return null;
 		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;;
 		if (throwOverflowExceptions) {
@@ -123,9 +133,9 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return result;
 	}
 
-	public static short asSmallint(String value) throws AnyException {
+	public static Short asSmallint(String value) throws AnyException {
 		if (value == null)
-			throw new NullValueException();
+			return null;
 		return asSmallint(EDecimal.asDecimal(value));
 	}
 
@@ -133,7 +143,9 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static BigDecimal asNumber(short value) throws AnyException {
+	public static BigDecimal asNumber(Short value) throws AnyException {
+		if (value == null)
+			return null;
 		return EDecimal.asDecimal(value);
 	}
 
@@ -161,16 +173,24 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return StrictMath.pow(op1, op2);
 	}
 
-	public static int compareTo(short op1, short op2) throws AnyException {
-		return (int) (op1 - op2);
+	public static int compareTo(Short op1, Short op2) throws AnyException {
+		if (op1 == null && op2 == null)
+			return 0;
+		if (op1 == null || op2 == null)
+			throw new NullValueException();
+		return op1.compareTo(op2);
 	}
 
-	public static boolean equals(short op1, short op2) {
-		return op1 == op2;
+	public static boolean equals(Short op1, Short op2) {
+		if (op1 == null || op2 == null)
+			return false;
+		return op1.equals(op2);
 	}
 
-	public static boolean notEquals(short op1, short op2) {
-		return op1 != op2;
+	public static boolean notEquals(Short op1, Short op2) {
+		if (op1 == null || op2 == null)
+			return false;
+		return !op1.equals(op2);
 	}
 
 	public int precision() {

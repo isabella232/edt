@@ -68,39 +68,51 @@ public class EString extends AnyBoxedObject<String> {
 		return isa;
 	}
 
-	public static String asString(boolean value, Integer... length) {
+	public static String asString(Boolean value, Integer... length) {
+		if (value == null)
+			return null;
 		return asString(String.valueOf(value), length);
 	}
 
-	public static String asString(short value, Integer... length) {
+	public static String asString(Short value, Integer... length) {
+		if (value == null)
+			return null;
 		return asString(String.valueOf(value), length);
 	}
 
-	public static String asString(int value, Integer... length) {
+	public static String asString(Integer value, Integer... length) {
+		if (value == null)
+			return null;
 		return asString(String.valueOf(value), length);
 	}
 
-	public static String asString(long value, Integer... length) {
+	public static String asString(Long value, Integer... length) {
+		if (value == null)
+			return null;
 		return asString(String.valueOf(value), length);
 	}
 
-	public static String asString(float value, Integer... length) {
+	public static String asString(Float value, Integer... length) {
+		if (value == null)
+			return null;
 		return asString(String.valueOf(value), length);
 	}
 
-	public static String asString(double value, Integer... length) {
+	public static String asString(Double value, Integer... length) {
+		if (value == null)
+			return null;
 		return asString(String.valueOf(value), length);
 	}
 
 	public static String asString(BigDecimal value, Integer... length) {
 		if (value == null)
-			throw new NullValueException();
+			return null;
 		return asString(String.valueOf(value), length);
 	}
 
 	public static String asString(String value, Integer... length) {
 		if (value == null)
-			throw new NullValueException();
+			return null;
 		if (length.length != 0 && value.length() > length[0])
 			value = value.substring(0, length[0]);
 		return value;
@@ -118,7 +130,7 @@ public class EString extends AnyBoxedObject<String> {
 	 */
 	public static String asString(Calendar cal, Integer... length) {
 		if (cal == null)
-			throw new NullValueException();
+			return null;
 		// Get the format pattern to use.
 		String format = "";
 		String separator = null;
@@ -207,7 +219,7 @@ public class EString extends AnyBoxedObject<String> {
 	 */
 	public static BigDecimal asNumber(String value, Integer... length) throws AnyException {
 		if (value == null)
-			throw new NullValueException();
+			return null;
 		return EDecimal.asDecimal(asString(value, length));
 	}
 
@@ -231,13 +243,13 @@ public class EString extends AnyBoxedObject<String> {
 
 	public static boolean equals(String op1, String op2) throws AnyException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return false;
 		return op1.equals(op2);
 	}
 
 	public static boolean notEquals(String op1, String op2) throws AnyException {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return false;
 		return !op1.equals(op2);
 	}
 

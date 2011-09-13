@@ -46,35 +46,45 @@ public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 		return value instanceof EFloat || value instanceof Double;
 	}
 
-	public static double asFloat(short value) {
-		return Double.valueOf(value);
-	}
-
-	public static double asFloat(int value) {
-		return Double.valueOf(value);
-	}
-
-	public static double asFloat(long value) {
-		return Double.valueOf(value);
-	}
-
-	public static double asFloat(float value) {
-		return Double.valueOf(value);
-	}
-
-	public static double asFloat(double value) {
-		return value;
-	}
-
-	public static double asFloat(BigDecimal value) {
+	public static Double asFloat(Short value) {
 		if (value == null)
-			throw new NullValueException();
+			return null;
+		return Double.valueOf(value);
+	}
+
+	public static Double asFloat(Integer value) {
+		if (value == null)
+			return null;
+		return Double.valueOf(value);
+	}
+
+	public static Double asFloat(Long value) {
+		if (value == null)
+			return null;
+		return Double.valueOf(value);
+	}
+
+	public static Double asFloat(Float value) {
+		if (value == null)
+			return null;
+		return Double.valueOf(value);
+	}
+
+	public static Double asFloat(Double value) {
+		if (value == null)
+			return null;
+		return Double.valueOf(value);
+	}
+
+	public static Double asFloat(BigDecimal value) {
+		if (value == null)
+			return null;
 		return value.doubleValue();
 	}
 
-	public static double asFloat(String value) throws AnyException {
+	public static Double asFloat(String value) throws AnyException {
 		if (value == null)
-			throw new NullValueException();
+			return null;
 		return asFloat(EDecimal.asDecimal(value));
 	}
 
@@ -102,15 +112,23 @@ public class EFloat extends AnyBoxedObject<Double> implements AnyNumber {
 		return StrictMath.pow(op1, op2);
 	}
 
-	public static int compareTo(double op1, double op2) throws AnyException {
-		return (int) (op1 - op2);
+	public static int compareTo(Double op1, Double op2) throws AnyException {
+		if (op1 == null && op2 == null)
+			return 0;
+		if ((op1 != null && op2 == null) || (op1 == null && op2 != null))
+			throw new NullValueException();
+		return op1.compareTo(op2);
 	}
 
-	public static boolean equals(double op1, double op2) {
-		return op1 == op2;
+	public static boolean equals(Double op1, Double op2) {
+		if (op1 == null || op2 == null)
+			return false;
+		return op1.equals(op2);
 	}
 
-	public static boolean notEquals(double op1, double op2) {
-		return op1 != op2;
+	public static boolean notEquals(Double op1, Double op2) {
+		if (op1 == null || op2 == null)
+			return false;
+		return !op1.equals(op2);
 	}
 }

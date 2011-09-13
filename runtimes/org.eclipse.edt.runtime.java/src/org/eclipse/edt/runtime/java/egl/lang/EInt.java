@@ -47,15 +47,21 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return EString.asString(object);
 	}
 
-	public static int asInt(short value) throws AnyException {
-		return value;
+	public static Integer asInt(Short value) throws AnyException {
+		if (value == null)
+			return null;
+		return value.intValue();
 	}
 
-	public static int asInt(int value) throws AnyException {
-		return value;
+	public static Integer asInt(Integer value) throws AnyException {
+		if (value == null)
+			return null;
+		return value.intValue();
 	}
 
-	public static int asInt(long value) throws AnyException {
+	public static Integer asInt(Long value) throws AnyException {
+		if (value == null)
+			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
@@ -70,9 +76,9 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 
-	public static int asInt(BigInteger value) throws AnyException {
+	public static Integer asInt(BigInteger value) throws AnyException {
 		if (value == null)
-			throw new NullValueException();
+			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
@@ -87,7 +93,9 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 
-	public static int asInt(float value) throws AnyException {
+	public static Integer asInt(Float value) throws AnyException {
+		if (value == null)
+			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
@@ -102,7 +110,9 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 
-	public static int asInt(double value) throws AnyException {
+	public static Integer asInt(Double value) throws AnyException {
+		if (value == null)
+			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
@@ -117,9 +127,9 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 
-	public static int asInt(BigDecimal value) throws AnyException {
+	public static Integer asInt(BigDecimal value) throws AnyException {
 		if (value == null)
-			throw new NullValueException();
+			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
@@ -134,9 +144,9 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 
-	public static int asInt(String value) throws AnyException {
+	public static Integer asInt(String value) throws AnyException {
 		if (value == null)
-			throw new NullValueException();
+			return null;
 		return asInt(EDecimal.asDecimal(value));
 	}
 
@@ -144,7 +154,9 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static BigDecimal asNumber(int value) throws AnyException {
+	public static BigDecimal asNumber(Integer value) throws AnyException {
+		if (value == null)
+			return null;
 		return EDecimal.asDecimal(value);
 	}
 
@@ -192,15 +204,23 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return op1 ^ op2;
 	}
 
-	public static int compareTo(int op1, int op2) throws AnyException {
-		return op1 - op2;
+	public static int compareTo(Integer op1, Integer op2) throws AnyException {
+		if (op1 == null && op2 == null)
+			return 0;
+		if ((op1 != null && op2 == null) || (op1 == null && op2 != null))
+			throw new NullValueException();
+		return op1.compareTo(op2);
 	}
 
-	public static boolean equals(int op1, int op2) {
-		return op1 == op2;
+	public static boolean equals(Integer op1, Integer op2) {
+		if (op1 == null || op2 == null)
+			return false;
+		return op1.equals(op2);
 	}
 
-	public static boolean notEquals(int op1, int op2) {
-		return op1 != op2;
+	public static boolean notEquals(Integer op1, Integer op2) {
+		if (op1 == null || op2 == null)
+			return false;
+		return !op1.equals(op2);
 	}
 }

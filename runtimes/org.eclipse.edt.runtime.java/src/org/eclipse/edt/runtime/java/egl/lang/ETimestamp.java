@@ -140,13 +140,13 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 
 	public static Calendar asTimestamp(Calendar timestamp) throws AnyException {
 		if (timestamp == null)
-			throw new NullValueException();
+			return null;
 		return asTimestamp(timestamp, DefaultPattern);
 	}
 
 	public static Calendar asTimestamp(Calendar timestamp, String timespanMask) throws AnyException {
 		if (timestamp == null)
-			throw new NullValueException();
+			return null;
 		if (timespanMask == null || timespanMask.length() == 0)
 			timespanMask = DefaultPattern;
 		// Default values in case the pattern doesn't specify things.
@@ -162,7 +162,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 
 	public static Calendar asTimestamp(String timestamp, Integer... args) throws AnyException {
 		if (timestamp == null)
-			throw new NullValueException();
+			return null;
 		if (args != null && args.length == 2)
 			return convert(timestamp, args[0], args[1]);
 		else
@@ -171,7 +171,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 
 	public static Calendar asTimestamp(String timestamp, String timespanMask) throws AnyException {
 		if (timestamp == null || timespanMask == null)
-			throw new NullValueException();
+			return null;
 		// Default values in case the pattern doesn't specify things.
 		int startCode = YEAR_CODE;
 		int endCode = SECOND_CODE;
@@ -185,7 +185,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 
 	public static Calendar asTimestamp(Calendar date, Integer... args) {
 		if (date == null)
-			throw new NullValueException();
+			return null;
 		if (args == null)
 			return asTimestamp((Calendar) date, YEAR_CODE, SECOND_CODE);
 		else
@@ -194,7 +194,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 
 	public static Calendar asTimestamp(Calendar date, int startCode, int endCode) {
 		if (date == null)
-			throw new NullValueException();
+			return null;
 		Calendar result = DateTimeUtil.getBaseCalendar();
 		// Get values for the full set of fields. Fields that we need will be
 		// set from the calendar. The others will be set to reasonable defaults.
@@ -275,7 +275,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 */
 	public static Calendar asTimestamp(String timestamp, String format, int startCode, int endCode) throws AnyException {
 		if (timestamp == null)
-			throw new NullValueException();
+			return null;
 		Calendar result;
 		timestamp = timestamp.trim();
 		try {
@@ -290,13 +290,13 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 
 	public static boolean equals(Calendar op1, Calendar op2) {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return false;
 		return op1.equals(op2);
 	}
 
 	public static boolean notEquals(Calendar op1, Calendar op2) {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return false;
 		return !op1.equals(op2);
 	}
 

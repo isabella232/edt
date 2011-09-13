@@ -80,7 +80,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	 */
 	public static Calendar asDate(String date) throws TypeCastException {
 		if (date == null)
-			throw new NullValueException();
+			return null;
 		// Quick check for strings that are too long or too short.
 		int length = date.length();
 		if (length < 5 || length > 10) {
@@ -161,19 +161,19 @@ public class EDate extends AnyBoxedObject<Calendar> {
 
 	public static Calendar asDate(Calendar date) throws AnyException {
 		if (date == null)
-			throw new NullValueException();
+			return null;
 		return ETimestamp.convert(EString.asString(date), ETimestamp.YEAR_CODE, ETimestamp.DAY_CODE);
 	}
 
 	public static boolean equals(Calendar op1, Calendar op2) {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return false;
 		return op1.equals(op2);
 	}
 
 	public static boolean notEquals(Calendar op1, Calendar op2) {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return false;
 		return !op1.equals(op2);
 	}
 
