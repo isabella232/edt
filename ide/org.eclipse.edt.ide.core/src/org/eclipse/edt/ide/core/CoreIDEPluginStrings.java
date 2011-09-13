@@ -59,5 +59,8 @@ public class CoreIDEPluginStrings extends NLS {
 	public static String analyzingChangedIRs;
 	public static String analyzingAllIRs;
 	public static String calculatingGeneratorChanges;
+	public static String projectHasBuildProblem;
+	public static String prereqProjectHasBuildProblem;
+	public static String prereqProjectMustBeRebuilt;
 }
 

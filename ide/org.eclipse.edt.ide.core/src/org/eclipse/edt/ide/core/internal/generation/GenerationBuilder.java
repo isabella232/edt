@@ -2,6 +2,7 @@ package org.eclipse.edt.ide.core.internal.generation;
 
 import java.util.Map;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
@@ -9,12 +10,17 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.CancelledException;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.builder.NullBuildNotifier;
+import org.eclipse.edt.ide.core.CoreIDEPluginStrings;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
+import org.eclipse.edt.ide.core.internal.builder.AbstractMarkerProblemRequestor;
+import org.eclipse.edt.ide.core.internal.builder.BuildManager;
 import org.eclipse.edt.ide.core.internal.builder.BuildNotifier;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 
 //TODO:
@@ -38,28 +44,29 @@ public class GenerationBuilder extends IncrementalProjectBuilder {
         IResourceDelta delta = getDelta(getProject());
         notifier.begin();
         try {
-        	if (kind == IncrementalProjectBuilder.FULL_BUILD) {
-				doClean();
-		        cleanBuild(delta, notifier);
+        	if(isWorthBuilding()){
+	        	if (kind == IncrementalProjectBuilder.FULL_BUILD) {
+					doClean();
+			        cleanBuild(delta, notifier);
+	        	}
+	        	else if (!GenerationBuildManager.getInstance().getProjectState(getProject())) {
+			     	doClean();
+			     	cleanBuild(null, notifier);
+	        	}
+	        	else if (needFullBuild()) {
+			     	doClean();
+			     	cleanBuild(null, notifier);
+	        	}
+	        	else {
+		        	if (delta == null) {
+			        	doClean();
+			        	cleanBuild(delta, notifier);
+			        } else{
+			        	incrementalBuild(delta, notifier);
+			        }
+	        	}
+	        	isOK = true;
         	}
-        	else if (!GenerationBuildManager.getInstance().getProjectState(getProject())) {
-		     	doClean();
-		     	cleanBuild(null, notifier);
-        	}
-        	else if (needFullBuild()) {
-		     	doClean();
-		     	cleanBuild(null, notifier);
-        	}
-        	else {
-	        	if (delta == null) {
-		        	doClean();
-		        	cleanBuild(delta, notifier);
-		        } else{
-		        	incrementalBuild(delta, notifier);
-		        }
-        	}
-        	
-        	isOK = true;
         } catch (CancelledException canceledException) {
 			throw new OperationCanceledException();
         } finally {
@@ -152,6 +159,58 @@ public class GenerationBuilder extends IncrementalProjectBuilder {
 			}
 		}
 		
+		return false;
+	}
+	
+	private boolean isWorthBuilding() {
+		try {
+			// Check to see if this project has any unhandled build exceptions
+			if(projectHasUnhandledBuildException(getProject())){
+				// Remove all existing generation problem markers, since we are about to issue a single problem marker for the entire project
+				getProject().deleteMarkers(EDTCoreIDEPlugin.GENERATION_PROBLEM, true, IResource.DEPTH_INFINITE);
+				
+				// Indicate that the project could not be generated
+				IMarker marker = getProject().createMarker(EDTCoreIDEPlugin.GENERATION_PROBLEM);
+				marker.setAttribute(IMarker.MESSAGE, CoreIDEPluginStrings.projectHasBuildProblem);
+				marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+				return false;
+			}
+			
+			// make sure all of the prereq projects do not have an unhandled EDT build exception
+			IProject currentProject = getProject();
+			IProject[] requiredProjects = ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).getRequiredProjects();
+			for (int i = 0; i <  requiredProjects.length; i++) {
+				IProject p = requiredProjects[i];
+				
+				// We have to confirm that a project exists and is open before we try to get its state.
+				// We won't get to this point if the project has an unhandled EDT build exception due to the marker check above
+				if (p.exists() && p.isOpen()){
+					if(!BuildManager.getInstance().getProjectState(p))  {
+						boolean cycleReferences = ProjectBuildPathManager.getInstance().getProjectBuildPath(p).hasCycle();
+						if (cycleReferences && EGLVAGCompatibilitySetting.isVAGCompatibility()){
+							continue;
+						}
+						currentProject.deleteMarkers(EDTCoreIDEPlugin.GENERATION_PROBLEM, true, IResource.DEPTH_INFINITE);
+						IMarker marker = currentProject.createMarker(EDTCoreIDEPlugin.GENERATION_PROBLEM);
+						marker.setAttribute(IMarker.MESSAGE, projectHasUnhandledBuildException(p)
+								? CoreIDEPluginStrings.bind(CoreIDEPluginStrings.prereqProjectHasBuildProblem, p.getName())
+										: CoreIDEPluginStrings.bind(CoreIDEPluginStrings.prereqProjectMustBeRebuilt, p.getName()));
+						marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+						return false;
+					}
+				}
+			}
+		} catch (CoreException e) {
+			throw new BuildException(e);
+		}
+		return true;
+	}
+	
+	private boolean projectHasUnhandledBuildException(IProject project) throws CoreException{
+		IMarker[] markers = project.findMarkers(AbstractMarkerProblemRequestor.BUILD_PROBLEM, false, IResource.DEPTH_ZERO);
+		if(markers.length > 0){
+			return true;
+		}
 		return false;
 	}
 }

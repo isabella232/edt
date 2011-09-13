@@ -26,6 +26,7 @@ import com.ibm.icu.text.NumberFormat;
 public abstract class AbstractMarkerProblemRequestor extends DefaultProblemRequestor {
 
 	public static final String PROBLEM = EDTCoreIDEPlugin.PLUGIN_ID + ".problem"; //$NON-NLS-1$
+	public static final String BUILD_PROBLEM = EDTCoreIDEPlugin.PLUGIN_ID + ".buildProblem"; //$NON-NLS-1$
 	public static final String CONTEXT_SPECIFIC_PROBLEM = EDTCoreIDEPlugin.PLUGIN_ID + ".contextSpecificProblem"; //$NON-NLS-1$
 	public static final String FILE_PROBLEM = EDTCoreIDEPlugin.PLUGIN_ID + ".fileProblem"; //$NON-NLS-1$
     public static final String PARSER_PROBLEM = EDTCoreIDEPlugin.PLUGIN_ID + ".syntaxProblem"; //$NON-NLS-1$

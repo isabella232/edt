@@ -48,6 +48,13 @@
        <persistent value="true"/>
     </extension>
     <extension
+          id="buildProblem"
+          name="%edtBuildProblemName"
+          point="org.eclipse.core.resources.markers">
+       <super type="org.eclipse.edt.ide.core.problem"/>
+       <persistent value="true"/>
+    </extension>
+    <extension
           id="contextSpecificProblem"
           name="%edtContextSpecificProblemName"
           point="org.eclipse.core.resources.markers">

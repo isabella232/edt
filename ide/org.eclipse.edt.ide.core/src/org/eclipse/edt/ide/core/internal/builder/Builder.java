@@ -153,7 +153,7 @@ public class Builder extends IncrementalProjectBuilder {
 	protected void addUnhandledExceptionMarker(){
 		try {
 			deleteAllMarkers();
-			IMarker marker = getProject().createMarker(AbstractMarkerProblemRequestor.PROBLEM);
+			IMarker marker = getProject().createMarker(AbstractMarkerProblemRequestor.BUILD_PROBLEM);
 			marker.setAttribute(IMarker.MESSAGE, BuilderResources.buildUnhandledException);
 			marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
 		} catch (CoreException e) {
@@ -319,7 +319,7 @@ public class Builder extends IncrementalProjectBuilder {
 			if (ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).isEGLPathBroken()) {
 				getProject().deleteMarkers(AbstractMarkerProblemRequestor.PROBLEM, true, IResource.DEPTH_INFINITE);
 
-				IMarker marker = getProject().createMarker(AbstractMarkerProblemRequestor.PROBLEM);
+				IMarker marker = getProject().createMarker(AbstractMarkerProblemRequestor.BUILD_PROBLEM);
 				marker.setAttribute(IMarker.MESSAGE, BuilderResources.buildAbortDueToEGLpathProblems);
 				marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
 				marker.setAttribute(IEGLConstants.EGL_Build_aborted, true);
