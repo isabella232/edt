@@ -77,6 +77,7 @@ public class XMLSerializer implements Serializer {
 			case '&': buffer.append("&amp;"); break;
 			case ',': buffer.append("&#44;"); break;
 			case '"': buffer.append("&quot;"); break;
+			case '\t': buffer.append("&#09;"); break;
 			case '\n': buffer.append("&#10;"); break;
 			case '\r': buffer.append("&#13;"); break;
 			default: buffer.append(c);
