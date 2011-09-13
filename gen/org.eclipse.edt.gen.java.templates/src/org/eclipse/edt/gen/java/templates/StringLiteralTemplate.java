@@ -107,6 +107,11 @@ public class StringLiteralTemplate extends JavaTemplate {
 				buf.insert(i, '\\');
 				i++;
 				buf.setCharAt(i, 't');
+			} else if (c == '\\') {
+				// Insert a slash before the character and increment
+				// the counter to account for the new character.
+				buf.insert(i, '\\');
+				i++;
 			}
 		}
 		return buf.toString();
