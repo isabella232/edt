@@ -81,6 +81,8 @@ public class SQLNlsStrings extends NLS {
 	public static String SQL_CONNECTION_DONE_MSG;
 	public static String SQL_CONNECTION_PROPERTIES_FOR;
 	public static String SQL_CONNECTION_JNDI_PROPERTY;
+	public static String SQL_BINDING_NAME_PROPERTY;
+	public static String SQL_CONNECTION_DEFAULT_SCHEMA_PROPERTY;
 	
 	//	SQL userid and password prompt dialog
 	public static String SQLUserIDAndPasswordDialogTitle;

@@ -292,6 +292,10 @@ public class EGLSQLUtility {
 		 return profile.getBaseProperties().getProperty(IJDBCDriverDefinitionConstants.DATABASE_NAME_PROP_ID);
 	 }
 	 
+	 public static String getDefaultSchema(IConnectionProfile profile) {
+		 return profile.getBaseProperties().getProperty(SQLConstants.DATABASE_DEFAULT_SCHEMA_ID);
+	 }
+	 
 	 public static String getDecodedConnectionPassword(IConnectionProfile connection) {
 		 String password = "";
 		 if (connection != null) {
@@ -362,7 +366,7 @@ public class EGLSQLUtility {
 	}
 	
 	public static ConnectionDisplayProperty[] getConnectionDisplayProperties(IConnectionProfile profile) {
-		ConnectionDisplayProperty[] properties = new ConnectionDisplayProperty[8];
+		ConnectionDisplayProperty[] properties = new ConnectionDisplayProperty[SQLConstants.DATABASE_PROFILE_PROPERTY_LENGTH];
 
 		properties[0] = new ConnectionDisplayProperty(
 				SQLNlsStrings.SQL_CONNECTION_DATABASE_PROPERTY,
@@ -388,6 +392,11 @@ public class EGLSQLUtility {
 						.getSQLPassword(profile));
 		properties[7] = new ConnectionDisplayProperty(
 				SQLNlsStrings.SQL_CONNECTION_JNDI_PROPERTY,"jdbc/" + EGLSQLUtility.getDBNameProperty(profile));
+		properties[8] = new ConnectionDisplayProperty(
+				SQLNlsStrings.SQL_BINDING_NAME_PROPERTY,profile.getName());
+		properties[9] = new ConnectionDisplayProperty(
+				SQLNlsStrings.SQL_CONNECTION_DEFAULT_SCHEMA_PROPERTY,
+				EGLSQLUtility.getDefaultSchema(profile));
 
 		return properties;
 	}

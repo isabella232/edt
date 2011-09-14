@@ -118,4 +118,7 @@ public class SQLConstants {
 	public static final String CLOSE_STATEMENT = "close resultSetID"; //$NON-NLS-1$
 	public static final String GET_BY_POSITION_STATEMENT = "fetch resultSetID using descriptor sqlda"; //$NON-NLS-1$
 	public static final int FORMAT_WIDTH = 56; // in bytes
+	
+	public static final int DATABASE_PROFILE_PROPERTY_LENGTH =10;//$NON-NLS-1$
+	public static final String DATABASE_DEFAULT_SCHEMA_ID="org.eclipse.datatools.connectivity.db.defaultSchema";
 }
