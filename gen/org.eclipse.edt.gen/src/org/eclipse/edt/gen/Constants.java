@@ -44,9 +44,9 @@ public class Constants {
 	public static final String AnnotationXmlElement = "eglx.xml.binding.annotation.xmlElement";
 	public static final String AnnotationJsonName = "eglx.json.JsonName";
 	public static final String AnnotationDedicatedService = "eglx.services.DedicatedService";
-	public static final String AnnotationBindService = "eglx.services.BindService";
-	public static final String PartHttp = "eglx.http.Http";
-	public static final String LibraryService = "eglx.services.ServiceLib";
+	public static final String AnnotationResource = "eglx.lang.Resource";
+	public static final String PartHttpRest = "eglx.http.HttpRest";
+	public static final String LibrarySys = "eglx.lang.SysLib";
 	public static final String AnnotationXMLStructureKind = "eglx.xml.binding.annotation.XMLStructureKind";
 	public static final String AnnotationXMLValue = "eglx.xml.binding.annotation.XMLValue";
 }
