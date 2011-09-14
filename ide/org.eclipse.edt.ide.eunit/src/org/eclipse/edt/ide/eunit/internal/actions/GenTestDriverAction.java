@@ -69,6 +69,7 @@ public abstract class GenTestDriverAction implements	IObjectActionDelegate{
 	
 	protected static final String GENERATORID_JAVA = "org.eclipse.edt.ide.gen.JavaGenProvider";
 	protected static final String GENERATORID_JAVASCRIPT = "org.eclipse.edt.ide.gen.JavaScriptGenProvider";
+	protected static final String GENERATORID_JAVASCRIPT_DEV = "org.eclipse.edt.ide.gen.JavaScriptDevGenProvider";
 	
 	/**
 	 * The root relative path of the EGL Resources plugin to retrieve the files to copy from
