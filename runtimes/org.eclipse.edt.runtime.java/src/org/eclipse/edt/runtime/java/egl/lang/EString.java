@@ -305,6 +305,12 @@ public class EString extends AnyBoxedObject<String> {
 		return EDecimal.asDecimal(asString(value, length));
 	}
 
+	public static BigDecimal asNumber(EString value, Integer... length) throws AnyException {
+		if (value == null)
+			return null;
+		return EDecimal.asDecimal(asString(value.ezeUnbox(), length));
+	}
+
 	public static String plus(String op1, String op2) throws AnyException {
 		if (op1 == null || op2 == null)
 			throw new NullValueException();

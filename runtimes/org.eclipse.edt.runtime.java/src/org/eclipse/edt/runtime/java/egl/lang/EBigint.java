@@ -229,6 +229,12 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return EDecimal.asDecimal(value);
 	}
 
+	public static BigDecimal asNumber(EBigint value) throws AnyException {
+		if (value == null)
+			return null;
+		return EDecimal.asDecimal(value.ezeUnbox());
+	}
+
 	public static long plus(long op1, long op2) throws AnyException {
 		return op1 + op2;
 	}

@@ -246,6 +246,12 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return EDecimal.asDecimal(value);
 	}
 
+	public static BigDecimal asNumber(EInt value) throws AnyException {
+		if (value == null)
+			return null;
+		return EDecimal.asDecimal(value.ezeUnbox());
+	}
+
 	public static int defaultValue() {
 		return DefaultValue;
 	}

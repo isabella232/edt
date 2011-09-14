@@ -488,6 +488,12 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 		return EDecimal.asDecimal(value);
 	}
 
+	public static BigDecimal asNumber(EDecimal value) throws AnyException {
+		if (value == null)
+			return null;
+		return EDecimal.asDecimal(value.ezeUnbox());
+	}
+
 	public static BigDecimal plus(BigDecimal op1, BigDecimal op2) {
 		if (op1 == null || op2 == null)
 			throw new NullValueException();

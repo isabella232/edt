@@ -264,6 +264,12 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return EDecimal.asDecimal(value);
 	}
 
+	public static BigDecimal asNumber(ESmallint value) throws AnyException {
+		if (value == null)
+			return null;
+		return EDecimal.asDecimal(value.ezeUnbox());
+	}
+
 	public static int plus(short op1, short op2) throws AnyException {
 		return op1 + op2;
 	}
