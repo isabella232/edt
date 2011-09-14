@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import egl.lang.AnyException;
+import egl.lang.DynamicAccessException;
 import egl.lang.InvocationException;
 
 public class Delegate {
@@ -27,7 +28,10 @@ public class Delegate {
 			this.method = target.getClass().getMethod(methodName, argTypes);
 		}
 		catch (Exception ex) {
-			throw new RuntimeException(ex); // TODO this should be one of our exceptions...something for an internal error
+			DynamicAccessException dax = new DynamicAccessException();
+			dax.setMessage( ex.toString() );
+			dax.key = methodName;
+			throw dax;
 		}
 	}
 
@@ -35,14 +39,17 @@ public class Delegate {
 		try {
 			return method.invoke(target, args);
 		}
-		catch (InvocationTargetException e) {
-			if (e.getTargetException() instanceof AnyException)
-				throw (AnyException) e.getTargetException();
-			else
-				throw new RuntimeException(e);
-		}
-		catch (Exception e) {
+		catch (Throwable problem) {
+			if ( problem instanceof InvocationTargetException )
+			{
+				problem = ((InvocationTargetException)problem).getTargetException();
+				if ( problem instanceof AnyException )
+				{
+					throw (AnyException)problem;
+				}
+			}
 			InvocationException ix = new InvocationException();
+			ix.setMessage( problem.toString() );
 			ix.name = method.getName();
 			throw ix;
 		}
