@@ -80,9 +80,9 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 
-import eglx.http.HttpRequest;
-import eglx.http.HttpResponse;
 import eglx.http.HttpUtilities;
+import eglx.http.Request;
+import eglx.http.Response;
 import eglx.json.JsonUtilities;
 import eglx.services.ServiceKind;
 import eglx.services.ServiceUtilities;
@@ -128,8 +128,8 @@ public class EvServer implements IClientProxy {
 			this.ps = ps;
 		}
 		
-		protected HttpURLConnection getHttpProxyConnection( HttpRequest restRequest ) throws IOException {		
-			String urlString = restRequest.getUri();
+		protected HttpURLConnection getHttpProxyConnection( Request restRequest ) throws IOException {		
+			String urlString = restRequest.uri;
 			Proxy proxy = getProxy( urlString );
 			if( proxy != null )
 			{
@@ -194,7 +194,7 @@ public class EvServer implements IClientProxy {
 		private void runProxy(RuiBrowserHttpRequest ruiRequest, final PrintStream ps) {
 			String urlString = ruiRequest.getURL();
 			try{
-				HttpRequest innerRequest = null;
+				Request innerRequest = null;
 				if( ruiRequest.getHeaders() != null && ruiRequest.getHeaders().containsKey(ProxyUtilities.EGL_REST_CALL) ){
 					eglRestService(urlString, ruiRequest, ps, innerRequest);
 				}
@@ -221,7 +221,7 @@ public class EvServer implements IClientProxy {
 			}
 		}
 		
-		private void eglRestService(String urlString, RuiBrowserHttpRequest ruiRequest, final PrintStream ps, HttpRequest innerRequest) {
+		private void eglRestService(String urlString, RuiBrowserHttpRequest ruiRequest, final PrintStream ps, Request innerRequest) {
 			ServiceKind serviceKind = innerRequest != null && ProxyUtilities.isSoapCall( innerRequest ) ? ServiceKind.WEB : ServiceKind.REST;
 			try
 			{
@@ -241,7 +241,7 @@ public class EvServer implements IClientProxy {
 					}
 				}
 				
-				HttpRequest request = null;
+				Request request = null;
 				isDedicated = innerRequest != null && ProxyUtilities.isEGLDedicatedCall(innerRequest);
 				boolean useTestServer = (isDedicated && !isDesignPane(intContextKey)) || isPreviewPane(intContextKey);
 				if (!useTestServer) {
@@ -258,7 +258,7 @@ public class EvServer implements IClientProxy {
 					}
 					else {
 						//TODO use project from inner URI and expect the user's binding is for the test project?
-						String innerURI = innerRequest.getUri();
+						String innerURI = innerRequest.uri;
 						String path = new URL(innerURI).getPath();
 						int start = path.startsWith( "/" ) ? 1 : 0;
 						int end = path.indexOf( '/', start );
@@ -276,21 +276,21 @@ public class EvServer implements IClientProxy {
 						}
 						
 						String testServerURI = "http://localhost:" + config.getPort();
-						request = new HttpRequest();
-						request.setBody( ruiRequest.getContent() );
-						request.setMethod( HttpUtilities.convert( ruiRequest.getMethod() ) );
+						request = new Request();
+						request.body = ruiRequest.getContent();
+						request.method = HttpUtilities.convert( ruiRequest.getMethod() );
 						
 						EDictionary headers = new EDictionary();
 						Map<String,String> headerMap = ruiRequest.getHeaders();
 						for(Map.Entry<String, String> entry : headerMap.entrySet()) {
 							headers.put(entry.getKey(), entry.getValue());
 						}
-						request.setHeaders(headers);
+						request.headers = headers;
 						
 						if (isDedicated) {
 							serviceKind = ServiceKind.EGL;
 							testServerURI += ruiRequest.getURL().trim();
-							request.setUri( testServerURI );
+							request.uri = testServerURI;
 							
 							// Need to use the outer request as the inner so that we can get to the proxy to do the actual invocation.
 							innerRequest = request;
@@ -298,35 +298,35 @@ public class EvServer implements IClientProxy {
 						else {
 							// Modify the inner request to point to the test server
 							testServerURI += "/" + project.getName() + "/restservices/";
-							String innerURI = innerRequest.getUri();
+							String innerURI = innerRequest.uri;
 							int index = innerURI.indexOf( "/restservices/" );//TODO is the servlet guaranteed to be /restservices/?
 							if (index != -1) {
 								testServerURI += innerURI.substring(index + 14);
-								innerRequest.setUri(testServerURI);
+								innerRequest.uri = testServerURI;
 							}
 						}
 					}
 				}
 				
 				if (request == null) {
-					request = new HttpRequest();
-					request.setUri( ruiRequest.getURL() );
-					request.setBody( ruiRequest.getContent() );
-					request.setMethod( HttpUtilities.convert( ruiRequest.getMethod() ) );
+					request = new Request();
+					request.uri = ruiRequest.getURL();
+					request.body = ruiRequest.getContent();
+					request.method = HttpUtilities.convert( ruiRequest.getMethod() );
 					
 					EDictionary headers = new EDictionary();
 					Map<String,String> headerMap = ruiRequest.getHeaders();
 					for(Map.Entry<String, String> entry : headerMap.entrySet()) {
 						headers.put(entry.getKey(), entry.getValue());
 					}
-					request.setHeaders(headers);
+					request.headers = headers;
 				}
 				
-				HttpResponse response = super.runProxy( urlString, request, innerRequest );
+				Response response = super.runProxy( urlString, request, innerRequest );
 				if( response != null )
 				{
-					ps.print( getResponseHeader( urlString, getContentType( urlString ), !urlString.endsWith(".egl"), response.getStatus(), response.getStatusMessage()  ) );
-					String content = response.getBody();
+					ps.print( getResponseHeader( urlString, getContentType( urlString ), !urlString.endsWith(".egl"), response.status, response.statusMessage  ) );
+					String content = response.body;
 					ps.write( content.getBytes("utf-8") );
 				}
 			}
@@ -345,15 +345,15 @@ public class EvServer implements IClientProxy {
 		}
 		
 		@Override
-		protected boolean isEGLDedicatedCall(HttpRequest request) {
+		protected boolean isEGLDedicatedCall(Request request) {
 			// We always run dedicated services in a remote test server. Return false so we don't try to run it locally.
 			return false;
 		}
 		
 		@Override
-		protected void setBody(HttpResponse outerResponse, HttpResponse innerResponse) {
-			if (isDedicated && innerResponse.getStatus() == 200) {
-				outerResponse.setBody(innerResponse.getBody());
+		protected void setBody(Response outerResponse, Response innerResponse) {
+			if (isDedicated) {
+				outerResponse.body =innerResponse.body;
 			}
 			else {
 				super.setBody(outerResponse, innerResponse);
