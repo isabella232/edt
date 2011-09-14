@@ -242,7 +242,6 @@ public class EvServer implements IClientProxy {
 				}
 				
 				HttpRequest request = null;
-				HttpResponse response = null;
 				isDedicated = innerRequest != null && ProxyUtilities.isEGLDedicatedCall(innerRequest);
 				boolean useTestServer = (isDedicated && !isDesignPane(intContextKey)) || isPreviewPane(intContextKey);
 				if (!useTestServer) {
@@ -323,10 +322,7 @@ public class EvServer implements IClientProxy {
 					request.setHeaders(headers);
 				}
 				
-				if (response == null) {
-					response = super.runProxy( urlString, request, innerRequest );
-				}
-				
+				HttpResponse response = super.runProxy( urlString, request, innerRequest );
 				if( response != null )
 				{
 					ps.print( getResponseHeader( urlString, getContentType( urlString ), !urlString.endsWith(".egl"), response.getStatus(), response.getStatusMessage()  ) );
@@ -356,7 +352,7 @@ public class EvServer implements IClientProxy {
 		
 		@Override
 		protected void setBody(HttpResponse outerResponse, HttpResponse innerResponse) {
-			if (isDedicated) {
+			if (isDedicated && innerResponse.getStatus() == 200) {
 				outerResponse.setBody(innerResponse.getBody());
 			}
 			else {
