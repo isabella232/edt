@@ -128,4 +128,7 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		out.print(".prototype.");
 		ctx.invoke(genName, arg, ctx, out);
 	}
+	public void genCloneMethod(Library library, Context ctx, TabbedWriter out) {
+		out.print(".eze$$clone()");
+	}
 }

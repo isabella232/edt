@@ -34,8 +34,8 @@ public class InterfaceTemplate extends JavaScriptTemplate {
 	}
 
 	public void genDefaultValue(Interface part, Context ctx, TabbedWriter out, Field field) {
-		if(field.getAnnotation(Constants.AnnotationBindService)!= null){
-			Annotation annot = field.getAnnotation(Constants.AnnotationBindService);
+		if(field.getAnnotation(Constants.AnnotationResource)!= null){
+			Annotation annot = field.getAnnotation(Constants.AnnotationResource);
 			ctx.invoke(genDefaultValue, annot.getEClass(), ctx, out, annot, field);
 		}
 		else if(field.getAnnotation(Constants.AnnotationDedicatedService)!= null){

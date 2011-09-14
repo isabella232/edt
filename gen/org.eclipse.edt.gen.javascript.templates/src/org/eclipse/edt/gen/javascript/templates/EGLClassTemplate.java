@@ -28,6 +28,7 @@ import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class EGLClassTemplate extends JavaScriptTemplate {
 
@@ -242,21 +243,21 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		ctx.invoke(genInstantiation, part, ctx, out);
 		out.println(";");
 
-		out.print(temp2);
-		out.println(".eze$$isNull = this.eze$$isNull;");
+//		out.print(temp2);
+//		out.println(".eze$$isNull = this.eze$$isNull;");
 
-		out.print(temp2);
-		out.println(".eze$$isNullable = this.eze$$isNullable;");
+//		out.print(temp2);
+//		out.println(".eze$$isNullable = this.eze$$isNullable;");
 
 		// clone fields
 		for (Field field : part.getFields()) {
 			ctx.invoke(genCloneMethod, part, ctx, out, field);
 		}
 
-		out.print(temp2);
-		out.print(".setNull(");
-		out.print(temp1);
-		out.println("eze$$isNull);");
+//		out.print(temp2);
+//		out.print(".setNull(");
+//		out.print(temp1);
+//		out.println("eze$$isNull);");
 
 		out.print("return ");
 		out.print(temp2);
@@ -273,6 +274,13 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.print(temp1);
 		out.print(".");
 		ctx.invoke(genName, arg, ctx, out);
+		if (arg.isNullable() || TypeUtils.isReferenceType(arg.getType())) {
+			out.print(" === null ? null : ");
+			out.print(temp1);
+			out.print(".");
+			ctx.invoke(genName, arg, ctx, out);
+			ctx.invoke(genCloneMethod, arg.getType(), ctx, out);
+		}
 		out.println(";");
 	}
 

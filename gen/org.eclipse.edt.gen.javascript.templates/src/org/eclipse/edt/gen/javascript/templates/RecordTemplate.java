@@ -118,4 +118,8 @@ public class RecordTemplate extends JavaScriptTemplate {
 	}
 
 	public void genGetterSetters(Record part, Context ctx, TabbedWriter out) {}
+
+	public void genCloneMethod(Record part, Context ctx, TabbedWriter out) {
+		out.print(".eze$$clone()");
+	}
 }

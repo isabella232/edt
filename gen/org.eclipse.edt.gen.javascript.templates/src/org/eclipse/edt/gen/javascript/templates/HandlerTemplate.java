@@ -84,4 +84,7 @@ public class HandlerTemplate extends JavaScriptTemplate {
 			}
 		}
 	}
+	public void genCloneMethod(Handler handler, Context ctx, TabbedWriter out) {
+		out.print(".eze$$clone()");
+	}
 }

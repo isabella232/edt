@@ -320,4 +320,6 @@ public class TypeTemplate extends JavaScriptTemplate {
 	public void genFieldInfoTypeName(Type type, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, arg);
 	}
+	public void genCloneMethod(Type type, Context ctx, TabbedWriter out) {
+	}
 }
