@@ -462,7 +462,7 @@ public class IRUtils {
 		}
 		
 		//special case for Any...we must make a boxing expression 
-		if (isAny(exprType.getClassifier())) {
+		if (isAny(type.getClassifier())) {
 			BoxingExpression box = factory.createBoxingExpression();
 			box.setExpr(expr);
 			return box;
