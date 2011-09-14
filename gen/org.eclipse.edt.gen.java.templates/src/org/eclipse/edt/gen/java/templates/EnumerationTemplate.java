@@ -68,6 +68,10 @@ public class EnumerationTemplate extends JavaTemplate {
 		
 	}
 
+	public void genDefaultValue(Enumeration part, Context ctx, TabbedWriter out) {
+		out.print("null");
+	}
+	
 	public void genClassHeader(Enumeration part, Context ctx, TabbedWriter out) {
 		out.print("public enum ");
 		ctx.invoke(genClassName, (Type) part, ctx, out);
