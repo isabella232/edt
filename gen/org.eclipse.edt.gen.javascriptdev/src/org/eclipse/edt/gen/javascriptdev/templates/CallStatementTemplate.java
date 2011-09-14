@@ -11,15 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascriptdev.templates;
 
-import org.eclipse.edt.gen.javascript.Context;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.CallStatement;
 
 public class CallStatementTemplate extends org.eclipse.edt.gen.javascript.templates.CallStatementTemplate {
-	@Override
-	public void genStatementBody(CallStatement stmt, Context ctx, TabbedWriter out) {
-		out.println("if (egl.enableEditing !== true) {");
-		super.genStatementBody(stmt, ctx, out);
-		out.println("}");
-	}
 }
