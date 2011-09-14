@@ -408,6 +408,14 @@ public class IRUtils {
 		}
 		return false;
 	}
+	
+	private static boolean isAny(Classifier clazz) {
+		if (clazz != null) {
+			return (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGLAny));
+		}
+		return false;
+	}
+
 
 	public static Expression makeExprCompatibleToType(Expression expr, Type type) {
 		Type exprType = expr.getType();
@@ -452,6 +460,14 @@ public class IRUtils {
 				}
 			}
 		}
+		
+		//special case for Any...we must make a boxing expression 
+		if (isAny(exprType.getClassifier())) {
+			BoxingExpression box = factory.createBoxingExpression();
+			box.setExpr(expr);
+			return box;
+		}
+		
 		if (TypeUtils.isReferenceType(exprType) 
 				&& exprType instanceof StructPart 
 				&& type instanceof StructPart 
