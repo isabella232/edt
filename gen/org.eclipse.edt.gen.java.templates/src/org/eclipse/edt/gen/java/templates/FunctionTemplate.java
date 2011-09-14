@@ -37,7 +37,7 @@ public class FunctionTemplate extends JavaTemplate {
 		// process the function
 		ctx.invokeSuper(this, genDeclaration, function, ctx, out);
 		// remember what function we are processing
-		ctx.setCurrentFunction(function.getName());
+		ctx.setCurrentFunction(function);
 		ctx.invoke(genRuntimeTypeName, function, ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(" ");
 		ctx.invoke(genName, function, ctx, out);
