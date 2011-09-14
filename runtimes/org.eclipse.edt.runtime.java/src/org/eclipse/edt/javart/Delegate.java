@@ -11,32 +11,40 @@
  *******************************************************************************/
 package org.eclipse.edt.javart;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import egl.lang.InvocationException;
 import egl.lang.AnyException;
+import egl.lang.InvocationException;
 
 public class Delegate {
 	Object target;
 	Method method;
-	
-	public Delegate(String methodName, Object target, Class...argTypes) {
+
+	public Delegate(String methodName, Object target, Class... argTypes) {
 		this.target = target;
 		try {
 			this.method = target.getClass().getMethod(methodName, argTypes);
 		}
-		catch(Exception ex) {
-			throw new RuntimeException(ex); //TODO this should be one of our exceptions...something for an internal error
+		catch (Exception ex) {
+			throw new RuntimeException(ex); // TODO this should be one of our exceptions...something for an internal error
 		}
 	}
-	
-	public Object invoke(Object...args) throws AnyException {
+
+	public Object invoke(Object... args) throws AnyException {
 		try {
 			return method.invoke(target, args);
-		} catch (Exception e) {
+		}
+		catch (InvocationTargetException e) {
+			if (e.getTargetException() instanceof AnyException)
+				throw (AnyException) e.getTargetException();
+			else
+				throw new RuntimeException(e);
+		}
+		catch (Exception e) {
 			InvocationException ix = new InvocationException();
 			ix.name = method.getName();
 			throw ix;
-		} 
+		}
 	}
 }
