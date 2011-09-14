@@ -104,7 +104,7 @@ public class HttpUtilities {
 	public static String getContentType(String key) {
 		return contentTypes.get(key);
 	}
-	public static void assignBody(HttpResponse response, AnyException jrte){
+	public static void assignBody(Response response, AnyException jrte){
 		
 	}
 	
@@ -165,9 +165,9 @@ public class HttpUtilities {
 			headers.put( HTTP_AUTHENTICATION_ID, new StringBuilder("Basic ").append(Base64.encode( authentication.toString() )).toString() );
 		}
 	}
-	public static void validateUrl(HttpRequest restRequest ) throws IOException, AnyException
+	public static void validateUrl(Request restRequest ) throws IOException, AnyException
 	{
-		String urlStr = restRequest.getUri().trim();
+		String urlStr = restRequest.uri;
 		if( urlStr == null || urlStr.trim().length() == 0 )
 		{
 			throw new AnyException(Message.SOA_E_WS_PROXY_EMPTY_URL_EXCEPTION,JavartUtil.errorMessage(Runtime.getRunUnit(), Message.SOA_E_WS_PROXY_EMPTY_URL_EXCEPTION, new Object[] {urlStr} ));

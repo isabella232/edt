@@ -24,8 +24,8 @@ import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
 import org.eclipse.edt.runtime.java.egl.lang.EglList;
 
 import egl.lang.AnyException;
-import eglx.http.HttpRequest;
-import eglx.http.HttpResponse;
+import eglx.http.Request;
+import eglx.http.Response;
 import eglx.http.HttpUtilities;
 import eglx.json.JsonLib;
 import eglx.services.ServiceInvocationException;
@@ -41,16 +41,16 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 		super(serviceClassName, serviceKind);
 	}
 
-	public HttpResponse invoke(HttpRequest request)throws AnyException
+	public Response invoke(Request request)throws AnyException
 	{
 		if (trace()){
 			tracer().put("invoking " + getServiceClassName() + " using " + ServiceUtilities.convert(getServiceKind()));
 		}
-		HttpResponse response = new HttpResponse();
+		Response response = new Response();
 		traceElapsedTime( true );
 
 		try{
-			ObjectNode jsonRequest = request.getBody() == null ? new ObjectNode() : JsonParser.parse(request.getBody());
+			ObjectNode jsonRequest = request.body == null ? new ObjectNode() : JsonParser.parse(request.body);
 			if (trace()){
 				tracer().put( "  invoking function " + JsonUtilities.getValueNode(jsonRequest, JSON_RPC_METHOD_ID).toJava() );
 			}
@@ -59,20 +59,20 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 			if (trace()){
 				tracer().put( "return data from dedicated service:" + result == null ? "null" : result );
 			}
-			response.setBody( result );
+			response.body = result;
 			boolean failed = resultContainsError( result );
-			response.setStatus( failed ? HttpUtilities.HTTP_STATUS_FAILED: HttpUtilities.HTTP_STATUS_OK );
-			response.setStatusMessage(failed ? HttpUtilities.HTTP_STATUS_MSG_FAILED : HttpUtilities.HTTP_STATUS_MSG_OK);
+			response.status =  failed ? HttpUtilities.HTTP_STATUS_FAILED: HttpUtilities.HTTP_STATUS_OK;
+			response.statusMessage = failed ? HttpUtilities.HTTP_STATUS_MSG_FAILED : HttpUtilities.HTTP_STATUS_MSG_OK;
 		}
 		catch(ServiceInvocationException sie){
-			response.setBody(eglx.json.JsonUtilities.createJsonAnyException(sie));
-			response.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
-			response.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
+			response.body = eglx.json.JsonUtilities.createJsonAnyException(sie);
+			response.status = HttpUtilities.HTTP_STATUS_FAILED;
+			response.statusMessage = HttpUtilities.HTTP_STATUS_MSG_FAILED;
 		} catch (Throwable t) {
-			response.setBody(eglx.json.JsonUtilities.createJsonAnyException( 
-					ServiceUtilities.buildServiceInvocationException(Message.SOA_E_EGL_SERVICE_INVOCATION, new String[]{request.getBody() == null ? "null" : request.getBody(), getServiceClassName()}, t, getServiceKind())));
-			response.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
-			response.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
+			response.body = eglx.json.JsonUtilities.createJsonAnyException( 
+					ServiceUtilities.buildServiceInvocationException(Message.SOA_E_EGL_SERVICE_INVOCATION, new String[]{request.body == null ? "null" : request.body, getServiceClassName()}, t, getServiceKind()));
+			response.status = HttpUtilities.HTTP_STATUS_FAILED;
+			response.statusMessage = HttpUtilities.HTTP_STATUS_MSG_FAILED;
 		}
 		return response;
 	}
@@ -138,7 +138,7 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 		return result.indexOf( "{\"error\" : {" ) != -1;
 	}
 	@Override
-	public ServiceKind getServiceKind(HttpRequest innerRequest) {
+	public ServiceKind getServiceKind(Request innerRequest) {
 		return getServiceKind();
 	}
 }

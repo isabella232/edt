@@ -14,8 +14,7 @@ package org.eclipse.edt.javart.services.servlet.proxy;
 import java.util.Iterator;
 import java.util.Map;
 
-import egl.lang.EDictionary;
-import eglx.http.HttpRequest;
+import eglx.http.Request;
 
 
 
@@ -30,10 +29,9 @@ public class ProxyUtilities
 	{
 	}
 
-	public static boolean isEGLDedicatedCall( HttpRequest innerRequest )	
+	public static boolean isEGLDedicatedCall( Request innerRequest )	
 	{
-		EDictionary headers = innerRequest.getHeaders();
-		return headers != null && headers.containsKey( EGL_DEDICATED_CALL );
+		return innerRequest.headers != null && innerRequest.headers.containsKey( EGL_DEDICATED_CALL );
 	}
 	
     static String convert( Map<?, ?> map )
@@ -64,9 +62,8 @@ public class ProxyUtilities
     	return buffer.toString();
     }
 	    
-	public static boolean isSoapCall( HttpRequest innerRequest )	
+	public static boolean isSoapCall( Request innerRequest )	
 	{
-		EDictionary headers = innerRequest.getHeaders();
-		return headers != null && headers.containsKey( EGL_SOAP_CALL );
+		return innerRequest.headers != null && innerRequest.headers.containsKey( EGL_SOAP_CALL );
 	}
 }

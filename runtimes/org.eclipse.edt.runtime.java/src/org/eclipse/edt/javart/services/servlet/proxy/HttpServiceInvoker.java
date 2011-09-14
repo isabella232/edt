@@ -12,8 +12,8 @@ package org.eclipse.edt.javart.services.servlet.proxy;
 
 import org.eclipse.edt.javart.messages.Message;
 
-import eglx.http.HttpRequest;
-import eglx.http.HttpResponse;
+import eglx.http.Request;
+import eglx.http.Response;
 import eglx.http.HttpUtilities;
 import eglx.services.ServiceKind;
 import eglx.services.ServiceUtilities;
@@ -22,23 +22,23 @@ public class HttpServiceInvoker extends EglHttpConnection {
 	
 	protected HttpServiceInvoker() {
 	}
-	public HttpResponse invoke(HttpRequest innerRequest)throws Throwable
+	public Response invoke(Request innerRequest)throws Throwable
 	{
 		//debug("proxy: url="+xmlRequest.URL);
 		HttpServiceHandler rest = new HttpServiceHandler();
 		HttpUtilities.validateUrl(innerRequest);
-		HttpResponse innerResponse = rest.invokeRestService( innerRequest, openConnection(innerRequest) );
+		Response innerResponse = rest.invokeRestService( innerRequest, openConnection(innerRequest) );
 		if( innerResponse == null )
 		{
-			innerResponse = new HttpResponse();
-			innerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
-			innerResponse.setBody(eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_REST_NO_RESPONSE, new String[]{innerRequest.getUri()}, null, getServiceKind(innerRequest) )));
+			innerResponse = new Response();
+			innerResponse.status = HttpUtilities.HTTP_STATUS_FAILED;
+			innerResponse.body = eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_REST_NO_RESPONSE, new String[]{innerRequest.uri}, null, getServiceKind(innerRequest) ));
 		}
 		return innerResponse;
 	}
 
 	@Override
-	public ServiceKind getServiceKind(HttpRequest innerRequest) {
+	public ServiceKind getServiceKind(Request innerRequest) {
 		return ProxyUtilities.isSoapCall(innerRequest) ? ServiceKind.WEB : ServiceKind.REST;
 	}
 }

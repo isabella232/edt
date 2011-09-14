@@ -8,17 +8,17 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package eglx.services;
-public enum ServiceType {
-	TrueRest(1),
-	EglRpc(2),
-	EglDedicated(3),
-	SOAP(4);
+package eglx.ui.rui;
+public enum FilterKind {
+	excludeAll(1),
+	excludeAllExcept(2),
+	includeAll(3),
+	includeAllExcept(4);
 	private final int value;
-	private ServiceType(int value) {
+	private FilterKind(int value) {
 		this.value = value;
 	}
-	private ServiceType() {
+	private FilterKind() {
 		value = -1;
 	}
 	public int getValue() {

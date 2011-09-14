@@ -8,16 +8,19 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package org.eclipse.edt.javart.services.servlet;
-
-import eglx.http.Request;
-import eglx.http.Response;
-import eglx.services.ServiceKind;
-
-public abstract class Invoker extends TracerBase{
-
-	protected Invoker() {
+package eglx.rest;
+public enum ServiceType {
+	TrueRest(1),
+	EglRpc(2),
+	EglDedicated(3);
+	private final int value;
+	private ServiceType(int value) {
+		this.value = value;
 	}
-	public abstract Response invoke( Request request ) throws Throwable;
-	public abstract ServiceKind getServiceKind(Request innerRequest);
+	private ServiceType() {
+		value = -1;
+	}
+	public int getValue() {
+		return value;
+	}
 }

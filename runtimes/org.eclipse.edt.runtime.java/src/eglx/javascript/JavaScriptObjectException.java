@@ -9,9 +9,12 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package eglx.javascript;
-import org.eclipse.edt.javart.ByteStorage;
-import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.Program;
+import org.eclipse.edt.javart.resources.*;
+import org.eclipse.edt.javart.*;
+import org.eclipse.edt.runtime.java.egl.lang.EString;
+import java.lang.String;
+import egl.lang.AnyException;
+@javax.xml.bind.annotation.XmlRootElement(name="JavaScriptObjectException")
 public class JavaScriptObjectException extends egl.lang.AnyException {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
@@ -45,6 +48,7 @@ public class JavaScriptObjectException extends egl.lang.AnyException {
 	public void ezeInitialize() {
 		name = Constants.EMPTY_STRING;
 	}
+	@org.eclipse.edt.javart.json.Json(name="name", clazz=EString.class, asOptions={})
 	public String getName() {
 		return (name);
 	}

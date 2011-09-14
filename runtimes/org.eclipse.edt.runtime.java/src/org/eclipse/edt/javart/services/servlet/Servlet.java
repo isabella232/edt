@@ -34,8 +34,8 @@ import org.eclipse.edt.javart.resources.Trace;
 
 import egl.lang.AnyException;
 import egl.lang.EDictionary;
-import eglx.http.HttpRequest;
-import eglx.http.HttpResponse;
+import eglx.http.Request;
+import eglx.http.Response;
 import eglx.http.HttpUtilities;
 import eglx.json.JsonUtilities;
 import eglx.services.ServiceKind;
@@ -130,8 +130,8 @@ import eglx.services.ServiceUtilities;
 		}
 		String url = null;
 		ServiceKind serviceKind = null;
-		HttpRequest request = null;
-		HttpResponse response = null;
+		Request request = null;
+		Response response = null;
 		try
 		{
 			if ( tracer().traceIsOn( Trace.GENERAL_TRACE ) ){
@@ -140,14 +140,14 @@ import eglx.services.ServiceUtilities;
 			request = ServletUtilities.createNewRequest( httpServletReq );
 			if(request != null)
 			{
-				url = request.getUri(); 
+				url = request.uri; 
 				//debug("server@"+portNumber+": url="+url);
 				if ( tracer().traceIsOn( Trace.GENERAL_TRACE ) ) 
 				{
 					tracer().put( "REQUEST:" );
 					tracer().put( "    URL:" + url != null ? url : "null");
-					tracer().put( "    content:" + request.getBody() != null ? request.getBody() : "null");
-					tracer().put( "    httpMethod:" + request.getMethod() != null ? HttpUtilities.httpMethodToString(request.getMethod()) : "null" );
+					tracer().put( "    content:" + request.body != null ? request.body : "null");
+					tracer().put( "    httpMethod:" + request.method != null ? HttpUtilities.httpMethodToString(request.method) : "null" );
 				}
 				response = processRequest( url, request, httpServletReq );
 			}
@@ -155,19 +155,19 @@ import eglx.services.ServiceUtilities;
 		catch(Throwable t)
 		{
 			response = buildResponse( getRunUnit(), httpServletReq.getRequestURL().toString(), t, 
-					request != null && request.getBody() != null ? request.getBody() : "", serviceKind);
+					request != null && request.body != null ? request.body : "", serviceKind);
 		}
-		String content = response.getBody();
+		String content = response.body;
 		log(content, response);
-		write( httpServletRes, content, response.headers, response.getStatus() );
+		write( httpServletRes, content, response.headers, response.status );
 	}   	
 	
-	protected abstract HttpResponse processRequest(String url, HttpRequest request, HttpServletRequest httpServletReq) throws Exception;
+	protected abstract Response processRequest(String url, Request request, HttpServletRequest httpServletReq) throws Exception;
 
-	private HttpResponse buildResponse( RunUnit runUnit, String url,  Throwable t, String requestContent, ServiceKind serviceKind )
+	private Response buildResponse( RunUnit runUnit, String url,  Throwable t, String requestContent, ServiceKind serviceKind )
 	{
 		
-		HttpResponse outerResponse = new HttpResponse();
+		Response outerResponse = new Response();
 		//handle as inner exception
 		AnyException jrte;
 
@@ -184,19 +184,19 @@ import eglx.services.ServiceUtilities;
 		{
 			jrte = ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_PROXY_UNIDENTIFIED, new Object[0], t, serviceKind );
 		}
-		HttpResponse innerResponse = new HttpResponse();
-		innerResponse.setBody(eglx.json.JsonUtilities.createJsonAnyException(jrte));
-		innerResponse.setStatus(HttpUtilities.HTTP_STATUS_FAILED);
-		innerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_FAILED);
+		Response innerResponse = new Response();
+		innerResponse.body = eglx.json.JsonUtilities.createJsonAnyException(jrte);
+		innerResponse.status = HttpUtilities.HTTP_STATUS_FAILED;
+		innerResponse.statusMessage = HttpUtilities.HTTP_STATUS_MSG_FAILED;
 		ServletUtilities.setBody(outerResponse, innerResponse);
-		outerResponse.setStatus(HttpUtilities.HTTP_STATUS_OK);
-		outerResponse.setStatusMessage(HttpUtilities.HTTP_STATUS_MSG_OK);
+		outerResponse.status = HttpUtilities.HTTP_STATUS_OK;
+		outerResponse.statusMessage = HttpUtilities.HTTP_STATUS_MSG_OK;
 		return outerResponse;
 	}
-	private void log( String content, HttpResponse response )
+	private void log( String content, Response response )
 	{
 /*		String str;
-		if( response.getBody() instanceof HttpResponse )
+		if( response.getBody() instanceof Response )
 		{
 			str = "Multi-Level";
 		}

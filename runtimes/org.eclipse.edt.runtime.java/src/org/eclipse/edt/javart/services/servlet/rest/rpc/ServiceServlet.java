@@ -26,8 +26,8 @@ import org.eclipse.edt.javart.services.servlet.Servlet;
 import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
 
 import eglx.http.HttpMethod;
-import eglx.http.HttpRequest;
-import eglx.http.HttpResponse;
+import eglx.http.Request;
+import eglx.http.Response;
 import eglx.http.HttpUtilities;
 import eglx.json.JsonLib;
 import eglx.json.JsonUtilities;
@@ -79,11 +79,11 @@ import eglx.services.ServiceUtilities;
 	}
 
 	@Override
-	protected HttpResponse processRequest(String urlString, HttpRequest request, HttpServletRequest httpServletReq) {
-		HttpResponse response = null;
+	protected Response processRequest(String urlString, Request request, HttpServletRequest httpServletReq) {
+		Response response = null;
 		try
 		{
-			if( HttpMethod.POST.equals(request.getMethod()))
+			if( HttpMethod.POST.equals(request.method))
 			{
 				if ( tracer().traceIsOn( Trace.GENERAL_TRACE ) ){
 					tracer().put( "this is an EGL REST RPC service" );
@@ -116,15 +116,15 @@ import eglx.services.ServiceUtilities;
 				
 				if( restServiceProjectInfo() != null )
 				{
-					RestServiceProjectInfo.ServiceFunctionInfo serviceFunctionInfo = restServiceProjectInfo().getServiceFunctionInfo(pathInfo, request.getMethod() );
+					RestServiceProjectInfo.ServiceFunctionInfo serviceFunctionInfo = restServiceProjectInfo().getServiceFunctionInfo(pathInfo, request.method);
 					if ( tracer().traceIsOn( Trace.GENERAL_TRACE ) && serviceFunctionInfo != null ){
 						tracer().put( "invoking service " + serviceFunctionInfo.getClassName() );
 						tracer().put( "    request encoding:" + String.valueOf(serviceFunctionInfo.getInEncoding()) );
 						tracer().put( "    response encoding:" + String.valueOf(serviceFunctionInfo.getOutEncoding()) );
 						tracer().put( "    hostProgramService?:" + String.valueOf(serviceFunctionInfo.isHostProgramService()) );
-						tracer().put( "    body:" + request.getBody() == null ? "null" : request.getBody() );
+						tracer().put( "    body:" + request.body == null ? "null" : request.body );
 					}
-					response = new HttpResponse();
+					response = new Response();
 					if( serviceFunctionInfo != null )
 					{
 						JsonRpcInvoker invoker = new JsonRpcInvoker(serviceFunctionInfo.getClassName(), ServiceKind.REST);
@@ -141,28 +141,28 @@ import eglx.services.ServiceUtilities;
 			}
 			else
 			{
-				throw ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_REST_WRONG_HTTP_FUNCTION, new String[] {HttpUtilities.httpMethodToString(request.getMethod())}, null, ServiceKind.WEB );
+				throw ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_REST_WRONG_HTTP_FUNCTION, new String[] {HttpUtilities.httpMethodToString(request.method)}, null, ServiceKind.WEB );
 			}
 		}
 		catch(ServiceInvocationException sie )
 		{
 			if( response == null ){
-				response = new HttpResponse();
+				response = new Response();
 			}
-			response.setBody( JsonUtilities.createJsonAnyException(sie) );
-			response.setStatus( HttpUtilities.HTTP_STATUS_FAILED );
-			response.setStatusMessage( "FAILED" );
+			response.body = JsonUtilities.createJsonAnyException(sie);
+			response.status = HttpUtilities.HTTP_STATUS_FAILED;
+			response.statusMessage = "FAILED";
 		}
 		catch(Throwable t)
 		{
 			if( response == null ){
-				response = new HttpResponse();
+				response = new Response();
 			}
-			response.setBody(JsonUtilities.createJsonAnyException(
+			response.body = JsonUtilities.createJsonAnyException(
 						ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_SERVICE, new String[] {urlString, "POST"}, null, ServiceKind.REST )
-					));
-			response.setStatus( HttpUtilities.HTTP_STATUS_FAILED );
-			response.setStatusMessage( "FAILED" );
+					);
+			response.status = HttpUtilities.HTTP_STATUS_FAILED;
+			response.statusMessage = "FAILED";
 		}
 		finally
 		{

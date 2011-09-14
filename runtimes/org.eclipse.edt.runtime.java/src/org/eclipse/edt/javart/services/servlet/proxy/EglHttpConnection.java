@@ -23,14 +23,14 @@ import java.util.List;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.services.servlet.Invoker;
 
-import eglx.http.HttpRequest;
+import eglx.http.Request;
 
 
 abstract class EglHttpConnection extends Invoker{
 	
 	protected EglHttpConnection() {
 	}
-	protected HttpURLConnection getHttpProxyConnection( HttpRequest restRequest ) throws IOException
+	protected HttpURLConnection getHttpProxyConnection( Request restRequest ) throws IOException
 	{
 		if( useProxy() )
 		{
@@ -38,13 +38,13 @@ abstract class EglHttpConnection extends Invoker{
 		}
 		return null;
 	}
-	protected HttpURLConnection openConnection( HttpRequest restRequest ) throws IOException
+	protected HttpURLConnection openConnection( Request restRequest ) throws IOException
 	{
 		HttpURLConnection connection = getHttpProxyConnection(restRequest);
 		
 		if( connection == null )
 		{
-            connection = (HttpURLConnection)new URL(restRequest.getUri()).openConnection();
+            connection = (HttpURLConnection)new URL(restRequest.uri).openConnection();
 		}
 		return connection;
 	}
@@ -54,9 +54,9 @@ abstract class EglHttpConnection extends Invoker{
 		return"true".equals( Runtime.getRunUnit().getProperties().get(("com.ibm.egl.service.invocation.useProxy") ) );
 	}
 	
-	private static HttpURLConnection getProxyConnection( HttpRequest restRequest ) throws IOException
+	private static HttpURLConnection getProxyConnection( Request restRequest ) throws IOException
 	{
-		String urlString = restRequest.getUri();
+		String urlString = restRequest.uri;
 		Proxy proxy = getProxy( urlString );
 		if( proxy != null )
 		{

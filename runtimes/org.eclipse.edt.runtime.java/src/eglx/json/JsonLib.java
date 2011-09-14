@@ -60,7 +60,7 @@ import org.eclipse.edt.runtime.java.egl.lang.NullType;
 import com.ibm.icu.text.SimpleDateFormat;
 
 import egl.lang.AnyException;
-import eglx.http.HttpResponse;
+import eglx.http.Response;
 import eglx.lang.StringLib;
 
 public class JsonLib {
@@ -69,12 +69,12 @@ public class JsonLib {
 		return process(obj).toJson(); 
 	}
 
-	public static String convertToJSON(HttpResponse response){
+	public static String convertToJSON(Response response){
 		EDictionary httpResponse = new EDictionary();
-		httpResponse.put("headers", response.getHeaders());
-		httpResponse.put("body", response.getBody());
-		httpResponse.put("status", response.getStatus());
-		httpResponse.put("statusMessage", response.getStatusMessage());
+		httpResponse.put("headers", response.headers);
+		httpResponse.put("body", response.body);
+		httpResponse.put("status", response.status);
+		httpResponse.put("statusMessage", response.statusMessage);
 		return process(httpResponse).toJson(); 
 	}
 

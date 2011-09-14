@@ -9,9 +9,12 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package egl.lang;
-import org.eclipse.edt.javart.ByteStorage;
-import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.Program;
+import org.eclipse.edt.javart.resources.*;
+import org.eclipse.edt.javart.*;
+import org.eclipse.edt.runtime.java.egl.lang.EString;
+import java.lang.String;
+import egl.lang.AnyException;
+@javax.xml.bind.annotation.XmlRootElement(name="DynamicAccessException")
 public class DynamicAccessException extends egl.lang.AnyException {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
@@ -45,6 +48,7 @@ public class DynamicAccessException extends egl.lang.AnyException {
 	public void ezeInitialize() {
 		key = Constants.EMPTY_STRING;
 	}
+	@org.eclipse.edt.javart.json.Json(name="key", clazz=EString.class, asOptions={})
 	public String getKey() {
 		return (key);
 	}

@@ -19,9 +19,9 @@ import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
 
 import egl.lang.AnyException;
-import eglx.http.HttpRequest;
-import eglx.http.HttpResponse;
 import eglx.http.HttpUtilities;
+import eglx.http.Request;
+import eglx.http.Response;
 import eglx.json.JsonLib;
 import eglx.services.ServiceInvocationException;
 
@@ -34,23 +34,23 @@ public class ServletUtilities
 	{
 	}
 
-    public static HttpRequest createHttpRequest(String object)throws ServiceInvocationException{
-    	HttpRequest request = null;
+    public static Request createHttpRequest(String object)throws ServiceInvocationException{
+    	Request request = null;
     	if(object == null){
-			request = new HttpRequest();
+			request = new Request();
     	}
     	else{
 	    	try {
 	    		EDictionary localRequest = new EDictionary();
 				JsonLib.convertFromJSON(object, localRequest);
-				request = new HttpRequest();
+				request = new Request();
 				Object obj = unBox(localRequest.get("body"));
-				request.setBody(obj == null ? null : obj.toString());
-				request.setHeaders((EDictionary)unBox(localRequest.get("headers")));
+				request.body = obj == null ? null : obj.toString();
+				request.headers = (EDictionary)unBox(localRequest.get("headers"));
 				obj = unBox(localRequest.get("method"));
-				request.setMethod(HttpUtilities.convert(obj instanceof Number ? ((Number)obj).intValue(): -1));
+				request.method = HttpUtilities.convert(obj instanceof Number ? ((Number)obj).intValue(): -1);
 				obj = unBox(localRequest.get("uri"));
-				request.setUri(obj == null ? null : obj.toString());
+				request.uri = obj == null ? null : obj.toString();
 			} catch (AnyException e) {
 				//FIXME throw exception
 			}
@@ -64,26 +64,26 @@ public class ServletUtilities
     	}
     	return obj;
     }
-    public static void setBody(HttpResponse outerResponse, HttpResponse innerResponse){
+    public static void setBody(Response outerResponse, Response innerResponse){
     	if(innerResponse == null){
-    		innerResponse = new HttpResponse();
+    		innerResponse = new Response();
     	}
-    	outerResponse.setBody(JsonLib.convertToJSON(innerResponse));
+    	outerResponse.body = JsonLib.convertToJSON(innerResponse);
     }
 
-	public static HttpRequest createNewRequest(javax.servlet.http.HttpServletRequest httpServletReq ) throws IOException {
+	public static Request createNewRequest(javax.servlet.http.HttpServletRequest httpServletReq ) throws IOException {
 
-		HttpRequest newRequest = new HttpRequest();
-		newRequest.setMethod(HttpUtilities.convert(httpServletReq.getMethod()));
-		newRequest.setUri(httpServletReq.getRequestURI()); //processRequestURL(request);
-		newRequest.setHeaders(processHeaders(httpServletReq));
+		Request newRequest = new Request();
+		newRequest.method = HttpUtilities.convert(httpServletReq.getMethod());
+		newRequest.uri = httpServletReq.getRequestURI();
+		newRequest.headers = processHeaders(httpServletReq);
 		/*FIXME add parameter map
 		if(JSON_RPC_GET_METHOD_ID.equalsIgnoreCase(newRequest.method))
 		{
 			newRequest.arguments = httpServletReq.getParameterMap();//processArgs(request);
 		}*/
 		BufferedReader reader = httpServletReq.getReader();
-		newRequest.setBody(processContent(httpServletReq.getContentLength(), reader));
+		newRequest.body = processContent(httpServletReq.getContentLength(), reader);
 
 		return newRequest;
 	}

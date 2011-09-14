@@ -1,0 +1,47 @@
+/*******************************************************************************
+ * Copyright (c) 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
+package eglx.http;
+import org.eclipse.edt.javart.resources.*;
+import org.eclipse.edt.javart.*;
+import eglx.http.Request;
+import eglx.http.Response;
+import org.eclipse.edt.runtime.java.egl.lang.EglAny;
+@javax.xml.bind.annotation.XmlRootElement(name="HttpSoap")
+public class HttpSoap extends ExecutableBase {
+	private static final long serialVersionUID = 10L;
+	@org.eclipse.edt.javart.json.Json(name="request", clazz=Request.class, asOptions={})
+	public Request request;
+	@org.eclipse.edt.javart.json.Json(name="response", clazz=Response.class, asOptions={})
+	public Response response;
+	@org.eclipse.edt.javart.json.Json(name="responseHeader", clazz=EglAny.class, asOptions={})
+	public egl.lang.EglAny responseHeader;
+	
+	public HttpSoap() {
+		super();
+		ezeInitialize();
+	}
+	public void ezeInitialize() {
+		request = new Request();
+		response = new Response();
+		responseHeader = null;
+	}
+	public Request getRequest() {
+		return request;
+	}
+	public Response getResponse() {
+		return response;
+	}
+	public void setSoapRequestHeader(egl.lang.EglAny rec) {
+	}
+	public egl.lang.EglAny getSoapResponseHeader() {
+		return responseHeader;
+	}
+}

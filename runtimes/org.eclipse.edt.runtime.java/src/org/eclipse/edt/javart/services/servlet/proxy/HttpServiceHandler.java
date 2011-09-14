@@ -34,8 +34,8 @@ import org.eclipse.edt.javart.resources.Trace;
 import org.eclipse.edt.javart.util.JavartUtil;
 
 import egl.lang.EDictionary;
-import eglx.http.HttpRequest;
-import eglx.http.HttpResponse;
+import eglx.http.Request;
+import eglx.http.Response;
 import eglx.http.HttpUtilities;
 import eglx.json.JsonUtilities;
 import eglx.services.ServiceKind;
@@ -165,21 +165,21 @@ public class HttpServiceHandler
 		}
 
 	}
-	HttpResponse invokeRestService( HttpRequest request, HttpURLConnection connection ) throws Throwable
+	Response invokeRestService( Request request, HttpURLConnection connection ) throws Throwable
 	{
-		EDictionary headers = request.getHeaders();
-		HttpResponse response;
+		EDictionary headers = request.headers;
+		Response response;
 		try
 		{
-			response = new HttpResponse();
+			response = new Response();
 			HttpStreamReader httpsr = null;
 			try
 			{
-				connection.setRequestMethod( HttpUtilities.httpMethodToString(request.getMethod()) );
+				connection.setRequestMethod( HttpUtilities.httpMethodToString(request.method) );
 				Trace tracer = Runtime.getRunUnit().getTrace();
 				if ( tracer.traceIsOn( Trace.GENERAL_TRACE ) ) 
 				{
-					tracer.put("REST request URL:" + request.getUri());
+					tracer.put("REST request URL:" + request.uri);
 				}
 
 				String contentType = null;
@@ -204,7 +204,7 @@ public class HttpServiceHandler
 				}
 
 				String charset = getCharSet(contentType);
-				byte[] resource = request.getBody() == null ? new byte[0] : request.getBody().getBytes( charset == null ? ServiceUtilities.UTF8 : charset );
+				byte[] resource = request.body == null ? new byte[0] : request.body.getBytes( charset == null ? ServiceUtilities.UTF8 : charset );
 				connection.setDoInput( true );
 				connection.setUseCaches( false );
 
@@ -246,7 +246,7 @@ public class HttpServiceHandler
 						connection = null;
 						String message = JavartUtil.errorMessage( Runtime.getRunUnit(),
 								Message.SOA_E_WS_PROXY_SERVICE_TIMEOUT,
-								new String[] { request.getUri() } );
+								new String[] { request.uri } );
 						throw new IOException( message );
 					}
 					else if ( httpsr.exception() )
@@ -258,14 +258,14 @@ public class HttpServiceHandler
 				{
 					tracer.put( "Service response time:" + String.valueOf( System.currentTimeMillis() - startTime ) );
 				}
-				response.setBody( httpsr.getReadValue() );
-				response.setStatus( connection.getResponseCode() );
-				response.setStatusMessage( connection.getResponseMessage() );
+				response.body = httpsr.getReadValue();
+				response.status = connection.getResponseCode();
+				response.statusMessage = connection.getResponseMessage();
 				Map<String,List<String>> header = connection.getHeaderFields();
 				if ( header != null )
 				{
-					if(response.getHeaders() == null){
-						response.setHeaders(new org.eclipse.edt.runtime.java.egl.lang.EDictionary());
+					if(response.headers == null){
+						response.headers = new org.eclipse.edt.runtime.java.egl.lang.EDictionary();
 					}
 					populate( response, header );
 					setServiceSessionId( response, header, headers.get( EGL_SESSION_ID ) );
@@ -287,15 +287,15 @@ public class HttpServiceHandler
 				{
 					try
 					{
-						response.setStatus( connection.getResponseCode() );
-						response.setStatusMessage( connection.getResponseMessage() );
+						response.status = connection.getResponseCode();
+						response.statusMessage = connection.getResponseMessage();
 						String eglException;
 						if ( (eglException = connection.getHeaderField( JsonUtilities.JSON_RPC_ERROR_NAME_VALUE )) != null )
 						{
 							try
 							{
 								eglException = URLDecoder.decode( eglException, ServiceUtilities.UTF8 );
-								response.setBody( eglException );
+								response.body = eglException;
 							}
 							catch ( Exception e )
 							{
@@ -303,34 +303,34 @@ public class HttpServiceHandler
 						}
 						else if (httpsr != null && httpsr.exception() && 
 								httpsr.getReadValue() != null && !httpsr.getReadValue().isEmpty()){
-					    	response.setBody(eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildInvocationException(
+					    	response.body = eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildInvocationException(
 									Message.SOA_E_WS_PROXY_COMMUNICATION,
-									new String[] { request.getUri() }, 
-									response.getStatus().toString(), 
-									response.getStatusMessage(),
+									new String[] { request.uri }, 
+									response.status.toString(), 
+									response.statusMessage,
 									ServiceUtilities.getMessage(ioe) + ":\n" + httpsr.getReadValue(),
 									null,
-									ServiceKind.REST )));
+									ServiceKind.REST ));
 						}
 					}
 					catch ( IOException ie )
 					{
-						response.setStatus( HttpUtilities.HTTP_STATUS_FAILED );
-						response.setStatusMessage( HttpUtilities.HTTP_STATUS_MSG_FAILED );
+						response.status = HttpUtilities.HTTP_STATUS_FAILED;
+						response.statusMessage = HttpUtilities.HTTP_STATUS_MSG_FAILED;
 					}
 
 				}
 				else
 				{
-					response.setStatus( HttpUtilities.HTTP_STATUS_FAILED );
-					response.setStatusMessage( HttpUtilities.HTTP_STATUS_MSG_FAILED );
+					response.status = HttpUtilities.HTTP_STATUS_FAILED;
+					response.statusMessage = HttpUtilities.HTTP_STATUS_MSG_FAILED;
 				}
-				if((response.getBody() == null || response.getBody().isEmpty()))
+				if((response.body == null || response.body.isEmpty()))
 				{
-			    	response.setBody(eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException(
+			    	response.body = eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException(
 							Message.SOA_E_WS_PROXY_COMMUNICATION,
-							new String[] { request.getUri() }, ioe,
-							ServiceKind.REST )));
+							new String[] { request.uri }, ioe,
+							ServiceKind.REST ));
 				}
 			}
 		}
@@ -344,19 +344,19 @@ public class HttpServiceHandler
 		return response;
 	}
 	
-	private void populate( HttpResponse response, Map<String,List<String>> header )
+	private void populate( Response response, Map<String,List<String>> header )
 	{
 		Map.Entry<String,List<String>> entry;
 		for( Iterator<Map.Entry<String,List<String>>> itr = header.entrySet().iterator(); itr.hasNext(); )
 		{
 			entry = itr.next();
 			if(entry.getKey() != null){
-				response.getHeaders().put(entry.getKey(), entry.getValue() == null ? null :  entry.getValue().toString() );
+				response.headers.put(entry.getKey(), entry.getValue() == null ? null :  entry.getValue().toString() );
 			}
 		}
 	}
 
-	private void setServiceSessionId( HttpResponse response, Map<String,List<String>> header, Object sessionKey )
+	private void setServiceSessionId( Response response, Map<String,List<String>> header, Object sessionKey )
 	{
 		//first establish the sessionKey
 		//then look through the header for a SET-COOKIE
@@ -376,7 +376,7 @@ public class HttpServiceHandler
 				String sessionId = getSessionId( entry.getValue(), sessionKey.toString() );
 				if( sessionId != null )
 				{
-					response.getHeaders().put( EGL_SESSION_ID, sessionId );
+					response.headers.put( EGL_SESSION_ID, sessionId );
 					break;
 				}
 			}
