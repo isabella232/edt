@@ -57,7 +57,7 @@ public class TimestampTypeTemplate extends JavaTemplate {
 			return "MONTH_CODE";
 		else if (pattern.startsWith("dd"))
 			return "DAY_CODE";
-		else if (pattern.startsWith("hh"))
+		else if (pattern.startsWith("HH"))
 			return "HOUR_CODE";
 		else if (pattern.startsWith("mm"))
 			return "MINUTE_CODE";
@@ -75,7 +75,7 @@ public class TimestampTypeTemplate extends JavaTemplate {
 			return "MONTH_CODE";
 		else if (pattern.endsWith("dd"))
 			return "DAY_CODE";
-		else if (pattern.endsWith("hh"))
+		else if (pattern.endsWith("HH"))
 			return "HOUR_CODE";
 		else if (pattern.endsWith("mm"))
 			return "MINUTE_CODE";
