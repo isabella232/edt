@@ -12,12 +12,19 @@
 package org.eclipse.edt.gen.javascriptdev.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
+import org.eclipse.edt.gen.javascriptdev.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Type;
 
 public class TypeTemplate extends org.eclipse.edt.gen.javascript.templates.TypeTemplate {
 	
 	public void genDebugTypeInfo(Type type, Context ctx, TabbedWriter out) {
 		out.print(type.getTypeSignature());
+	}
+	
+	public void genInitializeStatement(Type type, Context ctx, TabbedWriter out, Field arg) {
+		super.genInitializeStatement(type, ctx, out, arg);
+		ctx.invoke(Constants.genSetWidgetLocation, arg, Boolean.FALSE, ctx, out);
 	}
 }
