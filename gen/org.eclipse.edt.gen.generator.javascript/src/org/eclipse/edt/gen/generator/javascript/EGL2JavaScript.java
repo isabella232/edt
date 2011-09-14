@@ -47,7 +47,7 @@ public class EGL2JavaScript extends AbstractGeneratorCommand {
 
 	public String[] getTemplatePath() {
 		return new String[] { "org.eclipse.edt.gen.javascript.templates.egl.lang.templates", "org.eclipse.edt.gen.javascript.templates.egl.core.templates",
-				"org.eclipse.edt.gen.javascript.templates.templates" };
+				"org.eclipse.edt.gen.javascript.templates.eglx.services.templates", "org.eclipse.edt.gen.javascript.templates.templates" };
 	}
 
 
