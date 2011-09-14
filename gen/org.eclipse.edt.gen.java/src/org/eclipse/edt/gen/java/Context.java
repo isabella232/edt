@@ -38,7 +38,7 @@ public class Context extends EglContext {
 	private int firstJavaLineNumber;
 	private int lastJavaLineNumber;
 
-	private String currentFunction;
+	private Function currentFunction;
 	private String currentFile;
 
 	private StringBuffer smapData = new StringBuffer();
@@ -51,11 +51,11 @@ public class Context extends EglContext {
 		smapExtension.append("");
 	}
 
-	public String getCurrentFunction() {
+	public Function getCurrentFunction() {
 		return currentFunction;
 	}
 
-	public void setCurrentFunction(String currentFunction) {
+	public void setCurrentFunction(Function currentFunction) {
 		this.currentFunction = currentFunction;
 	}
 

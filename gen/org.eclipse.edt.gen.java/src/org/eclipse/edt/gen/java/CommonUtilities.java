@@ -582,10 +582,10 @@ public class CommonUtilities {
 				}
 			}
 
-			String currentFunction = context.getCurrentFunction();
+			Function currentFunction = context.getCurrentFunction();
 			if ( result != null && currentFunction != null )
 			{
-				if ( result.equals( currentFunction ) )
+				if ( result.equals( currentFunction.getName() ) )
 				{
 					result = null;
 				}
