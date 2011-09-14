@@ -26,14 +26,14 @@ import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.StringLiteral;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public class BindServiceTemplate extends JavaScriptTemplate {
+public class ResourceTemplate extends JavaScriptTemplate {
 
 	public void genDefaultValue(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) {
-		ExternalType serviceLib = (ExternalType)TypeUtils.getType(TypeUtils.EGL_KeyScheme + Constants.LibraryService).clone();
+		ExternalType serviceLib = (ExternalType)TypeUtils.getType(TypeUtils.EGL_KeyScheme + Constants.LibrarySys).clone();
 		QualifiedFunctionInvocation invocation = factory.createQualifiedFunctionInvocation();
 		PartName partName  = factory.createPartName();
 		partName.setType(serviceLib);
-		invocation.setId("bindService");
+		invocation.setId("getResource");
 		invocation.setQualifier(partName);
 		StringLiteral bindingKey = factory.createStringLiteral();
 		invocation.getArguments().add(bindingKey);
@@ -43,10 +43,10 @@ public class BindServiceTemplate extends JavaScriptTemplate {
 		else{
 			bindingKey.setValue(((NamedElement)field.getType()).getName());
 		}
-		if(annot.getValue("deploymentDescriptorName") != null){
+		if(annot.getValue("propertyFileName") != null){
 			StringLiteral deploymentDescriptorName = factory.createStringLiteral();
 			invocation.getArguments().add(deploymentDescriptorName);
-			deploymentDescriptorName.setValue((String)annot.getValue("deploymentDescriptorName"));
+			deploymentDescriptorName.setValue((String)annot.getValue("propertyFileName"));
 		}
 		ctx.invoke(genExpression, invocation, ctx, out);
 	}

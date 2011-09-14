@@ -24,11 +24,11 @@ import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.LHSExpr;
+import org.eclipse.edt.mof.egl.LogicAndDataPart;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.PartName;
-import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StringLiteral;
 import org.eclipse.edt.mof.egl.Type;
@@ -46,12 +46,12 @@ public class DedicatedServiceTemplate extends JavaScriptTemplate {
 		Annotation eglLocation = field.getAnnotation(IEGLConstants.EGL_LOCATION);
 		Container container = field.getContainer();
 
-		Record httpRecordType = (Record)TypeUtils.getType(TypeUtils.EGL_KeyScheme + Constants.PartHttp).clone();
+		LogicAndDataPart httpRecordType = (LogicAndDataPart)TypeUtils.getType(TypeUtils.EGL_KeyScheme + Constants.PartHttpRest).clone();
 		
 		NewExpression newExpr = ctx.getFactory().createNewExpression();
 		if (eglLocation != null)
 			newExpr.addAnnotation(eglLocation);
-		newExpr.setId(Constants.PartHttp);
+		newExpr.setId(Constants.PartHttpRest);
 		ctx.invoke(genNewExpression, newExpr, ctx, out);
 		out.println(";");
 		
@@ -67,8 +67,8 @@ public class DedicatedServiceTemplate extends JavaScriptTemplate {
 		httpRecordMemberName.setMember(field);
 		httpRecordMemberName.setId(field.getId());
 
-		//<field>.invocationType = ServiceType.EglDedicated;
-		Field httpRecordField = getField(httpRecordType, "invocationType", eglLocation);
+		//<field>.restType = ServiceType.EglDedicated;
+		Field httpRecordField = getField(httpRecordType, "restType", eglLocation);
 		stmtBlock.getStatements().add(createAssignment(container, 
 				createFieldMemberAccess( httpRecordMemberName, httpRecordField, eglLocation),
 				createEnumerationEntry(httpRecordField.getType(), "egldedicated"), 
@@ -78,7 +78,7 @@ public class DedicatedServiceTemplate extends JavaScriptTemplate {
 		Field httpRecordRequestField = getField(httpRecordType, "request", eglLocation);
 		MemberAccess httpRecordRequestFieldMemberAccess = createFieldMemberAccess(httpRecordMemberName, httpRecordRequestField, eglLocation);
 		
-		Field httpRecordRequestUriField = getField((Record)httpRecordRequestField.getType(), "uri", eglLocation);
+		Field httpRecordRequestUriField = getField((LogicAndDataPart)httpRecordRequestField.getType(), "uri", eglLocation);
 		StringLiteral stringLiteral = ctx.getFactory().createStringLiteral();
 		stringLiteral.setValue(serviceName);
 		stmtBlock.getStatements().add(createAssignment(container, 
@@ -89,7 +89,7 @@ public class DedicatedServiceTemplate extends JavaScriptTemplate {
 		ctx.invoke(genStatementBodyNoBraces, stmtBlock, ctx, out);
 	}
 
-	private Field getField(Record record, String fieldName, Annotation eglLocation){
+	private Field getField(LogicAndDataPart record, String fieldName, Annotation eglLocation){
 		Field field = (Field)record.getField(fieldName);
 		if (eglLocation != null)
 			field.addAnnotation(eglLocation);
