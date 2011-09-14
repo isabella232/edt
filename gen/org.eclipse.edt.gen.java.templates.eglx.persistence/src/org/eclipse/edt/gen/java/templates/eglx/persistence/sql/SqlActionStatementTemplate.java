@@ -159,7 +159,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 				ctx.invoke(genExpression, ((SqlPrepareStatement)stmt).getSqlStringExpr(), ctx, out);
 			}
 			else {
-				out.print(quoted(stmt.getSqlString()));
+				out.print(quoted(SQL.removeCRLFs(stmt.getSqlString())));
 			}
 			out.println(';');
 			out.print(var_stmt + " = " + var_datasource + '.' + expr_getConnection);

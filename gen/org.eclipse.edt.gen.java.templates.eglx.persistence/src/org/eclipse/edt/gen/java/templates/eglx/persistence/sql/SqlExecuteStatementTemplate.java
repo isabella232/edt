@@ -58,28 +58,5 @@ public class SqlExecuteStatementTemplate extends SqlActionStatementTemplate {
 		
 		genSqlStatementEnd(stmt, ctx, out);
 	}
-
-	@Override
-	public void genSqlStatementSetup(SqlActionStatement stmt, Context ctx,
-			TabbedWriter out) {
-		String[] stmts = stmt.getSqlString().split("[;]");
-		if (stmts.length == 1) {
-			super.genSqlStatementSetup(stmt, ctx, out);
-		}
-		else {
-			out.println("try {");
-			out.println("java.sql.Statement ezeStmt = ");
-			ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
-			out.println(".getConnection().createStatement();");
-			for (String sql : stmts) {
-				if (!SQL.isComment(sql)) {
-					out.print("ezeStmt.execute(");
-					out.print(quoted(sql));
-					out.println(");");
-				}
-			}
-		}
-	}
-	
 	
 }
