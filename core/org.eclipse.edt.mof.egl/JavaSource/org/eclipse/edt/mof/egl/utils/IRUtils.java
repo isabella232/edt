@@ -39,7 +39,6 @@ import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.FunctionPartInvocation;
-import org.eclipse.edt.mof.egl.InvocableElement;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
@@ -381,7 +380,6 @@ public class IRUtils {
 
 	public static void makeCompatible(InvocationExpression expr) {
 		Expression asExpr;
-		InvocableElement func = expr.getTarget();
 		int i = 0;
 		for (Expression arg : expr.getArguments()) {
 			asExpr = makeExprCompatibleToType(arg, expr.getParameterTypeForArg(i));
@@ -462,7 +460,7 @@ public class IRUtils {
 		if (TypeUtils.isReferenceType(type) && TypeUtils.isValueType(exprType)) {
 			BoxingExpression box = factory.createBoxingExpression();
 			box.setExpr(expr);
-			return box;
+			return createAsExpression(box, type);
 		}
 		return createAsExpression(expr, type);
 	}
@@ -890,7 +888,6 @@ public class IRUtils {
 
 	public static class CheckSideEffects extends AbstractVisitor {
 		boolean has = false;
-		@SuppressWarnings("unused")
 		public boolean checkSideEffect(Expression expr) {
 			disallowRevisit();
 			setReturnData(false);
