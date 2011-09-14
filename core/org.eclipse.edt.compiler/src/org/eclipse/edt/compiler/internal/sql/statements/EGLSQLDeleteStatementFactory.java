@@ -40,7 +40,7 @@ public class EGLSQLDeleteStatementFactory extends EGLSQLStatementFactory {
 
 		boolean isValidIoObject = true;
 
-		if (!isIoObjectSQLRecord()) {
+		if (!isIoObjectSQLRecord() && !isIoObjectBasicRecord()) {
 			isValidIoObject = false;
 		} else if (!isIoObjectValid()) {
 			isValidIoObject = false;

@@ -28,6 +28,9 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 public class SQLUtility {
     
     public static final String[] EGLIOSQL = new String[] {"egl", "io", "sql"};
+    
+    public static final String[] EGLXSQL = new String[] {"eglx", "persistence", "sql"};
+    public static final String[] EGLXPERSISTENCE = new String[] {"eglx", "persistence"};
 
     public static boolean containsOnlyKeyOrReadOnlyColumns(IDataBinding sqlRecordData, String[][] usingKeyItemAndColumnNames) {
 
@@ -140,6 +143,10 @@ public class SQLUtility {
         int numTables = 0;
         int numTableVars = 0;
 
+        if(sqlRecordData.getAnnotation(EGLIOSQL, "SQLRecord") == null) {
+        	return false;
+        }
+        
         IAnnotationBinding annotation = getField(sqlRecordData.getAnnotation(EGLIOSQL, "SQLRecord"), IEGLConstants.PROPERTY_TABLENAMES);
         if (annotation != null) {
             String[][] tableNames = (String[][]) annotation.getValue();
@@ -175,6 +182,18 @@ public class SQLUtility {
         return false;
     }
     
+    public static boolean isBasicRecord(IDataBinding sqlRecordData) {
+        if (!isValid(sqlRecordData)) {
+            return false;
+        }
+        
+        ITypeBinding typeBinding = sqlRecordData.getType();
+        boolean isValid = typeBinding.isTypeBinding() 
+        		&& (typeBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING 
+        		      || (typeBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING));
+        return isValid;
+    }
+    
     public static boolean isSQLRecordPart(Record record) {
     	if(record.hasSubType() && record.getSubType().getIdentifier() == InternUtil.intern("SQLRecord")) {
 			return true;
@@ -183,10 +202,17 @@ public class SQLUtility {
     }
 
     public static String getColumnName(IDataBinding itemBinding, IDataBinding recordData) {
-        IAnnotationBinding annotation = recordData.getAnnotationFor(EGLIOSQL, "Column",
-                new IDataBinding[] { itemBinding });
+        /*IAnnotationBinding annotation = recordData.getAnnotationFor(EGLIOSQL, "Column",
+                new IDataBinding[] { itemBinding });*/
+       
+        IAnnotationBinding annotation = itemBinding.getAnnotation(EGLXSQL, "Column");
         if (annotation != null) {
-            return (String) annotation.getValue();
+        	IAnnotationBinding columnNameAnnotation= (IAnnotationBinding)annotation.findData("name");
+        	if(columnNameAnnotation != null) {
+               return (String) columnNameAnnotation.getValue();
+        	} else {
+        	   return itemBinding.getName();
+        	}
         } else {
             return itemBinding.getName();
         }
@@ -202,8 +228,11 @@ public class SQLUtility {
             }
         }
 
-        return isSQLRecordDefinedWithMultipleTables(recordData);
-
+        if(recordData.getAnnotation(EGLIOSQL, "SQLRecord") != null) {
+        	return isSQLRecordDefinedWithMultipleTables(recordData);
+        } else {
+        	return false;
+        }
     }
 
     public static boolean isValid(IDataBinding dataBinding) {

@@ -141,7 +141,9 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 									new String[]{IEGLConstants.KEYWORD_ADD.toUpperCase()});
 						}
 						else {
-							SQLStatementValidator.checkAddClauses(withInlineSQLClause, aaddStatement.getSqlInfo().getParser(), problemRequestor);
+							if(aaddStatement.getSqlInfo() != null) {
+							   SQLStatementValidator.checkAddClauses(withInlineSQLClause, aaddStatement.getSqlInfo().getParser(), problemRequestor);
+							}
 						}
 					}			
 					

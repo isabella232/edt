@@ -102,7 +102,7 @@ public abstract class EGLSQLStatementFactory {
 
         String defaultSelectConditions = null;
 
-        if (SQLUtility.isValid(sqlRecordData)) {
+        if (SQLUtility.isValid(sqlRecordData) && sqlRecordData.getAnnotation(EGLIOSQL, "SQLRecord") != null) {
             IAnnotationBinding annotation = getField(sqlRecordData.getAnnotation(EGLIOSQL, "SQLRecord"), IEGLConstants.PROPERTY_DEFAULTSELECTCONDITION);
             if (annotation != null) {
                 defaultSelectConditions = (String) annotation.getValue();
@@ -217,6 +217,19 @@ public abstract class EGLSQLStatementFactory {
 
         return isSQLRecord;
     }
+    
+    protected boolean isIoObjectBasicRecord() {
+    	 if (!SQLUtility.isValid(sqlRecordData)) {
+             return false;
+         }
+    	
+    	boolean isBasicRecord = false;
+    	if(sqlRecordData.getType() != null && ITypeBinding.FLEXIBLE_RECORD_BINDING == sqlRecordData.getType().getKind()) {
+    		isBasicRecord = true;
+    	}
+    	 
+    	 return isBasicRecord;
+    }
 
     protected boolean isIoObjectValid() {
 
@@ -235,7 +248,8 @@ public abstract class EGLSQLStatementFactory {
 
         boolean isValidIoObject = true;
 
-        if (!isIoObjectSQLRecord())
+        //SQLUtility.isBasicRecord(dataBinding
+        if (!isIoObjectSQLRecord() && !isIoObjectBasicRecord() )
             isValidIoObject = false;
         else {
             // Need the list of SQL data items before checking to see if the I/O
@@ -251,7 +265,7 @@ public abstract class EGLSQLStatementFactory {
                 }
             }
 
-            if (!isIoObjectValid())
+            if (isIoObjectSQLRecord() && !isIoObjectValid())
                 isValidIoObject = false;
         }
 
@@ -303,7 +317,7 @@ public abstract class EGLSQLStatementFactory {
         int numTablesVariables = 0;
         int tableIndex = 0;
 
-        if (SQLUtility.isValid(sqlRecordData)) {
+        if (SQLUtility.isValid(sqlRecordData) && sqlRecordData.getAnnotation(EGLIOSQL, "SQLRecord") != null) {
             if (getSQLRecordTypeBinding() != null) {
                 IAnnotationBinding annotation = getField(sqlRecordData.getAnnotation(EGLIOSQL, "SQLRecord"), IEGLConstants.PROPERTY_TABLENAMES);
                 if (annotation != null) {
@@ -349,7 +363,8 @@ public abstract class EGLSQLStatementFactory {
             tableNames = new String[1];
             tableLabels = new String[1];
             if (getSQLRecordTypeBinding() != null) {
-                tableNames[0] = getSQLRecordTypeBinding().getName();
+                //tableNames[0] = getSQLRecordTypeBinding().getName(); 
+            	tableNames[0] = getSQLRecordTypeBinding().getCaseSensitiveName(); 
             }
             tableLabels[0] = "t1"; //$NON-NLS-1$
         }
@@ -413,11 +428,22 @@ public abstract class EGLSQLStatementFactory {
     public IDataBinding[] getKeyItems() {
         if (keyItems == null) {
             if (SQLUtility.isValid(sqlRecordData)) {
+            	
+            	IDataBinding[] dataBindings = SQLUtility.getFields(sqlRecordData);
+            	IAnnotationBinding annotation = null;
+            	List<IDataBinding> annoData = new ArrayList<IDataBinding>();
+            	
+            	for(IDataBinding dataBinding : dataBindings) {
+            		annotation = dataBinding.getAnnotation(SQLUtility.EGLXPERSISTENCE, IEGLConstants.PROPERTY_ID);
+                    if(annotation != null) {
+                    	annoData.add(dataBinding);
+                    }
+            	}
 
-                IAnnotationBinding annotation = getField(sqlRecordData.getAnnotation(EGLIOSQL, "SQLRecord"), IEGLConstants.PROPERTY_KEYITEMS);
-                if (annotation != null) {
-                	Object[] value = (Object[]) annotation.getValue();
-                    keyItems = eliminateInvalid(value);
+                //IAnnotationBinding annotation = getField(sqlRecordData.getAnnotation(EGLIOSQL, "SQLRecord"), IEGLConstants.PROPERTY_KEYITEMS);
+                if (annoData != null) {
+                	//Object[] value = (Object[]) annotation.getValue();
+                    keyItems = eliminateInvalid(annoData.toArray());
                 }
            }
 

@@ -1280,6 +1280,7 @@ public interface IEGLConstants {
 	public static final String PROPERTY_HIGHLIGHT = "highlight";  //$NON-NLS-1$
 	public static final String PROPERTY_HOSTVARQUALIFIER = "hostVarQualifier";  //$NON-NLS-1$
 	public static final String PROPERTY_I4GLITEMSNULLABLE = "I4GLItemsNullable";  //$NON-NLS-1$
+	public static final String PROPERTY_ID = "Id";  //$NON-NLS-1$
 	public static final String PROPERTY_INCLUDEMSGINTRANSACTION = "includeMsgInTransaction";  //$NON-NLS-1$
 	public static final String PROPERTY_INCLUDEREFERENCEDFUNCTIONS = "includeReferencedFunctions";  //$NON-NLS-1$
 	public static final String PROPERTY_INDEXORIENTATION = "indexOrientation";  //$NON-NLS-1$
