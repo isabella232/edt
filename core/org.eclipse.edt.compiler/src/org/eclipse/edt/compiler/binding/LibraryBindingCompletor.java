@@ -44,7 +44,7 @@ public class LibraryBindingCompletor extends FunctionContainerBindingCompletor {
     }
     protected IPartSubTypeAnnotationTypeBinding getDefaultSubType() {
     	try {
-    		return new AnnotationTypeBindingImpl((FlexibleRecordBinding) currentScope.findPackage(InternUtil.intern("eglx")).resolvePackage(InternUtil.intern("lang")).resolveType(InternUtil.intern("BasicLibrary")), libraryBinding);
+    		return null;
     	}
     	catch(UnsupportedOperationException e) {
     		return null;

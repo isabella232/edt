@@ -156,7 +156,7 @@ public class HandlerBindingCompletor extends FunctionContainerBindingCompletor {
     
     protected IPartSubTypeAnnotationTypeBinding getDefaultSubType() {
     	try {
-    		return new AnnotationTypeBindingImpl((FlexibleRecordBinding) currentScope.findPackage(InternUtil.intern("eglx")).resolvePackage(InternUtil.intern("lang")).resolveType(InternUtil.intern("BasicHandler")), handlerBinding);
+    		return null;
     	}
     	catch(UnsupportedOperationException e) {
     		return null;
