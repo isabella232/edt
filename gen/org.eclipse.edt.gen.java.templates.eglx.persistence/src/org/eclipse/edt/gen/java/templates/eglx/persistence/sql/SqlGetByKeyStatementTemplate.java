@@ -91,7 +91,8 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 					out.print("null");
 				}
 				out.println(';');
-				genGetSingleRowFromResultSet(targetType, targetVarName, -1, stmt.getDataSource(), var_resultSet, ctx, out);
+				genGetSingleRowFromResultSet(targetType, targetVarName, 1, stmt.getDataSource(), var_resultSet, ctx, out);
+				out.println(";");
 				out.print("ezeList.add(");
 				out.print(targetVarName);
 				out.println(");");
