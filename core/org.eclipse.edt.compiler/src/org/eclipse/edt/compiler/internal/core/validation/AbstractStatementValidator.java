@@ -8,8 +8,8 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 
 public abstract class AbstractStatementValidator extends AbstractASTVisitor implements StatementValidator {
 	
-	IProblemRequestor problemRequestor;
-	ICompilerOptions compilerOptions;
+	protected IProblemRequestor problemRequestor;
+	protected ICompilerOptions compilerOptions;
 	
 	@Override
 	public void validateStatement(Statement stmt, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {

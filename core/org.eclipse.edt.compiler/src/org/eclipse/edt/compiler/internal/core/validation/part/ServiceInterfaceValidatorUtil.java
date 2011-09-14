@@ -23,11 +23,11 @@ import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
+import org.eclipse.edt.compiler.core.ast.FunctionParameter.UseType;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.PrimitiveType;
-import org.eclipse.edt.compiler.core.ast.FunctionParameter.UseType;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -152,7 +152,7 @@ public class ServiceInterfaceValidatorUtil {
 			
 			case ITypeBinding.SERVICE_BINDING:
 			case ITypeBinding.INTERFACE_BINDING:
-			case ITypeBinding.HANDLER_BINDING:
+	//		case ITypeBinding.HANDLER_BINDING:
 				return true;
 				
 			case ITypeBinding.PRIMITIVE_TYPE_BINDING:

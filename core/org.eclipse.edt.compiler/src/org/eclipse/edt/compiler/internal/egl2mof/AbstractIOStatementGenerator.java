@@ -19,6 +19,7 @@ import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AddStatement;
+import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.CloseStatement;
 import org.eclipse.edt.mof.egl.ConverseStatement;
 import org.eclipse.edt.mof.egl.DeleteStatement;
@@ -46,6 +47,14 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 		super(env);
 	}
 
+	@Override
+	public CallStatement genCallStatement(org.eclipse.edt.compiler.core.ast.CallStatement stmt, 
+			Map<IBinding, EObject> bindingToElementMap) {
+		eObjects = bindingToElementMap;
+		stmt.accept(this);
+		return (CallStatement)stack.pop();
+	}
+	
 	@Override
 	public AddStatement genAddStatement(org.eclipse.edt.compiler.core.ast.AddStatement stmt, 
 			Map<IBinding, EObject> bindingToElementMap) {

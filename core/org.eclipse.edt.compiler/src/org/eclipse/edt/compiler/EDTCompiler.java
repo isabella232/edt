@@ -21,10 +21,12 @@ import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.SQLActionStatementValidator;
+import org.eclipse.edt.compiler.internal.egl2mof.eglx.services.ServicesActionStatementValidator;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
+import org.eclipse.edt.mof.eglx.services.ServicesCallStatement;
 
 public class EDTCompiler extends BaseCompiler {
 		
@@ -33,6 +35,7 @@ public class EDTCompiler extends BaseCompiler {
 		StatementValidator.Registry.put(MofConversion.Type_SqlRecord, new DefaultStatementValidator());
 		StatementValidator.Registry.put(MofConversion.EGL_lang_package, new DefaultStatementValidator());
 		StatementValidator.Registry.put("eglx.persistence.sql", new SQLActionStatementValidator());
+		StatementValidator.Registry.put("eglx.services", new ServicesActionStatementValidator());
 	}
 
 	@Override
@@ -43,6 +46,9 @@ public class EDTCompiler extends BaseCompiler {
 			String path = SystemEnvironmentUtil.getSystemLibraryPath(BindingCreator.class, "lib");
 			path += File.pathSeparator;
 			path += SystemEnvironmentUtil.getSystemLibraryPath(SqlActionStatement.class, "egllib");
+			path += File.pathSeparator;
+			System.out.println("loading ServiceCallStatement");
+			path += SystemEnvironmentUtil.getSystemLibraryPath(ServicesCallStatement.class, "egllib");
 			path += File.pathSeparator;
 			systemEnvironmentRootPath = path + super.getSystemEnvironmentPath();
 		}
@@ -103,8 +109,11 @@ public class EDTCompiler extends BaseCompiler {
 			}
 		});
 		
-		if (validator[0] == null) {
+		if (validator[0] == null && !(stmt instanceof org.eclipse.edt.compiler.core.ast.CallStatement)) {
 			return StatementValidator.Registry.get("eglx.persistence.sql");
+		}
+		else if (validator[0] == null && stmt instanceof org.eclipse.edt.compiler.core.ast.CallStatement) {
+			return StatementValidator.Registry.get("eglx.services");
 		}
 		else {
 			return validator[0];

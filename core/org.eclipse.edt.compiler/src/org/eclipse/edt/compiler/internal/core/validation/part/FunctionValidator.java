@@ -83,31 +83,22 @@ import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.AddStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.CallStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.CaseStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.CloseStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ContinueStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ConverseStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.DeleteStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.DisplayStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.ExecuteStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ExitStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.ForEachStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ForStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ForwardStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.FreeSQLStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.FunctionDataDeclarationValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.GetByKeyStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.GetByPositionStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.GotoStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.IfStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.LabelStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.MoveStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.OpenStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.OpenUIStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.PrepareStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.PrintStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.ReplaceStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ReturnStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.SetStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ShowStatementValidator;
@@ -534,7 +525,12 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(CallStatement callStatement) {
 		preVisitStatement(callStatement);
 		if (checkStatementAllowedInContainer(callStatement)) {
-			callStatement.accept(new CallStatementValidator(problemRequestor, compilerOptions));
+			if (enclosingPart != null && enclosingPart.getEnvironment() != null && enclosingPart.getEnvironment().getCompiler() != null) {
+				org.eclipse.edt.compiler.StatementValidator val = enclosingPart.getEnvironment().getCompiler().getValidatorFor(callStatement);
+				if (val != null) {
+					val.validateStatement(callStatement, problemRequestor, compilerOptions);
+				}
+			}
 		}
 		postVisitStatement(callStatement);
 		return false;

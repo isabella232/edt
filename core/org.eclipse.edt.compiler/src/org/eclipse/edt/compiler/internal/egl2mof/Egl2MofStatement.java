@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
 import org.eclipse.edt.compiler.core.ast.OtherwiseClause;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.SQLActionStatementGenerator;
+import org.eclipse.edt.compiler.internal.egl2mof.eglx.services.ServicesActionStatementGenerator;
 import org.eclipse.edt.compiler.internal.egl2mof.sql.SQLIOStatementGenerator;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
@@ -66,6 +67,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		IOStatementGenerator.Registry.put(Type_SqlRecord, new SQLIOStatementGenerator());
 		IOStatementGenerator.Registry.put(EGL_lang_package, new DefaultIOStatementGenerator());
 		IOStatementGenerator.Registry.put("eglx.persistence.sql", new SQLActionStatementGenerator());
+		IOStatementGenerator.Registry.put("eglx.services", new ServicesActionStatementGenerator());
 	}
 	
 	Egl2MofStatement(IEnvironment env) {
@@ -156,7 +158,8 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CallStatement callStatement) {
-		CallStatement stmt = factory.createCallStatement();
+		IOStatementGenerator generator = getGeneratorFor(callStatement);
+		CallStatement stmt = generator.genCallStatement(callStatement, eObjects);
 		callStatement.getInvocationTarget().accept(this);
 		stmt.setInvocationTarget((Expression)stack.pop());
 		if (callStatement.hasArguments()) {
@@ -768,8 +771,11 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			}
 		});
 		
-		if (generator[0] == null) {
+		if (generator[0] == null && !(node instanceof org.eclipse.edt.compiler.core.ast.CallStatement)) {
 			return IOStatementGenerator.Registry.get("eglx.persistence.sql");
+		}
+		else if (generator[0] == null && node instanceof org.eclipse.edt.compiler.core.ast.CallStatement) {
+			return IOStatementGenerator.Registry.get("eglx.services");
 		}
 		else {
 			return generator[0];

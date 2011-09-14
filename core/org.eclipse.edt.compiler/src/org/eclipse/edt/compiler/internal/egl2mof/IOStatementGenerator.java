@@ -20,6 +20,7 @@ import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AddStatement;
+import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.CloseStatement;
 import org.eclipse.edt.mof.egl.ConverseStatement;
 import org.eclipse.edt.mof.egl.DeleteStatement;
@@ -41,6 +42,7 @@ public interface IOStatementGenerator {
 	void setEnvironment(IEnvironment env);
 	void setContext(Context context);
 	
+	CallStatement genCallStatement(org.eclipse.edt.compiler.core.ast.CallStatement stmt, Map<IBinding, EObject> bindingToElementMap );
 	AddStatement genAddStatement(org.eclipse.edt.compiler.core.ast.AddStatement stmt, Map<IBinding, EObject> bindingToElementMap );
 	CloseStatement genCloseStatement(org.eclipse.edt.compiler.core.ast.CloseStatement stmt, Map<IBinding, EObject> bindingToElementMap );
 	ConverseStatement genConverseStatement(org.eclipse.edt.compiler.core.ast.ConverseStatement stmt, Map<IBinding, EObject> bindingToElementMap );
