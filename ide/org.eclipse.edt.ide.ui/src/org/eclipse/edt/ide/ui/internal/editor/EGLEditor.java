@@ -51,6 +51,8 @@ import org.eclipse.edt.ide.ui.internal.results.views.AbstractResultsViewPart;
 import org.eclipse.help.IContextProvider;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.PreferenceConstants;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
@@ -370,7 +372,7 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 	}
 
     protected boolean isEditorInputIncludedInContextMenu() {
-    	return false;
+    	return true;
     }
     
 	protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
@@ -1379,6 +1381,21 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 		super.editorContextMenuAboutToShow(menu);
 		addAction(menu, ITextEditorActionConstants.GROUP_COPY, ITextEditorActionConstants.SELECT_ALL);
 		addAction(menu, ITextEditorActionConstants.GROUP_FIND, ITextEditorActionConstants.FIND);
+		menu.addMenuListener( new IMenuListener() {
+
+			@Override
+			public void menuAboutToShow(IMenuManager menu) {
+				try {
+					IContributionItem item = menu.find( "org.eclipse.edt.ide.ui.file.sourceMenu" ); 
+					if ( item != null ) {
+						menu.remove( item );
+					}
+				} finally {
+					menu.removeMenuListener( this );
+				}
+			}
+			
+		});
 	}
 	
 	@Override
@@ -1394,6 +1411,7 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 			"org.eclipse.edt.ide.ui.templatePreferences", //$NON-NLS-1$
 			"org.eclipse.edt.ide.ui.ContentAssistAdvancedPreferences", //$NON-NLS-1$
 		};
+		
 	}
-	
+
 }
