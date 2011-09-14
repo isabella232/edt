@@ -26,11 +26,13 @@ public final class CorrectionMessages extends NLS {
 	public static String EGLCorrectionProposal_error_title;
 	public static String EGLCorrectionProposal_error_message;
 	public static String EGLCorrectionProcessor_error_quickfix_message;
+	public static String EGLCorrectionProcessor_error_quickassist_message;
 	public static String EGLCorrectionProcessor_error_status;
 	public static String EGLCorrectionProcessor_go_to_closest_using_menu;
 	public static String EGLCorrectionProcessor_go_to_closest_using_key;
 	public static String EGLCorrectionProcessor_go_to_original_using_menu;
 	public static String EGLCorrectionProcessor_go_to_original_using_key;
+	public static String NoCorrectionProposal_description;
 
 
 	static {

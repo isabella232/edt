@@ -11,6 +11,7 @@
 package org.eclipse.edt.ide.ui.internal.quickfix;
 
 import org.eclipse.edt.compiler.core.ast.File;
+import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
@@ -33,11 +34,25 @@ public interface IInvocationContext {
 	 */
 	int getSelectionLength();
 
-
+	/**
+	 * @returns the root of egl file
+	 */
 	File getFileAST();
 	
+	/**
+	 * @return the current invoke part
+	 */
 	Part getPart();
 	
+	/**
+	 * @return The document
+	 */
 	public IEGLDocument getDocument();
+	
+	/**
+	 *Convenience method to evaluate the AST node covering the current selection.
+	 * @return Returns the node that covers the location of the problem
+	 */
+	Node getCoveringNode();
 
 }

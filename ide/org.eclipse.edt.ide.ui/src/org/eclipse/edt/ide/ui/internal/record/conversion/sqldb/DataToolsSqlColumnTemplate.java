@@ -29,6 +29,7 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 		EGLSQLRetrieveUtility.getInstance().populateStructureItem(def, column, item);
 		StringBuilder builder = new StringBuilder();
 		
+		builder.append("    ");
 		builder.append(item.getName());
 		builder.append(" ");
 		builder.append(item.getPrimitiveType());

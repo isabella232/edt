@@ -41,12 +41,13 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 	
 	private Text fDbms;
 	private Text fSqlDB;
-	private Text fSqlID;
+	private Text fUserId;
 	private Text fSqlJDBCDriverClass;
 	private Text fSqlJNDIName;
 	private Text fSqlPassword;
-	private Text fSqlSchema;
-	private Text fSqlValidationConnectionURL;
+	private Text fDefaultSchema;
+	private Text fConnLocation;
+	//private Text fSqlValidationConnectionURL;
 	
 	protected Button btnPing;
 	
@@ -69,6 +70,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 	private void createSQLControls(FormToolkit toolkit, Composite parent) {
 		toolkit.createLabel(parent, SOAMessages.LabelDbms);
 		fDbms = createTextControl(toolkit, parent);
+		fDbms.setEditable(false);
 		fDbms.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
 				fSQLDatabaseBinding.setDbms(fDbms.getText());		
@@ -83,7 +85,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 			}			
 		});
 
-		toolkit.createLabel(parent, SOAMessages.LabelSqlDB);
+		toolkit.createLabel(parent, SOAMessages.LabelSqlValidationConnectionURL);
 		fSqlDB = createTextControl(toolkit, parent);
 		fSqlDB.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
@@ -92,10 +94,10 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		});
 
 		toolkit.createLabel(parent, SOAMessages.LabelSqlID);
-		fSqlID = createTextControl(toolkit, parent);
-		fSqlID.addModifyListener(new ModifyListener(){
+		fUserId = createTextControl(toolkit, parent);
+		fUserId.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
-				fSQLDatabaseBinding.setSqlID(fSqlID.getText());		
+				fSQLDatabaseBinding.setSqlID(fUserId.getText());		
 			}			
 		});
 
@@ -109,10 +111,10 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		});
 
 		toolkit.createLabel(parent, SOAMessages.LabelSqlSchema);
-		fSqlSchema = createTextControl(toolkit, parent);
-		fSqlSchema.addModifyListener(new ModifyListener(){
+		fDefaultSchema = createTextControl(toolkit, parent);
+		fDefaultSchema.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
-				fSQLDatabaseBinding.setSqlSchema(fSqlSchema.getText());		
+				fSQLDatabaseBinding.setSqlSchema(fDefaultSchema.getText());		
 			}			
 		});
 
@@ -123,15 +125,23 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 				fSQLDatabaseBinding.setSqlJNDIName(fSqlJNDIName.getText());		
 			}			
 		});
+		
+		toolkit.createLabel(parent, SOAMessages.LabelSqlJarLists);
+		fConnLocation = createTextControl(toolkit, parent);
+		fConnLocation.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e) {
+				fSQLDatabaseBinding.setSqlJNDIName(fConnLocation.getText());		
+			}			
+		});
 
 		
-		toolkit.createLabel(parent, SOAMessages.LabelSqlValidationConnectionURL);
+		/*toolkit.createLabel(parent, SOAMessages.LabelSqlValidationConnectionURL);
 		fSqlValidationConnectionURL = createTextControl(toolkit, parent);
 		fSqlValidationConnectionURL.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
 				fSQLDatabaseBinding.setSqlValidationConnectionURL(fSqlValidationConnectionURL.getText());		
 			}			
-		});
+		});*/
 		
 		btnPing = new Button(parent, SWT.NONE);
 		btnPing.addSelectionListener(new SelectionAdapter() {
@@ -173,18 +183,18 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		
 		copy.put("org.eclipse.datatools.connectivity.db.connectionProperties", "");
 		copy.put("org.eclipse.datatools.connectivity.db.savePWD", false);
-		if(fSqlSchema.getText() != null) {
-			copy.put("jarList", fSqlSchema.getText().trim());
-		} else {
-			copy.put("jarList", null);
+		if(fConnLocation.getText() != null) {
+			copy.put("jarList", fConnLocation.getText().trim());
 		}
 		
-		copy.put("org.eclipse.datatools.connectivity.db.username", fSqlID.getText());
+		copy.put("org.eclipse.datatools.connectivity.db.username", fUserId.getText());
 		copy.put("org.eclipse.datatools.connectivity.db.password", fSqlPassword.getText());
 		copy.put("org.eclipse.datatools.connectivity.db.driverClass", fSqlJDBCDriverClass.getText());
 		
-		copy.put("org.eclipse.datatools.connectivity.db.databaseName", fSqlDB.getText());
-		copy.put("org.eclipse.datatools.connectivity.db.URL", fSqlValidationConnectionURL.getText());
+		//copy.put("org.eclipse.datatools.connectivity.db.databaseName", fSqlDB.getText());
+		if(fSqlDB.getText() != null) {
+			copy.put("org.eclipse.datatools.connectivity.db.URL", fSqlDB.getText().trim());
+		}
 		
 		return copy;
 	}
@@ -221,7 +231,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 			fSqlDB.setText(sqldb);
 		String sqlid = fSQLDatabaseBinding.getSqlID();
 		if (sqlid != null)
-			fSqlID.setText(sqlid);
+			fUserId.setText(sqlid);
 		String sqljdbcdriver = fSQLDatabaseBinding.getSqlJDBCDriverClass();
 		if (sqljdbcdriver != null)
 			fSqlJDBCDriverClass.setText(sqljdbcdriver);
@@ -236,10 +246,15 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		}
 		String sqlschema = fSQLDatabaseBinding.getSqlSchema();
 		if (sqlschema != null)
-			fSqlSchema.setText(sqlschema);
-		String sqlvalidation = fSQLDatabaseBinding.getSqlValidationConnectionURL();
+			fDefaultSchema.setText(sqlschema);
+		
+		String jarLists = fSQLDatabaseBinding.getJarList();
+		if(jarLists != null)
+			fConnLocation.setText(jarLists);
+		
+		/*String sqlvalidation = fSQLDatabaseBinding.getSqlValidationConnectionURL();
 		if (sqlvalidation != null)
-			fSqlValidationConnectionURL.setText(sqlvalidation);
+			fSqlValidationConnectionURL.setText(sqlvalidation);*/
 	}	
 	
 	protected void HandleNameChanged() {

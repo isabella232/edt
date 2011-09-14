@@ -11,6 +11,7 @@
 package org.eclipse.edt.ide.ui.internal.quickfix;
 
 import org.eclipse.edt.compiler.core.ast.File;
+import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.ide.core.internal.model.EGLFile;
 import org.eclipse.edt.ide.core.internal.model.document.EGLDocument;
@@ -70,5 +71,14 @@ public class AssistContext extends TextInvocationContext implements IInvocationC
 
 	public IEGLDocument getDocument(){
 		return(document);
+	}
+
+	@Override
+	public Node getCoveringNode() {
+		if(null != document){
+			return(document.getNewModelNodeAtOffset(getOffset()));
+		}
+		
+		return null;
 	}
 }

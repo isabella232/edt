@@ -383,4 +383,6 @@ public class SOAMessages extends NLS {
 	public static String DefaultDeploymentDescription;
 	
 	public static String SQLDatabaseBindingDetailPageTestConnection;
+	
+	public static String LabelSqlJarLists;
 }

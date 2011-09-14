@@ -29,9 +29,11 @@ import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.editor.IEGLCompletionProposal;
 import org.eclipse.edt.ide.ui.editor.IProblemLocation;
+import org.eclipse.edt.ide.ui.editor.IQuickAssistProcessor;
 import org.eclipse.edt.ide.ui.editor.IQuickFixProcessor;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.editor.IAnnotation;
+import org.eclipse.edt.ide.ui.internal.quickfix.proposals.ChangeCorrectionProposal;
 import org.eclipse.edt.ide.ui.internal.util.Messages;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.contentassist.ContentAssistEvent;
@@ -41,6 +43,7 @@ import org.eclipse.jface.text.quickassist.IQuickAssistInvocationContext;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.ltk.core.refactoring.NullChange;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IMarkerHelpRegistry;
@@ -53,7 +56,9 @@ import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 public class EGLCorrectionProcessor implements org.eclipse.jface.text.quickassist.IQuickAssistProcessor {
 
 	private static final String QUICKFIX_PROCESSOR_CONTRIBUTION_ID= "quickFixProcessors"; //$NON-NLS-1$
+	private static final String QUICKASSIST_PROCESSOR_CONTRIBUTION_ID= "quickAssistProcessors"; //$NON-NLS-1$
 	private static ContributedProcessorDescriptor[] fgContributedCorrectionProcessors= null;
+	private static ContributedProcessorDescriptor[] fgContributedAssistProcessors= null;
 	
 	private static ContributedProcessorDescriptor[] getProcessorDescriptors(String contributionId, boolean testMarkerTypes) {
 		IConfigurationElement[] elements= Platform.getExtensionRegistry().getConfigurationElementsFor(EDTUIPlugin.PLUGIN_ID, contributionId);
@@ -76,6 +81,13 @@ public class EGLCorrectionProcessor implements org.eclipse.jface.text.quickassis
 			fgContributedCorrectionProcessors= getProcessorDescriptors(QUICKFIX_PROCESSOR_CONTRIBUTION_ID, true);
 		}
 		return fgContributedCorrectionProcessors;
+	}
+	
+	private static ContributedProcessorDescriptor[] getAssistProcessors() {
+		if (fgContributedAssistProcessors == null) {
+			fgContributedAssistProcessors= getProcessorDescriptors(QUICKASSIST_PROCESSOR_CONTRIBUTION_ID, false);
+		}
+		return fgContributedAssistProcessors;
 	}
 
 	private String fErrorMessage;
@@ -170,6 +182,10 @@ public class EGLCorrectionProcessor implements org.eclipse.jface.text.quickassis
 			}
 		}
 		
+		if (res == null || res.length == 0) {
+			return new ICompletionProposal[] { new ChangeCorrectionProposal(CorrectionMessages.NoCorrectionProposal_description, new NullChange(""), 0, null) }; //$NON-NLS-1$
+		}
+		
 		if (res.length > 1) {
 			Arrays.sort(res, new CompletionProposalComparator());
 		}
@@ -206,6 +222,17 @@ public class EGLCorrectionProcessor implements org.eclipse.jface.text.quickassis
 				resStatus.add(status);
 			}
 		}
+		
+		if (addQuickAssists) {
+			IStatus status= collectAssists(context, problemLocations, proposals);
+			if (!status.isOK()) {
+				if (resStatus == null) {
+					resStatus= new MultiStatus(EDTUIPlugin.PLUGIN_ID, IStatus.ERROR, CorrectionMessages.EGLCorrectionProcessor_error_quickassist_message, null);
+				}
+				resStatus.add(status);
+			}
+		}
+		
 		if (resStatus != null) {
 			return resStatus;
 		}
@@ -223,6 +250,14 @@ public class EGLCorrectionProcessor implements org.eclipse.jface.text.quickassis
 				collector.process(curr);
 			}
 		}
+		return collector.getStatus();
+	}
+	
+	public static IStatus collectAssists(IInvocationContext context, IProblemLocation[] locations, Collection proposals) {
+		ContributedProcessorDescriptor[] processors= getAssistProcessors();
+		SafeAssistCollector collector= new SafeAssistCollector(context, locations, proposals);
+		collector.process(processors);
+
 		return collector.getStatus();
 	}
 	
@@ -302,6 +337,19 @@ public class EGLCorrectionProcessor implements org.eclipse.jface.text.quickassis
 		return false;
 	}
 	
+	public static boolean hasAssists(IInvocationContext context) {
+		ContributedProcessorDescriptor[] processors= getAssistProcessors();
+		SafeHasAssist collector= new SafeHasAssist(context);
+
+		for (int i= 0; i < processors.length; i++) {
+			collector.process(processors[i]);
+			if (collector.hasAssists()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private static boolean hasCorrections(IMarker marker) {
 		if (marker == null || !marker.exists())
 			return false;
@@ -376,6 +424,31 @@ public class EGLCorrectionProcessor implements org.eclipse.jface.text.quickassis
 		}
 	}
 	
+	private static class SafeAssistCollector extends SafeCorrectionProcessorAccess {
+		private final IInvocationContext fContext;
+		private final IProblemLocation[] fLocations;
+		private final Collection fProposals;
+
+		public SafeAssistCollector(IInvocationContext context, IProblemLocation[] locations, Collection proposals) {
+			fContext= context;
+			fLocations= locations;
+			fProposals= proposals;
+		}
+
+		public void safeRun(ContributedProcessorDescriptor desc) throws Exception {
+			IQuickAssistProcessor curr= (IQuickAssistProcessor) desc.getProcessor(IQuickAssistProcessor.class);
+			if (curr != null) {
+				IEGLCompletionProposal[] res= curr.getAssists(fContext, fLocations);
+				if (res != null) {
+					for (int k= 0; k < res.length; k++) {
+						fProposals.add(res[k]);
+					}
+				}
+			}
+		}
+	}
+	
+	
 	private static class SafeHasCorrections extends SafeCorrectionProcessorAccess {
 		private final IEGLFile fCu;
 		private final int fProblemId;
@@ -395,6 +468,27 @@ public class EGLCorrectionProcessor implements org.eclipse.jface.text.quickassis
 			IQuickFixProcessor processor= (IQuickFixProcessor) desc.getProcessor(/*fCu,*/ IQuickFixProcessor.class);
 			if (processor != null && processor.hasCorrections(/*fCu,*/ fProblemId)) {
 				fHasCorrections= true;
+			}
+		}
+	}
+	
+	private static class SafeHasAssist extends SafeCorrectionProcessorAccess {
+		private final IInvocationContext fContext;
+		private boolean fHasAssists;
+
+		public SafeHasAssist(IInvocationContext context) {
+			fContext= context;
+			fHasAssists= false;
+		}
+
+		public boolean hasAssists() {
+			return fHasAssists;
+		}
+
+		public void safeRun(ContributedProcessorDescriptor desc) throws Exception {
+			IQuickAssistProcessor processor= (IQuickAssistProcessor) desc.getProcessor(IQuickAssistProcessor.class);
+			if (processor != null && processor.hasAssists(fContext)) {
+				fHasAssists= true;
 			}
 		}
 	}

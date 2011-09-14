@@ -19,7 +19,7 @@ import org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding;
 
 public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 	
-	private String dbms="";
+	private String dbVendorAndVersion="";
 	private String driverClass="";
 	private String connUrl="";
 	private String userName="";
@@ -28,6 +28,8 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 	private String dbName="";
 	private String jndiName="";
 	private String connLocation;
+	private String bindingName;
+	private String defaultSchema;
 
 	public BindingSQLDatabaseConfiguration() {
 		super();
@@ -45,11 +47,11 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 	}
 	
 	public String getDbms(){
-		return dbms;
+		return dbVendorAndVersion;
 	}
 	
 	public void setDbms(String dbms){
-		this.dbms = dbms;
+		this.dbVendorAndVersion = dbms;
 	}
 	
 	public String getDriverClass(){
@@ -108,20 +110,37 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 		this.connLocation = connLocation;
 	}
 	
+	public String getBindingName(){
+		return bindingName;
+	}
+	
+	public void setBindingName(String bindingName){
+		this.bindingName = bindingName;
+	}
+	
+	public String getDefaultSchema(){
+		return defaultSchema;
+	}
+	
+	public void setDefaultSchema(String defaultSchema){
+		this.defaultSchema = defaultSchema;
+	}
+	
 	public Object executeAddSQLDatabaseBinding(Bindings bindings){
 		SQLDatabaseBinding sqlBinding = DeploymentFactory.eINSTANCE.createSQLDatabaseBinding();
 		bindings.getSqlDatabaseBinding().add(sqlBinding);
 
+		sqlBinding.setName(getBindingName());
 		sqlBinding.setDbms(getDbms());
-		sqlBinding.setName(getDbms());
 		sqlBinding.setSqlID(getUserName());
 		sqlBinding.setSqlPassword(getPassword());
-		sqlBinding.setSqlValidationConnectionURL(getConnUrl());
-		sqlBinding.setSqlJDBCDriverClass(getDriverClass());
+		//sqlBinding.setSqlValidationConnectionURL(getConnUrl());
 		
-		sqlBinding.setSqlDB(getDbName());
+		sqlBinding.setJarList(getConnLocation());
+		sqlBinding.setSqlJDBCDriverClass(getDriverClass());
+		sqlBinding.setSqlDB(getConnUrl());
 		sqlBinding.setSqlJNDIName(getJndiName());
-		sqlBinding.setSqlSchema(getConnLocation());
+		sqlBinding.setSqlSchema(getDefaultSchema());
 		
 		return sqlBinding;
 	}

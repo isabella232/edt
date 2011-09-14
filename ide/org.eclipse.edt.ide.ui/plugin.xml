@@ -10,6 +10,7 @@
     <extension-point id="eglDDEditorPageContributions" name="EGL Deployment Descriptor Editor Page Contributions" schema="schema/eglDDEditorPageProviders.exsd"/>
     <extension-point id="eglDDEditorToolbarContributions" name="EGL Deployment Descriptor Editor Toolbar Contributions" schema="schema/eglDDEditorToolbarProviders.exsd"/>
 	<extension-point id="quickFixProcessors" name="%QuickFixProcessor" schema="schema/quickFixProcessor.exsd"/>
+	<extension-point id="quickAssistProcessors" name="%QuickAssistProcessor" schema="schema/quickAssistProcessors.exsd"/>   
 	   
 	<extension 
 		point="org.eclipse.core.runtime.preferences">
@@ -35,6 +36,14 @@
             class="org.eclipse.edt.ide.ui.internal.quickfix.QuickFixProcessor"
             id="org.eclipse.edt.ide.ui.QuickFixProcessor">
       </quickFixProcessor>
+    </extension>
+    <extension
+         point="org.eclipse.edt.ide.ui.quickAssistProcessors">
+    	<quickAssistProcessor
+    		name="%defaultQuickAssistProcessor"
+    		class="org.eclipse.edt.ide.ui.internal.quickfix.QuickAssistProcessor"
+        	id="org.eclipse.edt.ide.ui.QuickAssistProcessor">
+      	</quickAssistProcessor>
     </extension>
     <extension
          point="org.eclipse.ui.editorActions">
