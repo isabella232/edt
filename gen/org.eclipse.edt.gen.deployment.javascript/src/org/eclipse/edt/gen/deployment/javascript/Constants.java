@@ -66,6 +66,7 @@ public class Constants {
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/DateTimeLib.js"); 
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/MathLib.js");
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/SysLib.js");
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/rbd/StrLib.js");
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/rest/RestRuntime.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/Encoding.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/FieldInfo.js"); //$NON-NLS-1$
@@ -84,6 +85,13 @@ public class Constants {
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/xml/binding/annotation/Xml.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/xml/binding/annotation/XMLStructureKind.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/xml/Xml.js"); //$NON-NLS-1$
+		//These files are needed for EUnit test framework
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("org/eclipse/edt/eunit/runtime/AssertionFailedException.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("org/eclipse/edt/eunit/runtime/ConstantsLib.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("org/eclipse/edt/eunit/runtime/Log.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("org/eclipse/edt/eunit/runtime/LogResult.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("org/eclipse/edt/eunit/runtime/Status.js"); //$NON-NLS-1$
+		
 	}
 	public static final String RUI_PROPERTIES_LIBRARY = "RUIPropertiesLibrary";
 	public final static String RUI_HANDLER = "eglx.ui.rui.RUIHandler";
