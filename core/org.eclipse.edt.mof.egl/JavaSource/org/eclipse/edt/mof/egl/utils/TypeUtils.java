@@ -359,6 +359,10 @@ public class TypeUtils implements MofConversion {
 			if (s1 != null && s2 != null)
 				if (!s1.getEClass().equals(s2.getEClass()))
 					return false;
+			 
+			if (((Part)p1).hasCompileErrors() != ((Part)p2).hasCompileErrors()) {
+				return false;
+			}
 			
 		}
 		if (p1 instanceof Program) {
