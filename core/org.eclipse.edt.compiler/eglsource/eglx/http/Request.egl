@@ -1,0 +1,17 @@
+package eglx.http;
+
+// RUI Handler
+
+
+//
+//
+handler Request 
+	uri string?;
+	method HttpMethod?;
+	encoding Encoding?;  
+	charset string?;
+	contentType string?;
+	headers dictionary?;
+	body string?;
+	timeout int?;	
+end

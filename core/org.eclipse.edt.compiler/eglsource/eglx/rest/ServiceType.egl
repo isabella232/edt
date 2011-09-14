@@ -1,0 +1,5 @@
+package eglx.rest;
+
+enumeration ServiceType
+	TrueRest, EglRpc, EglDedicated
+end

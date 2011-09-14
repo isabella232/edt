@@ -1,0 +1,16 @@
+package eglx.http;
+
+// RUI Handler
+
+
+//
+//
+handler Response 
+	status int?;
+  	statusMessage string?;
+	encoding Encoding?;
+	charset string?;
+	contentType string?;
+	headers dictionary?;
+	body string?;
+end

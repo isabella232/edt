@@ -15,15 +15,6 @@ import egl.lang.reflect.InterfacePart;
 import egl.lang.NativeType;
 
 externalType ServiceLib type NativeType
-
-	//delegate
-	static serviceExceptionHandler  serviceExceptionHandler;
 	
-    static function bindService(http eglx.http.Http in)returns(any);
-    static function bindService(bindingkey string const in)returns(any);
-    static function bindService(bindingkey string const in, deploymentDescriptorName string const in)returns(any);
-
-end
-
-Delegate serviceExceptionHandler(exp AnyException in)
+    static function bindResource(serviceOrInterface any const in, http any const in)returns(any);
 end

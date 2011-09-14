@@ -1,0 +1,24 @@
+package eglx.http;
+
+// RUI Handler
+
+
+//
+//
+handler HttpSoap implements IHttp
+	request Request;
+	response Response;
+	responseHeader any?;
+	
+	function getRequest()returns(Request)
+		return(request);
+	end	
+	function getResponse()returns(Response)
+		return(response);
+	end	
+	function setSoapRequestHeader(rec any const in)
+	end	
+	function getSoapResponseHeader()returns(any)
+		return(responseHeader);
+	end	
+end

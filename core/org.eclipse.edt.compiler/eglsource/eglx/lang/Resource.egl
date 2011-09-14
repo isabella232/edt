@@ -1,11 +1,10 @@
-package eglx.services;
+package eglx.lang;
 
-Record BindService type Annotation
+Record Resource type Annotation
 {
 	targets = [elementKind.fieldMbr]
 //	targetTypes = [InterfacePart, ServicePart]
 }
   	bindingKey string;
-  	deploymentDescriptorName string?;
+  	propertyFileName string?;
 end
-

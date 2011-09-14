@@ -1,0 +1,7 @@
+package eglx.http;
+
+// interface
+interface IHttp
+	function getRequest() returns (eglx.http.Request);
+	function getResponse() returns (eglx.http.Response);
+end

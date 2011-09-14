@@ -1,5 +1,0 @@
-package eglx.services;
-
-enumeration ServiceType
-	TrueRest, EglRpc, EglDedicated, SOAP
-end
