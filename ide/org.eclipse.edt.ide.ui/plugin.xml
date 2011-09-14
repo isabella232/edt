@@ -782,7 +782,25 @@ Templates
 								value="org.eclipse.edt.ide.core.model.IEGLElement" />
  		        	</or>         					
 				</enablement>
-			</commonWizard>			
+			</commonWizard>
+			<commonWizard
+				type="new"
+				menuGroupId="org.eclipse.edt.ide.ui.wizards.menuGroup"
+				wizardId="org.eclipse.edt.ide.ui.newHandlerWizard">
+				<enablement>
+ 		        	<or>
+	 					<adapt
+								type="org.eclipse.core.resources.IProject" >
+							<test
+								property="org.eclipse.core.resources.projectNature"
+								value="org.eclipse.edt.ide.core.EGLNature" />
+						</adapt>
+						<instanceof
+								value="org.eclipse.edt.ide.core.model.IEGLElement" />
+ 		        	</or>         					
+				</enablement>
+			</commonWizard>
+			<!-- TODO Remove this			
 			<commonWizard
 				type="new"
 				menuGroupId="org.eclipse.edt.ide.ui.wizards.menuGroup"
@@ -816,7 +834,7 @@ Templates
 								value="org.eclipse.edt.ide.core.model.IEGLElement" />
  		        	</or>         					
 				</enablement>
-			</commonWizard>
+			</commonWizard> -->
 			<commonWizard
 				type="new"
 				menuGroupId="org.eclipse.edt.ide.ui.wizards.menuGroup"
@@ -949,7 +967,7 @@ Templates
             class="org.eclipse.edt.ide.ui.internal.wizards.ServiceWizard"
             id="org.eclipse.edt.ide.ui.newServicewizard">
        </wizard>
-	   <wizard
+       <wizard
         	name="%EGLProject"
             icon="icons/ctool16/newegl_wiz.gif"
             category="org.eclipse.edt.ide.ui.wizards.new.category"
@@ -957,6 +975,14 @@ Templates
             project="true"
             id="org.eclipse.edt.ide.ui.newProjectWizard">
  		</wizard>
+	   	<wizard
+        	name="%Handler"
+            icon="icons/ctool16/newruihandler_wiz.gif"
+            category="org.eclipse.edt.ide.ui.wizards.new.category"
+            class="org.eclipse.edt.ide.ui.internal.handlers.wizards.NewHandlerWizard"
+            id="org.eclipse.edt.ide.ui.newHandlerWizard">
+ 		</wizard>
+		<!--	TODO Remove these code and corresponding classed if they are not needed
 		<wizard
             name="%RUIHandler"
             icon="icons/ctool16/newruihandler_wiz.gif"
@@ -970,7 +996,7 @@ Templates
             category="org.eclipse.edt.ide.ui.wizards.new.category"
             class="org.eclipse.edt.ide.ui.internal.wizards.RUIWidgetWizard"
             id="org.eclipse.edt.ide.ui.newRuiWidgetWizard">
-		</wizard>
+		</wizard> -->
         <wizard
             name="%EGLSourceFolder"
             icon="icons/ctool16/newsrc_wiz.gif"
@@ -1430,6 +1456,38 @@ Templates
             description="Create entity records for fields defined in tables or views in a relational database.">
       </template>      
       
+    </extension>
+    
+    <extension point="org.eclipse.edt.ide.ui.eglTemplates">
+	
+	  <template
+     		default="true"
+     		name="%BasicHandler"
+     		icon="icons/ctool16/newrec_wiz.gif"
+            category="org.eclipse.edt.ide.ui.handlers"
+            codeTemplateID="org.eclipse.edt.ide.ui.templates.basic_handler_part"
+            id="org.eclipse.edt.ide.ui.handlers.basic"
+            description="%BasicHandlerDescription">
+      </template>
+      
+      <template
+            name="%RUIHandler"
+            icon="icons/ctool16/record_template.gif"
+            category="org.eclipse.edt.ide.ui.handlers"
+            wizardClass="org.eclipse.edt.ide.ui.internal.handlers.wizards.RUIHandlerWizard"
+            id="org.eclipse.edt.ide.ui.handlers.ruihandler"
+            description="%RUIHandlerDescription">
+      </template>
+      
+      <template
+            name="%RUIWidget"
+            icon="icons/ctool16/record_template.gif"
+            category="org.eclipse.edt.ide.ui.handlers"
+            wizardClass="org.eclipse.edt.ide.ui.internal.handlers.wizards.RUIWidgetWizard"
+            id="org.eclipse.edt.ide.ui.handlers.ruiwidget"
+            description="%RUIWidgetDescription">
+      </template>      
+     
     </extension>
     
     <extension point="org.eclipse.edt.ide.ui.projectTemplates">
