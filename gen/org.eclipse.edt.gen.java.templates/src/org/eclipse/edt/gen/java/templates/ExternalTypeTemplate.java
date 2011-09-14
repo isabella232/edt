@@ -60,11 +60,11 @@ public class ExternalTypeTemplate extends JavaTemplate {
 
 	public void genClassHeader(ExternalType part, Context ctx, TabbedWriter out) {}
 
-	public void genAccessor(ExternalType part, Context ctx, TabbedWriter out) {
-		ctx.invoke(genPartName, part, ctx, out);
+	public void genAccessor( ExternalType part, Context ctx, TabbedWriter out )
+	{
+		genRuntimeTypeName( part, ctx, out, TypeNameKind.JavaImplementation );
 	}
 
-	@SuppressWarnings("unchecked")
 	public void genRuntimeTypeName(ExternalType part, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		// if this external type has an alias, then use it instead
 		Annotation annot = part.getAnnotation("eglx.java.JavaObject");
