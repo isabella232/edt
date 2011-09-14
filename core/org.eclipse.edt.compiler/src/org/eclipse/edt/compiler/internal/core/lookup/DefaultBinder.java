@@ -1584,10 +1584,27 @@ public abstract class DefaultBinder extends AbstractBinder {
 			}
 			else {
 				ITypeBinding tBinding = newExpression.getType().resolveTypeBinding();
-				if (Binding.isValidBinding(tBinding) && tBinding.isReference() && !tBinding.isInstantiable() && currentScope.getPartBinding() != tBinding) {
+				if (Binding.isValidBinding(tBinding) && tBinding.isReference() && !tBinding.isInstantiable() && !tBinding.isNullable() && currentScope.getPartBinding() != tBinding) {
 					problemRequestor.acceptProblem(newExpression.getType(),
 							IProblemRequestor.TYPE_NOT_INSTANTIABLE_2,
 						new String[] {newExpression.getType().getCanonicalName()});
+				}
+				else {
+					//prevent the expression:  new any[10]
+					//you cannot create an array of non-instantiable types
+					Type currType = newExpression.getType();
+					while (currType.isArrayType()) {
+						ArrayType arrayType = (ArrayType) currType;
+						if (arrayType.hasInitialSize() && !isZeroLiteral(arrayType.getInitialSize())) {
+							tBinding = arrayType.getElementType().resolveTypeBinding();
+							if (Binding.isValidBinding(tBinding) && tBinding.isReference() && !tBinding.isInstantiable() && !tBinding.isNullable() && currentScope.getPartBinding() != tBinding) {
+								problemRequestor.acceptProblem(arrayType.getElementType(),
+										IProblemRequestor.TYPE_NOT_INSTANTIABLE_2,
+									new String[] {arrayType.getElementType().getCanonicalName()});
+							}
+						}
+						currType = arrayType.getElementType();
+					}
 				}
 			}
 		}
@@ -1628,6 +1645,18 @@ public abstract class DefaultBinder extends AbstractBinder {
 				}
 			});
 		}
+	}
+	
+	private boolean isZeroLiteral(Expression expr) {
+		
+		final boolean[] isZero = new boolean[1];
+		expr.accept(new DefaultASTVisitor(){
+			public boolean visit(IntegerLiteral integerLiteral) {
+				isZero[0] = Integer.valueOf(integerLiteral.getValue()) == 0;
+				return false;
+			}
+		});
+		return isZero[0];
 	}
 	
 	private List getArgumentTypes(List functionArguments) {
