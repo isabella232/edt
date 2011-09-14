@@ -8,30 +8,24 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass('eglx.http', "HttpResponse", "egl.jsrt", "Record", {
-	"eze$$fileName" : "eglx/http/HttpResponse.egl",
+egl.defineClass('eglx.http', 'Request',
+{
+	'eze$$fileName': 'eglx/http/Request.egl',
+	'eze$$runtimePropertiesFile': 'eglx.http.Request',
 		"constructor": function() {
+			this.jsrt$SysVar = new egl.egl.core.SysVar();
 			this.eze$$setInitial();
 		}
 		,
-		"ezeCopy": function(source) {
-			this.status = source.status;
-			this.statusMessage = source.statusMessage;
-			this.encoding = source.encoding;
-			this.charset = source.charset;
-			this.contentType = source.contentType;
-			this.headers = source.headers;
-			this.body = source.body;
-		}
-		,
 		"eze$$setEmpty": function() {
-			this.status = null;
-			this.statusMessage = null;
+			this.uri = null;
+			this.method = null;
 			this.encoding = null;
 			this.charset = null;
 			this.contentType = null;
 			this.headers = null;
 			this.body = null;
+			this.timeout = null;
 		}
 		,
 		"eze$$setInitial": function() {
@@ -40,24 +34,22 @@ egl.defineClass('eglx.http', "HttpResponse", "egl.jsrt", "Record", {
 		,
 		"eze$$clone": function() {
 			var ezert$$1 = this;
-			var ezert$$2 = new egl.eglx.http.HttpResponse();
-			ezert$$2.eze$$isNull = this.eze$$isNull;
-			ezert$$2.eze$$isNullable = this.eze$$isNullable;
-			ezert$$2.status = ezert$$1.status;
-			ezert$$2.statusMessage = ezert$$1.statusMessage;
-			ezert$$2.encoding = ezert$$1.encoding;
-			ezert$$2.charset = ezert$$1.charset;
-			ezert$$2.contentType = ezert$$1.contentType;
-			ezert$$2.headers = ezert$$1.headers;
-			ezert$$2.body = ezert$$1.body;
-			ezert$$2.setNull(ezert$$1.eze$$isNull);
+			var ezert$$2 = new egl.eglx.http.Request();
+			ezert$$2.uri = ezert$$1.uri === null ? null : ezert$$1.uri;
+			ezert$$2.method = ezert$$1.method === null ? null : ezert$$1.method;
+			ezert$$2.encoding = ezert$$1.encoding === null ? null : ezert$$1.encoding;
+			ezert$$2.charset = ezert$$1.charset === null ? null : ezert$$1.charset;
+			ezert$$2.contentType = ezert$$1.contentType === null ? null : ezert$$1.contentType;
+			ezert$$2.headers = ezert$$1.headers === null ? null : ezert$$1.headers;
+			ezert$$2.body = ezert$$1.body === null ? null : ezert$$1.body;
+			ezert$$2.timeout = ezert$$1.timeout === null ? null : ezert$$1.timeout;
 			return ezert$$2;
 		}
 		,
 		"eze$$getAnnotations": function() {
 			if(this.annotations === undefined){
 				this.annotations = {};
-				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("HttpResponse", null, false);
+				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("Request", null, false);
 			}
 			return this.annotations;
 		}
@@ -67,13 +59,13 @@ egl.defineClass('eglx.http', "HttpResponse", "egl.jsrt", "Record", {
 				var annotations;
 				this.fieldInfos = new Array();
 				annotations = {};
-				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("status", null, false, false);
-				annotations["JsonName"] = new egl.eglx.json.JsonName("status");
-				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("status", "status", "I;", Number, annotations);
+				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("uri", null, false, false);
+				annotations["JsonName"] = new egl.eglx.json.JsonName("uri");
+				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("uri", "uri", "S;", String, annotations);
 				annotations = {};
-				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("statusMessage", null, false, false);
-				annotations["JsonName"] = new egl.eglx.json.JsonName("statusMessage");
-				this.fieldInfos[1] =new egl.eglx.services.FieldInfo("statusMessage", "statusMessage", "S;", String, annotations);
+				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("method", null, false, false);
+				annotations["JsonName"] = new egl.eglx.json.JsonName("method");
+				this.fieldInfos[1] =new egl.eglx.services.FieldInfo("method", "method", "eglx.http.HttpMethod", egl.eglx.http.HttpMethod, annotations);
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("encoding", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("encoding");
@@ -94,12 +86,16 @@ egl.defineClass('eglx.http', "HttpResponse", "egl.jsrt", "Record", {
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("body", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("body");
 				this.fieldInfos[6] =new egl.eglx.services.FieldInfo("body", "body", "S;", String, annotations);
+				annotations = {};
+				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("timeout", null, false, false);
+				annotations["JsonName"] = new egl.eglx.json.JsonName("timeout");
+				this.fieldInfos[7] =new egl.eglx.services.FieldInfo("timeout", "timeout", "I;", Number, annotations);
 			}
 			return this.fieldInfos;
 		}
 		,
 		"toString": function() {
-			return "[HttpResponse]";
+			return "[Request]";
 		}
 	}
 );

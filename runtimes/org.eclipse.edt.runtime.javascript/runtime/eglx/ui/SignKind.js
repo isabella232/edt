@@ -8,14 +8,14 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass('eglx.services', "ServiceType", "egl.lang", "Enumeration",{
+egl.defineClass('eglx.ui', "SignKind", "egl.lang", "Enumeration",{
 		"constructor": function(valueIn) {
 			this.value = valueIn;
 		}
 	}
 );
-egl.eglx.services.ServiceType['TrueRest'] = new egl.eglx.services.ServiceType(1);
-egl.eglx.services.ServiceType['EglRpc'] = new egl.eglx.services.ServiceType(2);
-egl.eglx.services.ServiceType['EglDedicated'] = new egl.eglx.services.ServiceType(3);
-egl.eglx.services.ServiceType['SOAP'] = new egl.eglx.services.ServiceType(4);
+egl.eglx.ui.SignKind['leading'] = new egl.eglx.ui.SignKind(1);
+egl.eglx.ui.SignKind['none'] = new egl.eglx.ui.SignKind(2);
+egl.eglx.ui.SignKind['parens'] = new egl.eglx.ui.SignKind(3);
+egl.eglx.ui.SignKind['trailing'] = new egl.eglx.ui.SignKind(4);
 ;

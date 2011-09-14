@@ -83,7 +83,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"clip": function(source) {
-			if ((egl.egl.lang.NullType.equals({eze$$value : source, eze$$signature : "?S;"}, null))) {
+			if ((egl.egl.lang.NullType.equals({eze$$value : source, eze$$signature : "S;"}, null))) {
 				return null;
 			}
 			else {
@@ -94,7 +94,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"clip": function(source, clipType) {
-			if ((((egl.egl.lang.NullType.equals({eze$$value : source, eze$$signature : "?S;"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : clipType, eze$$signature : "?I;"}, null))))) {
+			if ((((egl.egl.lang.NullType.equals({eze$$value : source, eze$$signature : "S;"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : clipType, eze$$signature : "I;"}, null))))) {
 				return null;
 			}
 			else {
@@ -124,7 +124,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatDate": function(dateValue) {
-			if ((egl.egl.lang.NullType.equals({eze$$value : dateValue, eze$$signature : "?K;"}, null))) {
+			if ((egl.egl.lang.NullType.equals({eze$$value : dateValue, eze$$signature : "K;"}, null))) {
 				return null;
 			}
 			else {
@@ -137,7 +137,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatDate": function(dateValue, format) {
-			if ((((egl.egl.lang.NullType.equals({eze$$value : dateValue, eze$$signature : "?K;"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : format, eze$$signature : "?S;"}, null))))) {
+			if ((((egl.egl.lang.NullType.equals({eze$$value : dateValue, eze$$signature : "K;"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : format, eze$$signature : "S;"}, null))))) {
 				return null;
 			}
 			else {
@@ -152,7 +152,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatNumber": function(intValue) {
-			if ((egl.egl.lang.NullType.equals({eze$$value : intValue, eze$$signature : "?i;"}, null))) {
+			if ((egl.egl.lang.NullType.equals({eze$$value : intValue, eze$$signature : "i;"}, null))) {
 				return null;
 			}
 			else {
@@ -165,7 +165,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatNumber": function(intValue, format) {
-			if ((((egl.egl.lang.NullType.equals({eze$$value : intValue, eze$$signature : "?i;"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : format, eze$$signature : "?S;"}, null))))) {
+			if ((((egl.egl.lang.NullType.equals({eze$$value : intValue, eze$$signature : "i;"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : format, eze$$signature : "S;"}, null))))) {
 				return null;
 			}
 			else {
@@ -180,7 +180,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatNumber": function(intValue) {
-			if ((egl.egl.lang.NullType.equals({eze$$value : intValue, eze$$signature : "?I;"}, null))) {
+			if ((egl.egl.lang.NullType.equals({eze$$value : intValue, eze$$signature : "I;"}, null))) {
 				return null;
 			}
 			else {
@@ -193,7 +193,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatNumber": function(intValue, format) {
-			if ((((egl.egl.lang.NullType.equals({eze$$value : intValue, eze$$signature : "?I;"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : format, eze$$signature : "?S;"}, null))))) {
+			if ((((egl.egl.lang.NullType.equals({eze$$value : intValue, eze$$signature : "I;"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : format, eze$$signature : "S;"}, null))))) {
 				return null;
 			}
 			else {
@@ -208,7 +208,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatNumber": function(intValue) {
-			if ((egl.egl.lang.NullType.equals({eze$$value : intValue, eze$$signature : "?B;"}, null))) {
+			if ((egl.egl.lang.NullType.equals({eze$$value : intValue, eze$$signature : "B;"}, null))) {
 				return null;
 			}
 			else {
@@ -221,7 +221,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatNumber": function(intValue, format) {
-			if ((((egl.egl.lang.NullType.equals({eze$$value : intValue, eze$$signature : "?B;"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : format, eze$$signature : "?S;"}, null))))) {
+			if ((((egl.egl.lang.NullType.equals({eze$$value : intValue, eze$$signature : "B;"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : format, eze$$signature : "S;"}, null))))) {
 				return null;
 			}
 			else {
@@ -236,162 +236,158 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatNumber": function(decValue) {
-			if ((egl.egl.lang.NullType.equals({eze$$value : decValue, eze$$signature : "?d;"}, null))) {
+			if ((egl.egl.lang.NullType.equals({eze$$value : decValue, eze$$signature : "d;"}, null))) {
 				return null;
 			}
 			else {
-				var eze$Temp42 = egl.egl.lang.EDecimal.ZERO;
-				eze$Temp42 = (function(x){ return x != null ? (x) : egl.egl.lang.EDecimal.ZERO; })(decValue);
 				var eze$Temp41 = "";
-				eze$Temp41 = egl.eglx.lang.StringLib.format(eze$Temp42, this.defaultNumericFormat);
+				eze$Temp41 = egl.eglx.lang.StringLib.format(decValue, this.defaultNumericFormat);
 				return eze$Temp41;
 			}
 		}
 		,
 		"formatNumber": function(decValue, format) {
-			if ((((egl.egl.lang.NullType.equals({eze$$value : decValue, eze$$signature : "?d;"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : format, eze$$signature : "?S;"}, null))))) {
+			if ((((egl.egl.lang.NullType.equals({eze$$value : decValue, eze$$signature : "d;"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : format, eze$$signature : "S;"}, null))))) {
 				return null;
 			}
 			else {
-				var eze$Temp45 = egl.egl.lang.EDecimal.ZERO;
-				eze$Temp45 = (function(x){ return x != null ? (x) : egl.egl.lang.EDecimal.ZERO; })(decValue);
-				var eze$Temp46 = "";
-				eze$Temp46 = (function(x){ return x != null ? (x) : ""; })(format);
 				var eze$Temp44 = "";
-				eze$Temp44 = egl.eglx.lang.StringLib.format(eze$Temp45, eze$Temp46);
-				return eze$Temp44;
+				eze$Temp44 = (function(x){ return x != null ? (x) : ""; })(format);
+				var eze$Temp43 = "";
+				eze$Temp43 = egl.eglx.lang.StringLib.format(decValue, eze$Temp44);
+				return eze$Temp43;
 			}
 		}
 		,
 		"formatNumber": function(floatValue) {
-			if ((egl.egl.lang.NullType.equals({eze$$value : floatValue, eze$$signature : "?f;"}, null))) {
+			if ((egl.egl.lang.NullType.equals({eze$$value : floatValue, eze$$signature : "f;"}, null))) {
 				return null;
 			}
 			else {
-				var eze$Temp49 = 0;
-				eze$Temp49 = (function(x){ return x != null ? (x) : 0; })(floatValue);
-				var eze$Temp48 = "";
-				eze$Temp48 = egl.eglx.lang.StringLib.format(eze$Temp49, this.defaultNumericFormat);
-				return eze$Temp48;
+				var eze$Temp47 = 0;
+				eze$Temp47 = (function(x){ return x != null ? (x) : 0; })(floatValue);
+				var eze$Temp46 = "";
+				eze$Temp46 = egl.eglx.lang.StringLib.format(eze$Temp47, this.defaultNumericFormat);
+				return eze$Temp46;
 			}
 		}
 		,
 		"formatNumber": function(floatValue, format) {
-			if ((((egl.egl.lang.NullType.equals({eze$$value : floatValue, eze$$signature : "?f;"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : format, eze$$signature : "?S;"}, null))))) {
+			if ((((egl.egl.lang.NullType.equals({eze$$value : floatValue, eze$$signature : "f;"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : format, eze$$signature : "S;"}, null))))) {
 				return null;
 			}
 			else {
-				var eze$Temp52 = 0;
-				eze$Temp52 = (function(x){ return x != null ? (x) : 0; })(floatValue);
-				var eze$Temp53 = "";
-				eze$Temp53 = (function(x){ return x != null ? (x) : ""; })(format);
+				var eze$Temp50 = 0;
+				eze$Temp50 = (function(x){ return x != null ? (x) : 0; })(floatValue);
 				var eze$Temp51 = "";
-				eze$Temp51 = egl.eglx.lang.StringLib.format(eze$Temp52, eze$Temp53);
-				return eze$Temp51;
+				eze$Temp51 = (function(x){ return x != null ? (x) : ""; })(format);
+				var eze$Temp49 = "";
+				eze$Temp49 = egl.eglx.lang.StringLib.format(eze$Temp50, eze$Temp51);
+				return eze$Temp49;
 			}
 		}
 		,
 		"formatNumber": function(floatValue) {
-			if ((egl.egl.lang.NullType.equals({eze$$value : floatValue, eze$$signature : "?F;"}, null))) {
+			if ((egl.egl.lang.NullType.equals({eze$$value : floatValue, eze$$signature : "F;"}, null))) {
 				return null;
 			}
 			else {
-				var eze$Temp56 = 0;
-				eze$Temp56 = (function(x){ return x != null ? (x) : 0; })(floatValue);
-				var eze$Temp55 = "";
-				eze$Temp55 = egl.eglx.lang.StringLib.format(eze$Temp56, this.defaultNumericFormat);
-				return eze$Temp55;
+				var eze$Temp54 = 0;
+				eze$Temp54 = (function(x){ return x != null ? (x) : 0; })(floatValue);
+				var eze$Temp53 = "";
+				eze$Temp53 = egl.eglx.lang.StringLib.format(eze$Temp54, this.defaultNumericFormat);
+				return eze$Temp53;
 			}
 		}
 		,
 		"formatNumber": function(floatValue, format) {
-			if ((((egl.egl.lang.NullType.equals({eze$$value : floatValue, eze$$signature : "?F;"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : format, eze$$signature : "?S;"}, null))))) {
+			if ((((egl.egl.lang.NullType.equals({eze$$value : floatValue, eze$$signature : "F;"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : format, eze$$signature : "S;"}, null))))) {
 				return null;
 			}
 			else {
-				var eze$Temp59 = 0;
-				eze$Temp59 = (function(x){ return x != null ? (x) : 0; })(floatValue);
-				var eze$Temp60 = "";
-				eze$Temp60 = (function(x){ return x != null ? (x) : ""; })(format);
+				var eze$Temp57 = 0;
+				eze$Temp57 = (function(x){ return x != null ? (x) : 0; })(floatValue);
 				var eze$Temp58 = "";
-				eze$Temp58 = egl.eglx.lang.StringLib.format(eze$Temp59, eze$Temp60);
-				return eze$Temp58;
+				eze$Temp58 = (function(x){ return x != null ? (x) : ""; })(format);
+				var eze$Temp56 = "";
+				eze$Temp56 = egl.eglx.lang.StringLib.format(eze$Temp57, eze$Temp58);
+				return eze$Temp56;
 			}
 		}
 		,
 		"formatTimeStamp": function(timestampvalue) {
-			if ((egl.egl.lang.NullType.equals({eze$$value : timestampvalue, eze$$signature : "?J'yyyyMMddHHmmssffffff';"}, null))) {
+			if ((egl.egl.lang.NullType.equals({eze$$value : timestampvalue, eze$$signature : "J'yyyyMMddHHmmssffffff';"}, null))) {
 				return null;
 			}
 			else {
-				var eze$Temp63 = egl.egl.lang.ETimestamp.currentTimeStamp("yyyyMMddhhmmss");
-				eze$Temp63 = (function(x){ return x != null ? (x) : egl.egl.lang.ETimestamp.currentTimeStamp(); })(egl.egl.lang.ETimestamp.fromETimestamp(timestampvalue,"yyyyMMddhhmmss"));
-				var eze$Temp62 = "";
-				eze$Temp62 = egl.eglx.lang.StringLib.format(eze$Temp63, this.defaultTimeStampFormat);
-				return eze$Temp62;
+				var eze$Temp61 = egl.egl.lang.ETimestamp.currentTimeStamp("yyyyMMddhhmmss");
+				eze$Temp61 = (function(x){ return x != null ? (x) : egl.egl.lang.ETimestamp.currentTimeStamp(); })(egl.egl.lang.ETimestamp.ezeCast({eze$$value : timestampvalue, eze$$signature : "J'yyyyMMddHHmmssffffff';"},"yyyyMMddhhmmss"));
+				var eze$Temp60 = "";
+				eze$Temp60 = egl.eglx.lang.StringLib.format(eze$Temp61, this.defaultTimeStampFormat);
+				return eze$Temp60;
 			}
 		}
 		,
 		"formatTimeStamp": function(timestampvalue, format) {
-			if ((((egl.egl.lang.NullType.equals({eze$$value : timestampvalue, eze$$signature : "?J'yyyyMMddHHmmssffffff';"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : format, eze$$signature : "?S;"}, null))))) {
+			if ((((egl.egl.lang.NullType.equals({eze$$value : timestampvalue, eze$$signature : "J'yyyyMMddHHmmssffffff';"}, null)) || (egl.egl.lang.NullType.equals({eze$$value : format, eze$$signature : "S;"}, null))))) {
 				return null;
 			}
 			else {
-				var eze$Temp66 = egl.egl.lang.ETimestamp.currentTimeStamp("yyyyMMddhhmmss");
-				eze$Temp66 = (function(x){ return x != null ? (x) : egl.egl.lang.ETimestamp.currentTimeStamp(); })(egl.egl.lang.ETimestamp.fromETimestamp(timestampvalue,"yyyyMMddhhmmss"));
-				var eze$Temp67 = "";
-				eze$Temp67 = (function(x){ return x != null ? (x) : ""; })(format);
+				var eze$Temp64 = egl.egl.lang.ETimestamp.currentTimeStamp("yyyyMMddhhmmss");
+				eze$Temp64 = (function(x){ return x != null ? (x) : egl.egl.lang.ETimestamp.currentTimeStamp(); })(egl.egl.lang.ETimestamp.ezeCast({eze$$value : timestampvalue, eze$$signature : "J'yyyyMMddHHmmssffffff';"},"yyyyMMddhhmmss"));
 				var eze$Temp65 = "";
-				eze$Temp65 = egl.eglx.lang.StringLib.format(eze$Temp66, eze$Temp67);
-				return eze$Temp65;
+				eze$Temp65 = (function(x){ return x != null ? (x) : ""; })(format);
+				var eze$Temp63 = "";
+				eze$Temp63 = egl.eglx.lang.StringLib.format(eze$Temp64, eze$Temp65);
+				return eze$Temp63;
 			}
 		}
 		,
 		"getNextToken": function(source, index, delimiters) {
 			var charIndex = 0;
-			charIndex = egl.egl.lang.EInt32.fromEDecimal(((((index.ezeUnbox() / 2)).add(egl.egl.lang.EDecimal.fromEInt16(1, egl.javascript.BigDecimal.prototype.NINES[3])))));
+			charIndex = egl.egl.lang.EInt32.fromEDecimal((((new egl.javascript.BigDecimal(egl.divide(egl.egl.lang.EglAny.unbox(index),2))).add(egl.egl.lang.EDecimal.fromEInt16({eze$$value : 1, eze$$signature : "i;"}, egl.javascript.BigDecimal.prototype.NINES[8])))));
 			var token = null;
-			var eze$Temp68 = null;
-			eze$Temp68 = egl.egl.lang.EglAny.ezeWrap(charIndex);
-			token = egl.eglx.lang.StringLib.getNextToken(source.ezeUnbox(), eze$Temp68, delimiters);
-			charIndex = eze$Temp68.ezeUnbox();
-			if ((egl.egl.lang.NullType.notEquals({eze$$value : token, eze$$signature : "?S;"}, null))) {
+			var eze$Temp66 = null;
+			eze$Temp66 = egl.egl.lang.EglAny.ezeWrap(charIndex);
+			token = egl.eglx.lang.StringLib.getNextToken(egl.egl.lang.EglAny.unbox(source), eze$Temp66, delimiters);
+			charIndex = eze$Temp66.ezeUnbox();
+			if ((egl.egl.lang.NullType.notEquals({eze$$value : token, eze$$signature : "S;"}, null))) {
 				index.ezeCopy(((((((charIndex - 1)) * 2)) + 1)));
 			}
 			return token;
 		}
 		,
 		"getTokenCount": function(source, delimiters) {
-			var eze$Temp70 = 0;
-			eze$Temp70 = egl.eglx.lang.StringLib.getTokenCount(source, delimiters);
-			return eze$Temp70;
+			var eze$Temp68 = 0;
+			eze$Temp68 = egl.eglx.lang.StringLib.getTokenCount(source, delimiters);
+			return eze$Temp68;
 		}
 		,
 		"indexOf": function(source, pattern) {
-			var eze$Temp71 = 0;
-			eze$Temp71 = egl.egl.lang.EString.indexOf(source.ezeUnbox(), pattern);
-			return eze$Temp71;
+			var eze$Temp69 = 0;
+			eze$Temp69 = egl.egl.lang.EString.indexOf(egl.egl.lang.EglAny.unbox(source), pattern);
+			return eze$Temp69;
 		}
 		,
 		"indexOf": function(source, pattern, startIndex) {
-			var eze$Temp72 = 0;
-			eze$Temp72 = egl.egl.lang.EString.indexOf(source.ezeUnbox(), pattern, startIndex);
-			return eze$Temp72;
+			var eze$Temp70 = 0;
+			eze$Temp70 = egl.egl.lang.EString.indexOf(egl.egl.lang.EglAny.unbox(source), pattern, startIndex);
+			return eze$Temp70;
 		}
 		,
 		"lowerCase": function(characterItem) {
-			if ((egl.egl.lang.NullType.equals({eze$$value : characterItem, eze$$signature : "?S;"}, null))) {
+			if ((egl.egl.lang.NullType.equals({eze$$value : characterItem, eze$$signature : "S;"}, null))) {
 				return null;
 			}
 			else {
-				var eze$Temp74 = "";
-				eze$Temp74 = egl.egl.lang.EString.toLowerCase(characterItem);
-				return eze$Temp74;
+				var eze$Temp72 = "";
+				eze$Temp72 = egl.egl.lang.EString.toLowerCase(characterItem);
+				return eze$Temp72;
 			}
 		}
 		,
 		"spaces": function(characterCount) {
-			if ((egl.egl.lang.NullType.equals({eze$$value : characterCount, eze$$signature : "?I;"}, null))) {
+			if ((egl.egl.lang.NullType.equals({eze$$value : characterCount, eze$$signature : "I;"}, null))) {
 				return null;
 			}
 			else {
@@ -400,7 +396,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 				fiftyBlanks = "                                                  ";
 				while (((characterCount >= 50))) {
 					result += fiftyBlanks;
-					characterCount -= 50;
+					characterCount = ((characterCount - 50));
 				}
 				if (((characterCount > 0))) {
 					result += egl.egl.lang.EString.substring(fiftyBlanks, 1, characterCount);
@@ -410,13 +406,13 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"upperCase": function(characterItem) {
-			if ((egl.egl.lang.NullType.equals({eze$$value : characterItem, eze$$signature : "?S;"}, null))) {
+			if ((egl.egl.lang.NullType.equals({eze$$value : characterItem, eze$$signature : "S;"}, null))) {
 				return null;
 			}
 			else {
-				var eze$Temp79 = "";
-				eze$Temp79 = egl.egl.lang.EString.toUpperCase(characterItem);
-				return eze$Temp79;
+				var eze$Temp77 = "";
+				eze$Temp77 = egl.egl.lang.EString.toUpperCase(characterItem);
+				return eze$Temp77;
 			}
 		}
 		,

@@ -70,9 +70,9 @@ egl.defineClass(
     },
 
     "isJsonRPCFormat" : function(/*HttpRequest*/ http){
-    	return http instanceof egl.eglx.http.Http &&
-    		(http.invocationType === egl.eglx.services.ServiceType.EglDedicated ||
-    				http.invocationType === egl.eglx.services.ServiceType.EglRpc);
+    	return http instanceof egl.eglx.http.HttpRest &&
+    		(http.restType === egl.eglx.rest.ServiceType.EglDedicated ||
+    				http.restType === egl.eglx.rest.ServiceType.EglRpc);
     },
     
     /**
@@ -356,12 +356,9 @@ egl.defineClass(
                                    /*function*/ callback, 
                                    /*function*/ errCallback,                     
                                    /*boolean*/ asynchronous) {
-    	if(http instanceof egl.eglx.http.Http){
-    		if(http.invocationType === egl.eglx.services.ServiceType.EglDedicated){
+    	if(http instanceof egl.eglx.http.HttpRest){
+    		if(http.restType === egl.eglx.rest.ServiceType.EglDedicated){
                 egl.valueByKey( http.request.headers, egl.HEADER_EGLDEDICATED, "true");                    
-    		}
-    		else if(http.invocationType === egl.eglx.services.ServiceType.SOAP){
-                egl.valueByKey( http.request.headers, egl.egl.HEADER_EGLSOAP, "true");                    
     		}
     	}
     	var request = new egl.eglx.lang.EDictionary();
@@ -388,7 +385,7 @@ egl.defineClass(
                     if (xhr.status >= 200 && xhr.status <= 299){
                         try {
                         	egl.enter("Parse JSON ("+xhr.responseText.length+" bytes) from "+ http.request.uri, { eze$$typename: "RUI Runtime" });
-                        	var response = new egl.eglx.http.HttpResponse();
+                        	var response = new egl.eglx.http.Response();
                         	egl.eglx.json.JsonLib.convertFromJSON(xhr.responseText, response);
                         	http.response.body = response.body;
                         	http.response.status = response.status;
@@ -534,12 +531,9 @@ egl.defineClass(
     	
     },
     "getServiceKind": function(http){
-    	if(http instanceof egl.eglx.http.Http){
-    		if(http.invocationType === egl.eglx.services.ServiceType.EglDedicated){
+    	if(http instanceof egl.eglx.http.HttpRest){
+    		if(http.restType === egl.eglx.rest.ServiceType.EglDedicated){
                 return egl.eglx.services.ServiceKind.EGL;                    
-    		}
-    		else if(http.invocationType === egl.eglx.services.ServiceType.SOAP){
-                return egl.eglx.services.ServiceKind.WEB;                    
     		}
     		else{
                 return egl.eglx.services.ServiceKind.REST;                    

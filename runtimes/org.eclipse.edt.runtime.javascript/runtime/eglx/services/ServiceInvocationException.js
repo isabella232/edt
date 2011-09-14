@@ -35,13 +35,10 @@ egl.defineClass('eglx.services', "ServiceInvocationException", "egl.jsrt", "Reco
 		"eze$$clone": function() {
 			var ezert$$1 = this;
 			var ezert$$2 = new egl.eglx.services.ServiceInvocationException();
-			ezert$$2.eze$$isNull = this.eze$$isNull;
-			ezert$$2.eze$$isNullable = this.eze$$isNullable;
-			ezert$$2.source = ezert$$1.source;
+			ezert$$2.source = ezert$$1.source === null ? null : ezert$$1.source;
 			ezert$$2.detail1 = ezert$$1.detail1;
 			ezert$$2.detail2 = ezert$$1.detail2;
 			ezert$$2.detail3 = ezert$$1.detail3;
-			ezert$$2.setNull(ezert$$1eze$$isNull);
 			return ezert$$2;
 		}
 		,

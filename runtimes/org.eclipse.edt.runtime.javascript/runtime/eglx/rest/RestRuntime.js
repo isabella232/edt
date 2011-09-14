@@ -43,7 +43,7 @@ egl.eglx.rest.invokeService = function(http,
 					eze$Temp1, handleF2Resonse, egl.eglx.services.ServiceLib['$inst'].serviceExceptionHandler);
 
 	 */
-	http.invocationType = egl.eglx.services.ServiceType.TrueRest;
+	http.restType = egl.eglx.rest.ServiceType.TrueRest;
 	if(firstInDataNotInURL == null && http.request.userUri != undefined && http.request.userUri){
 		if(http.request.uri != undefined && http.request.uri != null){
 			for(idx = 0; idx < inFunctionParameterNames.length; idx++){
@@ -70,7 +70,7 @@ egl.eglx.rest.configHttp = function(http,
 									responseConfig){
 	
 	if(http === undefined || http === null){
-		http = new egl.eglx.http.Http;
+		http = new egl.eglx.http.HttpRest;
 	}
 	else{
 		http = http.eze$$clone();

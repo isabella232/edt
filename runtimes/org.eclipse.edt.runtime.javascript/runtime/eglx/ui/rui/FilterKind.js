@@ -8,12 +8,14 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass(
-	'eglx.services', 'ServiceLib',
-{
-	"constructor" : function() {				
+egl.defineClass('eglx.ui.rui', "FilterKind", "egl.lang", "Enumeration",{
+		"constructor": function(valueIn) {
+			this.value = valueIn;
+		}
 	}
-});
-egl.eglx.services.ServiceLib["bindResource"] = function(serviceOrInterface, resource) {
-	serviceOrInterface = resource;
-};
+);
+egl.eglx.ui.rui.FilterKind['excludeAll'] = new egl.eglx.ui.rui.FilterKind(1);
+egl.eglx.ui.rui.FilterKind['excludeAllExcept'] = new egl.eglx.ui.rui.FilterKind(2);
+egl.eglx.ui.rui.FilterKind['includeAll'] = new egl.eglx.ui.rui.FilterKind(3);
+egl.eglx.ui.rui.FilterKind['includeAllExcept'] = new egl.eglx.ui.rui.FilterKind(4);
+;

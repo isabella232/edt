@@ -27,9 +27,6 @@ egl.defineClass('eglx.services', "ServiceBindingException", "egl.jsrt", "Record"
 		"eze$$clone": function() {
 			var ezert$$1 = this;
 			var ezert$$2 = new egl.eglx.services.ServiceBindingException();
-			ezert$$2.eze$$isNull = this.eze$$isNull;
-			ezert$$2.eze$$isNullable = this.eze$$isNullable;
-			ezert$$2.setNull(ezert$$1eze$$isNull);
 			return ezert$$2;
 		}
 		,

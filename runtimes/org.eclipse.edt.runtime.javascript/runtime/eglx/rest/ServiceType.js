@@ -8,12 +8,13 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass(
-	'eglx.services', 'ServiceLib',
-{
-	"constructor" : function() {				
+egl.defineClass('eglx.rest', "ServiceType", "egl.lang", "Enumeration",{
+		"constructor": function(valueIn) {
+			this.value = valueIn;
+		}
 	}
-});
-egl.eglx.services.ServiceLib["bindResource"] = function(serviceOrInterface, resource) {
-	serviceOrInterface = resource;
-};
+);
+egl.eglx.rest.ServiceType['TrueRest'] = new egl.eglx.rest.ServiceType(1);
+egl.eglx.rest.ServiceType['EglRpc'] = new egl.eglx.rest.ServiceType(2);
+egl.eglx.rest.ServiceType['EglDedicated'] = new egl.eglx.rest.ServiceType(3);
+;

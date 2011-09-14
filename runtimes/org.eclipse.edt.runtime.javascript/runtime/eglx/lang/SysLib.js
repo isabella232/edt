@@ -68,3 +68,20 @@ egl.eglx.lang.SysLib["writeStderr"] = function(/*string*/ text) {
 egl.eglx.lang.SysLib['writeStdout'] = function	(text) {
 	egl.println(text);
 };
+
+egl.eglx.lang.SysLib["getResource"] = function(bindingKey, /*String*/eglddName) {
+	var ret = undefined;
+	if(eglddName === undefined || eglddName === null){
+		eglddName = egl__defaultDeploymentDescriptor;
+	}
+	var binding = egl.eglx.services.$ServiceBinder.getBinding(eglddName.toLowerCase(), bindingKey);
+	if(binding instanceof egl.eglx.services.RestBinding){
+		ret = new egl.eglx.http.HttpRest();
+		ret.request.uri = binding.baseURI;
+		ret.restType = egl.eglx.rest.ServiceType.EglRpc;
+	}
+	if(ret === undefined || ret === null){
+		throw egl.createRuntimeException("CRRUI3651E", [bindingKey, eglddName]);  
+	}
+	return ret;
+};

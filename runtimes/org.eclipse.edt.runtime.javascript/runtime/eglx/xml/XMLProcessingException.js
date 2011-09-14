@@ -29,10 +29,7 @@ egl.defineClass('eglx.xml', "XMLProcessingException", "egl.jsrt", "Record", {
 		"eze$$clone": function() {
 			var ezert$$1 = this;
 			var ezert$$2 = new egl.eglx.xml.XMLProcessingException();
-			ezert$$2.eze$$isNull = this.eze$$isNull;
-			ezert$$2.eze$$isNullable = this.eze$$isNullable;
 			ezert$$2.detail = ezert$$1.detail;
-			ezert$$2.setNull(ezert$$1eze$$isNull);
 			return ezert$$2;
 		}
 		,

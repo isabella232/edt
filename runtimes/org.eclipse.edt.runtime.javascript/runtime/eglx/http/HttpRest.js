@@ -8,22 +8,19 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass('eglx.http', "Http", "egl.jsrt", "Record", {
-	"eze$$fileName" : "eglx/http/Http.egl",
+egl.defineClass('eglx.http', 'HttpRest',
+{
+	'eze$$fileName': 'eglx/http/HttpRest.egl',
+	'eze$$runtimePropertiesFile': 'eglx.http.HttpRest',
 		"constructor": function() {
+			this.jsrt$SysVar = new egl.egl.core.SysVar();
 			this.eze$$setInitial();
 		}
 		,
-		"ezeCopy": function(source) {
-			this.request.ezeCopy(source.request);
-			this.response.ezeCopy(source.response);
-			this.invocationType = source.invocationType;
-		}
-		,
 		"eze$$setEmpty": function() {
-			this.request = new egl.eglx.http.HttpRequest();
-			this.response = new egl.eglx.http.HttpResponse();
-			this.invocationType = null;
+			this.request = new egl.eglx.http.Request();
+			this.response = new egl.eglx.http.Response();
+			this.restType = null;
 		}
 		,
 		"eze$$setInitial": function() {
@@ -32,20 +29,17 @@ egl.defineClass('eglx.http', "Http", "egl.jsrt", "Record", {
 		,
 		"eze$$clone": function() {
 			var ezert$$1 = this;
-			var ezert$$2 = new egl.eglx.http.Http();
-			ezert$$2.eze$$isNull = this.eze$$isNull;
-			ezert$$2.eze$$isNullable = this.eze$$isNullable;
-			ezert$$2.request = ezert$$1.request.eze$$clone();
-			ezert$$2.response = ezert$$1.response.eze$$clone();
-			ezert$$2.invocationType = ezert$$1.invocationType;
-			ezert$$2.setNull(ezert$$1.eze$$isNull);
+			var ezert$$2 = new egl.eglx.http.HttpRest();
+			ezert$$2.request = ezert$$1.request === null ? null : ezert$$1.request.eze$$clone();
+			ezert$$2.response = ezert$$1.response === null ? null : ezert$$1.response.eze$$clone();
+			ezert$$2.restType = ezert$$1.restType === null ? null : ezert$$1.restType;
 			return ezert$$2;
 		}
 		,
 		"eze$$getAnnotations": function() {
 			if(this.annotations === undefined){
 				this.annotations = {};
-				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("Http", null, false);
+				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("HttpRest", null, false);
 			}
 			return this.annotations;
 		}
@@ -57,21 +51,29 @@ egl.defineClass('eglx.http', "Http", "egl.jsrt", "Record", {
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("request", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("request");
-				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("request", "request", "A;", egl.eglx.http.HttpRequest, annotations);
+				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("request", "request", "Teglx/http/Request;", egl.eglx.http.Request, annotations);
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("response", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("response");
-				this.fieldInfos[1] =new egl.eglx.services.FieldInfo("response", "response", "A;", egl.eglx.http.HttpResponse, annotations);
+				this.fieldInfos[1] =new egl.eglx.services.FieldInfo("response", "response", "Teglx/http/Response;", egl.eglx.http.Response, annotations);
 				annotations = {};
-				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("invocationType", null, false, false);
-				annotations["JsonName"] = new egl.eglx.json.JsonName("invocationType");
-				this.fieldInfos[2] =new egl.eglx.services.FieldInfo("invocationType", "invocationType", "eglx.services.ServiceType", egl.eglx.services.ServiceType, annotations);
+				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("restType", null, false, false);
+				annotations["JsonName"] = new egl.eglx.json.JsonName("restType");
+				this.fieldInfos[2] =new egl.eglx.services.FieldInfo("restType", "restType", "eglx.rest.ServiceType", egl.eglx.rest.ServiceType, annotations);
 			}
 			return this.fieldInfos;
 		}
 		,
+		"getRequest": function() {
+			return this.request;
+		}
+		,
+		"getResponse": function() {
+			return this.response;
+		}
+		,
 		"toString": function() {
-			return "[Http]";
+			return "[HttpRest]";
 		}
 	}
 );

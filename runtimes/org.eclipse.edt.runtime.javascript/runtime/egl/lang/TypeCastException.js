@@ -31,11 +31,8 @@ egl.defineClass('egl.lang', "TypeCastException", "egl.jsrt", "Record", {
 		"eze$$clone": function() {
 			var ezert$$1 = this;
 			var ezert$$2 = new egl.egl.lang.TypeCastException();
-			ezert$$2.eze$$isNull = this.eze$$isNull;
-			ezert$$2.eze$$isNullable = this.eze$$isNullable;
 			ezert$$2.castToName = ezert$$1.castToName;
 			ezert$$2.actualTypeName = ezert$$1.actualTypeName;
-			ezert$$2.setNull(ezert$$1eze$$isNull);
 			return ezert$$2;
 		}
 		,

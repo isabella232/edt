@@ -8,12 +8,13 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass(
-	'eglx.services', 'ServiceLib',
-{
-	"constructor" : function() {				
+egl.defineClass('eglx.ui.rui', "PurposeKind", "egl.lang", "Enumeration",{
+		"constructor": function(valueIn) {
+			this.value = valueIn;
+		}
 	}
-});
-egl.eglx.services.ServiceLib["bindResource"] = function(serviceOrInterface, resource) {
-	serviceOrInterface = resource;
-};
+);
+egl.eglx.ui.rui.PurposeKind['FOR_DISPLAY'] = new egl.eglx.ui.rui.PurposeKind(1);
+egl.eglx.ui.rui.PurposeKind['FOR_CREATE'] = new egl.eglx.ui.rui.PurposeKind(2);
+egl.eglx.ui.rui.PurposeKind['FOR_UPDATE'] = new egl.eglx.ui.rui.PurposeKind(3);
+;
