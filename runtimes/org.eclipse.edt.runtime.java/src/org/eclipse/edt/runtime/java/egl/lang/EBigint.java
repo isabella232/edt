@@ -93,7 +93,7 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 	public static Long asBigint(Float value) {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		long result = 0;
 		if (throwOverflowExceptions)
 			try {
@@ -110,7 +110,7 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 	public static Long asBigint(ESmallfloat value) {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		long result = 0;
 		if (throwOverflowExceptions)
 			try {
@@ -127,7 +127,7 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 	public static Long asBigint(Double value) {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		long result = 0;
 		if (throwOverflowExceptions)
 			try {
@@ -144,7 +144,7 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 	public static Long asBigint(EFloat value) {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		long result = 0;
 		if (throwOverflowExceptions)
 			try {

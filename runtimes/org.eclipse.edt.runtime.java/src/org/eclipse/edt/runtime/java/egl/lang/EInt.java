@@ -74,7 +74,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	public static Integer asInt(Long value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
 			try {
@@ -91,7 +91,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	public static Integer asInt(EBigint value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
 			try {
@@ -108,7 +108,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	public static Integer asInt(Float value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
 			try {
@@ -125,7 +125,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	public static Integer asInt(ESmallfloat value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
 			try {
@@ -142,7 +142,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	public static Integer asInt(Double value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
 			try {
@@ -159,7 +159,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	public static Integer asInt(EFloat value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
 			try {
@@ -176,7 +176,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	public static Integer asInt(BigDecimal value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
 			try {
@@ -193,7 +193,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	public static Integer asInt(EDecimal value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
 			try {
@@ -210,7 +210,7 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	public static Integer asInt(BigInteger value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
 			try {

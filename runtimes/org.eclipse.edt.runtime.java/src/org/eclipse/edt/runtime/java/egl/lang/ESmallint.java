@@ -228,7 +228,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	public static Short asSmallint(BigInteger value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;
 		if (throwOverflowExceptions)
 			try {
