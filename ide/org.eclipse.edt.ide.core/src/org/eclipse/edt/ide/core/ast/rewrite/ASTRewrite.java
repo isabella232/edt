@@ -24,6 +24,7 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTNodeVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTPartVisitor;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
+import org.eclipse.edt.compiler.core.ast.DeleteStatement;
 import org.eclipse.edt.compiler.core.ast.ExecuteStatement;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
@@ -856,6 +857,68 @@ public class ASTRewrite {
 			return true;
 		}
 	}
+
+	private static class ComplementStatementClauseEdit extends DefaultASTEdit{
+		private static class NoClauseOrIOTargetOffsetFinder extends DefaultASTVisitor {
+			int offset = -1;
+
+			public boolean visit(ExecuteStatement executeStatement) {
+				offset = executeStatement.getOffset() + IEGLConstants.KEYWORD_EXECUTE.length();
+				return false;
+			}
+			
+			public boolean visit(DeleteStatement deleteStatement) {
+				Node dataSourceExpression = deleteStatement.getDataSource().getExpression();
+				offset = dataSourceExpression.getOffset() + dataSourceExpression.getLength();
+				return false;
+			}
+		}
+		
+		Statement statement;
+		String clauseContent;
+		
+		public ComplementStatementClauseEdit(Statement statement, String clauseContent){
+			this.statement = statement;
+			this.clauseContent = clauseContent;
+		}
+		
+		@Override
+		public TextEdit toTextEdit(IDocument document) throws BadLocationException {
+			int offset = -1;
+			
+			if(statement.getIOClauses().isEmpty()) {
+				if(statement.getIOObjects().isEmpty()) {
+					NoClauseOrIOTargetOffsetFinder offsetFinder = new NoClauseOrIOTargetOffsetFinder();
+					statement.accept(offsetFinder);
+					offset = offsetFinder.offset;
+					if(offset == -1) {
+						throw new RuntimeException("Can't locate offset to insert clause for " + statement.getClass().getName());
+					}
+				}
+				else {
+					Node lastTarget = (Node) statement.getIOObjects().get(statement.getIOObjects().size()-1);
+					offset = lastTarget.getOffset() + lastTarget.getLength();
+				}
+			}
+			else {
+				Node lastClause = (Node) statement.getIOClauses().get(statement.getIOClauses().size()-1);
+				offset = lastClause.getOffset() + lastClause.getLength();
+			}
+			if(-1 != offset){
+				InsertEdit result = new InsertEdit(offset, clauseContent);
+				return result;			
+					
+			}
+			
+			return(null);
+		}
+
+		@Override
+		public boolean isInsertEdit() {
+			return true;
+		}
+		
+	}
 	
 	private static class RemoveNodeEdit extends DefaultASTEdit {
 		Node nodeToRemove;
@@ -1031,6 +1094,10 @@ public class ASTRewrite {
 	
 	public void addIOStatementClause(Statement statement, IOStatementClauseInfo clauseInfo, Object clauseContent) {
 		addEdit(statement, new InsertStatementClauseEdit(statement, clauseInfo, clauseContent));
+	}
+	
+	public void completeIOStatement(Statement statement, String clauseContent){
+		addEdit(statement, new ComplementStatementClauseEdit(statement, clauseContent));
 	}
 	
 	public void addPackage(File file, String packageName) {
