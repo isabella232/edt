@@ -1,0 +1,6 @@
+package org.eclipse.edt.mof.eglx.services;
+
+import org.eclipse.edt.mof.egl.CallStatement;
+
+externalType ServiceCallStatement extends CallStatement type MofClass
+end
