@@ -427,15 +427,15 @@ public abstract class GenTestDriverAction implements	IObjectActionDelegate{
 		return op;
 	}
 
-	protected WorkspaceModifyOperation getSetGeneratorIDOperation(final IProject driverProject, final String generatorID) {
+	protected WorkspaceModifyOperation getSetGeneratorIDOperation(final IProject driverProject, final String[] generatorIDs) {
 		WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
 			@Override
 			protected void execute(IProgressMonitor monitor)
 					throws CoreException, InvocationTargetException,
 					InterruptedException {
-				monitor.subTask("set generator id " + generatorID +" for project " + driverProject.getName());
+				monitor.subTask("set generator id " + generatorIDs[0] +" for project " + driverProject.getName());
 				try {
-					ProjectSettingsUtility.setGeneratorIds(driverProject, new String[]{generatorID});
+					ProjectSettingsUtility.setGeneratorIds(driverProject, generatorIDs);
 				} catch (BackingStoreException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
