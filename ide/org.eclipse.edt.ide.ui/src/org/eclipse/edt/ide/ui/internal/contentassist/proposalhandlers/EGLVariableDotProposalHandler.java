@@ -290,7 +290,9 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 			SystemFunctionBinding systemFunctionBinding = (SystemFunctionBinding) iter.next();
 			if (systemFunctionBinding.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
 				String displayString = systemFunctionBinding.getCaseSensitiveName();
-				String proposalString = displayString + "(" + getParmString(systemFunctionBinding) + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+				String parameterStr = getParmString(systemFunctionBinding);
+				String proposalString = displayString + "(" + parameterStr + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+				int cusorPos = parameterStr.length() == 0 ? displayString.length() + 2 : displayString.length() + 1;
 				proposals.add(
 						new EGLCompletionProposal(viewer,
 							displayString,
@@ -298,7 +300,7 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 							additionalInfo,
 							getDocumentOffset() - getPrefix().length(),
 							getPrefix().length(),
-							displayString.length()+1,
+							cusorPos,
 							EGLCompletionProposal.RELEVANCE_SYSTEM_WORD,
 							getFirstParmLength(systemFunctionBinding)));
 			}
