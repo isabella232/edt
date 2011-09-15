@@ -96,9 +96,9 @@ public class TestServerUpdateErrorDialog extends ErrorDialog {
 	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		super.createButtonsForButtonBar(parent);
-		getButton(IDialogConstants.OK_ID).setText(TestServerMessages.ErrorDialogContinueButton);
+		createDetailsButton(parent);
 		createButton(parent, BUTTON_ID_TERMINATE_SERVER, configs.length > 1 ? TestServerMessages.ErrorDialogTerminatePluralButton : TestServerMessages.ErrorDialogTerminateButton, false);
+		createButton(parent, IDialogConstants.OK_ID, TestServerMessages.ErrorDialogContinueButton, false);
 		
 		Button details = getButton(IDialogConstants.DETAILS_ID);
 		if (details != null) {
