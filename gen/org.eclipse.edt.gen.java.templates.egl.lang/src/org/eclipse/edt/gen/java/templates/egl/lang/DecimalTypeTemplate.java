@@ -37,7 +37,7 @@ public class DecimalTypeTemplate extends JavaTemplate {
 		out.print(".ZERO");
 	}
 
-	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, String arg) {
+	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, String arg, Type rhsType) {
 		// the arg contains the operation being asked about
 		return true;
 	}
