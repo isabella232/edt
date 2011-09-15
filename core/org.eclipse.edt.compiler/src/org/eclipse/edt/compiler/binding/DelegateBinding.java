@@ -89,6 +89,11 @@ public class DelegateBinding extends PartBinding {
 	}
 	
 	@Override
+	public boolean isInstantiable() {
+		return false;
+	}
+	
+	@Override
 	public ITypeBinding primGetNullableInstance() {
 		DelegateBinding nullable = new DelegateBinding(this);
 		nullable.setNullable(true);
