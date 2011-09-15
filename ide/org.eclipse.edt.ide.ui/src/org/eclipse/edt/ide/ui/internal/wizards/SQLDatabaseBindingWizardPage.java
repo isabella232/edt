@@ -285,9 +285,21 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 					for (int index = 0; index < propertyCount; index++) {
 						TableItem tableItem = new TableItem(
 								connectionPropertiesTable, SWT.NONE);
-						tableItem.setText(new String[] {
-								properties[index].getPropertyName(),
-								properties[index].getValue() });
+						if(SQLNlsStrings.SQL_CONNECTION_USER_PASSWORD_PROPERTY.equals(properties[index].getPropertyName())
+							 &&	(properties[index].getValue() != null)) {
+							StringBuilder builder = new StringBuilder();
+							
+							for(int i=0; i < properties[index].getValue().length(); i++) {
+								builder.append("*");
+							}
+							tableItem.setText(new String[] {
+									properties[index].getPropertyName(),
+									builder.toString() });
+						} else {
+							tableItem.setText(new String[] {
+									properties[index].getPropertyName(),
+									properties[index].getValue() });
+						}
 					}
 					
 					UISQLUtility.setBindingSQLDatabaseConfiguration(getConfiguration(), properties);

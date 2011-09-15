@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2008, 2011 IBM Corporation and others.
+ * Copyright (c) 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -59,28 +59,28 @@ public class SQLRetrievePreferencePage extends PreferencePage implements IWorkbe
 	
 	public final static String[] CHARACTER_OPTION_BUTTON_STRINGS = 
 		{
-			SQLNlsStrings.CharacterOptionStringLabel,	
-			SQLNlsStrings.CharacterOptionLimitedLengthStringLabel,
-			SQLNlsStrings.CharacterOptionCharLabel,
-			SQLNlsStrings.CharacterOptionMBCharLabel,
-			SQLNlsStrings.CharacterOptionUnicodeLabel					
+			SQLNlsStrings.CharacterOptionStringLabel
+			//SQLNlsStrings.CharacterOptionLimitedLengthStringLabel,
+			//SQLNlsStrings.CharacterOptionCharLabel,
+			//SQLNlsStrings.CharacterOptionMBCharLabel,
+			//SQLNlsStrings.CharacterOptionUnicodeLabel					
 		};
 
 	public final static String[] NATIONAL_CHAR_OPTION_BUTTON_STRINGS = 
 	   {
-		    SQLNlsStrings.NationalCharOptionDBCharLabel,
-		    SQLNlsStrings.NationalCharOptionUnicodeLabel,
-		    SQLNlsStrings.NationalCharOptionStringLabel,
-		    SQLNlsStrings.NationalCharOptionLimitedStringLabel
+		    //SQLNlsStrings.NationalCharOptionDBCharLabel,
+		    //SQLNlsStrings.NationalCharOptionUnicodeLabel,
+		    SQLNlsStrings.NationalCharOptionStringLabel
+		    //SQLNlsStrings.NationalCharOptionLimitedStringLabel
 		};
 
 	public final static String[] TYPE_FOR_DATE_TYPES_OPTION_BUTTON_STRINGS = 
 		{
 		    SQLNlsStrings.DateTypesOptionDefaultLabel,
-		    SQLNlsStrings.DateTypesOptionCharLabel,
-		    SQLNlsStrings.DateTypesOptionUnicodeLabel,
-		    SQLNlsStrings.DateTypesOptionStringLabel,
-		    SQLNlsStrings.DateTypesOptionLimitedStringLabel
+		    //SQLNlsStrings.DateTypesOptionCharLabel,
+		    //SQLNlsStrings.DateTypesOptionUnicodeLabel,
+		    SQLNlsStrings.DateTypesOptionStringLabel
+		    //SQLNlsStrings.DateTypesOptionLimitedStringLabel
 		};
 
 	protected Composite createComposite(Composite parent, int numColumns) {

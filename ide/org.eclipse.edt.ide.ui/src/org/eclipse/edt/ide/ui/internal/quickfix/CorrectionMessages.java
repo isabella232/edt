@@ -34,6 +34,11 @@ public final class CorrectionMessages extends NLS {
 	public static String EGLCorrectionProcessor_go_to_original_using_key;
 	public static String NoCorrectionProposal_description;
 
+	public static String SQLStatementAddProposalLabel;
+	public static String SQLStatementAddWithIntoProposalLabel;
+	public static String SQLStatementRemoveProposalLabel;
+	public static String SQLStatementResetProposalLabel;
+	public static String SQLExceptionMessage;
 
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, CorrectionMessages.class);

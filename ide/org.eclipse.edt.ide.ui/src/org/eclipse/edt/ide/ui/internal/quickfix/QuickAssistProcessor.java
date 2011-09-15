@@ -16,11 +16,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AddStatement;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
-import org.eclipse.edt.compiler.core.ast.IntoClause;
-import org.eclipse.edt.compiler.core.ast.NoCursorClause;
-import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
 import org.eclipse.edt.compiler.core.ast.GetByKeyStatement;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
 import org.eclipse.edt.compiler.core.ast.WithInlineSQLClause;
 import org.eclipse.edt.ide.ui.editor.IEGLCompletionProposal;
 import org.eclipse.edt.ide.ui.editor.IProblemLocation;
@@ -28,6 +26,7 @@ import org.eclipse.edt.ide.ui.editor.IQuickAssistProcessor;
 import org.eclipse.edt.ide.ui.internal.editor.sql.SQLIOStatementActionInfo;
 import org.eclipse.edt.ide.ui.internal.quickfix.proposals.sql.SQLStatementAddAssistProposal;
 import org.eclipse.edt.ide.ui.internal.quickfix.proposals.sql.SQLStatementRemoveAssistProposal;
+import org.eclipse.edt.ide.ui.internal.quickfix.proposals.sql.SQLStatementResetAssistProposal;
 
 public class QuickAssistProcessor implements IQuickAssistProcessor {
 
@@ -49,16 +48,18 @@ public class QuickAssistProcessor implements IQuickAssistProcessor {
 		Node coveringAstNode = context.getCoveringNode();
 		if(isValidOperation(coveringAstNode)){
 			if(isSQLStatementExisted(coveringAstNode)) {
-				resultingCollections.add(new SQLStatementRemoveAssistProposal("Remove SQL Statement" +
-						"",2, null, context));
+				resultingCollections.add(new SQLStatementRemoveAssistProposal(CorrectionMessages.SQLStatementRemoveProposalLabel
+						,2, null, context));
+				resultingCollections.add(new SQLStatementResetAssistProposal(CorrectionMessages.SQLStatementResetProposalLabel
+						,2, null, context));
 			} else {
-				resultingCollections.add(new SQLStatementAddAssistProposal("Add SQL Statement" +
-						"",2, null, context));
+				resultingCollections.add(new SQLStatementAddAssistProposal(CorrectionMessages.SQLStatementAddProposalLabel,
+						2, null, context));
 				
 				//Only Select Statement applies to INTO clause
 				if(isSelectOperation(coveringAstNode)) {
-					resultingCollections.add(new SQLStatementAddAssistProposal("Add SQL Statement With Into" +
-							"",2, null, context,true));
+					resultingCollections.add(new SQLStatementAddAssistProposal(CorrectionMessages.SQLStatementAddWithIntoProposalLabel,
+						2, null, context,true));
 				}
 			}		
 			

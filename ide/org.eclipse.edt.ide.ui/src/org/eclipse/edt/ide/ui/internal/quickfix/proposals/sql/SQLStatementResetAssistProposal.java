@@ -19,16 +19,17 @@ import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.editor.sql.SQLIOStatementUtility;
 import org.eclipse.edt.ide.ui.internal.quickfix.AssistContext;
+import org.eclipse.edt.ide.ui.internal.quickfix.CorrectionMessages;
 import org.eclipse.edt.ide.ui.internal.quickfix.IInvocationContext;
-import org.eclipse.edt.ide.ui.internal.quickfix.proposals.AbstractSQLStatementProposal;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IFileEditorInput;
 
-public class SQLStatementResetAssistProposal extends AbstractSQLStatementProposal {
+public class SQLStatementResetAssistProposal extends SQLStatementAddAssistProposal {
     private IInvocationContext fContext;
 	
 	public SQLStatementResetAssistProposal(String label,int relevance, Image image, IInvocationContext context) {
 		super(label, context.getEGLFile(), relevance, image, context.getDocument());
+		
 		fContext = context;
 		if(fContext instanceof AssistContext) {
 			editor = (EGLEditor)((AssistContext)fContext).getEditor();
@@ -38,10 +39,31 @@ public class SQLStatementResetAssistProposal extends AbstractSQLStatementProposa
 	@Override
 	protected ASTRewrite getRewrite() {
 		try{
+			//Remove original SQL statement
 			ASTRewrite rewrite = ASTRewrite.create(fContext.getFileAST());
-			
 			Statement sqlNode = (Statement)fContext.getCoveringNode();
 			IEGLDocument document = fContext.getDocument();
+			
+			info = SQLIOStatementUtility.getAddSQLIoStatementActionInfo(document, sqlNode); 
+			initialize();
+			
+			if (info.getSqlStatementNode() != null && info.getIntoClauseNode() == null) {
+				rewrite.removeNode(info.getSqlStatementNode());
+			}
+			
+			if (info.getIntoClauseNode() != null && info.getSqlStatementNode() == null) {
+				rewrite.removeNode(info.getIntoClauseNode());
+			}
+			
+			if (info.getIntoClauseNode() != null && info.getSqlStatementNode() != null) {
+				rewrite.removeNode(info.getIntoClauseNode());
+				rewrite.removeNode(info.getSqlStatementNode());
+			}
+			
+			rewrite.completeIOStatement( sqlNode, "" );
+			
+			
+			//Regenerate default SQL statement
 			final Node nodeType[] = new Node[] {null};
 			if (sqlNode != null) {
 				IFileEditorInput fileInput = (IFileEditorInput)editor.getEditorInput();
@@ -52,25 +74,18 @@ public class SQLStatementResetAssistProposal extends AbstractSQLStatementProposa
 				});
 			}
 			
-			info = SQLIOStatementUtility.getAddSQLIoStatementActionInfo(document, nodeType[0]); 
+            info = SQLIOStatementUtility.getAddSQLIoStatementActionInfo(document, nodeType[0]); 	
 			initialize();
-			
 			if (!isEGLStatementValidForAction()) {
 				sqlStatement = null;
 			}
 			
-			Statement statement = info.getStatement();
-			Node sqlStatementNode = info.getSqlStatementNode();
-			Node intoClauseNode = info.getIntoClauseNode();
-			if (sqlStatementNode != null) {
-				// Need to create the default SQL statement.
-				//createDefault(statement);
-			} else if (intoClauseNode != null) {
-				// No SQL statement defined for this statement but there is an INTO clause.
-				// Create the default INTO clause based on the SQL record.  Reset the sqlStatement to
-				// null that is created because in this case we only needed the default INTO clause. 
-				//createDefault(statement);
-				sqlStatement = null;
+			createDefault(info.getStatement());
+			if (sqlStatement != null) {
+				rewrite.completeIOStatement( sqlNode, getStatementText());
+			} else {
+				sqlStatement = CorrectionMessages.SQLExceptionMessage;
+				rewrite.completeIOStatement( sqlNode, sqlStatement );
 			}
 			
 			return(rewrite);

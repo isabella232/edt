@@ -17,11 +17,13 @@ import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLDeclareStatementFa
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLGetByPositionStatementFactory;
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLStatementFactory;
 import org.eclipse.edt.ide.core.ast.rewrite.ASTRewrite;
+import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.editor.sql.SQLIOStatementUtility;
 import org.eclipse.edt.ide.ui.internal.quickfix.AssistContext;
+import org.eclipse.edt.ide.ui.internal.quickfix.CorrectionMessages;
 import org.eclipse.edt.ide.ui.internal.quickfix.IInvocationContext;
 import org.eclipse.edt.ide.ui.internal.quickfix.proposals.AbstractSQLStatementProposal;
 import org.eclipse.swt.graphics.Image;
@@ -30,6 +32,10 @@ import org.eclipse.ui.IFileEditorInput;
 public class SQLStatementAddAssistProposal extends
 		AbstractSQLStatementProposal {
 	private IInvocationContext fContext;
+	
+	SQLStatementAddAssistProposal(String label, IEGLFile eglFile, int relevance, Image image, IEGLDocument document) {
+		super(label, eglFile, relevance, image, document);
+	}
 	
 	public SQLStatementAddAssistProposal(String label,int relevance, Image image, IInvocationContext context) {
 		super(label, context.getEGLFile(), relevance, image, context.getDocument());
@@ -76,7 +82,7 @@ public class SQLStatementAddAssistProposal extends
 			if (sqlStatement != null) {
 				rewrite.completeIOStatement( sqlNode, getStatementText());
 			} else {
-				sqlStatement = "Cannot produce SQL statement due to exception.";
+				sqlStatement = CorrectionMessages.SQLExceptionMessage;
 				rewrite.completeIOStatement( sqlNode, sqlStatement );
 			}
 			
