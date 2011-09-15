@@ -60,19 +60,6 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 			builder.append(SQLConstants.DOUBLE_QUOTE);
 			builder.append("}");
 		}
-		if (item.isNullable()) {
-			builder.append(SQLConstants.COMMA_AND_SPACE);
-			builder.append(IEGLConstants.PROPERTY_ISSQLNULLABLE);
-			builder.append("="); //$NON-NLS-1$		
-			builder.append(IEGLConstants.KEYWORD_YES);
-		}
-		
-		if (item.isSQLVar()) {
-			builder.append(SQLConstants.COMMA_AND_SPACE);
-			builder.append(IEGLConstants.PROPERTY_SQLVARIABLELEN);
-			builder.append("="); //$NON-NLS-1$		
-			builder.append(IEGLConstants.KEYWORD_YES);
-		}
 		
 		if (needsExtraAnnotations) {
 			builder.append("}");

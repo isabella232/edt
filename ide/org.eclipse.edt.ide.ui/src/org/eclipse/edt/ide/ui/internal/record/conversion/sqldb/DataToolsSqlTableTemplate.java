@@ -22,9 +22,9 @@ public class DataToolsSqlTableTemplate extends DataToolsSqlTemplate {
 		
 		out.print("record " + table.getName() + " type Entity ");
 		if(isTableQualified) {
-			out.println("{ @table { \"" + table.getSchema().getName() + "." +table.getName() + "\" } }");		
+			out.println("{ @table { name=\"" + table.getSchema().getName() + "." +table.getName() + "\" } }");		
 		} else {
-			out.println("{ @table { \"" + table.getName() + "\" } }");		
+			out.println("{ @table { name=\"" + table.getName() + "\" } }");		
 		}
 		
 		Object[] columns = table.getColumns().toArray();
