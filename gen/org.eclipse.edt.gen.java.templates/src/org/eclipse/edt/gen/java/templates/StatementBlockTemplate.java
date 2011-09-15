@@ -45,22 +45,13 @@ public class StatementBlockTemplate extends JavaTemplate {
 	protected void processStatements(StatementBlock block, Context ctx, TabbedWriter out) {
 		ctx.setCurrentFile(IRUtils.getQualifiedFileName(block));
 		for (Statement stmt : block.getStatements()) {
-			if (ctx.isExpressionReorganizing())
-				ctx.invoke(genStatement, stmt, ctx, out);
-			else {
-				ReorganizeCode reorganizeCode = new ReorganizeCode();
-				List<StatementBlock> blockArray = reorganizeCode.reorgCode(stmt, ctx);
-				if (blockArray != null) {
-					ctx.setExpressionReorganizing(true);
-					if (blockArray.get(0) != null)
-						ctx.invoke(genStatementNoBraces, blockArray.get(0), ctx, out);
-					ctx.invoke(genStatement, stmt, ctx, out);
-					if (blockArray.get(1) != null)
-						ctx.invoke(genStatementNoBraces, blockArray.get(1), ctx, out);
-					ctx.setExpressionReorganizing(false);
-				} else
-					ctx.invoke(genStatement, stmt, ctx, out);
-			}
+			ReorganizeCode reorganizeCode = new ReorganizeCode();
+			List<StatementBlock> blockArray = reorganizeCode.reorgCode(stmt, ctx);
+			if (blockArray != null && blockArray.get(0) != null)
+				ctx.invoke(genStatementNoBraces, blockArray.get(0), ctx, out);
+			ctx.invoke(genStatement, stmt, ctx, out);
+			if (blockArray != null && blockArray.get(1) != null)
+				ctx.invoke(genStatementNoBraces, blockArray.get(1), ctx, out);
 		}
 	}
 }
