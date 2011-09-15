@@ -63,14 +63,21 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 				ctx.putAttribute(((MemberAccess) arg.getLHS()).getNamedElement(), Constants.EXPR_LHS, Boolean.FALSE); 
 			}
 			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
-			if (arg.getRHS().getType() instanceof ArrayType)
+			
+			Expression rhs = arg.getRHS();
+			
+			// Normally, the RHS will be encased in an AsExpression and we'll want to unwrap it....
+			if (rhs instanceof AsExpression)
+				rhs = ((AsExpression)rhs).getObjectExpr();
+			
+			if (rhs.getType() instanceof ArrayType)
 				out.print(".appendAll(");
 			else
 				out.print(".appendElement(");
-			if (arg.getRHS() instanceof BoxingExpression)
-				ctx.invoke(genExpression, ((BoxingExpression) arg.getRHS()).getExpr(), ctx, out);
+			if (rhs instanceof BoxingExpression)
+				ctx.invoke(genExpression, ((BoxingExpression)rhs).getExpr(), ctx, out);
 			else
-				ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+				ctx.invoke(genExpression, rhs, ctx, out);
 			out.print(")");
 		} 
 		else if ("=".equals(operator) && arg.getRHS() instanceof NewExpression){

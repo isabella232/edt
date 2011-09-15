@@ -177,7 +177,11 @@ public class TypeTemplate extends JavaScriptTemplate {
 			out.print("from");
 			out.print(ctx.getNativeTypeName(arg.getConversionOperation().getParameters().get(0).getType()));
 			out.print("(");
-			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			Expression objectExpr = arg.getObjectExpr();
+			if (objectExpr instanceof BoxingExpression){
+				objectExpr = ((BoxingExpression)objectExpr).getExpr();
+			}
+			ctx.invoke(genExpression, objectExpr, ctx, out);
 			if (ctx.getPrimitiveMapping(arg.getObjectExpr().getType().getClassifier().getTypeSignature()) == null) {
 				out.print(",\"");
 				ctx.invoke(genSignature, arg.getObjectExpr().getType(), ctx, out, arg);
