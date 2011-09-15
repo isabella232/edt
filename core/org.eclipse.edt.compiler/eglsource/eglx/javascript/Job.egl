@@ -7,7 +7,7 @@ ExternalType Job type JavaScriptObject {
 	}
 	
 	name String { @Property { getMethod = "getName", setMethod = "setName" } };
-	runFunction RunFunction { @Property { getMethod = "getRunFunction", setMethod = "setRunFunction" } };
+	runFunction RunFunction? { @Property { getMethod = "getRunFunction", setMethod = "setRunFunction" } };
 
 	function schedule();
 	function schedule(duration int in);
