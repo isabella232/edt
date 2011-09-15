@@ -10,7 +10,7 @@ package eglx.lang;
 Record EGLProperty type Annotation
 {
 	targets = [ElementKind.FieldMbr],
-	validationProxy = "com.ibm.etools.edt.binding.annotationType.EGLPropertyAnnotationTypeBinding"
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.EGLPropertyAnnotationTypeBinding"
 } 
 	getMethod FunctionMemberRef;
 	setMethod FunctionMemberRef;
