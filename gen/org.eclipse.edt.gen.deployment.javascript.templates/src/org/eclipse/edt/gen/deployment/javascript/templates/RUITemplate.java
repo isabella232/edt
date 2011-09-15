@@ -23,12 +23,7 @@ import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class RUITemplate extends JavaScriptTemplate {
-	
-	public void genDependentPart(Handler handler, Context ctx, LinkedHashSet dependentFiles) {
-		ctx.invoke(genOutputFileName, handler, ctx, dependentFiles);
-		ctx.invoke(genDependentParts, handler, ctx, dependentFiles);
-	}
+public class RUITemplate extends JavaScriptTemplate {	
 	
 	public void genCSSFiles(Handler handler, TabbedWriter out, LinkedHashSet cssFiles){
 		Annotation a = handler.getAnnotation( CommonUtilities.isRUIHandler( handler ) ? Constants.RUI_HANDLER : Constants.RUI_WIDGET);
