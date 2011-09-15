@@ -121,9 +121,29 @@ public abstract class EglAny implements egl.lang.EglAny {
 		}
 	}
 
-	
 	public static <T extends Object> boolean ezeIsa(Object object, Class<T> clazz) {
 		return clazz.isInstance(object);
+	}
+	
+	public static Object ezeDeepCopy( Object object )
+	{
+		if ( object instanceof EglAny )
+		{
+			EglAny any = (EglAny)object;
+			//TODO Using clone is not the correct way to make a deep copy of some kinds of objects.
+			try
+			{
+				return any.clone();
+			}
+			catch ( CloneNotSupportedException ex )
+			{
+				AnyException anyEx = new AnyException();
+				anyEx.setMessage( ex.toString() );
+				throw anyEx;
+			}
+		}
+		
+		return object;
 	}
 	
 	public EglAny() { super(); }
