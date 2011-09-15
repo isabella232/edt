@@ -64,7 +64,8 @@ public class SQLPlugin extends AbstractUIPlugin {
 
 	public boolean isCharacterOptionLimitedString() {
         String typeOption = getPreferenceStore().getString(ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_CHAR_CONTROL_OPTION);
-        if (typeOption == null || typeOption.equalsIgnoreCase(EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS[1]))
+        //if (typeOption == null || typeOption.equalsIgnoreCase(EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS[1]))
+        if (typeOption == null || typeOption.equalsIgnoreCase(EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS[0]))
             return true;   
         
         return false;
@@ -72,7 +73,8 @@ public class SQLPlugin extends AbstractUIPlugin {
     
     public boolean isCharacterOptionChar() {
 		String typeOption = getPreferenceStore().getString(ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_CHAR_CONTROL_OPTION);
-		if (typeOption == null || typeOption.equalsIgnoreCase(EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS[2]))
+		//if (typeOption == null || typeOption.equalsIgnoreCase(EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS[2]))
+		if (typeOption == null || typeOption.equalsIgnoreCase(EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS[0]))
 			return true;
 		
 		return false;
@@ -80,7 +82,8 @@ public class SQLPlugin extends AbstractUIPlugin {
 	
 	public boolean isCharacterOptionMBChar() {
 		String typeOption = getPreferenceStore().getString(ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_CHAR_CONTROL_OPTION);
-		if (typeOption == null || typeOption.equalsIgnoreCase(EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS[3]))
+		//if (typeOption == null || typeOption.equalsIgnoreCase(EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS[3]))
+		if (typeOption == null || typeOption.equalsIgnoreCase(EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS[0]))
 			return true;
 		
 		return false;
@@ -88,7 +91,8 @@ public class SQLPlugin extends AbstractUIPlugin {
 	
 	public boolean isCharacterOptionUnicode() {
 		String typeOption = getPreferenceStore().getString(ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_CHAR_CONTROL_OPTION);
-		if (typeOption == null || typeOption.equalsIgnoreCase(EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS[4]))
+		//if (typeOption == null || typeOption.equalsIgnoreCase(EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS[4]))
+		if (typeOption == null || typeOption.equalsIgnoreCase(EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS[0]))
 			return true;
 		
 		return false;
@@ -96,7 +100,8 @@ public class SQLPlugin extends AbstractUIPlugin {
 
 	public boolean isNationalCharOptionUnicode() {
 		String typeOption = getPreferenceStore().getString(ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_NATIONAL_CHAR_CONTROL_OPTION);
-		if (typeOption == null || typeOption.equalsIgnoreCase(EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS[1]))
+		//if (typeOption == null || typeOption.equalsIgnoreCase(EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS[1]))
+		if (typeOption == null || typeOption.equalsIgnoreCase(EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS[0]))
 			return true;
 		
 		return false;
@@ -104,7 +109,8 @@ public class SQLPlugin extends AbstractUIPlugin {
 	
 	public boolean isNationalCharOptionString() {
 		String typeOption = getPreferenceStore().getString(ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_NATIONAL_CHAR_CONTROL_OPTION);
-		if (typeOption == null || typeOption.equalsIgnoreCase(EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS[2]))
+		//if (typeOption == null || typeOption.equalsIgnoreCase(EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS[2]))
+		if (typeOption == null || typeOption.equalsIgnoreCase(EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS[0]))
 			return true;
 		
 		return false;
@@ -112,7 +118,8 @@ public class SQLPlugin extends AbstractUIPlugin {
 
 	public boolean isNationalCharOptionLimitedString() {
 		String typeOption = getPreferenceStore().getString(ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_NATIONAL_CHAR_CONTROL_OPTION);
-		if (typeOption == null || typeOption.equalsIgnoreCase(EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS[3]))
+		//if (typeOption == null || typeOption.equalsIgnoreCase(EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS[3]))
+		if (typeOption == null || typeOption.equalsIgnoreCase(EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS[0]))
 			return true;
 		
 		return false;

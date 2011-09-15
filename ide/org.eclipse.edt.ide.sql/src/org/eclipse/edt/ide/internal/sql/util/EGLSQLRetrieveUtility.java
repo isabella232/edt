@@ -337,6 +337,10 @@ public class EGLSQLRetrieveUtility {
 			sqlStructureItem.setPrimitiveType(IEGLConstants.KEYWORD_INT);
 			break;
 		}
+		case Types.DECIMAL: /*{
+			handleDecimalType(type, sqlStructureItem, itemName);
+			break;
+		}*/
 		case Types.FLOAT: // Treated as Double
 		case Types.DOUBLE: {
 			sqlStructureItem.setPrimitiveType(IEGLConstants.KEYWORD_FLOAT);
@@ -347,10 +351,6 @@ public class EGLSQLRetrieveUtility {
 			break;
 		}
 		
-		case Types.DECIMAL: {
-			handleDecimalType(type, sqlStructureItem, itemName);
-			break;
-		}
 		case Types.BINARY:
 		case Types.VARBINARY: {
 			handleBinaryType(type, sqlStructureItem, itemName);
@@ -1046,7 +1046,9 @@ public class EGLSQLRetrieveUtility {
 	 * retrieve preferences.
 	 */
 	private String changeCharacterTypeBasedOnPreferences() {
-		if (isCharType())
+		return IEGLConstants.KEYWORD_STRING;
+		
+		/*if (isCharType())
 			return IEGLConstants.KEYWORD_CHAR;
 		else if (isMBCharType())
 			return IEGLConstants.KEYWORD_MBCHAR;
@@ -1055,7 +1057,7 @@ public class EGLSQLRetrieveUtility {
 		else if (isCharacterLimitedStringType())
 			return SQLConstants.LIMITED_STRING;
 		else
-			return IEGLConstants.KEYWORD_STRING;
+			return IEGLConstants.KEYWORD_STRING;*/
 	}
 	
 	/**
