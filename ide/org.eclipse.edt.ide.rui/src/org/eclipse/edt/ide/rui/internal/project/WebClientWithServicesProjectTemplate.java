@@ -35,9 +35,8 @@ public class WebClientWithServicesProjectTemplate extends
 		ProjectGeneratorOperation op = new ProjectGeneratorOperation(eglProjConfiguration, 
 				getDefaultFolderName(eglProjConfiguration, SERVER), new String[]{ProjectConfiguration.JAVA_GENERATOR_ID}, rule);
 		listOps.add(op);
-		op = new ProjectGeneratorOperation(eglProjConfiguration, getDefaultFolderName(eglProjConfiguration, COMMON), 
-			new String[]{ProjectConfiguration.JAVA_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_GENERATOR_ID, 
-			ProjectConfiguration.JAVASCRIPT_DEV_GENERATOR_ID}, rule);
+		op = new ProjectGeneratorOperation(eglProjConfiguration, getDefaultFolderName(eglProjConfiguration, CLIENT), 
+			new String[]{ProjectConfiguration.JAVASCRIPT_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_DEV_GENERATOR_ID}, rule);
 		listOps.add(op);
 	}	
 
@@ -48,6 +47,14 @@ public class WebClientWithServicesProjectTemplate extends
 		}else{
 			return basePackage + "." + name;
 		}
+	}
+	
+	@Override
+	protected void setProjectCompilerAndGenerator(
+			ProjectConfiguration eglProjConfiguration) {
+		eglProjConfiguration.setSelectedCompiler(ProjectConfiguration.EDT_COMPILER_ID);
+		String[] generatorIds = new String[]{ProjectConfiguration.JAVA_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_DEV_GENERATOR_ID};
+		eglProjConfiguration.setSelectedGenerators(generatorIds);		
 	}
 	
 	@Override
