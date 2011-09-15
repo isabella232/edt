@@ -173,15 +173,21 @@ public class ProfileManager extends Observable{
 			fCurrentAllPreferenceSettingMap.clear();
 		}
 	}
-		
+	
 	private static IPath getBuildInPreferenceProfilePath(){
 		Bundle eglResourcesBundle = Platform.getBundle(PLUGIN_ID_IDE_UI);
 		URL url = FileLocator.find(eglResourcesBundle, new Path(PROFILE_BUILDIN_PATH), null);
 		try {
 			url = FileLocator.resolve(url);
-			if(url != null && url.getProtocol().equals("file")) //$NON-NLS-1$
+			String pathStr = null;
+ 			if ( "file".equals( url.getProtocol() ) ) {
+				pathStr = url.getFile();
+			} else {
+				pathStr = url.toString();
+			}
+			if(url != null) //$NON-NLS-1$
 			{
-				Path path = new Path(url.getFile());
+				Path path = new Path(pathStr);
 				return path;
 			}			
 		} catch (IOException e) {

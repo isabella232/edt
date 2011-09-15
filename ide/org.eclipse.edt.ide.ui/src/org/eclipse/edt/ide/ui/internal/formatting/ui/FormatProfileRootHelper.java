@@ -59,10 +59,16 @@ public class FormatProfileRootHelper {
 	}
 	
 	private static EGLFormatProfileRoot getEGLFormatProfileModel(IPath formatProfile, ResourceSet resourceSet){		
-		URI uri = URI.createFileURI(formatProfile.toOSString());
+		URI uri = null;
+		if ( "jar:".equals( formatProfile.getDevice() ) ) {
+			String path = formatProfile.toOSString();
+			path = path.replaceAll( "\\\\", "/" );
+			uri = URI.createURI( path );
+		} else {
+			uri = URI.createFileURI(formatProfile.toOSString());
+		}
 		
 		Resource resource = resourceSet.getResource(uri, true);
-		System.out.println("Loaded " + uri); //$NON-NLS-1$
 		
 		return (EGLFormatProfileRoot)(resource.getContents().get(0));
 	}
