@@ -54,6 +54,7 @@ import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.rui.internal.Activator;
 import org.eclipse.edt.ide.rui.internal.testserver.ServiceFinder.RestServiceMapping;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
@@ -95,6 +96,10 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		}
 		
 		try {
+			if (!project.hasNature(JavaCore.NATURE_ID)) {
+				throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, NLS.bind(TestServerMessages.ProjectMissingJavaNature, project.getName())));
+			}
+			
 			if (port < 0) {
 				port = SocketUtil.findOpenPort(DEFAULT_PORT, 5, 100);
 			}

@@ -30,6 +30,7 @@ public class TestServerMessages extends NLS {
 	public static String ServiceMappingRemovalsInvalidTokens;
 	public static String CouldNotGetPluginPath;
 	public static String ConfigServletBadStatus;
+	public static String ProjectMissingJavaNature;
 	
 	public static String ErrorDialogContinueButton;
 	public static String ErrorDialogTerminateButton;
