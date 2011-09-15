@@ -236,11 +236,6 @@ public class IRUtils {
 			return false;
 		}
 		
-		public boolean visit(ArrayLiteral expr) {
-			expr.getType().accept(this);
-			return false;
-		}
-		
 		public Set<Part> getReferencedPartsFor(Part part) {
 			root = part;
 			root.accept(this);
