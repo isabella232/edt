@@ -18,14 +18,7 @@ import org.eclipse.edt.mof.MofSerializable;
 
 public interface StereotypeType extends AnnotationType {
 	List<AnnotationType> getMemberAnnotations();
-	
-	List<Annotation> getImplicitFields();
-	
-	List<Annotation> getImplicitFunctions();
-	
-	String getValidationProxy();
-	void setValidationProxy(String className);
-	
+		
 	boolean isReferenceType();
 	void setIsReferenceType(boolean value);
 	

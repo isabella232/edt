@@ -30,14 +30,15 @@ import org.eclipse.edt.mof.utils.EList;
 
 public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 	private static int Slot_targets=0;
-	private static int Slot_annotations=1;
-	private static int Slot_name=2;
-	private static int Slot_fileName=3;
-	private static int Slot_hasCompileErrors=4;
-	private static int Slot_packageName=5;
-	private static int Slot_typeParameters=6;
-	private static int Slot_accessKind=7;
-	private static int totalSlots = 8;
+	private static int Slot_validationClass=1;
+	private static int Slot_annotations=2;
+	private static int Slot_name=3;
+	private static int Slot_fileName=4;
+	private static int Slot_hasCompileErrors=5;
+	private static int Slot_packageName=6;
+	private static int Slot_typeParameters=7;
+	private static int Slot_accessKind=8;
+	private static int totalSlots = 9;
 	
 	public static int totalSlots() {
 		return totalSlots + EClassImpl.totalSlots();
@@ -46,6 +47,7 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 	static {
 		int offset = EClassImpl.totalSlots();
 		Slot_targets += offset;
+		Slot_validationClass += offset;
 		Slot_annotations += offset;
 		Slot_name += offset;
 		Slot_typeParameters += offset;
@@ -81,6 +83,17 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 	public List<ElementKind> getTargets() {
 		return (List<ElementKind>)slotGet(Slot_targets);
 	}
+	
+	@Override
+	public String getValidationProxy() {
+		return (String)slotGet(Slot_validationClass);
+	}
+
+	@Override
+	public void setValidationProxy(String className) {
+		slotSet(Slot_validationClass, className);
+	}
+
 	
 	@SuppressWarnings("unchecked")
 	@Override

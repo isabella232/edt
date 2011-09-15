@@ -33,4 +33,8 @@ public interface AnnotationType extends EClass, Part {
 	 */
 	List<ElementKind> getTargets();
 	
+	String getValidationProxy();
+	void setValidationProxy(String className);
+
+	
 }
