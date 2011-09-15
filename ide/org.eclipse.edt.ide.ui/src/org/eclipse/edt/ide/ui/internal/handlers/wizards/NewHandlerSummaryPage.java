@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.handlers.wizards;
 
+import org.eclipse.edt.ide.ui.editor.EGLCodeFormatterUtil;
 import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.editor.DocumentProvider;
@@ -19,6 +20,7 @@ import org.eclipse.edt.ide.ui.internal.editor.TextTools;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentPartitioner;
@@ -33,6 +35,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.text.edits.MalformedTreeException;
+import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.SharedImages;
@@ -43,6 +47,7 @@ public class NewHandlerSummaryPage extends WizardPage {
 	private Label warningLabel;
 	private Table messageList;
 	private Composite messageComposite;
+	private String content;
 
 	/**
 	 * Constructor for SampleNewWizardPage.
@@ -79,13 +84,13 @@ public class NewHandlerSummaryPage extends WizardPage {
 		fPreviewViewer.setEditable(false);
 		fPreviewViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		document = new Document("");
+		document = new Document("");		
 
 		IDocumentPartitioner partitioner = ((DocumentProvider) EGLUI.getDocumentProvider()).createDocumentPartitioner();
 		document.setDocumentPartitioner(partitioner);
 		partitioner.connect(document);
 
-		fPreviewViewer.setDocument(document);
+		fPreviewViewer.setDocument(document);		
 
 		messageComposite = new HideableComposite(container, 0);
 		layout = new GridLayout(1, false);
@@ -104,20 +109,23 @@ public class NewHandlerSummaryPage extends WizardPage {
 		data.heightHint = 80;
 		messageList.setLayoutData(data);
 
-		setControl(container);
+		setControl(container);	
+		setContent(content);
 	}
 
 	public void setContent(String str) {
-		document.set(str != null ? str : "");
-		
-		try {
-//			TextEdit edit = EGLCodeFormatterUtil.format(document, null);
-//			edit.apply(document);
-		} catch (Exception e) {
-			
+		content = str;
+		if(document!=null){
+			document.set(str != null ? str : "");
+			try {
+				TextEdit edit = EGLCodeFormatterUtil.format(document, null);
+				edit.apply(document);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
-
+			
 	public void setMessages(java.util.List<String> messages) {
 		messageList.removeAll();
 

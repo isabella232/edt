@@ -1470,7 +1470,6 @@ Templates
     <extension point="org.eclipse.edt.ide.ui.eglTemplates">
 	
 	  <template
-     		default="true"
      		name="%BasicHandler"
      		icon="icons/ctool16/newrec_wiz.gif"
             category="org.eclipse.edt.ide.ui.handlers"
@@ -1480,12 +1479,13 @@ Templates
       </template>
       
       <template
-            name="%RUIHandler"
-            icon="icons/ctool16/record_template.gif"
             category="org.eclipse.edt.ide.ui.handlers"
-            wizardClass="org.eclipse.edt.ide.ui.internal.handlers.wizards.RUIHandlerWizard"
+            default="true"
+            description="%RUIHandlerDescription"
+            icon="icons/ctool16/record_template.gif"
             id="org.eclipse.edt.ide.ui.handlers.ruihandler"
-            description="%RUIHandlerDescription">
+            name="%RUIHandler"
+            wizardClass="org.eclipse.edt.ide.ui.internal.handlers.wizards.RUIHandlerWizard">
       </template>
       
       <template

@@ -20,7 +20,6 @@ import org.eclipse.jface.wizard.WizardDialog;
 
 public class RUIWidgetWizard extends TemplateWizard implements IPageChangingListener {
 	private static final String WIZPAGENAME_RUIWidgetWizardPage = "WIZPAGENAME_RUIWidgetWizardPage"; //$NON-NLS-1$
-	protected RUIWidgetWizardPage inputPage;
 	protected NewHandlerSummaryPage summaryPage;
 	protected HandlerConfiguration configuration;
 	protected String part;
@@ -28,7 +27,7 @@ public class RUIWidgetWizard extends TemplateWizard implements IPageChangingList
 	public RUIWidgetWizard() {
 		super();
 		setNeedsProgressMonitor(true);
-		setDialogSettings(EDTUIPlugin.getDefault().getDialogSettings());
+		setDialogSettings(EDTUIPlugin.getDefault().getDialogSettings());		
 	}
 
 	public HandlerConfiguration getConfiguration() {
@@ -36,9 +35,7 @@ public class RUIWidgetWizard extends TemplateWizard implements IPageChangingList
 	}
 	
 	public void addPages(){
-		inputPage = new RUIWidgetWizardPage(WIZPAGENAME_RUIWidgetWizardPage);
-		addPage(inputPage);
-		summaryPage = new NewHandlerSummaryPage();
+		summaryPage = new NewHandlerSummaryPage();		
 		addPage(summaryPage);
 	}
 	
@@ -48,12 +45,11 @@ public class RUIWidgetWizard extends TemplateWizard implements IPageChangingList
 		if (wizardContainer != null) {
 			((WizardDialog) wizardContainer).addPageChangingListener(this);
 		}
+		processInput();
 	}
 	
 	public boolean performFinish() {
-		if (inputPage.isInputNeedsProcessing()) {
-			processInput();
-		}
+		processInput();
 		if(part == null)
 			return false;
 		((NewHandlerWizard)getParentWizard()).setContentObj(part);
@@ -61,23 +57,20 @@ public class RUIWidgetWizard extends TemplateWizard implements IPageChangingList
 	}
 
 	private void processInput() {
-		RUIWidgetOperation op = new RUIWidgetOperation(getConfiguration(), inputPage.getWidgetName());
+		RUIWidgetOperation op = new RUIWidgetOperation(getConfiguration(), getConfiguration().getFileName());
 		try{
 			part = op.getFileContents();
 			summaryPage.setContent(part);
-	//		summaryPage.setMessages(getFilteredMessages());
+//			summaryPage.setMessages(getFilteredMessages());
 		}catch (Exception ex) {
 			ex.printStackTrace();		 
 		}
 	}
 
 	@Override
-	public void handlePageChanging(PageChangingEvent event) {
-		
-		if (event.getCurrentPage() == inputPage && inputPage.isInputNeedsProcessing() && event.getTargetPage() == summaryPage) {
-			processInput();
-		}else if(event.getTargetPage() == inputPage){
-			inputPage.updateWidgetName();
+	public void handlePageChanging(PageChangingEvent event) {		
+		if (event.getTargetPage() == summaryPage) {
+			processInput();			
 		}
 	}
 }

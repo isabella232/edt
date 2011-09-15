@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.handlers.wizards;
 
+import org.eclipse.edt.ide.ui.editor.EGLCodeFormatterUtil;
 import org.eclipse.edt.ide.ui.internal.record.RecordConfiguration;
 import org.eclipse.edt.ide.ui.wizards.PartOperation;
 import org.eclipse.edt.ide.ui.wizards.PartTemplateException;
 import org.eclipse.jface.text.Document;
+import org.eclipse.text.edits.TextEdit;
 
 public class HandlerOperation extends PartOperation {	
 	protected String codeTemplateId;
@@ -50,8 +52,8 @@ public class HandlerOperation extends PartOperation {
 		try {
 			Document doc = new Document();
 			doc.set(contents);
-//			TextEdit edit = EGLCodeFormatterUtil.format(doc, null);
-//			edit.apply(doc);
+			TextEdit edit = EGLCodeFormatterUtil.format(doc, null);
+			edit.apply(doc);
 			contents = doc.get();
 		} catch (Exception ex) {
 			
