@@ -9,9 +9,7 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package eglx.services;
-import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import egl.lang.AnyException;
 @javax.xml.bind.annotation.XmlRootElement(name="ServiceBindingException")
 public class ServiceBindingException extends egl.lang.AnyException {
 	private static final long serialVersionUID = 10L;

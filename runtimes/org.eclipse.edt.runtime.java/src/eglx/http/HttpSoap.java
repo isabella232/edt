@@ -10,7 +10,6 @@
  *******************************************************************************/
 package eglx.http;
 import org.eclipse.edt.javart.resources.*;
-import org.eclipse.edt.javart.*;
 import eglx.http.Request;
 import eglx.http.Response;
 import org.eclipse.edt.runtime.java.egl.lang.EglAny;

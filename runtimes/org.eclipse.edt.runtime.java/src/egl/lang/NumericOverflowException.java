@@ -9,9 +9,7 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package egl.lang;
-import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import egl.lang.AnyException;
 @javax.xml.bind.annotation.XmlRootElement(name="NumericOverflowException")
 public class NumericOverflowException extends egl.lang.AnyException {
 	private static final long serialVersionUID = 10L;

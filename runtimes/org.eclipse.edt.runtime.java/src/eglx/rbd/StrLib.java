@@ -17,8 +17,6 @@ import org.eclipse.edt.runtime.java.egl.lang.EString;
 import java.lang.String;
 import org.eclipse.edt.runtime.java.egl.lang.ESmallint;
 import java.lang.Short;
-import org.eclipse.edt.runtime.java.egl.lang.EBoolean;
-import java.lang.Boolean;
 import org.eclipse.edt.runtime.java.egl.lang.EInt;
 import java.lang.Integer;
 import org.eclipse.edt.runtime.java.egl.lang.EBigint;

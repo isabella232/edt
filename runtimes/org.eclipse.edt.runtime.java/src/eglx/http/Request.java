@@ -10,7 +10,6 @@
  *******************************************************************************/
 package eglx.http;
 import org.eclipse.edt.javart.resources.*;
-import org.eclipse.edt.javart.*;
 import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
 import eglx.http.HttpMethod;
 import org.eclipse.edt.runtime.java.egl.lang.EString;
@@ -18,7 +17,6 @@ import java.lang.String;
 import org.eclipse.edt.runtime.java.egl.lang.EInt;
 import java.lang.Integer;
 import eglx.services.Encoding;
-import org.eclipse.edt.runtime.java.egl.lang.EglAny;
 @javax.xml.bind.annotation.XmlRootElement(name="Request")
 public class Request extends ExecutableBase {
 	private static final long serialVersionUID = 10L;

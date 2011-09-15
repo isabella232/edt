@@ -13,8 +13,6 @@ package eglx.persistence.sql;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 
-import org.eclipse.edt.javart.RunUnit;
-
 public class SQLResultSet {
 	private ResultSet resultSet;
 	private String[] updateFieldNames;

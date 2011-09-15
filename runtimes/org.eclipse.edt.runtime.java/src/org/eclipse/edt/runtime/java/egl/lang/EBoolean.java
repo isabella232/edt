@@ -15,7 +15,6 @@ import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 
 import egl.lang.AnyException;
-import egl.lang.NullValueException;
 
 public class EBoolean extends AnyBoxedObject<Boolean> {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;

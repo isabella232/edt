@@ -175,7 +175,6 @@ public class EString extends AnyBoxedObject<String> {
 	public static String asString(EString value, Integer... length) {
 		if (value == null)
 			return null;
-		String val;
 		if (length.length != 0 && value.ezeUnbox().length() > length[0])
 			return value.ezeUnbox().substring(0, length[0]);
 		else

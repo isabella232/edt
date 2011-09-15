@@ -9,11 +9,9 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package egl.lang;
-import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
 import org.eclipse.edt.runtime.java.egl.lang.EString;
 import java.lang.String;
-import egl.lang.AnyException;
 @javax.xml.bind.annotation.XmlRootElement(name="InvalidPatternException")
 public class InvalidPatternException extends egl.lang.AnyException {
 	private static final long serialVersionUID = 10L;

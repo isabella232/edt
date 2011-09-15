@@ -9,9 +9,7 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package eglx.java;
-import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import egl.lang.AnyException;
 import org.eclipse.edt.runtime.java.egl.lang.EString;
 import java.lang.String;
 @javax.xml.bind.annotation.XmlRootElement(name="JavaObjectException")

@@ -10,11 +10,9 @@
  *******************************************************************************/
 package eglx.http;
 import org.eclipse.edt.javart.resources.*;
-import org.eclipse.edt.javart.*;
 import eglx.rest.ServiceType;
 import eglx.http.Request;
 import eglx.http.Response;
-import org.eclipse.edt.runtime.java.egl.lang.EglAny;
 @javax.xml.bind.annotation.XmlRootElement(name="HttpRest")
 public class HttpRest extends ExecutableBase {
 	private static final long serialVersionUID = 10L;

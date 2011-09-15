@@ -10,14 +10,12 @@
  *******************************************************************************/
 package eglx.http;
 import org.eclipse.edt.javart.resources.*;
-import org.eclipse.edt.javart.*;
 import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
 import org.eclipse.edt.runtime.java.egl.lang.EString;
 import java.lang.String;
 import eglx.services.Encoding;
 import org.eclipse.edt.runtime.java.egl.lang.EInt;
 import java.lang.Integer;
-import org.eclipse.edt.runtime.java.egl.lang.EglAny;
 @javax.xml.bind.annotation.XmlRootElement(name="Response")
 public class Response extends ExecutableBase {
 	private static final long serialVersionUID = 10L;

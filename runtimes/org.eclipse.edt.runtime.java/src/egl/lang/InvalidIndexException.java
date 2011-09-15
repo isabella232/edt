@@ -9,11 +9,8 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package egl.lang;
-import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import egl.lang.AnyException;
 import org.eclipse.edt.runtime.java.egl.lang.EInt;
-import java.lang.Integer;
 @javax.xml.bind.annotation.XmlRootElement(name="InvalidIndexException")
 public class InvalidIndexException extends egl.lang.AnyException {
 	private static final long serialVersionUID = 10L;
