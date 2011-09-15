@@ -21,6 +21,8 @@ import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.jdt.debug.core.IJavaReferenceType;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaType;
+import org.eclipse.jdt.debug.core.IJavaValue;
+import org.eclipse.jdt.debug.core.IJavaVariable;
 import org.eclipse.jdt.internal.debug.core.model.JDIReferenceType;
 
 import com.sun.jdi.AbsentInformationException;
@@ -231,6 +233,46 @@ public class SMAPUtil
 		
 		return smap == null
 				? "" : smap.trim(); //$NON-NLS-1$
+	}
+	
+	/**
+	 * @return true if the given value's default stratum equals {@link IEGLDebugCoreConstants#EGL_STRATUM}
+	 */
+	public static boolean isEGLStratum( IJavaValue value )
+	{
+		try
+		{
+			IJavaType type = value.getJavaType();
+			if ( type instanceof IJavaReferenceType && IEGLDebugCoreConstants.EGL_STRATUM.equals( ((IJavaReferenceType)type).getDefaultStratum() ) )
+			{
+				return true;
+			}
+		}
+		catch ( DebugException e )
+		{
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * @return true if the given variable's default stratum equals {@link IEGLDebugCoreConstants#EGL_STRATUM}
+	 */
+	public static boolean isEGLStratum( IJavaVariable variable )
+	{
+		try
+		{
+			IJavaType type = variable.getJavaType();
+			if ( type instanceof IJavaReferenceType && IEGLDebugCoreConstants.EGL_STRATUM.equals( ((IJavaReferenceType)type).getDefaultStratum() ) )
+			{
+				return true;
+			}
+		}
+		catch ( DebugException e )
+		{
+		}
+		
+		return false;
 	}
 	
 	/**

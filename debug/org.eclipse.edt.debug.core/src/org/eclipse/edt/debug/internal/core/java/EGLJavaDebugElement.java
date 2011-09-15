@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.model.DebugElement;
@@ -25,7 +26,11 @@ import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.edt.debug.core.IEGLDebugTarget;
 import org.eclipse.edt.debug.core.java.IEGLJavaDebugElement;
 import org.eclipse.edt.debug.core.java.IEGLJavaDebugTarget;
+import org.eclipse.edt.debug.core.java.SMAPUtil;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
+import org.eclipse.jdt.debug.core.IJavaStackFrame;
+import org.eclipse.jdt.debug.core.IJavaValue;
+import org.eclipse.jdt.debug.core.IJavaVariable;
 
 /**
  * Super class of all EGL Java Debug framework classes.
@@ -71,7 +76,39 @@ public abstract class EGLJavaDebugElement extends DebugElement implements IEGLJa
 			}
 		}
 		
+		// Try not to break other adapters when it's something that doesn't have an EGL-specific adapter.
+		if ( shouldCheckJavaElementAdapter() )
+		{
+			Object adapted = ((IAdaptable)getJavaDebugElement()).getAdapter( adapter );
+			if ( adapted != null )
+			{
+				return adapted;
+			}
+		}
+		
 		return super.getAdapter( adapter );
+	}
+	
+	/**
+	 * @return true if we should attempt to obtain an adapter from the underlying Java object.
+	 */
+	private boolean shouldCheckJavaElementAdapter()
+	{
+		Object javaObj = getJavaDebugElement();
+		if ( javaObj instanceof IJavaVariable )
+		{
+			return !SMAPUtil.isEGLStratum( (IJavaVariable)javaObj );
+		}
+		if ( javaObj instanceof IJavaValue )
+		{
+			return !SMAPUtil.isEGLStratum( (IJavaValue)javaObj );
+		}
+		if ( javaObj instanceof IJavaStackFrame )
+		{
+			return !SMAPUtil.isEGLStratum( (IJavaStackFrame)javaObj );
+		}
+		
+		return false;
 	}
 	
 	/**
