@@ -88,7 +88,7 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_MULTIPLY))
 			return " * ";
 		if (op.equals(expr.Op_DIVIDE))
-			return "  ";
+			return " / ";
 		if (op.equals(expr.Op_EQ))
 			return " == ";
 		if (op.equals(expr.Op_NE))

@@ -18,6 +18,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Part;
@@ -27,6 +28,7 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class AnyTypeTemplate extends JavaScriptTemplate {
 
+	//TODO sbg This method should be more like the one in Java gen
 	public void genConversionOperation(Type type, Context ctx, TabbedWriter out, AsExpression arg) {
 		// check to see if a conversion is required
 		if (arg.getEType() instanceof Interface || arg.getEType() instanceof Service) {
@@ -36,7 +38,11 @@ public class AnyTypeTemplate extends JavaScriptTemplate {
 			out.print("from");
 			out.print(ctx.getNativeTypeName(arg.getConversionOperation().getParameters().get(0).getType()));
 			out.print("(");
-			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			Expression objectExpr = arg.getObjectExpr();
+			if (objectExpr instanceof BoxingExpression){
+				objectExpr = ((BoxingExpression)objectExpr).getExpr();
+			}
+			ctx.invoke(genExpression, objectExpr, ctx, out);
 			if (ctx.getPrimitiveMapping(arg.getObjectExpr().getType().getClassifier().getTypeSignature()) == null) {
 				out.print(",\"");
 				ctx.invoke(genSignature, arg.getObjectExpr().getType(), ctx, out, arg);

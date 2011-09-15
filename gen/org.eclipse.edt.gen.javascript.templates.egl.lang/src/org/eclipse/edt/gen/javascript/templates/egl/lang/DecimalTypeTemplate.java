@@ -18,7 +18,9 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.Operation;
@@ -98,13 +100,17 @@ public class DecimalTypeTemplate extends JavaScriptTemplate {
 	public void genConversionOperation(FixedPrecisionType type, Context ctx, TabbedWriter out, AsExpression arg) {
 		Type toType = arg.getEType();
 		Type fromType = arg.getObjectExpr().getType();
-		if ((arg.getConversionOperation() == null) && TypeUtils.isNumericType(fromType)) {
+		if ((arg.getConversionOperation() != null) && TypeUtils.isNumericType(fromType)) {
 			if (needsConversion(fromType, toType) && CommonUtilities.proceedWithConversion(ctx, arg.getConversionOperation())) {
 				out.print(ctx.getNativeImplementationMapping(toType) + '.');
 				out.print("from");
 				out.print(ctx.getNativeTypeName(fromType));
 				out.print("(");
-				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+				Expression objectExpr = arg.getObjectExpr();
+				if (objectExpr instanceof BoxingExpression){
+					objectExpr = ((BoxingExpression)objectExpr).getExpr();
+				}
+				ctx.invoke(genExpression, objectExpr, ctx, out);
 				ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
 				out.print(")");
 			} else {
