@@ -8,6 +8,18 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
+egl.createJavaScriptObjectException = function( /*string*/ messageID, /*string or array*/ inserts )
+{
+	if (typeof(inserts) != "string") {
+		inserts = egl.getRuntimeMessage( messageID, inserts );
+	}
+	egl.exceptionThrown = true;
+	var args = new Array();
+	args.push( [ "messageID", messageID || "" ] );
+	args.push( [ "message", inserts || "" ] );
+	args.push( [ "name", arguments[ 2 ] || "" ] );
+	return new egl.eglx.javascript.JavaScriptObjectException( args );
+};
 egl.defineClass('eglx.javascript', "JavaScriptObjectException", "egl.jsrt", "Record", {
 	"eze$$fileName" : "eglx/javascript/Exceptions.egl",
 		"constructor": function() {
