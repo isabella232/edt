@@ -102,7 +102,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		// to see if it wants it broken apart
 		if (!object.getOperator().equals("=") && object.getOperator().indexOf("=") >= 0) {
 			// call out to the type to see if wants this broken up
-			if ((Boolean) ctx.invoke(Constants.isAssignmentBreakupWanted, object.getType(), ctx, object.getOperator())) {
+			if ((Boolean) ctx.invoke(Constants.isAssignmentBreakupWanted, object.getLHS().getType(), ctx, object.getOperator(), object.getRHS().getType())) {
 				BinaryExpression binExp = factory.createBinaryExpression();
 				binExp.setLHS(object.getLHS());
 				binExp.setRHS(object.getRHS());
@@ -329,7 +329,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			declarationExpression.getFields().add(field);
 			localDeclaration.setExpression(declarationExpression);
 			// add the local variable to the statement block
-			block.getStatements().add(localDeclaration);
+			block.getStatements().add(0, localDeclaration);
 			// we need to create the member access for our temporary variable
 			MemberName nameExpression = factory.createMemberName();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -357,7 +357,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			// add the assignment to the statement block
 			object.getSettings().getStatements().add(assignmentStatement);
 			// now copy the statement block to our preprocessing statement block
-			block.getStatements().add(object.getSettings());
+			block.getStatements().add(1, object.getSettings());
 			// now replace the setValuesExpression argument with the temporary variable
 			if (getParent() instanceof List)
 				((List<EObject>) getParent()).set(getParentSlotIndex(), nameExpression);
@@ -365,7 +365,7 @@ public class ReorganizeCode extends AbstractVisitor {
 				((EObjectImpl) getParent()).slotSet(getParentSlotIndex(), nameExpression);
 		} else {
 			// now copy the statement block to our preprocessing statement block
-			block.getStatements().add(object.getSettings());
+			block.getStatements().add(1, object.getSettings());
 			// now replace the setValuesExpression argument with the temporary variable
 			if (getParent() instanceof List)
 				((List<EObject>) getParent()).set(getParentSlotIndex(), object.getTarget());
