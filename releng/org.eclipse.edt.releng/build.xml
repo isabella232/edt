@@ -1,6 +1,4 @@
-<!-- A build file for use with Hudson. Note that forceContextQualifier 
-	 is being set, which overrides tag/branch values found in *.map files 
--->
+<!-- A build file for use with Hudson. -->
 <project default="run">
 	<property environment="env"/>
 	<property name="WORKSPACE" value="${env.WORKSPACE}"/>
@@ -9,6 +7,9 @@
 	<tstamp>
 		<format property="buildTimestamp" pattern="yyyyMMddHHmm" />
 	</tstamp>
+	
+	<!-- Setting forceContextQualifier to the build timestamp means the
+	     timestamp replaces ".qualifier" in our plugins' version strings. -->
 	<property name="forceContextQualifier" value="v${buildTimestamp}" />
 	
 	<property name="fetchTag" value="HEAD" />
@@ -18,10 +19,15 @@
 	
 	<property name="writableBuildRoot" value="/tmp/build" />
 
-	<property name="buildDir" value="${writableBuildRoot}/${buildType}${buildTimestamp}" /> 		
-		
+	
+	<property name="buildDir" value="${writableBuildRoot}/${buildType}_current" />
+
 	<target name="init">
-		<delete dir="${buildDir}" failonerror="false"/>
+		<!-- This build goes into directory ${buildType}_current and the last
+		     build is kept in ${buildType}_previous. -->
+		<delete dir="${writableBuildRoot}/${buildType}_previous" failonerror="false"/>
+		<move file="${writableBuildRoot}/${buildType}_current" todir="${writableBuildRoot}/${buildType}_previous" failonerror="false"/>
+		<mkdir dir="${buildDir}"/>
 	</target>
 
 	<target name="run" depends="init">
@@ -36,7 +42,6 @@
 		<condition property="isNightlyBuild">
 			<equals arg1="${buildType}" arg2="N" />
 		</condition>
-		<antcall target="deleteOldNightlies" inheritall="true" />
 
 		<ant antfile="promote.xml" />
 	</target>
@@ -54,13 +59,4 @@
 			</fileset>
 		</delete>
 	</target>	
-
-	<target name="deleteOldNightlies" if="isNightlyBuild">
-		<delete failonerror="false" includeemptydirs="true" verbose="true">
-			<dirset dir="${writableBuildRoot}">
-			    <include name="N20*/**"/>
-			    <exclude name="N${buildTimestamp}/**"/>
-			</dirset>
-		</delete>
-	</target>
 </project>
