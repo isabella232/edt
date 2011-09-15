@@ -21,7 +21,6 @@ import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.ParameterKind;
-import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -105,7 +104,7 @@ public class FieldTemplate extends JavaTemplate {
 	}
 
 	public void processInitializeStatement(Field field, Context ctx, TabbedWriter out, boolean adjustSmap) {
-		if (field.getInitializerStatements() == null) {
+		if (field.getInitializerStatements() == null || field.getInitializerStatements().getStatements().isEmpty()) {
 			// there are no initializer statements, so just initialize the field
 			ctx.invoke(genName, field, ctx, out);
 			out.print(" = ");
@@ -114,11 +113,10 @@ public class FieldTemplate extends JavaTemplate {
 		} else {
 			// if the initializer statements are not against the currect field, then we need to do the initialization in
 			// addition to the statements
-			if (!(field.getInitializerStatements() instanceof StatementBlock
-				&& ((StatementBlock) field.getInitializerStatements()).getStatements().size() > 0
-				&& ((StatementBlock) field.getInitializerStatements()).getStatements().get(0) instanceof AssignmentStatement
-				&& ((AssignmentStatement) ((StatementBlock) field.getInitializerStatements()).getStatements().get(0)).getAssignment().getLHS() instanceof MemberName && ((MemberName) ((AssignmentStatement) ((StatementBlock) field
-				.getInitializerStatements()).getStatements().get(0)).getAssignment().getLHS()).getMember().equals(field))) {
+			if (!(field.getInitializerStatements().getStatements().size() > 0
+				&& field.getInitializerStatements().getStatements().get(0) instanceof AssignmentStatement
+				&& ((AssignmentStatement) field.getInitializerStatements().getStatements().get(0)).getAssignment().getLHS() instanceof MemberName 
+				&& ((MemberName) ((AssignmentStatement) field.getInitializerStatements().getStatements().get(0)).getAssignment().getLHS()).getMember().equals(field))) {
 				// we need to initialize the field, before applying the initializer statements
 				ctx.invoke(genName, field, ctx, out);
 				out.print(" = ");
