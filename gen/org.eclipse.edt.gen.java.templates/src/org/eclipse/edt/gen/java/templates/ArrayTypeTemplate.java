@@ -22,6 +22,15 @@ import org.eclipse.edt.mof.egl.Type;
 
 public class ArrayTypeTemplate extends JavaTemplate {
 
+	public Boolean isAssignmentBreakupWanted(ArrayType type, Context ctx, String arg, Type rhsType) {
+		// types can override this to cause an compound assignment expression to be broken up
+		// the arg contains the operation being asked about. we always want compound power of broken up
+		if (arg.equals("::=") && !(rhsType instanceof ArrayType))
+			return true;
+		else
+			return false;
+	}
+
 	public void genConversionOperation(ArrayType type, Context ctx, TabbedWriter out, AsExpression arg) {
 		// check to see if a conversion is required
 		if (arg.getConversionOperation() != null) {
@@ -68,7 +77,7 @@ public class ArrayTypeTemplate extends JavaTemplate {
 		}
 	}
 
-	public void genTypeBasedAssignment(Type type, Context ctx, TabbedWriter out, Assignment arg) {
+	public void genTypeBasedAssignment(ArrayType type, Context ctx, TabbedWriter out, Assignment arg) {
 		String operator = "=";
 		if (arg.getOperator() != null && arg.getOperator().length() > 0)
 			operator = arg.getOperator();
