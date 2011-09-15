@@ -240,8 +240,7 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 		{
 			// We could just manually add a "this" variable and a "function" variable, but this way if the language gets
 			// extended by some client, e.g. concept of 'static' added to EGL, this would support that.
-			List<IEGLJavaVariable> newEGLVariables = VariableUtil.filterAndWrapVariables( javaFrame.getVariables(), this,
-					true, null );
+			List<IEGLJavaVariable> newEGLVariables = VariableUtil.filterAndWrapVariables( javaFrame.getVariables(), this, true, null );
 			variables = new EGLJavaVariable[ newEGLVariables.size() + 1 ];
 			newEGLVariables.toArray( variables );
 			variables[ variables.length - 1 ] = getCorrespondingVariable( new EGLJavaFunctionVariable( this ), null );
@@ -407,7 +406,9 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 			eglVar = previousEGLVariables.get( qualifiedName );
 		}
 		
-		if ( eglVar != null )
+		// If not the same class, e.g. previously wasn't adapted, but now its value caused it to get adapted to some other implementation
+		// of IEGLJavaVariable, then throw the old variable away instead of reusing it.
+		if ( eglVar != null && eglVar.getClass() == newVariable.getClass() )
 		{
 			eglVar.initialize( newVariable, parent );
 		}
@@ -423,7 +424,7 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 		
 		return eglVar;
 	}
-
+	
 	@Override
 	public String getSourcePath() throws DebugException
 	{

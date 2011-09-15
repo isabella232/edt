@@ -23,9 +23,7 @@ import org.eclipse.edt.debug.core.java.IVariableAdapter;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
 import org.eclipse.edt.debug.internal.core.java.EGLJavaVariable;
 import org.eclipse.edt.debug.internal.core.java.VariableUtil;
-import org.eclipse.jdt.debug.core.IJavaClassType;
-import org.eclipse.jdt.debug.core.IJavaInterfaceType;
-import org.eclipse.jdt.debug.core.IJavaType;
+import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 
 /**
@@ -40,42 +38,47 @@ public class DefaultVariableAdapter implements IVariableAdapter
 	{
 		try
 		{
-			IJavaType javaType = variable.getJavaType();
-			if ( javaType instanceof IJavaClassType || javaType instanceof IJavaInterfaceType )
+			// If the value isn't null, use the value's type. Otherwise use the variable's.
+			String type;
+			IValue value = variable.getValue();
+			if ( value instanceof IJavaValue && !((IJavaValue)value).isNull() )
 			{
-				IValue value = variable.getValue();
-				String type = value.getReferenceTypeName(); // Use the value's type which will be the actual type. The variable would report the
-															// declared type.
-				if ( getSimpleTypeMap().containsKey( type ) )
+				type = value.getReferenceTypeName();
+			}
+			else
+			{
+				type = variable.getReferenceTypeName();
+			}
+			
+			if ( getSimpleTypeMap().containsKey( type ) )
+			{
+				if ( "java.lang.String".equals( type ) ) //$NON-NLS-1$
 				{
-					if ( "java.lang.String".equals( type ) ) //$NON-NLS-1$
+					return new ChildlessVariable( frame.getDebugTarget(), variable, info, frame, parent );
+				}
+				
+				if ( "java.math.BigDecimal".equals( type ) || "java.math.BigInteger".equals( type ) ) //$NON-NLS-1$ //$NON-NLS-2$
+				{
+					return new ToStringVariable( frame.getDebugTarget(), variable, info, frame, parent );
+				}
+				
+				// The other types have the value inside a 'value' field.
+				IVariable[] vars = value.getVariables();
+				for ( IVariable var : vars )
+				{
+					if ( var instanceof IJavaVariable && !((IJavaVariable)var).isStatic() && var.getName().equals( "value" ) ) //$NON-NLS-1$
 					{
-						return new ChildlessVariable( frame.getDebugTarget(), variable, info, frame, parent );
-					}
-					
-					if ( "java.math.BigDecimal".equals( type ) || "java.math.BigInteger".equals( type ) ) //$NON-NLS-1$ //$NON-NLS-2$
-					{
-						return new ToStringVariable( frame.getDebugTarget(), variable, info, frame, parent );
-					}
-					
-					// The other types have the value inside a 'value' field.
-					IVariable[] vars = value.getVariables();
-					for ( IVariable var : vars )
-					{
-						if ( var instanceof IJavaVariable && !((IJavaVariable)var).isStatic() && var.getName().equals( "value" ) ) //$NON-NLS-1$
-						{
-							return new EGLJavaVariable( frame.getDebugTarget(), (IJavaVariable)var, info, frame, parent );
-						}
+						return new EGLJavaVariable( frame.getDebugTarget(), (IJavaVariable)var, info, frame, parent );
 					}
 				}
-				else if ( VariableUtil.isInstanceOf( variable, "java.util.List" ) ) //$NON-NLS-1$
-				{
-					return new ListVariable( frame.getDebugTarget(), variable, info, frame, parent );
-				}
-				else if ( VariableUtil.isInstanceOf( variable, "java.util.Map" ) ) //$NON-NLS-1$
-				{
-					return new MapVariable( frame.getDebugTarget(), variable, info, frame, parent );
-				}
+			}
+			else if ( VariableUtil.isInstanceOf( variable, "java.util.List" ) ) //$NON-NLS-1$
+			{
+				return new ListVariable( frame.getDebugTarget(), variable, info, frame, parent );
+			}
+			else if ( VariableUtil.isInstanceOf( variable, "java.util.Map" ) ) //$NON-NLS-1$
+			{
+				return new MapVariable( frame.getDebugTarget(), variable, info, frame, parent );
 			}
 		}
 		catch ( DebugException e )

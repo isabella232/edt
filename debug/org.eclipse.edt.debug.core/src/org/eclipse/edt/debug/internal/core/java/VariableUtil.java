@@ -60,7 +60,9 @@ public class VariableUtil
 	{
 		List<IEGLJavaVariable> newEGLVariables = new ArrayList<IEGLJavaVariable>( javaVariables.length );
 		
-		SMAPVariableInfo[] infos = parent == null ? frame.getSMAPVariableInfos() : parent.getSMAPVariableInfos();
+		SMAPVariableInfo[] infos = parent == null
+				? frame.getSMAPVariableInfos()
+				: parent.getSMAPVariableInfos();
 		String javaFrameSignature = frame.getJavaStackFrame().getMethodName() + ";" + frame.getJavaStackFrame().getSignature(); //$NON-NLS-1$
 		int currentLine = frame.getLineNumber();
 		int frameStartLine = frame.getSMAPFunctionInfo() == null
@@ -195,17 +197,40 @@ public class VariableUtil
 	 * @return true if the variable is an instance of <code>typeName</code>
 	 * @throws DebugException
 	 */
-	public static boolean isInstanceOf( IJavaVariable variable, String typeName ) throws DebugException
+	public static boolean isInstanceOf( IJavaVariable variable, String typeName )
 	{
-		IValue value = variable.getValue();
-		if ( value instanceof IJavaValue )
+		IJavaValue javaValue = null;
+		try
 		{
-			IJavaType javaType = ((IJavaValue)value).getJavaType();
-			if ( javaType instanceof IJavaClassType )
+			IValue value = variable.getValue();
+			if ( value instanceof IJavaValue )
 			{
-				return isInstanceOf( (IJavaClassType)javaType, typeName, false );
+				javaValue = (IJavaValue)value;
+				IJavaType javaType = javaValue.isNull()
+						? variable.getJavaType()
+						: javaValue.getJavaType();
+				if ( javaType instanceof IJavaClassType )
+				{
+					return isInstanceOf( (IJavaClassType)javaType, typeName, false );
+				}
 			}
 		}
+		catch ( DebugException e )
+		{
+		}
+		
+		// Maybe the type matches.
+		try
+		{
+			String type = javaValue == null || javaValue.isNull()
+					? variable.getReferenceTypeName()
+					: javaValue.getReferenceTypeName();
+			return typeName.equals( type );
+		}
+		catch ( DebugException e )
+		{
+		}
+		
 		return false;
 	}
 	
