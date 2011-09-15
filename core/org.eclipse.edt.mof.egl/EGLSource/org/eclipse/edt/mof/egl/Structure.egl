@@ -41,13 +41,11 @@ end
 
 externalType AnnotationType extends EClass, Part type MofClass
 	targets ElementKind[];  
+	validationProxy string;	
 end
 
 externalType StereotypeType extends AnnotationType type MofClass 
 	memberAnnotations AnnotationType[];
-	implicitFields Annotation[] {containment=true};
-	implicitFunctions Annotation[] {containment=true};
-	validationProxy string;
 	referenceType boolean;
 	partType TypeRef;
 	defaultSuperType TypeRef;
