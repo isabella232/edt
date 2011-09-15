@@ -662,37 +662,6 @@ public abstract class Mof2BindingBase extends AbstractVisitor implements MofConv
 		IAnnotationBinding stereotype = new AnnotationBinding(InternUtil.intern("Stereotype"), part, stereotypeType);
 		binding.addAnnotation(stereotype);
 		
-		//add the implicitFields field to the AnnotationBinding		
-		if (ir.getImplicitFields() != null && ir.getImplicitFields().size() > 0) {
-			IAnnotationBinding[] implicitFields = new IAnnotationBinding[ir.getImplicitFields().size()];
-			int i = 0;
-			for (Annotation ann : ir.getImplicitFields()) {
-				implicitFields[i] = createAnnotationBinding(ann);
-				i = i + 1;
-			}		
-			ITypeBinding arrayType = ArrayTypeBinding.getInstance(PrimitiveTypeBinding.getInstance(Primitive.ANY));
-			IAnnotationTypeBinding annType = AnnotationTypeManager.getAnnotationType(InternUtil.intern("Annotation"));
-			AnnotationFieldBinding targets = new AnnotationFieldBinding(InternUtil.intern("implicitFields"), part, arrayType, annType);
-			targets.setValue(implicitFields, null, null, null, false);
-			binding.addField(targets);
-
-		}
-		
-		//add the implicitFunctions field to the AnnotationBinding		
-		if (ir.getImplicitFunctions() != null  && ir.getImplicitFunctions().size() > 0) {
-			IAnnotationBinding[] implicitFunctions = new IAnnotationBinding[ir.getImplicitFunctions().size()];
-			int i = 0;
-			for (Annotation ann : ir.getImplicitFunctions()) {
-				implicitFunctions[i] = createAnnotationBinding(ann);
-				i = i + 1;
-			}		
-			ITypeBinding arrayType = ArrayTypeBinding.getInstance(PrimitiveTypeBinding.getInstance(Primitive.ANY));
-			IAnnotationTypeBinding annType = AnnotationTypeManager.getAnnotationType("Annotation");
-			AnnotationFieldBinding targets = new AnnotationFieldBinding(InternUtil.intern("implicitFunctions"), part, arrayType, annType);
-			targets.setValue(implicitFunctions, null, null, null, false);
-			binding.addField(targets);
-		}
-		
 		//add the isReference field to the annotationBinding
 		if (ir.isReferenceType()) {
 			ITypeBinding boolType = PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN);
@@ -771,6 +740,14 @@ public abstract class Mof2BindingBase extends AbstractVisitor implements MofConv
 				entry = elementKind.findData(InternUtil.intern(literal.name()));
 				list[i] = (EnumerationDataBinding)entry;
 				i++;
+			}
+			
+			String valProxy = ((AnnotationType)ir).getValidationProxy();
+			if (valProxy != null && valProxy.trim().length() > 0) {
+				PrimitiveTypeBinding stringType = PrimitiveTypeBinding.getInstance(Primitive.STRING);
+				AnnotationFieldBinding proxy = new AnnotationFieldBinding(InternUtil.intern("ValidationProxy"), declarer, stringType, annType);
+				proxy.setValue(valProxy, null, null, null, false);
+				binding.addField(proxy);
 			}
 		}
 		ArrayTypeBinding arrayType = ArrayTypeBinding.getInstance(elementKind);

@@ -32,10 +32,6 @@ public class AnnotationAnnotationTypeBinding extends PartSubTypeAnnotationTypeBi
     
     public AnnotationAnnotationTypeBinding() {
         super(caseSensitiveName, new Object[] {
-//        	"ImplicitFields",						ArrayTypeBinding.getInstance(FieldDeclarationAnnotationTypeBinding.getInstance()),
-//    		"ImplicitFunctions",					ArrayTypeBinding.getInstance(FunctionDeclarationAnnotationTypeBinding.getInstance()),
-        	"ImplicitFields",						ArrayTypeBinding.getInstance(PrimitiveTypeBinding.getInstance(Primitive.ANY)),
-        	"ImplicitFunctions",					ArrayTypeBinding.getInstance(PrimitiveTypeBinding.getInstance(Primitive.ANY)),
         	IEGLConstants.PROPERTY_TARGETS, 		ArrayTypeBinding.getInstance(ElementKind.TYPE),
         	IEGLConstants.PROPERTY_TARGETTYPES, 	ArrayTypeBinding.getInstance(TypeKind.TYPE),
         	IEGLConstants.PROPERTY_VALIDATIONCLASS,	PrimitiveTypeBinding.getInstance(Primitive.STRING),
