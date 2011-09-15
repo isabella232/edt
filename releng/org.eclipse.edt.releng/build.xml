@@ -26,7 +26,7 @@
 		<!-- This build goes into directory ${buildType}_current and the last
 		     build is kept in ${buildType}_previous. -->
 		<delete dir="${writableBuildRoot}/${buildType}_previous" failonerror="false"/>
-		<move file="${writableBuildRoot}/${buildType}_current" todir="${writableBuildRoot}/${buildType}_previous" failonerror="false"/>
+		<move file="${writableBuildRoot}/${buildType}_current" tofile="${writableBuildRoot}/${buildType}_previous" failonerror="false"/>
 		<mkdir dir="${buildDir}"/>
 	</target>
 
