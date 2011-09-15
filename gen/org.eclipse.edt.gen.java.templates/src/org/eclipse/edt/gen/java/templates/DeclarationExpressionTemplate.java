@@ -18,7 +18,6 @@ import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.MemberName;
-import org.eclipse.edt.mof.egl.StatementBlock;
 
 public class DeclarationExpressionTemplate extends JavaTemplate {
 
@@ -33,11 +32,10 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 			// if the initializer statements are not against the currect field, then we need to do the initialization in
 			// addition to the statements
 			if (field.getInitializerStatements() != null
-				&& field.getInitializerStatements() instanceof StatementBlock
-				&& ((StatementBlock) field.getInitializerStatements()).getStatements().size() == 1
-				&& ((StatementBlock) field.getInitializerStatements()).getStatements().get(0) instanceof AssignmentStatement
-				&& ((AssignmentStatement) ((StatementBlock) field.getInitializerStatements()).getStatements().get(0)).getAssignment().getLHS() instanceof MemberName
-				&& ((MemberName) ((AssignmentStatement) ((StatementBlock) field.getInitializerStatements()).getStatements().get(0)).getAssignment().getLHS())
+				&& field.getInitializerStatements().getStatements().size() == 1
+				&& field.getInitializerStatements().getStatements().get(0) instanceof AssignmentStatement
+				&& ((AssignmentStatement) field.getInitializerStatements().getStatements().get(0)).getAssignment().getLHS() instanceof MemberName
+				&& ((MemberName) ((AssignmentStatement) field.getInitializerStatements().getStatements().get(0)).getAssignment().getLHS())
 					.getMember().equals(field)) {
 				out.println(";");
 				// as this is an expression that also creates a new line with the above println method, it throws off the
