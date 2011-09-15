@@ -14,6 +14,7 @@ package org.eclipse.edt.compiler.binding;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -52,6 +53,31 @@ public abstract class FunctionContainerBinding extends PartBinding {
     	return classFields;
     }
     
+    /**
+     * 
+     * @param includeSuperType
+     * @return A list containing everything in getDeclaredData 
+     *         and supertype's getDeclaredData
+     */
+    public List getDeclaredData(boolean includeSuperType){
+    	if(!includeSuperType){
+    		return(classFields);
+    	}
+
+    	List retList = new LinkedList();
+    	retList.addAll(classFields);
+    	
+		//get supertype's declared data
+		IPartBinding spBinding = this.getDefaultSuperType();
+		if(spBinding instanceof FunctionContainerBinding){
+			retList.addAll(((FunctionContainerBinding)spBinding).getDeclaredData(includeSuperType));
+		}else if(spBinding instanceof ExternalTypeBinding){
+			retList.addAll(((ExternalTypeBinding)spBinding).getDeclaredAndInheritedData());
+		}
+		
+    	return retList;
+    }
+    
     public void addClassField(ClassFieldBinding fieldBinding) {
         if (classFields == Collections.EMPTY_LIST) {
             classFields = new ArrayList();
@@ -65,6 +91,25 @@ public abstract class FunctionContainerBinding extends PartBinding {
      */
     public List getDeclaredFunctions() {
         return declaredFunctions;
+    }
+    
+    public List getDeclaredFunctions(boolean includeSuperType){
+    	if(!includeSuperType){
+    		return(declaredFunctions);
+    	}
+
+    	List retList = new LinkedList();
+    	retList.addAll(declaredFunctions);
+    	
+		//get supertype's declared functions
+		IPartBinding spBinding = this.getDefaultSuperType();
+		if(spBinding instanceof FunctionContainerBinding){
+			retList.addAll(((FunctionContainerBinding)spBinding).getDeclaredFunctions(includeSuperType));
+		}else if(spBinding instanceof ExternalTypeBinding){
+			retList.addAll(((ExternalTypeBinding)spBinding).getDeclaredAndInheritedFunctions());
+		}
+		
+    	return retList;
     }
 
     public void addDeclaredFunction(NestedFunctionBinding functionBinding) {
