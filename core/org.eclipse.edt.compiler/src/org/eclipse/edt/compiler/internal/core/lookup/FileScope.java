@@ -174,6 +174,11 @@ public class FileScope extends Scope {
 		returnTopLevelFunctions = false;
 	}
 	
+	@Override
+	public boolean isReturningTopLevelFunctions() {
+		return returnTopLevelFunctions;
+	}
+	
 	public void startReturningTopLevelFunctions() {
 		super.startReturningTopLevelFunctions();
 		returnTopLevelFunctions = true;

@@ -328,7 +328,12 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
         }
         
         if(result != IBinding.NOT_FOUND_BINDING && result.getKind() == IDataBinding.TOP_LEVEL_FUNCTION_BINDING) {
-        	result = ((TopLevelFunctionDataBinding) result).getFunctionWithItemsNullableSignature(currentScope.I4GLItemsNullableIsEnabled());
+        	if (!currentScope.isReturningTopLevelFunctions()) {
+        		result = IBinding.NOT_FOUND_BINDING;
+        	}
+        	else {
+        		result = ((TopLevelFunctionDataBinding) result).getFunctionWithItemsNullableSignature(currentScope.I4GLItemsNullableIsEnabled());
+        	}
         }
         
         if(result == IBinding.NOT_FOUND_BINDING){

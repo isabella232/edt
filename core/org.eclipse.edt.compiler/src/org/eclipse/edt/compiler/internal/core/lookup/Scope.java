@@ -68,6 +68,11 @@ public abstract class Scope {
     	if(parentScope != null) parentScope.startReturningTopLevelFunctions();
     }
     
+    public boolean isReturningTopLevelFunctions() {
+    	if(parentScope != null) return parentScope.isReturningTopLevelFunctions(); 
+    	return true;
+    }
+    
     public void stopReturningFunctionContainerFunctions() {
     	if(parentScope != null) parentScope.stopReturningFunctionContainerFunctions();
     }
