@@ -20,7 +20,7 @@ import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AmbiguousReferenceException;
 import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.ArrayLiteral;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
@@ -364,7 +364,15 @@ public class IRUtils {
 	}
 	
 	public static void makeCompatible(Assignment expr) {	
-		Expression asExpr = makeExprCompatibleToType(expr.getRHS(), expr.getLHS().getType());
+		Type type = expr.getLHS().getType();
+		if ( type instanceof ArrayType && "::=".equals( expr.getOperator() ) 
+				&& !(expr.getRHS().getType() instanceof ArrayType) )
+		{
+			// When appending an element to an array with ::=, make the expr compatible 
+			// with the array's element type, not the array's type.
+			type = ((ArrayType)type).getElementType();
+		}
+		Expression asExpr = makeExprCompatibleToType(expr.getRHS(), type);
 		expr.setRHS(asExpr);			
 	}
 	
