@@ -312,20 +312,20 @@ public class EString extends AnyBoxedObject<String> {
 	}
 
 	public static String plus(String op1, String op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			throw new NullValueException();
 		return concat(op1, op2);
 	}
 
 	public static String concat(String op1, String op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			throw new NullValueException();
+		if (op1 == null)
+			op1 = "";
+		if (op2 == null)
+			op2 = "";
 		return op1 + op2;
 	}
 
 	public static String concatNull(String op1, String op2) {
 		if (op1 == null || op2 == null)
-			throw new NullValueException();
+			return null;
 		return op1 + op2;
 	}
 
