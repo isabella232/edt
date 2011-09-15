@@ -164,7 +164,7 @@ egl.egl.lang.EFloat32.fromEInt64  = function (x) {
 	return egl.convertFloatToSmallfloat(Number( (new egl.javascript.BigDecimal(x)).toString()));
 };
 egl.egl.lang.EFloat32.fromEDecimal  = function (x) {
-	return egl.convertFloatToSmallfloat(Number( (new egl.javascript.BigDecimal(x)).toString()));
+	return egl.convertFloatToSmallfloat(Number( x.toString()));
 
 };
 
@@ -266,7 +266,7 @@ egl.egl.lang.EInt64.fromAnyNum = function (x) {
 	return egl.convertDecimalToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
 egl.egl.lang.EInt64.fromEFloat32 = function (x) {  
-	return egl.convertDecimalToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	return egl.convertFloatToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 }; 
 
 
@@ -382,7 +382,13 @@ egl.egl.lang.EString.fromEInt32 = function (x) {
 egl.egl.lang.EString.fromEInt64 = function (x) {
 	return (x).toString();
 };
+egl.egl.lang.EString.fromEFloat32 = function (x) {
+	return (x).toString();
+};
 egl.egl.lang.EString.fromEFloat64 = function (x) {
+	return (x).toString();
+};
+egl.egl.lang.EString.fromEDecimal = function (x) {
 	return (x).toString();
 };
 egl.egl.lang.EString.fromEBoolean = function (x) {
@@ -641,10 +647,10 @@ egl.defineClass( "egl.lang", "NullType",
 }
 );
 egl.egl.lang.NullType.equals = function(x, y) {
-	return x == y;  //TODO sbg Should this be generated as a simple comparison, rather than all this overhead?
+	return egl.unboxAny(x) == y;  //TODO sbg Should this be generated as a simple comparison, rather than all this overhead?
 };
 egl.egl.lang.NullType.notEquals = function(x, y) {
-	return x != y;  //TODO sbg Should this be generated as a simple comparison, rather than all this overhead?
+	return egl.unboxAny(x) != y;  //TODO sbg Should this be generated as a simple comparison, rather than all this overhead?
 };
 egl.egl.lang.NullType.fromEList = function(list) {
 	return list; //TODO sbg Should this be generated as a simple comparison, rather than all this overhead?
