@@ -130,7 +130,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		fConnLocation = createTextControl(toolkit, parent);
 		fConnLocation.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
-				fSQLDatabaseBinding.setSqlJNDIName(fConnLocation.getText());		
+				fSQLDatabaseBinding.setJarList(fConnLocation.getText());
 			}			
 		});
 
