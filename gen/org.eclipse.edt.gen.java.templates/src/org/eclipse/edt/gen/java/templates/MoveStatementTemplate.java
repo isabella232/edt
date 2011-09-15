@@ -25,15 +25,20 @@ public class MoveStatementTemplate extends JavaTemplate
 
 	public void genStatementBody( MoveStatement stmt, Context ctx, TabbedWriter out )
 	{
+		Expression targetExpr = stmt.getTargetExpr();
+		Expression sourceExpr = stmt.getSourceExpr();
+		
 		if ( stmt.getModifier() == MoveStatement.MOVE_DEFAULT )
 		{
-			deepCopy( stmt, ctx, out );
+			ctx.invoke( genExpression, targetExpr, ctx, out );
+			out.print( " = (" );
+			ctx.invoke( genRuntimeTypeName, sourceExpr.getType(), ctx, out );
+			out.print( ")org.eclipse.edt.runtime.java.egl.lang.EglAny.ezeDeepCopy(" );
+			ctx.invoke( genExpression, sourceExpr, ctx, out );
+			out.println( ");" );
 		}
 		else
 		{
-			Expression targetExpr = stmt.getTargetExpr();
-			Expression sourceExpr = stmt.getSourceExpr();
-			
 			boolean needTemp = !(targetExpr instanceof Name) || !(sourceExpr instanceof Name);
 			if ( needTemp )
 			{
@@ -157,26 +162,6 @@ public class MoveStatementTemplate extends JavaTemplate
 				out.println( '}' );
 			}
 		}
-	}
-	
-	private void deepCopy( MoveStatement stmt, Context ctx, TabbedWriter out )
-	{
-		String tempName = ctx.nextTempName();
-
-		//TODO no, don't use clone...the source should be an EglAny so use EglAny.deepCopy
-		Expression source = stmt.getSourceExpr();
-		ctx.invoke( genRuntimeTypeName, source.getType(), ctx, out );
-		out.print( ' ' );
-		out.print( tempName );
-		out.print( " = (" );
-		ctx.invoke( genRuntimeTypeName, source.getType(), ctx, out );
-		out.print( ')' );
-		ctx.invoke( genExpression, source, ctx, out );
-		out.println( ".clone();" );
-		ctx.invoke( genExpression, stmt.getTargetExpr(), ctx, out );
-		out.print( " = " );
-		out.print( tempName );
-		out.println( ';' );
 	}
 	
 	private Name nameForTemp( String id, Context ctx, Type type )
