@@ -302,19 +302,19 @@ public class SQLPlugin extends AbstractUIPlugin {
 
 		EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS = 
 			new String[] {
-				charOptionUseString,
-				charOptionUseLimitedLengthString,
-				charOptionUseChar,
-				charOptionUseMBChar,
-				charOptionUseUnicode
+				charOptionUseString
+				//charOptionUseLimitedLengthString,
+				//charOptionUseChar,
+				//charOptionUseMBChar,
+				//charOptionUseUnicode
 			};
 		
 		EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS =
 			new String[] {
-				nationalCharOptionUseDBChar,
-				nationalCharOptionUseUnicode,
-				nationalCharOptionUseString,
-				nationalCharOptionUseLimitedString
+				//nationalCharOptionUseDBChar,
+				//nationalCharOptionUseUnicode,
+				nationalCharOptionUseString
+				//nationalCharOptionUseLimitedString
 			};
 		
 		NAME_CASE_OPTION_NON_MNEMONIC_STRINGS =
@@ -333,10 +333,10 @@ public class SQLPlugin extends AbstractUIPlugin {
 		TEXT_TYPE_FOR_DATE_OPTION_NON_MNEMONIC_STRINGS =
 			new String[] {
 				"",
-				IEGLConstants.KEYWORD_CHAR,
-				IEGLConstants.KEYWORD_UNICODE,
-				IEGLConstants.KEYWORD_STRING,
-				SQLConstants.LIMITED_STRING
+				//IEGLConstants.KEYWORD_CHAR,
+				//IEGLConstants.KEYWORD_UNICODE,
+				IEGLConstants.KEYWORD_STRING
+				//SQLConstants.LIMITED_STRING
 			};
 	}
 
