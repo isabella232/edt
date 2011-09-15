@@ -35,7 +35,7 @@ public class IsCompatibleWithValidator implements IAnnotationValidationRule {
 			return false;
 		}
 				
-		String[] ruiPkg = InternUtil.intern(new String[] {"egl", "ui", "rui"});
+		String[] ruiPkg = InternUtil.intern(new String[] {"eglx", "ui", "rui"});
 				
 		if (InternUtil.intern(IEGLConstants.PROPERTY_RUIWIDGET) == part.getName() && part.getPackageName() == ruiPkg) {
 			return true;
