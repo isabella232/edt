@@ -751,7 +751,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			((ArrayType)newExpression.getType()).getInitialSize().accept(this);
 			expr.getArguments().add((Expression)stack.pop());
 		}
-		if (newExpression.getSettingsBlock() != null) {
+		if (newExpression.getSettingsBlock() != null && newExpression.getSettingsBlock().getSettings().size() > 0) {
 			SetValuesExpression sve = processSettings(expr, newExpression.getSettingsBlock());
 			setElementInformation(newExpression, sve);
 			stack.push(sve);
