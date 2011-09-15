@@ -78,7 +78,7 @@ public class EGLSystemWordProposalHandler extends EGLAbstractProposalHandler {
 		
 		for (Iterator iter = systemLibaries.iterator(); iter.hasNext();) {
 			LibraryBinding systemLibrary = (LibraryBinding) iter.next();
-			for(Iterator iter2 = systemLibrary.getDeclaredFunctions().iterator(); iter2.hasNext();) {
+			for(Iterator iter2 = systemLibrary.getDeclaredFunctions(true).iterator(); iter2.hasNext();) {
 				IDataBinding nestedFunctionBinding = (IDataBinding) iter2.next();
 				IFunctionBinding functionBinding = (IFunctionBinding) nestedFunctionBinding.getType();
 				if(RETURNS == options && functionBinding.getReturnType() == null) {
@@ -91,7 +91,7 @@ public class EGLSystemWordProposalHandler extends EGLAbstractProposalHandler {
 					proposals.addAll(createFunctionInvocationProposals(functionBinding, UINlsStrings.bind(UINlsStrings.CAProposal_LibraryFunction, systemLibrary.getCaseSensitiveName()), EGLCompletionProposal.RELEVANCE_SYSTEM_WORD, addPrefix));
 				}
 			}
-			for(Iterator iter2 = systemLibrary.getDeclaredData().iterator(); iter2.hasNext();) {
+			for(Iterator iter2 = systemLibrary.getDeclaredData(true).iterator(); iter2.hasNext();) {
 				IDataBinding variableBinding = (IDataBinding) iter2.next();
 				if (variableBinding.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
 					proposals.add(createVariableProposal(variableBinding, EGLCompletionProposal.RELEVANCE_SYSTEM_WORD, systemLibrary.getCaseSensitiveName(), addPrefix));

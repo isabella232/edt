@@ -117,7 +117,7 @@ public class EGLFunctionPartSearchProposalHandler extends EGLPartSearchProposalH
 		List proposals = new ArrayList();
 		if(functionContainerPart != null) {
 			FunctionContainerBinding pBinding = (FunctionContainerBinding) ((Part) functionContainerPart).getName().resolveBinding();
-			for(Iterator iter = pBinding.getDeclaredFunctions().iterator(); iter.hasNext();) {
+			for(Iterator iter = pBinding.getDeclaredFunctions(true).iterator(); iter.hasNext();) {
 				IFunctionBinding fBinding = (IFunctionBinding) ((IDataBinding) iter.next()).getType();
 				
 				String name = fBinding.getName();

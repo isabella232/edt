@@ -448,7 +448,7 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 			IBinding binding = ((Part) functionContainerPart).getName().resolveBinding();
 			if(binding instanceof FunctionContainerBinding) {
 				FunctionContainerBinding pBinding = (FunctionContainerBinding) binding;
-				for(Iterator iter = pBinding.getDeclaredData().iterator(); iter.hasNext();) {
+				for(Iterator iter = pBinding.getDeclaredData(true).iterator(); iter.hasNext();) {
 					IDataBinding dBinding = (IDataBinding) iter.next();
 					if (dBinding.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
 						if(dataBindingFilter.dataBindingPasses(dBinding) && precondition(dBinding)) {

@@ -47,7 +47,7 @@ public class EGLFunctionFromLibraryUseStatementProposalHandler extends EGLAbstra
 	
 	protected List getProposals(LibraryBinding[] libraryContexts, int i) {
 		List proposals = new ArrayList();
-		List functions = libraryContexts[i].getDeclaredFunctions();
+		List functions = libraryContexts[i].getDeclaredFunctions(true);
 		for(Iterator iter = functions.iterator(); iter.hasNext();) {
 			IFunctionBinding function = (IFunctionBinding) ((IDataBinding) iter.next()).getType();
 			

@@ -160,10 +160,10 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 					return result;
 										
 				case ITypeBinding.LIBRARY_BINDING:
-					result.addAll(getFieldProposals(((LibraryBinding) qualifierTypeBinding).getDeclaredData(), addEquals, includePrivateFields, propertyBlockList));
+					result.addAll(getFieldProposals(((LibraryBinding) qualifierTypeBinding).getDeclaredData(true), addEquals, includePrivateFields, propertyBlockList));
 					if(includeFunctions) {
 						result.addAll(getFunctionProposals(
-							((LibraryBinding) qualifierTypeBinding).getDeclaredFunctions(),
+							((LibraryBinding) qualifierTypeBinding).getDeclaredFunctions(true),
 							UINlsStrings.bind(UINlsStrings.CAProposal_LibraryFunction, qualifierTypeBinding.getCaseSensitiveName()),
 							EGLCompletionProposal.RELEVANCE_LIBRARY_FUNCTION));
 					}
@@ -175,10 +175,10 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 
 				case ITypeBinding.SERVICE_BINDING:
 					if(qualifierExpression instanceof ThisExpression) {
-						result.addAll(getFieldProposals(((ServiceBinding) qualifierTypeBinding).getDeclaredData(), addEquals, includePrivateFields, propertyBlockList));
+						result.addAll(getFieldProposals(((ServiceBinding) qualifierTypeBinding).getDeclaredData(true), addEquals, includePrivateFields, propertyBlockList));
 					}
 					if(includeFunctions) {
-						result.addAll(getFunctionProposals(((ServiceBinding) qualifierTypeBinding).getDeclaredFunctions(),
+						result.addAll(getFunctionProposals(((ServiceBinding) qualifierTypeBinding).getDeclaredFunctions(true),
 								UINlsStrings.bind(UINlsStrings.CAProposal_ServiceFunction, qualifierTypeBinding.getCaseSensitiveName()),
 								EGLCompletionProposal.RELEVANCE_LIBRARY_FUNCTION));
 					}
@@ -193,9 +193,9 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 					return result;
 				
 				case ITypeBinding.HANDLER_BINDING:
-					result.addAll(getFieldProposals(((HandlerBinding) qualifierTypeBinding).getDeclaredData(), addEquals, includePrivateFields, propertyBlockList));
+					result.addAll(getFieldProposals(((HandlerBinding) qualifierTypeBinding).getDeclaredData(true), addEquals, includePrivateFields, propertyBlockList));
 					if(includeFunctions) {
-						result.addAll(getFunctionProposals(((HandlerBinding) qualifierTypeBinding).getDeclaredFunctions(),
+						result.addAll(getFunctionProposals(((HandlerBinding) qualifierTypeBinding).getDeclaredFunctions(true),
 								UINlsStrings.bind(UINlsStrings.CAProposal_HandlerFunction, qualifierTypeBinding.getCaseSensitiveName()),
 								EGLCompletionProposal.RELEVANCE_LIBRARY_FUNCTION));
 					}

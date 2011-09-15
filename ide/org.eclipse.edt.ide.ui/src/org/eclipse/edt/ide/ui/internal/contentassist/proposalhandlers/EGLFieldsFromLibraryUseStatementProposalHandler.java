@@ -46,7 +46,7 @@ public class EGLFieldsFromLibraryUseStatementProposalHandler extends EGLAbstract
 	
 	protected List getProposals(LibraryBinding[] libraryContexts, int i) {
 		List proposals = new ArrayList();
-		List fields = libraryContexts[i].getDeclaredData();
+		List fields = libraryContexts[i].getDeclaredData(true);
 		for(Iterator iter = fields.iterator(); iter.hasNext();) {
 			IDataBinding nextField = (IDataBinding) iter.next();
 			if(IDataBinding.CLASS_FIELD_BINDING == nextField.getKind()) {
