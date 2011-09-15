@@ -433,6 +433,21 @@ public class CommonUtilities {
 		return result;
 	}
 	
+	
+	public static QualifiedFunctionInvocation getFunctionInvocation(Context context, Field field, String fnName, boolean isSetter){
+		QualifiedFunctionInvocation qfi = context.getFactory().createQualifiedFunctionInvocation();
+		qfi.setId( (String)fnName );
+		qfi.setQualifier( expressionForContainer( ((Field)field).getContainer(), context ) );
+		if ( isSetter )
+		{
+			MemberName argName = context.getFactory().createMemberName();
+			argName.setId( field.getName() );
+			argName.setMember( (Member)field );
+			qfi.getArguments().add( argName );
+		}	
+		return qfi;
+	}
+	
 	private static Expression expressionForContainer( Container container, Context ctx )
 	{
 		Expression result = null;
