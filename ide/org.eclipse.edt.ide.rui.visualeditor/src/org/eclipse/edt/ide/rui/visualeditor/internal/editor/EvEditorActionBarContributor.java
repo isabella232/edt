@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.visualeditor.internal.editor;
 
-import org.eclipse.edt.ide.ui.internal.editor.EGLActionContributor;
-import org.eclipse.edt.ide.ui.internal.editor.EGLActionContributor2;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
@@ -37,7 +35,6 @@ public class EvEditorActionBarContributor extends MultiPageEditorActionBarContri
 
 	protected EvDesignActionBarContributor	_contributorDesignPage	= null;
 	protected EvPreviewActionBarContributor	_contributorPreviewPage	= null;
-	protected EGLActionContributor2			_contributorSourcePage	= null;
 
 	/**
 	 * 
@@ -48,7 +45,6 @@ public class EvEditorActionBarContributor extends MultiPageEditorActionBarContri
 		// defined in plugin.xml does not automatically get created
 		//------------------------------------------------------------------
 		_contributorDesignPage = new EvDesignActionBarContributor();
-		_contributorSourcePage = new EGLActionContributor2();
 		_contributorPreviewPage = new EvPreviewActionBarContributor();
 	}
 
@@ -62,14 +58,14 @@ public class EvEditorActionBarContributor extends MultiPageEditorActionBarContri
 	 * 
 	 */
 	public void contributeToMenu( IMenuManager menuManager ) {
-		_contributorSourcePage.contributeToMenu( menuManager );
+
 	}
 
 	/**
 	 * 
 	 */
 	public void contributeToStatusLine( IStatusLineManager statusLineManager ) {
-		_contributorSourcePage.contributeToStatusLine( statusLineManager );
+
 	}
 
 	/**
@@ -85,7 +81,7 @@ public class EvEditorActionBarContributor extends MultiPageEditorActionBarContri
 	 * Calls the sub-editors init methods.
 	 */
 	public void init( IActionBars bars, IWorkbenchPage page ) {
-		_contributorSourcePage.init( bars, page );
+
 		_contributorDesignPage.init( bars, page );
 		_contributorPreviewPage.init( bars, page );
 		
@@ -99,7 +95,7 @@ public class EvEditorActionBarContributor extends MultiPageEditorActionBarContri
 	 * The editor is the editor page that the user has turned to. 
 	 */
 	public void setActivePage( IEditorPart editor ) {
-		_contributorSourcePage.setActiveEditor( editor );
+
 		_contributorDesignPage.setActiveEditor( editor );
 		_contributorPreviewPage.setActiveEditor( editor );
 	}

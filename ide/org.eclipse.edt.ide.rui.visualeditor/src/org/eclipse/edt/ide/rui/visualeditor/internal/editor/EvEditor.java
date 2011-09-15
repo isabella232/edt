@@ -63,6 +63,7 @@ import org.eclipse.edt.ide.rui.visualeditor.internal.widget.gen.GenModelBuilder;
 import org.eclipse.edt.ide.rui.visualeditor.internal.widget.layout.WidgetLayout;
 import org.eclipse.edt.ide.rui.visualeditor.plugin.Activator;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
+import org.eclipse.edt.ide.ui.internal.editor.IEGLEditorWrapper;
 import org.eclipse.edt.ide.ui.internal.editor.IEvEditor;
 import org.eclipse.gef.ui.views.palette.PaletteView;
 import org.eclipse.jface.dialogs.Dialog;
@@ -116,7 +117,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 /**
  *
  */
-public class EvEditor extends MultiPageEditorPart implements IEGLModelChangeListener, IEditorSelectAndRevealer, IEvPropertySheetPageAdapter, IPartListener, IPropertyChangeListener, IResourceChangeListener, IResourceDeltaVisitor, ISelectionChangedListener, IWidgetDescriptorRegistryListener, SelectionListener, IEvEditor {
+public class EvEditor extends MultiPageEditorPart implements IEGLEditorWrapper, IEGLModelChangeListener, IEditorSelectAndRevealer, IEvPropertySheetPageAdapter, IPartListener, IPropertyChangeListener, IResourceChangeListener, IResourceDeltaVisitor, ISelectionChangedListener, IWidgetDescriptorRegistryListener, SelectionListener, IEvEditor {
 
 	protected boolean				_bRuiHandler				= true;
 	protected boolean				_bTranslationTestMode		= false;
@@ -2154,5 +2155,10 @@ public class EvEditor extends MultiPageEditorPart implements IEGLModelChangeList
 				return EvEditor.this.getSite().getId();
 			}
 		};
+	}
+
+	@Override
+	public EGLEditor getEGLEditor() {
+		return _pageSource;
 	} 
 }
