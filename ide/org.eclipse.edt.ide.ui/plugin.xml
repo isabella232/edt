@@ -306,7 +306,10 @@
        	 		<separator name="additions" visible="false"/>
        	 		<visibleWhen>
        				<with variable="activePartId">
-           				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+           				<or>
+            				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+            				<equals value="org.eclipse.edt.ide.rui.visualeditor.EvEditor"/>
+            			</or>
            			</with>
      			</visibleWhen>
     	 	</menu>
@@ -315,8 +318,12 @@
   			<command commandId="org.eclipse.edt.ide.ui.navigate.openOnSelection">
 				<visibleWhen>
        				<with variable="activePartId">
-       					<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+            			<or>
+            				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+            				<equals value="org.eclipse.edt.ide.rui.visualeditor.EvEditor"/>
+            			</or>
        				</with>
+       				
      			</visibleWhen>
  			</command>
  		</menuContribution>
@@ -329,7 +336,10 @@
        	 		<separator name="additions" visible="false"/>
        	 		<visibleWhen>
        				<with variable="activePartId">
-           				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+           				<or>
+            				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+            				<equals value="org.eclipse.edt.ide.rui.visualeditor.EvEditor"/>
+            			</or>
            			</with>
      			</visibleWhen>
     	 	</menu>
@@ -343,7 +353,10 @@
        	 		<separator name="additions" visible="false"/>
        	 		<visibleWhen>
        				<with variable="activePartId">
-           				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+           				<or>
+            				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+            				<equals value="org.eclipse.edt.ide.rui.visualeditor.EvEditor"/>
+            			</or>
            			</with>
      			</visibleWhen>
     	 	</menu>
@@ -352,7 +365,10 @@
        	 	<command commandId="org.eclipse.ui.edit.text.goto.line" label="%GoToLine.Name">
        	 		<visibleWhen>
        				<with variable="activePartId">
-           				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+           				<or>
+            				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+            				<equals value="org.eclipse.edt.ide.rui.visualeditor.EvEditor"/>
+            			</or>
            			</with>
      			</visibleWhen>
      		</command>
@@ -366,7 +382,10 @@
          		<command commandId="org.eclipse.edt.ide.ui.ruler.folding.collapse"/>
 				<visibleWhen>
        				<with variable="activePartId">
-       					<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+       					<or>
+            				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+            				<equals value="org.eclipse.edt.ide.rui.visualeditor.EvEditor"/>
+            			</or>
        				</with>
      			</visibleWhen>
  			</menu>
@@ -560,12 +579,12 @@
 	
 	<extension point="org.eclipse.ui.editors">
 		<editor
-			name="%pgmEditorName"
-			icon="icons/obj16/eglfile_obj.gif"
-			extensions="egl"
-			class="org.eclipse.edt.ide.ui.internal.editor.EGLEditor"
-			symbolicFontName="org.eclipse.edt.ide.ui.editors.textfont"
-			id="org.eclipse.edt.ide.ui.EGLEditor">
+        class="org.eclipse.edt.ide.ui.internal.editor.EGLEditor"
+        extensions="egl"
+        icon="icons/obj16/eglfile_obj.gif"
+        id="org.eclipse.edt.ide.ui.EGLEditor"
+        name="%pgmEditorName"
+        symbolicFontName="org.eclipse.edt.ide.ui.editors.textfont">
      <contentTypeBinding
            contentTypeId="org.eclipse.edt.ide.ui.commonfile">
      </contentTypeBinding>

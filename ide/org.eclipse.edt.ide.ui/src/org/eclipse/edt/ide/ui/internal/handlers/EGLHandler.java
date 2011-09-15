@@ -28,6 +28,7 @@ import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
+import org.eclipse.edt.ide.ui.internal.editor.IEGLEditorWrapper;
 import org.eclipse.edt.ide.ui.internal.util.EditorUtility;
 import org.eclipse.jface.text.ITextOperationTarget;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -57,6 +58,11 @@ public abstract class EGLHandler extends AbstractHandler implements IHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		// Initialize editor 
 		IEditorPart editor = HandlerUtil.getActiveEditor( event );
+		
+		if(editor instanceof IEGLEditorWrapper){
+			editor = ((IEGLEditorWrapper)editor).getEGLEditor();
+		}
+		
 		if( editor instanceof EGLEditor ) {
 			fEditor = (EGLEditor)editor;
 			if(editor != null)
@@ -69,7 +75,8 @@ public abstract class EGLHandler extends AbstractHandler implements IHandler {
 					fSelection = new StructuredSelection( element );
 				}			
 		    }			
-		}			
+		}
+		
 		if( fSelection != null )
 		{
 			run();

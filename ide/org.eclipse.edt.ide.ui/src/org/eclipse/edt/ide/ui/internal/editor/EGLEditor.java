@@ -362,7 +362,7 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 
 		// adds PropertyChangeListener
 		setPreferenceStore(createCombinedPreferenceStore());
-
+		
 		setSourceViewerConfiguration(new EGLSourceViewerConfiguration(tools, this));
 		
 		// Instantiate this factory here and cache the value since it is
