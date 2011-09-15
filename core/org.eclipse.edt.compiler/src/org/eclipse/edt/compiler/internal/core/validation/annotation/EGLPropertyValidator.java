@@ -43,7 +43,7 @@ public class EGLPropertyValidator implements IAnnotationValidationRule {
 			return false;
 		}
 				
-		String[] ruiPkg = InternUtil.intern(new String[] {"egl", "ui", "rui"});
+		String[] ruiPkg = InternUtil.intern(new String[] {"eglx", "ui", "rui"});
 				
 		if (InternUtil.intern(IEGLConstants.PROPERTY_RUIWIDGET) == part.getName() && part.getPackageName() == ruiPkg) {
 			return true;
@@ -75,10 +75,10 @@ public class EGLPropertyValidator implements IAnnotationValidationRule {
 		IAnnotationBinding ann = (IAnnotationBinding)allAnnotations.get(InternUtil.intern(IEGLConstants.PROPERTY_EGLPROPERTY));
 		if (ann != null && ann.getDeclaringPart() != null) {
 			
-			if (!supportsEglProperty(ann.getDeclaringPart())) {
-				problemRequestor.acceptProblem(errorNode, IProblemRequestor.ANNOTATION_NOT_APPLICABLE, IMarker.SEVERITY_ERROR, new String[] {IEGLConstants.PROPERTY_EGLPROPERTY});				
-				return;
-			}
+//			if (!supportsEglProperty(ann.getDeclaringPart())) {
+//				problemRequestor.acceptProblem(errorNode, IProblemRequestor.ANNOTATION_NOT_APPLICABLE, IMarker.SEVERITY_ERROR, new String[] {IEGLConstants.PROPERTY_EGLPROPERTY});				
+//				return;
+//			}
 			
 		}
 		
