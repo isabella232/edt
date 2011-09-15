@@ -50,6 +50,7 @@ public class ReorganizeCode extends AbstractVisitor {
 	EglContext ctx;
 	Container currentStatementContainer;
 	boolean processedStatement = false;
+	boolean inLocalVariableDeclaration = false;
 
 	@SuppressWarnings("unchecked")
 	public List<StatementBlock> reorgCode(Statement statement, EglContext ctx) {
@@ -84,9 +85,15 @@ public class ReorganizeCode extends AbstractVisitor {
 	public boolean visit(Statement object) {
 		// for statements that contain other statements, we only want to process this statement. the contained ones will
 		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
-		if (processedStatement)
+		// if these are the statements contained in a localvariable declaration however, we want to process them all
+		if (processedStatement && !inLocalVariableDeclaration)
 			return false;
 		processedStatement = true;
+		return true;
+	}
+
+	public boolean visit(LocalVariableDeclarationStatement object) {
+		inLocalVariableDeclaration = true;
 		return true;
 	}
 
