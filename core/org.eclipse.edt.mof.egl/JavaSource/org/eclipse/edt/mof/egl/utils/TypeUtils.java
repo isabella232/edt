@@ -737,7 +737,7 @@ public class TypeUtils implements MofConversion {
 			// Look up the super type chain of source
 			if (!src.getSuperTypes().isEmpty()) {
 				StructPart superType = src.getSuperTypes().get(0);
-				op = getBestFitWidenConversionOp(superType, target);
+				op = getBestFitWidenConversionOpSearchSource(superType, target);
 			}
 		}
 		return op;
@@ -749,7 +749,7 @@ public class TypeUtils implements MofConversion {
 			// Look up the super type chain of target
 			if (!target.getSuperTypes().isEmpty()) {
 				StructPart superType = target.getSuperTypes().get(0);
-				op = getBestFitWidenConversionOp(src, superType);
+				op = getBestFitWidenConversionOpSearchTarget(src, superType);
 			}
 		}
 		return op;
@@ -770,7 +770,7 @@ public class TypeUtils implements MofConversion {
 			// Look up the super type chain of source
 			if (!src.getSuperTypes().isEmpty()) {
 				StructPart superType = src.getSuperTypes().get(0);
-				op = getBestFitNarrowConversionOp(superType, target);
+				op = getBestFitNarrowConversionOpSearchSource(superType, target);
 			}
 		}
 		return op;
@@ -782,7 +782,7 @@ public class TypeUtils implements MofConversion {
 			// Look up the super type chain of target
 			if (!target.getSuperTypes().isEmpty()) {
 				StructPart superType = target.getSuperTypes().get(0);
-				op = getBestFitNarrowConversionOp(src, superType);
+				op = getBestFitNarrowConversionOpSearchTarget(src, superType);
 			}			
 		}
 		return op;
