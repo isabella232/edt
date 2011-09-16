@@ -16,8 +16,10 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class DeclarationExpressionTemplate extends JavaTemplate {
@@ -43,13 +45,33 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 					// as this is an expression that also creates a new line with the above println method, it throws off the
 					// smap ending line number by 1. We need to issue a call to correct this
 					ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
+					// we need to run the temporary variables separately, otherwise we might not get wraps
+					ctx.invoke(genInitializeStatement, field, ctx, out, true);
 				} else {
 					// as this is a value type that doesn't map to a primitive, we are going to end up doing an ezeCopyTo, so
 					// simply assign the result to the variable
 					out.print(" = ");
+					// we need to run the temporary variables separately, otherwise we might not get wraps
+					Expression rhs = ((AssignmentStatement) field.getInitializerStatements().getStatements().get(0)).getAssignment().getRHS();
+					// avoid initialization when the initializer is going to create a new value
+					if (rhs instanceof NewExpression && rhs.getType().equals(field.getType())) {
+						ctx.invoke(genExpression, rhs, ctx, out);
+						out.println(";");
+						// as this is an expression that also creates a new line with the above println method, it throws off
+						// the smap ending line number by 1. We need to issue a call to correct this
+						ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
+					} else {
+						out.print("null");
+						out.println(";");
+						// as this is an expression that also creates a new line with the above println method, it throws off
+						// the smap ending line number by 1. We need to issue a call to correct this
+						ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
+						ctx.invoke(genName, field, ctx, out);
+						out.print(" = ");
+						// we need to run the temporary variables separately, otherwise we might not get wraps
+						ctx.invoke(genInitializeStatement, field, ctx, out, true);
+					}
 				}
-				// we need to run the temporary variables separately, otherwise we might not get wraps
-				ctx.invoke(genInitializeStatement, field, ctx, out, true);
 			} else {
 				out.print(" = ");
 				// this logic will not combine, because it isn't safe to
