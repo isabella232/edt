@@ -337,10 +337,6 @@ public class EGLSQLRetrieveUtility {
 			sqlStructureItem.setPrimitiveType(IEGLConstants.KEYWORD_INT);
 			break;
 		}
-		case Types.DECIMAL: /*{
-			handleDecimalType(type, sqlStructureItem, itemName);
-			break;
-		}*/
 		case Types.FLOAT: // Treated as Double
 		case Types.DOUBLE: {
 			sqlStructureItem.setPrimitiveType(IEGLConstants.KEYWORD_FLOAT);
@@ -351,6 +347,10 @@ public class EGLSQLRetrieveUtility {
 			break;
 		}
 		
+		case Types.DECIMAL: {
+			handleDecimalType(type, sqlStructureItem, itemName);
+			break;
+		}
 		case Types.BINARY:
 		case Types.VARBINARY: {
 			handleBinaryType(type, sqlStructureItem, itemName);
