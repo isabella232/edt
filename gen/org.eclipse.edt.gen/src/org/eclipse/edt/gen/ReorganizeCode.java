@@ -93,21 +93,11 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	public boolean visit(LocalVariableDeclarationStatement object) {
-		// for statements that contain other statements, we only want to process this statement. the contained ones will
-		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
-		// if these are the statements contained in a localvariable declaration however, we want to process them all
-		if (processedStatement && !inLocalVariableDeclaration)
-			return false;
 		inLocalVariableDeclaration = true;
 		return true;
 	}
 
 	public boolean visit(Assignment object) {
-		// for statements that contain other statements, we only want to process this statement. the contained ones will
-		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
-		// if these are the statements contained in a localvariable declaration however, we want to process them all
-		if (processedStatement && !inLocalVariableDeclaration)
-			return false;
 		// check to see if this is a compound assignment (something like += or *=, etc). if it is, then call out to the type
 		// to see if it wants it broken apart
 		if (!object.getOperator().equals("=") && object.getOperator().indexOf("=") >= 0) {
@@ -126,11 +116,6 @@ public class ReorganizeCode extends AbstractVisitor {
 
 	@SuppressWarnings("unchecked")
 	public boolean visit(ReturnStatement object) {
-		// for statements that contain other statements, we only want to process this statement. the contained ones will
-		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
-		// if these are the statements contained in a localvariable declaration however, we want to process them all
-		if (processedStatement && !inLocalVariableDeclaration)
-			return false;
 		ctx.putAttribute(object.getContainer(), Constants.SubKey_functionHasReturnStatement, new Boolean(true));
 		// There are cases where someone uses a return statement to break out of a function, even though the function does
 		// not return anything
@@ -209,12 +194,7 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	public boolean visit(CallStatement object) {
-		// for statements that contain other statements, we only want to process this statement. the contained ones will
-		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
-		// if these are the statements contained in a localvariable declaration however, we want to process them all
-		if (processedStatement && !inLocalVariableDeclaration)
-			return false;
-		// if the statement has a function invocation, we need to make a temporary variable
+		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		if (object.getInvocationTarget() instanceof MemberAccess && ((MemberAccess) object.getInvocationTarget()).getMember() instanceof Function) {
 			Function serviceInterfaceFunction = (Function) ((MemberAccess) object.getInvocationTarget()).getMember();
 			FunctionInvocation invocation = factory.createFunctionInvocation();
@@ -228,81 +208,60 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	public boolean visit(CaseStatement object) {
-		// for statements that contain other statements, we only want to process this statement. the contained ones will
-		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
-		// if these are the statements contained in a localvariable declaration however, we want to process them all
-		if (processedStatement && !inLocalVariableDeclaration)
-			return false;
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
 			ctx.putAttribute(object, Constants.SubKey_statementNeedsLabel, new Boolean(true));
-		return true;
+		// for statements that contain other statements, we only want to process this statement. the contained ones will
+		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
+		return false;
 	}
 
 	public boolean visit(ForStatement object) {
-		// for statements that contain other statements, we only want to process this statement. the contained ones will
-		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
-		// if these are the statements contained in a localvariable declaration however, we want to process them all
-		if (processedStatement && !inLocalVariableDeclaration)
-			return false;
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
 			ctx.putAttribute(object, Constants.SubKey_statementNeedsLabel, new Boolean(true));
-		return true;
+		// for statements that contain other statements, we only want to process this statement. the contained ones will
+		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
+		return false;
 	}
 
 	public boolean visit(ForEachStatement object) {
-		// for statements that contain other statements, we only want to process this statement. the contained ones will
-		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
-		// if these are the statements contained in a localvariable declaration however, we want to process them all
-		if (processedStatement && !inLocalVariableDeclaration)
-			return false;
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
 			ctx.putAttribute(object, Constants.SubKey_statementNeedsLabel, new Boolean(true));
-		return true;
+		// for statements that contain other statements, we only want to process this statement. the contained ones will
+		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
+		return false;
 	}
 
 	public boolean visit(OpenUIStatement object) {
-		// for statements that contain other statements, we only want to process this statement. the contained ones will
-		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
-		// if these are the statements contained in a localvariable declaration however, we want to process them all
-		if (processedStatement && !inLocalVariableDeclaration)
-			return false;
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
 			ctx.putAttribute(object, Constants.SubKey_statementNeedsLabel, new Boolean(true));
-		return true;
+		// for statements that contain other statements, we only want to process this statement. the contained ones will
+		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
+		return false;
 	}
 
 	public boolean visit(WhileStatement object) {
-		// for statements that contain other statements, we only want to process this statement. the contained ones will
-		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
-		// if these are the statements contained in a localvariable declaration however, we want to process them all
-		if (processedStatement && !inLocalVariableDeclaration)
-			return false;
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
 			ctx.putAttribute(object, Constants.SubKey_statementNeedsLabel, new Boolean(true));
-		return true;
+		// for statements that contain other statements, we only want to process this statement. the contained ones will
+		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
+		return false;
 	}
 
 	public boolean visit(IfStatement object) {
-		// for statements that contain other statements, we only want to process this statement. the contained ones will
-		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
-		// if these are the statements contained in a localvariable declaration however, we want to process them all
-		if (processedStatement && !inLocalVariableDeclaration)
-			return false;
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
 			ctx.putAttribute(object, Constants.SubKey_statementNeedsLabel, new Boolean(true));
-
 		// If the else branch isn't a statement block, put it inside one. This lets generator extensions insert extra
 		// code, as well as handle when there are side effects in a nested IF condition.
 		if (object.getFalseBranch() != null && !(object.getFalseBranch() instanceof StatementBlock)) {
@@ -313,7 +272,9 @@ public class ReorganizeCode extends AbstractVisitor {
 			// now replace the false branch with this statement block
 			object.setFalseBranch(block);
 		}
-		return true;
+		// for statements that contain other statements, we only want to process this statement. the contained ones will
+		// get processed later. this keeps the temporary variable logic together at the point of the statement execution
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
