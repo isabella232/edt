@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.ide.rui.wizard.pages;
+package org.eclipse.edt.ide.rui.wizards.pages;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -55,6 +55,7 @@ import org.eclipse.swt.widgets.TableColumn;
 
 public class ProjectWizardRUILibraryPage extends ProjectWizardPage {	
 	
+	private static final String RUI_WIDGET_LIBRARY_ID = "org.eclipse.edt.rui.widgets_0.7.0";
 	/** The table presenting the templates. */
 	private CheckboxTableViewer fTableViewer;
 	private Label fDetailLabel;
@@ -192,7 +193,12 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 		});
 
 		fTableViewer.addCheckStateListener(new ICheckStateListener() {
-			public void checkStateChanged(CheckStateChangedEvent event) {				
+			public void checkStateChanged(CheckStateChangedEvent event) {
+				LibraryNode newElement = (LibraryNode) event.getElement();
+				if(!(event.getChecked()) && newElement.getId().equals(RUI_WIDGET_LIBRARY_ID)){
+					fTableViewer.setChecked(newElement, true);
+					return;
+				}
 				setSelectedWidgetLibrary((LibraryNode) event.getElement());
 			}			
 

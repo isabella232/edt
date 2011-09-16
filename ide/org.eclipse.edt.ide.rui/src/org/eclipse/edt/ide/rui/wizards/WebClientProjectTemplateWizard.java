@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.wizards;
 
-import org.eclipse.edt.ide.rui.wizard.pages.ProjectWizardRUILibraryPage;
+import org.eclipse.edt.ide.rui.wizards.pages.ProjectWizardRUILibraryPage;
 import org.eclipse.edt.ide.rui.internal.wizards.NewWizardMessages;
 import org.eclipse.edt.ide.ui.project.templates.ProjectTemplateWizard;
 

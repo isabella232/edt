@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package org.eclipse.edt.ide.rui.wizard.pages;
+package org.eclipse.edt.ide.rui.wizards.pages;
 
 import java.util.ArrayList;
 import java.util.List;
