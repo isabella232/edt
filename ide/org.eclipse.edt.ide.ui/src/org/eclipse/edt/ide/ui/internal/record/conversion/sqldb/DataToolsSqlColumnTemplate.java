@@ -40,6 +40,15 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 			builder.append(SQLConstants.LPAREN);
 			builder.append(item.getLength());
 			builder.append(SQLConstants.RPAREN);
+		} else if (item.getPrimitiveType().equals(IEGLConstants.KEYWORD_DECIMAL)) {
+			builder.append(SQLConstants.LPAREN);
+			builder.append(item.getLength());
+			builder.append(",");
+			builder.append(item.getDecimals());
+			builder.append(SQLConstants.RPAREN);
+		}
+		if (item.isNullable()) {
+			builder.append("?");
 		}
 		
 		boolean needsExtraAnnotations = column.isPartOfPrimaryKey() || !item.getColumnName().equals(item.getName());
