@@ -141,23 +141,31 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 		MAX_DIGIT_ORIENTED_BI_VALUES[32].negate(), MAX_DIGIT_ORIENTED_BI_VALUES[33].negate() };
 
 	private int maxPrecision;
+	private int maxDecimals;
 
 	public int getPrecision() {
 		return maxPrecision;
 	}
 
 	public int getDecimals() {
-		return object.scale();
+		return maxDecimals;
 	}
 
 	private EDecimal(BigDecimal value) {
 		super(value);
 		maxPrecision = value.precision();
+		maxDecimals = value.scale();
 	}
 
 	private EDecimal(BigDecimal value, int precision) {
 		super(value);
 		maxPrecision = precision;
+	}
+
+	private EDecimal(BigDecimal value, int precision, int decimals) {
+		super(value);
+		maxPrecision = precision;
+		maxDecimals = decimals;
 	}
 
 	public String toString() {
@@ -169,7 +177,7 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 	}
 
 	public static EDecimal ezeBox(BigDecimal value, int precision, int decimals) {
-		return new EDecimal(value, precision);
+		return new EDecimal(value, precision, decimals);
 	}
 
 	/**
