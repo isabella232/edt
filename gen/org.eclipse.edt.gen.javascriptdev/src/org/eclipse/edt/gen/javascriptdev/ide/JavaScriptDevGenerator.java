@@ -30,11 +30,6 @@ public class JavaScriptDevGenerator extends JavaScriptGenerator {
 	}
 
 	@Override
-	protected String getOutputDirectory(IFile eglFile) {
-		return Activator.OUTPUT_DIRECTORY_INTERNAL_PATH;
-	}
-	
-	@Override
 	public String getOutputDirectory(IResource resource) {
 		return Activator.OUTPUT_DIRECTORY_INTERNAL_PATH;
 	}
