@@ -40,7 +40,7 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
 		// out.print(Constants.JSRT_DTTMLIB_PKG + "currentTimeStamp(");
 		out.print("egl.egl.lang.ETimestamp.currentTimeStamp(");
-		ctx.invoke(genTypeDependentOptions, type, ctx, out);
+		generateOptions((TimestampType)type, ctx, out, false);
 		out.print(")");
 	}
 
@@ -93,7 +93,7 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 		// for timestamp type, always use the runtime
 		out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
 		out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
-		out.print("(ezeProgram, ");
+		out.print("(");
 		ctx.invoke(genExpression, arg.getLHS(), ctx, out);
 		out.print(", ");
 		ctx.invoke(genExpression, arg.getRHS(), ctx, out);
@@ -102,7 +102,7 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 
 	// this method gets invoked when there is a specific timestamp needed
 	public void genSignature(TimestampType type, Context ctx, TabbedWriter out) {
-		String signature = "J'" + type.getPattern() + "';";
+		String signature = "J'" + (type.getPattern() == null || type.getPattern().equals("null") ? "" : type.getPattern()) + "';";
 		out.print(signature);
 	}
 
@@ -113,6 +113,12 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genTypeDependentOptions(TimestampType type, Context ctx, TabbedWriter out) {
+		generateOptions(type, ctx, out, true);
+	}
+	
+	protected void generateOptions(TimestampType type, Context ctx, TabbedWriter out, boolean needSeparator) {
+		if (needSeparator)
+			out.print(", ");
 		String pattern = "yyyyMMddhhmmss";
 		if (type.getPattern() != null && !type.getPattern().equalsIgnoreCase("null"))
 			pattern = type.getPattern();
