@@ -31,7 +31,7 @@ public class DeploymentHTMLGenerator extends ValidHTMLGenerator {
 	
 	@Override
 	public void generate(Part part) throws GenerationException {
-		this.generate(part, JavaScriptTemplate.genPart);
+		this.generate(part, JavaScriptTemplate.genDeploymentHTML);
 	}
 
 }

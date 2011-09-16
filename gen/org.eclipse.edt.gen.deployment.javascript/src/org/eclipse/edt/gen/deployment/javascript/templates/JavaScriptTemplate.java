@@ -27,7 +27,7 @@ import org.eclipse.edt.mof.codegen.api.AbstractTemplate;
 public abstract class JavaScriptTemplate extends AbstractTemplate {
 	
 	public static final String genOutputFileName = "genOutputFileName";
-	public static final String genPart = "genPart";
+	public static final String genDeploymentHTML = "genDeploymentHTML";
 	public static final String genDependentParts = "genDependentParts";
 	public static final String genDependentPart = "genDependentPart";
 	public static final String genErrorHTML = "genErrorHTML";
