@@ -81,14 +81,14 @@ public class EGLSearchPage extends DialogPage implements ISearchPage, IEGLSearch
 	private Button fCaseSensitive;
 	
 	private Button[] fSearchFor;
-	private int[] fSearchForValues = { PROGRAM_PART, ALL_FUNCTIONS, LIBRARY_PART, TABLE_PART, RECORD_PART, ITEM_PART, HANDLER_PART, SERVICE_PART, INTERFACE_PART, DELEGATE_PART, EXTERNALTYPE_PART, ANNOTATION_PART, STEREOTYPE_PART, ALL_ELEMENTS };		
+	private int[] fSearchForValues = { PROGRAM_PART, ALL_FUNCTIONS, LIBRARY_PART, /**TABLE_PART,*/ RECORD_PART, /**ITEM_PART,*/ HANDLER_PART, SERVICE_PART, INTERFACE_PART, DELEGATE_PART, EXTERNALTYPE_PART, ANNOTATION_PART, STEREOTYPE_PART, ALL_ELEMENTS };		
 	private String[] fSearchForText= {
 		EGLSearchMessages.EGLSearchPageSearchForProgram,
 		EGLSearchMessages.EGLSearchPageSearchForFunction,
 		EGLSearchMessages.EGLSearchPageSearchForLibrary,
-		EGLSearchMessages.EGLSearchPageSearchForDatatable,
+		//EGLSearchMessages.EGLSearchPageSearchForDatatable,
 		EGLSearchMessages.EGLSearchPageSearchForRecord,
-		EGLSearchMessages.EGLSearchPageSearchForDataitem,		
+		//EGLSearchMessages.EGLSearchPageSearchForDataitem,		
 		EGLSearchMessages.EGLSearchPageSearchForReporthandler,
 		EGLSearchMessages.EGLSearchPageSearchForService,
 		EGLSearchMessages.EGLSearchPageSearchForInterface,

@@ -531,6 +531,17 @@
             description="%EGLSearchActionSet.description"
             visible="false"
             id="org.eclipse.edt.ide.ui.SearchActionSet">
+         <action
+               label="%openEGLSearchPageAction.label"
+               icon="icons/ctool16/esrch_nav.gif"
+               class="org.eclipse.edt.ide.ui.internal.search.OpenEGLSearchPageAction"
+               menubarPath="org.eclipse.search.menu/dialogGroup"
+               id="org.eclipse.edt.ide.core.search.OpenEGLSearchPage">
+         </action>      
+         <menu
+               label="%searchMenu.label"
+               id="org.eclipse.search.menu">
+         </menu>
       	</actionSet>         
 	</extension>
 	

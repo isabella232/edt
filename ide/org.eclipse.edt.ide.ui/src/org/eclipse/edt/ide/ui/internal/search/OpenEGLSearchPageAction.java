@@ -14,55 +14,36 @@ package org.eclipse.edt.ide.ui.internal.search;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.search.ui.SearchUI;
+import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
-public class OpenEGLSearchPageAction
-	implements IWorkbenchWindowActionDelegate {
-
-	private static final String EGL_SEARCH_PAGE_ID= "org.eclipse.edt.ide.ui.search.EGLSearchPage"; //$NON-NLS-1$
+public class OpenEGLSearchPageAction implements IWorkbenchWindowActionDelegate {
 	private IWorkbenchWindow fWindow;
 			
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchWindowActionDelegate#dispose()
-	 */
+	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
 		fWindow = null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchWindowActionDelegate#init(org.eclipse.ui.IWorkbenchWindow)
-	 */
+	@Override
 	public void init(IWorkbenchWindow window) {
-		// TODO Auto-generated method stub
 		fWindow = window;
-
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
-	 */
+	@Override
 	public void run(IAction action) {
-		// TODO Auto-generated method stub
-		if(fWindow == null || fWindow.getActivePage() == null)
-		{
+		if(fWindow == null || fWindow.getActivePage() == null) {
 			beep();
 			EDTUIPlugin.logErrorMessage("Could not open the search dialog - for some reason the window handle was null"); //$NON-NLS-1$
 			return;
 		}
-		SearchUI.openSearchDialog(fWindow, EGL_SEARCH_PAGE_ID);
-
+		NewSearchUI.openSearchDialog(fWindow, EGLSearchPage.EXTENSION_POINT_ID);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
-	 */
+	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
-
 	}
 
 	protected void beep() {
