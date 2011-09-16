@@ -15,10 +15,13 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.Logger;
+import org.eclipse.edt.ide.core.internal.model.EGLProject;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
@@ -37,7 +40,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -56,13 +58,10 @@ public class GenerationSettingsComposite extends Composite {
 	protected final String preferenceID;
 	protected final IStatusChangeListener statusListener;
 	
-	protected Button radioOutside;
-	protected Button radioInside;
 	protected Button browseInside;
-	protected Button browseOutside;
 	protected Text genInsideDirectory;
-	protected Text genOutsideDirectory;
 	protected Text genArguments;
+	protected String originalGenDir;
 	
 	
 	private StatusInfo latestStatus = new StatusInfo();
@@ -142,10 +141,6 @@ public class GenerationSettingsComposite extends Composite {
 			}
 		}
 		else {
-			radioInside = new Button(group, SWT.RADIO);
-			radioInside.setText(UINlsStrings.genInsideWorkbench);
-			data = new GridData(GridData.FILL_HORIZONTAL);
-			radioInside.setLayoutData(data);
 			
 			Composite cIn = new Composite(group, SWT.NULL);
 			layout = new GridLayout();
@@ -153,7 +148,7 @@ public class GenerationSettingsComposite extends Composite {
 			cIn.setLayout(layout);
 			cIn.setFont(group.getFont());
 			data = new GridData(GridData.FILL_HORIZONTAL);
-			data.horizontalIndent = 15;
+			data.horizontalIndent = 0;
 			cIn.setLayoutData(data);
 			
 			genInsideDirectory = new Text(cIn, SWT.BORDER);
@@ -162,27 +157,6 @@ public class GenerationSettingsComposite extends Composite {
 			
 			browseInside = new Button(cIn, SWT.PUSH);
 			browseInside.setText("..."); //$NON-NLS-1$
-			
-			radioOutside = new Button(group, SWT.RADIO);
-			radioOutside.setText(UINlsStrings.genOutsideWorkbench);
-			data = new GridData(GridData.FILL_HORIZONTAL);
-			radioOutside.setLayoutData(data);
-			
-			Composite cOut = new Composite(group, SWT.NULL);
-			layout = new GridLayout();
-			layout.numColumns = 2;
-			cOut.setLayout(layout);
-			cOut.setFont(group.getFont());
-			data = new GridData(GridData.FILL_HORIZONTAL);
-			data.horizontalIndent = 15;
-			cOut.setLayoutData(data);
-			
-			genOutsideDirectory = new Text(cOut, SWT.BORDER);
-			data = new GridData(GridData.FILL_HORIZONTAL);
-			genOutsideDirectory.setLayoutData(data);
-			
-			browseOutside = new Button(cOut, SWT.PUSH);
-			browseOutside.setText("..."); //$NON-NLS-1$
 			
 			browseInside.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
@@ -221,35 +195,9 @@ public class GenerationSettingsComposite extends Composite {
 				}
 			});
 			
-			browseOutside.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					DirectoryDialog dialog = new DirectoryDialog(browseInside.getShell());
-					dialog.setText(UINlsStrings.genDirSelectionTitle);
-					dialog.setMessage(UINlsStrings.genDirSelectionMsg);
-					dialog.setFilterPath(genOutsideDirectory.getText());
-					String result = dialog.open();
-					if (result != null) {
-						genOutsideDirectory.setText(result);
-					}
-				}
-			});
-			
-			radioInside.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					enableDisableControls();
-				}
-			});
-			
-			radioOutside.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					enableDisableControls();
-				}
-			});
-			
 			if (statusListener != null) {
 				genInsideDirectory.addModifyListener(new ModifyListener() {
 					public void modifyText(ModifyEvent e) {
-						if (radioInside.getSelection()) {
 							String text = genInsideDirectory.getText().trim();
 							if (text.length() == 0) {
 								latestStatus.setError(UINlsStrings.genSettingsValidationBlank);
@@ -271,27 +219,8 @@ public class GenerationSettingsComposite extends Composite {
 								}
 							}
 						}
-					}
-				});
-				
-				genOutsideDirectory.addModifyListener(new ModifyListener() {
-					public void modifyText(ModifyEvent e) {
-						if (radioOutside.getSelection()) {
-							if (genOutsideDirectory.getText().trim().length() == 0) {
-								latestStatus.setError(UINlsStrings.genSettingsValidationBlank);
-								statusListener.statusChanged(latestStatus);
-							}
-							else if (latestStatus != null && !latestStatus.isOK()){
-								latestStatus.setOK();
-								statusListener.statusChanged(latestStatus);
-							}
-						}
-					}
 				});
 			}
-			
-			
-			
 			
 			Group argGroup = new Group(this, SWT.NONE);
 			argGroup.setText(UINlsStrings.genArguments);
@@ -307,58 +236,30 @@ public class GenerationSettingsComposite extends Composite {
 
 			genArguments = new Text(argGroup, SWT.BORDER);
 			data = new GridData(GridData.FILL_HORIZONTAL);
+			data.horizontalIndent = 5;
 			genArguments.setLayoutData(data);
-
-			
 		}
 	}
 	
 	private void init() {
+		
 		if (resource == null) {
 			genInsideDirectory.setText(prefStore.getString(preferenceID));
 		}
 		else {
 			String genDir = ProjectSettingsUtility.getGenerationDirectory(resource, prefStore, projectPrefs, dirPropertyID, preferenceID);
-			if (new Path(genDir).isAbsolute()) {
-				radioOutside.setSelection(true);
-				radioInside.setSelection(false);
-				genInsideDirectory.setText(""); //$NON-NLS-1$
-				genOutsideDirectory.setText(genDir);
+			genDir = EclipseUtilities.convertFromInternalPath(genDir);
+			if (genDir.length() == 0) {
+				genDir = resource.getProject().getFullPath().toString();
 			}
-			else {
-				radioInside.setSelection(true);
-				radioOutside.setSelection(false);
-				
-				genDir = EclipseUtilities.convertFromInternalPath(genDir);
-				if (genDir.length() == 0) {
-					genDir = resource.getProject().getFullPath().toString();
-				}
-				genOutsideDirectory.setText(""); //$NON-NLS-1$
-				genInsideDirectory.setText(genDir);
-			}
+			genInsideDirectory.setText(genDir);
 
 			String genArgument = ProjectSettingsUtility.getGenerationArgument(resource, prefStore, projectPrefs, argPropertyID);
 			genArguments.setText(genArgument);
-			
-			enableDisableControls();
 		}
+		this.originalGenDir = genInsideDirectory.getText();
 	}
 	
-	private void enableDisableControls() {
-		if (radioInside.getSelection()) {
-			genOutsideDirectory.setEnabled(false);
-			browseOutside.setEnabled(false);
-			genInsideDirectory.setEnabled(true);
-			browseInside.setEnabled(true);
-		}
-		else {
-			genInsideDirectory.setEnabled(false);
-			browseInside.setEnabled(false);
-			genOutsideDirectory.setEnabled(true);
-			browseOutside.setEnabled(true);
-		}
-	}
-
 	public void performDefaults() {
 		latestStatus.setOK();
 		statusListener.statusChanged(latestStatus);
@@ -373,21 +274,20 @@ public class GenerationSettingsComposite extends Composite {
 			try {
 				String value;
 				
-				if (radioOutside.getSelection()) {
-					value = genOutsideDirectory.getText();
+				value = genInsideDirectory.getText();
+				if (value.equals(resource.getProject().getFullPath().toString())) {
+					// just use an indicator for 'this project'
+					value = ""; //$NON-NLS-1$
 				}
-				else {
-					// Save using internal format.
-					value = genInsideDirectory.getText();
-					if (value.equals(resource.getProject().getFullPath().toString())) {
-						// just use an indicator for 'this project'
-						value = ""; //$NON-NLS-1$
-					}
-					value = EclipseUtilities.convertToInternalPath(value);
-				}
-				
-				ProjectSettingsUtility.setGenerationDirectory(resource, value, projectPrefs, dirPropertyID);
 
+				//rebuild project if generation directory is changed
+				if(!value.equalsIgnoreCase(originalGenDir)){
+					ProjectSettingsUtility.setBuildFlag(resource);
+				}
+
+				value = EclipseUtilities.convertToInternalPath(value);
+				ProjectSettingsUtility.setGenerationDirectory(resource, value, projectPrefs, dirPropertyID);
+				
 				String argValue = genArguments.getText().trim();
 				ProjectSettingsUtility.setGenerationArgument(resource, argValue, projectPrefs, argPropertyID);
 
@@ -447,8 +347,5 @@ public class GenerationSettingsComposite extends Composite {
 
 	public void performAddition(){
 		genInsideDirectory.setText(genInsideDirectory.getText());
-		if(resource!=null){
-			genOutsideDirectory.setText(genOutsideDirectory.getText());
-		}
 	}
 }

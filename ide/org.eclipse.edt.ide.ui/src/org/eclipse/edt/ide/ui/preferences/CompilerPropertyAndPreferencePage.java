@@ -42,6 +42,7 @@ import org.eclipse.jface.dialogs.ControlEnableState;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -901,6 +902,16 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 				if ( resource != null && generatorOverrideCheckbox.getSelection() ) {
 					removeTabPropertiesFromProjectResources();
 				}
+				
+				//force a rebuild if workspace setting is changed
+				if(resource == null){
+					IPreferenceStore store = EDTCoreIDEPlugin.getPlugin().getPreferenceStore();
+					int buildFlag = store.getInt(EDTCorePreferenceConstants.BUILD_FLAG);
+					buildFlag ++;
+					store.setValue(EDTCorePreferenceConstants.BUILD_FLAG, buildFlag);
+
+				}
+				
 			}
 		};
 		
