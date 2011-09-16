@@ -11,16 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.egl.lang;
 
-import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.AsExpression;
-import org.eclipse.edt.mof.egl.Type;
 
 public class AnyTypeTemplate extends JavaTemplate {
 
-	public void genConversionOperation(Type type, Context ctx, TabbedWriter out, AsExpression arg) {
-		// we don't do anything for an any conversion, as all types that extend any should have already created their own
-		ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
-	}
 }
