@@ -559,8 +559,8 @@ public class TypeUtils implements MofConversion {
 	 */
 	private static int getLeastWideType(StructPart type1, StructPart type2) {
 		if (type1.equals(type2)) return 0;
-		if (getWidenConversionOp(type1, type2) != null) return -1;
-		if (getWidenConversionOp(type2, type1) != null) return 1;
+		if (getBestFitWidenConversionOp(type1, type2) != null) return -1;
+		if (getBestFitWidenConversionOp(type2, type1) != null) return 1;
 		return 0;  // neither is least wide
 	}
 	
@@ -583,7 +583,7 @@ public class TypeUtils implements MofConversion {
 		}
 		
 		if (srcType instanceof StructPart && type instanceof StructPart) {
-			return getNarrowConversionOp((StructPart) srcType, (StructPart)type) != null;
+			return getBestFitNarrowConversionOp((StructPart) srcType, (StructPart)type) != null;
 		}
 		return false;
 	}
@@ -602,7 +602,7 @@ public class TypeUtils implements MofConversion {
 		if (srcType instanceof StructPart) {
 			for (Classifier type : types) {
 				if (type instanceof StructPart) {
-					if (type != null && getWidenConversionOp((StructPart)srcType, (StructPart)type) != null)
+					if (type != null && getBestFitWidenConversionOp((StructPart)srcType, (StructPart)type) != null)
 						candidates.add((StructPart)type);
 				}
 			}
@@ -631,7 +631,7 @@ public class TypeUtils implements MofConversion {
 		if (candidates.size() == 0 && srcType instanceof StructPart) {
 			for (Classifier type : types) {
 				if (type instanceof StructPart) {
-					if (getNarrowConversionOp((StructPart)srcType, (StructPart)type) != null)
+					if (getBestFitNarrowConversionOp((StructPart)srcType, (StructPart)type) != null)
 						candidates.add((StructPart)type);
 				}
 			}
@@ -731,6 +731,13 @@ public class TypeUtils implements MofConversion {
 				StructPart superType = src.getSuperTypes().get(0);
 				op = getBestFitWidenConversionOp(superType, target);
 			}
+			//Search the target's supertype hierarchy for a conversion  operation
+			if (op == null) {
+				if (!target.getSuperTypes().isEmpty()) {
+					StructPart superType = target.getSuperTypes().get(0);
+					op = getBestFitWidenConversionOp(src, superType);
+				}
+			}
 		}
 		return op;
 	}
@@ -742,6 +749,14 @@ public class TypeUtils implements MofConversion {
 			if (!src.getSuperTypes().isEmpty()) {
 				StructPart superType = src.getSuperTypes().get(0);
 				op = getBestFitNarrowConversionOp(superType, target);
+			}
+			
+			//Search the target's supertype hierarchy for a conversion  operation
+			if (op == null) {
+				if (!target.getSuperTypes().isEmpty()) {
+					StructPart superType = target.getSuperTypes().get(0);
+					op = getBestFitNarrowConversionOp(src, superType);
+				}
 			}
 		}
 		return op;
