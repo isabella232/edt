@@ -18,18 +18,8 @@ import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.Classifier;
-import org.eclipse.edt.mof.egl.Type;
 
 public class ArrayTypeTemplate extends JavaTemplate {
-
-	public Boolean isAssignmentBreakupWanted(ArrayType type, Context ctx, String arg, Type rhsType) {
-		// types can override this to cause an compound assignment expression to be broken up
-		// the arg contains the operation being asked about. we always want compound power of broken up
-		if (arg.equals("::=") && !(rhsType instanceof ArrayType))
-			return true;
-		else
-			return false;
-	}
 
 	public void genConversionOperation(ArrayType type, Context ctx, TabbedWriter out, AsExpression arg) {
 		// check to see if a conversion is required
