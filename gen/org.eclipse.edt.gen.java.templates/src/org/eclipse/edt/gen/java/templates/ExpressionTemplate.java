@@ -24,14 +24,15 @@ public class ExpressionTemplate extends JavaTemplate {
 	public void genExpression(Expression expr, Context ctx, TabbedWriter out) {
 		String[] details = new String[] { expr.getEClass().getETypeSignature() };
 		EGLMessage message = EGLMessage.createEGLMessage(ctx.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-			Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_OBJECT, expr, details, CommonUtilities.includeEndOffset(expr.getAnnotation(IEGLConstants.EGL_LOCATION), ctx));
+			Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_OBJECT, expr, details,
+			CommonUtilities.includeEndOffset(expr.getAnnotation(IEGLConstants.EGL_LOCATION), ctx));
 		ctx.getMessageRequestor().addMessage(message);
 	}
+
 	public void genBoxingFunctionName(Expression expr, Context ctx, TabbedWriter out) {
-		if(ctx.getAttribute(expr, org.eclipse.edt.gen.Constants.SubKey_FunctionParameterIsConst) != null){
+		if (ctx.getAttribute(expr, org.eclipse.edt.gen.Constants.SubKey_functionParameterIsConst) != null) {
 			out.print("ezeWrap");
-		}
-		else{
+		} else {
 			out.print("ezeBox");
 		}
 	}
