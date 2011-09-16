@@ -346,15 +346,12 @@ public class RUITemplate extends JavaScriptTemplate {
 		}else{
 			generateRootHandler(part,out);
 		}
+		String fullPartName = part.getPackageName().replace('/', '.').toLowerCase() + "." + part.getName();
 		out.println("		} catch (e) {");
-		out.println("			if (e instanceof egl.egl.debug.DebugTermination) {" );
-		out.println("				if (e.msg) egl.println(e.msg);" );
-		out.println("			} else {");
-		out.println("				egl.crashTerminateSession();");
-		out.println("				if (!egl." + part.getPackageName().replace('/', '.').toLowerCase() + "." + part.getName()  +"){");
-		out.println("					egl.println('Internal generation error. Found no definition for fvt.primitives.TestDeclarations. Try <b>Project > Clean...</b>', e);");
-		out.println("				}else{ egl.printError('Could not render UI', e); throw e;}");
-		out.println("			}");
+		out.println("			egl.crashTerminateSession();");
+		out.println("			if (!egl." + fullPartName +"){");
+		out.println("				egl.println('Internal generation error. Found no definition for " + fullPartName + ". Try <b>Project > Clean...</b>', e);");
+		out.println("			}else{ egl.printError('Could not render UI', e); throw e;}");
 		out.println("		}");
 		out.println("	});");
 		out.println("};");
