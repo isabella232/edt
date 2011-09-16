@@ -674,6 +674,10 @@ public class TypeCompatibilityUtil {
 		boolean sourceIsFloat = Primitive.FLOAT == sourcePrim || Primitive.SMALLFLOAT == sourcePrim;
 		boolean targetIsFloat = Primitive.FLOAT == targetPrim || Primitive.SMALLFLOAT == targetPrim;
 		
+		if (Primitive.BOOLEAN == sourcePrim && Primitive.STRING == targetPrim) {
+			 return true;
+		}
+
 		if(targetIsFloat) {
 			if(Primitive.HEX == sourcePrim && (16 == source.getLength() || 8 == source.getLength())) return true;
 			
