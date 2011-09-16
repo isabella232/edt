@@ -17,16 +17,20 @@
 	<property name="relengBuilderDir" value="${basedir}" />
 	<dirname file="${relengBuilderDir}" property="workspaceDir" />
 	
+	<!-- writableBuildRoot should already have been set. -->
 	<property name="writableBuildRoot" value="/tmp/build" />
 
 	
-	<property name="buildDir" value="${writableBuildRoot}/${buildType}_current" />
+	<property name="buildDir" value="${writableBuildRoot}/ThisBuild" />
 
 	<target name="init">
-		<!-- This build goes into directory ${buildType}_current and the last
-		     build is kept in ${buildType}_previous. -->
-		<delete dir="${writableBuildRoot}/${buildType}_previous" failonerror="false"/>
-		<move file="${writableBuildRoot}/${buildType}_current" tofile="${writableBuildRoot}/${buildType}_previous" failonerror="false"/>
+		<!-- This build goes into directory ThisBuild and the previous build is 
+		     kept in OlderBuild.  Note that the publish step chooses which build
+		     to publish by comparing their names.  The build with the "greatest"
+		     name (last when doing string compares) is picked.  It will pick ThisBuild
+		     because 'T' > 'O'. -->
+		<delete dir="${writableBuildRoot}/OlderBuild" failonerror="false"/>
+		<move file="${writableBuildRoot}/ThisBuild" tofile="${writableBuildRoot}/OlderBuild" failonerror="false"/>
 		<mkdir dir="${buildDir}"/>
 	</target>
 
