@@ -33,24 +33,6 @@ public class JavaScriptGenerator extends AbstractGenerator {
 		cmd.generate(buildArgs(file, part), new EclipseJavaScriptGenerator(cmd, msgRequestor), env, null);
 	}
 	
-	protected String[] buildArgs(IFile file, Part part) throws Exception {
-		String[] args = new String[6];
-		
-		// Output directory (e.g. JavaSource folder). This is a property on the project, and it might be a directory in some other folder.
-		args[0] = "-o"; //$NON-NLS-1$
-		args[1] = getOutputDirectory(file);
-		
-		// this isn't used but it's a required parameter.
-		args[2] = "-p"; //$NON-NLS-1$
-		args[3] = part.getName();
-		
-		// this isn't used but it's a required parameter.
-		args[4] = "-r"; //$NON-NLS-1$
-		args[5] = file.getFullPath().toOSString();
-		
-		return args;
-	}
-	
 	@Override
 	protected String getGenerationDirectoryPropertyKey() {
 		return EDTCompilerIDEPlugin.PROPERTY_JAVASCRIPTGEN_DIR;
