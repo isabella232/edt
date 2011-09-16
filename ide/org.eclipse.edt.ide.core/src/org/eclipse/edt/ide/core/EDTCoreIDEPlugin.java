@@ -154,7 +154,9 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
 			if (EDTCorePreferenceConstants.COMPILER_ID.equals(event.getProperty())
-					|| EDTCorePreferenceConstants.GENERATOR_IDS.equals(event.getProperty())) {
+					|| EDTCorePreferenceConstants.GENERATOR_IDS.equals(event.getProperty())
+					|| EDTCorePreferenceConstants.BUILD_FLAG.equals(event.getProperty())
+					) {
 				// Touch all projects using the default compiler so that autobuild is triggered.
 				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 				for (IProject project : projects) {

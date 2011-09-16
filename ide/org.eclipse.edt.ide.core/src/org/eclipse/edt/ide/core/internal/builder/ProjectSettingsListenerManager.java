@@ -23,6 +23,7 @@ import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.compiler.tools.EGL2IR;
 import org.eclipse.edt.ide.core.CoreIDEPluginStrings;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
+import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
@@ -65,6 +66,10 @@ public class ProjectSettingsListenerManager {
 			if (prefs instanceof IEclipsePreferences) {
 				((IEclipsePreferences)prefs).addPreferenceChangeListener(listener);
 			}
+			prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(EDTCorePreferenceConstants.BUILD_FLAG);
+			if (prefs instanceof IEclipsePreferences) {
+				((IEclipsePreferences)prefs).addPreferenceChangeListener(listener);
+			}
 			listeners.put(project, listener);
 		}
 	}
@@ -73,6 +78,10 @@ public class ProjectSettingsListenerManager {
 		IPreferenceChangeListener listener = listeners.remove(project);
 		if (listener != null) {
 			Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(ProjectSettingsUtility.PROPERTY_GENERATOR_IDS);
+			if (prefs instanceof IEclipsePreferences) {
+				((IEclipsePreferences)prefs).removePreferenceChangeListener(listener);
+			}
+			prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(EDTCorePreferenceConstants.BUILD_FLAG);
 			if (prefs instanceof IEclipsePreferences) {
 				((IEclipsePreferences)prefs).removePreferenceChangeListener(listener);
 			}

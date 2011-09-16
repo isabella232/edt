@@ -70,6 +70,14 @@ public class EDTCorePreferenceConstants {
 	public static final String GENERATOR_IDS = "generatorIds";
 	
 	/**
+	 * A named preference that indicates a rebuild is needed
+	 * <p>
+	 * Value is of type <code>String</code>
+	 * </p>
+	 */
+	public static final String BUILD_FLAG = "buildFlag";
+
+	/**
 	 * Initializes the given preference store with the default values.
 	 * 
 	 * @param store the preference store to be initialized

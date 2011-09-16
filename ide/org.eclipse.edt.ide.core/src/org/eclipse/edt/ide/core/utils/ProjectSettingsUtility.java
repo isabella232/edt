@@ -450,6 +450,27 @@ public class ProjectSettingsUtility {
 	}	
 	
 	
+	/**
+	 * Sets a flag to indicate the project needs to be rebuild
+	 * 
+	 * @param resource  The resource (a file, folder, or project)
+	 * @throws BackingStoreException
+	 */
+	public static void setBuildFlag(IResource resource) throws BackingStoreException {
+		
+		if(resource != null){
+			//set flag to rebuild the project containing the resource, the preference change event will be caught by ProjectSettingsListenerManager
+			IProject project = resource.getProject();
+			Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(EDTCorePreferenceConstants.BUILD_FLAG);
+
+			int buildFlag = prefs.getInt(PROJECT_KEY, 0); 
+			buildFlag++;
+			prefs.putInt(PROJECT_KEY, buildFlag);
+			prefs.flush();
+		}
+	}
+	
+	
 	public static String[] getJavaGenerationDirectory(IProject project) {
 		return getGenerationDirectoryForLanguage(project, LANGUAGE_JAVA);
 	}
