@@ -23,6 +23,7 @@ import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.IsAExpression;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
@@ -209,6 +210,31 @@ public class TypeTemplate extends JavaTemplate {
 				&& ctx.getAttribute(((MemberName) arg2).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
 				&& ctx.getAttribute(((MemberName) arg2).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN)
 				out.print(".ezeUnbox()");
+		}
+	}
+
+	public void genIsaExpression(Type type, Context ctx, TabbedWriter out, IsAExpression arg) {
+		if (type.getTypeSignature().equalsIgnoreCase(arg.getEType().getTypeSignature())) {
+			if (arg.getObjectExpr().isNullable()) {
+				out.print("(");
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+				out.print(" == null ? false : true)");
+			} else
+				out.print("true");
+		} else if (TypeUtils.isReferenceType(type)) {
+			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
+			out.print(".ezeIsa(");
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
+			out.print(")");
+		} else if (ctx.mapsToPrimitiveType(type)) {
+			out.print("false");
+		} else {
+			out.print("EglAny.ezeIsa(");
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			out.print(", ");
+			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
+			out.print(".class)");
 		}
 	}
 
