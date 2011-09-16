@@ -221,8 +221,12 @@ public class TypeTemplate extends JavaTemplate {
 				out.print(" == null ? false : true)");
 			} else
 				out.print("true");
-		} else if (ctx.mapsToPrimitiveType(type)) {
-			out.print("false");
+		} else if (ctx.mapsToPrimitiveType(arg.getEType())) {
+			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
+			out.print(".ezeIsa(");
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
+			out.print(")");
 		} else {
 			out.print("EglAny.ezeIsa(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
