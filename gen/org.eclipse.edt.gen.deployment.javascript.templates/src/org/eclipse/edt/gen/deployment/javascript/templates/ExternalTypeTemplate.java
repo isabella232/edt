@@ -25,11 +25,6 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class ExternalTypeTemplate extends JavaScriptTemplate {
 	
-	public void genDependentPart(ExternalType et, Context ctx, LinkedHashSet dependentFiles) {
-		ctx.invoke(genOutputFileName, et, ctx, dependentFiles);
-		ctx.invoke(genDependentParts, et, ctx, dependentFiles);
-	}
-	
 	public void genOutputFileName(ExternalType et, Context ctx, LinkedHashSet dependentFiles) {
 		Annotation annot = et.getAnnotation( "eglx.javascript.JavaScriptObject" );
 		if (annot != null) {
@@ -67,26 +62,4 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 	
-	public void genDependentIncludeFiles(ExternalType et, Context ctx, TabbedWriter out, LinkedHashSet includeFiles, LinkedHashSet handledParts){
-		if ( handledParts.contains( et ) ) {
-			return;
-		}
-		try {
-			handledParts.add( et );
-			Set<Part> refParts = IRUtils.getReferencedPartsFor(et);
-			// BFS traverse
-			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart)){
-					ctx.invoke(genIncludeFiles, refPart, out, includeFiles);
-				}				
-			}
-			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart)){
-					ctx.invoke(genDependentIncludeFiles, refPart, ctx, out, includeFiles, handledParts);
-				}				
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

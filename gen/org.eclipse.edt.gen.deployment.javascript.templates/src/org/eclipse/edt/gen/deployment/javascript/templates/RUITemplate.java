@@ -33,30 +33,7 @@ public class RUITemplate extends JavaScriptTemplate {
 				cssFiles.add(fileName);
 			}
 		}
-	}
-	
-	public void genDependentCSSs(Handler part, Context ctx, TabbedWriter out, LinkedHashSet cssFiles, LinkedHashSet handledParts){
-		if ( handledParts.contains( part.getFullyQualifiedName() ) ) {
-			return;
-		}
-		try {
-			handledParts.add( part.getFullyQualifiedName() );
-			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
-			// BFS traverse
-			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart)){
-					ctx.invoke(genCSSFiles, refPart, out, cssFiles);
-				}				
-			}
-			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart)){
-					ctx.invoke(genDependentCSSs, refPart, ctx, out, cssFiles, handledParts);
-				}				
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	}	
 
 	public void genIncludeFiles(Handler handler, TabbedWriter out, LinkedHashSet includeFiles){
 		Annotation a = handler.getAnnotation( CommonUtilities.isRUIHandler( handler ) ? Constants.RUI_HANDLER : Constants.RUI_WIDGET);
@@ -65,29 +42,6 @@ public class RUITemplate extends JavaScriptTemplate {
 			if ( fileName != null && fileName.length() > 0 ){
 				includeFiles.add(fileName);
 			}
-		}
-	}
-	
-	public void genDependentIncludeFiles(Handler part, Context ctx, TabbedWriter out, LinkedHashSet includeFiles, LinkedHashSet handledParts){
-		if ( handledParts.contains( part ) ) {
-			return;
-		}
-		try {
-			handledParts.add( part );
-			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
-			// BFS traverse
-			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart)){
-					ctx.invoke(genIncludeFiles, refPart, out, includeFiles);
-				}				
-			}
-			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart)){
-					ctx.invoke(genDependentIncludeFiles, refPart, ctx, out, includeFiles, handledParts);
-				}				
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 }

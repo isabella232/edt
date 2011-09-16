@@ -20,10 +20,6 @@ import org.eclipse.edt.mof.egl.Library;
 
 
 public class LibraryTemplate extends JavaScriptTemplate {
-	public void genDependentPart(Library library, Context ctx, LinkedHashSet dependentFiles) {
-		ctx.invoke(genOutputFileName, library, ctx, dependentFiles);
-		ctx.invoke(genDependentParts, library, ctx, dependentFiles);
-	}
 	
 	public void genPropFiles(Library library, TabbedWriter out, LinkedHashSet propFiles){
 		if(CommonUtilities.isRUIPropertiesLibrary(library)){
