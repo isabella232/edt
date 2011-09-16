@@ -701,7 +701,7 @@ public class ReorganizeCode extends AbstractVisitor {
 				((EObjectImpl) getParent()).slotSet(getParentSlotIndex(), nameExpression);
 		} else {
 			// now copy the statement block to our preprocessing statement block
-			block.getStatements().add(1, object.getSettings());
+			block.getStatements().add(object.getSettings());
 			// now replace the setValuesExpression argument with the temporary variable
 			if (getParent() instanceof List)
 				((List<EObject>) getParent()).set(getParentSlotIndex(), object.getTarget());
