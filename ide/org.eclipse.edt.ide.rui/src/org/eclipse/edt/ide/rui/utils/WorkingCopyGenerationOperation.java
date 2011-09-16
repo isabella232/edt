@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -189,7 +190,7 @@ public class WorkingCopyGenerationOperation {
 													if (part != null && !part.hasCompileErrors()) {
 														JavaScriptDevGenerator jsDevGenerator = new JavaScriptDevGenerator() {
 															@Override
-															protected String getOutputDirectory(IFile eglFile) {
+															public String getOutputDirectory(IResource eglFile) {
 																return outputLocation.toOSString();
 															}
 														};
