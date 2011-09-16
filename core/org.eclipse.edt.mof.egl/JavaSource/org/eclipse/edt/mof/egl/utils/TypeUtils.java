@@ -724,44 +724,70 @@ public class TypeUtils implements MofConversion {
 	}
 	
 	public static Operation getBestFitWidenConversionOp(StructPart src, StructPart target) {
+		Operation op = getBestFitWidenConversionOpSearchSource(src, target);
+		if (op == null) {
+			op = getBestFitWidenConversionOpSearchTarget(src, target);
+		}
+		return op;
+	}
+
+	public static Operation getBestFitWidenConversionOpSearchSource(StructPart src, StructPart target) {
 		Operation op = getWidenConversionOp(src, target);
 		if (op == null) {
-			// Look up the super type chain
+			// Look up the super type chain of source
 			if (!src.getSuperTypes().isEmpty()) {
 				StructPart superType = src.getSuperTypes().get(0);
 				op = getBestFitWidenConversionOp(superType, target);
 			}
-			//Search the target's supertype hierarchy for a conversion  operation
-			if (op == null) {
-				if (!target.getSuperTypes().isEmpty()) {
-					StructPart superType = target.getSuperTypes().get(0);
-					op = getBestFitWidenConversionOp(src, superType);
-				}
-			}
 		}
 		return op;
 	}
 
+	public static Operation getBestFitWidenConversionOpSearchTarget(StructPart src, StructPart target) {
+		Operation op = getWidenConversionOp(src, target);
+		if (op == null) {
+			// Look up the super type chain of target
+			if (!target.getSuperTypes().isEmpty()) {
+				StructPart superType = target.getSuperTypes().get(0);
+				op = getBestFitWidenConversionOp(src, superType);
+			}
+		}
+		return op;
+	}
+	
 	public static Operation getBestFitNarrowConversionOp(StructPart src, StructPart target) {
+		Operation op = getBestFitNarrowConversionOpSearchSource(src, target);
+		if (op == null) {
+			op = getBestFitNarrowConversionOpSearchTarget(src, target);
+		}
+		return op;
+	}
+	
+
+	public static Operation getBestFitNarrowConversionOpSearchSource(StructPart src, StructPart target) {
 		Operation op = getNarrowConversionOp(src, target);
 		if (op == null) {
-			// Look up the super type chain
+			// Look up the super type chain of source
 			if (!src.getSuperTypes().isEmpty()) {
 				StructPart superType = src.getSuperTypes().get(0);
 				op = getBestFitNarrowConversionOp(superType, target);
 			}
-			
-			//Search the target's supertype hierarchy for a conversion  operation
-			if (op == null) {
-				if (!target.getSuperTypes().isEmpty()) {
-					StructPart superType = target.getSuperTypes().get(0);
-					op = getBestFitNarrowConversionOp(src, superType);
-				}
-			}
 		}
 		return op;
 	}
 
+	public static Operation getBestFitNarrowConversionOpSearchTarget(StructPart src, StructPart target) {
+		Operation op = getNarrowConversionOp(src, target);
+		if (op == null) {
+			// Look up the super type chain of target
+			if (!target.getSuperTypes().isEmpty()) {
+				StructPart superType = target.getSuperTypes().get(0);
+				op = getBestFitNarrowConversionOp(src, superType);
+			}			
+		}
+		return op;
+	}
+	
 	public static List<Operation> getBestFitOperation(StructPart container, String opSymbol, Classifier...argumentTypes) {
 		List<Operation> ops = new ArrayList<Operation>();
 		for (Operation op : container.getOperations()) {
