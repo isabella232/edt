@@ -31,7 +31,7 @@ egl.convertTextToFixedText = function( str, len )
 	}
 	else
 	{
-		return str + egl.eglx.lang.StrLib.spaces( len - str.length );
+		return str + egl.eglx.lang.StringLib.spaces( len - str.length );
 	}
 };
 
@@ -40,9 +40,16 @@ Date.prototype.compareTo 	= function(other) { return (this<other) ? -1 : 1; };
 Boolean.prototype.compareTo = function(other) { return (this<other) ? -1 : 1; };
 String.prototype.compareTo 	= function(other) { return (this<other) ? -1 : 1; };
 
+egl.textLen = function (s) {
+	//Returns the number of bytes in a text expression, excluding any trailing spaces or null values.
+	if ( s === null )
+		return 0;
+	return s.replace( /(\s)*$/, "" ).length;
+};
+
 egl.padWithLeadingZeros = function(s, totChars)
 {
-	var zerosToAdd = (totChars - egl.egl.core.$StrLib.textLen(s));
+	var zerosToAdd = (totChars - egl.textLen(s));
 	{
 		var i = 1;
 		for ( ; (i <= zerosToAdd); i = (i + 1) )
@@ -2243,7 +2250,7 @@ egl.convertAnyToString = function( any, nullable )
 				return any.eze$$value;
 			
 			case 'K':
-				return egl.eglx.lang.StrLib.format(any.eze$$value,egl.eglx.rbd.StrLib[$inst].defaultDateFormat);
+				return egl.eglx.lang.StringLib.format(any.eze$$value,egl.eglx.rbd.StrLib[$inst].defaultDateFormat);
 			
 //unsupported 0.7			case 'L':
 //				return egl.egl.core.$StrLib.formatTime(any.eze$$value,egl.eglx.rbd.StrLib[$inst].defaultTimeFormat);
@@ -2258,7 +2265,7 @@ egl.convertAnyToString = function( any, nullable )
 				{
 					pattern = egl.eglx.rbd.StrLib[$inst].defaultTimeStampFormat;
 				}
-				return egl.eglx.lang.StrLib.format(any.eze$$value,pattern);
+				return egl.eglx.lang.StringLib.format(any.eze$$value,pattern);
 
 			case 'I':
 			case 'i':
@@ -2574,13 +2581,13 @@ egl.convertAnyToTimestamp = function( any, nullable, pattern )
 		switch ( kind )
 		{
 			case 'J':
-				return egl.egl.core.$DateTimeLib.extend("timeStamp",any.eze$$value,pattern);//FIXME function doesn't exist
+				return egl.dateTime.extend("timeStamp",any.eze$$value,pattern);
 
 			case 'K':
-				return egl.egl.core.$DateTimeLib.extend("date",any.eze$$value,pattern);//FIXME function doesn't exist
+				return egl.dateTime.extend("date",any.eze$$value,pattern);
 
 			case 'L':
-				return egl.egl.core.$DateTimeLib.extend("time",any.eze$$value,pattern);//FIXME function doesn't exist
+				return egl.dateTime.extend("time",any.eze$$value,pattern);
 			
 			case 'S':
 			case 's':
@@ -2588,7 +2595,7 @@ egl.convertAnyToTimestamp = function( any, nullable, pattern )
 			case 'D':
 			case 'M':
 			case 'U':
-				return egl.egl.core.$DateTimeLib.timeStampValueWithPattern(any.eze$$value,pattern);//FIXME function doesn't exist
+				return egl.dateTime.timeStampValueWithPattern(any.eze$$value,pattern);
 		}
 	}
 	throw egl.createTypeCastException( "CRRUI2017E", [ egl.valueString( any ), egl.typeName( any.eze$$signature ), 'timestamp' + (nullable ? '?' : '') ], 'timestamp' + (nullable ? '?' : ''), egl.typeName( any.eze$$signature ) );
@@ -3284,7 +3291,7 @@ String.prototype.splice = function( first, last, instr ) {
 		return this.substring(0, first-1) + instr + this.substring(last);
 	if (regionLength < instr.length)
 		return this.substring(0, first-1) + instr.substring(0,regionLength) + this.substring(last);
-	return this.substring(0, first-1) + instr + egl.eglx.lang.StrLib.spaces(regionLength - instr.length) + this.substring(last);
+	return this.substring(0, first-1) + instr + egl.eglx.lang.StringLib.spaces(regionLength - instr.length) + this.substring(last);
 };
 
 egl.isspace = function(c) { 
@@ -3670,7 +3677,89 @@ Array.prototype.checkIndex = function Array_checkIndex( idx )
 	}
 	else
 		return idx;
-}
+};
+
+egl.dateTime = {};
+egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*optional mask*/pattern ) {
+	//Converts a timestamp, time, or date into a longer or shorter timestamp value.
+	if ( !date ) {
+		return null;
+	}
+	
+	//copy is returned if the pattern is invalid
+	var dateCopy = new Date( date );
+	var now = new Date();
+	type = type.toLowerCase();
+	
+	if ( type == "date" ) {
+		date.setHours( 0 );
+		date.setMinutes( 0 );
+		date.setSeconds( 0 );
+		date.setMilliseconds( 0 );
+		if (!pattern || pattern == "" )
+			pattern = "yyyyMMddHHmmss";
+	}
+	else if ( type == "time" ) {
+		date.setFullYear( now.getFullYear() );
+		date.setMonth( now.getMonth() );
+		date.setDate( now.getDate() );
+		if (!pattern || pattern == "" )
+			pattern = "yyyyMMddHHmmss";
+	}
+	else { // ( type == "timestamp" )
+		if (!pattern || pattern == "" )
+			pattern = "yyyyMMddHHmmssffffff";
+	}
+	
+	//enforce the pattern mask
+	//first function is for pattern missing chars on the left side (current)
+	//second function is for pattern missing chars on the right side (zeros)
+	var chars = 
+		[
+		  [ "y", function(d){ d.setFullYear( now.getFullYear() ); }, function(d){ d.setFullYear( 0 ); } ],
+	      [ "M", function(d){ d.setMonth( now.getMonth() ); }, function(d){ d.setMonth( 0 ); } ], 
+	      [ "d", function(d){ d.setDate( now.getDate() ); }, function(d){ d.setDate( 1 ); } ],
+	      [ "H", function(d){ d.setHours( now.getHours() ); }, function(d){ d.setHours( 0 ); } ],
+	      [ "m", function(d){ d.setMinutes( now.getMinutes() ); }, function(d){ d.setMinutes( 0 ); } ],
+	      [ "s", function(d){ d.setSeconds( now.getSeconds() ); }, function(d){ d.setSeconds( 0 ); } ], 
+	      [ "f", function(d){ d.setMilliseconds( now.getMilliseconds() ); }, function(d){ d.setMilliseconds( 0 ); } ]
+	    ];
+	
+	//set the new date values to the current time until the first
+	//char in the formatting string appears
+	var leadChar = pattern.charAt( 0 );
+	var i = 0;
+	while ( i < chars.length && leadChar != chars[ i ][ 0 ] ) {
+		(chars[ i ][ 1 ])( dateCopy );
+		i++;
+	}
+	//if the pattern has bad characters, just return the original date
+	if ( i >= chars.length ) {
+		return date;
+	}
+	
+	//find the last character and set everything after it to zeros
+	var lastChar = pattern.charAt( pattern.length - 1 );
+	i = chars.length - 1;
+	while ( i >= 0 && lastChar != chars[ i ][ 0 ] ) {
+		(chars[ i ][ 2 ])( dateCopy );
+		i--;
+	}
+	//if the pattern has bad characters, just return the date
+	if ( i < 0 ) {
+		return date;
+	}
+	
+	return dateCopy;
+};
+
+
+egl.dateTime.timeStampValueWithPattern = function(/*string*/source, /*optional mask*/timeSpanPattern) {
+	//Returns a TIMESTAMP value that reflects a string and is built based on a timestamp mask that you specify
+	timeSpanPattern = egl.getProperTimeStampPattern( timeSpanPattern );
+	return ( ( source != null ) ? egl.stringToTimeStamp( source, timeSpanPattern ) : null );
+};
+
 
 egl.checkNull = function ( obj, source )
 {

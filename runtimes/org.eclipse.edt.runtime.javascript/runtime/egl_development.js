@@ -1488,7 +1488,7 @@ if (egl.egl.ui) {
 	egl.instrumentFunctions("ServiceLib", egl.eglx.services.ServiceLib.prototype);
 	egl.instrumentFunctions("SysLib", egl.eglx.lang.SysLib.prototype);
 	egl.instrumentFunctions("ValidatorWrapper", egl.egl.rui.mvc.internal.ValidatorWrapper.prototype);
-	egl.instrumentFunctions("StrLib", egl.eglx.lang.StrLib.prototype);
+	egl.instrumentFunctions("StringLib", egl.eglx.lang.StringLib.prototype);
 	egl.instrumentFunctions("DateTimeLib", egl.eglx.lang.DateTimeLib.prototype);
 	egl.instrumentFunctions("SysVar", egl.egl.core.SysVar.prototype);
 	egl.instrumentFunctions("RUILib", egl.eglx.ui.rui.RuiLib.prototype);

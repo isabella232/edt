@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass( "eglx.lang", "StrLib", {
+egl.defineClass( "eglx.lang", "StringLib", {
 	"constructor" : function() {
 	}
 });
@@ -16,7 +16,7 @@ egl.defineClass( "eglx.lang", "StrLib", {
 	// TODO sbg need the format functions....
 	
 
-egl.eglx.lang.StrLib["getNextToken"] = function(/*string*/source, /*int*/
+egl.eglx.lang.StringLib["getNextToken"] = function(/*string*/source, /*int*/
 		index, /*string*/delimiters) {
 	// Adjust for EGL's 1-based indexing
 	var startIndex = (index - 1) / 2;
@@ -49,7 +49,7 @@ egl.eglx.lang.StrLib["getNextToken"] = function(/*string*/source, /*int*/
 	return source.slice(startIndex, tokenEnd);
 };
 
-egl.eglx.lang.StrLib["getTokenCount"] = function(/*string*/source, /*string*/
+egl.eglx.lang.StringLib["getTokenCount"] = function(/*string*/source, /*string*/
 		delimiters) {
 	//Returns the number of tokens in a source string by simulating the getTokenCount function.
 	var index = 1;
@@ -71,11 +71,11 @@ egl.eglx.lang.StrLib["getTokenCount"] = function(/*string*/source, /*string*/
 	}
 };
 
-egl.eglx.lang.StrLib["fromCharCode"] = function(/*integer*/i) {
+egl.eglx.lang.StringLib["fromCharCode"] = function(/*integer*/i) {
 	return String.fromCharCode(i); // TODO should we simply alias somehow?
 };
 
-egl.eglx.lang.StrLib["spaces"] = function(/*integer*/i) {
+egl.eglx.lang.StringLib["spaces"] = function(/*integer*/i) {
 	//Returns a string of a specified length.
 	var s = [];
 	for ( var n = 0; n < i; ++n) {

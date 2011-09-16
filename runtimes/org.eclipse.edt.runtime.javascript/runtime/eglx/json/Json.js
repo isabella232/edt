@@ -66,13 +66,13 @@ egl.eglx.json.toJSONString = function(object, depth, maxDepth, /*boolean*/ valid
 		       var kind = sig.charAt(0) === '?' ? sig.charAt(1) : sig.charAt(0);
 		   }
 		   if (kind == 'K') {
-		     return '"' + egl.eglx.lang.StrLib.format(object, "yyyy-MM-dd") + '"';
+		     return '"' + egl.eglx.lang.StringLib.format(object, "yyyy-MM-dd") + '"';
 		   }
 //unsupported 0.7		   else if (kind == 'L') {
 //		     return '"' + egl.egl.core.$StrLib.formatTime(object, "HH:mm:ss") + '"';//function does not exist
 //		   }
 		   else if (kind == 'J') {
-			   return '"' + egl.eglx.lang.StrLib.format( object, "yyyy-MM-dd HH:mm:ss") + '"' ;
+			   return '"' + egl.eglx.lang.StringLib.format( object, "yyyy-MM-dd HH:mm:ss") + '"' ;
 		   }
 		   	else if("eze$$value" in object){
 		   		return egl.eglx.json.toJSONString(egl.unboxAny( object ));

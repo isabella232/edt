@@ -86,15 +86,15 @@ egl.eglx.xml.XmlLib["primitiveToXML"] = function( /*value*/value, /*map*/namespa
 	var kind = fieldInfo.eglSignature.charAt(0) !== '?'? fieldInfo.eglSignature.charAt(0) : fieldInfo.eglSignature.charAt(1);
 	switch (kind) {
 		case 'K':
-			fieldValue = egl.eglx.lang.StrLib.format(fieldValue, "yyyy-MM-dd");
+			fieldValue = egl.eglx.lang.StringLib.format(fieldValue, "yyyy-MM-dd");
 			break;
 	//unsupported 0.7	case 'L':
-	//		fieldValue = egl.eglx.lang.StrLib.format(fieldValue, "HH:mm:ss");//FIXME function doesn't exist
+	//		fieldValue = egl.eglx.lang.StringLib.format(fieldValue, "HH:mm:ss");//FIXME function doesn't exist
 			break;
 		case 'L':
 			break;
 		case 'J':
-			fieldValue = egl.eglx.lang.StrLib.format(fieldValue, "yyyy-MM-dd HH:mm:ss");
+			fieldValue = egl.eglx.lang.StringLib.format(fieldValue, "yyyy-MM-dd HH:mm:ss");
 			break;
 	}
 	if (value instanceof egl.javascript.BigDecimal) {

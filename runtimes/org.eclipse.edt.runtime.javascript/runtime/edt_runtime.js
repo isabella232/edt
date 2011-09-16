@@ -335,10 +335,7 @@ egl.defineClass( "egl.lang", "EString"
 }
 );
 egl.egl.lang.EString.textLen = function (s) {
-	//Returns the number of bytes in a text expression, excluding any trailing spaces or null values.
-	if ( s === null )
-		return 0;
-	return s.replace( /(\s)*$/, "" ).length;
+   return egl.textLen(s);
 };
 egl.egl.lang.EString.ezeCast = function (x) {
 	return egl.convertAnyToString(x, false);    // TODO need nullable support
@@ -611,6 +608,12 @@ egl.egl.lang.ETimestamp["extend"] = function (/*type of date*/ type, /*extension
 	
 	return dateCopy;
 };
+
+
+egl.egl.lang.ETimestamp.ezeCast = function(x, pattern){
+	return egl.convertAnyToTimestamp(x, false, pattern);  //TODO sbg false should be a flag indicating nullable
+};
+
 
 /****************************************************************************
  * AnyNum

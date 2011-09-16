@@ -40,7 +40,7 @@ egl.defineClass( 'eglx.json', 'JSONParser', {
 		if(egl.eglx.json.$JSONParser) return egl.eglx.json.$JSONParser;
 		egl.eglx.json.$JSONParser=this;
 		this.jsrt$SysVar= new egl.egl.core.SysVar();
-		new egl.eglx.lang.StrLib();
+		new egl.eglx.lang.StringLib();
 		} finally { egl.leave(); }
 	}
 	,
