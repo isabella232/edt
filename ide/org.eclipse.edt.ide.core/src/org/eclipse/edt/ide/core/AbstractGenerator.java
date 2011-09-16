@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -59,21 +62,6 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 	 * {@link #getProjectSettingsPluginId()}, {@link #getGenerationDirectoryPreferenceKey()},
 	 * and {@link #getPreferenceStore()} to determine the value, but sub-classes may override this.
 	 * 
-	 * @param eglFile  The source .egl file
-	 */
-	protected String getOutputDirectory(IFile eglFile) {
-		return ProjectSettingsUtility.getGenerationDirectory(eglFile, getPreferenceStore(),
-				new ProjectScope(eglFile.getProject()).getNode(getProjectSettingsPluginId()),
-				getGenerationDirectoryPropertyKey(),
-				getGenerationDirectoryPreferenceKey());
-	}
-	
-	/**
-	 * Returns the output directory to use for writing a file in Eclipse.
-	 * The default implementation will use {@link #getGenerationDirectoryPropertyKey()},
-	 * {@link #getProjectSettingsPluginId()}, {@link #getGenerationDirectoryPreferenceKey()},
-	 * and {@link #getPreferenceStore()} to determine the value, but sub-classes may override this.
-	 * 
 	 * @param resource  The egl resource, could be a project, a package or a file. 
 	 */
 	public String getOutputDirectory(IResource resource) {	
@@ -86,25 +74,127 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 	
 	
 	/**
-	 * Returns the generation argument.
+	 * Returns the generation argument array, possibly null.
 	 * The default implementation will use {@link #getGenerationDirectoryPropertyKey()},
 	 * {@link #getProjectSettingsPluginId()}, {@link #getGenerationDirectoryPreferenceKey()},
 	 * and {@link #getPreferenceStore()} to determine the value, but sub-classes may override this.
 	 * 
 	 * @param eglFile  The source .egl file
 	 */
-	public String getGenerationArgument(IResource resource) {	
+	public String[] getGenerationArguments(IResource resource) {	
 		IProject project = resource.getProject();
-		return ProjectSettingsUtility.getGenerationArgument(resource, getPreferenceStore(),
+		String args = ProjectSettingsUtility.getGenerationArgument(resource, getPreferenceStore(),
 				new ProjectScope(project).getNode(getProjectSettingsPluginId()),
 				getGenerationArgumentsPropertyKey());
-	}	
+		
+		return splitIntoArgs(args);
+	}
 	
-	protected String getGenerationArgument(IFile eglFile) {
-		return ProjectSettingsUtility.getGenerationArgument(eglFile, getPreferenceStore(),
-				new ProjectScope(eglFile.getProject()).getNode(getProjectSettingsPluginId()),
-				getGenerationArgumentsPropertyKey());
-	}	
+	protected String[] buildArgs(IFile file, Part part) throws Exception {
+		int numArgs = 6;
+		
+		String[] additionalArgs = getGenerationArguments(file);
+		if (additionalArgs != null) {
+			numArgs += additionalArgs.length;
+		}
+		
+		String[] args = new String[numArgs];
+		
+		// Output directory (e.g. JavaSource folder). This is a property on the project, and it might be a directory in some other folder.
+		int idx = 0;
+		args[idx++] = "-o"; //$NON-NLS-1$
+		args[idx++] = getOutputDirectory(file);
+		
+		// this isn't used but it's a required parameter.
+		args[idx++] = "-p"; //$NON-NLS-1$
+		args[idx++] = part.getName();
+		
+		// this isn't used but it's a required parameter.
+		args[idx++] = "-r"; //$NON-NLS-1$
+		args[idx++] = file.getFullPath().toOSString();
+		
+		if (additionalArgs != null) {
+			for (String arg : additionalArgs) {
+				args[idx++] = arg;
+			}
+		}
+		
+		return args;
+	}
+	
+	private String[] splitIntoArgs(String args) {
+		if (args == null) {
+			return null;
+		}
+		
+		args = args.trim();
+		if (args.length() != 0) {
+			// Need to split up using whitespace as a delimiter, while supporting whitespace inside quotes, and delimited quotes inside quotes.
+			// This matches how args are processed by java on the command line.
+			char[] chars = args.toCharArray();
+			int size = chars.length;
+			int curr = 0;
+			boolean quoted = false;
+			boolean escaped = false;
+			List<String> entries = new ArrayList<String>( 10 );
+			
+			StringBuilder buf = new StringBuilder( 50 );
+			while (curr < size) {
+				char c = chars[curr];
+				
+				if (escaped && c != '"') {
+					// You can only escape a double quote or another escape. But we still append
+					// the \ if the next char was an escape, because it doesn't get added below.
+					buf.append('\\');
+				}
+				
+				if ( c == '\\' ) {
+					if (escaped) {
+						// We actually want another quote. \\ should remain \\. \c remains \c. but \" becomes just "
+						buf.append(c);
+					}
+					escaped = !escaped;
+				}
+				else if (Character.isWhitespace(c)) {
+					escaped = false;
+					if (!quoted) {
+						// End of an entry.
+						if (buf.length() != 0) {
+							entries.add(buf.toString());
+							buf = new StringBuilder( 50 );
+						}
+					}
+					else {
+						buf.append(c);
+					}
+				}
+				else if ( c == '"' ) {
+					if (escaped) {
+						escaped = false;
+						buf.append(c);
+					}
+					else {
+						quoted = !quoted;
+					}
+				}
+				else {
+					escaped = false;
+					buf.append(c);
+				}
+				
+				curr++;
+			}
+			
+			// If last chunk didn't end with whitespace.
+			if (buf.length() > 0) {
+				entries.add(buf.toString());
+			}
+			
+			return entries.toArray(new String[entries.size()]);
+		}
+		return null;
+	}
+	
 	/**
 	 * Returns the relative path for the output file.
 	 * 
