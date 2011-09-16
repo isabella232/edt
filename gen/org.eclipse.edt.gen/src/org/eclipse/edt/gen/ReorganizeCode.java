@@ -9,6 +9,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.BooleanLiteral;
 import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.CaseStatement;
 import org.eclipse.edt.mof.egl.Container;
@@ -38,6 +39,7 @@ import org.eclipse.edt.mof.egl.SetValuesExpression;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.UnaryExpression;
 import org.eclipse.edt.mof.egl.WhileStatement;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
@@ -88,6 +90,10 @@ public class ReorganizeCode extends AbstractVisitor {
 		// if these are the statements contained in a localvariable declaration however, we want to process them all
 		if (processedStatement && !inLocalVariableDeclaration)
 			return false;
+		if (ctx.getAttribute(object, org.eclipse.edt.gen.Constants.SubKey_statementHasBeenReorganized) != null)
+			return false;
+		if (inLocalVariableDeclaration)
+			ctx.putAttribute(object, Constants.SubKey_statementHasBeenReorganized, Boolean.TRUE);
 		processedStatement = true;
 		return true;
 	}
@@ -248,6 +254,41 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	public boolean visit(WhileStatement object) {
+		// if the condition has side effects, then we need to extract the condition and place it as an if statement and then
+		// insert that if with an exit while statement inside the while statement. Finally, we replace the while condition
+		// with the boolean true
+		if (IRUtils.hasSideEffects(object.getCondition())) {
+			// create a unary condition
+			UnaryExpression unaryExpression = factory.createUnaryExpression();
+			unaryExpression.setOperator("!");
+			unaryExpression.setExpression(object.getCondition());
+			// we need to create an if statement
+			IfStatement ifStatement = factory.createIfStatement();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				ifStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			ifStatement.setContainer(currentStatementContainer);
+			ifStatement.setCondition(unaryExpression);
+			// create the exit statement
+			StatementBlock statementBlock = factory.createStatementBlock();
+			statementBlock.setContainer(ifStatement.getContainer());
+			// we need to create an exit while statement
+			ExitStatement exitStatement = factory.createExitStatement();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				exitStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			exitStatement.setContainer(statementBlock.getContainer());
+			exitStatement.setExitStatementType(ExitStatement.EXIT_WHILE);
+			// add the exit statement to the statement block
+			statementBlock.getStatements().add(exitStatement);
+			// add the statement block to the true condition
+			ifStatement.setTrueBranch(statementBlock);
+			// create the boolean literal for true
+			BooleanLiteral booleanLiteral = factory.createBooleanLiteral();
+			booleanLiteral.setBooleanValue(true);
+			// now replace the while condition with the "true" boolean
+			object.setCondition(booleanLiteral);
+			// insert the if statement at start of the statement block
+			((StatementBlock) object.getBody()).getStatements().add(0, ifStatement);
+		}
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
@@ -257,7 +298,75 @@ public class ReorganizeCode extends AbstractVisitor {
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	public boolean visit(IfStatement object) {
+		// if the condition has side effects, then we need to extract the condition and place it as an assignment to a
+		// boolean temporary variable and then replace the condition with the boolean
+		if (IRUtils.hasSideEffects(object.getCondition())) {
+			// set up the new statement block if needed
+			List<StatementBlock> blockArray;
+			if (getReturnData() == null) {
+				blockArray = new ArrayList<StatementBlock>();
+				blockArray.add(null);
+				blockArray.add(null);
+				setReturnData(blockArray);
+			} else
+				blockArray = (List<StatementBlock>) getReturnData();
+			// handle the preprocessing
+			StatementBlock block;
+			// we need to add this to block list 0
+			if (blockArray.get(0) == null) {
+				block = factory.createStatementBlock();
+				block.setContainer(currentStatementContainer);
+				blockArray.set(0, block);
+			}
+			block = blockArray.get(0);
+			// we need to create a local variable
+			String temporary = ctx.nextTempName();
+			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			localDeclaration.setContainer(currentStatementContainer);
+			DeclarationExpression declarationExpression = factory.createDeclarationExpression();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			Field field = factory.createField();
+			field.setName(temporary);
+			field.setType(object.getCondition().getType());
+			field.setIsNullable(object.getCondition().isNullable());
+			// we need to create the member access
+			MemberName nameExpression = factory.createMemberName();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			nameExpression.setMember(field);
+			nameExpression.setId(field.getName());
+			// we need to create an assignment statement
+			AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			assignmentStatement.setContainer(currentStatementContainer);
+			Assignment assignment = factory.createAssignment();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			assignmentStatement.setAssignment(assignment);
+			assignment.setLHS(nameExpression);
+			assignment.setRHS(object.getCondition());
+			// add the assignment to the declaration statement block
+			StatementBlock declarationBlock = factory.createStatementBlock();
+			declarationBlock.setContainer(currentStatementContainer);
+			declarationBlock.getStatements().add(assignmentStatement);
+			// add the declaration statement block to the field
+			field.setInitializerStatements(declarationBlock);
+			field.setHasSetValuesBlock(true);
+			// add the field to the declaration expression
+			declarationExpression.getFields().add(field);
+			// connect the declaration expression to the local declaration
+			localDeclaration.setExpression(declarationExpression);
+			// add the local variable to the statement block
+			block.getStatements().add(localDeclaration);
+			// now replace the condition with the temporary variable
+			object.setCondition(nameExpression);
+		}
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
@@ -381,7 +490,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		// for a const we should not copy the parameter before passing it to the function.
 		for (int i = 0; i < object.getTarget().getParameters().size(); i++) {
 			if (object.getTarget().getParameters().get(i).isConst()) {
-				ctx.putAttribute(object.getArguments().get(i), Constants.SubKey_FunctionParameterIsConst, Boolean.TRUE);
+				ctx.putAttribute(object.getArguments().get(i), Constants.SubKey_functionParameterIsConst, Boolean.TRUE);
 			}
 		}
 	}
