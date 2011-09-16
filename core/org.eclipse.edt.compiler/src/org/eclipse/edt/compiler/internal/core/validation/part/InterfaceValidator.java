@@ -18,6 +18,7 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.InterfaceBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
+import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Name;
@@ -74,6 +75,12 @@ public class InterfaceValidator extends AbstractASTVisitor {
 		
 		return false;
 	}
+	
+	public boolean visit(Constructor constructor) {
+		constructor.accept(new FunctionValidator(problemRequestor, partBinding, compilerOptions));
+		return false;
+	}
+
 	
 	private void checkExtendedTypes(Interface iface) {
 		for(Iterator iter = iface.getExtendedTypes().iterator(); iter.hasNext();) {

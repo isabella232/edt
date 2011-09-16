@@ -14,6 +14,7 @@ package org.eclipse.edt.compiler.internal.core.validation.part;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
+import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
@@ -47,6 +48,11 @@ public abstract class FunctionContainerValidator extends AbstractASTVisitor {
 	
 	public boolean visit(NestedFunction nestedFunction) {
 		nestedFunction.accept(new FunctionValidator(problemRequestor, partBinding, compilerOptions));
+		return false;
+	}
+	
+	public boolean visit(Constructor constructor) {
+		constructor.accept(new FunctionValidator(problemRequestor, partBinding, compilerOptions));
 		return false;
 	}
 	

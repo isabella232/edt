@@ -302,9 +302,23 @@ public abstract class DefaultBinder extends AbstractBinder {
 				IFunctionBinding fBinding = (IFunctionBinding) tBinding;
 			}
 			else if(ITypeBinding.DELEGATE_BINDING != tBinding.getKind()){
-				problemRequestor.acceptProblem(
-					functionInvocation.getTarget(),
-					IProblemRequestor.FUNCTION_INVOCATION_TARGET_NOT_FUNCTION_OR_DELEGATE);
+				if (functionInvocation.getTarget() instanceof ThisExpression) {
+					OverloadedFunctionSet funcSet = getConstructors(tBinding);
+					if (funcSet == null || funcSet.getNestedFunctionBindings().isEmpty()) {
+						problemRequestor.acceptProblem(
+								functionInvocation.getTarget(),
+								IProblemRequestor.MATCHING_CONSTRUCTOR_CANNOT_BE_FOUND,
+								new String[]{tBinding.getName()});
+					}
+					else {
+						functionInvocation.getTarget().setDataBinding(funcSet);
+					}
+				}
+				else {
+					problemRequestor.acceptProblem(
+						functionInvocation.getTarget(),
+						IProblemRequestor.FUNCTION_INVOCATION_TARGET_NOT_FUNCTION_OR_DELEGATE);
+				}
 			}
 		}
         for(Iterator iter = functionInvocation.getArguments().iterator(); iter.hasNext();) {
@@ -3419,7 +3433,22 @@ public abstract class DefaultBinder extends AbstractBinder {
 
 			FunctionResolver resolver = new FunctionResolver(compilerOptions);			
 			OverloadedFunctionSet overloadedFunctionSet = (OverloadedFunctionSet) fInvocationDBinding;
-			IDataBinding matchingFunction = resolver.findMatchingFunction(overloadedFunctionSet, getArgumentTypes(functionInvocation.getArguments()), getArgumentIsLiteralArray(functionInvocation.getArguments()), true);
+			boolean isConstructor = functionInvocation.getTarget() instanceof ThisExpression;
+			IDataBinding matchingFunction = resolver.findMatchingFunction(overloadedFunctionSet, getArgumentTypes(functionInvocation.getArguments()), getArgumentIsLiteralArray(functionInvocation.getArguments()), !isConstructor);
+			
+			if (isConstructor) {
+				if(IBinding.NOT_FOUND_BINDING == matchingFunction || AmbiguousDataBinding.getInstance() == matchingFunction) {
+					problemRequestor.acceptProblem(
+						functionInvocation.getTarget(),
+						IProblemRequestor.MATCHING_CONSTRUCTOR_CANNOT_BE_FOUND,
+						new String[] {
+							functionInvocation.getTarget().resolveTypeBinding().getCaseSensitiveName()
+						});
+	        		functionInvocation.getTarget().setDataBinding(IBinding.NOT_FOUND_BINDING);
+	        		return;
+				}
+			}
+			
 			functionInvocation.getTarget().setAttributeOnName(Name.OVERLOADED_FUNCTION_SET, overloadedFunctionSet);
         	
         	if(AmbiguousDataBinding.getInstance() == matchingFunction) {

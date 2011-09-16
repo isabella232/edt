@@ -84,6 +84,7 @@ public class ExternalTypeValidator extends AbstractASTVisitor {
 	}
 	
 	public boolean visit(Constructor constructor) {
+		constructor.accept(new FunctionValidator(problemRequestor, partBinding, compilerOptions));
 		checkParameters(constructor.getParameters());
 		
 		return false;

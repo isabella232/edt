@@ -348,7 +348,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			}
 			else {
 				boolean isStatic = Binding.isValidBinding(functionBinding) && (functionBinding.isStatic() || declarer instanceof LibraryBinding);
-				if (node.getTarget() instanceof SimpleName && !isStatic) {
+				if ((node.getTarget() instanceof SimpleName || node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression) && !isStatic) {
 					if (functionBinding == null || isSuperTypeMember(functionBinding)) {
 						// Qualify with this to get QualifiedFunctionInvocation which will do dynamic lookup
 						fi = factory.createQualifiedFunctionInvocation();

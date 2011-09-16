@@ -24,6 +24,7 @@ import org.eclipse.edt.compiler.binding.FixedRecordBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
+import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
@@ -35,6 +36,7 @@ import org.eclipse.edt.compiler.core.ast.AssignmentStatement;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.CaseStatement;
 import org.eclipse.edt.compiler.core.ast.CloseStatement;
+import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.ContinueStatement;
 import org.eclipse.edt.compiler.core.ast.ConverseStatement;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
@@ -149,7 +151,8 @@ public class FunctionValidator extends AbstractASTVisitor {
 		}
 		
 		checkFunctionName(topLevelFunction.getName(), false);
-		checkNumberOfParms(topLevelFunction.getFunctionParameters(), topLevelFunction.getName());
+		checkNumberOfParms(topLevelFunction.getFunctionParameters(), topLevelFunction.getName(), functionName);
+		checkForConstructorCalls(topLevelFunction);
 		
 		return true;
 	}
@@ -158,17 +161,53 @@ public class FunctionValidator extends AbstractASTVisitor {
 		functionName = nestedFunction.getName().getCanonicalName();
 		
 		checkFunctionName(nestedFunction.getName(), true);
-		checkNumberOfParms(nestedFunction.getFunctionParameters(), nestedFunction.getName());
+		checkNumberOfParms(nestedFunction.getFunctionParameters(), nestedFunction.getName(), functionName);
+		checkForConstructorCalls(nestedFunction);
 		
 		return true;
 	}
 	
-	void checkNumberOfParms(List parms, Name name) {
+	public boolean visit(Constructor constructor) {
+		functionName = IEGLConstants.KEYWORD_CONSTRUCTOR;
+		
+		checkNumberOfParms(constructor.getParameters(), constructor, functionName);
+		checkForConstructorCalls(constructor);
+		
+		return true;
+	}
+	
+	private void checkForConstructorCalls(Node node) {
+		node.accept(new AbstractASTVisitor() {
+			public boolean visit(org.eclipse.edt.compiler.core.ast.FunctionInvocation functionInvocation) {
+				
+				//ensure that constructor invocations are the first statement in a constructor
+				if (Binding.isValidBinding(functionInvocation.getTarget().resolveDataBinding()) && functionInvocation.getTarget().resolveDataBinding().getKind() == IDataBinding.CONSTRUCTOR_BINDING) {
+					if (functionInvocation.getParent() instanceof FunctionInvocationStatement) {
+						if (functionInvocation.getParent().getParent() instanceof Constructor) {
+							Constructor constructor = (Constructor)functionInvocation.getParent().getParent();
+							if (constructor.getStmts().get(0) == functionInvocation.getParent()) {
+								return true;  // Success! we can exit without an error
+							}
+						}
+					}
+					//If we got here, the constructor invocation is in the wrong place. Throw a validation error
+					problemRequestor.acceptProblem(
+							functionInvocation.getTarget(),
+							IProblemRequestor.CONSTRUCTOR_CALL_WRONG_PLACE,
+							new String[]{});
+				}				
+				return true;
+			}
+		});
+	}
+	
+	
+	void checkNumberOfParms(List parms, Node name, String nameString) {
 		if (parms.size() > 255) {
         	problemRequestor.acceptProblem(
             		name,
     				IProblemRequestor.FUNCTION_TOO_MANY_PARMS,
-    				new String[] {name.getCanonicalName(), Integer.toString(parms.size())});        	
+    				new String[] {nameString, Integer.toString(parms.size())});        	
 		}
 	}
 	
@@ -966,6 +1005,5 @@ public class FunctionValidator extends AbstractASTVisitor {
 	private void validatePrimitiveConst(Type type){
 		StatementValidator.validatePrimitiveConstant(type, problemRequestor);
 	}
-
 	
 }

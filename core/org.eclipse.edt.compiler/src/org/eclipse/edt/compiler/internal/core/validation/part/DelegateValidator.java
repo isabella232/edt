@@ -32,7 +32,7 @@ public class DelegateValidator extends FunctionValidator {
 	public boolean visit(Delegate delegate) {
 		
 		EGLNameValidator.validate(delegate.getName(), EGLNameValidator.DELEGATE, problemRequestor, compilerOptions);
-		checkNumberOfParms(delegate.getParameters(), delegate.getName());		
+		checkNumberOfParms(delegate.getParameters(), delegate.getName(), delegate.getName().getCanonicalName());		
 		return true;
 	}
 
