@@ -7,6 +7,7 @@ import org.eclipse.edt.mof.eglx.persistence.sql.SqlForEachStatement;
 public class SqlForeachStatementTemplate extends SqlActionStatementTemplate {
 
 	public void genStatementBody(SqlForEachStatement stmt, Context ctx, TabbedWriter out) {
+		String var_resultSet = ctx.nextTempName();
 		if (stmt.getSqlString() != null && !"".equals(stmt.getSqlString())) {
 			genSqlStatementSetup(stmt, ctx, out);
 			out.println(class_ResultSet + " " + var_resultSet + " = " + var_statement + ".executeQuery();");
@@ -20,7 +21,12 @@ public class SqlForeachStatementTemplate extends SqlActionStatementTemplate {
 			out.println(".getResultSet();");
 		}
 		out.println("while (" + var_resultSet + ".next()) {");
-		genGetSingleRowFromResultSet(stmt.getTargets(), stmt.getDataSource(), var_resultSet, ctx, out);
+		if (stmt.getTargets().size() == 1) {
+			genGetSingleRowFromResultSet(stmt.getTarget(), var_resultSet, ctx, out);			
+		}
+		else {
+			genGetSingleRowFromResultSet(stmt.getTargets(), var_resultSet, ctx, out);
+		}
 		ctx.invoke(genStatement, stmt.getBody(), ctx, out);
 		out.println('}');
 		genSqlStatementEnd(stmt, ctx, out);

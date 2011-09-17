@@ -14,6 +14,7 @@ public class SqlOpenStatementTemplate extends SqlActionStatementTemplate {
 		else {
 			out.println("try {");
 		}
+		String var_resultSet = ctx.nextTempName();
 		out.print(class_ResultSet + " " + var_resultSet + " = ");
 		if (stmt.getPreparedStatement() == null)
 			out.println(var_statement + ".executeQuery();");

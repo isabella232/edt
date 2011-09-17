@@ -10,19 +10,23 @@ import org.eclipse.edt.gen.java.templates.StatementTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.persistence.sql.DummyExpression;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlPrepareStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.impl.DummyExpressionDynamicImpl;
 import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
 
 public abstract class SqlActionStatementTemplate extends StatementTemplate {
@@ -31,7 +35,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	public static final String genSelectClause = "genSelectClause";
 	public static final String var_connection = "ezeConn";
 	public static final String var_datasource = "ds";
-	public static final String var_resultSet = "ezeResult";
+//	public static final String var_resultSet = "ezeResult";
 	public static final String var_statement = "ezeStatement";
 	public static final String var_listElement = "ezeElement";
 	public static final String expr_getConnection = "getConnection()";
@@ -74,68 +78,95 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	 * @param ctx
 	 * @param out
 	 */
-	public void genGetSingleRowFromResultSet(List<Expression> targets, Expression dataSource, String resultSet, Context ctx, TabbedWriter out) {
+	public void genGetSingleRowFromResultSet(List<Expression> targets, String resultSet, Context ctx, TabbedWriter out) {
 		int i = 1;
 		for (Expression target : targets) {
-			EGLClass type = (EGLClass)target.getType().getClassifier();
-			String targetVar = getExprString(target, ctx);
-			genGetSingleRowFromResultSet(type, targetVar, i, dataSource, resultSet, ctx, out);
+			genSetTargetFromResultSet(target, resultSet, i, ctx, out);
+			i++;
 		}
 	}
 	
-	public void genGetSingleRowFromResultSet(EGLClass type, String targetVar, int columnIndex, Expression dataSource, String resultSet, Context ctx, TabbedWriter out) {
+	public void genGetSingleRowFromResultSet(Expression target, String resultSet, Context ctx, TabbedWriter out) {
+		EGLClass type = (EGLClass)target.getType().getClassifier();
+
 		if (SQL.isMappedSQLType(type)) { 
-			out.print(targetVar);
-			out.print(" = ");
-			genGetColumnValueByIndex(type, resultSet, columnIndex, ctx, out);
+			genSetTargetFromResultSet(target, resultSet, 1, ctx, out);
 		}
 		else {
 			// We are dealing with a mapped Entity containing fields to receive the column values
-			out.println("java.sql.ResultSetMetaData ezeMetaData = " + var_resultSet + ".getMetaData();");
+			out.println("java.sql.ResultSetMetaData ezeMetaData = " + resultSet + ".getMetaData();");
 			// If the target variable is a reference type then create a new instance to be populated
-			if (TypeUtils.isReferenceType(type)) { 
+			if (target.isNullable()) { 
 				out.print("if (");
-				out.print(targetVar);
+				ctx.invoke(genExpression, target, ctx, out);
 				out.println(" == null) {");
-				out.print(targetVar);
+				ctx.invoke(genExpression, target, ctx, out);
 				out.print(" = ");
 				ctx.invoke(genInstantiation, type, ctx, out);
 				out.println(";");
 				out.println("}");
 			}
-			out.println("for (int i=1; i<=ezeMetaData.getColumnCount(); i++) {");
-			if (TypeUtils.isDynamicType(type)) {
-				// TODO getObject needs to be changed to check the type
-				ctx.invoke(genInstantiation, type, ctx, out);
-				out.print(".put(");
-				out.print("ezeMetaData.getColumnName(i), ");
-				out.println(var_resultSet + ".getObject(i));");
-			}
-			else {
-				boolean doElse = false;
-				for (Field field : type.getFields()) {
-					if (!field.isStatic() && field.getAccessKind()!= AccessKind.ACC_PRIVATE && SQL.isPersistable(field)) {
-						String columnName = SQL.getColumnName(field);
-						if (doElse) out.print("else ");
-						out.print("if (ezeMetaData.getColumnName(i).equalsIgnoreCase(");
-						if (!doElse) doElse = true;
-						out.print(quoted(columnName));
-						out.println(")) {");					
-						out.print(targetVar);
-						out.print(".");
-						ctx.invoke(genName, field, ctx, out);
-						out.print(" = ");
-						genGetColumnValueByName((EGLClass)field.getType().getClassifier(), var_resultSet, columnName, ctx, out);
-						out.println(";");
-						out.println('}');
-					}
+			out.println("for (int ezeIdx=1; ezeIdx<=ezeMetaData.getColumnCount(); ezeIdx++) {");
+			boolean doElse = false;
+			for (Field field : type.getFields()) {
+				if (!field.isStatic() && field.getAccessKind()!= AccessKind.ACC_PRIVATE && SQL.isPersistable(field)) {
+					String columnName = SQL.getColumnName(field);
+					if (doElse) out.print("else ");
+					out.print("if (ezeMetaData.getColumnName(ezeIdx).equalsIgnoreCase(");
+					if (!doElse) doElse = true;
+					out.print(quoted(columnName));
+					out.println(")) {");					
+					genSetTargetFromResultSet(target, field, resultSet, columnName, ctx, out);
+					out.println('}');
 				}
 			}
-			out.println("}");
-			
+			out.println('}');
 		}
 	}
 	
+	public void genGetSingleRowFromResultSet(EGLClass type, String targetVar, String resultSet, Context ctx, TabbedWriter out) {
+		DummyExpression dummy = DummyExpressionDynamicImpl.newInstance();
+		dummy.setExpr(targetVar);
+		dummy.setType(type);
+		genGetSingleRowFromResultSet(dummy, resultSet, ctx, out);
+	}
+
+
+	
+	public void genSetTargetFromResultSet(Expression target, String var_resultSet, int columnIndex, Context ctx, TabbedWriter out) {
+		TabbedWriter newOut = new TabbedWriter(new StringWriter());
+		genGetColumnValueByIndex((EGLClass)target.getType().getClassifier(), var_resultSet, columnIndex, ctx, newOut);
+		genSetTargetFromResultSet(target, newOut.getCurrentLine(), ctx, out);
+	}
+	
+	public void genSetTargetFromResultSet(Expression target, String var_resultSet, String name, Context ctx, TabbedWriter out) {
+		TabbedWriter newOut = new TabbedWriter(new StringWriter());
+		genGetColumnValueByName((EGLClass)target.getType().getClassifier(), var_resultSet, name, ctx, newOut);
+		genSetTargetFromResultSet(target, newOut.getCurrentLine(), ctx, out);
+	}
+	
+	public void genSetTargetFromResultSet(Expression target, Field field, String var_resultSet, String name, Context ctx, TabbedWriter out) {
+		TabbedWriter newOut = new TabbedWriter(new StringWriter());
+		ctx.invoke(genExpression, target, ctx, newOut);
+		newOut.print('.');
+		ctx.invoke(genName, field, ctx, newOut);
+		DummyExpression dummy = DummyExpressionDynamicImpl.newInstance();
+		dummy.setExpr(newOut.getCurrentLine());
+		dummy.setType(field.getType());
+		genSetTargetFromResultSet(dummy, var_resultSet, name, ctx, out);
+	}
+	
+	private void genSetTargetFromResultSet(Expression target, String rhsExpr, Context ctx, TabbedWriter out) {
+		Assignment assign = ctx.getFactory().createAssignment();
+		assign.setLHS((LHSExpr)target);
+		DummyExpression dummy = DummyExpressionDynamicImpl.newInstance();
+		dummy.setExpr(rhsExpr);
+		dummy.setType(target.getType());
+		assign.setRHS(dummy);
+		ctx.invoke(genExpression, assign, ctx, out);
+		out.println(";");
+	}
+
 	public boolean genSqlStatementSetup(SqlActionStatement stmt, Context ctx, TabbedWriter out, String var_stmt, boolean stmtDeclared) {
 		boolean isCall = SQL.isCallStatement(stmt.getSqlString());
 		out.println("try {");

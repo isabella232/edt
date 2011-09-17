@@ -1,14 +1,20 @@
 package org.eclipse.edt.gen.java.templates.eglx.persistence.sql;
 
+import java.io.StringWriter;
+
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.persistence.sql.DummyExpression;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlGetByKeyStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.impl.DummyExpressionDynamicImpl;
 import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
 
 public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
@@ -18,6 +24,7 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 		boolean hasDataSource = stmt.getDataSource() != null;
 		boolean isResultSet = hasDataSource && SQL.isSQLResultSet(stmt.getDataSource().getType());
 		
+		String var_resultSet = ctx.nextTempName();
 		if (hasPreparedStmt) {
 			out.println("try {");
 			out.print(class_ResultSet + " " + var_resultSet + " = ");
@@ -63,11 +70,11 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 			out.println(".getResultSet();");
 		}
 
-		genPopulateFromResultSet(stmt, ctx, out, true);
+		genPopulateFromResultSet(stmt, ctx, out, var_resultSet, true);
 		genSqlStatementEnd(stmt, ctx, out);
 	}
 	
-	public void genPopulateFromResultSet(SqlGetByKeyStatement stmt, Context ctx, TabbedWriter out, boolean doClose ) {
+	public void genPopulateFromResultSet(SqlGetByKeyStatement stmt, Context ctx, TabbedWriter out, String var_resultSet, boolean doClose ) {
 		if (stmt.getTargets().size() == 1) {
 			Expression target = stmt.getTarget();
 			boolean targetIsList = target.getType() instanceof ArrayType;
@@ -91,7 +98,7 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 					out.print("null");
 				}
 				out.println(';');
-				genGetSingleRowFromResultSet(targetType, targetVarName, 1, stmt.getDataSource(), var_resultSet, ctx, out);
+				genGetSingleRowFromResultSet(targetType, targetVarName, var_resultSet, ctx, out);
 				out.println(";");
 				out.print("ezeList.add(");
 				out.print(targetVarName);
@@ -104,7 +111,7 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 			else {
 				targetType = (EGLClass)target.getType().getClassifier();
 				out.println("if(" + var_resultSet + ".next()) {");
-				genGetSingleRowFromResultSet(stmt.getTargets(), stmt.getDataSource(), var_resultSet, ctx, out);
+				genGetSingleRowFromResultSet(stmt.getTarget(), var_resultSet, ctx, out);
 				out.println(";");
 				out.println('}');
 				
@@ -112,22 +119,11 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 		}
 		else {
 			out.println("if(" + var_resultSet + ".next()) {");
-			int i = 1;
-			for (Expression target : stmt.getTargets()) {
-				genSetTargetFromResultSet(target, var_resultSet, i, ctx, out);
-				i++;
-			}
+			genGetSingleRowFromResultSet(stmt.getTargets(), var_resultSet, ctx, out);
 			out.println('}');
 		}
 		if (doClose)
 			out.println(var_resultSet + ".close();");
 	}
-	
-	public void genSetTargetFromResultSet(Expression target, String var_resultSet, int columnIndex, Context ctx, TabbedWriter out) {
-		ctx.invoke(genExpression, target, ctx, out);
-		out.print(" = ");
-		genGetColumnValueByIndex((EGLClass)target.getType().getClassifier(), var_resultSet, columnIndex, ctx, out);
-		out.println(";");
-	}
-	
+		
 }
