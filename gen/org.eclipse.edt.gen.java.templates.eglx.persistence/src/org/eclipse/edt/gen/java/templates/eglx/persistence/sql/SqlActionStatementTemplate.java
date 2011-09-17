@@ -1,7 +1,5 @@
 package org.eclipse.edt.gen.java.templates.eglx.persistence.sql;
 
-import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
 
@@ -19,10 +17,10 @@ import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.persistence.sql.DummyExpression;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlPrepareStatement;
@@ -147,13 +145,11 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	
 	public void genSetTargetFromResultSet(Expression target, Field field, String var_resultSet, String name, Context ctx, TabbedWriter out) {
 		TabbedWriter newOut = new TabbedWriter(new StringWriter());
-		ctx.invoke(genExpression, target, ctx, newOut);
-		newOut.print('.');
 		ctx.invoke(genName, field, ctx, newOut);
-		DummyExpression dummy = DummyExpressionDynamicImpl.newInstance();
-		dummy.setExpr(newOut.getCurrentLine());
-		dummy.setType(field.getType());
-		genSetTargetFromResultSet(dummy, var_resultSet, name, ctx, out);
+		MemberAccess expr = ctx.getFactory().createMemberAccess();
+		expr.setQualifier(target);
+		expr.setId(newOut.getCurrentLine());
+		genSetTargetFromResultSet(expr, var_resultSet, name, ctx, out);
 	}
 	
 	private void genSetTargetFromResultSet(Expression target, String rhsExpr, Context ctx, TabbedWriter out) {
