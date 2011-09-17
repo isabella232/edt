@@ -61,6 +61,7 @@ public class HandlerTemplate extends JavaScriptTemplate {
 		}
 		// instantiate each library
 		ctx.invoke(genLibraries, handler, ctx, out);
+		ctx.invoke(genFields, handler, ctx, out);
 		out.println("this.eze$$setInitial();");
 		out.println("}");
 	}

@@ -51,6 +51,7 @@ public class RecordTemplate extends JavaScriptTemplate {
 		out.print(quoted("constructor"));
 		out.println(": function() {");
 		ctx.invoke(genLibraries, part, ctx, out);
+		ctx.invoke(genFields, part, ctx, out);
 		out.println("this.eze$$setInitial();");
 		out.println("}");
 		out.println(",");

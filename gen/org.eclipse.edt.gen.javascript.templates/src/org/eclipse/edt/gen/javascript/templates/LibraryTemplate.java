@@ -91,7 +91,7 @@ public class LibraryTemplate extends JavaScriptTemplate {
 
 		// instantiate each library
 		ctx.invoke(genLibraries, library, ctx, out);
-
+		ctx.invoke(genFields, library, ctx, out);
 		out.println("this.eze$$setInitial();");
 		out.println("}");
 	}

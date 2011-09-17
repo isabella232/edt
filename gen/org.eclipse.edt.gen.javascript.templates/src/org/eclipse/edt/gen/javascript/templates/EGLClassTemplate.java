@@ -121,7 +121,6 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		ctx.invoke(genAnnotations, part, ctx, out);
 		ctx.invoke(genFieldAnnotations, part, ctx, out);
 		ctx.invoke(genFunctions, part, ctx, out);
-		ctx.invoke(genFields, part, ctx, out);
 		ctx.invoke(genGetterSetters, part, ctx, out);
 		ctx.invoke(genToString, part, ctx, out);
 	}
@@ -140,7 +139,9 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	public void genField(EGLClass part, Context ctx, TabbedWriter out, Field arg) {}
+	public void genField(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
+		ctx.invoke(genDeclaration, arg, ctx, out);
+	}
 
 	public void genConstructors(EGLClass part, Context ctx, TabbedWriter out) {
 		ctx.invoke(genConstructor, part, ctx, out);
@@ -151,6 +152,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.print(quoted("constructor"));
 		out.println(": function() {");
 		ctx.invoke(genLibraries, part, ctx, out);
+		ctx.invoke(genFields, part, ctx, out);
 		out.println("this."+ INITIALIZER_FUNCTION + "();");
 		out.println("}");
 	}
@@ -178,7 +180,9 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 
 	public void genSetEmptyMethodBody(EGLClass part, Context ctx, TabbedWriter out) {
 		for (Field field : part.getFields()) {
-			ctx.invoke(genSetEmptyMethod, part, ctx, out, field);
+			if (!(field instanceof ConstantField)) {
+				ctx.invoke(genSetEmptyMethod, part, ctx, out, field);
+			}
 		}
 	}
 
