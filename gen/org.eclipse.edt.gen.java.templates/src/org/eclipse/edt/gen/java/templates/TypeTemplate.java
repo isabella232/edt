@@ -214,13 +214,16 @@ public class TypeTemplate extends JavaTemplate {
 	}
 
 	public void genIsaExpression(Type type, Context ctx, TabbedWriter out, IsAExpression arg) {
-		if (type.getTypeSignature().equalsIgnoreCase(arg.getEType().getTypeSignature())) {
+		if (arg.getObjectExpr().getType().getTypeSignature().equalsIgnoreCase(arg.getEType().getTypeSignature())) {
 			if (arg.getObjectExpr().isNullable()) {
 				out.print("(");
 				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 				out.print(" == null ? false : true)");
 			} else
 				out.print("true");
+		} else if (arg.getObjectExpr().getType().getClassifier() != null && arg.getEType().getClassifier() != null
+			&& arg.getObjectExpr().getType().getClassifier().getTypeSignature().equalsIgnoreCase(arg.getEType().getClassifier().getTypeSignature())) {
+			out.print("false");
 		} else if (ctx.mapsToPrimitiveType(arg.getEType())) {
 			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".ezeIsa(");

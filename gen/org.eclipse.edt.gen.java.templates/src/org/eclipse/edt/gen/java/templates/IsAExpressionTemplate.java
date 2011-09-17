@@ -18,6 +18,6 @@ import org.eclipse.edt.mof.egl.IsAExpression;
 public class IsAExpressionTemplate extends JavaTemplate {
 
 	public void genExpression(IsAExpression expr, Context ctx, TabbedWriter out) {
-		ctx.invoke(genIsaExpression, expr.getObjectExpr().getType(), ctx, out, expr);
+		ctx.invoke(genIsaExpression, expr.getEType(), ctx, out, expr);
 	}
 }
