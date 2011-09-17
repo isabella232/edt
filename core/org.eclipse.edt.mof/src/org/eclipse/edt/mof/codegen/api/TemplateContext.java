@@ -310,7 +310,7 @@ public class TemplateContext extends HashMap<Object, Object> {
 	public Method primGetMethod(String methodName, Class<?> templateClass, EClassifier eClassifier, Object... args) {
 		Class<?> clazz = null;
 		try {
-			clazz = Class.forName(eClassifier.getETypeSignature(), true, tFactory.classloader);
+			clazz = Class.forName(eClassifier.getETypeSignature(), true, templateClass.getClassLoader());
 		}
 		catch (Exception x) {}
 		if (clazz == null)
