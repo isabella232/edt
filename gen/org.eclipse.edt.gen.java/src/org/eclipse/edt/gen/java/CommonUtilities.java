@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.GenerationException;
+import org.eclipse.edt.javart.util.JavaAliaser;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.*;
 import org.eclipse.edt.mof.serialization.DeserializationException;
