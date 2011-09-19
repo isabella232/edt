@@ -689,13 +689,27 @@ public class IRUtils {
 		if (result != null) {
 			return result;
 		}
-		
+				
 		result = checkForTextConcatenation(rhs, opSymbol);
 		if (result != null) {
 			return result;
 		}
 		
-		return null;		
+		//Special case for reference types..if lhs is subType of rhs or rhs, is subtype of lhs, use the default operation
+		//defined in ANY
+		if (TypeUtils.isReferenceType(lhs) && TypeUtils.isReferenceType(rhs) && lhs instanceof StructPart && rhs instanceof StructPart) {
+			StructPart lStruct = (StructPart)lhs;
+			StructPart rStruct = (StructPart)rhs;
+			
+			if (lStruct.isSubtypeOf(rStruct) || rStruct.isSubtypeOf(lStruct)) {
+				StructPart any = (StructPart)IRUtils.getEGLType(MofConversion.Type_EGLAny);
+				if (lStruct.isSubtypeOf(any)) {
+					result = primGetBinaryOperation(any, any, opSymbol);
+				}
+			}
+		}
+
+		return result;		
 	}
 	
 	private static Operation checkForTextConcatenation(Classifier clazz, String opSymbol) {
