@@ -627,6 +627,34 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	@SuppressWarnings("unchecked")
+	public boolean visit(BinaryExpression object) {
+		// if the lhs of this binary expression is an array, then we need to convert this to either appendAll or
+		// appendElement depending on whether the rhs is an array or not
+		if (object.getLHS().getType().getClassifier().equals(TypeUtils.Type_LIST)) {
+			// create the qualified function invocation
+			QualifiedFunctionInvocation invocation = factory.createQualifiedFunctionInvocation();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				invocation.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			if (object.getRHS().getType().getClassifier().equals(TypeUtils.Type_LIST))
+				invocation.setId("appendAll");
+			else
+				invocation.setId("appendElement");
+			Expression lhsExpression = object.getLHS();
+			while (lhsExpression instanceof BinaryExpression) {
+				lhsExpression = ((BinaryExpression) lhsExpression).getRHS();
+			}
+			invocation.setQualifier(lhsExpression);
+			invocation.getArguments().add(object.getRHS());
+			// now replace the BinaryExpression argument with the function invocation
+			if (getParent() instanceof List)
+				((List<EObject>) getParent()).set(getParentSlotIndex(), invocation);
+			else
+				((EObjectImpl) getParent()).slotSet(getParentSlotIndex(), invocation);
+		}
+		return true;
+	}
+
+	@SuppressWarnings("unchecked")
 	public boolean visit(SetValuesExpression object) {
 		boolean hasSideEffects = IRUtils.hasSideEffects(object.getTarget());
 		// set up the new statement block if needed
