@@ -61,38 +61,28 @@ public class CommonUtilities {
 	}
 
 	/**
-	 * Returns true if the type is an ExternalType with subtype JavaObject or 
-	 * NativeType.
+	 * Returns true if the type is an ExternalType with subtype JavaObject or NativeType.
 	 */
 	public static boolean isJavaExternalType(Type type) {
 		return getJavaExternalType(type) != null;
 	}
 
 	/**
-	 * Returns the Type if it's an ExternalType, with subtype JavaObject or 
-	 * NativeType. If it's something else, returns null.
+	 * Returns the Type if it's an ExternalType, with subtype JavaObject or NativeType. If it's something else, returns null.
 	 */
 	public static ExternalType getJavaExternalType(Type type) {
 		if (type instanceof ExternalType) {
-			if ( type.getAnnotation( "eglx.java.JavaObject" ) != null
-					|| type.getAnnotation( "egl.lang.NativeType" ) != null )
-			{
+			if (type.getAnnotation("eglx.java.JavaObject") != null || type.getAnnotation("egl.lang.NativeType") != null) {
 				return (ExternalType) type;
-			}
-			else
-			{
+			} else {
 				return null;
 			}
 		} else if (type instanceof Part) {
 			Part member = (Part) type;
 			if (member instanceof ExternalType) {
-				if ( member.getAnnotation( "eglx.java.JavaObject" ) != null
-						|| member.getAnnotation( "egl.lang.NativeType" ) != null )
-				{
-					return (ExternalType)member;
-				}
-				else
-				{
+				if (member.getAnnotation("eglx.java.JavaObject") != null || member.getAnnotation("egl.lang.NativeType") != null) {
+					return (ExternalType) member;
+				} else {
 					return null;
 				}
 			}
@@ -106,8 +96,8 @@ public class CommonUtilities {
 	}
 
 	/**
-	 * @return true if the external type is serializable. To be serializable, 
-	 * it must extend the java.io.Serializable external type.
+	 * @return true if the external type is serializable. To be serializable, it must extend the java.io.Serializable
+	 * external type.
 	 */
 	public static boolean isSerializable(ExternalType et) {
 		if (et == null) {
@@ -116,34 +106,29 @@ public class CommonUtilities {
 
 		// First see if we're looking at java.io.Serializable.
 		Annotation annot = et.getAnnotation("eglx.java.JavaObject");
-		if (annot != null) 
-		{
+		if (annot != null) {
 			String name = et.getName();
-			if ( ((String)annot.getValue("externalName")).length() > 0 )
-			{
-				name = (String)annot.getValue("externalName");
+			if (((String) annot.getValue("externalName")).length() > 0) {
+				name = (String) annot.getValue("externalName");
 			}
-			
-			if ( "Serializable".equals( name ) )
-			{
+
+			if ("Serializable".equals(name)) {
 				String pkg = et.getPackageName();
-				if ( ((String)annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0 )
-				{
-					pkg = (String)annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME);
+				if (((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0) {
+					pkg = (String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME);
 				}
-				
-				if ( "java.io".equals( pkg ) )
-				{
+
+				if ("java.io".equals(pkg)) {
 					return true;
 				}
 			}
 		}
-		
+
 		// Check the super types.
 		List<StructPart> extndsAry = et.getSuperTypes();
 		if (extndsAry != null) {
 			for (StructPart part : extndsAry) {
-				if (part instanceof ExternalType && isSerializable( (ExternalType)part) ) {
+				if (part instanceof ExternalType && isSerializable((ExternalType) part)) {
 					return true;
 				}
 			}
@@ -325,7 +310,7 @@ public class CommonUtilities {
 		int srcIndex = getJavaAllowedType(srcString);
 		int tgtIndex = getJavaAllowedType(tgtString);
 		if (srcIndex >= 0 && tgtIndex >= 0 && srcIndex != tgtIndex)
-			return !isBoxedOutputTemp( src, ctx );
+			return !isBoxedOutputTemp(src, ctx);
 		else
 			return false;
 	}
@@ -346,12 +331,11 @@ public class CommonUtilities {
 		else
 			return -1;
 	}
-	
-	public static boolean isBoxedOutputTemp( Expression expr, Context ctx )
-	{
+
+	public static boolean isBoxedOutputTemp(Expression expr, Context ctx) {
 		return expr instanceof MemberName
-			&& ctx.getAttribute( ((MemberName)expr).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable ) != null
-			&& ctx.getAttribute( ((MemberName)expr).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable ) != ParameterKind.PARM_IN;
+			&& ctx.getAttribute(((MemberName) expr).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
+			&& ctx.getAttribute(((MemberName) expr).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -368,7 +352,7 @@ public class CommonUtilities {
 			}
 		}
 		// ignore adding this entry to the list, if it is the part we are currently generating
-		Part partBeingGenerated = (Part) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated); 
+		Part partBeingGenerated = (Part) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated);
 		if (partBeingGenerated.getFullyQualifiedName().equalsIgnoreCase(qualifiedName))
 			return;
 		// don't import a type whose unqualified name matches the name of the part currently being generated
@@ -510,17 +494,16 @@ public class CommonUtilities {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Returns null if the desired propertyFunction isn't specified or shouldn't be used; otherwise, returns either the
 	 * explicit name of the function (if specified) or implicit name if it should be inferred. According to the docs for both
 	 * EGLProperty and Property, function names should be inferred if and only if the annotation is present but BOTH
 	 * properties are missing.
 	 */
-	public static String getPropertyFunction( NamedElement field, boolean setter, Context context )
-	{
+	public static String getPropertyFunction(NamedElement field, boolean setter, Context context) {
 		String result = null;
-		
+
 		boolean isEGLProperty = true;
 		Annotation annotation = field.getAnnotation(Constants.Annotation_EGLProperty);
 		if (annotation == null) {
@@ -528,90 +511,65 @@ public class CommonUtilities {
 			isEGLProperty = false;
 		}
 
-		if ( annotation != null )
-		{
+		if (annotation != null) {
 			String propertyFunction = setter ? Constants.Annotation_PropertySetter : Constants.Annotation_PropertyGetter;
 			String otherPropertyFunction = setter ? Constants.Annotation_PropertyGetter : Constants.Annotation_PropertySetter;
 
-			Object propFn = annotation.getValue( propertyFunction );
-			Object otherPropFn = annotation.getValue( otherPropertyFunction );
+			Object propFn = annotation.getValue(propertyFunction);
+			Object otherPropFn = annotation.getValue(otherPropertyFunction);
 
 			// If neither function is specified then we are supposed to infer the function
 			// names for @Property and look up the functions for @EGLProperty.
-			boolean bothUnspecified = 
-					( propFn == null || ( propFn instanceof String && ((String)propFn).length() == 0 ) )
-					&& ( otherPropFn == null || ( otherPropFn instanceof String && ((String)otherPropFn).length() == 0 ) );
-			if ( bothUnspecified )
-			{
+			boolean bothUnspecified = (propFn == null || (propFn instanceof String && ((String) propFn).length() == 0))
+				&& (otherPropFn == null || (otherPropFn instanceof String && ((String) otherPropFn).length() == 0));
+			if (bothUnspecified) {
 				String fieldName = field.getName();
-				result = (setter ? Constants.SetterPrefix : Constants.GetterPrefix)
-								+ fieldName.substring( 0, 1 ).toUpperCase();
-				if ( fieldName.length() > 1 )
-				{
-					result += fieldName.substring( 1 );
+				result = (setter ? Constants.SetterPrefix : Constants.GetterPrefix) + fieldName.substring(0, 1).toUpperCase();
+				if (fieldName.length() > 1) {
+					result += fieldName.substring(1);
 				}
 
-				if ( isEGLProperty )
-				{
+				if (isEGLProperty) {
 					// For @EGLProperty we have to take EGL's case-insensitivity into account.
 					// We can't simply assume the function for getting field XYZ is named getXYZ.
-					// It might be named getxyz.  We'll get the function by making a 
+					// It might be named getxyz. We'll get the function by making a
 					// QualifiedFunctionInvocation and using its ability to resolve the function being called.
 					QualifiedFunctionInvocation qfi = context.getFactory().createQualifiedFunctionInvocation();
-					qfi.setId( (String)result );
-					qfi.setQualifier( expressionForContainer( ((Field)field).getContainer(), context ) );
-					if ( setter )
-					{
+					qfi.setId((String) result);
+					qfi.setQualifier(expressionForContainer(((Field) field).getContainer(), context));
+					if (setter) {
 						MemberName argName = context.getFactory().createMemberName();
-						argName.setId( field.getName() );
-						argName.setMember( (Member)field );
-						qfi.getArguments().add( argName );
-					}	
-					
+						argName.setId(field.getName());
+						argName.setMember((Member) field);
+						qfi.getArguments().add(argName);
+					}
+
 					result = qfi.getTarget().getName();
 				}
-			}
-			else
-			{
-				if ( propFn instanceof Name )
-				{
-					result = ((Name)propFn).getId();
-				}
-				else
-				{
-					result = (String)propFn;
-				}
-			}
-
-			Function currentFunction = context.getCurrentFunction();
-			if ( result != null && currentFunction != null )
-			{
-				if ( result.equals( currentFunction.getName() ) )
-				{
-					result = null;
+			} else {
+				if (propFn instanceof Name) {
+					result = ((Name) propFn).getId();
+				} else {
+					result = (String) propFn;
 				}
 			}
 		}
 
 		return result;
 	}
-	
-	private static Expression expressionForContainer( Container container, Context ctx )
-	{
+
+	private static Expression expressionForContainer(Container container, Context ctx) {
 		Expression result = null;
-		Object pbg = ctx.getAttribute( ctx.getClass(), Constants.SubKey_partBeingGenerated );
-		if ( container instanceof Function 
-				|| ( container instanceof Part && pbg instanceof Part 
-						&& ((Part)container).getFullyQualifiedName().equalsIgnoreCase( ((Part)pbg).getFullyQualifiedName() ) ) )
-		{
+		Object pbg = ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated);
+		if (container instanceof Function
+			|| (container instanceof Part && pbg instanceof Part && ((Part) container).getFullyQualifiedName().equalsIgnoreCase(
+				((Part) pbg).getFullyQualifiedName()))) {
 			ThisExpression thisExpr = ctx.getFactory().createThisExpression();
-			thisExpr.setThisObject( container );
+			thisExpr.setThisObject(container);
 			result = thisExpr;
-		}
-		else
-		{
+		} else {
 			TypeName typeExpr = ctx.getFactory().createTypeName();
-			typeExpr.setType( (Type)container );
+			typeExpr.setType((Type) container);
 			result = typeExpr;
 		}
 
