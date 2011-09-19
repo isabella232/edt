@@ -90,12 +90,12 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 				out.print(' ');
 				String targetVarName = ctx.nextTempName();
 				out.print(targetVarName + " = ");
-				// Create a new instance for value types
-				if (TypeUtils.isValueType(targetType)) {
-					ctx.invoke(genInstantiation, targetType, ctx, out);
+				// Create a new instance
+				if (ctx.mapsToPrimitiveType(targetType)) {
+					ctx.invoke(genDefaultValue, targetType, ctx, out);
 				}
 				else {
-					out.print("null");
+					ctx.invoke(genInstantiation, targetType, ctx, out);
 				}
 				out.println(';');
 				genGetSingleRowFromResultSet(targetType, targetVarName, var_resultSet, ctx, out);
