@@ -20,7 +20,7 @@ public class EUnitRunAllJavascriptDriverGenerator extends
 		genImports();
 		
 		String genedPartName = RunAllTest + fDriverPartNameAppend;		
-		out.println("Handler " + genedPartName + " type RUIhandler {initialUI = [],onConstructionFunction = start, title=\"" + genedPartName + "\"} ");
+		out.println("Handler " + genedPartName + " type RUIhandler {initialUI = [], includefile = \"rununit.html\", onConstructionFunction = start, title=\"" + genedPartName + "\"} ");
 		out.pushIndent();
 		out.println("function start()");
 		out.pushIndent();
