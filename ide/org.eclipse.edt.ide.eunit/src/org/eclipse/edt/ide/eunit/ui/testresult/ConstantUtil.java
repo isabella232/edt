@@ -2,11 +2,14 @@ package org.eclipse.edt.ide.eunit.ui.testresult;
 
 public class ConstantUtil {
 
-	public static final int SPASSED = 0;
-	public static final int SFAILED = 1;
-	public static final int SERROR = 2;
-	public static final int SNOT_RUN = 3;
+	public static final int SPASSED = 0;		//green
+	public static final int SFAILED = 1;		//red
+	public static final int SERROR = 2;			//orange
+	public static final int SNOT_RUN = 3;		//yellow
+	public static final int SBAD = 4;
 
+	final static String[] STEXTS  = {"Passed.", "Failed.", "Error.", "Not run.", "Bad."};
+	
 //Record ResultSummaryRoot
 //	expCnt int;	{@XMLAttribute{}};					//expected total number of test variation count	
 //	trSum ResultSummary[]{};

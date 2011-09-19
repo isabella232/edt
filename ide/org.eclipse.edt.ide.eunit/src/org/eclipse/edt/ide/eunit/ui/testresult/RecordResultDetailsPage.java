@@ -113,8 +113,6 @@ public class RecordResultDetailsPage extends TestResultPkgNodeDetailsPage {
 			getDetailedResult(resultFile, toolkit, parent);
 			
 		}
-		
-
 	}
 
 	
@@ -165,7 +163,12 @@ public class RecordResultDetailsPage extends TestResultPkgNodeDetailsPage {
 		for (int i= 0; i<childrenCnt; i++){
 			Node childNode = childrenNodes.item(i);
 			if(childNode.getNodeType() == Node.ELEMENT_NODE){
-				createOneLabelPerLine(toolkit, parent, nColumnSpan, childNode.getNodeName() + ": " + childNode.getTextContent());
+				String nodeName = childNode.getNodeName();
+				String nodeTextContent = childNode.getTextContent();
+				if(nodeName.equals(ConstantUtil.ELEM_code)){					
+					nodeTextContent += " - " + ConstantUtil.STEXTS[Integer.parseInt(nodeTextContent)];
+				}
+				createOneLabelPerLine(toolkit, parent, nColumnSpan, nodeName + ": " + nodeTextContent);
 			}
 		}
 	}

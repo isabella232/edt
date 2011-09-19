@@ -1,5 +1,8 @@
 package org.eclipse.edt.ide.eunit.ui.testresult;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.birt.chart.model.data.NumberDataSet;
 import org.eclipse.birt.chart.model.data.TextDataSet;
 import org.eclipse.birt.chart.model.data.impl.NumberDataSetImpl;
@@ -31,14 +34,23 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
+import com.ibm.icu.text.DecimalFormat;
+
 
 public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 	protected IManagedForm mform;
 	protected int nColumnSpan = 3;
 	ResultStatisticCnts statisticCnt;
 	
-	private static final String BIRT_ENGINE_PLUGIN_ID = "org.eclipse.birt.chart.engine";
-	protected Color red;
+	private static final String BIRT_ENGINE_PLUGIN_ID = "org.eclipse.birt";
+	
+	protected List <Color> colors = new ArrayList<Color>();
+	
+	private Color red;
+	private Color green;
+	private Color orange;
+	private Color yellow;
+	private Color blue;
 	
 	public TestResultPkgNodeDetailsPage(ResultStatisticCnts statistic){
 		statisticCnt = statistic;
@@ -49,12 +61,17 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 		// TODO Auto-generated method stub
 
 	}
-
+	
 	@Override
-	public void dispose() {
-		if(red != null)
-			red.dispose();
-		red = null;
+	public void dispose() {		
+		//dispose color resources
+		if(colors != null && !colors.isEmpty()){
+			for (Color color : colors) {
+				color.dispose();				
+			}
+		}
+		colors.clear();
+		colors = null;		
 	}
 
 	@Override
@@ -63,10 +80,44 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 
 	}
 
+	protected Color getBlue(){
+		if(blue == null){
+			blue = new Color(Display.getCurrent(), new RGB(0, 0, 255));
+			colors.add(blue);
+		}
+		return blue;
+	}
+	
+	protected Color getGreen(){
+		if(green == null){
+			green = new Color(Display.getCurrent(), new RGB(0, 128, 0));
+			colors.add(green);
+		}
+		return green;
+	}
+	
 	protected Color getRed(){
-		if(red == null)
-			red = new Color(Display.getCurrent(), new RGB(255, 0, 0));	
+		if(red == null){
+			red = new Color(Display.getCurrent(), new RGB(255, 0, 0));
+			colors.add(red);
+		}
 		return red;
+	}
+	
+	protected Color getOrange(){
+		if(orange == null){
+			orange = new Color(Display.getCurrent(), new RGB(255, 127, 0));
+			colors.add(orange);
+		}
+		return orange;
+	}
+	
+	protected Color getYellow(){
+		if(yellow == null){
+			yellow = new Color(Display.getCurrent(), new RGB(255, 255, 0));
+			colors.add(yellow);
+		}
+		return yellow;
 	}
 	
 	@Override
@@ -126,6 +177,17 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 		return createSection(parent, toolkit, "", "", sectionStyle, columnSpan); //$NON-NLS-1$ //$NON-NLS-2$
 	}	
 	
+	private void createSummaryLine(FormToolkit toolkit, Composite parent,			 
+			int cnt,  String resultText, Color color, boolean createIfZero) {		
+		if(createIfZero || cnt > 0){
+			DecimalFormat df = new DecimalFormat("##.##%");		
+			double rate = (double)(cnt) / (double)(statisticCnt.getExpectedCnt());
+			
+			String failedSummary = cnt + " out of " + statisticCnt.getExpectedCnt() + ", [" +  df.format(rate) + "] " + resultText ;
+			createColorBoldLabel(toolkit, parent, nColumnSpan, failedSummary, color);
+		}
+	}	
+	
 	protected void createControlsInTopSection(FormToolkit toolkit, Composite parent) {
 		createSpacer(toolkit, parent, nColumnSpan);
 		createOneLabelPerLine(toolkit, parent, nColumnSpan, "testCnt: " + statisticCnt.getTestCnt());
@@ -135,8 +197,16 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 		createOneLabelPerLine(toolkit, parent, nColumnSpan,  "errCnt: " + statisticCnt.getErrCnt());
 		createOneLabelPerLine(toolkit, parent, nColumnSpan,  "badCnt: " + statisticCnt.getBadCnt());
 		createOneLabelPerLine(toolkit, parent, nColumnSpan,  "notRunCnt: " + statisticCnt.getNotRunCnt());
+		createOneLabelPerLine(toolkit, parent, nColumnSpan, "");
 		
-		if(statisticCnt.getTestCnt() != statisticCnt.getExpectedCnt()){
+		createSummaryLine(toolkit, parent, statisticCnt.getPassedCnt(), " PASSED.", getGreen(), true);
+		createSummaryLine(toolkit, parent, statisticCnt.getFailedCnt(), " FAILED.", getRed(), false);
+		createSummaryLine(toolkit, parent, statisticCnt.getErrCnt(), " HAVE ERROR.", getOrange(), false);
+		createSummaryLine(toolkit, parent, statisticCnt.getBadCnt(), " ARE BAD.", getBlue(), false);
+		createSummaryLine(toolkit, parent, statisticCnt.getNotRunCnt(), " SKIPPED.", getYellow(), false);
+				
+		if(statisticCnt.getTestCnt() != statisticCnt.getExpectedCnt())
+		{
 			String errMsg = "ERROR: Expected count [" + statisticCnt.getExpectedCnt() + "] is different from the actual test ran [" + statisticCnt.getTestCnt() + "]";
 			createErrorLable(toolkit, parent, nColumnSpan, errMsg);
 		}
@@ -200,10 +270,14 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 	}	
 	
 	protected Label createErrorLable(FormToolkit toolkit, Composite parent, int span, String labelText){
+		return createColorBoldLabel(toolkit, parent, span, labelText, getRed());
+	}	
+	
+	protected Label createColorBoldLabel(FormToolkit toolkit, Composite parent, int span, String labelText, Color color){
 		Label label = createOneLabelPerLine(toolkit, parent, span, labelText);
-		label.setForeground(getRed());
+		label.setForeground(color);
 		label.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DIALOG_FONT));
-		return label;
+		return label;		
 	}
 
 	protected Composite createSection(Composite parent, FormToolkit toolkit, String title,

@@ -18,13 +18,19 @@ public class RSTreeLabelProvider extends LabelProvider implements IColorProvider
 	
 	private Color red;
 	private Color green;
+	private Color orange;
+	private Color yellow;
 	
 	public RSTreeLabelProvider(){
 		red = new Color(Display.getCurrent(), new RGB(255, 0, 0));			
 		green = new Color(Display.getCurrent(), new RGB(0, 128, 0));
+		orange = new Color(Display.getCurrent(), new RGB(255, 127, 0));
+		yellow = new Color(Display.getCurrent(), new RGB(255, 255, 0));
 		colors = new ArrayList<Color>();
 		colors.add(red);
 		colors.add(green);
+		colors.add(orange);
+		colors.add(yellow);
 	}
 	
 	@Override
@@ -64,8 +70,18 @@ public class RSTreeLabelProvider extends LabelProvider implements IColorProvider
 	public Color getForeground(Object element) {
 		if(element instanceof Record_ResultSummary){
 			Record_ResultSummary rs = (Record_ResultSummary)element;
-			return rs.isSuccessful ? green : red;
-
+			switch(rs.resultCode){
+			case ConstantUtil.SPASSED:
+				return green;
+			case ConstantUtil.SFAILED:
+				return red;
+			case ConstantUtil.SERROR:
+				return orange;
+			case ConstantUtil.SNOT_RUN:
+				return yellow;
+			default:
+				return red;
+			}			
 		}
 						
 		if(element instanceof TestResultRootNode){
