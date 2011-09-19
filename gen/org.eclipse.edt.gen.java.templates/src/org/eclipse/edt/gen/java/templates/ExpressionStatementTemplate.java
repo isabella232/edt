@@ -32,5 +32,7 @@ public class ExpressionStatementTemplate extends JavaTemplate {
 	public void genStatementEnd(ExpressionStatement stmt, Context ctx, TabbedWriter out) {
 		if (processEnd)
 			ctx.invokeSuper(this, genStatementEnd, stmt, ctx, out);
+		else
+			processEnd = true;
 	}
 }
