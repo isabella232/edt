@@ -15,11 +15,16 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.AsExpression;
-import org.eclipse.edt.mof.egl.Assignment;
-import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.Type;
 
 public class ArrayTypeTemplate extends JavaTemplate {
+
+	public Boolean isAssignmentBreakupWanted(ArrayType type, Context ctx, String arg, Type rhsType) {
+		// types can override this to cause an compound assignment expression to be broken up
+		// the arg contains the operation being asked about
+		return true;
+	}
 
 	public void genConversionOperation(ArrayType type, Context ctx, TabbedWriter out, AsExpression arg) {
 		// check to see if a conversion is required
@@ -65,25 +70,6 @@ public class ArrayTypeTemplate extends JavaTemplate {
 			}
 			out.print(">");
 		}
-	}
-
-	public void genTypeBasedAssignment(ArrayType type, Context ctx, TabbedWriter out, Assignment arg) {
-		String operator = "=";
-		if (arg.getOperator() != null && arg.getOperator().length() > 0)
-			operator = arg.getOperator();
-		if (operator.equals("::=")) {
-			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
-			if (arg.getRHS().getType() instanceof ArrayType)
-				out.print(".appendAll(");
-			else
-				out.print(".appendElement(");
-			if (arg.getRHS() instanceof BoxingExpression)
-				ctx.invoke(genExpression, ((BoxingExpression) arg.getRHS()).getExpr(), ctx, out);
-			else
-				ctx.invoke(genExpression, arg.getRHS(), ctx, out);
-			out.print(")");
-		} else
-			ctx.invokeSuper(this, genTypeBasedAssignment, type, ctx, out, arg);
 	}
 
 	public void genJsonTypeDependentOptions(ArrayType type, Context ctx, TabbedWriter out) {
