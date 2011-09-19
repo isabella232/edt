@@ -47,7 +47,7 @@ library TestExecutionLib
 	/**
 	* helper function to run test that has mulitple test case methods
 	*/
-	function runMultiTest(testMethods String[] in, runTestMtd runTestMethod?[] in, testName String in) returns (MultiStatus)
+	function runMultiTest(testMethods String[] in, runTestMtd runTestMethod[] in, testName String in) returns (MultiStatus)
 		ms MultiStatus;		
 		testId String;
 
