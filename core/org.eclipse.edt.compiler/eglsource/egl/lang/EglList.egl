@@ -69,15 +69,17 @@ externalType EglList type ClassType {
 	 * Adds an element to the end of this list.
 	 *
 	 * @param element  the new element.
+	 * @return this list, after the new element has been added.
 	 */
-	function appendElement(element EglAny in);
+	function appendElement(element EglAny in) returns(EglList);
 	
 	/**
 	 * Adds the elements of the specified list to the end of this list.
 	 *
 	 * @param other  the other list.
+	 * @return this list, after the new elements have been added.
 	 */
-	function appendAll(other EglList in);
+	function appendAll(other EglList in) returns(EglList);
 	
 	/**
 	 * Inserts an element into this list at a specified position.  Any elements
