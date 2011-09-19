@@ -84,3 +84,47 @@ egl.eglx.lang.StringLib["spaces"] = function(/*integer*/i) {
 	return (s.join(''));
 };
 
+
+egl.eglx.lang.StringLib.defaultDateFormat = "MM/dd/yyyy";
+egl.eglx.lang.StringLib.db2TimestampFormat  = "yyyy-MM-dd-HH.mm.ss.SSSSSS";
+
+/* "Dispatcher" that looks at type a and fwds to the correct variant.
+ * TODO sbg this is temporary;  it should be removed when we have a
+ * proper implementation of function overrrides....
+ */
+egl.eglx.lang.StringLib["format"] = function(a, b) {
+	if (a == null)
+		throw new egl.lang.NullValueException();  //TODO sbg need a more specific exception?
+	if (a instanceof Date) {
+		return egl.eglx.lang.StringLib.formatTimestamp(a,b);
+	}
+};
+
+egl.eglx.lang.StringLib["formatTimestamp"] = function(/*timestamp*/val, /*optional string*/format) {
+	if (!format || format == "" ) {
+		format = egl.eglx.lang.StringLib.db2TimestampFormat;
+	}
+	try
+	{
+		return egl.timeStampToString( val, format );
+	}
+	catch ( oops )
+	{
+		return null;
+	}
+};
+
+egl.eglx.lang.StringLib["formatDate"] = function(/*date*/date, /*optional string*/format) {
+	if (!format) {
+		format = egl.eglx.lang.StringLib.defaultDateFormat;
+	}
+	
+	try
+	{
+		return egl.dateToString( date, format );
+	}
+	catch ( oops )
+	{
+		return null;
+	}
+};
