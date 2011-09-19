@@ -17,9 +17,9 @@ import org.eclipse.edt.javart.Delegate;
 
 public interface EglList<T> extends EglAny, java.util.List<T> {
 
-	public Collection<? extends T> appendAll(Collection<? extends T> collection);
+	public java.util.List<T> appendAll(Collection<? extends T> collection);
 
-	public Collection<? extends T> appendElement(T element);
+	public java.util.List<T> appendElement(T element);
 
 	public T getElement(int index);
 
