@@ -64,8 +64,8 @@ import com.ibm.icu.text.SimpleDateFormat;
 public abstract class GenTestDriverAction implements	IObjectActionDelegate{
 
 	private static final String RUNUNIT_PROPERTIES = "rununit.properties";
-	private static final String RESULTROOT_KEY = "EGLTestResultRoot";
-	private static final String RESULTROOT_DIR_APPEND = "ResultRoot";
+	protected static final String RESULTROOT_KEY = "EGLTestResultRoot";
+	protected static final String RESULTROOT_DIR_APPEND = "ResultRoot";
 	
 	protected static final String GENERATORID_JAVA = "org.eclipse.edt.ide.gen.JavaGenProvider";
 	protected static final String GENERATORID_JAVASCRIPT = "org.eclipse.edt.ide.gen.JavaScriptGenProvider";
