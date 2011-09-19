@@ -17,7 +17,7 @@ import java.util.List;
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
-import org.eclipse.edt.gen.java.JavaAliaser;
+import org.eclipse.edt.javart.util.JavaAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.DataTable;
 import org.eclipse.edt.mof.egl.Form;

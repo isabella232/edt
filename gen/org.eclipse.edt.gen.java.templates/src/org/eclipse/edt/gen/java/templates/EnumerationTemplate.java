@@ -54,8 +54,6 @@ public class EnumerationTemplate extends JavaTemplate {
 		out.print("private ");
 		ctx.invoke(genClassName, (Type) part, ctx, out);
 		out.println("(int value) {");
-//		out.print("super(");
-//		out.println(");");
 		out.println("\tthis.value = value;");
 		out.println("}");
 		//the runtime needs to use reflection so an enum must have a default constructor
@@ -64,8 +62,6 @@ public class EnumerationTemplate extends JavaTemplate {
 		out.println("() {");
 		out.println("value = -1;");
 		out.println("}");
-		
-		
 	}
 
 	public void genDefaultValue(Enumeration part, Context ctx, TabbedWriter out) {
