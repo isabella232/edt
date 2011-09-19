@@ -383,6 +383,13 @@ public class IRUtils {
 		}
 	}
 		
+	private static boolean isList(Classifier clazz) {
+		if (clazz != null) {
+			return (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGLList));
+		}
+		return false;
+	}
+
 	private static boolean isString(Classifier clazz) {
 		if (clazz != null) {
 			return (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGL_EGLString)) || (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGLString));
@@ -424,6 +431,10 @@ public class IRUtils {
 			return expr;
 		}
 		if (exprType.equals(type) || exprType.getClassifier().equals(type)) {
+			return expr;
+		}
+		
+		if (isList(type.getClassifier()) && (exprType.equals(type.getClassifier()) || exprType.getClassifier().equals(type.getClassifier()))) {
 			return expr;
 		}
 		
