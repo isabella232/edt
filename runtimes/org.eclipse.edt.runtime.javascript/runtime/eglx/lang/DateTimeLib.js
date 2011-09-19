@@ -85,3 +85,23 @@ egl.eglx.lang.DateTimeLib["mdy"] = function(/*integer*/month, /*integer*/day, /*
 	}
 };
 
+
+egl.eglx.lang.DateTimeLib["currentDate"] = function() {
+	//returns a new Date object
+	var date = new Date();
+	date.setHours( 0 );
+	date.setMinutes( 0 );
+	date.setSeconds( 0 );
+	date.setMilliseconds( 0 );
+	return date;
+};
+egl.eglx.lang.DateTimeLib["currentTime"] = function() {
+	//returns a new Date object
+	//just ignore date fields
+	return new Date();
+};
+egl.eglx.lang.DateTimeLib["currentTimeStamp"] = function( /*string*/ pattern ) {
+	//returns a new Date object
+	//timestamp keeps every field
+	return this.extend( "timestamp", new Date(), pattern );
+};
