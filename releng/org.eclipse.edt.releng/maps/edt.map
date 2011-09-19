@@ -24,7 +24,7 @@ plugin@org.eclipse.edt.gen.java=v201109191310,:pserver:anonymous@dev.eclipse.org
 plugin@org.eclipse.edt.gen.java.templates=v201109191310,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.java.templates
 plugin@org.eclipse.edt.gen.java.templates.egl.lang=v201109161523,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.java.templates.egl.lang
 plugin@org.eclipse.edt.gen.java.templates.eglx.persistence=v201109171800,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.java.templates.eglx.persistence
-plugin@org.eclipse.edt.gen.javascript=v201109142304,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.javascript
+plugin@org.eclipse.edt.gen.javascript=v201109191450,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.javascript
 plugin@org.eclipse.edt.gen.javascript.templates=v201109162347,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.javascript.templates
 plugin@org.eclipse.edt.gen.javascript.templates.egl.core=F08081647,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.javascript.templates.egl.core
 plugin@org.eclipse.edt.gen.javascript.templates.egl.lang=v201109161432,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.javascript.templates.egl.lang
@@ -49,7 +49,7 @@ plugin@org.eclipse.edt.mof.egl=v201109190924,:pserver:anonymous@dev.eclipse.org:
 plugin@org.eclipse.edt.mof.eglx.persistence.sql=v201109171400,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.mof.eglx.persistence.sql
 plugin@org.eclipse.edt.mof.eglx.services=v201109141827,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.mof.eglx.services
 plugin@org.eclipse.edt.runtime.java=v201109191441,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.java
-plugin@org.eclipse.edt.runtime.javascript=v201109182229,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.javascript
+plugin@org.eclipse.edt.runtime.javascript=v201109191450,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.javascript
 
 feature@org.eclipse.edt.tests.feature=v201102251630,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/tests/org.eclipse.edt.tests.feature
 plugin@org.eclipse.edt.compiler.tests plugin=v201102251630,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/tests/org.eclipse.edt.compiler.tests
