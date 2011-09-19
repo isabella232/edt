@@ -36,7 +36,7 @@ public class Constants {
 	// Commonly used package names
 	public static final String JSRT_EGL_NAMESPACE = "egl.";
 	public static final String JSRT_STRLIB_PKG = "egl.eglx.lang.StrLib['$inst'].";
-	public static final String JSRT_DTTMLIB_PKG = "egl.eglx.lang.DateTimeLib['$inst'].";
+	public static final String JSRT_DTTMLIB_PKG = "egl.eglx.lang.DateTimeLib.";
 	public static final String JSRT_XMLLIB_PKG = "egl.eglx.xml.XMLLib['$inst'].";
 	
 	// these are annotations key values, related to the values in the IRs
