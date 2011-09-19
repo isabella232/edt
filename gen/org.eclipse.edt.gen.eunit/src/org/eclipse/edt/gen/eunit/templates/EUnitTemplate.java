@@ -103,14 +103,14 @@ public abstract class EUnitTemplate extends AbstractTemplate {
 			functionCnt++;
 		}
 		out.println("];");
-		out.println("runTestMtds runTestMethod?[] = new runTestMethod?[" + functionCnt + "];");
-		int funcIndex = 1;
+		
+		out.println("runTestMtds runTestMethod[] = new runTestMethod[];");
 		for(String function : functions){
-			out.print("runTestMtds["+ funcIndex+ "] = ");
+			out.print("runTestMtds ::= ");
 			out.println(part.getFullyQualifiedName() + "." + function + ";");
-			funcIndex ++;
 		}
-//		out.print("runTestMtds runTestMethod[] = [");
+		
+//		out.print("runTestMtds runTestMethod[] = new runTestMethod[]{");
 //		boolean flag3 = false;
 //		for (String function : functions) {
 //			if (flag3)
@@ -118,7 +118,8 @@ public abstract class EUnitTemplate extends AbstractTemplate {
 //			out.print(part.getFullyQualifiedName() + "." + function);
 //			flag3 = true;
 //		}
-//		out.println("];");
+//		out.println("};");
+		
 		out.println("return (TestExecutionLib.runMultiTest(testMethods, runTestMtds, testName));");
 		out.popIndent();
 		out.println("end");
