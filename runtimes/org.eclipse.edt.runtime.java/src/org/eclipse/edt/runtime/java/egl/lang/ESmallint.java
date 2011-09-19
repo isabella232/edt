@@ -58,7 +58,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	public static Short asSmallint(Integer value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;
 		if (throwOverflowExceptions) {
 			try {
@@ -75,7 +75,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	public static Short asSmallint(EInt value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;
 		if (throwOverflowExceptions) {
 			try {
@@ -92,7 +92,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	public static Short asSmallint(Long value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;
 		if (throwOverflowExceptions) {
 			try {
@@ -109,7 +109,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	public static Short asSmallint(EBigint value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;
 		if (throwOverflowExceptions) {
 			try {
@@ -126,7 +126,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	public static Short asSmallint(Float value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;;
 		if (throwOverflowExceptions) {
 			try {
@@ -143,7 +143,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	public static Short asSmallint(ESmallfloat value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;;
 		if (throwOverflowExceptions) {
 			try {
@@ -160,7 +160,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	public static Short asSmallint(Double value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;;
 		if (throwOverflowExceptions) {
 			try {
@@ -177,7 +177,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	public static Short asSmallint(EFloat value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;;
 		if (throwOverflowExceptions) {
 			try {
@@ -194,7 +194,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	public static Short asSmallint(BigDecimal value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;;
 		if (throwOverflowExceptions) {
 			try {
@@ -211,7 +211,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	public static Short asSmallint(EDecimal value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;;
 		if (throwOverflowExceptions) {
 			try {
@@ -228,7 +228,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	public static Short asSmallint(BigInteger value) throws AnyException {
 		if (value == null)
 			return null;
-		boolean throwOverflowExceptions = true; // TODO need program flag on whether to throw exceptions or not.
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;
 		if (throwOverflowExceptions)
 			try {
