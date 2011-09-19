@@ -183,6 +183,9 @@ public class DeploymentUtilities {
 	}
 	
 	public static final void findFolder(final IProject project, final List results, final String targetFolder) throws CoreException {
+		if (targetFolder == null || targetFolder.length() == 0) {
+			return;
+		}
 		try {
 			project.accept(new IResourceVisitor() {
 				public boolean visit(IResource resource) throws CoreException {
