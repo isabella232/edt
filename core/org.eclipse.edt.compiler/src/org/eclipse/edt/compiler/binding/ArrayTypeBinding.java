@@ -24,6 +24,7 @@ import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter.UseType;
 import org.eclipse.edt.compiler.internal.core.lookup.System.ISystemLibrary;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibrary;
+import org.eclipse.edt.compiler.tools.TestLoadPart.MyVisitor;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
   
 
@@ -65,23 +66,9 @@ public class ArrayTypeBinding extends TypeBinding {
     	return (ArrayTypeBinding)result.get();
     }
     
-    public static final SystemFunctionBinding APPENDELEMENT = SystemLibrary.createSystemFunction(
-    		IEGLConstants.SYSTEM_WORD_APPENDELEMENT,
-    		null,
-    		new String[]		{"appendElement"},
-    		new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.ANY)},
-    		new UseType[]		{UseType.IN},
-    		ISystemLibrary.AppendElement_func
-    	);
+    public static final SystemFunctionBinding APPENDELEMENT = createAppendElement(null);
 
-	public static final SystemFunctionBinding APPENDALL = SystemLibrary.createSystemFunction(
-			IEGLConstants.SYSTEM_WORD_APPENDALL,
-			null,
-			new String[]		{"array"},
-			new ITypeBinding[]	{getInstance(PrimitiveTypeBinding.getInstance(Primitive.ANY))},
-			new UseType[]		{UseType.IN},
-			ISystemLibrary.AppendAll_func
-		);
+	public static final SystemFunctionBinding APPENDALL = createAppendAll(null);
 
 	public static final SystemFunctionBinding INSERTELEMENT = SystemLibrary.createSystemFunction(
 			IEGLConstants.SYSTEM_WORD_INSERTELEMENT,
@@ -188,6 +175,7 @@ public static final SystemFunctionBinding SORT = SystemLibrary.createSystemFunct
 
     
 	protected static final Map ARRAY_FUNCTIONS = new HashMap();
+	private transient Map instanceArrayFunctions;
 	static {		
 		ARRAY_FUNCTIONS.put(APPENDELEMENT.getName(), new NestedFunctionBinding(APPENDELEMENT.getName(), null, APPENDELEMENT));
 		ARRAY_FUNCTIONS.put(APPENDALL.getName(), new NestedFunctionBinding(APPENDALL.getName(), null, APPENDALL));
@@ -236,6 +224,7 @@ public static final SystemFunctionBinding SORT = SystemLibrary.createSystemFunct
     }
 
 	public void clear() {
+		instanceArrayFunctions = null;
 	}
 	
 	public ITypeBinding getBaseType() {
@@ -249,7 +238,7 @@ public static final SystemFunctionBinding SORT = SystemLibrary.createSystemFunct
 	}
 	
     public IDataBinding findData(String simpleName) {
-		IDataBinding result = (IDataBinding) ARRAY_FUNCTIONS.get(simpleName);
+		IDataBinding result = (IDataBinding) getInstanceArrayFunctions().get(simpleName);
 		if(result != null) return result;
 		return IBinding.NOT_FOUND_BINDING;
     }
@@ -284,5 +273,40 @@ public static final SystemFunctionBinding SORT = SystemLibrary.createSystemFunct
 		ArrayTypeBinding nullable = new ArrayTypeBinding(elementType);
 		nullable.setNullable(true);
 		return nullable;
+	}
+	
+	private Map getInstanceArrayFunctions() {
+		if (instanceArrayFunctions == null) {
+			instanceArrayFunctions = new HashMap(ARRAY_FUNCTIONS);
+			
+			instanceArrayFunctions.put(APPENDALL.getName(), new NestedFunctionBinding(APPENDALL.getName(), null, createAppendAll(this)));
+			instanceArrayFunctions.put(APPENDELEMENT.getName(), new NestedFunctionBinding(APPENDELEMENT.getName(), null, createAppendElement(this)));
+		}
+		return instanceArrayFunctions;
+	}
+	
+	private static SystemFunctionBinding createAppendAll(ITypeBinding returnType) {
+		return SystemLibrary.createSystemFunction(
+				IEGLConstants.SYSTEM_WORD_APPENDALL,
+				null,
+				returnType,
+				new String[]		{"array"},
+				new ITypeBinding[]	{getInstance(PrimitiveTypeBinding.getInstance(Primitive.ANY))},
+				new UseType[]		{UseType.IN},
+				ISystemLibrary.AppendAll_func
+			);
+	}
+
+
+	private static SystemFunctionBinding createAppendElement(ITypeBinding returnType) {
+		return SystemLibrary.createSystemFunction(
+	    		IEGLConstants.SYSTEM_WORD_APPENDELEMENT,
+	    		null,
+	    		returnType,
+	    		new String[]		{"appendElement"},
+	    		new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.ANY)},
+	    		new UseType[]		{UseType.IN},
+	    		ISystemLibrary.AppendElement_func
+	    	);		
 	}
 }
