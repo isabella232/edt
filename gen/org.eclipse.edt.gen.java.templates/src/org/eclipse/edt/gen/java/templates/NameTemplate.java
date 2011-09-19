@@ -16,27 +16,31 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.*;
 
-public class NameTemplate extends JavaTemplate
-{
-	public void genAssignment( Name expr, Context ctx, TabbedWriter out, Expression arg1, String arg2 )
-	{
-		String propertyFunction = CommonUtilities.getPropertyFunction(
-				expr.getNamedElement(), true, ctx );
-		if ( propertyFunction != null )
-		{
-			if ( expr.getQualifier() != null )
-			{
-				ctx.invoke( genExpression, expr.getQualifier(), ctx, out );
-				out.print( '.' );
+public class NameTemplate extends JavaTemplate {
+
+	public void genAssignment(Name expr, Context ctx, TabbedWriter out, Expression arg1, String arg2) {
+		String propertyFunction = CommonUtilities.getPropertyFunction(expr.getNamedElement(), true, ctx);
+		if (propertyFunction != null) {
+			Function currentFunction = ctx.getCurrentFunction();
+			if (currentFunction != null && propertyFunction.equals(currentFunction.getName())) {
+				if (expr.getQualifier() != null) {
+					ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+					out.print('.');
+				}
+				ctx.invoke(genName, expr.getNamedElement(), ctx, out);
+				out.print(arg2);
+				ctx.invoke(genExpression, arg1, ctx, out);
+			} else {
+				if (expr.getQualifier() != null) {
+					ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+					out.print('.');
+				}
+				out.print(propertyFunction);
+				out.print('(');
+				ctx.invoke(genExpression, arg1, ctx, out);
+				out.print(')');
 			}
-			out.print( propertyFunction );
-			out.print( '(' );
-			ctx.invoke( genExpression, arg1, ctx, out );
-			out.print( ')' );
-		}
-		else
-		{
-			ctx.invoke( genAssignment, expr.getType(), ctx, out, expr, arg1, arg2 );
-		}
+		} else
+			ctx.invoke(genAssignment, expr.getType(), ctx, out, expr, arg1, arg2);
 	}
 }

@@ -17,35 +17,30 @@ import org.eclipse.edt.javart.util.JavaAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.*;
 
-public class NamedElementTemplate extends JavaTemplate 
-{
-	public void genAccessor( NamedElement element, Context ctx, TabbedWriter out )
-	{
-		String propertyFunction = CommonUtilities.getPropertyFunction( element, false, ctx );
-		if ( propertyFunction != null )
-		{
-			out.print( propertyFunction );
-			out.print( "()" );
-		}
-		else
-		{
-			genName( element, ctx, out );
-		}
+public class NamedElementTemplate extends JavaTemplate {
+
+	public void genAccessor(NamedElement element, Context ctx, TabbedWriter out) {
+		String propertyFunction = CommonUtilities.getPropertyFunction(element, false, ctx);
+		if (propertyFunction != null) {
+			Function currentFunction = ctx.getCurrentFunction();
+			if (currentFunction != null && propertyFunction.equals(currentFunction.getName()))
+				genName(element, ctx, out);
+			else {
+				out.print(propertyFunction);
+				out.print("()");
+			}
+		} else
+			genName(element, ctx, out);
 	}
 
-	public void genName(NamedElement element, Context ctx, TabbedWriter out) 
-	{
-		if ( element instanceof Member && ((Member)element).getContainer() instanceof ExternalType )
-		{
-			Member member = (Member)element;
-			if ( CommonUtilities.isJavaExternalType( (ExternalType)member.getContainer() ) 
-					&& member.getAnnotation( "eglx.lang.ExternalName" ) != null )
-			{
-				out.print( (String)member.getAnnotation( "eglx.lang.ExternalName" ).getValue() );
+	public void genName(NamedElement element, Context ctx, TabbedWriter out) {
+		if (element instanceof Member && ((Member) element).getContainer() instanceof ExternalType) {
+			Member member = (Member) element;
+			if (CommonUtilities.isJavaExternalType((ExternalType) member.getContainer()) && member.getAnnotation("eglx.lang.ExternalName") != null) {
+				out.print((String) member.getAnnotation("eglx.lang.ExternalName").getValue());
 				return;
 			}
 		}
-
 		out.print(JavaAliaser.getAlias(element.getName()));
 	}
 }
