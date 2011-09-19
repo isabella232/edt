@@ -20,11 +20,10 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter.UseType;
+import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.System.ISystemLibrary;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibrary;
-import org.eclipse.edt.compiler.tools.TestLoadPart.MyVisitor;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
   
 
