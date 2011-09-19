@@ -64,15 +64,15 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 
 	// the following group of methods implements the edt version, which means that the indexes are relative to 1
 	@Override
-	public java.util.List<T> appendAll(Collection<? extends T> c) {
+	public EglList<T> appendAll(Collection<? extends T> c) {
 		list.addAll(c);
-		return list;
+		return this;
 	}
 
 	@Override
-	public java.util.List<T> appendElement(T element) {
+	public EglList<T> appendElement(T element) {
 		list.add(element);
-		return list;
+		return this;
 	}
 
 	@Override
