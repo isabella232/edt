@@ -107,6 +107,11 @@ class Egl2MofMember extends Egl2MofPart {
 		}
 	
 		EObject obj;
+		EList<EObject> list = null;;
+		if (node.getNames().size() > 1) {
+			list = new EList<EObject>();
+		}
+		
 		if (inMofContext) {
 			EField f = mof.createEField(true);
 			setUpMofTypedElement(f, field);
@@ -701,7 +706,17 @@ class Egl2MofMember extends Egl2MofPart {
 		}
 		
 		if (initializer != null) {
-			field.setInitializerStatements(factory.createStatementBlock());
+
+			//handle the annotations
+			if (settingsBlock != null) {
+				processSettings(field, settingsBlock);
+			}
+			
+			//Initializers may have been created when processing the settings
+			if (field.getInitializerStatements() == null) {
+				field.setInitializerStatements(factory.createStatementBlock());
+			}
+			
 			setElementInformation(initializer, field.getInitializerStatements());
 			initializer.accept(this);
 			Expression expr = (Expression)stack.pop();
@@ -709,10 +724,6 @@ class Egl2MofMember extends Egl2MofPart {
 			setElementInformation(initializer, stmt);
 			field.getInitializerStatements().getStatements().add(stmt);
 			field.setHasSetValuesBlock(true);
-			//handle the annotations
-			if (settingsBlock != null) {
-				processSettings(field, settingsBlock);
-			}
 		}
 		else {
 			if (settingsBlock != null) {
