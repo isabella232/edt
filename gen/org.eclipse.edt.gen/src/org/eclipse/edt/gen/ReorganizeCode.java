@@ -630,12 +630,14 @@ public class ReorganizeCode extends AbstractVisitor {
 	public boolean visit(BinaryExpression object) {
 		// if the lhs of this binary expression is an array, then we need to convert this to either appendAll or
 		// appendElement depending on whether the rhs is an array or not
-		if (object.getLHS().getType().getClassifier().equals(TypeUtils.Type_LIST)) {
+		if (object.getLHS().getType() != null && object.getLHS().getType().getClassifier() != null
+			&& object.getLHS().getType().getClassifier().equals(TypeUtils.Type_LIST)) {
 			// create the qualified function invocation
 			QualifiedFunctionInvocation invocation = factory.createQualifiedFunctionInvocation();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				invocation.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-			if (object.getRHS().getType().getClassifier().equals(TypeUtils.Type_LIST))
+			if (object.getRHS().getType() != null && object.getRHS().getType().getClassifier() != null
+				&& object.getRHS().getType().getClassifier().equals(TypeUtils.Type_LIST))
 				invocation.setId("appendAll");
 			else
 				invocation.setId("appendElement");
