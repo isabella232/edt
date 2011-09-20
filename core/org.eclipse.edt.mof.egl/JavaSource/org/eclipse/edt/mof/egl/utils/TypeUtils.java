@@ -246,7 +246,7 @@ public class TypeUtils implements MofConversion {
 	/**
 	 * Compatibility is defined between StructPart classifiers as either having
 	 * explicit conversion operations defined between them or the rhsType being
-	 * a subtype of the lhsType.
+	 * a subtype of the lhsType or the lhsType being a subtype of the rhsType
 	 * 
 	 * For a function to be compatible with a delegate, the parameters and return type must match exactly
 	 * 
@@ -261,6 +261,9 @@ public class TypeUtils implements MofConversion {
 			if (((SubType)rhsType).isSubtypeOf((StructPart)lhsType)) {
 				return true;
 			}
+		}
+		
+		if (lhsType instanceof SubType && rhsType instanceof StructPart) {		
 			if (isReferenceType(lhsType) && ((SubType)lhsType).isSubtypeOf((StructPart)rhsType)) {
 				return true;
 			}
