@@ -46,16 +46,16 @@ public class DedicatedServiceTemplate extends JavaScriptTemplate {
 		Annotation eglLocation = field.getAnnotation(IEGLConstants.EGL_LOCATION);
 		Container container = field.getContainer();
 
-		LogicAndDataPart httpRecordType = (LogicAndDataPart)TypeUtils.getType(TypeUtils.EGL_KeyScheme + Constants.PartHttpRest).clone();
+		LogicAndDataPart httpRecordType = (LogicAndDataPart)TypeUtils.getType(TypeUtils.EGL_KeyScheme + Constants.PartHttpRest);
 		
-		NewExpression newExpr = ctx.getFactory().createNewExpression();
+		NewExpression newExpr = factory.createNewExpression();
 		if (eglLocation != null)
 			newExpr.addAnnotation(eglLocation);
 		newExpr.setId(Constants.PartHttpRest);
 		ctx.invoke(genNewExpression, newExpr, ctx, out);
 		out.println(";");
 		
-		StatementBlock stmtBlock = ctx.getFactory().createStatementBlock();
+		StatementBlock stmtBlock = factory.createStatementBlock();
 		if (eglLocation != null)
 			stmtBlock.addAnnotation(eglLocation);
 		stmtBlock.setContainer(field.getContainer());
@@ -68,18 +68,20 @@ public class DedicatedServiceTemplate extends JavaScriptTemplate {
 		httpRecordMemberName.setId(field.getId());
 
 		//<field>.restType = ServiceType.EglDedicated;
-		Field httpRecordField = getField(httpRecordType, "restType", eglLocation);
+		Field httpRecordField = httpRecordType.getField("restType");
 		stmtBlock.getStatements().add(createAssignment(container, 
 				createFieldMemberAccess( httpRecordMemberName, httpRecordField, eglLocation),
-				createEnumerationEntry(httpRecordField.getType(), "egldedicated"), 
+				createEnumerationEntry(httpRecordField.getType(), "egldedicated", eglLocation), 
 				eglLocation));		
 
 		//<field>.request.uri = "services.HelloWorld";
-		Field httpRecordRequestField = getField(httpRecordType, "request", eglLocation);
+		Field httpRecordRequestField = httpRecordType.getField("request");
 		MemberAccess httpRecordRequestFieldMemberAccess = createFieldMemberAccess(httpRecordMemberName, httpRecordRequestField, eglLocation);
 		
-		Field httpRecordRequestUriField = getField((LogicAndDataPart)httpRecordRequestField.getType(), "uri", eglLocation);
-		StringLiteral stringLiteral = ctx.getFactory().createStringLiteral();
+		Field httpRecordRequestUriField = ((LogicAndDataPart)httpRecordRequestField.getType()).getField("uri");
+		StringLiteral stringLiteral = factory.createStringLiteral();
+		if (eglLocation != null)
+			stringLiteral.addAnnotation(eglLocation);
 		stringLiteral.setValue(serviceName);
 		stmtBlock.getStatements().add(createAssignment(container, 
 				createFieldMemberAccess(httpRecordRequestFieldMemberAccess, httpRecordRequestUriField, eglLocation),
@@ -89,16 +91,14 @@ public class DedicatedServiceTemplate extends JavaScriptTemplate {
 		ctx.invoke(genStatementBodyNoBraces, stmtBlock, ctx, out);
 	}
 
-	private Field getField(LogicAndDataPart record, String fieldName, Annotation eglLocation){
-		Field field = (Field)record.getField(fieldName);
-		if (eglLocation != null)
-			field.addAnnotation(eglLocation);
-		return field;
-	}
-	private MemberAccess createEnumerationEntry(Type enumerationType, String id) {
+	private MemberAccess createEnumerationEntry(Type enumerationType, String id, Annotation eglLocation) {
 		PartName partName  = factory.createPartName();
 		partName.setType(enumerationType);
 		MemberAccess enumEntry = factory.createMemberAccess();
+		if (eglLocation != null){
+			partName.addAnnotation(eglLocation);
+			enumEntry.addAnnotation(eglLocation);
+		}
 		enumEntry.setId(id);
 		enumEntry.setQualifier(partName);
 		return enumEntry;
@@ -116,12 +116,12 @@ public class DedicatedServiceTemplate extends JavaScriptTemplate {
 
 	private AssignmentStatement createAssignment(Container container, LHSExpr lhsExpr, Expression rhsExpr, Annotation eglLocation) {
 		AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
-		if (eglLocation != null)
-			assignmentStatement.addAnnotation(eglLocation);
 		assignmentStatement.setContainer(container);
 		Assignment assignment = factory.createAssignment();
-		if (eglLocation != null)
+		if (eglLocation != null){
+			assignmentStatement.addAnnotation(eglLocation);
 			assignment.addAnnotation(eglLocation);
+		}
 		assignmentStatement.setAssignment(assignment);
 		assignment.setLHS(lhsExpr);
 		assignment.setRHS(rhsExpr);
