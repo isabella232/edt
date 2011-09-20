@@ -14,6 +14,7 @@ egl.defineClass(
 	"constructor" : function() {				
 	}
 });
-egl.eglx.services.ServiceLib["bindResource"] = function(serviceOrInterface, resource) {
-	serviceOrInterface = resource;
+egl.eglx.services.ServiceLib["completeBind"] = function(serviceOrInterface, resource) {
+	serviceOrInterface.ezeCopy(egl.egl.lang.EglAny.unbox(resource));
+	return egl.egl.lang.EglAny.unbox(resource);
 };
