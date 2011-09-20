@@ -46,14 +46,11 @@ public class JavaGenerator extends Generator {
 	public JavaGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
 		super(processor, requestor);
 		generator = processor;
-		
-		out = (Boolean.TRUE 
-			==	(Boolean) context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)
-			) ?  new TabbedReportWriter("org.eclipse.edt.gen.java.templates.", new StringWriter())
-		      :  new TabbedWriter(new StringWriter());
 	}
 
 	public String getResult() {
+		if ( out == null )
+			return "";
 		return out.getWriter().toString();
 	}
 	
@@ -68,17 +65,8 @@ public class JavaGenerator extends Generator {
 		return context;
 	}
 
-	public boolean visit(Part part) {
-		try {
-			context.invoke(JavaTemplate.genPart, part, context, out);
-		}
-		catch (TemplateException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
 	public void generate(Part part) throws GenerationException {
+		makeWriter();
 		try {
 			context.putAttribute(context.getClass(), Constants.SubKey_partBeingGenerated, part);
 			context.invoke(JavaTemplate.preGenPart, part, context);
@@ -139,6 +127,16 @@ public class JavaGenerator extends Generator {
 		}
 		// close the output
 		out.close();
+	}
+	
+	private void makeWriter()
+	{
+		if ( out == null )
+		{
+			out = Boolean.TRUE.equals( context.getParameter( org.eclipse.edt.gen.Constants.parameter_report ) )
+					?  new TabbedReportWriter( "org.eclipse.edt.gen.java.templates.", new StringWriter() )
+				    :  new TabbedWriter( new StringWriter() );
+		}
 	}
 	
 	private String unqualifyFileName(String fileName) {
