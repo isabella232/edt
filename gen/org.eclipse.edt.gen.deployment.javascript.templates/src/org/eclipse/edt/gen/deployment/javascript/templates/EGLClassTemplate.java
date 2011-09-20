@@ -19,6 +19,7 @@ import org.eclipse.edt.gen.deployment.util.CommonUtilities;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Library;
@@ -43,9 +44,9 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		try {
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			for(Part refPart:refParts){
-				if(!processedParts.contains(refPart.getFullyQualifiedName()) && refPart instanceof EGLClass){
+				if(!processedParts.contains(refPart.getFullyQualifiedName())){
 					processedParts.add(refPart.getFullyQualifiedName());
-					if(CommonUtilities.isUserPart(refPart)){
+					if(CommonUtilities.isUserPart(refPart) || refPart instanceof Enumeration){
 						ctx.invoke(genDependentPart, refPart, ctx, dependentFiles);
 					}
 				}
