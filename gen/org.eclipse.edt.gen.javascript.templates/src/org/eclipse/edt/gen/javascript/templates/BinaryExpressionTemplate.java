@@ -21,18 +21,16 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 public class BinaryExpressionTemplate extends JavaScriptTemplate {
 
 	public void genExpression(BinaryExpression expr, Context ctx, TabbedWriter out) {
-		BinaryExpression binExpr = (BinaryExpression) expr.clone();
-
 		/*
 		 * Filter out conversions that aren't needed by the JavaScript runtime; some EGL "conversions" are actually
 		 * semantically equivalent in the JavaScript runtime (e.g., num and dec) and this is the only place to intelligently
 		 * ignore those conversions in binary expressions.
 		 */
 		if (CommonUtilities.needsConversion(expr.getRHS().getType(), expr.getLHS().getType())) {
-			IRUtils.makeCompatible(binExpr, expr.getLHS().getType(), expr.getRHS().getType());
+			IRUtils.makeCompatible(expr, expr.getLHS().getType(), expr.getRHS().getType());
 		}
 		out.print("(");
-		ctx.invoke(genBinaryExpression, (Type) binExpr.getOperation().getContainer(), ctx, out, binExpr);
+		ctx.invoke(genBinaryExpression, (Type) expr.getOperation().getContainer(), ctx, out, expr);
 		out.print(")");
 	}
 }

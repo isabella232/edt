@@ -24,7 +24,7 @@ public class FunctionTemplate extends JavaScriptTemplate {
 	}
 
 	public void genDeclaration(Function function, Context ctx, TabbedWriter out) {
-		ctx.setCurrentFunction(function.getName());
+		ctx.setCurrentFunction(function);
 		out.print("\"");
 		genName(function, ctx, out);
 		out.print("\"");

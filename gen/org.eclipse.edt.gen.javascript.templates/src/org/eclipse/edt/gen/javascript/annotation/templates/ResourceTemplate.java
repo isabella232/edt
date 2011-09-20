@@ -29,7 +29,7 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 public class ResourceTemplate extends JavaScriptTemplate {
 
 	public void genDefaultValue(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) {
-		ExternalType serviceLib = (ExternalType)TypeUtils.getType(TypeUtils.EGL_KeyScheme + Constants.LibrarySys).clone();
+		ExternalType serviceLib = (ExternalType)TypeUtils.getType(TypeUtils.EGL_KeyScheme + Constants.LibrarySys); //.clone();
 		QualifiedFunctionInvocation invocation = factory.createQualifiedFunctionInvocation();
 		PartName partName  = factory.createPartName();
 		partName.setType(serviceLib);

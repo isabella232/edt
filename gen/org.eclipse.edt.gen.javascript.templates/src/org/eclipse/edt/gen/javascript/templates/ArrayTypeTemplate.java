@@ -32,7 +32,7 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 	public Boolean isAssignmentBreakupWanted(ArrayType type, Context ctx, String arg, Type rhsType) {
 		// types can override this to cause an compound assignment expression to be broken up
 		// the arg contains the operation being asked about
-		return true;
+		return false;  ///TODO sbg This should be true but it breaks onChange ::= some_delegate
 	}
 
 	public void genDefaultValue(ArrayType generic, Context ctx, TabbedWriter out, Field arg) {

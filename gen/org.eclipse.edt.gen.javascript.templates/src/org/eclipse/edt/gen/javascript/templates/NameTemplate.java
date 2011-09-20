@@ -31,43 +31,75 @@ public class NameTemplate extends JavaScriptTemplate {
 		boolean genAsAssignment = true;
 		if ( propertyFunction != null )
 		{
-			Part currentPart = (Part) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated);
-			QualifiedFunctionInvocation qfi = CommonUtilities.getFunctionInvocation(ctx, (Field)expr.getNamedElement(), propertyFunction, true);
-			Container nameCnr = null;
-			if (qfi != null) {
-				try {
-					nameCnr = qfi.getTarget().getContainer();
-				}
-				catch (Exception e){
-					nameCnr = null;
-				}
-			}
-			
-			boolean nameContainedInPart = (nameCnr != null) && (nameCnr instanceof Part)
-										  && (((Part) nameCnr).getFullyQualifiedName().equals(currentPart.getFullyQualifiedName()));
-
-			if ((propertyFunction != null) && (nameCnr != null) && (!nameContainedInPart)) {
+			// First, is this a reference within the setter's definition?
+			if (CommonUtilities.isCurrentFunction(ctx, propertyFunction)) {
 				genAsAssignment = false;
-				
-				if ( expr.getQualifier() != null )
-				{
-					ctx.invoke( genExpression, expr.getQualifier(), ctx, out );
-					out.print( '.' );
+				if (expr.getQualifier() != null) {
+					ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+					out.print('.');
 				}
 				else {
 					ctx.invoke(genQualifier, expr.getNamedElement(), ctx, out);
 				}
-				out.print( propertyFunction );
-				out.print( '(' );
-				ctx.invoke( genExpression, arg1, ctx, out );
-				out.print( ')' );
+				ctx.invoke(genName, expr.getNamedElement(), ctx, out);
+				out.print(arg2);
+				ctx.invoke(genExpression, arg1, ctx, out);
+			} 
+			else {
+				// Second, are we referencing a setting from within the declaring part?
+				if (!isFunctionDeclaredinCurrentPart(ctx, (Field)expr.getNamedElement(), propertyFunction)) {
+					genAsAssignment = false;
+					
+					if ( expr.getQualifier() != null )
+					{
+						ctx.invoke( genExpression, expr.getQualifier(), ctx, out );
+						out.print( '.' );
+					}
+					else {
+						ctx.invoke(genQualifier, expr.getNamedElement(), ctx, out);
+					}
+					out.print( propertyFunction );
+					out.print( '(' );
+					ctx.invoke( genExpression, arg1, ctx, out );
+					out.print( ')' );
+				}
 			}
 		}
 
-
+		// Default case:  gen the assignment....
 		if (genAsAssignment)
 		{
 			ctx.invoke( genAssignment, expr.getType(), ctx, out, expr, arg1, arg2 );
 		}
+	}
+	
+	
+	private static boolean isFunctionDeclaredinCurrentPart(Context ctx, Field field, String propertyFunction){
+		boolean result = false;
+		
+		Part currentPart = (Part) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated);
+		Container nameCnr = getCnrForFunction(ctx, field, propertyFunction);
+		
+		result = (nameCnr != null) && (nameCnr instanceof Part)
+			  && (((Part) nameCnr).getFullyQualifiedName().equals(currentPart.getFullyQualifiedName()));
+		
+		return result;
+	}
+	
+	
+	private static Container getCnrForFunction(Context ctx, Field field, String propertyFunction){
+		Container result = null;
+		
+		QualifiedFunctionInvocation qfi = CommonUtilities.getFunctionInvocation(ctx, field, propertyFunction, true);
+		if (qfi != null) {
+			try {
+				result = qfi.getTarget().getContainer();
+			}
+			catch (Exception e){
+				result = null;
+			}
+		}
+		
+		return result;
 	}
 }

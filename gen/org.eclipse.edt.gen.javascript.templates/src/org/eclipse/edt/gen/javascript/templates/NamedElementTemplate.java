@@ -24,7 +24,7 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 		String propertyFunction = CommonUtilities.getPropertyFunction( element, false, ctx );
 
 		if (((ctx.getAttribute(element, Constants.EXPR_LHS) == null) || (ctx.getAttribute(element, Constants.EXPR_LHS) == Boolean.FALSE))
-			&& (propertyFunction != null)) {
+			&& (propertyFunction != null) && !CommonUtilities.isCurrentFunction(ctx, propertyFunction)) {
 			out.print( propertyFunction );
 			out.print( "()" );
 		}
