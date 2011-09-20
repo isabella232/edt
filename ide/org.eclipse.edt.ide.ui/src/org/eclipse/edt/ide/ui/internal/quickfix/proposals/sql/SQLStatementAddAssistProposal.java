@@ -71,12 +71,14 @@ public class SQLStatementAddAssistProposal extends
 					}
 				});
 			}
+			
 			info = SQLIOStatementUtility.getAddSQLIoStatementActionInfo(document, nodeType[0]); 	
 			
 			initialize();
 			if (!isEGLStatementValidForAction()) {
 				sqlStatement = null;
 			}
+			
 			createDefault(info.getStatement());
 			
 			if (sqlStatement != null) {
@@ -114,9 +116,6 @@ public class SQLStatementAddAssistProposal extends
 			}
 			
 			getMessages().addAll(statementFactory.getErrorMessages());
-			/*if (sqlStatement != null || intoClause != null) {
-				getStatementText();
-			}*/
 		}
 	}
 	

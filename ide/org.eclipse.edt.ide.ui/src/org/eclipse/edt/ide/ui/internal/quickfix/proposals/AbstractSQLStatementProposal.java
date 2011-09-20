@@ -453,8 +453,7 @@ public abstract class  AbstractSQLStatementProposal extends
 		info.setSqlRecordVariable(recordVar);
 		info.setIOObjectName(recordVar.getCanonicalString());
 		IDataBinding dataBinding = recordVar.resolveDataBinding();
-		if (SQLUtility.isSQLRecord(dataBinding)) {
-			info.setDynamicArrayRecord(dataBinding.getType().getKind() == ITypeBinding.ARRAY_TYPE_BINDING);
+		if(SQLUtility.isEntityRecord(dataBinding)){
 			info.setIOObjectName(dataBinding.getName());
 			return dataBinding;
 		} else if (SQLUtility.isBasicRecord(dataBinding)){
