@@ -58,6 +58,11 @@ public class TypeTemplate extends JavaTemplate {
 		}
 	}
 
+	public Boolean isAssignmentArrayMatchingWanted(Type type, Context ctx) {
+		// types can override this to cause type matching of array literals to be ignored.
+		return true;
+	}
+
 	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, String arg, Type rhsType) {
 		// types can override this to cause an compound assignment expression to be broken up
 		// the arg contains the operation being asked about. we always want compound power of broken up

@@ -62,7 +62,7 @@ public class ArrayTypeTemplate extends JavaTemplate {
 	}
 
 	public void genRuntimeTypeName(ArrayType generic, Context ctx, TabbedWriter out, TypeNameKind arg) {
-		ctx.invoke(genRuntimeTypeName, generic.getClassifier(), ctx, out, arg);
+		ctx.invoke(genRuntimeTypeName, generic.getClassifier(), ctx, out, TypeNameKind.EGLImplementation);
 		if (!generic.getTypeArguments().isEmpty()) {
 			out.print("<");
 			for (int i = 0; i < generic.getTypeArguments().size(); i++) {
