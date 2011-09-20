@@ -42,7 +42,7 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 	protected int nColumnSpan = 3;
 	ResultStatisticCnts statisticCnt;
 	
-	private static final String BIRT_ENGINE_PLUGIN_ID = "org.eclipse.birt";
+	private static final String BIRT_PLUGIN_ID = "org.eclipse.birt";
 	
 	protected List <Color> colors = new ArrayList<Color>();
 	
@@ -314,7 +314,7 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 	 */
 	protected boolean isBIRTPluginInstalled() {
 		State state = Platform.getPlatformAdmin().getState(false); // Have to call getState(false) to get an immutable state.
-		BundleDescription bundle = state.getBundle(BIRT_ENGINE_PLUGIN_ID, null);
+		BundleDescription bundle = state.getBundle(BIRT_PLUGIN_ID, null);
 		boolean versionCheck = false;
 		
 		if(bundle != null) {				
@@ -329,7 +329,7 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 				if(minorV > 6)
 					versionCheck = true;
 				else if(minorV == 6){
-					if(microV >= 2)
+					if(microV >= 1)
 						versionCheck = true;					
 				}
 			}				
