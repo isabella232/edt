@@ -6,6 +6,9 @@ import java.util.List;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ArrayLiteral;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
@@ -106,6 +109,20 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	public boolean visit(Assignment object) {
+		// check to see if this is an assignment of a literal array. if it is, then call out to the type
+		// to see if it wants to ensure that each of the array elements are type matching
+		if (object.getLHS().getType() instanceof ArrayType && object.getRHS() instanceof ArrayLiteral) {
+			// call out to the type to see if wants this logic to ensure each entry is type matching
+			if ((Boolean) ctx.invoke(Constants.isAssignmentArrayMatchingWanted, object.getLHS().getType(), ctx)) {
+				// scan through all array elements and make sure they match the lhs type. if they don't we insert as
+				// expressions
+				Type elementType = ((ArrayType) object.getLHS().getType()).getElementType();
+				while (elementType instanceof ArrayType) {
+					elementType = ((ArrayType) elementType).getElementType();
+				}
+				processArrayLiteral(elementType, (ArrayLiteral) object.getRHS());
+			}
+		}
 		// check to see if this is a compound assignment (something like += or *=, etc). if it is, then call out to the type
 		// to see if it wants it broken apart
 		if (!object.getOperator().equals("=") && object.getOperator().indexOf("=") >= 0) {
@@ -120,6 +137,25 @@ public class ReorganizeCode extends AbstractVisitor {
 			}
 		}
 		return true;
+	}
+
+	private void processArrayLiteral(Type type, ArrayLiteral object) {
+		List<Expression> entries = object.getEntries();
+		if (entries != null) {
+			for (int i = 0; i < entries.size(); i++) {
+				Expression element = entries.get(i);
+				if (element instanceof ArrayLiteral)
+					processArrayLiteral(type, (ArrayLiteral) element);
+				else {
+					if (!element.getType().getClassifier().equals(type.getClassifier())) {
+						AsExpression asExpression = factory.createAsExpression();
+						asExpression.setEType(type);
+						asExpression.setObjectExpr(element);
+						entries.set(i, asExpression);
+					}
+				}
+			}
+		}
 	}
 
 	@SuppressWarnings("unchecked")
