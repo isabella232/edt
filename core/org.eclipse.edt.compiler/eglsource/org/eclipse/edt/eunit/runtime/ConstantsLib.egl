@@ -11,6 +11,6 @@ library ConstantsLib
 	const SFAILED int = 1;
 	const SERROR int = 2;
 	const SNOT_RUN int = 3;
-	const SBAD = 4;
+	const SBAD int = 4;
 	
 end

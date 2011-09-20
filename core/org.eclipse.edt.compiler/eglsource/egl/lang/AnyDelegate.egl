@@ -1,0 +1,13 @@
+package egl.lang;
+
+import egl.lang.reflect.ClassType;
+import egl.lang.reflect.mof.Operation;
+
+externalType AnyDelegate extends EGLAny type ClassType
+	static function $EQ(lvalue AnyDelegate in, rvalue AnyDelegate in) returns(EglBoolean) {@Operation{"=="}};
+	static function $EQ(lvalue EGLAny in, rvalue AnyDelegate in) returns(EglBoolean) {@Operation{"=="}};
+	static function $EQ(lvalue AnyDelegate in, rvalue EGLAny in) returns(EglBoolean) {@Operation{"=="}};
+	static function $NEQ(lvalue AnyDelegate in, rvalue AnyDelegate in) returns(EglBoolean) {@Operation{"!="}};
+	static function $NEQ(lvalue EGLAny in, rvalue AnyDelegate in) returns(EglBoolean) {@Operation{"!="}};
+	static function $NEQ(lvalue AnyDelegate in, rvalue EGLAny in) returns(EglBoolean) {@Operation{"!="}};
+end
