@@ -180,7 +180,7 @@ egl.eglx.xml.XmlLib["eglClassToXML"] = function(/*value*/value, /*map*/namespace
 	var partAnntations = value.eze$$getAnnotations();
 	var xmlName = xmlStyle != null ? xmlStyle.name : null;
 	var prefix = xmlStyle != null && xmlStyle.namespace != null ? 
-					this.addNamespace(namespaces, xmlStyle.namespace) : null;
+					this.addNamespace(namespaces, xmlStyle.namespace) : "";
 	if (xmlStyle === null && partAnntations != undefined
 			&& partAnntations["XMLRootElement"] != undefined
 			&& partAnntations["XMLRootElement"] != null) {
