@@ -189,12 +189,6 @@ public class RecordTemplate extends JavaTemplate {
 		ctx.invoke(genPartName, part, ctx, out);
 	}
 
-	public void genDefaultValue(Record part, Context ctx, TabbedWriter out) {
-		out.print("(");
-		genRuntimeTypeName(part, ctx, out, TypeNameKind.JavaPrimitive);
-		out.print(") null");
-	}
-
 	public void genSuperClass(Record part, Context ctx, TabbedWriter out) {
 		Stereotype stereotype = part.getStereotype();
 		if (stereotype == null || stereotype.getEClass().getName().equals("BasicRecord"))
