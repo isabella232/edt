@@ -747,9 +747,9 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			node.accept(this);
 			expr.getArguments().add((Expression)stack.pop());
 		}
-		if (type.getKind() == ITypeBinding.ARRAY_TYPE_BINDING && ((ArrayType)newExpression.getType()).getInitialSize() != null) {
-			((ArrayType)newExpression.getType()).getInitialSize().accept(this);
-			expr.getArguments().add((Expression)stack.pop());
+		
+		if (type.getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
+			processNewArray(newExpression.getType(), expr);
 		}
 		if (newExpression.getSettingsBlock() != null && newExpression.getSettingsBlock().getSettings().size() > 0) {
 			SetValuesExpression sve = processSettings(expr, newExpression.getSettingsBlock());
@@ -760,6 +760,28 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			stack.push(expr);
 		}
 		return false;
+	}
+	
+	private void processNewArray(org.eclipse.edt.compiler.core.ast.Type type, NewExpression expr) {
+		if (type.isNullableType()) {
+			processNewArray(type.getBaseType(), expr);
+		}
+		
+		if (type.isArrayType()) {
+			ArrayType arrType = ((ArrayType)type);
+			processNewArray(arrType.getElementType(), expr);
+			
+			if (arrType.hasInitialSize()) {
+				arrType.getInitialSize().accept(this);
+				expr.getArguments().add((Expression)stack.pop());
+			}
+			else {
+				IntegerLiteral lit = factory.createIntegerLiteral();
+				lit.setValue("0");
+				setElementInformation(type, lit);
+				expr.getArguments().add(lit);
+			}
+		}
 	}
 
 	@Override
