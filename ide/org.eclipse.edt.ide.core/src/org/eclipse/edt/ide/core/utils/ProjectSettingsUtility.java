@@ -467,6 +467,13 @@ public class ProjectSettingsUtility {
 			buildFlag++;
 			prefs.putInt(PROJECT_KEY, buildFlag);
 			prefs.flush();
+		}else{
+			//set flag to force a rebuild for projects which inherit workspace compiler & generator setting
+			//the preference change event will be caught by EDTCoreIDEPlugin.PreferenceListener
+			IPreferenceStore store = EDTCoreIDEPlugin.getPlugin().getPreferenceStore();
+			int buildFlag = store.getInt(EDTCorePreferenceConstants.BUILD_FLAG);
+			buildFlag ++;
+			store.setValue(EDTCorePreferenceConstants.BUILD_FLAG, buildFlag);
 		}
 	}
 	

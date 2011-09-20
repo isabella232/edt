@@ -29,6 +29,7 @@ import org.eclipse.core.resources.ISaveContext;
 import org.eclipse.core.resources.ISaveParticipant;
 import org.eclipse.core.resources.ISavedState;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
@@ -42,6 +43,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
 import org.eclipse.edt.ide.core.internal.builder.ProjectSettingsListenerManager;
 import org.eclipse.edt.ide.core.internal.builder.ResourceChangeProcessor;
+import org.eclipse.edt.ide.core.internal.generation.GenerationBuildManager;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyFileInfoManager;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyResourceChangeProcessor;
 import org.eclipse.edt.ide.core.internal.model.EGLModelManager;
@@ -56,6 +58,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
 
 /**
  * <p>
@@ -157,19 +160,43 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 					|| EDTCorePreferenceConstants.GENERATOR_IDS.equals(event.getProperty())
 					|| EDTCorePreferenceConstants.BUILD_FLAG.equals(event.getProperty())
 					) {
-				// Touch all projects using the default compiler so that autobuild is triggered.
 				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 				for (IProject project : projects) {
-					if (project.isAccessible() && EGLProject.hasEGLNature(project) && ProjectSettingsUtility.getCompilerId(project) == null) {
-						try {
-							project.touch(null);
-						}
-						catch (CoreException e) {
-							log(e);
+					if (project.isAccessible() && EGLProject.hasEGLNature(project)){
+						//Touch projects using the default compiler so that autobuild is triggered.
+						if(ProjectSettingsUtility.getCompilerId(project) == null && ProjectSettingsUtility.getGeneratorIds( project ) == null){
+							//No project specific setting, inherit workspace compiler & generator settings
+							try {
+								GenerationBuildManager.getInstance().setProjectState(project, false);
+								project.touch(null);
+							}
+							catch (CoreException e) {
+								log(e);
+							}
+						}else if(ProjectSettingsUtility.getCompilerId(project) != null && !isGeneratorSettingOverridden(project)){
+							//Has project specific compiler setting, but did not override generation setting on Project level, 
+							//It mean some package can be using workspace setting, while some can have a specific setting
+							
+							String workspaceDefaultCompiler = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( EDTCorePreferenceConstants.COMPILER_ID );
+							if(ProjectSettingsUtility.getCompilerId(project).equalsIgnoreCase(workspaceDefaultCompiler)){
+								try {
+									GenerationBuildManager.getInstance().setProjectState(project, false);
+									project.touch(null);
+								}
+								catch (CoreException e) {
+									log(e);
+								}
+							}
 						}
 					}
 				}
 			}
+		}
+
+		private boolean isGeneratorSettingOverridden(IProject project){
+			Preferences genPrefs = new ProjectScope(project).getNode( EDTCoreIDEPlugin.PLUGIN_ID).node( ProjectSettingsUtility.PROPERTY_GENERATOR_IDS );
+			return ( ProjectSettingsUtility.findSetting( project.getFullPath(), genPrefs, false ) != null );
+			
 		}
 	}
 
