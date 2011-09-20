@@ -16,5 +16,5 @@ import egl.lang.NativeType;
 
 externalType ServiceLib type NativeType
 	
-    static function bindResource(serviceOrInterface any const in, http any const in)returns(any);
+    static function completeBind(serviceOrInterface any out, http any const in)returns(any);
 end
