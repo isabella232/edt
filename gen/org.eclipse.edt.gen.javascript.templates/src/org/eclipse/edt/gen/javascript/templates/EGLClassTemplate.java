@@ -140,7 +140,9 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	}
 
 	public void genField(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
-		ctx.invoke(genDeclaration, arg, ctx, out);
+		if (arg instanceof ConstantField) {
+			ctx.invoke(genDeclaration, arg, ctx, out);
+		}
 	}
 
 	public void genConstructors(EGLClass part, Context ctx, TabbedWriter out) {
