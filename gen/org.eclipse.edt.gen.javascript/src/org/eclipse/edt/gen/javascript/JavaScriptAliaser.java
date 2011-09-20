@@ -182,7 +182,7 @@ public class JavaScriptAliaser
 				
 				if (TypeUtils.isTextType(type)) {
 					if (f.getName().equals("length")) {
-						result = (Function) f.clone();
+						result = f; //(Function) f.clone();
 						result.setName("textLen");
 					}
 				}

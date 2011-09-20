@@ -419,21 +419,17 @@ public class CommonUtilities {
 					result = (String)propFn;
 				}
 			}
-
-			String currentFunction = context.getCurrentFunction();
-			if ( result != null && currentFunction != null )
-			{
-				if ( result.equals( currentFunction ) )
-				{
-					result = null;
-				}
-			}
 		}
 
 		return result;
 	}
 	
+	public static boolean isCurrentFunction(Context ctx, String functionName){
+		Function currentFunction = ctx.getCurrentFunction();
+		return ((currentFunction != null) && currentFunction.getName().equals(functionName));
+	}
 	
+		
 	public static QualifiedFunctionInvocation getFunctionInvocation(Context context, Field field, String fnName, boolean isSetter){
 		QualifiedFunctionInvocation qfi = context.getFactory().createQualifiedFunctionInvocation();
 		qfi.setId( (String)fnName );

@@ -20,24 +20,25 @@ import org.eclipse.edt.gen.EglContext;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Type;
 
 public class Context extends EglContext {
 
 	private static final long serialVersionUID = 6429116299734843162L;
 
-	private String currentFunction;
+	private Function currentFunction;
 	private Map<String, String> namespaceMap = new HashMap<String, String>();
 
 	public Context(AbstractGeneratorCommand processor) {
 		super(processor);
 	}
 
-	public String getCurrentFunction() {
+	public Function getCurrentFunction() {
 		return currentFunction;
 	}
 
-	public void setCurrentFunction(String currentFunction) {
+	public void setCurrentFunction(Function currentFunction) {
 		this.currentFunction = currentFunction;
 	}
 
