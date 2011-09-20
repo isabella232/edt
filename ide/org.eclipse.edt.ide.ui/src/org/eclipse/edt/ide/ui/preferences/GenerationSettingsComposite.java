@@ -269,6 +269,14 @@ public class GenerationSettingsComposite extends Composite {
 	public boolean performOK() {
 		if (resource == null) {
 			prefStore.setValue(preferenceID, genInsideDirectory.getText());
+			if(!genInsideDirectory.getText().equalsIgnoreCase(originalGenDir)){
+				try {
+					ProjectSettingsUtility.setBuildFlag(null);
+				} catch (BackingStoreException e) {
+					Logger.log("GenerationSettingsComposite.performOk", NLS.bind(UINlsStrings.genSettingsSaveError, resource.getFullPath().toString()), e); //$NON-NLS-1$
+					return false;
+				}
+			}
 		}
 		else {
 			try {

@@ -902,16 +902,6 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 				if ( resource != null && generatorOverrideCheckbox.getSelection() ) {
 					removeTabPropertiesFromProjectResources();
 				}
-				
-				//force a rebuild if workspace setting is changed
-				if(resource == null){
-					IPreferenceStore store = EDTCoreIDEPlugin.getPlugin().getPreferenceStore();
-					int buildFlag = store.getInt(EDTCorePreferenceConstants.BUILD_FLAG);
-					buildFlag ++;
-					store.setValue(EDTCorePreferenceConstants.BUILD_FLAG, buildFlag);
-
-				}
-				
 			}
 		};
 		

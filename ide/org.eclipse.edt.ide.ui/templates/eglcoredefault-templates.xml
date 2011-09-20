@@ -538,7 +538,7 @@ service ${serviceName}
 end
 </template>
 
-<template name="service declaration" description="%Templates.service_declaration" id="org.eclipse.edt.ide.ui.templates.service_declaration" context = "egl-core" enabled="true">${variableName} ${serviceName} {@bindService};</template>
+<template name="service declaration" description="%Templates.service_declaration" id="org.eclipse.edt.ide.ui.templates.service_declaration" context = "egl-core" enabled="true">${variableName} ${serviceName} {@Resource};</template>
 
 
 <!--  Structured records aren't supported in EDT 0.7
