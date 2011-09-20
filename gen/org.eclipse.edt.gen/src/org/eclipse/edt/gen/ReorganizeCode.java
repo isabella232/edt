@@ -780,7 +780,9 @@ public class ReorganizeCode extends AbstractVisitor {
 	public boolean visit(QualifiedFunctionInvocation object) {
 		// check to see if this is an assignment of a literal array. if it is, then call out to the type
 		// to see if it wants to ensure that each of the array elements are type matching
-		if (object.getId().equalsIgnoreCase("appendElement") && object.getQualifier().getType() instanceof ArrayType) {
+		if ((object.getId().equalsIgnoreCase("appendElement") || object.getId().equalsIgnoreCase("insertElement") || object.getId().equalsIgnoreCase(
+			"setElement"))
+			&& object.getQualifier().getType() instanceof ArrayType) {
 			// call out to the type to see if wants this logic to ensure each entry is type matching
 			if ((Boolean) ctx.invoke(Constants.isAssignmentArrayMatchingWanted, object.getQualifier().getType(), ctx)) {
 				// scan through all array elements and make sure they match the lhs type. if they don't we insert as
