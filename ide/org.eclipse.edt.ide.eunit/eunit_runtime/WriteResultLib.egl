@@ -23,8 +23,8 @@ Library WriteResultLib
 		xmlStr String = XMLLib.convertToXML(resultRootSum, true);
 		SysLib.writeStdOut(xmlStr);
 		
-		fileSeparator String = SysLib.getProperty("file.separator");
-		if(fileSeparator == "")
+		fileSeparator String? = SysLib.getProperty("file.separator");
+		if(fileSeparator == null || fileSeparator == "")
 			fileSeparator = "/";
 		end
 		etrRoot String = getResultRootDirectory(fileSeparator);
@@ -55,9 +55,9 @@ Library WriteResultLib
 		xmlStr String = XMLLib.convertToXML(tr, true);
 		SysLib.writeStdOut(xmlStr);
 		
-		//get the result output root from properties file
-		fileSeparator String = SysLib.getProperty("file.separator");
-		if(fileSeparator == "")
+		//get the result output root from properties file	
+		fileSeparator String? = SysLib.getProperty("file.separator");
+		if(fileSeparator == null || fileSeparator == "")
 			fileSeparator = "/";
 		end		
 		etrRoot String = getResultRootDirectory(fileSeparator);
