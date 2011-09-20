@@ -1256,6 +1256,7 @@ public interface IEGLConstants {
 	public static final String PROPERTY_ENDPOINT = "endpoint";  //$NON-NLS-1$
 	public static final String PROPERTY_ENUMERATION = "enum";  //$NON-NLS-1$
 	public static final String PROPERTY_ENUM = "enum";  //$NON-NLS-1$
+	public static final String PROPERTY_ENTITY = "Entity";  //$NON-NLS-1$
 	public static final String PROPERTY_EVENTLISTENER = "eventListener";  //$NON-NLS-1$
 	public static final String PROPERTY_EVENTVALUEITEM = "eventValueItem";  //$NON-NLS-1$
 	public static final String PROPERTY_FIELDDECLARATION = "fieldDeclaration";  //$NON-NLS-1$
@@ -1420,6 +1421,7 @@ public interface IEGLConstants {
 	public static final String PROPERTY_SQLVARIABLELEN = "sqlVariableLen";  //$NON-NLS-1$
 	public static final String PROPERTY_STYLE = "style";  //$NON-NLS-1$
 	public static final String PROPERTY_SYMMETRICSWAPPING = "symmetricSwapping";  //$NON-NLS-1$
+	public static final String PROPERTY_TABLE= "Table";  //$NON-NLS-1$
 	public static final String PROPERTY_TABLENAMEVARIABLES = "tableNameVariables";  //$NON-NLS-1$
 	public static final String PROPERTY_TABLENAMES = "tableNames";  //$NON-NLS-1$
 	public static final String PROPERTY_TARGETS = "targets";  //$NON-NLS-1$

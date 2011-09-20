@@ -182,6 +182,28 @@ public class SQLUtility {
         return false;
     }
     
+    public static boolean isEntityRecord(IDataBinding sqlRecordData) {
+        if (!isValid(sqlRecordData)) {
+            return false;
+        }
+        
+        IAnnotationBinding annotation = null;
+        
+        ITypeBinding typeBinding = sqlRecordData.getType();
+        if(typeBinding != null && typeBinding.isReference()) {
+        	ITypeBinding baseTypeBinding = typeBinding.getBaseType();
+        	annotation  = baseTypeBinding.getAnnotation(SQLUtility.EGLXPERSISTENCE, IEGLConstants.PROPERTY_ENTITY);
+        } else {
+        	 annotation  = typeBinding.getAnnotation(SQLUtility.EGLXPERSISTENCE, IEGLConstants.PROPERTY_ENTITY);
+        }
+        
+        if(annotation != null) {
+         	return true;
+         }
+        
+        return false;
+    }
+    
     public static boolean isBasicRecord(IDataBinding sqlRecordData) {
         if (!isValid(sqlRecordData)) {
             return false;
@@ -207,7 +229,7 @@ public class SQLUtility {
        
         IAnnotationBinding annotation = itemBinding.getAnnotation(EGLXSQL, "Column");
         if (annotation != null) {
-        	IAnnotationBinding columnNameAnnotation= (IAnnotationBinding)annotation.findData("name");
+        	IAnnotationBinding columnNameAnnotation= (IAnnotationBinding)annotation.findData(IEGLConstants.PROPERTY_NAME);
         	if(columnNameAnnotation != null) {
                return (String) columnNameAnnotation.getValue();
         	} else {

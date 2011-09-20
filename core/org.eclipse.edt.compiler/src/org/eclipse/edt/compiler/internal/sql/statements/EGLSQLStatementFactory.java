@@ -102,11 +102,8 @@ public abstract class EGLSQLStatementFactory {
 
         String defaultSelectConditions = null;
 
-        if (SQLUtility.isValid(sqlRecordData) && sqlRecordData.getAnnotation(EGLIOSQL, "SQLRecord") != null) {
-            IAnnotationBinding annotation = getField(sqlRecordData.getAnnotation(EGLIOSQL, "SQLRecord"), IEGLConstants.PROPERTY_DEFAULTSELECTCONDITION);
-            if (annotation != null) {
-                defaultSelectConditions = (String) annotation.getValue();
-            }
+        if (SQLUtility.isEntityRecord(sqlRecordData) || SQLUtility.isBasicRecord(sqlRecordData)) {
+        	//TODO:  sqlRecordData
         }
 
         // If no default select conditions are defined or if it is empty,
@@ -202,35 +199,6 @@ public abstract class EGLSQLStatementFactory {
         return true;
     }
 
-    protected boolean isIoObjectSQLRecord() {
-
-        if (!SQLUtility.isValid(sqlRecordData)) {
-            return false;
-        }
-
-        boolean isSQLRecord = sqlRecordData.getAnnotation(EGLIOSQL, "SQLRecord") != null;
-
-        if (!isSQLRecord) {
-            errorMessages.add(
-                new Problem(0, 0, IMarker.SEVERITY_ERROR, IProblemRequestor.IO_OBJECT_NOT_SQL_RECORD, new String[] { ioObjectName, getIOType() }));
-        }
-
-        return isSQLRecord;
-    }
-    
-    protected boolean isIoObjectBasicRecord() {
-    	 if (!SQLUtility.isValid(sqlRecordData)) {
-             return false;
-         }
-    	
-    	boolean isBasicRecord = false;
-    	if(sqlRecordData.getType() != null && ITypeBinding.FLEXIBLE_RECORD_BINDING == sqlRecordData.getType().getKind()) {
-    		isBasicRecord = true;
-    	}
-    	 
-    	 return isBasicRecord;
-    }
-
     protected boolean isIoObjectValid() {
 
         //TODO must implement this
@@ -249,7 +217,7 @@ public abstract class EGLSQLStatementFactory {
         boolean isValidIoObject = true;
 
         //SQLUtility.isBasicRecord(dataBinding
-        if (!isIoObjectSQLRecord() && !isIoObjectBasicRecord() )
+        if (!SQLUtility.isEntityRecord(sqlRecordData) && !SQLUtility.isBasicRecord(sqlRecordData))
             isValidIoObject = false;
         else {
             // Need the list of SQL data items before checking to see if the I/O
@@ -265,7 +233,7 @@ public abstract class EGLSQLStatementFactory {
                 }
             }
 
-            if (isIoObjectSQLRecord() && !isIoObjectValid())
+            if (SQLUtility.isEntityRecord(sqlRecordData) && !isIoObjectValid())
                 isValidIoObject = false;
         }
 
@@ -310,64 +278,48 @@ public abstract class EGLSQLStatementFactory {
     }
 
     protected void setupTableInfo() {
-
-        String[][] sqlTables = null;
-        String[][] sqlTableVariables = null;
-        int numTables = 0;
-        int numTablesVariables = 0;
-        int tableIndex = 0;
-
-        if (SQLUtility.isValid(sqlRecordData) && sqlRecordData.getAnnotation(EGLIOSQL, "SQLRecord") != null) {
-            if (getSQLRecordTypeBinding() != null) {
-                IAnnotationBinding annotation = getField(sqlRecordData.getAnnotation(EGLIOSQL, "SQLRecord"), IEGLConstants.PROPERTY_TABLENAMES);
-                if (annotation != null) {
-                    sqlTables = (String[][]) annotation.getValue();
-                }
-
-                annotation = getField(sqlRecordData.getAnnotation(EGLIOSQL, "SQLRecord"), IEGLConstants.PROPERTY_TABLENAMEVARIABLES);
-                if (annotation != null) {
-                    sqlTableVariables = (String[][]) annotation.getValue();
-                }
-            }
+    	List<String> sqlTables = new ArrayList<String>();
+    	List<String> sqlTableLables = new ArrayList<String>();
+    	int tableIndex = 0;
+    	boolean haveTableAnnotation = false;
+    	
+        if (SQLUtility.isEntityRecord(sqlRecordData) || SQLUtility.isBasicRecord(sqlRecordData)) {
+        	 List<ITypeBinding> declarers = new ArrayList<ITypeBinding>();
+        	 declarers.add( getSQLRecordTypeBinding() );
+        	 if(sqlRecordData.getDeclaringPart() != null 
+        			 && ITypeBinding.FLEXIBLE_RECORD_BINDING == sqlRecordData.getDeclaringPart().getKind()) {
+        		 declarers.add( sqlRecordData.getDeclaringPart() );
+        	 }
+        			
+        	 
+        	 for(ITypeBinding declarer : declarers) {
+        		 IAnnotationBinding annotation = declarer.getAnnotation(SQLUtility.EGLXSQL, IEGLConstants.PROPERTY_TABLE);
+        		 haveTableAnnotation = false;
+        		 
+        		 if (annotation != null) {
+                 	IAnnotationBinding tableNameAnnotation= (IAnnotationBinding)annotation.findData(IEGLConstants.PROPERTY_NAME);
+                 	if(tableNameAnnotation != null) {
+                 		haveTableAnnotation = true;
+                 		sqlTables.add((String) tableNameAnnotation.getValue());
+                 		sqlTableLables.add("t" + tableIndex);
+                 		tableIndex++;
+                 	}
+                 }
+        		 
+        		 if(!haveTableAnnotation) {
+        			 if(declarer == sqlRecordTypeBinding) {
+        				 sqlTables.add(getSQLRecordTypeBinding().getCaseSensitiveName());
+        			 } else {
+        				 sqlTables.add(declarer.getCaseSensitiveName());
+        			 }
+             		sqlTableLables.add("t" + tableIndex);
+             		tableIndex++;
+                 }
+        	 }
         }
-
-        if (sqlTables != null) {
-            numTables = sqlTables.length;
-        }
-
-        if (sqlTableVariables != null) {
-            numTablesVariables = sqlTableVariables.length;
-        }
-
-        if (numTables > 0 || numTablesVariables > 0) {
-            tableNames = new String[numTables + numTablesVariables];
-            tableLabels = new String[tableNames.length];
-            for (int i = 0; i < numTables; i++) {
-                tableNames[i] = sqlTables[i][0];
-                if (sqlTables[i].length > 1) {
-                    tableLabels[i] = sqlTables[i][1];
-            	}
-                tableIndex = i;
-            }
-            if (numTables > 0) {
-                tableIndex++;
-            }
-            for (int i = 0; i < numTablesVariables; i++) {
-                tableNames[tableIndex] = sqlTableVariables[i][0];
-                if (sqlTableVariables[i].length > 1) {
-                    tableLabels[tableIndex] = (String) sqlTableVariables[i][1];
-                }
-                tableIndex++;
-            }
-        } else {
-            tableNames = new String[1];
-            tableLabels = new String[1];
-            if (getSQLRecordTypeBinding() != null) {
-                //tableNames[0] = getSQLRecordTypeBinding().getName(); 
-            	tableNames[0] = getSQLRecordTypeBinding().getCaseSensitiveName(); 
-            }
-            tableLabels[0] = "t1"; //$NON-NLS-1$
-        }
+        
+        tableNames = sqlTables.toArray(new String[0]);
+    	tableLabels = sqlTableLables.toArray(new String[0]);
     }
 
     protected Problem getCouldNotBuildDefaultMessage() {

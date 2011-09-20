@@ -18,6 +18,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.Problem;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.sql.SQLConstants;
+import org.eclipse.edt.compiler.internal.sql.util.SQLUtility;
 
 
 public class EGLSQLExecuteStatementFactory extends EGLSQLStatementFactory {
@@ -97,7 +98,7 @@ public class EGLSQLExecuteStatementFactory extends EGLSQLStatementFactory {
 	}
 	protected boolean isIoObjectSQLRecord() {
 
-		boolean isValidIoObject = super.isIoObjectSQLRecord();
+		boolean isValidIoObject = SQLUtility.isEntityRecord(sqlRecordData);
 
 		if (createUpdate || createDelete || createInsert) {
 			if (ioObjectName == null || ioObjectName.trim().length() == 0) {

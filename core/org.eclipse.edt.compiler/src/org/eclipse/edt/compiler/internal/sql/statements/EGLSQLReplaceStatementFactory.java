@@ -53,8 +53,8 @@ public class EGLSQLReplaceStatementFactory extends EGLSQLStatementFactory {
 		
 		// The where clause is an optional clause that is only built if there are default selection
 		// conditions and/or key columns and the NOCURSOR modifier is used
-		if (noCursor) {
-			whereClause =
+		//Currently EDT does not support NOCURSOR modifier
+		whereClause =
 				EGLSQLClauseFactory.createDefaultWhereClause(
 					getDefaultSelectConditions(),
 					keyItemAndColumnNames,
@@ -65,7 +65,6 @@ public class EGLSQLReplaceStatementFactory extends EGLSQLStatementFactory {
 			if (whereClause != null) {
 				sqlStatement = sqlStatement + whereClause;
 			}
-		}
 
 
 		return sqlStatement;

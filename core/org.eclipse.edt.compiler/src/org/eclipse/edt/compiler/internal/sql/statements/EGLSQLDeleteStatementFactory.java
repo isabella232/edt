@@ -18,6 +18,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.Problem;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.sql.SQLConstants;
+import org.eclipse.edt.compiler.internal.sql.util.SQLUtility;
 
 
 public class EGLSQLDeleteStatementFactory extends EGLSQLStatementFactory {
@@ -40,7 +41,7 @@ public class EGLSQLDeleteStatementFactory extends EGLSQLStatementFactory {
 
 		boolean isValidIoObject = true;
 
-		if (!isIoObjectSQLRecord() && !isIoObjectBasicRecord()) {
+		if (!SQLUtility.isEntityRecord(sqlRecordData) && !SQLUtility.isBasicRecord(sqlRecordData)) {
 			isValidIoObject = false;
 		} else if (!isIoObjectValid()) {
 			isValidIoObject = false;
@@ -71,8 +72,8 @@ public class EGLSQLDeleteStatementFactory extends EGLSQLStatementFactory {
 		
 		// The where clause is an optional clause that is only built if there are default selection
 		// conditions and/or key columns and the NOCURSOR modifier is used
-		if (noCursor) {
-			whereClause =
+		//EDT currently does not support NOCURSOR modifier
+		whereClause =
 				EGLSQLClauseFactory.createDefaultWhereClause(
 					getDefaultSelectConditions(),
 					keyItemAndColumnNames,
@@ -88,7 +89,6 @@ public class EGLSQLDeleteStatementFactory extends EGLSQLStatementFactory {
 					deleteStatement = deleteStatement + whereClause;
 				}
 			}
-		}
 
 
 		return deleteStatement;

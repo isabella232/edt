@@ -63,7 +63,7 @@ public class EGLSQLClauseFactory {
 		int lineLength = 0;
 		for (int i = 0; i < numItemNames; i++) {
 
-			temp = SQLConstants.HOST_VARIABLE_INDICATOR + ioObjectName + SQLConstants.QUALIFICATION_DELIMITER + structureItemNames[i];
+			temp = SQLConstants.PARAMETER_MARKER;
 
 			if (i + 1 < numItemNames) {
 				temp = temp + SQLConstants.COMMA_AND_SPACE;
@@ -131,7 +131,7 @@ public class EGLSQLClauseFactory {
 			temp = removeEscapeCharactersFromName(temp);
 			
 			String label = labels[i];
-			if (label != null) {
+			if (label != null && numNames > 1) {
 				label = removeEscapeCharactersFromName(label);
 				temp = temp + SQLConstants.SPACE + label;
 			}
@@ -219,7 +219,7 @@ public class EGLSQLClauseFactory {
 			tableSpec = removeEscapeCharactersFromName(tableSpec);
 			tableLabel = tableLabels[i];
 			tableLabel = removeEscapeCharactersFromName(tableLabel);
-			if (tableLabel != null) {
+			if (tableLabel != null && numTables > 1) {
 				tableSpec = tableSpec + SQLConstants.SPACE + tableLabel;
 			}
 
@@ -340,10 +340,7 @@ public class EGLSQLClauseFactory {
 					+ SQLConstants.TAB
 					+ columnName
 					+ SQLConstants.EQUALS
-					+ SQLConstants.HOST_VARIABLE_INDICATOR
-					+ ioObjectName
-					+ SQLConstants.QUALIFICATION_DELIMITER
-					+ structureItemNames[i];
+					+ SQLConstants.PARAMETER_MARKER;
 
 			if (i + 1 < numColumnNames) {
 				setClause = setClause + SQLConstants.COMMA + SQLConstants.CRLF;
@@ -535,10 +532,7 @@ public class EGLSQLClauseFactory {
 			if (useRecordKeys) {
 				whereClause =
 					whereClause
-						+ SQLConstants.HOST_VARIABLE_INDICATOR
-						+ ioObjectName
-						+ SQLConstants.QUALIFICATION_DELIMITER
-						+ keyItemAndColumnNames[i][0];
+						+ SQLConstants.PARAMETER_MARKER;
 			} else {
 				whereClause = whereClause + SQLConstants.HOST_VARIABLE_INDICATOR + keyItemAndColumnNames[i][0];
 			}
