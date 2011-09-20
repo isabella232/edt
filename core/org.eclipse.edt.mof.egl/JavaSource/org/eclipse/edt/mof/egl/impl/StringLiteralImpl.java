@@ -20,7 +20,7 @@ public class StringLiteralImpl extends TextTypeLiteralImpl implements StringLite
 	
 	@Override
 	public Type getType() {
-		return IRUtils.getEGLPrimitiveType(Type_String, getValue().length());
+		return IRUtils.getEGLPrimitiveType(Type_String);
 	}
 
 }
