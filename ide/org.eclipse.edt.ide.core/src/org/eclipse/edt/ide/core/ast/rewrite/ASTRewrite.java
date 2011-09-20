@@ -27,7 +27,9 @@ import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
 import org.eclipse.edt.compiler.core.ast.ExecuteStatement;
 import org.eclipse.edt.compiler.core.ast.File;
+import org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
+import org.eclipse.edt.compiler.core.ast.GetByKeyStatement;
 import org.eclipse.edt.compiler.core.ast.IOStatementClauseInfo;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.Name;
@@ -35,9 +37,11 @@ import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
+import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.Statement;
+import org.eclipse.edt.compiler.core.ast.UsingClause;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -861,6 +865,7 @@ public class ASTRewrite {
 	private static class ComplementStatementClauseEdit extends DefaultASTEdit{
 		private static class NoClauseOrIOTargetOffsetFinder extends DefaultASTVisitor {
 			int offset = -1;
+			int optionSize = -1;
 
 			public boolean visit(ExecuteStatement executeStatement) {
 				offset = executeStatement.getOffset() + IEGLConstants.KEYWORD_EXECUTE.length();
@@ -868,8 +873,36 @@ public class ASTRewrite {
 			}
 			
 			public boolean visit(DeleteStatement deleteStatement) {
-				Node dataSourceExpression = deleteStatement.getDataSource().getExpression();
-				offset = dataSourceExpression.getOffset() + dataSourceExpression.getLength();
+				if(deleteStatement.getOptions() != null && deleteStatement.getOptions().size() > 0) {
+					Node usingClause = (Node)deleteStatement.getOptions().get(0);
+					if(usingClause != null && usingClause instanceof UsingClause) {
+						offset = usingClause.getOffset() + usingClause.getLength();
+					} 
+				}
+				
+				if(offset == -1) {
+					FromOrToExpressionClause dataSourceExpression = deleteStatement.getDataSource();
+					offset = dataSourceExpression.getOffset() + dataSourceExpression.getLength();
+				}
+				
+				return false;
+			}
+			
+			public boolean visit(GetByKeyStatement getByKeyStatement) {
+				optionSize = getByKeyStatement.getGetByKeyOptions().size();
+				if(optionSize > 0) {
+					Node lastClause = (Node)getByKeyStatement.getGetByKeyOptions().get(optionSize - 1);
+					offset =lastClause.getOffset() + lastClause.getLength();
+				}
+				return false;
+			}
+			
+			public boolean visit(ReplaceStatement replaceStatement) {
+				optionSize = replaceStatement.getReplaceOptions().size();
+				if(optionSize > 0) {
+					Node lastClause = (Node)replaceStatement.getReplaceOptions().get(optionSize - 1);
+					offset =lastClause.getOffset() + lastClause.getLength();
+				}
 				return false;
 			}
 		}
@@ -887,20 +920,19 @@ public class ASTRewrite {
 			int offset = -1;
 			
 			if(statement.getIOClauses().isEmpty()) {
-				if(statement.getIOObjects().isEmpty()) {
-					NoClauseOrIOTargetOffsetFinder offsetFinder = new NoClauseOrIOTargetOffsetFinder();
-					statement.accept(offsetFinder);
-					offset = offsetFinder.offset;
-					if(offset == -1) {
-						throw new RuntimeException("Can't locate offset to insert clause for " + statement.getClass().getName());
-					}
-				}
-				else {
+				NoClauseOrIOTargetOffsetFinder offsetFinder = new NoClauseOrIOTargetOffsetFinder();
+				statement.accept(offsetFinder);
+				offset = offsetFinder.offset;
+				
+				if(offset == -1 && !statement.getIOObjects().isEmpty()) {
 					Node lastTarget = (Node) statement.getIOObjects().get(statement.getIOObjects().size()-1);
 					offset = lastTarget.getOffset() + lastTarget.getLength();
 				}
-			}
-			else {
+				
+				if(offset == -1) {
+					throw new RuntimeException("Can't locate offset to insert clause for " + statement.getClass().getName());
+				}
+			} else {
 				Node lastClause = (Node) statement.getIOClauses().get(statement.getIOClauses().size()-1);
 				offset = lastClause.getOffset() + lastClause.getLength();
 			}
