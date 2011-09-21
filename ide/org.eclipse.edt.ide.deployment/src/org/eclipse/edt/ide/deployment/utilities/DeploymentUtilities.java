@@ -53,8 +53,6 @@ import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
 import org.eclipse.edt.ide.deployment.Activator;
 import org.eclipse.edt.ide.deployment.core.IDeploymentConstants;
-import org.eclipse.edt.ide.deployment.core.model.DeploymentBuildDescriptor;
-import org.eclipse.edt.ide.deployment.core.model.DeploymentDirectory;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentProject;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentTarget;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
@@ -166,7 +164,7 @@ public class DeploymentUtilities {
 		/**
 		 * now build the target directory path
 		 */
-		IProject project = sourceFolder.getProject();
+//		IProject project = sourceFolder.getProject();
 		List results = new ArrayList();
 //		DeploymentUtilities.findFolder(project, results, targetDirectoryType);
 		if (results.size() > 0) {
@@ -231,24 +229,6 @@ public class DeploymentUtilities {
 	{
 		if(target instanceof DeploymentProject){
 			return ((DeploymentProject)target).getName();
-		}else if(target instanceof DeploymentDirectory){
-			return ((DeploymentDirectory)target).getLocation();
-		}else if( target instanceof DeploymentBuildDescriptor ){
-			/* TODO - EDT
-			IFile bdFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(((DeploymentBuildDescriptor)target).getFileName()));
-			BuildDescriptor bd = new GeneratePartsOperation().createBuildDescriptor(bdFile, ((DeploymentBuildDescriptor)target).getName(), 
-					new DeploymentResultMessageRequestor(DeploymentResultsCollectorManager.getInstance().getCollector(
-															resultsCollectorsSubName != null && resultsCollectorsSubName.length() > 0 ? resultsCollectorsSubName : ((DeploymentBuildDescriptor)target).getFileName() + '/' + ((DeploymentBuildDescriptor)target).getName(), 
-																	resultsCollectorName)));
-			if( bd != null && SystemConstants.ELEMENT_ZOSCICS.equalsIgnoreCase(bd.getSystem()) )
-			{
-				return SystemConstants.ELEMENT_ZOSCICS;
-			}
-			else if( bd != null )
-			{
-				return bd.getGenProject();
-			}
-			*/
 		}
 		
 		return null;
@@ -260,12 +240,8 @@ public class DeploymentUtilities {
 		{
 			switch(target.getTargetType())
 			{
-				case DeploymentTarget.TARGET_DIRECTORY:
-					return IDeploymentConstants.TARGET_DIRECTORY;
 				case DeploymentTarget.TARGET_PROJECT:
 					return IDeploymentConstants.TARGET_PROJECT;
-				case DeploymentTarget.TARGET_BUILD_DESCRIPTOR:
-					return IDeploymentConstants.TARGET_BUILD_DESCRIPTOR;
 			}
 		}
 		return "";
