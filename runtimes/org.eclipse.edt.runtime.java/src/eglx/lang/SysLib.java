@@ -11,27 +11,41 @@
  *******************************************************************************/
 package eglx.lang;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
-import org.eclipse.edt.javart.*;
+import javax.xml.namespace.QName;
+
+import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.resources.Platform;
 import org.eclipse.edt.javart.resources.Trace;
+import org.eclipse.edt.javart.resources.egldd.Binding;
+import org.eclipse.edt.javart.resources.egldd.RuntimeDeploymentDesc;
+import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
 import org.eclipse.edt.javart.util.JavartUtil;
 
 import egl.lang.AnyException;
 import egl.lang.NullValueException;
+import eglx.persistence.sql.SQLDataSource;
 
 public class SysLib extends ExecutableBase {
 
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
+	private static Map<String, RuntimeDeploymentDesc> deploymentDescs = new HashMap<String, RuntimeDeploymentDesc>();
+	private static Map<QName, Binding> resources = new HashMap<QName, Binding>();
 	/**
 	 * Constructor
 	 * @param ru The rununit
@@ -277,5 +291,88 @@ public class SysLib extends ExecutableBase {
 		if (output == null)
 			throw new NullValueException();
 		System.err.println(output);
+	}
+	/**
+	 * get the resource binding from the egldd
+	 */
+	public static Object getResource(String bindKey) throws AnyException{
+		return getResource(bindKey, getProperty(Constants.APPLICATION_PROPERTY_FILE_NAME_KEY));
+	}
+	/**
+	 * get the resource binding from the egldd
+	 */
+	public static Object getResource(String bindingKey, String propertyFileName)  throws AnyException{
+		QName resourceId = new QName(propertyFileName, bindingKey);
+		Binding binding = resources.get(resourceId);
+		if(binding == null){
+			RuntimeDeploymentDesc dd = getDeploymentDesc(propertyFileName);
+			binding = getBinding(bindingKey, dd);
+			if(binding == null){
+				binding = getBinding(bindingKey, dd.getIncludedDescs());
+			}
+			if(binding != null){
+				resources.put(resourceId, binding);
+			}
+		}
+		Object resource = null;
+		if(binding instanceof SQLDatabaseBinding){
+			resource = new SQLDataSource(((SQLDatabaseBinding)binding).getSqlValidationConnectionURL());
+		}
+		return resource;
+	}
+	
+	private static RuntimeDeploymentDesc getDeploymentDesc(String propertyFileName){
+		RuntimeDeploymentDesc dd = deploymentDescs.get(propertyFileName);
+		if(dd == null){
+			if(propertyFileName.charAt(0) != '.' || propertyFileName.charAt(0) != '/'){
+				propertyFileName = '/' + propertyFileName;
+			}
+			if(!propertyFileName.endsWith("-bnd.xml")){
+				propertyFileName += "-bnd.xml";
+			}
+			InputStream is = org.eclipse.edt.javart.Runtime.getRunUnit().getClass().getResourceAsStream(propertyFileName);
+			if(is == null){
+				throw new AnyException(new FileNotFoundException(propertyFileName));
+			}
+			else{
+				try {
+					dd = RuntimeDeploymentDesc.createDeploymentDescriptor(propertyFileName, is);
+				} catch (Exception e) {
+					throw new AnyException(e);
+				}
+				deploymentDescs.put(propertyFileName, dd);
+			}
+		}
+		return dd;
+	}
+	
+	private static Binding getBinding(String name, List<String> includes){
+		List<RuntimeDeploymentDesc> includedDDs = new ArrayList<RuntimeDeploymentDesc>();
+		Binding binding = null;
+		for(String ddName : includes){
+			RuntimeDeploymentDesc includedDD = getDeploymentDesc(ddName);
+			binding = getBinding(name, includedDD);
+			if(binding != null){
+				break;
+			}
+			else{
+				includedDDs.add(includedDD);
+			}
+		}
+		for(RuntimeDeploymentDesc includedDD : includedDDs){
+			binding = getBinding(name, includedDD.getIncludedDescs());
+			if(binding != null){
+				break;
+			}
+		}
+		return binding;
+	}
+	private static Binding getBinding(String name, RuntimeDeploymentDesc dd){
+		for(Binding binding : dd.getBindings()){
+			if(name.equalsIgnoreCase(binding.getName())){
+				return binding;
+			}
+		}
+		return null;
 	}
 }

@@ -51,7 +51,7 @@ abstract class EglHttpConnection extends Invoker{
 
 	private boolean useProxy()
 	{
-		return"true".equals( Runtime.getRunUnit().getProperties().get(("com.ibm.egl.service.invocation.useProxy") ) );
+		return"true".equals( Runtime.getRunUnit().getProperties().get(("egl.service.invocation.useProxy") ) );
 	}
 	
 	private static HttpURLConnection getProxyConnection( Request restRequest ) throws IOException

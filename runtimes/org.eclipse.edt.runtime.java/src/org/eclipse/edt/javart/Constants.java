@@ -144,4 +144,9 @@ public class Constants
 	public static final String SIGNATURE_STRING                    = "egl.lang.string";
 	public static final String SIGNATURE_TIME                      = "egl.lang.time";
 	public static final String SIGNATURE_TIMESTAMP                 = "egl.lang.timestamp";
+	
+	/**
+	 * The following are property constants
+	 */
+	public static final String APPLICATION_PROPERTY_FILE_NAME_KEY  = "egl.application.property.file";
 }
