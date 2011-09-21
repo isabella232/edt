@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.runtime.java.egl.lang;
 
+import java.io.Serializable;
+
 import org.eclipse.edt.javart.Constants;
 
-public class AnyDelegate {
+public class AnyDelegate implements Serializable {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	public static boolean equals(Object object1, Object object2) {
