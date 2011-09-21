@@ -13,16 +13,18 @@ package org.eclipse.edt.ide.rui.wizards.pages;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 
 import org.eclipse.edt.ide.rui.internal.project.CommonUtilities;
 import org.eclipse.edt.ide.rui.internal.project.IWidgetLibraryConflict;
+import org.eclipse.edt.ide.rui.internal.wizards.NewWizardMessages;
 import org.eclipse.edt.ide.rui.wizards.WebClientProjectTemplateWizard;
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardPage;
 import org.eclipse.edt.ide.ui.internal.project.wizards.NewEGLProjectWizard;
-import org.eclipse.edt.ide.rui.internal.wizards.NewWizardMessages;
 import org.eclipse.edt.ide.widgetLibProvider.IWidgetLibProvider;
 import org.eclipse.edt.ide.widgetLibProvider.WidgetLibProviderManager;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -38,12 +40,15 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -63,6 +68,8 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 	private Label fLogoLabel;
 	private HashMap<String, LibraryNode> fLibraryNodes = new HashMap<String, LibraryNode>();
 	private IWidgetLibProvider[] libProviders;
+	
+	private Hashtable libraryImages = new Hashtable();
 
 	public ProjectWizardRUILibraryPage(String pageName) {
 		super(pageName);
@@ -71,14 +78,15 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 		populateLibraryData();
 	}
 	
-	
 	public void createContents(Composite ancestor) {
 		GridData adata = new GridData(GridData.FILL_BOTH);
 		ancestor.setLayoutData(adata);
 		ancestor.setLayout(new GridLayout());	
 
         createSelectionTable(ancestor);
-		createDetailGroup(ancestor);	
+		createDetailGroup(ancestor);
+		
+		fTableViewer.getTable().setFocus();
 		
 		//TODO: <jiyong> Help
 //		PlatformUI.getWorkbench().getHelpSystem().setHelp(parent, HelpContextIDs.New_EGL_Base_Project_Advanced_Page);
@@ -131,6 +139,7 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 		table.setLinesVisible(true);
 
 		fTableViewer= new CheckboxTableViewer(table);
+		fTableViewer.setComparator(new ViewerSorter());		
 		fTableViewer.setContentProvider(new LibraryContentProvider());
 		
 		TableViewerColumn column1= new TableViewerColumn(fTableViewer, new TableColumn(table, SWT.NONE));
@@ -141,7 +150,7 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 				return insertDataNode.getName();
 			}
 		});		
-		columnLayout.addColumnData(new ColumnWeightData(2, 50, true));
+		columnLayout.addColumnData(new ColumnWeightData(4, 70, true));
 
 		final TableViewerColumn column2= new TableViewerColumn(fTableViewer, new TableColumn(table, SWT.NONE));
 		column2.getColumn().setText(NewWizardMessages.RUILibraryPage_version_label);
@@ -152,7 +161,7 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 				return insertDataNode.getVersion();
 			}
 		});
-		columnLayout.addColumnData(new ColumnWeightData(1, 50, true));
+		columnLayout.addColumnData(new ColumnWeightData(2, 70, true));
 
 		final TableViewerColumn column3= new TableViewerColumn(fTableViewer, new TableColumn(table, SWT.NONE));
 		column3.getColumn().setText(NewWizardMessages.RUILibraryPage_provider_label);
@@ -164,26 +173,8 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 		});
 //		column3.getColumn().setToolTipText(NewWizardMessages.RUILibraryPage_version_tooltip);
 		
-		columnLayout.addColumnData(new ColumnWeightData(3, 50, true));		
+		columnLayout.addColumnData(new ColumnWeightData(2, 40, true));		
 		
-		fTableViewer.setComparator(new ViewerComparator() {
-//			public int compare(Viewer viewer, Object object1, Object object2) {
-//				if ((object1 instanceof LibraryNode) && (object2 instanceof LibraryNode)) {
-//					LibraryNode left= (LibraryNode) object1;
-//					LibraryNode right= (LibraryNode) object2;
-//					int result= Collator.getInstance().compare(left.getName(), right.getName());
-//					if (result != 0)
-//						return result;
-//					return Collator.getInstance().compare(left.getVersion(), right.getVersion());
-//				}
-//				return super.compare(viewer, object1, object2);
-//			}
-//
-//			public boolean isSorterProperty(Object element, String property) {
-//				return true;
-//			}
-		});
-
 
 		fTableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent e) {
@@ -205,61 +196,46 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 		});
 		fTableViewer.setInput(new ArrayList<LibraryNode>(fLibraryNodes.values()));
 		fTableViewer.setAllChecked(false);		
-		setSelectedWidgetLibrary();
+		setSelectedWidgetLibrary();		
 	}
 
 	private void createDetailGroup(Composite ancestor) {
 		Group group = new Group(ancestor, SWT.NULL);
+		group.setText(NewWizardMessages.RUILibraryPage_details_label);
 
 		//GridLayout
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
+		GridLayout layout = new GridLayout(2, false);
 		group.setLayout(layout);
 
 		//GridData
-		GridData data = new GridData(GridData.FILL);
+		GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalIndent = 0;
-		data.verticalAlignment = GridData.FILL;
-		data.horizontalAlignment = GridData.FILL;
-        data.heightHint= 200;
-		data.grabExcessHorizontalSpace = true;
+        data.heightHint= 150;
 		group.setLayoutData(data);
-		
-		group.setText(NewWizardMessages.RUILibraryPage_details_label);
-		
+				
 		Composite innerComposite = new Composite(group, SWT.NONE);
-		data = new GridData(GridData.FILL);
-		data.horizontalIndent = 0;
-		data.verticalAlignment = GridData.FILL;
-		data.horizontalAlignment = GridData.FILL;
-		data.widthHint= 300;
-		data.grabExcessHorizontalSpace = true;
+		data = new GridData(GridData.FILL_BOTH);
 		innerComposite.setLayoutData(data);		
-		innerComposite.setLayout(new GridLayout());
+		innerComposite.setLayout(new FillLayout());
 		
-		fDetailTitleLabel = new Label(innerComposite, SWT.BOLD);
+		/*fDetailTitleLabel = new Label(innerComposite, SWT.BOLD);
 		data = new GridData(GridData.FILL);
 		data.horizontalIndent = 0;
 		data.verticalAlignment = GridData.FILL;
 		data.horizontalAlignment = GridData.FILL;
 		data.grabExcessHorizontalSpace = true;
-		fDetailTitleLabel.setLayoutData(data);
-		fDetailLabel = new Label( innerComposite, SWT.NONE);
-		data = new GridData(GridData.FILL);
+		fDetailTitleLabel.setLayoutData(data);*/
+		fDetailLabel = new Label( innerComposite, SWT.NONE | SWT.WRAP);
+		/*data = new GridData(GridData.FILL);
 		data.horizontalIndent = 0;
 		data.verticalAlignment = GridData.FILL;
 		data.horizontalAlignment = GridData.FILL;
 		data.grabExcessHorizontalSpace = true;
-		fDetailLabel.setLayoutData(data);
+		fDetailLabel.setLayoutData(data);*/
 
 		fLogoLabel = new Label( group, SWT.NONE);		 
-		data = new GridData(GridData.FILL);
-		data.horizontalIndent = 0;
-		data.verticalAlignment = GridData.FILL;
-		data.horizontalAlignment = GridData.FILL;
-		data.grabExcessHorizontalSpace = true;
-		fLogoLabel.setLayoutData(data);		 
-		
+		data = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
+		fLogoLabel.setLayoutData(data);		
 	}	
 	
 	private Object[] getSelectedLib() {
@@ -307,12 +283,21 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 
 		if (selection.size() == 1) {
 			LibraryNode data = (LibraryNode) selection.getFirstElement();
-			fDetailTitleLabel.setText(data.getName());
 			fDetailLabel.setText(data.getDetail());
 			ImageDescriptor logo = data.getLogo();
 			if (logo != null) {
-				fLogoLabel.setImage(logo.createImage());
+				Image image = null;
+				if (libraryImages.containsKey(data))
+					image = (Image)libraryImages.get(data);
+				else {
+					image = logo.createImage();
+					libraryImages.put(data, image);
+				}
+				fLogoLabel.setImage(image);
+			} else {
+				fLogoLabel.setImage(null);
 			}
+			fLogoLabel.getParent().layout(true);
 		} else {
 			fDetailLabel.setText(""); //$NON-NLS-1$
 		}
@@ -474,5 +459,35 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 		}
 		
 	}
+
+	@Override
+	public void dispose() {
+		try {
+			Collection<Image> images = libraryImages.values();
+			for (Iterator iterator = images.iterator(); iterator.hasNext();) {
+				Image e = (Image) iterator.next();
+				if (!e.isDisposed()) {
+					e.dispose();
+				}
+			}
+			libraryImages.clear();
+		} catch (Exception ex) {
+			
+		}
+			
+		super.dispose();
+	}
+
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		
+		// Select the first library in the table so that its details show up
+		if (visible && fTableViewer.getTable().getItemCount() > 0 && fTableViewer.getTable().getSelectionCount() == 0) {
+			fTableViewer.setSelection(new StructuredSelection(fTableViewer.getElementAt(0)));
+		}
+	}
+	
+	
 	
 }

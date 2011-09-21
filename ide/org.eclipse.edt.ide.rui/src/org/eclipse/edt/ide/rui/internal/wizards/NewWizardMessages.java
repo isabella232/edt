@@ -37,4 +37,6 @@ public class NewWizardMessages extends NLS {
 
 	public static String ImportTask;
 	public static String ImportTask_Unzip;
+	public static String WebClientProjectTemplateWizard_0;
+	public static String WebClientWithServicesProjectTemplateWizard_0;
 }

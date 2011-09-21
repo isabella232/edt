@@ -76,7 +76,7 @@ public class WidgetLibProvider implements IWidgetLibProvider {
 
 	public String getFullVersion() {
 		if(this.version_desc != null && !this.version_desc.isEmpty())
-			return this.version + "( " + this.version_desc + " )";
+			return this.version + " (" + this.version_desc + ")";
 		else
 			return this.version;
 	}
@@ -152,7 +152,7 @@ public class WidgetLibProvider implements IWidgetLibProvider {
 		provider = element.getAttribute(PROVIDER_PROVIDER);
 		version = element.getAttribute(PROVIDER_VERSION);
 		version_desc = element.getAttribute(PROVIDER_VERSION_DESC);
-		if (element.getAttribute(PROVIDER_LOGO) != null) {
+		if (element.getAttribute(PROVIDER_LOGO) != null && !element.getAttribute(PROVIDER_LOGO).equals("")) {
 			logo = EDTUIPlugin.imageDescriptorFromPlugin(element.getContributor().getName(), element.getAttribute(PROVIDER_LOGO));
 		}
 		detail = element.getAttribute(PROVIDER_DETAIL);

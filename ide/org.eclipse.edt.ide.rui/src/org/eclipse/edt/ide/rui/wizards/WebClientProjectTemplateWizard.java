@@ -17,10 +17,11 @@ import org.eclipse.edt.ide.ui.project.templates.ProjectTemplateWizard;
 
 public class WebClientProjectTemplateWizard extends ProjectTemplateWizard {
 	
-	private ProjectWizardRUILibraryPage libraryPage;
+	protected ProjectWizardRUILibraryPage libraryPage;
 	
 	public void addPages() {
-		this.libraryPage = new ProjectWizardRUILibraryPage(NewWizardMessages.RUILibraryPage);
+		libraryPage = new ProjectWizardRUILibraryPage(NewWizardMessages.RUILibraryPage);
+		libraryPage.setTitle(NewWizardMessages.WebClientProjectTemplateWizard_0);
 		addPage(libraryPage);
 		super.addPages();
 	}

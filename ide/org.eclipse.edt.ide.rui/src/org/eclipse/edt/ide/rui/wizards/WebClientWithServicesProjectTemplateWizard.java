@@ -11,7 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.wizards;
 
+import org.eclipse.edt.ide.rui.internal.wizards.NewWizardMessages;
+
 public class WebClientWithServicesProjectTemplateWizard extends
 		WebClientProjectTemplateWizard {
+
+	@Override
+	public void addPages() {
+		super.addPages();
+		
+		libraryPage.setTitle(NewWizardMessages.WebClientWithServicesProjectTemplateWizard_0);
+	}
 
 }
