@@ -78,6 +78,7 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.ProgramParameter;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
+import org.eclipse.edt.mof.egl.SetValuesStatement;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StructuredField;
@@ -514,27 +515,50 @@ class Egl2MofMember extends Egl2MofPart {
 					}
 				}
 				else {
-					// result must be an Expression
-					arrayIndex++;
-					Expression qualifier;
-					if (context instanceof Member) {
-						qualifier = factory.createMemberName();
-						((MemberName)qualifier).setId(((Member)context).getId());
-						((MemberName)qualifier).setMember((Member)context);
+					if (result instanceof org.eclipse.edt.mof.egl.SetValuesExpression) {
+						org.eclipse.edt.mof.egl.SetValuesExpression sve = (org.eclipse.edt.mof.egl.SetValuesExpression) result;
+						if (sve.getTarget() instanceof LHSExpr) {
+							sve.setTarget(addQualifier(context, (LHSExpr)sve.getTarget()));
+						}
+						SetValuesStatement sveStmt = factory.createSetValuesStatement();
+						setElementInformation(expr, sveStmt);
+						sveStmt.setAssignment((org.eclipse.edt.mof.egl.SetValuesExpression)result);
+						block.getStatements().add(sveStmt);
+						//add the qualifier to any statements in the sttings block
+						for (Statement stmt : sve.getSettings().getStatements()) {
+							if (stmt instanceof AssignmentStatement) {
+								Assignment assignExpr = ((AssignmentStatement)stmt).getAssignment();
+								LHSExpr lhs = addQualifier(context, assignExpr.getLHS());
+								assignExpr.setLHS(lhs);
+							}
+						}
+
 					}
+				
 					else {
-						qualifier = (Expression)context;
+						// result must be an Expression
+						arrayIndex++;
+						Expression qualifier;
+						if (context instanceof Member) {
+							qualifier = factory.createMemberName();
+							((MemberName)qualifier).setId(((Member)context).getId());
+							((MemberName)qualifier).setMember((Member)context);
+						}
+						else {
+							qualifier = (Expression)context;
+						}
+						org.eclipse.edt.mof.egl.IntegerLiteral indexExpr = factory.createIntegerLiteral();
+						indexExpr.setValue(String.valueOf(arrayIndex));
+						QualifiedFunctionInvocation func = factory.createQualifiedFunctionInvocation();
+						setElementInformation(expr, func);
+						func.setQualifier(qualifier);
+						func.setId("appendElement");
+						func.getArguments().add((Expression)result);
+						FunctionStatement stmt = factory.createFunctionStatement();
+						setElementInformation(expr, stmt);
+						stmt.setExpr(func);
+						block.getStatements().add(stmt);
 					}
-					org.eclipse.edt.mof.egl.IntegerLiteral indexExpr = factory.createIntegerLiteral();
-					indexExpr.setValue(String.valueOf(arrayIndex));
-					QualifiedFunctionInvocation func = factory.createQualifiedFunctionInvocation();
-					setElementInformation(expr, func);
-					func.setQualifier(qualifier);
-					func.setId("appendElement");
-					func.getArguments().add((Expression)result);
-					FunctionStatement stmt = factory.createFunctionStatement();
-					stmt.setExpr(func);
-					block.getStatements().add(stmt);
 				}
 			}
 		}
