@@ -158,11 +158,11 @@ public class ServiceFinder {
 		List<RestServiceMapping> parsed = null;
 		try {
 			DeploymentDesc dd = DeploymentDesc.createDeploymentDescriptor(file.getLocation().toOSString());
-			ArrayList<Restservice> services = dd.getRestservices();
+			List<Restservice> services = dd.getRestservices();
 			if (services.size() > 0) {
 				parsed = new ArrayList<ServiceFinder.RestServiceMapping>(services.size());
 				for (Restservice service : services) {
-					parsed.add(new RestServiceMapping(service.getUri(), service.getImplementation(), service.isStateful()));
+					parsed.add(new RestServiceMapping(service.getImplementation(), service.isStateful()));
 				}
 			}
 		}
@@ -177,15 +177,16 @@ public class ServiceFinder {
 		String className;
 		boolean stateful;
 		
-		RestServiceMapping(String uri, String className, boolean stateful) {
+		RestServiceMapping(String className, boolean stateful) {
 			this.className = className;
 			this.stateful = stateful;
 			
-			if (uri.length() > 0 && uri.charAt(0) != '/') {
-				this.uri = '/' + uri;
+			// We use the unaliased class name for the uri, prefixed with a '/'
+			if (className.length() > 0 && className.charAt(0) != '/') {
+				this.uri = '/' + className;
 			}
 			else {
-				this.uri = uri;
+				this.uri = className;
 			}
 		}
 		

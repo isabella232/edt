@@ -69,14 +69,14 @@ public class ConfigServlet extends HttpServlet {
 		String removed = req.getParameter(ARG_REMOVED);
 		
 		if (added != null && added.length() > 0) {
-			parseAdditions(added);
+			parse(added, true);
 		}
 		if (removed != null && removed.length() > 0) {
-			parseRemovals(removed);
+			parse(removed, false);
 		}
 	}
 	
-	public void parseAdditions(String mappings) {
+	public void parse(String mappings, boolean added) {
 		StringTokenizer tok = new StringTokenizer(mappings, MAPPING_ARG_DELIMETER);
 		while (tok.hasMoreTokens()) {
 			String token = tok.nextToken();
@@ -97,36 +97,15 @@ public class ConfigServlet extends HttpServlet {
 					uri = uri.replaceAll("%7C", "|").replaceAll("%3B", ";").replaceAll("%25", "%"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 				}
 				
-				previewServlet.addServiceMapping(uri, className, stateful);
+				if (added) {
+					previewServlet.addServiceMapping(uri, className, stateful);
+				}
+				else {
+					previewServlet.removeServiceMapping(uri);
+				}
 			}
 			else {
 				log(NLS.bind(TestServerMessages.ServiceMappingAdditionsInvalidTokens, token));
-			}
-		}
-	}
-	
-	public void parseRemovals(String mappings) {
-		StringTokenizer tok = new StringTokenizer(mappings, MAPPING_ARG_DELIMETER);
-		while (tok.hasMoreTokens()) {
-			String token = tok.nextToken();
-			StringTokenizer subtok = new StringTokenizer(token, MAPPING_DELIMETER);
-			
-			if (subtok.countTokens() == 1) {
-				String uri = subtok.nextToken();
-				
-				// uri will be encoded
-				try {
-					uri = URLDecoder.decode(uri, "UTF-8"); //$NON-NLS-1$
-				}
-				catch (UnsupportedEncodingException e) {
-					// Shouldn't happen.
-					uri = uri.replaceAll("%7C", "|").replaceAll("%3B", ";").replaceAll("%25", "%"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-				}
-				
-				previewServlet.removeServiceMapping(uri);
-			}
-			else {
-				log(NLS.bind(TestServerMessages.ServiceMappingRemovalsInvalidTokens, token));
 			}
 		}
 	}

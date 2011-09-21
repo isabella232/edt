@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.datatools.connectivity.IConnectionProfile;
 import org.eclipse.edt.compiler.internal.PartWrapper;
 import org.eclipse.edt.compiler.tools.IRUtils;
 import org.eclipse.edt.ide.core.internal.model.EGLProject;
@@ -40,8 +41,9 @@ import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.utils.DefaultDeploymentDescriptorUtility;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
-import org.eclipse.edt.ide.deployment.core.model.SQLDatabaseBinding;
+import org.eclipse.edt.ide.internal.sql.util.EGLSQLUtility;
 import org.eclipse.edt.ide.rui.internal.Activator;
+import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.osgi.util.NLS;
@@ -180,7 +182,7 @@ public class ClasspathUtil {
 			IFile ddFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(defaultDD.getPartPath()));
 			if (!seenDDs.contains(ddFile) && ddFile.exists()) {
 				seenDDs.add(ddFile);
-				parseDD(ddFile, classpath);
+				parseDD(ddFile, classpath, seenDDs);
 			}
 		}
 		
@@ -204,7 +206,7 @@ public class ClasspathUtil {
 									&& !seenDDs.contains(proxy.requestResource())) {
 								IResource ddFile = proxy.requestResource();
 								seenDDs.add(ddFile);
-								parseDD(ddFile, classpath);
+								parseDD(ddFile, classpath, seenDDs);
 							}
 							return false;
 						}
@@ -229,24 +231,39 @@ public class ClasspathUtil {
 		}
 	}
 	
-	private static void parseDD(IResource file, List<String> classpath) {
+	private static void parseDD(IResource file, List<String> classpath, Set<IResource> seenDDs) {
 		try {
 			DeploymentDesc dd = DeploymentDesc.createDeploymentDescriptor(file.getLocation().toOSString());
 			List<SQLDatabaseBinding> bindings = dd.getSqlDatabaseBindings();
 			if (bindings.size() > 0) {
 				for (SQLDatabaseBinding binding : bindings) {
-					String jars = binding.getJarList();
+					String jars = null;
+					if (binding.isUseURI()) {
+						String uri = binding.getUri();
+						if (uri == null) {
+							continue;
+						}
+						
+						uri = uri.trim();
+						if (uri.startsWith("workspace://")) { //$NON-NLS-1$
+							// Look for the connection profile to obtain the jars
+							IConnectionProfile profile = EGLSQLUtility.getConnectionProfile(uri.substring(12));
+							if (profile != null) {
+								jars = EGLSQLUtility.getLoadingPath(profile);
+							}
+						}
+					}
+					else {
+						jars = binding.getJarList();
+					}
+					
 					if (jars == null) {
 						continue;
 					}
 					
 					jars = jars.trim();
 					if (jars.length() > 0) {
-						// The value uses File.pathSeparatorChar as a delimiter when it's created, so it will differ between Unix and Windows.
-						// Normalize it to use ':' for parsing.
-						jars = jars.replace(';', ':');
-						
-						StringTokenizer tok = new StringTokenizer(jars, ":");
+						StringTokenizer tok = new StringTokenizer(jars, File.pathSeparator);
 						while (tok.hasMoreTokens()) {
 							String next = tok.nextToken();
 							String entry = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><runtimeClasspathEntry externalArchive=\"" + next + "\" path=\"3\" type=\"2\"/>"; //$NON-NLS-1$ //$NON-NLS-2$
@@ -255,6 +272,16 @@ public class ClasspathUtil {
 							}
 						}
 					}
+				}
+			}
+			
+			// Check any included DD files.
+			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+			for (String include : dd.getIncludes()) {
+				IResource resource = root.findMember(include);
+				if (resource != null && resource.isAccessible() && !seenDDs.contains(resource)) {
+					seenDDs.add(resource);
+					parseDD(resource, classpath, seenDDs);
 				}
 			}
 		}

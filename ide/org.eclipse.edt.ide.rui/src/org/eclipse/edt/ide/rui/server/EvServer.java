@@ -243,28 +243,28 @@ public class EvServer implements IClientProxy {
 				
 				Request request = null;
 				isDedicated = innerRequest != null && ProxyUtilities.isEGLDedicatedCall(innerRequest);
-				boolean useTestServer = (isDedicated && !isDesignPane(intContextKey)) || isPreviewPane(intContextKey);
-				if (!useTestServer) {
+				boolean canUseTestServer = (isDedicated && !isDesignPane(intContextKey)) || isPreviewPane(intContextKey);
+				if (!canUseTestServer) {
 					IContext context = findContext(intContextKey);
 					if (context instanceof IContext2) {
-						useTestServer = ((IContext2)context).useTestServer();
+						canUseTestServer = ((IContext2)context).useTestServer();
 					}
 				}
 				
-				if (useTestServer) {
+				if (canUseTestServer) {
 					IProject project = null;
 					if (isDedicated) {
 						project = ResourcesPlugin.getWorkspace().getRoot().getProject( getProjectName( urlString ) );
 					}
 					else {
-						//TODO use project from inner URI and expect the user's binding is for the test project?
+						// Should be format "workspace://project/pkg.ServiceName"
 						String innerURI = innerRequest.uri;
-						String path = new URL(innerURI).getPath();
-						int start = path.startsWith( "/" ) ? 1 : 0;
-						int end = path.indexOf( '/', start );
-						
-						if (end != -1) {
-							project = ResourcesPlugin.getWorkspace().getRoot().getProject( path.substring( start, end ) );
+						if (innerURI.startsWith("workspace://")) {
+							int start = 12; // "workspace://".length()
+							int end = innerURI.indexOf('/', start);
+							if (end != -1) {
+								project = ResourcesPlugin.getWorkspace().getRoot().getProject(innerURI.substring(start, end));
+							}
 						}
 					}
 					
@@ -299,9 +299,9 @@ public class EvServer implements IClientProxy {
 							// Modify the inner request to point to the test server
 							testServerURI += "/" + project.getName() + "/restservices/";
 							String innerURI = innerRequest.uri;
-							int index = innerURI.indexOf( "/restservices/" );//TODO is the servlet guaranteed to be /restservices/?
-							if (index != -1) {
-								testServerURI += innerURI.substring(index + 14);
+							int start = 12 + project.getName().length() + 1; // ("workspace://" + projectName + "/").length()
+							if (start != -1) {
+								testServerURI += innerURI.substring(start);
 								innerRequest.uri = testServerURI;
 							}
 						}

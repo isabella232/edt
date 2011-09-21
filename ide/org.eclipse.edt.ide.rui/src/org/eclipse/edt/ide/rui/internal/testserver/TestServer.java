@@ -122,7 +122,7 @@ public class TestServer {
 		ConfigServlet configServlet = new ConfigServlet(previewServlet);
 		context.addServlet(new ServletHolder(configServlet), ConfigServlet.SERVLET_PATH);
 		if (serviceMappings != null && serviceMappings.length() > 0) {
-			configServlet.parseAdditions(serviceMappings);
+			configServlet.parse(serviceMappings, true);
 		}
 		
 		Server server = new Server(port);
