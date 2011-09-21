@@ -29,7 +29,6 @@ import org.eclipse.core.resources.ISaveContext;
 import org.eclipse.core.resources.ISaveParticipant;
 import org.eclipse.core.resources.ISavedState;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
@@ -58,7 +57,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.prefs.BackingStoreException;
-import org.osgi.service.prefs.Preferences;
 
 /**
  * <p>
@@ -156,16 +154,31 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	private class PreferenceListener implements IPropertyChangeListener {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
-			if (EDTCorePreferenceConstants.COMPILER_ID.equals(event.getProperty())
-					|| EDTCorePreferenceConstants.GENERATOR_IDS.equals(event.getProperty())
-					|| EDTCorePreferenceConstants.BUILD_FLAG.equals(event.getProperty())
-					) {
+			if (EDTCorePreferenceConstants.COMPILER_ID.equals(event.getProperty())) {
+				// Touch all projects using the default compiler so that autobuild is triggered.
+				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+				for (IProject project : projects) {
+					if (project.isAccessible() && EGLProject.hasEGLNature(project) && ProjectSettingsUtility.getCompilerId(project) == null) {
+						try {
+							project.touch(null);
+						}
+						catch (CoreException e) {
+							log(e);
+						}
+					}
+				}
+			}
+			//TODO this next check is still incomplete. We need to also verify that the modified gen settings were for the default compiler.
+			// If you change a non-default compiler's settings, we should not regenerate!
+			else if (EDTCorePreferenceConstants.GENERATOR_IDS.equals(event.getProperty())
+					|| EDTCorePreferenceConstants.BUILD_FLAG.equals(event.getProperty())) {
 				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 				for (IProject project : projects) {
 					if (project.isAccessible() && EGLProject.hasEGLNature(project)){
-						//Touch projects using the default compiler so that autobuild is triggered.
-						if(ProjectSettingsUtility.getCompilerId(project) == null && ProjectSettingsUtility.getGeneratorIds( project ) == null){
-							//No project specific setting, inherit workspace compiler & generator settings
+						String compilerId = ProjectSettingsUtility.getCompilerId(project);
+						if(compilerId == null) {
+							// No compiler means the project cannot be overriding any generation settings.
+							// Since the workspace generation settings have changed, force a regenerate.
 							try {
 								GenerationBuildManager.getInstance().setProjectState(project, false);
 								project.touch(null);
@@ -173,12 +186,15 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 							catch (CoreException e) {
 								log(e);
 							}
-						}else if(ProjectSettingsUtility.getCompilerId(project) != null && !isGeneratorSettingOverridden(project)){
-							//Has project specific compiler setting, but did not override generation setting on Project level, 
-							//It mean some package can be using workspace setting, while some can have a specific setting
-							
-							String workspaceDefaultCompiler = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString( EDTCorePreferenceConstants.COMPILER_ID );
-							if(ProjectSettingsUtility.getCompilerId(project).equalsIgnoreCase(workspaceDefaultCompiler)){
+						}
+						else if (compilerId.equals(EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString(EDTCorePreferenceConstants.COMPILER_ID))) {
+							// If the project itself has generatorIds then that means nothing in the project could possibly be using the workspace
+							// generator settings and we can skip regenerating.
+							if (ProjectSettingsUtility.getGeneratorIds(project) == null) {
+								//TODO right now we regenerate the entire project, but that hurts performance. It could be that some packages or files are overriding
+								// the workspace generation settings. These files would not need to be regenerated. A full solution would be to walk the source
+								// folders in the project and touch all IRs that correspond to .egl files that do not override the generation settings.
+								// See ProjectSettingsListenerManager.GeneratorPreferenceListener for how to do this.
 								try {
 									GenerationBuildManager.getInstance().setProjectState(project, false);
 									project.touch(null);
@@ -191,12 +207,6 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 					}
 				}
 			}
-		}
-
-		private boolean isGeneratorSettingOverridden(IProject project){
-			Preferences genPrefs = new ProjectScope(project).getNode( EDTCoreIDEPlugin.PLUGIN_ID).node( ProjectSettingsUtility.PROPERTY_GENERATOR_IDS );
-			return ( ProjectSettingsUtility.findSetting( project.getFullPath(), genPrefs, false ) != null );
-			
 		}
 	}
 
