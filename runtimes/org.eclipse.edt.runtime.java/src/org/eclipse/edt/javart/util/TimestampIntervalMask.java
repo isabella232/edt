@@ -84,52 +84,47 @@ public class TimestampIntervalMask implements Serializable
 	 */
 	public int getStartCode()
 	{
-		//TODO rewrite as a switch...come on people!!!
-		if( lowerCasePattern.startsWith("y") )
+		if ( lowerCasePattern.length() == 0 )
 		{
-			return YEAR_CODE;
-		}
-		else if( lowerCasePattern.startsWith("m") )
-		{
-			return isMonth( true ) ? MONTH_CODE : MINUTE_CODE;
-		}
-		else if( lowerCasePattern.startsWith("d") )
-		{
-			return DAY_CODE;
-		}
-		else if( lowerCasePattern.startsWith("h") )
-		{
-			return HOUR_CODE;
-		}
-		else if( lowerCasePattern.startsWith("s") )
-		{
-			return SECOND_CODE; 
-		}
-		else if( lowerCasePattern.startsWith("f") )
-		{
-			switch( numStartChars() )
-			{
-	            case 1:
-	            	return FRACTION1_CODE;
-	            case 2:
-	            	return FRACTION2_CODE;
-	            case 3:
-	            	return FRACTION3_CODE;
-	            case 4:
-	            	return FRACTION4_CODE;
-	            case 5:
-	            	return FRACTION5_CODE;
-	            case 6:
-	            	return FRACTION6_CODE;
-            }
-			// willnot happen
+			// Sanity check.  Should never happen.
 			return -1;
 		}
-		else
+		
+		switch ( lowerCasePattern.charAt( 0 ) )
 		{
-			// will not happen
-			return -1;
+			case 'y':
+				return YEAR_CODE;
+			case 'm':
+				return isMonth( true ) ? MONTH_CODE : MINUTE_CODE;
+			case 'd':
+				return DAY_CODE;
+			case 'h':
+				return HOUR_CODE;
+			case 's':
+				return SECOND_CODE; 
+			case 'f':
+				switch( numStartChars() )
+				{
+		            case 1:
+		            	return FRACTION1_CODE;
+		            case 2:
+		            	return FRACTION2_CODE;
+		            case 3:
+		            	return FRACTION3_CODE;
+		            case 4:
+		            	return FRACTION4_CODE;
+		            case 5:
+		            	return FRACTION5_CODE;
+		            case 6:
+		            	return FRACTION6_CODE;
+		            default:
+		    			// willnot happen
+		    			return -1;
+	            }
 		}
+
+		// will not happen
+		return -1;
 	}
 	
 	/**
@@ -137,52 +132,47 @@ public class TimestampIntervalMask implements Serializable
 	 */
 	public int getEndCode()
 	{
-		//TODO rewrite as a switch
-		if( lowerCasePattern.endsWith("y") )
+		if ( lowerCasePattern.length() == 0 )
 		{
-			return YEAR_CODE;
-		}
-		else if( lowerCasePattern.endsWith("m") )
-		{
-			return isMonth( false ) ? MONTH_CODE : MINUTE_CODE;
-		}
-		else if( lowerCasePattern.endsWith("d") )
-		{
-			return DAY_CODE;
-		}
-		else if( lowerCasePattern.endsWith("h") )
-		{
-			return HOUR_CODE;
-		}
-		else if( lowerCasePattern.endsWith("s") )
-		{
-			return SECOND_CODE;
-		}
-		else if( lowerCasePattern.endsWith("f") )
-		{
-			switch( numEndChars() )
-			{
-	            case 1:
-	            	return FRACTION1_CODE;
-	            case 2:
-	            	return FRACTION2_CODE;
-	            case 3:
-	            	return FRACTION3_CODE;
-	            case 4:
-	            	return FRACTION4_CODE;
-	            case 5:
-	            	return FRACTION5_CODE;
-	            case 6:
-	            	return FRACTION6_CODE;
-            }
-			// willnot happen
+			// Sanity check.  Should never happen.
 			return -1;
 		}
-		else
+		
+		switch ( lowerCasePattern.charAt( lowerCasePattern.length() - 1 ) )
 		{
-			// will not happen
-			return -1;
+			case 'y':
+				return YEAR_CODE;
+			case 'm':
+				return isMonth( false ) ? MONTH_CODE : MINUTE_CODE;
+			case 'd':
+				return DAY_CODE;
+			case 'h':
+				return HOUR_CODE;
+			case 's':
+				return SECOND_CODE; 
+			case 'f':
+				switch( numEndChars() )
+				{
+		            case 1:
+		            	return FRACTION1_CODE;
+		            case 2:
+		            	return FRACTION2_CODE;
+		            case 3:
+		            	return FRACTION3_CODE;
+		            case 4:
+		            	return FRACTION4_CODE;
+		            case 5:
+		            	return FRACTION5_CODE;
+		            case 6:
+		            	return FRACTION6_CODE;
+		            default:
+		    			// willnot happen
+		    			return -1;
+	            }
 		}
+
+		// will not happen
+		return -1;
 	}
 	
 	/**
