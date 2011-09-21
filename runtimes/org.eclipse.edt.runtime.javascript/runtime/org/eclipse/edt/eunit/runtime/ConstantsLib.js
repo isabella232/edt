@@ -1,13 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2011 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
 egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'ConstantsLib',
 {
 	'eze$$fileName': 'org/eclipse/edt/eunit/runtime/ConstantsLib.egl',
@@ -16,16 +6,24 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'ConstantsLib',
 			if(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']) return egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'];
 			egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']=this;
 			this.jsrt$SysVar = new egl.egl.core.SysVar();
+			this.NEWLINE = "";
+			this.NEWLINE = "\r\n";
+			this.EXIT_PREFIX = "";
+			this.EXIT_PREFIX = "STATUS: ";
+			this.SPASSED = 0;
+			this.SPASSED = 0;
+			this.SFAILED = 0;
+			this.SFAILED = 1;
+			this.SERROR = 0;
+			this.SERROR = 2;
+			this.SNOT_RUN = 0;
+			this.SNOT_RUN = 3;
+			this.SBAD = 0;
+			this.SBAD = 4;
 			this.eze$$setInitial();
 		}
 		,
 		"eze$$setEmpty": function() {
-			this.NEWLINE = "";
-			this.EXIT_PREFIX = "";
-			this.SPASSED = 0;
-			this.SFAILED = 0;
-			this.SERROR = 0;
-			this.SNOT_RUN = 0;
 		}
 		,
 		"eze$$setInitial": function() {
@@ -52,48 +50,28 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'ConstantsLib',
 			return NEWLINE;
 		}
 		,
-		"setNEWLINE": function(ezeValue) {
-			this.NEWLINE = ezeValue;
-		}
-		,
 		"getEXIT_PREFIX": function() {
 			return EXIT_PREFIX;
-		}
-		,
-		"setEXIT_PREFIX": function(ezeValue) {
-			this.EXIT_PREFIX = ezeValue;
 		}
 		,
 		"getSPASSED": function() {
 			return SPASSED;
 		}
 		,
-		"setSPASSED": function(ezeValue) {
-			this.SPASSED = ezeValue;
-		}
-		,
 		"getSFAILED": function() {
 			return SFAILED;
-		}
-		,
-		"setSFAILED": function(ezeValue) {
-			this.SFAILED = ezeValue;
 		}
 		,
 		"getSERROR": function() {
 			return SERROR;
 		}
 		,
-		"setSERROR": function(ezeValue) {
-			this.SERROR = ezeValue;
-		}
-		,
 		"getSNOT_RUN": function() {
 			return SNOT_RUN;
 		}
 		,
-		"setSNOT_RUN": function(ezeValue) {
-			this.SNOT_RUN = ezeValue;
+		"getSBAD": function() {
+			return SBAD;
 		}
 		,
 		"toString": function() {
