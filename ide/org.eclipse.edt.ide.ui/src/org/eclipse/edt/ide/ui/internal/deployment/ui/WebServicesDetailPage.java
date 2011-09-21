@@ -17,10 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
-import org.eclipse.edt.ide.ui.internal.deployment.Protocol;
-import org.eclipse.edt.ide.ui.internal.deployment.Restservice;
-import org.eclipse.edt.ide.ui.internal.deployment.StyleTypes;
-import org.eclipse.edt.ide.ui.internal.deployment.Webservice;
+import org.eclipse.edt.ide.deployment.core.model.Restservice;
+import org.eclipse.edt.ide.ui.internal.deployment.Service;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDWebServicesBlock.RowItem;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -45,13 +43,12 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 public class WebServicesDetailPage extends EGLDDBaseDetailPage {
-	private Webservice fWebService;
-	private Restservice fRestService;
+	private Service fWebService;
+	private Service fRestService;
 
 //	private TableViewer fWSAttribTV;
 
-	private CCombo fComboProtocol;
-	private Button fUseExistingBtn, fBrowseBtn, fIsStatefulBtn;
+	private Button fUseExistingBtn, fBrowseBtn;
 	private Label fLabelStyle, fLabelWSDLFile, fLabelService, fLabelPort, fRestUriLabel;
 	private Text fWSDLFileText, fRestUri;
 	private CCombo fComboStyle, fComboService, fComboPort;
@@ -111,18 +108,6 @@ public class WebServicesDetailPage extends EGLDDBaseDetailPage {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		fieldComposite.setLayout(layout);
 		fieldComposite.setLayoutData(gd);
-		
-		//createSpacer(toolkit, fieldComposite, layoutColumn);
-		fIsStatefulBtn = toolkit.createButton(fieldComposite, SOAMessages.LabelStateful, SWT.CHECK);		
-		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_BEGINNING);
-		gd.horizontalSpan = layoutColumn;
-		fIsStatefulBtn.setLayoutData(gd);
-		fIsStatefulBtn.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				HandleStatefulPressed();
-			}
-		});
-		fRESTServiceSectionControls.add(fIsStatefulBtn);
 		
 		fRestUriLabel = toolkit.createLabel(fieldComposite, SOAMessages.LabelURI);
 		fRESTServiceSectionControls.add(fRestUriLabel);
@@ -311,27 +296,6 @@ public class WebServicesDetailPage extends EGLDDBaseDetailPage {
 		fieldComposite.setLayout(layout);
 		fieldComposite.setLayoutData(gd);
 
-		Label protocolLabel = toolkit.createLabel(fieldComposite, SOAMessages.ProtocolLabel);
-		fPlatformSectionControls.add(protocolLabel);
-		fComboProtocol = new CCombo(fieldComposite, SWT.DROP_DOWN|SWT.READ_ONLY|SWT.FLAT);
-		toolkit.adapt(fComboProtocol, true, true);
-		fComboEnabledColor = fComboProtocol.getBackground();
-		fComboProtocol.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-		initProtocolComboItems(fComboProtocol);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		fComboProtocol.setLayoutData(gd);
-		fComboProtocol.addSelectionListener(new SelectionAdapter(){
-			public void widgetSelected(SelectionEvent e) {
-				HandleProtocolComboSelectionChanged(fComboProtocol);
-			}
-		});
-		fComboProtocol.addFocusListener(new FocusAdapter(){
-			public void focusGained(FocusEvent e) {
-				initProtocolComboItems(fComboProtocol);
-			}			
-		});
-		fPlatformSectionControls.add(fComboProtocol);
-		
 		Label cicsUriLabel = toolkit.createLabel(fieldComposite, SOAMessages.CICSURILabel);
 		fPlatformSectionControls.add(cicsUriLabel);
 		fCICSURIText = toolkit.createText(fieldComposite, "", SWT.SINGLE); //$NON-NLS-1$
@@ -358,26 +322,23 @@ public class WebServicesDetailPage extends EGLDDBaseDetailPage {
 	
 	private void HandleUseExistingPressed() {
 		boolean selectionState = fUseExistingBtn.getSelection();
-		fWebService.setUseExistingWSDL(selectionState);
+		//TODO SOAP not yet supported
+//		EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fWebService), Webservice.ATTRIBUTE_SERVICE_SOAP_useExistingWSDL, selectionState);
 				
 		updateServiceControlState(selectionState);
 		
-		if(!selectionState && fWebService.getStyle() != null){
-			fComboStyle.select(getComboIndex(fComboStyle, fWebService.getStyle().getLiteral()));
-			HandleStyleComboSelectionChanged();
-		}
+		//TODO SOAP not yet supported
+//		if(!selectionState && fWebService.getStyle() != null){
+//			fComboStyle.select(getComboIndex(fComboStyle, fWebService.getStyle().getLiteral()));
+//			HandleStyleComboSelectionChanged();
+//		}
 	}
 		
-	private void HandleStatefulPressed(){
-		boolean selectionState = fIsStatefulBtn.getSelection();
-		fRestService.setStateful(selectionState);		
-	}
-	
 	private void HandleRestURIModified(){
 		String newURI = fRestUri.getText();
 		if(newURI == null)
 			newURI = ""; //$NON-NLS-1$
-		fRestService.setUri(newURI);		
+		EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fRestService), Restservice.ATTRIBUTE_SERVICE_REST_uriFragment, newURI);
 	}
 	
 	private void HandleBrowsePressed() {
@@ -425,14 +386,16 @@ public class WebServicesDetailPage extends EGLDDBaseDetailPage {
 //		}while(resultInfo.isError() && dialogReturn != IDialogConstants.CANCEL_ID);
 	}
 	
-	private void HandleStyleComboSelectionChanged() {		
-		String styleRef = fComboStyle.getText();
-		if(styleRef != null && styleRef.trim().length()>0)
-			fWebService.setStyle(StyleTypes.get(styleRef));		
+	private void HandleStyleComboSelectionChanged() {
+		//TODO SOAP not yet supported
+//		String styleRef = fComboStyle.getText();
+//		if(styleRef != null && styleRef.trim().length()>0)
+//			fWebService.setStyle(StyleTypes.get(styleRef));		
 	}
 	
 	private void HandleServiceComboSelectionChanged() {
-		fWebService.setWsdlService(fComboService.getText());
+		//TODO SOAP not yet supported
+//		fWebService.setWsdlService(fComboService.getText());
 		
 		initPortComboItems() ;
 	}
@@ -456,30 +419,16 @@ public class WebServicesDetailPage extends EGLDDBaseDetailPage {
 	}
 	
 	private void HandlePortComboSelectionChanged() {
-		fWebService.setWsdlPort(fComboPort.getText());		
-	}
-	
-	protected void HandleProtocolComboSelectionChanged(CCombo comboControl) {
-		String protocolRef = comboControl.getText();
-		if(protocolRef != null && protocolRef.trim().length()>0){
-			Object data = comboControl.getData();
-			if(data instanceof Protocol[]){
-				Protocol[] protocols = ((Protocol[])data);
-				int index = comboControl.getSelectionIndex();	
-				String protocol = protocols[index].getName();
-				if(fWebService != null)
-					fWebService.setProtocol(protocol);
-				if(fRestService != null)
-					fRestService.setProtocol(protocol);
-			}
-		}
+		//TODO SOAP not yet supported
+//		fWebService.setWsdlPort(fComboPort.getText());		
 	}
 	
 	private void HandleCICSURIModified() {
-		String newCICSURI = fCICSURIText.getText();
-		if(newCICSURI == null)
-			newCICSURI = ""; //$NON-NLS-1$
-		fWebService.setUri(newCICSURI);
+		//TODO SOAP not yet supported
+//		String newCICSURI = fCICSURIText.getText();
+//		if(newCICSURI == null)
+//			newCICSURI = ""; //$NON-NLS-1$
+//		fWebService.setUri(newCICSURI);
 	}
 
 	public void commit(boolean onSave) {
@@ -506,18 +455,6 @@ public class WebServicesDetailPage extends EGLDDBaseDetailPage {
 		return false;
 	}
 
-	private int getProtocolIndexInCombo(CCombo comboControl, String item){
-		Object data = comboControl.getData();
-		if(data instanceof Protocol[]){
-			Protocol[] allItems = (Protocol[])data;
-			for(int i=0; i<allItems.length; i++){
-				if(item.equals(allItems[i].getName()))
-					return i;
-			}			
-		}
-		return -1;
-	}
-	
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		IStructuredSelection ssel = (IStructuredSelection)selection;
 		if(ssel.size() == 1){
@@ -548,7 +485,7 @@ public class WebServicesDetailPage extends EGLDDBaseDetailPage {
 		
 		if(fRestService != null){
 			updateRESTControls();	
-			updateControlState(fRESTServiceSectionControls, fRestService.isEnableGeneration());		
+			updateControlState(fRESTServiceSectionControls, EGLDDRootHelper.getBooleanParameterValue(fRestService.getParameters(), Restservice.ATTRIBUTE_SERVICE_REST_enableGeneration));		
 			if(fWebService == null){
 				updateControlState(fSOAPServiceSectionControls, false);
 			}
@@ -556,16 +493,11 @@ public class WebServicesDetailPage extends EGLDDBaseDetailPage {
 	}
 	
 	private void updateRESTControls(){
-		boolean isStateful = fRestService.isStateful();
-		fIsStatefulBtn.setSelection(isStateful);
-		
-		fRestUri.setText(fRestService.getUri()!=null ? fRestService.getUri() : ""); //$NON-NLS-1$
-		
-		initProtocolComboItems(fComboProtocol);
-		if(fRestService.getProtocol()!= null){
-			fComboProtocol.select(getProtocolIndexInCombo(fComboProtocol, fRestService.getProtocol()));
-			HandleProtocolComboSelectionChanged(fComboProtocol);
+		String uri = null;
+		if (fRestService.getParameters() != null) {
+			uri = EGLDDRootHelper.getParameterValue(fRestService.getParameters(), Restservice.ATTRIBUTE_SERVICE_REST_uriFragment);
 		}
+		fRestUri.setText(uri == null ? "" : uri); //$NON-NLS-1$
 	}
 
 //	private void updateSOAPControls() {
@@ -632,9 +564,10 @@ public class WebServicesDetailPage extends EGLDDBaseDetailPage {
 //		updateServiceControlState(isUseExisting);
 //	}
 	
-	private void initStyleComboItems() {		
-		String[] items = EGLDDRootHelper.getStyleComboItems();
-		fComboStyle.setItems(items);		
+	private void initStyleComboItems() {
+		//TODO SOAP not yet supported
+//		String[] items = EGLDDRootHelper.getStyleComboItems();
+//		fComboStyle.setItems(items);		
 	}
 	
 	private static int getComboIndex(CCombo combo, String item) {		
@@ -713,15 +646,6 @@ public class WebServicesDetailPage extends EGLDDBaseDetailPage {
 //		return resultStatus;
 //	}
 	
-	private void initProtocolComboItems(CCombo comboControl) {
-		List includedCommTypes = new ArrayList();
-		includedCommTypes.add(CommTypes.JAVA400_LITERAL);
-		includedCommTypes.add(CommTypes.JAVA400J2C_LITERAL);
-		includedCommTypes.add(CommTypes.CICSWS_LITERAL);
-		String[] items = EGLDDRootHelper.getProtocolComboItemsByType(getEGLServiceBindingEditor().getModelRoot(), includedCommTypes, comboControl);
-		comboControl.setItems(items);
-	}
-
 	private void updateServiceControlState(boolean controlState) {		
 		fLabelStyle.setEnabled(!controlState);
 		fComboStyle.setEnabled(!controlState);

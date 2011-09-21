@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
-import org.eclipse.edt.ide.ui.internal.deployment.EGLBinding;
+import org.eclipse.edt.ide.ui.internal.deployment.Binding;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.FileBrowseDialog;
@@ -26,7 +26,6 @@ import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
 import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.eclipse.edt.ide.ui.wizards.BindingBaseConfiguration;
 import org.eclipse.edt.ide.ui.wizards.BindingEGLConfiguration;
-import org.eclipse.edt.ide.ui.wizards.EGLDDBindingConfiguration;
 import org.eclipse.edt.ide.ui.wizards.EGLWizardUtilities;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -132,7 +131,6 @@ public class ServiceBindingWizardPage extends EGLBindingWizardPage {
 					deploymentRoot = EGLDDRootHelper.getEGLDDFileSharedWorkingModel(eglddFile, false);
 				}
 				getBindingEGLConfiguration().setEGLDeploymentDescriptor(eglddFile, deploymentRoot);				
-				updateProtocolComboItems(deploymentRoot, EGLDDBindingConfiguration.BINDINGTYPE_EGL);
 				validatePage();					
 			}
 			finally{
@@ -161,7 +159,7 @@ public class ServiceBindingWizardPage extends EGLBindingWizardPage {
 			EGLDeploymentRoot deploymentRoot = getBindingEGLConfiguration().getEGLDeploymentRoot(); 
 			if(deploymentRoot != null){
 				String currBindingName = getBindingEGLConfiguration().getBindingName();
-				EGLBinding eglBinding = EGLDDRootHelper.getEGLBindingByName(deploymentRoot, currBindingName);
+				Binding eglBinding = EGLDDRootHelper.getBindingByName(deploymentRoot, currBindingName);
 				if(eglBinding != null){
 					statusinfo.setError(NewWizardMessages.bind(NewWizardMessages.WSDLBindingWizpageValidationQueryOverride, currBindingName, getEGLDDFileHandle().getName()));
 				}

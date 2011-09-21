@@ -19,17 +19,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.EGLElementImageDescriptor;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
+import org.eclipse.edt.ide.ui.internal.deployment.Binding;
 import org.eclipse.edt.ide.ui.internal.deployment.Bindings;
 import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
-import org.eclipse.edt.ide.ui.internal.deployment.EGLBinding;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
-import org.eclipse.edt.ide.ui.internal.deployment.NativeBinding;
-import org.eclipse.edt.ide.ui.internal.deployment.Protocol;
-import org.eclipse.edt.ide.ui.internal.deployment.ReferenceProtocol;
-import org.eclipse.edt.ide.ui.internal.deployment.RestBinding;
-import org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding;
-import org.eclipse.edt.ide.ui.internal.deployment.WebBinding;
 import org.eclipse.edt.ide.ui.internal.viewsupport.ImageDescriptorRegistry;
 import org.eclipse.edt.ide.ui.internal.wizards.EGLDDBindingWizard;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -71,7 +65,7 @@ import org.eclipse.ui.forms.widgets.Section;
 public class EGLDDBindingBlock extends EGLDDBaseBlock {
 
 	private static final int COLINDEX_NAME = 0;
-	private static final int COLINDEX_PROTOCOLTYPE = 1;
+	private static final int COLINDEX_TYPE = 1;
 	protected Button fBtnRemove;
 	protected ISelection fCurrentSelection;
 	protected Button fBtnAdd;
@@ -85,11 +79,7 @@ public class EGLDDBindingBlock extends EGLDDBaseBlock {
 				Deployment deployment = servicebindingRoot.getDeployment();
 				Bindings bindings = deployment.getBindings();
 				if(bindings != null){
-					children.addAll(bindings.getEglBinding());
-					children.addAll(bindings.getNativeBinding());					
-					children.addAll(bindings.getWebBinding());
-					children.addAll(bindings.getRestBinding());
-					children.addAll(bindings.getSqlDatabaseBinding());
+					children.addAll(bindings.getBinding());
 				}
 			}
 			return children.toArray();
@@ -109,14 +99,12 @@ public class EGLDDBindingBlock extends EGLDDBaseBlock {
 				EGLElementImageDescriptor overlayedDescriptor=null;
 				ImageDescriptorRegistry registry = EDTUIPlugin.getImageDescriptorRegistry();	
 				int overlayFlag = 0;
-				if(element instanceof WebBinding){
-					overlayFlag = EGLElementImageDescriptor.WEBSERVICE;
-				}
-				else if(element instanceof EGLBinding){
-					EGLBinding eglbinding = (EGLBinding)element;
-					Protocol protocol = eglbinding.getProtocol();
-					overlayFlag = getProtocolOverlayFlag(protocol) ;
-				}
+				
+				//TODO uncomment when SOAP bindings are supported. also need a constant for the type
+//				if(element instanceof Binding && "edt.binding.soap".equals(((Binding)element).getType())){
+//					
+//					overlayFlag = EGLElementImageDescriptor.WEBSERVICE;
+//				}
 				overlayedDescriptor = new EGLElementImageDescriptor(PluginImages.DESC_OBJS_EXTERNALSERVICE,
 						overlayFlag, EGLDeploymentDescriptorEditor.SMALL_SIZE);				
 				
@@ -126,69 +114,22 @@ public class EGLDDBindingBlock extends EGLDDBaseBlock {
 			return null;
 		}
 
-		private int getProtocolOverlayFlag(Protocol protocol) {
-			int overlayFlag = 0;
-			if(protocol instanceof ReferenceProtocol)
-				overlayFlag = EGLElementImageDescriptor.SERVICEREF;
-			else{					
-				CommTypes commtype = EGLDDRootHelper.getProtocolCommType(protocol);		
-
-				if(commtype == CommTypes.TCPIP_LITERAL)
-					overlayFlag =  EGLElementImageDescriptor.TCPIP;
-				else if(commtype == CommTypes.CICSECI_LITERAL ||
-						commtype == CommTypes.CICSJ2C_LITERAL ||
-						commtype == CommTypes.CICSSSL_LITERAL ||
-						commtype == CommTypes.JAVA400_LITERAL ||
-						commtype == CommTypes.JAVA400J2C_LITERAL ||
-						commtype == CommTypes.CICSWS_LITERAL )
-					overlayFlag = EGLElementImageDescriptor.CICS;
-			}
-			return overlayFlag ;
-		}
-				
 		public String getColumnText(Object element, int columnIndex) {
-			if (element instanceof WebBinding) {
-				WebBinding webbinding = (WebBinding) element;
-				if(columnIndex == COLINDEX_NAME)
-					return webbinding.getName();
-				else if(columnIndex == COLINDEX_PROTOCOLTYPE){
-					return "WSDL"; //$NON-NLS-1$
+			if (element instanceof Binding) {
+				if(columnIndex == COLINDEX_NAME) {
+					return ((Binding)element).getName();
 				}
-			} 
-			else  if (element instanceof EGLBinding) {
-				EGLBinding eglbinding = (EGLBinding)element;
-				if(columnIndex == COLINDEX_NAME)
-					return eglbinding.getName();
-				else if(columnIndex == COLINDEX_PROTOCOLTYPE){
-					Protocol protocol = eglbinding.getProtocol();					
-					return EGLDDRootHelper.getProtocolCommTypeString(protocol);
+				else if(columnIndex == COLINDEX_TYPE){
+					String type = ((Binding)element).getType();
+					if (org.eclipse.edt.javart.resources.egldd.Binding.BINDING_SERVICE_REST.equals(type)) {
+						return "REST";  //$NON-NLS-1$
+					}
+					else if (org.eclipse.edt.javart.resources.egldd.Binding.BINDING_DB_SQL.equals(type)) {
+						return "SQL";  //$NON-NLS-1$
+					}
 				}
 			}
-			else if(element instanceof NativeBinding){
-				NativeBinding nativeBinding = (NativeBinding)element;
-				if(columnIndex == COLINDEX_NAME)
-					return nativeBinding.getName();
-				else if(columnIndex == COLINDEX_PROTOCOLTYPE){
-					Protocol protocol1 = nativeBinding.getProtocol();
-					return EGLDDRootHelper.getProtocolCommTypeString(protocol1);
-				}
-			}
-			else if(element instanceof RestBinding){
-				RestBinding restBinding = (RestBinding)element;
-				if(columnIndex == COLINDEX_NAME)
-					return restBinding.getName();
-				else if(columnIndex == COLINDEX_PROTOCOLTYPE){
-					return "REST";  //$NON-NLS-1$
-				}
-			}
-			else if(element instanceof SQLDatabaseBinding){
-				SQLDatabaseBinding sqlDatabaseBinding = (SQLDatabaseBinding)element;
-				if(columnIndex == COLINDEX_NAME)
-					return sqlDatabaseBinding.getName();
-				else if(columnIndex == COLINDEX_PROTOCOLTYPE){
-					return "SQL";  //$NON-NLS-1$
-				}
-			}
+			
 			return ""; //$NON-NLS-1$
 		}
 		
@@ -337,8 +278,8 @@ public class EGLDDBindingBlock extends EGLDDBaseBlock {
 		ColumnWeightData colData = new ColumnWeightData(tableColWidth, tableColWidth, true);
 		tableLayout.addColumnData(colData);
 		
-		col = new TableColumn(t, SWT.LEFT, COLINDEX_PROTOCOLTYPE);
-		col.setText(SOAMessages.TableColProtocol);
+		col = new TableColumn(t, SWT.LEFT, COLINDEX_TYPE);
+		col.setText(SOAMessages.TableColType);
 		col.pack();
 		tableColWidth = Math.max(EGLDDBindingFormPage.DEFAULT_COLUMN_WIDTH, col.getWidth());
 		maxWidth = Math.max(maxWidth, tableColWidth);
@@ -391,16 +332,8 @@ public class EGLDDBindingBlock extends EGLDDBaseBlock {
 			}
 			int selectionIndex = fTableViewer.getTable().getSelectionIndex();
 			boolean removeSuccesful = false;
-			if(obj instanceof EGLBinding){
-				removeSuccesful = bindings.getEglBinding().remove(obj);
-			} else if(obj instanceof NativeBinding) {
-				removeSuccesful = bindings.getNativeBinding().remove(obj);
-			} else if(obj instanceof WebBinding) {
-				removeSuccesful = bindings.getWebBinding().remove(obj);
-			} else if(obj instanceof RestBinding) {
-				removeSuccesful = bindings.getRestBinding().remove(obj);
-			} else if (obj instanceof SQLDatabaseBinding) {
-				removeSuccesful = bindings.getSqlDatabaseBinding().remove(obj);
+			if(obj instanceof Binding){
+				removeSuccesful = bindings.getBinding().remove(obj);
 			}
 			if(removeSuccesful)
 				EGLDDBaseFormPage.updateTableViewerAfterRemove(selectionIndex, fTableViewer, fBtnRemove);

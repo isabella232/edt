@@ -31,6 +31,10 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -42,12 +46,12 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
 
-public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage 
-    implements Listener {
+public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage implements Listener {
 	public static final String WIZPAGENAME_SQLDatabaseBindingWizardPage = "WIZPAGENAME_SQLDatabaseBindingWizardPage"; //$NON-NLS-1$
 	
 	//private Text connectionSecondaryID;
@@ -59,11 +63,16 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 
 	private Hashtable existingConnections;
 	
+	private Button jndiRadio;
+	private Text jndiText;
+	private Button connProfileUriRadio;
+	private Button connProfileInlinedRadio;
+	
 	public SQLDatabaseBindingWizardPage(String pageName){
 		super(pageName);
 		setTitle(NewWizardMessages.TitleAddSQLDatabaseBinding);
 		setDescription(NewWizardMessages.DescAddSQLDatabaseBinding);
-		nColumns = 4;
+		nColumns = 2;
 	}
 	
 	public void createControl(Composite parent) {
@@ -73,15 +82,103 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(composite, IUIHelpConstants.MODULE_SQLDATABASEBINDING);
 		
 		GridLayout layout = new GridLayout();
+		layout.numColumns = nColumns;
 		composite.setLayout(layout);
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		getEGLDDBindingConfiguration().getBindingSQLConfiguration();
 		
+		createBindingChoiceSection(composite);
 		createConnectionGroup(composite);
 		initializeValues();
-
+		
 		setControl(composite);
 		Dialog.applyDialogFont(parent);
+	}
+	
+	private void createBindingChoiceSection(Composite parent) {
+		Label l = new Label(parent, SWT.WRAP);
+		l.setText(NewWizardMessages.SQLBindingDescription);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumns;
+		l.setLayoutData(gd);
+		
+		Label spacer = new Label(parent, SWT.WRAP);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumns;
+		spacer.setLayoutData(gd);
+		
+		connProfileUriRadio = new Button(parent, SWT.RADIO);
+		connProfileUriRadio.setText(NewWizardMessages.SQLBindingWorkspaceUriLabel);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumns;
+		connProfileUriRadio.setLayoutData(gd);
+		connProfileUriRadio.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				handleWorkspaceURIRadio();
+			}
+		});
+		
+		connProfileInlinedRadio = new Button(parent, SWT.RADIO);
+		connProfileInlinedRadio.setText(NewWizardMessages.SQLBindingHardcodedLabel);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumns;
+		connProfileInlinedRadio.setLayoutData(gd);
+		connProfileInlinedRadio.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				handleInlinedRadio();
+			}
+		});
+		
+		jndiRadio = new Button(parent, SWT.RADIO);
+		jndiRadio.setText(NewWizardMessages.SQLBindingJNDILabel);
+		gd = new GridData();
+		gd.horizontalSpan = 1;
+		jndiRadio.setLayoutData(gd);
+		jndiRadio.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				getConfiguration().setUseUri(true);
+				handleJNDIChanged();
+				determinePageCompletion();
+			}
+		});
+		
+		jndiText = new Text(parent, SWT.SINGLE|SWT.BORDER);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumns - 1;
+		jndiText.setLayoutData(gd);
+		jndiText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if (jndiRadio.getSelection()) {
+					handleJNDIChanged();
+				}
+			}
+		});
+	}
+	
+	private void handleWorkspaceURIRadio() {
+		getConfiguration().setUseUri(true);
+		updateConnectionProperties();
+		determinePageCompletion();
+	}
+	
+	private void handleInlinedRadio() {
+		getConfiguration().setUseUri(false);
+		updateConnectionProperties();
+		determinePageCompletion();
+	}
+	
+	private void handleJNDIChanged() {
+		String text = jndiText.getText();
+		getConfiguration().setBindingName(text);
+		
+		if (!text.startsWith("jndi://")) { //$NON-NLS-1$
+			text = "jndi://" + text; //$NON-NLS-1$
+		}
+		getConfiguration().setUri(text);
 	}
 	
 	private void createConnectionGroup(Composite parent) {
@@ -90,6 +187,7 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 		GridLayout layout = new GridLayout();
 		groupParent.setLayout(layout);
 		GridData data = new GridData(GridData.FILL_BOTH);
+		data.horizontalSpan = nColumns;
 		//data.heightHint = 300;
 		groupParent.setLayoutData(data);
 
@@ -132,7 +230,7 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 			IPreferenceStore store = EDTUIPlugin.getDefault().getPreferenceStore();
 			String connectionName = store
 					.getString(ISQLPreferenceConstants.SQL_CONNECTION_NAMED_CONNECTION);
-			if (!connectionName.equals("")
+			if (connectionName.length() != 0
 					&& existingConnections.containsKey(connectionName)) {
 				TreeItem item = findTreeItemByName(existingConnectionsList
 						.getTree().getItems(), connectionName);
@@ -150,6 +248,9 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 		} else {
 			enableConnectionsControls(false, false);
 		}
+		
+		connProfileUriRadio.setSelection(true);
+		handleWorkspaceURIRadio(); // previous line won't fire an event - manually run the code
 	}
 	
 	private void createConnectionSection(Composite parent) {
@@ -290,7 +391,7 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 							StringBuilder builder = new StringBuilder();
 							
 							for(int i=0; i < properties[index].getValue().length(); i++) {
-								builder.append("*");
+								builder.append("*"); //$NON-NLS-1$
 							}
 							tableItem.setText(new String[] {
 									properties[index].getPropertyName(),
@@ -302,9 +403,14 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 						}
 					}
 					
-					UISQLUtility.setBindingSQLDatabaseConfiguration(getConfiguration(), properties);
+					if (connProfileInlinedRadio.getSelection()) {
+						UISQLUtility.setBindingSQLDatabaseConfiguration(getConfiguration(), properties);
+					}
+					else if (connProfileUriRadio.getSelection()) {
+						getConfiguration().setBindingName(profile.getName());
+						getConfiguration().setUri("workspace://" + profile.getName()); //$NON-NLS-1$
+					}
 				}
-
 			}
 		}
 	}
@@ -347,8 +453,26 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage
 	
 	protected boolean determinePageCompletion() {
 		setErrorMessage(null);
+		boolean result = true;
 		
-		return true;
+		if (connProfileInlinedRadio.getSelection() || connProfileUriRadio.getSelection()) {
+			// Verify a connection was selected.
+			if (getSelectedConnection() == null) {
+				setErrorMessage(NewWizardMessages.SQLBindingNoConnectionSelected);
+				result = false;
+			}
+		}
+		
+		setPageComplete(result);
+		return result;
+	}
+	
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		if (visible) {
+			determinePageCompletion();
+		}
 	}
 
 	private BindingSQLDatabaseConfiguration getConfiguration(){

@@ -11,12 +11,19 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.deployment.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.datatools.connectivity.IConnectionProfile;
 import org.eclipse.datatools.connectivity.internal.ConnectionProfile;
 import org.eclipse.datatools.connectivity.ui.PingJob;
+import org.eclipse.edt.compiler.internal.util.Encoder;
 import org.eclipse.edt.ide.internal.sql.util.EGLSQLUtility;
-import org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding;
+import org.eclipse.edt.ide.ui.internal.deployment.Binding;
+import org.eclipse.edt.ide.ui.internal.deployment.Parameters;
+import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -26,34 +33,45 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import java.util.Properties;
-import org.eclipse.edt.compiler.internal.util.Encoder;
 
 public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 
-	private SQLDatabaseBinding fSQLDatabaseBinding;
+	private Binding fSQLDatabaseBinding;
 	
+	private Button fUseURI;
+	private Text fUri;
+	
+	private Button fUseDefinedInfo;
 	private Text fDbms;
 	private Text fSqlDB;
 	private Text fUserId;
 	private Text fSqlJDBCDriverClass;
-	private Text fSqlJNDIName;
 	private Text fSqlPassword;
 	private Text fDefaultSchema;
 	private Text fConnLocation;
-	//private Text fSqlValidationConnectionURL;
+//	private Text fSqlValidationConnectionURL;
+	
+	private static final int indent = 20;
 	
 	protected Button btnPing;
+	
+	private List<Control> uriControls;
+	private List<Control> definedControls;
 	
 	public SQLDatabaseBindingDetailPage(){
 		super();
 		nColumnSpan = 3;
+		this.uriControls = new ArrayList<Control>();
+		this.definedControls = new ArrayList<Control>();
 	}
 	
 	protected Composite createDetailSection(Composite parent,
@@ -63,85 +81,221 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 	}
 	
 	protected void createDetailControls(FormToolkit toolkit, Composite parent) {
+		createURIControls(toolkit, parent);
 		createSQLControls(toolkit, parent);
 	}
 	
-
+	private void createURIControls(FormToolkit toolkit, Composite parent) {
+		int borderStyle = toolkit.getBorderStyle();
+		uriControls.clear();
+		
+		fUseURI = toolkit.createButton(parent, SOAMessages.SQLDatabaseBindingUseURILabel, SWT.RADIO);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumnSpan;
+		fUseURI.setLayoutData(gd);
+		fUseURI.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				for (Control c : uriControls) {
+					c.setEnabled(true);
+				}
+				for (Control c : definedControls) {
+					c.setEnabled(false);
+				}
+				fSQLDatabaseBinding.setUseURI(true);
+			}
+		});
+		
+		Label l = toolkit.createLabel(parent, SOAMessages.LabelURI);
+		gd = new GridData();
+		gd.horizontalIndent = indent;
+		l.setLayoutData(gd);
+		uriControls.add(l);
+		fUri = createTextControl(toolkit, parent);
+		fUri.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e) {
+				fSQLDatabaseBinding.setUri(fUri.getText());
+			}			
+		});
+		uriControls.add(fUri);
+		
+		// At least on Linux, creating a text in the form draws a border no matter what. Workaround is to put it inside a composite.
+		// In order to keep things aligned, we put just the individual Text controls in composites.
+		toolkit.setBorderStyle(SWT.NULL);
+		l = toolkit.createLabel(parent, SOAMessages.LabelJNDIExample);
+		gd = new GridData();
+		gd.horizontalIndent = indent;
+		l.setLayoutData(gd);
+		uriControls.add(l);
+		Composite exampleComposite = toolkit.createComposite(parent);
+		exampleComposite.setFont(parent.getFont());
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumnSpan - 1;
+		exampleComposite.setLayoutData(gd);
+		GridLayout layout = new GridLayout();
+		layout.verticalSpacing = 0;
+		layout.horizontalSpacing = 0;
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		exampleComposite.setLayout(layout);
+		uriControls.add(exampleComposite);
+		Text example = toolkit.createText(exampleComposite, "jndi://jdbc/SAMPLE", SWT.READ_ONLY|SWT.SINGLE); //$NON-NLS-1$
+		example.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		uriControls.add(example);
+		
+		l = toolkit.createLabel(parent, SOAMessages.LabelWorkspaceExample);
+		gd = new GridData();
+		gd.horizontalIndent = indent;
+		l.setLayoutData(gd);
+		uriControls.add(l);
+		exampleComposite = toolkit.createComposite(parent);
+		exampleComposite.setFont(parent.getFont());
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumnSpan - 1;
+		exampleComposite.setLayoutData(gd);
+		layout = new GridLayout();
+		layout.verticalSpacing = 0;
+		layout.horizontalSpacing = 0;
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		exampleComposite.setLayout(layout);
+		uriControls.add(exampleComposite);
+		example = toolkit.createText(exampleComposite, "workspace://myConnectionProfile", SWT.READ_ONLY|SWT.SINGLE); //$NON-NLS-1$
+		example.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		uriControls.add(example);
+		toolkit.setBorderStyle(borderStyle); // reset previous style
+		
+		createSpacer(toolkit, parent, nColumnSpan);
+	}
+	
 	private void createSQLControls(FormToolkit toolkit, Composite parent) {
-		toolkit.createLabel(parent, SOAMessages.LabelDbms);
+		definedControls.clear();
+		
+		fUseDefinedInfo = toolkit.createButton(parent, SOAMessages.SqlDatabaseBindingSpecifyInfoLabel, SWT.RADIO);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumnSpan;
+		fUseDefinedInfo.setLayoutData(gd);
+		fUseDefinedInfo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				for (Control c : definedControls) {
+					c.setEnabled(true);
+				}
+				for (Control c : uriControls) {
+					c.setEnabled(false);
+				}
+				fSQLDatabaseBinding.setUseURI(false);
+			}
+		});
+		
+		Label l = toolkit.createLabel(parent, SOAMessages.LabelDbms);
+		definedControls.add(l);
+		gd = new GridData();
+		gd.horizontalIndent = indent;
+		l.setLayoutData(gd);
 		fDbms = createTextControl(toolkit, parent);
 		fDbms.setEditable(false);
 		fDbms.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
-				fSQLDatabaseBinding.setDbms(fDbms.getText());		
+				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_dbms, fDbms.getText());
 			}			
 		});
+		definedControls.add(fDbms);
 		
-		toolkit.createLabel(parent, SOAMessages.LabelSqlJDBCDriverClass);
+		l = toolkit.createLabel(parent, SOAMessages.LabelSqlJDBCDriverClass);
+		gd = new GridData();
+		gd.horizontalIndent = indent;
+		l.setLayoutData(gd);
+		definedControls.add(l);
 		fSqlJDBCDriverClass = createTextControl(toolkit, parent);
 		fSqlJDBCDriverClass.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
-				fSQLDatabaseBinding.setSqlJDBCDriverClass(fSqlJDBCDriverClass.getText());		
+				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlJDBCDriverClass, fSqlJDBCDriverClass.getText());
 			}			
 		});
+		definedControls.add(fSqlJDBCDriverClass);
 
-		toolkit.createLabel(parent, SOAMessages.LabelSqlValidationConnectionURL);
+		l = toolkit.createLabel(parent, SOAMessages.LabelSqlValidationConnectionURL);
+		gd = new GridData();
+		gd.horizontalIndent = indent;
+		l.setLayoutData(gd);
+		definedControls.add(l);
 		fSqlDB = createTextControl(toolkit, parent);
 		fSqlDB.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
-				fSQLDatabaseBinding.setSqlDB(fSqlDB.getText());		
+				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlDB, fSqlDB.getText());
 			}			
 		});
+		definedControls.add(fSqlDB);
 
-		toolkit.createLabel(parent, SOAMessages.LabelSqlID);
+		l = toolkit.createLabel(parent, SOAMessages.LabelSqlID);
+		gd = new GridData();
+		gd.horizontalIndent = indent;
+		l.setLayoutData(gd);
+		definedControls.add(l);
 		fUserId = createTextControl(toolkit, parent);
 		fUserId.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
-				fSQLDatabaseBinding.setSqlID(fUserId.getText());		
+				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlID, fUserId.getText());
 			}			
 		});
+		definedControls.add(fUserId);
 
-		toolkit.createLabel(parent, SOAMessages.LabelSqlPassword);
+		l = toolkit.createLabel(parent, SOAMessages.LabelSqlPassword);
+		gd = new GridData();
+		gd.horizontalIndent = indent;
+		l.setLayoutData(gd);
+		definedControls.add(l);
 		fSqlPassword = createTextControl(toolkit, parent);
 		fSqlPassword.setEchoChar('*'); //$NON-NLS-1$
 		fSqlPassword.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
-				fSQLDatabaseBinding.setSqlPassword(Encoder.encode(fSqlPassword.getText()));		
+				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlPassword, Encoder.encode(fSqlPassword.getText()));
 			}			
 		});
+		definedControls.add(fSqlPassword);
 
-		toolkit.createLabel(parent, SOAMessages.LabelSqlSchema);
+		l = toolkit.createLabel(parent, SOAMessages.LabelSqlSchema);
+		gd = new GridData();
+		gd.horizontalIndent = indent;
+		l.setLayoutData(gd);
+		definedControls.add(l);
 		fDefaultSchema = createTextControl(toolkit, parent);
 		fDefaultSchema.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
-				fSQLDatabaseBinding.setSqlSchema(fDefaultSchema.getText());		
+				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlSchema, fDefaultSchema.getText());
 			}			
 		});
+		definedControls.add(fDefaultSchema);
 
-		toolkit.createLabel(parent, SOAMessages.LabelSqlJNDIName);
-		fSqlJNDIName = createTextControl(toolkit, parent);
-		fSqlJNDIName.addModifyListener(new ModifyListener(){
-			public void modifyText(ModifyEvent e) {
-				fSQLDatabaseBinding.setSqlJNDIName(fSqlJNDIName.getText());		
-			}			
-		});
-		
-		toolkit.createLabel(parent, SOAMessages.LabelSqlJarLists);
+		l = toolkit.createLabel(parent, SOAMessages.LabelSqlJarLists);
+		gd = new GridData();
+		gd.horizontalIndent = indent;
+		l.setLayoutData(gd);
+		definedControls.add(l);
 		fConnLocation = createTextControl(toolkit, parent);
 		fConnLocation.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
-				fSQLDatabaseBinding.setJarList(fConnLocation.getText());
-			}			
+				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jarList, fConnLocation.getText());
+			}
 		});
+		definedControls.add(fConnLocation);
 
 		
-		/*toolkit.createLabel(parent, SOAMessages.LabelSqlValidationConnectionURL);
+		/*
+		l = toolkit.createLabel(parent, SOAMessages.LabelSqlValidationConnectionURL);
+		gd = new GridData();
+		gd.horizontalIndent = indent;
+		l.setLayoutData(gd);
+		definedControls.add(l);
 		fSqlValidationConnectionURL = createTextControl(toolkit, parent);
 		fSqlValidationConnectionURL.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
-				fSQLDatabaseBinding.setSqlValidationConnectionURL(fSqlValidationConnectionURL.getText());		
-			}			
-		});*/
+				fSQLDatabaseBinding.setSqlValidationConnectionURL(fSqlValidationConnectionURL.getText());
+			}
+		});
+		definedControls.add(fSqlValidationConnectionURL);
+		*/
 		
 		btnPing = new Button(parent, SWT.NONE);
 		btnPing.addSelectionListener(new SelectionAdapter() {
@@ -150,11 +304,11 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 				testConnection();
 			}
 		});
-
 		GridData pingGD = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.FILL_HORIZONTAL);
 		pingGD.horizontalSpan = 3;
 		btnPing.setLayoutData(pingGD);
 		btnPing.setText(SOAMessages.SQLDatabaseBindingDetailPageTestConnection); //$NON-NLS-1$
+		definedControls.add(btnPing);
 	}
 	
 	protected void testConnection() {
@@ -162,10 +316,10 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		
 		//String profileProviderID = "org.eclipse.datatools.connectivity.db.derby.embedded.connectionProfile";
 		if(profileName != null) {
-			 String[] profiles = profileName.split(" ");
+			 String[] profiles = profileName.split(" "); //$NON-NLS-1$
 			 String profileProviderID = EGLSQLUtility.getDBProviderID(profiles[0]);
-			 String profileDescription = "";
-			 String parentProfile = "";
+			 String profileDescription = ""; //$NON-NLS-1$
+			 String parentProfile = ""; //$NON-NLS-1$
 			 boolean isAutoConnect = false;
 			 ConnectionProfile profile = new ConnectionProfile(profileName, profileDescription,
 						profileProviderID, parentProfile, isAutoConnect);
@@ -181,19 +335,19 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 	private Properties getProfileProperties(String[] profiles) {
 		Properties copy = new Properties();
 		
-		copy.put("org.eclipse.datatools.connectivity.db.connectionProperties", "");
-		copy.put("org.eclipse.datatools.connectivity.db.savePWD", false);
+		copy.put("org.eclipse.datatools.connectivity.db.connectionProperties", ""); //$NON-NLS-1$ //$NON-NLS-2$
+		copy.put("org.eclipse.datatools.connectivity.db.savePWD", false); //$NON-NLS-1$
 		if(fConnLocation.getText() != null) {
-			copy.put("jarList", fConnLocation.getText().trim());
+			copy.put("jarList", fConnLocation.getText().trim()); //$NON-NLS-1$
 		}
 		
-		copy.put("org.eclipse.datatools.connectivity.db.username", fUserId.getText());
-		copy.put("org.eclipse.datatools.connectivity.db.password", fSqlPassword.getText());
-		copy.put("org.eclipse.datatools.connectivity.db.driverClass", fSqlJDBCDriverClass.getText());
+		copy.put("org.eclipse.datatools.connectivity.db.username", fUserId.getText()); //$NON-NLS-1$
+		copy.put("org.eclipse.datatools.connectivity.db.password", fSqlPassword.getText()); //$NON-NLS-1$
+		copy.put("org.eclipse.datatools.connectivity.db.driverClass", fSqlJDBCDriverClass.getText()); //$NON-NLS-1$
 		
 		//copy.put("org.eclipse.datatools.connectivity.db.databaseName", fSqlDB.getText());
 		if(fSqlDB.getText() != null) {
-			copy.put("org.eclipse.datatools.connectivity.db.URL", fSqlDB.getText().trim());
+			copy.put("org.eclipse.datatools.connectivity.db.URL", fSqlDB.getText().trim()); //$NON-NLS-1$
 		}
 		
 		return copy;
@@ -215,7 +369,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		IStructuredSelection ssel = (IStructuredSelection) selection;
 		if (ssel.size() == 1)
-			fSQLDatabaseBinding = (SQLDatabaseBinding) ssel.getFirstElement();
+			fSQLDatabaseBinding = (Binding) ssel.getFirstElement();
 		else
 			fSQLDatabaseBinding = null;
 		update();
@@ -223,38 +377,67 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 
 	protected void update() {
 		fNameText.setText(fSQLDatabaseBinding.getName() == null ? "" : fSQLDatabaseBinding.getName()); //$NON-NLS-1$
-		String dbms = fSQLDatabaseBinding.getDbms();
-		if (dbms != null)
-			fDbms.setText(dbms);
-		String sqldb = fSQLDatabaseBinding.getSqlDB();
-		if (sqldb != null)
-			fSqlDB.setText(sqldb);
-		String sqlid = fSQLDatabaseBinding.getSqlID();
-		if (sqlid != null)
-			fUserId.setText(sqlid);
-		String sqljdbcdriver = fSQLDatabaseBinding.getSqlJDBCDriverClass();
-		if (sqljdbcdriver != null)
-			fSqlJDBCDriverClass.setText(sqljdbcdriver);
-		String sqljndiname = fSQLDatabaseBinding.getSqlJNDIName();
-		if (sqljndiname != null)
-			fSqlJNDIName.setText(sqljndiname);
-		String sqlpassword = fSQLDatabaseBinding.getSqlPassword();
-		if (sqlpassword != null && sqlpassword.trim().length() > 0 && Encoder.isEncoded(sqlpassword)) {
-			fSqlPassword.setText(Encoder.decode(sqlpassword));
-		} else if (sqlpassword != null) {
-			fSqlPassword.setText(sqlpassword);
+		
+		String uri = fSQLDatabaseBinding.getUri();
+		if (uri != null) {
+			fUri.setText(fSQLDatabaseBinding.getUri());
 		}
-		String sqlschema = fSQLDatabaseBinding.getSqlSchema();
-		if (sqlschema != null)
-			fDefaultSchema.setText(sqlschema);
 		
-		String jarLists = fSQLDatabaseBinding.getJarList();
-		if(jarLists != null)
-			fConnLocation.setText(jarLists);
+		Parameters params = fSQLDatabaseBinding.getParameters();
+		if (params != null) {
+			String dbms = EGLDDRootHelper.getParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_dbms);
+			if (dbms != null) {
+				fDbms.setText(dbms);
+			}
+			String sqldb = EGLDDRootHelper.getParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlDB);
+			if (sqldb != null) {
+				fSqlDB.setText(sqldb);
+			}
+			String sqlid = EGLDDRootHelper.getParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlID);
+			if (sqlid != null) {
+				fUserId.setText(sqlid);
+			}
+			String sqljdbcdriver = EGLDDRootHelper.getParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlJDBCDriverClass);
+			if (sqljdbcdriver != null) {
+				fSqlJDBCDriverClass.setText(sqljdbcdriver);
+			}
+			String sqlpassword = EGLDDRootHelper.getParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlPassword);
+			if (sqlpassword != null && sqlpassword.trim().length() > 0 && Encoder.isEncoded(sqlpassword)) {
+				fSqlPassword.setText(Encoder.decode(sqlpassword));
+			} else if (sqlpassword != null) {
+				fSqlPassword.setText(sqlpassword);
+			}
+			String sqlschema = EGLDDRootHelper.getParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlSchema);
+			if (sqlschema != null) {
+				fDefaultSchema.setText(sqlschema);
+			}
+			
+			String jarLists = EGLDDRootHelper.getParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jarList);
+			if(jarLists != null) {
+				fConnLocation.setText(jarLists);
+			}
+			
+//			String sqlvalidation = EGLDDRootHelper.getParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlValidationConnectionURL);
+//			if (sqlvalidation != null)
+//				fSqlValidationConnectionURL.setText(sqlvalidation);
+		}
 		
-		/*String sqlvalidation = fSQLDatabaseBinding.getSqlValidationConnectionURL();
-		if (sqlvalidation != null)
-			fSqlValidationConnectionURL.setText(sqlvalidation);*/
+		if (fSQLDatabaseBinding.isUseURI()) {
+			fUseURI.setSelection(true);
+			fUseDefinedInfo.setSelection(false);
+			
+			for (Control c : definedControls) {
+				c.setEnabled(false);
+			}
+		}
+		else {
+			fUseURI.setSelection(false);
+			fUseDefinedInfo.setSelection(true);
+			
+			for (Control c : uriControls) {
+				c.setEnabled(false);
+			}
+		}
 	}	
 	
 	protected void HandleNameChanged() {

@@ -16,8 +16,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.deployment.Bindings;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
-import org.eclipse.edt.ide.ui.internal.deployment.Protocols;
-import org.eclipse.edt.ide.ui.internal.deployment.Webservices;
+import org.eclipse.edt.ide.ui.internal.deployment.Services;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.FileBrowseDialog;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
@@ -97,7 +96,7 @@ public class CopyEGLDDWizardPage extends EGLPackageWizardPage {
 			public void checkStateChanged(CheckStateChangedEvent event) {
 				if(event.getChecked()){
 					Object element = event.getElement();
-					if(element instanceof Bindings || element instanceof Protocols || element instanceof Webservices){
+					if(element instanceof Bindings || element instanceof Services){
 						Object[] children = fTreeContentProvider.getChildren(element);
 						for (int i=0; i<children.length; i++)
 							queryOverride(children[i], fTreeLabelProvider.getText(children[i]));						

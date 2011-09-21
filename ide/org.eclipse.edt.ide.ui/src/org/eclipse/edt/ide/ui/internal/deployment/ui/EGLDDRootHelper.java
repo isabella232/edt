@@ -38,49 +38,25 @@ import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
+import org.eclipse.edt.ide.ui.internal.deployment.Binding;
 import org.eclipse.edt.ide.ui.internal.deployment.Bindings;
-import org.eclipse.edt.ide.ui.internal.deployment.CICSECIProtocol;
-import org.eclipse.edt.ide.ui.internal.deployment.CICSJ2CProtocol;
-import org.eclipse.edt.ide.ui.internal.deployment.CICSSSLProtocol;
-import org.eclipse.edt.ide.ui.internal.deployment.CICSWSProtocol;
 import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
-import org.eclipse.edt.ide.ui.internal.deployment.DeploymentBuildDescriptor;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentProject;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentTarget;
-import org.eclipse.edt.ide.ui.internal.deployment.EGLBinding;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
-import org.eclipse.edt.ide.ui.internal.deployment.IMSJ2CProtocol;
-import org.eclipse.edt.ide.ui.internal.deployment.IMSTCPProtocol;
-import org.eclipse.edt.ide.ui.internal.deployment.Include;
-import org.eclipse.edt.ide.ui.internal.deployment.Java400J2cProtocol;
-import org.eclipse.edt.ide.ui.internal.deployment.Java400Protocol;
-import org.eclipse.edt.ide.ui.internal.deployment.LocalProtocol;
-import org.eclipse.edt.ide.ui.internal.deployment.NativeBinding;
 import org.eclipse.edt.ide.ui.internal.deployment.Parameter;
 import org.eclipse.edt.ide.ui.internal.deployment.Parameters;
-import org.eclipse.edt.ide.ui.internal.deployment.Protocol;
-import org.eclipse.edt.ide.ui.internal.deployment.Protocols;
-import org.eclipse.edt.ide.ui.internal.deployment.ReferenceProtocol;
 import org.eclipse.edt.ide.ui.internal.deployment.ResourceOmissions;
-import org.eclipse.edt.ide.ui.internal.deployment.Restservice;
-import org.eclipse.edt.ide.ui.internal.deployment.Restservices;
-import org.eclipse.edt.ide.ui.internal.deployment.StyleTypes;
-import org.eclipse.edt.ide.ui.internal.deployment.SystemIProtocol;
-import org.eclipse.edt.ide.ui.internal.deployment.TCPIPProtocol;
-import org.eclipse.edt.ide.ui.internal.deployment.WebBinding;
-import org.eclipse.edt.ide.ui.internal.deployment.Webservice;
-import org.eclipse.edt.ide.ui.internal.deployment.Webservices;
+import org.eclipse.edt.ide.ui.internal.deployment.Service;
+import org.eclipse.edt.ide.ui.internal.deployment.Services;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.swt.widgets.Widget;
 
 public class EGLDDRootHelper {
 	public static final int PORT_MAXVALUE = 65536;	
@@ -231,7 +207,7 @@ public class EGLDDRootHelper {
 		EGLDeploymentRoot documentRoot = DeploymentFactory.eINSTANCE.createEGLDeploymentRoot();		
 		Deployment root = DeploymentFactory.eINSTANCE.createDeployment();		
 		documentRoot.setDeployment(root);
-		IPreferenceStore preferenceStore = EDTUIPlugin.getDefault().getPreferenceStore();
+//		IPreferenceStore preferenceStore = EDTUIPlugin.getDefault().getPreferenceStore();
 
 		//TODO fix before checkin
 //		String prefValue = preferenceStore.getString(IEGLPreferenceConstants.SERVICE_EGLDD_SERVICERUNTIME_DEFAULT);
@@ -239,38 +215,8 @@ public class EGLDDRootHelper {
 //			root.setWebserviceRuntime(WebserviceRuntimeType.JAXWS_LITERAL);
 //		}
 		
-		//---- test
-//		root.setAlias("MYBIND");
-//		Protocol protocol = ServiceBindingFactory.eINSTANCE.createProtocol();
-//		protocol.setCommType(CommTypes.CICSECI_LITERAL);
-//		protocol.setName("NQA17C02");
-//		protocol.setCtgPort("2113");
-//		root.getProtocol().add(protocol);
-//		
-//		EGLBinding eglbinding = ServiceBindingFactory.eINSTANCE.createEGLBinding();
-//		eglbinding.setName("HelloWorld");
-//		protocol = ServiceBindingFactory.eINSTANCE.createProtocol();
-//		protocol.setRef("NQA17C02");
-//		eglbinding.setProtocol(protocol);
-//		root.getEglBinding().add(eglbinding);
-//		
-//		eglbinding = ServiceBindingFactory.eINSTANCE.createEGLBinding();
-//		eglbinding.setName("HelloWorld1");
-//		protocol = ServiceBindingFactory.eINSTANCE.createProtocol();
-//		protocol.setCommType(CommTypes.TCPIP_LITERAL);
-//		protocol.setName("NQA17C02");
-//		protocol.setLocation("2113");
-//		eglbinding.setProtocol(protocol);
-//		root.getEglBinding().add(eglbinding);
-//		
-//		WebBinding webbinding = ServiceBindingFactory.eINSTANCE.createWebBinding();
-//		webbinding.setName("StockQuote");
-//		webbinding.setInterface("com.nasdaq.StockQuote");
-//		root.getWebBinding().add(webbinding);
-		//---- test
-		
 		try{				
-			Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
+//			Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 			URI uri = URI.createPlatformResourceURI(eglBindFile.getFullPath().toOSString(), true);			
 
 			ResourceSet resourceSet = new ResourceSetImpl();
@@ -369,351 +315,29 @@ public class EGLDDRootHelper {
 		return null;
 	}
 	
-	public static String getProtocolCommTypeString(Protocol protocol){
-		if(protocol instanceof ReferenceProtocol)
-			return ((ReferenceProtocol)protocol).getRef();
-		else
-			return getProtocolCommType(protocol).getLiteral();			
-	}
-	
-	public static CommTypes getProtocolCommType(Protocol protocol){
-		if(protocol instanceof LocalProtocol)
-			return CommTypes.LOCAL_LITERAL;
-		else if(protocol instanceof TCPIPProtocol)
-			return CommTypes.TCPIP_LITERAL;
-		else if(protocol instanceof Java400Protocol)
-			return CommTypes.JAVA400_LITERAL;
-		else if(protocol instanceof Java400J2cProtocol)
-			return CommTypes.JAVA400J2C_LITERAL;
-		else if(protocol instanceof CICSECIProtocol)
-			return CommTypes.CICSECI_LITERAL;
-		else if(protocol instanceof CICSJ2CProtocol)
-			return CommTypes.CICSJ2C_LITERAL;
-		else if(protocol instanceof CICSSSLProtocol)
-			return CommTypes.CICSSSL_LITERAL;
-		else if(protocol instanceof IMSJ2CProtocol)
-			return CommTypes.IMSJ2C_LITERAL;
-		else if(protocol instanceof IMSTCPProtocol)
-			return CommTypes.IMSTCP_LITERAL;
-		else if(protocol instanceof SystemIProtocol)
-			return CommTypes.SYSTEMI_LOCAL_LITERAL;
-		else if(protocol instanceof CICSWSProtocol)			
-			return CommTypes.CICSWS_LITERAL;		
-		else if(protocol instanceof ReferenceProtocol)
-			return null;
-		return CommTypes.LOCAL_LITERAL;
-	}
-	
-	/**
-	 * 	remove the current protocol on eglBinding if the newCommType differs from current commType
-	 *  create a new protocol instance based on newCommType, set it to eglBinding
-	 *     	
-	 * @param eglBinding
-	 * @param newCommtype
-	 */
-	public static Protocol setNewProtocolOnEGLBinding(Protocol currProcotol, FeatureMap protocolgrp, CommTypes newCommtype){
-		//Protocol currProcotol = eglBinding.getProtocol();
-		CommTypes currCommtype = getProtocolCommType(currProcotol);		
-		
-		//FeatureMap protocolgrp = eglBinding.getProtocolGroup();		
-		Protocol newProtocol = null;				
-		if(currProcotol != null){			
-			if(currCommtype == newCommtype)
-				newProtocol = currProcotol;
-			else //remove the current protocol
-				protocolgrp.unset(currProcotol.eContainmentFeature());
-		}
-		   			
-		if(newProtocol == null){
-			newProtocol = createNewProtocol(newCommtype);
-			setProtocolOnProtocolGroup(protocolgrp, newProtocol);
-		}
-		return newProtocol;
-	}
-	
-	public static void setProtocolOnProtocolGroup(FeatureMap protocolgrp, Protocol protocol){
-		DeploymentPackage pkg = DeploymentPackage.eINSTANCE;
-
-		if(protocol instanceof ReferenceProtocol){
-			protocolgrp.add(pkg.getEGLDeploymentRoot_ProtocolRef(), protocol);
-		}
-		else if(protocol instanceof LocalProtocol){
-			protocolgrp.add(pkg.getEGLDeploymentRoot_ProtocolLocal(), protocol);
-		}
-		else if(protocol instanceof Java400Protocol){
-			protocolgrp.add(pkg.getEGLDeploymentRoot_ProtocolJava400(), protocol);
-		}
-		else if(protocol instanceof Java400J2cProtocol){
-			protocolgrp.add(pkg.getEGLDeploymentRoot_ProtocolJava400j2c(), protocol);
-		}
-		else if(protocol instanceof TCPIPProtocol){
-			protocolgrp.add(pkg.getEGLDeploymentRoot_ProtocolTcpip(), protocol);
-		}
-		else if(protocol instanceof CICSECIProtocol){
-			protocolgrp.add(pkg.getEGLDeploymentRoot_ProtocolCicseci(), protocol);
-		}
-		else if(protocol instanceof CICSJ2CProtocol){
-			protocolgrp.add(pkg.getEGLDeploymentRoot_ProtocolCicsj2c(), protocol);   				
-		}
-		else if(protocol  instanceof CICSSSLProtocol){
-			protocolgrp.add(pkg.getEGLDeploymentRoot_ProtocolCicsssl(), protocol);
-		}   	
-		else if(protocol instanceof IMSJ2CProtocol){
-			protocolgrp.add(pkg.getEGLDeploymentRoot_ProtocolImsj2c(), protocol);
-		}
-		else if(protocol instanceof IMSTCPProtocol){
-			protocolgrp.add(pkg.getEGLDeploymentRoot_ProtocolImstcp(), protocol);
-		}
-		else if(protocol instanceof SystemIProtocol){
-			protocolgrp.add(pkg.getEGLDeploymentRoot_ProtocolSystemILocal(), protocol);
-		}
-		else if(protocol instanceof CICSWSProtocol){
-			protocolgrp.add(pkg.getEGLDeploymentRoot_ProtocolCicsws(), protocol);
-		}
-	}
-	
-	public static Protocol createNewProtocol(CommTypes commtype){
-		DeploymentFactory factory = DeploymentFactory.eINSTANCE;
-		Protocol newProtocol=null;
-		if(commtype == CommTypes.LOCAL_LITERAL){
-			newProtocol = factory.createLocalProtocol();
-		}
-		else if(commtype == CommTypes.JAVA400_LITERAL){
-			newProtocol = factory.createJava400Protocol();
-		}
-		else if(commtype == CommTypes.JAVA400J2C_LITERAL){
-			newProtocol = factory.createJava400J2cProtocol();
-		}
-		else if(commtype == CommTypes.TCPIP_LITERAL){
-			newProtocol = factory.createTCPIPProtocol();
-		}
-		else if(commtype == CommTypes.CICSECI_LITERAL){
-			newProtocol = factory.createCICSECIProtocol();
-		}
-		else if(commtype == CommTypes.CICSJ2C_LITERAL){
-			newProtocol = factory.createCICSJ2CProtocol();   				
-		}
-		else if(commtype == CommTypes.CICSSSL_LITERAL){
-			newProtocol = factory.createCICSSSLProtocol();
-		}   	
-		else if(commtype == CommTypes.IMSJ2C_LITERAL){
-			newProtocol = factory.createIMSJ2CProtocol();
-		}
-		else if(commtype == CommTypes.IMSTCP_LITERAL){
-			newProtocol = factory.createIMSTCPProtocol();
-		}
-		else if(commtype == CommTypes.SYSTEMI_LOCAL_LITERAL){
-			newProtocol = factory.createSystemIProtocol();
-		}
-		else if(commtype == CommTypes.CICSWS_LITERAL){
-			newProtocol = factory.createCICSWSProtocol();
-		}
-		return newProtocol;
-	}
-	
-	public static ReferenceProtocol setNewReferenceProtocolOnEGLBinding(Protocol currProtocol, FeatureMap protocolgrp, String refName){
-//		Protocol currProtocol = eglBinding.getProtocol();
-//		FeatureMap protocolgrp = eglBinding.getProtocolGroup();
-		ReferenceProtocol newProtocol = null;
-		if(currProtocol != null){
-			if(currProtocol instanceof ReferenceProtocol)
-				newProtocol = (ReferenceProtocol)currProtocol;
-			else{	//remove the currProtocol
-				protocolgrp.unset(currProtocol.eContainmentFeature());
-			}				
-		}
-		
-		if(newProtocol == null){
-			newProtocol = DeploymentFactory.eINSTANCE.createReferenceProtocol();
-			setProtocolOnProtocolGroup(protocolgrp, newProtocol);
-		}
-		newProtocol.setRef(refName);
-		return newProtocol;
-	}
-	
-	public static String[] getStyleComboItems() {		
-		List styleNames = new ArrayList();
-		
-		List styleTypes = StyleTypes.VALUES;
-		for(Iterator it=styleTypes.iterator(); it.hasNext();) {
-			StyleTypes itType = ((StyleTypes)it.next());
-			if(itType!=null) {
-				styleNames.add(itType.getLiteral());
-			}
-		}
-		
-		return (String[])(styleNames.toArray(new String[]{}));
-	}
-		
-	public static String[] getProtocolComboItems(EGLDeploymentRoot root, Widget comboWidget, int bindingType) {		
-		List protocolNames = new ArrayList();
-		List protocolNodes = new ArrayList();
+	public static Binding getBindingByName(EGLDeploymentRoot root, String name){
 		if(root != null){
-			collectProtocols(root, protocolNames, protocolNodes, CommTypes.getSupportedProtocol(bindingType), "");			 //$NON-NLS-1$
-			collectProtocolsFromIncludes(root, protocolNames, protocolNodes, CommTypes.getSupportedProtocol(bindingType));
-		}
-		comboWidget.setData((Protocol[])(protocolNodes.toArray(new Protocol[]{})));
-		return (String[])(protocolNames.toArray(new String[]{}));
-	}
-
-	private static void collectProtocolsFromIncludes(EGLDeploymentRoot root, List protocolNames, List protocolNodes, List filterIncludedCommTypes) {
-		IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
-		//also add the shared protocols from included egldd files
-		EList includes = root.getDeployment().getInclude();
-		for(Iterator iti = includes.iterator(); iti.hasNext();){
-			Include includedd = (Include)iti.next();
-			IFile includeddfile = wsRoot.getFile(new Path(includedd.getLocation()));
-			EGLDeploymentRoot includeRoot = EGLDDRootHelper.getEGLDDFileSharedWorkingModel(includeddfile, false);
-			collectProtocols(includeRoot, protocolNames, protocolNodes, filterIncludedCommTypes, includeddfile.getName());
-			EGLDDRootHelper.releaseSharedWorkingModel(includeddfile, false);
-		}
-	}
-
-	private static void collectProtocols(EGLDeploymentRoot root, List protocolNames, List protocolNodes, List filterIncludedCommTypes, String ddfileName) {
-		if(root != null){
-			Protocols protocolS = root.getDeployment().getProtocols();
-			if(protocolS != null){
-				EList protocols = protocolS.getProtocol();		
-				for(Iterator it = protocols.iterator(); it.hasNext();){
-					Protocol protocol = (Protocol)it.next();
-					if(filterIncludedCommTypes == null || 
-							((filterIncludedCommTypes != null) && (filterIncludedCommTypes.contains(getProtocolCommType(protocol))))){
-						protocolNodes.add(protocol);
-						String displayName = getProtocolDisplayText(protocol) ;
-						if(ddfileName.length()>0)
-							displayName += " - " + ddfileName; //$NON-NLS-1$
-						protocolNames.add(displayName); //$NON-NLS-1$ //$NON-NLS-2$						
+			Deployment deployment = root.getDeployment();		
+			Bindings bindings = deployment.getBindings();
+			if(bindings != null){
+				for (Binding binding : bindings.getBinding()) {
+					if(name.equals(binding.getName())) {
+						return binding;
 					}
 				}
 			}
 		}
-	}
-
-	public static String getProtocolDisplayText(Protocol protocol) {
-		String commtypeString = getProtocolCommType(protocol).getLiteral();
-		String displayName = protocol.getName()+ " (" + commtypeString + ")"; //$NON-NLS-1$ //$NON-NLS-2$
-		return displayName ;
-	}	
-	
-	public static String[] getProtocolComboItemsByType(EGLDeploymentRoot root, List filterIncludedCommTypes, Widget comboWidget){
-		List protocolNames = new ArrayList();
-		List protocolNodes = new ArrayList();
-		if(root != null){
-			collectProtocols(root, protocolNames, protocolNodes, filterIncludedCommTypes, "");			 //$NON-NLS-1$
-			collectProtocolsFromIncludes(root, protocolNames, protocolNodes, filterIncludedCommTypes);
-		}
-		comboWidget.setData((Protocol[])(protocolNodes.toArray(new Protocol[]{})));
-		return (String[])(protocolNames.toArray(new String[]{}));
+		return null;
 	}
 	
-	public static EGLBinding getEGLBindingByName(EGLDeploymentRoot root, String name){
-		if(root != null){
-			Deployment deployment = root.getDeployment();		
-			Bindings bindings = deployment.getBindings();
-			if(bindings != null){
-				for(Iterator it = bindings.getEglBinding().iterator(); it.hasNext();){
-					EGLBinding eglbinding = (EGLBinding)it.next();
-					if(name.equals(eglbinding.getName()))
-						return eglbinding;
+	public static Service getServiceByImpl(EGLDeploymentRoot root, String impl){
+		Deployment deployment = root.getDeployment();		
+		Services services = deployment.getServices();
+		if(services != null){
+			for (Service service : services.getService()) {
+				if(impl.equals(service.getImplementation())) {
+					return service;
 				}
-			}
-		}
-		return null;
-	}
-	
-	public static NativeBinding getNativeBindingByName(EGLDeploymentRoot root, String name){
-		if(root != null){
-			Deployment deployment = root.getDeployment();		
-			Bindings bindings = deployment.getBindings();
-			if(bindings != null){
-				for(Iterator it = bindings.getNativeBinding().iterator(); it.hasNext();){
-					NativeBinding nativeBinding = (NativeBinding)it.next();
-					if(name.equals(nativeBinding.getName()))
-						return nativeBinding;
-				}
-			}			
-		}
-		return null;
-	}
-	
-	public static WebBinding getWebBindingByName(EGLDeploymentRoot root, String name){
-		if(root != null){
-			Deployment deployment = root.getDeployment();		
-			Bindings bindings = deployment.getBindings();
-			if(bindings != null){
-				for(Iterator it = bindings.getWebBinding().iterator(); it.hasNext();){
-					WebBinding webbinding = (WebBinding)it.next();
-					if(name.equals(webbinding.getName()))
-						return webbinding;
-				}			
-			}
-		}
-		return null;
-	}
-
-	public static Protocol getProtocolByName(EGLDeploymentRoot root, String name){
-		Deployment deployment = root.getDeployment();		
-		Protocols protocols = deployment.getProtocols();
-		if(protocols != null){
-			for(Iterator it=protocols.getProtocol().iterator(); it.hasNext();){
-				Protocol protocol = (Protocol)it.next();
-				if(name.equals(protocol.getName()))
-					return protocol;
-			}
-		}			
-		return null;
-	}
-	
-	public static List getJava400Protocols( EGLDeploymentRoot root )
-	{
-		Deployment deployment = root.getDeployment();		
-		Protocols protocols = deployment.getProtocols();
-		ArrayList protos = new ArrayList();
-		if(protocols != null){
-			Protocol protocol;
-			for(Iterator it=protocols.getProtocol().iterator(); it.hasNext();){
-				protocol = (Protocol)it.next();
-				if(protocol instanceof Java400Protocol)
-					protos.add(protocol);
-			}
-		}			
-		return protos;
-	}
-	public static List getJava400J2cProtocols( EGLDeploymentRoot root )
-	{
-		Deployment deployment = root.getDeployment();		
-		Protocols protocols = deployment.getProtocols();
-		ArrayList protos = new ArrayList();
-		if(protocols != null){
-			Protocol protocol;
-			for(Iterator it=protocols.getProtocol().iterator(); it.hasNext();){
-				protocol = (Protocol)it.next();
-				if(protocol instanceof Java400J2cProtocol)
-					protos.add(protocol);
-			}
-		}			
-		return protos;
-	}
-	public static Webservice getWebserviceByImpl(EGLDeploymentRoot root, String impl){
-		Deployment deployment = root.getDeployment();		
-		Webservices wss = deployment.getWebservices();
-		if(wss != null){
-			for(Iterator it=wss.getWebservice().iterator(); it.hasNext();){
-				Webservice ws = (Webservice)it.next();
-				if(impl.equals(ws.getImplementation()))
-					return ws;
-			}
-		}
-		return null;
-	}
-	public static Restservice getRestserviceByImpl(EGLDeploymentRoot root, String impl){
-		Deployment deployment = root.getDeployment();		
-		Restservices wss = deployment.getRestservices();
-		if(wss != null){
-			for(Iterator it=wss.getRestservice().iterator(); it.hasNext();){
-				Restservice rs = (Restservice)it.next();
-				if(impl.equals(rs.getImplementation()))
-					return rs;
 			}
 		}
 		return null;
@@ -741,15 +365,48 @@ public class EGLDDRootHelper {
 		{
 			root.getDeployment().getTargetGroup().add( DeploymentPackage.eINSTANCE.getEGLDeploymentRoot_TargetProject(), target );
 		}
-		else if( target instanceof DeploymentBuildDescriptor)
-		{
-			root.getDeployment().getTargetGroup().add( DeploymentPackage.eINSTANCE.getEGLDeploymentRoot_TargetBuildDescriptor(), target );
-		}
 	}
 	
 	public static void removeTarget( EGLDeploymentRoot root )
 	{
 		root.getDeployment().getTargetGroup().clear();
+	}
+	
+	public static Parameters getParameters( Binding binding )
+	{
+		Parameters p = binding.getParameters();
+		if ( p == null )
+		{
+			p = DeploymentFactory.eINSTANCE.createParameters();
+			binding.setParameters( p );
+		}
+		return p;
+	}
+	
+	public static Parameters getParameters( Service service )
+	{
+		Parameters p = service.getParameters();
+		if ( p == null )
+		{
+			p = DeploymentFactory.eINSTANCE.createParameters();
+			service.setParameters( p );
+		}
+		return p;
+	}
+	
+	public static void addOrUpdateParameter( Parameters parms, String name, boolean value )
+	{
+		addOrUpdateParameter( parms, name, String.valueOf( value ) );
+	}
+	
+	public static void addOrUpdateParameter( Parameters parms, String name, char value )
+	{
+		addOrUpdateParameter( parms, name, String.valueOf( value ) );
+	}
+	
+	public static void addOrUpdateParameter( Parameters parms, String name, int value )
+	{
+		addOrUpdateParameter( parms, name, String.valueOf( value ) );
 	}
 	
 	public static void addOrUpdateParameter( Parameters parms, String name, String value )
@@ -774,13 +431,18 @@ public class EGLDDRootHelper {
 			}
 		}
 		
-		if ( !found )
+		if ( !found && value != null && value.length() != 0 )
 		{
 			Parameter p = DeploymentFactory.eINSTANCE.createParameter();
 			p.setName( name );
 			p.setValue( value );
 			parms.getParameter().add( p );
 		}
+	}
+	
+	public static boolean getBooleanParameterValue( Parameters parms, String name )
+	{
+		return Boolean.parseBoolean(getParameterValue(parms, name));
 	}
 	
 	public static String getParameterValue( Parameters parms, String name )

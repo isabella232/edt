@@ -14,7 +14,7 @@ package org.eclipse.edt.ide.ui.internal.deployment.ui;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
-import org.eclipse.edt.ide.ui.internal.deployment.WebBinding;
+import org.eclipse.edt.ide.ui.internal.deployment.Binding;
 import org.eclipse.edt.ide.ui.internal.dialogs.PartSelectionDialog;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -40,7 +40,7 @@ import org.eclipse.ui.forms.widgets.ImageHyperlink;
 public class WebBindingDetailPage extends EGLDDBindingBaseDetailPage implements IDetailsPage {
 	protected Text fInterfaceOrService;
 	
-	private WebBinding fWebBinding;
+	private Binding fWebBinding;
 	private Text fWSDLFileLocation;
 	//private Button fBtnReloadWSDL;
 	private Text fWSDLPort;
@@ -132,7 +132,8 @@ public class WebBindingDetailPage extends EGLDDBindingBaseDetailPage implements 
 
 	
 	protected void HandleGenCheckChanged() {
-		fWebBinding.setEnableGeneration(fGenBtn.getSelection());
+		//TODO SOAP not yet supported
+//		fWebBinding.setEnableGeneration(fGenBtn.getSelection());
 		
 	}
 
@@ -162,7 +163,8 @@ public class WebBindingDetailPage extends EGLDDBindingBaseDetailPage implements 
 	}
 	
 	protected void HandleWSDLServiceChanged() {
-		fWebBinding.setWsdlService(fWSDLService.getText());		
+		//TODO SOAP not yet supported
+//		fWebBinding.setWsdlService(fWSDLService.getText());		
 	}
 
 	protected Text createTextControl(FormToolkit toolkit, Composite parent) {
@@ -222,11 +224,13 @@ public class WebBindingDetailPage extends EGLDDBindingBaseDetailPage implements 
 	}
 		
 	protected void HandleWSDLLocationChanged() {
-		fWebBinding.setWsdlLocation(fWSDLFileLocation.getText());		
+		//TODO SOAP not yet supported
+//		fWebBinding.setWsdlLocation(fWSDLFileLocation.getText());		
 	}
 		
 	protected void HandleInterfaceChanged() {
-		fWebBinding.setInterface(fInterfaceOrService.getText());
+		//TODO SOAP not yet supported
+//		fWebBinding.setInterface(fInterfaceOrService.getText());
 	}
 	
 	protected void HandleBrowseInterfacePressed() {
@@ -291,41 +295,41 @@ public class WebBindingDetailPage extends EGLDDBindingBaseDetailPage implements 
 	}
 
 	public boolean setFormInput(Object input) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		IStructuredSelection ssel = (IStructuredSelection)selection;
 		if(ssel.size() == 1)
-			fWebBinding = (WebBinding)ssel.getFirstElement();
+			fWebBinding = (Binding)ssel.getFirstElement();
 		else
 			fWebBinding = null;
 		update();
 	}
 	
 	protected void update(){
-		fNameText.setText(fWebBinding.getName()==null ? "": fWebBinding.getName());		 //$NON-NLS-1$
-		fInterfaceOrService.setText(fWebBinding.getInterface()==null? "": fWebBinding.getInterface()); //$NON-NLS-1$
-		
-		String wsdlLocation = fWebBinding.getWsdlLocation();
-		if(wsdlLocation != null)
-			fWSDLFileLocation.setText(wsdlLocation);
-		
-		String wsdlPortText = fWebBinding.getWsdlPort();
-		if(wsdlPortText != null)
-			fWSDLPort.setText(wsdlPortText);
-		
-		String wsdlServiceText = fWebBinding.getWsdlService();
-		if(wsdlPortText != null)
-			fWSDLService.setText(wsdlServiceText);
-		
-		String wsdlUriText = fWebBinding.getUri();
-		if(wsdlUriText != null)
-			fWSDLUri.setText(wsdlUriText);
-		
-		if(fWebBinding.isSetEnableGeneration())
-			fGenBtn.setSelection(fWebBinding.isEnableGeneration());
+		//TODO SOAP not yet supported
+//		fNameText.setText(fWebBinding.getName()==null ? "": fWebBinding.getName());		 //$NON-NLS-1$
+//		fInterfaceOrService.setText(fWebBinding.getInterface()==null? "": fWebBinding.getInterface()); //$NON-NLS-1$
+//		
+//		String wsdlLocation = fWebBinding.getWsdlLocation();
+//		if(wsdlLocation != null)
+//			fWSDLFileLocation.setText(wsdlLocation);
+//		
+//		String wsdlPortText = fWebBinding.getWsdlPort();
+//		if(wsdlPortText != null)
+//			fWSDLPort.setText(wsdlPortText);
+//		
+//		String wsdlServiceText = fWebBinding.getWsdlService();
+//		if(wsdlPortText != null)
+//			fWSDLService.setText(wsdlServiceText);
+//		
+//		String wsdlUriText = fWebBinding.getUri();
+//		if(wsdlUriText != null)
+//			fWSDLUri.setText(wsdlUriText);
+//		
+//		if(fWebBinding.isSetEnableGeneration())
+//			fGenBtn.setSelection(fWebBinding.isEnableGeneration());
 	}
 
 }

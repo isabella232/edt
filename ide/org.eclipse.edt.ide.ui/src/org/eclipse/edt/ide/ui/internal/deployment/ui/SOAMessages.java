@@ -222,7 +222,7 @@ public class SOAMessages extends NLS {
 
 	public static String TableColName;
 
-	public static String TableColProtocol;
+	public static String TableColType;
 
 	public static String TableColValue;
 
@@ -278,7 +278,11 @@ public class SOAMessages extends NLS {
 
 	public static String LabelBaseURI;
 	
-	public static String BaseURITooltip;
+	public static String BaseURIDesc;
+	
+	public static String ExampleDeployedURI;
+	
+	public static String ExampleWorkspaceURI;
 
 	public static String LabelPreserveReqHeader;
 
@@ -360,9 +364,17 @@ public class SOAMessages extends NLS {
 	
 	public static String WebserviceRuntimeSectionDesc;
 
+	public static String SQLDatabaseBindingUseURILabel;
+	
+	public static String SqlDatabaseBindingSpecifyInfoLabel;
+	
 	public static String SQLDatabaseBindingDetailSecDescp;
 
 	public static String SQLDatabaseBindingDetailSecTitle;
+	
+	public static String LabelJNDIExample;
+	
+	public static String LabelWorkspaceExample;
 
 	public static String LabelDbms;
 

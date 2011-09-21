@@ -37,6 +37,7 @@ public class NewWizardMessages extends NLS {
 	public static String AnotherEGLDescript ;
 	public static String Apply ;
 	public static String ArgsNotAssigned ;
+	public static String BaseURIDesc;
 	public static String BrowseEGLDDFileLabel;
 	public static String BrowseWSDLDialogDescription;
 	public static String BrowseWSDLDialogTitle;
@@ -117,6 +118,8 @@ public class NewWizardMessages extends NLS {
 	public static String Err_InvalidImportedFormatProfile ;
 	public static String ErrEmptyFunctionList;
 	public static String ErrEmptyInterfaceName;
+	public static String ExampleDeployedURI;
+	public static String ExampleWorkspaceURI;
 	public static String Export ;
 	public static String ExportFormatProfile ;
 	public static String ExternalServiceTCPIPWizardPageErrorEmptyEntryPoint;
@@ -169,6 +172,11 @@ public class NewWizardMessages extends NLS {
 	public static String RestBindingBtnLabel ;
 	public static String RestService;
 	public static String SQLDatabaseBindingBtnLabel ;
+	public static String SQLBindingDescription;
+	public static String SQLBindingWorkspaceUriLabel;
+	public static String SQLBindingHardcodedLabel;
+	public static String SQLBindingJNDILabel;
+	public static String SQLBindingNoConnectionSelected;
 
 
 	public static String NewElementWizardOp_errorTitle;

@@ -27,7 +27,6 @@ public class UISQLUtility {
 			
 			config.setUserName(properties[5].getValue());
 			config.setPassword(properties[6].getValue());
-			config.setJndiName(properties[7].getValue());;
 			config.setBindingName(properties[8].getValue());
 			config.setDefaultSchema(properties[9].getValue());
 		}

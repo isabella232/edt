@@ -20,14 +20,10 @@ import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.IDialogFieldListener
 import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.StringDialogField;
 import org.eclipse.edt.ide.ui.wizards.BindingBaseConfiguration;
 import org.eclipse.edt.ide.ui.wizards.BindingRestConfiguration;
-import org.eclipse.jdt.internal.ui.wizards.dialogfields.LayoutUtil;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -37,7 +33,6 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 	public static final String WIZPAGENAME_RestBindingWizardPage = "WIZPAGENAME_RestBindingWizardPage"; //$NON-NLS-1$
 	private StringDialogField fBaseUriField;
 	private StringDialogField fSessionCookieId;
-	private Button fBtnPreserveRequestHeaders;
 	private RestBindingNameFieldAdapter adapter = new RestBindingNameFieldAdapter();
 	
 	private class RestBindingNameFieldAdapter implements IStringBrowseButtonFieldAdapter{
@@ -72,35 +67,15 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 		layout.marginHeight= 0;	
 		layout.numColumns= nColumns;
 		composite.setLayout(layout);
-
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
 		createComponentNameControl(composite, NewWizardMessages.LabelRestBindingName, getEGLDDBindingConfiguration().getBindingRestConfiguration());
 		createBaseUriControl(composite);
-		createBaseUriExample(composite);
 		createSessionCookieId(composite);
-		//createPreserveRequestHeaderControl(composite);		
 		setControl(composite);
 		Dialog.applyDialogFont(parent);
 	}
 	
-	private void createPreserveRequestHeaderControl(Composite composite) {
-		fBtnPreserveRequestHeaders = new Button(composite, SWT.CHECK);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
-		gd.horizontalSpan = nColumns;
-		fBtnPreserveRequestHeaders.setLayoutData(gd);
-		fBtnPreserveRequestHeaders.setText(NewWizardMessages.LabelPreserveReqHeaders);
-		fBtnPreserveRequestHeaders.setSelection(getConfiguration().isPreserveRequestHeader());
-		
-		fBtnPreserveRequestHeaders.addSelectionListener(new SelectionAdapter(){
-			public void widgetSelected(SelectionEvent e) {
-				HandlePreserveRequestHeaderChanged();
-			}
-		});
-	}
-
-	protected void HandlePreserveRequestHeaderChanged() {
-		getConfiguration().setPreserveRequestHeader(fBtnPreserveRequestHeaders.getSelection());		
-	}
-
 	private BindingRestConfiguration getConfiguration(){
 		return (BindingRestConfiguration)((EGLPartWizard)getWizard()).getConfiguration(getName());
 	}
@@ -110,6 +85,25 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 	}
 	
 	private void createBaseUriControl(Composite composite){
+		GridData gd;
+		
+		Label spacer = new Label(composite, SWT.WRAP);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumns;
+		spacer.setLayoutData(gd);
+		
+		Label desc = new Label(composite, SWT.WRAP);
+		desc.setText(SOAMessages.BaseURIDesc);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumns;
+		gd.widthHint = 550;
+		desc.setLayoutData(gd);
+		
+		spacer = new Label(composite, SWT.WRAP);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumns;
+		spacer.setLayoutData(gd);
+		
 		fBaseUriField = new StringDialogField();
 		fBaseUriField.setLabelText(NewWizardMessages.LabelRestBaseURI);
 		fBaseUriField.setText(getConfiguration().getBaseUri());
@@ -120,14 +114,22 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 							HandleBaseUriFieldChanged();
 					}		
 		});
-	}
-	
-	private void createBaseUriExample(Composite composite){
-		new Label(composite, SWT.NULL);
-		Text example = new Text(composite, SWT.READ_ONLY);
-		example.setText(SOAMessages.BaseURITooltip);
-		Label spacer = new Label(composite, SWT.NULL);
-		LayoutUtil.setHorizontalSpan( spacer, 2 );
+		
+		new Label(composite, SWT.WRAP).setText(SOAMessages.ExampleDeployedURI);
+		Text example = new Text(composite, SWT.READ_ONLY|SWT.WRAP);
+		example.setText("http://myhostname:8080/myTargetWebProject/restservices/myService"); //$NON-NLS-1$
+		example.setBackground(composite.getBackground());
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumns - 1;
+		example.setLayoutData(gd);
+		
+		new Label(composite, SWT.WRAP).setText(SOAMessages.ExampleWorkspaceURI);
+		example = new Text(composite, SWT.READ_ONLY|SWT.WRAP);
+		example.setText("workspace://myServiceProject/myPackage.myService"); //$NON-NLS-1$
+		example.setBackground(composite.getBackground());
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumns - 1;
+		example.setLayoutData(gd);
 	}
 	
 	protected void HandleBaseUriFieldChanged(){
@@ -135,6 +137,11 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 	}
 	
 	private void createSessionCookieId(Composite composite){
+		Label spacer = new Label(composite, SWT.WRAP);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumns;
+		spacer.setLayoutData(gd);
+		
 		fSessionCookieId = new StringDialogField();
 		fSessionCookieId.setLabelText(NewWizardMessages.LabelSessionCookieId);
 		fSessionCookieId.setText(getConfiguration().getSessionCookieId());

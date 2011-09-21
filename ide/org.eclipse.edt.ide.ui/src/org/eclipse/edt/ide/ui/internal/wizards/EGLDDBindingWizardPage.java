@@ -19,6 +19,7 @@ import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
+import org.eclipse.edt.ide.ui.internal.deployment.Binding;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 import org.eclipse.edt.ide.ui.internal.dialogs.EGLPartSelectionDialog;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
@@ -31,7 +32,6 @@ import org.eclipse.edt.ide.ui.wizards.EGLDDBindingConfiguration;
 import org.eclipse.edt.ide.ui.wizards.EGLFileConfiguration;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardContainer;
@@ -186,12 +186,7 @@ public class EGLDDBindingWizardPage extends EGLFileWizardPage {
 				statusinfo.setError(NewWizardMessages.EGLDDBindingWizPageValidationSetBindingName);
 			}
 			else{
-				Object binding =null;
-				binding = EGLDDRootHelper.getWebBindingByName(getEGLDDBindingConfiguration().getDeploymentRoot(), currname);
-				if(binding == null)
-					binding = EGLDDRootHelper.getNativeBindingByName(getEGLDDBindingConfiguration().getDeploymentRoot(), currname);
-				if(binding == null)
-					binding = EGLDDRootHelper.getEGLBindingByName(getEGLDDBindingConfiguration().getDeploymentRoot(), currname);
+				Binding binding = EGLDDRootHelper.getBindingByName(getEGLDDBindingConfiguration().getDeploymentRoot(), currname);
 				if(binding != null){
 					statusinfo.setError(NewWizardMessages.bind(NewWizardMessages.EGLDDBindingWizPageValidationBindingExisted, currname));
 				}
@@ -282,6 +277,4 @@ public class EGLDDBindingWizardPage extends EGLFileWizardPage {
 		dialog.setMessage(message);
 		return dialog;
 	}
-
-
 }

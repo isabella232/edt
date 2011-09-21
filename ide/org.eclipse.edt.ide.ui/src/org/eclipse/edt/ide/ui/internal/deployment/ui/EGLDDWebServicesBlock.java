@@ -20,7 +20,6 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.search.AllPartsCache;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
@@ -29,18 +28,16 @@ import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
+import org.eclipse.edt.ide.deployment.core.model.Restservice;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
-import org.eclipse.edt.ide.ui.internal.deployment.Restservice;
-import org.eclipse.edt.ide.ui.internal.deployment.Restservices;
-import org.eclipse.edt.ide.ui.internal.deployment.StyleTypes;
-import org.eclipse.edt.ide.ui.internal.deployment.Webservice;
-import org.eclipse.edt.ide.ui.internal.deployment.WebserviceRuntimeType;
-import org.eclipse.edt.ide.ui.internal.deployment.Webservices;
+import org.eclipse.edt.ide.ui.internal.deployment.Parameters;
+import org.eclipse.edt.ide.ui.internal.deployment.Service;
+import org.eclipse.edt.ide.ui.internal.deployment.Services;
 import org.eclipse.edt.ide.ui.internal.wizards.WebServicesWizard;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -88,18 +85,20 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 	private static final String[] TABLE_WS_COLUMN_PROPERTIES = {"COL_GEN", "COL_IMPL", "COL_STYLE"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	private static final int GENWS_NONE = 0;
-	private static final int GENWS_SOAP = 1;
-	private static final int GENWS_REST = 2;
+	private static final int GENWS_REST = 1;
+	private static final int GENWS_SOAP = 2;
 	private static final int GENWS_SOAPnREST = 3;
-	private static final String[] GEN_WS_TYPES = {SOAMessages.serDeployChoice_disabled, SOAMessages.serDeployChoice_soap, SOAMessages.serDeployChoice_rest, SOAMessages.serDeployChoice_soapRest};
+	private static final String[] GEN_WS_TYPES = {SOAMessages.serDeployChoice_disabled, SOAMessages.serDeployChoice_rest,
+		/*TODO SOAP not yet supported
+		 SOAMessages.serDeployChoice_soap, SOAMessages.serDeployChoice_soapRest*/};
 	
 	private Button fBtnRemoveWS;
 	private Button fBtnOpenWSImpl;
 	private SectionPart spart;
 	public static class RowItem{
 		int index;
-		Webservice webservice;		//this could be either webservice or restservice
-		Restservice restservice;
+		Service webservice;		//this could be either webservice or restservice
+		Service restservice;
 		
 		public boolean equals(Object obj) {
 			if(obj instanceof RowItem){
@@ -123,36 +122,31 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 			if(inputElement instanceof EGLDeploymentRoot){
 				EGLDeploymentRoot root = (EGLDeploymentRoot)inputElement;
 				Deployment deployment = root.getDeployment();
-				Webservices wss= deployment.getWebservices();
+				Services services = deployment.getServices();
 				int i=0;
-				if(wss != null){
-					for(Iterator it = wss.getWebservice().iterator(); it.hasNext();i++){
-						Webservice ws = (Webservice)it.next();
-						RowItem rowitem = new RowItem();
-						rowitem.index = i;						
-						rowitem.webservice = ws;
-						children.put(ws.getImplementation(), rowitem);
-						childrenValues.add(rowitem);
-					}
-				}
-				Restservices rss = deployment.getRestservices();
-				if(rss != null){
-					for(Iterator itr = rss.getRestservice().iterator(); itr.hasNext();){
-						Restservice rs = (Restservice)itr.next();
-						Object item = children.get(rs.getImplementation());
+				if(services != null){
+					for (Service s : services.getService()) {
 						RowItem rowitem = null;
+						
+						Object item = children.get(s.getImplementation());
 						if(item != null){
 							rowitem = (RowItem)item;
-							rowitem.restservice = rs;
 						}
 						else{
 							rowitem = new RowItem();
 							rowitem.index = i;
-							rowitem.restservice = rs;
-							children.put(rs.getImplementation(), rowitem);
+							children.put(s.getImplementation(), rowitem);
 							childrenValues.add(rowitem);
 							i++;
-						}							
+						}
+						
+						if (org.eclipse.edt.ide.deployment.core.model.Service.SERVICE_REST.equals(s.getType())) {
+							rowitem.restservice = s;
+						}
+						//TODO SOAP not yet supported.
+//						else if (org.eclipse.edt.ide.deployment.core.model.Service.SERVICE_SOAP.equals(s.getType())) {
+//							rowitem.webservice = s;
+//						}
 					}
 				}
 			}
@@ -169,19 +163,35 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 	private static Image getImageIcon(Object element) {
 		if(element instanceof RowItem){
 			RowItem rowitem = (RowItem)element;
-			Webservice ws = rowitem.webservice;
-			Restservice rs = rowitem.restservice;
+			Service ws = rowitem.webservice;
+			Service rs = rowitem.restservice;
 			if(ws != null){
-				if(ws.isSetImplType())
-					return ((ws.getImplType()&IEGLSearchConstants.EXTERNALTYPE) != 0) 
-							? PluginImages.get(PluginImages.IMG_OBJS_EXTERNALTYPE)
-							: PluginImages.get(PluginImages.IMG_OBJS_SERVICE);
+//				String implType = ws.getParameters() == null ? null : EGLDDRootHelper.getParameterValue(ws.getParameters(), Soapservice.ATTRIBUTE_SERVICE_implType);
+//				if(implType != null) {
+//					int type = 0;
+//					try {
+//						type = Integer.valueOf(implType);
+//					}
+//					catch (NumberFormatException e) {
+//					}
+//					return ((type & IEGLSearchConstants.EXTERNALTYPE) != 0) 
+//							? PluginImages.get(PluginImages.IMG_OBJS_EXTERNALTYPE)
+//							: PluginImages.get(PluginImages.IMG_OBJS_SERVICE);
+//				}
 			}
 			else if(rs != null){
-				if(rs.isSetImplType())
-					return ((rs.getImplType()&IEGLSearchConstants.EXTERNALTYPE) != 0) 
+				String implType = rs.getParameters() == null ? null : EGLDDRootHelper.getParameterValue(rs.getParameters(), Restservice.ATTRIBUTE_SERVICE_REST_implType);
+				if(implType != null) {
+					int type = 0;
+					try {
+						type = Integer.valueOf(implType);
+					}
+					catch (NumberFormatException e) {
+					}
+					return ((type & IEGLSearchConstants.EXTERNALTYPE) != 0) 
 							? PluginImages.get(PluginImages.IMG_OBJS_EXTERNALTYPE)
 							: PluginImages.get(PluginImages.IMG_OBJS_SERVICE);
+				}
 			}
 		}
 		return PluginImages.get(PluginImages.IMG_OBJS_SERVICE);
@@ -196,8 +206,8 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 		public String getText(Object element) {
 			if(element instanceof RowItem){
 				RowItem rowitem = (RowItem)element;
-				Webservice ws = rowitem.webservice;
-				Restservice rs = rowitem.restservice;
+				Service ws = rowitem.webservice;
+				Service rs = rowitem.restservice;
 				if(ws != null){
 					return ws.getImplementation();
 				}
@@ -218,8 +228,8 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 		public String getColumnText(Object element, int columnIndex) {
 			if(element instanceof RowItem){
 				RowItem rowitem = (RowItem)element;
-				Webservice ws = rowitem.webservice;
-				Restservice rs = rowitem.restservice;
+				Service ws = rowitem.webservice;
+				Service rs = rowitem.restservice;
 				switch (columnIndex) {
 				case COLINDEX_GEN:{
 					int genWsType = getGenWSType(ws, rs);
@@ -254,10 +264,10 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 			Object value = null;
 			if(element instanceof RowItem){
 				RowItem rowitem = (RowItem)element;
-				Webservice ws = rowitem.webservice;
-				Restservice rs = rowitem.restservice;
+				Service ws = rowitem.webservice;
+				Service rs = rowitem.restservice;
 				if(property.equals(TABLE_WS_COLUMN_PROPERTIES[COLINDEX_GEN]))
-					value = new Integer(getGenWSType(ws, rs));
+					value = Integer.valueOf(getGenWSType(ws, rs));
 				else if(property.equals(TABLE_WS_COLUMN_PROPERTIES[COLINDEX_IMPL])){
 					if(ws != null)
 						value = ws.getImplementation();
@@ -293,59 +303,62 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 		fPage = page;
 	}
 
-	private Restservice createNewRestService(String impl, boolean enableGen, int implType, String protocol){
+	private Service createNewRestService(String impl, boolean enableGen, int implType){
 		EGLDeploymentRoot root = getEGLDeploymentRootInput();
-		Restservice newRS = null;
+		Service newRS = null;
 		if(root != null){
 			Deployment deployment = root.getDeployment();
 			DeploymentFactory factory = DeploymentFactory.eINSTANCE;
-			Restservices rss = deployment.getRestservices();
+			Services rss = deployment.getServices();
 			if(rss == null){
-				rss = factory.createRestservices();
-				deployment.setRestservices(rss);
+				rss = factory.createServices();
+				deployment.setServices(rss);
 			}
 			
-			newRS = factory.createRestservice();
-			newRS.setImplementation(impl);			
+			newRS = factory.createService();
+			newRS.setType(org.eclipse.edt.ide.deployment.core.model.Service.SERVICE_REST);
+			newRS.setImplementation(impl);
+			
+			Parameters params = factory.createParameters();
+			newRS.setParameters(params);
+			
 			int lastDot = impl.lastIndexOf('.');
-			newRS.setUri(impl.substring((lastDot>0)?lastDot+1:0));
-			newRS.setEnableGeneration(enableGen);
-			newRS.setImplType(implType);
-			if(protocol != null && protocol.length() > 0)
-				newRS.setProtocol(protocol);
-			rss.getRestservice().add(newRS);
+			EGLDDRootHelper.addOrUpdateParameter(params, Restservice.ATTRIBUTE_SERVICE_REST_uriFragment, impl.substring((lastDot>0)?lastDot+1:0));
+			EGLDDRootHelper.addOrUpdateParameter(params, Restservice.ATTRIBUTE_SERVICE_REST_enableGeneration, enableGen);
+			EGLDDRootHelper.addOrUpdateParameter(params, Restservice.ATTRIBUTE_SERVICE_REST_implType, implType);
+			rss.getService().add(newRS);
 		}
 		return newRS;
 	}
 		
-	private Webservice createNewSoapService(String impl, boolean enableGen, int implType, String protocol){
+	private Service createNewSoapService(String impl, boolean enableGen, int implType){
 		EGLDeploymentRoot root = getEGLDeploymentRootInput();
-		Webservice newWs = null;
+		Service newWs = null;
 		if(root != null){
 			Deployment deployment = root.getDeployment();
 			DeploymentFactory factory = DeploymentFactory.eINSTANCE;
-			Webservices wss = deployment.getWebservices();
+			Services wss = deployment.getServices();
 			if(wss == null){
-				wss = factory.createWebservices();
-				deployment.setWebservices(wss);
+				wss = factory.createServices();
+				deployment.setServices(wss);
 			}			
 			
-			newWs = factory.createWebservice();
-			newWs.setImplementation(impl);		
-			newWs.setStyle(StyleTypes.DOCUMENT_WRAPPED);			
-			newWs.setEnableGeneration(enableGen);
-			newWs.setImplType(implType);
-			if(protocol != null && protocol.length() > 0)
-				newWs.setProtocol(protocol);
+			newWs = factory.createService();
+			//TODO SOAP not yet supported
+//			newWs.setType(org.eclipse.edt.ide.deployment.core.model.Service.SERVICE_SOAP);
+//			newWs.setImplementation(impl);		
+//			newWs.setStyle(StyleTypes.DOCUMENT_WRAPPED);			
+//			newWs.setEnableGeneration(enableGen);
+//			newWs.setImplType(implType);
 			
-			wss.getWebservice().add(newWs);
+			wss.getService().add(newWs);
 		}
 		return newWs;
 	}	
 	
 	private void handleGenWSTypeChanged(RowItem rowitem, int newGenWsType) {		
-		Webservice ws = rowitem.webservice;
-		Restservice rs = rowitem.restservice;
+		Service ws = rowitem.webservice;
+		Service rs = rowitem.restservice;
 		
 		//either ws or rs is not null
 		String impl = ws!=null? ws.getImplementation():rs.getImplementation();
@@ -354,14 +367,16 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 			switch(newGenWsType){
 			case GENWS_NONE:
 			case GENWS_REST:
-				ws.setEnableGeneration(false);
+				//TODO SOAP not yet supported
+//				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(ws), Webservice.ATTRIBUTE_SERVICE_SOAP_enableGeneration, false);
 				break;
 			case GENWS_SOAP:
 			case GENWS_SOAPnREST:
-				ws.setEnableGeneration(true);
+				//TODO SOAP not yet supported
+//				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(ws), Webservice.ATTRIBUTE_SERVICE_SOAP_enableGeneration, false);
 				break;
 			}
-						
+			
 			if(rs == null){
 				switch(newGenWsType){
 				case GENWS_NONE:
@@ -370,7 +385,19 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 				case GENWS_REST:
 				case GENWS_SOAPnREST:
 					//need to create a Restservice
-					Restservice newrs = createNewRestService(impl, true, ws.isSetImplType()?ws.getImplType():IEGLSearchConstants.SERVICE, ws.getProtocol());
+					int implType = IEGLSearchConstants.SERVICE;
+					if (rs.getParameters() != null) {
+						//TODO SOAP not yet supported
+//						String val = EGLDDRootHelper.getParameterValue(ws.getParameters(), Webservice.ATTRIBUTE_SERVICE_SOAP_implType);
+//						if (val != null) {
+//							try {
+//								implType = Integer.valueOf(val);
+//							}
+//							catch (NumberFormatException e) {
+//							}
+//						}
+					}
+					Service newrs = createNewRestService(impl, true, implType);
 					rowitem.restservice = newrs;
 					break;
 				}
@@ -381,11 +408,11 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 			switch(newGenWsType){
 			case GENWS_NONE:
 			case GENWS_SOAP:
-				rs.setEnableGeneration(false);
+				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(rs), Restservice.ATTRIBUTE_SERVICE_REST_enableGeneration, false);
 				break;
 			case GENWS_REST:
 			case GENWS_SOAPnREST:
-				rs.setEnableGeneration(true);
+				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(rs), Restservice.ATTRIBUTE_SERVICE_REST_enableGeneration, true);
 				break;
 			}			
 			
@@ -397,7 +424,18 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 				case GENWS_SOAP:
 				case GENWS_SOAPnREST:
 					//need to create a Webservice
-					Webservice newws = createNewSoapService(impl, true, rs.isSetImplType()?rs.getImplType():IEGLSearchConstants.SERVICE, rs.getProtocol());
+					int implType = IEGLSearchConstants.SERVICE;
+					if (rs.getParameters() != null) {
+						String val = EGLDDRootHelper.getParameterValue(rs.getParameters(), Restservice.ATTRIBUTE_SERVICE_REST_implType);
+						if (val != null) {
+							try {
+								implType = Integer.valueOf(val);
+							}
+							catch (NumberFormatException e) {
+							}
+						}
+					}
+					Service newws = createNewSoapService(impl, true, implType);
 					rowitem.webservice = newws;
 					break;
 				}				
@@ -499,11 +537,7 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 		fTableViewer = new TableViewer(t);
 		
 		CellEditor[] cellEditors = new CellEditor[TABLE_WS_COLUMN_PROPERTIES.length];
-		if(EDTCoreIDEPlugin.SUPPORT_SOAP){
-			cellEditors[COLINDEX_GEN] = new ComboBoxCellEditor(t, GEN_WS_TYPES, SWT.READ_ONLY);
-		}else{
-			cellEditors[COLINDEX_GEN] = new TextCellEditor(t, SWT.READ_ONLY);
-		}
+		cellEditors[COLINDEX_GEN] = new ComboBoxCellEditor(t, GEN_WS_TYPES, SWT.READ_ONLY);
 		cellEditors[COLINDEX_IMPL] = new TextCellEditor(t);
 		fTableViewer.setCellEditors(cellEditors);
 		fTableViewer.setCellModifier(new WSCellModifier());
@@ -583,19 +617,20 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 				int selectionIndex = fTableViewer.getTable().getSelectionIndex();
 				if(obj instanceof RowItem){
 					RowItem rowitem = (RowItem)obj;
-					Webservice ws = rowitem.webservice;
-					Restservice rs = rowitem.restservice;
+					Service ws = rowitem.webservice;
+					Service rs = rowitem.restservice;
 					EGLDeploymentRoot root = getEGLDeploymentRootInput();
 					if(root != null){
 						Deployment deployment = root.getDeployment();
-						Webservices wss = deployment.getWebservices();
-						Restservices rss = deployment.getRestservices();
+						Services wss = deployment.getServices();
 						boolean wssSuc=true, rssSuc = true;
-						if(wss != null && ws != null){												
-							wssSuc = wss.getWebservice().remove(ws);
-						}
-						if(rss != null && rs != null){
-							rssSuc = rss.getRestservice().remove(rs);
+						if(wss != null){
+							if (ws != null) {
+								wssSuc = wss.getService().remove(ws);
+							}
+							if (rs != null) {
+								rssSuc = wss.getService().remove(rs);
+							}
 						}
 						if(wssSuc && rssSuc){
 							EGLDDBaseFormPage.updateTableViewerAfterRemove(selectionIndex, fTableViewer, fBtnRemoveWS);
@@ -617,8 +652,8 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 			Object obj = ssel.getFirstElement();
 			if(obj instanceof RowItem){
 				RowItem rowitem = (RowItem)obj;				
-				Webservice ws = rowitem.webservice;
-				Restservice rs = rowitem.restservice;
+				Service ws = rowitem.webservice;
+				Service rs = rowitem.restservice;
 				String fqImpl = ""; //$NON-NLS-1$
 				if(ws != null)
 					fqImpl = ws.getImplementation();
@@ -679,9 +714,10 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 						//search for the service part in the curr project
 						final IEGLSearchScope projSearchScope = SearchEngine.createEGLSearchScope(new IEGLElement[]{eglProj}, false);						
 						AllPartsCache.getParts(projSearchScope, IEGLSearchConstants.SERVICE, monitor, eglServicePartsList);
-						if( !getEGLDeploymentRootInput().getDeployment().getWebserviceRuntime().equals(WebserviceRuntimeType.JAXWS)) {
+						//TODO SOAP not yet supported
+//						if( !getEGLDeploymentRootInput().getDeployment().getWebserviceRuntime().equals(WebserviceRuntimeType.JAXWS)) {
 							AllPartsCache.getParts(projSearchScope, IEGLSearchConstants.EXTERNALTYPE, HOSTPGM, monitor, eglServicePartsList);
-						}
+//						}
 					} catch (EGLModelException e) {
 						EDTUIPlugin.log( e );
 					}					
@@ -700,26 +736,29 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 	}
 
 
-	private int getGenWSType(Webservice ws, Restservice rs) {
+	private int getGenWSType(Service ws, Service rs) {
+		boolean wsEnabled = false;//TODO SOAP not yet supported; ws != null && ws.getParameters() != null && Boolean.parseBoolean(EGLDDRootHelper.getParameterValue(ws.getParameters(), Webservice.ATTRIBUTE_SERVICE_SOAP_enableGeneration));
+		boolean rsEnabled = rs != null && rs.getParameters() != null && Boolean.parseBoolean(EGLDDRootHelper.getParameterValue(rs.getParameters(), Restservice.ATTRIBUTE_SERVICE_REST_enableGeneration));
+		
 		int genWsType = GENWS_SOAPnREST;
 		if(ws != null && rs != null){
-			if(ws.isEnableGeneration() && rs.isEnableGeneration())
+			if(wsEnabled && rsEnabled)
 				genWsType = GENWS_SOAPnREST;
-			else if(ws.isEnableGeneration())
+			else if(wsEnabled)
 				genWsType = GENWS_SOAP;
-			else if(rs.isEnableGeneration())
+			else if(rsEnabled)
 				genWsType = GENWS_REST;
 			else
 				genWsType = GENWS_NONE;
 		}
 		else if(ws != null){  //rs==null
-			if(ws.isEnableGeneration())
+			if(wsEnabled)
 				genWsType = GENWS_SOAP;
 			else
 				genWsType = GENWS_NONE;
 		}
 		else if(rs != null){	//ws==null
-			if(rs.isEnableGeneration())
+			if(rsEnabled)
 				genWsType = GENWS_REST;
 			else
 				genWsType = GENWS_NONE;

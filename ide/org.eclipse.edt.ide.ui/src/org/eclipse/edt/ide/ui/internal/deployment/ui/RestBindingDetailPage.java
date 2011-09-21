@@ -11,13 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.deployment.ui;
 
-import org.eclipse.edt.ide.ui.internal.deployment.RestBinding;
+import org.eclipse.edt.ide.ui.internal.deployment.Binding;
+import org.eclipse.edt.javart.resources.egldd.RestBinding;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
@@ -25,7 +27,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class RestBindingDetailPage extends WebBindingDetailPage {
 
-	private RestBinding fRestBinding;
+	private Binding fRestBinding;
 	private Text fBaseUri;
 	private Text fSessionCookieId;
 	
@@ -49,7 +51,7 @@ public class RestBindingDetailPage extends WebBindingDetailPage {
 	
 
 	protected void HandleGenCheckChanged() {
-		fRestBinding.setEnableGeneration(fGenBtn.getSelection());		
+		EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fRestBinding), RestBinding.ATTRIBUTE_BINDING_REST_enableGeneration, fGenBtn.getSelection());
 	}
 	
 	private void createBaseUriControl(FormToolkit toolkit, Composite parent) {
@@ -63,27 +65,57 @@ public class RestBindingDetailPage extends WebBindingDetailPage {
 	}
 	
 	private void createBaseUriExample(FormToolkit toolkit, Composite parent) {
-		createSpacer( toolkit, parent, 1 );
 		boolean toggleBorder = toolkit.getBorderStyle() == SWT.BORDER;
 		if (toggleBorder) {
 			toolkit.setBorderStyle(SWT.NONE);
 		}
-		Text example = toolkit.createText(parent, SOAMessages.BaseURITooltip, SWT.SINGLE|SWT.READ_ONLY); //$NON-NLS-1$;
+		
+		toolkit.createLabel(parent, SOAMessages.ExampleDeployedURI);
+		
+		// At least on Linux, creating a text in the form draws a border no matter what. Workaround is to put it inside a composite.
+		// In order to keep things aligned, we put just the individual Text controls in composites.
+		Composite exampleComposite = toolkit.createComposite(parent);
+		exampleComposite.setFont(parent.getFont());
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumnSpan - 1;
+		exampleComposite.setLayoutData(gd);
+		GridLayout layout = new GridLayout();
+		layout.verticalSpacing = 0;
+		layout.horizontalSpacing = 0;
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		exampleComposite.setLayout(layout);
+		Text example = toolkit.createText(exampleComposite, "http://myhostname:8080/myTargetWebProject/restservices/myService", SWT.SINGLE|SWT.READ_ONLY); //$NON-NLS-1$;
+		example.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		toolkit.createLabel(parent, SOAMessages.ExampleWorkspaceURI);
+		
+		exampleComposite = toolkit.createComposite(parent);
+		exampleComposite.setFont(parent.getFont());
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumnSpan - 1;
+		exampleComposite.setLayoutData(gd);
+		layout = new GridLayout();
+		layout.verticalSpacing = 0;
+		layout.horizontalSpacing = 0;
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		exampleComposite.setLayout(layout);
+		example = toolkit.createText(exampleComposite, "workspace://myServiceProject/myPackage.myService", SWT.SINGLE|SWT.READ_ONLY); //$NON-NLS-1$;
+		example.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		if (toggleBorder) {
 			toolkit.setBorderStyle(SWT.BORDER);
 		}
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL|GridData.VERTICAL_ALIGN_BEGINNING);
-		gd.widthHint = 10;
-		gd.horizontalSpan = nColumnSpan-1;
-		example.setLayoutData(gd);
 	}
 
 	protected void HandleBaseUriChanged() {
-		fRestBinding.setBaseURI(fBaseUri.getText());		
+		fRestBinding.setUri(fBaseUri.getText());		
 	}
 
 	private void createSessionCookieIdControl(FormToolkit toolkit,
 			Composite parent) {
+		createSpacer(toolkit, parent, nColumnSpan);
 		toolkit.createLabel(parent, SOAMessages.LabelSessionCookieId);
 		fSessionCookieId = createTextControl(toolkit, parent);
 		fSessionCookieId.addModifyListener(new ModifyListener(){
@@ -95,13 +127,13 @@ public class RestBindingDetailPage extends WebBindingDetailPage {
 	}
 
 	protected void HandleSessionCookieIdChanged() {
-		fRestBinding.setSessionCookieId(fSessionCookieId.getText());		
+		EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fRestBinding), RestBinding.ATTRIBUTE_BINDING_REST_sessionCookieId, fSessionCookieId.getText());
 	}
 
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		IStructuredSelection ssel = (IStructuredSelection)selection;
 		if(ssel.size() == 1)
-			fRestBinding = (RestBinding)ssel.getFirstElement();
+			fRestBinding = (Binding)ssel.getFirstElement();
 		else
 			fRestBinding = null;
 		update();
@@ -109,16 +141,17 @@ public class RestBindingDetailPage extends WebBindingDetailPage {
 	
 	protected void update(){
 		fNameText.setText(fRestBinding.getName()==null?"":fRestBinding.getName()); //$NON-NLS-1$
-		String baseUri = fRestBinding.getBaseURI();
+		String baseUri = fRestBinding.getUri();
 		if(baseUri != null)
 			fBaseUri.setText(baseUri);
 		
-		String sessionCookieId = fRestBinding.getSessionCookieId();
+		String sessionCookieId = EGLDDRootHelper.getParameterValue(EGLDDRootHelper.getParameters(fRestBinding), RestBinding.ATTRIBUTE_BINDING_REST_sessionCookieId);
 		if(sessionCookieId != null)
 			fSessionCookieId.setText(sessionCookieId);
-				
-		if(fRestBinding.isSetEnableGeneration())
-			fGenBtn.setSelection(fRestBinding.isEnableGeneration());
+		
+		String enableGen = EGLDDRootHelper.getParameterValue(EGLDDRootHelper.getParameters(fRestBinding), RestBinding.ATTRIBUTE_BINDING_REST_enableGeneration);
+		if(enableGen != null)
+			fGenBtn.setSelection(Boolean.parseBoolean(enableGen));
 			
 	}
 	

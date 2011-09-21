@@ -18,12 +18,15 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.ide.core.model.EGLModelException;
+import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.EGLUIStatus;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
 import org.eclipse.edt.ide.ui.internal.deployment.Include;
+import org.eclipse.edt.ide.ui.internal.util.EditorUtility;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -50,6 +53,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.forms.IManagedForm;
@@ -244,8 +248,15 @@ public class EGLDDImportsFormPage extends EGLDDBaseFormPage {
 
 				IFile includeFile = proj.getWorkspace().getRoot().getFile(new Path(includeLocation));
 				if(includeFile != null && includeFile.exists()){
-					//TODO fix before checkin
-//					/WSDLParseUtil.openFileInEditor(includeFile);
+					try {
+						EditorUtility.openInEditor(includeFile, true);
+					}
+					catch (PartInitException e) {
+						EDTUIPlugin.log(e);
+					}
+					catch (EGLModelException e) {
+						EDTUIPlugin.log(e);
+					}
 				}
 				else{
 					IStatus status = EGLUIStatus.createError(-1, SOAMessages.bind(SOAMessages.ModuleBaseDetailPageFileNotExist, includeFile), null);
