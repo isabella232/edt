@@ -11,11 +11,15 @@
 package org.eclipse.edt.ide.ui.internal.quickfix;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AddStatement;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
+import org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause;
 import org.eclipse.edt.compiler.core.ast.GetByKeyStatement;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
@@ -53,13 +57,11 @@ public class QuickAssistProcessor implements IQuickAssistProcessor {
 				resultingCollections.add(new SQLStatementResetAssistProposal(CorrectionMessages.SQLStatementResetProposalLabel
 						,2, null, context));
 			} else {
-				resultingCollections.add(new SQLStatementAddAssistProposal(CorrectionMessages.SQLStatementAddProposalLabel,
-						2, null, context));
-				
-				//Only Select Statement applies to INTO clause
-				if(isSelectOperation(coveringAstNode)) {
-					resultingCollections.add(new SQLStatementAddAssistProposal(CorrectionMessages.SQLStatementAddWithIntoProposalLabel,
-						2, null, context,true));
+				SQLStatementAddAssistProposal addAssistProposal = new SQLStatementAddAssistProposal(CorrectionMessages.SQLStatementAddProposalLabel,
+						2, null, context);
+				Node boundNode = addAssistProposal.getBoundASTNode(context);
+				if(isDataSource(boundNode)) {
+					resultingCollections.add(addAssistProposal);
 				}
 			}		
 			
@@ -82,13 +84,45 @@ public class QuickAssistProcessor implements IQuickAssistProcessor {
 		return isValidStatement;
 	}
 	
-	private boolean isSelectOperation(Node astNode){
-		boolean isSelectStatement = false;
+	private boolean isDataSource(Node astNode){
+		boolean isDataSource = false;
+		FromOrToExpressionClause dataSource = null;
+		List expressions = null;
 		
 		if(astNode instanceof GetByKeyStatement) {
-			isSelectStatement = true;
+			GetByKeyStatement getByKeyStat = (GetByKeyStatement) astNode;
+			expressions = getByKeyStat.getGetByKeyOptions();
+		} else if(astNode instanceof AddStatement) {
+			AddStatement addStatement = (AddStatement) astNode;
+			expressions = addStatement.getOptions();
+		} else if (astNode instanceof DeleteStatement) {
+			DeleteStatement deleteStatement = (DeleteStatement) astNode;
+			if(deleteStatement.getDataSource() != null) {
+				expressions = new ArrayList();
+				expressions.add(deleteStatement.getDataSource());
+			}
+		} else if (astNode instanceof ReplaceStatement) {
+			ReplaceStatement replaceStatement = (ReplaceStatement)astNode;
+			expressions = replaceStatement.getReplaceOptions();
 		}
-		return isSelectStatement;
+		
+		if(expressions != null && expressions.size() > 0) {
+			for(int i=0; i< expressions.size(); i++) {
+				if(expressions.get(i) instanceof FromOrToExpressionClause) {
+					dataSource = (FromOrToExpressionClause) expressions.get(i);
+					break;
+				}
+			}
+		}
+		
+		if(dataSource != null) {
+			ITypeBinding typeBinding = dataSource.getExpression().resolveTypeBinding();
+			if(typeBinding != null && IEGLConstants.PROPERTY_SQLDATASOURCE.equalsIgnoreCase(typeBinding.getCaseSensitiveName())) {
+				isDataSource = true;
+			}
+		}
+		
+		return isDataSource;
 	}
 	
 	private boolean isSQLStatementExisted(Node astNode) {

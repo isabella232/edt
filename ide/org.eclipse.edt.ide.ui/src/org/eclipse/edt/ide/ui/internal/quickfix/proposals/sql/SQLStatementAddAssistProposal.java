@@ -45,16 +45,6 @@ public class SQLStatementAddAssistProposal extends
 		}
 	}
 	
-	public SQLStatementAddAssistProposal(String label,int relevance, Image image, IInvocationContext context, boolean addIntoClause) {
-		super(label, context.getEGLFile(), relevance, image, context.getDocument());
-		fContext = context;
-	    this.addIntoClause = addIntoClause;
-		if(fContext instanceof AssistContext) {
-			editor = (EGLEditor)((AssistContext)fContext).getEditor();
-		}
-	}
-
-	
 	@Override
 	protected ASTRewrite getRewrite() {
 		try{
@@ -62,19 +52,11 @@ public class SQLStatementAddAssistProposal extends
 			
 			Statement sqlNode = (Statement)fContext.getCoveringNode();
 			IEGLDocument document = fContext.getDocument();
-			final Node nodeType[] = new Node[] {null};
-			if (sqlNode != null) {
-				IFileEditorInput fileInput = (IFileEditorInput)editor.getEditorInput();
-				getBoundASTNode(document, null, sqlNode.getOffset(), fileInput.getFile(), new IBoundNodeProcessor() {
-					public void processBoundNode(Node boundNode, Node containerNode) {
-						nodeType[0] = boundNode;
-					}
-				});
-			}
+			final Node boundNode = getBoundASTNode(fContext);
 			
-			info = SQLIOStatementUtility.getAddSQLIoStatementActionInfo(document, nodeType[0]); 	
-			
+			info = SQLIOStatementUtility.getAddSQLIoStatementActionInfo(document, boundNode); 	
 			initialize();
+			
 			if (!isEGLStatementValidForAction()) {
 				sqlStatement = null;
 			}
@@ -94,6 +76,23 @@ public class SQLStatementAddAssistProposal extends
 		}
 		
 		return null;
+	}
+	
+	public Node getBoundASTNode(IInvocationContext context) {
+		Statement sqlNode = (Statement)context.getCoveringNode();
+		IEGLDocument document = context.getDocument();
+		final Node nodeType[] = new Node[] {null};
+		
+		if (sqlNode != null) {
+			IFileEditorInput fileInput = (IFileEditorInput)editor.getEditorInput();
+			getBoundASTNode(document, null, sqlNode.getOffset(), fileInput.getFile(), new IBoundNodeProcessor() {
+				public void processBoundNode(Node boundNode, Node containerNode) {
+					nodeType[0] = boundNode;
+				}
+			});
+		}
+		
+		return nodeType[0];
 	}
 	
 	protected void createDefault(Statement statement) {

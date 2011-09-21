@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.binding.ClassFieldBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
+import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AddStatement;
 import org.eclipse.edt.compiler.core.ast.ArrayAccess;
@@ -28,6 +29,7 @@ import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.GetByKeyStatement;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
@@ -692,5 +694,21 @@ public abstract class  AbstractSQLStatementProposal extends
 			}
 		}
 		return keyItemAndColumnNames;
+	}
+	
+	protected IPartBinding getEnclosingPartBinding(Node boundNode) {
+		while(!(boundNode instanceof Part)) {
+			boundNode = boundNode.getParent();
+		}
+		if(boundNode instanceof Part) {
+			Name name = ((Part) boundNode).getName();
+			if(name != null) {
+				IBinding binding = name.resolveBinding();
+				if(binding instanceof IPartBinding) {
+					return (IPartBinding) binding;
+				}
+			}
+		}
+		return null;
 	}
 }

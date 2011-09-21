@@ -356,7 +356,7 @@ public class WebServicesWizardPage extends EGLElementWizardPage {
 		grp.setLayoutData(gd);
 		grp.setText(NewWizardMessages.WSGenAs);
 		
-		final Button btnSOAP = new Button(grp, SWT.CHECK);
+		/*final Button btnSOAP = new Button(grp, SWT.CHECK);
 		btnSOAP.setText(NewWizardMessages.SOAPService);
 		btnSOAP.setSelection(getConfiguration().isGenAsSOAP());
 		btnSOAP.addSelectionListener(new SelectionAdapter(){
@@ -365,7 +365,7 @@ public class WebServicesWizardPage extends EGLElementWizardPage {
 				validatePage();
 			}
 		});
-		btnSOAP.setEnabled(false);
+		btnSOAP.setEnabled(false);*/
 		
 		final Button btnRest = new Button(grp, SWT.CHECK);
 		btnRest.setText(NewWizardMessages.RestService);
@@ -378,7 +378,7 @@ public class WebServicesWizardPage extends EGLElementWizardPage {
 		});
 
 		if(!EDTCoreIDEPlugin.SUPPORT_SOAP){
-			btnSOAP.setEnabled(false);
+			//btnSOAP.setEnabled(false);
 			btnRest.setEnabled(false);
 		}
 
