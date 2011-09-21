@@ -13,15 +13,11 @@ package org.eclipse.edt.gen.deployment.javascript;
 
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Set;
+import java.util.List;
 
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
-import org.eclipse.edt.ide.deployment.core.model.RestBinding;
-import org.eclipse.edt.ide.deployment.core.model.WebBinding;
+import org.eclipse.edt.javart.resources.egldd.RestBinding;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
 public class DeploymentDescGenerator{
@@ -55,26 +51,7 @@ public class DeploymentDescGenerator{
 		writer.print(eglddName);
 		writer.println("\");");
 		writer.println("var binding;");
-		ArrayList webBindings = deploymentDesc.getWebBindings();
-		for (int i = 0; i < webBindings.size(); i++)
-		{
-			WebBinding webBinding = (WebBinding) webBindings.get(i);
-			if (webBinding.isEnableGeneration())
-			{
-				writer.println("binding = new egl.eglx.services.WebBinding(");
-				writer.pushIndent();
-				writer.println("/*name        */ \"" + webBinding.getName() + "\",");
-				writer.println("/*interface   */ \"" + webBinding.getInterface() + "\",");
-				writer.println("/*wsdlLocation*/ \"" + webBinding.getWsdlLocation() + "\",");
-				writer.println("/*wsdlService */ \"" + webBinding.getWsdlService() + "\",");
-				writer.println("/*wsdlPort    */ \"" + webBinding.getWsdlPort() + "\",");
-				writer.println("/*uri         */ \"" + webBinding.getUri() + "\"");
-				writer.popIndent();
-				writer.println(");");
-				writer.println("bindFile.bindings.push(binding);");
-			}
-		}
-		ArrayList restBindings = deploymentDesc.getRestBindings();
+		List restBindings = deploymentDesc.getRestBindings();
 		for (int i = 0; i < restBindings.size(); i++)
 		{
 			RestBinding restBinding = (RestBinding) restBindings.get(i);
@@ -83,7 +60,7 @@ public class DeploymentDescGenerator{
 				writer.println("binding = new egl.eglx.services.RestBinding(");
 				writer.pushIndent();
 				writer.println("/*name                   */ \"" + restBinding.getName().toLowerCase() + "\",");
-				writer.println("/*baseURI                */ \"" + restBinding.getBaseURI() + "\",");
+				writer.println("/*baseURI                */ \"" + restBinding.getUri() + "\",");
 				writer.print("/*sessionCookieId        */ ");
 				if (restBinding.getSessionCookieId() != null)
 				{
