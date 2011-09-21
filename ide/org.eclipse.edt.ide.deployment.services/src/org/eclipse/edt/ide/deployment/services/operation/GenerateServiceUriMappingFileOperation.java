@@ -70,7 +70,7 @@ public class GenerateServiceUriMappingFileOperation extends AbstractDeploymentOp
 						null,
 						new String[] { service.getFullyQualifiedName() }));
 			} catch (Exception e) {
-				messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentInformationalMessage(
+				messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
 						EGLMessage.EGL_DEPLOYMENT_FAILED,
 						null,
 						new String[] { DeploymentUtilities.createExceptionMessage(e) }));

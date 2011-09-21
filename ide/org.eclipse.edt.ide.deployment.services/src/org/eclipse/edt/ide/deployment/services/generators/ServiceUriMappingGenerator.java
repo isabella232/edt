@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -29,16 +30,14 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.edt.ide.core.utils.EGLProjectInfoUtility;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.deployment.core.model.Restservice;
-import org.eclipse.edt.ide.deployment.rui.internal.util.Utils;
 import org.eclipse.edt.ide.deployment.rui.internal.util.WebUtilities;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
 import org.eclipse.edt.javart.util.JavaAliaser;
@@ -222,7 +221,12 @@ public class ServiceUriMappingGenerator
 	private void getRoot() throws Exception
 	{
     	String fullyQualifiedUriMappingFileName = project.getLocation().toPortableString();
-		String sourceFolder = EGLProjectInfoUtility.getGeneratedJavaFolder( project );
+		List<IResource> folders = new ArrayList<IResource>();
+    	org.eclipse.edt.ide.ui.internal.deployment.ui.DeploymentUtilities.getJavaSourceFolders(project, folders);
+		if ( folders.size() == 0 ) {
+			return;
+		}
+		String sourceFolder = folders.get(0).getFullPath().removeFirstSegments( 1 ).toOSString();
 		fullyQualifiedUriMappingFileName += '/' + sourceFolder + '/' + uriMappingFileName;
 		File file = new File( fullyQualifiedUriMappingFileName );
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
