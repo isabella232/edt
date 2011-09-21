@@ -11,13 +11,13 @@
  *******************************************************************************/
 package egl.lang;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.edt.javart.Delegate;
 
-public interface EglList<T> extends EglAny, java.util.List<T> {
+public interface EglList<T> extends EglAny, List<T> {
 
-	public EglList<T> appendAll(Collection<? extends T> collection);
+	public EglList<T> appendAll(List<? extends T> list);
 
 	public EglList<T> appendElement(T element);
 
@@ -35,9 +35,17 @@ public interface EglList<T> extends EglAny, java.util.List<T> {
 
 	public void removeElement(int index);
 
-	public void resize(int size, Class<T> elementClass);
+	public void resize(int size, ListElementFactory<? extends T> factory);
 
 	public void setElement(T element, int index);
 
 	public void sort(Delegate sortFunction);
+
+	/**
+	 * API of objects that can create elements for Lists.
+	 */
+	public interface ListElementFactory<EltT>
+	{
+		public EltT newElement();
+	}
 }

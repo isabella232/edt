@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.runtime.java.egl.lang;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import org.eclipse.edt.javart.Constants;
@@ -45,26 +46,19 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 	}
 
 	/**
-	 * Creates a list of the specified size, with elements initialized by using
-	 * the default constructor of the specified Class.
+	 * Creates a list of the specified size, with elements initialized using 
+	 * the factory.
 	 */
-	public EglList(int initialSize, Class<T> elementClass) {
+	public EglList(int initialSize, ListElementFactory<? extends T> factory) {
 		list = new ArrayList<T>(initialSize);
 		for (int i = 0; i < initialSize; i++) {
-			try
-			{
-				list.add( elementClass.newInstance() );
-			}
-			catch ( Exception ex )
-			{
-				throw new InvalidArgumentException();
-			}
+			list.add( factory.newElement() );
 		}
 	}
 
 	// the following group of methods implements the edt version, which means that the indexes are relative to 1
 	@Override
-	public EglList<T> appendAll(Collection<? extends T> c) {
+	public EglList<T> appendAll(List<? extends T> c) {
 		list.addAll(c);
 		return this;
 	}
@@ -119,9 +113,9 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 			throw new InvalidIndexException();
 		list.remove(index - 1);
 	}
-
+	
 	@Override
-	public void resize( int size, Class<T> elementClass ) 
+	public void resize( int size, ListElementFactory<? extends T> factory ) 
 	{
 		if ( size == 0 )
 		{
@@ -130,7 +124,7 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 		else if ( size > list.size() )
 		{
 			// Add elements to the end of the list.
-			if ( elementClass == null )
+			if ( factory == null )
 			{
 				// The elements are nullable, so add nulls.
 				for ( int needed = size - list.size(); needed > 0; needed-- )
@@ -140,18 +134,10 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 			}
 			else
 			{
-				// The elements aren't nullable, so add new instances using the
-				// class's default constructor.
+				// The elements aren't nullable, so add new instances using the factory.
 				for ( int needed = size - list.size(); needed > 0; needed-- )
 				{
-					try
-					{
-						list.add( elementClass.newInstance() );
-					}
-					catch ( Exception ex )
-					{
-						throw new InvalidArgumentException();
-					}
+					list.add( factory.newElement() );
 				}
 			}
 		}
@@ -327,4 +313,185 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 		return list.toArray(a);
 	}
 
+	
+	/**
+	 * A type of factory for making elements of Lists.  New elements are constructed
+	 * by calling newInstance on the Class.
+	 */
+	public static class ElementFactory<EltT> implements ListElementFactory<EltT>
+	{
+		Class<EltT> elementClass;
+
+		public ElementFactory( Class<EltT> elementClass )
+		{
+			this.elementClass = elementClass;
+		}
+
+		public EltT newElement()
+		{
+			try
+			{
+				return elementClass.newInstance();
+			}
+			catch ( Exception ex )
+			{
+				throw new InvalidArgumentException();
+			}
+		}
+	}
+
+	/**
+	 * A factory for making elements of int Lists.
+	 */
+	public static final ListElementFactory<Integer> IntFactory = 
+			new ListElementFactory<Integer>() 
+			{
+				public Integer newElement()
+				{
+					return 0;
+				}
+			};
+			
+	/**
+	 * A factory for making elements of bigint Lists.
+	 */
+	public static final ListElementFactory<Long> BigintFactory = 
+			new ListElementFactory<Long>() 
+			{
+				public Long newElement()
+				{
+					return 0L;
+				}
+			};
+			
+	/**
+	 * A factory for making elements of smallint Lists.
+	 */
+	public static final ListElementFactory<Short> SmallintFactory = 
+			new ListElementFactory<Short>() 
+			{
+				public Short newElement()
+				{
+					return 0;
+				}
+			};
+			
+	/**
+	 * A factory for making elements of boolean Lists.
+	 */
+	public static final ListElementFactory<Boolean> BooleanFactory = 
+			new ListElementFactory<Boolean>() 
+			{
+				public Boolean newElement()
+				{
+					return Boolean.FALSE;
+				}
+			};
+			
+	/**
+	 * A factory for making elements of string Lists.
+	 */
+	public static final ListElementFactory<String> StringFactory = 
+			new ListElementFactory<String>() 
+			{
+				public String newElement()
+				{
+					return Constants.EMPTY_STRING;
+				}
+			};
+			
+	/**
+	 * A factory for making elements of float Lists.
+	 */
+	public static final ListElementFactory<Double> FloatFactory = 
+			new ListElementFactory<Double>() 
+			{
+				public Double newElement()
+				{
+					return 0.0;
+				}
+			};
+			
+	/**
+	 * A factory for making elements of smallfloat Lists.
+	 */
+	public static final ListElementFactory<Float> SmallfloatFactory = 
+			new ListElementFactory<Float>() 
+			{
+				public Float newElement()
+				{
+					return 0f;
+				}
+			};
+			
+	/**
+	 * A factory for making elements of decimal Lists.
+	 */
+	public static final ListElementFactory<BigDecimal> DecimalFactory = 
+			new ListElementFactory<BigDecimal>() 
+			{
+				public BigDecimal newElement()
+				{
+					return BigDecimal.ZERO;
+				}
+			};
+			
+	/**
+	 * A factory for making elements of date Lists.
+	 */
+	public static final ListElementFactory<Calendar> DateFactory = 
+			new ListElementFactory<Calendar>() 
+			{
+				public Calendar newElement()
+				{
+					return EDate.defaultValue();
+				}
+			};
+			
+	/**
+	 * A type of factory for making elements of timestamp Lists.
+	 */
+	public static class TimestampFactory implements ListElementFactory<Calendar>
+	{
+		int startCode;
+		int endCode;
+		
+		public TimestampFactory( int startCode, int endCode )
+		{
+			this.startCode = startCode;
+			this.endCode = endCode;
+		}
+		
+		public Calendar newElement()
+		{
+			return ETimestamp.defaultValue( startCode, endCode );
+		}
+	}
+	
+	/**
+	 * A type of factory for making elements of multi-dimensional Lists.
+	 */
+	public static class ListFactory<EltT> implements ListElementFactory<EglList<EltT>>
+	{
+		int size;
+		ListElementFactory<EltT> subFactory;
+
+		public ListFactory( int size, ListElementFactory<EltT> subFactory )
+		{
+			this.size = size;
+			this.subFactory = subFactory;
+		}
+
+		public EglList<EltT> newElement()
+		{
+			if ( subFactory != null )
+			{
+				return new EglList<EltT>( size, subFactory );
+			}
+			else
+			{
+				return new EglList<EltT>( size );
+			}
+		}
+	}
 }
