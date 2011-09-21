@@ -12,13 +12,10 @@
 package org.eclipse.edt.ide.deployment.rui.internal.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -38,7 +35,6 @@ import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.deployment.core.IDeploymentConstants;
-import org.eclipse.edt.ide.deployment.core.model.Parameter;
 import org.eclipse.edt.ide.deployment.core.model.RUIApplication;
 import org.eclipse.edt.ide.deployment.core.model.RUIHandler;
 import org.eclipse.edt.ide.deployment.results.DeploymentResultMessageRequestor;
@@ -48,9 +44,9 @@ import org.eclipse.edt.ide.deployment.rui.internal.IConstants;
 import org.eclipse.edt.ide.deployment.rui.internal.preferences.HandlerLocalesList;
 import org.eclipse.edt.ide.deployment.rui.internal.util.DeployLocale;
 import org.eclipse.edt.ide.deployment.rui.internal.util.GenerateHTMLFile;
-import org.eclipse.edt.ide.deployment.rui.internal.util.Utils;
 import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
 import org.eclipse.edt.ide.rui.utils.IFileLocator;
+import org.eclipse.edt.javart.resources.egldd.Parameter;
 
 /**
  *
