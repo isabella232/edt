@@ -203,6 +203,22 @@ public abstract class EglAny implements egl.lang.EglAny {
 		return this;
 	}
 
+	public static boolean equals(Object object1, Object object2) {
+		Object unboxedOp1 = object1 instanceof egl.lang.EglAny ? ((egl.lang.EglAny)object1).ezeUnbox() : object1;
+		Object unboxedOp2 = object2 instanceof egl.lang.EglAny ? ((egl.lang.EglAny)object2).ezeUnbox() : object2;
+		if (unboxedOp1 == null || unboxedOp2 == null)
+			return false;
+		return unboxedOp1.equals(unboxedOp2);
+	}
+
+	public static boolean notEquals(Object object1, Object object2) {
+		Object unboxedOp1 = object1 instanceof egl.lang.EglAny ? ((egl.lang.EglAny)object1).ezeUnbox() : object1;
+		Object unboxedOp2 = object2 instanceof egl.lang.EglAny ? ((egl.lang.EglAny)object2).ezeUnbox() : object2;
+		if (unboxedOp1 == null || unboxedOp2 == null)
+			return false;
+		return !unboxedOp1.equals(unboxedOp2);
+	}
+
 	/**
 	 * Subclasses of this method that contain fields with types that can be parameterized with constraints such as length, precision
 	 * decimals, pattern, etc. should override this method to return the particular constraints set each field.  These 
