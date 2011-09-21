@@ -50,7 +50,7 @@ public class TimestampTypeTemplate extends JavaTemplate {
 		out.print(getEndPattern(pattern));
 	}
 
-	private String getStartPattern(String pattern) {
+	public static String getStartPattern(String pattern) {
 		if (pattern.startsWith("yyyy"))
 			return "YEAR_CODE";
 		else if (pattern.startsWith("MM"))
@@ -68,7 +68,7 @@ public class TimestampTypeTemplate extends JavaTemplate {
 		return "";
 	}
 
-	private String getEndPattern(String pattern) {
+	public static String getEndPattern(String pattern) {
 		if (pattern.endsWith("yyyy"))
 			return "YEAR_CODE";
 		else if (pattern.endsWith("MM"))
