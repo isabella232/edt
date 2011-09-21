@@ -11,10 +11,13 @@
 package org.eclipse.edt.javart.services.servlet;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.services.ServiceBase;
+import org.eclipse.edt.javart.util.JavaAliaser;
 
 import egl.lang.AnyException;
 import eglx.services.ServiceKind;
@@ -27,6 +30,9 @@ public abstract class LocalServiceInvoker extends Invoker{
 	private ServiceKind serviceKind;
 	private ServiceBase service;
 	private Class<ServiceBase> serviceClass;
+	
+	private static Map<String, String> cachedAliases = new HashMap<String, String>();
+	
 	public LocalServiceInvoker(String serviceClassName, ServiceKind serviceKind) {
 		this.serviceClassName = serviceClassName;
 		this.serviceKind = serviceKind;
@@ -58,7 +64,19 @@ public abstract class LocalServiceInvoker extends Invoker{
 	{
 		if(serviceClass == null){
 			try {
-				serviceClass = (Class<ServiceBase>)Class.forName( serviceClassName, true, Runtime.getRunUnit().getClass().getClassLoader() );
+				String aliasedServiceClassName = cachedAliases.get(serviceClassName);
+				if(aliasedServiceClassName == null){
+					int idx = serviceClassName.lastIndexOf('.');
+					if( idx != -1){
+						StringBuilder buf = new StringBuilder(JavaAliaser.packageNameAlias(serviceClassName.substring(0, idx)));
+						aliasedServiceClassName = buf.append('.').append(JavaAliaser.getAlias(serviceClassName.substring(idx + 1))).toString();
+					}
+					else{
+						aliasedServiceClassName = JavaAliaser.getAlias(aliasedServiceClassName);
+					}
+					cachedAliases.put(serviceClassName, aliasedServiceClassName);
+				}
+				serviceClass = (Class<ServiceBase>)Class.forName( aliasedServiceClassName, true, Runtime.getRunUnit().getClass().getClassLoader() );
 			} 
 			catch(Exception e)
 			{
