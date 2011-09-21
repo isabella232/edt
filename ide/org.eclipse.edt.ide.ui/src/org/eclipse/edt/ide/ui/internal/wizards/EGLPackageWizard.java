@@ -36,6 +36,7 @@ public class EGLPackageWizard extends Wizard implements INewWizard {
 	public EGLPackageWizard() {
 		super();
 		setDefaultPageImageDescriptor(PluginImages.DESC_WIZBAN_NEWPACK);
+		setNeedsProgressMonitor(true);
 	}	
 
 	/* (non-Javadoc)
