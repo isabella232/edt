@@ -11,10 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.egl.lang;
 
+import java.util.List;
+
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
+import org.eclipse.edt.gen.java.templates.TimestampTypeTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.*;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class ListTypeTemplate extends JavaTemplate 
 {
@@ -29,9 +33,9 @@ public class ListTypeTemplate extends JavaTemplate
 			ctx.invoke( genExpression, expr.getArguments().get( 0 ), ctx, out );
 			if ( !arrayType.elementsNullable() )
 			{
-				// Pass in the elementClass so we can create the elements.
+				// Pass in the elementArg so we can create the elements.
 				out.print( ", " );
-				elementClass( arrayType, ctx, out );
+				elementArg( arrayType, ctx, out, expr.getArguments(), 1 );
 			}
 		}
 		out.print( ')' );
@@ -39,7 +43,7 @@ public class ListTypeTemplate extends JavaTemplate
 
 	public void genContainerBasedInvocation( Type type, Context ctx, TabbedWriter out, Expression expr )
 	{
-		// The resize function is a special case.  We have to pass in the elementClass
+		// The resize function is a special case.  We have to pass in the elementArg
 		// so we can create the elements.
 		InvocationExpression invExpr = (InvocationExpression)expr;
 		if ( invExpr.getId().equalsIgnoreCase( "resize" ) )
@@ -49,7 +53,7 @@ public class ListTypeTemplate extends JavaTemplate
 			out.print( ".resize(" );
 			ctx.invoke( genExpression, invExpr.getArguments().get( 0 ), ctx, out );
 			out.print( ", " );
-			elementClass( (ArrayType)array.getType(), ctx, out );
+			elementArg( (ArrayType)array.getType(), ctx, out, null, 0 );
 			out.print( ')' );
 		}
 		else
@@ -58,7 +62,8 @@ public class ListTypeTemplate extends JavaTemplate
 		}
 	}
 	
-	private void elementClass( ArrayType arrayType, Context ctx, TabbedWriter out )
+	private void elementArg( ArrayType arrayType, Context ctx, TabbedWriter out, 
+			List<Expression> dimensionSizes, int whichDimension )
 	{
 		if ( arrayType.elementsNullable() )
 		{
@@ -66,8 +71,81 @@ public class ListTypeTemplate extends JavaTemplate
 		}
 		else
 		{
-			ctx.invoke( genRuntimeTypeName, arrayType.getElementType(), ctx, out, TypeNameKind.JavaObject );
-			out.print( ".class" );
+			Type elementType = arrayType.getElementType();
+			if ( elementType instanceof ArrayType )
+			{
+				ArrayType elementArrayType = (ArrayType)elementType;
+				out.print( "new org.eclipse.edt.runtime.java.egl.lang.EglList.ListFactory<" );
+				ctx.invoke( genRuntimeTypeName, elementArrayType.getElementType(), ctx, out, TypeNameKind.JavaObject );
+				out.print( ">(" );
+				if ( dimensionSizes == null )
+				{
+					out.print( 0 );
+				}
+				else
+				{
+					ctx.invoke( genExpression, dimensionSizes.get( whichDimension ), ctx, out );
+				}
+				out.print( ',' );
+				elementArg( elementArrayType, ctx, out, dimensionSizes, whichDimension + 1 );
+				out.print( ')' );
+			}
+			else
+			{
+				switch ( TypeUtils.getTypeKind( elementType ) )
+				{
+					case TypeUtils.TypeKind_INT:
+						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.IntFactory" );
+						break;
+					case TypeUtils.TypeKind_SMALLINT:
+						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.SmallintFactory" );
+						break;
+					case TypeUtils.TypeKind_BIGINT:
+						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.BigintFactory" );
+						break;
+					case TypeUtils.TypeKind_FLOAT:
+						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.FloatFactory" );
+						break;
+					case TypeUtils.TypeKind_SMALLFLOAT:
+						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.SmallfloatFactory" );
+						break;
+					case TypeUtils.TypeKind_DECIMAL:
+						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.DecimalFactory" );
+						break;
+					case TypeUtils.TypeKind_BOOLEAN:
+						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.BooleanFactory" );
+						break;
+					case TypeUtils.TypeKind_STRING:
+						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.StringFactory" );
+						break;
+					case TypeUtils.TypeKind_DATE:
+						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.DateFactory" );
+						break;
+					case TypeUtils.TypeKind_TIMESTAMP:
+						TimestampType tsType = (TimestampType)elementType;
+						String pattern = "yyyyMMddhhmmss";
+						if ( tsType.getPattern() != null && !tsType.getPattern().equalsIgnoreCase( "null" ) )
+						{
+							pattern = tsType.getPattern();
+						}
+						out.print( "new org.eclipse.edt.runtime.java.egl.lang.EglList.TimestampFactory(" );
+						ctx.invoke( genRuntimeTypeName, tsType, ctx, out, TypeNameKind.EGLImplementation );
+						out.print( '.' );
+						out.print( TimestampTypeTemplate.getStartPattern( pattern ) );
+						out.print( ',' );
+						ctx.invoke( genRuntimeTypeName, tsType, ctx, out, TypeNameKind.EGLImplementation );
+						out.print( '.' );
+						out.print( TimestampTypeTemplate.getEndPattern( pattern ) );
+						out.print( ')' );
+						break;
+					default:
+						out.print( "new org.eclipse.edt.runtime.java.egl.lang.EglList.ElementFactory<" );
+						ctx.invoke( genRuntimeTypeName, elementType, ctx, out, TypeNameKind.EGLImplementation );
+						out.print( ">(" );
+						ctx.invoke( genRuntimeTypeName, elementType, ctx, out, TypeNameKind.EGLImplementation );
+						out.print( ".class)" );
+				}
+			}
 		}
 	}
 }
