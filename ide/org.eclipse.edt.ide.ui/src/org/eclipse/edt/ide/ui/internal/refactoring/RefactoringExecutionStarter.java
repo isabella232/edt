@@ -36,10 +36,8 @@ import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
-import org.eclipse.edt.ide.ui.internal.deployment.Restservice;
-import org.eclipse.edt.ide.ui.internal.deployment.Restservices;
-import org.eclipse.edt.ide.ui.internal.deployment.Webservice;
-import org.eclipse.edt.ide.ui.internal.deployment.Webservices;
+import org.eclipse.edt.ide.ui.internal.deployment.Service;
+import org.eclipse.edt.ide.ui.internal.deployment.Services;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 import org.eclipse.edt.ide.ui.internal.refactoring.rename.RenameEGLFileProcessor;
 import org.eclipse.edt.ide.ui.internal.refactoring.rename.RenameEGLFileWizard;
@@ -122,8 +120,7 @@ public final class RefactoringExecutionStarter {
 			try {
 				deploymentRoot = EGLDDRootHelper.getEGLDDFileSharedWorkingModel(eglddFile, false);
 				Deployment deployment = deploymentRoot.getDeployment();
-				Webservices wss = deployment.getWebservices();
-				Restservices rss = deployment.getRestservices();
+				Services services = deployment.getServices();
 				
 				for(int i=0; i< removedFiles.length; i++) {
 					if(removedFiles[i] instanceof IEGLFile) {
@@ -135,29 +132,16 @@ public final class RefactoringExecutionStarter {
 							fullyQualifiedServiceName = packageName + '.' + fileName;
 							
 							//Remove service binding
-							if(rss != null) {
-								Restservice removedService = null;
-								for(Restservice restService : rss.getRestservice()) {
+							if(services != null) {
+								Service removedService = null;
+								for(Service restService : services.getService()) {
 									if(fullyQualifiedServiceName.equals(restService.getImplementation())) {
 										removedService = restService;
 										break;
 									}
 								}
 								if(removedService != null) {
-									rss.getRestservice().remove(removedService);
-								}
-							}
-							
-							if(wss != null) {
-								Webservice removedSoap = null;
-								for(Webservice soapService : wss.getWebservice()) {
-									if(fullyQualifiedServiceName.equals(soapService.getImplementation())) {
-										removedSoap = soapService;
-										break;
-									}
-								}
-								if(removedSoap != null) {
-									wss.getWebservice().remove(removedSoap);
+									services.getService().remove(removedService);
 								}
 							}
 							

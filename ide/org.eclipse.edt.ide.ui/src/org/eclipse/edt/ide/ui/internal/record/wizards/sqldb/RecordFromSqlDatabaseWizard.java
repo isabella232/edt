@@ -28,11 +28,12 @@ import org.eclipse.edt.compiler.internal.EGLBasePlugin;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceGenerator;
 import org.eclipse.edt.ide.internal.sql.util.EGLSQLUtility;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
+import org.eclipse.edt.ide.ui.internal.deployment.Binding;
 import org.eclipse.edt.ide.ui.internal.deployment.Bindings;
 import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
-import org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding;
+import org.eclipse.edt.ide.ui.internal.deployment.Parameter;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 import org.eclipse.edt.ide.ui.internal.record.NewRecordSummaryPage;
 import org.eclipse.edt.ide.ui.internal.record.NewRecordWizard;
@@ -41,6 +42,7 @@ import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.eclipse.edt.ide.ui.internal.util.UISQLUtility;
 import org.eclipse.edt.ide.ui.templates.wizards.TemplateWizard;
 import org.eclipse.edt.ide.ui.wizards.BindingSQLDatabaseConfiguration;
+import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangingEvent;
@@ -201,12 +203,22 @@ public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWork
 							bindings = factory.createBindings();
 							deployment.setBindings(bindings);
 						}
-						EList<SQLDatabaseBinding> existedSqlBindings = bindings.getSqlDatabaseBinding();
+						EList<Binding> existedBindings = bindings.getBinding();
 						
 						boolean existed = false;
-						for(SQLDatabaseBinding dbBinding : existedSqlBindings) {
-							if(sqlConfig.getDbms().equals(dbBinding.getDbms())) {
-								existed = true;
+						for(Binding binding : existedBindings) {
+							if (org.eclipse.edt.javart.resources.egldd.Binding.BINDING_DB_SQL.equals(binding.getType())) {
+								if (binding.getParameters() != null) {
+									for (Parameter p : binding.getParameters().getParameter()) {
+										if(SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_dbms.equals(p.getName()) && sqlConfig.getDbms().equals(p.getValue())) {
+											existed = true;
+											break;
+										}
+									}
+								}
+							}
+							
+							if (existed) {
 								break;
 							}
 						}
