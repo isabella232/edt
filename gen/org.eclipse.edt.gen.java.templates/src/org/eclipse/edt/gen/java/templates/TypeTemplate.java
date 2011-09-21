@@ -182,29 +182,43 @@ public class TypeTemplate extends JavaTemplate {
 
 	public void genAssignment(Type type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
 		// if the lhs is non-nullable but the rhs is nullable, we have a special case
-		if (!TypeUtils.isReferenceType(arg1.getType()) && !arg1.isNullable() && arg2.isNullable()) {
-			// if this is a well-behaved assignment, we can avoid the temporary
-			if (IRUtils.hasSideEffects(arg2)) {
-				String temporary = ctx.nextTempName();
-				ctx.invoke(genRuntimeTypeName, arg1.getType(), ctx, out, TypeNameKind.JavaObject);
-				out.print(" " + temporary + " = ");
-				ctx.invoke(genExpression, arg2, ctx, out);
-				out.println(";");
-				ctx.invoke(genExpression, arg1, ctx, out);
-				out.print(arg3 + " (");
-				ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
-				out.print(") org.eclipse.edt.javart.util.JavartUtil.checkNullable(" + temporary + ")");
-			} else if (TypeUtils.isReferenceType(arg2.getType())) {
-				ctx.invoke(genExpression, arg1, ctx, out);
-				out.print(arg3);
-				ctx.invoke(genExpression, arg2, ctx, out);
-			} else {
+		if (!arg1.isNullable() && arg2.isNullable()) {
+			if (TypeUtils.isReferenceType(arg1.getType())) {
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(arg3 + " (");
 				ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
 				out.print(") org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
 				ctx.invoke(genExpression, arg2, ctx, out);
 				out.print(")");
+				// check to see if we are unboxing RHS temporary variables (inout and out types only)
+				if (arg2 instanceof MemberName
+					&& ctx.getAttribute(((MemberName) arg2).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
+					&& ctx.getAttribute(((MemberName) arg2).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN)
+					out.print(".ezeUnbox()");
+			} else {
+				// if this is a well-behaved assignment, we can avoid the temporary
+				if (IRUtils.hasSideEffects(arg2)) {
+					String temporary = ctx.nextTempName();
+					ctx.invoke(genRuntimeTypeName, arg1.getType(), ctx, out, TypeNameKind.JavaObject);
+					out.print(" " + temporary + " = ");
+					ctx.invoke(genExpression, arg2, ctx, out);
+					out.println(";");
+					ctx.invoke(genExpression, arg1, ctx, out);
+					out.print(arg3 + " (");
+					ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
+					out.print(") org.eclipse.edt.javart.util.JavartUtil.checkNullable(" + temporary + ")");
+				} else if (TypeUtils.isReferenceType(arg2.getType())) {
+					ctx.invoke(genExpression, arg1, ctx, out);
+					out.print(arg3);
+					ctx.invoke(genExpression, arg2, ctx, out);
+				} else {
+					ctx.invoke(genExpression, arg1, ctx, out);
+					out.print(arg3 + " (");
+					ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
+					out.print(") org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
+					ctx.invoke(genExpression, arg2, ctx, out);
+					out.print(")");
+				}
 			}
 		} else {
 			ctx.invoke(genExpression, arg1, ctx, out);
