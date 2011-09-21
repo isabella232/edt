@@ -55,7 +55,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			// BFS traverse
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart) || refPart instanceof Enumeration){
+				if(CommonUtilities.isUserPart(refPart)){
 					ctx.invoke(genOutputFileName, refPart, dependentFiles);
 				}				
 			}
