@@ -31,6 +31,7 @@ import egl.lang.AnyException;
 import egl.lang.InvalidIndexException;
 import egl.lang.NullValueException;
 import eglx.java.JavaObjectException;
+import eglx.persistence.sql.SQLException;
 
 
 /**
@@ -451,6 +452,14 @@ public class JavartUtil
 			nvx.setMessage( msg );
 			
 			return nvx;
+		}
+		else if(ex instanceof java.sql.SQLException){
+			SQLException sql = new SQLException();
+			sql.setMessageID( Message.NULL_REFERENCE );
+			sql.setMessage( msg );
+			sql.setSQLState(((java.sql.SQLException)ex).getSQLState());
+			sql.setErrorCode(((java.sql.SQLException)ex).getErrorCode());
+			return sql; 
 		}
 		else
 		{

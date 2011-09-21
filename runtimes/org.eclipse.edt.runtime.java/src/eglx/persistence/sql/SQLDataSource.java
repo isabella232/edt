@@ -22,6 +22,7 @@ import java.util.Map.Entry;
 
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.resources.RecoverableResource;
+import org.eclipse.edt.javart.util.JavartUtil;
 
 import egl.lang.AnyException;
 
@@ -50,7 +51,7 @@ public class SQLDataSource implements RecoverableResource {
 			try {
 				conn = DriverManager.getConnection(connectionUrl);
 			} catch (java.sql.SQLException e) {
-				throw new SQLException(e);
+				throw JavartUtil.makeEglException(e);
 			}
 		}
 		return conn;
@@ -58,24 +59,26 @@ public class SQLDataSource implements RecoverableResource {
 
 	@Override
 	public void commit(RunUnit ru) throws AnyException {
-		if (conn != null) {
-			try {
+		try {
+			if(conn != null){
 				conn.commit();
-			} catch (java.sql.SQLException e) {
-				throw new SQLException(e);
 			}
+		} catch (java.sql.SQLException e) {
+			throw JavartUtil.makeEglException(e);
 		}
+		
 	}
 
 	@Override
 	public void rollback(RunUnit ru) throws AnyException {
-		if (conn != null) {
-			try {
+		try {
+			if(conn != null){
 				conn.rollback();
-			} catch (java.sql.SQLException e) {
-				throw new SQLException(e);
 			}
+		} catch (java.sql.SQLException e) {
+			throw JavartUtil.makeEglException(e);
 		}
+		
 	}
 
 	@Override
@@ -85,11 +88,11 @@ public class SQLDataSource implements RecoverableResource {
 				for (Statement s : entry.getValue())
 				s.close();
 			}
-			if (conn != null) {
+			if(conn != null){
 				conn.close();
 			}
 		} catch (java.sql.SQLException e) {
-			throw new SQLException(e);
+			throw JavartUtil.makeEglException(e);
 		}
 		
 	}
@@ -103,11 +106,11 @@ public class SQLDataSource implements RecoverableResource {
 					for (Statement s : entry.getValue())
 					s.close();
 				}
-				if (conn != null) {
+				if(conn != null){
 					conn.close();
 				}
 			} catch (java.sql.SQLException e) {
-				throw new SQLException(e);
+				throw JavartUtil.makeEglException(e);
 			}
 		}
 		
@@ -144,7 +147,7 @@ public class SQLDataSource implements RecoverableResource {
 			SetSchema.setString(1, schema);
 			SetSchema.executeUpdate();
 		} catch (java.sql.SQLException e) {
-			throw new SQLException(e);
+			throw JavartUtil.makeEglException(e);
 		}
 	}
 }

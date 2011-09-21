@@ -13,6 +13,8 @@ package eglx.persistence.sql;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 
+import org.eclipse.edt.javart.util.JavartUtil;
+
 public class SQLResultSet {
 	private ResultSet resultSet;
 	private String[] updateFieldNames;
@@ -61,7 +63,7 @@ public class SQLResultSet {
 		try {
 			return resultSet.absolute(row);
 		} catch (java.sql.SQLException e) {
-			throw new SQLException(e);
+			throw JavartUtil.makeEglException(e);
 		}
 	}
 	
@@ -69,7 +71,7 @@ public class SQLResultSet {
 		try {
 			return resultSet.relative(rows);
 		} catch (java.sql.SQLException e) {
-			throw new SQLException(e);
+			throw JavartUtil.makeEglException(e);
 		}	
 	}
 
@@ -77,28 +79,28 @@ public class SQLResultSet {
 		try {
 			return resultSet.next();
 		} catch (java.sql.SQLException e) {
-			throw new SQLException(e);
+			throw JavartUtil.makeEglException(e);
 		}	
 	}
 	public boolean setPrevious() throws SQLException {	
 		try {
 			return resultSet.previous();
 		} catch (java.sql.SQLException e) {
-			throw new SQLException(e);
+			throw JavartUtil.makeEglException(e);
 		}	
 	}
 	public boolean setFirst() throws SQLException {	
 		try {
 			return resultSet.first();
 		} catch (java.sql.SQLException e) {
-			throw new SQLException(e);
+			throw JavartUtil.makeEglException(e);
 		}	
 	}
 	public boolean setLast() throws SQLException {	
 		try {
 			return resultSet.last();
 		} catch (java.sql.SQLException e) {
-			throw new SQLException(e);
+			throw JavartUtil.makeEglException(e);
 		}	
 	}
 
@@ -106,7 +108,7 @@ public class SQLResultSet {
 		try {
 			return resultSet.isLast();
 		} catch (java.sql.SQLException e) {
-			throw new SQLException(e);
+			throw JavartUtil.makeEglException(e);
 		}	
 	}
 
@@ -114,7 +116,7 @@ public class SQLResultSet {
 		try {
 			return resultSet.isFirst();
 		} catch (java.sql.SQLException e) {
-			throw new SQLException(e);
+			throw JavartUtil.makeEglException(e);
 		}	
 	}
 
@@ -122,7 +124,7 @@ public class SQLResultSet {
 		try {
 			resultSet.deleteRow();
 		} catch (java.sql.SQLException e) {
-			throw new SQLException(e);
+			throw JavartUtil.makeEglException(e);
 		}
 	}
 	
@@ -130,7 +132,7 @@ public class SQLResultSet {
 		try {
 			resultSet.refreshRow();
 		} catch (java.sql.SQLException e) {
-			throw new SQLException(e);
+			throw JavartUtil.makeEglException(e);
 		}
 	}
 
@@ -138,7 +140,7 @@ public class SQLResultSet {
 		try {
 			resultSet.updateRow();
 		} catch (java.sql.SQLException e) {
-			throw new SQLException(e);
+			throw JavartUtil.makeEglException(e);
 		}
 	}
 	
@@ -146,7 +148,7 @@ public class SQLResultSet {
 		try {
 			resultSet.cancelRowUpdates();
 		} catch (java.sql.SQLException e) {
-			throw new SQLException(e);
+			throw JavartUtil.makeEglException(e);
 		}
 	}
 
