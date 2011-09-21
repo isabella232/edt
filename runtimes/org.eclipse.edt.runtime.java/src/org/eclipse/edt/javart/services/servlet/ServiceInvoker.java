@@ -17,10 +17,7 @@ import org.eclipse.edt.javart.json.JsonUtilities;
 import org.eclipse.edt.javart.json.ObjectNode;
 import org.eclipse.edt.javart.json.ParseException;
 import org.eclipse.edt.javart.json.StringNode;
-import org.eclipse.edt.javart.services.bindings.Binding;
-import org.eclipse.edt.javart.services.bindings.EGLBinding;
-import org.eclipse.edt.javart.services.bindings.ProtocolLOCAL;
-import org.eclipse.edt.javart.services.bindings.WebBinding;
+import org.eclipse.edt.javart.resources.egldd.Binding;
 
 import eglx.services.Encoding;
 
@@ -124,24 +121,15 @@ public abstract class ServiceInvoker extends Invoker
     		return functionName;
     	}
     	protected abstract Object getJsParameters();
-    	protected Binding getBinding()
-    	{
-    		return binding;
-    	}
-    	protected void setBinding( Binding binding )
-    	{
-    		this.binding = binding;
-    	}
 		protected abstract String getParameterOrder();
     }
 
-    FunctionInfo getFunctionInfo( Encoding inEncoding, Encoding outEncoding, String body, EGLBinding binding )
+    FunctionInfo getFunctionInfo( Encoding inEncoding, Encoding outEncoding, String body, boolean b )
     {
     	FunctionInfo info = null;
     	if( inEncoding.equals(ENCODING_JSON) )
     	{
         	info = new JsonFunctionInfo( body, outEncoding );
-        	info.setBinding(binding);
     	}
     	else
     	{
@@ -155,7 +143,6 @@ public abstract class ServiceInvoker extends Invoker
     	if( inEncoding.equals(ENCODING_JSON) )
     	{
         	info = new JsonFunctionInfo( body, outEncoding );
-			setFomBindingNode(info);
     	}
     	else
     	{
@@ -164,201 +151,6 @@ public abstract class ServiceInvoker extends Invoker
 
     	return info;
     }
-   	private void setFomBindingNode( FunctionInfo info )
-   	{
-	   	Binding binding = null;
-		ObjectNode bindingNode = (ObjectNode)JsonUtilities.getValueNode((ObjectNode)info.parsedObject(), BINDING_ID, new ObjectNode() );
-	   	// String bindingType = JsonUtilities.getValueNode(bindingNode, JsonUtilities.BINDING_TYPE_ID, new StringNode("webbinding",false) ).toJava();
-	   	String name = JsonUtilities.getValueNode(bindingNode, BINDING_NAME_ID, new StringNode("",false) ).toJava().trim();
-		if( bindingNode != null )
-		{
-		   	String bindingType = JsonUtilities.getValueNode(bindingNode, BINDING_TYPE_ID, new StringNode("webbinding",false) ).toJava();
-		   	if( bindingType.equalsIgnoreCase(BINDING_WEBTYPE_ID))
-		   	{
-				String interfaceName = JsonUtilities.getValueNode(bindingNode, WEB_BINDING_INTERFACE_ID, new StringNode("",false) ).toJava();
-				if( name == null || name.length() == 0 )
-				{
-					int partNameIdx = interfaceName.lastIndexOf(".") + 1;
-					//set the default name to the interface class name
-					if( partNameIdx == 0 )
-					{
-						name = interfaceName;
-					}
-					else
-					{
-						name = interfaceName.substring( partNameIdx );
-					}
-				}
-				binding = new WebBinding( name,
-						interfaceName,
-						JsonUtilities.getValueNode(bindingNode, WEB_BINDING_WSDL_LOCATION_ID, new StringNode("",false) ).toJava(),
-						JsonUtilities.getValueNode(bindingNode, WEB_BINDING_WSDL_PORT_ID, new StringNode("",false) ).toJava(),
-						JsonUtilities.getValueNode(bindingNode, WEB_BINDING_WSDL_SERVICE_ID, new StringNode("",false) ).toJava(),
-						JsonUtilities.getValueNode(bindingNode, WEB_BINDING_URI_ID, new StringNode("",false) ).toJava() );
-			}
-		   	else if( bindingType.equalsIgnoreCase(BINDING_EGLTYPE_ID))
-		   	{
-		   		/*
-		   		name: this.f_bindingName,
-                type: "EGLBinding",
-                serviceName: this.f_serviceName,
-                alias: this.f_alias,
-                protocol: "local"
-
-		   		 */
-		   		binding = new EGLBinding( 
-		   							JsonUtilities.getValueNode(bindingNode, BINDING_NAME_ID, new StringNode("",false) ).toJava(), 
-		   							JsonUtilities.getValueNode(bindingNode, EGL_BINDING_SERVICE_NAME_ID, new StringNode("",false) ).toJava(), 
-		   							JsonUtilities.getValueNode(bindingNode, EGL_BINDING_ALIAS_ID, new StringNode("",false) ).toJava() );
-				String protocol = JsonUtilities.getValueNode(bindingNode, PROTOCOL_ID, new StringNode("",false) ).toJava();
-		   		if( protocol.equalsIgnoreCase(PROTOCOL_LOCAL_ID) )
-		   		{
-		   			((EGLBinding)binding).setProtocol( new ProtocolLOCAL( "" ) );
-		   		}
-		   		
-		   	}
-		}
-		info.setBinding(binding);
-   	}
-
-/*FIXME   	private static MethodParameter[] getEmptyParameters( ExecutableBase program, ServiceReference ref, FunctionInfo info, IntValue serviceKind ) throws JavartException
-   	{
-   		if( ref instanceof LocalProxy && ((LocalProxy)ref).getServiceReference() instanceof ServiceCore2 )
-   		{
-   	   		if( serviceKind == ServiceKind.REST )
-   	   		{
-   	   			return ((ServiceCore2)((LocalProxy)ref).getServiceReference()).parametersByOperationName( info.getOperationName() );
-   	   		}
-   	   		else
-   	   		{
-   	   			return ((ServiceCore)((LocalProxy)ref).getServiceReference()).parameters( info.getFunctionName() );
-   	   		}
-   		}
-/*TODO SOAP   		else if( ref instanceof WebProxy )
-   		{
-			return wsdl2EglConversion( program, info );
-   		}
-   		else if( ref instanceof JAXWSReference )
-		{
-			return ((JAXWSReference)ref).parameters( info.getFunctionName() );
-		}
-   		else if( ref instanceof WASWebProxy )
-		{
-			return ((WASWebProxy)ref).parameters( info.getFunctionName() );
-		}*/
-/*TODO host program service   		else if( ref instanceof HostProgramServiceReference )
-   		{
-   			return ((HostProgramServiceReference)ref).parameters( info.getFunctionName() );
-   		}
-   		return new MethodParameter[0];
-   	}*/
-/*	public String invokeEglService( final FunctionInfo info ) throws ServiceInvocationException
-	{
-		String returnVal = null;
-		ServiceReference ref = null;
-		ExecutableBase program = program();
-		try
-		{
-				setSession(program()._runUnit());
-	
-				if( ref instanceof ExecutableBase )
-				{
-					program = (ExecutableBase)ref;
-				}
-	
-				MethodParameter[] parameters = getEglParameters( program, ref, info, ServiceKind.REST );
-				returnVal = convert2JSON( program,
-						((ServiceCore2)((LocalProxy)ref).getServiceReference()).ezeInvokeByOperationName(info.getOperationName(), info.getFunctionName(), parameters),
-						parameters, info.outEncoding, ServiceKind.REST );
-			
-//			((ExecutableBase)((LocalProxy)ref).getServiceReference())._runUnit().endRunUnit((ExecutableBase)((LocalProxy)ref).getServiceReference());
-		}
-		catch (ServiceInvocationException sie)
-		{
-			throw sie;
-		}
-		catch (Throwable t)
-		{
-			AnyException sie;
-			if( info == null )
-			{
-				sie = ServiceUtilities.buildServiceInvocationException( program._runUnit(), Message.SOA_E_WS_PROXY_REST, new String[] {"unknown", "unknown"}, t, servicek );
-			}
-			else
-			{
-				sie = ServiceUtilities.buildServiceInvocationException( program._runUnit(), Message.SOA_E_WS_PROXY_REST, new String[] {info.getBinding().getName(), info.getFunctionName()}, t, ServiceKind.REST );
-			}
-			if( sie instanceof ServiceInvocationException )
-			{
-				throw (ServiceInvocationException)sie;
-			}
-			else
-			{
-				returnVal = eglx.json.JsonUtilities.createJsonAnyException(program._runUnit(),sie);
-			}
-		}
-		finally
-		{
-			try
-			{
-//				removeSession( ((ExecutableBase)((LocalProxy)ref).getServiceReference())._runUnit() );
-			}
-			catch( AnyException j ){}
-		}
-		return returnVal;
-	}
-
-
-	protected void setSession( RunUnit runUnit )
-	{
-	}
-
-	protected void endSession( RunUnit runUnit )
-	{
-	}
-
-	protected void removeSession( RunUnit runUnit )
-	{
-	}
-/*FIXME	private static String invokeService( ExecutableBase program, ServiceReference ref, FunctionInfo info, int outEncoding, ServiceKind serviceKind ) throws Exception
-	{
-		if( ref instanceof ExecutableBase )
-		{
-			program = (ExecutableBase)ref;
-		}
-
-		MethodParameter[] parameters = getEglParameters( program, ref, info, serviceKind );
-		return convert2JSON( program,
-					ref.ezeInvoke( info.getOperationName(), info.getFunctionName(), parameters),
-					parameters, outEncoding, serviceKind );
-	}
-
-	private static MethodParameter[] getEglParameters( ExecutableBase program, ServiceReference ref, FunctionInfo info, IntValue serviceKind ) throws JavartException
-	{
-		MethodParameter[] parameters = null;
-		parameters = getEmptyParameters(program, ref, info, serviceKind );
-		assignByPosition(program, info.getJsParameters(), parameters, serviceKind);
-		return parameters;
-	}*/
-
-/*FIXME	private static String convert2JSON( ExecutableBase program, Object eglFunctionReturn, MethodParameter[] parameters, int outEncoding, IntValue serviceKind ) throws JavartException
-	{
-		String returnVal = null;
-		if( parameters.length > 0 && parameters[parameters.length-1].parameterKind() == MethodParameter.RETURN )
-		{
-			Assign.run( program, parameters[parameters.length-1].parameter(), eglFunctionReturn );
-		}
-		if( outEncoding == ENCODING_JSON )
-		{
-			returnVal = convert2JsonByPosition( program, parameters, serviceKind).toJson();
-		}
-		else if( outEncoding == ENCODING_XML )
-		{
-			//FIXME
-		}
-		return returnVal;
-	}*/
-
 	private ObjectNode getJsonParameters( String body )
 	{
 		ObjectNode payload;
@@ -372,79 +164,6 @@ public abstract class ServiceInvoker extends Invoker
 		}
 		return payload;
 	}
-/*FIXME	private static ObjectNode convert2JsonByPosition( ExecutableBase program, MethodParameter[] parameters, ServiceKind serviceKind)
-		throws JavartException
-	{
-		//1 or less return parameters will only be returned as an object
-		ObjectNode result = new ObjectNode();
-		ArrayNode returnParams = new ArrayNode();
-		int paramKind;
-		int returnCnt = 0;
-		for( int idx = 0; idx < parameters.length; idx++ )
-		{
-			paramKind = parameters[idx].parameterKind();
-			try
-			{
-				if( paramKind != MethodParameter.IN )
-				{
-					returnCnt++;
-					if( paramKind == MethodParameter.OUT && ProxyUtilities.hasExtraOutParameter( parameters[idx].parameter()) )
-					{
-						//references have an extra parameter and the second has the value
-						idx++;
-					}
-					returnParams.addValue( EGLToJSONConverter.convertToJson(program, parameters[idx].parameter() ) );
-				}
-			}
-			catch( JavartException jrte )
-			{
-				throw ServiceUtilities.buildServiceInvocationException( program, Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, new String[]{((Storage)parameters[idx].parameter()).name(), ConvertToString.run( program, parameters[idx].parameter() ) }, jrte, serviceKind );
-			}
-
-		}
-		if( returnCnt > 1 )
-		{
-			result.addPair( new NameValuePairNode( new StringNode( JSON_RPC_RESULT_ID, true ), returnParams ) );
-		}
-		else if( returnCnt == 1 )
-		{
-			result.addPair( new NameValuePairNode( new StringNode( JSON_RPC_RESULT_ID, true ), (ValueNode)returnParams.getValues().get( 0 ) ) );
-		}
-		return result;
-	}
-
-	private static void assignByPosition( ExecutableBase program, Object jsParameters, MethodParameter[] parameters, ServiceKind serviceKind) throws JavartException
-	{
-		if( jsParameters instanceof ArrayNode )
-		{
-			List<ValueNode> jsonValues = ((ArrayNode)jsParameters).getValues();
-			int jsonValuesIdx = 0;
-			ValueNode jsonValue = null;
-			for( int idx = 0; idx < parameters.length; idx++ )
-			{
-				try
-				{
-					if( parameters[idx].parameterKind() != MethodParameter.OUT && parameters[idx].parameterKind() != MethodParameter.RETURN )
-					{
-						if( jsonValuesIdx < jsonValues.size() )
-						{
-							jsonValue = jsonValues.get( jsonValuesIdx++ );
-							JSONToEGLConverter.convertToEgl(program, parameters[idx].parameter(), jsonValue );
-						}
-						else
-						{
-							//FIXME throw invalid values
-						}
-					}
-				}
-				catch( JavartException jrte )
-				{
-					throw ServiceUtilities.buildServiceInvocationException( program, Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, new String[]{((Storage)parameters[idx].parameter()).name(), jsonValue.toJava() }, jrte, serviceKind );
-				}
-			}
-		}
-	}*/
-
 
 	public void setUserId( String userId )
 	{
