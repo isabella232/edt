@@ -204,7 +204,5 @@ public class JavaGenerator extends Generator {
 
 	@Override
 	public void generate(Object objectClass) throws GenerationException {
-		// TODO Auto-generated method stub
-		
 	}
 }
