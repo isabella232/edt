@@ -35,7 +35,7 @@ public class DataTemplate {
 		this.purposes = new EnumerationEntry[0];
 		this.template = "";
 		this.widgetDescriptor = widgetDescriptor;
-		this.genController = true;
+		this.genController = false;
 	}
 	public String getName() {
 		return name;

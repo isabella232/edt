@@ -381,7 +381,7 @@ public class WidgetDescriptorFactory {
 					Boolean isContainer = (Boolean)dataMappingAnnotation.getValue(DATA_MAPPING_IS_CONTAINER);
 					dataTemplate.getDataMapping().setContainer(isContainer);
 					
-					// isContainer
+					// isDefault
 					Boolean isDefault = (Boolean)dataMappingAnnotation.getValue(DATA_MAPPING_IS_DEFAULT);
 					dataTemplate.getDataMapping().setDefault(isDefault);
 					

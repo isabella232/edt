@@ -25,7 +25,7 @@ public class DataMapping {
 		this.dataTemplate = dataTemplate;
 		this.forArray = false;
 		this.isContainer = false;
-		this.genChildWidget = true;
+		this.genChildWidget = false;
 		this.isDefault = false;
 		this.mappings = new EnumerationEntry[0];
 	}
