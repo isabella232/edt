@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.util.EGLMessage;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
+import org.eclipse.edt.ide.deployment.core.model.DeploymentDescUtil;
 import org.eclipse.edt.ide.deployment.operation.AbstractDeploymentOperation;
 import org.eclipse.edt.ide.deployment.results.DeploymentResultMessageRequestor;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
@@ -59,7 +60,7 @@ public class GenerateServiceBindXMLFileOperation extends AbstractDeploymentOpera
 		String javaSourceFolder = EclipseUtilities.getJavaSourceFolderName( context.getTargetProject() );
 
 		try {
-			InputStream is = new ByteArrayInputStream(ddModel.toBindXML().getBytes("UTF-8"));
+			InputStream is = new ByteArrayInputStream(DeploymentDescUtil.convertToBindXML(ddModel).getBytes("UTF-8"));
 		
 			IPath targetFilePath = new Path( "/" + context.getTargetProject().getName() + "/" + javaSourceFolder + "/" + ddModel.getName().toLowerCase() + BIND_XML_FILE_SUFFIX ); 
 			
