@@ -32,9 +32,7 @@ public class EGLDDBindingConfiguration extends EGLPartConfiguration {
 	
 	private int fBindingType=BINDINGTYPE_REST;
 
-	private BindingWebConfiguration fBindingWebConfig;
 	private BindingEGLConfiguration fBindingEGLConfig;
-	private BindingNativeConfiguration fBindingNativeConfig;
 	private BindingRestConfiguration fBindingRestConfig;
 	private BindingSQLDatabaseConfiguration fBindingSQLConfig;
 	private IWorkbench fWorkbench;
@@ -55,12 +53,6 @@ public class EGLDDBindingConfiguration extends EGLPartConfiguration {
 		fBindingType = bindingType;
 	}
 
-	public BindingWebConfiguration getBindingWebConfiguration() {
-		if(fBindingWebConfig == null)
-			fBindingWebConfig = new BindingWebConfiguration(fWorkbench, fProj);
-		return fBindingWebConfig;
-	}
-		
 	public EGLDeploymentRoot getDeploymentRoot(){
 		return fDeploymentRoot;
 	}
@@ -69,12 +61,6 @@ public class EGLDDBindingConfiguration extends EGLPartConfiguration {
 		if(fBindingEGLConfig == null)
 			fBindingEGLConfig = new BindingEGLConfiguration(fDeploymentRoot, fProj);
 		return fBindingEGLConfig;
-	}
-	
-	public BindingNativeConfiguration getBindingNativeConfiguration(){
-		if(fBindingNativeConfig == null)
-			fBindingNativeConfig = new BindingNativeConfiguration(fDeploymentRoot, fProj);
-		return fBindingNativeConfig;
 	}
 	
 	public BindingRestConfiguration getBindingRestConfiguration(){
@@ -103,16 +89,7 @@ public class EGLDDBindingConfiguration extends EGLPartConfiguration {
 	public Object executeAddBinding(IRunnableContext runnableContext) throws InvocationTargetException, InterruptedException{
 		Bindings bindings = getBindings();
 		Object newBinding = null;
-		if(fBindingType == BINDINGTYPE_WEB){
-			newBinding = fBindingWebConfig.executeAddWebBinding(runnableContext, bindings);
-		}
-		else if(fBindingType == BINDINGTYPE_EGL){
-			newBinding = fBindingEGLConfig.executeAddEGLBinding(bindings);
-		}		
-		else if(fBindingType == BINDINGTYPE_NATIVE){
-			newBinding = fBindingNativeConfig.executeAddNativeBinding(bindings);
-		}
-		else if(fBindingType == BINDINGTYPE_REST){
+		if(fBindingType == BINDINGTYPE_REST){
 			newBinding = fBindingRestConfig.executeAddRestBinding(bindings);
 		}
 		else if(fBindingType == BINDINGTYPE_SQL){

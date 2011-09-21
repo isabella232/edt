@@ -17,15 +17,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.edt.ide.core.internal.search.PartDeclarationInfo;
+import org.eclipse.edt.ide.deployment.core.model.Restservice;
 import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
-import org.eclipse.edt.ide.ui.internal.deployment.Restservice;
-import org.eclipse.edt.ide.ui.internal.deployment.Restservices;
-import org.eclipse.edt.ide.ui.internal.deployment.StyleTypes;
-import org.eclipse.edt.ide.ui.internal.deployment.Webservice;
-import org.eclipse.edt.ide.ui.internal.deployment.Webservices;
-import org.eclipse.emf.common.util.EList;
+import org.eclipse.edt.ide.ui.internal.deployment.Parameters;
+import org.eclipse.edt.ide.ui.internal.deployment.Service;
+import org.eclipse.edt.ide.ui.internal.deployment.Services;
+import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 
 public class WebServicesConfiguration extends EGLPartConfiguration {
 
@@ -72,20 +71,10 @@ public class WebServicesConfiguration extends EGLPartConfiguration {
 			fWSSet = new HashSet();
 		
 		Deployment deployment = deploymentRoot.getDeployment();
-		Webservices wss = deployment.getWebservices();
+		Services wss = deployment.getServices();
 		if(wss != null){
-			EList wsList = wss.getWebservice();
-			for(Iterator it = wsList.iterator(); it.hasNext();){
-				Webservice ws = (Webservice)it.next();
-				fWSSet.add(ws.getImplementation());
-			}
-		}
-		Restservices rss = deployment.getRestservices();
-		if(rss != null){
-			EList rsList = rss.getRestservice();
-			for(Iterator it = rsList.iterator(); it.hasNext();){
-				Restservice rs = (Restservice)it.next();
-				fWSSet.add(rs.getImplementation());
+			for(Service service : wss.getService()){
+				fWSSet.add(service.getImplementation());
 			}
 		}
 	}
@@ -155,40 +144,41 @@ public class WebServicesConfiguration extends EGLPartConfiguration {
 	public String executeAddWebServicesOperation(){
 		Deployment deployment = fDeploymentRoot.getDeployment();
 		DeploymentFactory factory = DeploymentFactory.eINSTANCE;
-		Webservices wss = deployment.getWebservices();
-		if(wss == null){
-			wss = factory.createWebservices();
-			deployment.setWebservices(wss);
-		}
-		Restservices rss = deployment.getRestservices();
-		if(rss == null){
-			rss = factory.createRestservices();
-			deployment.setRestservices(rss);
+		Services services = deployment.getServices();
+		if(services == null){
+			services = factory.createServices();
+			deployment.setServices(services);
 		}
 		
 		List sel = getSelectedServices2BeWS();
-		Webservice newWS = null;
-		Restservice newRS = null;		
+		Service newWS = null;
+		Service newRS = null;
 		for(Iterator it=sel.iterator(); it.hasNext();){
 			PartDeclarationInfo partinfo = (PartDeclarationInfo)it.next();
 			char parttype = partinfo.getPartType();
 			String fqImpl = partinfo.getFullyQualifiedName();
-			{
-				newWS = factory.createWebservice();
-				newWS.setImplementation(fqImpl);
-				newWS.setStyle(StyleTypes.DOCUMENT_WRAPPED);
-				newWS.setEnableGeneration(isGenAsSOAP());
-				newWS.setImplType(parttype);
-				wss.getWebservice().add(newWS);
-			}
+			
+			// SOAP not yet supported. this will need to be updated when supported. see the REST code below.
+//			{
+//				newWS = factory.createWebservice();
+//				newWS.setImplementation(fqImpl);
+//				newWS.setStyle(StyleTypes.DOCUMENT_WRAPPED);
+//				newWS.setEnableGeneration(isGenAsSOAP());
+//				newWS.setImplType(parttype);
+//				services.getWebservice().add(newWS);
+//			}
 			
 			{
-				newRS = factory.createRestservice();
+				newRS = factory.createService();
+				Parameters params = DeploymentFactory.eINSTANCE.createParameters();
+				newRS.setParameters(params);
+				
+				newRS.setType(org.eclipse.edt.ide.deployment.core.model.Service.SERVICE_REST);
 				newRS.setImplementation(fqImpl);
-				newRS.setUri(partinfo.getPartName());
-				newRS.setEnableGeneration(isGenAsRest());
-				newRS.setImplType(parttype);
-				rss.getRestservice().add(newRS);
+				EGLDDRootHelper.addOrUpdateParameter(params, Restservice.ATTRIBUTE_SERVICE_REST_uriFragment, partinfo.getPartName());
+				EGLDDRootHelper.addOrUpdateParameter(params, Restservice.ATTRIBUTE_SERVICE_REST_enableGeneration, isGenAsRest());
+				EGLDDRootHelper.addOrUpdateParameter(params, Restservice.ATTRIBUTE_SERVICE_REST_implType, parttype);
+				services.getService().add(newRS);
 			}
 		}				
 		 

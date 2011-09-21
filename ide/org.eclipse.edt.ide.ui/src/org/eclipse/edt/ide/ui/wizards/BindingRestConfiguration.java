@@ -12,10 +12,12 @@
 package org.eclipse.edt.ide.ui.wizards;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.edt.ide.ui.internal.deployment.Binding;
 import org.eclipse.edt.ide.ui.internal.deployment.Bindings;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
-import org.eclipse.edt.ide.ui.internal.deployment.RestBinding;
+import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
+import org.eclipse.edt.javart.resources.egldd.RestBinding;
 
 public class BindingRestConfiguration extends BindingEGLConfiguration {
 
@@ -67,17 +69,19 @@ public class BindingRestConfiguration extends BindingEGLConfiguration {
 	}
 	
 	public Object executeAddRestBinding(Bindings bindings){
-		RestBinding restBinding = DeploymentFactory.eINSTANCE.createRestBinding();
-		bindings.getRestBinding().add(restBinding);
+		Binding restBinding = DeploymentFactory.eINSTANCE.createBinding();
+		bindings.getBinding().add(restBinding);
 		
+		restBinding.setType(org.eclipse.edt.javart.resources.egldd.Binding.BINDING_SERVICE_REST);
 		restBinding.setName(getBindingName());
-		restBinding.setBaseURI(getBaseUri());
+		restBinding.setUri(getBaseUri());
+		restBinding.setUseURI(true);
 		
 		String sessionCookieId = getSessionCookieId();
-		if(sessionCookieId != null && sessionCookieId.trim().length()>0)
-			restBinding.setSessionCookieId(sessionCookieId);
-		restBinding.setPreserveRequestHeaders(isPreserveRequestHeader());
-		restBinding.setEnableGeneration(true);
+		if(sessionCookieId != null && sessionCookieId.trim().length()>0) {
+			EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(restBinding), RestBinding.ATTRIBUTE_BINDING_REST_sessionCookieId, sessionCookieId);
+		}
+		EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(restBinding), RestBinding.ATTRIBUTE_BINDING_REST_enableGeneration, true);
 		return restBinding;
 	}
 }

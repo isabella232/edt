@@ -45,15 +45,13 @@ import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.model.IProperty;
+import org.eclipse.edt.ide.deployment.core.model.Restservice;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
-import org.eclipse.edt.ide.ui.internal.deployment.Restservice;
-import org.eclipse.edt.ide.ui.internal.deployment.Restservices;
-import org.eclipse.edt.ide.ui.internal.deployment.StyleTypes;
-import org.eclipse.edt.ide.ui.internal.deployment.Webservice;
-import org.eclipse.edt.ide.ui.internal.deployment.Webservices;
+import org.eclipse.edt.ide.ui.internal.deployment.Parameters;
+import org.eclipse.edt.ide.ui.internal.deployment.Services;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 import org.eclipse.edt.ide.ui.internal.editor.util.EGLModelUtility;
 import org.eclipse.edt.ide.ui.internal.templates.TemplateEngine;
@@ -478,31 +476,35 @@ public class ServiceOperation extends EGLFileOperation {
 						Deployment deployment = deploymentRoot.getDeployment();
 						DeploymentFactory factory = DeploymentFactory.eINSTANCE;
 						if(configuration.IsGenAsWebService()) {
-							Webservices wss = deployment.getWebservices();
-							if(wss == null){
-								wss = factory.createWebservices();
-								deployment.setWebservices(wss);
-							}
-							
-							Webservice newWS = factory.createWebservice();							
-							newWS.setImplementation(fullyQualifiedServiceName);
-							newWS.setEnableGeneration(true);
-							newWS.setStyle(StyleTypes.get(StyleTypes.DOCUMENT_WRAPPED_VALUE));
-							wss.getWebservice().add(newWS);
+							//TODO not yet supported. will need to be changed like REST below for new model.
+//							Webservices wss = deployment.getWebservices();
+//							if(wss == null){
+//								wss = factory.createWebservices();
+//								deployment.setWebservices(wss);
+//							}
+//							
+//							Webservice newWS = factory.createWebservice();							
+//							newWS.setImplementation(fullyQualifiedServiceName);
+//							newWS.setEnableGeneration(true);
+//							newWS.setStyle(StyleTypes.get(StyleTypes.DOCUMENT_WRAPPED_VALUE));
+//							wss.getWebservice().add(newWS);
 						}
 						
 						if(configuration.isGenAsRestService()) {
-							Restservices rss = deployment.getRestservices();
+							Services rss = deployment.getServices();
 							if(rss == null){
-								rss = factory.createRestservices();
-								deployment.setRestservices(rss);
+								rss = factory.createServices();
+								deployment.setServices(rss);
 							}
 							
-							Restservice newRS = factory.createRestservice();
+							org.eclipse.edt.ide.ui.internal.deployment.Service newRS = factory.createService();
+							Parameters params = factory.createParameters();
+							newRS.setParameters(params);
+							newRS.setType(org.eclipse.edt.ide.deployment.core.model.Service.SERVICE_REST);
 							newRS.setImplementation(fullyQualifiedServiceName);
-							newRS.setEnableGeneration(true);
-							newRS.setUri(configuration.getServiceName());
-							rss.getRestservice().add(newRS);
+							EGLDDRootHelper.addOrUpdateParameter(params, Restservice.ATTRIBUTE_SERVICE_REST_enableGeneration, true);
+							EGLDDRootHelper.addOrUpdateParameter(params, Restservice.ATTRIBUTE_SERVICE_REST_uriFragment, configuration.getServiceName());
+							rss.getService().add(newRS);
 						}
 						
 						//persist the file if we're the only client 

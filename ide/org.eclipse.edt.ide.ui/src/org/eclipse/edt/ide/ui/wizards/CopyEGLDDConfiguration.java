@@ -18,18 +18,14 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.ide.ui.internal.deployment.Binding;
 import org.eclipse.edt.ide.ui.internal.deployment.Bindings;
 import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage;
-import org.eclipse.edt.ide.ui.internal.deployment.EGLBinding;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
-import org.eclipse.edt.ide.ui.internal.deployment.NativeBinding;
-import org.eclipse.edt.ide.ui.internal.deployment.Protocol;
-import org.eclipse.edt.ide.ui.internal.deployment.Protocols;
-import org.eclipse.edt.ide.ui.internal.deployment.WebBinding;
-import org.eclipse.edt.ide.ui.internal.deployment.Webservice;
-import org.eclipse.edt.ide.ui.internal.deployment.Webservices;
+import org.eclipse.edt.ide.ui.internal.deployment.Service;
+import org.eclipse.edt.ide.ui.internal.deployment.Services;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -55,23 +51,16 @@ public class CopyEGLDDConfiguration extends EGLPartConfiguration {
 				Bindings bindings = deployment.getBindings();
 				if(bindings != null)
 					children.add(bindings);
-				Protocols protocols = deployment.getProtocols();
-				if(protocols != null)
-					children.add(protocols);
-				Webservices wss = deployment.getWebservices();
+				Services wss = deployment.getServices();
 				if(wss != null)
 					children.add(wss);
 			}
 			else if(parentElement instanceof Bindings){
 				Bindings bindings = ((Bindings)parentElement);
-				children.addAll(bindings.getEglBinding());
-				children.addAll(bindings.getNativeBinding());
-				children.addAll(bindings.getWebBinding());
+				children.addAll(bindings.getBinding());
 			}
-			else if(parentElement instanceof Protocols)
-				children.addAll(((Protocols)parentElement).getProtocol());
-			else if(parentElement instanceof Webservices)
-				children.addAll(((Webservices)parentElement).getWebservice());
+			else if(parentElement instanceof Services)
+				children.addAll(((Services)parentElement).getService());
 			return children.toArray();
 		}
 
@@ -105,20 +94,12 @@ public class CopyEGLDDConfiguration extends EGLPartConfiguration {
 			DeploymentPackage pkg = DeploymentPackage.eINSTANCE;
 			if(element instanceof Bindings)
 				return pkg.getBindings().getName();
-			else if(element instanceof Protocols)
-				return pkg.getProtocols().getName();
-			else if(element instanceof Webservices)
-				return pkg.getWebservices().getName();
-			else if(element instanceof EGLBinding)
-				return ((EGLBinding)element).getName();
-			else if(element instanceof NativeBinding)
-				return ((NativeBinding)element).getName();
-			else if(element instanceof WebBinding)
-				return ((WebBinding)element).getName();
-			else if(element instanceof Protocol)
-				return ((Protocol)element).getName();
-			else if(element instanceof Webservice)
-				return ((Webservice)element).getImplementation();
+			else if(element instanceof Services)
+				return pkg.getServices().getName();
+			else if(element instanceof Binding)
+				return ((Binding)element).getName();
+			else if(element instanceof Service)
+				return ((Service)element).getImplementation();
 			return "";			 //$NON-NLS-1$
 		}
 	}
@@ -145,16 +126,10 @@ public class CopyEGLDDConfiguration extends EGLPartConfiguration {
 	}
 
 	public Object getSameNameNodeInCurrentEGLDD(Object element, String currLabel) {
-		if(element instanceof EGLBinding)
-			return EGLDDRootHelper.getEGLBindingByName(fCurrRoot, currLabel);
-		else if(element instanceof NativeBinding)
-			return EGLDDRootHelper.getNativeBindingByName(fCurrRoot, currLabel);
-		else if(element instanceof WebBinding)
-			return EGLDDRootHelper.getWebBindingByName(fCurrRoot, currLabel);
-		else if(element instanceof Protocol)
-			return EGLDDRootHelper.getProtocolByName(fCurrRoot, currLabel);
-		else if(element instanceof Webservice)
-			return EGLDDRootHelper.getWebserviceByImpl(fCurrRoot, currLabel);
+		if(element instanceof Binding)
+			return EGLDDRootHelper.getBindingByName(fCurrRoot, currLabel);
+		else if(element instanceof Service)
+			return EGLDDRootHelper.getServiceByImpl(fCurrRoot, currLabel);
 				
 		return null;
 	}
@@ -168,48 +143,27 @@ public class CopyEGLDDConfiguration extends EGLPartConfiguration {
 		DeploymentFactory factory = DeploymentFactory.eINSTANCE;
 		for(int i=0; i<fSelectedElement.length; i++){
 			EObject eobj = (EObject)fSelectedElement[i];
-			if(eobj instanceof EGLBinding || eobj instanceof WebBinding || eobj instanceof NativeBinding){
+			if(eobj instanceof Binding){
 				Bindings bindings = deployment.getBindings();
 				if(bindings == null){
 					bindings = factory.createBindings();
 					deployment.setBindings(bindings);
 				}
-				if(eobj instanceof EGLBinding){
-					EList list = bindings.getEglBinding();					
-					removeSameNameNode(eobj, ((EGLBinding)eobj).getName(), list);
+				if(eobj instanceof Binding){
+					EList list = bindings.getBinding();					
+					removeSameNameNode(eobj, ((Binding)eobj).getName(), list);
 										
 					list.add(EcoreUtil.copy(eobj));
 				}
-				else if(eobj instanceof NativeBinding){
-					EList list = bindings.getNativeBinding();
-					removeSameNameNode(eobj, ((NativeBinding)eobj).getName(), list);
-					
-					list.add(EcoreUtil.copy(eobj));
-				}
-				else if(eobj instanceof WebBinding){
-					EList list = bindings.getWebBinding();
-					removeSameNameNode(eobj, ((WebBinding)eobj).getName(), list);
-					list.add(EcoreUtil.copy(eobj));
-				}
 			}
-			else if(eobj instanceof Protocol){
-				Protocols protocols = deployment.getProtocols();
-				if(protocols == null){
-					protocols = factory.createProtocols();
-					deployment.setProtocols(protocols);
-				}
-				EList list = protocols.getProtocol();
-				removeSameNameNode(eobj, ((Protocol)eobj).getName(), list);
-				EGLDDRootHelper.setProtocolOnProtocolGroup(protocols.getProtocolGroup(), (Protocol)EcoreUtil.copy(eobj));					
-			}
-			else if(eobj instanceof Webservice){
-				Webservices wss = deployment.getWebservices();
+			else if(eobj instanceof Service){
+				Services wss = deployment.getServices();
 				if(wss == null){
-					wss = factory.createWebservices();
-					deployment.setWebservices(wss);
+					wss = factory.createServices();
+					deployment.setServices(wss);
 				}
-				EList list = wss.getWebservice();
-				removeSameNameNode(eobj, ((Webservice)eobj).getImplementation(), list);
+				EList list = wss.getService();
+				removeSameNameNode(eobj, ((Service)eobj).getImplementation(), list);
 				list.add(EcoreUtil.copy(eobj));
 			}
 		}

@@ -12,21 +12,25 @@
 package org.eclipse.edt.ide.ui.wizards;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.edt.ide.ui.internal.deployment.Binding;
 import org.eclipse.edt.ide.ui.internal.deployment.Bindings;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
-import org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding;
+import org.eclipse.edt.ide.ui.internal.deployment.Parameters;
+import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
+import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
 
 public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
+	
+	private boolean useUri;
+	private String uri;
 	
 	private String dbVendorAndVersion="";
 	private String driverClass="";
 	private String connUrl="";
 	private String userName="";
 	private String password="";
-	
 	private String dbName="";
-	private String jndiName="";
 	private String connLocation;
 	private String bindingName;
 	private String defaultSchema;
@@ -94,12 +98,20 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 		this.dbName = dbName;
 	}
 	
-	public String getJndiName(){
-		return jndiName;
+	public boolean useUri() {
+		return this.useUri;
 	}
 	
-	public void setJndiName(String jndiName){
-		this.jndiName = jndiName;
+	public void setUseUri(boolean useUri) {
+		this.useUri = useUri;
+	}
+	
+	public String getUri(){
+		return uri;
+	}
+	
+	public void setUri(String uri){
+		this.uri = uri;
 	}
 	
 	public String getConnLocation(){
@@ -127,20 +139,30 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 	}
 	
 	public Object executeAddSQLDatabaseBinding(Bindings bindings){
-		SQLDatabaseBinding sqlBinding = DeploymentFactory.eINSTANCE.createSQLDatabaseBinding();
-		bindings.getSqlDatabaseBinding().add(sqlBinding);
-
+		Binding sqlBinding = DeploymentFactory.eINSTANCE.createBinding();
+		bindings.getBinding().add(sqlBinding);
+		sqlBinding.setType(org.eclipse.edt.javart.resources.egldd.Binding.BINDING_DB_SQL);
 		sqlBinding.setName(getBindingName());
-		sqlBinding.setDbms(getDbms());
-		sqlBinding.setSqlID(getUserName());
-		sqlBinding.setSqlPassword(getPassword());
-		//sqlBinding.setSqlValidationConnectionURL(getConnUrl());
 		
-		sqlBinding.setJarList(getConnLocation());
-		sqlBinding.setSqlJDBCDriverClass(getDriverClass());
-		sqlBinding.setSqlDB(getConnUrl());
-		sqlBinding.setSqlJNDIName(getJndiName());
-		sqlBinding.setSqlSchema(getDefaultSchema());
+		if (useUri()) {
+			sqlBinding.setUseURI(true);
+			sqlBinding.setUri(getUri());
+		}
+		else {
+			sqlBinding.setUseURI(false);
+			Parameters params = DeploymentFactory.eINSTANCE.createParameters();
+			sqlBinding.setParameters(params);
+		
+			EGLDDRootHelper.addOrUpdateParameter(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_dbms, getDbms());
+			EGLDDRootHelper.addOrUpdateParameter(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlID, getUserName());
+			EGLDDRootHelper.addOrUpdateParameter(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlPassword, getPassword());
+//			EGLDDRootHelper.addOrUpdateParameter(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlValidationConnectionURL, getConnUrl());
+			
+			EGLDDRootHelper.addOrUpdateParameter(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jarList, getConnLocation());
+			EGLDDRootHelper.addOrUpdateParameter(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlJDBCDriverClass, getDriverClass());
+			EGLDDRootHelper.addOrUpdateParameter(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlDB, getConnUrl());
+			EGLDDRootHelper.addOrUpdateParameter(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlSchema, getDefaultSchema());
+		}
 		
 		return sqlBinding;
 	}

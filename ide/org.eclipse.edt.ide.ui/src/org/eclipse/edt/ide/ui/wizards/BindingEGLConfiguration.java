@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.wizards;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
@@ -23,6 +20,7 @@ import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Part;
+import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.internal.EGLBasePlugin;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemEnvironmentPackageNames;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
@@ -36,16 +34,13 @@ import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.model.IWorkingCopy;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
+import org.eclipse.edt.ide.ui.internal.deployment.Binding;
 import org.eclipse.edt.ide.ui.internal.deployment.Bindings;
 import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
-import org.eclipse.edt.ide.ui.internal.deployment.EGLBinding;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
-import org.eclipse.edt.ide.ui.internal.deployment.Protocol;
-import org.eclipse.edt.ide.ui.internal.deployment.ui.CommTypes;
+import org.eclipse.edt.ide.ui.internal.deployment.Parameters;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
-import org.eclipse.edt.mof.egl.Service;
-import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
 
@@ -55,7 +50,6 @@ public class BindingEGLConfiguration extends BindingBaseConfiguration {
 
 	protected int fSelectedCommTypeBtnIndex;
 	private EGLDeploymentRoot fDeploymentRoot;
-	protected Protocol[] fNewProtocol;
 	private IFile fEGLDDFile =null;
 
 	public BindingEGLConfiguration()
@@ -116,21 +110,6 @@ public class BindingEGLConfiguration extends BindingBaseConfiguration {
 
 	protected void setDefaultAttributes() {
 		fSelectedCommTypeBtnIndex=1;
-		
-		List commtypeList = CommTypes.getSupportedProtocol(getBindingType());
-		fNewProtocol = new Protocol[commtypeList.size()+1];
-		
-		fNewProtocol[0] = DeploymentFactory.eINSTANCE.createReferenceProtocol();
-		
-		int i=1;
-		for(Iterator it=commtypeList.iterator();it.hasNext(); i++){
-			CommTypes commtype = (CommTypes)it.next();
-			fNewProtocol[i] = EGLDDRootHelper.createNewProtocol(commtype);
-		}
-	}
-	
-	public Protocol getProtocol(){
-		return fNewProtocol[fSelectedCommTypeBtnIndex];
 	}
 	
 	public String getAlias() {
@@ -148,19 +127,21 @@ public class BindingEGLConfiguration extends BindingBaseConfiguration {
 	public void setSelectedCommTypeBtnIndex(int index) {
 		fSelectedCommTypeBtnIndex = index;
 	}
-		
-	public EGLBinding executeAddEGLBinding(Bindings bindings) {
-		EGLBinding eglBinding = DeploymentFactory.eINSTANCE.createEGLBinding();
-		bindings.getEglBinding().add(eglBinding);
-		
-		eglBinding.setName(getBindingName());
-		eglBinding.setServiceName(getEGLServiceOrInterface());
-		eglBinding.setAlias(getAlias());
-		
-		FeatureMap protocolGrp = eglBinding.getProtocolGroup();
-		EGLDDRootHelper.setProtocolOnProtocolGroup(protocolGrp, fNewProtocol[fSelectedCommTypeBtnIndex]);
-		return eglBinding;
-	}
+	
+	//TODO EGL bindings not yet supported
+//	public Binding executeAddEGLBinding(Bindings bindings) {
+//		Binding eglBinding = DeploymentFactory.eINSTANCE.createBinding();
+//		bindings.getBinding().add(eglBinding);
+//		eglBinding.setType("edt.binding.egl");//TODO need constant
+//		
+//		Parameters params = DeploymentFactory.eINSTANCE.createParameters();
+//		eglBinding.setParameters(params);
+//		eglBinding.setName(getBindingName());
+//		EGLDDRootHelper.addOrUpdateParameter(params, "serviceName", getEGLServiceOrInterface());//TODO need constant
+//		EGLDDRootHelper.addOrUpdateParameter(params, "alias", getAlias());//TODO need constant
+//		
+//		return eglBinding;
+//	}
 	
 	public void executeAddEGLBinding(){
 		if(fEGLDDFile != null && !fEGLDDFile.exists()){
@@ -183,11 +164,12 @@ public class BindingEGLConfiguration extends BindingBaseConfiguration {
 				//try to see if user wants to override the existing one
 				if(isOverwrite()){
 					//if there is an existing one, remove it
-					EGLBinding existingEGLBinding = EGLDDRootHelper.getEGLBindingByName(fDeploymentRoot, getBindingName());
+					Binding existingEGLBinding = EGLDDRootHelper.getBindingByName(fDeploymentRoot, getBindingName());
 					if(existingEGLBinding != null)
-						bindings.getEglBinding().remove(existingEGLBinding);				
+						bindings.getBinding().remove(existingEGLBinding);				
 				}
-				executeAddEGLBinding(bindings);
+				//TODO EGL bindings not yet supported.
+//				executeAddEGLBinding(bindings);
 				
 				//persist the file if we're the only client 
 				if(!EGLDDRootHelper.isWorkingModelSharedByUserClients(fEGLDDFile))
@@ -252,7 +234,6 @@ public class BindingEGLConfiguration extends BindingBaseConfiguration {
 					}
 			);	
 		} catch (EGLModelException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
 		return alias[0];
