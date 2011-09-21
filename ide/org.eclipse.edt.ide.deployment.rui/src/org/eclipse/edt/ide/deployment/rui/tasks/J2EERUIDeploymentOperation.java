@@ -219,63 +219,8 @@ public class J2EERUIDeploymentOperation {
 			IStatus status = DeploymentUtilities.createErrorStatus(Messages.J2EEDeploymentSolution_22);
 			throw new CoreException(status);
 		}
-
-
 	
 	}
-	
-	
-	private void copyFile(IFile sourceFile, IFolder folder, DeploymentResultMessageRequestor messageRequestor, IProgressMonitor monitor )
-	{
-		
-		String jsGenDir=null;
-		try {
-			jsGenDir = EGLProjectInfoUtility.getGeneratedJavaScriptFolder(sourceFile.getProject());
-		} catch (JavaModelException e1) {
-		} catch (CoreException e1) {
-		}
-		if(jsGenDir == null){
-			jsTargetPath = new Path("");
-		}else{
-			jsTargetPath = new Path(jsGenDir);
-		}
-		
-		IPath sourceRelativePath = sourceFile.getProjectRelativePath();
-		if(sourceFile.getFileExtension().equalsIgnoreCase("js") && jsTargetPath.isPrefixOf(sourceRelativePath)){
-			sourceRelativePath = sourceRelativePath.removeFirstSegments(jsTargetPath.segmentCount());
-			IFile targetFile = folder.getFile(sourceRelativePath);
-
-			IPath targetPath = targetFile.getParent().getProjectRelativePath();
-			EGLProjectFileUtility.createFolder(targetFile.getProject(),targetPath);
-			try{
-				InputStream is = null;
-/* TODO - EDT
-				if ( "js".equalsIgnoreCase( sourceFile.getFileExtension() ) ) {
-					//Compress JavaScript
-				} else {
-*/
-					is = sourceFile.getContents();
-//				}
-				
-				if( targetFile.exists() ) {
-					if( sourceFile.getLocalTimeStamp() != targetFile.getLocalTimeStamp() ){
-						targetFile.setContents(is, true, false, monitor);
-						targetFile.setLocalTimeStamp(sourceFile.getLocalTimeStamp());
-					}
-				}else {
-					targetFile.create(is, true, monitor);
-					targetFile.setLocalTimeStamp(sourceFile.getLocalTimeStamp());
-				}
-				
-			}catch(Exception e){
-				messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
-					EGLMessage.EGL_DEPLOYMENT_EXCEPTION, 
-					null,
-					new String[] { DeploymentUtilities.createExceptionMessage(e) }));
-			}
-		}
-	}
-
 	
 	private void deployHandlers(IFile ruiHandler, IFolder folder, DeploymentResultMessageRequestor messageRequestor, IProgressMonitor monitor) {
 		monitor = SubMonitor.convert(monitor, IProgressMonitor.UNKNOWN);
