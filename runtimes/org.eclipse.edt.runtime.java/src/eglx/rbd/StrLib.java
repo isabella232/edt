@@ -11,25 +11,27 @@
 package eglx.rbd;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.egl.lang.EFloat;
-import java.lang.Double;
-import org.eclipse.edt.runtime.java.egl.lang.EString;
-import java.lang.String;
-import org.eclipse.edt.runtime.java.egl.lang.ESmallint;
-import java.lang.Short;
 import org.eclipse.edt.runtime.java.egl.lang.EInt;
 import java.lang.Integer;
 import org.eclipse.edt.runtime.java.egl.lang.EBigint;
 import java.lang.Long;
-import eglx.lang.StringLib;
-import org.eclipse.edt.runtime.java.egl.lang.EDate;
-import java.util.Calendar;
-import org.eclipse.edt.runtime.java.egl.lang.ESmallfloat;
-import java.lang.Float;
-import org.eclipse.edt.runtime.java.egl.lang.ETimestamp;
 import org.eclipse.edt.runtime.java.egl.lang.EDecimal;
 import java.math.BigDecimal;
+import org.eclipse.edt.runtime.java.egl.lang.EFloat;
+import java.lang.Double;
+import org.eclipse.edt.runtime.java.egl.lang.EBoolean;
+import java.lang.Boolean;
+import org.eclipse.edt.runtime.java.egl.lang.ETimestamp;
+import java.util.Calendar;
+import org.eclipse.edt.runtime.java.egl.lang.EDate;
+import eglx.lang.StringLib;
 import org.eclipse.edt.runtime.java.egl.lang.EglAny;
+import org.eclipse.edt.runtime.java.egl.lang.EString;
+import java.lang.String;
+import org.eclipse.edt.runtime.java.egl.lang.ESmallint;
+import java.lang.Short;
+import org.eclipse.edt.runtime.java.egl.lang.ESmallfloat;
+import java.lang.Float;
 @javax.xml.bind.annotation.XmlRootElement(name="StrLib")
 public class StrLib extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
@@ -98,7 +100,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public int characterLen(String text) {
-		int eze$Temp2 = 0;
+		int eze$Temp2;
 		eze$Temp2 = EString.length(EString.trim(text));
 		return eze$Temp2;
 	}
@@ -107,7 +109,7 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			String eze$Temp4 = Constants.EMPTY_STRING;
+			String eze$Temp4;
 			eze$Temp4 = EString.clip(source);
 			return eze$Temp4;
 		}
@@ -117,20 +119,26 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			String eze$Temp6 = Constants.EMPTY_STRING;
-			eze$Temp6 = EString.trim(source);
 			if ((EInt.equals(clipType, (int)((short) 0)))) {
-				return eze$Temp6;
+				String eze$Temp7;
+				eze$Temp7 = EString.trim(source);
+				return eze$Temp7;
 			}
 			else {
 				if ((EInt.equals(clipType, (int)((short) 1)))) {
-					return EString.clipLeading(source);
-				}
-				else if ((EInt.equals(clipType, (int)((short) 2)))) {
-					return EString.clip(source);
+					String eze$Temp9;
+					eze$Temp9 = EString.clipLeading(source);
+					return eze$Temp9;
 				}
 				else {
-					return source;
+					if ((EInt.equals(clipType, (int)((short) 2)))) {
+						String eze$Temp11;
+						eze$Temp11 = EString.clip(source);
+						return eze$Temp11;
+					}
+					else {
+						return source;
+					}
 				}
 			}
 		}
@@ -140,11 +148,11 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			Calendar eze$Temp12 = EDate.defaultValue();
-			eze$Temp12 =  (Calendar) org.eclipse.edt.javart.util.JavartUtil.checkNullable(dateValue);
-			String eze$Temp11 = Constants.EMPTY_STRING;
-			eze$Temp11 = StringLib.format(eze$Temp12, defaultDateFormat);
-			return eze$Temp11;
+			Calendar eze$Temp14;
+			eze$Temp14 =  (Calendar) org.eclipse.edt.javart.util.JavartUtil.checkNullable(dateValue);
+			String eze$Temp13;
+			eze$Temp13 = StringLib.format(eze$Temp14, defaultDateFormat);
+			return eze$Temp13;
 		}
 	}
 	public String formatDate(Calendar dateValue, String format) {
@@ -152,13 +160,13 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			Calendar eze$Temp15 = EDate.defaultValue();
-			eze$Temp15 =  (Calendar) org.eclipse.edt.javart.util.JavartUtil.checkNullable(dateValue);
-			String eze$Temp16 = Constants.EMPTY_STRING;
-			eze$Temp16 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
-			String eze$Temp14 = Constants.EMPTY_STRING;
-			eze$Temp14 = StringLib.format(eze$Temp15, eze$Temp16);
-			return eze$Temp14;
+			Calendar eze$Temp17;
+			eze$Temp17 =  (Calendar) org.eclipse.edt.javart.util.JavartUtil.checkNullable(dateValue);
+			String eze$Temp18;
+			eze$Temp18 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
+			String eze$Temp16;
+			eze$Temp16 = StringLib.format(eze$Temp17, eze$Temp18);
+			return eze$Temp16;
 		}
 	}
 	public String formatNumber(Short intValue) {
@@ -166,11 +174,11 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			short eze$Temp19 = (short) 0;
-			eze$Temp19 =  (Short) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
-			String eze$Temp18 = Constants.EMPTY_STRING;
-			eze$Temp18 = StringLib.format(eze$Temp19, defaultNumericFormat);
-			return eze$Temp18;
+			short eze$Temp21;
+			eze$Temp21 =  (Short) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
+			String eze$Temp20;
+			eze$Temp20 = StringLib.format(eze$Temp21, defaultNumericFormat);
+			return eze$Temp20;
 		}
 	}
 	public String formatNumber(Short intValue, String format) {
@@ -178,13 +186,13 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			short eze$Temp22 = (short) 0;
-			eze$Temp22 =  (Short) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
-			String eze$Temp23 = Constants.EMPTY_STRING;
-			eze$Temp23 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
-			String eze$Temp21 = Constants.EMPTY_STRING;
-			eze$Temp21 = StringLib.format(eze$Temp22, eze$Temp23);
-			return eze$Temp21;
+			short eze$Temp24;
+			eze$Temp24 =  (Short) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
+			String eze$Temp25;
+			eze$Temp25 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
+			String eze$Temp23;
+			eze$Temp23 = StringLib.format(eze$Temp24, eze$Temp25);
+			return eze$Temp23;
 		}
 	}
 	public String formatNumber(Integer intValue) {
@@ -192,11 +200,11 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			int eze$Temp26 = 0;
-			eze$Temp26 =  (Integer) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
-			String eze$Temp25 = Constants.EMPTY_STRING;
-			eze$Temp25 = StringLib.format(eze$Temp26, defaultNumericFormat);
-			return eze$Temp25;
+			int eze$Temp28;
+			eze$Temp28 =  (Integer) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
+			String eze$Temp27;
+			eze$Temp27 = StringLib.format(eze$Temp28, defaultNumericFormat);
+			return eze$Temp27;
 		}
 	}
 	public String formatNumber(Integer intValue, String format) {
@@ -204,13 +212,13 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			int eze$Temp29 = 0;
-			eze$Temp29 =  (Integer) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
-			String eze$Temp30 = Constants.EMPTY_STRING;
-			eze$Temp30 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
-			String eze$Temp28 = Constants.EMPTY_STRING;
-			eze$Temp28 = StringLib.format(eze$Temp29, eze$Temp30);
-			return eze$Temp28;
+			int eze$Temp31;
+			eze$Temp31 =  (Integer) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
+			String eze$Temp32;
+			eze$Temp32 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
+			String eze$Temp30;
+			eze$Temp30 = StringLib.format(eze$Temp31, eze$Temp32);
+			return eze$Temp30;
 		}
 	}
 	public String formatNumber(Long intValue) {
@@ -218,11 +226,11 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			long eze$Temp33 = (long) 0;
-			eze$Temp33 =  (Long) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
-			String eze$Temp32 = Constants.EMPTY_STRING;
-			eze$Temp32 = StringLib.format(eze$Temp33, defaultNumericFormat);
-			return eze$Temp32;
+			long eze$Temp35;
+			eze$Temp35 =  (Long) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
+			String eze$Temp34;
+			eze$Temp34 = StringLib.format(eze$Temp35, defaultNumericFormat);
+			return eze$Temp34;
 		}
 	}
 	public String formatNumber(Long intValue, String format) {
@@ -230,13 +238,13 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			long eze$Temp36 = (long) 0;
-			eze$Temp36 =  (Long) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
-			String eze$Temp37 = Constants.EMPTY_STRING;
-			eze$Temp37 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
-			String eze$Temp35 = Constants.EMPTY_STRING;
-			eze$Temp35 = StringLib.format(eze$Temp36, eze$Temp37);
-			return eze$Temp35;
+			long eze$Temp38;
+			eze$Temp38 =  (Long) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
+			String eze$Temp39;
+			eze$Temp39 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
+			String eze$Temp37;
+			eze$Temp37 = StringLib.format(eze$Temp38, eze$Temp39);
+			return eze$Temp37;
 		}
 	}
 	public String formatNumber(BigDecimal decValue) {
@@ -244,9 +252,9 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			String eze$Temp39 = Constants.EMPTY_STRING;
-			eze$Temp39 = StringLib.format(decValue, defaultNumericFormat);
-			return eze$Temp39;
+			String eze$Temp41;
+			eze$Temp41 = StringLib.format(decValue, defaultNumericFormat);
+			return eze$Temp41;
 		}
 	}
 	public String formatNumber(BigDecimal decValue, String format) {
@@ -254,11 +262,11 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			String eze$Temp42 = Constants.EMPTY_STRING;
-			eze$Temp42 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
-			String eze$Temp41 = Constants.EMPTY_STRING;
-			eze$Temp41 = StringLib.format(decValue, eze$Temp42);
-			return eze$Temp41;
+			String eze$Temp44;
+			eze$Temp44 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
+			String eze$Temp43;
+			eze$Temp43 = StringLib.format(decValue, eze$Temp44);
+			return eze$Temp43;
 		}
 	}
 	public String formatNumber(Float floatValue) {
@@ -266,11 +274,11 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			float eze$Temp45 = 0.0f;
-			eze$Temp45 =  (Float) org.eclipse.edt.javart.util.JavartUtil.checkNullable(floatValue);
-			String eze$Temp44 = Constants.EMPTY_STRING;
-			eze$Temp44 = StringLib.format(eze$Temp45, defaultNumericFormat);
-			return eze$Temp44;
+			float eze$Temp47;
+			eze$Temp47 =  (Float) org.eclipse.edt.javart.util.JavartUtil.checkNullable(floatValue);
+			String eze$Temp46;
+			eze$Temp46 = StringLib.format(eze$Temp47, defaultNumericFormat);
+			return eze$Temp46;
 		}
 	}
 	public String formatNumber(Float floatValue, String format) {
@@ -278,13 +286,13 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			float eze$Temp48 = 0.0f;
-			eze$Temp48 =  (Float) org.eclipse.edt.javart.util.JavartUtil.checkNullable(floatValue);
-			String eze$Temp49 = Constants.EMPTY_STRING;
-			eze$Temp49 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
-			String eze$Temp47 = Constants.EMPTY_STRING;
-			eze$Temp47 = StringLib.format(eze$Temp48, eze$Temp49);
-			return eze$Temp47;
+			float eze$Temp50;
+			eze$Temp50 =  (Float) org.eclipse.edt.javart.util.JavartUtil.checkNullable(floatValue);
+			String eze$Temp51;
+			eze$Temp51 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
+			String eze$Temp49;
+			eze$Temp49 = StringLib.format(eze$Temp50, eze$Temp51);
+			return eze$Temp49;
 		}
 	}
 	public String formatNumber(Double floatValue) {
@@ -292,11 +300,11 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			double eze$Temp52 = 0.0;
-			eze$Temp52 =  (Double) org.eclipse.edt.javart.util.JavartUtil.checkNullable(floatValue);
-			String eze$Temp51 = Constants.EMPTY_STRING;
-			eze$Temp51 = StringLib.format(eze$Temp52, defaultNumericFormat);
-			return eze$Temp51;
+			double eze$Temp54;
+			eze$Temp54 =  (Double) org.eclipse.edt.javart.util.JavartUtil.checkNullable(floatValue);
+			String eze$Temp53;
+			eze$Temp53 = StringLib.format(eze$Temp54, defaultNumericFormat);
+			return eze$Temp53;
 		}
 	}
 	public String formatNumber(Double floatValue, String format) {
@@ -304,13 +312,13 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			double eze$Temp55 = 0.0;
-			eze$Temp55 =  (Double) org.eclipse.edt.javart.util.JavartUtil.checkNullable(floatValue);
-			String eze$Temp56 = Constants.EMPTY_STRING;
-			eze$Temp56 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
-			String eze$Temp54 = Constants.EMPTY_STRING;
-			eze$Temp54 = StringLib.format(eze$Temp55, eze$Temp56);
-			return eze$Temp54;
+			double eze$Temp57;
+			eze$Temp57 =  (Double) org.eclipse.edt.javart.util.JavartUtil.checkNullable(floatValue);
+			String eze$Temp58;
+			eze$Temp58 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
+			String eze$Temp56;
+			eze$Temp56 = StringLib.format(eze$Temp57, eze$Temp58);
+			return eze$Temp56;
 		}
 	}
 	public String formatTimeStamp(Calendar timestampvalue) {
@@ -318,11 +326,11 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			Calendar eze$Temp59 = ETimestamp.defaultValue();
-			eze$Temp59 =  (Calendar) org.eclipse.edt.javart.util.JavartUtil.checkNullable(ETimestamp.ezeCast(timestampvalue, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE));
-			String eze$Temp58 = Constants.EMPTY_STRING;
-			eze$Temp58 = StringLib.format(eze$Temp59, defaultTimeStampFormat);
-			return eze$Temp58;
+			Calendar eze$Temp61;
+			eze$Temp61 =  (Calendar) org.eclipse.edt.javart.util.JavartUtil.checkNullable(ETimestamp.ezeCast(timestampvalue, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE));
+			String eze$Temp60;
+			eze$Temp60 = StringLib.format(eze$Temp61, defaultTimeStampFormat);
+			return eze$Temp60;
 		}
 	}
 	public String formatTimeStamp(Calendar timestampvalue, String format) {
@@ -330,51 +338,51 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			Calendar eze$Temp62 = ETimestamp.defaultValue();
-			eze$Temp62 =  (Calendar) org.eclipse.edt.javart.util.JavartUtil.checkNullable(ETimestamp.ezeCast(timestampvalue, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE));
-			String eze$Temp63 = Constants.EMPTY_STRING;
-			eze$Temp63 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
-			String eze$Temp61 = Constants.EMPTY_STRING;
-			eze$Temp61 = StringLib.format(eze$Temp62, eze$Temp63);
-			return eze$Temp61;
+			Calendar eze$Temp64;
+			eze$Temp64 =  (Calendar) org.eclipse.edt.javart.util.JavartUtil.checkNullable(ETimestamp.ezeCast(timestampvalue, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE));
+			String eze$Temp65;
+			eze$Temp65 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
+			String eze$Temp63;
+			eze$Temp63 = StringLib.format(eze$Temp64, eze$Temp65);
+			return eze$Temp63;
 		}
 	}
 	public String getNextToken(AnyBoxedObject<String> source, AnyBoxedObject<Integer> index, String delimiters) {
-		int charIndex = 0;
+		int charIndex;
 		charIndex = EInt.asInt((EDecimal.plus((EInt.divide(index.ezeUnbox(), (int)((short) 2))), EDecimal.asDecimal(ESmallint.ezeBox((short) 1)))));
-		String token = null;
-		AnyBoxedObject<Integer> eze$Temp64 = null;
-		eze$Temp64 = EglAny.ezeWrap(charIndex);
-		token = StringLib.getNextToken(source.ezeUnbox(), eze$Temp64, delimiters);
-		charIndex = eze$Temp64.ezeUnbox();
+		AnyBoxedObject<Integer> eze$Temp66;
+		eze$Temp66 = EglAny.ezeWrap(charIndex);
+		String token;
+		token = StringLib.getNextToken(source.ezeUnbox(), eze$Temp66, delimiters);
+		charIndex = eze$Temp66.ezeUnbox();
 		if ((org.eclipse.edt.runtime.java.egl.lang.NullType.notEquals(EString.ezeBox(token), null))) {
 			index.ezeCopy((((charIndex - (int)((short) 1)) * (int)((short) 2)) + (int)((short) 1)));
 		}
 		return token;
 	}
 	public int getTokenCount(String source, String delimiters) {
-		int eze$Temp66 = 0;
-		eze$Temp66 = StringLib.getTokenCount(source, delimiters);
-		return eze$Temp66;
+		int eze$Temp68;
+		eze$Temp68 = StringLib.getTokenCount(source, delimiters);
+		return eze$Temp68;
 	}
 	public int indexOf(AnyBoxedObject<String> source, String pattern) {
-		int eze$Temp67 = 0;
-		eze$Temp67 = EString.indexOf(source.ezeUnbox(), pattern);
-		return eze$Temp67;
+		int eze$Temp69;
+		eze$Temp69 = EString.indexOf(source.ezeUnbox(), pattern);
+		return eze$Temp69;
 	}
 	public int indexOf(AnyBoxedObject<String> source, String pattern, int startIndex) {
-		int eze$Temp68 = 0;
-		eze$Temp68 = EString.indexOf(source.ezeUnbox(), pattern, startIndex);
-		return eze$Temp68;
+		int eze$Temp70;
+		eze$Temp70 = EString.indexOf(source.ezeUnbox(), pattern, startIndex);
+		return eze$Temp70;
 	}
 	public String lowerCase(String characterItem) {
 		if ((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(characterItem), null))) {
 			return null;
 		}
 		else {
-			String eze$Temp70 = Constants.EMPTY_STRING;
-			eze$Temp70 = EString.toLowerCase(characterItem);
-			return eze$Temp70;
+			String eze$Temp72;
+			eze$Temp72 = EString.toLowerCase(characterItem);
+			return eze$Temp72;
 		}
 	}
 	public String spaces(Integer characterCount) {
@@ -383,7 +391,7 @@ public class StrLib extends ExecutableBase {
 		}
 		else {
 			String result = Constants.EMPTY_STRING;
-			String fiftyBlanks = Constants.EMPTY_STRING;
+			String fiftyBlanks;
 			fiftyBlanks = "                                                  ";
 			while ((EInt.compareTo(characterCount, (int)((short) 50)) >= 0)) {
 				result += fiftyBlanks;
@@ -400,9 +408,9 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			String eze$Temp75 = Constants.EMPTY_STRING;
-			eze$Temp75 = EString.toUpperCase(characterItem);
-			return eze$Temp75;
+			String eze$Temp77;
+			eze$Temp77 = EString.toUpperCase(characterItem);
+			return eze$Temp77;
 		}
 	}
 }
