@@ -1417,6 +1417,7 @@ public interface IEGLConstants {
 	public static final String PROPERTY_SOSITAKEPOSITION = "SOSITakePosition";  //$NON-NLS-1$
 	public static final String PROPERTY_SPACESBETWEENCOLUMNS = "spacesBetweenColumns";  //$NON-NLS-1$
 	public static final String PROPERTY_SQLDATACODE = "sqlDataCode";  //$NON-NLS-1$
+	public static final String PROPERTY_SQLDATASOURCE = "sqldatasource";  //$NON-NLS-1$
 	public static final String PROPERTY_SQLSTATEMENT = "sqlStatement";  //$NON-NLS-1$
 	public static final String PROPERTY_SQLVARIABLELEN = "sqlVariableLen";  //$NON-NLS-1$
 	public static final String PROPERTY_STYLE = "style";  //$NON-NLS-1$

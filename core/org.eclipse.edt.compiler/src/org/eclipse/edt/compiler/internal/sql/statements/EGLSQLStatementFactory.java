@@ -107,7 +107,6 @@ public abstract class EGLSQLStatementFactory {
         }
 
         // If no default select conditions are defined or if it is empty,
-        // return.
         if (defaultSelectConditions == null) {
             return null;
         } else {
