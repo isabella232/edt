@@ -58,22 +58,24 @@ public class SQLDataSource implements RecoverableResource {
 
 	@Override
 	public void commit(RunUnit ru) throws AnyException {
-		try {
-			conn.commit();
-		} catch (java.sql.SQLException e) {
-			throw new SQLException(e);
+		if (conn != null) {
+			try {
+				conn.commit();
+			} catch (java.sql.SQLException e) {
+				throw new SQLException(e);
+			}
 		}
-		
 	}
 
 	@Override
 	public void rollback(RunUnit ru) throws AnyException {
-		try {
-			conn.rollback();
-		} catch (java.sql.SQLException e) {
-			throw new SQLException(e);
+		if (conn != null) {
+			try {
+				conn.rollback();
+			} catch (java.sql.SQLException e) {
+				throw new SQLException(e);
+			}
 		}
-		
 	}
 
 	@Override
@@ -83,7 +85,9 @@ public class SQLDataSource implements RecoverableResource {
 				for (Statement s : entry.getValue())
 				s.close();
 			}
-			conn.close();
+			if (conn != null) {
+				conn.close();
+			}
 		} catch (java.sql.SQLException e) {
 			throw new SQLException(e);
 		}
@@ -99,7 +103,9 @@ public class SQLDataSource implements RecoverableResource {
 					for (Statement s : entry.getValue())
 					s.close();
 				}
-				conn.close();
+				if (conn != null) {
+					conn.close();
+				}
 			} catch (java.sql.SQLException e) {
 				throw new SQLException(e);
 			}
