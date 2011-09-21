@@ -512,9 +512,10 @@ end</template>
 <template name="get" description="%Templates.get_by_key" id="org.eclipse.edt.ide.ui.templates.get_by_key" context = "egl-core" enabled="true">get ${recordName};
 </template>
 
+<!-- 
 <template name="get" description="%Templates.get_by_position" id="org.eclipse.edt.ide.ui.templates.get_by_position" context = "egl-core" enabled="true">get ${directive} ${recordName};
 </template>
-
+ -->
 
 
 <template name="interface" description="%Templates.interface" id="org.eclipse.edt.ide.ui.templates.interface" context = "egl-core" enabled="true">// interface
@@ -540,80 +541,55 @@ end
 
 <template name="service declaration" description="%Templates.service_declaration" id="org.eclipse.edt.ide.ui.templates.service_declaration" context = "egl-core" enabled="true">${variableName} ${serviceName} {@Resource};</template>
 
-
-<!--  Structured records aren't supported in EDT 0.7
-<template name="record" description="%Templates.fixed_SQL_record_with_table_names" id="org.eclipse.edt.ide.ui.templates.fixed_SQL_record_with_table_names" context = "egl-core" enabled="true">// structured SQL record with table names
+<template name="record" description="%Templates.record_with_entity" id="org.eclipse.edt.ide.ui.templates.record_with_entity" context = "egl-core" enabled="true">// Entity record
 //
-record ${recordName} type SQLRecord  
-	{tableNames = [[&quot;${tableName}&quot;, &quot;${L1}&quot;]], keyItems = [${keyItemName}],
-	 defaultSelectCondition = #sqlCondition{ ${column1} = :${hostVariable1} }}
-	
-	3 ${keyItemName} char(5);
-	3 itemName2 int {column = &quot;${columnName}&quot;, isReadOnly = no, isSqlNullable = yes};
-	
+record ${recordName} type Entity  
+	${id}	int {@Id};
+	name 	string;	
 end
 </template>
 
-<template name="record" description="%Templates.fixed_SQL_record_with_table_name_variables" id="org.eclipse.edt.ide.ui.templates.fixed_SQL_record_with_table_name_variables" context = "egl-core" enabled="true">// structured SQL record with table name variables
-//
-record ${recordName} type SQLRecord  
-	{tableNameVariables = [[&quot;${tableNameVariable}&quot;, &quot;${L1}&quot;]], keyItems = [${keyItemName}],
-	 defaultSelectCondition = #sqlCondition{ ${column1} = :${hostVariable1} }}
-	
-	3 ${keyItemName} char(5);
-	3 itemName2 int {column = &quot;${columnName}&quot;, isReadOnly = no, isSqlNullable = yes};
-	
-end
-</template>
--->
+<template name="execute" description="%Templates.execute_with_prepared_SQL_statement" id="org.eclipse.edt.ide.ui.templates.execute_with_prepared_SQL_statement" context = "egl-core" enabled="true">execute with ${preparedStatementReference}
+	using ${item1}, ${item2}, ${item3};</template>
 
-<template name="record" description="%Templates.flexible_SQL_record_with_table_names" id="org.eclipse.edt.ide.ui.templates.flexible_SQL_record_with_table_names" context = "egl-core" enabled="true">// SQL record with table names
-//
-record ${recordName} type SQLRecord  
-	{tableNames = [[&quot;${tableName}&quot;, &quot;${L1}&quot;]], keyItems = [${keyItemName}],
-	 defaultSelectCondition = #sqlCondition{ ${column1} = :${hostVariable1} }}
-	
-	${keyItemName} string;
-	itemName2 int {column = &quot;${columnName}&quot;, isReadOnly = no, isSqlNullable = yes};
-	
-end
-</template>
-
-<template name="execute" description="%Templates.execute_with_SQL_delete_statement" id="org.eclipse.edt.ide.ui.templates.execute_with_SQL_delete_statement" context = "egl-core" enabled="true">execute 
+<template name="execute" description="%Templates.execute_with_SQL_delete_statement" id="org.eclipse.edt.ide.ui.templates.execute_with_SQL_delete_statement" context = "egl-core" enabled="true">execute with 
 	#sql{
 		delete from ${tableOrViewName}
 			where
-				${column1} = :${hostVariable1}
-	};
+				${column1} = ?
+	} from ${ds} using ${item1};
 </template>
 
-<template name="execute" description="%Templates.execute_with_SQL_delete_statement_from_result_set" id="org.eclipse.edt.ide.ui.templates.execute_with_SQL_delete_statement_from_result_set" context = "egl-core" enabled="true">execute
+<!--  Not supported in EDT 0.7
+<template name="execute" description="%Templates.execute_with_SQL_delete_statement_from_result_set" id="org.eclipse.edt.ide.ui.templates.execute_with_SQL_delete_statement_from_result_set" context = "egl-core" enabled="true">execute with
 	#sql{
 		delete from ${tableOrViewName}
 			where current of ${resultSetIdentifier}
 	};
 </template>
+-->
 
-<template name="execute" description="%Templates.execute_with_SQL_insert_statement" id="org.eclipse.edt.ide.ui.templates.execute_with_SQL_insert_statement" context = "egl-core" enabled="true">execute 
+<template name="execute" description="%Templates.execute_with_SQL_insert_statement" id="org.eclipse.edt.ide.ui.templates.execute_with_SQL_insert_statement" context = "egl-core" enabled="true">execute with 
 	#sql{
 		insert into ${tableOrViewName}
 			(${column1}, ${column2}, ${column3})
 		values
-			(:${hostVariable1}, :${hostVariable2}, :${hostVariable3})
-	};
+			(?,?,?)
+	} from ${ds} using ${item1}, ${item2}, ${item3};
 </template>
 
-<template name="execute" description="%Templates.execute_with_SQL_update_statement" id="org.eclipse.edt.ide.ui.templates.execute_with_SQL_update_statemen" context = "egl-core" enabled="true">execute
+<template name="execute" description="%Templates.execute_with_SQL_update_statement" id="org.eclipse.edt.ide.ui.templates.execute_with_SQL_update_statemen" context = "egl-core" enabled="true">execute with
 	#sql{
 		update ${tableOrViewName}
 		set
-			${column2} = :${hostVariable2},
-			${column3} = :${hostVariable3}
+			${column2} = ?,
+			${column3} = ?
 		where
-			${column1} = :${hostVariable1}
-	};
+			${column1} = ?
+	} from ${ds} using ${item2}, ${item3}, ${item1};
 </template>
 
+<!--  Not supported in EDT 0.7
 <template name="execute" description="%Templates.execute_with_SQL_update_statement_from_result_set" id="org.eclipse.edt.ide.ui.templates.execute_with_SQL_update_statement_from_result_set" context = "egl-core" enabled="true">execute
 	#sql{
 		update ${tableOrViewName}
@@ -625,12 +601,10 @@ end
 </template>
 
 <template name="execute" description="%Templates.execute_SQL_statement_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.execute_SQL_statement_for_SQL_record" context = "egl-core" enabled="true">execute ${sqlStatement} for ${sqlRecord};</template>
+-->
 
-<template name="execute" description="%Templates.execute_with_prepared_SQL_statement" id="org.eclipse.edt.ide.ui.templates.execute_with_prepared_SQL_statement" context = "egl-core" enabled="true">execute ${preparedStatementReference}
-	using ${item1}, ${item2}, ${item3};</template>
 
-<template name="open" description="%Templates.open_with_SQL_select_statement" id="org.eclipse.edt.ide.ui.templates.open_with_SQL_select_statement" context = "egl-core" enabled="true">open ${resultSetIdentifier}
-	usingKeys ${item1}, ${item2}, ${item3}		 
+<template name="open" description="%Templates.open_with_SQL_select_statement" id="org.eclipse.edt.ide.ui.templates.open_with_SQL_select_statement" context = "egl-core" enabled="true">open ${resultSetIdentifier} from ${ds}
 	with
 		#sql{
 			select
@@ -638,16 +612,14 @@ end
 			from
 				${tableOrViewName} ${t1}
 			where
-				${column1} = :${hostVariable1}
+				${column1} = ?
 			order by
 				${column1} asc
 		}
-	into ${item4}, ${item5}, ${item6}
-	for ${recordName};
+	using ${item1};
 </template>
 
-<template name="open" description="%Templates.open_with_SQL_select_statement_with_forUpdate" id="org.eclipse.edt.ide.ui.templates.open_with_SQL_select_statement_with_forUpdate" context = "egl-core" enabled="true">open ${resultSetIdentifier} 
-	usingKeys ${item1}, ${item2}, ${item3}		 
+<template name="open" description="%Templates.open_with_SQL_select_statement_with_forUpdate" id="org.eclipse.edt.ide.ui.templates.open_with_SQL_select_statement_with_forUpdate" context = "egl-core" enabled="true">open ${resultSetIdentifier} from ${ds} 
 	with
 		#sql{
 			select
@@ -655,118 +627,70 @@ end
 			from
 				${tableOrViewName} ${t1}
 			where
-				${column1} = :${hostVariable1}
+				${column1} = ?
 			for update of
 				${column2}, ${column3}
 		}
-	into ${item4}, ${item5}, ${item6}
-	for ${recordName};
+	using ${item1};
 </template>
 
-<template name="open" description="%Templates.open_with_SQL_select_statement_with_hold" id="org.eclipse.edt.ide.ui.templates.open_with_SQL_select_statement_with_hold" context = "egl-core" enabled="true">open ${resultSetIdentifier} hold
-	usingKeys ${item1}, ${item2}, ${item3}		 
-	with
-		#sql{
-			select
-				${column1}, ${column2}, ${column3}
-			from
-				${tableOrViewName} ${t1}
-			where
-				${column1} = :${hostVariable1}
-			order by
-				${column1} asc
-		}
-	into ${item4}, ${item5}, ${item6}
-	for ${recordName};
-</template>
-
-<template name="open" description="%Templates.open_with_prepared_SQL_statement" id="org.eclipse.edt.ide.ui.templates.open_with_prepared_SQL_statement" context = "egl-core" enabled="true">open ${resultSetIdentifier}
+<template name="open" description="%Templates.open_with_prepared_SQL_statement" id="org.eclipse.edt.ide.ui.templates.open_with_prepared_SQL_statement" context = "egl-core" enabled="true">open ${resultSetIdentifier} 
 	with ${preparedStatementReference}
 	using ${item1}, ${item2}, ${item3};
 </template>
 
-<template name="prepare" description="%Templates.prepare_SQL_statement" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_statement" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} from ${stringExpression};</template>
+<template name="prepare" description="%Templates.prepare_SQL_statement_with_string" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_statement_with_string" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} from ${ds} with ${stringExpression};</template>
 
-<template name="prepare" description="%Templates.prepare_SQL_statement_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_statement_for_SQL_record" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} from ${stringExpression} for ${sqlRecord};</template>
+<template name="prepare" description="%Templates.prepare_SQL_statement" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_statement" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} from ${ds} 
+	with #sql{
+		insert into ${tableOrView} 
+		(${column1}, ${column2}, ${column3}) 	
+		values (?, ?, ?)};</template>
 
-<template name="prepare" description="%Templates.prepare_SQL_delete_statement_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_delete_statement_for_SQL_record" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} 
-	from
+<template name="prepare" description="%Templates.prepare_SQL_delete_statement" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_delete_statement" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} from ${ds} 
+	with
 		"delete from ${tableOrView} " +
-		"where ${column1} = ?"
-	for ${sqlRecord};</template>
+		"where ${column1} = ?";</template>
 	
-<template name="prepare" description="%Templates.prepare_SQL_delete_statement_from_result_set_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_delete_statement_from_result_set_for_SQL_record" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} 
-	from
-		"delete from ${tableOrView} " +
-		"where current of ${resultSetIdentifier}"
-	for ${sqlRecord};</template>	
-	
-<template name="prepare" description="%Templates.prepare_SQL_insert_statement_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_insert_statement_for_SQL_record" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} 
-	from
+<template name="prepare" description="%Templates.prepare_SQL_insert_statement" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_insert_statement" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} from ${ds} 
+	with
 		"insert into ${tableOrView} " +
 		"(${column1}, ${column2}, ${column3}) " +	
-		"values (?, ?, ?)"
-	for ${sqlRecord};</template>
+		"values (?, ?, ?)";</template>
 	
-<template name="prepare" description="%Templates.prepare_SQL_select_statement_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_select_statement_for_SQL_record" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} 
-	from
+<template name="prepare" description="%Templates.prepare_SQL_select_statement" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_select_statement" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} from ${ds} 
+	with
 		"select ${column1}, ${column2}, ${column3} " +
 		"from ${tableOrView1} ${t1} " +
 		"where ${column1} = ? " +
-		"order by ${column1} asc"
-	for ${sqlRecord};</template>	
+		"order by ${column1} asc";</template>	
 	
-<template name="prepare" description="%Templates.prepare_SQL_select_statement_with_forUpdate_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_select_statement_with_forUpdate_for_SQL_record" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} 
-	from
+<template name="prepare" description="%Templates.prepare_SQL_select_statement_with_forUpdate" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_select_statement_with_" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} from ${ds} 
+	with
 		"select ${column1}, ${column2}, ${column3} " +
 		"from ${tableOrView1} ${t1} " +
 		"where ${column1} = ? " +
-		"for update of ${column2}, ${column3}"
-	for ${sqlRecord};</template>	
+		"for update of ${column2}, ${column3}";</template>	
 	
-<template name="prepare" description="%Templates.prepare_SQL_update_statement_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_update_statement_for_SQL_record" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} 
-	from
+<template name="prepare" description="%Templates.prepare_SQL_update_statement" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_update_statement" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} from ${ds} 
+	with
 		"update ${tableOrView} " +
 		"set ${column2} = ?, ${column3} = ? " +
-		"where ${column1} = ?"
-	for ${sqlRecord};</template>	
+		"where ${column1} = ?";</template>	
 	
-<template name="prepare" description="%Templates.prepare_SQL_update_statement_from_result_set_for_SQL_record" id="org.eclipse.edt.ide.ui.templates.prepare_SQL_update_statement_from_result_set_for_SQL_record" context = "egl-core" enabled="true">prepare ${preparedStatementIdentifier} 
-	from
-		"update ${tableOrView} " +
-		"set ${column2} = ?, ${column3} = ? " +
-		"where current of ${resultSetIdentifier}"
-	for ${sqlRecord};</template>	
-
-<template name="replace" description="%Templates.replace_with_SQL_update_statement" id="org.eclipse.edt.ide.ui.templates.replace_with_SQL_update_statement" context = "egl-core" enabled="true">replace ${recordName}
+<template name="replace" description="%Templates.replace_with_SQL_update_statement" id="org.eclipse.edt.ide.ui.templates.replace_with_SQL_update_statement" context = "egl-core" enabled="true">replace ${recordName} to ${ds}
 	with
 		#sql{
 			update ${tableOrViewName}
 			set
-				${column2} = :${hostVariable2},
-				${column3} = :${hostVariable3}
+				${column2} = ?,
+				${column3} = ?
 		};
 </template>
 
-<template name="replace" description="%Templates.replace_with_SQL_update_statement_from_result_set" id="org.eclipse.edt.ide.ui.templates.replace_with_SQL_update_statement_from_result_set" context = "egl-core" enabled="true">replace ${recordName}
-	with
-		#sql{
-			update ${tableOrViewName}
-			set
-				${column2} = :${hostVariable2},
-				${column3} = :${hostVariable3}
-			where current of ${resultSetIdentifier}
-		};
-</template>
+<template name="replace" description="%Templates.replace_to_result_set" id="org.eclipse.edt.ide.ui.templates.replace_to_result_set" context = "egl-core" enabled="true">replace ${recordName} to ${resultSet};</template>
 
-<template name="execute" description="%Templates.execute_with_SQL_delete_statement" id="org.eclipse.edt.ide.ui.templates.execute_with_SQL_delete_statement" context = "egl-core" enabled="true">execute 
-	#sql{
-		delete from ${tableOrViewName}
-			where
-				${column1} = :${hostVariable1}
-	};
-</template>
-
+<!-- add with SQL not supported in EDT 0.7 
 <template name="add" description="%Templates.add_with_SQL_insert_statement" id="org.eclipse.edt.ide.ui.templates.add_with_SQL_insert_statement" context = "egl-core" enabled="true">add ${recordName} 
 	with 
 		#sql{
@@ -776,25 +700,15 @@ end
 				(:${hostVariable1}, :${hostVariable2}, :${hostVariable3})
 		};
 </template>
+ -->
 
-<template name="delete" description="%Templates.delete_from_SQL_result_set" id="org.eclipse.edt.ide.ui.templates.delete_from_SQL_result_set" context = "egl-core" enabled="true">delete ${recordName} from ${resultSetIdentifier};
-</template>
+<template name="add" description="%Templates.add_to_datasource_statement" id="org.eclipse.edt.ide.ui.templates.add_to_datasource_statement" context = "egl-core" enabled="true">add ${recordName} to ${ds};</template>
 
-<template name="get" description="%Templates.get_by_position_with_SQL_into" id="org.eclipse.edt.ide.ui.templates.get_by_position_with_SQL_into" context = "egl-core" enabled="true">get ${directive} ${recordName}
-	into ${item1}, ${item2}, ${item3};
-</template>
+<template name="delete" description="%Templates.delete_from_SQL_data_source" id="org.eclipse.edt.ide.ui.templates.delete_from_SQL_data_source" context = "egl-core" enabled="true">delete ${recordName} from ${ds};</template>
 
-<template name="get" description="%Templates.get_by_position_from_SQL_result_set" id="org.eclipse.edt.ide.ui.templates.get_by_position_from_SQL_result_set" context = "egl-core" enabled="true">get ${directive} ${recordName}
-	from ${resultSetIdentifier};
-</template>
+<template name="get" description="%Templates.get_from_SQL_data_source" id="org.eclipse.edt.ide.ui.templates.get_from_SQL_data_source" context = "egl-core" enabled="true">get ${recordName} from ${ds};</template>
 
-<template name="get" description="%Templates.get_by_position_from_SQL_result_set_with_into" id="org.eclipse.edt.ide.ui.templates.get_by_position_from_SQL_result_set_with_into" context = "egl-core" enabled="true">get ${directive} ${recordName}
-	from ${resultSetIdentifier}
-	into ${item1}, ${item2}, ${item3};
-</template>
-
-<template name="get" description="%Templates.get_by_key_with_SQL_select_statement" id="org.eclipse.edt.ide.ui.templates.get_by_key_with_SQL_select_statement" context = "egl-core" enabled="true">get ${recordName}
-	usingKeys ${item1}, ${item2}, ${item3}
+<template name="get" description="%Templates.get_with_SQL_select_statement" id="org.eclipse.edt.ide.ui.templates.get_with_SQL_select_statement" context = "egl-core" enabled="true">get ${recordName} from ${ds}
 	with
 		#sql{
 			select
@@ -802,19 +716,18 @@ end
 			from
 				${tableOrViewName} ${t1}
 			where
-				${column1} = :${hostVariable1}
+				${column1} = ?
 			order by
 				${column1} asc
 		}
-	into ${item4}, ${item5}, ${item6};
-</template>				
+	using ${item1};</template>				
 
-<template name="get" description="%Templates.get_by_key_with_prepared_SQL_statement" id="org.eclipse.edt.ide.ui.templates.get_by_key_with_prepared_SQL_statement" context = "egl-core" enabled="true">get ${recordName}
+<template name="get" description="%Templates.get_with_prepared_SQL_statement" id="org.eclipse.edt.ide.ui.templates.get_with_prepared_SQL_statement" context = "egl-core" enabled="true">get ${recordName} from ${ds}
 	with ${preparedStatementReference}
 	using ${item1}, ${item2}, ${item3};
 </template>	
 
-<template name="get" description="%Templates.get_by_key_with_SQL_select_statement_with_singleRow" id="org.eclipse.edt.ide.ui.templates.get_by_key_with_SQL_select_statement_with_singleRow" context = "egl-core" enabled="true">get ${recordName} singleRow
+<template name="get" description="%Templates.get_with_SQL_select_with_forUpdate" id="org.eclipse.edt.ide.ui.templates.get_with_SQL_select_with_forUpdate" context = "egl-core" enabled="true">get ${recordName} from ${ds}
 	with
 		#sql{
 			select
@@ -822,27 +735,11 @@ end
 			from
 				${tableOrViewName} ${t1}
 			where
-				${column1} = :${hostVariable1}
-			order by
-				${column1} asc
-		}
-	into ${item4}, ${item5}, ${item6};
-</template>
-
-<template name="get" description="%Templates.get_by_key_with_SQL_select_with_forUpdate" id="org.eclipse.edt.ide.ui.templates.get_by_key_with_SQL_select_with_forUpdate" context = "egl-core" enabled="true">get ${recordName}
-	usingKeys ${item1}, ${item2}, ${item3}
-	with
-		#sql{
-			select
-				${column1}, ${column2}, ${column3}
-			from
-				${tableOrViewName} ${t1}
-			where
-				${column1} = :${hostVariable1}
+				${column1} = ?
 			for update of
 				${column2}, ${column3}
 		}
-	into ${item4}, ${item5}, ${item6};
+	using ${item1};
 </template>
 
 <!--  RUIPropertiesLibrary isn't supported in EDT 0.7
