@@ -236,7 +236,6 @@ public class LocalizedText implements Serializable
 
 	/**
 	 * A date-time formatter for the Locale.
-	 * TODO This overrode the original com.ibm.icu.text.DateFormat
 	 */
 	private DateFormat dateFormatter;
 	
@@ -327,7 +326,7 @@ public class LocalizedText implements Serializable
 			longGregorianDateMask = null;
 			shortJulianDateMask = null;
 			longJulianDateMask = null;
-//			dateFormatter = null;
+			dateFormatter = null;
 			userMessages = null;
 			eglMessages = null;
 		}
@@ -1347,23 +1346,6 @@ public class LocalizedText implements Serializable
 	{
 		return languageID;
 	}
-	
-//	/**
-//	 * Returns a date-time formatter for the Locale.
-//	 */
-//	public com.ibm.icu.text.DateFormat getDateFormatter()
-//	{
-//		if ( dateFormatter == null )
-//		{
-//			dateFormatter = 
-//				com.ibm.icu.text.DateFormat.getDateTimeInstance( 
-//						com.ibm.icu.text.DateFormat.DEFAULT, 
-//						com.ibm.icu.text.DateFormat.DEFAULT, 
-//						locale );
-//		}
-//		
-//		return dateFormatter;
-//	}
 
 	/**
 	 * Returns the text of the message with the given ID in this object's
@@ -1462,11 +1444,7 @@ public class LocalizedText implements Serializable
 	{
 		if ( dateFormatter == null )
 		{
-			dateFormatter = DateFormat.getDateTimeInstance();
-//				com.ibm.icu.text.DateFormat.getDateTimeInstance( 
-//						com.ibm.icu.text.DateFormat.DEFAULT, 
-//						com.ibm.icu.text.DateFormat.DEFAULT, 
-//						locale );
+			dateFormatter = DateFormat.getDateTimeInstance( DateFormat.DEFAULT, DateFormat.DEFAULT, locale );
 		}
 		
 		return dateFormatter;
