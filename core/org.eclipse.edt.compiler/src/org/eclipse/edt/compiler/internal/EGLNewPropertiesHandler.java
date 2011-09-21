@@ -1139,8 +1139,8 @@ public class EGLNewPropertiesHandler {
 		if ( needRecalculateForNewAnno(DynamicItemDataDeclarationPropertyRules) ) {
 			DynamicItemDataDeclarationPropertyRules = new TreeSet();
 			DynamicItemDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_MAXSIZE));
-			DynamicItemDataDeclarationPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.HANDLER_SUBTYPE_JSF));
 			DynamicItemDataDeclarationPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.RECORD_SUBTYPE_SQl));
+			DynamicItemDataDeclarationPropertyRules.addAll(createRulesForElementKinds(new EnumerationDataBinding[]{ElementKind.FIELDMBR}));
 		}
 		return DynamicItemDataDeclarationPropertyRules;
 
@@ -1151,8 +1151,8 @@ public class EGLNewPropertiesHandler {
 		if ( needRecalculateForNewAnno(StaticItemDataDeclarationPropertyRules )) {
 			StaticItemDataDeclarationPropertyRules = new TreeSet();
 			StaticItemDataDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_INITIALIZED));
-			StaticItemDataDeclarationPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.HANDLER_SUBTYPE_JSF));
-			StaticItemDataDeclarationPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.RECORD_SUBTYPE_SQl));	    	
+			StaticItemDataDeclarationPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.RECORD_SUBTYPE_SQl));
+			StaticItemDataDeclarationPropertyRules.addAll(createRulesForElementKinds(new EnumerationDataBinding[]{ElementKind.FIELDMBR}));
 		}
 		return StaticItemDataDeclarationPropertyRules;
 	}
@@ -1174,6 +1174,7 @@ public class EGLNewPropertiesHandler {
 		if ( needRecalculateForNewAnno(ExternalTypeClassDeclarationPropertyRules) ) {
 			ExternalTypeClassDeclarationPropertyRules = new TreeSet();
 			ExternalTypeClassDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_JAVAPROPERTY));
+			ExternalTypeClassDeclarationPropertyRules.addAll(createRulesForElementKinds(new EnumerationDataBinding[] {ElementKind.FIELDMBR}));
 		}
 		return ExternalTypeClassDeclarationPropertyRules;
 	}
@@ -1184,6 +1185,7 @@ public class EGLNewPropertiesHandler {
 			ExternalTypeArrayHandlerClassDeclarationPropertyRules = new TreeSet();
 			ExternalTypeArrayHandlerClassDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_JAVAPROPERTY));
 			ExternalTypeArrayHandlerClassDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_EVENTLISTENER));
+			ExternalTypeArrayHandlerClassDeclarationPropertyRules.addAll(createRulesForElementKinds(new EnumerationDataBinding[] {ElementKind.FIELDMBR}));
 		}
 		return ExternalTypeArrayHandlerClassDeclarationPropertyRules;
 	}
@@ -1788,11 +1790,11 @@ public class EGLNewPropertiesHandler {
 		if ( needRecalculateForNewAnno(StructureItemPropertyRules) ) {
 			StructureItemPropertyRules = new TreeSet();
 			StructureItemPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.RECORD_SUBTYPE_SQl));
-			StructureItemPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.HANDLER_SUBTYPE_JSF));
 			StructureItemPropertyRules.addAll(createRulesForGroup("formatting"));
 			StructureItemPropertyRules.addAll(createRulesForGroup("validation"));
 			StructureItemPropertyRules.addAll(createRulesForGroup("ui"));
 			StructureItemPropertyRules.addAll(createRulesForMemberAnnotations(IEGLConstants.RECORD_SUBTYPE_DLI_SEGMENT));
+			StructureItemPropertyRules.addAll(createRulesForElementKinds(new EnumerationDataBinding[] {ElementKind.FIELDMBR}));
 		}
 		return StructureItemPropertyRules;
 

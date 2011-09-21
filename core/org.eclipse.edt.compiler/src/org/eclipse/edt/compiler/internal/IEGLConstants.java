@@ -1937,6 +1937,14 @@ public interface IEGLConstants {
 	public static String MIXED_CONSOLEFIELD_STRING = "consoleField";  //$NON-NLS-1$
 	public static String MIXED_DICTIONARY_STRING = "dictionary"; //$NON-NLS-1$
 	
+	//System SQL data type
+	public static String MIXED_DATASOURCE_STRING = "DataSource";
+	public static String MIXED_SQLDATASOURCE_STRING = "SQLDataSource";
+	public static String MIXED_SCROLLABLEDATASOURCE_STRING = "ScrollableDataSource";
+	public static String MIXED_SQLRESULTSET_STRING = "SQLResultSet";
+	
+	public static String MIXED_SQLSTATEMENT_STRING = "SQLStatement";
+	
 	public static int BEGIN_LEVEL = 5;	
 
 	//type
@@ -1959,6 +1967,8 @@ public interface IEGLConstants {
 	public static String RECORD_SUBTYPE_DLI_SEGMENT = "DLISegment"; //$NON-NLS-1$
 	public static String RECORD_SUBTYPE_PSB_RECORD = "PSBRecord"; //$NON-NLS-1$
 	public static String RECORD_SUBTYPE_EXCEPTION = "exception"; //$NON-NLS-1$
+	
+	public static String SUBTYPE_ENTITY = "Entity";
 	
 	//Form subtypes
 	public static String FORM_SUBTYPE_TEXT = "TextForm"; //$NON-NLS-1$
