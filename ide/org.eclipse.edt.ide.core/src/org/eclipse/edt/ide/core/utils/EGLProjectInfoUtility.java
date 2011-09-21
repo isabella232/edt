@@ -34,19 +34,24 @@ public final class EGLProjectInfoUtility {
 	}
 
 	
-	public static String getGeneratedJavaScriptFolder( IProject project )	throws CoreException, JavaModelException {
-		String[] javaGenDir = ProjectSettingsUtility.getJavaScriptGenerationDirectory(project);
-		if(javaGenDir.length>0)
-			return EclipseUtilities.convertFromInternalPath(javaGenDir[0]);
-		else
-			return null;
+	public static String[] getGeneratedJavaScriptFolder( IProject project )	throws CoreException, JavaModelException {
+		String[] jsGenDir = ProjectSettingsUtility.getJavaScriptGenerationDirectory(project);
+		return convertFromInternalPath( jsGenDir );
 	}
 
-	public static String getGeneratedJavaFolder( IProject project )	throws CoreException, JavaModelException {
+	public static String[] getGeneratedJavaFolder( IProject project )	throws CoreException, JavaModelException {
 		String[] javaGenDir = ProjectSettingsUtility.getJavaGenerationDirectory(project);
-		if(javaGenDir.length>0)
-			return EclipseUtilities.convertFromInternalPath(javaGenDir[0]);
-		else
+		return convertFromInternalPath( javaGenDir );
+	}
+	
+	private static String[] convertFromInternalPath( String[] internalForlders ) {
+		if ( internalForlders.length == 0 ) {
 			return null;
+		}
+		String[] folders = new String[internalForlders.length];
+		for ( int i = 0; i < internalForlders.length; i ++ ) {
+			folders[i] = EclipseUtilities.convertFromInternalPath(internalForlders[i]);
+		}
+		return folders;
 	}
 }

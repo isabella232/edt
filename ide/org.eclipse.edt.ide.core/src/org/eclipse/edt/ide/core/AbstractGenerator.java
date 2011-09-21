@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.core;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
@@ -25,6 +26,8 @@ import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
 
 /**
  * Base implementation of IGenerator intended to be subclassed by clients.
@@ -70,6 +73,25 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 				new ProjectScope(project).getNode(getProjectSettingsPluginId()),
 				getGenerationDirectoryPropertyKey(),
 				getGenerationDirectoryPreferenceKey());
+	}
+	
+	public String[] getPrjojectOutputDirectors(IProject project) {	
+		
+		Preferences propertyPrefs = new ProjectScope(project).getNode(getProjectSettingsPluginId()).node(  getGenerationDirectoryPropertyKey() );
+		try {
+			String[] keys = propertyPrefs.keys();
+			HashSet<String> dirs = new HashSet<String>();
+			for ( int i = 0; i < keys.length; i ++ ) {
+				dirs.add( (String)propertyPrefs.get( keys[i], null ) );
+			}
+			
+			String[] result = new String[ dirs.size() + 1 ]; 
+			dirs.toArray( result );
+			
+			result[ result.length - 1 ] = getOutputDirectory(project);
+			return result;
+		} catch (BackingStoreException e) {	}
+		return null;
 	}
 	
 	

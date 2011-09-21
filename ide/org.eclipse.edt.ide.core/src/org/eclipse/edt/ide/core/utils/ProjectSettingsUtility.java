@@ -514,7 +514,10 @@ public class ProjectSettingsUtility {
 					!generator.getId().equalsIgnoreCase(GENERATOR_ID_JAVASCRIPT_DEV)){
 				if(generator instanceof AbstractGenerator){
 					AbstractGenerator ideGenerator = (AbstractGenerator)generator;
-					retValue.add(ideGenerator.getOutputDirectory(project));
+					String[] values = ideGenerator.getPrjojectOutputDirectors(project);
+					for ( int j = 0; j < values.length; j ++ ) {
+						retValue.add( values[j] );
+					}
 				}
 			}
 		}
