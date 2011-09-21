@@ -56,11 +56,11 @@ Register the Preference Pages
    <extension
          point="org.eclipse.edt.ide.rui.widgetLibraryProvider">
       <provider
-            detail="Port from RBD 8.0.1.2"
+            detail="%StandardWidgetLibraryDescription"
             id="org.eclipse.edt.rui.widgets_0.7.0"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
-            libname="Rich UI widgets"
-            logo="icons/style.gif"
+            libname="%StandardWidgetLibraryName"
+            logo=""
             projectName="org.eclipse.edt.rui.widgets_0.7.0"
             provider="Eclipse.org"
             resourceFolder="/org.eclipse.edt.ide.ui.rui/"
@@ -70,11 +70,11 @@ Register the Preference Pages
       </provider>
       <provider
             conflictClass="org.eclipse.edt.ide.rui.internal.project.DojoConflictClass"
-            detail="Based on Dojo local"
+            detail="%DojoWidgetLibraryDescription"
             id="org.eclipse.edt.rui.dojo_0.7.0"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
-            libname="Dojo widgets"
-            logo="icons/full/obj16/egl_launch_obj.gif"
+            libname="%DojoWidgetLibraryName"
+            logo="icons/dojo16_logo.png"
             projectName="org.eclipse.edt.rui.dojo_0.7.0"
             provider="Eclipse.org"
              resourceFolder="/org.eclipse.edt.ide.ui.rui/"
@@ -85,11 +85,11 @@ Register the Preference Pages
       </provider>
       <provider
             conflictClass="org.eclipse.edt.ide.rui.internal.project.DojoConflictClass"
-            detail="Based on google runtime"
+            detail="%DojoWidgetLibraryDescription"
             id="org.eclipse.edt.rui.dojo.remote_0.7.0"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
-            libname="Dojo widgets"
-            logo="icons/highlight.gif"
+            libname="%DojoWidgetLibraryName"
+            logo="icons/dojo16_logo.png"
             projectName="org.eclipse.edt.rui.dojo.remote_0.7.0"
             provider="Eclipse.org"
             resourceFolder="/org.eclipse.edt.ide.ui.rui/"
