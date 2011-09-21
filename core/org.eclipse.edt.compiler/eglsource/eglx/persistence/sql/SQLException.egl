@@ -1,4 +1,6 @@
 package eglx.persistence.sql;
 
 record SQLException type Exception
+	SQLState string?;
+	ErrorCode int?;
 end
