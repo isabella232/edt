@@ -595,7 +595,7 @@ public class RUIFormPage extends EGLDDBaseFormPage implements ILocalesListViewer
 				Object obj = it.next();
 				if ( obj instanceof RUIHandlerRowItem )
 				{
-					EGLDDBaseDetailPage.try2OpenPartInEGLEditor( editor, ((RUIHandlerRowItem)obj).handler.getImplementation(), "com.ibm.etools.egl.rui.visualeditor.EvEditor" ); //$NON-NLS-1$
+					EGLDDBaseDetailPage.try2OpenPartInEGLEditor( editor, ((RUIHandlerRowItem)obj).handler.getImplementation(), "org.eclipse.edt.ide.rui.visualeditor.EvEditor" ); //$NON-NLS-1$
 				}
 			}
 		}
