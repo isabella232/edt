@@ -39,8 +39,7 @@ public class EGLForeachStatementReferenceCompletion extends EGLAbstractReference
 			new EGLDeclarationProposalHandler(viewer,
 				documentOffset,
 				prefix,
-				boundNode)
-					.getRecordProposals(EGLDeclarationProposalHandler.SQL_RECORD));
+				boundNode).getSQLActioniTargets());
 		}});
 		return proposals;
 	}

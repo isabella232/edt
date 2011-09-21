@@ -359,19 +359,11 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 			proposals.addAll(getNamedValueHelpKeyProposals(getDocumentOffset(), VALIDATIONBYPASSKEYS_PFN_LIST_PROPOSAL));
 		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_INPUTFORM))
 			proposals.addAll(getNameValueInputFormProposals(getDocumentOffset()));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_INPUTRECORD))
-			proposals.addAll(getNameValueVariableRecordProposals(getDocumentOffset(), EGLDeclarationProposalHandler.BASIC_RECORD));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_INPUTUIRECORD))
-			proposals.addAll(getNameValueVariableRecordProposals(getDocumentOffset(), EGLDeclarationProposalHandler.UI_RECORD));
 		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_ONCONSTRUCTIONFUNCTION)
 			|| propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_ONPRERENDERFUNCTION)
 			|| propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_ONPOSTRENDERFUNCTION)
 			|| 	propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_ONVALUECHANGEFUNCTION))
 				proposals.addAll(getNameValueFunctionProposals(getDocumentOffset()));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_PSB))
-			proposals.addAll(getNameValuePSBProposals(getDocumentOffset()));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_PSBPARM))
-			proposals.addAll(getNameValuePSBParmProposals(getDocumentOffset()));
 		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_REDEFINES))
 			proposals.addAll(getNameValueRedefinesProposals(getDocumentOffset()));
 		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_SELECTFROMLISTITEM))
@@ -433,9 +425,6 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 	private List getQuotedValueActionProposals(int documentOffset) {
 		//WebTrans - not sure if we can give proposals for UIRecord???
 		//If in a page handler return a list of functions in the page handler
-		if (partBinding != null && partBinding.getAnnotation(EGLUIJSF, IEGLConstants.HANDLER_SUBTYPE_JSF) != null)
-			return getNameValueFunctionProposals(getDocumentOffset());
-		else
 			return new ArrayList();
 	}
 	
@@ -564,34 +553,6 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 	 */
 	private Collection getQuotedValueDebugImplProposals(int documentOffset) {
 		return getQuotedValueServiceNameProposals(getDocumentOffset());
-	}
-
-	/**
-	 * @param getDocumentOffset()
-	 * @return
-	 */
-	private Collection getNameValuePSBProposals(int documentOffset) {
-		//add variable PSB record proposals
-		return new EGLDeclarationProposalHandler(
-			viewer,
-			getDocumentOffset(),
-			prefix,
-			boundNode).getRecordProposals(EGLDeclarationProposalHandler.PSB_RECORD, false, false);
-	}
-
-	/**
-	 * @param getDocumentOffset()
-	 * @return
-	 */
-	private Collection getNameValuePSBParmProposals(int documentOffset) {
-		//add variable PSB record proposals
-		List proposals = new ArrayList();
-		proposals = new EGLDeclarationProposalHandler(
-			viewer,
-			getDocumentOffset(),
-			prefix,
-			boundNode).getProgramParameterRecordProposals(EGLDeclarationProposalHandler.PSB_RECORD, false, false);
-		return proposals;
 	}
 
 	/**

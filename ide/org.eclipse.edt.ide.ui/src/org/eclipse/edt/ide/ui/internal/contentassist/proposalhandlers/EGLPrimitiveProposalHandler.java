@@ -60,15 +60,9 @@ public class EGLPrimitiveProposalHandler extends EGLAbstractProposalHandler {
 		if (partBinding != null) {
 			switch(partBinding.getKind()) {
 				case ITypeBinding.FIXED_RECORD_BINDING:
-					if(partBinding.getAnnotation(EGLIOSQL, IEGLConstants.RECORD_SUBTYPE_SQl) != null) {
-						return EGLDataTypeUtility.SQL_ITEM_PRIMITIVE_TYPE_NONFLEXIBLE_STRINGS;
-					}
 					return EGLDataTypeUtility.PRIMITIVE_TYPE_NONFLEXIBLE_STRINGS;
 					
 				case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-					if(partBinding.getAnnotation(EGLIOSQL, IEGLConstants.RECORD_SUBTYPE_SQl) != null) {
-						return EGLDataTypeUtility.SQL_ITEM_PRIMITIVE_TYPE_FLEXIBLE_STRINGS;
-					}
 					return EGLDataTypeUtility.PRIMITIVE_TYPE_STRINGS;
 					
 				case ITypeBinding.DATATABLE_BINDING:

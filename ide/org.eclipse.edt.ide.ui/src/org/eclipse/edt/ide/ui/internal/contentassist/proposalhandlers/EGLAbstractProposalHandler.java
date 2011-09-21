@@ -46,7 +46,6 @@ import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
-import org.eclipse.edt.compiler.internal.EGLNewPropertiesHandler;
 import org.eclipse.edt.compiler.internal.EGLSystemFunctionWord;
 import org.eclipse.edt.compiler.internal.EGLSystemWordHandler;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
@@ -73,18 +72,8 @@ public abstract class EGLAbstractProposalHandler {
 	static final protected String PROPOSAL_PART_REFERENCE_STRING = "{0}/{1}/{2} ({3})"; //$NON-NLS-1$
 	static final protected String PROPOSAL_VARIABLE_DOT_STRING = "{0} ({1})"; //$NON-NLS-1$
 	
-	static final String[] EGLCORE = new String[] {"egl", "core"}; //$NON-NLS-1$ //$NON-NLS-2$
-	static final String[] EGLJAVA = new String[] {"egl", "java"}; //$NON-NLS-1$ //$NON-NLS-2$
-	static final String[] EGLUIJASPER = new String[] {"egl", "ui", "jasper"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLUIJSF = new String[] {"egl", "ui", "jsf"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLUITEXT = new String[] {"egl", "ui", "text"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLUICONSOLE = new String[] {"egl", "ui", "console"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLUIWEBTRANSACTION = new String[] {"egl", "ui", "webTransaction"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLIOSQL = new String[] {"egl", "io", "sql"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLIOFILE = new String[] {"egl", "io", "file"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLIOMQ = new String[] {"egl", "io", "mq"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLIODLI = new String[] {"egl", "io", "dli"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLVG = new String[] {"egl", "vg"}; //$NON-NLS-1$ //$NON-NLS-2$
+	static final String[] EGLPERSISTENCE = new String[] {"eglx", "persistence"};
+	static final String[] EGLLANG = new String[]{"eglx", "lang"};
 
 	private int documentOffset;
 	private String prefix;
@@ -577,9 +566,9 @@ public abstract class EGLAbstractProposalHandler {
 					return UINlsStrings.CAProposal_Primitive;
 				case ITypeBinding.FIXED_RECORD_BINDING :
 				case ITypeBinding.FLEXIBLE_RECORD_BINDING :
-					if(typeBinding.getAnnotation(EGLUICONSOLE, IEGLConstants.RECORD_SUBTYPE_CONSOLE_FORM) != null) {
-						return IEGLConstants.MIXED_CONSOLEFIELD_STRING;
-					}
+//					if(typeBinding.getAnnotation(EGLUICONSOLE, IEGLConstants.RECORD_SUBTYPE_CONSOLE_FORM) != null) {
+//						return IEGLConstants.MIXED_CONSOLEFIELD_STRING;
+//					}
 					return IEGLConstants.KEYWORD_RECORD;
 				case ITypeBinding.DATATABLE_BINDING :
 					return IEGLConstants.KEYWORD_DATATABLE;

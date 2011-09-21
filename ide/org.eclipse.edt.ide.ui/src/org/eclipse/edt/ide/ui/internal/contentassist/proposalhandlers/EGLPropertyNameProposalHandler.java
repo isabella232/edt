@@ -85,8 +85,8 @@ public class EGLPropertyNameProposalHandler extends EGLAbstractProposalHandler {
 		int selectionLength = 0;
 		
 		StringBuffer buffer = new StringBuffer();
-		if ( propertyRule.isValueless() 
-			|| (propertyRule.isComplex()
+		if ( (propertyRule.isValueless()&&!isAnnotationSetting)|| 
+			(propertyRule.isComplex()
 			&& !isAnnotationSetting
 			&& !propertyRule.getName().equalsIgnoreCase(IEGLConstants.PROPERTY_PRINTFLOATINGAREA)
 			&& !propertyRule.getName().equalsIgnoreCase(IEGLConstants.PROPERTY_SCREENFLOATINGAREA))) {
@@ -95,9 +95,11 @@ public class EGLPropertyNameProposalHandler extends EGLAbstractProposalHandler {
 			
 		buffer.append(propertyRule.getName());		
 		if (propertyRule.isComplex() || propertyRule.hasType(EGLNewPropertiesHandler.nestedValue) || isAnnotationSetting) {
-			buffer.append(" {"); //$NON-NLS-1$
-			cursorPosition = buffer.length();
-			buffer.append("}"); //$NON-NLS-1$
+			if(!propertyRule.isValueless()){
+				buffer.append(" {"); //$NON-NLS-1$
+				cursorPosition = buffer.length();
+				buffer.append("}"); //$NON-NLS-1$
+			}
 		}
 		else {
 			if (!propertyRule.isValueless()) {

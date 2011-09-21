@@ -26,8 +26,6 @@ import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.internal.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibraryManager;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
@@ -51,7 +49,6 @@ public class EGLSystemWordProposalHandler extends EGLAbstractProposalHandler {
 			if(boundNode instanceof Part) {
 				boundNode.accept(new DefaultASTVisitor() {
 					public boolean visit(Handler handler) {
-						isWithinPageHandler = handler.getName().resolveBinding().getAnnotation(EGLUIJSF, IEGLConstants.HANDLER_SUBTYPE_JSF) != null;
 						return false;
 					}
 				});

@@ -27,6 +27,11 @@ public interface EGLDataTypeUtility {
 //			IEGLConstants.KEYWORD_BLOB,
 //			IEGLConstants.KEYWORD_CLOB,
 	  		IEGLConstants.MIXED_DICTIONARY_STRING,
+	  		IEGLConstants.MIXED_DATASOURCE_STRING,
+	  		IEGLConstants.MIXED_SCROLLABLEDATASOURCE_STRING,
+	  		IEGLConstants.MIXED_SQLDATASOURCE_STRING,
+	  		IEGLConstants.MIXED_SQLRESULTSET_STRING,
+	  		IEGLConstants.MIXED_SQLSTATEMENT_STRING,
 			//birt Reports
 //	  		IEGLConstants.EGL_REPORTS_BIRTREPORT,
 			//Report Handler

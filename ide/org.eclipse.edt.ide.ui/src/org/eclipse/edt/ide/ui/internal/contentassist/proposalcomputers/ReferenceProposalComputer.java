@@ -13,7 +13,11 @@ package org.eclipse.edt.ide.ui.internal.contentassist.proposalcomputers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.edt.compiler.core.ast.NodeTypes;
@@ -24,12 +28,13 @@ import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposalComput
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLContextBoundaryUtility;
 import org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.EGLDefinedReferenceCompletions;
 import org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.IReferenceCompletion;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
 
 public class ReferenceProposalComputer extends EGLCompletionProposalComputer {
 
 	public List computeCompletionProposals(EGLContentAssistInvocationContext context, IProgressMonitor monitor) {
 
-		ArrayList result = new ArrayList();
+		LinkedList result = new LinkedList();
 		// Set up the token stream
 		TokenStream tokenStream = new TokenStream(getPrefix(context.getViewer(), context.getInvocationOffset()));
 		tokenStream.skipPrefix();
@@ -71,7 +76,24 @@ public class ReferenceProposalComputer extends EGLCompletionProposalComputer {
 			}
 		}
 		
+		deleteDuplicated(result);
 		return result;
+	}
+	
+	private void deleteDuplicated(List result){
+		Set<String>calculatedList = new HashSet<String>();
+		
+		for (Iterator iterator = result.iterator(); iterator.hasNext();) {
+			Object propObj = (Object) iterator.next();
+			if (propObj instanceof ICompletionProposal) {
+				ICompletionProposal proposal = (ICompletionProposal) propObj;
+				if (calculatedList.contains(proposal.getDisplayString())) {
+					iterator.remove();
+				}else{
+					calculatedList.add(((ICompletionProposal) propObj).getDisplayString());	
+				}
+			}			
+		}
 	}
 	
 	private boolean isAtContextBoundary(int parseState) {

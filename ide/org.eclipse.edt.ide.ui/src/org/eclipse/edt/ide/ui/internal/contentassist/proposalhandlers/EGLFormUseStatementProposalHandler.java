@@ -20,10 +20,8 @@ import java.util.Set;
 
 import org.eclipse.edt.compiler.binding.FormBinding;
 import org.eclipse.edt.compiler.binding.FormGroupBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.ast.AbstractASTPartVisitor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.File;
@@ -108,14 +106,6 @@ public class EGLFormUseStatementProposalHandler extends EGLAbstractProposalHandl
 															formgroupBinding = (ITypeBinding) binding;
 														}
 													}
-												}
-											}
-											
-											if(formgroupBinding != null) {
-												IBinding usedTypeBinding = useStatement.getUsedTypeBinding();
-												IAnnotationBinding helpGroupABinding = usedTypeBinding.getAnnotation(EGLUITEXT, IEGLConstants.PROPERTY_HELPGROUP);
-												if(helpGroupABinding == null || helpGroupABinding.getValue() == Boolean.NO) {
-													usedFormGroups.add(formgroupBinding);
 												}
 											}
 										}										

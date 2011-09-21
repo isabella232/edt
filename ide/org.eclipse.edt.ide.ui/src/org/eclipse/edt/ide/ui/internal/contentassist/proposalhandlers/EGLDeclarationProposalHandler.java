@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Stack;
 
 import org.eclipse.edt.compiler.binding.ClassFieldBinding;
+import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.FunctionContainerBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
@@ -42,7 +43,6 @@ import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.jface.text.ITextViewer;
@@ -57,21 +57,9 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 
 	//Record subtypes
 	public static int BASIC_RECORD = 1<<0;
-	public static int INDEXED_RECORD = 1<<1;
-	public static int MQ_RECORD = 1<<2;
-	public static int RELATIVE_RECORD = 1<<3;
-	public static int SERIAL_RECORD = 1<<4;
-	public static int SQL_RECORD = 1<<5;
-	public static int UI_RECORD = 1<<6;
-	public static int CONSOLE_FORM = 1<<7;
-	public static int WINDOW = 1<<8;
-	public static int MENU = 1<<9;
-	public static int PROMPT = 1<<10;
-	public static int PSB_RECORD = 1<<11;
-	public static int DLI_SEGMENT = 1<<12;
+	public static int ENTITY_RECORD = 1<<1;
 	public static int EXCEPTION = 1<<12;
-	public static int ALL_RECORDS = BASIC_RECORD | INDEXED_RECORD | MQ_RECORD | RELATIVE_RECORD | SERIAL_RECORD | 
-					SQL_RECORD | UI_RECORD | CONSOLE_FORM | PSB_RECORD | DLI_SEGMENT | EXCEPTION;
+	public static int ALL_RECORDS =  ENTITY_RECORD | EXCEPTION;
 	
 	private static interface IDataBindingFilter {
 		boolean dataBindingPasses(IDataBinding dataBinding);
@@ -100,75 +88,15 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 				}
 				switch(type.getKind()) {
 					case ITypeBinding.FIXED_RECORD_BINDING:
-					case ITypeBinding.FLEXIBLE_RECORD_BINDING:						
-						if((BASIC_RECORD & recordTypes) == BASIC_RECORD) {
-							if(type.getAnnotation(EGLCORE, IEGLConstants.RECORD_SUBTYPE_BASIC) != null) {
-								return true;
-							}
-						}
-						if((INDEXED_RECORD & recordTypes) == INDEXED_RECORD) {
-							if(type.getAnnotation(EGLIOFILE, IEGLConstants.RECORD_SUBTYPE_INDEXED) != null) {
-								return true;
-							}
-						}
-						if((MQ_RECORD & recordTypes) == MQ_RECORD) {
-							if(type.getAnnotation(EGLIOMQ, IEGLConstants.RECORD_SUBTYPE_MQ) != null) {
-								return true;
-							}
-						}
-						if((RELATIVE_RECORD & recordTypes) == RELATIVE_RECORD) {
-							if(type.getAnnotation(EGLIOFILE, IEGLConstants.RECORD_SUBTYPE_RELATIVE) != null) {
-								return true;
-							}
-						}
-						if((SERIAL_RECORD & recordTypes) == SERIAL_RECORD) {
-							if(type.getAnnotation(EGLIOFILE, IEGLConstants.RECORD_SUBTYPE_SERIAL) != null) {
-								return true;
-							}
-						}
-						if((SQL_RECORD & recordTypes) == SQL_RECORD) {
-							if(type.getAnnotation(EGLIOSQL, IEGLConstants.RECORD_SUBTYPE_SQl) != null) {
-								return true;
-							}
-						}
-						if((UI_RECORD & recordTypes) == UI_RECORD) {
-							if(type.getAnnotation(EGLUIWEBTRANSACTION, IEGLConstants.RECORD_SUBTYPE_VGUI) != null) {
-								return true;
-							}
-						}
-						if((CONSOLE_FORM & recordTypes) == CONSOLE_FORM) {
-							if(type.getAnnotation(EGLUICONSOLE, IEGLConstants.RECORD_SUBTYPE_CONSOLE_FORM) != null) {
-								return true;
-							}
-						}
-						if((PSB_RECORD & recordTypes) == PSB_RECORD) {
-							if(type.getAnnotation(EGLIODLI, IEGLConstants.RECORD_SUBTYPE_PSB_RECORD) != null) {
-								return true;
-							}
-						}
-						if((DLI_SEGMENT & recordTypes) == DLI_SEGMENT) {
-							if(type.getAnnotation(EGLIODLI, IEGLConstants.RECORD_SUBTYPE_DLI_SEGMENT) != null) {
+					case ITypeBinding.FLEXIBLE_RECORD_BINDING:	
+					case ITypeBinding.EXTERNALTYPE_BINDING:
+					case ITypeBinding.HANDLER_BINDING:
+						if((ENTITY_RECORD & recordTypes) == ENTITY_RECORD) {
+							if(type.getAnnotation(EGLPERSISTENCE, IEGLConstants.SUBTYPE_ENTITY) != null) {
 								return true;
 							}
 						}
 						break;
-						
-					case ITypeBinding.EXTERNALTYPE_BINDING:
-						if((WINDOW & recordTypes) == WINDOW) {
-							if(AbstractBinder.typeIs(type, EGLUICONSOLE, IEGLConstants.EGL_CONSOLE_UI_WINDOW)) {
-								return true;
-							}
-						}
-						if((MENU & recordTypes) == MENU) {
-							if(AbstractBinder.typeIs(type, EGLUICONSOLE, IEGLConstants.EGL_CONSOLE_UI_MENU)) {
-								return true;
-							}
-						}
-						if((PROMPT & recordTypes) == PROMPT) {
-							if(AbstractBinder.typeIs(type, EGLUICONSOLE, IEGLConstants.EGL_CONSOLE_UI_PROMPT)) {
-								return true;
-							}
-						}
 				}
 			}			
 			return false;
@@ -235,6 +163,141 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 			return false;
 		}
 	}
+	
+	private static class DataSourceTypeDataBindingFilter implements IDataBindingFilter{
+
+		public DataSourceTypeDataBindingFilter(){
+		}
+		
+		public boolean dataBindingPasses(IDataBinding dataBinding) {
+			ITypeBinding type = dataBinding.getType();			
+			if (type != null && IBinding.NOT_FOUND_BINDING != type) {
+				type = type.getBaseType();
+
+				if (isDataSourceType(type)) {
+					return true;
+				}
+
+				if (ITypeBinding.EXTERNALTYPE_BINDING == type.getKind()) {
+					List extendType = ((ExternalTypeBinding) (type))
+							.getExtendedTypes();
+					for (Iterator iterator = extendType.iterator(); iterator
+							.hasNext();) {
+						ITypeBinding aType = (ITypeBinding) iterator.next();
+						if (isDataSourceType(aType)) {
+							return true;
+						}
+					}
+				}
+			}
+
+			return false;
+		}
+		
+	}
+	
+	private static boolean isDataSourceType(ITypeBinding type){
+		if (type.getName().equalsIgnoreCase(
+				IEGLConstants.MIXED_DATASOURCE_STRING)
+				|| type.getName().equalsIgnoreCase(
+						IEGLConstants.MIXED_SQLDATASOURCE_STRING)
+				|| type.getName().equalsIgnoreCase(
+						IEGLConstants.MIXED_SQLRESULTSET_STRING)
+				|| type.getName().equalsIgnoreCase(
+						IEGLConstants.MIXED_SCROLLABLEDATASOURCE_STRING)) {
+			return true;
+		}
+		return false;
+	}
+	
+	private static class SQLStatementTypeDataBindingFilter implements IDataBindingFilter{
+
+		public SQLStatementTypeDataBindingFilter(){
+		}
+		
+		public boolean dataBindingPasses(IDataBinding dataBinding) {
+			ITypeBinding type = dataBinding.getType();			
+			if (type != null && IBinding.NOT_FOUND_BINDING != type) {
+				type = type.getBaseType();
+				if (isSqlStatement(type)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+		
+	}
+	
+	private static boolean isSqlStatement(ITypeBinding type) {
+		if (type.getName().equalsIgnoreCase(
+				IEGLConstants.MIXED_SQLSTATEMENT_STRING)) {
+			return true;
+		}
+
+		return false;
+	}
+	
+	private static class SQLActionTargetsExternalTypeDataBindingFilter implements IDataBindingFilter{
+
+		public SQLActionTargetsExternalTypeDataBindingFilter() {
+		}
+		
+		@Override
+		public boolean dataBindingPasses(IDataBinding dataBinding) {
+			ITypeBinding type = dataBinding.getType();			
+			if(type != null && IBinding.NOT_FOUND_BINDING != type) {
+				type = type.getBaseType();
+				if (type.getKind() == ITypeBinding.EXTERNALTYPE_BINDING
+						&& !isDataSourceType(type) && !isSqlStatement(type)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+	}
+	
+	private static class HandlerTypeDataBindingFilter implements IDataBindingFilter{
+
+		public HandlerTypeDataBindingFilter() {
+		}
+		
+		@Override
+		public boolean dataBindingPasses(IDataBinding dataBinding) {
+			ITypeBinding type = dataBinding.getType();			
+			if(type != null && IBinding.NOT_FOUND_BINDING != type) {
+				type = type.getBaseType();
+				if(ITypeBinding.HANDLER_BINDING == type.getKind())
+					return true;
+			}
+			
+			return false;
+		}
+		
+	}
+	
+	private static class RecordTypeDataBindingFilter implements IDataBindingFilter{
+
+		public RecordTypeDataBindingFilter() {
+		}
+		
+		@Override
+		public boolean dataBindingPasses(IDataBinding dataBinding) {
+			ITypeBinding type = dataBinding.getType();			
+			if(type != null && IBinding.NOT_FOUND_BINDING != type) {
+				type = type.getBaseType();
+				if (type.getKind() == ITypeBinding.FIXED_RECORD_BINDING
+						|| type.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING){
+					return true;
+				}
+			}
+			return false;
+		}
+
+	}
+	
+
 	
 	private Node functionContainerPart;
 	private Node functionPart;
@@ -336,6 +399,56 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		List proposals = new ArrayList();
 		proposals.addAll(getVariableProposals(new ServiceTypeDataBindingFilter(), false, false));
 		proposals.addAll(getContainerVariableProposals(new ServiceTypeDataBindingFilter(), false, false));
+		return proposals;
+	}
+	
+	public List getDataSourceProposals(){
+		List proposals = new ArrayList();
+		proposals.addAll(getVariableProposals(new DataSourceTypeDataBindingFilter(), false, false));
+		proposals.addAll(getContainerVariableProposals(new DataSourceTypeDataBindingFilter(), false, false));
+		return proposals;
+	}
+	
+	public List getSQLStatementProposals(){
+		List proposals = new ArrayList();
+		proposals.addAll(getVariableProposals(new SQLStatementTypeDataBindingFilter(), false, false));
+		proposals.addAll(getContainerVariableProposals(new SQLStatementTypeDataBindingFilter(), false, false));
+		return proposals;
+	}
+
+	private List getAllRecordProposals(){
+		List proposals = new ArrayList();
+		proposals.addAll(getParameterProposals(new RecordTypeDataBindingFilter(), false));
+		proposals.addAll(getVariableProposals(new RecordTypeDataBindingFilter(), false, false));
+		proposals.addAll(getContainerVariableProposals(new RecordTypeDataBindingFilter(), false, false));
+		return proposals;
+	}
+	
+	private List getAllHandlerProposals(){
+		List proposals = new ArrayList();
+		proposals.addAll(getVariableProposals(new HandlerTypeDataBindingFilter(), false, false));
+		proposals.addAll(getContainerVariableProposals(new HandlerTypeDataBindingFilter(), false, false));
+		return proposals;
+	}
+	
+	private List getAllExternalTypeProposals(){
+		List proposals = new ArrayList();
+		proposals.addAll(getVariableProposals(new SQLActionTargetsExternalTypeDataBindingFilter(), false, false));
+		proposals.addAll(getContainerVariableProposals(new SQLActionTargetsExternalTypeDataBindingFilter(), false, false));
+		return proposals;
+	}
+	
+	/**
+	 * 
+	 * @return return all sql action targets from the context
+	 */
+	public List getSQLActioniTargets(){
+		List proposals = new ArrayList();
+		
+		proposals.addAll(getAllRecordProposals());
+		proposals.addAll(getAllHandlerProposals());
+		proposals.addAll(getAllExternalTypeProposals());
+		
 		return proposals;
 	}
 

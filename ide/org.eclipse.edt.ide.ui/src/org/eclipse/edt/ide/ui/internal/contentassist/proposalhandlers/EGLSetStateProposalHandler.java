@@ -16,14 +16,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
-import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.StructureItemBinding;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.jface.text.ITextViewer;
@@ -133,14 +131,7 @@ public class EGLSetStateProposalHandler extends EGLAbstractProposalHandler {
 				break;
 
 			case RECORD_ITEM_STATE :
-				IPartBinding itemDeclarer = targetBinding.getDeclaringPart();
-				if(Binding.isValidBinding(itemDeclarer) &&
-				   AbstractBinder.annotationIs(itemDeclarer.getSubType(), EGLIOSQL, IEGLConstants.RECORD_SUBTYPE_SQl) &&
-				   Binding.isValidBinding(enclosingPart) &&
-				   AbstractBinder.annotationIs(enclosingPart.getSubType(), EGLUIJSF, IEGLConstants.HANDLER_SUBTYPE_JSF)) {
-					availableStrings = getAvailableStates(new String[] {IEGLConstants.MNEMONIC_EMPTY, IEGLConstants.MNEMONIC_INITIAL}, currentStates);
-				}
-				else if(IDataBinding.STRUCTURE_ITEM_BINDING == targetBinding.getKind() && !((StructureItemBinding) targetBinding).getChildren().isEmpty()) {
+				if(IDataBinding.STRUCTURE_ITEM_BINDING == targetBinding.getKind() && !((StructureItemBinding) targetBinding).getChildren().isEmpty()) {
 					availableStrings = getAvailableStates(new String[] {IEGLConstants.MNEMONIC_EMPTY}, currentStates);
 				}
 				else {
@@ -322,20 +313,8 @@ public class EGLSetStateProposalHandler extends EGLAbstractProposalHandler {
 				}
 				
 				switch(typeBinding.getKind()) {
-					case ITypeBinding.FORM_BINDING:
-						if(typeBinding.getAnnotation(EGLUITEXT, IEGLConstants.FORM_SUBTYPE_PRINT) != null) {
-							return PRINT_FORM_STATE;
-						}
-						return TEXT_FORM_STATE;
-						
 					case ITypeBinding.FIXED_RECORD_BINDING:
 					case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-						if (typeBinding.getAnnotation(EGLIOFILE, IEGLConstants.RECORD_SUBTYPE_INDEXED) != null) {
-							return INDEXED_STATE;
-						}
-						else if (typeBinding.getAnnotation(EGLIODLI, IEGLConstants.RECORD_SUBTYPE_DLI_SEGMENT) != null) {
-							return DLI_RECORD_STATE;
-						}
 						return RECORD_STATE;
 						
 					case ITypeBinding.DATATABLE_BINDING:

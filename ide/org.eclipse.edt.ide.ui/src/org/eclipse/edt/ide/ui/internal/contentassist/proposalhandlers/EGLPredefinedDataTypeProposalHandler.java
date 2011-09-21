@@ -65,45 +65,18 @@ public class EGLPredefinedDataTypeProposalHandler extends EGLAbstractProposalHan
 			switch(partBinding.getKind()) {
 				case ITypeBinding.FIXED_RECORD_BINDING:
 				case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-					if(partBinding.getAnnotation(EGLIOSQL, IEGLConstants.RECORD_SUBTYPE_SQl) != null) {
-						if(ITypeBinding.FLEXIBLE_RECORD_BINDING == partBinding.getKind()) {
-							return EGLDataTypeUtility.PREDEFINED_DATA_TYPE_STRINGS;
-						}
-						else {
-							return new String[0];
-						}
-					}
-					
-					if(partBinding.getAnnotation(EGLUICONSOLE, IEGLConstants.RECORD_SUBTYPE_CONSOLE_FORM) != null) {
-						return EGLDataTypeUtility.PREDEFINED_CONSOLE_FORM_DATA_TYPE_STRINGS;
-					}
-					
-					if(partBinding.getAnnotation(EGLIODLI, IEGLConstants.RECORD_SUBTYPE_PSB_RECORD) != null) {
-						return EGLDataTypeUtility.PREDEFINED_PSBRECORD_DATA_TYPE_STRINGS;
-					}
-					
 					if(ITypeBinding.FLEXIBLE_RECORD_BINDING == partBinding.getKind()) {
 						return EGLDataTypeUtility.PREDEFINED_DATA_TYPE_STRINGS;
 					}
 					else {
 						return new String[0];
 					}
-				
-				case ITypeBinding.DATAITEM_BINDING:
-					return EGLDataTypeUtility.PREDEFINED_DATAITEM_TYPE_STRINGS;
-					
-				case ITypeBinding.DATATABLE_BINDING:
-					return new String[0];
 					
 				case ITypeBinding.LIBRARY_BINDING:
-					if(partBinding.getAnnotation(EGLCORE, IEGLConstants.LIBRARY_SUBTYPE_NATIVE) != null) {
+					if(partBinding.getAnnotation(EGLLANG, IEGLConstants.LIBRARY_SUBTYPE_NATIVE) != null) {
 						return EGLDataTypeUtility.PREDEFINED_NATIVE_LIBRARY_TYPE_STRINGS;
 					}
 					break;
-				
-				case ITypeBinding.FORM_BINDING:
-				case ITypeBinding.FORMGROUP_BINDING:
-					return new String[0];
 					
 				case ITypeBinding.SERVICE_BINDING:
 				case ITypeBinding.INTERFACE_BINDING:

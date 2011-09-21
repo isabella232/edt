@@ -267,7 +267,10 @@ public class EGLAnnotationNameReferenceCompletion extends EGLAbstractPropertyRef
 		}
 		
 		protected Collection getPropertyRules() {
-			return EGLNewPropertiesHandler.createRulesForMemberAnnotations(subtypeName);
+			Collection memberRulers = EGLNewPropertiesHandler.createRulesForMemberAnnotations(subtypeName);
+			Collection filedmbrAnnotation = EGLNewPropertiesHandler.createRulesForElementKinds(new EnumerationDataBinding[]{ElementKind.FIELDMBR});
+			memberRulers.addAll(filedmbrAnnotation);
+			return memberRulers;
 		}
 	}
 }

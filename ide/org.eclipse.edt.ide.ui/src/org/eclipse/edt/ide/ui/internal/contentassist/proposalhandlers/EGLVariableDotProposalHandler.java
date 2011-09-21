@@ -24,13 +24,11 @@ import org.eclipse.edt.compiler.binding.AmbiguousDataBinding;
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.ClassFieldBinding;
-import org.eclipse.edt.compiler.binding.DataTableBinding;
 import org.eclipse.edt.compiler.binding.DictionaryBinding;
 import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.FixedRecordBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
-import org.eclipse.edt.compiler.binding.FormBinding;
 import org.eclipse.edt.compiler.binding.HandlerBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
@@ -116,7 +114,7 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 						
 					case ITypeBinding.DICTIONARY_BINDING:
 						result.addAll(getSystemWordProposals(DictionaryBinding.getSYSTEM_FUNCTIONS(), UINlsStrings.CAProposal_FunctionSystemWord));
-						if(AbstractBinder.dataBindingIs(qualifierDataBinding, EGLCORE, IEGLConstants.KEYWORD_SYSLIB, IEGLConstants.SYSTEM_WORD_CURRENTEXCEPTION)) {
+						if(AbstractBinder.dataBindingIs(qualifierDataBinding, EGLLANG, IEGLConstants.KEYWORD_SYSLIB, IEGLConstants.SYSTEM_WORD_CURRENTEXCEPTION)) {
 						    Set dBindings = new HashSet();
 						    dBindings.addAll(((FlexibleRecordBinding) SystemPartManager.ANYEXCEPTION_BINDING).getDeclaredFields());
 						    result.addAll(getFieldProposals((Collection) dBindings, addEquals, includePrivateFields, propertyBlockList));
@@ -141,18 +139,12 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 					return result;
 				
 				case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-					if (isIORecordType())
-						result.addAll(getResourceAssociationSystemWordProposal());
+					result.addAll(getResourceAssociationSystemWordProposal());
 					result.addAll(getFieldProposals(((FlexibleRecordBinding) qualifierTypeBinding).getDeclaredFields(), addEquals, includePrivateFields, propertyBlockList));
-					return result;
-					
-				case ITypeBinding.FORM_BINDING:
-					result.addAll(getFieldProposals(((FormBinding) qualifierTypeBinding).getFields(), addEquals, includePrivateFields, propertyBlockList));
 					return result;
 
 				case ITypeBinding.FIXED_RECORD_BINDING:
-					if (isIORecordType())
-						result.addAll(getResourceAssociationSystemWordProposal());
+					result.addAll(getResourceAssociationSystemWordProposal());
 					Set dBindings = new HashSet();
 					dBindings.addAll(((FixedRecordBinding) qualifierTypeBinding).getSimpleNamesToDataBindingsMap().values());
 					dBindings.addAll(((FixedRecordBinding) qualifierTypeBinding).getStructureItems());
@@ -167,10 +159,6 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 							UINlsStrings.bind(UINlsStrings.CAProposal_LibraryFunction, qualifierTypeBinding.getCaseSensitiveName()),
 							EGLCompletionProposal.RELEVANCE_LIBRARY_FUNCTION));
 					}
-					return result;
-
-				case ITypeBinding.DATATABLE_BINDING:
-					result.addAll(getFieldProposals(((DataTableBinding) qualifierTypeBinding).getStructureItems(), addEquals, includePrivateFields, propertyBlockList));
 					return result;
 
 				case ITypeBinding.SERVICE_BINDING:
@@ -326,15 +314,4 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 		return proposals;
 	}
 
-	private boolean isIORecordType() {
-		if (qualifierTypeBinding.getAnnotation(EGLIOFILE, IEGLConstants.RECORD_SUBTYPE_INDEXED) != null)
-			return true;
-		if (qualifierTypeBinding.getAnnotation(EGLIOFILE, IEGLConstants.RECORD_SUBTYPE_RELATIVE) != null)
-			return true;
-		if (qualifierTypeBinding.getAnnotation(EGLIOFILE, IEGLConstants.RECORD_SUBTYPE_SERIAL) != null)
-			return true;
-		if (qualifierTypeBinding.getAnnotation(EGLIOMQ, IEGLConstants.RECORD_SUBTYPE_MQ) != null)
-			return true;
-		return false;
-	}
 }

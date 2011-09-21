@@ -12,14 +12,12 @@
 package org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers;
 
 import java.util.List;
-import java.util.TreeSet;
 
 import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.jface.text.ITextViewer;
@@ -168,11 +166,6 @@ public class EGLConditionalStateProposalHandler extends EGLAbstractProposalHandl
 	}
 
 	private int getType() {
-		if (AbstractBinder.dataBindingIs(targetBinding, EGLCORE, IEGLConstants.KEYWORD_SYSVAR, IEGLConstants.SYSTEM_WORD_SYSTEMTYPE))			
-			return SYS_VALUE;
-		else if (AbstractBinder.dataBindingIs(targetBinding, EGLUITEXT, IEGLConstants.KEYWORD_CONVERSEVAR, IEGLConstants.KEYWORD_EVENTKEY))
-			return KEY_VALUE;
-		
 		if(targetBinding != null) {
 			switch(targetBinding.getKind()) {
 				case IDataBinding.FORM_BINDING:
@@ -181,12 +174,6 @@ public class EGLConditionalStateProposalHandler extends EGLAbstractProposalHandl
 					return TEXT_FIELD_STATE;
 				case IDataBinding.STRUCTURE_ITEM_BINDING:
 				case IDataBinding.FLEXIBLE_RECORD_FIELD:
-					if(targetBinding.getDeclaringPart().getAnnotation(EGLIOSQL, IEGLConstants.RECORD_SUBTYPE_SQl) != null) {
-						return SQL_ITEM_STATE;
-					}
-					if(targetBinding.getDeclaringPart().getAnnotation(EGLUIWEBTRANSACTION, IEGLConstants.RECORD_SUBTYPE_VGUI) != null) {
-						return WEB_ITEM_STATE;
-					}
 					return ITEM_STATE;
 				case IDataBinding.FUNCTION_PARAMETER_BINDING:
 					if(((FunctionParameterBinding) targetBinding).isField()) {

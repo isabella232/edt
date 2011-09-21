@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.ast.NodeTypes;
-import org.eclipse.edt.compiler.internal.EGLBasePlugin;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
 
 public class EGLDefinedKeywordCompletions {
@@ -62,7 +61,7 @@ public class EGLDefinedKeywordCompletions {
 			completionList.add(new EGLKeywordCompletion(NodeTypes.FOR, IEGLConstants.KEYWORD_FOR));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.FOREACH, IEGLConstants.KEYWORD_FOREACH));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.FORUPDATE, IEGLConstants.KEYWORD_FORUPDATE));
-			completionList.add(new EGLKeywordCompletion(NodeTypes.FREESQL, IEGLConstants.KEYWORD_FREESQL));
+//			completionList.add(new EGLKeywordCompletion(NodeTypes.FREESQL, IEGLConstants.KEYWORD_FREESQL));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.FROM, IEGLConstants.KEYWORD_FROM));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.FUNCTION, IEGLConstants.KEYWORD_FUNCTION));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.GET, IEGLConstants.KEYWORD_GET));

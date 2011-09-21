@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2000, 2011 IBM Corporation and others.
+ * Copyright ÃƒÂ¦Ã‚Â¼?2000, 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,31 +16,32 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPredefinedDataTypeProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPrimitiveProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
-public class EGLDataItemTypeReferenceCompletion extends EGLAbstractReferenceCompletion {
+public class EGLSQLPrepareStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; dataItem a "); //$NON-NLS-1$
+		addContext("package a; function a() prepare "); //$NON-NLS-1$
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#returnCompletionProposals(com.ibm.etools.egl.pgm.errors.ParseStack, java.util.List, org.eclipse.jface.text.ITextViewer, int)
+	 */
 	protected List returnCompletionProposals(ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
 		final List proposals = new ArrayList();
-		getBoundASTNode(viewer, documentOffset, new String[] {"end", "x end", ""}, new CompletedNodeVerifier() { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			public boolean nodeIsValid(Node astNode) {
-				return astNode != null;
-			}
-		}, new IBoundNodeProcessor() {
-			public void processBoundNode(Node boundNode) {
-				proposals.addAll(new EGLPrimitiveProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());
-				proposals.addAll(new EGLPredefinedDataTypeProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());
-			}
-		});
+		getBoundASTNodeForOffsetInStatement(viewer, documentOffset,
+				new IBoundNodeProcessor() {
+					public void processBoundNode(Node boundNode) {
+						// SQL Statement into proposals
+						proposals.addAll(new EGLDeclarationProposalHandler(
+								viewer, documentOffset, prefix, boundNode)
+								.getSQLStatementProposals());
+					}
+				});
 		return proposals;
 	}
 }

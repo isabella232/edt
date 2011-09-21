@@ -55,7 +55,7 @@ public class EGLFunctionPartSearchProposalHandler extends EGLPartSearchProposalH
 		}
 		
 		if(functionContainerPart != null) {
-			IAnnotationBinding aBinding = ((Part) functionContainerPart).getName().resolveBinding().getAnnotation(EGLCORE, IEGLConstants.PROPERTY_INCLUDEREFERENCEDFUNCTIONS);
+			IAnnotationBinding aBinding = ((Part) functionContainerPart).getName().resolveBinding().getAnnotation(EGLLANG, IEGLConstants.PROPERTY_INCLUDEREFERENCEDFUNCTIONS);
 			referencedFunctions = aBinding != null && Boolean.YES == aBinding.getValue();
 		}
 	}

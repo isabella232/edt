@@ -14,8 +14,6 @@ package org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.internal.EGLBasePlugin;
-
 public class EGLDefinedReferenceCompletions {
 
 	private static IReferenceCompletion[] DEFINED_COMPLETIONS;
@@ -27,7 +25,17 @@ public class EGLDefinedReferenceCompletions {
 	public static IReferenceCompletion[] getDefinedCompletions() {
 		if (DEFINED_COMPLETIONS == null) {
 			List completionList = new ArrayList();
-			completionList.add(new EGLAddStatementReferenceCompletion());
+			completionList.add(new EGLSQLAddStatementReferenceCompletion());
+			completionList.add(new EGLSQLToStatementReferenceCompletion());
+			completionList.add(new EGLSQLFromStatementRefrerenceCompletion());
+			completionList.add(new EGLSQLForStatementReferenceCompletion());
+			completionList.add(new EGLSQLPrepareWithStatementReferenceCompletion());
+			completionList.add(new EGLSQLDeleteStatementReferenceCompletion());
+			completionList.add(new EGLSQLCloseStatementReferenceCompletion());
+			completionList.add(new EGLSQLGetStatementReferenceCompletion());
+			completionList.add(new EGLSQLOpenStatementReferenceCompletion());
+			completionList.add(new EGLSQLPrepareStatementReferenceCompletion());
+			completionList.add(new EGLSQLUsingStatementReferenceCompletion());
 			completionList.add(new EGLAnnotationNameReferenceCompletion());
 			completionList.add(new EGLAsIsaOperatorReferenceCompletion());
 			completionList.add(new EGLArrayIndexReferenceCompletion());
@@ -37,15 +45,10 @@ public class EGLDefinedReferenceCompletions {
 			completionList.add(new EGLCallProgramStatementReferenceCompletion());
 			completionList.add(new EGLCallStatementWithCallbackReferenceCompletion());
 			completionList.add(new EGLCaseStatementReferenceCompletion());
-			completionList.add(new EGLCloseStatementReferenceCompletion());
 			completionList.add(new EGLConditionalStateLikeMatchesReferenceCompletion());
 			completionList.add(new EGLConditionalStateReferenceCompletion());
 			completionList.add(new EGLConstantTypeReferenceCompletion());
 			completionList.add(new EGLContinueStatementReferenceCompletion());
-			completionList.add(new EGLDataItemTypeReferenceCompletion());
-			completionList.add(new EGLDeleteStatementReferenceCompletion());
-			completionList.add(new EGLEmbedStructureItemReferenceCompletion());
-			completionList.add(new EGLExecuteForStatementReferenceCompletion());
 			completionList.add(new EGLExitStatementReferenceCompletion());
 			completionList.add(new EGLExitProgramStatementReferenceCompletion());
 			completionList.add(new EGLExtendsReferenceCompletion());
@@ -57,11 +60,6 @@ public class EGLDefinedReferenceCompletions {
 			completionList.add(new EGLFunctionParameterNameReferenceCompletion());
 			completionList.add(new EGLFunctionParameterTypeReferenceCompletion());
 			completionList.add(new EGLFunctionReturnsReferenceCompletion());
-			completionList.add(new EGLGetNextStatementReferenceCompletion());
-			completionList.add(new EGLGetRelativeAbsoluteParensStatementReferenceCompletion());
-			completionList.add(new EGLGetRelativeAbsoluteStatementReferenceCompletion());
-			completionList.add(new EGLGetStatementReferenceCompletion());
-			completionList.add(new EGLIOStatementClauseItemReferenceCompletion());
 			completionList.add(new EGLImplementsReferenceCompletion());
 			completionList.add(new EGLMoveStatementReferenceCompletion());
 			completionList.add(new EGLMoveToStatementReferenceCompletion());
@@ -69,10 +67,7 @@ public class EGLDefinedReferenceCompletions {
 			completionList.add(new EGLNewReferenceCompletion());
 			completionList.add(new EGLNewSettingsBlockReferenceCompletion());
 			completionList.add(new EGLNumericExpressionStatementReferenceCompletion());
-			completionList.add(new EGLOpenForStatementReferenceCompletion());
 			completionList.add(new EGLParameterModifierReferenceCompletion());
-			completionList.add(new EGLPrepareForStatementReferenceCompletion());
-			completionList.add(new EGLPrepareFromStatementReferenceCompletion());
 			completionList.add(new EGLProgramArgumentsReferenceCompletion());
 			completionList.add(new EGLProgramParameterNameReferenceCompletion());
 			completionList.add(new EGLProgramParameterTypeReferenceCompletion());
@@ -81,8 +76,7 @@ public class EGLDefinedReferenceCompletions {
 			completionList.add(new EGLPropertyListValue2ReferenceCompletion());
 			completionList.add(new EGLPropertyNameReferenceCompletion());
 			completionList.add(new EGLRelationalOperatorReferenceCompletion());
-			completionList.add(new EGLReplaceStatementReferenceCompletion());
-			completionList.add(new EGLReportHandlerCallbackFunctionsReferenceCompletion());
+			completionList.add(new EGLSQLReplaceStatementReferenceCompletion());
 			completionList.add(new EGLReturnStatementReferenceCompletion());
 			completionList.add(new EGLReturnStatementWithParensReferenceCompletion());
 			completionList.add(new EGLSetStatementReferenceCompletion());
@@ -94,14 +88,12 @@ public class EGLDefinedReferenceCompletions {
 			completionList.add(new EGLSubScriptSubString2ModifierReferenceCompletion());
 			completionList.add(new EGLSubtypeReferenceCompletion());
 			completionList.add(new EGLThrowStatementReferenceCompletion());
-			completionList.add(new EGLTransferToPassingStatementReferenceCompletion());
-			completionList.add(new EGLTransferToStatementReferenceCompletion());
 			completionList.add(new EGLTryOnExceptionStatementReferenceCompletion());
 			completionList.add(new EGLTryOnException2StatementReferenceCompletion());
 			completionList.add(new EGLUseStatementReferenceCompletion());
 			completionList.add(new EGLVariableDotReferenceCompletion());
 			completionList.add(new EGLVariableTypeReferenceCompletion());
-			completionList.add(new EGLWithStatementReferenceCompletion());
+			completionList.add(new EGLSQLWithStatementReferenceCompletion());
 			
 			DEFINED_COMPLETIONS = (IReferenceCompletion[]) completionList.toArray(new IReferenceCompletion[0]);
 		}
