@@ -213,6 +213,8 @@ public interface MofConversion {
 	String Type_AnyText = EGL_SerializationKeyPrefix+".AnyText";
 	String Type_AnyRecord = EGL_SerializationKeyPrefix+".AnyRecord";
 	String Type_AnyStruct = EGL_SerializationKeyPrefix+".AnyStruct";
+	String Type_AnyEnumeration = EGL_SerializationKeyPrefix+".AnyEnumeration";
+	String Type_AnyDelegate = EGL_SerializationKeyPrefix+".AnyDelegate";
 	
 	// EGL Reflect Types	
 	String Type_FieldRef = EGL_lang_reflect_refTypes_package+".EGLFieldRef";

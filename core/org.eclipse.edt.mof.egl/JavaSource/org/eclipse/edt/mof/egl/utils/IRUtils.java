@@ -28,8 +28,10 @@ import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DanglingReference;
+import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.DelegateInvocation;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
@@ -410,7 +412,7 @@ public class IRUtils {
 		}
 		return false;
 	}
-	
+		
 	private static boolean isAny(Classifier clazz) {
 		if (clazz != null) {
 			return (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGLAny));
@@ -449,7 +451,7 @@ public class IRUtils {
 		if (isInt(exprType.getClassifier()) && isInt(type.getClassifier())) {
 			return expr;
 		}
-		
+						
 		if (exprType.getClassifier().equals(type.getClassifier())) {
 			if (exprType instanceof SequenceType) {
 				if (((SequenceType)exprType).getLength() < ((SequenceType)type).getLength()) {
@@ -475,9 +477,9 @@ public class IRUtils {
 		}
 		
 		if (TypeUtils.isReferenceType(exprType) 
-				&& exprType instanceof StructPart 
+				&& exprType instanceof SubType 
 				&& type instanceof StructPart 
-				&& ((StructPart)exprType).isSubtypeOf((StructPart)type)) 
+				&& ((SubType)exprType).isSubtypeOf((StructPart)type)) 
 			return expr;
 		if (TypeUtils.isReferenceType(type) && TypeUtils.isValueType(exprType)) {
 			BoxingExpression box = factory.createBoxingExpression();
@@ -727,19 +729,24 @@ public class IRUtils {
 	private static Operation primGetBinaryOperation(Classifier lhs, Classifier rhs, String opSymbol) {
 				
 		if (!(lhs instanceof StructPart)) {
-			
+			Operation result = null;
 			if (rhs instanceof StructPart) {
-				return getNoConversionBinaryOperation(lhs, rhs, (StructPart)rhs, opSymbol);
+				result = getNoConversionBinaryOperation(lhs, rhs, (StructPart)rhs, opSymbol);
+				if (result != null) {
+					return result;
+				}
 			}
-			else {
-				//neither lhs or rhs is struct. Check if their supertypes are struct
-				if (lhs instanceof SubType && rhs instanceof SubType) {
-					SubType lSubType = (SubType)lhs;
-					SubType rSubType = (SubType)rhs;
-					
-					if (lSubType.getSuperTypes().size() > 0 && rSubType.getSuperTypes().size() > 0) {
-						return getBinaryOperation(lSubType.getSuperTypes().get(0), rSubType.getSuperTypes().get(0), opSymbol);
-					}
+		
+			if (lhs instanceof SubType) {
+				SubType lSubType = (SubType)lhs;
+				Classifier rSubType = rhs;
+
+				if (!(rhs instanceof StructPart) && rhs instanceof SubType && ((SubType)rhs).getSuperTypes().size() > 0)  {
+					rSubType = ((SubType)rhs).getSuperTypes().get(0);
+				}
+				
+				if (lSubType.getSuperTypes().size() > 0) {
+					return getBinaryOperation(lSubType.getSuperTypes().get(0), rSubType, opSymbol);
 				}
 			}
 			

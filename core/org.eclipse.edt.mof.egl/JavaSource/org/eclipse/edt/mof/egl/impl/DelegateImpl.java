@@ -94,7 +94,7 @@ public class DelegateImpl extends PartImpl implements Delegate, MofConversion {
 	public List<StructPart> getSuperTypes() {
 		if (superTypes == null) {
 			superTypes = new ArrayList<StructPart>();
-			superTypes.add((StructPart)IRUtils.getEGLType(Type_EGLAny));
+			superTypes.add((StructPart)IRUtils.getEGLType(Type_AnyDelegate));
 		}
 		return superTypes;
 	}

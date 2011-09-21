@@ -270,7 +270,7 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 	public List<StructPart> getSuperTypes() {
 		if (superTypes == null) {
 			superTypes = new ArrayList<StructPart>();
-			superTypes.add((StructPart)IRUtils.getEGLType(MofConversion.Type_EGLAny));
+			superTypes.add((StructPart)IRUtils.getEGLType(MofConversion.Type_AnyEnumeration));
 		}
 		return superTypes;
 	}
