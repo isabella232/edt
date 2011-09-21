@@ -17,7 +17,6 @@ import org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage;
 import org.eclipse.edt.ide.ui.internal.deployment.Parameters;
 import org.eclipse.edt.ide.ui.internal.deployment.RUIApplication;
 import org.eclipse.edt.ide.ui.internal.deployment.RUIHandler;
-import org.eclipse.edt.ide.ui.internal.deployment.RUIResourceOmissions;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -41,7 +40,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.RUIApplicationImpl#getRuihandler <em>Ruihandler</em>}</li>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.RUIApplicationImpl#getResourceOmissions <em>Resource Omissions</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.RUIApplicationImpl#getParameters <em>Parameters</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.RUIApplicationImpl#isDeployAllHandlers <em>Deploy All Handlers</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.RUIApplicationImpl#isSupportDynamicLoading <em>Support Dynamic Loading</em>}</li>
@@ -50,7 +48,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
+public class RUIApplicationImpl extends EObjectImpl implements RUIApplication
+{
 	/**
 	 * The cached value of the '{@link #getRuihandler() <em>Ruihandler</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -60,16 +59,6 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * @ordered
 	 */
 	protected EList<RUIHandler> ruihandler;
-
-	/**
-	 * The cached value of the '{@link #getResourceOmissions() <em>Resource Omissions</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getResourceOmissions()
-	 * @generated
-	 * @ordered
-	 */
-	protected RUIResourceOmissions resourceOmissions;
 
 	/**
 	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' containment reference.
@@ -144,7 +133,8 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected RUIApplicationImpl() {
+	protected RUIApplicationImpl()
+	{
 		super();
 	}
 
@@ -154,7 +144,8 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * @generated
 	 */
 	@Override
-	protected EClass eStaticClass() {
+	protected EClass eStaticClass()
+	{
 		return DeploymentPackage.Literals.RUI_APPLICATION;
 	}
 
@@ -163,8 +154,10 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<RUIHandler> getRuihandler() {
-		if (ruihandler == null) {
+	public EList<RUIHandler> getRuihandler()
+	{
+		if (ruihandler == null)
+		{
 			ruihandler = new EObjectContainmentEList<RUIHandler>(RUIHandler.class, this, DeploymentPackage.RUI_APPLICATION__RUIHANDLER);
 		}
 		return ruihandler;
@@ -175,50 +168,8 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public RUIResourceOmissions getResourceOmissions() {
-		return resourceOmissions;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetResourceOmissions(RUIResourceOmissions newResourceOmissions, NotificationChain msgs) {
-		RUIResourceOmissions oldResourceOmissions = resourceOmissions;
-		resourceOmissions = newResourceOmissions;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DeploymentPackage.RUI_APPLICATION__RESOURCE_OMISSIONS, oldResourceOmissions, newResourceOmissions);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setResourceOmissions(RUIResourceOmissions newResourceOmissions) {
-		if (newResourceOmissions != resourceOmissions) {
-			NotificationChain msgs = null;
-			if (resourceOmissions != null)
-				msgs = ((InternalEObject)resourceOmissions).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.RUI_APPLICATION__RESOURCE_OMISSIONS, null, msgs);
-			if (newResourceOmissions != null)
-				msgs = ((InternalEObject)newResourceOmissions).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.RUI_APPLICATION__RESOURCE_OMISSIONS, null, msgs);
-			msgs = basicSetResourceOmissions(newResourceOmissions, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.RUI_APPLICATION__RESOURCE_OMISSIONS, newResourceOmissions, newResourceOmissions));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Parameters getParameters() {
+	public Parameters getParameters()
+	{
 		return parameters;
 	}
 
@@ -227,10 +178,12 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetParameters(Parameters newParameters, NotificationChain msgs) {
+	public NotificationChain basicSetParameters(Parameters newParameters, NotificationChain msgs)
+	{
 		Parameters oldParameters = parameters;
 		parameters = newParameters;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
+		{
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DeploymentPackage.RUI_APPLICATION__PARAMETERS, oldParameters, newParameters);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
@@ -242,8 +195,10 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setParameters(Parameters newParameters) {
-		if (newParameters != parameters) {
+	public void setParameters(Parameters newParameters)
+	{
+		if (newParameters != parameters)
+		{
 			NotificationChain msgs = null;
 			if (parameters != null)
 				msgs = ((InternalEObject)parameters).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.RUI_APPLICATION__PARAMETERS, null, msgs);
@@ -261,7 +216,8 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isDeployAllHandlers() {
+	public boolean isDeployAllHandlers()
+	{
 		return deployAllHandlers;
 	}
 
@@ -270,7 +226,8 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setDeployAllHandlers(boolean newDeployAllHandlers) {
+	public void setDeployAllHandlers(boolean newDeployAllHandlers)
+	{
 		boolean oldDeployAllHandlers = deployAllHandlers;
 		deployAllHandlers = newDeployAllHandlers;
 		boolean oldDeployAllHandlersESet = deployAllHandlersESet;
@@ -284,7 +241,8 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void unsetDeployAllHandlers() {
+	public void unsetDeployAllHandlers()
+	{
 		boolean oldDeployAllHandlers = deployAllHandlers;
 		boolean oldDeployAllHandlersESet = deployAllHandlersESet;
 		deployAllHandlers = DEPLOY_ALL_HANDLERS_EDEFAULT;
@@ -298,7 +256,8 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isSetDeployAllHandlers() {
+	public boolean isSetDeployAllHandlers()
+	{
 		return deployAllHandlersESet;
 	}
 
@@ -307,7 +266,8 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isSupportDynamicLoading() {
+	public boolean isSupportDynamicLoading()
+	{
 		return supportDynamicLoading;
 	}
 
@@ -316,7 +276,8 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setSupportDynamicLoading(boolean newSupportDynamicLoading) {
+	public void setSupportDynamicLoading(boolean newSupportDynamicLoading)
+	{
 		boolean oldSupportDynamicLoading = supportDynamicLoading;
 		supportDynamicLoading = newSupportDynamicLoading;
 		boolean oldSupportDynamicLoadingESet = supportDynamicLoadingESet;
@@ -330,7 +291,8 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void unsetSupportDynamicLoading() {
+	public void unsetSupportDynamicLoading()
+	{
 		boolean oldSupportDynamicLoading = supportDynamicLoading;
 		boolean oldSupportDynamicLoadingESet = supportDynamicLoadingESet;
 		supportDynamicLoading = SUPPORT_DYNAMIC_LOADING_EDEFAULT;
@@ -344,7 +306,8 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isSetSupportDynamicLoading() {
+	public boolean isSetSupportDynamicLoading()
+	{
 		return supportDynamicLoadingESet;
 	}
 
@@ -354,12 +317,12 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.RUI_APPLICATION__RUIHANDLER:
 				return ((InternalEList<?>)getRuihandler()).basicRemove(otherEnd, msgs);
-			case DeploymentPackage.RUI_APPLICATION__RESOURCE_OMISSIONS:
-				return basicSetResourceOmissions(null, msgs);
 			case DeploymentPackage.RUI_APPLICATION__PARAMETERS:
 				return basicSetParameters(null, msgs);
 		}
@@ -372,12 +335,12 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.RUI_APPLICATION__RUIHANDLER:
 				return getRuihandler();
-			case DeploymentPackage.RUI_APPLICATION__RESOURCE_OMISSIONS:
-				return getResourceOmissions();
 			case DeploymentPackage.RUI_APPLICATION__PARAMETERS:
 				return getParameters();
 			case DeploymentPackage.RUI_APPLICATION__DEPLOY_ALL_HANDLERS:
@@ -395,14 +358,13 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
+	public void eSet(int featureID, Object newValue)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.RUI_APPLICATION__RUIHANDLER:
 				getRuihandler().clear();
 				getRuihandler().addAll((Collection<? extends RUIHandler>)newValue);
-				return;
-			case DeploymentPackage.RUI_APPLICATION__RESOURCE_OMISSIONS:
-				setResourceOmissions((RUIResourceOmissions)newValue);
 				return;
 			case DeploymentPackage.RUI_APPLICATION__PARAMETERS:
 				setParameters((Parameters)newValue);
@@ -423,13 +385,12 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
-		switch (featureID) {
+	public void eUnset(int featureID)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.RUI_APPLICATION__RUIHANDLER:
 				getRuihandler().clear();
-				return;
-			case DeploymentPackage.RUI_APPLICATION__RESOURCE_OMISSIONS:
-				setResourceOmissions((RUIResourceOmissions)null);
 				return;
 			case DeploymentPackage.RUI_APPLICATION__PARAMETERS:
 				setParameters((Parameters)null);
@@ -450,12 +411,12 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
+	public boolean eIsSet(int featureID)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.RUI_APPLICATION__RUIHANDLER:
 				return ruihandler != null && !ruihandler.isEmpty();
-			case DeploymentPackage.RUI_APPLICATION__RESOURCE_OMISSIONS:
-				return resourceOmissions != null;
 			case DeploymentPackage.RUI_APPLICATION__PARAMETERS:
 				return parameters != null;
 			case DeploymentPackage.RUI_APPLICATION__DEPLOY_ALL_HANDLERS:
@@ -472,7 +433,8 @@ public class RUIApplicationImpl extends EObjectImpl implements RUIApplication {
 	 * @generated
 	 */
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());

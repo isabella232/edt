@@ -18,7 +18,5 @@ public interface IDeploymentConstants
 	public static final String PARAMETER_LOCALES = "locales";
 	
 	public static final String TARGET_PROJECT = "j2ee";
-	public static final String TARGET_DIRECTORY = "directory";
-	public static final String TARGET_BUILD_DESCRIPTOR = "buildDescriptor";
 	
 }

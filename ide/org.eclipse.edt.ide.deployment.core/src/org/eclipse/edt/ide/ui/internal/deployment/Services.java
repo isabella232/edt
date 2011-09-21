@@ -17,37 +17,37 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Resource Omissions</b></em>'.
+ * A representation of the model object '<em><b>Services</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.ResourceOmissions#getResource <em>Resource</em>}</li>
+ *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Services#getService <em>Service</em>}</li>
  * </ul>
  * </p>
  *
- * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getResourceOmissions()
- * @model extendedMetaData="name='ResourceOmissions' kind='elementOnly'"
+ * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getServices()
+ * @model extendedMetaData="name='Services' kind='elementOnly'"
  * @generated
  */
-public interface ResourceOmissions extends EObject
+public interface Services extends EObject
 {
 	/**
-	 * Returns the value of the '<em><b>Resource</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.edt.ide.ui.internal.deployment.Resource}.
+	 * Returns the value of the '<em><b>Service</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.edt.ide.ui.internal.deployment.Service}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Resource</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Service</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Resource</em>' containment reference list.
-	 * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getResourceOmissions_Resource()
+	 * @return the value of the '<em>Service</em>' containment reference list.
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getServices_Service()
 	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='resource'"
+	 *        extendedMetaData="kind='element' name='service'"
 	 * @generated
 	 */
-	EList<Resource> getResource();
+	EList<Service> getService();
 
-} // ResourceOmissions
+} // Services

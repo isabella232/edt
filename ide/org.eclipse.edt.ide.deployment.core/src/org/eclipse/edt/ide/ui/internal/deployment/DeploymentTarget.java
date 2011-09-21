@@ -30,7 +30,8 @@ import org.eclipse.emf.ecore.EObject;
  * @model extendedMetaData="name='DeploymentTarget' kind='elementOnly'"
  * @generated
  */
-public interface DeploymentTarget extends EObject {
+public interface DeploymentTarget extends EObject
+{
 	/**
 	 * Returns the value of the '<em><b>Parameters</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

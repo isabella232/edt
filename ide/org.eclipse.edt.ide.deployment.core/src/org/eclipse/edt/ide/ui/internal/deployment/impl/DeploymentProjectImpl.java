@@ -25,13 +25,15 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public class DeploymentProjectImpl extends DeploymentTargetImpl implements DeploymentProject {
+public class DeploymentProjectImpl extends DeploymentTargetImpl implements DeploymentProject
+{
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected DeploymentProjectImpl() {
+	protected DeploymentProjectImpl()
+	{
 		super();
 	}
 
@@ -41,7 +43,8 @@ public class DeploymentProjectImpl extends DeploymentTargetImpl implements Deplo
 	 * @generated
 	 */
 	@Override
-	protected EClass eStaticClass() {
+	protected EClass eStaticClass()
+	{
 		return DeploymentPackage.Literals.DEPLOYMENT_PROJECT;
 	}
 

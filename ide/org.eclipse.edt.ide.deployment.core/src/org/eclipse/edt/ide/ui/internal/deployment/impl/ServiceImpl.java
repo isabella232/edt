@@ -12,8 +12,8 @@
 package org.eclipse.edt.ide.ui.internal.deployment.impl;
 
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage;
-import org.eclipse.edt.ide.ui.internal.deployment.DeploymentTarget;
 import org.eclipse.edt.ide.ui.internal.deployment.Parameters;
+import org.eclipse.edt.ide.ui.internal.deployment.Service;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -26,19 +26,20 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Target</b></em>'.
+ * An implementation of the model object '<em><b>Service</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentTargetImpl#getParameters <em>Parameters</em>}</li>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentTargetImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.ServiceImpl#getParameters <em>Parameters</em>}</li>
+ *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.ServiceImpl#getImplementation <em>Implementation</em>}</li>
+ *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.ServiceImpl#getType <em>Type</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class DeploymentTargetImpl extends EObjectImpl implements DeploymentTarget
+public class ServiceImpl extends EObjectImpl implements Service
 {
 	/**
 	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' containment reference.
@@ -51,40 +52,51 @@ public class DeploymentTargetImpl extends EObjectImpl implements DeploymentTarge
 	protected Parameters parameters;
 
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * The default value of the '{@link #getImplementation() <em>Implementation</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getName()
+	 * @see #getImplementation()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = "";
+	protected static final String IMPLEMENTATION_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * The cached value of the '{@link #getImplementation() <em>Implementation</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getName()
+	 * @see #getImplementation()
 	 * @generated
 	 * @ordered
 	 */
-	protected String name = NAME_EDEFAULT;
+	protected String implementation = IMPLEMENTATION_EDEFAULT;
 
 	/**
-	 * This is true if the Name attribute has been set.
+	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @see #getType()
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean nameESet;
+	protected static final String TYPE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected String type = TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected DeploymentTargetImpl()
+	protected ServiceImpl()
 	{
 		super();
 	}
@@ -97,7 +109,7 @@ public class DeploymentTargetImpl extends EObjectImpl implements DeploymentTarge
 	@Override
 	protected EClass eStaticClass()
 	{
-		return DeploymentPackage.Literals.DEPLOYMENT_TARGET;
+		return DeploymentPackage.Literals.SERVICE;
 	}
 
 	/**
@@ -121,7 +133,7 @@ public class DeploymentTargetImpl extends EObjectImpl implements DeploymentTarge
 		parameters = newParameters;
 		if (eNotificationRequired())
 		{
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT_TARGET__PARAMETERS, oldParameters, newParameters);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DeploymentPackage.SERVICE__PARAMETERS, oldParameters, newParameters);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -138,14 +150,14 @@ public class DeploymentTargetImpl extends EObjectImpl implements DeploymentTarge
 		{
 			NotificationChain msgs = null;
 			if (parameters != null)
-				msgs = ((InternalEObject)parameters).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.DEPLOYMENT_TARGET__PARAMETERS, null, msgs);
+				msgs = ((InternalEObject)parameters).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.SERVICE__PARAMETERS, null, msgs);
 			if (newParameters != null)
-				msgs = ((InternalEObject)newParameters).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.DEPLOYMENT_TARGET__PARAMETERS, null, msgs);
+				msgs = ((InternalEObject)newParameters).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.SERVICE__PARAMETERS, null, msgs);
 			msgs = basicSetParameters(newParameters, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT_TARGET__PARAMETERS, newParameters, newParameters));
+			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.SERVICE__PARAMETERS, newParameters, newParameters));
 	}
 
 	/**
@@ -153,9 +165,9 @@ public class DeploymentTargetImpl extends EObjectImpl implements DeploymentTarge
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getName()
+	public String getImplementation()
 	{
-		return name;
+		return implementation;
 	}
 
 	/**
@@ -163,14 +175,12 @@ public class DeploymentTargetImpl extends EObjectImpl implements DeploymentTarge
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setName(String newName)
+	public void setImplementation(String newImplementation)
 	{
-		String oldName = name;
-		name = newName;
-		boolean oldNameESet = nameESet;
-		nameESet = true;
+		String oldImplementation = implementation;
+		implementation = newImplementation;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT_TARGET__NAME, oldName, name, !oldNameESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.SERVICE__IMPLEMENTATION, oldImplementation, implementation));
 	}
 
 	/**
@@ -178,24 +188,22 @@ public class DeploymentTargetImpl extends EObjectImpl implements DeploymentTarge
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void unsetName()
+	public String getType()
 	{
-		String oldName = name;
-		boolean oldNameESet = nameESet;
-		name = NAME_EDEFAULT;
-		nameESet = false;
+		return type;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setType(String newType)
+	{
+		String oldType = type;
+		type = newType;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, DeploymentPackage.DEPLOYMENT_TARGET__NAME, oldName, NAME_EDEFAULT, oldNameESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetName()
-	{
-		return nameESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.SERVICE__TYPE, oldType, type));
 	}
 
 	/**
@@ -208,7 +216,7 @@ public class DeploymentTargetImpl extends EObjectImpl implements DeploymentTarge
 	{
 		switch (featureID)
 		{
-			case DeploymentPackage.DEPLOYMENT_TARGET__PARAMETERS:
+			case DeploymentPackage.SERVICE__PARAMETERS:
 				return basicSetParameters(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -224,10 +232,12 @@ public class DeploymentTargetImpl extends EObjectImpl implements DeploymentTarge
 	{
 		switch (featureID)
 		{
-			case DeploymentPackage.DEPLOYMENT_TARGET__PARAMETERS:
+			case DeploymentPackage.SERVICE__PARAMETERS:
 				return getParameters();
-			case DeploymentPackage.DEPLOYMENT_TARGET__NAME:
-				return getName();
+			case DeploymentPackage.SERVICE__IMPLEMENTATION:
+				return getImplementation();
+			case DeploymentPackage.SERVICE__TYPE:
+				return getType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -242,11 +252,14 @@ public class DeploymentTargetImpl extends EObjectImpl implements DeploymentTarge
 	{
 		switch (featureID)
 		{
-			case DeploymentPackage.DEPLOYMENT_TARGET__PARAMETERS:
+			case DeploymentPackage.SERVICE__PARAMETERS:
 				setParameters((Parameters)newValue);
 				return;
-			case DeploymentPackage.DEPLOYMENT_TARGET__NAME:
-				setName((String)newValue);
+			case DeploymentPackage.SERVICE__IMPLEMENTATION:
+				setImplementation((String)newValue);
+				return;
+			case DeploymentPackage.SERVICE__TYPE:
+				setType((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -262,11 +275,14 @@ public class DeploymentTargetImpl extends EObjectImpl implements DeploymentTarge
 	{
 		switch (featureID)
 		{
-			case DeploymentPackage.DEPLOYMENT_TARGET__PARAMETERS:
+			case DeploymentPackage.SERVICE__PARAMETERS:
 				setParameters((Parameters)null);
 				return;
-			case DeploymentPackage.DEPLOYMENT_TARGET__NAME:
-				unsetName();
+			case DeploymentPackage.SERVICE__IMPLEMENTATION:
+				setImplementation(IMPLEMENTATION_EDEFAULT);
+				return;
+			case DeploymentPackage.SERVICE__TYPE:
+				setType(TYPE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -282,10 +298,12 @@ public class DeploymentTargetImpl extends EObjectImpl implements DeploymentTarge
 	{
 		switch (featureID)
 		{
-			case DeploymentPackage.DEPLOYMENT_TARGET__PARAMETERS:
+			case DeploymentPackage.SERVICE__PARAMETERS:
 				return parameters != null;
-			case DeploymentPackage.DEPLOYMENT_TARGET__NAME:
-				return isSetName();
+			case DeploymentPackage.SERVICE__IMPLEMENTATION:
+				return IMPLEMENTATION_EDEFAULT == null ? implementation != null : !IMPLEMENTATION_EDEFAULT.equals(implementation);
+			case DeploymentPackage.SERVICE__TYPE:
+				return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -301,10 +319,12 @@ public class DeploymentTargetImpl extends EObjectImpl implements DeploymentTarge
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		if (nameESet) result.append(name); else result.append("<unset>");
+		result.append(" (implementation: ");
+		result.append(implementation);
+		result.append(", type: ");
+		result.append(type);
 		result.append(')');
 		return result.toString();
 	}
 
-} //DeploymentTargetImpl
+} //ServiceImpl

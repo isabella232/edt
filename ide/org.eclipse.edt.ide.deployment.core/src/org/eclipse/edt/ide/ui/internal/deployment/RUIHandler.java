@@ -31,7 +31,8 @@ import org.eclipse.emf.ecore.EObject;
  * @model extendedMetaData="name='RUIHandler' kind='elementOnly'"
  * @generated
  */
-public interface RUIHandler extends EObject {
+public interface RUIHandler extends EObject
+{
 	/**
 	 * Returns the value of the '<em><b>Parameters</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

@@ -17,7 +17,7 @@ import java.util.List;
 
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage;
-import org.eclipse.edt.ide.ui.internal.deployment.RUIHandler;
+import org.eclipse.edt.ide.ui.internal.deployment.Service;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -38,12 +38,12 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.RUIHandler} object.
+ * This is the item provider adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.Service} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class RUIHandlerItemProvider
+public class ServiceItemProvider
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -58,7 +58,7 @@ public class RUIHandlerItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public RUIHandlerItemProvider(AdapterFactory adapterFactory)
+	public ServiceItemProvider(AdapterFactory adapterFactory)
 	{
 		super(adapterFactory);
 	}
@@ -76,33 +76,10 @@ public class RUIHandlerItemProvider
 		{
 			super.getPropertyDescriptors(object);
 
-			addEnableGenerationPropertyDescriptor(object);
 			addImplementationPropertyDescriptor(object);
+			addTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Enable Generation feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addEnableGenerationPropertyDescriptor(Object object)
-	{
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_RUIHandler_enableGeneration_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_RUIHandler_enableGeneration_feature", "_UI_RUIHandler_type"),
-				 DeploymentPackage.Literals.RUI_HANDLER__ENABLE_GENERATION,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -117,9 +94,32 @@ public class RUIHandlerItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_RUIHandler_implementation_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_RUIHandler_implementation_feature", "_UI_RUIHandler_type"),
-				 DeploymentPackage.Literals.RUI_HANDLER__IMPLEMENTATION,
+				 getString("_UI_Service_implementation_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Service_implementation_feature", "_UI_Service_type"),
+				 DeploymentPackage.Literals.SERVICE__IMPLEMENTATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTypePropertyDescriptor(Object object)
+	{
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Service_type_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Service_type_feature", "_UI_Service_type"),
+				 DeploymentPackage.Literals.SERVICE__TYPE,
 				 true,
 				 false,
 				 false,
@@ -142,7 +142,7 @@ public class RUIHandlerItemProvider
 		if (childrenFeatures == null)
 		{
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(DeploymentPackage.Literals.RUI_HANDLER__PARAMETERS);
+			childrenFeatures.add(DeploymentPackage.Literals.SERVICE__PARAMETERS);
 		}
 		return childrenFeatures;
 	}
@@ -162,7 +162,7 @@ public class RUIHandlerItemProvider
 	}
 
 	/**
-	 * This returns RUIHandler.gif.
+	 * This returns Service.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -170,7 +170,7 @@ public class RUIHandlerItemProvider
 	@Override
 	public Object getImage(Object object)
 	{
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/RUIHandler"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Service"));
 	}
 
 	/**
@@ -182,8 +182,10 @@ public class RUIHandlerItemProvider
 	@Override
 	public String getText(Object object)
 	{
-		RUIHandler ruiHandler = (RUIHandler)object;
-		return getString("_UI_RUIHandler_type") + " " + ruiHandler.isEnableGeneration();
+		String label = ((Service)object).getImplementation();
+		return label == null || label.length() == 0 ?
+			getString("_UI_Service_type") :
+			getString("_UI_Service_type") + " " + label;
 	}
 
 	/**
@@ -198,13 +200,13 @@ public class RUIHandlerItemProvider
 	{
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(RUIHandler.class))
+		switch (notification.getFeatureID(Service.class))
 		{
-			case DeploymentPackage.RUI_HANDLER__ENABLE_GENERATION:
-			case DeploymentPackage.RUI_HANDLER__IMPLEMENTATION:
+			case DeploymentPackage.SERVICE__IMPLEMENTATION:
+			case DeploymentPackage.SERVICE__TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case DeploymentPackage.RUI_HANDLER__PARAMETERS:
+			case DeploymentPackage.SERVICE__PARAMETERS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -225,7 +227,7 @@ public class RUIHandlerItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(DeploymentPackage.Literals.RUI_HANDLER__PARAMETERS,
+				(DeploymentPackage.Literals.SERVICE__PARAMETERS,
 				 DeploymentFactory.eINSTANCE.createParameters()));
 	}
 

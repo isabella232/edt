@@ -29,7 +29,8 @@ import org.eclipse.emf.ecore.EObject;
  * @model extendedMetaData="name='Resource' kind='empty'"
  * @generated
  */
-public interface Resource extends EObject {
+public interface Resource extends EObject
+{
 	/**
 	 * Returns the value of the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->

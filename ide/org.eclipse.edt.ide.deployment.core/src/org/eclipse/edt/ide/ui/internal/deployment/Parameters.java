@@ -31,7 +31,8 @@ import org.eclipse.emf.ecore.EObject;
  * @model extendedMetaData="name='Parameters' kind='elementOnly'"
  * @generated
  */
-public interface Parameters extends EObject {
+public interface Parameters extends EObject
+{
 	/**
 	 * Returns the value of the '<em><b>Parameter</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.edt.ide.ui.internal.deployment.Parameter}.

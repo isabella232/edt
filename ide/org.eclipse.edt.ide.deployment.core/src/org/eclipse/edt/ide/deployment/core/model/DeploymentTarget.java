@@ -14,11 +14,11 @@ package org.eclipse.edt.ide.deployment.core.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.javart.resources.egldd.Parameter;
+
 public class DeploymentTarget
 {
-	public static final int TARGET_DIRECTORY = 2;
 	public static final int TARGET_PROJECT = 3;
-	public static final int TARGET_BUILD_DESCRIPTOR = 4;
 	
 	protected List parameters;
 	

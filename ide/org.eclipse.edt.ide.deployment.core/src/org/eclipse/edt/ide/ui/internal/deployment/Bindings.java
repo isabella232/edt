@@ -23,11 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Bindings#getEglBinding <em>Egl Binding</em>}</li>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Bindings#getWebBinding <em>Web Binding</em>}</li>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Bindings#getNativeBinding <em>Native Binding</em>}</li>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Bindings#getRestBinding <em>Rest Binding</em>}</li>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Bindings#getSqlDatabaseBinding <em>Sql Database Binding</em>}</li>
+ *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Bindings#getBinding <em>Binding</em>}</li>
  * </ul>
  * </p>
  *
@@ -35,90 +31,23 @@ import org.eclipse.emf.ecore.EObject;
  * @model extendedMetaData="name='Bindings' kind='elementOnly'"
  * @generated
  */
-public interface Bindings extends EObject {
+public interface Bindings extends EObject
+{
 	/**
-	 * Returns the value of the '<em><b>Egl Binding</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.edt.ide.ui.internal.deployment.EGLBinding}.
+	 * Returns the value of the '<em><b>Binding</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.edt.ide.ui.internal.deployment.Binding}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Egl Binding</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Binding</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Egl Binding</em>' containment reference list.
-	 * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getBindings_EglBinding()
+	 * @return the value of the '<em>Binding</em>' containment reference list.
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getBindings_Binding()
 	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='eglBinding'"
+	 *        extendedMetaData="kind='element' name='binding'"
 	 * @generated
 	 */
-	EList<EGLBinding> getEglBinding();
-
-	/**
-	 * Returns the value of the '<em><b>Web Binding</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.edt.ide.ui.internal.deployment.WebBinding}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Web Binding</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Web Binding</em>' containment reference list.
-	 * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getBindings_WebBinding()
-	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='webBinding'"
-	 * @generated
-	 */
-	EList<WebBinding> getWebBinding();
-
-	/**
-	 * Returns the value of the '<em><b>Native Binding</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.edt.ide.ui.internal.deployment.NativeBinding}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Native Binding</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Native Binding</em>' containment reference list.
-	 * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getBindings_NativeBinding()
-	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='nativeBinding'"
-	 * @generated
-	 */
-	EList<NativeBinding> getNativeBinding();
-
-	/**
-	 * Returns the value of the '<em><b>Rest Binding</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.edt.ide.ui.internal.deployment.RestBinding}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Rest Binding</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Rest Binding</em>' containment reference list.
-	 * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getBindings_RestBinding()
-	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='restBinding'"
-	 * @generated
-	 */
-	EList<RestBinding> getRestBinding();
-
-	/**
-	 * Returns the value of the '<em><b>Sql Database Binding</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.edt.ide.ui.internal.deployment.SQLDatabaseBinding}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Sql Database Binding</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Sql Database Binding</em>' containment reference list.
-	 * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getBindings_SqlDatabaseBinding()
-	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='sqlDatabaseBinding'"
-	 * @generated
-	 */
-	EList<SQLDatabaseBinding> getSqlDatabaseBinding();
+	EList<Binding> getBinding();
 
 } // Bindings

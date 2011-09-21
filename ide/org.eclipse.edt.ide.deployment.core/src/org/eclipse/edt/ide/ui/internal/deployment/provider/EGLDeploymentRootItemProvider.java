@@ -48,14 +48,16 @@ public class EGLDeploymentRootItemProvider
 		IStructuredItemContentProvider,
 		ITreeItemContentProvider,
 		IItemLabelProvider,
-		IItemPropertySource {
+		IItemPropertySource
+{
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EGLDeploymentRootItemProvider(AdapterFactory adapterFactory) {
+	public EGLDeploymentRootItemProvider(AdapterFactory adapterFactory)
+	{
 		super(adapterFactory);
 	}
 
@@ -66,8 +68,10 @@ public class EGLDeploymentRootItemProvider
 	 * @generated
 	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
-		if (itemPropertyDescriptors == null) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object)
+	{
+		if (itemPropertyDescriptors == null)
+		{
 			super.getPropertyDescriptors(object);
 
 		}
@@ -83,26 +87,14 @@ public class EGLDeploymentRootItemProvider
 	 * @generated
 	 */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object)
+	{
+		if (childrenFeatures == null)
+		{
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__DEPLOY_EXT);
 			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__DEPLOYMENT);
-			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL);
-			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_CICSECI);
-			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_CICSJ2C);
-			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_CICSSSL);
-			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_CICSWS);
-			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_IMSJ2C);
-			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_IMSTCP);
-			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_JAVA400);
-			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_JAVA400J2C);
-			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_LOCAL);
-			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_REF);
-			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_SYSTEM_ILOCAL);
-			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_TCPIP);
 			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__TARGET);
-			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__TARGET_BUILD_DESCRIPTOR);
 			childrenFeatures.add(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__TARGET_PROJECT);
 		}
 		return childrenFeatures;
@@ -114,7 +106,8 @@ public class EGLDeploymentRootItemProvider
 	 * @generated
 	 */
 	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
+	protected EStructuralFeature getChildFeature(Object object, Object child)
+	{
 		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
@@ -128,7 +121,8 @@ public class EGLDeploymentRootItemProvider
 	 * @generated
 	 */
 	@Override
-	public Object getImage(Object object) {
+	public Object getImage(Object object)
+	{
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/EGLDeploymentRoot"));
 	}
 
@@ -139,7 +133,8 @@ public class EGLDeploymentRootItemProvider
 	 * @generated
 	 */
 	@Override
-	public String getText(Object object) {
+	public String getText(Object object)
+	{
 		return getString("_UI_EGLDeploymentRoot_type");
 	}
 
@@ -151,27 +146,15 @@ public class EGLDeploymentRootItemProvider
 	 * @generated
 	 */
 	@Override
-	public void notifyChanged(Notification notification) {
+	public void notifyChanged(Notification notification)
+	{
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(EGLDeploymentRoot.class)) {
+		switch (notification.getFeatureID(EGLDeploymentRoot.class))
+		{
 			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__DEPLOY_EXT:
 			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__DEPLOYMENT:
-			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__PROTOCOL:
-			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__PROTOCOL_CICSECI:
-			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__PROTOCOL_CICSJ2C:
-			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__PROTOCOL_CICSSSL:
-			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__PROTOCOL_CICSWS:
-			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__PROTOCOL_IMSJ2C:
-			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__PROTOCOL_IMSTCP:
-			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__PROTOCOL_JAVA400:
-			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__PROTOCOL_JAVA400J2C:
-			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__PROTOCOL_LOCAL:
-			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__PROTOCOL_REF:
-			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__PROTOCOL_SYSTEM_ILOCAL:
-			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__PROTOCOL_TCPIP:
 			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__TARGET:
-			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__TARGET_BUILD_DESCRIPTOR:
 			case DeploymentPackage.EGL_DEPLOYMENT_ROOT__TARGET_PROJECT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -187,78 +170,14 @@ public class EGLDeploymentRootItemProvider
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
+	{
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors.add
 			(createChildParameter
 				(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__DEPLOYMENT,
 				 DeploymentFactory.eINSTANCE.createDeployment()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_CICSECI,
-				 DeploymentFactory.eINSTANCE.createCICSECIProtocol()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_CICSJ2C,
-				 DeploymentFactory.eINSTANCE.createCICSJ2CProtocol()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_CICSSSL,
-				 DeploymentFactory.eINSTANCE.createCICSSSLProtocol()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_CICSWS,
-				 DeploymentFactory.eINSTANCE.createCICSWSProtocol()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_IMSJ2C,
-				 DeploymentFactory.eINSTANCE.createIMSJ2CProtocol()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_IMSTCP,
-				 DeploymentFactory.eINSTANCE.createIMSTCPProtocol()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_JAVA400,
-				 DeploymentFactory.eINSTANCE.createJava400Protocol()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_JAVA400J2C,
-				 DeploymentFactory.eINSTANCE.createJava400J2cProtocol()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_LOCAL,
-				 DeploymentFactory.eINSTANCE.createLocalProtocol()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_REF,
-				 DeploymentFactory.eINSTANCE.createReferenceProtocol()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_SYSTEM_ILOCAL,
-				 DeploymentFactory.eINSTANCE.createSystemIProtocol()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__PROTOCOL_TCPIP,
-				 DeploymentFactory.eINSTANCE.createTCPIPProtocol()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__TARGET_BUILD_DESCRIPTOR,
-				 DeploymentFactory.eINSTANCE.createDeploymentBuildDescriptor()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -273,7 +192,8 @@ public class EGLDeploymentRootItemProvider
 	 * @generated
 	 */
 	@Override
-	public ResourceLocator getResourceLocator() {
+	public ResourceLocator getResourceLocator()
+	{
 		return EglddEditPlugin.INSTANCE;
 	}
 

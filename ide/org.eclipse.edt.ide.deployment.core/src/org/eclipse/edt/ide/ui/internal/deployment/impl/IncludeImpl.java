@@ -34,7 +34,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class IncludeImpl extends EObjectImpl implements Include {
+public class IncludeImpl extends EObjectImpl implements Include
+{
 	/**
 	 * The default value of the '{@link #getLocation() <em>Location</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -60,7 +61,8 @@ public class IncludeImpl extends EObjectImpl implements Include {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected IncludeImpl() {
+	protected IncludeImpl()
+	{
 		super();
 	}
 
@@ -70,7 +72,8 @@ public class IncludeImpl extends EObjectImpl implements Include {
 	 * @generated
 	 */
 	@Override
-	protected EClass eStaticClass() {
+	protected EClass eStaticClass()
+	{
 		return DeploymentPackage.Literals.INCLUDE;
 	}
 
@@ -79,7 +82,8 @@ public class IncludeImpl extends EObjectImpl implements Include {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getLocation() {
+	public String getLocation()
+	{
 		return location;
 	}
 
@@ -88,7 +92,8 @@ public class IncludeImpl extends EObjectImpl implements Include {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLocation(String newLocation) {
+	public void setLocation(String newLocation)
+	{
 		String oldLocation = location;
 		location = newLocation;
 		if (eNotificationRequired())
@@ -101,8 +106,10 @@ public class IncludeImpl extends EObjectImpl implements Include {
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.INCLUDE__LOCATION:
 				return getLocation();
 		}
@@ -115,8 +122,10 @@ public class IncludeImpl extends EObjectImpl implements Include {
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
+	public void eSet(int featureID, Object newValue)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.INCLUDE__LOCATION:
 				setLocation((String)newValue);
 				return;
@@ -130,8 +139,10 @@ public class IncludeImpl extends EObjectImpl implements Include {
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
-		switch (featureID) {
+	public void eUnset(int featureID)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.INCLUDE__LOCATION:
 				setLocation(LOCATION_EDEFAULT);
 				return;
@@ -145,8 +156,10 @@ public class IncludeImpl extends EObjectImpl implements Include {
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
+	public boolean eIsSet(int featureID)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.INCLUDE__LOCATION:
 				return LOCATION_EDEFAULT == null ? location != null : !LOCATION_EDEFAULT.equals(location);
 		}
@@ -159,7 +172,8 @@ public class IncludeImpl extends EObjectImpl implements Include {
 	 * @generated
 	 */
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());

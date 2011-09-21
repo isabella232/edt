@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2008, 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -22,7 +22,8 @@ import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
  * @see org.eclipse.edt.ide.ui.internal.deployment.util.DeploymentResourceFactoryImpl
  * @generated
  */
-public class DeploymentResourceImpl extends XMLResourceImpl {
+public class DeploymentResourceImpl extends XMLResourceImpl
+{
 	/**
 	 * Creates an instance of the resource.
 	 * <!-- begin-user-doc -->
@@ -30,7 +31,8 @@ public class DeploymentResourceImpl extends XMLResourceImpl {
 	 * @param uri the URI of the new resource.
 	 * @generated
 	 */
-	public DeploymentResourceImpl(URI uri) {
+	public DeploymentResourceImpl(URI uri)
+	{
 		super(uri);
 		setTrackingModification(true);
 	}

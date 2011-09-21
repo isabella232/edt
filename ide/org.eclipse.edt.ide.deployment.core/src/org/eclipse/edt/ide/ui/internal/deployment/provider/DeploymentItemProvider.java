@@ -18,7 +18,6 @@ import java.util.List;
 import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage;
-import org.eclipse.edt.ide.ui.internal.deployment.WebserviceRuntimeType;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -53,14 +52,16 @@ public class DeploymentItemProvider
 		IStructuredItemContentProvider,
 		ITreeItemContentProvider,
 		IItemLabelProvider,
-		IItemPropertySource {
+		IItemPropertySource
+{
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DeploymentItemProvider(AdapterFactory adapterFactory) {
+	public DeploymentItemProvider(AdapterFactory adapterFactory)
+	{
 		super(adapterFactory);
 	}
 
@@ -71,36 +72,15 @@ public class DeploymentItemProvider
 	 * @generated
 	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
-		if (itemPropertyDescriptors == null) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object)
+	{
+		if (itemPropertyDescriptors == null)
+		{
 			super.getPropertyDescriptors(object);
 
-			addWebserviceRuntimePropertyDescriptor(object);
 			addAliasPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Webservice Runtime feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addWebserviceRuntimePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Deployment_webserviceRuntime_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Deployment_webserviceRuntime_feature", "_UI_Deployment_type"),
-				 DeploymentPackage.Literals.DEPLOYMENT__WEBSERVICE_RUNTIME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -109,7 +89,8 @@ public class DeploymentItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addAliasPropertyDescriptor(Object object) {
+	protected void addAliasPropertyDescriptor(Object object)
+	{
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
@@ -134,13 +115,13 @@ public class DeploymentItemProvider
 	 * @generated
 	 */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object)
+	{
+		if (childrenFeatures == null)
+		{
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(DeploymentPackage.Literals.DEPLOYMENT__BINDINGS);
-			childrenFeatures.add(DeploymentPackage.Literals.DEPLOYMENT__PROTOCOLS);
-			childrenFeatures.add(DeploymentPackage.Literals.DEPLOYMENT__WEBSERVICES);
-			childrenFeatures.add(DeploymentPackage.Literals.DEPLOYMENT__RESTSERVICES);
+			childrenFeatures.add(DeploymentPackage.Literals.DEPLOYMENT__SERVICES);
 			childrenFeatures.add(DeploymentPackage.Literals.DEPLOYMENT__RUIAPPLICATION);
 			childrenFeatures.add(DeploymentPackage.Literals.DEPLOYMENT__RESOURCE_OMISSIONS);
 			childrenFeatures.add(DeploymentPackage.Literals.DEPLOYMENT__TARGET_GROUP);
@@ -156,7 +137,8 @@ public class DeploymentItemProvider
 	 * @generated
 	 */
 	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
+	protected EStructuralFeature getChildFeature(Object object, Object child)
+	{
 		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
@@ -170,7 +152,8 @@ public class DeploymentItemProvider
 	 * @generated
 	 */
 	@Override
-	public Object getImage(Object object) {
+	public Object getImage(Object object)
+	{
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/Deployment"));
 	}
 
@@ -181,9 +164,9 @@ public class DeploymentItemProvider
 	 * @generated
 	 */
 	@Override
-	public String getText(Object object) {
-		WebserviceRuntimeType labelValue = ((Deployment)object).getWebserviceRuntime();
-		String label = labelValue == null ? null : labelValue.toString();
+	public String getText(Object object)
+	{
+		String label = ((Deployment)object).getAlias();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Deployment_type") :
 			getString("_UI_Deployment_type") + " " + label;
@@ -197,18 +180,17 @@ public class DeploymentItemProvider
 	 * @generated
 	 */
 	@Override
-	public void notifyChanged(Notification notification) {
+	public void notifyChanged(Notification notification)
+	{
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Deployment.class)) {
-			case DeploymentPackage.DEPLOYMENT__WEBSERVICE_RUNTIME:
+		switch (notification.getFeatureID(Deployment.class))
+		{
 			case DeploymentPackage.DEPLOYMENT__ALIAS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case DeploymentPackage.DEPLOYMENT__BINDINGS:
-			case DeploymentPackage.DEPLOYMENT__PROTOCOLS:
-			case DeploymentPackage.DEPLOYMENT__WEBSERVICES:
-			case DeploymentPackage.DEPLOYMENT__RESTSERVICES:
+			case DeploymentPackage.DEPLOYMENT__SERVICES:
 			case DeploymentPackage.DEPLOYMENT__RUIAPPLICATION:
 			case DeploymentPackage.DEPLOYMENT__RESOURCE_OMISSIONS:
 			case DeploymentPackage.DEPLOYMENT__TARGET_GROUP:
@@ -228,7 +210,8 @@ public class DeploymentItemProvider
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
+	{
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors.add
@@ -238,18 +221,8 @@ public class DeploymentItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(DeploymentPackage.Literals.DEPLOYMENT__PROTOCOLS,
-				 DeploymentFactory.eINSTANCE.createProtocols()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.DEPLOYMENT__WEBSERVICES,
-				 DeploymentFactory.eINSTANCE.createWebservices()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.DEPLOYMENT__RESTSERVICES,
-				 DeploymentFactory.eINSTANCE.createRestservices()));
+				(DeploymentPackage.Literals.DEPLOYMENT__SERVICES,
+				 DeploymentFactory.eINSTANCE.createServices()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -260,13 +233,6 @@ public class DeploymentItemProvider
 			(createChildParameter
 				(DeploymentPackage.Literals.DEPLOYMENT__RESOURCE_OMISSIONS,
 				 DeploymentFactory.eINSTANCE.createResourceOmissions()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.DEPLOYMENT__TARGET_GROUP,
-				 FeatureMapUtil.createEntry
-					(DeploymentPackage.Literals.EGL_DEPLOYMENT_ROOT__TARGET_BUILD_DESCRIPTOR,
-					 DeploymentFactory.eINSTANCE.createDeploymentBuildDescriptor())));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -288,7 +254,8 @@ public class DeploymentItemProvider
 	 * @generated
 	 */
 	@Override
-	public ResourceLocator getResourceLocator() {
+	public ResourceLocator getResourceLocator()
+	{
 		return EglddEditPlugin.INSTANCE;
 	}
 

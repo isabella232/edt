@@ -19,12 +19,9 @@ import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentTarget;
 import org.eclipse.edt.ide.ui.internal.deployment.Include;
-import org.eclipse.edt.ide.ui.internal.deployment.Protocols;
 import org.eclipse.edt.ide.ui.internal.deployment.RUIApplication;
 import org.eclipse.edt.ide.ui.internal.deployment.ResourceOmissions;
-import org.eclipse.edt.ide.ui.internal.deployment.Restservices;
-import org.eclipse.edt.ide.ui.internal.deployment.WebserviceRuntimeType;
-import org.eclipse.edt.ide.ui.internal.deployment.Webservices;
+import org.eclipse.edt.ide.ui.internal.deployment.Services;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -50,9 +47,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getBindings <em>Bindings</em>}</li>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getProtocols <em>Protocols</em>}</li>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getWebservices <em>Webservices</em>}</li>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getRestservices <em>Restservices</em>}</li>
+ *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getServices <em>Services</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getRuiapplication <em>Ruiapplication</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getResourceOmissions <em>Resource Omissions</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getTargetGroup <em>Target Group</em>}</li>
@@ -60,14 +55,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getInclude <em>Include</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getDeployExtGroup <em>Deploy Ext Group</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getDeployExt <em>Deploy Ext</em>}</li>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getWebserviceRuntime <em>Webservice Runtime</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getAlias <em>Alias</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class DeploymentImpl extends EObjectImpl implements Deployment {
+public class DeploymentImpl extends EObjectImpl implements Deployment
+{
 	/**
 	 * The cached value of the '{@link #getBindings() <em>Bindings</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -79,34 +74,14 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	protected Bindings bindings;
 
 	/**
-	 * The cached value of the '{@link #getProtocols() <em>Protocols</em>}' containment reference.
+	 * The cached value of the '{@link #getServices() <em>Services</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getProtocols()
+	 * @see #getServices()
 	 * @generated
 	 * @ordered
 	 */
-	protected Protocols protocols;
-
-	/**
-	 * The cached value of the '{@link #getWebservices() <em>Webservices</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getWebservices()
-	 * @generated
-	 * @ordered
-	 */
-	protected Webservices webservices;
-
-	/**
-	 * The cached value of the '{@link #getRestservices() <em>Restservices</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRestservices()
-	 * @generated
-	 * @ordered
-	 */
-	protected Restservices restservices;
+	protected Services services;
 
 	/**
 	 * The cached value of the '{@link #getRuiapplication() <em>Ruiapplication</em>}' containment reference.
@@ -159,35 +134,6 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	protected FeatureMap deployExtGroup;
 
 	/**
-	 * The default value of the '{@link #getWebserviceRuntime() <em>Webservice Runtime</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getWebserviceRuntime()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final WebserviceRuntimeType WEBSERVICE_RUNTIME_EDEFAULT = WebserviceRuntimeType.JAXRPC;
-
-	/**
-	 * The cached value of the '{@link #getWebserviceRuntime() <em>Webservice Runtime</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getWebserviceRuntime()
-	 * @generated
-	 * @ordered
-	 */
-	protected WebserviceRuntimeType webserviceRuntime = WEBSERVICE_RUNTIME_EDEFAULT;
-
-	/**
-	 * This is true if the Webservice Runtime attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean webserviceRuntimeESet;
-
-	/**
 	 * The default value of the '{@link #getAlias() <em>Alias</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -212,7 +158,8 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected DeploymentImpl() {
+	protected DeploymentImpl()
+	{
 		super();
 	}
 
@@ -222,7 +169,8 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * @generated
 	 */
 	@Override
-	protected EClass eStaticClass() {
+	protected EClass eStaticClass()
+	{
 		return DeploymentPackage.Literals.DEPLOYMENT;
 	}
 
@@ -231,7 +179,8 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Bindings getBindings() {
+	public Bindings getBindings()
+	{
 		return bindings;
 	}
 
@@ -240,10 +189,12 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetBindings(Bindings newBindings, NotificationChain msgs) {
+	public NotificationChain basicSetBindings(Bindings newBindings, NotificationChain msgs)
+	{
 		Bindings oldBindings = bindings;
 		bindings = newBindings;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
+		{
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT__BINDINGS, oldBindings, newBindings);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
@@ -255,8 +206,10 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setBindings(Bindings newBindings) {
-		if (newBindings != bindings) {
+	public void setBindings(Bindings newBindings)
+	{
+		if (newBindings != bindings)
+		{
 			NotificationChain msgs = null;
 			if (bindings != null)
 				msgs = ((InternalEObject)bindings).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.DEPLOYMENT__BINDINGS, null, msgs);
@@ -274,8 +227,9 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Protocols getProtocols() {
-		return protocols;
+	public Services getServices()
+	{
+		return services;
 	}
 
 	/**
@@ -283,11 +237,13 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetProtocols(Protocols newProtocols, NotificationChain msgs) {
-		Protocols oldProtocols = protocols;
-		protocols = newProtocols;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT__PROTOCOLS, oldProtocols, newProtocols);
+	public NotificationChain basicSetServices(Services newServices, NotificationChain msgs)
+	{
+		Services oldServices = services;
+		services = newServices;
+		if (eNotificationRequired())
+		{
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT__SERVICES, oldServices, newServices);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -298,18 +254,20 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setProtocols(Protocols newProtocols) {
-		if (newProtocols != protocols) {
+	public void setServices(Services newServices)
+	{
+		if (newServices != services)
+		{
 			NotificationChain msgs = null;
-			if (protocols != null)
-				msgs = ((InternalEObject)protocols).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.DEPLOYMENT__PROTOCOLS, null, msgs);
-			if (newProtocols != null)
-				msgs = ((InternalEObject)newProtocols).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.DEPLOYMENT__PROTOCOLS, null, msgs);
-			msgs = basicSetProtocols(newProtocols, msgs);
+			if (services != null)
+				msgs = ((InternalEObject)services).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.DEPLOYMENT__SERVICES, null, msgs);
+			if (newServices != null)
+				msgs = ((InternalEObject)newServices).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.DEPLOYMENT__SERVICES, null, msgs);
+			msgs = basicSetServices(newServices, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT__PROTOCOLS, newProtocols, newProtocols));
+			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT__SERVICES, newServices, newServices));
 	}
 
 	/**
@@ -317,93 +275,8 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Webservices getWebservices() {
-		return webservices;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetWebservices(Webservices newWebservices, NotificationChain msgs) {
-		Webservices oldWebservices = webservices;
-		webservices = newWebservices;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT__WEBSERVICES, oldWebservices, newWebservices);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setWebservices(Webservices newWebservices) {
-		if (newWebservices != webservices) {
-			NotificationChain msgs = null;
-			if (webservices != null)
-				msgs = ((InternalEObject)webservices).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.DEPLOYMENT__WEBSERVICES, null, msgs);
-			if (newWebservices != null)
-				msgs = ((InternalEObject)newWebservices).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.DEPLOYMENT__WEBSERVICES, null, msgs);
-			msgs = basicSetWebservices(newWebservices, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT__WEBSERVICES, newWebservices, newWebservices));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Restservices getRestservices() {
-		return restservices;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetRestservices(Restservices newRestservices, NotificationChain msgs) {
-		Restservices oldRestservices = restservices;
-		restservices = newRestservices;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT__RESTSERVICES, oldRestservices, newRestservices);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setRestservices(Restservices newRestservices) {
-		if (newRestservices != restservices) {
-			NotificationChain msgs = null;
-			if (restservices != null)
-				msgs = ((InternalEObject)restservices).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.DEPLOYMENT__RESTSERVICES, null, msgs);
-			if (newRestservices != null)
-				msgs = ((InternalEObject)newRestservices).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.DEPLOYMENT__RESTSERVICES, null, msgs);
-			msgs = basicSetRestservices(newRestservices, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT__RESTSERVICES, newRestservices, newRestservices));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public RUIApplication getRuiapplication() {
+	public RUIApplication getRuiapplication()
+	{
 		return ruiapplication;
 	}
 
@@ -412,10 +285,12 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetRuiapplication(RUIApplication newRuiapplication, NotificationChain msgs) {
+	public NotificationChain basicSetRuiapplication(RUIApplication newRuiapplication, NotificationChain msgs)
+	{
 		RUIApplication oldRuiapplication = ruiapplication;
 		ruiapplication = newRuiapplication;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
+		{
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT__RUIAPPLICATION, oldRuiapplication, newRuiapplication);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
@@ -427,8 +302,10 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setRuiapplication(RUIApplication newRuiapplication) {
-		if (newRuiapplication != ruiapplication) {
+	public void setRuiapplication(RUIApplication newRuiapplication)
+	{
+		if (newRuiapplication != ruiapplication)
+		{
 			NotificationChain msgs = null;
 			if (ruiapplication != null)
 				msgs = ((InternalEObject)ruiapplication).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.DEPLOYMENT__RUIAPPLICATION, null, msgs);
@@ -446,7 +323,8 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ResourceOmissions getResourceOmissions() {
+	public ResourceOmissions getResourceOmissions()
+	{
 		return resourceOmissions;
 	}
 
@@ -455,10 +333,12 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetResourceOmissions(ResourceOmissions newResourceOmissions, NotificationChain msgs) {
+	public NotificationChain basicSetResourceOmissions(ResourceOmissions newResourceOmissions, NotificationChain msgs)
+	{
 		ResourceOmissions oldResourceOmissions = resourceOmissions;
 		resourceOmissions = newResourceOmissions;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
+		{
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT__RESOURCE_OMISSIONS, oldResourceOmissions, newResourceOmissions);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
@@ -470,8 +350,10 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setResourceOmissions(ResourceOmissions newResourceOmissions) {
-		if (newResourceOmissions != resourceOmissions) {
+	public void setResourceOmissions(ResourceOmissions newResourceOmissions)
+	{
+		if (newResourceOmissions != resourceOmissions)
+		{
 			NotificationChain msgs = null;
 			if (resourceOmissions != null)
 				msgs = ((InternalEObject)resourceOmissions).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.DEPLOYMENT__RESOURCE_OMISSIONS, null, msgs);
@@ -489,8 +371,10 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FeatureMap getTargetGroup() {
-		if (targetGroup == null) {
+	public FeatureMap getTargetGroup()
+	{
+		if (targetGroup == null)
+		{
 			targetGroup = new BasicFeatureMap(this, DeploymentPackage.DEPLOYMENT__TARGET_GROUP);
 		}
 		return targetGroup;
@@ -501,7 +385,8 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DeploymentTarget getTarget() {
+	public DeploymentTarget getTarget()
+	{
 		return (DeploymentTarget)getTargetGroup().get(DeploymentPackage.Literals.DEPLOYMENT__TARGET, true);
 	}
 
@@ -510,7 +395,8 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetTarget(DeploymentTarget newTarget, NotificationChain msgs) {
+	public NotificationChain basicSetTarget(DeploymentTarget newTarget, NotificationChain msgs)
+	{
 		return ((FeatureMap.Internal)getTargetGroup()).basicAdd(DeploymentPackage.Literals.DEPLOYMENT__TARGET, newTarget, msgs);
 	}
 
@@ -519,8 +405,10 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Include> getInclude() {
-		if (include == null) {
+	public EList<Include> getInclude()
+	{
+		if (include == null)
+		{
 			include = new EObjectContainmentEList<Include>(Include.class, this, DeploymentPackage.DEPLOYMENT__INCLUDE);
 		}
 		return include;
@@ -531,8 +419,10 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FeatureMap getDeployExtGroup() {
-		if (deployExtGroup == null) {
+	public FeatureMap getDeployExtGroup()
+	{
+		if (deployExtGroup == null)
+		{
 			deployExtGroup = new BasicFeatureMap(this, DeploymentPackage.DEPLOYMENT__DEPLOY_EXT_GROUP);
 		}
 		return deployExtGroup;
@@ -543,7 +433,8 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<DeployExt> getDeployExt() {
+	public EList<DeployExt> getDeployExt()
+	{
 		return getDeployExtGroup().list(DeploymentPackage.Literals.DEPLOYMENT__DEPLOY_EXT);
 	}
 
@@ -552,53 +443,8 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public WebserviceRuntimeType getWebserviceRuntime() {
-		return webserviceRuntime;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setWebserviceRuntime(WebserviceRuntimeType newWebserviceRuntime) {
-		WebserviceRuntimeType oldWebserviceRuntime = webserviceRuntime;
-		webserviceRuntime = newWebserviceRuntime == null ? WEBSERVICE_RUNTIME_EDEFAULT : newWebserviceRuntime;
-		boolean oldWebserviceRuntimeESet = webserviceRuntimeESet;
-		webserviceRuntimeESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT__WEBSERVICE_RUNTIME, oldWebserviceRuntime, webserviceRuntime, !oldWebserviceRuntimeESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetWebserviceRuntime() {
-		WebserviceRuntimeType oldWebserviceRuntime = webserviceRuntime;
-		boolean oldWebserviceRuntimeESet = webserviceRuntimeESet;
-		webserviceRuntime = WEBSERVICE_RUNTIME_EDEFAULT;
-		webserviceRuntimeESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, DeploymentPackage.DEPLOYMENT__WEBSERVICE_RUNTIME, oldWebserviceRuntime, WEBSERVICE_RUNTIME_EDEFAULT, oldWebserviceRuntimeESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetWebserviceRuntime() {
-		return webserviceRuntimeESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getAlias() {
+	public String getAlias()
+	{
 		return alias;
 	}
 
@@ -607,7 +453,8 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setAlias(String newAlias) {
+	public void setAlias(String newAlias)
+	{
 		String oldAlias = alias;
 		alias = newAlias;
 		if (eNotificationRequired())
@@ -620,16 +467,14 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.DEPLOYMENT__BINDINGS:
 				return basicSetBindings(null, msgs);
-			case DeploymentPackage.DEPLOYMENT__PROTOCOLS:
-				return basicSetProtocols(null, msgs);
-			case DeploymentPackage.DEPLOYMENT__WEBSERVICES:
-				return basicSetWebservices(null, msgs);
-			case DeploymentPackage.DEPLOYMENT__RESTSERVICES:
-				return basicSetRestservices(null, msgs);
+			case DeploymentPackage.DEPLOYMENT__SERVICES:
+				return basicSetServices(null, msgs);
 			case DeploymentPackage.DEPLOYMENT__RUIAPPLICATION:
 				return basicSetRuiapplication(null, msgs);
 			case DeploymentPackage.DEPLOYMENT__RESOURCE_OMISSIONS:
@@ -654,16 +499,14 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.DEPLOYMENT__BINDINGS:
 				return getBindings();
-			case DeploymentPackage.DEPLOYMENT__PROTOCOLS:
-				return getProtocols();
-			case DeploymentPackage.DEPLOYMENT__WEBSERVICES:
-				return getWebservices();
-			case DeploymentPackage.DEPLOYMENT__RESTSERVICES:
-				return getRestservices();
+			case DeploymentPackage.DEPLOYMENT__SERVICES:
+				return getServices();
 			case DeploymentPackage.DEPLOYMENT__RUIAPPLICATION:
 				return getRuiapplication();
 			case DeploymentPackage.DEPLOYMENT__RESOURCE_OMISSIONS:
@@ -680,8 +523,6 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 				return ((FeatureMap.Internal)getDeployExtGroup()).getWrapper();
 			case DeploymentPackage.DEPLOYMENT__DEPLOY_EXT:
 				return getDeployExt();
-			case DeploymentPackage.DEPLOYMENT__WEBSERVICE_RUNTIME:
-				return getWebserviceRuntime();
 			case DeploymentPackage.DEPLOYMENT__ALIAS:
 				return getAlias();
 		}
@@ -695,19 +536,15 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
+	public void eSet(int featureID, Object newValue)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.DEPLOYMENT__BINDINGS:
 				setBindings((Bindings)newValue);
 				return;
-			case DeploymentPackage.DEPLOYMENT__PROTOCOLS:
-				setProtocols((Protocols)newValue);
-				return;
-			case DeploymentPackage.DEPLOYMENT__WEBSERVICES:
-				setWebservices((Webservices)newValue);
-				return;
-			case DeploymentPackage.DEPLOYMENT__RESTSERVICES:
-				setRestservices((Restservices)newValue);
+			case DeploymentPackage.DEPLOYMENT__SERVICES:
+				setServices((Services)newValue);
 				return;
 			case DeploymentPackage.DEPLOYMENT__RUIAPPLICATION:
 				setRuiapplication((RUIApplication)newValue);
@@ -725,9 +562,6 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 			case DeploymentPackage.DEPLOYMENT__DEPLOY_EXT_GROUP:
 				((FeatureMap.Internal)getDeployExtGroup()).set(newValue);
 				return;
-			case DeploymentPackage.DEPLOYMENT__WEBSERVICE_RUNTIME:
-				setWebserviceRuntime((WebserviceRuntimeType)newValue);
-				return;
 			case DeploymentPackage.DEPLOYMENT__ALIAS:
 				setAlias((String)newValue);
 				return;
@@ -741,19 +575,15 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
-		switch (featureID) {
+	public void eUnset(int featureID)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.DEPLOYMENT__BINDINGS:
 				setBindings((Bindings)null);
 				return;
-			case DeploymentPackage.DEPLOYMENT__PROTOCOLS:
-				setProtocols((Protocols)null);
-				return;
-			case DeploymentPackage.DEPLOYMENT__WEBSERVICES:
-				setWebservices((Webservices)null);
-				return;
-			case DeploymentPackage.DEPLOYMENT__RESTSERVICES:
-				setRestservices((Restservices)null);
+			case DeploymentPackage.DEPLOYMENT__SERVICES:
+				setServices((Services)null);
 				return;
 			case DeploymentPackage.DEPLOYMENT__RUIAPPLICATION:
 				setRuiapplication((RUIApplication)null);
@@ -770,9 +600,6 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 			case DeploymentPackage.DEPLOYMENT__DEPLOY_EXT_GROUP:
 				getDeployExtGroup().clear();
 				return;
-			case DeploymentPackage.DEPLOYMENT__WEBSERVICE_RUNTIME:
-				unsetWebserviceRuntime();
-				return;
 			case DeploymentPackage.DEPLOYMENT__ALIAS:
 				setAlias(ALIAS_EDEFAULT);
 				return;
@@ -786,16 +613,14 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
+	public boolean eIsSet(int featureID)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.DEPLOYMENT__BINDINGS:
 				return bindings != null;
-			case DeploymentPackage.DEPLOYMENT__PROTOCOLS:
-				return protocols != null;
-			case DeploymentPackage.DEPLOYMENT__WEBSERVICES:
-				return webservices != null;
-			case DeploymentPackage.DEPLOYMENT__RESTSERVICES:
-				return restservices != null;
+			case DeploymentPackage.DEPLOYMENT__SERVICES:
+				return services != null;
 			case DeploymentPackage.DEPLOYMENT__RUIAPPLICATION:
 				return ruiapplication != null;
 			case DeploymentPackage.DEPLOYMENT__RESOURCE_OMISSIONS:
@@ -810,8 +635,6 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 				return deployExtGroup != null && !deployExtGroup.isEmpty();
 			case DeploymentPackage.DEPLOYMENT__DEPLOY_EXT:
 				return !getDeployExt().isEmpty();
-			case DeploymentPackage.DEPLOYMENT__WEBSERVICE_RUNTIME:
-				return isSetWebserviceRuntime();
 			case DeploymentPackage.DEPLOYMENT__ALIAS:
 				return ALIAS_EDEFAULT == null ? alias != null : !ALIAS_EDEFAULT.equals(alias);
 		}
@@ -824,7 +647,8 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 	 * @generated
 	 */
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
@@ -832,8 +656,6 @@ public class DeploymentImpl extends EObjectImpl implements Deployment {
 		result.append(targetGroup);
 		result.append(", deployExtGroup: ");
 		result.append(deployExtGroup);
-		result.append(", webserviceRuntime: ");
-		if (webserviceRuntimeESet) result.append(webserviceRuntime); else result.append("<unset>");
 		result.append(", alias: ");
 		result.append(alias);
 		result.append(')');

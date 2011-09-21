@@ -26,9 +26,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getBindings <em>Bindings</em>}</li>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getProtocols <em>Protocols</em>}</li>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getWebservices <em>Webservices</em>}</li>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getRestservices <em>Restservices</em>}</li>
+ *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getServices <em>Services</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getRuiapplication <em>Ruiapplication</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getResourceOmissions <em>Resource Omissions</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getTargetGroup <em>Target Group</em>}</li>
@@ -36,7 +34,6 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getInclude <em>Include</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getDeployExtGroup <em>Deploy Ext Group</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getDeployExt <em>Deploy Ext</em>}</li>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getWebserviceRuntime <em>Webservice Runtime</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getAlias <em>Alias</em>}</li>
  * </ul>
  * </p>
@@ -45,7 +42,8 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  * @model extendedMetaData="name='Deployment' kind='elementOnly'"
  * @generated
  */
-public interface Deployment extends EObject {
+public interface Deployment extends EObject
+{
 	/**
 	 * Returns the value of the '<em><b>Bindings</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
@@ -74,85 +72,31 @@ public interface Deployment extends EObject {
 	void setBindings(Bindings value);
 
 	/**
-	 * Returns the value of the '<em><b>Protocols</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Services</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Protocols</em>' containment reference isn't clear,
+	 * If the meaning of the '<em>Services</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Protocols</em>' containment reference.
-	 * @see #setProtocols(Protocols)
-	 * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getDeployment_Protocols()
+	 * @return the value of the '<em>Services</em>' containment reference.
+	 * @see #setServices(Services)
+	 * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getDeployment_Services()
 	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='protocols'"
+	 *        extendedMetaData="kind='element' name='services'"
 	 * @generated
 	 */
-	Protocols getProtocols();
+	Services getServices();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getProtocols <em>Protocols</em>}' containment reference.
+	 * Sets the value of the '{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getServices <em>Services</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Protocols</em>' containment reference.
-	 * @see #getProtocols()
+	 * @param value the new value of the '<em>Services</em>' containment reference.
+	 * @see #getServices()
 	 * @generated
 	 */
-	void setProtocols(Protocols value);
-
-	/**
-	 * Returns the value of the '<em><b>Webservices</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Webservices</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Webservices</em>' containment reference.
-	 * @see #setWebservices(Webservices)
-	 * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getDeployment_Webservices()
-	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='webservices'"
-	 * @generated
-	 */
-	Webservices getWebservices();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getWebservices <em>Webservices</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Webservices</em>' containment reference.
-	 * @see #getWebservices()
-	 * @generated
-	 */
-	void setWebservices(Webservices value);
-
-	/**
-	 * Returns the value of the '<em><b>Restservices</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Restservices</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Restservices</em>' containment reference.
-	 * @see #setRestservices(Restservices)
-	 * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getDeployment_Restservices()
-	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='restservices'"
-	 * @generated
-	 */
-	Restservices getRestservices();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getRestservices <em>Restservices</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Restservices</em>' containment reference.
-	 * @see #getRestservices()
-	 * @generated
-	 */
-	void setRestservices(Restservices value);
+	void setServices(Services value);
 
 	/**
 	 * Returns the value of the '<em><b>Ruiapplication</b></em>' containment reference.
@@ -291,63 +235,6 @@ public interface Deployment extends EObject {
 	 * @generated
 	 */
 	EList<DeployExt> getDeployExt();
-
-	/**
-	 * Returns the value of the '<em><b>Webservice Runtime</b></em>' attribute.
-	 * The literals are from the enumeration {@link org.eclipse.edt.ide.ui.internal.deployment.WebserviceRuntimeType}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Webservice Runtime</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Webservice Runtime</em>' attribute.
-	 * @see org.eclipse.edt.ide.ui.internal.deployment.WebserviceRuntimeType
-	 * @see #isSetWebserviceRuntime()
-	 * @see #unsetWebserviceRuntime()
-	 * @see #setWebserviceRuntime(WebserviceRuntimeType)
-	 * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getDeployment_WebserviceRuntime()
-	 * @model unsettable="true"
-	 *        extendedMetaData="kind='element' name='webserviceRuntime'"
-	 * @generated
-	 */
-	WebserviceRuntimeType getWebserviceRuntime();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getWebserviceRuntime <em>Webservice Runtime</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Webservice Runtime</em>' attribute.
-	 * @see org.eclipse.edt.ide.ui.internal.deployment.WebserviceRuntimeType
-	 * @see #isSetWebserviceRuntime()
-	 * @see #unsetWebserviceRuntime()
-	 * @see #getWebserviceRuntime()
-	 * @generated
-	 */
-	void setWebserviceRuntime(WebserviceRuntimeType value);
-
-	/**
-	 * Unsets the value of the '{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getWebserviceRuntime <em>Webservice Runtime</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetWebserviceRuntime()
-	 * @see #getWebserviceRuntime()
-	 * @see #setWebserviceRuntime(WebserviceRuntimeType)
-	 * @generated
-	 */
-	void unsetWebserviceRuntime();
-
-	/**
-	 * Returns whether the value of the '{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getWebserviceRuntime <em>Webservice Runtime</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Webservice Runtime</em>' attribute is set.
-	 * @see #unsetWebserviceRuntime()
-	 * @see #getWebserviceRuntime()
-	 * @see #setWebserviceRuntime(WebserviceRuntimeType)
-	 * @generated
-	 */
-	boolean isSetWebserviceRuntime();
 
 	/**
 	 * Returns the value of the '<em><b>Alias</b></em>' attribute.

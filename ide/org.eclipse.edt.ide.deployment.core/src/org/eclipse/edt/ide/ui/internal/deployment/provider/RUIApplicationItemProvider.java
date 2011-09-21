@@ -50,14 +50,16 @@ public class RUIApplicationItemProvider
 		IStructuredItemContentProvider,
 		ITreeItemContentProvider,
 		IItemLabelProvider,
-		IItemPropertySource {
+		IItemPropertySource
+{
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public RUIApplicationItemProvider(AdapterFactory adapterFactory) {
+	public RUIApplicationItemProvider(AdapterFactory adapterFactory)
+	{
 		super(adapterFactory);
 	}
 
@@ -68,8 +70,10 @@ public class RUIApplicationItemProvider
 	 * @generated
 	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
-		if (itemPropertyDescriptors == null) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object)
+	{
+		if (itemPropertyDescriptors == null)
+		{
 			super.getPropertyDescriptors(object);
 
 			addDeployAllHandlersPropertyDescriptor(object);
@@ -84,7 +88,8 @@ public class RUIApplicationItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addDeployAllHandlersPropertyDescriptor(Object object) {
+	protected void addDeployAllHandlersPropertyDescriptor(Object object)
+	{
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
@@ -106,7 +111,8 @@ public class RUIApplicationItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addSupportDynamicLoadingPropertyDescriptor(Object object) {
+	protected void addSupportDynamicLoadingPropertyDescriptor(Object object)
+	{
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
@@ -131,11 +137,12 @@ public class RUIApplicationItemProvider
 	 * @generated
 	 */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object)
+	{
+		if (childrenFeatures == null)
+		{
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(DeploymentPackage.Literals.RUI_APPLICATION__RUIHANDLER);
-			childrenFeatures.add(DeploymentPackage.Literals.RUI_APPLICATION__RESOURCE_OMISSIONS);
 			childrenFeatures.add(DeploymentPackage.Literals.RUI_APPLICATION__PARAMETERS);
 		}
 		return childrenFeatures;
@@ -147,7 +154,8 @@ public class RUIApplicationItemProvider
 	 * @generated
 	 */
 	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
+	protected EStructuralFeature getChildFeature(Object object, Object child)
+	{
 		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
@@ -161,7 +169,8 @@ public class RUIApplicationItemProvider
 	 * @generated
 	 */
 	@Override
-	public Object getImage(Object object) {
+	public Object getImage(Object object)
+	{
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/RUIApplication"));
 	}
 
@@ -172,7 +181,8 @@ public class RUIApplicationItemProvider
 	 * @generated
 	 */
 	@Override
-	public String getText(Object object) {
+	public String getText(Object object)
+	{
 		RUIApplication ruiApplication = (RUIApplication)object;
 		return getString("_UI_RUIApplication_type") + " " + ruiApplication.isDeployAllHandlers();
 	}
@@ -185,16 +195,17 @@ public class RUIApplicationItemProvider
 	 * @generated
 	 */
 	@Override
-	public void notifyChanged(Notification notification) {
+	public void notifyChanged(Notification notification)
+	{
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(RUIApplication.class)) {
+		switch (notification.getFeatureID(RUIApplication.class))
+		{
 			case DeploymentPackage.RUI_APPLICATION__DEPLOY_ALL_HANDLERS:
 			case DeploymentPackage.RUI_APPLICATION__SUPPORT_DYNAMIC_LOADING:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case DeploymentPackage.RUI_APPLICATION__RUIHANDLER:
-			case DeploymentPackage.RUI_APPLICATION__RESOURCE_OMISSIONS:
 			case DeploymentPackage.RUI_APPLICATION__PARAMETERS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -210,18 +221,14 @@ public class RUIApplicationItemProvider
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
+	{
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors.add
 			(createChildParameter
 				(DeploymentPackage.Literals.RUI_APPLICATION__RUIHANDLER,
 				 DeploymentFactory.eINSTANCE.createRUIHandler()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DeploymentPackage.Literals.RUI_APPLICATION__RESOURCE_OMISSIONS,
-				 DeploymentFactory.eINSTANCE.createRUIResourceOmissions()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -236,7 +243,8 @@ public class RUIApplicationItemProvider
 	 * @generated
 	 */
 	@Override
-	public ResourceLocator getResourceLocator() {
+	public ResourceLocator getResourceLocator()
+	{
 		return EglddEditPlugin.INSTANCE;
 	}
 

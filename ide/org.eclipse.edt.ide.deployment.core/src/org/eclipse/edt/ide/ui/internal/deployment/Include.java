@@ -29,7 +29,8 @@ import org.eclipse.emf.ecore.EObject;
  * @model extendedMetaData="name='Include' kind='empty'"
  * @generated
  */
-public interface Include extends EObject {
+public interface Include extends EObject
+{
 	/**
 	 * Returns the value of the '<em><b>Location</b></em>' attribute.
 	 * <!-- begin-user-doc -->

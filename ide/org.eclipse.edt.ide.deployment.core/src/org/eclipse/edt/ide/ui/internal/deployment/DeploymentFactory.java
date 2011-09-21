@@ -21,7 +21,8 @@ import org.eclipse.emf.ecore.EFactory;
  * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage
  * @generated
  */
-public interface DeploymentFactory extends EFactory {
+public interface DeploymentFactory extends EFactory
+{
 	/**
 	 * The singleton instance of the factory.
 	 * <!-- begin-user-doc -->
@@ -31,6 +32,15 @@ public interface DeploymentFactory extends EFactory {
 	DeploymentFactory eINSTANCE = org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentFactoryImpl.init();
 
 	/**
+	 * Returns a new object of class '<em>Binding</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Binding</em>'.
+	 * @generated
+	 */
+	Binding createBinding();
+
+	/**
 	 * Returns a new object of class '<em>Bindings</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -38,42 +48,6 @@ public interface DeploymentFactory extends EFactory {
 	 * @generated
 	 */
 	Bindings createBindings();
-
-	/**
-	 * Returns a new object of class '<em>CICSECI Protocol</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>CICSECI Protocol</em>'.
-	 * @generated
-	 */
-	CICSECIProtocol createCICSECIProtocol();
-
-	/**
-	 * Returns a new object of class '<em>CICSJ2C Protocol</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>CICSJ2C Protocol</em>'.
-	 * @generated
-	 */
-	CICSJ2CProtocol createCICSJ2CProtocol();
-
-	/**
-	 * Returns a new object of class '<em>CICSSSL Protocol</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>CICSSSL Protocol</em>'.
-	 * @generated
-	 */
-	CICSSSLProtocol createCICSSSLProtocol();
-
-	/**
-	 * Returns a new object of class '<em>CICSWS Protocol</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>CICSWS Protocol</em>'.
-	 * @generated
-	 */
-	CICSWSProtocol createCICSWSProtocol();
 
 	/**
 	 * Returns a new object of class '<em>Deploy Ext</em>'.
@@ -94,15 +68,6 @@ public interface DeploymentFactory extends EFactory {
 	Deployment createDeployment();
 
 	/**
-	 * Returns a new object of class '<em>Build Descriptor</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Build Descriptor</em>'.
-	 * @generated
-	 */
-	DeploymentBuildDescriptor createDeploymentBuildDescriptor();
-
-	/**
 	 * Returns a new object of class '<em>Project</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -121,15 +86,6 @@ public interface DeploymentFactory extends EFactory {
 	DeploymentTarget createDeploymentTarget();
 
 	/**
-	 * Returns a new object of class '<em>EGL Binding</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>EGL Binding</em>'.
-	 * @generated
-	 */
-	EGLBinding createEGLBinding();
-
-	/**
 	 * Returns a new object of class '<em>EGL Deployment Root</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -139,24 +95,6 @@ public interface DeploymentFactory extends EFactory {
 	EGLDeploymentRoot createEGLDeploymentRoot();
 
 	/**
-	 * Returns a new object of class '<em>IMSJ2C Protocol</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>IMSJ2C Protocol</em>'.
-	 * @generated
-	 */
-	IMSJ2CProtocol createIMSJ2CProtocol();
-
-	/**
-	 * Returns a new object of class '<em>IMSTCP Protocol</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>IMSTCP Protocol</em>'.
-	 * @generated
-	 */
-	IMSTCPProtocol createIMSTCPProtocol();
-
-	/**
 	 * Returns a new object of class '<em>Include</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -164,42 +102,6 @@ public interface DeploymentFactory extends EFactory {
 	 * @generated
 	 */
 	Include createInclude();
-
-	/**
-	 * Returns a new object of class '<em>Java400 J2c Protocol</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Java400 J2c Protocol</em>'.
-	 * @generated
-	 */
-	Java400J2cProtocol createJava400J2cProtocol();
-
-	/**
-	 * Returns a new object of class '<em>Java400 Protocol</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Java400 Protocol</em>'.
-	 * @generated
-	 */
-	Java400Protocol createJava400Protocol();
-
-	/**
-	 * Returns a new object of class '<em>Local Protocol</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Local Protocol</em>'.
-	 * @generated
-	 */
-	LocalProtocol createLocalProtocol();
-
-	/**
-	 * Returns a new object of class '<em>Native Binding</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Native Binding</em>'.
-	 * @generated
-	 */
-	NativeBinding createNativeBinding();
 
 	/**
 	 * Returns a new object of class '<em>Parameter</em>'.
@@ -220,33 +122,6 @@ public interface DeploymentFactory extends EFactory {
 	Parameters createParameters();
 
 	/**
-	 * Returns a new object of class '<em>Protocol</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Protocol</em>'.
-	 * @generated
-	 */
-	Protocol createProtocol();
-
-	/**
-	 * Returns a new object of class '<em>Protocols</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Protocols</em>'.
-	 * @generated
-	 */
-	Protocols createProtocols();
-
-	/**
-	 * Returns a new object of class '<em>Reference Protocol</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Reference Protocol</em>'.
-	 * @generated
-	 */
-	ReferenceProtocol createReferenceProtocol();
-
-	/**
 	 * Returns a new object of class '<em>Resource</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -263,33 +138,6 @@ public interface DeploymentFactory extends EFactory {
 	 * @generated
 	 */
 	ResourceOmissions createResourceOmissions();
-
-	/**
-	 * Returns a new object of class '<em>Rest Binding</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Rest Binding</em>'.
-	 * @generated
-	 */
-	RestBinding createRestBinding();
-
-	/**
-	 * Returns a new object of class '<em>Restservice</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Restservice</em>'.
-	 * @generated
-	 */
-	Restservice createRestservice();
-
-	/**
-	 * Returns a new object of class '<em>Restservices</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Restservices</em>'.
-	 * @generated
-	 */
-	Restservices createRestservices();
 
 	/**
 	 * Returns a new object of class '<em>RUI Application</em>'.
@@ -310,76 +158,22 @@ public interface DeploymentFactory extends EFactory {
 	RUIHandler createRUIHandler();
 
 	/**
-	 * Returns a new object of class '<em>RUI Resource</em>'.
+	 * Returns a new object of class '<em>Service</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>RUI Resource</em>'.
+	 * @return a new object of class '<em>Service</em>'.
 	 * @generated
 	 */
-	RUIResource createRUIResource();
+	Service createService();
 
 	/**
-	 * Returns a new object of class '<em>RUI Resource Omissions</em>'.
+	 * Returns a new object of class '<em>Services</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>RUI Resource Omissions</em>'.
+	 * @return a new object of class '<em>Services</em>'.
 	 * @generated
 	 */
-	RUIResourceOmissions createRUIResourceOmissions();
-
-	/**
-	 * Returns a new object of class '<em>SQL Database Binding</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>SQL Database Binding</em>'.
-	 * @generated
-	 */
-	SQLDatabaseBinding createSQLDatabaseBinding();
-
-	/**
-	 * Returns a new object of class '<em>System IProtocol</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>System IProtocol</em>'.
-	 * @generated
-	 */
-	SystemIProtocol createSystemIProtocol();
-
-	/**
-	 * Returns a new object of class '<em>TCPIP Protocol</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>TCPIP Protocol</em>'.
-	 * @generated
-	 */
-	TCPIPProtocol createTCPIPProtocol();
-
-	/**
-	 * Returns a new object of class '<em>Web Binding</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Web Binding</em>'.
-	 * @generated
-	 */
-	WebBinding createWebBinding();
-
-	/**
-	 * Returns a new object of class '<em>Webservice</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Webservice</em>'.
-	 * @generated
-	 */
-	Webservice createWebservice();
-
-	/**
-	 * Returns a new object of class '<em>Webservices</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Webservices</em>'.
-	 * @generated
-	 */
-	Webservices createWebservices();
+	Services createServices();
 
 	/**
 	 * Returns the package supported by this factory.

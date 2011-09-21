@@ -23,5 +23,6 @@ import org.eclipse.emf.ecore.EObject;
  * @model extendedMetaData="name='Deploy-Ext' kind='empty'"
  * @generated
  */
-public interface DeployExt extends EObject {
+public interface DeployExt extends EObject
+{
 } // DeployExt

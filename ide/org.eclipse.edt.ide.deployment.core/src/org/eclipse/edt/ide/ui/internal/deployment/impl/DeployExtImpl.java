@@ -27,13 +27,15 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class DeployExtImpl extends EObjectImpl implements DeployExt {
+public class DeployExtImpl extends EObjectImpl implements DeployExt
+{
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected DeployExtImpl() {
+	protected DeployExtImpl()
+	{
 		super();
 	}
 
@@ -43,7 +45,8 @@ public class DeployExtImpl extends EObjectImpl implements DeployExt {
 	 * @generated
 	 */
 	@Override
-	protected EClass eStaticClass() {
+	protected EClass eStaticClass()
+	{
 		return DeploymentPackage.Literals.DEPLOY_EXT;
 	}
 

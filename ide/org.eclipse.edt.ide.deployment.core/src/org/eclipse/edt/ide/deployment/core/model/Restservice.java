@@ -11,76 +11,39 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.deployment.core.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.eclipse.edt.javart.resources.egldd.ParameterUtil;
 
-public class Restservice {
+public class Restservice extends Service{
 	
-	private String implementation;
-	private String uri;
-	private boolean enableGeneration;
-	private boolean stateful;
-	private String protocol;
-	List parameters;
+	public static final String ATTRIBUTE_SERVICE_REST_enableGeneration = "enableGeneration";
+	public static final String ATTRIBUTE_SERVICE_REST_uriFragment = "uriFragment";
+	public static final String ATTRIBUTE_SERVICE_REST_implType = "implType";
 	
-	public Restservice(String implementation, String uri, String protocol, String stateful,String enableGenerationString )
+	
+	public Restservice(String type, String implementation)
 	{
-		this.implementation = implementation;
-		this.uri = uri;
-		this.protocol = protocol;
-		this.stateful = string2Boolean( stateful );
-		this.parameters = new ArrayList();
-		enableGeneration = string2Boolean( enableGenerationString );
+		super(type, implementation);
 	}
 
-	private static boolean string2Boolean( String value )
+	public Restservice(Service service)
 	{
-		if (value != null && value.equalsIgnoreCase("true"))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	public String getImplementation() {
-		return implementation;
-	}
-
-	public void setImplementation(String implementation) {
-		this.implementation = implementation;
+		super(service.getType(), service.getImplementation());
+		parameters = service.parameters;
 	}
 
 	public boolean isEnableGeneration() {
-		return enableGeneration;
-	}
-
-	public void setEnableGeneration(boolean enableGeneration) {
-		this.enableGeneration = enableGeneration;
+		return ParameterUtil.getBooleanValue(getParameter(ATTRIBUTE_SERVICE_REST_enableGeneration), true);
 	}
 
 	public String getUri() {
-		return uri;
-	}
-
-	public String getProtocol()
-	{
-		return protocol;
-	}
-
-	public boolean isStateful()
-	{
-		return stateful;
+		return getParameter(ATTRIBUTE_SERVICE_REST_uriFragment).getValue();
 	}
 	
-	public void addParameter(Parameter param)
-	{
-		parameters.add(param);
+	public int getImplType() {
+		return ParameterUtil.getIntValue(getParameter(ATTRIBUTE_SERVICE_REST_implType), 0);
 	}
-	
-	public List getParameters()
-	{
-		return parameters;
+
+	public boolean isStateful(){
+		return(false);
 	}
 }

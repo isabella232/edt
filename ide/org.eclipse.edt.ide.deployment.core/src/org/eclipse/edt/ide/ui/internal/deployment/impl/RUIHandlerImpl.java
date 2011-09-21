@@ -39,7 +39,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
+public class RUIHandlerImpl extends EObjectImpl implements RUIHandler
+{
 	/**
 	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -104,7 +105,8 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected RUIHandlerImpl() {
+	protected RUIHandlerImpl()
+	{
 		super();
 	}
 
@@ -114,7 +116,8 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * @generated
 	 */
 	@Override
-	protected EClass eStaticClass() {
+	protected EClass eStaticClass()
+	{
 		return DeploymentPackage.Literals.RUI_HANDLER;
 	}
 
@@ -123,7 +126,8 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Parameters getParameters() {
+	public Parameters getParameters()
+	{
 		return parameters;
 	}
 
@@ -132,10 +136,12 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetParameters(Parameters newParameters, NotificationChain msgs) {
+	public NotificationChain basicSetParameters(Parameters newParameters, NotificationChain msgs)
+	{
 		Parameters oldParameters = parameters;
 		parameters = newParameters;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
+		{
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DeploymentPackage.RUI_HANDLER__PARAMETERS, oldParameters, newParameters);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
@@ -147,8 +153,10 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setParameters(Parameters newParameters) {
-		if (newParameters != parameters) {
+	public void setParameters(Parameters newParameters)
+	{
+		if (newParameters != parameters)
+		{
 			NotificationChain msgs = null;
 			if (parameters != null)
 				msgs = ((InternalEObject)parameters).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.RUI_HANDLER__PARAMETERS, null, msgs);
@@ -166,7 +174,8 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isEnableGeneration() {
+	public boolean isEnableGeneration()
+	{
 		return enableGeneration;
 	}
 
@@ -175,7 +184,8 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEnableGeneration(boolean newEnableGeneration) {
+	public void setEnableGeneration(boolean newEnableGeneration)
+	{
 		boolean oldEnableGeneration = enableGeneration;
 		enableGeneration = newEnableGeneration;
 		boolean oldEnableGenerationESet = enableGenerationESet;
@@ -189,7 +199,8 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void unsetEnableGeneration() {
+	public void unsetEnableGeneration()
+	{
 		boolean oldEnableGeneration = enableGeneration;
 		boolean oldEnableGenerationESet = enableGenerationESet;
 		enableGeneration = ENABLE_GENERATION_EDEFAULT;
@@ -203,7 +214,8 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isSetEnableGeneration() {
+	public boolean isSetEnableGeneration()
+	{
 		return enableGenerationESet;
 	}
 
@@ -212,7 +224,8 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getImplementation() {
+	public String getImplementation()
+	{
 		return implementation;
 	}
 
@@ -221,7 +234,8 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setImplementation(String newImplementation) {
+	public void setImplementation(String newImplementation)
+	{
 		String oldImplementation = implementation;
 		implementation = newImplementation;
 		if (eNotificationRequired())
@@ -234,8 +248,10 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.RUI_HANDLER__PARAMETERS:
 				return basicSetParameters(null, msgs);
 		}
@@ -248,8 +264,10 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.RUI_HANDLER__PARAMETERS:
 				return getParameters();
 			case DeploymentPackage.RUI_HANDLER__ENABLE_GENERATION:
@@ -266,8 +284,10 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
+	public void eSet(int featureID, Object newValue)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.RUI_HANDLER__PARAMETERS:
 				setParameters((Parameters)newValue);
 				return;
@@ -287,8 +307,10 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
-		switch (featureID) {
+	public void eUnset(int featureID)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.RUI_HANDLER__PARAMETERS:
 				setParameters((Parameters)null);
 				return;
@@ -308,8 +330,10 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
+	public boolean eIsSet(int featureID)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.RUI_HANDLER__PARAMETERS:
 				return parameters != null;
 			case DeploymentPackage.RUI_HANDLER__ENABLE_GENERATION:
@@ -326,7 +350,8 @@ public class RUIHandlerImpl extends EObjectImpl implements RUIHandler {
 	 * @generated
 	 */
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());

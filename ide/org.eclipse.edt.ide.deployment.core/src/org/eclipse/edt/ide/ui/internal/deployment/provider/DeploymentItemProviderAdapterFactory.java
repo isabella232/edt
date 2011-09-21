@@ -41,7 +41,8 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
  * <!-- end-user-doc -->
  * @generated
  */
-public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
+public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable
+{
 	/**
 	 * This keeps track of the root adapter factory that delegates to this adapter factory.
 	 * <!-- begin-user-doc -->
@@ -72,12 +73,38 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DeploymentItemProviderAdapterFactory() {
+	public DeploymentItemProviderAdapterFactory()
+	{
 		supportedTypes.add(IEditingDomainItemProvider.class);
 		supportedTypes.add(IStructuredItemContentProvider.class);
 		supportedTypes.add(ITreeItemContentProvider.class);
 		supportedTypes.add(IItemLabelProvider.class);
 		supportedTypes.add(IItemPropertySource.class);
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.Binding} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BindingItemProvider bindingItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.Binding}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBindingAdapter()
+	{
+		if (bindingItemProvider == null)
+		{
+			bindingItemProvider = new BindingItemProvider(this);
+		}
+
+		return bindingItemProvider;
 	}
 
 	/**
@@ -95,104 +122,14 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * @generated
 	 */
 	@Override
-	public Adapter createBindingsAdapter() {
-		if (bindingsItemProvider == null) {
+	public Adapter createBindingsAdapter()
+	{
+		if (bindingsItemProvider == null)
+		{
 			bindingsItemProvider = new BindingsItemProvider(this);
 		}
 
 		return bindingsItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.CICSECIProtocol} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected CICSECIProtocolItemProvider cicseciProtocolItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.CICSECIProtocol}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createCICSECIProtocolAdapter() {
-		if (cicseciProtocolItemProvider == null) {
-			cicseciProtocolItemProvider = new CICSECIProtocolItemProvider(this);
-		}
-
-		return cicseciProtocolItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.CICSJ2CProtocol} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected CICSJ2CProtocolItemProvider cicsj2CProtocolItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.CICSJ2CProtocol}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createCICSJ2CProtocolAdapter() {
-		if (cicsj2CProtocolItemProvider == null) {
-			cicsj2CProtocolItemProvider = new CICSJ2CProtocolItemProvider(this);
-		}
-
-		return cicsj2CProtocolItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.CICSSSLProtocol} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected CICSSSLProtocolItemProvider cicssslProtocolItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.CICSSSLProtocol}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createCICSSSLProtocolAdapter() {
-		if (cicssslProtocolItemProvider == null) {
-			cicssslProtocolItemProvider = new CICSSSLProtocolItemProvider(this);
-		}
-
-		return cicssslProtocolItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.CICSWSProtocol} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected CICSWSProtocolItemProvider cicswsProtocolItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.CICSWSProtocol}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createCICSWSProtocolAdapter() {
-		if (cicswsProtocolItemProvider == null) {
-			cicswsProtocolItemProvider = new CICSWSProtocolItemProvider(this);
-		}
-
-		return cicswsProtocolItemProvider;
 	}
 
 	/**
@@ -210,8 +147,10 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * @generated
 	 */
 	@Override
-	public Adapter createDeployExtAdapter() {
-		if (deployExtItemProvider == null) {
+	public Adapter createDeployExtAdapter()
+	{
+		if (deployExtItemProvider == null)
+		{
 			deployExtItemProvider = new DeployExtItemProvider(this);
 		}
 
@@ -233,35 +172,14 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * @generated
 	 */
 	@Override
-	public Adapter createDeploymentAdapter() {
-		if (deploymentItemProvider == null) {
+	public Adapter createDeploymentAdapter()
+	{
+		if (deploymentItemProvider == null)
+		{
 			deploymentItemProvider = new DeploymentItemProvider(this);
 		}
 
 		return deploymentItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.DeploymentBuildDescriptor} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected DeploymentBuildDescriptorItemProvider deploymentBuildDescriptorItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.DeploymentBuildDescriptor}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createDeploymentBuildDescriptorAdapter() {
-		if (deploymentBuildDescriptorItemProvider == null) {
-			deploymentBuildDescriptorItemProvider = new DeploymentBuildDescriptorItemProvider(this);
-		}
-
-		return deploymentBuildDescriptorItemProvider;
 	}
 
 	/**
@@ -279,8 +197,10 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * @generated
 	 */
 	@Override
-	public Adapter createDeploymentProjectAdapter() {
-		if (deploymentProjectItemProvider == null) {
+	public Adapter createDeploymentProjectAdapter()
+	{
+		if (deploymentProjectItemProvider == null)
+		{
 			deploymentProjectItemProvider = new DeploymentProjectItemProvider(this);
 		}
 
@@ -302,35 +222,14 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * @generated
 	 */
 	@Override
-	public Adapter createDeploymentTargetAdapter() {
-		if (deploymentTargetItemProvider == null) {
+	public Adapter createDeploymentTargetAdapter()
+	{
+		if (deploymentTargetItemProvider == null)
+		{
 			deploymentTargetItemProvider = new DeploymentTargetItemProvider(this);
 		}
 
 		return deploymentTargetItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.EGLBinding} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected EGLBindingItemProvider eglBindingItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.EGLBinding}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createEGLBindingAdapter() {
-		if (eglBindingItemProvider == null) {
-			eglBindingItemProvider = new EGLBindingItemProvider(this);
-		}
-
-		return eglBindingItemProvider;
 	}
 
 	/**
@@ -348,58 +247,14 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * @generated
 	 */
 	@Override
-	public Adapter createEGLDeploymentRootAdapter() {
-		if (eglDeploymentRootItemProvider == null) {
+	public Adapter createEGLDeploymentRootAdapter()
+	{
+		if (eglDeploymentRootItemProvider == null)
+		{
 			eglDeploymentRootItemProvider = new EGLDeploymentRootItemProvider(this);
 		}
 
 		return eglDeploymentRootItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.IMSJ2CProtocol} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected IMSJ2CProtocolItemProvider imsj2CProtocolItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.IMSJ2CProtocol}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createIMSJ2CProtocolAdapter() {
-		if (imsj2CProtocolItemProvider == null) {
-			imsj2CProtocolItemProvider = new IMSJ2CProtocolItemProvider(this);
-		}
-
-		return imsj2CProtocolItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.IMSTCPProtocol} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected IMSTCPProtocolItemProvider imstcpProtocolItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.IMSTCPProtocol}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createIMSTCPProtocolAdapter() {
-		if (imstcpProtocolItemProvider == null) {
-			imstcpProtocolItemProvider = new IMSTCPProtocolItemProvider(this);
-		}
-
-		return imstcpProtocolItemProvider;
 	}
 
 	/**
@@ -417,104 +272,14 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * @generated
 	 */
 	@Override
-	public Adapter createIncludeAdapter() {
-		if (includeItemProvider == null) {
+	public Adapter createIncludeAdapter()
+	{
+		if (includeItemProvider == null)
+		{
 			includeItemProvider = new IncludeItemProvider(this);
 		}
 
 		return includeItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.Java400J2cProtocol} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected Java400J2cProtocolItemProvider java400J2cProtocolItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.Java400J2cProtocol}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createJava400J2cProtocolAdapter() {
-		if (java400J2cProtocolItemProvider == null) {
-			java400J2cProtocolItemProvider = new Java400J2cProtocolItemProvider(this);
-		}
-
-		return java400J2cProtocolItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.Java400Protocol} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected Java400ProtocolItemProvider java400ProtocolItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.Java400Protocol}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createJava400ProtocolAdapter() {
-		if (java400ProtocolItemProvider == null) {
-			java400ProtocolItemProvider = new Java400ProtocolItemProvider(this);
-		}
-
-		return java400ProtocolItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.LocalProtocol} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected LocalProtocolItemProvider localProtocolItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.LocalProtocol}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createLocalProtocolAdapter() {
-		if (localProtocolItemProvider == null) {
-			localProtocolItemProvider = new LocalProtocolItemProvider(this);
-		}
-
-		return localProtocolItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.NativeBinding} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected NativeBindingItemProvider nativeBindingItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.NativeBinding}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createNativeBindingAdapter() {
-		if (nativeBindingItemProvider == null) {
-			nativeBindingItemProvider = new NativeBindingItemProvider(this);
-		}
-
-		return nativeBindingItemProvider;
 	}
 
 	/**
@@ -532,8 +297,10 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * @generated
 	 */
 	@Override
-	public Adapter createParameterAdapter() {
-		if (parameterItemProvider == null) {
+	public Adapter createParameterAdapter()
+	{
+		if (parameterItemProvider == null)
+		{
 			parameterItemProvider = new ParameterItemProvider(this);
 		}
 
@@ -555,81 +322,14 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * @generated
 	 */
 	@Override
-	public Adapter createParametersAdapter() {
-		if (parametersItemProvider == null) {
+	public Adapter createParametersAdapter()
+	{
+		if (parametersItemProvider == null)
+		{
 			parametersItemProvider = new ParametersItemProvider(this);
 		}
 
 		return parametersItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.Protocol} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ProtocolItemProvider protocolItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.Protocol}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createProtocolAdapter() {
-		if (protocolItemProvider == null) {
-			protocolItemProvider = new ProtocolItemProvider(this);
-		}
-
-		return protocolItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.Protocols} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ProtocolsItemProvider protocolsItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.Protocols}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createProtocolsAdapter() {
-		if (protocolsItemProvider == null) {
-			protocolsItemProvider = new ProtocolsItemProvider(this);
-		}
-
-		return protocolsItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.ReferenceProtocol} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ReferenceProtocolItemProvider referenceProtocolItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.ReferenceProtocol}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createReferenceProtocolAdapter() {
-		if (referenceProtocolItemProvider == null) {
-			referenceProtocolItemProvider = new ReferenceProtocolItemProvider(this);
-		}
-
-		return referenceProtocolItemProvider;
 	}
 
 	/**
@@ -647,8 +347,10 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * @generated
 	 */
 	@Override
-	public Adapter createResourceAdapter() {
-		if (resourceItemProvider == null) {
+	public Adapter createResourceAdapter()
+	{
+		if (resourceItemProvider == null)
+		{
 			resourceItemProvider = new ResourceItemProvider(this);
 		}
 
@@ -670,81 +372,14 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * @generated
 	 */
 	@Override
-	public Adapter createResourceOmissionsAdapter() {
-		if (resourceOmissionsItemProvider == null) {
+	public Adapter createResourceOmissionsAdapter()
+	{
+		if (resourceOmissionsItemProvider == null)
+		{
 			resourceOmissionsItemProvider = new ResourceOmissionsItemProvider(this);
 		}
 
 		return resourceOmissionsItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.RestBinding} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected RestBindingItemProvider restBindingItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.RestBinding}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createRestBindingAdapter() {
-		if (restBindingItemProvider == null) {
-			restBindingItemProvider = new RestBindingItemProvider(this);
-		}
-
-		return restBindingItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.Restservice} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected RestserviceItemProvider restserviceItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.Restservice}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createRestserviceAdapter() {
-		if (restserviceItemProvider == null) {
-			restserviceItemProvider = new RestserviceItemProvider(this);
-		}
-
-		return restserviceItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.Restservices} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected RestservicesItemProvider restservicesItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.Restservices}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createRestservicesAdapter() {
-		if (restservicesItemProvider == null) {
-			restservicesItemProvider = new RestservicesItemProvider(this);
-		}
-
-		return restservicesItemProvider;
 	}
 
 	/**
@@ -762,8 +397,10 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * @generated
 	 */
 	@Override
-	public Adapter createRUIApplicationAdapter() {
-		if (ruiApplicationItemProvider == null) {
+	public Adapter createRUIApplicationAdapter()
+	{
+		if (ruiApplicationItemProvider == null)
+		{
 			ruiApplicationItemProvider = new RUIApplicationItemProvider(this);
 		}
 
@@ -785,8 +422,10 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * @generated
 	 */
 	@Override
-	public Adapter createRUIHandlerAdapter() {
-		if (ruiHandlerItemProvider == null) {
+	public Adapter createRUIHandlerAdapter()
+	{
+		if (ruiHandlerItemProvider == null)
+		{
 			ruiHandlerItemProvider = new RUIHandlerItemProvider(this);
 		}
 
@@ -794,164 +433,53 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.RUIResource} instances.
+	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.Service} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected RUIResourceItemProvider ruiResourceItemProvider;
+	protected ServiceItemProvider serviceItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.RUIResource}.
+	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.Service}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createRUIResourceAdapter() {
-		if (ruiResourceItemProvider == null) {
-			ruiResourceItemProvider = new RUIResourceItemProvider(this);
+	public Adapter createServiceAdapter()
+	{
+		if (serviceItemProvider == null)
+		{
+			serviceItemProvider = new ServiceItemProvider(this);
 		}
 
-		return ruiResourceItemProvider;
+		return serviceItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.RUIResourceOmissions} instances.
+	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.Services} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected RUIResourceOmissionsItemProvider ruiResourceOmissionsItemProvider;
+	protected ServicesItemProvider servicesItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.RUIResourceOmissions}.
+	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.Services}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createRUIResourceOmissionsAdapter() {
-		if (ruiResourceOmissionsItemProvider == null) {
-			ruiResourceOmissionsItemProvider = new RUIResourceOmissionsItemProvider(this);
+	public Adapter createServicesAdapter()
+	{
+		if (servicesItemProvider == null)
+		{
+			servicesItemProvider = new ServicesItemProvider(this);
 		}
 
-		return ruiResourceOmissionsItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.SystemIProtocol} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected SystemIProtocolItemProvider systemIProtocolItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.SystemIProtocol}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createSystemIProtocolAdapter() {
-		if (systemIProtocolItemProvider == null) {
-			systemIProtocolItemProvider = new SystemIProtocolItemProvider(this);
-		}
-
-		return systemIProtocolItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.TCPIPProtocol} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected TCPIPProtocolItemProvider tcpipProtocolItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.TCPIPProtocol}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createTCPIPProtocolAdapter() {
-		if (tcpipProtocolItemProvider == null) {
-			tcpipProtocolItemProvider = new TCPIPProtocolItemProvider(this);
-		}
-
-		return tcpipProtocolItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.WebBinding} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected WebBindingItemProvider webBindingItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.WebBinding}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createWebBindingAdapter() {
-		if (webBindingItemProvider == null) {
-			webBindingItemProvider = new WebBindingItemProvider(this);
-		}
-
-		return webBindingItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.Webservice} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected WebserviceItemProvider webserviceItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.Webservice}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createWebserviceAdapter() {
-		if (webserviceItemProvider == null) {
-			webserviceItemProvider = new WebserviceItemProvider(this);
-		}
-
-		return webserviceItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.edt.ide.ui.internal.deployment.Webservices} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected WebservicesItemProvider webservicesItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.edt.ide.ui.internal.deployment.Webservices}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createWebservicesAdapter() {
-		if (webservicesItemProvider == null) {
-			webservicesItemProvider = new WebservicesItemProvider(this);
-		}
-
-		return webservicesItemProvider;
+		return servicesItemProvider;
 	}
 
 	/**
@@ -960,7 +488,8 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ComposeableAdapterFactory getRootAdapterFactory() {
+	public ComposeableAdapterFactory getRootAdapterFactory()
+	{
 		return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
 	}
 
@@ -970,7 +499,8 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory) {
+	public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory)
+	{
 		this.parentAdapterFactory = parentAdapterFactory;
 	}
 
@@ -980,7 +510,8 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * @generated
 	 */
 	@Override
-	public boolean isFactoryForType(Object type) {
+	public boolean isFactoryForType(Object type)
+	{
 		return supportedTypes.contains(type) || super.isFactoryForType(type);
 	}
 
@@ -991,7 +522,8 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * @generated
 	 */
 	@Override
-	public Adapter adapt(Notifier notifier, Object type) {
+	public Adapter adapt(Notifier notifier, Object type)
+	{
 		return super.adapt(notifier, this);
 	}
 
@@ -1001,10 +533,13 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * @generated
 	 */
 	@Override
-	public Object adapt(Object object, Object type) {
-		if (isFactoryForType(type)) {
+	public Object adapt(Object object, Object type)
+	{
+		if (isFactoryForType(type))
+		{
 			Object adapter = super.adapt(object, type);
-			if (!(type instanceof Class<?>) || (((Class<?>)type).isInstance(adapter))) {
+			if (!(type instanceof Class<?>) || (((Class<?>)type).isInstance(adapter)))
+			{
 				return adapter;
 			}
 		}
@@ -1018,7 +553,8 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void addListener(INotifyChangedListener notifyChangedListener) {
+	public void addListener(INotifyChangedListener notifyChangedListener)
+	{
 		changeNotifier.addListener(notifyChangedListener);
 	}
 
@@ -1028,7 +564,8 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void removeListener(INotifyChangedListener notifyChangedListener) {
+	public void removeListener(INotifyChangedListener notifyChangedListener)
+	{
 		changeNotifier.removeListener(notifyChangedListener);
 	}
 
@@ -1038,10 +575,12 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void fireNotifyChanged(Notification notification) {
+	public void fireNotifyChanged(Notification notification)
+	{
 		changeNotifier.fireNotifyChanged(notification);
 
-		if (parentAdapterFactory != null) {
+		if (parentAdapterFactory != null)
+		{
 			parentAdapterFactory.fireNotifyChanged(notification);
 		}
 	}
@@ -1052,45 +591,24 @@ public class DeploymentItemProviderAdapterFactory extends DeploymentAdapterFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void dispose() {
+	public void dispose()
+	{
+		if (bindingItemProvider != null) bindingItemProvider.dispose();
 		if (bindingsItemProvider != null) bindingsItemProvider.dispose();
-		if (cicseciProtocolItemProvider != null) cicseciProtocolItemProvider.dispose();
-		if (cicsj2CProtocolItemProvider != null) cicsj2CProtocolItemProvider.dispose();
-		if (cicssslProtocolItemProvider != null) cicssslProtocolItemProvider.dispose();
-		if (cicswsProtocolItemProvider != null) cicswsProtocolItemProvider.dispose();
 		if (deployExtItemProvider != null) deployExtItemProvider.dispose();
 		if (deploymentItemProvider != null) deploymentItemProvider.dispose();
-		if (deploymentBuildDescriptorItemProvider != null) deploymentBuildDescriptorItemProvider.dispose();
 		if (deploymentProjectItemProvider != null) deploymentProjectItemProvider.dispose();
 		if (deploymentTargetItemProvider != null) deploymentTargetItemProvider.dispose();
-		if (eglBindingItemProvider != null) eglBindingItemProvider.dispose();
 		if (eglDeploymentRootItemProvider != null) eglDeploymentRootItemProvider.dispose();
-		if (imsj2CProtocolItemProvider != null) imsj2CProtocolItemProvider.dispose();
-		if (imstcpProtocolItemProvider != null) imstcpProtocolItemProvider.dispose();
 		if (includeItemProvider != null) includeItemProvider.dispose();
-		if (java400J2cProtocolItemProvider != null) java400J2cProtocolItemProvider.dispose();
-		if (java400ProtocolItemProvider != null) java400ProtocolItemProvider.dispose();
-		if (localProtocolItemProvider != null) localProtocolItemProvider.dispose();
-		if (nativeBindingItemProvider != null) nativeBindingItemProvider.dispose();
 		if (parameterItemProvider != null) parameterItemProvider.dispose();
 		if (parametersItemProvider != null) parametersItemProvider.dispose();
-		if (protocolItemProvider != null) protocolItemProvider.dispose();
-		if (protocolsItemProvider != null) protocolsItemProvider.dispose();
-		if (referenceProtocolItemProvider != null) referenceProtocolItemProvider.dispose();
 		if (resourceItemProvider != null) resourceItemProvider.dispose();
 		if (resourceOmissionsItemProvider != null) resourceOmissionsItemProvider.dispose();
-		if (restBindingItemProvider != null) restBindingItemProvider.dispose();
-		if (restserviceItemProvider != null) restserviceItemProvider.dispose();
-		if (restservicesItemProvider != null) restservicesItemProvider.dispose();
 		if (ruiApplicationItemProvider != null) ruiApplicationItemProvider.dispose();
 		if (ruiHandlerItemProvider != null) ruiHandlerItemProvider.dispose();
-		if (ruiResourceItemProvider != null) ruiResourceItemProvider.dispose();
-		if (ruiResourceOmissionsItemProvider != null) ruiResourceOmissionsItemProvider.dispose();
-		if (systemIProtocolItemProvider != null) systemIProtocolItemProvider.dispose();
-		if (tcpipProtocolItemProvider != null) tcpipProtocolItemProvider.dispose();
-		if (webBindingItemProvider != null) webBindingItemProvider.dispose();
-		if (webserviceItemProvider != null) webserviceItemProvider.dispose();
-		if (webservicesItemProvider != null) webservicesItemProvider.dispose();
+		if (serviceItemProvider != null) serviceItemProvider.dispose();
+		if (servicesItemProvider != null) servicesItemProvider.dispose();
 	}
 
 }

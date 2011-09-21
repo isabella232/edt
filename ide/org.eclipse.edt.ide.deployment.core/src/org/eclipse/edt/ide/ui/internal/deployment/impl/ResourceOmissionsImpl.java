@@ -42,7 +42,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class ResourceOmissionsImpl extends EObjectImpl implements ResourceOmissions {
+public class ResourceOmissionsImpl extends EObjectImpl implements ResourceOmissions
+{
 	/**
 	 * The cached value of the '{@link #getResource() <em>Resource</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -58,7 +59,8 @@ public class ResourceOmissionsImpl extends EObjectImpl implements ResourceOmissi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ResourceOmissionsImpl() {
+	protected ResourceOmissionsImpl()
+	{
 		super();
 	}
 
@@ -68,7 +70,8 @@ public class ResourceOmissionsImpl extends EObjectImpl implements ResourceOmissi
 	 * @generated
 	 */
 	@Override
-	protected EClass eStaticClass() {
+	protected EClass eStaticClass()
+	{
 		return DeploymentPackage.Literals.RESOURCE_OMISSIONS;
 	}
 
@@ -77,8 +80,10 @@ public class ResourceOmissionsImpl extends EObjectImpl implements ResourceOmissi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Resource> getResource() {
-		if (resource == null) {
+	public EList<Resource> getResource()
+	{
+		if (resource == null)
+		{
 			resource = new EObjectContainmentEList<Resource>(Resource.class, this, DeploymentPackage.RESOURCE_OMISSIONS__RESOURCE);
 		}
 		return resource;
@@ -90,8 +95,10 @@ public class ResourceOmissionsImpl extends EObjectImpl implements ResourceOmissi
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.RESOURCE_OMISSIONS__RESOURCE:
 				return ((InternalEList<?>)getResource()).basicRemove(otherEnd, msgs);
 		}
@@ -104,8 +111,10 @@ public class ResourceOmissionsImpl extends EObjectImpl implements ResourceOmissi
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.RESOURCE_OMISSIONS__RESOURCE:
 				return getResource();
 		}
@@ -119,8 +128,10 @@ public class ResourceOmissionsImpl extends EObjectImpl implements ResourceOmissi
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
+	public void eSet(int featureID, Object newValue)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.RESOURCE_OMISSIONS__RESOURCE:
 				getResource().clear();
 				getResource().addAll((Collection<? extends Resource>)newValue);
@@ -135,8 +146,10 @@ public class ResourceOmissionsImpl extends EObjectImpl implements ResourceOmissi
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
-		switch (featureID) {
+	public void eUnset(int featureID)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.RESOURCE_OMISSIONS__RESOURCE:
 				getResource().clear();
 				return;
@@ -150,8 +163,10 @@ public class ResourceOmissionsImpl extends EObjectImpl implements ResourceOmissi
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
+	public boolean eIsSet(int featureID)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.RESOURCE_OMISSIONS__RESOURCE:
 				return resource != null && !resource.isEmpty();
 		}

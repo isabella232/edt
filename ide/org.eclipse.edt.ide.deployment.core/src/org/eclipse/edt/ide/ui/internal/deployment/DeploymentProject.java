@@ -22,5 +22,6 @@ package org.eclipse.edt.ide.ui.internal.deployment;
  * @model extendedMetaData="name='DeploymentProject' kind='elementOnly'"
  * @generated
  */
-public interface DeploymentProject extends DeploymentTarget {
+public interface DeploymentProject extends DeploymentTarget
+{
 } // DeploymentProject

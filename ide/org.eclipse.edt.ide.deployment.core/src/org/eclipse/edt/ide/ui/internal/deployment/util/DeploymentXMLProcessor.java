@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2008, 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -27,7 +27,8 @@ import org.eclipse.emf.ecore.xmi.util.XMLProcessor;
  * <!-- end-user-doc -->
  * @generated
  */
-public class DeploymentXMLProcessor extends XMLProcessor {
+public class DeploymentXMLProcessor extends XMLProcessor
+{
 
 	/**
 	 * Public constructor to instantiate the helper.
@@ -35,7 +36,8 @@ public class DeploymentXMLProcessor extends XMLProcessor {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DeploymentXMLProcessor() {
+	public DeploymentXMLProcessor()
+	{
 		super((EPackage.Registry.INSTANCE));
 		DeploymentPackage.eINSTANCE.eClass();
 	}
@@ -47,8 +49,10 @@ public class DeploymentXMLProcessor extends XMLProcessor {
 	 * @generated
 	 */
 	@Override
-	protected Map<String, Resource.Factory> getRegistrations() {
-		if (registrations == null) {
+	protected Map<String, Resource.Factory> getRegistrations()
+	{
+		if (registrations == null)
+		{
 			super.getRegistrations();
 			registrations.put(XML_EXTENSION, new DeploymentResourceFactoryImpl());
 			registrations.put(STAR_EXTENSION, new DeploymentResourceFactoryImpl());

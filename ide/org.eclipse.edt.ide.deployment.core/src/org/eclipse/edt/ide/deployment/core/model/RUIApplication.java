@@ -14,6 +14,8 @@ package org.eclipse.edt.ide.deployment.core.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.javart.resources.egldd.Parameter;
+
 public class RUIApplication
 {
 	private boolean deployAllHandlers;

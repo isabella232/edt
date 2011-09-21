@@ -24,7 +24,6 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.RUIApplication#getRuihandler <em>Ruihandler</em>}</li>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.RUIApplication#getResourceOmissions <em>Resource Omissions</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.RUIApplication#getParameters <em>Parameters</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.RUIApplication#isDeployAllHandlers <em>Deploy All Handlers</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.RUIApplication#isSupportDynamicLoading <em>Support Dynamic Loading</em>}</li>
@@ -35,7 +34,8 @@ import org.eclipse.emf.ecore.EObject;
  * @model extendedMetaData="name='RUIApplication' kind='elementOnly'"
  * @generated
  */
-public interface RUIApplication extends EObject {
+public interface RUIApplication extends EObject
+{
 	/**
 	 * Returns the value of the '<em><b>Ruihandler</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.edt.ide.ui.internal.deployment.RUIHandler}.
@@ -52,33 +52,6 @@ public interface RUIApplication extends EObject {
 	 * @generated
 	 */
 	EList<RUIHandler> getRuihandler();
-
-	/**
-	 * Returns the value of the '<em><b>Resource Omissions</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Resource Omissions</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Resource Omissions</em>' containment reference.
-	 * @see #setResourceOmissions(RUIResourceOmissions)
-	 * @see org.eclipse.edt.ide.ui.internal.deployment.DeploymentPackage#getRUIApplication_ResourceOmissions()
-	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='resource-omissions'"
-	 * @generated
-	 */
-	RUIResourceOmissions getResourceOmissions();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.edt.ide.ui.internal.deployment.RUIApplication#getResourceOmissions <em>Resource Omissions</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Resource Omissions</em>' containment reference.
-	 * @see #getResourceOmissions()
-	 * @generated
-	 */
-	void setResourceOmissions(RUIResourceOmissions value);
 
 	/**
 	 * Returns the value of the '<em><b>Parameters</b></em>' containment reference.

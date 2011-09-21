@@ -42,7 +42,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class ParametersImpl extends EObjectImpl implements Parameters {
+public class ParametersImpl extends EObjectImpl implements Parameters
+{
 	/**
 	 * The cached value of the '{@link #getParameter() <em>Parameter</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -58,7 +59,8 @@ public class ParametersImpl extends EObjectImpl implements Parameters {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ParametersImpl() {
+	protected ParametersImpl()
+	{
 		super();
 	}
 
@@ -68,7 +70,8 @@ public class ParametersImpl extends EObjectImpl implements Parameters {
 	 * @generated
 	 */
 	@Override
-	protected EClass eStaticClass() {
+	protected EClass eStaticClass()
+	{
 		return DeploymentPackage.Literals.PARAMETERS;
 	}
 
@@ -77,8 +80,10 @@ public class ParametersImpl extends EObjectImpl implements Parameters {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Parameter> getParameter() {
-		if (parameter == null) {
+	public EList<Parameter> getParameter()
+	{
+		if (parameter == null)
+		{
 			parameter = new EObjectContainmentEList<Parameter>(Parameter.class, this, DeploymentPackage.PARAMETERS__PARAMETER);
 		}
 		return parameter;
@@ -90,8 +95,10 @@ public class ParametersImpl extends EObjectImpl implements Parameters {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.PARAMETERS__PARAMETER:
 				return ((InternalEList<?>)getParameter()).basicRemove(otherEnd, msgs);
 		}
@@ -104,8 +111,10 @@ public class ParametersImpl extends EObjectImpl implements Parameters {
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.PARAMETERS__PARAMETER:
 				return getParameter();
 		}
@@ -119,8 +128,10 @@ public class ParametersImpl extends EObjectImpl implements Parameters {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
+	public void eSet(int featureID, Object newValue)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.PARAMETERS__PARAMETER:
 				getParameter().clear();
 				getParameter().addAll((Collection<? extends Parameter>)newValue);
@@ -135,8 +146,10 @@ public class ParametersImpl extends EObjectImpl implements Parameters {
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
-		switch (featureID) {
+	public void eUnset(int featureID)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.PARAMETERS__PARAMETER:
 				getParameter().clear();
 				return;
@@ -150,8 +163,10 @@ public class ParametersImpl extends EObjectImpl implements Parameters {
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
+	public boolean eIsSet(int featureID)
+	{
+		switch (featureID)
+		{
 			case DeploymentPackage.PARAMETERS__PARAMETER:
 				return parameter != null && !parameter.isEmpty();
 		}
