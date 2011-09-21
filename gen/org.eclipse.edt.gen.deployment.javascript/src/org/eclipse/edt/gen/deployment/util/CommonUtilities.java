@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.deployment.util;
 
+import java.util.LinkedHashSet;
+
 import org.eclipse.edt.gen.deployment.javascript.Constants;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.EGLClass;
@@ -71,6 +73,13 @@ public class CommonUtilities {
 	public static boolean isUserPart(Part refPart) {
 		return !refPart.getFullyQualifiedName().startsWith("egl") && 
 				!refPart.getFullyQualifiedName().startsWith("eglx") && refPart instanceof EGLClass;
+	}
+	
+	public static void addToDependentList(LinkedHashSet dependentFiles, String part) {
+		if(dependentFiles.contains(part)){
+			dependentFiles.remove(part);
+		}
+		dependentFiles.add(part);
 	}
 
 }
