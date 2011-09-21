@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.project.wizard.fragments;
 
-import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardTypePage;
+import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardMainPage;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
@@ -32,7 +32,7 @@ public abstract class ProjectContentFragment extends WizardFragment {
 	protected Text directory;
 	protected Button browseDirectory;
 	
-	public ProjectContentFragment(Composite renderOn, ProjectWizardTypePage parentPage) {
+	public ProjectContentFragment(Composite renderOn, ProjectWizardMainPage parentPage) {
 		super(renderOn, parentPage);
 	}
 

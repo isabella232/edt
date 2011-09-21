@@ -40,12 +40,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.widgets.FormText;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ScrolledFormText;
 
 public class ProjectTemplateSelectionPage extends WizardSelectionPage implements ISelectionChangedListener, IDoubleClickListener {
 	
 	protected TableViewer templateViewer;
-	protected Text descriptionText;
+	protected ScrolledFormText descriptionText;
 	
 	public ProjectTemplateSelectionPage(String pageName) {
 		super(pageName);
@@ -98,11 +100,33 @@ public class ProjectTemplateSelectionPage extends WizardSelectionPage implements
 		templateViewer.addSelectionChangedListener(this);
 		templateViewer.setInput(templates);
 		templateViewer.addDoubleClickListener(this);
-
-		descriptionText = new Text(container, SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.READ_ONLY);
-		descriptionText.setLayoutData(new GridData(GridData.FILL_BOTH));
-		descriptionText.setBackground(control.getBackground());
-		descriptionText.setForeground(control.getForeground());
+		
+		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+		descriptionText = new ScrolledFormText(container, SWT.V_SCROLL | SWT.H_SCROLL, false);
+		
+		int borderStyle = toolkit.getBorderStyle() == SWT.BORDER ? SWT.NULL : SWT.BORDER;
+		if (borderStyle == SWT.NULL) {
+			descriptionText.setData(FormToolkit.KEY_DRAW_BORDER,
+                    FormToolkit.TREE_BORDER);
+            toolkit.paintBordersFor(container);
+        }
+		
+        FormText ftext = toolkit.createFormText(descriptionText, false);        
+        descriptionText.setFormText(ftext);
+        descriptionText.setExpandHorizontal(false);
+        descriptionText.setExpandVertical(false);
+        descriptionText.setBackground(toolkit.getColors().getBackground());
+        descriptionText.setForeground(toolkit.getColors().getForeground());
+        
+        ftext.marginWidth = 2;
+        ftext.marginHeight = 2;
+                
+        descriptionText.setLayoutData(new GridData(GridData.FILL_BOTH));
+        
+		//descriptionText = new Text(container, SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.READ_ONLY);
+		//descriptionText.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//descriptionText.setBackground(control.getBackground());
+		//descriptionText.setForeground(control.getForeground());
 
 		if (templates != null) {
 			IPreferenceStore store = EDTUIPlugin.getDefault().getPreferenceStore();
@@ -176,7 +200,11 @@ public class ProjectTemplateSelectionPage extends WizardSelectionPage implements
 	}
 
 	private void setTemplateDescription(String text) {
-		descriptionText.setText(text != null ? text : "");
+		try {
+			descriptionText.setText(text != null ? text : "");
+		} catch (Exception ex) {
+			descriptionText.setText("");
+		}
 	}
 
 	private class TreeContentProvider implements IStructuredContentProvider {

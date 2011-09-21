@@ -920,6 +920,7 @@ public class NewWizardMessages extends NLS {
 	public static String ProjectContentFragment_2;
 	public static String ProjectContentFragment_3;
 	public static String ProjectContentFragment_4;
+	public static String ProjectWizardMainPage_1;
 	
 	public static String error_project_already_exists;
 	public static String error_project_exists_different_case;

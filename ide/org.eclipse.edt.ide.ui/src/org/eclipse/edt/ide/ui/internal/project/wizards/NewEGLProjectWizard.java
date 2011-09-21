@@ -27,8 +27,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
-import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectTemplateSelectionPage;
-import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardTypePage;
+import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardMainPage;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.edt.ide.ui.project.templates.IProjectTemplateClass;
 import org.eclipse.edt.ide.ui.project.templates.ProjectTemplateWizardNode;
@@ -49,8 +48,8 @@ import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 public class NewEGLProjectWizard extends Wizard 
 	implements IWorkbenchWizard, INewWizard {
 	
-	private ProjectWizardTypePage typePage;		
-	private ProjectTemplateSelectionPage templatePage;
+	private ProjectWizardMainPage mainPage;		
+	//private ProjectTemplateSelectionPage templatePage;
 	
 	private ProjectConfiguration model;	
 	private IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
@@ -70,9 +69,9 @@ public class NewEGLProjectWizard extends Wizard
 	public boolean performFinish() {
 		try{
 			ISchedulingRule rule = getCurrentSchedulingRule();
-			model.setProjectName(typePage.getModel().getProjectName());
+			model.setProjectName(mainPage.getModel().getProjectName());
 			
-			IWizardNode node = templatePage.getSelectedNode();
+			IWizardNode node = mainPage.getSelectedNode();
 			ProjectTemplateWizardNode twn = (ProjectTemplateWizardNode) node;		
 			List ops = ProjectFinishUtility.getCreateProjectFinishOperations((IProjectTemplateClass) twn.getTemplate().getProjectTemplateClass(), model, 0, rule);
 			for(Iterator it = ops.iterator(); it.hasNext();)
@@ -136,10 +135,10 @@ public class NewEGLProjectWizard extends Wizard
 	}
 	
 	public void addPages() {
-		this.typePage = new ProjectWizardTypePage(NewWizardMessages.EGLNewProjectWizard_1, model);
-		addPage(typePage);
-		this.templatePage = new ProjectTemplateSelectionPage(NewWizardMessages.ProjectTemplateSelectionPage);
-		addPage(templatePage);
+		this.mainPage = new ProjectWizardMainPage(NewWizardMessages.EGLNewProjectWizard_1, model);
+		addPage(mainPage);
+		//this.templatePage = new ProjectTemplateSelectionPage(NewWizardMessages.ProjectTemplateSelectionPage);
+		//addPage(templatePage);
 	}
 	
 	public boolean needsPreviousAndNextButtons() {

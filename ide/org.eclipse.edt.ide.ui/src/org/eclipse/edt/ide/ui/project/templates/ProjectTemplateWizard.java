@@ -18,14 +18,16 @@ import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.Wizard;
 
 public abstract class ProjectTemplateWizard extends Wizard implements IProjectTemplateWizard {
-	public ProjectTemplateWizard() {
-		super();
-		setNeedsProgressMonitor(true);
-	}
 
 	protected IProjectTemplate template;
 	protected IWizard parentWizard;
 	private SourceProjectWizardCapabilityPage capabilityPage;
+	
+	public ProjectTemplateWizard() {
+		super();
+		setWindowTitle(NewWizardMessages.EGLNewProjectWizard_0);
+		setNeedsProgressMonitor(true);
+	}
 	
 	public boolean performFinish() {
 		return false;
@@ -40,9 +42,8 @@ public abstract class ProjectTemplateWizard extends Wizard implements IProjectTe
 	}
 
 	public void setTemplate(IProjectTemplate template) {
-		this.template = template;
-		
-		setWindowTitle(template.getName());
+		this.template = template;		
+		//setWindowTitle(template.getName());
 	}
 
 	public IProjectTemplate getTemplate() {

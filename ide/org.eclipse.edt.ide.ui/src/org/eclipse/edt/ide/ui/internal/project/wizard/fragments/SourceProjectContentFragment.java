@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
-import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardTypePage;
+import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardMainPage;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
 import org.eclipse.swt.events.ModifyEvent;
@@ -36,7 +36,7 @@ public class SourceProjectContentFragment extends ProjectContentFragment {
 	private StatusInfo locationInfo;
 	private String customDirectory = "";  //$NON-NLS-1$
 	
-	public SourceProjectContentFragment(Composite renderOn, ProjectWizardTypePage parentPage) {
+	public SourceProjectContentFragment(Composite renderOn, ProjectWizardMainPage parentPage) {
 		super(renderOn, parentPage);
 		config = parentPage.getModel();
 		locationInfo = new StatusInfo();

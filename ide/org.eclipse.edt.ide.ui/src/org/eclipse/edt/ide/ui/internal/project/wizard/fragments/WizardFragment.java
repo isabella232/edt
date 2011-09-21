@@ -15,17 +15,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardTypePage;
+import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardMainPage;
 import org.eclipse.swt.widgets.Composite;
 
 public abstract class WizardFragment {
 	
 	protected Composite renderOn;
-	private ProjectWizardTypePage parentPage;
+	private ProjectWizardMainPage parentPage;
 	private List isCompleteListeners = new ArrayList();
 	private boolean isComplete = true;
 
-	public WizardFragment(Composite renderOn, ProjectWizardTypePage parentPage) {
+	public WizardFragment(Composite renderOn, ProjectWizardMainPage parentPage) {
 		this.renderOn = renderOn;
 		this.parentPage = parentPage;
 	}
@@ -34,7 +34,7 @@ public abstract class WizardFragment {
 	
 	public abstract void dispose();
 
-	public ProjectWizardTypePage getParentPage() {
+	public ProjectWizardMainPage getParentPage() {
 		return parentPage;
 	}
 	
