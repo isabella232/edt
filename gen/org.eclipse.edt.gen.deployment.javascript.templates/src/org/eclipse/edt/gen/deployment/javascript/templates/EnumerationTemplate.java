@@ -14,12 +14,13 @@ package org.eclipse.edt.gen.deployment.javascript.templates;
 import java.util.LinkedHashSet;
 
 import org.eclipse.edt.gen.deployment.javascript.Context;
+import org.eclipse.edt.gen.deployment.util.CommonUtilities;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.egl.Enumeration;
 
 public class EnumerationTemplate extends JavaScriptTemplate {
 	
-	public void genDependentPart(Enumeration part, Context ctx, LinkedHashSet dependentFiles) {
+	public void genOutputFileName(Enumeration part, LinkedHashSet dependentFiles) {
 		//Enumeration does not have dependent part, so just add itself to dependent list
 		StringBuilder buf = new StringBuilder(50);		
 		buf.append("\"");
@@ -30,7 +31,7 @@ public class EnumerationTemplate extends JavaScriptTemplate {
 		}
 		buf.append(JavaScriptAliaser.getAlias(part.getId()));
 		buf.append(".js\"");
-		dependentFiles.add(buf.toString());
+		CommonUtilities.addToDependentList(dependentFiles, buf.toString());
 	}
 
 }

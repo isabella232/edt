@@ -12,20 +12,16 @@
 package org.eclipse.edt.gen.deployment.javascript.templates;
 
 import java.util.LinkedHashSet;
-import java.util.Set;
 
 import org.eclipse.edt.gen.deployment.javascript.Context;
 import org.eclipse.edt.gen.deployment.util.CommonUtilities;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ExternalType;
-import org.eclipse.edt.mof.egl.Handler;
-import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class ExternalTypeTemplate extends JavaScriptTemplate {
 	
-	public void genOutputFileName(ExternalType et, Context ctx, LinkedHashSet dependentFiles) {
+	public void genOutputFileName(ExternalType et, LinkedHashSet dependentFiles) {
 		Annotation annot = et.getAnnotation( "eglx.javascript.JavaScriptObject" );
 		if (annot != null) {
 			String pkg = (String)annot.getValue( "relativePath" );
@@ -48,11 +44,11 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 			output += name ;
 			
 			output += ".js\"";
-			dependentFiles.add(output);
+			CommonUtilities.addToDependentList(dependentFiles, output);
 		}
 	}
 	
-	public void genIncludeFiles(ExternalType et, TabbedWriter out, LinkedHashSet includeFiles){
+	public void genIncludeFiles(ExternalType et, LinkedHashSet includeFiles){
 		Annotation a = et.getAnnotation( "eglx.javascript.JavaScriptObject" );
 		if ( a != null && a.getValue( "includeFile" ) != null ){
 			String fileName = a.getValue( "includeFile" ).toString();

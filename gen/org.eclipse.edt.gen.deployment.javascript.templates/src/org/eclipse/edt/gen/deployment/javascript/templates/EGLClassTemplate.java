@@ -29,33 +29,8 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 
 public class EGLClassTemplate extends JavaScriptTemplate {
-	public void genDependentPart(EGLClass part, Context ctx, LinkedHashSet dependentFiles) {
-		if(part instanceof ExternalType || part instanceof Handler || part instanceof Library || part instanceof Record){
-			ctx.invoke(genOutputFileName, part, ctx, dependentFiles);
-			ctx.invoke(genDependentParts, part, ctx, dependentFiles);
-		}
-	}
-	public void genDependentParts(EGLClass part, Context ctx, LinkedHashSet dependentFiles) {		
-		LinkedHashSet processedParts = (LinkedHashSet)ctx.get(genDependentParts);
-		if(processedParts == null){
-			processedParts = new LinkedHashSet();
-			ctx.put(genDependentParts, processedParts);
-		}
-		try {
-			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
-			for(Part refPart:refParts){
-				if(!processedParts.contains(refPart.getFullyQualifiedName())){
-					processedParts.add(refPart.getFullyQualifiedName());
-					if(CommonUtilities.isUserPart(refPart) || refPart instanceof Enumeration){
-						ctx.invoke(genDependentPart, refPart, ctx, dependentFiles);
-					}
-				}
-			}		
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	public void genOutputFileName(Part part, Context ctx, LinkedHashSet dependentFiles) {
+	
+	public void genOutputFileName(Part part, LinkedHashSet dependentFiles) {
 		StringBuilder buf = new StringBuilder(50);
 		
 		buf.append("\"");
@@ -66,26 +41,28 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		}
 		buf.append(JavaScriptAliaser.getAlias(part.getId()));
 		buf.append(".js\"");
-		dependentFiles.add(buf.toString());
+		CommonUtilities.addToDependentList(dependentFiles, buf.toString());
 	}
 	
-	public void genCSSFiles(EGLClass part, TabbedWriter out, LinkedHashSet cssFiles){}
-	public void genDependentCSSs(EGLClass part, Context ctx, TabbedWriter out, LinkedHashSet cssFiles, LinkedHashSet handledParts){
+	public void genDependentParts(EGLClass part, Context ctx, LinkedHashSet dependentFiles, LinkedHashSet handledParts) {		
 		if ( handledParts.contains( part.getFullyQualifiedName() ) ) {
 			return;
 		}
 		try {
-			handledParts.add( part.getFullyQualifiedName() );
+			if(!(part instanceof ExternalType)){
+				handledParts.add( part.getFullyQualifiedName() );	
+			}					
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			// BFS traverse
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart)){
-					ctx.invoke(genCSSFiles, refPart, out, cssFiles);
+				if(CommonUtilities.isUserPart(refPart) || refPart instanceof Enumeration){
+					ctx.invoke(genOutputFileName, refPart, dependentFiles);
 				}				
 			}
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart)){
-					ctx.invoke(genDependentCSSs, refPart, ctx, out, cssFiles, handledParts);
+				if(CommonUtilities.isUserPart(refPart) && (	part instanceof ExternalType || part instanceof Handler || 
+						part instanceof Library || part instanceof Record)){
+					ctx.invoke(genDependentParts, refPart, ctx, dependentFiles, handledParts);
 				}				
 			}
 		} catch (Exception e) {
@@ -93,8 +70,8 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		}
 	}
 	
-	public void genPropFiles(EGLClass part, TabbedWriter out, LinkedHashSet propFiles){}
-	public void genDependentProps(EGLClass part, Context ctx, TabbedWriter out, LinkedHashSet propFiles, LinkedHashSet handledParts){
+	public void genCSSFiles(EGLClass part, LinkedHashSet cssFiles){}
+	public void genDependentCSSs(EGLClass part, Context ctx, LinkedHashSet cssFiles, LinkedHashSet handledParts){
 		if ( handledParts.contains( part.getFullyQualifiedName() ) ) {
 			return;
 		}
@@ -104,12 +81,36 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			// BFS traverse
 			for(Part refPart:refParts){
 				if(CommonUtilities.isUserPart(refPart)){
-					ctx.invoke(genPropFiles, refPart, out, propFiles);
+					ctx.invoke(genCSSFiles, refPart, cssFiles);
+				}				
+			}
+			for(Part refPart:refParts){
+				if(CommonUtilities.isUserPart(refPart)){
+					ctx.invoke(genDependentCSSs, refPart, ctx, cssFiles, handledParts);
+				}				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void genPropFiles(EGLClass part, LinkedHashSet propFiles){}
+	public void genDependentProps(EGLClass part, Context ctx, LinkedHashSet propFiles, LinkedHashSet handledParts){
+		if ( handledParts.contains( part.getFullyQualifiedName() ) ) {
+			return;
+		}
+		try {
+			handledParts.add( part.getFullyQualifiedName() );
+			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
+			// BFS traverse
+			for(Part refPart:refParts){
+				if(CommonUtilities.isUserPart(refPart)){
+					ctx.invoke(genPropFiles, refPart, propFiles);
 				}
 			}
 			for(Part refPart:refParts){
 				if(CommonUtilities.isUserPart(refPart)){
-					ctx.invoke(genDependentProps, refPart, ctx, out, propFiles, handledParts);
+					ctx.invoke(genDependentProps, refPart, ctx, propFiles, handledParts);
 				}
 			}
 		} catch (Exception e) {
@@ -117,8 +118,8 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		}
 	}	
 	
-	public void genIncludeFiles(EGLClass part, TabbedWriter out, LinkedHashSet includeFiles){}
-	public void genDependentIncludeFiles(EGLClass part, Context ctx, TabbedWriter out, LinkedHashSet includeFiles, LinkedHashSet handledParts){
+	public void genIncludeFiles(EGLClass part, LinkedHashSet includeFiles){}
+	public void genDependentIncludeFiles(EGLClass part, Context ctx, LinkedHashSet includeFiles, LinkedHashSet handledParts){
 		if ( handledParts.contains( part ) ) {
 			return;
 		}
@@ -128,12 +129,12 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			// BFS traverse
 			for(Part refPart:refParts){
 				if(CommonUtilities.isUserPart(refPart)){
-					ctx.invoke(genIncludeFiles, refPart, out, includeFiles);
+					ctx.invoke(genIncludeFiles, refPart, includeFiles);
 				}				
 			}
 			for(Part refPart:refParts){
 				if(CommonUtilities.isUserPart(refPart)){
-					ctx.invoke(genDependentIncludeFiles, refPart, ctx, out, includeFiles, handledParts);
+					ctx.invoke(genDependentIncludeFiles, refPart, ctx, includeFiles, handledParts);
 				}				
 			}
 		} catch (Exception e) {

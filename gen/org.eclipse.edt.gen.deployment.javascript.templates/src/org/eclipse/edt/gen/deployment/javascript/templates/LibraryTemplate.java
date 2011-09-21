@@ -21,7 +21,7 @@ import org.eclipse.edt.mof.egl.Library;
 
 public class LibraryTemplate extends JavaScriptTemplate {
 	
-	public void genPropFiles(Library library, TabbedWriter out, LinkedHashSet propFiles){
+	public void genPropFiles(Library library, LinkedHashSet propFiles){
 		if(CommonUtilities.isRUIPropertiesLibrary(library)){
 			propFiles.add(CommonUtilities.getPropertiesFile( library ));
 		}

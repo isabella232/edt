@@ -166,9 +166,9 @@ public class RUITemplate extends JavaScriptTemplate {
 	
 	private void generateCSSFiles(Handler handler, Context ctx, TabbedWriter out) {
 		LinkedHashSet cssFiles = new LinkedHashSet();
-		ctx.invoke(genCSSFiles, handler, out, cssFiles);
+		ctx.invoke(genCSSFiles, handler, cssFiles);
 		LinkedHashSet handledParts = new LinkedHashSet();
-		ctx.invoke(genDependentCSSs, handler, ctx, out, cssFiles, handledParts);
+		ctx.invoke(genDependentCSSs, handler, ctx, cssFiles, handledParts);
 		ArrayList cssFileList = new ArrayList(cssFiles);
 		Collections.reverse(cssFileList);
 		for (Iterator iter = cssFileList.iterator(); iter.hasNext();) {
@@ -237,7 +237,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		
 		LinkedHashSet propFiles = new LinkedHashSet();
 		LinkedHashSet handledParts = new LinkedHashSet();
-		ctx.invoke(genDependentProps, handler, ctx, out, propFiles, handledParts);
+		ctx.invoke(genDependentProps, handler, ctx, propFiles, handledParts);
 		ArrayList propFileList = new ArrayList(propFiles);
 		Collections.reverse(propFileList);
 		for (Iterator iter = propFileList.iterator(); iter.hasNext();) {
@@ -308,8 +308,10 @@ public class RUITemplate extends JavaScriptTemplate {
 	}
 	
 	private void generateDependentFilePath(Handler handler, Context ctx, TabbedWriter out) {
-		LinkedHashSet dependentFiles = new LinkedHashSet();		
-		ctx.invoke(genDependentPart, handler, ctx, dependentFiles);
+		LinkedHashSet dependentFiles = new LinkedHashSet();
+		ctx.invoke(genOutputFileName, handler, dependentFiles);
+		LinkedHashSet handledParts = new LinkedHashSet();
+		ctx.invoke(genDependentParts, handler, ctx, dependentFiles, handledParts);
 		
 		ArrayList dependentFileList = new ArrayList(dependentFiles);		
 		Collections.reverse(dependentFileList);		
@@ -360,9 +362,9 @@ public class RUITemplate extends JavaScriptTemplate {
 	private void generateIncludeFiles(Handler handler, Context ctx, TabbedWriter out) {					
 		
 		LinkedHashSet includeFiles = new LinkedHashSet();
-		ctx.invoke(genIncludeFiles, handler, out, includeFiles);
+		ctx.invoke(genIncludeFiles, handler, includeFiles);
 		LinkedHashSet handledParts = new LinkedHashSet();
-		ctx.invoke(genDependentIncludeFiles, handler, ctx, out, includeFiles, handledParts);
+		ctx.invoke(genDependentIncludeFiles, handler, ctx, includeFiles, handledParts);
 		if(!includeFiles.isEmpty()){
 			out.println("var isLastFile = false;");
 			out.println("var htmlString = \"\";");
@@ -630,7 +632,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("};");
 	}
 	
-	public void genCSSFiles(Handler handler, TabbedWriter out, LinkedHashSet cssFiles){
+	public void genCSSFiles(Handler handler, LinkedHashSet cssFiles){
 		Annotation a = handler.getAnnotation( CommonUtilities.isRUIHandler( handler ) ? Constants.RUI_HANDLER : Constants.RUI_WIDGET);
 		if ( a != null ){
 			String fileName = (String)a.getValue( "cssFile" );
@@ -640,7 +642,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		}
 	}	
 
-	public void genIncludeFiles(Handler handler, TabbedWriter out, LinkedHashSet includeFiles){
+	public void genIncludeFiles(Handler handler, LinkedHashSet includeFiles){
 		Annotation a = handler.getAnnotation( CommonUtilities.isRUIHandler( handler ) ? Constants.RUI_HANDLER : Constants.RUI_WIDGET);
 		if ( a != null ){
 			String fileName = (String)a.getValue( "includeFile" );
