@@ -138,7 +138,7 @@ public class NewEglarFileExportOperation extends EglarFileExportOperation {
 					exportJavaDeployFiles(eglProject.getProject(), binJavaClassFolders[i], progressMonitor, addedSet);
 				}
 			}
-			IResource javaSourceFolder = eglProject.getProject().getFolder( EGLProjectInfoUtility.getGeneratedJavaFolder(eglProject.getProject()) );
+			IResource javaSourceFolder = eglProject.getProject().getFolder( EGLProjectInfoUtility.getGeneratedJavaFolder(eglProject.getProject())[0] );
 			exportJavaDeployFiles(eglProject.getProject(), javaSourceFolder, progressMonitor, addedSet);
 		}
 		
@@ -353,7 +353,7 @@ public class NewEglarFileExportOperation extends EglarFileExportOperation {
 	}
 	
 	private void exportJavaDeployFiles(IProject project, final IResource javaClassFolder, final IProgressMonitor progressMonitor, final HashSet addedSet) throws CoreException {
-		final IPath rootPath = new Path( EGLProjectInfoUtility.getGeneratedJavaFolder(project) );
+		final IPath rootPath = new Path( EGLProjectInfoUtility.getGeneratedJavaFolder(project)[0] );
 
 		try {
 			javaClassFolder.accept(new IResourceVisitor() {

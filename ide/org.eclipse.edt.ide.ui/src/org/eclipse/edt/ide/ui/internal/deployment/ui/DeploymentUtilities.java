@@ -177,8 +177,17 @@ public class DeploymentUtilities {
 			e.printStackTrace();
 		}
 	}
+	public static final void findFolder(final IProject project, final List<IResource> results, final String[] targetFolders) throws CoreException {
+		if ( targetFolders == null ) {
+			return;
+		}
+		for ( int i = 0; i < targetFolders.length; i ++ ) {
+			findFolder( project, results, targetFolders[i] );
+		}
+	}
 	
-	public static final void findFolder(final IProject project, final List results, final String targetFolder) throws CoreException {
+	
+	public static final void findFolder(final IProject project, final List<IResource> results, final String targetFolder) throws CoreException {
 		if (targetFolder == null || targetFolder.length() == 0) {
 			return;
 		}
@@ -206,13 +215,6 @@ public class DeploymentUtilities {
 			, IResource.DEPTH_ONE, false);
 		} catch (CoreException e) {
 			e.printStackTrace();
-		}
-	}
-	public static final void findDeployDynamicLoadingFolder(final IProject project, final List results,final String folderpath,  final String targetFolder)throws CoreException{
-		IResource targetResource = project.findMember(folderpath);
-		
-		if(null != targetResource && IResource.FOLDER == targetResource.getType() ) { //TODO - EDT && targetResource.getName().equalsIgnoreCase(targetFolder)){
-			results.add(targetResource);
 		}
 	}
 	public static void getJavaSourceFolders(IProject sourceProject, List<IResource> resources )
