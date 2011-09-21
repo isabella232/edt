@@ -83,7 +83,6 @@ public class AnyBoxedObject<R> implements EglAny, BoxedValue {
 
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
 		return super.clone();
 	}
 
