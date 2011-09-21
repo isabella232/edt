@@ -13,7 +13,6 @@ package org.eclipse.edt.ide.rui.utils;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-
 import org.eclipse.edt.ide.core.utils.EGLProjectInfoUtility;
 
 public class DeployFileLocator extends FileLocator {
@@ -23,10 +22,11 @@ public class DeployFileLocator extends FileLocator {
 	}
 	
 	protected String[] initResourceLocations(IProject project)throws CoreException{
-		return new String[] {EGLProjectInfoUtility.getGeneratedJavaScriptFolder(project), WEB_CONTENT};
+		
+		return Util.combineArray(EGLProjectInfoUtility.getGeneratedJavaScriptFolder(project), new String[] { WEB_CONTENT} );
 	}
 	
 	protected String[] initResourceLocationsInEglar(IProject project)throws CoreException{
-		return new String[] {EGLProjectInfoUtility.getGeneratedJavaScriptFolder(project), WEB_CONTENT};
+		return Util.combineArray(EGLProjectInfoUtility.getGeneratedJavaScriptFolder(project), new String[] {WEB_CONTENT} );
 	}
 }

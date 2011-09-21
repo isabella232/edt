@@ -324,6 +324,14 @@ public class Util {
 		return display;
 	}
 	
+	public static String[] combineArray( String[] array1, String[] array2 ) {
+		String[] result = new String[ array1.length + array2.length ];
+		System.arraycopy( array1, 0, result, 0, array1.length );
+		System.arraycopy( array2, 0, result, array1.length, array2.length );
+		
+		return result;
+	}
+	
 	private static boolean isExcludedCompression( String fileName ) {
 		for ( int i = 0; i < excludedCompression.length; i ++ ) {
 			if ( fileName.indexOf( excludedCompression[i]) > 0 ) {

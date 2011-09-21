@@ -35,10 +35,10 @@ public class JavaDeployFileLocator extends FileLocator {
 	}
 	
 	protected String[] initResourceLocations(IProject project)throws CoreException{
-		return new String[] {EGLProjectInfoUtility.getGeneratedJavaFolder( project )};
+		return EGLProjectInfoUtility.getGeneratedJavaFolder( project );
 	}
 	
 	protected String[] initResourceLocationsInEglar(IProject project)throws CoreException{
-		return new String[] {EGLProjectInfoUtility.getGeneratedJavaFolder(project)};
+		return EGLProjectInfoUtility.getGeneratedJavaFolder(project);
 	}
 }
