@@ -677,10 +677,10 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 	private Program setupTransfer( Transfer trans ) throws Exception
 	{
 		// If this is a transfer to a transaction with a different program,
-		// the new Program uses a different set of properties.  Do the switch 
+		// the new Program may use a different set of properties.  Do the switch 
 		// before the new Program is created so its constructor will use the 
 		// fields of this RU which might change along with the properties.
-		if ( /* TODO JEE behavior  !startupInfo.isJ2EE() && */ trans.toTransaction )
+		if ( newPropertiesNeeded( trans ) )
 		{
 			String newName = JavartUtil.removePackageName( trans.name );
 			String oldName =
@@ -712,4 +712,12 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 	
 		return newProgram;
 	}
+	
+	/**
+	 * Tells if a fresh set of properties should be loaded before a transfer.
+	 * 
+	 * @param trans  information about the transfer.
+	 * @return true if a fresh set of properties should be loaded before a transfer.
+	 */
+	protected abstract boolean newPropertiesNeeded( Transfer trans );
 }

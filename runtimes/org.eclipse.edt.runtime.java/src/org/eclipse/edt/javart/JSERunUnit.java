@@ -42,10 +42,23 @@ public class JSERunUnit extends RunUnitBase
 		Locale.setDefault( loc );
 		localizedText.switchLocale( loc );
 	}
-
+	
 	@Override
 	public void exit() 
 	{
 		System.exit( getReturnCode() );
+	}
+
+	/**
+	 * Tells if a fresh set of properties should be loaded before a transfer.
+	 * 
+	 * @param trans  information about the transfer.
+	 * @return true if a fresh set of properties should be loaded before a transfer.
+	 */
+	@Override
+	protected boolean newPropertiesNeeded( Transfer trans )
+	{
+		// A transfer to transaction effectively begins a new RunUnit.
+		return trans.toTransaction;
 	}
 }

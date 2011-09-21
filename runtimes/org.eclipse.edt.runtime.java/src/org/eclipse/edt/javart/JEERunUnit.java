@@ -47,4 +47,17 @@ public class JEERunUnit extends RunUnitBase
 	{
 		// Nothing to do here.
 	}
+
+	/**
+	 * Tells if a fresh set of properties should be loaded before a transfer.
+	 * 
+	 * @param trans  information about the transfer.
+	 * @return true if a fresh set of properties should be loaded before a transfer.
+	 */
+	@Override
+	protected boolean newPropertiesNeeded( Transfer trans )
+	{
+		// In JEE all properties come from the same place so there's no need to reload.
+		return false;
+	}
 }
