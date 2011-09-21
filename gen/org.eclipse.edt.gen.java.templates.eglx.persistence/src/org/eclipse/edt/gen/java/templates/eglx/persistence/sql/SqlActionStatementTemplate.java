@@ -263,7 +263,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	public void genSqlStatementEnd(SqlActionStatement stmt, Context ctx, TabbedWriter out) {
 		out.println("}");
 		out.println("catch(java.sql.SQLException ezeEx) {");
-		out.println("throw new eglx.persistence.sql.SQLException(ezeEx);");
+		out.println("throw org.eclipse.edt.javart.util.JavartUtil.makeEglException(ezeEx);");
 		out.println('}');
 	}
 	
