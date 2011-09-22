@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.Expression;
@@ -26,6 +28,10 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 
 	public void genDeclarationExpression(DeclarationExpression expr, Context ctx, TabbedWriter out) {
 		for (Field field : expr.getFields()) {
+			if(field.getAnnotation(Constants.AnnotationResource)!= null){
+				Annotation annot = field.getAnnotation(Constants.AnnotationResource);
+				ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field);
+			}
 			// write out the debug extension data
 			CommonUtilities.generateSmapExtension(field, ctx);
 			// process the field
