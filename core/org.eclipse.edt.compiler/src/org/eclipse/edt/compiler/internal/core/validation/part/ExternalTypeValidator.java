@@ -95,7 +95,7 @@ public class ExternalTypeValidator extends AbstractASTVisitor {
 		if (partBinding != null && partBinding.getSubType() != null) {
 			
 			// do not validate the parms for NativeType
-			if (AbstractBinder.annotationIs(partBinding.getSubType(), new String[] {"egl", "lang"}, "NativeType")) {
+			if (AbstractBinder.annotationIs(partBinding.getSubType(), new String[] {"eglx", "lang"}, "NativeType")) {
 				return;
 			}
 		}

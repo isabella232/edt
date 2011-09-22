@@ -1,0 +1,2 @@
+org.eclipse.edt.compiler
+org.eclipse.edt.mof.egl

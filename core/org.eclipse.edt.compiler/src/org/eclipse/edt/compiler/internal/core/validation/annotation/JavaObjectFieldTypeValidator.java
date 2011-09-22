@@ -103,7 +103,7 @@ public class JavaObjectFieldTypeValidator extends DefaultFieldContentAnnotationV
 				tBinding = tBinding.getBaseType();
 				if(IBinding.NOT_FOUND_BINDING != tBinding && tBinding != null) {
 					if(ITypeBinding.DELEGATE_BINDING == tBinding.getKind()) {
-						IAnnotationBinding aBinding = binding.getAnnotation(new String[] {"egl", "lang"}, IEGLConstants.PROPERTY_EVENTLISTENER);
+						IAnnotationBinding aBinding = binding.getAnnotation(new String[] {"eglx", "lang"}, IEGLConstants.PROPERTY_EVENTLISTENER);
 						if(aBinding == null) {						
 							problemRequestor.acceptProblem(
 								errorNode,
