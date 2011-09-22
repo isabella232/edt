@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Accessing an IBM i program as a web service"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.subject" content="services, IBM i, Web services, overview, PCML, IBM i programs as services, Program Call Markup Language (PCML), IBM i programs as services, HostProgram stereotype"></meta>
+<meta name="keywords" content="services, IBM i, Web services, overview, PCML, IBM i programs as services, Program Call Markup Language (PCML), IBM i programs as services, HostProgram stereotype"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01002.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,9 +23,423 @@
 <h1 class="topictitle1">Accessing an IBM i program as a web service</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><div><span>You can use EGL to expose the logic in an IBM i called program or service
+program by way of an EGL external type.</span>
+ The EGL generator
+uses that external type to create an EGL REST or SOAP service so that
+an application that is acting as a service requester can access any
+of the following kinds of IBM i
+programs: rpgle, cbl, cblle, sqlrpgle, sqlcbl, and sqlcblle.</div>
+
+<div class="p">To access an IBM i program:<ol>
+<li>Create an external type (type <span class="synph"><span class="kwd">HostProgram</span></span>).</li>
+
+<li>In the Services deployment section of the EGL deployment descriptor
+editor, select that external type and enter other appropriate information.</li>
+
+<li>Deploy the resulting web service to an application server that
+is compliant with Java EE.</li>
+
+<li>In the requester, code a <span class="synph"><span class="kwd">call</span></span> statement
+to access the IBM i code.</li>
+
+</ol>
+For detailed instructions, see “Accessing IBM i programs as web services: keystroke details.”</div>
+
+<div class="p">It is difficult to design the Record parts that will become the
+basis of the records that are used during service invocation. However,
+you can use the <span class="keyword" id="tedt01042__RDPS_fam"><a name="tedt01042__RDPS_fam"><!-- --></a>Rational Developer for Power Systems Software</span>:
+RPG and COBOL Development Tools for IBM i.
+In that case, you can use a wizard to create content in two projects:<ul>
+<li>The service project, which is a web project, includes the following
+components, which are used to develop the code that accesses the IBM i program:<ul>
+<li>An external type, stereotype <span class="synph"><span class="kwd">HostProgram</span></span>,
+which includes function prototypes that mirror the signatures of functions
+in the IBM i program of interest</li>
+
+<li>EGL structured Record parts that are referenced by parameters
+and return values in the function prototypes</li>
+
+<li>A deployment descriptor with an entry that includes the following
+details: a URI for accessing the service, a reference to the external
+type, and a set of connection parameters for accessing the program
+from <span class="keyword" id="tedt01042__WAS_full"><a name="tedt01042__WAS_full"><!-- --></a>IBM WebSphere Application Server</span> or
+Apache Tomcat.</li>
+
+<li>A Program Call Markup Language (PCML) file, as noted later.</li>
+
+</ul>
+</li>
+
+<li>The client project, which is a Rich UI project, includes the following
+components, which are used to develop the EGL Rich UI application
+that accesses the service:<ul>
+<li>An Interface part that is like the external type that is placed
+in the service project</li>
+
+<li>A set of non-structured Record parts that are referenced by parameters
+and return values in the function prototypes of the Interface part.
+The fields in those Record parts are equivalent to the bottommost
+(leaf) fields in the structured Record parts</li>
+
+<li>A deployment descriptor with an entry that accesses the service</li>
+
+</ul>
+</li>
+
+</ul>
+</div>
+
+<div class="p">Some IBM i (non-EGL) host
+programs are stateful: <ul>
+<li>A stateful program retains information between invocations so
+that the user and program can participate in a multistep conversation. </li>
+
+<li>When you provide access to a stateful host program and you set
+up the deployment descriptor of the web project that includes the
+external type, you must specify that the service is a REST service,
+not a SOAP service. To indicate that the host program is stateful,
+customize the deployment descriptor in the deployment descriptor editor
+by selecting the <span class="uicontrol">Stateful</span> check box.</li>
+
+<li>The stateful aspect of host-program access is made possible by
+a session cookie that is provided by the service. The cookie holds
+an identifier for the HTTP session. When you are working in Rich UI,
+you identify the session cookie when you declare a variable that is
+based on the Interface part.</li>
+
+<li>After you invoke the service for the last time in your application,
+to release runtime resources, invoke the <span class="synph"><span class="kwd">serviceLib.endStatefulServiceSession()</span></span> function.</li>
+
+<li><div class="note"><span class="notetitle">Note:</span> Any code that requires HTTP session operations cannot run
+or be debugged unless the code is deployed on an application server.</div>
+</li>
+
+</ul>
+</div>
+
+<p>The HTTP session detail is retained on the service-access variable.
+The lifespan of the session of the requester depends on where the
+variable is declared. For example, if the variable is declared in
+a function invocation, the session of the requester lasts as long
+as the function is in scope. If the variable is declared on a library,
+the session of the requester is retained until the library goes out
+of scope. If you are accessing an EGL stateful REST service, declare
+the variable in such a way that the variable does not go out of scope
+prematurely.</p>
+
+<div class="section"><h2 class="sectiontitle">Example: An external type that provide access to an IBM i program</h2><div class="p">This example
+shows an external type that provides access to an IBM i program.<pre class="codeblock">ExternalType GETREC type HostProgram {platformData=[@i5OSProgram{ programName="GETREC", 
+                         programType=NATIVE, isServiceProgram=false, libraryName="*LIBL"}]}
+   function GETREC(CUST CUSTa10, EOF char(1), COUNT decimal(2,0)){ hostName="GETREC"};
+end</pre>
+</div>
+<div class="p">The <span class="synph"><span class="kwd">platformData</span></span> property
+accepts an array. In this example, the array has a single entry for
+the <span class="synph"><span class="kwd">@i5OSProgram</span></span> complex property. The property
+fields for <span class="synph"><span class="kwd">@i5OSProgram</span></span> are as follows:<dl>
+
+<dt class="dlterm"><span class="keyword">programName</span></dt>
+
+<dd>The name of the program on IBM i.
+The default is the name of the external type.</dd>
+
+
+<dt class="dlterm"><span class="keyword">programType</span></dt>
+
+<dd>Either EGL (for a program written in EGL) or native (for a program
+written in COBOL or RPG).
+The default is <em>NATIVE</em>.</dd>
+
+
+<dt class="dlterm"><span class="keyword">isServiceProgram</span></dt>
+
+<dd>A Boolean that indicates whether the program is an IBM i service program. The default is <em>false</em>.</dd>
+
+
+<dt class="dlterm"><span class="keyword">libraryName</span></dt>
+
+<dd>The IBM i library. The default
+is *LIBL.</dd>
+
+</dl>
+</div>
+<p>The <span class="synph"><span class="kwd">hostName</span></span> property
+is available for a function prototype and identifies the name of the
+program function. The default is the name of the function prototype.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Data types in IBM i
+and EGL record fields</h2><p>The workbench converts the IBM i data types from the host source
+into a Program Call Markup Language (PCML) definition. The workbench
+then uses that definition to create the external type and records. </p>
+<p>The
+PCML file is retained for two reasons. First, you can update the file
+for use as the input in subsequent runs of the wizard. For example,
+you might put together a PCML definition that corresponds to entry
+points in several programs. If you use that definition as an input
+file, the external type that is created by the wizard can reflect
+all the entry points. Second, IBM technical-support
+representatives can use the retained PCML file as a debugging tool,
+if necessary.</p>
+<p>The following table lists the corresponding data
+types in IBM i structured records
+and EGL structured records.</p>
+<div class="p">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Corresponding data
+types in IBM i structured records
+and EGL structured records</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" colspan="2" valign="bottom" id="d22367e332">IBM i</th>
+
+<th class="cellrowborder" valign="bottom" width="37.150127226463106%" id="d22367e337">Rules</th>
+
+<th class="cellrowborder" valign="bottom" width="37.150127226463106%" id="d22367e340">EGL data type in the EGL external type</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td class="cellrowborder" rowspan="2" colspan="2" valign="top" headers="d22367e332 ">char</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e337 ">charType = single byte</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e340 ">CHAR (PCML length)</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e337 ">charType = double byte</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e340 ">UNICODE (PCML length)</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" rowspan="5" valign="top" width="13.486005089058525%" headers="d22367e332 ">int</td>
+
+<td class="cellrowborder" valign="top" width="12.213740458015266%" headers="d22367e332 ">2 byte signed</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e337 ">precision != 16, length=2</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e340 ">SMALLINT</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="12.213740458015266%" headers="d22367e332 ">2 byte unsigned</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e337 ">precision = 16, length = 2</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e340 ">INT</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="12.213740458015266%" headers="d22367e332 ">4 byte signed</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e337 ">precision != 32, length = 4</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e340 ">BIGINT</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="12.213740458015266%" headers="d22367e332 ">4 byte unsigned</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e337 ">precision = 32, length = 4</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e340 ">BIGINT</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="12.213740458015266%" headers="d22367e332 ">8 byte signed</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e337 ">length = 8</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e340 ">BIGINT</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="13.486005089058525%" headers="d22367e332 ">packed</td>
+
+<td class="cellrowborder" valign="top" width="12.213740458015266%" headers="d22367e332 ">&#xA0;</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e337 ">&#xA0;</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e340 ">DECIMAL (PCML length, PCML precision)</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="13.486005089058525%" headers="d22367e332 ">zone</td>
+
+<td class="cellrowborder" valign="top" width="12.213740458015266%" headers="d22367e332 ">&#xA0;</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e337 ">&#xA0;</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e340 ">NUM (PCML length, PCML precision)</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" rowspan="2" valign="top" width="13.486005089058525%" headers="d22367e332 ">float</td>
+
+<td class="cellrowborder" valign="top" width="12.213740458015266%" headers="d22367e332 ">&#xA0;</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e337 ">length = 4</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e340 ">SMALLFLOAT</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="12.213740458015266%" headers="d22367e332 ">&#xA0;</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e337 ">length = 8</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e340 ">FLOAT</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="13.486005089058525%" headers="d22367e332 ">byte</td>
+
+<td class="cellrowborder" valign="top" width="12.213740458015266%" headers="d22367e332 ">&#xA0;</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e337 ">&#xA0;</td>
+
+<td class="cellrowborder" valign="top" width="37.150127226463106%" headers="d22367e340 ">HEX (PCML length * 2)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+<p>You might need to update the workbench-created EGL
+record fields that correspond to IBM i
+types that are not supported by EGL or are not converted by PCML.
+Details about PCML are available in the online information center
+for IBM WebSphere Development Studio Client for iSeries: <a href="http://publib.boulder.ibm.com/infocenter/iadthelp/v7r0/topic/com.ibm.etools.iseries.webtools.doc/topics/rdtcattr.html" target="_blank">http://publib.boulder.ibm.com/infocenter/iadthelp/v7r0/topic/com.ibm.etools.iseries.webtools.doc/topics/rdtcattr.html</a>.</p>
+<div class="p">Some host structures do not have corresponding
+EGL types. Here is a COBOL example:<pre class="codeblock">01 P1 PIC 9(5) USAGE BINARY.
+01 P2.
+       02 P2A PIC X(5) OCCURS 1 to 10 TIMES 
+                       DEPENDING ON P1.</pre>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Data types in EGL record fields</h2><p>The following
+table lists the corresponding data types in structured and non-structured
+records. You might need to update the workbench-created non-structured
+record fields that are of type HEX or INTERVAL.</p>
+<div class="p">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Corresponding
+data types in structured and non-structured records</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" align="left" valign="bottom" id="d22367e540">Data Type in Structured Record</th>
+
+<th class="cellrowborder" align="left" valign="bottom" id="d22367e543">Data Type in Non-Structured Record</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td class="cellrowborder" valign="top" headers="d22367e540 ">BOOLEAN</td>
+
+<td class="cellrowborder" valign="top" headers="d22367e543 ">BOOLEAN</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" headers="d22367e540 ">CHAR, DBCHAR, MBCHAR, STRING, UNICODE</td>
+
+<td class="cellrowborder" valign="top" headers="d22367e543 ">STRING</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" headers="d22367e540 ">HEX</td>
+
+<td class="cellrowborder" valign="top" headers="d22367e543 ">HEX</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" headers="d22367e540 ">DATE</td>
+
+<td class="cellrowborder" valign="top" headers="d22367e543 ">DATE</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" headers="d22367e540 ">TIME</td>
+
+<td class="cellrowborder" valign="top" headers="d22367e543 ">TIME</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" headers="d22367e540 ">TIMESTAMP</td>
+
+<td class="cellrowborder" valign="top" headers="d22367e543 ">TIMESTAMP</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" headers="d22367e540 ">INTERVAL</td>
+
+<td class="cellrowborder" valign="top" headers="d22367e543 ">INTERVAL</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" headers="d22367e540 ">DECIMAL, BIN(length), BIGINT, INT, MONEY, NUM,
+SMALLINT, SMALLFLOAT </td>
+
+<td class="cellrowborder" valign="top" headers="d22367e543 ">Corresponding numeric types</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" headers="d22367e540 ">BIN(length, decimalPlaces) where decimalPlaces
+&gt; 0</td>
+
+<td class="cellrowborder" valign="top" headers="d22367e543 ">NUM(length, decimalPlaces)</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" headers="d22367e540 ">NUMC(length, decimalPlaces)</td>
+
+<td class="cellrowborder" valign="top" headers="d22367e543 ">NUM(length, decimalPlaces)</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" headers="d22367e540 ">PACF(length, decimalPlaces)</td>
+
+<td class="cellrowborder" valign="top" headers="d22367e543 ">NUM(length, decimalPlaces)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+</div>
 
 </div>
 

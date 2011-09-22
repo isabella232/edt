@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Service access outside of Rich UI"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="Except in a Rich UI handler or library, service access in EGL is synchronous: the requester waits for a response from the service."></meta>
+<meta name="description" content="Except in a Rich UI handler or library, service access in EGL is synchronous: the requester waits for a response from the service."></meta>
+<meta name="DC.subject" content="service access, overview, non-Rich UI"></meta>
+<meta name="keywords" content="service access, overview, non-Rich UI"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01003.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,9 +25,39 @@
 <h1 class="topictitle1">Service access outside of Rich UI</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>Except in a Rich UI handler or library, service access
+in EGL is <dfn class="term">synchronous</dfn>: the requester waits for a response
+from the service.</p>
+
+<div class="p">For example, the following code accesses the implementation that
+is shown in “EGL support for SOA:”<pre class="codeblock">returnValue String{};
+myInterface MyInterfacePart?{@Resource{bindingKey = "MyBinding"}};
+
+try
+   returnValue = myInterface.myEcho("world");
+
+   onException(except AnyException)
+      // exception handling
+end</pre>
+</div>
+
+<div class="p">Typically, accessing a service outside of Rich UI involves creating
+an EGL Interface part: <ol>
+<li>Use a workbench tool to create an EGL Interface part that describes
+the service operations.</li>
+
+<li>Create a service-access variable that is based on the Interface
+part. </li>
+
+<li>Use the variable in a service-access statement that places a returned
+value into a second variable. You can embed the service-access in
+a <span class="synph"><span class="kwd">try</span></span> block that references an exception
+handler. The exception handler is invoked at run time if the invocation
+fails.</li>
+
+</ol>
+</div>
 
 </div>
 

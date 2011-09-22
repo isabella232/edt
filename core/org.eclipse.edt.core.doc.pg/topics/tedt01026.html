@@ -5,26 +5,56 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="Calling from generated Java code to generated Java code"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.Title" content="Calling from generated Java code to Java code"></meta>
+<meta name="abstract" content="Your generated Java program can call generated or non-generated Java code."></meta>
+<meta name="description" content="Your generated Java program can call generated or non-generated Java code."></meta>
+<meta name="DC.subject" content="transferring control, Java programs (EGL), to Java code"></meta>
+<meta name="keywords" content="transferring control, Java programs (EGL), to Java code"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="tedt01026"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>Calling from generated Java code to generated Java code</title>
+<title>Calling from generated Java code to Java code</title>
 </head>
 <body id="tedt01026"><a name="tedt01026"><!-- --></a>
 
 
-<h1 class="topictitle1">Calling from generated Java code to generated Java code</h1>
+<h1 class="topictitle1">Calling from generated Java code to Java code</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>Your generated Java program can call generated or non-generated
+Java code.</p>
+
+<div class="p">To call one generated Java program from another, invoke the target Java class by using a <span class="synph"><span class="kwd">call</span></span> statement.
+However, be aware of package dependencies. One of the following statements
+must be true: <ul>
+<li>The target class and caller are in the same package; or</li>
+
+<li>The name of the target class is qualified with a package name.</li>
+
+</ul>
+</div>
+
+<div class="p">If you want the generated Java program to invoke non-generated Java code, create an ExternalType
+part that has the <span class="synph"><span class="kwd">JavaObject</span></span> stereotype.
+The part contains function prototypes for the Java methods of interest. In this case, invoke
+a Java method in one of two
+ways:<ul>
+<li>If the method is marked static, invoke it by using dot syntax
+that references the name of the ExternalType part; for example, <samp class="codeph">MyExternalType.myMethod()</samp>.</li>
+
+<li>Otherwise, create a variable based on the ExternalType and use
+dot syntax to append the variable name to the name of the method;
+for example, <samp class="codeph">myVariable.myMethod()</samp>.</li>
+
+</ul>
+</div>
+
+<p>When you invoke a non-generated class, it must provide a method
+to instantiate itself. You cannot instantiate a Java class from within EGL.</p>
 
 </div>
 

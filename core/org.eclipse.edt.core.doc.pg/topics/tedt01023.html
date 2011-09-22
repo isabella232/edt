@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Invoking a service asynchronously from a Rich UI application"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="In Rich UI, the call statement is used to invoke a service asynchronously:"></meta>
+<meta name="description" content="In Rich UI, the call statement is used to invoke a service asynchronously:"></meta>
+<meta name="DC.subject" content="Rich UI, services, invoking asynchronously, Rich UI, asynchronous invocation"></meta>
+<meta name="keywords" content="Rich UI, services, invoking asynchronously, Rich UI, asynchronous invocation"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01002.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,9 +25,238 @@
 <h1 class="topictitle1">Invoking a service asynchronously from a Rich UI application</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>In Rich UI, the <span class="synph"><span class="kwd">call</span></span> statement
+is used to invoke a service asynchronously:</p>
+
+<pre class="codeblock">call <var class="varname">serviceName</var>.<var class="varname">operationName</var>(<var class="varname">argumentList</var>)
+   returning to <var class="varname">myCallbackFunction</var> onException <var class="varname">myExceptionHandler</var>
+   {timeout = <em>milliseconds</em>};</pre>
+
+<dl>
+<dt class="dlterm"><span class="synph"><span class="var">serviceName</span></span> </dt>
+
+<dd>The name of a variable that is based on an Interface part</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">operationName</span></span> </dt>
+
+<dd>The name of the Interface part function prototype</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">argumentList</span></span> </dt>
+
+<dd>A list of arguments, each of which is separated from the next
+by a comma <p>For
+restrictions on arguments, see “Restrictions in the prototypes used
+for service access.”</p>
+</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">myCallbackFunction</span></span> </dt>
+
+<dd>The name of a callback function or delegate that is available
+to the call statement. In most cases, the function or delegate is
+in the same Rich UI handler or in a library. The callback function
+is described later in this topic.</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">myExceptionHandler</span></span> </dt>
+
+<dd>Optional. The name of an exception handler or a delegate that
+is available to the <span class="synph"><span class="kwd">call</span></span> statement.  In
+most cases, the exception handler or delegate is in the same Rich
+UI handler or in a library. The exception handler is described later
+in this topic. <div class="p">If you do not have your own exception handler, you
+can specify the following delegate: <span class="synph"><span class="kwd">serviceLib.serviceExceptionHandler</span></span>.
+Here are the implications:<ul>
+<li>By default, specifying that delegate automatically invokes a system
+function that writes the content of the exception <span class="synph"><span class="kwd">message</span></span> field
+to the standard output. In the product, the standard output is the
+console view. In an external browser, the standard output is the bottom
+of the web page.</li>
+
+<li>Alternatively, the delegate might cause the invocation of a custom
+exception handler. You can even use this alternative to make custom
+error handling be consistent throughout a set of applications. <div class="p">For
+example, you might do as follows:<ol>
+<li>Create a library named <samp class="codeph">myLibrary</samp> and include
+both a custom exception handler named <samp class="codeph">myExceptionHandler</samp> and
+a setup function.</li>
+
+<li>In the setup function, include the following statement:<pre class="codeblock">serviceLib.serviceExceptionHandler = myLibrary.myExceptionHandler;</pre>
+</li>
+
+<li>Invoke the setup function in each of your Rich UI applications,
+in the <span class="synph"><span class="kwd">on-construction</span></span> function.</li>
+
+</ol>
+</div>
+<p>For every service that is invoked by a <span class="synph"><span class="kwd">call</span></span> statement
+(if the statement includes <span class="synph"><span class="kwd">serviceLib.serviceExceptionHandler</span></span>),
+the EGL runtime code responds to a runtime exception by running the
+customized exception handler; in this case, by running <samp class="codeph">myLibrary.myExceptionHandler</samp>.</p>
+</li>
+
+</ul>
+</div>
+</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">milliseconds</span></span> </dt>
+
+<dd>The maximum valid number of milliseconds that elapse between when
+the EGL Rich UI proxy (on the application server) invokes a web service
+and when the proxy receives a response. If more time elapses, the
+EGL runtime code throws a <span class="synph"><span class="kwd">ServiceInvocationException</span></span>.
+However, no timeout is enforced during access of a dedicated service.<div class="p">To
+set a timeout:<ul>
+<li>Consider various factors, such as local network traffic, internet
+traffic, and server response time. Those factors mean that two invocations
+of the same service are likely to take a different amount of time
+under different conditions. </li>
+
+<li>Consider the nature of your application. If your code is waiting
+for a credit approval, you might set a high timeout value to avoid
+charging the user twice. If your code is making a bid in an online
+auction, you might set a low timeout value so that the user can make
+another bid quickly.</li>
+
+<li>Use timeout values that vary from one another by one or more seconds.</li>
+
+</ul>
+</div>
+<p>You can set a default value for <span class="synph"><span class="var">milliseconds</span></span> in
+the <span class="synph"><span class="kwd">defaultServiceTimeout</span></span> build descriptor
+option. The <span class="synph"><span class="kwd">defaultServiceTimeout</span></span> build
+descriptor option has no default value set. If you do not specify
+a value for either <span class="synph"><span class="kwd">defaultServiceTimeout</span></span> or
+for <span class="synph"><span class="var">milliseconds</span></span>, the service call will
+not time out. For more information, see “defaultServiceTimeout.”</p>
+</dd>
+
+</dl>
+
+<div class="section"><h2 class="sectiontitle">Keystroke assistance for the call statement</h2><div class="p">The
+following kinds of keystroke assistance are available:<ul>
+<li>After you type the <span class="synph"><span class="kwd">returning to</span></span> or <span class="synph"><span class="kwd">onException</span></span> keyword
+in the <span class="synph"><span class="kwd">call</span></span> statement, you can request content
+assist by pressing Ctrl+Space. A list of functions is displayed, and
+you can select one. </li>
+
+<li>If you type the <span class="synph"><span class="kwd">call</span></span> statement with
+the ending semicolon and include a reference to a callback or an onException
+function that does not exist, you can request that the workbench create
+the missing logic:<ul>
+<li>Press Ctrl+1.</li>
+
+<li>Alternatively, right click after the semicolon and select <span class="uicontrol">Create
+Callback Functions</span>.</li>
+
+</ul>
+</li>
+
+</ul>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Callback function</h2><p>The <span class="synph"><span class="kwd">callback</span></span> function
+receives the values, if any, that are in the response sent by the
+service. The callback itself has no return value.</p>
+<p> If the <span class="synph"><span class="kwd">callback</span></span> function
+is invoked from a third-party REST service, the function can have
+zero or one parameter. If a parameter is specified, its type must
+match the type of the return value that is specified in the Interface
+part, and the parameter modifier is IN. </p>
+<div class="p">If the <span class="synph"><span class="kwd">callback</span></span> function
+is invoked from a SOAP service or from an EGL REST-RPC service, the
+relationship of the function parameters and the service-invocation
+parameters is best described by an example: <ul>
+<li>Consider the following function prototype in an Interface part:<pre class="codeblock">Interface EmployeeService {}
+   Function GetEmployeeDetail(employeeCode STRING IN, 
+                              employeeSalary FLOAT OUT, 
+                              employeeStatus STRING INOUT) 
+            returns(myEmployeeRecordPart);
+end
+</pre>
+</li>
+
+<li>This example shows an interface declaration and <span class="synph"><span class="kwd">call</span></span> statement
+used to invoke the service:<pre class="codeblock">myInterface EmployeeService;
+
+call myInterface.GetEmployeeDetail("A123", 25.8, "Full-time")
+     returning to myCallback onException myExceptionHandler;
+</pre>
+</li>
+
+<li>Here is the outline of a <span class="synph"><span class="kwd">callback</span></span> function: <pre class="codeblock">Function myCallBack(salary FLOAT IN, 
+                    status STRING IN, 
+                    myRecord myEmployeeRecordPart IN)
+    // statements here
+end</pre>
+<p>The function includes one parameter for each service-operation
+parameter that is OUT or INOUT. The order of those parameters in the
+callback function is the same as the order in the service operation.
+The service-operation return value is represented as the last parameter
+in the callback function.</p>
+</li>
+
+</ul>
+</div>
+<div class="p">In general, the rules for designing the <span class="synph"><span class="kwd">callback</span></span> function
+for a web SOAP service or an EGL REST-RPC service are as follows: <ul>
+<li>The function has a series of parameters that are in the same order
+as the OUT and INOUT parameters in the service invocation</li>
+
+<li>If the service invocation has a return value, the <span class="synph"><span class="kwd">callback</span></span> function
+includes an additional, last parameter to accept the return value</li>
+
+<li>Each parameter in the function has the IN modifier</li>
+
+</ul>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">onException function</h2><div class="p">The <span class="synph"><span class="kwd">onException</span></span> function
+has the following characteristics:<ul>
+<li>No return value</li>
+
+<li>The function accepts an Exception record of type <span class="synph"><span class="kwd">AnyException</span></span>,
+and you can test that record to determine the specific type received</li>
+
+</ul>
+</div>
+<p>Here is the outline of an <span class="synph"><span class="kwd">onException</span></span> function:</p>
+<pre class="codeblock">Function myExceptionHandler(exp AnyException)
+   case 
+      when (exp isa ServiceBindingException)
+         ;
+      when (exp isa ServiceInvocationException)
+         ;
+      otherwise
+         ; 
+   end
+end</pre>
+<div class="p">Errors might occur in the following places:<ul>
+<li>In a service binding; that is, in how the service access is specified
+in your code. This error might involve a problem in the deployment
+descriptor.</li>
+
+<li>In the communication of the Rich UI application with the EGL Rich
+UI Proxy</li>
+
+<li>In the EGL Rich UI Proxy</li>
+
+<li>In the communication of the EGL Rich UI Proxy with the service</li>
+
+<li>In the service</li>
+
+</ul>
+</div>
+<p>A problem in a service binding results in a <span class="synph"><span class="kwd">ServiceBindingException</span></span>.
+Other problems result in a <span class="synph"><span class="kwd">ServiceInvocationException</span></span> or
+a <span class="synph"><span class="kwd">RuntimeException</span></span>, which is less likely.</p>
+</div>
 
 </div>
 

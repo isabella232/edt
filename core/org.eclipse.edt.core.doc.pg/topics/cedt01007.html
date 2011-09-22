@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Service-location details for web service deployment"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="Before you deploy a web service, make sure that you know the details of the deployment."></meta>
+<meta name="description" content="Before you deploy a web service, make sure that you know the details of the deployment."></meta>
+<meta name="DC.subject" content="services, deployment, locations"></meta>
+<meta name="keywords" content="services, deployment, locations"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01003.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,16 +25,98 @@
 <h1 class="topictitle1">Service-location details for web service deployment</h1>
 
 
-<div><p></p>
 
-<p></p>
-
+<div><p>Before you deploy a web service, make sure that you know
+the details of the deployment.</p>
 </div>
 
 <div>
 <div class="familylinks">
 </div>
 </div>
+<div class="nested1" xml:lang="en-us" id="java_ee_servers"><a name="java_ee_servers"><!-- --></a>
+<h2 class="topictitle2">For application servers that are compliant with Java EE</h2>
+
+<div>
+<div class="p">For an application server that is compliant with Java EE, the web service is deployed to a web
+archive (WAR) file, and this URI pattern is used:<pre class="codeblock">http://<var class="varname">domain:portNumber</var>/<var class="varname">contextRoot</var>/<var class="varname">serviceConstant</var>/<var class="varname">serviceName</var></pre>
+<dl>
+
+<dt class="dlterm"><var class="varname">domain</var><var class="varname">:portNumber</var></dt>
+
+<dd>The <var class="varname">domain</var> value is the IP address of the server
+to which the project is deployed. The colon (:) and subsequent <var class="varname">portNumber</var> value
+is the port, as determined by the application-server configuration. <p>When
+you are using IBM WebSphere Application Server, the value
+is localhost:9080 by default. However, your installation of that product
+can access a different port. This situation might occur if you previously
+installed WebSphere Application
+Server on the same machine. </p>
+<p>To change the domain and port number
+that are included in the WSDL file generated with a SOAP service,
+see “Setting preferences for service generation.”</p>
+</dd>
+
+
+<dt class="dlterm"><var class="varname">contextRoot</var></dt>
+
+<dd>The context root to which the service is deployed. By default,
+this value is the project name. <div class="p">To override the default in the
+EDT IDE:<ol>
+<li>Right-click the project.</li>
+
+<li>Click <span class="uicontrol">Properties</span> to display the Properties
+page.</li>
+
+<li>Click <span class="uicontrol">Web project settings</span> and type a new
+context root.</li>
+
+<li>Click <span class="uicontrol">OK</span>.</li>
+
+</ol>
+</div>
+</dd>
+
+
+<dt class="dlterm"><var class="varname">serviceConstant</var></dt>
+
+<dd>One of two values: <ul>
+<li>For a SOAP service:<span class="synph"><span class="kwd">services</span></span></li>
+
+<li>For an EGL REST-RPC service:<span class="synph"><span class="kwd">restservices</span></span></li>
+
+</ul>
+</dd>
+
+
+<dt class="dlterm"><var class="varname">serviceName</var></dt>
+
+<dd>For a SOAP service, <span class="synph"><span class="kwd">serviceName</span></span> is the
+value of the <span class="synph"><span class="kwd">name</span></span> field in the <span class="synph"><span class="kwd">@xml</span></span> complex
+property. By default, the value of that field is the name of the Service
+part, not the name of the <span class="synph"><span class="kwd">alias</span></span> property. <div class="p">For
+a REST service, <span class="synph"><span class="kwd">serviceName</span></span> is the value
+of the <span class="uicontrol">URI</span> text box on the <span class="uicontrol">Web Service
+Deployment</span> tab of the Deployment Descriptor editor. If
+that text box is blank, the value is the following concatenation: <ul>
+<li>The package name, with an underscore (<strong>_</strong>) in place of every
+period</li>
+
+<li>An underscore (<strong>_</strong>)</li>
+
+<li>The service name</li>
+
+</ul>
+</div>
+</dd>
+
+</dl>
+</div>
+
+</div>
+
+</div>
+
 
 </body>
 </html>

@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Form processing with Rich UI"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="Rich UI provides a way to implement the kind of form processing that is traditional in business software. The processing depends on the Rich UI controller, which is a definition that relates a single view—a widget—with a single model—a data field. For details on Rich UI controllers, see “Rich UI validation and formatting.”"></meta>
+<meta name="description" content="Rich UI provides a way to implement the kind of form processing that is traditional in business software. The processing depends on the Rich UI controller, which is a definition that relates a single view—a widget—with a single model—a data field. For details on Rich UI controllers, see “Rich UI validation and formatting.”"></meta>
+<meta name="DC.subject" content="Rich UI, form processing, forms, processing (Rich UI)"></meta>
+<meta name="keywords" content="Rich UI, form processing, forms, processing (Rich UI)"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01020.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,9 +25,250 @@
 <h1 class="topictitle1">Form processing with Rich UI</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>Rich UI provides a way to implement the kind of form processing
+that is traditional in business software. The processing depends on
+the Rich UI controller, which is a definition that relates a single
+view—a widget—with a single model—a data field. For details on Rich
+UI controllers, see “Rich UI validation and formatting.”</p>
+
+<div class="p">You might use form processing in an application that fulfills the
+following steps:<ul>
+<li>The application publishes data; that is, presents data to the
+user.</li>
+
+<li>The user updates the data and then clicks a button or presses
+a key to submit the data.</li>
+
+<li>The code validates the input, transmits all the validated data
+to a service, and responds to the user.</li>
+
+</ul>
+</div>
+
+<div class="p">A <dfn class="term">form manager</dfn> is a handler declaration that gives
+you the following capabilities:<ul>
+<li>To define a set of form fields, each of which can include a field
+label, a controller, and an error field. The displayable components
+can be anywhere on the user interface and can be separate from one
+another.</li>
+
+<li>To process the set of form fields, including output formatting,
+input validation, and input unformatting. For example, if a money
+value is being stored in a field of type NUM, the currency symbol
+ is removed from the input value before the value is stored.</li>
+
+</ul>
+</div>
+
+<p>You interact with a form manager by writing code or by using code
+that the Rich UI editor provides for you.</p>
+
+<div class="p">Here is a declaration of a form manager: <pre class="codeblock">employeeForm FormManager { entries = [
+   new FormField { nameLabel="Name:",   controller=nameController },
+   new FormField { nameLabel="Age:",    controller=ageController },
+   new FormField { nameLabel="Salary:", controller=salaryController }
+]};</pre>
+</div>
+
+<p>You invoke functions that handle each of the form fields in turn;
+for example, to validate the form as a whole. The order of the form-field
+processing is generally the order in which the form are listed in
+the <span class="synph"><span class="kwd">entries</span></span> array, in the declaration of
+the form manager.</p>
+
+<div class="section"><h2 class="sectiontitle">A starting point for form development</h2><div class="p">EGL
+provides a starting point for form development. In brief, the Rich
+UI editor provides application-specific code, and you add logic to
+invoke it. To cause the initial development in the EDT IDE, do as
+follows:<ol>
+<li>Open a handler in the Rich UI editor and drag and drop a record
+definition to the Design tab. </li>
+
+<li>Work with a wizard, as described in “Creating widgets by dragging
+data into the Rich UI editor.”</li>
+
+</ol>
+</div>
+<div class="p">In response to your keystrokes, the editor adds the following
+code to your handler: <ul>
+<li>A form manager. The form fields in the declaration are specific
+to your need.</li>
+
+<li>Functions that access the general form-processing logic in the
+form manager.</li>
+
+</ul>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Form fields</h2><p>A form field is itself a data
+collection: a record of type FormField. The record is used differently
+for a form manager and for a validating form. The use of a single
+record type for both of those mechanisms means that you can easily
+switch between the two.</p>
+<p>As suggested in the next table, you
+set the record fields that are appropriate for your use.</p>
+<div class="p">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="30.69620253164557%" id="d11133e120">Field in the record of type FormField</th>
+
+<th class="cellrowborder" valign="bottom" width="22.151898734177212%" id="d11133e123">Field value</th>
+
+<th class="cellrowborder" valign="bottom" width="47.151898734177216%" id="d11133e126">Details</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td class="cellrowborder" valign="top" width="30.69620253164557%" headers="d11133e120 ">controller</td>
+
+<td class="cellrowborder" valign="top" width="22.151898734177212%" headers="d11133e123 ">Controller</td>
+
+<td class="cellrowborder" valign="top" width="47.151898734177216%" headers="d11133e126 ">The controller is a definition that relates
+a view to a model.</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="30.69620253164557%" headers="d11133e120 ">errorLabel</td>
+
+<td class="cellrowborder" valign="top" width="22.151898734177212%" headers="d11133e123 ">TextLabel</td>
+
+<td class="cellrowborder" valign="top" width="47.151898734177216%" headers="d11133e126 ">The text label named <span class="synph"><span class="kwd">errorLabel</span></span> is
+the error field; it displays the error message, if any, that is output
+during validation of a form field. The appearance of the error field
+changes when an error occurs.<p>Supply the text label when you declare
+the form field. </p>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="30.69620253164557%" headers="d11133e120 ">nameLabel</td>
+
+<td class="cellrowborder" valign="top" width="22.151898734177212%" headers="d11133e123 ">TextLabel</td>
+
+<td class="cellrowborder" valign="top" width="47.151898734177216%" headers="d11133e126 ">The form-field label. The setting is ignored
+if you are using a validating form, which provides a label and assigns
+the <span class="synph"><span class="kwd">displayName</span></span> value to that label.</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="30.69620253164557%" headers="d11133e120 ">labelClass</td>
+
+<td class="cellrowborder" valign="top" width="22.151898734177212%" headers="d11133e123 ">String?</td>
+
+<td class="cellrowborder" valign="top" width="47.151898734177216%" headers="d11133e126 ">A CSS class. Do not change this value, which
+is used to change the form-field label to its original appearance
+after an error is resolved.<p>The class name is EglRuiTextLabel; and
+the same class name is used when an error occurs, with the addition
+of the following, secondary class: FormErrorLabel.</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+<p>When you work with a form manager, provide the <span class="synph"><span class="kwd">controller</span></span> and <span class="synph"><span class="kwd">nameLabel</span></span> values
+and, optionally, the <span class="synph"><span class="kwd">errorLabel</span></span> value.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Form-level functions</h2><p>The form-level functions
+invoke controller-specific functions; and in each case, the order
+of the invocations is the order in which the form fields are listed
+in the <span class="synph"><span class="kwd">entries</span></span> array. </p>
+<div class="p">Your code is
+likely to invoke functions for validating, committing, and publishing
+data. For example, your code might expand on the following logic:<pre class="codeblock">if (employeeForm.isValid())
+   employeeForm.commit();
+end</pre>
+</div>
+<p>The controller itself invokes a controller-specific <span class="synph"><span class="kwd">validStateSetter</span></span> function
+at the end of validation.</p>
+<div class="p">Note the order of events:<ol>
+<li>Your invocation of the form-level <span class="synph"><span class="kwd">isValid</span></span> function
+has the following effect for every controller in turn:<ol type="a">
+<li>Invokes the controller's <span class="synph"><span class="kwd">isValid</span></span> function,
+which in turn invokes the <span class="synph"><span class="kwd">validator</span></span> functions
+referenced in the controller definition. The process also involves
+elementary validations such as for the <span class="synph"><span class="kwd">isDecimalDigit</span></span> property
+of the controller model. </li>
+
+<li>Invokes the controller's <span class="synph"><span class="kwd">validStateSetter</span></span> function.
+By default, this function is the form-level <span class="synph"><span class="kwd">validStateSetter</span></span> function.</li>
+
+</ol>
+</li>
+
+<li>If all the controller views contain valid data, your code invokes
+the form-level <span class="synph"><span class="kwd">commit</span></span> function. That function
+invokes each controller-specific <span class="synph"><span class="kwd">commit</span></span> function
+to unformat the data in a controller view and to write the value to
+a controller model.</li>
+
+</ol>
+</div>
+<div class="p">Given the preceding order, you might want to invoke your
+own cross-field validation after the form validations succeed. Your
+code might look as follows: <pre class="codeblock">if (employeeForm.isValid())
+   if (myValidation())
+      employeeForm.commit();
+   end
+end</pre>
+</div>
+<p>Here are the form-level functions in alphabetical
+order:</p>
+<div class="p"><dl>
+<dt class="dlterm"><span class="synph"><span class="kwd">commit()</span></span></dt>
+
+<dd>Lets you commit all the views to the related models with one command.
+After you invoke the form-level <strong>commit</strong> function, you can transmit
+all the model data to a service.<p>The function has no parameters
+or return value.</p>
+</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="kwd">isValid()</span></span></dt>
+
+<dd>Invokes the controller-specific <strong>isValid</strong> functions.</dd>
+
+<dd class="ddexpand">The function has no parameters and returns a Boolean to indicate
+whether validation succeeded for all form fields.</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="kwd">publish()</span></span></dt>
+
+<dd>Invokes each controller-specific <span class="synph"><span class="kwd">publish</span></span> function
+to format data stored in the controller model and to write the formatted
+data to a controller view. Your code might invoke the form-level <strong>publish</strong> command
+in a callback function, which is invoked after your code receives
+data that is returned from a service.<p>The function has no parameters
+or return value.</p>
+</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="kwd">validate()</span></span></dt>
+
+<dd>Invokes the controller-specific <strong>validate</strong> functions.<p>The
+function has no parameters and returns a Boolean to indicate whether
+the validations succeeded; that is, whether all the controller-specific <strong>validate</strong> functions
+returned a null or blank.</p>
+</dd>
+
+
+
+</dl>
+</div>
+</div>
 
 </div>
 

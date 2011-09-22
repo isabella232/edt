@@ -6,9 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Drag and drop in EGL Rich UI applications"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/tedt01038.html"></meta>
+<meta name="DC.subject" content="Rich UI, drag and drop, drag and drop Rich UI widget"></meta>
+<meta name="keywords" content="Rich UI, drag and drop, drag and drop Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01002.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -24,16 +23,115 @@
 <h1 class="topictitle1">Drag and drop in EGL Rich UI applications</h1>
 
 
-<div><p></p>
+<div>
+<p>You can write code so that a user is able to drag a widget from
+one location and drop it at another. More broadly, your code can respond
+to the following user events: a single mouse-down event when the user
+holds the position; subsequent mouse-move events; and a single mouse-up
+event. You can fulfill any runtime tasks that are represented by the
+drag and drop; Rich UI does not define the behavior.</p>
 
-<p></p>
+<div class="p">You write the drag-and-drop code by specifying three properties
+in a widget declaration and by writing functions that are referenced
+in the corresponding property values. For example, here is the declaration
+of a button:<pre class="codeblock">b1 Button { 
+   text = "Button 1", position="absolute",	x=10, y=10,
+   <strong>onStartDrag = start, onDrag = drag, onDropOnTarget = drop</strong>};
+</pre>
+</div>
+
+<p>Here are the three properties that make drag-and-drop possible:</p>
+
+<ul>
+<li> <samp class="codeph">onStartDrag</samp> references a function that the EGL
+Runtime calls once, at the start of a drag operation. The function
+has characteristics that are shown in the following Delegate part:<pre class="codeblock">Delegate StartDragFunction(widget Widget in, 
+                           x int in, y int in) returns (Boolean)</pre>
+<p>The
+function receives a reference to the widget and receives the absolute
+x and y coordinates of the mouse pointer. The function returns a Boolean
+value that indicates whether to continue the drag operation.</p>
+</li>
+
+<li><samp class="codeph">onDrag</samp> references a function that the EGL Runtime
+calls repeatedly, as the drag operation proceeds; specifically, each
+time the browser records a mouse-move event. The function has characteristics
+that are shown in the following Delegate part:<pre class="codeblock">Delegate DragFunction(widget Widget in, 
+                      dropTarget Widget in, 
+                      x int in, y int in) </pre>
+<p>The function
+receives references to the widget being dragged and to the widget
+(if any) over which the mouse pointer is passing. If the mouse pointer
+is not passing over any widget, the second argument is null. The function
+also receives the absolute x and y coordinates of the mouse pointer
+and has no return value. The function itself should update the position
+of the widget (or some other image) in response to the mouse-move
+event.</p>
+</li>
+
+<li> <samp class="codeph">onDropOnTarget</samp> references a function that the
+EGL Runtime calls once, when the user releases the mouse to end the
+drag operation. The function has characteristics that are shown in
+the following Delegate part:<pre class="codeblock">Delegate DropOnTargetFunction(widget Widget in,
+                      dropTarget Widget in,
+                      x int in, y int in) </pre>
+<p>The function
+receives references to the widget being dropped and to the widget
+(if any) under the mouse pointer. If no widget is under the mouse
+pointer, the second argument is null. The function also receives the
+absolute x and y coordinates of the mouse pointer and has no return
+value.</p>
+</li>
+
+</ul>
+
+<div class="p">Here is an example you can bring into your workspace:.<pre class="codeblock">import com.ibm.egl.rui.widgets.TextField;
+
+handler MyHandler type RUIHandler{initialUI =[myTextField]}
+   myTextField TextField{text = 
+                   "What a drag!", position = "absolute", x = 110, y = 210, width = 120, 
+                   onStartDrag = start, onDrag = drag, onDropOnTarget = drop};
+   dx, dy int;
+
+   function start(myWidget Widget in, x int in, y int in) returns(boolean)
+      dx = x - myWidget.x;
+      dy = y - myWidget.y;
+      return(true);
+   end
+
+   function drag(myWidget Widget in, drop Widget in, x int in, y int in)
+      myWidget.x = x - dx;
+      myWidget.y = y - dy;
+   end
+
+   function drop(widget Widget in, drop Widget in, x int in, y int in)
+   end
+end  </pre>
+</div>
+
+<div class="p">The <samp class="codeph">start</samp> function calculates the difference between
+the location of the mouse pointer and the top-left corner of the widget.
+The effect of using that calculation is that the mouse pointer is
+displayed at the same place on the widget throughout the operation.
+To see the effect, run the code twice, clicking the <em>bottom-right
+corner</em> of the widget to start the drag-and-drop operation each
+time:<ol>
+<li>Run the code as shown</li>
+
+<li>Run the code only after replacing the statements in the <samp class="codeph">drag</samp> function
+with the following assignments:<pre class="codeblock">   myWidget.x = x;
+   myWidget.y = y;
+</pre>
+</li>
+
+</ol>
+</div>
+
+<p>Additional examples are in the “Shadow widget” reference topic.</p>
 
 </div>
 
 <div>
-<div class="familylinks">
-</div>
-
 <div class="familylinks">
 </div>
 </div>

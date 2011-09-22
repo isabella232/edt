@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Calling from generated Java code to an EXEC or BAT file"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="EGL provides two functions for calling a system command or an EXEC or BAT file:"></meta>
+<meta name="description" content="EGL provides two functions for calling a system command or an EXEC or BAT file:"></meta>
+<meta name="DC.subject" content="transferring control, Java programs (EGL), to EXEC files, to BAT files"></meta>
+<meta name="keywords" content="transferring control, Java programs (EGL), to EXEC files, to BAT files"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -22,9 +24,24 @@
 <h1 class="topictitle1">Calling from generated Java code to an EXEC or BAT file</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>EGL provides two functions for calling a system command
+or an EXEC or BAT file:</p>
+
+<div class="p"><dl>
+<dt class="dlterm"><span class="synph"><span class="kwd">sysLib.callCmd()</span></span></dt>
+
+<dd>This function transfers control to the specified command or file.
+When the invoked logic ends, control returns to the calling EGL program.</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="kwd">sysLib.startCmd()</span></span></dt>
+
+<dd>This function invokes the specified command or file and keeps
+running.</dd>
+
+</dl>
+</div>
 
 </div>
 

@@ -6,10 +6,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Developing a service or program"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/tedt01010.html"></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/tedt01011.html"></meta>
+<meta name="abstract" content="With EGL, you develop a service or program by coding a Service or Program part, respectively. The basic structure is the same. However, a service might provide several entry points, and programs provide one."></meta>
+<meta name="description" content="With EGL, you develop a service or program by coding a Service or Program part, respectively. The basic structure is the same. However, a service might provide several entry points, and programs provide one."></meta>
+<meta name="DC.subject" content="service, development, program"></meta>
+<meta name="keywords" content="service, development, program"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt01045.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -25,7 +26,44 @@
 
 
 
-<div><p></p>
+<div><p>With EGL, you develop a service or program by coding a
+Service or Program part, respectively. The basic structure is the
+same. However, a service might provide several entry points, and programs
+provide one.</p>
+
+<p>When you create a Service part, you specify whether it will be
+deployed as a SOAP service, an EGL REST service, and EGL service,
+or a subset of the three. You can change your decision later when
+you work with the EGL deployment descriptor. Similarly, when you create
+a Program part, you specify whether it will be deployed as a standard
+Java application or as a JEE client application.</p>
+
+<div class="p">Here is a Service part:<pre class="codeblock">Service MyServicePart
+   value STRING = "Hello ";
+
+   function myEcho(myString STRING IN) returns (STRING)
+      return (value = myString);
+   end
+end</pre>
+</div>
+
+<p>In this case, the logic accepts an input string, such as “world,”
+and returns to the requester the concatenation of “Hello” and the
+input string. </p>
+
+<div class="p">A program or service can access services, programs, files, reports,
+relational databases, and programs. In most cases, the following rules
+apply:<ul>
+<li>Resources can be local to or remote from the platform where the
+accessing logic runs.</li>
+
+<li>You specify the details for resource access by referencing an
+entry in the deployment descriptor. The access detail is called a <dfn class="term">resource
+binding</dfn>.</li>
+
+</ul>
+</div>
+
 </div>
 
 <div></div>

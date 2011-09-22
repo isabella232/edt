@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Function prototypes for service access"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="When you specify parameters in a function prototype to access a service, you must follow the rules described here."></meta>
+<meta name="description" content="When you specify parameters in a function prototype to access a service, you must follow the rules described here."></meta>
+<meta name="DC.subject" content="prototypes, EGL functions, parameters, Rich UI, services, access parameters"></meta>
+<meta name="keywords" content="prototypes, EGL functions, parameters, Rich UI, services, access parameters"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01003.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,9 +25,79 @@
 <h1 class="topictitle1">Function prototypes for service access</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>When you specify parameters in a function prototype to
+access a service, you must follow the rules described here.</p>
+
+<div class="p">An Interface part is used for service access and includes function
+prototypes such as the following one: <pre class="codeblock">Function GetEmployeeDetail(employeeCode STRING IN,                             
+                           employeeSalary FLOAT OUT,
+                           employeeStatus STRING INOUT)
+         returns(myEmployeeRecordPart);
+</pre>
+</div>
+
+<div class="p">If the prototype is used to access an EGL REST-RPC service, the
+following rules apply: <ul>
+<li>The prototype can include IN, OUT, and INOUT parameters.</li>
+
+<li>The data received and returned by the service is always in JSON
+format. JSON cannot include HEX, BLOB, or CLOB data.</li>
+
+<li>The service always returns a JSON string. In a Rich UI application,
+the EGL runtime code rounds any numeric data that is returned by the
+service and is greater than 15 significant digits. The rounding does
+not occur when JSON is returned to EGL-generated Java code.</li>
+
+</ul>
+</div>
+
+<p>If the prototype is used to access a SOAP service, the prototype
+can include IN, OUT, and INOUT parameters.</p>
+
+<div class="p">If the prototype is used to access a third-party REST service,
+the following rules apply:<ul>
+<li>The IN modifier is required for each parameter.</li>
+
+<li>If a parameter is used to construct the URI or the query string,
+the following rules apply:<ul>
+<li>The name of the parameter must match the name of the substitution
+variable in the URI template.</li>
+
+<li>The data type of the parameter can be a primitive type or related
+data item.</li>
+
+<li>If the requester is being generated to JavaScript, the primitive type must be
+STRING or one the following types, which are assignment-compatible
+with STRING: FLOAT, BIN, or one of the integer equivalents to BIN
+(INT, SMALLINT, or BIGINT).</li>
+
+<li>If the requester is being generated to Java, any primitive type is valid other than
+HEX, BLOB, or CLOB. </li>
+
+<li>If the REST service returns a JSON string to a Rich UI application,
+the EGL runtime code rounds any numeric data that is returned by the
+service and is greater than 15 significant digits. The rounding does
+not occur when JSON is returned to EGL-generated Java code.</li>
+
+</ul>
+</li>
+
+<li>The value of a representation parameter can be a string, one of
+the previously mentioned assignment-compatible types, or a non-structured
+Record part whose only fields fulfill the following rules: <ul>
+<li>The field is of type STRING or is assignment-compatible with STRING.</li>
+
+<li>The field can be based on a Record part that includes only strings
+(or assignment-compatible values) or other Record
+parts. Records can be nested within records to any level.</li>
+
+</ul>
+</li>
+
+</ul>
+</div>
+
 
 </div>
 

@@ -5,9 +5,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="Declaring a variable to access a remote EGL or native service"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.Title" content="Declaring a variable to access a remote service"></meta>
+<meta name="abstract" content="When you declare a variable to access a remote service or IBM i service program, you can use the Resource annotation to indicate that the binding detail for service access is in the resource binding section of the EGL deployment descriptor."></meta>
+<meta name="description" content="When you declare a variable to access a remote service or IBM i service program, you can use the Resource annotation to indicate that the binding detail for service access is in the resource binding section of the EGL deployment descriptor."></meta>
+<meta name="DC.subject" content="services, EGL, remote, variables, access"></meta>
+<meta name="keywords" content="services, EGL, remote, variables, access"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01002.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -15,17 +17,33 @@
 <meta name="DC.Identifier" content="tedt01018"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>Declaring a variable to access a remote EGL or native service</title>
+<title>Declaring a variable to access a remote service</title>
 </head>
 <body id="tedt01018"><a name="tedt01018"><!-- --></a>
 
 
-<h1 class="topictitle1">Declaring a variable to access a remote EGL or native service</h1>
+<h1 class="topictitle1">Declaring a variable to access a remote service</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>When you declare a variable to access a remote service
+or IBM i service program, you
+can use the <span class="synph"><span class="kwd">Resource</span></span> annotation to indicate
+that the binding detail for service access is in the resource binding
+section of the EGL deployment descriptor.</p>
+
+<div class="p">This example shows a variable declaration, as described in “Accessing
+a service”: <pre class="codeblock">myService MyInterfacePart {@Resource{bindingKey="MyBinding"}};</pre>
+</div>
+
+<p>The “Accessing a service” topic also includes details on other
+ways to bind your service-access variable to a particular service.</p>
+
+<p>If you are accessing a SOAP service, note that a SOAP service invocation
+uses a new HTTP session, and no session information is retained from
+invocation to invocation.  Your code cannot usefully call a service
+that is using session variables, which retain information from invocation
+to invocation. </p>
 
 </div>
 

@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Calling from generated Java code to a DLL"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="An EGL Java program can call functions in a single, non-EGL dynamic link library (DLL), which might be written in C or COBOL. The file extension for the DLL depends on your environment. Examples include .dll, .so, and .sl."></meta>
+<meta name="description" content="An EGL Java program can call functions in a single, non-EGL dynamic link library (DLL), which might be written in C or COBOL. The file extension for the DLL depends on your environment. Examples include .dll, .so, and .sl."></meta>
+<meta name="DC.subject" content="transferring control, Java programs (EGL), to DLLs"></meta>
+<meta name="keywords" content="transferring control, Java programs (EGL), to DLLs"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -22,9 +24,20 @@
 <h1 class="topictitle1">Calling from generated Java code to a DLL</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>An EGL Java program
+can call functions in a single, non-EGL dynamic link library (DLL),
+which might be written in C or COBOL. The file extension for the DLL
+depends on your environment. Examples include .dll, .so, and .sl.</p>
+
+<p>You create a Library part that has the <span class="synph"><span class="kwd">nativeLibrary</span></span> stereotype.
+That part acts as an interface between your EGL program and the DLL.
+The Library part lists function names and parameters and can use the <span class="synph"><span class="kwd">alias</span></span> function
+annotation wherever function names do not match the EGL naming conventions.</p>
+
+<p>Access the functions either by using dot syntax (<span class="synph"><span class="var">library.function()</span></span>)
+or by creating a <span class="synph"><span class="kwd">use</span></span> statement that references
+the library.</p>
 
 </div>
 

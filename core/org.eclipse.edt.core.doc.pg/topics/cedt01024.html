@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Rich UI job scheduler"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.subject" content="Rich UI, job scheduler, timer, job scheduler variable (Rich UI), Rich UI"></meta>
+<meta name="keywords" content="Rich UI, job scheduler, timer, job scheduler variable (Rich UI), Rich UI"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01002.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,9 +23,108 @@
 <h1 class="topictitle1">Rich UI job scheduler</h1>
 
 
-<div><p></p>
+<div>
+<div class="p">You can try the following example in your workspace:<pre class="codeblock">import com.ibm.egl.rui.widgets.Button;
+import egl.javascript.Job; 
 
-<p></p>
+handler MyHandler type RUIhandler { initialUI = [stopButton],
+                                    onConstructionFunction = initialization }
+
+   stopButton Button{text="Stop!", onclick ::= pleaseStop};	
+   doThis Job{runFunction = myRunFunction};
+
+   function initialization()
+      doThis.repeat(1000);
+   end
+
+   function myRunFunction()
+      sysLib.writeStdOut(currentTime());
+   end
+
+   function pleaseStop(e event in)
+      doThis.cancel();
+   end
+end</pre>
+</div>
+
+<div class="p">Use of this capability requires that you type the following <strong>import</strong> statement: <pre class="codeblock">   import egl.javascript.Job; </pre>
+</div>
+
+<p>You cannot add that statement with the <strong>Ctrl-Shift-O</strong> mechanism
+that is available for Widget types.</p>
+
+<div class="p">Two definitions may clarify the relationships:<ul>
+<li>The <em>run function</em> is the function that is invoked when the
+job is scheduled. The run function in our example is <samp class="codeph">myRunFunction</samp>.</li>
+
+<li>The <em>current function</em> is the function that is running while
+the timer is running.</li>
+
+</ul>
+</div>
+
+<div class="p">The job scheduler is a variable based on an EGL external type named
+Job. When you declare the variable, you can set the following properties:<dl>
+
+<dt class="dlterm"><span class="keyword">name</span></dt>
+
+<dd>Used by the EGL debugger to identify the job scheduler. If you
+omit this property, the value of <strong>name</strong> is the variable name.</dd>
+
+
+<dt class="dlterm"><span class="keyword">runFunction</span></dt>
+
+<dd>Identifies the run function, which has no parameters and no return
+value.</dd>
+
+</dl>
+</div>
+
+<div class="p">You can use a job scheduler to invoke the following functions:<dl>
+
+<dt class="dlterm"><span class="keyword">schedule (int</span> <var class="varname">milliseconds</var><span class="keyword">)</span></dt>
+
+<dd>Sets a timer immediately for the specified number of milliseconds
+and causes a subsequent invocation of the run function. The invocation
+occurs, at earliest, when the timer elapses or when the current function
+ends, whichever happens last. If you omit <var class="varname">milliseconds</var>,
+the invocation occurs, at earliest, as soon as the current function
+ends.</dd>
+
+</dl>
+<dl>
+<dt class="dlterm"><span class="keyword">repeat (int</span> <var class="varname">milliseconds</var><span class="keyword">)</span></dt>
+
+<dd>Sets a timer immediately for the specified number of milliseconds
+and then causes repeated invocation of the run function. <p>The timer
+is reset each time the run function starts. The rule for each invocation
+of the run function, including the first, is that the invocation occurs,
+at earliest, when the timer elapses or when the current function ends,
+whichever happens last.</p>
+</dd>
+
+
+<dt class="dlterm"><span class="keyword">cancel()</span></dt>
+
+<dd>Cancels later invocations of the job.</dd>
+
+</dl>
+</div>
+
+<p>The invocation of a run function never interrupts the execution
+of another function. For example, between the time when a job is scheduled
+and the time when the invocation of the run function is possible,
+the user might click a button to cause scheduling of an event handler.
+In that case, the invocation of the job function waits at least until
+the event handler invokes its own subordinate functions, if any, and
+ends.</p>
+
+<p>You can create multiple variables of type JOB and in this way schedule
+multiple jobs and even invoke the same run function. In all cases,
+only one function can run at a given time, and it runs to completion.</p>
+
+<p>If you use the same variable to reschedule a job, the previous
+use of that variable is canceled.</p>
 
 </div>
 

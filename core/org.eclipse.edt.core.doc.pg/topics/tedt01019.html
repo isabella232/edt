@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Binding an access variable dynamically"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="You can use dynamic binding to either choose a service at run time or change the service to which a variable is bound."></meta>
+<meta name="description" content="You can use dynamic binding to either choose a service at run time or change the service to which a variable is bound."></meta>
+<meta name="DC.subject" content="binding, dynamic, services"></meta>
+<meta name="keywords" content="binding, dynamic, services"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01002.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,9 +25,62 @@
 <h1 class="topictitle1">Binding an access variable dynamically</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>You can use dynamic binding to either choose a service
+at run time or change the service to which a variable is bound. </p>
+
+<p>To bind a variable dynamically, use functions in the <span class="synph"><span class="kwd">ServiceLib</span></span> system
+library instead of the <span class="synph"><span class="kwd">@Resource</span></span> annotation.
+This option is not available for access of a dedicated service from
+a Rich UI handler or related library.</p>
+
+<div class="p">Suppose that you created entries in the deployment descriptor file
+for two variations of the same service implementation:<pre class="codeblock">&lt;restBinding baseURI="http://myHostName" 
+             enableGeneration="true" 
+             name="MyEnglishBinding" 
+             preserveRequestHeaders="false"/&gt;
+
+&lt;restBinding baseURI="http://myHostName02" 
+             enableGeneration="true" 
+             name="MyFrenchBinding" 
+             preserveRequestHeaders="false"/&gt;
+</pre>
+</div>
+
+<p>For example, the first variation might return a value in English
+while the second a value in French.</p>
+
+<p>You might create and bind two variables, one for each of these
+entries. Alternatively, you can create one variable that is based
+on the Interface part that corresponds to the service. Then, you can
+use the <span class="synph"><span class="kwd">ServiceLib.getResource()</span></span> system
+function to bind the variable to one or the other deployed service:</p>
+
+<ol>
+<li>Create a variable that is based on the Interface part:<pre class="codeblock">myService MyInterfacePart?;</pre>
+</li>
+
+<li>Use the <span class="synph"><span class="kwd">getResource()</span></span> function to bind
+the variable to the service implementation:<pre class="codeblock">myService = ServiceLib.getResource("MyEnglishBinding");</pre>
+In
+this case, the <samp class="codeph">myService</samp> variable is now bound to
+the entry named <samp class="codeph">MyBinding</samp>.</li>
+
+<li>Use the variable to access the service:<pre class="codeblock">myContent string = myService.myEcho("world");</pre>
+<p>The
+value of <samp class="codeph">myContent</samp> is “Hello, world!”</p>
+</li>
+
+<li>You can use the <span class="synph"><span class="kwd">getResource</span></span> function
+again to bind the service to a different implementation:<pre class="codeblock">myTranslator = ServiceLib.getResource("MyFrenchBinding");</pre>
+</li>
+
+<li>Now you can use the variable to access the alternate service:<pre class="codeblock">myContent = myService.myEcho("world");</pre>
+<p>The
+value of <samp class="codeph">myContent</samp> is “Bonjour, monde!”</p>
+</li>
+
+</ol>
 
 </div>
 

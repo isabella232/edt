@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Rich UI validation and formatting"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.subject" content="Rich UI, validation, formatting, formats, Rich UI, controllers"></meta>
+<meta name="keywords" content="Rich UI, validation, formatting, formats, Rich UI, controllers"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01002.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01021.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
@@ -24,9 +24,488 @@
 <h1 class="topictitle1">Rich UI validation and formatting</h1>
 
 
-<div><p></p>
+<div>
+<p>This topic briefly describes the Model, View, and Controller (MVC)
+way of organizing logic and then explores how Rich UI uses the idea
+of MVC to support validation and formatting.</p>
 
-<p></p>
+<div class="section"><h2 class="sectiontitle">MVC</h2><div class="p">Modern data-processing systems separate
+the <em>view</em> from the <em>model</em>, and those terms are variously
+defined:<ul>
+<li>The <em>view</em> is the user interface, or the logic that supports
+the user interface, or the business data in the user interface</li>
+
+<li>The <em>model</em> is a database (or other data storage), or the
+logic that accesses a database, or the data that is sent to or retrieved
+from a database</li>
+
+</ul>
+</div>
+<p>The <em>controller</em> is the logic that oversees the transfer
+of data between the user interface and the database-access logic.</p>
+<p>In
+many cases, the acronym MVC refers to processing across multiple platforms.
+For example, a Rich UI application on a Windows platform might be considered to be
+the view (and to include the controller), while a service that accesses
+a database might be considered to be the model.</p>
+<div class="p">We can also
+consider a division of view from model in the Rich UI application
+itself. In this case, the terms have the following meaning:<ul>
+<li>The <em>view</em> is a widget in the user interface. Data that is
+placed into that widget must be validated before it can be used in
+other processing. Application data that is intended for display by
+the widget must be formatted before display.</li>
+
+<li>The <em>model</em> is a data field that is internal to the application.</li>
+
+</ul>
+ </div>
+<p>An EGL definition, the controller, lets you tie a specific
+view—a specific widget—to a specific model. The controller also oversees
+validations and format rules, as described later. </p>
+<p>You can also
+define a form that identifies a set of display fields and the related
+controllers. In such a form, you can display the error messages that
+result from validations and formatting.</p>
+<p>The next sections describe
+the Controller and how to work with it. For details on creating forms,
+see “Form processing with Rich UI,” which uses the mechanisms described
+here.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">The Controller in Rich UI</h2><div class="p">Consider the following
+declarations:<pre class="codeblock">nameField TextField;
+name String {inputRequired=yes, 
+             validationPropertiesLibrary=myLibrary,
+             inputRequiredMsgKey="requiredMessage"};</pre>
+</div>
+<div class="p">The
+declaration of <samp class="codeph">name</samp> has the following annotations:<ul>
+<li><span class="synph"><span class="kwd">inputRequired</span></span> ensures the user will
+provide input to any widget (a view) that is associated with the data
+field (a model)</li>
+
+<li><span class="synph"><span class="kwd">validationPropertiesLibrary</span></span> identifies
+the library (stereotype <samp class="codeph">RUIPropertiesLibrary</samp>) that
+includes declarations for use in messages and other text. If you do
+not include this annotation, the EGL Runtime accesses default messages.
+For details on customizing validation messages in Rich UI, see “Use
+of properties files for displayable text.”</li>
+
+<li><span class="synph"><span class="kwd">inputRequiredMsgKey</span></span> identifies a customized
+validation message</li>
+
+</ul>
+</div>
+<div class="p">Here is an example declaration of a Rich UI controller:<pre class="codeblock">nameController Controller
+   { @MVC 
+      { model=name, view=nameField },
+        validators = [myValidationFunction01, myValidationFunction02]
+   };</pre>
+</div>
+<p>The declaration ties a specific model—the <samp class="codeph">name</samp> field—to
+a specific view—the <samp class="codeph">nameField</samp> widget. In general,
+only a widget of a special type can be a controller view, as noted
+in “Widgets that can be used as controller views.”</p>
+<div class="p">You control
+the transfer of data between the model and the view, as follows: <ul>
+<li>To transfer data from the view to the model, you validate the
+data and then commit the validated data. In most cases, the commit
+step removes formatting characters such as currency symbols.</li>
+
+<li>To transfer data from the model to the view, you publish the data.
+In most cases, the publish step formats the data for display.</li>
+
+</ul>
+</div>
+<div class="p">In our example, the controller declaration also lists
+a set of <em>validators</em>, which are functions that you write and
+that validate input in sequence, one function after the next. Each
+validator is based on the following Delegate:<pre class="codeblock">Delegate 
+	  MVCValidatorFunction(input String in) returns(String?)
+end</pre>
+</div>
+<p>Input to a validator is considered to be valid
+if the function returns an empty string or null, but not if the validator
+returns a string with content. Such a string is considered an error
+message. If a function returns an error message, the subsequent functions
+do not run.</p>
+<div class="p">In most cases, you commit data from the view to
+the model only after validating the data. Here is the syntax for committing
+the user input from the <samp class="codeph">nameField</samp> widget into the <samp class="codeph">name</samp> field:<pre class="codeblock">if (nameController.isValid())
+   nameController.commit(); 
+end
+</pre>
+</div>
+</div>
+
+<div class="section" id="cedt01020__validating"><a name="cedt01020__validating"><!-- --></a><h2 class="sectiontitle">Validating the user input</h2><div class="p"><dfn class="term">Controller-level
+validation</dfn> is a value check that is caused by the invocation
+of either of two controller-specific functions:<ul>
+<li>The <span class="synph"><span class="kwd">isValid</span></span> function is invoked whenever
+the user moves the focus away from the widget. Also, your code can
+invoke the function, which displays error messages that result from
+a failed validation. <p>An error message is removed only when a successful
+validation occurs, not when the user moves the focus back to the widget.</p>
+</li>
+
+<li>The <span class="synph"><span class="kwd">validate</span></span> function is invoked by
+the <span class="synph"><span class="kwd">isValid</span></span> function and stores a message
+for the first-found error, but does not itself display the message.
+You can access the stored error message by invoking the controller-specific <strong>getErrorMessage</strong> function,
+which has no parameters and returns a value of type STRING?.<p>Your
+code can invoke the <span class="synph"><span class="kwd">validate</span></span> function instead
+of the <span class="synph"><span class="kwd">isValid</span></span> function, for greater control.
+For example, your code might invoke the <span class="synph"><span class="kwd">validate</span></span> function
+to test whether to display a help page or to take some other action
+if an error is found, and you can avoid displaying an error message
+returned from the function.</p>
+</li>
+
+</ul>
+</div>
+<p>A related controller-specific function is <span class="synph"><span class="kwd">isValidStateInitialized</span></span>,
+which specifies if a controller-specific validation function (whether <span class="synph"><span class="kwd">isValid</span></span> or <span class="synph"><span class="kwd">validate</span></span>)
+ran at least once in the current execution of the Rich UI application.
+The function <span class="synph"><span class="kwd">isValidStateInitialized</span></span> has
+no parameters and returns a Boolean.</p>
+<div class="p">Incidentally, several types
+of EGL Dojo widgets support a <dfn class="term">view-level validation</dfn>,
+which is a value check that occurs after each user keystroke. The
+view-level validation is available in the following types of widgets:<ul>
+<li>DojoCurrencyTextBox</li>
+
+<li>DojoDateTextBox</li>
+
+<li>DojoTextField</li>
+
+<li>DojoTimeTextBox</li>
+
+</ul>
+</div>
+<div class="p">For widgets of those types, the following rules apply:<ul>
+<li>The error message that results from a failed view-level validation
+is always displayed in a tooltip near the widget. When the widget
+loses focus, the tooltip is hidden, and when the widget regains focus,
+the tooltip is shown. <p>The behavior just described is a characteristic
+of Dojo.</p>
+</li>
+
+<li>When the user moves the focus away from the widget, controller-level
+validation occurs; but only if the view-specific validation was successful.</li>
+
+</ul>
+</div>
+<div class="p">As invoked by your code or by the <span class="synph"><span class="kwd">isValid</span></span> function,
+the <span class="synph"><span class="kwd">validate</span></span> function does as follows: <ol>
+<li>Runs the function referenced by the <span class="synph"><span class="kwd">retrieveViewHelper</span></span> Controller
+field (not shown in our example), which identifies the function that
+retrieves the widget content. The function has no parameters and returns
+a string. You might use this function to convert the input in some
+way. However, you do not need to set the <span class="synph"><span class="kwd">retrieveViewHelper</span></span> field
+in most cases. In the absence of that field, the widget content is
+available as a string, for subsequent processing.</li>
+
+<li>Runs the functions referenced by the <span class="synph"><span class="kwd">unformatters</span></span> Controller
+field (not shown in our example), which identifies an array of functions.
+Each has a string parameter (STRING in) and returns a string. You
+might use these functions to remove formatting characters from the
+input. The first-listed function accepts the string returned from
+the <span class="synph"><span class="kwd">retrieveViewHelper</span></span> function, and each
+of the later-listed functions accepts the string returned from the
+previous function. You might not need to set the <span class="synph"><span class="kwd">unformatters</span></span> field. </li>
+
+<li>Removes the formatting characters from the user input in accordance
+with the formatting field, if any, that you specified in the source
+code. An example of a formatting character is the currency symbol,
+which is associated with the <span class="synph"><span class="kwd">currency</span></span> field.
+A second example is the separators specified by the <span class="synph"><span class="kwd">dateFormat</span></span> field.</li>
+
+<li>Returns control to the user if a validation error occurs related
+to data type; for example, the user might have typed a character when
+the model is a numeric field.</li>
+
+<li>Runs the elementary validations, as specified by EGL fields that
+are set on the <em>model</em>, not on the view. <p>A later section lists
+the available validation fields, which include <span class="synph"><span class="kwd">inputRequired</span></span>,
+as shown in our example. (That field ensures the user will provide
+input to any widget that is associated with that the data field.) </p>
+<div class="p">Here
+are the possible outcomes of the elementary validations:<ul>
+<li>If any of the elementary validations fail, control returns to
+the user. If the controller is in a form, a message associated with
+the first failed validation is stored.<p>You can accept the default
+EGL message for a given validation; but if you want to specify your
+own message, review the description in “Use of properties files for
+displayable text.”</p>
+</li>
+
+<li>If all the elementary validations are fulfilled, the validators
+run, as described next.</li>
+
+</ul>
+</div>
+</li>
+
+<li>Runs the validators in the order specified in the controller <span class="synph"><span class="kwd">validators</span></span> array.
+Each validator accepts the input string (STRING in) without formatting
+characters such as the currency symbol; and each validator returns
+a string or a null. (The return value is of type STRING?.) <div class="p">If the
+validator returns a null or blank, the EGL Runtime considers the validation
+to have succeeded. However, the following statements apply if the
+validator returns a different value—for example, a value retrieved
+from a properties file, as described in “Use of properties files for
+displayable text”: <ul>
+<li>The EGL Runtime considers the validation to have failed.</li>
+
+<li>Control immediately returns to the user; in that case, the subsequent
+validators do not run.</li>
+
+<li>The returned string is stored as an error message. For details
+that are specific to the EGL Dojo widgets that support view-level
+validation, see <a href="#cedt01020__dojoview">Displaying a controller-level error message in an EGL Dojo widget</a>.</li>
+
+</ul>
+</div>
+<div class="p">You can write a validator that is accessed by multiple
+controllers. The reuse is possible because you can now identify the
+controller, as shown here: <pre class="codeblock">function commonValidator(input string in) returns(string?)
+   currController Controller = <strong>MVCLib.getCurrentContext()</strong>;
+   viewId string = currController.view.id;
+end 		</pre>
+</div>
+</li>
+
+</ol>
+</div>
+<p>Last, the <span class="synph"><span class="kwd">publishMessageHelper</span></span> field
+takes a function that has a single parameter, which is modified by
+IN, and no return value. This function is invoked when the widget
+gains focus, and the input to that function is the last message that
+was stored when the widget lost focus.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Changing the display of invalid input and handling
+error messages</h2><p>By default, a widget with invalid content
+is displayed with a style specified in a Cascading Stylesheet (CSS)
+class; specifically, the initial class such as EglRuiTextField, along
+with the following, secondary class: FormErrorEditor. A web designer
+in your organization is likely to set up the style sheet for best
+effect.</p>
+<p>You can assign a different set of CSS classes (or a
+different CSS ID) in response to validation failure; or you can change
+another aspect of the displayed output. For example, you can assign
+CSS classes to a label, as occurs (by default) if you use a validating
+form. (For details, see “Form processing with Rich UI.”) </p>
+<div class="p">Here
+is the procedure for changing the displayed output after the controller-level
+validation: <ul>
+<li>Set the controller field <span class="synph"><span class="kwd">validStateSetter</span></span>,
+which identifies a function for the EGL runtime to invoke at the end
+of validation.</li>
+
+<li>Create the function, which has two parameters and no return value.
+The first parameter receives the widget that holds the data being
+validated. The second parameter indicates whether the validation succeeded.
+Here is the Delegate part to which each function must conform:<pre class="codeblock">Delegate MVCValidStateSetter(widget Widget in, valid boolean in) end</pre>
+</li>
+
+<li>In that function, assign a different or additional class (or a
+different CSS ID) to the widget that has invalid content or, more
+likely, to the label of that widget.</li>
+
+</ul>
+</div>
+<p>In the same function, you can access controller-level
+error messages by invoking the controller-specific <strong>getErrorMessage</strong> function.
+As noted earlier, that function has no parameters and returns a value
+of type STRING?.</p>
+</div>
+
+<div class="section" id="cedt01020__dojoview"><a name="cedt01020__dojoview"><!-- --></a><h2 class="sectiontitle">Displaying a controller-level error
+message in an EGL Dojo widget</h2><div class="p">You have choices as to where
+to place the error message that results from a controller-level validation:<ul>
+<li>In relation to the EGL Dojo widgets that support view-level validation,
+you can place the message in the tooltip where any message from a
+view-level validation is displayed. In this case, the widget immediately
+displays an error indicator in response to the error, but the controller-level
+message is displayed only after the widget gains focus. (For the earlier
+description of view-level validation, see <a href="#cedt01020__validating">Validating the user input</a>.)<p>If the widget is in a form,
+you can prevent the controller-level error message from being displayed
+in an error label by removing the error label.</p>
+</li>
+
+<li>In relation to any EGL or EGL Dojo widget, you can place the message
+in an error label, as described in “Form processing with Rich UI.”
+In this case, the widget immediately displays an error indicator in
+response to the error, and the message is displayed as soon as the
+error occurs.<p>If you decide to place the message in an error label
+and are using an EGL Dojo widget that supports view-level validation,
+you can prevent the message from being displayed in the tooltip. To
+prevent the duplicate display, set the controller-specific <span class="synph"><span class="kwd">publishMessageHelper</span></span> field
+to null or assign your own function to that field. If you do not set
+the field or assign your own function, an internal EGL function is
+invoked to direct the error message to the tooltip.</p>
+</li>
+
+</ul>
+</div>
+<p>As noted in the documentation for the EGL Dojo widgets
+that support view-level validation, you can set an error indicator
+by invoking the widget-specific <span class="synph"><span class="kwd">showErrorIndicator</span></span> function
+and can display an error message by invoking the widget-specific <span class="synph"><span class="kwd">showErrorMessage</span></span> function.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Committing the validated input</h2><div class="p">When you
+run the controller-specific <strong>commit</strong> function, data is transferred
+from the view to the model. During that process, several functions
+are invoked, as determined by a set of controller fields that give
+you many options. Here are the fields:<ol>
+<li>The <span class="synph"><span class="kwd">retrieveViewHelper</span></span> field identifies
+the function that retrieves the widget content. The function has no
+parameters and returns a string. You might use this function to convert
+the input in some way. However, you do not need to set the <span class="synph"><span class="kwd">retrieveViewHelper</span></span> field
+in most cases. In the absence of that field, the widget content is
+available as a string, for subsequent processing.</li>
+
+<li>The <span class="synph"><span class="kwd">unformatters</span></span> field identifies an
+array of functions. Each has a string parameter (STRING in) and returns
+a string. You might use these functions to remove formatting characters
+from the input. The first-listed function accepts the string returned
+from the <span class="synph"><span class="kwd">retrieveViewHelper</span></span> function, and
+each of the later-listed functions accepts the string returned from
+the previous function. You might not need to set the <span class="synph"><span class="kwd">unformatters</span></span> field.</li>
+
+<li>Formatting characters are removed from the user input in accordance
+with the formatting fields, if any, that you specified in the source
+code. An example of a formatting character is the currency symbol,
+which is associated with the <span class="synph"><span class="kwd">currency</span></span> field.
+A second example are the separators specified by the <span class="synph"><span class="kwd">dateFormat</span></span> field. </li>
+
+<li>The <span class="synph"><span class="kwd">commitHelper</span></span> field identifies the
+function that assigns a value to the model. The function takes a string
+parameter and no return value. You might not need to set this field.
+In its absence, the model receives the string that was provided by
+an earlier function, if any, and that no longer includes formatting
+characters.</li>
+
+</ol>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Publishing the model data</h2><div class="p">When you run the
+controller-specific <samp class="codeph">publish</samp> function, data is transferred
+from the model to the view. During that process, several functions
+are invoked, as determined by a set of controller fields that give
+you many options. Here are the fields:<ol>
+<li>The <span class="synph"><span class="kwd">retrieveModelHelper</span></span> field identifies
+the function that retrieves the data content. The function has no
+parameters and returns a string. You might use this function to convert
+the output in some way. However, you do not need to set the <span class="synph"><span class="kwd">retrieveModelHelper</span></span> field
+in most cases. In the absence of that field, the model content is
+made available as a string, for subsequent processing.</li>
+
+<li> Formatting characters are added to the data content in accordance
+with the formatting fields, if any, that you specified in the source
+code. An example of a formatting character is the currency symbol,
+which is associated with the <span class="synph"><span class="kwd">currency</span></span> field.
+A second example are the separators specified by the <span class="synph"><span class="kwd">dateFormat</span></span> field. </li>
+
+<li>The <span class="synph"><span class="kwd">formatters</span></span> field identifies an array
+of functions. Each has a string parameter (STRING in) and returns
+a string. You might use these functions to format the output. The
+first-listed function accepts the string returned from the <span class="synph"><span class="kwd">retrieveModelHelper</span></span> function,
+with any formatting characters added in step 2. Each of the later-listed
+functions accepts the string returned from the previous function.
+You might not need to set the <span class="synph"><span class="kwd">formatters</span></span> field.</li>
+
+<li>The <span class="synph"><span class="kwd">publishHelper</span></span> field identifies the
+function that assigns a value to the view. The function has a string
+parameter (STRING in) and no return value. You might not need to set
+this field. In its absence, the view receives the string that was
+provided by an earlier function, if any, and that includes formatting
+characters.</li>
+
+</ol>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Validation and formatting annotations</h2><div class="p">Each
+of the annotations used in Rich UI validation and formatting can be
+categorized with a single letter:<ul>
+<li>F is for formatting. An annotation in this category removes formatting
+characters during commit and adds formatting characters during publish.
+Any of these annotations can result in the display of an error message;
+for example, if an input date is significantly different from the
+required date format, or if an integer value is a number other than
+0 or 1 but is associated with isBoolean.</li>
+
+<li>V is for input validation. </li>
+
+</ul>
+</div>
+<div class="p">Here are all the annotations:<ul>
+<li>currency (F)</li>
+
+<li>currencySymbol (F)</li>
+
+<li>dateFormat (F)</li>
+
+<li>fillCharacter (F)</li>
+
+<li>inputRequired (V)</li>
+
+<li>inputRequiredMsgKey (V)</li>
+
+<li>isBoolean (F)</li>
+
+<li>isDecimalDigit (V)</li>
+
+<li>isHexDigit (V)</li>
+
+<li>lowercase (F)</li>
+
+<li>minimumInput (V)</li>
+
+<li>minimumInputMsgKey (V)</li>
+
+<li>numericSeparator (F)</li>
+
+<li>sign (F)</li>
+
+<li>timeFormat (F)</li>
+
+<li>timestampFormat (F)</li>
+
+<li>typeChkMsgKey (V)</li>
+
+<li>uppercase (F)</li>
+
+<li>validValues (V)</li>
+
+<li>validValuesMsgKey (V)</li>
+
+<li>zeroFormat (F)</li>
+
+</ul>
+</div>
+<div class="p">The following annotations are further described in “Use
+of properties files for displayable text”:<ul>
+<li>inputRequiredMsgKey (V)</li>
+
+<li>minimumInputMsgKey (V)</li>
+
+<li>typeChkMsgKey (V)</li>
+
+<li>validValuesMsgKey (V)</li>
+
+</ul>
+</div>
+<p>You can specify the validation and formatting annotations
+on DataItem definitions, on variables, and on Record fields; but they
+are in effect for a given Rich UI controller only if you specify the <span class="synph"><span class="kwd">MVC</span></span> annotation
+when declaring the controller.</p>
+</div>
 
 </div>
 

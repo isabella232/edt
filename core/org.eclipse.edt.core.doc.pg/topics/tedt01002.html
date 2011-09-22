@@ -6,15 +6,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Accessing a service"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="In EGL, you can access several different types of services. To learn the access procedures, see the links in the following table."></meta>
+<meta name="description" content="In EGL, you can access several different types of services. To learn the access procedures, see the links in the following table."></meta>
+<meta name="DC.subject" content="services, accessing in EGL, EGL"></meta>
+<meta name="keywords" content="services, accessing in EGL, EGL"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01017.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01018.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt01043.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01019.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01020.html"></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/tedt01021.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01016.html"></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/tedt01022.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01023.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01024.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01025.html"></meta>
@@ -34,7 +35,81 @@
 
 
 
-<div><p></p>
+<div><p>In EGL, you can access several different types of services.
+To learn the access procedures, see the links in the following table. </p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="17.587939698492463%" id="d14556e42">Goal</th>
+
+<th class="cellrowborder" valign="bottom" width="82.41206030150754%" id="d14556e45">Tasks</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td class="cellrowborder" valign="top" width="17.587939698492463%" headers="d14556e42 ">Access a dedicated service</td>
+
+<td class="cellrowborder" valign="top" width="82.41206030150754%" headers="d14556e45 "><ol>
+<li><a href="tedt01017.html" title="After you code an EGL Service part, you can use that part as the basis of a service-access variable.">Declaring a variable to access a dedicated or local EGL service</a>.</li>
+
+<li>Then, complete either of these tasks:<ul>
+<li><a href="tedt01023.html" title="In Rich UI, the call statement is used to invoke a service asynchronously:">Invoking a service asynchronously from a Rich UI application</a>.</li>
+
+<li><a href="tedt01024.html" title="Service invocation outside of Rich UI is always synchronous, which means that the requester waits for a response from the service.">Invoking a service synchronously from outside of Rich UI</a>.</li>
+
+</ul>
+</li>
+
+</ol>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="17.587939698492463%" headers="d14556e42 ">Access an EGL REST-RPC service or third-party
+REST service</td>
+
+<td class="cellrowborder" valign="top" width="82.41206030150754%" headers="d14556e45 "><ol>
+<li><a href="tedt01020.html" title="You define an EGL Interface part in a file that is made available to the requester of that service. The Interface part can be in the same EGL package or can be imported from a separate package.">Creating an Interface part to access a REST service</a>.</li>
+
+<li><a href="tedt01018.html" title="When you declare a variable to access a remote service or IBM i service program, you can use the Resource annotation to indicate that the binding detail for service access is in the resource binding section of the EGL deployment descriptor.">Declaring a variable to access a remote service</a>.</li>
+
+<li>Add a REST binding:<ul>
+<li>If you are using the EDT IDE, follow the process described here:
+“Adding a REST binding to the EGL deployment descriptor.”</li>
+
+<li>Otherwise, add the REST binding as described here: <a href="tedt01043.html" title="You can edit the EGL deployment descriptor by hand.">Editing the EGL deployment descriptor manually</a>.</li>
+
+</ul>
+</li>
+
+<li>Then, complete either of these tasks:<ul>
+<li><a href="tedt01023.html" title="In Rich UI, the call statement is used to invoke a service asynchronously:">Invoking a service asynchronously from a Rich UI application</a>.</li>
+
+<li><a href="tedt01024.html" title="Service invocation outside of Rich UI is always synchronous, which means that the requester waits for a response from the service.">Invoking a service synchronously from outside of Rich UI</a>.</li>
+
+</ul>
+</li>
+
+</ol>
+<p>For details on accessing an EGL REST-RPC service from logic
+written outside of EGL, see “EGL REST-RPC message structure.”</p>
+</td>
+
+</tr>
+
+
+</tbody>
+
+</table>
+</div>
+
+
 </div>
 
 <div></div>

@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Browser history"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.subject" content="Rich UI, browser history, History Rich UI handler part, Rich UI, history in browser, browser history, Rich UI handler part"></meta>
+<meta name="keywords" content="Rich UI, browser history, History Rich UI handler part, Rich UI, history in browser, browser history, Rich UI handler part"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01002.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,9 +23,163 @@
 <h1 class="topictitle1">Browser history</h1>
 
 
-<div><p></p>
+<div>
+<p>Consider what happens if you access the Eclipse web site and then
+one owned by a media company. Two different web pages are provided
+from remote servers, and you can click the <span class="uicontrol">Back</span> and <span class="uicontrol">Forward</span> buttons
+in your browser to revisit each of the sites. </p>
 
-<p></p>
+<p>In contrast, the main processing in a Rich UI application is solely
+in your browser. The application may render new content and may even
+access the server for visual updates, but in most cases, the <span class="uicontrol">Back</span> and <span class="uicontrol">Forward</span> buttons
+are either disabled or direct processing to other web site.</p>
+
+<p>In Rich UI, you decide what on-screen content to identify as a
+separate web page. You enforce that decision by accessing functions
+in History, which is a Rich UI handler part provided with the product.
+By working with History, you can assign pages to the browser history
+at run time, and the user can use the <span class="uicontrol">Back</span> and <span class="uicontrol">Forward</span> buttons
+to access different pages in the application. Also, you can respond
+to the user's attempt to close the browser.</p>
+
+<p>The browser-history mechanism does not save the state of a given
+web page. You need to code the behavior that makes sense for your
+application.</p>
+
+<div class="section"><h2 class="sectiontitle">Setting up a browser history and event response</h2><div class="p">To
+set up the browser history and event response, do as follows:<ol>
+<li>In your Rich UI application, declare a Rich UI handler based on
+History, as in the following outline: <pre class="codeblock">import com.ibm.egl.rui.history.History;
+import com.ibm.egl.rui.history.HistoryChanged;
+import com.ibm.egl.rui.history.OnBeforeUnloadMessageFunction;
+
+Handler MyApplication Type RUIHandler { onConstructionFunction=start }
+   myHistory History {};
+end</pre>
+<p>By declaring a variable based on History, you add <samp class="codeph">#empty</samp> to
+the web address displayed in the user's browser. In regard to subsequent
+processing, <samp class="codeph">empty</samp> is the name of the new page. The
+new page is added to an application-specific browser history, but
+not to the browser's own history, which retains only the original
+web address.</p>
+</li>
+
+<li>In the on-construction function (for example), you can set up
+access to functions—event handlers—that run in response to specific
+user events:<ul>
+<li>One such event is either adding a new page to the browser history
+or navigating to a different page. Later, we show how to add or move
+to a new page. First, we describe how to set up the event handler. <div class="p">To
+enable a custom response to a new-page event, invoke the<strong> addListener</strong> function
+and reference an event handler that you code. Here is an example invocation
+of the <strong>addListener</strong> function:<pre class="codeblock">myHistory.addListener(myHistoryChanged);</pre>
+</div>
+<div class="p">The
+following Delegate part outlines the characteristics of the referenced
+event handler: <pre class="codeblock">Delegate
+   HistoryChanged(newPageName String in)
+end</pre>
+</div>
+<p>As shown, the event handler for the new-page
+event accepts a string. If you invoke <strong>addListener</strong> and reference
+a custom function, the custom function is invoked in the following
+cases: when the browser adds the initial page named <samp class="codeph">empty</samp>,
+and when you add a subsequent page. In each case, the user's browser
+displays the web address and includes the page name, which is the
+address subset that is displayed subsequent to the pound sign (#);
+also, the EGL Runtime provides that page name to your function.</p>
+<div class="p">Here
+is an example event handler that is invoked after a new-page event,
+with <samp class="codeph">myLabel</samp> assumed to be a widget in the user display:<pre class="codeblock">function myHistoryChanged(newPageName String in)
+   myLabel.text = "History was changed. Current page name is "+ newPageName;
+end</pre>
+</div>
+<p>You can register multiple new-page event handlers
+by running <strong>addListener</strong> multiple times. The referenced functions
+run in the order of registration. Even if you register the same function
+multiple times, all the registrations are in effect.</p>
+</li>
+
+<li>A second event is the user's attempt to close the browser or browser
+tab. <div class="p">In this case, invoke the <samp class="codeph">keepUserOnPage</samp> function
+and reference an event handler that you code. Here is an example invocation
+of the <samp class="codeph">keepUserOnPage</samp> function:<pre class="codeblock">history.keepUserOnPage(stayHere);</pre>
+</div>
+<div class="p">The
+following Delegate part outlines the characteristics of the referenced
+event handler: <pre class="codeblock">Delegate
+   OnBeforeUnloadMessageFunction() returns(String)
+end</pre>
+</div>
+<p>As shown, the event handler for the close-browser
+event returns a string. That string is displayed in a dialog box that
+lets the user confirm or reverse the browser close.</p>
+<div class="p">Here is
+an example event handler that is invoked after a close-browser event:<pre class="codeblock">function stayHere() returns(String)
+		return ("Close the application?");
+	end</pre>
+</div>
+</li>
+
+</ul>
+</li>
+
+</ol>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Adding an entry to a browser history</h2><div class="p">You
+add an entry to the application-specific browser history by invoking
+the function <strong>addToHistory</strong>. The following example adds a page
+named <samp class="codeph">myNewPage</samp>.<pre class="codeblock">myHistory.addToHistory("myNewPage");</pre>
+</div>
+<div class="p">The
+implication is as follows:<ul>
+<li>The new-page event handler runs; in our example, the handler name
+is <samp class="codeph">myHistoryChanged</samp></li>
+
+<li>If the user clicks the <strong>Back</strong> button, the web address in
+the browser includes the name of the previous page; and then, the <strong>Forward</strong> button
+is enabled, too.</li>
+
+</ul>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Navigating to the previous page</h2><p>You can
+navigate to the previous page in your application. Here is the example
+code:</p>
+<pre class="codeblock">myHistory.goBack();</pre>
+<div class="p">The implication
+is as follows:<ul>
+<li>The new-page event handler runs; in our example, the handler name
+is <strong>myHistoryChanged</strong></li>
+
+<li>The web address in the browser changes, as appropriate</li>
+
+<li>Subsequent navigation (forward and back) changes to reflect the
+new web address</li>
+
+</ul>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Navigating to the next page</h2><p>You can navigate
+to the next page in your application. Here is the example code:</p>
+<pre class="codeblock">myHistory.goForward();</pre>
+<div class="p">The
+implication is as follows:<ul>
+<li>The new-page event handler runs; in our example, the handler name
+is <samp class="codeph">myHistoryChanged</samp></li>
+
+<li>The web address in the browser changes, as appropriate</li>
+
+<li>Subsequent navigation (forward and back) changes to reflect the
+new web address</li>
+
+</ul>
+</div>
+</div>
 
 </div>
 
