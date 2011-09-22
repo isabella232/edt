@@ -5,6 +5,7 @@
       <topic label="Types and instances of those types" href="topics/cedt00004.html">
          <topic label="EGL types" href="topics/cedt00005.html"/>
          <topic label="Value and reference types" href="topics/cedt00012.html"/>
+         <topic label="Assignment and reference compatibility" href="topics/cedt00041.html"/>
          <topic label="Boxing and unboxing conversions" href="topics/cedt00025.html"/>
          <topic label="Data items" href="topics/cedt00006.html"/>
          <topic label="Classifiers (part types)" href="topics/cedt00007.html"/>
@@ -106,8 +107,6 @@
       <topic label="DojoLineGraph widget" href="topics/redt00141.html"/>
       <topic label="DojoMenu widget" href="topics/redt00142.html"/>
       <topic label="DojoMenuItem widget" href="topics/redt00143.html"/>
-      <topic label="DojoMenu widget" href="topics/redt00144.html"/>
-      <topic label="DojoMenuItem widget" href="topics/redt00145.html"/>
       <topic label="DojoPieChart widget" href="topics/redt00146.html"/>
       <topic label="DojoProgressBar widget" href="topics/redt00147.html"/>
       <topic label="DojoRadioGroup widget" href="topics/redt00148.html"/>
@@ -145,7 +144,6 @@
       <topic label="Grid widget" href="topics/redt00114.html"/>
       <topic label="GridTooltip widget" href="topics/redt00186.html"/>
       <topic label="GridLayout widget" href="topics/redt00112.html"/>
-      <topic label="GridTooltip widget" href="topics/redt00187.html"/>
       <topic label="Grouping widget" href="topics/redt00188.html"/>
       <topic label="Handler classifier detail" href="topics/redt00042.html"/>
       <topic label="HostProgram stereotype" href="topics/redt00086.html"/>
@@ -182,6 +180,11 @@
       <topic label="OneToOne annotation" href="topics/redt00171.html"/>
       <topic label="Open statement" href="topics/redt00028.html"/>
       <topic label="Operators and precedence" href="topics/redt00097.html"/>
+      <topic label="org.eclipse.edt.gen.java package" href="topics/redt00194.html"/>
+      <topic label="org.eclipse.edt.gen.javascript package" href="topics/redt00195.html"/>
+      <topic label="org.eclipse.edt.gen.java.templates package" href="topics/redt00193.html"/>
+      <topic label="org.eclipse.edt.gen.javascript.templates package"
+             href="topics/redt00196.html"/>
       <topic label="PasswordTextField widget" href="topics/redt00182.html"/>
       <topic label="Prepare statement" href="topics/redt00027.html"/>
       <topic label="Program classifier detail" href="topics/redt00047.html"/>
@@ -204,12 +207,12 @@
       <topic label="SMALLFLOAT type" href="topics/redt00061.html"/>
       <topic label="Span widget" href="topics/redt00118.html"/>
       <topic label="Special characters" href="topics/redt00104.html"/>
-      <topic label="STRING type" href="topics/redt00051.html"/>
       <topic label="SQLDataSource type" href="topics/redt00162.html"/>
       <topic label="SQLLib system library" href="topics/redt00075.html"/>
       <topic label="SQLResultSet type" href="topics/redt00163.html"/>
       <topic label="SQLStatement type" href="topics/redt00177.html"/>
       <topic label="StringLib system library" href="topics/redt00068.html"/>
+      <topic label="STRING type" href="topics/redt00051.html"/>
       <topic label="SysLib system library" href="topics/redt00066.html"/>
       <topic label="Table annotation" href="topics/redt00172.html"/>
       <topic label="TextArea widget" href="topics/redt00190.html"/>
@@ -217,6 +220,7 @@
       <topic label="TextLabel widget" href="topics/redt00192.html"/>
       <topic label="this keyword" href="topics/redt00002.html"/>
       <topic label="Throw statement" href="topics/redt00011.html"/>
+      <topic label="TIME type" href="topics/redt00187.html"/>
       <topic label="TIMESTAMP type" href="topics/redt00053.html"/>
       <topic label="Tooltip widget" href="topics/redt00184.html"/>
       <topic label="Transfer statement" href="topics/redt00010.html"/>
@@ -232,7 +236,7 @@
       <topic label="XMLLib system library" href="topics/redt00074.html"/>
       <topic label="XMLRootElement annotation" href="topics/redt00091.html"/>
       <topic label="XMLSchemaType annotation" href="topics/redt00092.html"/>
-      <topic label="XMLStructureKind annotation" href="topics/redt00093.html"/>
+      <topic label="XMLStructure annotation" href="topics/redt00093.html"/>
       <topic label="XMLType annotation" href="topics/redt00094.html"/>
    </topic>
 </toc>
