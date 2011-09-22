@@ -30,7 +30,11 @@ public class TryStatementTemplate extends JavaScriptTemplate {
 		String exceptionVar = ctx.nextTempName();
 		out.println( "catch ( " + exceptionVar + " )" );
 		out.println( "{" );
-		
+		genCatchBlockBody(stmt, ctx, out, exceptionVar);
+		out.println( "}" );
+	}
+	
+	protected void genCatchBlockBody(TryStatement stmt, Context ctx, TabbedWriter out, String exceptionVar) {
 		List<ExceptionBlock> exceptionBlocks = stmt.getExceptionBlocks();
 		if ((exceptionBlocks == null) || (exceptionBlocks.isEmpty())){
 			genCatchAllBlock(stmt, ctx, out, exceptionVar);
@@ -83,8 +87,6 @@ public class TryStatementTemplate extends JavaScriptTemplate {
 				out.println("}");
 			}
 		}
-		
-		out.println( "}" );
 	}
 
 	protected void genCatchAllBlock(TryStatement stmt, Context ctx, TabbedWriter out, String exceptionVar) {
