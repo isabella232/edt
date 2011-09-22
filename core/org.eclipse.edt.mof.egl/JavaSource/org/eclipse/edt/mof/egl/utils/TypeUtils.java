@@ -791,7 +791,7 @@ public class TypeUtils implements MofConversion {
 		return op;
 	}
 	
-	public static List<Operation> getBestFitOperation(StructPart container, String opSymbol, Classifier...argumentTypes) {
+	public static List<Operation> getBestFitOperation(StructPart container, String opSymbol, NamedElement...argumentTypes) {
 		List<Operation> ops = new ArrayList<Operation>();
 		for (Operation op : container.getOperations()) {
 			if (op.getOpSymbol().equals(opSymbol)) {
