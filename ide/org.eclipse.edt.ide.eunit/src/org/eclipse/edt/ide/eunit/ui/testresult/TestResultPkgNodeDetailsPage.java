@@ -48,7 +48,7 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 	
 	private Color red;
 	private Color green;
-	private Color orange;
+	private Color purple;
 	private Color yellow;
 	private Color blue;
 	
@@ -104,12 +104,12 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 		return red;
 	}
 	
-	protected Color getOrange(){
-		if(orange == null){
-			orange = new Color(Display.getCurrent(), new RGB(255, 127, 0));
-			colors.add(orange);
+	protected Color getPurple(){
+		if(purple == null){
+			purple = new Color(Display.getCurrent(), new RGB(184, 0, 73));
+			colors.add(purple);
 		}
-		return orange;
+		return purple;
 	}
 	
 	protected Color getYellow(){
@@ -201,7 +201,7 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 		
 		createSummaryLine(toolkit, parent, statisticCnt.getPassedCnt(), " PASSED.", getGreen(), true);
 		createSummaryLine(toolkit, parent, statisticCnt.getFailedCnt(), " FAILED.", getRed(), false);
-		createSummaryLine(toolkit, parent, statisticCnt.getErrCnt(), " HAVE ERROR.", getOrange(), false);
+		createSummaryLine(toolkit, parent, statisticCnt.getErrCnt(), " HAVE ERROR.", getPurple(), false);
 		createSummaryLine(toolkit, parent, statisticCnt.getBadCnt(), " ARE BAD.", getBlue(), false);
 		createSummaryLine(toolkit, parent, statisticCnt.getNotRunCnt(), " SKIPPED.", getYellow(), false);
 				
