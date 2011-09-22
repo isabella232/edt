@@ -15,6 +15,7 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.Type;
@@ -37,7 +38,7 @@ public class FunctionInvocationImpl extends InvocationExpressionImpl implements 
 	}
 	
 	@Override
-	public void setTarget(FunctionMember value) {
+	public void setTarget(Member value) {
 		slotSet(Slot_target, value);
 	}
 	
