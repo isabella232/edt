@@ -15,7 +15,6 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascriptdev.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.ExceptionBlock;
 import org.eclipse.edt.mof.egl.TryStatement;
 
 public class TryStatementTemplate extends org.eclipse.edt.gen.javascript.templates.TryStatementTemplate {
@@ -32,8 +31,8 @@ public class TryStatementTemplate extends org.eclipse.edt.gen.javascript.templat
 	}
 	
 	@Override
-	protected void genCatchBody(ExceptionBlock exceptionBlock, Context ctx, TabbedWriter out, String exceptionVar) {
+	protected void genCatchBlockBody(TryStatement stmt, Context ctx, TabbedWriter out, String exceptionVar) {
 		out.println("if (" + exceptionVar + " instanceof egl.egl.debug.DebugTermination) {\nthrow " + exceptionVar +";\n}");
-		super.genCatchBody(exceptionBlock, ctx, out, exceptionVar);
+		super.genCatchBlockBody(stmt, ctx, out, exceptionVar);
 	}
 }
