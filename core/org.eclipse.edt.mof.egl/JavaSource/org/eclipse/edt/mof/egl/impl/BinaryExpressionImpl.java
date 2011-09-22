@@ -57,7 +57,7 @@ public class BinaryExpressionImpl extends MultiOperandExpressionImpl implements 
 	}
 	
 	protected Operation resolveOperation() {
-		Operation op = IRUtils.getBinaryOperation(getLHS().getType().getClassifier(), getRHS().getType().getClassifier(), getOperator());
+		Operation op = IRUtils.getBinaryOperation(getOperandType(getLHS()), getOperandType(getRHS()), getOperator());
 		if (op == null) throw new NoSuchFunctionError();
 		return op;
 	}

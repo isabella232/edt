@@ -35,7 +35,7 @@ public class TernaryExpressionImpl extends MultiOperandExpressionImpl implements
 
 	@Override
 	protected Operation resolveOperation() {
-		Operation op = IRUtils.getBinaryOperation(getFirst().getType().getClassifier(), getSecond().getType().getClassifier(), getOperator());
+		Operation op = IRUtils.getBinaryOperation(getOperandType(getFirst()), getOperandType(getSecond()), getOperator());
 		if (op == null) throw new NoSuchFunctionError();
 		return op;
 	}

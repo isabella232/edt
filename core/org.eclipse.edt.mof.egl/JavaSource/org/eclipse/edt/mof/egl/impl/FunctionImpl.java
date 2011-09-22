@@ -11,14 +11,22 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.MofConversion;
+import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class FunctionImpl extends FunctionMemberImpl implements Function {
 	private static int Slot_returnField=0;
 	private static int totalSlots = 1;
 	
+	private List<StructPart> superTypes;
+
 	public static int totalSlots() {
 		return totalSlots + FunctionMemberImpl.totalSlots();
 	}
@@ -45,5 +53,31 @@ public class FunctionImpl extends FunctionMemberImpl implements Function {
 		return getType();
 	}
 
+	@Override
+	public List<StructPart> getSuperTypes() {
+		if (superTypes == null) {
+			superTypes = new ArrayList<StructPart>();
+			superTypes.add((StructPart)IRUtils.getEGLType(MofConversion.Type_AnyEnumeration));
+		}
+		return superTypes;
+	}
+
+	@Override
+	public boolean isSubtypeOf(StructPart part) {
+		if (!getSuperTypes().isEmpty()) {
+			for (StructPart superType : getSuperTypes()) {
+				if (superType == part) {
+					return true;
+				}
+			}
+			for (StructPart superType : getSuperTypes()) {
+				if (superType.isSubtypeOf(part)) return true;
+			}
+			return false;
+		}
+		else {
+			return false;
+		}
+	}
 	
 }

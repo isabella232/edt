@@ -13,8 +13,12 @@ package org.eclipse.edt.mof.egl.impl;
 
 import java.util.List;
 
+import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.MultiOperandExpression;
+import org.eclipse.edt.mof.egl.Name;
+import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.NoSuchFunctionError;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
@@ -75,5 +79,14 @@ public abstract class MultiOperandExpressionImpl extends ExpressionImpl implemen
 	}
 
 	protected abstract Operation resolveOperation();
+	
+	protected NamedElement getOperandType(Expression expr) {
+		if (expr instanceof Name && ((Name)expr).getNamedElement() instanceof Function) {
+			return (Function) ((Name)expr).getNamedElement();
+		}
+		else {			
+			return (Classifier)expr.getType().getClassifier();
+		}			
+	}
 	
 }
