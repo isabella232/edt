@@ -109,7 +109,7 @@ end
 externalType Member extends TypedElement type MofClass {isAbstract=yes}
 	isStatic boolean;
 	isAbstract boolean;
-	accessKind AccessKind;
+	accessKind AccessKind?;
 	container Container;
 end
 
@@ -172,7 +172,7 @@ externalType StructPart extends Part type MofClass
 end
 
 externalType DataType extends Classifier, Container type MofClass
-	typeKind ETypeKind;
+	typeKind ETypeKind?;
 	functions EGLFunction[] {containment=true};
 	operations EGLOperation[] {containment=true};
 end
@@ -209,7 +209,7 @@ externalType Parameter extends Member type MofClass
 end
 
 externalType FunctionParameter extends Parameter type MofClass
-	parameterKind ParameterKind;
+	parameterKind ParameterKind?;
 	isDefinedSqlNullable boolean;
 	isField boolean;
 	isConst boolean;
@@ -245,7 +245,7 @@ enumeration DirectionKind {@MofEnum}
 end
 
 externalType ConversionOperation extends EGLOperation type MofClass
-	direction DirectionKind;
+	direction DirectionKind?;
 end
 
 externalType EGLConstructor extends FunctionMember type MofClass {name="Constructor"}
@@ -281,7 +281,7 @@ end
 
 
 externalType Part extends Classifier type MofClass{isAbstract=yes}
-	accessKind AccessKind;
+	accessKind AccessKind?;
 
 	function getSubType() returns (Stereotype);
 	function getFullyQualifiedName() returns(string);
