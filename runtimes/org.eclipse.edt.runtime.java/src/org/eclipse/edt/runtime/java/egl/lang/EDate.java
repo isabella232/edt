@@ -66,7 +66,11 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		long now = java.lang.System.currentTimeMillis();
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		cal.setTimeInMillis(now);
-		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH);
+		int date = cal.get(Calendar.DATE);
+		cal.clear();
+		cal.set(year, month, date);
 		return cal;
 	}
 
@@ -158,6 +162,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 
 		// The last thing to do is put the values into a Calendar.
 		Calendar cal = DateTimeUtil.getBaseCalendar();
+		cal.clear();
 		cal.set(Calendar.YEAR, years);
 		cal.set(Calendar.MONTH, months - 1);
 		cal.set(Calendar.DATE, days);
