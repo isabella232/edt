@@ -113,7 +113,10 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 			out.println("for (var i = 0; i < " + arraySize + "; i++) {");
 			out.print(temporary);
 			out.print("[i] = ");
-			ctx.invoke(genDefaultValue, generic.getElementType(), ctx, out);
+			if (generic.elementsNullable())
+				out.print("null");
+			else
+				ctx.invoke(genDefaultValue, generic.getElementType(), ctx, out);
 			out.println(";}");
 			out.print("return ");
 			out.print(temporary);
