@@ -20,7 +20,6 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.StringLiteral;
@@ -41,7 +40,7 @@ public class ResourceTemplate extends JavaScriptTemplate {
 			bindingKey.setValue((String)annot.getValue("bindingkey"));
 		}
 		else{
-			bindingKey.setValue(((NamedElement)field.getType()).getName());
+			bindingKey.setValue(field.getName());
 		}
 		if(annot.getValue("propertyFileName") != null){
 			StringLiteral deploymentDescriptorName = factory.createStringLiteral();
