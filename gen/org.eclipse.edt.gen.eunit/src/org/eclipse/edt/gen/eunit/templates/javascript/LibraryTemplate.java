@@ -40,7 +40,7 @@ public class LibraryTemplate extends EUnitTemplate {
 		//out.println("use " + part.getFullyQualifiedName() + ";");		
 		out.println("function start()");
 		out.pushIndent();
-		out.print(part.getName() + "." + CommonUtilities.exeTestMethodName + "()");
+		out.print(CommonUtilities.getECKGenPartFQName(part) + "." + CommonUtilities.exeTestMethodName + "()");
 		out.println(";");
 		out.println("TestExecutionLib.writeResultSummary(" + counter.getCount() + ");");
 		out.popIndent();
