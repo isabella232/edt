@@ -15,13 +15,21 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.MemberName;
 
 public class InvocationExpressionTemplate extends JavaScriptTemplate {
 
 	public void genInvocation(InvocationExpression expr, Context ctx, TabbedWriter out) {
 		// then process the function invocation
 		if (expr.getQualifier() != null) {
+			boolean nullCheck = (expr.getQualifier().isNullable() && expr.getQualifier() instanceof MemberName);
+			if (nullCheck) {
+				out.print( "egl.checkNull(" );
+			}
 			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+			if (nullCheck) {
+				out.print(")");
+			}
 			out.print(".");
 		} else {
 			ctx.invoke(genQualifier, expr.getTarget(), ctx, out);

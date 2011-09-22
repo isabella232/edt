@@ -45,9 +45,9 @@ public class MemberAccessTemplate extends JavaScriptTemplate {
 			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 		else {
 			if (TypeUtils.isReferenceType(expr.getQualifier().getType()) || expr.getQualifier().isNullable()) {
-				// TODO sbg doesn't seem to be quite the right place out.print("egl.checkNull(");
+				out.print("egl.checkNull(");
 				ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
-				// TODO sbg doesn't seem to be quite the right place out.print(")");
+				out.print(")");
 			} else
 				ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
 			out.print(".");
