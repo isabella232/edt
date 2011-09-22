@@ -14,6 +14,7 @@ package org.eclipse.edt.mof.egl.impl;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.FunctionPartInvocation;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
@@ -75,7 +76,7 @@ public class FunctionPartInvocationImpl extends FunctionInvocationImpl implement
 	}
 
 	@Override
-	public void setTarget(FunctionMember value) {
+	public void setTarget(Member value) {
 		throw new UnsupportedOperationException();
 	}
 

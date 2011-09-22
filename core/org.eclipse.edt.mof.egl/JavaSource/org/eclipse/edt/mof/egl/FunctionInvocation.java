@@ -15,7 +15,7 @@ package org.eclipse.edt.mof.egl;
 public interface FunctionInvocation extends InvocationExpression {
 	
 	FunctionMember getTarget();
-	void setTarget(FunctionMember mbr);
+	void setTarget(Member mbr);
 	
 	public FunctionMember getFunction();
 
