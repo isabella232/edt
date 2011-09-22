@@ -353,11 +353,13 @@ public class IRUtils {
 		Type parmType2 = op.getParameters().get(1).getType();
 		// Operation invocations never have ParameterizedType(s) as parameter types
 		// so always use the classifier instead of the type directly
-		if (!type1.getClassifier().equals(parmType1)) {
+		
+		
+		if (type1 != null && !type1.getClassifier().equals(parmType1)) {
 			asExpr = makeExprCompatibleToType(expr.getLHS(), parmType1);
 			expr.setLHS(asExpr);
 		}
-		if (!type2.getClassifier().equals(parmType2)) {
+		if (type2 != null && !type2.getClassifier().equals(parmType2)) {
 			asExpr = makeExprCompatibleToType(expr.getRHS(), parmType2);
 			expr.setRHS(asExpr);
 		}
@@ -392,9 +394,9 @@ public class IRUtils {
 		return false;
 	}
 
-	private static boolean isString(Classifier clazz) {
-		if (clazz != null) {
-			return (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGL_EGLString)) || (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGLString));
+	private static boolean isString(NamedElement clazz) {
+		if (clazz instanceof Classifier) {
+			return (((Classifier)clazz).getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGL_EGLString)) || (((Classifier)clazz).getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGLString));
 		}
 		return false;
 	}
@@ -521,32 +523,39 @@ public class IRUtils {
 	 * @param rhs
 	 * @return
 	 */
-	public static Integer conversionDirection(Type lhs, Type rhs, String operator) {
+	public static Integer conversionDirection(NamedElement lhsne, NamedElement rhsne, String operator) {
 		// Check for NullType
-		if (lhs == null || rhs == null) return 0;
+		if (lhsne == null || rhsne == null) return 0;
 		
-		if (lhs.equals(rhs) || lhs.getClassifier().equals(rhs.getClassifier())) return 0;
-		
-		// If Text and Numeric types are involved both will be converted to Decimal
-		// Special case for + operator which is overloaded for both String and Number;
-		// if the Number is on the left then it is a numeric operation otherwise
-		// it is a concatenation operation
-		if (operator.equals("+") && TypeUtils.isNumericType(lhs) && TypeUtils.isTextType(rhs)) {
-			return 2;
+		if (lhsne.equals(rhsne)) return 0;
+
+		if (lhsne instanceof Type && rhsne instanceof Type) {
+			Type lhs = (Type) lhsne;
+			Type rhs = (Type) rhsne;
+			if (lhs.equals(rhs) || lhs.getClassifier().equals(rhs.getClassifier())) return 0;
+	
+			// If Text and Numeric types are involved both will be converted to Decimal
+			// Special case for + operator which is overloaded for both String and Number;
+			// if the Number is on the left then it is a numeric operation otherwise
+			// it is a concatenation operation
+			if (operator.equals("+") && TypeUtils.isNumericType(lhs) && TypeUtils.isTextType(rhs)) {
+				return 2;
+			}
+			if (operator.equals("+") && TypeUtils.isTextType(lhs)) {
+				return -1;
+			}
+			if (isValidWidenConversion(lhs, rhs))
+				return 1;
+			else if (isValidWidenConversion(rhs, lhs))
+				return -1;
+			else if (isValidNarrowConversion(lhs, rhs))
+				return 1;
+			else if (isValidNarrowConversion(rhs, lhs))
+				return -1;
+			else 
+				return null;
 		}
-		if (operator.equals("+") && TypeUtils.isTextType(lhs)) {
-			return -1;
-		}
-		if (isValidWidenConversion(lhs, rhs))
-			return 1;
-		else if (isValidWidenConversion(rhs, lhs))
-			return -1;
-		else if (isValidNarrowConversion(lhs, rhs))
-			return 1;
-		else if (isValidNarrowConversion(rhs, lhs))
-			return -1;
-		else 
-			return null;
+		return null;
 	}
 	
 	public static boolean isValidWidenConversion(Type source,  Type target) {
@@ -636,7 +645,7 @@ public class IRUtils {
 		return null;
 	}
 	
-	private static Operation getNoConversionBinaryOperation(Classifier lhs, Classifier rhs, StructPart clazz, String opSymbol) {
+	private static Operation getNoConversionBinaryOperation(NamedElement lhs, NamedElement rhs, StructPart clazz, String opSymbol) {
 		// First check if there is an explicit operation 
 		// independent of conversion of either side to the other.
 		// This is to handle the cases where binary operations are implemented
@@ -668,8 +677,7 @@ public class IRUtils {
 		return null;
 	}
 
-	private static Operation primGetNoConversionBinaryOperation(Classifier lhs, Classifier rhs, StructPart clazz, String opSymbol) {
-
+	private static Operation primGetNoConversionBinaryOperation(NamedElement lhs, NamedElement rhs, StructPart clazz, String opSymbol) {
 		List<Operation> ops = TypeUtils.getBestFitOperation(clazz, opSymbol, lhs, rhs);
 		// Filter out an operation that has the same parameter types for each parameter
 		if (ops.size() > 0) {
@@ -683,7 +691,7 @@ public class IRUtils {
 		return null;
 	}
 
-	public static Operation getBinaryOperation(Classifier lhs, Classifier rhs, String opSymbol) {
+	public static Operation getBinaryOperation(NamedElement lhs, NamedElement rhs, String opSymbol) {
 		
 		Operation result = checkForTextConcatenation(lhs, opSymbol);
 		if (result != null) {
@@ -702,7 +710,7 @@ public class IRUtils {
 		
 		//Special case for reference types..if lhs is subType of rhs or rhs, is subtype of lhs, use the default operation
 		//defined in ANY
-		if (TypeUtils.isReferenceType(lhs) && TypeUtils.isReferenceType(rhs) && lhs instanceof StructPart && rhs instanceof StructPart) {
+		if (lhs instanceof StructPart && rhs instanceof StructPart && TypeUtils.isReferenceType((StructPart)lhs) && TypeUtils.isReferenceType((StructPart)rhs)) {
 			StructPart lStruct = (StructPart)lhs;
 			StructPart rStruct = (StructPart)rhs;
 			
@@ -717,7 +725,7 @@ public class IRUtils {
 		return result;		
 	}
 	
-	private static Operation checkForTextConcatenation(Classifier clazz, String opSymbol) {
+	private static Operation checkForTextConcatenation(NamedElement clazz, String opSymbol) {
 		if (opSymbol.equals("+") || opSymbol.equals("::") || opSymbol.equals("?:")) {
 			if (isString(clazz)) {
 				return TypeUtils.getBinaryOperation((StructPart)clazz, opSymbol, false);
@@ -726,7 +734,7 @@ public class IRUtils {
 		return null;
 	}
 
-	private static Operation primGetBinaryOperation(Classifier lhs, Classifier rhs, String opSymbol) {
+	private static Operation primGetBinaryOperation(NamedElement lhs, NamedElement rhs, String opSymbol) {
 				
 		if (!(lhs instanceof StructPart)) {
 			Operation result = null;
@@ -739,7 +747,7 @@ public class IRUtils {
 		
 			if (lhs instanceof SubType) {
 				SubType lSubType = (SubType)lhs;
-				Classifier rSubType = rhs;
+				NamedElement rSubType = rhs;
 
 				if (!(rhs instanceof StructPart) && rhs instanceof SubType && ((SubType)rhs).getSuperTypes().size() > 0)  {
 					rSubType = ((SubType)rhs).getSuperTypes().get(0);
