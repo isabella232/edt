@@ -133,8 +133,7 @@ egl.eglx.xml.XmlLib["arrayToXML"] = function( /*value*/value, /*map*/namespaces,
 	//if the xmlArray.length > 1 create new xmlArray[xmlArray.length -1] = xmlArray[1]
 	//create new fieldInfo
 	var xmlName;
-	var arrayName = xmlStyle.name;
-	var wrapped = true;
+	var wrapped = false;
 	var names = null;
 	if (xmlArray != undefined && xmlArray != null) {
 		if (xmlArray.names != undefined
@@ -156,14 +155,15 @@ egl.eglx.xml.XmlLib["arrayToXML"] = function( /*value*/value, /*map*/namespaces,
 		names[0] = "item";
 	}
 	var s = [];
-	if (wrapped) {
-		s = [ "<" + arrayName + ">" ];
-	} else {
-		xmlName = arrayName;
-	}
 	fieldInfo = egl.clone(fieldInfo);
 	fieldInfo.eglSignature = fieldInfo.eglSignature.slice(1);
-	fieldInfo.annotations["XMLStyle"].name = names[0];
+	if (wrapped) {
+		s = [ "<" + xmlStyle.name + ">" ];
+		fieldInfo.annotations["XMLStyle"].name = names[0];
+	} else {
+		xmlName = xmlStyle.name;
+		fieldInfo.annotations["XMLStyle"].name = xmlStyle.name;
+	}
 	for (idx = 0; idx < value.length; idx++) {
 		if (value[0] instanceof Array) {
 			fieldInfo.annotations["XMLArray"] = new egl.eglx.xmlXMLArray( true, names.slice(1));
@@ -171,7 +171,7 @@ egl.eglx.xml.XmlLib["arrayToXML"] = function( /*value*/value, /*map*/namespaces,
 		s.push(this.toXML(value[idx], namespaces, fieldInfo));
 	}
 	if (wrapped) {
-		s.push("</" + arrayName + ">");
+		s.push("</" + xmlStyle.name + ">");
 	}
 	return s.join('');
 };

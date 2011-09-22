@@ -220,7 +220,7 @@ egl.defineClass(
 		                    else if(encoding === egl.eglx.services.Encoding._FORM){
 		                    	anyExp = egl.createAnyException("CRRUI3656E", []);	                    	
 		                    }
-		                    
+		                    callbackArgs[callbackArgs.length] = http;
 		                    if (anyExp == null && callbackFunction != null){
 		                        //if there is a call back function
 		                    	if (egl.debugg) {
