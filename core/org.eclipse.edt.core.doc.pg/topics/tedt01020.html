@@ -30,8 +30,8 @@
 available to the requester of that service. The Interface part can
 be in the same EGL package or can be imported from a separate package.</p>
 
-<p>An
-EGL Interface part includes one or more <dfn class="term">function prototypes</dfn>,
+<p>An EGL
+Interface part includes one or more <dfn class="term">function prototypes</dfn>,
 which are descriptions of how to write code to access a given service
 operation. A function prototype includes the operation name, parameters
 (if any), and a return type (if any). The prototype does not include
@@ -53,7 +53,7 @@ end
 <p>You can specify various EGL data types and can
 use the modifiers IN, OUT, and INOUT.</p>
 <div class="p">To create the Interface
-part: <ol>
+part in the EDT IDE: <ol>
 <li>In the Project Explorer view, right-click the EGL file that defines
 the service</li>
 
@@ -80,38 +80,38 @@ the operations that are available in a third-party REST service (not
 an EGL REST-RPC service), you must specify an annotation for each
 function prototype. The name of the annotation indicates the HTTP
 verb that is used to access the service: <ul>
-<li>For the GET method, the name is <span class="synph"><span class="kwd">@GetREST</span></span>.</li>
+<li>For the GET method, the name is <span class="synph"><span class="kwd">GetREST</span></span>.</li>
 
-<li>For the POST method, the name is <span class="synph"><span class="kwd">@PostREST</span></span>.</li>
+<li>For the POST method, the name is <span class="synph"><span class="kwd">PostREST</span></span>.</li>
 
-<li>For the PUT method, the name is <span class="synph"><span class="kwd">@PutREST</span></span>.</li>
+<li>For the PUT method, the name is <span class="synph"><span class="kwd">PutREST</span></span>.</li>
 
-<li>For the DELETE method, the name is <span class="synph"><span class="kwd">@DeleteREST</span>.</span></li>
+<li>For the DELETE method, the name is <span class="synph"><span class="kwd">DeleteREST</span>.</span></li>
 
 </ul>
 </div>
-<p>Those annotations are called the @xREST annotations because
-the same three fields are in each, as described in the @xREST annotations
+<p>Those annotations are called the xREST annotations because
+the same three fields are in each, as described in the xREST annotations
 section of this topic.</p>
 <div class="p">In the service-invocation statement that
 is used to access a third-party REST service, the argument that is
 passed to a given function parameter has one of two purposes: <ul>
 <li>Usually, the argument provides a value that the requester includes
 in the URI. This usage is shown later in this topic, in the description
-of the @xREST annotations. Those values are not passed to the service
+of the xREST annotations. Those values are not passed to the service
 logic; they are values that are embedded in the URI. In particular,
-if the annotation is <span class="synph"><span class="kwd">@GetREST</span></span>, all of the
+if the annotation is <span class="synph"><span class="kwd">GetREST</span></span>, all of the
 arguments that are assigned to the function parameters are used to
 construct the URI.</li>
 
 <li>In the case of one argument (at most), the argument is a representation
 that is processed by the service; for example, a record that contains
 values used to create a database-table row. Here are details:<ul>
-<li>If the annotation is <span class="synph"><span class="kwd">@PostREST</span></span> or <span class="synph"><span class="kwd">@PutREST</span></span> for
+<li>If the annotation is <span class="synph"><span class="kwd">PostREST</span></span> or <span class="synph"><span class="kwd">PutREST</span></span> for
 a given operation, the additional argument must be present, and the
 related parameter is called the <dfn class="term">representation parameter</dfn>. </li>
 
-<li>The argument also might be required if the annotation is <span class="synph"><span class="kwd">@DeleteREST</span></span>.
+<li>The argument also might be required if the annotation is <span class="synph"><span class="kwd">DeleteREST</span></span>.
 The need for such an argument depends on the service provider. </li>
 
 </ul>
@@ -121,12 +121,12 @@ The need for such an argument depends on the service provider. </li>
 </div>
 <div class="p">If the function prototype has a parameter that is not
 identified in the <span class="synph"><span class="kwd">uriTemplate</span></span> annotation
-field (for <span class="synph"><span class="kwd">@PostREST</span></span>, <span class="synph"><span class="kwd">@PutREST</span></span>,
-or <span class="synph"><span class="kwd">@DeleteREST</span></span>), that parameter is a representation
+field (for <span class="synph"><span class="kwd">PostREST</span></span>, <span class="synph"><span class="kwd">PutREST</span></span>,
+or <span class="synph"><span class="kwd">DeleteREST</span></span>), that parameter is a representation
 parameter. Either of the following cases is an error:<ul>
 <li>Specifying more than one representation parameter</li>
 
-<li>Specifying a representation parameter when <span class="synph"><span class="kwd">@GetREST</span></span> is
+<li>Specifying a representation parameter when <span class="synph"><span class="kwd">GetREST</span></span> is
 in use</li>
 
 </ul>
@@ -141,28 +141,27 @@ service. For more information about that Interface part, see “Using
 a provided Interface for a third-party REST service.”</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">@xREST annotations used for third-party REST services</h2><p>Each
-of the @xREST annotations has these fields: <span class="synph"><span class="kwd">uriTemplate</span></span>, <span class="synph"><span class="kwd">requestFormat</span></span>,
+<div class="section"><h2 class="sectiontitle">xREST annotations used for third-party REST services</h2><p>Each
+of the xREST annotations has these fields: <span class="synph"><span class="kwd">uriTemplate</span></span>, <span class="synph"><span class="kwd">requestFormat</span></span>,
 and <span class="synph"><span class="kwd">responseFormat</span></span>.</p>
 <div class="p"><dl>
 <dt class="dlterm"><span class="synph"><span class="kwd">uriTemplate</span></span></dt>
 
 <dd>A string, or <dfn class="term">template</dfn>, that in most cases outlines
 a relative URI, which identifies the last qualifiers in the URI that
-are used to access the service.<div class="p">The first URI qualifiers, the base
-URI, are specified in one of the following ways:<ul>
+are used to access the service.<div class="p">The first URI qualifiers are specified
+in one of the following ways:<ul>
 <li>When you declare a variable based on the Interface part, you can
 identify an entry in a deployment descriptor. In this case, an initial
-value for the base URI is in the deployment descriptor, and at configuration
+value for the URI is in the deployment descriptor, and at configuration
 time, a code installer can change that value.</li>
 
-<li>You can run the <span class="synph"><span class="kwd">serviceLib.setServiceLocation</span></span> function
-to change the value of the base URI at run time, regardless of how
-you specify an initial value.</li>
+<li>You can update the URI at run time, as described in "Binding an
+access variable dynamically.”</li>
 
 </ul>
 </div>
-<p>If you do not set the base URI, the value of the <span class="synph"><span class="kwd">uriTemplate</span></span> annotation
+<p>If you do not set the URI, the value of the <span class="synph"><span class="kwd">uriTemplate</span></span> annotation
 field includes the complete URI. In most cases, the value of the <span class="synph"><span class="kwd">uriTemplate</span></span> field
 has two aspects:</p>
 <ul>
@@ -199,7 +198,7 @@ so that the URI is valid. However, if the value of a substitution
 value begins with <em>http</em>, the EGL runtime code does no URI encoding
 because the service-invocation statement is specifying an argument
 that provides a complete URI. If you are responsible for URI encoding,
-review the documentation on the <span class="synph"><span class="kwd">serviceLib.convertToURLEncoded</span></span> system
+review the documentation on the <span class="synph"><span class="kwd">httpLib.convertToURLEncoded</span></span> system
 function.</p>
 </li>
 
@@ -283,7 +282,7 @@ and <em>JSON</em> is also valid.</p>
 
 </dl>
 </div>
-<div class="p">You can specify an <span class="synph"><span class="kwd">@xREST</span></span> annotation
+<div class="p">You can specify an <span class="synph"><span class="kwd">xREST</span></span> annotation
 without assigning values to the annotation fields: <pre class="codeblock">Interface IEmployeeService
    Function GetEmployeeDetail() returns(myRecordPart)
       {@GetRest{}};
@@ -296,7 +295,7 @@ without providing detail in the Interface part. For information about
 the three choices for specifying the base URI, see the description
 of <span class="synph"><span class="kwd">uriTemplate</span></span> in this topic.</li>
 
-<li>If the representation parameter (or, for the <span class="synph"><span class="kwd">@GetREST</span></span> annotation,
+<li>If the representation parameter (or, for the <span class="synph"><span class="kwd">GetREST</span></span> annotation,
 the return value) is a string, the EGL runtime code does no conversion.
 You must handle the conversion and can use any of the following functions
 for that purpose: <ul compact="compact">
@@ -315,9 +314,9 @@ for that purpose: <ul compact="compact">
 converts the related argument to Extensible Markup Language (XML)
 format. </li>
 
-<li>For the <span class="synph"><span class="kwd">@GetREST</span></span> annotation, if the
-return value is a record, the EGL runtime code converts that record
-from XML format.</li>
+<li>For the <span class="synph"><span class="kwd">GetREST</span></span> annotation, if the return
+value is a record, the EGL runtime code converts that record from
+XML format.</li>
 
 </ul>
 .</div>

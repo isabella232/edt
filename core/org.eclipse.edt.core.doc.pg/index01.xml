@@ -157,16 +157,6 @@
 <entry keyword="History Rich UI handler part">
 <topic href="topics/cedt01023.html#cedt01023" title="Browser history"/>
 </entry>
-<entry keyword="HostProgram stereotype">
-<topic href="topics/tedt01042.html#tedt01042" title="Accessing an IBM i program as a web service"/>
-</entry>
-<entry keyword="IBM i">
-<entry keyword="Web services">
-<entry keyword="overview">
-<topic href="topics/tedt01042.html#tedt01042" title="Accessing an IBM i program as a web service"/>
-</entry>
-</entry>
-</entry>
 <entry keyword="Infobus Rich UI widget">
 <topic href="topics/cedt01022.html#cedt01022" title="Rich UI Infobus"/>
 </entry>
@@ -179,32 +169,13 @@
 <topic href="topics/tedt01025.html#tedt01025" title="Using a provided Interface part for a 3rd-party REST service"/>
 </entry>
 </entry>
-<entry keyword="SOAP service access">
-<entry keyword="creating interfaces">
-<topic href="topics/tedt01016.html#tedt01016" title="Creating an Interface part to access a SOAP service "/>
-</entry>
-</entry>
 </entry>
 <entry keyword="job scheduler variable (Rich UI)">
 <topic href="topics/cedt01024.html#cedt01024" title="Rich UI job scheduler"/>
 </entry>
-<entry keyword="PCML">
-<entry keyword="IBM i programs as services">
-<entry keyword="overview">
-<topic href="topics/tedt01042.html#tedt01042" title="Accessing an IBM i program as a web service"/>
-</entry>
-</entry>
-</entry>
 <entry keyword="program">
 <entry keyword="development">
 <topic href="topics/tedt01000.html#tedt01000" title="Developing a service or program"/>
-</entry>
-</entry>
-<entry keyword="Program Call Markup Language (PCML)">
-<entry keyword="IBM i programs as services">
-<entry keyword="overview">
-<topic href="topics/tedt01042.html#tedt01042" title="Accessing an IBM i program as a web service"/>
-</entry>
 </entry>
 </entry>
 <entry keyword="properties files">
@@ -368,9 +339,6 @@
 </entry>
 <entry keyword="EGL support">
 <topic href="topics/cedt01003.html#cedt01003" title="EGL support for SOA"/>
-</entry>
-<entry keyword="IBM i">
-<topic href="topics/tedt01042.html#tedt01042" title="Accessing an IBM i program as a web service"/>
 </entry>
 <entry keyword="locations">
 <topic href="topics/cedt01007.html#cedt01007" title="Service-location details for web service deployment"/>

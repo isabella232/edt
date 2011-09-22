@@ -6,8 +6,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Creating an Interface part to access a SOAP service"></meta>
-<meta name="DC.subject" content="Interface parts, SOAP service access, creating interfaces"></meta>
-<meta name="keywords" content="Interface parts, SOAP service access, creating interfaces"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01002.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -22,107 +20,6 @@
 
 <h1 class="topictitle1">Creating an Interface part to access a SOAP service </h1>
 
-
-
-<div><div><span>An EGL Interface part includes one or more function
-prototypes, each of which identifies an operation that is available
-in a service.</span>
- As shown in the following example, a function
-prototype has an ending semicolon (;) and includes a function name,
-parameter list, and (optionally) a return type:</div>
-
-<pre class="codeblock">Interface WeatherForecast
-   Function GetWeatherByZipCode(zipcode string in) returns(myRecordPart);
-end</pre>
-
-<p>In relation to a SOAP service, the function prototypes can include
-parameters that have the modifiers IN, INOUT, or OUT.</p>
-
-<div class="p">To create an Interface part from a WSDL file:<ol>
-<li>Bring the WSDL file for the web service into your EGL Source folder;
-for example, into a subfolder named <span class="uicontrol">wsdl</span></li>
-
-<li>In the Project Explorer view, right-click the WSDL file and click <span class="uicontrol">Create
-EGL Client Interface</span>. The first New EGL Interface page
-is displayed.</li>
-
-<li>Select the web service from which you want to create Interface
-parts. If you want to create a SOAP service binding for the web service,
-click <span class="uicontrol">Create SOAP service bindings</span>.</li>
-
-<li>Click <span class="uicontrol">Next</span> to display the second New EGL
-Interface page.</li>
-
-<li>For the WSDL file <span class="synph"><span class="kwd">portType</span></span> entry that
-is related to the selected web service, complete these steps: <ol type="a">
-<li>Accept or update the name of the new Interface part.</li>
-
-<li>Select or clear check boxes to specify which operations in the <span class="synph"><span class="kwd">portType</span></span> entry
-will be represented in the new Interface part.</li>
-
-</ol>
-</li>
-
-<li>In the <span class="uicontrol">Source folder</span>, <span class="uicontrol">Package</span>,
-and <span class="uicontrol">EGL source file name</span> fields, set the location
-and name of the file that will contain the new Interface parts.</li>
-
-<li>If you want to reference the Interface parts in a Rich UI application,
-select <span class="uicontrol">Create the interface and data to be compatible with
-Rich UI applications</span>.</li>
-
-<li>If you want to overwrite the same-named EGL files, select <span class="uicontrol">Overwrite
-existing files</span>.</li>
-
-<li>If you indicated that you do not want to create SOAP service bindings,
-click <span class="uicontrol">Finish</span>. Otherwise, click <span class="uicontrol">Next</span> to
-display the "New EGL SOAP service binding" page.</li>
-
-<li>Ensure that the <span class="uicontrol">Source folder</span> field identifies
-the location of the EGL deployment descriptor.</li>
-
-<li>In the <span class="uicontrol">EGL deployment descriptor file name</span> field,
-select the name of the EGL deployment descriptor to which you are
-adding service bindings.</li>
-
-<li>To update service-binding details that are already in that file,
-select <span class="uicontrol">Update all existing bindings</span>.</li>
-
-<li>In the table of WSDL file port entries, select an entry that references
-the WSDL file portType entries from which you want to create Interface
-parts. </li>
-
-<li>In the Binding name column, either accept the default value, which
-is the name of a portType entry in the WSDL file, or type another
-name.<p>You specify the name when you declare a service-access variable
-and set the <span class="synph"><span class="kwd">@BindService</span></span> property, <span class="synph"><span class="kwd">bindingKey</span></span> field.</p>
-</li>
-
-<li>Click <span class="uicontrol">Finish</span>.</li>
-
-</ol>
-</div>
-
-<div class="p">When you create an Interface part by following the preceding steps,
-note any comments that were written into the file that holds the Interface
-part. Those comments represent a complex property that might be useful
-when you specify details about accessing the service. You specify
-those details in one of two cases:<ul>
-<li>When you create a service-access variable that is based on the
-Interface part</li>
-
-<li>When you create a service binding in the EGL deployment descriptor,
-if you did not do so in the preceding steps </li>
-
-</ul>
-</div>
-
-<p>Creating parts is helpful when names that are copied from the WSDL
-file are not valid in EGL. You might also want to create a part when
-you want to use an EGL package name that is not derived from the WSDL
-file. For details, see “@xml.”</p>
-
-</div>
 
 <div>
 <div class="familylinks">

@@ -30,12 +30,21 @@
 at run time or change the service to which a variable is bound. </p>
 
 <p>To bind a variable dynamically, use functions in the <span class="synph"><span class="kwd">ServiceLib</span></span> system
-library instead of the <span class="synph"><span class="kwd">@Resource</span></span> annotation.
-This option is not available for access of a dedicated service from
-a Rich UI handler or related library.</p>
+library. Dynamic binding is not available for access of a dedicated
+service from a Rich UI handler or related library.</p>
 
-<div class="p">Suppose that you created entries in the deployment descriptor file
-for two variations of the same service implementation:<pre class="codeblock">&lt;restBinding baseURI="http://myHostName" 
+<div class="p">The following variations apply: <ul>
+<li><a href="#tedt01019__acceptance">Accepting the detail that is stored in a binding entry</a></li>
+
+<li><a href="#tedt01019__object">Retrieving or creating a binding object and updating it in memory</a></li>
+
+</ul>
+</div>
+
+<div class="section" id="tedt01019__acceptance"><a name="tedt01019__acceptance"><!-- --></a><h2 class="sectiontitle">Accepting the detail that is stored
+in a binding entry</h2><div class="p">Suppose that you created entries in the
+deployment descriptor file for two variations of the same service
+implementation:<pre class="codeblock">&lt;restBinding baseURI="http://myHostName" 
              enableGeneration="true" 
              name="MyEnglishBinding" 
              preserveRequestHeaders="false"/&gt;
@@ -46,16 +55,13 @@ for two variations of the same service implementation:<pre class="codeblock">&lt
              preserveRequestHeaders="false"/&gt;
 </pre>
 </div>
-
-<p>For example, the first variation might return a value in English
+<p>The first variation might return a value in English
 while the second a value in French.</p>
-
-<p>You might create and bind two variables, one for each of these
-entries. Alternatively, you can create one variable that is based
-on the Interface part that corresponds to the service. Then, you can
-use the <span class="synph"><span class="kwd">ServiceLib.getResource()</span></span> system
+<p>You might create and bind
+two variables, one for each of these entries. Alternatively, you can
+create one variable that is based on the Interface part that corresponds
+to the service. Then, you can use the <span class="synph"><span class="kwd">ServiceLib.getResource()</span></span> system
 function to bind the variable to one or the other deployed service:</p>
-
 <ol>
 <li>Create a variable that is based on the Interface part:<pre class="codeblock">myService MyInterfacePart?;</pre>
 </li>
@@ -64,9 +70,12 @@ function to bind the variable to one or the other deployed service:</p>
 the variable to the service implementation:<pre class="codeblock">myService = ServiceLib.getResource("MyEnglishBinding");</pre>
 In
 this case, the <samp class="codeph">myService</samp> variable is now bound to
-the entry named <samp class="codeph">MyBinding</samp>.</li>
+the entry named <samp class="codeph">MyBinding</samp>. If you avoid specifying
+an argument in the function call, the argument value is the name of
+the variable to which the function is assigning a value.</li>
 
-<li>Use the variable to access the service:<pre class="codeblock">myContent string = myService.myEcho("world");</pre>
+<li>Use the variable to access the service. This example is appropriate
+outside of Rich UI:<pre class="codeblock">myContent string = myService.myEcho("world");</pre>
 <p>The
 value of <samp class="codeph">myContent</samp> is “Hello, world!”</p>
 </li>
@@ -81,6 +90,67 @@ value of <samp class="codeph">myContent</samp> is “Bonjour, monde!”</p>
 </li>
 
 </ol>
+<p>The effect of setting a <span class="synph"><span class="kwd">Resource</span></span> annotation
+is to generate code that is equivalent to the <span class="synph"><span class="kwd">SysLib.getResource</span></span> function
+invocation. If you set the <span class="synph"><span class="kwd">Resource</span></span> annotation
+and then invoke the <span class="synph"><span class="kwd">SysLib.getResource</span></span> function,
+your generated code invokes the system function twice.</p>
+</div>
+
+<div class="section" id="tedt01019__object"><a name="tedt01019__object"><!-- --></a><h2 class="sectiontitle">Retrieving or creating a binding object
+and updating it in memory</h2><div class="p">Here is example code, which prepares
+a variable that is later used in a service-invocation statement: <pre class="codeblock">myService IMyService;    
+myBinding HttpRest{@Resource};
+myBinding.request.encoding = Encoding.json;
+myService = servicelib.completeBind(myService, myBinding);
+</pre>
+</div>
+<div class="p">The code acts as follows: <ol>
+<li>Declares an access variable:<pre class="codeblock">myService IMyService?;</pre>
+<p>The
+Interface part typically includes a <span class="synph"><span class="kwd">URI template</span></span> annotation,
+which is a set of lower-level URI qualifiers that are resolved at
+run time. The resolved template might be <span class="synph"><samp class="codeph">/GetWeatherByZipCode?zipCode=27709</samp></span>.</p>
+</li>
+
+<li>Accesses a new instance of an HTTPRest object that provides a
+higher-level URI such as <span class="synph"><samp class="codeph">www.example.com/myproject/restservices/weather_service</samp></span>.
+That object contains the details stored in a service binding; in this
+case, the service binding named <samp class="codeph">myBinding</samp>.</li>
+
+<li>Adds detail to the HTTPRest object; for example, to ensure that
+data is transferred to and from the service in JSON format:<pre class="codeblock">myBinding.request.encoding = Encoding.json;
+</pre>
+</li>
+
+<li>Invokes the <span class="synph"><span class="kwd">SysLib.completeBind</span></span> function
+so that the variable references the HTTPRest object:<pre class="codeblock">myService = servicelib.completeBind(myService, myBinding);</pre>
+</li>
+
+</ol>
+</div>
+<div class="p">When you want to update specific fields in an object that
+is of a binding type such as HTTPRest, access the object in either
+of two ways:<ul>
+<li>As shown, one option is to retrieve an object that contains the
+data stored in the binding entry of the EGL deployment descriptor.
+Either of these two statements fulfills the need for HTTPRest:<pre class="codeblock">myBinding HttpRest{@Resource};
+
+// or
+myBinding HttpRest = SysLib.getResource();</pre>
+<p>In both cases,
+the EGL runtime code accesses the deployment-descriptor entry named <samp class="codeph">myBinding</samp>.</p>
+</li>
+
+<li>Alternatively, create a binding object and set all the details
+in your code:<pre class="codeblock">http HttpRest = new HttpRest{
+   restType = eglx.rest.ServiceType.TrueRest,	
+   uri = "www.example.com/myproject/restservices/weather_service};</pre>
+</li>
+
+</ul>
+</div>
+</div>
 
 </div>
 
