@@ -396,24 +396,11 @@ public class IRUtils {
 
 	private static boolean isString(NamedElement clazz) {
 		if (clazz instanceof Classifier) {
-			return (((Classifier)clazz).getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGL_EGLString)) || (((Classifier)clazz).getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGLString));
+			return (((Classifier)clazz).getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGLString));
 		}
 		return false;
 	}
 
-	private static boolean isBoolean(Classifier clazz) {
-		if (clazz != null) {
-			return (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGL_EGLBoolean)) || (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGLBoolean));
-		}
-		return false;
-	}
-
-	private static boolean isInt(Classifier clazz) {
-		if (clazz != null) {
-			return (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGL_EGLInt)) || (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGLInt));
-		}
-		return false;
-	}
 		
 	private static boolean isAny(Classifier clazz) {
 		if (clazz != null) {
@@ -442,18 +429,6 @@ public class IRUtils {
 			return expr;
 		}
 		
-		if (isString(exprType.getClassifier()) && isString(type.getClassifier())) {
-			return expr;
-		}
-
-		if (isBoolean(exprType.getClassifier()) && isBoolean(type.getClassifier())) {
-			return expr;
-		}
-
-		if (isInt(exprType.getClassifier()) && isInt(type.getClassifier())) {
-			return expr;
-		}
-						
 		if (exprType.getClassifier().equals(type.getClassifier())) {
 			if (exprType instanceof SequenceType) {
 				if (((SequenceType)exprType).getLength() < ((SequenceType)type).getLength()) {
