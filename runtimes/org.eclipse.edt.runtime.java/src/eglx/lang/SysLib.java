@@ -316,7 +316,7 @@ public class SysLib extends ExecutableBase {
 		}
 		Object resource = null;
 		if(binding instanceof SQLDatabaseBinding){
-			resource = new SQLDataSource(((SQLDatabaseBinding)binding).getSqlValidationConnectionURL());
+			resource = new SQLDataSource(((SQLDatabaseBinding)binding).getSqlDB());
 		}
 		return resource;
 	}
