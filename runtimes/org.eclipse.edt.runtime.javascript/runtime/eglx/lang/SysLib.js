@@ -81,7 +81,7 @@ egl.eglx.lang.SysLib["getResource"] = function(bindingKey, /*String*/eglddName) 
 		ret.restType = egl.eglx.rest.ServiceType.EglRpc;
 	}
 	if(ret === undefined || ret === null){
-		throw egl.createRuntimeException("CRRUI3651E", [bindingKey, eglddName]);  
+		throw egl.eglx.services.createServiceInvocationException("CRRUI3651E", [bindingKey, eglddName]);  
 	}
 	return ret;
 };

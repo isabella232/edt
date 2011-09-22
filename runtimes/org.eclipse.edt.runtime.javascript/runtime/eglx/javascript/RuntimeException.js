@@ -10,7 +10,7 @@
  *
  *******************************************************************************/
 
-egl.createRuntimeException = function( /*string*/ messageID, /*string or array*/ inserts )
+egl.createRuntimeExceptionArgs = function( /*string*/ messageID, /*string or array*/ inserts )
 {
 	if (typeof(inserts) != "string") {
 		inserts = egl.getRuntimeMessage( messageID, inserts );
@@ -19,7 +19,11 @@ egl.createRuntimeException = function( /*string*/ messageID, /*string or array*/
 	var args = new Array();
 	args.push( [ "messageID", messageID || "" ] );
 	args.push( [ "message", inserts || "" ] );
-	return new egl.egl.lang.AnyException( args );
+	return args;
+};
+egl.createRuntimeException = function( /*string*/ messageID, /*string or array*/ inserts )
+{
+	return new egl.egl.lang.AnyException( createRuntimeExceptionArgs(messageID, inserts) );
 };
 
 /* FUTURE sbg At this time, we don't have a need for RuntimeException;  the thinking is that

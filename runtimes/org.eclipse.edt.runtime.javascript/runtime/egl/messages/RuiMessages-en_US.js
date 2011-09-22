@@ -172,7 +172,7 @@ egl.eze$$rscBundles["RuiMessages"] =
 		'CRRUI2719E' : 'Error parsing input value.',
 
 		'CRRUI3650E' : 'Cannot find deployment descriptor file : \'{0}\'',
-		'CRRUI3651E' : 'Service binding key : \'{0}\' does not exist in the deployment descriptor \'{1}\'',
+		'CRRUI3651E' : 'Resource binding key : \'{0}\' does not exist in the deployment descriptor \'{1}\'',
 		'CRRUI3652E' : 'Wrong service binding type \'{0}\', expecting binding type \'{1}\'',
 		'CRRUI3653E' : 'An error occurred while trying to invoke rest service on \'{0}\'',
 		'CRRUI3654E' : 'An error occurred while building request object: \'{0}\'',
