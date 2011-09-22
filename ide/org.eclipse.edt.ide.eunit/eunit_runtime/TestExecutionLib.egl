@@ -134,13 +134,7 @@ library TestExecutionLib
 			setStatusRecordHelper(retStat, ConstantsLib.SERROR, summary);
 			return (retStat);
 		end
-		
-		if(ms.notRunCnt > 0)
-			summary += "; first test case skipped: " + ms.firstFailedTestName;
-			setStatusRecordHelper(retStat, ConstantsLib.SNOT_RUN, summary);	
-			return (retStat);
-		end
-			
+					
 		if(ms.errCnt > 0 )
 			summary += "; first test case with error: " + ms.firstFailedTestName;
 			setStatusRecordHelper(retStat, ConstantsLib.SERROR, summary);	
@@ -150,7 +144,13 @@ library TestExecutionLib
 		if(ms.failedCnt > 0)
 			summary += "; first test case failure: " + ms.firstFailedTestName;
 			setStatusRecordHelper(retStat, ConstantsLib.SFAILED, summary);	
-			return (retStat);
+			return (retStat);		
+		end
+		
+		if(ms.notRunCnt > 0)
+			summary += "; first test case skipped: " + ms.firstFailedTestName;
+			setStatusRecordHelper(retStat, ConstantsLib.SNOT_RUN, summary);	
+			return (retStat);				
 		else
 			setStatusRecordHelper(retStat, ConstantsLib.SPASSED, summary);	
 			return (retStat);			
