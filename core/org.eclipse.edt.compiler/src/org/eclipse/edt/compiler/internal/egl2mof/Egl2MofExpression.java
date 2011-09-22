@@ -315,7 +315,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.FunctionInvocation node) {
 		InvocationExpression fi;
 		
-		ITypeBinding typeBinding = node.getTarget().resolveTypeBinding();
+ 		ITypeBinding typeBinding = node.getTarget().resolveTypeBinding();
 		List<FunctionParameterBinding> functionParmBindings;
 		if (typeBinding instanceof DelegateBinding) {
 			
@@ -358,10 +358,21 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 						((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
 					}
 					else {
-						FunctionMember irFunc = (FunctionMember)getEObjectFor(functionBinding);
+						
+						Member mbr = (Member)getEObjectFor(functionBinding);
+						String id=null;
+						if (mbr instanceof FunctionMember) {
+							id =  ((FunctionMember)mbr).getName();
+						}
+						else {
+							if(Binding.isValidBinding(functionBinding)) {
+								id = functionBinding.getCaseSensitiveName();
+							}
+						}
+
 						fi = factory.createFunctionInvocation();
-						fi.setId(irFunc.getName());
-						((FunctionInvocation)fi).setTarget(irFunc);
+						fi.setId(id);
+						((FunctionInvocation)fi).setTarget(mbr);
 					}
 		
 				}
@@ -369,10 +380,20 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 					if (isStatic && node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.Name) {
 						
 						if (mofTypeFor(declarer) == currentPart) {
-							FunctionMember irFunc = (FunctionMember)getEObjectFor(functionBinding);
+							Member mbr = (Member)getEObjectFor(functionBinding);
+							String id=null;
+							if (mbr instanceof FunctionMember) {
+								id =  ((FunctionMember)mbr).getName();
+							}
+							else {
+								if(Binding.isValidBinding(functionBinding)) {
+									id = functionBinding.getCaseSensitiveName();
+								}
+							}
+							
 							fi = factory.createFunctionInvocation();
-							fi.setId(irFunc.getName());
-							((FunctionInvocation)fi).setTarget(irFunc);
+							fi.setId(id);
+							((FunctionInvocation)fi).setTarget(mbr);
 						}
 						else {
 							fi = factory.createQualifiedFunctionInvocation();
@@ -397,11 +418,22 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 									thisExpr.setThisObject(getCurrentFunctionMember().getContainer());
 									((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
 								}
-								else {								
-									FunctionMember irFunc = (FunctionMember)getEObjectFor(functionBinding);
+								else {		
+									
+									Member mbr = (Member)getEObjectFor(functionBinding);
+									String id=null;
+									if (mbr instanceof FunctionMember) {
+										id =  ((FunctionMember)mbr).getName();
+									}
+									else {
+										if(Binding.isValidBinding(functionBinding)) {
+											id = functionBinding.getCaseSensitiveName();
+										}
+									}
+
 									fi = factory.createFunctionInvocation();
-									fi.setId(irFunc.getName());
-									((FunctionInvocation)fi).setTarget(irFunc);
+									fi.setId(id);
+									((FunctionInvocation)fi).setTarget(mbr);
 								}
 							}
 							else {
