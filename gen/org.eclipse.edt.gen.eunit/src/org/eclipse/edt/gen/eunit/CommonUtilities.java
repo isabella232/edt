@@ -35,7 +35,10 @@ public class CommonUtilities {
 		return eckgenPkgName;
 	}
 
-
+	public static String getECKGenPartFQName(Part part){
+		String fqName = part.getFullyQualifiedName();
+		return prependECKGen(fqName);
+	}
 
 
 }
