@@ -138,5 +138,15 @@ public class EnumerationTypeBinding extends PartBinding {
 		nullable.setNullable(true);
 		return nullable;
 	}
+	
+	@Override
+	public boolean isInstantiable() {
+		return false;
+	}
+	
+	@Override
+	public boolean isReference() {
+		return true;
+	}
 
 }
