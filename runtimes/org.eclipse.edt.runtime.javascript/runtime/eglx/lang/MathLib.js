@@ -83,7 +83,20 @@ egl.eglx.lang.MathLib["floor"] = function(/*float*/value) {
 	return Math.floor(value); //throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
 };
 
-//TODO sbg need frexp()
+egl.eglx.lang.MathLib["frexp"] = function( y, x, assignFunc ) {
+	if ( y > 0 ) {
+		x = Math.floor( Math.log( y ) / Math.log( 2 ) ) + 1;
+	} else if ( y < 0 ) {
+		x = Math.floor( Math.log( Math.abs( y ) ) / Math.log( 2 ) ) + 1;
+	} else {
+		x = 0;
+	}
+	
+	if (assignFunc) {
+		assignFunc(x);
+	}
+	return y * Math.pow( 2, -x );
+};
 
 //TODO sbg need ldexp()
 
@@ -103,11 +116,37 @@ egl.eglx.lang.MathLib["log10"] = function(/*float*/x) {
 	}
 };
 
-//TODO sbg need max()
+egl.eglx.lang.MathLib["max"] = function(/*float*/x, /*float*/y) {
+	return (x).max(y);
+};
 
-//TODO sbg need min()
+egl.eglx.lang.MathLib["min"] = function(/*float*/x, /*float*/y) {
+	return (x).min(y);
+};
 
-//TODO sbg need modf()
+egl.eglx.lang.MathLib["modf"] = function(/*float*/ num, /*int*/ intPart, assignFunc ) {
+	var deciPart;
+	var isBigDecimal = ( intPart instanceof egl.javascript.BigDecimal );
+	
+	if ( parseInt( num ) == num ) {
+		intPart = num;
+		deciPart = 0;
+	} else {
+		var numStr = new String( num );
+		intPart = Number( numStr.replace( /\.\d*/, "" ) );
+		deciPart = Number( numStr.replace( /\d*\./, "0." ) );
+	}
+	
+	if ( isBigDecimal ) {
+		//this does the assignment, since BigDecimal is an object
+		intPart = new egl.javascript.BigDecimal( intPart.toString() );
+	}
+	
+	if (assignFunc) {
+		assignFunc(intPart);
+	}
+	return deciPart;
+};
 
 egl.eglx.lang.MathLib["pow"] = function(/*float*/base, /*float*/exponent) {
 	if (base == 0 && exp <= 0) {

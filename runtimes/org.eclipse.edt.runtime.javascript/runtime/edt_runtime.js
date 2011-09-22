@@ -1,11 +1,14 @@
-/*
- * Licensed Materials - Property of IBM
+/*******************************************************************************
+ * Copyright © 2008, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corporation 2008, 2010. All Rights Reserved.
+ * Contributors:
+ * IBM Corporation - initial API and implementation
  *
- * U.S. Government Users Restricted Rights - Use, duplication or
- * disclosure restricted by GSA DP Schedule Contract with IBM Corp.
- */
+ *******************************************************************************/
 
 /* TODO sbg We're using two different conventions for static functions:
  * the old RBD style in which they're simply functions on a class with
@@ -14,6 +17,17 @@
  * or somehow reconcile the two....
  */
 
+egl.createNullValueException = function( /*string*/ messageID, /*string or array*/ inserts )
+{
+	if (typeof(inserts) != "string") {
+		inserts = egl.getRuntimeMessage( messageID, inserts );
+	}
+	egl.exceptionThrown = true;
+	var args = new Array();
+	args.push( [ "messageID", messageID || "" ] );
+	args.push( [ "message", inserts || "" ] );
+	return new egl.egl.lang.NullValueException( args );
+};
 
 /****************************************************************************
  * AnyValue
@@ -268,6 +282,9 @@ egl.egl.lang.EInt64.fromAnyNum = function (x) {
 egl.egl.lang.EInt64.fromEFloat32 = function (x) {  
 	return egl.convertFloatToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 }; 
+egl.egl.lang.EInt64.ezeCast = function (x) {
+	return egl.convertAnyToBigint(x, false);    // TODO need nullable support
+};
 
 
 
@@ -436,6 +453,15 @@ egl.egl.lang.EString.plus = function (op1, op2) {
 	a = (op1) ? op1 : "";
 	b = (op2) ? op2 : "";
 	return a + b;
+};
+egl.egl.lang.EString.concat = function (op1, op2) {
+	a = (op1) ? op1 : "";
+	b = (op2) ? op2 : "";
+	return a + b;
+};
+
+egl.egl.lang.EString.nullconcat = function (op1, op2) {
+	return egl.nullableconcat(op1, op2);
 };
 
 

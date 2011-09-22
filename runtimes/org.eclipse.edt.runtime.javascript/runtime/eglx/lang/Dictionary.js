@@ -18,7 +18,7 @@ egl.createDictionary = function( c, o ) {
 egl.defineClass("eglx.lang", "EDictionary", {
 	"constructor" : function() {
 		this.eze$$caseSensitive = arguments[0] || false;
-		this.eze$$byKeyOrdering = arguments[1] || false;
+		this.eze$$byKeyOrdering = arguments[1] || egl.eglx.lang.OrderingKind.none;
 		this.eze$$typename = "EDictionary";
 		this.eze$$signature = "y;";
 		this.toString = function() {
@@ -31,5 +31,11 @@ egl.defineClass("eglx.lang", "EDictionary", {
 				delete this[f];
 			}
 		}
+	},
+	"getCaseSensitive" : function(){
+		return this.eze$$caseSensitive;
+	},
+	"getOrdering" : function(){
+		return this.eze$$byKeyOrdering;
 	}
 });

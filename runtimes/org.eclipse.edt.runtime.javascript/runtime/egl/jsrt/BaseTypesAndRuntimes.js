@@ -3772,7 +3772,8 @@ egl.checkNull = function ( obj, source )
 	}
 	else
 		return obj;
-}
+};
+
 
 egl.makeExceptionFromCaughtObject = function( caught )
 {
