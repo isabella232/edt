@@ -11,7 +11,7 @@
  *******************************************************************************/
 package eglx.java;
 
-import egl.lang.EventListener;
+import eglx.lang.EventListener;
 import egl.lang.reflect.NoReflect;
 
 import eglx.lang.Property;

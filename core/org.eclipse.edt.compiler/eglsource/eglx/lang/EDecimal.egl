@@ -1,6 +1,5 @@
 package eglx.lang;
 
-import egl.lang.EglNumber;
 import egl.lang.reflect.ClassType;
 import egl.lang.reflect.ParameterizableType;
 import egl.lang.reflect.mof.Operation;
@@ -10,7 +9,7 @@ import org.eclipse.edt.mof.egl.FixedPrecisionType;
 /**
  * EDecimal defines the EGL decimal type.
  */
-externalType EDecimal extends EglNumber type ParameterizableType {
+externalType EDecimal extends ENumber type ParameterizableType {
 	parameterizedType = FixedPrecisionType
 }
 	/**
@@ -163,5 +162,5 @@ externalType EDecimal extends EglNumber type ParameterizableType {
 	/**
 	 * {@Operation widen} Converts a decimal to a number.
 	 */
-	static function asNumber(value EDecimal in) returns(EglNumber) {@Operation{"widen"}};
+	static function asNumber(value EDecimal in) returns(ENumber) {@Operation{"widen"}};
 end

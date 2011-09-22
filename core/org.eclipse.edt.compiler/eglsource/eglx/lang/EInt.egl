@@ -1,11 +1,9 @@
 package eglx.lang;
 
-import egl.lang.EglInt;
-import egl.lang.EglNumber;
 import egl.lang.reflect.ClassType;
 import egl.lang.reflect.mof.Operation;
 
-externalType EInt extends EglInt type ClassType
+externalType EInt extends ENumber type ClassType
 	/**
 	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */
@@ -97,6 +95,8 @@ externalType EInt extends EglInt type ClassType
 	static function asInt(value EDecimal in) returns(EInt) {@Operation{"narrow"}};
 	static function asInt(value EFloat in) returns(EInt) {@Operation{"narrow"}};
 	static function asInt(value EBigint in) returns(EInt) {@Operation{"narrow"}};
+	static function asInt(value ENumber in) returns(EInt) {@Operation{"narrow"}};
+	
 
-	static function asNumber(value EInt in) returns(EglNumber) {@Operation{"widen"}};
+	static function asNumber(value EInt in) returns(ENumber) {@Operation{"widen"}};
 end

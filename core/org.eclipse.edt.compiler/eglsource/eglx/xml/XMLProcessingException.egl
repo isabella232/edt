@@ -11,7 +11,7 @@
  *******************************************************************************/
 package eglx.xml;
 
-import egl.lang.Exception;
+import eglx.lang.Exception;
 
 Record XMLProcessingException type Exception
   	detail string;

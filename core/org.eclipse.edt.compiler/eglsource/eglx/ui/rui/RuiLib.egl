@@ -11,10 +11,12 @@
  *******************************************************************************/
 package eglx.ui.rui;
 
-import egl.lang.NativeType;
+import eglx.lang.NativeType;
 import eglx.lang.*;
 
 externaltype RuiLib type NativeType
+
+	private constructor();
 
 	// Allow/disallow selection of text in a RUI web application
 	static function setTextSelectionEnabled(value boolean in);

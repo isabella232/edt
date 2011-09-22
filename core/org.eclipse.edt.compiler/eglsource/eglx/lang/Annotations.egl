@@ -43,3 +43,25 @@ Record ExternalName type Annotation
 	value String;
 end
 
+/**
+ * The stereotype for all Exceptions.
+ */
+Record Exception type Annotation
+{
+	targets = [ElementKind.recordPart],
+	@Stereotype { defaultSuperType = AnyException }
+}
+end
+
+Record EventListener type Annotation
+{
+	targets = [
+		ElementKind.FieldMbr
+	]
+} 
+	addMethod String;
+	listenerType String;
+	method String;
+end
+
+

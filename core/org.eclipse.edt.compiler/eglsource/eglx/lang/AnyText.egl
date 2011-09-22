@@ -1,4 +1,4 @@
-package egl.lang;
+package eglx.lang;
 
 import egl.lang.reflect.ClassType;
 

@@ -1,4 +1,4 @@
-package egl.lang;
+package eglx.lang;
 
 /**
  * InvalidArgumentExceptions are thrown to indicate that an argument to a function

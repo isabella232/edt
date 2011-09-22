@@ -11,9 +11,11 @@
  *******************************************************************************/
 package eglx.xml;
 
-import egl.lang.NativeType;
+import eglx.lang.NativeType;
 
 externaltype XmlLib type NativeType
+
+	private constructor();
 
     static function convertFromXML(xmlstr string in, eglType any const in);
 

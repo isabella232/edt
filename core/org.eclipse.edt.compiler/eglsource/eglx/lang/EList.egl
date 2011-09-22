@@ -1,13 +1,13 @@
-package egl.lang;
+package eglx.lang;
 
 import egl.lang.reflect.ClassType;
 import egl.lang.reflect.mof.Operation;
 
 /**
- * EglList defines the API of lists (dynamically-sized arrays) in EGL.  Lists have
+ * EList defines the API of lists (dynamically-sized arrays) in EGL.  Lists have
  * a size, which is the number of elements they contain.  The size may be zero.
  */
-externalType EglList type ClassType {  
+externalType EList type ClassType {  
 	typeParameters = ["E"]
 }
 
@@ -17,7 +17,7 @@ externalType EglList type ClassType {
 	 * not create a new list: the appendElement function is used to add the second 
 	 * operand to the end of the first operand.
 	 */
-	static function $Plus(lvalue EglList in, rvalue EglAny in) returns (EglList) {@Operation{"+"}};
+	static function $Plus(lvalue EList in, rvalue EAny in) returns (EList) {@Operation{"+"}};
 
 	/**
 	 * {@Operation ::} Creates a new list consisting of the first operand's elements
@@ -25,7 +25,7 @@ externalType EglList type ClassType {
 	 * not create a new list: the appendElement function is used to add the second 
 	 * operand to the end of the first operand.
 	 */
-	static function $Concat(value EglList in, rvalue EglAny in) returns (EglList) {@Operation{"::"}};
+	static function $Concat(value EList in, rvalue EAny in) returns (EList) {@Operation{"::"}};
 
 	/**
 	 * {@Operation +} Creates a new list consisting of the first operand followed 
@@ -33,7 +33,7 @@ externalType EglList type ClassType {
 	 * not create a new list: the insertElement function is used to add the second
 	 * operand to the front of the first operand.
 	 */
-	static function $Plus(lvalue EglAny in, rvalue EglList in) returns (EglList) {@Operation{"+"}};
+	static function $Plus(lvalue EAny in, rvalue EList in) returns (EList) {@Operation{"+"}};
 
 	/**
 	 * {@Operation ::} Creates a new list consisting of the first operand followed 
@@ -41,7 +41,7 @@ externalType EglList type ClassType {
 	 * not create a new list: the insertElement function is used to add the second
 	 * operand to the front of the first operand.
 	 */
-	static function $Concat(value EglAny in, rvalue EglList in) returns (EglList) {@Operation{"::"}};
+	static function $Concat(value EAny in, rvalue EList in) returns (EList) {@Operation{"::"}};
 
 	/**
 	 * {@Operation +} Creates a new list consisting of the first operand's elements
@@ -49,7 +49,7 @@ externalType EglList type ClassType {
 	 * (+=) does not create a new list: the appendAll function is used to add the 
 	 * second operand's elements to the end of the first operand.
 	 */
-	static function $Plus(lvalue EglList in, rvalue EglList in) returns (EglList) {@Operation{"+"}};
+	static function $Plus(lvalue EList in, rvalue EList in) returns (EList) {@Operation{"+"}};
 
 	/**
 	 * {@Operation ::} Creates a new list consisting of the first operand's elements
@@ -57,13 +57,13 @@ externalType EglList type ClassType {
 	 * (::=) does not create a new list: the appendAll function is used to add the 
 	 * second operand's elements to the end of the first operand.
 	 */
-	static function $Concat(value EglList in, rvalue EglList in) returns (EglList) {@Operation{"::"}};
+	static function $Concat(value EList in, rvalue EList in) returns (EList) {@Operation{"::"}};
 
 	/**
 	 * {@Operation []} Returns the element at the specified index.
 	 * @throws InvalidIndexException  if the index is less than 1 or greater than the size.
 	 */
-	static function $Get(value EglList in, index EglInt in) returns(EglAny) {@Operation{"[]"}};
+	static function $Get(value EList in, index EInt in) returns(EAny) {@Operation{"[]"}};
 	
 	/**
 	 * Adds an element to the end of this list.
@@ -71,7 +71,7 @@ externalType EglList type ClassType {
 	 * @param element  the new element.
 	 * @return this list, after the new element has been added.
 	 */
-	function appendElement(element EglAny in) returns(EglList);
+	function appendElement(element EAny in) returns(EList);
 	
 	/**
 	 * Adds the elements of the specified list to the end of this list.
@@ -79,7 +79,7 @@ externalType EglList type ClassType {
 	 * @param other  the other list.
 	 * @return this list, after the new elements have been added.
 	 */
-	function appendAll(other EglList in) returns(EglList);
+	function appendAll(other EList in) returns(EList);
 	
 	/**
 	 * Inserts an element into this list at a specified position.  Any elements
@@ -94,7 +94,7 @@ externalType EglList type ClassType {
 	 * @param index  where the element should be added.
 	 * @throws InvalidIndexException  if the index is negative or greater than 1 plus the size.
 	 */
-	function insertElement(element EglAny in, index EglInt in);
+	function insertElement(element EAny in, index EInt in);
 	
 	/**
 	 * Removes the element at a specified position from this list.  Any elements
@@ -103,7 +103,7 @@ externalType EglList type ClassType {
 	 * @param index  where the element should be removed.
 	 * @throws InvalidIndexException  if the index isn't a valid subscript.
 	 */
-	function removeElement(index EglInt in);
+	function removeElement(index EInt in);
 
 	/**
 	 * Returns the index of the first ocurrance of the specified value within 
@@ -115,7 +115,7 @@ externalType EglList type ClassType {
 	 * @return the index of the value, or 0 if it was not found.
 	 * @throws InvalidIndexException  if the index isn't a valid subscript.
 	 */
-	function indexOfElement(value EglAny in, index EglInt in) returns(EglInt);
+	function indexOfElement(value EAny in, index EInt in) returns(EInt);
 
 	/**
 	 * This is equivalent to indexOfElement(element, 1).
@@ -123,7 +123,7 @@ externalType EglList type ClassType {
 	 * @param value the value to find.
 	 * @return the index of the value, or 0 if it was not found.
 	 */
-	function indexOfElement(value EglAny in) returns(EglInt);
+	function indexOfElement(value EAny in) returns(EInt);
 	
 	/**
 	 * Removes all elements from the list.
@@ -137,14 +137,14 @@ externalType EglList type ClassType {
 	 * @param index  the index of the element to be updated. 
 	 * @throws InvalidIndexException  if the index isn't a valid subscript.
 	 */
-	function setElement(value EglAny in, index EglInt in);
+	function setElement(value EAny in, index EInt in);
 
 	/**
 	 * Returns the current size of the list.
 	 *
 	 * @return the current size of the list.
 	 */
-	function getSize() returns(EglInt);
+	function getSize() returns(EInt);
 
 	/**
 	 * Changes the size of the list.  If the new size is greater than the current
@@ -154,7 +154,7 @@ externalType EglList type ClassType {
 	 * @param size  the new size.
 	 * @throws InvalidSizeException  if the specified size is negative.
 	 */
-	function resize(size EglInt in);
+	function resize(size EInt in);
 
 	/**
 	 * Sorts the elements of the list in order from smallest to largest.
@@ -166,7 +166,7 @@ externalType EglList type ClassType {
 end
 
 /**
- * The delegate used by EglList.sort() to compare elements.
+ * The delegate used by EList.sort() to compare elements.
  *
  * @param a  the first value.
  * @param b  the second value.

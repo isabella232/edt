@@ -12,9 +12,11 @@
 package eglx.http;
 
 import egl.lang.reflect.InterfacePart;
-import egl.lang.NativeType;
+import eglx.lang.NativeType;
 
-externaltype HttpLib type NativeType   
+externaltype HttpLib type NativeType 
+	private constructor();
+	  
     static function convertFromURLEncoded(urlEncoded string in) returns (string);
 
     static function convertToURLEncoded(eglType string in) returns(string);

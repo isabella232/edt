@@ -1,14 +1,12 @@
 package eglx.lang;
 
-import egl.lang.EglBoolean;
-import egl.lang.EglNumber;
 import egl.lang.reflect.ClassType;
 import egl.lang.reflect.mof.Operation;
 
 /**
  * This is the class for booleans: true/false values.
  */
-externalType EBoolean extends EglBoolean type ClassType
+externalType EBoolean extends AnyValue type ClassType
 
 	/**
 	 * {@Operation ==} Compares two booleans.

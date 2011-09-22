@@ -1,5 +1,8 @@
 package eglx.persistence;
 
+import eglx.lang.NativeType;
+
+
 externalType ScrollableDataSource extends DataSource type NativeType
 	function setAbsolute(row int) returns (boolean);
 	function setRelative(rows int) returns (boolean);
