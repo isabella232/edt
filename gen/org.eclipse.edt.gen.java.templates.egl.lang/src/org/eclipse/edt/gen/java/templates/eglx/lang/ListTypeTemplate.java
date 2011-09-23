@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.java.templates.egl.lang;
+package org.eclipse.edt.gen.java.templates.eglx.lang;
 
 import java.util.List;
 

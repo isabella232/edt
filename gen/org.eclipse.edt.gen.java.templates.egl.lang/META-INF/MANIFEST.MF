@@ -4,7 +4,7 @@ Bundle-Name: EDT Java egl.lang Templates
 Bundle-SymbolicName: org.eclipse.edt.gen.java.templates.egl.lang
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Version: 0.7.0.qualifier
-Export-Package: org.eclipse.edt.gen.java.templates.egl.lang
+Export-Package: org.eclipse.edt.gen.java.templates.eglx.lang
 Require-Bundle: org.eclipse.edt.gen.java;bundle-version="0.7.0",
  org.eclipse.edt.compiler;bundle-version="0.7.0",
  org.eclipse.edt.gen;bundle-version="0.7.0",
