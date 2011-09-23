@@ -676,7 +676,11 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.QualifiedName name) {
-		Type type = (Type)mofTypeFor(name.getQualifier().resolveTypeBinding());
+		EObject objType = mofTypeFor(name.getQualifier().resolveTypeBinding());
+		Type type = null;
+		if (objType instanceof Type) {
+			type = (Type)mofTypeFor(name.getQualifier().resolveTypeBinding());
+		}
 		if (TypeUtils.isDynamicType(type)) {
 			DynamicAccess expr = factory.createDynamicAccess();
 			setElementInformation(name, expr);

@@ -24,6 +24,7 @@ import org.eclipse.edt.compiler.core.ast.OtherwiseClause;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.SQLActionStatementGenerator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.services.ServicesActionStatementGenerator;
 import org.eclipse.edt.compiler.internal.egl2mof.sql.SQLIOStatementGenerator;
+import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.CallStatement;
@@ -127,7 +128,10 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 				LocalVariableBinding binding = (LocalVariableBinding)name.resolveDataBinding();
 				Field field = factory.createField();
 				field.setName(binding.getCaseSensitiveName());
-				field.setType((Type)mofTypeFor(binding.getType()));
+				EObject objType = mofTypeFor(binding.getType());
+				if (objType instanceof Type) {
+					field.setType((Type)mofTypeFor(binding.getType()));
+				}
 				field.setIsNullable(binding.getType().isNullable());
 				field.setContainer(getCurrentFunctionMember());
 				addInitializers(decl.getInitializer(), decl.getSettingsBlockOpt(), field, decl.getType());
