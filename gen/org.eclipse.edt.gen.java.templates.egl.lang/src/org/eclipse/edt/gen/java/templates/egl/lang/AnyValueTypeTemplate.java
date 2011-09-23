@@ -41,8 +41,8 @@ public class AnyValueTypeTemplate extends JavaTemplate {
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			unboxCheck( arg.getObjectExpr(), ctx, out );
 			out.print(", ");
-			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.JavaImplementation);
-			out.print(".class)");
+			ctx.invoke(genRuntimeClassTypeName, arg.getEType(), ctx, out, TypeNameKind.JavaImplementation);
+			out.print(")");
 		}
 	}
 

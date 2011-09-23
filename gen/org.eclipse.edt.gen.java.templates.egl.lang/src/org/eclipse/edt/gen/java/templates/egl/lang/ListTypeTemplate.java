@@ -142,8 +142,8 @@ public class ListTypeTemplate extends JavaTemplate
 						out.print( "new org.eclipse.edt.runtime.java.egl.lang.EglList.ElementFactory<" );
 						ctx.invoke( genRuntimeTypeName, elementType, ctx, out, TypeNameKind.EGLImplementation );
 						out.print( ">(" );
-						ctx.invoke( genRuntimeTypeName, elementType, ctx, out, TypeNameKind.EGLImplementation );
-						out.print( ".class)" );
+						ctx.invoke( genRuntimeClassTypeName, elementType, ctx, out, TypeNameKind.EGLImplementation );
+						out.print( ")" );
 				}
 			}
 		}
