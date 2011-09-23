@@ -159,6 +159,9 @@ externalType EDecimal extends ENumber type ParameterizableType {
 	//TODO comment me
 	static function asDecimal(value EString in, length EInt in, decimals EInt in) returns(EDecimal) {@Operation{"narrow"}};
 
+	//TODO comment me
+	static function asDecimal(value ENumber in) returns(EDecimal) {@Operation{"narrow"}};
+
 	/**
 	 * {@Operation widen} Converts a decimal to a number.
 	 */

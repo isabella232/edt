@@ -82,4 +82,5 @@ externalType ESmallint extends ENumber type ClassType
 	static function asSmallint(value EString in) returns(ESmallint) {@Operation{"narrow"}};
 	static function asSmallint(value ESmallfloat in) returns(ESmallint) {@Operation{"narrow"}};
 	static function asSmallint(value EBigint in) returns(ESmallint) {@Operation{"narrow"}};
+	static function asSmallint(value ENumber in) returns(ESmallint) {@Operation{"narrow"}};
 end

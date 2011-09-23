@@ -61,6 +61,7 @@ externalType EString extends AnyText type ParameterizableType {
 	
 	static function asNumber(value EString in) returns(ENumber) {@Operation{"narrow"}};
 	
+	static function asString(value ENumber in) returns (EString) {@Operation{"widen"}};
 	static function asString(value EBigint in) returns (EString) {@Operation{"widen"}};
 	static function asString(value EBoolean in) returns (EString) {@Operation{"widen"}};
 	
