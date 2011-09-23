@@ -94,7 +94,7 @@ egl.eglx.lang.StringLib.db2TimestampFormat  = "yyyy-MM-dd-HH.mm.ss.SSSSSS";
  */
 egl.eglx.lang.StringLib["format"] = function(a, b) {
 	if (a == null)
-		throw new egl.lang.NullValueException();  //TODO sbg need a more specific exception?
+		throw new eglx.lang.NullValueException();  //TODO sbg need a more specific exception?
 	if (a instanceof Date) {
 		return egl.eglx.lang.StringLib.formatTimestamp(a,b);
 	}

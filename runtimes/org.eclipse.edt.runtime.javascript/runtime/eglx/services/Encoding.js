@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass('eglx.services', "Encoding", "egl.lang", "Enumeration",{
+egl.defineClass('eglx.services', "Encoding", "eglx.lang", "Enumeration",{
 		"constructor": function(valueIn) {
 			this.value = valueIn;
 		}

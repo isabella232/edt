@@ -33,12 +33,12 @@ egl.eglx.rest.invokeService = function(http,
 											errorCallbackFunction){
 	/*
 					[str1, str2, eze$Temp1, eze$Temp2],
-					["egl.egl.lang.EString", "egl.egl.lang.EInt32", "egl.egl.lang.EInt16", "egl.egl.lang.EFloat64"],
+					["egl.eglx.lang.EString", "egl.eglx.lang.EInt32", "egl.eglx.lang.EInt16", "egl.eglx.lang.EFloat64"],
 					["myarg1", "myArg2", "myArg3", "myArg4"],
-					["egl.egl.lang.EInt16", "egl.egl.lang.EString"],
+					["egl.eglx.lang.EInt16", "egl.eglx.lang.EString"],
 					"GET",
 					//http://www.ibm.com/{myarg1}/{myArg2}?item={myArg4}
-					"http://www.ibm.com/" + egl.eglx.http.HttpLib.convertToURLEncoded(egl.egl.lang.EString.fromEString(str1)) + "/" + egl.eglx.http.HttpLib.convertToURLEncoded(egl.egl.lang.EString.fromEInt32(str2)) + "?item=" + egl.eglx.http.HttpLib.convertToURLEncoded(egl.egl.lang.EString.ezeCast(eze$Temp2)),
+					"http://www.ibm.com/" + egl.eglx.http.HttpLib.convertToURLEncoded(egl.eglx.lang.EString.fromEString(str1)) + "/" + egl.eglx.http.HttpLib.convertToURLEncoded(egl.eglx.lang.EString.fromEInt32(str2)) + "?item=" + egl.eglx.http.HttpLib.convertToURLEncoded(egl.eglx.lang.EString.ezeCast(eze$Temp2)),
 					egl.formatNONE, "requst charset", " request content types", egl.formatNONE, "response Charset", "response Content Type",
 					eze$Temp1, handleF2Resonse, egl.eglx.services.ServiceLib['$inst'].serviceExceptionHandler);
 

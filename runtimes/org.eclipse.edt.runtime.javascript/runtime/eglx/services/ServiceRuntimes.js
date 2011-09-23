@@ -556,10 +556,10 @@ egl.defineClass(
     },
     "convertToEnum" : function( value, type) {
     	if(typeof value === "string"){
-    		value = egl.egl.lang.EInt32.fromEString(value);
+    		value = egl.eglx.lang.EInt32.fromEString(value);
     	}
     	for ( var field in type) {
-    		if (type[field] instanceof egl.egl.lang.Enumeration
+    		if (type[field] instanceof egl.eglx.lang.Enumeration
     				&& type[field].value == value) {
     			return type[field];
     		}

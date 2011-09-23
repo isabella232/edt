@@ -434,15 +434,15 @@ egl.tweakTypeForDebug = function(type, variableInfo){
 		}
 	}
 	else {
-		parent = variableInfo.value
+		parent = variableInfo.value;
 	}
 	
-	if (type == "egl.lang.AnyException") {
+	if (type == "eglx.lang.AnyException") {
 		type = (variableInfo.value.eze$$package ? variableInfo.value.eze$$package + "." : "") + variableInfo.value.eze$$typename;
 	}
 	
 	return type;
-}
+};
 
 egl.resolveAnyValue = function(any) {
 	if (any == null) {
@@ -455,7 +455,7 @@ egl.resolveAnyValue = function(any) {
 		valueObject = valueObject.eze$$value;
 	}
 	return valueObject;
-}
+};
 
 egl.resolveAnyType = function(any) {
 	if (any == null) {
@@ -1155,7 +1155,7 @@ egl.getDebugVariablesString = function(response) {
 	
 	// Array elements should retain type and name info from the parent.
 	var type = frame.variableInfos[variableIndex].type;
-	if (type && type.indexOf("egl.lang.EglList<") == 0 && type.charAt(type.length-1) == ">") {
+	if (type && type.indexOf("eglx.lang.EList<") == 0 && type.charAt(type.length-1) == ">") {
 		type = type.substring(17, type.length-1);
 		for (var i=0; i<children.length; i++) {
 			children[i].type = type;

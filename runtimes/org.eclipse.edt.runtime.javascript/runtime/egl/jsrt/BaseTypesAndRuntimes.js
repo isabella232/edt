@@ -3006,7 +3006,7 @@ egl.timeStampEquals = function(/*timestamp*/ a, /*timestamp*/ b, falseAnswer) {
 				return func.apply(context, arguments);
 			}
 			catch (e) {
-				if ( e instanceof egl.egl.lang.AnyException || (egl.egl.debug && e instanceof egl.egl.debug.DebugTermination))
+				if ( e instanceof egl.eglx.lang.AnyException || (egl.egl.debug && e instanceof egl.egl.debug.DebugTermination))
 				{
 					throw e;
 				}
@@ -3772,7 +3772,8 @@ egl.checkNull = function ( obj, source )
 	}
 	else
 		return obj;
-}
+};
+
 
 egl.makeExceptionFromCaughtObject = function( caught )
 {

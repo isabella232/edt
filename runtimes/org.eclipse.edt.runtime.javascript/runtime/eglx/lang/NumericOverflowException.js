@@ -8,18 +8,16 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass('egl.lang', "DynamicAccessException", "egl.jsrt", "Record", {
-	"eze$$fileName" : "egl/lang/Exceptions.egl",
+egl.defineClass('eglx.lang', "NumericOverflowException", "egl.jsrt", "Record", {
+	"eze$$fileName" : "eglx/lang/Exceptions.egl",
 		"constructor": function() {
 			this.eze$$setInitial();
 		}
 		,
 		"ezeCopy": function(source) {
-			this.key = source.key;
 		}
 		,
 		"eze$$setEmpty": function() {
-			this.key = "";
 		}
 		,
 		"eze$$setInitial": function() {
@@ -28,15 +26,14 @@ egl.defineClass('egl.lang', "DynamicAccessException", "egl.jsrt", "Record", {
 		,
 		"eze$$clone": function() {
 			var ezert$$1 = this;
-			var ezert$$2 = new egl.egl.lang.DynamicAccessException();
-			ezert$$2.key = ezert$$1.key;
+			var ezert$$2 = new egl.eglx.lang.NumericOverflowException();
 			return ezert$$2;
 		}
 		,
 		"eze$$getAnnotations": function() {
 			if(this.annotations === undefined){
 				this.annotations = {};
-				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("DynamicAccessException", null, false);
+				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("NumericOverflowException", null, false);
 			}
 			return this.annotations;
 		}
@@ -45,16 +42,12 @@ egl.defineClass('egl.lang', "DynamicAccessException", "egl.jsrt", "Record", {
 			if(this.fieldInfos === undefined){
 				var annotations;
 				this.fieldInfos = new Array();
-				annotations = {};
-				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("key", null, false, false);
-				annotations["JsonName"] = new egl.eglx.json.JsonName("key");
-				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("key", "key", "S;", String, annotations);
 			}
 			return this.fieldInfos;
 		}
 		,
 		"toString": function() {
-			return "[DynamicAccessException]";
+			return "[NumericOverflowException]";
 		}
 	}
 );

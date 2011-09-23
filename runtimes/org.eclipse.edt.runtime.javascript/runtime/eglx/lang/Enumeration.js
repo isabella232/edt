@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass("egl.lang", "Enumeration", {
+egl.defineClass("eglx.lang", "Enumeration", {
 		"constructor": function() {
 			this.value = 0;
 		}

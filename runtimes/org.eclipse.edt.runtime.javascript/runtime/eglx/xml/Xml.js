@@ -43,7 +43,7 @@ egl.eglx.xml.XmlLib["toXML"] = function( /*value*/value, /*map*/namespaces, /*Fi
 		s.push(this.arrayToXML(value, namespaces, fieldInfo));
 	} else if (value === null) {
 		s.push(this.nullToXML(value, namespaces, fieldInfo));
-	} else if (value !== null && typeof value === "object" && value instanceof egl.egl.lang.Enumeration) {
+	} else if (value !== null && typeof value === "object" && value instanceof egl.eglx.lang.Enumeration) {
 		s.push(this.primitiveToXML(value.value, namespaces, fieldInfo));
 	} else {
 		s.push(this.primitiveToXML(value, namespaces, fieldInfo));
@@ -333,11 +333,11 @@ egl.eglx.xml.XmlLib["fromXML"] = function( /*node*/elements, /*FieldInfo*/fieldI
 		return this.eglClassFromXML(elements[0], eglObj, fieldInfo);
 	} else if (eglObj !== null && typeof eglObj === "object" && eglObj instanceof egl.eglx.lang.EDictionary) {
 		return this.dictionaryFromXML(elements[0], eglObj, fieldInfo);
-	} else if (eglObj !== null && typeof eglObj === "object" && eglObj instanceof egl.egl.lang.Enumeration) {
+	} else if (eglObj !== null && typeof eglObj === "object" && eglObj instanceof egl.eglx.lang.Enumeration) {
 		return this.enumerationFromXML(elements[0], eglObj, fieldInfo);
 	} else if ((eglObj == undefined || eglObj == null)
 			&& (elements[0].children != null && elements[0].children.length > 1)) {
-		return this.dictionaryFromXML(elements[0], new egl.egl.lang.EDictionary(), fieldInfo);
+		return this.dictionaryFromXML(elements[0], new egl.eglx.lang.EDictionary(), fieldInfo);
 	} else {
 		return this.primitiveFromXML(elements[0], fieldInfo);
 	}
@@ -395,45 +395,45 @@ egl.eglx.xml.XmlLib["newPrimitiveFromXml"] = function( /*node*/value, /*FieldInf
 			break;
 
 		case 'I':
-			value = egl.egl.lang.EInt32.fromEString(value);
+			value = egl.eglx.lang.EInt32.fromEString(value);
 			break;
 
 		case 'i':
-			value = egl.egl.lang.EInt16.fromEString(value);
+			value = egl.eglx.lang.EInt16.fromEString(value);
 			break;
 
 		case '0':
-			value = egl.egl.lang.EBoolean.fromEString(value);
+			value = egl.eglx.lang.EBoolean.fromEString(value);
 			break;
 
 		case 'F':
-			value = egl.egl.lang.EIFloat64.fromEString(value);
+			value = egl.eglx.lang.EIFloat64.fromEString(value);
 			break;
 
 		case 'f':
-			value = egl.egl.lang.EFloat32.fromEString(value);
+			value = egl.eglx.lang.EFloat32.fromEString(value);
 			break;
 
 		case 'B':
-			value = egl.egl.lang.EInt64.fromEString(value);
+			value = egl.eglx.lang.EInt64.fromEString(value);
 			break;
 
 		case 'N':
 			var colon = fieldInfo.eglSignature.indexOf(':');
-			value = egl.egl.lang.Decimal.fromEString(value, 
+			value = egl.eglx.lang.Decimal.fromEString(value, 
 							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';')), 
 							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon))));
 			break;
 
 		case 'd':
 			var colon = fieldInfo.eglSignature.indexOf(':');
-			value = egl.egl.lang.Decimal.fromEString(value, 
+			value = egl.eglx.lang.Decimal.fromEString(value, 
 							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';')), 
 							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon))));
 			break;
 		case '9':
 			var colon = fieldInfo.eglSignature.indexOf(':');
-			value = egl.egl.lang.Decimal.fromEString(value, 
+			value = egl.eglx.lang.Decimal.fromEString(value, 
 							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';')), 
 							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon))));
 			break;

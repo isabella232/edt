@@ -24,10 +24,10 @@ egl.createAnyException = function( /*string*/ messageID, /*string or array*/ ins
 	args.push( [ "message", inserts || "" ] );
 	// uncomment the following line to see exceptions being swallowed
 	// egl.println("Exception: "+inserts+" "+this);
-	return new egl.egl.lang.AnyException( args );
+	return new egl.eglx.lang.AnyException( args );
 };
 
-egl.defineClass( "egl.lang", "AnyException", "egl.jsrt", "Record", {
+egl.defineClass( "eglx.lang", "AnyException", "egl.jsrt", "Record", {
 	
 	//to create an exception in the runtime:
 	//	var messageID = "EGLXXXX";

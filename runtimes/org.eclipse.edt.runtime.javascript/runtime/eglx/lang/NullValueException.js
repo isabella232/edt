@@ -8,8 +8,8 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass('egl.lang', "NumericOverflowException", "egl.jsrt", "Record", {
-	"eze$$fileName" : "egl/lang/Exceptions.egl",
+egl.defineClass('eglx.lang', "NullValueException", "egl.jsrt", "Record", {
+	"eze$$fileName" : "eglx/lang/Exceptions.egl",
 		"constructor": function() {
 			this.eze$$setInitial();
 		}
@@ -26,14 +26,14 @@ egl.defineClass('egl.lang', "NumericOverflowException", "egl.jsrt", "Record", {
 		,
 		"eze$$clone": function() {
 			var ezert$$1 = this;
-			var ezert$$2 = new egl.egl.lang.NumericOverflowException();
+			var ezert$$2 = new egl.eglx.lang.NullValueException();
 			return ezert$$2;
 		}
 		,
 		"eze$$getAnnotations": function() {
 			if(this.annotations === undefined){
 				this.annotations = {};
-				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("NumericOverflowException", null, false);
+				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("NullValueException", null, false);
 			}
 			return this.annotations;
 		}
@@ -47,7 +47,7 @@ egl.defineClass('egl.lang', "NumericOverflowException", "egl.jsrt", "Record", {
 		}
 		,
 		"toString": function() {
-			return "[NumericOverflowException]";
+			return "[NullValueException]";
 		}
 	}
 );

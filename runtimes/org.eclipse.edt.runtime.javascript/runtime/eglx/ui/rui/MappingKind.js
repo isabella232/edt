@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass('eglx.ui.rui', "MappingKind", "egl.lang", "Enumeration",{
+egl.defineClass('eglx.ui.rui', "MappingKind", "eglx.lang", "Enumeration",{
 		"constructor": function(valueIn) {
 			this.value = valueIn;
 		}

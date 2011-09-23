@@ -10,16 +10,12 @@
  *
  *******************************************************************************/
 
-egl.createJavaObjectException = function( /*string*/ messageID, /*string or array*/ inserts )
-{
-	if (typeof(inserts) != "string") {
-		inserts = egl.getRuntimeMessage( messageID, inserts );
+egl.defineClass('eglx.lang', "OrderingKind", "eglx.lang", "Enumeration",{
+		"constructor": function(valueIn) {
+			this.value = valueIn;
+		}
 	}
-	egl.exceptionThrown = true;
-	var args = new Array();
-	args.push( [ "messageID", messageID || "" ] );
-	args.push( [ "message", inserts || "" ] );
-	return new egl.egl.lang.JavaObjectException( args );
-}
-
-egl.defineClass( "egl.lang", "JavaObjectException", "egl.lang", "AnyException", { });
+);
+egl.eglx.lang.OrderingKind['byKey'] = new egl.eglx.lang.OrderingKind(1);
+egl.eglx.lang.OrderingKind['byInsertion'] = new egl.eglx.lang.OrderingKind(2);
+egl.eglx.lang.OrderingKind['none'] = new egl.eglx.lang.OrderingKind(3);

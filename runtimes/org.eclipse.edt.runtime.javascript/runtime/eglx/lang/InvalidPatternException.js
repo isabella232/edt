@@ -8,8 +8,8 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass('egl.lang', "InvalidPatternException", "egl.jsrt", "Record", {
-	"eze$$fileName" : "egl/lang/Exceptions.egl",
+egl.defineClass('eglx.lang', "InvalidPatternException", "egl.jsrt", "Record", {
+	"eze$$fileName" : "eglx/lang/Exceptions.egl",
 		"constructor": function() {
 			this.eze$$setInitial();
 		}
@@ -28,7 +28,7 @@ egl.defineClass('egl.lang', "InvalidPatternException", "egl.jsrt", "Record", {
 		,
 		"eze$$clone": function() {
 			var ezert$$1 = this;
-			var ezert$$2 = new egl.egl.lang.InvalidPatternException();
+			var ezert$$2 = new egl.eglx.lang.InvalidPatternException();
 			ezert$$2.pattern = ezert$$1.pattern;
 			return ezert$$2;
 		}

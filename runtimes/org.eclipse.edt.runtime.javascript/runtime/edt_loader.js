@@ -32,7 +32,7 @@ egl.eze$$runtimeProperties = {};
 load("messages", "", ["RuiMessages-en_US"]);
 load("runtime", "",  ["egl", "egl_development", "egl_mathcontext", "egl_bigdecimal"]);
 load("runtime", "egl.jsrt", ["BaseTypesAndRuntimes"]);
-load("runtime", "egl.lang", ["AnyException", "DynamicAccessException", "Enumeration",
+load("runtime", "eglx.lang", ["AnyException", "DynamicAccessException", "Enumeration",
                              "InvalidArgumentException", "InvalidIndexException", "InvalidPatternException",
                              "InvocationException", "JavaObjectException", "NullValueException",
                              "NumericOverflowException", "TypeCastException", ]);

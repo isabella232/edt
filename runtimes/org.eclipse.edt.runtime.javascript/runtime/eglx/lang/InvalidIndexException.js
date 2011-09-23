@@ -8,20 +8,18 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass('egl.lang', "InvocationException", "egl.jsrt", "Record", {
-	"eze$$fileName" : "egl/lang/Exceptions.egl",
+egl.defineClass('eglx.lang', "InvalidIndexException", "egl.jsrt", "Record", {
+	"eze$$fileName" : "eglx/lang/Exceptions.egl",
 		"constructor": function() {
 			this.eze$$setInitial();
 		}
 		,
 		"ezeCopy": function(source) {
-			this.name = source.name;
-			this.returnValue = source.returnValue;
+			this.index = source.index;
 		}
 		,
 		"eze$$setEmpty": function() {
-			this.name = "";
-			this.returnValue = 0;
+			this.index = 0;
 		}
 		,
 		"eze$$setInitial": function() {
@@ -30,16 +28,15 @@ egl.defineClass('egl.lang', "InvocationException", "egl.jsrt", "Record", {
 		,
 		"eze$$clone": function() {
 			var ezert$$1 = this;
-			var ezert$$2 = new egl.egl.lang.InvocationException();
-			ezert$$2.name = ezert$$1.name;
-			ezert$$2.returnValue = ezert$$1.returnValue;
+			var ezert$$2 = new egl.eglx.lang.InvalidIndexException();
+			ezert$$2.index = ezert$$1.index;
 			return ezert$$2;
 		}
 		,
 		"eze$$getAnnotations": function() {
 			if(this.annotations === undefined){
 				this.annotations = {};
-				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("InvocationException", null, false);
+				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("InvalidIndexException", null, false);
 			}
 			return this.annotations;
 		}
@@ -49,19 +46,15 @@ egl.defineClass('egl.lang', "InvocationException", "egl.jsrt", "Record", {
 				var annotations;
 				this.fieldInfos = new Array();
 				annotations = {};
-				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("name", null, false, false);
-				annotations["JsonName"] = new egl.eglx.json.JsonName("name");
-				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("name", "name", "S;", String, annotations);
-				annotations = {};
-				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("returnValue", null, false, false);
-				annotations["JsonName"] = new egl.eglx.json.JsonName("returnValue");
-				this.fieldInfos[1] =new egl.eglx.services.FieldInfo("returnValue", "returnValue", "I;", Number, annotations);
+				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("index", null, false, false);
+				annotations["JsonName"] = new egl.eglx.json.JsonName("index");
+				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("index", "index", "I;", Number, annotations);
 			}
 			return this.fieldInfos;
 		}
 		,
 		"toString": function() {
-			return "[InvocationException]";
+			return "[InvalidIndexException]";
 		}
 	}
 );

@@ -10,7 +10,7 @@
  *
  *******************************************************************************/
 
-egl.createRuntimeException = function( /*string*/ messageID, /*string or array*/ inserts )
+egl.createJavaObjectException = function( /*string*/ messageID, /*string or array*/ inserts )
 {
 	if (typeof(inserts) != "string") {
 		inserts = egl.getRuntimeMessage( messageID, inserts );
@@ -19,12 +19,7 @@ egl.createRuntimeException = function( /*string*/ messageID, /*string or array*/
 	var args = new Array();
 	args.push( [ "messageID", messageID || "" ] );
 	args.push( [ "message", inserts || "" ] );
-	return new egl.eglx.lang.AnyException( args );
+	return new egl.eglx.lang.JavaObjectException( args );
 };
 
-/* FUTURE sbg At this time, we don't have a need for RuntimeException;  the thinking is that
- * simply throwing AnyException is sufficient in EDT.  However, I'm leaving this here in case
- * we decide to add it;  note that it would also require changing egl.createRuntimeException
- * accordingly....
-egl.defineClass( "eglx.javascript", "RuntimeException", "eglx.lang", "AnyException", {} );
- */  
+egl.defineClass( "eglx.lang", "JavaObjectException", "eglx.lang", "AnyException", { });

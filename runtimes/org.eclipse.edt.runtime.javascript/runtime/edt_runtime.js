@@ -1,11 +1,14 @@
-/*
- * Licensed Materials - Property of IBM
+/*******************************************************************************
+ * Copyright © 2008, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corporation 2008, 2010. All Rights Reserved.
+ * Contributors:
+ * IBM Corporation - initial API and implementation
  *
- * U.S. Government Users Restricted Rights - Use, duplication or
- * disclosure restricted by GSA DP Schedule Contract with IBM Corp.
- */
+ *******************************************************************************/
 
 /* TODO sbg We're using two different conventions for static functions:
  * the old RBD style in which they're simply functions on a class with
@@ -14,11 +17,22 @@
  * or somehow reconcile the two....
  */
 
+egl.createNullValueException = function( /*string*/ messageID, /*string or array*/ inserts )
+{
+	if (typeof(inserts) != "string") {
+		inserts = egl.getRuntimeMessage( messageID, inserts );
+	}
+	egl.exceptionThrown = true;
+	var args = new Array();
+	args.push( [ "messageID", messageID || "" ] );
+	args.push( [ "message", inserts || "" ] );
+	return new egl.eglx.lang.NullValueException( args );
+};
 
 /****************************************************************************
  * AnyValue
  ****************************************************************************/
-egl.defineClass( "egl.lang", "AnyValue"
+egl.defineClass( "eglx.lang", "AnyValue"
 ,
 {
 	// TODO sbg In java RT, this is an interface;  do we need any methods on it here?
@@ -27,30 +41,30 @@ egl.defineClass( "egl.lang", "AnyValue"
 
 
 /****************************************************************************
- * EglAny
+ * EAny
  ****************************************************************************/
-egl.defineClass( "egl.lang", "EglAny",
+egl.defineClass( "eglx.lang", "EAny",
 {
 }
 );
-egl.egl.lang.EglAny.ezeWrap = function(obj){
-	return new egl.egl.lang.AnyBoxedObject(obj);
+egl.eglx.lang.EAny.ezeWrap = function(obj){
+	return new egl.eglx.lang.AnyBoxedObject(obj);
 };
-egl.egl.lang.EglAny.ezeCast = function(obj, cons){
+egl.eglx.lang.EAny.ezeCast = function(obj, cons){
 	return egl.convertAnyToRefType(obj, obj.eze$$signature, cons);
 };
-egl.egl.lang.EglAny.unbox = function(obj){
+egl.eglx.lang.EAny.unbox = function(obj){
 	return egl.unboxAny(obj);
 };
-egl.egl.lang.EglAny.fromEglAny = function(obj, sig){
+egl.eglx.lang.EAny.fromEAny = function(obj, sig){
 	return {eze$$value : obj, eze$$signature : sig};
 };
 
 /****************************************************************************
  * AnyBoxedObject
  ****************************************************************************/
-egl.defineClass( "egl.lang", "AnyBoxedObject",
-		"egl.lang", "EglAny",
+egl.defineClass( "eglx.lang", "AnyBoxedObject",
+		"eglx.lang", "EAny",
 {
 	"constructor" : function(obj) {
 		this.eze$$value = obj;
@@ -59,7 +73,7 @@ egl.defineClass( "egl.lang", "AnyBoxedObject",
     	return this.eze$$value;
     },
     "ezeCopy" : function(obj){
-    	if ((this.eze$$value == null) || !(obj instanceof egl.egl.lang.AnyValue)){ 
+    	if ((this.eze$$value == null) || !(obj instanceof egl.eglx.lang.AnyValue)){ 
     		this.eze$$value = obj;
     	}
     	else {
@@ -74,27 +88,27 @@ egl.defineClass( "egl.lang", "AnyBoxedObject",
  * JavaScript Number; we only instantiate one of these when boxing parms 
  * of this type across function invocations.
  ****************************************************************************/
-egl.defineClass( "egl.lang", "EInt16"
-				,"egl.lang", "AnyBoxedObject",
+egl.defineClass( "eglx.lang", "EInt16"
+				,"eglx.lang", "AnyBoxedObject",
 {
 	"constructor" : function(i){
-		egl.egl.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
+		egl.eglx.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
 	}
 }
 );
-egl.egl.lang.EInt16.fromEInt32 = function (x) {   
+egl.eglx.lang.EInt16.fromEInt32 = function (x) {   
 	return egl.convertNumberToSmallint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.EInt16.fromEDecimal = function (x) {   
+egl.eglx.lang.EInt16.fromEDecimal = function (x) {   
 	return egl.convertDecimalToSmallint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.EInt16.fromAnyNum = function (x) {   
+egl.eglx.lang.EInt16.fromAnyNumber = function (x) {   
 	return egl.convertDecimalToSmallint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.EInt16.fromEFloat64 = function (x) {
+egl.eglx.lang.EInt16.fromEFloat64 = function (x) {
 	return egl.convertFloatToSmallint(x);
 };
-egl.egl.lang.EInt16.fromEString = function (x) {
+egl.eglx.lang.EInt16.fromEString = function (x) {
 	return egl.convertStringToSmallint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
 
@@ -103,40 +117,40 @@ egl.egl.lang.EInt16.fromEString = function (x) {
  * Number; we only instantiate one of these when boxing parms of this type 
  * across function invocations.
  ****************************************************************************/
-egl.defineClass( "egl.lang", "EInt32"
-				,"egl.lang", "AnyBoxedObject",
+egl.defineClass( "eglx.lang", "EInt32"
+				,"eglx.lang", "AnyBoxedObject",
 {
 	"constructor" : function(i){
-		egl.egl.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
+		egl.eglx.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
 	}
 }
 );
-egl.egl.lang.EInt32.ZERO = 0;
-egl.egl.lang.EInt32.fromEString = function (x) {
+egl.eglx.lang.EInt32.ZERO = 0;
+egl.eglx.lang.EInt32.fromEString = function (x) {
 	return egl.convertNumberToInt(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.EInt32.fromEDecimal = function (x) {
+egl.eglx.lang.EInt32.fromEDecimal = function (x) {
 	return egl.convertDecimalToInt(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.EInt32.fromAnyNum = function (x) {
+egl.eglx.lang.EInt32.fromAnyNumber = function (x) {
 	return egl.convertDecimalToInt(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.EInt32.fromAnyObject = function (x) {
+egl.eglx.lang.EInt32.fromAnyObject = function (x) {
 	return egl.convertAnyToInt(x,false);  //TODO sbg avoid hardcoding the boolean flag
 };
-egl.egl.lang.EInt32.fromEInt64 = function (x) {
+egl.eglx.lang.EInt32.fromEInt64 = function (x) {
 	return egl.convertDecimalToInt(x);
 };
-egl.egl.lang.EInt32.fromEFloat32 = function (x) {
+egl.eglx.lang.EInt32.fromEFloat32 = function (x) {
 	return egl.convertFloatToInt(x);
 };
-egl.egl.lang.EInt32.fromEFloat64 = function (x) {
+egl.eglx.lang.EInt32.fromEFloat64 = function (x) {
 	return egl.convertFloatToInt(x);
 };
-egl.egl.lang.EInt32.fromEString = function (x) {
+egl.eglx.lang.EInt32.fromEString = function (x) {
 	return egl.convertStringToInt(x);
 };
-egl.egl.lang.EInt32.ezeCast = function (x) {
+egl.eglx.lang.EInt32.ezeCast = function (x) {
 	return egl.convertAnyToInt(x, false);    // TODO need nullable support
 };
 
@@ -145,25 +159,25 @@ egl.egl.lang.EInt32.ezeCast = function (x) {
  * JavaScript Number; we only instantiate one of these when boxing parms of 
  * this type across function invocations.
  ****************************************************************************/
-egl.defineClass( "egl.lang", "EFloat32"
-				,"egl.lang", "AnyBoxedObject",
+egl.defineClass( "eglx.lang", "EFloat32"
+				,"eglx.lang", "AnyBoxedObject",
 {
 	"constructor" : function(i){
-		egl.egl.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
+		egl.eglx.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
 	}
 }
 );
-egl.egl.lang.EFloat32.ZERO = egl.javascript.BigDecimal.prototype.ZERO;
-egl.egl.lang.EFloat32.fromEFloat64 = function (x) {
+egl.eglx.lang.EFloat32.ZERO = egl.javascript.BigDecimal.prototype.ZERO;
+egl.eglx.lang.EFloat32.fromEFloat64 = function (x) {
 	return egl.convertFloatToSmallfloat(x,"TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.EFloat32.fromEInt32  = function (x) {
+egl.eglx.lang.EFloat32.fromEInt32  = function (x) {
 	return egl.convertFloatToSmallfloat(Number( (new egl.javascript.BigDecimal(x)).toString()));
 };
-egl.egl.lang.EFloat32.fromEInt64  = function (x) {
+egl.eglx.lang.EFloat32.fromEInt64  = function (x) {
 	return egl.convertFloatToSmallfloat(Number( (new egl.javascript.BigDecimal(x)).toString()));
 };
-egl.egl.lang.EFloat32.fromEDecimal  = function (x) {
+egl.eglx.lang.EFloat32.fromEDecimal  = function (x) {
 	return egl.convertFloatToSmallfloat(Number( x.toString()));
 
 };
@@ -172,61 +186,61 @@ egl.egl.lang.EFloat32.fromEDecimal  = function (x) {
 /****************************************************************************
  * EDecimal
  ****************************************************************************/
-egl.defineClass( "egl.lang", "EDecimal"
-				,"egl.lang", "AnyBoxedObject",
+egl.defineClass( "eglx.lang", "EDecimal"
+				,"eglx.lang", "AnyBoxedObject",
 {
 	"constructor" : function(s){
-		egl.egl.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
+		egl.eglx.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
 	}
 }
 );
-egl.egl.lang.EDecimal.ZERO = egl.javascript.BigDecimal.prototype.ZERO;
-egl.egl.lang.EDecimal.fromEInt16 = function (x, decimals, limit) {   
+egl.eglx.lang.EDecimal.ZERO = egl.javascript.BigDecimal.prototype.ZERO;
+egl.eglx.lang.EDecimal.fromEInt16 = function (x, decimals, limit) {   
 	if (limit)
 		return egl.convertIntegerToDecimal(x, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 	else
 		return new egl.javascript.BigDecimal(x);
 };
-egl.egl.lang.EDecimal.fromEInt32 = function (x, decimals, limit) {   
+egl.eglx.lang.EDecimal.fromEInt32 = function (x, decimals, limit) {   
 	if (limit)
 		return egl.convertIntegerToDecimal(x, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 	else
 		return new egl.javascript.BigDecimal(x);
 };
-egl.egl.lang.EDecimal.fromEInt64 = function (x, decimals, limit) {   
+egl.eglx.lang.EDecimal.fromEInt64 = function (x, decimals, limit) {   
 	if (limit)
 		return egl.convertIntegerToDecimal(x, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 	else
 		return new egl.javascript.BigDecimal(x);
 };
-egl.egl.lang.EDecimal.fromEDecimal = function (x, decimals, limit) { 
+egl.eglx.lang.EDecimal.fromEDecimal = function (x, decimals, limit) { 
 	return egl.convertDecimalToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.EDecimal.fromEString = function (x, decimals, limit) { 
+egl.eglx.lang.EDecimal.fromEString = function (x, decimals, limit) { 
 	if (limit)
 		return egl.convertStringToDecimal(x, decimals, limit);
 	else
 		return egl.convertStringToDecimal(x, 0, decimals);
 };
-egl.egl.lang.EDecimal.fromAnyNum = function (x, decimals, limit) {
+egl.eglx.lang.EDecimal.fromAnyNumber = function (x, decimals, limit) {
 	if (limit)
 		return egl.convertDecimalToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 	else
 		return egl.convertDecimalToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/); 
 };
-egl.egl.lang.EDecimal.fromEFloat32 = function (x, decimals, limit) {
+egl.eglx.lang.EDecimal.fromEFloat32 = function (x, decimals, limit) {
 	if (limit)
 		return egl.convertFloatToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 	else
 		return egl.convertFloatToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.EDecimal.fromEFloat64 = function (x, decimals, limit) {
+egl.eglx.lang.EDecimal.fromEFloat64 = function (x, decimals, limit) {
 	if (limit)
 		return egl.convertFloatToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 	else
 		return egl.convertFloatToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.EDecimal.ezeCast = function (x, decimals, limit) {
+egl.eglx.lang.EDecimal.ezeCast = function (x, decimals, limit) {
 	if (limit)
 		return egl.convertAnyToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 	else
@@ -238,74 +252,77 @@ egl.egl.lang.EDecimal.ezeCast = function (x, decimals, limit) {
 /****************************************************************************
  * EInt64 covers the egl type "bigint" 
  ****************************************************************************/
-egl.defineClass( "egl.lang", "EInt64"
-				,"egl.lang", "AnyBoxedObject",
+egl.defineClass( "eglx.lang", "EInt64"
+				,"eglx.lang", "AnyBoxedObject",
 {
 	"constructor" : function(i){
-		egl.egl.lang.AnyBoxedObject.call(this, i);	//TODO no ctor chaining?! 
+		egl.eglx.lang.AnyBoxedObject.call(this, i);	//TODO no ctor chaining?! 
 	}
 }
 );
-egl.egl.lang.EInt64.ZERO = egl.javascript.BigDecimal.prototype.ZERO;
-egl.egl.lang.EInt64.fromEInt16 = function (x) {   
+egl.eglx.lang.EInt64.ZERO = egl.javascript.BigDecimal.prototype.ZERO;
+egl.eglx.lang.EInt64.fromEInt16 = function (x) {   
 	return new egl.javascript.BigDecimal(x);
 };
-egl.egl.lang.EInt64.fromEInt32 = function (x) {   
+egl.eglx.lang.EInt64.fromEInt32 = function (x) {   
 	return new egl.javascript.BigDecimal(x);
 };
-egl.egl.lang.EInt64.fromEString = function (x) {  
+egl.eglx.lang.EInt64.fromEString = function (x) {  
 	return egl.convertStringToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.EInt64.fromEDecimal = function (x) {  
+egl.eglx.lang.EInt64.fromEDecimal = function (x) {  
 	return egl.convertDecimalToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.EInt64.fromEFloat64 = function (x) {  
+egl.eglx.lang.EInt64.fromEFloat64 = function (x) {  
 	return egl.convertFloatToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.EInt64.fromAnyNum = function (x) {  
+egl.eglx.lang.EInt64.fromAnyNumber = function (x) {  
 	return egl.convertDecimalToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.EInt64.fromEFloat32 = function (x) {  
+egl.eglx.lang.EInt64.fromEFloat32 = function (x) {  
 	return egl.convertFloatToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 }; 
+egl.eglx.lang.EInt64.ezeCast = function (x) {
+	return egl.convertAnyToBigint(x, false);    // TODO need nullable support
+};
 
 
 
 /****************************************************************************
  * EFloat64 covers the egl type "float" and is represented as a JavaScript Number).
  ****************************************************************************/
-egl.defineClass( "egl.lang", "EFloat64"
-				,"egl.lang", "AnyBoxedObject",
+egl.defineClass( "eglx.lang", "EFloat64"
+				,"eglx.lang", "AnyBoxedObject",
 {
 	"constructor" : function(i){
-		egl.egl.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
+		egl.eglx.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
 	}
 }
 );
-egl.egl.lang.EFloat64.ZERO = egl.javascript.BigDecimal.prototype.ZERO;
-egl.egl.lang.EFloat64.fromEInt64 = function (x) { 
+egl.eglx.lang.EFloat64.ZERO = egl.javascript.BigDecimal.prototype.ZERO;
+egl.eglx.lang.EFloat64.fromEInt64 = function (x) { 
 	return Number(x.toString()); 
 };
-egl.egl.lang.EFloat64.fromEDecimal = function (x) { 
+egl.eglx.lang.EFloat64.fromEDecimal = function (x) { 
 	return Number(x.toString()); 
 };
 
 
-egl.defineClass( "egl.lang", "EBoolean"
-		,"egl.lang", "AnyBoxedObject",
+egl.defineClass( "eglx.lang", "EBoolean"
+		,"eglx.lang", "AnyBoxedObject",
 {
 	"constructor" : function(i){
-		egl.egl.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
+		egl.eglx.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
 	}
 }
 );
-egl.egl.lang.EBoolean.fromEString = function (x) {   
+egl.eglx.lang.EBoolean.fromEString = function (x) {   
 	return x.toLowerCase() === "true"; 
 };
-egl.egl.lang.EBoolean.ezeCast = function (x) {   
+egl.eglx.lang.EBoolean.ezeCast = function (x) {   
 	return x; 
 };
-egl.egl.lang.EBoolean.fromEBoolean = function (x) {  //TODO sbg likely a gen bug   
+egl.eglx.lang.EBoolean.fromEBoolean = function (x) {  //TODO sbg likely a gen bug   
 	return x; 
 };
 
@@ -313,129 +330,138 @@ egl.egl.lang.EBoolean.fromEBoolean = function (x) {  //TODO sbg likely a gen bug
 /****************************************************************************
  * EString
  ****************************************************************************/
-egl.defineClass( "egl.lang", "EString"
-				,"egl.lang", "AnyBoxedObject",
+egl.defineClass( "eglx.lang", "EString"
+				,"eglx.lang", "AnyBoxedObject",
 {
 	"constructor" : function(str) {
-		egl.egl.lang.AnyBoxedObject.call(this, str); //TODO no ctor chaining?!
+		egl.eglx.lang.AnyBoxedObject.call(this, str); //TODO no ctor chaining?!
 		
 		this.maxLength = -1;
 	},
  	"constructor" : function(str, length) {
-		egl.egl.lang.AnyBoxedObject.call(this, str); //TODO no ctor chaining?!
+		egl.eglx.lang.AnyBoxedObject.call(this, str); //TODO no ctor chaining?!
 	
 		this.maxLength = length;
 	},
 	"equals" : function(pgm, str1, str2) {
 		if ((str1 == null) || (str2 == null)) {
-			throw new egl.egl.lang.NullValueException();
+			throw new egl.eglx.lang.NullValueException();
 		}
 		return str1 == str2;
 	}
 }
 );
-egl.egl.lang.EString.textLen = function (s) {
+egl.eglx.lang.EString.textLen = function (s) {
    return egl.textLen(s);
 };
-egl.egl.lang.EString.ezeCast = function (x) {
+egl.eglx.lang.EString.ezeCast = function (x) {
 	return egl.convertAnyToString(x, false);    // TODO need nullable support
 };
 
-egl.egl.lang.EString.ezeBox = function(str){
-	return new egl.egl.lang.EString(str);
+egl.eglx.lang.EString.ezeBox = function(str){
+	return new egl.eglx.lang.EString(str);
 };
-egl.egl.lang.EString.ezeBox = function(str, len){
-	return new egl.egl.lang.EString(str, len);
+egl.eglx.lang.EString.ezeBox = function(str, len){
+	return new egl.eglx.lang.EString(str, len);
 };
-egl.egl.lang.EString.equals = function(str1, str2) {
+egl.eglx.lang.EString.equals = function(str1, str2) {
 	return (str1 == str2);
 };
-egl.egl.lang.EString.substring = function(str, startIndex, endIndex) {
+egl.eglx.lang.EString.substring = function(str, startIndex, endIndex) {
 	if (str == null || startIndex == null || endIndex == null)
 		return null;
 	start = startIndex;
 	end = endIndex;
 	max = str.length;
 	if (start < 1 || start > max) {
-		ex = new egl.egl.lang.InvalidIndexException();
+		ex = new egl.eglx.lang.InvalidIndexException();
 		ex.index = start;
 		throw ex;
 	} else if (end < start || end < 1 || end > max) {
-		ex = new egl.egl.lang.InvalidIndexException();
+		ex = new egl.eglx.lang.InvalidIndexException();
 		ex.index = end;
 		throw ex;
 	}
 	return str.substring(start-1, end);
 };
-egl.egl.lang.EString.substringAssign = function(tgt, src, start, end){
+egl.eglx.lang.EString.substringAssign = function(tgt, src, start, end){
 	return tgt.splice(start, end, src);
 };
-egl.egl.lang.EString.fromEInt16 = function (x) {
+egl.eglx.lang.EString.fromEInt16 = function (x) {
 	return (x).toString();
 };
-egl.egl.lang.EString.fromEInt32 = function (x) {
+egl.eglx.lang.EString.fromEInt32 = function (x) {
 	return (x).toString();
 };
-egl.egl.lang.EString.fromEInt64 = function (x) {
+egl.eglx.lang.EString.fromEInt64 = function (x) {
 	return (x).toString();
 };
-egl.egl.lang.EString.fromEFloat32 = function (x) {
+egl.eglx.lang.EString.fromEFloat32 = function (x) {
 	return (x).toString();
 };
-egl.egl.lang.EString.fromEFloat64 = function (x) {
+egl.eglx.lang.EString.fromEFloat64 = function (x) {
 	return (x).toString();
 };
-egl.egl.lang.EString.fromEDecimal = function (x) {
+egl.eglx.lang.EString.fromEDecimal = function (x) {
 	return (x).toString();
 };
-egl.egl.lang.EString.fromEBoolean = function (x) {
+egl.eglx.lang.EString.fromEBoolean = function (x) {
 	return (x).toString();
 };
-egl.egl.lang.EString.fromAnyObject = function (x) {
+egl.eglx.lang.EString.fromAnyObject = function (x) {
 	return egl.convertAnyToString(x, false);  //TODO sbg avoid hardcoding the boolean flag
 };
-egl.egl.lang.EString.matches = function (str1, str2, esc) {
+egl.eglx.lang.EString.matches = function (str1, str2, esc) {
 	esc = esc || "\\";
 	return egl.matches(str1, str2, esc);
 };
-egl.egl.lang.EString.isLike = function (str1, str2, esc) {
+egl.eglx.lang.EString.isLike = function (str1, str2, esc) {
 	esc = esc || "\\";
 	return egl.like(str1, str2, esc);
 };
-egl.egl.lang.EString.indexOf = function (str, pattern, start) {
+egl.eglx.lang.EString.indexOf = function (str, pattern, start) {
 	if ((str == null) || (pattern == null)) {
-		throw new egl.egl.lang.NullValueException();
+		throw new egl.eglx.lang.NullValueException();
 	}
 	if (!start) {
 		start = 1;
 	}
 	return str.indexOf(pattern, start - 1) + 1;
 };
-egl.egl.lang.EString.lastIndexOf = function (str, pattern) {
+egl.eglx.lang.EString.lastIndexOf = function (str, pattern) {
 	if ((str == null) || (pattern == null)) {
-		throw new egl.egl.lang.NullValueException();
+		throw new egl.eglx.lang.NullValueException();
 	}
 	return str.lastIndexOf(pattern) + 1;
 };
-egl.egl.lang.EString.replaceStr = function(str, target, replacement) {
+egl.eglx.lang.EString.replaceStr = function(str, target, replacement) {
 	return str.replace(new RegExp(target, "g"), replacement);   // TODO should we simply alias replaceStr as replace?
 };
-egl.egl.lang.EString.charCodeAt = function (str, index) {
+egl.eglx.lang.EString.charCodeAt = function (str, index) {
 	if ((str == null) || (index == null)) {
-		throw new egl.egl.lang.NullValueException();
+		throw new egl.eglx.lang.NullValueException();
 	}
 	return str.charAt(index - 1);
 };
-egl.egl.lang.EString.trim = function (str) {
+egl.eglx.lang.EString.trim = function (str) {
 	if (str == null) {
-		throw new egl.egl.lang.NullValueException();
+		throw new egl.eglx.lang.NullValueException();
 	}
 	return str.clip();
 };
-egl.egl.lang.EString.plus = function (op1, op2) {
+egl.eglx.lang.EString.plus = function (op1, op2) {
 	a = (op1) ? op1 : "";
 	b = (op2) ? op2 : "";
 	return a + b;
+};
+egl.eglx.lang.EString.concat = function (op1, op2) {
+	a = (op1) ? op1 : "";
+	b = (op2) ? op2 : "";
+	return a + b;
+};
+
+egl.eglx.lang.EString.nullconcat = function (op1, op2) {
+	return egl.nullableconcat(op1, op2);
 };
 
 
@@ -487,34 +513,34 @@ String.prototype.charCodeAt = function(index) {
 /****************************************************************************
  * EDate
  ****************************************************************************/
-egl.defineClass( "egl.lang", "EDate"
-		,"egl.lang", "AnyBoxedObject",
+egl.defineClass( "eglx.lang", "EDate"
+		,"eglx.lang", "AnyBoxedObject",
 {
 	"constructor" : function(i){
-		egl.egl.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
+		egl.eglx.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
 	}
 }
 );
-egl.egl.lang.EDate.fromEDate = function (x) {
+egl.eglx.lang.EDate.fromEDate = function (x) {
 	return x;  // TODO sbg bug in generator -- delete this fn when fixed
 };
-egl.egl.lang.EDate.fromEString = function (x) {   
+egl.eglx.lang.EDate.fromEString = function (x) {   
 return egl.stringToDate( x, egl.eglx.rbd.StrLib[$inst].defaultDateFormat ); // TODO need dateformat as arg?
 };
 
 /****************************************************************************
  * ETime
  ****************************************************************************/
-egl.defineClass( "egl.lang", "ETime"
-		,"egl.lang", "AnyBoxedObject",
+egl.defineClass( "eglx.lang", "ETime"
+		,"eglx.lang", "AnyBoxedObject",
 {
 	"constructor" : function(i){
-		egl.egl.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
+		egl.eglx.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
 	}
 }
 );
 //unsupported 0.7
-//egl.egl.lang.ETime.fromEString = function (x) {   
+//egl.eglx.lang.ETime.fromEString = function (x) {   
 //	return egl.stringToTime( x, egl.eglx.rbd.StrLib[$inst].defaultTimeFormat ); // TODO need timeformat as arg?
 //};
 
@@ -522,21 +548,21 @@ egl.defineClass( "egl.lang", "ETime"
 /****************************************************************************
  * ETimestamp
  ****************************************************************************/
-egl.defineClass( "egl.lang", "ETimestamp"
-		,"egl.lang", "AnyBoxedObject",
+egl.defineClass( "eglx.lang", "ETimestamp"
+		,"eglx.lang", "AnyBoxedObject",
 {
 	"constructor" : function(i){
-		egl.egl.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
+		egl.eglx.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
 	}
 }
 );
-egl.egl.lang.ETimestamp["currentTimeStamp"] = function (pattern) {
+egl.eglx.lang.ETimestamp["currentTimeStamp"] = function (pattern) {
 	// returns a new Date object
 	// timestamp keeps every field
-	return egl.egl.lang.ETimestamp.extend("timestamp", new Date(), pattern);
+	return egl.eglx.lang.ETimestamp.extend("timestamp", new Date(), pattern);
 };
 
-egl.egl.lang.ETimestamp["extend"] = function (/*type of date*/ type, /*extension*/ date, /*optional mask*/pattern ) {
+egl.eglx.lang.ETimestamp["extend"] = function (/*type of date*/ type, /*extension*/ date, /*optional mask*/pattern ) {
 	//Converts a timestamp, time, or date into a longer or shorter timestamp value.
 	if ( !date ) {
 		return null;
@@ -610,32 +636,32 @@ egl.egl.lang.ETimestamp["extend"] = function (/*type of date*/ type, /*extension
 };
 
 
-egl.egl.lang.ETimestamp.ezeCast = function(x, pattern){
+egl.eglx.lang.ETimestamp.ezeCast = function(x, pattern){
 	return egl.convertAnyToTimestamp(x, false, pattern);  //TODO sbg false should be a flag indicating nullable
 };
 
 
 /****************************************************************************
- * AnyNum
+ * AnyNumber
  ****************************************************************************/
-egl.defineClass( "egl.lang", "AnyNum",
+egl.defineClass( "eglx.lang", "AnyNumber",
 {
 }
 );
-egl.egl.lang.AnyNum.fromEInt16 = function (x, decimals, limit) {   
+egl.eglx.lang.AnyNumber.fromEInt16 = function (x, decimals, limit) {   
 		return egl.convertIntegerToDecimal(x, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.AnyNum.fromEInt32 = function (x, decimals, limit) {   
+egl.eglx.lang.AnyNumber.fromEInt32 = function (x, decimals, limit) {   
 		return egl.convertIntegerToDecimal(x, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.AnyNum.fromEDecimal = function (x, decimals, limit) { 
+egl.eglx.lang.AnyNumber.fromEDecimal = function (x, decimals, limit) { 
 	return egl.convertDecimalToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.egl.lang.AnyNum.fromEFloat64 = function (x, decimals, limit) { 
+egl.eglx.lang.AnyNumber.fromEFloat64 = function (x, decimals, limit) { 
 	return egl.convertFloatToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
 
-egl.egl.lang.AnyNum.ezeCast = function(x, decimals, limit){
+egl.eglx.lang.AnyNumber.ezeCast = function(x, decimals, limit){
 	return egl.convertDecimalToDecimal(x, decimals, limit, false, "TODO: make an exception for this"/*egl.createRuntimeException*/);  //TODO sbg false should be a flag indicating nullable
 };
 
@@ -645,20 +671,20 @@ egl.egl.lang.AnyNum.ezeCast = function(x, decimals, limit){
 /****************************************************************************
  * NullType
  ****************************************************************************/
-egl.defineClass( "egl.lang", "NullType",
+egl.defineClass( "eglx.lang", "NullType",
 {
 }
 );
-egl.egl.lang.NullType.equals = function(x, y) {
+egl.eglx.lang.NullType.equals = function(x, y) {
 	return egl.unboxAny(x) == y;  //TODO sbg Should this be generated as a simple comparison, rather than all this overhead?
 };
-egl.egl.lang.NullType.notEquals = function(x, y) {
+egl.eglx.lang.NullType.notEquals = function(x, y) {
 	return egl.unboxAny(x) != y;  //TODO sbg Should this be generated as a simple comparison, rather than all this overhead?
 };
-egl.egl.lang.NullType.fromEList = function(list) {
+egl.eglx.lang.NullType.fromEList = function(list) {
 	return list; //TODO sbg Should this be generated as a simple comparison, rather than all this overhead?
 };
-egl.egl.lang.NullType.fromAnyObject = function(obj, sig) {
+egl.eglx.lang.NullType.fromAnyObject = function(obj, sig) {
 	return {eze$$value : obj, eze$$signature : sig};
 };
 
