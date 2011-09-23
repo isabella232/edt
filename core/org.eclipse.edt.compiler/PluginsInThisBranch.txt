@@ -1,2 +1,9 @@
 org.eclipse.edt.compiler
 org.eclipse.edt.mof.egl
+org.eclipse.edt.gen.java
+org.eclipse.edt.gen.java.templates
+org.eclipse.edt.gen.java.templates.egl.lang
+org.eclipse.edt.gen.java.templates.eglx.persistence
+org.eclipse.edt.ide.rui
+org.eclipse.edt.ide.ui
+org.eclipse.edt.runtime.java
