@@ -110,12 +110,16 @@ public class TypeTemplate extends JavaTemplate {
 	}
 
 	public void genRuntimeConstraint(Type type, Context ctx, TabbedWriter out) {
-		genRuntimeTypeName(type, ctx, out, TypeNameKind.EGLImplementation);
-		out.print(".class");
+		ctx.invoke(genRuntimeClassTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
 	}
 
 	public void genRuntimeTypeName(Type type, Context ctx, TabbedWriter out) {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavaPrimitive);
+	}
+
+	public void genRuntimeClassTypeName(Type type, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genRuntimeTypeName, type, ctx, out, arg);
+		out.print(".class");
 	}
 
 	public void genRuntimeTypeName(Type type, Context ctx, TabbedWriter out, TypeNameKind arg) {
@@ -253,8 +257,8 @@ public class TypeTemplate extends JavaTemplate {
 			out.print("EglAny.ezeIsa(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(", ");
-			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
-			out.print(".class)");
+			ctx.invoke(genRuntimeClassTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
+			out.print(")");
 		}
 	}
 
@@ -277,8 +281,8 @@ public class TypeTemplate extends JavaTemplate {
 			out.print("EglAny.ezeCast(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(", ");
-			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.JavaImplementation);
-			out.print(".class)");
+			ctx.invoke(genRuntimeClassTypeName, arg.getEType(), ctx, out, TypeNameKind.JavaImplementation);
+			out.print(")");
 		}
 	}
 

@@ -45,20 +45,19 @@ public class ArrayTypeTemplate extends JavaTemplate {
 			out.print("EglAny.ezeCast(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(", ");
-			ctx.invoke(genRuntimeTypeName, type.getClassifier(), ctx, out, TypeNameKind.JavaImplementation);
-			out.print(".class)");
+			ctx.invoke(genRuntimeClassTypeName, type.getClassifier(), ctx, out, TypeNameKind.JavaImplementation);
+			out.print(")");
 		}
 	}
 
 	public void genRuntimeConstraint(ArrayType generic, Context ctx, TabbedWriter out) {
-		ctx.invoke(genRuntimeTypeName, generic.getClassifier(), ctx, out, TypeNameKind.EGLImplementation);
+		ctx.invoke(genRuntimeClassTypeName, generic.getClassifier(), ctx, out, TypeNameKind.EGLImplementation);
 		if (!generic.getTypeArguments().isEmpty()) {
 			for (int i = 0; i < generic.getTypeArguments().size(); i++) {
-				out.print(".class, ");
-				ctx.invoke(genRuntimeTypeName, generic.getTypeArguments().get(i), ctx, out, TypeNameKind.JavaObject);
+				out.print(", ");
+				ctx.invoke(genRuntimeClassTypeName, generic.getTypeArguments().get(i), ctx, out, TypeNameKind.JavaObject);
 			}
 		}
-		out.print(".class");
 	}
 
 	public void genRuntimeTypeName(ArrayType generic, Context ctx, TabbedWriter out, TypeNameKind arg) {
@@ -70,6 +69,11 @@ public class ArrayTypeTemplate extends JavaTemplate {
 			}
 			out.print(">");
 		}
+	}
+
+	public void genRuntimeClassTypeName(ArrayType generic, Context ctx, TabbedWriter out, TypeNameKind arg) {
+		ctx.invoke(genRuntimeTypeName, generic.getClassifier(), ctx, out, TypeNameKind.EGLImplementation);
+		out.print(".class");
 	}
 
 	public void genJsonTypeDependentOptions(ArrayType type, Context ctx, TabbedWriter out) {

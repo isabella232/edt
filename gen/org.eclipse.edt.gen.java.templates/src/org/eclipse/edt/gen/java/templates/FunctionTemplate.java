@@ -92,10 +92,9 @@ public class FunctionTemplate extends JavaTemplate {
 			FunctionParameter decl = function.getParameters().get(i);
 			out.print(", ");
 			if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx))
-				out.print("AnyBoxedObject");
+				out.print("AnyBoxedObject.class");
 			else
-				ctx.invoke(genRuntimeTypeName, decl, ctx, out, TypeNameKind.JavaObject);
-			out.print(".class");
+				ctx.invoke(genRuntimeClassTypeName, decl, ctx, out, TypeNameKind.JavaObject);
 		}
 		out.print(")");
 	}
@@ -112,10 +111,9 @@ public class FunctionTemplate extends JavaTemplate {
 			FunctionParameter decl = function.getParameters().get(i);
 			out.print(", ");
 			if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx))
-				out.print("AnyBoxedObject");
+				out.print("AnyBoxedObject.class");
 			else
-				ctx.invoke(genRuntimeTypeName, decl, ctx, out, TypeNameKind.JavaObject);
-			out.print(".class");
+				ctx.invoke(genRuntimeClassTypeName, decl, ctx, out, TypeNameKind.JavaObject);
 		}
 		out.print(")");
 	}
