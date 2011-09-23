@@ -18,18 +18,18 @@ public class RSTreeLabelProvider extends LabelProvider implements IColorProvider
 	
 	private Color red;
 	private Color green;
-	private Color orange;
+	private Color purple;
 	private Color yellow;
 	
 	public RSTreeLabelProvider(){
 		red = new Color(Display.getCurrent(), new RGB(255, 0, 0));			
 		green = new Color(Display.getCurrent(), new RGB(0, 128, 0));
-		orange = new Color(Display.getCurrent(), new RGB(255, 127, 0));
+		purple = new Color(Display.getCurrent(), new RGB(184, 0, 73));
 		yellow = new Color(Display.getCurrent(), new RGB(255, 255, 0));
 		colors = new ArrayList<Color>();
 		colors.add(red);
 		colors.add(green);
-		colors.add(orange);
+		colors.add(purple);
 		colors.add(yellow);
 	}
 	
@@ -76,7 +76,7 @@ public class RSTreeLabelProvider extends LabelProvider implements IColorProvider
 			case ConstantUtil.SFAILED:
 				return red;
 			case ConstantUtil.SERROR:
-				return orange;
+				return purple;
 			case ConstantUtil.SNOT_RUN:
 				return yellow;
 			default:
