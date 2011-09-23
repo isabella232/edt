@@ -266,8 +266,9 @@ public class PartsFromXMLUtil extends PartsUtil {
 
 		// add simpleContent annotation
 		Annotation annotation = new Annotation();
-		annotation.setName("XMLStructure");//$NON-NLS-1$
-		annotation.setValue("XMLStructureKind.simpleContent");//$NON-NLS-1$
+		annotation.setName("XMLValue");//$NON-NLS-1$
+		annotation.addField("kind", "XMLStructureKind.simpleContent");//$NON-NLS-1$
+		//annotation.setValue("XMLStructureKind.simpleContent");//$NON-NLS-1$
 		rec.addAnnotation(annotation);
 
 		new PartsFromXMLUtil(_msgHandler).process(node, rec, recs);
