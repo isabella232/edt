@@ -36,7 +36,7 @@ public class StringTypeTemplate extends JavaTemplate {
 	}
 
 	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
-		out.print("Constants.EMPTY_STRING");
+		out.print("\"\"");
 	}
 
 	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
