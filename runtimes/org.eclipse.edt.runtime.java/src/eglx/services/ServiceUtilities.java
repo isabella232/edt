@@ -15,10 +15,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.util.JavartUtil;
 
-import egl.lang.AnyException;
+import eglx.lang.AnyException;
 
 
 
@@ -39,7 +38,7 @@ public class ServiceUtilities
 	}
 	public static ServiceInvocationException buildInvocationException(String id, Object[] params, String detail1, String detail2, String detail3, Throwable t, ServiceKind serviceKind ) 
 	{
-		String message = JavartUtil.errorMessage(Runtime.getRunUnit(), id, params);
+		String message = JavartUtil.errorMessage( id, params);
 		while( t instanceof InvocationTargetException &&
 				((InvocationTargetException)t).getCause() != null ){
 			t = ((InvocationTargetException)t).getCause();

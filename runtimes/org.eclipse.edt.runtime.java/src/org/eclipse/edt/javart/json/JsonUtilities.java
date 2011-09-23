@@ -13,7 +13,9 @@ package org.eclipse.edt.javart.json;
 
 import java.util.List;
 
-import egl.lang.AnyException;
+import org.eclipse.edt.javart.messages.Message;
+
+import eglx.lang.DynamicAccessException;
 
 
 public class JsonUtilities 
@@ -30,7 +32,8 @@ public class JsonUtilities
 				return pair.getValue();
 			}
 		}
-		throw new AnyException();
+		DynamicAccessException dax = new DynamicAccessException();
+		throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, key, object );
 	}
 
 	public static ValueNode getValueNode( ObjectNode object, String key, ValueNode defaultValue )

@@ -16,6 +16,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
 
 /**
  * Helper class used to calculate arguments to be passed when instantiating
@@ -30,19 +31,6 @@ public class TimestampIntervalMask implements Serializable
 	 */
 	private String pattern = "";
 	private transient String lowerCasePattern = pattern;
-	
-	private static final int YEAR_CODE = 0;
-	private static final int MONTH_CODE = 1;
-	private static final int DAY_CODE = 2;
-	private static final int HOUR_CODE = 3;
-	private static final int MINUTE_CODE = 4;
-	private static final int SECOND_CODE = 5;
-	private static final int FRACTION1_CODE = 6;
-	private static final int FRACTION2_CODE = 7;
-	private static final int FRACTION3_CODE = 8;
-	private static final int FRACTION4_CODE = 9;
-	private static final int FRACTION5_CODE = 10;
-	private static final int FRACTION6_CODE = 11;
 	
 	public TimestampIntervalMask(String pattern) 
 	{
@@ -84,46 +72,39 @@ public class TimestampIntervalMask implements Serializable
 	 */
 	public int getStartCode()
 	{
-		if ( lowerCasePattern.length() == 0 )
+		if ( lowerCasePattern.length() > 0 )
 		{
-			// Sanity check.  Should never happen.
-			return -1;
+			switch ( lowerCasePattern.charAt( 0 ) )
+			{
+				case 'y':
+					return ETimestamp.YEAR_CODE;
+				case 'm':
+					return isMonth( true ) ? ETimestamp.MONTH_CODE : ETimestamp.MINUTE_CODE;
+				case 'd':
+					return ETimestamp.DAY_CODE;
+				case 'h':
+					return ETimestamp.HOUR_CODE;
+				case 's':
+					return ETimestamp.SECOND_CODE; 
+				case 'f':
+					switch( numStartChars() )
+					{
+			            case 1:
+			            	return ETimestamp.FRACTION1_CODE;
+			            case 2:
+			            	return ETimestamp.FRACTION2_CODE;
+			            case 3:
+			            	return ETimestamp.FRACTION3_CODE;
+			            case 4:
+			            	return ETimestamp.FRACTION4_CODE;
+			            case 5:
+			            	return ETimestamp.FRACTION5_CODE;
+			            case 6:
+			            	return ETimestamp.FRACTION6_CODE;
+		            }
+			}
 		}
 		
-		switch ( lowerCasePattern.charAt( 0 ) )
-		{
-			case 'y':
-				return YEAR_CODE;
-			case 'm':
-				return isMonth( true ) ? MONTH_CODE : MINUTE_CODE;
-			case 'd':
-				return DAY_CODE;
-			case 'h':
-				return HOUR_CODE;
-			case 's':
-				return SECOND_CODE; 
-			case 'f':
-				switch( numStartChars() )
-				{
-		            case 1:
-		            	return FRACTION1_CODE;
-		            case 2:
-		            	return FRACTION2_CODE;
-		            case 3:
-		            	return FRACTION3_CODE;
-		            case 4:
-		            	return FRACTION4_CODE;
-		            case 5:
-		            	return FRACTION5_CODE;
-		            case 6:
-		            	return FRACTION6_CODE;
-		            default:
-		    			// willnot happen
-		    			return -1;
-	            }
-		}
-
-		// will not happen
 		return -1;
 	}
 	
@@ -132,46 +113,39 @@ public class TimestampIntervalMask implements Serializable
 	 */
 	public int getEndCode()
 	{
-		if ( lowerCasePattern.length() == 0 )
+		if ( lowerCasePattern.length() > 0 )
 		{
-			// Sanity check.  Should never happen.
-			return -1;
+			switch ( lowerCasePattern.charAt( lowerCasePattern.length() - 1 ) )
+			{
+				case 'y':
+					return ETimestamp.YEAR_CODE;
+				case 'm':
+					return isMonth( false ) ? ETimestamp.MONTH_CODE : ETimestamp.MINUTE_CODE;
+				case 'd':
+					return ETimestamp.DAY_CODE;
+				case 'h':
+					return ETimestamp.HOUR_CODE;
+				case 's':
+					return ETimestamp.SECOND_CODE; 
+				case 'f':
+					switch( numEndChars() )
+					{
+			            case 1:
+			            	return ETimestamp.FRACTION1_CODE;
+			            case 2:
+			            	return ETimestamp.FRACTION2_CODE;
+			            case 3:
+			            	return ETimestamp.FRACTION3_CODE;
+			            case 4:
+			            	return ETimestamp.FRACTION4_CODE;
+			            case 5:
+			            	return ETimestamp.FRACTION5_CODE;
+			            case 6:
+			            	return ETimestamp.FRACTION6_CODE;
+		            }
+			}
 		}
 		
-		switch ( lowerCasePattern.charAt( lowerCasePattern.length() - 1 ) )
-		{
-			case 'y':
-				return YEAR_CODE;
-			case 'm':
-				return isMonth( false ) ? MONTH_CODE : MINUTE_CODE;
-			case 'd':
-				return DAY_CODE;
-			case 'h':
-				return HOUR_CODE;
-			case 's':
-				return SECOND_CODE; 
-			case 'f':
-				switch( numEndChars() )
-				{
-		            case 1:
-		            	return FRACTION1_CODE;
-		            case 2:
-		            	return FRACTION2_CODE;
-		            case 3:
-		            	return FRACTION3_CODE;
-		            case 4:
-		            	return FRACTION4_CODE;
-		            case 5:
-		            	return FRACTION5_CODE;
-		            case 6:
-		            	return FRACTION6_CODE;
-		            default:
-		    			// willnot happen
-		    			return -1;
-	            }
-		}
-
-		// will not happen
 		return -1;
 	}
 	
@@ -271,16 +245,16 @@ public class TimestampIntervalMask implements Serializable
 
 		switch( startCode )
 		{
-			case YEAR_CODE:
+			case ETimestamp.YEAR_CODE:
 				for( ; idx < length && lowerCasePattern.charAt( idx ) == 'y'; idx++ )
 				{
 					buf.append('y');
 				}
-				if( endCode == YEAR_CODE )
+				if( endCode == ETimestamp.YEAR_CODE )
 					break;
 
-			case MONTH_CODE:
-				if( startCode != MONTH_CODE )
+			case ETimestamp.MONTH_CODE:
+				if( startCode != ETimestamp.MONTH_CODE )
 				{
 					buf.append('-');
 				}
@@ -288,11 +262,11 @@ public class TimestampIntervalMask implements Serializable
 				{
 					buf.append('M');
 				}
-				if( endCode == MONTH_CODE )
+				if( endCode == ETimestamp.MONTH_CODE )
 					break;
 
-			case DAY_CODE:
-				if( startCode != DAY_CODE )
+			case ETimestamp.DAY_CODE:
+				if( startCode != ETimestamp.DAY_CODE )
 				{
 					buf.append('-');
 				}
@@ -300,11 +274,11 @@ public class TimestampIntervalMask implements Serializable
 				{
 					buf.append('d');
 				}
-				if( endCode == DAY_CODE )
+				if( endCode == ETimestamp.DAY_CODE )
 					break;
 
-			case HOUR_CODE:
-				if( startCode != HOUR_CODE )
+			case ETimestamp.HOUR_CODE:
+				if( startCode != ETimestamp.HOUR_CODE )
 				{
 					buf.append(' ');
 				}
@@ -312,11 +286,11 @@ public class TimestampIntervalMask implements Serializable
 				{
 					buf.append('H');
 				}
-				if( endCode == HOUR_CODE )
+				if( endCode == ETimestamp.HOUR_CODE )
 					break;
 
-			case MINUTE_CODE:
-				if( startCode != MINUTE_CODE )
+			case ETimestamp.MINUTE_CODE:
+				if( startCode != ETimestamp.MINUTE_CODE )
 				{
 					buf.append(':');
 				}
@@ -324,11 +298,11 @@ public class TimestampIntervalMask implements Serializable
 				{
 					buf.append('m');
 				}
-				if( endCode == MINUTE_CODE )
+				if( endCode == ETimestamp.MINUTE_CODE )
 					break;
 
-			case SECOND_CODE:
-				if( startCode != SECOND_CODE )
+			case ETimestamp.SECOND_CODE:
+				if( startCode != ETimestamp.SECOND_CODE )
 				{
 					buf.append(':');
 				}
@@ -336,20 +310,20 @@ public class TimestampIntervalMask implements Serializable
 				{
 					buf.append('s');
 				}
-				if( endCode == SECOND_CODE )
+				if( endCode == ETimestamp.SECOND_CODE )
 					break;
 
-			case FRACTION1_CODE:
-			case FRACTION2_CODE:
-			case FRACTION3_CODE:
-			case FRACTION4_CODE:
-			case FRACTION5_CODE:
-			case FRACTION6_CODE:
-				if( startCode <= SECOND_CODE )
+			case ETimestamp.FRACTION1_CODE:
+			case ETimestamp.FRACTION2_CODE:
+			case ETimestamp.FRACTION3_CODE:
+			case ETimestamp.FRACTION4_CODE:
+			case ETimestamp.FRACTION5_CODE:
+			case ETimestamp.FRACTION6_CODE:
+				if( startCode <= ETimestamp.SECOND_CODE )
 				{
 					buf.append('.');
 				}
-				for( int i = 0; i < endCode - SECOND_CODE; i++ )
+				for( int i = 0; i < endCode - ETimestamp.SECOND_CODE; i++ )
 				{
 					buf.append('S');
 				}

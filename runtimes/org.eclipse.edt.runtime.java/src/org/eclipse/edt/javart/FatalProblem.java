@@ -14,7 +14,7 @@ package org.eclipse.edt.javart;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.util.JavartUtil;
 
-import egl.lang.AnyException;
+import eglx.lang.AnyException;
 
 /**
  * Exception for fatal program errors.  These can't be handled with an EGL try
@@ -49,9 +49,9 @@ public class FatalProblem extends AnyException
 	 * @param ex
 	 *            The exception that was caught.
 	 */
-	public FatalProblem( Executable program, Exception ex )
+	public FatalProblem( Exception ex )
 	{
-		super( idFor( ex ), messageFor( program, ex ) );
+		super( idFor( ex ), messageFor( ex ) );
 	}
 	
 	/**
@@ -76,7 +76,7 @@ public class FatalProblem extends AnyException
 	 * AnyException, its message text is returned.  Otherwise the text for
 	 * Message.UNHANDLED_EXCEPTION is returned.
 	 */
-	private static String messageFor( Executable program, Exception ex )
+	private static String messageFor( Exception ex )
 	{
 		if ( ex instanceof AnyException )
 		{
@@ -84,8 +84,7 @@ public class FatalProblem extends AnyException
 		}
 		else
 		{
-			return JavartUtil.errorMessage( program, Message.UNHANDLED_EXCEPTION, 
-					new String[] { ex.toString() } );
+			return JavartUtil.errorMessage( Message.UNHANDLED_EXCEPTION, ex );
 		}
 	}
 }

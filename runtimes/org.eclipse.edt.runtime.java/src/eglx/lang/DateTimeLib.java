@@ -14,14 +14,10 @@ package eglx.lang;
 import java.util.Calendar;
 
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.util.DateTimeUtil;
-import org.eclipse.edt.javart.util.JavartUtil;
 
-import egl.lang.AnyException;
-import egl.lang.TypeCastException;
 
 public class DateTimeLib extends ExecutableBase {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -56,14 +52,10 @@ public class DateTimeLib extends ExecutableBase {
 			cal.get(Calendar.YEAR);
 		}
 		catch (IllegalArgumentException e) {
-			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR,
-				new Object[] { "DateTimeLib.dateFromJulian", String.valueOf(gregorianIntDate) });
 			TypeCastException tcx = new TypeCastException();
-			tcx.setMessage( message );
-			tcx.setMessageID( Message.DATA_FORMAT_ERROR );
 			tcx.castToName = "date";
 			tcx.actualTypeName = "int";
-			throw tcx;
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, gregorianIntDate, tcx.actualTypeName, tcx.castToName );
 		}
 		return cal;
 	}
@@ -85,14 +77,10 @@ public class DateTimeLib extends ExecutableBase {
 			cal.get(Calendar.YEAR);
 		}
 		catch (IllegalArgumentException e) {
-			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR,
-				new Object[] { "DateTimeLib.dateFromJulian", String.valueOf(julianIntDate) });
 			TypeCastException tcx = new TypeCastException();
-			tcx.setMessage( message );
-			tcx.setMessageID( Message.DATA_FORMAT_ERROR );
 			tcx.castToName = "date";
 			tcx.actualTypeName = "int";
-			throw tcx;
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, julianIntDate, tcx.actualTypeName, tcx.castToName );
 		}
 		return cal;
 	}
@@ -110,14 +98,8 @@ public class DateTimeLib extends ExecutableBase {
 			cal.get(Calendar.YEAR);
 		}
 		catch (IllegalArgumentException e) {
-			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR,
-				new Object[] { "DateTimeLib.mdy", String.valueOf(month), String.valueOf(day), String.valueOf(year) });
-			TypeCastException tcx = new TypeCastException();
-			tcx.setMessage( message );
-			tcx.setMessageID( Message.DATA_FORMAT_ERROR );
-			tcx.castToName = "date";
-			tcx.actualTypeName = "int,int,int";
-			throw tcx;
+			InvalidArgumentException ex = new InvalidArgumentException();
+			throw ex.fillInMessage( Message.MDY_ERROR, month, day, year );
 		}
 		return cal;
 	}

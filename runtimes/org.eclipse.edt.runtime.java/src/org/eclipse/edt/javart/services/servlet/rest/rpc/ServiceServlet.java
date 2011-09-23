@@ -23,7 +23,7 @@ import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.Trace;
 import org.eclipse.edt.javart.services.servlet.JsonRpcInvoker;
 import org.eclipse.edt.javart.services.servlet.Servlet;
-import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
+import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
 
 import eglx.http.HttpMethod;
 import eglx.http.Request;

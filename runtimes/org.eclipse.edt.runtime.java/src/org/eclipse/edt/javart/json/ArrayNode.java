@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import egl.lang.AnyException;
+import eglx.lang.AnyException;
 
 public class ArrayNode extends ValueNode {
 	List values = new ArrayList();

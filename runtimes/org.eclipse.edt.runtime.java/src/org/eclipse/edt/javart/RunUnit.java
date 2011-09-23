@@ -20,7 +20,7 @@ import org.eclipse.edt.javart.resources.ResourceManager;
 import org.eclipse.edt.javart.resources.StartupInfo;
 import org.eclipse.edt.javart.resources.Trace;
 
-import egl.lang.AnyException;
+import eglx.lang.AnyException;
 
 public interface RunUnit {
 	

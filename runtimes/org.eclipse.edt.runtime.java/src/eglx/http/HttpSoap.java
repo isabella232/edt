@@ -12,7 +12,8 @@ package eglx.http;
 import org.eclipse.edt.javart.resources.*;
 import eglx.http.Request;
 import eglx.http.Response;
-import org.eclipse.edt.runtime.java.egl.lang.EglAny;
+
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 @javax.xml.bind.annotation.XmlRootElement(name="HttpSoap")
 public class HttpSoap extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
@@ -20,8 +21,8 @@ public class HttpSoap extends ExecutableBase {
 	public Request request;
 	@org.eclipse.edt.javart.json.Json(name="response", clazz=Response.class, asOptions={})
 	public Response response;
-	@org.eclipse.edt.javart.json.Json(name="responseHeader", clazz=EglAny.class, asOptions={})
-	public egl.lang.EglAny responseHeader;
+	@org.eclipse.edt.javart.json.Json(name="responseHeader", clazz=EAny.class, asOptions={})
+	public eglx.lang.EAny responseHeader;
 	
 	public HttpSoap() {
 		super();
@@ -38,9 +39,9 @@ public class HttpSoap extends ExecutableBase {
 	public Response getResponse() {
 		return response;
 	}
-	public void setSoapRequestHeader(egl.lang.EglAny rec) {
+	public void setSoapRequestHeader(eglx.lang.EAny rec) {
 	}
-	public egl.lang.EglAny getSoapResponseHeader() {
+	public eglx.lang.EAny getSoapResponseHeader() {
 		return responseHeader;
 	}
 }

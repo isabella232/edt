@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.json;
 
-import egl.lang.AnyException;
+import eglx.lang.AnyException;
 
 public class NullNode extends ValueNode {
 	public static final NullNode NULL = new NullNode();

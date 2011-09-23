@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.javart;
 
-import egl.lang.AnyException;
+import eglx.lang.AnyException;
 
 /**
  * This is the superclass of things we throw that don't indicate an error.

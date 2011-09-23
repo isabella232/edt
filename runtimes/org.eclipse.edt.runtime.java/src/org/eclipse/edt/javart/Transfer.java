@@ -12,7 +12,7 @@
 package org.eclipse.edt.javart;
 
 
-import egl.lang.AnyValue;
+import eglx.lang.AnyValue;
 
 /**
  * Exception to be thrown when one program transfers to another.

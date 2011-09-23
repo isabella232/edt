@@ -32,12 +32,12 @@ import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.StartupInfo;
 import org.eclipse.edt.javart.resources.Trace;
 
-import egl.lang.AnyException;
-import egl.lang.EDictionary;
 import eglx.http.Request;
 import eglx.http.Response;
 import eglx.http.HttpUtilities;
 import eglx.json.JsonUtilities;
+import eglx.lang.AnyException;
+import eglx.lang.EDictionary;
 import eglx.services.ServiceKind;
 import eglx.services.ServiceUtilities;
 

@@ -14,15 +14,15 @@ package org.eclipse.edt.javart;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import egl.lang.AnyException;
-import egl.lang.EglAny;
+import eglx.lang.AnyException;
+import eglx.lang.EAny;
 
 public class TypeConstraints {
 
-	private Class<? extends EglAny> clazz;
+	private Class<? extends EAny> clazz;
 	private Object[] constraints;
 	
-	public TypeConstraints(Class<? extends EglAny> clazz, Object...constraints) {
+	public TypeConstraints(Class<? extends EAny> clazz, Object...constraints) {
 		this.clazz = clazz;
 		this.constraints = constraints.length == 0 ? null : constraints;
 	}
@@ -38,7 +38,7 @@ public class TypeConstraints {
 				method = clazz.getMethod("ezeCast", Object.class);
 			} catch (Exception e) {
 				try { 
-					method = org.eclipse.edt.runtime.java.egl.lang.EglAny.class.getMethod("ezeCast", Object.class, Class.class);
+					method = org.eclipse.edt.runtime.java.eglx.lang.EAny.class.getMethod("ezeCast", Object.class, Class.class);
 					useDefault = true;
 				}
 				catch (Exception ex1) {
@@ -66,7 +66,7 @@ public class TypeConstraints {
 		}
 	}
 	
-	public EglAny box(Object value) {
+	public EAny box(Object value) {
 		Method method = null;
 		try {
 			method = clazz.getMethod("ezeBox", Object.class, Object[].class);
@@ -76,7 +76,7 @@ public class TypeConstraints {
 				method = clazz.getMethod("ezeBox", Object.class);
 			} catch (NoSuchMethodException e) {
 				try { 
-					method = org.eclipse.edt.runtime.java.egl.lang.EglAny.class.getMethod("ezeBox", Object.class);
+					method = org.eclipse.edt.runtime.java.eglx.lang.EAny.class.getMethod("ezeBox", Object.class);
 				}
 				catch (Exception ex1) {
 					// Will not get here
@@ -85,9 +85,9 @@ public class TypeConstraints {
 			} 
 		}
 		try {
-			EglAny newValue = constraints == null
-				? (EglAny)method.invoke(clazz, value)
-				: (EglAny)method.invoke(clazz, value, constraints);
+			EAny newValue = constraints == null
+				? (EAny)method.invoke(clazz, value)
+				: (EAny)method.invoke(clazz, value, constraints);
 			return newValue;
 		}
 		catch (Exception ex) {

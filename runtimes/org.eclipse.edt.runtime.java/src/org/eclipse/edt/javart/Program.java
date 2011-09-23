@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.javart;
 
-import egl.lang.AnyValue;
+import eglx.lang.AnyValue;
 
 public interface Program extends Executable {
 	void main() throws Exception;

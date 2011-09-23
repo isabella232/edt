@@ -10,11 +10,13 @@
  *******************************************************************************/
 package eglx.http;
 import org.eclipse.edt.javart.resources.*;
-import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
 import eglx.http.HttpMethod;
-import org.eclipse.edt.runtime.java.egl.lang.EString;
 import java.lang.String;
-import org.eclipse.edt.runtime.java.egl.lang.EInt;
+
+import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+
 import java.lang.Integer;
 import eglx.services.Encoding;
 @javax.xml.bind.annotation.XmlRootElement(name="Request")
@@ -31,7 +33,7 @@ public class Request extends ExecutableBase {
 	@org.eclipse.edt.javart.json.Json(name="contentType", clazz=EString.class, asOptions={})
 	public String contentType;
 	@org.eclipse.edt.javart.json.Json(name="headers", clazz=EDictionary.class, asOptions={})
-	public egl.lang.EDictionary headers;
+	public eglx.lang.EDictionary headers;
 	@org.eclipse.edt.javart.json.Json(name="body", clazz=EString.class, asOptions={})
 	public String body;
 	@org.eclipse.edt.javart.json.Json(name="timeout", clazz=EInt.class, asOptions={})

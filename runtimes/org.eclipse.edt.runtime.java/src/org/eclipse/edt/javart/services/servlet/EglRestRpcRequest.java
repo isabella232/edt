@@ -13,16 +13,16 @@ package org.eclipse.edt.javart.services.servlet;
 import org.eclipse.edt.javart.ByteStorage;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.Program;
-import org.eclipse.edt.runtime.java.egl.lang.EString;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
 
-import egl.lang.EglAny;
+import eglx.lang.EAny;
 
-class EglRestRpcRequest extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
+class EglRestRpcRequest extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
 	public String method;
 	@javax.xml.bind.annotation.XmlTransient
-	public egl.lang.EglList<egl.lang.EglAny> params;
+	public eglx.lang.EList<eglx.lang.EAny> params;
 	public EglRestRpcRequest() {
 		super();
 		ezeInitialize();
@@ -30,7 +30,7 @@ class EglRestRpcRequest extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	public void ezeCopy(Object source) {
 		ezeCopy((EglRestRpcRequest) source);
 	}
-	public void ezeCopy(egl.lang.AnyValue source) {
+	public void ezeCopy(eglx.lang.AnyValue source) {
 		this.method = ((EglRestRpcRequest) source).method;
 		this.params = ((EglRestRpcRequest) source).params;
 	}
@@ -62,11 +62,11 @@ class EglRestRpcRequest extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	public void setMethod( String ezeValue ) {
 		this.method = ezeValue;
 	}
-	@org.eclipse.edt.javart.json.Json(name="params", clazz=EglAny.class, asOptions={})
-	public egl.lang.EglList<egl.lang.EglAny> getParams() {
+	@org.eclipse.edt.javart.json.Json(name="params", clazz=EAny.class, asOptions={})
+	public eglx.lang.EList<eglx.lang.EAny> getParams() {
 		return (params);
 	}
-	public void setParams( egl.lang.EglList<egl.lang.EglAny> ezeValue ) {
+	public void setParams( eglx.lang.EList<eglx.lang.EAny> ezeValue ) {
 		this.params = ezeValue;
 	}
 }

@@ -11,27 +11,19 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.egl.lang.EglAny;
-import org.eclipse.edt.runtime.java.egl.lang.EDecimal;
 import java.math.BigDecimal;
 import org.eclipse.edt.eunit.runtime.AssertionFailedException;
-import org.eclipse.edt.runtime.java.egl.lang.EBoolean;
 import java.lang.Boolean;
-import org.eclipse.edt.runtime.java.egl.lang.EFloat;
 import java.lang.Double;
-import org.eclipse.edt.runtime.java.egl.lang.EString;
 import java.lang.String;
 import eglx.lang.MathLib;
-import org.eclipse.edt.runtime.java.egl.lang.ETimestamp;
 import java.util.Calendar;
 import org.eclipse.edt.eunit.runtime.ConstantsLib;
-import org.eclipse.edt.runtime.java.egl.lang.EglList;
-import org.eclipse.edt.runtime.java.egl.lang.EDate;
 import org.eclipse.edt.eunit.runtime.Log;
-import org.eclipse.edt.runtime.java.egl.lang.EBigint;
 import java.lang.Long;
 import org.eclipse.edt.eunit.runtime.Status;
-import org.eclipse.edt.runtime.java.egl.lang.EInt;
+import org.eclipse.edt.runtime.java.eglx.lang.*;
+
 import java.lang.Integer;
 @javax.xml.bind.annotation.XmlRootElement(name="LogResult")
 public class LogResult extends ExecutableBase {
@@ -110,28 +102,28 @@ public class LogResult extends ExecutableBase {
 	}
 	public void passed(AnyBoxedObject<String> str) {
 		s.code = eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().SPASSED;
-		if (((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(str.ezeUnbox()), null)) || ((str.ezeUnbox()).equals("")))) {
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(str.ezeUnbox()), null)) || ((str.ezeUnbox()).equals("")))) {
 			str.ezeCopy("OK");
 		}
 		s.reason = str.ezeUnbox();
 	}
 	public void failed(AnyBoxedObject<String> str) {
 		s.code = eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().SFAILED;
-		if (((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(str.ezeUnbox()), null)) || ((str.ezeUnbox()).equals("")))) {
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(str.ezeUnbox()), null)) || ((str.ezeUnbox()).equals("")))) {
 			str.ezeCopy("FAILED");
 		}
 		s.reason = str.ezeUnbox();
 	}
 	public void error(AnyBoxedObject<String> str) {
 		s.code = eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().SERROR;
-		if (((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(str.ezeUnbox()), null)) || ((str.ezeUnbox()).equals("")))) {
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(str.ezeUnbox()), null)) || ((str.ezeUnbox()).equals("")))) {
 			str.ezeCopy("ERROR");
 		}
 		s.reason = str.ezeUnbox();
 	}
 	public void skipped(AnyBoxedObject<String> str) {
 		s.code = eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().SNOT_RUN;
-		if (((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(str.ezeUnbox()), null)) || ((str.ezeUnbox()).equals("")))) {
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(str.ezeUnbox()), null)) || ((str.ezeUnbox()).equals("")))) {
 			str.ezeCopy("SKIPPED");
 		}
 		s.reason = str.ezeUnbox();
@@ -139,12 +131,12 @@ public class LogResult extends ExecutableBase {
 	public void assertTrue(String failedReason, boolean testCondition) {
 		if (testCondition) {
 			AnyBoxedObject<String> eze$Temp6;
-			eze$Temp6 = EglAny.ezeWrap("OK");
+			eze$Temp6 = EAny.ezeWrap("OK");
 			passed(eze$Temp6);
 		}
 		else {
 			AnyBoxedObject<String> eze$Temp7;
-			eze$Temp7 = EglAny.ezeWrap(failedReason);
+			eze$Temp7 = EAny.ezeWrap(failedReason);
 			failed(eze$Temp7);
 			failedReason = eze$Temp7.ezeUnbox();
 			AssertionFailedException eze$Temp8 = new AssertionFailedException();
@@ -182,7 +174,7 @@ public class LogResult extends ExecutableBase {
 		eze$Temp11 = "";
 		assertStringEqual(eze$Temp11, expected, actual);
 	}
-	public void assertStringArrayEqual(String message, egl.lang.EglList<String> expected, egl.lang.EglList<String> actual) {
+	public void assertStringArrayEqual(String message, eglx.lang.EList<String> expected, eglx.lang.EList<String> actual) {
 		boolean isArrayEqual;
 		isArrayEqual = true;
 		int expectedSize;
@@ -224,13 +216,13 @@ public class LogResult extends ExecutableBase {
 			isArrayEqual = false;
 			failedReason = (((((((((((((((("Failed: ") + EXPECTEDSIZEHEADER)) + "'")) + EString.asString(expectedSize))) + "' ")) + ACTUALSIZEHEADER)) + "'")) + EString.asString(actualSize))) + "' ");
 		}
-		if (((org.eclipse.edt.runtime.java.egl.lang.NullType.notEquals(EString.ezeBox(message), null)) && (!(message).equals("")))) {
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.notEquals(EString.ezeBox(message), null)) && (!(message).equals("")))) {
 			;
 			failedReason = ((((message) + " - ")) + failedReason);
 		}
 		assertTrue(failedReason, isArrayEqual);
 	}
-	public void assertStringArrayEqual1(egl.lang.EglList<String> expected, egl.lang.EglList<String> actual) {
+	public void assertStringArrayEqual1(eglx.lang.EList<String> expected, eglx.lang.EList<String> actual) {
 		String eze$Temp18;
 		eze$Temp18 = "";
 		assertStringArrayEqual(eze$Temp18, expected, actual);
@@ -275,13 +267,13 @@ public class LogResult extends ExecutableBase {
 		String signActual = Constants.EMPTY_STRING;
 		double deltaLimit;
 		deltaLimit = 1E-14;
-		AnyBoxedObject<Integer> eze$Temp22 = EglAny.ezeWrap(0);
-		AnyBoxedObject<String> eze$Temp23 = EglAny.ezeWrap(Constants.EMPTY_STRING);
+		AnyBoxedObject<Integer> eze$Temp22 = EAny.ezeWrap(0);
+		AnyBoxedObject<String> eze$Temp23 = EAny.ezeWrap(Constants.EMPTY_STRING);
 		normalExpected = normalFloat(expected, eze$Temp22, eze$Temp23);
 		mantissaExpected = eze$Temp22.ezeUnbox();
 		signExpected = eze$Temp23.ezeUnbox();
-		AnyBoxedObject<Integer> eze$Temp24 = EglAny.ezeWrap(0);
-		AnyBoxedObject<String> eze$Temp25 = EglAny.ezeWrap(Constants.EMPTY_STRING);
+		AnyBoxedObject<Integer> eze$Temp24 = EAny.ezeWrap(0);
+		AnyBoxedObject<String> eze$Temp25 = EAny.ezeWrap(Constants.EMPTY_STRING);
 		normalActual = normalFloat(actual, eze$Temp24, eze$Temp25);
 		mantissaActual = eze$Temp24.ezeUnbox();
 		signActual = eze$Temp25.ezeUnbox();
@@ -296,15 +288,15 @@ public class LogResult extends ExecutableBase {
 		eze$Temp26 = "";
 		assertFloatEqual(eze$Temp26, expected, actual);
 	}
-	public void expectAssertTrue(String message, egl.lang.EglAny expected, egl.lang.EglAny actual, boolean isEqual) {
+	public void expectAssertTrue(String message, eglx.lang.EAny expected, eglx.lang.EAny actual, boolean isEqual) {
 		String failedReason;
 		failedReason = expect(expected, actual);
-		if (((org.eclipse.edt.runtime.java.egl.lang.NullType.notEquals(EString.ezeBox(message), null)) && (!(message).equals("")))) {
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.notEquals(EString.ezeBox(message), null)) && (!(message).equals("")))) {
 			failedReason = ((((message) + " - ")) + failedReason);
 		}
 		assertTrue(failedReason, isEqual);
 	}
-	public String expect(egl.lang.EglAny expected, egl.lang.EglAny actual) {
+	public String expect(eglx.lang.EAny expected, eglx.lang.EAny actual) {
 		String standardMsg;
 		standardMsg = (((((((((((((((("Failed: ") + EXPECTEDHEADER)) + "'")) + EString.ezeCast(expected))) + "' ")) + ACTUALHEADER)) + "'")) + EString.ezeCast(actual))) + "' ");
 		return standardMsg;

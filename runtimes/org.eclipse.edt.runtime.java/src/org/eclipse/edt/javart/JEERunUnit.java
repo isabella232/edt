@@ -16,7 +16,7 @@ import java.util.Locale;
 import org.eclipse.edt.javart.resources.RunUnitBase;
 import org.eclipse.edt.javart.resources.StartupInfo;
 
-import egl.lang.AnyException;
+import eglx.lang.AnyException;
 
 public class JEERunUnit extends RunUnitBase 
 {

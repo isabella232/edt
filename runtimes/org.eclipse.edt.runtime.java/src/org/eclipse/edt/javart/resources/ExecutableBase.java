@@ -18,7 +18,8 @@ import java.io.Serializable;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.Executable;
-import egl.lang.AnyException;
+
+import eglx.lang.AnyException;
 
 /**
  * This class represents anything in EGL that contains functions: programs,
