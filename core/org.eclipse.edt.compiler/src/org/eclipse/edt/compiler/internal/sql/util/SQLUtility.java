@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.sql.util;
 
+import java.util.Map;
+import java.util.HashMap;
 
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
@@ -224,9 +226,6 @@ public class SQLUtility {
     }
 
     public static String getColumnName(IDataBinding itemBinding, IDataBinding recordData) {
-        /*IAnnotationBinding annotation = recordData.getAnnotationFor(EGLIOSQL, "Column",
-                new IDataBinding[] { itemBinding });*/
-       
         IAnnotationBinding annotation = itemBinding.getAnnotation(EGLXSQL, "Column");
         if (annotation != null) {
         	IAnnotationBinding columnNameAnnotation= (IAnnotationBinding)annotation.findData(IEGLConstants.PROPERTY_NAME);
@@ -278,6 +277,91 @@ public class SQLUtility {
 	        }
         }
         return new IDataBinding[0];
+    }
+    
+    public static IDataBinding[] getFields(ITypeBinding typeBinding) {
+    	if (typeBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING || typeBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING) {
+            return ((IRecordBinding) typeBinding).getFields();
+        } else {
+        	return new IDataBinding[0];
+        }
+    }
+    
+    public static String getTableName(ITypeBinding typeBinding) {
+    	if(typeBinding != null) {
+    		ITypeBinding elementTypeBinding = null;
+    		if(typeBinding.isReference()) {
+    			elementTypeBinding = typeBinding.getBaseType();
+    		} else {
+    			elementTypeBinding = typeBinding;
+    		}
+    		IAnnotationBinding annotation = elementTypeBinding.getAnnotation(SQLUtility.EGLXSQL, IEGLConstants.PROPERTY_TABLE);
+        	if (annotation != null) {
+    			IAnnotationBinding tableNameAnnotation = (IAnnotationBinding) annotation.findData(IEGLConstants.PROPERTY_NAME);
+    			return (String) tableNameAnnotation.getValue();
+    		}
+    	}
+    	
+    	return null;
+    }
+    
+    public static String getIdColumnName(ITypeBinding typeBinding) {
+    	if(typeBinding != null) {
+    		IDataBinding[] fields = getFields(typeBinding);
+    		for(IDataBinding field : fields) {
+    			IAnnotationBinding annotation = field.getAnnotation(SQLUtility.EGLXPERSISTENCE, IEGLConstants.PROPERTY_ID);
+    			if (annotation != null) {
+    				annotation = field.getAnnotation(SQLUtility.EGLXPERSISTENCE, IEGLConstants.PROPERTY_COLUMN);
+    				if(annotation != null) {
+    					IAnnotationBinding tableNameAnnotation = (IAnnotationBinding) annotation.findData(IEGLConstants.PROPERTY_NAME);
+            			return (String) tableNameAnnotation.getValue();
+    				} else {
+    					return field.getCaseSensitiveName();
+    				}
+        			
+        		}
+    		}
+    	}
+    	
+    	return null;
+    }
+    
+    //The map key refers to type binding of master table
+    //The map value refers to name of foreign key of slave table
+    public static Map<ITypeBinding,String> getForeignKeys(IDataBinding dataBinding) {
+    	Map<ITypeBinding,String> foreignKeys = null;
+    	IDataBinding[] fieldBindings = getFields(dataBinding);
+    	
+    	for(IDataBinding fieldBinding : fieldBindings) {
+    		String foreignKey = getForeignKeyName(fieldBinding);
+    		if(foreignKey != null) {
+    			if(foreignKeys == null) {
+    				foreignKeys = new HashMap<ITypeBinding,String>();
+    			}
+    			if(fieldBinding.getType().getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING) {
+    				foreignKeys.put(dataBinding.getDeclaringPart(), foreignKey);
+    			} else {
+    				foreignKeys.put(fieldBinding.getDeclaringPart(), foreignKey);
+    			}
+    		}
+    	}
+    	
+    	return foreignKeys;
+    }
+    
+    private static String getForeignKeyName(IDataBinding fieldBinding) {
+    	String columnName = null;
+    	 IAnnotationBinding annotation = fieldBinding.getAnnotation(EGLXPERSISTENCE, "ManyToOne");
+    	 if(annotation != null) {
+    		 /**
+    		  * if typeBinding is PrimitiveTypeBinding, use entity field as column name;
+    		  * Otherwise, get column name from JoinColumn annotation.
+    		  */
+    		 //TODO:
+    		 columnName = fieldBinding.getCaseSensitiveName();
+    	 }
+    	
+    	return columnName;
     }
     
     public static String getColumnName(Expression expr) {

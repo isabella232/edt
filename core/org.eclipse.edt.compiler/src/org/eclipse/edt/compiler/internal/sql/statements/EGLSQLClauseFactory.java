@@ -441,7 +441,7 @@ public class EGLSQLClauseFactory {
 			// If the I/O object is an SQL record array and the usingKeys clause is specified, generate the WHERE clause with
 			// the new EGL algorithm.
 			whereClause = addKeyClausesToGetResultSet(whereClause, defaultSelectConditions, keyItemAndColumnNames);
-		} else if (!recordKeysInvalid) {
+		} else if (!recordKeysInvalid && defaultSelectConditions == null) {
 			// If this is a single record with or without usingKeys, generate using the old VG algorithm.
 			// If no usingKeys clause is specified for a dynamic array, the record keys are ignored completely for the WHERE clause.
 			whereClause =

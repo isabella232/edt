@@ -14,6 +14,7 @@ package org.eclipse.edt.compiler.internal.sql.statements;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
@@ -97,13 +98,51 @@ public abstract class EGLSQLStatementFactory {
         }
         return false;
     }
+    
+    private int getTableIndex(String tableName) {
+    	int index = -1;
+    	if(tableNames != null) {
+    		for(int i=0; i < tableNames.length; i++) {
+    			if(tableName.equals(tableNames[i])){
+    				index = i;
+    				break;
+    			}
+    		}
+    	}
+    	
+    	return index;
+    }
 
     protected String getDefaultSelectConditions() {
 
         String defaultSelectConditions = null;
 
-        if (SQLUtility.isEntityRecord(sqlRecordData) || SQLUtility.isBasicRecord(sqlRecordData)) {
-        	//TODO:  sqlRecordData
+        if ((SQLUtility.isEntityRecord(sqlRecordData) || SQLUtility.isBasicRecord(sqlRecordData))
+        		&& tableNames.length > 0) {
+        	Map<ITypeBinding,String> foreignKeys = SQLUtility.getForeignKeys(sqlRecordData);
+        	String masterTableName = null;
+        	String slaveTableName = SQLUtility.getTableName(sqlRecordData.getType());
+        	int slaveIndex = getTableIndex(slaveTableName);
+        	 
+        	if(slaveTableName!=null && slaveIndex!=-1 && foreignKeys != null) {
+        		for(ITypeBinding masterTable : foreignKeys.keySet()) {
+        			masterTableName = SQLUtility.getTableName(masterTable);
+
+					if (masterTableName != null) {
+						int tableIndex = getTableIndex(masterTableName);
+						if(tableIndex != -1) {
+							defaultSelectConditions = tableLabels[slaveIndex] + SQLConstants.QUALIFICATION_DELIMITER
+									+ foreignKeys.get(masterTable) + "=" 
+									+ tableLabels[tableIndex] + SQLConstants.QUALIFICATION_DELIMITER
+									+ SQLUtility.getIdColumnName(masterTable)
+									+ SQLConstants.SPACE + SQLConstants.AND + SQLConstants.SPACE
+									+ tableLabels[tableIndex] + SQLConstants.QUALIFICATION_DELIMITER
+									+ SQLUtility.getIdColumnName(masterTable)
+									+ "=" + SQLConstants.PARAMETER_MARKER;
+						}
+					}
+        		}
+        	}
         }
 
         // If no default select conditions are defined or if it is empty,
@@ -279,14 +318,15 @@ public abstract class EGLSQLStatementFactory {
     protected void setupTableInfo() {
     	List<String> sqlTables = new ArrayList<String>();
     	List<String> sqlTableLables = new ArrayList<String>();
-    	int tableIndex = 0;
+    	int tableIndex = 1;
     	boolean haveTableAnnotation = false;
     	
         if (SQLUtility.isEntityRecord(sqlRecordData) || SQLUtility.isBasicRecord(sqlRecordData)) {
         	 List<ITypeBinding> declarers = new ArrayList<ITypeBinding>();
         	 declarers.add( getSQLRecordTypeBinding() );
         	 if(sqlRecordData.getDeclaringPart() != null 
-        			 && ITypeBinding.FLEXIBLE_RECORD_BINDING == sqlRecordData.getDeclaringPart().getKind()) {
+        			 && ITypeBinding.FLEXIBLE_RECORD_BINDING == sqlRecordData.getDeclaringPart().getKind()
+        			 && SQLConstants.GET_IO_TYPE.toUpperCase().equals(getIOType())) {
         		 declarers.add( sqlRecordData.getDeclaringPart() );
         	 }
         			
