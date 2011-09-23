@@ -728,7 +728,9 @@ public class ReorganizeCode extends AbstractVisitor {
 			Field field = factory.createField();
 			field.setName(temporary);
 			field.setType(object.getType());
-			field.setIsNullable(object.isNullable());
+			// we always made this nullable as it will be assigned to by the set values block. this prevents an unnecessary
+			// initialization from occurring
+			field.setIsNullable(true);
 			declarationExpression.getFields().add(field);
 			localDeclaration.setExpression(declarationExpression);
 			// add the local variable to the statement block
