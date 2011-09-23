@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Executable;
-import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.json.ArrayNode;
 import org.eclipse.edt.javart.json.BooleanNode;
 import org.eclipse.edt.javart.json.DecimalNode;
@@ -60,6 +59,7 @@ import org.eclipse.edt.runtime.java.egl.lang.NullType;
 import com.ibm.icu.text.SimpleDateFormat;
 
 import egl.lang.AnyException;
+import egl.lang.InvalidArgumentException;
 import eglx.http.Response;
 import eglx.lang.StringLib;
 
@@ -122,9 +122,10 @@ public class JsonLib {
 	    	return processObject(object);
 	    if(object instanceof AnyException)
 	    	return processObject(object);
-		throw new AnyException(Message.SOA_E_JSON_TYPE_EXCEPTION,
-				JavartUtil.errorMessage( Runtime.getRunUnit(), Message.SOA_E_JSON_TYPE_EXCEPTION, 
-						new Object[] { object.getClass().getName() } ));
+	    
+	    InvalidArgumentException ex = new InvalidArgumentException();
+		throw ex.fillInMessage( Message.SOA_E_JSON_TYPE_EXCEPTION,
+						new Object[] { object.getClass().getName() } );
 	}
 	
 	private static ValueNode process(EglList<?> array)throws AnyException
@@ -208,7 +209,7 @@ public class JsonLib {
 				}
 			} catch (Throwable t) {
 				AnyException exc = new AnyException(Message.SOA_E_JSON_TYPE_EXCEPTION,
-						JavartUtil.errorMessage( Runtime.getRunUnit(), Message.SOA_E_JSON_TYPE_EXCEPTION, 
+						JavartUtil.errorMessage( Message.SOA_E_JSON_TYPE_EXCEPTION, 
 								new Object[] { name, object.getClass().getName() } ));
 				exc.initCause(t);
 				throw exc;
@@ -481,7 +482,7 @@ public class JsonLib {
 				}
 			} catch (Throwable t) {
 				AnyException exc = new AnyException(Message.SOA_E_JSON_TYPE_EXCEPTION,
-						JavartUtil.errorMessage( Runtime.getRunUnit(), Message.SOA_E_JSON_TYPE_EXCEPTION, 
+						JavartUtil.errorMessage( Message.SOA_E_JSON_TYPE_EXCEPTION, 
 								new Object[] { name, object.getClass().getName() } ));
 				exc.initCause(t);
 				throw exc;

@@ -18,6 +18,22 @@ package org.eclipse.edt.javart.messages;
  */
 public class Message
 {
+	//TODO update the ID values!
+	public static final String DYNAMIC_ACCESS_FAILED = "EGL0108E";
+	public static final String SOA_E_WS_PROXY_INVALID_HTTP_EXCEPTION = "EGL1557E";
+	public static final String SOA_E_WS_PROXY_INVALID_URL_EXCEPTION = "EGL1558E";
+	public static final String SOA_E_WS_PROXY_EMPTY_URL_EXCEPTION = "EGL1559E";
+	public static final String SOA_E_JSON_TYPE_EXCEPTION = "EGL1562E";
+	public static final String MDY_ERROR = "EGL0114E";
+	public static final String CONVERSION_ERROR = "EGL0102E";
+	public static final String CAUGHT_JAVA_EXCEPTION = "EGL0099E";
+	public static final String SQL_EXCEPTION_CAUGHT = "EGL0504E";
+	public static final String INDEX_OUT_OF_BOUNDS = "EGL0144E";
+	public static final String INVALID_SUBSTRING_INDEX = "EGL0142E";
+
+	
+	
+	
 	public static final String PROGRAM_ERROR_INFO = "EGL0001I";
 	public static final String FUNCTION_ERROR_INFO = "EGL0002I";
 	public static final String FILE_ERROR_INFO = "EGL0003I";
@@ -76,22 +92,18 @@ public class Message
 	public static final String AS400_SERVER_NOT_FOUND = "EGL0094E";
 	public static final String AS400_APPLICATION_ERROR = "EGL0095E";
 	public static final String NULL_REFERENCE_VARIABLE = "EGL0098E";
-	public static final String CAUGHT_JAVA_EXCEPTION = "EGL0099E";
 	public static final String UNHANDLED_EXCEPTION = "EGL0100E";
 	public static final String DATA_FORMAT_ERROR = "EGL0101E";
-	public static final String CONVERSION_ERROR = "EGL0102E";
 	public static final String INVALID_DATE_FORMAT_PATTERN = "EGL0103E";
 	public static final String INVALID_TIME_FORMAT_PATTERN = "EGL0104E";
 	public static final String INVALID_TIMESTAMP_FORMAT_PATTERN = "EGL0105E";
 	public static final String NULL_REFERENCE = "EGL0106E";
 	public static final String DYNAMIC_ACCESS_NOT_SUPPORTED = "EGL0107E";
-	public static final String DYNAMIC_ACCESS_FAILED = "EGL0108E";
 	public static final String INVALID_NUMERIC_FORMAT_PATTERN = "EGL0109E";
 	public static final String EXCEPTION_IN_LOB_ASSIGNMENT = "EGL0110E";
 	public static final String EXCEPTION_IN_LOB_SET_EMPTY = "EGL0111E";
 	public static final String EXCEPTION_IN_DELEGATE_INVOKE = "EGL0112E";
 	public static final String RUN_COMMAND_FAILED = "EGL0113E";	
-	public static final String MDY_ERROR = "EGL0114E";
 	public static final String NON_NUMERIC_STRING = "EGL0115E";
 	public static final String SYSTEM_FUNCTION_ERROR = "EGL0117E";
 	public static final String INT_AS_CHAR_ERROR = "EGL0118E";
@@ -104,9 +116,7 @@ public class Message
 	public static final String CALLING_CICS_UNSUCCESSFUL = "EGL0125E";
 	public static final String INVALID_ARRAY_SIZE = "EGL0140E";
 	public static final String ARRAY_INDEX_OUT_OF_BOUNDS = "EGL0141E";
-	public static final String INVALID_SUBSTRING_INDEX = "EGL0142E";
 	public static final String INVALID_ARRAY_FUNCTION_ARGUMENT = "EGL0143E";
-	public static final String INDEX_OUT_OF_BOUNDS = "EGL0144E";
 	public static final String UNSUPPORTED_CONVERSION_TABLE = "EGL0145E";
 	public static final String CANNOT_READ_CSOUIDPWD_FILE = "EGL0146E";
 	public static final String CALL_PARMS_TOO_LARGE = "EGL0147E";	
@@ -160,7 +170,6 @@ public class Message
 	public static final String SQL_RESULT_SET_NOT_FOUND = "EGL0501E";
 	public static final String SQL_ERROR = "EGL0502E";
 	public static final String SQL_NO_RECORD_FOUND = "EGL0503E";
-	public static final String SQL_EXCEPTION_CAUGHT = "EGL0504E";
 	public static final String SQL_CONNECTION_FAILED = "EGL0505E";
 	public static final String SQL_NO_JDBC_DRIVER = "EGL0506E";
 	public static final String SQL_JDBC_DRIVER_LOAD_ERROR = "EGL0507E";
@@ -438,12 +447,8 @@ public class Message
 	public static final String SOA_E_WS_PROXY_PARMETERS_EGL2XML = "EGL1554E";
 	public static final String SOA_E_WS_PROXY_XML_PARSE_EXCEPTION = "EGL1555E";
 	public static final String SOA_E_WS_PROXY_XML_CONVERT_EXCEPTION = "EGL1556E";
-	public static final String SOA_E_WS_PROXY_INVALID_HTTP_EXCEPTION = "EGL1557E";
-	public static final String SOA_E_WS_PROXY_INVALID_URL_EXCEPTION = "EGL1558E";
-	public static final String SOA_E_WS_PROXY_EMPTY_URL_EXCEPTION = "EGL1559E";
 	public static final String SOA_E_WS_GATEWAY_EXCEPTION = "EGL1560E";
 	public static final String SOA_E_JSON_CONVERSION_EXCEPTION = "EGL1561E";
-	public static final String SOA_E_JSON_TYPE_EXCEPTION = "EGL1562E";
 	public static final String SOA_E_NOT_JAXWS_WEB_SERVICE = "EGL1563E";
 	public static final String SOA_E_JAXWS_SOAP_HEADER_EXCEPTION = "EGL1564E";
 	public static final String SOA_E_WS_PROXY_XML_PARSE_ELEMENT_EXCEPTION = "EGL1565E";

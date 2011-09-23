@@ -20,7 +20,6 @@ import java.util.concurrent.ThreadFactory;
 
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.ControlFlow;
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.FatalProblem;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.Runtime;
@@ -171,40 +170,26 @@ public class JavartUtil
 	 * Checks the start and end indices for a substring access, and throws an
 	 * exception with ID = Message.INVALID_SUBSTRING_INDEX if they are invalid.
 	 * 
-	 * @param program     The program.
 	 * @param startIndex  The start index.
 	 * @param endIndex    The end index.
 	 * @param maxlen      The maximum length of the item being substringed.
 	 * @throws AnyException
 	 */
-	public static void checkSubstringIndices( Executable program, int startIndex,
-			int endIndex, int maxlen )
+	public static void checkSubstringIndices( int startIndex, int endIndex, int maxlen )
 		throws AnyException
 	{
 		if ( startIndex < 1 || startIndex > maxlen )
 		{
 			// startIndex is bad.
-			String message = errorMessage(
-					program,
-					Message.INVALID_SUBSTRING_INDEX,
-					new Object[]{
-						Integer.valueOf( startIndex ),
-						Integer.valueOf( endIndex )
-					} );
-			
 			InvalidIndexException ex = 
 				new InvalidIndexException();
-			ex.setMessage( message );
 			ex.index = startIndex;
-			ex.setMessageID(Message.INVALID_SUBSTRING_INDEX);
-			
-			throw ex;
+			throw ex.fillInMessage( Message.INVALID_SUBSTRING_INDEX, startIndex, endIndex );
 		}
 		else if ( endIndex < startIndex || endIndex < 1 || endIndex > maxlen )
 		{
 			// endIndex is bad.
 			String message = errorMessage(
-					program,
 					Message.INVALID_SUBSTRING_INDEX,
 					new Object[]{
 						Integer.valueOf( startIndex ),
@@ -222,120 +207,46 @@ public class JavartUtil
 	}
 	
 	/**
-	 * Builds an error message.  If tracing is on, it will be written to the
-	 * trace.  If logging is on, it will be written to the log.
+	 * Builds an error message with no inserts.  If tracing is on, the message will
+	 * be written to the trace.  If logging is on, it will be written to the log.
 	 * 
-	 * @param p   the program.
 	 * @param id  the message ID.
 	 * @return the error message.
 	 */
-	public static String errorMessage( Executable p, String id )
+	public static String errorMessage( String id )
 	{
-		String message = Runtime.getRunUnit().getLocalizedText().getMessage( id );
-		return errorMessage( id, message, p );
-	}
-	
-	/**
-	 * Builds an error message.  If tracing is on, it will be written to the
-	 * trace.  If logging is on, it will be written to the log.
-	 * 
-	 * @param p        the program.
-	 * @param id       the message ID.
-	 * @param inserts  the message inserts.
-	 * @return the error message.
-	 */
-	public static String errorMessage( Executable p, String id, Object[] inserts )
-	{
-		String message = Runtime.getRunUnit().getLocalizedText().getMessage( id, inserts );
-		return errorMessage( id, message, p );
-	}
-	
-	private static String errorMessage( String id, String message, Executable p )
-	{
-		String locationMessage; 
-		String locationMessageId;
 		RunUnit ru = Runtime.getRunUnit();
-		// TODO handle stack tracing from mapping of EGL to Java directly(as in JSR 045)
-
-		locationMessageId = Message.PROGRAM_ERROR_INFO;
-		locationMessage = ru.getLocalizedText().getMessage( 
-				Message.PROGRAM_ERROR_INFO,
-				new String[] { p._name() } );
-
-		message = id + ' ' + message;
-		locationMessage = locationMessageId + ' ' + locationMessage;
-		
-		// Write the message to the trace and log.
-//		if ( ru.getTrace().traceIsOn() )
-//		{
-//			ru.getTrace().put( message );
-//			ru.getTrace().put( locationMessage );
-//		}
-//		if ( ru.syslib._errorLogIsOn() )
-//		{
-//			ru.syslib.errorLog( null, message + LINE_SEPARATOR + locationMessage );
-//		}
-		
-		return message + '\n' + locationMessage;
-	}
-	
-	/**
-	 * Builds an error message.  If tracing is on, it will be written to the
-	 * trace.  If logging is on, it will be written to the log.
-	 * 
-	 * @param ru  the run unit.
-	 * @param id  the message ID.
-	 * @return the error message.
-	 */
-	public static String errorMessage( RunUnit ru, String id )
-	{
 		String message = ru.getLocalizedText().getMessage( id );
-		return errorMessage( id, message, ru );
-	}
-	
-	/**
-	 * Builds an error message.  If tracing is on, it will be written to the
-	 * trace.  If logging is on, it will be written to the log.
-	 * 
-	 * @param ru       the run unit.
-	 * @param id       the message ID.
-	 * @param inserts  the message inserts.
-	 * @return the error message.
-	 */
-	public static String errorMessage( RunUnit ru, String id, Object[] inserts )
-	{
-		String message = ru.getLocalizedText().getMessage( id, inserts );
-		return errorMessage( id, message, ru );
-	}
-	
-	private static String errorMessage( String id, String message, RunUnit ru )
-	{
-//		Executable p = ru.peekExecutable();
-//		if ( p != null )
-//		{
-//			return errorMessage( id, message, p );
-//		}
-
-		String programName = ru.getStartupInfo().getRuName();
-		String locationMessage = ru.getLocalizedText().getMessage( 
-					Message.PROGRAM_ERROR_INFO,
-					new String[] { programName } );
-
-		message = id + ' ' + message;
-		locationMessage = Message.PROGRAM_ERROR_INFO + ' ' + locationMessage;
 		
-		// Write the message to the trace and log.
+		// Write the message to the trace.
 		if ( ru.getTrace().traceIsOn() )
 		{
 			ru.getTrace().put( message );
-			ru.getTrace().put( locationMessage );
 		}
-//		if ( ru.syslib._errorLogIsOn() )
-//		{
-//			ru.syslib.errorLog( null, message + LINE_SEPARATOR + locationMessage );
-//		}
 		
-		return message + '\n' + locationMessage;
+		return message;
+	}
+	
+	/**
+	 * Builds an error message.  If tracing is on, it will be written to the
+	 * trace.  If logging is on, it will be written to the log.
+	 * 
+	 * @param id       the message ID.
+	 * @param inserts  the message inserts.
+	 * @return the error message.
+	 */
+	public static String errorMessage( String id, Object... inserts )
+	{
+		RunUnit ru = Runtime.getRunUnit();
+		String message = ru.getLocalizedText().getMessage( id, inserts );
+		
+		// Write the message to the trace.
+		if ( ru.getTrace().traceIsOn() )
+		{
+			ru.getTrace().put( message );
+		}
+		
+		return message;
 	}
 
 	/**
@@ -440,7 +351,7 @@ public class JavartUtil
 		
 		String msg = ex.getMessage();
 		String className = ex.getClass().getName();
-		if ( msg == null || msg.trim().length() == 0 )
+		if ( msg == null || msg.length() == 0 )
 		{
 			msg = className;
 		}
@@ -448,27 +359,23 @@ public class JavartUtil
 		if ( ex instanceof NullPointerException )
 		{
 			NullValueException nvx = new NullValueException();
-			nvx.setMessageID( Message.NULL_REFERENCE );
-			nvx.setMessage( msg );
-			
-			return nvx;
+			return nvx.fillInMessage( Message.NULL_REFERENCE, msg );
 		}
-		else if(ex instanceof java.sql.SQLException){
-			SQLException sql = new SQLException();
-			sql.setMessageID( Message.NULL_REFERENCE );
-			sql.setMessage( msg );
-			sql.setSQLState(((java.sql.SQLException)ex).getSQLState());
-			sql.setErrorCode(((java.sql.SQLException)ex).getErrorCode());
-			return sql; 
+		else if ( ex instanceof java.sql.SQLException )
+		{
+			SQLException sqlx = new SQLException();
+			java.sql.SQLException caught = (java.sql.SQLException)ex;
+			String state = caught.getSQLState();
+			int code = caught.getErrorCode();
+			sqlx.setSQLState( state );
+			sqlx.setErrorCode( code );
+			return sqlx.fillInMessage( Message.SQL_EXCEPTION_CAUGHT, msg, state, code );
 		}
 		else
 		{
 			JavaObjectException jox = new JavaObjectException();
-			jox.setMessageID( Message.CAUGHT_JAVA_EXCEPTION );
-			jox.setMessage( msg );
 			jox.exceptionType = className;
-			
-			return jox;
+			return jox.fillInMessage( Message.CAUGHT_JAVA_EXCEPTION, msg );
 		}
 	}
 	

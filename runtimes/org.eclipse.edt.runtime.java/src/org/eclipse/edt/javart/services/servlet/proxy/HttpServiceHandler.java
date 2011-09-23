@@ -244,9 +244,9 @@ public class HttpServiceHandler
 						threadResult.cancel( true );
 						connection.disconnect();
 						connection = null;
-						String message = JavartUtil.errorMessage( Runtime.getRunUnit(),
+						String message = JavartUtil.errorMessage(
 								Message.SOA_E_WS_PROXY_SERVICE_TIMEOUT,
-								new String[] { request.uri } );
+								request.uri );
 						throw new IOException( message );
 					}
 					else if ( httpsr.exception() )

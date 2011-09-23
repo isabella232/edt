@@ -25,7 +25,6 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
@@ -37,7 +36,6 @@ import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
 import org.eclipse.edt.javart.util.JavartUtil;
 
 import egl.lang.AnyException;
-import egl.lang.NullValueException;
 import eglx.persistence.sql.SQLDataSource;
 
 public class SysLib extends ExecutableBase {
@@ -69,8 +67,6 @@ public class SysLib extends ExecutableBase {
 	 * honored down to two decimal places.
 	 */
 	public static void wait(BigDecimal time) {
-		if (time == null)
-			throw new NullValueException();
 		// Truncate any extra digits by shifting the decimal point
 		// over two places and converting the value to a long.
 		time = time.movePointRight(2);
@@ -90,8 +86,6 @@ public class SysLib extends ExecutableBase {
 	 * Run an external command in the foreground, in LINE mode. This does not return until the command has completed.
 	 */
 	public static void callCmd(String commandString) throws AnyException {
-		if (commandString == null)
-			throw new NullValueException();
 		runCommand(commandString, true, true);
 	}
 
@@ -100,14 +94,10 @@ public class SysLib extends ExecutableBase {
 	 * complete.
 	 */
 	public static void startCmd(String commandString) throws AnyException {
-		if (commandString == null)
-			throw new NullValueException();
 		runCommand(commandString, true, true);
 	}
 
 	private static void runCommand(String commandString, boolean lineMode, boolean wait) throws AnyException {
-		if (commandString == null)
-			throw new NullValueException();
 		final Process proc;
 		try {
 			proc = java.lang.Runtime.getRuntime().exec(
@@ -153,8 +143,6 @@ public class SysLib extends ExecutableBase {
 	 * Returns a formatted message from the RunUnit's message bundle, or null if no message with the key is found.
 	 */
 	public static String getMessage(String key) {
-		if (key == null)
-			throw new NullValueException();
 		return getMessage(key, null);
 	}
 
@@ -162,8 +150,6 @@ public class SysLib extends ExecutableBase {
 	 * Returns a formatted message from the RunUnit's message bundle, or null if no message with the key is found.
 	 */
 	public static String getMessage(String key, egl.lang.EglList<String> inserts) {
-		if (key == null)
-			throw new NullValueException();
 		// Get the inserts as Strings.
 		String[] insertStrings = null;
 		if (inserts != null) {
@@ -174,7 +160,7 @@ public class SysLib extends ExecutableBase {
 		}
 		// Look up the message.
 		key = key.trim();
-		String message = Runtime.getRunUnit().getLocalizedText().getMessage(key, insertStrings);
+		String message = Runtime.getRunUnit().getLocalizedText().getMessage(key, (Object[])insertStrings);
 		return message;
 	}
 
@@ -195,7 +181,7 @@ public class SysLib extends ExecutableBase {
 			Runtime.getRunUnit().commit();
 		}
 		catch (AnyException jx) {
-			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.commit", jx.getMessage() });
+			String message = JavartUtil.errorMessage( Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.commit", jx.getMessage() });
 			errorException = new RuntimeException(message); //TODO this should be one of our exceptions
 		}
 		finally {
@@ -228,7 +214,7 @@ public class SysLib extends ExecutableBase {
 			Runtime.getRunUnit().rollback();
 		}
 		catch (AnyException jx) {
-			String message = JavartUtil.errorMessage((Executable) null, Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.rollBack", jx.getMessage() });
+			String message = JavartUtil.errorMessage( Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.rollBack", jx.getMessage() });
 			errorException = new RuntimeException(message); //TODO this should be one of our exceptions
 		}
 		finally {
@@ -249,8 +235,6 @@ public class SysLib extends ExecutableBase {
 	 * Change the locale of the running program dynamically.
 	 */
 	public static void setLocale(String languageCode) {
-		if (languageCode == null)
-			throw new NullValueException();
 		Locale locale = new Locale(languageCode);
 		Runtime.getRunUnit().switchLocale(locale);
 	}
@@ -259,8 +243,6 @@ public class SysLib extends ExecutableBase {
 	 * Change the locale of the running program dynamically.
 	 */
 	public static void setLocale(String languageCode, String countryCode) {
-		if (languageCode == null || countryCode == null)
-			throw new NullValueException();
 		Locale locale = new Locale(languageCode, countryCode);
 		Runtime.getRunUnit().switchLocale(locale);
 	}
@@ -269,8 +251,6 @@ public class SysLib extends ExecutableBase {
 	 * Change the locale of the running program dynamically.
 	 */
 	public static void setLocale(String languageCode, String countryCode, String variant) {
-		if (languageCode == null || countryCode == null || variant == null)
-			throw new NullValueException();
 		Locale locale = new Locale(languageCode, countryCode, variant);
 		Runtime.getRunUnit().switchLocale(locale);
 	}
@@ -280,7 +260,7 @@ public class SysLib extends ExecutableBase {
 	 */
 	public static void writeStdout(String output) {
 		if (output == null)
-			throw new NullValueException();
+			output = "";
 		System.out.println(output);
 	}
 
@@ -289,7 +269,7 @@ public class SysLib extends ExecutableBase {
 	 */
 	public static void writeStderr(String output) {
 		if (output == null)
-			throw new NullValueException();
+			output = "";
 		System.err.println(output);
 	}
 	/**

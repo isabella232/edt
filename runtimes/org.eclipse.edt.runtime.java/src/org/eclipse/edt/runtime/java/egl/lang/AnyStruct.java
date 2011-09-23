@@ -15,7 +15,6 @@ import java.io.Serializable;
 
 import org.eclipse.edt.javart.ByteStorage;
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.Executable;
 import egl.lang.AnyException;
 import org.eclipse.edt.javart.util.JavartUtil;
 
@@ -97,8 +96,8 @@ public abstract class AnyStruct extends AnyValue implements Serializable {
 		
 	}
 
-	public <T extends AnyStruct> T substring(Executable program, int start, int end) throws AnyException {
-		JavartUtil.checkSubstringIndices(program, start, end, sizeInBytes-offset);
+	public <T extends AnyStruct> T substring(int start, int end) throws AnyException {
+		JavartUtil.checkSubstringIndices( start, end, sizeInBytes-offset);
 		T newValue = ezeNewValue();
 		newValue.buffer = buffer;
 		newValue.offset = start;

@@ -1459,7 +1459,7 @@ public class LocalizedText implements Serializable
 	 * @param inserts  the message inserts.
 	 * @return the text of the message.
 	 */
-	public String getMessage( String id, Object[] inserts )
+	public String getMessage( String id, Object... inserts )
 	{
 		String text = getMessage( id );
 		if ( inserts == null || text == null || inserts.length == 0 )

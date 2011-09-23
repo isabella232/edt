@@ -15,6 +15,8 @@ import java.lang.reflect.Field;
 
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.TypeConstraints;
+import org.eclipse.edt.javart.messages.Message;
+import org.eclipse.edt.javart.util.JavartUtil;
 import org.eclipse.edt.runtime.java.egl.lang.EglAny;
 
 public class AnyException extends RuntimeException implements egl.lang.EglAny {
@@ -75,7 +77,7 @@ public class AnyException extends RuntimeException implements egl.lang.EglAny {
 		catch (Exception e) {
 			DynamicAccessException dax = new DynamicAccessException();
 			dax.key = name;
-			throw dax;
+			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, new Object[] { name, ezeName() } );
 		}
 	}
 
@@ -93,7 +95,7 @@ public class AnyException extends RuntimeException implements egl.lang.EglAny {
 		catch (Exception e) {
 			DynamicAccessException dax = new DynamicAccessException();
 			dax.key = name;
-			throw dax;
+			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, new Object[] { name, ezeName() } );
 		}
 	}
 
@@ -154,6 +156,28 @@ public class AnyException extends RuntimeException implements egl.lang.EglAny {
 		return this;
 	}
 
+	/**
+	 * This method sets the ID and message of this exception.  It's normally used
+	 * after an exception is created and values are assigned to its fields, other 
+	 * than message and messageID.  This exception is returned so that it may easily
+	 * be thrown, as shown in the following example. 
+	 * <pre><code>
+	 * DynamicAccessException dax = new DynamicAccessException();
+	 * dax.key = name;
+	 * throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, new Object[] { name, ezeName() } );
+	 * </code></pre>
+	 * 
+	 * @param id       the message ID.
+	 * @param inserts  the inserts for the message, may be null.
+	 * @return this exception.
+	 */
+	public AnyException fillInMessage( String id, Object... inserts )
+	{
+		setMessageID( id );
+		setMessage( JavartUtil.errorMessage( id, inserts ) );
+		return this;
+	}
+	
 	/**
 	 * To improve performance, we override the usual implementation of this method,
 	 * which is VERY expensive.  But unfortunately this means a stack trace for this
