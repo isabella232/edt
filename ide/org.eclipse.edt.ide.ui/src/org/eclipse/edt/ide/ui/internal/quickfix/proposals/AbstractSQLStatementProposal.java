@@ -28,6 +28,7 @@ import org.eclipse.edt.compiler.core.ast.DeleteStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.GetByKeyStatement;
 import org.eclipse.edt.compiler.core.ast.Name;
+import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Record;
@@ -69,6 +70,7 @@ import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.editor.EditorUtility;
 import org.eclipse.edt.ide.ui.internal.editor.sql.SQLEditorUtility;
 import org.eclipse.edt.ide.ui.internal.editor.sql.SQLIOStatementActionInfo;
+import org.eclipse.edt.ide.ui.internal.quickfix.IInvocationContext;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.swt.graphics.Image;
@@ -709,6 +711,26 @@ public abstract class  AbstractSQLStatementProposal extends
 				}
 			}
 		}
+		return null;
+	}
+	
+	public static Statement SQLStatementFinder(IInvocationContext context){
+		
+		Node astNode = context.getCoveringNode();
+		
+		if(null != astNode){
+			if(astNode instanceof Statement){
+				return (Statement)astNode;
+			}
+		}
+		
+		while(!(astNode instanceof NestedFunction || astNode instanceof Part)){
+			astNode = astNode.getParent();
+			if(astNode instanceof Statement){
+				return (Statement)astNode;
+			}
+		}
+		
 		return null;
 	}
 }

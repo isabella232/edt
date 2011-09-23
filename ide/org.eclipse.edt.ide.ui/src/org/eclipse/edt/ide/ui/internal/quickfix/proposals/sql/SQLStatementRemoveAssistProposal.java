@@ -38,7 +38,7 @@ public class SQLStatementRemoveAssistProposal extends AbstractSQLStatementPropos
 		try {
 			ASTRewrite rewrite = ASTRewrite.create(fContext.getFileAST());
 			
-			Statement sqlNode = (Statement)fContext.getCoveringNode();
+			Statement sqlNode = AbstractSQLStatementProposal.SQLStatementFinder(fContext);
 			IEGLDocument document = fContext.getDocument();
 			
 			info = SQLIOStatementUtility.getAddSQLIoStatementActionInfo(document, sqlNode); 	

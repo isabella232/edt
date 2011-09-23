@@ -21,6 +21,7 @@ import org.eclipse.edt.ide.ui.internal.editor.sql.SQLIOStatementUtility;
 import org.eclipse.edt.ide.ui.internal.quickfix.AssistContext;
 import org.eclipse.edt.ide.ui.internal.quickfix.CorrectionMessages;
 import org.eclipse.edt.ide.ui.internal.quickfix.IInvocationContext;
+import org.eclipse.edt.ide.ui.internal.quickfix.proposals.AbstractSQLStatementProposal;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IFileEditorInput;
 
@@ -41,7 +42,7 @@ public class SQLStatementResetAssistProposal extends SQLStatementAddAssistPropos
 		try{
 			//Remove original SQL statement
 			ASTRewrite rewrite = ASTRewrite.create(fContext.getFileAST());
-			Statement sqlNode = (Statement)fContext.getCoveringNode();
+			Statement sqlNode = AbstractSQLStatementProposal.SQLStatementFinder(fContext);
 			IEGLDocument document = fContext.getDocument();
 			
 			info = SQLIOStatementUtility.getAddSQLIoStatementActionInfo(document, sqlNode); 

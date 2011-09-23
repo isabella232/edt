@@ -50,7 +50,7 @@ public class SQLStatementAddAssistProposal extends
 		try{
 			ASTRewrite rewrite = ASTRewrite.create(fContext.getFileAST());
 			
-			Statement sqlNode = (Statement)fContext.getCoveringNode();
+			Statement sqlNode = AbstractSQLStatementProposal.SQLStatementFinder(fContext);
 			IEGLDocument document = fContext.getDocument();
 			final Node boundNode = getBoundASTNode(fContext);
 			
@@ -79,7 +79,7 @@ public class SQLStatementAddAssistProposal extends
 	}
 	
 	public Node getBoundASTNode(IInvocationContext context) {
-		Statement sqlNode = (Statement)context.getCoveringNode();
+		Statement sqlNode = AbstractSQLStatementProposal.SQLStatementFinder(context);
 		IEGLDocument document = context.getDocument();
 		final Node nodeType[] = new Node[] {null};
 		
