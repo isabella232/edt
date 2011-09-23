@@ -14,6 +14,8 @@ package org.eclipse.edt.javart;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.eclipse.edt.javart.messages.Message;
+
 import egl.lang.AnyException;
 import egl.lang.DynamicAccessException;
 import egl.lang.InvocationException;
@@ -29,9 +31,8 @@ public class Delegate {
 		}
 		catch (Exception ex) {
 			DynamicAccessException dax = new DynamicAccessException();
-			dax.setMessage( ex.toString() );
 			dax.key = methodName;
-			throw dax;
+			throw dax.fillInMessage( Message.EXCEPTION_IN_DELEGATE_GET, methodName, ex );
 		}
 	}
 
@@ -49,9 +50,8 @@ public class Delegate {
 				}
 			}
 			InvocationException ix = new InvocationException();
-			ix.setMessage( problem.toString() );
 			ix.name = method.getName();
-			throw ix;
+			throw ix.fillInMessage( Message.EXCEPTION_IN_DELEGATE_INVOKE, ix.name, problem );
 		}
 	}
 }

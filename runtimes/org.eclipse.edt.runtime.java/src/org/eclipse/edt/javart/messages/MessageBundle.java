@@ -26,7 +26,7 @@ public class MessageBundle extends ListResourceBundle
 	static final Object[][] contents =
 	{
 		{ Message.DYNAMIC_ACCESS_FAILED, "A field named {0} cannot be found in {1}." },
-		{ Message.SOA_E_WS_PROXY_INVALID_HTTP_EXCEPTION, "The URL ''{0}'' used to invoke the service is invalid. It doesn''t contain the http:// protocol." },
+		{ Message.SOA_E_WS_PROXY_INVALID_HTTP_EXCEPTION, "The URL ''{0}'' used to invoke the service is invalid. It does not contain the http:// protocol." },
 		{ Message.SOA_E_WS_PROXY_INVALID_URL_EXCEPTION, "The URL ''{0}'' used to invoke the service is invalid. {1}" },
 		{ Message.SOA_E_WS_PROXY_EMPTY_URL_EXCEPTION, "The URL used to invoke the service is blank. Specify a URL that points to the service." },
 		{ Message.SOA_E_JSON_TYPE_EXCEPTION, "JSON conversion cannot be performed on field:{0} in {1}." },
@@ -34,9 +34,16 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.CONVERSION_ERROR, "The value {0} of type {1} cannot be converted to the type {2}." },
 		{ Message.CAUGHT_JAVA_EXCEPTION, "{0}" },
 		{ Message.SQL_EXCEPTION_CAUGHT, "{0}: [sqlstate:{1}][sqlcode:{2}]" },
+		{ Message.LIST_INDEX_OUT_OF_BOUNDS, "List index {0} is out of bounds. The list''s size is {1}." },
 		{ Message.INDEX_OUT_OF_BOUNDS, "The index value {0} is out of bounds." },
 		{ Message.INVALID_SUBSTRING_INDEX, "Invalid substring indices {0}:{1}." },
-
+		{ Message.EXCEPTION_IN_DELEGATE_INVOKE, "Invoking function {0} with a delegate failed due to {1}" },
+		{ Message.EXCEPTION_IN_DELEGATE_GET, "Creation of a delegate for function {0} failed due to {1}" },
+		{ Message.RUN_COMMAND_FAILED, "An error occurred running the {0} command.  Error: {1}." },
+		{ Message.NULL_NOT_ALLOWED, "A null value was used." },
+		{ Message.NO_FIELD_IN_TIMESTAMP, "Function {0} can only be called on timestamps whose pattern includes ''{1}''." },
+		{ Message.INVALID_MATCH_PATTERN, "The string-matching pattern {0} is invalid." },
+		{ Message.NEGATIVE_SIZE, "The size value {0} is less than zero." },
 		
 		
 		{ Message.PROGRAM_ERROR_INFO, "The error occurred in {0}." },
@@ -107,9 +114,7 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.DYNAMIC_ACCESS_NOT_SUPPORTED, "Dynamic access is not supported for {0}." },		
 		{ Message.INVALID_NUMERIC_FORMAT_PATTERN, "The {0} numeric format pattern is not valid." },
 		{ Message.EXCEPTION_IN_LOB_ASSIGNMENT, "An error occurred while assigning {0} to {1}. Error: {2}." },
-		{ Message.EXCEPTION_IN_LOB_SET_EMPTY, "An error in the SET {0} EMPTY statement. Error: {1}." },
-		{ Message.EXCEPTION_IN_DELEGATE_INVOKE, "A {0} error occurred while invoking the method with a {1} signature." },
-		{ Message.RUN_COMMAND_FAILED, "An error running the {0} command.  Error: {1}." },
+		{ Message.EXCEPTION_IN_LOB_SET_EMPTY, "An error in the SET {0} EMPTY statement. Error: {1}." },		
 		{ Message.NON_NUMERIC_STRING, "{0} was passed the {1} nonnumeric string. All characters in the portion of the string defined by the length argument must be numeric." },
 		{ Message.SYSTEM_FUNCTION_ERROR, "{0} failed with error message {1}." },
 		{ Message.INT_AS_CHAR_ERROR, "The argument to StrLib.intAsChar must be a number between 0 and 255." },
@@ -119,7 +124,6 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.START_TRANSACTION_ERROR, "VGLib.startTransaction to class {0} failed. The exception is {1}" },
 		{ Message.INT_AS_UNICODE_ERROR, "The argument to StrLib.intAsUnicode must be a number between 0 and 65535." },
 		{ Message.INVALID_ARRAY_SIZE, "The {0} size value is not valid for the {1} array. The maximum size is {2}." },
-		{ Message.ARRAY_INDEX_OUT_OF_BOUNDS, "Index {0} is out of bounds for the {1} array. The array size is {2}." },
 		{ Message.INVALID_ARRAY_FUNCTION_ARGUMENT, "The argument to the function for the {0} array is not valid." },
 		{ Message.UNSUPPORTED_CONVERSION_TABLE, "{0} is an unsupported conversion table." },
 		{ Message.CANNOT_READ_CSOUIDPWD_FILE, "The csouidpwd.properties file cannot be read. Error: {0}" },

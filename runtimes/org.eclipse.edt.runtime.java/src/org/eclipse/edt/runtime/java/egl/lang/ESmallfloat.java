@@ -19,7 +19,6 @@ import org.eclipse.edt.javart.Constants;
 
 import egl.lang.AnyException;
 import egl.lang.AnyNumber;
-import egl.lang.NullValueException;
 
 public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 	/**
@@ -164,8 +163,6 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 	public static int compareTo(Float op1, Float op2) throws AnyException {
 		if (op1 == null && op2 == null)
 			return 0;
-		if ((op1 != null && op2 == null) || (op1 == null && op2 != null))
-			throw new NullValueException();
 		return op1.compareTo(op2);
 	}
 

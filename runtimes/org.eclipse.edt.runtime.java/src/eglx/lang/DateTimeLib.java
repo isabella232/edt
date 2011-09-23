@@ -58,7 +58,7 @@ public class DateTimeLib extends ExecutableBase {
 			TypeCastException tcx = new TypeCastException();
 			tcx.castToName = "date";
 			tcx.actualTypeName = "int";
-			throw tcx.fillInMessage( Message.CONVERSION_ERROR, new Object[] { gregorianIntDate } );
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, gregorianIntDate, tcx.actualTypeName, tcx.castToName );
 		}
 		return cal;
 	}
@@ -83,7 +83,7 @@ public class DateTimeLib extends ExecutableBase {
 			TypeCastException tcx = new TypeCastException();
 			tcx.castToName = "date";
 			tcx.actualTypeName = "int";
-			throw tcx.fillInMessage( Message.CONVERSION_ERROR, new Object[] { julianIntDate } );
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, julianIntDate, tcx.actualTypeName, tcx.castToName );
 		}
 		return cal;
 	}
@@ -102,8 +102,7 @@ public class DateTimeLib extends ExecutableBase {
 		}
 		catch (IllegalArgumentException e) {
 			InvalidArgumentException ex = new InvalidArgumentException();
-			throw ex.fillInMessage( Message.MDY_ERROR,
-				new Object[] { String.valueOf(month), String.valueOf(day), String.valueOf(year) } );
+			throw ex.fillInMessage( Message.MDY_ERROR, month, day, year );
 		}
 		return cal;
 	}

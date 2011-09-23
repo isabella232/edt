@@ -16,6 +16,7 @@ import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.messages.Message;
 
 import egl.lang.*;
 
@@ -464,7 +465,12 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 			if (blanksAsZero)
 				return BigDecimal.ZERO;
 			else
-				throw new NumberFormatException();
+			{
+				TypeCastException tcx = new TypeCastException();
+				tcx.actualTypeName = "string";
+				tcx.castToName = "decimal";
+				throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
+			}
 		}
 		// Remove a leading +.
 		if (value.charAt(0) == '+')
@@ -503,46 +509,32 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 	}
 
 	public static BigDecimal plus(BigDecimal op1, BigDecimal op2) {
-		if (op1 == null || op2 == null)
-			throw new NullValueException();
 		return op1.add(op2);
 	}
 
 	public static BigDecimal minus(BigDecimal op1, BigDecimal op2) {
-		if (op1 == null || op2 == null)
-			throw new NullValueException();
 		return op1.subtract(op2);
 	}
 
 	public static BigDecimal divide(BigDecimal op1, BigDecimal op2) {
-		if (op1 == null || op2 == null)
-			throw new NullValueException();
 		return op1.divide(op2, BIGDECIMAL_RESULT_SCALE, ROUND_BD);
 	}
 
 	public static BigDecimal multiply(BigDecimal op1, BigDecimal op2) {
-		if (op1 == null || op2 == null)
-			throw new NullValueException();
 		return op1.multiply(op2);
 	}
 
 	public static BigDecimal remainder(BigDecimal op1, BigDecimal op2) {
-		if (op1 == null || op2 == null)
-			throw new NullValueException();
 		return op1.remainder(op2);
 	}
 
 	public static Double power(BigDecimal op1, BigDecimal op2) throws AnyException {
-		if (op1 == null || op2 == null)
-			throw new NullValueException();
 		return StrictMath.pow(op1.doubleValue(), op2.doubleValue());
 	}
 
 	public static int compareTo(BigDecimal op1, BigDecimal op2) throws AnyException {
 		if (op1 == null && op2 == null)
 			return 0;
-		if ((op1 != null && op2 == null) || (op1 == null && op2 != null))
-			throw new NullValueException();
 		return op1.compareTo(op2);
 	}
 

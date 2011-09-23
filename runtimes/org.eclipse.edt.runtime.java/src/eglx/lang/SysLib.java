@@ -36,6 +36,7 @@ import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
 import org.eclipse.edt.javart.util.JavartUtil;
 
 import egl.lang.AnyException;
+import egl.lang.InvocationException;
 import eglx.persistence.sql.SQLDataSource;
 
 public class SysLib extends ExecutableBase {
@@ -106,7 +107,9 @@ public class SysLib extends ExecutableBase {
 							: new String[] { "/bin/sh", "-c", commandString } );
 		}
 		catch (IOException ex) {
-			throw new RuntimeException(ex);
+			InvocationException ix = new InvocationException();
+			ix.name = commandString;
+			throw ix.fillInMessage( Message.RUN_COMMAND_FAILED, commandString, ex );
 		}
 
 		if (wait) {
@@ -134,7 +137,9 @@ public class SysLib extends ExecutableBase {
 				proc.waitFor();
 			}
 			catch (InterruptedException ex) {
-				throw new RuntimeException(ex);
+				InvocationException ix = new InvocationException();
+				ix.name = commandString;
+				throw ix.fillInMessage( Message.RUN_COMMAND_FAILED, commandString, ex );
 			}
 		}
 	}

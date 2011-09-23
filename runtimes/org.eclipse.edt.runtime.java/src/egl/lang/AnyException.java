@@ -77,7 +77,7 @@ public class AnyException extends RuntimeException implements egl.lang.EglAny {
 		catch (Exception e) {
 			DynamicAccessException dax = new DynamicAccessException();
 			dax.key = name;
-			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, new Object[] { name, ezeName() } );
+			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, name, ezeName() );
 		}
 	}
 
@@ -95,7 +95,7 @@ public class AnyException extends RuntimeException implements egl.lang.EglAny {
 		catch (Exception e) {
 			DynamicAccessException dax = new DynamicAccessException();
 			dax.key = name;
-			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, new Object[] { name, ezeName() } );
+			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, name, ezeName() );
 		}
 	}
 
@@ -164,7 +164,7 @@ public class AnyException extends RuntimeException implements egl.lang.EglAny {
 	 * <pre><code>
 	 * DynamicAccessException dax = new DynamicAccessException();
 	 * dax.key = name;
-	 * throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, new Object[] { name, ezeName() } );
+	 * throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, name, ezeName() );
 	 * </code></pre>
 	 * 
 	 * @param id       the message ID.

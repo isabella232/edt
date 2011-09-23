@@ -16,9 +16,11 @@ import java.util.*;
 
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.Delegate;
+import org.eclipse.edt.javart.messages.Message;
 
 import egl.lang.InvalidArgumentException;
 import egl.lang.InvalidIndexException;
+import eglx.java.JavaObjectException;
 
 public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 	/**
@@ -71,8 +73,12 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 
 	@Override
 	public T getElement(int index) {
-		if (index - 1 < 0 || index - 1 >= list.size())
-			throw new InvalidIndexException();
+		if (index < 1 || index > list.size())
+		{
+			InvalidIndexException ex = new InvalidIndexException();
+			ex.index = index;
+			throw ex.fillInMessage( Message.LIST_INDEX_OUT_OF_BOUNDS, index, list.size() );
+		}
 		return get(index - 1);
 	}
 
@@ -88,8 +94,12 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 
 	@Override
 	public int indexOfElement(Object o, int index) {
-		if (index - 1 < 0 || index - 1 > list.size())
-			throw new InvalidIndexException();
+		if (index < 1 || index - 1 > list.size())
+		{
+			InvalidIndexException ex = new InvalidIndexException();
+			ex.index = index;
+			throw ex.fillInMessage( Message.LIST_INDEX_OUT_OF_BOUNDS, index, list.size() );
+		}
 		return list.subList(index - 1, list.size()).indexOf(o) + 1 + index - 1;
 	}
 
@@ -97,8 +107,12 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 	public void insertElement(T element, int index) {
 		if (index == 0)
 			index = 1;
-		if (index - 1 < 0 || index - 1 > list.size())
-			throw new InvalidIndexException();
+		if (index < 1 || index - 1 > list.size())
+		{
+			InvalidIndexException ex = new InvalidIndexException();
+			ex.index = index;
+			throw ex.fillInMessage( Message.LIST_INDEX_OUT_OF_BOUNDS, index, list.size() );
+		}
 		list.add(index - 1, element);
 	}
 
@@ -109,8 +123,12 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 
 	@Override
 	public void removeElement(int index) {
-		if (index - 1 < 0 || index - 1 >= list.size())
-			throw new InvalidIndexException();
+		if (index < 1 || index > list.size())
+		{
+			InvalidIndexException ex = new InvalidIndexException();
+			ex.index = index;
+			throw ex.fillInMessage( Message.LIST_INDEX_OUT_OF_BOUNDS, index, list.size() );
+		}
 		list.remove(index - 1);
 	}
 	
@@ -151,7 +169,8 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 		}
 		else
 		{
-			throw new InvalidArgumentException();
+			InvalidArgumentException ex = new InvalidArgumentException();
+			throw ex.fillInMessage( Message.NEGATIVE_SIZE, size );
 		}
 	}
 
@@ -187,8 +206,12 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 
 	@Override
 	public void setElement(T element, int index) {
-		if (index - 1 < 0 || index - 1 >= list.size())
-			throw new InvalidIndexException();
+		if (index < 1 || index > list.size())
+		{
+			InvalidIndexException ex = new InvalidIndexException();
+			ex.index = index;
+			throw ex.fillInMessage( Message.LIST_INDEX_OUT_OF_BOUNDS, index, list.size() );
+		}
 		set(index - 1, element);
 	}
 
@@ -335,7 +358,9 @@ public class EglList<T> extends EglAny implements egl.lang.EglList<T> {
 			}
 			catch ( Exception ex )
 			{
-				throw new InvalidArgumentException();
+				JavaObjectException jox = new JavaObjectException();
+				jox.exceptionType = ex.getClass().getName();
+				throw jox.fillInMessage( Message.CAUGHT_JAVA_EXCEPTION, ex );
 			}
 		}
 	}

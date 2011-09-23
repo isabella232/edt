@@ -33,7 +33,7 @@ public class JsonUtilities
 			}
 		}
 		DynamicAccessException dax = new DynamicAccessException();
-		throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, new Object[] { key, object } );
+		throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, key, object );
 	}
 
 	public static ValueNode getValueNode( ObjectNode object, String key, ValueNode defaultValue )

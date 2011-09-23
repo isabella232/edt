@@ -18,19 +18,25 @@ package org.eclipse.edt.javart.messages;
  */
 public class Message
 {
-	//TODO update the ID values!
-	public static final String DYNAMIC_ACCESS_FAILED = "EGL0108E";
-	public static final String SOA_E_WS_PROXY_INVALID_HTTP_EXCEPTION = "EGL1557E";
-	public static final String SOA_E_WS_PROXY_INVALID_URL_EXCEPTION = "EGL1558E";
-	public static final String SOA_E_WS_PROXY_EMPTY_URL_EXCEPTION = "EGL1559E";
-	public static final String SOA_E_JSON_TYPE_EXCEPTION = "EGL1562E";
-	public static final String MDY_ERROR = "EGL0114E";
-	public static final String CONVERSION_ERROR = "EGL0102E";
-	public static final String CAUGHT_JAVA_EXCEPTION = "EGL0099E";
-	public static final String SQL_EXCEPTION_CAUGHT = "EGL0504E";
-	public static final String INDEX_OUT_OF_BOUNDS = "EGL0144E";
-	public static final String INVALID_SUBSTRING_INDEX = "EGL0142E";
-
+	public static final String DYNAMIC_ACCESS_FAILED = "EGL0001E";
+	public static final String SOA_E_WS_PROXY_INVALID_HTTP_EXCEPTION = "EGL0002E";
+	public static final String SOA_E_WS_PROXY_INVALID_URL_EXCEPTION = "EGL0003E";
+	public static final String SOA_E_WS_PROXY_EMPTY_URL_EXCEPTION = "EGL0004E";
+	public static final String SOA_E_JSON_TYPE_EXCEPTION = "EGL0005E";
+	public static final String MDY_ERROR = "EGL0006E";
+	public static final String CONVERSION_ERROR = "EGL0007E";
+	public static final String CAUGHT_JAVA_EXCEPTION = "EGL0008E";
+	public static final String SQL_EXCEPTION_CAUGHT = "EGL0009E";
+	public static final String LIST_INDEX_OUT_OF_BOUNDS = "EGL0010E";
+	public static final String INDEX_OUT_OF_BOUNDS = "EGL0011E";
+	public static final String INVALID_SUBSTRING_INDEX = "EGL0012E";
+	public static final String EXCEPTION_IN_DELEGATE_INVOKE = "EGL0013E";
+	public static final String EXCEPTION_IN_DELEGATE_GET = "EGL0014E";
+	public static final String RUN_COMMAND_FAILED = "EGL0015E";	
+	public static final String NULL_NOT_ALLOWED = "EGL0016E";
+	public static final String NO_FIELD_IN_TIMESTAMP = "EGL0017E";
+	public static final String INVALID_MATCH_PATTERN = "EGL0018E";
+	public static final String NEGATIVE_SIZE = "EGL0019E";
 	
 	
 	
@@ -102,8 +108,6 @@ public class Message
 	public static final String INVALID_NUMERIC_FORMAT_PATTERN = "EGL0109E";
 	public static final String EXCEPTION_IN_LOB_ASSIGNMENT = "EGL0110E";
 	public static final String EXCEPTION_IN_LOB_SET_EMPTY = "EGL0111E";
-	public static final String EXCEPTION_IN_DELEGATE_INVOKE = "EGL0112E";
-	public static final String RUN_COMMAND_FAILED = "EGL0113E";	
 	public static final String NON_NUMERIC_STRING = "EGL0115E";
 	public static final String SYSTEM_FUNCTION_ERROR = "EGL0117E";
 	public static final String INT_AS_CHAR_ERROR = "EGL0118E";
@@ -115,7 +119,6 @@ public class Message
 	public static final String EXCEPTION_CALLING_CICS = "EGL0124E";
 	public static final String CALLING_CICS_UNSUCCESSFUL = "EGL0125E";
 	public static final String INVALID_ARRAY_SIZE = "EGL0140E";
-	public static final String ARRAY_INDEX_OUT_OF_BOUNDS = "EGL0141E";
 	public static final String INVALID_ARRAY_FUNCTION_ARGUMENT = "EGL0143E";
 	public static final String UNSUPPORTED_CONVERSION_TABLE = "EGL0145E";
 	public static final String CANNOT_READ_CSOUIDPWD_FILE = "EGL0146E";

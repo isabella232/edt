@@ -18,7 +18,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
-import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.ControlFlow;
 import org.eclipse.edt.javart.FatalProblem;
 import org.eclipse.edt.javart.RunUnit;
@@ -145,26 +144,6 @@ public class JavartUtil
 
 		return fullName.substring( index + 1 );
 	}
-
-	/**
-	 * Returns the name of a class's package.  If there is no package,
-	 * defaultName is returned.
-	 *
-	 * @param fullName     the class name to use.
-	 * @param defaultName  the default package name.
-	 * @return <code>fullName</code>'s package, or defaultName.
-	 */
-	public static String packageName( String fullName, String defaultName )
-	{
-		int index = fullName.lastIndexOf( '.' );
-		
-		if ( index == -1 )
-		{
-			return defaultName;
-		}
-
-		return fullName.substring( 0, index );
-	}
 	
 	/**
 	 * Checks the start and end indices for a substring access, and throws an
@@ -181,28 +160,16 @@ public class JavartUtil
 		if ( startIndex < 1 || startIndex > maxlen )
 		{
 			// startIndex is bad.
-			InvalidIndexException ex = 
-				new InvalidIndexException();
+			InvalidIndexException ex = new InvalidIndexException();
 			ex.index = startIndex;
 			throw ex.fillInMessage( Message.INVALID_SUBSTRING_INDEX, startIndex, endIndex );
 		}
 		else if ( endIndex < startIndex || endIndex < 1 || endIndex > maxlen )
 		{
 			// endIndex is bad.
-			String message = errorMessage(
-					Message.INVALID_SUBSTRING_INDEX,
-					new Object[]{
-						Integer.valueOf( startIndex ),
-						Integer.valueOf( endIndex )
-					} );
-			
-			InvalidIndexException ex = 
-				new InvalidIndexException();
-			ex.setMessage( message );
+			InvalidIndexException ex = new InvalidIndexException();
 			ex.index = endIndex;
-			ex.setMessageID(Message.INVALID_SUBSTRING_INDEX);
-			
-			throw ex;
+			throw ex.fillInMessage( Message.INVALID_SUBSTRING_INDEX, startIndex, endIndex );
 		}
 	}
 	
@@ -248,64 +215,6 @@ public class JavartUtil
 		
 		return message;
 	}
-
-	/**
-	 * Removes trailing blanks from the original string and returns the result.
-	 * 
-	 * @param s  The original string
-	 * @return The original string with trailing blanks removed.
-	 */
-	public static String removeTrailingBlanks( String s )
-	{
-		int i;
-		for ( i = s.length() - 1; i >= 0 && s.charAt( i ) == ' '; i-- );
-		return s.substring( 0, i + 1 );
-	}
-	
-	/**
-	 * Removes trailing DBCS blanks from the original string and returns the
-	 * result.
-	 * 
-	 * @param s  The original string
-	 * @return The original string with trailing DBCS blanks removed.
-	 */
-	public static String removeTrailingDbcsBlanks( String s )
-	{
-		int i;
-		for ( i = s.length() - 1; i >= 0
-				&& s.charAt( i ) == Constants.DBCS_BLANK_CHAR; i-- );
-		return s.substring( 0, i + 1 );
-	}
-	
-	/**
-	 * Removes trailing DBCS and SBCS blanks from the original string and
-	 * returns the result.
-	 * 
-	 * @param s  The original string
-	 * @return The original string with trailing DBCS and SBCS blanks removed.
-	 */
-	public static String removeTrailingDbcsAndSbcsBlanks( String s )
-	{
-		int i;
-		for ( i = s.length() - 1; i >= 0
-				&& (s.charAt( i ) == ' '
-				|| s.charAt( i ) == Constants.DBCS_BLANK_CHAR); i-- );
-		return s.substring( 0, i + 1 );
-	}
-	
-	/**
-	 * Removes trailing Unicode blanks from the original string and returns the
-	 * result.
-	 * 
-	 * @param s  The original string
-	 * @return The original string with trailing Unicode blanks removed.
-	 */
-	public static String removeTrailingUnicodeBlanks( String s )
-	{
-		int i;
-		for ( i = s.length() - 1; i >= 0 && s.charAt( i ) == '\u0020'; i-- );
-		return s.substring( 0, i + 1 );
-	}
 	
 	/**
 	 * This is called by generated code to ensure a try statement doesn't hide
@@ -325,11 +234,14 @@ public class JavartUtil
 	
 	/**
 	 * utility to check to see if an object is null and if it is, then throw 
-	 * a NullValueException, otherwise return true
+	 * a NullValueException, otherwise return the object
 	 */
 	public static Object checkNullable(Object o) throws NullValueException {
 		if (o == null)
-			throw new NullValueException();
+		{
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
 		return o;
 	}
 	/**

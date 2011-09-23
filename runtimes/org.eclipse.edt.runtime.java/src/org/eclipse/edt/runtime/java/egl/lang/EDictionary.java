@@ -20,6 +20,8 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.messages.Message;
+
 import egl.lang.AnyException;
 import egl.lang.DynamicAccessException;
 import eglx.lang.OrderingKind;
@@ -304,7 +306,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 			// Since the size is unchanged, there was no value with that key.
 			DynamicAccessException dax = new DynamicAccessException();
 			dax.key = key;
-			throw dax;
+			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, key, "dictionary" );
 		}
 	}
 
@@ -366,7 +368,7 @@ public class EDictionary extends EglAny implements egl.lang.EDictionary {
 		{
 			DynamicAccessException dax = new DynamicAccessException();
 			dax.key = name;
-			throw dax;
+			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, name, "dictionary" );
 		}
 		return value instanceof egl.lang.EglAny ? (egl.lang.EglAny) value : EglAny.ezeBox(value);
 	}

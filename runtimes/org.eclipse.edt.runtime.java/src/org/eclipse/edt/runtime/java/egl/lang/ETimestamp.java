@@ -18,12 +18,13 @@ import java.util.GregorianCalendar;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
 import org.eclipse.edt.javart.util.TimestampIntervalMask;
 
 import egl.lang.AnyException;
-import egl.lang.NullValueException;
+import egl.lang.InvalidArgumentException;
 import egl.lang.TypeCastException;
 
 /**
@@ -392,8 +393,6 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	}
 
 	public static Calendar convert(String timestamp, int startCode, int endCode) {
-		if (timestamp == null)
-			throw new NullValueException();
 		Calendar result;
 		// Try to parse the string by hand, looking for each field (years, months,
 		// etc.) that this ETimestamp stores.
@@ -588,7 +587,12 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			|| (days == -1 && startCode <= DAY_CODE && endCode >= DAY_CODE) || (hours == -1 && startCode <= HOUR_CODE && endCode >= HOUR_CODE)
 			|| (minutes == -1 && startCode <= MINUTE_CODE && endCode >= MINUTE_CODE) || (seconds == -1 && startCode <= SECOND_CODE && endCode >= SECOND_CODE)
 			|| (microseconds == -1 && endCode >= FRACTION1_CODE))
-			throw new TypeCastException();
+		{
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "timestamp";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, timestamp, tcx.actualTypeName, tcx.castToName );
+		}
 		// The last thing to do is put the values into a calendar and TimestampData.
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		if (years != -1)
@@ -617,7 +621,10 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			cal.getTimeInMillis();
 		}
 		catch (Exception ex) {
-			throw new TypeCastException();
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "timestamp";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, timestamp, tcx.actualTypeName, tcx.castToName );
 		}
 		result = cal;
 		return result;
@@ -690,10 +697,11 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the day of a timestamp
 	 */
 	public static int dayOf(Calendar aTimestamp) throws AnyException {
-		if (aTimestamp == null)
-			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.DATE))
-			throw new TypeCastException();
+		{
+			InvalidArgumentException ex = new InvalidArgumentException();
+			throw ex.fillInMessage( Message.NO_FIELD_IN_TIMESTAMP, "dayOf", "dd" );
+		}
 		return aTimestamp.get(Calendar.DATE);
 	}
 
@@ -701,10 +709,11 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the month of a timestamp
 	 */
 	public static int monthOf(Calendar aTimestamp) throws AnyException {
-		if (aTimestamp == null)
-			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.MONTH))
-			throw new TypeCastException();
+		{
+			InvalidArgumentException ex = new InvalidArgumentException();
+			throw ex.fillInMessage( Message.NO_FIELD_IN_TIMESTAMP, "monthOf", "MM" );
+		}
 		return aTimestamp.get(Calendar.MONTH) + 1;
 	}
 
@@ -712,10 +721,11 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the year of a timestamp
 	 */
 	public static int yearOf(Calendar aTimestamp) throws AnyException {
-		if (aTimestamp == null)
-			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.YEAR))
-			throw new TypeCastException();
+		{
+			InvalidArgumentException ex = new InvalidArgumentException();
+			throw ex.fillInMessage( Message.NO_FIELD_IN_TIMESTAMP, "yearOf", "yyyy" );
+		}
 		return aTimestamp.get(Calendar.YEAR);
 	}
 
@@ -723,10 +733,11 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the weekday of a timestamp
 	 */
 	public static int weekdayOf(Calendar aTimestamp) throws AnyException {
-		if (aTimestamp == null)
-			throw new NullValueException();
 		if (!aTimestamp.isSet(DAY_CODE))
-			throw new TypeCastException();
+		{
+			InvalidArgumentException ex = new InvalidArgumentException();
+			throw ex.fillInMessage( Message.NO_FIELD_IN_TIMESTAMP, "weekdayOf", "dd" );
+		}
 		return aTimestamp.get(Calendar.DAY_OF_WEEK) - 1;
 	}
 
@@ -734,10 +745,11 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the date of a timestamp
 	 */
 	public static Calendar dateOf(Calendar aTimestamp) throws AnyException {
-		if (aTimestamp == null)
-			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.YEAR) || !aTimestamp.isSet(Calendar.MONTH) || !aTimestamp.isSet(Calendar.DATE))
-			throw new TypeCastException();
+		{
+			InvalidArgumentException ex = new InvalidArgumentException();
+			throw ex.fillInMessage( Message.NO_FIELD_IN_TIMESTAMP, "dateOf", "yyyyMMdd" );
+		}
 		return new ETimestamp((Calendar) aTimestamp.clone(), YEAR_CODE, DAY_CODE).ezeUnbox();
 	}
 
@@ -745,10 +757,11 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the time of a timestamp
 	 */
 	public static Calendar timeOf(Calendar aTimestamp) throws AnyException {
-		if (aTimestamp == null)
-			throw new NullValueException();
 		if (!aTimestamp.isSet(Calendar.HOUR_OF_DAY) || !aTimestamp.isSet(Calendar.MINUTE) || !aTimestamp.isSet(Calendar.SECOND))
-			throw new TypeCastException();
+		{
+			InvalidArgumentException ex = new InvalidArgumentException();
+			throw ex.fillInMessage( Message.NO_FIELD_IN_TIMESTAMP, "timeOf", "HHmmss" );
+		}
 		return new ETimestamp((Calendar) aTimestamp.clone(), HOUR_CODE, SECOND_CODE).ezeUnbox();
 	}
 
@@ -756,8 +769,6 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 * Returns the extension of a timestamp
 	 */
 	public static Calendar extend(Calendar aTimestamp, String timeSpanPattern) throws AnyException {
-		if (aTimestamp == null || timeSpanPattern == null)
-			throw new NullValueException();
 		// Default values in case the pattern doesn't specify things.
 		int startCode = YEAR_CODE;
 		int endCode = SECOND_CODE;

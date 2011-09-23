@@ -23,19 +23,8 @@ import java.util.List;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Executable;
-import org.eclipse.edt.javart.json.ArrayNode;
-import org.eclipse.edt.javart.json.BooleanNode;
-import org.eclipse.edt.javart.json.DecimalNode;
-import org.eclipse.edt.javart.json.FloatingPointNode;
-import org.eclipse.edt.javart.json.IntegerNode;
-import org.eclipse.edt.javart.json.Json;
-import org.eclipse.edt.javart.json.JsonParser;
+import org.eclipse.edt.javart.json.*;
 import org.eclipse.edt.javart.json.JsonUtilities;
-import org.eclipse.edt.javart.json.NameValuePairNode;
-import org.eclipse.edt.javart.json.NullNode;
-import org.eclipse.edt.javart.json.ObjectNode;
-import org.eclipse.edt.javart.json.StringNode;
-import org.eclipse.edt.javart.json.ValueNode;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.util.DateTimeUtil;
@@ -124,8 +113,7 @@ public class JsonLib {
 	    	return processObject(object);
 	    
 	    InvalidArgumentException ex = new InvalidArgumentException();
-		throw ex.fillInMessage( Message.SOA_E_JSON_TYPE_EXCEPTION,
-						new Object[] { object.getClass().getName() } );
+		throw ex.fillInMessage( Message.SOA_E_JSON_TYPE_EXCEPTION, object.getClass().getName() );
 	}
 	
 	private static ValueNode process(EglList<?> array)throws AnyException
@@ -223,8 +211,7 @@ public class JsonLib {
 	public static void convertFromJSON(String jsonString, Object obj)throws AnyException{
 		try {
 			convertToEgl(obj, JsonParser.parseValue(jsonString));
-		} catch (Throwable e) {
-			// TODO Auto-generated catch block
+		} catch (ParseException e) {
 			throw new AnyException(e);
 		}
 	}

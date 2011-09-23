@@ -16,11 +16,11 @@ import java.util.GregorianCalendar;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.TimestampIntervalMask;
 
 import egl.lang.AnyException;
-import egl.lang.NullValueException;
 import egl.lang.TypeCastException;
 
 /**
@@ -95,7 +95,10 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		if (length < 5 || length > 10) {
 			// Minimum is 5 characters: 1/1/1
 			// Maximum is 10 characters: 11/11/1111
-			throw new TypeCastException();
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "date";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, date, tcx.actualTypeName, tcx.castToName );
 		}
 
 		int months = -1;
@@ -157,7 +160,10 @@ public class EDate extends AnyBoxedObject<Calendar> {
 
 		// Make sure all required fields were found.
 		if (months == -1 || days == -1 || years == -1) {
-			throw new TypeCastException();
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "date";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, date, tcx.actualTypeName, tcx.castToName );
 		}
 
 		// The last thing to do is put the values into a Calendar.
@@ -209,8 +215,6 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	 * Returns the difference between 2 dates
 	 */
 	public static int daysDifferent(Calendar aDate, Calendar bDate) throws AnyException {
-		if (aDate == null || bDate == null)
-			throw new NullValueException();
 		return (int) ((aDate.getTimeInMillis() - bDate.getTimeInMillis()) / (1000 * DateTimeUtil.SECONDS_PER_DAY));
 	}
 
@@ -218,10 +222,6 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	 * Returns the adds days to a date
 	 */
 	public static Calendar addDays(Calendar aDate, int amount) throws AnyException {
-		if (aDate == null)
-			throw new NullValueException();
-		if (!aDate.isSet(Calendar.DATE))
-			throw new TypeCastException();
 		Calendar newDate = (Calendar) aDate.clone();
 		newDate.roll(Calendar.DAY_OF_YEAR, amount);
 		return newDate;
@@ -231,8 +231,6 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	 * Returns the extension of a date
 	 */
 	public static Calendar extend(Calendar aDate, String timeSpanPattern) throws AnyException {
-		if (aDate == null || timeSpanPattern == null)
-			throw new NullValueException();
 		// Default values in case the pattern doesn't specify things.
 		int startCode = ETimestamp.YEAR_CODE;
 		int endCode = ETimestamp.SECOND_CODE;

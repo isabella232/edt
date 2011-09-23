@@ -170,12 +170,12 @@ public class HttpUtilities {
 		if( urlStr == null || urlStr.trim().length() == 0 )
 		{
 			InvalidArgumentException ex = new InvalidArgumentException();
-			throw ex.fillInMessage( Message.SOA_E_WS_PROXY_EMPTY_URL_EXCEPTION, new Object[] {urlStr} );
+			throw ex.fillInMessage( Message.SOA_E_WS_PROXY_EMPTY_URL_EXCEPTION, urlStr );
 		}
 		if( urlStr.trim().toLowerCase().indexOf("http") == -1 )
 		{
 			InvalidArgumentException ex = new InvalidArgumentException();
-			throw ex.fillInMessage( Message.SOA_E_WS_PROXY_INVALID_HTTP_EXCEPTION, new Object[] {urlStr} );
+			throw ex.fillInMessage( Message.SOA_E_WS_PROXY_INVALID_HTTP_EXCEPTION, urlStr );
 		}
 		try
 		{
@@ -184,7 +184,7 @@ public class HttpUtilities {
 		catch( MalformedURLException mfue )
 		{
 			InvalidArgumentException ex = new InvalidArgumentException();
-			throw ex.fillInMessage( Message.SOA_E_WS_PROXY_INVALID_URL_EXCEPTION, new Object[] {urlStr, ServiceUtilities.getMessage( mfue ) } );
+			throw ex.fillInMessage( Message.SOA_E_WS_PROXY_INVALID_URL_EXCEPTION, urlStr, ServiceUtilities.getMessage( mfue ) );
 		}
 	}
 	static String urlEncode( Map<String, String> parameters, boolean isQueryParameters ) throws UnsupportedEncodingException

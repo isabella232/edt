@@ -18,6 +18,7 @@ import java.lang.reflect.Method;
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.TypeConstraints;
+import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.util.JavartUtil;
 
 import egl.lang.AnyException;
@@ -58,7 +59,7 @@ public abstract class EglAny implements egl.lang.EglAny {
 			tcx.castToName = clazz.getName();
 			Object unboxed = value instanceof egl.lang.EglAny ? ((egl.lang.EglAny)value).ezeUnbox() : value;
 			tcx.actualTypeName = unboxed.getClass().getName();
-			throw tcx;
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
 		}
 	}
 	
@@ -101,7 +102,7 @@ public abstract class EglAny implements egl.lang.EglAny {
 					TypeCastException tcx = new TypeCastException();
 					tcx.castToName = clazz.getName();
 					tcx.actualTypeName = unboxed.getClass().getName();
-					throw tcx;
+					throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
 				}
 			}
 			if (args == null) 
@@ -110,10 +111,7 @@ public abstract class EglAny implements egl.lang.EglAny {
 				return method.invoke(null, unboxed, args);
 		}
 		catch(InvocationTargetException ex) {
-			if (ex.getTargetException() instanceof AnyException)
-				throw (AnyException)ex.getTargetException();
-			else
-				throw JavartUtil.makeEglException(ex.getTargetException());
+			throw JavartUtil.makeEglException(ex.getTargetException());
 		}
 		catch (Exception ex1) {
 			// Should not ever get here
@@ -174,7 +172,7 @@ public abstract class EglAny implements egl.lang.EglAny {
 		} catch (Exception e) {
 			DynamicAccessException dax = new DynamicAccessException();
 			dax.key = name;
-			throw dax;
+			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, name, this );
 		} 
 	}
 
@@ -193,7 +191,7 @@ public abstract class EglAny implements egl.lang.EglAny {
 		} catch (Exception e) {
 			DynamicAccessException dax = new DynamicAccessException();
 			dax.key = name;
-			throw dax;
+			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, name, this );
 		} 
 	}
 
@@ -239,15 +237,4 @@ public abstract class EglAny implements egl.lang.EglAny {
 	public void ezeInitialize() throws AnyException {
 		
 	}
-	
-//	private void throwDynamicAccessException(String name) throws AnyException {
-//		JavartUtil.throwRuntimeException( 
-//				Message.DYNAMIC_ACCESS_FAILED, 
-//				JavartUtil.errorMessage( 
-//						ezeProgram, 
-//						Message.DYNAMIC_ACCESS_FAILED,
-//						new Object[] { name, this.ezeTypeSignature() } ), 
-//						ezeProgram );
-//
-//	}
 }
