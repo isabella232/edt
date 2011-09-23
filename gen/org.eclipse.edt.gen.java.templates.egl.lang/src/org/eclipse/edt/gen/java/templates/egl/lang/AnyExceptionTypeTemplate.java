@@ -27,7 +27,7 @@ public class AnyExceptionTypeTemplate extends JavaTemplate {
 	}
 
 	public void genSuperClass(Type type, Context ctx, TabbedWriter out) {
-		out.print("egl.lang.AnyException");
+		out.print("eglx.lang.AnyException");
 	}
 
 	public void genContainerBasedAssignment(Type type, Context ctx, TabbedWriter out, Assignment arg1, Field arg2) {

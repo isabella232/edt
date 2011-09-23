@@ -75,7 +75,7 @@ public class ListTypeTemplate extends JavaTemplate
 			if ( elementType instanceof ArrayType )
 			{
 				ArrayType elementArrayType = (ArrayType)elementType;
-				out.print( "new org.eclipse.edt.runtime.java.egl.lang.EglList.ListFactory<" );
+				out.print( "new org.eclipse.edt.runtime.java.eglx.lang.EList.ListFactory<" );
 				ctx.invoke( genRuntimeTypeName, elementArrayType.getElementType(), ctx, out, TypeNameKind.JavaObject );
 				out.print( ">(" );
 				if ( dimensionSizes == null )
@@ -95,31 +95,31 @@ public class ListTypeTemplate extends JavaTemplate
 				switch ( TypeUtils.getTypeKind( elementType ) )
 				{
 					case TypeUtils.TypeKind_INT:
-						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.IntFactory" );
+						out.print( "org.eclipse.edt.runtime.java.eglx.lang.EList.IntFactory" );
 						break;
 					case TypeUtils.TypeKind_SMALLINT:
-						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.SmallintFactory" );
+						out.print( "org.eclipse.edt.runtime.java.eglx.lang.EList.SmallintFactory" );
 						break;
 					case TypeUtils.TypeKind_BIGINT:
-						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.BigintFactory" );
+						out.print( "org.eclipse.edt.runtime.java.eglx.lang.EList.BigintFactory" );
 						break;
 					case TypeUtils.TypeKind_FLOAT:
-						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.FloatFactory" );
+						out.print( "org.eclipse.edt.runtime.java.eglx.lang.EList.FloatFactory" );
 						break;
 					case TypeUtils.TypeKind_SMALLFLOAT:
-						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.SmallfloatFactory" );
+						out.print( "org.eclipse.edt.runtime.java.eglx.lang.EList.SmallfloatFactory" );
 						break;
 					case TypeUtils.TypeKind_DECIMAL:
-						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.DecimalFactory" );
+						out.print( "org.eclipse.edt.runtime.java.eglx.lang.EList.DecimalFactory" );
 						break;
 					case TypeUtils.TypeKind_BOOLEAN:
-						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.BooleanFactory" );
+						out.print( "org.eclipse.edt.runtime.java.eglx.lang.EList.BooleanFactory" );
 						break;
 					case TypeUtils.TypeKind_STRING:
-						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.StringFactory" );
+						out.print( "org.eclipse.edt.runtime.java.eglx.lang.EList.StringFactory" );
 						break;
 					case TypeUtils.TypeKind_DATE:
-						out.print( "org.eclipse.edt.runtime.java.egl.lang.EglList.DateFactory" );
+						out.print( "org.eclipse.edt.runtime.java.eglx.lang.EList.DateFactory" );
 						break;
 					case TypeUtils.TypeKind_TIMESTAMP:
 						TimestampType tsType = (TimestampType)elementType;
@@ -128,7 +128,7 @@ public class ListTypeTemplate extends JavaTemplate
 						{
 							pattern = tsType.getPattern();
 						}
-						out.print( "new org.eclipse.edt.runtime.java.egl.lang.EglList.TimestampFactory(" );
+						out.print( "new org.eclipse.edt.runtime.java.eglx.lang.EList.TimestampFactory(" );
 						ctx.invoke( genRuntimeTypeName, tsType, ctx, out, TypeNameKind.EGLImplementation );
 						out.print( '.' );
 						out.print( TimestampTypeTemplate.getStartPattern( pattern ) );
@@ -139,7 +139,7 @@ public class ListTypeTemplate extends JavaTemplate
 						out.print( ')' );
 						break;
 					default:
-						out.print( "new org.eclipse.edt.runtime.java.egl.lang.EglList.ElementFactory<" );
+						out.print( "new org.eclipse.edt.runtime.java.eglx.lang.EList.ElementFactory<" );
 						ctx.invoke( genRuntimeTypeName, elementType, ctx, out, TypeNameKind.EGLImplementation );
 						out.print( ">(" );
 						ctx.invoke( genRuntimeTypeName, elementType, ctx, out, TypeNameKind.EGLImplementation );
