@@ -8,3 +8,5 @@ org.eclipse.edt.gen.java.templates.eglx.persistence
 org.eclipse.edt.ide.rui
 org.eclipse.edt.ide.ui
 org.eclipse.edt.runtime.java
+org.eclipse.edt.gen.generator.example
+org.eclipse.edt.gen.generator.java
