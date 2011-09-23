@@ -72,7 +72,7 @@ public class CommonUtilities {
 	 */
 	public static ExternalType getJavaExternalType(Type type) {
 		if (type instanceof ExternalType) {
-			if (type.getAnnotation("eglx.java.JavaObject") != null || type.getAnnotation("egl.lang.NativeType") != null) {
+			if (type.getAnnotation("eglx.java.JavaObject") != null || type.getAnnotation("eglx.lang.NativeType") != null) {
 				return (ExternalType) type;
 			} else {
 				return null;
@@ -80,7 +80,7 @@ public class CommonUtilities {
 		} else if (type instanceof Part) {
 			Part member = (Part) type;
 			if (member instanceof ExternalType) {
-				if (member.getAnnotation("eglx.java.JavaObject") != null || member.getAnnotation("egl.lang.NativeType") != null) {
+				if (member.getAnnotation("eglx.java.JavaObject") != null || member.getAnnotation("eglx.lang.NativeType") != null) {
 					return (ExternalType) member;
 				} else {
 					return null;
