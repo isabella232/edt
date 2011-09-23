@@ -29,14 +29,14 @@ public class EDTVariableAdapter implements IVariableAdapter
 	{
 		try
 		{
-			if ( VariableUtil.isInstanceOf( variable, "egl.lang.EDictionary" ) ) //$NON-NLS-1$
+			if ( VariableUtil.isInstanceOf( variable, "eglx.lang.EDictionary" ) ) //$NON-NLS-1$
 			{
 				// Rather than the default map implementation, dictionary values are always of type 'any'
 				return new MapVariable( frame.getDebugTarget(), variable, info, frame, parent ) {
 					@Override
 					protected String getTypeNameForElement( IJavaValue value )
 					{
-						return "egl.lang.EglAny"; //$NON-NLS-1$
+						return "eglx.lang.EAny"; //$NON-NLS-1$
 					}
 				};
 			}
