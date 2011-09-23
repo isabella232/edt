@@ -591,7 +591,11 @@ public class IRUtils {
 	
 	public static Operation getConversionOperation(Expression expr, Type trg) {
 		if (expr.getType() != null && expr.getType().getClassifier() instanceof StructPart && trg.getClassifier() instanceof StructPart) {
-			return getConversionOperation((StructPart)expr.getType().getClassifier(), (StructPart)trg.getClassifier());
+			
+			//Do not attempt to find a conversion operation if the 2 types are the same
+			if ((StructPart)expr.getType().getClassifier() != (StructPart)trg.getClassifier()) {
+				return getConversionOperation((StructPart)expr.getType().getClassifier(), (StructPart)trg.getClassifier());
+			}
 		}
 		return null;
 	}
