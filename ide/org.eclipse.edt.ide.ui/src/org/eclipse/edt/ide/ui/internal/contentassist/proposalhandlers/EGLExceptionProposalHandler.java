@@ -59,7 +59,7 @@ public class EGLExceptionProposalHandler extends EGLAbstractProposalHandler {
 	 */
 	private  void addAnyException(List proposals){
 		proposals.add(new EGLCompletionProposal(viewer,
-				"anyexception - egl.lang (record)",
+				"anyexception - eglx.lang (record)",
 				"anyexception",
 				UINlsStrings.CAProposal_Exception,
 				getDocumentOffset() - getPrefix().length(),
