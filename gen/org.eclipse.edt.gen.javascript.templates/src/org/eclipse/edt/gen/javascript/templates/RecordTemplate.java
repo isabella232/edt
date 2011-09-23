@@ -21,6 +21,7 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class RecordTemplate extends JavaScriptTemplate {
@@ -92,8 +93,15 @@ public class RecordTemplate extends JavaScriptTemplate {
 		ctx.invoke(genPartName, part, ctx, out);
 	}
 
-	public void genDefaultValue(Record part, Context ctx, TabbedWriter out) {
-		out.print("null");
+	public void genDefaultValue(Type type, Context ctx, TabbedWriter out, Expression arg) {
+		if (arg.isNullable())
+			out.print("null");
+		else
+			ctx.invoke(genDefaultValue, type, ctx, out);
+	}
+
+	public void genDefaultValue(Type type, Context ctx, TabbedWriter out) {
+		ctx.invoke(genInstantiation, type, ctx, out); //out.print("null");
 	}
 
 	public void genSuperClass(Record type, Context ctx, TabbedWriter out) {
@@ -108,7 +116,7 @@ public class RecordTemplate extends JavaScriptTemplate {
 		/*
 		 * TODO sbg Java has all of this, but I'm not sure whether it -- or some form of it -- is necessary.... if (
 		 * TypeUtils.isValueType( type ) ) { if (arg1.isNullable()) { ctx.invoke(genExpression, arg1, ctx, out);
-		 * out.print(arg3); } out.print("egl.egl.lang.AnyValue.ezeCopyTo("); ctx.invoke(genExpression, arg2, ctx, out);
+		 * out.print(arg3); } out.print("egl.eglx.lang.AnyValue.ezeCopyTo("); ctx.invoke(genExpression, arg2, ctx, out);
 		 * out.print(", "); ctx.invoke(genExpression, arg1, ctx, out); out.print(")"); } else
 		 */
 		{

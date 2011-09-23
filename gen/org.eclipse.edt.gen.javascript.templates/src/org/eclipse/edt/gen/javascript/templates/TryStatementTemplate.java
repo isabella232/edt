@@ -20,7 +20,7 @@ import org.eclipse.edt.mof.egl.TryStatement;
 
 public class TryStatementTemplate extends JavaScriptTemplate {
 
-	private static final String ANY_EXCEPTION = "egl.lang.AnyException";
+	private static final String ANY_EXCEPTION = "eglx.lang.AnyException";
 	private static final String JAVA_SCRIPT_OBJECT_EXCEPTION = "eglx.javascript.JavaScriptObjectException";
 
 	public void genStatementBody(TryStatement stmt, Context ctx, TabbedWriter out) {
@@ -107,7 +107,7 @@ public class TryStatementTemplate extends JavaScriptTemplate {
 		}
 		else if (ANY_EXCEPTION.equals(sig)) {
 			out.println( "{" );
-			out.println( "if (!(" + exceptionVar + " instanceof egl.egl.lang.AnyException)) {" );
+			out.println( "if (!(" + exceptionVar + " instanceof egl.eglx.lang.AnyException)) {" );
 			out.println( exceptionVar + " = egl.makeExceptionFromCaughtObject(" + exceptionVar + ");" );
 			out.println( "}" );
 		}
