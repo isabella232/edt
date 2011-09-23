@@ -120,7 +120,8 @@ public abstract class EglAny implements egl.lang.EglAny {
 	}
 
 	public static <T extends Object> boolean ezeIsa(Object object, Class<T> clazz) {
-		return clazz.isInstance(object);
+		Object unboxed = object instanceof egl.lang.EglAny ? ((egl.lang.EglAny)object).ezeUnbox() : object;
+		return clazz.isInstance(unboxed);
 	}
 	
 	public static Object ezeDeepCopy( Object object )
