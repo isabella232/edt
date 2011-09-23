@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.StringTokenizer;
 
 import org.eclipse.edt.javart.*;
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;

@@ -32,7 +32,7 @@ public class DynamicAccessException extends eglx.lang.AnyException {
 		return new DynamicAccessException();
 	}
 	public void ezeSetEmpty() {
-		key = Constants.EMPTY_STRING;
+		key = "";
 	}
 	public boolean isVariableDataLength() {
 		return false;
@@ -45,7 +45,7 @@ public class DynamicAccessException extends eglx.lang.AnyException {
 	public void storeInBuffer(ByteStorage buffer) {
 	}
 	public void ezeInitialize() {
-		key = Constants.EMPTY_STRING;
+		key = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="key", clazz=EString.class, asOptions={})
 	public String getKey() {

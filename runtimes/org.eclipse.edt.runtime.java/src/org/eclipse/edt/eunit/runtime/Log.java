@@ -34,7 +34,7 @@ public class Log extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue {
 		return new Log();
 	}
 	public void ezeSetEmpty() {
-		msg = Constants.EMPTY_STRING;
+		msg = "";
 	}
 	public boolean isVariableDataLength() {
 		return false;
@@ -47,7 +47,7 @@ public class Log extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue {
 	public void storeInBuffer(ByteStorage buffer) {
 	}
 	public void ezeInitialize() {
-		msg = Constants.EMPTY_STRING;
+		msg = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="msg", clazz=EString.class, asOptions={})
 	public String getMsg() {

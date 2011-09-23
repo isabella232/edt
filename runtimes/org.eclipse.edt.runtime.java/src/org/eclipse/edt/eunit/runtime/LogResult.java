@@ -181,7 +181,7 @@ public class LogResult extends ExecutableBase {
 		expectedSize = expected.getSize();
 		int actualSize;
 		actualSize = actual.getSize();
-		String failedReason = Constants.EMPTY_STRING;
+		String failedReason = "";
 		if ((expectedSize == actualSize)) {
 			String failedHeader;
 			failedHeader = "Array element No.[";
@@ -263,17 +263,17 @@ public class LogResult extends ExecutableBase {
 		double delta = 0.0;
 		int mantissaExpected = 0;
 		int mantissaActual = 0;
-		String signExpected = Constants.EMPTY_STRING;
-		String signActual = Constants.EMPTY_STRING;
+		String signExpected = "";
+		String signActual = "";
 		double deltaLimit;
 		deltaLimit = 1E-14;
 		AnyBoxedObject<Integer> eze$Temp22 = EAny.ezeWrap(0);
-		AnyBoxedObject<String> eze$Temp23 = EAny.ezeWrap(Constants.EMPTY_STRING);
+		AnyBoxedObject<String> eze$Temp23 = EAny.ezeWrap("");
 		normalExpected = normalFloat(expected, eze$Temp22, eze$Temp23);
 		mantissaExpected = eze$Temp22.ezeUnbox();
 		signExpected = eze$Temp23.ezeUnbox();
 		AnyBoxedObject<Integer> eze$Temp24 = EAny.ezeWrap(0);
-		AnyBoxedObject<String> eze$Temp25 = EAny.ezeWrap(Constants.EMPTY_STRING);
+		AnyBoxedObject<String> eze$Temp25 = EAny.ezeWrap("");
 		normalActual = normalFloat(actual, eze$Temp24, eze$Temp25);
 		mantissaActual = eze$Temp24.ezeUnbox();
 		signActual = eze$Temp25.ezeUnbox();

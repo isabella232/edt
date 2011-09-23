@@ -32,7 +32,7 @@ public class JavaScriptObjectException extends eglx.lang.AnyException {
 		return new JavaScriptObjectException();
 	}
 	public void ezeSetEmpty() {
-		name = Constants.EMPTY_STRING;
+		name = "";
 	}
 	public boolean isVariableDataLength() {
 		return false;
@@ -45,7 +45,7 @@ public class JavaScriptObjectException extends eglx.lang.AnyException {
 	public void storeInBuffer(ByteStorage buffer) {
 	}
 	public void ezeInitialize() {
-		name = Constants.EMPTY_STRING;
+		name = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="name", clazz=EString.class, asOptions={})
 	public String getName() {

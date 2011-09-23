@@ -32,7 +32,7 @@ public class JavaObjectException extends eglx.lang.AnyException {
 		return new JavaObjectException();
 	}
 	public void ezeSetEmpty() {
-		exceptionType = Constants.EMPTY_STRING;
+		exceptionType = "";
 	}
 	public boolean isVariableDataLength() {
 		return false;
@@ -45,7 +45,7 @@ public class JavaObjectException extends eglx.lang.AnyException {
 	public void storeInBuffer(ByteStorage buffer) {
 	}
 	public void ezeInitialize() {
-		exceptionType = Constants.EMPTY_STRING;
+		exceptionType = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="exceptionType", clazz=EString.class, asOptions={})
 	public String getExceptionType() {

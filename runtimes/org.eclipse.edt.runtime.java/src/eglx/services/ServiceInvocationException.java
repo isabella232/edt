@@ -44,9 +44,9 @@ public class ServiceInvocationException extends eglx.lang.AnyException {
 	}
 	public void ezeSetEmpty() {
 		source = null;
-		detail1 = Constants.EMPTY_STRING;
-		detail2 = Constants.EMPTY_STRING;
-		detail3 = Constants.EMPTY_STRING;
+		detail1 = "";
+		detail2 = "";
+		detail3 = "";
 	}
 	public boolean isVariableDataLength() {
 		return false;
@@ -60,9 +60,9 @@ public class ServiceInvocationException extends eglx.lang.AnyException {
 	}
 	public void ezeInitialize() {
 		source = null;
-		detail1 = Constants.EMPTY_STRING;
-		detail2 = Constants.EMPTY_STRING;
-		detail3 = Constants.EMPTY_STRING;
+		detail1 = "";
+		detail2 = "";
+		detail3 = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="source", clazz=ServiceKind.class, asOptions={})
 	public ServiceKind getSource() {

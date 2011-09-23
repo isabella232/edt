@@ -421,7 +421,7 @@ public class EList<T> extends EAny implements eglx.lang.EList<T> {
 			{
 				public String newElement()
 				{
-					return Constants.EMPTY_STRING;
+					return "";
 				}
 			};
 			

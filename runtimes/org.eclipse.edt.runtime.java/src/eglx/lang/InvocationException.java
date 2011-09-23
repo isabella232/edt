@@ -36,7 +36,7 @@ public class InvocationException extends eglx.lang.AnyException {
 		return new InvocationException();
 	}
 	public void ezeSetEmpty() {
-		name = Constants.EMPTY_STRING;
+		name = "";
 		returnValue = 0;
 	}
 	public boolean isVariableDataLength() {
@@ -50,7 +50,7 @@ public class InvocationException extends eglx.lang.AnyException {
 	public void storeInBuffer(ByteStorage buffer) {
 	}
 	public void ezeInitialize() {
-		name = Constants.EMPTY_STRING;
+		name = "";
 		returnValue = 0;
 	}
 	@org.eclipse.edt.javart.json.Json(name="name", clazz=EString.class, asOptions={})

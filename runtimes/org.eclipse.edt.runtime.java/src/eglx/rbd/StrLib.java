@@ -42,11 +42,11 @@ public class StrLib extends ExecutableBase {
 		ezeInitialize();
 	}
 	public void ezeInitialize() {
-		defaultDateFormat = Constants.EMPTY_STRING;
-		defaultTimeFormat = Constants.EMPTY_STRING;
-		defaultTimeStampFormat = Constants.EMPTY_STRING;
-		defaultMoneyFormat = Constants.EMPTY_STRING;
-		defaultNumericFormat = Constants.EMPTY_STRING;
+		defaultDateFormat = "";
+		defaultTimeFormat = "";
+		defaultTimeStampFormat = "";
+		defaultMoneyFormat = "";
+		defaultNumericFormat = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="defaultDateFormat", clazz=EString.class, asOptions={})
 	public String getDefaultDateFormat() {
@@ -382,7 +382,7 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			String result = Constants.EMPTY_STRING;
+			String result = "";
 			String fiftyBlanks;
 			fiftyBlanks = "                                                  ";
 			while ((EInt.compareTo(characterCount, (int)((short) 50)) >= 0)) {

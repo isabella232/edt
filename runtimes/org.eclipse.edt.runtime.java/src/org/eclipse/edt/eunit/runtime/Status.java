@@ -41,7 +41,7 @@ public class Status extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue {
 	}
 	public void ezeSetEmpty() {
 		code = 0;
-		reason = Constants.EMPTY_STRING;
+		reason = "";
 	}
 	public boolean isVariableDataLength() {
 		return false;
@@ -55,7 +55,7 @@ public class Status extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue {
 	}
 	public void ezeInitialize() {
 		code = 0;
-		reason = Constants.EMPTY_STRING;
+		reason = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="code", clazz=EInt.class, asOptions={})
 	public int getCode() {

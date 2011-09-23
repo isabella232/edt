@@ -38,7 +38,7 @@ class EglRestRpcRequest extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue 
 		return new EglRestRpcRequest();
 	}
 	public void ezeSetEmpty() {
-		method = Constants.EMPTY_STRING;
+		method = "";
 		params = null;
 	}
 	public boolean isVariableDataLength() {
@@ -52,7 +52,7 @@ class EglRestRpcRequest extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue 
 	public void storeInBuffer(ByteStorage buffer) {
 	}
 	public void ezeInitialize() {
-		method = Constants.EMPTY_STRING;
+		method = "";
 		params = null;
 	}
 	@org.eclipse.edt.javart.json.Json(name="method", clazz=EString.class, asOptions={})

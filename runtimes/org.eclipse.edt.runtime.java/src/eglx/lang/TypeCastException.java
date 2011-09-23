@@ -35,8 +35,8 @@ public class TypeCastException extends eglx.lang.AnyException {
 		return new TypeCastException();
 	}
 	public void ezeSetEmpty() {
-		castToName = Constants.EMPTY_STRING;
-		actualTypeName = Constants.EMPTY_STRING;
+		castToName = "";
+		actualTypeName = "";
 	}
 	public boolean isVariableDataLength() {
 		return false;
@@ -49,8 +49,8 @@ public class TypeCastException extends eglx.lang.AnyException {
 	public void storeInBuffer(ByteStorage buffer) {
 	}
 	public void ezeInitialize() {
-		castToName = Constants.EMPTY_STRING;
-		actualTypeName = Constants.EMPTY_STRING;
+		castToName = "";
+		actualTypeName = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="castToName", clazz=EString.class, asOptions={})
 	public String getCastToName() {

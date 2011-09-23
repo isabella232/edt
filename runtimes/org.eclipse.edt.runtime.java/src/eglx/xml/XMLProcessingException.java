@@ -32,7 +32,7 @@ public class XMLProcessingException extends eglx.lang.AnyException {
 		return new XMLProcessingException();
 	}
 	public void ezeSetEmpty() {
-		detail = Constants.EMPTY_STRING;
+		detail = "";
 	}
 	public boolean isVariableDataLength() {
 		return false;
@@ -45,7 +45,7 @@ public class XMLProcessingException extends eglx.lang.AnyException {
 	public void storeInBuffer(ByteStorage buffer) {
 	}
 	public void ezeInitialize() {
-		detail = Constants.EMPTY_STRING;
+		detail = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="detail", clazz=EString.class, asOptions={})
 	public String getDetail() {

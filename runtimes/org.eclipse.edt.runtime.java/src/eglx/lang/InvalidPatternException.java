@@ -32,7 +32,7 @@ public class InvalidPatternException extends eglx.lang.AnyException {
 		return new InvalidPatternException();
 	}
 	public void ezeSetEmpty() {
-		pattern = Constants.EMPTY_STRING;
+		pattern = "";
 	}
 	public boolean isVariableDataLength() {
 		return false;
@@ -45,7 +45,7 @@ public class InvalidPatternException extends eglx.lang.AnyException {
 	public void storeInBuffer(ByteStorage buffer) {
 	}
 	public void ezeInitialize() {
-		pattern = Constants.EMPTY_STRING;
+		pattern = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="pattern", clazz=EString.class, asOptions={})
 	public String getPattern() {
