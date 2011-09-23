@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.javascript.templates.egl.lang;
+package org.eclipse.edt.gen.javascript.templates.eglx.lang;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.egl.IntervalType;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
 
-public class MonthsIntervalTypeTemplate extends JavaScriptTemplate {
+public class SecondsIntervalTypeTemplate extends JavaScriptTemplate {
 
 	// this method gets invoked when there is a specific interval needed
 	public void genDefaultValue(IntervalType type, Context ctx, TabbedWriter out) {
@@ -40,13 +40,13 @@ public class MonthsIntervalTypeTemplate extends JavaScriptTemplate {
 
 	// this method gets invoked when there is a specific interval needed
 	public void genSignature(IntervalType type, Context ctx, TabbedWriter out) {
-		String signature = "Q'" + type.getPattern() + "';";
+		String signature = "q'" + type.getPattern() + "';";
 		out.print(signature);
 	}
 
 	// this method gets invoked when there is a generic (unknown) interval needed
 	public void genSignature(ParameterizableType type, Context ctx, TabbedWriter out) {
-		String signature = "Q;";
+		String signature = "q;";
 		out.print(signature);
 	}
 }

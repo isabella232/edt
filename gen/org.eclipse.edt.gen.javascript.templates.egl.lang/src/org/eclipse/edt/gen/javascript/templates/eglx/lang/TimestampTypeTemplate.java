@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.javascript.templates.egl.lang;
+package org.eclipse.edt.gen.javascript.templates.eglx.lang;
 
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
@@ -39,7 +39,7 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 
 	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
 		// out.print(Constants.JSRT_DTTMLIB_PKG + "currentTimeStamp(");
-		out.print("egl.egl.lang.ETimestamp.currentTimeStamp(");
+		out.print("egl.eglx.lang.ETimestamp.currentTimeStamp(");
 		generateOptions((TimestampType)type, ctx, out, false);
 		out.print(")");
 	}

@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.javascript.templates.egl.lang;
+package org.eclipse.edt.gen.javascript.templates.eglx.lang;
 
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
@@ -66,7 +66,7 @@ public class AnyTypeTemplate extends JavaScriptTemplate {
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
 			out.print(")");
 		} else {
-			out.print(eglnamespace + "egl.lang.EglAny.ezeCast("); // TODO sbg need to dynamically get class name
+			out.print(eglnamespace + "eglx.lang.EAny.ezeCast("); // TODO sbg need to dynamically get class name
 			if (arg.getObjectExpr().getType() != TypeUtils.Type_ANY) {
 				BoxingExpression boxingExpr = IrFactory.INSTANCE.createBoxingExpression();
 				boxingExpr.setExpr(arg.getObjectExpr());

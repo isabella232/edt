@@ -9,31 +9,17 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.javascript.templates.egl.lang;
+package org.eclipse.edt.gen.javascript.templates.eglx.lang;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Field;
 
-public class DictionaryTypeTemplate extends JavaScriptTemplate {
+public class AnyValueTypeTemplate extends JavaScriptTemplate {
 
 	public void genSignature(EGLClass type, Context ctx, TabbedWriter out) {
-		String signature = "y;";
+		String signature = "A;";
 		out.print(signature);
-	}
-
-	public void genInstantiation(EGLClass type, Context ctx, TabbedWriter out, Field arg) {
-		if (arg.hasSetValuesBlock()) {
-			ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavascriptPrimitive);
-			out.print("()");
-		} else {
-			out.print("null");
-		}
-	}
-
-	public void genInstantiation(EGLClass type, Context ctx, TabbedWriter out) {
-		out.print("null");
 	}
 }

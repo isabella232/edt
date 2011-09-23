@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.javascript.templates.egl.lang;
+package org.eclipse.edt.gen.javascript.templates.eglx.lang;
 
 import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
@@ -17,24 +17,19 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
-import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.FixedPrecisionType;
-import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.Operation;
-import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public class FloatTypeTemplate extends JavaScriptTemplate {
+public class SmallintTypeTemplate extends JavaScriptTemplate {
 
 	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
 		out.print("0");
 	}
 
 	public void genSignature(EGLClass type, Context ctx, TabbedWriter out) {
-		String signature = "F;";
+		String signature = "i;";
 		out.print(signature);
 	}
 
@@ -59,60 +54,7 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	protected boolean needsConversion(Type fromType, Type toType) {
-		boolean result = true;
-		if (TypeUtils.isNumericType(fromType) && !CommonUtilities.needsConversion(fromType, toType))
-			result = false;
-		return result;
-	}
-
-	public void genConversionOperation(FixedPrecisionType type, Context ctx, TabbedWriter out, AsExpression arg) {
-		Type toType = arg.getEType();
-		Type fromType = arg.getObjectExpr().getType();
-		if ((arg.getConversionOperation() == null) && TypeUtils.isNumericType(fromType)) {
-			if (needsConversion(fromType, toType)) {
-				out.print(ctx.getNativeImplementationMapping(toType) + '.');
-				out.print("from");
-				out.print(ctx.getNativeTypeName(fromType));
-				out.print("(");
-				Expression objectExpr = arg.getObjectExpr();
-				if (objectExpr instanceof BoxingExpression){
-					objectExpr = ((BoxingExpression)objectExpr).getExpr();
-				}
-				ctx.invoke(genExpression, objectExpr, ctx, out);
-				ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
-				out.print(")");
-			} else {
-				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
-			}
-		} else {
-			// we need to invoke the logic in type template to call back to the other conversion situations
-			ctx.invokeSuper(this, genConversionOperation, type, ctx, out, arg);
-		}
-	}
-
-	public void genTypeDependentOptions(ParameterizableType type, Context ctx, TabbedWriter out, AsExpression arg) {
-		out.print(", ");
-		// if we get here, then we have been given an integer literal, to be represented as a FixedPrecisionType. So, we must
-		// set the dependend options to be a list of nines
-		if (arg.getObjectExpr() instanceof IntegerLiteral) {
-			String value = ((IntegerLiteral) arg.getObjectExpr()).getValue();
-			if (value.startsWith("-"))
-				value = value.substring(1);
-			if (value.length() > 4)
-				out.print("egl.javascript.BigDecimal.prototype.NINES[8]");
-			else
-				out.print("egl.javascript.BigDecimal.prototype.NINES[3]");
-		} else
-			out.print("egl.javascript.BigDecimal.prototype.NINES[8]");
-	}
-
-	public void genTypeDependentOptions(ParameterizableType type, Context ctx, TabbedWriter out) {
-		out.print(", ");
-		out.print("egl.javascript.BigDecimal.prototype.NINES[8]");
-	}
-
-	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) {
+	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, BinaryExpression arg) {
 		if (false) { // TODO sbg other impls of genBinaryExpression consider nullables
 		} else {
 			out.print(getNativeStringPrefixOperation(arg));
@@ -129,9 +71,9 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 	protected String getNativeStringPrefixOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_NE))
-			return "!";
-		if (op.equals(expr.Op_DIVIDE))
-			return "egl.divide";
+			return "";
+		if (op.equals(expr.Op_MODULO))
+			return "egl.remainder(";
 		return "";
 	}
 
@@ -146,44 +88,48 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_MULTIPLY))
 			return " * ";
 		if (op.equals(expr.Op_DIVIDE))
-			return ",";
+			return " / ";
 		if (op.equals(expr.Op_EQ))
 			return " == ";
 		if (op.equals(expr.Op_NE))
-			return ".compareTo(";
+			return " != ";
 		if (op.equals(expr.Op_LT))
-			return ".compareTo(";
+			return " < ";
 		if (op.equals(expr.Op_GT))
-			return ".compareTo(";
+			return " > ";
 		if (op.equals(expr.Op_LE))
-			return ".compareTo(";
+			return " <= ";
 		if (op.equals(expr.Op_GE))
-			return ".compareTo(";
+			return " >= ";
 		if (op.equals(expr.Op_AND))
 			return " && ";
 		if (op.equals(expr.Op_OR))
 			return " || ";
 		if (op.equals(expr.Op_CONCAT))
 			return " + ";
+		if (op.equals(expr.Op_MODULO))
+			return ",";
 		return "";
 	}
 
 	@SuppressWarnings("static-access")
 	protected String getNativeStringComparisionOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
-		if (op.equals(expr.Op_MULTIPLY))
+		if (op.equals(expr.Op_EQ))
 			return "";
 		if (op.equals(expr.Op_NE))
-			return ")";
+			return "";
 		if (op.equals(expr.Op_LT))
-			return ") < 0";
+			return "";
 		if (op.equals(expr.Op_GT))
-			return ") > 0";
+			return "";
 		if (op.equals(expr.Op_LE))
-			return ") <= 0";
+			return "";
 		if (op.equals(expr.Op_GE))
-			return ") >= 0";
+			return "";
+		if (op.equals(expr.Op_MODULO))
+			return ")";
 		return "";
 	}
-
+	
 }
