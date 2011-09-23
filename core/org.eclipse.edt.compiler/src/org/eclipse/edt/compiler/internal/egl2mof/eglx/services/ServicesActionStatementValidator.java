@@ -256,7 +256,7 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 	}
 	
 	private String getQualAnyExceptionString() {
-		return InternUtil.intern("egl.lang" + "." + IEGLConstants.EGL_ANYEXCEPTION);
+		return InternUtil.intern("eglx.lang" + "." + IEGLConstants.EGL_ANYEXCEPTION);
 	}
 	
 	
