@@ -76,14 +76,10 @@ public class ReorganizeCode extends AbstractVisitor {
 	@SuppressWarnings("unchecked")
 	private StatementBlock verify(int index) {
 		// set up the new statement block array. The 1st block is for statements that need to be executed before the current
-		// statement. The 2nd block is for statements that need to be executed after the current statement. The 3rd block
-		// will contain the current statement, if it is supposed to be executed after the others. With return statements that
-		// invoke functions that require unboxing after the function call, we need to place the return statement at the end
-		// and not execute it in the middle.
+		// statement. The 2nd block is for statements that need to be executed after the current statement.
 		List<StatementBlock> blockArray;
 		if (getReturnData() == null) {
 			blockArray = new ArrayList<StatementBlock>();
-			blockArray.add(null);
 			blockArray.add(null);
 			blockArray.add(null);
 			setReturnData(blockArray);
@@ -235,16 +231,10 @@ public class ReorganizeCode extends AbstractVisitor {
 				declarationExpression.getFields().add(field);
 				// connect the declaration expression to the local declaration
 				localDeclaration.setExpression(declarationExpression);
-				// we need to analyze the statement we moved
-				assignmentStatement.accept(this);
 				// add the local variable to the statement list
 				verify(0).getStatements().add(localDeclaration);
 				// now replace the return expression with the temporary variable
 				object.setExpression(nameExpression);
-				// we are going to copy this return statement to the 3rd block to force it to be executed afterwards to allow
-				// any unboxing to occur
-				verify(2).getStatements().add(object);
-
 			}
 		}
 		return false;
