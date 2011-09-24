@@ -42,15 +42,20 @@ public class StatementBlockTemplate extends JavaScriptTemplate {
 	}
 
 	protected void processStatements(StatementBlock block, Context ctx, TabbedWriter out) {
-//TODO sbg from Java gen, related to debug		ctx.setCurrentFile(IRUtils.getFileName(block));
+		// TODO sbg from Java gen, related to debug ctx.setCurrentFile(IRUtils.getFileName(block));
 		for (Statement stmt : block.getStatements()) {
 			ReorganizeCode reorganizeCode = new ReorganizeCode();
 			List<StatementBlock> blockArray = reorganizeCode.reorgCode(stmt, ctx);
 			if (blockArray != null && blockArray.get(0) != null)
 				ctx.invoke(genStatementNoBraces, blockArray.get(0), ctx, out);
-			ctx.invoke(genStatement, stmt, ctx, out);
+			// if there is no 3rd block or if the 3rd block does not contain a statement, then process the original statement
+			if (!(blockArray != null && blockArray.get(2) != null))
+				ctx.invoke(genStatement, stmt, ctx, out);
 			if (blockArray != null && blockArray.get(1) != null)
 				ctx.invoke(genStatementNoBraces, blockArray.get(1), ctx, out);
+			// if there is a 3rd block, then process it after everything else
+			if (blockArray != null && blockArray.get(2) != null)
+				ctx.invoke(genStatementNoBraces, blockArray.get(2), ctx, out);
 		}
 	}
 }
