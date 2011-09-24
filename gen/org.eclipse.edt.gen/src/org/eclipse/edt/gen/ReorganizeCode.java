@@ -73,6 +73,32 @@ public class ReorganizeCode extends AbstractVisitor {
 		return (List<StatementBlock>) getReturnData();
 	}
 
+	@SuppressWarnings("unchecked")
+	private StatementBlock verify(int index) {
+		// set up the new statement block array. The 1st block is for statements that need to be executed before the current
+		// statement. The 2nd block is for statements that need to be executed after the current statement. The 3rd block
+		// will contain the current statement, if it is supposed to be executed after the others. With return statements that
+		// invoke functions that require unboxing after the function call, we need to place the return statement at the end
+		// and not execute it in the middle.
+		List<StatementBlock> blockArray;
+		if (getReturnData() == null) {
+			blockArray = new ArrayList<StatementBlock>();
+			blockArray.add(null);
+			blockArray.add(null);
+			blockArray.add(null);
+			setReturnData(blockArray);
+		} else
+			blockArray = (List<StatementBlock>) getReturnData();
+		StatementBlock block;
+		if (blockArray.get(index) == null) {
+			block = factory.createStatementBlock();
+			block.setContainer(currentStatementContainer);
+			blockArray.set(index, block);
+		}
+		block = blockArray.get(index);
+		return (block);
+	}
+
 	public boolean visit(EObject object) {
 		return true;
 	}
@@ -159,7 +185,6 @@ public class ReorganizeCode extends AbstractVisitor {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public boolean visit(ReturnStatement object) {
 		ctx.putAttribute(object.getContainer(), Constants.SubKey_functionHasReturnStatement, new Boolean(true));
 		// There are cases where someone uses a return statement to break out of a function, even though the function does
@@ -169,24 +194,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			// variable for the return of the function invocation. This is because we need to unbox the inout/out args after
 			// the function is invoked and before the return statement
 			if (object.getExpression().getType() != null && IRUtils.hasSideEffects(object.getExpression())) {
-				// set up the new statement block if needed
-				List<StatementBlock> blockArray;
-				if (getReturnData() == null) {
-					blockArray = new ArrayList<StatementBlock>();
-					blockArray.add(null);
-					blockArray.add(null);
-					setReturnData(blockArray);
-				} else
-					blockArray = (List<StatementBlock>) getReturnData();
 				// handle the preprocessing
-				StatementBlock block;
-				// we need to add this to block list 0
-				if (blockArray.get(0) == null) {
-					block = factory.createStatementBlock();
-					block.setContainer(currentStatementContainer);
-					blockArray.set(0, block);
-				}
-				block = blockArray.get(0);
 				String temporary = ctx.nextTempName();
 				LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
 				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -230,12 +238,16 @@ public class ReorganizeCode extends AbstractVisitor {
 				// we need to analyze the statement we moved
 				assignmentStatement.accept(this);
 				// add the local variable to the statement list
-				block.getStatements().add(localDeclaration);
+				verify(0).getStatements().add(localDeclaration);
 				// now replace the return expression with the temporary variable
 				object.setExpression(nameExpression);
+				// we are going to copy this return statement to the 3rd block to force it to be executed afterwards to allow
+				// any unboxing to occur
+				verify(2).getStatements().add(object);
+
 			}
 		}
-		return true;
+		return false;
 	}
 
 	public boolean visit(CallStatement object) {
@@ -262,7 +274,6 @@ public class ReorganizeCode extends AbstractVisitor {
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	public boolean visit(ForStatement object) {
 		// if the condition has side effects, then we need to extract the condition and place it as an assignment to a
 		// temporary variable and then replace the condition with the temporary variable. In addition, we need to have a flag
@@ -271,24 +282,6 @@ public class ReorganizeCode extends AbstractVisitor {
 		boolean toExpressionHasSideEffects = object.getToExpression() != null && IRUtils.hasSideEffects(object.getToExpression());
 		boolean deltaExpressionHasSideEffects = object.getDeltaExpression() != null && IRUtils.hasSideEffects(object.getDeltaExpression());
 		if (fromExpressionHasSideEffects || toExpressionHasSideEffects || deltaExpressionHasSideEffects) {
-			// set up the new statement block if needed
-			List<StatementBlock> blockArray;
-			if (getReturnData() == null) {
-				blockArray = new ArrayList<StatementBlock>();
-				blockArray.add(null);
-				blockArray.add(null);
-				setReturnData(blockArray);
-			} else
-				blockArray = (List<StatementBlock>) getReturnData();
-			// handle the preprocessing
-			StatementBlock block;
-			// we need to add this to block list 0
-			if (blockArray.get(0) == null) {
-				block = factory.createStatementBlock();
-				block.setContainer(currentStatementContainer);
-				blockArray.set(0, block);
-			}
-			block = blockArray.get(0);
 			// in all cases, we will need a boolean temporary variable
 			// we need to create a local variable
 			String temporaryFlag = ctx.nextTempName();
@@ -313,7 +306,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			// connect the declaration expression to the local declaration
 			localDeclarationFlag.setExpression(declarationExpressionFlag);
 			// add the local variable to the statement block
-			block.getStatements().add(localDeclarationFlag);
+			verify(0).getStatements().add(localDeclarationFlag);
 			// we need to create an if statement
 			IfStatement ifStatement = factory.createIfStatement();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -390,7 +383,7 @@ public class ReorganizeCode extends AbstractVisitor {
 				// connect the declaration expression to the local declaration
 				localDeclaration.setExpression(declarationExpression);
 				// add the local variable to the statement block
-				block.getStatements().add(localDeclaration);
+				verify(0).getStatements().add(localDeclaration);
 				// now replace the condition with the temporary variable
 				object.setFromExpression(nameExpression);
 			}
@@ -420,7 +413,7 @@ public class ReorganizeCode extends AbstractVisitor {
 				// connect the declaration expression to the local declaration
 				localDeclaration.setExpression(declarationExpression);
 				// add the local variable to the statement block
-				block.getStatements().add(localDeclaration);
+				verify(0).getStatements().add(localDeclaration);
 				// we also need to add the assignment to the front of the user's code block
 				// we need to create an assignment statement
 				AssignmentStatement assignmentStatementDelta = factory.createAssignmentStatement();
@@ -482,7 +475,7 @@ public class ReorganizeCode extends AbstractVisitor {
 				// connect the declaration expression to the local declaration
 				localDeclaration.setExpression(declarationExpression);
 				// add the local variable to the statement block
-				block.getStatements().add(localDeclaration);
+				verify(0).getStatements().add(localDeclaration);
 				// we also need to add the assignment to the true block
 				// we need to create an assignment statement
 				AssignmentStatement assignmentStatementTrue = factory.createAssignmentStatement();
@@ -575,29 +568,10 @@ public class ReorganizeCode extends AbstractVisitor {
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	public boolean visit(IfStatement object) {
 		// if the condition has side effects, then we need to extract the condition and place it as an assignment to a
 		// boolean temporary variable and then replace the condition with the boolean
 		if (IRUtils.hasSideEffects(object.getCondition())) {
-			// set up the new statement block if needed
-			List<StatementBlock> blockArray;
-			if (getReturnData() == null) {
-				blockArray = new ArrayList<StatementBlock>();
-				blockArray.add(null);
-				blockArray.add(null);
-				setReturnData(blockArray);
-			} else
-				blockArray = (List<StatementBlock>) getReturnData();
-			// handle the preprocessing
-			StatementBlock block;
-			// we need to add this to block list 0
-			if (blockArray.get(0) == null) {
-				block = factory.createStatementBlock();
-				block.setContainer(currentStatementContainer);
-				blockArray.set(0, block);
-			}
-			block = blockArray.get(0);
 			// we need to create a local variable
 			String temporary = ctx.nextTempName();
 			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
@@ -640,7 +614,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			// connect the declaration expression to the local declaration
 			localDeclaration.setExpression(declarationExpression);
 			// add the local variable to the statement block
-			block.getStatements().add(localDeclaration);
+			verify(0).getStatements().add(localDeclaration);
 			// now replace the condition with the temporary variable
 			object.setCondition(nameExpression);
 		}
@@ -696,24 +670,6 @@ public class ReorganizeCode extends AbstractVisitor {
 	@SuppressWarnings("unchecked")
 	public boolean visit(SetValuesExpression object) {
 		boolean hasSideEffects = IRUtils.hasSideEffects(object.getTarget());
-		// set up the new statement block if needed
-		List<StatementBlock> blockArray;
-		if (getReturnData() == null) {
-			blockArray = new ArrayList<StatementBlock>();
-			blockArray.add(null);
-			blockArray.add(null);
-			setReturnData(blockArray);
-		} else
-			blockArray = (List<StatementBlock>) getReturnData();
-		// handle the preprocessing
-		StatementBlock block;
-		// we need to add this to block list 0
-		if (blockArray.get(0) == null) {
-			block = factory.createStatementBlock();
-			block.setContainer(currentStatementContainer);
-			blockArray.set(0, block);
-		}
-		block = blockArray.get(0);
 		// if there are no side effects, we don't need a temporary variable
 		if (hasSideEffects) {
 			// we need to create a local variable
@@ -734,7 +690,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			declarationExpression.getFields().add(field);
 			localDeclaration.setExpression(declarationExpression);
 			// add the local variable to the statement block
-			block.getStatements().add(0, localDeclaration);
+			verify(0).getStatements().add(0, localDeclaration);
 			// we need to create the member access for our temporary variable
 			MemberName nameExpression = factory.createMemberName();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -762,7 +718,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			// add the assignment to the statement block
 			object.getSettings().getStatements().add(assignmentStatement);
 			// now copy the statement block to our preprocessing statement block
-			block.getStatements().add(1, object.getSettings());
+			verify(0).getStatements().add(1, object.getSettings());
 			// now replace the setValuesExpression argument with the temporary variable
 			if (getParent() instanceof List)
 				((List<EObject>) getParent()).set(getParentSlotIndex(), nameExpression);
@@ -770,7 +726,7 @@ public class ReorganizeCode extends AbstractVisitor {
 				((EObjectImpl) getParent()).slotSet(getParentSlotIndex(), nameExpression);
 		} else {
 			// now copy the statement block to our preprocessing statement block
-			block.getStatements().add(object.getSettings());
+			verify(0).getStatements().add(object.getSettings());
 			// now replace the setValuesExpression argument with the temporary variable
 			if (getParent() instanceof List)
 				((List<EObject>) getParent()).set(getParentSlotIndex(), object.getTarget());
@@ -823,7 +779,6 @@ public class ReorganizeCode extends AbstractVisitor {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void processInvocation(InvocationExpression object) {
 		processInvocationConstantParameters(object);
 		boolean altered = false;
@@ -842,29 +797,11 @@ public class ReorganizeCode extends AbstractVisitor {
 		// if no work needs to be done, continue with the visiting
 		if (!altered)
 			return;
-		// set up the new statement block if needed
-		List<StatementBlock> blockArray;
-		if (getReturnData() == null) {
-			blockArray = new ArrayList<StatementBlock>();
-			blockArray.add(null);
-			blockArray.add(null);
-			setReturnData(blockArray);
-		} else
-			blockArray = (List<StatementBlock>) getReturnData();
 		// now handle the pre/post processing assignment statements
 		for (int i = 0; i < object.getTarget().getParameters().size(); i++) {
 			FunctionParameter parameter = object.getTarget().getParameters().get(i);
 			// change any arguments marked as needing to be altered
 			if (argumentToBeAltered[i]) {
-				// handle the preprocessing
-				StatementBlock block;
-				// we need to add this to block list 0
-				if (blockArray.get(0) == null) {
-					block = factory.createStatementBlock();
-					block.setContainer(currentStatementContainer);
-					blockArray.set(0, block);
-				}
-				block = blockArray.get(0);
 				if (parameter.getParameterKind() == ParameterKind.PARM_IN) {
 					// we need to create a local variable
 					String temporary = ctx.nextTempName();
@@ -909,7 +846,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					// connect the declaration expression to the local declaration
 					localDeclaration.setExpression(declarationExpression);
 					// add the local variable to the statement block
-					block.getStatements().add(localDeclaration);
+					verify(0).getStatements().add(localDeclaration);
 					// now replace the function argument with the temporary variable
 					object.getArguments().set(i, nameExpression);
 				} else if (parameter.getParameterKind() == ParameterKind.PARM_INOUT) {
@@ -956,16 +893,9 @@ public class ReorganizeCode extends AbstractVisitor {
 					// connect the declaration expression to the local declaration
 					localDeclaration.setExpression(declarationExpression);
 					// add the local variable to the statement block
-					block.getStatements().add(localDeclaration);
+					verify(0).getStatements().add(localDeclaration);
 					// now handle the post processing if it is lhsexpr compatible
 					if (object.getArguments().get(i) instanceof LHSExpr) {
-						// we need to add this to block list 1
-						if (blockArray.get(1) == null) {
-							block = factory.createStatementBlock();
-							block.setContainer(currentStatementContainer);
-							blockArray.set(1, block);
-						}
-						block = blockArray.get(1);
 						// we need to create an assignment statement of the local variable to the original
 						assignmentStatement = factory.createAssignmentStatement();
 						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -978,7 +908,7 @@ public class ReorganizeCode extends AbstractVisitor {
 						assignment.setLHS((LHSExpr) object.getArguments().get(i));
 						assignment.setRHS(nameExpression);
 						// add the assignment to the statement block
-						block.getStatements().add(assignmentStatement);
+						verify(1).getStatements().add(assignmentStatement);
 					}
 					// we need to pass the initialized local on to the function invocation
 					object.getArguments().set(i, nameExpression);
@@ -1008,16 +938,9 @@ public class ReorganizeCode extends AbstractVisitor {
 					// connect the declaration expression to the local declaration
 					localDeclaration.setExpression(declarationExpression);
 					// add the local variable to the statement block
-					block.getStatements().add(localDeclaration);
+					verify(0).getStatements().add(localDeclaration);
 					// now handle the post processing if it is lhsexpr compatible
 					if (object.getArguments().get(i) instanceof LHSExpr) {
-						// we need to add this to block list 1
-						if (blockArray.get(1) == null) {
-							block = factory.createStatementBlock();
-							block.setContainer(currentStatementContainer);
-							blockArray.set(1, block);
-						}
-						block = blockArray.get(1);
 						// we need to create an assignment statement of the local variable to the original
 						AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
 						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -1030,7 +953,7 @@ public class ReorganizeCode extends AbstractVisitor {
 						assignment.setLHS((LHSExpr) object.getArguments().get(i));
 						assignment.setRHS(nameExpression);
 						// add the assignment to the statement block
-						block.getStatements().add(assignmentStatement);
+						verify(1).getStatements().add(assignmentStatement);
 					}
 					// we need to pass the initialized local on to the function invocation
 					object.getArguments().set(i, nameExpression);
