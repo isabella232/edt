@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="setLocale system function"></meta>
+<meta name="abstract" content="SysLib.setLocale sets the Java locale for the run unit."></meta>
+<meta name="description" content="SysLib.setLocale sets the Java locale for the run unit."></meta>
+<meta name="DC.subject" content="EGL system functions, setLocale, setLocale EGL system function, SysLib EGL system library"></meta>
+<meta name="keywords" content="EGL system functions, setLocale, setLocale EGL system function, SysLib EGL system library"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="redt00201"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>setLocale system function</title>
+</head>
+<body id="redt00201"><a name="redt00201"><!-- --></a>
+
+
+<h1 class="topictitle1">setLocale system function</h1>
+
+
+
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">SysLib.setLocale</span></span> sets
+the Java locale for the run
+unit.</p>
+
+
+<a name="redt00201__main"><!-- --></a><dl id="redt00201__main">
+<dt class="dlterm"><a name="redt00201__package"><!-- --></a>Package</dt>
+
+<dd><p>eglx.lang</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00201__syntax"><!-- --></a>Syntax</dt>
+
+<dd><pre class="codeblock" id="redt00201__syntax_block"><a name="redt00201__syntax_block"><!-- --></a>static function setLocale(languageCode string in);
+
+static function setLocale(languageCode string in, countryCode string in);
+
+static function setLocale(languageCode string in, countryCode string in, variant string in);</pre>
+<a name="redt00201__syntax_list"><!-- --></a><dl id="redt00201__syntax_list">
+<dt class="dlterm"><var class="varname">languageCode</var></dt>
+
+<dd>A two-character language code. Only language codes that are defined
+by ISO 639-2 are valid.</dd>
+
+
+<dt class="dlterm"><var class="varname">countryCode</var></dt>
+
+<dd>A two-character country code. Only country codes that are defined
+by ISO 3166 are valid.</dd>
+
+
+<dt class="dlterm"><var class="varname">variant</var></dt>
+
+<dd>A variant code. The code is usually an uppercase string that is
+used in conjunction with <span class="synph"><span class="var">languageCode</span></span> and <span class="synph"><span class="var">countryCode</span></span> to
+create the locale identifier, as in the example.</dd>
+
+</dl>
+<anchor id="syntax_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00201__use"><!-- --></a>Example use</dt>
+
+<dd><p>The following example changes the locale to Canadian French
+for Windows.</p>
+<pre class="codeblock">sysLib.setLocale("fr", "CA", "WIN"); </pre>
+<anchor id="use_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00201__comments"><!-- --></a>Comments</dt>
+
+<dd><div class="p">The Java locale determines
+these aspects of runtime behavior: <ul>
+<li>The human language used for labels and messages</li>
+
+<li>The default date and time formats</li>
+
+</ul>
+</div>
+<div class="p">For
+example, you might present a list of languages and set the Java locale based on the language
+the user selects. The new Java locale
+is in use until one of the following occurs:  <ul>
+<li>You call <span class="synph"><span class="kwd">sysLib.setLocale()</span></span> again.</li>
+
+<li>The browser session ends.</li>
+
+<li>A new web page is presented for any other reason.</li>
+
+</ul>
+</div>
+<p>In the cases mentioned, the next web page reverts by default
+to the Java locale that is specified
+in the browser.</p>
+<p>Language
+codes follow the ISO 639-2 standard, and country codes follow the
+ISO 3166 standard. For more information, see the related reference
+links at the end of this topic and the documentation for the java.util.Locale
+class.</p>
+<pre class="codeblock"></pre>
+<anchor id="comments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00201__compat"><!-- --></a>Compatibility</dt>
+
+<dd><p></p>
+
+<div class="tablenoborder"><a name="redt00201__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00201__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d31169e216">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d31169e219">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00201__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d31169e216 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d31169e219 ">No issues.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00201__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d31169e216 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d31169e219 "><span class="synph"><span class="kwd">SysLib.setLocale()</span></span> is
+not supported.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
+
+<p></p>
+
+</div>
+
+<anchor id="related_links"></anchor>
+
+
+</body>
+</html>

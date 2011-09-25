@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="SysLib system library"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="SysLib provides a set of EGL system functions that are generally useful."></meta>
+<meta name="description" content="SysLib provides a set of EGL system functions that are generally useful."></meta>
+<meta name="DC.subject" content="EGL system libraries, SysLib, SysLib EGL system library, overview"></meta>
+<meta name="keywords" content="EGL system libraries, SysLib, SysLib EGL system library, overview"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -22,9 +24,191 @@
 <h1 class="topictitle1">SysLib system library</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">SysLib</span></span> provides a
+set of EGL system functions that are generally useful.</p>
+
+<dl>
+<dt class="dlterm"><a name="redt00066__package"><!-- --></a>Package</dt>
+
+<dd><p>eglx.lang</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00066__functions"><!-- --></a>Functions</dt>
+
+<dd>
+<div class="tablenoborder"><a name="redt00066__function_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00066__function_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Functions</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d18860e65">System function</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d18860e68">Purpose</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="function_rows_start"></anchor>
+<tr id="redt00066__function_rows_callcmd">
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e65 "><a href="redt00145.html" title="SysLib.callCmd runs a system command synchronously.">CallCmd system function</a></td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e68 "><span class="synph"><span class="kwd">SysLib.callCmd</span></span> runs
+a system command synchronously.<p class="function_callcmd_more"></p>
+</td>
+
+</tr>
+
+<anchor id="function_rows_postcallcmd"></anchor>
+<tr id="redt00066__function_rows_commit">
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e65 "><a href="redt00198.html" title="SysLib.commit saves updates to recoverable resources such as databases.">Commit system function</a></td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e68 "><span class="synph"><span class="kwd">SysLib.commit</span></span> saves
+updates to recoverable resources such as databases.<p class="function_commit_more"></p>
+</td>
+
+</tr>
+
+<anchor id="function_rows_postcallcmd"></anchor>
+<tr id="redt00066__function_rows_getproperty">
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e65 "><a href="redt00200.html" title="SysLib.getProperty returns the value of a Java runtime setting.">GetProperty system function</a></td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e68 "><span class="synph"><span class="kwd">SysLib.getProperty</span></span> returns
+the value of a Java runtime
+setting.<p class="function_getproperty_more"></p>
+</td>
+
+</tr>
+
+<anchor id="function_rows_postgetproperty"></anchor>
+<tr id="redt00066__function_rows_getresource">
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e65 "><a href="redt00205.html" title="SysLib.getResource returns an object that is based on a specific entry in an EGL deployment descriptor.">getResource system function</a></td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e68 "><span class="synph"><span class="kwd">SysLib.getResource</span></span> returns
+an object that is based on a specific entry in an EGL deployment descriptor.<p class="function_getresource_more"></p>
+</td>
+
+</tr>
+
+<anchor id="function_rows_postgetresource"></anchor>
+<tr id="redt00066__function_rows_rollback">
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e65 "><a href="redt00199.html" title="SysLib.rollback reverses updates that were made to recoverable resources since the last commit.">Rollback system function</a></td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e68 "><span class="synph"><span class="kwd">SysLib.rollback</span></span> reverses
+updates that were made to recoverable resources since the last commit.<p class="function_rollback_more"></p>
+</td>
+
+</tr>
+
+<anchor id="function_rows_postrollback"></anchor>
+<tr id="redt00066__function_rows_getlocale">
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e65 "><a href="redt00201.html" title="SysLib.setLocale sets the Java locale for the run unit.">setLocale system function</a></td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e68 "><span class="synph"><span class="kwd">SysLib.setLocale</span></span> sets
+the Java locale for the run
+unit.<p class="function_setlocale_more"></p>
+</td>
+
+</tr>
+
+<anchor id="function_rows_postsetlocale"></anchor>
+<tr id="redt00066__function_rows_startcmd">
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e65 "><a href="redt00197.html" title="SysLib.startCmd runs a system command asynchronously.">StartCmd system function</a></td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e68 "><span class="synph"><span class="kwd">SysLib.startCmd</span></span> runs
+a system command asynchronously.<p class="function_startcmd_more"></p>
+</td>
+
+</tr>
+
+<anchor id="function_rows_poststartcmd"></anchor>
+<tr id="redt00066__function_rows_wait">
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e65 "><a href="redt00202.html" title="SysLib.wait suspends the current process for a specified number of seconds.">Wait system function</a></td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e68 "><span class="synph"><span class="kwd">SysLib.wait</span></span> suspends
+the current process for a specified number of seconds. <p class="function_wait_more"></p>
+</td>
+
+</tr>
+
+<anchor id="function_rows_postwait"></anchor>
+<tr id="redt00066__function_rows_writestderr">
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e65 "><a href="redt00203.html" title="SysLib.writeStdErr writes a string to the standard error destination.">WriteStdError system function</a></td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e68 "><span class="synph"><span class="kwd">SysLib.writeStdErr</span></span> writes
+a string to the standard error destination.<p class="function_writestderr_more"></p>
+</td>
+
+</tr>
+
+<anchor id="function_rows_postwritestderr"></anchor>
+<tr id="redt00066__function_rows_writestdout">
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e65 "><a href="redt00204.html" title="SysLib.writeStdOut writes a string to the standard output destination.">WriteStdOut system function</a></td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e68 "><span class="synph"><span class="kwd">SysLib.writeStdOut</span></span> writes
+a string to the standard output destination.<p class="function_writestdout_more"></p>
+</td>
+
+</tr>
+
+<anchor id="function_rows_postwritestdout"></anchor>
+<anchor id="function_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+</dd>
+
+
+<dt class="dlterm"><a name="redt00066__comments"><!-- --></a>Comments</dt>
+
+<dd>The library is implemented as an EGL external type, stereotype
+NativeType, and not as an EGL library.<anchor id="comments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00066__compat"><!-- --></a>Compatibility</dt>
+
+<dd><p></p>
+
+<div class="tablenoborder"><a name="redt00066__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00066__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d18860e405">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d18860e408">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00066__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e405 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e408 ">See the function-specific topics.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00066__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e405 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d18860e408 ">See the function-specific topics.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
 
 </div>
 

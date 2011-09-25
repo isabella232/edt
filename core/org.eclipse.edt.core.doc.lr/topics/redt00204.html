@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="WriteStdOut system function"></meta>
+<meta name="abstract" content="SysLib.writeStdOut writes a string to the standard output destination."></meta>
+<meta name="description" content="SysLib.writeStdOut writes a string to the standard output destination."></meta>
+<meta name="DC.subject" content="EGL system functions, writeStdOut, writeStdOut EGL system function, SysLib EGL system library"></meta>
+<meta name="keywords" content="EGL system functions, writeStdOut, writeStdOut EGL system function, SysLib EGL system library"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="redt00204"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>WriteStdOut system function</title>
+</head>
+<body id="redt00204"><a name="redt00204"><!-- --></a>
+
+
+<h1 class="topictitle1">WriteStdOut system function</h1>
+
+
+
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">SysLib.writeStdOut</span></span> writes
+a string to the standard output destination.</p>
+
+
+<a name="redt00204__main"><!-- --></a><dl id="redt00204__main">
+<dt class="dlterm"><a name="redt00204__package"><!-- --></a>Package</dt>
+
+<dd><p>eglx.lang</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00204__syntax"><!-- --></a>Syntax</dt>
+
+<dd><pre class="codeblock" id="redt00204__syntax_block"><a name="redt00204__syntax_block"><!-- --></a>static function writeStdOut(text string in);</pre>
+<a name="redt00204__syntax_list"><!-- --></a><dl id="redt00204__syntax_list">
+<dt class="dlterm"><var class="varname">text</var></dt>
+
+<dd>The text to write.</dd>
+
+</dl>
+<anchor id="syntax_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00204__use"><!-- --></a>Example use</dt>
+
+<dd><p>Here is example code:</p>
+<pre class="codeblock">SysLib.writeStdOut("Opened file");</pre>
+<anchor id="use_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00204__comments"><!-- --></a>Comments</dt>
+
+<dd><p><span class="synph"><span class="kwd">sysLib.writeStdOut</span></span> is typically for
+debugging.</p>
+<anchor id="comments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00204__compat"><!-- --></a>Compatibility</dt>
+
+<dd><p></p>
+
+<div class="tablenoborder"><a name="redt00204__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00204__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d32339e117">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d32339e120">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00204__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d32339e117 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d32339e120 ">The output goes to the System.err output stream
+of the Java Virtual Machine (JVM). <p>The default is to route the
+output to the console, but when you start the JVM, you can route the
+output to a different location.</p>
+<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00204__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d32339e117 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d32339e120 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
+
+<p></p>
+
+</div>
+
+<anchor id="related_links"></anchor>
+
+
+</body>
+</html>

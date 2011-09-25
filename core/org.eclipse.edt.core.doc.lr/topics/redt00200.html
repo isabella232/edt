@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="GetProperty system function"></meta>
+<meta name="abstract" content="SysLib.getProperty returns the value of a Java runtime setting."></meta>
+<meta name="description" content="SysLib.getProperty returns the value of a Java runtime setting."></meta>
+<meta name="DC.subject" content="EGL system functions, getProperty, getProperty EGL system function, SysLib EGL system library"></meta>
+<meta name="keywords" content="EGL system functions, getProperty, getProperty EGL system function, SysLib EGL system library"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="redt00200"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>GetProperty system function</title>
+</head>
+<body id="redt00200"><a name="redt00200"><!-- --></a>
+
+
+<h1 class="topictitle1">GetProperty system function</h1>
+
+
+
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">SysLib.getProperty</span></span> returns
+the value of a Java runtime
+setting.</p>
+
+<a name="redt00200__main"><!-- --></a><dl id="redt00200__main">
+<dt class="dlterm"><a name="redt00200__package"><!-- --></a>Package</dt>
+
+<dd><p>eglx.lang</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00200__syntax"><!-- --></a>Syntax</dt>
+
+<dd><pre class="codeblock" id="redt00200__syntax_block"><a name="redt00200__syntax_block"><!-- --></a>static function getProperty(propertyName string in) returns(string?);</pre>
+<a name="redt00200__syntax_list"><!-- --></a><dl id="redt00200__syntax_list">
+<dt class="dlterm"><var class="varname">propertyName</var></dt>
+
+<dd>Specifies the name of a property in a Java program properties file. Input can be any
+variable or expression that is assignment compatible with the STRING
+type.</dd>
+
+</dl>
+<p>The function returns the property value from a Java properties file. If the specified
+property is not found, <span class="synph"><span class="kwd">sysLib.getProperty</span></span> calls
+the java.lang.System.getProperty method to request the Java system property with the given name. If
+the property is still not found, <span class="synph"><span class="kwd">sysLib.getProperty</span></span> returns
+a null.</p>
+<anchor id="syntax_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00200__use"><!-- --></a>Example use</dt>
+
+<dd><p>Here is example code:</p>
+<pre class="codeblock"></pre>
+<anchor id="use_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00200__comments"><!-- --></a>Comments</dt>
+
+<dd><p></p>
+<pre class="codeblock"></pre>
+<anchor id="comments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00200__compat"><!-- --></a>Compatibility</dt>
+
+<dd><p></p>
+
+<div class="tablenoborder"><a name="redt00200__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00200__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d30794e131">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d30794e134">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00200__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d30794e131 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d30794e134 ">No issues.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00200__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d30794e131 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d30794e134 "><span class="synph"><span class="kwd">SysLib.getProperty</span></span> is
+not supported.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
+
+<p></p>
+
+</div>
+
+<anchor id="related_links"></anchor>
+
+
+</body>
+</html>
