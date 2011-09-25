@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Binding an access variable dynamically"></meta>
-<meta name="abstract" content="You can use dynamic binding to either choose a service at run time or change the service to which a variable is bound."></meta>
-<meta name="description" content="You can use dynamic binding to either choose a service at run time or change the service to which a variable is bound."></meta>
+<meta name="abstract" content="You can use dynamic binding to access or update binding details in response to conditions at run time."></meta>
+<meta name="description" content="You can use dynamic binding to access or update binding details in response to conditions at run time."></meta>
 <meta name="DC.subject" content="binding, dynamic, services"></meta>
 <meta name="keywords" content="binding, dynamic, services"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01002.html"></meta>
@@ -26,20 +26,19 @@
 
 
 
-<div><p>You can use dynamic binding to either choose a service
-at run time or change the service to which a variable is bound. </p>
+<div><p>You can use dynamic binding to access or update binding
+details in response to conditions at run time.</p>
 
-<p>To bind a variable dynamically, use functions in the <span class="synph"><span class="kwd">ServiceLib</span></span> system
-library. Dynamic binding is not available for access of a dedicated
-service from a Rich UI handler or related library.</p>
-
-<div class="p">The following variations apply: <ul>
+<div class="p">Here are two distinct tasks: <ul>
 <li><a href="#tedt01019__acceptance">Accepting the detail that is stored in a binding entry</a></li>
 
-<li><a href="#tedt01019__object">Retrieving or creating a binding object and updating it in memory</a></li>
+<li><a href="#tedt01019__object">Retrieving or creating the binding detail and updating it in memory</a></li>
 
 </ul>
 </div>
+
+<p>Dynamic binding is not available for access of a dedicated service
+from a Rich UI handler or related library.</p>
 
 <div class="section" id="tedt01019__acceptance"><a name="tedt01019__acceptance"><!-- --></a><h2 class="sectiontitle">Accepting the detail that is stored
 in a binding entry</h2><div class="p">Suppose that you created entries in the
@@ -60,14 +59,14 @@ while the second a value in French.</p>
 <p>You might create and bind
 two variables, one for each of these entries. Alternatively, you can
 create one variable that is based on the Interface part that corresponds
-to the service. Then, you can use the <span class="synph"><span class="kwd">ServiceLib.getResource()</span></span> system
+to the service. Then, you can use the <span class="synph"><span class="kwd">SysLib.getResource()</span></span> system
 function to bind the variable to one or the other deployed service:</p>
 <ol>
 <li>Create a variable that is based on the Interface part:<pre class="codeblock">myService MyInterfacePart?;</pre>
 </li>
 
 <li>Use the <span class="synph"><span class="kwd">getResource()</span></span> function to bind
-the variable to the service implementation:<pre class="codeblock">myService = ServiceLib.getResource("MyEnglishBinding");</pre>
+the variable to the service implementation:<pre class="codeblock">myService = SysLib.getResource("MyEnglishBinding");</pre>
 In
 this case, the <samp class="codeph">myService</samp> variable is now bound to
 the entry named <samp class="codeph">MyBinding</samp>. If you avoid specifying
@@ -81,7 +80,7 @@ value of <samp class="codeph">myContent</samp> is “Hello, world!”</p>
 </li>
 
 <li>You can use the <span class="synph"><span class="kwd">getResource</span></span> function
-again to bind the service to a different implementation:<pre class="codeblock">myTranslator = ServiceLib.getResource("MyFrenchBinding");</pre>
+again to bind the service to a different implementation:<pre class="codeblock">myTranslator = SysLib.getResource("MyFrenchBinding");</pre>
 </li>
 
 <li>Now you can use the variable to access the alternate service:<pre class="codeblock">myContent = myService.myEcho("world");</pre>
@@ -97,7 +96,7 @@ and then invoke the <span class="synph"><span class="kwd">SysLib.getResource</sp
 your generated code invokes the system function twice.</p>
 </div>
 
-<div class="section" id="tedt01019__object"><a name="tedt01019__object"><!-- --></a><h2 class="sectiontitle">Retrieving or creating a binding object
+<div class="section" id="tedt01019__object"><a name="tedt01019__object"><!-- --></a><h2 class="sectiontitle">Retrieving or creating the binding detail
 and updating it in memory</h2><div class="p">Here is example code, which prepares
 a variable that is later used in a service-invocation statement: <pre class="codeblock">myService IMyService;    
 myBinding HttpRest{@Resource};
@@ -123,27 +122,27 @@ data is transferred to and from the service in JSON format:<pre class="codeblock
 </pre>
 </li>
 
-<li>Invokes the <span class="synph"><span class="kwd">SysLib.completeBind</span></span> function
+<li>Invokes the <span class="synph"><span class="kwd">ServiceLib.completeBind</span></span> function
 so that the variable references the HTTPRest object:<pre class="codeblock">myService = servicelib.completeBind(myService, myBinding);</pre>
 </li>
 
 </ol>
 </div>
-<div class="p">When you want to update specific fields in an object that
-is of a binding type such as HTTPRest, access the object in either
-of two ways:<ul>
-<li>As shown, one option is to retrieve an object that contains the
-data stored in the binding entry of the EGL deployment descriptor.
-Either of these two statements fulfills the need for HTTPRest:<pre class="codeblock">myBinding HttpRest{@Resource};
+<div class="p">The declaration of the binding object takes either of
+two forms: <ul>
+<li>One option is to retrieve an object that contains the data stored
+in the binding entry of the EGL deployment descriptor. Either of these
+two statements fulfills the need for HTTPRest:<pre class="codeblock">myBinding HttpRest{@Resource};
 
 // or
-myBinding HttpRest = SysLib.getResource();</pre>
-<p>In both cases,
-the EGL runtime code accesses the deployment-descriptor entry named <samp class="codeph">myBinding</samp>.</p>
+myBinding HttpRest = SysLib.getResource("myBinding");</pre>
+<p>In
+either case, the EGL runtime code accesses the deployment-descriptor
+entry named <samp class="codeph">myBinding</samp>.</p>
 </li>
 
-<li>Alternatively, create a binding object and set all the details
-in your code:<pre class="codeblock">http HttpRest = new HttpRest{
+<li>Alternatively, create a binding object in which you set all the
+fields of interest:<pre class="codeblock">http HttpRest = new HttpRest{
    restType = eglx.rest.ServiceType.TrueRest,	
    uri = "www.example.com/myproject/restservices/weather_service};</pre>
 </li>
