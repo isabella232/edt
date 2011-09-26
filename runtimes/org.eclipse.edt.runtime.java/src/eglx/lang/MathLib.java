@@ -16,7 +16,6 @@ import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import egl.lang.AnyException;
 
 import org.eclipse.edt.javart.resources.ExecutableBase;
 

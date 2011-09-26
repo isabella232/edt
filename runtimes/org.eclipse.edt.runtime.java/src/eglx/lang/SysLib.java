@@ -35,8 +35,6 @@ import org.eclipse.edt.javart.resources.egldd.RuntimeDeploymentDesc;
 import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
 import org.eclipse.edt.javart.util.JavartUtil;
 
-import egl.lang.AnyException;
-import egl.lang.InvocationException;
 import eglx.persistence.sql.SQLDataSource;
 
 public class SysLib extends ExecutableBase {
@@ -86,8 +84,8 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * Run an external command in the foreground, in LINE mode. This does not return until the command has completed.
 	 */
-	public static void callCmd(String commandString) throws AnyException {
-		runCommand(commandString, true, true);
+	public static int callCmd(String commandString) throws AnyException {
+		return runCommand(commandString, true, true);
 	}
 
 	/**
@@ -95,10 +93,10 @@ public class SysLib extends ExecutableBase {
 	 * complete.
 	 */
 	public static void startCmd(String commandString) throws AnyException {
-		runCommand(commandString, true, true);
+		runCommand(commandString, true, false);
 	}
 
-	private static void runCommand(String commandString, boolean lineMode, boolean wait) throws AnyException {
+	private static int runCommand(String commandString, boolean lineMode, boolean wait) throws AnyException {
 		final Process proc;
 		try {
 			proc = java.lang.Runtime.getRuntime().exec(
@@ -134,13 +132,16 @@ public class SysLib extends ExecutableBase {
 			}.start();
 
 			try {
-				proc.waitFor();
+				return proc.waitFor();
 			}
 			catch (InterruptedException ex) {
 				InvocationException ix = new InvocationException();
 				ix.name = commandString;
 				throw ix.fillInMessage( Message.RUN_COMMAND_FAILED, commandString, ex );
 			}
+		}
+		else {
+			return 0;
 		}
 	}
 
@@ -154,7 +155,7 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * Returns a formatted message from the RunUnit's message bundle, or null if no message with the key is found.
 	 */
-	public static String getMessage(String key, egl.lang.EglList<String> inserts) {
+	public static String getMessage(String key, eglx.lang.EList<String> inserts) {
 		// Get the inserts as Strings.
 		String[] insertStrings = null;
 		if (inserts != null) {

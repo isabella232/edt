@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.StringTokenizer;
 
 import org.eclipse.edt.javart.*;
+import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
@@ -24,8 +25,6 @@ import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
 import org.eclipse.edt.javart.util.NumberFormatter;
 
-import egl.lang.AnyException;
-import egl.lang.InvalidIndexException;
 
 public class StringLib extends ExecutableBase {
 

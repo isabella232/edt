@@ -11,11 +11,12 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
-import org.eclipse.edt.runtime.java.egl.lang.EString;
+import org.eclipse.edt.runtime.java.eglx.lang.AnyValue;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+
 import java.lang.String;
 @javax.xml.bind.annotation.XmlRootElement()
-public class Log extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
+public class Log extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
 	public String msg;
@@ -26,14 +27,14 @@ public class Log extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	public void ezeCopy(Object source) {
 		ezeCopy((Log) source);
 	}
-	public void ezeCopy(egl.lang.AnyValue source) {
+	public void ezeCopy(eglx.lang.AnyValue source) {
 		this.msg = ((Log) source).msg;
 	}
 	public Log ezeNewValue(Object... args) {
 		return new Log();
 	}
 	public void ezeSetEmpty() {
-		msg = Constants.EMPTY_STRING;
+		msg = "";
 	}
 	public boolean isVariableDataLength() {
 		return false;
@@ -46,7 +47,7 @@ public class Log extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	public void storeInBuffer(ByteStorage buffer) {
 	}
 	public void ezeInitialize() {
-		msg = Constants.EMPTY_STRING;
+		msg = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="msg", clazz=EString.class, asOptions={})
 	public String getMsg() {

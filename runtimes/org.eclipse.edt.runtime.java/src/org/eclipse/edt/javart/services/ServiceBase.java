@@ -13,7 +13,7 @@ package org.eclipse.edt.javart.services;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 
-import egl.lang.AnyException;
+import eglx.lang.AnyException;
 
 
 

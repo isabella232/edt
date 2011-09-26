@@ -14,7 +14,7 @@ package org.eclipse.edt.javart;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.util.JavartUtil;
 
-import egl.lang.AnyException;
+import eglx.lang.AnyException;
 
 /**
  * Exception for fatal program errors.  These can't be handled with an EGL try

@@ -23,9 +23,9 @@ import java.util.Map;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.services.servlet.ServiceInvoker;
 
-import egl.lang.AnyException;
-import egl.lang.EDictionary;
-import egl.lang.InvalidArgumentException;
+import eglx.lang.AnyException;
+import eglx.lang.EDictionary;
+import eglx.lang.InvalidArgumentException;
 import eglx.services.Encoding;
 import eglx.services.ServiceUtilities;
 

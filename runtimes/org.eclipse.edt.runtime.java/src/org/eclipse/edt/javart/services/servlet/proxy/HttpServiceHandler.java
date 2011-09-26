@@ -33,11 +33,11 @@ import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.Trace;
 import org.eclipse.edt.javart.util.JavartUtil;
 
-import egl.lang.EDictionary;
 import eglx.http.Request;
 import eglx.http.Response;
 import eglx.http.HttpUtilities;
 import eglx.json.JsonUtilities;
+import eglx.lang.EDictionary;
 import eglx.services.ServiceKind;
 import eglx.services.ServiceUtilities;
 
@@ -265,7 +265,7 @@ public class HttpServiceHandler
 				if ( header != null )
 				{
 					if(response.headers == null){
-						response.headers = new org.eclipse.edt.runtime.java.egl.lang.EDictionary();
+						response.headers = new org.eclipse.edt.runtime.java.eglx.lang.EDictionary();
 					}
 					populate( response, header );
 					setServiceSessionId( response, header, headers.get( EGL_SESSION_ID ) );

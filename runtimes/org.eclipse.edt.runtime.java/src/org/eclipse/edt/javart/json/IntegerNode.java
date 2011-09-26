@@ -13,7 +13,7 @@ package org.eclipse.edt.javart.json;
 
 import java.math.BigInteger;
 
-import egl.lang.AnyException;
+import eglx.lang.AnyException;
 
 public class IntegerNode extends NumberNode {
 	

@@ -11,10 +11,12 @@
 package eglx.services;
 import org.eclipse.edt.javart.*;
 import eglx.services.ServiceKind;
-import org.eclipse.edt.runtime.java.egl.lang.EString;
+
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+
 import java.lang.String;
 @javax.xml.bind.annotation.XmlRootElement(name="ServiceInvocationException")
-public class ServiceInvocationException extends egl.lang.AnyException {
+public class ServiceInvocationException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
 	public ServiceKind source;
@@ -31,7 +33,7 @@ public class ServiceInvocationException extends egl.lang.AnyException {
 	public void ezeCopy(Object source) {
 		ezeCopy((ServiceInvocationException) source);
 	}
-	public void ezeCopy(egl.lang.AnyValue source) {
+	public void ezeCopy(eglx.lang.AnyValue source) {
 		this.source = ((ServiceInvocationException) source).source;
 		this.detail1 = ((ServiceInvocationException) source).detail1;
 		this.detail2 = ((ServiceInvocationException) source).detail2;
@@ -42,9 +44,9 @@ public class ServiceInvocationException extends egl.lang.AnyException {
 	}
 	public void ezeSetEmpty() {
 		source = null;
-		detail1 = Constants.EMPTY_STRING;
-		detail2 = Constants.EMPTY_STRING;
-		detail3 = Constants.EMPTY_STRING;
+		detail1 = "";
+		detail2 = "";
+		detail3 = "";
 	}
 	public boolean isVariableDataLength() {
 		return false;
@@ -58,9 +60,9 @@ public class ServiceInvocationException extends egl.lang.AnyException {
 	}
 	public void ezeInitialize() {
 		source = null;
-		detail1 = Constants.EMPTY_STRING;
-		detail2 = Constants.EMPTY_STRING;
-		detail3 = Constants.EMPTY_STRING;
+		detail1 = "";
+		detail2 = "";
+		detail3 = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="source", clazz=ServiceKind.class, asOptions={})
 	public ServiceKind getSource() {

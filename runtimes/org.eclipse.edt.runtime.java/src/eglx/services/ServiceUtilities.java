@@ -17,7 +17,7 @@ import java.util.Map;
 
 import org.eclipse.edt.javart.util.JavartUtil;
 
-import egl.lang.AnyException;
+import eglx.lang.AnyException;
 
 
 

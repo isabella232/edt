@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.eclipse.edt.javart.messages.Message;
 
-import egl.lang.DynamicAccessException;
+import eglx.lang.DynamicAccessException;
 
 
 public class JsonUtilities 

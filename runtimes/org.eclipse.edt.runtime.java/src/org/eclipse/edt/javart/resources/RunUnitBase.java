@@ -35,7 +35,8 @@ import org.eclipse.edt.javart.ExitProgram;
 import org.eclipse.edt.javart.ExitRunUnit;
 import org.eclipse.edt.javart.FatalProblem;
 
-import egl.lang.AnyException;
+import eglx.lang.AnyException;
+
 import org.eclipse.edt.javart.Program;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.Transfer;

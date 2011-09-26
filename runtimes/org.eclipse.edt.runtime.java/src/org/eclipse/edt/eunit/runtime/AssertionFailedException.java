@@ -11,9 +11,10 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import egl.lang.AnyException;
+
+import eglx.lang.AnyException;
 @javax.xml.bind.annotation.XmlRootElement(name="AssertionFailedException")
-public class AssertionFailedException extends egl.lang.AnyException {
+public class AssertionFailedException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
 	public AssertionFailedException() {
 		super();
@@ -22,7 +23,7 @@ public class AssertionFailedException extends egl.lang.AnyException {
 	public void ezeCopy(Object source) {
 		ezeCopy((AssertionFailedException) source);
 	}
-	public void ezeCopy(egl.lang.AnyValue source) {
+	public void ezeCopy(eglx.lang.AnyValue source) {
 	}
 	public AssertionFailedException ezeNewValue(Object... args) {
 		return new AssertionFailedException();

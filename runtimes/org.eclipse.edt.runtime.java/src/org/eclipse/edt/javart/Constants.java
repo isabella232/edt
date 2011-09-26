@@ -110,8 +110,6 @@ public class Constants
 	 * A String containing 50 zeros.
 	 */
 	public static final String STRING_50_ZEROS = "00000000000000000000000000000000000000000000000000";
-	
-	public static final String EMPTY_STRING = "";
 
 	/*
 	 * Used to set the default type of XML created from XMLLib. 

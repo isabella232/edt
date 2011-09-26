@@ -16,7 +16,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.runtime.java.egl.lang.ETimestamp;
+import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
 
 /**
  * Helper class used to calculate arguments to be passed when instantiating

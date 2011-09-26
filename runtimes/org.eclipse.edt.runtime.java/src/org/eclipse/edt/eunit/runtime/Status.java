@@ -11,13 +11,15 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
-import org.eclipse.edt.runtime.java.egl.lang.EString;
 import java.lang.String;
-import org.eclipse.edt.runtime.java.egl.lang.EInt;
+
+import org.eclipse.edt.runtime.java.eglx.lang.AnyValue;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+
 import java.lang.Integer;
 @javax.xml.bind.annotation.XmlRootElement(name="Status")
-public class Status extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
+public class Status extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
 	public int code;
@@ -30,7 +32,7 @@ public class Status extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	public void ezeCopy(Object source) {
 		ezeCopy((Status) source);
 	}
-	public void ezeCopy(egl.lang.AnyValue source) {
+	public void ezeCopy(eglx.lang.AnyValue source) {
 		this.code = ((Status) source).code;
 		this.reason = ((Status) source).reason;
 	}
@@ -39,7 +41,7 @@ public class Status extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	}
 	public void ezeSetEmpty() {
 		code = 0;
-		reason = Constants.EMPTY_STRING;
+		reason = "";
 	}
 	public boolean isVariableDataLength() {
 		return false;
@@ -53,7 +55,7 @@ public class Status extends org.eclipse.edt.runtime.java.egl.lang.AnyValue {
 	}
 	public void ezeInitialize() {
 		code = 0;
-		reason = Constants.EMPTY_STRING;
+		reason = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="code", clazz=EInt.class, asOptions={})
 	public int getCode() {

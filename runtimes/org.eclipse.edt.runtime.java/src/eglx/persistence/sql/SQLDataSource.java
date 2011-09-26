@@ -24,7 +24,7 @@ import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.resources.RecoverableResource;
 import org.eclipse.edt.javart.util.JavartUtil;
 
-import egl.lang.AnyException;
+import eglx.lang.AnyException;
 
 public class SQLDataSource implements RecoverableResource {
 	private PreparedStatement SetSchema = null;

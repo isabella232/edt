@@ -11,13 +11,17 @@
 package eglx.persistence.sql;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import egl.lang.AnyException;
-import org.eclipse.edt.runtime.java.egl.lang.EInt;
+
+import eglx.lang.AnyException;
+
 import java.lang.Integer;
-import org.eclipse.edt.runtime.java.egl.lang.EString;
+
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+
 import java.lang.String;
 @javax.xml.bind.annotation.XmlRootElement(name="SqlException")
-public class SQLException extends egl.lang.AnyException {
+public class SQLException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
 	public String SQLState;
@@ -30,7 +34,7 @@ public class SQLException extends egl.lang.AnyException {
 	public void ezeCopy(Object source) {
 		ezeCopy((SQLException) source);
 	}
-	public void ezeCopy(egl.lang.AnyValue source) {
+	public void ezeCopy(eglx.lang.AnyValue source) {
 		this.SQLState = ((SQLException) source).SQLState;
 		this.ErrorCode = ((SQLException) source).ErrorCode;
 	}

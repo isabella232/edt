@@ -29,27 +29,13 @@ import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartUtil;
-import org.eclipse.edt.runtime.java.egl.lang.AnyValue;
-import org.eclipse.edt.runtime.java.egl.lang.EBigint;
-import org.eclipse.edt.runtime.java.egl.lang.EBoolean;
-import org.eclipse.edt.runtime.java.egl.lang.EDate;
-import org.eclipse.edt.runtime.java.egl.lang.EDecimal;
-import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
-import org.eclipse.edt.runtime.java.egl.lang.EFloat;
-import org.eclipse.edt.runtime.java.egl.lang.EInt;
-import org.eclipse.edt.runtime.java.egl.lang.ESmallfloat;
-import org.eclipse.edt.runtime.java.egl.lang.ESmallint;
-import org.eclipse.edt.runtime.java.egl.lang.EString;
-import org.eclipse.edt.runtime.java.egl.lang.ETimestamp;
-import org.eclipse.edt.runtime.java.egl.lang.EglAny;
-import org.eclipse.edt.runtime.java.egl.lang.EglList;
-import org.eclipse.edt.runtime.java.egl.lang.NullType;
+import org.eclipse.edt.runtime.java.eglx.lang.*;
 
 import com.ibm.icu.text.SimpleDateFormat;
 
-import egl.lang.AnyException;
-import egl.lang.InvalidArgumentException;
 import eglx.http.Response;
+import eglx.lang.AnyException;
+import eglx.lang.InvalidArgumentException;
 import eglx.lang.StringLib;
 
 public class JsonLib {
@@ -101,8 +87,8 @@ public class JsonLib {
 	        return new IntegerNode(((Enum<?>)object).ordinal() + 1);
 	    if(object instanceof Calendar)
 	        return process((Calendar)object);
-	    if(object instanceof EglList<?>)
-	        return process((EglList<?>)object);
+	    if(object instanceof EList<?>)
+	        return process((EList<?>)object);
 	    if(object instanceof EDictionary)
 	    	return process((EDictionary)object);
 	    if(object instanceof AnyValue)
@@ -116,7 +102,7 @@ public class JsonLib {
 		throw ex.fillInMessage( Message.SOA_E_JSON_TYPE_EXCEPTION, object.getClass().getName() );
 	}
 	
-	private static ValueNode process(EglList<?> array)throws AnyException
+	private static ValueNode process(EList<?> array)throws AnyException
 	{
 	    ArrayNode node = new ArrayNode();
 	    for(Object object : array)
@@ -247,7 +233,7 @@ public class JsonLib {
 	        	return null;
 	        }
 	        if(jsonValue instanceof ArrayNode){
-	        	EglList<Object> list = new EglList<Object>();
+	        	EList<Object> list = new EList<Object>();
 	        	for(Object node : ((ArrayNode)jsonValue).getValues()){
 	        		list.add(convertToEgl(fieldType, fieldTypeOptions, null, (ValueNode)node));
 	        	}
@@ -378,9 +364,9 @@ public class JsonLib {
     private static Object convertJsonNode(ValueNode jsonValue){
     	Object retVal = null;
         if(jsonValue instanceof ArrayNode){
-        	retVal = new EglList<Object>();
+        	retVal = new EList<Object>();
         	for(Object node : ((ArrayNode)jsonValue).getValues()){
-        		((EglList<Object>)retVal).add(convertJsonNode((ValueNode)node));
+        		((EList<Object>)retVal).add(convertJsonNode((ValueNode)node));
         	}
         }
     	else if(jsonValue instanceof BooleanNode){
@@ -404,8 +390,8 @@ public class JsonLib {
     	else if(jsonValue instanceof StringNode){
     		retVal = convertToEgl(EString.class, null, null, jsonValue);
     	}
-    	if(!(retVal instanceof egl.lang.EglAny)){
-    		retVal = EglAny.ezeBox(retVal);
+    	if(!(retVal instanceof eglx.lang.EAny)){
+    		retVal = EAny.ezeBox(retVal);
     	}
     	return retVal;
     }
@@ -483,7 +469,7 @@ public class JsonLib {
     	do{
     		fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
     		clazz = clazz.getSuperclass();
-    	}while(egl.lang.EglAny.class.isAssignableFrom(clazz) || Executable.class.isAssignableFrom(clazz));
+    	}while(eglx.lang.EAny.class.isAssignableFrom(clazz) || Executable.class.isAssignableFrom(clazz));
     	return fields;
     }
 }

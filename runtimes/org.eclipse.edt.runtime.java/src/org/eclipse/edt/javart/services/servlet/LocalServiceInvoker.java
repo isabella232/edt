@@ -19,7 +19,7 @@ import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.services.ServiceBase;
 import org.eclipse.edt.javart.util.JavaAliaser;
 
-import egl.lang.AnyException;
+import eglx.lang.AnyException;
 import eglx.services.ServiceKind;
 import eglx.services.ServiceUtilities;
 

@@ -11,7 +11,7 @@
 package eglx.services;
 import org.eclipse.edt.javart.*;
 @javax.xml.bind.annotation.XmlRootElement(name="ServiceBindingException")
-public class ServiceBindingException extends egl.lang.AnyException {
+public class ServiceBindingException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
 	public ServiceBindingException() {
 		super();
@@ -20,7 +20,7 @@ public class ServiceBindingException extends egl.lang.AnyException {
 	public void ezeCopy(Object source) {
 		ezeCopy((ServiceBindingException) source);
 	}
-	public void ezeCopy(egl.lang.AnyValue source) {
+	public void ezeCopy(eglx.lang.AnyValue source) {
 	}
 	public ServiceBindingException ezeNewValue(Object... args) {
 		return new ServiceBindingException();

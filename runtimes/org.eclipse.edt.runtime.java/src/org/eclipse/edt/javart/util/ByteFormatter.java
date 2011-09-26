@@ -13,7 +13,9 @@ package org.eclipse.edt.javart.util;
 
 import org.eclipse.edt.javart.ByteStorage;
 import org.eclipse.edt.javart.ConversionAttributeSet;
-import egl.lang.AnyException;
+
+import eglx.lang.AnyException;
+
 import org.eclipse.edt.javart.resources.Trace;
 
 /**

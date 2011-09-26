@@ -22,10 +22,10 @@ import javax.xml.bind.Marshaller;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
-import egl.lang.AnyException;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 
-import egl.lang.AnyValue;
+import eglx.lang.AnyException;
+import eglx.lang.AnyValue;
 
 public class XmlLib extends ExecutableBase {
 

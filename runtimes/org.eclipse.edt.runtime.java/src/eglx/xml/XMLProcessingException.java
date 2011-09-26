@@ -10,10 +10,11 @@
  *******************************************************************************/
 package eglx.xml;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.egl.lang.EString;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+
 import java.lang.String;
 @javax.xml.bind.annotation.XmlRootElement(name="XMLProcessingException")
-public class XMLProcessingException extends egl.lang.AnyException {
+public class XMLProcessingException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
 	public String detail;
@@ -24,14 +25,14 @@ public class XMLProcessingException extends egl.lang.AnyException {
 	public void ezeCopy(Object source) {
 		ezeCopy((XMLProcessingException) source);
 	}
-	public void ezeCopy(egl.lang.AnyValue source) {
+	public void ezeCopy(eglx.lang.AnyValue source) {
 		this.detail = ((XMLProcessingException) source).detail;
 	}
 	public XMLProcessingException ezeNewValue(Object... args) {
 		return new XMLProcessingException();
 	}
 	public void ezeSetEmpty() {
-		detail = Constants.EMPTY_STRING;
+		detail = "";
 	}
 	public boolean isVariableDataLength() {
 		return false;
@@ -44,7 +45,7 @@ public class XMLProcessingException extends egl.lang.AnyException {
 	public void storeInBuffer(ByteStorage buffer) {
 	}
 	public void ezeInitialize() {
-		detail = Constants.EMPTY_STRING;
+		detail = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="detail", clazz=EString.class, asOptions={})
 	public String getDetail() {

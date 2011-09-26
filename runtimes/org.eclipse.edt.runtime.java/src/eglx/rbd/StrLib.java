@@ -11,26 +11,18 @@
 package eglx.rbd;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.egl.lang.EInt;
 import java.lang.Integer;
-import org.eclipse.edt.runtime.java.egl.lang.EBigint;
 import java.lang.Long;
-import org.eclipse.edt.runtime.java.egl.lang.EDecimal;
 import java.math.BigDecimal;
-import org.eclipse.edt.runtime.java.egl.lang.EFloat;
 import java.lang.Double;
-import org.eclipse.edt.runtime.java.egl.lang.EBoolean;
 import java.lang.Boolean;
-import org.eclipse.edt.runtime.java.egl.lang.ETimestamp;
 import java.util.Calendar;
-import org.eclipse.edt.runtime.java.egl.lang.EDate;
 import eglx.lang.StringLib;
-import org.eclipse.edt.runtime.java.egl.lang.EglAny;
-import org.eclipse.edt.runtime.java.egl.lang.EString;
 import java.lang.String;
-import org.eclipse.edt.runtime.java.egl.lang.ESmallint;
 import java.lang.Short;
-import org.eclipse.edt.runtime.java.egl.lang.ESmallfloat;
+
+import org.eclipse.edt.runtime.java.eglx.lang.*;
+
 import java.lang.Float;
 @javax.xml.bind.annotation.XmlRootElement(name="StrLib")
 public class StrLib extends ExecutableBase {
@@ -50,11 +42,11 @@ public class StrLib extends ExecutableBase {
 		ezeInitialize();
 	}
 	public void ezeInitialize() {
-		defaultDateFormat = Constants.EMPTY_STRING;
-		defaultTimeFormat = Constants.EMPTY_STRING;
-		defaultTimeStampFormat = Constants.EMPTY_STRING;
-		defaultMoneyFormat = Constants.EMPTY_STRING;
-		defaultNumericFormat = Constants.EMPTY_STRING;
+		defaultDateFormat = "";
+		defaultTimeFormat = "";
+		defaultTimeStampFormat = "";
+		defaultMoneyFormat = "";
+		defaultNumericFormat = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="defaultDateFormat", clazz=EString.class, asOptions={})
 	public String getDefaultDateFormat() {
@@ -105,7 +97,7 @@ public class StrLib extends ExecutableBase {
 		return eze$Temp2;
 	}
 	public String clip(String source) {
-		if ((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(source), null))) {
+		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(source), null))) {
 			return null;
 		}
 		else {
@@ -115,7 +107,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String clip(String source, Integer clipType) {
-		if (((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(source), null)) || (org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EInt.ezeBox(clipType), null)))) {
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(source), null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EInt.ezeBox(clipType), null)))) {
 			return null;
 		}
 		else {
@@ -144,7 +136,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatDate(Calendar dateValue) {
-		if ((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EDate.ezeBox(dateValue), null))) {
+		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EDate.ezeBox(dateValue), null))) {
 			return null;
 		}
 		else {
@@ -156,7 +148,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatDate(Calendar dateValue, String format) {
-		if (((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EDate.ezeBox(dateValue), null)) || (org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(format), null)))) {
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EDate.ezeBox(dateValue), null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(format), null)))) {
 			return null;
 		}
 		else {
@@ -170,7 +162,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(Short intValue) {
-		if ((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(ESmallint.ezeBox(intValue), null))) {
+		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(ESmallint.ezeBox(intValue), null))) {
 			return null;
 		}
 		else {
@@ -182,7 +174,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(Short intValue, String format) {
-		if (((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(ESmallint.ezeBox(intValue), null)) || (org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(format), null)))) {
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(ESmallint.ezeBox(intValue), null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(format), null)))) {
 			return null;
 		}
 		else {
@@ -196,7 +188,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(Integer intValue) {
-		if ((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EInt.ezeBox(intValue), null))) {
+		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EInt.ezeBox(intValue), null))) {
 			return null;
 		}
 		else {
@@ -208,7 +200,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(Integer intValue, String format) {
-		if (((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EInt.ezeBox(intValue), null)) || (org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(format), null)))) {
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EInt.ezeBox(intValue), null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(format), null)))) {
 			return null;
 		}
 		else {
@@ -222,7 +214,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(Long intValue) {
-		if ((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EBigint.ezeBox(intValue), null))) {
+		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EBigint.ezeBox(intValue), null))) {
 			return null;
 		}
 		else {
@@ -234,7 +226,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(Long intValue, String format) {
-		if (((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EBigint.ezeBox(intValue), null)) || (org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(format), null)))) {
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EBigint.ezeBox(intValue), null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(format), null)))) {
 			return null;
 		}
 		else {
@@ -248,7 +240,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(BigDecimal decValue) {
-		if ((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EDecimal.ezeBox(decValue), null))) {
+		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EDecimal.ezeBox(decValue), null))) {
 			return null;
 		}
 		else {
@@ -258,7 +250,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(BigDecimal decValue, String format) {
-		if (((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EDecimal.ezeBox(decValue), null)) || (org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(format), null)))) {
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EDecimal.ezeBox(decValue), null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(format), null)))) {
 			return null;
 		}
 		else {
@@ -270,7 +262,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(Float floatValue) {
-		if ((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(ESmallfloat.ezeBox(floatValue), null))) {
+		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(ESmallfloat.ezeBox(floatValue), null))) {
 			return null;
 		}
 		else {
@@ -282,7 +274,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(Float floatValue, String format) {
-		if (((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(ESmallfloat.ezeBox(floatValue), null)) || (org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(format), null)))) {
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(ESmallfloat.ezeBox(floatValue), null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(format), null)))) {
 			return null;
 		}
 		else {
@@ -296,7 +288,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(Double floatValue) {
-		if ((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EFloat.ezeBox(floatValue), null))) {
+		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EFloat.ezeBox(floatValue), null))) {
 			return null;
 		}
 		else {
@@ -308,7 +300,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(Double floatValue, String format) {
-		if (((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EFloat.ezeBox(floatValue), null)) || (org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(format), null)))) {
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EFloat.ezeBox(floatValue), null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(format), null)))) {
 			return null;
 		}
 		else {
@@ -322,7 +314,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatTimeStamp(Calendar timestampvalue) {
-		if ((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(ETimestamp.ezeBox(timestampvalue, ETimestamp.YEAR_CODE, ETimestamp.FRACTION6_CODE), null))) {
+		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(ETimestamp.ezeBox(timestampvalue, ETimestamp.YEAR_CODE, ETimestamp.FRACTION6_CODE), null))) {
 			return null;
 		}
 		else {
@@ -334,7 +326,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatTimeStamp(Calendar timestampvalue, String format) {
-		if (((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(ETimestamp.ezeBox(timestampvalue, ETimestamp.YEAR_CODE, ETimestamp.FRACTION6_CODE), null)) || (org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(format), null)))) {
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(ETimestamp.ezeBox(timestampvalue, ETimestamp.YEAR_CODE, ETimestamp.FRACTION6_CODE), null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(format), null)))) {
 			return null;
 		}
 		else {
@@ -351,11 +343,11 @@ public class StrLib extends ExecutableBase {
 		int charIndex;
 		charIndex = EInt.asInt((EDecimal.plus((EInt.divide(index.ezeUnbox(), (int)((short) 2))), EDecimal.asDecimal(ESmallint.ezeBox((short) 1)))));
 		AnyBoxedObject<Integer> eze$Temp66;
-		eze$Temp66 = EglAny.ezeWrap(charIndex);
+		eze$Temp66 = EAny.ezeWrap(charIndex);
 		String token;
 		token = StringLib.getNextToken(source.ezeUnbox(), eze$Temp66, delimiters);
 		charIndex = eze$Temp66.ezeUnbox();
-		if ((org.eclipse.edt.runtime.java.egl.lang.NullType.notEquals(EString.ezeBox(token), null))) {
+		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.notEquals(EString.ezeBox(token), null))) {
 			index.ezeCopy((((charIndex - (int)((short) 1)) * (int)((short) 2)) + (int)((short) 1)));
 		}
 		return token;
@@ -376,7 +368,7 @@ public class StrLib extends ExecutableBase {
 		return eze$Temp70;
 	}
 	public String lowerCase(String characterItem) {
-		if ((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(characterItem), null))) {
+		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(characterItem), null))) {
 			return null;
 		}
 		else {
@@ -386,11 +378,11 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String spaces(Integer characterCount) {
-		if ((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EInt.ezeBox(characterCount), null))) {
+		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EInt.ezeBox(characterCount), null))) {
 			return null;
 		}
 		else {
-			String result = Constants.EMPTY_STRING;
+			String result = "";
 			String fiftyBlanks;
 			fiftyBlanks = "                                                  ";
 			while ((EInt.compareTo(characterCount, (int)((short) 50)) >= 0)) {
@@ -404,7 +396,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String upperCase(String characterItem) {
-		if ((org.eclipse.edt.runtime.java.egl.lang.NullType.equals(EString.ezeBox(characterItem), null))) {
+		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(characterItem), null))) {
 			return null;
 		}
 		else {

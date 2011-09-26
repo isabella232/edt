@@ -10,10 +10,11 @@
  *******************************************************************************/
 package eglx.javascript;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.egl.lang.EString;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+
 import java.lang.String;
 @javax.xml.bind.annotation.XmlRootElement(name="JavaScriptObjectException")
-public class JavaScriptObjectException extends egl.lang.AnyException {
+public class JavaScriptObjectException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
 	public String name;
@@ -24,14 +25,14 @@ public class JavaScriptObjectException extends egl.lang.AnyException {
 	public void ezeCopy(Object source) {
 		ezeCopy((JavaScriptObjectException) source);
 	}
-	public void ezeCopy(egl.lang.AnyValue source) {
+	public void ezeCopy(eglx.lang.AnyValue source) {
 		this.name = ((JavaScriptObjectException) source).name;
 	}
 	public JavaScriptObjectException ezeNewValue(Object... args) {
 		return new JavaScriptObjectException();
 	}
 	public void ezeSetEmpty() {
-		name = Constants.EMPTY_STRING;
+		name = "";
 	}
 	public boolean isVariableDataLength() {
 		return false;
@@ -44,7 +45,7 @@ public class JavaScriptObjectException extends egl.lang.AnyException {
 	public void storeInBuffer(ByteStorage buffer) {
 	}
 	public void ezeInitialize() {
-		name = Constants.EMPTY_STRING;
+		name = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="name", clazz=EString.class, asOptions={})
 	public String getName() {

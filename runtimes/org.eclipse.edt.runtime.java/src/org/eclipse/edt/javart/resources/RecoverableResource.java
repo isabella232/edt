@@ -13,7 +13,7 @@ package org.eclipse.edt.javart.resources;
 
 import org.eclipse.edt.javart.RunUnit;
 
-import egl.lang.AnyException;
+import eglx.lang.AnyException;
 
 public interface RecoverableResource 
 {

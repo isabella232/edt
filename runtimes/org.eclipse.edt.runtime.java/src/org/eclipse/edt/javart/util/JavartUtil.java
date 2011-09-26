@@ -23,12 +23,12 @@ import org.eclipse.edt.javart.FatalProblem;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
-import org.eclipse.edt.runtime.java.egl.lang.EglAny;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 
-import egl.lang.AnyException;
-import egl.lang.InvalidIndexException;
-import egl.lang.NullValueException;
 import eglx.java.JavaObjectException;
+import eglx.lang.AnyException;
+import eglx.lang.InvalidIndexException;
+import eglx.lang.NullValueException;
 import eglx.persistence.sql.SQLException;
 
 
@@ -117,9 +117,9 @@ public class JavartUtil
 	 */
 	public static String getEglType( Object object )
 	{
-		if ( object instanceof EglAny )
+		if ( object instanceof EAny )
 		{
-			return ((EglAny)object).ezeTypeSignature();
+			return ((EAny)object).ezeTypeSignature();
 		}
 		else 
 		{
@@ -302,7 +302,7 @@ public class JavartUtil
 		// JavaObjectExceptions, not NullValueExceptions.  Right now we assume
 		// every NullPointerException should become a NullValueException.
 		return ex instanceof JavaObjectException 
-				|| (!(ex instanceof egl.lang.AnyException) && !(ex instanceof NullPointerException));
+				|| (!(ex instanceof eglx.lang.AnyException) && !(ex instanceof NullPointerException));
 	}
 
 	/**

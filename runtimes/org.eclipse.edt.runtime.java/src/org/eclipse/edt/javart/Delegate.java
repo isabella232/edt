@@ -16,9 +16,9 @@ import java.lang.reflect.Method;
 
 import org.eclipse.edt.javart.messages.Message;
 
-import egl.lang.AnyException;
-import egl.lang.DynamicAccessException;
-import egl.lang.InvocationException;
+import eglx.lang.AnyException;
+import eglx.lang.DynamicAccessException;
+import eglx.lang.InvocationException;
 
 public class Delegate {
 	Object target;

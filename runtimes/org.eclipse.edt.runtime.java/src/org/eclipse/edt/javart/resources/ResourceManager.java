@@ -18,7 +18,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.edt.javart.Constants;
-import egl.lang.AnyException;
+
+import eglx.lang.AnyException;
 
 /**
  * Keeps track of resources for a RunUnit.

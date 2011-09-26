@@ -16,13 +16,13 @@ import java.io.IOException;
 import java.util.Enumeration;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
-import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
+import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
 
-import egl.lang.AnyException;
 import eglx.http.HttpUtilities;
 import eglx.http.Request;
 import eglx.http.Response;
 import eglx.json.JsonLib;
+import eglx.lang.AnyException;
 import eglx.services.ServiceInvocationException;
 
 

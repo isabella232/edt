@@ -18,9 +18,6 @@ import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 
-import egl.lang.AnyException;
-import egl.lang.InvalidArgumentException;
-import egl.lang.TypeCastException;
 
 public class DateTimeLib extends ExecutableBase {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
