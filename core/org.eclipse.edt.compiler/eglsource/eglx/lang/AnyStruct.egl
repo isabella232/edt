@@ -1,4 +1,4 @@
-package egl.lang;
+package eglx.lang;
 
 externalType AnyStruct extends AnyValue type ClassType {isAbstract=yes}
 end

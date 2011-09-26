@@ -239,7 +239,7 @@ public abstract class Mof2BindingBase extends AbstractVisitor implements MofConv
 		else if (str.equalsIgnoreCase(Type_EGLUnicode)) {
 			return Primitive.UNICODE;
 		}
-		else if (str.equalsIgnoreCase(Type_EGLString) || str.equalsIgnoreCase(Type_EGL_EGLString)) {
+		else if (str.equalsIgnoreCase(Type_EGLString)) {
 			return Primitive.STRING;
 		}
 		return null;
@@ -291,7 +291,7 @@ public abstract class Mof2BindingBase extends AbstractVisitor implements MofConv
 			astPrimitive = Primitive.BLOB;
 			binding = PrimitiveTypeBinding.getInstance(astPrimitive);
 		}
-		else if (key.equalsIgnoreCase(Type_EGLBoolean) || key.equalsIgnoreCase(Type_EGL_EGLBoolean)) {
+		else if (key.equalsIgnoreCase(Type_EGLBoolean)) {
 			astPrimitive = Primitive.BOOLEAN;
 			binding = PrimitiveTypeBinding.getInstance(astPrimitive);
 		}
@@ -307,7 +307,7 @@ public abstract class Mof2BindingBase extends AbstractVisitor implements MofConv
 			astPrimitive = Primitive.FLOAT;
 			binding = PrimitiveTypeBinding.getInstance(astPrimitive);
 		}
-		else if (key.equalsIgnoreCase(Type_EGLInt) || key.equalsIgnoreCase(Type_EGL_EGLInt)) {
+		else if (key.equalsIgnoreCase(Type_EGLInt)) {
 			astPrimitive = Primitive.INT;
 			binding = PrimitiveTypeBinding.getInstance(astPrimitive);
 		}

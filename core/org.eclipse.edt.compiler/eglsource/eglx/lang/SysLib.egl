@@ -1,8 +1,10 @@
 package eglx.lang;
 
-import egl.lang.NativeType;
+import eglx.lang.NativeType;
 
 externalType SysLib type NativeType
+
+	private constructor();
 	
 	static function callCmd(commandString string in);
 	static function startCmd(commandString string in);

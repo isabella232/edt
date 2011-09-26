@@ -1,5 +1,9 @@
 package org.eclipse.edt.eunit.runtime;
 
+import eglx.lang.Exception;
+import eglx.lang.MathLib;
+import eglx.xml.binding.annotation.XMLRootElement;
+
 Record Log {@xmlrootelement {}}
 	msg String;			//equivalent of "StdOut" stream
 end
@@ -96,7 +100,7 @@ Library LogResult
 	function assertTrue(failedReason String in, testCondition boolean in)
 		if(testCondition)
 			passed("OK");
-		else
+		else  
 			failed(failedReason);
 			throw new AssertionFailedException{message = s.reason};
 		end

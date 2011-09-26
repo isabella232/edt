@@ -1,6 +1,6 @@
 package eglx.persistence.sql;
 
-import egl.lang.nativetype;
+import eglx.lang.Nativetype;
 import eglx.persistence.ScrollableDataSource;
 
 externalType SQLResultSet extends ScrollableDataSource type NativeType

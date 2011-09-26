@@ -1,8 +1,10 @@
 package eglx.lang;
 
-import egl.lang.NativeType;
+import eglx.lang.NativeType;
 
 externalType MathLib type NativeType
+
+	private constructor();
 
 	// Returns a float, greater than or equal to 0.0 and less than 1.0.
 	static function random() returns (float);

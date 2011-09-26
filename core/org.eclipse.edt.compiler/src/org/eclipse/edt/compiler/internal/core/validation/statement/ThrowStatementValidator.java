@@ -51,7 +51,7 @@ public class ThrowStatementValidator extends DefaultASTVisitor {
 				ITypeBinding tBinding = throwStatement.getExpression().resolveTypeBinding();
 				if(tBinding != null && IBinding.NOT_FOUND_BINDING != tBinding) {
 					if(!isAnyException(tBinding) &&
-					   tBinding.getAnnotation(new String[] {"egl", "lang"}, "Exception") == null) {
+					   tBinding.getAnnotation(new String[] {"eglx", "lang"}, "Exception") == null) {
 						problemRequestor.acceptProblem(
 							throwStatement.getExpression(),
 							IProblemRequestor.THROW_TARGET_MUST_BE_EXCEPTION,
@@ -77,7 +77,7 @@ public class ThrowStatementValidator extends DefaultASTVisitor {
 			return false;
 		}
 		
-		if (type.getPackageName() != InternUtil.intern(new String[] {"egl", "lang"})) {
+		if (type.getPackageName() != InternUtil.intern(new String[] {"eglx", "lang"})) {
 			return false;
 		}
 		

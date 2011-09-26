@@ -21,10 +21,10 @@ Record VEWidget type Annotation
 	largeIcon string;
 	template string;
 	description string;
-	propertyFilterType FilterKind;
+	propertyFilterType FilterKind?;
 	propertyFilter string[];
 	provider string;
-	eventFilterType FilterKind;
+	eventFilterType FilterKind?;
 	eventFilter string[];
 	container VEContainer;
 end

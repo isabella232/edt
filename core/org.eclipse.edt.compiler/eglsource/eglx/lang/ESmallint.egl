@@ -1,10 +1,9 @@
 package eglx.lang;
 
-import egl.lang.EglNumber;
 import egl.lang.reflect.ClassType;
 import egl.lang.reflect.mof.Operation;
 
-externalType ESmallint extends EglNumber type ClassType
+externalType ESmallint extends ENumber type ClassType
 	/**
 	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */
@@ -75,7 +74,7 @@ externalType ESmallint extends EglNumber type ClassType
 	 */
 	static function $NEQ(lvalue ESmallint in, rvalue ESmallint in) returns(EBoolean) {@Operation{"!="}};
 
-	static function asNumber(value ESmallint in) returns(EglNumber) {@Operation{"widen"}};
+	static function asNumber(value ESmallint in) returns(ENumber) {@Operation{"widen"}};
 
 	static function asSmallint(value EDecimal in) returns(ESmallint) {@Operation{"narrow"}};
 	static function asSmallint(value EFloat in) returns(ESmallint) {@Operation{"narrow"}};
@@ -83,4 +82,5 @@ externalType ESmallint extends EglNumber type ClassType
 	static function asSmallint(value EString in) returns(ESmallint) {@Operation{"narrow"}};
 	static function asSmallint(value ESmallfloat in) returns(ESmallint) {@Operation{"narrow"}};
 	static function asSmallint(value EBigint in) returns(ESmallint) {@Operation{"narrow"}};
+	static function asSmallint(value ENumber in) returns(ESmallint) {@Operation{"narrow"}};
 end

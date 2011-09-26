@@ -1,8 +1,10 @@
 package eglx.lang;
 
-import egl.lang.NativeType;
+import eglx.lang.NativeType;
 
 externalType StringLib type NativeType
+
+	private constructor();
 	
 	static function format(intValue smallint in, pattern string in) returns (string);
 	static function format(intValue int in, pattern string in) returns (string);

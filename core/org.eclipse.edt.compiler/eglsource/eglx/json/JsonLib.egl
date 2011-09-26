@@ -12,9 +12,11 @@
 package eglx.json;
 
 import egl.lang.reflect.InterfacePart;
-import egl.lang.NativeType;
+import eglx.lang.NativeType;
 
 externaltype JsonLib type NativeType
+
+	private constructor();
    
     static function convertFromJSON(json string in,  eglType any const in);
 

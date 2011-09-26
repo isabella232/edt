@@ -11,7 +11,7 @@
  *******************************************************************************/
 package eglx.services;
 
-import egl.lang.Exception;
+import eglx.lang.Exception;
 
 Record ServiceBindingException type Exception
 end

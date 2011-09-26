@@ -1,0 +1,87 @@
+package eglx.lang;
+
+import egl.lang.reflect.ClassType;
+import egl.lang.reflect.mof.Operation;
+
+externalType ENumber extends AnyValue type ClassType
+	/**
+	 * {@Operation +} A unary plus (has no effect on the numeric value).
+	 */
+	static function $Plus(value ENumber in) returns (ENumber) {@Operation{"+"}};
+
+	/**
+	 * {@Operation +} Adds two numbers.
+	 */
+	static function $Plus(lvalue ENumber in, rvalue ENumber in) returns (ENumber) {@Operation{"+"}};
+
+	/**
+	 * {@Operation -} Negates the value.
+	 */
+	static function $Minus(value ENumber in) returns (ENumber) {@Operation{"-"}};
+
+	/**
+	 * {@Operation -} Subtracts one number from another.
+	 */
+	static function $Minus(lvalue ENumber in, rvalue ENumber in) returns (ENumber) {@Operation{"-"}};
+
+	/**
+	 * {@Operation *} Multiplies two numbers.
+	 */
+	static function $Multiply(lvalue ENumber in, rvalue ENumber in) returns (ENumber) {@Operation{"*"}};
+
+	/**
+	 * {@Operation /} Divides one number by another.
+	 */
+	static function $Divide(lvalue ENumber in, rvalue ENumber in) returns (ENumber) {@Operation{"/"}};
+
+	/**
+	 * {@Operation %} Computes the remainder of dividing one number by another.
+	 */
+	static function $Modulo(lvalue ENumber in, rvalue ENumber in) returns (ENumber) {@Operation{"%"}};
+
+	/**
+	 * {@Operation **} Computes lvalue to the power of rvalue.
+	 */
+	static function $PowerOf(lvalue ENumber in, rvalue ENumber in) returns (ENumber) {@Operation{"**"}};
+
+	/**
+	 * {@Operation <} Compares two numbers.
+	 */
+	static function $LT(lvalue ENumber in, rvalue ENumber in) returns (EBoolean) {@Operation{"<"}};
+
+	/**
+	 * {@Operation >} Compares two numbers.
+	 */
+	static function $GT(lvalue ENumber in, rvalue ENumber in) returns (EBoolean) {@Operation{">"}};
+
+	/**
+	 * {@Operation <=} Compares two numbers.
+	 */
+	static function $LTE(lvalue ENumber in, rvalue ENumber in) returns (EBoolean) {@Operation{"<="}};
+
+	/**
+	 * {@Operation >=} Compares two numbers.
+	 */
+	static function $GTE(lvalue ENumber in, rvalue ENumber in) returns (EBoolean) {@Operation{">="}};
+
+	/**
+	 * {@Operation ==} Compares two numbers.
+	 */
+	static function $EQ(lvalue ENumber in, rvalue ENumber in) returns(EBoolean) {@Operation{"=="}};
+
+	/**
+	 * {@Operation !=} Compares two numbers.
+	 */
+	static function $NEQ(lvalue ENumber in, rvalue ENumber in) returns(EBoolean) {@Operation{"!="}};
+
+	/**
+	 * Conversion operations to convert to number
+	 */
+	static function asNumber(value EBigint in) returns(ENumber) {@Operation{"widen"}};
+	static function asNumber(value EDecimal in) returns(ENumber) {@Operation{"widen"}};
+	static function asNumber(value EFloat in) returns(ENumber) {@Operation{"widen"}};
+	static function asNumber(value EInt in) returns(ENumber) {@Operation{"widen"}};
+	static function asNumber(value ESmallfloat in) returns(ENumber) {@Operation{"widen"}};
+	static function asNumber(value ESmallint in) returns(ENumber) {@Operation{"widen"}};
+	static function asNumber(value EString in) returns(ENumber) {@Operation{"narrow"}};
+end

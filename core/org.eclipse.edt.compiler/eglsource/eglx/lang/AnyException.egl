@@ -1,20 +1,20 @@
-package egl.lang;
+package eglx.lang;
 
 import egl.lang.reflect.ClassType;
 
 /**
  * AnyException is the supertype of all exceptions.
  */
-externalType AnyException extends EglAny type ClassType
+externalType AnyException extends EAny type ClassType
 	/**
 	 * Some text explaining the reason for this exception.  Messages may be
 	 * presented in the user's language and locale.
 	 */
-	message EglString;
+	message String;
 
 	/**
 	 * A unique identifier for the condition which caused this exception.  It 
 	 * should not be translated or localized.
 	 */
-	messageID EglString;
+	messageID String;
 end

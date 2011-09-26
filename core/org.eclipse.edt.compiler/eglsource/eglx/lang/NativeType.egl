@@ -1,4 +1,4 @@
-package egl.lang;
+package eglx.lang;
 
 Record NativeType type Annotation { 
 	targets = [ElementKind.ExternalTypePart],

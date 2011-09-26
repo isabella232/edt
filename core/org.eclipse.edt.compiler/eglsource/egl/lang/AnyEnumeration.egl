@@ -1,9 +1,0 @@
-package egl.lang;
-
-import egl.lang.reflect.ClassType;
-import egl.lang.reflect.mof.Operation;
-
-externalType AnyEnumeration extends EGLAny type ClassType
-	static function $EQ(lvalue AnyEnumeration in, rvalue AnyEnumeration in) returns(EglBoolean) {@Operation{"=="}};
-	static function $NEQ(lvalue AnyEnumeration in, rvalue AnyEnumeration in) returns(EglBoolean) {@Operation{"!="}};
-end

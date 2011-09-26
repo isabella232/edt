@@ -1,11 +1,14 @@
 package eglx.lang;
 
-import egl.lang.NativeType;
+import eglx.lang.NativeType;
 
 /**
  * Utility functions related to date/time processing.
  */
 externaltype DateTimeLib type NativeType
+
+	private constructor();
+	
 	/**
 	 * Creates a date from an int by interpreting the int's value as a Gregorian
 	 * date.  Gregorian dates use the format yyyyMMdd, so December 31, 1899 is

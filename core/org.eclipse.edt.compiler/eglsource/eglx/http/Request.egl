@@ -1,5 +1,6 @@
 package eglx.http;
 
+import eglx.services.Encoding;
 // RUI Handler
 
 

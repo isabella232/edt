@@ -78,7 +78,7 @@ public class TryStatementValidator extends DefaultASTVisitor {
 						}
 						else {
 							if(!isAnyException(exceptionTypeBinding) &&
-							   exceptionTypeBinding.getAnnotation(new String[] {"egl", "lang"}, "Exception") == null) {
+							   exceptionTypeBinding.getAnnotation(new String[] {"eglx", "lang"}, "Exception") == null) {
 								problemRequestor.acceptProblem(
 									exceptionType,
 									IProblemRequestor.TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION,
@@ -124,7 +124,7 @@ public class TryStatementValidator extends DefaultASTVisitor {
 			return false;
 		}
 		
-		if (type.getPackageName() != InternUtil.intern(new String[] {"egl", "lang"})) {
+		if (type.getPackageName() != InternUtil.intern(new String[] {"eglx", "lang"})) {
 			return false;
 		}
 		

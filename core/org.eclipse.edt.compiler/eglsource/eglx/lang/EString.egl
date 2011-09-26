@@ -1,14 +1,11 @@
 package eglx.lang;
 
-import egl.lang.EglAny;
-import egl.lang.EglNumber;
-import egl.lang.EglString;
 import egl.lang.reflect.ParameterizableType;
 import egl.lang.reflect.mof.Operation;
 
 import org.eclipse.edt.mof.egl.SequenceType;
 
-externalType EString extends EglString type ParameterizableType {
+externalType EString extends AnyText type ParameterizableType {
 	parameterizedType = SequenceType
 }
 	/**
@@ -62,8 +59,9 @@ externalType EString extends EglString type ParameterizableType {
 	 */
 	static function $Substr(value EString in, fromIndex EInt in, toIndex EInt in) returns(EString) {@Operation{"[:"}};
 	
-	static function asNumber(value EString in) returns(EglNumber) {@Operation{"narrow"}};
+	static function asNumber(value EString in) returns(ENumber) {@Operation{"narrow"}};
 	
+	static function asString(value ENumber in) returns (EString) {@Operation{"widen"}};
 	static function asString(value EBigint in) returns (EString) {@Operation{"widen"}};
 	static function asString(value EBoolean in) returns (EString) {@Operation{"widen"}};
 	

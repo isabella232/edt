@@ -1,0 +1,16 @@
+package eglx.lang;
+
+library Constants
+
+    const isoDateFormat string = 		"yyyy-MM-dd";
+    const usaDateFormat string = 		"MM/dd/yyyy";
+    const eurDateFormat string = 		"dd.MM.yyyy";
+    const jisDateFormat string = 		"yyyy-MM-dd";
+    const isoTimeFormat string = 		"HH.mm.ss";
+    const usaTimeFormat string = 		"hh:mm a";
+    const eurTimeFormat string = 		"HH.mm.ss";
+    const jisTimeFormat string = 		"HH:mm:ss";
+    const db2TimeStampFormat string = 	"yyyy-MM-dd-HH.mm.ss.SSSSSS";
+    const odbcTimeStampFormat string = 	"yyyy-MM-dd HH:mm:ss.SSSSSS";
+
+end

@@ -53,10 +53,12 @@ import org.eclipse.edt.mof.EParameter;
 import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.ConstantFormField;
 import org.eclipse.edt.mof.egl.Constructor;
+import org.eclipse.edt.mof.egl.DynamicAccess;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.Expression;
@@ -68,6 +70,7 @@ import org.eclipse.edt.mof.egl.FunctionStatement;
 import org.eclipse.edt.mof.egl.InvalidName;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NewExpression;
@@ -82,6 +85,7 @@ import org.eclipse.edt.mof.egl.SetValuesStatement;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StructuredField;
+import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.VariableFormField;
 import org.eclipse.edt.mof.egl.lookup.ProxyPart;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -452,6 +456,40 @@ class Egl2MofMember extends Egl2MofPart {
 		}
 	}
 	
+	protected LHSExpr setAccessForDynamicAccess(DynamicAccess da, Expression expr) {
+		if (expr == null) {
+			return da;
+		}
+		
+		if (expr instanceof MemberName) {
+			org.eclipse.edt.mof.egl.StringLiteral index = factory.createStringLiteral();
+			index.setValue(((MemberName)expr).getId());
+			da.setAccess(index);
+			return da;
+		}
+
+		if (expr instanceof DynamicAccess) {
+			DynamicAccess oldDA = (DynamicAccess)expr;
+			setAccessForDynamicAccess(da, (oldDA.getExpression()));
+			if (oldDA.getExpression() instanceof MemberName) {
+				oldDA.setExpression(da);
+			}
+			return oldDA;
+		}
+		
+		if (expr instanceof ArrayAccess) {
+			ArrayAccess oldAA = (ArrayAccess)expr;
+			setAccessForDynamicAccess(da, (oldAA.getArray()));
+			if (oldAA.getArray() instanceof MemberName) {
+				oldAA.setArray(da);
+			}
+			return oldAA;
+		}
+		
+		return null;
+
+	}
+	
 	public void processSettings(Element context, SettingsBlock settings) {
 		StatementBlock block = null;
 		int arrayIndex = 0;
@@ -480,7 +518,31 @@ class Egl2MofMember extends Egl2MofPart {
 					else {
 						expr.accept(this);
 						Assignment assign = (Assignment)stack.pop();
-						assign.setLHS(addQualifier(context, assign.getLHS()));
+						org.eclipse.edt.mof.egl.Type type = null;
+						if (context instanceof TypedElement) {
+							type = ((TypedElement)context).getType();
+						}
+						if (TypeUtils.isDynamicType(type)) {
+							DynamicAccess da = factory.createDynamicAccess();
+							setElementInformation(expr, da);
+							LHSExpr newLHS = setAccessForDynamicAccess(da, assign.getLHS());
+							
+							if (context instanceof Expression) {
+								da.setExpression((Expression)context);
+							}
+							else {
+								if (context instanceof Member) {
+									MemberName exp = factory.createMemberName();
+									exp.setId(((Member)context).getName());
+									exp.setMember((Member)context);	
+									da.setExpression(exp);
+								}
+							}
+							assign.setLHS(newLHS);
+						}
+						else {
+							assign.setLHS(addQualifier(context, assign.getLHS()));
+						}
 						if (block == null)
 							block = factory.createStatementBlock();
 						AssignmentStatement stmt = createAssignmentStatement(assign);
