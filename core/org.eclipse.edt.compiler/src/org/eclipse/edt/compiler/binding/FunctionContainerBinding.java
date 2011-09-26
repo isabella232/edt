@@ -32,6 +32,12 @@ public abstract class FunctionContainerBinding extends PartBinding {
 	public FunctionContainerBinding(FunctionContainerBinding old) {
 		super(old);
 
+	    if (old.classFields == Collections.EMPTY_LIST) {
+	    	old.classFields = new ArrayList();
+	    }
+	    if (old.declaredFunctions == Collections.EMPTY_LIST) {
+	    	old.declaredFunctions = new ArrayList();
+	    }
 		classFields = old.classFields;
 		declaredFunctions = old.declaredFunctions;
 	}

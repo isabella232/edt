@@ -23,7 +23,6 @@ import java.util.Set;
  */
 public class ServiceBinding extends FunctionContainerBinding {
 	
-	private boolean haveExpandedExtendedInterfaces = false;
 	private List extendedInterfaces = Collections.EMPTY_LIST;
 	
     public ServiceBinding(String[] packageName, String caseSensitiveInternedName) {
@@ -33,7 +32,9 @@ public class ServiceBinding extends FunctionContainerBinding {
     private ServiceBinding(ServiceBinding old) {
         super(old);
         
-    	haveExpandedExtendedInterfaces = old.haveExpandedExtendedInterfaces;
+    	if (old.extendedInterfaces == Collections.EMPTY_LIST) {
+    		old.extendedInterfaces = new ArrayList();
+    	}
     	extendedInterfaces = old.extendedInterfaces;
     }
 
@@ -47,12 +48,7 @@ public class ServiceBinding extends FunctionContainerBinding {
      *         interfaces extend).
      */
     public List getImplementedInterfaces() {
-    	if(!haveExpandedExtendedInterfaces) {
-			List newExtendedInterfaces = getExtendedInterfaces(new HashSet());
-			extendedInterfaces = newExtendedInterfaces;
-			haveExpandedExtendedInterfaces = true;
-		}
-    	return extendedInterfaces;
+    	return getExtendedInterfaces(new HashSet());
     }
     
     private List getExtendedInterfaces(Set interfacesAlreadyProcessed) {
@@ -85,7 +81,6 @@ public class ServiceBinding extends FunctionContainerBinding {
     
 	public void clear() {
 		super.clear();
-		haveExpandedExtendedInterfaces = false;
 		extendedInterfaces = Collections.EMPTY_LIST;
 	}
 

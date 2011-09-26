@@ -44,6 +44,9 @@ public abstract class Binding implements IBinding {
     }
     
     protected Binding(Binding old) {
+    	if (old.annotations == Collections.EMPTY_LIST) {
+    		old.annotations = new ArrayList();
+    	}
         annotations = old.annotations;
         caseSensitiveInternedName = old.caseSensitiveInternedName;
         caseInsensitiveInternedName = old.caseInsensitiveInternedName;

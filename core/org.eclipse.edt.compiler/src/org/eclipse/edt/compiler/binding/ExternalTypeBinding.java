@@ -36,9 +36,6 @@ public class ExternalTypeBinding extends PartBinding {
 	
 	private List constructors = Collections.EMPTY_LIST;
 	
-	private boolean haveExpandedExtendedTypes = false;
-	private transient List allExtendedTypes = Collections.EMPTY_LIST;
-	
 	private transient List extendedTypes = Collections.EMPTY_LIST;
 
     public ExternalTypeBinding(String[] packageName, String caseSensitiveInternedName) {
@@ -48,13 +45,24 @@ public class ExternalTypeBinding extends PartBinding {
     private ExternalTypeBinding(ExternalTypeBinding old) {
     	super(old);
     	
+    	if (old.declaredFunctions == Collections.EMPTY_LIST) {
+    		old.declaredFunctions = new ArrayList();
+    	}
+    	if (old.declaredData == Collections.EMPTY_LIST) {
+    		old.declaredData = new ArrayList();
+    	}
+    	if (old.constructors == Collections.EMPTY_LIST) {
+    		old.constructors = new ArrayList();
+    	}
+    	if (old.extendedTypes == Collections.EMPTY_LIST) {
+    		old.extendedTypes = new ArrayList();
+    	}
+    	
     	declaredFunctions = old.declaredFunctions;	
     	declaredAndInheritedFunctions = old.declaredAndInheritedFunctions;   	
     	declaredData = old.declaredData;
     	declaredAndInheritedData = old.declaredAndInheritedData;
     	constructors = old.constructors;
-    	haveExpandedExtendedTypes = old.haveExpandedExtendedTypes;
-    	allExtendedTypes = old.allExtendedTypes;
     	List extendedTypes = old.extendedTypes;
     	
     }
@@ -69,12 +77,7 @@ public class ExternalTypeBinding extends PartBinding {
      *         types extend).
      */
     public List getExtendedTypes() {
-		if(!haveExpandedExtendedTypes) {
-			List newExtendedTypes = getExtendedTypes(new HashSet());
-			allExtendedTypes = newExtendedTypes;
-			haveExpandedExtendedTypes = true;
-		}
-    	return allExtendedTypes;
+    	return getExtendedTypes(new HashSet());
     }
     
     List getExtendedTypes(Set typesAlreadyProcessed) {
@@ -101,8 +104,9 @@ public class ExternalTypeBinding extends PartBinding {
 	    		extendedTypes = new ArrayList();
 	    	}
 	    	extendedTypes.add(typeBinding);
-	    	haveExpandedExtendedTypes = false;
     	}
+    	declaredAndInheritedData = null;
+    	declaredAndInheritedFunctions = null;
     }
     
     /**
@@ -124,12 +128,22 @@ public class ExternalTypeBinding extends PartBinding {
     
     public List getDeclaredAndInheritedFunctions() {
     	if(declaredAndInheritedFunctions == null) {
-    		declaredAndInheritedFunctions = new ArrayList();
-    		declaredAndInheritedFunctions.addAll(getDeclaredFunctions());
+        	List tempDeclaredAndInheritedFunctions = new ArrayList();
+        	tempDeclaredAndInheritedFunctions.addAll(getDeclaredFunctions());
     		
     		List extendedTypes = getExtendedTypes();
+    		boolean hasEnvironment = (getEnvironment() != null);
     		for(Iterator iter = extendedTypes.iterator(); iter.hasNext();) {
-    			declaredAndInheritedFunctions.addAll(((ExternalTypeBinding) iter.next()).getDeclaredFunctions());
+    			ExternalTypeBinding et = (ExternalTypeBinding) iter.next();
+    			tempDeclaredAndInheritedFunctions.addAll(et.getDeclaredFunctions());
+    			hasEnvironment = hasEnvironment && (et.getEnvironment() != null);
+    		}
+    		
+    		if (hasEnvironment) {
+    			declaredAndInheritedFunctions = tempDeclaredAndInheritedFunctions;
+    		}
+    		else {
+    			return tempDeclaredAndInheritedFunctions;
     		}
     	}
     	return declaredAndInheritedFunctions;
@@ -137,12 +151,21 @@ public class ExternalTypeBinding extends PartBinding {
     
     public List getDeclaredAndInheritedData() {
     	if(declaredAndInheritedData == null) {
-    		declaredAndInheritedData = new ArrayList();
-    		declaredAndInheritedData.addAll(getDeclaredData());
+    		List tempDeclaredAndInheritedData = new ArrayList();
+    		tempDeclaredAndInheritedData.addAll(getDeclaredData());
     		
     		List extendedTypes = getExtendedTypes();
+    		boolean hasEnvironment = (getEnvironment() != null);
     		for(Iterator iter = extendedTypes.iterator(); iter.hasNext();) {
-    			declaredAndInheritedData.addAll(((ExternalTypeBinding) iter.next()).getDeclaredData());
+    			ExternalTypeBinding et = (ExternalTypeBinding) iter.next();
+    			tempDeclaredAndInheritedData.addAll(et.getDeclaredData());
+    			hasEnvironment = hasEnvironment && (et.getEnvironment() != null);
+    		}
+    		if (hasEnvironment) {
+    			declaredAndInheritedData = tempDeclaredAndInheritedData;
+    		}
+    		else {
+    			return tempDeclaredAndInheritedData;
     		}
     	}
     	return declaredAndInheritedData;
@@ -157,6 +180,7 @@ public class ExternalTypeBinding extends PartBinding {
         	declaredData = new ArrayList();
         }
         declaredData.add(fieldBinding);
+        declaredAndInheritedData = null;
     }
     
     public List getConstructors() {
@@ -181,9 +205,7 @@ public class ExternalTypeBinding extends PartBinding {
 		declaredAndInheritedData = null;
 		declaredFunctions = Collections.EMPTY_LIST;	
 		declaredAndInheritedFunctions = null;		
-		haveExpandedExtendedTypes = false;
 		extendedTypes = Collections.EMPTY_LIST;
-		allExtendedTypes = Collections.EMPTY_LIST;
 	}
 
 	public boolean isStructurallyEqual(IPartBinding anotherPartBinding) {

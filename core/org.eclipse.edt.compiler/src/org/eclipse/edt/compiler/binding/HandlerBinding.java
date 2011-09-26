@@ -29,7 +29,6 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
  */
 public class HandlerBinding extends FunctionContainerBinding {
 
-	private boolean haveExpandedExtendedInterfaces = false;
 	private List extendedInterfaces = Collections.EMPTY_LIST;
 
 	private List constructors = Collections.EMPTY_LIST;
@@ -42,7 +41,14 @@ public class HandlerBinding extends FunctionContainerBinding {
     
     private HandlerBinding(HandlerBinding old) {
         super(old);
-    	haveExpandedExtendedInterfaces = old.haveExpandedExtendedInterfaces;
+
+    	if (old.extendedInterfaces == Collections.EMPTY_LIST) {
+    		old.extendedInterfaces = new ArrayList();
+    	}
+    	if (old.constructors == Collections.EMPTY_LIST) {
+    		old.constructors = new ArrayList();
+    	}
+
     	extendedInterfaces = old.extendedInterfaces;
     	constructors = old.constructors;
     }
@@ -50,7 +56,6 @@ public class HandlerBinding extends FunctionContainerBinding {
     
 	public void clear() {
 		super.clear();
-		haveExpandedExtendedInterfaces = false;
 		extendedInterfaces = Collections.EMPTY_LIST;
 		constructors = Collections.EMPTY_LIST;
 	}
@@ -60,14 +65,9 @@ public class HandlerBinding extends FunctionContainerBinding {
      *         that this service implements (and the interfaces that those
      *         interfaces extend).
      */
-    public List getImplementedInterfaces() {
-    	if(!haveExpandedExtendedInterfaces) {
-			List newExtendedInterfaces = getExtendedInterfaces(new HashSet());
-			extendedInterfaces = newExtendedInterfaces;
-			haveExpandedExtendedInterfaces = true;
-		}
-    	return extendedInterfaces;
-    }
+	public List getImplementedInterfaces() {
+		return getExtendedInterfaces(new HashSet());
+	}
     
     private List getExtendedInterfaces(Set interfacesAlreadyProcessed) {
 		List result = new ArrayList();

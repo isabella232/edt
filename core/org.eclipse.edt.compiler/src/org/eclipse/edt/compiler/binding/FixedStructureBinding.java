@@ -39,6 +39,14 @@ public abstract class FixedStructureBinding extends PartBinding {
     
     protected FixedStructureBinding(FixedRecordBinding old) {
     	super(old);
+    	
+    	if (old.structureItems == Collections.EMPTY_LIST) {
+    		old.structureItems = new ArrayList();
+    	}
+        if (old.referencedStructures == Collections.EMPTY_LIST) {
+        	old.referencedStructures = new ArrayList();
+        }
+
     	structureItems = old.structureItems;
     	unqualifiedNamesToDataBindings = old.unqualifiedNamesToDataBindings;	
     	referencedStructures = old.referencedStructures;

@@ -35,6 +35,14 @@ public class FlexibleRecordBindingImpl extends FlexibleRecordBinding {
     private FlexibleRecordBindingImpl(FlexibleRecordBindingImpl old) {
         super(old);
 
+    	if (old.fields == Collections.EMPTY_LIST) {
+    		old.fields = new ArrayList();
+    	}
+
+        if (old.referencedRecords == Collections.EMPTY_LIST) {
+        	old.referencedRecords = new ArrayList();
+        }
+
         fields = old.fields;
        referencedRecords = old.referencedRecords;
 

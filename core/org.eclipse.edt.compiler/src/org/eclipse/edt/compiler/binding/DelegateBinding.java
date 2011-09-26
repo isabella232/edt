@@ -31,6 +31,9 @@ public class DelegateBinding extends PartBinding {
     
     private DelegateBinding(DelegateBinding old) {
         super(old);
+    	if (old.parameters == Collections.EMPTY_LIST) {
+    		old.parameters = new ArrayList();
+    	}
         this.parameters = old.parameters;
         this.returnType = old.returnType;
         this.returnTypeIsSqlNullable = old.returnTypeIsSqlNullable;

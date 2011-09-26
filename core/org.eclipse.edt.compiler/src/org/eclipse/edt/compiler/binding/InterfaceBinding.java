@@ -29,9 +29,6 @@ public class InterfaceBinding extends PartBinding {
 	private List declaredFunctions = Collections.EMPTY_LIST;	
 	private List declaredAndInheritedFunctions = null;
 			
-	private boolean haveExpandedExtendedTypes = false;
-	private transient List allExtendedTypes = Collections.EMPTY_LIST;
-	
 	private transient List extendedTypes = Collections.EMPTY_LIST;
 	
     public InterfaceBinding(String[] packageName, String caseSensitiveInternedName) {
@@ -41,10 +38,15 @@ public class InterfaceBinding extends PartBinding {
     private InterfaceBinding(InterfaceBinding old) {
         super(old);
  
+    	if (old.declaredFunctions == Collections.EMPTY_LIST) {
+    		old.declaredFunctions = new ArrayList();
+    	}
+    	if (old.extendedTypes == Collections.EMPTY_LIST) {
+    		old.extendedTypes = new ArrayList();
+    	}
+        
     	declaredFunctions = old.declaredFunctions;	
     	declaredAndInheritedFunctions = old.declaredAndInheritedFunctions;   			
-    	haveExpandedExtendedTypes = old.haveExpandedExtendedTypes;
-    	allExtendedTypes = old.allExtendedTypes;   	
     	extendedTypes = old.extendedTypes;    
     }
 
@@ -59,12 +61,7 @@ public class InterfaceBinding extends PartBinding {
      *         types extend).
      */
     public List getExtendedTypes() {
-		if(!haveExpandedExtendedTypes) {
-			List newExtendedTypes = getExtendedTypes(new HashSet());
-			allExtendedTypes = newExtendedTypes;
-			haveExpandedExtendedTypes = true;
-		}
-    	return allExtendedTypes;
+    	return getExtendedTypes(new HashSet());
     }
     
     List getExtendedTypes(Set typesAlreadyProcessed) {
@@ -91,7 +88,7 @@ public class InterfaceBinding extends PartBinding {
 	    		extendedTypes = new ArrayList();
 	    	}
 	    	extendedTypes.add(typeBinding);
-	    	haveExpandedExtendedTypes = false;
+	    	declaredAndInheritedFunctions = null;
     	}
     }
 
@@ -114,12 +111,21 @@ public class InterfaceBinding extends PartBinding {
 
     public List getDeclaredAndInheritedFunctions() {
     	if(declaredAndInheritedFunctions == null) {
-    		declaredAndInheritedFunctions = new ArrayList();
-    		declaredAndInheritedFunctions.addAll(getDeclaredFunctions());
+        	List tempDeclaredAndInheritedFunctions = new ArrayList();
+        	tempDeclaredAndInheritedFunctions.addAll(getDeclaredFunctions());
     		
     		List extendedTypes = getExtendedTypes();
+    		boolean hasEnvironment = (getEnvironment() != null);
     		for(Iterator iter = extendedTypes.iterator(); iter.hasNext();) {
-    			declaredAndInheritedFunctions.addAll(((InterfaceBinding) iter.next()).getDeclaredFunctions());
+    			ExternalTypeBinding et = (ExternalTypeBinding) iter.next();
+    			tempDeclaredAndInheritedFunctions.addAll(et.getDeclaredFunctions());
+    			hasEnvironment = hasEnvironment && (et.getEnvironment() != null);
+    		}
+    		
+    		if (hasEnvironment) {
+    			declaredAndInheritedFunctions = tempDeclaredAndInheritedFunctions;    		}
+    		else {
+    			return tempDeclaredAndInheritedFunctions;
     		}
     	}
     	return declaredAndInheritedFunctions;
@@ -133,9 +139,7 @@ public class InterfaceBinding extends PartBinding {
 		super.clear();
 		declaredFunctions = Collections.EMPTY_LIST;	
 		declaredAndInheritedFunctions = null;		
-		haveExpandedExtendedTypes = false;
 		extendedTypes = Collections.EMPTY_LIST;
-		allExtendedTypes = Collections.EMPTY_LIST;
 	}
 
 	public boolean isStructurallyEqual(IPartBinding anotherPartBinding) {

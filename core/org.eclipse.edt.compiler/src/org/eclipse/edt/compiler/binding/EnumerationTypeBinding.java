@@ -40,6 +40,9 @@ public class EnumerationTypeBinding extends PartBinding {
     
     protected EnumerationTypeBinding(EnumerationTypeBinding old) {
         super(old);
+        if (old.enumerations == Collections.EMPTY_LIST) {
+        	old.enumerations = new ArrayList();
+        }
         this.enumerations = old.enumerations;
         this.commaListComparator = old.commaListComparator;
     }
