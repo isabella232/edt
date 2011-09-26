@@ -26,7 +26,10 @@ import java.io.IOException;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.rui.utils.DebugIFileLocator;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
 import org.eclipse.edt.ide.rui.utils.IFileLocator;
@@ -71,4 +74,16 @@ public abstract class WorkingCopyContentProvider extends AbstractContentProvider
 			return super.generateHTMLFile(locator, resourceName, projectName);
 		}		
 	}
+
+	@Override
+	protected ProjectEnvironment getProjectEnvironment(IProject project) {
+		IPath generationDirectory = editorProvider.getGenerationDirectory();
+		ProjectEnvironment environment = ProjectEnvironmentManager.getInstance().getProjectEnvironmentForPreview(project, generationDirectory);
+		return environment;
+	}
+
+	
+
+		
+	
 }

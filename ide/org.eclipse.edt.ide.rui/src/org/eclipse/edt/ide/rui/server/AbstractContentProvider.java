@@ -206,7 +206,7 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 		try {
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();
 			IProject project = workspace.getRoot().getProject(projectName);
-			environment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
+			environment = getProjectEnvironment(project);
 			Environment.pushEnv(environment.getIREnvironment());			
 			environment.getIREnvironment().initSystemEnvironment(environment.getSystemEnvironment()); 
 			
@@ -252,6 +252,11 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 		return null;
 	}
 	
+	protected  ProjectEnvironment getProjectEnvironment(IProject project) {
+		ProjectEnvironment environment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
+		return environment;
+	}
+
 	protected abstract FileLocator getFileLocator(IProject project)throws CoreException;
 	protected abstract IFileLocator getIFileLocator(IProject project)throws CoreException;
 	
