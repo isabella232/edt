@@ -102,6 +102,7 @@ import org.eclipse.edt.mof.egl.SubstringAccess;
 import org.eclipse.edt.mof.egl.TernaryExpression;
 import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.UnaryExpression;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -890,9 +891,22 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				((MemberName)ref).setMember(decl);
 			}
 			if (setexpr instanceof Assignment) {
+				
+				
 				Assignment assign = (Assignment)setexpr;
-				LHSExpr lhs = addQualifier(ref, assign.getLHS());
-				assign.setLHS(lhs);
+				
+				org.eclipse.edt.mof.egl.Type type = target.getType();
+				if (TypeUtils.isDynamicType(type)) {
+					DynamicAccess da = factory.createDynamicAccess();
+					setElementInformation(setting, da);
+					LHSExpr newLHS = setAccessForDynamicAccess(da, assign.getLHS());					
+					da.setExpression(ref);
+					assign.setLHS(newLHS);
+				}
+				else {
+					LHSExpr lhs = addQualifier(ref, assign.getLHS());
+					assign.setLHS(lhs);
+				}
 				AssignmentStatement stmt = createAssignmentStatement(assign);
 				setElementInformation(setting, stmt);
 				block.getStatements().add(stmt);
