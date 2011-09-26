@@ -48,7 +48,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	}
 	
 	public void genDependentParts(EGLClass part, Context ctx, LinkedHashSet dependentFiles, LinkedHashSet handledParts) {		
-		if (part instanceof Service || handledParts.contains(part.getFullyQualifiedName())) {
+		if (handledParts.contains(part.getFullyQualifiedName())) {
 			return;
 		}
 		try {
@@ -83,12 +83,12 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			// BFS traverse
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart)){
+				if(CommonUtilities.isUserClass(refPart)){
 					ctx.invoke(genCSSFiles, refPart, cssFiles);
 				}				
 			}
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart)){
+				if(CommonUtilities.isUserClass(refPart)){
 					ctx.invoke(genDependentCSSs, refPart, ctx, cssFiles, handledParts);
 				}				
 			}
@@ -107,12 +107,12 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			// BFS traverse
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart)){
+				if(CommonUtilities.isUserClass(refPart)){
 					ctx.invoke(genPropFiles, refPart, propFiles);
 				}
 			}
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart)){
+				if(CommonUtilities.isUserClass(refPart)){
 					ctx.invoke(genDependentProps, refPart, ctx, propFiles, handledParts);
 				}
 			}
@@ -131,12 +131,12 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			// BFS traverse
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart)){
+				if(CommonUtilities.isUserClass(refPart)){
 					ctx.invoke(genIncludeFiles, refPart, includeFiles);
 				}				
 			}
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart)){
+				if(CommonUtilities.isUserClass(refPart)){
 					ctx.invoke(genDependentIncludeFiles, refPart, ctx, includeFiles, handledParts);
 				}				
 			}
