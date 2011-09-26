@@ -20,20 +20,15 @@ import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Handler;
-import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
-import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 
 public class EGLClassTemplate extends JavaScriptTemplate {
 	
 	public void genOutputFileName(Part part, LinkedHashSet dependentFiles) {
-		if (part instanceof Interface || part instanceof Service){
-			return;
-		}
 		StringBuilder buf = new StringBuilder(50);
 		
 		buf.append("\"");
