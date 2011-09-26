@@ -321,6 +321,7 @@ public class EGLSQLRetrieveUtility {
 			handleTimestampType( sqlStructureItem, allowTextTypesForDateTimeTypes, isNullable );
 			break;
 		}
+		case Types.TINYINT: // Treated as SMALLINT
 		case Types.SMALLINT: {
 			sqlStructureItem.setPrimitiveType(IEGLConstants.KEYWORD_SMALLINT);
 			break;
