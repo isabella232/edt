@@ -58,4 +58,10 @@ public class FunctionParameterTemplate extends JavaTemplate {
 			return "INOUT";
 		}
 	}
+	
+	public void genRuntimeClassTypeName( FunctionParameter parameter, Context ctx, TabbedWriter out, TypeNameKind kind )
+	{
+		ctx.invoke( genRuntimeTypeName, parameter.getType(), ctx, out, kind );
+		out.print( ".class" );
+	}
 }
