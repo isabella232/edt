@@ -19,7 +19,6 @@ import org.eclipse.edt.javart.services.servlet.TracerBase;
 import eglx.http.Request;
 import eglx.http.Response;
 import eglx.http.HttpUtilities;
-import eglx.services.ServiceBindingException;
 import eglx.services.ServiceInvocationException;
 import eglx.services.ServiceKind;
 import eglx.services.ServiceUtilities;
@@ -63,15 +62,6 @@ public class ProxyEventHandler extends TracerBase
 				serviceKind = invoker.getServiceKind(serviceRequest);
 				innerResponse = invoker.invoke(serviceRequest);
 			}
-		}
-		catch(ServiceBindingException sbe )
-		{
-			if(innerResponse == null){
-				innerResponse = new Response();
-			}
-			innerResponse.status = HttpUtilities.HTTP_STATUS_FAILED;
-			innerResponse.statusMessage = HttpUtilities.HTTP_STATUS_MSG_FAILED;
-			innerResponse.body = eglx.json.JsonUtilities.createJsonAnyException(sbe);
 		}
 		catch(ServiceInvocationException sie)
 		{
