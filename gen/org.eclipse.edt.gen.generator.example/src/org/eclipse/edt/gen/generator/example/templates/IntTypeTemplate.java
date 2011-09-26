@@ -16,7 +16,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
 
-public class IntTypeTemplate extends org.eclipse.edt.gen.java.templates.egl.lang.IntTypeTemplate {
+public class IntTypeTemplate extends org.eclipse.edt.gen.java.templates.eglx.lang.IntTypeTemplate {
 
 	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
 		// in this example, we are overriding the default value generator method, and if the user specified
