@@ -36,7 +36,7 @@ import org.eclipse.edt.javart.json.ObjectNode;
 import org.eclipse.edt.javart.json.StringNode;
 import org.eclipse.edt.javart.json.ValueNode;
 
-import egl.lang.AnyException;
+import eglx.lang.AnyException;
 
 public class PartsFromJsonUtil extends PartsUtil {
 	public PartsFromJsonUtil(IMessageHandler msgHandler) {
