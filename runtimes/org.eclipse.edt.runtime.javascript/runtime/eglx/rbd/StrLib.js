@@ -15,7 +15,6 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		"constructor": function() {
 			if(egl.eglx.rbd.StrLib['$inst']) return egl.eglx.rbd.StrLib['$inst'];
 			egl.eglx.rbd.StrLib['$inst']=this;
-			this.jsrt$SysVar = new egl.egl.core.SysVar();
 			this.eze$$setInitial();
 		}
 		,

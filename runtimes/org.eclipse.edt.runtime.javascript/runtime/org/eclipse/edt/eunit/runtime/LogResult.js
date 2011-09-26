@@ -15,7 +15,6 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 		"constructor": function() {
 			if(egl.org.eclipse.edt.eunit.runtime.LogResult['$inst']) return egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'];
 			egl.org.eclipse.edt.eunit.runtime.LogResult['$inst']=this;
-			this.jsrt$SysVar = new egl.egl.core.SysVar();
 			new egl.org.eclipse.edt.eunit.runtime.ConstantsLib();
 			this.eze$$setInitial();
 		}

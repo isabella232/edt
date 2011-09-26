@@ -13,7 +13,6 @@ egl.defineClass('eglx.http', 'HttpSoap',
 	'eze$$fileName': 'eglx/http/HttpSoap.egl',
 	'eze$$runtimePropertiesFile': 'eglx.http.HttpSoap',
 		"constructor": function() {
-			this.jsrt$SysVar = new egl.egl.core.SysVar();
 			this.eze$$setInitial();
 		}
 		,

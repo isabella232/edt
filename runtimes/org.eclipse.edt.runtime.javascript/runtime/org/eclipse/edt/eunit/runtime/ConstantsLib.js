@@ -5,7 +5,6 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'ConstantsLib',
 		"constructor": function() {
 			if(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']) return egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'];
 			egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']=this;
-			this.jsrt$SysVar = new egl.egl.core.SysVar();
 			this.NEWLINE = "";
 			this.NEWLINE = "\r\n";
 			this.EXIT_PREFIX = "";

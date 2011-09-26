@@ -13,7 +13,6 @@ egl.defineClass('eglx.http', 'HttpRest',
 	'eze$$fileName': 'eglx/http/HttpRest.egl',
 	'eze$$runtimePropertiesFile': 'eglx.http.HttpRest',
 		"constructor": function() {
-			this.jsrt$SysVar = new egl.egl.core.SysVar();
 			this.eze$$setInitial();
 		}
 		,

@@ -23,7 +23,7 @@ egl.createRuntimeExceptionArgs = function( /*string*/ messageID, /*string or arr
 };
 egl.createRuntimeException = function( /*string*/ messageID, /*string or array*/ inserts )
 {
-	return new egl.eglx.lang.AnyException( createRuntimeExceptionArgs(messageID, inserts) );
+	return new egl.eglx.lang.AnyException(egl.createRuntimeExceptionArgs(messageID, inserts) );
 };
 
 /* FUTURE sbg At this time, we don't have a need for RuntimeException;  the thinking is that
