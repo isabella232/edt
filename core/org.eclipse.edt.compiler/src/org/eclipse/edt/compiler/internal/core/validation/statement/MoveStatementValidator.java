@@ -72,6 +72,14 @@ public class MoveStatementValidator extends DefaultASTVisitor {
 	}
 	
 	public boolean visit(MoveStatement moveStatement) {
+		 
+		if (true) {
+			problemRequestor.acceptProblem(moveStatement,
+					IProblemRequestor.MOVE_NOT_SUPPORTED,
+					new String[] {});
+			return false;
+		}
+		
 		this.moveStmt = moveStatement;
 		Expression sourceExpr = moveStatement.getSource();
 		Expression targetExpr = moveStatement.getTarget();
