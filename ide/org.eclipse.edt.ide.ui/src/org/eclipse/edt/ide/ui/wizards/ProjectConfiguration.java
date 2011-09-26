@@ -17,7 +17,6 @@ import java.util.List;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.compiler.internal.EGLBasePlugin;
 import org.eclipse.edt.ide.core.model.PPListElement;
-import org.eclipse.edt.ide.core.utils.EGLProjectInfoUtility;
 
 public class ProjectConfiguration {
 	
@@ -104,7 +103,24 @@ public class ProjectConfiguration {
 	}
 
 	public void setSelectedGenerators(String[] selectedGenerators) {
-		this.selectedGenerators = selectedGenerators;
+		boolean hasDevJS = false;
+		boolean hasJS = false;
+		for(String gen : selectedGenerators){
+			if(gen.equals(JAVASCRIPT_GENERATOR_ID)){
+				hasJS = true;
+			}else if(gen.equals(JAVASCRIPT_DEV_GENERATOR_ID)){
+				hasDevJS = true;
+			}
+		}
+		if(hasJS && !hasDevJS){
+			this.selectedGenerators = new String[selectedGenerators.length + 1];
+			for(int i=0;i<selectedGenerators.length;i++){
+				this.selectedGenerators[i] = selectedGenerators[i];
+			}
+			this.selectedGenerators[selectedGenerators.length] = JAVASCRIPT_DEV_GENERATOR_ID;
+		}else{
+			this.selectedGenerators = selectedGenerators;
+		}		
 	}
 	
 	/**
