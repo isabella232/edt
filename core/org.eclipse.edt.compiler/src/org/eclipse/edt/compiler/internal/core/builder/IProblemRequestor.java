@@ -481,6 +481,8 @@ public interface IProblemRequestor {
 	public static final int SYSTEM_LIBRARY_NOT_SUPPORTED = 3460;
 	public static final int LIBRARY_FUNCTION_NOT_ALLOWED_FOR_PROPERTY = 3461;
 	public static final int PROPERTY_NOT_VALID_FOR_TYPES = 3462;
+
+	public static final int MOVE_NOT_SUPPORTED = 3463;
 	
 	public static final int LENGTH_OF_NONDECIMAL_DIGITS_FOR_CONSTANT_TOO_LONG = 3465;
 	public static final int DECIMALS_OF_VALUE_FOR_CONSTANT_TOO_LONG = 3466;
