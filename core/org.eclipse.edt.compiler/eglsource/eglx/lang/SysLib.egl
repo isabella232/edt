@@ -6,7 +6,7 @@ externalType SysLib type NativeType
 
 	private constructor();
 	
-	static function callCmd(commandString string in);
+	static function callCmd(commandString string in) returns(int);
 	static function startCmd(commandString string in);
 	
 	static function commit();
