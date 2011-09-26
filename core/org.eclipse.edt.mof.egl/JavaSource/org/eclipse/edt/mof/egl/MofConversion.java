@@ -22,7 +22,7 @@ public interface MofConversion {
 	String EGL_lang_reflect_refTypes_package = "egl.lang.reflect.reftypes";
 	String EGLX_lang_package = "eglx.lang";
 	String EGL_KeyScheme = Type.EGL_KeyScheme + Type.KeySchemeDelimiter;
-	String EGL_SerializationKeyPrefix = EGL_KeyScheme + EGL_lang_package;
+	String EGLX_SerializationKeyPrefix = EGL_KeyScheme + EGLX_lang_package;
 	
 	String Type_JavaObject = Mof_package_name+".JavaObject";
 	String Type_EObject = Mof_package_name+".EObject";
@@ -48,52 +48,42 @@ public interface MofConversion {
 	    
 	
 	// EGL Base Types without keyScheme prefix
-	String Type_Any = EGL_lang_package+".EglAny";
+	String Type_Any = EGLX_lang_package+".EAny";
 	String Type_Int = EGLX_lang_package+".EInt";
 	String Type_Smallint = EGLX_lang_package+".ESmallint";
 	String Type_Bigint = EGLX_lang_package+".EBigint";
 	String Type_Float = EGLX_lang_package+".EFloat";
 	String Type_Smallfloat = EGLX_lang_package+".ESmallfloat";
 	String Type_Decimal = EGLX_lang_package+".EDecimal";
-	String Type_Number = EGL_lang_package+".EglNumber";
+	String Type_Number = EGLX_lang_package+".ENumber";
 	String Type_Boolean = EGLX_lang_package+".EBoolean";
 	String Type_String = EGLX_lang_package+".EString";
-	String Type_NULL = EGL_lang_package+".NullType";
+	String Type_NULL = EGLX_lang_package+".NullType";
 	String Type_Date = EGLX_lang_package+".EDate";
 	String Type_Time = EGLX_lang_package+".ETime";
 	String Type_Timestamp = EGLX_lang_package+".ETimestamp";
-	String Type_List = EGL_lang_package+".EglList";
+	String Type_List = EGLX_lang_package+".EList";
 	String Type_Dictionary = EGLX_lang_package+".EDictionary";
-
-	String Type_EGL_String = EGL_lang_package+".EGLString";
-	String Type_EGL_Boolean = EGL_lang_package+".EGLBoolean";
-	String Type_EGL_Int = EGL_lang_package+".EGLInt";
 
 	// Below here are types not supported in EDT 0.7.
 
-	String Type_Num = EGL_lang_package+".AnyNum";
-	String Type_Bin = EGL_lang_package+".AnyBin";
-	String Type_Numc = EGL_lang_package+".AnyNumc";
-	String Type_Pacf = EGL_lang_package+".AnyPacf";
-	String Type_Char = EGL_lang_package+".AnyChar";
-	String Type_MBChar = EGL_lang_package+".AnyMBChar";
-	String Type_DBChar = EGL_lang_package+".AnyDBChar";
-	String Type_Hex = EGL_lang_package+".AnyHex";
-	String Type_Unicode = EGL_lang_package+".AnyUnicode";
-	String Type_Blob = EGL_lang_package+".AnyBlob";
-	String Type_Clob = EGL_lang_package+".AnyClob";
-	String Type_Interval = EGL_lang_package+".AnyInterval";
-	String Type_MonthInterval = EGL_lang_package+".AnyMonthsInterval";
-	String Type_SecondsInterval = EGL_lang_package+".AnySecondsInterval";
-	String Type_UBin = EGL_lang_package+".AnyUBin";
-	String Type_UnicodeNum = EGL_lang_package+".AnyUnicodeNum";
-	String Type_ArrayDictionary = EGL_lang_package+".EArrayDictionary";
-
-	// EGL Base Types with KeyScheme prefix
-	String Type_EGL_EGLString = EGL_KeyScheme+Type_EGL_String;
-	String Type_EGL_EGLBoolean = EGL_KeyScheme+Type_EGL_Boolean;
-	String Type_EGL_EGLInt = EGL_KeyScheme+Type_EGL_Int;
-
+	String Type_Num = EGLX_lang_package+".AnyNum";
+	String Type_Bin = EGLX_lang_package+".AnyBin";
+	String Type_Numc = EGLX_lang_package+".AnyNumc";
+	String Type_Pacf = EGLX_lang_package+".AnyPacf";
+	String Type_Char = EGLX_lang_package+".AnyChar";
+	String Type_MBChar = EGLX_lang_package+".AnyMBChar";
+	String Type_DBChar = EGLX_lang_package+".AnyDBChar";
+	String Type_Hex = EGLX_lang_package+".AnyHex";
+	String Type_Unicode = EGLX_lang_package+".AnyUnicode";
+	String Type_Blob = EGLX_lang_package+".AnyBlob";
+	String Type_Clob = EGLX_lang_package+".AnyClob";
+	String Type_Interval = EGLX_lang_package+".AnyInterval";
+	String Type_MonthInterval = EGLX_lang_package+".AnyMonthsInterval";
+	String Type_SecondsInterval = EGLX_lang_package+".AnySecondsInterval";
+	String Type_UBin = EGLX_lang_package+".AnyUBin";
+	String Type_UnicodeNum = EGLX_lang_package+".AnyUnicodeNum";
+	String Type_ArrayDictionary = EGLX_lang_package+".EArrayDictionary";
 	
 	String Type_EGLNullType = EGL_KeyScheme+Type_NULL;
 	String Type_EGLAny = EGL_KeyScheme+Type_Any;
@@ -209,12 +199,12 @@ public interface MofConversion {
 	String Type_TimestampType = EGL_reflect_package+".TimestampType";
 	
 	// EGL Base type hierarchy
-	String Type_AnyValue = EGL_SerializationKeyPrefix+".AnyValue";
-	String Type_AnyText = EGL_SerializationKeyPrefix+".AnyText";
-	String Type_AnyRecord = EGL_SerializationKeyPrefix+".AnyRecord";
-	String Type_AnyStruct = EGL_SerializationKeyPrefix+".AnyStruct";
-	String Type_AnyEnumeration = EGL_SerializationKeyPrefix+".AnyEnumeration";
-	String Type_AnyDelegate = EGL_SerializationKeyPrefix+".AnyDelegate";
+	String Type_AnyValue = EGLX_SerializationKeyPrefix+".AnyValue";
+	String Type_AnyText = EGLX_SerializationKeyPrefix+".AnyText";
+	String Type_AnyRecord = EGLX_SerializationKeyPrefix+".AnyRecord";
+	String Type_AnyStruct = EGLX_SerializationKeyPrefix+".AnyStruct";
+	String Type_AnyEnumeration = EGLX_SerializationKeyPrefix+".AnyEnumeration";
+	String Type_AnyDelegate = EGLX_SerializationKeyPrefix+".AnyDelegate";
 	
 	// EGL Reflect Types	
 	String Type_FieldRef = EGL_lang_reflect_refTypes_package+".EGLFieldRef";

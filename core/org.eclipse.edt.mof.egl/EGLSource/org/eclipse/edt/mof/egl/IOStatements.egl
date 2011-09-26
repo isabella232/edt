@@ -56,7 +56,7 @@ enumeration GetByPositionKind {@MofEnum}
 end
 
 externalType GetByPositionStatement extends IOStatement type MofClass
-	directive GetByPositionKind;
+	directive GetByPositionKind?;
 	position Expression {containment=true};
 
 	function getDirectiveString() returns(string);
