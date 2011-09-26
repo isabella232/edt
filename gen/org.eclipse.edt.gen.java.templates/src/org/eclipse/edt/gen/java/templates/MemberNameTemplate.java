@@ -45,7 +45,7 @@ public class MemberNameTemplate extends JavaTemplate {
 		} else if ( CommonUtilities.isBoxedOutputTemp( expr, ctx ) ) {
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
 			out.print(arg2);
-			out.print("EglAny.ezeWrap(");
+			out.print("EAny.ezeWrap(");
 			ctx.invoke(genExpression, arg1, ctx, out);
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
 			if ( CommonUtilities.isBoxedOutputTemp( arg1, ctx ) )

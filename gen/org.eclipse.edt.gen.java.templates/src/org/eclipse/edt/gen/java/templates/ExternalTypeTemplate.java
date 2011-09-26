@@ -98,7 +98,7 @@ public class ExternalTypeTemplate extends JavaTemplate {
 	public void genContainerBasedAssignment(ExternalType part, Context ctx, TabbedWriter out, Assignment assignment, Field field) {
 		Annotation annot = part.getAnnotation("eglx.java.JavaObject");
 		if (annot != null) {
-			Annotation eventListener = field.getAnnotation("egl.lang.EventListener");
+			Annotation eventListener = field.getAnnotation("eglx.lang.EventListener");
 			if (eventListener != null) {
 				ctx.invoke(genExpression, assignment.getLHS().getQualifier(), ctx, out);
 				out.print('.');

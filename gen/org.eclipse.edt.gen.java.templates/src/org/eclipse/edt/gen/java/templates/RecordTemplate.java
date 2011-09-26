@@ -79,7 +79,7 @@ public class RecordTemplate extends JavaTemplate {
 		ctx.invoke(genClassName, part, ctx, out);
 		out.println(") source);");
 		out.println("}");
-		out.println("public void ezeCopy(egl.lang.AnyValue source) {");
+		out.println("public void ezeCopy(eglx.lang.AnyValue source) {");
 		List<Field> fields = part.getFields();
 		if (fields != null && fields.size() != 0) {
 			for (Field field : fields) {
@@ -192,7 +192,7 @@ public class RecordTemplate extends JavaTemplate {
 	public void genSuperClass(Record part, Context ctx, TabbedWriter out) {
 		Stereotype stereotype = part.getStereotype();
 		if (stereotype == null || stereotype.getEClass().getName().equals("BasicRecord"))
-			out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue");
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue");
 		else
 			ctx.invoke(genSuperClass, stereotype, ctx, out);
 	}
@@ -203,7 +203,7 @@ public class RecordTemplate extends JavaTemplate {
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(arg3);
 			}
-			out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(");
 			ctx.invoke(genExpression, arg2, ctx, out);
 			out.print(", ");
 			ctx.invoke(genExpression, arg1, ctx, out);

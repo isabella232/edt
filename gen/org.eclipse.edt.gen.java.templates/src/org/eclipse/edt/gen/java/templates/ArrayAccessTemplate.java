@@ -36,7 +36,7 @@ public class ArrayAccessTemplate extends JavaTemplate {
 				out.print(temporary + ".set(");
 				ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 				out.print(" - 1, ");
-				out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
+				out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(");
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(", ");
 				out.print(temporary + ".get(");
@@ -56,7 +56,7 @@ public class ArrayAccessTemplate extends JavaTemplate {
 				out.print(".set(");
 				ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 				out.print(" - 1, ");
-				out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
+				out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(");
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(", ");
 				ctx.invoke(genExpression, (Expression) expr, ctx, out);
@@ -72,7 +72,7 @@ public class ArrayAccessTemplate extends JavaTemplate {
 			out.print(")");
 		} else {
 			// non-nullable array
-			out.print("org.eclipse.edt.runtime.java.egl.lang.AnyValue.ezeCopyTo(");
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(");
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(", ");
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);

@@ -50,12 +50,12 @@ public class TryStatementTemplate extends JavaTemplate {
 			int specialBlocksCount = 0;
 			for (ExceptionBlock exceptionBlock : blocks) {
 				String sig = exceptionBlock.getException().getType().getTypeSignature();
-				if ( sig.equals( "egl.lang.AnyException" ) )
+				if ( sig.equals( "eglx.lang.AnyException" ) )
 				{
 					anyExBlock = exceptionBlock;
 					specialBlocksCount++;
 				}
-				else if ( sig.equals( "egl.lang.NullValueException" ) )
+				else if ( sig.equals( "eglx.lang.NullValueException" ) )
 				{
 					nullValueExBlock = exceptionBlock;
 					specialBlocksCount++;
@@ -113,18 +113,18 @@ public class TryStatementTemplate extends JavaTemplate {
 		ctx.invoke( genName, ex, ctx, out );
 		out.println( " = (" + exClass + ")" + exTemp + ';' );
 		out.println( '}' );
-		if ( !ex.getType().getTypeSignature().equals( "egl.lang.AnyException" ) )
+		if ( !ex.getType().getTypeSignature().equals( "eglx.lang.AnyException" ) )
 		{
-			out.println( "else if ( " + exTemp + " instanceof egl.lang.AnyException )" );
+			out.println( "else if ( " + exTemp + " instanceof eglx.lang.AnyException )" );
 			out.println( '{' );
-			out.println( "throw (egl.lang.AnyException)" + exTemp + ';' );
+			out.println( "throw (eglx.lang.AnyException)" + exTemp + ';' );
 			out.println( '}' );
 		}
 		out.println( "else" );
 		out.println( '{' );
 		ctx.invoke( genName, ex, ctx, out );
 		out.print( " = " );
-		if ( !ex.getType().getTypeSignature().equals( "egl.lang.AnyException" ) )
+		if ( !ex.getType().getTypeSignature().equals( "eglx.lang.AnyException" ) )
 		{
 			out.print( "(" + exClass + ')' );
 		}
@@ -194,7 +194,7 @@ public class TryStatementTemplate extends JavaTemplate {
 		}
 		else
 		{
-			out.println( "throw (egl.lang.AnyException)" + exTemp + ';' );
+			out.println( "throw (eglx.lang.AnyException)" + exTemp + ';' );
 		}
 		out.println( '}' );
 		

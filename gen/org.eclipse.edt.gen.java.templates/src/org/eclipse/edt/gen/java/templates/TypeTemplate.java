@@ -48,7 +48,7 @@ public class TypeTemplate extends JavaTemplate {
 			CommonUtilities.processImport(ctx.getNativeMapping(type.getClassifier().getTypeSignature()), ctx);
 		if (ctx.mapsToPrimitiveType(type.getClassifier())) {
 			// if this primitive type is really a primitive, it will map back to the java object. We want to use that java
-			// object instead of the primitive mapped simply to a java object. For example, egl.lang.Int16 maps to short (the
+			// object instead of the primitive mapped simply to a java object. For example, eglx.lang.ESmallint maps to short (the
 			// primitive) and then short maps to the java object java.lang.Short. We want to always use the object for the
 			// imports.
 			if (ctx.getPrimitiveMapping(ctx.getPrimitiveMapping(type.getClassifier().getTypeSignature())) != null)
@@ -254,7 +254,7 @@ public class TypeTemplate extends JavaTemplate {
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
 		} else {
-			out.print("EglAny.ezeIsa(");
+			out.print("EAny.ezeIsa(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(", ");
 			ctx.invoke(genRuntimeClassTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
@@ -278,7 +278,7 @@ public class TypeTemplate extends JavaTemplate {
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
 		} else {
-			out.print("EglAny.ezeCast(");
+			out.print("EAny.ezeCast(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(", ");
 			ctx.invoke(genRuntimeClassTypeName, arg.getEType(), ctx, out, TypeNameKind.JavaImplementation);
