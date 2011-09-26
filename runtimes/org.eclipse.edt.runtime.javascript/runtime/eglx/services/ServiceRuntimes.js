@@ -297,9 +297,6 @@ egl.defineClass(
         				eglExpObj.detail2,
         				eglExpObj.detail3);
     		}
-    		else if(expType == "eglx.services.ServiceBindingException"){
-    			exp = egl.eglx.services.createServiceBindingException(eglExpObj.messageID, eglExpObj.message);
-    		}
     		else{
         		exp = egl.eglx.services.createServiceInvocationException(
         				eglExpObj.messageID,

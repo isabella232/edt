@@ -44,7 +44,7 @@ load("runtime", "", ["edt_runtime", "edt_runtime_fixups"]);
 load("runtime", "eglx.javascript", ["Job", "JavaScriptObjectException", "RuntimeException"]);
 load("runtime", "eglx.java", ["JavaObjectException"]);
 load("runtime", "eglx.rbd", ["StrLib"]);
-load("runtime", "eglx.services", ["ServiceKind", "ServiceBinder","ServiceBindingException","ServiceInvocationException", "ServiceLib", "ServiceRuntimes"]);
+load("runtime", "eglx.services", ["ServiceKind", "ServiceBinder","ServiceInvocationException", "ServiceLib", "ServiceRuntimes"]);
 load("runtime", "eglx.json", ["Json", "JSONParser"]);
 load("runtime", "eglx.xml.binding.annotation", ["Xml"]);
 load("runtime", "eglx.xml", ["Xml"]);
