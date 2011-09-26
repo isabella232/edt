@@ -160,7 +160,7 @@ public class SystemEnvironment implements ISystemEnvironment {
 				Environment.popEnv();
 				
 				//The following is needed until we get rid of the binding hierarchy and replace it with IRs
-				DictionaryBinding.INSTANCE.setEnvironment(this);
+				DictionaryBinding.setDictionaryEnvironment(this);
 				
 				if (notifier != null) {
 					notifier.done();
