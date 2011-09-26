@@ -174,7 +174,7 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 
 				case ITypeBinding.INTERFACE_BINDING:
 					if(includeFunctions) {
-						result.addAll(getFunctionProposals(((InterfaceBinding) qualifierTypeBinding).getDeclaredFunctions(),
+						result.addAll(getFunctionProposals(((InterfaceBinding) qualifierTypeBinding).getDeclaredAndInheritedFunctions(),
 								UINlsStrings.bind(UINlsStrings.CAProposal_InterfaceFunction, qualifierTypeBinding.getCaseSensitiveName()),
 								EGLCompletionProposal.RELEVANCE_LIBRARY_FUNCTION));
 					}
