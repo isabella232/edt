@@ -9,17 +9,10 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.javascript.templates.egl.lang;
+package org.eclipse.edt.gen.javascript.templates.eglx.lang;
 
-import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.EGLClass;
 
-public class AnyValueTypeTemplate extends JavaScriptTemplate {
+public class ListTypeTemplate extends JavaScriptTemplate {
 
-	public void genSignature(EGLClass type, Context ctx, TabbedWriter out) {
-		String signature = "A;";
-		out.print(signature);
-	}
 }

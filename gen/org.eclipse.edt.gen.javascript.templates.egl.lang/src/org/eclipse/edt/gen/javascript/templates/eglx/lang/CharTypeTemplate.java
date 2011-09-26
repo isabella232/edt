@@ -9,17 +9,25 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.javascript.templates.egl.lang;
+package org.eclipse.edt.gen.javascript.templates.eglx.lang;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.ParameterizableType;
+import org.eclipse.edt.mof.egl.SequenceType;
 
-public class DictionaryTypeTemplate extends JavaScriptTemplate {
+public class CharTypeTemplate extends JavaScriptTemplate {
 
-	public void genSignature(EGLClass type, Context ctx, TabbedWriter out) {
-		String signature = "y;";
-		out.print(signature); 
+	// this method gets invoked when there is a char with a length needed
+	public void genSignature(SequenceType type, Context ctx, TabbedWriter out) {
+		String signature = "C" + type.getLength() + ";";
+		out.print(signature);
+	}
+
+	// this method gets invoked when there is a char with no length needed
+	public void genSignature(ParameterizableType type, Context ctx, TabbedWriter out) {
+		String signature = "C;";
+		out.print(signature);
 	}
 }
