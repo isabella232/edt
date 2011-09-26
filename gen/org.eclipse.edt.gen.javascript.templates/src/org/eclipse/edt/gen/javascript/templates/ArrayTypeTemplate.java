@@ -36,7 +36,10 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genDefaultValue(ArrayType generic, Context ctx, TabbedWriter out, Field arg) {
-		processDefaultValue(generic, ctx, out);
+		if (arg.isNullable()) 
+			out.print("null");
+		else
+			processDefaultValue(generic, ctx, out);
 	}
 
 	public void genDefaultValue(ArrayType generic, Context ctx, TabbedWriter out) {
