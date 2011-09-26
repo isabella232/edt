@@ -52,7 +52,6 @@ public class HandlerTemplate extends JavaScriptTemplate {
 		out.print(quoted("constructor"));
 		out.println(": function() {");
 
-		out.println("this.jsrt$SysVar = new egl.egl.core.SysVar();");
 		// instantiate each user part
 		List<Part> usedParts = handler.getUsedParts();
 		for (Part part : usedParts) {

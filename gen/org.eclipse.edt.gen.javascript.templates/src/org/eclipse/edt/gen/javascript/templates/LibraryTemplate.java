@@ -87,8 +87,6 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		ctx.invoke(genAccessor, library, ctx, out);
 		out.println("=this;");
 
-		out.println("this.jsrt$SysVar = new egl.egl.core.SysVar();");
-
 		// instantiate each library
 		ctx.invoke(genLibraries, library, ctx, out);
 		ctx.invoke(genFields, library, ctx, out);
