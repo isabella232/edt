@@ -71,13 +71,16 @@ public class CommonUtilities {
 		return result;
 	}
 	
-	public static boolean isUserPart(EGLClass part) {
-		return isUserPart((Part)part);
+	public static boolean isUserClass(Part part) {
+		return isUserDefined(part) && (part instanceof EGLClass);
 	}
 	
 	public static boolean isUserPart(Part part){
-		return !part.getFullyQualifiedName().startsWith("egl") && 
-		!part.getFullyQualifiedName().startsWith("eglx") && (part instanceof EGLClass || part instanceof Enumeration);
+		return isUserDefined(part) && (part instanceof EGLClass || part instanceof Enumeration);
+	}
+	
+	private static boolean isUserDefined(Part part){
+		return !part.getFullyQualifiedName().startsWith("egl") && !part.getFullyQualifiedName().startsWith("eglx");
 	}
 	
 	public static void addToDependentList(LinkedHashSet dependentFiles, String part) {
