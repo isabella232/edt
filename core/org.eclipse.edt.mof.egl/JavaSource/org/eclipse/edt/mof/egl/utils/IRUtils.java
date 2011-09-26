@@ -237,11 +237,17 @@ public class IRUtils {
 			return false;
 		}
 		
+		public boolean visit(NewExpression newExpr) {
+			newExpr.getType().accept(this);
+			return true;
+		}
+		
 		public Set<Part> getReferencedPartsFor(Part part) {
 			root = part;
 			root.accept(this);
 			return referencedParts;
 		}
+		
 	}
 	
 	/**
