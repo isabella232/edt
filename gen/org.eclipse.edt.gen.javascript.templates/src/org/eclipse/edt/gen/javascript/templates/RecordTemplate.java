@@ -116,7 +116,7 @@ public class RecordTemplate extends JavaScriptTemplate {
 		/*
 		 * TODO sbg Java has all of this, but I'm not sure whether it -- or some form of it -- is necessary.... if (
 		 * TypeUtils.isValueType( type ) ) { if (arg1.isNullable()) { ctx.invoke(genExpression, arg1, ctx, out);
-		 * out.print(arg3); } out.print("egl.egl.lang.AnyValue.ezeCopyTo("); ctx.invoke(genExpression, arg2, ctx, out);
+		 * out.print(arg3); } out.print("egl.eglx.lang.AnyValue.ezeCopyTo("); ctx.invoke(genExpression, arg2, ctx, out);
 		 * out.print(", "); ctx.invoke(genExpression, arg1, ctx, out); out.print(")"); } else
 		 */
 		{
