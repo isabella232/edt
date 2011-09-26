@@ -67,7 +67,6 @@ public abstract class FileLocator {
 //		
 //		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/Encoding.js");  //$NON-NLS-1$
 //		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceBinder.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceBindingException.js");  //$NON-NLS-1$
 //		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceInvocationException.js");  //$NON-NLS-1$
 //		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceKind.js");  //$NON-NLS-1$
 //		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceLib.js");  //$NON-NLS-1$
