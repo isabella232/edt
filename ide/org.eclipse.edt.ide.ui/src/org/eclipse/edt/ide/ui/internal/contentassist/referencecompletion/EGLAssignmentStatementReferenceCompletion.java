@@ -20,12 +20,12 @@ import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
+import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLEnumerationNameProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFieldsFromLibraryUseStatementProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFormUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionPartSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
@@ -58,97 +58,98 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 		final List proposals = new ArrayList();
 		final EGLAssignmentStatementReferenceCompletion thisCompletion = this;
 		final boolean[] isDone = new boolean[] {false};
-		
-		getBoundASTNode(viewer, documentOffset, new String[] {"x", "x}", "x;", "x", "x;end end", "x}; end"}, new CompletedNodeVerifier() {
-			public boolean nodeIsValid(Node astNode) {
-				return astNode != null && getNodeThatMightBeAssignment(astNode) instanceof Assignment;
-			}
-		}, new IBoundNodeProcessor() {
-			public void processBoundNode(Node boundNode) {
-				thisCompletion.boundNode = boundNode;
-				Node nodeThatMightBeAssignment = getNodeThatMightBeAssignment(boundNode);
-				if(nodeThatMightBeAssignment instanceof Assignment) {
-					Assignment assignmentNode = ((Assignment) nodeThatMightBeAssignment);
-					IBinding lhBinding = assignmentNode.getLeftHandSide().resolveDataBinding();
-					if(lhBinding != null && IBinding.NOT_FOUND_BINDING != lhBinding) {
-						if(lhBinding.isAnnotationBinding()) {
-							//We are completing the rhs of a property value
-							proposals.addAll(new EGLPropertyValueProposalHandler(viewer, documentOffset, prefix, editor, thisCompletion, parseStack, boundNode).getProposals((IAnnotationBinding) lhBinding));
-							isDone[0] = true;
-							return;
-						}
-						else if(lhBinding instanceof ClassFieldBinding && 
-								assignmentNode.getParent() != null &&								
-								assignmentNode.getParent() instanceof SettingsBlock) {  //added for RUI widget class fields
-							proposals.addAll(new EGLPropertyValueProposalHandler(viewer, documentOffset, prefix, editor, thisCompletion, parseStack, boundNode).getProposals((ClassFieldBinding) lhBinding));
-							isDone[0] = true;
-							return;
+		final boolean[] isStringLiteral = new boolean[]{false};
+
+		if (isState(parseStack, ((Integer) validStates.get(0)).intValue())
+				|| isState(parseStack,((Integer) validStates.get(1)).intValue())
+				|| isState(parseStack,((Integer) validStates.get(2)).intValue())) {
+
+			getBoundASTNode(viewer, documentOffset, new String[] {"x", "x}", "x;", "\";", "x", "x;end end", "x}; end"}, new CompletedNodeVerifier() {
+				public boolean nodeIsValid(Node astNode) {
+					if(astNode instanceof StringLiteral){
+						isStringLiteral[0] = true;
+					}
+					return astNode != null && getNodeThatMightBeAssignment(astNode) instanceof Assignment;
+				}
+			}, new IBoundNodeProcessor() {
+				public void processBoundNode(Node boundNode) {
+					thisCompletion.boundNode = boundNode;
+					Node nodeThatMightBeAssignment = getNodeThatMightBeAssignment(boundNode);
+					if(nodeThatMightBeAssignment instanceof Assignment) {
+						Assignment assignmentNode = ((Assignment) nodeThatMightBeAssignment);
+						IBinding lhBinding = assignmentNode.getLeftHandSide().resolveDataBinding();
+						if(lhBinding != null && IBinding.NOT_FOUND_BINDING != lhBinding) {
+							if(lhBinding.isAnnotationBinding()) {
+								//We are completing the rhs of a property value
+								proposals.addAll(new EGLPropertyValueProposalHandler(viewer, documentOffset, prefix, editor, thisCompletion, parseStack, boundNode).getProposals((IAnnotationBinding) lhBinding));
+								isDone[0] = true;
+								return;
+							}
+							else if(lhBinding instanceof ClassFieldBinding && 
+									assignmentNode.getParent() != null &&								
+									assignmentNode.getParent() instanceof SettingsBlock) {  //added for RUI widget class fields
+								proposals.addAll(new EGLPropertyValueProposalHandler(viewer, documentOffset, prefix, editor, thisCompletion, parseStack, boundNode).getProposals((ClassFieldBinding) lhBinding));
+								isDone[0] = true;
+								return;
+							}
 						}
 					}
-				}
 
-				//Get all variable proposals
-				proposals.addAll(
-					new EGLDeclarationProposalHandler(viewer,
-						documentOffset,
-						prefix,
-						boundNode)
-						.getProposals(boundNode));
-				
-				//Get all table use statement proposals
-				proposals.addAll(
-					new EGLTableUseStatementProposalHandler(viewer,
-						documentOffset,
-						prefix,
-						editor,
-						boundNode).getProposals());
-				
-				//Get all forms from formGroup use statement proposals
-				proposals.addAll(
-					new EGLFormUseStatementProposalHandler(viewer,
-						documentOffset,
-						prefix,
-						editor,
-						boundNode).getProposals());
-				
-				//Get user field proposals using library use statements
-				proposals.addAll(
-					new EGLFieldsFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, boundNode).getProposals());
-				
-				//Get user function proposals with return value using library use statements
-				proposals.addAll(
-					new EGLFunctionFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
-				
-				//Get system function proposals with no return value
-				proposals.addAll(
-						new EGLSystemWordProposalHandler(viewer,
+					//Get all variable proposals
+					proposals.addAll(
+						new EGLDeclarationProposalHandler(viewer,
+							documentOffset,
+							prefix,
+							boundNode)
+							.getProposals(boundNode));
+					
+					//Get all table use statement proposals
+					proposals.addAll(
+						new EGLTableUseStatementProposalHandler(viewer,
 							documentOffset,
 							prefix,
 							editor,
-							boundNode).getProposals(EGLSystemWordProposalHandler.RETURNS, true));
+							boundNode).getProposals());
+					
+					//Get user field proposals using library use statements
+					proposals.addAll(
+						new EGLFieldsFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, boundNode).getProposals());
+					
+					//Get user function proposals with return value using library use statements
+					proposals.addAll(
+						new EGLFunctionFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+					
+					//Get system function proposals with no return value
+					proposals.addAll(
+							new EGLSystemWordProposalHandler(viewer,
+								documentOffset,
+								prefix,
+								editor,
+								boundNode).getProposals(EGLSystemWordProposalHandler.RETURNS, true));
 
-				//Get user function proposals with return value
-				proposals.addAll(
-					new EGLFunctionPartSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
-				
-				thisCompletion.boundNode = null;
-			}
-		});
-		
-		if(!isDone[0]) {
-			//Get all library and external type proposals
-			proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(
-				IEGLSearchConstants.LIBRARY|IEGLSearchConstants.EXTERNALTYPE));
-	
-			//Get all system library proposals
-			proposals.addAll(
-				new EGLSystemLibraryProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
+					//Get user function proposals with return value
+					proposals.addAll(
+						new EGLFunctionPartSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+					
+					thisCompletion.boundNode = null;
+				}
+			});
 			
-			//Get all enumeration name proposals
-			proposals.addAll(
-				new EGLEnumerationNameProposalHandler(viewer, documentOffset, prefix).getProposals());
-		}
+			if(!isDone[0] && !isStringLiteral[0]) {
+				//Get all library and external type proposals
+				proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(
+					IEGLSearchConstants.LIBRARY|IEGLSearchConstants.EXTERNALTYPE));
 		
+				//Get all system library proposals
+				proposals.addAll(
+					new EGLSystemLibraryProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
+				
+				//Get all enumeration name proposals
+				proposals.addAll(
+					new EGLEnumerationNameProposalHandler(viewer, documentOffset, prefix).getProposals());
+			}
+		}
+
 		return proposals;
 	}
 

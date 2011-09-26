@@ -61,13 +61,15 @@ public class EGLSQLWithStatementReferenceCompletion extends EGLAbstractReference
 				new IBoundNodeProcessor() {
 					public void processBoundNode(Node boundNode) {
 						// SQL Statement into proposals
-						result.addAll(new EGLDeclarationProposalHandler(viewer,
-								documentOffset, prefix, boundNode)
-								.getSQLStatementProposals());
+						EGLDeclarationProposalHandler eglDP = new EGLDeclarationProposalHandler(viewer,
+								documentOffset, prefix, boundNode);
+						
+						result.addAll(eglDP.getSQLStatementProposals());
+						result.addAll(eglDP.getSQLStringProposals());
 					}
 				});
 
-		return result;
+			return result;
 		}
 
 }

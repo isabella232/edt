@@ -238,6 +238,34 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		return false;
 	}
 	
+	private static class SQLStringTypeDataBindingFilter implements IDataBindingFilter{
+
+		public SQLStringTypeDataBindingFilter(){
+		}
+		
+		public boolean dataBindingPasses(IDataBinding dataBinding) {
+			ITypeBinding type = dataBinding.getType();			
+			if (type != null && IBinding.NOT_FOUND_BINDING != type) {
+				type = type.getBaseType();
+				if (isSqlString(type)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+		
+	}
+	
+	private static boolean isSqlString(ITypeBinding type) {
+		if (type.getName().equalsIgnoreCase(
+				IEGLConstants.KEYWORD_STRING)) {
+			return true;
+		}
+
+		return false;
+	}
+	
 	private static class SQLActionTargetsExternalTypeDataBindingFilter implements IDataBindingFilter{
 
 		public SQLActionTargetsExternalTypeDataBindingFilter() {
@@ -413,6 +441,13 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		List proposals = new ArrayList();
 		proposals.addAll(getVariableProposals(new SQLStatementTypeDataBindingFilter(), false, false));
 		proposals.addAll(getContainerVariableProposals(new SQLStatementTypeDataBindingFilter(), false, false));
+		return proposals;
+	}
+	
+	public List getSQLStringProposals(){
+		List proposals = new ArrayList();
+		proposals.addAll(getVariableProposals(new SQLStringTypeDataBindingFilter(), false, false));
+		proposals.addAll(getContainerVariableProposals(new SQLStringTypeDataBindingFilter(), false, false));
 		return proposals;
 	}
 
