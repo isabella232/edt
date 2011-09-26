@@ -30,10 +30,10 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
  * @author Dave Murray
  */
 public class DictionaryBinding extends PartBinding {
-	
-	private static boolean EnumTypesFound = false;
-	
+		
 	public static DictionaryBinding INSTANCE = new DictionaryBinding();
+	
+	private static EnumerationTypeBinding ORDERINGKIND = new EnumerationTypeBinding(InternUtil.intern(new String[] {"eglx", "lang"}), InternUtil.intern("OrderingKind"));
 	
 	public static final SystemFunctionBinding CONTAINSKEY = SystemLibrary.createSystemFunction(
 	    IEGLConstants.SYSTEM_WORD_CONTAINSKEY,
@@ -92,7 +92,7 @@ public class DictionaryBinding extends PartBinding {
 	public static final SystemFunctionBinding GETORDERING = SystemLibrary.createSystemFunction(
 		    "getOrdering",
 		    null,
-			PrimitiveTypeBinding.getInstance(Primitive.INT),
+			ORDERINGKIND,
 			0);
 
 	private static final Map SYSTEM_FUNCTIONS = new HashMap();
@@ -111,7 +111,7 @@ public class DictionaryBinding extends PartBinding {
 	
 	public static final ConstructorBinding CONSTRUCTOR1 = new ConstructorBinding(DictionaryBinding.INSTANCE);
 	public static final FunctionParameterBinding C1P1 = new FunctionParameterBinding(InternUtil.intern("caseSensitive"), DictionaryBinding.INSTANCE, PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN), (IFunctionBinding)CONSTRUCTOR1.getType());
-	public static final FunctionParameterBinding C1P2 = new FunctionParameterBinding(InternUtil.intern("ordering"), DictionaryBinding.INSTANCE, PrimitiveTypeBinding.getInstance(Primitive.INT), (IFunctionBinding)CONSTRUCTOR1.getType());
+	public static final FunctionParameterBinding C1P2 = new FunctionParameterBinding(InternUtil.intern("ordering"), DictionaryBinding.INSTANCE, ORDERINGKIND, (IFunctionBinding)CONSTRUCTOR1.getType());
 	static {
 		C1P1.setInput(true);
 		C1P2.setInput(true);
@@ -192,26 +192,9 @@ public class DictionaryBinding extends PartBinding {
     	return CONSTRUCTORS;
     }
     
-    @Override
-    public void setEnvironment(IEnvironment environment) {
+    public static void setDictionaryEnvironment(IEnvironment environment) {
     	
-    	//update the types!
-    	resolveEnumType(environment);
-    	
-    	super.setEnvironment(environment);
+    	ORDERINGKIND.setEnvironment(environment);
     }
-    
-    private static void resolveEnumType(IEnvironment environment) {
-    	if (EnumTypesFound) {
-    		return;
-    	}
     	
-    	IPartBinding enumBinding = environment.getPartBinding(InternUtil.intern(new String[] {"eglx", "lang"}), InternUtil.intern("OrderingKind"));
-    	if (Binding.isValidBinding(enumBinding)) {
-    		C1P2.setType(enumBinding);
-    		GETORDERING.setReturnType(enumBinding);
-    		EnumTypesFound = true;
-    	}
-    }
-	
 }
