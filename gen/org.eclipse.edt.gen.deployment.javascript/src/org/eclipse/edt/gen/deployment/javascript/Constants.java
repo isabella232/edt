@@ -40,15 +40,15 @@ public class Constants {
 //TODO waiting CQ approval bugzilla 5300		RUI_RUNTIME_JAVASCRIPT_FILES.add("webtoolkit.base64.js");  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/jsrt/BaseTypesAndRuntimes.js");  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/Dictionary.js");  //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/AnyException.js"); //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/DynamicAccessException.js"); //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/Enumeration.js"); //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/InvalidArgumentException.js");  //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/InvalidIndexException.js");  //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/InvalidPatternException.js");  //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/InvocationException.js"); //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/NullValueException.js"); //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/NumericOverflowException.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/AnyException.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/DynamicAccessException.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/Enumeration.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/InvalidArgumentException.js");  //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/InvalidIndexException.js");  //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/InvalidPatternException.js");  //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/InvocationException.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/NullValueException.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/NumericOverflowException.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpRest.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpLib.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpMethod.js"); //$NON-NLS-1$
