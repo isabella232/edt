@@ -32,7 +32,8 @@ public class WebClientProjectTemplate extends AbstractProjectTemplateClass {
 
 	protected void setTargetRuntime(
 			final ProjectConfiguration eglProjConfiguration) {
-		eglProjConfiguration.setTargetRuntimeValue(ProjectConfiguration.JAVASCRIPT_PLATFORM);
+		// Needs to be java project to support dedicated service
+		eglProjConfiguration.setTargetRuntimeValue(ProjectConfiguration.JAVA_JAVASCRIPT_PLATFORMS);
 	}
 
 	public void applyTemplate(IProject project) {

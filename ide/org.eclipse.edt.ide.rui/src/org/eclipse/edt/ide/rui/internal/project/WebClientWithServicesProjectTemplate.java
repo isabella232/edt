@@ -22,12 +22,6 @@ public class WebClientWithServicesProjectTemplate extends
 
 	protected static final String SERVER = "server";
 
-	protected void setTargetRuntime(
-			final ProjectConfiguration eglProjConfiguration) {
-		//JavaScript Platform
-		eglProjConfiguration.setTargetRuntimeValue(ProjectConfiguration.JAVA_JAVASCRIPT_PLATFORMS);
-	}
-	
 	protected void addGeneratorOperation(
 			final ProjectConfiguration eglProjConfiguration,
 			ISchedulingRule rule, List listOps) {
