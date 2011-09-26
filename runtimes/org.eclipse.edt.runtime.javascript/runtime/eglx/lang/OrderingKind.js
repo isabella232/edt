@@ -10,7 +10,7 @@
  *
  *******************************************************************************/
 
-egl.defineClass('eglx.lang', "OrderingKind", "egl.lang", "Enumeration",{
+egl.defineClass('eglx.lang', "OrderingKind", "eglx.lang", "Enumeration",{
 		"constructor": function(valueIn) {
 			this.value = valueIn;
 		}

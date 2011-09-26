@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass('eglx.ui', "SignKind", "egl.lang", "Enumeration",{
+egl.defineClass('eglx.ui', "SignKind", "eglx.lang", "Enumeration",{
 		"constructor": function(valueIn) {
 			this.value = valueIn;
 		}

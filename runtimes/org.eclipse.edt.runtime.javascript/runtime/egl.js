@@ -601,7 +601,7 @@ egl._defineClass = function(
 					var dataOutput = "type=" + this.eze$$package + "." + this.eze$$typename;
 					if ( this.eze$$DOMElemnt )
 					    dataOutput = dataOutput + ", tagName=" + this.eze$$DOMElement.tagName + ",childCount=" + this.eze$$DOMElement.childNodes.length ; 
-                    if ( this instanceof egl.egl.lang.AnyException )
+                    if ( this instanceof egl.eglx.lang.AnyException )
                         dataOutput = dataOutput + ", message=" + this.message;	
                     return "[" + dataOutput + "]";				    		    
 				}

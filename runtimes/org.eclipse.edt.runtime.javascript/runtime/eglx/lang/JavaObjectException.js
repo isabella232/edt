@@ -19,7 +19,7 @@ egl.createJavaObjectException = function( /*string*/ messageID, /*string or arra
 	var args = new Array();
 	args.push( [ "messageID", messageID || "" ] );
 	args.push( [ "message", inserts || "" ] );
-	return new egl.egl.lang.JavaObjectException( args );
-}
+	return new egl.eglx.lang.JavaObjectException( args );
+};
 
-egl.defineClass( "egl.lang", "JavaObjectException", "egl.lang", "AnyException", { });
+egl.defineClass( "eglx.lang", "JavaObjectException", "eglx.lang", "AnyException", { });

@@ -8,8 +8,8 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass('egl.lang', "TypeCastException", "egl.jsrt", "Record", {
-	"eze$$fileName" : "egl/lang/Exceptions.egl",
+egl.defineClass('eglx.lang', "TypeCastException", "egl.jsrt", "Record", {
+	"eze$$fileName" : "eglx/lang/Exceptions.egl",
 		"constructor": function() {
 			this.eze$$setInitial();
 		}
@@ -30,7 +30,7 @@ egl.defineClass('egl.lang', "TypeCastException", "egl.jsrt", "Record", {
 		,
 		"eze$$clone": function() {
 			var ezert$$1 = this;
-			var ezert$$2 = new egl.egl.lang.TypeCastException();
+			var ezert$$2 = new egl.eglx.lang.TypeCastException();
 			ezert$$2.castToName = ezert$$1.castToName;
 			ezert$$2.actualTypeName = ezert$$1.actualTypeName;
 			return ezert$$2;

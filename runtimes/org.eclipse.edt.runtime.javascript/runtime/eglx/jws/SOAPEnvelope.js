@@ -55,11 +55,11 @@ egl.defineClass('eglx.jws', "SOAPEnvelope", "egl.jsrt", "Record", {
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("soapHeader", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("soapHeader");
-				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("soapHeader", "soapHeader", "Tegl/lang/EglAny;", egl.egl.lang.EglAny, annotations);
+				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("soapHeader", "soapHeader", "Teglx/lang/EAny;", egl.eglx.lang.EAny, annotations);
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("body", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("body");
-				this.fieldInfos[1] =new egl.eglx.services.FieldInfo("body", "body", "Tegl/lang/EglAny;", egl.egl.lang.EglAny, annotations);
+				this.fieldInfos[1] =new egl.eglx.services.FieldInfo("body", "body", "Teglx/lang/EAny;", egl.eglx.lang.EAny, annotations);
 			}
 			return this.fieldInfos;
 		},

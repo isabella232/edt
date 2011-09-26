@@ -15,6 +15,6 @@ egl.defineClass(
 	}
 });
 egl.eglx.services.ServiceLib["completeBind"] = function(serviceOrInterface, resource) {
-	serviceOrInterface.ezeCopy(egl.egl.lang.EglAny.unbox(resource));
-	return egl.egl.lang.EglAny.unbox(resource);
+	serviceOrInterface.ezeCopy(egl.eglx.lang.EAny.unbox(resource));
+	return egl.eglx.lang.EAny.unbox(resource);
 };

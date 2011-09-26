@@ -8,18 +8,18 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass('egl.lang', "InvalidIndexException", "egl.jsrt", "Record", {
-	"eze$$fileName" : "egl/lang/Exceptions.egl",
+egl.defineClass('eglx.lang', "DynamicAccessException", "egl.jsrt", "Record", {
+	"eze$$fileName" : "eglx/lang/Exceptions.egl",
 		"constructor": function() {
 			this.eze$$setInitial();
 		}
 		,
 		"ezeCopy": function(source) {
-			this.index = source.index;
+			this.key = source.key;
 		}
 		,
 		"eze$$setEmpty": function() {
-			this.index = 0;
+			this.key = "";
 		}
 		,
 		"eze$$setInitial": function() {
@@ -28,15 +28,15 @@ egl.defineClass('egl.lang', "InvalidIndexException", "egl.jsrt", "Record", {
 		,
 		"eze$$clone": function() {
 			var ezert$$1 = this;
-			var ezert$$2 = new egl.egl.lang.InvalidIndexException();
-			ezert$$2.index = ezert$$1.index;
+			var ezert$$2 = new egl.eglx.lang.DynamicAccessException();
+			ezert$$2.key = ezert$$1.key;
 			return ezert$$2;
 		}
 		,
 		"eze$$getAnnotations": function() {
 			if(this.annotations === undefined){
 				this.annotations = {};
-				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("InvalidIndexException", null, false);
+				this.annotations["XMLRootElement"] = new egl.eglx.xml.binding.annotation.XMLRootElement("DynamicAccessException", null, false);
 			}
 			return this.annotations;
 		}
@@ -46,15 +46,15 @@ egl.defineClass('egl.lang', "InvalidIndexException", "egl.jsrt", "Record", {
 				var annotations;
 				this.fieldInfos = new Array();
 				annotations = {};
-				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("index", null, false, false);
-				annotations["JsonName"] = new egl.eglx.json.JsonName("index");
-				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("index", "index", "I;", Number, annotations);
+				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("key", null, false, false);
+				annotations["JsonName"] = new egl.eglx.json.JsonName("key");
+				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("key", "key", "S;", String, annotations);
 			}
 			return this.fieldInfos;
 		}
 		,
 		"toString": function() {
-			return "[InvalidIndexException]";
+			return "[DynamicAccessException]";
 		}
 	}
 );

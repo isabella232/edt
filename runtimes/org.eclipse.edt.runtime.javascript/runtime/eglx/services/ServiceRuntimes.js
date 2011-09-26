@@ -556,10 +556,10 @@ egl.defineClass(
     },
     "convertToEnum" : function( value, type) {
     	if(typeof value === "string"){
-    		value = egl.egl.lang.EInt32.fromEString(value);
+    		value = egl.eglx.lang.EInt32.fromEString(value);
     	}
     	for ( var field in type) {
-    		if (type[field] instanceof egl.egl.lang.Enumeration
+    		if (type[field] instanceof egl.eglx.lang.Enumeration
     				&& type[field].value == value) {
     			return type[field];
     		}
@@ -574,11 +574,15 @@ new egl.eglx.services.ServiceRT();
 egl.statefulSessionMap = new Object();
 egl.eze$$SetProxyAuth=null;
 
-egl.eglx.services.createServiceInvocationException = function( /*string*/ messageID, /*string or array*/ inserts ){
-	return new egl.eglx.services.ServiceBindingException(egl.createRuntimeExceptionArgs(messageID, inserts));
-};
 egl.eglx.services.createServiceInvocationException = function( /*string*/ messageID, /*string or array*/ inserts )
 {
+	if (typeof(inserts) != "string") {
+		inserts = egl.getRuntimeMessage( messageID, inserts );
+	}
+	egl.exceptionThrown = true;
+	var args = new Array();
+	args.push( [ "messageID", messageID || "" ] );
+	args.push( [ "message", inserts || "" ] );
 	var exp = {};
 	if(arguments[2] instanceof egl.eglx.services.ServiceKind){
 		exp["source"] = arguments[2];                    
@@ -598,7 +602,7 @@ egl.eglx.services.createServiceInvocationException = function( /*string*/ messag
 	exp["detail1"] = detail1;		
 	exp["detail2"] = detail2;		
 	exp["detail3"] = detail3;	
-	var eglExp = new egl.eglx.services.ServiceInvocationException(egl.createRuntimeExceptionArgs(messageID, inserts));
+	var eglExp = new egl.eglx.services.ServiceInvocationException(args);
 	eglExp.ezeCopy(exp);
 	return eglExp;
 };

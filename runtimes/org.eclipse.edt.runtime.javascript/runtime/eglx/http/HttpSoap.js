@@ -59,7 +59,7 @@ egl.defineClass('eglx.http', 'HttpSoap',
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("responseHeader", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("responseHeader");
-				this.fieldInfos[2] =new egl.eglx.services.FieldInfo("responseHeader", "responseHeader", "Tegl/lang/EglAny;", egl.egl.lang.EglAny, annotations);
+				this.fieldInfos[2] =new egl.eglx.services.FieldInfo("responseHeader", "responseHeader", "Teglx/lang/EAny;", egl.eglx.lang.EAny, annotations);
 			}
 			return this.fieldInfos;
 		}
