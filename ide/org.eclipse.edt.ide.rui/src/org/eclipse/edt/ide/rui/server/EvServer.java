@@ -67,7 +67,7 @@ import org.eclipse.edt.javart.services.servlet.proxy.ProxyEventHandler;
 import org.eclipse.edt.javart.services.servlet.proxy.ProxyUtilities;
 import org.eclipse.edt.javart.services.servlet.proxy.RuiBrowserHttpRequest;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.runtime.java.egl.lang.EDictionary;
+import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorDescriptor;
