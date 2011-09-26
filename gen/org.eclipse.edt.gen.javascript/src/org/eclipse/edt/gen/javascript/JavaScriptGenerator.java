@@ -43,7 +43,7 @@ public class JavaScriptGenerator extends Generator {
 		generator = processor;
 
 		out = (Boolean.TRUE
-				== (Boolean) context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)
+//				== (Boolean) context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)
 			) ? new TabbedReportWriter("org.eclipse.edt.gen.javascript.templates.", new StringWriter()) : new TabbedWriter(new StringWriter());
 	}
 
