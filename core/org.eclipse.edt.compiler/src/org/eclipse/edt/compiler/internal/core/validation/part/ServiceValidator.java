@@ -108,7 +108,7 @@ public class ServiceValidator extends FunctionContainerValidator {
 		List interfaceList = serviceBinding.getImplementedInterfaces();
 		for (int i = 0; i < interfaceList.size(); i++){
 			InterfaceBinding interfaceBinding = (InterfaceBinding)interfaceList.get(i);
-			for(Iterator iter = interfaceBinding.getDeclaredFunctions().iterator(); iter.hasNext();) {
+			for(Iterator iter = interfaceBinding.getDeclaredAndInheritedFunctions().iterator(); iter.hasNext();) {
 				NestedFunctionBinding fBinding = (NestedFunctionBinding) iter.next();
 				if(!fBinding.isPrivate()) {
 					retVal.add(fBinding);
