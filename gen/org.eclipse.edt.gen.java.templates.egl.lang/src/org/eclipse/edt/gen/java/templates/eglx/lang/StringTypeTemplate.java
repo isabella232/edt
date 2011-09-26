@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.java.templates.egl.lang;
+package org.eclipse.edt.gen.java.templates.eglx.lang;
 
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.java.CommonUtilities;
@@ -36,7 +36,7 @@ public class StringTypeTemplate extends JavaTemplate {
 	}
 
 	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
-		out.print("Constants.EMPTY_STRING");
+		out.print("\"\"");
 	}
 
 	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {

@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.java.templates.egl.lang;
+package org.eclipse.edt.gen.java.templates.eglx.lang;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.egl.IntervalType;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
 
-public class SecondsIntervalTypeTemplate extends JavaTemplate {
+public class MonthsIntervalTypeTemplate extends JavaTemplate {
 
 	// this method gets invoked when there is a specific interval needed
 	public void genDefaultValue(IntervalType type, Context ctx, TabbedWriter out) {

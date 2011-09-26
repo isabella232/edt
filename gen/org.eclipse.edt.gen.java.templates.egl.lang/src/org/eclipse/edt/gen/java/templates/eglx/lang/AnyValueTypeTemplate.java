@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.java.templates.egl.lang;
+package org.eclipse.edt.gen.java.templates.eglx.lang;
 
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
@@ -37,7 +37,7 @@ public class AnyValueTypeTemplate extends JavaTemplate {
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
 		} else {
-			out.print("EglAny.ezeCast(");
+			out.print("EAny.ezeCast(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			unboxCheck( arg.getObjectExpr(), ctx, out );
 			out.print(", ");

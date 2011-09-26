@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.java.templates.egl.lang;
+package org.eclipse.edt.gen.java.templates.eglx.lang;
 
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.java.CommonUtilities;
@@ -18,32 +18,14 @@ import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.*;
 
-public class TimestampTypeTemplate extends JavaTemplate {
+public class DateTypeTemplate extends JavaTemplate {
 
-	// this method gets invoked when there is a specific timestamp needed
-	public void genDefaultValue(TimestampType type, Context ctx, TabbedWriter out) {
-		processDefaultValue(type, ctx, out);
-	}
-
-	// this method gets invoked when there is a generic (unknown) timestamp needed
-	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out) {
-		processDefaultValue(type, ctx, out);
-	}
-
-	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
+	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
 		out.print(".defaultValue()");
 	}
 
-	public void genContainerBasedNewExpression(TimestampType type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
-		processNewExpression(type, ctx, out, arg);
-	}
-
-	public void genContainerBasedNewExpression(ParameterizableType type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
-		processNewExpression(type, ctx, out, arg);
-	}
-
-	public void processNewExpression(Type type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
+	public void genContainerBasedNewExpression(EGLClass type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
 		ctx.invoke(genRuntimeTypeName, arg.getType(), ctx, out, TypeNameKind.EGLImplementation);
 		out.print(".defaultValue(");
 		if (arg.getArguments() != null && arg.getArguments().size() > 0) {
@@ -55,16 +37,8 @@ public class TimestampTypeTemplate extends JavaTemplate {
 		out.print(")");
 	}
 
-	public void genBinaryExpression(TimestampType type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
-		processBinaryExpression(type, ctx, out, arg);
-	}
-
-	public void genBinaryExpression(ParameterizableType type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
-		processBinaryExpression(type, ctx, out, arg);
-	}
-
-	public void processBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
-		// for timestamp type, always use the runtime
+	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
+		// for date type, always use the runtime
 		out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
 		out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
 		out.print("(");
