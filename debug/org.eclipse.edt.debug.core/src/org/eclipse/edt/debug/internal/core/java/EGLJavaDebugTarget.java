@@ -17,6 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
@@ -30,6 +32,7 @@ import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.IBreakpointManagerListener;
 import org.eclipse.debug.core.IDebugEventFilter;
 import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDebugElement;
 import org.eclipse.debug.core.model.IDebugTarget;
@@ -54,6 +57,7 @@ import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
 import org.eclipse.jdt.debug.core.IJavaThread;
 import org.eclipse.jdt.debug.core.JDIDebugModel;
 import org.eclipse.jdt.internal.debug.ui.BreakpointUtils;
+import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 
 /**
  * Wraps an IJavaDebugTarget.
@@ -61,6 +65,10 @@ import org.eclipse.jdt.internal.debug.ui.BreakpointUtils;
 @SuppressWarnings("restriction")
 public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaDebugTarget, IDebugEventFilter, IBreakpointManagerListener
 {
+	private static final String FILTER_ATTR = "edt.debug.filter.runtimes"; //$NON-NLS-1$
+	
+	public static final boolean FILTER_RUNTIMES = !System.getProperty( FILTER_ATTR, "yes" ).equalsIgnoreCase( "false" ); //$NON-NLS-1$ //$NON-NLS-2$
+	
 	/**
 	 * The underlying Java debug target.
 	 */
@@ -81,6 +89,16 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 	 */
 	private final Map<EGLLineBreakpoint, IJavaBreakpoint> breakpoints;
 	
+	/**
+	 * A flag indicating if we should filter out certain Java class types that EGL programmers won't want to step through.
+	 */
+	private boolean filterRuntimes;
+	
+	/**
+	 * Cache of class names to contents of *.eglsmap files. Used when the class itself didn't contain SMAP data.
+	 */
+	private Map<String, String> smapFileCache;
+	
 	public EGLJavaDebugTarget( IJavaDebugTarget target )
 	{
 		super( null );
@@ -88,6 +106,7 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 		threads = new HashMap<IJavaThread, EGLJavaThread>();
 		eglThreads = new ArrayList<IEGLJavaThread>();
 		breakpoints = new HashMap<EGLLineBreakpoint, IJavaBreakpoint>();
+		initFilterSetting();
 		
 		// Add the initial threads, which are created before the target.
 		try
@@ -108,6 +127,59 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 		
 		DebugPlugin.getDefault().addDebugEventFilter( this );
 		initializeBreakpoints();
+	}
+	
+	/**
+	 * Initialize the filtering setting. If the launch configuration specifies the VM arg then we'll honor it, otherwise we fall back on the system
+	 * property setting within the Eclipse JVM.
+	 */
+	private void initFilterSetting()
+	{
+		boolean set = false;
+		ILaunch launch = getDebugTarget().getLaunch();
+		if ( launch != null )
+		{
+			ILaunchConfiguration config = launch.getLaunchConfiguration();
+			if ( config != null )
+			{
+				try
+				{
+					String vmArgs = config.getAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, (String)null );
+					if ( vmArgs != null && vmArgs.length() > 0 )
+					{
+						Pattern p = Pattern.compile( ".*-D" + FILTER_ATTR + "=([\\S]*)" ); //$NON-NLS-1$ //$NON-NLS-2$
+						Matcher m = p.matcher( vmArgs );
+						if ( m.matches() && m.groupCount() > 0 )
+						{
+							if ( "false".equalsIgnoreCase( m.group( 1 ) ) ) //$NON-NLS-1$
+							{
+								filterRuntimes = false;
+							}
+							else
+							{
+								filterRuntimes = true;
+							}
+							set = true;
+						}
+					}
+				}
+				catch ( CoreException e )
+				{
+				}
+			}
+		}
+		
+		if ( !set )
+		{
+			filterRuntimes = FILTER_RUNTIMES;
+		}
+		
+		// When filtering is enabled, also enable reading *.eglsmap files off disk for the Java runtime. If
+		// the build process is updated to add SMAP data to the runtime's .class files then we can remove this.
+		if ( filterRuntimes )
+		{
+			smapFileCache = new HashMap<String, String>();
+		}
 	}
 	
 	/*
@@ -134,6 +206,16 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 			return this;
 		}
 		return super.getAdapter( adapter );
+	}
+	
+	public Map<String, String> getSMAPFileCache()
+	{
+		return smapFileCache;
+	}
+	
+	public boolean filterRuntimes()
+	{
+		return filterRuntimes;
 	}
 	
 	@Override
@@ -434,8 +516,8 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 					BreakpointUtils.addRunToLineAttributes( attributes );
 				}
 				
-				return JDIDebugModel.createStratumBreakpoint( ResourcesPlugin.getWorkspace().getRoot(), IEGLDebugCoreConstants.EGL_STRATUM, resource.getName(), null, qualifiedName,
-						bp.getLineNumber(), bp.getCharStart(), bp.getCharEnd(), hitcount, false, attributes );
+				return JDIDebugModel.createStratumBreakpoint( ResourcesPlugin.getWorkspace().getRoot(), IEGLDebugCoreConstants.EGL_STRATUM,
+						resource.getName(), null, qualifiedName, bp.getLineNumber(), bp.getCharStart(), bp.getCharEnd(), hitcount, false, attributes );
 			}
 		}
 		return null;
@@ -694,6 +776,11 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 			}
 		}
 		breakpoints.clear();
+		
+		if ( smapFileCache != null )
+		{
+			smapFileCache.clear();
+		}
 		
 		synchronized ( threads )
 		{

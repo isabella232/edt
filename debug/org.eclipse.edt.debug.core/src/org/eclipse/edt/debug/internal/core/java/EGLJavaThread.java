@@ -16,16 +16,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
-import org.eclipse.debug.core.ILaunch;
-import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IBreakpoint;
-import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.edt.debug.core.IEGLStackFrame;
@@ -35,16 +29,12 @@ import org.eclipse.edt.debug.core.java.IEGLJavaThread;
 import org.eclipse.edt.debug.core.java.SMAPUtil;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaThread;
-import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 
 /**
  * Wraps an IJavaThread.
  */
 public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 {
-	private static final String FILTER_ATTR = "edt.debug.filter.runtimes"; //$NON-NLS-1$
-	private static final boolean FILTER_RUNTIMES = !System.getProperty( FILTER_ATTR, "yes" ).equalsIgnoreCase( "false" ); //$NON-NLS-1$ //$NON-NLS-2$
-	
 	private static final EGLJavaStackFrame[] EMPTY_FRAMES = new EGLJavaStackFrame[ 0 ];
 	
 	/**
@@ -73,11 +63,6 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	private Map<IStackFrame, EGLJavaStackFrame> previousStackFrames;
 	
 	/**
-	 * A flag indicating if we should filter out certain Java class types that EGL programmers won't want to step through.
-	 */
-	private boolean filterRuntimes;
-	
-	/**
 	 * A flag indicating that the step request came from an EGL frame.
 	 */
 	private boolean steppingFromEGL;
@@ -88,58 +73,11 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	 * @param target The debug target.
 	 * @param thread The Java thread.
 	 */
-	public EGLJavaThread( IDebugTarget target, IJavaThread thread )
+	public EGLJavaThread( EGLJavaDebugTarget target, IJavaThread thread )
 	{
 		super( target );
 		javaThread = thread;
-		initFilterSetting();
 		disposeStackFrames();
-	}
-	
-	/**
-	 * Initialize the filtering setting. If the launch configuration specifies the VM arg then we'll honor it, otherwise we fall back on the system
-	 * property setting within the Eclipse JVM.
-	 */
-	private void initFilterSetting()
-	{
-		boolean set = false;
-		ILaunch launch = getDebugTarget().getLaunch();
-		if ( launch != null )
-		{
-			ILaunchConfiguration config = launch.getLaunchConfiguration();
-			if ( config != null )
-			{
-				try
-				{
-					String vmArgs = config.getAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, (String)null );
-					if ( vmArgs != null && vmArgs.length() > 0 )
-					{
-						Pattern p = Pattern.compile( ".*-D" + FILTER_ATTR + "=([\\S]*)" ); //$NON-NLS-1$ //$NON-NLS-2$
-						Matcher m = p.matcher( vmArgs );
-						if ( m.matches() && m.groupCount() > 0 )
-						{
-							if ( "false".equalsIgnoreCase( m.group( 1 ) ) ) //$NON-NLS-1$
-							{
-								filterRuntimes = false;
-							}
-							else
-							{
-								filterRuntimes = true;
-							}
-							set = true;
-						}
-					}
-				}
-				catch ( CoreException e )
-				{
-				}
-			}
-		}
-		
-		if ( !set )
-		{
-			filterRuntimes = FILTER_RUNTIMES;
-		}
 	}
 	
 	protected void disposeStackFrames()
@@ -331,7 +269,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 					// 3. don't filter the top frame
 					// 4. filter the initial main method (if there is one - there won't be if running on a server)
 					// 5. if we're disabling filtering due to a breakpoint in the runtime, don't filter frames above the topmost frame w/EGL stratum
-					if ( !filterRuntimes
+					if ( !getEGLJavaDebugTarget().filterRuntimes()
 							|| indexOfTopEGLFrame == -1
 							|| (!steppingFromEGL && indexOfTopEGLFrame > i)
 							|| i == 0
@@ -440,15 +378,11 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 						fireCreationEvent();
 						break;
 					case DebugEvent.TERMINATE:
-						EGLJavaDebugTarget target = getEGLJavaDebugTarget();
-						if ( target != null )
-						{
-							target.removeThread( javaThread );
-						}
+						getEGLJavaDebugTarget().removeThread( javaThread );
 						fireTerminateEvent();
 						break;
 					case DebugEvent.RESUME:
-						if ( steppingFromEGL && filterRuntimes && events[ i ].getDetail() == DebugEvent.STEP_INTO )
+						if ( steppingFromEGL && getEGLJavaDebugTarget().filterRuntimes() && events[ i ].getDetail() == DebugEvent.STEP_INTO )
 						{
 							IStackFrame topJavaFrame = previousJavaFrames == null || previousJavaFrames.length == 0
 									? null
@@ -472,7 +406,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 						savedEvents.add( events[ i ] );
 						break;
 					case DebugEvent.SUSPEND:
-						if ( !bpHit && steppingFromEGL && filterRuntimes && events[ i ].getDetail() == DebugEvent.STEP_END )
+						if ( !bpHit && steppingFromEGL && getEGLJavaDebugTarget().filterRuntimes() && events[ i ].getDetail() == DebugEvent.STEP_END )
 						{
 							try
 							{

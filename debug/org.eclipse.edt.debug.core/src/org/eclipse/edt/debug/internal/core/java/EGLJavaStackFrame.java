@@ -351,7 +351,7 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 	{
 		if ( smap == null )
 		{
-			smap = SMAPUtil.getSMAP( javaFrame.getReferenceType() );
+			smap = SMAPUtil.getSMAP( javaFrame.getReferenceType(), getEGLJavaDebugTarget().getSMAPFileCache() );
 		}
 		return smap;
 	}

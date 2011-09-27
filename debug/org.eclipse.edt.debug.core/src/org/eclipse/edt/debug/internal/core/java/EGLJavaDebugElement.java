@@ -94,6 +94,12 @@ public abstract class EGLJavaDebugElement extends DebugElement implements IEGLJa
 	 */
 	private boolean shouldCheckJavaElementAdapter()
 	{
+		if ( this instanceof EGLJavaFunctionVariable )
+		{
+			// No actual corresponding Java element.
+			return false;
+		}
+		
 		Object javaObj = getJavaDebugElement();
 		if ( javaObj instanceof IJavaVariable )
 		{
@@ -116,10 +122,7 @@ public abstract class EGLJavaDebugElement extends DebugElement implements IEGLJa
 	 */
 	public EGLJavaDebugTarget getEGLJavaDebugTarget()
 	{
-		IDebugTarget target = getDebugTarget();
-		return target instanceof EGLJavaDebugTarget
-				? (EGLJavaDebugTarget)target
-				: null;
+		return (EGLJavaDebugTarget)getDebugTarget();
 	}
 	
 	/**

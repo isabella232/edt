@@ -22,6 +22,8 @@ import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
 import org.eclipse.edt.debug.core.java.SMAPUtil;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
+import org.eclipse.jdt.debug.core.IJavaClassType;
+import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaValue;
 
 /**
@@ -152,7 +154,7 @@ public class EGLJavaValue extends EGLJavaDebugElement implements IEGLJavaValue
 	{
 		if ( smap == null )
 		{
-			smap = SMAPUtil.getSMAP( javaValue.getJavaType() );
+			smap = SMAPUtil.getSMAP( javaValue.getJavaType(), getEGLJavaDebugTarget().getSMAPFileCache() );
 		}
 		return smap;
 	}
@@ -170,6 +172,36 @@ public class EGLJavaValue extends EGLJavaDebugElement implements IEGLJavaValue
 		{
 			// We only care about the variables, which is the first element
 			smapVariableInfos = (SMAPVariableInfo[])SMAPUtil.parseVariables( getSMAP(), null );
+			
+			// Also acquire variable infos from super types so we can display inherited fields.
+			IJavaType type = javaValue.getJavaType();
+			while ( type instanceof IJavaClassType )
+			{
+				IJavaClassType superType = ((IJavaClassType)type).getSuperclass();
+				if ( superType != null )
+				{
+					String superSMAP = SMAPUtil.getSMAP( superType, getEGLJavaDebugTarget().getSMAPFileCache() );
+					if ( superSMAP.length() != 0 )
+					{
+						SMAPVariableInfo[] superInfos = SMAPUtil.parseVariables( superSMAP, null );
+						if ( superInfos.length != 0 )
+						{
+							if ( smapVariableInfos.length == 0 )
+							{
+								smapVariableInfos = superInfos;
+							}
+							else
+							{
+								SMAPVariableInfo[] newInfos = new SMAPVariableInfo[ smapVariableInfos.length + superInfos.length ];
+								System.arraycopy( smapVariableInfos, 0, newInfos, 0, smapVariableInfos.length );
+								System.arraycopy( superInfos, 0, newInfos, smapVariableInfos.length, superInfos.length );
+								smapVariableInfos = newInfos;
+							}
+						}
+					}
+				}
+				type = superType;
+			}
 		}
 		return smapVariableInfos;
 	}

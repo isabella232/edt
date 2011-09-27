@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.core.java;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.eclipse.debug.core.DebugException;
@@ -205,28 +208,79 @@ public class SMAPUtil
 	
 	/**
 	 * Returns the SMAP information for the Java type. It will never be null. If there is no SMAP information, or the Java type was not a type that we
-	 * recognize (currently only JDIReferenceType), then this will return blank.
+	 * recognize (currently only JDIReferenceType), then this will return blank. When the class file doesn't contain SMAP information we'll try to
+	 * read in *.eglsmap files from the disk.
 	 * 
 	 * @param type The Java type.
+	 * @param smapFileCache A cache of class name to SMAP data from *.eglsmap files read off disk, or null if we should not check for such files.
 	 * @return the SMAP information.
 	 */
-	public static String getSMAP( IJavaType type )
+	public static String getSMAP( IJavaType type, Map<String, String> smapFileCache )
 	{
 		String smap = null;
-		if ( type instanceof JDIReferenceType )
+		if ( type instanceof IJavaReferenceType )
 		{
-			Type underlyingType = ((JDIReferenceType)type).getUnderlyingType();
-			if ( underlyingType instanceof ReferenceType )
+			if ( type instanceof JDIReferenceType )
 			{
+				Type underlyingType = ((JDIReferenceType)type).getUnderlyingType();
+				if ( underlyingType instanceof ReferenceType )
+				{
+					try
+					{
+						smap = ((ReferenceType)underlyingType).sourceDebugExtension();
+					}
+					catch ( AbsentInformationException e )
+					{
+					}
+					catch ( UnsupportedOperationException e )
+					{
+					}
+				}
+			}
+			
+			if ( smap == null && smapFileCache != null )
+			{
+				// No SMAP in the class file; check if the *.eglsmap file can be read in directly.
+				// This only works for *.eglsmap files in the classpath of the debug IDE code (i.e. we don't have
+				// the classpath of the running application). This allows us to support SMAPs in the Java runtime,
+				// since currently their .class files do not contain SMAP data.
 				try
 				{
-					smap = ((ReferenceType)underlyingType).sourceDebugExtension();
+					String className = ((IJavaReferenceType)type).getName();
+					
+					if ( smapFileCache.containsKey( className ) )
+					{
+						smap = smapFileCache.get( className );
+					}
+					else
+					{
+						try
+						{
+							Class clazz = Class.forName( className );
+							String eglsmap = "/" + className.replace( '.', '/' ) + "." + IEGLDebugCoreConstants.SMAP_EXTENSION; //$NON-NLS-1$ //$NON-NLS-2$
+							InputStream is = clazz.getResourceAsStream( eglsmap );
+							if ( is != null )
+							{
+								BufferedInputStream bis = new BufferedInputStream( is );
+								byte[] b = new byte[ bis.available() ];
+								bis.read( b, 0, b.length );
+								smap = new String( b, "UTF-8" ); //$NON-NLS-1$
+								smapFileCache.put( className, smap );
+							}
+							else
+							{
+								smapFileCache.put( className, null );
+							}
+						}
+						catch ( Throwable t )
+						{
+							smapFileCache.put( className, null );
+						}
+					}
 				}
-				catch ( AbsentInformationException e )
+				catch ( Throwable t )
 				{
-				}
-				catch ( UnsupportedOperationException e )
-				{
+					// Ignore.
 				}
 			}
 		}
