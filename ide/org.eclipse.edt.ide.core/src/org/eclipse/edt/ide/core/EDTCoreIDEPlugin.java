@@ -47,6 +47,7 @@ import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyFileInfoM
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyResourceChangeProcessor;
 import org.eclipse.edt.ide.core.internal.model.EGLModelManager;
 import org.eclipse.edt.ide.core.internal.model.EGLProject;
+import org.eclipse.edt.ide.core.internal.refactor.SettingUpdateResourceChangeListener;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IMember;
@@ -366,7 +367,9 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 		
 		workspace.addResourceChangeListener(WorkingCopyResourceChangeProcessor.getInstance(), IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE
 				| IResourceChangeEvent.POST_CHANGE);
-		
+
+		workspace.addResourceChangeListener(SettingUpdateResourceChangeListener.getInstance(), IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
+
 		ProjectSettingsListenerManager.getInstance(); // Make sure existing projects register preference listeners
 		
 		EGLModelManager manager = EGLModelManager.getEGLModelManager();

@@ -18,7 +18,9 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.edt.ide.core.AbstractGenerator;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
@@ -82,6 +84,8 @@ public class ProjectSettingsUtility {
 	 * Constant for the JavaScript Development Mode generator ID
 	 */
 	public static final String GENERATOR_ID_JAVASCRIPT_DEV = "org.eclipse.edt.ide.gen.JavaScriptDevGenProvider"; //$NON-NLS-1$
+	
+	public static final String[] plugins = new String[] {EDTCoreIDEPlugin.PLUGIN_ID, "org.eclipse.edt.ide.compiler"};
 	
 	
 	/**
@@ -523,5 +527,63 @@ public class ProjectSettingsUtility {
 		}
 		return retValue.toArray(new String[0]);
 	}
+
+	public static void replaceWorkspaceSettings(IPath oldPath, IPath newPath) throws BackingStoreException {
+		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+		for (IProject project : projects) {
+			replaceWorkspaceSettings(project, oldPath, newPath);
+		}
+	}
+    public static void replaceWorkspaceSettings(IProject project, IPath oldPath, IPath newPath) throws BackingStoreException {
+    	for ( int i = 0; i < plugins.length; i ++ ) {
+	    	IEclipsePreferences prefs = new	ProjectScope(project).getNode( plugins[i] );
+	    	String[] names = prefs.childrenNames();
+	    	for (String name : names) {
+	    	    Preferences nextNode = prefs.node(name);
+	    	    String[] keys = nextNode.keys();
+	    	    for (String key : keys) {
+	    	    	String oldKey = keyFor(oldPath);
+	    	    	String oldValue = EclipseUtilities.convertToInternalPath(oldPath.toString());
+	    	    	String value = nextNode.get(key, null);
+	    	        if (key.equals( oldKey ) ) {
+	    	            nextNode.put(keyFor(newPath), value);
+	    	            nextNode.remove(key);
+	    	        } else if ( value.equals( oldValue ) ) {
+	    	        	nextNode.put(key, EclipseUtilities.convertToInternalPath(newPath.toString()));
+	    	        } else if ( value.equals( oldPath.toString() ) ) {
+	    	        	nextNode.put(key, newPath.toString());
+	    	        }
+	    	    }
+	    	}
+    	}
+    }
+    
+	public static void removeWorkspaceSettings(IPath path) throws BackingStoreException {
+		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+		for (IProject project : projects) {
+			removeWorkspaceSettings(project, path);
+		}
+	}
+	
+    public static void removeWorkspaceSettings(IProject project, IPath path) throws BackingStoreException {
+    	for ( int i = 0; i < plugins.length; i ++ ) {
+	    	IEclipsePreferences prefs = new	ProjectScope(project).getNode(plugins[i]);
+
+	    	String[] names = prefs.childrenNames();
+	    	for (String name : names) {
+	    	    Preferences nextNode = prefs.node(name);
+	    	    String[] keys = nextNode.keys();
+	    	    for (String key : keys) {
+	    	    	String oldKey = keyFor(path);
+	    	    	String oldValue = EclipseUtilities.convertToInternalPath(path.toString());
+	    	    	String value = nextNode.get(key, null);
+	    	        if (key.equals( oldKey ) || value.equals( oldValue ) || value.equals( path.toString() ) ) {
+	    	            nextNode.remove( key );
+	    	        }
+	    	    }
+	    	}
+	    	prefs.flush();
+    	}
+    }
 	
 }
