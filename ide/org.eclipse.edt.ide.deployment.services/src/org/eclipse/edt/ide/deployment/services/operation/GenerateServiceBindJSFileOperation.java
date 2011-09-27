@@ -16,6 +16,7 @@ import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -26,7 +27,6 @@ import org.eclipse.edt.gen.deployment.javascript.DeploymentDescGenerator;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.operation.AbstractDeploymentOperation;
-import org.eclipse.edt.ide.deployment.operation.IDeploymentOperation;
 import org.eclipse.edt.ide.deployment.results.DeploymentResultMessageRequestor;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.rui.internal.util.Utils;
@@ -62,18 +62,29 @@ public class GenerateServiceBindJSFileOperation extends AbstractDeploymentOperat
 		this.context = context;
 		ddModel = context.getDeploymentDesc();
 		
-		String javaSourceFolder = EclipseUtilities.getJavaSourceFolderName( context.getTargetProject() );
+//		String javaSourceFolder = EclipseUtilities.getJavaSourceFolderName( context.getTargetProject() );
 		DeploymentResultMessageRequestor messageRequestor = new DeploymentResultMessageRequestor(resultsCollector);
 
+		generateBindFile(context.getDeploymentDesc(), context.getTargetProject(), monitor, messageRequestor);
+		
+		for ( DeploymentDesc egldd: context.getDependentModels() ) {
+			generateBindFile(egldd, context.getTargetProject(), monitor, messageRequestor);
+		}
+
+	}
+
+	private void generateBindFile(DeploymentDesc egldd, IProject targetProject,
+			IProgressMonitor monitor,
+			DeploymentResultMessageRequestor messageRequestor) {
 		try {
 			
 			DeploymentDescGenerator generator = new DeploymentDescGenerator();
 			
-			InputStream is = new ByteArrayInputStream( generator.generateBindFile( context.getDeploymentDesc() ) );
+			InputStream is = new ByteArrayInputStream( generator.generateBindFile( egldd ) );
 			
-			IFolder projectRootFolder = Utils.getContextDirectory(context.getTargetProject());
+			IFolder projectRootFolder = Utils.getContextDirectory(targetProject);
 		
-			IPath targetFilePath = projectRootFolder.getFullPath().append( new Path( ddModel.getName().toLowerCase() + BIND_JS_FILE_SUFFIX ) ); 
+			IPath targetFilePath = projectRootFolder.getFullPath().append( new Path( egldd.getName().toLowerCase() + BIND_JS_FILE_SUFFIX ) ); 
 			
 			IFile targetFile = ResourcesPlugin.getWorkspace().getRoot().getFile(targetFilePath);
 	
@@ -96,6 +107,5 @@ public class GenerateServiceBindJSFileOperation extends AbstractDeploymentOperat
 					null,
 					new String[] { DeploymentUtilities.createExceptionMessage(e) }));
 		}
-
 	}
 }
