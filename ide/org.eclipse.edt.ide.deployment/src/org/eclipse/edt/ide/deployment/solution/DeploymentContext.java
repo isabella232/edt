@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.deployment.solution;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -45,7 +47,8 @@ public class DeploymentContext {
 	private IProject targetProject;
 	private ProjectEnvironment environment;
 	private IProgressMonitor monitor;
-	
+	private List<DeploymentDesc> dependentModels;
+
 	private Shell shell;
 	
 	private int status = 0; // 0 - initial status; 1 - should continue; 2 - stop
@@ -94,6 +97,8 @@ public class DeploymentContext {
 
 	public void setSourceProject(IProject sourceProject) {
 		this.sourceProject = sourceProject;
+		
+		this.setDependentModels( DeploymentUtilities.getDependentModels( this.sourceProject ) );
 
 		environment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(this.sourceProject);
 //			Environment.pushEnv(environment.getIREnvironment());			
@@ -121,6 +126,14 @@ public class DeploymentContext {
 		this.shell = shell;
 	}
 	
+	public List<DeploymentDesc> getDependentModels() {
+		return dependentModels;
+	}
+
+	public void setDependentModels(List<DeploymentDesc> dependentModels) {
+		this.dependentModels = dependentModels;
+	}
+
 	public void showMessage( String messageID ) {
 		  DeploymentDesc model = getDeploymentDesc();
 		  IProject project = getSourceProject();

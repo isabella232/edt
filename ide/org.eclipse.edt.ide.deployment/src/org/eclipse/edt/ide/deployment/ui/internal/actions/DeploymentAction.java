@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.deployment.ui.internal.actions;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -96,7 +98,9 @@ public class DeploymentAction implements IActionDelegate {
 			if (part != null && !part.hasCompileErrors()) {
 				EclipseEGL2HTML cmd = new EclipseEGL2HTML(resource);
 				// TODO only for testing, can remove later
-				Generator generator = new DeploymentHTMLGenerator(cmd, "testdd", null, "en_US", "en_US");
+				List egldds = new ArrayList();
+				egldds.add( "testdd" );
+				Generator generator = new DeploymentHTMLGenerator(cmd, egldds, null, "en_US", "en_US", environment.getSystemEnvironment());
 				cmd.generate(part, generator, environment.getIREnvironment());
 			}
 		} catch (PartNotFoundException e) {

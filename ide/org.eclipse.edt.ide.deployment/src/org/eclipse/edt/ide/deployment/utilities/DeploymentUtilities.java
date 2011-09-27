@@ -51,11 +51,14 @@ import org.eclipse.edt.ide.core.model.Signature;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.ide.deployment.Activator;
 import org.eclipse.edt.ide.deployment.core.IDeploymentConstants;
+import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentProject;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentTarget;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
+import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -283,12 +286,6 @@ public class DeploymentUtilities {
 		}
 	}
 	
-	public static IFile findIFile(IProject project, String fileName) throws CoreException{
-//		IFileLocator locator = new DeployIFileLocator( project );
-//		return locator.findFile(fileName);
-		return null;
-	}
-	
 	public static String[] convertPackage( String pkg )
 	{
 		StringTokenizer toks = new StringTokenizer(pkg,".");
@@ -353,6 +350,46 @@ public class DeploymentUtilities {
 		if (display == null)
 			display = Display.getDefault();
 		return display;
+	}
+	
+	public static List<DeploymentDesc> getDependentModels( IProject project ) {
+		List eglProjectPath = org.eclipse.edt.ide.core.internal.utils.Util.getEGLProjectPath(project);
+		
+		List<DeploymentDesc> models = new ArrayList<DeploymentDesc>();
+		
+		for (Iterator iter1 = eglProjectPath.iterator(); iter1.hasNext();) {
+			IEGLProject eglProject = (IEGLProject)iter1.next();
+			IProject dependentPro = eglProject.getProject();
+			if ( dependentPro != project ) {
+				String eglddPath = ProjectSettingsUtility.getDefaultDeploymentDescriptor( dependentPro );
+				if ( eglddPath == null ) {
+					continue;
+				}
+				IFile resource = (IFile)dependentPro.getWorkspace().getRoot().findMember( eglddPath );
+				
+				try {
+            		String ddName = resource.getName();
+            		ddName = ddName.substring(0, ddName.indexOf( resource.getFileExtension() ) - 1);
+					DeploymentDesc model = DeploymentDesc.createDeploymentDescriptor(ddName, resource.getContents());
+					models.add( model );
+				} catch (Exception e) {
+				}
+//				eglProject.
+			}
+		}
+
+		
+		return models;
+		
+	}
+	
+	public static List getAllEglddsName( DeploymentContext context ) {
+		List egldds = new ArrayList();
+		egldds.add( context.getDeploymentDesc().getName() );
+		for ( DeploymentDesc egldd : context.getDependentModels() ) {
+			egldds.add( egldd.getName() );
+		}
+		return egldds;
 	}
 	
 	public static Map getAllRUIHandlersInProject( IEGLProject project) throws EGLModelException{
