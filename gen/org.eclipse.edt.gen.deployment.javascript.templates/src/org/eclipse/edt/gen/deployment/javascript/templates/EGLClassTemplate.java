@@ -20,9 +20,11 @@ import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Handler;
+import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 
@@ -53,12 +55,12 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			// BFS traverse
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart)){
+				if(CommonUtilities.isUserPart(refPart, ctx)){
 					ctx.invoke(genOutputFileName, refPart, dependentFiles);
 				}				
 			}
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserPart(refPart) && (	part instanceof ExternalType || part instanceof Handler || 
+				if(CommonUtilities.isUserPart(refPart, ctx) && (part instanceof ExternalType || part instanceof Handler || 
 						part instanceof Library || part instanceof Record)){
 					ctx.invoke(genDependentParts, refPart, ctx, dependentFiles, handledParts);
 				}				
@@ -78,12 +80,12 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			// BFS traverse
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserClass(refPart)){
+				if(CommonUtilities.isUserClass(refPart, ctx)){
 					ctx.invoke(genCSSFiles, refPart, cssFiles);
 				}				
 			}
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserClass(refPart)){
+				if(CommonUtilities.isUserClass(refPart, ctx)){
 					ctx.invoke(genDependentCSSs, refPart, ctx, cssFiles, handledParts);
 				}				
 			}
@@ -102,12 +104,12 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			// BFS traverse
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserClass(refPart)){
+				if(CommonUtilities.isUserClass(refPart, ctx)){
 					ctx.invoke(genPropFiles, refPart, propFiles);
 				}
 			}
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserClass(refPart)){
+				if(CommonUtilities.isUserClass(refPart, ctx)){
 					ctx.invoke(genDependentProps, refPart, ctx, propFiles, handledParts);
 				}
 			}
@@ -126,12 +128,12 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
 			// BFS traverse
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserClass(refPart)){
+				if(CommonUtilities.isUserClass(refPart, ctx)){
 					ctx.invoke(genIncludeFiles, refPart, includeFiles);
 				}				
 			}
 			for(Part refPart:refParts){
-				if(CommonUtilities.isUserClass(refPart)){
+				if(CommonUtilities.isUserClass(refPart, ctx)){
 					ctx.invoke(genDependentIncludeFiles, refPart, ctx, includeFiles, handledParts);
 				}				
 			}

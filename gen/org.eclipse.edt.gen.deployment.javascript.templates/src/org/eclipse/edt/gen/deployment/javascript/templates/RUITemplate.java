@@ -76,7 +76,7 @@ public class RUITemplate extends JavaScriptTemplate {
 	};		
 	
 	protected void genHTML(boolean isDevelopment, Handler handler, Context ctx, TabbedWriter out,
-			String egldd, HashMap eglParameters, String userMsgLocale,
+			List egldds, HashMap eglParameters, String userMsgLocale,
 			String runtimeMsgLocale, boolean enableEditing, boolean contextAware, boolean isDebug) {
 		// TODO the css is not interpreted: "Resource interpreted as stylesheet but transferred with MIME type text/html." 
 		// Uncomment when this issue is addressed
@@ -105,7 +105,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		generatePropertiesFiles(handler, ctx, runtimeMsgLocale, userMsgLocale, out);	
 		
 //		generateRuntimePropertiesFiles(out);			
-		generateBindingFileImports(handler, ctx, out, egldd);
+		generateBindingFileImports(handler, ctx, out, egldds);
 		
 		
 		generateRuntimeFilePath(out);
@@ -120,8 +120,8 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("</html>");	
 	}
 	
-	public void genDevelopmentHTML(Handler handler, Context ctx, TabbedWriter out, String egldd, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale, Boolean enableEditing, Boolean contextAware, Boolean isDebug){
-		genHTML(true, handler, ctx, out, egldd, eglParameters, userMsgLocale, runtimeMsgLocale, enableEditing, contextAware, isDebug);		
+	public void genDevelopmentHTML(Handler handler, Context ctx, TabbedWriter out, List egldds, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale, Boolean enableEditing, Boolean contextAware, Boolean isDebug){
+		genHTML(true, handler, ctx, out, egldds, eglParameters, userMsgLocale, runtimeMsgLocale, enableEditing, contextAware, isDebug);		
 	}	
 	
 	public void preGenComment(TabbedWriter out){
@@ -252,8 +252,8 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(\"" + RuntimePropertiesFileUtil.getJavascriptFileName(propertiesFile) + "\");");
 	}
 	
-	private void generateBindingFileImports(Handler part, Context ctx, TabbedWriter out, String egldd){
-		if (egldd == null || egldd.length() == 0) {
+	private void generateBindingFileImports(Handler part, Context ctx, TabbedWriter out, List egldds){
+		if (egldds == null || egldds.size() == 0) {
 			return;
 		}
 		
@@ -268,10 +268,15 @@ public class RUITemplate extends JavaScriptTemplate {
 			for(Part refPart:refParts){
 				if(!processedParts.contains(refPart)){
 					processedParts.add(refPart);
-					if(CommonUtilities.isUserPart(refPart)){
+					if(CommonUtilities.isUserPart(refPart, ctx)){
 //						Annotation annot = refPart.getAnnotation(Constants.USES_SERVICELIB_BINDSERVICE_FUNCTION);
 						if(refPart instanceof Service || refPart instanceof Interface ){
-							out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(\"" + egldd.toLowerCase() + "-bnd.js" + "\");");
+							out.print("RUI_RUNTIME_JAVASCRIPT_FILES.push(");
+							int size = egldds.size();
+							for ( int i = 0; i < egldds.size(); i ++ ) {
+								out.print( "\"" + ((String)egldds.get(i)).toLowerCase() + "-bnd.js\"" + (i == size-1 ? "" : ",") );
+							}
+							out.println(");");
 							return;
 						}
 					}
