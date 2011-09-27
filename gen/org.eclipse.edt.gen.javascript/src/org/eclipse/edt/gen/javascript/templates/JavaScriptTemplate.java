@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -75,6 +75,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genInitializeStatement = "genInitializeStatement";
 	public static final String genInstantiation = "genInstantiation";
 	public static final String genInvocation = "genInvocation";
+	public static final String genIsaExpression = "genIsaExpression";
 	public static final String genJsonAnnotations = "genJsonAnnotations";
 	public static final String genLibrary = "genLibrary";
 	public static final String genLibraries = "genLibraries";
