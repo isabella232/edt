@@ -62,6 +62,7 @@ import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.json.TokenMgrError;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.StartupInfo;
+import org.eclipse.edt.javart.services.ServiceUtilities;
 import org.eclipse.edt.javart.services.servlet.ServletUtilities;
 import org.eclipse.edt.javart.services.servlet.proxy.ProxyEventHandler;
 import org.eclipse.edt.javart.services.servlet.proxy.ProxyUtilities;
@@ -85,7 +86,6 @@ import eglx.http.Request;
 import eglx.http.Response;
 import eglx.json.JsonUtilities;
 import eglx.services.ServiceKind;
-import eglx.services.ServiceUtilities;
 
 
 
