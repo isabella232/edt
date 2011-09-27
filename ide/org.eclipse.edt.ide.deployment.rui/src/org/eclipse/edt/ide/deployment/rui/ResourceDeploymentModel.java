@@ -79,13 +79,6 @@ public class ResourceDeploymentModel {
 		this.resourceOmissions = resourceOmissions;
 	}
 	
-	public ResourceDeploymentModel(IProject sourceProject, List<String> resourceOmissions, boolean supportDynamicLoading) 
-	{
-		this.activeRoot = new TreeNodeRoot(null, sourceProject);		
-		this.activeRoot.setSupportDynamicLoading(supportDynamicLoading);
-		this.resourceOmissions = resourceOmissions;
-	}
-	
 	private void initializeResourceTree(){
 		if (this.activeRoot.children == null) {
 			cleanupFoldersToDeploy(activeRoot);

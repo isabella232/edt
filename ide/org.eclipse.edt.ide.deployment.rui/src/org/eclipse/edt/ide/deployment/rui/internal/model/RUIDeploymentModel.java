@@ -40,11 +40,11 @@ import org.eclipse.edt.ide.deployment.core.model.RUIHandler;
 import org.eclipse.edt.ide.deployment.results.DeploymentResultMessageRequestor;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.rui.Activator;
-import org.eclipse.edt.ide.deployment.rui.internal.IConstants;
 import org.eclipse.edt.ide.deployment.rui.internal.preferences.HandlerLocalesList;
 import org.eclipse.edt.ide.deployment.rui.internal.util.DeployLocale;
 import org.eclipse.edt.ide.deployment.rui.internal.util.GenerateHTMLFile;
 import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
+import org.eclipse.edt.ide.rui.utils.IConstants;
 import org.eclipse.edt.ide.rui.utils.IFileLocator;
 import org.eclipse.edt.javart.resources.egldd.Parameter;
 
@@ -155,12 +155,7 @@ public class RUIDeploymentModel {
 	 * The HTML file name to use for each RUIHandler, indexed by RUIHandler IFile
 	 */
 	private Map<IResource, String> htmlFileNames = new HashMap<IResource, String>();
-	
-	/**
-	 * The Dynamic Load Handler List for each RUIHandler, indexed by RUIHandler IFile
-	 */
-	private Map<IResource, String> dynamicLoadHandlersMap = new HashMap<IResource, String>();
-	
+ 
 	/**
 	 * The context root to use for this deployment
 	 */
@@ -188,19 +183,19 @@ public class RUIDeploymentModel {
 
 	List<PartInfo> allHandlers = new ArrayList<PartInfo>();
 	IEGLSearchScope projSearchScope = null;
-	private String eglddName = null;
+	private List egldds = null;
 	
 	/**
 	 * Constructor
 	 * @param contextRoot2 
 	 * @param project 
 	 */
-	public RUIDeploymentModel(RUIApplication ruiApplication, IProject sourceProject, String target, String eglddName, String contextRoot, IDeploymentResultsCollector resultsCollector) throws CoreException{
+	public RUIDeploymentModel(RUIApplication ruiApplication, IProject sourceProject, String target, List egldds, String contextRoot, IDeploymentResultsCollector resultsCollector) throws CoreException{
 		this.sourceProject = sourceProject;
 		this.target = target;
 		this.contextRoot = contextRoot;
 		this.resultsCollector = resultsCollector;
-		this.eglddName = eglddName;
+		this.egldds = egldds;
 
 		startAllHandlerGeneration();
 		
@@ -450,7 +445,6 @@ public class RUIDeploymentModel {
 //			}
 //
 			if(sourceRUIHandlers.contains(ruiHandler)){
-				//generate HTML for source handlers, not for dynamic loading handlers
 				if (!messageRequestor.isError() && !monitor.isCanceled()) {
 					/**
 					 * pass the HTML generator the locale that the HTML file will be supporting. This is used as input to see
@@ -460,7 +454,7 @@ public class RUIDeploymentModel {
 					eglProperties.put(IConstants.DEFAULT_LOCALE_PARAMETER_NAME, locale.getRuntimeLocaleCode());
 					byte[] htmlFile;
 					try {
-						htmlFile = generateHandlerHTML(ruiHandler, eglProperties, userLocaleCode, locale.getRuntimeLocaleCode(), eglddName, messageRequestor);
+						htmlFile = generateHandlerHTML(ruiHandler, eglProperties, userLocaleCode, locale.getRuntimeLocaleCode(), egldds, messageRequestor);
 						/**
 						 * store the html file bytes into a map for retrieval
 						 */
@@ -476,14 +470,6 @@ public class RUIDeploymentModel {
 				}
 			}
 		}
-//		if(sourceRUIHandlersDynamic.values().contains(ruiHandler)){
-//			//proceed dynamic load handlers, put the required resource to a list
-//			for (Iterator<String> it = XmlDeployFileUtil.getAllIncludes(relatedDeployFiles).iterator(); it.hasNext() && !monitor.isCanceled(); ) {
-//				String resource = it.next();
-//				dynamicLoadResource.add(resource);
-//			}
-//		}
-
 	}
 	
 	/**
@@ -498,8 +484,8 @@ public class RUIDeploymentModel {
 	 * @throws CoreException
 	 */
 	public static final byte[] generateHandlerHTML(IFile input, HashMap eglParameters, 
-			String userMsgLocale, String runtimeMsgLocale, String eglddName, IGenerationMessageRequestor messageRequestor) throws Exception  {
-		GenerateHTMLFile op = new GenerateHTMLFile(input, eglParameters, userMsgLocale, runtimeMsgLocale, eglddName);
+			String userMsgLocale, String runtimeMsgLocale, List egldds, IGenerationMessageRequestor messageRequestor) throws Exception  {
+		GenerateHTMLFile op = new GenerateHTMLFile(input, eglParameters, userMsgLocale, runtimeMsgLocale, egldds);
 		return op.execute(messageRequestor);
 	}
 	
@@ -646,8 +632,8 @@ public class RUIDeploymentModel {
 		return contextRoot;
 	}
 	
-	public String getEglddName() {
-		return eglddName;
+	public List getEgldds() {
+		return egldds;
 	}
 	public void setContextRoot(String contextRoot) {
 		this.contextRoot = contextRoot;	
@@ -655,9 +641,5 @@ public class RUIDeploymentModel {
 	
 	public Map<IResource, String> getHTMLFileNames(){
 		return htmlFileNames;
-	}
-	
-	public Map<IResource, String> getDynamicLoadHandlers(){
-		return dynamicLoadHandlersMap;
 	}
 }

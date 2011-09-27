@@ -110,8 +110,6 @@ public class J2EEDeploymentSolution extends AbstractDeploymentSolution {
 						{
 							String handleName = (String)itr.next();
 							boolean isConfigured = false;
-							//If a handler is already configured in EGLDD, used the configured information 
-							//including HTML file name and dynamic loading handler names
 							for(Iterator<RUIHandler> ite = application.getRUIHandlers().iterator();ite.hasNext();){
 								RUIHandler configuredHandler = ite.next();
 								if(configuredHandler.getImplementation().equals(handleName)){
@@ -155,58 +153,6 @@ public class J2EEDeploymentSolution extends AbstractDeploymentSolution {
 	}
 	
 	
-	/* TODO - EDT	
-	private void executeWeb(BuildDescriptor bd, IFile bdFile, IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor) {
-		if( model.hasParts() )
-		{
-			IProject targetProject = ResourcesPlugin.getWorkspace().getRoot().getProject(targetProjectName);
-			if( targetProject != null && targetProject.exists() && targetProject.isOpen() )
-			{
-
-				if( !EclipseUtilities.isWebProject(targetProject))
-				{
-					resultsCollector.addMessage(RUIDeployUtilities.createStatus(IStatus.ERROR, Messages.bind(Messages.J2EEDeploymentSolution_95, new String[] {targetProjectName})));
-					return;
-				}
-
-				if( !monitor.isCanceled() ){
-					removeJavaScriptValidation(targetProject, monitor);
-					deployRUISolutions(monitor, resultsCollector);
-				}
-				monitor.subTask("");
-				TargetDeploymentModel targetDeploymentModel = new TargetDeploymentModel(model);
-				ResourceCopyOperation resourceCopyOperation = new ResourceCopyOperation(targetProject);
-				if( !monitor.isCanceled() ){
-					resourceCopyOperation.updateFda7Jar(monitor);
-				}
-				if( !monitor.isCanceled() ){
-					resourceCopyOperation.copyModelResources(new ResourceDeploymentModel(targetDeploymentModel.getSourceProject(), model.getResourceOmissions(), model.isSupportDynamicLoading()), 
-																						monitor, resultsCollector);
-				}
-				if( !monitor.isCanceled() ){
-					deployDD(targetDeploymentModel, bd, bdFile, monitor, resultsCollector);
-				}
-				monitor.subTask("");
-				if( !monitor.isCanceled() ){
-					monitor.setTaskName(Messages.J2EEDeploymentSolution_67);
-					WebXMLManager.instance.updateModel(targetProject);
-				}
-				if( monitor.isCanceled() ){
-					resultsCollector.addMessage(DeploymentUtilities.createStatus(IStatus.ERROR, Messages.J2EEDeploymentSolution_Canceled));
-				}
-			}
-			else
-			{
-				resultsCollector.addMessage(DeploymentUtilities.createDeployMessage(IStatus.ERROR, Messages.bind(Messages.J2EEDeploymentSolution_32, targetProjectName)));
-			}
-		}
-		else
-		{
-			resultsCollector.addMessage(DeploymentUtilities.createStatus(IStatus.WARNING, Messages.bind(Messages.deployment_no_parts_found, model.getName())));
-		}
-	}
-	*/
-
 	private void removeJavaScriptValidation(final IProject project, final IProgressMonitor monitor)
 	{
 		try {

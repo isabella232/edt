@@ -13,10 +13,10 @@ package org.eclipse.edt.ide.deployment.rui.internal.util;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
@@ -47,15 +47,15 @@ public class GenerateHTMLFile{
 	private HashMap eglParameters;
 	private String userMsgLocale;
 	private final String runtimeMsgLocale;
-	private String eglddName;
+	private List egldds;
 
 	public GenerateHTMLFile(IFile eglFile, HashMap eglParameters, 
-			String userMsgLocale, String runtimeMsgLocale, String eglddName){
+			String userMsgLocale, String runtimeMsgLocale, List egldds){
 		this.eglFile = eglFile;
 		this.eglParameters = eglParameters;
 		this.runtimeMsgLocale = runtimeMsgLocale;
 		this.userMsgLocale = userMsgLocale;
-		this.eglddName = eglddName;
+		this.egldds = egldds;
 	}
 
 	public byte[] execute(final IGenerationMessageRequestor messageRequestor) throws Exception {
@@ -110,25 +110,6 @@ public class GenerateHTMLFile{
 	}
 	
 	protected byte[] generateHTMLFileContents(String resourceName, IProject project) throws IOException, SAXException{
-//		HTMLGenerator generator;
-//		// Locate the deploy file for this HTML file
-//		EGLResource resource = locator.findResource(resourceName.concat(".deploy")); //$NON-NLS-1$
-//		if(resource != null){
-//			DotDeployFile deployFile = XmlDeployFileUtil.getDeployFile(resource);
-//			HashMap eglProperties = new HashMap();
-//			eglProperties.put(IConstants.CONTEXT_ROOT_PARAMETER_NAME, projectName);		
-//			eglProperties.put(IConstants.HTML_FILE_LOCALE, getHandlerMessageLocale());
-//			eglProperties.put(IConstants.DEFAULT_LOCALE_PARAMETER_NAME, getRuntimeMessageLocale());
-//			
-//			// If this file is in the preview pane, add information to the returned HTML file as necessary
-//			generator = getDevelopmentGenerator(locator, resourceName, eglProperties, 
-//					getHandlerMessageLocale(), getRuntimeMessageLocale(), deployFile);
-//			return generator.generate();
-//		}
-//		return null;
-		
-		
-		
 		ProjectEnvironment environment = null;
 		try {
 			environment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
@@ -145,7 +126,7 @@ public class GenerateHTMLFile{
 			
 			if (part != null && !part.hasCompileErrors()) {
 				EGL2HTML4VE cmd = new EGL2HTML4VE();
-				Generator generator = new DeploymentHTMLGenerator(cmd, eglddName, eglParameters, userMsgLocale, runtimeMsgLocale );
+				Generator generator = new DeploymentHTMLGenerator(cmd, egldds, eglParameters, userMsgLocale, runtimeMsgLocale, environment.getSystemEnvironment() );
 				String result = cmd.generate(part, generator, environment.getIREnvironment());
 				return result.getBytes();
 			}

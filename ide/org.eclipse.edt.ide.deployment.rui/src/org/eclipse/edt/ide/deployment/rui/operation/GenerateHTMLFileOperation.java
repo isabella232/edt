@@ -116,7 +116,7 @@ public class GenerateHTMLFileOperation extends AbstractDeploymentOperation {
 					}
 				}
 			}
-			RUIDeploymentModel ruiModel = new RUIDeploymentModel(model.getRUIApplication(), context.getSourceProject(), targetProjectName, model.getName(), contextRoot, resultsCollector);
+			RUIDeploymentModel ruiModel = new RUIDeploymentModel(model.getRUIApplication(), context.getSourceProject(), targetProjectName, DeploymentUtilities.getAllEglddsName(context), contextRoot, resultsCollector);
 			
 			if(ruiModel.getHandlerLocales().size() > 0){
 				if(ruiModel.getSourceRUIHandlers().size() > 0){

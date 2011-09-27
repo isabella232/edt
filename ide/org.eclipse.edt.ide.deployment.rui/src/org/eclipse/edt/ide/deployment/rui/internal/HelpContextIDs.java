@@ -31,6 +31,4 @@ public interface HelpContextIDs {
 	// Deployment preference page
 	public static final String RUI_DEPLOYMENT_PREFERENCE_PAGE = PREFIX + "ruidp0001"; //$NON-NLS-1$
 	
-	//Dynamic loading wizard help id
-	public static final String RUI_DEPLOYMENT_DYNAMICLOADING_WIZARD = PREFIX + "dynamicloading0001";
 }

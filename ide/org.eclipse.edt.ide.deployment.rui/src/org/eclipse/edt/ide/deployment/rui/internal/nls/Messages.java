@@ -161,11 +161,9 @@ public class Messages extends NLS {
 	public static String editor_detail_page_handlers_label;
 	public static String locale_section_title;
 	public static String rui_handlers_section_title;
-	public static String rui_dynamic_loading_section_title;
 	public static String rui_handlers_table_handler_column_label;
 	public static String rui_handlers_table_html_column_label;
 	public static String rui_handlers_deploy_all_label;
-	public static String rui_handlers_support_dynamic_loading;
 	public static String target_detail_page_rui_section_title;
 	public static String target_detail_page_rui_section_desc;
 	public static String no_locale_selected_error;
@@ -199,21 +197,6 @@ public class Messages extends NLS {
 	public static String deployment_invalid_rui_handler_missing_ir;
 	public static String deployment_invalid_rui_handler_missing_bd;
 	public static String deployment_invalid_rui_handler_exception;
-		
-		//For dynamic loading		
-	public static String rui_handlers_table_dynamicloading_label;
-	public static String rui_handlers_table_dynamic_column_label;
-	public static String DynamicLoadingConfigTitle;
-	public static String DynamicLoadingConfigButtonConfigure;
-	public static String DynamicLoadingPageTitle;
-	public static String DynamicLoadingPageDescription;
-	public static String AddDynamicLoadingLabel;
-	public static String AddAllDynamicLoadingLabel;
-	public static String RemoveDynamicLoadingLabel;
-	public static String RemoveAllDynamicLoadingLabel;
-	public static String AddReferenceDynamicLoadingLabel;
-	public static String DynamicLoadingAvaliableHandlers;
-	public static String HandlersToDynamicLoading;
 	
 	static {
 		// initialize resource bundle

@@ -105,7 +105,7 @@ public class RUIFormPage extends EGLDDBaseFormPage implements ILocalesListViewer
 	private static final int COLINDEX_HANDLER = 0;
 	private static final int COLINDEX_HTML = 1;
 	private static final int COLINDEX_DYAMIC = 0;
-	private static final String[] HANDLER_TABLE_COLUMN_PROPERTIES = { "COL_HANDLER", "COL_HTML", "COL_DYNAMIClIST"}; //$NON-NLS-1$ //$NON-NLS-2$
+	private static final String[] HANDLER_TABLE_COLUMN_PROPERTIES = { "COL_HANDLER", "COL_HTML" }; //$NON-NLS-1$ //$NON-NLS-2$
 	
 	private static final int COLINDEX_LOCALE_DESC = 0;
 	private static final int COLINDEX_LOCALE_CODE = 1;
@@ -545,28 +545,8 @@ public class RUIFormPage extends EGLDDBaseFormPage implements ILocalesListViewer
 		int maxWidth = EGLDDBaseFormPage.DEFAULT_COLUMN_WIDTH;
 		maxWidth = EGLDDBaseFormPage.createTableColumn( t, tableLayout, maxWidth, Messages.rui_handlers_table_handler_column_label, COLINDEX_HANDLER );
 		maxWidth = EGLDDBaseFormPage.createTableColumn( t, tableLayout, maxWidth, Messages.rui_handlers_table_html_column_label, COLINDEX_HTML );
-		//maxWidth = EGLDDBaseFormPage.createTableColumn( t, tableLayout, maxWidth, Messages.rui_handlers_table_dynamicloading_label, COLINDEX_DYNAMICLIST );
 		t.setLayout( tableLayout );
 		
-		return t;
-	}
-
-	private Table createDynanicConfigControl(FormToolkit toolkit,Composite parent) {
-		int style = SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL| SWT.V_SCROLL | SWT.BORDER;
-		Table t = toolkit.createTable(parent, style);
-		t.setHeaderVisible(true);
-		t.setLinesVisible(true);
-
-		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.heightHint = 160;
-		gd.widthHint = 100;
-		t.setLayoutData(gd);
-		toolkit.paintBordersFor(parent);
-		TableLayout tableLayout = new TableLayout();
-		int maxWidth = EGLDDBaseFormPage.DEFAULT_COLUMN_WIDTH;
-		maxWidth = EGLDDBaseFormPage.createTableColumn(t, tableLayout, maxWidth, Messages.rui_handlers_table_dynamic_column_label, COLINDEX_DYAMIC);
-		t.setLayout(tableLayout);
-
 		return t;
 	}
 

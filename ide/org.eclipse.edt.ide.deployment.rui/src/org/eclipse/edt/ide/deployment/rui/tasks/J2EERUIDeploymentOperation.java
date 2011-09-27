@@ -34,11 +34,8 @@ import org.eclipse.edt.compiler.internal.util.EGLMessage;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IPart;
-import org.eclipse.edt.ide.core.utils.EGLProjectFileUtility;
-import org.eclipse.edt.ide.core.utils.EGLProjectInfoUtility;
 import org.eclipse.edt.ide.deployment.results.DeploymentResultMessageRequestor;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
-import org.eclipse.edt.ide.deployment.rui.internal.IConstants;
 import org.eclipse.edt.ide.deployment.rui.internal.model.RUIDeploymentModel;
 import org.eclipse.edt.ide.deployment.rui.internal.model.RUIDeploymentModel.DeployableFile;
 import org.eclipse.edt.ide.deployment.rui.internal.nls.Messages;
@@ -48,8 +45,8 @@ import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
 import org.eclipse.edt.ide.rui.utils.DeployFileLocator;
 import org.eclipse.edt.ide.rui.utils.DeployIFileLocator;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
+import org.eclipse.edt.ide.rui.utils.IConstants;
 import org.eclipse.edt.ide.rui.utils.IFileLocator;
-import org.eclipse.jdt.core.JavaModelException;
 
 /**
  * The abstract deployment operation for a J2EE based web project target. <br>
@@ -165,7 +162,7 @@ public class J2EERUIDeploymentOperation {
 				 */
 				HashMap<String, String> eglProperties = new HashMap<String, String>();
 				eglProperties.put(IConstants.CONTEXT_ROOT_PARAMETER_NAME, model.getContextRoot());
-				eglProperties.put(IConstants.DEFAULT_DD_PARAMETER_NAME, model.getEglddName().toLowerCase());
+				eglProperties.put(IConstants.DEFAULT_DD_PARAMETER_NAME, ((String)model.getEgldds().get(0)).toLowerCase());
 				if( !monitor.isCanceled() ){
 					monitor.subTask(Messages.J2EEDeploymentOperation_2);
 					model.generateHandler(ruiHandler, 

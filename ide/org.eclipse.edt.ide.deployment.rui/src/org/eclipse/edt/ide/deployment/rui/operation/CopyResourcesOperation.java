@@ -45,7 +45,7 @@ public class CopyResourcesOperation extends AbstractDeploymentOperation {
 //			resourceCopyOperation.updateFda7Jar(monitor);
 //		}
 		if( !monitor.isCanceled() ){
-			resourceCopyOperation.copyModelResources(new ResourceDeploymentModel(context.getSourceProject(), model.getResourceOmissions(), false), 
+			resourceCopyOperation.copyModelResources(new ResourceDeploymentModel(context.getSourceProject(), model.getResourceOmissions()), 
 																				monitor, resultsCollector);
 		}
 
