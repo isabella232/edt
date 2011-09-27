@@ -35,6 +35,7 @@ public class EGLSQLWithStatementReferenceCompletion extends EGLAbstractReference
 		addContext("package a; function a() open a with "); //$NON-NLS-1$
 		addContext("package a; function a() open a from a with "); //$NON-NLS-1$
 		addContext("package a; function a() replace a to a with "); //$NON-NLS-1$
+		addContext("package a; function a() prepare a from a with "); //$NON-NLS-1$
 		
 	}
 
