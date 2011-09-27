@@ -23,7 +23,9 @@
 package org.eclipse.edt.ide.rui.server;
 
 import java.util.HashMap;
+import java.util.List;
 
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.deployment.javascript.DesignPaneHTMLGenerator;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
@@ -39,7 +41,7 @@ public class DesignPaneContentProvider extends WorkingCopyContentProvider {
 		super(editorProvider);
 	}
 
-	protected HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, String egldd, HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale) {
-		return new DesignPaneHTMLGenerator(processor, egldd, eglProperties, userMsgLocale, runtimeMsgLocale);
+	protected HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, List egldds, HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv) {
+		return new DesignPaneHTMLGenerator(processor, egldds, eglProperties, userMsgLocale, runtimeMsgLocale, sysEnv);
 	}	
 }

@@ -27,7 +27,9 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -35,6 +37,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.internal.PartWrapper;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.Generator;
@@ -228,8 +231,10 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 				
 				//FIXME using default specified on the project for now
 				String egldd = DefaultDeploymentDescriptorUtility.getDefaultDeploymentDescriptor(project).getPartName();
+				List egldds = new ArrayList();
+				egldds.add( egldd );
 				eglProperties.put(IConstants.DEFAULT_DD_PARAMETER_NAME, egldd);
-				Generator generator = getDevelopmentGenerator(cmd, egldd, eglProperties, getHandlerMessageLocale(), getRuntimeMessageLocale());
+				Generator generator = getDevelopmentGenerator(cmd, egldds, eglProperties, getHandlerMessageLocale(), getRuntimeMessageLocale(), environment.getSystemEnvironment());
 				String result = cmd.generate(part, generator, environment.getIREnvironment());
 				return result.getBytes();
 			}
@@ -260,7 +265,7 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 	protected abstract FileLocator getFileLocator(IProject project)throws CoreException;
 	protected abstract IFileLocator getIFileLocator(IProject project)throws CoreException;
 	
-	protected abstract HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, String egldd, HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale);
+	protected abstract HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, List egldds, HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv);
 
 	
 	protected String getRuntimeMessageLocale() {

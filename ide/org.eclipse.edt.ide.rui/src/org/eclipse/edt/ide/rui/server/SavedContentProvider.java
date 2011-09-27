@@ -23,9 +23,11 @@
 package org.eclipse.edt.ide.rui.server;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
 import org.eclipse.edt.gen.deployment.javascript.NoContextHTMLGenerator;
@@ -45,7 +47,7 @@ public class SavedContentProvider extends AbstractContentProvider {
 		return new DebugIFileLocator(project);
 	}
 	
-	protected HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, String egldd, HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale) {
-		return new NoContextHTMLGenerator(processor, egldd, eglProperties, userMsgLocale, runtimeMsgLocale);
+	protected HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, List egldds, HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv) {
+		return new NoContextHTMLGenerator(processor, egldds, eglProperties, userMsgLocale, runtimeMsgLocale, sysEnv);
 	}
 }
