@@ -308,6 +308,14 @@ public class CommonUtilities {
 
 		return false;
 	}
+	
+	public static boolean isException(Object obj) {
+		if (obj instanceof EGLClass) {
+			return ((EGLClass) obj).getAnnotation("eglx.lang.Exception") != null; // TODO sbg need constant
+		}
+		return false;
+	}
+
 
 	public static boolean isRUIPropertiesLibrary(Object obj) {
 		if (obj instanceof EGLClass) {
