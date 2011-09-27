@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension
+          point="org.eclipse.debug.core.launchConfigurationTypes">
+       <launchConfigurationType
+             delegate="org.eclipse.edt.debug.javascript.internal.launching.RUILaunchDelegate"
+             id="org.eclipse.edt.debug.javascript.ruiLaunchConfigurationType"
+             modes="run, debug"
+             name="%LaunchConfiguration.label"
+             sourceLocatorId="org.eclipse.edt.debug.javascript.ruiSourceLookupDirector"
+             sourcePathComputerId="org.eclipse.edt.debug.javascript.ruiSourcePathComputer"/>
+    </extension>
+    <extension
+          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+       <launchConfigurationTypeImage
+             configTypeID="org.eclipse.edt.debug.javascript.ruiLaunchConfigurationType"
+             icon="icons/full/obj16/egl_launch_obj.gif"
+             id="org.eclipse.edt.debug.javascript.ruiLaunchConfigurationTypeImage"/>
+    </extension>
+    <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            type="org.eclipse.edt.debug.javascript.ruiLaunchConfigurationType"
+            class="org.eclipse.edt.debug.javascript.internal.launching.RUILoadTabGroup"
+            id="org.eclipse.edt.debug.javascript.ruiLoadTabGroup">
+      </launchConfigurationTabGroup>
+   	</extension>  	
+   	
+    <extension
+         point="org.eclipse.debug.ui.debugModelPresentations">
+      <debugModelPresentation
+            class="org.eclipse.edt.debug.javascript.internal.model.RUIModelPresentation"
+            id="org.eclipse.edt.debug.javascript.rui">
+      </debugModelPresentation>
+   </extension>
+    <extension
+         point="org.eclipse.debug.core.sourceLocators">
+      <sourceLocator
+            name="%SourceDirector.name"
+            class="org.eclipse.edt.debug.javascript.internal.launching.RUISourceLookupDirector"
+            id="org.eclipse.edt.debug.javascript.ruiSourceLookupDirector">
+      </sourceLocator>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.sourcePathComputers">
+      <sourcePathComputer
+            class="org.eclipse.edt.debug.javascript.internal.launching.RUISourcePathComputerDelegate"
+            id="org.eclipse.edt.debug.javascript.ruiSourcePathComputer">
+      </sourcePathComputer>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+         id="org.eclipse.edt.debug.javascript.ruiLaunchShortcut"
+         class="org.eclipse.edt.debug.javascript.internal.launching.RUILaunchShortcut"
+         label="%LaunchShortcut.label"
+         icon="icons/full/obj16/egl_launch_obj.gif"
+         modes="run, debug">
+         <contextualLaunch>
+           <enablement>
+             <with variable="selection">
+               <count value="1"/>
+               <iterate>
+	             <and>
+	               <test property="org.eclipse.edt.debug.javascript.rui.isRuiHandler" forcePluginActivation="true"/>
+                   <test property="org.eclipse.edt.debug.ui.hasProjectNatures" args="org.eclipse.edt.ide.core.EGLNature" forcePluginActivation="true"/>
+	             </and>
+               </iterate>
+             </with>
+           </enablement>
+  		 </contextualLaunch>
+         <configurationType
+               id="org.eclipse.edt.debug.javascript.ruiLaunchConfigurationType"/>
+         <description
+               description="%RunRUILaunchShortcut.description"
+               mode="run"/>
+         <description
+               description="%DebugRUILaunchShortcut.description"
+               mode="debug"/>
+      </shortcut>
+   </extension>
+
+<!-- Property testers -->
+   <extension point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+         class="org.eclipse.edt.debug.javascript.internal.launching.RuiLaunchableTester"
+         id="org.eclipse.edt.debug.javascript.ruiLaunchableTester"
+         namespace="org.eclipse.edt.debug.javascript.rui"
+         properties="isRuiHandler"
+         type="java.lang.Object"/>            
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.editorActions">
+      <editorContribution
+            targetID="org.eclipse.edt.ide.rui.visualeditor.EvEditor"
+            id="org.eclipse.edt.debug.EvEditor.debugActions">
+         <action
+               label="%AddBreakpoint.label"
+               class="org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
+               actionID="RulerDoubleClick"
+               id="org.eclipse.edt.debug.ui.actions.ManageBreakpointRulerAction">
+         </action>
+         <action
+               class="org.eclipse.edt.debug.javascript.internal.actions.DebugAction"
+               icon="icons/full/etool16/debug_exc.gif"
+               id="org.eclipse.edt.debug.javascript.launchDebugAction"
+               label="%DebugInExternalBrowser.label"
+               style="push"
+               toolbarPath="main"
+               tooltip="%DebugInExternalBrowser.label">
+         </action>
+      </editorContribution>
+   </extension>
+   
+   <extension
+         point="org.eclipse.debug.core.watchExpressionDelegates">
+      <watchExpressionDelegate
+            debugModel="org.eclipse.edt.debug.javascript.rui"
+            delegateClass="org.eclipse.edt.debug.core.EGLWatchExpressionDelegate">
+      </watchExpressionDelegate>
+   </extension>
+</plugin>
