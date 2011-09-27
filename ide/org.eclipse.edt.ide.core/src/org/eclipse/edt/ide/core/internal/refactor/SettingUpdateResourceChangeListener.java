@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,7 +20,6 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -55,7 +54,6 @@ public class SettingUpdateResourceChangeListener implements
 			int rcType = dResource.getType();
 
 			if (rcType == IResource.PROJECT || rcType == IResource.FOLDER) {
-				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 				int flags = delta.getFlags();
 				switch (delta.getKind()) {
 				case IResourceDelta.REMOVED:
