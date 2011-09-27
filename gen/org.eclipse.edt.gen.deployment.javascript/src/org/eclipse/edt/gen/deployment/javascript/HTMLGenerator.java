@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.deployment.javascript;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.EglContext;
@@ -22,16 +23,20 @@ import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.serialization.Environment;
 
 public class HTMLGenerator extends Generator {
 
 	protected Context context;
 	protected TabbedWriter out;
 	protected AbstractGeneratorCommand generator;
+	protected ISystemEnvironment sysEnv;
 	
-	public HTMLGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
+	public HTMLGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor, ISystemEnvironment sysEnv ) {
 		super(processor, requestor);		
 		out = new TabbedWriter(new StringWriter());
+		this.sysEnv = sysEnv; 
+		context.sysEnv = sysEnv;
 	}
 
 	@Override
@@ -41,7 +46,7 @@ public class HTMLGenerator extends Generator {
 	
 	@Override
 	public EglContext makeContext(AbstractGeneratorCommand processor) {
-		context = new Context(processor);
+		context = new Context(processor, sysEnv);
 		return context;
 	}
 

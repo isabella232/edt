@@ -12,14 +12,16 @@
 package org.eclipse.edt.gen.deployment.javascript;
 
 import java.util.HashMap;
+import java.util.List;
 
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 
 public class DesignPaneHTMLGenerator extends VeHTMLGenerator {
 
-	public DesignPaneHTMLGenerator(AbstractGeneratorCommand processor, String egldd,
-			HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale) {
-		super(processor, egldd, eglParameters, userMsgLocale, runtimeMsgLocale);
+	public DesignPaneHTMLGenerator(AbstractGeneratorCommand processor, List egldds,
+			HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv) {
+		super(processor, egldds, eglParameters, userMsgLocale, runtimeMsgLocale, sysEnv);
 		// TODO Auto-generated constructor stub
 	}
 

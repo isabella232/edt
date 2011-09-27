@@ -12,7 +12,9 @@
 package org.eclipse.edt.gen.deployment.javascript;
 
 import java.util.HashMap;
+import java.util.List;
 
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.deployment.javascript.templates.JavaScriptTemplate;
@@ -20,9 +22,9 @@ import org.eclipse.edt.mof.egl.Part;
 
 public abstract class DevelopmentHTMLGenerator extends ValidHTMLGenerator {	
 	
-	public DevelopmentHTMLGenerator(AbstractGeneratorCommand processor, String egldd,
-			HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale) {
-		super(processor, egldd, eglParameters, userMsgLocale, runtimeMsgLocale);
+	public DevelopmentHTMLGenerator(AbstractGeneratorCommand processor, List egldds,
+			HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv) {
+		super(processor, egldds, eglParameters, userMsgLocale, runtimeMsgLocale, sysEnv);
 	}
 
 	@Override
@@ -31,7 +33,7 @@ public abstract class DevelopmentHTMLGenerator extends ValidHTMLGenerator {
 	}
 	
 	protected void invokeGeneration(Part part, String methodName) {
-		context.invoke(methodName, part, context, out, egldd, eglParameters, userMsgLocale, runtimeMsgLocale, getEnableEditing(), isContextAware(), isDebug());
+		context.invoke(methodName, part, context, out, egldds, eglParameters, userMsgLocale, runtimeMsgLocale, getEnableEditing(), isContextAware(), isDebug());
 	}
 	
 	/**

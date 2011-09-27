@@ -11,14 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.deployment.javascript;
 
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 
 public abstract class ErrorHTMLGenerator extends HTMLGenerator {
 
 	public ErrorHTMLGenerator(AbstractGeneratorCommand processor,
-			IGenerationMessageRequestor requestor) {
-		super(processor, requestor);
+			IGenerationMessageRequestor requestor, ISystemEnvironment sysEnv) {
+		super(processor, requestor, sysEnv);
 	}
 
 }

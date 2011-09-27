@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.deployment.util;
 import java.util.LinkedHashSet;
 
 import org.eclipse.edt.gen.deployment.javascript.Constants;
+import org.eclipse.edt.gen.deployment.javascript.Context;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
@@ -71,16 +72,17 @@ public class CommonUtilities {
 		return result;
 	}
 	
-	public static boolean isUserClass(Part part) {
-		return isUserDefined(part) && (part instanceof EGLClass);
+	public static boolean isUserClass(Part part, Context context) {
+		return isUserDefined(part, context) && (part instanceof EGLClass);
 	}
 	
-	public static boolean isUserPart(Part part){
-		return isUserDefined(part) && (part instanceof EGLClass || part instanceof Enumeration);
+	public static boolean isUserPart(Part part, Context context){
+		return isUserDefined(part, context) && (part instanceof EGLClass || part instanceof Enumeration);
 	}
 	
-	private static boolean isUserDefined(Part part){
-		return !part.getFullyQualifiedName().startsWith("egl") && !part.getFullyQualifiedName().startsWith("eglx");
+	private static boolean isUserDefined(Part part, Context context){
+		//return !part.getFullyQualifiedName().startsWith("egl") && !part.getFullyQualifiedName().startsWith("eglx");
+		return !context.isSystemPart( part.getFullyQualifiedName() );
 	}
 	
 	public static void addToDependentList(LinkedHashSet dependentFiles, String part) {

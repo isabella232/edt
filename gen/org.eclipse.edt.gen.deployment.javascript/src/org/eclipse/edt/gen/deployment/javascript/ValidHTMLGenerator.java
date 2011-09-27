@@ -12,33 +12,35 @@
 package org.eclipse.edt.gen.deployment.javascript;
 
 import java.util.HashMap;
+import java.util.List;
 
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.mof.egl.Part;
 
 public abstract class ValidHTMLGenerator extends HTMLGenerator {
 
-	protected String egldd;
+	protected List egldds;
 	protected HashMap eglParameters = new HashMap();
 	protected String userMsgLocale;
 	protected String runtimeMsgLocale;	
 	
-	public ValidHTMLGenerator(AbstractGeneratorCommand processor, String egldd, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale ) {
-		super(processor, null);
-		this.egldd = egldd;
+	public ValidHTMLGenerator(AbstractGeneratorCommand processor, List egldds, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv ) {
+		super(processor, null, sysEnv);
+		this.egldds = egldds;
 		this.eglParameters = eglParameters;
 		this.userMsgLocale = userMsgLocale;
 		this.runtimeMsgLocale = runtimeMsgLocale;
 	}
 
 	// TODO Need to be removed
-	public ValidHTMLGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
-		super(processor, null);
+	public ValidHTMLGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor, ISystemEnvironment sysEnv) {
+		super(processor, null, sysEnv);
 	}
 	
 	protected void invokeGeneration(Part part, String methodName) {
-		context.invoke(methodName, part, context, out, egldd, eglParameters, userMsgLocale, runtimeMsgLocale);
+		context.invoke(methodName, part, context, out, egldds, eglParameters, userMsgLocale, runtimeMsgLocale);
 	}
 
 }

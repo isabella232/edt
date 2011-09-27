@@ -12,14 +12,16 @@
 package org.eclipse.edt.gen.deployment.javascript;
 
 import java.util.HashMap;
+import java.util.List;
 
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 
 public abstract class ContextAwareHTMLGenerator extends DevelopmentHTMLGenerator {
 
-	public ContextAwareHTMLGenerator(AbstractGeneratorCommand processor, String egldd,
-			HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale) {
-		super(processor, egldd, eglParameters, userMsgLocale, runtimeMsgLocale);
+	public ContextAwareHTMLGenerator(AbstractGeneratorCommand processor, List egldds,
+			HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv) {
+		super(processor, egldds, eglParameters, userMsgLocale, runtimeMsgLocale, sysEnv);
 	}
 
 	@Override
