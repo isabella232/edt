@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import java.util.List;
 
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -105,11 +106,16 @@ public class RecordTemplate extends JavaScriptTemplate {
 	}
 
 	public void genSuperClass(Record type, Context ctx, TabbedWriter out) {
-		// TODO: make a constant
-		out.print(quoted("egl.jsrt"));
-		out.print(", ");
-		// TODO: make a constant
-		out.print(quoted("Record"));
+		if (CommonUtilities.isException(type)) {
+			out.print(quoted("eglx.lang"));  // TODO: make a constant
+			out.print(", ");
+			out.print(quoted("AnyException"));  // TODO: make a constant
+		}
+		else {
+			out.print(quoted("egl.jsrt"));  // TODO: make a constant
+			out.print(", ");
+			out.print(quoted("Record"));  // TODO: make a constant
+		}
 	}
 
 	public void genAssignment(Record type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
