@@ -41,7 +41,7 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, AsExpression arg) {
-		if (arg.getConversionOperation() == null || !needsConversion(arg.getConversionOperation())) {
+		if (arg.getConversionOperation() != null && !needsConversion(arg.getConversionOperation())) {
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 		} else {
 			// we need to invoke the logic in type template to call back to the other conversion situations
