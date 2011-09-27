@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass('eglx.lang', "InvalidPatternException", "egl.jsrt", "Record", {
+egl.defineClass('eglx.lang', "InvalidPatternException", "eglx.lang", "AnyException", {
 	"eze$$fileName" : "eglx/lang/Exceptions.egl",
 		"constructor": function() {
 			this.eze$$setInitial();

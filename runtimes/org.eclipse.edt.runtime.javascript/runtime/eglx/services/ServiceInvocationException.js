@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass('eglx.services', "ServiceInvocationException", "egl.jsrt", "Record", {
+egl.defineClass('eglx.services', "ServiceInvocationException", "eglx.lang", "AnyException", {
 	"eze$$fileName" : "eglx/services/ServiceInvocationException.egl",
 		"constructor": function() {
 			this.eze$$setInitial();
