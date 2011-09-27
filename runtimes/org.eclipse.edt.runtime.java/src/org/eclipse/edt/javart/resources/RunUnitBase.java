@@ -385,10 +385,9 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 				ex = ((InvocationTargetException)ex).getTargetException();
 			}
 
-			String message = JavartUtil.errorMessage(
-					Message.CREATE_OBJECT_FAILED,
-					new Object[] { name, ex } );
-			throw new FatalProblem( Message.CREATE_OBJECT_FAILED, message );
+			FatalProblem problem = new FatalProblem();
+			problem.initCause( ex );
+			throw problem.fillInMessage( Message.CREATE_OBJECT_FAILED, ex );
 		}
 	}
 

@@ -624,6 +624,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			TypeCastException tcx = new TypeCastException();
 			tcx.actualTypeName = "string";
 			tcx.castToName = "timestamp";
+			tcx.initCause( ex );
 			throw tcx.fillInMessage( Message.CONVERSION_ERROR, timestamp, tcx.actualTypeName, tcx.castToName );
 		}
 		result = cal;

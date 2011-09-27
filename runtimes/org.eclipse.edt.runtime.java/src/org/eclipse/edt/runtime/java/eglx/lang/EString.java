@@ -282,6 +282,7 @@ public class EString extends AnyBoxedObject<String> {
 				tcx.castToName = "string";
 				tcx.actualTypeName = "date or timestamp"; // TODO see the TODO in the method comment: need to know if the
 															// Calendar is a date or timestamp
+				tcx.initCause( iax );
 				throw tcx.fillInMessage( Message.CONVERSION_ERROR, cal.getTime(), tcx.actualTypeName, tcx.castToName );
 			}
 			finally {
@@ -538,6 +539,7 @@ public class EString extends AnyBoxedObject<String> {
 		catch (PatternSyntaxException e) {
 			InvalidPatternException ex = new InvalidPatternException();
 			ex.pattern = pattern;
+			ex.initCause( e );
 			throw ex.fillInMessage( Message.INVALID_MATCH_PATTERN, pattern );
 		}
 	}
@@ -625,6 +627,7 @@ public class EString extends AnyBoxedObject<String> {
 		catch (PatternSyntaxException e) {
 			InvalidPatternException ex = new InvalidPatternException();
 			ex.pattern = pattern;
+			ex.initCause( e );
 			throw ex.fillInMessage( Message.INVALID_MATCH_PATTERN, pattern );
 		}
 	}

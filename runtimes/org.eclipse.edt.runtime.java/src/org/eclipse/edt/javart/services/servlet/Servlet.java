@@ -31,6 +31,7 @@ import org.eclipse.edt.javart.json.ParseException;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.StartupInfo;
 import org.eclipse.edt.javart.resources.Trace;
+import org.eclipse.edt.javart.services.ServiceUtilities;
 
 import eglx.http.Request;
 import eglx.http.Response;
@@ -39,7 +40,6 @@ import eglx.json.JsonUtilities;
 import eglx.lang.AnyException;
 import eglx.lang.EDictionary;
 import eglx.services.ServiceKind;
-import eglx.services.ServiceUtilities;
 
 
 

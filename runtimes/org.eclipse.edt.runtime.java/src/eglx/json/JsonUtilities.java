@@ -20,13 +20,10 @@ import org.eclipse.edt.javart.json.NameValuePairNode;
 import org.eclipse.edt.javart.json.ObjectNode;
 import org.eclipse.edt.javart.json.StringNode;
 import org.eclipse.edt.javart.json.ValueNode;
-import org.eclipse.edt.javart.services.FunctionParameter;
-import org.eclipse.edt.javart.services.FunctionParameterKind;
-import org.eclipse.edt.javart.services.FunctionSignature;
+import org.eclipse.edt.javart.services.*;
 import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 
 import eglx.lang.AnyException;
-import eglx.services.ServiceUtilities;
 
 
 public class JsonUtilities {

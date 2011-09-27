@@ -59,6 +59,7 @@ public abstract class EAny implements eglx.lang.EAny {
 			tcx.castToName = clazz.getName();
 			Object unboxed = value instanceof eglx.lang.EAny ? ((eglx.lang.EAny)value).ezeUnbox() : value;
 			tcx.actualTypeName = unboxed.getClass().getName();
+			tcx.initCause( ex );
 			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
 		}
 	}
@@ -173,6 +174,7 @@ public abstract class EAny implements eglx.lang.EAny {
 		} catch (Exception e) {
 			DynamicAccessException dax = new DynamicAccessException();
 			dax.key = name;
+			dax.initCause( e );
 			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, name, this );
 		} 
 	}
@@ -192,6 +194,7 @@ public abstract class EAny implements eglx.lang.EAny {
 		} catch (Exception e) {
 			DynamicAccessException dax = new DynamicAccessException();
 			dax.key = name;
+			dax.initCause( e );
 			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, name, this );
 		} 
 	}

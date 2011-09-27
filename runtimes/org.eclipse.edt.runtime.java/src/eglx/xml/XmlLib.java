@@ -22,10 +22,12 @@ import javax.xml.bind.Marshaller;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 
 import eglx.lang.AnyException;
 import eglx.lang.AnyValue;
+import eglx.lang.InvalidArgumentException;
 
 public class XmlLib extends ExecutableBase {
 
@@ -46,7 +48,9 @@ public class XmlLib extends ExecutableBase {
 			return writer.toString();
 		}
 		catch (Exception e) {
-			throw new AnyException(e);
+			InvalidArgumentException ex = new InvalidArgumentException();
+			ex.initCause( e );
+			throw ex.fillInMessage( Message.EGL2XML_ERROR, storage, e );
 		}
 	}
 
@@ -67,7 +71,9 @@ public class XmlLib extends ExecutableBase {
 			}
 		}
 		catch (Exception e) {
-			throw new AnyException(e);
+			InvalidArgumentException ex = new InvalidArgumentException();
+			ex.initCause( e );
+			throw ex.fillInMessage( Message.XML2EGL_ERROR, xml, e );
 		}
 	}
 

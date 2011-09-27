@@ -12,6 +12,7 @@
 package org.eclipse.edt.javart.services.servlet.proxy;
 
 import org.eclipse.edt.javart.messages.Message;
+import org.eclipse.edt.javart.services.ServiceUtilities;
 import org.eclipse.edt.javart.services.servlet.JsonRpcInvoker;
 import org.eclipse.edt.javart.services.servlet.ServletUtilities;
 import org.eclipse.edt.javart.services.servlet.TracerBase;
@@ -21,7 +22,6 @@ import eglx.http.Response;
 import eglx.http.HttpUtilities;
 import eglx.services.ServiceInvocationException;
 import eglx.services.ServiceKind;
-import eglx.services.ServiceUtilities;
 
 
 public class ProxyEventHandler extends TracerBase

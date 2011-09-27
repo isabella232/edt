@@ -21,13 +21,13 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.edt.javart.messages.Message;
+import org.eclipse.edt.javart.services.ServiceUtilities;
 import org.eclipse.edt.javart.services.servlet.ServiceInvoker;
 
 import eglx.lang.AnyException;
 import eglx.lang.EDictionary;
 import eglx.lang.InvalidArgumentException;
 import eglx.services.Encoding;
-import eglx.services.ServiceUtilities;
 
 public class HttpUtilities {
 	public static final int HTTP_STATUS_FAILED = 500;

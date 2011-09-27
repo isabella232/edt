@@ -360,6 +360,7 @@ public class EList<T> extends EAny implements eglx.lang.EList<T> {
 			{
 				JavaObjectException jox = new JavaObjectException();
 				jox.exceptionType = ex.getClass().getName();
+				jox.initCause( ex );
 				throw jox.fillInMessage( Message.CAUGHT_JAVA_EXCEPTION, ex );
 			}
 		}

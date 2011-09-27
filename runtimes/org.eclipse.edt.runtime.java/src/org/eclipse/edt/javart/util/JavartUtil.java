@@ -271,7 +271,8 @@ public class JavartUtil
 		if ( ex instanceof NullPointerException )
 		{
 			NullValueException nvx = new NullValueException();
-			return nvx.fillInMessage( Message.NULL_REFERENCE, msg );
+			nvx.initCause( ex );
+			return nvx.fillInMessage( Message.NULL_NOT_ALLOWED, msg );
 		}
 		else if ( ex instanceof java.sql.SQLException )
 		{
@@ -281,12 +282,14 @@ public class JavartUtil
 			int code = caught.getErrorCode();
 			sqlx.setSQLState( state );
 			sqlx.setErrorCode( code );
+			sqlx.initCause( ex );
 			return sqlx.fillInMessage( Message.SQL_EXCEPTION_CAUGHT, msg, state, code );
 		}
 		else
 		{
 			JavaObjectException jox = new JavaObjectException();
 			jox.exceptionType = className;
+			jox.initCause( ex );
 			return jox.fillInMessage( Message.CAUGHT_JAVA_EXCEPTION, msg );
 		}
 	}

@@ -28,7 +28,6 @@ import org.eclipse.edt.javart.json.JsonUtilities;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.util.DateTimeUtil;
-import org.eclipse.edt.javart.util.JavartUtil;
 import org.eclipse.edt.runtime.java.eglx.lang.*;
 
 import com.ibm.icu.text.SimpleDateFormat;
@@ -182,11 +181,9 @@ public class JsonLib {
 					objectNode.addPair(new NameValuePairNode(new StringNode(name, false), process(field.get(object))));
 				}
 			} catch (Throwable t) {
-				AnyException exc = new AnyException(Message.SOA_E_JSON_TYPE_EXCEPTION,
-						JavartUtil.errorMessage( Message.SOA_E_JSON_TYPE_EXCEPTION, 
-								new Object[] { name, object.getClass().getName() } ));
-				exc.initCause(t);
-				throw exc;
+			    InvalidArgumentException ex = new InvalidArgumentException();
+				ex.initCause(t);
+				throw ex.fillInMessage( Message.SOA_E_JSON_FIELD_TYPE_EXCEPTION, name, object.getClass().getName() );
 			}
 		}
 	    return objectNode;
@@ -198,7 +195,9 @@ public class JsonLib {
 		try {
 			convertToEgl(obj, JsonParser.parseValue(jsonString));
 		} catch (ParseException e) {
-			throw new AnyException(e);
+		    InvalidArgumentException ex = new InvalidArgumentException();
+			ex.initCause(e);
+			throw ex.fillInMessage( Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, obj, jsonString );
 		}
 	}
 	public static Object convertToEgl(ValueNode jsonValue) throws AnyException{
@@ -343,11 +342,13 @@ public class JsonLib {
 	        	return dict;
 	        }
 		} catch (Throwable t) {
-			AnyException e = new AnyException();
-			e.initCause(t);
-			throw e;
+		    InvalidArgumentException ex = new InvalidArgumentException();
+			ex.initCause(t);
+			throw ex.fillInMessage( Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, field, jsonValue );
 		}
-        throw new AnyException();
+		
+	    InvalidArgumentException ex = new InvalidArgumentException();
+		throw ex.fillInMessage( Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, field, jsonValue );
 	}
 
 	private static int getETimestampStaticField(String fieldName){
@@ -454,11 +455,9 @@ public class JsonLib {
 					}
 				}
 			} catch (Throwable t) {
-				AnyException exc = new AnyException(Message.SOA_E_JSON_TYPE_EXCEPTION,
-						JavartUtil.errorMessage( Message.SOA_E_JSON_TYPE_EXCEPTION, 
-								new Object[] { name, object.getClass().getName() } ));
-				exc.initCause(t);
-				throw exc;
+			    InvalidArgumentException ex = new InvalidArgumentException();
+				ex.initCause(t);
+				throw ex.fillInMessage( Message.SOA_E_JSON_FIELD_TYPE_EXCEPTION, name, object.getClass().getName() );
 			}
 		}
 	    return object;

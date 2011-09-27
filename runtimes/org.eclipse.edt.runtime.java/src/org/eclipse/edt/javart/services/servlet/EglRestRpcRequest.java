@@ -11,7 +11,6 @@
 package org.eclipse.edt.javart.services.servlet;
 
 import org.eclipse.edt.javart.ByteStorage;
-import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.Program;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 

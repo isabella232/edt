@@ -31,6 +31,7 @@ import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.Trace;
+import org.eclipse.edt.javart.services.ServiceUtilities;
 import org.eclipse.edt.javart.util.JavartUtil;
 
 import eglx.http.Request;
@@ -38,8 +39,8 @@ import eglx.http.Response;
 import eglx.http.HttpUtilities;
 import eglx.json.JsonUtilities;
 import eglx.lang.EDictionary;
+import eglx.services.ServiceInvocationException;
 import eglx.services.ServiceKind;
-import eglx.services.ServiceUtilities;
 
 
 public class HttpServiceHandler
@@ -244,10 +245,11 @@ public class HttpServiceHandler
 						threadResult.cancel( true );
 						connection.disconnect();
 						connection = null;
-						String message = JavartUtil.errorMessage(
-								Message.SOA_E_WS_PROXY_SERVICE_TIMEOUT,
-								request.uri );
-						throw new IOException( message );
+						ServiceInvocationException six = 
+								ServiceUtilities.buildServiceInvocationException( 
+										Message.SOA_E_WS_PROXY_SERVICE_TIMEOUT, 
+										new String[]{ request.uri }, null, ServiceKind.REST );
+						throw six;
 					}
 					else if ( httpsr.exception() )
 					{

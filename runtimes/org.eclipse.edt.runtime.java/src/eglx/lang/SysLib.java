@@ -11,7 +11,6 @@
  *******************************************************************************/
 package eglx.lang;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -29,11 +28,9 @@ import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.resources.Platform;
-import org.eclipse.edt.javart.resources.Trace;
 import org.eclipse.edt.javart.resources.egldd.Binding;
 import org.eclipse.edt.javart.resources.egldd.RuntimeDeploymentDesc;
 import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
-import org.eclipse.edt.javart.util.JavartUtil;
 
 import eglx.persistence.sql.SQLDataSource;
 
@@ -107,6 +104,7 @@ public class SysLib extends ExecutableBase {
 		catch (IOException ex) {
 			InvocationException ix = new InvocationException();
 			ix.name = commandString;
+			ix.initCause( ex );
 			throw ix.fillInMessage( Message.RUN_COMMAND_FAILED, commandString, ex );
 		}
 
@@ -137,6 +135,7 @@ public class SysLib extends ExecutableBase {
 			catch (InterruptedException ex) {
 				InvocationException ix = new InvocationException();
 				ix.name = commandString;
+				ix.initCause( ex );
 				throw ix.fillInMessage( Message.RUN_COMMAND_FAILED, commandString, ex );
 			}
 		}
@@ -171,70 +170,17 @@ public class SysLib extends ExecutableBase {
 	}
 
 	/**
-	 * Calls the Power Server to commit changes.
+	 * Commits changes.
 	 */
 	public static void commit() throws AnyException {
-		RuntimeException errorException = null;
-		Trace trace = Runtime.getRunUnit().getTrace();
-		boolean tracing = trace.traceIsOn(Trace.GENERAL_TRACE);
-		try {
-			if (tracing) {
-				trace.put("commit()");
-				trace.put("    committing Recoverable Resources ...");
-			}
-
-			/* Commit recoverable resource */
-			Runtime.getRunUnit().commit();
-		}
-		catch (AnyException jx) {
-			String message = JavartUtil.errorMessage( Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.commit", jx.getMessage() });
-			errorException = new RuntimeException(message); //TODO this should be one of our exceptions
-		}
-		finally {
-			if (errorException == null) {
-				// Commit OK.
-				if (tracing)
-					trace.put("<-- commit()   rc = 0");
-			} else {
-				// Commit failed.
-				if (tracing)
-					trace.put("<-- commit()   rc <> 0 ");
-				throw errorException;
-			}
-		}
+		Runtime.getRunUnit().commit();
 	}
 
 	/**
-	 * Calls the Power Server and resource manager to rollback changes.
+	 * Rolls back changes.
 	 */
 	public static void rollback() throws AnyException {
-		RuntimeException errorException = null;
-		Trace trace = Runtime.getRunUnit().getTrace();
-		boolean tracing = trace.traceIsOn(Trace.GENERAL_TRACE);
-		try {
-			if (tracing) {
-				trace.put("rollBack()");
-				trace.put("    resetting Recoverable Resources ...");
-			}
-			/* Roll back recoverable resources */
-			Runtime.getRunUnit().rollback();
-		}
-		catch (AnyException jx) {
-			String message = JavartUtil.errorMessage( Message.SYSTEM_FUNCTION_ERROR, new Object[] { "SysLib.rollBack", jx.getMessage() });
-			errorException = new RuntimeException(message); //TODO this should be one of our exceptions
-		}
-		finally {
-			if (errorException == null) {
-				// Rollback went OK.
-				if (tracing)
-					trace.put("<-- rollBack()   rc = 0");
-			} else {
-				// Rollback failed.
-				if (tracing)
-					trace.put("<-- rollBack()   rc <> 0");
-				throw errorException;
-			}
-		}
+		Runtime.getRunUnit().rollback();
 	}
 
 	/**
@@ -318,13 +264,13 @@ public class SysLib extends ExecutableBase {
 			}
 			InputStream is = org.eclipse.edt.javart.Runtime.getRunUnit().getClass().getResourceAsStream(propertyFileName);
 			if(is == null){
-				throw new AnyException(new FileNotFoundException(propertyFileName));
+				throw new AnyException();//TODO throw some other kind of exception, set the message and ID properly
 			}
 			else{
 				try {
 					dd = RuntimeDeploymentDesc.createDeploymentDescriptor(propertyFileName, is);
 				} catch (Exception e) {
-					throw new AnyException(e);
+					throw new AnyException();//TODO throw some other kind of exception, set the message and ID properly
 				}
 				deploymentDescs.put(propertyFileName, dd);
 			}

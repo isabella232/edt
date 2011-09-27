@@ -11,12 +11,12 @@
 package org.eclipse.edt.javart.services.servlet.proxy;
 
 import org.eclipse.edt.javart.messages.Message;
+import org.eclipse.edt.javart.services.ServiceUtilities;
 
 import eglx.http.Request;
 import eglx.http.Response;
 import eglx.http.HttpUtilities;
 import eglx.services.ServiceKind;
-import eglx.services.ServiceUtilities;
 
 public class HttpServiceInvoker extends EglHttpConnection {
 	

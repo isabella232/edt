@@ -29,20 +29,15 @@ public class FatalProblem extends AnyException
 
 	/**
 	 * Makes the FatalProblem.  Prepare to die!
-	 * 
-	 * @param id
-	 *            The message ID.
-	 * @param message
-	 *            The error message.
 	 */
-	public FatalProblem( String id, String message )
+	public FatalProblem()
 	{
-		super( id, message );
 	}
 
 	/**
 	 * Makes a FatalProblem for an Exception that was caught but can't be
-	 * handled.
+	 * handled.  Calls <code>fillInMessage</code> and does 
+	 * <code>initCause( ex );</code>. 
 	 * 
 	 * @param program
 	 *            The program that caught an exception.
@@ -51,7 +46,8 @@ public class FatalProblem extends AnyException
 	 */
 	public FatalProblem( Exception ex )
 	{
-		super( idFor( ex ), messageFor( ex ) );
+		fillInMessage( idFor( ex ), messageFor( ex ) );
+		initCause( ex );
 	}
 	
 	/**

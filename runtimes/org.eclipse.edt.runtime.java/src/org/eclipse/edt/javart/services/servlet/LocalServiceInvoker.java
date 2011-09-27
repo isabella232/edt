@@ -17,11 +17,11 @@ import java.util.Map;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.services.ServiceBase;
+import org.eclipse.edt.javart.services.ServiceUtilities;
 import org.eclipse.edt.javart.util.JavaAliaser;
 
 import eglx.lang.AnyException;
 import eglx.services.ServiceKind;
-import eglx.services.ServiceUtilities;
 
 public abstract class LocalServiceInvoker extends Invoker{
 	private long elapseTime;
@@ -99,7 +99,7 @@ public abstract class LocalServiceInvoker extends Invoker{
 				throw ae;
 			}
 			catch(Exception e){
-				ServiceUtilities.buildServiceInvocationException( 
+				throw ServiceUtilities.buildServiceInvocationException( 
 						Message.SOA_E_LOAD_LOCAL_SERVICE,
 						new Object[] { serviceClassName }, e, serviceKind);
 			}

@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.javart;
 
+import org.eclipse.edt.javart.messages.Message;
+
 import eglx.lang.*;
 
 public class AnyBoxedObject<R> implements EAny, BoxedValue {
@@ -64,7 +66,9 @@ public class AnyBoxedObject<R> implements EAny, BoxedValue {
 			((EAny)object).ezeSet(name, value);
 		}
 		else {
-			throw new DynamicAccessException();
+			DynamicAccessException dax = new DynamicAccessException();
+			dax.key = name;
+			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, name, this );
 		}
 	}
 

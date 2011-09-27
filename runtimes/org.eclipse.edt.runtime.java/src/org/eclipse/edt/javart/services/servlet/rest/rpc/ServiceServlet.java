@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.Trace;
+import org.eclipse.edt.javart.services.ServiceUtilities;
 import org.eclipse.edt.javart.services.servlet.JsonRpcInvoker;
 import org.eclipse.edt.javart.services.servlet.Servlet;
 import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
@@ -34,7 +35,6 @@ import eglx.json.JsonUtilities;
 import eglx.services.Encoding;
 import eglx.services.ServiceInvocationException;
 import eglx.services.ServiceKind;
-import eglx.services.ServiceUtilities;
 
 
 

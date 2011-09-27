@@ -27,7 +27,14 @@ public class TypeConstraints {
 		this.constraints = constraints.length == 0 ? null : constraints;
 	}
 	
-	public Object constrainValue(Object value) throws AnyException {
+	/**
+	 * Attempts to convert the value to the type.
+	 * 
+	 * @param value  the value to be converted.
+	 * @return the result of the conversion.
+	 * @throws RuntimeException  it may or may not be an AnyException.
+	 */
+	public Object constrainValue(Object value) throws RuntimeException {
 		Method method = null;
 		boolean useDefault = false;
 		try {

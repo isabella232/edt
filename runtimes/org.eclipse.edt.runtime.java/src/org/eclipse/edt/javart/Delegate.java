@@ -32,6 +32,7 @@ public class Delegate {
 		catch (Exception ex) {
 			DynamicAccessException dax = new DynamicAccessException();
 			dax.key = methodName;
+			dax.initCause( ex );
 			throw dax.fillInMessage( Message.EXCEPTION_IN_DELEGATE_GET, methodName, ex );
 		}
 	}
@@ -51,6 +52,7 @@ public class Delegate {
 			}
 			InvocationException ix = new InvocationException();
 			ix.name = method.getName();
+			ix.initCause( problem );
 			throw ix.fillInMessage( Message.EXCEPTION_IN_DELEGATE_INVOKE, ix.name, problem );
 		}
 	}

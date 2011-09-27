@@ -1088,7 +1088,7 @@ public class NumericUtil
 		// than S390 can.
 		if ( s390Exponent > 127 )
 		{
-			throw new RuntimeException(
+			throw new RuntimeException( //TODO need to make a proper AnyException for this
 					"Number outside of range for double precision OS390 Float" );
 		}
 		else if ( s390Exponent < 0 )

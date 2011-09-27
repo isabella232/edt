@@ -30,32 +30,15 @@ public class AnyException extends RuntimeException implements eglx.lang.EAny {
 	protected String id;
 
 	public AnyException() {
-		this( "", "" );
-	}
-
-	public AnyException(String id) {
-		this( id, "" );
+		this.message = "";
+		this.id = "";
+		ezeInitialize();
 	}
 
 	public AnyException(String id, String message) {
 		super( message );
 		this.message = message;
 		this.id = id;
-		ezeInitialize();
-	}
-
-	public AnyException(Throwable ex) {
-		super(ex);
-		id = "";
-		message = ex.getLocalizedMessage();
-		if ( message == null || message.length() == 0 )
-		{
-			message = ex.getMessage();
-		}
-		if ( message == null || message.length() == 0 )
-		{
-			message = ex.toString();
-		}
 		ezeInitialize();
 	}
 
@@ -77,6 +60,7 @@ public class AnyException extends RuntimeException implements eglx.lang.EAny {
 		catch (Exception e) {
 			DynamicAccessException dax = new DynamicAccessException();
 			dax.key = name;
+			dax.initCause( e );
 			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, name, ezeName() );
 		}
 	}
@@ -95,6 +79,7 @@ public class AnyException extends RuntimeException implements eglx.lang.EAny {
 		catch (Exception e) {
 			DynamicAccessException dax = new DynamicAccessException();
 			dax.key = name;
+			dax.initCause( e );
 			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, name, ezeName() );
 		}
 	}

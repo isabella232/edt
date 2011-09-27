@@ -20,6 +20,7 @@ import org.eclipse.edt.javart.json.ObjectNode;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.services.FunctionParameterKind;
 import org.eclipse.edt.javart.services.FunctionSignature;
+import org.eclipse.edt.javart.services.ServiceUtilities;
 import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
 import org.eclipse.edt.runtime.java.eglx.lang.EList;
 
@@ -30,7 +31,6 @@ import eglx.json.JsonLib;
 import eglx.lang.AnyException;
 import eglx.services.ServiceInvocationException;
 import eglx.services.ServiceKind;
-import eglx.services.ServiceUtilities;
 
 public class JsonRpcInvoker extends LocalServiceInvoker {
 	private static String JSON_RPC_METHOD_ID = "method";
@@ -95,9 +95,6 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 		catch (Throwable t)
 		{
 			throw ServiceUtilities.buildServiceInvocationException(Message.SOA_E_WS_SERVICE, new String[] {getServiceClassName(), methodName}, t, getServiceKind() );
-		}
-		finally
-		{
 		}
 		return returnVal;
 	}
