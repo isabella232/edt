@@ -102,6 +102,7 @@ import org.eclipse.edt.mof.egl.SubstringAccess;
 import org.eclipse.edt.mof.egl.TernaryExpression;
 import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.UnaryExpression;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -788,7 +789,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			processNewArray(newExpression.getType(), expr);
 		}
 		if (newExpression.getSettingsBlock() != null && newExpression.getSettingsBlock().getSettings().size() > 0) {
-			SetValuesExpression sve = processSettings(expr, newExpression.getSettingsBlock());
+			SetValuesExpression sve = processSettings(expr, mofType, newExpression.getSettingsBlock());
 			setElementInformation(newExpression, sve);
 			stack.push(sve);
 		}
@@ -823,13 +824,20 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.SetValuesExpression setValuesExpression) {
 		setValuesExpression.getExpression().accept(this);
-		SetValuesExpression sve = processSettings((Expression)stack.pop(), setValuesExpression.getSettingsBlock());
+		Type targetType = null;
+		if (Binding.isValidBinding(setValuesExpression.getExpression().resolveTypeBinding())) {
+			EObject obj = mofTypeFor(setValuesExpression.getExpression().resolveTypeBinding());
+			if (obj instanceof Type) {
+				targetType = (Type) obj;
+			}
+		}
+		SetValuesExpression sve = processSettings((Expression)stack.pop(), targetType, setValuesExpression.getSettingsBlock());
 		setElementInformation(setValuesExpression, sve);
 		stack.push(sve);
 		return false;
 	}
 	
-	private SetValuesExpression processSettings(Expression target, SettingsBlock settings) {
+	private SetValuesExpression processSettings(Expression target, Type targetType, SettingsBlock settings) {
 		if (!localStack.isEmpty() && target instanceof Name) {
 			target = ((Name)target).addQualifier(localStack.peek());
 		}
@@ -848,7 +856,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			DeclarationExpression declExpr = factory.createDeclarationExpression();
 			decl = factory.createField();	
 			decl.setName("eze$SettingTarget" + sveStack.size());
-			decl.setType(target.getType());
+			decl.setType(targetType);
 			setElementInformation(settings, decl);
 			declExpr.getFields().add(decl);
 			local.setExpression(declExpr);
@@ -890,9 +898,21 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				((MemberName)ref).setMember(decl);
 			}
 			if (setexpr instanceof Assignment) {
+				
+				
 				Assignment assign = (Assignment)setexpr;
-				LHSExpr lhs = addQualifier(ref, assign.getLHS());
-				assign.setLHS(lhs);
+				
+				if (TypeUtils.isDynamicType(targetType)) {
+					DynamicAccess da = factory.createDynamicAccess();
+					setElementInformation(setting, da);
+					LHSExpr newLHS = setAccessForDynamicAccess(da, assign.getLHS());					
+					da.setExpression(ref);
+					assign.setLHS(newLHS);
+				}
+				else {
+					LHSExpr lhs = addQualifier(ref, assign.getLHS());
+					assign.setLHS(lhs);
+				}
 				AssignmentStatement stmt = createAssignmentStatement(assign);
 				setElementInformation(setting, stmt);
 				block.getStatements().add(stmt);
