@@ -85,7 +85,7 @@ public class AnyTypeTemplate extends JavaScriptTemplate {
 
 	public void genSignature(Type type, Context ctx, TabbedWriter out) {
 		out.print("T");
-		out.print(type.getTypeSignature().replaceAll("\\.", "/"));
+		out.print(type.getTypeSignature().toLowerCase().replaceAll("\\.", "/"));
 		out.print(";");
 	}
 
