@@ -14,14 +14,13 @@ package org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.ISystemEnvironment;
-import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibraryManager;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
@@ -44,8 +43,11 @@ public class EGLSystemLibraryProposalHandler extends EGLAbstractProposalHandler 
 		
 		IFileEditorInput editorInput = (IFileEditorInput) editor.getEditorInput();
 		ISystemEnvironment env = SystemEnvironmentManager.findSystemEnvironment(editorInput.getFile().getProject(), null); 
-		SystemLibraryManager slm = env.getSystemLibraryManager();
-		for(Iterator iter = CapabilityFilterUtility.filterParts(slm.getLibraries().values()).iterator(); iter.hasNext();) {
+		List contentAssistPartList = new LinkedList();
+		contentAssistPartList.addAll(env.getSystemLibraryManager().getLibraries().values());
+		contentAssistPartList.addAll(env.getContentAssistPartsManager().getContentAssistParts().values());
+		
+		for(Iterator iter = CapabilityFilterUtility.filterParts(contentAssistPartList).iterator(); iter.hasNext();) {
 			IPartBinding nextLibrary = (IPartBinding) iter.next();
 			String systemLibraryName = (String) getLibraryNamesToStringConstants().get(nextLibrary.getName().toLowerCase());
 			if (systemLibraryName == null)
@@ -81,6 +83,11 @@ public class EGLSystemLibraryProposalHandler extends EGLAbstractProposalHandler 
 			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_SYSLIB.toLowerCase(), UINlsStrings.CAProposal_SystemLibrary);
 			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_SYSVAR.toLowerCase(), UINlsStrings.CAProposal_SystemVarLibrary);
 			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_SERVICELIB.toLowerCase(), UINlsStrings.CAProposal_ServiceLibrary);
+			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_HTTPLIB.toLowerCase(), UINlsStrings.CAProposal_HttpLibrary);
+			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_STRINGLIB.toLowerCase(), UINlsStrings.CAProposal_StringLibrary);
+			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_RUILIB.toLowerCase(), UINlsStrings.CAProposal_RuiLibrary);
+			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_JSONLIB.toLowerCase(), UINlsStrings.CAProposal_JsonLibrary);
+			libraryNamesToStringConstants.put(IEGLConstants.KEYWORD_XMLLib.toLowerCase(), UINlsStrings.CAProposal_XmlLibrary);
 		}
 		return libraryNamesToStringConstants;
 	}

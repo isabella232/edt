@@ -1041,6 +1041,10 @@ public class UINlsStrings extends NLS {
 	public static String CAProposal_DLILibrary;
 	public static String CAProposal_DLIVarLibrary;
 	public static String CAProposal_ServiceLibrary;
+	public static String CAProposal_HttpLibrary;
+	public static String CAProposal_RuiLibrary;
+	public static String CAProposal_JsonLibrary;
+	public static String CAProposal_XmlLibrary;
 	
 	public static String Validate_label;
 	public static String Revalidate_label;
