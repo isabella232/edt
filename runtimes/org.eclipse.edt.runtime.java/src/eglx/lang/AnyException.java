@@ -27,18 +27,18 @@ public class AnyException extends RuntimeException implements eglx.lang.EAny {
 	/**
 	 * The message ID.
 	 */
-	protected String id;
+	protected String messageID;
 
 	public AnyException() {
 		this.message = "";
-		this.id = "";
+		this.messageID = "";
 		ezeInitialize();
 	}
 
 	public AnyException(String id, String message) {
 		super( message );
 		this.message = message;
-		this.id = id;
+		this.messageID = id;
 		ezeInitialize();
 	}
 
@@ -129,11 +129,11 @@ public class AnyException extends RuntimeException implements eglx.lang.EAny {
 	 */
 	public String getMessageID()
 	{
-		return id;
+		return messageID;
 	}
 	
 	public void setMessageID(String id) {
-		this.id = id;
+		this.messageID = id;
 	}
 
 	@Override
