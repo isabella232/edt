@@ -27,9 +27,11 @@ import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.IsAExpression;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.UnaryExpression;
@@ -273,6 +275,56 @@ public class TypeTemplate extends JavaScriptTemplate {
 		} else
 			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
 	}
+	
+	
+	public void genIsaExpression(Type type, Context ctx, TabbedWriter out, IsAExpression arg) {
+		Expression lhs = arg.getObjectExpr();
+		Type lhsType = lhs.getType();
+		Type isaType = arg.getEType();
+		String lhsTypeSig = lhsType.getTypeSignature();
+		String isaTypeSig = isaType.getTypeSignature();
+
+		
+		// ISA is usually simple, but there are some things we have to check
+		// specially: loose types, ExternalTypes, Any, and AnyException.  Also 
+		// beware that Widget (an ET) is compatible with RUIWidget (a kind of handler).
+		//TODO expressiongenerator has the impl. for these special caess
+		
+		if ( lhsTypeSig.equals( "egl.lang.AnyException" ) && isaType instanceof NamedElement )
+		{
+			out.print("(");
+			ctx.invoke(genExpression, lhs, ctx, out);
+			out.print( " instanceof " );
+			ctx.invoke(genRuntimeTypeName, isaType, ctx, out, TypeNameKind.JavascriptObject);
+			out.print(")");
+		}
+
+		else if (lhsTypeSig.equalsIgnoreCase(isaTypeSig)) {
+			if (lhs.isNullable()) {
+				out.print("(");
+				ctx.invoke(genExpression, lhs, ctx, out);
+				out.print(" == null ? false : true)");
+			} else
+				out.print("true");
+		}
+		else if (lhsType.getClassifier() != null && isaType.getClassifier() != null
+			&& lhsType.getClassifier().getTypeSignature().equalsIgnoreCase(isaType.getClassifier().getTypeSignature())) {
+			out.print("false");
+		}
+		else {
+			out.print("egl.isa(");
+			ctx.putAttribute(lhs, Constants.DONT_UNBOX, Boolean.TRUE);
+			ctx.invoke(genExpression, lhs, ctx, out);
+			ctx.putAttribute(lhs, Constants.DONT_UNBOX, Boolean.FALSE);  //TODO sbg Can we just remove DONT_UNBOX?
+			out.print(", ");
+			out.print("\"");
+			ctx.invoke(genSignature, isaType, ctx, out); 
+			out.print("\"");
+			out.print(")");
+		}
+	}
+
+	
 
 	public void genSignature(Type type, Context ctx, TabbedWriter out, TypedElement arg) {
 		/* In EDT, nullable is a characteristic of the field, not the type, so this is no
