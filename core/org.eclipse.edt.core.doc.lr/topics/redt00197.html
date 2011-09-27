@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="StartCmd system function"></meta>
-<meta name="abstract" content="SysLib.startCmd runs a system command asynchronously."></meta>
-<meta name="description" content="SysLib.startCmd runs a system command asynchronously."></meta>
+<meta name="abstract" content="SysLib.startCmd runs a system command asynchronously and does not return a value."></meta>
+<meta name="description" content="SysLib.startCmd runs a system command asynchronously and does not return a value."></meta>
 <meta name="DC.subject" content="EGL system functions, startCmd, startCmd EGL system function, SysLib EGL system library"></meta>
 <meta name="keywords" content="EGL system functions, startCmd, startCmd EGL system function, SysLib EGL system library"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
@@ -26,7 +26,7 @@
 
 
 <div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">SysLib.startCmd</span></span> runs
-a system command asynchronously.</p>
+a system command asynchronously and does not return a value. </p>
 
 <a name="redt00197__main"><!-- --></a><dl id="redt00197__main">
 <dt class="dlterm"><a name="redt00197__package"><!-- --></a>Package</dt>
@@ -62,8 +62,7 @@ directory location, as in the following example:<pre class="codeblock">SysLib.ca
 
 <dt class="dlterm"><a name="redt00197__comments"><!-- --></a>Comments</dt>
 
-<dd><p>Invoke <span class="synph"><span class="kwd">SysLib.callCmd</span></span> to initiate
-a system command synchronously.</p>
+<dd><p>To initiate a system command synchronously, invoke <span class="synph"><span class="kwd">SysLib.callCmd</span></span>.</p>
 </dd>
 
 
@@ -74,9 +73,9 @@ a system command synchronously.</p>
 <div class="tablenoborder"><a name="redt00197__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00197__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d29698e118">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d31753e118">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d29698e121">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d31753e121">Issue</th>
 
 </tr>
 
@@ -85,23 +84,23 @@ a system command synchronously.</p>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00197__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d29698e118 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d31753e118 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d29698e121 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d31753e121 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00197__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d29698e118 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d31753e118 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d29698e121 ">The <span class="synph"><span class="kwd">SysLib.startCmd</span></span> function
+<td class="cellrowborder" valign="top" width="50%" headers="d31753e121 ">The <span class="synph"><span class="kwd">SysLib.startCmd</span></span> function
 is not supported. <p class="compat_javascript_more"></p>
 </td>
 
 </tr>
 
-<anchor id="compat_rows_postjava"></anchor>
+<anchor id="compat_rows_postjavascript"></anchor>
 <anchor id="compat_rows_end"></anchor>
 </tbody>
 

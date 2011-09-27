@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="Atan2 system function"></meta>
+<meta name="abstract" content="MathLib.atan2 computes the principal value of the arc tangent of y/x, using the signs of both arguments to determine the quadrant of the return value."></meta>
+<meta name="description" content="MathLib.atan2 computes the principal value of the arc tangent of y/x, using the signs of both arguments to determine the quadrant of the return value."></meta>
+<meta name="DC.subject" content="EGL system functions, atan2, atan2 EGL system function, MathLib EGL system library"></meta>
+<meta name="keywords" content="EGL system functions, atan2, atan2 EGL system function, MathLib EGL system library"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="redt00210"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>Atan2 system function</title>
+</head>
+<body id="redt00210"><a name="redt00210"><!-- --></a>
+
+
+<h1 class="topictitle1">Atan2 system function</h1>
+
+
+
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">MathLib.atan2</span></span> computes
+the principal value of the arc tangent of y/x, using the signs of
+both arguments to determine the quadrant of the return value.</p>
+
+
+<a name="redt00210__main"><!-- --></a><dl id="redt00210__main">
+<dt class="dlterm"><a name="redt00210__package"><!-- --></a>Package</dt>
+
+<dd><p>eglx.lang</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00210__syntax"><!-- --></a>Syntax</dt>
+
+<dd><pre class="codeblock" id="redt00210__syntax_block"><a name="redt00210__syntax_block"><!-- --></a>static function atan2(y float in, x float in) returns(float);</pre>
+<a name="redt00210__syntax_list"><!-- --></a><dl id="redt00210__syntax_list">
+<dt class="dlterm"><span class="synph"><span class="var">y</span></span>, <span class="synph"><span class="var">x</span></span></dt>
+
+<dd>Numerator and denominator for computation.</dd>
+
+</dl>
+<p>The returned value is between -pi and pi.</p>
+<anchor id="syntax_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00210__use"><!-- --></a>Example use</dt>
+
+<dd><p>After the following code runs, the value of <em>result</em> is
+0.19739555984988078.</p>
+<pre class="codeblock" id="redt00210__use_block"><a name="redt00210__use_block"><!-- --></a>x INT = 5;
+y INT = 1;
+
+result FLOAT = mathLib.atan2(y, x);
+</pre>
+<anchor id="use_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00210__comments"><!-- --></a>Comments</dt>
+
+<dd><p>In the case of Java,
+EGL uses methods in the Java StrictMath
+class that are equivalent to the EGL functions. This usage ensures
+that the runtime behavior is the same for every Java Virtual Machine.</p>
+<anchor id="comments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00210__compat"><!-- --></a>Compatibility</dt>
+
+<dd><p></p>
+
+<div class="tablenoborder"><a name="redt00210__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00210__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d36443e132">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d36443e135">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00210__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d36443e132 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d36443e135 ">No issues.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00210__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d36443e132 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d36443e135 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
+
+<p></p>
+
+</div>
+
+<anchor id="related_links"></anchor>
+
+
+</body>
+</html>

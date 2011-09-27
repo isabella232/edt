@@ -37,8 +37,26 @@
 <topic href="topics/cedt00029.html#cedt00029" title="Class classifier overview"/>
 </entry>
 </entry>
+<entry keyword="abs EGL system function">
+<topic href="topics/redt00206.html#redt00206" title="Abs system function"/>
+</entry>
+<entry keyword="acos EGL system function">
+<topic href="topics/redt00207.html#redt00207" title="Acos system function"/>
+</entry>
+<entry keyword="asin EGL system function">
+<topic href="topics/redt00208.html#redt00208" title="Asin system function"/>
+</entry>
+<entry keyword="atan EGL system function">
+<topic href="topics/redt00209.html#redt00209" title="Atan system function"/>
+</entry>
+<entry keyword="atan2 EGL system function">
+<topic href="topics/redt00210.html#redt00210" title="Atan2 system function"/>
+</entry>
 <entry keyword="callCmd EGL system function">
 <topic href="topics/redt00145.html#redt00145" title="CallCmd system function"/>
+</entry>
+<entry keyword="ceiling EGL system function">
+<topic href="topics/redt00211.html#redt00211" title="Ceiling system function"/>
 </entry>
 <entry keyword="character types">
 <entry keyword="EGL">
@@ -51,14 +69,41 @@
 <entry keyword="completeBind EGL system function">
 <topic href="topics/redt00144.html#redt00144" title="CompleteBind system function"/>
 </entry>
+<entry keyword="cos EGL system function">
+<topic href="topics/redt00212.html#redt00212" title="Cos system function"/>
+</entry>
+<entry keyword="cosh EGL system function">
+<topic href="topics/redt00213.html#redt00213" title="Cosh system function"/>
+</entry>
 <entry keyword="date and time types">
 <entry keyword="EGL">
 <topic href="topics/cedt00022.html#cedt00022" title="EGL date-and-time types"/>
 </entry>
 </entry>
+<entry keyword="decimals EGL system function">
+<topic href="topics/redt00214.html#redt00214" title="Decimals system function"/>
+</entry>
 <entry keyword="EGL system functions">
+<entry keyword="abs">
+<topic href="topics/redt00206.html#redt00206" title="Abs system function"/>
+</entry>
+<entry keyword="acos">
+<topic href="topics/redt00207.html#redt00207" title="Acos system function"/>
+</entry>
+<entry keyword="asin">
+<topic href="topics/redt00208.html#redt00208" title="Asin system function"/>
+</entry>
+<entry keyword="atan">
+<topic href="topics/redt00209.html#redt00209" title="Atan system function"/>
+</entry>
+<entry keyword="atan2">
+<topic href="topics/redt00210.html#redt00210" title="Atan2 system function"/>
+</entry>
 <entry keyword="callCmd">
 <topic href="topics/redt00145.html#redt00145" title="CallCmd system function"/>
+</entry>
+<entry keyword="ceiling">
+<topic href="topics/redt00211.html#redt00211" title="Ceiling system function"/>
 </entry>
 <entry keyword="commit">
 <topic href="topics/redt00198.html#redt00198" title="Commit system function"/>
@@ -66,11 +111,56 @@
 <entry keyword="completeBind">
 <topic href="topics/redt00144.html#redt00144" title="CompleteBind system function"/>
 </entry>
+<entry keyword="cos">
+<topic href="topics/redt00212.html#redt00212" title="Cos system function"/>
+</entry>
+<entry keyword="cosh">
+<topic href="topics/redt00213.html#redt00213" title="Cosh system function"/>
+</entry>
+<entry keyword="decimals">
+<topic href="topics/redt00214.html#redt00214" title="Decimals system function"/>
+</entry>
+<entry keyword="exp">
+<topic href="topics/redt00215.html#redt00215" title="Exp system function"/>
+</entry>
+<entry keyword="floor">
+<topic href="topics/redt00216.html#redt00216" title="Floor system function"/>
+</entry>
+<entry keyword="frexp">
+<topic href="topics/redt00217.html#redt00217" title="Frexp system function"/>
+</entry>
 <entry keyword="getProperty">
 <topic href="topics/redt00200.html#redt00200" title="GetProperty system function"/>
 </entry>
 <entry keyword="getResource">
 <topic href="topics/redt00205.html#redt00205" title="getResource system function"/>
+</entry>
+<entry keyword="ldexp">
+<topic href="topics/redt00218.html#redt00218" title="Ldexp system function"/>
+</entry>
+<entry keyword="log">
+<topic href="topics/redt00219.html#redt00219" title="Log system function"/>
+</entry>
+<entry keyword="log10">
+<topic href="topics/redt00220.html#redt00220" title="Log10 system function"/>
+</entry>
+<entry keyword="max">
+<topic href="topics/redt00221.html#redt00221" title="Max system function"/>
+</entry>
+<entry keyword="min">
+<topic href="topics/redt00222.html#redt00222" title="Min system function"/>
+</entry>
+<entry keyword="modf">
+<topic href="topics/redt00223.html#redt00223" title="Modf system function"/>
+</entry>
+<entry keyword="pow">
+<topic href="topics/redt00224.html#redt00224" title="Pow system function"/>
+</entry>
+<entry keyword="precision">
+<topic href="topics/redt00225.html#redt00225" title="Precision system function"/>
+</entry>
+<entry keyword="random">
+<topic href="topics/redt00226.html#redt00226" title="Random system function"/>
 </entry>
 <entry keyword="rollback">
 <topic href="topics/redt00199.html#redt00199" title="Rollback system function"/>
@@ -78,8 +168,23 @@
 <entry keyword="setLocale">
 <topic href="topics/redt00201.html#redt00201" title="setLocale system function"/>
 </entry>
+<entry keyword="sin">
+<topic href="topics/redt00228.html#redt00228" title="Sin system function"/>
+</entry>
+<entry keyword="sinh">
+<topic href="topics/redt00229.html#redt00229" title="Sinh system function"/>
+</entry>
+<entry keyword="sqrt">
+<topic href="topics/redt00230.html#redt00230" title="Sqrt system function"/>
+</entry>
 <entry keyword="startCmd">
 <topic href="topics/redt00197.html#redt00197" title="StartCmd system function"/>
+</entry>
+<entry keyword="tan">
+<topic href="topics/redt00231.html#redt00231" title="Tan system function"/>
+</entry>
+<entry keyword="tanh">
+<topic href="topics/redt00232.html#redt00232" title="Tanh system function"/>
 </entry>
 <entry keyword="writeStdErr">
 <topic href="topics/redt00203.html#redt00203" title="WriteStdError system function"/>
@@ -88,10 +193,14 @@
 <topic href="topics/redt00204.html#redt00204" title="WriteStdOut system function"/>
 </entry>
 <entry keyword="x">
+<topic href="topics/redt00227.html#redt00227" title="Round system function"/>
 <topic href="topics/redt00202.html#redt00202" title="Wait system function"/>
 </entry>
 </entry>
 <entry keyword="EGL system libraries">
+<entry keyword="MathLib">
+<topic href="topics/redt00067.html#redt00067" title="MathLib system library"/>
+</entry>
 <entry keyword="ServiceLib">
 <topic href="topics/redt00071.html#redt00071" title="ServiceLib system library"/>
 </entry>
@@ -117,6 +226,15 @@
 <topic href="topics/cedt00021.html#cedt00021" title="EGL numeric types"/>
 </entry>
 </entry>
+<entry keyword="exp EGL system function">
+<topic href="topics/redt00215.html#redt00215" title="Exp system function"/>
+</entry>
+<entry keyword="floor EGL system function">
+<topic href="topics/redt00216.html#redt00216" title="Floor system function"/>
+</entry>
+<entry keyword="frexp EGL system function">
+<topic href="topics/redt00217.html#redt00217" title="Frexp system function"/>
+</entry>
 <entry keyword="getProperty EGL system function">
 <topic href="topics/redt00200.html#redt00200" title="GetProperty system function"/>
 </entry>
@@ -128,8 +246,109 @@
 <topic href="topics/cedt00023.html#cedt00023" title="EGL large-object types"/>
 </entry>
 </entry>
+<entry keyword="ldexp EGL system function">
+<topic href="topics/redt00218.html#redt00218" title="Ldexp system function"/>
+</entry>
+<entry keyword="log EGL system function">
+<topic href="topics/redt00219.html#redt00219" title="Log system function"/>
+</entry>
+<entry keyword="log10 EGL system function">
+<topic href="topics/redt00220.html#redt00220" title="Log10 system function"/>
+</entry>
 <entry keyword="Logical unit of work">
 <topic href="topics/cedt00042.html#cedt00042" title="Logical unit of work"/>
+</entry>
+<entry keyword="MathLib EGL system library">
+<entry keyword="abs">
+<topic href="topics/redt00206.html#redt00206" title="Abs system function"/>
+</entry>
+<entry keyword="acos">
+<topic href="topics/redt00207.html#redt00207" title="Acos system function"/>
+</entry>
+<entry keyword="asin">
+<topic href="topics/redt00208.html#redt00208" title="Asin system function"/>
+</entry>
+<entry keyword="atan">
+<topic href="topics/redt00209.html#redt00209" title="Atan system function"/>
+</entry>
+<entry keyword="atan2">
+<topic href="topics/redt00210.html#redt00210" title="Atan2 system function"/>
+</entry>
+<entry keyword="ceiling">
+<topic href="topics/redt00211.html#redt00211" title="Ceiling system function"/>
+</entry>
+<entry keyword="cos">
+<topic href="topics/redt00212.html#redt00212" title="Cos system function"/>
+</entry>
+<entry keyword="cosh">
+<topic href="topics/redt00213.html#redt00213" title="Cosh system function"/>
+</entry>
+<entry keyword="decimals">
+<topic href="topics/redt00214.html#redt00214" title="Decimals system function"/>
+</entry>
+<entry keyword="exp">
+<topic href="topics/redt00215.html#redt00215" title="Exp system function"/>
+</entry>
+<entry keyword="floor">
+<topic href="topics/redt00216.html#redt00216" title="Floor system function"/>
+</entry>
+<entry keyword="frexp">
+<topic href="topics/redt00217.html#redt00217" title="Frexp system function"/>
+</entry>
+<entry keyword="ldexp">
+<topic href="topics/redt00218.html#redt00218" title="Ldexp system function"/>
+</entry>
+<entry keyword="log">
+<topic href="topics/redt00219.html#redt00219" title="Log system function"/>
+</entry>
+<entry keyword="log10">
+<topic href="topics/redt00220.html#redt00220" title="Log10 system function"/>
+</entry>
+<entry keyword="max">
+<topic href="topics/redt00221.html#redt00221" title="Max system function"/>
+</entry>
+<entry keyword="min">
+<topic href="topics/redt00222.html#redt00222" title="Min system function"/>
+</entry>
+<entry keyword="modf">
+<topic href="topics/redt00223.html#redt00223" title="Modf system function"/>
+</entry>
+<entry keyword="overview">
+<topic href="topics/redt00067.html#redt00067" title="MathLib system library"/>
+</entry>
+<entry keyword="pow">
+<topic href="topics/redt00224.html#redt00224" title="Pow system function"/>
+</entry>
+<entry keyword="precision">
+<topic href="topics/redt00225.html#redt00225" title="Precision system function"/>
+</entry>
+<entry keyword="random">
+<topic href="topics/redt00226.html#redt00226" title="Random system function"/>
+</entry>
+<entry keyword="sin">
+<topic href="topics/redt00228.html#redt00228" title="Sin system function"/>
+</entry>
+<entry keyword="sinh">
+<topic href="topics/redt00229.html#redt00229" title="Sinh system function"/>
+</entry>
+<entry keyword="sqrt">
+<topic href="topics/redt00230.html#redt00230" title="Sqrt system function"/>
+</entry>
+<entry keyword="tan">
+<topic href="topics/redt00231.html#redt00231" title="Tan system function"/>
+</entry>
+<entry keyword="tanh">
+<topic href="topics/redt00232.html#redt00232" title="Tanh system function"/>
+</entry>
+<entry keyword="x">
+<topic href="topics/redt00227.html#redt00227" title="Round system function"/>
+</entry>
+</entry>
+<entry keyword="max EGL system function">
+<topic href="topics/redt00221.html#redt00221" title="Max system function"/>
+</entry>
+<entry keyword="min EGL system function">
+<topic href="topics/redt00222.html#redt00222" title="Min system function"/>
 </entry>
 <entry keyword="miscellaneous types">
 <entry keyword="EGL">
@@ -137,10 +356,22 @@
 <topic href="topics/cedt00024.html#cedt00024" title="BOOLEAN type"/>
 </entry>
 </entry>
+<entry keyword="modf EGL system function">
+<topic href="topics/redt00223.html#redt00223" title="Modf system function"/>
+</entry>
 <entry keyword="numeric types">
 <entry keyword="EGL">
 <topic href="topics/cedt00021.html#cedt00021" title="EGL numeric types"/>
 </entry>
+</entry>
+<entry keyword="pow EGL system function">
+<topic href="topics/redt00224.html#redt00224" title="Pow system function"/>
+</entry>
+<entry keyword="precision EGL system function">
+<topic href="topics/redt00225.html#redt00225" title="Precision system function"/>
+</entry>
+<entry keyword="random EGL system function">
+<topic href="topics/redt00226.html#redt00226" title="Random system function"/>
 </entry>
 <entry keyword="rollback EGL system function">
 <topic href="topics/redt00199.html#redt00199" title="Rollback system function"/>
@@ -152,6 +383,15 @@
 </entry>
 <entry keyword="setLocale EGL system function">
 <topic href="topics/redt00201.html#redt00201" title="setLocale system function"/>
+</entry>
+<entry keyword="sin EGL system function">
+<topic href="topics/redt00228.html#redt00228" title="Sin system function"/>
+</entry>
+<entry keyword="sinh EGL system function">
+<topic href="topics/redt00229.html#redt00229" title="Sinh system function"/>
+</entry>
+<entry keyword="sqrt EGL system function">
+<topic href="topics/redt00230.html#redt00230" title="Sqrt system function"/>
 </entry>
 <entry keyword="startCmd EGL system function">
 <topic href="topics/redt00197.html#redt00197" title="StartCmd system function"/>
@@ -191,6 +431,12 @@
 <topic href="topics/redt00204.html#redt00204" title="WriteStdOut system function"/>
 </entry>
 </entry>
+<entry keyword="tan EGL system function">
+<topic href="topics/redt00231.html#redt00231" title="Tan system function"/>
+</entry>
+<entry keyword="tanh EGL system function">
+<topic href="topics/redt00232.html#redt00232" title="Tanh system function"/>
+</entry>
 <entry keyword="wait EGL system function">
 <topic href="topics/redt00202.html#redt00202" title="Wait system function"/>
 </entry>
@@ -199,5 +445,8 @@
 </entry>
 <entry keyword="writeStdOut EGL system function">
 <topic href="topics/redt00204.html#redt00204" title="WriteStdOut system function"/>
+</entry>
+<entry keyword="x EGL system function">
+<topic href="topics/redt00227.html#redt00227" title="Round system function"/>
 </entry>
 </index>
