@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.eclipse.edt.compiler.binding.DictionaryBinding;
 import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
+import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
@@ -32,8 +33,10 @@ import org.eclipse.edt.compiler.binding.LibraryBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
 import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeManager;
 import org.eclipse.edt.compiler.internal.EGLBaseNlsStrings;
+import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.lookup.EnumerationManager;
+import org.eclipse.edt.compiler.internal.core.lookup.System.ContentAssistPartManager;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibraryManager;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.util.NameUtil;
@@ -52,6 +55,7 @@ public class SystemEnvironment implements ISystemEnvironment {
     private Map unqualifiedSystemParts = Collections.EMPTY_MAP;
     private EnumerationManager enumerationManager;
     private SystemLibraryManager sysLibManager;
+    private ContentAssistPartManager contentAssistPartsManager;//Should Only used by Content Assist
     private AnnotationTypeManager annTypeManger;
     private ICompiler compiler;
 
@@ -178,6 +182,9 @@ public class SystemEnvironment implements ISystemEnvironment {
         
         if (part.getKind() == ITypeBinding.LIBRARY_BINDING){
         	getSystemLibraryManager().addSystemLibrary((LibraryBinding)part);
+		} else if (part.getKind() == ITypeBinding.EXTERNALTYPE_BINDING
+				&& null != part.getAnnotation(IEGLConstants.EGLX_LANG_PACKAGE,IEGLConstants.ContentAssist)) {
+        	getContentAssistPartsManager().addContentAssistPart((ExternalTypeBinding)part);
         }
         else if (part.getKind() == ITypeBinding.ENUMERATION_BINDING) {
         	if(enumerationIsImplicitlyUsed(part)) {
@@ -215,11 +222,13 @@ public class SystemEnvironment implements ISystemEnvironment {
         	enumerationManager = new EnumerationManager(parentEnv.getEnumerationManager());
         	sysLibManager = new SystemLibraryManager(parentEnv.getSystemLibraryManager());
         	annTypeManger = new AnnotationTypeManager(parentEnv.getAnnotationTypeManager());
+        	contentAssistPartsManager = new ContentAssistPartManager(parentEnv.getContentAssistPartsManager());
         }
         else {
         	enumerationManager = new EnumerationManager(null);
         	sysLibManager = new SystemLibraryManager(null);
         	annTypeManger = new AnnotationTypeManager(null);
+        	contentAssistPartsManager = new ContentAssistPartManager(null);
         }
     }
 
@@ -378,6 +387,11 @@ public class SystemEnvironment implements ISystemEnvironment {
 	@Override
 	public AnnotationTypeManager getAnnotationTypeManager() {
 		return annTypeManger;
+	}
+
+	@Override////Should Only used by Content Assist
+	public ContentAssistPartManager getContentAssistPartsManager() {
+		return contentAssistPartsManager;
 	}
 
 }

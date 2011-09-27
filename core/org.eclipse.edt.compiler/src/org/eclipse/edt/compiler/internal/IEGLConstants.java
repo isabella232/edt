@@ -28,9 +28,11 @@ public interface IEGLConstants {
 	public static final String EGL_UI_CONSOLE_PACKAGE = "egl.ui.console"; //$NON-NLS-1$
 	public static final String EGL_REPORTS_JASPER_PACKAGE = "egl.reports.jasper"; //$NON-NLS-1$
 	public static final String EGLX_DLI_PACKAGE = "eglx.dli"; //$NON-NLS-1$
+	public static final String [] EGLX_LANG_PACKAGE = {"eglx","lang"};
+
 	
-
-
+	//Content Assist annotation defined in eglx/lang/annotations.egl file
+	public static final String ContentAssist = "ContentAssist";
 
 
 	//EGL keywords

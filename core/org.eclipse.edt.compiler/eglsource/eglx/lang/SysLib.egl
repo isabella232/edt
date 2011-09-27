@@ -2,7 +2,7 @@ package eglx.lang;
 
 import eglx.lang.NativeType;
 
-externalType SysLib type NativeType
+externalType SysLib type NativeType{@ContentAssist}
 
 	private constructor();
 	

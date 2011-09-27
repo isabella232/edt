@@ -6,6 +6,7 @@ import java.util.Map;
 import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeManager;
 import org.eclipse.edt.compiler.internal.core.lookup.EnumerationManager;
 import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
+import org.eclipse.edt.compiler.internal.core.lookup.System.ContentAssistPartManager;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibraryManager;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.ObjectStore;
@@ -16,5 +17,6 @@ public interface ISystemEnvironment extends IBindingEnvironment {
 	IEnvironment getIREnvironment();
 	EnumerationManager getEnumerationManager();
 	SystemLibraryManager getSystemLibraryManager();
+	ContentAssistPartManager getContentAssistPartsManager();
 	AnnotationTypeManager getAnnotationTypeManager();
 }

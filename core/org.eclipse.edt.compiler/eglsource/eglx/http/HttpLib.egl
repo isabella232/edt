@@ -14,7 +14,7 @@ package eglx.http;
 import egl.lang.reflect.InterfacePart;
 import eglx.lang.NativeType;
 
-externaltype HttpLib type NativeType 
+externaltype HttpLib type NativeType{@ContentAssist}   
 	private constructor();
 	  
     static function convertFromURLEncoded(urlEncoded string in) returns (string);

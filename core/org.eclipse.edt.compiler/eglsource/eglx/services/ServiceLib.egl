@@ -14,7 +14,7 @@ package eglx.services;
 import egl.lang.reflect.InterfacePart;
 import eglx.lang.NativeType;
 
-externalType ServiceLib type NativeType
+externalType ServiceLib type NativeType{@ContentAssist}
 	private constructor();  
 	
     static function completeBind(serviceOrInterface any out, http any const in)returns(any);
