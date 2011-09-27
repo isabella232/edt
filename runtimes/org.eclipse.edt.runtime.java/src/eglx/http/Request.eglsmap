@@ -1,0 +1,18 @@
+SMAP
+Request.java
+egl
+*S egl
+*F
++ 1 Request.egl
+eglx/http/Request.egl
+*L
+*E
+10#1;uri;uri;eglx.lang.EString
+11#1;method;method;eglx.http.HttpMethod
+12#1;encoding;encoding;eglx.services.Encoding
+13#1;charset;charset;eglx.lang.EString
+14#1;contentType;contentType;eglx.lang.EString
+15#1;headers;headers;eglx.lang.EDictionary
+16#1;body;body;eglx.lang.EString
+17#1;timeout;timeout;eglx.lang.EInt
+*X

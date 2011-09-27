@@ -1,0 +1,24 @@
+SMAP
+ConstantsLib.java
+egl
+*S egl
+*F
++ 1 ConstantsLib.egl
+org/eclipse/edt/eunit/runtime/ConstantsLib.egl
+*L
+7#1:12
+8#1:14
+10#1:16
+11#1:18
+12#1:20
+13#1:22
+14#1:24
+*E
+7#1;NEWLINE;NEWLINE;eglx.lang.EString
+8#1;EXIT_PREFIX;EXIT_PREFIX;eglx.lang.EString
+10#1;SPASSED;SPASSED;eglx.lang.EInt
+11#1;SFAILED;SFAILED;eglx.lang.EInt
+12#1;SERROR;SERROR;eglx.lang.EInt
+13#1;SNOT_RUN;SNOT_RUN;eglx.lang.EInt
+14#1;SBAD;SBAD;eglx.lang.EInt
+*X
