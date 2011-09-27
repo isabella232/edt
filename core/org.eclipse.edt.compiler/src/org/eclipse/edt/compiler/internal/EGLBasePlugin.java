@@ -38,7 +38,7 @@ public class EGLBasePlugin extends AbstractUIPlugin {
 	 * The following are constants defined for the key elements of the 
 	 * Package Version extension point defined in this plugin's plugin.xml file
 	 */
-	public static final String EGL_BASE_PLUGIN_ID = "com.ibm.etools.egl"; //$NON-NLS-1$
+	public static final String EGL_BASE_PLUGIN_ID = "org.eclipse.edt.compiler"; //$NON-NLS-1$
 
 	public static final String EGL_AST_PLUGIN_ID = "com.ibm.etools.egl.java.ast"; //$NON-NLS-1$
 
