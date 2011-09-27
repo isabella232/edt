@@ -449,7 +449,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 							if (node.getTarget() instanceof QualifiedName) {
 								fi = factory.createQualifiedFunctionInvocation();
 								QualifiedName name = (QualifiedName)node.getTarget();
-								fi.setId(name.getIdentifier());
+								fi.setId(name.getCaseSensitiveIdentifier());
 								name.getQualifier().accept(this);
 								((QualifiedFunctionInvocation)fi).setQualifier((Expression)stack.pop());
 							}
@@ -686,7 +686,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			DynamicAccess expr = factory.createDynamicAccess();
 			setElementInformation(name, expr);
 			StringLiteral index = factory.createStringLiteral();
-			index.setValue(name.getIdentifier());
+			index.setValue(name.getCaseSensitiveIdentifier());
 			expr.setAccess(index);
 			stack.push(expr);
 			name.getQualifier().accept(this);
@@ -696,7 +696,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			MemberAccess nameExpr = factory.createMemberAccess();
 			setElementInformation(name, nameExpr);
 			stack.push(nameExpr);
-			nameExpr.setId(name.getIdentifier());
+			nameExpr.setId(name.getCaseSensitiveIdentifier());
 			
 			IBinding qualBinding = name.getQualifier().resolveBinding();
 			if (qualBinding instanceof PartBinding) {
