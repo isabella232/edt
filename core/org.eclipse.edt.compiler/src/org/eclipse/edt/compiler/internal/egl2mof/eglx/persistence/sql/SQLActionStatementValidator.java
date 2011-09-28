@@ -1,6 +1,7 @@
 package org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql;
 
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
+import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation.OpenStatementValidator;
 
 public class SQLActionStatementValidator extends DefaultStatementValidator {
 
@@ -35,7 +36,7 @@ public class SQLActionStatementValidator extends DefaultStatementValidator {
 	}
 
 	public boolean visit(org.eclipse.edt.compiler.core.ast.OpenStatement openStatement) {
-		//TODO validate the sql action statement
+		new OpenStatementValidator(openStatement, problemRequestor, compilerOptions).validate();
 		return false;
 	}
 

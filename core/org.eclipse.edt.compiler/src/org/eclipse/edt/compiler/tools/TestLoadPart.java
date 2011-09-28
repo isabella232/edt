@@ -122,13 +122,6 @@ public class TestLoadPart {
 //			return false;
 //		}
 		
-		public boolean visit(Field field) {
-			
-			String name = IRUtils.getFileName(field);
-			System.out.println("Field: " + field.getId() + " = " + name);
-			
-			return true;
-		}
 //		
 //		public boolean visit(Statement stmt) {
 //

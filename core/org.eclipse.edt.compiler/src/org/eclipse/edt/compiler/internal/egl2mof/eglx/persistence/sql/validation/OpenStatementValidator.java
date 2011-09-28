@@ -1,5 +1,7 @@
 package org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation;
 
+import org.eclipse.edt.compiler.binding.Binding;
+import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ForExpressionClause;
@@ -14,7 +16,7 @@ import org.eclipse.edt.compiler.core.ast.WithInlineSQLClause;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 
-public class OpenStatementValidator {
+public class OpenStatementValidator extends AbstractSqlStatementValidator{
 	OpenStatement statement;
 	IProblemRequestor problemRequestor;
 	ICompilerOptions compilerOptions;
@@ -37,6 +39,80 @@ public class OpenStatementValidator {
 	
 	public void validate() {
 		initialize();
+		
+		validateTarget();
+		validateFrom();
+		validateWith();
+		validateFor();
+	}
+	
+	private void validateTarget() {
+		ITypeBinding targetType = statement.getResultSet().resolveTypeBinding();
+		if (Binding.isValidBinding(targetType) && !isResultSet(targetType)) {
+			problemRequestor.acceptProblem(statement.getResultSet(),
+					IProblemRequestor.SQL_EXPR_HAS_WRONG_TYPE,
+					new String[] {statement.getResultSet().getCanonicalString(), "eglx.persistence.sql.SQLResultSet"});
+			return;
+		}
+	}
+	
+	private void validateFrom() {
+		if (from != null) {
+			ITypeBinding type = from.getExpression().resolveTypeBinding();
+			if (Binding.isValidBinding(type) && !isDataSource(type)) {
+				problemRequestor.acceptProblem(from.getExpression(),
+						IProblemRequestor.SQL_EXPR_HAS_WRONG_TYPE,
+						new String[] {from.getExpression().getCanonicalString(), "eglx.persistence.sql.SQLDataSource"});
+				return;
+			}
+		}
+	}
+	
+	private void validateWith() {
+		boolean isSqlStatement = false;
+		
+		if (withExpression != null) {
+			ITypeBinding type = withExpression.getExpression().resolveTypeBinding();
+			if (Binding.isValidBinding(type) && !isSqlStatement(type)) {
+				problemRequestor.acceptProblem(withExpression.getExpression(),
+						IProblemRequestor.SQL_EXPR_HAS_WRONG_TYPE,
+						new String[] {withExpression.getExpression().getCanonicalString(), "eglx.persistence.sql.SQLStatement"});
+				return;
+			}
+			else {
+				isSqlStatement = true;
+			}
+		}
+
+		// if no FROM clause is specified the WITH clause must be specified and must be 
+		// referencing an expression of type SQLStatement.  In other words if a prepared 
+		// statement is available there is no need for referencing the explicit datasource
+				
+		if (from == null && !isSqlStatement) {
+			problemRequestor.acceptProblem(statement,
+					IProblemRequestor.SQL_WITH_STMT_REQUIRED,
+					new String[] {"eglx.persistence.sql.SQLStatement"});
+		}
+	}
+	
+	private void validateFor() {
+		if (forExpression != null) {
+			//If no USING or WITH clause is specified the FOR clause can be specified 
+			if (using != null || withExpression != null || withInline != null) {
+				problemRequestor.acceptProblem(forExpression.getExpression(),
+						IProblemRequestor.SQL_FOR_NOT_ALLOWED,
+						new String[] {});
+				return;
+			}
+
+			ITypeBinding type = forExpression.getExpression().resolveTypeBinding();
+				if (Binding.isValidBinding(type) && !isEntityWithID(type) && !isAssociationExpression(forExpression.getExpression())) {
+					problemRequestor.acceptProblem(forExpression.getExpression(),
+							IProblemRequestor.SQL_FOR_TYPE_INVALID,
+							new String[] {forExpression.getExpression().getCanonicalString()});
+					return;
+				}
+		}
 	}
 	
 	

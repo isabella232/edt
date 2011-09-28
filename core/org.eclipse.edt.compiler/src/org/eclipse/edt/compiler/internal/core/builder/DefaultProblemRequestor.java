@@ -506,7 +506,12 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(FUNCTION_MUST_HAVE_ALL_IN_PARMS),
 		new Integer(FUNCTION_PARM_MUST_HAVE_TYPE),
 		new Integer(FUNCTION_TYPE_NOT_COMPAT_WITH_PARM),
-		new Integer(FUNCTION_CANNOT_HAVE_RETURN_TYPE)
+		new Integer(FUNCTION_CANNOT_HAVE_RETURN_TYPE),
+		
+		
+		new Integer(SQL_EXPR_HAS_WRONG_TYPE),
+		new Integer(SQL_WITH_STMT_REQUIRED),
+		new Integer(SQL_FOR_TYPE_INVALID)
 	}));
 	
 	/**

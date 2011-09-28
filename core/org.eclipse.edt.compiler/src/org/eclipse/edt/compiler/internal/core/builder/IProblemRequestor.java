@@ -1888,4 +1888,10 @@ public interface IProblemRequestor {
     public static final int DLI_PCBRECORD_NOT_VALID_AS_IN_ARG = 7955;    
     
     public static final int VALIDATION_ERROR_COMPILING_BINARY_FUNCTION = 7999;    
+    
+    //Sql datasource messages
+    public static final int SQL_EXPR_HAS_WRONG_TYPE = 8500;
+    public static final int SQL_WITH_STMT_REQUIRED = 8501;
+    public static final int SQL_FOR_TYPE_INVALID = 8502;
+    public static final int SQL_FOR_NOT_ALLOWED = 8503;
 }

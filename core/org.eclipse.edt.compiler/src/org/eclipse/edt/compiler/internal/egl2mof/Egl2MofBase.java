@@ -189,6 +189,11 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		if (element == null) return null;
 		IBinding key = element instanceof NestedFunctionBinding ? ((NestedFunctionBinding)element).getType() : element;
 		EObject result = eObjects.get(key);
+		//if we cant find a real object, see if we have a proxy already
+		if (result == null) {
+			result = proxies.get(key);
+		}
+		//If no proxy is found, we need to make one instead
 		if (result == null) {
 			if (inMofContext) {
 				result = new ProxyEObject();
