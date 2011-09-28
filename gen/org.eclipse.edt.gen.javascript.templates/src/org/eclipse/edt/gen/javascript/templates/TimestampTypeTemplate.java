@@ -27,56 +27,11 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 	}
 
 	protected void generateOptions(TimestampType type, Context ctx, TabbedWriter out, boolean needSeparator) {
-		// default to standard pattern
+		if (needSeparator)
+			out.print(", ");
 		String pattern = "yyyyMMddhhmmss";
 		if (type.getPattern() != null && !type.getPattern().equalsIgnoreCase("null"))
 			pattern = type.getPattern();
-		String start = "";
-		String end = "";
-		if (pattern.startsWith("yyyy"))
-			start = ".YEAR_CODE";
-		else if (pattern.startsWith("MM"))
-			start = ".MONTH_CODE";
-		else if (pattern.startsWith("dd"))
-			start = ".DAY_CODE";
-		else if (pattern.startsWith("hh"))
-			start = ".HOUR_CODE";
-		else if (pattern.startsWith("mm"))
-			start = ".MINUTE_CODE";
-		else if (pattern.startsWith("ss"))
-			start = ".SECOND_CODE";
-		else if (pattern.startsWith("f"))
-			start = ".FRACTION1_CODE";
-		if (needSeparator)
-			out.print(", ");
-		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
-		out.print(start);
-		if (pattern.endsWith("yyyy"))
-			end = ".YEAR_CODE";
-		else if (pattern.endsWith("MM"))
-			end = ".MONTH_CODE";
-		else if (pattern.endsWith("dd"))
-			end = ".DAY_CODE";
-		else if (pattern.endsWith("hh"))
-			end = ".HOUR_CODE";
-		else if (pattern.endsWith("mm"))
-			end = ".MINUTE_CODE";
-		else if (pattern.endsWith("ss"))
-			end = ".SECOND_CODE";
-		else if (pattern.endsWith("ffffff"))
-			end = ".FRACTION6_CODE";
-		else if (pattern.endsWith("fffff"))
-			end = ".FRACTION5_CODE";
-		else if (pattern.endsWith("ffff"))
-			end = ".FRACTION4_CODE";
-		else if (pattern.endsWith("fff"))
-			end = ".FRACTION3_CODE";
-		else if (pattern.endsWith("ff"))
-			end = ".FRACTION2_CODE";
-		else if (pattern.endsWith("f"))
-			end = ".FRACTION1_CODE";
-		out.print(", ");
-		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
-		out.print(end);
+		out.print(quoted(pattern));
 	}
 }
