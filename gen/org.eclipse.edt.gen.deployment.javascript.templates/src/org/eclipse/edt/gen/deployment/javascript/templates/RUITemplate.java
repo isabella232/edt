@@ -371,10 +371,16 @@ public class RUITemplate extends JavaScriptTemplate {
 		LinkedHashSet handledParts = new LinkedHashSet();
 		ctx.invoke(genDependentIncludeFiles, handler, ctx, includeFiles, handledParts);
 		if(!includeFiles.isEmpty()){
-			out.println("var isLastFile = false;");
+			out.println("var isLastFile = false; var currentFile = \"\"");
 			out.println("var htmlString = \"\";");
 			out.println("function runHandler() {");
-			out.println("	htmlString += xmlhttp.responseText;");
+			out.println("   var currentFileType = currentFile.indexOf(\".\") >=0 ? currentFile.substring(currentFile.lastIndexOf(\".\") + 1, currentFile.length) : \"\";");
+			out.println("	if(currentFileType == \"js\")");
+			out.println("		htmlString += \"<script>\" + xmlhttp.responseText + \"<\\/script>\";");
+			out.println("	else if(currentFileType == \"css\")");
+			out.println("		htmlString += \"<style type='text/css'>\" + xmlhttp.responseText + \"<\\/style>\";");
+			out.println("	else");
+			out.println("		htmlString += xmlhttp.responseText;");
 			out.println("	if(isLastFile){");
 			out.println("		document.write(htmlString + \"<script>egl.load(RUI_RUNTIME_JAVASCRIPT_FILES, function(){egl.startupInit();});<\\/script>\");");
 			out.println("		isLastFile = false;");
@@ -407,7 +413,8 @@ public class RUITemplate extends JavaScriptTemplate {
 				String includeFilestring = (String)iter.next();
 				if(!iter.hasNext())
 					out.println("	isLastFile = true;");
-				out.println("		xmlhttp.open( 'POST', '" + includeFilestring + "', false );");
+				out.println("		currentFile = '" + includeFilestring + "';");
+				out.println("		xmlhttp.open( 'POST', currentFile, false );");
 				out.println("		xmlhttp.send( null );");
 			}		
 			out.println("}");
