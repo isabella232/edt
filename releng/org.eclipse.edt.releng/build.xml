@@ -41,9 +41,6 @@
 		<ant antfile="${relengCommonBuilderDir}/buildAll.xml" target="runEclipse" dir="${relengCommonBuilderDir}" />
 
 		<antcall target="cleanUp" inheritall="true" />
-		<condition property="isNightlyBuild">
-			<equals arg1="${buildType}" arg2="N" />
-		</condition>
 
 		<ant antfile="promote.xml" />
 	</target>
