@@ -68,7 +68,7 @@ public class DateTypeTemplate extends JavaScriptTemplate {
 		// for date type, always use the runtime
 		out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
 		out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
-		out.print("(ezeProgram, ");
+		out.print("(");
 		ctx.invoke(genExpression, arg.getLHS(), ctx, out);
 		out.print(", ");
 		ctx.invoke(genExpression, arg.getRHS(), ctx, out);

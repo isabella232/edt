@@ -66,19 +66,22 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 
 
 	public void processNewExpression(Type type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
-		out.print("new ");
-		ctx.invoke(genRuntimeTypeName, arg.getType(), ctx, out, TypeNameKind.JavascriptImplementation);
-		out.print("(");
-		if (arg.getArguments() != null && arg.getArguments().size() > 0) {
-			String delim = "";
-			for (Expression argument : arg.getArguments()) {
-				out.print(delim);
-				ctx.invoke(genExpression, argument, ctx, out);
-				delim = ", ";
-			}
-		} else
-			ctx.invoke(genConstructorOptions, arg.getType(), ctx, out);
+		out.print("egl.eglx.lang.ETimestamp.currentTimeStamp("); 
+		ctx.invoke(genConstructorOptions, arg.getType(), ctx, out);
 		out.print(")");
+//		out.print("new ");
+//		ctx.invoke(genRuntimeTypeName, arg.getType(), ctx, out, TypeNameKind.JavascriptImplementation);
+//		out.print("(");
+//		if (arg.getArguments() != null && arg.getArguments().size() > 0) {
+//			String delim = "";
+//			for (Expression argument : arg.getArguments()) {
+//				out.print(delim);
+//				ctx.invoke(genExpression, argument, ctx, out);
+//				delim = ", ";
+//			}
+//		} else
+//			ctx.invoke(genConstructorOptions, arg.getType(), ctx, out);
+//		out.print(")");
 	}
 
 	public void genBinaryExpression(TimestampType type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
