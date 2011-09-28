@@ -15,14 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
-import org.eclipse.edt.compiler.tools.EGL2IR;
 import org.eclipse.edt.ide.core.internal.builder.AbstractBuilder;
 import org.eclipse.edt.ide.core.internal.builder.AbstractProcessingQueue;
-import org.eclipse.edt.ide.core.internal.builder.IFileSystemObjectStore;
 import org.eclipse.edt.mof.serialization.Environment;
-import org.eclipse.edt.mof.serialization.ObjectStore;
 
 /**
  * @author winghong
@@ -86,43 +82,6 @@ public class ProjectEnvironmentManager {
         return result;
     }
     
-
-    /**
-     * Get a ProjectEnvironment which includes generationDirectory as an IR search location. A new ProjectEnvironment was created
-     * each time this function is called. Nothing is cached, and nothing in the ProjectEnvironmentManager cache is changed.
-     *  
-     * @param project
-     * @param generationDirectory	
-     * @return
-     */
-    public ProjectEnvironment getProjectEnvironmentForPreview(IProject project, IPath generationDirectory) {
-        ProjectEnvironment envrionment = new ProjectEnvironment(project);
-        envrionment.setIREnvironment(new ProjectIREnvironment());
-
-        //get project BuildPathEntry
-        IBuildPathEntry[] projectBuildPathEntries = getProjectBuildPathEntriesFor(project);
-        
-        //create a new BuildPathEntry for generationDirectory
-		ProjectBuildPathEntry buildPathEntry = new ProjectBuildPathEntry(ProjectInfoManager.getInstance().getProjectInfo(project));
-		buildPathEntry.setObjectStores(new ObjectStore[] {
-					new IFileSystemObjectStore(generationDirectory, envrionment.getIREnvironment(), ObjectStore.XML),
-					new IFileSystemObjectStore(generationDirectory, envrionment.getIREnvironment(), ObjectStore.XML, EGL2IR.EGLXML)
-				});
-		buildPathEntry.setDeclaringEnvironment(envrionment);
-
-		//Merge BuildPathEntry together, generationDirectory comes first
-		IBuildPathEntry[] previewBuildPathEntries = new IBuildPathEntry[projectBuildPathEntries.length+1];
-		previewBuildPathEntries[0] = buildPathEntry;
-		for(int i = 0;i <projectBuildPathEntries.length; i++){
-			previewBuildPathEntries[i+1] = projectBuildPathEntries[i];
-		}
-		
-		envrionment.setProjectBuildPathEntries(previewBuildPathEntries);
-		envrionment.setDeclaringProjectBuildPathEntry(ProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry(project));
-        
-        return envrionment;
-    }
-
     public ProjectIREnvironment getIREnvironment(IProject project) {
     	ProjectIREnvironment env = irEnvironments.get(project);
     	if (env == null) {
