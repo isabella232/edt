@@ -31,6 +31,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +98,7 @@ import eglx.services.ServiceKind;
 public class EvServer implements IClientProxy {
 
 	private ServerSocket serverSocket = null;
-	private Map contextKeyQueues = new HashMap();
+	private Map<Integer, QueueProcessor> contextKeyQueues = new HashMap<Integer, QueueProcessor>();
 
 	private Object contextSynchObject = new Object();
 	private List<IContextResolver> contextResolvers = new ArrayList<IContextResolver>();
@@ -878,6 +879,12 @@ public class EvServer implements IClientProxy {
 			if (bytes == null) {
 				String uri = trimmedURL.substring(trimmedURL.indexOf('/') + 1,
 						trimmedURL.length());
+								
+				if(intKey == null && trimmedURL.endsWith(".js")){
+					String tempURL = trimmedURL.substring(0, trimmedURL.lastIndexOf(".js"));
+					context = findContext(tempURL);
+				}
+				
 				if (intKey != null) {
 					context = findContext(intKey);
 				}
@@ -1365,6 +1372,18 @@ public class EvServer implements IClientProxy {
 			}
 		}
 		return null;
+	}
+	
+	private IContext findContext(String uri) {
+		synchronized(contextSynchObject) {
+			for(Iterator<Integer> iterator = contextKeyQueues.keySet().iterator(); iterator.hasNext();){
+				QueueProcessor queueProcessor = contextKeyQueues.get(iterator.next());
+				if(queueProcessor.getContext().getUrl().contains(uri)){
+					return queueProcessor.getContext();
+				}
+			}
+			return null;
+		}
 	}
 	
 	private QueueProcessor findQueueProcessor(Integer contextKey) {
