@@ -602,7 +602,14 @@ public class TypeUtils implements MofConversion {
 		if (srcType == type) {
 			return false;
 		}
-		
+
+		//If we find a widen operation, then this cannot be a narrow
+		if (srcType instanceof StructPart && type instanceof StructPart) {
+			if (getBestFitWidenConversionOp((StructPart) srcType, (StructPart)type) != null) {
+				return false;
+			}
+		}
+
 		if (srcType instanceof StructPart && type instanceof StructPart) {
 			return getBestFitNarrowConversionOp((StructPart) srcType, (StructPart)type) != null;
 		}
