@@ -46,7 +46,7 @@
          </attribute>
       </complexType>
    </element>
-   
+
    <element name="DeploymentOperation">
       <complexType>
          <attribute name="id" type="string" use="required">
@@ -69,7 +69,7 @@
                   Provide visualization of this deployment solution to the deployment wizard and handles the deployment execution
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":com.ibm.etools.egl.rui.deploy.internal.wizard.IDeploymentSolution"/>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.edt.ide.deployment.solution.IDeploymentSolution"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -124,5 +124,5 @@ accompanies this distribution, and is available at
 &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;
       </documentation>
    </annotation>
-   
+
 </schema>
