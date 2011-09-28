@@ -36,7 +36,7 @@ public class SQLActionStatementValidator extends DefaultStatementValidator {
 	}
 
 	public boolean visit(org.eclipse.edt.compiler.core.ast.OpenStatement openStatement) {
-		new OpenStatementValidator(openStatement, problemRequestor, compilerOptions).validate();
+//		new OpenStatementValidator(openStatement, problemRequestor, compilerOptions).validate();
 		return false;
 	}
 
