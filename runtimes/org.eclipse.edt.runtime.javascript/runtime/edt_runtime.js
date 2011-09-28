@@ -408,6 +408,12 @@ egl.eglx.lang.EString.fromEDecimal = function (x) {
 egl.eglx.lang.EString.fromEBoolean = function (x) {
 	return (x).toString();
 };
+egl.eglx.lang.EString.fromETimestamp = function (timestamp) {
+	return egl.timeStampToString(timestamp, "yyyy-MM-dd-HH.mm.ss.SSSSSS"); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
+};
+egl.eglx.lang.EString.fromEDate = function (d) {
+	return egl.dateToString(d, "yyyy-MM-dd"); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
+};
 egl.eglx.lang.EString.fromAnyObject = function (x) {
 	return egl.convertAnyToString(x, false);  //TODO sbg avoid hardcoding the boolean flag
 };
@@ -527,6 +533,13 @@ egl.eglx.lang.EDate.fromEDate = function (x) {
 egl.eglx.lang.EDate.fromEString = function (x) {   
 return egl.stringToDate( x, egl.eglx.rbd.StrLib[$inst].defaultDateFormat ); // TODO need dateformat as arg?
 };
+egl.eglx.lang.EDate.equals = function (x, y) {   
+	return egl.dateEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
+};
+egl.eglx.lang.EDate.ezeCast = function (any) {   
+	return egl.convertAnyToDate(any, false);  //TODO sbg false should be a flag indicating nullable
+};
+
 
 /****************************************************************************
  * ETime
@@ -638,6 +651,9 @@ egl.eglx.lang.ETimestamp["extend"] = function (/*type of date*/ type, /*extensio
 
 egl.eglx.lang.ETimestamp.ezeCast = function(x, pattern){
 	return egl.convertAnyToTimestamp(x, false, pattern);  //TODO sbg false should be a flag indicating nullable
+};
+egl.eglx.lang.ETimestamp.equals = function (x, y) {   
+	return egl.timeStampEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
 };
 
 

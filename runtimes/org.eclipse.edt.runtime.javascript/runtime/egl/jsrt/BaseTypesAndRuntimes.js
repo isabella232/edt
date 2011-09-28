@@ -2990,6 +2990,8 @@ egl.timeStampEquals = function(/*timestamp*/ a, /*timestamp*/ b, falseAnswer) {
 	}
 };
 
+
+
 // Constructor for a Delegate (function reference)
 // This encapsulates the function and its context in a wrapper function for
 // easy invocation

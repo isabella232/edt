@@ -105,3 +105,40 @@ egl.eglx.lang.DateTimeLib["currentTimeStamp"] = function( /*string*/ pattern ) {
 	//timestamp keeps every field
 	return this.extend( "timestamp", new Date(), pattern );
 };
+
+
+
+egl.getProperTimeStampPattern = function( pattern ) {
+	new egl.eglx.lang.Constants(); // TODO sbg remove if/when Constants' fields are static
+	return ( pattern ) 
+				? egl.formatTimeStampPattern( pattern )
+				: (( egl.eglx.lang.Constants['$inst'].defaultTimeStampFormat == "" ) 
+						? egl.eglx.lang.Constants['$inst'].db2TimestampFormat
+						: egl.eglx.lang.Constants['$inst'].defaultTimeStampFormat );
+};
+
+egl.formatTimeStampPattern = function( mask ) {
+	new egl.eglx.lang.Constants(); // TODO sbg remove if/when Constants' fields are static
+	
+	// Masks specify fractions of seconds with "f", but formatting patterns use "S".
+	mask = mask.replace(/f/g, "S");
+
+	// Masks can be any subset of "yyyyMMddHHmmssffffff" (though they can't start or stop in the middle of a character block).
+	// We want to return the corresponding subset of the format "yyyy-MM-dd HH:mm:ss.SSSSSS" (the odbc timestamp format)
+	// that matches the subset of characters in the mask (i.e. if the mask is "MMddHH", we want to return the corresponding
+	// substring of the pattern: "MM-dd HH".
+	var firstCharInMask = mask.charAt(0);
+	var lastCharInMask = mask.charAt(mask.length-1);
+	
+	var startIndex = egl.eglx.lang.Constants['$inst'].odbcTimestampFormat.indexOf(firstCharInMask);
+	var endIndex = egl.eglx.lang.Constants['$inst'].odbcTimestampFormat.lastIndexOf(lastCharInMask)+1; // (add 1 so we actually *get* the last character)
+	
+	if( startIndex >= 0 && endIndex > startIndex )
+	{
+		return egl.eglx.lang.Constants['$inst'].odbcTimestampFormat.substring( startIndex, endIndex );
+	}
+	else
+	{
+		throw egl.createRuntimeException( "CRRUI2032E", [ mask ] );
+	}
+};

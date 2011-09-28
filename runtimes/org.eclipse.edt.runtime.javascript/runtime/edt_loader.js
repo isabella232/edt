@@ -36,7 +36,7 @@ load("runtime", "eglx.lang", ["AnyException", "DynamicAccessException", "Enumera
                              "InvalidArgumentException", "InvalidIndexException", "InvalidPatternException",
                              "InvocationException", "JavaObjectException", "NullValueException",
                              "NumericOverflowException", "TypeCastException", ]);
-load("runtime", "eglx.lang", ["DateTimeLib", "Dictionary", "OrderingKind", "MathLib", "StringLib", "SysLib"]);
+load("runtime", "eglx.lang", ["Constants", "DateTimeLib", "Dictionary", "OrderingKind", "MathLib", "StringLib", "SysLib"]);
 load("runtime", "eglx.ui.rui", ["Widget", "Document", "Event", "View"]);
 load("runtime", "egl.ui.gateway", ["UIGatewayRecord"]);
 
