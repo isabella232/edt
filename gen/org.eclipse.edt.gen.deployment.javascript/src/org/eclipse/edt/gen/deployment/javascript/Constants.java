@@ -39,6 +39,7 @@ public class Constants {
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("edt_runtime.js");  //$NON-NLS-1$
 //TODO waiting CQ approval bugzilla 5300		RUI_RUNTIME_JAVASCRIPT_FILES.add("webtoolkit.base64.js");  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/jsrt/BaseTypesAndRuntimes.js");  //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/Constants.js");  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/Dictionary.js");  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/AnyException.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/DynamicAccessException.js"); //$NON-NLS-1$
