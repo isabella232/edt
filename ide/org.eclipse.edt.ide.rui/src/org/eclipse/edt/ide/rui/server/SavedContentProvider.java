@@ -35,6 +35,7 @@ import org.eclipse.edt.ide.rui.utils.DebugFileLocator;
 import org.eclipse.edt.ide.rui.utils.DebugIFileLocator;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
 import org.eclipse.edt.ide.rui.utils.IFileLocator;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
 public class SavedContentProvider extends AbstractContentProvider {
@@ -49,5 +50,10 @@ public class SavedContentProvider extends AbstractContentProvider {
 	
 	protected HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, List egldds, HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv) {
 		return new NoContextHTMLGenerator(processor, egldds, eglProperties, userMsgLocale, runtimeMsgLocale, sysEnv);
+	}
+
+	@Override
+	protected IEnvironment getEnvironmentForGeneration(IProject project) {
+		return null;
 	}
 }

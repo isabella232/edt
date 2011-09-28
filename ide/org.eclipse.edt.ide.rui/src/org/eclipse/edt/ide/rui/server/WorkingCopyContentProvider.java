@@ -26,15 +26,15 @@ import java.io.IOException;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
-import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
-import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
+import org.eclipse.edt.ide.rui.internal.deployment.javascript.EGL2HTML4VE;
+import org.eclipse.edt.ide.rui.internal.lookup.PreviewIREnvironmentManager;
 import org.eclipse.edt.ide.rui.utils.DebugIFileLocator;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
 import org.eclipse.edt.ide.rui.utils.IFileLocator;
 import org.eclipse.edt.ide.rui.utils.PreviewFileLocator;
 import org.eclipse.edt.ide.rui.utils.WorkingCopyGenerationResult;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.xml.sax.SAXException;
 
 
@@ -76,14 +76,9 @@ public abstract class WorkingCopyContentProvider extends AbstractContentProvider
 	}
 
 	@Override
-	protected ProjectEnvironment getProjectEnvironment(IProject project) {
-		IPath generationDirectory = editorProvider.getGenerationDirectory();
-		ProjectEnvironment environment = ProjectEnvironmentManager.getInstance().getProjectEnvironmentForPreview(project, generationDirectory);
-		return environment;
+	protected  IEnvironment getEnvironmentForGeneration(IProject project) {
+		return PreviewIREnvironmentManager.getPreviewIREnvironment(project, editorProvider.getGenerationDirectory().toFile());
 	}
-
-	
-
 		
 	
 }

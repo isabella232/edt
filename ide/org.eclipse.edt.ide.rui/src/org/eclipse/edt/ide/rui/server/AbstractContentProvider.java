@@ -33,7 +33,6 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
@@ -44,21 +43,21 @@ import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.deployment.javascript.DeploymentDescGenerator;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
-import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.utils.DefaultDeploymentDescriptorUtility;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.rui.internal.deployment.javascript.EGL2HTML4VE;
+import org.eclipse.edt.ide.rui.internal.lookup.PreviewIREnvironmentManager;
 import org.eclipse.edt.ide.rui.internal.nls.LocaleUtility;
 import org.eclipse.edt.ide.rui.preferences.IRUIPreferenceConstants;
 import org.eclipse.edt.ide.rui.utils.EGLResource;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
 import org.eclipse.edt.ide.rui.utils.IConstants;
 import org.eclipse.edt.ide.rui.utils.IFileLocator;
+import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.PartNotFoundException;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.xml.sax.SAXException;
 
@@ -186,61 +185,36 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 //	}
 	
 	protected byte[] generateHTMLFile( FileLocator locator, String resourceName, String projectName) throws IOException, SAXException{
-//		HTMLGenerator generator;
-//		// Locate the deploy file for this HTML file
-//		EGLResource resource = locator.findResource(resourceName.concat(".deploy")); //$NON-NLS-1$
-//		if(resource != null){
-//			DotDeployFile deployFile = XmlDeployFileUtil.getDeployFile(resource);
-//			HashMap eglProperties = new HashMap();
-//			eglProperties.put(IConstants.CONTEXT_ROOT_PARAMETER_NAME, projectName);		
-//			eglProperties.put(IConstants.HTML_FILE_LOCALE, getHandlerMessageLocale());
-//			eglProperties.put(IConstants.DEFAULT_LOCALE_PARAMETER_NAME, getRuntimeMessageLocale());
-//			
-//			// If this file is in the preview pane, add information to the returned HTML file as necessary
-//			generator = getDevelopmentGenerator(locator, resourceName, eglProperties, 
-//					getHandlerMessageLocale(), getRuntimeMessageLocale(), deployFile);
-//			return generator.generate();
-//		}
-//		return null;
-		
-		
-		
-		ProjectEnvironment environment = null;
+		IEnvironment environment = null;
 		try {
-			IWorkspace workspace = ResourcesPlugin.getWorkspace();
-			IProject project = workspace.getRoot().getProject(projectName);
-			environment = getProjectEnvironment(project);
-			Environment.pushEnv(environment.getIREnvironment());			
-			environment.getIREnvironment().initSystemEnvironment(environment.getSystemEnvironment()); 
+			IProject project =  ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+			environment = getEnvironmentForGeneration(project);
+			Environment.pushEnv(environment);			
 			
-			String[] splits = resourceName.split("/");
-			String[] packageName = new String[splits.length-1];
-			for(int i=0; i<splits.length-1; i++){
-				packageName[i] = splits[i];
+			Part part=null;
+			EObject eObject = environment.find(PreviewIREnvironmentManager.makeEGLKey(resourceName.replace("/", ".")));
+			if(eObject!=null && eObject instanceof Part){
+				part = (Part)eObject;
 			}
-			String partName = splits[splits.length-1];
-			Part part = environment.findPart(InternUtil.intern(packageName), InternUtil.intern(partName));
 			
 			if (part != null && !part.hasCompileErrors()) {
 				EGL2HTML4VE cmd = new EGL2HTML4VE();
 						
-				HashMap eglProperties = new HashMap();
+				HashMap<String, String> eglProperties = new HashMap<String, String>();
 				eglProperties.put(IConstants.CONTEXT_ROOT_PARAMETER_NAME, projectName);		
 				eglProperties.put(IConstants.HTML_FILE_LOCALE, getHandlerMessageLocale());
 				eglProperties.put(IConstants.DEFAULT_LOCALE_PARAMETER_NAME, getRuntimeMessageLocale());
 				
 				//FIXME using default specified on the project for now
 				String egldd = DefaultDeploymentDescriptorUtility.getDefaultDeploymentDescriptor(project).getPartName();
-				List egldds = new ArrayList();
+				List<String> egldds = new ArrayList<String>();
 				egldds.add( egldd );
 				eglProperties.put(IConstants.DEFAULT_DD_PARAMETER_NAME, egldd);
-				Generator generator = getDevelopmentGenerator(cmd, egldds, eglProperties, getHandlerMessageLocale(), getRuntimeMessageLocale(), environment.getSystemEnvironment());
-				String result = cmd.generate(part, generator, environment.getIREnvironment());
+				Generator generator = getDevelopmentGenerator(cmd, egldds, eglProperties, getHandlerMessageLocale(), getRuntimeMessageLocale(), 
+						ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getSystemEnvironment());
+				String result = cmd.generate(part, generator, environment);
 				return result.getBytes();
 			}
-		} catch (PartNotFoundException e) {
-			e.printStackTrace();
-//			buildPartNotFoundMessage(e, messageRequestor, partName);
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 //			handleRuntimeException(e, messageRequestor, partName, new HashSet());
@@ -257,11 +231,7 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 		return null;
 	}
 	
-	protected  ProjectEnvironment getProjectEnvironment(IProject project) {
-		ProjectEnvironment environment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
-		return environment;
-	}
-
+	protected abstract IEnvironment getEnvironmentForGeneration(IProject project);
 	protected abstract FileLocator getFileLocator(IProject project)throws CoreException;
 	protected abstract IFileLocator getIFileLocator(IProject project)throws CoreException;
 	

@@ -645,7 +645,7 @@ public class EvServer implements IClientProxy {
 	}
 
 	private void debug(String string) {
-		//System.out.println(string);
+		System.out.println(string);
 	}
 
 	public void fail(PrintStream ps) throws InterruptedException {
