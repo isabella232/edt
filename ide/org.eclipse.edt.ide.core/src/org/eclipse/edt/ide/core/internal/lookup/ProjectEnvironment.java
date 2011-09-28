@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.lookup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.compiler.ISystemEnvironment;
@@ -69,14 +72,17 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
     	this.buildPathEntries = projectBuildPathEntries;
     	
     	// Add the object stores for the path entries to the backing environment.
+    	List<String> serializationSchemesSet = new ArrayList<String>();
     	if (this.buildPathEntries != null) {
 	    	for (int i = 0; i < buildPathEntries.length; i++) {
 	    		ObjectStore[] stores = buildPathEntries[i].getObjectStores();
 	    		for (int j = 0; j < stores.length; j++) {
 	    			this.irEnvironment.registerObjectStore(stores[j].getKeyScheme(), stores[j]);
 	    			if (buildPathEntries[i] instanceof ProjectBuildPathEntry
-	    					&& ((ProjectBuildPathEntry)buildPathEntries[i]).getProject() == this.project) {
+	    					&& ((ProjectBuildPathEntry)buildPathEntries[i]).getProject() == this.project
+	    					&& !serializationSchemesSet.contains(stores[j].getKeyScheme())) {
 	   					this.irEnvironment.setDefaultSerializeStore(stores[j].getKeyScheme(), stores[j]);
+	   					serializationSchemesSet.add(stores[j].getKeyScheme());
 	    			}
 	    		}
 	    	}
