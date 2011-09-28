@@ -1132,3 +1132,10 @@ egl.defineClass(
 	}
 });
 
+egl.eglx.ui.rui.Widget.fromWidget = function(x, y) {
+	/* TODO sbg Making this "conversion" a no-op because it's very dubious;  however, it's defined in 
+	 * eglx/ui/rui/ExternalTypes.egl so we need to have something....hopefully that will be revisited
+	 * and ultimately removed (along with this function).
+	 */
+	return x;    
+};
