@@ -104,7 +104,7 @@ public class RUIFormPage extends EGLDDBaseFormPage implements ILocalesListViewer
 
 	private static final int COLINDEX_HANDLER = 0;
 	private static final int COLINDEX_HTML = 1;
-	private static final int COLINDEX_DYAMIC = 0;
+//	private static final int COLINDEX_DYAMIC = 0;
 	private static final String[] HANDLER_TABLE_COLUMN_PROPERTIES = { "COL_HANDLER", "COL_HTML" }; //$NON-NLS-1$ //$NON-NLS-2$
 	
 	private static final int COLINDEX_LOCALE_DESC = 0;
@@ -429,7 +429,7 @@ public class RUIFormPage extends EGLDDBaseFormPage implements ILocalesListViewer
 			}
 			private void run()
 			{
-				String id = "com.ibm.etools.egl.rui.ruiPreferences"; //$NON-NLS-1$
+				String id = "org.eclipse.edt.ide.rui.ruiPreferences"; //$NON-NLS-1$
 				PreferencesUtil.createPreferenceDialogOn( null, id, null, null ).open();
 			}
 		} );
