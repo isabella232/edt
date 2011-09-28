@@ -67,11 +67,13 @@ public class HandlerTemplate extends JavaScriptTemplate {
 		out.println("this.eze$$setInitial();");
 		
 		Stereotype stereotype = handler.getStereotype();
-		MemberName onConstruction = (MemberName) stereotype.getValue(FieldName_OnConstructionFunction);
-		if (onConstruction != null) {
-			out.print("this.");
-			ctx.invoke(genName, onConstruction.getMember(), ctx, out);
-			out.println("();");
+		if (stereotype != null) {
+			MemberName onConstruction = (MemberName) stereotype.getValue(FieldName_OnConstructionFunction);
+			if (onConstruction != null) {
+				out.print("this.");
+				ctx.invoke(genName, onConstruction.getMember(), ctx, out);
+				out.println("();");
+			}
 		}
 		
 		out.println("}");
