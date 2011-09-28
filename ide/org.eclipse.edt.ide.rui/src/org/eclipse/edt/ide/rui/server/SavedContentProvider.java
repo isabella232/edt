@@ -31,6 +31,7 @@ import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
 import org.eclipse.edt.gen.deployment.javascript.NoContextHTMLGenerator;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.rui.utils.DebugFileLocator;
 import org.eclipse.edt.ide.rui.utils.DebugIFileLocator;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
@@ -54,6 +55,6 @@ public class SavedContentProvider extends AbstractContentProvider {
 
 	@Override
 	protected IEnvironment getEnvironmentForGeneration(IProject project) {
-		return null;
+		return ProjectEnvironmentManager.getInstance().getIREnvironment(project);
 	}
 }
