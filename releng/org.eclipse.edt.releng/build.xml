@@ -12,8 +12,6 @@
 	     timestamp replaces ".qualifier" in our plugins' version strings. -->
 	<property name="forceContextQualifier" value="v${buildTimestamp}" />
 	
-	<property name="fetchTag" value="HEAD" />
-	
 	<property name="relengBuilderDir" value="${basedir}" />
 	<dirname file="${relengBuilderDir}" property="workspaceDir" />
 	
