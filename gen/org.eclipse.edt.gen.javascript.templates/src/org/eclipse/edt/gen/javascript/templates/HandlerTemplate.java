@@ -19,10 +19,13 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Handler;
+import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Stereotype;
 
 public class HandlerTemplate extends JavaScriptTemplate {
-
+	public static final String FieldName_OnConstructionFunction = "onConstructionFunction";
+	
 	public void genSuperClass(Handler type, Context ctx, TabbedWriter out) {
 		out.print("ExecutableBase");
 	}
@@ -62,6 +65,15 @@ public class HandlerTemplate extends JavaScriptTemplate {
 		ctx.invoke(genLibraries, handler, ctx, out);
 		ctx.invoke(genFields, handler, ctx, out);
 		out.println("this.eze$$setInitial();");
+		
+		Stereotype stereotype = handler.getStereotype();
+		MemberName onConstruction = (MemberName) stereotype.getValue(FieldName_OnConstructionFunction);
+		if (onConstruction != null) {
+			out.print("this.");
+			ctx.invoke(genName, onConstruction.getMember(), ctx, out);
+			out.println("();");
+		}
+		
 		out.println("}");
 	}
 
