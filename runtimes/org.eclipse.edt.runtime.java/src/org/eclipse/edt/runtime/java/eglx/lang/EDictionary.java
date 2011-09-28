@@ -264,10 +264,10 @@ public class EDictionary extends EAny implements eglx.lang.EDictionary {
 	/**
 	 * Return a DynamicArray of the values that exist in this dictionary in the preferred order.
 	 */
-	public EList<Object> getValues() throws AnyException {
-		EList<Object> vals = new EList<Object>();
+	public EList<eglx.lang.EAny> getValues() throws AnyException {
+		EList<eglx.lang.EAny> vals = new EList<eglx.lang.EAny>();
 		for (Object value : this.map.values()) {
-			vals.add(value);
+			vals.add( value instanceof eglx.lang.EAny ? (eglx.lang.EAny)value : EAny.ezeBox( value ) );
 		}
 
 		return vals;

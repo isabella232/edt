@@ -85,7 +85,7 @@ public interface EDictionary extends EAny, Map<String, Object> {
 	 *
 	 * @return the values.
 	 */
-	public EList<Object> getValues();
+	public EList<EAny> getValues();
 	
 	/**
 	 * Returns the number of key-value pairs in this dictionary.
