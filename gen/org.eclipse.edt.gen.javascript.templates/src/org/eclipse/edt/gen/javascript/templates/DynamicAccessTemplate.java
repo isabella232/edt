@@ -19,8 +19,10 @@ import org.eclipse.edt.mof.egl.Expression;
 public class DynamicAccessTemplate extends JavaScriptTemplate {
 
 	public void genAssignment(DynamicAccess expr, Context ctx, TabbedWriter out, Expression arg1, String arg2) {
+		out.print("egl.eglx.lang.EDictionary");  //TODO sbg need to lookup
+		out.print(".set("); 
 		ctx.invoke(genExpression, expr.getExpression(), ctx, out);
-		out.print(".ezeSet(");
+		out.print(", ");
 		ctx.invoke(genExpression, expr.getAccess(), ctx, out);
 		out.print(", ");
 		ctx.invoke(genExpression, arg1, ctx, out);
@@ -28,8 +30,10 @@ public class DynamicAccessTemplate extends JavaScriptTemplate {
 	}
 
 	public void genExpression(DynamicAccess expr, Context ctx, TabbedWriter out) {
+		out.print("egl.eglx.lang.EDictionary");  //TODO sbg need to lookup
+		out.print(".get(");
 		ctx.invoke(genExpression, expr.getExpression(), ctx, out);
-		out.print(".ezeGet(");
+		out.print(", ");
 		ctx.invoke(genExpression, expr.getAccess(), ctx, out);
 		out.print(")");
 	}

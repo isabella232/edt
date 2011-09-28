@@ -138,6 +138,10 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genConversionOperation(ArrayType type, Context ctx, TabbedWriter out, AsExpression arg) {
+		out.print("egl.convertAnyToArrayType(");
 		ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+		out.print(",\"");
+		ctx.invoke(genSignature, arg.getEType(), ctx, out, arg);
+		out.print("\")");
 	}
 }
