@@ -15,11 +15,19 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.NamedElement;
 
 public class AnyValueTypeTemplate extends JavaScriptTemplate {
 
 	public void genSignature(EGLClass type, Context ctx, TabbedWriter out) {
-		String signature = "A;";
-		out.print(signature);
+		if (type instanceof NamedElement) {
+			out.print("T");
+			out.print(type.getTypeSignature().toLowerCase().replaceAll("\\.", "/"));
+			out.print(";");
+		}
+		else {
+			String signature = "A;";
+			out.print(signature);
+		}
 	}
 }
