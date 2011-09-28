@@ -3183,7 +3183,7 @@ egl.getKeys = function egl_getKeys(object) {
 		}
 	}
 	if ( (object.eze$$byKeyOrdering != undefined) && 
-		 (object.eze$$byKeyOrdering == true) )
+		 (object.eze$$byKeyOrdering.value == 1) )
 		return result.sort();
 	else 
 		return result;

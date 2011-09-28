@@ -20,7 +20,7 @@ egl.eglx.rest.invokeEglService = function(http,
 	var eglRpcRestRequest = new egl.eglx.lang.EDictionary();
 	eglRpcRestRequest.method = methodName;
 	eglRpcRestRequest.params = inData;
-	http = egl.egl.lang.EglAny.unbox(http);
+	http = egl.eglx.lang.EAny.unbox(http);
 	egl.eglx.services.$ServiceRT.encodeResquestBody(http.request, eglRpcRestRequest);
 	egl.eglx.services.$ServiceRT.internalInvokeService(http, returnTypes, callbackFunction, errorCallbackFunction, null);
 };
@@ -44,7 +44,7 @@ egl.eglx.rest.invokeService = function(http,
 					eze$Temp1, handleF2Resonse, egl.eglx.services.ServiceLib['$inst'].serviceExceptionHandler);
 
 	 */
-	http = egl.egl.lang.EglAny.unbox(http);
+	http = egl.eglx.lang.EAny.unbox(http);
 	http.restType = egl.eglx.rest.ServiceType.TrueRest;
 	if(firstInDataNotInURL == null && http.request.userUri != undefined && http.request.userUri){
 		if(http.request.uri != undefined && http.request.uri != null){
@@ -70,7 +70,7 @@ egl.eglx.rest.invokeService = function(http,
 egl.eglx.rest.configHttp = function(http, 
 									requestConfig,
 									responseConfig){
-	http = egl.egl.lang.EglAny.unbox(http);
+	http = egl.eglx.lang.EAny.unbox(http);
 	if(http === undefined || http === null){
 		http = new egl.eglx.http.HttpRest;
 	}

@@ -25,17 +25,60 @@ egl.defineClass("eglx.lang", "EDictionary", {
 			return this.$text || "[EDictionary]";
 		};
 	},
+	"containsKey" : function(key) {
+		return egl.containsKey(this, key);
+	},
+	"getKeys" : function() {
+		return egl.getKeys(this);
+	},
+	"getValues" : function() {
+		return egl.getValues(this);
+	},
+	"insertAll" : function(src) {
+		egl.insertAll(this, src);
+	},
 	"removeAll" : function(){
-		for (f in this) {
-			if(typeof this[f] !== "function" && f.indexOf("eze$$") != 0){
-				delete this[f];
-			}
-		}
+		egl.removeAll(this);
+	},
+	"removeElement" : function(key) {
+		egl.removeElement(this, key);
+	},
+	"size" : function() {
+		return egl.size(this);
 	},
 	"getCaseSensitive" : function(){
 		return this.eze$$caseSensitive;
 	},
 	"getOrdering" : function(){
 		return this.eze$$byKeyOrdering;
+	},
+	"clone" : function(){
+		return egl.clone(this);
+	},
+	"eze$$clone" : function(){
+		return egl.clone(this);
 	}
 });
+
+egl.eglx.lang.EDictionary.lookup = function (dict, key) {
+	return egl.valueByKey(egl.checkNull(dict), key);
+};
+
+
+/* EDictionary.set:  Note that it must be declared static in order to take
+ * advantage of the auto-unboxing that egl.valueByKey does;  otherwise, 
+ * access chains (such as referencing a field of a record in a dictionary)
+ * won't work. 
+ */ 
+egl.eglx.lang.EDictionary.set = function(dict, key, boxedValue){
+	 return egl.valueByKey(egl.checkNull(dict), key, boxedValue.eze$$value, boxedValue.eze$$signature);
+};
+
+/* EDictionary.get:  Note that it must be declared static in order to take
+ * advantage of the auto-unboxing that egl.valueByKey does;  otherwise, 
+ * access chains (such as referencing a field of a record in a dictionary)
+ * won't work. 
+ */ 
+egl.eglx.lang.EDictionary.get = function(dict, key){
+	return egl.valueByKey(egl.checkNull(dict), key);
+};
