@@ -274,7 +274,10 @@ public class RUITemplate extends JavaScriptTemplate {
 							out.print("RUI_RUNTIME_JAVASCRIPT_FILES.push(");
 							int size = egldds.size();
 							for ( int i = 0; i < egldds.size(); i ++ ) {
-								out.print( "\"" + ((String)egldds.get(i)).toLowerCase() + "-bnd.js\"" + (i == size-1 ? "" : ",") );
+								String next = (String)egldds.get(i);
+								if (next != null && next.length() > 0) {
+									out.print( "\"" + next.toLowerCase() + "-bnd.js\"" + (i == size-1 ? "" : ",") );
+								}
 							}
 							out.println(");");
 							return;
