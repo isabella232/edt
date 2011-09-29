@@ -10,6 +10,9 @@
  *
  *******************************************************************************/
 
+//TODO sbg Remove this if we ever implement real "static" fields on Constants
+new egl.eglx.lang.Constants();  
+
 /* TODO sbg We're using two different conventions for static functions:
  * the old RBD style in which they're simply functions on a class with
  * a singleton constructor, and a JavaScript-style in which functions are
@@ -150,8 +153,8 @@ egl.eglx.lang.EInt32.fromEFloat64 = function (x) {
 egl.eglx.lang.EInt32.fromEString = function (x) {
 	return egl.convertStringToInt(x);
 };
-egl.eglx.lang.EInt32.ezeCast = function (x) {
-	return egl.convertAnyToInt(x, false);    // TODO need nullable support
+egl.eglx.lang.EInt32.ezeCast = function (x, nullable) {
+	return egl.convertAnyToInt(x, nullable);   
 };
 
 /****************************************************************************
@@ -240,11 +243,11 @@ egl.eglx.lang.EDecimal.fromEFloat64 = function (x, decimals, limit) {
 	else
 		return egl.convertFloatToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.eglx.lang.EDecimal.ezeCast = function (x, decimals, limit) {
+egl.eglx.lang.EDecimal.ezeCast = function (x, nullable, decimals, limit) {
 	if (limit)
-		return egl.convertAnyToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+		return egl.convertAnyToDecimal(x, decimals, limit, nullable, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 	else
-		return egl.convertAnyToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/); 
+		return egl.convertAnyToDecimal(x, 0, decimals, nullable, "TODO: make an exception for this"/*egl.createRuntimeException*/); 
 };
 
 
@@ -282,8 +285,8 @@ egl.eglx.lang.EInt64.fromAnyNumber = function (x) {
 egl.eglx.lang.EInt64.fromEFloat32 = function (x) {  
 	return egl.convertFloatToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 }; 
-egl.eglx.lang.EInt64.ezeCast = function (x) {
-	return egl.convertAnyToBigint(x, false);    // TODO need nullable support
+egl.eglx.lang.EInt64.ezeCast = function (x, nullable) {
+	return egl.convertAnyToBigint(x, nullable);    
 };
 
 
@@ -319,8 +322,8 @@ egl.defineClass( "eglx.lang", "EBoolean"
 egl.eglx.lang.EBoolean.fromEString = function (x) {   
 	return x.toLowerCase() === "true"; 
 };
-egl.eglx.lang.EBoolean.ezeCast = function (x) {   
-	return x; 
+egl.eglx.lang.EBoolean.ezeCast = function (x, nullable) {   
+	return egl.convertAnyToBoolean(x, nullable);   
 };
 egl.eglx.lang.EBoolean.fromEBoolean = function (x) {  //TODO sbg likely a gen bug   
 	return x; 
@@ -354,8 +357,8 @@ egl.defineClass( "eglx.lang", "EString"
 egl.eglx.lang.EString.textLen = function (s) {
    return egl.textLen(s);
 };
-egl.eglx.lang.EString.ezeCast = function (x) {
-	return egl.convertAnyToString(x, false);    // TODO need nullable support
+egl.eglx.lang.EString.ezeCast = function (x, nullable) {
+	return egl.convertAnyToString(x, nullable);  
 };
 
 egl.eglx.lang.EString.ezeBox = function(str){
@@ -388,16 +391,16 @@ egl.eglx.lang.EString.substringAssign = function(tgt, src, start, end){
 	return tgt.splice(start, end, src);
 };
 egl.eglx.lang.EString.fromEInt16 = function (x) {
-	return (x).toString();
+	return ''+x;
 };
 egl.eglx.lang.EString.fromEInt32 = function (x) {
-	return (x).toString();
+	return ''+x;
 };
 egl.eglx.lang.EString.fromEInt64 = function (x) {
 	return (x).toString();
 };
 egl.eglx.lang.EString.fromEFloat32 = function (x) {
-	return (x).toString();
+	return ''+x;
 };
 egl.eglx.lang.EString.fromEFloat64 = function (x) {
 	return (x).toString();
@@ -453,7 +456,7 @@ egl.eglx.lang.EString.trim = function (str) {
 	if (str == null) {
 		throw new egl.eglx.lang.NullValueException();
 	}
-	return str.clip();
+	return str.clipLeading().clipTrailing();
 };
 egl.eglx.lang.EString.plus = function (op1, op2) {
 	a = (op1) ? op1 : "";
@@ -469,7 +472,21 @@ egl.eglx.lang.EString.concat = function (op1, op2) {
 egl.eglx.lang.EString.nullconcat = function (op1, op2) {
 	return egl.nullableconcat(op1, op2);
 };
-
+egl.eglx.lang.EString.clip = function(s){
+	return ( s === null ) ? null : s.clip();
+};
+egl.eglx.lang.EString.clipLeading = function(s){
+	return ( s === null ) ? null : s.clipLeading();
+};
+egl.eglx.lang.EString.clipTrailing = function(s){
+	return ( s === null ) ? null : s.clipTrailing();
+};
+egl.eglx.lang.EString.toLowerCase = function(s){
+	return ( s === null ) ? null : s.toLowerCase();
+};
+egl.eglx.lang.EString.toUpperCase = function(s){
+	return ( s === null ) ? null : s.toUpperCase();
+};
 
 
 //Returns the number of bytes in a text expression, excluding any trailing spaces or null values.
@@ -479,7 +496,7 @@ String.prototype.length = function() {  //TODO Don't override JavaScript field o
 };
 
 String.prototype.clip = function() {
-	return this.clipLeading().clipTrailing();
+	return this.clipTrailing();
 };
 
 String.prototype.clipLeading = function() {
@@ -531,13 +548,13 @@ egl.eglx.lang.EDate.fromEDate = function (x) {
 	return x;  // TODO sbg bug in generator -- delete this fn when fixed
 };
 egl.eglx.lang.EDate.fromEString = function (x) {   
-return egl.stringToDate( x, egl.eglx.rbd.StrLib[$inst].defaultDateFormat ); // TODO need dateformat as arg?
+    return egl.stringToDate( x, egl.eglx.lang.Constants['$inst'].isoDateFormat ); // TODO need dateformat as arg?
 };
 egl.eglx.lang.EDate.equals = function (x, y) {   
 	return egl.dateEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
 };
-egl.eglx.lang.EDate.ezeCast = function (any) {   
-	return egl.convertAnyToDate(any, false);  //TODO sbg false should be a flag indicating nullable
+egl.eglx.lang.EDate.ezeCast = function (any, nullable) {   
+	return egl.convertAnyToDate(any, nullable);
 };
 
 
@@ -649,8 +666,8 @@ egl.eglx.lang.ETimestamp["extend"] = function (/*type of date*/ type, /*extensio
 };
 
 
-egl.eglx.lang.ETimestamp.ezeCast = function(x, pattern){
-	return egl.convertAnyToTimestamp(x, false, pattern);  //TODO sbg false should be a flag indicating nullable
+egl.eglx.lang.ETimestamp.ezeCast = function(x, nullable, pattern){
+	return egl.convertAnyToTimestamp(x, nullable, pattern);  
 };
 egl.eglx.lang.ETimestamp.equals = function (x, y) {   
 	return egl.timeStampEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
@@ -677,8 +694,8 @@ egl.eglx.lang.AnyNumber.fromEFloat64 = function (x, decimals, limit) {
 	return egl.convertFloatToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
 
-egl.eglx.lang.AnyNumber.ezeCast = function(x, decimals, limit){
-	return egl.convertDecimalToDecimal(x, decimals, limit, false, "TODO: make an exception for this"/*egl.createRuntimeException*/);  //TODO sbg false should be a flag indicating nullable
+egl.eglx.lang.AnyNumber.ezeCast = function(x, nullable, decimals, limit){
+	return egl.convertDecimalToDecimal(x, decimals, limit, nullable, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
 
 
