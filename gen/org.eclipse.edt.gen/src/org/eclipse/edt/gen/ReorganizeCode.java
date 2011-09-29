@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.ArrayLiteral;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.AsExpression;
@@ -268,10 +269,12 @@ public class ReorganizeCode extends AbstractVisitor {
 		// if the condition has side effects, then we need to extract the condition and place it as an assignment to a
 		// temporary variable and then replace the condition with the temporary variable. In addition, we need to have a flag
 		// that indicates that the to and increment are to processed on subsequent calls
+		boolean counterVariableHasSideEffects = object.getCounterVariable() != null
+			&& (IRUtils.hasSideEffects(object.getCounterVariable()) || object.getCounterVariable() instanceof ArrayAccess);
 		boolean fromExpressionHasSideEffects = object.getFromExpression() != null && IRUtils.hasSideEffects(object.getFromExpression());
 		boolean toExpressionHasSideEffects = object.getToExpression() != null && IRUtils.hasSideEffects(object.getToExpression());
 		boolean deltaExpressionHasSideEffects = object.getDeltaExpression() != null && IRUtils.hasSideEffects(object.getDeltaExpression());
-		if (fromExpressionHasSideEffects || toExpressionHasSideEffects || deltaExpressionHasSideEffects) {
+		if (counterVariableHasSideEffects || fromExpressionHasSideEffects || toExpressionHasSideEffects || deltaExpressionHasSideEffects) {
 			// in all cases, we will need a boolean temporary variable
 			// we need to create a local variable
 			String temporaryFlag = ctx.nextTempName();
@@ -329,6 +332,68 @@ public class ReorganizeCode extends AbstractVisitor {
 			ifStatement.setFalseBranch(falseStatementBlock);
 			// insert the if statement at start of the statement block
 			((StatementBlock) object.getBody()).getStatements().add(0, ifStatement);
+			// do we need to create a temporary variable for the counter variable
+			if (counterVariableHasSideEffects) {
+				// we need to create a local variable
+				String temporary = ctx.nextTempName();
+				LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				localDeclaration.setContainer(currentStatementContainer);
+				DeclarationExpression declarationExpression = factory.createDeclarationExpression();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				Field field = factory.createField();
+				field.setName(temporary);
+				field.setType(object.getCounterVariable().getType());
+				field.setIsNullable(object.getCounterVariable().isNullable());
+				// we need to create the member access
+				MemberName nameExpression = factory.createMemberName();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				nameExpression.setMember(field);
+				nameExpression.setId(field.getName());
+				// we need to create an assignment statement
+				AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				assignmentStatement.setContainer(currentStatementContainer);
+				Assignment assignment = factory.createAssignment();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				assignmentStatement.setAssignment(assignment);
+				assignment.setLHS(nameExpression);
+				assignment.setRHS(object.getCounterVariable());
+				// add the assignment to the declaration statement block
+				StatementBlock declarationBlock = factory.createStatementBlock();
+				declarationBlock.setContainer(currentStatementContainer);
+				declarationBlock.getStatements().add(assignmentStatement);
+				// add the declaration statement block to the field
+				field.setInitializerStatements(declarationBlock);
+				field.setHasSetValuesBlock(true);
+				// add the field to the declaration expression
+				declarationExpression.getFields().add(field);
+				// connect the declaration expression to the local declaration
+				localDeclaration.setExpression(declarationExpression);
+				// add the local variable to the statement block
+				verify(0).getStatements().add(localDeclaration);
+				// we also need to add the assignment to the true block
+				// we need to create an assignment statement
+				AssignmentStatement assignmentStatementTrue = factory.createAssignmentStatement();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					assignmentStatementTrue.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				assignmentStatementTrue.setContainer(currentStatementContainer);
+				Assignment assignmentTrue = factory.createAssignment();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					assignmentTrue.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				assignmentStatementTrue.setAssignment(assignmentTrue);
+				assignmentTrue.setLHS(nameExpression);
+				assignmentTrue.setRHS((Expression) object.getCounterVariable().clone());
+				// add the assignment to the true statement block
+				trueStatementBlock.getStatements().add(assignmentStatementTrue);
+				// now replace the condition with the temporary variable
+				object.setCounterVariable(nameExpression);
+			}
 			// do we need to create a temporary variable for the from expression
 			if (fromExpressionHasSideEffects) {
 				// we need to create a local variable
