@@ -10,9 +10,6 @@
  *
  *******************************************************************************/
 
-//TODO sbg Remove this if we ever implement real "static" fields on Constants
-new egl.eglx.lang.Constants();  
-
 /* TODO sbg We're using two different conventions for static functions:
  * the old RBD style in which they're simply functions on a class with
  * a singleton constructor, and a JavaScript-style in which functions are
