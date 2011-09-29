@@ -10,7 +10,7 @@ library StrLib
 	end
 	
 	function characterLen(text string in) returns(int)
-		return( text.trim().length() );
+		return( text.clip().length() );
 	end
 	
 	function clip(source string? in) returns(string?)
