@@ -879,11 +879,6 @@ public class EvServer implements IClientProxy {
 			if (bytes == null) {
 				String uri = trimmedURL.substring(trimmedURL.indexOf('/') + 1,
 						trimmedURL.length());
-								
-				if(intKey == null && trimmedURL.endsWith(".js")){
-					String tempURL = trimmedURL.substring(0, trimmedURL.lastIndexOf(".js"));
-					context = findContext(tempURL);
-				}
 				
 				if (intKey != null) {
 					context = findContext(intKey);
@@ -1372,18 +1367,6 @@ public class EvServer implements IClientProxy {
 			}
 		}
 		return null;
-	}
-	
-	private IContext findContext(String uri) {
-		synchronized(contextSynchObject) {
-			for(Iterator<Integer> iterator = contextKeyQueues.keySet().iterator(); iterator.hasNext();){
-				QueueProcessor queueProcessor = contextKeyQueues.get(iterator.next());
-				if(queueProcessor.getContext().getUrl().contains(uri)){
-					return queueProcessor.getContext();
-				}
-			}
-			return null;
-		}
 	}
 	
 	private QueueProcessor findQueueProcessor(Integer contextKey) {
