@@ -102,7 +102,9 @@ public class CommonUtilities {
 	}
 
 	public static Annotation includeEndOffset(Annotation annotation, EglContext ctx) {
-		annotation.addAnnotation(ctx.getFactory().createAnnotation(EGLMessage.IncludeEndOffset));
+		if (annotation != null) {
+			annotation.addAnnotation(ctx.getFactory().createAnnotation(EGLMessage.IncludeEndOffset));
+		}
 		return annotation;
 	}
 }
