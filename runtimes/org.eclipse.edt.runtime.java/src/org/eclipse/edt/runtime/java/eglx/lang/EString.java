@@ -466,6 +466,11 @@ public class EString extends AnyBoxedObject<String> {
 	 * returns the position of a specific string within a string
 	 */
 	public static int indexOf(String source, String value, int start) {
+		if (start < 1 || start > source.length()) {
+			InvalidIndexException ex = new InvalidIndexException();
+			ex.index = start;
+			throw ex.fillInMessage( Message.INDEX_OUT_OF_BOUNDS, start );
+		}
 		return source.indexOf(value, start - 1) + 1;
 	}
 
@@ -487,6 +492,11 @@ public class EString extends AnyBoxedObject<String> {
 	 * Returns the integer value of a character code within a string
 	 */
 	public static int charCodeAt(String source, int index) {
+		if (index < 1 || index > source.length()) {
+			InvalidIndexException ex = new InvalidIndexException();
+			ex.index = index;
+			throw ex.fillInMessage( Message.INDEX_OUT_OF_BOUNDS, index );
+		}
 		return source.charAt(index - 1);
 	}
 
