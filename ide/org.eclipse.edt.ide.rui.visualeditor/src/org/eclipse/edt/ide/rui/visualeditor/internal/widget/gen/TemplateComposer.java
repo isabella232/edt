@@ -226,7 +226,7 @@ public class TemplateComposer {
 						String formFieldMangerName = (String)oFormFieldMangerName;
 						sbValidStateSetter.append("\nfunction ").append(validStateSetter).append("(view Widget in, valid boolean in)\n");
 						sbValidStateSetter.append("\tfor (n int from ").append(formFieldMangerName).append(".entries.getSize() to 1 decrement by 1)\n");
-						sbValidStateSetter.append("\t\tentry FormField = ").append(formFieldMangerName).append(".entries[n];\n");
+						sbValidStateSetter.append("\t\tentry ${typeName:org.eclipse.edt.rui.mvc.FormField} = ").append(formFieldMangerName).append(".entries[n];\n");
 						sbValidStateSetter.append("\t\tif(entry.controller.view == view)\n");
 						sbValidStateSetter.append("\t\t\tif(valid)\n");
 						sbValidStateSetter.append("\t\t\t\t// TODO: handle valid value\n");

@@ -115,7 +115,7 @@ public class PageDataModelBuilder {
 	
 	private boolean isAcceptType(ITypeBinding typeBinding){
 		String packageQualifiedName = typeBinding.getPackageQualifiedName();
-		if(packageQualifiedName.equals("com.ibm.egl.rui.mvc.FormField")){
+		if(packageQualifiedName.equals("org.eclipse.edt.rui.mvc.FormField")){
 			return false;
 		}
 		return true;
