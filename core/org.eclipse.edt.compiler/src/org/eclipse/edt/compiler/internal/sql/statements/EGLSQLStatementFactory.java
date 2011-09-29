@@ -101,7 +101,7 @@ public abstract class EGLSQLStatementFactory {
     
     private int getTableIndex(String tableName) {
     	int index = -1;
-    	if(tableNames != null) {
+    	if(tableNames != null && tableName != null) {
     		for(int i=0; i < tableNames.length; i++) {
     			if(tableName.equals(tableNames[i])){
     				index = i;
