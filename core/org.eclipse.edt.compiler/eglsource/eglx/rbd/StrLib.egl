@@ -42,7 +42,7 @@ library StrLib
 		if ( dateValue == null )
 			return( null );
 		else
-			return( eglx.lang.StringLib.format( dateValue, defaultDateFormat ) );
+			return( StringLib.format( dateValue, defaultDateFormat ) );
 		end
 	end
 	
@@ -50,7 +50,7 @@ library StrLib
 		if ( dateValue == null || format == null )
 			return( null );
 		else
-			return( eglx.lang.StringLib.format( dateValue, format ) );
+			return( StringLib.format( dateValue, format ) );
 		end
 	end
 	
@@ -58,7 +58,7 @@ library StrLib
 		if ( intValue == null )
 			return( null );
 		else
-			return( eglx.lang.StringLib.format( intValue, defaultNumericFormat ) );
+			return( StringLib.format( intValue, defaultNumericFormat ) );
 		end
 	end
 	
@@ -66,7 +66,7 @@ library StrLib
 		if ( intValue == null || format == null )
 			return( null );
 		else
-			return( eglx.lang.StringLib.format( intValue, format ) );
+			return( StringLib.format( intValue, format ) );
 		end
 	end
 	
@@ -74,7 +74,7 @@ library StrLib
 		if ( intValue == null )
 			return( null );
 		else
-			return( eglx.lang.StringLib.format( intValue, defaultNumericFormat ) );
+			return( StringLib.format( intValue, defaultNumericFormat ) );
 		end
 	end
 	
@@ -82,7 +82,7 @@ library StrLib
 		if ( intValue == null || format == null )
 			return( null );
 		else
-			return( eglx.lang.StringLib.format( intValue, format ) );
+			return( StringLib.format( intValue, format ) );
 		end
 	end
 	
@@ -90,7 +90,7 @@ library StrLib
 		if ( intValue == null )
 			return( null );
 		else
-			return( eglx.lang.StringLib.format( intValue, defaultNumericFormat ) );
+			return( StringLib.format( intValue, defaultNumericFormat ) );
 		end
 	end
 	
@@ -98,7 +98,7 @@ library StrLib
 		if ( intValue == null || format == null )
 			return( null );
 		else
-			return( eglx.lang.StringLib.format( intValue, format ) );
+			return( StringLib.format( intValue, format ) );
 		end
 	end
 	
@@ -106,7 +106,7 @@ library StrLib
 		if ( decValue == null )
 			return( null );
 		else
-			return( eglx.lang.StringLib.format( decValue, defaultNumericFormat ) );
+			return( StringLib.format( decValue, defaultNumericFormat ) );
 		end
 	end
 	
@@ -114,7 +114,7 @@ library StrLib
 		if ( decValue == null || format == null )
 			return( null );
 		else
-			return( eglx.lang.StringLib.format( decValue, format ) );
+			return( StringLib.format( decValue, format ) );
 		end
 	end
 	
@@ -122,7 +122,7 @@ library StrLib
 		if ( floatValue == null )
 			return( null );
 		else
-			return( eglx.lang.StringLib.format( floatValue, defaultNumericFormat ) );
+			return( StringLib.format( floatValue, defaultNumericFormat ) );
 		end
 	end
 	
@@ -130,7 +130,7 @@ library StrLib
 		if ( floatValue == null || format == null )
 			return( null );
 		else
-			return( eglx.lang.StringLib.format( floatValue, format ) );
+			return( StringLib.format( floatValue, format ) );
 		end
 	end
 	
@@ -138,7 +138,7 @@ library StrLib
 		if ( floatValue == null )
 			return( null );
 		else
-			return( eglx.lang.StringLib.format( floatValue, defaultNumericFormat ) );
+			return( StringLib.format( floatValue, defaultNumericFormat ) );
 		end
 	end
 	
@@ -146,7 +146,7 @@ library StrLib
 		if ( floatValue == null || format == null )
 			return( null );
 		else
-			return( eglx.lang.StringLib.format( floatValue, format ) );
+			return( StringLib.format( floatValue, format ) );
 		end
 	end
 	
@@ -154,7 +154,7 @@ library StrLib
 		if ( timestampvalue == null )
 			return( null );
 		else
-			return( eglx.lang.StringLib.format( timestampvalue, defaultTimestampFormat ) );
+			return( StringLib.format( timestampvalue, defaultTimestampFormat ) );
 		end
 	end
 	
@@ -162,13 +162,13 @@ library StrLib
 		if ( timestampvalue == null || format == null )
 			return( null );
 		else
-			return( eglx.lang.StringLib.format( timestampvalue, format ) );
+			return( StringLib.format( timestampvalue, format ) );
 		end
 	end
 	
 	function getNextToken(source string inout, index int inout, delimiters string in) returns (string?)
 		charIndex int = index / 2 + 1;
-		token string? = eglx.lang.StringLib.getNextToken( source, charIndex, delimiters );
+		token string? = StringLib.getNextToken( source, charIndex, delimiters );
 		if ( token != null )
 			index = (charIndex - 1) * 2 + 1;
 		end
@@ -176,7 +176,7 @@ library StrLib
 	end
 	
 	function getTokenCount(source string in, delimiters string in) returns (int)
-		return( eglx.lang.StringLib.getTokenCount( source, delimiters ) );
+		return( StringLib.getTokenCount( source, delimiters ) );
 	end
 	
 	function indexOf(source string inout, pattern string in) returns (int)
