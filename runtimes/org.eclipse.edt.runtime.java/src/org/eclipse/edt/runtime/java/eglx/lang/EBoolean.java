@@ -52,12 +52,6 @@ public class EBoolean extends AnyBoxedObject<Boolean> {
 		return value.ezeUnbox();
 	}
 
-	public static Boolean asBoolean(Number number) throws AnyException {
-		if (number == null)
-			return null;
-		return number.floatValue() != 0;
-	}
-
 	public static boolean equals(Boolean op1, Boolean op2) {
 		if (op1 == null || op2 == null)
 			return false;
