@@ -338,7 +338,7 @@ public class TestServerManager implements TerminationListener, IResourceChangeLi
 		
 		@Override
 		public void preferenceChange(PreferenceChangeEvent event) {
-			// For each config, have it update its mappings if the project is on its EGL path.
+			// For each config, have it update its settings if the project is on its EGL path.
 			HashMap<IProject, TestServerConfiguration> mapClone;
 			synchronized(syncObj) {
 				if (serverConfigMap == null) {
@@ -350,7 +350,7 @@ public class TestServerManager implements TerminationListener, IResourceChangeLi
 			if (mapClone != null) {
 				for (TestServerConfiguration config : mapClone.values()) {
 					if (config.isOnEGLPath(this.project)) {
-						config.updateServiceMappingsOnServer();
+						config.updateDDSettingsOnServer();
 					}
 				}
 			}

@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.internal;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -75,7 +76,15 @@ public class Activator extends AbstractUIPlugin {
 		return PLUGIN_ID;
 	}
 	
+	public void log(Exception e) {
+		getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e));
+	}
+	
+	public void log(String msg) {
+		getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, msg));
+	}
+	
 	public void log(String msg, Exception e) {
-		getLog().log(new Status(Status.ERROR, PLUGIN_ID, Status.ERROR, msg, e));
+		getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, msg, e));
 	}
 }

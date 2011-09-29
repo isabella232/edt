@@ -13,9 +13,11 @@ package org.eclipse.edt.ide.rui.internal.testserver;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -53,7 +55,9 @@ import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.rui.internal.Activator;
+import org.eclipse.edt.ide.rui.internal.testserver.DeploymentDescriptorFinder.DDFile;
 import org.eclipse.edt.ide.rui.internal.testserver.ServiceFinder.RestServiceMapping;
+import org.eclipse.edt.ide.rui.server.EvServer;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
@@ -78,7 +82,9 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 	private List<TerminationListener> terminationListeners;
 	private String[] resolvedClasspath; // Used to determine when a classpath has changed.
 	
+	private String currentDefaultDDName;
 	private Map<String,RestServiceMapping> currentServiceMappings;
+	private Map<String,DDFile> currentDDFiles;
 	
 	public TestServerConfiguration(IProject project, boolean debugMode) {
 		this(project, debugMode, -1);
@@ -120,11 +126,19 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			args.append(copy.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, "")); //$NON-NLS-1$
 			args.append(" -p "); //$NON-NLS-1$
 			args.append(port);
+			args.append(" -i "); //$NON-NLS-1$
+			args.append(EvServer.getInstance().getPortNumber());
 			args.append(" -c \"/"); //$NON-NLS-1$
 			args.append(project.getName());
 			args.append("\" -s \""); //$NON-NLS-1$
 			currentServiceMappings = ServiceFinder.findRestServices(project);
 			args.append(ServiceFinder.toArgumentString(currentServiceMappings.values()));
+			args.append("\" -dd \""); //$NON-NLS-1$
+			currentDDFiles = DeploymentDescriptorFinder.findDeploymentDescriptors(project);
+			args.append(DeploymentDescriptorFinder.toArgumentString(currentDDFiles.values()));
+			args.append("\" -ddd \""); //$NON-NLS-1$
+			currentDefaultDDName = DeploymentDescriptorFinder.getDefaultDDName(project);
+			args.append(currentDefaultDDName);
 			args.append("\""); //$NON-NLS-1$
 //			args.append(" -d"); // uncomment this line to enable debug messages in the console
 			
@@ -135,6 +149,9 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			
 			// register a listener for changes to DD files
 			ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
+			
+			// Make sure EvServer is running before starting the process. It uses EvServer to talk to the IDE.
+			EvServer.getInstance();
 			
 			launch = copy.launch(debugMode ? ILaunchManager.DEBUG_MODE : ILaunchManager.RUN_MODE, monitor);
 			resolvedClasspath = delegate.getClasspath(launch.getLaunchConfiguration());
@@ -257,11 +274,12 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		if (!started) {
 			return;
 		}
-		// We need to recalculate all the bindings if even 1 DD file in the EGL path changed. It could be that there
-		// were duplicate URIs among the files, and a URI that was included before has now been changed/removed, so
-		// the duplicate that was previously skipped needs to be used (replacing the mapping on the server).
+		
+		// We need to recalculate all the DD settings if even 1 DD file in the EGL path changed. It could be that there
+		// were duplicate settings among the files, and a setting that was included before has now been changed/removed, so
+		// the duplicate that was previously skipped needs to be used (replacing the setting on the server).
 		try {
-			class RecomputeMappings extends RuntimeException {private static final long serialVersionUID = 1L;}; // For fast exit of delta visitor
+			class RecomputeSettings extends RuntimeException {private static final long serialVersionUID = 1L;}; // For fast exit of delta visitor
 			try {
 				if (event.getDelta() != null) {
 					event.getDelta().accept(new IResourceDeltaVisitor() {
@@ -282,7 +300,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 								case IResourceDelta.REMOVED:
 									if ("egldd".equalsIgnoreCase(delta.getFullPath().getFileExtension()) //$NON-NLS-1$
 											&& isOnEGLPath(project, delta.getResource().getProject(), new HashSet<IProject>())) {
-										throw new RecomputeMappings();
+										throw new RecomputeSettings();
 									}
 									break;
 							}
@@ -291,65 +309,113 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 					});
 				}
 			}
-			catch (RecomputeMappings e) {
-				updateServiceMappingsOnServer();
+			catch (RecomputeSettings e) {
+				updateDDSettingsOnServer();
 			}
 		}
 		catch (CoreException e) {
-			Activator.getDefault().log(e.getMessage(), e);
+			Activator.getDefault().log(e);
 		}
 	}
 	
-	public void updateServiceMappingsOnServer() {
+	public void updateDDSettingsOnServer() {
 		if (!started) {
 			return;
 		}
 		
+		String defaultDD = DeploymentDescriptorFinder.getDefaultDDName(project);
+		boolean defaultDDChanged = !currentDefaultDDName.equals(defaultDD);
+		
 		// Iterate through, keep track of those that are no longer in the list, those that were already in the list but have
 		// changed, and those that are new to the list. Updates are treated as additions, and the server will handle it appropriately.
 		Map<String,RestServiceMapping> newMappings = ServiceFinder.findRestServices(project);
-		List<RestServiceMapping> addedOrChanged = new ArrayList<RestServiceMapping>();
-		Map<String,RestServiceMapping> copyOfCurrent = new HashMap<String,RestServiceMapping>(currentServiceMappings);
-		
+		List<RestServiceMapping> addedOrChangedMappings = new ArrayList<RestServiceMapping>();
+		Map<String,RestServiceMapping> copyOfCurrentMappings = new HashMap<String,RestServiceMapping>(currentServiceMappings);
 		for (Iterator<RestServiceMapping> it = newMappings.values().iterator(); it.hasNext();) {
 			RestServiceMapping next = it.next();
-			RestServiceMapping old = copyOfCurrent.remove(next.uri);
+			RestServiceMapping old = copyOfCurrentMappings.remove(next.uri);
 			if (old == null || !old.equals(next)) {
-				addedOrChanged.add(next);
+				addedOrChangedMappings.add(next);
 			}
 		}
 		
-		if (addedOrChanged.size() > 0 || copyOfCurrent.size() > 0) {
-			String addedArg = ServiceFinder.toArgumentString(addedOrChanged);
-			String removedArg = ServiceFinder.toArgumentString(copyOfCurrent.values()); // leftovers get removed
-			
-			StringBuilder args = new StringBuilder(addedArg.length() + removedArg.length() + 30);
-			if (addedArg.length() > 0) {
-				args.append(ConfigServlet.ARG_ADDED);
-				args.append('=');
-				args.append(addedArg);
+		Map<String,DDFile> newDDFiles = DeploymentDescriptorFinder.findDeploymentDescriptors(project);
+		List<DDFile> addedOrChangedDDFiles = new ArrayList<DDFile>();
+		Map<String,DDFile> copyOfCurrentDDFiles = new HashMap<String,DDFile>(currentDDFiles);
+		for (Iterator<DDFile> it = newDDFiles.values().iterator(); it.hasNext();) {
+			DDFile next = it.next();
+			DDFile old = copyOfCurrentDDFiles.remove(next.name);
+			if (old == null || !old.equals(next)) {
+				addedOrChangedDDFiles.add(next);
 			}
-			if (removedArg.length() > 0) {
+		}
+		
+		if (defaultDDChanged || addedOrChangedMappings.size() > 0 || copyOfCurrentMappings.size() > 0 || addedOrChangedDDFiles.size() > 0 || copyOfCurrentDDFiles.size() > 0) {
+			String addedMappingArg = ServiceFinder.toArgumentString(addedOrChangedMappings);
+			String removedMappingArg = ServiceFinder.toArgumentString(copyOfCurrentMappings.values()); // leftovers get removed
+			String addedDDArg = DeploymentDescriptorFinder.toArgumentString(addedOrChangedDDFiles);
+			String removedDDArg = DeploymentDescriptorFinder.toArgumentString(copyOfCurrentDDFiles.values()); // leftovers get removed
+			
+			StringBuilder args = new StringBuilder(addedMappingArg.length() + removedMappingArg.length() + + addedDDArg.length() + removedDDArg.length()
+					+ defaultDD.length() + 50);
+			if (addedMappingArg.length() > 0) {
+				args.append(ConfigServlet.ARG_MAPPING_ADDED);
+				args.append('=');
+				args.append(addedMappingArg);
+			}
+			if (removedMappingArg.length() > 0) {
 				if (args.length() > 0) {
 					args.append('&');
 				}
-				args.append(ConfigServlet.ARG_REMOVED);
+				args.append(ConfigServlet.ARG_MAPPING_REMOVED);
 				args.append('=');
-				args.append(removedArg);
+				args.append(removedMappingArg);
+			}
+			if (addedDDArg.length() > 0) {
+				if (args.length() > 0) {
+					args.append('&');
+				}
+				args.append(ConfigServlet.ARG_DD_ADDED);
+				args.append('=');
+				args.append(addedDDArg);
+			}
+			if (removedDDArg.length() > 0) {
+				if (args.length() > 0) {
+					args.append('&');
+				}
+				args.append(ConfigServlet.ARG_DD_REMOVED);
+				args.append('=');
+				args.append(removedDDArg);
+			}
+			if (defaultDDChanged) {
+				if (args.length() > 0) {
+					args.append('&');
+				}
+				args.append(ConfigServlet.ARG_DEFAULT_DD);
+				args.append('=');
+				try {
+					args.append(URLEncoder.encode(defaultDD, "UTF-8")); //$NON-NLS-1$
+				}
+				catch(UnsupportedEncodingException e) {
+					// Shouldn't happen.
+					args.append(defaultDD);
+				}
 			}
 			
 			try {
 				int status = invokeConfigServlet(args.toString());
 				if (status != 200) {
-					System.err.println(NLS.bind(TestServerMessages.ConfigServletBadStatus, status));
+					Activator.getDefault().log(NLS.bind(TestServerMessages.ConfigServletBadStatus, status));
 				}
 			}
 			catch (IOException e) {
-				Activator.getDefault().log(e.getMessage(), e);
+				Activator.getDefault().log(e);
 			}
 		}
 		
 		currentServiceMappings = newMappings;
+		currentDDFiles = newDDFiles;
+		currentDefaultDDName = defaultDD;
 	}
 	
 	private int invokeConfigServlet(String args) throws IOException {
@@ -410,10 +476,10 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			}
 		}
 		catch (EGLModelException e) {
-			Activator.getDefault().log(e.getMessage(), e);
+			Activator.getDefault().log(e);
 		}
 		catch (CoreException e ) {
-			Activator.getDefault().log(e.getMessage(), e);
+			Activator.getDefault().log(e);
 		}
 		
 		return false;

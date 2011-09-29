@@ -26,8 +26,6 @@ public class TestServerMessages extends NLS {
 	}
 	
 	public static String TestServerProcessName;
-	public static String ServiceMappingAdditionsInvalidTokens;
-	public static String ServiceMappingRemovalsInvalidTokens;
 	public static String CouldNotGetPluginPath;
 	public static String ConfigServletBadStatus;
 	public static String ProjectMissingJavaNature;

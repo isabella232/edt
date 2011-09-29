@@ -44,11 +44,13 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.datatools.connectivity.IConnectionProfile;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPath;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfo;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfoManager;
+import org.eclipse.edt.ide.internal.sql.util.EGLSQLUtility;
 import org.eclipse.edt.ide.rui.editor.IEditorSelectAndRevealer;
 import org.eclipse.edt.ide.rui.internal.Activator;
 import org.eclipse.edt.ide.rui.internal.nls.RUINlsStrings;
@@ -375,6 +377,52 @@ public class EvServer implements IClientProxy {
 				
 			}
 			return null;
+		}
+	}
+	
+	private class TestServerRequestHander implements Runnable {
+		public PrintStream ps;
+		public RuiBrowserHttpRequest xmlRequest;
+		
+		public TestServerRequestHander( RuiBrowserHttpRequest ruiRequest, final PrintStream ps ) {
+			this.xmlRequest = ruiRequest;
+			this.ps = ps;
+		}
+		
+		@Override
+		public void run() {
+			String urlString = xmlRequest.getURL();
+			try {
+				if (xmlRequest.getContentArguments().containsKey("connectionProfile")) {
+					//TODO for now the SQLDataSource API only takes the url, once it supports username, password, etc, return more values.
+					String url = null;
+					String profileName = xmlRequest.getContentArguments().get("connectionProfile");
+					IConnectionProfile profile = EGLSQLUtility.getConnectionProfile(profileName);
+					if (profile != null) {
+						url = EGLSQLUtility.getSQLConnectionURLPreference(profile);
+					}
+					
+					if (url == null) {
+						url = "";
+					}
+					ps.print(getGoodResponseHeader(urlString, getContentType(urlString), false));
+					ps.write(url.getBytes("utf-8"));
+				}
+			}
+			catch (Throwable t) {
+				System.err.println(urlString);
+				t.printStackTrace();
+				try {
+					fail(ps);
+				} catch (Exception ee) {
+				}
+			}
+			finally {
+				if (ps != null) {
+					ps.flush();
+					ps.close();
+				}
+			}
 		}
 	}
 	
@@ -733,7 +781,7 @@ public class EvServer implements IClientProxy {
 				if (xmlRequest != null) {
 					url = xmlRequest.getURL();
 					
-					// Proxy must be checked first since the context key is passed along for debug.
+					// Proxy and test server must be checked first since the context key is passed along for debug.
 					if (url.indexOf("__proxy") != -1 || xmlRequest.getHeaders() != null && xmlRequest.getHeaders().containsKey(ProxyUtilities.EGL_REST_CALL) ){
 						Event event = new Event();
 						event.ps = ps;
@@ -743,6 +791,11 @@ public class EvServer implements IClientProxy {
 						event.arguments = xmlRequest.getArguments();
 						___ProxyHandler hop = new ___ProxyHandler( xmlRequest, ps );
 						Thread thread = new Thread( hop );
+						thread.start();
+					}
+					else if (url.indexOf("__testServer") != -1) {
+						TestServerRequestHander tsrh = new TestServerRequestHander( xmlRequest, ps );
+						Thread thread = new Thread (tsrh);
 						thread.start();
 					}
 					else {
@@ -787,7 +840,7 @@ public class EvServer implements IClientProxy {
 									//debug(xmlRequest.getURL());
 									//
 									q.addEvent(event);
-								} 
+								}
 								else {
 									debug("handleBrowserEvent: context key not in queue");
 									ps.print(getBadResponseHeader());

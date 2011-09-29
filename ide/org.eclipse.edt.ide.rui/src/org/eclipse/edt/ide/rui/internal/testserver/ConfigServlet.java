@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.internal.testserver;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -22,8 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.ide.IDEResourceLocator;
 import org.eclipse.edt.javart.services.servlet.rest.rpc.PreviewServiceServlet;
-import org.eclipse.osgi.util.NLS;
+
 
 public class ConfigServlet extends HttpServlet {
 	
@@ -35,14 +37,29 @@ public class ConfigServlet extends HttpServlet {
 	public static final String SERVLET_PATH = "/config"; //$NON-NLS-1$
 	
 	/**
+	 * The name of the argument for setting the default deployment descriptor name.
+	 */
+	public static final String ARG_DEFAULT_DD = "defaultDD"; //$NON-NLS-1$
+	
+	/**
+	 * The name of the argument for passing deployment descriptor additions.
+	 */
+	public static final String ARG_DD_ADDED = "ddAdded"; //$NON-NLS-1$
+	
+	/**
+	 * The name of the argument for passing deployment descriptor removals.
+	 */
+	public static final String ARG_DD_REMOVED = "ddRemoved"; //$NON-NLS-1$
+	
+	/**
 	 * The name of the argument for passing mapping additions.
 	 */
-	public static final String ARG_ADDED = "added"; //$NON-NLS-1$
+	public static final String ARG_MAPPING_ADDED = "mappingAdded"; //$NON-NLS-1$
 	
 	/**
 	 * The name of the argument for passing mapping removals.
 	 */
-	public static final String ARG_REMOVED = "removed"; //$NON-NLS-1$
+	public static final String ARG_MAPPING_REMOVED = "mappingRemoved"; //$NON-NLS-1$
 	
 	/**
 	 * The delimeter used between mappings.
@@ -59,24 +76,43 @@ public class ConfigServlet extends HttpServlet {
 	 */
 	private final PreviewServiceServlet previewServlet;
 	
-	public ConfigServlet(PreviewServiceServlet previewServlet) {
+	/**
+	 * The resource locator for resource bindings.
+	 */
+	private final IDEResourceLocator resourceLocator;
+	
+	public ConfigServlet(PreviewServiceServlet previewServlet, IDEResourceLocator resourceLocator) {
 		this.previewServlet = previewServlet;
+		this.resourceLocator = resourceLocator;
 	}
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String added = req.getParameter(ARG_ADDED);
-		String removed = req.getParameter(ARG_REMOVED);
+		String addedMappings = req.getParameter(ARG_MAPPING_ADDED);
+		String removedMappings = req.getParameter(ARG_MAPPING_REMOVED);
+		String addedDDs = req.getParameter(ARG_DD_ADDED);
+		String removedDDs = req.getParameter(ARG_DD_REMOVED);
+		String defaultDD = req.getParameter(ARG_DEFAULT_DD);
 		
-		if (added != null && added.length() > 0) {
-			parse(added, true);
+		if (addedMappings != null && addedMappings.length() > 0) {
+			parseMappings(addedMappings, true);
 		}
-		if (removed != null && removed.length() > 0) {
-			parse(removed, false);
+		if (removedMappings != null && removedMappings.length() > 0) {
+			parseMappings(removedMappings, false);
+		}
+		if (addedDDs != null && addedDDs.length() > 0) {
+			parseDDFiles(addedDDs, true);
+		}
+		if (removedDDs != null && removedDDs.length() > 0) {
+			parseDDFiles(removedDDs, false);
+		}
+		if (defaultDD != null) {
+			TestServer.log("Default DD changed: " + defaultDD); //$NON-NLS-1$
+			resourceLocator.setDefaultDD(defaultDD);
 		}
 	}
 	
-	public void parse(String mappings, boolean added) {
+	public void parseMappings(String mappings, boolean added) {
 		StringTokenizer tok = new StringTokenizer(mappings, MAPPING_ARG_DELIMETER);
 		while (tok.hasMoreTokens()) {
 			String token = tok.nextToken();
@@ -98,14 +134,45 @@ public class ConfigServlet extends HttpServlet {
 				}
 				
 				if (added) {
+					TestServer.log("Service mapping added or changed: " + uri + ", " + className); //$NON-NLS-1$ //$NON-NLS-2$
 					previewServlet.addServiceMapping(uri, className, stateful);
 				}
 				else {
+					TestServer.log("Service mapping removed: " + uri + ", " + className); //$NON-NLS-1$ //$NON-NLS-2$
 					previewServlet.removeServiceMapping(uri);
 				}
 			}
 			else {
-				log(NLS.bind(TestServerMessages.ServiceMappingAdditionsInvalidTokens, token));
+				TestServer.log("Invalid number of tokens in service mapping " + (added ? "addition: " : "removal: ") + token); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			}
+		}
+	}
+	
+	public void parseDDFiles(String ddFiles, boolean added) {
+		// For simplicity there's just the one delimeter.
+		// name1;path1;name2;path2... using File.pathSeparator
+		StringTokenizer tok = new StringTokenizer(ddFiles, File.pathSeparator);
+		while (tok.hasMoreTokens()) {
+			String name = tok.nextToken();
+			if (tok.hasMoreTokens()) {
+				String path = tok.nextToken();
+				
+				try {
+					name = URLDecoder.decode(name, "UTF-8"); //$NON-NLS-1$
+					path = URLDecoder.decode(path, "UTF-8"); //$NON-NLS-1$
+				}
+				catch (UnsupportedEncodingException e) {
+					// Shouldn't happen.
+				}
+				
+				if (added) {
+					TestServer.log("DD file added or changed: " + name + ", " + path); //$NON-NLS-1$ //$NON-NLS-2$
+					resourceLocator.addDDFile(name, path);
+				}
+				else {
+					TestServer.log("DD file removed: " + name + ", " + path); //$NON-NLS-1$ //$NON-NLS-2$
+					resourceLocator.removeDDFile(name);
+				}
 			}
 		}
 	}
