@@ -74,7 +74,18 @@ externalType EFloat extends ENumber type ClassType
 	 */
 	static function $NEQ(lvalue EFloat in, rvalue EFloat in) returns(EBoolean) {@Operation{"!="}};
 	
+	/**
+	 * {@Operation narrow} Converts a string to a float.  The string is parsed
+	 * as follows: It may begin with an optional + or - sign.  After the sign there
+	 * must be a sequence of one or more digit characters.  They may be followed by
+	 * a decimal point (a period) and one or more digit characters.  It may end with
+	 * an exponent, which is the letter e or E, followed by an optional negative sign,
+	 * followed by one or more digit characters.
+	 *
+	 * @throws TypeCastException if the string can't be parsed into a float.
+	 */
 	static function asFloat(value EString in) returns(EFloat) {@Operation{"narrow"}};
+
 	static function asFloat(value ESmallint in) returns(EFloat) {@Operation{"widen"}};
 	static function asFloat(value ESmallfloat in) returns(EFloat) {@Operation{"widen"}};
 	static function asFloat(value EDecimal in) returns(EFloat) {@Operation{"widen"}};

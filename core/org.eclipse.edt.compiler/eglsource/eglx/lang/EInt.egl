@@ -89,14 +89,62 @@ externalType EInt extends ENumber type ClassType
 	 */
 	static function $NEQ(lvalue EInt in, rvalue EInt in) returns(EBoolean) {@Operation{"!="}};
 
+	/**
+	 * {@Operation narrow} Converts a string to an int.  The string is parsed
+	 * as follows: It may begin with an optional + or - sign.  After the sign there
+	 * must be a sequence of one or more digit characters.  Nothing may follow the
+	 * digits.  The digits in the string must be within the valid range for an int.
+	 *
+	 * @throws TypeCastException if the string can't be parsed into an int.
+	 */
 	static function asInt(value EString in) returns(EInt) {@Operation{"narrow"}};
+	
+	/**
+	 * {@Operation widen} Converts an int to a smallint.
+	 */
 	static function asInt(value ESmallint in) returns(EInt) {@Operation{"widen"}};
+
+	/**
+	 * {@Operation narrow} Converts a smallfloat to an int.  Digits after the
+	 * decimal point are discarded.
+	 *
+	 * @throws TypeCastException if the smallfloat is out of range for an int.
+	 */
 	static function asInt(value ESmallfloat in) returns(EInt) {@Operation{"narrow"}};
+
+	/**
+	 * {@Operation narrow} Converts a decimal to an int.  Digits after the
+	 * decimal point are discarded.
+	 *
+	 * @throws TypeCastException if the decimal is out of range for an int.
+	 */
 	static function asInt(value EDecimal in) returns(EInt) {@Operation{"narrow"}};
+
+	/**
+	 * {@Operation narrow} Converts a float to an int.  Digits after the
+	 * decimal point are discarded.
+	 *
+	 * @throws TypeCastException if the float is out of range for an int.
+	 */
 	static function asInt(value EFloat in) returns(EInt) {@Operation{"narrow"}};
+
+	/**
+	 * {@Operation narrow} Converts a bigint to an int.
+	 *
+	 * @throws TypeCastException if the bigint is out of range for an int.
+	 */
 	static function asInt(value EBigint in) returns(EInt) {@Operation{"narrow"}};
+
+	/**
+	 * {@Operation narrow} Converts a number to an int.  Digits after the
+	 * decimal point are discarded.
+	 *
+	 * @throws TypeCastException if the number is out of range for an int.
+	 */
 	static function asInt(value ENumber in) returns(EInt) {@Operation{"narrow"}};
 	
-
+	/**
+	 * {@Operation widen} Converts an int to a number.
+	 */
 	static function asNumber(value EInt in) returns(ENumber) {@Operation{"widen"}};
 end

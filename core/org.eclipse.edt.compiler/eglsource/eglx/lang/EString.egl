@@ -62,7 +62,17 @@ externalType EString extends AnyText type ParameterizableType {
 	static function asNumber(value EString in) returns(ENumber) {@Operation{"narrow"}};
 	
 	static function asString(value ENumber in) returns (EString) {@Operation{"widen"}};
+
+	/**
+	 * {@Operation widen} Converts a bigint to a string.  The string will consist of
+	 * one or more digit characters.  It will begin with a - sign if the value is
+	 * negative.
+	 */
 	static function asString(value EBigint in) returns (EString) {@Operation{"widen"}};
+
+	/**
+	 * {@Operation{"widen"} Converts a boolean to "true" or "false".
+	 */
 	static function asString(value EBoolean in) returns (EString) {@Operation{"widen"}};
 	
 	/**
@@ -71,10 +81,44 @@ externalType EString extends AnyText type ParameterizableType {
 	 * converted to "04/01/0009".
 	 */
 	static function asString(value EDate in) returns (EString) {@Operation{"widen"}};
+	
+	/**
+	 * {@Operation widen} Converts a decimal to a string.  The string will consist of
+	 * one or more digit characters, with a period used for a decimal point.  The string
+	 * will begin with a - sign if the value is negative.
+	 */
 	static function asString(value EDecimal in) returns (EString) {@Operation{"widen"}};
+	
+	/**
+	 * {@Operation widen} Converts a float to a string.  The string will consist of
+	 * one or more digit characters, with a period used for a decimal point.  The string
+	 * will begin with a - sign if the value is negative.  It may end with an exponent,
+	 * which is the letter e or E, followed by an optional negative sign, followed by one
+	 * or more digit characters.
+	 */
 	static function asString(value EFloat in) returns (EString) {@Operation{"widen"}};
+
+	/**
+	 * {@Operation widen} Converts an int to a string.  The string will consist of
+	 * one or more digit characters.  It will begin with a - sign if the value is
+	 * negative.
+	 */
 	static function asString(value EInt in) returns (EString) {@Operation{"widen"}};
+	
+	/**
+	 * {@Operation widen} Converts a smallfloat to a string.  The string will consist of
+	 * one or more digit characters, with a period used for a decimal point.  The string
+	 * will begin with a - sign if the value is negative.  It may end with an exponent,
+	 * which is the letter e or E, followed by an optional negative sign, followed by one
+	 * or more digit characters.
+	 */
 	static function asString(value ESmallfloat in) returns (EString) {@Operation{"widen"}};
+
+	/**
+	 * {@Operation widen} Converts a smallint to a string.  The string will consist of
+	 * one or more digit characters.  It will begin with a - sign if the value is
+	 * negative.
+	 */
 	static function asString(value ESmallint in) returns (EString) {@Operation{"widen"}};
 	
 	/**
@@ -142,18 +186,111 @@ externalType EString extends AnyText type ParameterizableType {
 	 */
 	function matchesPattern(value EString in, esc EString in) returns(EBoolean);
 
+	/**
+	 * Returns the number of characters in this string.
+	 *
+	 * @return the length of this string.
+	 */
 	function length() returns(EInt);
+
+	/**
+	 * Returns this string minus any trailing blanks.
+	 *
+	 * @return the clipped string.
+	 */
 	function clip() returns(EString);
+
+	/**
+	 * Returns this string minus any leading blanks.
+	 *
+	 * @return the clipped string.
+	 */
 	function clipLeading() returns(EString);
+
+	/**
+	 * Returns this string minus any trailing and trailing blanks.
+	 *
+	 * @return the trimmed string.
+	 */
 	function trim() returns(EString);
+
+	/**
+	 * Returns this string with its characters converted to upper case.
+	 *
+	 * @return the uppercased string.
+	 */
 	function toUpperCase() returns(EString);
+
+	/**
+	 * Returns this string with its characters converted to lower case.
+	 *
+	 * @return the lowercased string.
+	 */
 	function toLowerCase() returns(EString);
+
+	/**
+	 * Searches for a substring within this string, starting at index 1,
+	 * and returns the index of its first character.
+	 *
+	 * @param substr  the substring to find.
+	 * @return the index of the substring, or 0 if it wasn't found.
+	 */
 	function indexOf(substr EString in) returns (EInt);
+
+	/**
+	 * Searches for a substring within this string, starting at the given index,
+	 * and returns the index of its first character.
+	 *
+	 * @param substr      the substring to find.
+	 * @param startIndex  where to start the search.
+	 * @return the index of the substring, or 0 if it wasn't found.
+	 * @throws InvalidIndexException if startIndex is less than 1 or greater 
+	 *    than the length of this string.
+	 */
 	function indexOf(substr EString in, startIndex EInt in) returns (EInt);
+
+	/**
+	 * Searches for a substring within this string, starting at the end, and 
+	 * returns the index of its first character.
+	 *
+	 * @param substr  the substring to find.
+	 * @return the index of the substring, or 0 if it wasn't found.
+	 */
 	function lastIndexOf(substr EString in) returns (EInt);
+
+	/**
+	 * Tells if this string ends with the given substring.
+	 *
+	 * @param suffix  the suffix to find.
+	 * @return true if the substring appears at the end of this string.
+	 */
 	function endsWith(suffix EString in) returns(EBoolean);
+
+	/**
+	 * Tells if this string starts with the given substring.
+	 *
+	 * @param prefix  the prefix to find.
+	 * @return true if the substring appears at the front of this string.
+	 */
 	function startsWith(prefix EString in) returns(EBoolean);
-	// replace all occurances of target
+
+	/**
+	 * Returns a string created by replacing all occurances of one substring with 
+	 * another.  The target substring and its replacement may have different lengths.
+	 *
+	 * @param target       the substring to find.
+	 * @param replacement  the replacement for the target substring.
+	 * @return this string, with replacements.
+	 */
 	function replaceStr(target EString in, replacement EString in) returns(EString);
+	
+	/**
+	 * Returns the Unicode codepoint of the given character, as an int.
+	 *
+	 * @param index  the index of the character.
+	 * @return the Unicode codepoint of the given character, as an int.
+	 * @throws InvalidIndexException if index is less than 1 or greater 
+	 *    than the length of this string.
+	 */
 	function charCodeAt(index EInt in) returns(EInt);
 end

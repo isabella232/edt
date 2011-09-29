@@ -153,7 +153,14 @@ externalType EDecimal extends ENumber type ParameterizableType {
 	 */
 	static function asDecimal(value EFloat in, length EInt in, decimals EInt in) returns(EDecimal) {@Operation{"narrow"}};
 	
-	//TODO comment me
+	/**
+	 * {@Operation narrow} Converts a string to a decimal.  The string is parsed
+	 * as follows: It may begin with an optional + or - sign.  After the sign there
+	 * must be a sequence of one or more digit characters.  They may be followed by
+	 * a decimal point (a period) and one or more digit characters.
+	 *
+	 * @throws TypeCastException if the string can't be parsed into a decimal.
+	 */
 	static function asDecimal(value EString in) returns(EDecimal) {@Operation{"narrow"}};
 	
 	//TODO comment me
