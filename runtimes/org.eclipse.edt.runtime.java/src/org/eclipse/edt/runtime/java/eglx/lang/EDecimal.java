@@ -480,48 +480,23 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 	public static BigDecimal asDecimal(String value, Integer... args) throws AnyException {
 		if (value == null)
 			return null;
-		return asDecimal(asDecimal(value, false), args);
+		try
+		{
+			return asDecimal( new BigDecimal( value ), args );
+		}
+		catch ( NumberFormatException ex )
+		{
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "decimal";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
+		}
 	}
 
 	public static BigDecimal asDecimal(EString value, Integer... args) throws AnyException {
 		if (value == null)
 			return null;
-		return asDecimal(asDecimal(value.ezeUnbox(), false), args);
-	}
-
-	public static BigDecimal asDecimal(String value, boolean blanksAsZero) {
-		if (value == null)
-			return null;
-		// Check for zero length string and remove extra blanks.
-		value = value.trim();
-		if (value.length() == 0) {
-			if (blanksAsZero)
-				return BigDecimal.ZERO;
-			else {
-				TypeCastException tcx = new TypeCastException();
-				tcx.actualTypeName = "string";
-				tcx.castToName = "decimal";
-				throw tcx.fillInMessage(Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName);
-			}
-		}
-		// Remove a leading +.
-		if (value.charAt(0) == '+')
-			value = value.substring(1);
-		// If the string has an exponent, parse it with Double. If not, but it does
-		// have a decimal point, parse it with BigDecimal. Recognize the decimal
-		// point specified by the user as well as a period.
-		// TODO EGL numeric values should not be caring about localized decimal points.
-		// char decSym = prog._runUnit().getLocalizedText().getDecimalSymbol();
-		char decSym = '.';
-		if (value.indexOf('e') != -1 || value.indexOf('E') != -1)
-			return new BigDecimal(Double.parseDouble(value));
-		else if (value.indexOf(decSym) != -1)
-			return new BigDecimal(value);
-		// if the length is bigger than 18 it won't fit in a long
-		// TODO handle large numbers
-		if (value.length() > 18)
-			return new BigDecimal(new BigInteger(value));
-		return BigDecimal.valueOf(Long.valueOf(value));
+		return asDecimal(value.ezeUnbox(), args);
 	}
 
 	/**

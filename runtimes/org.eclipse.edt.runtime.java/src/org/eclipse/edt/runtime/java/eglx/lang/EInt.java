@@ -16,9 +16,11 @@ import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.messages.Message;
 
 import eglx.lang.AnyException;
 import eglx.lang.NumericOverflowException;
+import eglx.lang.TypeCastException;
 
 public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -258,16 +260,29 @@ public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 		return result;
 	}
 
-	public static Integer asInt(String value) throws AnyException {
+	public static Integer asInt(String value) throws TypeCastException {
 		if (value == null)
 			return null;
-		return asInt(EDecimal.asDecimal(value));
+		try
+		{
+			// Remove a leading plus.
+			String input = value.charAt( 0 ) == '+' ? value.substring( 1 ) : value;
+			return Integer.valueOf( input );
+		}
+		catch ( Exception ex )
+		{
+			// Length is zero (charAt failed) or invalid number (valueOf failed).
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "int";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
+		}
 	}
 
 	public static Integer asInt(EString value) throws AnyException {
 		if (value == null)
 			return null;
-		return asInt(EDecimal.asDecimal(value.ezeUnbox()));
+		return asInt(value.ezeUnbox());
 	}
 
 	/**

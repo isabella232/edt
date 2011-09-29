@@ -16,8 +16,10 @@ import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.messages.Message;
 
 import eglx.lang.AnyException;
+import eglx.lang.TypeCastException;
 
 public class ESmallfloat extends AnyBoxedObject<Float> implements eglx.lang.ENumber {
 	/**
@@ -140,13 +142,27 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements eglx.lang.ENum
 	public static Float asSmallfloat(String value) throws AnyException {
 		if (value == null)
 			return null;
-		return asSmallfloat(EDecimal.asDecimal(value));
+		try
+		{
+			//TODO this is too permissive.  See the doc for the method.  We should
+			// only allow a sign, digits, decimal point, digits, and exponent.  The
+			// sign and everything after the first set of digits is optional.
+			return Float.valueOf( value );
+		}
+		catch ( Exception ex )
+		{
+			// It's invalid.
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "smallfloat";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
+		}
 	}
 
 	public static Float asSmallfloat(EString value) throws AnyException {
 		if (value == null)
 			return null;
-		return asSmallfloat(EDecimal.asDecimal(value.ezeUnbox()));
+		return asSmallfloat(value.ezeUnbox());
 	}
 
 	/**

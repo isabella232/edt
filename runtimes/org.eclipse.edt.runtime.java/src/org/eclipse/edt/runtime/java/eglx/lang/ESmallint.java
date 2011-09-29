@@ -16,9 +16,11 @@ import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.messages.Message;
 
 import eglx.lang.AnyException;
 import eglx.lang.NumericOverflowException;
+import eglx.lang.TypeCastException;
 
 public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumber {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -282,13 +284,26 @@ public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumbe
 	public static Short asSmallint(String value) throws AnyException {
 		if (value == null)
 			return null;
-		return asSmallint(EDecimal.asDecimal(value));
+		try
+		{
+			// Remove a leading plus.
+			String input = value.charAt( 0 ) == '+' ? value.substring( 1 ) : value;
+			return Short.valueOf( input );
+		}
+		catch ( Exception ex )
+		{
+			// Length is zero (charAt failed) or invalid number (valueOf failed).
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "smallint";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
+		}
 	}
 
 	public static Short asSmallint(EString value) throws AnyException {
 		if (value == null)
 			return null;
-		return asSmallint(EDecimal.asDecimal(value.ezeUnbox()));
+		return asSmallint(value.ezeUnbox());
 	}
 
 	/**

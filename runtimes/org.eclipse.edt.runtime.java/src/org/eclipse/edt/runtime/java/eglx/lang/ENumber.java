@@ -16,8 +16,10 @@ import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.messages.Message;
 
 import eglx.lang.AnyException;
+import eglx.lang.TypeCastException;
 
 /**
  * Class to be used in processing Decimal operations
@@ -133,13 +135,54 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 	public static ENumber asNumber(String value) throws AnyException {
 		if (value == null)
 			return null;
-		return asNumber(EDecimal.asDecimal(value));
+		// Parse the string as a float if it contains an exponent.  Parse it as
+		// a decimal if it contains a period.  Otherwise, parse it as a decimal,
+		// bigint, int, or smallint depending on its length.
+		Number number;
+		try
+		{
+			if ( value.indexOf( 'e' ) != -1 || value.indexOf( 'E' ) != -1 )
+			{
+				number = Double.valueOf( value );
+			}
+			else if ( value.indexOf( '.' ) != -1 || value.length() > 18 )
+			{
+				number = new BigDecimal( value );
+			}
+			else
+			{
+				// Remove a leading plus.
+				String input = value.length() > 0 && value.charAt( 0 ) == '+' ? value.substring( 1 ) : value;
+				if ( input.length() > 9 )
+				{
+					number = Long.valueOf( input );
+				}
+				else if ( input.length() > 5 )
+				{
+					number = Integer.valueOf( input );
+				}
+				else
+				{
+					number = Short.valueOf( input );
+				}
+			}
+		}
+		catch ( NumberFormatException fmtEx )
+		{
+			// It's invalid.
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "number";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
+		}
+		
+		return ezeBox( number );
 	}
 
 	public static ENumber asNumber(EString value) throws AnyException {
 		if (value == null)
 			return null;
-		return asNumber(EDecimal.asDecimal(value.ezeUnbox()));
+		return asNumber(value.ezeUnbox());
 	}
 
 	public static ENumber plus(Object op1, Object op2) {
