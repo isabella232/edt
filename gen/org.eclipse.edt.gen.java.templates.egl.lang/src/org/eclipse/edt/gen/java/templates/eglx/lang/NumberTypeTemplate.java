@@ -19,42 +19,34 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.UnaryExpression;
 
 public class NumberTypeTemplate extends JavaTemplate {
 
-	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
-		out.print("new ");
-		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
-		out.print("(");
-		ctx.invoke(genConstructorOptions, type, ctx, out);
-		out.print(")");
-	}
-
 	public void genConstructorOptions(EGLClass type, Context ctx, TabbedWriter out) {
-		out.print("0");
+		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber"))
+			out.print("0");
+		else
+			ctx.invokeSuper(this, genConstructorOptions, type, ctx, out);
 	}
 
 	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
 		// for number type, always use the runtime
-		out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
-		out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
-		out.print("(");
-		ctx.invoke(genExpression, arg.getLHS(), ctx, out);
-		out.print(", ");
-		ctx.invoke(genExpression, arg.getRHS(), ctx, out);
-		out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
-	}
-
-	public void genUnaryExpression(EGLClass type, Context ctx, TabbedWriter out, UnaryExpression arg) {
-		ctx.invoke(genExpression, arg.getExpression(), ctx, out);
-		// we only need to check for minus sign and if found, we need to change it to .negate()
-		if (arg.getOperator().equals("-"))
-			out.print(".negate()");
+		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber")) {
+			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
+			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
+			out.print("(");
+			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
+			out.print(", ");
+			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+			out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
+		} else
+			ctx.invokeSuper(this, genBinaryExpression, type, ctx, out, arg);
 	}
 
 	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, String arg, Type rhsType) {
-		// the arg contains the operation being asked about
-		return true;
+		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber"))
+			return true;
+		else
+			return (Boolean) ctx.invokeSuper(this, org.eclipse.edt.gen.Constants.isAssignmentBreakupWanted, type, ctx, arg, rhsType);
 	}
 }
