@@ -173,7 +173,7 @@ public class JavaScriptAliaser
 	 * @param f
 	 * @return
 	 */
-	public static Function getAlias(Function f){
+	public static Function getAlias(Context ctx, Function f){
 		Function result = f;
 		
 		try {
@@ -185,6 +185,22 @@ public class JavaScriptAliaser
 						result = (Function) f.clone();
 						result.setName("textLen");
 					}
+				}
+			}
+			
+			
+			
+			/* TODO sbg The logic below is part of https://bugs.eclipse.org/bugs/show_bug.cgi?id=358329, however,
+			 * it should eventually be removed when we implement 
+			 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=359315
+			 */
+
+			// TODO sbg As written, this will cause overloads to overwrite method renames (above) 
+			{
+				String overloaded = CommonUtilities.isOverloaded(ctx, f);
+				if (overloaded != null){
+					result = (Function) f.clone();
+					result.setName(overloaded);
 				}
 			}
 		}

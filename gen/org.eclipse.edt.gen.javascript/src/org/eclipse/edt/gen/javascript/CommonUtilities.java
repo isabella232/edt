@@ -11,8 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript;
 
+import java.io.StringWriter;
+import java.util.List;
+
 import org.eclipse.edt.gen.GenerationException;
+import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.BinaryExpression;
@@ -20,9 +25,11 @@ import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Name;
@@ -475,5 +482,105 @@ public class CommonUtilities {
 		}
 
 		return result;
+	}
+	
+	
+	
+	/* TODO sbg isOverloaded is part of https://bugs.eclipse.org/bugs/show_bug.cgi?id=358329, however,
+	 * it should eventually be removed when we implement 
+	 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=359315
+	 */
+	/**
+	 * Returns the fn alias if overloaded, otherwise returns null
+	 * @param fn
+	 */
+	public static String isOverloaded(Context ctx, Function fn) {
+		String result = null;
+
+		EGLClass part = (EGLClass) fn.getContainer();
+		if (!(part instanceof ExternalType) && (!part.isNativeType())) {
+			String fnName = fn.getName();
+			/* Relies on reference equality among the list of fns in a part;
+			 * start by finding the 1st part fn that has a matching name;
+			 * then, look to see if it there are any other functions that
+			 * have the same name but aren't the same function (again, ref.
+			 * equality).  If so, then we know the passed-in fn is overloaded,
+			 * and we can return its mangled name.
+			 */
+			for (Function f1 : part.getFunctions()) {
+				String f1Name = f1.getName();
+				if (fnName.equals(f1Name)) {
+					for (Function f2 : part.getFunctions()) {
+						if ((f1 != f2) && (f1Name.equals(f2.getName()))){
+							result = getOverloadedFunctionAlias(ctx, fn);
+							break;
+						}
+					}
+					if (result != null) 
+						break;
+				}
+			}
+	
+			
+	/* TODO sbg The impl. below caches all aliases for overloaded functions,
+	 * however, it relies on the semantic equality of Functions, something
+	 * that is currently lacking; if this is ever addressed, the impl. below
+	 * should be more optimal. 		
+	 */
+	//		String marker = (String)ctx.getAttribute(fn, Constants.Overloaded_Marker);
+	//		if (marker != null) {
+	//			result = (marker.length() == 0) ? null : marker;
+	//		}
+	//		else {
+	//			EGLClass part = (EGLClass) fn.getContainer();
+	//			for (Function f1 : part.getFunctions()) {
+	//				String f1Name = f1.getName();
+	//				String alias = null;
+	//				for (Function f2 : part.getFunctions()) {
+	//					if ((f1 != f2) && (f1Name.equals(f2.getName()))){
+	//						alias = getOverloadedFunctionAlias(ctx, f1);
+	//						if ((f1Name.equals(fn.getName()) 
+	//							&& fn.getParameters().containsAll(f1.getParameters()))) {
+	//							result = alias;
+	//						}
+	//						break;
+	//					}
+	//				}
+	//				ctx.putAttribute(f1, Constants.Overloaded_Marker, (alias == null) ? "" : alias);
+	//			}
+	//		}
+		}
+		
+		return result;
+	}
+
+	
+	/* TODO sbg getOverloadedFunctionAlias is part of https://bugs.eclipse.org/bugs/show_bug.cgi?id=358329, however,
+	 * it should eventually be removed when we implement 
+	 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=359315
+	 */
+	private static String getOverloadedFunctionAlias(Context ctx, Function fn) {
+		String delim = "_";
+		StringBuffer result = new StringBuffer(fn.getName());
+		
+		List<FunctionParameter> args = fn.getParameters();
+		result.append(delim);
+		result.append(args.size());
+		
+		String sep = delim;
+		for (FunctionParameter arg : args){
+			Type type = arg.getType();
+			StringWriter sw = new StringWriter();
+			TabbedWriter tw = new TabbedWriter(sw);
+			ctx.invoke(JavaScriptTemplate.genSignature, type, ctx, tw);  // TODO sbg optimize
+			String sig = tw.getCurrentLine();
+			sig = sig.replace('?', '$');  // TODO sbg optimize
+			sig = sig.replace(";", "");   // TODO sbg optimize
+			
+			result.append(sep);
+			result.append(sig);
+		}
+		
+		return result.toString();
 	}
 }
