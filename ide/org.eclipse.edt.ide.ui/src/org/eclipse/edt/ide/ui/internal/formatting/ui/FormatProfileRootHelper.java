@@ -60,7 +60,7 @@ public class FormatProfileRootHelper {
 	
 	private static EGLFormatProfileRoot getEGLFormatProfileModel(IPath formatProfile, ResourceSet resourceSet){		
 		URI uri = null;
-		if ( "jar:".equals( formatProfile.getDevice() ) ) {
+		if ( formatProfile.toOSString().startsWith( "jar:") ) {
 			String path = formatProfile.toOSString();
 			path = path.replaceAll( "\\\\", "/" );
 			uri = URI.createURI( path );

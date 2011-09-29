@@ -88,5 +88,6 @@ Export-Package:
  org.eclipse.edt.ide.ui.templates,
  org.eclipse.edt.ide.ui.templates.pages,
  org.eclipse.edt.ide.ui.templates.wizards,
- org.eclipse.edt.ide.ui.wizards
+ org.eclipse.edt.ide.ui.wizards,
+ org.eclipse.edt.ide.ui.internal.results.views
 Bundle-Vendor: Eclipse EGL Development Tools

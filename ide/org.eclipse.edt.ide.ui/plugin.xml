@@ -183,35 +183,35 @@
 			id="org.eclipse.edt.ide.ui.source.createGroup.callbackFunction"/>
 -->	
 		<!-- References/Project -->
-		<command
+		<!--command
 			name="%InProject.name"
 			description="%InProject.description"
-			id="org.eclipse.edt.ide.ui.search.findProjectReferences"/>
+			id="org.eclipse.edt.ide.ui.search.findProjectReferences"/-->
 		<!-- Declarations/Project -->
-		<command
+		<!--command
 			name="%InProject.name"
 			description="%InProject.description"
-			id="org.eclipse.edt.ide.ui.search.findProjectDeclarations"/>
+			id="org.eclipse.edt.ide.ui.search.findProjectDeclarations"/-->
 		<!-- References/Working set -->
-		<command
+		<!--command
 			name="%InWorkingSet.name"
 			description="%InWorkingSet.description"
-			id="org.eclipse.edt.ide.ui.search.findWorkingSetReferences"/>
+			id="org.eclipse.edt.ide.ui.search.findWorkingSetReferences"/-->
 		<!-- Declarations/Working set -->
-		<command
+		<!--command
 			name="%InWorkingSet.name"
 			description="%InWorkingSet.description"
-			id="org.eclipse.edt.ide.ui.search.findWorkingSetDeclarations"/>
+			id="org.eclipse.edt.ide.ui.search.findWorkingSetDeclarations"/-->
 		<!-- References/Workspace -->
-		<command
+		<!--command
 			name="%InWorkspace.name"
 			description="%InWorkspace.description"
-			id="org.eclipse.edt.ide.ui.search.findWorkspaceReferences"/>
+			id="org.eclipse.edt.ide.ui.search.findWorkspaceReferences"/-->
 		<!-- Declarations/Workspace -->
-		<command
+		<!--command
 			name="%InWorkspace.name"
 			description="%InWorkspace.description"
-			id="org.eclipse.edt.ide.ui.search.findWorkspaceDeclarations"/>			
+			id="org.eclipse.edt.ide.ui.search.findWorkspaceDeclarations"/-->			
 		<!-- Source edit SQL -->
 <!-- Uncomment when SQL support is ready
 		<command
@@ -327,7 +327,7 @@
      			</visibleWhen>
  			</command>
  		</menuContribution>
-   		<menuContribution locationURI="popup:#EGLEditorContext?after=org.eclipse.edt.ide.ui.navigate.openOnSelection">
+   		<!--menuContribution locationURI="popup:#EGLEditorContext?after=org.eclipse.edt.ide.ui.navigate.openOnSelection">
      		<menu id="org.eclipse.edt.ide.ui.popup.references.menu" 
      			label="%ReferencesMenu.name">
        	 		<command commandId="org.eclipse.edt.ide.ui.search.findWorkspaceReferences"/>
@@ -360,7 +360,7 @@
            			</with>
      			</visibleWhen>
     	 	</menu>
-  		</menuContribution>
+  		</menuContribution-->
   		<menuContribution locationURI="popup:#EGLEditorContext?after=org.eclipse.edt.ide.ui.popup.declarations.menu">
        	 	<command commandId="org.eclipse.ui.edit.text.goto.line" label="%GoToLine.Name">
        	 		<visibleWhen>
@@ -1093,22 +1093,32 @@ Templates
 				label="%ConvertToEGLProject">
 			</action> 
 		</objectContribution>
-<!--	TODO EDT menubarPaths not being recognized
 		<objectContribution
             objectClass="org.eclipse.core.resources.IProject"
             adaptable="true"
             id="org.eclipse.edt.ide.ui.source.projectpopupmenu">
+       		<menu
+            	label="%SourceMenu.label"
+               	path="group.source"               
+               	id="org.eclipse.edt.ide.ui.project.sourceMenu">
+            	<separator
+                	name="group1">
+            	</separator>
+            	<separator
+                	name="group2">
+            	</separator>
+        	</menu>   
            	<action
          		label="%Format.name"
          		class="org.eclipse.edt.ide.ui.internal.actions.FormattingAction"
-          		menubarPath="org.eclipse.jdt.ui.source.menu/editGroup"
+          		menubarPath="org.eclipse.edt.ide.ui.project.sourceMenu/editGroup"
          		enablesFor="*"
          		id="org.eclipse.edt.ide.ui.project.source.editGroup.format">
          	</action>         
          	<action
          		label="%OrganizeImports.name"
          		class="org.eclipse.edt.ide.ui.internal.actions.OrganizeImportsAction"
-         		menubarPath="org.eclipse.jdt.ui.source.menu/importGroup"
+         		menubarPath="org.eclipse.edt.ide.ui.project.sourceMenu/importGroup"
          		enablesFor="*"
          		id="org.eclipse.edt.ide.ui.project.source.importGroup.organizeImports">
          	</action>   
@@ -1117,7 +1127,6 @@ Templates
                	value="org.eclipse.edt.ide.core.EGLNature">
          	</filter>
       	</objectContribution>
--->      	
 		<objectContribution
             objectClass="org.eclipse.core.resources.IFolder"
             adaptable="true"
