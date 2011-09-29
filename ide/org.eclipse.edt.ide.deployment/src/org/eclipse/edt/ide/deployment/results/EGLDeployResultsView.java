@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
+import org.eclipse.edt.ide.ui.internal.results.views.AbstractResultsListViewerAction;
 import org.eclipse.edt.ide.ui.internal.viewsupport.ImageDescriptorRegistry;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -60,10 +61,9 @@ public class EGLDeployResultsView extends ViewPart{
 	LinkedHashMap results = new LinkedHashMap();
 	ImageDescriptorRegistry fRegistry = null;
 	
-	//TODO - EDT
-//	private EGLUtilitiesDeployResultsListViewerAction selectAllAction = null;
-//	private EGLUtilitiesDeployResultsListViewerAction deselectAllAction = null;
-//	private EGLUtilitiesDeployResultsListViewerAction copyAction = null;
+	private EGLUtilitiesDeployResultsListViewerAction selectAllAction = null;
+	private EGLUtilitiesDeployResultsListViewerAction deselectAllAction = null;
+	private EGLUtilitiesDeployResultsListViewerAction copyAction = null;
 	private EGLRemoveTabAction removeTabAction = null;
 	private EGLRemoveAllTabsAction removeAllTabsAction = null;
 	private EGLRemoveTabsWithNoErrorsAction removeTabsWithNoErrorsAction = null;
@@ -407,8 +407,7 @@ public class EGLDeployResultsView extends ViewPart{
 			Control resultsViewerPart= createResultViewerControl(fResultViewerViewForm);
 			fResultViewerViewForm.setContent(resultsViewerPart);
 
-			//TODO - EDT
-//			createActions();
+			createActions();
 			registerActions();
 			createPartsContextMenu();
 			createResultsContextMenu();
@@ -484,24 +483,22 @@ public class EGLDeployResultsView extends ViewPart{
 			menuMgr.setRemoveAllWhenShown(true);
 			menuMgr.addMenuListener(new IMenuListener() {
 				public void menuAboutToShow(IMenuManager manager) {
-					//TODO - EDT
-//					fillResultsContextMenu(manager);
+					fillResultsContextMenu(manager);
 				}
 			});
 			Menu menu = menuMgr.createContextMenu(fResultsViewer.getList());
 			fResultsViewer.getList().setMenu(menu);
 		}
 		
-		//TODO - EDT
-//		private void fillResultsContextMenu(IMenuManager manager) {
-//			selectAllAction.setEnabled(fResultsViewer.getList().getSelectionCount() < fResultsViewer.getList().getItemCount());
-//			deselectAllAction.setEnabled(fResultsViewer.getList().getSelectionCount() > 0);
-//			copyAction.setEnabled(fResultsViewer.getList().getSelectionCount() > 0);
-//			manager.add(selectAllAction);
-//			manager.add(deselectAllAction);
-//			manager.add(copyAction);
-//
-//		}
+		private void fillResultsContextMenu(IMenuManager manager) {
+			selectAllAction.setEnabled(fResultsViewer.getList().getSelectionCount() < fResultsViewer.getList().getItemCount());
+			deselectAllAction.setEnabled(fResultsViewer.getList().getSelectionCount() > 0);
+			copyAction.setEnabled(fResultsViewer.getList().getSelectionCount() > 0);
+			manager.add(selectAllAction);
+			manager.add(deselectAllAction);
+			manager.add(copyAction);
+
+		}
 
 		private void createPartsContextMenu() {
 			// Configure the context menu to be lazily populated on each pop-up.
@@ -523,70 +520,69 @@ public class EGLDeployResultsView extends ViewPart{
 
 		}
 		
-		//TODO - EDT
-//		public void createActions() {
-//			selectAllAction =
-//				new EGLUtilitiesDeployResultsListViewerAction(
-//					UINlsStrings.SelectAllLabel,
-//					this,
-//					EGLUtilitiesDeployResultsListViewerAction.SELECT_ALL);
-//			deselectAllAction =
-//				new EGLUtilitiesDeployResultsListViewerAction(
-//					UINlsStrings.DeselectAllLabel,
-//					this,
-//					EGLUtilitiesDeployResultsListViewerAction.DESELECT_ALL);
-//			deselectAllAction.setEnabled(false);
-//
-//
-//			copyAction =
-//				new EGLUtilitiesDeployResultsListViewerAction(
-//					UINlsStrings.CopyLabel,
-//					this,
-//					EGLUtilitiesDeployResultsListViewerAction.COPY);
-//			copyAction.setEnabled(false);
-//
-//		}
-//
-//	public class EGLUtilitiesDeployResultsListViewerAction
-//		extends EGLAbstractResultsListViewerAction {
-//
-//		int actionType = EGLAbstractResultsListViewerAction.SELECT_ALL;
-//		/**
-//		 * Constructor for EGLUtilitiesResultListViewerAction.
-//		 * @param text
-//		 */
-//		protected EGLUtilitiesDeployResultsListViewerAction(String text) {
-//			super(text);
-//		}
-//		public EGLUtilitiesDeployResultsListViewerAction(
-//			String text,
-//			EGLDeployResultsView viewPart,
-//			int type) {
-//			super(text, viewPart, type);	
-//			actionType = type;
-//		}
-//		
-//		public ListViewer getCurrentViewer() {
-//			return fResultsViewer;
-//		}
-//
-//		public void run() {
-//			if (getCurrentViewer() == null) {
-//				return;
-//			}
-//			switch (actionType) {
-//				case SELECT_ALL :
-//					{
-//						getCurrentViewer().getList().selectAll();
-//						break;
-//					}
-//				default :
-//					super.run();
-//					break;
-//			}
-//		}
-//	}
-//			
+		public void createActions() {
+			selectAllAction =
+				new EGLUtilitiesDeployResultsListViewerAction(
+					UINlsStrings.SelectAllLabel,
+					this,
+					EGLUtilitiesDeployResultsListViewerAction.SELECT_ALL);
+			deselectAllAction =
+				new EGLUtilitiesDeployResultsListViewerAction(
+					UINlsStrings.DeselectAllLabel,
+					this,
+					EGLUtilitiesDeployResultsListViewerAction.DESELECT_ALL);
+			deselectAllAction.setEnabled(false);
+
+
+			copyAction =
+				new EGLUtilitiesDeployResultsListViewerAction(
+					UINlsStrings.CopyLabel,
+					this,
+					EGLUtilitiesDeployResultsListViewerAction.COPY);
+			copyAction.setEnabled(false);
+
+		}
+
+	public class EGLUtilitiesDeployResultsListViewerAction
+		extends AbstractResultsListViewerAction {
+
+		int actionType = AbstractResultsListViewerAction.SELECT_ALL;
+		/**
+		 * Constructor for EGLUtilitiesResultListViewerAction.
+		 * @param text
+		 */
+		protected EGLUtilitiesDeployResultsListViewerAction(String text) {
+			super(text);
+		}
+		public EGLUtilitiesDeployResultsListViewerAction(
+			String text,
+			EGLDeployResultsView viewPart,
+			int type) {
+			super(text, viewPart, type);	
+			actionType = type;
+		}
+		
+		public ListViewer getCurrentViewer() {
+			return fResultsViewer;
+		}
+
+		public void run() {
+			if (getCurrentViewer() == null) {
+				return;
+			}
+			switch (actionType) {
+				case SELECT_ALL :
+					{
+						getCurrentViewer().getList().selectAll();
+						break;
+					}
+				default :
+					super.run();
+					break;
+			}
+		}
+	}
+			
 	public class EGLRemoveTabsWithNoErrorsAction extends Action {
 				
 		public EGLRemoveTabsWithNoErrorsAction(String title) {
