@@ -209,6 +209,8 @@ public class TypeTemplate extends JavaScriptTemplate {
 				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 				ctx.putAttribute(arg.getObjectExpr(), Constants.DONT_UNBOX, Boolean.FALSE);
 			}
+			out.print(", ");
+			out.print(arg.getObjectExpr().isNullable());
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
 			out.print(")");
 		} else {

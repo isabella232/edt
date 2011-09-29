@@ -48,7 +48,7 @@ public class FunctionTemplate extends JavaScriptTemplate {
 	}
 
 	public void genName(Function function, Context ctx, TabbedWriter out) {
-		ctx.invokeSuper(this, genName, JavaScriptAliaser.getAlias(function), ctx, out);
+		ctx.invokeSuper(this, genName, JavaScriptAliaser.getAlias(ctx, function), ctx, out);
 	}
 
 	public Function getCallbackFunction(Function function, Context ctx) {
