@@ -15,6 +15,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.Assignment;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Type;
@@ -27,8 +28,14 @@ public class AssignmentTemplate extends JavaTemplate {
 		IRUtils.makeCompatible(expr);
 		// generate the assignment based on the lhs, but pass along the rhs
 		Field field = null;
-		if (expr.getLHS() instanceof ArrayAccess && ((Name) ((ArrayAccess) expr.getLHS()).getArray()).getNamedElement() instanceof Field)
-			field = (Field) ((Name) ((ArrayAccess) expr.getLHS()).getArray()).getNamedElement();
+		Expression exprLHS = expr.getLHS();
+		while (exprLHS instanceof ArrayAccess) {
+			if (!(((ArrayAccess) exprLHS).getArray() instanceof ArrayAccess))
+				break;
+			exprLHS = ((ArrayAccess) exprLHS).getArray();
+		}
+		if (exprLHS instanceof ArrayAccess && ((Name) ((ArrayAccess) exprLHS).getArray()).getNamedElement() instanceof Field)
+			field = (Field) ((Name) ((ArrayAccess) exprLHS).getArray()).getNamedElement();
 		else if (expr.getLHS() instanceof Name && ((Name) expr.getLHS()).getNamedElement() instanceof Field)
 			field = (Field) ((Name) expr.getLHS()).getNamedElement();
 		if (field != null && field.getContainer() != null && field.getContainer() instanceof Type)
