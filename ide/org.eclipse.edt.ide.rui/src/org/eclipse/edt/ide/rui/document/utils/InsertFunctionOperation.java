@@ -22,6 +22,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.document.utils;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -90,6 +91,9 @@ public class InsertFunctionOperation {
 	}
 	
 	private void addFunction(String functionTemplate, org.eclipse.edt.compiler.core.ast.File fileAST, Part part) throws EGLModelException, MalformedTreeException, BadLocationException{
+		List imports = new ArrayList();
+		functionTemplate = DocumentUtil.handleTypeNameVaraibles(currentFile, currentDocument, functionTemplate, imports);
+		DocumentUtil.addQualifiedImports(currentFile, currentDocument, imports);
 		ASTRewrite rewrite = ASTRewrite.create(fileAST);
 		rewrite.addFunction(part, functionTemplate);
 		rewrite.rewriteAST(currentDocument).apply(currentDocument);
