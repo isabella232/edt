@@ -84,4 +84,23 @@ public class PreviewIREnvironment extends Environment implements IEnvironment{
 			}
 		}
 	}
+
+	@Override
+	public EObject find(String key) throws MofObjectNotFoundException, DeserializationException {
+		LookupDelegate delegate = getDelegateForKey(key);
+		key = delegate.normalizeKey(key);
+
+		//search in contextStore first
+		EObject object = contextStore.get(key);
+		if (object != null) {
+			return object;
+		}else{
+			return super.find(key);
+		}
+	}
+	
+	private void debug (String msg){
+//		System.out.println("PreviewIREnvironment.DEBUG -- " + msg);
+	}
+	
 }
