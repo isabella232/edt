@@ -100,7 +100,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("<body class=\"" + getTheme(handler) + "\">");
 		out.println("<script type=\"text/javascript\">");
 		generateEGLNamespace(out);
-		generateEGLLoader(out);
+		generateEGLLoader(out, isDevelopment);
 		
 		generatePropertiesFiles(handler, ctx, runtimeMsgLocale, userMsgLocale, out);	
 		
@@ -112,7 +112,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		if(isDevelopment){
 			generateDevelopmentRuntimeFilePath(out);
 		}
-		generateDependentFilePath(handler, ctx, out);
+		generateDependentFilePath(handler, ctx, out, isDevelopment);
 		generateStartupInit(handler, out, userMsgLocale, isDevelopment);
 		generateIncludeFiles(handler, ctx, out);						
 		out.println("</script>");		
@@ -149,7 +149,8 @@ public class RUITemplate extends JavaScriptTemplate {
 	private void generateHeader(Handler handler, TabbedWriter out, boolean enableEditing, boolean contextAware, boolean isDebug) {
 		out.println("egl__debugg=" + isDebug + ";"); //$NON-NLS-1$
 		out.println("egl__enableEditing=" + enableEditing + ";"); //$NON-NLS-1$
-		out.println("egl__contextAware=" + contextAware + ";"); //$NON-NLS-1$		
+		out.println("egl__contextAware=" + contextAware + ";"); //$NON-NLS-1$
+		out.println("egl__contextKey=(function(){var params = location.search.substring(1).split('&');for(var i in params){var keys = params[i].split('=');if(keys.length == 2 && keys[0] == 'contextKey')return keys[1];}return '';})();"); //$NON-NLS-1$
 	}
 	
 	private void generateEGLParameters(TabbedWriter out, HashMap eglParameters) {
@@ -186,7 +187,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("var RUI_DEPENDENT_JAVASCRIPT_FILES = [];");
 	}
 	
-	private void generateEGLLoader(TabbedWriter out) {
+	private void generateEGLLoader(TabbedWriter out, boolean isDevelopment) {
 		out.println("egl.eze$$loadScript = function(url, callback){");
 		out.println("	var script = document.createElement(\"script\");");
 		out.println("	script.type = \"text/javascript\";");
@@ -315,7 +316,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("RUI_RUNTIME_JAVASCRIPT_FILES = RUI_RUNTIME_JAVASCRIPT_FILES.concat(RUI_DEVELOPMENT_JAVASCRIPT_FILES);");
 	}
 	
-	private void generateDependentFilePath(Handler handler, Context ctx, TabbedWriter out) {
+	private void generateDependentFilePath(Handler handler, Context ctx, TabbedWriter out, boolean isDevelopment) {
 		LinkedHashSet dependentFiles = new LinkedHashSet();
 		ctx.invoke(genOutputFileName, handler, dependentFiles);
 		LinkedHashSet handledParts = new LinkedHashSet();
@@ -326,6 +327,9 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("var RUI_DEPENDENT_JAVASCRIPT_FILES = [");		
 		for (Iterator iter = dependentFileList.iterator(); iter.hasNext();) {
 			out.print( (String)iter.next());
+			if(isDevelopment){
+				out.print( " + \"?contextKey=\" + egl__contextKey");
+			}
 			if(iter.hasNext()){
 				out.print(", ");
 			}
