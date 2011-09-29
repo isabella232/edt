@@ -20,10 +20,14 @@ egl.defineClass(
 );	
 
 egl.eglx.lang.MathLib["random"] = function() {
+	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
 };
 		
-egl.eglx.lang.MathLib["abs"] = function(/* float */value) {
-	return Math.abs(value);
+egl.eglx.lang.MathLib["abs"] = function(x) {
+	if (x instanceof egl.javascript.BigDecimal)
+		return (x).abs();
+
+	return Math.abs(x);
 };
 egl.eglx.lang.MathLib["acos"] = function(/* float */value) {
 	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
@@ -116,12 +120,18 @@ egl.eglx.lang.MathLib["log10"] = function(/*float*/x) {
 	}
 };
 
-egl.eglx.lang.MathLib["max"] = function(/*float*/x, /*float*/y) {
-	return (x).max(y);
+egl.eglx.lang.MathLib["max"] = function(x, y) {
+	if (x instanceof egl.javascript.BigDecimal)
+		return (x).max(y);
+	
+	return Math.max(x, y);
 };
 
-egl.eglx.lang.MathLib["min"] = function(/*float*/x, /*float*/y) {
-	return (x).min(y);
+egl.eglx.lang.MathLib["min"] = function(x, y) {
+	if (x instanceof egl.javascript.BigDecimal)
+		return (x).min(y);
+	
+	return Math.min(x, y);
 };
 
 egl.eglx.lang.MathLib["modf"] = function(/*float*/ num, /*int*/ intPart, assignFunc ) {
