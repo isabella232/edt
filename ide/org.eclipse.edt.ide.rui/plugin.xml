@@ -16,7 +16,7 @@ Register the Preference Pages
       		id="org.eclipse.edt.ide.rui.ruiPreferences">
       </page>
       <page
-            category="org.eclipse.edt.ide.rui.ruiPreferences"
+            category="org.eclipse.edt.ide.ui.preferences"
             class="org.eclipse.edt.ide.rui.internal.testserver.TestServerPreferencePage"
             id="org.eclipse.edt.ide.rui.testServerPreferences"
             name="%TestServerPreferencePageName">
