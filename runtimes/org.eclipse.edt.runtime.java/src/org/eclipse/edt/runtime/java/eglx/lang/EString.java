@@ -23,7 +23,10 @@ import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
 
-import eglx.lang.*;
+import eglx.lang.AnyException;
+import eglx.lang.InvalidIndexException;
+import eglx.lang.InvalidPatternException;
+import eglx.lang.TypeCastException;
 
 public class EString extends AnyBoxedObject<String> {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -161,6 +164,18 @@ public class EString extends AnyBoxedObject<String> {
 		return asString(String.valueOf(value), length);
 	}
 
+	public static String asString(Number value, Integer... length) {
+		if (value == null)
+			return null;
+		return asString(String.valueOf(value), length);
+	}
+
+	public static String asString(ENumber value, Integer... length) {
+		if (value == null)
+			return null;
+		return asString(String.valueOf(value.ezeUnbox()), length);
+	}
+
 	public static String asString(String value, Integer... length) {
 		if (value == null)
 			return null;
@@ -296,16 +311,16 @@ public class EString extends AnyBoxedObject<String> {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static BigDecimal asNumber(String value, Integer... length) throws AnyException {
+	public static ENumber asNumber(String value, Integer... length) throws AnyException {
 		if (value == null)
 			return null;
-		return EDecimal.asDecimal(asString(value, length));
+		return ENumber.asNumber(asString(value, length));
 	}
 
-	public static BigDecimal asNumber(EString value, Integer... length) throws AnyException {
+	public static ENumber asNumber(EString value, Integer... length) throws AnyException {
 		if (value == null)
 			return null;
-		return EDecimal.asDecimal(asString(value.ezeUnbox(), length));
+		return ENumber.asNumber(asString(value.ezeUnbox(), length));
 	}
 
 	public static String plus(String op1, String op2) throws AnyException {

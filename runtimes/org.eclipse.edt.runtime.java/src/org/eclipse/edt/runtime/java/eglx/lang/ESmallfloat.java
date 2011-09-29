@@ -18,9 +18,8 @@ import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 
 import eglx.lang.AnyException;
-import eglx.lang.AnyNumber;
 
-public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
+public class ESmallfloat extends AnyBoxedObject<Float> implements eglx.lang.ENumber {
 	/**
 	 * The version ID used in serialization.
 	 */
@@ -39,6 +38,8 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 	}
 
 	public static boolean ezeIsa(Object value) {
+		if (value instanceof ENumber && ((ENumber) value).ezeUnbox() instanceof Float)
+			return true;
 		return value instanceof ESmallfloat || value instanceof Float;
 	}
 
@@ -124,6 +125,18 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 		return value.floatValue();
 	}
 
+	public static Float asSmallfloat(Number value) {
+		if (value == null)
+			return null;
+		return value.floatValue();
+	}
+
+	public static Float asSmallfloat(ENumber value) {
+		if (value == null)
+			return null;
+		return value.ezeUnbox().floatValue();
+	}
+
 	public static Float asSmallfloat(String value) throws AnyException {
 		if (value == null)
 			return null;
@@ -134,6 +147,22 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements AnyNumber {
 		if (value == null)
 			return null;
 		return asSmallfloat(EDecimal.asDecimal(value.ezeUnbox()));
+	}
+
+	/**
+	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
+	 * go into the class related to the argument instead
+	 */
+	public static ENumber asNumber(Float value) throws AnyException {
+		if (value == null)
+			return null;
+		return ENumber.asNumber(value);
+	}
+
+	public static ENumber asNumber(ESmallfloat value) throws AnyException {
+		if (value == null)
+			return null;
+		return ENumber.asNumber(value.ezeUnbox());
 	}
 
 	public static float plus(float op1, float op2) throws AnyException {

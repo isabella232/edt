@@ -18,10 +18,9 @@ import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 
 import eglx.lang.AnyException;
-import eglx.lang.AnyNumber;
 import eglx.lang.NumericOverflowException;
 
-public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
+public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	private static final int DefaultValue = 0;
 	private static final int Precision = 9;
@@ -39,6 +38,8 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	}
 
 	public static boolean ezeIsa(Object value) {
+		if (value instanceof ENumber && ((ENumber) value).ezeUnbox() instanceof Integer)
+			return true;
 		return value instanceof EInt || value instanceof Integer;
 	}
 
@@ -223,6 +224,40 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 		return result;
 	}
 
+	public static Integer asInt(Number value) throws AnyException {
+		if (value == null)
+			return null;
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		int result = 0;
+		if (throwOverflowExceptions)
+			try {
+				result = value.intValue();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		else
+			result = value.intValue();
+		return result;
+	}
+
+	public static Integer asInt(ENumber value) throws AnyException {
+		if (value == null)
+			return null;
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		int result = 0;
+		if (throwOverflowExceptions)
+			try {
+				result = value.ezeUnbox().intValue();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		else
+			result = value.ezeUnbox().intValue();
+		return result;
+	}
+
 	public static Integer asInt(String value) throws AnyException {
 		if (value == null)
 			return null;
@@ -239,16 +274,16 @@ public class EInt extends AnyBoxedObject<Integer> implements AnyNumber {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static BigDecimal asNumber(Integer value) throws AnyException {
+	public static ENumber asNumber(Integer value) throws AnyException {
 		if (value == null)
 			return null;
-		return EDecimal.asDecimal(value);
+		return ENumber.asNumber(value);
 	}
 
-	public static BigDecimal asNumber(EInt value) throws AnyException {
+	public static ENumber asNumber(EInt value) throws AnyException {
 		if (value == null)
 			return null;
-		return EDecimal.asDecimal(value.ezeUnbox());
+		return ENumber.asNumber(value.ezeUnbox());
 	}
 
 	public static int defaultValue() {

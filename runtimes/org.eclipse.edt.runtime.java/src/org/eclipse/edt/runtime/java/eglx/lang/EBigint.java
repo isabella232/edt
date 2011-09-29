@@ -18,10 +18,9 @@ import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 
 import eglx.lang.AnyException;
-import eglx.lang.AnyNumber;
 import eglx.lang.NumericOverflowException;
 
-public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
+public class EBigint extends AnyBoxedObject<Long> implements eglx.lang.ENumber {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	private static final long DefaultValue = 0L;
 	private static final int Precision = 18;
@@ -48,6 +47,8 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 	}
 
 	public static boolean ezeIsa(Object value) {
+		if (value instanceof ENumber && ((ENumber) value).ezeUnbox() instanceof Long)
+			return true;
 		return value instanceof EBigint || value instanceof Long;
 	}
 
@@ -208,6 +209,40 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 		return result;
 	}
 
+	public static Long asBigint(Number value) throws AnyException {
+		if (value == null)
+			return null;
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		long result = 0;
+		if (throwOverflowExceptions)
+			try {
+				result = value.longValue();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		else
+			result = value.longValue();
+		return result;
+	}
+
+	public static Long asBigint(ENumber value) throws AnyException {
+		if (value == null)
+			return null;
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		long result = 0;
+		if (throwOverflowExceptions)
+			try {
+				result = value.ezeUnbox().longValue();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		else
+			result = value.ezeUnbox().longValue();
+		return result;
+	}
+
 	public static Long asBigint(String value) throws AnyException {
 		return asBigint(EDecimal.asDecimal(value));
 	}
@@ -222,16 +257,16 @@ public class EBigint extends AnyBoxedObject<Long> implements AnyNumber {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static BigDecimal asNumber(Long value) throws AnyException {
+	public static ENumber asNumber(Long value) throws AnyException {
 		if (value == null)
 			return null;
-		return EDecimal.asDecimal(value);
+		return ENumber.asNumber(value);
 	}
 
-	public static BigDecimal asNumber(EBigint value) throws AnyException {
+	public static ENumber asNumber(EBigint value) throws AnyException {
 		if (value == null)
 			return null;
-		return EDecimal.asDecimal(value.ezeUnbox());
+		return ENumber.asNumber(value.ezeUnbox());
 	}
 
 	public static long plus(long op1, long op2) throws AnyException {

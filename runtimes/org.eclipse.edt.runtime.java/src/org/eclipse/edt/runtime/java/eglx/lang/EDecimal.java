@@ -18,13 +18,15 @@ import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.messages.Message;
 
-import eglx.lang.*;
+import eglx.lang.AnyException;
+import eglx.lang.NumericOverflowException;
+import eglx.lang.TypeCastException;
 
 /**
  * Class to be used in processing Decimal operations
  * @author twilson
  */
-public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
+public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.ENumber {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
 	/**
@@ -263,23 +265,36 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 	}
 
 	public static boolean ezeIsa(Object value, Integer... args) {
-		boolean isa = value instanceof EDecimal;
+		boolean isa = (value instanceof ENumber && ((ENumber) value).ezeUnbox() instanceof BigDecimal);
 		if (isa) {
 			if (args.length != 0) {
-				isa = ((EDecimal) value).getPrecision() == args[0];
-				if (isa && args.length == 1)
-					isa = ((EDecimal) value).getDecimals() == 0;
-				else if (isa && args.length == 2)
-					isa = ((EDecimal) value).getDecimals() == args[1];
+				if (isa && args.length != 0) {
+					isa = ((BigDecimal) ((ENumber) value).ezeUnbox()).precision() == args[0];
+					if (isa && args.length == 1)
+						isa = ((BigDecimal) ((ENumber) value).ezeUnbox()).scale() == 0;
+					else if (isa && args.length == 2)
+						isa = ((BigDecimal) ((ENumber) value).ezeUnbox()).scale() == args[1];
+				}
 			}
 		} else {
-			isa = value instanceof BigDecimal;
-			if (isa && args.length != 0) {
-				isa = ((BigDecimal) value).precision() == args[0];
-				if (isa && args.length == 1)
-					isa = ((BigDecimal) value).scale() == 0;
-				else if (isa && args.length == 2)
-					isa = ((BigDecimal) value).scale() == args[1];
+			isa = value instanceof EDecimal;
+			if (isa) {
+				if (args.length != 0) {
+					isa = ((EDecimal) value).getPrecision() == args[0];
+					if (isa && args.length == 1)
+						isa = ((EDecimal) value).getDecimals() == 0;
+					else if (isa && args.length == 2)
+						isa = ((EDecimal) value).getDecimals() == args[1];
+				}
+			} else {
+				isa = value instanceof BigDecimal;
+				if (isa && args.length != 0) {
+					isa = ((BigDecimal) value).precision() == args[0];
+					if (isa && args.length == 1)
+						isa = ((BigDecimal) value).scale() == 0;
+					else if (isa && args.length == 2)
+						isa = ((BigDecimal) value).scale() == args[1];
+				}
 			}
 		}
 		return isa;
@@ -444,6 +459,24 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 		return asDecimal(new BigDecimal(value), getMaxValue(precision, scale), getMinValue(precision, scale), precision, scale, false);
 	}
 
+	public static BigDecimal asDecimal(Number value, Integer... args) throws AnyException {
+		if (value == null)
+			return null;
+		if (args.length == 2)
+			return asDecimal(BigDecimal.valueOf(value.doubleValue()), args[0], args[1]);
+		else
+			return BigDecimal.valueOf(value.doubleValue());
+	}
+
+	public static BigDecimal asDecimal(ENumber value, Integer... args) throws AnyException {
+		if (value == null)
+			return null;
+		if (args.length == 2)
+			return asDecimal(BigDecimal.valueOf(value.ezeUnbox().doubleValue()), args[0], args[1]);
+		else
+			return BigDecimal.valueOf(value.ezeUnbox().doubleValue());
+	}
+
 	public static BigDecimal asDecimal(String value, Integer... args) throws AnyException {
 		if (value == null)
 			return null;
@@ -464,12 +497,11 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 		if (value.length() == 0) {
 			if (blanksAsZero)
 				return BigDecimal.ZERO;
-			else
-			{
+			else {
 				TypeCastException tcx = new TypeCastException();
 				tcx.actualTypeName = "string";
 				tcx.castToName = "decimal";
-				throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
+				throw tcx.fillInMessage(Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName);
 			}
 		}
 		// Remove a leading +.
@@ -496,16 +528,16 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements AnyNumber {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static BigDecimal asNumber(BigDecimal value) throws AnyException {
+	public static ENumber asNumber(BigDecimal value) throws AnyException {
 		if (value == null)
 			return null;
-		return EDecimal.asDecimal(value);
+		return ENumber.asNumber(value);
 	}
 
-	public static BigDecimal asNumber(EDecimal value) throws AnyException {
+	public static ENumber asNumber(EDecimal value) throws AnyException {
 		if (value == null)
 			return null;
-		return EDecimal.asDecimal(value.ezeUnbox());
+		return ENumber.asNumber(value.ezeUnbox());
 	}
 
 	public static BigDecimal plus(BigDecimal op1, BigDecimal op2) {

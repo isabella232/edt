@@ -12,6 +12,6 @@
 package eglx.lang;
 
 
-public interface AnyNumber {
+public interface ENumber {
 		
 }

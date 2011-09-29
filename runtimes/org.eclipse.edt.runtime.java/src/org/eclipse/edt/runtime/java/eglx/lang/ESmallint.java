@@ -18,10 +18,9 @@ import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 
 import eglx.lang.AnyException;
-import eglx.lang.AnyNumber;
 import eglx.lang.NumericOverflowException;
 
-public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
+public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumber {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	private static final int precision = 4;
 
@@ -38,6 +37,8 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	}
 
 	public static boolean ezeIsa(Object value) {
+		if (value instanceof ENumber && ((ENumber) value).ezeUnbox() instanceof Short)
+			return true;
 		return value instanceof ESmallint || value instanceof Short;
 	}
 
@@ -244,6 +245,40 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 		return result;
 	}
 
+	public static Short asSmallint(Number value) throws AnyException {
+		if (value == null)
+			return null;
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		short result = 0;;
+		if (throwOverflowExceptions) {
+			try {
+				result = value.shortValue();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		} else
+			result = value.shortValue();
+		return result;
+	}
+
+	public static Short asSmallint(ENumber value) throws AnyException {
+		if (value == null)
+			return null;
+		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
+		short result = 0;;
+		if (throwOverflowExceptions) {
+			try {
+				result = value.ezeUnbox().shortValue();
+			}
+			catch (ArithmeticException ex) {
+				throw new NumericOverflowException();
+			}
+		} else
+			result = value.ezeUnbox().shortValue();
+		return result;
+	}
+
 	public static Short asSmallint(String value) throws AnyException {
 		if (value == null)
 			return null;
@@ -260,16 +295,16 @@ public class ESmallint extends AnyBoxedObject<Short> implements AnyNumber {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static BigDecimal asNumber(Short value) throws AnyException {
+	public static ENumber asNumber(Short value) throws AnyException {
 		if (value == null)
 			return null;
-		return EDecimal.asDecimal(value);
+		return ENumber.asNumber(value);
 	}
 
-	public static BigDecimal asNumber(ESmallint value) throws AnyException {
+	public static ENumber asNumber(ESmallint value) throws AnyException {
 		if (value == null)
 			return null;
-		return EDecimal.asDecimal(value.ezeUnbox());
+		return ENumber.asNumber(value.ezeUnbox());
 	}
 
 	public static int plus(short op1, short op2) throws AnyException {
