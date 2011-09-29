@@ -11,18 +11,23 @@
 
 package org.eclipse.edt.ide.ui.internal.record.conversion.sqldb;
 
+import java.util.Locale;
+
 import org.eclipse.datatools.connectivity.sqm.core.definition.DatabaseDefinition;
+import org.eclipse.datatools.modelbase.sql.tables.Column;
+import org.eclipse.edt.compiler.core.EGLKeywordHandler;
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceContext;
 import org.eclipse.edt.ide.internal.sql.util.EGLSQLRetrieveUtility;
 import org.eclipse.edt.ide.internal.sql.util.EGLSQLStructureItem;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.ide.sql.SQLConstants;
-import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
 public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 	
-	public void genColumn(org.eclipse.datatools.modelbase.sql.tables.Column column, EglSourceContext ctx, TabbedWriter out){
+	public void genColumn(Column column, EglSourceContext ctx, TabbedWriter out){
 		EGLSQLStructureItem item = new EGLSQLStructureItem();
+		String colNameAlias = null;
 		
 		DatabaseDefinition def = (DatabaseDefinition)ctx.get(DataToolsObjectsToEglSource.DATA_DEFINITION_OBJECT);
 		
@@ -30,7 +35,16 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 		StringBuilder builder = new StringBuilder();
 		
 		builder.append("    ");
-		builder.append(item.getName());
+		if(item.getName() == null) {
+			System.out.println(column.getName());
+		}
+		if(EGLKeywordHandler.getKeywordHashSet().contains(item.getName().toLowerCase(Locale.ENGLISH))) {
+			//TODO:Should be indication message for this.
+			colNameAlias = item.getName() + ctx.nextTempIndex();
+			builder.append(colNameAlias);
+		} else {
+			builder.append(item.getName());
+		}
 		builder.append(" ");
 		builder.append(item.getPrimitiveType());
 		if(item.getPrimitiveType().equals(IEGLConstants.KEYWORD_CHAR)
@@ -43,34 +57,45 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 		} else if (item.getPrimitiveType().equals(IEGLConstants.KEYWORD_DECIMAL)) {
 			builder.append(SQLConstants.LPAREN);
 			builder.append(item.getLength());
-			builder.append(",");
-			builder.append(item.getDecimals());
+			if(item.getDecimals() != null) {
+				builder.append(",");
+				builder.append(item.getDecimals());
+			}
 			builder.append(SQLConstants.RPAREN);
 		}
 		if (item.isNullable()) {
 			builder.append("?");
 		}
 		
-		boolean needsExtraAnnotations = column.isPartOfPrimaryKey() || !item.getColumnName().equals(item.getName());
+		boolean isPartOfPK = column.isPartOfPrimaryKey();
 		
-		if (needsExtraAnnotations) {
+		if (isPartOfPK) {
 			builder.append("{");
 		}
 		if (column.isPartOfPrimaryKey()) {
 			builder.append(" @id ");
 		}		
-		if (!item.getColumnName().equals(item.getName())) {
+		if (colNameAlias!= null) {
 			if (column.isPartOfPrimaryKey()) {
 				builder.append(SQLConstants.COMMA_AND_SPACE);
+				builder.append("@column{ name =");
+			} else {
+				builder.append("{@column{ name =");
 			}
-			builder.append("@column { name =");
+			
 			builder.append(SQLConstants.DOUBLE_QUOTE);
 			builder.append(item.getColumnName());
 			builder.append(SQLConstants.DOUBLE_QUOTE);
-			builder.append("}");
+			if (column.isPartOfPrimaryKey()) {
+				builder.append("}");
+			} else {
+				builder.append("}");
+				builder.append("}");
+			}
+			
 		}
 		
-		if (needsExtraAnnotations) {
+		if (isPartOfPK) {
 			builder.append("}");
 		}
 		
