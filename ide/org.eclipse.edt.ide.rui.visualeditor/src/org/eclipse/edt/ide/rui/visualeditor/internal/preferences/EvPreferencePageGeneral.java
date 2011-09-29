@@ -308,7 +308,7 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 		_radioRenderEngineIE.setLayoutData( gridData );
 		_radioRenderEngineIE.setText( Messages.NL_VisualEditor_RenderEngion_IE );
 		if (!Platform.getOS().equals(Platform.OS_WIN32) ) {
-			_radioRenderEngineIE.setEnabled( false );
+			_radioRenderEngineIE.setVisible( false );
 		}
 
 		// Reflect the current preference
