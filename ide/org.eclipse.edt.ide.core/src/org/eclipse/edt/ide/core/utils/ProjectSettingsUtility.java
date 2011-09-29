@@ -20,7 +20,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.edt.ide.core.AbstractGenerator;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
@@ -535,8 +535,11 @@ public class ProjectSettingsUtility {
 		}
 	}
     public static void replaceWorkspaceSettings(IProject project, IPath oldPath, IPath newPath) throws BackingStoreException {
-    	for ( int i = 0; i < plugins.length; i ++ ) {
-	    	IEclipsePreferences prefs = new	ProjectScope(project).getNode( plugins[i] );
+    	Preferences projectPrefs =
+    		Platform.getPreferencesService().getRootNode().node(ProjectScope.SCOPE).node(project.getName());
+		String[] prefsFiles = projectPrefs.childrenNames();
+		for (String file : prefsFiles) {
+		    Preferences prefs = projectPrefs.node(file); 
 	    	String[] names = prefs.childrenNames();
 	    	for (String name : names) {
 	    	    Preferences nextNode = prefs.node(name);
@@ -544,15 +547,26 @@ public class ProjectSettingsUtility {
 	    	    for (String key : keys) {
 	    	    	String oldKey = keyFor(oldPath);
 	    	    	String oldValue = EclipseUtilities.convertToInternalPath(oldPath.toString());
+	    	    	String oldValue1 = EclipseUtilities.convertToInternalPath(oldKey);
 	    	    	String value = nextNode.get(key, null);
-	    	        if (key.equals( oldKey ) ) {
-	    	            nextNode.put(keyFor(newPath), value);
+	    	        if ( pathStartWith( value, oldValue ) ) {
+	    	        	String pathStr = EclipseUtilities.convertToInternalPath( newPath.toString() );
+	    	        	value = value.replace( oldValue, pathStr );
+	    	        	nextNode.put(key, value);
+	    	        } else if ( pathStartWith( value, oldPath.toString() ) ) {
+	    	        	String pathStr = newPath.toString();
+	    	        	value = value.replace( oldPath.toString(), pathStr );
+	    	        	nextNode.put(key, value);
+	    	        } else if ( project.getFullPath().matchingFirstSegments( oldPath) == 1 && pathStartWith( value, oldValue1 ) ) {
+	    	        	String newValue = EclipseUtilities.convertToInternalPath(keyFor(newPath));
+	    	        	value = value.replace( oldValue1, newValue );
+	    	        	nextNode.put(key, value);
+	    	        } else if ( pathStartWith( key, oldKey ) ) {
 	    	            nextNode.remove(key);
-	    	        } else if ( value.equals( oldValue ) ) {
-	    	        	nextNode.put(key, EclipseUtilities.convertToInternalPath(newPath.toString()));
-	    	        } else if ( value.equals( oldPath.toString() ) ) {
-	    	        	nextNode.put(key, newPath.toString());
+	    	            key = key.replace( oldKey, keyFor(newPath));
+	    	            nextNode.put(key, value);
 	    	        }
+
 	    	    }
 	    	}
     	}
@@ -566,9 +580,11 @@ public class ProjectSettingsUtility {
 	}
 	
     public static void removeWorkspaceSettings(IProject project, IPath path) throws BackingStoreException {
-    	for ( int i = 0; i < plugins.length; i ++ ) {
-	    	IEclipsePreferences prefs = new	ProjectScope(project).getNode(plugins[i]);
-
+    	Preferences projectPrefs =
+    		Platform.getPreferencesService().getRootNode().node(ProjectScope.SCOPE).node(project.getName());
+		String[] prefsFiles = projectPrefs.childrenNames();
+		for (String file : prefsFiles) {
+		    Preferences prefs = projectPrefs.node(file); 
 	    	String[] names = prefs.childrenNames();
 	    	for (String name : names) {
 	    	    Preferences nextNode = prefs.node(name);
@@ -576,14 +592,19 @@ public class ProjectSettingsUtility {
 	    	    for (String key : keys) {
 	    	    	String oldKey = keyFor(path);
 	    	    	String oldValue = EclipseUtilities.convertToInternalPath(path.toString());
+	    	    	String oldValue1 = EclipseUtilities.convertToInternalPath(oldKey);
 	    	    	String value = nextNode.get(key, null);
-	    	        if (key.equals( oldKey ) || value.equals( oldValue ) || value.equals( path.toString() ) ) {
+	    	        if ( (!PROJECT_KEY.equals(oldKey) && key.equals( oldKey )) || pathStartWith( value, oldValue ) || pathStartWith( value, path.toString() ) || (project.getFullPath().matchingFirstSegments( path) == 1 && pathStartWith( value, oldValue1 ) )  ) {
 	    	            nextNode.remove( key );
 	    	        }
 	    	    }
 	    	}
 	    	prefs.flush();
     	}
+    }
+    
+    private static boolean pathStartWith( String path1, String path2 ) {
+    	return path1.equals( path2 ) || (path1.startsWith( path2 + "/" ) );
     }
 	
 }
