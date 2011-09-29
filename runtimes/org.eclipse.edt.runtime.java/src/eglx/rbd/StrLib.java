@@ -93,7 +93,7 @@ public class StrLib extends ExecutableBase {
 	}
 	public int characterLen(String text) {
 		int eze$Temp2;
-		eze$Temp2 = EString.length(EString.trim(text));
+		eze$Temp2 = EString.length(EString.clip(text));
 		return eze$Temp2;
 	}
 	public String clip(String source) {
