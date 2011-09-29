@@ -303,7 +303,10 @@ public class CommonUtilities {
 
 	public static boolean isRUIWidget(Object obj) {
 		if (obj instanceof EGLClass) {
-			return ((EGLClass) obj).getAnnotation("eglx.ui.rui.RUIWidget") != null; // TODO sbg need constant
+			EGLClass eglClass = (EGLClass)obj;
+			if(eglClass.getAnnotation("eglx.ui.rui.RUIWidget") != null || eglClass.getAnnotation("eglx.ui.rui.VEWidget") != null){ // TODO sbg need constant
+				return true;
+			}
 		}
 
 		return false;
