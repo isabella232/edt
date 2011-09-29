@@ -51,4 +51,13 @@ public class Parameter
 	public String getType() {
 		return type;
 	}
+	
+	public boolean equals(Object o) {
+		if (!(o instanceof Parameter)) {
+			return false;
+		}
+		
+		Parameter p = (Parameter)o;
+		return Binding.equal(name, p.name) && Binding.equal(type, type) && Binding.equal(value, p.value);
+	}
 }

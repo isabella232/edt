@@ -1,0 +1,223 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.javart.ide;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
+import org.eclipse.edt.javart.resources.egldd.Binding;
+import org.eclipse.edt.javart.resources.egldd.RuntimeDeploymentDesc;
+import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
+
+import eglx.lang.AnyException;
+import eglx.lang.SysLib;
+import eglx.lang.SysLib.ResourceLocator;
+import eglx.persistence.sql.SQLDataSource;
+
+/**
+ * Implements SysLib.ResourceLocator to handle locating deployment descriptors for a Java test environment, as well as
+ * supporting special binding URIs such as "workspace://".
+ */
+public class IDEResourceLocator extends SysLib implements ResourceLocator {
+	
+	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Maps DD names to absolute filesystem paths.
+	 */
+	private Map<String,String> ddPaths = new HashMap<String, String>();
+	
+	/**
+	 * Port on which the IDE server is running.
+	 */
+	private final String ideURL;
+	
+	/**
+	 * The name of the default DD file.
+	 */
+	private String defaultDD;
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param idePort  The port on which the IDE can be reached.
+	 */
+	public IDEResourceLocator(int idePort) {
+		this.ideURL = "http://localhost:" + idePort + "/__testServer"; //$NON-NLS-1$ //$NON-NLS-2$
+	}
+	
+	@Override
+	public Object locateResource(String bindingKey) {
+		return locateResource(bindingKey, defaultDD);
+	}
+	
+	@Override
+	public Object locateResource(String bindingKey, String propertyFileName) {
+		return doGetResource(bindingKey, propertyFileName);
+	}
+	
+	@Override
+	public Object convertToResource(Binding binding) {
+		if (binding instanceof SQLDatabaseBinding) {
+			SQLDatabaseBinding sqlBinding = (SQLDatabaseBinding)binding;
+			if (sqlBinding.isUseURI()) {
+				String uri = sqlBinding.getUri();
+				if (uri != null && uri.startsWith("workspace://")) { //$NON-NLS-1$
+					//TODO need API in SQLDataSource to set username, password, etc. For now just set the URL
+					String profileInfo = getConnectionProfileSettings(uri.substring(12)); // "workspace://".length()
+					if (profileInfo != null && profileInfo.length() > 0) {
+						return new SQLDataSource(profileInfo);
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public RuntimeDeploymentDesc getDeploymentDesc(String propertyFileName) {
+		String normalized = normalizePropertyFileName(propertyFileName);
+		RuntimeDeploymentDesc dd = deploymentDescs.get(normalized);
+		if (dd == null) {
+			String path = ddPaths.get(normalized);
+			if (path != null && path.length() > 0) {
+				try {
+					InputStream is = new FileInputStream(new File(path));
+					dd = RuntimeDeploymentDesc.createDeploymentDescriptor(normalized, is);
+					deploymentDescs.put(normalized, dd);
+				}
+				catch (Exception e) {
+					throw new AnyException();//update this when SysLib finishes its corresponding TODO
+				}
+			}
+			else {
+				throw new AnyException();//update this when SysLib finishes its corresponding TODO
+			}
+		}
+		return dd;
+	}
+	
+	private String normalizePropertyFileName(String name) {
+		if (name == null || name.length() == 0) {
+			return name;
+		}
+		
+		int lastSlash = name.lastIndexOf('/');
+		if (lastSlash != -1) {
+			name = name.substring(lastSlash + 1);
+		}
+		
+		if (name.endsWith("-bnd.xml")) { //$NON-NLS-1$
+			name = name.substring(0, name.length() - 8); // "-bnd.xml".length()
+		}
+		else if (name.endsWith(".egldd")) {
+			name = name.substring(0, name.length() - 6); // ".egldd".length()
+		}
+		
+		return name.toLowerCase();
+	}
+	
+	public void setDefaultDD(String dd) {
+		this.defaultDD = dd;
+	}
+	
+	public void addDDFile(String name, String path) {
+		this.ddPaths.put(name, path);
+		removeFromCache(name);
+	}
+	
+	public void removeDDFile(String name) {
+		this.ddPaths.remove(name);
+		removeFromCache(name);
+	}
+	
+	private void removeFromCache(String ddName) {
+		// Remove cached DDs.
+		deploymentDescs.remove(ddName);
+		
+		// Remove cached resources. Key is a QName whose namespace is the file name.
+		if (resources.size() > 0) {
+			for (Iterator<QName> it = resources.keySet().iterator(); it.hasNext();) {
+				QName q = it.next();
+				if (ddName.equals(normalizePropertyFileName(q.getNamespaceURI()))) {
+					it.remove();
+				}
+			}
+		}
+	}
+	
+	/**
+	 * @return the connection settings for the connection profile. A connection to the IDE is used to dynamically obtain this information.
+	 */
+	private String getConnectionProfileSettings(String profileName) {
+		String connectionURL = null;
+		
+		InputStream is = null;
+		try {
+			HttpURLConnection conn = (HttpURLConnection)new URL(ideURL).openConnection(); //$NON-NLS-1$ //$NON-NLS-2$
+			conn.setDoOutput(true);
+			conn.setRequestProperty("Accept-Charset", "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
+			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
+			
+			OutputStream output = null;
+			try {
+			     output = conn.getOutputStream();
+			     output.write(("connectionProfile=" + profileName).getBytes("UTF-8")); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+			finally {
+				if (output != null) {
+					try {
+						output.close();
+					}
+					catch (IOException e) {
+					}
+				}
+			}
+			if (conn.getResponseCode() == 200) {
+				is = conn.getInputStream();
+				BufferedReader br = new BufferedReader(new InputStreamReader(is));
+				
+				StringBuilder buf = new StringBuilder( 50 );
+				String line;
+				while ((line = br.readLine()) != null) {
+					buf.append(line);
+				}
+				connectionURL = buf.toString();
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			if (is != null) {
+				try {
+					is.close();
+				}
+				catch (IOException e) {
+				}
+			}
+		}
+		
+		return connectionURL;
+	}
+}

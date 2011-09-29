@@ -38,8 +38,10 @@ public class SysLib extends ExecutableBase {
 
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
-	private static Map<String, RuntimeDeploymentDesc> deploymentDescs = new HashMap<String, RuntimeDeploymentDesc>();
-	private static Map<QName, Binding> resources = new HashMap<QName, Binding>();
+	protected static Map<String, RuntimeDeploymentDesc> deploymentDescs = new HashMap<String, RuntimeDeploymentDesc>();
+	protected static Map<QName, Binding> resources = new HashMap<QName, Binding>();
+	private static ResourceLocator resourceLocator;
+	
 	/**
 	 * Constructor
 	 * @param ru The rununit
@@ -228,12 +230,22 @@ public class SysLib extends ExecutableBase {
 	 * get the resource binding from the egldd
 	 */
 	public static Object getResource(String bindKey) throws AnyException{
+		if (resourceLocator != null) {
+			return resourceLocator.locateResource(bindKey);
+		}
 		return getResource(bindKey, getProperty(Constants.APPLICATION_PROPERTY_FILE_NAME_KEY));
 	}
 	/**
 	 * get the resource binding from the egldd
 	 */
 	public static Object getResource(String bindingKey, String propertyFileName)  throws AnyException{
+		if (resourceLocator != null) {
+			return resourceLocator.locateResource(bindingKey, propertyFileName);
+		}
+		return doGetResource(bindingKey, propertyFileName);
+	}
+	
+	protected static Object doGetResource(String bindingKey, String propertyFileName)  throws AnyException{
 		QName resourceId = new QName(propertyFileName, bindingKey);
 		Binding binding = resources.get(resourceId);
 		if(binding == null){
@@ -246,17 +258,34 @@ public class SysLib extends ExecutableBase {
 				resources.put(resourceId, binding);
 			}
 		}
+		
 		Object resource = null;
-		if(binding instanceof SQLDatabaseBinding){
-			resource = new SQLDataSource(((SQLDatabaseBinding)binding).getSqlDB());
+		if (resourceLocator != null) {
+			resource = resourceLocator.convertToResource(binding);
+		}
+		if(resource == null && binding instanceof SQLDatabaseBinding){
+			SQLDatabaseBinding sqlBinding = (SQLDatabaseBinding)binding;
+			if (sqlBinding.isUseURI()) {
+				String uri = sqlBinding.getUri();
+				if (uri != null && uri.startsWith("jndi://")) {
+					//TODO need to actually support JNDI. This code will not work but serves as a placeholder.
+					resource = new SQLDataSource(uri.substring(7)); // "jndi://".length()
+				}
+			}
+			else {
+				resource = new SQLDataSource(sqlBinding.getSqlDB());
+			}
 		}
 		return resource;
 	}
 	
 	private static RuntimeDeploymentDesc getDeploymentDesc(String propertyFileName){
+		if (resourceLocator != null) {
+			return resourceLocator.getDeploymentDesc(propertyFileName);
+		}
 		RuntimeDeploymentDesc dd = deploymentDescs.get(propertyFileName);
 		if(dd == null){
-			if(propertyFileName.charAt(0) != '.' || propertyFileName.charAt(0) != '/'){
+			if(propertyFileName.charAt(0) != '.' && propertyFileName.charAt(0) != '/'){
 				propertyFileName = '/' + propertyFileName;
 			}
 			if(!propertyFileName.endsWith("-bnd.xml")){
@@ -306,5 +335,16 @@ public class SysLib extends ExecutableBase {
 			}
 		}
 		return null;
+	}
+	
+	public static void setResourceLocator(ResourceLocator locator) {
+		resourceLocator = locator;
+	}
+	
+	public static interface ResourceLocator {
+		public Object locateResource(String bindingKey);
+		public Object locateResource(String bindingKey, String propFileName);
+		public RuntimeDeploymentDesc getDeploymentDesc(String propertyFileName);
+		public Object convertToResource(Binding binding);
 	}
 }

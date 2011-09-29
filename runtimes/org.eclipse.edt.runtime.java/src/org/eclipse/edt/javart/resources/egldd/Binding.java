@@ -14,6 +14,8 @@ package org.eclipse.edt.javart.resources.egldd;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 public class Binding {
 	
@@ -89,4 +91,29 @@ public class Binding {
 		return useURI;
 	}
 	
+	public boolean equals(Object o) {
+		if (!(o instanceof Binding)) {
+			return false;
+		}
+		
+		Binding b = (Binding)o;
+		if (useURI == b.useURI && getClass().equals(b.getClass()) && equal(name, b.name) && equal(type, b.type) && equal(uri, b.uri)
+				&& parameters.size() == b.parameters.size()) {
+			Set<Entry<String, Parameter>> entrySet = b.parameters.entrySet();
+			for (Entry<String, Parameter> entry : parameters.entrySet()) {
+				if (!entrySet.contains(entry)) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean equal(String s1, String s2) {
+		if (s1 == null) {
+			return s2 == null;
+		}
+		return s1.equals(s2);
+	}
 }
