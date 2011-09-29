@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayAccess;
@@ -50,6 +51,8 @@ public class ArrayAccessTemplate extends JavaTemplate {
 				ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 				out.print(" - 1, ");
 				ctx.invoke(genExpression, arg1, ctx, out);
+				if (CommonUtilities.isBoxedOutputTemp(arg1, ctx))
+					out.print(".ezeUnbox()");
 				out.print(")");
 			} else {
 				ctx.invoke(genExpression, expr.getArray(), ctx, out);
@@ -69,6 +72,8 @@ public class ArrayAccessTemplate extends JavaTemplate {
 			ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 			out.print(" - 1, ");
 			ctx.invoke(genExpression, arg1, ctx, out);
+			if (CommonUtilities.isBoxedOutputTemp(arg1, ctx))
+				out.print(".ezeUnbox()");
 			out.print(")");
 		} else {
 			// non-nullable array

@@ -27,7 +27,6 @@ import org.eclipse.edt.mof.egl.IsAExpression;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
-import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.UnaryExpression;
@@ -48,7 +47,8 @@ public class TypeTemplate extends JavaTemplate {
 			CommonUtilities.processImport(ctx.getNativeMapping(type.getClassifier().getTypeSignature()), ctx);
 		if (ctx.mapsToPrimitiveType(type.getClassifier())) {
 			// if this primitive type is really a primitive, it will map back to the java object. We want to use that java
-			// object instead of the primitive mapped simply to a java object. For example, eglx.lang.ESmallint maps to short (the
+			// object instead of the primitive mapped simply to a java object. For example, eglx.lang.ESmallint maps to short
+			// (the
 			// primitive) and then short maps to the java object java.lang.Short. We want to always use the object for the
 			// imports.
 			if (ctx.getPrimitiveMapping(ctx.getPrimitiveMapping(type.getClassifier().getTypeSignature())) != null)
@@ -195,9 +195,7 @@ public class TypeTemplate extends JavaTemplate {
 				ctx.invoke(genExpression, arg2, ctx, out);
 				out.print(")");
 				// check to see if we are unboxing RHS temporary variables (inout and out types only)
-				if (arg2 instanceof MemberName
-					&& ctx.getAttribute(((MemberName) arg2).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
-					&& ctx.getAttribute(((MemberName) arg2).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN)
+				if (CommonUtilities.isBoxedOutputTemp(arg2, ctx))
 					out.print(".ezeUnbox()");
 			} else {
 				// if this is a well-behaved assignment, we can avoid the temporary
@@ -229,9 +227,7 @@ public class TypeTemplate extends JavaTemplate {
 			out.print(arg3);
 			ctx.invoke(genExpression, arg2, ctx, out);
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
-			if (arg2 instanceof MemberName
-				&& ctx.getAttribute(((MemberName) arg2).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
-				&& ctx.getAttribute(((MemberName) arg2).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN)
+			if (CommonUtilities.isBoxedOutputTemp(arg2, ctx))
 				out.print(".ezeUnbox()");
 		}
 	}
