@@ -35,6 +35,7 @@ public class EGLConnectibleDatabases {
 		validVendors.add(SQLConstants.GENERIC_JDBC_NAME);
 		validVendors.add(SQLConstants.DB2UDBVSE_NAME);
 		validVendors.add(SQLConstants.DB2_ALIAS_NAME);
+		validVendors.add(SQLConstants.MYSQL_NAME);
 		
 		DatabaseDefinitionRegistry dbDefReg = RDBCorePlugin.getDefault()
 				.getDatabaseDefinitionRegistry();
