@@ -573,12 +573,12 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 	public static boolean equals(BigDecimal op1, BigDecimal op2) {
 		if (op1 == null || op2 == null)
 			return false;
-		return op1.equals(op2);
+		return op1.compareTo(op2) == 0;
 	}
 
 	public static boolean notEquals(BigDecimal op1, BigDecimal op2) {
 		if (op1 == null || op2 == null)
 			return false;
-		return !op1.equals(op2);
+		return op1.compareTo(op2) != 0;
 	}
 }

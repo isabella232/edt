@@ -302,13 +302,13 @@ public class EBigint extends AnyBoxedObject<Long> implements eglx.lang.ENumber {
 	public static boolean equals(Long op1, Long op2) {
 		if (op1 == null || op2 == null)
 			return false;
-		return op1.equals(op2);
+		return op1.compareTo(op2) == 0;
 	}
 
 	public static boolean notEquals(Long op1, Long op2) {
 		if (op1 == null || op2 == null)
 			return false;
-		return !op1.equals(op2);
+		return op1.compareTo(op2) != 0;
 	}
 
 	public static long defaultValue() {
