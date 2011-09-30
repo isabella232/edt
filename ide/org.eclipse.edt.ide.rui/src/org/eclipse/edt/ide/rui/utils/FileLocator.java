@@ -38,55 +38,6 @@ public abstract class FileLocator {
 		RUI_DEVELOPMENT_JAVASCRIPT_FILES.add("egl_development.js");  //$NON-NLS-1$
 	};
 	
-//	//RUI runtime files
-//	public static final List<String> RUI_RUNTIME_JAVASCRIPT_FILES = new ArrayList<String>();
-//	static{
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("edt_loader.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("edt_runtime_fixups.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("edt_runtime.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl_bigdecimal.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl_mathcontext.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("webtoolkit.base64.js");  //$NON-NLS-1$
-//		
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/AnyException.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/InvalidIndexException.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/InvocationException.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/JavaObjectException.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/NullValueException.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/TypeCastException.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/javascript/JavaScriptObjectException.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/javascript/Job.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/jsrt/BaseTypesAndRuntimes.js");  //$NON-NLS-1$		
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/lang/Enumeration.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/ui/gateway/UIGatewayRecord.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/ui/rui/Document.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/ui/rui/Event.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/ui/rui/View.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/ui/rui/Widget.js");  //$NON-NLS-1$
-//		
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/Encoding.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceBinder.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceInvocationException.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceKind.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceLib.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/services/ServiceRuntimes.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/Http.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpMethod.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpRequest.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpResponse.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpREST.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/http/HttpSOAP.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/json/Json.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/json/JSONParser.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/jws/SOAPEnvelope.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/jest/RestRuntime.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/xml/binding/annotation/Xml.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/xml/binding/annotation/XMLStructureKind.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/xml/Xml.js");  //$NON-NLS-1$
-//		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/xml/XMLProcessingException.js");  //$NON-NLS-1$
-//	};
-	
 	//RUI runtime property files
 	public static final List<String> RUI_RUNTIME_PROPERTIES_FILES = new ArrayList<String>();
 	static{
@@ -163,10 +114,23 @@ public abstract class FileLocator {
 	}
 	
 	public EGLResource findResource(String name){
+		EGLResource result = null;
+		result = findResource(name, true);
+		if(result == null){
+			result = findResource(name, false);
+		}
+		return result;
+	}
+	
+	public EGLResource findResource(String name, boolean isLowercase){
 		int lastSlash = name.lastIndexOf( '/' );
 		if (lastSlash != -1) {
-			// Lowercase the package.
-			name = name.substring( 0, lastSlash ).toLowerCase() + name.substring( lastSlash );
+			if(isLowercase){
+				// Lowercase the package.
+				name = name.substring( 0, lastSlash ).toLowerCase() + name.substring( lastSlash );
+			}else{
+				name = name.substring( 0, lastSlash ) + name.substring( lastSlash );
+			}
 		}
 		
 		EGLResource result = null;
