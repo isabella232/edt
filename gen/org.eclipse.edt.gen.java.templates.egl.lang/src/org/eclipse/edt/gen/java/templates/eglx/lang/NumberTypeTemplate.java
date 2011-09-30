@@ -19,6 +19,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.UnaryExpression;
 
 public class NumberTypeTemplate extends JavaTemplate {
 
@@ -41,6 +42,17 @@ public class NumberTypeTemplate extends JavaTemplate {
 			out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
 		} else
 			ctx.invokeSuper(this, genBinaryExpression, type, ctx, out, arg);
+	}
+
+	public void genUnaryExpression(EGLClass type, Context ctx, TabbedWriter out, UnaryExpression arg) {
+		// we only need to check for minus sign and if found, we need to change it to .negate()
+		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber") && arg.getOperator().equals("-")) {
+			ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
+			out.print(".negate(");
+			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
+			out.print(")");
+		} else
+			ctx.invokeSuper(this, genUnaryExpression, type, ctx, out, arg);
 	}
 
 	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, String arg, Type rhsType) {
