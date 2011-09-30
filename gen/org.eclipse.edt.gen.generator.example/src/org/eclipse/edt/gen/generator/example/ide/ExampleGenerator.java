@@ -48,7 +48,7 @@ public class ExampleGenerator extends AbstractGenerator {
 	}
 
 	@Override
-	protected String getProjectSettingsPluginId() {
+	public String getProjectSettingsPluginId() {
 		return Activator.PLUGIN_ID;
 	}
 
