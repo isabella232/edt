@@ -40,7 +40,7 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
 		// out.print(Constants.JSRT_DTTMLIB_PKG + "currentTimeStamp(");
 		out.print("egl.eglx.lang.ETimestamp.currentTimeStamp(");
-		generateOptions((TimestampType)type, ctx, out, false);
+		ctx.invoke(genConstructorOptions, type, ctx, out);
 		out.print(")");
 	}
 
