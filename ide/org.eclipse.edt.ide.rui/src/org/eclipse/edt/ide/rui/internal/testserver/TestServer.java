@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.internal.testserver;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import org.eclipse.edt.javart.ide.IDEResourceLocator;
 import org.eclipse.edt.javart.services.servlet.proxy.AjaxProxyServlet;
 import org.eclipse.edt.javart.services.servlet.rest.rpc.PreviewServiceServlet;
@@ -154,8 +157,15 @@ public class TestServer {
 			return;
 		}
 		
-		if (contextRoot.charAt(0) != '/') {
-			contextRoot = '/' + contextRoot;
+		try {
+			// Encode the context but not a leading '/'
+			contextRoot = '/' + URLEncoder.encode(contextRoot.charAt(0) == '/' ? contextRoot.substring(1) : contextRoot, "UTF-8");
+		}
+		catch (UnsupportedEncodingException e) {
+			// Shouldn't happen.
+			if (contextRoot.charAt(0) != '/') {
+				contextRoot = "/" + contextRoot;
+			}
 		}
 		
 		Context context = new Context(Context.SESSIONS);
