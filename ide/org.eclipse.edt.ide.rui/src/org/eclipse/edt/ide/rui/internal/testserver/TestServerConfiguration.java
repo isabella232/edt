@@ -150,9 +150,6 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			// register a listener for changes to DD files
 			ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
 			
-			// Make sure EvServer is running before starting the process. It uses EvServer to talk to the IDE.
-			EvServer.getInstance();
-			
 			launch = copy.launch(debugMode ? ILaunchManager.DEBUG_MODE : ILaunchManager.RUN_MODE, monitor);
 			resolvedClasspath = delegate.getClasspath(launch.getLaunchConfiguration());
 			
@@ -419,7 +416,15 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 	}
 	
 	private int invokeConfigServlet(String args) throws IOException {
-		URLConnection conn = new URL("http://localhost:" + port + "/" + project.getName() + ConfigServlet.SERVLET_PATH).openConnection(); //$NON-NLS-1$ //$NON-NLS-2$
+		String projectName = project.getName();
+		try {
+			projectName = URLEncoder.encode(projectName, "UTF-8");
+		}
+		catch (UnsupportedEncodingException e) {
+			// Shouldn't happen.
+		}
+		
+		URLConnection conn = new URL("http://localhost:" + port + "/" + projectName + ConfigServlet.SERVLET_PATH).openConnection(); //$NON-NLS-1$ //$NON-NLS-2$
 		conn.setDoOutput(true);
 		conn.setRequestProperty("Accept-Charset", "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
 		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
