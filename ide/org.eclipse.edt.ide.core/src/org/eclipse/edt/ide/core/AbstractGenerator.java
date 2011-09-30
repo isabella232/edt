@@ -237,12 +237,6 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 	protected abstract String getGenerationArgumentsPropertyKey();
 	
 	/**
-	 * @return the plug-in ID used to read and write project-level preferences for
-	 *         the key returned by {@link #getGenerationDirectoryPropertyKey()}
-	 */
-	protected abstract String getProjectSettingsPluginId();
-	
-	/**
 	 * @return the key for the default generation directory in preferences; this may
 	 *         be null if there is no default generation directory.
 	 */

@@ -12,8 +12,10 @@
 package org.eclipse.edt.ide.core.utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -22,6 +24,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.ide.core.AbstractGenerator;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
@@ -85,8 +88,7 @@ public class ProjectSettingsUtility {
 	 */
 	public static final String GENERATOR_ID_JAVASCRIPT_DEV = "org.eclipse.edt.ide.gen.JavaScriptDevGenProvider"; //$NON-NLS-1$
 	
-	public static final String[] plugins = new String[] {EDTCoreIDEPlugin.PLUGIN_ID, "org.eclipse.edt.ide.compiler"};
-	
+	private static final Map<ICompiler, String[]> preferenceNodes = new HashMap<ICompiler, String[]>();
 	
 	/**
 	 * Returns the ICompiler registered for the given project. This returns null if there is no compiler.
@@ -537,7 +539,7 @@ public class ProjectSettingsUtility {
     public static void replaceWorkspaceSettings(IProject project, IPath oldPath, IPath newPath) throws BackingStoreException {
     	Preferences projectPrefs =
     		Platform.getPreferencesService().getRootNode().node(ProjectScope.SCOPE).node(project.getName());
-		String[] prefsFiles = projectPrefs.childrenNames();
+    	String[] prefsFiles = getPreferenceNodes( project );
 		for (String file : prefsFiles) {
 		    Preferences prefs = projectPrefs.node(file); 
 	    	String[] names = prefs.childrenNames();
@@ -582,7 +584,7 @@ public class ProjectSettingsUtility {
     public static void removeWorkspaceSettings(IProject project, IPath path) throws BackingStoreException {
     	Preferences projectPrefs =
     		Platform.getPreferencesService().getRootNode().node(ProjectScope.SCOPE).node(project.getName());
-		String[] prefsFiles = projectPrefs.childrenNames();
+		String[] prefsFiles = getPreferenceNodes( project );
 		for (String file : prefsFiles) {
 		    Preferences prefs = projectPrefs.node(file); 
 	    	String[] names = prefs.childrenNames();
@@ -607,4 +609,31 @@ public class ProjectSettingsUtility {
     	return path1.equals( path2 ) || (path1.startsWith( path2 + "/" ) );
     }
 	
+    private static String[] getPreferenceNodes(IProject project) {
+    	ICompiler compiler = getCompiler(project);
+    	String[] nodes =  new String[0];
+    	if (compiler != null) {
+    		nodes = preferenceNodes.get(compiler);
+    		if (nodes == null) {
+	    		List<org.eclipse.edt.compiler.IGenerator> gens = compiler.getGenerators();
+	    		List<String> ids = new ArrayList<String>(gens.size());
+	    		if (gens.size() > 0) {
+	    			for (org.eclipse.edt.compiler.IGenerator gen : gens) {
+	    				if (gen instanceof IGenerator) {
+	    					String id = ((IGenerator)gen).getProjectSettingsPluginId();
+	    					if (id != null && id.length() > 0 && !ids.contains(id)) {
+	    						ids.add(id);
+	    					}
+	    				}
+	    			}
+	    		}
+	    		nodes = ids.toArray(new String[ids.size()]);
+	    		preferenceNodes.put(compiler, nodes);
+    		}
+    	}
+    	String[] newNodes = new String[nodes.length + 1];
+    	System.arraycopy( nodes, 0, newNodes, 0, nodes.length );
+    	newNodes[nodes.length] = EDTCoreIDEPlugin.PLUGIN_ID;
+    	return newNodes;
+    }
 }

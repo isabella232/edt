@@ -38,4 +38,9 @@ public interface IGenerator extends org.eclipse.edt.compiler.IGenerator {
 	 * @throws CoreException
 	 */
 	public IFile[] getOutputFiles(IFile eglFile, Part part) throws CoreException;
+	
+	/**
+	 * @return the plug-in ID used to read and write project-level preferences.
+	 */
+	public String getProjectSettingsPluginId();
 }
