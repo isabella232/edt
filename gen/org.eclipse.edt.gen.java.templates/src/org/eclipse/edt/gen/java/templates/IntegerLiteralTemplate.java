@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.eclipse.edt.gen.java.Context;
@@ -44,9 +45,11 @@ public class IntegerLiteralTemplate extends JavaTemplate {
 			out.print(trimLeadingZeros(expr.getUnsignedValue()));
 			out.print('L');
 		} else {
-			// Generate a BigInteger.
-			byte[] bytes = new BigInteger(expr.getValue()).toByteArray();
-			out.print("new java.math.BigInteger( new byte[] {");
+			// Make a BigDecimal from a BigInteger (the unscaled value) and an int (the scale).
+			BigDecimal bd = new BigDecimal(expr.getValue());
+			BigInteger unscaled = bd.unscaledValue();
+			byte[] bytes = unscaled.toByteArray();
+			out.print("new java.math.BigDecimal( new java.math.BigInteger( new byte[] {");
 			for (int i = 0; i < bytes.length; i++) {
 				if (bytes[i] >= 0) {
 					out.print(" 0x" + Integer.toHexString(bytes[i] & 0xff));
@@ -57,7 +60,9 @@ public class IntegerLiteralTemplate extends JavaTemplate {
 					out.print(',');
 				}
 			}
-			out.print(" } )");
+			out.print(" } ), ");
+			out.print(bd.scale());
+			out.print(')');
 		}
 	}
 
