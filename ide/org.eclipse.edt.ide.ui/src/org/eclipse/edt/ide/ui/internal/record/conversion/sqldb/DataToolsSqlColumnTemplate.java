@@ -21,6 +21,8 @@ import org.eclipse.edt.gen.generator.eglsource.EglSourceContext;
 import org.eclipse.edt.ide.internal.sql.util.EGLSQLRetrieveUtility;
 import org.eclipse.edt.ide.internal.sql.util.EGLSQLStructureItem;
 import org.eclipse.edt.ide.sql.SQLConstants;
+import org.eclipse.edt.ide.ui.internal.record.conversion.xmlschema.WSDLUtil;
+import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
 public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
@@ -35,12 +37,9 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 		StringBuilder builder = new StringBuilder();
 		
 		builder.append("    ");
-		if(item.getName() == null) {
-			System.out.println(column.getName());
-		}
-		if(EGLKeywordHandler.getKeywordHashSet().contains(item.getName().toLowerCase(Locale.ENGLISH))) {
-			//TODO:Should be indication message for this.
-			colNameAlias = item.getName() + ctx.nextTempIndex();
+		
+		colNameAlias = getAliasName(item.getName().trim(),ctx);
+		if( colNameAlias != null) {
 			builder.append(colNameAlias);
 		} else {
 			builder.append(item.getName());
@@ -103,5 +102,15 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 		out.println(builder.toString());
 	}
 	
-	
+	private String getAliasName(String itemName,EglSourceContext ctx) {
+		String alias = null;
+		
+		if(EGLKeywordHandler.getKeywordHashSet().contains(itemName.toLowerCase(Locale.ENGLISH))) {
+			alias = itemName + ctx.nextTempIndex();
+		} else {
+			alias = CoreUtility.getCamelCaseString(itemName);
+		}
+		
+		return alias;
+	}
 }

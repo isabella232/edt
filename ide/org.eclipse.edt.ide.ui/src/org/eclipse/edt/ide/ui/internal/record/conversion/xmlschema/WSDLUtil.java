@@ -32,15 +32,6 @@ import org.apache.xerces.xs.XSTypeDefinition;
 public class WSDLUtil {
 	private static int k16 = 16384;
 
-	public static String makeFirstCharUpper(String str) {
-		if (str.length() > 0 && Character.isLetter(str.charAt(0))) {
-			StringBuffer buf = new StringBuffer(str);
-			buf.setCharAt(0, Character.toUpperCase(buf.charAt(0)));
-			return buf.toString();
-		}
-		return str;
-	}
-
 	public static boolean isStandardArray(XSTypeDefinition xsdType) {
 		boolean rc = false;
 		if (xsdType.getTypeCategory() == XSTypeDefinition.COMPLEX_TYPE) {
