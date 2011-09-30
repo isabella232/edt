@@ -40,6 +40,10 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 		return new ENumber(value);
 	}
 
+	public static ENumber ezeBox(ENumber value) {
+		return value;
+	}
+
 	public static Object ezeCast(Object value, Object[] constraints) throws AnyException {
 		Integer[] args = new Integer[constraints.length];
 		java.lang.System.arraycopy(constraints, 0, args, 0, args.length);
