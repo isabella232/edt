@@ -570,15 +570,52 @@ public class CommonUtilities {
 		String sep = delim;
 		for (FunctionParameter arg : args){
 			Type type = arg.getType();
-			StringWriter sw = new StringWriter();
-			TabbedWriter tw = new TabbedWriter(sw);
-			ctx.invoke(JavaScriptTemplate.genSignature, type, ctx, tw);  // TODO sbg optimize
-			String sig = tw.getCurrentLine();
-			sig = sig.replace('?', '$');  // TODO sbg optimize
-			sig = sig.replace(";", "");   // TODO sbg optimize
 			
-			result.append(sep);
-			result.append(sig);
+			
+//			if (type instanceof NamedElement) {
+//				String sig = type.getTypeSignature().toLowerCase();
+//				String hash;
+//				if ( sig.hashCode() >= 0 )
+//				{
+//					hash = Integer.toHexString( sig.hashCode() );
+//				}
+//				else
+//				{
+//					hash = "n" + Integer.toHexString( Math.abs( sig.hashCode() ) );
+//				}
+//				return type.getClassifier() + hash;
+//			}
+//			else 
+			{
+				StringWriter sw = new StringWriter();
+				TabbedWriter tw = new TabbedWriter(sw);
+				ctx.invoke(JavaScriptTemplate.genSignature, type, ctx, tw);  // TODO sbg optimize
+				
+				String sig = tw.getCurrentLine();
+				StringBuffer sanitizedSig = new StringBuffer();
+				int length = sig.length();
+				boolean skip = false;
+				for (int i=0; i<length; i++) {
+					char c= sig.charAt(i);
+					switch (c) {
+						case '?':
+							c = '$';
+							break;
+						case ';':
+							continue;
+						case '\'':
+							skip = !skip;
+							continue;
+						default:
+							break;
+					}
+					if (!skip)
+						sanitizedSig.append(c);
+				}
+				
+				result.append(sep);
+				result.append(sanitizedSig.toString());
+			}
 		}
 		
 		return result.toString();
