@@ -57,7 +57,7 @@ public class JavaGenerator extends AbstractGenerator {
 	}
 
 	@Override
-	protected String getProjectSettingsPluginId() {
+	public String getProjectSettingsPluginId() {
 		return EDTCompilerIDEPlugin.PLUGIN_ID;
 	}
 
