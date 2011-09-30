@@ -28,10 +28,10 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -278,7 +278,15 @@ public class EvServer implements IClientProxy {
 							config.start(null, true); // Will no-op if already running
 						}
 						
-						String testServerURI = "http://localhost:" + config.getPort();
+						String encodedProject = project.getName();
+						try {
+							encodedProject = URLEncoder.encode(encodedProject, "UTF-8");
+						}
+						catch (UnsupportedEncodingException e) {
+							// Shouldn't happen.
+						}
+						
+						String testServerURI = "http://localhost:" + config.getPort() + "/" + encodedProject;
 						request = new Request();
 						request.body = ruiRequest.getContent();
 						request.method = HttpUtilities.convert( ruiRequest.getMethod() );
@@ -290,9 +298,10 @@ public class EvServer implements IClientProxy {
 						}
 						request.headers = headers;
 						
+						//TODO test dedicated with space in project name
 						if (isDedicated) {
 							serviceKind = ServiceKind.EGL;
-							testServerURI += ruiRequest.getURL().trim();
+							testServerURI += "/___proxy";
 							request.uri = testServerURI;
 							
 							// Need to use the outer request as the inner so that we can get to the proxy to do the actual invocation.
@@ -300,11 +309,11 @@ public class EvServer implements IClientProxy {
 						}
 						else {
 							// Modify the inner request to point to the test server
-							testServerURI += "/" + project.getName() + "/restservices/";
+							testServerURI += "/restservices/";
 							String innerURI = innerRequest.uri;
-							int start = 12 + project.getName().length() + 1; // ("workspace://" + projectName + "/").length()
+							int start = innerURI.indexOf('/', 12 /* "workspace://".length() */);
 							if (start != -1) {
-								testServerURI += innerURI.substring(start);
+								testServerURI += innerURI.substring(start + 1);
 								innerRequest.uri = testServerURI;
 							}
 						}
@@ -370,13 +379,15 @@ public class EvServer implements IClientProxy {
 				name = name.replace("/", "");
 				name = name.replace("\\", "");
 				name = name.trim();
-				if (name.length() == 0) {
-					return null;
+				try {
+					return URLDecoder.decode(name, "UTF-8");
 				}
-				return name;
-				
+				catch (UnsupportedEncodingException e) {
+					// Shouldn't happen.
+					return name;
+				}
 			}
-			return null;
+			return "";
 		}
 	}
 	
