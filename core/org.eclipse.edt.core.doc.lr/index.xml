@@ -126,14 +126,26 @@
 <entry keyword="floor">
 <topic href="topics/redt00216.html#redt00216" title="Floor system function"/>
 </entry>
+<entry keyword="format">
+<topic href="topics/redt00233.html#redt00233" title="Format system function"/>
+</entry>
 <entry keyword="frexp">
 <topic href="topics/redt00217.html#redt00217" title="Frexp system function"/>
+</entry>
+<entry keyword="fromCharCode">
+<topic href="topics/redt00236.html#redt00236" title="FromCharCode system function"/>
+</entry>
+<entry keyword="getNextToken">
+<topic href="topics/redt00234.html#redt00234" title="StringLib.GetNextToken system function"/>
 </entry>
 <entry keyword="getProperty">
 <topic href="topics/redt00200.html#redt00200" title="GetProperty system function"/>
 </entry>
 <entry keyword="getResource">
 <topic href="topics/redt00205.html#redt00205" title="getResource system function"/>
+</entry>
+<entry keyword="getTokenCount">
+<topic href="topics/redt00235.html#redt00235" title="GetTokenCount system function"/>
 </entry>
 <entry keyword="ldexp">
 <topic href="topics/redt00218.html#redt00218" title="Ldexp system function"/>
@@ -166,13 +178,16 @@
 <topic href="topics/redt00199.html#redt00199" title="Rollback system function"/>
 </entry>
 <entry keyword="setLocale">
-<topic href="topics/redt00201.html#redt00201" title="setLocale system function"/>
+<topic href="topics/redt00201.html#redt00201" title="SetLocale system function"/>
 </entry>
 <entry keyword="sin">
 <topic href="topics/redt00228.html#redt00228" title="Sin system function"/>
 </entry>
 <entry keyword="sinh">
 <topic href="topics/redt00229.html#redt00229" title="Sinh system function"/>
+</entry>
+<entry keyword="spaces">
+<topic href="topics/redt00237.html#redt00237" title="Spaces system function"/>
 </entry>
 <entry keyword="sqrt">
 <topic href="topics/redt00230.html#redt00230" title="Sqrt system function"/>
@@ -204,6 +219,10 @@
 <entry keyword="ServiceLib">
 <topic href="topics/redt00071.html#redt00071" title="ServiceLib system library"/>
 </entry>
+<entry keyword="StrLib">
+<topic href="topics/redt00239.html#redt00239" title="StrLib system library"/>
+<topic href="topics/redt00068.html#redt00068" title="StringLib system library"/>
+</entry>
 <entry keyword="SysLib">
 <topic href="topics/redt00066.html#redt00066" title="SysLib system library"/>
 </entry>
@@ -232,14 +251,29 @@
 <entry keyword="floor EGL system function">
 <topic href="topics/redt00216.html#redt00216" title="Floor system function"/>
 </entry>
+<entry keyword="format EGL system function">
+<topic href="topics/redt00233.html#redt00233" title="Format system function"/>
+</entry>
+<entry keyword="Format patterns">
+<topic href="topics/redt00238.html#redt00237" title="Pattern characters used to format non-string values to strings"/>
+</entry>
 <entry keyword="frexp EGL system function">
 <topic href="topics/redt00217.html#redt00217" title="Frexp system function"/>
+</entry>
+<entry keyword="fromCharCode EGL system function">
+<topic href="topics/redt00236.html#redt00236" title="FromCharCode system function"/>
+</entry>
+<entry keyword="getNextToken EGL system function">
+<topic href="topics/redt00234.html#redt00234" title="StringLib.GetNextToken system function"/>
 </entry>
 <entry keyword="getProperty EGL system function">
 <topic href="topics/redt00200.html#redt00200" title="GetProperty system function"/>
 </entry>
 <entry keyword="getResource EGL system function">
 <topic href="topics/redt00205.html#redt00205" title="getResource system function"/>
+</entry>
+<entry keyword="getTokenCount EGL system function">
+<topic href="topics/redt00235.html#redt00235" title="GetTokenCount system function"/>
 </entry>
 <entry keyword="large object">
 <entry keyword="EGL">
@@ -364,6 +398,9 @@
 <topic href="topics/cedt00021.html#cedt00021" title="EGL numeric types"/>
 </entry>
 </entry>
+<entry keyword="Patterns">
+<topic href="topics/redt00238.html#redt00237" title="Pattern characters used to format non-string values to strings"/>
+</entry>
 <entry keyword="pow EGL system function">
 <topic href="topics/redt00224.html#redt00224" title="Pow system function"/>
 </entry>
@@ -382,7 +419,7 @@
 </entry>
 </entry>
 <entry keyword="setLocale EGL system function">
-<topic href="topics/redt00201.html#redt00201" title="setLocale system function"/>
+<topic href="topics/redt00201.html#redt00201" title="SetLocale system function"/>
 </entry>
 <entry keyword="sin EGL system function">
 <topic href="topics/redt00228.html#redt00228" title="Sin system function"/>
@@ -390,11 +427,37 @@
 <entry keyword="sinh EGL system function">
 <topic href="topics/redt00229.html#redt00229" title="Sinh system function"/>
 </entry>
+<entry keyword="spaces EGL system function">
+<topic href="topics/redt00237.html#redt00237" title="Spaces system function"/>
+</entry>
 <entry keyword="sqrt EGL system function">
 <topic href="topics/redt00230.html#redt00230" title="Sqrt system function"/>
 </entry>
 <entry keyword="startCmd EGL system function">
 <topic href="topics/redt00197.html#redt00197" title="StartCmd system function"/>
+</entry>
+<entry keyword="StringLib EGL system library">
+<entry keyword="format">
+<topic href="topics/redt00233.html#redt00233" title="Format system function"/>
+</entry>
+<entry keyword="fromCharCode">
+<topic href="topics/redt00236.html#redt00236" title="FromCharCode system function"/>
+</entry>
+<entry keyword="getNextToken">
+<topic href="topics/redt00234.html#redt00234" title="StringLib.GetNextToken system function"/>
+</entry>
+<entry keyword="getTokenCount">
+<topic href="topics/redt00235.html#redt00235" title="GetTokenCount system function"/>
+</entry>
+<entry keyword="spaces">
+<topic href="topics/redt00237.html#redt00237" title="Spaces system function"/>
+</entry>
+</entry>
+<entry keyword="StrLib EGL system library">
+<entry keyword="overview">
+<topic href="topics/redt00239.html#redt00239" title="StrLib system library"/>
+<topic href="topics/redt00068.html#redt00068" title="StringLib system library"/>
+</entry>
 </entry>
 <entry keyword="SysLib EGL system library">
 <entry keyword="callCmd">
@@ -416,7 +479,7 @@
 <topic href="topics/redt00199.html#redt00199" title="Rollback system function"/>
 </entry>
 <entry keyword="setLocale">
-<topic href="topics/redt00201.html#redt00201" title="setLocale system function"/>
+<topic href="topics/redt00201.html#redt00201" title="SetLocale system function"/>
 </entry>
 <entry keyword="startCmd">
 <topic href="topics/redt00197.html#redt00197" title="StartCmd system function"/>

@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="StrLib system library"></meta>
+<meta name="abstract" content="StrLib includes functions and constants that are particularly convenient for a subset of users who are migrating code. For new development, use the more efficient functions in the StringLib system library and in the EDT STRING type."></meta>
+<meta name="description" content="StrLib includes functions and constants that are particularly convenient for a subset of users who are migrating code. For new development, use the more efficient functions in the StringLib system library and in the EDT STRING type."></meta>
+<meta name="DC.subject" content="EGL system libraries, StrLib, StrLib EGL system library, overview"></meta>
+<meta name="keywords" content="EGL system libraries, StrLib, StrLib EGL system library, overview"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="redt00239"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>StrLib system library</title>
+</head>
+<body id="redt00239"><a name="redt00239"><!-- --></a>
+
+
+<h1 class="topictitle1">StrLib system library</h1>
+
+
+
+<div><p><span class="synph"><span class="kwd">StrLib</span></span> includes functions
+and constants that are particularly convenient for a subset of users
+who are migrating code. For new development, use the more efficient
+functions in the <span class="synph"><span class="kwd">StringLib</span></span> system library
+and in the EDT STRING type.</p>
+
+<dl>
+<dt class="dlterm"><a name="redt00239__package"><!-- --></a>Package</dt>
+
+<dd><p>eglx.rbd</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00239__constants"><!-- --></a>Variables</dt>
+
+<dd>Each of the following <span class="synph"><span class="kwd">StrLib</span></span> variables
+is of the EGL STRING type:<ul>
+<li><span class="synph"><span class="kwd">StrLib.defaultDateFormat</span></span></li>
+
+<li><span class="synph"><span class="kwd">StrLib.defaultTimeFormat</span></span></li>
+
+<li><span class="synph"><span class="kwd">StrLib.defaultTimeStampFormat</span></span></li>
+
+<li><span class="synph"><span class="kwd">StrLib.MoneyFormat</span></span></li>
+
+<li><span class="synph"><span class="kwd">StrLib NumericFormat</span></span></li>
+
+</ul>
+<p>As shown later, <span class="synph"><span class="kwd">StrLib.defaultDateFormat</span></span>, <span class="synph"><span class="kwd">StrLib.defaultTimesStampFormat</span></span>,
+and <span class="synph"><span class="kwd">StrLib.defaultNumericFormat</span></span> affect the
+behavior of a related formatting function in the <span class="synph"><span class="kwd">StrLib</span></span> library.
+In addition, you might use any of those variables to provide pattern
+details when you invoke the <span class="synph"><span class="kwd">StringLib.format</span></span> function.</p>
+</dd>
+
+
+<dt class="dlterm"><a name="redt00239__functions"><!-- --></a>Functions</dt>
+
+<dd>The <span class="synph"><span class="kwd">StrLib</span></span> functions are written in
+EGL: <pre class="codeblock"><strong>function booleanAsString(value boolean in) returns(string)</strong>
+/*********************************************************************
+* Accept a Boolean value and return the equivalent string.           *
+**********************************************************************/
+   if ( value )
+      return( "true" );
+   else
+      return( "false" );
+   end
+	end
+
+<strong>function characterLen(text string in) returns(int)</strong>
+/********************************************************************* 
+* Accept a string, remove leading and trailing blanks and nulls,     * 
+* and return the number of characters.                               * 
+**********************************************************************/
+	  return( text.clip().length() );
+end
+	
+<strong>function clip(source string? in) returns(string?)</strong>
+/********************************************************************* 
+* Accept a string, remove leading and trailing blanks and nulls,     * 
+* and return the string.                                             * 
+**********************************************************************/
+   if ( source == null )
+      return( null );
+   else
+      return( source.clip() );
+   end
+end
+	
+<strong>function clip(source string? in, clipType int? in) returns(string?)</strong>
+/********************************************************************* 
+* Accept a string; remove leading blanks and nulls (clipType = 1),   *  
+* trailing blanks and nulls (clipType = 2), or both (clipType = 0);  * 
+* and return the string.  If clipType is another number, return      * 
+* the string as is. If clipType or the string is null, return null.  *
+**********************************************************************/
+   if ( source == null || clipType == null )
+      return( null );
+   else
+      case ( clipType )
+         when (0)
+            return( source.trim() );
+         when (1)
+            return( source.clipLeading() );
+         when (2)
+            return( source.clip() );
+         otherwise
+            return( source );
+      end
+   end
+end
+	
+<strong>function formatDate(dateValue date? in) returns(string?)</strong>
+/********************************************************************* 
+* Accept a date and format it in accordance                          *
+* with the value of StrLib.defaultDateFormat.                        *
+**********************************************************************/
+   if ( dateValue == null )
+      return( null );
+   else
+      return( StringLib.format( dateValue, defaultDateFormat ));
+   end
+end
+	
+<strong>function formatDate(dateValue date? in, format string? in) returns(string?)</strong>
+/********************************************************************* 
+* Accept a date and format it in accordance with an input pattern.   *
+* For details on values for the second parameter, see                *
+* "Pattern characters used to format non-string values to strings."  *
+**********************************************************************/
+   if ( dateValue == null || format == null )
+      return( null );
+   else
+      return( StringLib.format( dateValue, format ));
+   end
+end
+	
+<strong>function formatNumber(value smallint?   in) returns (string?)</strong>
+<strong>function formatNumber(value int?        in) returns (string?)</strong>
+<strong>function formatNumber(value bigint?     in) returns (string?)</strong>
+<strong>function formatNumber(value decimal?    in) returns (string?)</strong>
+<strong>function formatNumber(value smallfloat? in) returns (string?)</strong>
+<strong>function formatNumber(value float?      in) returns (string?)</strong>
+/********************************************************************* 
+* Accept a numeric value and format it in accordance                 *
+* with the value of StrLib.defaultNumericFormat.                     *
+**********************************************************************/
+   if ( value == null )
+      return( null );
+   else
+      return( StringLib.format( value, defaultNumericFormat ) );
+   end
+end
+	
+<strong>function formatNumber(value smallint?   in, format string? in) returns (string?)</strong>
+<strong>function formatNumber(value int?        in, format string? in) returns (string?)</strong>
+<strong>function formatNumber(value bigint?     in, format string? in) returns (string?)</strong>
+<strong>function formatNumber(value decimal?    in, format string? in) returns (string?)</strong>
+<strong>function formatNumber(value smallfloat? in, format string? in) returns (string?)</strong>
+<strong>function formatNumber(value float?      in, format string? in) returns (string?)</strong>
+/******************************************************************** 
+* Accept a numeric value and format it in accordance with an input  *
+* pattern. For details on values for the second parameter, see      *
+* "Pattern characters used to format non-string values to strings." *
+*********************************************************************/
+   if ( value == null || format == null )
+      return( null );
+   else
+      return( StringLib.format( value, format ) );
+   end
+end
+
+<strong>function formatTimeStamp(timestampvalue timestamp("yyyyMMddHHmmssffffff")? in) 
+         returns(string?)</strong>
+/********************************************************************* 
+* Accept a timestamp value and format it in accordance               *
+* with the value of StrLib.defaultTimestampFormat.                   *
+**********************************************************************/
+   if ( timestampvalue == null )
+      return( null );
+   else
+      return( StringLib.format( timestampvalue, defaultTimestampFormat ) );
+   end
+end
+	
+<strong>function formatTimeStamp(timestampvalue timestamp("yyyyMMddHHmmssffffff")? in,
+                         format string? in)
+         returns (string?)</strong>
+/********************************************************************* 
+* Accept a timestamp value and format it in accordance with an input *
+* pattern. For details on values for the second parameter, see       *
+* "Pattern characters used to format non-string values to strings."  *
+**********************************************************************/
+   if ( timestampvalue == null || format == null )
+      return( null );
+   else
+      return( StringLib.format( timestampvalue, format ) );
+   end
+end
+
+<strong>function getNextToken(source string inout, index int inout, delimiters string in)
+         returns (string?)</strong>
+/********************************************************************* 
+* Returns a token from a substring that starts at a specified        *
+* byte position of an input string.                                  *
+*                                                                    *
+*    source:                                                         *
+*       Takes the input string.                                      *
+*    index:                                                          *
+*       Takes the starting position at which to begin searching      *
+*       for a token, given that the first byte in source is at       *
+*       position 1. If a token is found, the value in index is       *
+*       changed to the index of the first byte that follows the      *
+*       token. If no token is found, index is set to one plus the    *
+*       number of bytes in the source string.                        *
+*    delimiters:                                                     *
+*       Takes a string that contains one or more delimiter           *
+*       characters, with no characters separating one from the next. *
+**********************************************************************/
+   charIndex int = index / 2 + 1;
+   token string? = StringLib.getNextToken(source, charIndex, delimiters);
+   if ( token != null )
+      index = (charIndex - 1) * 2 + 1;
+   end
+   return( token );
+end
+	
+<strong>function getTokenCount(source string in, delimiters string in) returns (int)</strong>
+/********************************************************************* 
+* Returns the number of tokens in a source string                    *
+*                                                                    *
+*    source:                                                         *
+*       Takes the input string.                                      *
+*    delimiters:                                                     *
+*       Takes a string that contains one or more delimiter           *
+*       characters, with no characters separating one from the next. *
+**********************************************************************/
+   return( StringLib.getTokenCount( source, delimiters ) );
+end
+
+<strong>function indexOf(source string inout, pattern string in) returns (int)</strong>
+/*********************************************************************
+* Returns an index into a string of characters. The index indicates  *
+* the first character position at which a specified pattern starts.  *
+* If the pattern is not found, the function returns a zero.          *
+*                                                                    *
+*    source:                                                         *
+*       Takes the input string.                                      *
+*    pattern:                                                        *
+*       Takes a sequence of characters to search for in source.      *
+**********************************************************************/
+   return( source.indexOf( pattern ) );
+end
+	
+<strong>function indexOf(source string inout, pattern string in, startIndex int in)
+         returns (int)</strong>
+/********************************************************************* 
+* Returns an index into a string of characters. The index indicates  *
+* the first character position at which a specified pattern starts.  *
+*                                                                    *
+* The value of the third parameter determines how many characters    * 
+* to skip when the function inspects the source string.              * 
+*                                                                    *
+* If the pattern is not found, the function returns a zero.          *
+*                                                                    *
+*    source:                                                         *
+*       Takes the input string.                                      *
+*    pattern:                                                        *
+*       Takes a quence of characters to search for in source.        *
+*    skipIndex                                                       *
+*       Takes a number of characters to skip.                        *
+**********************************************************************/
+   return( source.indexOf( pattern, startIndex ) );
+end
+	
+<strong>function lowerCase(characterItem string? in) returns(string?)</strong>
+/********************************************************************* 
+* Converts all uppercase values in a character string to lowercase   *
+* values. Numeric and existing lowercase values are not affected.    *
+**********************************************************************/
+   if ( characterItem == null )
+      return( null );
+   else
+      return( characterItem.toLowerCase() );
+   end
+end
+
+<strong>function spaces(characterCount int? in) returns(string?)</strong>
+/********************************************************************* 
+* Returns a string of spaces of the specified length.                *
+**********************************************************************/
+   if ( characterCount == null )
+      return( null );
+   else
+      result string;
+      fiftyBlanks string = "                                                  ";
+      while ( characterCount &gt;= 50 )
+         result ::= fiftyBlanks;
+         characterCount -= 50;
+      end
+      if ( characterCount &gt; 0 )
+         result ::= fiftyBlanks[1:characterCount];
+      end
+      return( result );
+   end
+end
+
+<strong>function upperCase(characterItem string? in) returns(string?)</strong>
+/********************************************************************* 
+* Converts all lowercase values in a character string to uppercase   *
+* values. Numeric and existing uppercase values are not affected.    *
+**********************************************************************/
+   if ( characterItem == null )
+      return( null );
+   else
+      return( characterItem.toUpperCase() );
+   end
+	end</pre>
+</dd>
+
+
+<dt class="dlterm"><a name="redt00239__comments"><!-- --></a>Comments</dt>
+
+<dd><p>The <span class="synph"><span class="kwd">StrLib</span></span> library is implemented
+as an EGL library, not as an EGL external type.</p>
+<anchor id="comments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00239__compat"><!-- --></a>Compatibility</dt>
+
+<dd><p></p>
+
+<div class="tablenoborder"><a name="redt00239__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00239__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d52970e243">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d52970e246">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00239__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d52970e243 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d52970e246 ">No issues.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00239__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d52970e243 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d52970e246 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
+
+</div>
+
+<anchor id="related_links"></anchor>
+
+
+</body>
+</html>

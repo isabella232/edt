@@ -57,14 +57,9 @@
       <topic label="Other reference topics" href="topics/redt00035.html"/>
    </topic>
    <topic label="EGL language details">
-      <topic label="Abs system function" href="topics/redt00206.html"/>
-      <topic label="Acos system function" href="topics/redt00207.html"/>
       <topic label="Add statement" href="topics/redt00021.html"/>
       <topic label="ANY type" href="topics/redt00050.html"/>
-      <topic label="Asin system function" href="topics/redt00208.html"/>
       <topic label="Assignment statement" href="topics/redt00004.html"/>
-      <topic label="Atan system function" href="topics/redt00209.html"/>
-      <topic label="Atan2 system function" href="topics/redt00210.html"/>
       <topic label="BasicProgram stereotype" href="topics/redt00102.html"/>
       <topic label="BidiTextArea widget" href="topics/redt00121.html"/>
       <topic label="BidiTextField widget" href="topics/redt00122.html"/>
@@ -76,24 +71,17 @@
       <topic label="Button widget" href="topics/redt00123.html"/>
       <topic label="BYTES type" href="topics/redt00063.html"/>
       <topic label="Call statement" href="topics/redt00003.html"/>
-      <topic label="CallCmd system function" href="topics/redt00145.html"/>
       <topic label="Case statement" href="topics/redt00014.html"/>
-      <topic label="Ceiling system function" href="topics/redt00211.html"/>
       <topic label="Checkbox widget" href="topics/redt00124.html"/>
       <topic label="CLOB type" href="topics/redt00055.html"/>
       <topic label="Close statement" href="topics/redt00022.html"/>
       <topic label="Column annotation" href="topics/redt00174.html"/>
       <topic label="Combo widget" href="topics/redt00125.html"/>
-      <topic label="Commit system function" href="topics/redt00198.html"/>
-      <topic label="CompleteBind system function" href="topics/redt00144.html"/>
       <topic label="Continue statement" href="topics/redt00020.html"/>
-      <topic label="Cos system function" href="topics/redt00212.html"/>
-      <topic label="Cosh system function" href="topics/redt00213.html"/>
       <topic label="DataGrid widget" href="topics/redt00113.html"/>
       <topic label="DataSource type" href="topics/redt00164.html"/>
       <topic label="DATE type" href="topics/redt00052.html"/>
       <topic label="DateTimeLib system library" href="topics/redt00069.html"/>
-      <topic label="Decimals system function" href="topics/redt00214.html"/>
       <topic label="DECIMAL type" href="topics/redt00059.html"/>
       <topic label="Delegate classifier detail" href="topics/redt00038.html"/>
       <topic label="Delete statement" href="topics/redt00023.html"/>
@@ -142,21 +130,16 @@
       <topic label="Execute statement" href="topics/redt00026.html"/>
       <topic label="Exit statement" href="topics/redt00019.html"/>
       <topic label="Expressions" href="topics/redt00095.html"/>
-      <topic label="Exp system function" href="topics/redt00215.html"/>
       <topic label="ExternalType classifier detail" href="topics/redt00041.html"/>
       <topic label="FLOAT type" href="topics/redt00060.html"/>
       <topic label="FloatLeft widget" href="topics/redt00110.html"/>
       <topic label="FloatRight widget" href="topics/redt00111.html"/>
-      <topic label="Floor system function" href="topics/redt00216.html"/>
       <topic label="For statement" href="topics/redt00017.html"/>
       <topic label="ForEach statement" href="topics/redt00018.html"/>
       <topic label="FreeSQL statement" href="topics/redt00029.html"/>
-      <topic label="Frexp system function" href="topics/redt00217.html"/>
       <topic label="Function invocation statement" href="topics/redt00008.html"/>
       <topic label="Function syntax" href="topics/redt00036.html"/>
       <topic label="GeneratedValue annotation" href="topics/redt00175.html"/>
-      <topic label="GetProperty system function" href="topics/redt00200.html"/>
-      <topic label="getResource system function" href="topics/redt00205.html"/>
       <topic label="Get statement" href="topics/redt00024.html"/>
       <topic label="Grid widget" href="topics/redt00114.html"/>
       <topic label="GridTooltip widget" href="topics/redt00186.html"/>
@@ -178,23 +161,45 @@
       <topic label="JSONLib system library" href="topics/redt00072.html"/>
       <topic label="JSONName annotation" href="topics/redt00088.html"/>
       <topic label="Label statement" href="topics/redt00009.html"/>
-      <topic label="Ldexp system function" href="topics/redt00218.html"/>
       <topic label="Library classifier detail" href="topics/redt00043.html"/>
       <topic label="Like operator" href="topics/redt00098.html"/>
       <topic label="List part" href="topics/redt00049.html"/>
       <topic label="List widget" href="topics/redt00179.html"/>
       <topic label="Listmulti widget" href="topics/redt00180.html"/>
       <topic label="Literals" href="topics/redt00096.html"/>
-      <topic label="Log system function" href="topics/redt00219.html"/>
-      <topic label="Log10 system function" href="topics/redt00220.html"/>
       <topic label="ManyToMany annotation" href="topics/redt00168.html"/>
       <topic label="ManyToOne annotation" href="topics/redt00169.html"/>
       <topic label="Matches operator" href="topics/redt00099.html"/>
-      <topic label="MathLib system library" href="topics/redt00067.html"/>
-      <topic label="Max system function" href="topics/redt00221.html"/>
+      <topic label="MathLib system library" href="topics/redt00067.html">
+         <topic label="Abs system function" href="topics/redt00206.html"/>
+         <topic label="Acos system function" href="topics/redt00207.html"/>
+         <topic label="Asin system function" href="topics/redt00208.html"/>
+         <topic label="Atan system function" href="topics/redt00209.html"/>
+         <topic label="Atan2 system function" href="topics/redt00210.html"/>
+         <topic label="Cos system function" href="topics/redt00212.html"/>
+         <topic label="Cosh system function" href="topics/redt00213.html"/>
+         <topic label="Ceiling system function" href="topics/redt00211.html"/>
+         <topic label="Decimals system function" href="topics/redt00214.html"/>
+         <topic label="Exp system function" href="topics/redt00215.html"/>
+         <topic label="Floor system function" href="topics/redt00216.html"/>
+         <topic label="Frexp system function" href="topics/redt00217.html"/>
+         <topic label="Ldexp system function" href="topics/redt00218.html"/>
+         <topic label="Log system function" href="topics/redt00219.html"/>
+         <topic label="Log10 system function" href="topics/redt00220.html"/>
+         <topic label="Min system function" href="topics/redt00222.html"/>
+         <topic label="Max system function" href="topics/redt00221.html"/>
+         <topic label="Modf system function" href="topics/redt00223.html"/>
+         <topic label="Pow system function" href="topics/redt00224.html"/>
+         <topic label="Precision system function" href="topics/redt00225.html"/>
+         <topic label="Random system function" href="topics/redt00226.html"/>
+         <topic label="Round system function" href="topics/redt00227.html"/>
+         <topic label="Sin system function" href="topics/redt00228.html"/>
+         <topic label="Sinh system function" href="topics/redt00229.html"/>
+         <topic label="Sqrt system function" href="topics/redt00230.html"/>
+         <topic label="Tan system function" href="topics/redt00231.html"/>
+         <topic label="Tanh system function" href="topics/redt00232.html"/>
+      </topic>
       <topic label="Menu widget" href="topics/redt00181.html"/>
-      <topic label="Min system function" href="topics/redt00222.html"/>
-      <topic label="Modf system function" href="topics/redt00223.html"/>
       <topic label="Move statement" href="topics/redt00006.html"/>
       <topic label="Naming conventions" href="topics/redt00106.html"/>
       <topic label="NativeType stereotype" href="topics/redt00085.html"/>
@@ -209,32 +214,28 @@
       <topic label="org.eclipse.edt.gen.javascript.templates package"
              href="topics/redt00196.html"/>
       <topic label="PasswordTextField widget" href="topics/redt00182.html"/>
-      <topic label="Pow system function" href="topics/redt00224.html"/>
-      <topic label="Precision system function" href="topics/redt00225.html"/>
+      <topic label="Pattern characters used to format non-string values to strings"
+             href="topics/redt00238.html"/>
       <topic label="Prepare statement" href="topics/redt00027.html"/>
       <topic label="Program classifier detail" href="topics/redt00047.html"/>
       <topic label="Property annotation" href="topics/redt00076.html"/>
       <topic label="RadioGroup widget" href="topics/redt00183.html"/>
-      <topic label="Random system function" href="topics/redt00226.html"/>
       <topic label="Record classifier detail" href="topics/redt00040.html"/>
       <topic label="Replace statement" href="topics/redt00025.html"/>
       <topic label="Reserved words" href="topics/redt00103.html"/>
       <topic label="Resource annotation" href="topics/redt00087.html"/>
       <topic label="Return statement" href="topics/redt00007.html"/>
-      <topic label="Rollback system function" href="topics/redt00199.html"/>
-      <topic label="Round system function" href="topics/redt00227.html"/>
       <topic label="RUIHandler stereotype" href="topics/redt00082.html"/>
       <topic label="RUILib system library" href="topics/redt00070.html"/>
       <topic label="RUIWidget stereotype" href="topics/redt00101.html"/>
       <topic label="ScrollableDataSource type" href="topics/redt00165.html"/>
       <topic label="SecondaryTables annotation" href="topics/redt00173.html"/>
       <topic label="Service classifier detail" href="topics/redt00044.html"/>
-      <topic label="ServiceLib system library" href="topics/redt00071.html"/>
-      <topic label="setLocale system function" href="topics/redt00201.html"/>
+      <topic label="ServiceLib system library" href="topics/redt00071.html">
+         <topic label="CompleteBind system function" href="topics/redt00144.html"/>
+      </topic>
       <topic label="Set-values blocks" href="topics/redt00105.html"/>
       <topic label="Shadow widget" href="topics/redt00117.html"/>
-      <topic label="Sin system function" href="topics/redt00228.html"/>
-      <topic label="Sinh system function" href="topics/redt00229.html"/>
       <topic label="SMALLINT type" href="topics/redt00056.html"/>
       <topic label="SMALLFLOAT type" href="topics/redt00061.html"/>
       <topic label="Span widget" href="topics/redt00118.html"/>
@@ -243,14 +244,28 @@
       <topic label="SQLLib system library" href="topics/redt00075.html"/>
       <topic label="SQLResultSet type" href="topics/redt00163.html"/>
       <topic label="SQLStatement type" href="topics/redt00177.html"/>
-      <topic label="Sqrt system function" href="topics/redt00230.html"/>
-      <topic label="StartCmd system function" href="topics/redt00197.html"/>
-      <topic label="StringLib system library" href="topics/redt00068.html"/>
+      <topic label="StringLib system library" href="topics/redt00068.html">
+         <topic label="Format system function" href="topics/redt00233.html"/>
+         <topic label="FromCharCode system function" href="topics/redt00236.html"/>
+         <topic label="StringLib.GetNextToken system function" href="topics/redt00234.html"/>
+         <topic label="GetTokenCount system function" href="topics/redt00235.html"/>
+         <topic label="Spaces system function" href="topics/redt00237.html"/>
+      </topic>
       <topic label="STRING type" href="topics/redt00051.html"/>
-      <topic label="SysLib system library" href="topics/redt00066.html"/>
+      <topic label="StrLib system library" href="topics/redt00239.html"/>
+      <topic label="SysLib system library" href="topics/redt00066.html">
+         <topic label="CallCmd system function" href="topics/redt00145.html"/>
+         <topic label="Commit system function" href="topics/redt00198.html"/>
+         <topic label="GetProperty system function" href="topics/redt00200.html"/>
+         <topic label="getResource system function" href="topics/redt00205.html"/>
+         <topic label="Rollback system function" href="topics/redt00199.html"/>
+         <topic label="SetLocale system function" href="topics/redt00201.html"/>
+         <topic label="StartCmd system function" href="topics/redt00197.html"/>
+         <topic label="Wait system function" href="topics/redt00202.html"/>
+         <topic label="WriteStdError system function" href="topics/redt00203.html"/>
+         <topic label="WriteStdOut system function" href="topics/redt00204.html"/>
+      </topic>
       <topic label="Table annotation" href="topics/redt00172.html"/>
-      <topic label="Tan system function" href="topics/redt00231.html"/>
-      <topic label="Tanh system function" href="topics/redt00232.html"/>
       <topic label="TextArea widget" href="topics/redt00190.html"/>
       <topic label="TextField widget" href="topics/redt00191.html"/>
       <topic label="TextLabel widget" href="topics/redt00192.html"/>
@@ -266,10 +281,7 @@
       <topic label="Try blocks" href="topics/redt00013.html"/>
       <topic label="Type conversions" href="topics/redt00064.html"/>
       <topic label="Use statement" href="topics/redt00005.html"/>
-      <topic label="Wait system function" href="topics/redt00202.html"/>
       <topic label="While statement" href="topics/redt00016.html"/>
-      <topic label="WriteStdError system function" href="topics/redt00203.html"/>
-      <topic label="WriteStdOut system function" href="topics/redt00204.html"/>
       <topic label="XMLAttribute annotation" href="topics/redt00089.html"/>
       <topic label="XMLElement annotation" href="topics/redt00090.html"/>
       <topic label="XMLLib system library" href="topics/redt00074.html"/>
