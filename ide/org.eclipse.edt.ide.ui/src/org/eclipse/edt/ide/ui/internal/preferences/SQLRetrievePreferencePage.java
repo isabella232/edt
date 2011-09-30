@@ -108,8 +108,8 @@ public class SQLRetrievePreferencePage extends PreferencePage implements IWorkbe
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(parent, IUIHelpConstants.SQL_RETRIEVE_PREFERENCES_CONTEXT);
 
 		Composite composite = createComposite(parent, 1);
-		createDataItemCharTypeControlOptionsGroup(composite);
-		createDataItemNationalCharControlOptionsGroup(composite);
+		//createDataItemCharTypeControlOptionsGroup(composite);
+		//createDataItemNationalCharControlOptionsGroup(composite);
 		createDataItemNameControlOptionsGroup(composite);
 
 		createTypeForDateTypesControlOptionsGroup(composite);
@@ -261,7 +261,7 @@ public class SQLRetrievePreferencePage extends PreferencePage implements IWorkbe
 		IPreferenceStore store = getPreferenceStore();
 
 		String option = store.getDefaultString(ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_CHAR_CONTROL_OPTION);
-		for (int i = 0; i < SQLPlugin.EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS.length; i++) {
+		/*for (int i = 0; i < SQLPlugin.EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS.length; i++) {
 			if (i == 0 || i == 1) {
 				charTypeControlButtons[i].setEnabled(true);
 			}
@@ -269,10 +269,10 @@ public class SQLRetrievePreferencePage extends PreferencePage implements IWorkbe
 				charTypeControlButtons[i].setSelection(true);
 			else
 				charTypeControlButtons[i].setSelection(false);
-		}
+		}*/
 		
 		option = store.getDefaultString(ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_NATIONAL_CHAR_CONTROL_OPTION);
-		for (int i = 0; i < SQLPlugin.EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS.length; i++) {
+		/*for (int i = 0; i < SQLPlugin.EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS.length; i++) {
 			if (i == 2 || i == 3) {
 				nationalCharControlButtons[i].setEnabled(true);
 			}
@@ -280,7 +280,7 @@ public class SQLRetrievePreferencePage extends PreferencePage implements IWorkbe
 				nationalCharControlButtons[i].setSelection(true);
 			else
 				nationalCharControlButtons[i].setSelection(false);
-		}
+		}*/
 		
 		option = store.getDefaultString(ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_NAME_CASE_CONTROL_OPTION);
 		for (int i = 0; i < SQLPlugin.NAME_CASE_OPTION_NON_MNEMONIC_STRINGS.length; i++) {
@@ -327,20 +327,20 @@ public class SQLRetrievePreferencePage extends PreferencePage implements IWorkbe
 		boolean selectionSet = false;
 
 		String option = store.getString(ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_CHAR_CONTROL_OPTION);
-		for (int i = 0; i < SQLPlugin.EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS.length; i++) {
+		/*for (int i = 0; i < SQLPlugin.EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS.length; i++) {
 			if (SQLPlugin.EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS[i].equalsIgnoreCase(option))
 				charTypeControlButtons[i].setSelection(true);
 			else
 				charTypeControlButtons[i].setSelection(false);
-		}
+		}*/
 		
 		option = store.getString(ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_NATIONAL_CHAR_CONTROL_OPTION);
-		for (int i = 0; i < SQLPlugin.EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS.length; i++) {
+		/*for (int i = 0; i < SQLPlugin.EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS.length; i++) {
 			if (SQLPlugin.EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS[i].equalsIgnoreCase(option))
 				nationalCharControlButtons[i].setSelection(true);
 			else
 				nationalCharControlButtons[i].setSelection(false);
-		}
+		}*/
 		
 		option = store.getString(ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_NAME_CASE_CONTROL_OPTION);
 		for (int i = 0; i < SQLPlugin.NAME_CASE_OPTION_NON_MNEMONIC_STRINGS.length; i++) {
@@ -408,23 +408,36 @@ public class SQLRetrievePreferencePage extends PreferencePage implements IWorkbe
 	private void storeValues() {
 		IPreferenceStore store = getPreferenceStore();
 
-		for (int i = 0; i < charTypeControlButtons.length; i++) {
-			if (charTypeControlButtons[i].getSelection() == true) {
-				store.setValue(
-					ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_CHAR_CONTROL_OPTION,
-					SQLPlugin.EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS[i]);
-				break;
+		if(charTypeControlButtons != null) {
+			for (int i = 0; i < charTypeControlButtons.length; i++) {
+				if (charTypeControlButtons[i].getSelection() == true) {
+					store.setValue(
+						ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_CHAR_CONTROL_OPTION,
+						SQLPlugin.EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS[i]);
+					break;
+				}
 			}
+		} else {
+			store.setValue(
+					ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_CHAR_CONTROL_OPTION,
+					SQLPlugin.EGL_CHAR_OPTION_NON_MNEMONIC_STRINGS[0]);
 		}
 		
-		for (int i = 0; i < nationalCharControlButtons.length; i++) {
-			if (nationalCharControlButtons[i].getSelection() == true) {
-				store.setValue(
-					ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_NATIONAL_CHAR_CONTROL_OPTION,
-					SQLPlugin.EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS[i]);
-				break;
+		if(nationalCharControlButtons != null) {
+			for (int i = 0; i < nationalCharControlButtons.length; i++) {
+				if (nationalCharControlButtons[i].getSelection() == true) {
+					store.setValue(
+						ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_NATIONAL_CHAR_CONTROL_OPTION,
+						SQLPlugin.EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS[i]);
+					break;
+				}
 			}
+		} else {
+			store.setValue(
+					ISQLPreferenceConstants.SQL_RETRIEVE_ITEM_NATIONAL_CHAR_CONTROL_OPTION,
+					SQLPlugin.EGL_NATIONAL_CHAR_OPTION_NON_MNEMONIC_STRINGS[0]);
 		}
+		
 				
 		for (int i = 0; i < caseControlButtons.length; i++) {
 			if (caseControlButtons[i].getSelection() == true) {
