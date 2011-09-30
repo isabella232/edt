@@ -138,20 +138,5 @@ public class DeploymentDesc extends RuntimeDeploymentDesc{
 		
 		return eglParts;
 	}
-
-	public void resolveIncludes(DeploymentDescFileLocator locator) throws Exception {
-		resolveDeploymentDescriptors( this, this, locator );
-	}
-	
-	private void resolveDeploymentDescriptors( DeploymentDesc root, DeploymentDesc deploymentDesc, DeploymentDescFileLocator locator ) throws Exception
-	{
-		for ( int i = 0; i < deploymentDesc.includes.size(); i ++ ) {
-			String include = (String)includes.get( i );
-			DeploymentDesc includedDeploymentDesc = createDeploymentDescriptor( include, locator.getInputStream( include ) );
-			deploymentDesc.addRestBindingsAll(includedDeploymentDesc.getRestBindings());
-			deploymentDesc.addSqlDatabaseBindingsAll(includedDeploymentDesc.getSqlDatabaseBindings());
-			resolveDeploymentDescriptors( root, includedDeploymentDesc, locator );
-		}
-	}
 	
 }
