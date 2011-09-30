@@ -195,7 +195,7 @@ public class DeployAction implements IObjectActionDelegate {
 			            		if( model != null )
 			            		{
 				            		IDEDeploymentDescFileLocator fileLocator = new IDEDeploymentDescFileLocator();
-				            		model.resolveIncludes( fileLocator );
+				            		DeploymentUtilities.resolveIncludes( model, fileLocator );
 			            			DeploymentContext context = new DeploymentContext( model );
 			            			context.setSourceProject( ddFile.getProject() );
 			            			context.init();

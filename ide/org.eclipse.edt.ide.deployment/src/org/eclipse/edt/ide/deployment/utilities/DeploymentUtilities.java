@@ -53,10 +53,13 @@ import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.ide.deployment.Activator;
+import org.eclipse.edt.ide.deployment.core.DeploymentDescFileLocator;
 import org.eclipse.edt.ide.deployment.core.IDeploymentConstants;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentProject;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentTarget;
+import org.eclipse.edt.ide.deployment.internal.nls.Messages;
+import org.eclipse.edt.ide.deployment.results.DeploymentResultsCollectorManager;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -356,7 +359,7 @@ public class DeploymentUtilities {
 		List eglProjectPath = org.eclipse.edt.ide.core.internal.utils.Util.getEGLProjectPath(project);
 		
 		List<DeploymentDesc> models = new ArrayList<DeploymentDesc>();
-		
+		IDEDeploymentDescFileLocator fileLocator = new IDEDeploymentDescFileLocator();
 		for (Iterator iter1 = eglProjectPath.iterator(); iter1.hasNext();) {
 			IEGLProject eglProject = (IEGLProject)iter1.next();
 			IProject dependentPro = eglProject.getProject();
@@ -371,6 +374,7 @@ public class DeploymentUtilities {
             		String ddName = resource.getName();
             		ddName = ddName.substring(0, ddName.indexOf( resource.getFileExtension() ) - 1);
 					DeploymentDesc model = DeploymentDesc.createDeploymentDescriptor(ddName, resource.getContents());
+					resolveIncludes( model, fileLocator );
 					models.add( model );
 				} catch (Exception e) {
 				}
@@ -474,6 +478,27 @@ public class DeploymentUtilities {
 	public static String getValidationResourceBundleName() {
 
 		return IEGLBaseConstants.EGL_VALIDATION_RESOURCE_BUNDLE_NAME;
+	}
+	
+	public static void resolveIncludes(DeploymentDesc root, DeploymentDescFileLocator locator) throws Exception {
+		resolveDeploymentDescriptors( root, root, locator );
+	}
+	
+	private static void resolveDeploymentDescriptors( DeploymentDesc root, DeploymentDesc deploymentDesc, DeploymentDescFileLocator locator ) throws Exception
+	{
+		List includes = deploymentDesc.getIncludes();
+		for ( int i = 0; i < includes.size(); i ++ ) {
+			String include = (String)includes.get( i );
+			try {
+				DeploymentDesc includedDeploymentDesc = DeploymentDesc.createDeploymentDescriptor( include, locator.getInputStream( include ) );
+				root.addRestBindingsAll(includedDeploymentDesc.getRestBindings());
+				root.addSqlDatabaseBindingsAll(includedDeploymentDesc.getSqlDatabaseBindings());
+				resolveDeploymentDescriptors( root, includedDeploymentDesc, locator );
+			} catch ( Exception e ) {
+				DeploymentResultsCollectorManager.getInstance().getCollector(DeploymentUtilities.getDeploymentTargetId(root.getDeploymentTarget(), null, root.getName()), root.getName(), false, false).addMessage(
+						DeploymentUtilities.createDeployMessage(IStatus.WARNING, Messages.bind(Messages.deployment_action_no_dd_files_found, include)));
+			}
+		}
 	}
 
 }
