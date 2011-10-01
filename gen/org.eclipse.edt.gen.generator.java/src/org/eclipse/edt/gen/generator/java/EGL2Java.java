@@ -49,6 +49,7 @@ public class EGL2Java extends AbstractGeneratorCommand {
 		// this defined the locations of the templates.properties files to be loaded and used
 		return new String[] { "org.eclipse.edt.gen.java.templates.eglx.lang.templates",
 				"org.eclipse.edt.gen.java.templates.eglx.persistence.sql.templates",
+				"org.eclipse.edt.gen.java.templates.eglx.persistence.templates",
 				"org.eclipse.edt.gen.java.templates.templates" };
 	}
 
