@@ -19,6 +19,7 @@ import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
@@ -189,9 +190,13 @@ public class TypeTemplate extends JavaTemplate {
 		if (!arg1.isNullable() && arg2.isNullable()) {
 			if (TypeUtils.isReferenceType(arg1.getType())) {
 				ctx.invoke(genExpression, arg1, ctx, out);
-				out.print(arg3 + " (");
-				ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
-				out.print(") org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
+				out.print(arg3 + " ");
+				if (!(arg2 instanceof BoxingExpression)) {
+					out.print("(");
+					ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
+					out.print(") ");
+				}
+				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
 				ctx.invoke(genExpression, arg2, ctx, out);
 				out.print(")");
 				// check to see if we are unboxing RHS temporary variables (inout and out types only)
@@ -206,18 +211,26 @@ public class TypeTemplate extends JavaTemplate {
 					ctx.invoke(genExpression, arg2, ctx, out);
 					out.println(";");
 					ctx.invoke(genExpression, arg1, ctx, out);
-					out.print(arg3 + " (");
-					ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
-					out.print(") org.eclipse.edt.javart.util.JavartUtil.checkNullable(" + temporary + ")");
+					out.print(arg3 + " ");
+					if (!(arg2 instanceof BoxingExpression)) {
+						out.print("(");
+						ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
+						out.print(") ");
+					}
+					out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(" + temporary + ")");
 				} else if (TypeUtils.isReferenceType(arg2.getType())) {
 					ctx.invoke(genExpression, arg1, ctx, out);
 					out.print(arg3);
 					ctx.invoke(genExpression, arg2, ctx, out);
 				} else {
 					ctx.invoke(genExpression, arg1, ctx, out);
-					out.print(arg3 + " (");
-					ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
-					out.print(") org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
+					out.print(arg3 + " ");
+					if (!(arg2 instanceof BoxingExpression)) {
+						out.print("(");
+						ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
+						out.print(") ");
+					}
+					out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
 					ctx.invoke(genExpression, arg2, ctx, out);
 					out.print(")");
 				}
