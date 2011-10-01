@@ -11,8 +11,29 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.eglx.lang;
 
+import org.eclipse.edt.gen.GenerationException;
+import org.eclipse.edt.gen.java.CommonUtilities;
+import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Type;
 
 public class AnyTypeTemplate extends JavaTemplate {
+
+	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
+		// for number type, always use the runtime
+		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.EAny")) {
+			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
+			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
+			out.print("(");
+			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
+			out.print(", ");
+			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+			out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
+		} else
+			ctx.invokeSuper(this, genBinaryExpression, type, ctx, out, arg);
+	}
 
 }
