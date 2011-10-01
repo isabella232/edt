@@ -1,4 +1,4 @@
-package org.eclipse.edt.gen.java.templates.eglx.persistence.sql;
+package org.eclipse.edt.gen.java.templates.eglx.persistence;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
