@@ -14,6 +14,8 @@ package org.eclipse.edt.runtime.java.eglx.lang;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
@@ -203,6 +205,118 @@ public abstract class EAny implements eglx.lang.EAny {
 	@Override
 	public eglx.lang.EAny ezeUnbox() {
 		return this;
+	}
+
+	public static eglx.lang.EAny asAny(Object value) {
+		if (value == null)
+			return null;
+		return ezeBox(value);
+	}
+
+	public static eglx.lang.EAny asAny(EAny value) {
+		if (value == null)
+			return null;
+		return value;
+	}
+
+	public static eglx.lang.EAny asAny(Short value) {
+		if (value == null)
+			return null;
+		return ezeBox(value);
+	}
+
+	public static eglx.lang.EAny asAny(ESmallint value) {
+		if (value == null)
+			return null;
+		return value;
+	}
+
+	public static eglx.lang.EAny asAny(Integer value) {
+		if (value == null)
+			return null;
+		return ezeBox(value);
+	}
+
+	public static eglx.lang.EAny asAny(EInt value) {
+		if (value == null)
+			return null;
+		return value;
+	}
+
+	public static eglx.lang.EAny asAny(Long value) {
+		return ezeBox(value);
+	}
+
+	public static eglx.lang.EAny asAny(EBigint value) {
+		if (value == null)
+			return null;
+		return value;
+	}
+
+	public static eglx.lang.EAny asAny(Float value) {
+		if (value == null)
+			return null;
+		return ezeBox(value);
+	}
+
+	public static eglx.lang.EAny asAny(ESmallfloat value) {
+		if (value == null)
+			return null;
+		return value;
+	}
+
+	public static eglx.lang.EAny asAny(Double value) {
+		if (value == null)
+			return null;
+		return ezeBox(value);
+	}
+
+	public static eglx.lang.EAny asAny(EFloat value) {
+		if (value == null)
+			return null;
+		return value;
+	}
+
+	public static eglx.lang.EAny asAny(BigDecimal value) throws AnyException {
+		if (value == null)
+			return null;
+		return ezeBox(value);
+	}
+
+	public static eglx.lang.EAny asAny(EDecimal value) throws AnyException {
+		if (value == null)
+			return null;
+		return value;
+	}
+
+	public static eglx.lang.EAny asAny(BigInteger value) throws AnyException {
+		if (value == null)
+			return null;
+		return ezeBox(value);
+	}
+
+	public static eglx.lang.EAny asAny(Number value) throws AnyException {
+		if (value == null)
+			return null;
+		return ezeBox(value);
+	}
+
+	public static eglx.lang.EAny asAny(ENumber value) throws AnyException {
+		if (value == null)
+			return null;
+		return value;
+	}
+
+	public static eglx.lang.EAny asAny(String value) throws AnyException {
+		if (value == null)
+			return null;
+		return ezeBox(value);
+	}
+
+	public static eglx.lang.EAny asAny(EString value) throws AnyException {
+		if (value == null)
+			return null;
+		return value;
 	}
 
 	public static boolean equals(Object object1, Object object2) {
