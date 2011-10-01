@@ -36,42 +36,40 @@ public abstract class EAny implements eglx.lang.EAny {
 	public static eglx.lang.EAny box(eglx.lang.EAny value) throws AnyException {
 		return ezeBox(value);
 	}
-		
+
 	@SuppressWarnings("unchecked")
 	public static <R extends Object> AnyBoxedObject<R> ezeBox(R object) throws AnyException {
 		if (object instanceof AnyValue) {
-			AnyValue newValue = ((AnyValue)object).ezeNewValue();
-			newValue.ezeCopy((AnyValue)object);
-			return new AnyBoxedObject<R>((R)newValue);
+			AnyValue newValue = ((AnyValue) object).ezeNewValue();
+			newValue.ezeCopy((AnyValue) object);
+			return new AnyBoxedObject<R>((R) newValue);
 		}
 		return new AnyBoxedObject<R>(object);
 	}
-	
+
 	public static <R extends Object> AnyBoxedObject<R> ezeWrap(R object) {
 		return new AnyBoxedObject<R>(object);
 	}
 
 	public static <T extends Object> T ezeCast(Object value, Class<T> clazz) throws AnyException {
 		try {
-			Object unboxed = value instanceof eglx.lang.EAny ? ((eglx.lang.EAny)value).ezeUnbox() : value;
+			Object unboxed = value instanceof eglx.lang.EAny ? ((eglx.lang.EAny) value).ezeUnbox() : value;
 			return clazz.cast(unboxed);
 		}
-		catch(ClassCastException ex) {
+		catch (ClassCastException ex) {
 			TypeCastException tcx = new TypeCastException();
 			tcx.castToName = clazz.getName();
-			Object unboxed = value instanceof eglx.lang.EAny ? ((eglx.lang.EAny)value).ezeUnbox() : value;
+			Object unboxed = value instanceof eglx.lang.EAny ? ((eglx.lang.EAny) value).ezeUnbox() : value;
 			tcx.actualTypeName = unboxed.getClass().getName();
-			tcx.initCause( ex );
-			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
+			tcx.initCause(ex);
+			throw tcx.fillInMessage(Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName);
 		}
 	}
-	
+
 	/**
-	 * Dynamic implementation of data type conversion.  Used when casting values
-	 * of unknown type to the receiver type.  This method looks up the appropriate
-	 * conversion operation first in the receiver class and if not found then
-	 * lookup will continue into the class of the <code>value</code> parameter.
-	 *
+	 * Dynamic implementation of data type conversion. Used when casting values of unknown type to the receiver type. This
+	 * method looks up the appropriate conversion operation first in the receiver class and if not found then lookup will
+	 * continue into the class of the <code>value</code> parameter.
 	 * @param value
 	 * @param conversionMethod
 	 * @param clazz
@@ -84,9 +82,8 @@ public abstract class EAny implements eglx.lang.EAny {
 	public static Object ezeCast(Object value, String conversionMethod, Class clazz, Class[] parameterTypes, Object[] args) throws AnyException {
 		try {
 			// Conversion operation needs to be invoked
-			Object unboxed = value instanceof eglx.lang.EAny ? ((eglx.lang.EAny)value).ezeUnbox() : value;
-			if ( unboxed == null )
-			{
+			Object unboxed = value instanceof eglx.lang.EAny ? ((eglx.lang.EAny) value).ezeUnbox() : value;
+			if (unboxed == null) {
 				return null;
 			}
 			Method method;
@@ -97,23 +94,23 @@ public abstract class EAny implements eglx.lang.EAny {
 			try {
 				method = clazz.getMethod(conversionMethod, parmTypes);
 			}
-			catch(NoSuchMethodException ex) {
+			catch (NoSuchMethodException ex) {
 				try {
 					method = value.getClass().getMethod(conversionMethod, parmTypes);
-				} 
+				}
 				catch (NoSuchMethodException ex1) {
 					TypeCastException tcx = new TypeCastException();
 					tcx.castToName = clazz.getName();
 					tcx.actualTypeName = unboxed.getClass().getName();
-					throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
+					throw tcx.fillInMessage(Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName);
 				}
 			}
-			if (args == null) 
+			if (args == null)
 				return method.invoke(null, unboxed);
-			else 
+			else
 				return method.invoke(null, unboxed, args);
 		}
-		catch(InvocationTargetException ex) {
+		catch (InvocationTargetException ex) {
 			throw JavartUtil.makeEglException(ex.getTargetException());
 		}
 		catch (Exception ex1) {
@@ -123,37 +120,35 @@ public abstract class EAny implements eglx.lang.EAny {
 	}
 
 	public static <T extends Object> boolean ezeIsa(Object object, Class<T> clazz) {
-		Object unboxed = object instanceof eglx.lang.EAny ? ((eglx.lang.EAny)object).ezeUnbox() : object;
+		Object unboxed = object instanceof eglx.lang.EAny ? ((eglx.lang.EAny) object).ezeUnbox() : object;
 		return clazz.isInstance(unboxed);
 	}
-	
-	public static Object ezeDeepCopy( Object object )
-	{
-		if ( object instanceof EAny )
-		{
-			EAny any = (EAny)object;
-			//TODO Using clone is not the correct way to make a deep copy of some kinds of objects.
-			try
-			{
+
+	public static Object ezeDeepCopy(Object object) {
+		if (object instanceof EAny) {
+			EAny any = (EAny) object;
+			// TODO Using clone is not the correct way to make a deep copy of some kinds of objects.
+			try {
 				return any.clone();
 			}
-			catch ( CloneNotSupportedException ex )
-			{
+			catch (CloneNotSupportedException ex) {
 				AnyException anyEx = new AnyException();
-				anyEx.setMessage( ex.toString() );
+				anyEx.setMessage(ex.toString());
 				throw anyEx;
 			}
 		}
-		
+
 		return object;
 	}
-	
-	public EAny() { super(); }
-	
+
+	public EAny() {
+		super();
+	}
+
 	public java.lang.String ezeTypeSignature() {
 		return getClass().getName();
 	}
-	
+
 	public String ezeName() {
 		return getClass().getSimpleName();
 	}
@@ -173,32 +168,33 @@ public abstract class EAny implements eglx.lang.EAny {
 			}
 			Object value = field.get(this);
 			return value instanceof eglx.lang.EAny ? (eglx.lang.EAny) value : ezeBox(value);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			DynamicAccessException dax = new DynamicAccessException();
 			dax.key = name;
-			dax.initCause( e );
-			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, name, this );
-		} 
+			dax.initCause(e);
+			throw dax.fillInMessage(Message.DYNAMIC_ACCESS_FAILED, name, this);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public void ezeSet(String name, Object value) throws AnyException {
 		try {
 			Field field = this.getClass().getField(name);
-			if (ezeTypeConstraints(name) != null){
+			if (ezeTypeConstraints(name) != null) {
 				TypeConstraints constraints = ezeTypeConstraints(name);
 				value = constraints.constrainValue(value);
-			}
-			else if (value instanceof AnyBoxedObject) {
-				value = ((AnyBoxedObject<Object>)value).ezeUnbox();
+			} else if (value instanceof AnyBoxedObject) {
+				value = ((AnyBoxedObject<Object>) value).ezeUnbox();
 			}
 			field.set(this, value);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			DynamicAccessException dax = new DynamicAccessException();
 			dax.key = name;
-			dax.initCause( e );
-			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, name, this );
-		} 
+			dax.initCause(e);
+			throw dax.fillInMessage(Message.DYNAMIC_ACCESS_FAILED, name, this);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -210,118 +206,14 @@ public abstract class EAny implements eglx.lang.EAny {
 	public static eglx.lang.EAny asAny(Object value) {
 		if (value == null)
 			return null;
+		if (value instanceof eglx.lang.EAny)
+			return (EAny) value;
 		return ezeBox(value);
-	}
-
-	public static eglx.lang.EAny asAny(EAny value) {
-		if (value == null)
-			return null;
-		return value;
-	}
-
-	public static eglx.lang.EAny asAny(Short value) {
-		if (value == null)
-			return null;
-		return ezeBox(value);
-	}
-
-	public static eglx.lang.EAny asAny(ESmallint value) {
-		if (value == null)
-			return null;
-		return value;
-	}
-
-	public static eglx.lang.EAny asAny(Integer value) {
-		if (value == null)
-			return null;
-		return ezeBox(value);
-	}
-
-	public static eglx.lang.EAny asAny(EInt value) {
-		if (value == null)
-			return null;
-		return value;
-	}
-
-	public static eglx.lang.EAny asAny(Long value) {
-		return ezeBox(value);
-	}
-
-	public static eglx.lang.EAny asAny(EBigint value) {
-		if (value == null)
-			return null;
-		return value;
-	}
-
-	public static eglx.lang.EAny asAny(Float value) {
-		if (value == null)
-			return null;
-		return ezeBox(value);
-	}
-
-	public static eglx.lang.EAny asAny(ESmallfloat value) {
-		if (value == null)
-			return null;
-		return value;
-	}
-
-	public static eglx.lang.EAny asAny(Double value) {
-		if (value == null)
-			return null;
-		return ezeBox(value);
-	}
-
-	public static eglx.lang.EAny asAny(EFloat value) {
-		if (value == null)
-			return null;
-		return value;
-	}
-
-	public static eglx.lang.EAny asAny(BigDecimal value) throws AnyException {
-		if (value == null)
-			return null;
-		return ezeBox(value);
-	}
-
-	public static eglx.lang.EAny asAny(EDecimal value) throws AnyException {
-		if (value == null)
-			return null;
-		return value;
-	}
-
-	public static eglx.lang.EAny asAny(BigInteger value) throws AnyException {
-		if (value == null)
-			return null;
-		return ezeBox(value);
-	}
-
-	public static eglx.lang.EAny asAny(Number value) throws AnyException {
-		if (value == null)
-			return null;
-		return ezeBox(value);
-	}
-
-	public static eglx.lang.EAny asAny(ENumber value) throws AnyException {
-		if (value == null)
-			return null;
-		return value;
-	}
-
-	public static eglx.lang.EAny asAny(String value) throws AnyException {
-		if (value == null)
-			return null;
-		return ezeBox(value);
-	}
-
-	public static eglx.lang.EAny asAny(EString value) throws AnyException {
-		if (value == null)
-			return null;
-		return value;
 	}
 
 	public static boolean equals(Object object1, Object object2) {
-		Object unboxedOp1 = object1 instanceof eglx.lang.EAny ? ((eglx.lang.EAny)object1).ezeUnbox() : object1;
-		Object unboxedOp2 = object2 instanceof eglx.lang.EAny ? ((eglx.lang.EAny)object2).ezeUnbox() : object2;
+		Object unboxedOp1 = object1 instanceof eglx.lang.EAny ? ((eglx.lang.EAny) object1).ezeUnbox() : object1;
+		Object unboxedOp2 = object2 instanceof eglx.lang.EAny ? ((eglx.lang.EAny) object2).ezeUnbox() : object2;
 		if (unboxedOp1 == null && unboxedOp2 == null)
 			return true;
 		if (unboxedOp1 == null || unboxedOp2 == null)
@@ -330,8 +222,8 @@ public abstract class EAny implements eglx.lang.EAny {
 	}
 
 	public static boolean notEquals(Object object1, Object object2) {
-		Object unboxedOp1 = object1 instanceof eglx.lang.EAny ? ((eglx.lang.EAny)object1).ezeUnbox() : object1;
-		Object unboxedOp2 = object2 instanceof eglx.lang.EAny ? ((eglx.lang.EAny)object2).ezeUnbox() : object2;
+		Object unboxedOp1 = object1 instanceof eglx.lang.EAny ? ((eglx.lang.EAny) object1).ezeUnbox() : object1;
+		Object unboxedOp2 = object2 instanceof eglx.lang.EAny ? ((eglx.lang.EAny) object2).ezeUnbox() : object2;
 		if (unboxedOp1 == null && unboxedOp2 == null)
 			return false;
 		if (unboxedOp1 == null || unboxedOp2 == null)
@@ -340,23 +232,23 @@ public abstract class EAny implements eglx.lang.EAny {
 	}
 
 	/**
-	 * Subclasses of this method that contain fields with types that can be parameterized with constraints such as length, precision
-	 * decimals, pattern, etc. should override this method to return the particular constraints set each field.  These 
-	 * constraints are used to convert values to conform to the given constraints.  An example would be a string of length 10 being
-	 * dynamically assigned to a String field that was defined as char(6).  The actual java field type will be java.lang.String.  However
-	 * the TypeConstraints for that field will have a reference to Class egl.lang.Char.class as well as the length of 6.  This information
-	 * will be used to then truncated the string of length 10 to one of length 6.
+	 * Subclasses of this method that contain fields with types that can be parameterized with constraints such as length,
+	 * precision decimals, pattern, etc. should override this method to return the particular constraints set each field.
+	 * These constraints are used to convert values to conform to the given constraints. An example would be a string of
+	 * length 10 being dynamically assigned to a String field that was defined as char(6). The actual java field type will be
+	 * java.lang.String. However the TypeConstraints for that field will have a reference to Class egl.lang.Char.class as
+	 * well as the length of 6. This information will be used to then truncated the string of length 10 to one of length 6.
 	 * @param fieldName
 	 * @return
 	 */
 	public TypeConstraints ezeTypeConstraints(String fieldName) {
 		return null;
 	}
-	
+
 	/**
 	 * Default implementation does nothing
 	 */
 	public void ezeInitialize() throws AnyException {
-		
+
 	}
 }
