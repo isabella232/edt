@@ -29,12 +29,14 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.IfStatement;
+import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.OpenUIStatement;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterKind;
@@ -143,7 +145,21 @@ public class ReorganizeCode extends AbstractVisitor {
 				while (elementType instanceof ArrayType) {
 					elementType = ((ArrayType) elementType).getElementType();
 				}
-				processArrayLiteral(elementType, (ArrayLiteral) object.getRHS());
+				List<Expression> entries = ((ArrayLiteral) object.getRHS()).getEntries();
+				if (entries != null && entries.size() == 0) {
+					// as there are no entries, the type needs to be changed to the same type as the lhs
+					IntegerLiteral integerLiteral = factory.createIntegerLiteral();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						integerLiteral.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					integerLiteral.setValue("0");
+					NewExpression newExpression = factory.createNewExpression();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						newExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					newExpression.getArguments().add(integerLiteral);
+					newExpression.setId(object.getLHS().getType().getTypeSignature());
+					object.setRHS(newExpression);
+				} else
+					processArrayLiteral(elementType, (ArrayLiteral) object.getRHS());
 			}
 		}
 		// check to see if this is a compound assignment (something like += or *=, etc). if it is, then call out to the type
