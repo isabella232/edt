@@ -111,9 +111,6 @@ public class TypeCompatibilityUtil {
 		inferredTypeForDateTimeArithmetic = new HashMap();
 		
 		inferredTypeForDateTimeArithmetic.put(
-			new DateTimeCalculation(Primitive.DATE, Primitive.DATE, BinaryExpression.Operator.MINUS),
-			Primitive.NUM);
-		inferredTypeForDateTimeArithmetic.put(
 			new DateTimeCalculation(Primitive.DATE, Primitive.NUM, BinaryExpression.Operator.PLUS),
 			Primitive.DATE);
 		inferredTypeForDateTimeArithmetic.put(
