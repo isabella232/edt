@@ -1,20 +1,13 @@
 package org.eclipse.edt.gen.java.templates.eglx.persistence.sql;
 
-import java.io.StringWriter;
-
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayType;
-import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.persistence.sql.DummyExpression;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlGetByKeyStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.impl.DummyExpressionDynamicImpl;
 import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
 
 public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
@@ -80,7 +73,8 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 			boolean targetIsList = target.getType() instanceof ArrayType;
 			EGLClass targetType;
 			if (targetIsList) {
-				out.print(TypeUtils.Type_List + " ezeList = ");
+				ctx.invoke(genRuntimeTypeName, target.getType(), ctx, out, TypeNameKind.EGLImplementation);
+				out.print(" ezeList = ");
 				ctx.invoke(genInstantiation, target.getType().getClassifier(), ctx, out);
 				out.println(";");
 				// Assume target type is an EGLClass as other Classifiers would be filtered out by front end validation

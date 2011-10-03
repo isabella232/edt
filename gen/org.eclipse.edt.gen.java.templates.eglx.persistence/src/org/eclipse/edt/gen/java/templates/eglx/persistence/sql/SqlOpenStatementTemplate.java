@@ -2,7 +2,6 @@ package org.eclipse.edt.gen.java.templates.eglx.persistence.sql;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlOpenStatement;
 
 public class SqlOpenStatementTemplate extends SqlActionStatementTemplate {
