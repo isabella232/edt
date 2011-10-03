@@ -39,8 +39,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -50,7 +48,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbench;
@@ -239,19 +236,6 @@ public class EGLDDBindingBlock extends EGLDDBaseBlock {
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		client.setLayoutData(gd);
 		
-		//alias
-		toolkit.createLabel( client, SOAMessages.BindFileAliasLabel );
-		final Text fAliasText = toolkit.createText(client, getEGLDeploymentRootInput().getDeployment().getAlias(), SWT.BORDER|SWT.SINGLE); //$NON-NLS-1$
-		gd = new GridData();
-		gd.widthHint = 200;
-		fAliasText.setLayoutData( gd );
-		fAliasText.addModifyListener(new ModifyListener(){
-			public void modifyText(ModifyEvent e) {
-				getEGLDeploymentRootInput().getDeployment().setAlias(fAliasText.getText());
-			}
-
-			
-		});
 		//filler
 //		toolkit.createLabel( parent, "" );
 	}
