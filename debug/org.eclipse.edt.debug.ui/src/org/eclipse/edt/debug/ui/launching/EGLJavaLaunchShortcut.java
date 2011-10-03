@@ -15,205 +15,193 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.edt.compiler.IGenerator;
-import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.ui.DebugUITools;
+import org.eclipse.debug.ui.IDebugModelPresentation;
 import org.eclipse.edt.debug.core.DebugUtil;
-import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
-import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
+import org.eclipse.edt.debug.internal.ui.EDTDebugUIPlugin;
 import org.eclipse.edt.ide.core.internal.model.SourcePart;
 import org.eclipse.edt.ide.core.model.EGLCore;
-import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLFile;
-import org.eclipse.edt.ide.core.model.IPackageDeclaration;
 import org.eclipse.edt.ide.core.model.IPart;
-import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
-import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.PartNotFoundException;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.mof.serialization.Environment;
-import org.eclipse.jdt.debug.ui.launchConfigurations.JavaApplicationLaunchShortcut;
-import org.eclipse.jdt.internal.launching.JavaLaunchableTester;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
-import org.eclipse.osgi.util.NLS;
-import org.eclipse.ui.dialogs.ListDialog;
+import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
-@SuppressWarnings("restriction")
 public class EGLJavaLaunchShortcut extends AbstractEGLLaunchShortcut
 {
 	@Override
 	public void doLaunch( IFile eglFile, String mode )
 	{
-		final List<IFile> files = getMainJavaOutputFiles( eglFile );
-		if ( files == null || files.size() == 0 )
+		try
 		{
-			MessageDialog.openError( DebugUtil.getShell(), EGLLaunchingMessages.launch_error_dialog_title,
-					NLS.bind( EGLLaunchingMessages.java_launch_no_files, eglFile.getName() ) );
-			return;
-		}
-		
-		IFile file = null;
-		if ( files.size() > 1 )
-		{
-			ListDialog dialog = new ListDialog( DebugUtil.getShell() );
-			dialog.setTitle( EGLLaunchingMessages.java_launch_file_selection_title );
-			dialog.setMessage( EGLLaunchingMessages.java_launch_file_selection_msg );
-			dialog.setContentProvider( new IStructuredContentProvider() {
-				@Override
-				public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
-				{
-				}
-				
-				@Override
-				public void dispose()
-				{
-				}
-				
-				@Override
-				public Object[] getElements( Object inputElement )
-				{
-					return files.toArray();
-				}
-			} );
-			dialog.setLabelProvider( new LabelProvider() {
-				public String getText( Object element )
-				{
-					if ( element instanceof IFile )
-					{
-						return ((IFile)element).getFullPath().toString();
-					}
-					return super.getText( element );
-				}
-			} );
-			dialog.setInput( files );
-			
-			if ( dialog.open() == Window.OK )
+			ILaunchConfiguration config = findLaunchConfiguration( eglFile.getProject(), eglFile );
+			if ( config != null )
 			{
-				Object[] result = dialog.getResult();
-				if ( result != null && result.length > 0 && result[ 0 ] instanceof IFile )
-				{
-					file = (IFile)result[ 0 ];
-				}
+				DebugUITools.launch( config, mode );
 			}
 		}
-		else
+		catch ( CoreException e )
 		{
-			file = files.get( 0 );
-		}
-		
-		if ( file != null && file.exists() )
-		{
-			JavaApplicationLaunchShortcut shortcut = new JavaApplicationLaunchShortcut();
-			shortcut.launch( new StructuredSelection( file ), mode );
+			MessageDialog.openError( DebugUtil.getShell(), EGLLaunchingMessages.launch_error_dialog_title, e.getMessage() );
 		}
 	}
 	
-	public static List<IFile> getMainJavaOutputFiles( IFile eglFile )
+	protected ILaunchConfiguration findLaunchConfiguration( IProject project, IFile eglFile ) throws CoreException
 	{
-		List<IFile> files = EGLJavaLaunchShortcut.getJavaOutputFiles( eglFile );
-		if ( files != null && files.size() > 0 )
+		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
+		ILaunchConfigurationType configType = launchManager.getLaunchConfigurationType( IEGLJavaLaunchConstants.CONFIG_TYPE_MAIN_PROGRAM );
+		if ( configType == null )
 		{
-			List<IFile> mainFiles = new ArrayList<IFile>( files.size() );
-			JavaLaunchableTester tester = new JavaLaunchableTester();
-			for ( IFile file : files )
+			abort( EGLLaunchingMessages.egl_java_main_launch_configuration_type_not_found );
+		}
+		String fileName = getQualifiedFilename( eglFile );
+		ILaunchConfiguration[] configs = launchManager.getLaunchConfigurations( configType );
+		List candidateConfigs = new ArrayList( configs.length );
+		for ( int i = 0; i < configs.length; i++ )
+		{
+			ILaunchConfiguration config = configs[ i ];
+			if ( config.getAttribute( IEGLJavaLaunchConstants.ATTR_PROGRAM_FILE, "" ).equals( fileName ) ) //$NON-NLS-1$
 			{
-				if ( tester.test( file, "hasMain", new Object[ 0 ], null ) ) //$NON-NLS-1$
+				String configProjectName = config.getAttribute( IEGLJavaLaunchConstants.ATTR_PROJECT_NAME, "" ); //$NON-NLS-1$
+				String projectName = ""; //$NON-NLS-1$
+				if ( project != null && project.getName() != null )
 				{
-					mainFiles.add( file );
+					projectName = project.getName();
+				}
+				if ( projectName.equals( configProjectName ) )
+				{
+					candidateConfigs.add( config );
 				}
 			}
-			return mainFiles;
+		}
+		
+		int candidateCount = candidateConfigs.size();
+		if ( candidateCount < 1 )
+		{
+			return createConfiguration( project, eglFile );
+		}
+		else if ( candidateCount == 1 )
+		{
+			return (ILaunchConfiguration)candidateConfigs.get( 0 );
+		}
+		else
+		{
+			// Prompt the user to choose a config. A null result means the user
+			// cancelled the dialog, in which case this method returns null,
+			// since cancelling the dialog should also cancel launching anything.
+			ILaunchConfiguration config = chooseConfiguration( candidateConfigs );
+			if ( config != null )
+			{
+				return config;
+			}
+		}
+		
+		return null;
+	}
+	
+	protected void abort( String message ) throws CoreException
+	{
+		Status status = new Status( IStatus.ERROR, EDTDebugUIPlugin.PLUGIN_ID, IStatus.ERROR, message, null );
+		throw new CoreException( status );
+	}
+	
+	protected String getQualifiedFilename( IFile eglFile ) throws CoreException
+	{
+		String pathName = eglFile.getFullPath().toString();
+		// Chop off project from file name
+		int index = pathName.indexOf( '/', 1 );
+		
+		return pathName.substring( index + 1 );
+	}
+	
+	protected ILaunchConfiguration createConfiguration( IProject project, IFile eglFile ) throws CoreException
+	{
+		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
+		ILaunchConfigurationType configType = launchManager.getLaunchConfigurationType( IEGLJavaLaunchConstants.CONFIG_TYPE_MAIN_PROGRAM );
+		if ( configType == null )
+		{
+			abort( EGLLaunchingMessages.egl_java_main_launch_configuration_type_not_found );
+		}
+		
+		String fileName = getQualifiedFilename( eglFile );
+		String programName = getFirstProgram( (IEGLFile)EGLCore.create( eglFile ) );
+		if ( programName == null )
+		{
+			abort( EGLLaunchingMessages.egl_java_main_launch_configuration_no_program_found );
+		}
+		
+		String configName = launchManager.generateLaunchConfigurationName( programName );
+		ILaunchConfigurationWorkingCopy configCopy = configType.newInstance( null, configName );
+		if ( configCopy == null )
+		{
+			abort( EGLLaunchingMessages.egl_java_main_launch_configuration_create_config_failed );
+		}
+		
+		String projectName = null;
+		if ( project != null )
+		{
+			projectName = project.getName();
+		}
+		
+		configCopy.setAttribute( IEGLJavaLaunchConstants.ATTR_PROJECT_NAME, projectName );
+		configCopy.setAttribute( IEGLJavaLaunchConstants.ATTR_PROGRAM_FILE, fileName );
+		EGLJavaLaunchUtils.addJavaAttributes( projectName, configCopy );
+		
+		return configCopy.doSave();
+	}
+	
+	protected ILaunchConfiguration chooseConfiguration( List configList )
+	{
+		IDebugModelPresentation labelProvider = DebugUITools.newDebugModelPresentation();
+		ElementListSelectionDialog dialog = new ElementListSelectionDialog( DebugUtil.getShell(), labelProvider );
+		dialog.setElements( configList.toArray() );
+		dialog.setTitle( EGLLaunchingMessages.launch_config_selection_dialog_title );
+		dialog.setMessage( EGLLaunchingMessages.launch_config_selection_dialog_message );
+		dialog.setMultipleSelection( false );
+		int result = dialog.open();
+		labelProvider.dispose();
+		if ( result == Window.OK )
+		{
+			return (ILaunchConfiguration)dialog.getFirstResult();
 		}
 		return null;
 	}
 	
-	public static List<IFile> getJavaOutputFiles( IFile eglFile )
+	protected String getFirstProgram( IEGLFile programFile )
 	{
-		IGenerator[] gens = ProjectSettingsUtility.getGenerators( eglFile );
-		if ( gens.length > 0 )
+		if ( programFile != null )
 		{
-			List<IGenerator> javaGens = new ArrayList<IGenerator>( gens.length );
-			for ( IGenerator gen : gens )
+			try
 			{
-				if ( "Java".equalsIgnoreCase( gen.getLanguage() ) ) //$NON-NLS-1$
+				IPart[] parts = programFile.getParts();
+				SourcePart srcPart = null;
+				for ( int i = 0; i < parts.length; i++ )
 				{
-					javaGens.add( gen );
+					if ( parts[ i ] instanceof SourcePart )
+					{
+						srcPart = (SourcePart)parts[ i ];
+						if ( srcPart.isProgram() )
+						{
+							return srcPart.getFullyQualifiedName();
+						}
+					}
 				}
 			}
-			
-			if ( javaGens.size() > 0 )
+			catch ( CoreException e )
 			{
-				IEGLFile element = (IEGLFile)EGLCore.create( eglFile );
-				if ( element != null )
-				{
-					ProjectEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment( eglFile.getProject() );
-					try
-					{
-						Environment.pushEnv( env.getIREnvironment() );
-						env.getIREnvironment().initSystemEnvironment( env.getSystemEnvironment() );
-						
-						List<IFile> files = new ArrayList<IFile>( javaGens.size() );
-						
-						String[] pkg;
-						IPackageDeclaration[] pkgDecl = element.getPackageDeclarations();
-						if ( pkgDecl != null && pkgDecl.length > 0 )
-						{
-							pkg = IRFileNameUtility.toIRFileName( pkgDecl[ 0 ].getElementName().split( "\\." ) ); //$NON-NLS-1$
-						}
-						else
-						{
-							pkg = new String[ 0 ];
-						}
-						
-						for ( IPart ipart : element.getParts() )
-						{
-							if ( ipart instanceof SourcePart && ((SourcePart)ipart).isProgram() )
-							{
-								try
-								{
-									String name = IRFileNameUtility.toIRFileName( ipart.getElementName() );
-									Part part = env.findPart( InternUtil.intern( pkg ), InternUtil.intern( name ) );
-									for ( IGenerator gen : javaGens )
-									{
-										if ( gen instanceof org.eclipse.edt.ide.core.IGenerator )
-										{
-											try
-											{
-												for ( IFile file : ((org.eclipse.edt.ide.core.IGenerator)gen).getOutputFiles( eglFile, part ) )
-												{
-													files.add( file );
-												}
-											}
-											catch ( CoreException ce )
-											{
-											}
-										}
-									}
-								}
-								catch ( PartNotFoundException e )
-								{
-									e.printStackTrace();
-								}
-							}
-						}
-						return files;
-					}
-					catch ( EGLModelException e )
-					{
-						e.printStackTrace();
-					}
-					finally
-					{
-						Environment.popEnv();
-					}
-				}
+				EDTDebugUIPlugin.log( e );
 			}
 		}
+		
 		return null;
 	}
 }

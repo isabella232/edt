@@ -23,7 +23,6 @@ public class EGLJavaMessages extends NLS
 		NLS.initializeMessages( BUNDLE_NAME, EGLJavaMessages.class );
 	}
 	
-	public static String ChooseExistingJavaTitle;
 	public static String LineBreakpointUnkown;
 	public static String LineBreakpointLabel;
 }
