@@ -315,7 +315,7 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 			message = fatalError.toString();
 		}
 		System.out.println( message );
-		if ( !AnyException.NO_STACK_TRACES )
+		if ( AnyException.STACK_TRACES )
 		{
 			ex.printStackTrace( System.out );
 		}

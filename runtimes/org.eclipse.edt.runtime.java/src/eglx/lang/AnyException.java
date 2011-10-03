@@ -164,28 +164,23 @@ public class AnyException extends RuntimeException implements eglx.lang.EAny {
 	}
 	
 	/**
-	 * To improve performance, we override the usual implementation of this method,
-	 * which is VERY expensive.  But unfortunately this means a stack trace for this
-	 * exception will not be available.  That's OK since EGL users don't see them
-	 * anyway.
-	 * <P>
-	 * For debugging, you can get stack traces in your AnyExceptions (and loose
-	 * the performance improvement) by setting the system property 
-	 * org.eclipse.edt.javart.StackTraces to true.  
+	 * The usual implementation of this method is VERY expensive.  To improve
+	 * performance, at the cost of losing stack traces from our exceptions, set 
+	 * the system property org.eclipse.edt.javart.StackTraces to false.  
 	 *
 	 * @return this object.
 	 */
 	public Throwable fillInStackTrace()
 	{
-		if ( NO_STACK_TRACES )
+		if ( STACK_TRACES )
 		{
-			return this;
+			return super.fillInStackTrace();
 		}
-		return super.fillInStackTrace();
+		return this;
 	}
 	
 	/**
 	 * Determines if fillInStackTrace is optimized or not.
 	 */
-	public static final boolean NO_STACK_TRACES = !Boolean.getBoolean( "org.eclipse.edt.javart.StackTraces" );
+	public static final boolean STACK_TRACES = Boolean.getBoolean( "org.eclipse.edt.javart.StackTraces" );
 }
