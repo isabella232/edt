@@ -140,6 +140,7 @@ public class NewWizardMessages extends NLS {
 	public static String LabelRestBindingName;
 	public static String LabelServiceName ;
 	public static String LabelSessionCookieId;
+	public static String RestBindingBlankError;
 	public static String LineWrappingSettingFor ;
 	public static String LoadEGLFormatProfile ;
 	public static String LocateEGLServicePartGrpLabel;

@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.wizards;
 
-import org.eclipse.edt.ide.core.model.IPart;
-import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.SOAMessages;
 import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.DialogField;
@@ -33,21 +31,6 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 	public static final String WIZPAGENAME_RestBindingWizardPage = "WIZPAGENAME_RestBindingWizardPage"; //$NON-NLS-1$
 	private StringDialogField fBaseUriField;
 	private StringDialogField fSessionCookieId;
-	private RestBindingNameFieldAdapter adapter = new RestBindingNameFieldAdapter();
-	
-	private class RestBindingNameFieldAdapter implements IStringBrowseButtonFieldAdapter{
-
-		public void dialogFieldChanged(DialogField field) {
-			if(field == fNameField)
-				HandleBindingNameChanged(getBindingRestConfiguration());
-			
-		}
-
-		public void changeControlPressed(DialogField field) {
-			HandleRestBindingNameBrowsePressed();			
-		}
-		
-	}
 	
 	public RestBindingWizardPage(String pageName){
 		super(pageName);
@@ -74,6 +57,8 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 		createSessionCookieId(composite);
 		setControl(composite);
 		Dialog.applyDialogFont(parent);
+		
+		determinePageCompletion();
 	}
 	
 	private BindingRestConfiguration getConfiguration(){
@@ -134,6 +119,7 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 	
 	protected void HandleBaseUriFieldChanged(){
 		getConfiguration().setBaseUri(fBaseUriField.getText());
+		determinePageCompletion();
 	}
 	
 	private void createSessionCookieId(Composite composite){
@@ -155,18 +141,48 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 	}
 
 	protected void HandleSessionCookieIdChanged() {
-		getConfiguration().setSessionCookieId(fSessionCookieId.getText());		
+		getConfiguration().setSessionCookieId(fSessionCookieId.getText());
+		determinePageCompletion();
 	}
 	
-	protected void createComponentNameControl(Composite parent, String labelName, final BindingBaseConfiguration esConfig) {		
-		fNameField = createStringBrowseButtonDialogField(parent, adapter, labelName, esConfig.getBindingName(), nColumns-1);
-	}	
+	protected void createComponentNameControl(Composite parent, String labelName, final BindingBaseConfiguration esConfig) {
+		fNameField = new StringDialogField();
+		fNameField.setLabelText( labelName );
+		fNameField.setText( esConfig.getBindingName() );
+		createStringDialogField( parent, fNameField, new IDialogFieldListener() {
+			@Override
+			public void dialogFieldChanged(DialogField field) {
+				if (field == fNameField) {
+					HandleBindingNameChanged(esConfig);
+				}
+			}
+		} );
+	}
 	
-	public void HandleRestBindingNameBrowsePressed(){
-		IPart eglPart = browsedEGLPartFQValue(getBindingRestConfiguration().getProject(), IEGLSearchConstants.SERVICE|IEGLSearchConstants.INTERFACE, true);
-		if(eglPart != null){			
-			//set to be the simple name
-			fNameField.setText(eglPart.getElementName());			
+	protected void HandleBindingNameChanged(final BindingBaseConfiguration esConfig) {
+		super.HandleBindingNameChanged(esConfig);
+		determinePageCompletion();
+	}
+	
+	protected boolean determinePageCompletion() {
+		setErrorMessage(null);
+		boolean result = true;
+		
+		String name = fNameField.getText();
+		if (name == null || name.trim().length() == 0) {
+			setErrorMessage(NewWizardMessages.RestBindingBlankError);
+			result = false;
+		}
+		
+		setPageComplete(result);
+		return result;
+	}
+	
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		if (visible) {
+			determinePageCompletion();
 		}
 	}
 }
