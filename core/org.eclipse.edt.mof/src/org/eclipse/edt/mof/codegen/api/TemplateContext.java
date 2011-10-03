@@ -13,6 +13,7 @@ package org.eclipse.edt.mof.codegen.api;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -320,29 +321,33 @@ public class TemplateContext extends HashMap<Object, Object> {
 
 	public Method primGetMethod(String methodName, Class<?> templateClass, Class<?> objectClass, Object... args) {
 		Method method = null;
-		for (Method m : templateClass.getMethods()) {
-			boolean matches = true;
-			if (m.getName().equals(methodName)) {
-				if (m.getParameterTypes().length == args.length + 1) {
-					Class<?>[] pTypes = m.getParameterTypes();
-					if (pTypes[0].isAssignableFrom(objectClass)) {
-						for (int i = 0; i < args.length; i++) {
-							if (args[i] != null && !pTypes[i + 1].isAssignableFrom(args[i].getClass())) {
+	    do {
+	        for (Method m : templateClass.getDeclaredMethods()) {
+	            if (Modifier.isPublic(m.getModifiers())) {
+					boolean matches = true;
+					if (m.getName().equals(methodName)) {
+						if (m.getParameterTypes().length == args.length + 1) {
+							Class<?>[] pTypes = m.getParameterTypes();
+							if (pTypes[0].isAssignableFrom(objectClass)) {
+								for (int i = 0; i < args.length; i++) {
+									if (args[i] != null && !pTypes[i + 1].isAssignableFrom(args[i].getClass())) {
+										matches = false;
+										break;
+									}
+								}
+							} else
 								matches = false;
-								break;
-							}
-						}
+						} else
+							matches = false;
 					} else
 						matches = false;
-				} else
-					matches = false;
-			} else
-				matches = false;
-			if (matches) {
-				method = m;
-				break;
-			}
-		}
+					if (matches) {
+						method = m;
+						break;
+					}
+				}
+	        }
+        } while (method == null && (templateClass = templateClass.getSuperclass()) != null);
 		return method;
 	}
 
