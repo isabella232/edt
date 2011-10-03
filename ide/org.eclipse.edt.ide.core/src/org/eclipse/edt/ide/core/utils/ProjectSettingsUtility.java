@@ -464,21 +464,23 @@ public class ProjectSettingsUtility {
 	 */
 	public static void setBuildFlag(IResource resource) throws BackingStoreException {
 		
-		if(resource != null){
+		if (resource != null) {
 			//set flag to rebuild the project containing the resource, the preference change event will be caught by ProjectSettingsListenerManager
 			IProject project = resource.getProject();
 			Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(EDTCorePreferenceConstants.BUILD_FLAG);
-
-			int buildFlag = prefs.getInt(PROJECT_KEY, 0); 
+			
+			String key = keyFor(resource.getFullPath());
+			int buildFlag = prefs.getInt(key, 0); 
 			buildFlag++;
-			prefs.putInt(PROJECT_KEY, buildFlag);
+			prefs.putInt(key, buildFlag);
 			prefs.flush();
-		}else{
+		}
+		else {
 			//set flag to force a rebuild for projects which inherit workspace compiler & generator setting
 			//the preference change event will be caught by EDTCoreIDEPlugin.PreferenceListener
 			IPreferenceStore store = EDTCoreIDEPlugin.getPlugin().getPreferenceStore();
 			int buildFlag = store.getInt(EDTCorePreferenceConstants.BUILD_FLAG);
-			buildFlag ++;
+			buildFlag++;
 			store.setValue(EDTCorePreferenceConstants.BUILD_FLAG, buildFlag);
 		}
 	}
