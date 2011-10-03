@@ -18,11 +18,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
 
@@ -141,6 +146,36 @@ public class IDEResourceLocator extends SysLib implements ResourceLocator {
 		this.defaultDD = dd;
 	}
 	
+	public List<String[]> parseDDArgument(String ddFiles, boolean added) {
+		// For simplicity there's just the one delimeter.
+		// name1;path1;name2;path2... using File.pathSeparator
+		StringTokenizer tok = new StringTokenizer(ddFiles, File.pathSeparator);
+		List<String[]> ddEntries = new ArrayList<String[]>();
+		while (tok.hasMoreTokens()) {
+			String name = tok.nextToken();
+			if (tok.hasMoreTokens()) {
+				String path = tok.nextToken();
+				
+				try {
+					name = URLDecoder.decode(name, "UTF-8"); //$NON-NLS-1$
+					path = URLDecoder.decode(path, "UTF-8"); //$NON-NLS-1$
+				}
+				catch (UnsupportedEncodingException e) {
+					// Shouldn't happen.
+				}
+				
+				ddEntries.add(new String[]{name, path});
+				if (added) {
+					addDDFile(name, path);
+				}
+				else {
+					removeDDFile(name);
+				}
+			}
+		}
+		return ddEntries;
+	}
+	
 	public void addDDFile(String name, String path) {
 		this.ddPaths.put(name, path);
 		removeFromCache(name);
@@ -153,7 +188,9 @@ public class IDEResourceLocator extends SysLib implements ResourceLocator {
 	
 	private void removeFromCache(String ddName) {
 		// Remove cached DDs.
-		deploymentDescs.remove(ddName);
+		if (deploymentDescs.size() > 0) {
+			deploymentDescs.remove(ddName);
+		}
 		
 		// Remove cached resources. Key is a QName whose namespace is the file name.
 		if (resources.size() > 0) {
