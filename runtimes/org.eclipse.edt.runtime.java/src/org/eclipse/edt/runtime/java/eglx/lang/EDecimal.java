@@ -265,36 +265,23 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 	}
 
 	public static boolean ezeIsa(Object value, Integer... args) {
-		boolean isa = (value instanceof ENumber && ((ENumber) value).ezeUnbox() instanceof BigDecimal);
+		boolean isa = value instanceof EDecimal;
 		if (isa) {
 			if (args.length != 0) {
-				if (isa && args.length != 0) {
-					isa = ((BigDecimal) ((ENumber) value).ezeUnbox()).precision() == args[0];
-					if (isa && args.length == 1)
-						isa = ((BigDecimal) ((ENumber) value).ezeUnbox()).scale() == 0;
-					else if (isa && args.length == 2)
-						isa = ((BigDecimal) ((ENumber) value).ezeUnbox()).scale() == args[1];
-				}
+				isa = ((EDecimal) value).getPrecision() == args[0];
+				if (isa && args.length == 1)
+					isa = ((EDecimal) value).getDecimals() == 0;
+				else if (isa && args.length == 2)
+					isa = ((EDecimal) value).getDecimals() == args[1];
 			}
 		} else {
-			isa = value instanceof EDecimal;
-			if (isa) {
-				if (args.length != 0) {
-					isa = ((EDecimal) value).getPrecision() == args[0];
-					if (isa && args.length == 1)
-						isa = ((EDecimal) value).getDecimals() == 0;
-					else if (isa && args.length == 2)
-						isa = ((EDecimal) value).getDecimals() == args[1];
-				}
-			} else {
-				isa = value instanceof BigDecimal;
-				if (isa && args.length != 0) {
-					isa = ((BigDecimal) value).precision() == args[0];
-					if (isa && args.length == 1)
-						isa = ((BigDecimal) value).scale() == 0;
-					else if (isa && args.length == 2)
-						isa = ((BigDecimal) value).scale() == args[1];
-				}
+			isa = value instanceof BigDecimal;
+			if (isa && args.length != 0) {
+				isa = ((BigDecimal) value).precision() == args[0];
+				if (isa && args.length == 1)
+					isa = ((BigDecimal) value).scale() == 0;
+				else if (isa && args.length == 2)
+					isa = ((BigDecimal) value).scale() == args[1];
 			}
 		}
 		return isa;
@@ -503,16 +490,16 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static ENumber asNumber(BigDecimal value) throws AnyException {
+	public static EDecimal asNumber(BigDecimal value) throws AnyException {
 		if (value == null)
 			return null;
-		return ENumber.asNumber(value);
+		return EDecimal.ezeBox(value);
 	}
 
-	public static ENumber asNumber(EDecimal value) throws AnyException {
+	public static EDecimal asNumber(EDecimal value) throws AnyException {
 		if (value == null)
 			return null;
-		return ENumber.asNumber(value.ezeUnbox());
+		return value;
 	}
 
 	public static BigDecimal plus(BigDecimal op1, BigDecimal op2) {

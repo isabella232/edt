@@ -44,8 +44,6 @@ public class EFloat extends AnyBoxedObject<Double> implements eglx.lang.ENumber 
 	}
 
 	public static boolean ezeIsa(Object value) {
-		if (value instanceof ENumber && ((ENumber) value).ezeUnbox() instanceof Double)
-			return true;
 		return value instanceof EFloat || value instanceof Double;
 	}
 
@@ -169,16 +167,16 @@ public class EFloat extends AnyBoxedObject<Double> implements eglx.lang.ENumber 
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static ENumber asNumber(Double value) throws AnyException {
+	public static EFloat asNumber(Double value) throws AnyException {
 		if (value == null)
 			return null;
-		return ENumber.asNumber(value);
+		return EFloat.ezeBox(value);
 	}
 
-	public static ENumber asNumber(EFloat value) throws AnyException {
+	public static EFloat asNumber(EFloat value) throws AnyException {
 		if (value == null)
 			return null;
-		return ENumber.asNumber(value.ezeUnbox());
+		return value;
 	}
 
 	public static double plus(double op1, double op2) throws AnyException {

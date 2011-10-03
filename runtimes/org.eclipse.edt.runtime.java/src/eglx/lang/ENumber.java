@@ -14,4 +14,6 @@ package eglx.lang;
 
 public interface ENumber {
 		
+	public <T extends Object> T ezeUnbox();
+
 }

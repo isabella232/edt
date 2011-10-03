@@ -40,8 +40,6 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements eglx.lang.ENum
 	}
 
 	public static boolean ezeIsa(Object value) {
-		if (value instanceof ENumber && ((ENumber) value).ezeUnbox() instanceof Float)
-			return true;
 		return value instanceof ESmallfloat || value instanceof Float;
 	}
 
@@ -169,16 +167,16 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements eglx.lang.ENum
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static ENumber asNumber(Float value) throws AnyException {
+	public static ESmallfloat asNumber(Float value) throws AnyException {
 		if (value == null)
 			return null;
-		return ENumber.asNumber(value);
+		return ESmallfloat.ezeBox(value);
 	}
 
-	public static ENumber asNumber(ESmallfloat value) throws AnyException {
+	public static ESmallfloat asNumber(ESmallfloat value) throws AnyException {
 		if (value == null)
 			return null;
-		return ENumber.asNumber(value.ezeUnbox());
+		return value;
 	}
 
 	public static float plus(float op1, float op2) throws AnyException {

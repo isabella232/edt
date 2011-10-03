@@ -40,8 +40,6 @@ public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 	}
 
 	public static boolean ezeIsa(Object value) {
-		if (value instanceof ENumber && ((ENumber) value).ezeUnbox() instanceof Integer)
-			return true;
 		return value instanceof EInt || value instanceof Integer;
 	}
 
@@ -289,16 +287,16 @@ public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static ENumber asNumber(Integer value) throws AnyException {
+	public static EInt asNumber(Integer value) throws AnyException {
 		if (value == null)
 			return null;
-		return ENumber.asNumber(value);
+		return EInt.ezeBox(value);
 	}
 
-	public static ENumber asNumber(EInt value) throws AnyException {
+	public static EInt asNumber(EInt value) throws AnyException {
 		if (value == null)
 			return null;
-		return ENumber.asNumber(value.ezeUnbox());
+		return value;
 	}
 
 	public static int defaultValue() {

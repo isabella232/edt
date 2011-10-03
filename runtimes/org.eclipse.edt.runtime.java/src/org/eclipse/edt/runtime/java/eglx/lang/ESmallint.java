@@ -39,8 +39,6 @@ public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumbe
 	}
 
 	public static boolean ezeIsa(Object value) {
-		if (value instanceof ENumber && ((ENumber) value).ezeUnbox() instanceof Short)
-			return true;
 		return value instanceof ESmallint || value instanceof Short;
 	}
 
@@ -310,16 +308,16 @@ public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumbe
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static ENumber asNumber(Short value) throws AnyException {
+	public static ESmallint asNumber(Short value) throws AnyException {
 		if (value == null)
 			return null;
-		return ENumber.asNumber(value);
+		return ESmallint.ezeBox(value);
 	}
 
-	public static ENumber asNumber(ESmallint value) throws AnyException {
+	public static ESmallint asNumber(ESmallint value) throws AnyException {
 		if (value == null)
 			return null;
-		return ENumber.asNumber(value.ezeUnbox());
+		return value;
 	}
 
 	public static int plus(short op1, short op2) throws AnyException {

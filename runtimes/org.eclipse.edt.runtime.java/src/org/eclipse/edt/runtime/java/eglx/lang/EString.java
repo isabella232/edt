@@ -311,16 +311,16 @@ public class EString extends AnyBoxedObject<String> {
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static ENumber asNumber(String value, Integer... length) throws AnyException {
+	public static EString asNumber(String value, Integer... length) throws AnyException {
 		if (value == null)
 			return null;
-		return ENumber.asNumber(asString(value, length));
+		return EString.ezeBox(asString(value, length));
 	}
 
-	public static ENumber asNumber(EString value, Integer... length) throws AnyException {
+	public static EString asNumber(EString value, Integer... length) throws AnyException {
 		if (value == null)
 			return null;
-		return ENumber.asNumber(asString(value.ezeUnbox(), length));
+		return value;
 	}
 
 	public static String plus(String op1, String op2) throws AnyException {
