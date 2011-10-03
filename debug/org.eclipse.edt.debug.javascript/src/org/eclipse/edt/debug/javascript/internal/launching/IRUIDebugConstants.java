@@ -24,8 +24,6 @@ public interface IRUIDebugConstants
 	
 	public static final String ID_RUI_LAUNCH_TYPE = "org.eclipse.edt.debug.javascript.ruiLaunchConfigurationType"; //$NON-NLS-1$
 	
-	public static final String RUI_ICON_LAUNCH_MAIN_TAB = "RUI_ICON_LAUNCH_MAIN_TAB"; //$NON-NLS-1$
-	
 	public static final String RUI_ICON_VARIABLE = "RUI_ICON_VARIABLE"; //$NON-NLS-1$
 	
 	public static final String RUI_ICON_DEBUG_EXC = "RUI_ICON_DEBUG_EXC"; //$NON-NLS-1$

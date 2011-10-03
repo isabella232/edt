@@ -11,11 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.javascript.internal.launching;
 
+import org.eclipse.edt.debug.javascript.EDTJavaScriptDebugPlugin;
+
 public interface IRUIHelpIDConstants
 {
-	//TODO
-	public static final String HELP_PREFIX = ""; //$NON-NLS-1$
-	public static final String ProjectBrowseDialog = HELP_PREFIX + "browse_project"; //$NON-NLS-1$
-	public static final String HandlerSearchDialog = HELP_PREFIX + "browse_handler"; //$NON-NLS-1$
-	public static final String RUIHandlerLaunch = HELP_PREFIX + "rui_handler_launch"; //$NON-NLS-1$
+	public static final String RUIHandlerLaunch = EDTJavaScriptDebugPlugin.PLUGIN_ID + ".rui_handler_launch"; //$NON-NLS-1$
 }

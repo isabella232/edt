@@ -19,23 +19,20 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
-import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
 import org.eclipse.edt.debug.core.DebugUtil;
 import org.eclipse.edt.debug.javascript.internal.model.IRUILaunchConfigurationConstants;
 import org.eclipse.edt.debug.javascript.internal.model.RUIDebugMessages;
-import org.eclipse.edt.ide.debug.javascript.internal.utils.RUIDebugUtil;
+import org.eclipse.edt.debug.ui.launching.AbstractEGLApplicationTab;
+import org.eclipse.edt.ide.core.model.IEGLElement;
+import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
+import org.eclipse.edt.ide.rui.utils.Util;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -44,7 +41,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
-public class RUILoadMainTab extends AbstractLaunchConfigurationTab implements ModifyListener, SelectionListener
+public class RUILoadMainTab extends AbstractEGLApplicationTab implements ModifyListener, SelectionListener
 {
 	
 	protected Label fProjectLabel;
@@ -237,35 +234,17 @@ public class RUILoadMainTab extends AbstractLaunchConfigurationTab implements Mo
 	 */
 	protected void handleBrowseButtonPushed()
 	{
-		IProject[] projects;
-		
-		projects = getWorkspaceRoot().getProjects();
-		
-		ILabelProvider labelProvider = new LabelProvider() {
-			@Override
-			public String getText( Object element )
-			{
-				if ( element instanceof IProject )
-				{
-					return ((IProject)(element)).getName();
-				}
-				return super.getText( element );
-			}
-		};
-		ListSelectionDialog dialog = new ListSelectionDialog( getShell(), labelProvider, IRUIHelpIDConstants.ProjectBrowseDialog );
-		dialog.setTitle( RUIDebugMessages.rui_load_main_tab_project_browse_title );
-		dialog.setMessage( RUIDebugMessages.rui_load_main_tab_project_browse_message );
-		dialog.setElements( projects );
-		
-		if ( dialog.open() == Window.OK )
+		String project = browseForProject();
+		if ( project != null )
 		{
-			IProject project = (IProject)dialog.getResult();
-			if ( project != null )
-			{
-				String projectName = labelProvider.getText( project );
-				fProjectText.setText( projectName );
-			}
+			fProjectText.setText( project );
 		}
+	}
+	
+	@Override
+	protected String getProjectName()
+	{
+		return fProjectText.getText();
 	}
 	
 	/**
@@ -273,23 +252,12 @@ public class RUILoadMainTab extends AbstractLaunchConfigurationTab implements Mo
 	 */
 	protected void handleHandlerFileSearchButtonPushed()
 	{
-		ILabelProvider labelProvider = new LabelProvider();
-		ListSelectionDialog dialog = new ListSelectionDialog( getShell(), labelProvider, IRUIHelpIDConstants.HandlerSearchDialog );
-		dialog.setTitle( RUIDebugMessages.rui_load_main_tab_handler_file_search_title );
-		dialog.setMessage( RUIDebugMessages.rui_load_main_tab_handler_file_search_message );
+		IEGLElement part = browseForPart( IEGLSearchConstants.HANDLER, new String[] { "RUIHandler", "RUIWidget" }, //$NON-NLS-1$ //$NON-NLS-2$
+				RUIDebugMessages.rui_load_main_tab_handler_file_search_title, RUIDebugMessages.rui_load_main_tab_handler_file_search_message );
 		
-		String projectName = fProjectText.getText().trim();
-		Object[] handlers = RUIDebugUtil.getHandlerFileList( projectName );
-		dialog.setElements( handlers );
-		
-		if ( dialog.open() == Window.OK )
+		if ( part != null )
 		{
-			String path = (String)dialog.getResult();
-			if ( path != null )
-			{
-				String pathName = labelProvider.getText( path );
-				fHandlerFileText.setText( pathName );
-			}
+			fHandlerFileText.setText( ((IEGLElement)part).getResource().getProjectRelativePath().toString() );
 		}
 	}
 	
@@ -342,11 +310,16 @@ public class RUILoadMainTab extends AbstractLaunchConfigurationTab implements Mo
 			return false;
 		}
 		
-		IFile file = null;
-		file = project.getFile( handlerFileName );
+		IFile file = project.getFile( handlerFileName );
 		if ( !file.exists() )
 		{
 			setErrorMessage( RUIDebugMessages.rui_load_main_tab_handler_file_not_in_project );
+			return false;
+		}
+		
+		if ( !Util.isVESupportType( file ) )
+		{
+			setErrorMessage( RUIDebugMessages.rui_load_launch_configuration_file_not_handler );
 			return false;
 		}
 		
@@ -384,14 +357,18 @@ public class RUILoadMainTab extends AbstractLaunchConfigurationTab implements Mo
 	@Override
 	public void setDefaults( ILaunchConfigurationWorkingCopy configuration )
 	{
-		IResource resource = RUIDebugUtil.getContext();
+		IResource resource = DebugUtil.getContext();
 		if ( resource != null )
 		{
 			if ( DebugUtil.isEGLFileName( resource.getName() ) )
 			{
 				initializeProject( resource, configuration );
 				initializeConfigName( resource, configuration );
-				initializeHandlerFile( resource, configuration );
+				
+				if ( resource.getType() == IResource.FILE && Util.isVESupportType( (IFile)resource ) )
+				{
+					initializeHandlerFile( resource, configuration );
+				}
 			}
 			else
 			{
@@ -434,32 +411,6 @@ public class RUILoadMainTab extends AbstractLaunchConfigurationTab implements Mo
 			name = project.getName();
 		}
 		configuration.setAttribute( IRUILaunchConfigurationConstants.ATTR_PROJECT_NAME, name );
-	}
-	
-	/**
-	 * Initialize the configuration name based on the current selection in the workspace.
-	 * 
-	 * @param resource The currently selected resource.
-	 * @param configuration The launch configuration.
-	 */
-	protected void initializeConfigName( IResource resource, ILaunchConfigurationWorkingCopy configuration )
-	{
-		String configName = null;
-		String name = resource.getName();
-		int index = name.lastIndexOf( '.' );
-		if ( index > 0 )
-		{
-			name = name.substring( 0, index );
-		}
-		ILaunchConfigurationDialog dialog = getLaunchConfigurationDialog();
-		if ( dialog != null )
-		{
-			configName = getLaunchConfigurationDialog().generateName( name );
-		}
-		if ( configName != null )
-		{
-			configuration.rename( configName );
-		}
 	}
 	
 	/**
@@ -511,14 +462,5 @@ public class RUILoadMainTab extends AbstractLaunchConfigurationTab implements Mo
 	public String getName()
 	{
 		return RUIDebugMessages.rui_load_main_tab_name;
-	}
-	
-	/**
-	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#getImage()
-	 */
-	@Override
-	public Image getImage()
-	{
-		return RUIDebugUtil.getImage( IRUIDebugConstants.RUI_ICON_LAUNCH_MAIN_TAB );
 	}
 }

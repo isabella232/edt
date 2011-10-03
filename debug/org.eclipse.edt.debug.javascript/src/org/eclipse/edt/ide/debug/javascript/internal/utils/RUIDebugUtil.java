@@ -20,15 +20,12 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
@@ -49,6 +46,7 @@ import org.eclipse.edt.debug.javascript.internal.launching.IRUIDebugConstants;
 import org.eclipse.edt.debug.javascript.internal.model.IRUILaunchConfigurationConstants;
 import org.eclipse.edt.debug.javascript.internal.model.RUIDebugMessages;
 import org.eclipse.edt.debug.javascript.internal.model.RUIDebugTarget;
+import org.eclipse.edt.debug.ui.launching.EGLLaunchingMessages;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.ide.core.internal.model.SourcePart;
 import org.eclipse.edt.ide.core.internal.model.SourcePartElementInfo;
@@ -64,12 +62,9 @@ import org.eclipse.edt.ide.rui.server.EvServer;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
 public class RUIDebugUtil
@@ -79,8 +74,8 @@ public class RUIDebugUtil
 		// No instances.
 	}
 	
-	private static boolean imageRegistryInitialized = false;
-	private static Integer initializeMutex = new Integer( 0 );
+	private static boolean imageRegistryInitialized;
+	private static final Object initializeMutex = new Object();
 	
 	/**
 	 * The image registry which holds <code>Image</code>s
@@ -266,8 +261,8 @@ public class RUIDebugUtil
 		IDebugModelPresentation labelProvider = DebugUITools.newDebugModelPresentation();
 		ElementListSelectionDialog dialog = new ElementListSelectionDialog( DebugUtil.getShell(), labelProvider );
 		dialog.setElements( configList.toArray() );
-		dialog.setTitle( RUIDebugMessages.rui_debug_utils_choose_config_title );
-		dialog.setMessage( RUIDebugMessages.rui_debug_utils_choose_config_message );
+		dialog.setTitle( EGLLaunchingMessages.launch_config_selection_dialog_title );
+		dialog.setMessage( EGLLaunchingMessages.launch_config_selection_dialog_message );
 		dialog.setMultipleSelection( false );
 		int result = dialog.open();
 		labelProvider.dispose();
@@ -526,7 +521,6 @@ public class RUIDebugUtil
 	private static void declareImages()
 	{
 		declareRegistryImage( IRUIDebugConstants.RUI_ICON_VARIABLE, "obj16/variable_obj.gif" ); //$NON-NLS-1$
-		declareRegistryImage( IRUIDebugConstants.RUI_ICON_LAUNCH_MAIN_TAB, "obj16/main_tab_obj.gif" ); //$NON-NLS-1$
 		declareRegistryImage( IRUIDebugConstants.RUI_ICON_DEBUG_EXC, "etool16/debug_exc.gif" ); //$NON-NLS-1$
 	}
 	
@@ -537,90 +531,6 @@ public class RUIDebugUtil
 			imageRegistry = new ImageRegistry();
 		}
 		return imageRegistry;
-	}
-	
-	public static IResource getContext()
-	{
-		IWorkbenchPage page = EDTJavaScriptDebugPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		if ( page != null )
-		{
-			ISelection selection = page.getSelection();
-			Object element = null;
-			if ( selection instanceof IStructuredSelection )
-			{
-				IStructuredSelection sel = (IStructuredSelection)selection;
-				if ( !sel.isEmpty() )
-					element = sel.getFirstElement();
-			}
-			else
-				element = selection;
-			
-			if ( element != null && (element instanceof IAdaptable) )
-			{
-				element = ((IAdaptable)element).getAdapter( IResource.class );
-				return (IResource)element;
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Get the list of handler files available for debug in the specified project.
-	 * 
-	 * @param projectName the name of the project
-	 * @return array of path names of .egl files in the project, such as "folder/prog1.egl".
-	 */
-	public static Object[] getHandlerFileList( String projectName )
-	{
-		Vector handlers = new Vector();
-		try
-		{
-			IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-			IProject myProject = myWorkspaceRoot.getProject( projectName );
-			IResource[] resources = ((org.eclipse.core.resources.IContainer)myProject).members();
-			
-			findEGLHandlerFiles( resources, handlers );
-		}
-		catch ( org.eclipse.core.runtime.CoreException e )
-		{
-		}
-		
-		return handlers.toArray();
-	}
-	
-	/**
-	 * Find the .egl files in the resource array.
-	 * 
-	 * @param resources resources within a project or folder
-	 * @param programs the .egl path names
-	 */
-	public static void findEGLHandlerFiles( IResource[] resources, Vector handlers )
-	{
-		String pathStr = null;
-		int index = 0;
-		for ( int x = 0; x < resources.length; x++ )
-		{
-			if ( resources[ x ].getType() == IResource.FILE )
-			{
-				org.eclipse.core.runtime.IPath path = resources[ x ].getFullPath();
-				pathStr = path.toString();
-				if ( DebugUtil.isEGLFileName( pathStr ) )
-				{
-					index = pathStr.indexOf( '/', 1 );
-					handlers.add( pathStr.substring( index + 1 ) );
-				}
-			}
-			else if ( resources[ x ].getType() == IResource.FOLDER )
-			{
-				try
-				{
-					findEGLHandlerFiles( ((org.eclipse.core.resources.IContainer)resources[ x ]).members(), handlers );
-				}
-				catch ( org.eclipse.core.runtime.CoreException e )
-				{
-				}
-			}
-		}
 	}
 	
 	/**
