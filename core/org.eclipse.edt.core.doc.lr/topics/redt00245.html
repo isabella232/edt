@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="eglx.http package"></meta>
+<meta name="abstract" content="eglx.http defines an API for accessing details in HTTP messages. "></meta>
+<meta name="description" content="eglx.http defines an API for accessing details in HTTP messages. "></meta>
+<meta name="DC.subject" content="EGL packages, eglx.http, eglx.http EGL package"></meta>
+<meta name="keywords" content="EGL packages, eglx.http, eglx.http EGL package"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00073.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="redt00245"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>eglx.http package</title>
+</head>
+<body id="redt00245"><a name="redt00245"><!-- --></a>
+
+
+<h1 class="topictitle1">eglx.http package</h1>
+
+
+
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">eglx.http</span></span> defines
+an API for accessing details in HTTP messages. </p>
+
+
+<div class="p" id="redt00245__types"><a name="redt00245__types"><!-- --></a>
+<div class="tablenoborder"><a name="redt00245__types_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00245__types_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Types</span></caption>
+<tbody>
+<tr id="redt00245__compat_java">
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">enumeration HttpMethod
+  _GET = 1,
+  POST = 2,
+  _DELETE = 3,
+  PUT = 4
+end</pre>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">handler HttpRest implements IHttp
+   request Request;
+   response Response;
+   restType eglx.rest.ServiceType?;
+	
+   function getRequest()returns(Request)
+      return(request);
+   end
+
+   function getResponse()returns(Response)
+      return(response);
+   end
+end</pre>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">handler Request 
+   uri string?;  							// Complete URL, encoded for HTTP use
+   method HttpMethod?;			// Method being invoked. Default is _GET.
+   encoding Encoding?;			// [ link to doc for eglx.services ]
+   charset string?;    		// character encoding; for example, "UTF-8".
+   contentType string?;		// content type; for example, "text/html".
+   headers dictionary?;		// each entry identifies a header name and content.
+   body string?;							// content of transported message.
+   timeout int?;							//
+end</pre>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">handler Response 
+   status int?;
+   statusMessage string?;
+   encoding Encoding?;
+   charset string?;
+   contentType string?;
+   headers dictionary?;
+   body string?;
+end</pre>
+</td>
+
+</tr>
+
+<tr id="redt00245__compat_javascript">
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">interface IHttp
+   function getRequest() 
+      returns 
+      (eglx.http.Request);
+   function getResponse() 
+      returns 
+      (eglx.http.Response);
+end</pre>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><a href="redt00073.html" title="HTTPLib contains functions that are useful specifically in applications that access the web.">HTTPLib system library</a></td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+<div class="p">
+<div class="tablenoborder"><a name="redt00245__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00245__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d56280e112">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d56280e115">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00245__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d56280e112 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d56280e115 ">See type-specific topics.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00245__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d56280e112 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d56280e115 ">See type-specific topics.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+</div>
+
+</div>
+
+<anchor id="related_links"></anchor>
+
+
+</body>
+</html>

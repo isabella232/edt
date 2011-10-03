@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="HTTPLib.convertToURLEncoded"></meta>
+<meta name="abstract" content="HTTPLib.convertToURLEncoded returns a Universe Resource Locator (URL), which identifies a web page or represents the resource that will be accessed by a REST service."></meta>
+<meta name="description" content="HTTPLib.convertToURLEncoded returns a Universe Resource Locator (URL), which identifies a web page or represents the resource that will be accessed by a REST service."></meta>
+<meta name="DC.subject" content="EGL system functions, convertToURLEncoded, convertToURLEncoded EGL system function, HTTPLib EGL system library"></meta>
+<meta name="keywords" content="EGL system functions, convertToURLEncoded, convertToURLEncoded EGL system function, HTTPLib EGL system library"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00073.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="redt00246"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>HTTPLib.convertToURLEncoded</title>
+</head>
+<body id="redt00246"><a name="redt00246"><!-- --></a>
+
+
+<h1 class="topictitle1">HTTPLib.convertToURLEncoded</h1>
+
+
+
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">HTTPLib.convertToURLEncoded</span></span> returns
+a Universe Resource Locator (URL), which identifies a web page or
+represents the resource that will be accessed by a REST service.</p>
+
+
+<a name="redt00246__main"><!-- --></a><dl id="redt00246__main">
+<dt class="dlterm"><a name="redt00246__package"><!-- --></a>Package</dt>
+
+<dd><p>eglx.http</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00246__syntax"><!-- --></a>Syntax</dt>
+
+<dd><pre class="codeblock" id="redt00246__syntax_block"><a name="redt00246__syntax_block"><!-- --></a>static function convertToURLEncoded(eglType string in) returns(string);</pre>
+<a name="redt00246__syntax_list"><!-- --></a><dl id="redt00246__syntax_list">
+<dt class="dlterm"><var class="varname">convertToURLEncoded</var></dt>
+
+<dd>The input string.</dd>
+
+</dl>
+<p>The functions returns a valid URL.</p>
+<anchor id="syntax_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00246__use"><!-- --></a>Example use</dt>
+
+<dd><pre class="codeblock" id="redt00246__use_block"><a name="redt00246__use_block"><!-- --></a></pre>
+<anchor id="use_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00246__comments"><!-- --></a>Comments</dt>
+
+<dd> The function is useful if you wish to use a URL that includes
+spaces or other characters that are not valid in the URL. For example,
+if your URL includes query parameters and the value of a parameter
+includes a space, the function returns a valid URL with the following
+characters in place of the space: %20.<p><span class="synph"><span class="kwd">HTTPLib.convertToURLEncoded</span></span> is
+the complement of the <span class="synph"><span class="kwd">HTTPLib.convertFromURLEncoded</span></span> system
+function.</p>
+<anchor id="comments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00246__compat"><!-- --></a>Compatibility</dt>
+
+<dd><p></p>
+
+<div class="tablenoborder"><a name="redt00246__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00246__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d56649e122">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d56649e125">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00246__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d56649e122 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d56649e125 ">No issues.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00246__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d56649e122 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d56649e125 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
+
+<p></p>
+
+</div>
+
+<anchor id="related_links"></anchor>
+
+
+</body>
+</html>
