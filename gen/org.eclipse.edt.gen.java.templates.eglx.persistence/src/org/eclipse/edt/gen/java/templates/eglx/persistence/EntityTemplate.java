@@ -8,6 +8,6 @@ import org.eclipse.edt.mof.egl.EGLClass;
 public class EntityTemplate extends JavaTemplate {
 	
 	public void genSuperClass(EGLClass part, Context ctx, TabbedWriter out) {
-		
+		out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue");
 	}
 }
