@@ -34,7 +34,7 @@ import org.eclipse.edt.mof.utils.TabbedWriter;
 
 @SuppressWarnings("unchecked")
 public class XMLSerializer implements Serializer {
-	private static final String XMLHeader = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>";
+	private static final String XMLHeader = "<?xml version=\"1.1\" encoding=\"iso-8859-1\"?>";
 	
 	MofFactory mof = MofFactory.INSTANCE;
 	Map<EObject, Integer> written = new HashMap<EObject, Integer>();
@@ -77,8 +77,10 @@ public class XMLSerializer implements Serializer {
 			case '&': buffer.append("&amp;"); break;
 			case ',': buffer.append("&#44;"); break;
 			case '"': buffer.append("&quot;"); break;
+			case '\b': buffer.append("&#08;"); break;
 			case '\t': buffer.append("&#09;"); break;
 			case '\n': buffer.append("&#10;"); break;
+			case '\f': buffer.append("&#12;"); break;
 			case '\r': buffer.append("&#13;"); break;
 			default: buffer.append(c);
 			}
