@@ -32,7 +32,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	public static final String genClause = "genClause";
 	public static final String genSelectClause = "genSelectClause";
 	public static final String var_connection = "ezeConn";
-	public static final String var_datasource = "ds";
+//	public static final String var_datasource = "ds";
 //	public static final String var_resultSet = "ezeResult";
 	public static final String var_statement = "ezeStatement";
 	public static final String var_listElement = "ezeElement";
@@ -189,7 +189,9 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 				out.print(quoted(SQL.removeCRLFs(stmt.getSqlString())));
 			}
 			out.println(';');
-			out.print(var_stmt + " = " + var_datasource + '.' + expr_getConnection);
+			out.print(var_stmt + " = ");
+			ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
+			out.print('.' + expr_getConnection);
 			if (isCall) {
 				out.println(".prepareCall(stmtStr);");
 			}
