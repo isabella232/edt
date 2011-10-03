@@ -18,6 +18,7 @@ import org.eclipse.debug.core.IDebugEventFilter;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IDebugTarget;
+import org.eclipse.debug.core.model.ISourceLocator;
 import org.eclipse.edt.debug.core.IEGLDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.ui.IStartup;
@@ -57,12 +58,16 @@ public class DebugTargetWrapper implements IStartup
 							launch.removeDebugTarget( javaTarget );
 							launch.addDebugTarget( edtTarget );
 							
-							// Set up a source lookup director that is capable of finding .egl files from the EGL build path.
+							// Set up a source lookup director that is capable of finding .egl files from the EGL build path, if necessary.
 							try
 							{
-								EGLJavaSourceLookupDirector director = new EGLJavaSourceLookupDirector( launch.getSourceLocator() );
-								director.initializeDefaults( launch.getLaunchConfiguration() );
-								launch.setSourceLocator( director );
+								ISourceLocator origLocator = launch.getSourceLocator();
+								if ( !(origLocator instanceof EGLJavaSourceLookupDirector) )
+								{
+									EGLJavaSourceLookupDirector director = new EGLJavaSourceLookupDirector( origLocator );
+									director.initializeDefaults( launch.getLaunchConfiguration() );
+									launch.setSourceLocator( director );
+								}
 							}
 							catch ( CoreException e )
 							{

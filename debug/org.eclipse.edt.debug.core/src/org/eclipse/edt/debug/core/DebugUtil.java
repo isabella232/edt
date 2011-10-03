@@ -11,8 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.core;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.edt.ide.ui.EDTUIPlugin;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 public class DebugUtil
@@ -59,5 +67,41 @@ public class DebugUtil
 		} );
 		
 		return shell[ 0 ];
+	}
+	
+	public static IResource getContext()
+	{
+		IWorkbenchPage page = EDTUIPlugin.getActivePage();
+		if ( page != null )
+		{
+			ISelection selection = page.getSelection();
+			Object element = null;
+			if ( selection instanceof IStructuredSelection )
+			{
+				IStructuredSelection sel = (IStructuredSelection)selection;
+				if ( !sel.isEmpty() )
+				{
+					element = sel.getFirstElement();
+				}
+			}
+			else
+			{
+				element = selection;
+			}
+			
+			if ( element != null && (element instanceof IAdaptable) )
+			{
+				element = ((IAdaptable)element).getAdapter( IResource.class );
+				return (IResource)element;
+			}
+			
+			IEditorPart part = page.getActiveEditor();
+			if ( part != null )
+			{
+				IEditorInput input = part.getEditorInput();
+				return (IResource)input.getAdapter( IResource.class );
+			}
+		}
+		return null;
 	}
 }

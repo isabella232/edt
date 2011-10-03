@@ -28,6 +28,12 @@ public class EGLJavaSourceLookupDirector extends AbstractSourceLookupDirector
 	private final ISourceLocator originalLocator;
 	private final ISourceLookupDirector originalDirector;
 	
+	public EGLJavaSourceLookupDirector()
+	{
+		// Default constructor is required by Platform Debug tooling.
+		this( null );
+	}
+	
 	public EGLJavaSourceLookupDirector( ISourceLocator locator )
 	{
 		originalLocator = locator;
