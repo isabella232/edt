@@ -10,7 +10,6 @@
         	<element maxOccurs="unbounded" minOccurs="0" name="include" type="egl:Include"/>
         	<element maxOccurs="unbounded" minOccurs="0" ref="egl:deploy-ext"/>
         </sequence>
-        <attribute name="alias" type="NCName" use="optional"/>
     </complexType>
 
     <element abstract="true" name="deploy-ext" type="egl:Deploy-Ext"/>

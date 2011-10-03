@@ -78,32 +78,8 @@ public class DeploymentItemProvider
 		{
 			super.getPropertyDescriptors(object);
 
-			addAliasPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Alias feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAliasPropertyDescriptor(Object object)
-	{
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Deployment_alias_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Deployment_alias_feature", "_UI_Deployment_type"),
-				 DeploymentPackage.Literals.DEPLOYMENT__ALIAS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -166,10 +142,7 @@ public class DeploymentItemProvider
 	@Override
 	public String getText(Object object)
 	{
-		String label = ((Deployment)object).getAlias();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Deployment_type") :
-			getString("_UI_Deployment_type") + " " + label;
+		return getString("_UI_Deployment_type");
 	}
 
 	/**
@@ -186,9 +159,6 @@ public class DeploymentItemProvider
 
 		switch (notification.getFeatureID(Deployment.class))
 		{
-			case DeploymentPackage.DEPLOYMENT__ALIAS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
 			case DeploymentPackage.DEPLOYMENT__BINDINGS:
 			case DeploymentPackage.DEPLOYMENT__SERVICES:
 			case DeploymentPackage.DEPLOYMENT__RUIAPPLICATION:

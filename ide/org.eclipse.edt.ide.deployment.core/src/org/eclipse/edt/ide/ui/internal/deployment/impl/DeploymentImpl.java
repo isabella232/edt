@@ -55,7 +55,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getInclude <em>Include</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getDeployExtGroup <em>Deploy Ext Group</em>}</li>
  *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getDeployExt <em>Deploy Ext</em>}</li>
- *   <li>{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentImpl#getAlias <em>Alias</em>}</li>
  * </ul>
  * </p>
  *
@@ -132,26 +131,6 @@ public class DeploymentImpl extends EObjectImpl implements Deployment
 	 * @ordered
 	 */
 	protected FeatureMap deployExtGroup;
-
-	/**
-	 * The default value of the '{@link #getAlias() <em>Alias</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAlias()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String ALIAS_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getAlias() <em>Alias</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAlias()
-	 * @generated
-	 * @ordered
-	 */
-	protected String alias = ALIAS_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -443,29 +422,6 @@ public class DeploymentImpl extends EObjectImpl implements Deployment
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getAlias()
-	{
-		return alias;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setAlias(String newAlias)
-	{
-		String oldAlias = alias;
-		alias = newAlias;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT__ALIAS, oldAlias, alias));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
 	{
@@ -523,8 +479,6 @@ public class DeploymentImpl extends EObjectImpl implements Deployment
 				return ((FeatureMap.Internal)getDeployExtGroup()).getWrapper();
 			case DeploymentPackage.DEPLOYMENT__DEPLOY_EXT:
 				return getDeployExt();
-			case DeploymentPackage.DEPLOYMENT__ALIAS:
-				return getAlias();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -562,9 +516,6 @@ public class DeploymentImpl extends EObjectImpl implements Deployment
 			case DeploymentPackage.DEPLOYMENT__DEPLOY_EXT_GROUP:
 				((FeatureMap.Internal)getDeployExtGroup()).set(newValue);
 				return;
-			case DeploymentPackage.DEPLOYMENT__ALIAS:
-				setAlias((String)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -600,9 +551,6 @@ public class DeploymentImpl extends EObjectImpl implements Deployment
 			case DeploymentPackage.DEPLOYMENT__DEPLOY_EXT_GROUP:
 				getDeployExtGroup().clear();
 				return;
-			case DeploymentPackage.DEPLOYMENT__ALIAS:
-				setAlias(ALIAS_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -635,8 +583,6 @@ public class DeploymentImpl extends EObjectImpl implements Deployment
 				return deployExtGroup != null && !deployExtGroup.isEmpty();
 			case DeploymentPackage.DEPLOYMENT__DEPLOY_EXT:
 				return !getDeployExt().isEmpty();
-			case DeploymentPackage.DEPLOYMENT__ALIAS:
-				return ALIAS_EDEFAULT == null ? alias != null : !ALIAS_EDEFAULT.equals(alias);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -656,8 +602,6 @@ public class DeploymentImpl extends EObjectImpl implements Deployment
 		result.append(targetGroup);
 		result.append(", deployExtGroup: ");
 		result.append(deployExtGroup);
-		result.append(", alias: ");
-		result.append(alias);
 		result.append(')');
 		return result.toString();
 	}

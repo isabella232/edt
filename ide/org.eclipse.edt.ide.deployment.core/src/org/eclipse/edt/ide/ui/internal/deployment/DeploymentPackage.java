@@ -268,22 +268,13 @@ public interface DeploymentPackage extends EPackage
 	int DEPLOYMENT__DEPLOY_EXT = 8;
 
 	/**
-	 * The feature id for the '<em><b>Alias</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DEPLOYMENT__ALIAS = 9;
-
-	/**
 	 * The number of structural features of the '<em>Deployment</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYMENT_FEATURE_COUNT = 10;
+	int DEPLOYMENT_FEATURE_COUNT = 9;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentTargetImpl <em>Target</em>}' class.
@@ -981,17 +972,6 @@ public interface DeploymentPackage extends EPackage
 	EReference getDeployment_DeployExt();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.edt.ide.ui.internal.deployment.Deployment#getAlias <em>Alias</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Alias</em>'.
-	 * @see org.eclipse.edt.ide.ui.internal.deployment.Deployment#getAlias()
-	 * @see #getDeployment()
-	 * @generated
-	 */
-	EAttribute getDeployment_Alias();
-
-	/**
 	 * Returns the meta object for class '{@link org.eclipse.edt.ide.ui.internal.deployment.DeploymentProject <em>Project</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1590,14 +1570,6 @@ public interface DeploymentPackage extends EPackage
 		 * @generated
 		 */
 		EReference DEPLOYMENT__DEPLOY_EXT = eINSTANCE.getDeployment_DeployExt();
-
-		/**
-		 * The meta object literal for the '<em><b>Alias</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute DEPLOYMENT__ALIAS = eINSTANCE.getDeployment_Alias();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.edt.ide.ui.internal.deployment.impl.DeploymentProjectImpl <em>Project</em>}' class.

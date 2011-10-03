@@ -420,16 +420,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getDeployment_Alias()
-	{
-		return (EAttribute)deploymentEClass.getEStructuralFeatures().get(9);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getDeploymentProject()
 	{
 		return deploymentProjectEClass;
@@ -867,7 +857,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		createEReference(deploymentEClass, DEPLOYMENT__INCLUDE);
 		createEAttribute(deploymentEClass, DEPLOYMENT__DEPLOY_EXT_GROUP);
 		createEReference(deploymentEClass, DEPLOYMENT__DEPLOY_EXT);
-		createEAttribute(deploymentEClass, DEPLOYMENT__ALIAS);
 
 		deploymentProjectEClass = createEClass(DEPLOYMENT_PROJECT);
 
@@ -978,7 +967,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEReference(getDeployment_Include(), this.getInclude(), null, "include", null, 0, -1, Deployment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDeployment_DeployExtGroup(), ecorePackage.getEFeatureMapEntry(), "deployExtGroup", null, 0, -1, Deployment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDeployment_DeployExt(), this.getDeployExt(), null, "deployExt", null, 0, -1, Deployment.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-		initEAttribute(getDeployment_Alias(), theXMLTypePackage.getNCName(), "alias", null, 0, 1, Deployment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deploymentProjectEClass, DeploymentProject.class, "DeploymentProject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1205,14 +1193,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 			 "name", "deploy-ext",
 			 "namespace", "##targetNamespace",
 			 "group", "deploy-ext:group"
-		   });		
-		addAnnotation
-		  (getDeployment_Alias(), 
-		   source, 
-		   new String[] 
-		   {
-			 "kind", "attribute",
-			 "name", "alias"
 		   });		
 		addAnnotation
 		  (deploymentProjectEClass, 

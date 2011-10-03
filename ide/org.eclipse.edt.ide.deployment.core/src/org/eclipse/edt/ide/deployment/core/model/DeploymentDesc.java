@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.ide.deployment.core.DeploymentDescFileLocator;
 import org.eclipse.edt.ide.deployment.core.DeploymentDescParser;
 import org.eclipse.edt.javart.resources.egldd.RuntimeDeploymentDesc;
 
@@ -24,8 +23,6 @@ import org.eclipse.edt.javart.resources.egldd.RuntimeDeploymentDesc;
 
 public class DeploymentDesc extends RuntimeDeploymentDesc{
 
-	private String alias;
-	
 	private List<Service> services;
 	
 	private RUIApplication ruiApplication;
@@ -61,15 +58,6 @@ public class DeploymentDesc extends RuntimeDeploymentDesc{
 		services = new ArrayList<Service>();
 		resourceOmissions = new ArrayList<String>();
 	}
-	
-	public String getAlias() {
-		return alias;
-	}
-
-	public void setAlias(String alias) {
-		this.alias = alias;
-	}
-
 	
 	public List<Restservice> getRestservices() {
 		List<Restservice> restServices = new ArrayList<Restservice>();

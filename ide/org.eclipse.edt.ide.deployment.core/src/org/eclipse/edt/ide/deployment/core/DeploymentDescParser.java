@@ -47,7 +47,6 @@ public class DeploymentDescParser extends RuntimeDeploymentDescParser {
 
 	public void startElement(String uri, String localName, String qName, Attributes attributes) {
 		if (localName.equals("deployment")) {
-			((DeploymentDesc)desc).setAlias(attributes.getValue("alias"));
 		} 
 		else if (localName.equals("service")) {
 			currentService = new Service(attributes.getValue("type"),
