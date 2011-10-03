@@ -6,20 +6,117 @@ externalType StringLib type NativeType{@ContentAssist}
 
 	private constructor();
 	
-	static function format(intValue smallint in, pattern string in) returns (string);
-	static function format(intValue int in, pattern string in) returns (string);
-	static function format(intValue bigint in, pattern string in) returns (string);
-	static function format(decValue decimal in, pattern string in) returns (string);
-	static function format(floatValue smallfloat in, pattern string in) returns (string);
-	static function format(floatValue float in, pattern string in) returns (string);
-	static function format(d date in, pattern string in) returns(string);
-	static function format(ts timestamp in, pattern string in) returns(string);
+	/**
+	 * Converts a number to a string, formatted according to the given pattern.
+	 *
+	 * @param value    the number to be formatted.
+	 * @param pattern  how the number should be formatted.
+	 * @return a formatted string.
+	 */
+	static function format(value smallint in, pattern string in) returns (string);
+	
+	/**
+	 * Converts a number to a string, formatted according to the given pattern.
+	 *
+	 * @param value    the number to be formatted.
+	 * @param pattern  how the number should be formatted.
+	 * @return a formatted string.
+	 */
+	static function format(value int in, pattern string in) returns (string);
+	
+	/**
+	 * Converts a number to a string, formatted according to the given pattern.
+	 *
+	 * @param value    the number to be formatted.
+	 * @param pattern  how the number should be formatted.
+	 * @return a formatted string.
+	 */
+	static function format(value bigint in, pattern string in) returns (string);
+	
+	/**
+	 * Converts a number to a string, formatted according to the given pattern.
+	 *
+	 * @param value    the number to be formatted.
+	 * @param pattern  how the number should be formatted.
+	 * @return a formatted string.
+	 */
+	static function format(value decimal in, pattern string in) returns (string);
+	
+	/**
+	 * Converts a number to a string, formatted according to the given pattern.
+	 *
+	 * @param value    the number to be formatted.
+	 * @param pattern  how the number should be formatted.
+	 * @return a formatted string.
+	 */
+	static function format(value smallfloat in, pattern string in) returns (string);
+	
+	/**
+	 * Converts a number to a string, formatted according to the given pattern.
+	 *
+	 * @param value    the number to be formatted.
+	 * @param pattern  how the number should be formatted.
+	 * @return a formatted string.
+	 */
+	static function format(value float in, pattern string in) returns (string);
+	
+	/**
+	 * Converts a date to a string, formatted according to the given pattern.
+	 *
+	 * @param value    the date to be formatted.
+	 * @param pattern  how the date should be formatted.
+	 * @return a formatted string.
+	 */
+	static function format(value date in, pattern string in) returns(string);
+	
+	/**
+	 * Converts a timestamp to a string, formatted according to the given pattern.
+	 *
+	 * @param value    the timestamp to be formatted.
+	 * @param pattern  how the timestamp should be formatted.
+	 * @return a formatted string.
+	 */
+	static function format(value timestamp in, pattern string in) returns(string);
 
-	static function getNextToken(source string in, index int inout, delimiters string in) returns (string);
+	/**
+	 * Returns the next token from the source string, or null if there is none.
+	 * If a token is found, the index argument is updated with the token's ending position. 
+	 *
+	 * @param source      the string to parse.
+	 * @param index       where to start looking for a token in the source string.
+	 * @param delimiters  which character(s) separate one token from another.
+	 * @return the next token, or null.
+	 * @throws eglx.lang.InvalidIndexException is thrown if the index is less than
+	 * 1 or greater than the length of the source String.
+	 */
+	static function getNextToken(source string in, index int inout, delimiters string in) returns (string?);
 
+	/**
+	 * Returns the number of tokens in the source string, as if it was parsed by
+	 * repeated calls to getNextToken.
+	 *
+	 * @param source      the string to parse.
+	 * @param delimiters  which character(s) separate one token from another.
+	 * @return the number of tokens in the string.
+	 */
 	static function getTokenCount(source string in, delimiters string in) returns (int);
-
+	
+	/**
+	 * Returns a one-character string containing the character at the given Unicode
+	 * codepoint.
+	 *
+	 * @param c  the numeric value of the Unicode character.
+	 * @return a string containing the character.
+	 * @throws eglx.lang.InvalidArgumentException if c is less than 0 or greater than 65535.
+	 */
 	static function fromCharCode(c int in) returns(string);
-
+	
+	/**
+	 * Returns a string of the given lenth, containing only spaces.  If the input
+	 * is less than one, returns the empty string.
+	 *
+	 * @param characterCount  how many spaces are desired.
+	 * @return a string of spaces.
+	 */
 	static function spaces(characterCount int in) returns(string);
 end
