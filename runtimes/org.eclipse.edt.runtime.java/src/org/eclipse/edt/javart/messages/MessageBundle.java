@@ -62,6 +62,7 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.UNHANDLED_EXCEPTION, "An unhandled error occurred. Error: {0}." },
 		{ Message.SOA_E_WS_PROXY_SERVICE_TIMEOUT, "The service invocation timed out. exception: Connection read time out error. url:{0}" },
 		{ Message.SOA_E_WS_REST_NO_RESPONSE, "No response was received from the service. URL:{0}" },
+		{ Message.VALUE_OUT_OF_RANGE, "The value {0} is not within the valid range of {1} to {2}." },
 	};
 	
 	/**

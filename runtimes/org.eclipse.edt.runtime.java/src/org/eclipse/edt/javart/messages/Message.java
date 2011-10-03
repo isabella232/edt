@@ -55,4 +55,5 @@ public class Message
 	public static final String UNHANDLED_EXCEPTION = "EGL0036E";
 	public static final String SOA_E_WS_PROXY_SERVICE_TIMEOUT = "EGL0037E";
 	public static final String SOA_E_WS_REST_NO_RESPONSE = "EGL0038E";
+	public static final String VALUE_OUT_OF_RANGE = "EGL0039E";
 }

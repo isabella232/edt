@@ -107,8 +107,8 @@ public class StringLib extends ExecutableBase {
 	}
 
 	/**
-	 * Returns the next token from the source string, or NULL if there is none. If a token is found, the index argument is
-	 * updated with the token's ending position. The exception egl.lang.InvalidIndexException is thrown if the index is less than
+	 * Returns the next token from the source string, or null if there is none. If a token is found, the index argument is
+	 * updated with the token's ending position. The exception eglx.lang.InvalidIndexException is thrown if the index is less than
 	 * 1 or greater than the length of the source String.
 	 */
 	public static String getNextToken(String source, AnyBoxedObject<Integer> index, String delimiters) throws AnyException {
@@ -156,6 +156,11 @@ public class StringLib extends ExecutableBase {
 	 * Returns the string value of a character code
 	 */
 	public static String fromCharCode(int character) {
+		if ( character < 0 || character > 65535 )
+		{
+			InvalidArgumentException ex = new InvalidArgumentException();
+			throw ex.fillInMessage( Message.VALUE_OUT_OF_RANGE, character, 0, 65535 );
+		}
 		return String.valueOf((char)character);
 	}
 
