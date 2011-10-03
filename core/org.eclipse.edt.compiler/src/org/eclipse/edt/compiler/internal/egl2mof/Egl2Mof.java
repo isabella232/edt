@@ -158,7 +158,7 @@ public class Egl2Mof extends Egl2MofExpression {
 		EObject mofPart = null;
 		try {
 			part.accept(this);
-			mofPart = stack.pop();
+			mofPart = (EObject)stack.pop();
 			// If the EClassifier has name different than the original Part
 			// due to conflicts with EGL keywords for instance, save
 			// the result at the original typeSignature as well

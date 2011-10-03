@@ -149,7 +149,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	
 	boolean visitFunctionBody = false;
 	
-	public Stack<EObject> stack;
+	public Stack<Object> stack;
 	public Map<IBinding, EObject> eObjects;
 	public Map<IBinding, ProxyEObject> proxies;
 	
@@ -158,7 +158,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		this.env = env;
 		this.mof = MofFactory.INSTANCE;
 		this.factory = IrFactory.INSTANCE;
-		stack = new Stack<EObject>();
+		stack = new Stack<Object>();
 		eObjects = new HashMap<IBinding, EObject>();
 		proxies = new HashMap<IBinding, ProxyEObject>();
 	}
@@ -176,7 +176,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 	protected EObject eStackPop() {
-		return stack.pop();
+		return (EObject)stack.pop();
 	}
 	
 	protected MofSerializable getPartBeingProcessed() {

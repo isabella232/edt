@@ -677,17 +677,30 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		
 		for (Node n : (List<Node>)part.getContents()) {
 			n.accept(this);
-			EObject mofObj = stack.pop();
-			if (mofObj != null) {
-				if (inMofContext) {
-					((EMemberContainer)container).addMember((EMember)mofObj);
-					if (mofObj instanceof EField && (container instanceof AnnotationType || container instanceof EMetadataType)) {
-						((EField)mofObj).setContainment(true);
-					}
+			
+			Object obj = stack.pop();
+			if (obj instanceof List) {
+				for (EObject eobj : (List<EObject>)obj) {
+					handleMember(eobj, container);
 				}
-				else {
-					((Container)container).addMember((Member)mofObj);
+			}
+			else {
+				handleMember((EObject)obj, container);
+			}
+			
+		}
+	}
+	
+	private void handleMember(EObject mofObj, EObject container) {
+		if (mofObj != null) {
+			if (inMofContext) {
+				((EMemberContainer)container).addMember((EMember)mofObj);
+				if (mofObj instanceof EField && (container instanceof AnnotationType || container instanceof EMetadataType)) {
+					((EField)mofObj).setContainment(true);
 				}
+			}
+			else {
+				((Container)container).addMember((Member)mofObj);
 			}
 		}
 	}

@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.egl2mof;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.AnnotationBinding;
@@ -103,39 +104,52 @@ class Egl2MofMember extends Egl2MofPart {
  	
 	@Override
 	public boolean visit(ClassDataDeclaration node) {
-		IDataBinding field = ((org.eclipse.edt.compiler.core.ast.Name)node.getNames().get(0)).resolveDataBinding();
 		
-		// Do not create members that have invalid types!
-		if (!Binding.isValidBinding(field)) {
+		List<EObject> list = new ArrayList<EObject>();
+
+		for (org.eclipse.edt.compiler.core.ast.Name name : (List<org.eclipse.edt.compiler.core.ast.Name>)node.getNames()) {
+			IDataBinding field = name.resolveDataBinding();
+			
+			// Do not create members that have invalid types!
+			if (!Binding.isValidBinding(field)) {
+				stack.push(null);
+				return false;
+			}
+			
+			EObject obj;
+					
+			if (inMofContext) {
+				EField f = mof.createEField(true);
+				setUpMofTypedElement(f, field);
+				setInitialValue(node, f);
+				obj = f;
+			}
+			else {
+				EClass fieldClass = mofMemberTypeFor(field);
+				Field f = (Field)fieldClass.newInstance();
+				setUpEglTypedElement(f, field);
+				if (field instanceof ClassFieldBinding) {
+					f.setIsStatic(((ClassFieldBinding)field).isStatic());
+				}
+				addInitializers(node, f, node.getType());
+				obj = f;
+			}
+			eObjects.put(field, obj);
+			setElementInformation(node, obj);
+			list.add(obj);
+		}
+		
+		if (list.isEmpty()) {
 			stack.push(null);
-			return false;
-		}
-	
-		EObject obj;
-		EList<EObject> list = null;;
-		if (node.getNames().size() > 1) {
-			list = new EList<EObject>();
-		}
-		
-		if (inMofContext) {
-			EField f = mof.createEField(true);
-			setUpMofTypedElement(f, field);
-			setInitialValue(node, f);
-			obj = f;
 		}
 		else {
-			EClass fieldClass = mofMemberTypeFor(field);
-			Field f = (Field)fieldClass.newInstance();
-			setUpEglTypedElement(f, field);
-			if (field instanceof ClassFieldBinding) {
-				f.setIsStatic(((ClassFieldBinding)field).isStatic());
+			if (list.size() == 1) {
+				stack.push(list.get(0));
 			}
-			addInitializers(node, f, node.getType());
-			obj = f;
+			else {
+				stack.push(list);
+			}
 		}
-		eObjects.put(field, obj);
-		setElementInformation(node, obj);
-		stack.push(obj);
 		return false;
 	}
 
