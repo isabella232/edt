@@ -92,19 +92,7 @@ public class RUIModelPresentation extends LabelProvider implements IDebugModelPr
 	@Override
 	public void computeDetail( IValue value, IValueDetailListener listener )
 	{
-		StringBuffer result = new StringBuffer();
-		String refType = null;
 		String valueString = null;
-		try
-		{
-			refType = value.getReferenceTypeName();
-		}
-		catch ( DebugException e )
-		{
-		}
-		if ( (refType != null) && ((refType = refType.trim()).length() > 0) )
-			result.append( "(" + refType + ") " ); //$NON-NLS-1$ //$NON-NLS-2$
-			
 		try
 		{
 			valueString = value.getValueString();
@@ -112,11 +100,7 @@ public class RUIModelPresentation extends LabelProvider implements IDebugModelPr
 		catch ( DebugException e )
 		{
 		}
-		if ( valueString != null )
-		{
-			result.append( valueString );
-		}
-		listener.detailComputed( value, result.toString() );
+		listener.detailComputed( value, valueString );
 	}
 	
 	/*

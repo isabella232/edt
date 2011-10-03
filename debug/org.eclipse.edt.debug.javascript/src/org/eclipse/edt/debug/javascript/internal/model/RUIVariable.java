@@ -233,18 +233,20 @@ public class RUIVariable extends RUIDebugElement implements IEGLVariable
 	public String getLabel( boolean qualified )
 	{
 		String label = null;
-		StringBuffer buf = new StringBuffer( 20 );
+		StringBuilder buf = new StringBuilder( 20 );
 		try
 		{
-			buf.append( getName() );
 			if ( qualified )
 			{
 				String type = getReferenceTypeName();
 				if ( type != null && (type = type.trim()).length() != 0 )
 				{
-					buf.append( " " + type ); //$NON-NLS-1$
+					buf.append( type ); //$NON-NLS-1$
+					buf.append( " " );
 				}
 			}
+			buf.append( getName() );
+			
 			String value = getValue().getValueString();
 			if ( value != null )
 			{
