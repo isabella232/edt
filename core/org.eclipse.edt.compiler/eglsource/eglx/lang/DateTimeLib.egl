@@ -17,17 +17,17 @@ externaltype DateTimeLib type NativeType{@ContentAssist}
 	 * @param gregorianDateAsInteger  the Gregorian date value.
 	 * @return a new date.
 	 */
-	static function dateFromGregorian(gregorianDateAsInteger EInt in) returns (EDate);
+	static function dateFromGregorian(gregorianDateAsInteger int in) returns (date);
 	
 	/**
 	 * Creates a date from an int by interpreting the int's value as a Julian date.
-	 * Julian dates use the format yyyyDDD, so the number 1899356 represents
+	 * Julian dates use the format yyyyDDD, so the number 1899365 represents
 	 * December 31, 1899.
 	 *
 	 * @param julianDateAsInteger  the Julian date value.
 	 * @return a new date.
 	 */
-	static function dateFromJulian(julianDateAsInteger EInt in) returns (EDate);
+	static function dateFromJulian(julianDateAsInteger int in) returns (date);
 	
 	/**
 	 * Creates a date from an int by interpreting the int's value as a number of
@@ -37,7 +37,7 @@ externaltype DateTimeLib type NativeType{@ContentAssist}
 	 * @param numberOfDays  the number of days after December 31, 1899.
 	 * @return a new date.
 	 */
-	static function dateFromInt(numberOfDays EInt in) returns (EDate);
+	static function dateFromInt(numberOfDays int in) returns (date);
 	
 	/**
 	 * Creates a date from ints representing a month, day, and year.
@@ -47,5 +47,5 @@ externaltype DateTimeLib type NativeType{@ContentAssist}
 	 * @param yearValue   the year.
 	 * @return a new date.
 	 */
-	static function mdy(monthValue EInt in, dayValue EInt in, yearValue EInt in) returns(EDate);
+	static function mdy(monthValue int in, dayValue int in, yearValue int in) returns(date);
 end
