@@ -19,11 +19,14 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
+import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.compiler.tools.EGL2IR;
 import org.eclipse.edt.ide.core.CoreIDEPluginStrings;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
+import org.eclipse.edt.ide.core.internal.lookup.FileInfoManager;
+import org.eclipse.edt.ide.core.internal.lookup.IFileInfo;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
@@ -176,23 +179,33 @@ public class ProjectSettingsListenerManager {
 									// then it should be regenerated if a file, otherwise check its kids.
 									if (resource.equals(source) || ProjectSettingsUtility.findSetting(resource.getFullPath(), prefs, false) == null) {
 										if (resource.getType() == IResource.FILE) {
-											// We really don't know which extension the IR will have, so check for all known extensions.
-											String relativePath = IRFileNameUtility.toIRFileName(resource.getFullPath().removeFirstSegments(sourceDirSegments).removeFileExtension().toString());
-											IResource file = outputFolder.findMember(relativePath + EGL2IR.EGLXML);
-											if (file != null) {
-												file.touch(null);
-											}
-											file = outputFolder.findMember(relativePath + EGL2IR.EGLBIN);
-											if (file != null) {
-												file.touch(null);
-											}
-											file = outputFolder.findMember(relativePath + ZipFileObjectStore.MOFXML);
-											if (file != null) {
-												file.touch(null);
-											}
-											file = outputFolder.findMember(relativePath + ZipFileObjectStore.MOFBIN);
-											if (file != null) {
-												file.touch(null);
+											IFileInfo info = FileInfoManager.getInstance().getFileInfo( project, resource.getProjectRelativePath() );
+											if (info != null) {
+												IPath relativeFolderPath = resource.getFullPath().removeFirstSegments(sourceDirSegments).removeLastSegments( 1 );
+												for (Object name : info.getPartNames()) {
+													if (info.getPartType((String)name) == ITypeBinding.FILE_BINDING) {
+														continue;
+													}
+													
+													// We really don't know which extension the IR will have, so check for all known extensions.
+													String relativePath = IRFileNameUtility.toIRFileName(relativeFolderPath.append((String)name).toString());
+													IResource file = outputFolder.findMember(relativePath + EGL2IR.EGLXML);
+													if (file != null) {
+														file.touch(null);
+													}
+													file = outputFolder.findMember(relativePath + EGL2IR.EGLBIN);
+													if (file != null) {
+														file.touch(null);
+													}
+													file = outputFolder.findMember(relativePath + ZipFileObjectStore.MOFXML);
+													if (file != null) {
+														file.touch(null);
+													}
+													file = outputFolder.findMember(relativePath + ZipFileObjectStore.MOFBIN);
+													if (file != null) {
+														file.touch(null);
+													}
+												}
 											}
 											return false; // files don't have kids
 										}
