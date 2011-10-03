@@ -109,7 +109,7 @@ public class ClasspathUtil {
 		addJDBCJars(project, new HashSet<IProject>(), new HashSet<IResource>(), classpath);
 	}
 	
-	private static void addEGLPathToJavaPathIfNecessary(IJavaProject javaProject, IProject currProject, Set<IProject> seen, List<String> classpath) {
+	public static void addEGLPathToJavaPathIfNecessary(IJavaProject javaProject, IProject currProject, Set<IProject> seen, List<String> classpath) {
 		if (seen.contains(currProject)) {
 			return;
 		}
@@ -165,12 +165,12 @@ public class ClasspathUtil {
 		return null;
 	}
 	
-	private static String getWorkspaceProjectClasspathEntry(String projectName) {
+	public static String getWorkspaceProjectClasspathEntry(String projectName) {
 		return "<?xml version=\"1.0\" encoding=\"UTF-8\"?><runtimeClasspathEntry id=\"org.eclipse.jdt.launching.classpathentry.defaultClasspath\">" + //$NON-NLS-1$
 				"<memento exportedEntriesOnly=\"false\" project=\"" + projectName + "\"/></runtimeClasspathEntry>"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
-	private static void addJDBCJars(IProject project, Set<IProject> seenProjects, final Set<IResource> seenDDs, final List<String> classpath) {
+	public static void addJDBCJars(IProject project, Set<IProject> seenProjects, final Set<IResource> seenDDs, final List<String> classpath) {
 		if (seenProjects.contains(project)) {
 			return;
 		}

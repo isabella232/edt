@@ -52,6 +52,7 @@ Export-Package: org.eclipse.edt.ide.rui.actions,
  org.eclipse.edt.ide.rui.editor,
  org.eclipse.edt.ide.rui.internal.deployment.javascript,
  org.eclipse.edt.ide.rui.internal.nls,
+ org.eclipse.edt.ide.rui.internal.testserver,
  org.eclipse.edt.ide.rui.preferences,
  org.eclipse.edt.ide.rui.server,
  org.eclipse.edt.ide.rui.utils

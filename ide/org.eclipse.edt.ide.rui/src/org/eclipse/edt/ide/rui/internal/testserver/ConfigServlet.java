@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.internal.testserver;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.servlet.ServletException;
@@ -149,30 +149,13 @@ public class ConfigServlet extends HttpServlet {
 	}
 	
 	public void parseDDFiles(String ddFiles, boolean added) {
-		// For simplicity there's just the one delimeter.
-		// name1;path1;name2;path2... using File.pathSeparator
-		StringTokenizer tok = new StringTokenizer(ddFiles, File.pathSeparator);
-		while (tok.hasMoreTokens()) {
-			String name = tok.nextToken();
-			if (tok.hasMoreTokens()) {
-				String path = tok.nextToken();
-				
-				try {
-					name = URLDecoder.decode(name, "UTF-8"); //$NON-NLS-1$
-					path = URLDecoder.decode(path, "UTF-8"); //$NON-NLS-1$
-				}
-				catch (UnsupportedEncodingException e) {
-					// Shouldn't happen.
-				}
-				
-				if (added) {
-					TestServer.log("DD file added or changed: " + name + ", " + path); //$NON-NLS-1$ //$NON-NLS-2$
-					resourceLocator.addDDFile(name, path);
-				}
-				else {
-					TestServer.log("DD file removed: " + name + ", " + path); //$NON-NLS-1$ //$NON-NLS-2$
-					resourceLocator.removeDDFile(name);
-				}
+		List<String[]> parsed = resourceLocator.parseDDArgument(ddFiles, added);
+		for (String[] next : parsed) {
+			if (added) {
+				TestServer.log("DD file added or changed: " + next[0] + ", " + next[1]); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+			else {
+				TestServer.log("DD file removed: " + next[0] + ", " + next[1]); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 	}
