@@ -82,12 +82,7 @@ public class DeploymentDescriptorFinder {
 			if (member != null && member.getType() == IResource.FILE) {
 				try {
 					DeploymentDesc dd = DeploymentDesc.createDeploymentDescriptor(member.getLocation().toOSString());
-					// TODO make this match the comment below in parseDD()
-					String name = null;//dd.getAlias();
-					if (name == null || (name = name.trim()).length() == 0) {
-						name = dd.getName();
-					}
-					return name.toLowerCase();
+					return dd.getName().toLowerCase();
 				}
 				catch (Exception e) {
 					Activator.getDefault().log(e.getMessage(), e);
@@ -186,15 +181,8 @@ public class DeploymentDescriptorFinder {
 			String absPath = file.getLocation().toOSString();
 			DeploymentDesc dd = DeploymentDesc.createDeploymentDescriptor(absPath);
 			
-			//TODO deployment isn't using the alias but probably should. whatever it does, make sure this matches.
-			String name = null;//dd.getAlias();
-			if (name == null || (name = name.trim()).length() == 0) {
-				name = dd.getName();
-			}
-			name = name.toLowerCase();
-			
 			List<DDFile> entries = new ArrayList<DDFile>();
-			entries.add(new DDFile(name, absPath, dd.getBindings()));
+			entries.add(new DDFile(dd.getName().toLowerCase(), absPath, dd.getBindings()));
 			
 			// We also need anything it included.
 			List<String> includes = dd.getIncludes();
