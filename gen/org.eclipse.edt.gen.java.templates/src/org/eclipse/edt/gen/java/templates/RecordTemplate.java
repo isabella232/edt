@@ -20,7 +20,6 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
-import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -190,11 +189,7 @@ public class RecordTemplate extends JavaTemplate {
 	}
 
 	public void genSuperClass(Record part, Context ctx, TabbedWriter out) {
-		Stereotype stereotype = part.getStereotype();
-		if (stereotype == null || stereotype.getEClass().getName().equals("BasicRecord"))
-			out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue");
-		else
-			ctx.invoke(genSuperClass, stereotype, ctx, out);
+		out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue");
 	}
 
 	public void genAssignment(Record type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
