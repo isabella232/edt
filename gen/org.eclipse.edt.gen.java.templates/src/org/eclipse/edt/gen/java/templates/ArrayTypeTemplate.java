@@ -13,10 +13,7 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.ArrayType;
-import org.eclipse.edt.mof.egl.AsExpression;
-import org.eclipse.edt.mof.egl.Classifier;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.*;
 
 public class ArrayTypeTemplate extends JavaTemplate {
 
@@ -35,18 +32,32 @@ public class ArrayTypeTemplate extends JavaTemplate {
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
-		} else if (ctx.mapsToPrimitiveType(arg.getEType())) {
-			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
-			out.print(".ezeCast(");
-			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
-			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
-			out.print(")");
 		} else {
-			out.print("EAny.ezeCast(");
+			out.print("EList.ezeCast(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
-			out.print(", ");
-			ctx.invoke(genRuntimeClassTypeName, type.getClassifier(), ctx, out, TypeNameKind.JavaImplementation);
-			out.print(")");
+			out.print(", \"");
+			out.print(type.getTypeSignature());
+			out.print("\")");
+		}
+	}
+	
+	public void genIsaExpression(Type type, Context ctx, TabbedWriter out, IsAExpression arg) {
+		if (arg.getObjectExpr().getType().getTypeSignature().equalsIgnoreCase(arg.getEType().getTypeSignature())) {
+			if (arg.getObjectExpr().isNullable()) {
+				out.print("(");
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+				out.print(" == null ? false : true)");
+			} else
+				out.print("true");
+		} else if (arg.getObjectExpr().getType().getClassifier() != null && arg.getEType().getClassifier() != null
+			&& arg.getObjectExpr().getType().getClassifier().getTypeSignature().equalsIgnoreCase(arg.getEType().getClassifier().getTypeSignature())) {
+			out.print("false");
+		} else {
+			out.print("EList.ezeIsa(");
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			out.print(", \"");
+			out.print(type.getTypeSignature());
+			out.print("\")");
 		}
 	}
 
@@ -61,7 +72,7 @@ public class ArrayTypeTemplate extends JavaTemplate {
 	}
 
 	public void genRuntimeTypeName(ArrayType generic, Context ctx, TabbedWriter out, TypeNameKind arg) {
-		ctx.invoke(genRuntimeTypeName, generic.getClassifier(), ctx, out, TypeNameKind.EGLImplementation);
+		ctx.invoke(genRuntimeTypeName, generic.getClassifier(), ctx, out, arg);
 		if (!generic.getTypeArguments().isEmpty()) {
 			out.print("<");
 			for (int i = 0; i < generic.getTypeArguments().size(); i++) {

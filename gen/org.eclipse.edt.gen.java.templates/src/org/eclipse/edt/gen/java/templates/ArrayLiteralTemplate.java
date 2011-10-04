@@ -21,27 +21,38 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
-public class ArrayLiteralTemplate extends JavaTemplate {
-
-	public void genExpression(ArrayLiteral expr, Context ctx, TabbedWriter out) {
+public class ArrayLiteralTemplate extends JavaTemplate
+{
+	public void genExpression( ArrayLiteral expr, Context ctx, TabbedWriter out )
+	{
 		List<Expression> entries = expr.getEntries();
-		out.print("new ");
-		ctx.invoke(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.EGLImplementation);
-		out.print('(');
-		out.print(entries == null ? 0 : entries.size());
-		out.print(')');
-		// now loop through all of the entries, adding them to the new expression
-		if (entries != null) {
-			Type elementType = ((ArrayType) expr.getType()).getElementType();
-			int i = 1;
-			for (Expression element : entries) {
-				out.print(".ezeSet(");
-				out.print(i);
-				out.print(", ");
-				ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(element, elementType), ctx, out);
-				out.print(")");
-				i++;
+		if ( entries == null || entries.size() == 0 )
+		{
+			ctx.invoke( genInstantiation, expr.getType(), ctx, out );
+		}
+		else
+		{
+			ctx.invoke( genRuntimeTypeName, expr.getType().getClassifier(), ctx, out, TypeNameKind.EGLImplementation );
+			out.print( ".ezeNew(" );
+
+			Type elementType = ((ArrayType)expr.getType()).getElementType();
+			boolean firstElement = true;
+			for ( Expression element : entries )
+			{
+				if ( firstElement )
+				{
+					firstElement = false;
+				}
+				else
+				{
+					out.print( ", " );
+				}
+				ctx.invoke( genExpression,
+						IRUtils.makeExprCompatibleToType( element, elementType ), 
+						ctx, out );
 			}
 		}
+
+		out.print( ')' );
 	}
 }

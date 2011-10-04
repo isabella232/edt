@@ -97,7 +97,14 @@ public class ArrayAccessTemplate extends JavaTemplate {
 
 	public void genArrayAccess(ArrayAccess expr, Context ctx, TabbedWriter out) {
 		ctx.invoke(genExpression, expr.getArray(), ctx, out);
-		out.print(".get(");
+		if ( expr.getArray().getType().equals( TypeUtils.Type_ANY ) )
+		{
+			out.print(".ezeGet(");
+		}
+		else
+		{
+			out.print(".get(");
+		}
 		ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 		out.print(" - 1)");
 	}

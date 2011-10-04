@@ -13,12 +13,19 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.BoxingExpression;
 
 public class BoxingExpressionTemplate extends JavaTemplate {
 
 	public void genExpression(BoxingExpression expr, Context ctx, TabbedWriter out) {
-		if (ctx.mapsToPrimitiveType(expr.getType())) {
+		if ( expr.getType() instanceof ArrayType ) {
+			out.print("EList.ezeBox(");
+			ctx.invoke(genExpression, expr.getExpr(), ctx, out);
+			out.print(", \"");
+			out.print(expr.getType().getTypeSignature());
+			out.print("\")");
+		} else if (ctx.mapsToPrimitiveType(expr.getType())) {
 			ctx.invoke(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".");
 			ctx.invoke(genBoxingFunctionName, expr.getExpr(), ctx, out);
