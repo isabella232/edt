@@ -18,51 +18,120 @@ import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.gen.java.templates.TimestampTypeTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.*;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class ListTypeTemplate extends JavaTemplate 
 {
 	public void genContainerBasedNewExpression( Type type, Context ctx, TabbedWriter out, NewExpression expr )
 	{
-		ArrayType arrayType = (ArrayType)expr.getType();
-		out.print( "new " );
-		ctx.invoke( genRuntimeTypeName, type, ctx, out, TypeNameKind.JavaImplementation );
-		out.print( '(' );
-		if ( expr.getArguments() != null && expr.getArguments().size() > 0 )
+		if ( expr.getArguments() == null || expr.getArguments().size() == 0 )
 		{
-			ctx.invoke( genExpression, expr.getArguments().get( 0 ), ctx, out );
-			if ( !arrayType.elementsNullable() )
-			{
-				// Pass in the elementArg so we can create the elements.
-				out.print( ", " );
-				elementArg( arrayType, ctx, out, expr.getArguments(), 1 );
-			}
+			genInstantiation( type, ctx, out );
 		}
-		out.print( ')' );
+		else
+		{
+			ctx.invoke( genRuntimeTypeName, type.getClassifier(), ctx, out, TypeNameKind.EGLImplementation );
+			out.print( ".ezeNew(" );
+			ctx.invoke( genExpression, expr.getArguments().get( 0 ), ctx, out );
+			out.print( ',' );
+			factory( (ArrayType)expr.getType(), ctx, out, expr.getArguments(), 1 );
+			out.print( ')' );
+		}
 	}
 
-	public void genContainerBasedInvocation( Type type, Context ctx, TabbedWriter out, Expression expr )
+	public void genInstantiation( Type type, Context ctx, TabbedWriter out )
 	{
-		// The resize function is a special case.  We have to pass in the elementArg
-		// so we can create the elements.
-		InvocationExpression invExpr = (InvocationExpression)expr;
-		if ( invExpr.getId().equalsIgnoreCase( "resize" ) )
+		Type elementType = ((ArrayType)type).getElementType();		
+		if ( elementType instanceof ArrayType )
 		{
-			Expression array = invExpr.getQualifier();
-			ctx.invoke( genExpression, array, ctx, out );
-			out.print( ".resize(" );
-			ctx.invoke( genExpression, invExpr.getArguments().get( 0 ), ctx, out );
+			out.print( "((" );
+			ctx.invoke( genRuntimeTypeName, type.getClassifier(), ctx, out, TypeNameKind.JavaObject );
+			out.print( ")new java.util.ArrayList())" );
+		}
+		else
+		{
+			ctx.invoke( genRuntimeTypeName, type.getClassifier(), ctx, out, TypeNameKind.EGLImplementation );
+			out.print( ".ezeNew(" );
+			ctx.invoke( genRuntimeTypeName, elementType.getClassifier(), ctx, out, TypeNameKind.JavaObject );
+			out.print( ".class)" );
+		}
+	}
+
+	public void genContainerBasedInvocation( Type type, Context ctx, TabbedWriter out, InvocationExpression expr )
+	{
+		IRUtils.makeCompatible( expr );
+
+		ctx.invoke( genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation );
+		out.print( '.' );
+		ctx.invoke( genName, expr.getTarget(), ctx, out );
+		out.print( '(' );
+		ctx.invoke( genExpression, expr.getQualifier(), ctx, out );
+
+		// Special cases: 1. Pass a factory to resize so it can create new elements.
+		// 2. We may need to copy the first argument to appendElement, insertElement,
+		// and setElement.
+		if ( expr.getId().equalsIgnoreCase( "resize" ) )
+		{
 			out.print( ", " );
-			elementArg( (ArrayType)array.getType(), ctx, out, null, 0 );
+			ctx.invoke( genExpression, expr.getArguments().get( 0 ), ctx, out );
+			out.print( ", " );
+			factory( (ArrayType)expr.getQualifier().getType(), ctx, out, null, 0 );
+			out.print( ')' );
+		}
+		else if ( expr.getId().equalsIgnoreCase( "appendElement" ) )
+		{
+			out.print( ", " );
+			Expression arg0 = expr.getArguments().get( 0 );
+			if ( arg0.getType() == null || TypeUtils.isReferenceType( arg0.getType() ) 
+					|| ctx.mapsToPrimitiveType( arg0.getType() ) )
+			{
+				ctx.invoke( genExpression, arg0, ctx, out );
+			}
+			else
+			{
+				out.print( "org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(" );
+				ctx.invoke( genExpression, arg0, ctx, out );
+				out.print( ", " );
+				ctx.invoke( genInstantiation, arg0.getType(), ctx, out );
+				out.print( ')' );
+			}
+			out.print( ')' );
+		}
+		else if ( expr.getId().equalsIgnoreCase( "insertElement" )
+					|| expr.getId().equalsIgnoreCase( "setElement" ) )
+		{
+			out.print( ", " );
+			Expression arg0 = expr.getArguments().get( 0 );
+			if ( arg0.getType() == null || TypeUtils.isReferenceType( arg0.getType() ) 
+					|| ctx.mapsToPrimitiveType( arg0.getType() ) )
+			{
+				ctx.invoke( genExpression, arg0, ctx, out );
+			}
+			else
+			{
+				out.print( "org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(" );
+				ctx.invoke( genExpression, arg0, ctx, out );
+				out.print( ", " );
+				ctx.invoke( genInstantiation, arg0.getType(), ctx, out );
+				out.print( ')' );
+			}
+			out.print( ", " );
+			ctx.invoke( genExpression, expr.getArguments().get( 1 ), ctx, out );
 			out.print( ')' );
 		}
 		else
 		{
-			ctx.invokeSuper( this, genContainerBasedInvocation, type, ctx, out, expr );
+			if ( expr.getArguments() != null && expr.getArguments().size() > 0 )
+			{
+				out.print( ", " );
+				ctx.foreach( expr.getArguments(), ',', genExpression, ctx, out );
+			}
+			out.print( ')' );
 		}
 	}
 	
-	private void elementArg( ArrayType arrayType, Context ctx, TabbedWriter out, 
+	protected void factory( ArrayType arrayType, Context ctx, TabbedWriter out, 
 			List<Expression> dimensionSizes, int whichDimension )
 	{
 		if ( arrayType.elementsNullable() )
@@ -87,7 +156,7 @@ public class ListTypeTemplate extends JavaTemplate
 					ctx.invoke( genExpression, dimensionSizes.get( whichDimension ), ctx, out );
 				}
 				out.print( ',' );
-				elementArg( elementArrayType, ctx, out, dimensionSizes, whichDimension + 1 );
+				factory( elementArrayType, ctx, out, dimensionSizes, whichDimension + 1 );
 				out.print( ')' );
 			}
 			else
@@ -140,7 +209,7 @@ public class ListTypeTemplate extends JavaTemplate
 						break;
 					default:
 						out.print( "new org.eclipse.edt.runtime.java.eglx.lang.EList.ElementFactory<" );
-						ctx.invoke( genRuntimeTypeName, elementType, ctx, out, TypeNameKind.EGLImplementation );
+						ctx.invoke( genRuntimeTypeName, elementType, ctx, out, TypeNameKind.EGLInterface );
 						out.print( ">(" );
 						ctx.invoke( genRuntimeClassTypeName, elementType, ctx, out, TypeNameKind.EGLImplementation );
 						out.print( ")" );
