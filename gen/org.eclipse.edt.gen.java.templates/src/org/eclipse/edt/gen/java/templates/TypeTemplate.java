@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.java.templates;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
+import org.eclipse.edt.javart.util.JavaAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.AsExpression;
@@ -41,22 +42,31 @@ public class TypeTemplate extends JavaTemplate {
 		// types used table if it doesn't already exist. The first thing we want to check for, is to make sure the
 		// unqualified type name (the last node in the name) is not already taken. If it is already taken, we can't do an
 		// import for it and when used throughout the program, will have to be fully qualified at all times.
-		CommonUtilities.processImport(ctx.getNativeImplementationMapping(type.getClassifier()), ctx);
+		CommonUtilities.processImport(aliasPackageName(ctx.getNativeImplementationMapping(type.getClassifier())), ctx);
 		// in the case where the model name doesn't match the interface name, then we also need to process the interface
 		// name as it will exist
 		if (ctx.getNativeMapping(ctx.getNativeMapping(type.getClassifier().getTypeSignature())) != null)
-			CommonUtilities.processImport(ctx.getNativeMapping(type.getClassifier().getTypeSignature()), ctx);
+			CommonUtilities.processImport(aliasPackageName(ctx.getNativeMapping(type.getClassifier().getTypeSignature())), ctx);
 		if (ctx.mapsToPrimitiveType(type.getClassifier())) {
 			// if this primitive type is really a primitive, it will map back to the java object. We want to use that java
 			// object instead of the primitive mapped simply to a java object. For example, eglx.lang.ESmallint maps to short
-			// (the
-			// primitive) and then short maps to the java object java.lang.Short. We want to always use the object for the
-			// imports.
+			// (the primitive) and then short maps to the java object java.lang.Short. We want to always use the object for
+			// the imports.
 			if (ctx.getPrimitiveMapping(ctx.getPrimitiveMapping(type.getClassifier().getTypeSignature())) != null)
-				CommonUtilities.processImport(ctx.getPrimitiveMapping(ctx.getPrimitiveMapping(type.getClassifier().getTypeSignature())), ctx);
+				CommonUtilities.processImport(aliasPackageName(ctx.getPrimitiveMapping(ctx.getPrimitiveMapping(type.getClassifier().getTypeSignature()))), ctx);
 			else
-				CommonUtilities.processImport(ctx.getPrimitiveMapping(type.getClassifier().getTypeSignature()), ctx);
+				CommonUtilities.processImport(aliasPackageName(ctx.getPrimitiveMapping(type.getClassifier().getTypeSignature())), ctx);
 		}
+	}
+
+	private String aliasPackageName(String imported) {
+		String type;
+		int lastDot = imported.lastIndexOf('.');
+		if (lastDot == -1)
+			type = imported;
+		else
+			type = CommonUtilities.packageName(imported.substring(0, lastDot)) + '.' + JavaAliaser.getAlias(imported.substring(lastDot + 1));
+		return type;
 	}
 
 	public Boolean isAssignmentArrayMatchingWanted(Type type, Context ctx) {

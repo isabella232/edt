@@ -71,13 +71,12 @@ public class PartTemplate extends JavaTemplate {
 				if (lastDot == -1) {
 					type = JavaAliaser.getAlias(imported);
 				} else {
-					String pkg = CommonUtilities.packageName(imported.substring(0, lastDot));
-					if (pkg.equals("java.lang")) {
+					if (imported.startsWith("java.lang.")) {
 						// If we're intentionally importing a class from java.lang, don't
 						// alias the name.
 						type = imported;
 					} else {
-						type = pkg + '.' + JavaAliaser.getAlias(imported.substring(lastDot + 1));
+						type = imported.substring(0, lastDot) + '.' + JavaAliaser.getAlias(imported.substring(lastDot + 1));
 					}
 				}
 				out.println("import " + type + ";");
