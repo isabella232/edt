@@ -1,11 +1,15 @@
 package org.eclipse.edt.gen.java.templates.eglx.persistence.sql;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.LHSExpr;
+import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlGetByKeyStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
@@ -99,8 +103,25 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 				out.println(");");
 				// Generate the adding of the result to the list;
 				out.println('}');
-				ctx.invoke(genExpression, target, ctx, out);
-				out.println(" = ezeList;");
+				
+				Assignment assignment = factory.createAssignment();
+				if (stmt.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					assignment.addAnnotation(stmt.getAnnotation(IEGLConstants.EGL_LOCATION));
+
+				Field field = factory.createField();
+				field.setName("ezeList");
+				field.setType(target.getType());
+				field.setIsNullable(target.isNullable());
+				MemberName rhs = factory.createMemberName();
+				if (stmt.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					rhs.addAnnotation(stmt.getAnnotation(IEGLConstants.EGL_LOCATION));
+				rhs.setMember(field);
+				rhs.setId(field.getName());
+
+				assignment.setLHS((LHSExpr)target);
+				assignment.setRHS(rhs);
+				ctx.invoke(genExpression, assignment, ctx, out);
+				out.println(";");
 			}
 			else {
 				targetType = (EGLClass)target.getType().getClassifier();
