@@ -298,7 +298,6 @@ public class EvServer implements IClientProxy {
 						}
 						request.headers = headers;
 						
-						//TODO test dedicated with space in project name
 						if (isDedicated) {
 							serviceKind = ServiceKind.EGL;
 							testServerURI += "/___proxy";
