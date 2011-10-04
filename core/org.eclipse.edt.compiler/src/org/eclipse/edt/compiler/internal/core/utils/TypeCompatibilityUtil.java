@@ -675,6 +675,15 @@ public class TypeCompatibilityUtil {
 			 return true;
 		}
 
+		if (Primitive.BOOLEAN == targetPrim) {
+			 return (Primitive.ANY == sourcePrim);
+		}
+
+		if (Primitive.BOOLEAN == sourcePrim) {
+			 return false;
+		}
+
+		
 		if(targetIsFloat) {
 			if(Primitive.HEX == sourcePrim && (16 == source.getLength() || 8 == source.getLength())) return true;
 			

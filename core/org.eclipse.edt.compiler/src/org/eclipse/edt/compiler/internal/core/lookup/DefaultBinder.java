@@ -1908,7 +1908,9 @@ public abstract class DefaultBinder extends AbstractBinder {
 							new String[] {operand2.getCanonicalString()});
 					}
 					else if(!type2.isDynamic()) {
-						if(!TypeCompatibilityUtil.isMoveCompatible(
+						if(	!(type1 instanceof PrimitiveTypeBinding) ||
+							!(type2 instanceof PrimitiveTypeBinding) ||
+							!TypeCompatibilityUtil.isMoveCompatible(
 							(PrimitiveTypeBinding) type1,
 							(PrimitiveTypeBinding) type2) &&
 							Primitive.BOOLEAN != ((PrimitiveTypeBinding) type2).getPrimitive()) {
@@ -1916,6 +1918,15 @@ public abstract class DefaultBinder extends AbstractBinder {
 									binaryExpression,
 									IProblemRequestor.EXPRESSIONS_INCOMPATIBLE,
 									new String[] {operand1.getCanonicalString(), operand2.getCanonicalString()});
+						}
+					}
+					if ((operator == BinaryExpression.Operator.CONCAT ||
+								operator == BinaryExpression.Operator.NULLCONCAT)) {
+						if (Binding.isValidBinding(type1) && !isStringType(type1)) {
+							problemRequestor.acceptProblem(
+									operand1,
+									IProblemRequestor.ELEMENT_NOT_VALID_IN_EXPRESSION,
+									new String[] {operand1.getCanonicalString()});
 						}
 					}
 				}
@@ -2025,6 +2036,35 @@ public abstract class DefaultBinder extends AbstractBinder {
 							shouldContinue[0] = false;
 						}
 					}
+					
+
+					
+					if(	operator == BinaryExpression.Operator.GREATER ||
+							operator == BinaryExpression.Operator.GREATER_EQUALS ||							
+						operator == BinaryExpression.Operator.LESS ||							
+						operator == BinaryExpression.Operator.LESS_EQUALS) {
+						if (ITypeBinding.PRIMITIVE_TYPE_BINDING == type1.getKind()&&
+						   ((PrimitiveTypeBinding)type1).getPrimitive() == Primitive.BOOLEAN) {
+							problemRequestor.acceptProblem(
+									operand1,
+									IProblemRequestor.TYPE_INCOMPATIBLE_ARITHMETIC_COMPARISON,
+									new String[] {operand1.getCanonicalString(), operand2.getCanonicalString()});
+							shouldContinue[0] = false;
+						}
+						else {
+							if (ITypeBinding.PRIMITIVE_TYPE_BINDING == type2.getKind() &&
+								((PrimitiveTypeBinding)type2).getPrimitive() == Primitive.BOOLEAN) {
+								problemRequestor.acceptProblem(
+										operand2,
+										IProblemRequestor.TYPE_INCOMPATIBLE_ARITHMETIC_COMPARISON,
+										new String[] {operand2.getCanonicalString(), operand1.getCanonicalString()});
+								shouldContinue[0] = false;
+							}
+						}
+					}
+					
+					
+					
 					
 					if(!shouldContinue[0]) return;
 					
@@ -2214,6 +2254,16 @@ public abstract class DefaultBinder extends AbstractBinder {
 					Assignment.Operator.AND == operator ||
 					Assignment.Operator.XOR == operator) {
 				inferTypeForBitwiseOperand(rightHandSide, problemRequestor);
+			}
+			else if (Assignment.Operator.CONCAT == operator ||
+					Assignment.Operator.NULLCONCAT == operator) {
+				
+				if (!isStringType(lhType) && !isArrayType(lhType)) {
+					problemRequestor.acceptProblem(
+							leftHandSide,
+							IProblemRequestor.ELEMENT_NOT_VALID_IN_EXPRESSION,
+							new String[] {leftHandSide.getCanonicalString()});
+				}
 			}
 					
 			if(isArithmeticAssignment(assignment)){
@@ -2480,7 +2530,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 		ITypeBinding operandType = operand.resolveTypeBinding();
 		if(operandType.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING) {
 			Primitive operandPrim = ((PrimitiveTypeBinding) operandType).getPrimitive();
-			if(operandPrim != Primitive.BOOLEAN && !Primitive.isNumericType(operandPrim)) {
+			if(operandPrim != Primitive.BOOLEAN ) {
 				problemRequestor.acceptProblem(
 					operand,
 					IProblemRequestor.TYPE_NOT_VALID_IN_BOOLEAN_EXPRESSION,
@@ -3040,7 +3090,11 @@ public abstract class DefaultBinder extends AbstractBinder {
 		return type.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING &&
 		       Primitive.isStringType(((PrimitiveTypeBinding) type).getPrimitive());
 	}
-	
+
+	private static boolean isArrayType(ITypeBinding type) {
+		return type.getKind() == ITypeBinding.ARRAY_TYPE_BINDING;
+	}
+
 	private static boolean isDateTimeType(ITypeBinding type) {
 		return type.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING &&
 		       Primitive.isDateTimeType(((PrimitiveTypeBinding) type).getPrimitive());
