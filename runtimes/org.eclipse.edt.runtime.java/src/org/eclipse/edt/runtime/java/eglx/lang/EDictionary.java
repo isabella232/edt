@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.runtime.java.eglx.lang;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -250,10 +252,10 @@ public class EDictionary extends EAny implements eglx.lang.EDictionary {
 	}
 
 	/**
-	 * Return a DynamicArray of the keys (StringItems) that exist in this dictionary in the preferred order.
+	 * Return a list of the keys (StringItems) that exist in this dictionary in the preferred order.
 	 */
-	public EList<String> getKeys() throws AnyException {
-		EList<String> keys = new EList<String>();
+	public List<String> getKeys() throws AnyException {
+		List<String> keys = new ArrayList<String>();
 		for (String key : this.map.keySet()) {
 			keys.add(key);
 		}
@@ -262,10 +264,10 @@ public class EDictionary extends EAny implements eglx.lang.EDictionary {
 	}
 
 	/**
-	 * Return a DynamicArray of the values that exist in this dictionary in the preferred order.
+	 * Return a list of the values that exist in this dictionary in the preferred order.
 	 */
-	public EList<eglx.lang.EAny> getValues() throws AnyException {
-		EList<eglx.lang.EAny> vals = new EList<eglx.lang.EAny>();
+	public List<eglx.lang.EAny> getValues() throws AnyException {
+		List<eglx.lang.EAny> vals = new ArrayList<eglx.lang.EAny>();
 		for (Object value : this.map.values()) {
 			vals.add( value instanceof eglx.lang.EAny ? (eglx.lang.EAny)value : EAny.ezeBox( value ) );
 		}

@@ -18,6 +18,7 @@ import java.lang.Double;
 import java.lang.String;
 import eglx.lang.MathLib;
 import java.util.Calendar;
+import java.util.List;
 import org.eclipse.edt.eunit.runtime.ConstantsLib;
 import org.eclipse.edt.eunit.runtime.Log;
 import java.lang.Long;
@@ -174,13 +175,13 @@ public class LogResult extends ExecutableBase {
 		eze$Temp11 = "";
 		assertStringEqual(eze$Temp11, expected, actual);
 	}
-	public void assertStringArrayEqual(String message, eglx.lang.EList<String> expected, eglx.lang.EList<String> actual) {
+	public void assertStringArrayEqual(String message, List<String> expected, List<String> actual) {
 		boolean isArrayEqual;
 		isArrayEqual = true;
 		int expectedSize;
-		expectedSize = expected.getSize();
+		expectedSize = EList.getSize(expected);
 		int actualSize;
-		actualSize = actual.getSize();
+		actualSize = EList.getSize(actual);
 		String failedReason = "";
 		if ((expectedSize == actualSize)) {
 			String failedHeader;
@@ -222,7 +223,7 @@ public class LogResult extends ExecutableBase {
 		}
 		assertTrue(failedReason, isArrayEqual);
 	}
-	public void assertStringArrayEqual1(eglx.lang.EList<String> expected, eglx.lang.EList<String> actual) {
+	public void assertStringArrayEqual1(List<String> expected, List<String> actual) {
 		String eze$Temp18;
 		eze$Temp18 = "";
 		assertStringArrayEqual(eze$Temp18, expected, actual);

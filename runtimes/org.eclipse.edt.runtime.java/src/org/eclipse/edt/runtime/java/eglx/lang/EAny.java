@@ -14,8 +14,6 @@ package org.eclipse.edt.runtime.java.eglx.lang;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
@@ -175,6 +173,16 @@ public abstract class EAny implements eglx.lang.EAny {
 			dax.initCause(e);
 			throw dax.fillInMessage(Message.DYNAMIC_ACCESS_FAILED, name, this);
 		}
+	}
+	
+	@Override
+	public eglx.lang.EAny ezeGet(int index) throws AnyException {
+		TypeCastException tcx = new TypeCastException();
+		tcx.castToName = "list";
+		Object unboxed = ezeUnbox();
+		tcx.actualTypeName = unboxed.getClass().getName();
+		throw tcx.fillInMessage( Message.CONVERSION_ERROR, unboxed, tcx.actualTypeName,
+				tcx.castToName );
 	}
 
 	@SuppressWarnings("unchecked")

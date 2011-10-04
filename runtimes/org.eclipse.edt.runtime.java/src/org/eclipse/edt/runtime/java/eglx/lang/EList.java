@@ -14,126 +14,328 @@ package org.eclipse.edt.runtime.java.eglx.lang;
 import java.math.BigDecimal;
 import java.util.*;
 
+import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.Delegate;
 import org.eclipse.edt.javart.messages.Message;
 
 import eglx.java.JavaObjectException;
-import eglx.lang.InvalidArgumentException;
-import eglx.lang.InvalidIndexException;
+import eglx.lang.*;
 
-public class EList<T> extends EAny implements eglx.lang.EList<T> {
+public class EList<E> extends AnyBoxedObject<List<E>>
+{
 	/**
 	 * The version ID used in serialization.
 	 */
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-
-	private java.util.List<T> list;
-
-	/**
-	 * Creates an empty list.
-	 */
-	public EList() {
-		list = new ArrayList<T>();
-	}
+	
+	private String signature;
 
 	/**
-	 * Creates a list of the specified size, with null elements.
+	 * Makes an EList.
 	 */
-	public EList(int initialSize) {
-		list = new ArrayList<T>(initialSize);
-		for (int i = 0; i < initialSize; i++) {
-			list.add(null);
+	private EList( List<E> list, String signature )
+	{
+		super( list );
+		this.signature = signature;
+	}
+	
+	/**
+	 * Creates a new empty list.
+	 * 
+	 * @param clazz  the type of elements, not used at run time, it's there to
+	 *   satisfy the Java compiler's type-checking.
+	 * @return a new list.
+	 */
+	public static <T> List<T> ezeNew( Class<? extends T> clazz )
+	{
+		return new ArrayList<T>();
+	}
+	
+	/**
+	 * Creates a new list of the specified size.  The elements will be created
+	 * if the factory isn't null.
+	 * 
+	 * @param size     the number of elements in the new list.
+	 * @param factory  a factory to make the list's elements, or null.
+	 * @return a new list.
+	 */
+	public static <T> List<T> ezeNew( int size, ListElementFactory<? extends T> factory )
+	{
+		List<T> list = new ArrayList<T>( size );
+		if ( factory != null )
+		{
+			for ( int i = 0; i < size; i++ )
+			{
+				list.add( factory.newElement() );
+			}
 		}
+		else
+		{
+			for ( int i = 0; i < size; i++ )
+			{
+				list.add( null );
+			}
+		}
+		return list;
+	}
+	
+	/**
+	 * Creates a new list containing the specified elements.
+	 * 
+	 * @param elements  the elements of the new list.
+	 * @return a new list.
+	 */
+	public static <T> List<T> ezeNew( T... elements )
+	{
+		int size = elements == null ? 0 : elements.length;
+		List<T> list = new ArrayList<T>( size );
+		for ( int i = 0; i < size; i++ )
+		{
+			list.add( elements[ i ] );
+		}
+		return list;
+	}
+	
+	/**
+	 * Boxes a list.
+	 */
+	public static <T> AnyBoxedObject<List<T>> ezeBox( List<T> object, String signature )
+	{
+		return new EList( object, signature );
 	}
 
 	/**
-	 * Creates a list of the specified size, with elements initialized using 
-	 * the factory.
+	 * Tests if an object is a particular kind of list.
+	 * 
+	 * @param object     the object.
+	 * @param signature  the signature of the list type.
+	 * @return true if the object is the specified kind of list.
 	 */
-	public EList(int initialSize, ListElementFactory<? extends T> factory) {
-		list = new ArrayList<T>(initialSize);
-		for (int i = 0; i < initialSize; i++) {
-			list.add( factory.newElement() );
-		}
+	public static boolean ezeIsa( Object object, String signature ) 
+	{
+		return object instanceof EList && ((EList)object).signature.equals( signature );
 	}
 
-	// the following group of methods implements the edt version, which means that the indexes are relative to 1
-	@Override
-	public EList<T> appendAll(List<? extends T> c) {
-		list.addAll(c);
-		return this;
-	}
-
-	@Override
-	public EList<T> appendElement(T element) {
-		list.add(element);
-		return this;
-	}
-
-	@Override
-	public T getElement(int index) {
-		if (index < 1 || index > list.size())
+	public static <T> List<T> ezeCast( Object value, String signature ) throws TypeCastException
+	{
+		if ( ezeIsa( value, signature ) )
 		{
-			InvalidIndexException ex = new InvalidIndexException();
-			ex.index = index;
-			throw ex.fillInMessage( Message.LIST_INDEX_OUT_OF_BOUNDS, index, list.size() );
+			return (List<T>)((EList)value).ezeUnbox();
 		}
-		return get(index - 1);
-	}
-
-	@Override
-	public int getSize() {
-		return list.size();
-	}
-
-	@Override
-	public int indexOfElement(Object o) {
-		return indexOfElement(o, 1);
-	}
-
-	@Override
-	public int indexOfElement(Object o, int index) {
-		if (index < 1 || index - 1 > list.size())
+		else
 		{
-			InvalidIndexException ex = new InvalidIndexException();
-			ex.index = index;
-			throw ex.fillInMessage( Message.LIST_INDEX_OUT_OF_BOUNDS, index, list.size() );
+			TypeCastException tcx = new TypeCastException();
+			tcx.castToName = signature;
+			Object unboxed = value instanceof eglx.lang.EAny ? ((eglx.lang.EAny)value).ezeUnbox() : value;
+			tcx.actualTypeName = unboxed.getClass().getName();
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName,
+					tcx.castToName );
 		}
-		return list.subList(index - 1, list.size()).indexOf(o) + 1 + index - 1;
-	}
-
-	@Override
-	public void insertElement(T element, int index) {
-		if (index == 0)
-			index = 1;
-		if (index < 1 || index - 1 > list.size())
-		{
-			InvalidIndexException ex = new InvalidIndexException();
-			ex.index = index;
-			throw ex.fillInMessage( Message.LIST_INDEX_OUT_OF_BOUNDS, index, list.size() );
-		}
-		list.add(index - 1, element);
-	}
-
-	@Override
-	public void removeAll() {
-		list.clear();
-	}
-
-	@Override
-	public void removeElement(int index) {
-		if (index < 1 || index > list.size())
-		{
-			InvalidIndexException ex = new InvalidIndexException();
-			ex.index = index;
-			throw ex.fillInMessage( Message.LIST_INDEX_OUT_OF_BOUNDS, index, list.size() );
-		}
-		list.remove(index - 1);
 	}
 	
 	@Override
-	public void resize( int size, ListElementFactory<? extends T> factory ) 
+	public eglx.lang.EAny ezeGet( int index ) throws AnyException 
+	{
+		return EAny.asAny( ezeUnbox().get( index ) );
+	}
+
+	/**
+	 * Adds an element to the end of a list.
+	 *
+	 * @param list     the list to modify.
+	 * @param element  the new element.
+	 * @return the list, after the new element has been added.
+	 */
+	public static <T> List<T> appendElement( List<T> list, T element )
+	{
+		list.add( element );
+		return list;
+	}
+	
+	/**
+	 * Adds the elements of a list to the end of another list.
+	 *
+	 * @param list   the list to modify.
+	 * @param other  the other list.
+	 * @return the list, after the new elements have been added.
+	 */
+	public static <T> List<T> appendAll( List<T> list, List<? extends T> other )
+	{
+		list.addAll( other );
+		return list;
+	}
+
+	/**
+	 * Inserts an element into a list at a specified position.  Any elements
+	 * at or beyond the specified index are shifted toward the end.
+	 *
+	 * The index may be any valid position within the list.  It may also be 
+	 * zero, indicating that the new element goes at the front, or it may be one
+	 * more than the current size, indicating that the new element goes at the 
+	 * end (as if appendElement had been called). 
+	 *
+	 * @param list     the list to modify.
+	 * @param element  the new element.
+	 * @param index    where the element should be added.
+	 * @throws InvalidIndexException  if the index is negative or greater than 1 plus the size.
+	 */
+	public static <T> void insertElement( List<T> list, T element, int index )
+	{
+		if ( index == 0 )
+		{
+			index = 1;
+		}
+		if ( index < 1 || index - 1 > list.size() )
+		{
+			InvalidIndexException ex = new InvalidIndexException();
+			ex.index = index;
+			throw ex.fillInMessage( Message.LIST_INDEX_OUT_OF_BOUNDS, index, list.size() );
+		}
+		list.add( index - 1, element );
+	}
+	
+	/**
+	 * Removes the element at a specified position from a list.  Any elements
+	 * at or beyond the specified index are shifted toward the front.
+	 *
+	 * @param list   the list to modify.
+	 * @param index  where the element should be removed.
+	 * @throws InvalidIndexException  if the index isn't a valid subscript.
+	 */
+	public static void removeElement( List list, int index )
+	{
+		if ( index < 1 || index > list.size() )
+		{
+			InvalidIndexException ex = new InvalidIndexException();
+			ex.index = index;
+			throw ex.fillInMessage( Message.LIST_INDEX_OUT_OF_BOUNDS, index, list.size() );
+		}
+		list.remove( index - 1 );
+	}
+	
+	/**
+	 * Removes all elements from the list.
+	 * 
+	 * @param list   the list to modify.
+	 */
+	public static void removeAll( List list )
+	{
+		list.clear();
+	}
+	
+	/**
+	 * Sets the value of an element.
+	 *
+	 * @param list   the list to modify.
+	 * @param value  the value for the specified element.
+	 * @param index  the index of the element to be updated. 
+	 * @throws InvalidIndexException  if the index isn't a valid subscript.
+	 */
+	public static <T> void setElement( List<T> list, T value, int index )
+	{
+		if ( index < 1 || index > list.size() )
+		{
+			InvalidIndexException ex = new InvalidIndexException();
+			ex.index = index;
+			throw ex.fillInMessage( Message.LIST_INDEX_OUT_OF_BOUNDS, index, list.size() );
+		}
+		list.set( index - 1, value );
+	}
+
+	/**
+	 * Returns the current size of a list.
+	 *
+	 * @param list  the list.
+	 * @return the current size of a list.
+	 */
+	public static int getSize( List list )
+	{
+		return list.size();
+	}
+	
+	/**
+	 * Sorts the elements of a list in order from smallest to largest.
+	 *
+	 * @param list          the list to sort.
+	 * @param sortFunction  a function capable of comparing two elements.
+	 * @throws InvocationException when the sort function can't be called.
+	 */
+	public static <T> void sort( List<T> list, final Delegate sortFunction )
+	{
+		Collections.sort(
+				list, 
+				new Comparator<T>()
+				{
+					public int compare( T obj1, T obj2 )
+					{
+						eglx.lang.EAny arg1 = obj1 instanceof eglx.lang.EAny ? (eglx.lang.EAny)obj1 : EAny.ezeBox( obj1 );
+						eglx.lang.EAny arg2 = obj2 instanceof eglx.lang.EAny ? (eglx.lang.EAny)obj2 : EAny.ezeBox( obj2 );
+						
+						Object result = sortFunction.invoke( arg1, arg2 );
+						if ( result instanceof Integer )
+						{
+							return (Integer)result;
+						}
+						else if ( result instanceof EInt )
+						{
+							return ((EInt)result).ezeUnbox();
+						}
+						else
+						{
+							return 0; // This shouldn't happen.
+						}
+					}
+				} 
+			);
+	}
+
+	/**
+	 * Returns the index of the first ocurrance of the specified value within 
+	 * a list.
+	 * 
+	 * @param list   the list.
+	 * @param value  the value to find.
+	 * @return the index of the value, or 0 if it was not found.
+	 */
+	public static <T> int indexOfElement( List<T> list, T value )
+	{
+		return list.indexOf( value ) + 1;
+	}
+
+	/**
+	 * Returns the index of the first ocurrance of the specified value within 
+	 * a list.  The search begins at the specified index and stops at the
+	 * end of the list.
+	 * 
+	 * @param list   the list.
+	 * @param value  the value to find.
+	 * @param index  the index of the element to examine first. 
+	 * @return the index of the value, or 0 if it was not found.
+	 * @throws InvalidIndexException  if the index isn't a valid subscript.
+	 */
+	public static <T> int indexOfElement( List<T> list, T value, int index )
+	{
+		if ( index < 1 || index - 1 > list.size() )
+		{
+			InvalidIndexException ex = new InvalidIndexException();
+			ex.index = index;
+			throw ex.fillInMessage( Message.LIST_INDEX_OUT_OF_BOUNDS, index, list.size() );
+		}
+		return list.subList( index - 1, list.size() ).indexOf( value ) + index;
+	}
+
+	/**
+	 * Changes the size of a list.  If the new size is greater than the current
+	 * size, new elements are added at the end of the list.  If the new size is
+	 * smaller than the current size, elements at the end are removed. 
+	 *
+	 * @param list  the list to modify.
+	 * @param size  the new size.
+	 * @throws InvalidSizeException  if the specified size is negative.
+	 * @return the resized list.
+	 */
+	public static <T> List<T> resize( List<T> list, int size, ListElementFactory<? extends T> factory )
 	{
 		if ( size == 0 )
 		{
@@ -172,180 +374,27 @@ public class EList<T> extends EAny implements eglx.lang.EList<T> {
 			InvalidArgumentException ex = new InvalidArgumentException();
 			throw ex.fillInMessage( Message.NEGATIVE_SIZE, size );
 		}
+		
+		return list;
 	}
-
-	@Override
-	public void sort( final Delegate sortFunction )
-	{
-		Collections.sort(
-				list, 
-				new Comparator<T>()
-				{
-					public int compare( T obj1, T obj2 )
-					{
-						eglx.lang.EAny arg1 = obj1 instanceof eglx.lang.EAny ? (eglx.lang.EAny)obj1 : EAny.ezeBox( obj1 );
-						eglx.lang.EAny arg2 = obj2 instanceof eglx.lang.EAny ? (eglx.lang.EAny)obj2 : EAny.ezeBox( obj2 );
-						
-						Object result = sortFunction.invoke( arg1, arg2 );
-						if ( result instanceof Integer )
-						{
-							return (Integer)result;
-						}
-						else if ( result instanceof EInt )
-						{
-							return ((EInt)result).ezeUnbox();
-						}
-						else
-						{
-							return 0; // This shouldn't happen.
-						}
-					}
-				} 
-			);
-	}
-
-	@Override
-	public void setElement(T element, int index) {
-		if (index < 1 || index > list.size())
-		{
-			InvalidIndexException ex = new InvalidIndexException();
-			ex.index = index;
-			throw ex.fillInMessage( Message.LIST_INDEX_OUT_OF_BOUNDS, index, list.size() );
-		}
-		set(index - 1, element);
-	}
-
-	// the following group of methods implements the java version, which means that the indexes are relative to 0
-	@Override
-	public void add(int index, T element) {
-		list.add(index, element);
-	}
-
-	@Override
-	public boolean add(T e) {
-		return list.add(e);
-	}
-
-	@Override
-	public boolean addAll(Collection<? extends T> c) {
-		return list.addAll(c);
-	}
-
-	@Override
-	public boolean addAll(int index, Collection<? extends T> c) {
-		return list.addAll(index, c);
-	}
-
-	@Override
-	public void clear() {
-		list.clear();
-	}
-
-	@Override
-	public boolean contains(Object o) {
-		return list.contains(o);
-	}
-
-	@Override
-	public boolean containsAll(Collection<?> c) {
-		return list.containsAll(c);
-	}
-
-	public EList<T> ezeSet(int index, T element) {
-		setElement(element, index);
-		return this;
-	}
-
-	@Override
-	public T get(int index) {
-		return list.get(index);
-	}
-
-	@Override
-	public int indexOf(Object o) {
-		return list.indexOf(o);
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return list.isEmpty();
-	}
-
-	@Override
-	public Iterator<T> iterator() {
-		return list.iterator();
-	}
-
-	@Override
-	public int lastIndexOf(Object o) {
-		return list.lastIndexOf(o);
-	}
-
-	@Override
-	public ListIterator<T> listIterator() {
-		return list.listIterator();
-	}
-
-	@Override
-	public ListIterator<T> listIterator(int index) {
-		return list.listIterator(index);
-	}
-
-	@Override
-	public T remove(int index) {
-		return list.remove(index);
-	}
-
-	@Override
-	public boolean remove(Object o) {
-		return list.remove(o);
-	}
-
-	@Override
-	public boolean removeAll(Collection<?> c) {
-		return list.removeAll(c);
-	}
-
-	@Override
-	public boolean retainAll(Collection<?> c) {
-		return list.retainAll(c);
-	}
-
-	@Override
-	public T set(int index, T element) {
-		return list.set(index, element);
-	}
-
-	@Override
-	public int size() {
-		return list.size();
-	}
-
-	@Override
-	public java.util.List<T> subList(int fromIndex, int toIndex) {
-		return list.subList(fromIndex, toIndex);
-	}
-
-	@Override
-	public Object[] toArray() {
-		return list.toArray();
-	}
-
-	@Override
-	public <T> T[] toArray(T[] a) {
-		return list.toArray(a);
-	}
-
 	
+	/**
+	 * API of objects that can create elements for Lists.
+	 */
+	public interface ListElementFactory<EltT>
+	{
+		public EltT newElement();
+	}
+
 	/**
 	 * A type of factory for making elements of Lists.  New elements are constructed
 	 * by calling newInstance on the Class.
 	 */
 	public static class ElementFactory<EltT> implements ListElementFactory<EltT>
 	{
-		Class<EltT> elementClass;
+		Class<? extends EltT> elementClass;
 
-		public ElementFactory( Class<EltT> elementClass )
+		public ElementFactory( Class<? extends EltT> elementClass )
 		{
 			this.elementClass = elementClass;
 		}
@@ -497,7 +546,7 @@ public class EList<T> extends EAny implements eglx.lang.EList<T> {
 	/**
 	 * A type of factory for making elements of multi-dimensional Lists.
 	 */
-	public static class ListFactory<EltT> implements ListElementFactory<EList<EltT>>
+	public static class ListFactory<EltT> implements ListElementFactory<List<EltT>>
 	{
 		int size;
 		ListElementFactory<EltT> subFactory;
@@ -508,16 +557,26 @@ public class EList<T> extends EAny implements eglx.lang.EList<T> {
 			this.subFactory = subFactory;
 		}
 
-		public EList<EltT> newElement()
+		public List<EltT> newElement()
 		{
+			ArrayList<EltT> element = new ArrayList<EltT>( size + 10 );
+			
 			if ( subFactory != null )
 			{
-				return new EList<EltT>( size, subFactory );
+				for ( int i = 0; i < size; i++ )
+				{
+					element.add( subFactory.newElement() );
+				}
 			}
 			else
 			{
-				return new EList<EltT>( size );
+				for ( int i = 0; i < size; i++ )
+				{
+					element.add( null );
+				}
 			}
+			
+			return element;
 		}
 	}
 }

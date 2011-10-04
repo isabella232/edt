@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.services.servlet;
 
+import java.util.List;
+
 import org.eclipse.edt.javart.ByteStorage;
 import org.eclipse.edt.javart.Program;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
@@ -21,7 +23,7 @@ class EglRestRpcRequest extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue 
 	@javax.xml.bind.annotation.XmlTransient
 	public String method;
 	@javax.xml.bind.annotation.XmlTransient
-	public eglx.lang.EList<eglx.lang.EAny> params;
+	public List<eglx.lang.EAny> params;
 	public EglRestRpcRequest() {
 		super();
 		ezeInitialize();
@@ -62,10 +64,10 @@ class EglRestRpcRequest extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue 
 		this.method = ezeValue;
 	}
 	@org.eclipse.edt.javart.json.Json(name="params", clazz=EAny.class, asOptions={})
-	public eglx.lang.EList<eglx.lang.EAny> getParams() {
+	public List<eglx.lang.EAny> getParams() {
 		return (params);
 	}
-	public void setParams( eglx.lang.EList<eglx.lang.EAny> ezeValue ) {
+	public void setParams( List<eglx.lang.EAny> ezeValue ) {
 		this.params = ezeValue;
 	}
 }

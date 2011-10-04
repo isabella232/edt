@@ -11,6 +11,8 @@
 package org.eclipse.edt.javart.services.servlet;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.json.ArrayNode;
@@ -22,7 +24,6 @@ import org.eclipse.edt.javart.services.FunctionParameterKind;
 import org.eclipse.edt.javart.services.FunctionSignature;
 import org.eclipse.edt.javart.services.ServiceUtilities;
 import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
-import org.eclipse.edt.runtime.java.eglx.lang.EList;
 
 import eglx.http.Request;
 import eglx.http.Response;
@@ -101,7 +102,7 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 	
 	private String convertToJson(Method method, Object[] parameters, Object ret){
 		FunctionSignature signature = method.getAnnotation(FunctionSignature.class);
-		final EList<Object> responseParameters = new EList<Object>();
+		final List<Object> responseParameters = new ArrayList<Object>();
 		for(int idx = 0; idx < signature.parameters().length; idx++){
 			if(!FunctionParameterKind.IN.equals(signature.parameters()[idx].kind())){
 				responseParameters.add(parameters[idx]);

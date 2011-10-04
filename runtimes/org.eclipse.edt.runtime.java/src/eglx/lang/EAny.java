@@ -27,6 +27,8 @@ public interface EAny extends Serializable, Cloneable {
 
 	public EAny ezeGet(String name) throws AnyException; 
 
+	public EAny ezeGet(int index) throws AnyException; 
+
 	public void ezeSet(String name, Object value) throws AnyException;
 	
 	public <T extends Object> T ezeUnbox();

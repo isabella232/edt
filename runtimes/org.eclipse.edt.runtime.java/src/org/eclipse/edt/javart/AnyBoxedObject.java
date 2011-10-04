@@ -12,10 +12,11 @@
 package org.eclipse.edt.javart;
 
 import org.eclipse.edt.javart.messages.Message;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 
 import eglx.lang.*;
 
-public class AnyBoxedObject<R> implements EAny, BoxedValue {
+public class AnyBoxedObject<R> implements eglx.lang.EAny, BoxedValue {
 
 	public R object;
 	
@@ -38,16 +39,25 @@ public class AnyBoxedObject<R> implements EAny, BoxedValue {
 	}
 
 	@Override
-	public EAny ezeGet(String name) throws AnyException {
+	public eglx.lang.EAny ezeGet(String name) throws AnyException {
 		if (object instanceof EAny) {
 			return ((EAny)object).ezeGet(name);
 		}
 		else {
 			DynamicAccessException dax = new DynamicAccessException();
 			dax.key = name;
-			throw dax;
+			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, name, this );
 		}
+	}
 
+	@Override
+	public eglx.lang.EAny ezeGet(int index) throws AnyException {
+		TypeCastException tcx = new TypeCastException();
+		tcx.castToName = "list";
+		Object unboxed = ezeUnbox();
+		tcx.actualTypeName = unboxed.getClass().getName();
+		throw tcx.fillInMessage( Message.CONVERSION_ERROR, unboxed, tcx.actualTypeName,
+				tcx.castToName );
 	}
 
 	@Override

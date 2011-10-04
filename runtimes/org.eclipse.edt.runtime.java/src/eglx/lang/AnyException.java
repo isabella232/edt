@@ -66,6 +66,16 @@ public class AnyException extends RuntimeException implements eglx.lang.EAny {
 	}
 
 	@Override
+	public EAny ezeGet(int index) throws AnyException {
+		TypeCastException tcx = new TypeCastException();
+		tcx.castToName = "list";
+		Object unboxed = ezeUnbox();
+		tcx.actualTypeName = unboxed.getClass().getName();
+		throw tcx.fillInMessage( Message.CONVERSION_ERROR, unboxed, tcx.actualTypeName,
+				tcx.castToName );
+	}
+
+	@Override
 	public String ezeName() {
 		return this.getClass().getSimpleName();
 	}
@@ -182,5 +192,5 @@ public class AnyException extends RuntimeException implements eglx.lang.EAny {
 	/**
 	 * Determines if fillInStackTrace is optimized or not.
 	 */
-	public static final boolean STACK_TRACES = Boolean.getBoolean( "org.eclipse.edt.javart.StackTraces" );
+	public static final boolean STACK_TRACES = !"false".equalsIgnoreCase( System.getProperty( "org.eclipse.edt.javart.StackTraces" ) );
 }

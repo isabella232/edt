@@ -86,8 +86,8 @@ public class JsonLib {
 	        return new IntegerNode(((Enum<?>)object).ordinal() + 1);
 	    if(object instanceof Calendar)
 	        return process((Calendar)object);
-	    if(object instanceof EList<?>)
-	        return process((EList<?>)object);
+	    if(object instanceof List<?>)
+	        return process((List<?>)object);
 	    if(object instanceof EDictionary)
 	    	return process((EDictionary)object);
 	    if(object instanceof AnyValue)
@@ -101,7 +101,7 @@ public class JsonLib {
 		throw ex.fillInMessage( Message.SOA_E_JSON_TYPE_EXCEPTION, object.getClass().getName() );
 	}
 	
-	private static ValueNode process(EList<?> array)throws AnyException
+	private static ValueNode process(List<?> array)throws AnyException
 	{
 	    ArrayNode node = new ArrayNode();
 	    for(Object object : array)
@@ -232,7 +232,7 @@ public class JsonLib {
 	        	return null;
 	        }
 	        if(jsonValue instanceof ArrayNode){
-	        	EList<Object> list = new EList<Object>();
+	        	List<Object> list = new ArrayList<Object>();
 	        	for(Object node : ((ArrayNode)jsonValue).getValues()){
 	        		list.add(convertToEgl(fieldType, fieldTypeOptions, null, (ValueNode)node));
 	        	}
@@ -365,9 +365,9 @@ public class JsonLib {
     private static Object convertJsonNode(ValueNode jsonValue){
     	Object retVal = null;
         if(jsonValue instanceof ArrayNode){
-        	retVal = new EList<Object>();
+        	retVal = new ArrayList<Object>();
         	for(Object node : ((ArrayNode)jsonValue).getValues()){
-        		((EList<Object>)retVal).add(convertJsonNode((ValueNode)node));
+        		((List<Object>)retVal).add(convertJsonNode((ValueNode)node));
         	}
         }
     	else if(jsonValue instanceof BooleanNode){

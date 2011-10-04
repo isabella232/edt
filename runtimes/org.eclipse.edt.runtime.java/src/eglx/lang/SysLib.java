@@ -156,7 +156,7 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * Returns a formatted message from the RunUnit's message bundle, or null if no message with the key is found.
 	 */
-	public static String getMessage(String key, eglx.lang.EList<String> inserts) {
+	public static String getMessage(String key, List<String> inserts) {
 		// Get the inserts as Strings.
 		String[] insertStrings = null;
 		if (inserts != null) {

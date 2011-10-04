@@ -11,9 +11,8 @@
  *******************************************************************************/
 package eglx.lang;
 
+import java.util.List;
 import java.util.Map;
-
-import org.eclipse.edt.runtime.java.eglx.lang.EList;
 
 
 /**
@@ -72,20 +71,20 @@ public interface EDictionary extends EAny, Map<String, Object> {
 	public boolean containsKey(String key);
 	
 	/**
-	 * Returns an array containing all of the keys, in the order specified by
+	 * Returns a list containing all of the keys, in the order specified by
 	 * the ordering annotation.
 	 *
 	 * @return the keys.
 	 */
-	public EList<String> getKeys();
+	public List<String> getKeys();
 	
 	/**
-	 * Returns an array containing all of the values, in the order specified by
+	 * Returns a list containing all of the values, in the order specified by
 	 * the ordering annotation.
 	 *
 	 * @return the values.
 	 */
-	public EList<EAny> getValues();
+	public List<EAny> getValues();
 	
 	/**
 	 * Returns the number of key-value pairs in this dictionary.
