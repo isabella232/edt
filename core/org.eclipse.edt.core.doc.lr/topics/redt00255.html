@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="XMLLib.convertFromXML function"></meta>
+<meta name="abstract" content="XMLLib.convertFromXML copies an XML string to a record or handler."></meta>
+<meta name="description" content="XMLLib.convertFromXML copies an XML string to a record or handler."></meta>
+<meta name="DC.subject" content="EGL functions, convertFromXML, convertFromXML EGL function, XMLLib EGL external type"></meta>
+<meta name="keywords" content="EGL functions, convertFromXML, convertFromXML EGL function, XMLLib EGL external type"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00257.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="redt00255"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>XMLLib.convertFromXML function</title>
+</head>
+<body id="redt00255"><a name="redt00255"><!-- --></a>
+
+
+<h1 class="topictitle1">XMLLib.convertFromXML function</h1>
+
+
+
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">XMLLib.convertFromXML</span></span> copies
+an XML string to a record or handler.</p>
+
+<a name="redt00255__main"><!-- --></a><dl id="redt00255__main">
+<dt class="dlterm"><a name="redt00255__package"><!-- --></a>Package</dt>
+
+<dd><p>eglx.xml</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00255__syntax"><!-- --></a>Syntax</dt>
+
+<dd><pre class="codeblock" id="redt00255__syntax_block"><a name="redt00255__syntax_block"><!-- --></a>static function convertFromXML(xmlstr string in, eglType any const in);</pre>
+<a name="redt00255__syntax_list"><!-- --></a><dl id="redt00255__syntax_list">
+<dt class="dlterm"><var class="varname">xmlstr</var></dt>
+
+<dd>An XML string.</dd>
+
+
+<dt class="dlterm"><var class="varname">eglType</var></dt>
+
+<dd>A record or handler.</dd>
+
+</dl>
+<anchor id="syntax_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00255__use"><!-- --></a>Example use</dt>
+
+<dd><p>Although the second parameter is declared as ANY type, the
+EGL runtime verifies that the input is a record or handler. Because
+of the declaration, you can use the function in a library function
+that accepts any type of variable, as in the following example:</p>
+<pre class="codeblock" id="redt00255__use_block"><a name="redt00255__use_block"><!-- --></a>function convert(myRecord MyRecordPart in, record2Populate ANY const in)
+   jsonLib.convertFromXML(myRecord.data, record2Populate);
+end</pre>
+<anchor id="use_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00255__comments"><!-- --></a>Comments</dt>
+
+<dd><p>For other details on the conversion, see “Correspondence between
+an XML string and an EGL variable.” </p>
+<p><span class="synph"><span class="kwd">JSONLib.convertFromXML</span></span> is
+the complement of the <span class="synph"><span class="kwd">JSONLib.convertToXML</span></span> function.</p>
+<anchor id="comments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00255__compat"><!-- --></a>Compatibility</dt>
+
+<dd><p></p>
+
+<div class="tablenoborder"><a name="redt00255__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00255__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d58951e128">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d58951e131">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00255__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d58951e128 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d58951e131 ">No issues.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00255__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d58951e128 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d58951e131 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
+
+<p></p>
+
+</div>
+
+<anchor id="related_links"></anchor>
+
+
+</body>
+</html>

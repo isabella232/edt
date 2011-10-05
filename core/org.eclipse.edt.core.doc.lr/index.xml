@@ -37,51 +37,64 @@
 <topic href="topics/cedt00029.html#cedt00029" title="Class classifier overview"/>
 </entry>
 </entry>
-<entry keyword="abs EGL system function">
-<topic href="topics/redt00206.html#redt00206" title="MathLib.abs system function"/>
+<entry keyword="abs EGL function">
+<topic href="topics/redt00206.html#redt00206" title="MathLib.abs function"/>
 </entry>
-<entry keyword="acos EGL system function">
-<topic href="topics/redt00207.html#redt00207" title="MathLib.acos system function"/>
+<entry keyword="acos EGL function">
+<topic href="topics/redt00207.html#redt00207" title="MathLib.acos function"/>
 </entry>
-<entry keyword="asin EGL system function">
-<topic href="topics/redt00208.html#redt00208" title="MathLib.asin system function"/>
+<entry keyword="asin EGL function">
+<topic href="topics/redt00208.html#redt00208" title="MathLib.asin function"/>
 </entry>
-<entry keyword="atan EGL system function">
-<topic href="topics/redt00209.html#redt00209" title="MathLib.atan system function"/>
+<entry keyword="atan EGL function">
+<topic href="topics/redt00209.html#redt00209" title="MathLib.atan function"/>
 </entry>
-<entry keyword="atan2 EGL system function">
-<topic href="topics/redt00210.html#redt00210" title="MathLib.atan2 system function"/>
+<entry keyword="atan2 EGL function">
+<topic href="topics/redt00210.html#redt00210" title="MathLib.atan2 function"/>
 </entry>
-<entry keyword="callCmd EGL system function">
-<topic href="topics/redt00145.html#redt00145" title="SysLib.callCmd system function"/>
+<entry keyword="callCmd EGL function">
+<topic href="topics/redt00145.html#redt00145" title="SysLib.callCmd function"/>
 </entry>
-<entry keyword="ceiling EGL system function">
-<topic href="topics/redt00211.html#redt00211" title="MathLib.ceiling system function"/>
+<entry keyword="ceiling EGL function">
+<topic href="topics/redt00211.html#redt00211" title="MathLib.ceiling function"/>
 </entry>
 <entry keyword="character types">
 <entry keyword="EGL">
 <topic href="topics/cedt00020.html#cedt00020" title="EGL character types"/>
 </entry>
 </entry>
-<entry keyword="commit EGL system function">
-<topic href="topics/redt00198.html#redt00198" title="SysLib.commit system function"/>
+<entry keyword="commit EGL function">
+<topic href="topics/redt00198.html#redt00198" title="SysLib.commit function"/>
 </entry>
-<entry keyword="completeBind EGL system function">
-<topic href="topics/redt00144.html#redt00144" title="ServiceLib.completeBind system function"/>
+<entry keyword="completeBind EGL function">
+<topic href="topics/redt00144.html#redt00144" title="ServiceLib.completeBind function"/>
 </entry>
 <entry keyword="Constants EGL system library">
 <entry keyword="overview">
 <topic href="topics/redt00240.html#redt00240" title="Constants system library"/>
 </entry>
 </entry>
-<entry keyword="convertToURLEncoded EGL system function">
+<entry keyword="convertFromJSON EGL function">
+<topic href="topics/redt00250.html#redt00250" title="JSONLib.convertFromJSON function"/>
+</entry>
+<entry keyword="convertFromURLEncoded EGL function">
+<topic href="topics/redt00252.html#redt00252" title="HTTPLib.convertFromURLEncoded"/>
+</entry>
+<entry keyword="convertFromXML EGL function">
+<topic href="topics/redt00255.html#redt00255" title="XMLLib.convertFromXML function"/>
+</entry>
+<entry keyword="convertToJSON EGL function">
+<topic href="topics/redt00251.html#redt00251" title="JSONLib.convertToJSON function"/>
+<topic href="topics/redt00256.html#redt00256" title="XMLLib.convertToXML function"/>
+</entry>
+<entry keyword="convertToURLEncoded EGL function">
 <topic href="topics/redt00246.html#redt00246" title="HTTPLib.convertToURLEncoded"/>
 </entry>
-<entry keyword="cos EGL system function">
-<topic href="topics/redt00212.html#redt00212" title="MathLib.cos system function"/>
+<entry keyword="cos EGL function">
+<topic href="topics/redt00212.html#redt00212" title="MathLib.cos function"/>
 </entry>
-<entry keyword="cosh EGL system function">
-<topic href="topics/redt00213.html#redt00213" title="MathLib.cosh system function"/>
+<entry keyword="cosh EGL function">
+<topic href="topics/redt00213.html#redt00213" title="MathLib.cosh function"/>
 </entry>
 <entry keyword="date and time types">
 <entry keyword="EGL">
@@ -91,16 +104,13 @@
 <entry keyword="dateFromGregorian EGL system function">
 <topic href="topics/redt00244.html#redt00244" title="DateTimeLib.dateFromGregorian system function"/>
 </entry>
-<entry keyword="dateFromInt EGL system function">
+<entry keyword="dateFromInt EGL function">
 <topic href="topics/redt00242.html#redt00242" title="DateTimeLib.dateFromInt function"/>
 </entry>
-<entry keyword="dateFromJulian EGL system function">
+<entry keyword="dateFromJulian EGL function">
 <topic href="topics/redt00241.html#redt00241" title="DateTimeLib.dateFromJulian system function"/>
 </entry>
-<entry keyword="DateTimeLib EGL system library">
-<entry keyword="dateFromGregorian">
-<topic href="topics/redt00244.html#redt00244" title="DateTimeLib.dateFromGregorian system function"/>
-</entry>
+<entry keyword="DateTimeLib EGL external type">
 <entry keyword="dateFromInt">
 <topic href="topics/redt00242.html#redt00242" title="DateTimeLib.dateFromInt function"/>
 </entry>
@@ -111,187 +121,237 @@
 <topic href="topics/redt00243.html#redt00243" title="DateTimeLib.mdy system function"/>
 </entry>
 <entry keyword="overview">
-<topic href="topics/redt00069.html#redt00069" title="DateTimeLib system library"/>
+<topic href="topics/redt00069.html#redt00069" title="DateTimeLib external type"/>
 </entry>
 </entry>
-<entry keyword="decimals EGL system function">
-<topic href="topics/redt00214.html#redt00214" title="MathLib.decimals system function"/>
-</entry>
-<entry keyword="EGL packages">
-<entry keyword="eglx.http">
-<topic href="topics/redt00245.html#redt00245" title="eglx.http package"/>
+<entry keyword="DateTimeLib EGL system library">
+<entry keyword="dateFromGregorian">
+<topic href="topics/redt00244.html#redt00244" title="DateTimeLib.dateFromGregorian system function"/>
 </entry>
 </entry>
-<entry keyword="EGL system functions">
+<entry keyword="decimals EGL function">
+<topic href="topics/redt00214.html#redt00214" title="MathLib.decimals function"/>
+</entry>
+<entry keyword="EGL external types">
+<entry keyword="DateTimeLib">
+<topic href="topics/redt00069.html#redt00069" title="DateTimeLib external type"/>
+</entry>
+<entry keyword="JSONLib">
+<topic href="topics/redt00249.html#redt00249" title="JSONLib external type"/>
+</entry>
+<entry keyword="MathLib">
+<topic href="topics/redt00067.html#redt00067" title="MathLib external type"/>
+</entry>
+<entry keyword="ServiceLib">
+<topic href="topics/redt00071.html#redt00071" title="ServiceLib external type"/>
+</entry>
+<entry keyword="StrLib">
+<topic href="topics/redt00068.html#redt00068" title="StringLib external type"/>
+</entry>
+<entry keyword="SysLib">
+<topic href="topics/redt00066.html#redt00066" title="SysLib system library"/>
+</entry>
+<entry keyword="XMLLib">
+<topic href="topics/redt00257.html#redt00257" title="XMLLib external type"/>
+</entry>
+</entry>
+<entry keyword="EGL function">
+<entry keyword="mdy">
+<topic href="topics/redt00243.html#redt00243" title="DateTimeLib.mdy system function"/>
+</entry>
+<entry keyword="setHTTPBasicAuthentication">
+<topic href="topics/redt00247.html#redt00247" title="HTTPLib.setHTTPBasicAuthentication system function"/>
+</entry>
+<entry keyword="setProxyBasicAuthentication">
+<topic href="topics/redt00248.html#redt00248" title="HTTPLib.setProxyBasicAuthentication"/>
+</entry>
+</entry>
+<entry keyword="EGL functions">
 <entry keyword="abs">
-<topic href="topics/redt00206.html#redt00206" title="MathLib.abs system function"/>
+<topic href="topics/redt00206.html#redt00206" title="MathLib.abs function"/>
 </entry>
 <entry keyword="acos">
-<topic href="topics/redt00207.html#redt00207" title="MathLib.acos system function"/>
+<topic href="topics/redt00207.html#redt00207" title="MathLib.acos function"/>
 </entry>
 <entry keyword="asin">
-<topic href="topics/redt00208.html#redt00208" title="MathLib.asin system function"/>
+<topic href="topics/redt00208.html#redt00208" title="MathLib.asin function"/>
 </entry>
 <entry keyword="atan">
-<topic href="topics/redt00209.html#redt00209" title="MathLib.atan system function"/>
+<topic href="topics/redt00209.html#redt00209" title="MathLib.atan function"/>
 </entry>
 <entry keyword="atan2">
-<topic href="topics/redt00210.html#redt00210" title="MathLib.atan2 system function"/>
+<topic href="topics/redt00210.html#redt00210" title="MathLib.atan2 function"/>
 </entry>
 <entry keyword="callCmd">
-<topic href="topics/redt00145.html#redt00145" title="SysLib.callCmd system function"/>
+<topic href="topics/redt00145.html#redt00145" title="SysLib.callCmd function"/>
 </entry>
 <entry keyword="ceiling">
-<topic href="topics/redt00211.html#redt00211" title="MathLib.ceiling system function"/>
+<topic href="topics/redt00211.html#redt00211" title="MathLib.ceiling function"/>
 </entry>
 <entry keyword="commit">
-<topic href="topics/redt00198.html#redt00198" title="SysLib.commit system function"/>
+<topic href="topics/redt00198.html#redt00198" title="SysLib.commit function"/>
 </entry>
 <entry keyword="completeBind">
-<topic href="topics/redt00144.html#redt00144" title="ServiceLib.completeBind system function"/>
+<topic href="topics/redt00144.html#redt00144" title="ServiceLib.completeBind function"/>
+</entry>
+<entry keyword="convertFromJSON">
+<topic href="topics/redt00250.html#redt00250" title="JSONLib.convertFromJSON function"/>
+</entry>
+<entry keyword="convertFromURLEncoded">
+<topic href="topics/redt00252.html#redt00252" title="HTTPLib.convertFromURLEncoded"/>
+</entry>
+<entry keyword="convertFromXML">
+<topic href="topics/redt00255.html#redt00255" title="XMLLib.convertFromXML function"/>
+</entry>
+<entry keyword="convertToJSON">
+<topic href="topics/redt00251.html#redt00251" title="JSONLib.convertToJSON function"/>
+<topic href="topics/redt00256.html#redt00256" title="XMLLib.convertToXML function"/>
 </entry>
 <entry keyword="convertToURLEncoded">
 <topic href="topics/redt00246.html#redt00246" title="HTTPLib.convertToURLEncoded"/>
 </entry>
 <entry keyword="cos">
-<topic href="topics/redt00212.html#redt00212" title="MathLib.cos system function"/>
+<topic href="topics/redt00212.html#redt00212" title="MathLib.cos function"/>
 </entry>
 <entry keyword="cosh">
-<topic href="topics/redt00213.html#redt00213" title="MathLib.cosh system function"/>
+<topic href="topics/redt00213.html#redt00213" title="MathLib.cosh function"/>
 </entry>
 <entry keyword="dateFromInt">
 <topic href="topics/redt00242.html#redt00242" title="DateTimeLib.dateFromInt function"/>
 </entry>
 <entry keyword="DateTimeLib">
-<topic href="topics/redt00244.html#redt00244" title="DateTimeLib.dateFromGregorian system function"/>
 <topic href="topics/redt00241.html#redt00241" title="DateTimeLib.dateFromJulian system function"/>
 </entry>
 <entry keyword="decimals">
-<topic href="topics/redt00214.html#redt00214" title="MathLib.decimals system function"/>
+<topic href="topics/redt00214.html#redt00214" title="MathLib.decimals function"/>
 </entry>
 <entry keyword="exp">
-<topic href="topics/redt00215.html#redt00215" title="MathLib.exp system function"/>
+<topic href="topics/redt00215.html#redt00215" title="MathLib.exp function"/>
 </entry>
 <entry keyword="floor">
-<topic href="topics/redt00216.html#redt00216" title="MathLib.floor system function"/>
+<topic href="topics/redt00216.html#redt00216" title="MathLib.floor function"/>
 </entry>
 <entry keyword="format">
-<topic href="topics/redt00233.html#redt00233" title="StringLib.format system function"/>
+<topic href="topics/redt00233.html#redt00233" title="StringLib.format function"/>
 </entry>
 <entry keyword="frexp">
-<topic href="topics/redt00217.html#redt00217" title="MathLib.frexp system function"/>
+<topic href="topics/redt00217.html#redt00217" title="MathLib.frexp function"/>
 </entry>
 <entry keyword="fromCharCode">
-<topic href="topics/redt00236.html#redt00236" title="StringLib.fromCharCode system function"/>
+<topic href="topics/redt00236.html#redt00236" title="StringLib.fromCharCode function"/>
 </entry>
-<entry keyword="getNextToken">
-<topic href="topics/redt00234.html#redt00234" title="StringLib.GetNextToken system function"/>
+<entry keyword="getNextToken (StringLib)">
+<topic href="topics/redt00234.html#redt00234" title="StringLib.GetNextToken function"/>
 </entry>
 <entry keyword="getProperty">
-<topic href="topics/redt00200.html#redt00200" title="SysLib.getProperty system function"/>
+<topic href="topics/redt00200.html#redt00200" title="SysLib.getProperty function"/>
 </entry>
 <entry keyword="getResource">
-<topic href="topics/redt00205.html#redt00205" title="SysLib.getResource system function"/>
+<topic href="topics/redt00205.html#redt00205" title="SysLib.getResource function"/>
 </entry>
-<entry keyword="getTokenCount">
-<topic href="topics/redt00235.html#redt00235" title="StringLib.getTokenCount system function"/>
+<entry keyword="getTokenCount (StringLib)">
+<topic href="topics/redt00235.html#redt00235" title="StringLib.getTokenCount function"/>
 </entry>
 <entry keyword="ldexp">
-<topic href="topics/redt00218.html#redt00218" title="MathLib.ldexp system function"/>
+<topic href="topics/redt00218.html#redt00218" title="MathLib.ldexp function"/>
 </entry>
 <entry keyword="log">
-<topic href="topics/redt00219.html#redt00219" title="MathLib.log system function"/>
+<topic href="topics/redt00219.html#redt00219" title="MathLib.log function"/>
 </entry>
 <entry keyword="log10">
-<topic href="topics/redt00220.html#redt00220" title="MathLib.log10 system function"/>
+<topic href="topics/redt00220.html#redt00220" title="MathLib.log10 function"/>
 </entry>
 <entry keyword="max">
-<topic href="topics/redt00221.html#redt00221" title="MathLib.max system function"/>
-</entry>
-<entry keyword="mdy">
-<topic href="topics/redt00243.html#redt00243" title="DateTimeLib.mdy system function"/>
+<topic href="topics/redt00221.html#redt00221" title="MathLib.max function"/>
 </entry>
 <entry keyword="min">
-<topic href="topics/redt00222.html#redt00222" title="MathLib.min system function"/>
+<topic href="topics/redt00222.html#redt00222" title="MathLib.min function"/>
 </entry>
 <entry keyword="modf">
-<topic href="topics/redt00223.html#redt00223" title="MathLib.modf system function"/>
+<topic href="topics/redt00223.html#redt00223" title="MathLib.modf function"/>
 </entry>
 <entry keyword="pow">
-<topic href="topics/redt00224.html#redt00224" title="MathLib.pow system function"/>
+<topic href="topics/redt00224.html#redt00224" title="MathLib.pow function"/>
 </entry>
 <entry keyword="precision">
-<topic href="topics/redt00225.html#redt00225" title="MathLib.precision system function"/>
+<topic href="topics/redt00225.html#redt00225" title="MathLib.precision function"/>
 </entry>
 <entry keyword="random">
-<topic href="topics/redt00226.html#redt00226" title="MathLib.random system function"/>
+<topic href="topics/redt00226.html#redt00226" title="MathLib.random function"/>
 </entry>
 <entry keyword="rollback">
-<topic href="topics/redt00199.html#redt00199" title="SysLib.rollback system function"/>
+<topic href="topics/redt00199.html#redt00199" title="SysLib.rollback function"/>
 </entry>
-<entry keyword="setHTTPBasicAuthentication">
-<topic href="topics/redt00247.html#redt00247" title="HTTPLib.setHTTPBasicAuthentication system function"/>
+<entry keyword="round">
+<topic href="topics/redt00227.html#redt00227" title="MathLib.round function"/>
 </entry>
 <entry keyword="setLocale">
-<topic href="topics/redt00201.html#redt00201" title="SysLib.setLocale system function"/>
-</entry>
-<entry keyword="setProxyBasicAuthentication">
-<topic href="topics/redt00248.html#redt00248" title="HTTPLib.setProxyBasicAuthentication"/>
+<topic href="topics/redt00201.html#redt00201" title="SysLib.setLocale function"/>
 </entry>
 <entry keyword="sin">
-<topic href="topics/redt00228.html#redt00228" title="MathLib.sin system function"/>
+<topic href="topics/redt00228.html#redt00228" title="MathLib.sin function"/>
 </entry>
 <entry keyword="sinh">
-<topic href="topics/redt00229.html#redt00229" title="MathLib.sinh system function"/>
+<topic href="topics/redt00229.html#redt00229" title="MathLib.sinh function"/>
 </entry>
 <entry keyword="spaces">
-<topic href="topics/redt00237.html#redt00237" title="StringLib.spaces system function"/>
+<topic href="topics/redt00237.html#redt00237" title="StringLib.spaces function"/>
 </entry>
 <entry keyword="sqrt">
-<topic href="topics/redt00230.html#redt00230" title="MathLib.sqrt system function"/>
+<topic href="topics/redt00230.html#redt00230" title="MathLib.sqrt function"/>
 </entry>
 <entry keyword="startCmd">
-<topic href="topics/redt00197.html#redt00197" title="SysLib.startCmd system function"/>
+<topic href="topics/redt00197.html#redt00197" title="SysLib.startCmd function"/>
 </entry>
 <entry keyword="tan">
-<topic href="topics/redt00231.html#redt00231" title="MathLib.tan system function"/>
+<topic href="topics/redt00231.html#redt00231" title="MathLib.tan function"/>
 </entry>
 <entry keyword="tanh">
-<topic href="topics/redt00232.html#redt00232" title="MathLib.tanh system function"/>
+<topic href="topics/redt00232.html#redt00232" title="MathLib.tanh function"/>
 </entry>
-<entry keyword="writeStdErr">
-<topic href="topics/redt00203.html#redt00203" title="SysLib.writeStdError system function"/>
+<entry keyword="wait">
+<topic href="topics/redt00202.html#redt00202" title="SysLib.wait function"/>
+</entry>
+<entry keyword="writeStdError">
+<topic href="topics/redt00203.html#redt00203" title="SysLib.writeStdError function"/>
 </entry>
 <entry keyword="writeStdOut">
-<topic href="topics/redt00204.html#redt00204" title="SysLib.writeStdOut system function"/>
+<topic href="topics/redt00204.html#redt00204" title="SysLib.writeStdOut function"/>
 </entry>
-<entry keyword="x">
-<topic href="topics/redt00227.html#redt00227" title="MathLib.round system function"/>
-<topic href="topics/redt00202.html#redt00202" title="SysLib.wait system function"/>
+</entry>
+<entry keyword="EGL libraries">
+<entry keyword="StrLib">
+<topic href="topics/redt00239.html#redt00239" title="eglx.rbd package and its StrLib library"/>
+</entry>
+</entry>
+<entry keyword="EGL packages">
+<entry keyword="eglx.http">
+<topic href="topics/redt00245.html#redt00245" title="eglx.http package"/>
+</entry>
+<entry keyword="eglx.json">
+<topic href="topics/redt00035.html#redt00035" title="eglx.json package"/>
+</entry>
+<entry keyword="eglx.rbd">
+<topic href="topics/redt00239.html#redt00239" title="eglx.rbd package and its StrLib library"/>
+</entry>
+<entry keyword="eglx.services">
+<topic href="topics/redt00065.html#redt00065" title="eglx.services package"/>
+</entry>
+<entry keyword="eglx.xml">
+<topic href="topics/redt00034.html#redt00034" title="eglx.xml package"/>
+</entry>
+</entry>
+<entry keyword="EGL system functions">
+<entry keyword="DateTimeLib">
+<topic href="topics/redt00244.html#redt00244" title="DateTimeLib.dateFromGregorian system function"/>
 </entry>
 </entry>
 <entry keyword="EGL system libraries">
 <entry keyword="Constants">
 <topic href="topics/redt00240.html#redt00240" title="Constants system library"/>
 </entry>
-<entry keyword="DateTimeLib">
-<topic href="topics/redt00069.html#redt00069" title="DateTimeLib system library"/>
-</entry>
 <entry keyword="HTTPLib">
-<topic href="topics/redt00073.html#redt00073" title="HTTPLib system library"/>
-</entry>
-<entry keyword="MathLib">
-<topic href="topics/redt00067.html#redt00067" title="MathLib system library"/>
-</entry>
-<entry keyword="ServiceLib">
-<topic href="topics/redt00071.html#redt00071" title="ServiceLib system library"/>
-</entry>
-<entry keyword="StrLib">
-<topic href="topics/redt00239.html#redt00239" title="StrLib system library"/>
-<topic href="topics/redt00068.html#redt00068" title="StringLib system library"/>
-</entry>
-<entry keyword="SysLib">
-<topic href="topics/redt00066.html#redt00066" title="SysLib system library"/>
+<topic href="topics/redt00073.html#redt00073" title="HTTPLib external type"/>
 </entry>
 </entry>
 <entry keyword="EGL types">
@@ -315,42 +375,51 @@
 <entry keyword="eglx.http EGL package">
 <topic href="topics/redt00245.html#redt00245" title="eglx.http package"/>
 </entry>
-<entry keyword="exp EGL system function">
-<topic href="topics/redt00215.html#redt00215" title="MathLib.exp system function"/>
+<entry keyword="eglx.json EGL package">
+<topic href="topics/redt00035.html#redt00035" title="eglx.json package"/>
 </entry>
-<entry keyword="floor EGL system function">
-<topic href="topics/redt00216.html#redt00216" title="MathLib.floor system function"/>
+<entry keyword="eglx.rbd EGL package">
+<topic href="topics/redt00239.html#redt00239" title="eglx.rbd package and its StrLib library"/>
 </entry>
-<entry keyword="format EGL system function">
-<topic href="topics/redt00233.html#redt00233" title="StringLib.format system function"/>
+<entry keyword="eglx.services EGL package">
+<topic href="topics/redt00065.html#redt00065" title="eglx.services package"/>
+</entry>
+<entry keyword="eglx.xml EGL package">
+<topic href="topics/redt00034.html#redt00034" title="eglx.xml package"/>
+</entry>
+<entry keyword="exp EGL function">
+<topic href="topics/redt00215.html#redt00215" title="MathLib.exp function"/>
+</entry>
+<entry keyword="floor EGL function">
+<topic href="topics/redt00216.html#redt00216" title="MathLib.floor function"/>
+</entry>
+<entry keyword="format EGL function">
+<topic href="topics/redt00233.html#redt00233" title="StringLib.format function"/>
 </entry>
 <entry keyword="Format patterns">
 <topic href="topics/redt00238.html#redt00237" title="Pattern characters used to format non-string values to strings"/>
 </entry>
-<entry keyword="frexp EGL system function">
-<topic href="topics/redt00217.html#redt00217" title="MathLib.frexp system function"/>
+<entry keyword="frexp EGL function">
+<topic href="topics/redt00217.html#redt00217" title="MathLib.frexp function"/>
 </entry>
-<entry keyword="fromCharCode EGL system function">
-<topic href="topics/redt00236.html#redt00236" title="StringLib.fromCharCode system function"/>
+<entry keyword="fromCharCode EGL function">
+<topic href="topics/redt00236.html#redt00236" title="StringLib.fromCharCode function"/>
 </entry>
-<entry keyword="getNextToken EGL system function">
-<topic href="topics/redt00234.html#redt00234" title="StringLib.GetNextToken system function"/>
+<entry keyword="getNextToken (StringLib) EGL function">
+<topic href="topics/redt00234.html#redt00234" title="StringLib.GetNextToken function"/>
 </entry>
-<entry keyword="getProperty EGL system function">
-<topic href="topics/redt00200.html#redt00200" title="SysLib.getProperty system function"/>
+<entry keyword="getProperty EGL function">
+<topic href="topics/redt00200.html#redt00200" title="SysLib.getProperty function"/>
 </entry>
-<entry keyword="getResource EGL system function">
-<topic href="topics/redt00205.html#redt00205" title="SysLib.getResource system function"/>
+<entry keyword="getResource EGL function">
+<topic href="topics/redt00205.html#redt00205" title="SysLib.getResource function"/>
 </entry>
-<entry keyword="getTokenCount EGL system function">
-<topic href="topics/redt00235.html#redt00235" title="StringLib.getTokenCount system function"/>
+<entry keyword="getTokenCount (StringLib) EGL function">
+<topic href="topics/redt00235.html#redt00235" title="StringLib.getTokenCount function"/>
 </entry>
-<entry keyword="HTTPLib EGL system library">
+<entry keyword="HTTPLib EGL external type">
 <entry keyword="convertToURLEncoded">
 <topic href="topics/redt00246.html#redt00246" title="HTTPLib.convertToURLEncoded"/>
-</entry>
-<entry keyword="overview">
-<topic href="topics/redt00073.html#redt00073" title="HTTPLib system library"/>
 </entry>
 <entry keyword="setHTTPBasicAuthentication">
 <topic href="topics/redt00247.html#redt00247" title="HTTPLib.setHTTPBasicAuthentication system function"/>
@@ -359,117 +428,141 @@
 <topic href="topics/redt00248.html#redt00248" title="HTTPLib.setProxyBasicAuthentication"/>
 </entry>
 </entry>
+<entry keyword="HTTPLib EGL system library">
+<entry keyword="convertFromURLEncoded">
+<topic href="topics/redt00252.html#redt00252" title="HTTPLib.convertFromURLEncoded"/>
+</entry>
+<entry keyword="overview">
+<topic href="topics/redt00073.html#redt00073" title="HTTPLib external type"/>
+</entry>
+</entry>
+<entry keyword="JSON strings">
+<entry keyword="copying to EGL">
+<topic href="topics/redt00253.html#redt00253" title="Correspondence between a JSON string and an EGL variable"/>
+</entry>
+</entry>
+<entry keyword="JSONLib EGL external type">
+<entry keyword="convertFromJSON">
+<topic href="topics/redt00250.html#redt00250" title="JSONLib.convertFromJSON function"/>
+</entry>
+<entry keyword="convertToJSON">
+<topic href="topics/redt00251.html#redt00251" title="JSONLib.convertToJSON function"/>
+</entry>
+<entry keyword="overview">
+<topic href="topics/redt00249.html#redt00249" title="JSONLib external type"/>
+</entry>
+</entry>
 <entry keyword="large object">
 <entry keyword="EGL">
 <topic href="topics/cedt00023.html#cedt00023" title="EGL large-object types"/>
 </entry>
 </entry>
-<entry keyword="ldexp EGL system function">
-<topic href="topics/redt00218.html#redt00218" title="MathLib.ldexp system function"/>
+<entry keyword="ldexp EGL function">
+<topic href="topics/redt00218.html#redt00218" title="MathLib.ldexp function"/>
 </entry>
-<entry keyword="log EGL system function">
-<topic href="topics/redt00219.html#redt00219" title="MathLib.log system function"/>
+<entry keyword="log EGL function">
+<topic href="topics/redt00219.html#redt00219" title="MathLib.log function"/>
 </entry>
-<entry keyword="log10 EGL system function">
-<topic href="topics/redt00220.html#redt00220" title="MathLib.log10 system function"/>
+<entry keyword="log10 EGL function">
+<topic href="topics/redt00220.html#redt00220" title="MathLib.log10 function"/>
 </entry>
 <entry keyword="Logical unit of work">
 <topic href="topics/cedt00042.html#cedt00042" title="Logical unit of work"/>
 </entry>
-<entry keyword="MathLib EGL system library">
+<entry keyword="MathLib EGL external type">
 <entry keyword="abs">
-<topic href="topics/redt00206.html#redt00206" title="MathLib.abs system function"/>
+<topic href="topics/redt00206.html#redt00206" title="MathLib.abs function"/>
 </entry>
 <entry keyword="acos">
-<topic href="topics/redt00207.html#redt00207" title="MathLib.acos system function"/>
+<topic href="topics/redt00207.html#redt00207" title="MathLib.acos function"/>
 </entry>
 <entry keyword="asin">
-<topic href="topics/redt00208.html#redt00208" title="MathLib.asin system function"/>
+<topic href="topics/redt00208.html#redt00208" title="MathLib.asin function"/>
 </entry>
 <entry keyword="atan">
-<topic href="topics/redt00209.html#redt00209" title="MathLib.atan system function"/>
+<topic href="topics/redt00209.html#redt00209" title="MathLib.atan function"/>
 </entry>
 <entry keyword="atan2">
-<topic href="topics/redt00210.html#redt00210" title="MathLib.atan2 system function"/>
+<topic href="topics/redt00210.html#redt00210" title="MathLib.atan2 function"/>
 </entry>
 <entry keyword="ceiling">
-<topic href="topics/redt00211.html#redt00211" title="MathLib.ceiling system function"/>
+<topic href="topics/redt00211.html#redt00211" title="MathLib.ceiling function"/>
 </entry>
 <entry keyword="cos">
-<topic href="topics/redt00212.html#redt00212" title="MathLib.cos system function"/>
+<topic href="topics/redt00212.html#redt00212" title="MathLib.cos function"/>
 </entry>
 <entry keyword="cosh">
-<topic href="topics/redt00213.html#redt00213" title="MathLib.cosh system function"/>
+<topic href="topics/redt00213.html#redt00213" title="MathLib.cosh function"/>
 </entry>
 <entry keyword="decimals">
-<topic href="topics/redt00214.html#redt00214" title="MathLib.decimals system function"/>
+<topic href="topics/redt00214.html#redt00214" title="MathLib.decimals function"/>
 </entry>
 <entry keyword="exp">
-<topic href="topics/redt00215.html#redt00215" title="MathLib.exp system function"/>
+<topic href="topics/redt00215.html#redt00215" title="MathLib.exp function"/>
 </entry>
 <entry keyword="floor">
-<topic href="topics/redt00216.html#redt00216" title="MathLib.floor system function"/>
+<topic href="topics/redt00216.html#redt00216" title="MathLib.floor function"/>
 </entry>
 <entry keyword="frexp">
-<topic href="topics/redt00217.html#redt00217" title="MathLib.frexp system function"/>
+<topic href="topics/redt00217.html#redt00217" title="MathLib.frexp function"/>
 </entry>
 <entry keyword="ldexp">
-<topic href="topics/redt00218.html#redt00218" title="MathLib.ldexp system function"/>
+<topic href="topics/redt00218.html#redt00218" title="MathLib.ldexp function"/>
 </entry>
 <entry keyword="log">
-<topic href="topics/redt00219.html#redt00219" title="MathLib.log system function"/>
+<topic href="topics/redt00219.html#redt00219" title="MathLib.log function"/>
 </entry>
 <entry keyword="log10">
-<topic href="topics/redt00220.html#redt00220" title="MathLib.log10 system function"/>
+<topic href="topics/redt00220.html#redt00220" title="MathLib.log10 function"/>
 </entry>
 <entry keyword="max">
-<topic href="topics/redt00221.html#redt00221" title="MathLib.max system function"/>
+<topic href="topics/redt00221.html#redt00221" title="MathLib.max function"/>
 </entry>
 <entry keyword="min">
-<topic href="topics/redt00222.html#redt00222" title="MathLib.min system function"/>
+<topic href="topics/redt00222.html#redt00222" title="MathLib.min function"/>
 </entry>
 <entry keyword="modf">
-<topic href="topics/redt00223.html#redt00223" title="MathLib.modf system function"/>
+<topic href="topics/redt00223.html#redt00223" title="MathLib.modf function"/>
 </entry>
 <entry keyword="overview">
-<topic href="topics/redt00067.html#redt00067" title="MathLib system library"/>
+<topic href="topics/redt00067.html#redt00067" title="MathLib external type"/>
 </entry>
 <entry keyword="pow">
-<topic href="topics/redt00224.html#redt00224" title="MathLib.pow system function"/>
+<topic href="topics/redt00224.html#redt00224" title="MathLib.pow function"/>
 </entry>
 <entry keyword="precision">
-<topic href="topics/redt00225.html#redt00225" title="MathLib.precision system function"/>
+<topic href="topics/redt00225.html#redt00225" title="MathLib.precision function"/>
 </entry>
 <entry keyword="random">
-<topic href="topics/redt00226.html#redt00226" title="MathLib.random system function"/>
+<topic href="topics/redt00226.html#redt00226" title="MathLib.random function"/>
+</entry>
+<entry keyword="round">
+<topic href="topics/redt00227.html#redt00227" title="MathLib.round function"/>
 </entry>
 <entry keyword="sin">
-<topic href="topics/redt00228.html#redt00228" title="MathLib.sin system function"/>
+<topic href="topics/redt00228.html#redt00228" title="MathLib.sin function"/>
 </entry>
 <entry keyword="sinh">
-<topic href="topics/redt00229.html#redt00229" title="MathLib.sinh system function"/>
+<topic href="topics/redt00229.html#redt00229" title="MathLib.sinh function"/>
 </entry>
 <entry keyword="sqrt">
-<topic href="topics/redt00230.html#redt00230" title="MathLib.sqrt system function"/>
+<topic href="topics/redt00230.html#redt00230" title="MathLib.sqrt function"/>
 </entry>
 <entry keyword="tan">
-<topic href="topics/redt00231.html#redt00231" title="MathLib.tan system function"/>
+<topic href="topics/redt00231.html#redt00231" title="MathLib.tan function"/>
 </entry>
 <entry keyword="tanh">
-<topic href="topics/redt00232.html#redt00232" title="MathLib.tanh system function"/>
-</entry>
-<entry keyword="x">
-<topic href="topics/redt00227.html#redt00227" title="MathLib.round system function"/>
+<topic href="topics/redt00232.html#redt00232" title="MathLib.tanh function"/>
 </entry>
 </entry>
-<entry keyword="max EGL system function">
-<topic href="topics/redt00221.html#redt00221" title="MathLib.max system function"/>
+<entry keyword="max EGL function">
+<topic href="topics/redt00221.html#redt00221" title="MathLib.max function"/>
 </entry>
-<entry keyword="mdy EGL system function">
+<entry keyword="mdy EGL function">
 <topic href="topics/redt00243.html#redt00243" title="DateTimeLib.mdy system function"/>
 </entry>
-<entry keyword="min EGL system function">
-<topic href="topics/redt00222.html#redt00222" title="MathLib.min system function"/>
+<entry keyword="min EGL function">
+<topic href="topics/redt00222.html#redt00222" title="MathLib.min function"/>
 </entry>
 <entry keyword="miscellaneous types">
 <entry keyword="EGL">
@@ -477,8 +570,8 @@
 <topic href="topics/cedt00024.html#cedt00024" title="BOOLEAN type"/>
 </entry>
 </entry>
-<entry keyword="modf EGL system function">
-<topic href="topics/redt00223.html#redt00223" title="MathLib.modf system function"/>
+<entry keyword="modf EGL function">
+<topic href="topics/redt00223.html#redt00223" title="MathLib.modf function"/>
 </entry>
 <entry keyword="numeric types">
 <entry keyword="EGL">
@@ -488,121 +581,150 @@
 <entry keyword="Patterns">
 <topic href="topics/redt00238.html#redt00237" title="Pattern characters used to format non-string values to strings"/>
 </entry>
-<entry keyword="pow EGL system function">
-<topic href="topics/redt00224.html#redt00224" title="MathLib.pow system function"/>
+<entry keyword="pow EGL function">
+<topic href="topics/redt00224.html#redt00224" title="MathLib.pow function"/>
 </entry>
-<entry keyword="precision EGL system function">
-<topic href="topics/redt00225.html#redt00225" title="MathLib.precision system function"/>
+<entry keyword="precision EGL function">
+<topic href="topics/redt00225.html#redt00225" title="MathLib.precision function"/>
 </entry>
-<entry keyword="random EGL system function">
-<topic href="topics/redt00226.html#redt00226" title="MathLib.random system function"/>
+<entry keyword="random EGL function">
+<topic href="topics/redt00226.html#redt00226" title="MathLib.random function"/>
 </entry>
-<entry keyword="rollback EGL system function">
-<topic href="topics/redt00199.html#redt00199" title="SysLib.rollback system function"/>
+<entry keyword="REST services">
+<entry keyword="Copying JSON strings">
+<topic href="topics/redt00253.html#redt00253" title="Correspondence between a JSON string and an EGL variable"/>
 </entry>
-<entry keyword="ServiceLib EGL system library">
+<entry keyword="Copying XML strings">
+<topic href="topics/redt00254.html#redt00254" title="Correspondence between an XML string and an EGL variable"/>
+</entry>
+</entry>
+<entry keyword="rollback EGL function">
+<topic href="topics/redt00199.html#redt00199" title="SysLib.rollback function"/>
+</entry>
+<entry keyword="round EGL function">
+<topic href="topics/redt00227.html#redt00227" title="MathLib.round function"/>
+</entry>
+<entry keyword="ServiceLib EGL external type">
+<entry keyword="completeBind">
+<topic href="topics/redt00144.html#redt00144" title="ServiceLib.completeBind function"/>
+</entry>
 <entry keyword="overview">
-<topic href="topics/redt00071.html#redt00071" title="ServiceLib system library"/>
+<topic href="topics/redt00071.html#redt00071" title="ServiceLib external type"/>
 </entry>
 </entry>
-<entry keyword="setHTTPBasicAuthentication EGL system function">
+<entry keyword="setHTTPBasicAuthentication EGL function">
 <topic href="topics/redt00247.html#redt00247" title="HTTPLib.setHTTPBasicAuthentication system function"/>
 </entry>
-<entry keyword="setLocale EGL system function">
-<topic href="topics/redt00201.html#redt00201" title="SysLib.setLocale system function"/>
+<entry keyword="setLocale EGL function">
+<topic href="topics/redt00201.html#redt00201" title="SysLib.setLocale function"/>
 </entry>
-<entry keyword="setProxyBasicAuthentication EGL system function">
+<entry keyword="setProxyBasicAuthentication EGL function">
 <topic href="topics/redt00248.html#redt00248" title="HTTPLib.setProxyBasicAuthentication"/>
 </entry>
-<entry keyword="sin EGL system function">
-<topic href="topics/redt00228.html#redt00228" title="MathLib.sin system function"/>
+<entry keyword="sin EGL function">
+<topic href="topics/redt00228.html#redt00228" title="MathLib.sin function"/>
 </entry>
-<entry keyword="sinh EGL system function">
-<topic href="topics/redt00229.html#redt00229" title="MathLib.sinh system function"/>
+<entry keyword="sinh EGL function">
+<topic href="topics/redt00229.html#redt00229" title="MathLib.sinh function"/>
 </entry>
-<entry keyword="spaces EGL system function">
-<topic href="topics/redt00237.html#redt00237" title="StringLib.spaces system function"/>
+<entry keyword="spaces EGL function">
+<topic href="topics/redt00237.html#redt00237" title="StringLib.spaces function"/>
 </entry>
-<entry keyword="sqrt EGL system function">
-<topic href="topics/redt00230.html#redt00230" title="MathLib.sqrt system function"/>
+<entry keyword="sqrt EGL function">
+<topic href="topics/redt00230.html#redt00230" title="MathLib.sqrt function"/>
 </entry>
-<entry keyword="startCmd EGL system function">
-<topic href="topics/redt00197.html#redt00197" title="SysLib.startCmd system function"/>
+<entry keyword="startCmd EGL function">
+<topic href="topics/redt00197.html#redt00197" title="SysLib.startCmd function"/>
 </entry>
-<entry keyword="StringLib EGL system library">
+<entry keyword="StringLib EGL external type">
 <entry keyword="format">
-<topic href="topics/redt00233.html#redt00233" title="StringLib.format system function"/>
+<topic href="topics/redt00233.html#redt00233" title="StringLib.format function"/>
 </entry>
-<entry keyword="fromCharCode">
-<topic href="topics/redt00236.html#redt00236" title="StringLib.fromCharCode system function"/>
+<entry keyword="fromCharCount">
+<topic href="topics/redt00236.html#redt00236" title="StringLib.fromCharCode function"/>
 </entry>
 <entry keyword="getNextToken">
-<topic href="topics/redt00234.html#redt00234" title="StringLib.GetNextToken system function"/>
-</entry>
-<entry keyword="getTokenCount">
-<topic href="topics/redt00235.html#redt00235" title="StringLib.getTokenCount system function"/>
+<topic href="topics/redt00234.html#redt00234" title="StringLib.GetNextToken function"/>
+<topic href="topics/redt00235.html#redt00235" title="StringLib.getTokenCount function"/>
 </entry>
 <entry keyword="spaces">
-<topic href="topics/redt00237.html#redt00237" title="StringLib.spaces system function"/>
+<topic href="topics/redt00237.html#redt00237" title="StringLib.spaces function"/>
 </entry>
 </entry>
-<entry keyword="StrLib EGL system library">
+<entry keyword="StrLib EGL external type">
 <entry keyword="overview">
-<topic href="topics/redt00239.html#redt00239" title="StrLib system library"/>
-<topic href="topics/redt00068.html#redt00068" title="StringLib system library"/>
+<topic href="topics/redt00068.html#redt00068" title="StringLib external type"/>
 </entry>
 </entry>
-<entry keyword="SysLib EGL system library">
+<entry keyword="StrLib EGL library">
+<entry keyword="overview">
+<topic href="topics/redt00239.html#redt00239" title="eglx.rbd package and its StrLib library"/>
+</entry>
+</entry>
+<entry keyword="SysLib EGL external type">
 <entry keyword="callCmd">
-<topic href="topics/redt00145.html#redt00145" title="SysLib.callCmd system function"/>
+<topic href="topics/redt00145.html#redt00145" title="SysLib.callCmd function"/>
 </entry>
 <entry keyword="commit">
-<topic href="topics/redt00198.html#redt00198" title="SysLib.commit system function"/>
+<topic href="topics/redt00198.html#redt00198" title="SysLib.commit function"/>
 </entry>
 <entry keyword="getProperty">
-<topic href="topics/redt00200.html#redt00200" title="SysLib.getProperty system function"/>
+<topic href="topics/redt00200.html#redt00200" title="SysLib.getProperty function"/>
 </entry>
 <entry keyword="getResource">
-<topic href="topics/redt00205.html#redt00205" title="SysLib.getResource system function"/>
+<topic href="topics/redt00205.html#redt00205" title="SysLib.getResource function"/>
 </entry>
 <entry keyword="overview">
 <topic href="topics/redt00066.html#redt00066" title="SysLib system library"/>
 </entry>
 <entry keyword="rollback">
-<topic href="topics/redt00199.html#redt00199" title="SysLib.rollback system function"/>
+<topic href="topics/redt00199.html#redt00199" title="SysLib.rollback function"/>
 </entry>
 <entry keyword="setLocale">
-<topic href="topics/redt00201.html#redt00201" title="SysLib.setLocale system function"/>
+<topic href="topics/redt00201.html#redt00201" title="SysLib.setLocale function"/>
 </entry>
 <entry keyword="startCmd">
-<topic href="topics/redt00197.html#redt00197" title="SysLib.startCmd system function"/>
+<topic href="topics/redt00197.html#redt00197" title="SysLib.startCmd function"/>
 </entry>
 <entry keyword="wait">
-<topic href="topics/redt00202.html#redt00202" title="SysLib.wait system function"/>
+<topic href="topics/redt00202.html#redt00202" title="SysLib.wait function"/>
 </entry>
-<entry keyword="writeStdErr">
-<topic href="topics/redt00203.html#redt00203" title="SysLib.writeStdError system function"/>
+<entry keyword="writeStdError">
+<topic href="topics/redt00203.html#redt00203" title="SysLib.writeStdError function"/>
 </entry>
 <entry keyword="writeStdOut">
-<topic href="topics/redt00204.html#redt00204" title="SysLib.writeStdOut system function"/>
+<topic href="topics/redt00204.html#redt00204" title="SysLib.writeStdOut function"/>
 </entry>
 </entry>
-<entry keyword="tan EGL system function">
-<topic href="topics/redt00231.html#redt00231" title="MathLib.tan system function"/>
+<entry keyword="tan EGL function">
+<topic href="topics/redt00231.html#redt00231" title="MathLib.tan function"/>
 </entry>
-<entry keyword="tanh EGL system function">
-<topic href="topics/redt00232.html#redt00232" title="MathLib.tanh system function"/>
+<entry keyword="tanh EGL function">
+<topic href="topics/redt00232.html#redt00232" title="MathLib.tanh function"/>
 </entry>
-<entry keyword="wait EGL system function">
-<topic href="topics/redt00202.html#redt00202" title="SysLib.wait system function"/>
+<entry keyword="wait EGL function">
+<topic href="topics/redt00202.html#redt00202" title="SysLib.wait function"/>
 </entry>
-<entry keyword="writeStdErr EGL system function">
-<topic href="topics/redt00203.html#redt00203" title="SysLib.writeStdError system function"/>
+<entry keyword="writeStdError EGL function">
+<topic href="topics/redt00203.html#redt00203" title="SysLib.writeStdError function"/>
 </entry>
-<entry keyword="writeStdOut EGL system function">
-<topic href="topics/redt00204.html#redt00204" title="SysLib.writeStdOut system function"/>
+<entry keyword="writeStdOut EGL function">
+<topic href="topics/redt00204.html#redt00204" title="SysLib.writeStdOut function"/>
 </entry>
-<entry keyword="x EGL system function">
-<topic href="topics/redt00227.html#redt00227" title="MathLib.round system function"/>
+<entry keyword="XML">
+<entry keyword="copying to and from variables">
+<topic href="topics/redt00254.html#redt00254" title="Correspondence between an XML string and an EGL variable"/>
+</entry>
+</entry>
+<entry keyword="XMLLib EGL external type">
+<entry keyword="convertFromXML">
+<topic href="topics/redt00255.html#redt00255" title="XMLLib.convertFromXML function"/>
+</entry>
+<entry keyword="convertToJSON">
+<topic href="topics/redt00256.html#redt00256" title="XMLLib.convertToXML function"/>
+</entry>
+<entry keyword="overview">
+<topic href="topics/redt00257.html#redt00257" title="XMLLib external type"/>
+</entry>
 </entry>
 </index>
