@@ -99,6 +99,11 @@ public class ClasspathUtil {
 			classpath.add(entry);
 		}
 		
+		entry = getClasspathEntry( "com.ibm.icu" ); //$NON-NLS-1$
+		if (entry != null) {
+			classpath.add(entry);
+		}
+		
 		// The main project.
 		classpath.add(getWorkspaceProjectClasspathEntry(project.getName()));
 		
@@ -141,7 +146,7 @@ public class ClasspathUtil {
 		}
 	}
 	
-	private static String getClasspathEntry(String pluginName) {
+	public static String getClasspathEntry(String pluginName) {
 		Bundle bundle = Platform.getBundle(pluginName);
 		if (bundle != null) {
 			try {
