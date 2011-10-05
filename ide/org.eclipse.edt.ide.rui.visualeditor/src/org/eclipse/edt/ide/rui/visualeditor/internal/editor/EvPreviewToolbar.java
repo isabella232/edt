@@ -13,16 +13,11 @@ package org.eclipse.edt.ide.rui.visualeditor.internal.editor;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.edt.ide.rui.actions.ActionLaunchExternalBrowser;
 import org.eclipse.edt.ide.rui.visualeditor.internal.actions.EvActionPreferences;
 import org.eclipse.edt.ide.rui.visualeditor.internal.nl.Tooltips;
 import org.eclipse.edt.ide.rui.visualeditor.plugin.Activator;
-import org.eclipse.jface.action.AbstractGroupMarker;
-import org.eclipse.jface.action.GroupMarker;
-import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -61,11 +56,6 @@ public class EvPreviewToolbar extends Composite implements SelectionListener {
 	protected ToolBar		_toolbar					= null;
 	
 	/**
-	 * Group name for the main section of the toolbar.
-	 */
-	private static final String MAIN_GROUP_NAME = "main";
-
-	/**
 	 * 
 	 */
 	public EvPreviewToolbar( Composite compositeParent, int style, EvPreviewPage pagePreview ) {
@@ -88,51 +78,15 @@ public class EvPreviewToolbar extends Composite implements SelectionListener {
 		gridData = new GridData( GridData.HORIZONTAL_ALIGN_END );
 		_toolbar.setLayoutData( gridData );
 		
-		new GroupMarker( MAIN_GROUP_NAME ).fill( _toolbar, 0 );
-		
 		_itemLaunchExternalBrowser = createExternalBrowser();
 		_itemPreferences = createPreferences();
 		_itemRefreshWebPage = createRefreshWebPage();
-		
-		addToolbarContributions();
 		
 		// Help
 		//-----
 		EvHelp.setHelp( _toolbar, EvHelp.PREVIEW_TOOLBAR );
 		for( int i = 0; i < _toolbar.getItemCount(); ++i )
 			EvHelp.setHelp( _toolbar.getItem( i ).getControl(), EvHelp.PREVIEW_TOOLBAR );
-	}
-	
-	protected void addToolbarContributions() {
-		List<IContributionItem> notMainGroupItems = new ArrayList<IContributionItem>();
-		boolean inMainGroup = true;
-		
-		// Add all the items to the main group, then add items for different groups afterwards
-		for (IContributionItem item : _pagePreview.getEditorSite().getActionBars().getToolBarManager().getItems()) {
-			if (item.isGroupMarker() ) {
-				if (MAIN_GROUP_NAME.equals(((AbstractGroupMarker)item).getGroupName())) {
-					inMainGroup = true;
-				}
-				else {
-					inMainGroup = false;
-					notMainGroupItems.add( item );
-				}
-			}
-			else {
-				if (inMainGroup) {
-					item.fill( _toolbar, 0 );
-				}
-				else {
-					notMainGroupItems.add( item );
-				}
-			}
-		}
-		
-		if (notMainGroupItems.size() > 0) {
-			for (IContributionItem item : notMainGroupItems) {
-				item.fill( _toolbar, 0 );
-			}
-		}
 	}
 	
 	/**
