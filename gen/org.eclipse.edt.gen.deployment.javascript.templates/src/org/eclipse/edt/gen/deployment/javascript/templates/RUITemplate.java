@@ -113,7 +113,7 @@ public class RUITemplate extends JavaScriptTemplate {
 			generateDevelopmentRuntimeFilePath(out);
 		}
 		generateDependentFilePath(handler, ctx, out, isDevelopment);
-		generateStartupInit(handler, out, userMsgLocale, isDevelopment);
+		generateStartupInit(handler, out, userMsgLocale, isDevelopment, isDebug);
 		generateIncludeFiles(handler, ctx, out);						
 		out.println("</script>");		
 		out.println("</body>");
@@ -338,7 +338,7 @@ public class RUITemplate extends JavaScriptTemplate {
 
 	}
 	
-	private void generateStartupInit(Handler part, TabbedWriter out, String userMsgLocale, boolean isDevelopment) {
+	private void generateStartupInit(Handler part, TabbedWriter out, String userMsgLocale, boolean isDevelopment, boolean isDebug) {
 		out.println("egl.startupInit = function() {");		
 		out.println("	egl.load(RUI_DEPENDENT_JAVASCRIPT_FILES, function(){");
 		generateLocaleInfo(out, userMsgLocale);
@@ -362,10 +362,18 @@ public class RUITemplate extends JavaScriptTemplate {
 		}
 		String fullPartName = part.getPackageName().replace('/', '.').toLowerCase() + "." + part.getName();
 		out.println("		} catch (e) {");
+		if (isDebug) {
+			out.println("			if (e instanceof egl.egl.debug.DebugTermination) {" );
+			out.println("				if (e.msg) egl.println(e.msg);" );
+			out.println("			} else {");
+		}
 		out.println("			egl.crashTerminateSession();");
 		out.println("			if (!egl." + fullPartName +"){");
 		out.println("				egl.println('Internal generation error. Found no definition for " + fullPartName + ". Try <b>Project > Clean...</b>', e);");
 		out.println("			}else{ egl.printError('Could not render UI', e); throw e;}");
+		if (isDebug) {
+			out.println("			}");
+		}
 		out.println("		}");
 		out.println("	});");
 		out.println("};");
