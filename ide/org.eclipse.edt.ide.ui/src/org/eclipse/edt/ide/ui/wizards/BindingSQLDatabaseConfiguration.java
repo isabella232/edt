@@ -18,7 +18,6 @@ import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
 import org.eclipse.edt.ide.ui.internal.deployment.Parameters;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
-import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
 
 public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
@@ -143,10 +142,20 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 		Binding sqlBinding = DeploymentFactory.eINSTANCE.createBinding();
 		bindings.getBinding().add(sqlBinding);
 		sqlBinding.setType(org.eclipse.edt.javart.resources.egldd.Binding.BINDING_DB_SQL);
-		String bindingName = CoreUtility.getCamelCaseString(getBindingName());
-		if(bindingName == null) {
-			bindingName = getBindingName();
-		} 
+		String bindingName = getBindingName();
+		
+		int length = bindingName.length();
+		StringBuilder validName = new StringBuilder(length);
+		for (int i = 0; i < length; i++) {
+			if (Character.isJavaIdentifierPart(bindingName.charAt(i))) {
+				validName.append(bindingName.charAt(i));
+			}
+		}
+		
+		if (validName.length() > 0) {
+			bindingName = validName.toString();
+		}
+		
 		Binding binding = EGLDDRootHelper.getBindingByName(getEGLDeploymentRoot(), bindingName);
 		int incrementIndex = 1;
 		while(binding != null) {
