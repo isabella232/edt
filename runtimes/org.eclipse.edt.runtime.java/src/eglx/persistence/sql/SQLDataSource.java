@@ -85,8 +85,11 @@ public class SQLDataSource implements RecoverableResource {
 	public void exit(RunUnit ru) throws AnyException {
 		try {
 			for (Entry<String, List<Statement>> entry : statements.entrySet()) {
-				for (Statement s : entry.getValue())
-				s.close();
+				for (Statement s : entry.getValue()){
+					if(s != null){
+						s.close();
+					}
+				}
 			}
 			if(conn != null){
 				conn.close();
@@ -103,8 +106,11 @@ public class SQLDataSource implements RecoverableResource {
 		if (toTransaction) {
 			try {
 				for (Entry<String, List<Statement>> entry : statements.entrySet()) {
-					for (Statement s : entry.getValue())
-					s.close();
+					for (Statement s : entry.getValue()){
+						if(s != null){
+							s.close();
+						}
+					}
 				}
 				if(conn != null){
 					conn.close();
