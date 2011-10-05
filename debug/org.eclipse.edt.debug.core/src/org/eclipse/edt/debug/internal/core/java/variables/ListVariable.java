@@ -141,4 +141,10 @@ public class ListVariable extends EGLJavaVariable
 			return getValueString();
 		}
 	}
+	
+	@Override
+	protected boolean shouldCheckJavaElementAdapter()
+	{
+		return false;
+	}
 }

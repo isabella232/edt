@@ -430,4 +430,17 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 	{
 		return javaFrame.getSourcePath();
 	}
+	
+	@Override
+	protected boolean shouldCheckJavaElementAdapter()
+	{
+		try
+		{
+			return !SMAPUtil.isEGLStratum( getSMAP() );
+		}
+		catch ( DebugException e )
+		{
+			return true;
+		}
+	}
 }

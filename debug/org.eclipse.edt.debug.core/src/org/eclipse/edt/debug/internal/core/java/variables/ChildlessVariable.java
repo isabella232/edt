@@ -49,4 +49,10 @@ public class ChildlessVariable extends EGLJavaVariable
 			}
 		};
 	}
+	
+	@Override
+	protected boolean shouldCheckJavaElementAdapter()
+	{
+		return false;
+	}
 }

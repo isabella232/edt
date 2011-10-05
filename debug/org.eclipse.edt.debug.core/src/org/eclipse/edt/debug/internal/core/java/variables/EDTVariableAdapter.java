@@ -13,6 +13,7 @@ package org.eclipse.edt.debug.internal.core.java.variables;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
+import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
 import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
@@ -55,7 +56,7 @@ public class EDTVariableAdapter implements IVariableAdapter
 		}
 		catch ( DebugException e )
 		{
-			e.printStackTrace();
+			EDTDebugCorePlugin.log( e );
 		}
 		return null;
 	}

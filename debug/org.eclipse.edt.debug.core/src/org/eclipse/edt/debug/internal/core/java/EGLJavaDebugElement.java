@@ -26,11 +26,7 @@ import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.edt.debug.core.IEGLDebugTarget;
 import org.eclipse.edt.debug.core.java.IEGLJavaDebugElement;
 import org.eclipse.edt.debug.core.java.IEGLJavaDebugTarget;
-import org.eclipse.edt.debug.core.java.SMAPUtil;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
-import org.eclipse.jdt.debug.core.IJavaStackFrame;
-import org.eclipse.jdt.debug.core.IJavaValue;
-import org.eclipse.jdt.debug.core.IJavaVariable;
 
 /**
  * Super class of all EGL Java Debug framework classes.
@@ -92,28 +88,8 @@ public abstract class EGLJavaDebugElement extends DebugElement implements IEGLJa
 	/**
 	 * @return true if we should attempt to obtain an adapter from the underlying Java object.
 	 */
-	private boolean shouldCheckJavaElementAdapter()
+	protected boolean shouldCheckJavaElementAdapter()
 	{
-		if ( this instanceof EGLJavaFunctionVariable )
-		{
-			// No actual corresponding Java element.
-			return false;
-		}
-		
-		Object javaObj = getJavaDebugElement();
-		if ( javaObj instanceof IJavaVariable )
-		{
-			return !SMAPUtil.isEGLStratum( (IJavaVariable)javaObj );
-		}
-		if ( javaObj instanceof IJavaValue )
-		{
-			return !SMAPUtil.isEGLStratum( (IJavaValue)javaObj );
-		}
-		if ( javaObj instanceof IJavaStackFrame )
-		{
-			return !SMAPUtil.isEGLStratum( (IJavaStackFrame)javaObj );
-		}
-		
 		return false;
 	}
 	

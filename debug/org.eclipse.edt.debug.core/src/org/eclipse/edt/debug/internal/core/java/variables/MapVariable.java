@@ -132,4 +132,10 @@ public class MapVariable extends EGLJavaVariable
 	{
 		return value.getReferenceTypeName();
 	}
+	
+	@Override
+	protected boolean shouldCheckJavaElementAdapter()
+	{
+		return false;
+	}
 }

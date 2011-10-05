@@ -62,4 +62,10 @@ public class EGLJavaFunctionVariable extends EGLJavaVariable
 	{
 		return true;
 	}
+	
+	@Override
+	protected boolean shouldCheckJavaElementAdapter()
+	{
+		return false;
+	}
 }

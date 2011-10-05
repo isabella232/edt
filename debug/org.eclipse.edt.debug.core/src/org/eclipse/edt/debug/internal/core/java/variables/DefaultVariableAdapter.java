@@ -16,6 +16,7 @@ import java.util.HashMap;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
+import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
 import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
@@ -68,7 +69,13 @@ public class DefaultVariableAdapter implements IVariableAdapter
 				{
 					if ( var instanceof IJavaVariable && !((IJavaVariable)var).isStatic() && var.getName().equals( "value" ) ) //$NON-NLS-1$
 					{
-						return new EGLJavaVariable( frame.getDebugTarget(), (IJavaVariable)var, info, frame, parent );
+						return new EGLJavaVariable( frame.getDebugTarget(), (IJavaVariable)var, info, frame, parent ) {
+							@Override
+							protected boolean shouldCheckJavaElementAdapter()
+							{
+								return false;
+							}
+						};
 					}
 				}
 			}
@@ -83,6 +90,7 @@ public class DefaultVariableAdapter implements IVariableAdapter
 		}
 		catch ( DebugException e )
 		{
+			EDTDebugCorePlugin.log( e );
 		}
 		return null;
 	}

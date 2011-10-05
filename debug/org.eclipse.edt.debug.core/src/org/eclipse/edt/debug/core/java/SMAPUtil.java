@@ -348,4 +348,29 @@ public class SMAPUtil
 		
 		return false;
 	}
+	
+	/**
+	 * @return true if the smap value has a default stratum of {@link IEGLDebugCoreConstants#EGL_STRATUM}
+	 */
+	public static boolean isEGLStratum( String smap )
+	{
+		if ( smap.length() > 0 )
+		{
+			// Third line has the default stratum.
+			int index = smap.indexOf( '\n' );
+			if ( index != -1 )
+			{
+				index = smap.indexOf( '\n', index + 1 );
+				if ( index != -1 )
+				{
+					int end = smap.indexOf( '\n', index + 1 );
+					if ( end != -1 )
+					{
+						return IEGLDebugCoreConstants.EGL_STRATUM.equals( smap.substring( index + 1, end ) );
+					}
+				}
+			}
+		}
+		return false;
+	}
 }

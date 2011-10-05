@@ -24,6 +24,7 @@ import org.eclipse.edt.debug.core.IEGLVariable;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
 import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
+import org.eclipse.edt.debug.core.java.SMAPUtil;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.debug.core.IJavaValue;
@@ -232,5 +233,27 @@ public class EGLJavaVariable extends EGLJavaDebugElement implements IEGLJavaVari
 	public IEGLJavaValue getParentValue()
 	{
 		return parent;
+	}
+	
+	@Override
+	protected boolean shouldCheckJavaElementAdapter()
+	{
+		if ( SMAPUtil.isEGLStratum( javaVariable ) )
+		{
+			return false;
+		}
+		
+		try
+		{
+			getValue();
+			if ( value instanceof EGLJavaValue )
+			{
+				return ((EGLJavaValue)value).shouldCheckJavaElementAdapter();
+			}
+		}
+		catch ( DebugException e )
+		{
+		}
+		return true;
 	}
 }

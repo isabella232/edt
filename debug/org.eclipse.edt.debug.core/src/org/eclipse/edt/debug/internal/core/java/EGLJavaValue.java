@@ -217,4 +217,17 @@ public class EGLJavaValue extends EGLJavaDebugElement implements IEGLJavaValue
 	{
 		return parentVariable;
 	}
+	
+	@Override
+	protected boolean shouldCheckJavaElementAdapter()
+	{
+		try
+		{
+			return !SMAPUtil.isEGLStratum( getSMAP() );
+		}
+		catch ( DebugException e )
+		{
+			return true;
+		}
+	}
 }
