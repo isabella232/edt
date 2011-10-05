@@ -102,15 +102,6 @@
                actionID="RulerDoubleClick"
                id="org.eclipse.edt.debug.ui.actions.ManageBreakpointRulerAction">
          </action>
-         <action
-               class="org.eclipse.edt.debug.javascript.internal.actions.DebugAction"
-               icon="icons/full/etool16/debug_exc.gif"
-               id="org.eclipse.edt.debug.javascript.launchDebugAction"
-               label="%DebugInExternalBrowser.label"
-               style="push"
-               toolbarPath="main"
-               tooltip="%DebugInExternalBrowser.label">
-         </action>
       </editorContribution>
    </extension>
    
