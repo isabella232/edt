@@ -67,11 +67,11 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 			out.println(".getResultSet();");
 		}
 
-		genPopulateFromResultSet(stmt, ctx, out, var_resultSet, true);
+		genPopulateFromResultSet(stmt, ctx, out, var_resultSet, isResultSet);
 		genSqlStatementEnd(stmt, ctx, out);
 	}
 	
-	public void genPopulateFromResultSet(SqlGetByKeyStatement stmt, Context ctx, TabbedWriter out, String var_resultSet, boolean doClose ) {
+	public void genPopulateFromResultSet(SqlGetByKeyStatement stmt, Context ctx, TabbedWriter out, String var_resultSet, boolean isResultSet ) {
 		if (stmt.getTargets().size() == 1) {
 			Expression target = stmt.getTarget();
 			boolean targetIsList = target.getType() instanceof ArrayType;
@@ -125,10 +125,12 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 			}
 			else {
 				targetType = (EGLClass)target.getType().getClassifier();
-				out.println("if(" + var_resultSet + ".next()) {");
+				if(!isResultSet)
+					out.println("if(" + var_resultSet + ".next()) {");
 				genGetSingleRowFromResultSet(stmt.getTarget(), var_resultSet, ctx, out);
 				out.println(";");
-				out.println('}');
+				if(!isResultSet)
+					out.println('}');
 				
 			}
 		}
@@ -137,7 +139,7 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 			genGetSingleRowFromResultSet(stmt.getTargets(), var_resultSet, ctx, out);
 			out.println('}');
 		}
-		if (doClose)
+		if (!isResultSet)
 			out.println(var_resultSet + ".close();");
 	}
 		

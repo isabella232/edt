@@ -17,7 +17,7 @@ public class SqlDeleteStatementTemplate extends SqlActionStatementTemplate {
 		else {
 			out.println("try {");
 			ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
-			out.println(".getResultSet().deleteRow()");
+			out.println(".getResultSet().deleteRow();");
 		}
 		genSqlStatementEnd(stmt, ctx, out);
 	}
