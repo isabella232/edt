@@ -14,5 +14,5 @@ externalType SQLResultSet extends ScrollableDataSource type NativeType
 	
 	function getWarnings() returns(SQLWarning?);
 	
-	function setFetchSize(size int);
+	function setFetchSize(size int in);
 end
