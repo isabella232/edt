@@ -4,8 +4,10 @@ delegate runTestMethod()
 end
 
 // basic library
-library TestAsyncLib
+library TestAsyncLib	
+	nextTestIndex int = 1;					//test method index
 	runTestMtds runTestMethod[];			//list of test methods within a libraries
+	
 	LibraryStartTests runTestMethod[];		//list of test libraries
 	private nextLibIndex int = 1;					//test library index
 		
@@ -14,5 +16,14 @@ library TestAsyncLib
 			nextLibIndex += 1;
 			LibraryStartTests[nextLibIndex]();	
 		end		
+	end	
+	
+	function nextTest(ms MultiStatus, testId String in)
+		ms.addStatus(testId);	
+		syslib.writeStdout("TestAsyncLib.runTestMtds array size: " + TestAsyncLib.runTestMtds.getSize());
+		if(nextTestIndex < runTestMtds.getSize())
+			nextTestIndex += 1;
+			runTestMtds[nextTestIndex]();
+		end
 	end	
 end
