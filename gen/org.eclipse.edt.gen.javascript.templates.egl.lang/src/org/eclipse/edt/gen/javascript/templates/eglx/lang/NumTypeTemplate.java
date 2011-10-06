@@ -21,6 +21,7 @@ import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
+import org.eclipse.edt.mof.egl.IsAExpression;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -116,6 +117,17 @@ public class NumTypeTemplate extends JavaScriptTemplate {
 			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
 			out.print(getNativeStringComparisionOperation(arg));
 			out.print(")");
+		}
+	}
+	
+	public void genIsaExpression(Type type, Context ctx, TabbedWriter out, IsAExpression arg) {
+		if (TypeUtils.Type_Number.equals(type.getTypeSignature())) {
+			out.print("egl.is(");
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			out.print(", \"NUMERIC\",egl.isnumeric)");
+		}
+		else {
+			ctx.invokeSuper(this, genIsaExpression, type, ctx, out, arg);
 		}
 	}
 
