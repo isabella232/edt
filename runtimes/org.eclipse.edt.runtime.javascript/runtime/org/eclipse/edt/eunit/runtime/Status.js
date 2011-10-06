@@ -1,13 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2011 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
 egl.defineClass('org.eclipse.edt.eunit.runtime', "Status", "egl.jsrt", "Record", {
 	"eze$$fileName" : "org/eclipse/edt/eunit/runtime/LogResult.egl",
 		"constructor": function() {
@@ -31,11 +21,8 @@ egl.defineClass('org.eclipse.edt.eunit.runtime', "Status", "egl.jsrt", "Record",
 		"eze$$clone": function() {
 			var ezert$$1 = this;
 			var ezert$$2 = new egl.org.eclipse.edt.eunit.runtime.Status();
-			ezert$$2.eze$$isNull = this.eze$$isNull;
-			ezert$$2.eze$$isNullable = this.eze$$isNullable;
 			ezert$$2.code = ezert$$1.code;
 			ezert$$2.reason = ezert$$1.reason;
-			ezert$$2.setNull(ezert$$1eze$$isNull);
 			return ezert$$2;
 		}
 		,
