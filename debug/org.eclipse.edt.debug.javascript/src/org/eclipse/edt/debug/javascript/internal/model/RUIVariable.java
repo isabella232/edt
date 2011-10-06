@@ -241,8 +241,8 @@ public class RUIVariable extends RUIDebugElement implements IEGLVariable
 				String type = getReferenceTypeName();
 				if ( type != null && (type = type.trim()).length() != 0 )
 				{
-					buf.append( type ); //$NON-NLS-1$
-					buf.append( " " );
+					buf.append( type );
+					buf.append( " " ); //$NON-NLS-1$
 				}
 			}
 			buf.append( getName() );
