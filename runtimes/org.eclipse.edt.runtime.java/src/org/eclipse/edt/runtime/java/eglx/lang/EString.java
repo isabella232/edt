@@ -220,6 +220,11 @@ public class EString extends AnyBoxedObject<String> {
 			return null;
 		return asString((Calendar) value, length);
 	}
+	
+	// This version exists so that it's much easier/faster for debug to invoke it.
+	public static String asString(Calendar cal) {
+		return asString(cal, new Integer[0]);
+	}
 
 	public static String asString(Calendar cal, Integer... length) {
 		if (cal == null)
