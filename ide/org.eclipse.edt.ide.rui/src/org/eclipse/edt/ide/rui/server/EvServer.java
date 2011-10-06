@@ -404,19 +404,44 @@ public class EvServer implements IClientProxy {
 			String urlString = xmlRequest.getURL();
 			try {
 				if (xmlRequest.getContentArguments().containsKey("connectionProfile")) {
-					//TODO for now the SQLDataSource API only takes the url, once it supports username, password, etc, return more values.
 					String url = null;
+					String user = null;
+					String pass = null;
+					String schema = null;
 					String profileName = xmlRequest.getContentArguments().get("connectionProfile");
 					IConnectionProfile profile = EGLSQLUtility.getConnectionProfile(profileName);
 					if (profile != null) {
 						url = EGLSQLUtility.getSQLConnectionURLPreference(profile);
+						user = EGLSQLUtility.getSQLUserId(profile);
+						pass = EGLSQLUtility.getSQLPassword(profile);
+						schema = EGLSQLUtility.getDefaultSchema(profile);
 					}
 					
 					if (url == null) {
 						url = "";
 					}
+					if (user == null) {
+						user = "";
+					}
+					if (pass == null) {
+						pass = "";
+					}
+					if (schema == null) {
+						schema = "";
+					}
+					
+					String info;
+					try {
+						info = URLEncoder.encode(url, "UTF-8") + ';' + URLEncoder.encode(user, "UTF-8") + ';'
+								 + URLEncoder.encode(pass, "UTF-8") + ';' + URLEncoder.encode(schema, "UTF-8");
+					}
+					catch (UnsupportedEncodingException e) {
+						// Shouldn't happen.
+						info = url + ';' + user + ';' + pass + ';' + schema;
+					}
+					
 					ps.print(getGoodResponseHeader(urlString, getContentType(urlString), false));
-					ps.write(url.getBytes("utf-8"));
+					ps.write(info.getBytes("utf-8"));
 				}
 			}
 			catch (Throwable t) {
