@@ -1,31 +1,29 @@
-/*******************************************************************************
- * Copyright (c) 2011 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import java.math.BigDecimal;
-import org.eclipse.edt.eunit.runtime.AssertionFailedException;
-import java.lang.Boolean;
-import java.lang.Double;
-import java.lang.String;
-import eglx.lang.MathLib;
-import java.util.Calendar;
-import java.util.List;
-import org.eclipse.edt.eunit.runtime.ConstantsLib;
-import org.eclipse.edt.eunit.runtime.Log;
-import java.lang.Long;
-import org.eclipse.edt.eunit.runtime.Status;
-import org.eclipse.edt.runtime.java.eglx.lang.*;
-
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
+import org.eclipse.edt.eunit.runtime.ConstantsLib;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import java.lang.String;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import org.eclipse.edt.runtime.java.eglx.lang.EDate;
+import java.util.Calendar;
+import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
+import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
+import java.math.BigDecimal;
+import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
+import java.lang.Double;
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import org.eclipse.edt.eunit.runtime.Log;
+import org.eclipse.edt.eunit.runtime.Status;
+import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
+import java.lang.Long;
+import org.eclipse.edt.runtime.java.eglx.lang.EList;
+import java.util.List;
+import eglx.lang.MathLib;
+import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
+import java.lang.Boolean;
 @javax.xml.bind.annotation.XmlRootElement(name="LogResult")
 public class LogResult extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
@@ -129,7 +127,7 @@ public class LogResult extends ExecutableBase {
 		}
 		s.reason = str.ezeUnbox();
 	}
-	public void assertTrue(String failedReason, boolean testCondition) {
+	public void assertTrueException(String failedReason, boolean testCondition, boolean throwsFailException) {
 		if (testCondition) {
 			AnyBoxedObject<String> eze$Temp6;
 			eze$Temp6 = EAny.ezeWrap("OK");
@@ -140,20 +138,26 @@ public class LogResult extends ExecutableBase {
 			eze$Temp7 = EAny.ezeWrap(failedReason);
 			failed(eze$Temp7);
 			failedReason = eze$Temp7.ezeUnbox();
-			AssertionFailedException eze$Temp8 = new AssertionFailedException();
-			{
-				AssertionFailedException eze$SettingTarget1;
-				eze$SettingTarget1 = new AssertionFailedException();
-				eze$SettingTarget1.setMessage(s.reason);
-				eze$Temp8 = eze$SettingTarget1;
+			if (throwsFailException) {
+				AssertionFailedException eze$Temp9 = null;
+				{
+					AssertionFailedException eze$SettingTarget1;
+					eze$SettingTarget1 = new AssertionFailedException();
+					eze$SettingTarget1.setMessage(s.reason);
+					eze$Temp9 = eze$SettingTarget1;
+				}
+				throw eze$Temp9;
 			}
-			throw eze$Temp8;
 		}
 	}
+	public void assertTrue(String failedReason, boolean testCondition) {
+		assertTrueException(failedReason, testCondition, true);
+	}
 	public void assertTrue1(boolean testCondition) {
-		String eze$Temp9;
-		eze$Temp9 = "";
-		assertTrue(eze$Temp9, testCondition);
+		assertTrue("", testCondition);
+	}
+	public void assertTrueNoException(String failedReason, boolean testCondition) {
+		assertTrueException(failedReason, testCondition, false);
 	}
 	public void assertBigIntEqual(String message, long expected, long actual) {
 		boolean isEqual;
@@ -161,9 +165,12 @@ public class LogResult extends ExecutableBase {
 		expectAssertTrue(message, EBigint.ezeBox(expected), EBigint.ezeBox(actual), isEqual);
 	}
 	public void assertBigIntEqual1(long expected, long actual) {
-		String eze$Temp10;
-		eze$Temp10 = "";
-		assertBigIntEqual(eze$Temp10, expected, actual);
+		assertBigIntEqual("", expected, actual);
+	}
+	public void assertBigIntEqualNoException(String message, long expected, long actual) {
+		boolean isEqual;
+		isEqual = (expected == actual);
+		expectAssertTrueNoException(message, EBigint.ezeBox(expected), EBigint.ezeBox(actual), isEqual);
 	}
 	public void assertStringEqual(String message, String expected, String actual) {
 		boolean isEqual;
@@ -171,9 +178,12 @@ public class LogResult extends ExecutableBase {
 		expectAssertTrue(message, EString.ezeBox(expected), EString.ezeBox(actual), isEqual);
 	}
 	public void assertStringEqual1(String expected, String actual) {
-		String eze$Temp11;
-		eze$Temp11 = "";
-		assertStringEqual(eze$Temp11, expected, actual);
+		assertStringEqual("", expected, actual);
+	}
+	public void assertStringEqualNoException(String message, String expected, String actual) {
+		boolean isEqual;
+		isEqual = ((expected).equals(actual));
+		expectAssertTrueNoException(message, EString.ezeBox(expected), EString.ezeBox(actual), isEqual);
 	}
 	public void assertStringArrayEqual(String message, List<String> expected, List<String> actual) {
 		boolean isArrayEqual;
@@ -224,9 +234,7 @@ public class LogResult extends ExecutableBase {
 		assertTrue(failedReason, isArrayEqual);
 	}
 	public void assertStringArrayEqual1(List<String> expected, List<String> actual) {
-		String eze$Temp18;
-		eze$Temp18 = "";
-		assertStringArrayEqual(eze$Temp18, expected, actual);
+		assertStringArrayEqual("", expected, actual);
 	}
 	public void assertDateEqual(String message, Calendar expected, Calendar actual) {
 		boolean isEqual;
@@ -234,9 +242,12 @@ public class LogResult extends ExecutableBase {
 		expectAssertTrue(message, EDate.ezeBox(expected), EDate.ezeBox(actual), isEqual);
 	}
 	public void assertDateEqual1(Calendar expected, Calendar actual) {
-		String eze$Temp19;
-		eze$Temp19 = "";
-		assertDateEqual(eze$Temp19, expected, actual);
+		assertDateEqual("", expected, actual);
+	}
+	public void assertDateEqualNoException(String message, Calendar expected, Calendar actual) {
+		boolean isEqual;
+		isEqual = (EDate.equals(expected, actual));
+		expectAssertTrueNoException(message, EDate.ezeBox(expected), EDate.ezeBox(actual), isEqual);
 	}
 	public void assertTimestampEqual(String message, Calendar expected, Calendar actual) {
 		boolean isEqual;
@@ -244,9 +255,12 @@ public class LogResult extends ExecutableBase {
 		expectAssertTrue(message, ETimestamp.ezeBox(expected, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE), ETimestamp.ezeBox(actual, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE), isEqual);
 	}
 	public void assertTimestampEqual1(Calendar expected, Calendar actual) {
-		String eze$Temp20;
-		eze$Temp20 = "";
-		assertTimestampEqual(eze$Temp20, expected, actual);
+		assertTimestampEqual("", expected, actual);
+	}
+	public void assertTimestampEqualNoException(String message, Calendar expected, Calendar actual) {
+		boolean isEqual;
+		isEqual = (ETimestamp.equals(expected, actual));
+		expectAssertTrueNoException(message, ETimestamp.ezeBox(expected, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE), ETimestamp.ezeBox(actual, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE), isEqual);
 	}
 	public void assertDecimalEqual(String message, BigDecimal expected, BigDecimal actual) {
 		boolean isEqual;
@@ -254,11 +268,27 @@ public class LogResult extends ExecutableBase {
 		expectAssertTrue(message, EDecimal.ezeBox(expected), EDecimal.ezeBox(actual), isEqual);
 	}
 	public void assertDecimalEqual1(BigDecimal expected, BigDecimal actual) {
-		String eze$Temp21;
-		eze$Temp21 = "";
-		assertDecimalEqual(eze$Temp21, expected, actual);
+		assertDecimalEqual("", expected, actual);
+	}
+	public void assertDecimalEqualNoException(String message, BigDecimal expected, BigDecimal actual) {
+		boolean isEqual;
+		isEqual = (EDecimal.equals(expected, actual));
+		expectAssertTrueNoException(message, EDecimal.ezeBox(expected), EDecimal.ezeBox(actual), isEqual);
 	}
 	public void assertFloatEqual(String message, double expected, double actual) {
+		boolean isEqual;
+		isEqual = isFloatEqual(expected, actual);
+		expectAssertTrue(message, EFloat.ezeBox(expected), EFloat.ezeBox(actual), isEqual);
+	}
+	public void assertFloatEqual1(double expected, double actual) {
+		assertFloatEqual("", expected, actual);
+	}
+	public void assertFloatEqualNoException(String message, double expected, double actual) {
+		boolean isEqual;
+		isEqual = isFloatEqual(expected, actual);
+		expectAssertTrueNoException(message, EFloat.ezeBox(expected), EFloat.ezeBox(actual), isEqual);
+	}
+	public boolean isFloatEqual(double expected, double actual) {
 		double normalExpected = 0.0;
 		double normalActual = 0.0;
 		double delta = 0.0;
@@ -268,34 +298,39 @@ public class LogResult extends ExecutableBase {
 		String signActual = "";
 		double deltaLimit;
 		deltaLimit = 1E-14;
-		AnyBoxedObject<Integer> eze$Temp22 = EAny.ezeWrap(0);
-		AnyBoxedObject<String> eze$Temp23 = EAny.ezeWrap("");
-		normalExpected = normalFloat(expected, eze$Temp22, eze$Temp23);
-		mantissaExpected = eze$Temp22.ezeUnbox();
-		signExpected = eze$Temp23.ezeUnbox();
-		AnyBoxedObject<Integer> eze$Temp24 = EAny.ezeWrap(0);
-		AnyBoxedObject<String> eze$Temp25 = EAny.ezeWrap("");
-		normalActual = normalFloat(actual, eze$Temp24, eze$Temp25);
-		mantissaActual = eze$Temp24.ezeUnbox();
-		signActual = eze$Temp25.ezeUnbox();
+		AnyBoxedObject<Integer> eze$Temp16 = EAny.ezeWrap(0);
+		AnyBoxedObject<String> eze$Temp17 = EAny.ezeWrap("");
+		normalExpected = normalFloat(expected, eze$Temp16, eze$Temp17);
+		mantissaExpected = eze$Temp16.ezeUnbox();
+		signExpected = eze$Temp17.ezeUnbox();
+		AnyBoxedObject<Integer> eze$Temp18 = EAny.ezeWrap(0);
+		AnyBoxedObject<String> eze$Temp19 = EAny.ezeWrap("");
+		normalActual = normalFloat(actual, eze$Temp18, eze$Temp19);
+		mantissaActual = eze$Temp18.ezeUnbox();
+		signActual = eze$Temp19.ezeUnbox();
 		delta = (normalExpected - normalActual);
 		delta = MathLib.abs(delta);
 		boolean isEqual;
 		isEqual = ((((signExpected).equals(signActual)) && (mantissaExpected == mantissaActual)) && (delta < deltaLimit));
-		expectAssertTrue(message, EFloat.ezeBox(expected), EFloat.ezeBox(actual), isEqual);
+		return isEqual;
 	}
-	public void assertFloatEqual1(double expected, double actual) {
-		String eze$Temp26;
-		eze$Temp26 = "";
-		assertFloatEqual(eze$Temp26, expected, actual);
+	public void expectAssertTrueNoException(String message, eglx.lang.EAny expected, eglx.lang.EAny actual, boolean isEqual) {
+		String failedReason;
+		failedReason = buildFailedReason(message, expected, actual);
+		assertTrueNoException(failedReason, isEqual);
 	}
 	public void expectAssertTrue(String message, eglx.lang.EAny expected, eglx.lang.EAny actual, boolean isEqual) {
+		String failedReason;
+		failedReason = buildFailedReason(message, expected, actual);
+		assertTrue(failedReason, isEqual);
+	}
+	public String buildFailedReason(String message, eglx.lang.EAny expected, eglx.lang.EAny actual) {
 		String failedReason;
 		failedReason = expect(expected, actual);
 		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.notEquals(EString.ezeBox(message), null)) && (!(message).equals("")))) {
 			failedReason = ((((message) + " - ")) + failedReason);
 		}
-		assertTrue(failedReason, isEqual);
+		return failedReason;
 	}
 	public String expect(eglx.lang.EAny expected, eglx.lang.EAny actual) {
 		String standardMsg;

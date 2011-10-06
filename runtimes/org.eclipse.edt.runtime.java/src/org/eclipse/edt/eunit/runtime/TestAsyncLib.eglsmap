@@ -1,0 +1,20 @@
+SMAP
+TestAsyncLib.java
+egl
+*S egl
+*F
++ 1 TestAsyncLib.egl
+org/eclipse/edt/eunit/runtime/TestAsyncLib.egl
+*L
+7#1:23
+10#1:25
+13#1:49,2
+14#1:52
+15#1:53
+12#1:55
+*E
+8#1;runTestMtds;runTestMtds;eglx.lang.EList<org.eclipse.edt.eunit.runtime.runTestMethod>
+9#1;LibraryStartTests;LibraryStartTests;eglx.lang.EList<org.eclipse.edt.eunit.runtime.runTestMethod>
+10#1;nextLibIndex;nextLibIndex;eglx.lang.EInt
+12#1;F:nextTestLibrary;nextTestLibrary;()V
+*X
