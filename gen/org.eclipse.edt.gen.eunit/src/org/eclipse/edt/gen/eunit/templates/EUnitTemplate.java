@@ -35,6 +35,7 @@ public abstract class EUnitTemplate extends AbstractTemplate {
 	public static final String genClassHeader = "genClassHeader";
 
 	public static final String genLibDriver = "genLibDriver";
+	public static final String genLibDriverImports = "genLibDriverImports";
 	public static final String genLibDriverClassBody = "genLibDriverClassBody";
 
 	// these are used by the validation step. preGen is used to preGen individual items within the part being generated.
@@ -136,6 +137,11 @@ public abstract class EUnitTemplate extends AbstractTemplate {
 		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".LogResult;");		
 		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".executeLibTestMethod;");
 		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".runTestMethod;");
+		out.println();
+	}	
+	
+	protected void generateLibDriverImportStatements(Part part, Context ctx, TabbedWriter out) {
+		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".TestExecutionLib;");
 		out.println();
 	}	
 }

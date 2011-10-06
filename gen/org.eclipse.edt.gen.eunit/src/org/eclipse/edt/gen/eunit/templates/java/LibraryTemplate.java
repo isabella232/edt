@@ -32,6 +32,10 @@ public class LibraryTemplate extends EUnitTemplate {
 	public void genImports(Library part, Context ctx, TabbedWriter out) {
 		generateImportStatement(part, ctx, out);
 	}
+	
+	public void genLibDriverImports(Library part, Context ctx, TabbedWriter out){
+		generateLibDriverImportStatements(part, ctx, out);
+	}
 
 	public void genClassBody(Library part, Context ctx, TabbedWriter out, TestCounter counter) {
 		generateDriverLibraryBody(part, ctx, out, counter);

@@ -32,12 +32,11 @@ public class PartTemplate extends EUnitTemplate {
 	}
 	
 	public void genLibDriver(Part part, Context ctx, TabbedWriter out, String driverPartNameAppend, TestCounter counter) {
-		genPackageStatement(part, ctx, out);
-		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".TestExecutionLib;");
-		out.println();
+		genPackageStatement(part, ctx, out);		
+		ctx.invoke(genLibDriverImports, part, ctx, out);
 		ctx.invoke(genLibDriverClassBody, part, ctx, out, driverPartNameAppend, counter);
 	}
-	
+
 	public void genPackageStatement(Part part, Context ctx, TabbedWriter out) {
 		out.print("package ");
 		out.print(CommonUtilities.getECKGenPackageName(part));
@@ -45,8 +44,6 @@ public class PartTemplate extends EUnitTemplate {
 		out.println();
 	}
 
-
-		
 	public void genPartName(Part part, Context ctx, TabbedWriter out) {
 		if (ctx.mapsToNativeType(part))
 			out.print(ctx.getNativeImplementationMapping(part));

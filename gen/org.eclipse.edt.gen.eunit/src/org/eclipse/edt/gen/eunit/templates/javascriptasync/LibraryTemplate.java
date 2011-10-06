@@ -37,6 +37,12 @@ public class LibraryTemplate extends EUnitTemplate {
 		generateImportStatement(part, ctx, out);
 	}	
 	
+	public void genLibDriverImports(Library part, Context ctx, TabbedWriter out){
+		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".TestAsyncLib;");
+		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".runTestMethod;");
+		generateLibDriverImportStatements(part, ctx, out);
+	}	
+	
 	public void genClassBody(Library part, Context ctx, TabbedWriter out, TestCounter counter) {
 		out.println("library " + part.getName());
 		out.pushIndent();
@@ -58,12 +64,12 @@ public class LibraryTemplate extends EUnitTemplate {
 		out.println(part.getFullyQualifiedName() + ".ms.expectedCnt = testVariationCnt;");
 		out.println("LogResult.clearResults();");
 		
-		out.println("TestAsyncLib.runTestMtds runTestMethod[] = new runTestMethod[];");
+		out.println("TestAsyncLib.runTestMtds = new runTestMethod[];");
 		for(String function : functions){
-			out.print("runTestMtds ::= ");
+			out.print("TestAsyncLib.runTestMtds ::= ");
 			out.println(part.getFullyQualifiedName() + "." + function + ";");
 		}
-		out.println("TestAsyncLib.runTestMtds ::= " + CommonUtilities.endTestMethodName);
+		out.println("TestAsyncLib.runTestMtds ::= " + CommonUtilities.endTestMethodName + ";");
 		out.println();
 		out.println("TestAsyncLib.runTestMtds[1]();");	
 		out.popIndent();
@@ -109,7 +115,7 @@ public class LibraryTemplate extends EUnitTemplate {
 		out.println("function start()");
 		out.pushIndent();
 		out.println("TestAsyncLib.LibraryStartTests = new runTestMethod[];");
-		out.println("TestAsyncLib.LibraryStartTests ::= " + CommonUtilities.getECKGenPartFQName(part) + "." + CommonUtilities.exeTestMethodName + "();");
+		out.println("TestAsyncLib.LibraryStartTests ::= " + CommonUtilities.getECKGenPartFQName(part) + "." + CommonUtilities.exeTestMethodName + ";");
 		out.println("TestAsyncLib.LibraryStartTests ::= " + CommonUtilities.endTestMethodName + ";");
 		out.println("TestAsyncLib.LibraryStartTests[1]();");
 		out.popIndent();
