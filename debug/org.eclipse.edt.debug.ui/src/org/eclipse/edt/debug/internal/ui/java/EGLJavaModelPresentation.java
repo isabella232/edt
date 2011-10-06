@@ -14,6 +14,7 @@ package org.eclipse.edt.debug.internal.ui.java;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IValue;
@@ -48,6 +49,37 @@ public class EGLJavaModelPresentation extends JDIModelPresentation
 		if ( element instanceof EGLBreakpoint )
 		{
 			return getBreakpointText( (EGLBreakpoint)element );
+		}
+		
+		if ( element instanceof IEGLJavaVariable )
+		{
+			try
+			{
+				IEGLJavaVariable var = (IEGLJavaVariable)element;
+				StringBuilder buf = new StringBuilder( 100 );
+				
+				if ( isShowVariableTypeNames() )
+				{
+					String type = var.getReferenceTypeName();
+					if ( type != null && (type = type.trim()).length() != 0 )
+					{
+						buf.append( type );
+						buf.append( " " );//$NON-NLS-1$
+					}
+				}
+				
+				buf.append( var.getName() );
+				String value = var.getValue().getValueString();
+				if ( value != null )
+				{
+					buf.append( " = " ); //$NON-NLS-1$
+					buf.append( value );
+				}
+				return buf.toString();
+			}
+			catch ( DebugException e )
+			{
+			}
 		}
 		
 		if ( element instanceof IEGLJavaDebugElement )
