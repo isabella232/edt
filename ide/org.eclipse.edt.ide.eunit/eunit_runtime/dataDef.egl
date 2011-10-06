@@ -1,19 +1,5 @@
 package org.eclipse.edt.eunit.runtime;
 
-
-Record MultiStatus
-	//these values accumulate the aggregate outcome, without 
-	//requiring the individual outcomes be stored
-	testCnt int;
-	expectedCnt int;
-	passedCnt int;
-	failedCnt int;
-	errCnt int;
-	badCnt int;
-	notRunCnt int;
-	firstFailedTestName String;
-end
-
 Record TestDescription
 	rootDir String;		//source root directory 
 	pkgName String;		//package name
@@ -49,9 +35,6 @@ end
 Record ResultSummaryRoot {@xmlrootelement {}}
 	expCnt int{@XMLAttribute{}};					//expected total number of test variation count
 	trSum ResultSummary[]{};
-end
-
-delegate runTestMethod()	
 end
 
 delegate executeLibTestMethod(testName String in) returns (MultiStatus)

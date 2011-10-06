@@ -17,12 +17,15 @@ library TestExecutionLib
 		//run the test case		
 		ms MultiStatus = exeLibTestMtd(td.name);
 		
+		writeResults(td, ms, bwriteStdOut);		
+	end
+	
+	function writeResults(td TestDescription in, ms MultiStatus in, bwriteStdOut boolean in)
 		//convert multiStatus to status		
 		s Status = calculateStatus(ms);				
 		
 		stdOutLog Log = LogResult.getLog();
-		xml2 String = XMLLib.convertToXML(stdOutLog, true);
-		
+				
 		if(bwriteStdOut)
 			delta int = 1;
 			keyCode int = s.code + delta;
@@ -30,14 +33,15 @@ library TestExecutionLib
 			SysLib.writeStdOut("Status code: " + s.code + " - " + description);
 			SysLib.writeStdOut("Status reason: " + s.reason);
 			SysLib.writeStdOut("");
+			xml2 String = XMLLib.convertToXML(stdOutLog, true);
 			SysLib.writeStdOut("Out record: \r\n" + xml2);
 		end
 		
 		//need working directory or testRoot dir, need full package name
 		//to construct the location and name of the result file
 		path String = "This is the path where the output file should be";
-		WriteResultLib.writeResult(s, ms, stdOutLog, td, this.resultRootSum); 				 						
-	end
+		WriteResultLib.writeResult(s, ms, stdOutLog, td, this.resultRootSum); 			
+	end	
 	
 	function writeResultSummary(expectedTestCnt int in)
 		this.resultRootSum.expCnt = expectedTestCnt;
@@ -70,7 +74,7 @@ library TestExecutionLib
 				//StatusLib.error(expMsg, s);
 				LogResult.error(expMsg);
 			end
-			addStatus(ms, testId);
+			ms.addStatus(testId);
 		end
 						
 		return (ms);
@@ -160,35 +164,6 @@ library TestExecutionLib
 	private function setStatusRecordHelper(s Status out, c int in, r String in)
 		s.code = c;
 		s.reason = r;
-	end
-
-	/**
-	* add status to MultiStatus
-	*/
-	private function addStatus(ms MultiStatus,  testId String in)
-		s Status = LogResult.getStatus();
-		msg String = testId + ": " + s.reason;
-		LogResult.logStdOut(msg);
-				
-		ms.testCnt += 1;
-		
-		case(s.code)
-			when (ConstantsLib.SPASSED)
-				ms.passedCnt += 1;
-			when (ConstantsLib.SFAILED)
-				ms.failedCnt += 1;
-			when (ConstantsLib.SERROR)
-				ms.errCnt += 1;
-			when (ConstantsLib.SNOT_RUN)
-				ms.notRunCnt += 1;	
-			otherwise	
-				ms.badCnt += 1;				
-		end
-		
-		if(s.code != ConstantsLib.SPASSED && strLib.characterLen(ms.firstFailedTestName) == 0)
-			ms.firstFailedTestName = testId;
-		end
-		
 	end
 			
 end

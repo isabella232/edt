@@ -20,6 +20,13 @@
        	 		<separator name="group1"/>       	 		
        	 	</menu>
        	 	<action
+				class="org.eclipse.edt.ide.eunit.internal.actions.GenTestDriverActionJavascriptAsync"
+				enablesFor="1"
+				menubarPath="org.eclipse.edt.eck.gentestdriver.menu1/group1"				
+				id="org.eclipse.edt.eck.gentestdriver.javascriptasync"
+				label="%GenECKTestDriver.JavaScriptAsync">
+			</action>        	 	
+       	 	<action
 				class="org.eclipse.edt.ide.eunit.internal.actions.GenTestDriverActionJavascript"
 				enablesFor="1"
 				menubarPath="org.eclipse.edt.eck.gentestdriver.menu1/group1"				
