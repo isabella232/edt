@@ -14,17 +14,29 @@ package org.eclipse.edt.debug.internal.core.java;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
+import org.eclipse.edt.debug.core.java.IEGLJavaThread;
 import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
 import org.eclipse.edt.debug.core.java.IVariableAdapter;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
+import org.eclipse.jdt.debug.core.IEvaluationRunnable;
+import org.eclipse.jdt.debug.core.IJavaClassObject;
 import org.eclipse.jdt.debug.core.IJavaClassType;
+import org.eclipse.jdt.debug.core.IJavaDebugTarget;
+import org.eclipse.jdt.debug.core.IJavaFieldVariable;
 import org.eclipse.jdt.debug.core.IJavaInterfaceType;
+import org.eclipse.jdt.debug.core.IJavaObject;
+import org.eclipse.jdt.debug.core.IJavaReferenceType;
+import org.eclipse.jdt.debug.core.IJavaStackFrame;
+import org.eclipse.jdt.debug.core.IJavaThread;
 import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
@@ -262,5 +274,247 @@ public class VariableUtil
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Invokes a static method in the remote VM.
+	 * 
+	 * @param thread The EGL thread.
+	 * @param frame The Java frame.
+	 * @param className The class name contaning the static method.
+	 * @param methodName The name of the static method.
+	 * @param methodSignature The signature of the static method.
+	 * @param args Arguments to be passed to the method, possibly null.
+	 * @return the resulting value, or null if the evaluation failed.
+	 */
+	public static IJavaValue invokeStaticMethod( IEGLJavaThread thread, IJavaStackFrame frame, String className, String methodName,
+			String methodSignature, IJavaValue[] args )
+	{
+		synchronized ( thread.getEvaluationLock() )
+		{
+			waitForEvaluation( thread.getJavaThread() );
+			
+			IJavaDebugTarget target = (IJavaDebugTarget)frame.getDebugTarget();
+			
+			try
+			{
+				IJavaReferenceType context;
+				IJavaObject thisObj = frame.getThis();
+				if ( thisObj == null )
+				{
+					context = frame.getReferenceType();
+				}
+				else
+				{
+					context = (IJavaReferenceType)thisObj.getJavaType();
+				}
+				
+				IJavaObject classLoader = context.getClassLoaderObject();
+				IJavaClassObject classObj = null;
+				IJavaType[] types = target.getJavaTypes( className );
+				if ( types != null && types.length > 0 )
+				{
+					for ( int i = 0; i < types.length; i++ )
+					{
+						if ( types[ i ] instanceof IJavaReferenceType
+								&& isClassLoaderCompatible( classLoader, ((IJavaReferenceType)types[ i ]).getClassLoaderObject(), thread ) )
+						{
+							classObj = (IJavaClassObject)((IJavaReferenceType)types[ i ]).getClassObject();
+							break;
+						}
+					}
+				}
+				
+				if ( classObj == null )
+				{
+					// Class not yet loaded.
+					final IJavaValue name = target.newValue( className );
+					((IJavaObject)name).disableCollection();
+					try
+					{
+						IJavaClassType javaLangClass = getJavaLangClass( target );
+						if ( javaLangClass != null )
+						{
+							IJavaValue[] forNameArgs = new IJavaValue[] { name, target.newValue( true ), classLoader == null
+									? target.nullValue()
+									: classLoader };
+							classObj = (IJavaClassObject)runSendMessage( thread, javaLangClass, forNameArgs, "forName", //$NON-NLS-1$
+									"(Ljava/lang/String;ZLjava/lang/ClassLoader;)Ljava/lang/Class;" ); //$NON-NLS-1$
+						}
+					}
+					catch ( CoreException e )
+					{
+					}
+					finally
+					{
+						((IJavaObject)name).enableCollection();
+					}
+				}
+				
+				if ( classObj != null )
+				{
+					IJavaType instType = classObj.getInstanceType();
+					if ( instType instanceof IJavaClassType )
+					{
+						return runSendMessage( thread, (IJavaClassType)instType, args, methodName, methodSignature );
+					}
+				}
+			}
+			catch ( CoreException e )
+			{
+				EDTDebugCorePlugin.log( e );
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * @return the IJavaClassType for java.lang.Class, or null if it hasn't been loaded yet.
+	 * @throws CoreException
+	 */
+	public static IJavaClassType getJavaLangClass( IJavaDebugTarget target ) throws CoreException
+	{
+		IJavaType[] types = target.getJavaTypes( "java.lang.Class" ); //$NON-NLS-1$
+		if ( types == null || types.length != 1 )
+		{
+			return null;
+		}
+		return (IJavaClassType)types[ 0 ];
+	}
+	
+	/**
+	 * @return true if cl2 is the same as, or a parent of, cl1, or if either is null.
+	 */
+	public static boolean isClassLoaderCompatible( IJavaObject cl1, IJavaObject cl2, IEGLJavaThread thread ) throws CoreException
+	{
+		if ( cl1 == null || cl2 == null )
+		{
+			return true;
+		}
+		
+		IJavaObject toTry = cl1;
+		while ( toTry != null )
+		{
+			if ( toTry.equals( cl2 ) )
+			{
+				return true;
+			}
+			toTry = getParentLoader( toTry, thread );
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Returns the parent class loader of the given class loader object or <code>null</code> if none.
+	 * 
+	 * @param loader class loader object
+	 * @return parent class loader or <code>null</code>
+	 * @throws CoreException
+	 */
+	public static IJavaObject getParentLoader( IJavaObject cl, IEGLJavaThread thread ) throws CoreException
+	{
+		// Some classloaders have their parent in a 'parent' field. This is much faster than sending a message.
+		IJavaFieldVariable parent = cl.getField( "parent", false ); //$NON-NLS-1$
+		if ( parent != null )
+		{
+			IJavaValue value = (IJavaValue)parent.getValue();
+			return value.isNull()
+					? null
+					: (IJavaObject)value;
+		}
+		
+		IJavaValue value = runSendMessage( thread, cl, null, "getParent", "()Ljava/lang/ClassLoader;", false ); //$NON-NLS-1$ //$NON-NLS-2$
+		return value.isNull()
+				? null
+				: (IJavaObject)value;
+	}
+	
+	/**
+	 * Runs "sendMessage" on the receiver in a synchronized manner. This should be used instead of directly invoking sendMessage because only one
+	 * request may be done at a time.
+	 * 
+	 * @param thread The EGL thread.
+	 * @param receiver The object on which to send the message.
+	 * @param args The arguments to be passed to the method, possibly null.
+	 * @param methodName The name of the method to invoke.
+	 * @param methodSignature The signature of the method to invoke.
+	 * @param superSend <code>true</code> if the method lookup should begin in this object's superclass
+	 * @return the result of invoking the method.
+	 * @throws DebugException
+	 */
+	public static IJavaValue runSendMessage( IEGLJavaThread thread, final IJavaObject receiver, final IJavaValue[] args, final String methodName,
+			final String methodSignature, final boolean superSend ) throws DebugException
+	{
+		// Each thread can only run one evaluation at a time. If we try to run a second, JDT throws an error.
+		final IJavaValue[] result = new IJavaValue[ 1 ];
+		synchronized ( thread.getEvaluationLock() )
+		{
+			final IJavaThread javaThread = thread.getJavaThread();
+			IEvaluationRunnable eval = new IEvaluationRunnable() {
+				public void run( IJavaThread thread, IProgressMonitor monitor ) throws DebugException
+				{
+					result[ 0 ] = receiver.sendMessage( methodName, methodSignature, args, thread, superSend );
+				}
+			};
+			
+			waitForEvaluation( javaThread );
+			javaThread.runEvaluation( eval, null, DebugEvent.EVALUATION_IMPLICIT, false );
+		}
+		return result[ 0 ];
+	}
+	
+	/**
+	 * Runs "sendMessage" on the receiver in a synchronized manner. This should be used instead of directly invoking sendMessage because only one
+	 * request may be done at a time.
+	 * 
+	 * @param thread The EGL thread.
+	 * @param receiver The type on which to send the message.
+	 * @param args The arguments to be passed to the method, possibly null.
+	 * @param methodName The name of the method to invoke.
+	 * @param methodSignature The signature of the method to invoke.
+	 * @return the result of invoking the method.
+	 * @throws DebugException
+	 */
+	public static IJavaValue runSendMessage( IEGLJavaThread thread, final IJavaClassType receiver, final IJavaValue[] args, final String methodName,
+			final String methodSignature ) throws DebugException
+	{
+		// Each thread can only run one evaluation at a time. If we try to run a second, JDT throws an error.
+		final IJavaValue[] result = new IJavaValue[ 1 ];
+		synchronized ( thread.getEvaluationLock() )
+		{
+			final IJavaThread javaThread = thread.getJavaThread();
+			IEvaluationRunnable eval = new IEvaluationRunnable() {
+				public void run( IJavaThread thread, IProgressMonitor monitor ) throws DebugException
+				{
+					result[ 0 ] = receiver.sendMessage( methodName, methodSignature, args, thread );
+				}
+			};
+			
+			waitForEvaluation( javaThread );
+			javaThread.runEvaluation( eval, null, DebugEvent.EVALUATION_IMPLICIT, false );
+		}
+		return result[ 0 ];
+	}
+	
+	/**
+	 * Waits until it's safe to run an evaluation.
+	 * 
+	 * @param thread The Java thread.
+	 */
+	private static void waitForEvaluation( IJavaThread thread )
+	{
+		while ( thread.isPerformingEvaluation() || !thread.isSuspended() )
+		{
+			try
+			{
+				Thread.sleep( 1 );
+			}
+			catch ( InterruptedException e )
+			{
+				return;
+			}
+		}
 	}
 }

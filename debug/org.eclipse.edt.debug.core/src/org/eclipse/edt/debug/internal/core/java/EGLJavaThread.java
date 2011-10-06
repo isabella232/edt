@@ -68,6 +68,11 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	private boolean steppingFromEGL;
 	
 	/**
+	 * The evaluation lock.
+	 */
+	private final Object evaluationLock;
+	
+	/**
 	 * Constructor.
 	 * 
 	 * @param target The debug target.
@@ -76,6 +81,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	public EGLJavaThread( EGLJavaDebugTarget target, IJavaThread thread )
 	{
 		super( target );
+		evaluationLock = new Object();
 		javaThread = thread;
 		disposeStackFrames();
 	}
@@ -550,5 +556,11 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	public Object getJavaDebugElement()
 	{
 		return getJavaThread();
+	}
+	
+	@Override
+	public Object getEvaluationLock()
+	{
+		return evaluationLock;
 	}
 }

@@ -19,6 +19,7 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
+import org.eclipse.edt.debug.core.java.IEGLJavaThread;
 import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
@@ -36,7 +37,6 @@ import org.eclipse.jdt.internal.debug.core.logicalstructures.JDIPlaceholderVaria
 @SuppressWarnings("restriction")
 public class MapVariable extends EGLJavaVariable
 {
-	
 	public MapVariable( IDebugTarget target, IJavaVariable javaVariable, SMAPVariableInfo variableInfo, IEGLJavaStackFrame frame, IEGLJavaValue parent )
 	{
 		super( target, javaVariable, variableInfo, frame, parent );
@@ -65,12 +65,13 @@ public class MapVariable extends EGLJavaVariable
 			
 			if ( javaValue instanceof IJavaObject )
 			{
-				IJavaValue entrySetValue = ((IJavaObject)javaValue).sendMessage( "entrySet", "()Ljava/util/Set;", null, //$NON-NLS-1$ //$NON-NLS-2$
-						parentVariable.getEGLStackFrame().getEGLThread().getJavaThread(), false );
+				IEGLJavaThread eglThread = getEGLStackFrame().getEGLThread();
+				IJavaValue entrySetValue = VariableUtil.runSendMessage( eglThread, (IJavaObject)javaValue, null,
+						"entrySet", "()Ljava/util/Set;", false ); //$NON-NLS-1$ //$NON-NLS-2$
 				if ( entrySetValue instanceof IJavaObject )
 				{
-					IJavaValue toArrayValue = ((IJavaObject)entrySetValue).sendMessage( "toArray", "()[Ljava/lang/Object;", null, //$NON-NLS-1$ //$NON-NLS-2$
-							parentVariable.getEGLStackFrame().getEGLThread().getJavaThread(), false );
+					IJavaValue toArrayValue = VariableUtil.runSendMessage( eglThread, (IJavaObject)entrySetValue, null,
+							"toArray", "()[Ljava/lang/Object;", false ); //$NON-NLS-1$ //$NON-NLS-2$
 					if ( toArrayValue != null )
 					{
 						IVariable[] vars = toArrayValue.getVariables();
@@ -83,10 +84,10 @@ public class MapVariable extends EGLJavaVariable
 							IValue value = var.getValue();
 							if ( value instanceof IJavaObject )
 							{
-								IJavaValue nextkey = ((IJavaObject)value).sendMessage( "getKey", "()Ljava/lang/Object;", null, //$NON-NLS-1$ //$NON-NLS-2$
-										parentVariable.getEGLStackFrame().getEGLThread().getJavaThread(), false );
-								IJavaValue nextvalue = ((IJavaObject)value).sendMessage( "getValue", "()Ljava/lang/Object;", null, //$NON-NLS-1$ //$NON-NLS-2$
-										parentVariable.getEGLStackFrame().getEGLThread().getJavaThread(), false );
+								IJavaValue nextkey = VariableUtil.runSendMessage( eglThread, (IJavaObject)value, null,
+										"getKey", "()Ljava/lang/Object;", false ); //$NON-NLS-1$ //$NON-NLS-2$
+								IJavaValue nextvalue = VariableUtil.runSendMessage( eglThread, (IJavaObject)value, null,
+										"getValue", "()Ljava/lang/Object;", false ); //$NON-NLS-1$ //$NON-NLS-2$
 								
 								if ( nextkey != null && nextvalue instanceof IJavaValue )
 								{
@@ -113,7 +114,8 @@ public class MapVariable extends EGLJavaVariable
 		@Override
 		public String getValueString()
 		{
-			return javaValue.isNull() ? "null" : ""; //$NON-NLS-1$ //$NON-NLS-2$
+			return javaValue.isNull()
+					? "null" : ""; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		
 		@Override

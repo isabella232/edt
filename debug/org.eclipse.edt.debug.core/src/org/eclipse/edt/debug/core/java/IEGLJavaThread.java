@@ -20,4 +20,9 @@ public interface IEGLJavaThread extends IEGLThread, IEGLJavaDebugElement
 	 * @return the underlying thread.
 	 */
 	public IJavaThread getJavaThread();
+	
+	/**
+	 * @return a lock for running evaluations; only one evaluation per thread may be run.
+	 */
+	public Object getEvaluationLock();
 }

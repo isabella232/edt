@@ -26,11 +26,12 @@ import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 
 /**
- * Variable that just shows its value as toString(), with no children.
+ * Variable that shows the calendar formatted nicely.
  */
-public class ToStringVariable extends EGLJavaVariable
+public class CalendarVariable extends EGLJavaVariable
 {
-	public ToStringVariable( IDebugTarget target, IJavaVariable javaVariable, SMAPVariableInfo variableInfo, IEGLJavaStackFrame frame, IEGLJavaValue parent )
+	public CalendarVariable( IDebugTarget target, IJavaVariable javaVariable, SMAPVariableInfo variableInfo, IEGLJavaStackFrame frame,
+			IEGLJavaValue parent )
 	{
 		super( target, javaVariable, variableInfo, frame, parent );
 	}
@@ -47,25 +48,18 @@ public class ToStringVariable extends EGLJavaVariable
 					return "null"; //$NON-NLS-1$
 				}
 				
+				// IJavaStackFrame frame = getEGLStackFrame().getJavaStackFrame();
 				if ( javaValue instanceof IJavaObject )
 				{
-					IJavaValue toStringValue;
-					if ( "Ljava/lang/String;".equals( javaValue.getSignature() ) ) //$NON-NLS-1$
-					{
-						toStringValue = javaValue;
-					}
-					else
-					{
-						toStringValue = VariableUtil.runSendMessage( getEGLStackFrame().getEGLThread(), (IJavaObject)javaValue, null,
-								"toString", "()Ljava/lang/String;", false ); //$NON-NLS-1$ //$NON-NLS-2$
-					}
+					IJavaValue result = VariableUtil.invokeStaticMethod( getEGLStackFrame().getEGLThread(), getEGLStackFrame().getJavaStackFrame(),
+							"org.eclipse.edt.runtime.java.eglx.lang.EString", //$NON-NLS-1$
+							"asString", "(Ljava/util/Calendar;)Ljava/lang/String;", new IJavaValue[] { javaValue } ); //$NON-NLS-1$ //$NON-NLS-2$
 					
-					if ( toStringValue == null )
+					if ( result == null )
 					{
 						return EDTDebugCoreMessages.ErrorRetrievingValue;
 					}
-					
-					return toStringValue.getValueString();
+					return result.getValueString();
 				}
 				
 				return super.getValueString();
@@ -81,6 +75,19 @@ public class ToStringVariable extends EGLJavaVariable
 			public boolean hasVariables()
 			{
 				return false;
+			}
+			
+			@Override
+			public String computeDetail()
+			{
+				try
+				{
+					return getValueString();
+				}
+				catch ( DebugException e )
+				{
+					return e.getLocalizedMessage();
+				}
 			}
 		};
 	}

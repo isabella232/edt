@@ -33,7 +33,6 @@ import org.eclipse.jdt.debug.core.IJavaVariable;
  */
 public class ListVariable extends EGLJavaVariable
 {
-	
 	public ListVariable( IDebugTarget target, IJavaVariable javaVariable, SMAPVariableInfo variableInfo, IEGLJavaStackFrame frame,
 			IEGLJavaValue parent )
 	{
@@ -63,8 +62,8 @@ public class ListVariable extends EGLJavaVariable
 			
 			if ( javaValue instanceof IJavaObject )
 			{
-				IJavaValue toArrayValue = ((IJavaObject)javaValue).sendMessage( "toArray", "()[Ljava/lang/Object;", null, parentVariable //$NON-NLS-1$ //$NON-NLS-2$
-						.getEGLStackFrame().getEGLThread().getJavaThread(), false );
+				IJavaValue toArrayValue = VariableUtil.runSendMessage( getEGLStackFrame().getEGLThread(), (IJavaObject)javaValue, null, "toArray", //$NON-NLS-1$
+						"()[Ljava/lang/Object;", false ); //$NON-NLS-1$
 				if ( toArrayValue != null )
 				{
 					IVariable[] vars = toArrayValue.getVariables();
