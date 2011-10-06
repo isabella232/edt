@@ -72,7 +72,10 @@ egl.eglx.lang.StringLib["getTokenCount"] = function(/*string*/source, /*string*/
 };
 
 egl.eglx.lang.StringLib["fromCharCode"] = function(/*integer*/i) {
-	return String.fromCharCode(i); // TODO should we simply alias somehow?
+	if ((i >= 0) && (i<= 65535))
+		return String.fromCharCode(i); // TODO should we simply alias somehow?
+	else 
+		throw new eglx.lang.InvalidArgumentException();
 };
 
 egl.eglx.lang.StringLib["spaces"] = function(/*integer*/i) {
