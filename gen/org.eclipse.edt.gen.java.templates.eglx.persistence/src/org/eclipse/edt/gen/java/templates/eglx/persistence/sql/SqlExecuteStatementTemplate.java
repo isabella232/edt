@@ -38,7 +38,7 @@ public class SqlExecuteStatementTemplate extends SqlActionStatementTemplate {
 		}
 		if (stmt.getUsingExpressions() != null && !stmt.getUsingExpressions().isEmpty()) {
 			out.println("if (" + stmtVar + " instanceof java.sql.CallableStatement) {");
-			out.print("ezeParmData = ");
+			out.print("java.sql.ParameterMetaData ezeParmData = ");
 			out.println(stmtVar + ".getParameterMetaData();");
 			int i = 1;
 			for (Expression uexpr : stmt.getUsingExpressions()) {
@@ -47,7 +47,7 @@ public class SqlExecuteStatementTemplate extends SqlActionStatementTemplate {
 				out.println("if (ezeParmMode == java.sql.ParameterMetaData.parameterModeOut || ezeParmMode == java.sql.ParameterMetaData.parameterModeInOut) {");
 				ctx.invoke(genExpression, uexpr, ctx, out);
 				out.print(" = ");
-				genGetColumnValueByIndex(uexpr.getType().getClassifier(), stmtVar, i, ctx, out);
+				genGetColumnValueByIndex(uexpr.getType().getClassifier(), "((java.sql.CallableStatement)" + stmtVar + ")", i, ctx, out);
 				out.println(";");
 				out.println("}");
 				i++;
