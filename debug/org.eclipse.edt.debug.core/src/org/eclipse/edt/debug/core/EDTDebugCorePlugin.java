@@ -157,7 +157,7 @@ public class EDTDebugCorePlugin extends Plugin implements BundleActivator
 	{
 		if ( t instanceof CoreException )
 		{
-			log( new Status( IStatus.ERROR, PLUGIN_ID, IStatus.ERROR, t.getMessage(), t.getCause() ) );
+			log( new Status( IStatus.ERROR, PLUGIN_ID, IStatus.ERROR, t.getMessage(), t.getCause() == null ? t : t.getCause() ) );
 		}
 		else
 		{
