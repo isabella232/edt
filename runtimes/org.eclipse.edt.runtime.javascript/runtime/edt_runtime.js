@@ -181,6 +181,9 @@ egl.eglx.lang.EFloat32.fromEDecimal  = function (x) {
 	return egl.convertFloatToSmallfloat(Number( x.toString()));
 
 };
+egl.eglx.lang.EFloat32.fromEString = function (x){
+	return egl.convertStringToFloat(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+};
 
 
 /****************************************************************************
@@ -306,6 +309,9 @@ egl.eglx.lang.EFloat64.fromEInt64 = function (x) {
 egl.eglx.lang.EFloat64.fromEDecimal = function (x) { 
 	return Number(x.toString()); 
 };
+egl.eglx.lang.EFloat64.fromEString = function (x){
+	return egl.convertStringToFloat(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+};
 
 
 egl.defineClass( "eglx.lang", "EBoolean"
@@ -366,6 +372,9 @@ egl.eglx.lang.EString.ezeBox = function(str, len){
 };
 egl.eglx.lang.EString.equals = function(str1, str2) {
 	return (str1 == str2);
+};
+egl.eglx.lang.EString.notEquals = function(str1, str2) {
+	return (str1 != str2);
 };
 egl.eglx.lang.EString.substring = function(str, startIndex, endIndex) {
 	if (str == null || startIndex == null || endIndex == null)
@@ -706,10 +715,10 @@ egl.defineClass( "eglx.lang", "NullType",
 }
 );
 egl.eglx.lang.NullType.equals = function(x, y) {
-	return egl.unboxAny(x) == y;  //TODO sbg Should this be generated as a simple comparison, rather than all this overhead?
+	return egl.unboxAny(x) == egl.unboxAny(y);  //TODO sbg Should this be generated as a simple comparison, rather than all this overhead?
 };
 egl.eglx.lang.NullType.notEquals = function(x, y) {
-	return egl.unboxAny(x) != y;  //TODO sbg Should this be generated as a simple comparison, rather than all this overhead?
+	return egl.unboxAny(x) != egl.unboxAny(y);  //TODO sbg Should this be generated as a simple comparison, rather than all this overhead?
 };
 egl.eglx.lang.NullType.fromEList = function(list) {
 	return list; //TODO sbg Should this be generated as a simple comparison, rather than all this overhead?

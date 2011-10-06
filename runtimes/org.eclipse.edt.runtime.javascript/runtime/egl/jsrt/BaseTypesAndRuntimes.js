@@ -2830,7 +2830,7 @@ Array.prototype.eze$$getName = function() {
 
 //Wrapper for internal validators that need extra parameters.
 egl.defineClass(
-		'egl.rui.mvc.internal', 'ValidatorWrapper',
+		'org.eclipse.edt.rui.mvc.internal', 'ValidatorWrapper',
 {
 	"constructor" : function( context, func ) {
 		this.context = context;
@@ -2848,7 +2848,7 @@ egl.defineClass(
 });
 
 egl.defineClass(
-		'egl.rui.mvc.internal', 'FormatterWrapper',
+		'org.eclipse.edt.rui.mvc.internal', 'FormatterWrapper',
 {
 	"constructor" : function( context ) {
 		this.context = context;
@@ -3793,4 +3793,20 @@ egl.makeExceptionFromCaughtObject = function( caught )
 	}
 
 	return egl.createJavaScriptObjectException( 'CRRUI2006E', message, name );
-}
+};
+
+
+
+egl.createTypeCastException = function( /*string*/ messageID, /*string or array*/ inserts )
+{
+	if (typeof(inserts) != "string") {
+		inserts = egl.getRuntimeMessage( messageID, inserts );
+	}
+	egl.exceptionThrown = true;
+	var args = new Array();
+	args.push( [ "messageID", messageID || "" ] );
+	args.push( [ "message", inserts || "" ] );
+	args.push( [ "castToName", arguments[ 2 ] || "" ] );
+	args.push( [ "actualTypeName", arguments[ 3 ] || "" ] );
+	return new egl.eglx.lang.TypeCastException( args );
+};
