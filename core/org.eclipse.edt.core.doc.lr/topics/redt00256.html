@@ -45,12 +45,25 @@ an EGL record or handler to an XML string.</p>
 
 <dt class="dlterm"><var class="varname">eglType</var></dt>
 
-<dd>An EGL record, handler, or dictionary.</dd>
+<dd>Takes an EGL record, handler, or dictionary.</dd>
 
 
 <dt class="dlterm"><var class="varname">document</var></dt>
 
-<dd></dd>
+<dd>Indicates whether the output is a well-formed XML document:<dl>
+
+<dt class="dlterm">True</dt>
+
+<dd>The function returns well-formed output that includes an XML declaration
+and a root element.</dd>
+
+
+<dt class="dlterm">False</dt>
+
+<dd>The function returns an XML fragment.</dd>
+
+</dl>
+</dd>
 
 </dl>
 <anchor id="syntax_more"></anchor></dd>
@@ -78,9 +91,9 @@ the complement of the <span class="synph"><span class="kwd">JSONLib.convertFromX
 <div class="tablenoborder"><a name="redt00256__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00256__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d59322e125">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d56138e144">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d59322e128">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d56138e147">Issue</th>
 
 </tr>
 
@@ -89,17 +102,17 @@ the complement of the <span class="synph"><span class="kwd">JSONLib.convertFromX
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00256__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d59322e125 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d56138e144 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d59322e128 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d56138e147 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00256__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d59322e125 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d56138e144 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d59322e128 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d56138e147 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

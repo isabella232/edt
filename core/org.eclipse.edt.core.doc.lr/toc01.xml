@@ -2,7 +2,7 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 <toc label="EGL Language Reference">
    <topic label="EGL language overview" href="topics/cedt00002.html">
-      <topic label="Types and instances of those types" href="topics/cedt00004.html">
+      <topic label="Types" href="topics/cedt00004.html">
          <topic label="EGL types" href="topics/cedt00005.html"/>
          <topic label="Value and reference types" href="topics/cedt00012.html"/>
          <topic label="Assignment and reference compatibility" href="topics/cedt00041.html"/>
@@ -24,34 +24,69 @@
          <topic label="EGL numeric types" href="topics/cedt00021.html"/>
       </topic>
       <topic label="Overview of classifiers" href="topics/cedt00019.html">
-         <topic label="Classifiers for defining EGL data parts" href="topics/cedt00026.html">
-            <topic label="DataItem classifier overview" href="topics/cedt00030.html"/>
-            <topic label="Record classifier overview" href="topics/cedt00031.html"/>
-            <topic label="Enumeration classifier overview" href="topics/cedt00032.html"/>
-            <topic label="Class classifier overview" href="topics/cedt00029.html"/>
-         </topic>
-         <topic label="Classifiers for defining EGL logic parts" href="topics/cedt00027.html">
-            <topic label="Program classifier overview" href="topics/cedt00033.html"/>
-            <topic label="Library classifier overview" href="topics/cedt00034.html"/>
-            <topic label="Service classifier overview" href="topics/cedt00035.html"/>
-            <topic label="Handler classifier overview" href="topics/cedt00036.html"/>
-         </topic>
-         <topic label="Classifiers for defining prototype parts" href="topics/cedt00028.html">
-            <topic label="Interface classifier overview" href="topics/cedt00037.html"/>
-            <topic label="ExternalType classifier overview" href="topics/cedt00038.html"/>
-            <topic label="Delegate classifier overview" href="topics/cedt00039.html"/>
-         </topic>
+         <topic label="Class classifier overview" href="topics/cedt00029.html"/>
+         <topic label="DataItem classifier overview" href="topics/cedt00030.html"/>
+         <topic label="Delegate classifier overview" href="topics/cedt00039.html"/>
+         <topic label="Enumeration classifier overview" href="topics/cedt00032.html"/>
+         <topic label="ExternalType classifier overview" href="topics/cedt00038.html"/>
+         <topic label="Handler classifier overview" href="topics/cedt00036.html"/>
+         <topic label="Interface classifier overview" href="topics/cedt00037.html"/>
+         <topic label="Library classifier overview" href="topics/cedt00034.html"/>
+         <topic label="Program classifier overview" href="topics/cedt00033.html"/>
+         <topic label="Record classifier overview" href="topics/cedt00031.html"/>
+         <topic label="Service classifier overview" href="topics/cedt00035.html"/>
       </topic>
       <topic label="EGL Syntax" href="topics/cedt00013.html"/>
       <topic label="Logical unit of work" href="topics/cedt00042.html"/>
    </topic>
-   <topic label="EGL language cross-reference tables">
+   <topic label="EGL core">
+      <topic label="Statements list" href="topics/redt00030.html">
+         <topic label="Assignment statement" href="topics/redt00004.html"/>
+         <topic label="Continue statement" href="topics/redt00020.html"/>
+         <topic label="Case statement" href="topics/redt00014.html"/>
+         <topic label="Use statement" href="topics/redt00005.html"/>
+         <topic label="While statement" href="topics/redt00016.html"/>
+      </topic>
       <topic label="Types table" href="topics/redt00033.html"/>
-      <topic label="Rich UI widgets table" href="topics/redt00107.html"/>
-      <topic label="Statements list" href="topics/redt00030.html"/>
       <topic label="Types table" href="topics/redt00033.html"/>
    </topic>
    <topic label="Packages">
+      <topic label="dojo.widgets" href="topics/redt00258.html">
+         <topic label="DojoAccordionContainer widget" href="topics/redt00160.html"/>
+         <topic label="DojoBarGraph widget" href="topics/redt00161.html"/>
+         <topic label="DojoBorderContainer widget" href="topics/redt00126.html"/>
+         <topic label="DojoBubbleChart widget" href="topics/redt00127.html"/>
+         <topic label="DojoButton widget" href="topics/redt00128.html"/>
+         <topic label="DojoCalendar widget" href="topics/redt00129.html"/>
+         <topic label="DojoCheckbox widget" href="topics/redt00130.html"/>
+         <topic label="DojoColorPalette widget" href="topics/redt00131.html"/>
+         <topic label="DojoComboBox widget" href="topics/redt00132.html"/>
+         <topic label="DojoContentPane" href="topics/redt00133.html"/>
+         <topic label="DojoContextMenu widget" href="topics/redt00134.html"/>
+         <topic label="DojoCurrencyTextBox widget" href="topics/redt00135.html"/>
+         <topic label="DojoDateTextBox widget" href="topics/redt00136.html"/>
+         <topic label="DojoDialog widget" href="topics/redt00137.html"/>
+         <topic label="DojoEditor widget" href="topics/redt00138.html"/>
+         <topic label="DojoGrid widget" href="topics/redt00139.html"/>
+         <topic label="DojoHorizontalSlider widget" href="topics/redt00140.html"/>
+         <topic label="DojoLineGraph widget" href="topics/redt00141.html"/>
+         <topic label="DojoMenu widget" href="topics/redt00142.html"/>
+         <topic label="DojoMenuItem widget" href="topics/redt00143.html"/>
+         <topic label="DojoPieChart widget" href="topics/redt00146.html"/>
+         <topic label="DojoProgressBar widget" href="topics/redt00147.html"/>
+         <topic label="DojoRadioGroup widget" href="topics/redt00148.html"/>
+         <topic label="DojoStackContainer widget" href="topics/redt00149.html"/>
+         <topic label="DojoTabContainer widget" href="topics/redt00150.html"/>
+         <topic label="DojoTextArea widget" href="topics/redt00151.html"/>
+         <topic label="DojoTextField widget" href="topics/redt00152.html"/>
+         <topic label="DojoTimeTextBox widget" href="topics/redt00153.html"/>
+         <topic label="DojoTitlePane widget" href="topics/redt00154.html"/>
+         <topic label="DojoToggleButton widget" href="topics/redt00155.html"/>
+         <topic label="DojoTooltip widget" href="topics/redt00156.html"/>
+         <topic label="DojoTooltipDialog widget" href="topics/redt00157.html"/>
+         <topic label="DojoTree widget" href="topics/redt00158.html"/>
+         <topic label="DojoTreeNode widget" href="topics/redt00159.html"/>
+      </topic>
       <topic label="eglx.http package" href="topics/redt00245.html">
          <topic label="HTTPLib external type" href="topics/redt00073.html">
             <topic label="HTTPLib.convertFromURLEncoded" href="topics/redt00252.html"/>
@@ -136,107 +171,88 @@
             <topic label="XMLLib.convertToXML function" href="topics/redt00256.html"/>
          </topic>
       </topic>
+      <topic label="org.eclipse.edt.rui.widgets package" href="topics/redt00031.html">
+         <topic label="BidiTextArea widget" href="topics/redt00121.html"/>
+         <topic label="BidiTextField widget" href="topics/redt00122.html"/>
+         <topic label="Box widget" href="topics/redt00108.html"/>
+         <topic label="Button widget" href="topics/redt00123.html"/>
+         <topic label="Checkbox widget" href="topics/redt00124.html"/>
+         <topic label="Combo widget" href="topics/redt00125.html"/>
+         <topic label="DataGrid widget" href="topics/redt00113.html"/>
+         <topic label="Div widget" href="topics/redt00109.html"/>
+         <topic label="FloatLeft widget" href="topics/redt00110.html"/>
+         <topic label="FloatRight widget" href="topics/redt00111.html"/>
+         <topic label="Grid widget" href="topics/redt00114.html"/>
+         <topic label="GridTooltip widget" href="topics/redt00186.html"/>
+         <topic label="GridLayout widget" href="topics/redt00112.html"/>
+         <topic label="Grouping widget" href="topics/redt00188.html"/>
+         <topic label="HTML widget" href="topics/redt00115.html"/>
+         <topic label="Hyperlink widget" href="topics/redt00189.html"/>
+         <topic label="Image widget" href="topics/redt00116.html"/>
+         <topic label="List widget" href="topics/redt00179.html"/>
+         <topic label="Listmulti widget" href="topics/redt00180.html"/>
+         <topic label="PasswordTextField widget" href="topics/redt00182.html"/>
+         <topic label="RadioGroup widget" href="topics/redt00183.html"/>
+         <topic label="Shadow widget" href="topics/redt00117.html"/>
+         <topic label="Span widget" href="topics/redt00118.html"/>
+         <topic label="TextArea widget" href="topics/redt00190.html"/>
+         <topic label="TextField widget" href="topics/redt00191.html"/>
+         <topic label="TextLabel widget" href="topics/redt00192.html"/>
+         <topic label="Tooltip widget" href="topics/redt00184.html"/>
+         <topic label="TreeTooltip widget" href="topics/redt00185.html"/>
+      </topic>
    </topic>
    <topic label="Supplemental details">
-      <topic label="Add statement" href="topics/redt00021.html"/>
+      <topic label="Action statements" href="topics/redt00026.html">
+         <topic label="Add statement" href="topics/redt00021.html"/>
+         <topic label="Call statement" href="topics/redt00003.html"/>
+         <topic label="Close statement" href="topics/redt00022.html"/>
+         <topic label="Delete statement" href="topics/redt00023.html"/>
+         <topic label="Action statements" href="topics/redt00026.html"/>
+         <topic label="ForEach statement" href="topics/redt00018.html"/>
+         <topic label="FreeSQL statement" href="topics/redt00029.html"/>
+         <topic label="Get statement" href="topics/redt00024.html"/>
+         <topic label="Replace statement" href="topics/redt00025.html"/>
+         <topic label="Transfer statement" href="topics/redt00010.html"/>
+      </topic>
       <topic label="ANY type" href="topics/redt00050.html"/>
-      <topic label="Assignment statement" href="topics/redt00004.html"/>
       <topic label="BasicProgram stereotype" href="topics/redt00102.html"/>
-      <topic label="BidiTextArea widget" href="topics/redt00121.html"/>
-      <topic label="BidiTextField widget" href="topics/redt00122.html"/>
       <topic label="BIGINT type" href="topics/redt00058.html"/>
       <topic label="BIRTHandler stereotype" href="topics/redt00084.html"/>
       <topic label="BLOB type" href="topics/redt00054.html"/>
       <topic label="BOOLEAN type" href="topics/redt00176.html"/>
-      <topic label="Box widget" href="topics/redt00108.html"/>
-      <topic label="Button widget" href="topics/redt00123.html"/>
       <topic label="BYTES type" href="topics/redt00063.html"/>
-      <topic label="Call statement" href="topics/redt00003.html"/>
-      <topic label="Case statement" href="topics/redt00014.html"/>
-      <topic label="Checkbox widget" href="topics/redt00124.html"/>
       <topic label="CLOB type" href="topics/redt00055.html"/>
-      <topic label="Close statement" href="topics/redt00022.html"/>
       <topic label="Column annotation" href="topics/redt00174.html"/>
-      <topic label="Combo widget" href="topics/redt00125.html"/>
       <topic label="Constants system library" href="topics/redt00240.html"/>
-      <topic label="Continue statement" href="topics/redt00020.html"/>
       <topic label="Correspondence between a JSON string and an EGL variable"
              href="topics/redt00253.html"/>
       <topic label="Correspondence between an XML string and an EGL variable"
              href="topics/redt00254.html"/>
-      <topic label="DataGrid widget" href="topics/redt00113.html"/>
       <topic label="DataSource type" href="topics/redt00164.html"/>
       <topic label="DATE type" href="topics/redt00052.html"/>
       <topic label="DECIMAL type" href="topics/redt00059.html"/>
       <topic label="Delegate classifier detail" href="topics/redt00038.html"/>
-      <topic label="Delete statement" href="topics/redt00023.html"/>
       <topic label="Dictionary part" href="topics/redt00048.html"/>
-      <topic label="Div widget" href="topics/redt00109.html"/>
-      <topic label="DojoAccordionContainer widget" href="topics/redt00160.html"/>
-      <topic label="DojoBarGraph widget" href="topics/redt00161.html"/>
-      <topic label="DojoBorderContainer widget" href="topics/redt00126.html"/>
-      <topic label="DojoBubbleChart widget" href="topics/redt00127.html"/>
-      <topic label="DojoButton widget" href="topics/redt00128.html"/>
-      <topic label="DojoCalendar widget" href="topics/redt00129.html"/>
-      <topic label="DojoCheckbox widget" href="topics/redt00130.html"/>
-      <topic label="DojoColorPalette widget" href="topics/redt00131.html"/>
-      <topic label="DojoComboBox widget" href="topics/redt00132.html"/>
-      <topic label="DojoContentPane" href="topics/redt00133.html"/>
-      <topic label="DojoContextMenu widget" href="topics/redt00134.html"/>
-      <topic label="DojoCurrencyTextBox widget" href="topics/redt00135.html"/>
-      <topic label="DojoDateTextBox widget" href="topics/redt00136.html"/>
-      <topic label="DojoDialog widget" href="topics/redt00137.html"/>
-      <topic label="DojoEditor widget" href="topics/redt00138.html"/>
-      <topic label="DojoGrid widget" href="topics/redt00139.html"/>
-      <topic label="DojoHorizontalSlider widget" href="topics/redt00140.html"/>
-      <topic label="DojoLineGraph widget" href="topics/redt00141.html"/>
-      <topic label="DojoMenu widget" href="topics/redt00142.html"/>
-      <topic label="DojoMenuItem widget" href="topics/redt00143.html"/>
-      <topic label="DojoPieChart widget" href="topics/redt00146.html"/>
-      <topic label="DojoProgressBar widget" href="topics/redt00147.html"/>
-      <topic label="DojoRadioGroup widget" href="topics/redt00148.html"/>
-      <topic label="DojoStackContainer widget" href="topics/redt00149.html"/>
-      <topic label="DojoTabContainer widget" href="topics/redt00150.html"/>
-      <topic label="DojoTextArea widget" href="topics/redt00151.html"/>
-      <topic label="DojoTextField widget" href="topics/redt00152.html"/>
-      <topic label="DojoTimeTextBox widget" href="topics/redt00153.html"/>
-      <topic label="DojoTitlePane widget" href="topics/redt00154.html"/>
-      <topic label="DojoToggleButton widget" href="topics/redt00155.html"/>
-      <topic label="DojoTooltip widget" href="topics/redt00156.html"/>
-      <topic label="DojoTooltipDialog widget" href="topics/redt00157.html"/>
-      <topic label="DojoTree widget" href="topics/redt00158.html"/>
-      <topic label="DojoTreeNode widget" href="topics/redt00159.html"/>
       <topic label="Entity stereotype" href="topics/redt00081.html"/>
       <topic label="Enumeration classifier detail" href="topics/redt00046.html"/>
       <topic label="Enumerations provided in EDT" href="topics/redt00037.html"/>
       <topic label="EventListener annotation" href="topics/redt00083.html"/>
-      <topic label="Exception stereotype" href="topics/redt00079.html"/>
-      <topic label="Exception records provided in EDT" href="topics/redt00080.html"/>
-      <topic label="Execute statement" href="topics/redt00026.html"/>
+      <topic label="Exception stereotype" href="topics/redt00079.html">
+         <topic label="Exception records provided in EDT" href="topics/redt00080.html"/>
+      </topic>
       <topic label="Exit statement" href="topics/redt00019.html"/>
       <topic label="Expressions" href="topics/redt00095.html"/>
       <topic label="ExternalType classifier detail" href="topics/redt00041.html"/>
       <topic label="FLOAT type" href="topics/redt00060.html"/>
-      <topic label="FloatLeft widget" href="topics/redt00110.html"/>
-      <topic label="FloatRight widget" href="topics/redt00111.html"/>
       <topic label="For statement" href="topics/redt00017.html"/>
-      <topic label="ForEach statement" href="topics/redt00018.html"/>
-      <topic label="FreeSQL statement" href="topics/redt00029.html"/>
       <topic label="Function invocation statement" href="topics/redt00008.html"/>
       <topic label="Function syntax" href="topics/redt00036.html"/>
       <topic label="GeneratedValue annotation" href="topics/redt00175.html"/>
-      <topic label="Get statement" href="topics/redt00024.html"/>
-      <topic label="Grid widget" href="topics/redt00114.html"/>
-      <topic label="GridTooltip widget" href="topics/redt00186.html"/>
-      <topic label="GridLayout widget" href="topics/redt00112.html"/>
-      <topic label="Grouping widget" href="topics/redt00188.html"/>
       <topic label="Handler classifier detail" href="topics/redt00042.html"/>
       <topic label="HostProgram stereotype" href="topics/redt00086.html"/>
-      <topic label="HTML widget" href="topics/redt00115.html"/>
-      <topic label="Hyperlink widget" href="topics/redt00189.html"/>
       <topic label="ID annotation" href="topics/redt00166.html"/>
       <topic label="If statement" href="topics/redt00015.html"/>
-      <topic label="Image widget" href="topics/redt00116.html"/>
       <topic label="In operator" href="topics/redt00100.html"/>
       <topic label="Interface classifier detail" href="topics/redt00045.html"/>
       <topic label="INT type" href="topics/redt00057.html"/>
@@ -248,8 +264,6 @@
       <topic label="Library classifier detail" href="topics/redt00043.html"/>
       <topic label="Like operator" href="topics/redt00098.html"/>
       <topic label="List part" href="topics/redt00049.html"/>
-      <topic label="List widget" href="topics/redt00179.html"/>
-      <topic label="Listmulti widget" href="topics/redt00180.html"/>
       <topic label="Literals" href="topics/redt00096.html"/>
       <topic label="ManyToMany annotation" href="topics/redt00168.html"/>
       <topic label="ManyToOne annotation" href="topics/redt00169.html"/>
@@ -268,16 +282,12 @@
       <topic label="org.eclipse.edt.gen.java.templates package" href="topics/redt00193.html"/>
       <topic label="org.eclipse.edt.gen.javascript.templates package"
              href="topics/redt00196.html"/>
-      <topic label="PasswordTextField widget" href="topics/redt00182.html"/>
       <topic label="Pattern characters used to format non-string values to strings"
              href="topics/redt00238.html"/>
       <topic label="Prepare statement" href="topics/redt00027.html"/>
       <topic label="Program classifier detail" href="topics/redt00047.html"/>
       <topic label="Property annotation" href="topics/redt00076.html"/>
-      <topic label="RadioGroup widget" href="topics/redt00183.html"/>
       <topic label="Record classifier detail" href="topics/redt00040.html"/>
-      <topic label="Replace statement" href="topics/redt00025.html"/>
-      <topic label="eglx.http package" href="topics/redt00245.html"/>
       <topic label="Reserved words" href="topics/redt00103.html"/>
       <topic label="Resource annotation" href="topics/redt00087.html"/>
       <topic label="Return statement" href="topics/redt00007.html"/>
@@ -288,10 +298,8 @@
       <topic label="SecondaryTables annotation" href="topics/redt00173.html"/>
       <topic label="Service classifier detail" href="topics/redt00044.html"/>
       <topic label="Set-values blocks" href="topics/redt00105.html"/>
-      <topic label="Shadow widget" href="topics/redt00117.html"/>
       <topic label="SMALLINT type" href="topics/redt00056.html"/>
       <topic label="SMALLFLOAT type" href="topics/redt00061.html"/>
-      <topic label="Span widget" href="topics/redt00118.html"/>
       <topic label="Special characters" href="topics/redt00104.html"/>
       <topic label="SQLDataSource type" href="topics/redt00162.html"/>
       <topic label="SQLLib system library" href="topics/redt00075.html"/>
@@ -299,22 +307,14 @@
       <topic label="SQLStatement type" href="topics/redt00177.html"/>
       <topic label="STRING type" href="topics/redt00051.html"/>
       <topic label="Table annotation" href="topics/redt00172.html"/>
-      <topic label="TextArea widget" href="topics/redt00190.html"/>
-      <topic label="TextField widget" href="topics/redt00191.html"/>
-      <topic label="TextLabel widget" href="topics/redt00192.html"/>
       <topic label="this keyword" href="topics/redt00002.html"/>
       <topic label="Throw statement" href="topics/redt00011.html"/>
       <topic label="TIME type" href="topics/redt00187.html"/>
       <topic label="TIMESTAMP type" href="topics/redt00053.html"/>
-      <topic label="Tooltip widget" href="topics/redt00184.html"/>
-      <topic label="Transfer statement" href="topics/redt00010.html"/>
       <topic label="Transient annotation" href="topics/redt00167.html"/>
       <topic label="Tree widget" href="topics/redt00120.html"/>
-      <topic label="TreeTooltip widget" href="topics/redt00185.html"/>
       <topic label="Try blocks" href="topics/redt00013.html"/>
       <topic label="Type conversions" href="topics/redt00064.html"/>
-      <topic label="Use statement" href="topics/redt00005.html"/>
-      <topic label="While statement" href="topics/redt00016.html"/>
       <topic label="XMLAttribute annotation" href="topics/redt00089.html"/>
       <topic label="XMLElement annotation" href="topics/redt00090.html"/>
       <topic label="XMLLib system library" href="topics/redt00074.html"/>

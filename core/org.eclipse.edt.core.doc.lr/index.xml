@@ -22,7 +22,6 @@
 <topic href="topics/cedt00038.html#cedt00038" title="ExternalType classifier overview"/>
 <topic href="topics/cedt00027.html#cedt00027" title="Classifiers for defining EGL logic parts"/>
 <topic href="topics/cedt00031.html#cedt00031" title="Record classifier overview"/>
-<topic href="topics/cedt00004.html#cedt00004" title="Types and instances of those types"/>
 <topic href="topics/cedt00002.html#cedt00002" title="EGL language overview"/>
 <topic href="topics/cedt00037.html#cedt00037" title="Interface classifier overview"/>
 <topic href="topics/cedt00026.html#cedt00026" title="Classifiers for defining EGL data parts"/>
@@ -131,6 +130,9 @@
 </entry>
 <entry keyword="decimals EGL function">
 <topic href="topics/redt00214.html#redt00214" title="MathLib.decimals function"/>
+</entry>
+<entry keyword="dojo.widgets EGL package">
+<topic href="topics/redt00258.html#redt00258" title="dojo.widgets"/>
 </entry>
 <entry keyword="EGL external types">
 <entry keyword="DateTimeLib">
@@ -325,6 +327,9 @@
 </entry>
 </entry>
 <entry keyword="EGL packages">
+<entry keyword="dojo.widgets">
+<topic href="topics/redt00258.html#redt00258" title="dojo.widgets"/>
+</entry>
 <entry keyword="eglx.http">
 <topic href="topics/redt00245.html#redt00245" title="eglx.http package"/>
 </entry>
@@ -339,6 +344,9 @@
 </entry>
 <entry keyword="eglx.xml">
 <topic href="topics/redt00034.html#redt00034" title="eglx.xml package"/>
+</entry>
+<entry keyword="org.eclipse.edt.rui.widgets">
+<topic href="topics/redt00031.html#redt00031" title="org.eclipse.edt.rui.widgets package"/>
 </entry>
 </entry>
 <entry keyword="EGL system functions">
@@ -578,6 +586,9 @@
 <topic href="topics/cedt00021.html#cedt00021" title="EGL numeric types"/>
 </entry>
 </entry>
+<entry keyword="org.eclipse.edt.rui.widgets EGL package">
+<topic href="topics/redt00031.html#redt00031" title="org.eclipse.edt.rui.widgets package"/>
+</entry>
 <entry keyword="Patterns">
 <topic href="topics/redt00238.html#redt00237" title="Pattern characters used to format non-string values to strings"/>
 </entry>
@@ -701,6 +712,9 @@
 </entry>
 <entry keyword="tanh EGL function">
 <topic href="topics/redt00232.html#redt00232" title="MathLib.tanh function"/>
+</entry>
+<entry keyword="types">
+<topic href="topics/cedt00004.html#cedt00004" title="Types"/>
 </entry>
 <entry keyword="wait EGL function">
 <topic href="topics/redt00202.html#redt00202" title="SysLib.wait function"/>
