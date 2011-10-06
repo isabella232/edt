@@ -24,11 +24,13 @@ import org.eclipse.edt.mof.codegen.api.AbstractTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Part;
 
 public abstract class EUnitTemplate extends AbstractTemplate {
 	// Constants that represent all the method names invoked using the dynamic Template.gen() methods
 	// This allows one to find all references to invocations of the methods being invoked dynamically
 	public static final String genPart = "genPart";
+	public static final String genImports = "genImports";
 	public static final String genClassBody = "genClassBody";
 	public static final String genClassHeader = "genClassHeader";
 
@@ -127,4 +129,13 @@ public abstract class EUnitTemplate extends AbstractTemplate {
 		out.println("end");
 	}
 
+	protected void generateImportStatement(Part part, Context ctx, TabbedWriter out) {
+		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".MultiStatus;");
+		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".TestDescription;");
+		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".TestExecutionLib;");
+		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".LogResult;");		
+		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".executeLibTestMethod;");
+		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".runTestMethod;");
+		out.println();
+	}	
 }

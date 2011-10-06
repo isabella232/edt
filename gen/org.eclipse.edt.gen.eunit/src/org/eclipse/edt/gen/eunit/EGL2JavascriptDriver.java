@@ -20,7 +20,7 @@ import org.eclipse.edt.gen.AbstractGeneratorCommand;
 
 public class EGL2JavascriptDriver extends EGL2Base {
 
-	private static final String javascriptDriverPartNameAppend = "_rui";
+	protected static final String javascriptDriverPartNameAppend = "_rui";
 	
 	public EGL2JavascriptDriver() {
 		super();

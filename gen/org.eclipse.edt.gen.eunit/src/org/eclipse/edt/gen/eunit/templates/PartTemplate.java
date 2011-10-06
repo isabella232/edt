@@ -26,7 +26,7 @@ public class PartTemplate extends EUnitTemplate {
 
 	public void genPart(Part part, Context ctx, TabbedWriter out, TestCounter counter) {
 		genPackageStatement(part, ctx, out);
-		genImportStatement(part, ctx, out);
+		ctx.invoke(genImports, part, ctx, out);
 		ctx.invoke(genClassHeader, part, ctx, out);
 		ctx.invoke(genClassBody, part, ctx, out, counter);
 	}
@@ -45,15 +45,7 @@ public class PartTemplate extends EUnitTemplate {
 		out.println();
 	}
 
-	public void genImportStatement(Part part, Context ctx, TabbedWriter out) {
-		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".MultiStatus;");
-		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".TestDescription;");
-		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".TestExecutionLib;");
-		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".LogResult;");		
-		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".executeLibTestMethod;");
-		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".runTestMethod;");
-		out.println();
-	}
+
 		
 	public void genPartName(Part part, Context ctx, TabbedWriter out) {
 		if (ctx.mapsToNativeType(part))

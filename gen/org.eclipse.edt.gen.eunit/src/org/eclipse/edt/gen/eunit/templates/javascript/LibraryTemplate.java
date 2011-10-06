@@ -32,6 +32,10 @@ public class LibraryTemplate extends EUnitTemplate {
 		generateDriverLibraryBody(part, ctx, out, counter);
 	}
 	
+	public void genImports(Library part, Context ctx, TabbedWriter out) {
+		generateImportStatement(part, ctx, out);
+	}
+	
 	public void genLibDriverClassBody(Library part, Context ctx, TabbedWriter out, String driverPartNameAppend, TestCounter counter){
 		String genedHandlerName = part.getName() + driverPartNameAppend;
 		out.println("Handler " + genedHandlerName + " type RUIhandler {initialUI = [], includefile = \"rununit.html\", onConstructionFunction = start, title=\"" +genedHandlerName + "\"} ");
