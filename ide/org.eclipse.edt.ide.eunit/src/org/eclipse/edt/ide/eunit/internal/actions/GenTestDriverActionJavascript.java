@@ -34,7 +34,7 @@ public class GenTestDriverActionJavascript extends GenTestDriverAction {
 	protected List<WorkspaceModifyOperation> getGenTestDriverOperatoins(IWorkspaceRoot wsRoot, 
 											String baseProjName, IProject baseProj,IEGLProject baseEGLProj) {
 		
-		String driverProjName = baseProjName + DRIVERPROJSUFFIX_JAVASCRIPT;
+		String driverProjName = getDriverProjName(baseProjName);
 		IProject driverProj = wsRoot.getProject(driverProjName);
 		IEGLProject driverEGLProject = EGLCore.create(driverProj);
 
@@ -51,7 +51,7 @@ public class GenTestDriverActionJavascript extends GenTestDriverAction {
 		WorkspaceModifyOperation op3 = getSetEGLBuildPathOperation(driverEGLProject, driverProjName, baseProjName);
 		ops.add(op3);
 
-		WorkspaceModifyOperation op5 = getCopyECKRuntimeFilesOperation(driverProj, token_javascript);
+		WorkspaceModifyOperation op5 = getCopyJSECKRuntimeFilesOperation(driverProj);
 		ops.add(op5);
 
 		WorkspaceModifyOperation op6 = getCreateRununitPropertyOperation(wsRoot, driverProj);
@@ -65,6 +65,15 @@ public class GenTestDriverActionJavascript extends GenTestDriverAction {
 
 		return ops;
 	}
+
+	protected String getDriverProjName(String baseProjName) {
+		String driverProjName = baseProjName + DRIVERPROJSUFFIX_JAVASCRIPT;
+		return driverProjName;
+	}
+	
+	protected WorkspaceModifyOperation getCopyJSECKRuntimeFilesOperation(IProject driverProj){
+		return getCopyECKRuntimeFilesOperation(driverProj, token_javascript);
+	}	
 
 	@Override
 	protected void invokeDriverGenerator(String[] args, IIDECompiler compiler, IEUnitGenerationNotifier eckGenerationNotifier) {
