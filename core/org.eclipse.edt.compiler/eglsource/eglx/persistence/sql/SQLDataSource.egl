@@ -10,6 +10,7 @@ externalType SQLDataSource extends DataSource type NativeType
     static TRANSACTION_ISOLATION_REPEATABLE_READ int;
     static TRANSACTION_ISOLATION_SERIALIZABLE int;
      
+	private constructor();
 	constructor(connectionUrl string in);
 	constructor(connectionUrl string in, properties Dictionary in);
 	

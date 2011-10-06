@@ -4,6 +4,7 @@ import eglx.lang.NativeType;
 
 
 externalType ScrollableDataSource extends DataSource type NativeType
+	private constructor();
 	function setAbsolute(row int) returns (boolean);
 	function setRelative(rows int) returns (boolean);
 	function setNext() returns (boolean);

@@ -2,4 +2,5 @@ package eglx.persistence.sql;
 import eglx.lang.NativeType;
 
 externalType SQLStatement type NativeType
+	private constructor();
 end

@@ -4,7 +4,7 @@ import eglx.lang.Nativetype;
 import eglx.persistence.ScrollableDataSource;
 
 externalType SQLResultSet extends ScrollableDataSource type NativeType
-	
+	private constructor();
 	function cancelRowUpdates();
 	function deleteRow();
 	function refreshRow();
