@@ -28,6 +28,8 @@ public class Constants {
 	public static final String EXPR_LHS = "EXPR_LHS";
 	
 	public static final String DONT_UNBOX = "DONT_UNBOX";
+	
+	public static final String QUALIFIER_ALIAS = "QUALIFIER_ALIAS";
 
 
 	// command parameter internal names
