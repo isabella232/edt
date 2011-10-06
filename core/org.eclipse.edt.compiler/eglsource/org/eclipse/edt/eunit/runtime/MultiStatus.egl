@@ -1,0 +1,46 @@
+package org.eclipse.edt.eunit.runtime;
+
+// basic handler
+
+handler MultiStatus
+	//these values accumulate the aggregate outcome, without 
+	//requiring the individual outcomes be stored
+	testCnt int;
+	expectedCnt int;
+	passedCnt int;
+	failedCnt int;
+	errCnt int;
+	badCnt int;
+	notRunCnt int;
+	firstFailedTestName String;
+
+	/**
+	* add status to MultiStatus
+	*/
+	function addStatus(testId String in)
+		//ms MultiStatus = this;
+		s Status = LogResult.getStatus();
+		msg String = testId + ": " + s.reason;
+		LogResult.logStdOut(msg);
+				
+		testCnt += 1;
+		
+		case(s.code)
+			when (ConstantsLib.SPASSED)
+				passedCnt += 1;
+			when (ConstantsLib.SFAILED)
+				failedCnt += 1;
+			when (ConstantsLib.SERROR)
+				errCnt += 1;
+			when (ConstantsLib.SNOT_RUN)
+				notRunCnt += 1;	
+			otherwise	
+				badCnt += 1;				
+		end
+		
+		if(s.code != ConstantsLib.SPASSED && strLib.characterLen(firstFailedTestName) == 0)
+			firstFailedTestName = testId;
+		end		
+	end
+end
+

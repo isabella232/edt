@@ -1,9 +1,5 @@
 package org.eclipse.edt.eunit.runtime;
 
-import eglx.lang.Exception;
-import eglx.lang.MathLib;
-import eglx.xml.binding.annotation.XMLRootElement;
-
 Record Log {@xmlrootelement {}}
 	msg String;			//equivalent of "StdOut" stream
 end
@@ -89,6 +85,18 @@ Library LogResult
 		s.reason = str;
 	end
 	
+	function assertTrueException(failedReason String in, testCondition boolean in, throwsFailException boolean in)
+		if(testCondition)
+			passed("OK");
+		else
+			failed(failedReason);
+			if(throwsFailException)
+				throw new AssertionFailedException{message = s.reason};
+			end
+		end
+	end	
+	
+	
 	/**
 	 * @description it will throw AssertionFailedException exception when the testCondition is false
 	 * @param failedReason String - if assertion failed, the failure reason message 
@@ -98,12 +106,7 @@ Library LogResult
 	 * @throws AssertionFailedException when testCondition is false
 	 **/ 
 	function assertTrue(failedReason String in, testCondition boolean in)
-		if(testCondition)
-			passed("OK");
-		else  
-			failed(failedReason);
-			throw new AssertionFailedException{message = s.reason};
-		end
+		assertTrueException(failedReason, testCondition, true);
 	end	
 
 	/**
@@ -113,6 +116,10 @@ Library LogResult
 	function assertTrue1(testCondition boolean in)
 		assertTrue("", testCondition);
 	end		
+	
+	function assertTrueNoException(failedReason String in, testCondition boolean in)
+		assertTrueException(failedReason, testCondition, false);
+	end	
 	
 	/**
 	 * @description - message will be preappend to the standard expected and actual messages
@@ -127,6 +134,11 @@ Library LogResult
 		assertBigIntEqual("", expected, actual);
 	end
 	
+	function assertBigIntEqualNoException(message String in, expected bigint in, actual bigint in)
+		isEqual boolean = (expected == actual);
+		expectAssertTrueNoException(message, expected, actual, isEqual);
+	end
+		
 	function assertStringEqual(message String in, expected String in, actual String in)
 		isEqual boolean = (expected == actual);
 		expectAssertTrue(message, expected, actual, isEqual);
@@ -135,6 +147,11 @@ Library LogResult
 	function assertStringEqual1(expected String in, actual String in)
 		assertStringEqual("", expected, actual);
 	end	
+	
+	function assertStringEqualNoException(message String in, expected String in, actual String in)
+		isEqual boolean = (expected == actual);
+		expectAssertTrueNoException(message, expected, actual, isEqual);
+	end
 	
 	function assertStringArrayEqual(message String in, expected String[] in, actual String[] in)
 		isArrayEqual boolean = true;
@@ -189,6 +206,11 @@ Library LogResult
 		assertDateEqual("", expected, actual);
 	end
 	
+	function assertDateEqualNoException(message String in, expected Date in, actual Date in)
+		isEqual boolean = (expected == actual);
+		expectAssertTrueNoException(message, expected, actual, isEqual);
+	end	
+	
 	function assertTimestampEqual(message String in, expected Timestamp in, actual Timestamp in)
 		isEqual boolean = (expected == actual);
 		expectAssertTrue(message, expected, actual, isEqual);		
@@ -198,6 +220,11 @@ Library LogResult
 		assertTimestampEqual("", expected, actual);
 	end
 	
+	function assertTimestampEqualNoException(message String in, expected Timestamp in, actual Timestamp in)
+		isEqual boolean = (expected == actual);
+		expectAssertTrueNoException(message, expected, actual, isEqual);		
+	end
+		
 	function assertDecimalEqual(message String in, expected decimal in, actual decimal in)
 		isEqual boolean = (expected == actual);
 		expectAssertTrue(message, expected, actual, isEqual);				
@@ -207,7 +234,27 @@ Library LogResult
 		assertDecimalEqual("", expected, actual);
 	end
 	
+	function assertDecimalEqualNoException(message String in, expected decimal in, actual decimal in)
+		isEqual boolean = (expected == actual);
+		expectAssertTrueNoException(message, expected, actual, isEqual);				
+	end	
+	
 	function assertFloatEqual(message String in, expected float in, actual float in)
+		isEqual boolean = isFloatEqual(expected, actual);
+		expectAssertTrue(message, expected, actual, isEqual);
+	end
+	
+	function assertFloatEqual1(expected float in, actual float in)
+		assertFloatEqual("", expected, actual);
+	end
+	
+	function assertFloatEqualNoException(message String in, expected float in, actual float in)
+		isEqual boolean = isFloatEqual(expected, actual);
+		expectAssertTrueNoException(message, expected, actual, isEqual);
+	end	
+	
+	//private helper methods
+	private function isFloatEqual(expected float in, actual float in) returns (boolean)
 		normalExpected, normalActual, delta float;
 		mantissaExpected, mantissaActual int;
 		signExpected, signActual String;
@@ -219,20 +266,26 @@ Library LogResult
 		isEqual boolean = (signExpected == signActual) && 
 					(mantissaExpected == mantissaActual) &&
 					(delta < deltaLimit);
-		expectAssertTrue(message, expected, actual, isEqual);
+					
+		return(isEqual);			
 	end
 	
-	function assertFloatEqual1(expected float in, actual float in)
-		assertFloatEqual("", expected, actual);
+	private function expectAssertTrueNoException(message String in, expected any in, actual any in, isEqual boolean in)
+		failedReason String = buildFailedReason(message, expected, actual);			
+		assertTrueNoException(failedReason, isEqual);		
 	end
 	
-	//private helper methods
 	private function expectAssertTrue(message String in, expected any in, actual any in, isEqual boolean in)
+		failedReason String = buildFailedReason(message, expected, actual);
+		assertTrue(failedReason, isEqual);		
+	end
+	
+	private function buildFailedReason(message String in, expected any in, actual any in) returns (String)
 		failedReason String = expect(expected, actual);
 		if(message != null && message != "") 
 			failedReason = message + " - " + failedReason;
 		end
-		assertTrue(failedReason, isEqual);		
+		return (failedReason);
 	end
 
     private function expect(expected any in, actual any in) returns (String)
