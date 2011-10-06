@@ -273,7 +273,20 @@ public class SysLib extends ExecutableBase {
 				}
 			}
 			else {
-				resource = new SQLDataSource(sqlBinding.getSqlDB());
+				EDictionary props = new org.eclipse.edt.runtime.java.eglx.lang.EDictionary();
+				String user = sqlBinding.getSqlID();
+				String password = sqlBinding.getSqlPassword();
+				String schema = sqlBinding.getSqlSchema();
+				if (user != null) {
+					props.put("user", user);
+				}
+				if (password != null) {
+					props.put("password", password);
+				}
+				resource = new SQLDataSource(sqlBinding.getSqlDB(), props);
+				if (schema != null && (schema = schema.trim()).length() > 0) {
+					((SQLDataSource)resource).setCurrentSchema(schema);
+				}
 			}
 		}
 		return resource;

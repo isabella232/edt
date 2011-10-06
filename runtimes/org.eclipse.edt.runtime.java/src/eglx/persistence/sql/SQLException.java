@@ -9,17 +9,10 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package eglx.persistence.sql;
-import org.eclipse.edt.javart.resources.*;
-import org.eclipse.edt.javart.*;
-
-import eglx.lang.AnyException;
-
-import java.lang.Integer;
-
+import org.eclipse.edt.javart.ByteStorage;
+import org.eclipse.edt.javart.Program;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
-
-import java.lang.String;
 @javax.xml.bind.annotation.XmlRootElement(name="SqlException")
 public class SQLException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
@@ -27,6 +20,7 @@ public class SQLException extends eglx.lang.AnyException {
 	public String SQLState;
 	@javax.xml.bind.annotation.XmlTransient
 	public Integer ErrorCode;
+	public SQLException nextException;
 	public SQLException() {
 		super();
 		ezeInitialize();
@@ -58,6 +52,7 @@ public class SQLException extends eglx.lang.AnyException {
 	public void ezeInitialize() {
 		SQLState = null;
 		ErrorCode = null;
+		nextException = null;
 	}
 	@org.eclipse.edt.javart.json.Json(name="SQLState", clazz=EString.class, asOptions={})
 	public String getSQLState() {
@@ -72,5 +67,12 @@ public class SQLException extends eglx.lang.AnyException {
 	}
 	public void setErrorCode( Integer ezeValue ) {
 		this.ErrorCode = ezeValue;
+	}
+	
+	public SQLException getNextException() {
+		return nextException;
+	}
+	public void setNextException(SQLException ex) {
+		this.nextException = ex;
 	}
 }

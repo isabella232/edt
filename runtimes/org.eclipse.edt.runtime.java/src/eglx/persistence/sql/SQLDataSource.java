@@ -19,37 +19,53 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.resources.RecoverableResource;
 import org.eclipse.edt.javart.util.JavartUtil;
 
 import eglx.lang.AnyException;
+import eglx.lang.EDictionary;
 
 public class SQLDataSource implements RecoverableResource {
+	
+	public static final int TRANSACTION_ISOLATION_NONE = Connection.TRANSACTION_NONE;
+	public static final int TRANSACTION_ISOLATION_READ_UNCOMMITTED = Connection.TRANSACTION_READ_UNCOMMITTED;
+	public static final int TRANSACTION_ISOLATION_READ_COMMITTED = Connection.TRANSACTION_READ_COMMITTED;
+	public static final int TRANSACTION_ISOLATION_REPEATABLE_READ = Connection.TRANSACTION_REPEATABLE_READ;
+	public static final int TRANSACTION_ISOLATION_SERIALIZABLE = Connection.TRANSACTION_SERIALIZABLE;
+	
 	private PreparedStatement SetSchema = null;
 	
 	private Connection conn;
 	private Map<String, List<Statement>> statements;
 	private String connectionUrl;
+	private Properties properties;
+	
+	public SQLDataSource(String connectionUrl) {
+		this(connectionUrl, org.eclipse.edt.javart.Runtime.getRunUnit());
+	}
 	
 	public SQLDataSource(String connectionUrl, RunUnit ru) {
 		this.connectionUrl = connectionUrl;
+		this.statements = new HashMap<String, List<Statement>>();
+		this.properties = new Properties();
 		ru.registerResource(this);
-		statements = new HashMap<String, List<Statement>>();
 	}
 	
-	public SQLDataSource(String connectionUrl) {
-		this.connectionUrl = connectionUrl;
-		org.eclipse.edt.javart.Runtime.getRunUnit().registerResource(this);
-		statements = new HashMap<String, List<Statement>>();
+	public SQLDataSource(String connectionUrl, EDictionary properties) {
+		this(connectionUrl);
+		
+		if (properties != null) {
+			this.properties.putAll(properties);
+		}
 	}
-
 
 	public Connection getConnection() throws SQLException {
 		if (conn == null) {
 			try {
-				conn = DriverManager.getConnection(connectionUrl);
+				conn = DriverManager.getConnection(connectionUrl, properties);
 			} catch (java.sql.SQLException e) {
 				throw JavartUtil.makeEglException(e);
 			}
@@ -152,6 +168,85 @@ public class SQLDataSource implements RecoverableResource {
 			}
 			SetSchema.setString(1, schema);
 			SetSchema.executeUpdate();
+		} catch (java.sql.SQLException e) {
+			throw JavartUtil.makeEglException(e);
+		}
+	}
+	
+	public boolean getAutoCommit() throws SQLException {
+		try {
+			return getConnection().getAutoCommit();
+		} catch (java.sql.SQLException e) {
+			throw JavartUtil.makeEglException(e);
+		}
+	}
+	
+	public void setAutoCommit(boolean autoCommit) throws SQLException {
+		try {
+			getConnection().setAutoCommit( autoCommit );
+		} catch (java.sql.SQLException e) {
+			throw JavartUtil.makeEglException(e);
+		}
+	}
+	
+	public int getTransactionIsolation() throws SQLException {
+		try {
+			return getConnection().getTransactionIsolation();
+		} catch (java.sql.SQLException e) {
+			throw JavartUtil.makeEglException(e);
+		}
+	}
+	
+	public void setTransactionIsolation(int level) throws SQLException {
+		try {
+			getConnection().setTransactionIsolation(level);
+		} catch (java.sql.SQLException e) {
+			throw JavartUtil.makeEglException(e);
+		}
+	}
+	
+	public boolean supportsTransactionIsolationLevel(int level) throws SQLException {
+		try {
+			return getConnection().getMetaData().supportsTransactionIsolationLevel(level);
+		} catch (java.sql.SQLException e) {
+			throw JavartUtil.makeEglException(e);
+		}
+	}
+	
+	public boolean isClosed() throws SQLException {
+		try {
+			return getConnection().isClosed();
+		} catch (java.sql.SQLException e) {
+			throw JavartUtil.makeEglException(e);
+		}
+	}
+	
+	public boolean isReadOnly() throws SQLException {
+		try {
+			return getConnection().isReadOnly();
+		} catch (java.sql.SQLException e) {
+			throw JavartUtil.makeEglException(e);
+		}
+	}
+	
+	public boolean isValid(int timeout) throws SQLException {
+		try {
+			return getConnection().isValid(timeout);
+		} catch (java.sql.SQLException e) {
+			throw JavartUtil.makeEglException(e);
+		}
+	}
+	
+	public SQLWarning getWarnings() throws SQLException {
+		if (conn == null) {
+			return null;
+		}
+		try {
+			java.sql.SQLWarning warning = conn.getWarnings();
+			if (warning == null) {
+				return null;
+			}
+			return (SQLWarning)JavartUtil.makeEglException(warning);
 		} catch (java.sql.SQLException e) {
 			throw JavartUtil.makeEglException(e);
 		}

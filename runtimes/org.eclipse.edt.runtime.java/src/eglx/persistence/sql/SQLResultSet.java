@@ -152,5 +152,15 @@ public class SQLResultSet {
 		}
 	}
 
-
+	public SQLWarning getWarnings() throws SQLException {
+		try {
+			java.sql.SQLWarning warning = resultSet.getWarnings();
+			if (warning == null) {
+				return null;
+			}
+			return (SQLWarning)JavartUtil.makeEglException(warning);
+		} catch (java.sql.SQLException e) {
+			throw JavartUtil.makeEglException(e);
+		}
+	}
 }

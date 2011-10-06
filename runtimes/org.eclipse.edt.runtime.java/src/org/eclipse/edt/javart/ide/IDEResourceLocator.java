@@ -34,6 +34,7 @@ import javax.xml.namespace.QName;
 import org.eclipse.edt.javart.resources.egldd.Binding;
 import org.eclipse.edt.javart.resources.egldd.RuntimeDeploymentDesc;
 import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
+import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
 
 import eglx.lang.AnyException;
 import eglx.lang.SysLib;
@@ -89,10 +90,55 @@ public class IDEResourceLocator extends SysLib implements ResourceLocator {
 			if (sqlBinding.isUseURI()) {
 				String uri = sqlBinding.getUri();
 				if (uri != null && uri.startsWith("workspace://")) { //$NON-NLS-1$
-					//TODO need API in SQLDataSource to set username, password, etc. For now just set the URL
 					String profileInfo = getConnectionProfileSettings(uri.substring(12)); // "workspace://".length()
 					if (profileInfo != null && profileInfo.length() > 0) {
-						return new SQLDataSource(profileInfo);
+						String[] tokens = profileInfo.split(";");
+						if (tokens.length > 0) {
+							String url = tokens[0].trim();
+							String user = null;
+							String pass = null;
+							String schema = null;
+							
+							if (tokens.length > 1) {
+								user = tokens[1].trim();
+							}
+							if (tokens.length > 2) {
+								pass = tokens[2].trim();
+							}
+							if (tokens.length > 3) {
+								schema = tokens[3].trim();
+							}
+							
+							try {
+								url = URLDecoder.decode(url, "UTF-8");
+								if (user != null) {
+									user = URLDecoder.decode(user, "UTF-8");
+								}
+								if (pass != null) {
+									pass = URLDecoder.decode(pass, "UTF-8");
+								}
+								if (schema != null) {
+									schema = URLDecoder.decode(schema, "UTF-8");
+								}
+							}
+							catch (UnsupportedEncodingException e) {
+								// Shouldn't happen.
+							}
+							
+							EDictionary props = new EDictionary();
+							if (user != null && user.length() > 0) {
+								props.put("user", user);
+							}
+							if (pass != null && pass.length() > 0) {
+								props.put("password", pass);
+							}
+							
+							SQLDataSource ds = new SQLDataSource(url, props);
+							if (schema != null && schema.length() > 0) {
+								ds.setCurrentSchema(schema);
+							}
+							return ds;
+						}
 					}
 				}
 			}
