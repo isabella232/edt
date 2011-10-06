@@ -17,6 +17,7 @@ import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.EGLClass;
@@ -49,6 +50,10 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			catch (Exception e) {}
 		}
 		addNamespaceMap(part, ctx);
+		
+		
+		
+		
 	}
 
 	private void addNamespaceMap(EGLClass part, Context ctx) {
@@ -217,6 +222,20 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		if (part.getInitializerStatements() != null) {
 			ctx.invoke(genStatementNoBraces, part.getInitializerStatements(), ctx, out);
 		}
+		
+		
+		// Gen field-level annotations that want to participate in initialization
+		for (Field field : part.getFields()) {
+			for (Annotation annot : field.getAnnotations()) {
+				try {
+					ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field, genInitializeMethod);
+				}
+				catch (TemplateException ex) {
+					//NOGO sbg Seems bogus, but apparently we lack templates for some annotations?
+				}
+			}
+		}
+
 	}
 	
 	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
@@ -355,7 +374,12 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	public void genQualifier(EGLClass part, Context ctx, TabbedWriter out, NamedElement arg) {
 		for (Member mbr : part.getAllMembers()) {
 			if (mbr.getId().equalsIgnoreCase(arg.getId())) {
-				out.print("this.");
+				Object alias = ctx.getAttribute(ctx.getClass(), Constants.QUALIFIER_ALIAS);
+				if (alias != null) 
+					out.print(alias.toString());
+				else
+					out.print("this.");
+				
 				break;
 			}
 		}

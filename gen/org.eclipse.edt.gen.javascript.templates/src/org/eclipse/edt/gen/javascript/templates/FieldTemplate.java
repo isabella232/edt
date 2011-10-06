@@ -42,6 +42,10 @@ public class FieldTemplate extends JavaScriptTemplate {
 				field.addAnnotation(annotation);
 			} catch (Exception e) {}
 		}	
+		
+		for (Annotation annot : field.getAnnotations()) {
+			ctx.invoke(preGen, annot.getEClass(), ctx, annot, field);
+		}
 	}
 
 	public void genDeclaration(Field field, Context ctx, TabbedWriter out) {

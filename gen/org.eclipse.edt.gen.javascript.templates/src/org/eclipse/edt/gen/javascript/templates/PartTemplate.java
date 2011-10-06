@@ -17,6 +17,7 @@ import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.DataTable;
 import org.eclipse.edt.mof.egl.Form;
 import org.eclipse.edt.mof.egl.Library;
@@ -34,6 +35,10 @@ public class PartTemplate extends JavaScriptTemplate {
 		ctx.putAttribute(ctx.getClass(), Constants.SubKey_partLibrariesUsed, new ArrayList<Library>());
 		ctx.putAttribute(ctx.getClass(), Constants.SubKey_partRecordsUsed, new ArrayList<Record>());
 		ctx.invoke(preGenClassBody, part, ctx);
+		
+		for (Annotation annot : part.getAnnotations()) {
+			ctx.invoke(preGen, annot.getEClass(), ctx, annot, part);
+		}
 	}
 
 	public void genPart(Part part, Context ctx, TabbedWriter out) {

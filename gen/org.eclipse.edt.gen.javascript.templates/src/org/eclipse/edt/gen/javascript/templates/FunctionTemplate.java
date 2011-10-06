@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.javascript.templates;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Type;
 
@@ -21,6 +22,10 @@ public class FunctionTemplate extends JavaScriptTemplate {
 
 	public void preGen(Function function, Context ctx) {
 		ctx.invoke(preGen, function.getStatementBlock(), ctx);
+		
+		for (Annotation annot : function.getAnnotations()) {
+			ctx.invoke(preGen, annot.getEClass(), ctx, annot, function);
+		}
 	}
 
 	public void genDeclaration(Function function, Context ctx, TabbedWriter out) {

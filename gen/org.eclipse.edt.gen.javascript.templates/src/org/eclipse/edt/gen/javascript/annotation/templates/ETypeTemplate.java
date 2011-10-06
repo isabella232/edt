@@ -17,11 +17,23 @@ import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Part;
 
 public class ETypeTemplate extends JavaScriptTemplate {
 
 	public void genConversionControlAnnotation(EType type, Context ctx, TabbedWriter out, Annotation annot, Object obj) {
 	}
 
-	public void genDefaultValue(EType type, Context ctx, TabbedWriter out, Annotation annot, Field field){}
+	public void genDefaultValue(EType type, Context ctx, TabbedWriter out, Annotation annot, Field field){
+	}
+	
+	public void preGen(EType type, Context ctx, Annotation annot, Field field){
+	}
+	
+	public void preGen(EType type, Context ctx, Annotation annot, Part part){
+	}
+	
+	public void preGen(EType type, Context ctx, Annotation annot, Function function){
+	}
 }
