@@ -63,7 +63,7 @@ public class ExternalTypeBinding extends PartBinding {
     	declaredData = old.declaredData;
     	declaredAndInheritedData = old.declaredAndInheritedData;
     	constructors = old.constructors;
-    	List extendedTypes = old.extendedTypes;
+    	extendedTypes = old.extendedTypes;
     	
     }
     
